@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
 
   sensor->readAnnotationFile(annotationXml);
   if (verbose) {
-     sensor->print(std::cout);
+     sensor->print(std::clog);
   }
 
   bool validate(false);

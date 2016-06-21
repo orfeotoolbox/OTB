@@ -22,8 +22,10 @@
 
 #if defined(USE_BOOST_TIME)
             using boost::posix_time::microseconds;
+            using boost::posix_time::seconds;
 #else
             using ossimplugins::time::microseconds;
+            using ossimplugins::time::seconds;
 #endif
 namespace {// Anonymous namespace
    ossimTrace traceExec  ("ossimSentinel1Model:exec");
@@ -556,8 +558,13 @@ namespace ossimplugins
       addOptional (theProductKwl, SUPPORT_DATA_PREFIX, "slice_num",          imageInformation, "sliceNumber");
 
       ossimXmlNode const& xAzimutTimeInterval = getExpectedFirstNode(imageInformation, "azimuthTimeInterval");
-      theAzimuthTimeInterval = to<double>(xAzimutTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval")*1000000;
-      std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
+      const double azimuthTimeInterval = to<double>(xAzimutTimeInterval.getText(), "decoding imageInformation/azimuthTimeInterval");
+#if defined(USE_BOOST_TIME)
+      theAzimuthTimeInterval = boost::posix_time::precise_duration(azimuthTimeInterval * 1000000.);
+#else
+      theAzimuthTimeInterval = seconds(azimuthTimeInterval);
+#endif
+      std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds() << "\n";
       add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimutTimeInterval.getText());
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
@@ -842,8 +849,8 @@ namespace ossimplugins
             burstRecord.startLine = add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
             burstRecord.endLine   = add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
             // TODO: check units.
-            burstRecord.azimuthStartTime = add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + microseconds(first_valid*theAzimuthTimeInterval));
-            burstRecord.azimuthStopTime  = add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + microseconds(last_valid*theAzimuthTimeInterval));
+            burstRecord.azimuthStartTime = add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + (first_valid*theAzimuthTimeInterval));
+            burstRecord.azimuthStopTime  = add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + (last_valid*theAzimuthTimeInterval));
 
             theBurstRecords.push_back(burstRecord);
          }
@@ -984,11 +991,9 @@ namespace ossimplugins
 
             const DurationType timeSinceStart = azimuthTime - acqStart; // in day frac
 
-            const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
-            const double imPt_y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
-            std::clog << "timeSinceStart: " << timeSinceStart << " = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            std::clog << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
-            std::clog << "imPt_y: " << imPt_y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
+            const double imPt_y= timeSinceStart/theAzimuthTimeInterval + acqStartLine;
+            std::clog << "timeSinceStart: " << timeSinceStart << "(" << timeSinceStart.total_microseconds() << "us) = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            std::clog << "imPt_y: " << imPt_y << " = " << timeSinceStart.total_microseconds() << "/" << theAzimuthTimeInterval.total_microseconds() << "+" << acqStartLine << "\n";
             add(theProductKwl, prefix, keyImPtY, imPt_y);
          }
          else

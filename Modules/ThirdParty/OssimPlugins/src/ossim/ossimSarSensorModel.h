@@ -102,8 +102,8 @@ public:
    };
 
 #if defined(USE_BOOST_TIME)
-   typedef boost::posix_time::ptime         TimeType;
-   typedef boost::posix_time::time_duration DurationType;
+   typedef boost::posix_time::ptime            TimeType;
+   typedef boost::posix_time::precise_duration DurationType;
 #else
    typedef time::ModifiedJulianDate TimeType;
    typedef time::Duration           DurationType;
@@ -364,14 +364,14 @@ protected:
    std::vector<CoordinateConversionRecordType> theGroundRangeToSlantRangeRecords;
 
    double                                      theRadarFrequency; // in Hz
-   double                                      theAzimuthTimeInterval; // in microseconds
+   DurationType                                theAzimuthTimeInterval;
    double                                      theNearRangeTime; // in seconds
    double                                      theRangeSamplingRate; // in Hz
    double                                      theRangeResolution; // in meters
    bool                                        theBistaticCorrectionNeeded; // Do we need to compute
    // bistatic correction ?
    ProductType                                 theProductType; // GRD/SLC
-   DurationType                                theAzimuthTimeOffset; // Offset in microseconds, computed
+   DurationType                                theAzimuthTimeOffset; // Offset computed
    double                                      theRangeTimeOffset; // Offset in seconds, computed
 
    static const double C;

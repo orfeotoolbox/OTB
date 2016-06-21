@@ -34,6 +34,13 @@ namespace {// Anonymous namespace
     const ossimString attZ                = "z";
 }// Anonymous namespace
 
+#if defined(USE_BOOST_TIME)
+            using boost::posix_time::microseconds;
+            using boost::posix_time::seconds;
+#else
+            using ossimplugins::time::microseconds;
+            using ossimplugins::time::seconds;
+#endif
 void ossimplugins::ossimSentinel1SarSensorModel::readCoordinates(
         ossimXmlDocument const& xmlDoc, ossimString const& xpath,
         ossimString const& rg0_xpath, ossimString const& coeffs_xpath,
@@ -130,8 +137,13 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
     theRadarFrequency = getDoubleFromFirstNode(xmlRoot, "generalAnnotation/productInformation/radarFrequency");
 
     //Parse azimuth time interval
-    theAzimuthTimeInterval = getDoubleFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/azimuthTimeInterval")*1000000;
-    std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval << "\n";
+    const double azimuthTimeInterval = getDoubleFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/azimuthTimeInterval");
+#if defined(USE_BOOST_TIME)
+      theAzimuthTimeInterval = boost::posix_time::precise_duration(azimuthTimeInterval * 1000000.);
+#else
+      theAzimuthTimeInterval = seconds(azimuthTimeInterval);
+#endif
+    std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds() << "us\n";
 
 
     // Now read burst records as well
@@ -203,13 +215,8 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
             burstRecord.startLine = burstId*linesPerBurst + first_valid;
             burstRecord.endLine = burstId*linesPerBurst + last_valid;
 
-#if defined(USE_BOOST_TIME)
-            using boost::posix_time::microseconds;
-#else
-            using ossimplugins::time::microseconds;
-#endif
-            burstRecord.azimuthStartTime = azTime + microseconds(first_valid*theAzimuthTimeInterval);
-            burstRecord.azimuthStopTime = azTime + microseconds(last_valid*theAzimuthTimeInterval);
+            burstRecord.azimuthStartTime = azTime + (first_valid*theAzimuthTimeInterval);
+            burstRecord.azimuthStopTime = azTime  + (last_valid*theAzimuthTimeInterval);
 
             theBurstRecords.push_back(burstRecord);
         }
@@ -276,11 +283,9 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
             }
             const DurationType timeSinceStart = gcpRecord.azimuthTime - acqStart;
 
-            const double timeSinceStartInMicroSeconds = timeSinceStart.total_microseconds();
-            gcpRecord.imPt.y= timeSinceStartInMicroSeconds/theAzimuthTimeInterval + acqStartLine;
+            gcpRecord.imPt.y= timeSinceStart/theAzimuthTimeInterval + acqStartLine;
             std::clog << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            std::clog << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
-            std::clog << "imPt_y: " << gcpRecord.imPt.y << " = " << timeSinceStartInMicroSeconds << "/" << theAzimuthTimeInterval << "+" << acqStartLine << "\n";
+            std::clog << "imPt_y: " << gcpRecord.imPt.y << " = " << timeSinceStart.total_microseconds() << "/" << theAzimuthTimeInterval.total_microseconds() << "+" << acqStartLine << "\n";
         }
         else
         {

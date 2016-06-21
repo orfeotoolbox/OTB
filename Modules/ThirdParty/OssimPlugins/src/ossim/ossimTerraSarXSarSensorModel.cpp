@@ -102,7 +102,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
     std::cout << "azimuthTimeStop " << azimuthTimeStop << '\n';
 
-    const double td = (azimuthTimeStop - azimuthTimeStart).total_microseconds();
+    const DurationType td = azimuthTimeStop - azimuthTimeStart;
 
     // numberOfRows
     unsigned int numberOfRows = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/numberOfRows")->getText().toUInt16();
@@ -112,7 +112,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     //Compute azimuth time interval
     theAzimuthTimeInterval = td / static_cast<double> (numberOfRows);
 
-    std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval  << " and 1/prf: " << (1 / theRadarFrequency) * 1000000 << '\n';
+    std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1 / theRadarFrequency) * 1000000 << '\n';
 
     //For Terrasar-X only 1 burst is supported for now
     BurstRecordType burstRecord;

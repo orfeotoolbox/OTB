@@ -22,8 +22,10 @@
 
 #if defined(USE_BOOST_TIME)
 using boost::posix_time::microseconds;
+using boost::posix_time::seconds;
 #else
 using ossimplugins::time::microseconds;
+using ossimplugins::time::seconds;
 #endif
 
 namespace {// Anonymous namespace
@@ -109,13 +111,13 @@ namespace ossimplugins
 
    ossimSarSensorModel::ossimSarSensorModel()
       : theRadarFrequency(0.),
-      theAzimuthTimeInterval(0.),
+      theAzimuthTimeInterval(seconds(0)),
       theNearRangeTime(0.),
       theRangeSamplingRate(0.),
       theRangeResolution(0.),
       theBistaticCorrectionNeeded(false),
-      theAzimuthTimeOffset(0),
-      theRangeTimeOffset(0)
+      theAzimuthTimeOffset(seconds(0)),
+      theRangeTimeOffset(0.)
       {}
 
    ossimSarSensorModel::GCPRecordType const&
@@ -202,8 +204,8 @@ namespace ossimplugins
          imPt.makeNan();
          return;
       }
-      // std::clog << "AzimuthTime: " << azimuthTime << "\n";
-      // std::clog << "RangeTime: " << rangeTime << "\n";
+      std::clog << "AzimuthTime: " << azimuthTime << "\n";
+      std::clog << "RangeTime: " << rangeTime << "\n";
       // std::clog << "GRD: " << isGRD() << "\n";
 
       // Convert azimuth time to line
@@ -364,16 +366,18 @@ namespace ossimplugins
          unsigned int j = nBegin;
          for( ; j != i ; ++j)
          {
-            const double td1 = (azimuthTime - theOrbitRecords[j].azimuthTime).total_microseconds();
-            const double td2 = (theOrbitRecords[i].azimuthTime - theOrbitRecords[j].azimuthTime).total_microseconds();
-            w*=td1/td2;
+            const DurationType td1 = azimuthTime                    - theOrbitRecords[j].azimuthTime;
+            const DurationType td2 = theOrbitRecords[i].azimuthTime - theOrbitRecords[j].azimuthTime;
+            const double f = td1 / td2;
+            w *= f;
          }
          ++j;
          for( ; j < nEnd; ++j)
          {
-            const double td1 = (azimuthTime - theOrbitRecords[j].azimuthTime).total_microseconds();
-            const double td2 = (theOrbitRecords[i].azimuthTime - theOrbitRecords[j].azimuthTime).total_microseconds();
-            w*=td1/td2;
+            const DurationType td1 = azimuthTime                    - theOrbitRecords[j].azimuthTime;
+            const DurationType td2 = theOrbitRecords[i].azimuthTime - theOrbitRecords[j].azimuthTime;
+            const double f = td1 / td2;
+            w *= f;
          }
 
          sensorPos[0]+=w*theOrbitRecords[i].position[0];
@@ -388,13 +392,11 @@ namespace ossimplugins
 
    void ossimSarSensorModel::slantRangeToGroundRange(const double & slantRange, const TimeType & azimuthTime, double & groundRange) const
    {
-      // std::clog << "SR -> GR\n";
       applyCoordinateConversion(slantRange,azimuthTime,theSlantRangeToGroundRangeRecords,groundRange);
    }
 
    void ossimSarSensorModel::groundRangeToSlantRange(const double & groundRange, const TimeType & azimuthTime, double & slantRange) const
    {
-      // std::clog << "GR -> SR\n";
       applyCoordinateConversion(groundRange,azimuthTime,theGroundRangeToSlantRangeRecords,slantRange);
    }
 
@@ -455,16 +457,10 @@ namespace ossimplugins
          assert(!nextRecord->coefs.empty()&&"nextRecord coefficients vector is empty.");
 
          // If azimuth time is between 2 records, interpolate
-#if defined(USE_BOOST_TIME)
          const double interp
-            =                    (azimuthTime             - previousRecord->azimuthTime).total_microseconds()
-            /static_cast<double>((nextRecord->azimuthTime - previousRecord->azimuthTime).total_microseconds());
-#else
-         const double interp
-            = (azimuthTime             - previousRecord->azimuthTime)
+            = DurationType(azimuthTime             - previousRecord->azimuthTime)
             / (nextRecord->azimuthTime - previousRecord->azimuthTime)
             ;
-#endif
          // std::clog << "interp: " << interp << " ="
          // << " (" << azimuthTime             << " - " << previousRecord->azimuthTime << " (="<< (azimuthTime             - previousRecord->azimuthTime)<< ") )"
          // << "/(" << nextRecord->azimuthTime << " - " << previousRecord->azimuthTime << " (="<< (nextRecord->azimuthTime - previousRecord->azimuthTime)<< ") )"
@@ -560,11 +556,7 @@ namespace ossimplugins
          interpAzimuthTime = time::ModifiedJulianDate(-b / a);
 #else
          const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
-#if defined(USE_BOOST_TIME)
-         interpAzimuthTime = record1->azimuthTime - microseconds(doppler1 / (doppler2 - doppler1) * delta_td.total_microseconds());
-#else
          interpAzimuthTime = record1->azimuthTime - doppler1 / (doppler2 - doppler1) * delta_td;
-#endif
 #endif
       }
       else
@@ -578,21 +570,13 @@ namespace ossimplugins
          const double interp = abs_doppler1/interpDenom;
          std::clog << "interp: " << interp << "\n";
 
-         // Note that microsecond precision is used here
          const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
-         const double deltat = static_cast<double>(delta_td.total_microseconds());
-         std::clog << "delta_td: " << delta_td << "\n";
-         std::clog << "deltat: " << deltat << "ms\n";
+         std::clog << "delta_td: " << delta_td << " = " << record2->azimuthTime <<" - " <<record1->azimuthTime<< "\n";
 
          // Compute interpolated time offset wrt record1
-#if defined(USE_BOOST_TIME)
-         const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
-         std::clog << "td: " << td  << "(old formula)" << "\t" << (delta_td * interp)<< "(new formula)\n";
-#else
-         // No need for that many computations (day-frac -> ms -> day frac)
+         // (No need for that many computations (day-frac -> ms -> day frac))
          const DurationType td     = delta_td * interp;
-         std::clog << "td: " << td  << "\n";
-#endif
+         std::clog << "td: " << td  << "(" << td.total_microseconds() << "us)\n";
          // Compute interpolated azimuth time
          interpAzimuthTime = record1->azimuthTime + td + theAzimuthTimeOffset;
       }
@@ -608,7 +592,7 @@ namespace ossimplugins
    void ossimSarSensorModel::computeBistaticCorrection(const ossimEcefPoint & inputPt, const ossimEcefPoint & sensorPos, DurationType & bistaticCorrection) const
    {
       // Bistatic correction (eq 25, p 28)
-      double halftrange = 1000000 * (sensorPos-inputPt).magnitude()/C;
+      double halftrange = 1000000. * (sensorPos-inputPt).magnitude()/C;
       bistaticCorrection= microseconds(static_cast<unsigned long>(floor(halftrange+0.5)));
    }
 
@@ -658,10 +642,10 @@ namespace ossimplugins
       }
 
       const DurationType timeSinceStart = azimuthTime - currentBurst->azimuthStartTime;
-      const double timeSinceStartInMicroSeconds = static_cast<double>(timeSinceStart.total_microseconds());
 
       // Eq 22 p 27
-      line = (timeSinceStartInMicroSeconds/theAzimuthTimeInterval) + currentBurst->startLine;
+      line = (timeSinceStart/theAzimuthTimeInterval) + currentBurst->startLine;
+      std::clog << "line = " << line << " <- " << timeSinceStart << "/" << theAzimuthTimeInterval << "+" << currentBurst->startLine << "\n";
    }
 
    void ossimSarSensorModel::lineToAzimuthTime(const double & line, TimeType & azimuthTime) const
@@ -699,13 +683,11 @@ namespace ossimplugins
 
       }
 
-      const double timeSinceStartInMicroSeconds = (line - currentBurst->startLine)*theAzimuthTimeInterval;
-      // std::clog << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
+      const DurationType timeSinceStart = (line - currentBurst->startLine)*theAzimuthTimeInterval;
+      // std::clog << "timeSinceStart: " << timeSinceStart.total_microseconds() << "us\n";
 
-      const DurationType timeSinceStart = microseconds(timeSinceStartInMicroSeconds);
       // Eq 22 p 27
       azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + theAzimuthTimeOffset;
-      // std::clog << "timeSinceStart: " << timeSinceStart << "\n";
       // std::clog << "offset: "         << theAzimuthTimeOffset << "\n";
       // std::clog << "->azimuthTime: "  << azimuthTime << "\n";
    }
@@ -718,7 +700,7 @@ namespace ossimplugins
       ossimEcefPoint currentEstimation(initGcp.worldPt);
 
       // Compute corresponding image position
-      // std::clog << "initGCP: " << initGcp.imPt << "\n";
+      std::clog << "initGCP: " << initGcp.imPt << "\n";
       ossimDpt currentImPoint(initGcp.imPt);
 
       ossim_float64 currentImSquareResidual = squareDistance(target,currentImPoint);
@@ -743,7 +725,7 @@ namespace ossimplugins
          if(init)
             init =false;
 
-         // std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
+         std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
 
          // compute residuals
          F(1) = target.x - currentImPoint.x;
@@ -764,10 +746,10 @@ namespace ossimplugins
          ossimGpt currentEstimationWorld(currentEstimation);
          ossimGpt tmpGpt = ossimGpt(currentEstimation+dx);
          worldToLineSample(tmpGpt,tmpImPt);
-         // std::clog << "currentEstimationWorld: " << currentEstimationWorld << "\n";
-         // std::clog << "currentEstimation: " << currentEstimation << "\n";
-         // std::clog << "tmpGpt: " << tmpGpt << "\n";
-         // std::clog << "tmpImPt: " << tmpImPt << "\n";
+         std::clog << "currentEstimationWorld: " << currentEstimationWorld << "\n";
+         std::clog << "currentEstimation: " << currentEstimation << "\n";
+         std::clog << "tmpGpt: " << tmpGpt << "\n";
+         std::clog << "tmpImPt: " << tmpImPt << "\n";
          p_fx[0] = (currentImPoint.x-tmpImPt.x)/d;
          p_fy[0] = (currentImPoint.y-tmpImPt.y)/d;
          p_fh[0] = (currentEstimationWorld.height()-tmpGpt.height())/d;
@@ -822,7 +804,7 @@ namespace ossimplugins
          ++iter;
       }
 
-      // std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
+      std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
 
       ellPt = currentEstimation;
       return true;
@@ -853,6 +835,7 @@ namespace ossimplugins
 
       unsigned int gcpId = 1;
 
+      std::clog << theGCPRecords.size() << " GCPS\n";
       for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt,++gcpId)
       {
          ossimDpt estimatedImPt;
@@ -877,7 +860,7 @@ namespace ossimplugins
 
          if(verbose)
          {
-            std::clog<<"GCP #"<<gcpId<<'\n';
+            std::clog<<"GCP #"<<gcpId<< (thisSuccess ? "succeeded" : "failed") << '\n';
             std::clog<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
             std::clog<<"Slant range time: ref="<<gcpIt->slantRangeTime<<", predicted: "<<estimatedRangeTime<<", res="<<std::abs(estimatedRangeTime - gcpIt->slantRangeTime)<<'\n';
             std::clog<<"Image point: ref="<<gcpIt->imPt<<", predicted="<<estimatedImPt<<", res="<<estimatedImPt-gcpIt->imPt<<'\n';
@@ -913,6 +896,7 @@ namespace ossimplugins
 
       unsigned int gcpId = 1;
 
+      std::clog << testGcps.size() << " GCPS\n";
       for(std::vector<GCPRecordType>::const_iterator gcpIt = testGcps.begin(); gcpIt!=testGcps.end();++gcpIt,++gcpId)
       {
          ossimGpt estimatedWorldPt;
@@ -950,7 +934,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::optimizeTimeOffsetsFromGcps()
    {
-      DurationType cumulAzimuthTime(0);
+      DurationType cumulAzimuthTime(seconds(0));
       double cumulRangeTime(0);
       unsigned int count=0;
 
@@ -1115,8 +1099,13 @@ namespace ossimplugins
       get(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
       get(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
       get(kwl, SUPPORT_DATA_PREFIX, "radar_frequency"           , theRadarFrequency     );
-      get(kwl, SUPPORT_DATA_PREFIX, "line_time_interval"        , theAzimuthTimeInterval);
-      theAzimuthTimeInterval *= 1000000;
+      double azimuthTimeInterval = 0.; // in seconds
+      get(kwl, SUPPORT_DATA_PREFIX, "line_time_interval"        , azimuthTimeInterval);
+#if defined(USE_BOOST_TIME)
+      theAzimuthTimeInterval = boost::posix_time::precise_duration(azimuthTimeInterval * 1000000.);
+#else
+      theAzimuthTimeInterval = seconds(azimuthTimeInterval);
+#endif
 
       get(kwl, theOrbitRecords);
       // TODO: don't fetch burst records if already read thanks to xml loading
@@ -1157,7 +1146,7 @@ namespace ossimplugins {
    return ossimSensorModel::print(out)
       << "\n ossimSarSensorModel data-members:\n"
       << "\n                 theRadarFrequency: " << theRadarFrequency << "Hz"
-      << "\n            theAzimuthTimeInterval: " << theAzimuthTimeInterval << "us"
+      << "\n            theAzimuthTimeInterval: " << theAzimuthTimeInterval.total_microseconds() << "us"
       << "\n                  theNearRangeTime: " << theNearRangeTime << "s"
       << "\n              theRangeSamplingRate: " << theRangeSamplingRate << "Hz"
       << "\n                theRangeResolution: " << theRangeResolution << "m"
