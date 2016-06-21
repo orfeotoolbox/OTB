@@ -259,8 +259,8 @@ else()
   include(External_otb)
 endif()
 
-if(UNIX)
-    add_subdirectory(Packaging)
+if(UNIX OR MSVC)
+  add_subdirectory(Packaging)
 endif()
 
 if(FROM_SYSTEM_LIST)
