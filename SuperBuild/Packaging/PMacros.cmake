@@ -90,7 +90,7 @@ macro(macro_create_targets_for_package pkg)
 
   #configure
   add_custom_target(PACKAGE-${pkg}-configure
-    COMMAND ${CMAKE_COMMAND}
+    COMMAND ${CMAKE_COMMAND} "-G${CMAKE_GENERATOR}"
     "${PACKAGE_PROJECT_DIR}/src"
     WORKING_DIRECTORY "${PACKAGE_PROJECT_DIR}/build"
     DEPENDS PACKAGE-${pkg}-check

@@ -1,3 +1,5 @@
+#RK: TODO: do a sweep when mxe is out and msvc builds are stabilized
+
 macro(macro_super_package)
   cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
 
@@ -13,22 +15,28 @@ macro(macro_super_package)
 
   set(loader_program_PATHS)
   if(WIN32)
+    if(MSVC)
+      set(loader_program_names      "dumpbin")
+      set(loader_program_PATHS)
+      set(LOADER_PROGRAM_ARGS       "/DEPENDENTS")
+    else()
       set(loader_program_names      "${MXE_ARCH}-w64-mingw32.shared-objdump")
       set(loader_program_PATHS      "${MXE_MXEROOT}/usr/bin")
       set(LOADER_PROGRAM_ARGS       "-p")
+    endif()
+  else()
+    if(APPLE)
+      set(loader_program_names    otool)
+      set(LOADER_PROGRAM_ARGS     "-l")
+      set(loader_program_PATHS    /opt/local/bin) # a path that is already listed i path on apple
     else()
-      if(APPLE)
-        set(loader_program_names    otool)
-        set(LOADER_PROGRAM_ARGS     "-l")
-        set(loader_program_PATHS    /opt/local/bin) # a path that is already listed i path on apple
-      else()
-        set(loader_program_names    objdump)
-        set(LOADER_PROGRAM_ARGS     "-p")
-        set(loader_program_PATHS    /usr/bin) # a path that is already listed in default path on Linux
-      endif()
-      if(NOT DEPENDENCIES_INSTALL_DIR)
-        message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
-      endif()
+      set(loader_program_names    objdump)
+      set(LOADER_PROGRAM_ARGS     "-p")
+      set(loader_program_PATHS    /usr/bin) # a path that is already listed in default path on Linux
+    endif()
+    if(NOT DEPENDENCIES_INSTALL_DIR)
+      message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
+    endif()
   endif()
 
   find_program(LOADER_PROGRAM "${loader_program_names}" PATHS ${loader_program_PATHS})
@@ -295,6 +303,12 @@ function(func_install_support_files)
 
   set(PKG_SHARE_SOURCE_DIR ${DEPENDENCIES_INSTALL_DIR}/share)
 
+  set(GDAL_DATA ${PKG_SHARE_SOURCE_DIR}/gdal)
+  #MSVC install gdal-data in in a different directory. So we don't spoil it
+  if(MSVC)
+    set(GDAL_DATA ${DEPENDENCIES_INSTALL_DIR}/data)
+  endif()
+
   # Just check if required variables are defined.
   foreach(req
       DEPENDENCIES_INSTALL_DIR
@@ -323,7 +337,6 @@ function(func_install_support_files)
   endif() #NOT PKG_GENERATE_XDK
 
   ####################### install GDAL data ############################
-  set(GDAL_DATA ${PKG_SHARE_SOURCE_DIR}/gdal)
   if(NOT EXISTS "${GDAL_DATA}/epsg.wkt")
     message(FATAL_ERROR "Cannot generate package without GDAL_DATA : ${GDAL_DATA} ${DEPENDENCIES_INSTALL_DIR}")
   endif()
@@ -586,11 +599,6 @@ function(func_prepare_package)
     set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/otb/applications/${OTB_APP_SO_NAME}")
   endforeach()
 
-  # set(include_mvd 0)
-  # if(DEFINED Monteverdi_SOURCE_DIR)
-  #   set(include_mvd 1)
-  # endif()
-
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
 
   func_install_support_files()
@@ -702,10 +710,18 @@ function(func_process_deps infile)
           if(loader_rv)
             message(FATAL_ERROR "loader_ev=${loader_ev}\n PACKAGE-OTB: result_variable is '${loader_rv}'")
           endif()
-
           if(WIN32)
-            string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" loader_ov "${loader_ov}")
-            string(REGEX REPLACE "DLL.Name.." "" needed_dlls "${loader_ov}")
+            if(MSVC)
+              string(REGEX MATCHALL "dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
+              string(REGEX REPLACE "dependencies.." "" loader_ov "${loader_ov}")
+              #beware of .DLL and .dll
+              string(REGEX REPLACE ".DLL" ".dll" loader_ov "${loader_ov}")
+              #convert to cmake list
+              string(REGEX REPLACE ".dll" ".dll;" needed_dlls "${loader_ov}")
+            else()
+              string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" loader_ov "${loader_ov}")
+              string(REGEX REPLACE "DLL.Name.." "" needed_dlls "${loader_ov}")
+            endif()
           else()  #case for unixes
             if(APPLE)
               string(REGEX REPLACE "[^\n]+cmd LC_LOAD_DYLIB\n[^\n]+\n[^\n]+name ([^\n]+).\\(offset[^\n]+\n" "rpath \\1\n" loader_ov "${loader_ov}")
@@ -862,7 +878,6 @@ function(func_lisp install_list )
 
 endfunction() # func_lisp
 
-
 set(WINDOWS_SYSTEM_DLLS
   msvc.*dll
   user32.dll
@@ -884,7 +899,14 @@ set(WINDOWS_SYSTEM_DLLS
   opengl32.dll
   glu32.dll
   rpcrt4.dll
-  winspool.drv)
+  winspool.drv
+  api-ms-win-crt*.*.dll
+  vcruntime*.*.dll
+  normaliz.dll
+  concrt*.*.dll
+  odbc32.dll
+  psapi.dll
+  vcomp*.*.dll)
 
 set(LINUX_SYSTEM_DLLS
   libm.so
