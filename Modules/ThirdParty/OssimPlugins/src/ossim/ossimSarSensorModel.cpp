@@ -681,7 +681,7 @@ namespace ossimplugins
       // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
 
       const DurationType timeSinceStart = microseconds(timeSinceStartInMicroSeconds);
-      const DurationType offset         = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
+      const DurationType offset         = microseconds(theAzimuthTimeOffset);
       // Eq 22 p 27
       azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + offset;
       // std::cout << "timeSinceStart: " << timeSinceStart << "\n";
