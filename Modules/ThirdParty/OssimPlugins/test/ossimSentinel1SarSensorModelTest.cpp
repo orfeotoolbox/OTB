@@ -11,7 +11,7 @@
 
 #include "ossimSentinel1SarSensorModel.h"
 
-enum Inverse { forward, inv, undef};
+enum Inverse { fwd, inv, undef};
 
 int main(int argc, char * argv[])
 {
@@ -26,7 +26,7 @@ int main(int argc, char * argv[])
       if (a == "-v" || a == "-verbose") {
          verbose = true;
       } else if (inverse == undef)  {
-         inverse = atoi(argv[i]) == 1 ? inv : forward;
+         inverse = atoi(argv[i]) == 1 ? inv : fwd;
       } else if (annotationXml.empty())  {
          annotationXml = a;
       } else {
