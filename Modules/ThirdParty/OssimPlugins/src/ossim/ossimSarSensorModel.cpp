@@ -567,7 +567,8 @@ namespace ossimplugins
       // std::cout << "OK - deltat: " << deltat << "ms\n";
 
       // Compute interpolated time offset wrt record1
-      const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
+      // const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
+      const DurationType td     = delta_td * interp;
       const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
       // std::cout << "td: " << td << "\n";
       // std::cout << "offset: " << offset << "\n";
