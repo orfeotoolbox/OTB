@@ -593,12 +593,8 @@ namespace ossimplugins
          const DurationType td     = delta_td * interp;
          std::clog << "td: " << td  << "\n";
 #endif
-         // const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
-         const DurationType offset = microseconds(theAzimuthTimeOffset);
-         std::clog << "offset: " << offset.total_seconds() << "s\n";
-
          // Compute interpolated azimuth time
-         interpAzimuthTime = record1->azimuthTime + td + offset;
+         interpAzimuthTime = record1->azimuthTime + td + theAzimuthTimeOffset;
       }
 
       std::clog << "interpAzimuthTime: " << interpAzimuthTime << "\n";
@@ -707,12 +703,10 @@ namespace ossimplugins
       // std::clog << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
 
       const DurationType timeSinceStart = microseconds(timeSinceStartInMicroSeconds);
-      const DurationType offset         = microseconds(theAzimuthTimeOffset);
-      // const DurationType offset         = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
       // Eq 22 p 27
-      azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + offset;
+      azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + theAzimuthTimeOffset;
       // std::clog << "timeSinceStart: " << timeSinceStart << "\n";
-      // std::clog << "offset: "         << offset << " (" << theAzimuthTimeOffset << ")\n";
+      // std::clog << "offset: "         << theAzimuthTimeOffset << "\n";
       // std::clog << "->azimuthTime: "  << azimuthTime << "\n";
    }
 
@@ -956,7 +950,8 @@ namespace ossimplugins
 
    void ossimSarSensorModel::optimizeTimeOffsetsFromGcps()
    {
-      double cumulRangeTime(0), cumulAzimuthTime(0);
+      DurationType cumulAzimuthTime(0);
+      double cumulRangeTime(0);
       unsigned int count=0;
 
       // First, fix the azimuth time
@@ -971,12 +966,12 @@ namespace ossimplugins
 
          if(s1)
          {
-            cumulAzimuthTime+=-(estimatedAzimuthTime-gcpIt->azimuthTime).total_microseconds();
+            cumulAzimuthTime -= (estimatedAzimuthTime-gcpIt->azimuthTime);
             ++count;
          }
       }
 
-      theAzimuthTimeOffset= cumulAzimuthTime/=count;
+      theAzimuthTimeOffset = cumulAzimuthTime /= count;
 
       // Then, fix the range time
       count=0;
@@ -1168,7 +1163,7 @@ namespace ossimplugins {
       << "\n                theRangeResolution: " << theRangeResolution << "m"
       << "\n       theBistaticCorrectionNeeded: " << theBistaticCorrectionNeeded
       << "\n                    theProductType: " << theProductType
-      << "\n              theAzimuthTimeOffset: " << theAzimuthTimeOffset << "us offset"
+      << "\n              theAzimuthTimeOffset: " << theAzimuthTimeOffset.total_microseconds() << "us offset"
       << "\n                theRangeTimeOffset: " << theRangeTimeOffset << "s offset"
       << "\n                     theGCPRecords: " << "\n" << theGCPRecords
       << "\n                   theOrbitRecords: " << "\n" << theOrbitRecords

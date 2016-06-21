@@ -371,7 +371,7 @@ protected:
    bool                                        theBistaticCorrectionNeeded; // Do we need to compute
    // bistatic correction ?
    ProductType                                 theProductType; // GRD/SLC
-   double                                      theAzimuthTimeOffset; // Offset in microseconds, computed
+   DurationType                                theAzimuthTimeOffset; // Offset in microseconds, computed
    double                                      theRangeTimeOffset; // Offset in seconds, computed
 
    static const double C;
