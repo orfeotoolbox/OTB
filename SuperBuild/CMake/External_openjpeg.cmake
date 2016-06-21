@@ -40,8 +40,4 @@ ExternalProject_Add(OPENJPEG
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(OPENJPEG FALSE)
 
 #Apply patches to openjpeg (for now Even Roualt optim)
-#cannot apply on windows.
-#There is an issue with CLRF and patch from github
-if(NOT MSVC)
 SUPERBUILD_PATCH_SOURCE(OPENJPEG)
-endif()
