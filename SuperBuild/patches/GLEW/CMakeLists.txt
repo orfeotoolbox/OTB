@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(glew)
 
+option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
+
 #NOTE: Below is output from "make" on osx. This was used to make up this cmakelists.txt
 # cc -DGLEW_NO_GLU -DGLEW_BUILD -O2 -Wall -W -Iinclude -dynamic -fno-common -ansi -pedantic -fPIC  -o tmp/darwin/default/shared/glew.o -c src/glew.c
 # cc -dynamiclib -install_name /usr/lib/libGLEW.1.13.0.dylib -current_version 1.13.0 -compatibility_version 1.13 -o lib/libGLEW.1.13.0.dylib tmp/darwin/default/shared/glew.o  -framework OpenGL
@@ -22,40 +24,6 @@ project(glew)
 # OpenGL
 # clang: warning: argument unused during compilation: '-ansi'
 
-if(APPLE)
-  if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-  endif()
-  set(CMAKE_MACOSX_RPATH TRUE)
-  # use, i.e. don't skip the full RPATH for the build tree
-  set(CMAKE_SKIP_BUILD_RPATH  FALSE)
-  # when building, don't use the install RPATH already
-  # (but later on when installing)
-  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-  # add the automatically determined parts of the RPATH
-  # which point to directories outside the build tree to the install RPATH
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-  # the RPATH to be used when installing, but only if it's not a system directory
-  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-  if("${isSystemDir}" STREQUAL "-1")
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-  endif("${isSystemDir}" STREQUAL "-1")
-endif()
-
-
-# Set a default build type if none was specified
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to 'Release' as none was specified.")
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
-  # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
-
-set(BUILD_SHARED_LIBS ON)
-if(MSVC)
-  set(BUILD_SHARED_LIBS OFF) #force off
-endif()
 
 if(BUILD_SHARED_LIBS)
   add_definitions("-DGLEW_BUILD")
