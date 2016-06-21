@@ -501,7 +501,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, TimeType & interpAzimuthTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const
    {
-      assert(!theOrbitRecords.empty()&&"Orbit records vector is empty()");
+      assert(!theOrbitRecords.size()<2&&"Orbit records vector contains less than 2 elements");
 
       std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();
 
@@ -544,42 +544,63 @@ namespace ossimplugins
          }
       }
 
-      // If not found, pass error to caller (not a programming error, but
-      // eronous input parameters
+      bool extrapolate = false;
+
+      // In this case, we need to extrapolate
       if(it == theOrbitRecords.end())
       {
-         return false;
+         record1 = theOrbitRecords.begin();
+         record2 = record1 + theOrbitRecords.size()-1;
+         doppler1 = (inputPt-record1->position).dot(record1->velocity);
+         doppler2 = (inputPt-record2->position).dot(record2->velocity);
+#if 0
+         double delta_td = record2->azimuthTime.as_day_frac() - record1->azimuthTime.as_day_frac();
+         double a = (doppler2 - doppler1)/delta_td;
+         double b = doppler1 - a * record1->azimuthTime.as_day_frac();
+         interpAzimuthTime = time::ModifiedJulianDate(-b / a);
+#else
+         const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
+#if defined(USE_BOOST_TIME)
+         interpAzimuthTime = record1->azimuthTime - microseconds(doppler1 / (doppler2 - doppler1) * delta_td.total_microseconds());
+#else
+         interpAzimuthTime = record1->azimuthTime - doppler1 / (doppler2 - doppler1) * delta_td;
+#endif
+#endif
+      }
+      else
+      {
+         // now interpolate time and sensor position
+         const double abs_doppler1 = std::abs(doppler1);
+         const double interpDenom = abs_doppler1+std::abs(doppler2);
+
+         assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
+
+         const double interp = abs_doppler1/interpDenom;
+         std::cout << "interp: " << interp << "\n";
+
+         // Note that microsecond precision is used here
+         const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
+         const double deltat = static_cast<double>(delta_td.total_microseconds());
+         std::cout << "delta_td: " << delta_td << "\n";
+         std::cout << "deltat: " << deltat << "ms\n";
+
+         // Compute interpolated time offset wrt record1
+#if defined(USE_BOOST_TIME)
+         const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
+         std::cout << "td: " << td  << "(old formula)" << "\t" << (delta_td * interp)<< "(new formula)\n";
+#else
+         // No need for that many computations (day-frac -> ms -> day frac)
+         const DurationType td     = delta_td * interp;
+         std::cout << "td: " << td  << "\n";
+#endif
+         // const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
+         const DurationType offset = microseconds(theAzimuthTimeOffset);
+         std::cout << "offset: " << offset.total_seconds() << "s\n";
+
+         // Compute interpolated azimuth time
+         interpAzimuthTime = record1->azimuthTime + td + offset;
       }
 
-      // now interpolate time and sensor position
-      const double abs_doppler1 = std::abs(doppler1);
-      const double interpDenom = abs_doppler1+std::abs(doppler2);
-
-      assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
-
-      const double interp = abs_doppler1/interpDenom;
-      std::cout << "interp: " << interp << "\n";
-
-      // Note that microsecond precision is used here
-      const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
-      const double deltat = static_cast<double>(delta_td.total_microseconds());
-      std::cout << "delta_td: " << delta_td << "\n";
-      std::cout << "deltat: " << deltat << "ms\n";
-
-      // Compute interpolated time offset wrt record1
-#if defined(USE_BOOST_TIME)
-      const DurationType td     = microseconds(static_cast<unsigned long>(floor(interp * deltat+0.5)));
-      std::cout << "td: " << td  << "(old formula)" << "\t" << (delta_td * interp)<< "(new formula)\n";
-#else
-      // No need for that many computations (day-frac -> ms -> day frac)
-      const DurationType td     = delta_td * interp;
-      std::cout << "td: " << td  << "\n";
-#endif
-      const DurationType offset = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
-      std::cout << "offset: " << offset << "\n";
-
-      // Compute interpolated azimuth time
-      interpAzimuthTime = record1->azimuthTime + td + offset;
       std::cout << "interpAzimuthTime: " << interpAzimuthTime << "\n";
 
       // Interpolate sensor position and velocity
@@ -686,7 +707,8 @@ namespace ossimplugins
       // std::cout << "timeSinceStartInMicroSeconds: " << timeSinceStartInMicroSeconds << "\n";
 
       const DurationType timeSinceStart = microseconds(timeSinceStartInMicroSeconds);
-      const DurationType offset         = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
+      const DurationType offset         = microseconds(theAzimuthTimeOffset);
+      // const DurationType offset         = microseconds(static_cast<unsigned long>(floor(theAzimuthTimeOffset+0.5)));
       // Eq 22 p 27
       azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + offset;
       // std::cout << "timeSinceStart: " << timeSinceStart << "\n";
