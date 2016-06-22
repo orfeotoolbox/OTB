@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 2.8.3)
 project(muparser)
 
 option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
+if(MSVC AND BUILD_SHARED_LIBS)
+ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
 
 file(GLOB MUPARSER_SRCS "src/*.cpp" )
 list(REMOVE_ITEM MUPARSER_SRCS "${CMAKE_SOURCE_DIR}/src/muParserComplex.cpp")
