@@ -12,7 +12,7 @@
 #include "ossimSarSensorModel.h"
 
 
-int main(int argc, char * argv[])
+int main(int, char *[])
 {
   ossimplugins::ossimSarSensorModel sensor;
 
