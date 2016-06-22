@@ -16,7 +16,7 @@ ExternalProject_Add(GLEW
 
 set(_SB_GLEW_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
-  set(_SB_GLEW_LIBRARY ${SB_INSTALL_PREFIX}/lib/libglew32.lib)
+  set(_SB_GLEW_LIBRARY ${SB_INSTALL_PREFIX}/lib/glew32.lib)
 elseif(UNIX)
   set(_SB_GLEW_LIBRARY ${SB_INSTALL_PREFIX}/lib/libGLEW${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
