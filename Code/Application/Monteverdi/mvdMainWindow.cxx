@@ -486,7 +486,7 @@ MainWindow
 
   m_UI->menu_View->addSeparator();
 
-  m_UI->menu_View->addSeparator();
+  m_UI->menu_View->addAction( m_UI->action_LoadOTBApplications );
 
 #if USE_PIXEL_DESCRIPTION
   m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
@@ -1593,10 +1593,7 @@ MainWindow
   //
   // Update main-window UI.
   m_UI->action_LoadOTBApplications->setEnabled( false );
-
-  m_UI->menu_View->addAction(
-    m_OtbApplicationsBrowserDock->toggleViewAction()
-  );
+  m_UI->action_LoadOTBApplications->setVisible( false );
 
   m_UI->menu_View->addAction(
     m_OtbApplicationsBrowserDock->toggleViewAction()

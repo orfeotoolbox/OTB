@@ -31,7 +31,6 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_OpenImage"/>
-    <addaction name="action_LoadOTBApplications"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -251,7 +250,7 @@
   </action>
   <action name="action_LoadOTBApplications">
    <property name="text">
-    <string>Load OTB-&amp;Applications</string>
+    <string>OTB-Applications browser</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
