@@ -96,8 +96,12 @@ endmacro(ADD_SUPERBUILD_CONFIGURE_VAR)
 macro(SUPERBUILD_PATCH_SOURCE project)
   set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
   string(TOLOWER ${project} patch_dir_prefix)
+  set(PATCH_ARGS "${ARGV1}")
   if(WIN32)
     set(DIFF_FILE_MATCH_STRING "win")
+    if(NOT PATCH_ARGS)
+      set(PATCH_ARGS "--binary")
+    endif()
   else()
     if(APPLE)
       set(DIFF_FILE_MATCH_STRING "macx")
@@ -117,7 +121,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
   
   #merge two list for the final one
   list(APPEND files_list ${all_files_list})
-  
+
   #because we are passing it cmake_command using -D!!
   string(REPLACE ";" " " DOT_DIFF_FILES "${files_list}")
 
@@ -128,6 +132,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
       ${CMAKE_COMMAND}
       -DSOURCE_DIR=${${project}_SB_SRC}
       -DDOT_DIFF_FILES=${DOT_DIFF_FILES}
+      -DPATCH_ARGS=${PATCH_ARGS}
       -P ${CMAKE_SOURCE_DIR}/CMake/patch.cmake
       DEPENDEES patch update
       DEPENDERS configure

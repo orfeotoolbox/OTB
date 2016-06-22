@@ -4,13 +4,7 @@ if(NOT PATCH_PROGRAM)
   message(FATAL_ERROR "patch program not found. PATCH_PROGRAM. search names :' patch'")
 endif()
 
-set(OPTS)
-if(WIN32)
-  set(OPTS "--binary")
-endif()
-
 separate_arguments(DOT_DIFF_FILES)
-
 list(SORT DOT_DIFF_FILES)
 
 foreach(dot_diff_file ${DOT_DIFF_FILES})
@@ -18,7 +12,7 @@ foreach(dot_diff_file ${DOT_DIFF_FILES})
   execute_process(
     COMMAND
     ${CMAKE_COMMAND} -E chdir ${SOURCE_DIR} 
-    ${PATCH_PROGRAM} "-p1" "-i" "${dot_diff_file}" ${OPTS}
+    ${PATCH_PROGRAM} "-p1" "-i" "${dot_diff_file}" "${PATCH_ARGS}"
     RESULT_VARIABLE patch_rv
     OUTPUT_VARIABLE patch_ov
     OUTPUT_STRIP_TRAILING_WHITESPACE
