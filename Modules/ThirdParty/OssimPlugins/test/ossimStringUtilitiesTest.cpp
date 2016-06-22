@@ -172,9 +172,6 @@ void check_split(RangeType const& parts, char const* (&expected)[NbParts])
 }
 
 BOOST_AUTO_TEST_CASE(split1) {
-   typedef part_range<splitter_on_delim>       range_type;
-   typedef typename range_type::const_iterator const_iterator;
-
    {
       char const* expected[] = { "abc", "def", "xy" };
       check_split(split_on( "abc,def,xy", ','), expected);
