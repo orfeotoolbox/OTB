@@ -24,6 +24,7 @@
 template <typename SamplerType>
 std::string RunSampler(SamplerType *sampler, unsigned long total)
 {
+  std::string output;
   std::ostringstream oss;
   sampler->Reset();
   for (unsigned long i=0UL ; i < total ; ++i)
@@ -37,7 +38,9 @@ std::string RunSampler(SamplerType *sampler, unsigned long total)
       oss << "_";
       }
     }
-  return oss.str();
+  output = oss.str();
+  std::cout << "Sampling result : "<< output << std::endl;
+  return output;
 }
 
 int otbPeriodicSamplerTest(int, char *[])
@@ -52,7 +55,7 @@ int otbPeriodicSamplerTest(int, char *[])
   std::string test1 = RunSampler<otb::PeriodicSampler>(sampler,23);
   
   if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
-    std::cout << "Wrong nb of needed elements :" << std::endl;
+    std::cout << "1 - Wrong nb of needed elements :" << std::endl;
     std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
     std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
     return EXIT_FAILURE;
@@ -72,12 +75,11 @@ int otbPeriodicSamplerTest(int, char *[])
   sampler->SetRate(0.2,50);
   sampler->SetParameters(param);
   std::string test2 = RunSampler<otb::PeriodicSampler>(sampler,50);
-  std::string baseline2("_X___X_______X_X_______X___X___X_____X__X_____X___");
-  if (test2 != baseline2)
-    {
-    std::cout << "2 - Wrong sampling sequence :" << std::endl;
-    std::cout << "  expected : " << baseline2<< std::endl;
-    std::cout << "  got : " << test2 << std::endl;
+
+  if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
+    std::cout << "2 - Wrong nb of needed elements :" << std::endl;
+    std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
+    std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
     return EXIT_FAILURE;
     }
   
@@ -96,18 +98,9 @@ int otbPatternSamplerTest(int, char *[])
   std::string test1 = RunSampler<otb::PatternSampler>(sampler,23);
   
   if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
-    std::cout << "Wrong nb of needed elements :" << std::endl;
+    std::cout << "1 - Wrong nb of needed elements :" << std::endl;
     std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
     std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
-    return EXIT_FAILURE;
-    }
-  
-  std::string baseline1("_______X____X____XX__X_");
-  if (test1 != baseline1)
-    {
-    std::cout << "1 - Wrong sampling sequence :" << std::endl;
-    std::cout << "  expected : " << baseline1 << std::endl;
-    std::cout << "  got : " << test1 << std::endl;
     return EXIT_FAILURE;
     }
   
@@ -149,18 +142,9 @@ int otbRandomSamplerTest(int, char *[])
   std::string test1 = RunSampler<otb::RandomSampler>(sampler,23);
   
   if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
-    std::cout << "Wrong nb of needed elements :" << std::endl;
+    std::cout << "1 - Wrong nb of needed elements :" << std::endl;
     std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
     std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
-    return EXIT_FAILURE;
-    }
-  
-  std::string baseline1("_______X____X____XX__X_");
-  if (test1 != baseline1)
-    {
-    std::cout << "1 - Wrong sampling sequence :" << std::endl;
-    std::cout << "  expected : " << baseline1 << std::endl;
-    std::cout << "  got : " << test1 << std::endl;
     return EXIT_FAILURE;
     }
   
@@ -168,15 +152,13 @@ int otbRandomSamplerTest(int, char *[])
   sampler->SetRate(0.1,23);
   sampler->SetParameters(param);
   std::string test2 = RunSampler<otb::RandomSampler>(sampler,23);
-  std::string baseline2("_____________X_______X_");
-  if (test2 != baseline2)
-    {
-    std::cout << "2 - Wrong sampling sequence :" << std::endl;
-    std::cout << "  expected : " << baseline2 << std::endl;
-    std::cout << "  got : " << test2 << std::endl;
+
+  if ( sampler->GetChosenElements() != sampler->GetNeededElements() )    {
+    std::cout << "2 - Wrong nb of needed elements :" << std::endl;
+    std::cout << "  expected : " << sampler->GetNeededElements() << std::endl;
+    std::cout << "  got : " << sampler->GetChosenElements() << std::endl;
     return EXIT_FAILURE;
     }
-    
-  
+
   return EXIT_SUCCESS;
 }
