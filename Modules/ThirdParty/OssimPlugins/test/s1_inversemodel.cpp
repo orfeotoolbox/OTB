@@ -524,17 +524,17 @@ int main(int argc, char * argv[])
               )
           {
               ossimString att1 = "azimuthTime";
-              ossimString s = (*itNode)->findFirstNode(att1)->getText();
-              std::replace(s.begin(), s.end(), 'T', ' ');
-              boost::posix_time::ptime azTime(boost::posix_time::time_from_string(s));
+              ossimString s2 = (*itNode)->findFirstNode(att1)->getText();
+              std::replace(s2.begin(), s2.end(), 'T', ' ');
+              boost::posix_time::ptime azTime(boost::posix_time::time_from_string(s2));
 
               att1 = "firstValidSample";
-              s = (*itNode)->findFirstNode(att1)->getText();
+              s2 = (*itNode)->findFirstNode(att1)->getText();
 
               long first_valid(0), last_valid(0);
               bool begin_found(false), end_found(false);
 
-              std::vector<ossimString> ssp = s.split(" ");
+              std::vector<ossimString> ssp = s2.split(" ");
 
               for (std::vector<ossimString>::const_iterator sIt = ssp.begin(), sEnd = ssp.end()
                       ; sIt != sEnd && !end_found
@@ -595,16 +595,16 @@ int main(int argc, char * argv[])
               )
           {
               ossimString att1 = "azimuthTime";
-              ossimString s = (*itNode)->findFirstNode(att1)->getText();
-              std::replace(s.begin(), s.end(), 'T', ' ');
-              boost::posix_time::ptime azTime(boost::posix_time::time_from_string(s));
+              ossimString s2 = (*itNode)->findFirstNode(att1)->getText();
+              std::replace(s2.begin(), s2.end(), 'T', ' ');
+              boost::posix_time::ptime azTime(boost::posix_time::time_from_string(s2));
 
               att1 = "sr0";
               double sr0 = (*itNode)->findFirstNode(att1)->getText().toDouble();
 
               att1 = "srgrCoefficients";
-              s = (*itNode)->findFirstNode(att1)->getText();
-              std::vector<ossimString> ssplit = s.split(" ");
+              s2 = (*itNode)->findFirstNode(att1)->getText();
+              std::vector<ossimString> ssplit = s2.split(" ");
 
               std::vector<double> coefs;
 
@@ -636,9 +636,9 @@ int main(int argc, char * argv[])
       {
           // Retrieve acquisition time
           ossimString att1 = "azimuthTime";
-          ossimString s = (*itNode)->findFirstNode(att1)->getText();
-          std::replace(s.begin(), s.end(), 'T', ' ');
-          boost::posix_time::ptime azTime(boost::posix_time::time_from_string(s));
+          ossimString s2 = (*itNode)->findFirstNode(att1)->getText();
+          std::replace(s2.begin(), s2.end(), 'T', ' ');
+          boost::posix_time::ptime azTime(boost::posix_time::time_from_string(s2));
 
           att1 = "slantRangeTime";
           double slantRangeTime = (*itNode)->findFirstNode(att1)->getText().toDouble();
