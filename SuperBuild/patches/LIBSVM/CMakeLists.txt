@@ -4,6 +4,10 @@ project(libsvm)
 
 option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
 
+if(MSVC AND BUILD_SHARED_LIBS)
+ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 set(LIBSVM_SRCS "svm.cpp" )
 set(LIBSVM_HEADERS "svm.h")
 
