@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMbasedImageFilter_h
-#define __otbSOMbasedImageFilter_h
+#ifndef otbSOMbasedImageFilter_h
+#define otbSOMbasedImageFilter_h
 
 #include "itkMacro.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -143,10 +143,10 @@ public:
 
 protected:
   // throw the Map to the functor
-  virtual void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
 
   SOMbasedImageFilter ();
-  virtual ~SOMbasedImageFilter () {}
+  ~SOMbasedImageFilter () ITK_OVERRIDE {}
 
 private:
   SOMbasedImageFilter (const Self &);

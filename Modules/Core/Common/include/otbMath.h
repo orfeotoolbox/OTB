@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMath_h
-#define __otbMath_h
+#ifndef otbMath_h
+#define otbMath_h
 
 /**
  * otbMath.h defines standard math macros, constants, and other
@@ -90,7 +90,7 @@ const long double CONST_EULERl =    0.5772156649015328606065120900824024L;  /* e
 
 template <typename T> T InverseValue(const T & value)
 {
-  return ((value > 0 || value > 0) ? 1/value : 0);
+  return ((value > 0 || value < 0) ? 1/value : 0);
 }
 
 template <typename T> T SignOfValue(const T & value)

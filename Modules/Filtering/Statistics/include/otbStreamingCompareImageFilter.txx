@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingCompareImageFilter_txx
-#define __otbStreamingCompareImageFilter_txx
+#ifndef otbStreamingCompareImageFilter_txx
+#define otbStreamingCompareImageFilter_txx
 #include "otbStreamingCompareImageFilter.h"
 
 #include "itkImageRegionIterator.h"

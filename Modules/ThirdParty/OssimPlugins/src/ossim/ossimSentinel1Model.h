@@ -110,6 +110,12 @@ namespace ossimplugins
     virtual void lineSampleToWorld(const ossimDpt& image_point,
                                    ossimGpt&       gpt) const;
 
+    virtual void  worldToLineSample(const ossimGpt& world_point,
+                                    ossimDpt&       image_point) const;
+
+    virtual void imagingRay(const ossimDpt& image_point,
+                            ossimEcefRay&   image_ray) const;
+
     bool initImageSize(ossimIpt& imageSize) const
     {
        // theImageClipRect = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);

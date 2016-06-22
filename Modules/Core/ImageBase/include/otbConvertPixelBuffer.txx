@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConvertPixelBuffer_txx
-#define __otbConvertPixelBuffer_txx
+#ifndef otbConvertPixelBuffer_txx
+#define otbConvertPixelBuffer_txx
 #include "otbConvertPixelBuffer.h"
 
 #include "itkConvertPixelBuffer.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBCOInterpolateImageFunction_txx
-#define __otbBCOInterpolateImageFunction_txx
+#ifndef otbBCOInterpolateImageFunction_txx
+#define otbBCOInterpolateImageFunction_txx
 
 #include "otbBCOInterpolateImageFunction.h"
 

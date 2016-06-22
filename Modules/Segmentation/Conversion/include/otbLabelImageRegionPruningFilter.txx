@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelImageRegionPruningFilter_txx
-#define __otbLabelImageRegionPruningFilter_txx
+#ifndef otbLabelImageRegionPruningFilter_txx
+#define otbLabelImageRegionPruningFilter_txx
 
 #include "otbLabelImageRegionPruningFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -91,7 +91,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-      return 0;
+      return ITK_NULLPTR;
     }
   return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -115,7 +115,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-      return 0;
+      return ITK_NULLPTR;
     }
   return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
 }

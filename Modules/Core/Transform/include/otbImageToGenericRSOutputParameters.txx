@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToGenericRSOutputParameters_txx
-#define __otbImageToGenericRSOutputParameters_txx
+#ifndef otbImageToGenericRSOutputParameters_txx
+#define otbImageToGenericRSOutputParameters_txx
 
 
 #include "otbImageToGenericRSOutputParameters.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMassOfBelief_h
-#define __otbMassOfBelief_h
+#ifndef otbMassOfBelief_h
+#define otbMassOfBelief_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -177,10 +177,10 @@ protected:
   MassOfBelief() {}
 
   /** Desctructor */
-  virtual ~MassOfBelief() {}
+  ~MassOfBelief() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   MassOfBelief(const Self&); //purposely not implemented

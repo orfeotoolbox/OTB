@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelToBoundaryImageFilter_h
-#define __otbLabelToBoundaryImageFilter_h
+#ifndef otbLabelToBoundaryImageFilter_h
+#define otbLabelToBoundaryImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 
@@ -93,7 +93,7 @@ protected:
   {
     this->SetRadius(1);
   }
-  virtual ~LabelToBoundaryImageFilter() { }
+  ~LabelToBoundaryImageFilter() ITK_OVERRIDE { }
 
 private:
   LabelToBoundaryImageFilter( const Self & ); // Not implemented

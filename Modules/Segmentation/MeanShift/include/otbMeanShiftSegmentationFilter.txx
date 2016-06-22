@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanShiftSegmentationFilter_txx
-#define __otbMeanShiftSegmentationFilter_txx
+#ifndef otbMeanShiftSegmentationFilter_txx
+#define otbMeanShiftSegmentationFilter_txx
 
 #include "otbMeanShiftSegmentationFilter.h"
 

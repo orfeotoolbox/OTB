@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometriesSource_h
-#define __otbGeometriesSource_h
+#ifndef otbGeometriesSource_h
+#define otbGeometriesSource_h
 
 #include <boost/noncopyable.hpp>
 #include "itkProcessObject.h"
@@ -114,7 +114,7 @@ public:
    * initializing them.
    * \post <tt>GetOutput() != NULL</tt>
    */
-  virtual void PrepareOutputs();
+  void PrepareOutputs() ITK_OVERRIDE;
 
 protected:
   /** Default constructor.
@@ -124,7 +124,7 @@ protected:
   /** Destructor.
    * Does nothing.
    */
-  virtual ~GeometriesSource();
+  ~GeometriesSource() ITK_OVERRIDE;
 
   /** Ensures that the output geometries are allocated before processing.
    * If the output hasn't been set, at this point, the default output geometries
@@ -135,4 +135,4 @@ protected:
   };
 } // end namespace otb
 
-#endif // __otbGeometriesSource_h
+#endif // otbGeometriesSource_h

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperComplexInputImageParameter_txx
-#define __otbWrapperComplexInputImageParameter_txx
+#ifndef otbWrapperComplexInputImageParameter_txx
+#define otbWrapperComplexInputImageParameter_txx
 
 #include "otbWrapperComplexInputImageParameter.h"
 

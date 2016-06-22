@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDriversInit_h
-#define __otbOGRDriversInit_h
+#ifndef otbOGRDriversInit_h
+#define otbOGRDriversInit_h
 
 #include <boost/noncopyable.hpp>
 
@@ -57,4 +57,4 @@ private:
 
 } } // end namespace otb::ogr
 
-#endif // __otbOGRDriversInit_h
+#endif // otbOGRDriversInit_h

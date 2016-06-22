@@ -1,6 +1,6 @@
 
 int main(int argc, char *argv[])
 {
-  int *p = nullptr;
+  int *p = ITK_NULLPTR;
   return 0;
 }

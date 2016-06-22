@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSarBrightnessFunctor_h
-#define __otbSarBrightnessFunctor_h
+#ifndef otbSarBrightnessFunctor_h
+#define otbSarBrightnessFunctor_h
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"

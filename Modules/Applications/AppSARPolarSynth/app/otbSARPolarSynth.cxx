@@ -41,7 +41,7 @@ public:
   itkTypeMacro(SARPolarSynth, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("SARPolarSynth");
     SetDescription("Gives, for each pixel, the power that would have been received by a SAR system with a basis different from the classical (H,V) one (polarimetric synthetis).");
@@ -149,12 +149,12 @@ private:
     SetDocExampleParameterValue("out", "newbasis.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 	
 	m_MCPSFilter = MCPSFilterType::New();

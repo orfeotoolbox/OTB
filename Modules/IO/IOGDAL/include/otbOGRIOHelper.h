@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRIOHelper_h
-#define __otbOGRIOHelper_h
+#ifndef otbOGRIOHelper_h
+#define otbOGRIOHelper_h
 
 #include <vector>
 
@@ -86,7 +86,7 @@ public:
 
 protected:
   OGRIOHelper();
-  ~OGRIOHelper();
+  ~OGRIOHelper() ITK_OVERRIDE;
 
 private:
   OGRIOHelper(const Self &); //purposely not implemented

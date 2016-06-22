@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToClassStatisticsFilter_txx
-#define __otbOGRDataToClassStatisticsFilter_txx
+#ifndef otbOGRDataToClassStatisticsFilter_txx
+#define otbOGRDataToClassStatisticsFilter_txx
 
 #include "otbOGRDataToClassStatisticsFilter.h"
 
@@ -40,8 +40,8 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 ::Synthetize(void)
 {
   otb::ogr::DataSource* vectors = const_cast<otb::ogr::DataSource*>(this->GetOGRData());
-  vectors->GetLayer(this->GetLayerIndex()).SetSpatialFilter(NULL);
-  
+  vectors->GetLayer(this->GetLayerIndex()).SetSpatialFilter(ITK_NULLPTR);
+
   ClassCountMapType &classCount = this->GetClassCountOutput()->Get();
   PolygonSizeMapType &polygonSize = this->GetPolygonSizeOutput()->Get();
   
@@ -105,7 +105,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ClassCountObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -117,7 +117,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<ClassCountObjectType *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -129,7 +129,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const PolygonSizeObjectType *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -141,7 +141,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
 {
     if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<PolygonSizeObjectType *>(this->itk::ProcessObject::GetOutput(2));
 }

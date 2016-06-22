@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReaderBase_h
-#define __otbImageSeriesFileReaderBase_h
+#ifndef otbImageSeriesFileReaderBase_h
+#define otbImageSeriesFileReaderBase_h
 
 #include <iostream>
 #include <fstream>
@@ -131,7 +131,7 @@ public:
   {
     return m_ListOfFileNames.size();
   }
-  virtual OutputImageListType * GetOutput(void);
+  OutputImageListType * GetOutput(void) ITK_OVERRIDE;
   virtual OutputImageType *     GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Performs selective file extraction */
@@ -139,14 +139,14 @@ public:
   virtual OutputImageType * GenerateOutput(DataObjectPointerArraySizeType idx);
 
   /** Synchronization */
-  void Update()
+  void Update() ITK_OVERRIDE
   {
     this->GenerateData();
   }
 
 protected:
   ImageSeriesFileReaderBase();
-  virtual ~ImageSeriesFileReaderBase () {}
+  ~ImageSeriesFileReaderBase () ITK_OVERRIDE {}
 
   enum FileType { kFileName = 0, kImageFileName, kAnyFileName };
   /**
@@ -157,7 +157,7 @@ protected:
   virtual void TestFileExistanceAndReadability(std::string& file, FileType fileType);
   virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -179,7 +179,7 @@ protected:
   virtual void AllocateListOfComponents(void);
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   std::string                m_FileName;
   OutputImageListPointerType m_OutputList;

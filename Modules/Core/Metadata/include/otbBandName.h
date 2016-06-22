@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBandName_h
-#define __otbBandName_h
+#ifndef otbBandName_h
+#define otbBandName_h
 
 namespace otb
 {

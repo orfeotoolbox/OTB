@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletTransform_h
-#define __otbWaveletTransform_h
+#ifndef otbWaveletTransform_h
+#define otbWaveletTransform_h
 
 #include "otbImageToImageListFilter.h"
 #include "otbImageListToImageFilter.h"
@@ -173,10 +173,10 @@ public:
 
 protected:
   WaveletTransform();
-  virtual ~WaveletTransform() {}
+  ~WaveletTransform() ITK_OVERRIDE {}
 
   /** Generate data redefinition */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   WaveletTransform (const Self &);
@@ -304,16 +304,16 @@ public:
 
 protected:
   WaveletTransform();
-  virtual ~WaveletTransform() {}
+  ~WaveletTransform() ITK_OVERRIDE {}
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy information from the input image if existing.
     **/
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Generate data redefinition */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   WaveletTransform (const Self &);

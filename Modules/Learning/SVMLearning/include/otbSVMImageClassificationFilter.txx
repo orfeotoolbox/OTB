@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMImageClassificationFilter_txx
-#define __otbSVMImageClassificationFilter_txx
+#ifndef otbSVMImageClassificationFilter_txx
+#define otbSVMImageClassificationFilter_txx
 
 #include "otbSVMImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
@@ -52,7 +52,7 @@ SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }

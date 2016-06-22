@@ -91,7 +91,7 @@ protected:
       }
   }
 
-  virtual ~CurlResource()
+  ~CurlResource() ITK_OVERRIDE
   {
     curl_easy_cleanup(m_Curl);
   }
@@ -137,7 +137,7 @@ protected:
       }
   }
 
-  virtual ~CurlMultiResource()
+  ~CurlMultiResource() ITK_OVERRIDE
   {
     curl_multi_cleanup(m_Curl);
   }
@@ -175,7 +175,7 @@ public:
   {
     m_File = fopen(infname, "wb");
 
-    if (m_File == NULL)
+    if (m_File == ITK_NULLPTR)
       {
       itkExceptionMacro(<<" otbCurlHelper::FileResource : failed to open the file ."<< infname);
       }
@@ -184,7 +184,7 @@ public:
 protected:
   CurlFileDescriptorResource(){}
 
-  virtual ~CurlFileDescriptorResource()
+  ~CurlFileDescriptorResource() ITK_OVERRIDE
   {
     fclose(m_File);
   }

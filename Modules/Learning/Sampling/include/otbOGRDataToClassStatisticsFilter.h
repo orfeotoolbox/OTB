@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToClassStatisticsFilter_h
-#define __otbOGRDataToClassStatisticsFilter_h
+#ifndef otbOGRDataToClassStatisticsFilter_h
+#define otbOGRDataToClassStatisticsFilter_h
 
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -64,10 +64,10 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentOGRDataToClassStatisticsFilter, PersistentSamplingFilterBase);
 
-  void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
   /** Reset method called before starting the streaming*/
-  void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
   /** the class count map is stored as output #2 */
   const ClassCountObjectType* GetClassCountOutput() const;
@@ -79,24 +79,24 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
 protected:
   /** Constructor */
   PersistentOGRDataToClassStatisticsFilter();
   /** Destructor */
-  virtual ~PersistentOGRDataToClassStatisticsFilter() {}
+  ~PersistentOGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
 
   /** Implement generic method called at each candidate position */
-  virtual void ProcessSample(const ogr::Feature& feature,
-                             typename TInputImage::IndexType& imgIndex,
-                             typename TInputImage::PointType& imgPoint,
-                             itk::ThreadIdType& threadid);
+  void ProcessSample(const ogr::Feature& feature,
+                     typename TInputImage::IndexType& imgIndex,
+                     typename TInputImage::PointType& imgPoint,
+                     itk::ThreadIdType& threadid) ITK_OVERRIDE;
 
   /** Prepare temporary variables for the current feature */
-  virtual void PrepareFeature(const ogr::Feature& feature,
-                              itk::ThreadIdType& threadid);
+  void PrepareFeature(const ogr::Feature& feature,
+                      itk::ThreadIdType& threadid) ITK_OVERRIDE;
 
 private:
   PersistentOGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
@@ -180,7 +180,7 @@ protected:
   /** Constructor */
   OGRDataToClassStatisticsFilter() {}
   /** Destructor */
-  virtual ~OGRDataToClassStatisticsFilter() {}
+  ~OGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
 
 private:
   OGRDataToClassStatisticsFilter(const Self &); //purposely not implemented

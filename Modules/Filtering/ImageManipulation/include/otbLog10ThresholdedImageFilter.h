@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLog10ThresholdedImageFilter_h
-#define __otbLog10ThresholdedImageFilter_h
+#ifndef otbLog10ThresholdedImageFilter_h
+#define otbLog10ThresholdedImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"
@@ -101,7 +101,7 @@ public:
   }
 protected:
   Log10ThresholdedImageFilter() {}
-  virtual ~Log10ThresholdedImageFilter() {}
+  ~Log10ThresholdedImageFilter() ITK_OVERRIDE {}
 
 private:
   Log10ThresholdedImageFilter(const Self&); //purposely not implemented

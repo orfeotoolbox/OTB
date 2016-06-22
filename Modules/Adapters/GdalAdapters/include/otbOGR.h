@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGR_h
-#define __otbOGR_h
+#ifndef otbOGR_h
+#define otbOGR_h
 
 namespace otb {
   /**\defgroup gGeometry Geometry
@@ -43,4 +43,4 @@ namespace otb {
  */
 
 
-#endif // __otbOGR_h
+#endif // otbOGR_h

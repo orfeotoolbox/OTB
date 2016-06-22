@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEdgePathFilter_txx
-#define __otbImageToEdgePathFilter_txx
+#ifndef otbImageToEdgePathFilter_txx
+#define otbImageToEdgePathFilter_txx
 
 #include "otbImageToEdgePathFilter.h"
 #include "otbMacro.h"

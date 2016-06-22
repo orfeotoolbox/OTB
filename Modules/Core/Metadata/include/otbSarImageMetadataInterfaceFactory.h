@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarImageMetadataInterfaceFactory_h
-#define __otbSarImageMetadataInterfaceFactory_h
+#ifndef otbSarImageMetadataInterfaceFactory_h
+#define otbSarImageMetadataInterfaceFactory_h
 
 #include "itkObject.h"
 #include "otbSarImageMetadataInterface.h"
@@ -58,7 +58,7 @@ public:
 
 protected:
   SarImageMetadataInterfaceFactory();
-  ~SarImageMetadataInterfaceFactory();
+  ~SarImageMetadataInterfaceFactory() ITK_OVERRIDE;
 
 private:
   SarImageMetadataInterfaceFactory(const Self &); //purposely not implemented

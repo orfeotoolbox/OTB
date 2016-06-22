@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeVectorImageFilter_h
-#define __otbNormalizeVectorImageFilter_h
+#ifndef otbNormalizeVectorImageFilter_h
+#define otbNormalizeVectorImageFilter_h
 
 #include <vnl/vnl_math.h>
 
@@ -193,9 +193,9 @@ public:
 
 protected:
   NormalizeVectorImageFilter ();
-  virtual ~NormalizeVectorImageFilter() { }
+  ~NormalizeVectorImageFilter() ITK_OVERRIDE { }
 
-  void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 
 private:
@@ -218,5 +218,5 @@ private:
 #include "otbNormalizeVectorImageFilter.txx"
 #endif
 
-#endif // __otbNormalizeVectorImageFilter_h
+#endif // otbNormalizeVectorImageFilter_h
 

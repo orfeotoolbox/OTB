@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperListViewParameter_h
-#define __otbWrapperListViewParameter_h
+#ifndef otbWrapperListViewParameter_h
+#define otbWrapperListViewParameter_h
 
 #include "otbWrapperParameterGroup.h"
 
@@ -77,13 +77,13 @@ public:
   /** Return any value */
   virtual unsigned int GetValue();
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     // a choice parameter always has a value
     return true;
   }
 
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     // nothing to do : a choice parameter always has a value
   }
@@ -155,7 +155,7 @@ protected:
   ListViewParameter();
 
   /** Destructor */
-  virtual ~ListViewParameter();
+  ~ListViewParameter() ITK_OVERRIDE;
 
   struct ListViewChoice
   {

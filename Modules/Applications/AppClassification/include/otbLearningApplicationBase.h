@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbLearningApplicationBase_h
-#define __otbLearningApplicationBase_h
+#ifndef otbLearningApplicationBase_h
+#define otbLearningApplicationBase_h
 
 #include "otbConfigure.h"
 

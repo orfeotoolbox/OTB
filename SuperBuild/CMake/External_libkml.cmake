@@ -2,7 +2,6 @@ if(NOT __EXTERNAL_LIBKML__)
 set(__EXTERNAL_LIBKML__ 1)
 
 if(USE_SYSTEM_LIBKML)
-  find_package ( LibKML )
   message(STATUS "  Using libKML system version")
 else()
   SETUP_SUPERBUILD(PROJECT LIBKML)

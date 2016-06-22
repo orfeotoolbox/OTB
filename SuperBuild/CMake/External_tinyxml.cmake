@@ -1,10 +1,14 @@
-if(NOT __EXTERNAL_TINYXML__)
-set(__EXTERNAL_TINYXML__ 1)
+if( __EXTERNAL_TINYXML__)
+  return()
+else()
+  set(__EXTERNAL_TINYXML__ 1)
+endif()
 
 if(USE_SYSTEM_TINYXML)
-  find_package ( TinyXML )
   message(STATUS "  Using TinyXML system version")
-else()
+  return()
+endif()
+
   SETUP_SUPERBUILD(PROJECT TINYXML)
   message(STATUS "  Using TinyXML SuperBuild version")
 
@@ -14,10 +18,7 @@ else()
     URL_MD5 c1b864c96804a10526540c664ade67f0
     BINARY_DIR ${TINYXML_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
-      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    CMAKE_CACHE_ARGS
-      -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
-      -DCMAKE_BUILD_TYPE:STRING=Release
+    DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     DEPENDS ${TINYXML_DEPENDENCIES}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy
@@ -31,6 +32,3 @@ else()
   elseif(UNIX)
     set(_SB_TINYXML_LIBRARY ${SB_INSTALL_PREFIX}/lib/libtinyxml${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
-
-endif()
-endif()

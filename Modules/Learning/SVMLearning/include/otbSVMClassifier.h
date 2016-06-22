@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMClassifier_h
-#define __otbSVMClassifier_h
+#ifndef otbSVMClassifier_h
+#define otbSVMClassifier_h
 
 #include "vcl_deprecated_header.h"
 
@@ -105,15 +105,15 @@ public:
   /** Get the number of classes. */
   itkGetObjectMacro(Model, SVMModelType);
 
-  void Update();
+  void Update() ITK_OVERRIDE;
 
 protected:
   SVMClassifier();
-  virtual ~SVMClassifier() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~SVMClassifier() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Starts the classification process */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   virtual void DoClassification();
 
 private:
