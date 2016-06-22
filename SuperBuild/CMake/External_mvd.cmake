@@ -6,6 +6,8 @@ endif()
 
 SETUP_SUPERBUILD(MVD)
 
+set(MONTEVERDI_GIT_TAG "develop" CACHE STRING "branch name of monteverdi to build. Default is 'develop'")
+
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(MVD OTB QWT QT4)
 
@@ -16,10 +18,11 @@ ADD_SUPERBUILD_CMAKE_VAR(MVD QWT_LIBRARY)
 ADD_SUPERBUILD_CMAKE_VAR(MVD QT_QMAKE_EXECUTABLE)
 
 #TODO: control build testing via cmake variable properly
+
 ExternalProject_Add(MVD
   PREFIX MVD
   GIT_REPOSITORY "https://git@git.orfeo-toolbox.org/git/monteverdi2.git"
-  GIT_TAG "release-3.2"
+  GIT_TAG "${MONTEVERDI_GIT_TAG}"
   SOURCE_DIR ${MVD_SB_SRC}
   BINARY_DIR ${MVD_SB_BUILD_DIR}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
