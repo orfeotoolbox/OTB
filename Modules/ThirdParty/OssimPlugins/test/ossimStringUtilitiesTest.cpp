@@ -193,6 +193,10 @@ BOOST_AUTO_TEST_CASE(to_int) {
    BOOST_CHECK_EQUAL(to<int>("-12", "UT"), -12);
    BOOST_CHECK_EQUAL(to<int>("-0", "UT"), 0);
    BOOST_CHECK_EQUAL(to<int>("-13576", "UT"), -13576);
+
+   BOOST_CHECK_EQUAL(to_with_default<int>("abc", 42), 42);
+   BOOST_CHECK_EQUAL(to_with_default<int>("12h", 42), 42);
+   BOOST_CHECK_EQUAL(to_with_default<int>("0x12", 42), 42);
    BOOST_CHECK_THROW(to<int>("abc", "UT"), std::runtime_error);
    BOOST_CHECK_THROW(to<int>("12h", "UT"), std::runtime_error);
    BOOST_CHECK_THROW(to<int>("0x12", "UT"), std::runtime_error);
@@ -222,9 +226,12 @@ BOOST_AUTO_TEST_CASE(to_double) {
    BOOST_CHECK_CLOSE(to<double>("-13576.1", "UT"), -13576.1, 0.00001);
 
    // invalid double conversions return 0 as per ossim way of doind things
-   BOOST_CHECK_CLOSE(to<double>("abc", "UT"),      0,        0.00001);
-   BOOST_CHECK_CLOSE(to<double>("12h", "UT"),      12,       0.00001);
-   BOOST_CHECK_CLOSE(to<double>("0x12", "UT"),     0,        0.00001);
+   BOOST_CHECK_THROW(to<double>("abc", "UT"),  std::runtime_error);
+   BOOST_CHECK_THROW(to<double>("12h", "UT"),  std::runtime_error);
+   BOOST_CHECK_THROW(to<double>("0x12", "UT"), std::runtime_error);
+   BOOST_CHECK_CLOSE(to_with_default<double>("abc", 42),  42, 0.00001);
+   BOOST_CHECK_CLOSE(to_with_default<double>("12h", 42),  42, 0.00001);
+   BOOST_CHECK_CLOSE(to_with_default<double>("0x12", 42), 42, 0.00001);
 
    BOOST_CHECK(ossim::isnan(to<double>("nan", "UT")));
 }

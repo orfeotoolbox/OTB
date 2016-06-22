@@ -478,25 +478,83 @@ part_range<splitter_on_delim> split_on(String const& str, char delim) {
 }
 //@}
 
-/**\name string to number convertion */
+/**\name string to number conversion */
 //@{
+/**
+ * \brief Generic string to whatever conversion -- failure means exception.
+ * Tries to decode a value from a string.
+ * \tparam  T Type of the value decoded from the input string
+ * \param[in] v  input string to convert
+ * \param[in] context  context message for the exception thrown
+ *
+ * \return The value decoded
+ * \throw std::runtime_error if a value of type `T` cannot be decoded from the
+ * string.
+ * \note For efficiency reasons, the function has been specialized for integral
+ * floating point, and string types.
+ * \note That alternative to `ossimString::toXxxx()` function has been defined
+ * to support generic programing in `get()` and `add()` helper functions for
+ * keyword list.
+ * \see `to_with_default()` for the version that never fails, but returns a
+ * default value otherwise (being `T()` by default).
+ *
+ */
 template <typename T>
 inline
-T to(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
+T to(string_view const& v, string_view const& context)
 {
    T res ;
-   std::stringstream iss;
-   if (iss << v && iss >> res)  {
+   std::stringstream ss;
+   if (ss << v && (ss >> res >> std::ws).eof())  {
       return res;
    }
    throw std::runtime_error("Cannot decode "+v+" as "+
          typeid(T).name() + " while " + context);
 }
 
+/**
+ * \brief Generic string to whatever conversion -- failure is hidden.
+ * Tries to decode a value from a string.
+ * \tparam  T Type of the value decoded from the input string
+ * \param[in] v  input string to convert
+ * \param[in] def  default value returned in the conversion isn't possible
+ *
+ * \return The value decoded
+ * \return `def` if no value of type `T` can be decoded from `v`.
+ * \throw None
+ * \note For efficiency reasons, the function has been specialized for integral
+ * floating point, and string types.
+ * \note That alternative to `ossimString::toXxxx()` function has been defined
+ * to support generic programing in `get()` and `add()` helper functions for
+ * keyword list.
+ * \see `to()` for the version that fails by throwing exceptions.
+ */
+template <typename T>
+inline
+T to_with_default(string_view const& v, T const& def = T())
+{
+   T res = def;
+   std::stringstream ss;
+   if (ss << v && (ss >> res >> std::ws).eof())  {
+      return res;
+   }
+   return def;
+}
+
 namespace details {
-    // In a perfect world, we'd used enable_if & co to restrict the code to
-    // integral types
-    template <typename Int> inline Int to_integer(string_view const& v, ossimplugins::string_view const& context)
+    /**
+     * \brief Internal generic string to integer conversion (w/ exception).
+     * Tries to convert the input string into a integer type. If the
+     * string doesn't represent an integer value, an exception is thrown.
+     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
+     * co to restrict the code to integral types)
+     * \param[in] v  input string
+     * \param[in] context  context message for the exception thrown
+     *
+     * \return The string as an integer.
+     * \throw std::runtime_error is the number cannot be converted.
+     */
+    template <typename Int> inline Int to_integer(string_view const& v, string_view const& context)
     {
         // string_view::data() isn't compatible with strtol => we emulate it
 
@@ -523,15 +581,99 @@ namespace details {
         return is_negative ? -res : res;
     }
 
-    template <typename FloatType> FloatType to_float(string_view const& v, ossimplugins::string_view const& context) {
+    /**
+     * \brief Internal generic string to integer conversion (w/o exception).
+     * Tries to convert the input string into a integer type. If the
+     * string doesn't represent an integer value, the default value will be
+     * returned.
+     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
+     * co to restrict the code to integral types)
+     * \param[in] v  input string
+     * \param[in] def  default value returned in the conversion isn't possible
+     *
+     * \return The string as an integer.
+     * \return `def` if the string cannot be converted to an integer value.
+     * \throw None
+     */
+    template <typename Int> inline Int to_integer(string_view const& v, Int const def)
+    {
+        // string_view::data() isn't compatible with strtol => we emulate it
+
+        // TODO: handle HEX, OCT, BIN, locales?
+        string_view::const_iterator it  = v.begin();
+        string_view::const_iterator end = v.end();
+
+        bool is_negative = false;
+        Int res = 0;
+        if (it != end) {
+            // TODO: reject '-' with unsigned types
+            switch (*it) {
+                case '-': is_negative = true; /*[[fallthrough]]*/
+                case '+': ++it;
+            }
+            for ( ; it != end ; ++it) {
+                // only support arabic digits
+                if (!std::isdigit(*it)) {
+                   return def;
+                }
+                res  = 10 * res + *it - '0';
+            }
+        }
+        return is_negative ? -res : res;
+    }
+
+    /**
+     * \brief Internal generic string to float conversion (w/ exception).
+     * Tries to convert the input string into a floating point type. If the
+     * string doesn't represent a floating point value, an exception is thrown.
+     * \tparam FloatType floating point type (`float`, `double`, `long double`)
+     * \param[in] v  input string
+     * \param[in] context  context message for the exception thrown
+     *
+     * \return The string as a float. The special `"nan"` string is converted to
+     * `ossim::nan()`.
+     * \throw std::runtime_error is the number cannot be converted.
+     */
+    template <typename FloatType> inline FloatType to_float(string_view const& v, string_view const& context)
+    {
        if (contains(v, "nan")) {
           return ::ossim::nan();
        }
        FloatType res = FloatType(); // 0-construction
        if (!v.empty()) {
-          std::stringstream iss;
-          if (! (iss << v && iss >> res))  {
+          std::stringstream ss;
+          if (! (ss << v && (ss >> res >> std::ws).eof()))  {
              throw std::runtime_error("Cannot decode "+v+" as float value while " + context);
+          }
+       }
+       return res;
+    }
+
+    /**
+     * \brief Internal generic string to float conversion (w/o exception).
+     * Tries to convert the input string into a floating point type. If the
+     * string doesn't represent a floating point value, the default value will
+     * be returned.
+     * \tparam FloatType floating point type (`float`, `double`, `long double`)
+     * \param[in] v  input string
+     * \param[in] def  default value returned in the conversion isn't possible
+     *
+     * \return The string as a float. The special `"nan"` string is converted
+     * to `ossim::nan()`.
+     * \return `def` if the string cannot be converted to a floating point
+     * value.
+     * \throw None
+     */
+    template <typename FloatType> inline FloatType to_float(string_view const& v, FloatType const def)
+    {
+       if (contains(v, "nan")) {
+          return ::ossim::nan();
+       }
+       FloatType res = FloatType(); // 0-construction
+       if (!v.empty()) {
+          std::stringstream ss;
+          if (! (ss << v && (ss >> res >> std::ws).eof()))  {
+             return def;
           }
        }
        return res;
@@ -551,30 +693,29 @@ namespace details {
     }
 } // ossimplugins::details namespace
 
-template <> inline char to<char>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
-{ return details::to_integer<char>(v, context); }
+#define OSSIM_GENERATE_CONV(internal_to, type) \
+   template <> inline type to<type>(string_view const& v, string_view const& context) \
+   { return details::internal_to<type>(v, context); } \
+   template <> inline type to_with_default<type>(string_view const& v, type const& def) \
+   { return details::internal_to<type>(v, def); }
+// Note: specialization doesn't support default arguments, but default argument
+// T() will still work.
 
-template <> inline short to<short>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
-{ return details::to_integer<short>(v, context); }
+OSSIM_GENERATE_CONV(to_integer, char);
+OSSIM_GENERATE_CONV(to_integer, short);
+OSSIM_GENERATE_CONV(to_integer, int);
+OSSIM_GENERATE_CONV(to_integer, unsigned int);
+OSSIM_GENERATE_CONV(to_integer, long);
+OSSIM_GENERATE_CONV(to_float,   ossim_float32);
+OSSIM_GENERATE_CONV(to_float,   ossim_float64);
+#undef OSSIM_GENERATE_CONV
 
-template <> inline int to<int>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
-{ return details::to_integer<int>(v, context); }
+template <> inline std::string to<std::string>(string_view const& v, string_view const& /*context*/)
+{ return std::string(v.begin(), v.end()); }
 
-template <> inline unsigned int to<unsigned int>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
-{ return details::to_integer<unsigned int>(v, context); }
+template <typename T> inline T const& to(T const& v, string_view const& /*context*/) { return v; }
 
-template <> inline long to<long>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
-{ return details::to_integer<long>(v, context); }
-
-template <> inline ossim_float32 to<ossim_float32>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
-{ return details::to_float<ossim_float32>(v, context); }
-
-template <> inline ossim_float64 to<ossim_float64>(ossimplugins::string_view const& v, ossimplugins::string_view const& context)
-{ return details::to_float<ossim_float64>(v, context); }
-
-template <typename T> inline T const& to(T const& v, ossimplugins::string_view const& /*context*/) { return v; }
-
-template <typename T> inline T const& to_default(T const& v, T const& /* default*/, ossimplugins::string_view const& /*context*/) { return v; }
+template <typename T> inline T const& to_with_default(T const& v, T const& /* default*/) { return v; }
 
 // template <> inline double to<double>(ossimplugins::string_view const& v)
 // { return details::to_float<double>(v); }
