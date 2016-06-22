@@ -16,11 +16,8 @@ endmacro()
 
 # Macro SETUP_SUPERBUILD
 # Initialize usefull variables to build a superbuild project
-macro(SETUP_SUPERBUILD)
-  cmake_parse_arguments(NEW_SB "" "PROJECT" "" ${ARGN})
+macro(SETUP_SUPERBUILD NEW_SB_PROJECT)
   list(APPEND FROM_SUPERBUILD_LIST ${NEW_SB_PROJECT})
-  #message(STATUS "  Using ${NEW_SB_PROJECT} SuperBuild version")
-  #set_property(GLOBAL PROPERTY prop_${project}_DEPENDENCIES "")
   set(${NEW_SB_PROJECT}_DEPENDENCIES "")
   set(${NEW_SB_PROJECT}_SB_BUILD_DIR ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/build)
   set(${NEW_SB_PROJECT}_SB_SRC ${CMAKE_BINARY_DIR}/${NEW_SB_PROJECT}/src/${NEW_SB_PROJECT})
@@ -118,7 +115,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
 
   #glob all files ending with all.diff
   file(GLOB all_files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*all.diff")
-  
+
   #merge two list for the final one
   list(APPEND files_list ${all_files_list})
 

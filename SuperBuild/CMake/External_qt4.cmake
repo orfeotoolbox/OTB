@@ -1,6 +1,6 @@
 INCLUDE_ONCE_MACRO(QT4)
 
-SETUP_SUPERBUILD(PROJECT QT4)
+SETUP_SUPERBUILD(QT4)
 
 #RK: are we ready for QT4 build on linux?.
 #This comment here scares me away.

@@ -1,5 +1,5 @@
 INCLUDE_ONCE_MACRO(PCRE)
-SETUP_SUPERBUILD(PROJECT PCRE)
+SETUP_SUPERBUILD(PCRE)
 if(MSVC)
   # TODO ?
 else()
@@ -24,5 +24,5 @@ else()
     DEPENDEES patch update
     DEPENDERS configure
     )
-  
+
 endif()

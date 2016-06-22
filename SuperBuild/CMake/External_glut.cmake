@@ -5,7 +5,7 @@ if(APPLE)
   retunr()
 endif()
 
-SETUP_SUPERBUILD(PROJECT GLUT)
+SETUP_SUPERBUILD(GLUT)
 
 ExternalProject_Add(GLUT
   PREFIX GLUT
@@ -27,4 +27,3 @@ if(WIN32)
 elseif(UNIX)
   set(_SB_GLUT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libfreeglut${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
-
