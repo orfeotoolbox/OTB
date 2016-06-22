@@ -51,7 +51,7 @@ public:
   typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConcatenateImages");
     SetDescription("Concatenate a list of images of the same size into a single multi-channel one.");
@@ -84,7 +84,7 @@ private:
     SetDocExampleParameterValue("out", "otbConcatenateImages.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
 
@@ -94,7 +94,7 @@ private:
     m_ExtractorList = ExtractROIFilterListType::New();
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");

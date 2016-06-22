@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCurlHelperInterface_h
-#define __otbCurlHelperInterface_h
+#ifndef otbCurlHelperInterface_h
+#define otbCurlHelperInterface_h
 
 #include <iosfwd>
 #include "itkObject.h"
@@ -62,7 +62,7 @@ public:
 
 protected:
   CurlHelperInterface() {}
-  virtual ~CurlHelperInterface() {}
+  ~CurlHelperInterface() ITK_OVERRIDE {}
 
 private:
   CurlHelperInterface(const Self &);  //purposely not implemented

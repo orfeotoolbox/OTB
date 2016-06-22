@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericRadiativeTerms_h
-#define __otbAtmosphericRadiativeTerms_h
+#ifndef otbAtmosphericRadiativeTerms_h
+#define otbAtmosphericRadiativeTerms_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -115,9 +115,9 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel();
   /** Destructor */
-  ~AtmosphericRadiativeTermsSingleChannel() {}
+  ~AtmosphericRadiativeTermsSingleChannel() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   AtmosphericRadiativeTermsSingleChannel(const Self &); //purposely not implemented
@@ -262,9 +262,9 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTerms();
   /** Destructor */
-  ~AtmosphericRadiativeTerms() {}
+  ~AtmosphericRadiativeTerms() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   AtmosphericRadiativeTerms(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometricMomentsFunctor_h
-#define __otbRadiometricMomentsFunctor_h
+#ifndef otbRadiometricMomentsFunctor_h
+#define otbRadiometricMomentsFunctor_h
 
 #include "itkVariableLengthVector.h"
 #include "otbMath.h"

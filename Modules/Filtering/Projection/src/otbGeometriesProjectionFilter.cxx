@@ -216,7 +216,7 @@ OGRSpatialReference* otb::GeometriesProjectionFilter::DoDefineNewLayerSpatialRef
     }
   else
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 }
 

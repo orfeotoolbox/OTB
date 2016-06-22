@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToPathListFilter_h
-#define __otbImageToPathListFilter_h
+#ifndef otbImageToPathListFilter_h
+#define otbImageToPathListFilter_h
 
 #include "otbPathListSource.h"
 namespace otb
@@ -73,9 +73,9 @@ public:
 
 protected:
   ImageToPathListFilter();
-  virtual ~ImageToPathListFilter() {}
+  ~ImageToPathListFilter() ITK_OVERRIDE {}
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToPathListFilter(const Self &); //purposely not implemented

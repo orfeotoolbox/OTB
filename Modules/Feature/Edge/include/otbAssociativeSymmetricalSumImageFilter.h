@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAssociativeSymmetricalSumImageFilter_h
-#define __otbAssociativeSymmetricalSumImageFilter_h
+#ifndef otbAssociativeSymmetricalSumImageFilter_h
+#define otbAssociativeSymmetricalSumImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 
@@ -91,7 +91,7 @@ public:
 
 protected:
   AssociativeSymmetricalSumImageFilter() {}
-  virtual ~AssociativeSymmetricalSumImageFilter() {}
+  ~AssociativeSymmetricalSumImageFilter() ITK_OVERRIDE {}
 
 private:
   AssociativeSymmetricalSumImageFilter(const Self &); //purposely not implemented

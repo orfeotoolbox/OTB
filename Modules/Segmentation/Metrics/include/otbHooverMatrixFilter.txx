@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHooverMatrixFilter_txx
-#define __otbHooverMatrixFilter_txx
+#ifndef otbHooverMatrixFilter_txx
+#define otbHooverMatrixFilter_txx
 
 #include "otbHooverMatrixFilter.h"
 

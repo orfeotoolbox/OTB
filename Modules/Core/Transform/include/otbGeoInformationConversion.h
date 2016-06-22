@@ -16,11 +16,10 @@
 
 =========================================================================*/
 
-#ifndef __otbGeoInformationConversion_h
-#define __otbGeoInformationConversion_h
+#ifndef otbGeoInformationConversion_h
+#define otbGeoInformationConversion_h
 
 #include <string>
-
 
 namespace otb
 {

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImportImageFilter_txx
-#define __otbImportImageFilter_txx
+#ifndef otbImportImageFilter_txx
+#define otbImportImageFilter_txx
 
 #include "otbImportImageFilter.h"
 #include "itkObjectFactory.h"
@@ -43,7 +43,7 @@ ImportImageFilter<TOutputImage>
     }
   m_Direction.SetIdentity();
 
-  m_ImportPointer = 0;
+  m_ImportPointer = ITK_NULLPTR;
   m_FilterManageMemory = false;
   m_Size = 0;
 }

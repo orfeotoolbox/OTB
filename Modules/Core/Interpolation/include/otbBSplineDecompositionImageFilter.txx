@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplineDecompositionImageFilter_txx
-#define __otbBSplineDecompositionImageFilter_txx
+#ifndef otbBSplineDecompositionImageFilter_txx
+#define otbBSplineDecompositionImageFilter_txx
 #include "otbBSplineDecompositionImageFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"

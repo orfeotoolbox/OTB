@@ -46,16 +46,16 @@ public:
   itkNewMacro(Self);
 
   // Retrieve the full extent of the actor
-  virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const ITK_OVERRIDE;
 
   // Update internal actor state with respect to ViewSettings
-  virtual void ProcessViewSettings();
+  void ProcessViewSettings() ITK_OVERRIDE;
 
   // Heavy load/unload operations of data
-  virtual void UpdateData();
+  void UpdateData() ITK_OVERRIDE;
 
   // Gl rendering of current state
-  virtual void Render();
+  void Render() ITK_OVERRIDE;
 
   void SetUL( const PointType & );
 
@@ -84,7 +84,7 @@ public:
 protected:
   GlROIActor();
   
-  virtual ~GlROIActor();
+  ~GlROIActor() ITK_OVERRIDE;
   
 private:
   // prevent implementation

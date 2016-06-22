@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometricSarSensorModelAdapter_h
-#define __otbGeometricSarSensorModelAdapter_h
+#ifndef otbGeometricSarSensorModelAdapter_h
+#define otbGeometricSarSensorModelAdapter_h
 
 #include <vector>
 
@@ -73,7 +73,7 @@ public:
 
 protected:
   GeometricSarSensorModelAdapter();
-  virtual ~GeometricSarSensorModelAdapter();
+  ~GeometricSarSensorModelAdapter() ITK_OVERRIDE;
 
 private:
   GeometricSarSensorModelAdapter(const Self &); //purposely not implemented

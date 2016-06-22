@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputFilenameListParameter_h
-#define __otbWrapperInputFilenameListParameter_h
+#ifndef otbWrapperInputFilenameListParameter_h
+#define otbWrapperInputFilenameListParameter_h
 
 #include <string>
 #include "otbWrapperStringParameter.h"
@@ -73,14 +73,14 @@ public:
   /** Get one list of the stored files. */
   StringParameterListPointerType GetFileList() const;
 
-  bool HasValue() const;
+  bool HasValue() const ITK_OVERRIDE;
 
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
 
  /** Clear all the list. */
-  virtual void ClearValue();
+  void ClearValue() ITK_OVERRIDE;
 
 
 protected:
@@ -88,7 +88,7 @@ protected:
   InputFilenameListParameter();
 
   /** Destructor */
-  virtual ~InputFilenameListParameter();
+  ~InputFilenameListParameter() ITK_OVERRIDE;
 
 
   StringParameterListType::Pointer  m_FilenameList;

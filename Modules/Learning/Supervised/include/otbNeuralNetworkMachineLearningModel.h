@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNeuralNetworkMachineLearningModel_h
-#define __otbNeuralNetworkMachineLearningModel_h
+#ifndef otbNeuralNetworkMachineLearningModel_h
+#define otbNeuralNetworkMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 
@@ -169,23 +169,23 @@ public:
   itkSetMacro(Epsilon, double);
 
   /** Train the machine learning model */
-  virtual void Train();
+  void Train() ITK_OVERRIDE;
   /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="");
+  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="");
+  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &);
+  bool CanReadFile(const std::string &) ITK_OVERRIDE;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &);
+  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
 protected:
@@ -193,12 +193,12 @@ protected:
   NeuralNetworkMachineLearningModel();
 
   /** Destructor */
-  virtual ~NeuralNetworkMachineLearningModel();
+  ~NeuralNetworkMachineLearningModel() ITK_OVERRIDE;
 
   void LabelsToMat(const TargetListSampleType * listSample, cv::Mat & output);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeastSquareAffineTransformEstimator_txx
-#define __otbLeastSquareAffineTransformEstimator_txx
+#ifndef otbLeastSquareAffineTransformEstimator_txx
+#define otbLeastSquareAffineTransformEstimator_txx
 
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>

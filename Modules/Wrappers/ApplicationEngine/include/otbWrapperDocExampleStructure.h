@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperDocExampleStructure_h
-#define __otbWrapperDocExampleStructure_h
+#ifndef otbWrapperDocExampleStructure_h
+#define otbWrapperDocExampleStructure_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -117,7 +117,7 @@ protected:
   /** Constructor */
   DocExampleStructure();
   /** Destructor */
-  virtual ~DocExampleStructure();
+  ~DocExampleStructure() ITK_OVERRIDE;
 
 private:
   DocExampleStructure(const DocExampleStructure &); //purposely not implemented

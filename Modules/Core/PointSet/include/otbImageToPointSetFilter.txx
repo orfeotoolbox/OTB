@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToPointSetFilter_txx
-#define __otbImageToPointSetFilter_txx
+#ifndef otbImageToPointSetFilter_txx
+#define otbImageToPointSetFilter_txx
 
 #include "otbImageToPointSetFilter.h"
 
@@ -94,7 +94,7 @@ const typename ImageToPointSetFilter<TInputImage, TOutputPointSet>::InputImageTy
 ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1) return 0;
+  if (this->GetNumberOfInputs() < 1) return ITK_NULLPTR;
 
   return dynamic_cast<const InputImageType*>
            (this->ProcessObjectType::GetInput(0));
@@ -256,12 +256,12 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreadedGenerateData(const InputImageRegionType&, itk::ThreadIdType)
 {
   // The following code is equivalent to:
-  // itkExceptionMacro("subclass should override this method!!!");
+  // itkExceptionMacro("subclass should ITK_OVERRIDE this method!!!");
   // The ExceptionMacro is not used because gcc warns that a
   // 'noreturn' function does return
   std::ostringstream message;
   message << "itk::ERROR: " << this->GetNameOfClass()
-          << "(" << this << "): " << "Subclass should override this method!!!";
+          << "(" << this << "): " << "Subclass should ITK_OVERRIDE this method!!!";
   itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);
   throw e_;
 

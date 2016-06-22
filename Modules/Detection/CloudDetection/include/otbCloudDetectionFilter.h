@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCloudDetectionFilter_h
-#define __otbCloudDetectionFilter_h
+#ifndef otbCloudDetectionFilter_h
+#define otbCloudDetectionFilter_h
 
 #include "otbCloudDetectionFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -68,11 +68,11 @@ public:
 protected:
   CloudDetectionFilter();
 
-  virtual ~CloudDetectionFilter() {}
+  ~CloudDetectionFilter() ITK_OVERRIDE {}
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   CloudDetectionFilter(const Self &); //purposely not implemented

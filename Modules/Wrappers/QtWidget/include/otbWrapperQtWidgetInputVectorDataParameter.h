@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputVectorDataParameter_h
-#define __otbWrapperQtWidgetInputVectorDataParameter_h
+#ifndef otbWrapperQtWidgetInputVectorDataParameter_h
+#define otbWrapperQtWidgetInputVectorDataParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetInputVectorDataParameter : public QtWidgetParameter
   Q_OBJECT
 public:
   QtWidgetInputVectorDataParameter(InputVectorDataParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputVectorDataParameter();
+  ~QtWidgetInputVectorDataParameter() ITK_OVERRIDE;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -53,9 +53,9 @@ private:
   QtWidgetInputVectorDataParameter(const QtWidgetInputVectorDataParameter&); //purposely not implemented
   void operator=(const QtWidgetInputVectorDataParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   InputVectorDataParameter::Pointer m_InputVectorDataParam;

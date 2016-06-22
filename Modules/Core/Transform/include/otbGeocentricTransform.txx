@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeocentricTransform_txx
-#define __otbGeocentricTransform_txx
+#ifndef otbGeocentricTransform_txx
+#define otbGeocentricTransform_txx
 
 #include "otbGeocentricTransform.h"
 

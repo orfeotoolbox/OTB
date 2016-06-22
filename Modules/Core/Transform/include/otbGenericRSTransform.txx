@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRSTransform_txx
-#define __otbGenericRSTransform_txx
+#ifndef otbGenericRSTransform_txx
+#define otbGenericRSTransform_txx
 
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"
@@ -43,9 +43,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_OutputSpacing.Fill(1);
   m_OutputOrigin.Fill(0);
 
-  m_Transform = NULL;
-  m_InputTransform = NULL;
-  m_OutputTransform = NULL;
+  m_Transform = ITK_NULLPTR;
+  m_InputTransform = ITK_NULLPTR;
+  m_OutputTransform = ITK_NULLPTR;
   m_TransformUpToDate = false;
   m_TransformAccuracy = Projection::UNKNOWN;
 }
@@ -96,8 +96,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
 
   //Make sure that the state is clean:
-  m_InputTransform = NULL;
-  m_OutputTransform = NULL;
+  m_InputTransform = ITK_NULLPTR;
+  m_OutputTransform = ITK_NULLPTR;
 
   bool firstTransformGiveGeo = true;
   bool inputTransformIsSensor = false;
@@ -158,8 +158,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     m_InputTransform = itk::IdentityTransform<double, NInputDimensions>::New();
 //     firstTransformGiveGeo = false;
 
-    OGRSpatialReferenceH hSRS = NULL;
-    hSRS = OSRNewSpatialReference(NULL);
+    OGRSpatialReferenceH hSRS = ITK_NULLPTR;
+    hSRS = OSRNewSpatialReference(ITK_NULLPTR);
     const char * wktString = m_InputProjectionRef.c_str();
     if (OSRImportFromWkt(hSRS, (char **) &wktString) != OGRERR_NONE)
       {
@@ -283,7 +283,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GetInverse(Self * inverseTransform) const
 {
   // Test the inverseTransform pointer
-  if (inverseTransform == NULL)
+  if (inverseTransform == ITK_NULLPTR)
     {
     return false;
     }

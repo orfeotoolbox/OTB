@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbOSMDataToVectorDataGenerator_h
-#define __otbOSMDataToVectorDataGenerator_h
+#ifndef otbOSMDataToVectorDataGenerator_h
+#define otbOSMDataToVectorDataGenerator_h
 
 // store the nodes (points) coordinates
 #include <map>
@@ -162,7 +162,7 @@ public:
 
 protected:
   /** Generate Data method : lauch the process */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /**
     * Parse the xml file get from OSM to compose the requested vector
@@ -182,7 +182,7 @@ protected:
 
 
   OSMDataToVectorDataGenerator();
-  virtual ~OSMDataToVectorDataGenerator();
+  ~OSMDataToVectorDataGenerator() ITK_OVERRIDE;
 
 private:
   OSMDataToVectorDataGenerator(const Self&); //purposely not implemented

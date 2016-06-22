@@ -126,7 +126,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RadiometricIndices");
     SetDescription("Compute radiometric indices.");
@@ -433,7 +433,7 @@ private:
       }
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     //Nothing to do here
   }
@@ -483,7 +483,7 @@ private:
     otbAppLogINFO(<< m_Map[GetSelectedItems("list")[idx]].item << " added.");\
     }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();

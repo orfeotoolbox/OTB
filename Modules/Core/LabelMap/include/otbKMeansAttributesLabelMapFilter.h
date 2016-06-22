@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKMeansAttributesLabelMapFilter_h
-#define __otbKMeansAttributesLabelMapFilter_h
+#ifndef otbKMeansAttributesLabelMapFilter_h
+#define otbKMeansAttributesLabelMapFilter_h
 
 #include "itkLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
@@ -120,7 +120,7 @@ public:
 
 protected:
   KMeansAttributesLabelMapFilter();
-  ~KMeansAttributesLabelMapFilter() {};
+  ~KMeansAttributesLabelMapFilter() ITK_OVERRIDE {};
 
 
 private:

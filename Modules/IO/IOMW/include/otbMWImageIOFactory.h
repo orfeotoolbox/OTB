@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMWImageIOFactory_h
-#define __otbMWImageIOFactory_h
+#ifndef otbMWImageIOFactory_h
+#define otbMWImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 
@@ -37,8 +37,8 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
+  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
+  const char* GetDescription(void) const ITK_OVERRIDE;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -56,7 +56,7 @@ public:
 
 protected:
   MWImageIOFactory();
-  virtual ~MWImageIOFactory();
+  ~MWImageIOFactory() ITK_OVERRIDE;
 
 private:
   MWImageIOFactory(const Self &); //purposely not implemented

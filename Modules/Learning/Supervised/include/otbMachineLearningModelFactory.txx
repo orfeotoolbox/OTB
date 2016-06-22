@@ -81,7 +81,7 @@ for(typename std::list<MachineLearningModelTypePointer>::iterator k = possibleMa
 
       }
     }
-  return 0;
+  return ITK_NULLPTR;
 }
 
 template <class TInputValue, class TOutputValue>

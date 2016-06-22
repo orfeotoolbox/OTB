@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainDecisionTree_txx
-#define __otbTrainDecisionTree_txx
+#ifndef otbTrainDecisionTree_txx
+#define otbTrainDecisionTree_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb
