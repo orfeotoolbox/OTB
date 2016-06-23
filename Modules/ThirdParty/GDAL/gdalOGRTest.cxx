@@ -6,7 +6,7 @@
 int main(int argc,char * argv[])
 {
   OGRDataSourceH	hDS;
-  OGRSFDriverH        *pahDriver;
+  OGRSFDriverH    *pahDriver = NULL;
 
   OGRRegisterAll();
   hDS = OGROpen("null.shp", FALSE, pahDriver );
