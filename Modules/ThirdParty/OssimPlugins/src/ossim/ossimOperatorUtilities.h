@@ -48,9 +48,9 @@ namespace ossimplugins {
       }
    };
 
-   DEFINE_OPERATORS(addable, +=, +);
+   DEFINE_OPERATORS(addable,       +=, +);
    DEFINE_OPERATORS(substractable, -=, -);
-   DEFINE_OPERATORS(multipliable, *=, *);
+   DEFINE_OPERATORS(multipliable,  *=, *);
 #undef DEFINE_OPERATORS
 
    template <typename T, typename R> struct dividable {
@@ -60,7 +60,7 @@ namespace ossimplugins {
          return lhs;
       }
       friend scalar_type operator/(T const& lhs, T const& rhs) {
-         return ratio(lhs, rhs);
+         return ratio_(lhs, rhs);
       }
    };
 

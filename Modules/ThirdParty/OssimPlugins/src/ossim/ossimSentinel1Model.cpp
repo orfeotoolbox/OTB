@@ -889,7 +889,7 @@ namespace ossimplugins
 
          if (ssplit.empty())
          {
-            throw std::runtime_error("The "+rg0_xpath+" record has an empty coef vector");
+            throw std::runtime_error("The "+rg0_xpath.string()+" record has an empty coef vector");
          }
          add(theProductKwl,prefix+ NUMBER_KEY, ssplit.size());
 

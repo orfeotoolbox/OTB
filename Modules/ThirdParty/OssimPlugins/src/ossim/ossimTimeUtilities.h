@@ -247,7 +247,7 @@ namespace boost { namespace posix_time {
          void sub(precise_duration const& rhs) { m_usec_frac -= rhs.total_microseconds(); }
          void mult(scalar_type coeff)          { m_usec_frac *= coeff; }
          void div(scalar_type coeff)           { assert(coeff && "Cannot divide by 0"); m_usec_frac /= coeff; }
-         friend scalar_type ratio(precise_duration const& lhs, precise_duration const& rhs)
+         friend scalar_type ratio_(precise_duration const& lhs, precise_duration const& rhs)
          { return lhs.total_microseconds() / rhs.total_microseconds(); }
 
          friend precise_duration& operator+=(precise_duration & u, precise_duration const& v) {
