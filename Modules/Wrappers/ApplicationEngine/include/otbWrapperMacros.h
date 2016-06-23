@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperMacros_h
-#define __otbWrapperMacros_h
+#ifndef otbWrapperMacros_h
+#define otbWrapperMacros_h
 
 
 #define otbAppLogFATAL(x) \

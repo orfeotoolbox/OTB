@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLikelihoodPathListFilter_h
-#define __otbLikelihoodPathListFilter_h
+#ifndef otbLikelihoodPathListFilter_h
+#define otbLikelihoodPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
@@ -82,11 +82,11 @@ protected:
   /** Constructor */
   LikelihoodPathListFilter();
   /** Destructor */
-  virtual ~LikelihoodPathListFilter() {}
+  ~LikelihoodPathListFilter() ITK_OVERRIDE {}
   /** GenerateData method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LikelihoodPathListFilter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRPCSolverAdapter_h
-#define __otbRPCSolverAdapter_h
+#ifndef otbRPCSolverAdapter_h
+#define otbRPCSolverAdapter_h
 
 #include <vector>
 

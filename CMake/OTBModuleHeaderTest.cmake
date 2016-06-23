@@ -99,7 +99,7 @@ macro( otb_module_headertest _name )
       get_filename_component( _test_name ${_header_test_src} NAME_WE )
       add_custom_command(
         OUTPUT ${_header_test_src}
-        COMMAND ${PYTHON_EXECUTABLE} ${OTB_SOURCE_DIR}/Utilities/Maintenance/BuildHeaderTest.py
+        COMMAND ${PYTHON_EXECUTABLE} ${OTB_CMAKE_DIR}/../Utilities/Maintenance/BuildHeaderTest.py
         ${_name}
         ${${_name}_SOURCE_DIR}
         ${${_name}_BINARY_DIR}

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbInverseLogPolarTransform_txx
-#define __otbInverseLogPolarTransform_txx
+#ifndef otbInverseLogPolarTransform_txx
+#define otbInverseLogPolarTransform_txx
 
 #include "otbInverseLogPolarTransform.h"
 #include "otbMacro.h"

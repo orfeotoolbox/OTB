@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataFileReader_txx
-#define __otbVectorDataFileReader_txx
+#ifndef otbVectorDataFileReader_txx
+#define otbVectorDataFileReader_txx
 
 #include <fstream>
 
@@ -37,7 +37,7 @@ namespace otb
 template <class TOutputVectorData>
 VectorDataFileReader<TOutputVectorData>
 ::VectorDataFileReader() :
-  m_VectorDataIO(NULL),
+  m_VectorDataIO(ITK_NULLPTR),
   m_UserSpecifiedVectorDataIO(false),
   m_FileName("")
 {

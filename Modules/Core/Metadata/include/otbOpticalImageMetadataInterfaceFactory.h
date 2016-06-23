@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOpticalImageMetadataInterfaceFactory_h
-#define __otbOpticalImageMetadataInterfaceFactory_h
+#ifndef otbOpticalImageMetadataInterfaceFactory_h
+#define otbOpticalImageMetadataInterfaceFactory_h
 
 #include "itkObject.h"
 #include "otbOpticalImageMetadataInterface.h"
@@ -58,7 +58,7 @@ public:
 
 protected:
   OpticalImageMetadataInterfaceFactory();
-  ~OpticalImageMetadataInterfaceFactory();
+  ~OpticalImageMetadataInterfaceFactory() ITK_OVERRIDE;
 
 private:
   OpticalImageMetadataInterfaceFactory(const Self &); //purposely not implemented

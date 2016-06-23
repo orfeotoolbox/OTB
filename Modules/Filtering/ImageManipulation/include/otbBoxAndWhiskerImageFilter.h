@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBoxAndWhiskerImageFilter_h
-#define __otbBoxAndWhiskerImageFilter_h
+#ifndef otbBoxAndWhiskerImageFilter_h
+#define otbBoxAndWhiskerImageFilter_h
 
 #include "itkMacro.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -93,12 +93,12 @@ public:
 
 protected:
   BoxAndWhiskerImageFilter ();
-  virtual ~BoxAndWhiskerImageFilter () {}
+  ~BoxAndWhiskerImageFilter () ITK_OVERRIDE {}
 
   /** Main computation method implemented as a multithreaded filter */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  virtual void GenerateOutputInformation();
-  virtual void AllocateOutputs();
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void AllocateOutputs() ITK_OVERRIDE;
 
   /** Perform the outlier detection */
   PixelType PerformBoxAndWhiskerDetection(const PixelType& pixel);

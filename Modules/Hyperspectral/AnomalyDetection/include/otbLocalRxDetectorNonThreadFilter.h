@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLocalRxDetectorNonThreadFilter_h
-#define __otbLocalRxDetectorNonThreadFilter_h
+#ifndef otbLocalRxDetectorNonThreadFilter_h
+#define otbLocalRxDetectorNonThreadFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -89,16 +89,16 @@ public:
   itkGetMacro(ExternalRadius, int);
 
   /** Main computation method */
-  virtual void GenerateInputRequestedRegion();
-  virtual void GenerateData();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 //       virtual void BeforeThreadedGenerateData();
 //       virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 
 protected:
   LocalRxDetectorNonThreadFilter();
-  virtual ~LocalRxDetectorNonThreadFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LocalRxDetectorNonThreadFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LocalRxDetectorNonThreadFilter(const Self&); //purposely not implemented

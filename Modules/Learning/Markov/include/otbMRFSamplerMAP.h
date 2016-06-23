@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFSamplerMAP_h
-#define __otbMRFSamplerMAP_h
+#ifndef otbMRFSamplerMAP_h
+#define otbMRFSamplerMAP_h
 
 #include "otbMRFSampler.h"
 
@@ -62,7 +62,7 @@ public:
   itkTypeMacro(MRFSamplerMAP, MRFSampler);
 
   inline int Compute(const InputImageNeighborhoodIterator& itData,
-                     const LabelledImageNeighborhoodIterator& itRegul)
+                     const LabelledImageNeighborhoodIterator& itRegul) ITK_OVERRIDE
   {
     if (this->m_NumberOfClasses == 0)
       {
@@ -100,7 +100,7 @@ public:
 protected:
   // The constructor and destructor.
   MRFSamplerMAP() {};
-  virtual ~MRFSamplerMAP() {}
+  ~MRFSamplerMAP() ITK_OVERRIDE {}
 
 };
 

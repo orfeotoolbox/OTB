@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLinkPathListFilter_h
-#define __otbLinkPathListFilter_h
+#ifndef otbLinkPathListFilter_h
+#define otbLinkPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
@@ -81,11 +81,11 @@ protected:
   /** Constructor */
   LinkPathListFilter();
   /** Destructor */
-  virtual ~LinkPathListFilter() {}
+  ~LinkPathListFilter() ITK_OVERRIDE {}
   /** GenerateData method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**
    * Verify the angular condition to link a path.

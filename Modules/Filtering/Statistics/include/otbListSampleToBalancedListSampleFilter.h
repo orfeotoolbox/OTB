@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToBalancedListSampleFilter_h
-#define __otbListSampleToBalancedListSampleFilter_h
+#ifndef otbListSampleToBalancedListSampleFilter_h
+#define otbListSampleToBalancedListSampleFilter_h
 
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "itkDataObjectDecorator.h"
@@ -117,7 +117,7 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** In order to respect the fair data principle, the number of samples for
     * each label must be the same. This method computes the label that
@@ -126,12 +126,12 @@ protected:
   void ComputeMaxSampleFrequency();
 
   /** Make Output */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   ListSampleToBalancedListSampleFilter();
-  virtual ~ListSampleToBalancedListSampleFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ListSampleToBalancedListSampleFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ListSampleToBalancedListSampleFilter(const Self&); //purposely not implemented

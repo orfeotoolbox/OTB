@@ -57,7 +57,7 @@ else()
       )
 
     if(APPLE)
-      SUPERBUILD_PATCH_SOURCE(PROJ "patch-for-at-rpath")
+      SUPERBUILD_PATCH_SOURCE(PROJ)
     endif()
 
   endif()

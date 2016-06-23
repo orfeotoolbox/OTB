@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMaximumAutocorrelationFactorImageFilter_txx
-#define __otbMaximumAutocorrelationFactorImageFilter_txx
+#ifndef otbMaximumAutocorrelationFactorImageFilter_txx
+#define otbMaximumAutocorrelationFactorImageFilter_txx
 
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 #include "otbMultiChannelExtractROI.h"

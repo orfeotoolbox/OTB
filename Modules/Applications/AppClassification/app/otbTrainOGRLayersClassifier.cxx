@@ -51,7 +51,7 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("TrainOGRLayersClassifier");
     SetDescription("Train a SVM classifier based on labeled geometries and a list of features to consider.");
@@ -88,14 +88,14 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if ( HasValue("inshp") )
       {
       std::string shapefile = GetParameterString("inshp");
 
        otb::ogr::DataSource::Pointer ogrDS;
-       otb::ogr::Layer layer(NULL, false);
+       otb::ogr::Layer layer(ITK_NULLPTR, false);
 
        OGRSpatialReference oSRS("");
        std::vector<std::string> options;
@@ -119,7 +119,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     #ifdef OTB_USE_LIBSVM 
     clock_t tic = clock();
@@ -170,7 +170,7 @@ private:
              target->PushBack(feature.ogr().GetFieldAsInteger(GetParameterString("cfield").c_str()));
            }
          feature = layer.ogr().GetNextFeature();
-         goesOn = feature.addr() != 0;
+         goesOn = feature.addr() != ITK_NULLPTR;
        }
 
     ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();

@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingHistogramVectorImageFilter_txx
-#define __otbStreamingHistogramVectorImageFilter_txx
+#ifndef otbStreamingHistogramVectorImageFilter_txx
+#define otbStreamingHistogramVectorImageFilter_txx
 #include "otbStreamingHistogramVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

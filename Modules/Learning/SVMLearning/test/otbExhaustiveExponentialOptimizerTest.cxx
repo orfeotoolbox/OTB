@@ -69,7 +69,7 @@ public:
   };
 
   /** \return The accuracy value corresponding the parameters */
-  virtual MeasureType GetValue(const ParametersType& parameters) const
+  MeasureType GetValue(const ParametersType& parameters) const ITK_OVERRIDE
   {
     return static_cast<MeasureType> ( m_FunctionInternalParameters.GetElement(0) * parameters.GetElement(0) * parameters.GetElement(0) +
                                  m_FunctionInternalParameters.GetElement(1) * parameters.GetElement(1) * parameters.GetElement(1) +
@@ -80,10 +80,10 @@ public:
   };
 
   /** \return the number of parameters to optimize */
-  virtual unsigned int GetNumberOfParameters(void) const {return 2; };
+  unsigned int GetNumberOfParameters(void) const ITK_OVERRIDE {return 2; };
 
   /** \return The accuracy derivative corresponding to the parameters */
-  virtual void GetDerivative(const ParametersType& itkNotUsed(parameters), DerivativeType& itkNotUsed(derivative)) const {};
+  void GetDerivative(const ParametersType& itkNotUsed(parameters), DerivativeType& itkNotUsed(derivative)) const ITK_OVERRIDE {};
 
   /// Constructor
   Quadratic2DCostFunction()
@@ -92,7 +92,7 @@ public:
     m_FunctionInternalParameters.Fill(0.0);
   };
   /// Destructor
-  virtual ~Quadratic2DCostFunction(){};
+  ~Quadratic2DCostFunction() ITK_OVERRIDE{};
 
 private:
   Quadratic2DCostFunction(const Self &); //purposely not implemented

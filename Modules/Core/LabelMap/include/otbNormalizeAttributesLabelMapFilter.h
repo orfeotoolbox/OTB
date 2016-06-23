@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeAttributesLabelMapFilter_h
-#define __otbNormalizeAttributesLabelMapFilter_h
+#ifndef otbNormalizeAttributesLabelMapFilter_h
+#define otbNormalizeAttributesLabelMapFilter_h
 
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include <vector>
@@ -142,10 +142,10 @@ protected:
   NormalizeAttributesLabelMapFilter(){}
 
   /** Destructor */
-  virtual ~NormalizeAttributesLabelMapFilter(){}
+  ~NormalizeAttributesLabelMapFilter() ITK_OVERRIDE{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   NormalizeAttributesLabelMapFilter(const Self &); //purposely not implemented

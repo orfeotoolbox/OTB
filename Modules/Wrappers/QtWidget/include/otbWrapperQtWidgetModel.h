@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetModel_h
-#define __otbWrapperQtWidgetModel_h
+#ifndef otbWrapperQtWidgetModel_h
+#define otbWrapperQtWidgetModel_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT AppliThread : public QThread
       m_Application = app;
     }
 
-  virtual ~AppliThread();
+  ~AppliThread() ITK_OVERRIDE;
 
   inline void Execute()
   {
@@ -65,7 +65,7 @@ signals:
   void ExceptionRaised( QString what );
 
 protected:
-  virtual void run();
+  void run() ITK_OVERRIDE;
 
 private:
   AppliThread(const AppliThread&); //purposely not implemented
@@ -86,7 +86,7 @@ class ITK_ABI_EXPORT QtWidgetModel : public QObject
 public:
   QtWidgetModel(Application* app);
 
-  virtual ~QtWidgetModel();
+  ~QtWidgetModel() ITK_OVERRIDE;
 
   Application* GetApplication()
   {

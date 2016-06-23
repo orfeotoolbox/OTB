@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplineInterpolateImageFunction_h
-#define __otbBSplineInterpolateImageFunction_h
+#ifndef otbBSplineInterpolateImageFunction_h
+#define otbBSplineInterpolateImageFunction_h
 
 #include <vector>
 
@@ -104,8 +104,8 @@ public:
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  virtual OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& index) const;
+  OutputType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& index) const ITK_OVERRIDE;
 
   /** Derivative typedef support */
   typedef itk::CovariantVector<OutputType,
@@ -128,7 +128,7 @@ public:
   itkGetMacro(SplineOrder, int);
 
   /** Set the input image.  This must be set by the user. */
-  virtual void SetInputImage(const TImageType * inputData);
+  void SetInputImage(const TImageType * inputData) ITK_OVERRIDE;
 
   /** Update coefficients filter. Coefficient filter are computed over the buffered
    region of the input image. */
@@ -136,9 +136,9 @@ public:
 
 protected:
   BSplineInterpolateImageFunction();
-  virtual ~BSplineInterpolateImageFunction() {}
+  ~BSplineInterpolateImageFunction() ITK_OVERRIDE {}
   void operator =(const Self&);  //purposely not implemented
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   // These are needed by the smoothing spline routine.
   std::vector<CoefficientDataType> m_Scratch;           // temp storage for processing of Coefficients

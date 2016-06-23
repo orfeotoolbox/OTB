@@ -22,8 +22,8 @@
  * to interface to instance variables in a standard fashion.
  */
 
-#ifndef __otbMacro_h
-#define __otbMacro_h
+#ifndef otbMacro_h
+#define otbMacro_h
 
 #include "itkMacro.h"
 #include "itkObject.h"

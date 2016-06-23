@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPerBandVectorImageFilter_txx
-#define __otbPerBandVectorImageFilter_txx
+#ifndef otbPerBandVectorImageFilter_txx
+#define otbPerBandVectorImageFilter_txx
 
 #include "otbPerBandVectorImageFilter.h"
 

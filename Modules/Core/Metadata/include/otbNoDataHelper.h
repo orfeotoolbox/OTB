@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNoDataHelper_h
-#define __otbNoDataHelper_h
+#ifndef otbNoDataHelper_h
+#define otbNoDataHelper_h
 #include <vector>
 #include <cassert>
 #include "vnl/vnl_math.h"

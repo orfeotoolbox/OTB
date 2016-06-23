@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCorrectPolygonFunctor_h
-#define __otbCorrectPolygonFunctor_h
+#ifndef otbCorrectPolygonFunctor_h
+#define otbCorrectPolygonFunctor_h
 
 #include "otbSimplifyPathFunctor.h"
 #include "otbClosePathFunctor.h"

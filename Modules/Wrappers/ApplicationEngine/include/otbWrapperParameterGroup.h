@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperParameterGroup_h
-#define __otbWrapperParameterGroup_h
+#ifndef otbWrapperParameterGroup_h
+#define otbWrapperParameterGroup_h
 
 #include "itkObject.h"
 #include "otbWrapperParameter.h"
@@ -88,14 +88,14 @@ public:
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
   // Always has value
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return true;
   }
 
 protected:
   ParameterGroup();
-  virtual ~ParameterGroup();
+  ~ParameterGroup() ITK_OVERRIDE;
 
   typedef std::vector<Parameter::Pointer> ParameterListType;
   ParameterListType m_ParameterList;

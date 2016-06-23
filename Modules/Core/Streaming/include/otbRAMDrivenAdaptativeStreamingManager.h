@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAMDrivenAdaptativeStreamingManager_h
-#define __otbRAMDrivenAdaptativeStreamingManager_h
+#ifndef otbRAMDrivenAdaptativeStreamingManager_h
+#define otbRAMDrivenAdaptativeStreamingManager_h
 
 #include "otbStreamingManager.h"
 
@@ -80,11 +80,11 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region);
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
 
 protected:
   RAMDrivenAdaptativeStreamingManager();
-  virtual ~RAMDrivenAdaptativeStreamingManager();
+  ~RAMDrivenAdaptativeStreamingManager() ITK_OVERRIDE;
 
   /** The number of MegaBytes of RAM available */
   unsigned int m_AvailableRAMInMB;

@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbBandMathImageFilter_h
-#define __otbBandMathImageFilter_h
+#ifndef otbBandMathImageFilter_h
+#define otbBandMathImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -127,12 +127,12 @@ public:
 
 protected :
   BandMathImageFilter();
-  virtual ~BandMathImageFilter();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~BandMathImageFilter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData();
-  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
-  void AfterThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) ITK_OVERRIDE;
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
 private :
   BandMathImageFilter(const Self&); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEdgePathFilter_h
-#define __otbImageToEdgePathFilter_h
+#ifndef otbImageToEdgePathFilter_h
+#define otbImageToEdgePathFilter_h
 
 #include "otbImageToPathFilter.h"
 
@@ -82,10 +82,10 @@ public:
 
 protected:
   ImageToEdgePathFilter();
-  virtual ~ImageToEdgePathFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateOutputInformation() {}  //does nothing
-  virtual void GenerateData();
+  ~ImageToEdgePathFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  //does nothing
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   ImageToEdgePathFilter(const Self &); // purposely not implemented

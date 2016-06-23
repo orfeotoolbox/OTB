@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUniformAlphaBlendingFunctor_h
-#define __otbUniformAlphaBlendingFunctor_h
+#ifndef otbUniformAlphaBlendingFunctor_h
+#define otbUniformAlphaBlendingFunctor_h
 
 #include "itkMacro.h"
 #include "itkNumericTraits.h"

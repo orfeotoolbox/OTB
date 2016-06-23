@@ -227,7 +227,7 @@ public:
 
 protected:
    MuellerToPolarisationDegreeAndPowerImageFilter() {}
-  virtual ~MuellerToPolarisationDegreeAndPowerImageFilter() {}
+  ~MuellerToPolarisationDegreeAndPowerImageFilter() ITK_OVERRIDE {}
 
 private:
   MuellerToPolarisationDegreeAndPowerImageFilter(const Self&); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToSimulatedImageFilter_txx
-#define __otbLabelMapToSimulatedImageFilter_txx
+#ifndef otbLabelMapToSimulatedImageFilter_txx
+#define otbLabelMapToSimulatedImageFilter_txx
 
 #include "otbLabelMapToSimulatedImageFilter.h"
 

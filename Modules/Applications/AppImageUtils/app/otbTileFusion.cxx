@@ -42,7 +42,7 @@ public:
   typedef otb::TileImageFilter<FloatVectorImageType> TileFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("TileFusion");
     SetDescription("Fusion of an image made of several tile files.");
@@ -75,12 +75,12 @@ private:
     SetDocExampleParameterValue("out", "EntireImage.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to be done
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the input image list
     FloatVectorImageListType::Pointer tileList = this->GetParameterImageList("il");

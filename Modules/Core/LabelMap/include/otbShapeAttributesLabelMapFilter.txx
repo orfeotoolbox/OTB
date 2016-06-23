@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShapeAttributesLabelMapFilter_txx
-#define __otbShapeAttributesLabelMapFilter_txx
+#ifndef otbShapeAttributesLabelMapFilter_txx
+#define otbShapeAttributesLabelMapFilter_txx
 
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "itkProgressReporter.h"
@@ -46,7 +46,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   m_ComputeFlusser(true),
   m_ComputePolygon(true),
   m_ReducedAttributeSet(true),
-  m_LabelImage(NULL)
+  m_LabelImage(ITK_NULLPTR)
 {}
 
 /** The comparator (!=) */

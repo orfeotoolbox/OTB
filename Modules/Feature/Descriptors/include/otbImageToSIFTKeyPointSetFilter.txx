@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToSIFTKeyPointSetFilter_txx
-#define __otbImageToSIFTKeyPointSetFilter_txx
+#ifndef otbImageToSIFTKeyPointSetFilter_txx
+#define otbImageToSIFTKeyPointSetFilter_txx
 
 #include "otbImageToSIFTKeyPointSetFilter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDSFusionOfClassifiersImageFilter_txx
-#define __otbDSFusionOfClassifiersImageFilter_txx
+#ifndef otbDSFusionOfClassifiersImageFilter_txx
+#define otbDSFusionOfClassifiersImageFilter_txx
 
 #include "otbDSFusionOfClassifiersImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -59,7 +59,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }

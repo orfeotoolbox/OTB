@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConfusionMatrixCalculator_txx
-#define __otbConfusionMatrixCalculator_txx
+#ifndef otbConfusionMatrixCalculator_txx
+#define otbConfusionMatrixCalculator_txx
 
 
 namespace otb

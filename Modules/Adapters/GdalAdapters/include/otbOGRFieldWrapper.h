@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRFieldWrapper_h
-#define __otbOGRFieldWrapper_h
+#ifndef otbOGRFieldWrapper_h
+#define otbOGRFieldWrapper_h
 
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -212,4 +212,4 @@ private:
 #include "otbOGRFieldWrapper.txx"
 #endif
 
-#endif // __otbOGRFieldWrapper_h
+#endif // otbOGRFieldWrapper_h

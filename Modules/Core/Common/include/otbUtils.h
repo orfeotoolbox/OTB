@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUtils_h
-#define __otbUtils_h
+#ifndef otbUtils_h
+#define otbUtils_h
 
 #include "itkMacro.h"
 

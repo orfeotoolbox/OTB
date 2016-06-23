@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolyLineImageIterator_h
-#define __otbPolyLineImageIterator_h
+#ifndef otbPolyLineImageIterator_h
+#define otbPolyLineImageIterator_h
 
 #include "otbPolyLineImageConstIterator.h"
 
@@ -92,7 +92,7 @@ public:
   PolyLineImageIterator(ImageType * imagePtr, PathType * pathPtr)
     : Superclass(imagePtr, pathPtr) {};
   /** Default Destructor. */
-  virtual ~PolyLineImageIterator() {}
+  ~PolyLineImageIterator() ITK_OVERRIDE {}
 };
 } // End namespace otb
 

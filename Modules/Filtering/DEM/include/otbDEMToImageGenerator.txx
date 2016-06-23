@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMToImageGenerator_txx
-#define __otbDEMToImageGenerator_txx
+#ifndef otbDEMToImageGenerator_txx
+#define otbDEMToImageGenerator_txx
 
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
