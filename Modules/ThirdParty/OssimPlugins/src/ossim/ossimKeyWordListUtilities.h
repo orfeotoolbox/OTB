@@ -11,13 +11,34 @@
 #ifndef ossimKeyWordListUtilities_h
 #define ossimKeyWordListUtilities_h
 
+#include "ossimStringUtilities.h"
+#include "ossimXmlTools.h"
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimXmlNode.h>
-#include "ossimStringUtilities.h"
-#include "ossimXmlTools.h"
+#include <stdexcept>
 
 namespace ossimplugins {
+   class kw_runtime_error : public std::runtime_error {
+   public:
+      explicit kw_runtime_error(std::string const& msg)
+         : std::runtime_error(msg)
+         {}
+   };
+   class empty_keyword_data : public kw_runtime_error {
+   public:
+      explicit empty_keyword_data(std::string const& keyword)
+         : kw_runtime_error("Data associated to '"+keyword+"' keyword is empty.")
+         {}
+   };
+
+   class missing_keyword : public kw_runtime_error {
+   public:
+      explicit missing_keyword(std::string const& keyword)
+         : kw_runtime_error("Cannot find '"+keyword+"' keyword in keyword list.")
+         {}
+   };
+
    inline
       void addOptional(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key,
             ossimXmlNode const& parentNode, ossimString const& xpath)
@@ -183,21 +204,24 @@ namespace ossimplugins {
 #endif
 
    template <typename T>
-   inline void get(ossimKeywordlist const& kwl, std::string const& prefix, std::string const& key, T & v)
-   {
-      std::string const& str = kwl.findKey(prefix, key);
-      assert(&str != &ossimKeywordlist::NULL_KW);
-      assert(!str.empty());
-      v = to<T>(str, " extracting " + prefix + key + "from KWL");
-   }
-
-   template <typename T>
    inline void get(ossimKeywordlist const& kwl, std::string const& key, T & v)
    {
       std::string const& str = kwl.findKey(key);
+      if (&str == &ossimKeywordlist::NULL_KW) {
+         throw missing_keyword(key);
+      }
+      if (str.empty()) {
+         throw empty_keyword_data(key);
+      }
       assert(&str != &ossimKeywordlist::NULL_KW);
       assert(!str.empty());
       v = to<T>(str, " extracting " + key + "from KWL");
+   }
+
+   template <typename T>
+   inline void get(ossimKeywordlist const& kwl, std::string const& prefix, std::string const& key, T & v)
+   {
+      return get(kwl, prefix+key, v);
    }
 
    inline void get(ossimKeywordlist const& kwl, std::string const& key, time::ModifiedJulianDate & v)

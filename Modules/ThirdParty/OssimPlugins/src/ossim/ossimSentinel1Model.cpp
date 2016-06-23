@@ -537,7 +537,7 @@ namespace ossimplugins
       const ossimString & productType  = getTextFromFirstNode(adsHeader, "productType");
       theProductType = ProductType(productType);
 
-      add(theProductKwl, HEADER_PREFIX, "product_type", productType.string());
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "product_type", productType.string());
 
       addMandatory(theProductKwl, HEADER_PREFIX, "swath",        adsHeader, "swath");
       addMandatory(theProductKwl, HEADER_PREFIX, "polarisation", adsHeader, "polarisation");

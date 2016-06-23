@@ -984,9 +984,17 @@ namespace ossimplugins
          std::vector<ossimSarSensorModel::OrbitRecordType> & orbitRecords)
    {
       char orbit_prefix_[256];
-      // TODO: read number of bursts ->
       std::size_t nbOrbits;
-      get(kwl, "orbitList.nb_orbits", nbOrbits);
+      try {
+         get(kwl, "orbitList.nb_orbits", nbOrbits);
+      } catch (kw_runtime_error const& e) {
+         nbOrbits = kwl.getNumberOfKeysThatMatch("orbitList\\.orbit\\[.*\\]\\.time");
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING: " << e.what()
+            << "\n\tNumber of orbits manually counted to " << nbOrbits
+            << ".\n\tPlease update your geom file.\n";
+      }
+
       for (std::size_t i=0; i!=nbOrbits ; ++i) {
          const int pos = std::snprintf(orbit_prefix_, sizeof(orbit_prefix_), "orbitList.orbit[%d].", int(i));
          assert(pos > 0 && pos < 256);
@@ -1088,39 +1096,51 @@ namespace ossimplugins
       static const char MODULE[] = "ossimplugins::ossimSarSensorModel::loadState";
       SCOPED_LOG(traceDebug, MODULE);
 
-      ossimSensorModel::loadState(kwl, prefix);
+      try
+      {
+         const bool success = ossimSensorModel::loadState(kwl, prefix);
+         if (!success) {
+            return false;
+         }
 
-      // And finally, extract data into fields
-      std::string product_type_string;
-      get(kwl, HEADER_PREFIX + "product_type", product_type_string);
-      theProductType = ProductType(product_type_string);
+         // And finally, extract data into fields
+         std::string product_type_string;
+         get(kwl, SUPPORT_DATA_PREFIX + "product_type", product_type_string);
+         theProductType = ProductType(product_type_string);
 
-      get(kwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", theNearRangeTime      );
-      get(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
-      get(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
-      get(kwl, SUPPORT_DATA_PREFIX, "radar_frequency"           , theRadarFrequency     );
-      double azimuthTimeInterval = 0.; // in seconds
-      get(kwl, SUPPORT_DATA_PREFIX, "line_time_interval"        , azimuthTimeInterval);
+         get(kwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", theNearRangeTime      );
+         get(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
+         get(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
+         get(kwl, SUPPORT_DATA_PREFIX, "radar_frequency"           , theRadarFrequency     );
+         double azimuthTimeInterval = 0.; // in seconds
+         get(kwl, SUPPORT_DATA_PREFIX, "line_time_interval"        , azimuthTimeInterval);
 #if defined(USE_BOOST_TIME)
-      theAzimuthTimeInterval = boost::posix_time::precise_duration(azimuthTimeInterval * 1000000.);
+         theAzimuthTimeInterval = boost::posix_time::precise_duration(azimuthTimeInterval * 1000000.);
 #else
-      theAzimuthTimeInterval = seconds(azimuthTimeInterval);
+         theAzimuthTimeInterval = seconds(azimuthTimeInterval);
 #endif
 
-      get(kwl, theOrbitRecords);
-      // TODO: don't fetch burst records if already read thanks to xml loading
-      // that required them
-      get(kwl, theBurstRecords);
-      if (isGRD())
-      {
-         get(kwl, SR_PREFIX, keySr0, theSlantRangeToGroundRangeRecords);
-         get(kwl, GR_PREFIX, keyGr0, theGroundRangeToSlantRangeRecords);
+         get(kwl, theOrbitRecords);
+         // TODO: don't fetch burst records if already read thanks to xml loading
+         // that required them
+         theBurstRecords.clear();
+         get(kwl, theBurstRecords);
+         if (isGRD())
+         {
+            get(kwl, SR_PREFIX, keySr0, theSlantRangeToGroundRangeRecords);
+            get(kwl, GR_PREFIX, keyGr0, theGroundRangeToSlantRangeRecords);
+         }
+         get(kwl, theGCPRecords);
+
+         optimizeTimeOffsetsFromGcps();
+         return true;
+      } catch (std::runtime_error const& e) {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING: " << e.what()
+            << "\n\tIt won't be possible to orthorectify the associated images!"
+            << "\n\tPlease update your geom file.\n";
       }
-      get(kwl, theGCPRecords);
-
-      optimizeTimeOffsetsFromGcps();
-
-      return true;
+      return false;
    }
 }
 
