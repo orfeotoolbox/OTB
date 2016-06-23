@@ -17,7 +17,7 @@ ossimXmlNode const& ossimplugins::getExpectedFirstNode(ossimXmlNode const& node,
 {
     ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
     if (!wh) {
-        throw std::runtime_error("No subnode found for xpath '" + xpath.string() + "'");
+        throw std::runtime_error("No '" + xpath.string() + "' subnode found");
     }
     return *wh;
 }

@@ -506,18 +506,24 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::readProduct(const ossimFilename &productXmlFile)
    {
-      const bool ret = read(productXmlFile);
-      if ( ret )
+      try
       {
-         readCalibrationMetadata();
-         readNoiseMetadata();
-         return true;
+         const bool ret = read(productXmlFile);
+         if ( ret )
+         {
+            readCalibrationMetadata();
+            readNoiseMetadata();
+            return true;
+         }
+      } catch (std::exception const& e) {
+         if (traceExec())
+            ossimNotify(ossimNotifyLevel_INFO)
+               << "Error while reading " << productXmlFile << " as Sentinel1 model: " << e.what() << "\n";
       }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_FATAL) << " read() failed\n";
-         return false;
-      }
+      if (traceExec())
+         ossimNotify(ossimNotifyLevel_FATAL)
+               << "Cannot read " << productXmlFile << " as Sentinel1 model.\n";
+      return false;
    }
 
    bool ossimSentinel1Model::read(ossimFilename const& annotationXml)
