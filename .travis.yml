@@ -11,6 +11,7 @@ addons:
     - libqt4-dev
     - libqtcore4
     - libqtgui4
+    - libboost-all-dev
 
 before_script:
   - export MAKE_CMD=/tmp/ninja
