@@ -38,6 +38,7 @@ otbStreamingMinMaxVectorImageFilter.cxx
 otbListSampleGeneratorTest.cxx
 otbImaginaryImageToComplexImageFilterTest.cxx
 otbListSampleToHistogramListGenerator.cxx
+otbSamplerTest.cxx
 )
 
 add_executable(otbStatisticsTestDriver ${OTBStatisticsTests})
@@ -493,3 +494,14 @@ otb_add_test(NAME bfTvListSampleToHistogramListGenerator COMMAND otbStatisticsTe
   10 1
   )
 
+otb_add_test(NAME bfTvPeriodicSamplerTest
+             COMMAND otbStatisticsTestDriver
+             otbPeriodicSamplerTest)
+
+otb_add_test(NAME bfTvPatternSamplerTest
+             COMMAND otbStatisticsTestDriver
+             otbPatternSamplerTest)
+
+otb_add_test(NAME bfTvRandomSamplerTest
+             COMMAND otbStatisticsTestDriver
+             otbRandomSamplerTest)
