@@ -20,6 +20,7 @@
 
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -33,7 +34,7 @@ namespace otb
  *
  * \ingroup OTBSampling
  */
-template <class TInputImage, class TMaskImage>
+template <class TInputImage, class TMaskImage = otb::Image<unsigned char,2> >
 class ITK_EXPORT PersistentSamplingFilterBase
   : public otb::PersistentImageFilter<TInputImage, TInputImage>
 {

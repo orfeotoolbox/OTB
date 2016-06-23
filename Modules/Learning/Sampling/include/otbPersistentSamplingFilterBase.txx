@@ -175,6 +175,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   this->m_InMemoryInputs.clear();
 
   // gather temporary outputs and write to output
+  const otb::ogr::DataSource* vectors = this->GetOGRData();
   itk::TimeProbe chrono;
   chrono.Start();
   unsigned int count = 0;
@@ -203,11 +204,24 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
           }
   
         ogr::Layer::const_iterator tmpIt = inLayer.begin();
-        for(; tmpIt!=inLayer.end(); ++tmpIt)
+        // This test only uses 1 input, not compatible with multiple OGRData inputs
+        if (vectors == realOutput)
           {
-          ogr::Feature dstFeature(outLayer.GetLayerDefn());
-          dstFeature.SetFrom( *tmpIt, TRUE );
-          outLayer.CreateFeature( dstFeature );
+          // Update mode
+          for(; tmpIt!=inLayer.end(); ++tmpIt)
+            {
+            outLayer.SetFeature( *tmpIt );
+            }
+          }
+        else
+          {
+          // Copy mode
+          for(; tmpIt!=inLayer.end(); ++tmpIt)
+            {
+            ogr::Feature dstFeature(outLayer.GetLayerDefn());
+            dstFeature.SetFrom( *tmpIt, TRUE );
+            outLayer.CreateFeature( dstFeature );
+            }
           }
         }
   
@@ -715,8 +729,8 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   if (inputDS == outputDS)
     {
     updateMode = true;
-    // Check input layer name is same as m_OutLayerName
-    // TODO
+    // Check m_OutLayerName is same as input layer name 
+    m_OutLayerName = inLayer.GetName();
     }
 
   // First get list of current fields
@@ -756,6 +770,8 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // Add new fields
   for (unsigned int k=0 ; k<m_AdditionalFields.size() ; k++)
     {
+    // DEBUG
+    std::cout << "Add new field "<< m_AdditionalFields[k].GetName() << std::endl;
     // test if field is already present
     if (currentFields.count(m_AdditionalFields[k].GetName()))
       {
