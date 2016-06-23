@@ -60,7 +60,7 @@ namespace ossimplugins {
          return lhs;
       }
       friend scalar_type operator/(T const& lhs, T const& rhs) {
-         return ratio_(lhs, rhs);
+         return ratio(lhs, rhs);
       }
    };
 

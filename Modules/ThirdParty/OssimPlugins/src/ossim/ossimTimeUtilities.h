@@ -171,7 +171,6 @@ namespace ossimplugins { namespace time {
          using details::DayFrac::diff;
       };
 
-
    ModifiedJulianDate toModifiedJulianDate(string_view const& utcTimeString);
    inline Duration microseconds(double us) {
       return Duration(us / (24L * 60 * 60 * 1000 * 1000));
@@ -199,8 +198,11 @@ namespace ossimplugins { namespace time {
 // TODO:
 // - check whether we could have used another boost date
 // - move this elsewhere
-// - move this into another namespace 
+// - move this into another namespace
 namespace boost { namespace posix_time {
+   class precise_duration;
+   double ratio(precise_duration const& lhs, precise_duration const& rhs);
+
    class precise_duration
       : private ossimplugins::addable<precise_duration>
       , private ossimplugins::substractable<precise_duration>
@@ -247,9 +249,6 @@ namespace boost { namespace posix_time {
          void sub(precise_duration const& rhs) { m_usec_frac -= rhs.total_microseconds(); }
          void mult(scalar_type coeff)          { m_usec_frac *= coeff; }
          void div(scalar_type coeff)           { assert(coeff && "Cannot divide by 0"); m_usec_frac /= coeff; }
-         friend scalar_type ratio_(precise_duration const& lhs, precise_duration const& rhs)
-         { return lhs.total_microseconds() / rhs.total_microseconds(); }
-
          friend precise_duration& operator+=(precise_duration & u, precise_duration const& v) {
             u.add(v);
             return u;
@@ -289,11 +288,15 @@ namespace boost { namespace posix_time {
          friend bool operator==(precise_duration const& lhs, precise_duration const& rhs) {
             return lhs.total_microseconds() == rhs.total_microseconds();
          }
+
+      public:
+         friend scalar_type ratio(precise_duration const& lhs, precise_duration const& rhs)
+         { return lhs.total_microseconds() / rhs.total_microseconds(); }
+
          //@}
       private:
          double m_usec_frac;
       };
-
 
 } } // boost::time namespaces
 #endif
