@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolyLineImageConstIterator_txx
-#define __otbPolyLineImageConstIterator_txx
+#ifndef otbPolyLineImageConstIterator_txx
+#define otbPolyLineImageConstIterator_txx
 
 #include "otbPolyLineImageConstIterator.h"
 #include "otbMacro.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMImageModelEstimator_txx
-#define __otbSVMImageModelEstimator_txx
+#ifndef otbSVMImageModelEstimator_txx
+#define otbSVMImageModelEstimator_txx
 
 #include "otbSVMImageModelEstimator.h"
 #include "otbMacro.h"
@@ -75,7 +75,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TInputImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -87,7 +87,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TTrainingImage *>(this->itk::ProcessObject::GetInput(1));
 }

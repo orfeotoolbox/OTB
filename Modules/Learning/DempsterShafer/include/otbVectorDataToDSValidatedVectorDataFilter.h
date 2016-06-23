@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToDSValidatedVectorDataFilter_h
-#define __otbVectorDataToDSValidatedVectorDataFilter_h
+#ifndef otbVectorDataToDSValidatedVectorDataFilter_h
+#define otbVectorDataToDSValidatedVectorDataFilter_h
 
 #include "otbMassOfBelief.h"
 
@@ -158,13 +158,13 @@ public:
 
 protected:
   /** Triggers the Computation */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** Constructor */
   VectorDataToDSValidatedVectorDataFilter();
   /** Destructor */
-  virtual ~VectorDataToDSValidatedVectorDataFilter() {}
+  ~VectorDataToDSValidatedVectorDataFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   std::string GetNextID()
     {

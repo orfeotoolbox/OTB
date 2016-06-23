@@ -18,8 +18,8 @@ See IMTCopyright.txt for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMMap_h
-#define __otbSOMMap_h
+#ifndef otbSOMMap_h
+#define otbSOMMap_h
 
 #include "itkVariableLengthVector.h"
 #include "itkEuclideanDistanceMetric.h"
@@ -91,9 +91,9 @@ protected:
   /** Constructor */
   SOMMap();
   /** Destructor */
-  virtual ~SOMMap();
+  ~SOMMap() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SOMMap(const Self &); // purposely not implemented

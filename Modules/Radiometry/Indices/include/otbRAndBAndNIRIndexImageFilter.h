@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAndBAndNIRIndexImageFilter_h
-#define __otbRAndBAndNIRIndexImageFilter_h
+#ifndef otbRAndBAndNIRIndexImageFilter_h
+#define otbRAndBAndNIRIndexImageFilter_h
 
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
@@ -71,9 +71,9 @@ public:
 
 protected:
   RAndBAndNIRIndexImageFilter();
-  virtual ~RAndBAndNIRIndexImageFilter() {}
+  ~RAndBAndNIRIndexImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   RAndBAndNIRIndexImageFilter(const Self &); //purposely not implemented

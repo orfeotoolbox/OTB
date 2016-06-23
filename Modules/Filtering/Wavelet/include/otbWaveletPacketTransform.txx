@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletPacketTransform_txx
-#define __otbWaveletPacketTransform_txx
+#ifndef otbWaveletPacketTransform_txx
+#define otbWaveletPacketTransform_txx
 #include "otbWaveletPacketTransform.h"
 #include "otbMacro.h"
 

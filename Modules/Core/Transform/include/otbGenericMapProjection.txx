@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericMapProjection_txx
-#define __otbGenericMapProjection_txx
+#ifndef otbGenericMapProjection_txx
+#define otbGenericMapProjection_txx
 
 #include "otbGenericMapProjection.h"
 #include "otbMacro.h"
@@ -130,7 +130,7 @@ bool
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::IsProjectionDefined() const
 {
-  return (m_MapProjection->GetMapProjection() != NULL);
+  return (m_MapProjection->GetMapProjection() != ITK_NULLPTR);
 }
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,

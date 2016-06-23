@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReduceSpectralResponse_txx
-#define __otbReduceSpectralResponse_txx
+#ifndef otbReduceSpectralResponse_txx
+#define otbReduceSpectralResponse_txx
 
 #include <algorithm>
 #include "itkNumericTraits.h"
@@ -81,7 +81,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
 
     if(m_ReflectanceMode)
       {
-      if (solarIrradiance == 0)
+      if (solarIrradiance == ITK_NULLPTR)
         {
         itkExceptionMacro(<<"Error occurs getting solar irradiance. Solar irradiance is mandatory using the reflectance mode.");
         }

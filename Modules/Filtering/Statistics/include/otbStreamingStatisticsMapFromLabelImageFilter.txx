@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsMapFromLabelImageFilter_txx
-#define __otbStreamingStatisticsMapFromLabelImageFilter_txx
+#ifndef otbStreamingStatisticsMapFromLabelImageFilter_txx
+#define otbStreamingStatisticsMapFromLabelImageFilter_txx
 #include "otbStreamingStatisticsMapFromLabelImageFilter.h"
 
 #include "itkInputDataObjectIterator.h"

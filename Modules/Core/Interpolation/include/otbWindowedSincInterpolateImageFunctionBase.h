@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWindowedSincInterpolateImageFunctionBase_h
-#define __otbWindowedSincInterpolateImageFunctionBase_h
+#ifndef otbWindowedSincInterpolateImageFunctionBase_h
+#define otbWindowedSincInterpolateImageFunctionBase_h
 
 #include "otbGenericInterpolateImageFunction.h"
 #include "itkSize.h"
@@ -176,8 +176,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageFunctionBase();
-  virtual ~WindowedSincInterpolateImageFunctionBase();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~WindowedSincInterpolateImageFunctionBase() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   WindowedSincInterpolateImageFunctionBase(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputVectorDataListParameter_h
-#define __otbWrapperInputVectorDataListParameter_h
+#ifndef otbWrapperInputVectorDataListParameter_h
+#define otbWrapperInputVectorDataListParameter_h
 
 #include "otbVectorDataFileReader.h"
 
@@ -82,14 +82,14 @@ public:
   /** Add an image to the list. */
   void AddVectorData(VectorDataType* image);
 
-  bool HasValue() const;
+  bool HasValue() const ITK_OVERRIDE;
 
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
 
  /** Clear all the list. */
-  virtual void ClearValue();
+  void ClearValue() ITK_OVERRIDE;
 
 
 protected:
@@ -97,7 +97,7 @@ protected:
   InputVectorDataListParameter();
 
   /** Destructor */
-  virtual ~InputVectorDataListParameter();
+  ~InputVectorDataListParameter() ITK_OVERRIDE;
 
   VectorDataListType::Pointer m_VectorDataList;
   VectorDataFileReaderListType::Pointer  m_ReaderList;

@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
-#define __otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
+#ifndef otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
+#define otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
 
 #include "otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLambert2EtenduProjection_h
-#define __otbLambert2EtenduProjection_h
+#ifndef otbLambert2EtenduProjection_h
+#define otbLambert2EtenduProjection_h
 
 #include "otbLambertConformalConicMapProjection.h"
 
@@ -57,7 +57,7 @@ protected:
     this->SetParameter("StandardParallel2", "47.69601389");
   }
 
-  virtual ~Lambert2EtenduProjection() {}
+  ~Lambert2EtenduProjection() ITK_OVERRIDE {}
 
 private:
   Lambert2EtenduProjection(const Self &); //purposely not implemented

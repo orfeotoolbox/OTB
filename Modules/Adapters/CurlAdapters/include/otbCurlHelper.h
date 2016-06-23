@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCurlHelper_h
-#define __otbCurlHelper_h
+#ifndef otbCurlHelper_h
+#define otbCurlHelper_h
 
 #include "otbCurlHelperInterface.h"
 
@@ -45,19 +45,19 @@ public:
   itkTypeMacro(CurlHelper, CurlHelperInterface);
   itkNewMacro(Self);
 
-  bool TestUrlAvailability(const std::string& url) const;
+  bool TestUrlAvailability(const std::string& url) const ITK_OVERRIDE;
   
   bool IsCurlReturnHttpError(const std::string& url) const;
   
-  int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const;
+  int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const ITK_OVERRIDE;
   
-  int RetrieveFile(const std::string& urlString, std::string filename) const;
+  int RetrieveFile(const std::string& urlString, std::string filename) const ITK_OVERRIDE;
 
-  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const;
+  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const ITK_OVERRIDE;
 
   int RetrieveFileMulti(const std::vector<std::string>& listURLs,
                         const std::vector<std::string>& listFiles,
-                        int maxConnect) const;
+                        int maxConnect) const ITK_OVERRIDE;
 
   itkGetMacro(Timeout,long int);
   
@@ -68,7 +68,7 @@ protected:
     m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
               "Gecko/20071127 Firefox/2.0.0.11"),
     m_Timeout(10) {}
-  virtual ~CurlHelper() {}
+  ~CurlHelper() ITK_OVERRIDE {}
 
 private:
   CurlHelper(const Self &);  //purposely not implemented

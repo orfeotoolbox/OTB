@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalHistogramIFFactory_h
-#define __otbLocalHistogramIFFactory_h
+#ifndef otbLocalHistogramIFFactory_h
+#define otbLocalHistogramIFFactory_h
 
 #include "itkLightObject.h"
 
@@ -79,8 +79,8 @@ public:
 
 protected:
   LocalHistogramIFFactory(){}
-  ~LocalHistogramIFFactory(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LocalHistogramIFFactory() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LocalHistogramIFFactory(const Self& ); //purposely not implemented

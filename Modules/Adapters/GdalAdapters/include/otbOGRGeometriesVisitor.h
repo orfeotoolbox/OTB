@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRGeometriesVisitor_h
-#define __otbOGRGeometriesVisitor_h
+#ifndef otbOGRGeometriesVisitor_h
+#define otbOGRGeometriesVisitor_h
 
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -94,4 +94,4 @@ TResult apply(TGeometry * geometry, TFunctor functor)
 // #include "otbOGRGeometriesVisitor.txx"
 #endif
 
-#endif // __otbOGRGeometriesVisitor_h
+#endif // otbOGRGeometriesVisitor_h

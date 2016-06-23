@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperComplexOutputImageParameter_h
-#define __otbWrapperComplexOutputImageParameter_h
+#ifndef otbWrapperComplexOutputImageParameter_h
+#define otbWrapperComplexOutputImageParameter_h
 
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
@@ -74,7 +74,7 @@ public:
   itkGetMacro(RAMValue, unsigned int);
 
   /** Implement the reset method (replace pixel type by default type) */
-  virtual void Reset()
+  void Reset() ITK_OVERRIDE
   {
     m_ComplexPixelType = m_DefaultComplexPixelType;
   }
@@ -83,7 +83,7 @@ public:
   static std::string ConvertPixelTypeToString(ComplexImagePixelType type);
 
   /** Return true if a filename is set */
-  bool HasValue() const;
+  bool HasValue() const ITK_OVERRIDE;
 
   void SetFileName (const char* filename)
   {
@@ -107,7 +107,7 @@ protected:
   /** Constructor */
   ComplexOutputImageParameter();
   /** Destructor */
-  virtual ~ComplexOutputImageParameter();
+  ~ComplexOutputImageParameter() ITK_OVERRIDE;
 
   template <class TInputImageType>
     void SwitchImageWrite();

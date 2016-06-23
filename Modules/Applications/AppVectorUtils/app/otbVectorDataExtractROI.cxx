@@ -62,7 +62,7 @@ public:
   typedef otb::RemoteSensingRegion<double>                RemoteSensingRegionType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("VectorDataExtractROI");
     SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
@@ -100,12 +100,12 @@ private:
     SetDocExampleParameterValue("io.out", "apTvUtVectorDataExtractROIApplicationTest.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the inputs
     VectorDataType*        vd      = GetParameterVectorData("io.vd");

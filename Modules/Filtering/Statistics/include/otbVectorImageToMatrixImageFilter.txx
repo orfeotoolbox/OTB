@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImageToMatrixFilter_txx
-#define __otbVectorImageToMatrixFilter_txx
+#ifndef otbVectorImageToMatrixFilter_txx
+#define otbVectorImageToMatrixFilter_txx
 #include "otbVectorImageToMatrixImageFilter.h"
 
 #include "itkImageRegionIterator.h"

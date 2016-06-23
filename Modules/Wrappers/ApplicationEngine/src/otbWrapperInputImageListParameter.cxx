@@ -83,8 +83,8 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
 void
 InputImageListParameter::AddNullElement()
 {
-  m_ReaderList->PushBack(NULL);
-  m_ImageList->PushBack(NULL);
+  m_ReaderList->PushBack(ITK_NULLPTR);
+  m_ImageList->PushBack(ITK_NULLPTR);
   SetActive(false);
   this->Modified();
 }

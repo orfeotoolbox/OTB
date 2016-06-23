@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToProfileFilter_h
-#define __otbImageToProfileFilter_h
+#ifndef otbImageToProfileFilter_h
+#define otbImageToProfileFilter_h
 
 #include "otbImageToImageListFilter.h"
 
@@ -88,17 +88,17 @@ protected:
   /** Get the pointer to the filter */
   itkGetObjectMacro(Filter, FilterType);
   /** GenerateData method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** GenerateOutputInformation method */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
   /** Generate input requested region */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
   /** Constructor */
   ImageToProfileFilter();
   /** Destructor */
-  virtual ~ImageToProfileFilter() {}
+  ~ImageToProfileFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToProfileFilter(const Self &); //purposely not implemented

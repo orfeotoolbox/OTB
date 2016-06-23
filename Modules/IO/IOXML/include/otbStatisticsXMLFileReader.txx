@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileReader_txx
-#define __otbStatisticsXMLFileReader_txx
+#ifndef otbStatisticsXMLFileReader_txx
+#define otbStatisticsXMLFileReader_txx
 
 #include "otbStatisticsXMLFileReader.h"
 #include "itkMacro.h"
@@ -179,7 +179,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     {
     // Iterate through the tree to get all the stats
     for( TiXmlElement* currentStat = root->FirstChildElement();
-         currentStat != NULL;
+         currentStat != ITK_NULLPTR;
          currentStat = currentStat->NextSiblingElement() )
       {
       InputDataType   currentStatisticVector;
@@ -193,7 +193,7 @@ StatisticsXMLFileReader<TMeasurementVector>
       std::vector<double>   tempMeasurementVector;
 
       for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticVector");
-     sample != NULL;
+     sample != ITK_NULLPTR;
      sample = sample->NextSiblingElement() )
         {
         // Get the current value of the statistic vector
@@ -220,24 +220,24 @@ StatisticsXMLFileReader<TMeasurementVector>
     {
     // Iterate through the tree to get all the stats
     for( TiXmlElement* currentStat = root->FirstChildElement();
-         currentStat != NULL;
+         currentStat != ITK_NULLPTR;
          currentStat = currentStat->NextSiblingElement() )
       {
       GenericMapType currentMap;
       std::string currentName(currentStat->Attribute("name"));
 
       for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticMap");
-          sample != NULL;
+          sample != ITK_NULLPTR;
           sample = sample->NextSiblingElement() )
         {
         // Get the current pair of the statistic map
         const char *c_key = sample->Attribute("key");
         const char *c_value = sample->Attribute("value");
-        if (c_key == NULL)
+        if (c_key == ITK_NULLPTR)
           {
           itkExceptionMacro("'key' attribute not found in StatisticMap !");
           }
-        if (c_value == NULL)
+        if (c_value == ITK_NULLPTR)
           {
           itkExceptionMacro("'value' attribute not found in StatisticMap !");
           }

@@ -86,7 +86,7 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
@@ -175,7 +175,7 @@ private:
     SetDocExampleParameterValue("method", "pca");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
               if (HasValue("in"))
               {
@@ -223,7 +223,7 @@ private:
               }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     // Get Parameters

@@ -19,8 +19,8 @@
 
  =========================================================================*/
 
-#ifndef __otbOBIAMuParserFunctor_h
-#define __otbOBIAMuParserFunctor_h
+#ifndef otbOBIAMuParserFunctor_h
+#define otbOBIAMuParserFunctor_h
 
 #include "otbParser.h"
 #include "otbMacro.h"

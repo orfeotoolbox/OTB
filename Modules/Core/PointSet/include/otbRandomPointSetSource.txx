@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbRandomPointSetSource_txx
-#define __otbRandomPointSetSource_txx
+#ifndef otbRandomPointSetSource_txx
+#define otbRandomPointSetSource_txx
 
 #include "otbRandomPointSetSource.h"
 

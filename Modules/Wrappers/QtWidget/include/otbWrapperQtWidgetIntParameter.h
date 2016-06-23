@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetIntParameter_h
-#define __otbWrapperQtWidgetIntParameter_h
+#ifndef otbWrapperQtWidgetIntParameter_h
+#define otbWrapperQtWidgetIntParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetIntParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
-  virtual ~QtWidgetIntParameter();
+  ~QtWidgetIntParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetValue( int value );
@@ -49,9 +49,9 @@ private:
   QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
   void operator=(const QtWidgetIntParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   QHBoxLayout *         m_QHBoxLayout;
   QSpinBox *            m_QSpinBox;

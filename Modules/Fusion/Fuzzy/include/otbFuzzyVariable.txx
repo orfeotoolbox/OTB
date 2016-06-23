@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFuzzyVariable_txx
-#define __otbFuzzyVariable_txx
+#ifndef otbFuzzyVariable_txx
+#define otbFuzzyVariable_txx
 
 
 #include "otbFuzzyVariable.h"

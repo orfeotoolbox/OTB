@@ -56,7 +56,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
     {
     Parameter* param = m_ParamList->GetParameterByIndex(i);
 
-    if (param != 0)
+    if (param != ITK_NULLPTR)
       {
       ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
       ChoiceParameter* paramAsChoice = dynamic_cast<ChoiceParameter*>(param);
@@ -64,10 +64,10 @@ void QtWidgetParameterGroup::DoCreateWidget()
       InputProcessXMLParameter* paramAsOutXML = dynamic_cast<InputProcessXMLParameter*>(param);
 
       bool paramIsXML = false;
-      if(paramAsInXML != 0 || paramAsOutXML != 0)
+      if(paramAsInXML != ITK_NULLPTR || paramAsOutXML != ITK_NULLPTR)
         paramIsXML = true;
 
-      if (paramAsGroup == 0 && paramAsChoice == 0 && !paramIsXML)
+      if (paramAsGroup == ITK_NULLPTR && paramAsChoice == ITK_NULLPTR && !paramIsXML)
         {
         // Label (col 1)
         QWidget* label = new QtWidgetParameterLabel( param );

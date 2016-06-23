@@ -70,7 +70,7 @@ public:
 private:
   ChangeLabelImageFilterType::Pointer m_ChangeLabelFilter;
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("LSMSSmallRegionsMerging");
     SetDescription("Third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow.");
@@ -118,11 +118,11 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     clock_t tic = clock();
 

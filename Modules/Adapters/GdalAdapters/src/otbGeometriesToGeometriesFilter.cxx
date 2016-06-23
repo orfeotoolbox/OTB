@@ -216,7 +216,7 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
 OGRSpatialReference* otb::GeometriesToGeometriesFilter::DoDefineNewLayerSpatialReference(
   ogr::Layer const& itkNotUsed(source)) const
 {
-  return 0;
+  return ITK_NULLPTR;
 }
 
 /*virtual*/

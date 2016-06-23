@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbClampImageFilter_h
-#define __otbClampImageFilter_h
+#ifndef otbClampImageFilter_h
+#define otbClampImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -100,8 +100,8 @@ public:
 
 protected:
   ClampImageFilter();
-  virtual ~ClampImageFilter() {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ClampImageFilter() ITK_OVERRIDE {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** ClampImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -114,9 +114,9 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId );
+                            itk::ThreadIdType threadId ) ITK_OVERRIDE;
 
-  void GenerateOutputInformation(void)
+  void GenerateOutputInformation(void) ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRHelpers_h
-#define __otbOGRHelpers_h
+#ifndef otbOGRHelpers_h
+#define otbOGRHelpers_h
 
 #include <string>
 #include <vector>
@@ -76,7 +76,7 @@ struct StringListConverter
       {
       m_raw.push_back(b->c_str());
       }
-    m_raw.push_back(0);
+    m_raw.push_back(ITK_NULLPTR);
     assert(CSLCount(const_cast <char**>(&m_raw[0])) == static_cast<int>(boost::size(strings)));
     }
   /**
@@ -85,7 +85,7 @@ struct StringListConverter
   char ** to_ogr() const
     {
     return m_raw.size() == 1
-            ? NULL
+            ? ITK_NULLPTR
             : const_cast <char**>(&m_raw[0]);
     }
 private:
@@ -95,4 +95,4 @@ private:
 } // ogr namespace
 } // end namespace otb
 
-#endif // __otbOGRHelpers_h
+#endif // otbOGRHelpers_h
