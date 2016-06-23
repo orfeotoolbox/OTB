@@ -95,7 +95,7 @@ public:
   virtual ~ApplicationsToolBox();
 
   /** Get TreeWidget */
-  QTreeWidget * GetAlgorithmsTree();
+  // QTreeWidget * GetAlgorithmsTree();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

@@ -1,4 +1,4 @@
-/*=========================================================================
+ /*=========================================================================
 
   Program:   Monteverdi
   Language:  C++
@@ -54,6 +54,13 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+enum COLUMN
+{
+  COLUMN_NAME = 0,
+  COLUMN_TITLE,
+  //
+  COLUMN_COUNT,
+};
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -83,7 +90,7 @@ ApplicationsToolBox
 
   //
   // connect double click on the tree Widget
-  QObject::connect(GetAlgorithmsTree(),
+  QObject::connect( m_UI->m_AlgorithmsTree,
                    SIGNAL( itemDoubleClicked(QTreeWidgetItem* ,int) ),
                    this,
                    SLOT( OnAlgorithmTreeDoubleClick(QTreeWidgetItem* ,int) )
@@ -104,92 +111,99 @@ ApplicationsToolBox
 }
 
 /*******************************************************************************/
-QTreeWidget *
-ApplicationsToolBox
-::GetAlgorithmsTree()
-{
-  return m_UI->m_AlgorithmsTree;
-}
+// QTreeWidget *
+// ApplicationsToolBox
+// ::GetAlgorithmsTree()
+// {
+//   return m_UI->m_AlgorithmsTree;
+// }
 
 /*******************************************************************************/
 void
 ApplicationsToolBox
 ::FillTreeUsingTags()
 {
+  assert( m_UI->m_AlgorithmsTree!=NULL );
+
   //
   // clear algorithms tree
-  GetAlgorithmsTree()->clear();
+  m_UI->m_AlgorithmsTree->clear();
 
-  if ( m_AppTags.size() > 0 )
+  if( m_AppTags.empty() )
+    return;
+
+  // 
+  // main item (title)
+  QTreeWidgetItem * mainItem = new QTreeWidgetItem( m_UI->m_AlgorithmsTree );
+
+  mainItem->setText( COLUMN_NAME, tr( "Orfeo Toolbox Algorithms" ) );
+  mainItem->setExpanded( !m_SearchText.isEmpty() );
+
+  // 
+  // iterate on map: key as high-level item / algorithms as lower-level items
+  for( ApplicationsTagContainer::const_iterator itTag( m_AppTags.begin() );
+       itTag!=m_AppTags.end();
+       ++itTag )
     {
-    // 
-    // main item (title)
-    QTreeWidgetItem * mainItem = new QTreeWidgetItem( GetAlgorithmsTree() );
-    mainItem->setText(0, tr("Orfeo Toolbox Algorithms"));
-    mainItem->setExpanded( !m_SearchText.isEmpty() );
+    //
+    // current Doctag name
+    QString  qcurrentTag( (*itTag).first.c_str() );
 
-    // 
-    // iterate on map: key as high-level item / algorithms as lower-level items
-    ApplicationsTagContainer::const_iterator itTag = m_AppTags.begin();
-    while( itTag != m_AppTags.end() )
+    // If a current tag applicaton name match the searchText, add the
+    // tag as an item to the tree
+    if (m_SearchText.isEmpty() ||  
+	IsSearchTextMatchAnyAlgorithm( qcurrentTag ) || 
+	qcurrentTag.contains(m_SearchText ,Qt::CaseInsensitive))
       {
       //
-      // current Doctag name
-      QString  qcurrentTag( (*itTag).first.c_str() );
+      // step #1 ->  DocTag is a main item
+      QTreeWidgetItem * cmainItem = new QTreeWidgetItem( mainItem );
+      cmainItem->setText( COLUMN_NAME,  qcurrentTag );
+      cmainItem->setExpanded( !m_SearchText.isEmpty() );
 
-      // If a current tag applicaton name match the searchText, add the
-      // tag as an item to the tree
-      if (m_SearchText.isEmpty() ||  
-          IsSearchTextMatchAnyAlgorithm( qcurrentTag ) || 
-          qcurrentTag.contains(m_SearchText ,Qt::CaseInsensitive))
-        {
-        //
-        // step #1 ->  DocTag is a main item
-        QTreeWidgetItem * cmainItem = new QTreeWidgetItem( mainItem );
-        cmainItem->setText(0,  qcurrentTag );
-        cmainItem->setExpanded( !m_SearchText.isEmpty() );
+      //
+      // add category icon
+      cmainItem->setIcon( COLUMN_NAME, QIcon( ":/icons/otb" ) );
 
-        //
-        // add category icon
-        cmainItem->setIcon(0, QIcon( ":/icons/otb" ));
-        
-        //
-        // step #2 -> Add algorithms name if matching the search label
-        StringVector::const_iterator itApps = (*itTag).second.begin();
-        while( itApps != (*itTag).second.end() )
-          {
-          // get current app name
-          QString  qcurrentAlg( (*itApps).c_str() );
+      //
+      // step #2 -> Add algorithms name if matching the search label
+      for( StringVector::const_iterator itApps( itTag->second.begin() );
+	   itApps != itTag->second.end();
+	   ++itApps )
+	{
+	// get current app name
+	QString  name( itApps->c_str() );
 
-          //  get current app DocName
-          QString qcurrentAlgDocName = GetApplicationDocNameByApplicationName(qcurrentAlg );
-        
-          // does the current algorithm DocName match the search text
-          if ( m_SearchText.isEmpty() ||
-               qcurrentAlgDocName.contains(m_SearchText, Qt::CaseInsensitive) ||
-               qcurrentTag.contains(m_SearchText ,Qt::CaseInsensitive))
-            {
-            // 
-            // set current application name as secondary item
-            QTreeWidgetItem * secItem = new QTreeWidgetItem( cmainItem );
-            secItem->setText(0, GetApplicationDocNameByApplicationName( qcurrentAlg ) );
-          
-            //
-            // add algorithm icon
-            secItem->setIcon(0, QIcon( ":/icons/process" ));
-            }
+	//  get current app DocName
+	QString title(
+	  GetApplicationDocNameByApplicationName( name )
+	);
 
-          ++itApps;
-          }
-        }
+	// does the current algorithm DocName match the search text
+	if ( m_SearchText.isEmpty() ||
+	     title.contains( m_SearchText, Qt::CaseInsensitive ) ||
+	     name.contains( m_SearchText ,Qt::CaseInsensitive ) )
+	  {
+	  // 
+	  // set current application name as secondary item
+	  QTreeWidgetItem * secItem = new QTreeWidgetItem( cmainItem );
 
-      ++itTag;
+	  secItem->setText( COLUMN_NAME, name );
+	  secItem->setText( COLUMN_TITLE, title );
+
+	  secItem->setToolTip( COLUMN_NAME, title );
+
+	  secItem->setIcon( COLUMN_NAME, QIcon( ":/icons/process" ) );
+	  }
+	}
       }
-
     }
 
-  //Expand algorithms tree by default
-  this->GetAlgorithmsTree()->expandAll();
+  // Expand algorithms tree by default
+  m_UI->m_AlgorithmsTree->expandAll();
+
+  m_UI->m_AlgorithmsTree->resizeColumnToContents( COLUMN_NAME );
+  m_UI->m_AlgorithmsTree->resizeColumnToContents( COLUMN_TITLE );
 }
 
 /*******************************************************************************/
@@ -197,32 +211,24 @@ bool
 ApplicationsToolBox
 ::IsSearchTextMatchAnyAlgorithm(const QString & tagName )
 {
-  bool res = false;
-  
   // find the pair corresponding to the tagName
-  ApplicationsTagContainer::const_iterator itTag = m_AppTags.find( ToStdString( tagName ) );
-  if( itTag != m_AppTags.end() )
-    {
-    // iterate on the alg names relative to this tag
-    StringVector::const_iterator itApps = (*itTag).second.begin();
-    while( itApps != (*itTag).second.end() )
-      {
-      // current application name 
-      QString currentAppName( (*itApps).c_str() );
+  ApplicationsTagContainer::const_iterator itTag(
+    m_AppTags.find(
+      ToStdString( tagName )
+    )
+  );
 
-      // get current app Doc name
-      QString  qcurrentDocNameItem = GetApplicationDocNameByApplicationName( currentAppName );
-      
-      if ( qcurrentDocNameItem.contains(m_SearchText ,Qt::CaseInsensitive) )
-        {
-        return true;
-        }
-      ++itApps;
-      }
+  if( itTag==m_AppTags.end() )
+    return false;
 
-    }
-  
-  return res;
+  for( StringVector::const_iterator itApps( itTag->second.begin() );
+       itApps != itTag->second.end();
+       ++itApps )
+    if( GetApplicationDocNameByApplicationName( itApps->c_str() )
+	.contains( m_SearchText, Qt::CaseInsensitive ) )
+      return true;
+
+  return false;
 }
 
 /*******************************************************************************/
@@ -230,7 +236,10 @@ void
 ApplicationsToolBox
 ::LaunchApplication( const QString& appName )
 {
-  emit ApplicationToLaunchSelected(appName, GetApplicationDocNameByApplicationName( appName ) );
+  emit ApplicationToLaunchSelected(
+    appName,
+    GetApplicationDocNameByApplicationName( appName )
+  );
 }
 
 /*******************************************************************************/
@@ -288,7 +297,7 @@ ApplicationsToolBox
   m_SearchText = search;
   
   // fill the tree with the application
-  FillTreeUsingTags();  
+  FillTreeUsingTags();
 }
 
 /*******************************************************************************/
@@ -296,24 +305,43 @@ void
 ApplicationsToolBox
 ::OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column )
 {
-  //
-  // Execute algorithm : check  if the
-  // item is low-level ->does not any child
-  if ( item->childCount() == 0 )
-    {
-    QString currentDocName = item->text( column );
-  
-    // 
-    // Execute the algorithm
-    if ( !currentDocName.isEmpty() )
-      {
-      // 
-      // get the application name relative to the DocName clicked
-      std::string appName = m_AppsDocNameToNameMap[ ToStdString( currentDocName ) ];
+  // qDebug() << item << column;
 
-      LaunchApplication( QString (appName.c_str() ) );
+  if( item->childCount() > 0 )
+    return;
+
+  QString text( item->text( column ) );
+
+  if( text.isEmpty() )
+    return;
+
+  switch( column )
+    {
+    case COLUMN_NAME:
+      break;
+
+    case COLUMN_TITLE:
+      {
+      ApplicationDocNameToNameMap::const_iterator it(
+	m_AppsDocNameToNameMap.find(
+	  ToStdString( text )
+	)
+      );
+
+      assert( it!=m_AppsDocNameToNameMap.end() );
+
+      assert( it->second.empty() );
+
+      text = FromStdString( it->second );
       }
+      break;
+
+    default:
+      assert( false && "Unexpected enum value." );
+      break;
     }
+
+  LaunchApplication( text );
 }
 
 /*******************************************************************************/
