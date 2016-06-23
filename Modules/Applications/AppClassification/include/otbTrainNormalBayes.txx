@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainNormalBayes_txx
-#define __otbTrainNormalBayes_txx
+#ifndef otbTrainNormalBayes_txx
+#define otbTrainNormalBayes_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb

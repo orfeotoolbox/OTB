@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFourierMellinDescriptorsImageFunction_txx
-#define __otbFourierMellinDescriptorsImageFunction_txx
+#ifndef otbFourierMellinDescriptorsImageFunction_txx
+#define otbFourierMellinDescriptorsImageFunction_txx
 
 #include "otbFourierMellinDescriptorsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

@@ -412,7 +412,7 @@ void LUMImageIO::WriteImageInformation()
     m_File.write(value, headerLength);
     }
   delete[] value;
-  value = NULL;
+  value = ITK_NULLPTR;
   //Set m_TypeLum
   if (0) {}
   otbSetTypeLumMacro(CHAR,   "08BI", "08LI")
@@ -464,7 +464,7 @@ int LUMImageIO::CaiGetTypeLum(const char *          type_code,
   taille = -1;
   int nbbits = -1;
   ind = 0;
-  pch0 = NULL;
+  pch0 = ITK_NULLPTR;
 
   std::string str_type_code(type_code);
   while ((trouve == -1) && (ind < m_CaiLumTyp.size()))
@@ -499,17 +499,17 @@ int LUMImageIO::CaiGetTypeLum(const char *          type_code,
       pch0 = const_cast<char *>(strstr(type_code, "U"));
       if (taille == 1)
         {
-        if (pch0 == NULL) sprintf(cod_pix, "OCT");
+        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "OCT");
         else sprintf(cod_pix, "UOCT");
         }
       else if (taille == 2)
         {
-        if (pch0 == NULL) sprintf(cod_pix, "I2");
+        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "I2");
         else sprintf(cod_pix, "UI2");
         }
       else if (taille == 4)
         {
-        if (pch0 == NULL) sprintf(cod_pix, "I4");
+        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "I4");
         else sprintf(cod_pix, "UI4");
         }
       else taille = -1;

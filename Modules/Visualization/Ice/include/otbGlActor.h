@@ -70,7 +70,7 @@ public:
 protected:
   GlActor();
 
-  virtual ~GlActor();
+  ~GlActor() ITK_OVERRIDE;
 
 private:
   // prevent implementation

@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageAndVectorImageOperationFilter_h
-#define __otbImageAndVectorImageOperationFilter_h
+#ifndef otbImageAndVectorImageOperationFilter_h
+#define otbImageAndVectorImageOperationFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
@@ -160,7 +160,7 @@ public:
 
   /** Set the input images of this process object.  */
   using Superclass::SetInput;
-  void SetInput(const InputImageType *input);
+  void SetInput(const InputImageType *input) ITK_OVERRIDE;
   void SetVectorInput(const VectorInputImageType *input);
 
   /** Get the input images of this process object.  */
@@ -212,12 +212,12 @@ public:
 
 protected:
   ImageAndVectorImageOperationFilter();
-  virtual ~ImageAndVectorImageOperationFilter();
+  ~ImageAndVectorImageOperationFilter() ITK_OVERRIDE;
 
   /** This is a source, so it must set the spacing, size, and largest possible
    * region for the output image that it will produce.
    * \sa ProcessObject::GenerateOutputInformation() */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &); //purposely not implemented

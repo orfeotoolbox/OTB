@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanDifferenceImageFilter_h
-#define __otbMeanDifferenceImageFilter_h
+#ifndef otbMeanDifferenceImageFilter_h
+#define otbMeanDifferenceImageFilter_h
 
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "otbMeanDifference.h"
@@ -79,7 +79,7 @@ public:
 
 protected:
   MeanDifferenceImageFilter() {}
-  virtual ~MeanDifferenceImageFilter() {}
+  ~MeanDifferenceImageFilter() ITK_OVERRIDE {}
 
 private:
   MeanDifferenceImageFilter(const Self &); //purposely not implemented

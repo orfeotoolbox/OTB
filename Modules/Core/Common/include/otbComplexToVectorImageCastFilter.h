@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbComplexToVectorImageCastFilter_h
-#define __otbComplexToVectorImageCastFilter_h
+#ifndef otbComplexToVectorImageCastFilter_h
+#define otbComplexToVectorImageCastFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"
@@ -137,7 +137,7 @@ public:
 
 protected:
   ComplexToVectorImageCastFilter() {}
-  virtual ~ComplexToVectorImageCastFilter() {}
+  ~ComplexToVectorImageCastFilter() ITK_OVERRIDE {}
 
   template<class T>
   bool PixelIsSingle(const T& /*dummy*/)
@@ -151,7 +151,7 @@ protected:
               return false;
   }
 
-  void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
               Superclass::GenerateOutputInformation();
               InputPixelType dummy;

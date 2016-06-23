@@ -39,13 +39,13 @@ int main(int argc, char * argv[])
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   
-  if(demdir != NULL)
+  if(demdir != ITK_NULLPTR)
     {
     std::cout<<"Configuring DEM directory: "<<demdir<<std::endl;
     demHandler->OpenDEMDirectory(demdir);
     }
 
-  if(geoidfile != NULL)
+  if(geoidfile != ITK_NULLPTR)
     {
     std::cout<<"Configuring geoid file: "<<geoidfile<<std::endl;
     demHandler->OpenGeoidFile(geoidfile);

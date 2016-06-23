@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtractROI_txx
-#define __otbExtractROI_txx
+#ifndef otbExtractROI_txx
+#define otbExtractROI_txx
 
 #include "otbExtractROI.h"
 #include "itkImageRegionIterator.h"

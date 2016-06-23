@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarParametricMapFunction_h
-#define __otbSarParametricMapFunction_h
+#ifndef otbSarParametricMapFunction_h
+#define otbSarParametricMapFunction_h
 
 #include "itkImageFunction.h"
 #include "itkPointSet.h"
@@ -76,10 +76,10 @@ public:
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType                       RealType;
 
   /** Evaluate the function at specific positions */
-  virtual RealType Evaluate(const PointType& point) const;
+  RealType Evaluate(const PointType& point) const ITK_OVERRIDE;
 
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex(const IndexType& index) const
+  RealType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE
   {
     PointType point;
     point[0] = static_cast<typename PointType::ValueType>(index[0]);
@@ -87,8 +87,8 @@ public:
     return this->Evaluate(point);
   }
 
-  virtual RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  RealType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& cindex) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -124,8 +124,8 @@ public:
 
 protected:
   SarParametricMapFunction();
-  virtual ~SarParametricMapFunction(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~SarParametricMapFunction() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SarParametricMapFunction(const Self &);  //purposely not implemented

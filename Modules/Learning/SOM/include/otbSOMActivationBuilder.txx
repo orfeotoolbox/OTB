@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMActivationBuilder_txx
-#define __otbSOMActivationBuilder_txx
+#ifndef otbSOMActivationBuilder_txx
+#define otbSOMActivationBuilder_txx
 
 #include "itkImageRegionIterator.h"
 

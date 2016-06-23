@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWatershedSegmentationFilter_h
-#define __otbWatershedSegmentationFilter_h
+#ifndef otbWatershedSegmentationFilter_h
+#define otbWatershedSegmentationFilter_h
 
 #include "otbMacro.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -81,9 +81,9 @@ public:
 protected:
   WatershedSegmentationFilter();
 
-  virtual ~WatershedSegmentationFilter();
+  ~WatershedSegmentationFilter() ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   typename CastImageFilterType::Pointer m_CastFilter;

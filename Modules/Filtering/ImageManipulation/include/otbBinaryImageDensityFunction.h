@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBinaryImageDensityFunction_h
-#define __otbBinaryImageDensityFunction_h
+#ifndef otbBinaryImageDensityFunction_h
+#define otbBinaryImageDensityFunction_h
 
 #include "itkImageFunction.h"
 #include "itkNumericTraits.h"
@@ -77,17 +77,17 @@ public:
   RealType;
 
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex(const IndexType& index) const;
+  RealType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
 
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate(const PointType& point) const
+  RealType Evaluate(const PointType& point) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  RealType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& cindex) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -106,8 +106,8 @@ public:
 
 protected:
   BinaryImageDensityFunction();
-  virtual ~BinaryImageDensityFunction(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~BinaryImageDensityFunction() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   BinaryImageDensityFunction(const Self &);  //purposely not implemented

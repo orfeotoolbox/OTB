@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFineRegistrationImageFilter_h
-#define __otbFineRegistrationImageFilter_h
+#ifndef otbFineRegistrationImageFilter_h
+#define otbFineRegistrationImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkInterpolateImageFunction.h"
@@ -178,16 +178,16 @@ protected:
   /** Constructor */
   FineRegistrationImageFilter();
   /** Destructor */
-  virtual ~FineRegistrationImageFilter() {};
+  ~FineRegistrationImageFilter() ITK_OVERRIDE {};
 
   /** Threaded generate data */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Generate the input requested regions  */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Generate output information */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 private:
   FineRegistrationImageFilter(const Self&); //purposely not implemented

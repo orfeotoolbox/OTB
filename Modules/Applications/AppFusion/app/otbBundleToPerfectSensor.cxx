@@ -50,7 +50,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("BundleToPerfectSensor");
     SetDescription("Perform P+XS pansharpening");
@@ -102,7 +102,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if(!HasUserValue("mode") && HasValue("inp") && HasValue("inxs") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inp"),GetParameterImage("inxs")))
       {
@@ -111,7 +111,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* panchroV = GetParameterImage("inp");
     FloatVectorImageType* xs = GetParameterImage("inxs");

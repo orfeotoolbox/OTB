@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMCaracteristicsExtractor_txx
-#define __otbDEMCaracteristicsExtractor_txx
+#ifndef otbDEMCaracteristicsExtractor_txx
+#define otbDEMCaracteristicsExtractor_txx
 
 #include "otbDEMCaracteristicsExtractor.h"
 #include "itkImageRegionIterator.h"

@@ -60,9 +60,9 @@ MSTARImageIO::MSTARImageIO()
 
   m_BytePerPixel = 0;
 
-  MSTARfp = NULL;        /* Input FILE ptr to MSTAR image file     */
-  HDRfp = NULL;          /* Output FILE ptr to MSTAR header file   */
-  RAWfp = NULL;
+  MSTARfp = ITK_NULLPTR;        /* Input FILE ptr to MSTAR image file     */
+  HDRfp = ITK_NULLPTR;          /* Output FILE ptr to MSTAR header file   */
+  RAWfp = ITK_NULLPTR;
 
   i = 0;
   j = 0;
@@ -83,13 +83,13 @@ MSTARImageIO::MSTARImageIO()
   littleushortval = 0;
   littlefloatval = 0.;
 
-  MSTARname = NULL;      /* Input MSTAR filename           */
+  MSTARname = ITK_NULLPTR;      /* Input MSTAR filename           */
 
-  tptr = NULL;  /* Temp buffer ptr */
-  phdr = NULL;  /* Ptr to buffer to hold Phoenix header */
+  tptr = ITK_NULLPTR;  /* Temp buffer ptr */
+  phdr = ITK_NULLPTR;  /* Ptr to buffer to hold Phoenix header */
 
-  FSCENEdata = NULL; /* Ptr to Fullscene data buffer */
-  CHIPdata = NULL;   /* Ptr to CHIp data buffer      */
+  FSCENEdata = ITK_NULLPTR; /* Ptr to Fullscene data buffer */
+  CHIPdata = ITK_NULLPTR;   /* Ptr to CHIp data buffer      */
 
   
 
@@ -98,10 +98,10 @@ MSTARImageIO::MSTARImageIO()
 /** Destructor */
 MSTARImageIO::~MSTARImageIO()
 {
-  if (phdr != NULL)
+  if (phdr != ITK_NULLPTR)
     {
     free(phdr);
-    phdr = NULL;
+    phdr = ITK_NULLPTR;
     }
 }
 
@@ -117,7 +117,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
   MSTARname = filename;
 
   MSTARfp = fopen(MSTARname, "rb");
-  if (MSTARfp == NULL)
+  if (MSTARfp == ITK_NULLPTR)
     {
     otbMsgDevMacro(<< "\nError: Unable to open [" << MSTARname << "] for reading!\n");
     return false;
@@ -133,18 +133,18 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     {
     otbMsgDevMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
     fclose(MSTARfp);
-    MSTARfp = NULL;
+    MSTARfp = ITK_NULLPTR;
     return false;
     }
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
   tptr = (char *) strstr(tbuff, "PhoenixHeaderLength= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
 //    fprintf(stderr,"Can not determine Phoenix header length!\n");
     fclose(MSTARfp);
-    MSTARfp = NULL;
+    MSTARfp = ITK_NULLPTR;
     return false;
     }
   else
@@ -154,11 +154,11 @@ bool MSTARImageIO::CanReadFile(const char* filename)
 
   /* Check for and extract native header length */
   tptr = (char *) strstr(tbuff, "native_header_length= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
 //    fprintf(stderr,"Can not determine native header length!\n");
     fclose(MSTARfp);
-    MSTARfp = NULL;
+    MSTARfp = ITK_NULLPTR;
     return false;
     }
   else
@@ -168,7 +168,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
 
   /* Extract MSTAR column width */
   tptr = (char *) strstr(tbuff, "NumberOfColumns= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     otbMsgDevMacro(<< "Error: Can not determine MSTAR image width");
     fclose(MSTARfp);
@@ -182,11 +182,11 @@ bool MSTARImageIO::CanReadFile(const char* filename)
 
   /* Extract MSTAR row height */
   tptr = (char *) strstr(tbuff, "NumberOfRows= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     otbMsgDevMacro(<< "Error: Can not determine MSTAR image height!");
     fclose(MSTARfp);
-    MSTARfp = NULL;
+    MSTARfp = ITK_NULLPTR;
     return false;
     }
   else
@@ -237,7 +237,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
 // free(phdr);
 
   fclose(MSTARfp);
-  MSTARfp = NULL;
+  MSTARfp = ITK_NULLPTR;
   otbMsgDevMacro(<< "Can read MSTAR");
   return bool(true);
 }
@@ -267,7 +267,7 @@ void MSTARImageIO::Read(void* buffer)
 {
 
   MSTARfp = fopen(MSTARname, "rb");
-  if (MSTARfp == NULL)
+  if (MSTARfp == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Error: Unable to open file for reading!\n\n " << m_FileName.c_str() << ").");
     }
@@ -287,7 +287,7 @@ void MSTARImageIO::Read(void* buffer)
 
   /* Extract Phoenix Summary header length */
   tptr = (char *) strstr(tbuff, "PhoenixHeaderLength= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
@@ -299,7 +299,7 @@ void MSTARImageIO::Read(void* buffer)
 
   /* Check for and extract native header length */
   tptr = (char *) strstr(tbuff, "native_header_length= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Can not determine native header length!\n");
@@ -311,7 +311,7 @@ void MSTARImageIO::Read(void* buffer)
 
   /* Extract MSTAR column width */
   tptr = (char *) strstr(tbuff, "NumberOfColumns= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Error: Can not determine MSTAR image width");
@@ -324,7 +324,7 @@ void MSTARImageIO::Read(void* buffer)
 
   /* Extract MSTAR row height */
   tptr = (char *) strstr(tbuff, "NumberOfRows= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Error: Can not determine MSTAR image height!");
@@ -431,7 +431,7 @@ void MSTARImageIO::Read(void* buffer)
       bytesPerImage = totchunks * sizeof(float);
       CHIPdata = (float *) malloc(bytesPerImage);
 
-      if (CHIPdata == (float *) NULL)
+      if (CHIPdata == (float *) ITK_NULLPTR)
         {
         fclose(MSTARfp);
         itkExceptionMacro("Error: Unable to malloc CHIP memory!\n");
@@ -476,7 +476,7 @@ void MSTARImageIO::Read(void* buffer)
     case FSCENE_IMAGE:
       bytesPerImage = nchunks * sizeof(short);
       FSCENEdata = (unsigned short *) malloc(bytesPerImage);
-      if (FSCENEdata == (unsigned short *) NULL)
+      if (FSCENEdata == (unsigned short *) ITK_NULLPTR)
         {
         fclose(MSTARfp);
         itkExceptionMacro(<< "Error: Unable to malloc fullscene memory!\n");
@@ -587,7 +587,7 @@ void MSTARImageIO::ReadImageInformation()
 
   MSTARname = m_FileName.c_str();
   MSTARfp = fopen(MSTARname, "rb");
-  if (MSTARfp == NULL)
+  if (MSTARfp == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Error: Unable to open file for reading!\n\n " << m_FileName.c_str());
     }
@@ -607,7 +607,7 @@ void MSTARImageIO::ReadImageInformation()
 
   /* Extract Phoenix Summary header length */
   tptr = (char *) strstr(tbuff, "PhoenixHeaderLength= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
@@ -619,7 +619,7 @@ void MSTARImageIO::ReadImageInformation()
 
   /* Check for and extract native header length */
   tptr = (char *) strstr(tbuff, "native_header_length= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Can not determine native header length!\n");
@@ -631,7 +631,7 @@ void MSTARImageIO::ReadImageInformation()
 
   /* Extract MSTAR column width */
   tptr = (char *) strstr(tbuff, "NumberOfColumns= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Error: Can not determine MSTAR image width");
@@ -644,7 +644,7 @@ void MSTARImageIO::ReadImageInformation()
 
   /* Extract MSTAR row height */
   tptr = (char *) strstr(tbuff, "NumberOfRows= ");
-  if (tptr == (char *) NULL)
+  if (tptr == (char *) ITK_NULLPTR)
     {
     fclose(MSTARfp);
     itkExceptionMacro(<< "Error: Can not determine MSTAR image height!");

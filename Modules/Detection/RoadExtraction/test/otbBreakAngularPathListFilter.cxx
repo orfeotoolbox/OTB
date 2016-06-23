@@ -45,7 +45,7 @@ int otbBreakAngularPathListFilter(int itkNotUsed(argc), char * argv[])
   ++cpt;
   ListPoints.clear();
 
-  while (argv[cpt] != NULL)
+  while (argv[cpt] != ITK_NULLPTR)
     {
     if (argv[cpt][0] == '|')
       {

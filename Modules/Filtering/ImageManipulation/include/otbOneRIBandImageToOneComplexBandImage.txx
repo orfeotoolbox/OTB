@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOneRIBandImageToOneComplexBandImage_txx
-#define __otbOneRIBandImageToOneComplexBandImage_txx
+#ifndef otbOneRIBandImageToOneComplexBandImage_txx
+#define otbOneRIBandImageToOneComplexBandImage_txx
 
 #include "otbOneRIBandImageToOneComplexBandImage.h"
 

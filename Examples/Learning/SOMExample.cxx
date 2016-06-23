@@ -406,7 +406,7 @@ int main(int itkNotUsed(argc), char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  if (actMapFileName != NULL)
+  if (actMapFileName != ITK_NULLPTR)
     {
     ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
     actWriter->SetFileName(actMapFileName);

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageClassificationFilter_txx
-#define __otbImageClassificationFilter_txx
+#ifndef otbImageClassificationFilter_txx
+#define otbImageClassificationFilter_txx
 
 #include "otbImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
@@ -57,7 +57,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -70,7 +70,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<ConfidenceImageType *>(this->itk::ProcessObject::GetOutput(1));
 }

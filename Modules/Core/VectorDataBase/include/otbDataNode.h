@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDataNode_h
-#define __otbDataNode_h
+#ifndef otbDataNode_h
+#define otbDataNode_h
 
 #include "itkPoint.h"
 #include "otbPolygon.h"
@@ -287,9 +287,9 @@ protected:
   /** Constructor */
   DataNode();
   /** Destructor */
-  virtual ~DataNode() {}
+  ~DataNode() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   OGRGeometry* ConvertDataNodeToOGRGeometry(const DataNode* dataNode);
 

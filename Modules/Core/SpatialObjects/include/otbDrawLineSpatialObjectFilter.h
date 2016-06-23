@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDrawLineSpatialObjectFilter_h
-#define __otbDrawLineSpatialObjectFilter_h
+#ifndef otbDrawLineSpatialObjectFilter_h
+#define otbDrawLineSpatialObjectFilter_h
 
 #include "itkSpatialObjectToImageFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
@@ -98,10 +98,10 @@ public:
 
 protected:
   DrawLineSpatialObjectFilter();
-  virtual ~DrawLineSpatialObjectFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~DrawLineSpatialObjectFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   DrawLineSpatialObjectFilter(const Self &); //purposely not implemented

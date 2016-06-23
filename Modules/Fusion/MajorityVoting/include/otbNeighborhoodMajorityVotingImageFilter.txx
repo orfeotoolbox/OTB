@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbNeighborhoodMajorityVotingImageFilter_txx
-#define __otbNeighborhoodMajorityVotingImageFilter_txx
+#ifndef otbNeighborhoodMajorityVotingImageFilter_txx
+#define otbNeighborhoodMajorityVotingImageFilter_txx
 
 // First make sure that the configuration is available.
 // This line can be removed once the optimized versions

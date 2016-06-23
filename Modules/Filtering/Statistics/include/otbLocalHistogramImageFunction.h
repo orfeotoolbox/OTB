@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalHistogramImageFunction_h
-#define __otbLocalHistogramImageFunction_h
+#ifndef otbLocalHistogramImageFunction_h
+#define otbLocalHistogramImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkHistogram.h"
@@ -86,17 +86,17 @@ public:
                       InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  virtual OutputType  EvaluateAtIndex(const IndexType& index) const;
+  OutputType  EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
 
   /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PointType& point) const
+  OutputType Evaluate(const PointType& point) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  OutputType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& cindex) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -125,8 +125,8 @@ public:
 
 protected:
   LocalHistogramImageFunction();
-  virtual ~LocalHistogramImageFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LocalHistogramImageFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LocalHistogramImageFunction(const Self &);  //purposely not implemented

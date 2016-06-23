@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapEstimationMethod_h
-#define __otbDisparityMapEstimationMethod_h
+#ifndef otbDisparityMapEstimationMethod_h
+#define otbDisparityMapEstimationMethod_h
 
 #include "itkImageToImageMetric.h"
 #include "itkSingleValuedNonLinearOptimizer.h"
@@ -181,15 +181,15 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~DisparityMapEstimationMethod();
+  ~DisparityMapEstimationMethod() ITK_OVERRIDE;
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
-  void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
 
 private:
   DisparityMapEstimationMethod(const Self &); //purposely not implemented

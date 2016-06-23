@@ -89,7 +89,7 @@ if(NOT __EXTERNAL_QT4__)
     endif()
 
     if(APPLE)
-      SUPERBUILD_PATCH_SOURCE(QT4 "patch-for-at-rpath")
+      SUPERBUILD_PATCH_SOURCE(QT4)
     endif()
 
     set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)

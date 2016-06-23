@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataTransformFilter_h
-#define __otbVectorDataTransformFilter_h
+#ifndef otbVectorDataTransformFilter_h
+#define otbVectorDataTransformFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkTransform.h"
@@ -99,14 +99,14 @@ public:
 
 protected:
   VectorDataTransformFilter();
-  virtual ~VectorDataTransformFilter() {};
+  ~VectorDataTransformFilter() ITK_OVERRIDE {};
 
-  PointType ProcessPoint(PointType point) const;
-  LinePointerType ProcessLine(LinePointerType line) const;
-  PolygonPointerType ProcessPolygon(PolygonPointerType polygon) const;
-  PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const;
+  PointType ProcessPoint(PointType point) const ITK_OVERRIDE;
+  LinePointerType ProcessLine(LinePointerType line) const ITK_OVERRIDE;
+  PolygonPointerType ProcessPolygon(PolygonPointerType polygon) const ITK_OVERRIDE;
+  PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const ITK_OVERRIDE;
 
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   VectorDataTransformFilter(const Self&); //purposely not implemented

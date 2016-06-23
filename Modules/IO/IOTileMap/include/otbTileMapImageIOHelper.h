@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileMapImageIOHelper_h
-#define __otbTileMapImageIOHelper_h
+#ifndef otbTileMapImageIOHelper_h
+#define otbTileMapImageIOHelper_h
 
 
 #include "itkObject.h"
@@ -53,7 +53,7 @@ public:
 
 protected:
   TileMapImageIOHelper() {}
-  ~TileMapImageIOHelper() {}
+  ~TileMapImageIOHelper() ITK_OVERRIDE {}
 
 private:
   TileMapImageIOHelper(const Self &);  //purposely not implemented

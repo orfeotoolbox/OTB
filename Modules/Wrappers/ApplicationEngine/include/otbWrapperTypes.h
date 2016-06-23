@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperTypes_h
-#define __otbWrapperTypes_h
+#ifndef otbWrapperTypes_h
+#define otbWrapperTypes_h
 
 #include <complex>
 #include "itkRGBPixel.h"
@@ -142,4 +142,4 @@ typedef otb::ObjectList<FloatImageType>       FloatImageListType;
 } // end namespace Wrapper
 } // end namespace otb
 
-#endif // __otbWrapperApplication_h_
+#endif // otbWrapperApplication_h_

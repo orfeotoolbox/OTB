@@ -53,7 +53,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ClassificationMapRegularization");
     SetDescription("Filters the input labeled image using Majority Voting in a ball shaped neighbordhood.");
@@ -111,12 +111,12 @@ private:
     SetDocExampleParameterValue("ip.undecidedlabel", "7");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Majority Voting
     m_NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();

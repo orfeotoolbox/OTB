@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometricMomentsIFFactory_h
-#define __otbRadiometricMomentsIFFactory_h
+#ifndef otbRadiometricMomentsIFFactory_h
+#define otbRadiometricMomentsIFFactory_h
 
 #include "itkLightObject.h"
 
@@ -79,8 +79,8 @@ public:
 
 protected:
   RadiometricMomentsIFFactory(){}
-  ~RadiometricMomentsIFFactory(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~RadiometricMomentsIFFactory() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   RadiometricMomentsIFFactory(const Self& ); //purposely not implemented

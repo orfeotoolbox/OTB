@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbJoinContainer_h
-#define __otbJoinContainer_h
+#ifndef otbJoinContainer_h
+#define otbJoinContainer_h
 
 // #include <iosfwd>
 #include <string>
@@ -61,4 +61,4 @@ std::ostream & Join(std::ostream &os, TRange const& range, std::string const& se
 // #include "otbJoinContainer.txx"
 #endif
 
-#endif // __otbJoinContainer_h
+#endif // otbJoinContainer_h

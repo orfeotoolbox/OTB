@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereoSensorModelToElevationMapFilter_txx
-#define __otbStereoSensorModelToElevationMapFilter_txx
+#ifndef otbStereoSensorModelToElevationMapFilter_txx
+#define otbStereoSensorModelToElevationMapFilter_txx
 
 #include "otbStereorectificationDisplacementFieldSource.h"
 #include "itkProgressReporter.h"
@@ -78,7 +78,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -104,7 +104,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(1));
 }

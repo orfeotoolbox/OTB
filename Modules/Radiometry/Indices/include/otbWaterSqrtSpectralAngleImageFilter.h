@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWaterSqrtSpectralAngleImageFilter_h
-#define __otbWaterSqrtSpectralAngleImageFilter_h
+#ifndef otbWaterSqrtSpectralAngleImageFilter_h
+#define otbWaterSqrtSpectralAngleImageFilter_h
 
 #include "otbWaterIndicesFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -70,7 +70,7 @@ public:
 
 protected:
   WaterSqrtSpectralAngleImageFilter() {}
-  virtual ~WaterSqrtSpectralAngleImageFilter() {}
+  ~WaterSqrtSpectralAngleImageFilter() ITK_OVERRIDE {}
 
 private:
   WaterSqrtSpectralAngleImageFilter(Self &); // purposely not implemented
