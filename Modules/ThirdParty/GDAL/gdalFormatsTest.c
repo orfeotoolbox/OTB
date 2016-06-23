@@ -5,22 +5,19 @@
 
 int main(int argc, char * argv[])
 {
-
+  GDALDriverH hDriver = NULL;
   if (argc < 2) {
-    printf( "gdalFormatsTest: incorrect usage.\n");
-     exit(1);
+    printf( "Usage : gdalFormatsTest  driverName.\n");
+    return EXIT_FAILURE;;
   }
 
   GDALAllRegister();
 
-  const char *pszFormat = argv[1];
-  GDALDriverH hDriver = GDALGetDriverByName( pszFormat );
-  char **papszMetadata;
+  hDriver = GDALGetDriverByName( argv[1] );
   if( hDriver == NULL ) {
-  printf( "hDriver == NULL for input format '%s' ", pszFormat);
-  exit( 1 );
+  printf( "No driver for input name '%s' ", argv[1]);
+  return EXIT_FAILURE;
   }
 
   return EXIT_SUCCESS;
-
 }
