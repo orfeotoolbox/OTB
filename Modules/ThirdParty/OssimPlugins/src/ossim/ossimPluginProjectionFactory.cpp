@@ -16,25 +16,26 @@
 // ADD_MODEL: Include all sensor model headers here:
 //***
 #include "ossimPluginProjectionFactory.h"
-#include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimRefPtr.h>
-#include <ossim/projection/ossimProjection.h>
 #include "ossimRadarSatModel.h"
 #include "ossimEnvisatAsarModel.h"
 #include "ossimTerraSarModel.h"
-//#include <ossim/projection/ossimCosmoSkymedModel.h>
 #include "ossimRadarSat2Model.h"
 #include "ossimErsSarModel.h"
 #include "ossimAlosPalsarModel.h"
 #include "ossimPleiadesModel.h"
-#include <ossim/base/ossimNotifyContext.h>
 #include "ossimTileMapModel.h"
 #include "ossimSpot6Model.h"
 #include "ossimSentinel1Model.h"
 #include "ossimStringUtilities.h"
+#include "ossimTraceHelpers.h"
+#include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/projection/ossimProjection.h>
+//#include <ossim/projection/ossimCosmoSkymedModel.h>
 //***
 // Define Trace flags for use within this file:
 //***
+#include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimTrace.h>
 static ossimTrace traceExec  = ossimTrace("ossimPluginProjectionFactory:exec");
 static ossimTrace traceDebug = ossimTrace("ossimPluginProjectionFactory:debug");
@@ -369,11 +370,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    ossimRefPtr<ossimProjection> result = 0;
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimKeywordlist& kwl)";
 
-   if(traceDebug())
-   {
-        ossimNotify(ossimNotifyLevel_DEBUG)
-                   << MODULE << " DEBUG: Start ...." << std::endl;
-   }
+   SCOPED_LOG(traceDebug, MODULE);
 
    const char* lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
    if (lookup)
@@ -435,16 +432,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 //      }
 
       // Then, try to load the keyword list
-      if ( !result->loadState(kwl, prefix) )
+      if ( result.get() && !result->loadState(kwl, prefix) )
       {
          result = 0;
       }
-   }
-
-   if(traceDebug())
-   {
-        ossimNotify(ossimNotifyLevel_DEBUG)
-                   << MODULE << " DEBUG: End ...." << std::endl;
    }
 
    return result.release();
