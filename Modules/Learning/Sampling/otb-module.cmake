@@ -12,6 +12,7 @@ otb_module(OTBSampling
     OTBTestKernel
     OTBImageIO
     OTBImageBase
+    OTBIOXML
 
   DESCRIPTION
     "${DOCUMENTATION}"

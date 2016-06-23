@@ -19,18 +19,19 @@
 #define otb_GlImageActor_h
 
 
-#include "otbGenericRSTransform.h"
-#include "otbGeoInterface.h"
-#include "otbGlActor.h"
-#include "otbFragmentShader.h"
-#include "otbImageFileReader.h"
-#include "otbMultiChannelExtractROI.h"
-#include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbVectorImage.h"
+#include <vcl_algorithm.h>
 
 #include "itkCenteredRigid2DTransform.h"
 
-#include <vcl_algorithm.h>
+#include "otbFragmentShader.h"
+#include "otbGenericRSTransform.h"
+#include "otbGeoInterface.h"
+#include "otbGlActor.h"
+#include "otbImageFileReader.h"
+#include "otbImageSettings.h"
+#include "otbMultiChannelExtractROI.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbVectorImage.h"
 
 
 namespace otb
@@ -76,16 +77,16 @@ public:
   void Initialize(const std::string & filename);
 
   // Retrieve the full extent of the actor
-  virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const ITK_OVERRIDE;
 
   // Update internal actor state with respect to ViewSettings
-  virtual void ProcessViewSettings();
+  void ProcessViewSettings() ITK_OVERRIDE;
 
   // Heavy load/unload operations of data
-  virtual void UpdateData();
+  void UpdateData() ITK_OVERRIDE;
 
   // Gl rendering of current state
-  virtual void Render();
+  void Render() ITK_OVERRIDE;
 
   // Automatic color adjustment
   void AutoColorAdjustment( double & minRed, double & maxRed,
@@ -97,15 +98,15 @@ public:
 
   const PointType & GetOrigin() const;
 
-  const SpacingType & GetSpacing() const;
+  const GeoInterface::Spacing2 & GetSpacing() const ITK_OVERRIDE;
 
-  virtual std::string GetWkt() const;
+  std::string GetWkt() const ITK_OVERRIDE;
 
   ImageKeywordlistType GetKwl() const;
 
-  virtual bool HasKwl() const;
+  bool HasKwl() const ITK_OVERRIDE;
 
-  bool GetKwl( ImageKeywordlist & ) const;
+  bool GetKwl( ImageKeywordlist & ) const ITK_OVERRIDE;
 
   MetaDataDictionaryType & GetMetaDataDictionary() const;
 
@@ -123,6 +124,8 @@ public:
   itkBooleanMacro(SoftwareRendering );
   itkSetMacro(SoftwareRendering, bool );
   itkGetMacro(SoftwareRendering, bool );
+
+  void CreateShader();
 
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
@@ -177,25 +180,19 @@ public:
   itkGetObjectMacro(Shader,FragmentShader);
   itkSetObjectMacro(Shader,FragmentShader);
 
+  itkGetObjectMacro( ImageSettings, ImageSettings );
+
   //
   // otb::GlActor overloads.
   //
 
-  virtual bool TransformFromViewport( Point2f & out,
-                                      const Point2f & in,
-                                      bool isPhysical = true ) const;
-
-  virtual bool TransformFromViewport( Point2d & out,
+  bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
-                                      bool isPhysical = true ) const;
+                                      bool isPhysical = true ) const ITK_OVERRIDE;
 
-  virtual bool TransformToViewport( Point2f & out,
-                                    const Point2f & in,
-                                    bool isPhysical = true ) const;
-
-  virtual bool TransformToViewport( Point2d & out,
+  bool TransformToViewport( Point2d & out,
                                     const Point2d & in,
-                                    bool isPhysical = true ) const;
+                                    bool isPhysical = true ) const ITK_OVERRIDE;
 
 
   void UpdateTransforms();
@@ -203,7 +200,7 @@ public:
 protected:
   GlImageActor();
   
-  virtual ~GlImageActor();
+  ~GlImageActor() ITK_OVERRIDE;
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;
@@ -219,6 +216,7 @@ protected:
       : m_Loaded(false),
         m_TextureId(0),
         m_ImageRegion(),
+        m_TileSize(0),
         m_Image(),
         m_UL(),
         m_UR(),
@@ -228,7 +226,7 @@ protected:
         m_RedIdx(1),
         m_GreenIdx(2),
         m_BlueIdx(3),
-        m_RescaleFilter(NULL)
+        m_RescaleFilter(ITK_NULLPTR)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);
@@ -239,6 +237,7 @@ protected:
     bool m_Loaded;
     unsigned int m_TextureId;
     RegionType m_ImageRegion;
+    unsigned int m_TileSize;
     VectorImageType::Pointer m_Image;
     PointType m_UL;
     PointType m_UR;
@@ -304,6 +303,7 @@ private:
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
 
+  ImageSettings::Pointer m_ImageSettings;
   FragmentShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;

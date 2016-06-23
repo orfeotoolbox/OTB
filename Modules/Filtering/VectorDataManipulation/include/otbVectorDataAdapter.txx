@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataAdapterFilter_txx
-#define __otbVectorDataAdapterFilter_txx
+#ifndef otbVectorDataAdapterFilter_txx
+#define otbVectorDataAdapterFilter_txx
 
 #include "otbVectorDataAdapter.h"
 

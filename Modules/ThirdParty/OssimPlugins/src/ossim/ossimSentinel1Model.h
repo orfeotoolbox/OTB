@@ -103,6 +103,18 @@ namespace ossimplugins
 
     bool getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern);
 
+    virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
+                                         const double&   heightEllipsoid,
+                                         ossimGpt&       worldPoint) const;
+
+    virtual void lineSampleToWorld(const ossimDpt& image_point,
+                                   ossimGpt&       gpt) const;
+
+    virtual void  worldToLineSample(const ossimGpt& world_point,
+                                    ossimDpt&       image_point) const;
+
+    virtual void imagingRay(const ossimDpt& image_point,
+                            ossimEcefRay&   image_ray) const;
 
     bool initImageSize(ossimIpt& imageSize) const
     {

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbRGBAPixelConverter_h
-#define __otbRGBAPixelConverter_h
+#ifndef otbRGBAPixelConverter_h
+#define otbRGBAPixelConverter_h
 
 #include "itkProcessObject.h"
 #include "itkRGBAPixel.h"
@@ -30,7 +30,7 @@ namespace otb
  * \brief Convert an itk::RGBApixel<InternalType> into another pixel
  * type
  *
- * To be usable, the desired convertion must be implemented through
+ * To be usable, the desired conversion must be implemented through
  * partial specialisation mecanism.
  *
  *
@@ -63,8 +63,8 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  virtual ~RGBAPixelConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~RGBAPixelConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
@@ -100,8 +100,8 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  virtual ~RGBAPixelConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~RGBAPixelConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
@@ -137,8 +137,8 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  virtual ~RGBAPixelConverter(){}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~RGBAPixelConverter() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImageTo3DScalarImageFilter_txx
-#define __otbVectorImageTo3DScalarImageFilter_txx
+#ifndef otbVectorImageTo3DScalarImageFilter_txx
+#define otbVectorImageTo3DScalarImageFilter_txx
 
 #include "otbVectorImageTo3DScalarImageFilter.h"
 #include "itkImageRegionConstIterator.h"

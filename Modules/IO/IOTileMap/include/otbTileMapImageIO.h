@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileMapImageIO_h
-#define __otbTileMapImageIO_h
+#ifndef otbTileMapImageIO_h
+#define otbTileMapImageIO_h
 
 
 /* C++ Libraries */
@@ -87,48 +87,50 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
+  bool CanReadFile(const char*) ITK_OVERRIDE;
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  virtual bool CanStreamRead()
+  bool CanStreamRead() ITK_OVERRIDE
   {
     return true;
   }
 
   /** Set the spacing and dimension information for the set filename. */
-  virtual void ReadImageInformation();
+  void ReadImageInformation() ITK_OVERRIDE;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(void* buffer);
+  void Read(void* buffer) ITK_OVERRIDE;
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
+  bool CanWriteFile(const char*) ITK_OVERRIDE;
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  virtual bool CanStreamWrite()
+  bool CanStreamWrite() ITK_OVERRIDE
   {
     return true;
   }
 
   /** Writes the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
-  virtual void WriteImageInformation();
+  void WriteImageInformation() ITK_OVERRIDE;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
-  virtual void Write(const void* buffer);
+  void Write(const void* buffer) ITK_OVERRIDE;
 
   /** Get the number of overviews available into the file specified
    *  This imageIO didn't support overviews */
-  virtual unsigned int GetOverviewsCount()
+  unsigned int GetOverviewsCount() ITK_OVERRIDE
   {
-    return 0;
+    // MANTIS-1154: Source image is always considered as the best
+    // resolution overview.
+    return 1;
   }
   
   /** Get information about overviews available into the file specified
    * This imageIO didn't support overviews */ 
-  virtual std::vector<std::string> GetOverviewsInfo()
+  std::vector<std::string> GetOverviewsInfo() ITK_OVERRIDE
   {
     std::vector<std::string> desc;
     return desc;
@@ -136,27 +138,27 @@ public:
   
   /** Provide hist about the output container to deal with complex pixel
    *  type (Not used here) */ 
-  virtual void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
-                                        bool itkNotUsed(isVectorImage)){}
+  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
+                                        bool itkNotUsed(isVectorImage)) ITK_OVERRIDE{}
 
 protected:
   /** Constructor.*/
   TileMapImageIO();
   /** Destructor.*/
-  virtual ~TileMapImageIO();
+  ~TileMapImageIO() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Read all information on the image*/
   void InternalReadImageInformation();
   /** Write all information on the image*/
   void InternalWriteImageInformation();
 
-  virtual unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
-                                                                       const ImageIORegion& pasteRegion) const;
+  unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
+                                                                       const ImageIORegion& pasteRegion) const ITK_OVERRIDE;
 
-  virtual ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
+  ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
                                                                unsigned int numberOfActualSplits,
-                                                               const ImageIORegion& pasteRegion) const;
+                                                               const ImageIORegion& pasteRegion) const ITK_OVERRIDE;
 
   /** Number of bands of the image*/
   int m_NbBands;
@@ -223,4 +225,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbTileMapImageIO_h
+#endif // otbTileMapImageIO_h

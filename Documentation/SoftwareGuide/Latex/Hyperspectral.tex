@@ -1,0 +1,456 @@
+\chapter{Hyperspectral}
+
+%TODO translate using  Hyperspectral_tr.txt
+An hyperspectral image contains a collection of spectral pixels or
+equivalently, a collection of spectral bands.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Cube_HPX.eps}
+  \itkcaption[Hyperspectral cube]{Illustration of an hyperspectral cube, spectral pixel and a spectral layer.}
+  \label{fig:cube}
+\end{figure}
+
+An hyperspectral system \ref{fig:cube} acquired
+radiance, each pixel contains fine spectral information
+fine that depends of:
+
+\begin{itemize}
+\item{Spectrum of the light source (in practice, the
+sun) and atmospheric disturbances.}
+\item{Spectral responses
+of different materials in the overlap zone and of the nature of the mixture.}
+\end{itemize}
+
+Preliminary treatments allow to perform 
+atmospheric correction for estimating a reflectance cube
+spectral by subtraction of information extrinsic of the
+scene (see also \ref{secAtmosphericCorrections}).
+ 
+\section{Unmixing}
+
+\subsection{Linear mixing model}
+
+Reflectance information depends only of the materials spectral responses in the scene. When the mixture between
+materials is macroscopic, the linear mixing model of spectra
+is generally admitted. In this case, the image typically looks like this:
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Linear_Unmixing_HPX.eps}
+  \itkcaption[Linear mixing model]{Zone which verify the LM model.}
+  \label{fig:linear_unmixing}
+\end{figure}
+
+We notice \ref{fig:linear_unmixing} the
+presence of pure pixels, and pixel-blending. The LMM acknowledges that
+reflectance spectrum associated with each pixel is a linear combination of pure materials in the recovery area, commonly known as ``''endmembers. This is illustrated in \ref{fig:decomp_mml}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Decomposition_MML_HPX.eps}
+  \itkcaption[Decomposition of the LMM]{Decomposition of a hyperspectral cube according to the LMM.}
+  \label{fig:decomp_mml}
+\end{figure}
+The `` left'' term represents the different spectral bands of
+data cube. The `` right'' term represents a `` product''
+between the reflectance spectra of endmembers and their repective abundances. Abundance band of endmembers is
+image grayscale between $0$ and $1$. The pixel i of the
+abundance band of endmember j is $s_ {ji}$. This value is the
+abundance of endmember j in the pixel i. Under certain conditions
+~\cite{Huck2009}, this value can be interpreted as the ratio
+surface of the material in the overlap zone (\ref{fig:linear_unmixing}). In
+practice, one can reasonably expect that: 
+
+\begin{itemize}
+\item{a limit number
+of pure materials compose the scene.}
+\item{the scene contains pure pixels if the spatial resolution is sufficient and
+do not necessarily contains them otherwise.}
+\end{itemize}
+
+Many techniques of unmixing in hyperspectral image analysis
+are based on geometric approach where each pixel is seen as a spectral
+vector of L (number of spectral bands). The
+spectral bands can then be written as vectors.
+
+\begin{figure}[h]
+\begin{tikzpicture}
+\pgfmathsetmacro{\cubex}{2}
+\pgfmathsetmacro{\cubey}{2}
+\pgfmathsetmacro{\cubez}{2}
+\draw[black,fill=white] (0,0,0) -- ++(-\cubex,0,0) -- ++(0,-\cubey,0) -- ++(\cubex,0,0) -- cycle;
+\draw[black,fill=white] (0,0,0) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+\draw[black,fill=white] (0,0,0) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+\node[draw] (R) at (2,0.5) {R};
+\draw[->] (2,0.5) -- (R.west);
+\end{tikzpicture}
+\itkcaption[Hyperspectral cube vectorization]{``Vectorization'' of hyperspectral cube. The spectral pixels
+are stored in the columns of the matrix R and, in
+equivalently, the spectral bands are assigned to the lines of R.}
+\label{fig:mml}
+\end{figure}
+%% Figure 5: "Vectorisation" du cube hyperspectral. Les pixels spectraux
+%% sont ranges dans les colonnes de la matrice R et, de maniere
+%% equivalente, les bandes spectrales sont rangees dans les lignes de R.
+
+By deduction of \ref{fig:decomp_mml} et de \ref{fig:mml}, the LMM needs to decompose R as: 
+\begin{center}
+$R= A.S + N = X + N$
+\end{center}
+
+J is the number of endmembers and the number of spectral pixels I:
+ 
+\begin{itemize}
+\item{J columns of the matrix A contain the spectra of endmembers.}
+\item{J rows of the matrix S contain the abundance maps
+vectorized, we call the columns vectors of abundances of
+matrix S.}
+\item{The matrix N, of dimensions $LXI$ is a matrix of additive noise.}
+\end{itemize}
+
+The unmixing problem is to estimate matrices A and S
+from R or possibly of \"X, an estimate of the denoised matrix signal.
+
+Several physical constraints can be taken into
+account to solve the unmixing problem:
+ 
+\begin{itemize}
+\item{C1: reflectance spectra are positives (non negative matrix A).}
+\item{C2: positivity abundances are positive (non-negative matrix S).}
+\item{C3: additivity
+abundance (the sum of the coefficients of each column of the matrix S is 1).}
+\item{Independence between the ``algebraic spectral vectors'' of endmembers associated with linearity and mixtures of spectra, so that the simplex property described in paragraph below.}
+\end{itemize}
+
+\subsection{Simplex}  
+Recent unmixing algorithms based on the ``property of
+simplex.'' In a vector space of dimension $J-1$, we can
+associate to J vectors algebrically independent, J points which define the vertices of a J-simplex \ref{fig:simplex}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Simplex_HPX.eps}
+  \itkcaption[Simplex]{Illustration of a 2-simplex, a 3-simplex and a 4-simplex.}
+  \label{fig:simplex}
+\end{figure}
+
+Hyperspectral cube of L bands, based on J endmembers,
+may be contained in a affine subspace of dimension $J-1$.
+A relevant subspace in the sense of signal-to-noise ratio is
+generally obtained by Principal Component Analysis (PCA) \ref{sec:RoadExtraction}. 
+In practice, the $J-1$ eigenvectors associated with highest values are
+the columns of a projection matrix V of dimension $(Lx(J-1))$. Reduced
+data Z, of dimensions $((J-1)xI)$ are obtained by the operation:
+$Z=V^{T}(\tilde{R})$
+
+where each column of $\tilde{R}$ where the average spectrum is substracted,
+generally estimated under maximum likelihood. In the
+subspace carrying the column-vectors Z, endmembers spectra oare associated to the top of the simplex. If the noise is
+negligible, the simplex circumscribed reduced data.
+
+This property shows that the endmembers research are the vertices of a
+simplex that circumscribes the data. However, an infinity of different
+simplices can identify the same data set. In fact, the problem of
+unmixing generally does not have a unique solution. This degeneration can also be
+demonstrated by the formalism of the non-negative
+matrices factorization \cite{Huck2010a}.
+
+It is therefore necessary to choose the most physically
+relevant solution. All unmixing techniques based on this simplex property admit that the best solution is defined by the allowable
+minimum volume simplex, or the notion of volume is extended to all
+finite dimensions (possibly different from 3).
+  
+
+\subsection{State of the art unmixing algorithms selection} 
+The more recent linear unmixing algorithms exploit the
+simplex property. It is possible to classify these methods into several families:
+
+\subsubsection{Family 1} 
+A first family of unmixing algorithms are based on research of the
+endmembers ``among'' data. This means that a minimum of one pure pixel must
+be associated with each endmembers. If this hypothesis is not
+verified, it will produce an estimation error of the endmembers spectra. The historical advantage of these algorithms are their low
+algorithmic complexity. The three best known are :
+\begin{itemize}
+\item PPI (Pixel Purity Index)
+\item VCA NFINDER (Vertex Component Analysis) \cite{Nascimento2005}
+\end{itemize}
+
+In addition to its success recognized by the
+community and very competitive algorithmic complexity, the endmembers estimation is unbiased in absence of noise (and when there are pure pixels).
+
+\paragraph{VCA} 
+The VCA algorithm is systematically
+used to initialize various studied algorithms (except
+MVES, based on a different initialization).
+
+Important elements on the operation of VCA:
+\begin{itemize}
+\item {The VCA algorithm
+is based on iterative projections of the data orthogonal to
+the subspace already held by the endmembers.}
+\item {Biaised when degree of purity is lower than 1.}
+\end{itemize}  
+
+\subsubsection{Family 2} 
+A second family is composed of algorithms which are looking for the simplex of minimum
+volume circumscribing the data. Phase initialization consists in determining
+an initial simplex any circumscribing the data. Then, a numerical
+optimization scheme minimizes a functional, increasing function of the
+volume generalized, itself dependent of estimated endmembersin the
+current iteration. The optimization scheme is constrained by the fact that the
+data have remained on the simplex and possibly by constraints C1, C2 and C3.
+
+Existing algorithms are: 
+\begin{itemize}
+\item {MVSA (Minimum Volume Simplex
+Analysis) \cite{Li2008}.}
+\item { MVES (Minimum Volume Encosing Simplex)
+[Chan2009].}
+\item {SISAL (Simplex Identification via Split Augmented
+Lagrangian) \cite{Dias2009}.}
+\end{itemize}  
+  
+Main differences between algorithms are: 
+\begin{itemize}
+\item {The numerical optimization scheme.}
+\item {The way
+constraints are taken into account.}
+
+\end{itemize}  
+These issues impact the computational complexity and the precision of the estimation.
+ 
+\paragraph{MVSA \cite{Li2008} } 
+MVSA key points: 
+\begin{itemize}
+\item {Initialization by VCA.}
+\item {All spectral pixels included in the simplex estimate
+  (approximatively) by VCA does not impact the constraint of  data to belong to the researched simplex, they are
+  simply delete the data used in the minimization of the
+  simplex to reduce the algorithmic complexity.}
+\item {The highly developed optimization technique uses
+  sequential quadratic programming (Sequential Quadratic
+  Programming - SQP) and more specifically of the category
+  ``Quasi-Newton''under constraint.}
+\end{itemize} 
+
+\paragraph{MVES \cite{Chan2009}}
+ MVES key points: 
+\begin{itemize}
+\item {Initialization by non-trivial
+  iterative method (LP Linear Programming for Linear
+  Programming), different from VCA.}
+\item {Resolution of problem by LP.}
+\end{itemize} 
+ 
+
+\paragraph{SISAL \cite{Dias2009}}
+SISAL key points:
+\begin{itemize}
+\item {Initialisation by VCA.}
+\item {Selection of similar spectral pixels as MVSA to reduce computational complexity.}
+\item {Advanced optimization technique
+combining multiple features.}
+\begin{itemize}
+\item {Decomposition of the non convex problem
+in convex set of problems.}
+\item {Development of a
+specific method of separation of variables for considering
+Lagrangian increases with a good design properties.}
+\end{itemize}
+\end{itemize} 
+
+\subsubsection{Family 3}
+Non negative matrix factorization algorithms (NMF for Non-negative Matrix Factorization). The purpose of this
+branch of applied mathematics is to factor a non-negative matrix, X in our case, into a product of non negative matrices: AS by minimizing a distance between X and AS and
+with an adapted regularization to lift the degeneration in an appropriate manner adapted to the physical problems associated with unmixing.
+
+\paragraph{MDMD-NMF \cite{Huck2010b}} 
+Key points of MDMD-NMF:
+\begin{itemize}
+\item {VCA initialization.}
+\item {Minimizing the norm of standard
+Frobenius with a spectral regularization and a regularization ``Space''(the matrix of abundances).}
+\begin{itemize}
+\item {Minimum spectral
+Dispersion: the spectral regularization encourages the  variance of 
+coefficients of a spectrum of endmembers to be low.}
+\item {Maximum spatial dispersion: the spatial regularization
+  encourages the vector of abundances to occupy all the admissible parts (more information in \cite{Huck2009}). it
+  presents a certain analogy with the minimum volume constraint.}
+\end{itemize}
+\end{itemize}
+ 
+ 
+  
+
+\subsubsection{Further remarks}
+Algorithms of families 1 and 2 estimate `` only'' the spectra of
+endmembers. The estimated abundance maps held
+\textit{a posteri} and requires the application of an algorithm like Fully
+Constrained Least Square (FCLS)\doxygen{otb}{FCLSUnmixingImageFilter} \cite{Heinz2001}. VSS includes an specific algorithm
+for the estimation of the abundances.
+The unmixing is a general non-convex problem,
+which explains the importance of the initialization of algorithms.
+
+Overview of algorithms and related physical constraints:
+
+\begin{center}
+   \begin{tabular}{ | p{1.5cm} | | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2cm} | }
+     \hline
+     & VCA & MVSA & MVES & SISAL & MDMD \\ \hline
+     C1 $(A>0)$ & mute & mute & mute & mute & hard \\ \hline
+     C2 $(S>0)$ & mute & hard & hard & soft & hard \\ \hline
+     C3 (additivity) & Mute (FCLS) & hard & hard & hard & soft \\ \hline
+     simplex & Endmembers in the data & Circumscribed to data & 
+     Circumscribed to data & Circumscribed to data &
+     Indirectly by ``space'' regularization \\ \hline
+   \end{tabular}
+ \end{center}
+
+\subsubsection{Basic hyperspectral unmixing example}
+\input{HyperspectralUnmixingExample}
+
+\section{Dimensionality reduction}
+
+Please refer to chapter~\ref{chap:dimred}, page~\pageref{chap:dimred} for a presentation of dimension reduction methods available in OTB.
+
+\section{Anomaly detection}
+By definition, an anomaly in a scene is an element that does not
+expect to find. The unusual element is likely different from its
+environment and its presence is in the minority scene. Typically, a
+vehicle in natural environment, a rock in a field, a wooden hut in a
+forest are anomalies that can be desired to detect using a
+hyperspectral imaging. This implies that the spectral response of the
+anomaly can be discriminated in the spectral response of ``background
+clutter''. This also implies that the pixels associated to anomalies,
+the anomalous pixels are sufficiently rare and/or punctual to be
+considered as such. These properties can be viewed as spectral and
+spatial hypotheses on which the techniques of detection anomalies in
+hyperspectral images rely on.
+
+
+Literature on hyperspectral imaging
+generally distinguishes target detection and detection
+anomalies:
+
+\begin{itemize}
+\item {We speak of detection of targets when the spectral response
+element of the research is used as input to
+the detection algorithm. This is an \textit{a priori} information that
+can, in theory, allow to construct algorithms with very high
+detection score, such as for example the Adaptive Matched Filter (AMF) or Adaptive
+Cosine/Coherence Estimator (ACE). Nevertheless,
+thin enough knowledge of the researched spectrum is a difficult 
+information to hold in practice, leading the use of anomaly detection algorithms.}
+
+\item {We speak of detection of anomalies (or outliers) when the spectrum
+  of the unusual element is not required by the algorithm. For this reason, we often associate the term
+  ``Unsupervised'' detection. Nevertheless, these algorithms depend
+  generally of ``structural'' parameters. For example, in the case
+  of detection on a sliding window, selecting the right
+  dimensions is based on an \textit{a priori} knowledge of the anomalies size. 
+  We focus here on algorithms for \bf{anomaly detection}.}
+
+\end{itemize}
+    
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Anomaly_HYP.eps}
+  \itkcaption[Concept of detection]{Notions on detection: ground truth mask, map detection, face detection.}
+  \label{fig:anomaly_hyp}
+\end{figure}
+
+In \ref{fig:anomaly_hyp}, we introduce some notions that will be useful later. Anomaly detection algorithms have an image as input and consider a map
+serving as a detection tool for making a decision. A
+adaptive thresholding provides a estimated mask detection that
+we hope is the most similar possible as the ground truth mask,
+unknown in practice.
+
+Two approaches dominate the state of the art in anomaly detection
+in hyperspectral images. Methods which use Pursuit
+Projection (PP) and methods based on a probabilistic modelization of the background and possibly of the target class
+with statistical hypothesis tests.
+The PP consists in projecting linearly spectral pixels on
+vectors wi which optimizes a criterion sensitive to the presence of anomalies
+(like Kurtosis). This gives a series of maps of projections
+where anomalies contrast very strongly with the background. But the automatic estimation of map  detection have also major difficulties, including:
+
+\begin{itemize} 
+\item How many projectors should I consider?  
+\item What (s) projector (s) to choose?  
+\item How to manage an inhomogeneous background?  
+\item Detection performances varies with the spatial dimensions of the image (number of samples) 
+\item These algorithms usually do not have a structure allowing parallelization
+\item These algorithms do not generally have a ``constant false alarm rate''.
+\end{itemize}
+
+Algorithms described here are RX (presented in the first version
+in \cite{Reed1990} and GMRF \cite{Schweizer2001}. They are based on probability models, statistics and hypothesis tests and
+sliding window. These approaches consist in answering the following question : ``The pixel (or set of neighboring pixels) tests looks like background pixels?'', by a process of test
+statistics. More fully, this approach requires:
+
+\begin{itemize} 
+\item A model for the background 
+\item The choice of a statistic test 
+\item Eventually, a model for the class ``anomaly''
+\item Estimators for the parameters \textit{a priori} unknown
+\item Hypothesis of homogeneity for a satisfactory compromise between:
+\begin{itemize} 
+\item The number of samples compared to the number of estimate parameters 
+\item The homogeneity, including the background 
+\item Algorithmic complexity (although the algorithms considered are
+highly parallelizable)
+\end{itemize} 
+\end{itemize} 
+Principle of RX and GMRF can be resume with \ref{fig:workflow_anomaly}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Anomaly_Detection_Workflow.eps}
+  \itkcaption[Anomaly detection block diagram]{Basic workflow of anomaly detection in hyperspectral images.}
+  \label{fig:workflow_anomaly}
+\end{figure}
+
+An optional first step is to reduce the size of spectral data
+while maintaining information related to anomalies. Then, the spectral pixels
+are tested one by oneturn (parallelizable task). The pixel
+test works on a sliding window (see \ref{fig:sliding_anomaly}). This
+window consists of two sub windows, centered on the pixel test of  dimensions L and LL, with $L<LL$.
+
+\begin{itemize}
+\item Pixels belonging to the annulus formed the class ``local background''. The statistical parameters of the background,
+  required by statistical tests, are estimated from these
+  spectral pixels. One of the challenges is to find a
+  compromise on the thickness of the annulus (and therefore the number
+  statistical sampling) where:
+ 
+\begin{itemize}
+\item If the annulus is too thick, the local background  is no longer homogeneous
+\item If the number of samples is too low, the precision of
+  the statistical estimation of the model parameters for the background is too
+  low
+\end{itemize}  
+\item Pixels of the central part of the sliding window
+  belong to the class ``unknown''. If the test pixel (central pixel) is an anomaly, it is possible that its neighbors
+  pixels are also anomalies, which imply to not to choose
+  a too small value for L if it is known that anomalies
+  can be distribute over several pixels.
+\end{itemize}  
+Once all the parameters are estimated, a statistical test is performed and assigns a
+value $\Lambda(i)$ to the tested pixel i. A map of detection is thus
+formed.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Sliding_Window_Anomaly_Algo.eps}
+  \itkcaption[Sliding window and parameters definitions]{Principle of the sliding window and definitions of
+parameters L and LL of the sliding window. RX algorithms and
+GMRF, taken herein in the following sections.}
+  \label{fig:sliding_anomaly}
+\end{figure}
+
+The RX algorithm is available in OTB through the \doxygen{otb}{LocalRxDetectorFilter} class.
+
+%\subsection{Local RX}

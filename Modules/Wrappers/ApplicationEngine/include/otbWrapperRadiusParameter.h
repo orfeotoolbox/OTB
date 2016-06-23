@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperRadiusParameter_h
-#define __otbWrapperRadiusParameter_h
+#ifndef otbWrapperRadiusParameter_h
+#define otbWrapperRadiusParameter_h
 
 #include "otbWrapperNumericalParameter.h"
 
@@ -46,7 +46,7 @@ public:
   /** RTTI support */
   itkTypeMacro(RadiusParameter, Parameter);
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return true;
   }
@@ -61,7 +61,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~RadiusParameter()
+  ~RadiusParameter() ITK_OVERRIDE
   {}
 
 private:

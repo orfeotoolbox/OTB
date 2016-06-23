@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNeighborhoodScalarProductFilter_h
-#define __otbNeighborhoodScalarProductFilter_h
+#ifndef otbNeighborhoodScalarProductFilter_h
+#define otbNeighborhoodScalarProductFilter_h
 
 #include "otbImageToModulusAndDirectionImageFilter.h"
 
@@ -81,9 +81,9 @@ protected:
   /** Constructor */
   NeighborhoodScalarProductFilter();
   /** Destructor */
-  virtual ~NeighborhoodScalarProductFilter() {}
+  ~NeighborhoodScalarProductFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** NeighborhoodScalarProductImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -95,7 +95,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 private:
   NeighborhoodScalarProductFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

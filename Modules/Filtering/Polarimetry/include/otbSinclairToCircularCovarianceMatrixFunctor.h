@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToCircularCovarianceMatrixFunctor_h
-#define __otbSinclairToCircularCovarianceMatrixFunctor_h
+#ifndef otbSinclairToCircularCovarianceMatrixFunctor_h
+#define otbSinclairToCircularCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
 #include "otbSinclairToCovarianceMatrixFunctor.h"

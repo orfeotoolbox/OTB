@@ -165,6 +165,14 @@ public:
   /** Return the list of expression variables (only make sense after having set up an expression) */
   const mup::var_maptype& GetExprVar() const
   {
+    try
+      {
+      return m_MuParserX.GetExprVar();
+      }
+    catch(ExceptionType &e)
+      {
+      ExceptionHandler(e);
+      }
     return m_MuParserX.GetExprVar();
   }
 
@@ -200,7 +208,7 @@ public:
   }*/
 
   /** Convert parser specific exception into itk exception */
-  virtual void ExceptionHandler(ExceptionType &e)
+  virtual void ExceptionHandler(ExceptionType &e) const
   {
     itkExceptionMacro(                                     << std::endl
           << "Message:     "   << e.GetMsg()   << std::endl
@@ -224,11 +232,11 @@ protected:
     InitConst();
   }
 
-  virtual ~ParserXImpl()
+  ~ParserXImpl() ITK_OVERRIDE
   {
   }
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

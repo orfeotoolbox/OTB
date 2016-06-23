@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelMapSource_txx
-#define __otbLabelMapSource_txx
+#ifndef otbLabelMapSource_txx
+#define otbLabelMapSource_txx
 
 #include "otbLabelMapSource.h"
 
@@ -62,7 +62,7 @@ LabelMapSource<TOutputLabelMap>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputLabelMapType *> (this->ProcessObject::GetOutput(0));
 }

@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainSVM_txx
-#define __otbTrainSVM_txx
+#ifndef otbTrainSVM_txx
+#define otbTrainSVM_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb

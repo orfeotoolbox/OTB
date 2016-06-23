@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeastSquareAffineTransformEstimator_h
-#define __otbLeastSquareAffineTransformEstimator_h
+#ifndef otbLeastSquareAffineTransformEstimator_h
+#define otbLeastSquareAffineTransformEstimator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -135,10 +135,10 @@ protected:
   /** Constructor */
   LeastSquareAffineTransformEstimator();
   /** Destructor */
-  virtual ~LeastSquareAffineTransformEstimator();
+  ~LeastSquareAffineTransformEstimator() ITK_OVERRIDE;
 
   /** The PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LeastSquareAffineTransformEstimator (const Self &);   // purposely not implemented

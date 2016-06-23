@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataTransformFilter_txx
-#define __otbVectorDataTransformFilter_txx
+#ifndef otbVectorDataTransformFilter_txx
+#define otbVectorDataTransformFilter_txx
 
 #include "otbVectorDataTransformFilter.h"
 #include "itkProgressReporter.h"
@@ -38,7 +38,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
   // use the otb::Transform or we loose the capability of using all the existing
   // itk transform, so we just keep it as NULL and you have to be careful not
   // to burn yourself when using it.
-  m_Transform = NULL;
+  m_Transform = ITK_NULLPTR;
 }
 
 /**
@@ -132,7 +132,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 
 
 /**
-   * GenerateData Performs the coordinate convertion for each element in the tree
+   * GenerateData Performs the coordinate conversion for each element in the tree
  */
 template <class TInputVectorData, class TOutputVectorData >
 void

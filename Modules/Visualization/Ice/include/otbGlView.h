@@ -277,7 +277,7 @@ public:
 protected:
   GlView();
 
-  virtual ~GlView();
+  ~GlView() ITK_OVERRIDE;
 
 private:
   // prevent implementation
@@ -325,7 +325,7 @@ GlView
   const otb::GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
 
@@ -542,11 +542,11 @@ GlView
 		Spacing & spacing ) const
 {
   // std::cout
-  //   << std::hex << this
+  //   << std::hex << this << std::dec
   //   << "::ZoomToRegion( "
   //   << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
   //   << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
-  //   << "[ " << spacing[ 0 ] << ", " << spacing[ 1 ] << "] )"
+  //   << "[ " << native[ 0 ] << ", " << native[ 1 ] << "] )"
   //   << std::endl;
 
   // Compute center point.
@@ -588,7 +588,7 @@ GlView
   spacing[ 0 ] = ( native[ 0 ]<0.0 ? -1 : +1 ) * scale;
   spacing[ 1 ] = ( native[ 1 ]<0.0 ? -1 : +1 ) * scale;
 
-  // std::cout << "-> spacing: " << center[ 0 ] << ", " << center[ 1 ] << std::endl;
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
 
   // Ok.
   return true;
@@ -603,6 +603,11 @@ GlView
 	      Spacing & spacing,
 	      double units ) const
 {
+  // std::cout
+  //   << std::hex << this << std::dec
+  //   << "::ZoomToFull();"
+  //   << std::endl;
+
   // Get layer actor.
   GlActor::Pointer actor( GetActor( key ) );
 
@@ -614,7 +619,7 @@ GlView
   const GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
   // Get viewport current center and spacing.
@@ -623,7 +628,14 @@ GlView
   center = m_Settings->GetViewportCenter();
   spacing = m_Settings->GetSpacing();
 
-  // Transform center point to image space..
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
+
+  // Get native spacing.
+  GeoInterface::Spacing2 n_spacing( geo->GetSpacing() );
+
+  // std::cout << "-> n_spacing: " << n_spacing[ 0 ] << ", " << n_spacing[ 1 ] << std::endl;
+
+  // Transform center point to image space.
   Point o;
 
   if( !geo->TransformFromViewport( o, center, true ) )
@@ -645,8 +657,14 @@ GlView
   e[ 1 ] -= o[ 1 ];
 
   // Apply extent vector length to view spacing.
+  //
+  // MANTIS-1178: Lenght of vector e must be divided by native
+  // spacing.
+  //
+  // MANTIS-1203: absolute value of native spacing should be
+  // considered (to avoid flipping effects).
   spacing[ 0 ] =
-    units * spacing[ 0 ] /
+    vcl_abs( n_spacing[ 0 ] ) * units * spacing[ 0 ] /
     vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
   //
@@ -663,15 +681,39 @@ GlView
   e[ 1 ] -= o[ 1 ];
 
   // Apply extent vector length to view spacing.
+  //
+  // MANTIS-1178: Lenght of vector e must be divided by native
+  // spacing.
+  //
+  // MANTIS-1203: absolute value of native spacing should be
+  // considered (to avoid flipping effects).
   spacing[ 1 ] =
-    units * spacing[ 1 ] /
+    vcl_abs( n_spacing[ 1 ] ) * units * spacing[ 1 ] /
     vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
+
+  //
+  // Compute aspect-ratio corrected spacing (smallest pixel is chosen
+  // as 1:1 reference).
+  //
+  // MANTIS-1202
+  //
+  // MANTIS-1203: restore sign of axis when applying isotrop spacing.
+  // {
+  if( vcl_abs( spacing[ 0 ] ) < vcl_abs( spacing[ 1 ] ) )
+    spacing[ 1 ] = ( spacing[ 1 ]<0.0 ? -1 : +1 ) * vcl_abs( spacing[ 0 ] );
+  else
+    spacing[ 0 ] = ( spacing[ 0 ]<0.0 ? -1 : +1 ) * vcl_abs( spacing[ 1 ] );
+  // }
+  // MANTIS-1202
+
+  // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
 
   //
   // Ok.
   return true;
 }
-
 
 } // End namespace otb
 

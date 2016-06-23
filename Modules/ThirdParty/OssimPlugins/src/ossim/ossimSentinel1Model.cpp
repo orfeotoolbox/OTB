@@ -1,5 +1,7 @@
 #include "ossimSentinel1Model.h"
 
+#include <cassert>
+
 namespace ossimplugins
 {
 
@@ -121,9 +123,17 @@ namespace ossimplugins
    bool ossimSentinel1Model::loadState(const ossimKeywordlist& kwl,
                                       const char* prefix)
    {
-      //theManifestKwl.addList(kwl, true);
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::loadState";
+
+      theManifestKwl.addList(kwl, true);
+
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "theManifestKwl.getSize()" << theManifestKwl.getSize() << std::endl;
+      }
 
       ossimSarModel::loadState(kwl, prefix);
+
       return true;
    }
 
@@ -167,62 +177,60 @@ namespace ossimplugins
          bool foundManifestFile = findSafeManifest(file, safeFile);
          while (foundManifestFile)
          {
-            if(theManifestDoc.get())
+            if(!theManifestDoc.get())
             {
-               if( !theManifestDoc->openFile(safeFile))
-               {
-                  std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
-                  break;
-               }
+               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " theManifestDoc.get()" << std::endl;
+               break;
             }
-            else
+
+            if( !theManifestDoc->openFile(safeFile))
             {
-               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " theManifestDoc..\n";
+               ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " theManifestDoc->openFile(safeFile)" << std::endl;
                break;
             }
 
             if ( !this->isSentinel1(safeFile))
             {
-               std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->isSentinel1(safeFile)" << std::endl;
                break;
             }
 
             ossimString productFile;
             if ( !this->getAnnotationFileLocation(safeFile, "^product"))
             {
-               std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->getAnnotationFileLocation(safeFile, '^product')" << std::endl;
                break;
             }
 
             // Set the image ID to the scene ID.
             if ( !this->getImageId( theImageID ) )
             {
-               std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->getImageId( theImageID )" << std::endl;
                break;
             }
 
             if ( !this->standAloneProductInformation( ) )
             {
-               std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->standAloneProductInformation( )" << std::endl;
                break;
             }
 
             // Set the sensor ID to the mission ID.
             if ( !this->initSensorID( theSensorID ) )
             {
-               std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSensorID( theSensorID )" << std::endl;
                break;
             }
 
             if ( !this->readProduct( safeFile ) )
             {
-               std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )" << std::endl;
                break;
             }
 
             if ( !this->initImageSize( theImageSize ) )
              {
-                std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize )" << std::endl;
                 break;
              }
 
@@ -232,7 +240,7 @@ namespace ossimplugins
 
             if ( !this->initGsd( theGSD ) )
              {
-                std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initGsd( theGSD )" << std::endl;
                 break;
              }
 
@@ -240,7 +248,7 @@ namespace ossimplugins
 
             if ( !this->initSRGR( ) )
             {
-               std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )" << std::endl;
                break;
             }
 
@@ -250,7 +258,7 @@ namespace ossimplugins
             // }
             // else
             // {
-            //    std::cerr << MODULE << "error at line:" << __LINE__ << std::endl;
+            //    std::cout << MODULE << "error at line:" << __LINE__ << std::endl;
             // }
 
 
@@ -308,10 +316,13 @@ namespace ossimplugins
          ossim::getPath(xpath +  "/byteStream/fileLocation", theManifestDoc.get(), theProductXmlFile);
          xml_nodes.clear();
          theManifestDoc->findNodes(xpath +  "/byteStream/fileLocation", xml_nodes);
+
+         assert( xml_nodes.size() > 0 );
+
          if(xml_nodes.size() < 1 )
          {
-            std::cerr << "error :" << __LINE__ << std::endl;
-            return  false;
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " getAnnotationFileLocation( )" << std::endl;
+           return  false;
          }
          xml_nodes[0]->getAttributeValue(theProductXmlFile , "href");
          theProductXmlFile.setPath(manifestFile.path() + "/annotation");
@@ -542,5 +553,42 @@ namespace ossimplugins
 
       return true;
    }
+
+   void
+   ossimSentinel1Model::
+   lineSampleHeightToWorld(const ossimDpt& image_point,
+                             const double& heightEllipsoid,
+                                 ossimGpt& worldPoint) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
+   void
+   ossimSentinel1Model::
+   lineSampleToWorld(const ossimDpt& image_point,
+                           ossimGpt& gpt) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
+   void
+   ossimSentinel1Model::
+   worldToLineSample(const ossimGpt& world_point,
+                     ossimDpt&  image_point) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
+   void ossimSentinel1Model::
+   imagingRay(const ossimDpt& image_point,
+              ossimEcefRay&   image_ray) const {
+
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
 
 } //end namespace

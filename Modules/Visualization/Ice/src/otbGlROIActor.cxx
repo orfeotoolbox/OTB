@@ -166,7 +166,9 @@ void GlROIActor::UpdateTransforms()
 
   if( settings->GetUseProjection() )
     {
-    if( settings->GetGeometryChanged() )
+    if( settings->GetGeometryChanged() ||
+	m_ImageToViewportTransform.IsNull() ||
+	m_ViewportToImageTransform.IsNull() )
       {
       // std::cout
       // 	<< "otb::GlROIActor@" << std::hex << this

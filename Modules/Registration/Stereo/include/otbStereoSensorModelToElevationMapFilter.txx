@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereoSensorModelToElevationMapFilter_txx
-#define __otbStereoSensorModelToElevationMapFilter_txx
+#ifndef otbStereoSensorModelToElevationMapFilter_txx
+#define otbStereoSensorModelToElevationMapFilter_txx
 
 #include "otbStereoSensorModelToElevationMapFilter.h"
 
@@ -84,7 +84,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 {
   if(this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -96,7 +96,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 {
   if(this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -108,7 +108,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 {
   if(this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputHeight *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -284,7 +284,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   rsTransform->SetInputKeywordList(outputPtr->GetImageKeywordlist());
   rsTransform->InstanciateTransform();
 
-  // Fill ouptut
+  // Fill output
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputPtr->GetBufferedRegion());
 
   for(outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)

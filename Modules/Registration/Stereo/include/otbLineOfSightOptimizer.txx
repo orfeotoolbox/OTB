@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineOfSightOptimizer_txx
-#define __otbLineOfSightOptimizer_txx
+#ifndef otbLineOfSightOptimizer_txx
+#define otbLineOfSightOptimizer_txx
 
 #include "otbLineOfSightOptimizer.h"
 

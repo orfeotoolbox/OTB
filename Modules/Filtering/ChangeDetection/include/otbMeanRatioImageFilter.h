@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanRatioImageFilter_h
-#define __otbMeanRatioImageFilter_h
+#ifndef otbMeanRatioImageFilter_h
+#define otbMeanRatioImageFilter_h
 
 #include "otbMeanRatio.h"
 
@@ -77,7 +77,7 @@ public:
 
 protected:
   MeanRatioImageFilter() {}
-  virtual ~MeanRatioImageFilter() {}
+  ~MeanRatioImageFilter() ITK_OVERRIDE {}
 
 private:
   MeanRatioImageFilter(const Self &); //purposely not implemented

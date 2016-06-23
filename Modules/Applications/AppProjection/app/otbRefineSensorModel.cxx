@@ -53,7 +53,7 @@ public:
   itkTypeMacro(RefineSensorModel, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RefineSensorModel");
     SetDescription("Perform least-square fit of a sensor model to a set of tie points");
@@ -100,12 +100,12 @@ private:
     SetDocExampleParameterValue("map.epsg.code","32631");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     OGRMultiLineString mls;
 
@@ -202,7 +202,7 @@ private:
   if(IsParameterEnabled("outstat"))
     {
     ofs.open(GetParameterString("outstat").c_str());
-    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
+    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat predicted_elev x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 
   for(TiePointsType::const_iterator it = tiepoints.begin();
@@ -319,7 +319,7 @@ private:
 if(IsParameterEnabled("outvector"))
   {
   // Create the datasource (for matches export)
-  otb::ogr::Layer layer(NULL, false);
+  otb::ogr::Layer layer(ITK_NULLPTR, false);
   otb::ogr::DataSource::Pointer ogrDS;
 
   ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

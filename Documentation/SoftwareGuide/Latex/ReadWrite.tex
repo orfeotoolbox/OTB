@@ -1,0 +1,390 @@
+2;rgb:0000/0000/0000\chapter{Reading and Writing Images}
+\label{sec:IO}
+
+This chapter describes the toolkit architecture supporting reading and
+writing of images to files. OTB does not enforce any particular file
+format, instead, it provides a structure inherited from ITK,
+supporting a variety of formats that can be easily extended by the
+user as new formats become available.
+
+We begin the chapter with some simple examples of file I/O.
+
+\section{Basic Example}
+\label{sec:ImagReadWrite}
+\input{ImageReadWrite.tex}
+
+To better understand the IO architecture, please refer to Figures
+\ref{fig:ImageIOCollaborationDiagram},
+\ref{fig:ImageIOFactoriesUseCases}, and
+\ref{fig:ImageIOFactoriesClassDiagram}.
+
+\begin{figure}
+\center
+\includegraphics[width=\textwidth]{ImageIOCollaborationDiagram.eps}
+\itkcaption[Collaboration diagram of the ImageIO classes]{Collaboration diagram
+of the ImageIO classes.} \label{fig:ImageIOCollaborationDiagram}
+\end{figure}
+
+\begin{figure}
+\center
+\includegraphics[width=\textwidth]{ImageIOFactoriesUseCases.eps}
+\itkcaption[Use cases of ImageIO factories] {Use cases of ImageIO factories.}
+\label{fig:ImageIOFactoriesUseCases}
+\end{figure}
+
+\begin{figure}
+\center
+\includegraphics[width=\textwidth]{ImageIOFactoriesClassDiagram.eps}
+\itkcaption[Class diagram of ImageIO factories] {Class diagram of the ImageIO
+factories.}
+\label{fig:ImageIOFactoriesClassDiagram}
+\end{figure}
+
+
+The following section describes the internals of the IO architecture provided
+in the toolbox.
+
+\section{Pluggable Factories}
+\label{sec:ImageIOPluggableFactories}
+
+The principle behind the input/output mechanism used in ITK and
+therefore OTB is known as
+\emph{pluggable-factories} \cite{Gamma1995}. This concept is illustrated in
+the UML diagram in Figure~\ref{fig:ImageIOCollaborationDiagram}. From the
+user's point of view the objects responsible for reading and writing files
+are the \doxygen{otb}{ImageFileReader} and \doxygen{otb}{ImageFileWriter}
+classes. These two classes, however, are not aware of the details involved in
+reading or writing particular file formats like PNG or GeoTIFF.  What they do
+is to dispatch the user's requests to a set of specific classes that are
+aware of the details of image file formats. These classes are the
+\doxygen{itk}{ImageIO} classes. The ITK delegation mechanism enables users to
+extend the number of supported file formats by just adding new classes to the
+ImageIO hierarchy.
+
+Each instance of ImageFileReader and ImageFileWriter has
+a pointer to an ImageIO object. If this pointer is empty, it will
+be impossible to read or write an image and the image file reader/writer must
+determine which ImageIO class to use to perform IO operations.
+This is done basically by passing the filename to a centralized class, the
+\doxygen{itk}{ImageIOFactory} and asking it to identify any subclass of
+ImageIO capable of reading or writing the user-specified file. This
+is illustrated by the use cases on the right side of
+Figure~\ref{fig:ImageIOFactoriesUseCases}. The ImageIOFactory acts here as a
+dispatcher that help to locate the actual IO factory classes corresponding to
+each file format.
+
+Each class derived from ImageIO must provide an associated factory
+class capable of producing an instance of the ImageIO class. For
+example, for PNG files, there is a \doxygen{itk}{PNGImageIO} object that knows how
+to read this image files and there is a \doxygen{itk}{PNGImageIOFactory} class
+capable of constructing a PNGImageIO object and returning a pointer
+to it.  Each time a new file format is added (i.e., a new ImageIO
+subclass is created), a factory must be implemented as a derived class of the
+ObjectFactoryBase class as illustrated in
+Figure~\ref{fig:ImageIOFactoriesClassDiagram}.
+
+For example, in order to read PNG files, a PNGImageIOFactory is
+created and registered with the central ImageIOFactory
+singleton\footnote{\emph{Singleton} means that there is only one instance of
+this class in a particular application} class as illustrated in the left side
+of Figure~\ref{fig:ImageIOFactoriesUseCases}. When the ImageFileReader asks
+the ImageIOFactory for an ImageIO capable of reading the
+file identified with \emph{filename} the ImageIOFactory will iterate over the
+list of registered factories and will ask each one of them is they know how
+to read the file. The factory that responds affirmatively will be used to
+create the specific ImageIO instance that will be returned to the
+ImageFileReader and used to perform the read operations.
+
+With respect to the ITK formats, OTB adds most of the remote sensing
+image formats. In order to do so, the Geospatial Data Abstraction Library, GDAL
+      \url{http://www.gdal.org/}, is encapsultated in a ImageIO
+      factory. GDAL is a translator library for raster
+      geospatial data formats that is released under an X/MIT style
+      Open Source license. As a library, it presents a single abstract
+      data model to the calling application for all supported formats,
+      which include CEOS, GeoTIFF, ENVI, and much more. See
+      \url{http://www.gdal.org/formats_list.html} for
+      the full format list.
+
+      Since GDAL is itself a multi-format library, the GDAL IO
+factory is able to choose the appropriate ressource for reading and
+writing images.
+
+In most cases the mechanism is transparent to the user who only interacts
+with the ImageFileReader and ImageFileWriter. It is
+possible, however, to explicitly select the type of ImageIO object
+to use.  Please see the ITK Software for more details about this.
+
+%\section{Using ImageIO Classes Explicitly}
+%\label{sec:ImageReadExportVTK}
+%\input{ImageReadExportVTK.tex}
+
+\section{IO Streaming}
+\index{Streaming}
+\label{sec:IOStreaming}
+\subsection{Implicit Streaming}
+\label{sec:ImplicitIOStreaming}
+\input{StreamingImageReadWrite}
+
+\subsection{Explicit Streaming}
+\label{sec:ExplicitIOStreaming}
+\input{ExplicitStreamingExample}
+
+
+\section{Reading and Writing RGB Images}
+\index{Image!RGB}
+\label{sec:RGBImagReadWrite}
+\input{RGBImageReadWrite.tex}
+
+\section{Reading, Casting and Writing Images}
+\label{sec:ImagReadCastWrite}
+\input{ImageReadCastWrite.tex}
+
+\section{Extracting Regions}
+\label{sec:ImagReadRegionOfInterestWrite}
+\input{ImageReadRegionOfInterestWrite.tex}
+
+%\section{Extracting Slices}
+%\label{sec:ImagReadExtractWrite}
+%\input{ImageReadExtractWrite.tex}
+
+
+\section{Reading and Writing Vector Images}
+\index{Image!Multispectral}
+\label{sec:VectorImagReadWrite}
+
+Images whose pixel type is a Vector, a CovariantVector, an Array, or a Complex
+are quite common in image processing. One of the uses of these tye of
+images is the processing of SLC SAR images, which are complex.
+
+
+%\subsection{The Minimal Example}
+%\label{VectorImageReadWrite}
+%\input{VectorImageReadWrite.tex}
+
+%\subsection{Producing and Writing Covariant Images}
+%\label{CovariantVectorImageWrite}
+%\input{CovariantVectorImageWrite.tex}
+
+%\subsection{Reading Covariant Images}
+%\label{CovariantVectorImageRead}
+%Let's now take the image that we just created and read it into another program.
+%\input{CovariantVectorImageRead.tex}
+
+
+\subsection{Reading and Writing Complex Images}
+\label{sec:ComplexImagReadWrite}
+\input{ComplexImageReadWrite.tex}
+
+\section{Reading and Writing Multiband Images}
+\label{sec:MultibandImagReadWrite}
+\input{MultibandImageReadWrite.tex}
+
+\subsection{Extracting ROIs}
+\label{sec:ExtractROI}
+\input{ExtractROI.tex}
+
+
+%\section{Extracting Components from Vector Images}
+%\label{sec:VectorImageExtractComponent}
+%\input{CovariantVectorImageExtractComponent.tex}
+
+\section{Reading Image Series}
+\label{sec:ReadingImageSeries}
+\input{ImageSeriesIOExample}
+
+
+\section{Extended filename for reader and writer}
+\label{sec:ExtendedFilename}
+
+\subsection{Purpose}
+
+There are multiple ways to define geo-referencing information. For instance,
+ one can use a geographic transform, a cartographic projection, or a sensor 
+model with RPC coefficients. A single image may contain several of these 
+elements, such as in the "ortho-ready" products : this is a type of product 
+still in sensor geometry (the sensor model is supplied with the image) 
+but it also contains an approximative geographic transform that can be used 
+to have a quick estimate of the image localisation. For instance, your product
+may contain a ".TIF" file for the image, along with a ".RPB" file that contains
+the sensor model coefficients and an ".IMD" file that contains a cartographic 
+projection. 
+
+This case leads to the following question : which geo-referencing element
+should be used when opening this image in an OTB reader. In fact, it depends on
+the users need. For an orthorectification application, the sensor model must be
+used. In order to specify which information should be skipped, a syntax of 
+extended filenames has been developped for both reader and writer. 
+
+
+\subsection{Syntax}
+
+The reader and writer extended file name support is based on the same syntax,
+only the options are different.  To benefit from the extended file name
+mecanism, the following syntax is to be used:
+
+\begin{verbatim}
+Path/Image.ext?&key1=<value1>&key2=<value2>
+\end{verbatim}
+
+IMPORTANT: Note that you'll probably need to "quote" the filename.
+
+\subsection{Reader options}
+
+\textbf{Available Options:}
+
+\begin{itemize}
+
+\item \begin{verbatim}&geom=<path/filename.geom>\end{verbatim}
+
+  \begin{itemize}
+  \item Contains the file name of a valid geom file
+  \item Use the content of the specified geom file instead of image-embedded
+    geometric information
+  \item empty by default, use the image-embedded information if available
+  \end{itemize}  
+\item \begin{verbatim}&sdataidx=<(int)idx>\end{verbatim}
+  \begin{itemize}
+  \item Select the sub-dataset to read
+  \item 0 by default
+  \end{itemize}
+\item \begin{verbatim}&resol=<(int)resolution factor>\end{verbatim}
+  \begin{itemize}
+  \item Select the JPEG2000 sub-resolution image to read
+  \item 0 by default
+  \end{itemize}
+\item \begin{verbatim}&skipcarto=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item Skip the cartographic information
+  \item Clears the projectionref, set the origin to $[0,0]$ and the spacing to $[1/max(1,resolution factor),1/max(1,resolution factor)]$
+  \item Keeps the keyword list
+  \item false by default 
+  \end{itemize}
+\item \begin{verbatim}&skipgeom=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item Skip geometric information
+  \item Clears the keyword list
+  \item Keeps the projectionref and the origin/spacing informations
+  \item false by default. 
+  \end{itemize}
+\item \begin{verbatim}&skiprpctag=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item Skip the reading of internal RPC tags (see \ref{sec:TypesofSensorModels} for details)
+  \item false by default. 
+  \end{itemize}
+\end{itemize}
+
+\subsection{Writer options}
+
+\textbf{Available Options:}
+
+\begin{itemize}
+
+\item \begin{verbatim}&writegeom=<(bool)false>\end{verbatim}
+  \begin{itemize}
+  \item To activate writing of external geom file
+  \item true by default
+  \end{itemize}  
+\item \begin{verbatim}&writerpctags=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item To activate writing of RPC tags in TIFF files
+  \item false by default
+  \end{itemize}  
+\item \begin{verbatim}&gdal:co:<GDALKEY>=<VALUE>\end{verbatim}
+  \begin{itemize}
+  \item To specify a gdal creation option
+  \item For gdal creation option information, see dedicated gdal documentation
+  \item None by default 
+  \end{itemize}
+\item \begin{verbatim}&streaming:type=<VALUE>\end{verbatim}
+  \begin{itemize}
+  \item Activates configuration of streaming through extended filenames
+  \item Override any previous configuration of streaming
+  \item Allows to configure the kind of streaming to perform
+  \item Available values are:
+    \begin{itemize}
+    \item auto : tiled or stripped streaming mode chosen automatically depending on TileHint read from input files
+    \item tiled : tiled streaming mode
+    \item stripped : stripped streaming mode
+    \item none : explicitly deactivate streaming 
+    \end{itemize}
+  \item Not set by default 
+  \end{itemize}
+\item \begin{verbatim}&streaming:sizemode=<VALUE>\end{verbatim}
+  \begin{itemize}
+  \item Allows to choose how the size of the streaming pieces is computed
+  \item Available values are:
+    \begin{itemize}
+    \item auto  : size is estimated from the available memory setting by evaluating pipeline memory print
+    \item height : size is set by setting height of strips or tiles
+    \item nbsplits : size is computed from a given number of splits 
+    \end{itemize}
+  \item Default is auto 
+  \end{itemize}
+\item \begin{verbatim}&streaming:sizevalue=<VALUE>\end{verbatim}
+\begin{itemize}
+    \item Parameter for size of streaming pieces computation
+    \item Value is :
+      \begin{itemize}
+        \item if sizemode=auto : available memory in Mb
+        \item if sizemode=height : height of the strip or tile in pixels
+        \item if sizemode=nbsplits : number of requested splits for streaming 
+      \end{itemize}
+    \item If not provided, the default value is set to 0 and result in different behaviour depending on sizemode (if set to height or nbsplits, streaming is deactivated, if set to auto, value is fetched from configuration or cmake configuration file) 
+\end{itemize}
+
+\item \begin{verbatim}&box=<startx>:<starty>:<sizex>:<sizey>\end{verbatim}
+\begin{itemize}
+    \item User defined parameters of output image region
+    \item The region must be set with 4 unsigned integers (the separator used is
+      the colon ':'). Values are:
+      \begin{itemize}
+        \item startx: first index on X
+        \item starty: first index on Y
+        \item sizex: size along X
+        \item sizey: size along Y 
+      \end{itemize}
+    \item The definition of the region follows the same convention as itk::Region
+    definition in C++. A region is defined by two classes: the itk::Index and
+    itk::Size classes. The origin of the region within the image with which it
+    is associated is defined by Index 
+\end{itemize}
+
+\end{itemize}
+
+The available syntax for boolean options are:
+
+\begin{itemize}
+    \item ON, On, on, true, True, 1 are available for setting a 'true' boolean value
+    \item OFF, Off, off, false, False, 0 are available for setting a 'false' boolean value
+\end{itemize}
+%% \section{Reading and Writing Image Series}
+
+%% It is still quite common to store 3D medical images in sets of files each one
+%% containing a single slice of a volume dataset. Those 2D files can be read as
+%% individual 2D images, or can be grouped together in order to reconstruct a 3D
+%% dataset. The same practice can be extended to higher dimensions, for example,
+%% for managing 4D datasets by using sets of files each one containing a 3D image.
+%% This practice is common in the domain of cardiac imaging, perfusion, functional
+%% MRI and PET. This section illustrates the functionalities available in ITK for
+%% dealing with reading and writing series of images.
+
+%% \index{Series!Reading}
+%% \index{Series!Writing}
+%% \index{Image Series!Reading}
+%% \index{Image Series!Writing}
+
+%% \subsection{Reading Image Series}
+%% \label{sec:ReadingImageSeries}
+%% \input{ImageSeriesReadWrite.tex}
+
+%% \subsection{Writing Image Series}
+%% \label{sec:WritingImageSeries}
+%% %\input{ImageReadImageSeriesWrite.tex}
+
+%% \subsection{Reading and Writing Series of RGB Images}
+%% \label{sec:ReadingWritingRGBImageSeries}
+%% %\input{RGBImageSeriesReadWrite.tex}
+
+
+

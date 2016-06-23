@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbThresholdImageToPointSetFilter_h
-#define __otbThresholdImageToPointSetFilter_h
+#ifndef otbThresholdImageToPointSetFilter_h
+#define otbThresholdImageToPointSetFilter_h
 
 #include "otbImageToPointSetFilter.h"
 #include "itkPointSet.h"
@@ -81,11 +81,11 @@ public:
 
 protected:
   ThresholdImageToPointSetFilter();
-  virtual ~ThresholdImageToPointSetFilter() {}
+  ~ThresholdImageToPointSetFilter() ITK_OVERRIDE {}
 
-  virtual void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ThresholdImageToPointSetFilter(const Self &); //purposely not implemented

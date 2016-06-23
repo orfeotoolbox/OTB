@@ -121,7 +121,7 @@ private:
   std::string m_inImageName;
   bool m_currentEnabledStateOfFluxParam;
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("OpticalCalibration");
     SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6. For other sensors the application also allows providing calibration parameters manually.");
@@ -354,7 +354,7 @@ private:
     m_currentEnabledStateOfFluxParam=false;
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     std::ostringstream ossOutput;
     //ossOutput << std::endl << "--DoUpdateParameters--" << std::endl;
@@ -558,7 +558,7 @@ private:
 
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     //Main filters instanciations
     m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();

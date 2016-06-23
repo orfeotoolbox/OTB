@@ -18,6 +18,8 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbGenericRSResampleImageFilter.h"
+#include "otbGridResampleImageFilter.h"
+#include "otbImportGeoInformationImageFilter.h"
 
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
@@ -66,15 +68,17 @@ public:
 
   typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
                                             FloatVectorImageType>  ResamplerType;
+  typedef otb::ImportGeoInformationImageFilter<FloatVectorImageType,
+                                               FloatVectorImageType> ImportGeoInformationFilterType;
 
   typedef itk::ScalableAffineTransform<double, 2>                 TransformType;
   
-  typedef otb::StreamingResampleImageFilter
+  typedef otb::GridResampleImageFilter
     <FloatVectorImageType,
      FloatVectorImageType>                                        BasicResamplerType;
   
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Superimpose");
     SetDescription("Using available image metadata, project one image onto another one");
@@ -144,7 +148,7 @@ private:
     SetDocExampleParameterValue("out", "SuperimposedXS_to_PAN.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if(!HasUserValue("mode") && HasValue("inr") && HasValue("inm") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"),GetParameterImage("inm")))
       {
@@ -154,7 +158,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the inputs
     FloatVectorImageType* refImage = GetParameterImage("inr");
@@ -164,6 +168,8 @@ private:
     m_Resampler = ResamplerType::New();
     
     m_BasicResampler = BasicResamplerType::New();
+
+    m_GeoImport = ImportGeoInformationFilterType::New();
 
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
@@ -246,23 +252,30 @@ private:
       {
       otbAppLogINFO("Using the PHR mode");
       
-      otb::PleiadesPToXSAffineTransformCalculator::TransformType::Pointer transform
-        = otb::PleiadesPToXSAffineTransformCalculator::Compute(GetParameterImage("inr"),
-                                                               GetParameterImage("inm"));
-
-      m_BasicResampler->SetTransform(transform);
+      otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset
+        = otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(GetParameterImage("inr"),
+                                                                     GetParameterImage("inm"));
       
       m_BasicResampler->SetInput(movingImage);
+      origin+=offset;
+      origin[0]=origin[0]/4;
+      origin[1]=origin[1]/4;
       
       m_BasicResampler->SetOutputOrigin(origin);
-      m_BasicResampler->SetOutputSpacing(spacing);
-      m_BasicResampler->SetOutputSize(size);
-      m_BasicResampler->SetOutputStartIndex(start);
+
+      FloatVectorImageType::SpacingType xsSpacing = GetParameterImage("inm")->GetSpacing();
+      xsSpacing*=0.25;
       
+      m_BasicResampler->SetOutputSpacing(xsSpacing);
+      m_BasicResampler->SetOutputSize(size);
+      m_Resampler->SetOutputStartIndex(start);
       m_BasicResampler->SetEdgePaddingValue(defaultValue);
 
+      m_GeoImport->SetInput(m_BasicResampler->GetOutput());
+      m_GeoImport->SetSource(refImage);
+
       // Set the output image
-      SetParameterOutputImage("out", m_BasicResampler->GetOutput());
+      SetParameterOutputImage("out", m_GeoImport->GetOutput());
       }
     else
       {
@@ -273,6 +286,8 @@ private:
   ResamplerType::Pointer           m_Resampler;
   
   BasicResamplerType::Pointer      m_BasicResampler;
+
+  ImportGeoInformationFilterType::Pointer m_GeoImport;
   
 };
 

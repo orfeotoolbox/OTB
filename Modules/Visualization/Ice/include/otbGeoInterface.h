@@ -19,6 +19,7 @@
 #define otb_GeoInterface_h
 
 
+#include "itkFloatTypes.h"
 #include "itkPoint.h"
 
 
@@ -47,18 +48,18 @@ class GeoInterface
 {
 public:
   /**
-   * Double precision point-type.
    */
-  typedef itk::Point< float, 2 > Point2f;
+  typedef itk::Point< itk::SpacePrecisionType, 2 > Point2;
 
   /**
-   * Single precision point-type.
+   * Double precision point-type.
    */
   typedef itk::Point< double, 2 > Point2d;
 
   /**
+   * Spacing-type based on ITK floating-point prevision.
    */
-  typedef itk::Vector< double, 2 > Spacing2d;
+  typedef itk::Vector< itk::SpacePrecisionType, 2 > Spacing2;
 
   /**
    * Transform given point from viewport coordinate-system to this
@@ -73,7 +74,9 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  template <typename T> bool TransformFromViewport(T & out, const T & in, bool isPhysical = true) const;
+  virtual bool TransformFromViewport( Point2d & out,
+                                      const Point2d & in,
+                                      bool isPhysical = true ) const;
 
   /**
    * Transform given point from viewport coordinate-system to this
@@ -88,8 +91,14 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  template <typename T> bool TransformToViewport(T & out, const T & in, bool isPhysical = true) const;
-  
+  virtual bool TransformToViewport( Point2d & out,
+                                    const Point2d & in,
+                                    bool isPhysical = true ) const;
+
+  /**
+   */
+  virtual const Spacing2 & GetSpacing() const;
+
   /**
    */
   virtual std::string GetWkt() const;

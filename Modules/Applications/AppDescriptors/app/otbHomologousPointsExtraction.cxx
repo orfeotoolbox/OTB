@@ -77,7 +77,7 @@ public:
   itkTypeMacro(HomologousPointsExtraction, otb::Wrapper::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("HomologousPointsExtraction");
     SetDocName("Homologous points extraction");
@@ -88,7 +88,7 @@ private:
       " the first is the full mode where keypoints are extracted from the full extent of both images"
       " (please note that in this mode large image file are not supported). "
       "The second mode, called geobins, allows one to set-up spatial binning to get fewer points"
-      " spread accross the entire image. "
+      " spread across the entire image. "
       "In this mode, the corresponding spatial bin in the second image is estimated using geographical"
       " transform or sensor modelling, and is padded according to the user defined precision. Last, in"
       " both modes the application can filter matches whose colocalisation in first image exceed this precision. "
@@ -142,8 +142,8 @@ private:
     AddChoice("mode.full","Extract and match all keypoints (no streaming)");
     SetParameterDescription("mode.full","Extract and match all keypoints, loading both images entirely into memory");
 
-    AddChoice("mode.geobins","Search keypoints in small spatial bins regularly spread accross first image");
-    SetParameterDescription("mode.geobins","This method allows retrieving a set of tie points regulary spread accross image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are cropped to the largest image region shrinked by the margin parameter for both in1 and in2 images.");
+    AddChoice("mode.geobins","Search keypoints in small spatial bins regularly spread across first image");
+    SetParameterDescription("mode.geobins","This method allows retrieving a set of tie points regulary spread across image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are cropped to the largest image region shrinked by the margin parameter for both in1 and in2 images.");
 
     AddParameter(ParameterType_Int,"mode.geobins.binsize","Size of bin");
     SetParameterDescription("mode.geobins.binsize","Radius of the spatial bin in pixels");
@@ -197,12 +197,12 @@ private:
     SetDocExampleParameterValue("out","homologous.txt");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
 
   }
 
-  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform1ToWGS84,RSTransformType * rsTransform2ToWGS84, std::ofstream & file, OGRMultiLineString * mls = NULL)
+  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform1ToWGS84,RSTransformType * rsTransform2ToWGS84, std::ofstream & file, OGRMultiLineString * mls = ITK_NULLPTR)
   {
     MatchingFilterType::Pointer matchingFilter = MatchingFilterType::New();
 
@@ -321,7 +321,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     OGRMultiLineString mls;
 
@@ -501,7 +501,7 @@ private:
       if(IsParameterEnabled("outvector"))
         {
         // Create the datasource (for matches export)
-        otb::ogr::Layer layer(NULL, false);
+        otb::ogr::Layer layer(ITK_NULLPTR, false);
         otb::ogr::DataSource::Pointer ogrDS;
 
         ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

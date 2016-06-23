@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonListToRCC8GraphFilter_h
-#define __otbPolygonListToRCC8GraphFilter_h
+#ifndef otbPolygonListToRCC8GraphFilter_h
+#define otbPolygonListToRCC8GraphFilter_h
 
 #include "otbRCC8GraphSource.h"
 #include "otbPolygonToPolygonRCC8Calculator.h"
@@ -120,9 +120,9 @@ protected:
   /** Constructor */
   PolygonListToRCC8GraphFilter();
   /** Destructor */
-  virtual ~PolygonListToRCC8GraphFilter();
+  ~PolygonListToRCC8GraphFilter() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Multi-threading implementation */
 
@@ -148,7 +148,7 @@ protected:
   /** End Multi-threading implementation */
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Get the composition knowledge.
    * \param r1 First RCC8 relation value,

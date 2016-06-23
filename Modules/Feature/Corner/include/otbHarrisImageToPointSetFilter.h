@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHarrisImageToPointSetFilter_h
-#define __otbHarrisImageToPointSetFilter_h
+#ifndef otbHarrisImageToPointSetFilter_h
+#define otbHarrisImageToPointSetFilter_h
 
 #include "otbThresholdImageToPointSetFilter.h"
 #include "otbHarrisImageFilter.h"
@@ -75,11 +75,11 @@ public:
 
 protected:
   HarrisImageToPointSetFilter();
-  virtual ~HarrisImageToPointSetFilter() {}
+  ~HarrisImageToPointSetFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   HarrisImageToPointSetFilter(const Self &); //purposely not implemented

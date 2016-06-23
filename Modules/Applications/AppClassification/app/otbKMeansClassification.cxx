@@ -103,9 +103,9 @@ private:
 
 
 typedef FloatImageType::PixelType PixelType;
-typedef UInt8ImageType   LabeledImageType;
+typedef UInt16ImageType   LabeledImageType;
 
-typedef UInt8VectorImageType        VectorImageType;
+typedef UInt16VectorImageType       VectorImageType;
 typedef VectorImageType::PixelType  VectorPixelType;
 typedef UInt8RGBImageType           RGBImageType;
 typedef RGBImageType::PixelType     RGBPixelType;
@@ -123,12 +123,12 @@ typedef RAMDrivenStrippedStreamingManager<FloatVectorImageType> RAMDrivenStrippe
 
 
 typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
-typedef itk::ImageRegionConstIterator<LabeledImageType> LabeledIteratorType;
+typedef itk::ImageRegionConstIterator<UInt8ImageType> LabeledIteratorType;
 
 typedef otb::StreamingShrinkImageFilter<FloatVectorImageType,
      FloatVectorImageType>              ImageSamplingFilterType;
 
-typedef otb::StreamingShrinkImageFilter<LabeledImageType,
+typedef otb::StreamingShrinkImageFilter<UInt8ImageType,
     UInt8ImageType>              MaskSamplingFilterType;
 typedef Functor::KMeansFunctor<SampleType, LabelType> KMeansFunctorType;
 typedef itk::UnaryFunctorImageFilter<FloatVectorImageType,
@@ -164,7 +164,7 @@ public:
   itkTypeMacro(KMeansClassification, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
@@ -218,7 +218,7 @@ private:
     SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // test of input image //
     if (HasValue("in"))
@@ -251,7 +251,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

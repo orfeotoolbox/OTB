@@ -43,7 +43,7 @@ public:
   itkTypeMacro(MeanShiftSmoothing, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("MeanShiftSmoothing");
     SetDescription("Perform mean shift filtering");
@@ -115,7 +115,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if(IsParameterEnabled("modesearch"))
       {
@@ -125,11 +125,10 @@ private:
     else
       {
       MandatoryOff("foutpos");
-      DisableParameter("foutpos");
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* input = GetParameterImage("in");
 
@@ -142,6 +141,7 @@ private:
     m_Filter->SetThreshold(GetParameterFloat("thres"));
     m_Filter->SetMaxIterationNumber(GetParameterInt("maxiter"));
     m_Filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
+    m_Filter->SetModeSearch(IsParameterEnabled("modesearch"));
 
     //Compute the margin used to ensure exact results (tile wise smoothing)
     //This margin is valid for the default uniform kernel used by the
@@ -156,11 +156,13 @@ private:
       }
 
     SetParameterOutputImage("fout", m_Filter->GetOutput());
-    SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
+    if (IsParameterEnabled("foutpos") && HasValue("foutpos"))
+      {
+      SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
+      }
     if(!IsParameterEnabled("modesearch"))
       {
-        otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
-        m_Filter->SetModeSearch(false);
+      otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
       }
    }
 

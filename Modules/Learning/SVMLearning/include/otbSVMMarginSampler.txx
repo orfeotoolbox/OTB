@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMMarginSampler_txx
-#define __otbSVMMarginSampler_txx
+#ifndef otbSVMMarginSampler_txx
+#define otbSVMMarginSampler_txx
 
 #include "otbSVMMarginSampler.h"
 #include "otbMacro.h"

@@ -41,10 +41,10 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
   typedef otb::GDALOverviewsBuilder FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  otb::GDALResamplingType resamp = AVERAGE;
+  otb::GDALResamplingType resamp = GDAL_RESAMPLING_AVERAGE;
 
   filter->SetInputFileName(filename);
-  filter->SetNbOfResolutions(nbResolution);
+  filter->SetNbResolutions(nbResolution);
   filter->SetResamplingMethod(resamp);
 
   {
@@ -54,7 +54,14 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
 
   otb::GDALImageIO::Pointer io = otb::GDALImageIO::New();
   io->SetFileName(inputFilename);
-  io->CanReadFile(inputFilename);
+  bool canRead = io->CanReadFile(inputFilename);
+
+  if(!canRead)
+    {
+    std::cerr<<"Failed to read file "<< inputFilename <<" with GdalImageIO."<<std::endl;
+    return EXIT_FAILURE;
+    }
+  
   io->ReadImageInformation();
   //std::cout << io->GetOverviewsCount() << std::endl;
 

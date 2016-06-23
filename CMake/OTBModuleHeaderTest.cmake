@@ -42,8 +42,8 @@ endif()
 
 
 macro( otb_module_headertest _name )
-  if( NOT ${_name}_THIRD_PARTY AND
-      EXISTS ${${_name}_SOURCE_DIR}/include
+  if( NOT ${_name}_THIRD_PARTY 
+      AND EXISTS ${${_name}_SOURCE_DIR}/include
       AND PYTHON_EXECUTABLE
       AND NOT (PYTHON_VERSION_STRING VERSION_LESS 2.6)
       AND NOT (${_name} STREQUAL OTBTestKernel)
@@ -99,7 +99,7 @@ macro( otb_module_headertest _name )
       get_filename_component( _test_name ${_header_test_src} NAME_WE )
       add_custom_command(
         OUTPUT ${_header_test_src}
-        COMMAND ${PYTHON_EXECUTABLE} ${OTB_SOURCE_DIR}/Utilities/Maintenance/BuildHeaderTest.py
+        COMMAND ${PYTHON_EXECUTABLE} ${OTB_CMAKE_DIR}/../Utilities/Maintenance/BuildHeaderTest.py
         ${_name}
         ${${_name}_SOURCE_DIR}
         ${${_name}_BINARY_DIR}

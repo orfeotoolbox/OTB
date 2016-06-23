@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMDMDNMFImageFilter_txx
-#define __otbMDMDNMFImageFilter_txx
+#ifndef otbMDMDNMFImageFilter_txx
+#define otbMDMDNMFImageFilter_txx
 
 #include "otbMDMDNMFImageFilter.h"
 

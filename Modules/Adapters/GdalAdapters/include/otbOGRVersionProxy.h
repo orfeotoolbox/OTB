@@ -15,12 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRVersionProxy_h
-#define __otbOGRVersionProxy_h
+#ifndef otbOGRVersionProxy_h
+#define otbOGRVersionProxy_h
 
 #include <string>
 #include <vector>
 #include "otbConfigure.h"
+#include "itkMacro.h"
 
 #ifdef OTB_USE_GDAL_20
 class GDALDataset;

@@ -75,7 +75,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Convert");
     SetDescription("Convert an image to a different format, eventually rescaling the data"
@@ -136,7 +136,7 @@ private:
     SetDocExampleParameterValue("type", "linear");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
@@ -316,7 +316,7 @@ private:
   }
 
 
- void DoExecute()
+ void DoExecute() ITK_OVERRIDE
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {

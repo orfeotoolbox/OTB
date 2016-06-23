@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiDisparityMapTo3DFilter_txx
-#define __otbMultiDisparityMapTo3DFilter_txx
+#ifndef otbMultiDisparityMapTo3DFilter_txx
+#define otbMultiDisparityMapTo3DFilter_txx
 
 #include "otbMultiDisparityMapTo3DFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -119,7 +119,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 {
   if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(3 * index));
 }
@@ -132,7 +132,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 {
   if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(3 * index + 1));
 }
@@ -145,7 +145,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 {
   if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(3 * index + 2));
 }

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNeighborhoodScalarProductFilter_txx
-#define __otbNeighborhoodScalarProductFilter_txx
+#ifndef otbNeighborhoodScalarProductFilter_txx
+#define otbNeighborhoodScalarProductFilter_txx
 
 #include "otbNeighborhoodScalarProductFilter.h"
 #include "itkImageRegionIterator.h"
@@ -154,7 +154,7 @@ NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
         angle -= CONST_PI;
         }
 
-      // Set the ouptut values
+      // Set the output values
       outputIt.Set(scalarMaxValue);
       outputDirIt.Set(angle);
       ++neighInputIt;

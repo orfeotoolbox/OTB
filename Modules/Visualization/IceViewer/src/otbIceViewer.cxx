@@ -15,11 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbIceViewer.h"
 #include <algorithm>
+
 #include <otbImageMetadataInterfaceFactory.h>
+
 #include "otbGlROIActor.h"
 #include "otbGlVectorActor.h"
+#include "otbGlVersionChecker.h"
+#include "otbIceViewer.h"
 
 namespace otb
 {
@@ -35,7 +38,7 @@ GlVectorActor::ColorType BuildColor(double r, double g, double b)
 }
 
 IceViewer::IceViewer()
-  : m_Window(NULL),
+  : m_Window(ITK_NULLPTR),
     m_View(),
     m_FastRendering(false),
     m_SelectedActor(""),
@@ -68,7 +71,7 @@ IceViewer::IceViewer()
 
 IceViewer::~IceViewer()
 {
-  if(m_Window != NULL)
+  if(m_Window != ITK_NULLPTR)
     {
     glfwDestroyWindow(m_Window);
     }
@@ -84,6 +87,14 @@ void IceViewer::AddImage(const std::string & fname, const std::string & key, con
     }
   
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
+
+  const char * glVersion = ITK_NULLPTR;
+  const char * glslVersion = ITK_NULLPTR;
+
+  if( GlVersionChecker::CheckGLCapabilities( glVersion,
+					     glslVersion ) )
+    actor->CreateShader();
+
   actor->Initialize(fname);
   actor->SetVisible(true);
 
@@ -103,18 +114,29 @@ void IceViewer::AddImage(const std::string & fname, const std::string & key, con
   actor->SetGreenIdx(std::min(imi->GetDefaultDisplay()[1]+1,actor->GetNumberOfComponents()));
   actor->SetBlueIdx(std::min(imi->GetDefaultDisplay()[2]+1,actor->GetNumberOfComponents()));
 
-  otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
-  double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;
+  otb::ImageSettings::Pointer imageSettings( actor->GetImageSettings() );
+  assert( !imageSettings.IsNull() );
 
-  actor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue);
+  double minRed = 0.0;
+  double maxRed = 1.0;
+  double minGreen = 0.0;
+  double maxGreen = 1.0;
+  double minBlue = 0.0;
+  double maxBlue = 1.0;
 
-  shader->SetMinRed(minRed);
-  shader->SetMinGreen(minGreen);
-  shader->SetMinBlue(minBlue);
-  shader->SetMaxRed(maxRed);
-  shader->SetMaxGreen(maxGreen);
-  shader->SetMaxBlue(maxBlue);
-  
+  actor->AutoColorAdjustment(
+    minRed, maxRed,
+    minGreen, maxGreen,
+    minBlue, maxBlue
+  );
+
+  imageSettings->SetMinRed( minRed );
+  imageSettings->SetMinGreen( minGreen );
+  imageSettings->SetMinBlue( minBlue );
+  imageSettings->SetMaxRed( maxRed );
+  imageSettings->SetMaxGreen( maxGreen );
+  imageSettings->SetMaxBlue( maxBlue );
+
   // TODO: Implement this
   // actor->UpdateColorBalance();
   
@@ -129,7 +151,9 @@ void IceViewer::AddVector(const std::string & fname, const std::string & key, co
     }
 
   otb::GlVectorActor::Pointer actor = otb::GlVectorActor::New();
+
   actor->Initialize(fname);
+
   actor->SetVisible(true);
   actor->SetAlpha(0.5);
   actor->SetColor(m_ColorMapIterator->second);
@@ -202,19 +226,19 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
   // Initialize glut (ugly workaround)
   int fake_argc = 1;
   char fake_name[] = "fake";
-  char * fake_argv[] = {fake_name,NULL};
+  char * fake_argv[] = {fake_name,ITK_NULLPTR};
   glutInit(&fake_argc,fake_argv);
 
   // Set glfw errors callback
   glfwSetErrorCallback(error_callback);
   
   // Create the window
-  if(m_Window != NULL)
+  if(m_Window != ITK_NULLPTR)
     {
     glfwDestroyWindow(m_Window);
     }
   
-  m_Window = glfwCreateWindow(w, h,name.c_str(), NULL, NULL);
+  m_Window = glfwCreateWindow(w, h,name.c_str(), ITK_NULLPTR, ITK_NULLPTR);
   if (!m_Window)
     {
     itkExceptionMacro(<<"Could not create glfw window.");
@@ -384,40 +408,71 @@ void IceViewer::DrawHud()
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<std::endl;
       
-      otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
-      
-      oss<<"    Rendering: "<<"R="<<currentActor->GetRedIdx()<<":["<<shader->GetMinRed()<<", "<<shader->GetMaxRed()<<"] G="<<currentActor->GetGreenIdx()<<":["<<shader->GetMinGreen()<<", "<<shader->GetMaxGreen()<<"] B="<<currentActor->GetBlueIdx()<<":["<<shader->GetMinBlue()<<", "<<shader->GetMaxBlue()<<"]"<<", gam="<<shader->GetGamma()<<", al="<<shader->GetAlpha()<<", nodata=";
-      shader->GetUseNoData()? oss<< "y": oss << "n";
+      ImageSettings::Pointer imageSettings( currentActor->GetImageSettings() );
+      assert( !imageSettings.IsNull() );
+
+      oss
+	<<"    Rendering: "
+	<< "R=" << currentActor->GetRedIdx()
+	<< ":[" << imageSettings->GetMinRed()
+	<< ", "<< imageSettings->GetMaxRed()
+	<< "] G=" << currentActor->GetGreenIdx()
+	<< ":[" << imageSettings->GetMinGreen()
+	<< ", " << imageSettings->GetMaxGreen()
+	<< "] B=" << currentActor->GetBlueIdx()
+	<< ":[" << imageSettings->GetMinBlue()
+	<< ", " << imageSettings->GetMaxBlue()
+	<< "]"
+	<< ", gam="
+	<< imageSettings->GetGamma()
+	<< ", al="
+	<< imageSettings->GetAlpha()
+	<< ", nodata=";
+
+      imageSettings->GetUseNoData()
+	? oss << "y"
+	: oss << "n";
+
+      oss << "\n";
+      oss << "    Shader: ";
+
+      otb::StandardShader::Pointer shader(
+	dynamic_cast< otb::StandardShader * >(
+	  currentActor->GetShader()
+	)
+      );
+
+      if( !shader.IsNull() )
+	{
+	switch(shader->GetShaderType())
+	  {
+	  case SHADER_STANDARD:
+	    oss<<" standard";
+	    break;
+	  case SHADER_LOCAL_CONTRAST:
+	    oss<<" local contrast - radius="<<shader->GetRadius()<<", range=["<<-shader->GetLocalContrastRange()<<", "<<shader->GetLocalContrastRange()<<"]";
+	    break;
+	  case SHADER_LOCAL_ALPHA:
+	    oss<<" local transparency - radius="<<shader->GetRadius();
+	    break;
+	  case SHADER_ALPHA_GRID:
+	    oss<<" chessboard transparency - grid="<<shader->GetChessboardSize();
+	    break;
+	  case SHADER_ALPHA_SLIDER:
+	    oss<<" swipe transparency - "<<(shader->GetVerticalSlider()?"vertical":"horizontal")<<", position="<<shader->GetSliderPosition();
+	    break;
+	  case SHADER_SPECTRAL_ANGLE:
+	    oss<<" spectral angle: - gain="<<shader->GetSpectralAngleRange();
+	    // Do nothing
+	    break;
+	  case SHADER_GRADIENT:
+	    oss<<" gradient";
+	    break;
+	  }
+	}
+
       oss<<"\n";
-      oss<<"    Shader: ";
-      
-      switch(shader->GetShaderType())
-        {
-        case SHADER_STANDARD:
-          oss<<" standard";
-          break;
-        case SHADER_LOCAL_CONTRAST:
-          oss<<" local contrast - radius="<<shader->GetRadius()<<", range=["<<-shader->GetLocalContrastRange()<<", "<<shader->GetLocalContrastRange()<<"]";
-          break;
-        case SHADER_LOCAL_ALPHA:
-          oss<<" local transparency - radius="<<shader->GetRadius();
-          break;
-        case SHADER_ALPHA_GRID:
-          oss<<" chessboard transparency - grid="<<shader->GetChessboardSize();
-          break;
-        case SHADER_ALPHA_SLIDER:
-          oss<<" swipe transparency - "<<(shader->GetVerticalSlider()?"vertical":"horizontal")<<", position="<<shader->GetSliderPosition();
-          break;
-        case SHADER_SPECTRAL_ANGLE:
-          oss<<" spectral angle: - gain="<<shader->GetSpectralAngleRange();
-          // Do nothing
-          break;
-        case SHADER_GRADIENT:
-          oss<<" gradient";
-          break;
-        }
-      oss<<"\n";
-      
+
       oss<<"    Position - index: ("<<poutidx[0]<<", "<<poutidx[1]<<"), phys: "<<poutphys[0]<<", "<<poutphys[1]<<")";
       oss<<", resolution: "<<currentActor->GetCurrentResolution()<<"\n";
       if(pixelAvail)
@@ -632,30 +687,50 @@ void IceViewer::DrawHelp()
   glutBitmapString(GLUT_BITMAP_8_BY_13,(unsigned char *) oss.str().c_str());
 }
 
-void IceViewer::UpdateShaderColorAndPosition(double vpx, double vpy,otb::GlImageActor * currentActor)
+void
+IceViewer
+::UpdateShaderColorAndPosition( double vpx,
+				double vpy,
+				otb::GlImageActor * currentActor )
 {
-   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+   otb::GlImageActor::PointType pin;
 
-      otb::GlImageActor::PointType pin;
-      pin[0]=vpx;
-      pin[1]=vpy;
-      otb::GlImageActor::PixelType pixel;
-      bool pixelAvail = currentActor->GetPixelFromViewport(pin,pixel);
-            
-      if(pixelAvail)
-        {
-        shader->SetCurrentRed(pixel[0]);
-        shader->SetCurrentGreen(pixel[1]);
-        shader->SetCurrentBlue(pixel[2]);
-        }
-      
-      int width, height;
-      double posx,posy;
-      glfwGetFramebufferSize(m_Window, &width, &height);
-      glfwGetCursorPos(m_Window,&posx,&posy);
-      pin[0]=posx;
-      pin[1]=height-posy;
-      shader->SetCenter(pin);
+   pin[ 0 ] = vpx;
+   pin[ 1 ] = vpy;
+
+   otb::GlImageActor::PixelType pixel;
+   
+   if( currentActor->GetPixelFromViewport( pin, pixel ) )
+     {
+     ImageSettings::Pointer imageSettings( currentActor->GetImageSettings() );
+     assert( !imageSettings.IsNull() );
+
+     imageSettings->SetCurrentRed( pixel[ 0 ] );
+     imageSettings->SetCurrentGreen( pixel[ 1 ] );
+     imageSettings->SetCurrentBlue( pixel[ 2 ] );
+     }
+
+   int width = 0;
+   int height = 0;
+
+   double posx = 0.0;
+   double posy = 0.0;
+
+   glfwGetFramebufferSize( m_Window, &width, &height );
+
+   glfwGetCursorPos( m_Window, &posx, &posy );
+
+   pin[ 0 ] = posx;
+   pin[ 1 ]= height - posy;
+
+   otb::StandardShader::Pointer shader(
+     dynamic_cast< otb::StandardShader * >(
+       currentActor->GetShader()
+     )
+   );
+
+   if( !shader.IsNull() )
+     shader->SetCenter( pin );
 }
 
 
@@ -729,30 +804,44 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
 bool IceViewer::scroll_callback_image(GLFWwindow * window, double, double yoffset)
 {
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
-  otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
-  if(currentActor.IsNull())
-    {
+  otb::GlImageActor::Pointer currentActor(
+    dynamic_cast< otb::GlImageActor * >(
+      m_View->GetActor( m_SelectedActor ).GetPointer()
+    )
+  );
+
+  if( currentActor.IsNull() )
     return false;
-    }
 
-  otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
 
-  if(shader.IsNull())
-    {
+  otb::StandardShader::Pointer shader(
+    dynamic_cast< otb::StandardShader * >(
+      currentActor->GetShader()
+    )
+  );
+
+  if( shader.IsNull() )
     return false;
-    }
-  
+
+
+  ImageSettings::Pointer imageSettings(
+    currentActor->GetImageSettings()
+  );
+
+  assert( !imageSettings.IsNull() );
+
   if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {
     if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_GRADIENT)
       {
-      shader->SetMinRed(shader->GetMinRed()*factor);
-      shader->SetMinGreen(shader->GetMinGreen()*factor);
-      shader->SetMinBlue(shader->GetMinBlue()*factor);
-      shader->SetMaxRed(shader->GetMaxRed()*factor);
-      shader->SetMaxGreen(shader->GetMaxGreen()*factor);
-      shader->SetMaxBlue(shader->GetMaxBlue()*factor);
+      imageSettings->SetMinRed( imageSettings->GetMinRed() * factor );
+      imageSettings->SetMinGreen( imageSettings->GetMinGreen() * factor );
+      imageSettings->SetMinBlue( imageSettings->GetMinBlue() * factor );
+      imageSettings->SetMaxRed( imageSettings->GetMaxRed() * factor );
+      imageSettings->SetMaxGreen( imageSettings->GetMaxGreen() * factor );
+      imageSettings->SetMaxBlue( imageSettings->GetMaxBlue() * factor );
+
       return true;
       }
     else if(shader->GetShaderType() == SHADER_LOCAL_CONTRAST)
@@ -771,13 +860,14 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double, double yoffse
     switch(shader->GetShaderType())
       {
       case SHADER_STANDARD:
-        shader->SetMinRed(shader->GetMinRed()/factor);
-        shader->SetMinGreen(shader->GetMinGreen()/factor);
-        shader->SetMinBlue(shader->GetMinBlue()/factor);
-        shader->SetMaxRed(shader->GetMaxRed()*factor);
-        shader->SetMaxGreen(shader->GetMaxGreen()*factor);
-        shader->SetMaxBlue(shader->GetMaxBlue()*factor);
+        imageSettings->SetMinRed( imageSettings->GetMinRed() / factor );
+        imageSettings->SetMinGreen( imageSettings->GetMinGreen() / factor );
+        imageSettings->SetMinBlue( imageSettings->GetMinBlue() / factor );
+        imageSettings->SetMaxRed( imageSettings->GetMaxRed() * factor );
+        imageSettings->SetMaxGreen( imageSettings->GetMaxGreen() * factor );
+        imageSettings->SetMaxBlue( imageSettings->GetMaxBlue() * factor );
         break;
+
       case SHADER_LOCAL_CONTRAST:
         shader->SetRadius(shader->GetRadius()/factor);
         break;
@@ -803,12 +893,12 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double, double yoffse
     }
   else if(glfwGetKey(window,GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
     {
-    shader->SetGamma(shader->GetGamma()/factor);
+    imageSettings->SetGamma( imageSettings->GetGamma() / factor );
     return true;
     }
   else if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
     {
-    shader->SetAlpha(shader->GetAlpha()/factor);  
+    imageSettings->SetAlpha( imageSettings->GetAlpha() / factor );  
     return true;
     }
   return false;
@@ -931,21 +1021,25 @@ void IceViewer::UpdateShaderColorAndPosition()
    
     if(currentActor.IsNotNull())
       {
-      otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+      otb::StandardShader::Pointer currentShader(
+	dynamic_cast< otb::StandardShader * >(
+	  currentActor->GetShader()
+	)
+      );
 
-      this->UpdateShaderColorAndPosition(vpx,vpy,currentActor);
+      if( !currentShader.IsNull() )
+	{
+	UpdateShaderColorAndPosition( vpx, vpy, currentActor );
       
-      if(currentShader->GetShaderType() == SHADER_ALPHA_SLIDER)
-        {
-        if(currentShader->GetVerticalSlider())
-          {
-          currentShader->SetSliderPosition(height-posy);
-          }
-        else
-          {
-          currentShader->SetSliderPosition(posx);
-          }
-        }
+	if(currentShader->GetShaderType() == SHADER_ALPHA_SLIDER)
+	  {
+	  if( currentShader->GetVerticalSlider() )
+	    currentShader->SetSliderPosition( height - posy );
+
+	  else
+	    currentShader->SetSliderPosition( posx );
+	  }
+	}
       }
     }
 }
@@ -1268,22 +1362,37 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 bool IceViewer::key_callback_image(GLFWwindow* window, int key, int, int action, int)
 {
   double posx,posy,vpx,vpy;
+
   glfwGetCursorPos(m_Window,&posx,&posy);
   m_View->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
 
-  otb::GlImageActor::Pointer actor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
-  if(actor.IsNull())
-    {
+  otb::GlImageActor::Pointer actor(
+    dynamic_cast< otb::GlImageActor * >(
+      m_View->GetActor( m_SelectedActor ).GetPointer()
+    )
+  );
+
+  if( actor.IsNull() )
     return false;
-    }
 
-  otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
+
+  otb::StandardShader::Pointer shader(
+    dynamic_cast< otb::StandardShader * >(
+      actor->GetShader()
+    )
+  );
    
-  if(shader.IsNull())
-    {
+  if( shader.IsNull() )
     return false;
-    }
+
+
+  ImageSettings::Pointer imageSettings(
+    actor->GetImageSettings()
+  );
+
+  assert( !imageSettings.IsNull() );
+
 
   // Switch shader mode
   if(key == GLFW_KEY_L && action == GLFW_PRESS)
@@ -1354,12 +1463,12 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
     actor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue);
      
-    shader->SetMinRed(minRed);
-    shader->SetMinGreen(minGreen);
-    shader->SetMinBlue(minBlue);
-    shader->SetMaxRed(maxRed);
-    shader->SetMaxGreen(maxGreen);
-    shader->SetMaxBlue(maxBlue);
+    imageSettings->SetMinRed( minRed );
+    imageSettings->SetMinGreen( minGreen );
+    imageSettings->SetMinBlue( minBlue );
+    imageSettings->SetMaxRed( maxRed );
+    imageSettings->SetMaxGreen( maxGreen );
+    imageSettings->SetMaxBlue( maxBlue );
     }
 
   if(key == GLFW_KEY_E && action == GLFW_PRESS)
@@ -1377,13 +1486,13 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     {
     double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
     actor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue,false);
-     
-    shader->SetMinRed(minRed);
-    shader->SetMinGreen(minGreen);
-    shader->SetMinBlue(minBlue);
-    shader->SetMaxRed(maxRed);
-    shader->SetMaxGreen(maxGreen);
-    shader->SetMaxBlue(maxBlue);
+
+    imageSettings->SetMinRed( minRed );
+    imageSettings->SetMinGreen( minGreen );
+    imageSettings->SetMinBlue( minBlue );
+    imageSettings->SetMaxRed( maxRed );
+    imageSettings->SetMaxGreen( maxGreen );
+    imageSettings->SetMaxBlue( maxBlue );
     }
 
 #if 0
@@ -1429,7 +1538,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
   //Activate/Deactivate the use no-data
   if(key == GLFW_KEY_N && action == GLFW_PRESS)
     {
-    shader->SetUseNoData(!shader->GetUseNoData());
+    imageSettings->SetUseNoData( !imageSettings->GetUseNoData() );
     }
 
   return true;
@@ -1533,25 +1642,33 @@ void IceViewer::CopyActorStyle(otb::GlActor::Pointer srcActor, otb::GlActor::Poi
   otb::GlImageActor::Pointer srcImgActor = dynamic_cast<otb::GlImageActor*>(srcActor.GetPointer());
   otb::GlImageActor::Pointer dstImgActor = dynamic_cast<otb::GlImageActor*>(dstActor.GetPointer());
 
-
-  if(srcActor.IsNotNull() && srcActor->GetVisible() && dstImgActor.IsNotNull() && dstActor->GetVisible())
+  if(srcImgActor.IsNotNull() && srcActor->GetVisible() && dstImgActor.IsNotNull() && dstActor->GetVisible())
     {
-    otb::StandardShader::Pointer srcShader = static_cast<otb::StandardShader *>(srcImgActor->GetShader());
-    otb::StandardShader::Pointer dstShader = static_cast<otb::StandardShader *>(dstImgActor->GetShader());
+    ImageSettings::Pointer srcImageSettings( srcImgActor->GetImageSettings() );
+    assert( !srcImageSettings.IsNull() );
 
-    if(srcShader.IsNotNull() && dstShader.IsNotNull())
+    ImageSettings::Pointer dstImageSettings( dstImgActor->GetImageSettings() );
+    assert( !dstImageSettings.IsNull() );
+
+    otb::StandardShader::Pointer srcShader = dynamic_cast<otb::StandardShader *>(srcImgActor->GetShader());
+
+    otb::StandardShader::Pointer dstShader = dynamic_cast<otb::StandardShader *>(dstImgActor->GetShader());
+
+    if( srcShader.IsNotNull() &&
+	dstShader.IsNotNull() )
       {
       // Apply same parameters to all image actors
-      dstImgActor->SetRedIdx(srcImgActor->GetRedIdx());
-      dstImgActor->SetGreenIdx(srcImgActor->GetGreenIdx());
-      dstImgActor->SetBlueIdx(srcImgActor->GetBlueIdx());
-      dstShader->SetMinRed(srcShader->GetMinRed());
-      dstShader->SetMinGreen(srcShader->GetMinGreen());
-      dstShader->SetMinBlue(srcShader->GetMinBlue());
-      dstShader->SetMaxRed(srcShader->GetMaxRed());
-      dstShader->SetMaxGreen(srcShader->GetMaxGreen());
-      dstShader->SetMaxBlue(srcShader->GetMaxBlue());
-      dstShader->SetGamma(srcShader->GetGamma());
+      dstImgActor->SetRedIdx( srcImgActor->GetRedIdx() );
+      dstImgActor->SetGreenIdx( srcImgActor->GetGreenIdx() );
+      dstImgActor->SetBlueIdx( srcImgActor->GetBlueIdx() );
+
+      dstImageSettings->SetMinRed( srcImageSettings->GetMinRed() );
+      dstImageSettings->SetMinGreen( srcImageSettings->GetMinGreen() );
+      dstImageSettings->SetMinBlue( srcImageSettings->GetMinBlue() );
+      dstImageSettings->SetMaxRed( srcImageSettings->GetMaxRed() );
+      dstImageSettings->SetMaxGreen( srcImageSettings->GetMaxGreen() );
+      dstImageSettings->SetMaxBlue( srcImageSettings->GetMaxBlue() );
+      dstImageSettings->SetGamma( srcImageSettings->GetGamma() );
       
       if(srcShader->GetShaderType() == SHADER_STANDARD || srcShader->GetShaderType() == SHADER_LOCAL_CONTRAST || srcShader->GetShaderType() == SHADER_SPECTRAL_ANGLE || srcShader->GetShaderType() == SHADER_GRADIENT)
         {

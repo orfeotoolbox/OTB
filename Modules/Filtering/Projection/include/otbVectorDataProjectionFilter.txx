@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataProjectionFilter_txx
-#define __otbVectorDataProjectionFilter_txx
+#ifndef otbVectorDataProjectionFilter_txx
+#define otbVectorDataProjectionFilter_txx
 
 #include "otbVectorDataProjectionFilter.h"
 #include "itkProgressReporter.h"
@@ -325,7 +325,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 }
 
 /**
-   * GenerateData Performs the coordinate convertion for each element in the tree
+   * GenerateData Performs the coordinate conversion for each element in the tree
  */
 template <class TInputVectorData, class TOutputVectorData>
 void

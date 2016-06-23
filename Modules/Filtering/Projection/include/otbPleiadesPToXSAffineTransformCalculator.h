@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPleiadesPToXSAffineTransformCalculator__h
-#define __otbPleiadesPToXSAffineTransformCalculator__h
+#ifndef otbPleiadesPToXSAffineTransformCalculator__h
+#define otbPleiadesPToXSAffineTransformCalculator__h
 
 #include "itkLightObject.h"
 #include "itkScalableAffineTransform.h"
@@ -57,7 +57,9 @@ public:
 
   itkTypeMacro(PleiadesPToXSAffineTransformCalculator,itk::LightObject);
   
-  typedef itk::ScalableAffineTransform<double,2> TransformType;
+  typedef itk::ScalableAffineTransform<double,2>   TransformType;
+  typedef TransformType::OutputVectorType OffsetType;
+
   
   /**
    * This function checks if the transform calculation applies to the
@@ -69,7 +71,16 @@ public:
    */
   static bool CanCompute(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage);
      
-
+/**
+   * This function computes the offset in pan pixels for a pair of
+   * image. Note that the CanCompute() method is first called, and
+   * that an exception will be raised if computation can not be done.
+   *
+   * \return The computed transform
+   */
+  static OffsetType ComputeOffset(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage);
+  
+  
   /**
    * This function computes the transform for a pair of image. Note
    * that the CanCompute() method is first called, and that an

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetComplexOutputImageParameter_h
-#define __otbWrapperQtWidgetComplexOutputImageParameter_h
+#ifndef otbWrapperQtWidgetComplexOutputImageParameter_h
+#define otbWrapperQtWidgetComplexOutputImageParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetComplexOutputImageParameter : public QtWidgetParame
   Q_OBJECT
 public:
   QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*);
-  virtual ~QtWidgetComplexOutputImageParameter();
+  ~QtWidgetComplexOutputImageParameter() ITK_OVERRIDE;
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -54,9 +54,9 @@ private:
   QtWidgetComplexOutputImageParameter(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   std::string m_FileName;
   ComplexOutputImageParameter::Pointer m_OutputImageParam;

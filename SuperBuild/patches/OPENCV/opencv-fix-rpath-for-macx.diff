@@ -1,0 +1,11 @@
+diff -burN opencv-2.4.11.orig/cmake/OpenCVModule.cmake opencv-2.4.11/cmake/OpenCVModule.cmake
+--- opencv-2.4.11.orig/cmake/OpenCVModule.cmake	2016-04-19 12:20:03.000000000 +0200
++++ opencv-2.4.11/cmake/OpenCVModule.cmake	2016-04-19 12:21:06.000000000 +0200
+@@ -589,7 +589,6 @@
+     ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+     LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+     RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+-    INSTALL_NAME_DIR lib
+   )
+ 
+   # For dynamic link numbering convenions

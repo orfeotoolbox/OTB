@@ -57,7 +57,7 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("VectorDataReprojection");
     std::ostringstream oss;
@@ -112,12 +112,12 @@ private:
     SetDocExampleParameterValue("out.vd","reprojected_vd.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
 
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

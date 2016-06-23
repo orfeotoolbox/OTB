@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHooverInstanceFilter_txx
-#define __otbHooverInstanceFilter_txx
+#ifndef otbHooverInstanceFilter_txx
+#define otbHooverInstanceFilter_txx
 
 #include "otbHooverInstanceFilter.h"
 #include "otbMacro.h"

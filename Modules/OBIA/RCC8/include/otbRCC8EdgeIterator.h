@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8EdgeIterator_h
-#define __otbRCC8EdgeIterator_h
+#ifndef otbRCC8EdgeIterator_h
+#define otbRCC8EdgeIterator_h
 
 #include "otbRCC8Graph.h"
 

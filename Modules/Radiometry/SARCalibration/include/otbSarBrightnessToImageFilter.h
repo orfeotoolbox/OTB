@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarBrightnessToImageFilter_h
-#define __otbSarBrightnessToImageFilter_h
+#ifndef otbSarBrightnessToImageFilter_h
+#define otbSarBrightnessToImageFilter_h
 
 #include "otbSarBrightnessFunction.h"
 #include "otbFunctionToImageFilter.h"
@@ -83,10 +83,10 @@ public:
 
 protected:
   SarBrightnessToImageFilter();
-  virtual ~SarBrightnessToImageFilter() {}
+  ~SarBrightnessToImageFilter() ITK_OVERRIDE {}
 
   /** Update the function list and input parameters*/
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 private:
   SarBrightnessToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

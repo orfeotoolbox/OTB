@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHoughTransform2DLinesImageFilter_txx
-#define __otbHoughTransform2DLinesImageFilter_txx
+#ifndef otbHoughTransform2DLinesImageFilter_txx
+#define otbHoughTransform2DLinesImageFilter_txx
 
 #include "otbHoughTransform2DLinesImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -50,7 +50,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
   m_Variance = 5;
   m_OldModifiedTime = 0;
   m_OldNumberOfLines = 0;
-  m_SimplifyAccumulator = NULL;
+  m_SimplifyAccumulator = ITK_NULLPTR;
 }
 
 template<typename TInputPixelType, typename TOutputPixelType>

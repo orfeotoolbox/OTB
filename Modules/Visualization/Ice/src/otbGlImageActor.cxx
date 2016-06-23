@@ -44,7 +44,8 @@ GlImageActor::GlImageActor()
     m_Origin(),
     m_Spacing(),
     m_NumberOfComponents(0),
-    m_Shader(StandardShader::New()),
+    m_ImageSettings( ImageSettings::New() ),
+    m_Shader(),
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
@@ -53,15 +54,37 @@ GlImageActor::GlImageActor()
     m_SoftwareRendering(false)
 {}
 
-GlImageActor::~GlImageActor()
-{}
+GlImageActor
+::~GlImageActor()
+{
+  // Release OpenGL texture names.
+  for( TileVectorType::iterator it( m_LoadedTiles.begin() );
+       it!=m_LoadedTiles.end();
+       ++it )
+    UnloadTile( *it );
+
+  m_LoadedTiles.clear();
+}
+
+void
+GlImageActor
+::CreateShader()
+{
+  StandardShader::Pointer shader( StandardShader::New() );
+
+  shader->SetImageSettings( m_ImageSettings );
+
+  m_Shader = shader;
+}
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const
 {
   return m_Origin;
 }
 
-const GlImageActor::SpacingType & GlImageActor::GetSpacing() const
+const GeoInterface::Spacing2 &
+GlImageActor
+::GetSpacing() const
 {
   return m_Spacing;
 }
@@ -133,14 +156,27 @@ void GlImageActor::Initialize(const std::string & filename)
 
   unsigned int ovrCount = m_FileReader->GetOverviewsCount();
 
+  // std::cout << "overview-count: " << ovrCount << std::endl;
+
+  assert( ovrCount>0 );
+
+  // {
+  // typedef std::vector< std::string > StringVector;
+
+  // StringVector info(
+  //   m_FileReader->GetOverviewsInfo()
+  // );
+
+  // for( StringVector::const_iterator it( info.begin() );
+  //      it!=info.end();
+  //      ++it )
+  //   std::cout << *it << std::endl;
+  // }
+
   m_AvailableResolutions.clear();
 
-  m_AvailableResolutions.push_back(0);
-
-  for(unsigned int i =0; i < ovrCount;++i)
-    {
-    m_AvailableResolutions.push_back(i+1);
-    }
+  for( unsigned int i=0; i<ovrCount; ++i )
+    m_AvailableResolutions.push_back( i );
 
   m_CurrentResolution = m_AvailableResolutions.front();
 
@@ -197,9 +233,9 @@ void GlImageActor::UpdateData()
   CleanLoadedTiles();
 
   // Retrieve settings
-  ViewSettings::ConstPointer settings = this->GetSettings();
+  ViewSettings::ConstPointer settings = GetSettings();
 
-  RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
+  RegionType largest( m_FileReader->GetOutput()->GetLargestPossibleRegion() );
  
   double ulx, uly, lrx, lry;
 
@@ -209,14 +245,10 @@ void GlImageActor::UpdateData()
 
   RegionType requested;
 
-  this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
+  ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
 
-  if(!requested.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion()))
-    {
+  if( !requested.Crop( largest ) )
     return;
-    }
-
-  // std::cout<<"Corresponding image region: "<<requested<<std::endl;
  
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
@@ -227,17 +259,16 @@ void GlImageActor::UpdateData()
   //unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
-
-  // std::cout<<"Required tiles: "<<nbTilesX<<" x "<<nbTilesY<<std::endl;
-
+  
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
-
+  Tile newTile;
+  
    for(unsigned int i = 0; i < nbTilesX; ++i)
     {
     for(unsigned int j = 0; j<nbTilesY; ++j)
       {
-      Tile newTile;
+      
       newTile.m_TextureId = 0;
 
       IndexType tileIndex;
@@ -246,18 +277,16 @@ void GlImageActor::UpdateData()
       
       newTile.m_ImageRegion.SetSize(tileSize);
       newTile.m_ImageRegion.SetIndex(tileIndex);
-      
-      newTile.m_ImageRegion.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
+
+      newTile.m_ImageRegion.Crop( largest );
 
       ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR,false);
-
-       // std::cout<<"Loading tile "<<newTile.m_ImageRegion<<std::endl;
-       // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
 
       newTile.m_RedIdx = m_RedIdx;
       newTile.m_GreenIdx = m_GreenIdx;
       newTile.m_BlueIdx = m_BlueIdx;
       newTile.m_Resolution = m_CurrentResolution;
+      newTile.m_TileSize = m_TileSize;
 
       if(!TileAlreadyLoaded(newTile))
         {
@@ -265,6 +294,7 @@ void GlImageActor::UpdateData()
         }
       }
     }
+
 }
 
 bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
@@ -293,7 +323,7 @@ void GlImageActor::Render()
   //   << "\tpixel: " << m_SoftwareRendering << std::endl
   //   << "\ttile: " << m_TileSize << std::endl;
 
-  if(!m_SoftwareRendering)
+  if( !m_SoftwareRendering && !m_Shader.IsNull() )
     {
     // std::cout << "\tGLSL" << std::endl;
 
@@ -317,38 +347,36 @@ void GlImageActor::Render()
       VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
       mins.Fill(0);
       maxs.Fill(255);
-        
-      double gamma(1.0);
 
-      bool useNoData(false);
       double noData(0.);
-      
-      StandardShader::Pointer shader = dynamic_cast<StandardShader *>(m_Shader.GetPointer());
 
-      if(shader)
-        {
-      
-        mins[0] = shader->GetMinRed();
-        mins[1] = shader->GetMinGreen();
-        mins[2] = shader->GetMinBlue();
+      assert( !m_ImageSettings.IsNull() );
+
+      mins[ 0 ] = m_ImageSettings->GetMinRed();
+      mins[ 1 ] = m_ImageSettings->GetMinGreen();
+      mins[ 2 ] = m_ImageSettings->GetMinBlue();
     
-        maxs[0] = shader->GetMaxRed();
-        maxs[1] = shader->GetMaxGreen();
-        maxs[2] = shader->GetMaxBlue();
+      maxs[ 0 ] = m_ImageSettings->GetMaxRed();
+      maxs[ 1 ] = m_ImageSettings->GetMaxGreen();
+      maxs[ 2  ] = m_ImageSettings->GetMaxBlue();
 
-        gamma = shader->GetGamma();
+      // MANTIS-1204
+      // {
+      double gamma = m_ImageSettings->GetGamma();
 
-        useNoData = shader->GetUseNoData();
-
-        if(useNoData)
-          {
-          noData = shader->GetNoData();
-          }
-        
-        }
+      gamma =
+	gamma == 0.0
+        ? std::numeric_limits< double >::max()
+        : 1.0 / gamma;
+      // }
       
-      omins.Fill(0);
-      omaxs.Fill(255);
+     
+      if( m_ImageSettings->GetUseNoData() )
+        noData = m_ImageSettings->GetNoData();
+
+      
+      omins.Fill( 0 );
+      omaxs.Fill( 255 );
     
       it->m_RescaleFilter->SetInputMinimum(mins);
       it->m_RescaleFilter->SetInputMaximum(maxs);
@@ -378,7 +406,7 @@ void GlImageActor::Render()
         ++idx;
         buffer[idx] = 255;
 
-        if(useNoData && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
+        if(m_ImageSettings->GetUseNoData() && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
           {
           buffer[idx] = 0;
           }
@@ -421,56 +449,72 @@ void GlImageActor::Render()
       }
     }
 
-for(TileVectorType::iterator it = m_LoadedTiles.begin();
-    it != m_LoadedTiles.end(); ++it)
-  {
-  
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-  
-  glEnable(GL_TEXTURE_2D);  
-  glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
-  
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
-  if(m_CurrentResolution == 0)
+  for(TileVectorType::iterator it = m_LoadedTiles.begin();
+      it != m_LoadedTiles.end(); ++it)
     {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  
+    glEnable(GL_TEXTURE_2D);  
+    glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
+  
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
+    if(m_CurrentResolution == 0)
+      {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      }
+    else
+      {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      }
+  
+    // Reset color before rendering
+    glColor3d(1.0f,1.0f,1.0f);
+  
+    glBegin (GL_QUADS);
+    glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
+    glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
+    glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
+    glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
+    glEnd ();
+  
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
     }
-  else
-    {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
-  
-  // Reset color before rendering
-  glColor3d(1.0f,1.0f,1.0f);
-  
-  glBegin (GL_QUADS);
-  glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
-  glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
-  glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
-  glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
-  glEnd ();
-  
-  glDisable(GL_TEXTURE_2D);
-  glDisable(GL_BLEND);
-  }
 
-if(!m_SoftwareRendering)
-  {
+  if( !m_SoftwareRendering && !m_Shader.IsNull() )
+    {
     m_Shader->UnloadShader();
-  }
-
+    }
 }
 
 void GlImageActor::LoadTile(Tile& tile)
 {
+  // std::cout
+  //   << std::hex << this
+  //   << "::LoadTile(" << &tile << ")"
+  //   << std::dec << std::endl;
+
+  // std::cout
+  //   << "[ " << tile.m_ImageRegion.GetIndex()[ 0 ]
+  //   << ", " << tile.m_ImageRegion.GetIndex()[ 1 ]
+  //   << " ]-[ " << tile.m_ImageRegion.GetSize()[ 0 ]
+  //   << ", " << tile.m_ImageRegion.GetSize()[ 1 ]
+  //   << "]"
+  //   << std::endl;
+
   ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
+
   extract->SetInput(m_FileReader->GetOutput());
   extract->SetExtractionRegion(tile.m_ImageRegion);
   extract->SetChannel(tile.m_RedIdx);
   extract->SetChannel(tile.m_GreenIdx);
   extract->SetChannel(tile.m_BlueIdx);
+
+  // std::cout << "ExtractROIFilter::Update()...";
   extract->Update();
+  // std::cout << "\tDONE\n";
 
   tile.m_Image = extract->GetOutput();
 
@@ -495,7 +539,19 @@ void GlImageActor::LoadTile(Tile& tile)
       }
     
     // Now load the texture
-    glGenTextures(1, &(tile.m_TextureId));
+    assert( tile.m_TextureId==0 );
+
+    glGenTextures( 1, &tile.m_TextureId );
+
+    // Following assert is somtimes false on some OpenGL systems for
+    // some unknown reason even though the glGenTexture() call has
+    // succeeded.
+    // assert( glGetError()==GL_NO_ERROR );
+
+    assert( tile.m_TextureId!=0 );
+
+    // std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
+
     glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
@@ -530,9 +586,22 @@ void GlImageActor::LoadTile(Tile& tile)
   
 void GlImageActor::UnloadTile(Tile& tile)
 {
-  if(tile.m_Loaded)
+  // std::cout << std::hex << this << std::dec << "::UnloadTile()" << std::endl;
+
+  if( tile.m_Loaded )
     {
-    glDeleteTextures(1,&tile.m_TextureId);
+    assert( tile.m_TextureId>0 );
+
+    glDeleteTextures( 1, &tile.m_TextureId );
+
+    // std::cout << "Deleted texture #" << tile.m_TextureId << std::endl;
+
+    tile.m_TextureId = 0;
+
+    tile.m_Image = VectorImageType::Pointer();
+
+    tile.m_RescaleFilter = RescaleFilterType::Pointer();
+
     tile.m_Loaded = false;
     }
 }
@@ -563,9 +632,12 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
        || it->m_BlueIdx != m_BlueIdx
-       || it->m_ImageRegion.GetSize()[0]!=m_TileSize
-       || it->m_ImageRegion.GetSize()[1]!=m_TileSize)
-      {     
+       // We need to compare with theoretical tile size as actual tile
+       // size might be smaller at images borders
+       || it->m_TileSize!=m_TileSize)
+      {
+       
+      
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
       }
@@ -783,19 +855,68 @@ GlImageActor
 	    PixelType & pixel,
 	    IndexType & index ) const
 {
+
+  // std::cout << std::endl;
+
+  // std::cout << "O: (" << m_Origin[ 0 ] << ", " << m_Origin[ 1 ] << ")";
+  // std::cout << "\tS: (" << m_Spacing[ 1 ] << ", " << m_Spacing[ 1 ] << ")";
+  // std::cout << std::endl;
+
+  // std::cout << "P: (" << physical[ 0 ] << ", " << physical[ 1 ] << ")";
+  // std::cout << std::endl;
+
   // First, we need to return index in full img (not in overviews)
+#if 0
   index[ 0 ] = static_cast<unsigned int>((physical[0]-m_Origin[0])/m_Spacing[0]);
   index[ 1 ] = static_cast<unsigned int>((physical[1]-m_Origin[1])/m_Spacing[1]);
+
+#else
+  index[ 0 ] =
+    static_cast< IndexType::IndexValueType >(
+      ( physical[ 0 ] - m_Origin[ 0 ] ) / 
+      m_Spacing[ 0 ]
+    );
+
+  index[ 1 ] =
+    static_cast< IndexType::IndexValueType >(
+      ( physical[ 1 ]-  m_Origin[ 1 ] ) /
+      m_Spacing[ 1 ]
+    );
+
+#endif
+
+  // std::cout << "I: (" << index[ 0 ] << ", " << index[ 1 ] << ")";
+  // std::cout
+  //   << "\tI: ("
+  //   << ( ( physical[ 0 ] - m_Origin[ 0 ] ) / m_Spacing[ 0 ] )
+  //   << ", "
+  //   << ( ( physical[ 1 ] - m_Origin[ 1 ] ) / m_Spacing[ 1 ] )
+  //   << ")";
+  // std::cout << std::endl;
 
   // Then, we need to find the index in the currently loaded overview
   IndexType ovrIndex;
   m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, ovrIndex );
+
+  // std::cout << "O: (" << ovrIndex[ 0 ] << ", " << ovrIndex[ 1 ] << ")";
+  // std::cout << std::endl;
 
   // And look it up in loaded tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
     {
+    // std::cout
+    //   << "R: ("
+    //   << it->m_ImageRegion.GetIndex()[ 0 ]
+    //   << ", "
+    //   << it->m_ImageRegion.GetIndex()[ 1 ]
+    //   << ")-("
+    //   << it->m_ImageRegion.GetSize()[ 0 ]
+    //   << ", "
+    //   << it->m_ImageRegion.GetSize()[ 1 ]
+    //   << ")";
+
     if(it->m_ImageRegion.IsInside(ovrIndex))
       {
       IndexType idx;
@@ -803,10 +924,14 @@ GlImageActor
       idx[ 0 ] = ovrIndex[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
       idx[ 1 ] = ovrIndex[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
 
+      // std::cout << "\tIr: (" << idx[ 0 ] << ", " << idx[ 1 ] << ")";
+
       pixel = it->m_Image->GetPixel( idx );
 
       return true;
       }
+
+    // std::cout << std::endl;
     }
 
   return false;
@@ -852,29 +977,60 @@ void GlImageActor::UpdateResolution()
   double distAC = vcl_sqrt((pointA[0]-pointC[0])*(pointA[0]-pointC[0])+(pointA[1]-pointC[1])*(pointA[1]-pointC[1]));
   
   double resolution = std::min(100/distAB,100/distAC);
-  
+
+  // std::cout << std::endl;
+  // std::cout << "resolution: " << resolution << std::endl;
+
   // Arbitrary higher than any distance we will compute here
-  double minDist       = 50000.;
-  unsigned int closest = 0;
+  double minDist = 50000.;
+  m_CurrentResolution = 0;
 
-  // Compute the diff and keep the index that minimize the distance
-  for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
-       it != m_AvailableResolutions.end(); ++it)
+  // OTB always include full resolution level in available resolutions.
+  assert( !m_AvailableResolutions.empty() );
+
+  // MANTIS-1179: resolution>1 <=> zooming in past 1:1 scale. So, cap
+  // resolution to index 0.
+  if( resolution<1.0 )
     {
+    bool isFound = false;
 
-    double diff = 1/((double)(1<<(*it))) - resolution;
-
-    if (((m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower && diff < 0)
-         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper && diff > 0)
-         ||(m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest))
-    && vcl_abs(diff) < minDist)
+    // Compute the diff and keep the index that minimize the distance
+    for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
+	 it != m_AvailableResolutions.end(); ++it)
       {
-      minDist = vcl_abs(diff);
-      closest = std::distance(m_AvailableResolutions.begin(),it);
+      double diff = 1/((double)(1<<(*it))) - resolution;
+
+      // std::cout << "diff: " << diff << std::endl;
+
+      if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
+	      diff <= 0 )
+	    ||
+	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
+	      diff >= 0 )
+	    ||
+	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
+	  &&
+	  vcl_abs(diff) < minDist )
+	{
+	isFound = true;
+
+	minDist = vcl_abs(diff);
+	m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
+
+	// std::cout << "found: " << m_CurrentResolution << std::endl;
+	}
+      }
+
+    // MANTIS-1147: Cap current-resolution.
+    if( !isFound )
+      {
+      assert( m_AvailableResolutions.size() > 0 );
+
+      m_CurrentResolution = m_AvailableResolutions.size() - 1;
+
+      // std::cout << "not found: " << m_CurrentResolution << std::endl;
       }
     }
-      
-  m_CurrentResolution = closest;
 
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
@@ -885,6 +1041,8 @@ void GlImageActor::UpdateResolution()
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(extFilename.str());
   m_FileReader->UpdateOutputInformation();
+
+  // std::cout << "Switched to resolution: " << m_CurrentResolution << std::endl;
 }
 
 void GlImageActor::UpdateTransforms()
@@ -1086,41 +1244,11 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
 }
 
 
-
-bool
-GlImageActor
-::TransformFromViewport( Point2f & out,
-                         const Point2f & in,
-                         bool isPhysical ) const
-{
-  out = ViewportToImageTransform( in, isPhysical );
-
-  return true;
-}
-
-
 bool
 GlImageActor
 ::TransformFromViewport( Point2d & out,
                          const Point2d & in,
                          bool isPhysical ) const
-{
-  Point2f p;
-
-  if( !TransformFromViewport( p, Point2f( in ), isPhysical ) )
-    return false;
-
-  out = p;
-
-  return true;
-}
-
-
-bool
-GlImageActor
-::TransformToViewport( Point2f & out,
-                       const Point2f & in,
-                       bool isPhysical ) const
 {
   out = ViewportToImageTransform( in, isPhysical );
 
@@ -1134,12 +1262,7 @@ GlImageActor
                        const Point2d & in,
                        bool isPhysical ) const
 {
-  Point2f p;
-
-  if( !TransformToViewport( p, Point2f( in ), isPhysical ) )
-    return false;
-
-  out = p;
+  out = ViewportToImageTransform( in, isPhysical );
 
   return true;
 }

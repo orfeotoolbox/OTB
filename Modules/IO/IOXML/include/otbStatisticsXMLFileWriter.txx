@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileWriter_txx
-#define __otbStatisticsXMLFileWriter_txx
+#ifndef otbStatisticsXMLFileWriter_txx
+#define otbStatisticsXMLFileWriter_txx
 
 #include "otbStatisticsXMLFileWriter.h"
 #include "itkMacro.h"
@@ -81,7 +81,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
-  TiXmlElement * root = NULL;
+  TiXmlElement * root = ITK_NULLPTR;
   if (m_MeasurementVectorContainer.size())
     {
     root = new TiXmlElement( "FeatureStatistics");
@@ -110,15 +110,13 @@ StatisticsXMLFileWriter<TMeasurementVector>
     }
     
   // Iterate on map containers
-  TiXmlElement * mapRoot = NULL;
+  TiXmlElement * mapRoot = ITK_NULLPTR;
   if (m_GenericMapContainer.size())
     {
     mapRoot = new TiXmlElement( "GeneralStatistics");
     doc.LinkEndChild( mapRoot );
     }
 
-  std::string keyAttr("key");
-  std::string valAttr("value");
   GenericMapContainer::const_iterator containerIt;
   for ( containerIt = m_GenericMapContainer.begin() ; containerIt != m_GenericMapContainer.end() ; ++containerIt)
     {
@@ -135,8 +133,8 @@ StatisticsXMLFileWriter<TMeasurementVector>
       {
       // For each value in Measurementvector
       TiXmlElement * curStatisticMap = new TiXmlElement("StatisticMap");
-      curStatisticMap->SetAttribute(keyAttr , mapIter->first);
-      curStatisticMap->SetAttribute(valAttr, mapIter->second);
+      curStatisticMap->SetAttribute("key" , mapIter->first.c_str());
+      curStatisticMap->SetAttribute("value", mapIter->second.c_str());
       feature->LinkEndChild(curStatisticMap);
       }
     }

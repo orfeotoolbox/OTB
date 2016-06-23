@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapProjectionAdapter_h
-#define __otbMapProjectionAdapter_h
+#ifndef otbMapProjectionAdapter_h
+#define otbMapProjectionAdapter_h
 
 #include <string>
 #include <map>
@@ -82,7 +82,7 @@ public:
 
 protected:
   MapProjectionAdapter();
-  virtual ~MapProjectionAdapter();
+  ~MapProjectionAdapter() ITK_OVERRIDE;
 
 private:
   MapProjectionAdapter(const Self &); //purposely not implemented

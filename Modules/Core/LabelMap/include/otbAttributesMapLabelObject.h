@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAttributesMapLabelObject_h
-#define __otbAttributesMapLabelObject_h
+#ifndef otbAttributesMapLabelObject_h
+#define otbAttributesMapLabelObject_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -274,7 +274,7 @@ public:
 
     // copy the data of the current type if possible
     const Self * src = dynamic_cast<const Self *>(lo);
-    if (src == NULL)
+    if (src == ITK_NULLPTR)
       {
       return;
       }
@@ -303,10 +303,10 @@ protected:
   /** Constructor */
   AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New()) {}
   /** Destructor */
-  virtual ~AttributesMapLabelObject() {}
+  ~AttributesMapLabelObject() ITK_OVERRIDE {}
 
   /** The printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Attributes: " << std::endl;

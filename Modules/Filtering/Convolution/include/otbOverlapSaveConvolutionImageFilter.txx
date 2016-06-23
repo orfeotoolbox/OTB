@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOverlapSaveConvolutionImageFilter_txx
-#define __otbOverlapSaveConvolutionImageFilter_txx
+#ifndef otbOverlapSaveConvolutionImageFilter_txx
+#define otbOverlapSaveConvolutionImageFilter_txx
 
 #include "itkConfigure.h"
 
@@ -265,7 +265,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
     norm = 1.0;
     }
 
-  // Fill the ouptut image
+  // Fill the output image
   outputIt.GoToBegin();
   while (!outputIt.IsAtEnd())
     {

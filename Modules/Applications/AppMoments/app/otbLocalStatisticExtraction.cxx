@@ -52,7 +52,7 @@ itkTypeMacro(LocalStatisticExtraction, otb::Application);
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
 SetName("LocalStatisticExtraction");
 SetDescription("Computes local statistical moments on every pixel in the selected channel of the input image");
@@ -92,12 +92,12 @@ SetDocExampleParameterValue("radius", "3");
 SetDocExampleParameterValue("out", "Statistics.tif");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

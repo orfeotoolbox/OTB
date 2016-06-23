@@ -545,7 +545,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 
     //FIXME won't be intuitive for the non order case
     unsigned int numLineDiff = std::min(listStrDiffLineFileRef.size(), listStrDiffLineFileTest.size());
-    std::cout << "Nb lines differents : " << numLineDiff << std::endl;
+    std::cout << "Nb lines different : " << numLineDiff << std::endl;
     for (unsigned int i = 0; i < numLineDiff; ++i)
       {
       std::cout << "   -------------------------------" << std::endl;
@@ -1076,31 +1076,31 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Open data source.                                               */
   /* -------------------------------------------------------------------- */
-  otb::ogr::version_proxy::GDALDatasetType *ref_poDS = NULL;
-  otb::ogr::version_proxy::GDALDriverType *  ref_poDriver = NULL;
+  otb::ogr::version_proxy::GDALDatasetType *ref_poDS = ITK_NULLPTR;
+  otb::ogr::version_proxy::GDALDriverType *  ref_poDriver = ITK_NULLPTR;
   //OGRGeometry *  ref_poSpatialFilter = NULL;
-  otb::ogr::version_proxy::GDALDatasetType *test_poDS = NULL;
-  otb::ogr::version_proxy::GDALDriverType *  test_poDriver = NULL;
+  otb::ogr::version_proxy::GDALDatasetType *test_poDS = ITK_NULLPTR;
+  otb::ogr::version_proxy::GDALDriverType *  test_poDriver = ITK_NULLPTR;
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
   ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, false);
-  if (ref_poDS == NULL && !bReadOnly)
+  if (ref_poDS == ITK_NULLPTR && !bReadOnly)
     {
     ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, true);
     bReadOnly = TRUE;
-    if (ref_poDS != NULL && m_ReportErrors)
+    if (ref_poDS != ITK_NULLPTR && m_ReportErrors)
       {
       std::cout << "Had to open REF data source read-only."<<std::endl;
       }
     }
   test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
-  if (test_poDS == NULL && !bReadOnly)
+  if (test_poDS == ITK_NULLPTR && !bReadOnly)
     {
     test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
 
     bReadOnly = TRUE;
 
-    if (test_poDS != NULL && m_ReportErrors)
+    if (test_poDS != ITK_NULLPTR && m_ReportErrors)
       {
       std::cout << "Had to open TEST data source read-only."<<std::endl;
       }
@@ -1108,7 +1108,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Report failure                                                  */
   /* -------------------------------------------------------------------- */
-  if (ref_poDS == NULL)
+  if (ref_poDS == ITK_NULLPTR)
     {
 
     if (m_ReportErrors)
@@ -1127,7 +1127,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   ref_poDriver = ref_poDS->GetDriver();
   CPLAssert(ref_poDriver != NULL);
 
-  if (test_poDS == NULL)
+  if (test_poDS == ITK_NULLPTR)
     {
     if (m_ReportErrors)
       {
@@ -1183,14 +1183,14 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
     OGRLayer *ref_poLayer = ref_poDS->GetLayer(iLayer);
     OGRLayer *test_poLayer = test_poDS->GetLayer(iLayer);
 
-    if (ref_poLayer == NULL)
+    if (ref_poLayer == ITK_NULLPTR)
       {
       if (m_ReportErrors)
         std::cout << "FAILURE: Couldn't fetch advertised layer " << iLayer <<
         " for REF data source" << std::endl;
       return (1);
       }
-    if (test_poLayer == NULL)
+    if (test_poLayer == ITK_NULLPTR)
       {
       if (m_ReportErrors)
         std::cout << "FAILURE: Couldn't fetch advertised layer " << iLayer <<
@@ -1199,20 +1199,20 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
 
     //Check Layer inforamtion
-    ogrReportOnLayer(ref_poLayer, NULL, NULL, test_poLayer, NULL, NULL, nbdiff);
+    ogrReportOnLayer(ref_poLayer, ITK_NULLPTR, ITK_NULLPTR, test_poLayer, ITK_NULLPTR, ITK_NULLPTR, nbdiff);
 
     //If no difference, check the feature
     if (nbdiff == 0)
       {
-      OGRFeature *      ref_poFeature = NULL;
-      OGRFeature *      test_poFeature = NULL;
+      OGRFeature *      ref_poFeature = ITK_NULLPTR;
+      OGRFeature *      test_poFeature = ITK_NULLPTR;
       std::string       basefilename(test_pszDataSource);
       int               nbFeature(0);
       std::stringstream oss2;
       oss2.str("");
       oss2 << iLayer;
 
-      while ((ref_poFeature = ref_poLayer->GetNextFeature()) != NULL)
+      while ((ref_poFeature = ref_poLayer->GetNextFeature()) != ITK_NULLPTR)
         {
         test_poFeature = test_poLayer->GetNextFeature();
         std::stringstream oss;
@@ -1223,9 +1223,9 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
                                    + "_ref.txt";
         std::string test_filename = basefilename + "_temporary_layer_" + oss2.str() + "_feature_" + oss.str()
                                     + "_test.txt";
-        FILE *ref_f(NULL);
+        FILE *ref_f(ITK_NULLPTR);
         ref_f = fopen(ref_filename.c_str(), "w");
-        if (ref_f == NULL)
+        if (ref_f == ITK_NULLPTR)
           {
           itkGenericExceptionMacro(<< "Impossible to create ASCII file <" << ref_filename << ">.");
           }
@@ -1233,9 +1233,9 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
         OGRFeature::DestroyFeature( ref_poFeature );
         fclose(ref_f);
 
-        FILE *test_f(NULL);
+        FILE *test_f(ITK_NULLPTR);
         test_f = fopen(test_filename.c_str(), "w");
-        if (test_f == NULL)
+        if (test_f == ITK_NULLPTR)
           {
           itkGenericExceptionMacro(<< "Impossible to create ASCII file <" << test_filename << ">.");
           }
@@ -1268,7 +1268,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 
 void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOptions)
 {
-  if (fpOut == NULL) fpOut = stdout;
+  if (fpOut == ITK_NULLPTR) fpOut = stdout;
 
   if(!feature)
     {
@@ -1280,7 +1280,7 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
 
   const char* pszDisplayFields =
     CSLFetchNameValue(papszOptions, "DISPLAY_FIELDS");
-  if (pszDisplayFields == NULL || CSLTestBoolean(pszDisplayFields))
+  if (pszDisplayFields == ITK_NULLPTR || CSLTestBoolean(pszDisplayFields))
     {
     for (int iField = 0; iField < feature->GetFieldCount(); iField++)
       {
@@ -1296,21 +1296,21 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
       }
     }
 
-  if (feature->GetStyleString() != NULL)
+  if (feature->GetStyleString() != ITK_NULLPTR)
     {
     const char* pszDisplayStyle =
       CSLFetchNameValue(papszOptions, "DISPLAY_STYLE");
-    if (pszDisplayStyle == NULL || CSLTestBoolean(pszDisplayStyle))
+    if (pszDisplayStyle == ITK_NULLPTR || CSLTestBoolean(pszDisplayStyle))
       {
       fprintf(fpOut, "  Style = %s\n", feature->GetStyleString());
       }
     }
 
-  if (feature->GetGeometryRef() != NULL)
+  if (feature->GetGeometryRef() != ITK_NULLPTR)
     {
     const char* pszDisplayGeometry =
       CSLFetchNameValue(papszOptions, "DISPLAY_GEOMETRY");
-    if (!(pszDisplayGeometry != NULL && EQUAL(pszDisplayGeometry, "NO")))
+    if (!(pszDisplayGeometry != ITK_NULLPTR && EQUAL(pszDisplayGeometry, "NO")))
       {
       DumpOGRGeometry(fpOut, feature->GetGeometryRef(), "  ", papszOptions);
       }
@@ -1321,15 +1321,15 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
 
 void TestHelper::DumpOGRGeometry(FILE* fp, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions)
 {
-  char *pszWkt = NULL;
+  char *pszWkt = ITK_NULLPTR;
 
-  if (pszPrefix == NULL) pszPrefix = "";
+  if (pszPrefix == ITK_NULLPTR) pszPrefix = "";
 
-  if (fp == NULL) fp = stdout;
+  if (fp == ITK_NULLPTR) fp = stdout;
 
   const char* pszDisplayGeometry =
     CSLFetchNameValue(papszOptions, "DISPLAY_GEOMETRY");
-  if (pszDisplayGeometry != NULL && EQUAL(pszDisplayGeometry, "SUMMARY"))
+  if (pszDisplayGeometry != ITK_NULLPTR && EQUAL(pszDisplayGeometry, "SUMMARY"))
     {
     OGRLineString *        poLine;
     OGRPolygon *           poPoly;
@@ -1398,7 +1398,7 @@ void TestHelper::DumpOGRGeometry(FILE* fp, OGRGeometry* geometry, const char * p
         break;
       }
     }
-  else if (pszDisplayGeometry == NULL || CSLTestBoolean(pszDisplayGeometry) ||
+  else if (pszDisplayGeometry == ITK_NULLPTR || CSLTestBoolean(pszDisplayGeometry) ||
            EQUAL(pszDisplayGeometry, "WKT"))
     {
     if (geometry->exportToWkt(&pszWkt) == OGRERR_NONE)
@@ -1856,13 +1856,13 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
   /* -------------------------------------------------------------------- */
   otbCheckStringValue("pszWHERE", ref_pszWHERE, test_pszWHERE, nbdiff, m_ReportErrors);
 
-  if (ref_pszWHERE != NULL) ref_poLayer->SetAttributeFilter(ref_pszWHERE);
+  if (ref_pszWHERE != ITK_NULLPTR) ref_poLayer->SetAttributeFilter(ref_pszWHERE);
 
-  if (ref_poSpatialFilter != NULL) ref_poLayer->SetSpatialFilter(ref_poSpatialFilter);
+  if (ref_poSpatialFilter != ITK_NULLPTR) ref_poLayer->SetSpatialFilter(ref_poSpatialFilter);
 
-  if (test_pszWHERE != NULL) test_poLayer->SetAttributeFilter(test_pszWHERE);
+  if (test_pszWHERE != ITK_NULLPTR) test_poLayer->SetAttributeFilter(test_pszWHERE);
 
-  if (test_poSpatialFilter != NULL) test_poLayer->SetSpatialFilter(test_poSpatialFilter);
+  if (test_poSpatialFilter != ITK_NULLPTR) test_poLayer->SetSpatialFilter(test_poSpatialFilter);
 
   /* -------------------------------------------------------------------- */
   /*      Report various overall information.                             */
@@ -1893,12 +1893,12 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
   char *ref_pszWKT;
   char *test_pszWKT;
 
-  if (ref_poLayer->GetSpatialRef() == NULL) ref_pszWKT = CPLStrdup("(unknown)");
+  if (ref_poLayer->GetSpatialRef() == ITK_NULLPTR) ref_pszWKT = CPLStrdup("(unknown)");
   else
     {
     ref_poLayer->GetSpatialRef()->exportToPrettyWkt(&ref_pszWKT);
     }
-  if (test_poLayer->GetSpatialRef() == NULL) test_pszWKT = CPLStrdup("(unknown)");
+  if (test_poLayer->GetSpatialRef() == ITK_NULLPTR) test_pszWKT = CPLStrdup("(unknown)");
   else
     {
     test_poLayer->GetSpatialRef()->exportToPrettyWkt(&test_pszWKT);

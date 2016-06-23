@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVirtualDimensionality_h
-#define __otbVirtualDimensionality_h
+#ifndef otbVirtualDimensionality_h
+#define otbVirtualDimensionality_h
 
 #include "itkObjectFactory.h"
 #include "itkLightObject.h"
@@ -117,8 +117,8 @@ public:
 
 protected:
   VirtualDimensionality();
-  virtual ~VirtualDimensionality() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~VirtualDimensionality() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VirtualDimensionality(const Self &); //purposely not implemented

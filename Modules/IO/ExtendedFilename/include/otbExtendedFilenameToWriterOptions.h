@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtendedFilenameToWriterOptions_h
-#define __otbExtendedFilenameToWriterOptions_h
+#ifndef otbExtendedFilenameToWriterOptions_h
+#define otbExtendedFilenameToWriterOptions_h
 
 #include "otbExtendedFilenameHelper.h"
 #include "otbGDALImageIO.h"
@@ -63,6 +63,7 @@ public:
   {
     std::pair< bool, std::string  >              simpleFileName;
     std::pair< bool, bool  >                     writeGEOMFile;
+    std::pair< bool, bool  >                     writeRPCTags;
     std::pair< bool, GDALCOType >                gdalCreationOptions;
     std::pair<bool,  std::string>                streamingType;
     std::pair<bool,  std::string>                streamingSizeMode;
@@ -77,7 +78,9 @@ public:
   bool SimpleFileNameIsSet () const;
   const char* GetSimpleFileName () const;
   bool WriteGEOMFileIsSet () const;
+  bool WriteRPCTagsIsSet() const;
   bool GetWriteGEOMFile () const;
+  bool GetWriteRPCTags() const;
   bool gdalCreationOptionsIsSet () const;
   GDALCOType GetgdalCreationOptions () const;
   bool StreamingTypeIsSet () const;
@@ -93,7 +96,7 @@ public:
 
 protected:
   ExtendedFilenameToWriterOptions();
-  virtual ~ExtendedFilenameToWriterOptions() {}
+  ~ExtendedFilenameToWriterOptions() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameToWriterOptions(const Self &);  //purposely not implemented
@@ -105,4 +108,4 @@ private:
 };
 } // end namespace otb
 
-#endif // __otbExtendedFilenameToWriterOptions_h
+#endif // otbExtendedFilenameToWriterOptions_h

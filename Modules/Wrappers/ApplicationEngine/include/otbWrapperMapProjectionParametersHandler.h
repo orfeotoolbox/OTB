@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __otbWrapperMapProjectionParametersHandler_h
-#define __otbWrapperMapProjectionParametersHandler_h
+#ifndef otbWrapperMapProjectionParametersHandler_h
+#define otbWrapperMapProjectionParametersHandler_h
 
 #include "otbWrapperApplication.h"
 
@@ -82,4 +82,4 @@ protected:
 }
 
 
-#endif // __otbWrapperMapProjectionParametersHandler_h_
+#endif // otbWrapperMapProjectionParametersHandler_h_

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHillShadingFunctor_h
-#define __otbHillShadingFunctor_h
+#ifndef otbHillShadingFunctor_h
+#define otbHillShadingFunctor_h
 
 #include "itkNumericTraits.h"
 #include "otbMath.h"

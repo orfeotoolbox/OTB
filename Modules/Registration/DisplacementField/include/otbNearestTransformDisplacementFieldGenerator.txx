@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNearestTransformDisplacementFieldGenerator_txx
-#define __otbNearestTransformDisplacementFieldGenerator_txx
+#ifndef otbNearestTransformDisplacementFieldGenerator_txx
+#define otbNearestTransformDisplacementFieldGenerator_txx
 
 #include "otbNearestTransformDisplacementFieldGenerator.h"
 #include "itkImageRegionIteratorWithIndex.h"

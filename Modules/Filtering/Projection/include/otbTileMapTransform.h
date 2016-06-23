@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileMapTransform_h
-#define __otbTileMapTransform_h
+#ifndef otbTileMapTransform_h
+#define otbTileMapTransform_h
 
 
 // Only for the enum definition
@@ -70,7 +70,7 @@ public:
   void SetLevel(unsigned int level);
   unsigned int GetLevel() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
 
   virtual void PrintMap() const;
 
@@ -82,7 +82,7 @@ public:
 
 protected:
   TileMapTransform();
-  virtual ~TileMapTransform();
+  ~TileMapTransform() ITK_OVERRIDE;
 
 private:
   TileMapTransform(const Self &); //purposely not implemented
