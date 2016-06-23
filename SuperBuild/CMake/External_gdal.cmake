@@ -70,7 +70,7 @@ if(UNIX)
     --with-odbc=no
     --with-ogdi=no
     --with-pam
-    --with-pcidsk=no
+    --with-pcidsk=yes
     --with-pcraster=no
     --with-pcre=no
     --with-perl=no
