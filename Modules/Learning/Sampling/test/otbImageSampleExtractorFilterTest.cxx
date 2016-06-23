@@ -74,7 +74,7 @@ int otbImageSampleExtractorFilter(int argc, char* argv[])
   filter->SetInput(imgSource->GetOutput());
   filter->SetLayerIndex(2);
   filter->SetSamplePositions(vectors);
-  filter->SetOutputOGRData(output);
+  filter->SetOutputSamples(output);
   filter->SetClassFieldName(classFieldName);
   filter->SetOutputFieldPrefix(outputPrefix);
 
@@ -153,7 +153,7 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   filter->SetInput(imgSource->GetOutput());
   filter->SetLayerIndex(0);
   filter->SetSamplePositions(outputUpdate);
-  filter->SetOutputOGRData(outputUpdate);
+  filter->SetOutputSamples(outputUpdate);
   filter->SetClassFieldName(classFieldName);
   filter->SetOutputFieldPrefix(outputPrefix);
 

@@ -126,7 +126,7 @@ private:
     filter->SetInput(this->GetParameterImage("in"));
     filter->SetLayerIndex(this->GetParameterInt("layer"));
     filter->SetSamplePositions(vectors);
-    filter->SetOutputOGRData(output);
+    filter->SetOutputSamples(output);
     filter->SetClassFieldName(this->GetParameterString("field"));
     filter->SetOutputFieldPrefix(this->GetParameterString("pre"));
 
