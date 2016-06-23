@@ -80,10 +80,10 @@ add_custom_target(CookBookHTMLFromRST
   DEPENDS generate_otbapps_rst
   COMMENT "Building RST documentation in html")
 
-ADD_CUSTOM_TARGET(CookBookHTMLFromPDF
+add_custom_target(CookBookHTMLFromPDF
   ALL
   COMMAND ${CMAKE_MAKE_PROGRAM} pdf
   WORKING_DIRECTORY ${RST_SOURCES}/RST
   COMMENT "Building RST documentation in pdf")
 
-ADD_DEPENDENCIES(CookBookHTMLFromPDF CookBookHTMLFromRST)
+add_dependencies(CookBookHTMLFromPDF CookBookHTMLFromRST)
