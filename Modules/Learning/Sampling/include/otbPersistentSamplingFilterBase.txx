@@ -770,23 +770,61 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // Add new fields
   for (unsigned int k=0 ; k<m_AdditionalFields.size() ; k++)
     {
-    // DEBUG
-    std::cout << "Add new field "<< m_AdditionalFields[k].GetName() << std::endl;
+    OGRFieldDefn ogrFieldDefinition(m_AdditionalFields[k].Name.c_str(),m_AdditionalFields[k].Type);
+    ogrFieldDefinition.SetWidth( m_AdditionalFields[k].Width );
+    ogrFieldDefinition.SetPrecision( m_AdditionalFields[k].Precision );
+    ogr::FieldDefn fieldDef(ogrFieldDefinition);
     // test if field is already present
-    if (currentFields.count(m_AdditionalFields[k].GetName()))
+    if (currentFields.count(fieldDef.GetName()))
       {
       // test the field type
-      if (currentFields[m_AdditionalFields[k].GetName()] != m_AdditionalFields[k].GetType())
+      if (currentFields[fieldDef.GetName()] != fieldDef.GetType())
         {
-        itkExceptionMacro("Field name "<< m_AdditionalFields[k].GetName() << " already exists with a different type!");
+        itkExceptionMacro("Field name "<< fieldDef.GetName() << " already exists with a different type!");
         }
       }
     else
       {
-      outLayer.CreateField(m_AdditionalFields[k]);
+      outLayer.CreateField(fieldDef);
       }
     }
 }
+
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::ClearAdditionalFields()
+{
+  this->m_AdditionalFields.clear();
+}
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::CreateAdditionalField(std::string name,
+                        OGRFieldType type,
+                        int width,
+                        int precision)
+{
+  SimpleFieldDefn defn;
+  defn.Name = name;
+  defn.Type = type;
+  defn.Width = width;
+  defn.Precision = precision;
+  this->m_AdditionalFields.push_back(defn);
+}
+
+template<class TInputImage, class TMaskImage>
+const std::vector<
+  typename PersistentSamplingFilterBase<TInputImage,TMaskImage>
+    ::SimpleFieldDefn>&
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GetAdditionalFields()
+{
+  return this->m_AdditionalFields;
+}
+
 
 } // end namespace otb
 
