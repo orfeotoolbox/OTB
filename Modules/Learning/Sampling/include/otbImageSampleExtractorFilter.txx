@@ -168,8 +168,8 @@ PersistentImageSampleExtractorFilter<TInputImage>
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   inputImage->UpdateOutputInformation();
   unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
-  
-  this->m_AdditionalFields.clear();
+
+  this->ClearAdditionalFields();
   std::ostringstream oss;
   std::string fieldName;
   for (unsigned int i=0 ; i<nbBand ; ++i)
@@ -177,12 +177,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
     oss.str(std::string(""));
     oss << this->GetSampleFieldPrefix() << i;
     fieldName = oss.str();
-    // DEBUG
-    std::cout << "new field "<< fieldName << std::endl;
-    OGRFieldDefn sampleField(fieldName.c_str(),OFTReal);
-    sampleField.SetWidth(12);
-    sampleField.SetPrecision(10);
-    this->m_AdditionalFields.push_back(ogr::FieldDefn(sampleField));
+    this->CreateAdditionalField(fieldName,OFTReal,12,10);
     }
 }
 
