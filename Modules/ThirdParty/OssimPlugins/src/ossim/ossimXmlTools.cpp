@@ -9,8 +9,10 @@
 //----------------------------------------------------------------------------
 
 #include "ossimXmlTools.h"
-#include <ossim/base/ossimString.h>
 #include "ossimTimeUtilities.h"
+#include <ossim/base/ossimString.h>
+#include <ossim/base/ossimXmlDocument.h>
+#include <ossim/base/ossimNotify.h>
 // #include <ossim/base/ossimXmlNode.h>
 
 ossimXmlNode const& ossimplugins::getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath)
@@ -58,5 +60,27 @@ ossimString const& ossimplugins::getOptionalTextFromFirstNode(ossimXmlNode const
   static const ossimString empty;
   ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
   return wh.valid() ? wh->getText() : empty;
+}
+
+ossimString const& ossimplugins::getOnlyText(ossimXmlDocument const& doc, ossimString const& xpath)
+{
+   static const ossimString empty;
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+   doc.findNodes(xpath, xnodes);
+   switch (xnodes.size()) {
+      case 1: // perfect
+         if (xnodes[0].valid()) {
+            return xnodes[0]->getText();
+         }
+
+      case 0:
+         ossimNotify(ossimNotifyLevel_WARN) << "No node found with the name: " << xpath << "\n";
+         break;
+      default:
+         ossimNotify(ossimNotifyLevel_WARN) << xnodes.size()
+            << " (too many) nodes found with the name: " << xpath << "\n";
+         break;
+   }
+   return empty;
 }
 

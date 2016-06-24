@@ -56,7 +56,6 @@ namespace {// Anonymous namespace
 
 namespace ossimplugins
 {
-
    RTTI_DEF1(ossimSentinel1Model, "ossimSentinel1Model", ossimSarSensorModel);
 
 //*************************************************************************************************
@@ -69,7 +68,6 @@ namespace ossimplugins
       , theTOPSAR(false)
    {
       // theManifestDoc = new ossimXmlDocument();
-      // this->clearFields(); // pointless at construction
    }
 
    void ossimSentinel1Model::clearFields()
@@ -132,11 +130,10 @@ namespace ossimplugins
               "true",
               true);
 
-      kwl.addList(theManifestKwl, true); // TODO: really ?
-      kwl.addList(theProductKwl, true);
+      kwl.addList(theManifestKwl, true);
+      kwl.addList(theProductKwl,  true);
 
-      ossimSarSensorModel::saveState(kwl, prefix);
-      return true;
+      return ossimSarSensorModel::saveState(kwl, prefix);
    }
 
 
@@ -159,22 +156,17 @@ namespace ossimplugins
       return ossimSarSensorModel::loadState(kwl, prefix);
    }
 
-#if 0
-   bool ossimSentinel1Model::findSafeManifest(const ossimFilename& file, ossimFilename& manifestFile)
+   ossimFilename ossimSentinel1Model::searchManifestFile(const ossimFilename& file) const
    {
-      manifestFile = ossimFilename(file.path().path() + "/manifest.safe");
+      const ossimFilename manifestFile = ossimFilename(file.path().path() + "/manifest.safe");
 
       if(!manifestFile.exists())
       {
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "manifest.safe " << manifestFile << " doesn't exist ...\n";
-         }
-         return false;
+         ossimNotify(ossimNotifyLevel_WARN) << "manifest.safe " << manifestFile << " doesn't exist...\n";
+         return "";
       }
-      return true;
+      return manifestFile;
    }
-#endif
 
    bool ossimSentinel1Model::open(const ossimFilename& file)
    {
@@ -193,6 +185,43 @@ namespace ossimplugins
       {
          theGSD.makeNan();
 
+         // -----[ Read manifest file
+         const ossimFilename safeFile = searchManifestFile(file);
+         theManifestDirectory = safeFile.path();
+         if (!safeFile.empty())
+         {
+            if ( !this->isSentinel1(safeFile))
+            {
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
+               return false;
+            }
+            ossimXmlDocument manifestDoc;
+            if (!manifestDoc.openFile(safeFile))
+            {
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
+               return false;
+            }
+            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
+
+            theImageID = getImageId(manifestDoc);
+            if (theImageID.empty()) {
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
+               return false;
+            }
+
+            if (! standAloneProductInformation(manifestDoc))  {
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load product information from " << safeFile << "\n";
+               return false;
+            }
+
+            theSensorID = initSensorID(manifestDoc);
+            if (theSensorID.empty()) {
+               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
+               return false;
+            }
+         }
+
+         // -----[ Read product file
          ossimFilename xmlFileName = file;
 
          // If this is tiff file, look for corresponding annotation file
@@ -211,7 +240,7 @@ namespace ossimplugins
 
          if ( !this->initImageSize( theImageSize ) )
          {
-           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize )\n";
+           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails\n";
            return false;
          }
 
@@ -219,14 +248,12 @@ namespace ossimplugins
          theSubImageOffset.x = 0.0;
          theSubImageOffset.y = 0.0;
 
-         // from ossimSensorModel
-         if ( !this->initGsd( theGSD ) )
-         {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initGsd( theGSD )\n";
-            return false;
-         }
+         // if ( !this->initGsd( theGSD ) )
+         // {
+            // ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initGsd( theGSD ) fails\n";
+            // return false;
+         // }
 
-         // from ossimSensorModel
          theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
 #if 0
@@ -243,30 +270,30 @@ namespace ossimplugins
       }
    }
 
-#if 0
-   bool ossimSentinel1Model::getImageId( ossimString& s) const
+   ossimString const& ossimSentinel1Model::getImageId(ossimXmlDocument const& manifestDoc) const
    {
-      ossimString xpath;
-      xpath = "/xfdu:XFDU/metadataSection/metadataObject/metadataWrap/xmlData/s1sarl1:standAloneProductInformation/s1sarl1:missionDataTakeID";
-      return ossim::getPath(xpath, theManifestDoc.get(), s);
+      ossimString xpath = "/xfdu:XFDU/metadataSection/metadataObject/metadataWrap/xmlData/s1sarl1:standAloneProductInformation/s1sarl1:missionDataTakeID";
+      ossimString imageId;
+      return getOnlyText(manifestDoc, xpath);
    }
 
-   bool ossimSentinel1Model::initSensorID(ossimString& s)
+   ossimString ossimSentinel1Model::initSensorID(ossimXmlDocument const& manifestDoc)
    {
-      const ossimRefPtr<ossimXmlNode> safePlatform = theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:platform");
+      const ossimRefPtr<ossimXmlNode> safePlatform = manifestDoc.getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:platform");
       ossimString familyName, instrumentId;
       const bool ret1 = safePlatform->getChildTextValue(familyName, "safe:familyName");
       const bool ret2 = safePlatform->getChildTextValue(instrumentId, "safe:number");
 
-      theManifestKwl.add("support_data.",
-            "instrument",
-            "S1" + instrumentId,
-            true);
-
-      s = familyName + instrumentId;
-      return ret1 && ret2;
+      if (ret1 && ret2) {
+         theManifestKwl.add("support_data.",
+               "instrument",
+               "S1" + instrumentId,
+               true);
+         return familyName + instrumentId;
+      }
    }
 
+#if 0
    bool ossimSentinel1Model::getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern)
    {
       static const char MODULE[] = "ossimSentinel1SafeManifest::getAnnotationFileLocation";
@@ -287,10 +314,7 @@ namespace ossimplugins
          ossim::getPath(xpath +  "/byteStream/fileLocation", theManifestDoc.get(), theProductXmlFile);
          xml_nodes.clear();
          theManifestDoc->findNodes(xpath +  "/byteStream/fileLocation", xml_nodes);
-
-         assert( xml_nodes.size() > 0 );
-
-         if(xml_nodes.size() < 1 )
+         if(xml_nodes.empty())
          {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " getAnnotationFileLocation( )\n";
             return  false;
@@ -301,18 +325,19 @@ namespace ossimplugins
       }
       return true;
    }
+#endif
 
-   bool ossimSentinel1Model::standAloneProductInformation()
+   bool ossimSentinel1Model::standAloneProductInformation(ossimXmlDocument const& manifestDoc)
    {
       static const char MODULE[] = "ossimSentinel1ProductDoc::parseSafe";
 
       const ossimString prefix = "support_data.";
 
-      const ossimRefPtr<ossimXmlNode> safeProcessing = theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:processing");
-      const ossimRefPtr<ossimXmlNode> facility = safeProcessing->findFirstNode("safe:facility");
-      const ossimRefPtr<ossimXmlNode> software = facility->findFirstNode("safe:software");
-      const ossimString org = facility->getAttributeValue("organisation");
-      const ossimString name = software->getAttributeValue("name");
+      const ossimRefPtr<ossimXmlNode> safeProcessing = manifestDoc.getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:processing");
+      const ossimRefPtr<ossimXmlNode> facility       = safeProcessing->findFirstNode("safe:facility");
+      const ossimRefPtr<ossimXmlNode> software       = facility->findFirstNode("safe:software");
+      const ossimString org     = facility->getAttributeValue("organisation");
+      const ossimString name    = software->getAttributeValue("name");
       const ossimString version = software->getAttributeValue("version");
 
       theManifestKwl.add(prefix,
@@ -325,7 +350,7 @@ namespace ossimplugins
             safeProcessing->getAttributeValue("start"),
             true);
 
-      const ossimRefPtr<ossimXmlNode> acquisitionPeriod = theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:acquisitionPeriod");
+      const ossimRefPtr<ossimXmlNode> acquisitionPeriod = manifestDoc.getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:acquisitionPeriod");
       ossimString acqStartTime = acquisitionPeriod->getChildTextValue("safe:startTime");
 
       theManifestKwl.add(prefix,
@@ -344,8 +369,8 @@ namespace ossimplugins
             true);
 
       const ossimRefPtr<ossimXmlNode> instrumentNode =
-         theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:platform/safe:instrument");
-      ossimString swath =  instrumentNode->getChildTextValue("s1sarl1:swath");
+         manifestDoc.getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:platform/safe:instrument");
+      ossimString swath            =  instrumentNode->getChildTextValue("s1sarl1:swath");
       ossimString acquisition_mode =  instrumentNode->getChildTextValue("s1sarl1:mode");
 
       if( acquisition_mode.empty())
@@ -354,7 +379,7 @@ namespace ossimplugins
          if(instrumentModeNode.get())
          {
             acquisition_mode = instrumentModeNode->getChildTextValue("s1sarl1:mode");
-            swath = instrumentModeNode->getChildTextValue("s1sarl1:swath");
+            swath            = instrumentModeNode->getChildTextValue("s1sarl1:swath");
          }
       }
 
@@ -369,14 +394,14 @@ namespace ossimplugins
             true);
 
       if (acquisition_mode == "IW" || acquisition_mode == "EW")
-         setTOPSAR();
+         theTOPSAR = true;
 
       const ossimRefPtr<ossimXmlNode> orbitReference =
-         theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:orbitReference");
+         manifestDoc.getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:orbitReference");
 
       std::vector<ossimRefPtr<ossimXmlNode> > orbitNumberNodes;
       const ossimString orbitReference_xpath = "/xfdu:XFDU/metadataSection/metadataObject/metadataWrap/xmlData/safe:orbitReference";
-      theManifestDoc->findNodes(orbitReference_xpath + "/safe:orbitNumber", orbitNumberNodes);
+      manifestDoc.findNodes(orbitReference_xpath + "/safe:orbitNumber", orbitNumberNodes);
 
       std::vector<ossimRefPtr<ossimXmlNode> >::const_iterator it = orbitNumberNodes.begin();
       while( it != orbitNumberNodes.end())
@@ -394,7 +419,7 @@ namespace ossimplugins
       }
 
       orbitNumberNodes.clear();
-      theManifestDoc->findNodes(orbitReference_xpath + "/safe:relativeOrbitNumber", orbitNumberNodes);
+      manifestDoc.findNodes(orbitReference_xpath + "/safe:relativeOrbitNumber", orbitNumberNodes);
 
       std::vector<ossimRefPtr<ossimXmlNode> >::const_iterator it2 = orbitNumberNodes.begin();
       while( it2 != orbitNumberNodes.end())
@@ -428,7 +453,7 @@ namespace ossimplugins
 
       ossimString productType = "unknown";
       const ossimRefPtr<ossimXmlNode> standAloneProductInformation =
-         theManifestDoc->getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/s1sarl1:standAloneProductInformation");
+         manifestDoc.getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/s1sarl1:standAloneProductInformation");
 
       if (theOCN)
       {
@@ -449,8 +474,7 @@ namespace ossimplugins
       {
          //ossimKeywordNames::PIXEL_TYPE_KW;  RK
          theManifestKwl.add("sample_type", "COMPLEX",  true);
-         setSLC();
-
+         theSLC = true;
       }
       else
       {
@@ -460,7 +484,6 @@ namespace ossimplugins
 
       return true;
    }
-#endif
 
    bool ossimSentinel1Model::isSentinel1(const ossimFilename &manifestFile )
    {
@@ -576,9 +599,12 @@ namespace ossimplugins
 
       const double rangeSpacing = getDoubleFromFirstNode(imageInformation, "rangePixelSpacing");
       add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spacing", rangeSpacing);
+      theGSD.x = rangeSpacing;
 
       const double azimuthSpacing = getDoubleFromFirstNode(imageInformation, "azimuthPixelSpacing");
       add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", azimuthSpacing);
+      theGSD.y = azimuthSpacing;
+      // TODO: reload theGSD and theMeanGSD in loadState
 
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_SAMPLES_KW, imageInformation, "numberOfSamples");
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_LINES_KW,   imageInformation, "numberOfLines");
@@ -664,6 +690,7 @@ namespace ossimplugins
       calibrationDir.findAllFilesThatMatch(files, "calibration*");
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
+      std::clog << files.size() << " calibration files found in " << theManifestDirectory << "\n"; 
       std::stringstream strm;
       for (; it != files.end(); ++it)
       {
@@ -947,31 +974,6 @@ namespace ossimplugins
 #endif
             unsigned long acqStartLine(0);
 
-#if 0
-            bool burstFound(false);
-            for(std::vector<BurstRecordType>::reverse_iterator bIt = theBurstRecords.rbegin();bIt!=theBurstRecords.rend() && !burstFound;++bIt)
-            {
-               if(azimuthTime >= bIt->azimuthStartTime && azimuthTime < bIt->azimuthStopTime)
-               {
-                  burstFound = true;
-                  acqStart = bIt->azimuthStartTime;
-                  acqStartLine = bIt->startLine;
-               }
-            }
-            if(!burstFound)
-            {
-               if(azimuthTime < theBurstRecords.front().azimuthStartTime)
-               {
-                  acqStart = theBurstRecords.front().azimuthStartTime;
-                  acqStartLine = theBurstRecords.front().startLine;
-               }
-               else if (azimuthTime >= theBurstRecords.front().azimuthStopTime)
-               {
-                  acqStart = theBurstRecords.back().azimuthStartTime;
-                  acqStartLine = theBurstRecords.back().startLine;
-               }
-            }
-#else
             const std::vector<BurstRecordType>::const_reverse_iterator bIt
                = std::find_if(theBurstRecords.rbegin(), theBurstRecords.rend(), DoesContain(azimuthTime));
             if (bIt != theBurstRecords.rend())
@@ -993,7 +995,6 @@ namespace ossimplugins
             {
                assert(!"unexpected case");
             }
-#endif
 
             const DurationType timeSinceStart = azimuthTime - acqStart; // in day frac
 
@@ -1146,7 +1147,7 @@ namespace ossimplugins
    {
       if ( !doc.openFile( file ) )
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << "ossimSentinel1ProductDoc::openMetadataFile" << std::endl;
+         ossimNotify(ossimNotifyLevel_FATAL) << "ossimSentinel1ProductDoc::openMetadataFile\n";
          return false;
       }
 

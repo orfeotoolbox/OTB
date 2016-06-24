@@ -96,11 +96,11 @@ namespace ossimplugins
 
       bool readProduct(const ossimFilename &productXmlFile);
 
-      // bool getImageId(ossimString& s) const;
+      ossimString const& getImageId(ossimXmlDocument const& manifestDoc) const;
 
-      // bool initSensorID(ossimString& s);
+      ossimString initSensorID(ossimXmlDocument const& manifestDoc);
 
-      // bool standAloneProductInformation();
+      bool standAloneProductInformation(ossimXmlDocument const& manifestDoc);
 
       // bool getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern);
 
@@ -118,9 +118,9 @@ namespace ossimplugins
 
 #if 0
       bool initSRGR();
-
-      // bool findSafeManifest(const ossimFilename& file, ossimFilename& safeFile);
 #endif
+
+      ossimFilename searchManifestFile(const ossimFilename& file) const;
 
       void clearFields();
 

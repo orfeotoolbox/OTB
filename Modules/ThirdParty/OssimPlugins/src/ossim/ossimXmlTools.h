@@ -11,6 +11,7 @@
 #define OSSIM_XMLTOOLS_H__
 
 class ossimString;
+class ossimXmlDocument;
 // class ossimXmlNode;
 
 #if defined(USE_BOOST_TIME)
@@ -44,6 +45,8 @@ namespace ossimplugins {
          DataType const& value = to<DataType>(sValue, "decoding " + xpath + " node");
          return value;
       }
+
+   ossimString const& getOnlyText(ossimXmlDocument const& doc, ossimString const& xpath);
 
 } // ossimplugins namespace
 

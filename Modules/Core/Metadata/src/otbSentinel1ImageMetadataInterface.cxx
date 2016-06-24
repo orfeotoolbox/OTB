@@ -22,6 +22,7 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "ossimTimeUtilities.h"
 
 //useful constants
 #include <otbMath.h>
@@ -85,13 +86,16 @@ Sentinel1ImageMetadataInterface
 
   const ImageKeywordlistType imageKeywordlist =  this->GetImageKeywordlist();
 
-  const double firstLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.startTime"), "calibration.startTime(double)");
+  // const double firstLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.startTime"), "calibration.startTime(double)");
 
-  const double lastLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.stopTime"), "calibration.stopTime(double)");
+  // const double lastLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.stopTime"), "calibration.stopTime(double)");
+  using namespace ossimplugins::time;
+  const ModifiedJulianDate firstLineTime = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.startTime"));
+  const ModifiedJulianDate lastLineTime  = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.stopTime"));
 
-  const std::string bandPrefix = "Band[0]."; //make && use GetBandPrefix(subSwath, polarisation)
+  const std::string supportDataPrefix = "support_data."; //make && use GetBandPrefix(subSwath, polarisation)
 
-  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(bandPrefix + "number_lines"), bandPrefix + "number_lines(int)");
+  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(supportDataPrefix + "number_lines"), supportDataPrefix + "number_lines(int)");
 
   const int count = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"), "calibration.count");
 
@@ -106,7 +110,8 @@ Sentinel1ImageMetadataInterface
 
     calibrationVector.line = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(prefix.str() + "line"), prefix.str() + "line");
 
-    calibrationVector.timeMJD =  Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey(prefix.str() + "azimuthTime"), prefix.str() + "azimuthTime");
+    // TODO: don't manipulate doubles, but ModifiedJulianDate
+    calibrationVector.timeMJD =  toModifiedJulianDate(imageKeywordlist.GetMetadataByKey(prefix.str() + "azimuthTime")).as_day_frac();
 
     Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "pixel"), calibrationVector.pixels, prefix.str() + "pixel");
 
@@ -132,7 +137,7 @@ Sentinel1ImageMetadataInterface
 
   Sentinel1CalibrationLookupData::Pointer sarLut;
   sarLut = Sentinel1CalibrationLookupData::New();
-  sarLut->InitParameters(type, firstLineTime, lastLineTime, numOfLines, count, calibrationVectorList);
+  sarLut->InitParameters(type, firstLineTime.as_day_frac(), lastLineTime.as_day_frac(), numOfLines, count, calibrationVectorList);
   this->SetCalibrationLookupData(sarLut);
 
 

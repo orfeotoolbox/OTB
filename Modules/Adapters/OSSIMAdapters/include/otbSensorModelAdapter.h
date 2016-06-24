@@ -48,7 +48,7 @@ class SensorModelAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef SensorModelAdapter          Self;
+  typedef SensorModelAdapter            Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -98,7 +98,7 @@ public:
   double Optimize();
 
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
-  bool IsValidSensorModel();
+  bool IsValidSensorModel() const;
 
   /** Read geom file and instanciate sensor model */
   bool ReadGeomFile(const std::string & infile);
