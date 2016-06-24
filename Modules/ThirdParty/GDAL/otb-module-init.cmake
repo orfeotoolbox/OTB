@@ -131,6 +131,7 @@ if (GDAL_HAS_JPEG2000)
 endif()
 
 gdal_try_run(STATUS GDAL_HAS_HDF5 gdalFormatsTest.c HDF5)
+gdal_try_run(STATUS GDAL_HAS_HDF4 gdalFormatsTest.c HDF4)
 
 #------------------- TESTS (END)---------------------
 
