@@ -68,6 +68,29 @@ void
 PersistentImageSampleExtractorFilter<TInputImage>
 ::Reset(void)
 {
+  // Check output field names
+  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
+  inputImage->UpdateOutputInformation();
+  unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
+  if (m_SampleFieldNames.size())
+    {
+    if ( m_SampleFieldNames.size() != nbBand)
+      {
+      itkExceptionMacro(<< "Wrong number of field names given, got "
+        <<m_SampleFieldNames.size() << ", expected "<< nbBand);
+      }
+    }
+  else
+    {
+    // use the prefix to create field names
+    std::ostringstream oss;
+    for (unsigned int i=0 ; i<nbBand ; ++i)
+      {
+      oss.str("");
+      oss << this->GetSampleFieldPrefix() << i;
+      m_SampleFieldNames.push_back(oss.str());
+      }
+    }
   // initialize additional fields for output
   this->InitializeFields();
 
@@ -75,6 +98,56 @@ PersistentImageSampleExtractorFilter<TInputImage>
   ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
   ogr::DataSource* output  = this->GetOutputSamples();
   this->InitializeOutputDataSource(inputDS,output);
+}
+
+template<class TInputImage>
+void
+PersistentImageSampleExtractorFilter<TInputImage>
+::SetSampleFieldNames(std::vector<std::string> &names)
+{
+  m_SampleFieldNames.clear();
+  for (unsigned int i=0 ; i<names.size() ; i++)
+    {
+    m_SampleFieldNames.push_back(names[i]);
+    }
+}
+
+template<class TInputImage>
+const std::vector<std::string> &
+PersistentImageSampleExtractorFilter<TInputImage>
+::GetSampleFieldNames()
+{
+  return m_SampleFieldNames;
+}
+
+template<class TInputImage>
+void
+PersistentImageSampleExtractorFilter<TInputImage>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+
+  // Check SRS of input image and samples
+  std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
+  bool projectionInformationAvailable = !projectionRefWkt.empty();
+  if(projectionInformationAvailable)
+    {
+    OGRSpatialReference imgSRS;
+    const char *projWktCstr = projectionRefWkt.c_str();
+    char **projWktPointer = const_cast<char**>(&projWktCstr);
+    OGRErr err = imgSRS.importFromWkt( projWktPointer );
+    if (err == OGRERR_NONE)
+      {
+      // get input layer
+      ogr::Layer inLayer = this->GetOGRData()->GetLayer(this->GetLayerIndex());
+      if ( !imgSRS.IsSame(inLayer.GetSpatialRef()) )
+        {
+        char *layerSrsWkt = NULL;
+        inLayer.GetSpatialRef()->exportToPrettyWkt(&layerSrsWkt);
+        itkExceptionMacro(<< "Spatial reference of input image and samples don't match:  \n" << projectionRefWkt << "\nvs\n"<<  layerSrsWkt);
+        }
+      }
+    }
 }
 
 template<class TInputImage>
@@ -112,8 +185,6 @@ PersistentImageSampleExtractorFilter<TInputImage>
   IndexType imgIndex;
   PixelType imgPixel;
   double imgComp;
-  std::ostringstream oss;
-  std::string fieldName;
   ogr::Layer::const_iterator featIt = layer.begin();
   for(; featIt!=layer.end(); ++featIt)
     {
@@ -140,11 +211,8 @@ PersistentImageSampleExtractorFilter<TInputImage>
         for (unsigned int i=0 ; i<nbBand ; ++i)
           {
           imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
-          oss.str(std::string(""));
-          oss << this->GetSampleFieldPrefix() << i;
-          fieldName = oss.str();
           // Fill the ouptut OGRDataSource
-          dstFeature[fieldName].SetValue(imgComp);
+          dstFeature[m_SampleFieldNames[i]].SetValue(imgComp);
           }
         outputLayer.CreateFeature( dstFeature );
         break;
@@ -165,19 +233,10 @@ void
 PersistentImageSampleExtractorFilter<TInputImage>
 ::InitializeFields()
 {
-  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
-  inputImage->UpdateOutputInformation();
-  unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
-
   this->ClearAdditionalFields();
-  std::ostringstream oss;
-  std::string fieldName;
-  for (unsigned int i=0 ; i<nbBand ; ++i)
+  for (unsigned int i=0 ; i<m_SampleFieldNames.size() ; ++i)
     {
-    oss.str(std::string(""));
-    oss << this->GetSampleFieldPrefix() << i;
-    fieldName = oss.str();
-    this->CreateAdditionalField(fieldName,OFTReal,12,10);
+    this->CreateAdditionalField(m_SampleFieldNames[i],OFTReal,24,15);
     }
 }
 
@@ -246,6 +305,23 @@ ImageSampleExtractorFilter<TInputImage>
 {
   return this->GetFilter()->GetSampleFieldPrefix();
 }
+
+template<class TInputImage>
+void
+ImageSampleExtractorFilter<TInputImage>
+::SetOutputFieldNames(std::vector<std::string> &names)
+{
+  this->GetFilter()->SetSampleFieldNames(names);
+}
+
+template<class TInputImage>
+const std::vector<std::string> &
+ImageSampleExtractorFilter<TInputImage>
+::GetOutputFieldNames()
+{
+  return this->GetFilter()->GetSampleFieldNames();
+}
+
 
 template<class TInputImage>
 void

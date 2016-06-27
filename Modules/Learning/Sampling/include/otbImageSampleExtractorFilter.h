@@ -78,11 +78,19 @@ public:
   itkSetMacro(SampleFieldPrefix, std::string);
   itkGetMacro(SampleFieldPrefix, std::string);
 
+  /** Directly set the output field names (the prefix won't be used) */
+  void SetSampleFieldNames(std::vector<std::string> &names);
+
+  /** Get the sample names */
+  const std::vector<std::string> & GetSampleFieldNames();
+
 protected:
   /** Constructor */
   PersistentImageSampleExtractorFilter();
   /** Destructor */
   virtual ~PersistentImageSampleExtractorFilter() {}
+
+  virtual void GenerateOutputInformation();
 
   virtual void GenerateInputRequestedRegion();
 
@@ -96,8 +104,12 @@ private:
   /** Initialize fields to store extracted values (Real type) */
   void InitializeFields();
 
-  /** Prefix to generate field names for each input channel */
+  /** Prefix to generate field names for each input channel
+   *  (ignored if the field names are given directly) */
   std::string m_SampleFieldPrefix;
+
+  /** List of field names for each component */
+  std::vector<std::string> m_SampleFieldNames;
 };
 
 /**
@@ -146,6 +158,12 @@ public:
 
   void SetOutputFieldPrefix(const std::string &key);
   std::string GetOutputFieldPrefix();
+
+  /** Set the output field names */
+  void SetOutputFieldNames(std::vector<std::string> &names);
+
+  /** Get the output field names */
+  const std::vector<std::string> & GetOutputFieldNames();
   
   void SetLayerIndex(int index);
   int GetLayerIndex();
