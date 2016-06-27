@@ -42,7 +42,6 @@
 namespace ossimplugins
 {
 
-   // TODO: add loadSate(KWL) and saveState(KWL)
 class ossimSarSensorModel : public ossimSensorModel
 {
 public:
@@ -251,8 +250,8 @@ public:
 
    //TODO: Add virtual method readAnnotationFile?
 
-   virtual bool loadState(const ossimKeywordlist& kwl,
-         const char* prefix=NULL);
+   virtual bool saveState(ossimKeywordlist      & kwl, const char* prefix=NULL) const;
+   virtual bool loadState(ossimKeywordlist const& kwl, const char* prefix=NULL);
 
    bool isGRD() const {
       switch (theProductType.ToInternal()) {

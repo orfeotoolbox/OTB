@@ -29,7 +29,8 @@ using ossimplugins::time::seconds;
 #endif
 
 namespace {// Anonymous namespace
-   const bool k_verbose = false; // global verbose constant; TODO: use an option
+   const bool         k_verbose = false; // global verbose constant; TODO: use an option
+   const unsigned int k_version = 2;
 
    // Sometimes, we don't need to compare the actual distance, its square value is
    // more than enough.
@@ -1091,7 +1092,15 @@ namespace ossimplugins
       }
    }
 
-   bool ossimSarSensorModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
+   bool ossimSarSensorModel::saveState(ossimKeywordlist& kwl, const char* prefix) const
+   {
+      SCOPED_LOG(traceDebug, "ossimplugins::ossimSarSensorModel::loadState");
+
+      add(kwl, HEADER_PREFIX, "version", k_version);
+      return ossimSensorModel::saveState(kwl, prefix);
+   }
+
+   bool ossimSarSensorModel::loadState(ossimKeywordlist const& kwl, const char* prefix)
    {
       static const char MODULE[] = "ossimplugins::ossimSarSensorModel::loadState";
       SCOPED_LOG(traceDebug, MODULE);
@@ -1132,13 +1141,23 @@ namespace ossimplugins
          }
          get(kwl, theGCPRecords);
 
+         try {
+            unsigned int version;
+            get(kwl, HEADER_PREFIX, "version", version);
+            if (version < k_version) {
+               throw std::runtime_error("Geom file generated with previous version of ossim plugins");
+            }
+         } catch (...) {
+            throw std::runtime_error("Geom file generated with previous version of ossim plugins");
+         }
+
          optimizeTimeOffsetsFromGcps();
          return true;
       } catch (std::runtime_error const& e) {
          ossimNotify(ossimNotifyLevel_WARN)
             << "WARNING: " << e.what()
             << "\n\tIt won't be possible to orthorectify the associated images!"
-            << "\n\tPlease update your geom file.\n";
+            << "\n\tPlease upgrade your geom file.\n";
       }
       return false;
    }
