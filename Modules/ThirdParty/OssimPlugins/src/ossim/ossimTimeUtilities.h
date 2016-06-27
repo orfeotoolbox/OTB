@@ -55,7 +55,7 @@ namespace ossimplugins { namespace time {
          void sub(DayFrac const& rhs) { m_day_frac -= rhs.m_day_frac; }
          void mult(scalar_type coeff) { m_day_frac *= coeff; }
          void div(scalar_type coeff)  { assert(coeff && "Cannot divide by 0"); m_day_frac /= coeff; }
-         template <typename V> friend scalar_type ratio(V const& lhs, V const& rhs)
+         template <typename V> friend scalar_type ratio_(V const& lhs, V const& rhs)
          { return lhs.as_day_frac() / rhs.as_day_frac(); }
 
          template <typename U, typename V> friend U& operator+=(U & u, V const& v) {
@@ -201,7 +201,7 @@ namespace ossimplugins { namespace time {
 // - move this into another namespace
 namespace boost { namespace posix_time {
    class precise_duration;
-   double ratio(precise_duration const& lhs, precise_duration const& rhs);
+   double ratio_(precise_duration const& lhs, precise_duration const& rhs);
 
    class precise_duration
       : private ossimplugins::addable<precise_duration>
@@ -290,7 +290,7 @@ namespace boost { namespace posix_time {
          }
 
       public:
-         friend scalar_type ratio(precise_duration const& lhs, precise_duration const& rhs)
+         friend scalar_type ratio_(precise_duration const& lhs, precise_duration const& rhs)
          { return lhs.total_microseconds() / rhs.total_microseconds(); }
 
          //@}
