@@ -687,7 +687,7 @@ namespace ossimplugins
       calibrationDir.findAllFilesThatMatch(files, "calibration*");
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
-      std::clog << files.size() << " calibration files found in " << theManifestDirectory << "\n"; 
+      std::clog << files.size() << " calibration files found in " << theManifestDirectory << "\n";
       std::stringstream strm;
       for (; it != files.end(); ++it)
       {
@@ -1134,7 +1134,7 @@ namespace ossimplugins
    {
       if ( !doc.openFile( file ) )
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << "ossimSentinel1ProductDoc::openMetadataFile\n";
+         ossimNotify(ossimNotifyLevel_FATAL) << "Cannot open metadata file `" << file << "`\n";
          return false;
       }
 
