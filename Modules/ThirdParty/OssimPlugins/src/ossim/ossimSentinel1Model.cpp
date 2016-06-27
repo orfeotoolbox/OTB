@@ -248,12 +248,7 @@ namespace ossimplugins
          theSubImageOffset.x = 0.0;
          theSubImageOffset.y = 0.0;
 
-         // if ( !this->initGsd( theGSD ) )
-         // {
-            // ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initGsd( theGSD ) fails\n";
-            // return false;
-         // }
-
+         // automatically loaded/saved into ossimSensorModel
          theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
 #if 0
@@ -273,7 +268,6 @@ namespace ossimplugins
    ossimString const& ossimSentinel1Model::getImageId(ossimXmlDocument const& manifestDoc) const
    {
       ossimString xpath = "/xfdu:XFDU/metadataSection/metadataObject/metadataWrap/xmlData/s1sarl1:standAloneProductInformation/s1sarl1:missionDataTakeID";
-      ossimString imageId;
       return getOnlyText(manifestDoc, xpath);
    }
 
@@ -604,8 +598,11 @@ namespace ossimplugins
       const double azimuthSpacing = getDoubleFromFirstNode(imageInformation, "azimuthPixelSpacing");
       add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", azimuthSpacing);
       theGSD.y = azimuthSpacing;
-      // TODO: reload theGSD and theMeanGSD in loadState
+      // theGSD and theMeanGSD will be saved and reloaded automatically in
+      // ossimSensorModel::load/saveState() 
 
+      // TODO: Why duplicting these two information elsewhere? they're already
+      // under root prefix
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_SAMPLES_KW, imageInformation, "numberOfSamples");
       addOptional(theProductKwl, ossimKeywordNames::NUMBER_LINES_KW,   imageInformation, "numberOfLines");
 
@@ -1048,16 +1045,6 @@ namespace ossimplugins
       add(theProductKwl,"orbitList.nb_orbits", static_cast<ossim_uint32>(stateVectorList_size));
    }
 
-   bool ossimSentinel1Model::initGsd(ossimDpt& gsd) const
-   {
-      // TODO: cache the value, or store it in a variable?
-#if 0
-      gsd.x =  theRangeSpacingTotal;
-      gsd.y =  theAzimuthSpacingTotal;
-#endif
-      return true;
-   }
-
    bool ossimSentinel1Model::initImageSize(ossimIpt& imageSize) const
    {
       std::string const& samples_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_SAMPLES_KW);
@@ -1153,6 +1140,5 @@ namespace ossimplugins
 
       return true;
    }
-
 
 } //end namespace

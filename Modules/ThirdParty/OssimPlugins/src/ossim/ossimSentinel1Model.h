@@ -106,8 +106,6 @@ namespace ossimplugins
 
       bool initImageSize(ossimIpt& imageSize) const;
 
-      bool initGsd(ossimDpt& gsd) const;
-
       ossimKeywordlist const& getManifestKwl() const
       {
          return theManifestKwl;
