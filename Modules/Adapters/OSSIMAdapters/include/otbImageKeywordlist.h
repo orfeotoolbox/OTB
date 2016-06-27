@@ -95,7 +95,12 @@ public:
   {
     m_Keywordlist.clear();
   }
- 
+
+  KeywordlistMapSizeType Empty() const
+  {
+    return m_Keywordlist.empty();
+  }
+
   KeywordlistMapSizeType GetSize(void) const
   {
     return m_Keywordlist.size();
@@ -113,7 +118,7 @@ public:
   virtual void AddKey(const std::string& key, const std::string& value);
 
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
-  
+
   /** try to convert the image keywordlist into a GDALRpcInfo structure
    *  return true if successful, false otherwise */
   virtual bool convertToGDALRPC(GDALRPCInfo &rpc) const;

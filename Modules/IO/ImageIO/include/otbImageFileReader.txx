@@ -435,7 +435,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
 
   // Don't add an empty ossim keyword list
-  if( otb_kwl.GetSize() != 0 )
+  if(!otb_kwl.Empty())
     {
       itk::EncapsulateMetaData<ImageKeywordlist>(dict,
                                                  MetaDataKey::OSSIMKeywordlistKey, otb_kwl);

@@ -84,15 +84,7 @@ void
 ImageKeywordlist::
 SetKeywordlist(const ossimKeywordlist& kwl)
 {
-  m_Keywordlist.clear();
-  for (ossimKeywordlist::KeywordMap::const_iterator it = kwl.getMap().begin();
-       it != kwl.getMap().end();
-       ++it)
-    {
-    std::string first(it->first);
-    std::string second(it->second);
-    m_Keywordlist[first] = second;
-    }
+  m_Keywordlist = kwl.getMap();
 }
 
 const std::string&
@@ -118,7 +110,6 @@ HasKey(const std::string& key) const
 {
   KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
-
   return (it != m_Keywordlist.end());
 }
 
@@ -140,14 +131,7 @@ void
 ImageKeywordlist::
 convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
 {
-  ossimKeywordlist::KeywordMap ossimMap;
-  for(KeywordlistMap::const_iterator it = m_Keywordlist.begin();
-      it != m_Keywordlist.end();
-      ++it)
-    {
-    ossimMap[it->first] = it->second;
-    }
-  kwl.getMap() = ossimMap;
+  kwl.getMap() = m_Keywordlist;
 }
 
 bool
