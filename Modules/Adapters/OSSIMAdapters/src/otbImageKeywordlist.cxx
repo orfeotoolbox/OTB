@@ -47,6 +47,8 @@
 #endif
 
 #include "otbSensorModelAdapter.h"
+#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace otb
 {
@@ -226,12 +228,13 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   /****************************************************/
   /* First try : test the OSSIM plugins factory       */
   /****************************************************/
+  {
   /** Before, the pluginfactory was tested if the ossim one returned false.
-      But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
-      thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
-      because the default include factory contains ossimQuickbirdTiffTileSource. */
-  ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()
-                                 ->createProjection(ossimFilename(filename.c_str()), 0);
+    But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
+    thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
+    because the default include factory contains ossimQuickbirdTiffTileSource. */
+  boost::scoped_ptr<ossimProjection> projection(ossimplugins::ossimPluginProjectionFactory::instance()
+        ->createProjection(ossimFilename(filename.c_str()), 0));
 
   if (projection)
     {
@@ -239,20 +242,16 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
     hasMetaData = projection->saveState(geom_kwl);
     otb_kwl.SetKeywordlist(geom_kwl);
-
-    // Free memory
-    delete projection;
-    projection = 0;
-
     }
+  }
 
   /***********************************************/
   /* Second try : the OSSIM projection factory   */
   /***********************************************/
   if (!hasMetaData)
     {
-    ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
-                                 ->open(ossimFilename(filename.c_str()));
+    boost::scoped_ptr<ossimImageHandler> handler(ossimImageHandlerRegistry::instance()
+                                 ->open(ossimFilename(filename.c_str())));
     if (handler)
       {
       otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
@@ -263,26 +262,25 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
       if (geom.valid())
         {
-        projection = geom->getProjection();
+        ossimProjection const* projection = geom->getProjection();
         if (projection)
           {
           hasMetaData = projection->saveState(geom_kwl);
-          }
-        }
 
-      // if the handler has found a sensor model, copy the tags found
-      if (hasMetaData && dynamic_cast<ossimSensorModel*>(projection))
-        {
-        otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
-        otb_kwl.SetKeywordlist(geom_kwl);
-        }
-      else
-        {
-        hasMetaData = false;
-        }
-      // Free memory
-      delete handler;
-      }
+          // if the handler has found a sensor model, copy the tags found
+          if (hasMetaData && dynamic_cast<ossimSensorModel const*>(projection))
+            {
+            otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
+            otb_kwl.SetKeywordlist(geom_kwl);
+            // geom_kwl.print(std::cout);
+            }
+          else
+            {
+            hasMetaData = false;
+            }
+          } // projection
+        } // geom.valid
+      } // handler
     }
 
   /**********************************************************/
