@@ -72,11 +72,22 @@ private:
       "values (OGR format). If not given, the input vector data file is updated");
     MandatoryOff("out");
 
-    AddParameter(ParameterType_String, "pre", "Output field prefix");
-    SetParameterDescription("pre","Prefix used to form the field names that"
+    AddParameter(ParameterType_Choice, "outfield", "Output field names");
+    SetParameterDescription("outfield", "Choice between naming method for output fields");
+
+    AddChoice("outfield.prefix","Use a prefix and an incremental counter");
+    SetParameterDescription("outfield.prefix","Use a prefix and an incremental counter");
+
+    AddParameter(ParameterType_String, "outfield.prefix.name", "Output field prefix");
+    SetParameterDescription("outfield.prefix.name","Prefix used to form the field names that"
       "will contain the extracted values.");
-    MandatoryOff("pre");
-    SetParameterString("pre", "value_");
+    SetParameterString("outfield.prefix.name", "value_");
+
+    AddChoice("outfield.list","Use the given name list");
+    SetParameterDescription("outfield.list","Use the given name list");
+
+    AddParameter(ParameterType_StringList, "outfield.list.names", "Output field names");
+    SetParameterDescription("outfield.list.names","Full list of output field names.");
 
     AddParameter(ParameterType_String, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class"
@@ -122,13 +133,30 @@ private:
       output = vectors;
       }
 
+    std::vector<std::string> nameList;
+    std::string namePrefix("");
+    if (this->GetParameterString("outfield").compare("prefix") == 0)
+      {
+      namePrefix = this->GetParameterString("outfield.prefix.name");
+      }
+    else if (this->GetParameterString("outfield").compare("list") == 0)
+      {
+      nameList = this->GetParameterStringList("outfield.list.names");
+      }
+    else
+      {
+      otbAppLogFATAL("Unkown output field option : " << this->GetParameterString("outfield"));
+      }
+    
+
     FilterType::Pointer filter = FilterType::New();
     filter->SetInput(this->GetParameterImage("in"));
     filter->SetLayerIndex(this->GetParameterInt("layer"));
     filter->SetSamplePositions(vectors);
     filter->SetOutputSamples(output);
     filter->SetClassFieldName(this->GetParameterString("field"));
-    filter->SetOutputFieldPrefix(this->GetParameterString("pre"));
+    filter->SetOutputFieldPrefix(namePrefix);
+    filter->SetOutputFieldNames(nameList);
 
     AddProcess(filter->GetStreamer(),"Extracting sample values...");
     filter->Update();
