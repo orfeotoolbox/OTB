@@ -94,7 +94,7 @@ std::string StandardShader::GetSource() const
     "\n"								\
     "float phasis( float x, float y )\n"				\
     "{\n"								\
-    "  return atan( y / x );\n"						\
+    "  return atan( y, x );\n"						\
     "}\n"								\
     "\n"								\
     "vec3 modulus( vec3 v )\n"						\
