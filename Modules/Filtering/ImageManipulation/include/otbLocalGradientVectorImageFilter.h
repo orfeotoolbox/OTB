@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalGradientVectorImageFilter_h
-#define __otbLocalGradientVectorImageFilter_h
+#ifndef otbLocalGradientVectorImageFilter_h
+#define otbLocalGradientVectorImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
 
@@ -93,7 +93,7 @@ protected:
     typename Superclass::RadiusType radius = {{1, 1}};
     this->SetRadius( radius );
   }
-  virtual ~LocalGradientVectorImageFilter() { }
+  ~LocalGradientVectorImageFilter() ITK_OVERRIDE { }
 
 private:
   LocalGradientVectorImageFilter( const Self & ); // Not implemented
@@ -103,4 +103,4 @@ private:
 } // end of namespace otb
 
 
-#endif // __otbLocalGradientVectorImageFilter_h
+#endif // otbLocalGradientVectorImageFilter_h

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeNeighborhoodConnectedImageFilter_txx
-#define __otbLabelizeNeighborhoodConnectedImageFilter_txx
+#ifndef otbLabelizeNeighborhoodConnectedImageFilter_txx
+#define otbLabelizeNeighborhoodConnectedImageFilter_txx
 
 #include "otbLabelizeNeighborhoodConnectedImageFilter.h"
 

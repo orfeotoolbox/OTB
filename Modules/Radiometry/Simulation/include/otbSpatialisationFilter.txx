@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpatialisationFilter_txx
-#define __otbSpatialisationFilter_txx
+#ifndef otbSpatialisationFilter_txx
+#define otbSpatialisationFilter_txx
 
 #include "itkNumericTraits.h"
 

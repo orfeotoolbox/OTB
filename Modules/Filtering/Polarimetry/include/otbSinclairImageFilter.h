@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairImageFilter_h
-#define __otbSinclairImageFilter_h
+#ifndef otbSinclairImageFilter_h
+#define otbSinclairImageFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
 #include "otbSinclairToCovarianceMatrixFunctor.h"
@@ -106,11 +106,11 @@ protected:
   /**  Constructor */
   SinclairImageFilter() {}
   /**  Destructor */
-  virtual ~SinclairImageFilter() {}
+  ~SinclairImageFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

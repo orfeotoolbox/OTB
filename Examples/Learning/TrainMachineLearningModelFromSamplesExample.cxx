@@ -101,6 +101,8 @@ int main(int argc, char* argv[])
 
   InputListSampleType::Pointer InputListSample = InputListSampleType::New();
   TargetListSampleType::Pointer TargetListSample = TargetListSampleType::New();
+
+  InputListSample->SetMeasurementVectorSize(nbSampleComponents);
   // Software Guide : EndCodeSnippet
 
 

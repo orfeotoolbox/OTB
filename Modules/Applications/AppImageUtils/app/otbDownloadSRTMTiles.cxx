@@ -91,7 +91,7 @@ private:
       }
     return false;
   }
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DownloadSRTMTiles");
     SetDescription("Download or list SRTM tiles related to a set of images");
@@ -132,13 +132,13 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     //Get the mode

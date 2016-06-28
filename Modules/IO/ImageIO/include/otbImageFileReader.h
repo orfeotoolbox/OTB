@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileReader_h
-#define __otbImageFileReader_h
+#ifndef otbImageFileReader_h
+#define otbImageFileReader_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -120,17 +120,17 @@ public:
   typedef ExtendedFilenameToReaderOptions            FNameHelperType;
 
   /** Prepare image allocation at the first call of the pipeline processing */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Does the real work. */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Give the reader a chance to indicate that it will produce more
    * output than it was requested to produce. ImageFileReader cannot
    * currently read a portion of an image (since the ImageIO objects
    * cannot read a portion of an image), so the ImageFileReader must
    * enlarge the RequestedRegion to the size of the image on disk. */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
+  void EnlargeOutputRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
 
   /** Set/Get the ImageIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular ImageIO can
@@ -160,8 +160,8 @@ public:
 
 protected:
   ImageFileReader();
-  virtual ~ImageFileReader();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageFileReader() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Convert a block of pixels from one type to another. */
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);
@@ -207,4 +207,4 @@ private:
 #include "otbImageFileReader.txx"
 #endif
 
-#endif // __otbImageFileReader_h
+#endif // otbImageFileReader_h

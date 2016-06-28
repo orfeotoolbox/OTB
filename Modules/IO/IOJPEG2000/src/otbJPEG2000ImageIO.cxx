@@ -175,7 +175,7 @@ public:
     if (m_JP2Metadata.pszProjection)
       return m_JP2Metadata.pszProjection;
     else
-      return NULL;
+      return ITK_NULLPTR;
   };
 
   /** Get the GML box from file*/
@@ -183,7 +183,7 @@ public:
     if (m_JP2Metadata.papszGMLMetadata)
       return m_JP2Metadata.papszGMLMetadata;
     else
-      return NULL;
+      return ITK_NULLPTR;
   };
 
   // Get the origin from GML box (use tinyxml to parse the GML box)
@@ -428,9 +428,9 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
 
   // Set default event mgr
   // catch events using our callbacks and give a local context      
-  opj_set_info_handler(codec.get(), info_callback,00);
-  opj_set_warning_handler(codec.get(), warning_callback,00);
-  opj_set_error_handler(codec.get(), error_callback,00);
+  opj_set_info_handler(codec.get(), info_callback,ITK_NULLPTR);
+  opj_set_warning_handler(codec.get(), warning_callback,ITK_NULLPTR);
+  opj_set_error_handler(codec.get(), error_callback,ITK_NULLPTR);
   
   // Setup the decoder decoding parameters using user parameters
   if (!opj_setup_decoder(codec.get(), &parameters))
@@ -441,7 +441,7 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
 
   // Read the main header of the codestream and if necessary the JP2
   // boxes
-  opj_image_t * unsafeOpjImgPtr = NULL;
+  opj_image_t * unsafeOpjImgPtr = ITK_NULLPTR;
 
   if (!opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
     {
@@ -512,9 +512,9 @@ int JPEG2000InternalReader::Initialize()
 
     // Set default event mgr
     // catch events using our callbacks and give a local context      
-    opj_set_info_handler(codec.get(), info_callback,00);
-    opj_set_warning_handler(codec.get(), warning_callback,00);
-    opj_set_error_handler(codec.get(), error_callback,00);
+    opj_set_info_handler(codec.get(), info_callback,ITK_NULLPTR);
+    opj_set_warning_handler(codec.get(), warning_callback,ITK_NULLPTR);
+    opj_set_error_handler(codec.get(), error_callback,ITK_NULLPTR);
 
     // Setup the decoder decoding parameters using user parameters
     if (!opj_setup_decoder(codec.get(), &parameters))
@@ -526,7 +526,7 @@ int JPEG2000InternalReader::Initialize()
 
     // Read the main header of the codestream and if necessary the JP2
     // boxes
-    opj_image_t * unsafeOpjImgPtr = NULL;
+    opj_image_t * unsafeOpjImgPtr = ITK_NULLPTR;
 
     if (!opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
       {
@@ -829,7 +829,7 @@ JPEG2000ImageIO::~JPEG2000ImageIO()
 
 bool JPEG2000ImageIO::CanReadFile(const char* filename)
 {
-  if (filename == NULL)
+  if (filename == ITK_NULLPTR)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
@@ -931,7 +931,7 @@ void JPEG2000ImageIO::Read(void* buffer)
   chrono.Start();
 
   // Check if conversion succeed
-  if (buffer == NULL)
+  if (buffer == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "JPEG2000ImageIO : Bad alloc");
     return;
@@ -1369,7 +1369,7 @@ void JPEG2000ImageIO::ReadImageInformation()
       otbMsgDevMacro(<< "JPEG2000 file has GMLMetadata!");
       std::string key;
 
-      for (int cpt = 0; papszGMLMetadata[cpt] != NULL; ++cpt)
+      for (int cpt = 0; papszGMLMetadata[cpt] != ITK_NULLPTR; ++cpt)
         {
         std::ostringstream lStream;
         lStream << MetaDataKey::MetadataKey << cpt;
@@ -1384,14 +1384,14 @@ void JPEG2000ImageIO::ReadImageInformation()
     /* ProjectionRef*/
     if (lJP2MetadataReader.GetProjectionRef() && !std::string(lJP2MetadataReader.GetProjectionRef()).empty() )
       {
-      OGRSpatialReferenceH pSR = OSRNewSpatialReference(NULL);
+      OGRSpatialReferenceH pSR = OSRNewSpatialReference(ITK_NULLPTR);
 
-      const char * pszProjection = NULL;
+      const char * pszProjection = ITK_NULLPTR;
       pszProjection =  lJP2MetadataReader.GetProjectionRef();
 
       if (OSRImportFromWkt(pSR, (char **) (&pszProjection)) == OGRERR_NONE)
         {
-        char * pszPrettyWkt = NULL;
+        char * pszPrettyWkt = ITK_NULLPTR;
         OSRExportToPrettyWkt(pSR, &pszPrettyWkt, FALSE);
 
         itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
@@ -1405,10 +1405,10 @@ void JPEG2000ImageIO::ReadImageInformation()
                                               static_cast<std::string>(lJP2MetadataReader.GetProjectionRef()));
         }
 
-      if (pSR != NULL)
+      if (pSR != ITK_NULLPTR)
         {
         OSRRelease(pSR);
-        pSR = NULL;
+        pSR = ITK_NULLPTR;
         }
       }
     else

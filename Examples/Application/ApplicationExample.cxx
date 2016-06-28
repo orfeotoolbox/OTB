@@ -97,7 +97,7 @@ private:
   //  \code{DoInit()} method contains class information and description, parameter set up, and example values.
   //  Software Guide : EndLatex
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
 
     // Software Guide : BeginLatex
@@ -228,7 +228,7 @@ private:
   // gives a complete description of this method.
   // Software Guide : EndLatex
   //  Software Guide :BeginCodeSnippet
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
   //  Software Guide : EndCodeSnippet
@@ -238,7 +238,7 @@ private:
   // gives a complete description of this method.
   // Software Guide : EndLatex
   //  Software Guide :BeginCodeSnippet
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 

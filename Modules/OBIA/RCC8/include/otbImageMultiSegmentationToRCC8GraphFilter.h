@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMultiSegmentationToRCC8GraphFilter_h
-#define __otbImageMultiSegmentationToRCC8GraphFilter_h
+#ifndef otbImageMultiSegmentationToRCC8GraphFilter_h
+#define otbImageMultiSegmentationToRCC8GraphFilter_h
 
 #include "otbImageListToRCC8GraphFilter.h"
 
@@ -81,11 +81,11 @@ protected:
   /** Constructor */
   ImageMultiSegmentationToRCC8GraphFilter();
   /** Destructor */
-  virtual ~ImageMultiSegmentationToRCC8GraphFilter();
+  ~ImageMultiSegmentationToRCC8GraphFilter() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Get the composition knowledge.
    * \param r1 First RCC8 relation value,

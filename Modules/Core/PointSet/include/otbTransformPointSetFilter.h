@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTransformPointSetFilter_h
-#define __otbTransformPointSetFilter_h
+#ifndef otbTransformPointSetFilter_h
+#define otbTransformPointSetFilter_h
 
 #include "otbPointSetToPointSetFilter.h"
 
@@ -72,11 +72,11 @@ public:
 
 protected:
   TransformPointSetFilter();
-  virtual ~TransformPointSetFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~TransformPointSetFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Generate Requested Data */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Transform to apply to all the PointSet points. */
   typename TransformType::Pointer m_Transform;

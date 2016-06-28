@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbClosePathFunctor_h
-#define __otbClosePathFunctor_h
+#ifndef otbClosePathFunctor_h
+#define otbClosePathFunctor_h
 
 #include "otbMath.h"
 

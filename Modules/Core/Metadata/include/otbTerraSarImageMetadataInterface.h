@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbTerraSarImageMetadataInterface_h
-#define __otbTerraSarImageMetadataInterface_h
+#ifndef otbTerraSarImageMetadataInterface_h
+#define otbTerraSarImageMetadataInterface_h
 
 #include <string>
 
@@ -64,28 +64,28 @@ public:
   typedef double                                RealType;
 
   /** Get the imaging start acquisition day from the ossim metadata */
-  int GetDay() const;
+  int GetDay() const ITK_OVERRIDE;
 
   /** Get the imaging start acquisition month from the ossim metadata */
-  int GetMonth() const;
+  int GetMonth() const ITK_OVERRIDE;
 
   /** Get the imaging start acquisition year from the ossim metadata */
-  int GetYear() const;
+  int GetYear() const ITK_OVERRIDE;
 
   /** Get the imaging start acquisition hour from the ossim metadata */
-  int GetHour() const;
+  int GetHour() const ITK_OVERRIDE;
 
   /** Get the imaging start acquisition minute from the ossim metadata */
-  int GetMinute() const;
+  int GetMinute() const ITK_OVERRIDE;
 
   /** Get the imaging production day from the ossim metadata : generationTime variable */
-  int GetProductionDay() const;
+  int GetProductionDay() const ITK_OVERRIDE;
 
   /** Get the imaging production month from the ossim metadata : generationTime variable */
-  int GetProductionMonth() const;
+  int GetProductionMonth() const ITK_OVERRIDE;
 
   /** Get the imaging production year from the ossim metadata : generationTime variable */
-  int GetProductionYear() const;
+  int GetProductionYear() const ITK_OVERRIDE;
 
   /** Get the calibration.calFactor : generationTime variable */
   double GetCalibrationFactor() const;
@@ -112,13 +112,13 @@ public:
   DoubleVectorType GetNoiseReferencePointList() const;
 
   /** Get the radar frequency */
-  double GetRadarFrequency() const;
+  double GetRadarFrequency() const ITK_OVERRIDE;
 
   /** Get the PRF */
-  double GetPRF() const;
+  double GetPRF() const ITK_OVERRIDE;
 
   /** Get the RSF */
-  double GetRSF() const;
+  double GetRSF() const ITK_OVERRIDE;
 
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles() const;
@@ -127,7 +127,7 @@ public:
   double GetMeanIncidenceAngles() const;
 
   /** Get the center incidence angle */
-  double GetCenterIncidenceAngle() const;
+  double GetCenterIncidenceAngle() const ITK_OVERRIDE;
 
   /** Get the center index */
   IndexType GetCenterIncidenceAngleIndex() const;
@@ -139,26 +139,26 @@ public:
   IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
   /** Get the constant calibration factor */
-  RealType   GetRadiometricCalibrationScale() const;
+  RealType   GetRadiometricCalibrationScale() const ITK_OVERRIDE;
 
-  PointSetPointer GetRadiometricCalibrationNoise() const;
-  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
+  PointSetPointer GetRadiometricCalibrationNoise() const ITK_OVERRIDE;
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const ITK_OVERRIDE;
 
   //PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
-  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const ITK_OVERRIDE;
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const ITK_OVERRIDE;
 
-  bool CanRead() const;
+  bool CanRead() const ITK_OVERRIDE;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const;
+  std::vector<unsigned int> GetDefaultDisplay() const ITK_OVERRIDE;
 
 protected:
   TerraSarImageMetadataInterface();
-  virtual ~TerraSarImageMetadataInterface() {}
+  ~TerraSarImageMetadataInterface() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Evaluate polynom with Horner scheme*/
 
   inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;

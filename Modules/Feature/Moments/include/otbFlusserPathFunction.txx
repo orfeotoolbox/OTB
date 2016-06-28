@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserPathFunction_txx
-#define __otbFlusserPathFunction_txx
+#ifndef otbFlusserPathFunction_txx
+#define otbFlusserPathFunction_txx
 
 #include "otbFlusserPathFunction.h"
 #include "otbComplexMomentPathFunction.h"

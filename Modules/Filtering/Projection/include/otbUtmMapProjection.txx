@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbUtmMapProjection_txx
-#define __otbUtmMapProjection_txx
+#ifndef otbUtmMapProjection_txx
+#define otbUtmMapProjection_txx
 
 #include "otbUtmMapProjection.h"
 

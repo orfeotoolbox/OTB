@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserXPlugins_h
-#define __otbParserXPlugins_h
+#ifndef otbParserXPlugins_h
+#define otbParserXPlugins_h
 
 #include "itkMacro.h"
 #include "otbMath.h"
@@ -33,14 +33,14 @@ public:
     bands():ICallback(mup::cmFUNC, "bands", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "bands - A bands selector";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new bands(*this);
     }
@@ -53,14 +53,14 @@ public:
     dotpr():ICallback(mup::cmFUNC, "dotpr", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "dotpr(m1,m2) - A vector/matrix dot product";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new dotpr(*this);
     }
@@ -72,14 +72,14 @@ class ElementWiseDivision : public mup::IOprtBin
     ElementWiseDivision():IOprtBin(_T("div"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int) ITK_OVERRIDE;
 
-    virtual const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return _T("x div y - Element-wise division (vectors / matrices)");
     }
   
-    virtual mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new ElementWiseDivision(*this);
     }
@@ -92,14 +92,14 @@ class DivisionByScalar : public mup::IOprtBin
     DivisionByScalar():IOprtBin(_T("dv"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int) ITK_OVERRIDE;
 
-    virtual const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return _T("x dv y - division of vectors / matrices by a scalar");
     }
   
-    virtual mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new DivisionByScalar(*this);
     }
@@ -112,14 +112,14 @@ class ElementWiseMultiplication : public mup::IOprtBin
     ElementWiseMultiplication():IOprtBin(_T("mult"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int) ITK_OVERRIDE;
 
-    virtual const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return _T("x mult y - Element wise multiplication (vectors / matrices)");
     }
   
-    virtual mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new ElementWiseMultiplication(*this);
     }
@@ -132,14 +132,14 @@ class MultiplicationByScalar : public mup::IOprtBin
     MultiplicationByScalar():IOprtBin(_T("mlt"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int) ITK_OVERRIDE;
 
-    virtual const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return _T("x mlt y - multiplication of vectors / matrices by a scalar");
     }
   
-    virtual mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new MultiplicationByScalar(*this);
     }
@@ -152,14 +152,14 @@ public:
     ElementWisePower():IOprtBin(_T("pow"), (int) mup::prPOW, mup::oaRIGHT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return _T("pow - Power for noncomplex vectors & matrices");
     }
 
-    virtual mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new ElementWisePower(*this);
     }
@@ -172,14 +172,14 @@ class PowerByScalar : public mup::IOprtBin
     PowerByScalar():IOprtBin(_T("pw"), (int)(mup::prMUL_DIV), mup::oaLEFT)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int) ITK_OVERRIDE;
 
-    virtual const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return _T("x pw y - power of vectors / matrices by a scalar");
     }
   
-    virtual mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new PowerByScalar(*this);
     }
@@ -192,14 +192,14 @@ public:
     ndvi():ICallback(mup::cmFUNC, "ndvi", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "NDVI - Normalized Difference Vegetation Index";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new ndvi(*this);
     }
@@ -212,14 +212,14 @@ public:
     cat():ICallback(mup::cmFUNC, "cat", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "cat(m1,m2) - Values concatenation";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new cat(*this);
     }
@@ -232,14 +232,14 @@ public:
     mean():ICallback(mup::cmFUNC, "mean", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "mean(m1,m2,..) - mean of each neighborhood";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new mean(*this);
     }
@@ -252,14 +252,14 @@ public:
     var():ICallback(mup::cmFUNC, "var", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "var(m1,m2,..) - variance of each neighborhood";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new var(*this);
     }
@@ -272,14 +272,14 @@ public:
     corr():ICallback(mup::cmFUNC, "corr", 2)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "corr(m1,m2) - variance of two variables m1 and m2";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new corr(*this);
     }
@@ -292,14 +292,14 @@ public:
     median():ICallback(mup::cmFUNC, "median", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "median(m1,m2,..) - median value of each neighborhood";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new median(*this);
     }
@@ -312,14 +312,14 @@ public:
     maj():ICallback(mup::cmFUNC, "maj", -1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "maj(m1,m2,..) - majority value of each neighborhood";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new maj(*this);
     }
@@ -332,14 +332,14 @@ public:
     vnorm():ICallback(mup::cmFUNC, "vnorm", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc);
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iArgc) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vnorm(v1) - Norm for a vector : sqrt(sum of squared elements); works also with matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vnorm(*this);
     }
@@ -351,14 +351,14 @@ public:
     vmin():ICallback(mup::cmFUNC, "vmin", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vmin(m1) - overall minimun";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vmin(*this);
     }
@@ -371,14 +371,14 @@ public:
     vmax():ICallback(mup::cmFUNC, "vmax", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vmax(m1) - overall maximun";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vmax(*this);
     }
@@ -391,14 +391,14 @@ public:
     vect2scal():ICallback(mup::cmFUNC, "vect2scal", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vect2scal - Convert one dimensional vector to scalar";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vect2scal(*this);
     }
@@ -412,14 +412,14 @@ public:
     vcos():ICallback(mup::cmFUNC, "vcos", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vcos - Cosinus for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vcos(*this);
     }
@@ -432,14 +432,14 @@ public:
     vacos():ICallback(mup::cmFUNC, "vacos", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vacos - Arccosinus for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vacos(*this);
     }
@@ -451,14 +451,14 @@ public:
     vsin():ICallback(mup::cmFUNC, "vsin", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vsin - Sinus for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vsin(*this);
     }
@@ -470,14 +470,14 @@ public:
     vasin():ICallback(mup::cmFUNC, "vasin", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vasin - Arcsinus for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vasin(*this);
     }
@@ -490,14 +490,14 @@ public:
     vtan():ICallback(mup::cmFUNC, "vtan", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vtan - Tangent for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vtan(*this);
     }
@@ -510,14 +510,14 @@ public:
     vatan():ICallback(mup::cmFUNC, "vatan", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vatan - Arctangent for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vatan(*this);
     }
@@ -530,14 +530,14 @@ public:
     vtanh():ICallback(mup::cmFUNC, "vtanh", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vtanh - Hyperbolic tangent for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vtanh(*this);
     }
@@ -550,14 +550,14 @@ public:
     vsinh():ICallback(mup::cmFUNC, "vsinh", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vsinh - Hyperbolic sinus for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vsinh(*this);
     }
@@ -570,14 +570,14 @@ public:
     vcosh():ICallback(mup::cmFUNC, "vcosh", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vcosh - Hyperbolic cosinus for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vcosh(*this);
     }
@@ -590,14 +590,14 @@ public:
     vlog():ICallback(mup::cmFUNC, "vlog", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vlog - Log for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vlog(*this);
     }
@@ -610,14 +610,14 @@ public:
     vlog10():ICallback(mup::cmFUNC, "vlog10", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vlog10 - Log10 for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vlog10(*this);
     }
@@ -630,14 +630,14 @@ public:
     vabs():ICallback(mup::cmFUNC, "vabs", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vabs - Absolute value for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vabs(*this);
     }
@@ -650,14 +650,14 @@ public:
     vexp():ICallback(mup::cmFUNC, "vexp", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vexp - Exponential for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vexp(*this);
     }
@@ -670,14 +670,14 @@ public:
     vsqrt():ICallback(mup::cmFUNC, "vsqrt", 1)
     {}
 
-    virtual void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc));
+    void Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itkNotUsed(a_iArgc)) ITK_OVERRIDE;
 
-    const mup::char_type* GetDesc() const
+    const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
       return "vsqrt - Sqrt for noncomplex vectors & matrices";
     }
 
-    mup::IToken* Clone() const
+    mup::IToken* Clone() const ITK_OVERRIDE
     {
       return new vsqrt(*this);
     }

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometriesProjectionFilter_h
-#define __otbGeometriesProjectionFilter_h
+#ifndef otbGeometriesProjectionFilter_h
+#define otbGeometriesProjectionFilter_h
 
 #include "otbGeometriesToGeometriesFilter.h"
 #include "otbOGRGeometryWrapper.h"
@@ -190,7 +190,7 @@ private:
    * of the filter. It's up to the caller to take responsibility of the returned
    * object.
    */
-  virtual OGRSpatialReference* DoDefineNewLayerSpatialReference(ogr::Layer const& source) const;
+  OGRSpatialReference* DoDefineNewLayerSpatialReference(ogr::Layer const& source) const ITK_OVERRIDE;
   /**
    * Hook that actually filters an OGR \c Layer.
    * \param[in]     source      Input layer
@@ -202,13 +202,13 @@ private:
    * inner-filter working on \c ogr::DataSource cannot be globally configured
    * once and for all.
    */
-  virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const;
+  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const ITK_OVERRIDE;
   /** Hook used to conclude the initialization phase.
    * Global \c ogr::DataSource settings for the \c m_Transform functor are
    * forwarded to the functor. \c ogr::Layer specific settings will be set at
    * the last moment from \c DoProcessLayer().
    */
-  virtual void DoFinalizeInitialisation();
+  void DoFinalizeInitialisation() ITK_OVERRIDE;
   /**
    * Hook used to define the fields of the new layer.
    * \param[in] source  source \c Layer -- for reference
@@ -217,18 +217,18 @@ private:
    * Just forwards the fields definition to the \c FieldTransformationPolicy
    * encapsuled in the \c TransformationFunctorDispatcherType.
    */
-  virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const;
+  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const ITK_OVERRIDE;
 
 protected:
   /** Default constructor. */
   GeometriesProjectionFilter();
   /** Destructor. */
-  virtual ~GeometriesProjectionFilter();
+  ~GeometriesProjectionFilter() ITK_OVERRIDE;
 
   /** Computes output information.
    * \post \c m_OutputProjectionRef contains all its related meta-data
    */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 public:
   /**\name Image Reference (origin, spacing) */
@@ -292,4 +292,4 @@ private:
 #include "otbGeometriesProjectionFilter.txx"
 #endif
 
-#endif // __otbGeometriesProjectionFilter_h
+#endif // otbGeometriesProjectionFilter_h

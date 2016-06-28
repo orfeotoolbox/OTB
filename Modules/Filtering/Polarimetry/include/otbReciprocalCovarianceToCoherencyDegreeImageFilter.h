@@ -144,7 +144,7 @@ public:
 
 protected:
   ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
-  virtual ~ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
+  ~ReciprocalCovarianceToCoherencyDegreeImageFilter() ITK_OVERRIDE {}
 
 private:
   ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented

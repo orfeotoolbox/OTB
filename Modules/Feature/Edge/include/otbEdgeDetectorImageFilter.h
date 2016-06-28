@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEdgeDetectorImageFilter_h
-#define __otbEdgeDetectorImageFilter_h
+#ifndef otbEdgeDetectorImageFilter_h
+#define otbEdgeDetectorImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
@@ -109,9 +109,9 @@ public:
 protected:
 
   EdgeDetectorImageFilter();
-  virtual ~EdgeDetectorImageFilter();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateData();
+  ~EdgeDetectorImageFilter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

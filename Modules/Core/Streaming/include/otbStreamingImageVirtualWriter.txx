@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageVirtualWriter_txx
-#define __otbStreamingImageVirtualWriter_txx
+#ifndef otbStreamingImageVirtualWriter_txx
+#define otbStreamingImageVirtualWriter_txx
 #include "otbStreamingImageVirtualWriter.h"
 
 #include "otbMacro.h"

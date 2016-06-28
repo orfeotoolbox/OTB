@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLibSVMMachineLearningModel_txx
-#define __otbLibSVMMachineLearningModel_txx
+#ifndef otbLibSVMMachineLearningModel_txx
+#define otbLibSVMMachineLearningModel_txx
 
 #include <fstream>
 #include "otbLibSVMMachineLearningModel.h"
@@ -79,7 +79,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
   target = m_SVMestimator->GetModel()->EvaluateLabel(mfunctor(input));
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     if (!this->m_ConfidenceIndex)
       {

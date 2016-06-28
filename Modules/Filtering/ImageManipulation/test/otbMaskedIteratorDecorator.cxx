@@ -345,12 +345,12 @@ int otbMaskedIteratorDecoratorExtended(int itkNotUsed(argc), char * itkNotUsed(a
 
   std::cout << std::endl << "itk::ImageRegionIterator without mask: ";
   ret = TripleTest< itk::ImageRegionIterator<ImageType>,
-                    itk::ImageRegionIterator<MaskType> >(image, NULL, region);
+                    itk::ImageRegionIterator<MaskType> >(image, ITK_NULLPTR, region);
   retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
 
   std::cout << std::endl << "itk::ImageRegionConstIterator without mask: ";
   ret = TripleTest< itk::ImageRegionConstIterator<ImageType>,
-                    itk::ImageRegionConstIterator<MaskType> >(image, NULL, region);
+                    itk::ImageRegionConstIterator<MaskType> >(image, ITK_NULLPTR, region);
   retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
 
   return retGlobal;

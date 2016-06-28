@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseUnmixingImageFilter_h
-#define __otbSparseUnmixingImageFilter_h
+#ifndef otbSparseUnmixingImageFilter_h
+#define otbSparseUnmixingImageFilter_h
 
 #include "itkListSample.h"
 #include "itkHistogram.h"
@@ -159,9 +159,9 @@ public:
 
 protected:
   SparseUnmixingImageFilter();
-  virtual ~SparseUnmixingImageFilter() { }
+  ~SparseUnmixingImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   virtual void GenerateNumberOfComponentsRequired ();
 private:
   SparseUnmixingImageFilter(const Self &); //purposely not implemented

@@ -81,7 +81,7 @@ InputFilenameListParameter::SetListFromFileName(const std::vector<std::string> &
 void
 InputFilenameListParameter::AddNullElement()
 {
-  m_FilenameList->PushBack(NULL);
+  m_FilenameList->PushBack(ITK_NULLPTR);
   SetActive(false);
   this->Modified();
 }

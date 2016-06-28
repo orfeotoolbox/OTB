@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMeanShiftSmoothingImageFilter_txx
-#define __otbMeanShiftSmoothingImageFilter_txx
+#ifndef otbMeanShiftSmoothingImageFilter_txx
+#define otbMeanShiftSmoothingImageFilter_txx
 
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "itkImageRegionIterator.h"

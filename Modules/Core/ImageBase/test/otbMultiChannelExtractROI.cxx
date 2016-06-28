@@ -37,7 +37,7 @@ int generic_otbMultiChannelExtractROI(int itkNotUsed(argc), char * argv[], const
   typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
   int cpt(0), nbcanaux(0);
 
-  while (argv[cpt] != NULL)
+  while (argv[cpt] != ITK_NULLPTR)
     {
     std::string strArgv(argv[cpt]);
     if (strArgv == "-startX")
@@ -76,7 +76,7 @@ int generic_otbMultiChannelExtractROI(int itkNotUsed(argc), char * argv[], const
       bool searchChannels(true);
       while (searchChannels == true)
         {
-        if (argv[cpt] == NULL)
+        if (argv[cpt] == ITK_NULLPTR)
           {
           searchChannels = false;
           }

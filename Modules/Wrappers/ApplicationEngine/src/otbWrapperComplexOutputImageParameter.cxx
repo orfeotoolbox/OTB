@@ -162,7 +162,7 @@ ComplexOutputImageParameter::GetWriter()
     type = 1;
     }
 
-  itk::ProcessObject* writer = 0;
+  itk::ProcessObject* writer = ITK_NULLPTR;
   switch ( GetComplexPixelType() )
     {
     case ComplexImagePixelType_float:

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToPathListAlignFilter_h
-#define __otbImageToPathListAlignFilter_h
+#ifndef otbImageToPathListAlignFilter_h
+#define otbImageToPathListAlignFilter_h
 
 #include "itkImageSource.h"
 #include "itkConceptChecking.h"
@@ -118,10 +118,10 @@ public:
 
 protected:
   ImageToPathListAlignFilter();
-  virtual ~ImageToPathListAlignFilter();
+  ~ImageToPathListAlignFilter() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation() {}  // do nothing
-  virtual void GenerateData();
+  void GenerateOutputInformation() ITK_OVERRIDE {}  // do nothing
+  void GenerateData() ITK_OVERRIDE;
   virtual std::vector<double> tab(int n, double p, double m);
   virtual void AngleCalculate(const InputImageType*  InputImageIn);
 
@@ -131,7 +131,7 @@ protected:
   ValueType m_PathValue;
   ValueType m_BackgroundValue;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToPathListAlignFilter(const Self &); //purposely not implemented

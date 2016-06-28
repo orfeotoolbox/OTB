@@ -96,7 +96,7 @@ private:
     m_StatisticsFilter            = StatisticsFilterType::New();
   }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("StereoRectificationGridGenerator");
     SetDescription("Generates two deformation fields to stereo-rectify (i.e. resample in epipolar geometry) a pair of stereo images up to the sensor model precision");
@@ -198,12 +198,12 @@ private:
     SetDocExampleParameterValue("epi.elevation.default","400");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_DisplacementFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
     m_DisplacementFieldSource->SetRightImage(GetParameterImage("io.inright"));

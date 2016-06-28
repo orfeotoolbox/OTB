@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAMDrivenStrippedStreamingManager_txx
-#define __otbRAMDrivenStrippedStreamingManager_txx
+#ifndef otbRAMDrivenStrippedStreamingManager_txx
+#define otbRAMDrivenStrippedStreamingManager_txx
 
 #include "otbRAMDrivenStrippedStreamingManager.h"
 #include "otbMacro.h"

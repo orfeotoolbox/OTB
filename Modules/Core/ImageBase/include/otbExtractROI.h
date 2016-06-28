@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtractROI_h
-#define __otbExtractROI_h
+#ifndef otbExtractROI_h
+#define otbExtractROI_h
 
 #include "otbExtractROIBase.h"
 #include "otbImage.h"
@@ -77,17 +77,17 @@ public:
                       OutputImageType::ImageDimension);
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 protected:
   ExtractROI();
-  virtual ~ExtractROI() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ExtractROI() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** ExtractROI
    *
    * \sa ExtractROIBase::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ExtractROI(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorWithIndexWithOutputSizeImageFilter_h
-#define __otbUnaryFunctorWithIndexWithOutputSizeImageFilter_h
+#ifndef otbUnaryFunctorWithIndexWithOutputSizeImageFilter_h
+#define otbUnaryFunctorWithIndexWithOutputSizeImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -108,7 +108,7 @@ protected:
   /**
    * Destructor
    */
-  virtual ~UnaryFunctorWithIndexWithOutputSizeImageFilter() {}
+  ~UnaryFunctorWithIndexWithOutputSizeImageFilter() ITK_OVERRIDE {}
 
   /** UnaryFunctorWithIndexWithOutputSizeImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -120,12 +120,12 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Pad the input requested region by radius
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** UnaryFunctorWithIndexWithOutputSizeImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, UnaryFunctorImageFilter
@@ -135,7 +135,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();

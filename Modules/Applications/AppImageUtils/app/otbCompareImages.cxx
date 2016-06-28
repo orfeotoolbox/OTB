@@ -46,7 +46,7 @@ public:
   typedef otb::StreamingCompareImageFilter<FloatImageType> StreamingCompareImageFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("CompareImages");
     SetDescription("Estimator between 2 images.");
@@ -125,7 +125,7 @@ private:
     SetDocExampleParameterValue("roi.sizey", "200");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Set channel interval
     if( HasValue("ref.in") )
@@ -160,7 +160,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Init filters
     m_ExtractRefFilter = ExtractROIMonoFilterType::New();

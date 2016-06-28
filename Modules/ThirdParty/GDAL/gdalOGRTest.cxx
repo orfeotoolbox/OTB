@@ -6,18 +6,11 @@
 int main(int argc,char * argv[])
 {
   OGRDataSourceH	hDS;
-  OGRSFDriverH        *pahDriver;
-  
-  OGRRegisterAll(); 	
+  OGRSFDriverH    *pahDriver = NULL;
 
-  hDS = OGROpen(argv[1], FALSE, pahDriver );
-
-  if( hDS == NULL )
-    {
-    return -1;
-    }
-
+  OGRRegisterAll();
+  hDS = OGROpen("null.shp", FALSE, pahDriver );
   OGRReleaseDataSource( hDS );
-  
-  return 0;
+
+  return EXIT_SUCCESS;
 }

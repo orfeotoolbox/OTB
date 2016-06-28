@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageRegionNonUniformMultidimensionalSplitter_h
-#define __otbImageRegionNonUniformMultidimensionalSplitter_h
+#ifndef otbImageRegionNonUniformMultidimensionalSplitter_h
+#define otbImageRegionNonUniformMultidimensionalSplitter_h
 
 #include "itkRegion.h"
 #include "itkObjectFactory.h"
@@ -95,19 +95,19 @@ public:
    * a certain dimensions, then some splits will not be possible. This
    * method returns a number less than or equal to the requested number
    * of pieces.  */
-  virtual unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber);
+  unsigned int GetNumberOfSplits(const RegionType& region,
+                                         unsigned int requestedNumber) ITK_OVERRIDE;
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
-  virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region);
+  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
+                              const RegionType& region) ITK_OVERRIDE;
 
 protected:
   ImageRegionNonUniformMultidimensionalSplitter() {}
-  virtual ~ImageRegionNonUniformMultidimensionalSplitter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageRegionNonUniformMultidimensionalSplitter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageRegionNonUniformMultidimensionalSplitter(const Self &); //purposely not implemented

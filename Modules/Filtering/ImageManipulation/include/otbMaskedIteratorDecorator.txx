@@ -31,7 +31,7 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
                           const RegionType& region)
 {
   m_ItImage = TIteratorType(image,region);
-  if (mask == NULL)
+  if (mask == ITK_NULLPTR)
     {
     m_UseMask = false;
     }

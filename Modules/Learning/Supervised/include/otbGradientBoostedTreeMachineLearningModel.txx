@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGradientBoostedTreeMachineLearningModel_txx
-#define __otbGradientBoostedTreeMachineLearningModel_txx
+#ifndef otbGradientBoostedTreeMachineLearningModel_txx
+#define otbGradientBoostedTreeMachineLearningModel_txx
 
 #include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
@@ -92,7 +92,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     if (!this->m_ConfidenceIndex)
       {
@@ -109,7 +109,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_GBTreeModel->save(filename.c_str(), 0);
+    m_GBTreeModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_GBTreeModel->save(filename.c_str(), name.c_str());
 }
@@ -120,7 +120,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_GBTreeModel->load(filename.c_str(), 0);
+    m_GBTreeModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_GBTreeModel->load(filename.c_str(), name.c_str());
 }

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
-#define __otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
+#ifndef otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
+#define otbProfileDerivativeToMultiScaleCharacteristicsFilter_h
 
 #include "otbImageListToImageFilter.h"
 
@@ -83,26 +83,26 @@ public:
 
 protected:
   /** Main computation method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
    * Copy information from the first image of the list if existing.
    **/
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /**
    * GenerateInputRequestedRegion
    * Set the requested region of each image in the list.
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Constructor */
   ProfileDerivativeToMultiScaleCharacteristicsFilter();
   /** Destructor */
-  virtual ~ProfileDerivativeToMultiScaleCharacteristicsFilter() {}
+  ~ProfileDerivativeToMultiScaleCharacteristicsFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ProfileDerivativeToMultiScaleCharacteristicsFilter(const Self &); //purposely not implemented
