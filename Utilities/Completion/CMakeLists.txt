@@ -2,7 +2,7 @@
 find_package(OTB REQUIRED)
 include(${OTB_USE_FILE})
 
-add_executable(completionGenerator completionGenerator.cxx)
+add_executable(completionGenerator EXCLUDE_FROM_ALL completionGenerator.cxx)
 target_link_libraries(completionGenerator ${OTB_LIBRARIES})
 
 add_custom_target(generate-completion
