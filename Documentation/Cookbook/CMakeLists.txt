@@ -13,8 +13,22 @@ find_package(OTB REQUIRED)
 #find Python
 find_package(PythonInterp REQUIRED)
 
-set(RST_GENERATED_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/_sources)
-set(OTB_COPYRIGHT_TEXT "2016, OTB Team")
+find_program(SH_INTERP sh)
+if(NOT SH_INTERP)
+  message(FATAL_ERROR "'sh' program not found")
+endif()
+
+find_program(SPHINX_BUILD sphinx-build)
+
+if(NOT SPHINX_BUILD)
+  message(FATAL_ERROR "The 'sphinx-build' command was not found. Make sure you have Sphinx installed, then set the SPHINXBUILD environment variable to point to the full path of the 'sphinx-build' executable. Alternatively you can add the directory with the executable to your PATH. If you don't have Sphinx installed, grab it from http://sphinx-doc.org")
+endif()
+
+string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
+set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR}, OTB Team")
+
+set(RST_GENERATED_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/rst)
+
 set(RST_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
 set(RST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/rst)
 
@@ -27,17 +41,17 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURC
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/_static)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/_templates)
 
-configure_file(${CMAKE_SOURCE_DIR}/CMake/RunApplicationsRstGenerator.sh.cmake.in
-  ${RST_GENERATED_SOURCE_DIR}/RunApplicationsRstGenerator.sh
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMake/RunApplicationsRstGenerator.sh.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
   @ONLY)
 
-file(GLOB mvd_images ${CMAKE_SOURCE_DIR}/Art/MonteverdiImages/*.*)
+file(GLOB mvd_images ${CMAKE_CURRENT_SOURCE_DIR}/Art/MonteverdiImages/*.*)
 foreach(mvd_image ${mvd_images})
   get_filename_component(out_file ${mvd_image} NAME)
   configure_file(${mvd_image} ${RST_GENERATED_SOURCE_DIR}/Art/MonteverdiImages/${out_file} COPYONLY)
 endforeach()
 
-file(GLOB qt_images ${CMAKE_SOURCE_DIR}/Art/QtImages/*.png)
+file(GLOB qt_images ${CMAKE_CURRENT_SOURCE_DIR}/Art/QtImages/*.png)
 foreach(qt_image ${qt_images})
   get_filename_component(out_file ${qt_image} NAME)
   configure_file(${qt_image} ${RST_GENERATED_SOURCE_DIR}/Art/QtImages/${out_file} COPYONLY)
@@ -64,12 +78,10 @@ endforeach()
 configure_file(${RST_SOURCES}/conf.py.in ${RST_GENERATED_SOURCE_DIR}/conf.py @ONLY)
 configure_file(${RST_SOURCES}/Makefile.in ${RST_GENERATED_SOURCE_DIR}/Makefile @ONLY)
 
-find_program(BASH_INTERP bash)
-
 add_custom_target(generate_otbapps_rst
   ALL
-  COMMAND ${BASH_INTERP} ${RST_GENERATED_SOURCE_DIR}/RunApplicationsRstGenerator.sh
-  WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
+  COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Auto-generating Application Reference Documentation in RST"
   )
 
@@ -80,10 +92,10 @@ add_custom_target(CookBookHTMLFromRST
   DEPENDS generate_otbapps_rst
   COMMENT "Building RST documentation in html")
 
-add_custom_target(CookBookHTMLFromPDF
-  ALL
-  COMMAND ${CMAKE_MAKE_PROGRAM} pdf
-  WORKING_DIRECTORY ${RST_SOURCES}/RST
-  COMMENT "Building RST documentation in pdf")
+# add_custom_target(CookBookHTMLFromPDF
+#   ALL
+#   COMMAND ${CMAKE_MAKE_PROGRAM} pdf
+#   WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
+#   COMMENT "Building RST documentation in pdf")
 
-add_dependencies(CookBookHTMLFromPDF CookBookHTMLFromRST)
+# add_dependencies(CookBookHTMLFromPDF CookBookHTMLFromRST)
