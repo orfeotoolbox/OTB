@@ -19,6 +19,7 @@
 #define otbSqrtSpectralAngleFunctor_h
 
 #include "otbSpectralAngleFunctor.h"
+#include "itkMacro.h"
 
 namespace otb
 {
