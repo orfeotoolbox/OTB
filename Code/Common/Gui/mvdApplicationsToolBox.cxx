@@ -182,7 +182,7 @@ ApplicationsToolBox
 	// does the current algorithm DocName match the search text
 	if ( m_SearchText.isEmpty() ||
 	     title.contains( m_SearchText, Qt::CaseInsensitive ) ||
-	     name.contains( m_SearchText ,Qt::CaseInsensitive ) )
+	     name.contains( m_SearchText, Qt::CaseInsensitive ) )
 	  {
 	  // 
 	  // set current application name as secondary item
@@ -224,9 +224,14 @@ ApplicationsToolBox
   for( StringVector::const_iterator itApps( itTag->second.begin() );
        itApps != itTag->second.end();
        ++itApps )
-    if( GetApplicationDocNameByApplicationName( itApps->c_str() )
+    {
+    QString name( FromStdString( *itApps ) );
+
+    if( name.contains( m_SearchText, Qt::CaseInsensitive ) ||
+	GetApplicationDocNameByApplicationName( name )
 	.contains( m_SearchText, Qt::CaseInsensitive ) )
       return true;
+    }
 
   return false;
 }
