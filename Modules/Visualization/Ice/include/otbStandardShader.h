@@ -78,18 +78,18 @@ public:
   itkSetMacro(Center,PointType);
   itkGetConstReferenceMacro(Center,PointType);
 
-  virtual void SetupShader();
+  void SetupShader() ITK_OVERRIDE;
 
   itkNewMacro(Self);
 
 protected:
   StandardShader();
 
-  virtual ~StandardShader();
+  ~StandardShader() ITK_OVERRIDE;
 
-  virtual std::string GetSource() const;
+  std::string GetSource() const ITK_OVERRIDE;
 
-  virtual std::string GetName() const;
+  std::string GetName() const ITK_OVERRIDE;
 
 private:
   // prevent implementation

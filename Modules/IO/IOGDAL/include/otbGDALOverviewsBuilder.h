@@ -152,15 +152,15 @@ public:
   void SetInputFileName( const std::string & str );
 
 
-  void Update();
+  void Update() ITK_OVERRIDE;
 
 
 protected:
   GDALOverviewsBuilder();
 
-  virtual ~GDALOverviewsBuilder() {};
+  ~GDALOverviewsBuilder() ITK_OVERRIDE {};
 
-  void PrintSelf( std::ostream & os, itk::Indent indent ) const;
+  void PrintSelf( std::ostream & os, itk::Indent indent ) const ITK_OVERRIDE;
 
 
 private:

@@ -72,10 +72,10 @@ GDAL_COMPRESSION_NAMES[ GDAL_COMPRESSION_COUNT ] =
 std::string
 GetConfigOption( const char * key )
 {
-  const char * value = CPLGetConfigOption( key, NULL );
+  const char * value = CPLGetConfigOption( key, ITK_NULLPTR );
   
   return
-    value==NULL
+    value==ITK_NULLPTR
     ? std::string()
     : std::string( value );
 }
@@ -516,7 +516,7 @@ GDALOverviewsBuilder
       static_cast< int >( m_NbResolutions - 1 ),
       &ovwlist.front(),
       0, // All bands
-      NULL, // All bands
+      ITK_NULLPTR, // All bands
       ( GDALProgressFunc )otb_UpdateGDALProgress,
       this );
 

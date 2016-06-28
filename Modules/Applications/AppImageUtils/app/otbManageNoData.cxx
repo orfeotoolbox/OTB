@@ -55,7 +55,7 @@ public:
   typedef otb::ChangeInformationImageFilter<FloatVectorImageType> ChangeInfoFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ManageNoData");
     SetDescription("Manage No-Data");
@@ -104,6 +104,9 @@ private:
     SetParameterDescription("mode.apply","Apply an external mask to an image using the no-data value of the input image");
     AddParameter(ParameterType_InputImage, "mode.apply.mask", "Mask image");
     SetParameterDescription("mode.apply.mask","Mask to be applied on input image (valid pixels have non null values)");
+    AddParameter(ParameterType_Float, "mode.apply.ndval", "Nodata value used");
+    SetParameterDescription("mode.apply.ndval","No Data value used according to the mask image");
+    SetDefaultParameterFloat("mode.apply.ndval", 0.0);
 
     SetParameterString("mode","buildmask");
 
@@ -116,13 +119,13 @@ private:
     SetDocExampleParameterValue("mode.buildmask.outv", "0");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
 
- void DoExecute()
+ void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType::Pointer inputPtr = this->GetParameterImage("in");
     
@@ -160,7 +163,7 @@ private:
       if (!ret)
         {
         flags.resize(nbBands,true);
-        values.resize(nbBands,0.0);
+        values.resize(nbBands,GetParameterFloat("mode.apply.ndval"));
         }
 
       m_V2L = VectorToListFilterType::New();

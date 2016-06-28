@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 cd `dirname $0`
 
@@ -6,6 +6,11 @@ cd `dirname $0`
 # Avoid any pre-mature optimization on variable names here.
 
 OUT_DIR=`pwd`
+CAT=`which cat`
+RM=`which rm`
+CHMOD=`which chmod`
+SED=`which sed`
+WHICH_ENV=`which env`
 
 PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
 
@@ -22,18 +27,26 @@ for bin_file in $BINARY_FILES; do
     fi
 done
 
-cat > $OUT_DIR/monteverdi.sh << EOF
-#!/bin/sh
+I_AM_XDK=@IS_XDK@
+
+if [ "$I_AM_XDK" = true ] ; then
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+else
+$CAT > $OUT_DIR/monteverdi.sh << EOF
+#!$WHICH_ENV bash
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
 export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 $OUT_DIR/bin/monteverdi "\$@"
 EOF
-chmod +x $OUT_DIR/monteverdi.sh
 
-cat > $OUT_DIR/mapla.sh << EOF
-#!/bin/sh
+$CHMOD +x $OUT_DIR/monteverdi.sh
+
+$CAT > $OUT_DIR/mapla.sh << EOF
+#!$WHICH_ENV bash
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
@@ -41,10 +54,10 @@ export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 $OUT_DIR/bin/mapla "\$@"
 EOF
 
-chmod +x $OUT_DIR/mapla.sh
+$CHMOD +x $OUT_DIR/mapla.sh
 
-cat > $OUT_DIR/otbenv.profile << EOF
-#!/bin/sh
+$CAT > $OUT_DIR/otbenv.profile << EOF
+#!$WHICH_ENV bash
 PATH=\$PATH:$OUT_DIR/bin
 GDAL_DATA=$OUT_DIR/share/gdal
 GEOTIFF_CSV=$OUT_DIR/share/espg_csv
@@ -55,18 +68,13 @@ export GDAL_DATA
 export GEOTIFF_CSV
 EOF
 
-# echo "Creating symbolic links..."
-. ./make_symlinks
-
-if [ -f lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake ]; then
-    rm -fr $OUT_DIR/bin/*
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
-    sed -i "s,@CMAKE_INSTALL_PREFIX@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
 fi
 
-rm -fr $OUT_DIR/tools
+#echo "Creating symbolic links..."
+. ./make_symlinks
 
-rm -f $OUT_DIR/pkgsetup
+$RM -fr $OUT_DIR/tools
 
-rm -f $OUT_DIR/make_symlinks
+$RM -f $OUT_DIR/pkgsetup
+
+$RM -f $OUT_DIR/make_symlinks

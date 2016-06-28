@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataExtractROI_txx
-#define __otbVectorDataExtractROI_txx
+#ifndef otbVectorDataExtractROI_txx
+#define otbVectorDataExtractROI_txx
 
 #include "otbVectorDataExtractROI.h"
 

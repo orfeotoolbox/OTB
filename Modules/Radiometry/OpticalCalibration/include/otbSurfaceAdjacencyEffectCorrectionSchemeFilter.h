@@ -19,8 +19,8 @@
     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
-#define __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
+#ifndef otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
+#define otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
 
 #include "itkNumericTraits.h"
 #include <vector>
@@ -267,11 +267,11 @@ public:
 
 protected:
   SurfaceAdjacencyEffectCorrectionSchemeFilter();
-  virtual ~SurfaceAdjacencyEffectCorrectionSchemeFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~SurfaceAdjacencyEffectCorrectionSchemeFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Initialize the parameters of the functor before the threads run. */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Fill AtmosphericRadiativeTerms using image metadata*/
   void UpdateAtmosphericRadiativeTerms();
@@ -280,7 +280,7 @@ protected:
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
 

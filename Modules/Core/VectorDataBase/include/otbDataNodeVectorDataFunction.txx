@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDataNodeVectorDataFunction_txx
-#define __otbDataNodeVectorDataFunction_txx
+#ifndef otbDataNodeVectorDataFunction_txx
+#define otbDataNodeVectorDataFunction_txx
 
 #include "otbDataNodeVectorDataFunction.h"
 
@@ -30,7 +30,7 @@ template <class TOutput, class TCoordRep, class TPrecision>
 DataNodeVectorDataFunction<TOutput, TCoordRep, TPrecision>
 ::DataNodeVectorDataFunction()
 {
-  m_VectorData = NULL;
+  m_VectorData = ITK_NULLPTR;
 }
 
 

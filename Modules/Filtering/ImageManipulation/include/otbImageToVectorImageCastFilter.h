@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToVectorImageCastFilter_h
-#define __otbImageToVectorImageCastFilter_h
+#ifndef otbImageToVectorImageCastFilter_h
+#define otbImageToVectorImageCastFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVariableLengthVector.h"
@@ -93,15 +93,15 @@ protected:
   /// Constructor
   ImageToVectorImageCastFilter() {}
   /// Detructor
-  virtual ~ImageToVectorImageCastFilter() {}
+  ~ImageToVectorImageCastFilter() ITK_OVERRIDE {}
   /// Additionnal output information for allocation
-  virtual void GenerateOutputInformation(void)
+  void GenerateOutputInformation(void) ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
   }
   /// Copy output requested region to input requested region
-  virtual void GenerateInputRequestedRegion(void)
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE
   {
     if (this->GetInput())
       {

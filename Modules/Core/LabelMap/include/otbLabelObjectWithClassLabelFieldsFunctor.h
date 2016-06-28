@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelObjectWithClassLabelFieldsFunctor_h
-#define __otbLabelObjectWithClassLabelFieldsFunctor_h
+#ifndef otbLabelObjectWithClassLabelFieldsFunctor_h
+#define otbLabelObjectWithClassLabelFieldsFunctor_h
 
 #include "itkLabelObject.h"
 #include <map>

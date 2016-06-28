@@ -599,7 +599,7 @@ namespace ossimplugins
       add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", azimuthSpacing);
       theGSD.y = azimuthSpacing;
       // theGSD and theMeanGSD will be saved and reloaded automatically in
-      // ossimSensorModel::load/saveState() 
+      // ossimSensorModel::load/saveState()
 
       // TODO: Why duplicting these two information elsewhere? they're already
       // under root prefix
@@ -1048,7 +1048,7 @@ namespace ossimplugins
    bool ossimSentinel1Model::initImageSize(ossimIpt& imageSize) const
    {
       std::string const& samples_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_SAMPLES_KW);
-      std::string const& lines_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_LINES_KW);
+      std::string const& lines_cstr   = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_LINES_KW);
 
       imageSize.samp = to<int>(samples_cstr, "decoding sample number from KWL");
       imageSize.line = to<int>(lines_cstr, "decoding line number from KWL");
@@ -1139,6 +1139,12 @@ namespace ossimplugins
       }
 
       return true;
+   }
+
+   void ossimSentinel1Model::imagingRay(const ossimDpt& image_point, ossimEcefRay&   image_ray) const
+   {
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
    }
 
 } //end namespace

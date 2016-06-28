@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentFilterStreamingDecorator_txx
-#define __otbPersistentFilterStreamingDecorator_txx
+#ifndef otbPersistentFilterStreamingDecorator_txx
+#define otbPersistentFilterStreamingDecorator_txx
 
 #include "otbPersistentFilterStreamingDecorator.h"
 

@@ -1,12 +1,17 @@
-file(GLOB all_dot_diff_files "${PATCH_DIR}/*diff")
-
+file(GLOB all_dot_diff_files "${PATCH_DIR}/*${DIFF_FILE_MATCH_STRING}*diff")
 find_program(PATCH_PROGRAM NAMES patch)
 if(PATCH_PROGRAM)
+set(OPTS)
+if(WIN32)
+set(OPTS "--binary")
+endif()
+  list(REVERSE all_dot_diff_files)
   foreach(dot_diff_file ${all_dot_diff_files})
     # message("dot_diff_file=${dot_diff_file}")
     execute_process(
       COMMAND
-      ${CMAKE_COMMAND} -E chdir ${SOURCE_DIR}  ${PATCH_PROGRAM} "-p1" INPUT_FILE "${dot_diff_file}"
+      ${CMAKE_COMMAND} -E chdir ${SOURCE_DIR} 
+      ${PATCH_PROGRAM} "-p1" "-i" "${dot_diff_file}" ${OPTS}
       RESULT_VARIABLE patch_rv
       OUTPUT_VARIABLE patch_ov
       OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
@@ -19,8 +24,6 @@ if(PATCH_PROGRAM)
     endif()
   endforeach()
 else()
-  if(NOT WIN32)
-    #Raise a fatal error if not on windows
     message(FATAL_ERROR "patch program not found. PATCH_PROGRAM. search names :' patch'")
   endif()
 endif()

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKeyPointSetsMatchingFilter_h
-#define __otbKeyPointSetsMatchingFilter_h
+#ifndef otbKeyPointSetsMatchingFilter_h
+#define otbKeyPointSetsMatchingFilter_h
 
 #include "otbObjectListSource.h"
 #include "otbLandmark.h"
@@ -99,12 +99,12 @@ protected:
   /// Constructor
   KeyPointSetsMatchingFilter();
   /// Destructor
-  virtual ~KeyPointSetsMatchingFilter() {}
+  ~KeyPointSetsMatchingFilter() ITK_OVERRIDE {}
   /// PrintSelf method
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /// Generate Data
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /**
    * Find the nearest neighbor of data1 in pointset.

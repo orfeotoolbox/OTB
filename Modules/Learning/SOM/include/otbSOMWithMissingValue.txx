@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMWithMissingValue_txx
-#define __otbSOMWithMissingValue_txx
+#ifndef otbSOMWithMissingValue_txx
+#define otbSOMWithMissingValue_txx
 
 #include "otbSOMWithMissingValue.h"
 

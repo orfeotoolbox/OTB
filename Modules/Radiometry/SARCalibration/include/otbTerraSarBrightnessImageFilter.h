@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTerraSarBrightnessImageFilter_h
-#define __otbTerraSarBrightnessImageFilter_h
+#ifndef otbTerraSarBrightnessImageFilter_h
+#define otbTerraSarBrightnessImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataDictionary.h"
@@ -143,10 +143,10 @@ protected:
   /** Constructor */
   TerraSarBrightnessImageFilter(){};
   /** Destructor */
-  virtual ~TerraSarBrightnessImageFilter() {}
+  ~TerraSarBrightnessImageFilter() ITK_OVERRIDE {}
 
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
 private:
   TerraSarBrightnessImageFilter(const Self &); //purposely not implemented

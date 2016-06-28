@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetSource_txx
-#define __otbPointSetSource_txx
+#ifndef otbPointSetSource_txx
+#define otbPointSetSource_txx
 
 #include "otbPointSetSource.h"
 
@@ -63,7 +63,7 @@ PointSetSource<TOutputPointSet>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<TOutputPointSet*>

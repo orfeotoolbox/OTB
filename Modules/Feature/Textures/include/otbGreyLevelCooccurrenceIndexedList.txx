@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __otbGreyLevelCooccurrenceIndexedList_txx
-#define __otbGreyLevelCooccurrenceIndexedList_txx
+#ifndef otbGreyLevelCooccurrenceIndexedList_txx
+#define otbGreyLevelCooccurrenceIndexedList_txx
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDBOverlapDataNodeFeatureFunction_h
-#define __otbDBOverlapDataNodeFeatureFunction_h
+#ifndef otbDBOverlapDataNodeFeatureFunction_h
+#define otbDBOverlapDataNodeFeatureFunction_h
 
 #include "otbDataNodeVectorDataFunction.h"
 
@@ -73,7 +73,7 @@ public:
 
   typedef std::vector<PrecisionType>                  OutputType;
 
-  virtual OutputType Evaluate( const DataNodeType& node ) const;
+  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
 
   /** Set/Get methods */
   itkGetConstMacro(DistanceThreshold, PrecisionType);
@@ -84,8 +84,8 @@ public:
 
 protected:
   DBOverlapDataNodeFeatureFunction();
-  ~DBOverlapDataNodeFeatureFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~DBOverlapDataNodeFeatureFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   DBOverlapDataNodeFeatureFunction(const Self&); //purposely not implemented

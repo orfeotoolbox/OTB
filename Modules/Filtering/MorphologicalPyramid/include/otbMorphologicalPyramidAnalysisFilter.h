@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalPyramidAnalysisFilter_h
-#define __otbMorphologicalPyramidAnalysisFilter_h
+#ifndef otbMorphologicalPyramidAnalysisFilter_h
+#define otbMorphologicalPyramidAnalysisFilter_h
 
 #include "otbImageToImageListFilter.h"
 
@@ -90,7 +90,7 @@ public:
    * Get The Analyse image at each level of the pyramid.
    * \return The analysed image at each level of the pyramid.
    */
-  OutputImageListType* GetOutput(void);
+  OutputImageListType* GetOutput(void) ITK_OVERRIDE;
   /**
    * Get The SupFilter details
    * \return The brighter details extracted from the filtering operation.
@@ -116,12 +116,12 @@ protected:
   /** Constructor */
   MorphologicalPyramidAnalysisFilter();
   /** Destructor */
-  virtual ~MorphologicalPyramidAnalysisFilter();
-  virtual void GenerateOutputInformation() {}  // does nothing
+  ~MorphologicalPyramidAnalysisFilter() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  // does nothing
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** Number of levels of the algorithm */

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8VertexWithCompacity_h
-#define __otbRCC8VertexWithCompacity_h
+#ifndef otbRCC8VertexWithCompacity_h
+#define otbRCC8VertexWithCompacity_h
 
 #include "otbRCC8VertexBase.h"
 
@@ -58,20 +58,20 @@ public:
    * Set the VertexWithCompacity attributes from the attributes vector.
    * \param attributes The vector containing the parsed attributes.
    */
-  void SetAttributesMap(AttributesMapType attributes);
+  void SetAttributesMap(AttributesMapType attributes) ITK_OVERRIDE;
   /**
    * Get an attributes vector representing the VertexWithCompacity attributes.
    * \return The attributes vector
    */
-  AttributesMapType GetAttributesMap(void);
+  AttributesMapType GetAttributesMap(void) ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   RCC8VertexWithCompacity();
   /** Desctructor */
-  ~RCC8VertexWithCompacity() {}
+  ~RCC8VertexWithCompacity() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The compacity */

@@ -181,7 +181,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          {
            EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
 
-           if(eParam!=NULL)
+           if(eParam!=ITK_NULLPTR)
              {
              //Dont use app->HasUserValue which returns false always because of
              //EmptyParameter::HasValue() is false for EmptyParameter
@@ -211,7 +211,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
           {
            OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
            
-           if(imgParam!=NULL)
+           if(imgParam!=ITK_NULLPTR)
              {
              value = imgParam->GetFileName();
              ImagePixelType pixType = imgParam->GetPixelType();

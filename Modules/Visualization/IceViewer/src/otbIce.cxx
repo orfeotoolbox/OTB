@@ -39,13 +39,13 @@ int main(int argc, char * argv[])
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   
-  if(demdir != NULL)
+  if(demdir != ITK_NULLPTR)
     {
     std::cout<<"Configuring DEM directory: "<<demdir<<std::endl;
     demHandler->OpenDEMDirectory(demdir);
     }
 
-  if(geoidfile != NULL)
+  if(geoidfile != ITK_NULLPTR)
     {
     std::cout<<"Configuring geoid file: "<<geoidfile<<std::endl;
     demHandler->OpenGeoidFile(geoidfile);
@@ -82,6 +82,11 @@ int main(int argc, char * argv[])
         std::cerr << "Failed to open object as vector: " << err2 << std::endl;
         std::cerr << "Could not open file " << argv[i] << " as an image or a vector, skipping." << std::endl;
         }
+      }
+    catch(std::runtime_error & err)
+      {
+      std::cerr<<"Runtime error: "<< err.what() <<std::endl;
+      return EXIT_FAILURE;
       }
     }
 

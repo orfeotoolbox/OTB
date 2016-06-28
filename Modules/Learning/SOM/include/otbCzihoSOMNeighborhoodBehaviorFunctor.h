@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbCzihoSOMNeighborhoodBehaviorFunctor_h
-#define __otbCzihoSOMNeighborhoodBehaviorFunctor_h
+#ifndef otbCzihoSOMNeighborhoodBehaviorFunctor_h
+#define otbCzihoSOMNeighborhoodBehaviorFunctor_h
 
 #include "itkSize.h"
 #include "itkMath.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDrawLineSpatialObjectListFilter_h
-#define __otbDrawLineSpatialObjectListFilter_h
+#ifndef otbDrawLineSpatialObjectListFilter_h
+#define otbDrawLineSpatialObjectListFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbLineSpatialObjectList.h"
@@ -89,10 +89,10 @@ public:
 
 protected:
   DrawLineSpatialObjectListFilter();
-  virtual ~DrawLineSpatialObjectListFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~DrawLineSpatialObjectListFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * compute the intersection of the segment to draw with the region

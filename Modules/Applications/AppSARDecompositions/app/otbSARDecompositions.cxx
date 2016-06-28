@@ -81,7 +81,7 @@ public:
   itkTypeMacro(SARDecompositions, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("SARDecompositions");
     SetDescription("From one-band complex images (each one related to an element of the Sinclair matrix), returns the selected decomposition.");
@@ -155,12 +155,12 @@ private:
     SetDocExampleParameterValue("out", "HaA.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 	  
 	bool inhv = HasUserValue("inhv");

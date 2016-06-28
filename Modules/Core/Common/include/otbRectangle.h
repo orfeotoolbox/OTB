@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRectangle_h
-#define __otbRectangle_h
+#ifndef otbRectangle_h
+#define otbRectangle_h
 
 #include "itkImageRegion.h"
 
@@ -97,10 +97,10 @@ protected:
     };
 
   /** Destructor */
-  virtual ~Rectangle() {}
+  ~Rectangle() ITK_OVERRIDE {}
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** */
   virtual double ComputeEuclideanDistanceMetricToSegment(VertexType q1, VertexType q2, VertexType p) const;

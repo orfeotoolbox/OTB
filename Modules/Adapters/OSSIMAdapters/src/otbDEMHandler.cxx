@@ -48,15 +48,15 @@
 namespace otb
 {
 /** Initialize the singleton */
-DEMHandler::Pointer DEMHandler::m_Singleton = NULL;
+DEMHandler::Pointer DEMHandler::m_Singleton = ITK_NULLPTR;
 
 DEMHandler::Pointer DEMHandler::Instance()
 {
-  if(m_Singleton.GetPointer() == NULL)
+  if(m_Singleton.GetPointer() == ITK_NULLPTR)
     {
     m_Singleton = itk::ObjectFactory<Self>::Create();
 
-    if(m_Singleton.GetPointer() == NULL)
+    if(m_Singleton.GetPointer() == ITK_NULLPTR)
       {
       m_Singleton = new DEMHandler;
       }
@@ -149,7 +149,7 @@ bool
 DEMHandler
 ::OpenGeoidFile(const char* geoidFile)
 {
-  if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == 0)
+  if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == ITK_NULLPTR)
     {
     otbMsgDevMacro(<< "Opening geoid: " << geoidFile);
     ossimFilename           geoid(geoidFile);

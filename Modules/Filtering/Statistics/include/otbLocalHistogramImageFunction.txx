@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalHistogramImageFunction_txx
-#define __otbLocalHistogramImageFunction_txx
+#ifndef otbLocalHistogramImageFunction_txx
+#define otbLocalHistogramImageFunction_txx
 
 #include "otbLocalHistogramImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLibSVMMachineLearningModelFactory_h
-#define __otbLibSVMMachineLearningModelFactory_h
+#ifndef otbLibSVMMachineLearningModelFactory_h
+#define otbLibSVMMachineLearningModelFactory_h
 
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
@@ -39,8 +39,8 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
+  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
+  const char* GetDescription(void) const ITK_OVERRIDE;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -57,7 +57,7 @@ public:
 
 protected:
   LibSVMMachineLearningModelFactory();
-  virtual ~LibSVMMachineLearningModelFactory();
+  ~LibSVMMachineLearningModelFactory() ITK_OVERRIDE;
 
 private:
   LibSVMMachineLearningModelFactory(const Self &); //purposely not implemented

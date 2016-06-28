@@ -1,5 +1,5 @@
-#ifndef __otbWrapperInputProcessXMLParameter_h
-#define __otbWrapperInputProcessXMLParameter_h
+#ifndef otbWrapperInputProcessXMLParameter_h
+#define otbWrapperInputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
 #include <sstream>
@@ -32,7 +32,7 @@ public:
 
   itkGetStringMacro(FileName);
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     if(m_FileName.empty())
       return false;
@@ -66,7 +66,7 @@ protected:
   InputProcessXMLParameter();
 
   /** Destructor */
-  virtual ~InputProcessXMLParameter();
+  ~InputProcessXMLParameter() ITK_OVERRIDE;
 
 private:
 

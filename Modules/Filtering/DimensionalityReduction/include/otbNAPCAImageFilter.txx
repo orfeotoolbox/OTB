@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNAPCAImageFilter_txx
-#define __otbNAPCAImageFilter_txx
+#ifndef otbNAPCAImageFilter_txx
+#define otbNAPCAImageFilter_txx
 #include "otbNAPCAImageFilter.h"
 
 #include "itkMacro.h"

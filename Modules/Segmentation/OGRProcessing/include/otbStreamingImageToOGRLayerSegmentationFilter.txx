@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageToOGRLayerSegmentationFilter_txx
-#define __otbStreamingImageToOGRLayerSegmentationFilter_txx
+#ifndef otbStreamingImageToOGRLayerSegmentationFilter_txx
+#define otbStreamingImageToOGRLayerSegmentationFilter_txx
 
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 

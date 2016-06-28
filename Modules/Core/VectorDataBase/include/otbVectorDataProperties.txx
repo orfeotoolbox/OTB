@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataProperties_txx
-#define __otbVectorDataProperties_txx
+#ifndef otbVectorDataProperties_txx
+#define otbVectorDataProperties_txx
 
 #include "otbVectorDataProperties.h"
 #include <algorithm>

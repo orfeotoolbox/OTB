@@ -81,20 +81,20 @@ namespace ossimplugins
       virtual bool saveState(ossimKeywordlist& kwl,
             const char* prefix=NULL) const;
 
-      virtual bool loadState(const ossimKeywordlist& kwl,
+      virtual bool loadState(ossimKeywordlist const& kwl,
             const char* prefix=NULL);
 
       bool checkDirectory(const ossimFilename& file, const char* d, const char *ext) const;
 
-      bool isLevel0(const ossimFilename& file) const;
+      bool isLevel0(ossimFilename const& file) const;
 
-      bool isLevel2(const ossimFilename& file) const;
+      bool isLevel2(ossimFilename const& file) const;
 
-      bool isLevel1(const ossimFilename& file) const;
+      bool isLevel1(ossimFilename const& file) const;
 
-      bool isSentinel1(const ossimFilename &manifestFile);
+      bool isSentinel1(ossimFilename const &manifestFile);
 
-      bool readProduct(const ossimFilename &productXmlFile);
+      bool readProduct(ossimFilename const &productXmlFile);
 
       ossimString const& getImageId(ossimXmlDocument const& manifestDoc) const;
 
@@ -106,10 +106,7 @@ namespace ossimplugins
 
       bool initImageSize(ossimIpt& imageSize) const;
 
-      ossimKeywordlist const& getManifestKwl() const
-      {
-         return theManifestKwl;
-      }
+      virtual void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const;
 
       bool isSLC() const { return  theSLC; }
       bool isOCN() const { return  theOCN; }

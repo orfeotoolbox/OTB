@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCloudDetectionFunctor_h
-#define __otbCloudDetectionFunctor_h
+#ifndef otbCloudDetectionFunctor_h
+#define otbCloudDetectionFunctor_h
 
 #include "otbCloudEstimatorFunctor.h"
 

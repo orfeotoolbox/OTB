@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSiftFastImageFilter_h
-#define __otbSiftFastImageFilter_h
+#ifndef otbSiftFastImageFilter_h
+#define otbSiftFastImageFilter_h
 
 #include "otbImageToPointSetFilter.h"
 #include "otbImage.h"

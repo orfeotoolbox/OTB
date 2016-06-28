@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGCPsToRPCSensorModelImageFilter_txx
-#define __otbGCPsToRPCSensorModelImageFilter_txx
+#ifndef otbGCPsToRPCSensorModelImageFilter_txx
+#define otbGCPsToRPCSensorModelImageFilter_txx
 
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 
