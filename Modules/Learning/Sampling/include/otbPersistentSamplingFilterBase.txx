@@ -722,7 +722,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // First get list of current fields
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   std::map<std::string, OGRFieldType> currentFields;
-  for (unsigned int k=0 ; k<layerDefn.GetFieldCount() ; k++)
+  for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
     {
     OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
     std::string currentName(fieldDefn.GetNameRef());
@@ -746,7 +746,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       wkbPoint,
       this->GetOGRLayerCreationOptions());
     // Copy existing fields
-    for (unsigned int k=0 ; k<layerDefn.GetFieldCount() ; k++)
+    for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
       {
       OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
       outLayer.CreateField(fieldDefn);
