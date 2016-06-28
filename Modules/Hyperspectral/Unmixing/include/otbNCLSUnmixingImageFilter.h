@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNCLSUnmixingImageFilter_h
-#define __otbNCLSUnmixingImageFilter_h
+#ifndef otbNCLSUnmixingImageFilter_h
+#define otbNCLSUnmixingImageFilter_h
 
 #include "itkMacro.h"
 #include "itkNumericTraits.h"
@@ -171,9 +171,9 @@ public:
 protected:
   NCLSUnmixingImageFilter();
 
-  virtual ~NCLSUnmixingImageFilter();
+  ~NCLSUnmixingImageFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   NCLSUnmixingImageFilter(const Self &); //purposely not implemented

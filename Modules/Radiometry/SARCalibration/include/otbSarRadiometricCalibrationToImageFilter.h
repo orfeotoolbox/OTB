@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarRadiometricCalibrationToImageFilter_h
-#define __otbSarRadiometricCalibrationToImageFilter_h
+#ifndef otbSarRadiometricCalibrationToImageFilter_h
+#define otbSarRadiometricCalibrationToImageFilter_h
 
 #include "otbSarRadiometricCalibrationFunction.h"
 #include "otbFunctionToImageFilter.h"
@@ -111,13 +111,13 @@ protected:
   SarRadiometricCalibrationToImageFilter();
 
   /** Empty, default virtual dtor */
-  virtual ~SarRadiometricCalibrationToImageFilter() {}
+  ~SarRadiometricCalibrationToImageFilter() ITK_OVERRIDE {}
 
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Update the function list and input parameters*/
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
 private:
 

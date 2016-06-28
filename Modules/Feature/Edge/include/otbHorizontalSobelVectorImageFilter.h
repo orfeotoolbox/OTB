@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHorizontalSobelVectorImageFilter_h
-#define __otbHorizontalSobelVectorImageFilter_h
+#ifndef otbHorizontalSobelVectorImageFilter_h
+#define otbHorizontalSobelVectorImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
 
@@ -88,7 +88,7 @@ protected:
     typename Superclass::RadiusType radius = {{1, 1}};
     this->SetRadius( radius );
   }
-  virtual ~HorizontalSobelVectorImageFilter() { }
+  ~HorizontalSobelVectorImageFilter() ITK_OVERRIDE { }
 
 private:
   HorizontalSobelVectorImageFilter( const Self & ); // Not implemented
@@ -98,4 +98,4 @@ private:
 } // end of namespace otb
 
 
-#endif // __otbHorizontalSobelVectorImageFilter_h
+#endif // otbHorizontalSobelVectorImageFilter_h

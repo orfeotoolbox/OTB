@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeNeighborhoodConnectedImageFilter_h
-#define __otbLabelizeNeighborhoodConnectedImageFilter_h
+#ifndef otbLabelizeNeighborhoodConnectedImageFilter_h
+#define otbLabelizeNeighborhoodConnectedImageFilter_h
 
 #include "itkNeighborhoodConnectedImageFilter.h"
 #include "otbLabelizeImageFilterBase.h"
@@ -101,11 +101,11 @@ public:
 
 protected:
   LabelizeNeighborhoodConnectedImageFilter();
-  virtual ~LabelizeNeighborhoodConnectedImageFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LabelizeNeighborhoodConnectedImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Region growing */
-  virtual void RegionGrowing(const IndexType indexSeed);
+  void RegionGrowing(const IndexType indexSeed) ITK_OVERRIDE;
 
 private:
   LabelizeNeighborhoodConnectedImageFilter(const Self &); //purposely not implemented

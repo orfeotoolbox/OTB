@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToReflectanceImageFilter_h
-#define __otbImageToReflectanceImageFilter_h
+#ifndef otbImageToReflectanceImageFilter_h
+#define otbImageToReflectanceImageFilter_h
 
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
@@ -251,10 +251,10 @@ protected:
     };
 
   /** Destructor */
-  virtual ~ImageToReflectanceImageFilter() {}
+  ~ImageToReflectanceImageFilter() ITK_OVERRIDE {}
 
   /** Update the functor list and input parameters */
-  virtual void BeforeThreadedGenerateData(void)
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
   {
 
     OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(

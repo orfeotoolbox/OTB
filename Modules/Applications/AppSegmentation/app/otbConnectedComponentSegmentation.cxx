@@ -66,7 +66,7 @@ public:
         <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConnectedComponentSegmentation");
     SetDescription("Connected component segmentation and object based image filtering of the input image according to user-defined criterions.");
@@ -117,12 +117,12 @@ private:
    SetDocExampleParameterValue("out", "ConnectedComponentSegmentation.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     InputVectorImageType::Pointer inputImage = GetParameterImage("in");
 

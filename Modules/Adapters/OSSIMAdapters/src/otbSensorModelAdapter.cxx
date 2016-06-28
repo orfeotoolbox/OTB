@@ -51,7 +51,7 @@ namespace otb
 {
 
 SensorModelAdapter::SensorModelAdapter():
-  m_SensorModel(NULL), m_TiePoints(NULL) // FIXME keeping the original value but...
+  m_SensorModel(ITK_NULLPTR), m_TiePoints(ITK_NULLPTR) // FIXME keeping the original value but...
 {
   m_DEMHandler = DEMHandler::Instance();
   m_TiePoints = new ossimTieGptSet();
@@ -59,15 +59,15 @@ SensorModelAdapter::SensorModelAdapter():
 
 SensorModelAdapter::~SensorModelAdapter()
 {
-  if (m_SensorModel != NULL)
+  if (m_SensorModel != ITK_NULLPTR)
     {
     delete m_SensorModel;
-    m_SensorModel = NULL;
+    m_SensorModel = ITK_NULLPTR;
     }
-  if(m_TiePoints!=NULL)
+  if(m_TiePoints!=ITK_NULLPTR)
     {
     delete m_TiePoints;
-    m_TiePoints = NULL;
+    m_TiePoints = ITK_NULLPTR;
     }
 }
 
@@ -80,7 +80,7 @@ void SensorModelAdapter::CreateProjection(const ImageKeywordlist& image_kwl)
   otbMsgDevMacro(<< "* type: " << geom.find("type"));
 
   m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
-  if (m_SensorModel == NULL)
+  if (m_SensorModel == ITK_NULLPTR)
     {
       m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
     }
@@ -88,7 +88,7 @@ void SensorModelAdapter::CreateProjection(const ImageKeywordlist& image_kwl)
 
 bool SensorModelAdapter::IsValidSensorModel()
 {
-  if (m_SensorModel == NULL)
+  if (m_SensorModel == ITK_NULLPTR)
     {
       return false;
     }
@@ -101,7 +101,7 @@ bool SensorModelAdapter::IsValidSensorModel()
 void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
                                                double& lon, double& lat, double& h) const
 {
-  if (this->m_SensorModel == NULL)
+  if (this->m_SensorModel == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "ForwardTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -120,7 +120,7 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
 void SensorModelAdapter::ForwardTransformPoint(double x, double y,
                                                double& lon, double& lat, double& h) const
 {
-  if (this->m_SensorModel == NULL)
+  if (this->m_SensorModel == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "ForwardTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -139,7 +139,7 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y,
 void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
                                                double& x, double& y, double& z) const
 {
-  if (this->m_SensorModel == NULL)
+  if (this->m_SensorModel == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "InverseTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -159,7 +159,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
 void SensorModelAdapter::InverseTransformPoint(double lon, double lat,
                                                double& x, double& y, double& z) const
 {
-  if (this->m_SensorModel == NULL)
+  if (this->m_SensorModel == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "InverseTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -215,27 +215,27 @@ double SensorModelAdapter::Optimize()
   double precision = 0.;
 
   // If tie points and model are allocated
-  if(m_SensorModel != NULL)
+  if(m_SensorModel != ITK_NULLPTR)
     {
     // try to retrieve a sensor model
 
-    ossimSensorModel * sensorModel = NULL;
+    ossimSensorModel * sensorModel = ITK_NULLPTR;
 	sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
 
-    ossimRpcProjection * simpleRpcModel = NULL;
+    ossimRpcProjection * simpleRpcModel = ITK_NULLPTR;
     simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
 
      //Handle expections
-	 if ( (sensorModel == NULL ) && (simpleRpcModel == NULL ) )
+	 if ( (sensorModel == ITK_NULLPTR ) && (simpleRpcModel == ITK_NULLPTR ) )
 		itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
 
 
-    if(sensorModel != NULL )
+    if(sensorModel != ITK_NULLPTR )
       {
 			// Call optimize fit
 			precision  = sensorModel->optimizeFit(*m_TiePoints);
       }
-    else if (simpleRpcModel != NULL)
+    else if (simpleRpcModel != ITK_NULLPTR)
 	  {
 		  	// Call optimize fit
 			precision  = simpleRpcModel->optimizeFit(*m_TiePoints);
@@ -256,39 +256,39 @@ bool SensorModelAdapter::ReadGeomFile(const std::string & infile)
 
   m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
 
-  if (m_SensorModel == NULL)
+  if (m_SensorModel == ITK_NULLPTR)
     {
     m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
     }
 
-  return (m_SensorModel != NULL);
+  return (m_SensorModel != ITK_NULLPTR);
 }
 
 bool SensorModelAdapter::WriteGeomFile(const std::string & outfile)
 {
   // If tie points and model are allocated
-  if(m_SensorModel != NULL)
+  if(m_SensorModel != ITK_NULLPTR)
     {
     // try to retrieve a sensor model
-    ossimSensorModel * sensorModel = NULL;
+    ossimSensorModel * sensorModel = ITK_NULLPTR;
     sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
 
-    ossimRpcProjection * simpleRpcModel = NULL;
+    ossimRpcProjection * simpleRpcModel = ITK_NULLPTR;
     simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
 
 	//Handle expections
-	if ( (sensorModel == NULL ) && (simpleRpcModel == NULL ) )
+	if ( (sensorModel == ITK_NULLPTR ) && (simpleRpcModel == ITK_NULLPTR ) )
 		itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
 
 
 	ossimKeywordlist geom;
     bool success = false;
-    if(sensorModel != NULL )
+    if(sensorModel != ITK_NULLPTR )
       {
 			// Save state
 			success = sensorModel->saveState(geom);
       }
-    else if (simpleRpcModel != NULL)
+    else if (simpleRpcModel != ITK_NULLPTR)
 	  {
 			// Save state
 			success = simpleRpcModel->saveState(geom);

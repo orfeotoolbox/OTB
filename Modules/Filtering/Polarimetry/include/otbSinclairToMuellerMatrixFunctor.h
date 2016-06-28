@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToMuellerMatrixFunctor_h
-#define __otbSinclairToMuellerMatrixFunctor_h
+#ifndef otbSinclairToMuellerMatrixFunctor_h
+#define otbSinclairToMuellerMatrixFunctor_h
 
 #include "vcl_complex.h"
 

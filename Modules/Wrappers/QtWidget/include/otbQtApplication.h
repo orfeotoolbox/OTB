@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbQtApplication_h
-#define __otbQtApplication_h
+#ifndef otbQtApplication_h
+#define otbQtApplication_h
 
 #include <QtGui>
 #include <QString>
@@ -35,7 +35,7 @@ class ITK_ABI_EXPORT QtApplication : public QApplication
 public:
   QtApplication(int& argc, char** argv);
 
-  bool notify(QObject *object, QEvent* event);
+  bool notify(QObject *object, QEvent* event) ITK_OVERRIDE;
 
 signals:
 

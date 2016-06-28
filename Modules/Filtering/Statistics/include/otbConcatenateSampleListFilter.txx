@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateSampleListFilter_txx
-#define __otbConcatenateSampleListFilter_txx
+#ifndef otbConcatenateSampleListFilter_txx
+#define otbConcatenateSampleListFilter_txx
 
 #include "otbConcatenateSampleListFilter.h"
 #include "itkProgressReporter.h"

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsVectorImageFilter_h
-#define __otbStreamingStatisticsVectorImageFilter_h
+#ifndef otbStreamingStatisticsVectorImageFilter_h
+#define otbStreamingStatisticsVectorImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -174,12 +174,12 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  virtual void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
-  virtual void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
   itkSetMacro(EnableMinMax, bool);
   itkGetMacro(EnableMinMax, bool);
@@ -205,19 +205,19 @@ public:
 protected:
   PersistentStreamingStatisticsVectorImageFilter();
 
-  virtual ~PersistentStreamingStatisticsVectorImageFilter() {}
+  ~PersistentStreamingStatisticsVectorImageFilter() ITK_OVERRIDE {}
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentStreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented
@@ -465,7 +465,7 @@ protected:
   StreamingStatisticsVectorImageFilter() {}
 
   /** Destructor */
-  virtual ~StreamingStatisticsVectorImageFilter() {}
+  ~StreamingStatisticsVectorImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented

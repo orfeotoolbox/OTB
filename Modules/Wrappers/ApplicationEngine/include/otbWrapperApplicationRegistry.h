@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperApplicationRegistry_h
-#define __otbWrapperApplicationRegistry_h
+#ifndef otbWrapperApplicationRegistry_h
+#define otbWrapperApplicationRegistry_h
 
 #include <string>
 #include "itkObject.h"
@@ -76,7 +76,7 @@ public:
 
 protected:
   ApplicationRegistry();
-  virtual ~ApplicationRegistry();
+  ~ApplicationRegistry() ITK_OVERRIDE;
 
 private:
   ApplicationRegistry(const Self&); //purposely not implemented
@@ -90,4 +90,4 @@ private:
 } // end namespace Wrapper
 } //end namespace otb
 
-#endif // __otbWrapperApplication_h_
+#endif // otbWrapperApplication_h_

@@ -110,7 +110,7 @@ public:
 
 protected:
    ReciprocalPauliDecompImageFilter() {this->SetNumberOfThreads(1);}
-  virtual ~ReciprocalPauliDecompImageFilter() {}
+  ~ReciprocalPauliDecompImageFilter() ITK_OVERRIDE {}
 
 private:
   ReciprocalPauliDecompImageFilter(const Self&); //purposely not implemented

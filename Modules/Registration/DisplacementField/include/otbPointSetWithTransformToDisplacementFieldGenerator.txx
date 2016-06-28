@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetWithTransformToDisplacementFieldGenerator_txx
-#define __otbPointSetWithTransformToDisplacementFieldGenerator_txx
+#ifndef otbPointSetWithTransformToDisplacementFieldGenerator_txx
+#define otbPointSetWithTransformToDisplacementFieldGenerator_txx
 
 #include "otbPointSetWithTransformToDisplacementFieldGenerator.h"
 
@@ -31,7 +31,7 @@ template <class TPointSet, class TDisplacementField>
 PointSetWithTransformToDisplacementFieldGenerator<TPointSet, TDisplacementField>
 ::PointSetWithTransformToDisplacementFieldGenerator()
 {
-  m_Transform = 0;    // has to be provided by the user
+  m_Transform = ITK_NULLPTR;    // has to be provided by the user
 }
 /**
  * PrintSelf Method

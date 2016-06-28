@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsVectorImageFilter_txx
-#define __otbStreamingStatisticsVectorImageFilter_txx
+#ifndef otbStreamingStatisticsVectorImageFilter_txx
+#define otbStreamingStatisticsVectorImageFilter_txx
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

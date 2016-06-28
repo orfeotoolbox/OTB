@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRFeatureWrapper_txx
-#define __otbOGRFeatureWrapper_txx
+#ifndef otbOGRFeatureWrapper_txx
+#define otbOGRFeatureWrapper_txx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
@@ -205,4 +205,4 @@ void otb::ogr::Feature::CheckInvariants() const
   assert(m_Feature && "OGRFeature can't be null");
 }
 
-#endif // __otbOGRFeatureWrapper_txx
+#endif // otbOGRFeatureWrapper_txx

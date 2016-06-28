@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGAndRIndexImageFilter_h
-#define __otbGAndRIndexImageFilter_h
+#ifndef otbGAndRIndexImageFilter_h
+#define otbGAndRIndexImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbSoilIndicesFunctor.h"
@@ -69,9 +69,9 @@ public:
 
 protected:
   GAndRIndexImageFilter();
-  virtual ~GAndRIndexImageFilter() {}
+  ~GAndRIndexImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /*  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                               itk::ThreadIdType threadId );

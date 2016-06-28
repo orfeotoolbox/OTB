@@ -139,7 +139,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
   // Iterate through the tree to get all the nodes and store them in
   // a std::map
   for( TiXmlElement* node = root.FirstChild("node").ToElement();
-       node != NULL  && strcmp(node->Value(),"node")==0;
+       node != ITK_NULLPTR  && strcmp(node->Value(),"node")==0;
        node = node->NextSiblingElement() )
     {
     int id = 0;
@@ -168,7 +168,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
 
   // Iterate through the tree to get all the fields ways with tag k=key
   for( TiXmlElement* currentLayer = root.FirstChildElement("way").ToElement();
-       currentLayer != NULL && strcmp(currentLayer->Value(),"way") ==0;
+       currentLayer != ITK_NULLPTR && strcmp(currentLayer->Value(),"way") ==0;
        currentLayer = currentLayer->NextSiblingElement() )
     {
     bool foundKey = false;
@@ -180,7 +180,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
 
       // Iterate through the node tag to find the "key"
       for( TiXmlElement* currentTag = currentLayer->FirstChild("tag")->ToElement();
-           currentTag != NULL;
+           currentTag != ITK_NULLPTR;
            currentTag = currentTag->NextSiblingElement() )
         {
         std::string result = currentTag->Attribute("k");
@@ -211,7 +211,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
 
         // put the current layer pointer to the begining
         for( TiXmlElement* currentNode = currentLayer->FirstChildElement("nd");
-             currentNode != NULL;
+             currentNode != ITK_NULLPTR;
              currentNode = currentNode->NextSiblingElement() )
           {
           int value=0;

@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbDateTimeAdapter_h
-#define __otbDateTimeAdapter_h
+#ifndef otbDateTimeAdapter_h
+#define otbDateTimeAdapter_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -81,7 +81,7 @@ public:
   
 protected:
   DateTimeAdapter();
-  virtual ~DateTimeAdapter();
+  ~DateTimeAdapter() ITK_OVERRIDE;
 
 private:
   DateTimeAdapter(const Self &); //purposely not implemented

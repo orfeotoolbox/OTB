@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMetaDataKey_h
-#define __otbMetaDataKey_h
+#ifndef otbMetaDataKey_h
+#define otbMetaDataKey_h
 
 #include <string>
 #include <vector>

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLikelihoodPathListFilter_txx
-#define __otbLikelihoodPathListFilter_txx
+#ifndef otbLikelihoodPathListFilter_txx
+#define otbLikelihoodPathListFilter_txx
 
 #include "otbLikelihoodPathListFilter.h"
 #include "otbPolyLineImageConstIterator.h"
@@ -50,7 +50,7 @@ LikelihoodPathListFilter<TPath, TImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ImageType *>(this->itk::ProcessObject::GetInput(1));
 }

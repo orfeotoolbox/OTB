@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpatialObjectToImageDrawingFilter_h
-#define __otbSpatialObjectToImageDrawingFilter_h
+#ifndef otbSpatialObjectToImageDrawingFilter_h
+#define otbSpatialObjectToImageDrawingFilter_h
 
 #include "itkImageSource.h"
 #include "itkConceptChecking.h"
@@ -137,10 +137,10 @@ public:
 
 protected:
   SpatialObjectToImageDrawingFilter();
-  virtual ~SpatialObjectToImageDrawingFilter();
+  ~SpatialObjectToImageDrawingFilter() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation(); // do nothing
-  virtual void GenerateData();
+  void GenerateOutputInformation() ITK_OVERRIDE; // do nothing
+  void GenerateData() ITK_OVERRIDE;
 
   SizeType     m_Size;
   double       m_Spacing[OutputImageDimension];
@@ -150,7 +150,7 @@ protected:
   ValueType    m_OutsideValue;
   bool         m_UseObjectValue;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SpatialObjectToImageDrawingFilter(const Self &); //purposely not implemented

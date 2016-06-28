@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSensorModelAdapter_h
-#define __otbSensorModelAdapter_h
+#ifndef otbSensorModelAdapter_h
+#define otbSensorModelAdapter_h
 
 #include "otbDEMHandler.h"
 
@@ -108,7 +108,7 @@ public:
 
 protected:
   SensorModelAdapter();
-  virtual ~SensorModelAdapter();
+  ~SensorModelAdapter() ITK_OVERRIDE;
 
 private:
   SensorModelAdapter(const Self &); //purposely not implemented

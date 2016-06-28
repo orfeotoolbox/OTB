@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToOGRDataFilter_h
-#define __otbPersistentImageToOGRDataFilter_h
+#ifndef otbPersistentImageToOGRDataFilter_h
+#define otbPersistentImageToOGRDataFilter_h
 
 #include "otbPersistentImageFilter.h"
 

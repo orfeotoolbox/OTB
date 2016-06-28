@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRSResampleImageFilter_txx
-#define __otbGenericRSResampleImageFilter_txx
+#ifndef otbGenericRSResampleImageFilter_txx
+#define otbGenericRSResampleImageFilter_txx
 
 #include "otbGenericRSResampleImageFilter.h"
 
@@ -200,7 +200,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
    m_InputRpcEstimator->SetInput(tempPtr);
    m_InputRpcEstimator->UpdateOutputInformation();
 
-   // No need to override the input kwl, just setup the
+   // No need to ITK_OVERRIDE the input kwl, just setup the
    // transform with the kwl estimated
    if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
      m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
@@ -295,12 +295,12 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     bool hem = (geoPoint[1]>1e-10)?true:false;
 
     // Build the output UTM projection ref
-    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
+    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(ITK_NULLPTR);
     OSRSetProjCS(oSRS, "UTM");
     OSRSetWellKnownGeogCS(oSRS, "WGS84");
     OSRSetUTM(oSRS, zone, hem);
 
-    char * utmRefC = NULL;
+    char * utmRefC = ITK_NULLPTR;
     OSRExportToWkt(oSRS, &utmRefC);
     projectionRef = utmRefC;
 

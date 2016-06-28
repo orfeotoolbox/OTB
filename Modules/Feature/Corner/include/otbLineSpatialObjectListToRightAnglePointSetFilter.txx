@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSpatialObjectListToRightAnglePointSetFilter_txx
-#define __otbLineSpatialObjectListToRightAnglePointSetFilter_txx
+#ifndef otbLineSpatialObjectListToRightAnglePointSetFilter_txx
+#define otbLineSpatialObjectListToRightAnglePointSetFilter_txx
 
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "itkLineIterator.h"

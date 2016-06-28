@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperApplicationFactoryBase_h
-#define __otbWrapperApplicationFactoryBase_h
+#ifndef otbWrapperApplicationFactoryBase_h
+#define otbWrapperApplicationFactoryBase_h
 
 #include "itkObjectFactoryBase.h"
 #include "otbWrapperApplication.h"
@@ -44,7 +44,7 @@ public:
 protected:
   ApplicationFactoryBase(){}
 
-  virtual ~ApplicationFactoryBase(){}
+  ~ApplicationFactoryBase() ITK_OVERRIDE{}
 
 private:
   ApplicationFactoryBase(const Self &); //purposely not implemented

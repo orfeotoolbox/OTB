@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaralickTexturesImageFunction_txx
-#define __otbHaralickTexturesImageFunction_txx
+#ifndef otbHaralickTexturesImageFunction_txx
+#define otbHaralickTexturesImageFunction_txx
 
 #include "otbHaralickTexturesImageFunction.h"
 #include "itkImageRegionIteratorWithIndex.h"

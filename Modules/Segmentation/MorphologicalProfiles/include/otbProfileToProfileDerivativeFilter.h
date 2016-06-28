@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProfileToProfileDerivativeFilter_h
-#define __otbProfileToProfileDerivativeFilter_h
+#ifndef otbProfileToProfileDerivativeFilter_h
+#define otbProfileToProfileDerivativeFilter_h
 
 #include "otbImageListToImageListFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -75,20 +75,20 @@ public:
 
   /** Generate output information for the ImageList and for each image
       in the list. */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Generate input requested region for each image in the list. */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 protected:
   /** Main computation method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** Constructor */
   ProfileToProfileDerivativeFilter();
   /** Destructor */
-  virtual ~ProfileToProfileDerivativeFilter() {}
+  ~ProfileToProfileDerivativeFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ProfileToProfileDerivativeFilter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
-#define __otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
+#ifndef otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
+#define otbBSplinesInterpolateTransformDisplacementFieldGenerator_h
 
 #include "otbPointSetWithTransformToDisplacementFieldGenerator.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -103,13 +103,13 @@ protected:
   /** Constructor */
   BSplinesInterpolateTransformDisplacementFieldGenerator();
   /** Destructor */
-  virtual ~BSplinesInterpolateTransformDisplacementFieldGenerator() {}
+  ~BSplinesInterpolateTransformDisplacementFieldGenerator() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /**
    * Test wether a parameter is angular or not.

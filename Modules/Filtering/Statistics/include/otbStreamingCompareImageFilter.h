@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingCompareImageFilter_h
-#define __otbStreamingCompareImageFilter_h
+#ifndef otbStreamingCompareImageFilter_h
+#define otbStreamingCompareImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"
@@ -129,31 +129,31 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs();
-  virtual void GenerateOutputInformation();
-  void Synthetize(void);
-  void Reset(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
 
 protected:
   PersistentCompareImageFilter();
-  virtual ~PersistentCompareImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentCompareImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType&
                              outputRegionForThread,
-                             itk::ThreadIdType threadId);
+                             itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Allows skipping the verification of physical space between
    *  the two input images (see flag m_PhysicalSpaceCheck)
    */
-  virtual void VerifyInputInformation();
+  void VerifyInputInformation() ITK_OVERRIDE;
 
 private:
   PersistentCompareImageFilter(const Self &); //purposely not implemented
@@ -295,7 +295,7 @@ protected:
   /** Constructor */
   StreamingCompareImageFilter() {};
   /** Destructor */
-  virtual ~StreamingCompareImageFilter() {}
+  ~StreamingCompareImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingCompareImageFilter(const Self &); //purposely not implemented

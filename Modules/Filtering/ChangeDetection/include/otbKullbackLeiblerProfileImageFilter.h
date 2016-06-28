@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKullbackLeiblerProfileImageFilter_h
-#define __otbKullbackLeiblerProfileImageFilter_h
+#ifndef otbKullbackLeiblerProfileImageFilter_h
+#define otbKullbackLeiblerProfileImageFilter_h
 
 #include <vector>
 
@@ -186,7 +186,7 @@ public:
 
 protected:
   KullbackLeiblerProfileImageFilter() {}
-  virtual ~KullbackLeiblerProfileImageFilter() {}
+  ~KullbackLeiblerProfileImageFilter() ITK_OVERRIDE {}
 
 private:
   KullbackLeiblerProfileImageFilter(const Self &); //purposely not implemented

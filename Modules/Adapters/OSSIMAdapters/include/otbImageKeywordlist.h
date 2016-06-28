@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageKeywordlist_h
-#define __otbImageKeywordlist_h
+#ifndef otbImageKeywordlist_h
+#define otbImageKeywordlist_h
 
 #include <iostream>
 #include <map>
@@ -164,4 +164,4 @@ ImageKeywordlist
 
 } //namespace otb
 
-#endif // __otbImageKeywordlist_h
+#endif // otbImageKeywordlist_h

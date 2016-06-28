@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoveTortuousPathListFilter_h
-#define __otbRemoveTortuousPathListFilter_h
+#ifndef otbRemoveTortuousPathListFilter_h
+#define otbRemoveTortuousPathListFilter_h
 
 #include "otbUnaryFunctorObjectListBooleanFilter.h"
 #include "otbPathMeanDistanceFunctor.h"

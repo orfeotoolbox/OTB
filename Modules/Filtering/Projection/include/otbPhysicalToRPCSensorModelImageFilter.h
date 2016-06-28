@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPhysicalToRPCSensorModelImageFilter_h
-#define __otbPhysicalToRPCSensorModelImageFilter_h
+#ifndef otbPhysicalToRPCSensorModelImageFilter_h
+#define otbPhysicalToRPCSensorModelImageFilter_h
 
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
@@ -107,19 +107,19 @@ public:
   }
 
   /** Reimplement the method Modified() */
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   PhysicalToRPCSensorModelImageFilter();
   /** Destructor */
-  virtual ~PhysicalToRPCSensorModelImageFilter();
+  ~PhysicalToRPCSensorModelImageFilter() ITK_OVERRIDE;
 
   /** The PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Generate the Output image information*/
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   PhysicalToRPCSensorModelImageFilter(const Self &);   // purposely not implemented

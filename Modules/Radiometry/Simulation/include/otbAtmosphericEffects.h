@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericEffects_h
-#define __otbAtmosphericEffects_h
+#ifndef otbAtmosphericEffects_h
+#define otbAtmosphericEffects_h
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 
@@ -93,7 +93,7 @@ class AtmosphericEffects
            /** Constructor from a ASCII file */
            //AtmosphericEffects( const std::string & filename );
            /** Destructor */
-           virtual ~AtmosphericEffects() {};
+           ~AtmosphericEffects() ITK_OVERRIDE {};
            /** PrintSelf method */
            //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

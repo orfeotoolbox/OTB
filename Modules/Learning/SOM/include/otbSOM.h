@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOM_h
-#define __otbSOM_h
+#ifndef otbSOM_h
+#define otbSOM_h
 
 #include "itkImageToImageFilter.h"
 #include "itkEuclideanDistanceMetric.h"
@@ -123,13 +123,13 @@ protected:
   /** Constructor */
   SOM();
   /** Destructor */
-  virtual ~SOM();
+  ~SOM() ITK_OVERRIDE;
   /** Output information redefinition */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Output allocation redefinition */
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /**
    * Update the output map with a new sample.
    * \param sample The new sample to learn,
@@ -142,7 +142,7 @@ protected:
    */
   virtual void Step(unsigned int currentIteration);
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SOM(const Self &); // purposely not implemented

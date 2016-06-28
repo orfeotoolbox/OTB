@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToReciprocalCovarianceMatrixFunctor_h
-#define __otbSinclairToReciprocalCovarianceMatrixFunctor_h
+#ifndef otbSinclairToReciprocalCovarianceMatrixFunctor_h
+#define otbSinclairToReciprocalCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
 #include "otbMath.h"
