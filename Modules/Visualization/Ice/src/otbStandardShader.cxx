@@ -87,9 +87,9 @@ std::string StandardShader::GetSource() const
     "uniform float shader_slider_pos;\n"                                \
     "uniform int shader_vertical_slider_flag;\n"                        \
     "\n"								\
-    "float modulus( float x, float y )\n"				\
+    "float decibels( float x )\n"					\
     "{\n"								\
-    "  return sqrt( x * x + y * y );\n"					\
+    "  return 10.0f * log( x ) / log( 10.0f );\n"			\
     "}\n"								\
     "\n"								\
     "float phasis( float x, float y )\n"				\
@@ -99,7 +99,6 @@ std::string StandardShader::GetSource() const
     "\n"								\
     "vec3 modulus( vec3 v )\n"						\
     "{\n"								\
-    "  // v.r = v.g = v.b = modulus( v.x, v.y );\n"			\
     "  v.r = v.g = v.b = length( vec2( v ) );\n"			\
     "  return v;\n"							\
     "}\n"								\
@@ -112,7 +111,6 @@ std::string StandardShader::GetSource() const
     "\n"								\
     "vec4 modulus( vec4 v )\n"						\
     "{\n"								\
-    "  // v.r = v.g = v.b = modulus( v.x, v.y );\n"			\
     "  v.r = v.g = v.b = length( vec2( v ) );\n"			\
     "  return v;\n"							\
     "}\n"								\
@@ -120,6 +118,30 @@ std::string StandardShader::GetSource() const
     "vec4 phasis( vec4 v )\n"						\
     "{\n"								\
     "  v.r = v.g = v.b = phasis( v.x, v.y );\n"				\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
+    "vec3 amplitude_db( vec3 v )\n"					\
+    "{\n"								\
+    "  v.r = v.g = v.b = decibels( length( vec2( v ) ) );\n"		\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
+    "vec3 intensity_db( vec3 v )\n"					\
+    "{\n"								\
+    "  v.r = v.g = v.b = decibels( v.x * v.x + v.y * v.y );\n"		\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
+    "vec4 amplitude_db( vec4 v )\n"					\
+    "{\n"								\
+    "  v.r = v.g = v.b = decibels( length( vec2( v ) ) );\n"		\
+    "  return v;\n"							\
+    "}\n"								\
+    "\n"								\
+    "vec4 intensity_db( vec4 v )\n"					\
+    "{\n"								\
+    "  v.r = v.g = v.b = decibels( v.x * v.x + v.y * v.y );\n"		\
     "  return v;\n"							\
     "}\n"								\
     "\n"								\
@@ -140,6 +162,20 @@ std::string StandardShader::GetSource() const
     "  p2 = phasis( p );\n"						\
     "\n"								\
     "  p_current = phasis( shader_current );\n"				\
+    "}\n"								\
+    "// Amplitude dB (complex)\n"					\
+    "else if( pixel_type==3 )\n"					\
+    "{\n"								\
+    "  p2 = amplitude_db( p );\n"					\
+    "\n"								\
+    "  p_current = amplitude_db( shader_current );\n"			\
+    "}\n"								\
+    "// Intensity dB (complex)\n"					\
+    "else if( pixel_type==4 )\n"					\
+    "{\n"								\
+    "  p2 = intensity_db( p );\n"					\
+    "\n"								\
+    "  p_current = intensity_db( shader_current );\n"			\
     "}\n"								\
     "// Dynamics\n"							\
     "gl_FragColor =\n"							\
@@ -223,16 +259,73 @@ void StandardShader::SetupShader()
 
   assert( !m_ImageSettings.IsNull() );
 
+#define DECIBEL( x ) ( 10.0 * log10( x ) )
+
+  //
+  // Apply logarithmic dB scale.
+  double minRGB[] =
+    {
+      m_ImageSettings->GetMinRed(),
+      m_ImageSettings->GetMinGreen(),
+      m_ImageSettings->GetMinBlue()
+    };
+
+  double maxRGB[] =
+    {
+      m_ImageSettings->GetMaxRed(),
+      m_ImageSettings->GetMaxGreen(),
+      m_ImageSettings->GetMaxBlue()
+    };
+
+#if 0
+  switch( m_ImageSettings->GetPixelType() )
+    {
+    case ImageSettings::PIXEL_TYPE_AMPLITUDE_DB :
+      assert( minRGB[ 0 ]==minRGB[ 1 ] && minRGB[ 1 ]==minRGB[ 2 ] );
+      assert( maxRGB[ 0 ]==maxRGB[ 1 ] && maxRGB[ 1 ]==maxRGB[ 2 ] );
+
+      minRGB[ 0 ] =
+      minRGB[ 1 ] =
+      minRGB[ 2 ] =
+	DECIBEL( minRGB[ 0 ] );
+
+      maxRGB[ 0 ] =
+      maxRGB[ 1 ] =
+      maxRGB[ 2 ] =
+	DECIBEL( maxRGB[ 0 ] );
+      break;
+
+    case ImageSettings::PIXEL_TYPE_INTENSITY_DB :
+      assert( minRGB[ 0 ]==minRGB[ 1 ] && minRGB[ 1 ]==minRGB[ 2 ] );
+      assert( maxRGB[ 0 ]==maxRGB[ 1 ] && maxRGB[ 1 ]==maxRGB[ 2 ] );
+
+      minRGB[ 0 ] =
+      minRGB[ 1 ] =
+      minRGB[ 2 ] =
+	DECIBEL( minRGB[ 0 ] * minRGB[ 0 ] );
+
+      maxRGB[ 0 ] =
+      maxRGB[ 1 ] =
+      maxRGB[ 2 ] =
+	DECIBEL( maxRGB[ 0 ] * maxRGB[ 0 ] );
+      break;
+
+    default:
+      break;
+    }
+#endif
+
   //
   // Compute shifts.
-  double shr = -m_ImageSettings->GetMinRed();
-  double shg = -m_ImageSettings->GetMinGreen();
-  double shb = -m_ImageSettings->GetMinBlue();
+  double shr = -minRGB[ 0 ];
+  double shg = -minRGB[ 1 ];
+  double shb = -minRGB[ 2 ];
+
   //
   // Compute scales.
-  double scr = 1.0 / ( m_ImageSettings->GetMaxRed()+shr );
-  double scg = 1.0 / ( m_ImageSettings->GetMaxGreen()+shg );
-  double scb = 1.0 / ( m_ImageSettings->GetMaxBlue()+shb );
+  double scr = 1.0 / ( maxRGB[ 0 ] + shr );
+  double scg = 1.0 / ( maxRGB[ 1 ] + shg );
+  double scb = 1.0 / ( maxRGB[ 2 ] + shb );
 
   double gamma = m_ImageSettings->GetGamma();
 

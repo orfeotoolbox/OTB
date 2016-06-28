@@ -24,7 +24,7 @@ namespace otb
 {
 
 ImageSettings::ImageSettings() :
-  m_PixelType( PIXEL_TYPE_INTENSITY ),
+  m_PixelType( PIXEL_TYPE_OPTICAL ),
   m_MinRed( 0 ),
   m_MaxRed( 255 ),
   m_MinGreen( 0 ),
