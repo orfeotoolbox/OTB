@@ -16,10 +16,13 @@ if(MSVC)
   #TODO: add LCMS dependency
 endif()
 
+#GIT_REPOSITORY "https://github.com/uclouvain/openjpeg.git"
+#GIT_TAG d0babeb6f6cdd1887308137df37bb2b4724a6592
+
 ExternalProject_Add(OPENJPEG
   PREFIX OPENJPEG
-  GIT_REPOSITORY "https://github.com/uclouvain/openjpeg.git"
-  GIT_TAG d0babeb6f6cdd1887308137df37bb2b4724a6592
+  URL "https://github.com/uclouvain/openjpeg/archive/d0babeb6f6cdd1887308137df37bb2b4724a6592.zip"
+  URL_MD5 e84a8cca9892a5f80ce91c1174c3fd41
   BINARY_DIR ${OPENJPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
