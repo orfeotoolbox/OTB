@@ -62,7 +62,7 @@ void ossimplugins::ossimSentinel1SarSensorModel::readCoordinates(
 
       if (ssplit.empty())
       {
-         throw std::runtime_error("The "+rg0_xpath+" record has an empty coef vector");
+         throw std::runtime_error(("The "+rg0_xpath+" record has an empty coef vector").string());
       }
       for (std::vector<ossimString>::const_iterator cIt = ssplit.begin(), e = ssplit.end()
             ; cIt != e
@@ -79,7 +79,6 @@ void ossimplugins::ossimSentinel1SarSensorModel::readCoordinates(
 
 namespace ossimplugins
 {
-
 void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annotationXml)
 {
     ossimRefPtr<ossimXmlDocument> xmlDoc = new ossimXmlDocument(annotationXml);
