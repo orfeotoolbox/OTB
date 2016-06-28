@@ -139,6 +139,8 @@ ApplicationsToolBox
   mainItem->setText( COLUMN_NAME, tr( "Orfeo Toolbox Algorithms" ) );
   mainItem->setExpanded( !m_SearchText.isEmpty() );
 
+  QString search( m_SearchText.simplified() );
+
   // 
   // iterate on map: key as high-level item / algorithms as lower-level items
   for( ApplicationsTagContainer::const_iterator itTag( m_AppTags.begin() );
@@ -152,8 +154,8 @@ ApplicationsToolBox
     // If a current tag applicaton name match the searchText, add the
     // tag as an item to the tree
     if (m_SearchText.isEmpty() ||  
-	IsSearchTextMatchAnyAlgorithm( qcurrentTag ) || 
-	qcurrentTag.contains(m_SearchText ,Qt::CaseInsensitive))
+	IsSearchTextMatchAnyAlgorithm( qcurrentTag, search ) || 
+	qcurrentTag.contains( search, Qt::CaseInsensitive ) )
       {
       //
       // step #1 ->  DocTag is a main item
@@ -181,8 +183,8 @@ ApplicationsToolBox
 
 	// does the current algorithm DocName match the search text
 	if ( m_SearchText.isEmpty() ||
-	     title.contains( m_SearchText, Qt::CaseInsensitive ) ||
-	     name.contains( m_SearchText, Qt::CaseInsensitive ) )
+	     title.contains( search, Qt::CaseInsensitive ) ||
+	     name.contains( search, Qt::CaseInsensitive ) )
 	  {
 	  // 
 	  // set current application name as secondary item
@@ -209,7 +211,7 @@ ApplicationsToolBox
 /*******************************************************************************/
 bool
 ApplicationsToolBox
-::IsSearchTextMatchAnyAlgorithm(const QString & tagName )
+::IsSearchTextMatchAnyAlgorithm( const QString & tagName, const QString & search )
 {
   // find the pair corresponding to the tagName
   ApplicationsTagContainer::const_iterator itTag(
@@ -227,9 +229,9 @@ ApplicationsToolBox
     {
     QString name( FromStdString( *itApps ) );
 
-    if( name.contains( m_SearchText, Qt::CaseInsensitive ) ||
+    if( name.contains( search, Qt::CaseInsensitive ) ||
 	GetApplicationDocNameByApplicationName( name )
-	.contains( m_SearchText, Qt::CaseInsensitive ) )
+	.contains( search, Qt::CaseInsensitive ) )
       return true;
     }
 

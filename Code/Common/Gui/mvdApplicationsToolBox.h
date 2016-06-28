@@ -143,7 +143,8 @@ private:
    * \brief Helper method to check if searchText matches any of the
    * algorithms string contained in the map
    */
-  bool IsSearchTextMatchAnyAlgorithm( const QString & tagName );
+  bool IsSearchTextMatchAnyAlgorithm( const QString & tagName,
+				      const QString & search );
 
   /**
    * \brief Helper method to get the DocName of an application from an
