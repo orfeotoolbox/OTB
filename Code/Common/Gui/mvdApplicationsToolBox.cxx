@@ -62,6 +62,15 @@ enum COLUMN
   COLUMN_COUNT,
 };
 
+enum ItemType
+{
+  ITEM_TYPE_ROOT = 0,
+  ITEM_TYPE_TAG,
+  ITEM_TYPE_APPLICATION,
+  //
+  TYPE_COUNT,
+};
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
@@ -134,10 +143,12 @@ ApplicationsToolBox
 
   // 
   // main item (title)
-  QTreeWidgetItem * mainItem = new QTreeWidgetItem( m_UI->m_AlgorithmsTree );
+  QTreeWidgetItem * mainItem =
+    new QTreeWidgetItem( m_UI->m_AlgorithmsTree, ITEM_TYPE_ROOT );
 
   mainItem->setText( COLUMN_NAME, tr( "Orfeo Toolbox Algorithms" ) );
   mainItem->setExpanded( !m_SearchText.isEmpty() );
+  mainItem->setFlags( Qt::NoItemFlags | Qt::ItemIsEnabled );
 
   QString search( m_SearchText.simplified() );
 
@@ -159,9 +170,12 @@ ApplicationsToolBox
       {
       //
       // step #1 ->  DocTag is a main item
-      QTreeWidgetItem * cmainItem = new QTreeWidgetItem( mainItem );
-      cmainItem->setText( COLUMN_NAME,  qcurrentTag );
+      QTreeWidgetItem * cmainItem =
+	new QTreeWidgetItem( mainItem, ITEM_TYPE_TAG );
+
+      cmainItem->setText( COLUMN_NAME, qcurrentTag );
       cmainItem->setExpanded( !m_SearchText.isEmpty() );
+      cmainItem->setFlags( Qt::NoItemFlags | Qt::ItemIsEnabled );
 
       //
       // add category icon
@@ -181,6 +195,9 @@ ApplicationsToolBox
 	  GetApplicationDocNameByApplicationName( name )
 	);
 
+	assert( !name.isEmpty() );
+	assert( !title.isEmpty() );
+
 	// does the current algorithm DocName match the search text
 	if ( m_SearchText.isEmpty() ||
 	     title.contains( search, Qt::CaseInsensitive ) ||
@@ -188,7 +205,8 @@ ApplicationsToolBox
 	  {
 	  // 
 	  // set current application name as secondary item
-	  QTreeWidgetItem * secItem = new QTreeWidgetItem( cmainItem );
+	  QTreeWidgetItem * secItem =
+	    new QTreeWidgetItem( cmainItem, ITEM_TYPE_APPLICATION );
 
 	  secItem->setText( COLUMN_NAME, name );
 	  secItem->setText( COLUMN_TITLE, title );
@@ -243,6 +261,8 @@ void
 ApplicationsToolBox
 ::LaunchApplication( const QString& appName )
 {
+  assert( !appName.isEmpty() );
+
   emit ApplicationToLaunchSelected(
     appName,
     GetApplicationDocNameByApplicationName( appName )
@@ -261,7 +281,6 @@ ApplicationsToolBox
 
   while( itDocNames != m_AppsDocNameToNameMap.end() )
     {
-    
     // retrieve the appName in the map
     if ( appName == QString( (*itDocNames).second.c_str() ) )
       {
@@ -289,7 +308,7 @@ ApplicationsToolBox
 
   // remember the OTB applications  docName <-> Name association
   m_AppsDocNameToNameMap = docNameToNameMap;
-  
+
   // fill the tree with the application
   FillTreeUsingTags();  
 }
@@ -299,7 +318,7 @@ void
 ApplicationsToolBox
 ::OnSearchBoxChanged(const QString & search)
 {
-  // 
+  //
   // get the search text
   m_SearchText = search;
   
@@ -314,7 +333,7 @@ ApplicationsToolBox
 {
   // qDebug() << item << column;
 
-  if( item->childCount() > 0 )
+  if( item->type()!=ITEM_TYPE_APPLICATION )
     return;
 
   QString text( item->text( column ) );
