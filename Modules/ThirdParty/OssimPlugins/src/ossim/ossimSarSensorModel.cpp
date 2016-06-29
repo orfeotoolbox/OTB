@@ -149,6 +149,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightAboveEllipsoid, ossimGpt& worldPt) const
    {
+      // std::clog << "ossimSarSensorModel::lineSampleHeightToWorld()\n";
       assert(!theGCPRecords.empty()&&"theGCPRecords is empty.");
 
       GCPRecordType const& refGcp = findClosestGCP(imPt);
@@ -175,6 +176,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::lineSampleToWorld(ossimDpt const& imPt, ossimGpt& worldPt) const
    {
+      // std::clog << "ossimSarSensorModel::lineSampleToWorld()\n";
       assert(!theGCPRecords.empty()&&"theGCPRecords is empty.");
 
       GCPRecordType const& refGcp = findClosestGCP(imPt);
@@ -192,6 +194,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::worldToLineSample(const ossimGpt& worldPt, ossimDpt & imPt) const
    {
+      // std::clog << "ossimSarSensorModel::worldToLineSample()\n";
       assert(theRangeResolution>0&&"theRangeResolution is null.");
 
       // First compute azimuth and range time
@@ -205,8 +208,8 @@ namespace ossimplugins
          imPt.makeNan();
          return;
       }
-      std::clog << "AzimuthTime: " << azimuthTime << "\n";
-      std::clog << "RangeTime: " << rangeTime << "\n";
+      // std::clog << "AzimuthTime: " << azimuthTime << "\n";
+      // std::clog << "RangeTime: " << rangeTime << "\n";
       // std::clog << "GRD: " << isGRD() << "\n";
 
       // Convert azimuth time to line
@@ -237,6 +240,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime) const
    {
+      // std::clog << "ossimSarSensorModel::worldToAzimuthRangeTime()\n";
       // First convert lat/lon to ECEF
       ossimEcefPoint inputPt(worldPt);
 
@@ -275,6 +279,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::lineSampleToAzimuthRangeTime(const ossimDpt & imPt, TimeType & azimuthTime, double & rangeTime) const
    {
+      // std::clog << "ossimSarSensorModel::lineSampleToAzimuthRangeTime()\n";
       // First compute azimuth time here
       lineToAzimuthTime(imPt.y,azimuthTime);
 
@@ -294,6 +299,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::computeRangeDoppler(const ossimEcefPoint & inputPt, const ossimEcefPoint & sensorPos, const ossimEcefVector sensorVel, double & range, double & doppler) const
    {
+      // std::clog << "ossimSarSensorModel::computeRangeDoppler()\n";
       assert(theRadarFrequency>0&&"theRadarFrequency is null");
 
       // eq. 19, p. 25
@@ -569,20 +575,20 @@ namespace ossimplugins
          assert(interpDenom>0&&"Both doppler frequency are null in interpolation weight computation");
 
          const double interp = abs_doppler1/interpDenom;
-         std::clog << "interp: " << interp << "\n";
+         // std::clog << "interp: " << interp << "\n";
 
          const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
-         std::clog << "delta_td: " << delta_td << " = " << record2->azimuthTime <<" - " <<record1->azimuthTime<< "\n";
+         // std::clog << "delta_td: " << delta_td << " = " << record2->azimuthTime <<" - " <<record1->azimuthTime<< "\n";
 
          // Compute interpolated time offset wrt record1
          // (No need for that many computations (day-frac -> ms -> day frac))
          const DurationType td     = delta_td * interp;
-         std::clog << "td: " << td  << "(" << td.total_microseconds() << "us)\n";
+         // std::clog << "td: " << td  << "(" << td.total_microseconds() << "us)\n";
          // Compute interpolated azimuth time
          interpAzimuthTime = record1->azimuthTime + td + theAzimuthTimeOffset;
       }
 
-      std::clog << "interpAzimuthTime: " << interpAzimuthTime << "\n";
+      // std::clog << "interpAzimuthTime: " << interpAzimuthTime << "\n";
 
       // Interpolate sensor position and velocity
       interpolateSensorPosVel(interpAzimuthTime,interpSensorPos, interpSensorVel);
@@ -646,7 +652,7 @@ namespace ossimplugins
 
       // Eq 22 p 27
       line = (timeSinceStart/theAzimuthTimeInterval) + currentBurst->startLine;
-      std::clog << "line = " << line << " <- " << timeSinceStart << "/" << theAzimuthTimeInterval << "+" << currentBurst->startLine << "\n";
+      // std::clog << "line = " << line << " <- " << timeSinceStart << "/" << theAzimuthTimeInterval << "+" << currentBurst->startLine << "\n";
    }
 
    void ossimSarSensorModel::lineToAzimuthTime(const double & line, TimeType & azimuthTime) const
@@ -701,7 +707,7 @@ namespace ossimplugins
       ossimEcefPoint currentEstimation(initGcp.worldPt);
 
       // Compute corresponding image position
-      std::clog << "initGCP: " << initGcp.imPt << "\n";
+      // std::clog << "initGCP: " << initGcp.imPt << "\n";
       ossimDpt currentImPoint(initGcp.imPt);
 
       ossim_float64 currentImSquareResidual = squareDistance(target,currentImPoint);
@@ -726,7 +732,7 @@ namespace ossimplugins
          if(init)
             init =false;
 
-         std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
+         // std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
 
          // compute residuals
          F(1) = target.x - currentImPoint.x;
@@ -747,10 +753,10 @@ namespace ossimplugins
          ossimGpt currentEstimationWorld(currentEstimation);
          ossimGpt tmpGpt = ossimGpt(currentEstimation+dx);
          worldToLineSample(tmpGpt,tmpImPt);
-         std::clog << "currentEstimationWorld: " << currentEstimationWorld << "\n";
-         std::clog << "currentEstimation: " << currentEstimation << "\n";
-         std::clog << "tmpGpt: " << tmpGpt << "\n";
-         std::clog << "tmpImPt: " << tmpImPt << "\n";
+         // std::clog << "currentEstimationWorld: " << currentEstimationWorld << "\n";
+         // std::clog << "currentEstimation: " << currentEstimation << "\n";
+         // std::clog << "tmpGpt: " << tmpGpt << "\n";
+         // std::clog << "tmpImPt: " << tmpImPt << "\n";
          p_fx[0] = (currentImPoint.x-tmpImPt.x)/d;
          p_fy[0] = (currentImPoint.y-tmpImPt.y)/d;
          p_fh[0] = (currentEstimationWorld.height()-tmpGpt.height())/d;
@@ -805,7 +811,7 @@ namespace ossimplugins
          ++iter;
       }
 
-      std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
+      // std::clog<<"Iter: "<<iter<<", Res: im="<<currentImSquareResidual<<", hgt="<<currentHeightResidual<<'\n';
 
       ellPt = currentEstimation;
       return true;
@@ -827,6 +833,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::autovalidateInverseModelFromGCPs(const double & xtol, const double & ytol, const double azTimeTol, const double & rangeTimeTol) const
    {
+      // std::clog << "ossimSarSensorModel::autovalidateInverseModelFromGCPs()\n";
       if(theGCPRecords.empty())
       {
          return false;
@@ -836,7 +843,7 @@ namespace ossimplugins
 
       unsigned int gcpId = 1;
 
-      std::clog << theGCPRecords.size() << " GCPS\n";
+      // std::clog << theGCPRecords.size() << " GCPS\n";
       for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt,++gcpId)
       {
          ossimDpt estimatedImPt;
@@ -879,6 +886,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::autovalidateForwardModelFromGCPs(double resTol)
    {
+      // std::clog << "ossimSarSensorModel::autovalidateForwardModelFromGCPs()\n";
       resTol *= resTol; // as internally we won't be using sqrt on norms
 
       // First, split half of the gcps to serve as tests, and remove them
@@ -897,7 +905,7 @@ namespace ossimplugins
 
       unsigned int gcpId = 1;
 
-      std::clog << testGcps.size() << " GCPS\n";
+      // std::clog << testGcps.size() << " GCPS\n";
       for(std::vector<GCPRecordType>::const_iterator gcpIt = testGcps.begin(); gcpIt!=testGcps.end();++gcpIt,++gcpId)
       {
          ossimGpt estimatedWorldPt;
@@ -935,6 +943,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::optimizeTimeOffsetsFromGcps()
    {
+      // std::clog << "ossimSarSensorModel::optimizeTimeOffsetsFromGcps()\n";
       DurationType cumulAzimuthTime(seconds(0));
       double cumulRangeTime(0);
       unsigned int count=0;
@@ -1102,6 +1111,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::loadState(ossimKeywordlist const& kwl, const char* prefix)
    {
+      // std::clog << "ossimSarSensorModel::loadState()\n";
       static const char MODULE[] = "ossimplugins::ossimSarSensorModel::loadState";
       SCOPED_LOG(traceDebug, MODULE);
 
