@@ -234,6 +234,25 @@ N
 S
 )
 
+set(RESOL
+  0.5
+  0.5
+  0.5
+  0.5
+  0.5
+  0.5
+  )
+
+set(GRIDSPACING
+  4
+  4
+  4
+  4
+  4
+  4
+  4
+  )
+
 set(MODE
 "noDEM"
 "DEMSRTM"
@@ -255,6 +274,8 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	list(GET ORIGINSY   ${IMGNB} current_originy  )
 	list(GET UTMZONES   ${IMGNB} current_zone     )
 	list(GET HEMIS   ${IMGNB} current_hemis       )
+	list(GET RESOL ${IMGNB} current_resol         )
+	list(GET GRIDSPACING ${IMGNB} current_grid_spacing)
 	math(EXPR IMGNB "${IMGNB} + 1")
 
 	set( MODENB 0)
@@ -272,11 +293,11 @@ foreach(current_img ${IMG_TEST_ORTHO})
 		  ${current_originy}
 		  500
 		  500
-		  0.5
-		  -0.5
+		  ${current_resol}
+		  -${current_resol}
 		  ${current_zone}
 		  ${current_hemis}
-		  4 # Spacing of the displacement field
+		  ${current_grid_spacing}  # Spacing of the displacement field
 		  ${MODENB}
 		  ${current_demdir}
 		)
