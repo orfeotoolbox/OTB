@@ -87,11 +87,6 @@ endif()
 
 
 #===== Domain tests
-# s1_inversemodel
-add_executable(s1_inversemodel s1_inversemodel.cpp)
-target_link_libraries(s1_inversemodel otbossimplugins)
-otb_module_target_label(s1_inversemodel)
-
 #Test executables
 add_executable(ossimSarSensorModelTest ossimSarSensorModelTest.cpp)
 target_link_libraries(ossimSarSensorModelTest otbossimplugins)
