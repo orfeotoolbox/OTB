@@ -68,21 +68,22 @@ public:
 private:
   void DoInit()
   {
-    SetName("TrainOGRLayersClassifier");
-    SetDescription("Train a SVM classifier based on labeled geometries and a list of features to consider.");
+    SetName("TrainVectorClassifier");
+    SetDescription("Train a classifier based on labeled geometries and a list of features to consider.");
 
-    SetDocName("TrainOGRLayersClassifier");
-    SetDocLongDescription("This application trains a SVM classifier based on labeled geometries and a list of features to consider for classification.");
-    SetDocLimitations("Experimental. For now only shapefiles are supported. Tuning of SVM classifier is not available.");
-    SetDocAuthors("David Youssefi during internship at CNES");
-    SetDocSeeAlso("OGRLayerClassifier,ComputeOGRLayersFeaturesStatistics");
-    AddDocTag(Tags::Segmentation);
+    SetDocName("Train Vector Classifier");
+    SetDocLongDescription("This application trains a classifier based on "
+      "labeled geometries and a list of features to consider for classification.");
+    SetDocLimitations(" ");
+    SetDocAuthors("OTB Team");
+    SetDocSeeAlso(" ");
    
     //Group IO
     AddParameter(ParameterType_Group, "io", "Input and output data");
     SetParameterDescription("io", "This group of parameters allows setting input and output data.");
 
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector Data");
+    SetParameterDescription("io.vd", "Input geometries used for training (note : all geometries from the layer will be used)");
 
     AddParameter(ParameterType_InputFilename, "io.stats", "Input XML image statistics file");
     MandatoryOff("io.stats");
@@ -99,48 +100,60 @@ private:
     SetParameterDescription("feat","List of features to consider for classification.");
 
     AddParameter(ParameterType_String,"cfield","Field containing the class id for supervision");
-    SetParameterDescription("cfield","Field containing the class id for supervision. Only geometries with this field available will be taken into account.");
+    SetParameterDescription("cfield","Field containing the class id for supervision. "
+      "Only geometries with this field available will be taken into account.");
     SetParameterString("cfield","class");
 
+    AddParameter(ParameterType_Int, "layer", "Layer Index");
+    SetParameterDescription("layer", "Layer index to read in the input vector file.");
+    MandatoryOff("layer");
+    SetDefaultParameterInt("layer",0);
 
+    AddParameter(ParameterType_Group, "valid", "Validation data");
+    SetParameterDescription("valid", "This group of parameters defines validation data.");
+
+    AddParameter(ParameterType_InputVectorData, "valid.vd", "Validation Vector Data");
+    SetParameterDescription("valid.vd", "Geometries used for validation "
+      "(must contain the same fields used for training, all geometries from the layer will be used)");
+    MandatoryOff("valid.vd");
+
+    AddParameter(ParameterType_Int, "valid.layer", "Layer Index");
+    SetParameterDescription("valid.layer", "Layer index to read in the validation vector file.");
+    MandatoryOff("valid.layer");
+    SetDefaultParameterInt("valid.layer",0);
+
+    // Add parameters for the classifier choice
+    Superclass::DoInit();
+
+    AddRANDParameter();
     // Doc example parameter settings
     SetDocExampleParameterValue("io.vd", "vectorData.shp");
     SetDocExampleParameterValue("io.stats", "meanVar.xml");
     SetDocExampleParameterValue("io.out", "svmModel.svm");
     SetDocExampleParameterValue("feat", "perimeter");
     SetDocExampleParameterValue("cfield", "predicted");
-
-    Superclass::DoInit();
   }
 
   void DoUpdateParameters()
   {
     if ( HasValue("io.vd") )
       {
-      std::string shapefile = GetParameterString("io.vd");
+      std::string vectorFile = GetParameterString("io.vd");
+      ogr::DataSource::Pointer ogrDS =
+        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
+      ogr::Feature feature = layer.ogr().GetNextFeature();
 
-       otb::ogr::DataSource::Pointer ogrDS;
-       otb::ogr::Layer layer(NULL, false);
-
-       OGRSpatialReference oSRS("");
-       std::vector<std::string> options;
-
-       ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-       std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
-       layername = layername.substr(0,layername.size()-4);
-       layer = ogrDS->GetLayer(0);
-
-       otb::ogr::Feature feature = layer.ogr().GetNextFeature();
-       ClearChoices("feat");
-       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
-         {
-           std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
-           key = item;
-           key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
-           std::transform(key.begin(), key.end(), key.begin(), tolower);
-           key="feat."+key;
-           AddChoice(key,item);
-         }
+      ClearChoices("feat");
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
+        std::transform(key.begin(), key.end(), key.begin(), tolower);
+        key="feat."+key;
+        AddChoice(key,item);
+        }
       }
   }
 
@@ -217,83 +230,147 @@ void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
 }
 
 
-  void DoExecute()
+void DoExecute()
   {
-    std::string shapefile = GetParameterString("io.vd");
-    std::string XMLfile = GetParameterString("io.stats");
-    std::string modelfile = GetParameterString("io.out");
-    typedef int LabelPixelType;
-    typedef itk::FixedArray<LabelPixelType,1> LabelSampleType;
-    typedef itk::Statistics::ListSample <LabelSampleType> LabelListSampleType;
+  std::string shapefile = GetParameterString("io.vd");
+  std::string modelfile = GetParameterString("io.out");
+  typedef int LabelPixelType;
+  typedef itk::FixedArray<LabelPixelType,1> LabelSampleType;
+  typedef itk::Statistics::ListSample <LabelSampleType> LabelListSampleType;
 
+  const int nbFeatures = GetSelectedItems("feat").size();
+
+  // Statistics for shift/scale
+  MeasurementType meanMeasurementVector;
+  MeasurementType stddevMeasurementVector;
+  if (HasValue("io.stats") && IsParameterEnabled("io.stats"))
+    {
     StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
+    std::string XMLfile = GetParameterString("io.stats");
     statisticsReader->SetFileName(XMLfile);
+    meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
+    stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
+    }
+  else
+    {
+    meanMeasurementVector.SetSize(nbFeatures);
+    meanMeasurementVector.Fill(0.);
+    stddevMeasurementVector.SetSize(nbFeatures);
+    stddevMeasurementVector.Fill(1.);
+    }
 
-    MeasurementType meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
-    MeasurementType stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
+  ogr::DataSource::Pointer source = ogr::DataSource::New(shapefile, ogr::DataSource::Modes::Read);
+  ogr::Layer layer = source->GetLayer(this->GetParameterInt("layer"));
+  ogr::Feature feature = layer.ogr().GetNextFeature();
+  bool goesOn = feature.addr() != 0;
 
-    otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-    otb::ogr::Layer layer = source->GetLayer(0);
+  ListSampleType::Pointer input = ListSampleType::New();
+  LabelListSampleType::Pointer target = LabelListSampleType::New();
+  input->SetMeasurementVectorSize(nbFeatures);
 
-    bool goesOn = true;
-    
-    otb::ogr::Feature feature = layer.ogr().GetNextFeature();
+  int cFieldIndex=0;
+  std::vector<int> featureFieldIndex;
+  if (feature.addr())
+    {
+    cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
+    for(int idx=0; idx < nbFeatures; ++idx)
+      featureFieldIndex.push_back(feature.ogr().GetFieldIndex(GetSelectedItems("feat")[idx]));
+    }
 
-    ListSampleType::Pointer input = ListSampleType::New();
-    LabelListSampleType::Pointer target = LabelListSampleType::New();
-    const int nbFeatures = GetSelectedItems("feat").size();
+  while(goesOn)
+    {
+    if(feature.ogr().IsFieldSet(cFieldIndex))
+      {
+      MeasurementType mv;
+      mv.SetSize(nbFeatures);
+      for(int idx=0; idx < nbFeatures; ++idx)
+        mv[idx] = feature.ogr().GetFieldAsDouble(featureFieldIndex[idx]);
 
-    input->SetMeasurementVectorSize(nbFeatures);
+      input->PushBack(mv);
+      target->PushBack(feature.ogr().GetFieldAsInteger(cFieldIndex));
+      }
+    feature = layer.ogr().GetNextFeature();
+    goesOn = feature.addr() != 0;
+    }
 
-    if(feature.addr())
-      while(goesOn)
-       {
-        if(feature.ogr().IsFieldSet(feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str())))
-           {
-             MeasurementType mv; mv.SetSize(nbFeatures);
+  ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
+  trainingShiftScaleFilter->SetInput(input);
+  trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
+  trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
+  trainingShiftScaleFilter->Update();
 
-             for(int idx=0; idx < nbFeatures; ++idx)
-              mv[idx] = feature.ogr().GetFieldAsDouble(GetSelectedItems("feat")[idx]);
+  ListSampleType::Pointer listSample;
+  LabelListSampleType::Pointer labelListSample;
 
-             input->PushBack(mv);
-             target->PushBack(feature.ogr().GetFieldAsInteger(GetParameterString("cfield").c_str()));
-           }
-         feature = layer.ogr().GetNextFeature();
-         goesOn = feature.addr() != 0;
-       }
+  listSample = trainingShiftScaleFilter->GetOutput();
+  labelListSample = target;
 
-    ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
-    trainingShiftScaleFilter->SetInput(input);
-    trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
-    trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
-    trainingShiftScaleFilter->Update();
-
-    ListSampleType::Pointer listSample;
-    LabelListSampleType::Pointer labelListSample;
-
-    listSample = trainingShiftScaleFilter->GetOutput();
-    labelListSample = target;
-
-    ListSampleType::Pointer trainingListSample = listSample;
-    LabelListSampleType::Pointer trainingLabeledListSample = labelListSample;
+  ListSampleType::Pointer trainingListSample = listSample;
+  LabelListSampleType::Pointer trainingLabeledListSample = labelListSample;
 
   //--------------------------
   // Estimate model
   //--------------------------
   this->Train(trainingListSample,trainingLabeledListSample,GetParameterString("io.out"));
 
-
   //--------------------------
   // Performances estimation
   //--------------------------
-  TargetListSampleType::Pointer predictedList = TargetListSampleType::New();
-  ListSampleType::Pointer performanceListSample = ListSampleType::New();
-  TargetListSampleType::Pointer performanceLabeledListSample = TargetListSampleType::New();
-
   ListSampleType::Pointer validationListSample=ListSampleType::New();
   TargetListSampleType::Pointer validationLabeledListSample = TargetListSampleType::New();
+
+  // Import validation data
+  if (HasValue("valid.vd") && IsParamaterEnabled("valid.vd"))
+    {
+    std::string validFile = this->GetParameterString("valid.vd");
+    source = ogr::DataSource::New(validFile, ogr::DataSource::Modes::Read);
+    layer = source->GetLayer(this->GetParameterInt("valid.layer"));
+    feature = layer.ogr().GetNextFeature();
+    goesOn = feature.addr() != 0;
+
+    // find usefull field indexes
+    cFieldIndex=0;
+    featureFieldIndex.clear();
+    if (feature.addr())
+      {
+      cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
+      for(int idx=0; idx < nbFeatures; ++idx)
+        featureFieldIndex.push_back(feature.ogr().GetFieldIndex(GetSelectedItems("feat")[idx]));
+      }
+
+    input = ListSampleType::New();
+    target = LabelListSampleType::New();
+    input->SetMeasurementVectorSize(nbFeatures);
+    while(goesOn)
+      {
+      if(feature.ogr().IsFieldSet(cFieldIndex))
+        {
+        MeasurementType mv;
+        mv.SetSize(nbFeatures);
+        for(int idx=0; idx < nbFeatures; ++idx)
+          mv[idx] = feature.ogr().GetFieldAsDouble(featureFieldIndex[idx]);
+
+        input->PushBack(mv);
+        target->PushBack(feature.ogr().GetFieldAsInteger(cFieldIndex));
+        }
+      feature = layer.ogr().GetNextFeature();
+      goesOn = feature.addr() != 0;
+      }
+
+    ShiftScaleFilterType::Pointer validShiftScaleFilter = ShiftScaleFilterType::New();
+    validShiftScaleFilter->SetInput(input);
+    validShiftScaleFilter->SetShifts(meanMeasurementVector);
+    validShiftScaleFilter->SetScales(stddevMeasurementVector);
+    validShiftScaleFilter->Update();
+
+    validationListSample = validShiftScaleFilter->GetOutput();
+    validationLabeledListSample = target;
+    }
  
   //Test the input validation set size
+  TargetListSampleType::Pointer predictedList = TargetListSampleType::New();
+  ListSampleType::Pointer performanceListSample;
+  TargetListSampleType::Pointer performanceLabeledListSample;
   if(validationLabeledListSample->Size() != 0)
     {
     performanceListSample = validationListSample;
@@ -306,119 +383,118 @@ void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
     performanceLabeledListSample = trainingLabeledListSample;
     }
 
-    this->Classify(performanceListSample, predictedList, GetParameterString("io.out"));
+  this->Classify(performanceListSample, predictedList, GetParameterString("io.out"));
 
-    ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
+  ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
 
-    otbAppLogINFO("Predicted list size : " << predictedList->Size());
-    otbAppLogINFO("ValidationLabeledListSample size : " << performanceLabeledListSample->Size());
-    confMatCalc->SetReferenceLabels(performanceLabeledListSample);
-    confMatCalc->SetProducedLabels(predictedList);
-    confMatCalc->Compute();
+  otbAppLogINFO("Predicted list size : " << predictedList->Size());
+  otbAppLogINFO("ValidationLabeledListSample size : " << performanceLabeledListSample->Size());
+  confMatCalc->SetReferenceLabels(performanceLabeledListSample);
+  confMatCalc->SetProducedLabels(predictedList);
+  confMatCalc->Compute();
 
-    otbAppLogINFO("training performances");
-    LogConfusionMatrix(confMatCalc);
+  otbAppLogINFO("training performances");
+  LogConfusionMatrix(confMatCalc);
 
-    for (unsigned int itClasses = 0; itClasses < confMatCalc->GetNumberOfClasses(); itClasses++)
+  for (unsigned int itClasses = 0; itClasses < confMatCalc->GetNumberOfClasses(); itClasses++)
+    {
+    ConfusionMatrixCalculatorType::ClassLabelType classLabel = confMatCalc->GetMapOfIndices()[itClasses];
+
+    otbAppLogINFO("Precision of class [" << classLabel << "] vs all: " << confMatCalc->GetPrecisions()[itClasses]);
+    otbAppLogINFO("Recall of class    [" << classLabel << "] vs all: " << confMatCalc->GetRecalls()[itClasses]);
+    otbAppLogINFO(
+      "F-score of class   [" << classLabel << "] vs all: " << confMatCalc->GetFScores()[itClasses] << "\n");
+    }
+  otbAppLogINFO("Global performance, Kappa index: " << confMatCalc->GetKappaIndex());
+
+
+  if (this->HasValue("io.confmatout"))
+    {
+    // Writing the confusion matrix in the output .CSV file
+
+    MapOfIndicesType::iterator itMapOfIndicesValid, itMapOfIndicesPred;
+    ClassLabelType labelValid = 0;
+
+    ConfusionMatrixType confusionMatrix = confMatCalc->GetConfusionMatrix();
+    MapOfIndicesType mapOfIndicesValid = confMatCalc->GetMapOfIndices();
+
+    unsigned int nbClassesPred = mapOfIndicesValid.size();
+
+    /////////////////////////////////////////////
+    // Filling the 2 headers for the output file
+    const std::string commentValidStr = "#Reference labels (rows):";
+    const std::string commentPredStr = "#Produced labels (columns):";
+    const char separatorChar = ',';
+    std::ostringstream ossHeaderValidLabels, ossHeaderPredLabels;
+
+    // Filling ossHeaderValidLabels and ossHeaderPredLabels for the output file
+    ossHeaderValidLabels << commentValidStr;
+    ossHeaderPredLabels << commentPredStr;
+
+    itMapOfIndicesValid = mapOfIndicesValid.begin();
+
+    while (itMapOfIndicesValid != mapOfIndicesValid.end())
       {
-      ConfusionMatrixCalculatorType::ClassLabelType classLabel = confMatCalc->GetMapOfIndices()[itClasses];
+      // labels labelValid of mapOfIndicesValid are already sorted in otbConfusionMatrixCalculator
+      labelValid = itMapOfIndicesValid->second;
 
-      otbAppLogINFO("Precision of class [" << classLabel << "] vs all: " << confMatCalc->GetPrecisions()[itClasses]);
-      otbAppLogINFO("Recall of class    [" << classLabel << "] vs all: " << confMatCalc->GetRecalls()[itClasses]);
-      otbAppLogINFO(
-        "F-score of class   [" << classLabel << "] vs all: " << confMatCalc->GetFScores()[itClasses] << "\n");
-      }
-    otbAppLogINFO("Global performance, Kappa index: " << confMatCalc->GetKappaIndex());
+      otbAppLogINFO("mapOfIndicesValid[" << itMapOfIndicesValid->first << "] = " << labelValid);
 
+      ossHeaderValidLabels << labelValid;
+      ossHeaderPredLabels << labelValid;
 
-    if (this->HasValue("io.confmatout"))
-      {
-      // Writing the confusion matrix in the output .CSV file
+      ++itMapOfIndicesValid;
 
-      MapOfIndicesType::iterator itMapOfIndicesValid, itMapOfIndicesPred;
-      ClassLabelType labelValid = 0;
-
-      ConfusionMatrixType confusionMatrix = confMatCalc->GetConfusionMatrix();
-      MapOfIndicesType mapOfIndicesValid = confMatCalc->GetMapOfIndices();
-
-      unsigned int nbClassesPred = mapOfIndicesValid.size();
-
-      /////////////////////////////////////////////
-      // Filling the 2 headers for the output file
-      const std::string commentValidStr = "#Reference labels (rows):";
-      const std::string commentPredStr = "#Produced labels (columns):";
-      const char separatorChar = ',';
-      std::ostringstream ossHeaderValidLabels, ossHeaderPredLabels;
-
-      // Filling ossHeaderValidLabels and ossHeaderPredLabels for the output file
-      ossHeaderValidLabels << commentValidStr;
-      ossHeaderPredLabels << commentPredStr;
-
-      itMapOfIndicesValid = mapOfIndicesValid.begin();
-
-      while (itMapOfIndicesValid != mapOfIndicesValid.end())
+      if (itMapOfIndicesValid != mapOfIndicesValid.end())
         {
-        // labels labelValid of mapOfIndicesValid are already sorted in otbConfusionMatrixCalculator
-        labelValid = itMapOfIndicesValid->second;
+        ossHeaderValidLabels << separatorChar;
+        ossHeaderPredLabels << separatorChar;
+        }
+      else
+        {
+        ossHeaderValidLabels << std::endl;
+        ossHeaderPredLabels << std::endl;
+        }
+      }
 
-        otbAppLogINFO("mapOfIndicesValid[" << itMapOfIndicesValid->first << "] = " << labelValid);
+    std::ofstream outFile;
+    outFile.open(this->GetParameterString("io.confmatout").c_str());
+    outFile << std::fixed;
+    outFile.precision(10);
 
-        ossHeaderValidLabels << labelValid;
-        ossHeaderPredLabels << labelValid;
+    /////////////////////////////////////
+    // Writing the 2 headers
+    outFile << ossHeaderValidLabels.str();
+    outFile << ossHeaderPredLabels.str();
+    /////////////////////////////////////
 
-        ++itMapOfIndicesValid;
+    unsigned int indexLabelValid = 0, indexLabelPred = 0;
 
-        if (itMapOfIndicesValid != mapOfIndicesValid.end())
+    for (itMapOfIndicesValid = mapOfIndicesValid.begin(); itMapOfIndicesValid != mapOfIndicesValid.end(); ++itMapOfIndicesValid)
+      {
+      indexLabelPred = 0;
+
+      for (itMapOfIndicesPred = mapOfIndicesValid.begin(); itMapOfIndicesPred != mapOfIndicesValid.end(); ++itMapOfIndicesPred)
+        {
+        // Writing the confusion matrix (sorted in otbConfusionMatrixCalculator) in the output file
+        outFile << confusionMatrix(indexLabelValid, indexLabelPred);
+        if (indexLabelPred < (nbClassesPred - 1))
           {
-          ossHeaderValidLabels << separatorChar;
-          ossHeaderPredLabels << separatorChar;
+          outFile << separatorChar;
           }
         else
           {
-          ossHeaderValidLabels << std::endl;
-          ossHeaderPredLabels << std::endl;
+          outFile << std::endl;
           }
+        ++indexLabelPred;
         }
 
-      std::ofstream outFile;
-      outFile.open(this->GetParameterString("io.confmatout").c_str());
-      outFile << std::fixed;
-      outFile.precision(10);
+      ++indexLabelValid;
+      }
 
-      /////////////////////////////////////
-      // Writing the 2 headers
-      outFile << ossHeaderValidLabels.str();
-      outFile << ossHeaderPredLabels.str();
-      /////////////////////////////////////
-
-      unsigned int indexLabelValid = 0, indexLabelPred = 0;
-
-      for (itMapOfIndicesValid = mapOfIndicesValid.begin(); itMapOfIndicesValid != mapOfIndicesValid.end(); ++itMapOfIndicesValid)
-        {
-        indexLabelPred = 0;
-
-        for (itMapOfIndicesPred = mapOfIndicesValid.begin(); itMapOfIndicesPred != mapOfIndicesValid.end(); ++itMapOfIndicesPred)
-          {
-          // Writing the confusion matrix (sorted in otbConfusionMatrixCalculator) in the output file
-          outFile << confusionMatrix(indexLabelValid, indexLabelPred);
-          if (indexLabelPred < (nbClassesPred - 1))
-            {
-            outFile << separatorChar;
-            }
-          else
-            {
-            outFile << std::endl;
-            }
-          ++indexLabelPred;
-          }
-
-        ++indexLabelValid;
-        }
-
-      outFile.close();
-      } // END if (this->HasValue("io.confmatout"))
-
-    }
+    outFile.close();
+    } // END if (this->HasValue("io.confmatout"))
+  }
 
 };
 }
