@@ -46,55 +46,55 @@ getModifiedJulianDate(ossimString const& utcTimeString)
 
    if (output.size () != 3)
    {
-      throw std::runtime_error("Invalid date" + utcTimeString);
+      throw std::runtime_error(("Invalid date" + utcTimeString).string());
    }
 
    char* stop;
    int year = std::strtol( output[0].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
-      throw std::runtime_error("Invalid year" + utcTimeString);
+      throw std::runtime_error(("Invalid year" + utcTimeString).string());
    }
 
    stop  = 0;
    int month = std::strtol( output[1].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
-      throw std::runtime_error("Invalid month" + utcTimeString);
+      throw std::runtime_error(("Invalid month" + utcTimeString).string());
    }
    stop  = 0;
    int day = std::strtol( output[2].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
-      throw std::runtime_error("Invalid day" + utcTimeString);
+      throw std::runtime_error(("Invalid day" + utcTimeString).string());
    }
    /* Parse time */
    output.clear();
    date_time[1].split(output, ":");
    if (output.size () != 3)
    {
-      throw std::runtime_error("Invalid time" + utcTimeString);
+      throw std::runtime_error(("Invalid time" + utcTimeString).string());
    }
 
    stop  = 0;
    int hours = std::strtol( output[0].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
-      throw std::runtime_error("Invalid hour" + utcTimeString);
+      throw std::runtime_error(("Invalid hour" + utcTimeString).string());
    }
 
    stop  = 0;
    int minutes = std::strtol( output[1].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
-      throw std::runtime_error("Invalid minutes" + utcTimeString);
+      throw std::runtime_error(("Invalid minutes" + utcTimeString).string());
    }
 
    stop  = 0;
    double seconds = std::strtod( output[2].c_str(), &stop);
    if ( *stop != 0 )
    {
-      throw std::runtime_error("Invalid seconds" + utcTimeString);
+      throw std::runtime_error(("Invalid seconds" + utcTimeString).string());
    }
 
    /* Below method could replace all above split and convert. But there is a lot of
