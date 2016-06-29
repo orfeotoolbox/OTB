@@ -59,10 +59,8 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     }
 
   // Add an extra field for the original FID
-  this->m_AdditionalFields.clear();
-  OGRFieldDefn fidField(this->GetOriginFieldName().c_str(),OFTInteger);
-  fidField.SetWidth(12);
-  this->m_AdditionalFields.push_back(ogr::FieldDefn(fidField));
+  this->ClearAdditionalFields();
+  this->CreateAdditionalField(this->GetOriginFieldName(),OFTInteger,12);
 
   // compute label mapping
   this->ComputeClassPartition();
