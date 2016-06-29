@@ -18,6 +18,7 @@
 #ifndef otbOGRHelpers_h
 #define otbOGRHelpers_h
 
+#include "itkMacro.h"
 #include <string>
 #include <vector>
 #include <cassert>

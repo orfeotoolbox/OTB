@@ -175,6 +175,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   this->m_InMemoryInputs.clear();
 
   // gather temporary outputs and write to output
+  const otb::ogr::DataSource* vectors = this->GetOGRData();
   itk::TimeProbe chrono;
   chrono.Start();
   unsigned int count = 0;
@@ -203,11 +204,24 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
           }
   
         ogr::Layer::const_iterator tmpIt = inLayer.begin();
-        for(; tmpIt!=inLayer.end(); ++tmpIt)
+        // This test only uses 1 input, not compatible with multiple OGRData inputs
+        if (vectors == realOutput)
           {
-          ogr::Feature dstFeature(outLayer.GetLayerDefn());
-          dstFeature.SetFrom( *tmpIt, TRUE );
-          outLayer.CreateFeature( dstFeature );
+          // Update mode
+          for(; tmpIt!=inLayer.end(); ++tmpIt)
+            {
+            outLayer.SetFeature( *tmpIt );
+            }
+          }
+        else
+          {
+          // Copy mode
+          for(; tmpIt!=inLayer.end(); ++tmpIt)
+            {
+            ogr::Feature dstFeature(outLayer.GetLayerDefn());
+            dstFeature.SetFrom( *tmpIt, TRUE );
+            outLayer.CreateFeature( dstFeature );
+            }
           }
         }
   
@@ -715,14 +729,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   if (inputDS == outputDS)
     {
     updateMode = true;
-    // Check input layer name is same as m_OutLayerName
-    // TODO
+    // Check m_OutLayerName is same as input layer name 
+    m_OutLayerName = inLayer.GetName();
     }
 
   // First get list of current fields
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   std::map<std::string, OGRFieldType> currentFields;
-  for (unsigned int k=0 ; k<layerDefn.GetFieldCount() ; k++)
+  for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
     {
     OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
     std::string currentName(fieldDefn.GetNameRef());
@@ -746,7 +760,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       wkbPoint,
       this->GetOGRLayerCreationOptions());
     // Copy existing fields
-    for (unsigned int k=0 ; k<layerDefn.GetFieldCount() ; k++)
+    for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
       {
       OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
       outLayer.CreateField(fieldDefn);
@@ -756,21 +770,61 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // Add new fields
   for (unsigned int k=0 ; k<m_AdditionalFields.size() ; k++)
     {
+    OGRFieldDefn ogrFieldDefinition(m_AdditionalFields[k].Name.c_str(),m_AdditionalFields[k].Type);
+    ogrFieldDefinition.SetWidth( m_AdditionalFields[k].Width );
+    ogrFieldDefinition.SetPrecision( m_AdditionalFields[k].Precision );
+    ogr::FieldDefn fieldDef(ogrFieldDefinition);
     // test if field is already present
-    if (currentFields.count(m_AdditionalFields[k].GetName()))
+    if (currentFields.count(fieldDef.GetName()))
       {
       // test the field type
-      if (currentFields[m_AdditionalFields[k].GetName()] != m_AdditionalFields[k].GetType())
+      if (currentFields[fieldDef.GetName()] != fieldDef.GetType())
         {
-        itkExceptionMacro("Field name "<< m_AdditionalFields[k].GetName() << " already exists with a different type!");
+        itkExceptionMacro("Field name "<< fieldDef.GetName() << " already exists with a different type!");
         }
       }
     else
       {
-      outLayer.CreateField(m_AdditionalFields[k]);
+      outLayer.CreateField(fieldDef);
       }
     }
 }
+
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::ClearAdditionalFields()
+{
+  this->m_AdditionalFields.clear();
+}
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::CreateAdditionalField(std::string name,
+                        OGRFieldType type,
+                        int width,
+                        int precision)
+{
+  SimpleFieldDefn defn;
+  defn.Name = name;
+  defn.Type = type;
+  defn.Width = width;
+  defn.Precision = precision;
+  this->m_AdditionalFields.push_back(defn);
+}
+
+template<class TInputImage, class TMaskImage>
+const std::vector<
+  typename PersistentSamplingFilterBase<TInputImage,TMaskImage>
+    ::SimpleFieldDefn>&
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GetAdditionalFields()
+{
+  return this->m_AdditionalFields;
+}
+
 
 } // end namespace otb
 
