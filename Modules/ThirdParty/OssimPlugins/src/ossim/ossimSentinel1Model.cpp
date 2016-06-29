@@ -587,7 +587,7 @@ namespace ossimplugins
 #else
       theAzimuthTimeInterval = seconds(azimuthTimeInterval);
 #endif
-      std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds() << "\n";
+      // std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds() << "\n";
       add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", xAzimutTimeInterval.getText());
       // addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", imageInformation, "azimuthTimeInterval");
 
@@ -705,15 +705,20 @@ namespace ossimplugins
          addMandatory(theProductKwl, calibrationPrefix, "swath", adsHeader, "swath");
          addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
 
+#if 0
 #if !defined(USE_BOOST_TIME)
          addMandatory(theProductKwl, calibrationPrefix, "startTime", adsHeader, "startTime");
          addMandatory(theProductKwl, calibrationPrefix, "stopTime",  adsHeader, "stopTime");
 #else
          add(theProductKwl, calibrationPrefix, "startTime",
-               time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "startTime")));
+           time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "startTime")));
 
          add(theProductKwl, calibrationPrefix, "stopTime",
-               time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "stopTime")));
+           time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "stopTime")));
+#endif
+#else // store as a string
+         addMandatory(theProductKwl, calibrationPrefix, "startTime", adsHeader, "startTime");
+         addMandatory(theProductKwl, calibrationPrefix, "stopTime",  adsHeader, "stopTime");
 #endif
 
          addMandatory(theProductKwl, calibrationPrefix, "absoluteCalibrationConstant", calibrationInformation, "absoluteCalibrationConstant");
@@ -741,10 +746,14 @@ namespace ossimplugins
                   "pixel_count",
                   node->getAttributeValue("count").string());
 
-#if !defined(USE_BOOST_TIME)
-            add(theProductKwl, calibrationVectorPrefix, keyAzimuthTime,
-                  time::toModifiedJulianDate(getOptionalTextFromFirstNode(calibrationVector, "azimuthTime")));
+#if 0
+#if defined(USE_BOOST_TIME)
+            addMandatory(theProductKwl, calibrationVectorPrefix, keyAzimuthTime, calibrationVector, "azimuthTime");
 #else
+            add(theProductKwl, calibrationVectorPrefix, keyAzimuthTime,
+              time::toModifiedJulianDate(getOptionalTextFromFirstNode(calibrationVector, "azimuthTime")));
+#endif
+#else // store as a string
             addMandatory(theProductKwl, calibrationVectorPrefix, keyAzimuthTime, calibrationVector, "azimuthTime");
 #endif
 
@@ -795,10 +804,14 @@ namespace ossimplugins
                   node->getAttributeValue("count"),
                   ShallOverwrite::no);
 
-#if !defined(USE_BOOST_TIME)
-            add(theProductKwl, noiseVectorPrefix, keyAzimuthTime,
-                  time::toModifiedJulianDate(getTextFromFirstNode(noiseVector, "azimuthTime")));
+#if 0
+#if defined(USE_BOOST_TIME)
+            addMandatory(theProductKwl, noiseVectorPrefix, keyAzimuthTime, noiseVector, "azimuthTime");
 #else
+            add(theProductKwl, noiseVectorPrefix, keyAzimuthTime,
+              time::toModifiedJulianDate(getTextFromFirstNode(noiseVector, "azimuthTime")));
+#endif
+#else // store as a string
             addMandatory(theProductKwl, noiseVectorPrefix, keyAzimuthTime, noiseVector, "azimuthTime");
 #endif
 
@@ -996,8 +1009,8 @@ namespace ossimplugins
             const DurationType timeSinceStart = azimuthTime - acqStart; // in day frac
 
             const double imPt_y= timeSinceStart/theAzimuthTimeInterval + acqStartLine;
-            std::clog << "timeSinceStart: " << timeSinceStart << "(" << timeSinceStart.total_microseconds() << "us) = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            std::clog << "imPt_y: " << imPt_y << " = " << timeSinceStart.total_microseconds() << "/" << theAzimuthTimeInterval.total_microseconds() << "+" << acqStartLine << "\n";
+            // std::clog << "timeSinceStart: " << timeSinceStart << "(" << timeSinceStart.total_microseconds() << "us) = " << azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            // std::clog << "imPt_y: " << imPt_y << " = " << timeSinceStart.total_microseconds() << "/" << theAzimuthTimeInterval.total_microseconds() << "+" << acqStartLine << "\n";
             add(theProductKwl, prefix, keyImPtY, imPt_y);
          }
          else
