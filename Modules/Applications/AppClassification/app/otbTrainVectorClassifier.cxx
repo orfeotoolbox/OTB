@@ -269,12 +269,10 @@ void DoExecute()
   input->SetMeasurementVectorSize(nbFeatures);
 
   int cFieldIndex=0;
-  std::vector<int> featureFieldIndex;
+  std::vector<int> featureFieldIndex = GetSelectedItems("feat");
   if (feature.addr())
     {
     cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
-    for(int idx=0; idx < nbFeatures; ++idx)
-      featureFieldIndex.push_back(feature.ogr().GetFieldIndex(GetSelectedItems("feat")[idx]));
     }
 
   while(goesOn)
@@ -320,7 +318,7 @@ void DoExecute()
   TargetListSampleType::Pointer validationLabeledListSample = TargetListSampleType::New();
 
   // Import validation data
-  if (HasValue("valid.vd") && IsParamaterEnabled("valid.vd"))
+  if (HasValue("valid.vd") && IsParameterEnabled("valid.vd"))
     {
     std::string validFile = this->GetParameterString("valid.vd");
     source = ogr::DataSource::New(validFile, ogr::DataSource::Modes::Read);
@@ -329,14 +327,9 @@ void DoExecute()
     goesOn = feature.addr() != 0;
 
     // find usefull field indexes
-    cFieldIndex=0;
-    featureFieldIndex.clear();
-    if (feature.addr())
-      {
-      cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
-      for(int idx=0; idx < nbFeatures; ++idx)
-        featureFieldIndex.push_back(feature.ogr().GetFieldIndex(GetSelectedItems("feat")[idx]));
-      }
+
+    // TODO : detect corresponding indexes in validation data set, for the moment
+    // Assume they have the same fields, in the same order.
 
     input = ListSampleType::New();
     target = LabelListSampleType::New();
