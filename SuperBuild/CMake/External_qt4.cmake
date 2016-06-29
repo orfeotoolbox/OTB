@@ -30,7 +30,7 @@ if(UNIX)
   if(APPLE)
     set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
   else() #Linux
-    set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -gtkstyle")
+    set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
   endif()
 endif()
 
