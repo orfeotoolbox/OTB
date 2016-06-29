@@ -27,13 +27,13 @@ if(USE_SYSTEM_PNG)
 endif()
 
 if(UNIX)
-  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-openssl")
   if(APPLE)
     set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
   else() #Linux
-    set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-sm -no-xrender -no-fontconfig -no-gtkstyle -no-glib")
+    set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -gtkstyle")
   endif()
 endif()
+
 STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
 STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
 

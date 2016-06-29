@@ -1,7 +1,7 @@
 #RK: TODO: do a sweep when mxe is out and msvc builds are stabilized
 
 macro(macro_super_package)
-  cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
+  cmake_parse_arguments(PKG  "" "STAGE_DIR" "" ${ARGN} )
 
   if(${PKG_STAGE_DIR} STREQUAL "")
     message(FATAL_ERROR "PKG_STAGE_DIR is emtpy. Just can't continue.")
@@ -606,6 +606,10 @@ function(func_prepare_package)
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
 
+  set(ALLOWED_SYSTEM_DLLS_SEARCH_PATHS
+    /usr/lib
+    /lib64 )
+
   func_install_support_files()
 
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/temp_so_names_dir")
@@ -619,13 +623,38 @@ function(func_prepare_package)
     func_process_deps(${bn})
   endforeach()
   #message(STATUS "Processing done")
-
+  list(REMOVE_DUPLICATES notfound_dlls)
+  if(UNIX AND NOT APPLE)
+    foreach(allowed_system_dll ${ALLOWED_SYSTEM_DLLS})
+      list (FIND notfound_dlls "${allowed_system_dll}" found_index)
+      if(${found_index} GREATER -1)
+        #find_file (<VAR> NAMES name PATHS paths... NO_DEFAULT_PATH)
+        find_file ( ${allowed_system_dll}_abs_path NAMES ${allowed_system_dll}
+          PATHS ${ALLOWED_SYSTEM_DLLS_SEARCH_PATHS} NO_DEFAULT_PATH)
+        if(${allowed_system_dll}_abs_path)
+          file(GLOB fff "${${allowed_system_dll}_abs_path}*")
+          foreach(f ${fff})
+            func_is_file_a_symbolic_link("${f}" is_symlink linked_to_file)
+            if(is_symlink)
+              get_filename_component(name_of_f ${f} NAME)
+              file(APPEND
+                ${CMAKE_BINARY_DIR}/make_symlinks_temp
+                "ln -sf $OUT_DIR/lib/gtk/${linked_to_file} $OUT_DIR/lib/gtk/${name_of_f}\n"
+                )
+            else() # is_symlink
+              install(FILES ${f} DESTINATION ${PKG_STAGE_DIR}/lib/gtk)
+            endif()
+          endforeach()
+          list(REMOVE_ITEM notfound_dlls "${allowed_system_dll}")
+        endif()
+      endif()
+    endforeach()
+  endif() #UNIX AND NOT APPLE
+  
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
-    list(REMOVE_DUPLICATES notfound_dlls)
-    #string(REPLACE ";" "\r" notfound_dlls ${notfound_dlls})
-    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling superbuild_package macro.")
-  endif()
+    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling macro_super_package macro.")
+  endif() #( ${nos} GREATER 0)
 
   file(GLOB temp_files "${CMAKE_BINARY_DIR}/temp_so_names_dir/*") # /lib/otb
   foreach(temp_file ${temp_files})
@@ -757,7 +786,7 @@ function(func_process_deps infile)
     set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
   endif()
 
-endfunction()
+endfunction() #function(func_process_deps infile)
 
 # The below function is modified from GetPrerequisities.cmake
 # which is distributed with CMake.
@@ -851,6 +880,42 @@ function(func_is_file_a_symbolic_link file result_var1 result_var2)
   endif()
 endfunction()
 
+macro(is_system_dll matched value)
+  set(${matched})
+  string(TOLOWER ${value} value_)
+  foreach (pattern ${SYSTEM_DLLS})
+    string(TOLOWER ${pattern} pattern_)
+    if("${value_}" MATCHES "${pattern_}")
+      set(${matched} TRUE)
+    endif()
+  endforeach()
+endmacro()
+
+macro(list_contains var value)
+  set(${var})
+  foreach(value2 ${ARGN})
+    if(${value} STREQUAL ${value2})
+      set(${var} TRUE)
+    endif()
+  endforeach(value2)
+endmacro()
+
+# Get the translation files coming with Qt, and install them in the bundle
+# They are loaded by Monteverdi.
+function(get_qt_translation_files RESULT)
+    # These files are the "qt_<localename>.qm" files
+    # They are located in QT_TRANSLATIONS_DIR, which comes from FindQt4
+    file(GLOB translation_files ${QT_TRANSLATIONS_DIR}/qt_*)
+
+    # We need to remove the "qt_help_<localename>.qm" files from this list
+    foreach(translation_item ${translation_files})
+      if(${translation_item} MATCHES "qt_help")
+        list(REMOVE_ITEM translation_files ${translation_item})
+      endif()
+    endforeach()
+
+    set(${RESULT} ${translation_files} PARENT_SCOPE)
+endfunction()
 
 #func_lisp: - A list_process function (func_lisp)
 #This method process the input list inplace.
@@ -932,6 +997,7 @@ set(LINUX_SYSTEM_DLLS
   libdrm.so.2
   libGL.so*
   libGLU.so*
+  libXrender.so*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
@@ -963,39 +1029,20 @@ else() #case for unixes
   endif()
 endif(WIN32)
 
-macro(is_system_dll matched value)
-  set(${matched})
-  string(TOLOWER ${value} value_)
-  foreach (pattern ${SYSTEM_DLLS})
-    string(TOLOWER ${pattern} pattern_)
-    if("${value_}" MATCHES "${pattern_}")
-      set(${matched} TRUE)
-    endif()
-  endforeach()
-endmacro()
-
-macro(list_contains var value)
-  set(${var})
-  foreach(value2 ${ARGN})
-    if(${value} STREQUAL ${value2})
-      set(${var} TRUE)
-    endif()
-  endforeach(value2)
-endmacro()
-
-# Get the translation files coming with Qt, and install them in the bundle
-# They are loaded by Monteverdi.
-function(get_qt_translation_files RESULT)
-    # These files are the "qt_<localename>.qm" files
-    # They are located in QT_TRANSLATIONS_DIR, which comes from FindQt4
-    file(GLOB translation_files ${QT_TRANSLATIONS_DIR}/qt_*)
-
-    # We need to remove the "qt_help_<localename>.qm" files from this list
-    foreach(translation_item ${translation_files})
-      if(${translation_item} MATCHES "qt_help")
-        list(REMOVE_ITEM translation_files ${translation_item})
-      endif()
-    endforeach()
-
-    set(${RESULT} ${translation_files} PARENT_SCOPE)
-endfunction()
+#superbuild cannot manage build of gtk2+ just for qt gtkstyle.
+# -gtkstyle option is deactivated by default in build of QT4
+# So the list of requirements on building OTB with superbuild stays same.
+#For our user base, we need monteverdi with a nice look and feel
+# rather than simply X11 based windows. Hence we need -gtkstyle
+# This forces us to have system gtk+ installed on the system.
+# OTB package manager 'this script' will pick them up and put
+# into the binary package. Below cmake variable controls the list of
+#libraries coming from /usr/lib a.k.a system.
+set(ALLOWED_SYSTEM_DLLS
+  libfreetype.so.6
+  libgthread-2.0.so.0
+  libglib-2.0.so.0
+  libgobject-2.0.so.0
+  libXrender.so.1
+  libfontconfig.so.1
+  )
