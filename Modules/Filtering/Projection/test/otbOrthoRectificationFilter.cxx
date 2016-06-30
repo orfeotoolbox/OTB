@@ -20,6 +20,7 @@
 // iostream is used for general output
 #include <iostream>
 #include <stdlib.h>
+#include <complex>
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -30,41 +31,66 @@
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
+#include "otbComplexToIntensityImageFilter.h"
+#include "otbPerBandVectorImageFilter.h"
 
 int otbOrthoRectificationFilter(int argc, char* argv[])
 {
-  if (argc != 14)
+  if (argc != 15)
     {
     std::cout << argv[0] <<
     " <input filename> <output filename> <origin easting> <origin northing>"
     " <x size> <y size> <x spacing> <y spacing> <UTM zone> <UTM hemisphere>"
-    " <grid_spacing> <mode> <mode.info>"
+    " <grid_spacing> <mode> <mode.info> <is_complex>"
               << std::endl;
 
     return EXIT_FAILURE;
     }
 
+  typedef std::complex<double>                                                      ComplexPixelType;
+  typedef otb::VectorImage<ComplexPixelType,2>                                     ComplexVectorImageType;
   typedef otb::VectorImage<double, 2>                                               VectorImageType;
   typedef otb::ImageFileReader<VectorImageType>                                     ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>                            WriterType;
+  typedef otb::ImageFileReader<ComplexVectorImageType>                              ComplexReaderType;
+  typedef otb::ImageFileWriter<VectorImageType>                                     WriterType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
+
+  // Handling of complex images
+  typedef otb::Image<ComplexPixelType> ComplexImageType;
+  typedef otb::Image<double>           ImageType;
+  typedef otb::ComplexToIntensityImageFilter<ComplexImageType, ImageType> IntensityFilterType;
+  typedef otb::PerBandVectorImageFilter<ComplexVectorImageType,VectorImageType,IntensityFilterType> PerBandIntensityFilterType;
+  
   typedef otb::OrthoRectificationFilter<VectorImageType, VectorImageType, UtmMapProjectionType> OrthoRectifFilterType;
 
   //Allocate pointer
   ReaderType::Pointer reader = ReaderType::New();
+  ComplexReaderType::Pointer cReader = ComplexReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-
+  PerBandIntensityFilterType::Pointer intensityFilter = PerBandIntensityFilterType::New();
+  
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
   UtmMapProjectionType::Pointer  utmMapProjection = UtmMapProjectionType::New();
 
-  // Set parameters ...
-  reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
+  
+  bool isComplex = atoi(argv[14]);
 
-  reader->GenerateOutputInformation();
-  std::cout << reader->GetOutput() << std::endl;
-
-  orthoRectifFilter->SetInput(reader->GetOutput());
+  if(isComplex)
+    {
+      cReader->SetFileName(argv[1]);
+      cReader->GenerateOutputInformation();
+      std::cout << cReader->GetOutput() << std::endl;
+      intensityFilter->SetInput(cReader->GetOutput());
+      orthoRectifFilter->SetInput(intensityFilter->GetOutput());
+    }
+  else
+    {
+      reader->SetFileName(argv[1]);
+      reader->GenerateOutputInformation();
+      std::cout << reader->GetOutput() << std::endl;
+      orthoRectifFilter->SetInput(reader->GetOutput());
+    }
 
   VectorImageType::IndexType start;
   start[0] = 0;

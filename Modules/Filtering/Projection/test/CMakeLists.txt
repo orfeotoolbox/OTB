@@ -253,6 +253,15 @@ set(GRIDSPACING
   4
   )
 
+set(ISCOMPLEX
+  0
+  0
+  0
+  0
+  0
+  0
+  )
+
 set(MODE
 "noDEM"
 "DEMSRTM"
@@ -276,6 +285,7 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	list(GET HEMIS   ${IMGNB} current_hemis       )
 	list(GET RESOL ${IMGNB} current_resol         )
 	list(GET GRIDSPACING ${IMGNB} current_grid_spacing)
+	list(GET ISCOMPLEX ${IMGNB} current_is_compex)
 	math(EXPR IMGNB "${IMGNB} + 1")
 
 	set( MODENB 0)
@@ -300,6 +310,7 @@ foreach(current_img ${IMG_TEST_ORTHO})
 		  ${current_grid_spacing}  # Spacing of the displacement field
 		  ${MODENB}
 		  ${current_demdir}
+		  ${current_is_compex}
 		)
 			  
 	endforeach()
