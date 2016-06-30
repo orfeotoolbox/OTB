@@ -205,11 +205,6 @@ public:
 	void SetIORegion(const itk::ImageIORegion& region);
 	itkGetConstReferenceMacro(IORegion, itk::ImageIORegion);
 
-	/** Set the compression On or Off */
-	itkSetMacro(UseCompression, bool);
-	itkGetConstReferenceMacro(UseCompression, bool);
-	itkBooleanMacro(UseCompression);
-
 	/** By default the MetaDataDictionary is taken from the input image and
 	 *  passed to the ImageIO. In some cases, however, a user may prefer to
 	 *  introduce her/his own MetaDataDictionary. This is often the case of
@@ -290,7 +285,6 @@ private:
 	itk::ImageIORegion m_IORegion;
 	bool               m_UserSpecifiedIORegion; // track whether the region is user specified
 	bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
-	bool m_UseCompression;
 	bool m_UseInputMetaDataDictionary; // whether to use the
 	// MetaDataDictionary from the
 	// input or not.

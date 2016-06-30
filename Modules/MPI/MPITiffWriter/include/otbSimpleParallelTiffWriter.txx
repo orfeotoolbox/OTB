@@ -25,7 +25,6 @@ SimpleParallelTiffWriter<TInputImage>
    m_UserSpecifiedImageIO(true),
    m_UserSpecifiedIORegion(false),
    m_FactorySpecifiedImageIO(false),
-   m_UseCompression(false),
    m_UseInputMetaDataDictionary(false),
    m_WriteGeomFile(false),
    m_FilenameHelper(),
@@ -210,15 +209,6 @@ SimpleParallelTiffWriter<TInputImage>
 	}
 
 	os << indent << "IO Region: " << m_IORegion << "\n";
-
-	if (m_UseCompression)
-	{
-		os << indent << "Compression: On\n";
-	}
-	else
-	{
-		os << indent << "Compression: Off\n";
-	}
 
 	if (m_UseInputMetaDataDictionary)
 	{
