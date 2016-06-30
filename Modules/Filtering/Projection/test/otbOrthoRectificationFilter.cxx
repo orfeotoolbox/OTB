@@ -80,15 +80,19 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
     {
       cReader->SetFileName(argv[1]);
       cReader->GenerateOutputInformation();
-      std::cout << cReader->GetOutput() << std::endl;
       intensityFilter->SetInput(cReader->GetOutput());
+      VectorImageType::PixelType no_data(cReader->GetOutput()->GetNumberOfComponentsPerPixel());
+      no_data.Fill(0);
+      orthoRectifFilter->SetEdgePaddingValue(no_data);
       orthoRectifFilter->SetInput(intensityFilter->GetOutput());
     }
   else
     {
       reader->SetFileName(argv[1]);
       reader->GenerateOutputInformation();
-      std::cout << reader->GetOutput() << std::endl;
+      VectorImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+      no_data.Fill(0);
+      orthoRectifFilter->SetEdgePaddingValue(no_data);
       orthoRectifFilter->SetInput(reader->GetOutput());
     }
 
@@ -121,10 +125,6 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   gridSpacing[0] = atof(argv[11]);
   gridSpacing[1] = -atof(argv[11]);
   orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
-
-  VectorImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-  no_data.Fill(0);
-  orthoRectifFilter->SetEdgePaddingValue(no_data);
   
   // manage demHandler
   if (atoi(argv[12])==1) //mode = no DEM
