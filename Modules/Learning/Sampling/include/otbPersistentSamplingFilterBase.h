@@ -20,6 +20,7 @@
 
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -33,7 +34,7 @@ namespace otb
  *
  * \ingroup OTBSampling
  */
-template <class TInputImage, class TMaskImage>
+template <class TInputImage, class TMaskImage = otb::Image<unsigned char,2> >
 class ITK_EXPORT PersistentSamplingFilterBase
   : public otb::PersistentImageFilter<TInputImage, TInputImage>
 {
@@ -176,8 +177,24 @@ protected:
   /** In-memory containers storing position during iteration loop*/
   std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
 
-  /** Additional field definitions to add in output data sources */
-  std::vector<ogr::FieldDefn> m_AdditionalFields;
+  typedef struct {
+    std::string Name;
+    OGRFieldType Type;
+    int Width;
+    int Precision;
+    } SimpleFieldDefn;
+
+  /** Clear current additional fields */
+  void ClearAdditionalFields();
+
+  /** Create a new additional field */
+  void CreateAdditionalField(std::string name,
+                             OGRFieldType type,
+                             int width=0,
+                             int precision=0);
+
+  /** Get a reference over the additional fields */
+  const std::vector<SimpleFieldDefn>& GetAdditionalFields();
 
 private:
   PersistentSamplingFilterBase(const Self &); //purposely not implemented
@@ -197,6 +214,9 @@ private:
 
   /** Creation option for output layers */
   std::vector<std::string> m_OGRLayerCreationOptions;
+
+  /** Additional field definitions to add in output data sources */
+  std::vector<SimpleFieldDefn> m_AdditionalFields;
 
 };
 } // End namespace otb
