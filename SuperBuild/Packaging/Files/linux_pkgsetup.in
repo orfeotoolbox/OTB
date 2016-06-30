@@ -10,7 +10,6 @@ CAT=`which cat`
 RM=`which rm`
 CHMOD=`which chmod`
 SED=`which sed`
-WHICH_ENV=`which env`
 
 PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
 
@@ -36,9 +35,11 @@ if [ "$I_AM_XDK" = true ] ; then
 else
 
 $CAT > $OUT_DIR/monteverdi.sh << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
+if [ -n "$OTB_USE_SYSTEM_GTK" ]; then
+  export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+fi
 export LC_NUMERIC=C
-unset LD_LIBRARY_PATH
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
 export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
@@ -47,21 +48,11 @@ EOF
 
 $CHMOD +x $OUT_DIR/monteverdi.sh
 
-$CAT > $OUT_DIR/monteverdi-gtk.sh << EOF
-#!$WHICH_ENV bash
-export LC_NUMERIC=C
-export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
-export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
-export GDAL_DATA=$OUT_DIR/share/gdal
-export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
-$OUT_DIR/bin/monteverdi "\$@"
-EOF
-
-$CHMOD +x $OUT_DIR/monteverdi-gtk.sh
-
-
 $CAT > $OUT_DIR/mapla.sh << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
+if [ -n "$OTB_USE_SYSTEM_GTK" ]; then
+  export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+fi
 export LC_NUMERIC=C
 unset LD_LIBRARY_PATH
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
@@ -72,21 +63,8 @@ EOF
 
 $CHMOD +x $OUT_DIR/mapla.sh
 
-$CAT > $OUT_DIR/mapla-gtk.sh << EOF
-#!$WHICH_ENV bash
-export LC_NUMERIC=C
-export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
-export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
-export GDAL_DATA=$OUT_DIR/share/gdal
-export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
-$OUT_DIR/bin/mapla "\$@"
-EOF
-
-$CHMOD +x $OUT_DIR/mapla-gtk.sh
-
-
 $CAT > $OUT_DIR/otbenv.profile << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
 PATH=\$PATH:$OUT_DIR/bin
 GDAL_DATA=$OUT_DIR/share/gdal
 GEOTIFF_CSV=$OUT_DIR/share/espg_csv
