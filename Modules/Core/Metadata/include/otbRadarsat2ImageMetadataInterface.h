@@ -156,7 +156,7 @@ public:
     m_Gains = gains;
   }
 
-  double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y)) ITK_OVERRIDE
+  double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y)) const ITK_OVERRIDE
   {
     double lutVal = 1.0;
 
