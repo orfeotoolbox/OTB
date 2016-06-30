@@ -650,7 +650,7 @@ function(func_prepare_package)
       endif()
     endforeach()
   endif() #UNIX AND NOT APPLE
-  
+
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
     message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling macro_super_package macro.")
@@ -998,6 +998,9 @@ set(LINUX_SYSTEM_DLLS
   libGL.so*
   libGLU.so*
   libXrender.so*
+  libSM.so*
+  libICE.so*
+  libXrandr.so*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
