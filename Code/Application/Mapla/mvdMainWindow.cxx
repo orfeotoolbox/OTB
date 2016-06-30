@@ -104,7 +104,7 @@ void
 MainWindow
 ::virtual_SetupUI()
 {
-  setObjectName( "mvd::MainWindow" );
+  setObjectName( "Mapla" );
   setWindowTitle( PROJECT_NAME " Application Launcher" );
 
 #ifdef OTB_USE_QT4
@@ -131,6 +131,11 @@ MainWindow
   );
 
 #endif // OTB_USE_QT4
+
+  if( !RestoreLayout( Monteverdi_UI_VERSION ) )
+    {
+    qWarning() << "Failed to restore window layout!";
+    }
 }
 
 /*****************************************************************************/
@@ -163,6 +168,8 @@ MainWindow
     Application::Instance()->GetModel()==
     Application::Instance()->GetModel< OTBApplicationsModel >()
   );
+
+  SaveLayout( Monteverdi_UI_VERSION );
 
   I18nMainWindow::closeEvent( event );
 }
