@@ -46,6 +46,10 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdTypes.h"
 
+
+#define USE_ALGORITHM_ROOT_NODE 0
+
+
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -63,7 +67,6 @@ namespace Ui
 {
 class ApplicationsToolBox;
 };
-
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -174,7 +177,8 @@ private:
   /**
    * \brief text to search in the widget tree
    */
-  QString m_SearchText;  
+  QString m_SearchText;
+
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

@@ -143,12 +143,14 @@ ApplicationsToolBox
 
   // 
   // main item (title)
+#if USE_ALGORITHM_ROOT_NODE
   QTreeWidgetItem * mainItem =
     new QTreeWidgetItem( m_UI->m_AlgorithmsTree, ITEM_TYPE_ROOT );
 
   mainItem->setText( COLUMN_NAME, tr( "Orfeo Toolbox Algorithms" ) );
   mainItem->setExpanded( !m_SearchText.isEmpty() );
   mainItem->setFlags( Qt::NoItemFlags | Qt::ItemIsEnabled );
+#endif // USE_ALGORITHME_ROOT_NODE
 
   QString search( m_SearchText.simplified() );
 
@@ -171,7 +173,14 @@ ApplicationsToolBox
       //
       // step #1 ->  DocTag is a main item
       QTreeWidgetItem * cmainItem =
-	new QTreeWidgetItem( mainItem, ITEM_TYPE_TAG );
+	new QTreeWidgetItem(
+#if USE_ALGORITHM_ROOT_NODE
+	  mainItem,
+#else // USE_ALGORITHM_ROOT_NODE
+	  m_UI->m_AlgorithmsTree,
+#endif // USE_ALGORITHM_ROOT_NODE
+	  ITEM_TYPE_TAG
+	);
 
       cmainItem->setText( COLUMN_NAME, qcurrentTag );
       cmainItem->setExpanded( !m_SearchText.isEmpty() );
