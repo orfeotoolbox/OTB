@@ -325,22 +325,6 @@ otb_test_application(NAME apTvClTrainOGRLayersClassifier
 
 set_tests_properties(apTvClTrainOGRLayersClassifier PROPERTIES DEPENDS apTvClComputeOGRLayersFeaturesStatistics)
 
-otb_test_application(NAME apTvClTrainVectorClassifier
-                     APP  TrainVectorClassifier
-                     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClLabeledVector.shp
-                             -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
-                             -io.stats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
-                             -classifier libsvm
-                             -classifier.libsvm.c 1
-                             -classifier.libsvm.k linear
-                             -classifier.libsvm.opt true
-                             -io.out ${TEMP}/apTvClTrainVectorSVMModel.svm
-                     VALID   --compare-ascii ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorSVMModel.svm
-                             ${TEMP}/apTvClTrainVectorSVMModel.svm)
-
-set_tests_properties(apTvClTrainVectorClassifier PROPERTIES DEPENDS apTvClComputeOGRLayersFeaturesStatistics)
-
 #----------- ComputeConfusionMatrix TESTS ----------------
 otb_test_application(NAME apTvComputeConfusionMatrixV
                      APP  ComputeConfusionMatrix
@@ -890,9 +874,22 @@ otb_test_application(NAME apTvClSampleSelection
 otb_test_application(NAME apTvClSampleExtraction
                      APP SampleExtraction
                      OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
-                             -vec ${OTBAPP_BASELINE_FILES}/apTvClSampleSelectionOut.sqlite
+                             -vec ${INPUTDATA}/Classification/apTvClSampleSelectionOut.sqlite
                              -field Class
                              -out ${TEMP}/apTvClSampleExtractionOut.sqlite
                      VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClSampleExtractionOut.sqlite
                              ${TEMP}/apTvClSampleExtractionOut.sqlite)
+
+#----------- TrainVectorClassifier TESTS ----------------
+otb_test_application(NAME apTvClTrainVectorClassifier
+                     APP  TrainVectorClassifier
+                     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+                             -feat value_0 value_1 value_2 value_3
+                             -cfield class
+                             -classifier rf
+                             -io.confmatout ${TEMP}/apTvClTrainVectorClassifierConfMat.txt
+                             -io.out ${TEMP}/apTvClTrainVectorClassifierModel.rf
+                     VALID   --compare-ascii ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorClassifierModel.rf
+                             ${TEMP}/apTvClTrainVectorClassifierModel.rf)
