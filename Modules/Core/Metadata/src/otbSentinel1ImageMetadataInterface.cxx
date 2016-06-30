@@ -26,6 +26,7 @@
 
 //useful constants
 #include <otbMath.h>
+#include <iomanip>
 
 namespace otb
 {
@@ -56,24 +57,28 @@ Sentinel1ImageMetadataInterface
     {
   case SarCalibrationLookupData::BETA:
       {
+      otbMsgDevMacro("betaNought");
       betaLut = true;
       }
     break;
 
   case SarCalibrationLookupData::GAMMA:
       {
+      otbMsgDevMacro("gamma");
       gammaLut = true;
       }
     break;
 
   case SarCalibrationLookupData::DN:
       {
+      otbMsgDevMacro("dn");
       dnLut = true;
       }
     break;
 
   case SarCalibrationLookupData::SIGMA:
   default:
+      otbMsgDevMacro("sigmaNought");
     sigmaLut = true;
     break;
     }
@@ -86,10 +91,13 @@ Sentinel1ImageMetadataInterface
   using namespace ossimplugins::time;
   const ModifiedJulianDate firstLineTime = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.startTime"));
   const ModifiedJulianDate lastLineTime  = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.stopTime"));
+  otbMsgDevMacro(<<"calibration.startTime: "<<std::setprecision(16) << firstLineTime);
+  otbMsgDevMacro(<<"calibration.stopTime : "<<std::setprecision(16) << lastLineTime);
 
   const std::string supportDataPrefix = "support_data."; //make && use GetBandPrefix(subSwath, polarisation)
 
   const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(supportDataPrefix + "number_lines"), supportDataPrefix + "number_lines(int)");
+  otbMsgDevMacro(<<"numOfLines   : " << numOfLines);
 
   const int count = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"), "calibration.count");
 
@@ -106,7 +114,9 @@ Sentinel1ImageMetadataInterface
     calibrationVector.line = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(sPrefix + "line"), sPrefix + "line");
 
     // TODO: don't manipulate doubles, but ModifiedJulianDate
-    calibrationVector.timeMJD =  toModifiedJulianDate(imageKeywordlist.GetMetadataByKey(sPrefix + "azimuthTime")).as_day_frac();
+    const std::string sAzimuth = imageKeywordlist.GetMetadataByKey(sPrefix + "azimuthTime");
+    calibrationVector.timeMJD =  toModifiedJulianDate(sAzimuth).as_day_frac();
+    otbMsgDevMacro(<<sPrefix<<"line   : " << calibrationVector.line <<" ;\t"<<sPrefix<<"timeMJD: "<<std::setprecision(16) << calibrationVector.timeMJD << " (" << sAzimuth << ")");
 
     Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "pixel"), calibrationVector.pixels, sPrefix + "pixel");
 
