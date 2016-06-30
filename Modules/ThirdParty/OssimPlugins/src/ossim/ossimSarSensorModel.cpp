@@ -149,6 +149,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightAboveEllipsoid, ossimGpt& worldPt) const
    {
+      // std::clog << "ossimSarSensorModel::lineSampleHeightToWorld()\n";
       assert(!theGCPRecords.empty()&&"theGCPRecords is empty.");
 
       GCPRecordType const& refGcp = findClosestGCP(imPt);
@@ -175,6 +176,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::lineSampleToWorld(ossimDpt const& imPt, ossimGpt& worldPt) const
    {
+      // std::clog << "ossimSarSensorModel::lineSampleToWorld()\n";
       assert(!theGCPRecords.empty()&&"theGCPRecords is empty.");
 
       GCPRecordType const& refGcp = findClosestGCP(imPt);
@@ -192,6 +194,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::worldToLineSample(const ossimGpt& worldPt, ossimDpt & imPt) const
    {
+      // std::clog << "ossimSarSensorModel::worldToLineSample()\n";
       assert(theRangeResolution>0&&"theRangeResolution is null.");
 
       // First compute azimuth and range time
@@ -237,6 +240,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime) const
    {
+      // std::clog << "ossimSarSensorModel::worldToAzimuthRangeTime()\n";
       // First convert lat/lon to ECEF
       ossimEcefPoint inputPt(worldPt);
 
@@ -275,6 +279,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::lineSampleToAzimuthRangeTime(const ossimDpt & imPt, TimeType & azimuthTime, double & rangeTime) const
    {
+      // std::clog << "ossimSarSensorModel::lineSampleToAzimuthRangeTime()\n";
       // First compute azimuth time here
       lineToAzimuthTime(imPt.y,azimuthTime);
 
@@ -294,6 +299,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::computeRangeDoppler(const ossimEcefPoint & inputPt, const ossimEcefPoint & sensorPos, const ossimEcefVector sensorVel, double & range, double & doppler) const
    {
+      // std::clog << "ossimSarSensorModel::computeRangeDoppler()\n";
       assert(theRadarFrequency>0&&"theRadarFrequency is null");
 
       // eq. 19, p. 25
@@ -701,7 +707,7 @@ namespace ossimplugins
       ossimEcefPoint currentEstimation(initGcp.worldPt);
 
       // Compute corresponding image position
-      std::clog << "initGCP: " << initGcp.imPt << "\n";
+      // std::clog << "initGCP: " << initGcp.imPt << "\n";
       ossimDpt currentImPoint(initGcp.imPt);
 
       ossim_float64 currentImSquareResidual = squareDistance(target,currentImPoint);
@@ -827,6 +833,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::autovalidateInverseModelFromGCPs(const double & xtol, const double & ytol, const double azTimeTol, const double & rangeTimeTol) const
    {
+      // std::clog << "ossimSarSensorModel::autovalidateInverseModelFromGCPs()\n";
       if(theGCPRecords.empty())
       {
          return false;
@@ -879,6 +886,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::autovalidateForwardModelFromGCPs(double resTol)
    {
+      // std::clog << "ossimSarSensorModel::autovalidateForwardModelFromGCPs()\n";
       resTol *= resTol; // as internally we won't be using sqrt on norms
 
       // First, split half of the gcps to serve as tests, and remove them
@@ -897,7 +905,7 @@ namespace ossimplugins
 
       unsigned int gcpId = 1;
 
-      std::clog << testGcps.size() << " GCPS\n";
+      // std::clog << testGcps.size() << " GCPS\n";
       for(std::vector<GCPRecordType>::const_iterator gcpIt = testGcps.begin(); gcpIt!=testGcps.end();++gcpIt,++gcpId)
       {
          ossimGpt estimatedWorldPt;
@@ -935,6 +943,7 @@ namespace ossimplugins
 
    void ossimSarSensorModel::optimizeTimeOffsetsFromGcps()
    {
+      // std::clog << "ossimSarSensorModel::optimizeTimeOffsetsFromGcps()\n";
       DurationType cumulAzimuthTime(seconds(0));
       double cumulRangeTime(0);
       unsigned int count=0;
@@ -1102,6 +1111,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::loadState(ossimKeywordlist const& kwl, const char* prefix)
    {
+      // std::clog << "ossimSarSensorModel::loadState()\n";
       static const char MODULE[] = "ossimplugins::ossimSarSensorModel::loadState";
       SCOPED_LOG(traceDebug, MODULE);
 
