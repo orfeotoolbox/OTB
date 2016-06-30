@@ -32,10 +32,20 @@
 // Validation
 #include "otbConfusionMatrixCalculator.h"
 
+#include <algorithm>
+#include <locale>
+
 namespace otb
 {
 namespace Wrapper
 {
+
+/** Utility function to negate std::isalnum */
+bool IsNotAlphaNum(char c)
+  {
+  return !std::isalnum(c);
+  }
+
 class TrainVectorClassifier : public LearningApplicationBase<float,int>
 {
 public:
@@ -149,9 +159,9 @@ private:
         {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
         key = item;
-        key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
-        std::transform(key.begin(), key.end(), key.begin(), tolower);
-        key="feat."+key;
+        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::transform(key.begin(), end, key.begin(), tolower);
+        key="feat."+key.substr(0, end - key.begin());
         AddChoice(key,item);
         }
       }
