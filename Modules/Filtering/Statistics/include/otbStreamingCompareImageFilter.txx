@@ -48,7 +48,7 @@ PersistentCompareImageFilter<TInputImage>
   this->GetPSNROutput()->Set(itk::NumericTraits<RealType>::max());
   this->GetMSEOutput()->Set(itk::NumericTraits<RealType>::max());
   this->GetMAEOutput()->Set(itk::NumericTraits<RealType>::max());
-  this->GetDiffCountOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetDiffCountOutput()->Set(itk::NumericTraits<RealType>::Zero);
 
   this->Reset();
 }
@@ -223,8 +223,8 @@ PersistentCompareImageFilter<TInputImage>
 ::Synthetize()
 {
   int      i;
-  long     count;
-  long     diffCount;
+  unsigned long     count;
+  unsigned long     diffCount;
   RealType squareOfDifferences, absoluteValueOfDifferences;
 
   int numberOfThreads = this->GetNumberOfThreads();
@@ -270,7 +270,6 @@ PersistentCompareImageFilter<TInputImage>
   this->GetMSEOutput()->Set(mse);
   this->GetMAEOutput()->Set(mae);
   this->GetPSNROutput()->Set(psnr);
-  std::cout << diffCount <<std::endl;
   this->GetDiffCountOutput()->Set(static_cast<RealType>(diffCount));
 }
 
@@ -349,7 +348,7 @@ PersistentCompareImageFilter<TInputImage>
       m_ThreadMaxRef[threadId] = value1;
       }
     
-    PixelType diffVal = realValue1 - realValue2;
+    RealType diffVal = realValue1 - realValue2;
     m_SquareOfDifferences[threadId] +=  diffVal * diffVal;
     m_AbsoluteValueOfDifferences[threadId] += vcl_abs( diffVal );
     if (! itk::Math::FloatAlmostEqual(realValue1, realValue2))
