@@ -347,6 +347,8 @@ endif()
 # Provide an option for generating documentation.
 add_subdirectory(Utilities/Doxygen)
 
+add_subdirectory(Utilities/Completion)
+
 #----------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
