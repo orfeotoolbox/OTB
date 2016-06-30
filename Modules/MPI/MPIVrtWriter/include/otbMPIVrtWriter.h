@@ -28,6 +28,11 @@
 
 #include <itksys/SystemTools.hxx>
 
+#include <gdal.h>
+#include <gdal_priv.h>
+#include <vrtdataset.h>
+#include <ogr_spatialref.h>
+
 namespace otb {
 
 namespace mpi {
@@ -92,6 +97,11 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
   joins.push_back(itksys::SystemTools::GetFilenameWithoutExtension(output));
   std::string prefix = itksys::SystemTools::JoinPath(joins);
   
+
+  // Data type
+  std::string dataTypeStr = "Float32";
+  GDALImageIO::Pointer gdalImageIO;
+
   // Now write all the regions
   for(typename std::vector<typename TImage::RegionType>::const_iterator it = regionsToWrite.begin();
       it!=regionsToWrite.end();++it)
@@ -100,12 +110,18 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
     extractFilter->SetInput(img);
     extractFilter->SetRegionOfInterest(*it);
     // Writer
-	// Filename
+	  // Output Filename
     std::stringstream ss;
     ss<<prefix<<"_"<<it->GetIndex()[0]<<"_"<<it->GetIndex()[1]<<"_"<<it->GetSize()[0]<<"_"<<it->GetSize()[1]<<".tif";
     typename WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(ss.str());
     writer->SetInput(extractFilter->GetOutput());
+    // Datatype
+    gdalImageIO = dynamic_cast<GDALImageIO *>(writer->GetImageIO());
+    if(gdalImageIO.IsNotNull())
+    {
+      dataTypeStr = gdalImageIO->GetGdalPixelTypeAsString();
+    }
 
     if (!availableRAM)
       {
@@ -120,58 +136,6 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
     try
     {
       writer->Update();
-      if (writeVRTFile && (myRank == 0))
-      {
-      std::string dataType = "Float32";
-
-      GDALImageIO::Pointer gdalImageIO = dynamic_cast<GDALImageIO *>(writer->GetImageIO());
-
-      if(gdalImageIO.IsNotNull())
-        {
-        dataType = gdalImageIO->GetGdalPixelTypeAsString();
-        }
-
-      
-        // Write VRT File
-        std::stringstream vrtfOut;
-        vrtfOut<<prefix<<".vrt";
-
-        int imageSizeX = img->GetLargestPossibleRegion().GetSize()[0];
-        int imageSizeY = img->GetLargestPossibleRegion().GetSize()[1];
-
-        std::ofstream ofs(vrtfOut.str().c_str());
-
-        ofs<<"<VRTDataset rasterXSize=\""<<imageSizeX<<"\" rasterYSize=\""<<imageSizeY<<"\">"<<std::endl;
-
-        const unsigned int nbBands = img->GetNumberOfComponentsPerPixel();
-
-        for(unsigned int band = 1; band<=nbBands;++band)
-        {
-        ofs<<"\t<VRTRasterBand dataType=\""<<dataType<<"\" band=\""<<band<<"\">"<<std::endl;
-          ofs<<"\t\t<ColorInterp>Gray</ColorInterp>"<<std::endl;
-
-          typename TImage::RegionType currentRegion;
-          for(unsigned int id=0; id < numberOfSplits; ++id)
-          {
-            currentRegion = streamingManager->GetSplit(id);
-            int tileSizeX = currentRegion.GetSize()[0];
-            int tileSizeY = currentRegion.GetSize()[1];
-            int tileIndexX = currentRegion.GetIndex()[0];
-            int tileIndexY = currentRegion.GetIndex()[1];
-            std::stringstream tileFileName;
-            tileFileName <<prefix<<"_"<<tileIndexX<<"_"<<tileIndexY<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif";
-            ofs<<"\t\t<SimpleSource>"<<std::endl;
-            ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<< itksys::SystemTools::GetFilenameName(tileFileName.str())<<"</SourceFilename>"<<std::endl;
-            ofs<<"\t\t\t<SourceBand>"<<band<<"</SourceBand>"<<std::endl;
-            ofs<<"\t\t\t<SrcRect xOff=\""<<0<<"\" yOff=\""<<0<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
-            ofs<<"\t\t\t<DstRect xOff=\""<<tileIndexX<<"\" yOff=\""<<tileIndexY<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
-            ofs<<"\t\t</SimpleSource>"<<std::endl;
-          }
-          ofs<<"\t</VRTRasterBand>"<<std::endl;
-        }
-        ofs<<"</VRTDataset>"<<std::endl;
-        ofs.close();
-      }
     }
     catch (itk::ExceptionObject& err)
     {
@@ -181,6 +145,147 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
       mpiConfig->abort(EXIT_FAILURE);
     }
   }
+
+  // MPI process synchronization
+  mpiConfig->barrier();
+
+  // Write VRT file
+  try 
+  {
+    if (writeVRTFile && (myRank == 0))
+    {
+      // VRT Filename
+      std::stringstream vrtfOut;
+      vrtfOut<< prefix << ".vrt";
+
+      // Data type
+      GDALDataType dataType;
+      dataType = GDALGetDataTypeByName(dataTypeStr.c_str());
+
+      int imageSizeY = img->GetLargestPossibleRegion().GetSize()[1];
+      int imageSizeX = img->GetLargestPossibleRegion().GetSize()[0];
+      const unsigned int nbBands = img->GetNumberOfComponentsPerPixel();
+
+      // Get VRT driver
+      GDALAllRegister();
+      GDALDriver *driver = GetGDALDriverManager()->GetDriverByName("VRT");
+      if (driver == NULL) {
+         mpiConfig->logError("Error opening VRT driver.");
+         mpiConfig->abort(EXIT_FAILURE);
+      }
+
+      // Create output raster
+      GDALDataset *VRTOutput = driver->Create(vrtfOut.str().c_str(),
+            imageSizeX,
+            imageSizeY,
+            0,
+            dataType,
+            NULL); // No options
+      if (VRTOutput == NULL) {
+        mpiConfig->logError("driver->Create call failed.\n");
+        mpiConfig->abort(EXIT_FAILURE);
+      }
+
+      // Set GeoTransform
+      double gt[6];
+      gt[0] = img->GetOrigin()[0] - 0.5*img->GetSpacing()[0];
+      gt[1] = img->GetSpacing()[0];
+      gt[2] = 0.0;
+      gt[3] = img->GetOrigin()[1] - 0.5*img->GetSpacing()[1];
+      gt[4] = 0.0;
+      gt[5] = img->GetSpacing()[1];
+      VRTOutput->SetGeoTransform(gt);
+
+      // Set projection
+      OGRSpatialReference out_sr;
+      char *wkt = NULL;
+      out_sr.SetFromUserInput(img->GetProjectionRef().c_str());
+      out_sr.exportToWkt(&wkt);
+      VRTOutput->SetProjection(wkt);
+
+      for(unsigned int band = 1; band<=nbBands;++band)
+      {
+        VRTOutput->AddBand(dataType, NULL);
+
+        typename TImage::RegionType currentRegion;
+        for(unsigned int id=0; id < numberOfSplits; ++id)
+        {
+          currentRegion = streamingManager->GetSplit(id);
+          int tileSizeX = currentRegion.GetSize()[0];
+          int tileSizeY = currentRegion.GetSize()[1];
+          int tileIndexX = currentRegion.GetIndex()[0];
+          int tileIndexY = currentRegion.GetIndex()[1];
+          std::stringstream tileFileName;
+          tileFileName <<prefix<<"_"<<tileIndexX<<"_"<<tileIndexY<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif";
+          std::cout<<tileFileName.str()<<std::endl;
+
+          GDALDataset *dataset = (GDALDataset*) GDALOpen(tileFileName.str().c_str(), GA_ReadOnly);
+
+          VRTSourcedRasterBand *VRTBand = dynamic_cast<VRTSourcedRasterBand*> (VRTOutput->GetRasterBand(band));
+          VRTBand->AddSimpleSource(dataset->GetRasterBand(band),
+                                      0, //xOffSrc
+                                      0, //yOffSrc
+                                      tileSizeX, //xSizeSrc
+                                      tileSizeY, //ySizeSrc
+                                      tileIndexX, //xOffDest
+                                      tileIndexY, //yOffDest
+                                      tileSizeX, //xSizeDest
+                                      tileSizeY, //ySizeDest
+                                      "near", 
+                                      VRT_NODATA_UNSET);
+        }
+
+      }
+
+      // Close
+      OGRFree(wkt);
+      GDALClose(VRTOutput);
+
+      // OLD: Write VRT File
+      vrtfOut.str(std::string());
+      vrtfOut.clear();
+      vrtfOut<< prefix<<"_old.vrt";
+
+      std::ofstream ofs(vrtfOut.str().c_str());
+
+      ofs<<"<VRTDataset rasterXSize=\""<<imageSizeX<<"\" rasterYSize=\""<<imageSizeY<<"\">"<<std::endl;
+
+      for(unsigned int band = 1; band<=nbBands;++band)
+      {
+        ofs<<"\t<VRTRasterBand dataType=\""<<dataTypeStr<<"\" band=\""<<band<<"\">"<<std::endl;
+        ofs<<"\t\t<ColorInterp>Gray</ColorInterp>"<<std::endl;
+
+        typename TImage::RegionType currentRegion;
+        for(unsigned int id=0; id < numberOfSplits; ++id)
+        {
+          currentRegion = streamingManager->GetSplit(id);
+          int tileSizeX = currentRegion.GetSize()[0];
+          int tileSizeY = currentRegion.GetSize()[1];
+          int tileIndexX = currentRegion.GetIndex()[0];
+          int tileIndexY = currentRegion.GetIndex()[1];
+          std::stringstream tileFileName;
+          tileFileName <<prefix<<"_"<<tileIndexX<<"_"<<tileIndexY<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif";
+          ofs<<"\t\t<SimpleSource>"<<std::endl;
+          ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<< itksys::SystemTools::GetFilenameName(tileFileName.str())<<"</SourceFilename>"<<std::endl;
+          ofs<<"\t\t\t<SourceBand>"<<band<<"</SourceBand>"<<std::endl;
+          ofs<<"\t\t\t<SrcRect xOff=\""<<0<<"\" yOff=\""<<0<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
+          ofs<<"\t\t\t<DstRect xOff=\""<<tileIndexX<<"\" yOff=\""<<tileIndexY<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
+          ofs<<"\t\t</SimpleSource>"<<std::endl;
+        }
+        ofs<<"\t</VRTRasterBand>"<<std::endl;
+      }
+      ofs<<"</VRTDataset>"<<std::endl;
+      ofs.close();
+    }
+  }
+  catch (itk::ExceptionObject& err)
+  {
+    std::stringstream message;
+    message << "ExceptionObject caught: " << err << std::endl;
+    mpiConfig->logError(message.str());
+    mpiConfig->abort(EXIT_FAILURE);
+  }
+
 }
 
 } // End namesapce mpi

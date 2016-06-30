@@ -68,7 +68,9 @@ int otbMPIReadWriteTest(int argc, char * argv[])
   std::string outputFilename = std::string(argv[2]);
 
   otb::mpi::WriteMPI(reader->GetOutput(),outputFilename);
-  
+
+  config->barrier();
+
   return EXIT_SUCCESS;
 }
 
