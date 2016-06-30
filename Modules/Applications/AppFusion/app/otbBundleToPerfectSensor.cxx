@@ -70,6 +70,9 @@ private:
     AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
     SetParameterDescription("inxs"," Input XS image.");
 
+    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
+    SetParameterDescription("out"," Output image.");
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
@@ -89,8 +92,7 @@ private:
     
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     SetParameterDescription("lms"," Spacing of the deformation field. Default is 10 times the PAN image spacing.");
-    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
-    SetParameterDescription("out"," Output image.");
+
     AddRAMParameter();
 
     MandatoryOff("lms");

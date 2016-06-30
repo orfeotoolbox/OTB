@@ -268,7 +268,8 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
     }
 
   m_ANNModel->write(fs, lname);
-  cvWrite(fs, "class_labels", m_CvMatOfLabels);
+  if (m_CvMatOfLabels != ITK_NULLPTR)
+    cvWrite(fs, "class_labels", m_CvMatOfLabels);
 
   cvReleaseFileStorage(&fs);
 }
