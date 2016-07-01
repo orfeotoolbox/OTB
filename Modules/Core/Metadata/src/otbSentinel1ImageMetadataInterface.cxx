@@ -102,6 +102,7 @@ Sentinel1ImageMetadataInterface
   const int count = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"), "calibration.count");
 
   std::vector<Sentinel1CalibrationStruct> calibrationVectorList(count);
+  double lastMJD = 0; 
 
   for(int i = 0; i < count; i++)
     {
@@ -113,12 +114,25 @@ Sentinel1ImageMetadataInterface
 
     calibrationVector.line = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(sPrefix + "line"), sPrefix + "line");
 
-    // TODO: don't manipulate doubles, but ModifiedJulianDate
+    // TODO: don't manipulate doubles, but ModifiedJulianDate for a better type
+    // safety
     const std::string sAzimuth = imageKeywordlist.GetMetadataByKey(sPrefix + "azimuthTime");
     calibrationVector.timeMJD =  toModifiedJulianDate(sAzimuth).as_day_frac();
+    calibrationVector.deltaMJD = calibrationVector.timeMJD - lastMJD;
+    lastMJD = calibrationVector.timeMJD;
+
     otbMsgDevMacro(<<sPrefix<<"line   : " << calibrationVector.line <<" ;\t"<<sPrefix<<"timeMJD: "<<std::setprecision(16) << calibrationVector.timeMJD << " (" << sAzimuth << ")");
 
     Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "pixel"), calibrationVector.pixels, sPrefix + "pixel");
+
+    // prepare deltaPixels vector
+    int prev_pixels = 0;
+    calibrationVector.deltaPixels.resize(calibrationVector.pixels.size());
+    for (std::size_t p=0, N=calibrationVector.pixels.size(); p!=N ; ++p)
+    {
+        calibrationVector.deltaPixels[p] = (calibrationVector.pixels[p] - prev_pixels);
+        prev_pixels = calibrationVector.pixels[p];
+    }
 
     if (sigmaLut)
       {
