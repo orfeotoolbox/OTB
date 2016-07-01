@@ -35,7 +35,20 @@
 
 namespace otb {
 
-// Update MPI
+/**
+ *\brief Write image data to multiple files with MPI processus and add a VRT file.
+ * 
+ * The image is divided into several pieces. 
+ * Each pieces is distributed to a MPI processus.
+ * Each MPI processus write their pieces into a separate
+ * file.
+ * The master processus writes a VRT file (optional).
+ *
+ *\param img Image
+ *\param output Output Filename
+ *\param availableRAM Available memory for streaming
+ *\param writeVRTFile Activate the VRT file writing
+ */
 template <typename TImage> void WriteMPI(TImage *img, const std::string &output, unsigned int availableRAM = 0, bool writeVRTFile=true) 
 {
   typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
