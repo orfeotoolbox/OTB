@@ -135,6 +135,7 @@ namespace ossimplugins { namespace time {
          }
          bool is_negative() const { return as_day_frac() < 0.0; }
          Duration invert_sign() { return Duration(- as_day_frac()); }
+         friend Duration abs(Duration const& d) { return Duration(std::abs(d.as_day_frac())); }
       };
 
    /**
@@ -297,6 +298,12 @@ namespace boost { namespace posix_time {
       private:
          double m_usec_frac;
       };
+
+   time_duration abs(time_duration d) {
+       if(d.is_negative())
+           d = d.invert_sign();
+       return d;
+   }
 
 } } // boost::time namespaces
 #endif

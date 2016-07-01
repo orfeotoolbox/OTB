@@ -340,19 +340,13 @@ namespace ossimplugins
       {
          // Search for the deg number of records around the azimuth time
          unsigned int t_min_idx = 0;
-         DurationType t_min = azimuthTime - theOrbitRecords.front().azimuthTime;
-
-         if(t_min.is_negative())
-            t_min = t_min.invert_sign();
+         DurationType t_min = abs(azimuthTime - theOrbitRecords.front().azimuthTime);
 
          unsigned int count = 0;
 
          for(std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();it!=theOrbitRecords.end();++it,++count)
          {
-            DurationType current_time = azimuthTime-it->azimuthTime;
-
-            if(current_time.is_negative())
-               current_time = current_time.invert_sign();
+            const DurationType current_time = abs(azimuthTime-it->azimuthTime);
 
             if(t_min > current_time)
             {
