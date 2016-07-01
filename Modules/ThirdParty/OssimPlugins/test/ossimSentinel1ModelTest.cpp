@@ -26,7 +26,7 @@ int main(int argc, char * argv[])
 
    string annotationXml;
    Inverse inverse = undef;
-   bool verbose;
+   bool verbose = false;
 
    for (int i=1; i!=argc ; ++i) {
       std::string const a(argv[i]);
