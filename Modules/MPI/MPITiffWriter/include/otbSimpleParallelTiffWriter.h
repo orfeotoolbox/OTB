@@ -1,3 +1,17 @@
+/*=========================================================================
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  TODO: Add copyright notice for Remi Cresson (IRSTEA)
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 #ifndef __SimpleParallelTiffWriter_h
 #define __SimpleParallelTiffWriter_h
 
