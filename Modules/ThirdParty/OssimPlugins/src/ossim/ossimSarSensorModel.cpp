@@ -878,7 +878,7 @@ namespace ossimplugins
 
       if(success)
       {
-         std::cout<<"All GCPs within "<<ytol <<" azimuth pixel, "<<xtol<<" range pixel, "<<azTimeTol<<" s of azimuth time, "<<rangeTimeTol<<" of range time\n";
+         std::cout<<"All GCPs within "<<ytol <<" azimuth pixel, "<<xtol<<" range pixel, "<<azTimeTol<<" microseconds of azimuth time, "<<rangeTimeTol<<" of range time\n";
       }
 
       return success;
