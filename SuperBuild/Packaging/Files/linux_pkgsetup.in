@@ -36,6 +36,7 @@ else
 
 $CAT > $OUT_DIR/monteverdi.sh << EOF
 #!/bin/sh
+unset LD_LIBRARY_PATH
 if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
   export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
 fi
@@ -50,6 +51,7 @@ $CHMOD +x $OUT_DIR/monteverdi.sh
 
 $CAT > $OUT_DIR/mapla.sh << EOF
 #!/bin/sh
+unset LD_LIBRARY_PATH
 if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
   export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
 fi
