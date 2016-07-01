@@ -238,42 +238,6 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
       // Close
       OGRFree(wkt);
       GDALClose(VRTOutput);
-
-      // OLD: Write VRT File
-      vrtfOut.str(std::string());
-      vrtfOut.clear();
-      vrtfOut<< prefix<<"_old.vrt";
-
-      std::ofstream ofs(vrtfOut.str().c_str());
-
-      ofs<<"<VRTDataset rasterXSize=\""<<imageSizeX<<"\" rasterYSize=\""<<imageSizeY<<"\">"<<std::endl;
-
-      for(unsigned int band = 1; band<=nbBands;++band)
-      {
-        ofs<<"\t<VRTRasterBand dataType=\""<<dataTypeStr<<"\" band=\""<<band<<"\">"<<std::endl;
-        ofs<<"\t\t<ColorInterp>Gray</ColorInterp>"<<std::endl;
-
-        typename TImage::RegionType currentRegion;
-        for(unsigned int id=0; id < numberOfSplits; ++id)
-        {
-          currentRegion = streamingManager->GetSplit(id);
-          int tileSizeX = currentRegion.GetSize()[0];
-          int tileSizeY = currentRegion.GetSize()[1];
-          int tileIndexX = currentRegion.GetIndex()[0];
-          int tileIndexY = currentRegion.GetIndex()[1];
-          std::stringstream tileFileName;
-          tileFileName <<prefix<<"_"<<tileIndexX<<"_"<<tileIndexY<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif";
-          ofs<<"\t\t<SimpleSource>"<<std::endl;
-          ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<< itksys::SystemTools::GetFilenameName(tileFileName.str())<<"</SourceFilename>"<<std::endl;
-          ofs<<"\t\t\t<SourceBand>"<<band<<"</SourceBand>"<<std::endl;
-          ofs<<"\t\t\t<SrcRect xOff=\""<<0<<"\" yOff=\""<<0<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
-          ofs<<"\t\t\t<DstRect xOff=\""<<tileIndexX<<"\" yOff=\""<<tileIndexY<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
-          ofs<<"\t\t</SimpleSource>"<<std::endl;
-        }
-        ofs<<"\t</VRTRasterBand>"<<std::endl;
-      }
-      ofs<<"</VRTDataset>"<<std::endl;
-      ofs.close();
     }
   }
   catch (itk::ExceptionObject& err)
