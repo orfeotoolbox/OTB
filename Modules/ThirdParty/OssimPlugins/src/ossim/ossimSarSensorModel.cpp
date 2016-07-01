@@ -354,6 +354,7 @@ namespace ossimplugins
                t_min = current_time;
             }
          }
+         // TODO: see if these expressions can be simplified
          nBegin = std::max((int)t_min_idx-(int)deg/2+1,(int)0);
          nEnd = std::min(nBegin+deg-1,(unsigned int)theOrbitRecords.size());
          nBegin = nEnd<theOrbitRecords.size()-1 ? nBegin : nEnd-deg+1;
@@ -510,20 +511,15 @@ namespace ossimplugins
 
       double doppler1 = (inputPt-it->position).dot(it->velocity);
 
-      std::vector<OrbitRecordType>::const_iterator record1 = it;
 
       bool dopplerSign1 = doppler1 < 0;
 
-      ++it;
-
-      std::vector<OrbitRecordType>::const_iterator record2;
+      ++it; // -> it != begin
 
       // Look for the consecutive records where doppler freq changes sign
       // Note: implementing a bisection algorithm here might be faster
       for ( ; it!=theOrbitRecords.end() ; ++it)
       {
-         record2 = it;
-
          // compute range and doppler of current record
          doppler2 = (inputPt-it->position).dot(it->velocity);
 
@@ -537,31 +533,25 @@ namespace ossimplugins
          else
          {
             doppler1 = doppler2;
-            record1 = record2;
          }
       }
-
-      bool extrapolate = false;
 
       // In this case, we need to extrapolate
       if(it == theOrbitRecords.end())
       {
-         record1 = theOrbitRecords.begin();
-         record2 = record1 + theOrbitRecords.size()-1;
+         std::vector<OrbitRecordType>::const_iterator record1 = theOrbitRecords.begin();
+         std::vector<OrbitRecordType>::const_iterator record2 = record1 + theOrbitRecords.size()-1;
          doppler1 = (inputPt-record1->position).dot(record1->velocity);
          doppler2 = (inputPt-record2->position).dot(record2->velocity);
-#if 0
-         double delta_td = record2->azimuthTime.as_day_frac() - record1->azimuthTime.as_day_frac();
-         double a = (doppler2 - doppler1)/delta_td;
-         double b = doppler1 - a * record1->azimuthTime.as_day_frac();
-         interpAzimuthTime = time::ModifiedJulianDate(-b / a);
-#else
          const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
          interpAzimuthTime = record1->azimuthTime - doppler1 / (doppler2 - doppler1) * delta_td;
-#endif
       }
       else
       {
+         assert(it != theOrbitRecords.begin());
+         assert(it != theOrbitRecords.end());
+         std::vector<OrbitRecordType>::const_iterator record2 = it;
+         std::vector<OrbitRecordType>::const_iterator record1 = --it;
          // now interpolate time and sensor position
          const double abs_doppler1 = std::abs(doppler1);
          const double interpDenom = abs_doppler1+std::abs(doppler2);
@@ -610,7 +600,6 @@ namespace ossimplugins
       std::vector<BurstRecordType>::const_iterator itend = theBurstRecords.end();
       for(; it!= itend ; ++it)
       {
-
          if(azimuthTime >= it->azimuthStartTime
                && azimuthTime < it->azimuthStopTime)
          {
@@ -623,7 +612,6 @@ namespace ossimplugins
       // extrapolate line
       if(it == itend)
       {
-
          if(! theBurstRecords.empty())
          {
             if(azimuthTime < theBurstRecords.front().azimuthStartTime)
