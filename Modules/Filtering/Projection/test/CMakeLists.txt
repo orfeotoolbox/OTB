@@ -115,7 +115,7 @@ endforeach()
 #"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos} 
 #"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos} 
 #"palsar/gd-palsar-1" #LARGEINPUT{PALSAR/200801280007/l1data/IMG-HH-ALPSRP037120700-H1.1__A} Ne reconnaît pas l'image
-#"s1/gd-s1-A" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} segfault
+#"s1/gd-s1-A" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 #)
 
 
@@ -178,6 +178,7 @@ SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_S
 QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif 
 RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff
 )
 
 set(IMG_TYPE
@@ -187,6 +188,7 @@ set(IMG_TYPE
 "qb-1"
 "ikonos-1"     
 "rapideye-1"
+"sentinel1"
 )
 
 set(GEOMGCP
@@ -196,6 +198,7 @@ set(GEOMGCP
 "QB/qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
 "ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
 "rapideye/rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+"sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 )
 
 set(ORIGINSX
@@ -205,6 +208,7 @@ set(ORIGINSX
 375000
 340000
 430000
+787422
 )
 
 set(ORIGINSY
@@ -214,6 +218,7 @@ set(ORIGINSY
 4823000
 5524000
 6190000
+1664034
 )
 
 set(UTMZONES
@@ -223,6 +228,7 @@ set(UTMZONES
 31
 31
 55
+26
 )
 
 set(HEMIS
@@ -232,7 +238,39 @@ N
 N
 N
 S
+N
 )
+
+set(RESOL
+  0.5
+  0.5
+  0.5
+  0.5
+  0.5
+  0.5
+  4
+  )
+
+set(GRIDSPACING
+  4
+  4
+  4
+  4
+  4
+  4
+  4
+  32
+  )
+
+set(ISCOMPLEX
+  0
+  0
+  0
+  0
+  0
+  0
+  1
+  )
 
 set(MODE
 "noDEM"
@@ -255,6 +293,9 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	list(GET ORIGINSY   ${IMGNB} current_originy  )
 	list(GET UTMZONES   ${IMGNB} current_zone     )
 	list(GET HEMIS   ${IMGNB} current_hemis       )
+	list(GET RESOL ${IMGNB} current_resol         )
+	list(GET GRIDSPACING ${IMGNB} current_grid_spacing)
+	list(GET ISCOMPLEX ${IMGNB} current_is_compex)
 	math(EXPR IMGNB "${IMGNB} + 1")
 
 	set( MODENB 0)
@@ -272,13 +313,14 @@ foreach(current_img ${IMG_TEST_ORTHO})
 		  ${current_originy}
 		  500
 		  500
-		  0.5
-		  -0.5
+		  ${current_resol}
+		  -${current_resol}
 		  ${current_zone}
 		  ${current_hemis}
-		  4 # Spacing of the displacement field
+		  ${current_grid_spacing}  # Spacing of the displacement field
 		  ${MODENB}
 		  ${current_demdir}
+		  ${current_is_compex}
 		)
 			  
 	endforeach()
