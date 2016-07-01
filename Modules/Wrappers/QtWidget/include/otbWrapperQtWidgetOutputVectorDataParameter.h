@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetOutputVectorDataParameter_h
-#define __otbWrapperQtWidgetOutputVectorDataParameter_h
+#ifndef otbWrapperQtWidgetOutputVectorDataParameter_h
+#define otbWrapperQtWidgetOutputVectorDataParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetOutputVectorDataParameter : public QtWidgetParamete
   Q_OBJECT
 public:
   QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*);
-  virtual ~QtWidgetOutputVectorDataParameter();
+  ~QtWidgetOutputVectorDataParameter() ITK_OVERRIDE;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -58,9 +58,9 @@ private:
   QtWidgetOutputVectorDataParameter(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
   void operator=(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   std::string m_FileName;
   OutputVectorDataParameter::Pointer m_OutputVectorDataParam;

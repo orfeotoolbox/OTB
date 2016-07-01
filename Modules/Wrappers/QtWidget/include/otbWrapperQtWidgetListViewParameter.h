@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetListViewParameter_h
-#define __otbWrapperQtWidgetListViewParameter_h
+#ifndef otbWrapperQtWidgetListViewParameter_h
+#define otbWrapperQtWidgetListViewParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT QtWidgetListViewParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetListViewParameter(ListViewParameter*, QtWidgetModel*);
-  virtual ~QtWidgetListViewParameter();
+  ~QtWidgetListViewParameter() ITK_OVERRIDE;
 
   std::vector<int>  GetSelectedItems()
   {
@@ -53,9 +53,9 @@ private:
   QtWidgetListViewParameter(const QtWidgetListViewParameter&); //purposely not implemented
   void operator=(const QtWidgetListViewParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   ListViewParameter::Pointer m_ListViewParam;
 

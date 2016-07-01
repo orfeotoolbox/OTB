@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTextureImageFunction_h
-#define __otbTextureImageFunction_h
+#ifndef otbTextureImageFunction_h
+#define otbTextureImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -74,17 +74,17 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex(const IndexType& index) const;
+  RealType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
 
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate(const PointType& point) const
+  RealType Evaluate(const PointType& point) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  RealType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& cindex) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -117,8 +117,8 @@ public:
 
 protected:
   TextureImageFunction();
-  virtual ~TextureImageFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~TextureImageFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   TextureImageFunction(const Self &);  //purposely not implemented

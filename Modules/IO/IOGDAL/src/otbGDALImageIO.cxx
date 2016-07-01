@@ -172,7 +172,7 @@ GDALImageIO::~GDALImageIO()
 bool GDALImageIO::CanReadFile(const char* file)
 {
   // First check the extension
-  if (file == NULL)
+  if (file == ITK_NULLPTR)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
@@ -202,7 +202,7 @@ void GDALImageIO::Read(void* buffer)
   unsigned char *p = static_cast<unsigned char *>(buffer);
 
   // Check if conversion succeed
-  if (p == NULL)
+  if (p == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "GDAL : Bad alloc");
     return;
@@ -418,7 +418,7 @@ void GDALImageIO::Read(void* buffer)
                                                        m_PxType->pixType,
                                                        nbBands,
                                                        // We want to read all bands
-                                                       NULL,
+                                                       ITK_NULLPTR,
                                                        pixelOffset,
                                                        lineOffset,
                                                        bandOffset);
@@ -449,7 +449,7 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
          (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ||
 	 (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"SENTINEL2") == 0) ) )
     {
-    for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
+    for (int cpt = 0; papszMetadata[cpt] != ITK_NULLPTR; ++cpt)
       {
       std::string key, name;
       if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
@@ -602,7 +602,7 @@ void GDALImageIO::InternalReadImageInformation()
     std::vector<std::string> names;
     if( CSLCount(papszMetadata) > 0 )
       {
-      for( int cpt = 0; papszMetadata[cpt] != NULL; ++cpt )
+      for( int cpt = 0; papszMetadata[cpt] != ITK_NULLPTR; ++cpt )
         {
         std::string key, name;
         if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
@@ -891,7 +891,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (m_NumberOfDimensions == 3) m_Spacing[2] = 1;
 
-  char** papszMetadata = dataset->GetMetadata(NULL);
+  char** papszMetadata = dataset->GetMetadata(ITK_NULLPTR);
 
   /* -------------------------------------------------------------------- */
   /*      Report general info.                                            */
@@ -915,16 +915,16 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
-  if (dataset->GetProjectionRef() != NULL && !std::string(dataset->GetProjectionRef()).empty())
+  if (dataset->GetProjectionRef() != ITK_NULLPTR && !std::string(dataset->GetProjectionRef()).empty())
     {
-    OGRSpatialReferenceH pSR = OSRNewSpatialReference(NULL);
+    OGRSpatialReferenceH pSR = OSRNewSpatialReference(ITK_NULLPTR);
 
-    const char *         pszProjection = NULL;
+    const char *         pszProjection = ITK_NULLPTR;
     pszProjection =  dataset->GetProjectionRef();
 
     if (OSRImportFromWkt(pSR, (char **) (&pszProjection)) == OGRERR_NONE)
       {
-      char * pszPrettyWkt = NULL;
+      char * pszPrettyWkt = ITK_NULLPTR;
       OSRExportToPrettyWkt(pSR, &pszPrettyWkt, FALSE);
 
       itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
@@ -938,10 +938,10 @@ void GDALImageIO::InternalReadImageInformation()
                                             static_cast<std::string>(dataset->GetProjectionRef()));
       }
 
-    if (pSR != NULL)
+    if (pSR != ITK_NULLPTR)
       {
       OSRRelease(pSR);
-      pSR = NULL;
+      pSR = ITK_NULLPTR;
       }
     }
   else
@@ -970,7 +970,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     // assert( gcpProj!=NULL );
 
-    if( gcpProj!=NULL )
+    if( gcpProj!=ITK_NULLPTR )
       gcpProjectionKey = gcpProj;
     }
 
@@ -1084,12 +1084,12 @@ void GDALImageIO::InternalReadImageInformation()
   /*      Report metadata.                                                */
   /* -------------------------------------------------------------------- */
 
-  papszMetadata = dataset->GetMetadata(NULL);
+  papszMetadata = dataset->GetMetadata(ITK_NULLPTR);
   if (CSLCount(papszMetadata) > 0)
     {
     std::string key;
 
-    for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
+    for (int cpt = 0; papszMetadata[cpt] != ITK_NULLPTR; ++cpt)
       {
       std::ostringstream lStream;
       lStream << MetaDataKey::MetadataKey << cpt;
@@ -1103,7 +1103,7 @@ void GDALImageIO::InternalReadImageInformation()
   /* Special case for JPEG2000, also look in the GML boxes */
   if (m_Dataset->IsJPEG2000())
     {
-    char **gmlMetadata = NULL;
+    char **gmlMetadata = ITK_NULLPTR;
     GDALJP2Metadata jp2Metadata;
     if (jp2Metadata.ReadAndParse(m_FileName.c_str()))
       {
@@ -1117,7 +1117,7 @@ void GDALImageIO::InternalReadImageInformation()
         std::string key;
         int cptOffset = CSLCount(papszMetadata);
 
-        for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
+        for (int cpt = 0; gmlMetadata[cpt] != ITK_NULLPTR; ++cpt)
           {
           std::ostringstream lStream;
           lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
@@ -1140,7 +1140,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     std::string key;
 
-    for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
+    for (int cpt = 0; papszMetadata[cpt] != ITK_NULLPTR; ++cpt)
       {
       std::ostringstream lStream;
       lStream << MetaDataKey::SubMetadataKey << cpt;
@@ -1200,7 +1200,7 @@ void GDALImageIO::InternalReadImageInformation()
     GDALRasterBandH hBand;
     hBand = GDALGetRasterBand(dataset, iBand + 1);
     if ((GDALGetRasterColorInterpretation(hBand) == GCI_PaletteIndex)
-        && (hTable = GDALGetRasterColorTable(hBand)) != NULL)
+        && (hTable = GDALGetRasterColorTable(hBand)) != ITK_NULLPTR)
       {
       m_IsIndexed = true;
 
@@ -1269,7 +1269,7 @@ void GDALImageIO::InternalReadImageInformation()
 bool GDALImageIO::CanWriteFile(const char* name)
 {
   // First check the filename
-  if (name == NULL)
+  if (name == ITK_NULLPTR)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
@@ -1286,8 +1286,8 @@ bool GDALImageIO::CanWriteFile(const char* name)
 
   // Check the driver for support of Create or at least CreateCopy
   GDALDriver* driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName(gdalDriverShortName);
-  if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, NULL ) == NULL
-       && GDALGetMetadataItem( driver, GDAL_DCAP_CREATECOPY, NULL ) == NULL )
+  if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, ITK_NULLPTR ) == ITK_NULLPTR
+       && GDALGetMetadataItem( driver, GDAL_DCAP_CREATECOPY, ITK_NULLPTR ) == ITK_NULLPTR )
     {
     itkDebugMacro(<< "The driver " << GDALGetDriverShortName(driver) << " does not support writing");
     return false;
@@ -1301,12 +1301,12 @@ bool GDALImageIO::CanStreamWrite()
   std::string gdalDriverShortName = FilenameToGdalDriverShortName(m_FileName);
   GDALDriver* driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName(gdalDriverShortName);
 
-  if (driver == NULL)
+  if (driver == ITK_NULLPTR)
     {
     itkDebugMacro(<< "Unable to instantiate driver " << gdalDriverShortName);
     m_CanStreamWrite = false;
     }
-  if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, NULL ) != NULL )
+  if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, ITK_NULLPTR ) != ITK_NULLPTR )
     {
     m_CanStreamWrite = true;
     }
@@ -1327,7 +1327,7 @@ void GDALImageIO::Write(const void* buffer)
     }
 
   // Check if conversion succeed
-  if (buffer == NULL)
+  if (buffer == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "GDAL : Bad alloc");
     return;
@@ -1381,7 +1381,7 @@ void GDALImageIO::Write(const void* buffer)
                                                        m_PxType->pixType,
                                                        m_NbBands,
                                                        // We want to write all bands
-                                                       NULL,
+                                                       ITK_NULLPTR,
                                                        // Pixel offset
                                                        // is nbComp * BytePerPixel
                                                        m_BytePerPixel * m_NbBands,
@@ -1410,7 +1410,7 @@ void GDALImageIO::Write(const void* buffer)
     std::string realFileName = GetGdalWriteImageFileName(gdalDriverShortName, m_FileName);
 
     GDALDriver* driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName(gdalDriverShortName);
-    if (driver == NULL)
+    if (driver == ITK_NULLPTR)
       {
       itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
       }
@@ -1418,7 +1418,7 @@ void GDALImageIO::Write(const void* buffer)
     GDALCreationOptionsType creationOptions = m_CreationOptions;
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
                                                  otb::ogr::StringListConverter(creationOptions).to_ogr(),
-                                                 NULL, NULL );
+                                                 ITK_NULLPTR, ITK_NULLPTR );
     if(!hOutputDS)
     {
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
@@ -1781,7 +1781,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       std::string  tag = svalue.substr(0, equalityPos);
       std::string  value = svalue.substr(equalityPos + 1);
       otbMsgDevMacro(<< "Metadata: " << tag << "=" << value);
-      dataset->SetMetadataItem(tag.c_str(), value.c_str(), NULL);
+      dataset->SetMetadataItem(tag.c_str(), value.c_str(), ITK_NULLPTR);
       }
     }
 
@@ -1852,7 +1852,7 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
   else if ( extension == ".j2k" || extension == ".jp2" || extension == ".jpx")
   {
     // Try different JPEG2000 drivers
-    GDALDriver *driver = NULL;
+    GDALDriver *driver = ITK_NULLPTR;
     driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName("JP2OpenJPEG");
     if (driver)
       {

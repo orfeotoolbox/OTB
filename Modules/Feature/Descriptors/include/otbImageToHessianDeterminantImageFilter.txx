@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageToHessianDeterminantImageFilter_txx
-#define __otbImageToHessianDeterminantImageFilter_txx
+#ifndef otbImageToHessianDeterminantImageFilter_txx
+#define otbImageToHessianDeterminantImageFilter_txx
 
 #include "otbImageToHessianDeterminantImageFilter.h"
 

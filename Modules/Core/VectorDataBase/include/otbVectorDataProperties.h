@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataProperties_h
-#define __otbVectorDataProperties_h
+#ifndef otbVectorDataProperties_h
+#define otbVectorDataProperties_h
 
 #include "itkObjectFactory.h"
 
@@ -81,11 +81,11 @@ public:
   void ComputeBoundingRegion();
 protected:
   /** Constructor */
-  VectorDataProperties() : m_VectorDataObject(NULL) {};
+  VectorDataProperties() : m_VectorDataObject(ITK_NULLPTR) {};
   /** Destructor */
-  virtual ~VectorDataProperties() {}
+  ~VectorDataProperties() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   void ProcessNode(InternalTreeNodeType * source);
   bool IsBoundingRegionNull();

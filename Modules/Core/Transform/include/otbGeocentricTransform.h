@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeocentricTransform_h
-#define __otbGeocentricTransform_h
+#ifndef otbGeocentricTransform_h
+#define otbGeocentricTransform_h
 
 #include "otbGenericMapProjection.h"
 #include "otbEllipsoidAdapter.h"
@@ -63,11 +63,11 @@ public:
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
 
-  OutputPointType TransformPoint(const InputPointType& point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
 
 protected:
   GeocentricTransform();
-  virtual ~GeocentricTransform();
+  ~GeocentricTransform() ITK_OVERRIDE;
   EllipsoidAdapter::Pointer m_Ellipsoid;
 
 private:

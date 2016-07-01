@@ -45,7 +45,7 @@ public:
   itkTypeMacro(ReadImageInfo, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ReadImageInfo");
     SetDescription("Get information about the image");
@@ -245,12 +245,12 @@ private:
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     std::ostringstream ossOutput;
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

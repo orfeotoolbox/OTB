@@ -8,11 +8,11 @@ There are two ways to install OTB library on your system: installing from a bina
 You can find information about the installation of binary packages for OTB and Monteverdi in the OTB-Cookbook.
 This chapter covers compilation of OTB library from source.
 
-OTB has been developed and tested across different combinations of operating systems, compilers, and hardware platforms including MS-Windows, Linux on Intel-compatible hardware and Mac OSX.  It is known to work with the following compilers in 32/64 bit:
+OTB has been developed and tested across different combinations of operating systems, compilers, and hardware platforms including Windows, Linux and Mac OSX.  It is known to work with the following compilers in 32/64 bit:
 \begin{itemize}
-\item Visual Studio 2010 and higher compiler on MS-Windows
-\item GCC 4.1 and higher on Unix/Linux systems
-\item Clang on MacOSX (10.8 and higher) systems
+\item Visual Studio 2015 on Windows
+\item GCC 4.x on GNU/Linux
+\item AppleClang on MacOSX (10.8 or higher)
 \end{itemize}
 
 \index{CMake}
@@ -224,15 +224,28 @@ because the SuperBuild will install some targets during the compilation step.
 Therefore this directory will be used even if you don't use make install target.
 In fact there is no make install target for the SuperBuild.
 
-During the configuration step, the SuperBuild will detect any existing dependencies installed as systems libraries.
-Whether to use them can be controlled via the \texttt{USE\_SYSTEM\_\textit{XXX}} (see
-table~\ref{tab:installation-cmake-variables}).
+By default, SuperBuild will not use any of libraries installed on system. All \texttt{USE\_SYSTEM\_\textit{XXX}} are
+are set to FALSE. This is our recommended way of using SuperBuild. You are however free to use a system library
+if you want!. You must be very much aware of dependencies of those libraries you use from system. For example,
+if libjpeg is not used from superbuild using USE_SYSTEM_JPEG=TRUE then you should not use zlib from superbuild
+because zlib is a dependency of libjpeg. Here SuperBuild will not automagically set USE_SYSTEM_ZLIB=FALSE.
+You must do it yourself. The example of libjpeg - zlib dependency chain is so simple.
+Imagine the same case for GDAL which depends on zlib, libjpeg, libtiff(with big tiff support), geotiff,
+sqlite, curl, geos, libkml, openjpeg. This is one of the reasons we recommend to use SuperBuild exclusively or not.
+
+All dependencies are configured and built in a way that help us to get an efficient build OTB.
+So we enable geotiff (with proj4 support), openjpeg, geos in GDAL build.
+
+It is also important to note that SuperBuild is tested daily on all three platforms that makes us clear that
+there is no issue with new changes in OTB and its dependencies. It simply works!
+
+(see table~\ref{tab:installation-cmake-variables}).
 
 SuperBuild downloads dependencies into the \texttt{DOWNLOAD\_LOCATION} directory, which will be
 \texttt{$\sim$/OTB/build/Downloads} in our example.
 Dependencies can be downloaded manually into this directory before the compilation step.
 This can be usefull if you wish to bypass a proxy, intend to compile OTB without an internet conection, or other network
-constraint. You can find a complete bundle with all dependencies sources on the Orfeo ToolBox website (pick the 'SuperBuild-archives' corresponding to the OTB version you want to build) :
+constraint. You can find an archive with sources of all our dependencies on the Orfeo ToolBox website (pick the 'SuperBuild-archives' corresponding to the OTB version you want to build) :
 \begin{center}
 \url{https://www.orfeo-toolbox.org/packages}
 \end{center}

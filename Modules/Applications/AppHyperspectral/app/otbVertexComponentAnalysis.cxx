@@ -44,7 +44,7 @@ public:
   itkTypeMacro(VertexComponentAnalysis, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("VertexComponentAnalysis");
     SetDescription("Find endmembers in hyperspectral images with Vertex Component Analysis");
@@ -78,12 +78,12 @@ private:
     SetDocExampleParameterValue("outendm", "VertexComponentAnalysis.tif double");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     DoubleVectorImageType::Pointer inputImage = GetParameterDoubleVectorImage("in");
     DoubleVectorImageType::Pointer endmembersImage;

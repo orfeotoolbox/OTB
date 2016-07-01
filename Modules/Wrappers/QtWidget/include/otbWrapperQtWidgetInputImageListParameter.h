@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputImageListParameter_h
-#define __otbWrapperQtWidgetInputImageListParameter_h
+#ifndef otbWrapperQtWidgetInputImageListParameter_h
+#define otbWrapperQtWidgetInputImageListParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -38,7 +38,7 @@ class ITK_ABI_EXPORT QtWidgetInputImageListParameter : public QtWidgetParameterB
   Q_OBJECT
 public:
   QtWidgetInputImageListParameter(InputImageListParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputImageListParameter();
+  ~QtWidgetInputImageListParameter() ITK_OVERRIDE;
 
 
 signals:
@@ -59,9 +59,9 @@ private:
   QtWidgetInputImageListParameter(const QtWidgetInputImageListParameter&); //purposely not implemented
   void operator=(const QtWidgetInputImageListParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   void RecreateImageList();
   void UpdateFileList( std::map<unsigned int, unsigned int> idMap );

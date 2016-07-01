@@ -89,7 +89,7 @@ int DEMConvertAdapter::Convert(std::string tempFilename, std::string output)
   ih->initialize();
 
   ossimRefPtr<ossimImageSource> source = ih.get();
-  ossimRefPtr<ossimBandSelector> bs = 0;
+  ossimRefPtr<ossimBandSelector> bs = ITK_NULLPTR;
 
 
   // Get the image rectangle for the rrLevel selected.

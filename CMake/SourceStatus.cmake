@@ -23,6 +23,11 @@ endif()
 if(EXISTS "${PROJECT_SOURCE_DIR}/.git")
   find_package(Git)
   if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%H --oneline
+      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+      OUTPUT_VARIABLE OTB_GIT_LAST_COMMIT
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+
     execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%H
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       OUTPUT_VARIABLE OTB_WC_REVISION
@@ -54,7 +59,7 @@ if(OTB_DATA_ROOT)
       mark_as_advanced(OTB_DATA_WC_REVISION)
     endif()
   endif()
-  
+
   if(EXISTS "${OTB_DATA_ROOT}/.git")
     if(NOT GIT_FOUND)
       find_package(Git)

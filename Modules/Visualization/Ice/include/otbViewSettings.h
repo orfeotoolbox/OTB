@@ -141,7 +141,7 @@ public:
 protected:
   ViewSettings();
 
-  virtual ~ViewSettings();
+  ~ViewSettings() ITK_OVERRIDE;
 
 private:
   // prevent implementation

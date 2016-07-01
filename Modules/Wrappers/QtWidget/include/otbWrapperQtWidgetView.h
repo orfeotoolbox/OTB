@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetView_h
-#define __otbWrapperQtWidgetView_h
+#ifndef otbWrapperQtWidgetView_h
+#define otbWrapperQtWidgetView_h
 
 #include <QtGui>
 #include <QObject>
@@ -39,7 +39,7 @@ class ITK_ABI_EXPORT QtWidgetView : public QWidget
   Q_OBJECT
 public:
   QtWidgetView(Application* app);
-  virtual ~QtWidgetView();
+  ~QtWidgetView() ITK_OVERRIDE;
 
   void CreateGui();
 

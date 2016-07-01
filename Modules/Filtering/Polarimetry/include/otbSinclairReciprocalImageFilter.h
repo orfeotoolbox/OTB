@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairReciprocalImageFilter_h
-#define __otbSinclairReciprocalImageFilter_h
+#ifndef otbSinclairReciprocalImageFilter_h
+#define otbSinclairReciprocalImageFilter_h
 
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
@@ -105,11 +105,11 @@ protected:
   /**  Constructor */
   SinclairReciprocalImageFilter() {}
   /**  Destructor */
-  virtual ~SinclairReciprocalImageFilter() {}
+  ~SinclairReciprocalImageFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

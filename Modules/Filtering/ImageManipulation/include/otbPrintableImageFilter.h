@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPrintableImageFilter_h
-#define __otbPrintableImageFilter_h
+#ifndef otbPrintableImageFilter_h
+#define otbPrintableImageFilter_h
 
 #include "otbImage.h"
 #include "itkImageToImageFilter.h"
@@ -160,7 +160,7 @@ public:
                itk::ImageToImageFilter);
 
   /** Display */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   void SetChannel(unsigned int channel);
   const ChannelsType GetChannels(void) const;
@@ -231,14 +231,14 @@ public:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 protected:
 
   PrintableImageFilter();
 
   void BeforeGenerateData();
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

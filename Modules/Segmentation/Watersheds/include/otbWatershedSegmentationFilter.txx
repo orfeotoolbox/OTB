@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWatershedSegmentationFilter_txx
-#define __otbWatershedSegmentationFilter_txx
+#ifndef otbWatershedSegmentationFilter_txx
+#define otbWatershedSegmentationFilter_txx
 
 #include "otbWatershedSegmentationFilter.h"
 

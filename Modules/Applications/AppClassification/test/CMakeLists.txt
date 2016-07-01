@@ -846,10 +846,37 @@ endif()
 #----------- PolygonClassStatistics TESTS ----------------
 otb_test_application(NAME apTvClPolygonClassStatisticsTest
                      APP PolygonClassStatistics
-                     OPTIONS -in ${INPUTDATA}/cthead1_flip.tif
-                             -vec ${INPUTDATA}/variousVectors.sqlite
-                             -field label
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                             -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
+                             -field Class
                              -out ${TEMP}/apTvClPolygonClassStatisticsOut.xml
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
                              ${TEMP}/apTvClPolygonClassStatisticsOut.xml)
+
+#----------- SampleSelection TESTS -----------------------
+otb_test_application(NAME apTvClSampleSelection
+                     APP SampleSelection
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                             -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
+                             -field Class
+                             -out ${TEMP}/apTvClSampleSelectionOut.sqlite
+                             -instats ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
+                             -outrates ${TEMP}/apTvClSampleSelectionOutRates.txt
+                             -strategy byclass
+                             -strategy.byclass.in ${INPUTDATA}/Classification/sampling_required.csv
+                             -sampler periodic
+                     VALID   --compare-ogr ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClSampleSelectionOut.sqlite
+                             ${TEMP}/apTvClSampleSelectionOut.sqlite)
+
+#----------- SampleExtraction TESTS -----------------------
+otb_test_application(NAME apTvClSampleExtraction
+                     APP SampleExtraction
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                             -vec ${OTBAPP_BASELINE_FILES}/apTvClSampleSelectionOut.sqlite
+                             -field Class
+                             -out ${TEMP}/apTvClSampleExtractionOut.sqlite
+                     VALID   --compare-ogr ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClSampleExtractionOut.sqlite
+                             ${TEMP}/apTvClSampleExtractionOut.sqlite)

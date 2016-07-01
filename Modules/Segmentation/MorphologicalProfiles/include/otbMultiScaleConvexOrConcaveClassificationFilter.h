@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiScaleConvexOrConcaveClassificationFilter_h
-#define __otbMultiScaleConvexOrConcaveClassificationFilter_h
+#ifndef otbMultiScaleConvexOrConcaveClassificationFilter_h
+#define otbMultiScaleConvexOrConcaveClassificationFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
 namespace otb
@@ -219,7 +219,7 @@ public:
   itkGetMacro(LabelSeparator, LabelType);
 
   /** Set the functor parameters before calling the ThreadedGenerateData() */
-  virtual void BeforeThreadedGenerateData(void)
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
   {
     this->GetFunctor().SetLabelSeparator(m_LabelSeparator);
     this->GetFunctor().SetSigma(m_Sigma);
@@ -233,9 +233,9 @@ protected:
     m_Sigma          = 0.0;
     };
   /** Destructor */
-  virtual ~MultiScaleConvexOrConcaveClassificationFilter() {}
+  ~MultiScaleConvexOrConcaveClassificationFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "LabelSeparator: " << m_LabelSeparator << std::endl;

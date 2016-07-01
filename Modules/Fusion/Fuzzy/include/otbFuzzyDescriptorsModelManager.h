@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFuzzyDescriptorsModelManager_h
-#define __otbFuzzyDescriptorsModelManager_h
+#ifndef otbFuzzyDescriptorsModelManager_h
+#define otbFuzzyDescriptorsModelManager_h
 
 #include <vector>
 #include <utility>

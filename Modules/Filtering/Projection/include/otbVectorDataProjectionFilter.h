@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataProjectionFilter_h
-#define __otbVectorDataProjectionFilter_h
+#ifndef otbVectorDataProjectionFilter_h
+#define otbVectorDataProjectionFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbGenericRSTransform.h"
@@ -172,17 +172,17 @@ public:
 
 protected:
   VectorDataProjectionFilter();
-  virtual ~VectorDataProjectionFilter() {}
+  ~VectorDataProjectionFilter() ITK_OVERRIDE {}
 
-  virtual OutputPointType ProcessPoint(InputPointType point) const;
-  virtual OutputLinePointerType ProcessLine(InputLinePointerType line) const;
-  virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const;
-  virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const;
+  OutputPointType ProcessPoint(InputPointType point) const ITK_OVERRIDE;
+  OutputLinePointerType ProcessLine(InputLinePointerType line) const ITK_OVERRIDE;
+  OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const ITK_OVERRIDE;
+  OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const ITK_OVERRIDE;
 
   virtual void InstanciateTransform(void);
 
-  virtual void GenerateOutputInformation(void);
-  virtual void GenerateData(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   VectorDataProjectionFilter(const Self &); //purposely not implemented

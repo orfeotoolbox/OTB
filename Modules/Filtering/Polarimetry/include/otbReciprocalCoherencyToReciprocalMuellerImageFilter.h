@@ -160,7 +160,7 @@ public:
 
 protected:
    ReciprocalCoherencyToReciprocalMuellerImageFilter() {}
-  virtual ~ReciprocalCoherencyToReciprocalMuellerImageFilter() {}
+  ~ReciprocalCoherencyToReciprocalMuellerImageFilter() ITK_OVERRIDE {}
 
 
 private:

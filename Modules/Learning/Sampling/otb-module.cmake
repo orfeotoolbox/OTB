@@ -3,6 +3,7 @@ set(DOCUMENTATION "This module contains OTB sampling framework.")
 otb_module(OTBSampling
   DEPENDS
     OTBCommon
+    OTBConversion
     OTBImageManipulation
     OTBITK
     OTBStatistics
@@ -11,6 +12,7 @@ otb_module(OTBSampling
     OTBTestKernel
     OTBImageIO
     OTBImageBase
+    OTBIOXML
 
   DESCRIPTION
     "${DOCUMENTATION}"

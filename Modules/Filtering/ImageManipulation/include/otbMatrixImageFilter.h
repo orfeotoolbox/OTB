@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMatrixImageFilter_h
-#define __otbMatrixImageFilter_h
+#ifndef otbMatrixImageFilter_h
+#define otbMatrixImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbMath.h"
@@ -108,13 +108,13 @@ public:
 
 protected:
   MatrixImageFilter();
-  virtual ~MatrixImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~MatrixImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**
    * Before threaded generate data method.
    */
-  void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** MatrixImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
@@ -125,7 +125,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   MatrixImageFilter(const Self &); //purposely not implemented

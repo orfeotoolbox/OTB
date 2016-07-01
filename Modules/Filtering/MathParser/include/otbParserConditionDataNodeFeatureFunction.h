@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserConditionDataNodeFeatureFunction_h
-#define __otbParserConditionDataNodeFeatureFunction_h
+#ifndef otbParserConditionDataNodeFeatureFunction_h
+#define otbParserConditionDataNodeFeatureFunction_h
 
 #include "otbDataNodeImageFunction.h"
 #include "otbPolyLineImageConstIterator.h"
@@ -84,7 +84,7 @@ public:
 
   typedef std::vector<PrecisionType>                  OutputType;
 
-  virtual OutputType Evaluate( const DataNodeType& node ) const;
+  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
 
   std::string GetExpression() const
   {
@@ -103,8 +103,8 @@ public:
 
 protected:
   ParserConditionDataNodeFeatureFunction();
-  virtual ~ParserConditionDataNodeFeatureFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ParserConditionDataNodeFeatureFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ParserConditionDataNodeFeatureFunction(const Self&); //purposely not implemented

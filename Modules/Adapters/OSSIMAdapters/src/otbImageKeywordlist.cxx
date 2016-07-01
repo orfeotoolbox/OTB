@@ -258,7 +258,7 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
     // Free memory
     delete projection;
-    projection = 0;
+    projection = ITK_NULLPTR;
 
     }
 
@@ -433,15 +433,15 @@ ReadGeometryFromRPCTag(const std::string& filename)
 
   //  try to use GeoTiff RPC tag if present.
   // Warning : RPC in subdatasets are not supported
-  GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), NULL);
-  if(identifyDriverH == NULL)
+  GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), ITK_NULLPTR);
+  if(identifyDriverH == ITK_NULLPTR)
     {
     // If no driver has identified the dataset, don't try to open it and exit
     return otb_kwl;
     }
 
   GDALDatasetH datasetH = GDALOpen(filename.c_str(), GA_ReadOnly);
-  if (datasetH != NULL)
+  if (datasetH != ITK_NULLPTR)
     {
     GDALDataset* dataset = static_cast<GDALDataset*>(datasetH);
     GDALRPCInfo rpcStruct;

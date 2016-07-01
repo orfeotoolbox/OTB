@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadarsat2ImageMetadataInterface_h
-#define __otbRadarsat2ImageMetadataInterface_h
+#ifndef otbRadarsat2ImageMetadataInterface_h
+#define otbRadarsat2ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
 
@@ -55,40 +55,40 @@ public:
 
   /*ImageMetadataInterfaceBase pure virtuals */
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const;
+  int GetProductionDay() const ITK_OVERRIDE;
 
   /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const;
+  int GetProductionMonth() const ITK_OVERRIDE;
 
   /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const;
+  int GetProductionYear() const ITK_OVERRIDE;
 
   /** check sensor ID */
-  bool CanRead() const;
+  bool CanRead() const ITK_OVERRIDE;
 
-  int GetDay() const;
+  int GetDay() const ITK_OVERRIDE;
 
-  int GetMonth() const;
+  int GetMonth() const ITK_OVERRIDE;
 
-  int GetYear() const;
+  int GetYear() const ITK_OVERRIDE;
 
-  int GetHour() const;
+  int GetHour() const ITK_OVERRIDE;
 
-  int GetMinute() const;
+  int GetMinute() const ITK_OVERRIDE;
 
-  UIntVectorType GetDefaultDisplay() const;
+  UIntVectorType GetDefaultDisplay() const ITK_OVERRIDE;
 
   /*SarImageMetadataInterface pure virutals rituals */
-  double GetPRF() const;
+  double GetPRF() const ITK_OVERRIDE;
 
-  double GetRSF() const;
+  double GetRSF() const ITK_OVERRIDE;
 
-  double GetRadarFrequency() const;
+  double GetRadarFrequency() const ITK_OVERRIDE;
 
-  double GetCenterIncidenceAngle() const;
+  double GetCenterIncidenceAngle() const ITK_OVERRIDE;
 
   /*get lookup data for calulating backscatter */
-  void CreateCalibrationLookupData(const short type);
+  void CreateCalibrationLookupData(const short type) ITK_OVERRIDE;
 
 
 protected:
@@ -96,7 +96,7 @@ protected:
   Radarsat2ImageMetadataInterface();
 
   /* class desctructor */
-  virtual ~Radarsat2ImageMetadataInterface() {}
+  ~Radarsat2ImageMetadataInterface() ITK_OVERRIDE {}
 
 private:
   Radarsat2ImageMetadataInterface(const Self &); //purposely not implemented
@@ -144,7 +144,7 @@ public:
 
   }
 
-  virtual ~Radarsat2CalibrationLookupData()
+  ~Radarsat2CalibrationLookupData() ITK_OVERRIDE
   {
 
   }
@@ -156,7 +156,7 @@ public:
     m_Gains = gains;
   }
 
-  double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y))
+  double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y)) ITK_OVERRIDE
   {
     double lutVal = 1.0;
 
@@ -172,7 +172,7 @@ public:
     return lutVal;
   }
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const
+  void PrintSelf(std::ostream & os, itk::Indent indent) const ITK_OVERRIDE
   {
     os << indent << " offset:'" << m_Offset << "'" << std::endl;
     os <<  " referenceNoiseLevel.gain: " << std::endl;

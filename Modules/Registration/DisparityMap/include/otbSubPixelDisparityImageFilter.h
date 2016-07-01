@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSubPixelDisparityImageFilter_h
-#define __otbSubPixelDisparityImageFilter_h
+#ifndef otbSubPixelDisparityImageFilter_h
+#define otbSubPixelDisparityImageFilter_h
 
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 
@@ -207,29 +207,29 @@ protected:
   SubPixelDisparityImageFilter();
 
   /** Destructor */
-  virtual ~SubPixelDisparityImageFilter();
+  ~SubPixelDisparityImageFilter() ITK_OVERRIDE;
 
   /** \brief Verify that the input images are compatible
    *
    * This method needs to be re-implemented from ImageToImageFilter since
    * the initial images and disparity maps may not have the same size
    */
-  virtual void VerifyInputInformation();
+  void VerifyInputInformation() ITK_OVERRIDE;
   
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Generate input requrested region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Before threaded generate data */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** After threaded generate data */
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
 private:
   SubPixelDisparityImageFilter(const Self&); //purposely not implemented

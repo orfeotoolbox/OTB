@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTestMain_h
-#define __otbTestMain_h
+#ifndef otbTestMain_h
+#define otbTestMain_h
 
 #include "otbConfigure.h"
 

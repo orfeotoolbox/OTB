@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapFileProductWriter_h
-#define __otbMapFileProductWriter_h
+#ifndef otbMapFileProductWriter_h
+#define otbMapFileProductWriter_h
 
 #include <fstream>
 
@@ -151,7 +151,7 @@ public:
   itkGetStringMacro(ShapeIndexPath);
 
   /** Update Method : Call a porotected Write method */
-  virtual void Update()
+  void Update() ITK_OVERRIDE
   {
     this->Write();
   }
@@ -161,8 +161,8 @@ public:
 
 protected:
   MapFileProductWriter();
-  virtual ~MapFileProductWriter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~MapFileProductWriter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**Method for Tiling the input image*/
   virtual void Tiling();

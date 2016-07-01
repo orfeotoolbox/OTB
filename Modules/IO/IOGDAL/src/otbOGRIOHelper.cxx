@@ -31,7 +31,7 @@ OGRIOHelper
 {
   OGRPoint * ogrPoint = (OGRPoint *) ogrGeometry;
 
-  if (ogrPoint == NULL)
+  if (ogrPoint == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "Failed to convert OGRGeometry to OGRPoint");
     }
@@ -60,7 +60,7 @@ OGRIOHelper
 {
   OGRLineString * ogrLine = (OGRLineString *) ogrGeometry;
 
-  if (ogrLine == NULL)
+  if (ogrLine == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "Failed to convert OGRGeometry to OGRLine");
     }
@@ -102,7 +102,7 @@ OGRIOHelper
 {
   OGRPolygon * ogrPolygon = (OGRPolygon *) ogrGeometry;
 
-  if (ogrPolygon == NULL)
+  if (ogrPolygon == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "Failed to convert OGRGeometry to OGRPolygon");
     }
@@ -187,7 +187,7 @@ void OGRIOHelper
   unsigned int   counter = 0;
   itk::TimeProbe chrono;
 
-  while ((feature = layer->GetNextFeature()) != NULL)
+  while ((feature = layer->GetNextFeature()) != ITK_NULLPTR)
     {
     chrono.Start();
 
@@ -197,7 +197,7 @@ void OGRIOHelper
     /** Temporary geometry container */
     OGRGeometry * geometry = feature->GetGeometryRef();
 
-    if (geometry == NULL)
+    if (geometry == ITK_NULLPTR)
       {
       OGRFeature::DestroyFeature(feature);
       chrono.Stop();
@@ -674,7 +674,7 @@ unsigned int OGRIOHelper
                                                kwl);
 
     // Create the field once
-    if (ogrCurrentLayer != NULL && !fieldsAddedToOGRLayer)
+    if (ogrCurrentLayer != ITK_NULLPTR && !fieldsAddedToOGRLayer)
       {
       // Take into account the fields stored in the
       // vectordatakeywordlist
@@ -710,8 +710,8 @@ unsigned int OGRIOHelper
       }
       case DOCUMENT:
       {
-      ogrCurrentLayer = m_DataSource->CreateLayer(dataNode->GetNodeId(), oSRS, wkbUnknown, NULL);
-      if (ogrCurrentLayer == NULL)
+      ogrCurrentLayer = m_DataSource->CreateLayer(dataNode->GetNodeId(), oSRS, wkbUnknown, ITK_NULLPTR);
+      if (ogrCurrentLayer == ITK_NULLPTR)
         {
         //itkExceptionMacro(<<"Failed to create layer "<<dataNode->GetNodeId());
         std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
@@ -742,7 +742,7 @@ unsigned int OGRIOHelper
         }
 
       //Save it in the structure
-      if (ogrCollection == NULL)
+      if (ogrCollection == ITK_NULLPTR)
         {
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
@@ -800,7 +800,7 @@ unsigned int OGRIOHelper
         }
 
       //Save it in the structure
-      if (ogrCollection == NULL)
+      if (ogrCollection == ITK_NULLPTR)
         {
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
@@ -885,7 +885,7 @@ unsigned int OGRIOHelper
         }
 
       //Save it in the structure
-      if (ogrCollection == NULL)
+      if (ogrCollection == ITK_NULLPTR)
         {
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
@@ -918,7 +918,7 @@ unsigned int OGRIOHelper
       }
       case FEATURE_MULTIPOINT:
       {
-      if (ogrCollection != NULL)
+      if (ogrCollection != ITK_NULLPTR)
         {
         itkExceptionMacro(<< "Problem while creating multipoint.");
         }
@@ -941,7 +941,7 @@ unsigned int OGRIOHelper
       }
       case FEATURE_MULTILINE:
       {
-      if (ogrCollection != NULL)
+      if (ogrCollection != ITK_NULLPTR)
         {
         itkExceptionMacro(<< "Problem while creating multiline.");
         }
@@ -966,7 +966,7 @@ unsigned int OGRIOHelper
       }
       case FEATURE_MULTIPOLYGON:
       {
-      if (ogrCollection != NULL)
+      if (ogrCollection != ITK_NULLPTR)
         {
         itkExceptionMacro(<< "Problem while creating multipolygon.");
         }
@@ -989,7 +989,7 @@ unsigned int OGRIOHelper
       }
       case FEATURE_COLLECTION:
       {
-      if (ogrCollection != NULL)
+      if (ogrCollection != ITK_NULLPTR)
         {
         itkExceptionMacro(<< "Problem while creating collection.");
         }
@@ -1031,7 +1031,7 @@ std::vector<OGRLayer*> OGRIOHelper
 {
 
   // Create the in memory datasource if NULL
-  if (inMemoryDataSource == NULL)
+  if (inMemoryDataSource == ITK_NULLPTR)
     {
     const char * driverName = "Memory";
     ogr::version_proxy::GDALDriverType * ogrDriver = ogr::version_proxy::GetDriverByName(driverName);
@@ -1057,7 +1057,7 @@ std::vector<OGRLayer*> OGRIOHelper
                                                kwl);
 
     // Create the field once
-    if (ogrCurrentLayer != NULL && !fieldsAddedToOGRLayer)
+    if (ogrCurrentLayer != ITK_NULLPTR && !fieldsAddedToOGRLayer)
       {
       // Take into account the fields stored in the
       // vectordatakeywordlist
@@ -1088,8 +1088,8 @@ std::vector<OGRLayer*> OGRIOHelper
       case DOCUMENT:
       {
       ogrCurrentLayer = inMemoryDataSource->CreateLayer(dataNode->GetNodeId(), oSRS,
-                                      wkbUnknown, NULL);
-      if (ogrCurrentLayer == NULL)
+                                      wkbUnknown, ITK_NULLPTR);
+      if (ogrCurrentLayer == ITK_NULLPTR)
         {
         std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
         }
