@@ -35,8 +35,8 @@ BOOST_AUTO_TEST_CASE(begin_end)
    std::string const s   = "123456789";
 
    BOOST_REQUIRE_EQUAL(*rbegin(t), 0);
-   BOOST_REQUIRE_EQUAL(size(s), 9);
-   BOOST_REQUIRE_EQUAL(size(t), 10);
+   BOOST_REQUIRE_EQUAL(size(s), 9u);
+   BOOST_REQUIRE_EQUAL(size(t), 10u);
 }
 #endif
 
@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(string_view_array)
    char const        t[] = "123456789";
 
    string_view v(t);
-   BOOST_CHECK_EQUAL(v.size()    , 9);
+   BOOST_CHECK_EQUAL(v.size()    , 9u);
    BOOST_CHECK(! v.empty());
    BOOST_CHECK_EQUAL(*v.begin()  , '1');
    BOOST_CHECK_EQUAL(*(v.end()-1), '9');
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(string_view_string)
    std::string const s   = "123456789";
 
    string_view v(s);
-   BOOST_CHECK_EQUAL(v.size()    , 9);
+   BOOST_CHECK_EQUAL(v.size()    , 9u);
    BOOST_CHECK(! v.empty());
    BOOST_CHECK_EQUAL(*v.begin()  , '1');
    BOOST_CHECK_EQUAL(*(v.end()-1), '9');
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(string_view_ptr)
    char const       *ptr = "123456789";
 
    string_view v(ptr);
-   BOOST_CHECK_EQUAL(v.size()    , 9);
+   BOOST_CHECK_EQUAL(v.size()    , 9u);
    BOOST_CHECK(! v.empty());
    BOOST_CHECK_EQUAL(*v.begin()  , '1');
    BOOST_CHECK_EQUAL(*(v.end()-1), '9');
