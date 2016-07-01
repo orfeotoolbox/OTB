@@ -32,6 +32,9 @@
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
+#ifdef OTB_USE_MPI
+#include "otbMPIConfig.h"
+#endif
 
 typedef int (*MainFuncPointer)(int, char*[]);
 std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
@@ -332,6 +335,11 @@ int main(int ac, char* av[])
 
 
     result = EXIT_SUCCESS;
+#ifdef OTB_USE_MPI
+    otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+    if (mpiConfig->GetMyRank() == 0)
+    {
+#endif
     std::cout << " -> Test EXIT SUCCESS." << std::endl;
     if (lFlagRegression == false)
       {
@@ -410,6 +418,9 @@ int main(int ac, char* av[])
       }
     std::cout << "-------------  End control baseline tests    -------------" << std::endl;
 
+#ifdef OTB_USE_MPI
+    }
+#endif
     return result;
     }
 }
