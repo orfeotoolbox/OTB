@@ -106,8 +106,8 @@ private:
     AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
     SetParameterDescription("io.out", "Output file containing the model estimated (.txt format).");
 
-    AddParameter(ParameterType_ListView,  "feat", "List of features to consider for classification.");
-    SetParameterDescription("feat","List of features to consider for classification.");
+    AddParameter(ParameterType_ListView,  "feat", "Field names for training features.");
+    SetParameterDescription("feat","List of field names in the input vector data to be used as features for training.");
 
     AddParameter(ParameterType_String,"cfield","Field containing the class id for supervision");
     SetParameterDescription("cfield","Field containing the class id for supervision. "
@@ -115,7 +115,7 @@ private:
     SetParameterString("cfield","class");
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
-    SetParameterDescription("layer", "Layer index to read in the input vector file.");
+    SetParameterDescription("layer", "Index of the layer to use in the input vector file.");
     MandatoryOff("layer");
     SetDefaultParameterInt("layer",0);
 
@@ -128,7 +128,7 @@ private:
     MandatoryOff("valid.vd");
 
     AddParameter(ParameterType_Int, "valid.layer", "Layer Index");
-    SetParameterDescription("valid.layer", "Layer index to read in the validation vector file.");
+    SetParameterDescription("valid.layer", "Index of the layer to use in the validation vector file.");
     MandatoryOff("valid.layer");
     SetDefaultParameterInt("valid.layer",0);
 
@@ -140,7 +140,7 @@ private:
     SetDocExampleParameterValue("io.vd", "vectorData.shp");
     SetDocExampleParameterValue("io.stats", "meanVar.xml");
     SetDocExampleParameterValue("io.out", "svmModel.svm");
-    SetDocExampleParameterValue("feat", "perimeter");
+    SetDocExampleParameterValue("feat", "perimeter  area  width");
     SetDocExampleParameterValue("cfield", "predicted");
   }
 
@@ -278,11 +278,25 @@ void DoExecute()
   LabelListSampleType::Pointer target = LabelListSampleType::New();
   input->SetMeasurementVectorSize(nbFeatures);
 
-  int cFieldIndex=0;
+  int cFieldIndex=-1;
   std::vector<int> featureFieldIndex = GetSelectedItems("feat");
   if (feature.addr())
     {
     cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
+    }
+
+  // Check that the class field exists
+  if (cFieldIndex < 0)
+    {
+    std::ostringstream oss;
+    std::vector<std::string> names = GetChoiceNames("feat");
+    for (unsigned int i=0 ; i<names.size() ; i++)
+      {
+      if (i) oss << ", ";
+      oss << names[i];
+      }
+    otbAppLogFATAL("The field name for class label ("<<GetParameterString("cfield")
+      <<") has not been found in the input vector file! Choices are "<< oss.str());
     }
 
   while(goesOn)
