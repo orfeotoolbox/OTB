@@ -117,8 +117,8 @@ getModifiedJulianDate(ossimString const& utcTimeString)
 
 typedef unsigned int uint;
 void check_time(char const* format, char const* sDate,
-      uint year, uint month, uint day,
-      uint hour, uint min, uint sec, double fsec)
+      int year, int month, int day,
+      int hour, int min, int sec, double fsec)
 {
    // std::cout << "Test " << sDate << " against " << format << std::endl;
    const ossimDate d = time::details::strptime(format, sDate);
@@ -143,17 +143,17 @@ void check_time(char const* format, char const* sDate,
    BOOST_CHECK_EQUAL(d2.getDay(), day);
    BOOST_CHECK_EQUAL(d2.getHour(), hour);
    BOOST_CHECK_EQUAL(d2.getMin(), min);
-   BOOST_CHECK_CLOSE_FRACTION(d2.getSec()+d2.getFractionalSecond(), sec+fsec, 0.0001);
+   BOOST_CHECK_CLOSE_FRACTION(d2.getSec()+d2.getFractionalSecond(), sec+fsec, 1e-6);
 
    // Alternative implementation
-   BOOST_CHECK_CLOSE_FRACTION(d.getModifiedJulian(), getModifiedJulianDate(sDate), 0.01);
+   BOOST_CHECK_CLOSE_FRACTION(d.getModifiedJulian(), getModifiedJulianDate(sDate), 1e-12);
 
    // Check string conversion
    // Yes, this is likelly to fail du to double imprecisions
    // - official ossimDate string conversion
    time::ModifiedJulianDate mjd = time::toModifiedJulianDate(sDate);
    // std::cout << "MJD("<<sDate<<"): " << mjd.as_day_frac() << std::endl;
-   BOOST_CHECK_CLOSE_FRACTION(d.getModifiedJulian(), mjd.as_day_frac(), 0.01);
+   BOOST_CHECK_CLOSE_FRACTION(d.getModifiedJulian(), mjd.as_day_frac(), 1e-12);
    std::ostringstream oss;
    oss << d.getYear() << '-' << std::setw(2) << std::setfill('0') << d.getMonth() << '-' << d.getDay() << 'T';
    d.printTime(oss);
@@ -167,6 +167,7 @@ void check_time(char const* format, char const* sDate,
    // std::cout << oss.str() << "\n";
 
    // We know this test will fail because of float rounding => just display
+   std::cout.precision(16);
    std::cout << mjd << " as a simple string (" << to_simple_string(mjd)
       << ") is expected to differ from " << sDate << "\n";
    // BOOST_CHECK_EQUAL(to_simple_string(mjd), sDate);
@@ -190,4 +191,8 @@ BOOST_AUTO_TEST_CASE(check_strptime)
    check_time(
          "%Y-%m-%dT%H:%M:%S%.", "1970-12-31T00:42:52.156000",
          1970, 12, 31, 0, 42, 52, 0.156);
+
+   check_time(
+         "%Y-%m-%dT%H:%M:%S%.", "2015-06-19T19:50:44.223221",
+         2015, 6, 19, 19, 50, 44, 0.223221);
 }

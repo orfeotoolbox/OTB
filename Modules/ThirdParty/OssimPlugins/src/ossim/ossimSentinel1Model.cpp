@@ -705,21 +705,9 @@ namespace ossimplugins
          addMandatory(theProductKwl, calibrationPrefix, "swath", adsHeader, "swath");
          addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
 
-#if 0
-#if !defined(USE_BOOST_TIME)
+         // store as a string
          addMandatory(theProductKwl, calibrationPrefix, "startTime", adsHeader, "startTime");
          addMandatory(theProductKwl, calibrationPrefix, "stopTime",  adsHeader, "stopTime");
-#else
-         add(theProductKwl, calibrationPrefix, "startTime",
-           time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "startTime")));
-
-         add(theProductKwl, calibrationPrefix, "stopTime",
-           time::toModifiedJulianDate(getTextFromFirstNode(adsHeader, "stopTime")));
-#endif
-#else // store as a string
-         addMandatory(theProductKwl, calibrationPrefix, "startTime", adsHeader, "startTime");
-         addMandatory(theProductKwl, calibrationPrefix, "stopTime",  adsHeader, "stopTime");
-#endif
 
          addMandatory(theProductKwl, calibrationPrefix, "absoluteCalibrationConstant", calibrationInformation, "absoluteCalibrationConstant");
 
@@ -746,16 +734,8 @@ namespace ossimplugins
                   "pixel_count",
                   node->getAttributeValue("count").string());
 
-#if 0
-#if defined(USE_BOOST_TIME)
+            // store as a string
             addMandatory(theProductKwl, calibrationVectorPrefix, keyAzimuthTime, calibrationVector, "azimuthTime");
-#else
-            add(theProductKwl, calibrationVectorPrefix, keyAzimuthTime,
-              time::toModifiedJulianDate(getOptionalTextFromFirstNode(calibrationVector, "azimuthTime")));
-#endif
-#else // store as a string
-            addMandatory(theProductKwl, calibrationVectorPrefix, keyAzimuthTime, calibrationVector, "azimuthTime");
-#endif
 
             addMandatory(theProductKwl, calibrationVectorPrefix, "line",        calibrationVector, "line");
             addMandatory(theProductKwl, calibrationVectorPrefix, "pixel",       calibrationVector, "pixel");
@@ -804,16 +784,8 @@ namespace ossimplugins
                   node->getAttributeValue("count"),
                   ShallOverwrite::no);
 
-#if 0
-#if defined(USE_BOOST_TIME)
+            // store as a string
             addMandatory(theProductKwl, noiseVectorPrefix, keyAzimuthTime, noiseVector, "azimuthTime");
-#else
-            add(theProductKwl, noiseVectorPrefix, keyAzimuthTime,
-              time::toModifiedJulianDate(getTextFromFirstNode(noiseVector, "azimuthTime")));
-#endif
-#else // store as a string
-            addMandatory(theProductKwl, noiseVectorPrefix, keyAzimuthTime, noiseVector, "azimuthTime");
-#endif
 
             addMandatory(theProductKwl, noiseVectorPrefix, "line",     noiseVector, "line");
             addMandatory(theProductKwl, noiseVectorPrefix, "pixel",    noiseVector, "pixel");

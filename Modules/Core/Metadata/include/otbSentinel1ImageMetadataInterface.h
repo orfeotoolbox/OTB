@@ -164,7 +164,7 @@ public:
 
   void InitParameters(short type, double ft, double lt,
                       int lines, int c,
-                      std::vector<Sentinel1CalibrationStruct> vlist)
+                      std::vector<Sentinel1CalibrationStruct> const& vlist)
   {
     firstLineTime = ft;
     lastLineTime = lt;
@@ -175,11 +175,11 @@ public:
     lineTimeInterval = (lt - ft) / ((lines - 1) * 1.0);
   }
 
-  double GetValue(const IndexValueType x, const IndexValueType y) ITK_OVERRIDE
+  double GetValue(const IndexValueType x, const IndexValueType y) const ITK_OVERRIDE
   {
     const int calVecIdx = GetVectorIndex(y);
-    const Sentinel1CalibrationStruct vec0 = calibrationVectorList[calVecIdx];
-    const Sentinel1CalibrationStruct vec1 = calibrationVectorList[calVecIdx + 1];
+    const Sentinel1CalibrationStruct & vec0 = calibrationVectorList[calVecIdx];
+    const Sentinel1CalibrationStruct & vec1 = calibrationVectorList[calVecIdx + 1];
     const double azTime = firstLineTime + y * lineTimeInterval;
     const double muY = (azTime - vec0.timeMJD) /(vec1.timeMJD - vec0.timeMJD);
     const int pixelIdx = GetPixelIndex(x, calibrationVectorList[calVecIdx]);
@@ -189,7 +189,7 @@ public:
     return lutVal;
   }
 
-  int GetVectorIndex(int y)
+  int GetVectorIndex(int y) const
   {
     for (int i = 1; i < count; i++)
       {
@@ -202,7 +202,7 @@ public:
 
   }
 
-  int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec)
+  int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec) const
   {
     const int size = calVec.pixels.size();
     for (int i = 0; i < size; i++)

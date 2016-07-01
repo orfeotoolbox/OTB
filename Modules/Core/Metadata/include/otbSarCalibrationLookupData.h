@@ -35,14 +35,13 @@ class ITK_EXPORT SarCalibrationLookupData : public itk::LightObject {
   SarCalibrationLookupData()
     :m_Type(0)
   {
-
   }
 
   ~SarCalibrationLookupData() ITK_OVERRIDE
   {
   }
 
-  virtual double GetValue(const IndexValueType itkNotUsed(x), const IndexValueType itkNotUsed(y))
+  virtual double GetValue(const IndexValueType itkNotUsed(x), const IndexValueType itkNotUsed(y)) const
   {
     return 1.0;
   }
