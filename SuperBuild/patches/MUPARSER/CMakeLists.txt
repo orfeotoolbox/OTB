@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(muparser)
 
-set(BUILD_SHARED_LIBS ON)
-if(MSVC)
-set(BUILD_SHARED_LIBS OFF) #force off
+option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
+if(MSVC AND BUILD_SHARED_LIBS)
+ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
 file(GLOB MUPARSER_SRCS "src/*.cpp" )

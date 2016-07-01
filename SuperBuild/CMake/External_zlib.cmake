@@ -1,16 +1,7 @@
-if( __EXTERNAL_ZLIB__)
-  return()
-else()
-  set(__EXTERNAL_ZLIB__ 1)
-endif()
+INCLUDE_ONCE_MACRO(ZLIB)
 
-if(USE_SYSTEM_ZLIB)
-  message(STATUS "  Using Zlib system version")
-  return()
-endif()
+SETUP_SUPERBUILD(ZLIB)
 
-SETUP_SUPERBUILD(PROJECT ZLIB)
-message(STATUS "  Using zlib SuperBuild version")
 
 # Try official release 1.2.8
 ExternalProject_Add(ZLIB
@@ -20,7 +11,9 @@ ExternalProject_Add(ZLIB
   BINARY_DIR ${ZLIB_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  CMAKE_COMMAND ${SB_CMAKE_COMMAND})
+  CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
+  CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  )
 
 if(UNIX)
   ExternalProject_Add_Step(ZLIB remove_static

@@ -1,5 +1,7 @@
+#RK: TODO: do a sweep when mxe is out and msvc builds are stabilized
+
 macro(macro_super_package)
-  cmake_parse_arguments(PKG  "" "STAGE_DIR" "SEARCHDIRS" ${ARGN} )
+  cmake_parse_arguments(PKG  "" "STAGE_DIR" "" ${ARGN} )
 
   if(${PKG_STAGE_DIR} STREQUAL "")
     message(FATAL_ERROR "PKG_STAGE_DIR is emtpy. Just can't continue.")
@@ -13,22 +15,28 @@ macro(macro_super_package)
 
   set(loader_program_PATHS)
   if(WIN32)
+    if(MSVC)
+      set(loader_program_names      "dumpbin")
+      set(loader_program_PATHS)
+      set(LOADER_PROGRAM_ARGS       "/DEPENDENTS")
+    else()
       set(loader_program_names      "${MXE_ARCH}-w64-mingw32.shared-objdump")
       set(loader_program_PATHS      "${MXE_MXEROOT}/usr/bin")
       set(LOADER_PROGRAM_ARGS       "-p")
+    endif()
+  else()
+    if(APPLE)
+      set(loader_program_names    otool)
+      set(LOADER_PROGRAM_ARGS     "-l")
+      set(loader_program_PATHS    /opt/local/bin) # a path that is already listed i path on apple
     else()
-      if(APPLE)
-        set(loader_program_names    otool)
-        set(LOADER_PROGRAM_ARGS     "-l")
-        set(loader_program_PATHS    /opt/local/bin) # a path that is already listed i path on apple
-      else()
-        set(loader_program_names    objdump)
-        set(LOADER_PROGRAM_ARGS     "-p")
-        set(loader_program_PATHS    /usr/bin) # a path that is already listed in default path on Linux
-      endif()
-      if(NOT DEPENDENCIES_INSTALL_DIR)
-        message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
-      endif()
+      set(loader_program_names    objdump)
+      set(LOADER_PROGRAM_ARGS     "-p")
+      set(loader_program_PATHS    /usr/bin) # a path that is already listed in default path on Linux
+    endif()
+    if(NOT DEPENDENCIES_INSTALL_DIR)
+      message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
+    endif()
   endif()
 
   find_program(LOADER_PROGRAM "${loader_program_names}" PATHS ${loader_program_PATHS})
@@ -40,11 +48,16 @@ macro(macro_super_package)
 
   set(PKG_SEARCHDIRS)
   if(WIN32)
-    file(GLOB MXE_GCC_LIB_DIR "${DEPENDENCIES_INSTALL_DIR}/bin/gcc*")
-    list(APPEND PKG_SEARCHDIRS ${MXE_GCC_LIB_DIR})
-    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/bin") #Qt
-    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/lib") #Qwt
-    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #mxe dlls
+    if(MSVC)
+      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #all other dlls
+      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #Qt & Qwt dlls
+    else()
+      file(GLOB MXE_GCC_LIB_DIR "${DEPENDENCIES_INSTALL_DIR}/bin/gcc*")
+      list(APPEND PKG_SEARCHDIRS ${MXE_GCC_LIB_DIR})
+      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/bin") #Qt
+      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/lib") #Qwt
+      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #mxe dlls
+    endif()
   else() #unixes
     list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
     list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #superbuild .so /.dylib
@@ -185,8 +198,12 @@ function(func_install_xdk_files)
   set(QT_REQ_DIRS)
   if(WIN32)
     #only affects windows due to regex on dll
-    file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*dll.*")
-    install(FILES ${LIB_FILES}    DESTINATION ${PKG_STAGE_DIR}/lib )
+    if(MSVC)
+      file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*.lib")
+    else()
+      file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*dll.*")
+    endif()
+    install(FILES ${LIB_FILES} DESTINATION ${PKG_STAGE_DIR}/lib )
 
     file(GLOB ITK_EXTRA_DLL_FILES_1 "${DEPENDENCIES_INSTALL_DIR}/bin/libITK*.dll")
     install(FILES ${ITK_EXTRA_DLL_FILES_1} DESTINATION ${PKG_STAGE_DIR}/bin)
@@ -295,6 +312,12 @@ function(func_install_support_files)
 
   set(PKG_SHARE_SOURCE_DIR ${DEPENDENCIES_INSTALL_DIR}/share)
 
+  set(GDAL_DATA ${PKG_SHARE_SOURCE_DIR}/gdal)
+  #MSVC install gdal-data in in a different directory. So we don't spoil it
+  if(MSVC)
+    set(GDAL_DATA ${DEPENDENCIES_INSTALL_DIR}/data)
+  endif()
+
   # Just check if required variables are defined.
   foreach(req
       DEPENDENCIES_INSTALL_DIR
@@ -323,7 +346,6 @@ function(func_install_support_files)
   endif() #NOT PKG_GENERATE_XDK
 
   ####################### install GDAL data ############################
-  set(GDAL_DATA ${PKG_SHARE_SOURCE_DIR}/gdal)
   if(NOT EXISTS "${GDAL_DATA}/epsg.wkt")
     message(FATAL_ERROR "Cannot generate package without GDAL_DATA : ${GDAL_DATA} ${DEPENDENCIES_INSTALL_DIR}")
   endif()
@@ -586,12 +608,11 @@ function(func_prepare_package)
     set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/otb/applications/${OTB_APP_SO_NAME}")
   endforeach()
 
-  # set(include_mvd 0)
-  # if(DEFINED Monteverdi_SOURCE_DIR)
-  #   set(include_mvd 1)
-  # endif()
-
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
+
+  set(ALLOWED_SYSTEM_DLLS_SEARCH_PATHS
+    /usr/lib
+    /lib64 )
 
   func_install_support_files()
 
@@ -606,13 +627,38 @@ function(func_prepare_package)
     func_process_deps(${bn})
   endforeach()
   #message(STATUS "Processing done")
+  list(REMOVE_DUPLICATES notfound_dlls)
+  if(UNIX AND NOT APPLE)
+    foreach(allowed_system_dll ${ALLOWED_SYSTEM_DLLS})
+      list (FIND notfound_dlls "${allowed_system_dll}" found_index)
+      if(${found_index} GREATER -1)
+        #find_file (<VAR> NAMES name PATHS paths... NO_DEFAULT_PATH)
+        find_file ( ${allowed_system_dll}_abs_path NAMES ${allowed_system_dll}
+          PATHS ${ALLOWED_SYSTEM_DLLS_SEARCH_PATHS} NO_DEFAULT_PATH)
+        if(${allowed_system_dll}_abs_path)
+          file(GLOB fff "${${allowed_system_dll}_abs_path}*")
+          foreach(f ${fff})
+            func_is_file_a_symbolic_link("${f}" is_symlink linked_to_file)
+            if(is_symlink)
+              get_filename_component(name_of_f ${f} NAME)
+              file(APPEND
+                ${CMAKE_BINARY_DIR}/make_symlinks_temp
+                "ln -sf $OUT_DIR/lib/gtk/${linked_to_file} $OUT_DIR/lib/gtk/${name_of_f}\n"
+                )
+            else() # is_symlink
+              install(FILES ${f} DESTINATION ${PKG_STAGE_DIR}/lib/gtk)
+            endif()
+          endforeach()
+          list(REMOVE_ITEM notfound_dlls "${allowed_system_dll}")
+        endif()
+      endif()
+    endforeach()
+  endif() #UNIX AND NOT APPLE
 
   list(LENGTH notfound_dlls nos)
   if(${nos} GREATER 0)
-    list(REMOVE_DUPLICATES notfound_dlls)
-    #string(REPLACE ";" "\r" notfound_dlls ${notfound_dlls})
-    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling superbuild_package macro.")
-  endif()
+    message(FATAL_ERROR "Following dlls were not found: ${notfound_dlls}. Please consider adding their paths to PKG_SEARCHDIRS when calling macro_super_package macro.")
+  endif() #( ${nos} GREATER 0)
 
   file(GLOB temp_files "${CMAKE_BINARY_DIR}/temp_so_names_dir/*") # /lib/otb
   foreach(temp_file ${temp_files})
@@ -702,10 +748,18 @@ function(func_process_deps infile)
           if(loader_rv)
             message(FATAL_ERROR "loader_ev=${loader_ev}\n PACKAGE-OTB: result_variable is '${loader_rv}'")
           endif()
-
           if(WIN32)
-            string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" loader_ov "${loader_ov}")
-            string(REGEX REPLACE "DLL.Name.." "" needed_dlls "${loader_ov}")
+            if(MSVC)
+              string(REGEX MATCHALL "dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
+              string(REGEX REPLACE "dependencies.." "" loader_ov "${loader_ov}")
+              #beware of .DLL and .dll
+              string(REGEX REPLACE ".DLL" ".dll" loader_ov "${loader_ov}")
+              #convert to cmake list
+              string(REGEX REPLACE ".dll" ".dll;" needed_dlls "${loader_ov}")
+            else()
+              string(REGEX MATCHALL "DLL.Name..[A-Za-z(0-9\\.0-9)+_\\-]*" loader_ov "${loader_ov}")
+              string(REGEX REPLACE "DLL.Name.." "" needed_dlls "${loader_ov}")
+            endif()
           else()  #case for unixes
             if(APPLE)
               string(REGEX REPLACE "[^\n]+cmd LC_LOAD_DYLIB\n[^\n]+\n[^\n]+name ([^\n]+).\\(offset[^\n]+\n" "rpath \\1\n" loader_ov "${loader_ov}")
@@ -736,7 +790,7 @@ function(func_process_deps infile)
     set(notfound_dlls "${notfound_dlls}" PARENT_SCOPE )
   endif()
 
-endfunction()
+endfunction() #function(func_process_deps infile)
 
 # The below function is modified from GetPrerequisities.cmake
 # which is distributed with CMake.
@@ -830,112 +884,6 @@ function(func_is_file_a_symbolic_link file result_var1 result_var2)
   endif()
 endfunction()
 
-
-#func_lisp: - A list_process function (func_lisp)
-#This method process the input list inplace.
-#It first remove all entries in the list starting with otbapp_*
-#Then when generating XDK package it also remove
-#the all OTB and Monteverdi binaries are lib.
-#Value of PKG_GENERATE_XDK is set already
-#The final list is use to create install() commands later
-function(func_lisp install_list )
-  foreach(install_list_item ${${install_list}})
-    get_filename_component(install_list_item_NAME_WE ${install_list_item} NAME_WE)
-    #MUST remove otb applications. Installed later in otb_support_files function
-    #message("${install_list_item}")
-    if ("${install_list_item_NAME_WE}" MATCHES "otbapp_*")
-      list(REMOVE_ITEM ${install_list} "${install_list_item}")
-    endif()
-
-    if(PKG_GENERATE_XDK)
-      if ("${install_list_item_NAME_WE}"
-          MATCHES
-          "libOTB|libotb|otbApp|otbTest|libMonteverdi|monteverdi|mapla|iceViewer"
-          )
-        list(REMOVE_ITEM ${install_list} "${install_list_item}")
-      endif()
-    endif()
-  endforeach()
-
-#  message(FATAL_ERROR "install_list=${${install_list}}")
-  set(${install_list} "${${install_list}}" PARENT_SCOPE)
-
-endfunction() # func_lisp
-
-
-set(WINDOWS_SYSTEM_DLLS
-  msvc.*dll
-  user32.dll
-  gdi32.dll
-  shell32.dll
-  kernel32.dll
-  ws2_32.dll
-  wldap32.dll
-  ole32.dll
-  comdlg32.dll
-  shfolder.dll
-  secur32.dll
-  wsock32.dll
-  advapi32.dll
-  crypt32.dll
-  imm32.dll
-  oleaut32.dll
-  winmm.dll
-  opengl32.dll
-  glu32.dll
-  rpcrt4.dll
-  winspool.drv)
-
-set(LINUX_SYSTEM_DLLS
-  libm.so
-  libc.so
-  libstdc*
-  libgcc_s.so
-  librt.so
-  libdl.so
-  libpthread.so
-  libidn.so
-  libgomp.so*
-  ld-linux-x86-64.so*
-  libX11.so*
-  libXext.so*
-  libXau.so*
-  libXdmcp.so*
-  libXxf86vm.so*
-  libdrm.so.2
-  libGL.so*
-  libGLU.so*
-  )
-
-# libgcc_s.*dylib and other *.framework are dragged by QT
-set(APPLE_SYSTEM_DLLS
-  libSystem.*dylib
-  libiconv.*dylib
-  libc\\+\\+.*dylib
-  libstdc.*dylib
-  libobjc.*dylib
-  ApplicationServices.framework
-  CoreFoundation.framework
-  CoreServices.framework
-  Security.framework
-  Carbon.framework
-  AppKit.framework
-  Foundation.framework
-  AGL.framework
-  OpenGL.framework
-  libgcc_s.*dylib
-  )
-
-if(WIN32)
-  set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
-else() #case for unixes
-  if(APPLE)
-    set(SYSTEM_DLLS "${APPLE_SYSTEM_DLLS}")
-  else()
-    set(SYSTEM_DLLS "${LINUX_SYSTEM_DLLS}")
-  endif()
-endif(WIN32)
-
 macro(is_system_dll matched value)
   set(${matched})
   string(TOLOWER ${value} value_)
@@ -972,3 +920,136 @@ function(get_qt_translation_files RESULT)
 
     set(${RESULT} ${translation_files} PARENT_SCOPE)
 endfunction()
+
+#func_lisp: - A list_process function (func_lisp)
+#This method process the input list inplace.
+#It first remove all entries in the list starting with otbapp_*
+#Then when generating XDK package it also remove
+#the all OTB and Monteverdi binaries are lib.
+#Value of PKG_GENERATE_XDK is set already
+#The final list is use to create install() commands later
+function(func_lisp install_list )
+  foreach(install_list_item ${${install_list}})
+    get_filename_component(install_list_item_NAME_WE ${install_list_item} NAME_WE)
+    #MUST remove otb applications. Installed later in otb_support_files function
+    #message("${install_list_item}")
+    if ("${install_list_item_NAME_WE}" MATCHES "otbapp_*")
+      list(REMOVE_ITEM ${install_list} "${install_list_item}")
+    endif()
+
+    if(PKG_GENERATE_XDK)
+      if ("${install_list_item_NAME_WE}"
+          MATCHES
+          "libOTB|libotb|otbApp|otbTest|libMonteverdi|monteverdi|mapla|iceViewer"
+          )
+        list(REMOVE_ITEM ${install_list} "${install_list_item}")
+      endif()
+    endif()
+  endforeach()
+
+#  message(FATAL_ERROR "install_list=${${install_list}}")
+  set(${install_list} "${${install_list}}" PARENT_SCOPE)
+
+endfunction() # func_lisp
+
+set(WINDOWS_SYSTEM_DLLS
+  msvc.*dll
+  user32.dll
+  gdi32.dll
+  shell32.dll
+  kernel32.dll
+  ws2_32.dll
+  wldap32.dll
+  ole32.dll
+  comdlg32.dll
+  shfolder.dll
+  secur32.dll
+  wsock32.dll
+  advapi32.dll
+  crypt32.dll
+  imm32.dll
+  oleaut32.dll
+  winmm.dll
+  opengl32.dll
+  glu32.dll
+  rpcrt4.dll
+  winspool.drv
+  api-ms-win-crt*.*.dll
+  vcruntime*.*.dll
+  normaliz.dll
+  concrt*.*.dll
+  odbc32.dll
+  psapi.dll
+  vcomp*.*.dll)
+
+set(LINUX_SYSTEM_DLLS
+  libm.so
+  libc.so
+  libstdc*
+  libgcc_s.so
+  librt.so
+  libdl.so
+  libpthread.so
+  libidn.so
+  libgomp.so*
+  ld-linux-x86-64.so*
+  libX11.so*
+  libXext.so*
+  libXau.so*
+  libXdmcp.so*
+  libXxf86vm.so*
+  libdrm.so.2
+  libGL.so*
+  libGLU.so*
+  libXrender.so*
+  libSM.so*
+  libICE.so*
+  libXrandr.so*
+  )
+
+# libgcc_s.*dylib and other *.framework are dragged by QT
+set(APPLE_SYSTEM_DLLS
+  libSystem.*dylib
+  libiconv.*dylib
+  libc\\+\\+.*dylib
+  libstdc.*dylib
+  libobjc.*dylib
+  ApplicationServices.framework
+  CoreFoundation.framework
+  CoreServices.framework
+  Security.framework
+  Carbon.framework
+  AppKit.framework
+  Foundation.framework
+  AGL.framework
+  OpenGL.framework
+  libgcc_s.*dylib
+  )
+
+if(WIN32)
+  set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
+else() #case for unixes
+  if(APPLE)
+    set(SYSTEM_DLLS "${APPLE_SYSTEM_DLLS}")
+  else()
+    set(SYSTEM_DLLS "${LINUX_SYSTEM_DLLS}")
+  endif()
+endif(WIN32)
+
+#superbuild cannot manage build of gtk2+ just for qt gtkstyle.
+# -gtkstyle option is deactivated by default in build of QT4
+# So the list of requirements on building OTB with superbuild stays same.
+#For our user base, we need monteverdi with a nice look and feel
+# rather than simply X11 based windows. Hence we need -gtkstyle
+# This forces us to have system gtk+ installed on the system.
+# OTB package manager 'this script' will pick them up and put
+# into the binary package. Below cmake variable controls the list of
+#libraries coming from /usr/lib a.k.a system.
+set(ALLOWED_SYSTEM_DLLS
+  libfreetype.so.6
+  libgthread-2.0.so.0
+  libglib-2.0.so.0
+  libgobject-2.0.so.0
+  libXrender.so.1
+  libfontconfig.so.1
+  )
