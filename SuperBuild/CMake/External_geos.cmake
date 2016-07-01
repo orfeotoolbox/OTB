@@ -3,8 +3,7 @@ INCLUDE_ONCE_MACRO(GEOS)
 SETUP_SUPERBUILD(GEOS)
 
 if(MSVC)
-
-  set(GEOS_URL "  https://github.com/libgeos/libgeos/archive/714127ef49087634e7f6687424fdf041d18c3d0f.zip")
+  set(GEOS_URL "https://github.com/libgeos/libgeos/archive/714127ef49087634e7f6687424fdf041d18c3d0f.zip")
   set(GEOS_URL_MD5 "d4bc49008dc712e8c612e8b8a91030c0")
   set(GEOS_SB_CONFIG "-DProject_WC_REVISION:STRING=99999")
   list(APPEND GEOS_SB_CONFIG "-DGEOS_BUILD_PACKAGED:BOOL=OFF")
