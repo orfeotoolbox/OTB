@@ -35,8 +35,6 @@
 
 namespace otb {
 
-namespace mpi {
-
 // Update MPI
 template <typename TImage> void WriteMPI(TImage *img, const std::string &output, unsigned int availableRAM = 0, bool writeVRTFile=true) 
 {
@@ -288,7 +286,6 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
 
 }
 
-} // End namesapce mpi
 } // End namespace otb
 #endif //__otbMPIVrtWriter_h
 

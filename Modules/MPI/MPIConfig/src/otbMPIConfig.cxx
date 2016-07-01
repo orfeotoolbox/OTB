@@ -36,7 +36,7 @@
     if (_result != MPI_SUCCESS)                                         \
       {                                                                 \
       std::stringstream message;                                        \
-      message << "otb::mpi::ERROR: " << #MPIFunc << " (Code = " << _result; \
+      message << "otb::ERROR: " << #MPIFunc << " (Code = " << _result; \
       ::itk::ExceptionObject _e(__FILE__, __LINE__, message.str().c_str()); \
       throw _e;                                                         \
       }                                                                 \
