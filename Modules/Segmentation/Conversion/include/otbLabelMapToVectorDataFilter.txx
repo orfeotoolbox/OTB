@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToVectorDataFilter_txx
-#define __otbLabelMapToVectorDataFilter_txx
+#ifndef otbLabelMapToVectorDataFilter_txx
+#define otbLabelMapToVectorDataFilter_txx
 
 #include "otbLabelMapToVectorDataFilter.h"
 
@@ -56,7 +56,7 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TLabelMap *>

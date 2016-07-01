@@ -64,7 +64,7 @@ itkTypeMacro(HaralickTextureExtraction, otb::Application);
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
 SetName("HaralickTextureExtraction");
 SetDescription("Computes textures on every pixel of the input image selected channel");
@@ -154,12 +154,12 @@ SetDocExampleParameterValue("texture", "simple");
 SetDocExampleParameterValue("out", "HaralickTextures.tif");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

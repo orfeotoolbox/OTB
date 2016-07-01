@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBandsStatisticsAttributesLabelMapFilter_h
-#define __otbBandsStatisticsAttributesLabelMapFilter_h
+#ifndef otbBandsStatisticsAttributesLabelMapFilter_h
+#define otbBandsStatisticsAttributesLabelMapFilter_h
 
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
@@ -188,19 +188,19 @@ protected:
   /** Constructor */
   BandsStatisticsAttributesLabelMapFilter();
   /** Destructor */
-  ~BandsStatisticsAttributesLabelMapFilter() {}
+  ~BandsStatisticsAttributesLabelMapFilter() ITK_OVERRIDE {}
 
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *){};
+  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE{};
 
   /** Before threaded data generation */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   BandsStatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented

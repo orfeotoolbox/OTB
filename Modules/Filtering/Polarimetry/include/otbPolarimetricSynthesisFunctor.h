@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolarimetricSynthesisFunctor_h
-#define __otbPolarimetricSynthesisFunctor_h
+#ifndef otbPolarimetricSynthesisFunctor_h
+#define otbPolarimetricSynthesisFunctor_h
 
 #include "otbMath.h"
 #include "vcl_complex.h"

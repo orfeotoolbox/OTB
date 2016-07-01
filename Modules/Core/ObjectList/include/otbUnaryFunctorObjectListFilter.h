@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorObjectListFilter_h
-#define __otbUnaryFunctorObjectListFilter_h
+#ifndef otbUnaryFunctorObjectListFilter_h
+#define otbUnaryFunctorObjectListFilter_h
 
 #include "otbObjectListToObjectListFilter.h"
 
@@ -91,15 +91,15 @@ public:
 
 protected:
   UnaryFunctorObjectListFilter();
-  virtual ~UnaryFunctorObjectListFilter() {}
+  ~UnaryFunctorObjectListFilter() ITK_OVERRIDE {}
 
   /** Multi-threading implementation */
 
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   /** startIndex and stopIndex represent the indices of the Objects to
   examine in thread threadId */
-  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** End Multi-threading implementation */
 

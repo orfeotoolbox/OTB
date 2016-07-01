@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelToProSailParameters_h
-#define __otbLabelToProSailParameters_h
+#ifndef otbLabelToProSailParameters_h
+#define otbLabelToProSailParameters_h
 
 #include "otbLabelToSimulationParametersBase.h"
 
@@ -83,11 +83,11 @@ public:
   // virtual const ParametersType & GetStep1Parameters();
   //virtual const ParametersType & GetStep2Parameters();
 
-   virtual void GenerateData();
+   void GenerateData() ITK_OVERRIDE;
 
 protected:
    LabelToProSailParameters();
-   virtual ~LabelToProSailParameters() {}
+   ~LabelToProSailParameters() ITK_OVERRIDE {}
 
 
 private:

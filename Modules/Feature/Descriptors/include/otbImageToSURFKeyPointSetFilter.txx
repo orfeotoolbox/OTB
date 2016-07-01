@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToSURFKeyPointSetFilter_txx
-#define __otbImageToSURFKeyPointSetFilter_txx
+#ifndef otbImageToSURFKeyPointSetFilter_txx
+#define otbImageToSURFKeyPointSetFilter_txx
 
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "itkCenteredRigid2DTransform.h"

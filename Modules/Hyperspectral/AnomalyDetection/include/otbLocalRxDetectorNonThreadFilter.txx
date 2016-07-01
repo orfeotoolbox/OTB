@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLocalRxDetectorNonThreadFilter_txx
-#define __otbLocalRxDetectorNonThreadFilter_txx
+#ifndef otbLocalRxDetectorNonThreadFilter_txx
+#define otbLocalRxDetectorNonThreadFilter_txx
 
 #include "otbLocalRxDetectorNonThreadFilter.h"
 

@@ -29,10 +29,10 @@ QtWidgetChoiceParameter::QtWidgetChoiceParameter( ChoiceParameter* param,
                                             QtWidgetModel* m ) :
   QtWidgetParameterBase(param, m),
   m_ChoiceParam(param),
-  m_ComboBox( NULL ),
-  m_StackWidget( NULL ),
-  m_VLayout( NULL ),
-  m_VLayoutGroup( NULL ),
+  m_ComboBox( ITK_NULLPTR ),
+  m_StackWidget( ITK_NULLPTR ),
+  m_VLayout( ITK_NULLPTR ),
+  m_VLayoutGroup( ITK_NULLPTR ),
   m_WidgetList()
 {
 }

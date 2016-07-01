@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbCzihoSOMLearningBehaviorFunctor_h
-#define __otbCzihoSOMLearningBehaviorFunctor_h
+#ifndef otbCzihoSOMLearningBehaviorFunctor_h
+#define otbCzihoSOMLearningBehaviorFunctor_h
 
 #include "itkSize.h"
 #include "otbMath.h"

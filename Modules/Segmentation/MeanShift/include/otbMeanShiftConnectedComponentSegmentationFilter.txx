@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanShiftConnectedComponentSegmentationFilter_txx
-#define __otbMeanShiftConnectedComponentSegmentationFilter_txx
+#ifndef otbMeanShiftConnectedComponentSegmentationFilter_txx
+#define otbMeanShiftConnectedComponentSegmentationFilter_txx
 
 #include "otbMeanShiftConnectedComponentSegmentationFilter.h"
 #include "itkExtractImageFilter.h"

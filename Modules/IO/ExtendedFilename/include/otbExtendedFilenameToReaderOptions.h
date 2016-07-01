@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtendedFilenameToReaderOptions_h
-#define __otbExtendedFilenameToReaderOptions_h
+#ifndef otbExtendedFilenameToReaderOptions_h
+#define otbExtendedFilenameToReaderOptions_h
 
 #include "otbExtendedFilenameHelper.h"
 
@@ -87,7 +87,7 @@ public:
 
 protected:
   ExtendedFilenameToReaderOptions();
-  virtual ~ExtendedFilenameToReaderOptions() {}
+  ~ExtendedFilenameToReaderOptions() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameToReaderOptions(const Self &);  //purposely not implemented
@@ -99,4 +99,4 @@ private:
 };
 } // end namespace otb
 
-#endif // __otbExtendedFilenameToReaderOptions_h
+#endif // otbExtendedFilenameToReaderOptions_h

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAngularProjectionBinaryImageFilter_txx
-#define __otbAngularProjectionBinaryImageFilter_txx
+#ifndef otbAngularProjectionBinaryImageFilter_txx
+#define otbAngularProjectionBinaryImageFilter_txx
 #include "otbAngularProjectionBinaryImageFilter.h"
 
 #include <vnl/vnl_math.h>
@@ -56,7 +56,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 {
   if ( this->GetNumberOfInputs() < 1 )
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   return static_cast<const TInputImage * > (this->itk::ProcessObject::GetInput(0) );
@@ -69,7 +69,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 {
   if ( this->GetNumberOfInputs() < 2 )
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   return static_cast<const TInputImage * > (this->itk::ProcessObject::GetInput(1));

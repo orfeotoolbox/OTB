@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpatialObjectSource_h
-#define __otbSpatialObjectSource_h
+#ifndef otbSpatialObjectSource_h
+#define otbSpatialObjectSource_h
 
 #include "otbMacro.h"
 #include "itkProcessObject.h"
@@ -64,9 +64,9 @@ protected:
   /** Constructor */
   SpatialObjectSource();
   /** Destructor */
-  virtual ~SpatialObjectSource() {}
+  ~SpatialObjectSource() ITK_OVERRIDE {}
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SpatialObjectSource(const Self &); //purposely not implemented

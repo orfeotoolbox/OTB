@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbConfusionMatrixCalculator_h
-#define __otbConfusionMatrixCalculator_h
+#ifndef otbConfusionMatrixCalculator_h
+#define otbConfusionMatrixCalculator_h
 
 #include "otbMacro.h"
 #include "otbConfusionMatrixMeasurements.h"
@@ -140,8 +140,8 @@ public:
 
 protected:
   ConfusionMatrixCalculator();
-  virtual ~ConfusionMatrixCalculator() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ConfusionMatrixCalculator() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

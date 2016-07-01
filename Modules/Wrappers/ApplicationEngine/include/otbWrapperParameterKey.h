@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperParameterKey_h
-#define __otbWrapperParameterKey_h
+#ifndef otbWrapperParameterKey_h
+#define otbWrapperParameterKey_h
 
 #include <string>
 #include <vector>
@@ -117,4 +117,4 @@ private:
 } // end namespace Wrapper
 } //end namespace otb
 
-#endif // __otbWrapperParameterKey_h_
+#endif // otbWrapperParameterKey_h_

@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletGenerator_h
-#define __otbWaveletGenerator_h
+#ifndef otbWaveletGenerator_h
+#define otbWaveletGenerator_h
 
 #include <vector>
 #include "itkLightObject.h"
@@ -98,7 +98,7 @@ public:
 
 protected:
   WaveletGenerator() {}
-  ~WaveletGenerator() {}
+  ~WaveletGenerator() ITK_OVERRIDE {}
 
 private:
   WaveletGenerator(const Self &);  // not implemented

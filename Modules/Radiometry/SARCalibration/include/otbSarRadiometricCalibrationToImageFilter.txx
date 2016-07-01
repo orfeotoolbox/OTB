@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarRadiometricCalibrationToImageFilter_txx
-#define __otbSarRadiometricCalibrationToImageFilter_txx
+#ifndef otbSarRadiometricCalibrationToImageFilter_txx
+#define otbSarRadiometricCalibrationToImageFilter_txx
 
 #include "otbSarRadiometricCalibrationToImageFilter.h"
 #include "otbSarImageMetadataInterfaceFactory.h"

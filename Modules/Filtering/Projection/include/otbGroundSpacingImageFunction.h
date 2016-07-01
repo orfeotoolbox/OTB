@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGroundSpacingImageFunction_h
-#define __otbGroundSpacingImageFunction_h
+#ifndef otbGroundSpacingImageFunction_h
+#define otbGroundSpacingImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkNumericTraits.h"

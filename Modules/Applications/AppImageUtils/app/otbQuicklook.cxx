@@ -50,7 +50,7 @@ public:
         <ExtractROIFilterType::OutputImageType, ExtractROIFilterType::OutputImageType> ShrinkImageFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
@@ -116,7 +116,7 @@ private:
     SetDocExampleParameterValue("out", "quicklookImage.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Update the sizes only if the user does not defined a size
     if ( HasValue("in") )
@@ -193,7 +193,7 @@ bool CropRegionOfInterest()
     return false;
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     InputImageType::Pointer inImage = GetParameterImage("in");
 

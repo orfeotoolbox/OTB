@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMath_h
-#define __otbMath_h
+#ifndef otbMath_h
+#define otbMath_h
 
 /**
  * otbMath.h defines standard math macros, constants, and other

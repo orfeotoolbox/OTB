@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToOSMVectorDataGenerator_txx
-#define __otbImageToOSMVectorDataGenerator_txx
+#ifndef otbImageToOSMVectorDataGenerator_txx
+#define otbImageToOSMVectorDataGenerator_txx
 
 #include "otbImageToOSMVectorDataGenerator.h"
 #include "otbGeoInformationConversion.h"
@@ -57,7 +57,7 @@ ImageToOSMVectorDataGenerator<TImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const  ImageType* >

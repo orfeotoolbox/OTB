@@ -71,7 +71,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
   SetName("ComputeConfusionMatrix");
   SetDescription("Computes the confusion matrix of a classification");
@@ -132,7 +132,7 @@ private:
   SetDocExampleParameterValue("nodatalabel","255");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
@@ -209,7 +209,7 @@ private:
     }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     Int32ImageType* input = this->GetParameterInt32Image("in");
 

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardWriterWatcher_h
-#define __otbStandardWriterWatcher_h
+#ifndef otbStandardWriterWatcher_h
+#define otbStandardWriterWatcher_h
 
 #include "otbWriterWatcherBase.h"
 
@@ -86,22 +86,22 @@ public:
 protected:
 
   /** Callback method to show the ProgressEvent */
-  virtual void ShowWriterProgress();
+  void ShowWriterProgress() ITK_OVERRIDE;
 
   /** Callback method to show the StartEvent */
-  virtual void StartWriter();
+  void StartWriter() ITK_OVERRIDE;
 
   /** Callback method to show the EndEvent */
-  virtual void EndWriter();
+  void EndWriter() ITK_OVERRIDE;
 
   /** Callback method to show the ProgressEvent */
-  virtual void ShowFilterProgress();
+  void ShowFilterProgress() ITK_OVERRIDE;
 
   /** Callback method to show the StartEvent */
-  virtual void StartFilter() {}
+  void StartFilter() ITK_OVERRIDE {}
 
   /** Callback method to show the EndEvent */
-  virtual void EndFilter() {}
+  void EndFilter() ITK_OVERRIDE {}
 
   /** This is the method invoked by ShowFilterProgress() and ShowWriterProgress() */
   virtual void ShowProgress();

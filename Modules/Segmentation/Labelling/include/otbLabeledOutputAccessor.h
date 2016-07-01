@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabeledOutputAccessor_h
-#define __otbLabeledOutputAccessor_h
+#ifndef otbLabeledOutputAccessor_h
+#define otbLabeledOutputAccessor_h
 
 #include "itkMacro.h"
 

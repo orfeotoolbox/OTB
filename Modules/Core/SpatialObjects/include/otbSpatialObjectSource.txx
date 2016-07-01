@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpatialObjectSource_txx
-#define __otbSpatialObjectSource_txx
+#ifndef otbSpatialObjectSource_txx
+#define otbSpatialObjectSource_txx
 
 #include "otbSpatialObjectSource.h"
 
@@ -43,7 +43,7 @@ SpatialObjectSource<TSpatialObject>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<SpatialObjectType *> (this->ProcessObject::GetOutput(0));
 }

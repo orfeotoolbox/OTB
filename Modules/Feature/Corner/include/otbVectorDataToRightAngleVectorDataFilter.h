@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToRightAngleVectorDataFilter_h
-#define __otbVectorDataToRightAngleVectorDataFilter_h
+#ifndef otbVectorDataToRightAngleVectorDataFilter_h
+#define otbVectorDataToRightAngleVectorDataFilter_h
 
 
 #include "otbVectorDataToVectorDataFilter.h"
@@ -84,11 +84,11 @@ protected:
   /** Constructor.*/
   VectorDataToRightAngleVectorDataFilter();
   /**Destructor.*/
-  virtual ~VectorDataToRightAngleVectorDataFilter(){}
+  ~VectorDataToRightAngleVectorDataFilter() ITK_OVERRIDE{}
   /** Standard PrintSelf method.*/
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**Main computation method.*/
-  virtual void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
   /**Angle computation.*/
   virtual double ComputeAngleFormedBySegments(LineType * lineDst, LineType * lineSrc);
   /** When we find a right angle, one compute the coordinate of the segments intersection.*/

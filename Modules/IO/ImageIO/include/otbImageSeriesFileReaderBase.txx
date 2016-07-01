@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReaderBase_txx
-#define __otbImageSeriesFileReaderBase_txx
+#ifndef otbImageSeriesFileReaderBase_txx
+#define otbImageSeriesFileReaderBase_txx
 #include "otbImageSeriesFileReaderBase.h"
 
 namespace otb {

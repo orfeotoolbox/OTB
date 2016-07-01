@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericEffects_txx
-#define __otbAtmosphericEffects_txx
+#ifndef otbAtmosphericEffects_txx
+#define otbAtmosphericEffects_txx
 
 #include "otbAtmosphericEffects.h"
 #include "otbSurfaceReflectanceToReflectanceFilter.h"

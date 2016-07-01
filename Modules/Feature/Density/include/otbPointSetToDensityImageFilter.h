@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetToDensityImageFilter_h
-#define __otbPointSetToDensityImageFilter_h
+#ifndef otbPointSetToDensityImageFilter_h
+#define otbPointSetToDensityImageFilter_h
 
 #include "itkProcessObject.h"
 #include "itkPointSet.h"
@@ -81,27 +81,27 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~PointSetToDensityImageFilter() {}
+  ~PointSetToDensityImageFilter() ITK_OVERRIDE {}
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**
    * Call the ImageSource::GenerateData which handle multithreading
    */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /**
    * Main computation method.
    */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
   * Main computation method.
   */
-  virtual void  GenerateOutputInformation();
+  void  GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIOBase_h
-#define __otbVectorDataIOBase_h
+#ifndef otbVectorDataIOBase_h
+#define otbVectorDataIOBase_h
 
 #include <string>
 
@@ -144,13 +144,13 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write(const itk::DataObject* data, char ** papszOptions = NULL) = 0;
+  virtual void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) = 0;
 
 protected:
   VectorDataIOBase();
-  virtual ~VectorDataIOBase();
+  ~VectorDataIOBase() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Big or Little Endian, and the type of the file. (May be ignored.) */
   ByteOrder m_ByteOrder;
@@ -172,4 +172,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbVectorDataIOBase_h
+#endif // otbVectorDataIOBase_h

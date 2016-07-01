@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFrostImageFilter_txx
-#define __otbFrostImageFilter_txx
+#ifndef otbFrostImageFilter_txx
+#define otbFrostImageFilter_txx
 
 #include "otbFrostImageFilter.h"
 

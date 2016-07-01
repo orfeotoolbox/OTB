@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetProgressReport_h
-#define __otbWrapperQtWidgetProgressReport_h
+#ifndef otbWrapperQtWidgetProgressReport_h
+#define otbWrapperQtWidgetProgressReport_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -42,7 +42,7 @@ class ITK_ABI_EXPORT QtWidgetProgressReport : public QWidget
   Q_OBJECT
 public:
   QtWidgetProgressReport(QtWidgetModel * model);
-  virtual ~QtWidgetProgressReport();
+  ~QtWidgetProgressReport() ITK_OVERRIDE;
 
   void SetApplication(Application::Pointer app);
 

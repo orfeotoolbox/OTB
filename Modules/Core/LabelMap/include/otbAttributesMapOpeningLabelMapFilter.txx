@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbAttributesMapOpeningLabelMapFilter_txx
-#define __otbAttributesMapOpeningLabelMapFilter_txx
+#ifndef otbAttributesMapOpeningLabelMapFilter_txx
+#define otbAttributesMapOpeningLabelMapFilter_txx
 
 #include "otbAttributesMapOpeningLabelMapFilter.h"
 

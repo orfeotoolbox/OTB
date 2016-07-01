@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometricMomentsIFFactory_txx
-#define __otbRadiometricMomentsIFFactory_txx
+#ifndef otbRadiometricMomentsIFFactory_txx
+#define otbRadiometricMomentsIFFactory_txx
 
 #include "otbRadiometricMomentsIFFactory.h"
 

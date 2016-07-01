@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetComplexInputImageParameter_h
-#define __otbWrapperQtWidgetComplexInputImageParameter_h
+#ifndef otbWrapperQtWidgetComplexInputImageParameter_h
+#define otbWrapperQtWidgetComplexInputImageParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetComplexInputImageParameter : public QtWidgetParamet
   Q_OBJECT
 public:
   QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*);
-  virtual ~QtWidgetComplexInputImageParameter();
+  ~QtWidgetComplexInputImageParameter() ITK_OVERRIDE;
 
 protected slots:
   bool SetFileName( const QString& value );
@@ -50,9 +50,9 @@ private:
   QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetComplexInputImageParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   ComplexInputImageParameter::Pointer m_ComplexInputImageParam;

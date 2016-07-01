@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSailModel_h
-#define __otbSailModel_h
+#ifndef otbSailModel_h
+#define otbSailModel_h
 
 
 #include "otbSpectralResponse.h"
@@ -58,10 +58,10 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
 
 
       /** Set Inputs */
-      void SetReflectance(const SpectralResponseType *object);
+      void SetReflectance(const SpectralResponseType *object) ITK_OVERRIDE;
       SpectralResponseType * GetReflectance();
 
-      void SetTransmittance(const SpectralResponseType *object);
+      void SetTransmittance(const SpectralResponseType *object) ITK_OVERRIDE;
       SpectralResponseType * GetTransmittance();
 
       /** Set parameters */
@@ -101,7 +101,7 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       itkGetMacro(FCoverView, double);
 
       /** GenerateData */
-      virtual void GenerateData();
+      void GenerateData() ITK_OVERRIDE;
 
       /** Get Output */
       virtual SpectralResponseType * GetViewingReflectance();
@@ -118,11 +118,11 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       /** Constructor */
       SailModel();
       /** Destructor */
-      virtual ~SailModel();
+      ~SailModel() ITK_OVERRIDE;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-      virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType);
+      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
       using Superclass::MakeOutput;
 
       /** Compute Leaf Angle Distribution */

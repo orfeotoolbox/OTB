@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTestHelper_h
-#define __otbTestHelper_h
+#ifndef otbTestHelper_h
+#define otbTestHelper_h
 
 #include <map>
 #include <string>
@@ -66,7 +66,7 @@ public:
     m_MaxArea(1024*1024)
   {}
 
-  ~TestHelper(){}
+  ~TestHelper() ITK_OVERRIDE{}
 
   int RegressionTestAllImages(const StringList& baselineFilenamesImage,
                               const StringList& testFilenamesImage);
@@ -141,8 +141,8 @@ private:
                    OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
                    int& nbdiff) const;
 
-  static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = NULL);
-  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = NULL);
+  static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = ITK_NULLPTR);
+  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = ITK_NULLPTR);
 
   double m_ToleranceDiffValue;
   double m_Epsilon;

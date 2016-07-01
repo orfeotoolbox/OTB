@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTerraSarBrightnessImageFilter_txx
-#define __otbTerraSarBrightnessImageFilter_txx
+#ifndef otbTerraSarBrightnessImageFilter_txx
+#define otbTerraSarBrightnessImageFilter_txx
 
 #include "otbTerraSarBrightnessImageFilter.h"
 #include "otbTerraSarImageMetadataInterface.h"

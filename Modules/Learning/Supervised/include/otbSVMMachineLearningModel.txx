@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMMachineLearningModel_txx
-#define __otbSVMMachineLearningModel_txx
+#ifndef otbSVMMachineLearningModel_txx
+#define otbSVMMachineLearningModel_txx
 
 #include <fstream>
 #include "itkMacro.h"
@@ -84,7 +84,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   // Set up SVM's parameters
   CvTermCriteria term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
-  CvSVMParams params( m_SVMType, m_KernelType, m_Degree, m_Gamma, m_Coef0, m_C, m_Nu, m_P, NULL , term_crit );
+  CvSVMParams params( m_SVMType, m_KernelType, m_Degree, m_Gamma, m_Coef0, m_C, m_Nu, m_P, ITK_NULLPTR , term_crit );
 
   // Train the SVM
   if (!m_ParameterOptimization)
@@ -131,7 +131,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     (*quality) = m_SVMModel->predict(sample,true);
     }
@@ -145,7 +145,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_SVMModel->save(filename.c_str(), 0);
+    m_SVMModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_SVMModel->save(filename.c_str(), name.c_str());
 }
@@ -156,7 +156,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_SVMModel->load(filename.c_str(), 0);
+    m_SVMModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_SVMModel->load(filename.c_str(), name.c_str());
 }

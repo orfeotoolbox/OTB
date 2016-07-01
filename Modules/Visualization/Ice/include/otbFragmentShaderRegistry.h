@@ -52,7 +52,7 @@ public:
 protected:
   FragmentShaderRegistry();
 
-  virtual ~FragmentShaderRegistry();
+  ~FragmentShaderRegistry() ITK_OVERRIDE;
 
 private:
   typedef std::map<std::string, std::pair<unsigned int, unsigned int> > ShaderMapType;
