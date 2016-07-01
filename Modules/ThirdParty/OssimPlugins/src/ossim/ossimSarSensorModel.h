@@ -236,7 +236,7 @@ public:
    bool autovalidateInverseModelFromGCPs(const double & xtol = 1, const double & ytol = 1, const double azTimeTol = 500, const double &rangeTimeTo=0.0000000001) const;
 
    // TODO: document me
-   bool autovalidateForwardModelFromGCPs(double resTol = 10);
+   bool autovalidateForwardModelFromGCPs(double resTol = 25);
 
    //Pure virtual in base class
    bool useForward() const;
