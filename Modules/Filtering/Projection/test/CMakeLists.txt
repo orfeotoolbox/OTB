@@ -188,7 +188,7 @@ set(IMG_TYPE
 "qb-1"
 "ikonos-1"     
 "rapideye-1"
-"sentinel-1"
+"sentinel1"
 )
 
 set(GEOMGCP
