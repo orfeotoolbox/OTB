@@ -53,10 +53,6 @@
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
 
-// GDAL
-#include <gdal.h>
-#include <ogr_spatialref.h>
-
 // SPTW
 #include <algorithm>
 #include <vector>

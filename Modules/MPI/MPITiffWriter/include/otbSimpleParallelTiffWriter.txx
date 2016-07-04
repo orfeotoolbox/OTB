@@ -22,6 +22,7 @@ using std::vector;
 
 using sptw::PTIFF;
 using sptw::open_raster;
+using sptw::create_generic_raster;
 using sptw::SPTW_ERROR;
 
 namespace otb
@@ -423,21 +424,23 @@ SimpleParallelTiffWriter<TInputImage>
 	{
 		// Make sure that filename is not empty
 		itkExceptionMacro(<< "No filename was specified");
+		otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
 	}
 	std::string::size_type idx;
 	idx = m_FileName.rfind('.');
 	if(idx != std::string::npos)
 	{
 		std::string extension = m_FileName.substr(idx+1);
+		boost::algorithm::to_lower(extension);
 		if (boost::iequals(extension, "tif"))
 		{
 			// Extension is TIF
 		}
 		else
 		{
-			// Bad extension
+			// Other extension
 			itkExceptionMacro(<<"Filename must have .tif extension !");
-			MPI_Abort(MPI_COMM_WORLD, 1);
+			otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
 		}
 	}
 	else
@@ -512,149 +515,54 @@ SimpleParallelTiffWriter<TInputImage>
 	}
 
 	/************************************************************************
-	 *  	Raster creation with GDAL and SPTW routines
+	 *                         Raster creation
 	 ************************************************************************/
 
-	GDALAllRegister();
-
-	// TODO: find a good tile size, wich give a better cluster load
-
-	// Check that the geotiff tile size is not too big
+	// When mode is tiled, check the GeoTiff tile size
 	int inputRegionMinSize = std::min(inputRegion.GetSize()[0],	inputRegion.GetSize()[1]);
-	if (m_TiffTileSize > inputRegionMinSize)
+	if (m_TiffTiledMode && m_TiffTileSize > inputRegionMinSize)
 	{
 		// Find the nearest (floor) power of 2
 		m_TiffTileSize = (int) std::pow(2, std::floor(std::log((double) inputRegionMinSize)/std::log(2.0)));
 		itkWarningMacro(<<"GeoTiff tile size is bigger than image. Setting to " << m_TiffTileSize);
 	}
 
-	// If we are the process with rank 0 we are responsible for the creation of the output raster.
-	if (otb::MPIConfig::Instance()->GetMyRank() == 0 && !m_VirtualMode) {
+	// Master process (Rank 0) is responsible for the creation of the output raster.
+	if (otb::MPIConfig::Instance()->GetMyRank() == 0 && !m_VirtualMode)
+	{
+		// Set geotransform
+		double geotransform[6];
+		geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSpacing()[0];
+		geotransform[1] = inputPtr->GetSpacing()[0];
+		geotransform[2] = 0.0;
+		geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSpacing()[1];
+		geotransform[4] = 0.0;
+		geotransform[5] = inputPtr->GetSpacing()[1];
 
-		// Get GeoTiff driver
-		GDALAllRegister();
-		GDALDriver *driver = GetGDALDriverManager()->GetDriverByName("GTiff");
-		if (driver == NULL) {
-			fprintf(stderr, "Error opening GTiff driver.\n");
-			MPI_Abort(MPI_COMM_WORLD, 1);
-		}
+		// Call SPTW routine that creates the output raster
+		SPTW_ERROR sperr = create_generic_raster(m_FileName,
+				inputPtr->GetLargestPossibleRegion().GetSize()[0],
+				inputPtr->GetLargestPossibleRegion().GetSize()[1],
+				nBands,
+				dataType,
+				geotransform,
+				inputPtr->GetProjectionRef(),
+				m_TiffTiledMode,
+				m_TiffTileSize);
 
-		// Set driver options
-		char **options = NULL;
-		options = CSLSetNameValue(options, "INTERLEAVE", "PIXEL");
-		options = CSLSetNameValue(options, "BIGTIFF", "YES");
-		options = CSLSetNameValue(options, "COMPRESS", "NONE");
-		options = CSLSetNameValue(options, "SPARSE_OK", "YES");
-		if (m_TiffTiledMode)
+		if (sperr != sptw::SP_None)
 		{
-			std::stringstream ts;
-			ts << m_TiffTileSize;
-			options = CSLSetNameValue(options, "TILED", "YES");
-			options = CSLSetNameValue(options, "BLOCKXSIZE", ts.str().c_str());
-			options = CSLSetNameValue(options, "BLOCKYSIZE", ts.str().c_str());
+			itkExceptionMacro(<<"Error creating raster");
+			otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
 		}
-		else
-		{
-			m_TiffTileSize=inputRegion.GetSize()[0];
-		}
-
-		// Create output raster
-		GDALDataset *output =
-				driver->Create(m_FileName.c_str(),
-						inputRegion.GetSize()[0],
-						inputRegion.GetSize()[1],
-						nBands,
-						dataType,
-						options);
-		if (output == NULL) {
-			fprintf(stderr, "driver->Create call failed.\n");
-		}
-
-		// Set GeoTransform
-		double gt[6];
-		gt[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSpacing()[0];
-		gt[1] = inputPtr->GetSpacing()[0];
-		gt[2] = 0.0;
-		gt[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSpacing()[1];
-		gt[4] = 0.0;
-		gt[5] = inputPtr->GetSpacing()[1];
-		output->SetGeoTransform(gt);
-
-		// Set projection
-		OGRSpatialReference out_sr;
-		char *wkt = NULL;
-		out_sr.SetFromUserInput(inputPtr->GetProjectionRef().c_str());
-		out_sr.exportToWkt(&wkt);
-		output->SetProjection(wkt);
-
-		// Write first and last pixel in the raster
-		double *data = new double(sizeof(*data) * 4 * output->GetRasterCount());
-		CPLErr rcode = output->RasterIO(GF_Write,
-				0,
-				0,
-				1,
-				1,
-				data,
-				1,
-				1,
-				output->GetRasterBand(1)->GetRasterDataType(),
-				output->GetRasterCount(),
-				NULL,
-				0,
-				0,
-				0);
-
-    if(rcode != CE_None)
-      {
-      delete data;
-
-      // Clean stuff
-      OGRFree(wkt);
-      CSLDestroy(options);
-      GDALClose(output);
-
-      itkExceptionMacro(<<"Error while writing image with GDAL");
-      }
-
-    
-		rcode = output->RasterIO(GF_Write,
-				inputRegion.GetSize()[0]-1,
-				inputRegion.GetSize()[1]-1,
-				1,
-				1,
-				data,
-				1,
-				1,
-				output->GetRasterBand(1)->GetRasterDataType(),
-				output->GetRasterCount(),
-				NULL,
-				0,
-				0,
-				0);
-
-    if(rcode != CE_None)
-      {
-      delete data;
-
-      // Clean stuff
-      OGRFree(wkt);
-      CSLDestroy(options);
-      GDALClose(output);
-
-      itkExceptionMacro(<<"Error while writing image with GDAL");
-      }
-
-
-    delete data;
-
-		// Clean stuff
-		OGRFree(wkt);
-		CSLDestroy(options);
-		GDALClose(output);
 	}
 
-	// Wait for rank 0 to finish creating the file
+	// Wait for rank 0 to finish creating the output raster
 	otb::MPIConfig::Instance()->barrier();
+
+	/************************************************************************
+	 *                         Raster update: open raster
+	 ************************************************************************/
 
 	// Open raster (if not in virtual mode)
 	PTIFF* output_raster = NULL;
@@ -662,13 +570,16 @@ SimpleParallelTiffWriter<TInputImage>
 	{
 		output_raster = open_raster(m_FileName);
 
-		// First we have to populate blocks offsets
-		if (otb::MPIConfig::Instance()->GetMyRank() == 0) {
+		// First, populate blocks offsets
+		if (otb::MPIConfig::Instance()->GetMyRank() == 0)
+		{
 			SPTW_ERROR sperr = populate_tile_offsets(output_raster,
 					m_TiffTileSize,
 					m_TiffTiledMode);
-			if (sperr != sptw::SP_None) {
-				fprintf(stderr, "\nError populating tile offsets\n");
+			if (sperr != sptw::SP_None)
+			{
+				itkExceptionMacro(<<"Error populating tile offsets\n");
+				otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
 			}
 		}
 
@@ -680,13 +591,15 @@ SimpleParallelTiffWriter<TInputImage>
 		output_raster = open_raster(m_FileName);
 		otb::MPIConfig::Instance()->barrier();
 
-		if (output_raster == NULL) {
-			fprintf(stderr, "Could not open output raster\n");
-			MPI_Abort(MPI_COMM_WORLD, 1);
+		if (output_raster == NULL)
+		{
+			itkExceptionMacro(<<"Could not open output raster");
+			otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
 		}
 	}
+
 	/************************************************************************
-	 *  	Raster update with SPTW
+	 *                         Raster update: write regions
 	 ************************************************************************/
 
 	// Time probe for overall process time
@@ -699,10 +612,12 @@ SimpleParallelTiffWriter<TInputImage>
 
 	// Recompute a new splitting layout which fits better the MPI number of processes
 	// TODO make it work on tiled splits !
+	// [dirtycode]
 	unsigned int newNumberOfStrippedSplits = OptimizeStrippedSplittingLayout(m_NumberOfDivisions);
 	this->SetNumberOfDivisionsStrippedStreaming(newNumberOfStrippedSplits);
-    m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
-    m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+	m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
+	m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+	// [/dirtycode]
 
 	// Configure process objects
 	this->UpdateProgress(0);
@@ -739,7 +654,7 @@ SimpleParallelTiffWriter<TInputImage>
 			m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
 	{
 		streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
-		
+
 		if (GetProcFromDivision(m_CurrentDivision) == otb::MPIConfig::Instance()->GetMyRank())
 		{
 			/*
@@ -756,8 +671,8 @@ SimpleParallelTiffWriter<TInputImage>
 			/*
 			 * Writing using SPTW
 			 */
-            itk::TimeProbe writingTime;
-            writingTime.Start();
+			itk::TimeProbe writingTime;
+			writingTime.Start();
 			if (!m_VirtualMode)
 			{
 				sptw::write_area(output_raster,
@@ -809,7 +724,7 @@ SimpleParallelTiffWriter<TInputImage>
 	    }
 	  itkDebugMacro( "Overall time:" << overallTime.GetTotal() );
 	  }
-	  */
+	 */
 
 	/**
 	 * If we ended due to aborting, push the progress up to 1.0 (since
