@@ -261,7 +261,136 @@ SPTW_ERROR populate_tile_offsets(PTIFF *tiff_file,
   return SP_None;
 }
 
+SPTW_ERROR create_generic_raster(string filename,
+		int64_t x_size,
+		int64_t y_size,
+		int band_count,
+		GDALDataType band_type,
+		double *geotransform,
+		string projection_srs,
+		bool tiled_mode,
+		int tiles_size) {
 
+	GDALAllRegister();
+
+	// Get GeoTiff driver
+	GDALDriver *driver = GetGDALDriverManager()->GetDriverByName("GTiff");
+
+	if (driver == NULL) {
+		return SP_CreateError;
+	}
+
+	// Set driver options
+	char **options = NULL;
+	options = CSLSetNameValue(options, "INTERLEAVE", "PIXEL");
+	options = CSLSetNameValue(options, "BIGTIFF", "YES");
+	options = CSLSetNameValue(options, "COMPRESS", "NONE");
+	options = CSLSetNameValue(options, "SPARSE_OK", "YES");
+	if (tiled_mode)
+	{
+		std::stringstream ts;
+		ts << tiles_size;
+		options = CSLSetNameValue(options, "TILED", "YES");
+		options = CSLSetNameValue(options, "BLOCKXSIZE", ts.str().c_str());
+		options = CSLSetNameValue(options, "BLOCKYSIZE", ts.str().c_str());
+	}
+	else
+	{
+		tiles_size = x_size;
+	}
+
+	// Create output raster
+	GDALDataset *output =
+			driver->Create(filename.c_str(),
+					x_size,
+					y_size,
+					band_count,
+					band_type,
+					options);
+	if (output == NULL) {
+		fprintf(stderr, "driver->Create call failed.\n");
+		return SP_CreateError;
+	}
+
+	// Set GeoTransform
+	output->SetGeoTransform(geotransform);
+
+	// Set projection
+	OGRSpatialReference out_sr;
+	char *wkt = NULL;
+	out_sr.SetFromUserInput(projection_srs.c_str());
+	out_sr.exportToWkt(&wkt);
+	output->SetProjection(wkt);
+
+	// Write first and last pixel in the raster
+	double *data = new double(sizeof(*data) * 4 * output->GetRasterCount());
+	CPLErr rcode = output->RasterIO(GF_Write,
+			0,
+			0,
+			1,
+			1,
+			data,
+			1,
+			1,
+			output->GetRasterBand(1)->GetRasterDataType(),
+			output->GetRasterCount(),
+			NULL,
+			0,
+			0,
+			0);
+
+	if(rcode != CE_None)
+	{
+		delete data;
+
+		// Clean stuff
+		OGRFree(wkt);
+		CSLDestroy(options);
+		GDALClose(output);
+
+		fprintf(stderr, "Error while writing first pixel in the raster with GDAL\n");
+		return SP_CreateError;
+	}
+
+
+	rcode = output->RasterIO(GF_Write,
+			x_size-1,
+			y_size-1,
+			1,
+			1,
+			data,
+			1,
+			1,
+			output->GetRasterBand(1)->GetRasterDataType(),
+			output->GetRasterCount(),
+			NULL,
+			0,
+			0,
+			0);
+
+	if(rcode != CE_None)
+	{
+		delete data;
+
+		// Clean stuff
+		OGRFree(wkt);
+		CSLDestroy(options);
+		GDALClose(output);
+
+		fprintf(stderr, "Error while writing last pixel in the raster with GDAL\n");
+		return SP_CreateError;
+
+	}
+
+	delete data;
+
+	// Clean stuff
+	OGRFree(wkt);
+	CSLDestroy(options);
+	GDALClose(output);
+
+	return SP_None;
+}
 
 SPTW_ERROR create_raster(string filename,
                          int64_t x_size,

@@ -97,6 +97,16 @@ namespace sptw {
             int64_t tile_size,
             bool tiled);
 
+    SPTW_ERROR create_generic_raster(string filename,
+    		int64_t x_size,
+    		int64_t y_size,
+    		int band_count,
+    		GDALDataType band_type,
+    		double *geotransform,
+    		string projection_srs,
+    		bool tiled_mode,
+    		int tiles_size);
+
     SPTW_ERROR create_raster(string filename,
             int64_t x_size,
             int64_t y_size,
