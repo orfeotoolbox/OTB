@@ -988,7 +988,7 @@ namespace ossimplugins
       }
 
       for (std::size_t i=0; i!=nbOrbits ; ++i) {
-         const int pos = std::snprintf(orbit_prefix_, sizeof(orbit_prefix_), "orbitList.orbit[%d].", int(i));
+         const int pos = s_printf(orbit_prefix_, "orbitList.orbit[%d].", int(i));
          assert(pos > 0 && pos < 256);
          const std::string orbit_prefix(orbit_prefix_, pos);
 
@@ -1012,7 +1012,7 @@ namespace ossimplugins
       std::size_t nbBursts ;
       get(kwl, BURST_NUMBER_KEY, nbBursts);
       for (std::size_t burstId=0; burstId!=nbBursts ; ++burstId) {
-         const int pos = std::snprintf(burstPrefix_, sizeof(burstPrefix_), "%s[%d].", BURST_PREFIX.c_str(), burstId);
+         const int pos = s_printf(burstPrefix_, "%s[%d].", BURST_PREFIX.c_str(), burstId);
          assert(pos > 0 && pos < sizeof(burstPrefix_));
          const std::string burstPrefix(burstPrefix_, pos);
 
@@ -1033,7 +1033,7 @@ namespace ossimplugins
       std::size_t nbGCPs ;
       get(kwl, GCP_NUMBER_KEY, nbGCPs);
       for (std::size_t gcpId=0; gcpId!=nbGCPs ; ++gcpId) {
-         const int pos = std::snprintf(prefix_, sizeof(prefix_), "%s[%d].", GCP_PREFIX.c_str(), gcpId);
+         const int pos = s_printf(prefix_, "%s[%d].", GCP_PREFIX.c_str(), gcpId);
          assert(pos > 0 && pos < sizeof(prefix_));
          const std::string prefix(prefix_, pos);
 
@@ -1061,7 +1061,7 @@ namespace ossimplugins
 
       for (std::size_t idx=0 ; idx!=nbCoords ; ++idx)
       {
-         const int pos = std::snprintf(prefix_, sizeof(prefix_), "%s[%d].", sr_gr_prefix.c_str(), idx);
+         const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
          std::string prefix(prefix_, pos);
 
@@ -1072,7 +1072,7 @@ namespace ossimplugins
          std::size_t nbCoeffs;
          get(kwl, prefix + NUMBER_KEY,      nbCoeffs);
          for (std::size_t coeff_idx=0; coeff_idx!=nbCoeffs ; ++coeff_idx) {
-            const int pos2 = std::snprintf(prefix_+pos, sizeof(prefix_)-pos, "coeff[%d]", coeff_idx);
+            const int pos2 = s_printf(prefix_+pos, sizeof(prefix_)-pos, "coeff[%d]", coeff_idx);
             assert(pos2 > 0 && pos+pos2 < sizeof(prefix_));
             prefix.assign(prefix_, pos+pos2);
             double coeff;

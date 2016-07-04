@@ -15,6 +15,20 @@ set(OSSIMPLUGINS_SVN_REVISION "18162")
 # patch number for OTB modifications applied on top of OSSIM_SVN_REVISION (used for .so versioning)
 set(OSSIMPLUGINS_OTB_PATCH "1")
 
+# Check whether std::snprintf is defined
+include(CheckCXXSymbolExists)
+check_cxx_symbol_exists(std::snprintf cstdio HAVE_STD_SNPRINTF)
+if (NOT HAVE_STD_SNPRINTF)
+    # it would be _snprintf with VC++
+    check_symbol_exists(_snprintf stdio.h HAVE_MSC_SNPRINTF)
+    if (NOT HAVE_MSC_SNPRINTF)
+        message(FATAL_ERROR "Either std::snprintf or VC++'s _snprintf are required")
+    endif()
+endif()
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ossim/ossimplugins-config.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/ossim/ossimplugins-config.h)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/ossim)
+
 # include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 #   ${CMAKE_CURRENT_SOURCE_DIR}/ossim
 # #  ${OTB_SOURCE_DIR}/Utilities/otbossim/include
@@ -26,7 +40,7 @@ set(OSSIMPLUGINS_OTB_PATCH "1")
   # When using External ossim, compile ossimplugin as a DLL
   # even if we compile OTB as a static lib
   set(ossimplugins_LIBTYPE SHARED)
-  if(WIN32)  
+  if(WIN32)
     add_definitions(-DOSSIMPLUGINSMAKINGDLL)
   endif()
 
@@ -51,7 +65,7 @@ set(ossimplugins_SOURCES
 
 add_library(otbossimplugins ${ossimplugins_LIBTYPE} ${ossimplugins_SOURCES})
 message(STATUS "lib for ossim: ${OTBBoost_LIBRARIES}")
-target_link_libraries(otbossimplugins 
+target_link_libraries(otbossimplugins
   ${OTBBoost_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBOssim_LIBRARIES}

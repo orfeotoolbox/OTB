@@ -21,6 +21,7 @@
 #include <typeinfo>
 #include <stdexcept>
 #include <cctype>
+#include <cstdarg>
 #include <string>
 #include <ossim/base/ossimString.h>
 
@@ -720,6 +721,19 @@ template <typename T> inline T const& to_with_default(T const& v, T const& /* de
 // template <> inline double to<double>(ossimplugins::string_view const& v)
 // { return details::to_float<double>(v); }
 //@}
+
+int s_printf(char *str, std::size_t size, const char *format, ...);
+int vs_printf(char *str, std::size_t size, const char *format, std::va_list ap);
+
+template <std::size_t size>
+inline
+int s_printf(char (&str)[size], const char *format, ...) {
+    std::va_list ap;
+    va_start(ap, format);
+    const int res = vs_printf(str, size, format, ap);
+    va_end(ap);
+    return res;
+}
 
 
 } // ossimplugins namespace

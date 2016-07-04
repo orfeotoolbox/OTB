@@ -117,7 +117,7 @@ std::string ossimplugins::time::to_simple_string(ModifiedJulianDate const& d)
       // << " --> *10^6: " << fs2*1000L*1000
       // << " --> %10^6: " << ulong(fs2*1000L*1000)%(1000L*1000)
       // << "\n";
-   s += std::snprintf(&buffer[s], sizeof(buffer)-s, ".%06ld",
+   s += s_printf(&buffer[s], sizeof(buffer)-s, ".%06ld",
          ulong(frac_sec * 1000L * 1000) % (1000L*1000));
    return std::string(buffer, s);
 }
@@ -132,7 +132,7 @@ std::string ossimplugins::time::to_simple_string(Duration const& d)
    const ulong  m  = (ls/60) % 60;
    const ulong  h  = (ls/60/60);
    char buffer[1024];
-   const std::size_t N = std::snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d.%06ld", h, m, s, us);
+   const std::size_t N = s_printf(buffer, "%02d:%02d:%02d.%06ld", h, m, s, us);
    assert(N);
 
    return std::string(buffer, N);

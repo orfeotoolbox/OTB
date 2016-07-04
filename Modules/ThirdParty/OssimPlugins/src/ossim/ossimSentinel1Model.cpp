@@ -724,7 +724,7 @@ namespace ossimplugins
              )
          {
             char calibrationVectorPrefix[256];
-            std::snprintf(calibrationVectorPrefix, sizeof(calibrationVectorPrefix), "%scalibrationVector[%d].", calibrationPrefix, idx);
+            s_printf(calibrationVectorPrefix, "%scalibrationVector[%d].", calibrationPrefix, idx);
             assert(b_calibVector->get());
 
             ossimXmlNode const& calibrationVector = **b_calibVector;
@@ -772,7 +772,7 @@ namespace ossimplugins
              )
          {
             char noiseVectorPrefix [256];
-            std::snprintf(noiseVectorPrefix, sizeof(noiseVectorPrefix), "%snoiseVector[%d].", noisePrefix, idx);
+            s_printf(noiseVectorPrefix, "%snoiseVector[%d].", noisePrefix, idx);
             assert(b_noiseVector->get());
 
             ossimXmlNode const& noiseVector = **b_noiseVector;
@@ -860,7 +860,7 @@ namespace ossimplugins
                }
             }
 
-            std::snprintf(burstPrefix, sizeof(burstPrefix), "%s[%d].", BURST_PREFIX.c_str(), burstId);
+            s_printf(burstPrefix, "%s[%d].", BURST_PREFIX.c_str(), burstId);
             burstRecord.startLine = add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
             burstRecord.endLine   = add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
             // TODO: check units.
@@ -893,7 +893,7 @@ namespace ossimplugins
       unsigned int idx = 0;
       for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode, ++idx)
       {
-         int pos = std::snprintf(prefix, sizeof(prefix), "%s[%d].", sr_gr_prefix.c_str(), idx);
+         int pos = s_printf(prefix, "%s[%d].", sr_gr_prefix.c_str(), idx);
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix));
 
          addMandatory(theProductKwl, prefix + keyAzimuthTime,**itNode, attAzimuthTime);
@@ -915,7 +915,7 @@ namespace ossimplugins
              )
          {
             // append to current prefix
-            std::snprintf(prefix+pos, sizeof(prefix)-pos, "coeff[%d]", coeff_idx);
+            s_printf(prefix+pos, sizeof(prefix)-pos, "coeff[%d]", coeff_idx);
             add(theProductKwl, prefix, *cIt); // Don't check this is really a double.
          }
          assert(coeff_idx>0 &&"The rg0 record has empty coefs vector.");
@@ -932,7 +932,7 @@ namespace ossimplugins
       unsigned int idx = 0;
       for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++idx)
       {
-         int pos = std::snprintf(prefix, sizeof(prefix), "%s[%d].", GCP_PREFIX.c_str(), idx);
+         int pos = s_printf(prefix, "%s[%d].", GCP_PREFIX.c_str(), idx);
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < 1024);
 #if defined(USE_BOOST_TIME)
          const TimeType azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
@@ -1012,7 +1012,7 @@ namespace ossimplugins
       for (std::size_t i = 0; i != stateVectorList_size ; ++i)
       {
          //orbit_state_vectors
-         const int pos = std::snprintf(orbit_prefix_, sizeof(orbit_prefix_), "orbitList.orbit[%d].", int(i));
+         const int pos = s_printf(orbit_prefix_, "orbitList.orbit[%d].", int(i));
          assert(pos > 0 && pos < 256);
          const std::string orbit_prefix(orbit_prefix_, pos);
 
@@ -1075,7 +1075,7 @@ namespace ossimplugins
          {
             char prefix[256];
             //Doppler_Centroid_Coefficients.dop_coef_list;
-            std::snprintf(prefix, sizeof(prefix), "dopplerCentroid.dop_coef_list%d.", index);
+            s_printf(prefix, "dopplerCentroid.dop_coef_list%d.", index);
 
             const ossimXmlNodePtr & dcEstimate = *it;
             assert(dcEstimate.get());
@@ -1103,7 +1103,7 @@ namespace ossimplugins
                for (int count = 1 ; coeff != result.end() ; ++count, ++coeff)
                {
                   char coeff_prefix[256];
-                  std::snprintf(coeff_prefix, sizeof(coeff_prefix), "%s%d.dop_coef", prefix, count);
+                  s_printf(coeff_prefix, "%s%d.dop_coef", prefix, count);
 
                   add(theProductKwl, coeff_prefix, coeff->string());
                }
