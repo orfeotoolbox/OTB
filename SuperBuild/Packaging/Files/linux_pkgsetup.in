@@ -10,7 +10,6 @@ CAT=`which cat`
 RM=`which rm`
 CHMOD=`which chmod`
 SED=`which sed`
-WHICH_ENV=`which env`
 
 PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
 
@@ -34,8 +33,13 @@ if [ "$I_AM_XDK" = true ] ; then
     $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
     $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
 else
+
 $CAT > $OUT_DIR/monteverdi.sh << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
+unset LD_LIBRARY_PATH
+if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
+  export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+fi
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
@@ -46,8 +50,13 @@ EOF
 $CHMOD +x $OUT_DIR/monteverdi.sh
 
 $CAT > $OUT_DIR/mapla.sh << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
+unset LD_LIBRARY_PATH
+if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
+  export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+fi
 export LC_NUMERIC=C
+unset LD_LIBRARY_PATH
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
 export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
@@ -57,7 +66,7 @@ EOF
 $CHMOD +x $OUT_DIR/mapla.sh
 
 $CAT > $OUT_DIR/otbenv.profile << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
 PATH=\$PATH:$OUT_DIR/bin
 GDAL_DATA=$OUT_DIR/share/gdal
 GEOTIFF_CSV=$OUT_DIR/share/espg_csv

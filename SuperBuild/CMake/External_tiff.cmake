@@ -1,16 +1,6 @@
-if( __EXTERNAL_TIFF__)
-  return()
-else()
-  set(__EXTERNAL_TIFF__ 1)
-endif()
+INCLUDE_ONCE_MACRO(TIFF)
 
-if(USE_SYSTEM_TIFF)
-  message(STATUS "  Using libtiff system version")
-  return()
-endif()
-
-SETUP_SUPERBUILD(PROJECT TIFF)
-message(STATUS "  Using libtiff SuperBuild version")
+SETUP_SUPERBUILD(TIFF)
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(TIFF ZLIB JPEG)
@@ -66,6 +56,7 @@ else()
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     DEPENDS ${TIFF_DEPENDENCIES}
     CMAKE_CACHE_ARGS
+    ${SB_CMAKE_CACHE_ARGS}
     -DCMAKE_INSTALL_LIBDIR:PATH=lib
     -DCMAKE_INSTALL_BINDIR:PATH=bin
     -DBUILD_TESTING:BOOL=OFF

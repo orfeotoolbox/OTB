@@ -162,24 +162,25 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG3 COMMAND otbImageBaseTestDriver
   ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_3.png
   -startX 300 -startY 10 -sizeX 250 -sizeY 50  -channels 3 )
 
-otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
-  ${TEMP}/ioTvMultiDatasetReading2.txt
-  --ignore-lines-with 1 Pointer:
-  otbVectorImageTest
-  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
-  ${TEMP}/ioTvMultiDatasetReading2.txt
-  )
+if(GDAL_HAS_HDF4)
+  otb_add_test(NAME ioTvMultiDatasetReading2 COMMAND otbImageBaseTestDriver
+    --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading2.txt
+    ${TEMP}/ioTvMultiDatasetReading2.txt
+    --ignore-lines-with 1 Pointer:
+    otbVectorImageTest
+    ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
+    ${TEMP}/ioTvMultiDatasetReading2.txt
+    )
 
-otb_add_test(NAME ioTvMultiDatasetReading1 COMMAND otbImageBaseTestDriver
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
-  ${TEMP}/ioTvMultiDatasetReading1.txt
-  --ignore-lines-with 1 Pointer:
-  otbVectorImageTest
-  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
-  ${TEMP}/ioTvMultiDatasetReading1.txt
-  )
-
+  otb_add_test(NAME ioTvMultiDatasetReading1 COMMAND otbImageBaseTestDriver
+    --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReading1.txt
+    ${TEMP}/ioTvMultiDatasetReading1.txt
+    --ignore-lines-with 1 Pointer:
+    otbVectorImageTest
+    ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=0
+    ${TEMP}/ioTvMultiDatasetReading1.txt
+    )
+endif()
 otb_add_test(NAME coTvExtractROITestMetaData_TIFF COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/coTvExtractROITestMetaData1.txt
@@ -631,25 +632,28 @@ otb_add_test(NAME   ioTvMultiChannelROI_QuickbirdXS2TIFF COMMAND otbImageBaseTes
   -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
   )
 
-# Tests which read data in HDF files.
-otb_add_test(NAME   ioTvMultiChannelROI_HDF4_2_TIF COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
-                     ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
-         otbMultiChannelExtractROI
-         ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
-         ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
-         -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
-         -channels 1 )
+if(GDAL_HAS_HDF4)
+  # Tests which read data in HDF files.
+  otb_add_test(NAME   ioTvMultiChannelROI_HDF4_2_TIF COMMAND otbImageBaseTestDriver
+    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
+    ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
+    otbMultiChannelExtractROI
+    ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf?&sdataidx=5
+    ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
+    -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
+    -channels 1 )
+endif()
 
-otb_add_test(NAME   ioTvMultiChannelROI_HDF5_2_TIF COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
-                     ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
-         otbMultiChannelExtractROI
-         ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5?&sdataidx=3
-         ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
-         -startX 100 -startY 20 -sizeX 200 -sizeY 100
-         -channels 1 )
-
+if(GDAL_HAS_HDF5)
+  otb_add_test(NAME   ioTvMultiChannelROI_HDF5_2_TIF COMMAND otbImageBaseTestDriver
+    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
+    ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
+    otbMultiChannelExtractROI
+    ${INPUTDATA}/GSSTF_NCEP.2b.2008.12.31.he5?&sdataidx=3
+    ${TEMP}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1_OUT.tif
+    -startX 100 -startY 20 -sizeX 200 -sizeY 100
+    -channels 1 )
+endif()
 
 # Read an area inside one tile at resolution 0 (jpeg2000 conformance file with
 # specific tile size at different resolution).

@@ -206,13 +206,15 @@ otb_add_test(NAME ioTuGDALImageIOCanRead_IKONOS_PAN COMMAND otbIOGDALTestDriver 
 otb_add_test(NAME ioTuGDALImageIOCanRead_FORMOSAT2 COMMAND otbIOGDALTestDriver otbGDALImageIOTestCanRead
   LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF})
 
-otb_add_test(NAME ioTvMultiDatasetReadingInfo COMMAND otbIOGDALTestDriver
-  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
-  ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-  otbMultiDatasetReadingInfo
-  ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
-  ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
-  )
+if(GDAL_HAS_HDF4)
+  otb_add_test(NAME ioTvMultiDatasetReadingInfo COMMAND otbIOGDALTestDriver
+    --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
+    ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
+    otbMultiDatasetReadingInfo
+    ${INPUTDATA}/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf
+    ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
+    )
+endif()
 
 otb_add_test(NAME ioTuOGRVectorDataIOTestCanReadGML COMMAND otbIOGDALTestDriver
   otbOGRVectorDataIOTestCanRead

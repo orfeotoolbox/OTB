@@ -52,7 +52,7 @@ endmacro()
 
 macro(macro_create_targets_for_package pkg)
 
-  if(WIN32)
+  if(WIN32 AND NOT MSVC)
     add_custom_target(PACKAGE-${pkg}-check
       COMMAND ${CMAKE_COMMAND} --build "." --target install
       WORKING_DIRECTORY "${Monteverdi_BINARY_DIR}"
@@ -90,7 +90,7 @@ macro(macro_create_targets_for_package pkg)
 
   #configure
   add_custom_target(PACKAGE-${pkg}-configure
-    COMMAND ${CMAKE_COMMAND}
+    COMMAND ${CMAKE_COMMAND} "-G${CMAKE_GENERATOR}"
     "${PACKAGE_PROJECT_DIR}/src"
     WORKING_DIRECTORY "${PACKAGE_PROJECT_DIR}/build"
     DEPENDS PACKAGE-${pkg}-check
