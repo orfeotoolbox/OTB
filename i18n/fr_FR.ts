@@ -409,6 +409,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <source>Orfeo Toolbox Algorithms</source>
         <translation>Applications OTB</translation>
     </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::ApplicationsToolBoxController</name>
@@ -4272,7 +4276,7 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     </message>
     <message>
         <source>Load OTB-&amp;Applications</source>
-        <translation>Charger les OTB-&amp;Applications</translation>
+        <translation type="obsolete">Charger les OTB-&amp;Applications</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
