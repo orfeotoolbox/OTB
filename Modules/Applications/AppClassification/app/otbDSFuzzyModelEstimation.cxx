@@ -414,7 +414,7 @@ private:
       {
       // An error has occurred in the optimization.
       // Update the parameters
-      otbAppLogFATAL("ERROR: Exception Catched : "<< err.GetDescription() << std::endl
+      otbAppLogFATAL("ERROR: Exception Caught : "<< err.GetDescription() << std::endl
         << "numberOfIterations : " << m_Optimizer->GetOptimizer()->get_num_evaluations() << std::endl
         << "Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
       }
