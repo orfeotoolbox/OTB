@@ -14,6 +14,7 @@
 #include "ossimTraceHelpers.h"
 #include "ossimRangeUtilities.h"
 #include "ossimSarSensorModelPathsAndKeys.h"
+#include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimLsrSpace.h>
 #include <boost/static_assert.hpp>
 #include <iostream>
@@ -980,7 +981,20 @@ namespace ossimplugins
       try {
          get(kwl, "orbitList.nb_orbits", nbOrbits);
       } catch (kw_runtime_error const& e) {
-         nbOrbits = kwl.getNumberOfKeysThatMatch("orbitList\\.orbit\\[.*\\]\\.time");
+         nbOrbits = 0;
+         ossimRegExp regExp;
+         regExp.compile("orbitList\\.orbit\\[.*\\]\\.time");
+         ossimKeywordlist::KeywordMap::const_iterator i =
+           kwl.getMap().begin();
+         for(; i != kwl.getMap().end(); ++i)
+         {
+            if(regExp.find( (*i).first.c_str()))
+            {
+               ++nbOrbits;
+            }
+         }
+         // Method getNumberOfKeysThatMatch not available in ossim 1.8.16
+         //nbOrbits = kwl.getNumberOfKeysThatMatch("orbitList\\.orbit\\[.*\\]\\.time");
          ossimNotify(ossimNotifyLevel_WARN)
             << "WARNING: " << e.what()
             << "\n\tNumber of orbits manually counted to " << nbOrbits
