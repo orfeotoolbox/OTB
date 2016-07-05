@@ -69,9 +69,10 @@ StatisticsXMLFileWriter<TMeasurementVector>
     itkExceptionMacro(<<"The XML output FileName is empty, please set the filename via the method SetFileName");
 
   // Check that the right extension is given : expected .xml */
-  if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
+  std::string extension = itksys::SystemTools::GetFilenameLastExtension(m_FileName);
+  if (itksys::SystemTools::LowerCase(extension) != ".xml")
     {
-    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
+    itkExceptionMacro(<<extension
                       <<" is a wrong Extension FileName : Expected .xml");
     }
 

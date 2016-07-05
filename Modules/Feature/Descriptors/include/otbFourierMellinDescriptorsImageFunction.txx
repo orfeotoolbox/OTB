@@ -112,12 +112,12 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
       for (unsigned int q= 0; q <= m_Qmax; q++)
         {
         ScalarComplexType power(double(p-2.0+m_Sigma)/2.0, -double(q)/2.0);
-
-        if (x!=0 || y!=0) // vcl_pow limitations
-          {
-          coefs.at(p).at(q) += vcl_pow(xplusiy, -p) * vcl_pow(x2plusy2, power) * value;
-          }
-        }
+	
+	if(x!=0 || y !=0) // vcl_pow limitation
+	  {	    
+	    coefs.at(p).at(q) += vcl_pow(xplusiy, -static_cast<double>(p)) * vcl_pow(x2plusy2, power) * value;
+	  }
+	}
       }
     }
 
