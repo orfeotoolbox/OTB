@@ -50,7 +50,7 @@ class TrainVectorClassifier : public LearningApplicationBase<float,int>
 {
 public:
   typedef TrainVectorClassifier Self;
-  typedef LearningApplicationBase Superclass;
+  typedef LearningApplicationBase<float, int> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   itkNewMacro(Self)
