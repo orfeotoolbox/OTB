@@ -12,6 +12,6 @@ otb_test_application(NAME apTvRaSarRadiometricCalibration_RADARSAT2
   APP  SARCalibration
   OPTIONS -in ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.geom
   -out ${TEMP}/apTvRaSarRadiometricCalibration_RADARSAT2.tif
-  VALID   --compare-image ${NOTOL}
+  VALID   --compare-image ${EPSILON_5}
   ${BASELINE}/raTvSarRadiometricCalibration_RADARSAT2.tif
   ${TEMP}/apTvRaSarRadiometricCalibration_RADARSAT2.tif )
