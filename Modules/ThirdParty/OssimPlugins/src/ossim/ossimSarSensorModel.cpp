@@ -766,7 +766,7 @@ namespace ossimplugins
          // Invert system
          try {
             dR = B.i() * F;
-         } catch (RBD_COMMON::BaseException const& e) {
+         } catch (std::exception const& e) {
             // NEWMATH exception
             throw std::runtime_error(e.what());
          }
