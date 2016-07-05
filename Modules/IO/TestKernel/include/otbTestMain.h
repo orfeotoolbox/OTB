@@ -67,6 +67,10 @@ void LoadTestEnv()
 
 int main(int ac, char* av[])
 {
+  #ifdef OTB_USE_MPI
+  otb::MPIConfig::Instance()->Init(ac,av);
+  #endif
+  
   bool   lFlagRegression(false);
   double lToleranceDiffValue(0);
   double lEpsilon(0);
