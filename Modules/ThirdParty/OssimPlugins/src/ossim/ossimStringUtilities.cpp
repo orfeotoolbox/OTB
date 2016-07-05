@@ -37,7 +37,7 @@ int ossimplugins::s_printf(char *str, std::size_t size, const char *format, ...)
 {
     std::va_list ap;
     va_start(ap, format);
-    const int res = vs_printf(str, size, format, ap);
+    const int res = ossimplugins::vs_printf(str, size, format, ap);
     va_end(ap);
     return res;
 }

@@ -168,7 +168,7 @@ void check_time(char const* format, char const* sDate,
 
    // We know this test will fail because of float rounding => just display
    std::cout.precision(16);
-   std::cout << mjd << " as a simple string (" << to_simple_string(mjd)
+   std::cout << mjd << " as a simple string (" << time::to_simple_string(mjd)
       << ") is expected to differ from " << sDate << "\n";
    // BOOST_CHECK_EQUAL(to_simple_string(mjd), sDate);
 }
