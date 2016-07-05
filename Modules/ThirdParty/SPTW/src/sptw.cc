@@ -268,8 +268,8 @@ SPTW_ERROR create_generic_raster(string filename,
 		GDALDataType band_type,
 		double *geotransform,
 		string projection_srs,
-		bool tiled_mode,
-		int tiles_size) {
+		int block_size_x,
+		bool tiled_mode) {
 
 	GDALAllRegister();
 
@@ -289,14 +289,10 @@ SPTW_ERROR create_generic_raster(string filename,
 	if (tiled_mode)
 	{
 		std::stringstream ts;
-		ts << tiles_size;
+		ts << block_size_x;
 		options = CSLSetNameValue(options, "TILED", "YES");
 		options = CSLSetNameValue(options, "BLOCKXSIZE", ts.str().c_str());
 		options = CSLSetNameValue(options, "BLOCKYSIZE", ts.str().c_str());
-	}
-	else
-	{
-		tiles_size = x_size;
 	}
 
 	// Create output raster

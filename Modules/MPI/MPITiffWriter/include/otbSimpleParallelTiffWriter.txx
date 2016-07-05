@@ -518,13 +518,24 @@ SimpleParallelTiffWriter<TInputImage>
 	 *                         Raster creation
 	 ************************************************************************/
 
-	// When mode is tiled, check the GeoTiff tile size
-	int inputRegionMinSize = std::min(inputRegion.GetSize()[0],	inputRegion.GetSize()[1]);
-	if (m_TiffTiledMode && m_TiffTileSize > inputRegionMinSize)
+	// First, compute the block size
+	int block_size_x = m_TiffTiledMode;
+
+	if (m_TiffTiledMode)
 	{
-		// Find the nearest (floor) power of 2
-		m_TiffTileSize = (int) std::pow(2, std::floor(std::log((double) inputRegionMinSize)/std::log(2.0)));
-		itkWarningMacro(<<"GeoTiff tile size is bigger than image. Setting to " << m_TiffTileSize);
+		// When mode is tiled, check the GeoTiff tile size
+		int inputRegionMinSize = std::min(inputRegion.GetSize()[0],	inputRegion.GetSize()[1]);
+		if (m_TiffTileSize > inputRegionMinSize)
+		{
+			// Find the nearest (floor) power of 2
+			block_size_x = (int) std::pow(2, std::floor(std::log((double) inputRegionMinSize)/std::log(2.0)));
+			itkWarningMacro(<<"GeoTiff tile size is bigger than image. Setting to " << block_size_x);
+		}
+	}
+	else
+	{
+		// When mode is not tiled (i.e. striped)
+		block_size_x = inputPtr->GetLargestPossibleRegion().GetSize()[0];
 	}
 
 	// Master process (Rank 0) is responsible for the creation of the output raster.
@@ -547,8 +558,8 @@ SimpleParallelTiffWriter<TInputImage>
 				dataType,
 				geotransform,
 				inputPtr->GetProjectionRef(),
-				m_TiffTiledMode,
-				m_TiffTileSize);
+				block_size_x,
+				m_TiffTiledMode);
 
 		if (sperr != sptw::SP_None)
 		{
@@ -574,7 +585,7 @@ SimpleParallelTiffWriter<TInputImage>
 		if (otb::MPIConfig::Instance()->GetMyRank() == 0)
 		{
 			SPTW_ERROR sperr = populate_tile_offsets(output_raster,
-					m_TiffTileSize,
+					block_size_x,
 					m_TiffTiledMode);
 			if (sperr != sptw::SP_None)
 			{

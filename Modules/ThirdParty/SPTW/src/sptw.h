@@ -104,8 +104,8 @@ namespace sptw {
     		GDALDataType band_type,
     		double *geotransform,
     		string projection_srs,
-    		bool tiled_mode,
-    		int tiles_size);
+			int block_size_x,
+    		bool tiled_mode);
 
     SPTW_ERROR create_raster(string filename,
             int64_t x_size,
