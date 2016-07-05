@@ -21,7 +21,7 @@ class ossimString;
 namespace ossimplugins
 {
 
-class ossimSentinel1SarSensorModel : public ossimSarSensorModel
+class OSSIM_PLUGINS_DLL ossimSentinel1SarSensorModel : public ossimSarSensorModel
 {
 public:
 
