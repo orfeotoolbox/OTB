@@ -766,9 +766,11 @@ namespace ossimplugins
          // Invert system
          try {
             dR = B.i() * F;
-         } catch (std::exception const& e) {
+         } catch (NEWMAT::SingularException const& e) {
             // NEWMATH exception
             throw std::runtime_error(e.what());
+         } catch (...) {
+            throw std::runtime_error("Cannot invert 3x3 matrix in projToSurface");
          }
 
          // Update estimate
