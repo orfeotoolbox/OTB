@@ -684,7 +684,10 @@ namespace ossimplugins
    {
       ossimDirectory calibrationDir( theManifestDirectory.dirCat( "annotation/calibration") );
       std::vector<ossimFilename> files;
-      calibrationDir.findAllFilesThatMatch(files, "calibration*");
+      if (calibrationDir.isOpened())
+        {
+        calibrationDir.findAllFilesThatMatch(files, "calibration*");
+        }
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
       std::clog << files.size() << " calibration files found in " << theManifestDirectory << "\n";
@@ -753,7 +756,10 @@ namespace ossimplugins
    {
       ossimDirectory calibrationDir( theManifestDirectory.dirCat( "annotation/calibration") );
       std::vector<ossimFilename> files;
-      calibrationDir.findAllFilesThatMatch(files, "noise*");
+      if (calibrationDir.isOpened())
+        {
+        calibrationDir.findAllFilesThatMatch(files, "noise*");
+        }
       std::vector<ossimFilename>::const_iterator it = files.begin();
       const char noisePrefix[] = "noise.";
 
