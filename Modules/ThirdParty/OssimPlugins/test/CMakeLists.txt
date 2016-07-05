@@ -107,7 +107,7 @@ otb_module_target_label(ossimTerraSarXSarSensorModelTest)
 otb_add_test(NAME ossimSarSensorModelTest COMMAND ossimSarSensorModelTest )
 
 #S1 tests
-file(GLOB s1_files ${CMAKE_CURRENT_SOURCE_DIR}/data/s1/*.xml)
+file(GLOB s1_files ${INPUTDATA}/ossimPlugins/s1/*.xml)
 #Loop over all S1 annotation files
 foreach(entry ${s1_files})
   get_filename_component(name ${entry} NAME_WE)
