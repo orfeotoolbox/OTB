@@ -21,6 +21,7 @@
 
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
+#include "itkMath.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -29,7 +30,7 @@ namespace otb
 template<class TInputImage>
 PersistentCompareImageFilter<TInputImage>
 ::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),
- m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1), m_PhysicalSpaceCheck(true)
+ m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1), m_DiffCount(1), m_PhysicalSpaceCheck(true)
 {
   this->SetNumberOfRequiredInputs( 2 );
   // first output is a copy of the image, DataObject created by
@@ -37,7 +38,7 @@ PersistentCompareImageFilter<TInputImage>
 
   // allocate the data objects for the outputs which are
   // just decorators around real types
-  for (int i = 1; i < 4; ++i)
+  for (int i = 1; i < 5; ++i)
   {
     typename RealObjectType::Pointer output
     = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
@@ -47,6 +48,7 @@ PersistentCompareImageFilter<TInputImage>
   this->GetPSNROutput()->Set(itk::NumericTraits<RealType>::max());
   this->GetMSEOutput()->Set(itk::NumericTraits<RealType>::max());
   this->GetMAEOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetDiffCountOutput()->Set(itk::NumericTraits<RealType>::Zero);
 
   this->Reset();
 }
@@ -112,6 +114,7 @@ PersistentCompareImageFilter<TInputImage>
     case 1:
     case 2:
     case 3:
+    case 4:
       return static_cast<itk::DataObject*>(RealObjectType::New().GetPointer());
       break;
     default:
@@ -170,6 +173,22 @@ PersistentCompareImageFilter<TInputImage>
 }
 
 template<class TInputImage>
+typename PersistentCompareImageFilter<TInputImage>::RealObjectType*
+PersistentCompareImageFilter<TInputImage>
+::GetDiffCountOutput()
+{
+  return static_cast<RealObjectType*>(this->itk::ProcessObject::GetOutput(4));
+}
+
+template<class TInputImage>
+const typename PersistentCompareImageFilter<TInputImage>::RealObjectType*
+PersistentCompareImageFilter<TInputImage>
+::GetDiffCountOutput() const
+{
+  return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(4));
+}
+
+template<class TInputImage>
 void
 PersistentCompareImageFilter<TInputImage>
 ::GenerateOutputInformation()
@@ -204,7 +223,8 @@ PersistentCompareImageFilter<TInputImage>
 ::Synthetize()
 {
   int      i;
-  long     count;
+  unsigned long     count;
+  unsigned long     diffCount;
   RealType squareOfDifferences, absoluteValueOfDifferences;
 
   int numberOfThreads = this->GetNumberOfThreads();
@@ -216,6 +236,7 @@ PersistentCompareImageFilter<TInputImage>
 
   squareOfDifferences = absoluteValueOfDifferences = itk::NumericTraits<RealType>::Zero;
   count = 0;
+  diffCount=0;
 
   // Find min/max and the accumulate count and difference of squares over all threads
   minimumRef = itk::NumericTraits<PixelType>::max();
@@ -224,6 +245,7 @@ PersistentCompareImageFilter<TInputImage>
   for (i = 0; i < numberOfThreads; ++i)
     {
     count += m_Count[i];
+    diffCount += m_DiffCount[i];
     squareOfDifferences += m_SquareOfDifferences[i];
     absoluteValueOfDifferences += m_AbsoluteValueOfDifferences[i];
 
@@ -248,6 +270,7 @@ PersistentCompareImageFilter<TInputImage>
   this->GetMSEOutput()->Set(mse);
   this->GetMAEOutput()->Set(mae);
   this->GetPSNROutput()->Set(psnr);
+  this->GetDiffCountOutput()->Set(static_cast<RealType>(diffCount));
 }
 
 template<class TInputImage>
@@ -259,6 +282,7 @@ PersistentCompareImageFilter<TInputImage>
 
   // Resize the thread temporaries
   m_Count.SetSize(numberOfThreads);
+  m_DiffCount.SetSize(numberOfThreads);
   m_SquareOfDifferences.SetSize(numberOfThreads);
   m_AbsoluteValueOfDifferences.SetSize(numberOfThreads);
 
@@ -267,6 +291,7 @@ PersistentCompareImageFilter<TInputImage>
 
   // Initialize the temporaries
   m_Count.Fill(itk::NumericTraits<long>::Zero);
+  m_DiffCount.Fill(itk::NumericTraits<long>::Zero);
   m_SquareOfDifferences.Fill(itk::NumericTraits<RealType>::Zero);
   m_AbsoluteValueOfDifferences.Fill(itk::NumericTraits<RealType>::Zero);
   m_ThreadMinRef.Fill(itk::NumericTraits<PixelType>::max());
@@ -322,9 +347,14 @@ PersistentCompareImageFilter<TInputImage>
       {
       m_ThreadMaxRef[threadId] = value1;
       }
-
-    m_SquareOfDifferences[threadId] += ( realValue1 - realValue2 ) * ( realValue1 - realValue2 );
-    m_AbsoluteValueOfDifferences[threadId] += vcl_abs( realValue1 - realValue2 );
+    
+    RealType diffVal = realValue1 - realValue2;
+    m_SquareOfDifferences[threadId] +=  diffVal * diffVal;
+    m_AbsoluteValueOfDifferences[threadId] += vcl_abs( diffVal );
+    if (! itk::Math::FloatAlmostEqual(realValue1, realValue2))
+      {
+      m_DiffCount[threadId]++;
+      }
     m_Count[threadId]++;
     ++it1;
     ++it2;
@@ -340,7 +370,8 @@ PersistentCompareImageFilter<TImage>
 
   os << indent << "PSNR: "     << this->GetPSNR() << std::endl;
   os << indent << "MSE: "    << this->GetMSE() << std::endl;
-  os << indent << "MAE: " << this->GetMAE() << std::endl;
+  os << indent << "MAE: " << this->GetMAE() << std::endl; 
+  os << indent << "Count: " << this->GetDiffCount() << std::endl;
 }
 } // end namespace otb
 #endif

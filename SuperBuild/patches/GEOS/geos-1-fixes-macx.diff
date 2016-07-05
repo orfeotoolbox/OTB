@@ -1,6 +1,6 @@
 diff -burN geos-3.4.2.orig/src/CMakeLists.txt geos-3.4.2/src/CMakeLists.txt
---- geos-3.4.2.orig/src/CMakeLists.txt	2016-06-13 10:33:31.170294946 +0200
-+++ geos-3.4.2/src/CMakeLists.txt	2016-06-13 10:35:15.630300001 +0200
+--- geos-3.4.2.orig/src/CMakeLists.txt	2016-07-01 14:07:05.000000000 +0200
++++ geos-3.4.2/src/CMakeLists.txt	2016-07-01 14:07:39.000000000 +0200
 @@ -62,7 +62,7 @@
  else()
  
@@ -19,11 +19,11 @@ diff -burN geos-3.4.2.orig/src/CMakeLists.txt geos-3.4.2/src/CMakeLists.txt
 -    OUTPUT_NAME "geos"
 -    PREFIX "lib"
 -    CLEAN_DIRECT_OUTPUT 1)
-+  # set_target_properties(geos-static
-+  #   PROPERTIES
-+  #   OUTPUT_NAME "geos"
-+  #   PREFIX "lib"
-+  #   CLEAN_DIRECT_OUTPUT 1)
++#  set_target_properties(geos-static
++#    PROPERTIES
++#    OUTPUT_NAME "geos"
++#    PREFIX "lib"
++#    CLEAN_DIRECT_OUTPUT 1)
  
  endif()
  
@@ -36,8 +36,3 @@ diff -burN geos-3.4.2.orig/src/CMakeLists.txt geos-3.4.2/src/CMakeLists.txt
      RUNTIME DESTINATION bin
      LIBRARY DESTINATION lib
      ARCHIVE DESTINATION lib)
-@@ -192,4 +192,3 @@
- ### geso/util
- file(GLOB geos_util_HEADERS ${CMAKE_SOURCE_DIR}/include/geos/util/*.h)
- source_group("Header Files\\geos\\util" FILES ${geos_util_HEADERS})
--

@@ -234,17 +234,17 @@ private:
     SetParameterDescription( "out", "The output image. The output image is the segmentation of the filtered image. It is recommended to set the pixel type to uint32." );
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
-    AddParameter(ParameterType_Float, "ranger", "Range radius");
-    SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
-    SetDefaultParameterFloat("ranger", 15);
-    SetMinimumParameterFloatValue("ranger", 0);
-    MandatoryOff("ranger");
-
     AddParameter(ParameterType_Float, "spatialr", "Spatial radius");
     SetParameterDescription("spatialr", "Spatial radius of the neighborhood.");
     SetDefaultParameterFloat("spatialr", 5);
     SetMinimumParameterFloatValue("spatialr", 0);
     MandatoryOff("spatialr");
+    
+    AddParameter(ParameterType_Float, "ranger", "Range radius");
+    SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
+    SetDefaultParameterFloat("ranger", 15);
+    SetMinimumParameterFloatValue("ranger", 0);
+    MandatoryOff("ranger");
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Region Size");
     SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is deleted.");
@@ -276,8 +276,8 @@ private:
     SetDocExampleParameterValue("in","smooth.tif");
     SetDocExampleParameterValue("inpos","position.tif");
     SetDocExampleParameterValue("out","segmentation.tif");
-    SetDocExampleParameterValue("ranger","15");
     SetDocExampleParameterValue("spatialr","5");
+    SetDocExampleParameterValue("ranger","15");
     SetDocExampleParameterValue("minsize","0");
     SetDocExampleParameterValue("tilesizex","256");
     SetDocExampleParameterValue("tilesizey","256");
