@@ -28,6 +28,16 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/.git")
       OUTPUT_VARIABLE OTB_GIT_LAST_COMMIT
       OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
+    #git symbolic-ref --short -q HEAD does not work on older git version
+    #rather than checking for git version. it is better to not use that
+    #option and employ cmake stuff to do the work
+    execute_process(COMMAND ${GIT_EXECUTABLE} symbolic-ref -q HEAD
+      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+      OUTPUT_VARIABLE OTB_GIT_SYMBOLIC_REF_OUTPUT
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+
+    get_filename_component(OTB_GIT_BRANCH ${OTB_GIT_SYMBOLIC_REF_OUTPUT} NAME)
+
     execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%H
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       OUTPUT_VARIABLE OTB_WC_REVISION
