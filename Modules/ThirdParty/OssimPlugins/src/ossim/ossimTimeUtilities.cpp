@@ -63,7 +63,7 @@ ossimDate ossimplugins::time::details::strptime(string_view const& format, strin
                             std::size_t nsecs_nb_digits = d.size();
                             ssecs = decode_uint(d);
                             nsecs_nb_digits -= d.size();
-                            ssecs /= std::pow(10, nsecs_nb_digits);
+                            ssecs /= std::pow((double)10.0, (int)nsecs_nb_digits);
                          } else {
                             // std::cout << "No subfraction in source date" << std::endl;
                          }
