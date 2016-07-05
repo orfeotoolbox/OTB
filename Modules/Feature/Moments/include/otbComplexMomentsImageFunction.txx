@@ -106,11 +106,23 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
       {
       for (unsigned int q= 0; q <= m_Qmax; q++)
         {
-        moments.at(p).at(q) += vcl_pow(xpy, p) * vcl_pow(xqy, q) * value;
+	  ScalarComplexType pow1(1,0);
+	  ScalarComplexType pow2(1,0);
+	  if(p!=0 || x!=0 || y != 0)
+	    {
+	      pow1=vcl_pow(xpy,p);
+	    }
+	  if(q!=0 || x!=0 || y != 0)
+	    {
+	      pow2=vcl_pow(xqy,q);
+	    }
+	  
+	  moments.at(p).at(q) += pow1 * pow2 * value;
+	  
         }
       }
     }
-
+  
   // Normalisation
   for (int p = m_Pmax; p >= 0; p--)
     {
