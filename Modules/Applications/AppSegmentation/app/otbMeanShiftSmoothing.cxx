@@ -100,7 +100,7 @@ private:
     MandatoryOff("rangeramp");
 
     AddParameter(ParameterType_Empty, "modesearch", "Mode search.");
-    SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path . Be careful, with this option, the result will slightly depend on thread number");
+    SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number");
     EnableParameter("modesearch");
 
 
@@ -116,17 +116,7 @@ private:
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
-  {
-    if(IsParameterEnabled("modesearch"))
-      {
-      MandatoryOn("foutpos");
-      EnableParameter("foutpos");
-      }
-    else
-      {
-      MandatoryOff("foutpos");
-      }
-  }
+  {}
 
   void DoExecute() ITK_OVERRIDE
   {
