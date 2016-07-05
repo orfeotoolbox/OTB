@@ -116,17 +116,7 @@ private:
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
-  {
-    if(IsParameterEnabled("modesearch"))
-      {
-      MandatoryOn("foutpos");
-      EnableParameter("foutpos");
-      }
-    else
-      {
-      MandatoryOff("foutpos");
-      }
-  }
+  {}
 
   void DoExecute() ITK_OVERRIDE
   {
