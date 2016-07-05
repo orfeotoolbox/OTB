@@ -17,7 +17,7 @@
 namespace ossimplugins
 {
 
-class ossimTerraSarXSarSensorModel : public ossimSarSensorModel
+class OSSIM_PLUGINS_DLL ossimTerraSarXSarSensorModel : public ossimSarSensorModel
 {
 public:
 

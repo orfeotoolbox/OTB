@@ -11,6 +11,8 @@
 #ifndef ossimStringUtilities_h
 #define ossimStringUtilities_h
 
+#include "ossimPluginConstants.h"
+
 #include <algorithm>
 #include <iterator>
 #include <cassert>
@@ -722,8 +724,8 @@ template <typename T> inline T const& to_with_default(T const& v, T const& /* de
 // { return details::to_float<double>(v); }
 //@}
 
-int s_printf(char *str, std::size_t size, const char *format, ...);
-int vs_printf(char *str, std::size_t size, const char *format, std::va_list ap);
+OSSIM_PLUGINS_DLL int s_printf(char *str, std::size_t size, const char *format, ...);
+OSSIM_PLUGINS_DLL int vs_printf(char *str, std::size_t size, const char *format, std::va_list ap);
 
 template <std::size_t size>
 inline

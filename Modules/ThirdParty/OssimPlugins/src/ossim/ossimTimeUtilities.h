@@ -13,6 +13,7 @@
 
 #include "ossimStringUtilities.h"
 #include "ossimOperatorUtilities.h"
+#include "ossimPluginConstants.h"
 #include <cassert>
 #include <ostream>
 class ossimDate;
@@ -172,19 +173,19 @@ namespace ossimplugins { namespace time {
          using details::DayFrac::diff;
       };
 
-   ModifiedJulianDate toModifiedJulianDate(string_view const& utcTimeString);
+   OSSIM_PLUGINS_DLL ModifiedJulianDate toModifiedJulianDate(string_view const& utcTimeString);
    inline Duration microseconds(double us) {
       return Duration(us / (24L * 60 * 60 * 1000 * 1000));
    }
    inline Duration seconds(double us) {
       return Duration(us / (24L * 60 * 60));
    }
-   std::string to_simple_string(ModifiedJulianDate const& d);
-   std::string to_simple_string(Duration const& d);
+   OSSIM_PLUGINS_DLL std::string to_simple_string(ModifiedJulianDate const& d);
+   OSSIM_PLUGINS_DLL std::string to_simple_string(Duration const& d);
 
    namespace details {
       // strptime is not portable, hence this simplified emulation
-      ossimDate strptime(string_view const& format, string_view const& date);
+      OSSIM_PLUGINS_DLL ossimDate strptime(string_view const& format, string_view const& date);
    } // details namespace
 
 } } // ossimplugins namespace::time
