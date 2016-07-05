@@ -24,7 +24,7 @@ namespace otb
 {
 
 /** \class AssociativeSymmetricalSumImageFilter
- * \brief Implements an assymetric fusion of line detector image filter.
+ * \brief Implements an asymmetric fusion of line detector image filter.
  *
  * This class implements a fusion of the output images of
  * otb::LineRatioDetector and otb::LineCorrelationDetector

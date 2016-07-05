@@ -238,8 +238,8 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
     }
 
   // Compute ReachableOutputRegion
-  // InputImage buffered region corresponds to a region of the ouptut
-  // image. Computing it beforehand allows to save IsInsideBuffer
+  // InputImage buffered region corresponds to a region of the output
+  // image. Computing it beforehand allows saving IsInsideBuffer
   // calls in the interpolation loop
   
   // Compute the padding due to the interpolator

@@ -30,7 +30,7 @@ namespace Functor
  * \brief Functor to extract segmentation boundaries
  * 
  * Functor intended to work with 3x3 neighborhood and scalar label image
- * The generated boundary is 1-pixel wide, so it is not symetric. 
+ * The generated boundary is 1-pixel wide, so it is not symmetric. 
  * Output value is 1 on the boundaries and 0 in the background
  * 
  * \ingroup OTBLabelling
@@ -63,7 +63,7 @@ public:
  * \brief Filter to extract boundaries of a label image
  * 
  * Filter intended to work with a scalar label image.
- * The generated boundary is 1-pixel wide, so it is not symetric. 
+ * The generated boundary is 1-pixel wide, so it is not symmetric. 
  * Output value is 1 on the boundaries and 0 in the background
  * 
  * \ingroup OTBLabelling

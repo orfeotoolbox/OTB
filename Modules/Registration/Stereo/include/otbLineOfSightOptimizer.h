@@ -66,7 +66,7 @@ public:
 
   /** Compute the best intersection between N lines of sight.
    *  Starting points of every line of sight are stored in the point set 'pointA'
-   *  ending points are stored in 'pointB' (however, the computation is symetrical)*/
+   *  ending points are stored in 'pointB' (however, the computation is symmetrical)*/
   PointType Compute(PointSetPointerType pointA, PointSetPointerType pointB);
 
   /** Get the residues from last computation */

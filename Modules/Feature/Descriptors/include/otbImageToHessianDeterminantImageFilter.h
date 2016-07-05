@@ -51,7 +51,7 @@ public:
 
   /*
    *
-   * \param input : A symetric Hessian Matrix
+   * \param input : A symmetric Hessian Matrix
    * \return  Determinant of the Hessian Matrix
    */
   inline TOutput operator ()(const TInput& input)
