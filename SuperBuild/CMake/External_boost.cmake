@@ -4,10 +4,7 @@
 # support both libraries. See the related changeset in OTB trunk:
 # http://hg.orfeo-toolbox.org/OTB/r# ev/8da67e36c78d
 
-if(NOT __EXTERNAL_BOOST__)
-set(__EXTERNAL_BOOST__ 1)
-
-if(USE_SYSTEM_BOOST)
+INCLUDE_ONCE_MACRO(BOOST)
   # Required
   find_package ( Boost
     1.35.0
@@ -18,11 +15,8 @@ if(USE_SYSTEM_BOOST)
     COMPONENTS unit_test_framework date_time
     )
   
-  message(STATUS "  Using Boost system version")
-else()
-  SETUP_SUPERBUILD(PROJECT BOOST)
   
-  message(STATUS "  Using Boost superbuild version")
+  SETUP_SUPERBUILD(BOOST)
 
   option(SUPERBUILD_BOOST_HEADER_ONLY "Only use Boost headers" ON)
   mark_as_advanced(SUPERBUILD_BOOST_HEADER_ONLY)
@@ -35,11 +29,8 @@ else()
         URL_MD5 52dd00be775e689f55a987baebccc462
         BINARY_DIR ${BOOST_SB_BUILD_DIR}
         INSTALL_DIR ${SB_INSTALL_PREFIX}
-      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-        CMAKE_CACHE_ARGS
-        -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
-        -DCMAKE_BUILD_TYPE:STRING=Release
-        -DBUILD_SHARED_LIBS:BOOL=ON
+        DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
+        CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy 
         ${CMAKE_SOURCE_DIR}/patches/BOOST/CMakeLists.txt 
         ${BOOST_SB_SRC}
@@ -71,25 +62,14 @@ else()
       )
     endif()
     
-    message(STATUS "  Using Boost SuperBuild version")
     
-  else(MSVC)
+  elseif(MSVC10)
+    
     #TODO: find hash for archives properly
     set(BOOST_HEADERS_URL_HASH 1605dc6085cb2dc778ef5ab6c0e59083)
     set(BOOST_GRAPH_URL_HASH c246516ca84a3c79ae8a0b22fceb0344)
     set(BOOST_REGEX_URL_HASH a3bfc2dc9a3ebe3c050518ecb29d6f8b)
     set(BOOST_UTF_URL_HASH 75971963a74c76d32e01974a8e48be11)
-    
-    if(MSVC10)
-        set(BOOST_HEADERS_URL_HASH 1605dc6085cb2dc778ef5ab6c0e59083)
-        set(BOOST_GRAPH_URL_HASH c246516ca84a3c79ae8a0b22fceb0344)
-        set(BOOST_REGEX_URL_HASH a3bfc2dc9a3ebe3c050518ecb29d6f8b)
-        set(BOOST_UTF_URL_HASH 75971963a74c76d32e01974a8e48be11)
-    else(MSVC80)
- 
-    else(CMAKE_COMPILER_2005)
-   
-    endif()
 
     set(BOOST_HEADERS_URL "http://sourceforge.net/projects/boost/files/boost-binaries/1.50.0/boost_1_50_headers.zip/download")
     set(BOOST_GRAPH_URL "http://sourceforge.net/projects/boost/files/boost-binaries/1.50.0/libboost_graph-vc100-mt-1_50.zip/download")
@@ -129,14 +109,27 @@ else()
       BUILD_COMMAND ""
       INSTALL_COMMAND ""
     )
-
-    message(STATUS "  Using Boost SuperBuild version (prebuilt binaries)")
+  message(STATUS "  Using Boost SuperBuild version (prebuilt binaries)")
     
-  endif() #end else MSVC
+elseif(MSVC14)
+  if(SUPERBUILD_BOOST_HEADER_ONLY)
+    ExternalProject_Add(BOOST
+      PREFIX BOOST
+      URL "http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.bz2/download"
+      URL_MD5 65a840e1a0b13a558ff19eeb2c4f0cbe
+      BINARY_DIR ${BOOST_SB_BUILD_DIR}
+      INSTALL_DIR ${SB_INSTALL_PREFIX}
+      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
+      CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
+      PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_SOURCE_DIR}/patches/BOOST/CMakeLists.txt
+      ${BOOST_SB_SRC}
+      )
+  else()
+    message(FATAL_ERROR "not build yet")
+  endif()
+endif() #end else MSVC
   
-  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  set(_SB_Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)
+set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+set(_SB_Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)
   
-  
-endif()
-endif()

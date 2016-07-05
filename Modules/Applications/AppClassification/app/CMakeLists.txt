@@ -46,6 +46,12 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
+  NAME           TrainVectorClassifier
+  SOURCES        otbTrainVectorClassifier.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+
+otb_create_application(
   NAME           ComputeConfusionMatrix
   SOURCES        otbComputeConfusionMatrix.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
@@ -109,8 +115,13 @@ otb_create_application(
   NAME           PolygonClassStatistics
   SOURCES        otbPolygonClassStatistics.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-  
+
 otb_create_application(
   NAME           SampleSelection
   SOURCES        otbSampleSelection.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           SampleExtraction
+  SOURCES        otbSampleExtraction.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

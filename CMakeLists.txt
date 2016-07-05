@@ -364,6 +364,15 @@ endif()
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 
+# uninstall target
+configure_file(
+    "${CMAKE_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
+    "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+  COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
+
 #macro to put a fixed space between key, value  in summary
 macro(get_white_spaces var res)
   string(LENGTH "${var}" len)

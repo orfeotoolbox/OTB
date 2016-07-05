@@ -8,7 +8,7 @@ otb_test_application(NAME apTvClComputeOGRLayersFeaturesStatistics
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClComputeOGRLayersFeaturesStatistics.xml
                              ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml)
-                             
+
 #----------- SOMClassification TESTS ----------------
 otb_test_application(NAME apTvClSOMClassificationSmall
                      APP  SOMClassification
@@ -323,7 +323,7 @@ otb_test_application(NAME apTvClTrainOGRLayersClassifier
                              ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
                              ${TEMP}/apTvClModel.svm)
 
-set_tests_properties(apTvClTrainOGRLayersClassifier PROPERTIES DEPENDS apTvClComputeOGRLayersFeaturesStatistics) 
+set_tests_properties(apTvClTrainOGRLayersClassifier PROPERTIES DEPENDS apTvClComputeOGRLayersFeaturesStatistics)
 
 #----------- ComputeConfusionMatrix TESTS ----------------
 otb_test_application(NAME apTvComputeConfusionMatrixV
@@ -580,7 +580,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
                              ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
                              ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp)
 
-set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt) 
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt)
 
 otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication
                      APP  ComputePolylineFeatureFromImage
@@ -593,7 +593,7 @@ otb_test_application(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadE
                              ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
                              ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp)
 
-set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication) 
+set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication)
 endif()
 
 #----------- KMeansClassification TESTS ----------------
@@ -869,3 +869,27 @@ otb_test_application(NAME apTvClSampleSelection
                      VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClSampleSelectionOut.sqlite
                              ${TEMP}/apTvClSampleSelectionOut.sqlite)
+
+#----------- SampleExtraction TESTS -----------------------
+otb_test_application(NAME apTvClSampleExtraction
+                     APP SampleExtraction
+                     OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                             -vec ${INPUTDATA}/Classification/apTvClSampleSelectionOut.sqlite
+                             -field Class
+                             -out ${TEMP}/apTvClSampleExtractionOut.sqlite
+                     VALID   --compare-ogr ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClSampleExtractionOut.sqlite
+                             ${TEMP}/apTvClSampleExtractionOut.sqlite)
+
+#----------- TrainVectorClassifier TESTS ----------------
+otb_test_application(NAME apTvClTrainVectorClassifier
+                     APP  TrainVectorClassifier
+                     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+                             -feat value_0 value_1 value_2 value_3
+                             -cfield class
+                             -classifier rf
+                             -io.confmatout ${TEMP}/apTvClTrainVectorClassifierConfMat.txt
+                             -io.out ${TEMP}/apTvClTrainVectorClassifierModel.rf
+                     VALID   --compare-ascii ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorClassifierModel.rf
+                             ${TEMP}/apTvClTrainVectorClassifierModel.rf)

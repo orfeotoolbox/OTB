@@ -8,4 +8,7 @@ void RegisterTests()
   REGISTER_TEST(otbOGRDataToSamplePositionFilterPattern);
   REGISTER_TEST(otbOGRDataToClassStatisticsFilterNew);
   REGISTER_TEST(otbOGRDataToClassStatisticsFilter);
+  REGISTER_TEST(otbImageSampleExtractorFilterNew);
+  REGISTER_TEST(otbImageSampleExtractorFilter);
+  REGISTER_TEST(otbImageSampleExtractorFilterUpdate);
 }

@@ -123,6 +123,14 @@ public:
   }
   RealObjectType* GetMAEOutput();
   const RealObjectType* GetMAEOutput() const;
+  
+  /** Return the Number of Pixel which are different. */
+  RealType GetDiffCount() const
+  {
+    return this->GetDiffCountOutput()->Get();
+  }
+  RealObjectType* GetDiffCountOutput();
+  const RealObjectType* GetDiffCountOutput() const;
 
   itkGetMacro(PhysicalSpaceCheck,bool);
   itkSetMacro(PhysicalSpaceCheck,bool);
@@ -164,6 +172,7 @@ private:
   itk::Array<PixelType> m_ThreadMinRef;
   itk::Array<PixelType> m_ThreadMaxRef;
   itk::Array<long>      m_Count;
+  itk::Array<long>      m_DiffCount;
   bool                  m_PhysicalSpaceCheck;
 }; // end of class PersistentCompareImageFilter
 
@@ -277,6 +286,20 @@ public:
   const RealObjectType* GetMAEOutput() const
   {
     return this->GetFilter()->GetMAEOutput();
+  }
+  
+  /** Return the Number of Pixel different. */
+  RealType GetDiffCount() const
+  {
+    return this->GetFilter()->GetDiffCountOutput()->Get();
+  }
+  RealObjectType* GetDiffCountOutput()
+  {
+    return this->GetFilter()->GetDiffCountOutput();
+  }
+  const RealObjectType* GetDiffCountOutput() const
+  {
+    return this->GetFilter()->GetDiffCountOutput();
   }
 
   /** Set the PhysicalSpaceCheck flag */
