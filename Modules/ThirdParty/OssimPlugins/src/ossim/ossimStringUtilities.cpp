@@ -22,10 +22,12 @@ int ossimplugins::vs_printf(char * str, std::size_t size, const char * format, s
 {
 #if defined(HAVE_STD_SNPRINTF)
     const int res = std::vsnprintf(str, size, format, ap);
+    return res;
 #elif defined(HAVE_MSC_SNPRINTF)
     const int res = _vsnprintf(str, size, format, ap);
     // force 0x0 on the last possible character at worst
     str[size-1] = '\0';
+    return res;
 #else
 #   error "Don't know how to perform snprintf"
 #endif
