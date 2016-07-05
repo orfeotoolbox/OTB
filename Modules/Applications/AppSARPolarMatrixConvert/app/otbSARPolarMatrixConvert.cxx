@@ -193,7 +193,7 @@ private:
     "This application allows converting classical polarimetric matrices to each other.\n"
     "For instance, it is possible to get the coherency matrix from the Sinclar one, or the Mueller matrix from the coherency one.\n"
     "The filters used in this application never handle matrices, but images where each band is related to their elements.\n"
-    "As most of the time SAR polarimetry handles symetric/hermitian matrices, only the relevant elements are stored, so that the images representing them have a minimal number of bands.\n"
+    "As most of the time SAR polarimetry handles symmetric/hermitian matrices, only the relevant elements are stored, so that the images representing them have a minimal number of bands.\n"
     "For instance, the coherency matrix size is 3x3 in the monostatic case, and 4x4 in the bistatic case : it will thus be stored in a 6-band or a 10-band complex image (the diagonal and the upper elements of the matrix).\n"
     "\n"
     "The Sinclair matrix is a special case : it is always represented as 3 or 4 one-band complex images (for mono- or bistatic case).\n"
