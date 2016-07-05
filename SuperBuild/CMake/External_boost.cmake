@@ -5,23 +5,13 @@
 # http://hg.orfeo-toolbox.org/OTB/r# ev/8da67e36c78d
 
 INCLUDE_ONCE_MACRO(BOOST)
-  # Required
-  find_package ( Boost
-    1.35.0
-    )
-  # Optional components
-  find_package ( Boost
-    1.35.0
-    COMPONENTS unit_test_framework date_time
-    )
   
-  
-  SETUP_SUPERBUILD(BOOST)
+SETUP_SUPERBUILD(BOOST)
 
-  option(SUPERBUILD_BOOST_HEADER_ONLY "Only use Boost headers" ON)
-  mark_as_advanced(SUPERBUILD_BOOST_HEADER_ONLY)
+option(SUPERBUILD_BOOST_HEADER_ONLY "Only use Boost headers" ON)
+mark_as_advanced(SUPERBUILD_BOOST_HEADER_ONLY)
   
-  if(UNIX)
+if(UNIX)
     if(SUPERBUILD_BOOST_HEADER_ONLY)
       ExternalProject_Add(BOOST
         PREFIX BOOST
