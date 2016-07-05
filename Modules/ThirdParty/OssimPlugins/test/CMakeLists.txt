@@ -95,10 +95,12 @@ otb_module_target_label(ossimSarSensorModelTest)
 # S1
 add_executable(ossimSentinel1ModelTest ossimSentinel1ModelTest.cpp)
 target_link_libraries(ossimSentinel1ModelTest otbossimplugins)
+otb_module_target_label(ossimSentinel1ModelTest)
 
 # TSX (old)
 add_executable(ossimTerraSarXSarSensorModelTest ossimTerraSarXSarSensorModelTest.cpp)
 target_link_libraries(ossimTerraSarXSarSensorModelTest otbossimplugins)
+otb_module_target_label(ossimTerraSarXSarSensorModelTest)
 
 #Use ctest
 # enable_testing()
