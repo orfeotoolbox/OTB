@@ -357,7 +357,6 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   // qDebug() << this << "::PaintGL(" << c << ")";
-  // qDebug() << "{";
 
   // qDebug() << m_GlView.GetPointer();
 
@@ -411,8 +410,6 @@ ImageViewRenderer
   // qDebug() << m_GlView.GetPointer() << "::AfterRendering()";
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-
-  // qDebug() << "}\n";
 }
 
 /*****************************************************************************/
@@ -1173,6 +1170,11 @@ ImageViewRenderer
 	p_screen[ 0 ] = screen.x();
 	p_screen[ 1 ] =
 	  m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
+
+	// qDebug()
+	//   << "otb::StandardShader::SetCenter("
+	//   << p_screen[ 0 ] << "," << p_screen[ 1 ]
+	//   << ")";
 
 	shader->SetCenter( p_screen );
 

@@ -727,6 +727,8 @@ ImageViewWidget
 {
   assert( event!=NULL );
 
+  // qDebug() << this << "::mouseMove(" << event << ")";
+
   // Superclass default behaviour.
   QGLWidget::mouseMoveEvent( event );
 
@@ -736,7 +738,7 @@ ImageViewWidget
   //
   // Get layer-stack.
   StackedLayerModel * stackedLayerModel = GetLayerStack();
-  
+
   // assert( stackedLayerModel!=NULL );
   if( stackedLayerModel==NULL )
     return;
@@ -786,6 +788,24 @@ ImageViewWidget
 	DefaultImageType::PixelType()
       );
     }
+  else
+    {
+    // Transform coordinates from widget space to viewport space.
+    assert( m_Manipulator!=NULL );
+
+    PointType ptView;
+
+    m_Manipulator->Transform( ptView, event->pos() );
+
+    //
+    // Pick pixel of point in viewport space and return point in image
+    // space.
+    assert( m_Renderer!=NULL );
+
+    const PixelInfo::Vector & pixels = stackedLayerModel->PixelInfos();
+
+    m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
+    }
 
   //
   // Update view depending on shader status special behaviour.
@@ -828,7 +848,6 @@ ImageViewWidget
 	  updateGL();
 
 	  break;
-
 	  }
 #if USE_XP_REGION_OPTIM
 	}
