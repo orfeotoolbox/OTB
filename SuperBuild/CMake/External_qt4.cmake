@@ -55,6 +55,36 @@ else()
 
 endif()
 
+
+#Remove left over or previous installation from install prefix.
+#Existing files in install prefix was disturbing a second installation.
+#even afer the QT4 directory is removed from build
+
+add_custom_target(QT4-uninstall
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtCore"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtDBus"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtGui"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtNetwork"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtOpenGL"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtSql"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtSvg"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtTest"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtXml"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/mkspecs"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/plugins"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/translations"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/lib/libQt*"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/qmake"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/lrelease"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/moc"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/rcc"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/uic"
+  WORKING_DIRECTORY "${SB_INSTALL_PREFIX}"
+  )
+
+#adding it to dependencies will remove the files when configure QWT
+#list(APPEND QT4_DEPENDENCIES QT4-uninstall)
+
   ExternalProject_Add(QT4
     PREFIX QT4
     URL "http://download.qt.io/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
@@ -68,28 +98,18 @@ endif()
 
 
  if(MSVC)
- #Q: why this copy here?.
- #RK: Because QT4 sucks with qmake -query.
-  ExternalProject_Add_Step(QT4 copy_specs
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_directory
-    ${QT4_SB_SRC}/mkspecs ${SB_INSTALL_PREFIX}/mkspecs
-    DEPENDEES patch update
-    DEPENDERS configure )
-
-  ExternalProject_Add_Step(QT4 _jpeg_lib_name
-    COMMAND
-    ${CMAKE_COMMAND} -E copy
-    ${CMAKE_SOURCE_DIR}/patches/QT4/qjpeghandler.pri
-    ${QT4_SB_SRC}/src/gui/image/
-    DEPENDEES patch update
-    DEPENDERS configure )
-
+   #Q: why this copy here?.
+   #RK: Because QT4 sucks with qmake -query.
+   ExternalProject_Add_Step(QT4 patches
+     COMMAND ${CMAKE_COMMAND} -E copy_directory
+     ${QT4_SB_SRC}/mkspecs ${SB_INSTALL_PREFIX}/mkspecs
+     COMMAND ${CMAKE_COMMAND} -E copy
+     ${CMAKE_SOURCE_DIR}/patches/QT4/qjpeghandler.pri
+     ${QT4_SB_SRC}/src/gui/image/
+     DEPENDEES patch update
+     DEPENDERS configure )
 endif()
 
-
-
-  SUPERBUILD_PATCH_SOURCE(QT4)
-
+SUPERBUILD_PATCH_SOURCE(QT4)
 
 set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)
