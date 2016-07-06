@@ -831,16 +831,25 @@ ImageViewWidget
 
 	m_Renderer->GetLayerExtent( it->first, origin, extent );
 
-	if( ( origin[ 0 ]<=in[ 0 ] && in[ 0 ]<=extent[ 0 ] &&
-	      origin[ 1 ]<=in[ 1 ] && in[ 1 ]<=extent[ 1 ] ) |
+	if( ( origin[ 0 ]<=ptView[ 0 ] && ptView[ 0 ]<=extent[ 0 ] &&
+	      origin[ 1 ]<=ptView[ 1 ] && ptView[ 1 ]<=extent[ 1 ] ) ||
 	    ( origin[ 0 ]<=m_Position[ 0 ] && m_Position[ 0 ]<=extent[ 0 ] &&
 	      origin[ 1 ]<=m_Position[ 1 ] && m_Position[ 1 ]<=extent[ 1 ] ) )
 	  {
 	  qDebug() << FromStdString( it->first );
 
-	  qDebug()
-	    << "o:" << origin[ 0 ] << "," << origin[ 1 ] << ";"
-	    << "e:" << extent[ 0 ] << "," << extent[ 1 ];
+	  // qDebug()
+	  //   << "x:" << origin[ 0 ] << ptView[ 0 ] << m_Position[ 0 ] << extent[ 0 ];
+
+	  // qDebug()
+	  //   << "y:" << origin[ 1 ] << ptView[ 1 ] << m_Position[ 1 ] << extent[ 1 ];
+
+	  // qDebug()
+	  //   << "x:" << ptView[ 0 ] << m_Position[ 0 ];
+
+	  // qDebug()
+	  //   << "y:" << ptView[ 1 ] << m_Position[ 1 ];
+
 #endif // USE_XP_REGION_OPTIM
 
 	  // qDebug() << "updateGL(" << in[ 0 ] << "," << in[ 1 ] << ")";
@@ -854,11 +863,11 @@ ImageViewWidget
 #endif // USE_XP_REGION_OPTIM
       }
     }
-  }
 
 #if USE_XP_REGION_OPTIM
-  m_Position = in;
+  m_Position = ptView;
 #endif // USE_XP_REGION_OPTION
+  }
 }
 
 /*******************************************************************************/
