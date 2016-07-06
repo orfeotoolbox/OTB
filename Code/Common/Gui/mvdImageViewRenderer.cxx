@@ -1106,6 +1106,9 @@ ImageViewRenderer
 
   assert( !m_GlView.IsNull() );
 
+  if( !m_EffectsEnabled )
+    return;
+
   for( PixelInfo::Vector::const_iterator it( pixels.begin() );
        it != pixels.end();
        ++ it )
