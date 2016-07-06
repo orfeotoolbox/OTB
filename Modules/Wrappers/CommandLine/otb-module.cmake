@@ -7,6 +7,9 @@ otb_module(OTBCommandLine
     OTBTinyXML
     OTBApplicationEngine
 
+    OPTIONAL_DEPENDS
+    OTBMPIConfig
+    
   TEST_DEPENDS
     OTBTestKernel
     OTBAppImageUtils

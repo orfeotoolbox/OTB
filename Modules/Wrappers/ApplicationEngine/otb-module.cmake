@@ -17,6 +17,10 @@ otb_module(OTBApplicationEngine
     OTBOSSIMAdapters
     OTBITK
 
+    OPTIONAL_DEPENDS
+    OTBMPIVrtWriter
+    OTBMPITiffWriter
+    
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
