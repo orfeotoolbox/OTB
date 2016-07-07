@@ -6,6 +6,6 @@ if (BUILD_TESTING)
   if (NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
     message(STATUS "Boost unit_test_framework not found. Hence otbOGRTests will be skipped")
   else()
-    message(STATUS "Found Boost components: ${OTB_Boost_COMPONENTS}")
+    message(STATUS "Found Boost components: unit_test_framework")
   endif()
 endif() #BUILD_TESTING
