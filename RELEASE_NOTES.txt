@@ -2,6 +2,18 @@
  Monteverdi Release Note
 =========================
 
+Monteverdi 3.4.0 - Changes since version 3.2.0 (July ??th, 2016)
+=================================================================
+
+* Bug fixes:
+  * MANTIS-1235: Monteverdi is not able to open S1 product (SLC SM product)
+  * MANTIS-1231: Monteverdi: shader effect does not follow the mouse cursor when moving
+  * MANTIS-1205: Gamma slider effect inverted between full and quicklook view
+  * MANTIS-1204: Zoom to full extent and zoom to layer extent does not preserve aspect ratio
+
+* RFC:
+  * Request for Changes-44: Improve OTB-applications display & search in Monteverd & Mapla 
+
 Monteverdi 3.2.0 - Changes since version 3.0.0 (March 30th, 2016)
 =================================================================
 
