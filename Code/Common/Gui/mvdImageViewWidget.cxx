@@ -727,19 +727,94 @@ ImageViewWidget
 {
   assert( event!=NULL );
 
+  // qDebug() << this << "::mouseMove(" << event << ")";
+
   // Superclass default behaviour.
   QGLWidget::mouseMoveEvent( event );
-
-  // Delegate behaviour.
-  m_Manipulator->MouseMoveEvent( event );
 
   //
   // Get layer-stack.
   StackedLayerModel * stackedLayerModel = GetLayerStack();
-  
-  // assert( stackedLayerModel!=NULL );
-  if( stackedLayerModel==NULL )
-    return;
+  assert( stackedLayerModel!=NULL );
+
+  //
+  // Update view depending on shader status special behaviour.
+  //
+  bool isAnyEffectActive = false;
+
+  if( m_Renderer->IsEffectsEnabled() )
+    {
+    for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
+	 it!=stackedLayerModel->End();
+	 ++ it )
+      {
+      assert( it->second!=NULL );
+
+      if( it->second->inherits( AbstractImageModel::staticMetaObject.className() ) )
+	{
+	VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
+	assert( imageModel!=NULL );
+
+	if( imageModel->GetSettings().GetEffect()!=EFFECT_NONE &&
+	    imageModel->GetSettings().GetEffect()!=EFFECT_NORMAL )
+	  {
+#if USE_XP_REGION_OPTIM
+	  PointType origin;
+	  PointType extent;
+
+	  m_Renderer->GetLayerExtent( it->first, origin, extent );
+
+	  if( ( origin[ 0 ]<=ptView[ 0 ] && ptView[ 0 ]<=extent[ 0 ] &&
+		origin[ 1 ]<=ptView[ 1 ] && ptView[ 1 ]<=extent[ 1 ] ) ||
+	      ( origin[ 0 ]<=m_Position[ 0 ] && m_Position[ 0 ]<=extent[ 0 ] &&
+		origin[ 1 ]<=m_Position[ 1 ] && m_Position[ 1 ]<=extent[ 1 ] ) )
+	    {
+	    qDebug() << FromStdString( it->first );
+
+	    // qDebug()
+	    //   << "x:" << origin[ 0 ] << ptView[ 0 ] << m_Position[ 0 ] << extent[ 0 ];
+
+	    // qDebug()
+	    //   << "y:" << origin[ 1 ] << ptView[ 1 ] << m_Position[ 1 ] << extent[ 1 ];
+
+	    // qDebug()
+	    //   << "x:" << ptView[ 0 ] << m_Position[ 0 ];
+
+	    // qDebug()
+	    //   << "y:" << ptView[ 1 ] << m_Position[ 1 ];
+
+#endif // USE_XP_REGION_OPTIM
+
+	    // qDebug() << "updateGL(" << in[ 0 ] << "," << in[ 1 ] << ")";
+
+	    isAnyEffectActive = true;
+
+	    break;
+	    }
+#if USE_XP_REGION_OPTIM
+	  }
+#endif // USE_XP_REGION_OPTIM
+	}
+      }
+
+#if USE_XP_REGION_OPTIM
+    m_Position = ptView;
+#endif // USE_XP_REGION_OPTION
+    }
+
+  // Delegate behaviour.
+  if( isAnyEffectActive )
+    {
+    bool bypass = m_Renderer->SetBypassRenderingEnabled( true );
+
+    m_Manipulator->MouseMoveEvent( event );
+
+    m_Renderer->SetBypassRenderingEnabled( bypass );
+    }
+
+  else
+    m_Manipulator->MouseMoveEvent( event );
+
 
   //
   // Pixel-picking special behaviour.
@@ -786,60 +861,27 @@ ImageViewWidget
 	DefaultImageType::PixelType()
       );
     }
-
-  //
-  // Update view depending on shader status special behaviour.
-  //
-  {
-  for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
-       it!=stackedLayerModel->End();
-       ++ it )
+  else if( isAnyEffectActive )
     {
-    assert( it->second!=NULL );
+    // Transform coordinates from widget space to viewport space.
+    assert( m_Manipulator!=NULL );
 
-    if( it->second->inherits( AbstractImageModel::staticMetaObject.className() ) )
-      {
-      VectorImageModel * imageModel = qobject_cast< VectorImageModel * >( it->second );
-      assert( imageModel!=NULL );
+    PointType ptView;
 
-      if( imageModel->GetSettings().GetEffect()!=EFFECT_NONE &&
-	  imageModel->GetSettings().GetEffect()!=EFFECT_NORMAL )
-	{
-#if USE_XP_REGION_OPTIM
-	PointType origin;
-	PointType extent;
+    m_Manipulator->Transform( ptView, event->pos() );
 
-	m_Renderer->GetLayerExtent( it->first, origin, extent );
+    //
+    // Pick pixel of point in viewport space and return point in image
+    // space.
+    assert( m_Renderer!=NULL );
 
-	if( ( origin[ 0 ]<=in[ 0 ] && in[ 0 ]<=extent[ 0 ] &&
-	      origin[ 1 ]<=in[ 1 ] && in[ 1 ]<=extent[ 1 ] ) |
-	    ( origin[ 0 ]<=m_Position[ 0 ] && m_Position[ 0 ]<=extent[ 0 ] &&
-	      origin[ 1 ]<=m_Position[ 1 ] && m_Position[ 1 ]<=extent[ 1 ] ) )
-	  {
-	  qDebug() << FromStdString( it->first );
+    const PixelInfo::Vector & pixels = stackedLayerModel->PixelInfos();
 
-	  qDebug()
-	    << "o:" << origin[ 0 ] << "," << origin[ 1 ] << ";"
-	    << "e:" << extent[ 0 ] << "," << extent[ 1 ];
-#endif // USE_XP_REGION_OPTIM
-
-	  // qDebug() << "updateGL(" << in[ 0 ] << "," << in[ 1 ] << ")";
-
-	  updateGL();
-
-	  break;
-
-	  }
-#if USE_XP_REGION_OPTIM
-	}
-#endif // USE_XP_REGION_OPTIM
-      }
+    m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
     }
-  }
 
-#if USE_XP_REGION_OPTIM
-  m_Position = in;
-#endif // USE_XP_REGION_OPTION
+  if( isAnyEffectActive )
+    updateGL();
 }
 
 /*******************************************************************************/
