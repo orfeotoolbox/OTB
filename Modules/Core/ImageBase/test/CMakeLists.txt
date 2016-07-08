@@ -788,7 +788,7 @@ otb_add_test(NAME  ioTvMultiMonoChannelROI_ENVI2PNG COMMAND otbImageBaseTestDriv
 otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
                              ${TEMP}/ioTvMultiResolutionReading0.txt
-  --ignore-lines-with 1 SubDatasetIndex
+  --ignore-lines-with 6 VectorImage Source PipelineMTime ImportImageContainer Pointer CacheSizeInBytes
       otbVectorImageTest
       ${INPUTDATA}/bretagne.j2k?&resol=0
       ${TEMP}/ioTvMultiResolutionReading0.txt
@@ -797,7 +797,7 @@ otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
 otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
                              ${TEMP}/ioTvMultiResolutionReading3.txt
-  --ignore-lines-with 1 SubDatasetIndex
+  --ignore-lines-with 6 VectorImage Source PipelineMTime ImportImageContainer Pointer CacheSizeInBytes
       otbVectorImageTest
       ${INPUTDATA}/bretagne.j2k?&resol=3
       ${TEMP}/ioTvMultiResolutionReading3.txt
