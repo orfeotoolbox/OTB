@@ -30,7 +30,14 @@ template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
 ::LearningApplicationBase() : m_RegressionFlag(false)
 {
-} 
+}
+
+template <class TInputValue, class TOutputValue>
+LearningApplicationBase<TInputValue,TOutputValue>
+::~LearningApplicationBase()
+{
+  ModelFactoryType::CleanFactories();
+}
 
 template <class TInputValue, class TOutputValue>
 void

@@ -135,6 +135,8 @@ public:
 protected:
   LearningApplicationBase();
 
+  ~LearningApplicationBase() ITK_OVERRIDE;
+
   /** Generic method to train and save the machine learning model. This method
    * uses specific train methods depending on the chosen model.*/
   void Train(typename ListSampleType::Pointer trainingListSample,
