@@ -68,6 +68,20 @@ include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
 
+repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
+
+#-----------------------------------------------------------------------------
+# Configure the default OTB_DATA_ROOT for the location of OTB Data.
+find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
+)
+mark_as_advanced(OTB_DATA_ROOT)
+
+if(OTB_DATA_ROOT)
+  repository_status(${OTB_DATA_ROOT} OTB_DATA_GIT_STATUS_MESSAGE)
+endif()
+
 set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
@@ -203,14 +217,6 @@ option(BUILD_EXAMPLES "Build the Examples directory." OFF)
 
 #----------------------------------------------------------------------------
 set(OTB_TEST_OUTPUT_DIR "${OTB_BINARY_DIR}/Testing/Temporary")
-
-#-----------------------------------------------------------------------------
-# Configure the default OTB_DATA_ROOT for the location of OTB Data.
-find_path(OTB_DATA_ROOT
-  NAMES README-OTB-Data
-  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
-)
-mark_as_advanced(OTB_DATA_ROOT)
 
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
 mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
@@ -376,7 +382,7 @@ add_custom_target(uninstall
 #macro to put a fixed space between key, value  in summary
 macro(get_white_spaces var res)
   string(LENGTH "${var}" len)
-  math(EXPR required_spaces "22 - ${len}")
+  math(EXPR required_spaces "23 - ${len}")
   set(${res})
   foreach(loop_var RANGE ${required_spaces})
     set(${res} "${${res}} ")
@@ -385,8 +391,10 @@ endmacro()
 
 message("\n======================= Begin of OTB cmake summary =======================\n")
 
-message("git log -1 --oneline     = [${OTB_GIT_LAST_COMMIT}]")
-message("git symbolic-ref -q HEAD = ${OTB_GIT_BRANCH}")
+message( ${OTB_GIT_STATUS_MESSAGE})
+if(OTB_DATA_GIT_STATUS_MESSAGE)
+  message( ${OTB_DATA_GIT_STATUS_MESSAGE})
+endif()
 
 set(option_list ${OTB_MODULE_ACTIVATION_OPTION_LIST})
 list(SORT option_list)
@@ -406,6 +414,7 @@ foreach(otb_option
     ${option_list}
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA
+    OTB_DATA_ROOT
     )
     get_white_spaces("${otb_option}" spaces)
   message("${otb_option} ${spaces} = ${${otb_option}}")
