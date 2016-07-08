@@ -11,25 +11,44 @@ endif()
 
 
 if(MSVC)
-if(NOT BUILD_SHARED_LIBS)
-  message(FATAL_ERROR "static build or curl not supported")
+  if(NOT BUILD_SHARED_LIBS)
+    message(FATAL_ERROR "static build or curl not supported")
+    return()
 endif()
 
-  ExternalProject_Add(CURL
-    PREFIX CURL
-    URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
-    URL_MD5 58943642ea0ed050ab0431ea1caf3a6f
-    SOURCE_DIR ${CURL_SB_SRC}
-    BINARY_DIR ${CURL_SB_BUILD_DIR}/winbuild
-    INSTALL_DIR ${SB_INSTALL_PREFIX}
-    DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    DEPENDS ${CURL_DEPENDENCIES}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CURL_SB_SRC} ${CURL_SB_BUILD_DIR}
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND nmake /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${SB_INSTALL_PREFIX}
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CURL_SB_BUILD_DIR}/builds/libcurl-vc-install/ ${SB_INSTALL_PREFIX}
-    )
+if(NOT DEFINED ENV{PROCESSOR_ARCHITECTURE})
+  message(FATAL_ERROR "PROCESSOR_ARCHITECTURE env variable is not defined")
+  return()
+endif()
+
+if("$ENV{PROCESSOR_ARCHITECTURE}" MATCHES "AMD64" )
+  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
+else()
+  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
+endif()
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+  set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-release")
+else()
+  set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-debug")
+endif()
+
+set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-dll-zlib-dll-ipv6-sspi-winssl")
+
+ExternalProject_Add(CURL
+  PREFIX CURL
+  URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
+  URL_MD5 58943642ea0ed050ab0431ea1caf3a6f
+  SOURCE_DIR ${CURL_SB_SRC}
+  BINARY_DIR ${CURL_SB_SRC}/winbuild
+  INSTALL_DIR ${SB_INSTALL_PREFIX}
+  DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
+  DEPENDS ${CURL_DEPENDENCIES}
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND nmake /f ${CURL_SB_SRC}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${SB_INSTALL_PREFIX}
+  INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory
+  ${CURL_SB_SRC}/builds/${CURL_INSTALL_DIR_PREFIX}/ ${SB_INSTALL_PREFIX}
+  )
 
 else(UNIX)
   ExternalProject_Add(CURL
@@ -52,7 +71,5 @@ else(UNIX)
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 endif()
-
-SUPERBUILD_PATCH_SOURCE(CURL)
 
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(CURL TRUE)
