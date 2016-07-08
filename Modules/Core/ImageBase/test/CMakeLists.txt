@@ -817,12 +817,14 @@ otb_add_test(NAME ioTvOtbVectorImageTestFORMOSAT2 COMMAND otbImageBaseTestDriver
         LARGEINPUT{/FORMOSAT/Sudouest_20071013_MS_fmsat/}
         ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
 
+if(GDAL_HAS_HDF5)
 otb_add_test(NAME ioTvOtbVectorImageTestCOSMOSKYMED COMMAND otbImageBaseTestDriver
    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestCOSMOSKYMED.txt
                      ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt
         otbVectorImageLegacyTest
         LARGEINPUT{/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
         ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
+endif()
 
 otb_add_test(NAME ioTvOtbVectorImageTestRadarsat COMMAND otbImageBaseTestDriver
    --compare-ascii ${EPSILON_3}
