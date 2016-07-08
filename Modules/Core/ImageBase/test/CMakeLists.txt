@@ -67,10 +67,6 @@ otb_add_test(NAME bfTvItkImagePCAShapeModelEstimatorTest COMMAND otbImageBaseTes
   )
 set_property(TEST bfTvItkImagePCAShapeModelEstimatorTest PROPERTY DEPENDS bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator)
 
-
-
-
-
 otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvFunctionToImageFilterTest.tif
@@ -181,6 +177,7 @@ if(GDAL_HAS_HDF4)
     ${TEMP}/ioTvMultiDatasetReading1.txt
     )
 endif()
+
 otb_add_test(NAME coTvExtractROITestMetaData_TIFF COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/coTvExtractROITestMetaData1.txt
@@ -259,12 +256,9 @@ otb_add_test(NAME bfTuFunctionToImageFilterNew COMMAND otbImageBaseTestDriver
   otbFunctionToImageFilterNew
   )
 
-
-
 otb_add_test(NAME coTuVectorImageToASImageAdaptorNew COMMAND otbImageBaseTestDriver
   otbVectorImageToASImageAdaptorNew
   )
-
 
 otb_add_test(NAME bfTvImageAndVectorImageOperationFilterTest COMMAND otbImageBaseTestDriver
   --compare-n-images ${NOTOL} 4
@@ -296,16 +290,11 @@ otb_add_test(NAME coTvImageOfVectorsToMonoChannelExtractROI COMMAND otbImageBase
   ${TEMP}/coImageOfVectorsToMonoChannelExtractROI.png
   )
 
-
 otb_add_test(NAME coTuImageOfVectorsToMonoChannelExtractROINew COMMAND otbImageBaseTestDriver
   otbImageOfVectorsToMonoChannelExtractROINew
   )
-
-
-
 otb_add_test(NAME coTuExtractROINew COMMAND otbImageBaseTestDriver
   otbExtractROINew)
-
 
 otb_add_test(NAME coTvExtractROI_RGB COMMAND otbImageBaseTestDriver
   --compare-image ${NOTOL}   ${BASELINE}/coExtractROI_RGB_300_10_200_50.png
@@ -327,7 +316,6 @@ otb_add_test(NAME coTvExtractROI_QB COMMAND otbImageBaseTestDriver
 
 otb_add_test(NAME bfTvComplexToIntensityFilterTest COMMAND otbImageBaseTestDriver
   otbComplexToIntensityFilterTest)
-
 
 otb_add_test(NAME coTuMultiToMonoROINew COMMAND otbImageBaseTestDriver
   otbMultiToMonoChannelExtractROINew)
@@ -367,7 +355,6 @@ otb_add_test(NAME feTuImageFunctionAdaptorNew COMMAND otbImageBaseTestDriver
   otbImageFunctionAdaptorNew
   )
 
-
 otb_add_test(NAME coTuMultiChannelROINew COMMAND otbImageBaseTestDriver
   otbMultiChannelExtractROINew)
 
@@ -394,24 +381,24 @@ if(OTB_DATA_USE_LARGEINPUT)
 
     # Read info from the input file
     #otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
-      #--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
-      #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-      #--ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
-      #otbVectorImageTest
-      #${current_file}?&resol=0
-      #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-      #)
+    #--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
+    #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+    #--ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
+    #otbVectorImageTest
+    #${current_file}?&resol=0
+    #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+    #)
 
     if(NOT PHR_TIFF_FILE)
       # Read info from the input file (res=5)
       #otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type}_res5 COMMAND otbImageBaseTestDriver
-        #--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
-        #${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-        #--ignore-lines-with 4 CacheSizeInBytes Driver Corner SubDatasetIndex
-        #otbVectorImageTest
-        #${current_file}?&resol=5
-        #${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
-        #)
+      #--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
+      #${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+      #--ignore-lines-with 4 CacheSizeInBytes Driver Corner SubDatasetIndex
+      #otbVectorImageTest
+      #${current_file}?&resol=5
+      #${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+      #)
       # Decode an area inside one tile
       otb_add_test(NAME ioTvReaderWriterJP22TIF_${current_type}_1 COMMAND otbImageBaseTestDriver
 	--compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_1.tif
@@ -452,8 +439,6 @@ if(OTB_DATA_USE_LARGEINPUT)
   endforeach()
 
 endif()
-
-
 
 # ---  SPOT4 (CAI)  ---
 otb_add_test(NAME  ioTvMultiChannelROI_SPOT42PNG COMMAND otbImageBaseTestDriver
@@ -658,105 +643,105 @@ endif()
 # Read an area inside one tile at resolution 0 (jpeg2000 conformance file with
 # specific tile size at different resolution).
 otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res0 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
-         otbMultiChannelExtractROI
-            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=0
-            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
-            )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=0
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
+  )
 
 # Read an area inside one tile at resolution 4 (jpeg2000 conformance file with
 # specific tile size at different resolution).
 otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res4 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
-         otbMultiChannelExtractROI
-            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=4
-            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
-            )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=4
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
+  )
 
 # Read an area inside one tile at resolution 0 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
 otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
-         otbMultiChannelExtractROI
-            ${INPUTDATA}/lena512color.jp2?&resol=0
-            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
-            -startX 150 -startY 75 -sizeX 100 -sizeY 50 )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/lena512color.jp2?&resol=0
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+  -startX 150 -startY 75 -sizeX 100 -sizeY 50 )
 
 # Read an area inside one tile at resolution 5 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
 otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res5 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res5.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
-         otbMultiChannelExtractROI
-            ${INPUTDATA}/lena512color.jp2?&resol=5
-            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
-            )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res5.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/lena512color.jp2?&resol=5
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
+  )
 
 
 # Read an area inside one tile at resolution 0
 otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res0_1 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
-         otbMultiChannelExtractROI
-            ${INPUTDATA}/bretagne.j2k?&resol=0
-            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
-            -startX 700 -startY 1000 -sizeX 50 -sizeY 40 )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/bretagne.j2k?&resol=0
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
+  -startX 700 -startY 1000 -sizeX 50 -sizeY 40 )
 
 # Read an area which need to decode 4 tiles at resolution 0
 otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res0_2 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
-         otbMultiChannelExtractROI
-            ${INPUTDATA}/bretagne.j2k?&resol=0
-            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
-            -startX 1260 -startY 950 -sizeX 40 -sizeY 20 )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/bretagne.j2k?&resol=0
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
+  -startX 1260 -startY 950 -sizeX 40 -sizeY 20 )
 
 # Read all the image with a resolution 3
 otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res3 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif
-         otbMultiChannelExtractROI
-            ${INPUTDATA}/bretagne.j2k?&resol=3
-            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/bretagne.j2k?&resol=3
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif )
 
 # Read area inside one tile at resolution 3
 otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res3_1 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
-         otbMultiChannelExtractROI
-           ${INPUTDATA}/bretagne.j2k?&resol=3
-           ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
-           -startX 90 -startY 70 -sizeX 20 -sizeY 30 )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/bretagne.j2k?&resol=3
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
+  -startX 90 -startY 70 -sizeX 20 -sizeY 30 )
 
 # Read an area which need to decode 4 tiles at resolution 3
 otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res3_2 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
-         otbMultiChannelExtractROI
-           ${INPUTDATA}/bretagne.j2k?&resol=3
-           ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
-           -startX 40 -startY 30 -sizeX 80 -sizeY 60 )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/bretagne.j2k?&resol=3
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
+  -startX 40 -startY 30 -sizeX 80 -sizeY 60 )
 
 # Read all the image with a resolution 5
 otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res5 COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5.tif
-                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif
-         otbMultiChannelExtractROI
-           ${INPUTDATA}/bretagne.j2k?&resol=5
-           ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif )
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif
+  otbMultiChannelExtractROI
+  ${INPUTDATA}/bretagne.j2k?&resol=5
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif )
 
 
 
 
 # ---  RADARSAT (GDAL)  ---
 otb_add_test(NAME  ioTvMultiMonoChannelROI_RADARSAT2ENVI COMMAND otbImageBaseTestDriver
-         otbMultiToMonoChannelExtractROI
-         -ushort LARGEINPUT{RADARSAT1/GOMA/SCENE01/}
-         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
-         -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
+  otbMultiToMonoChannelExtractROI
+  -ushort LARGEINPUT{RADARSAT1/GOMA/SCENE01/}
+  -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
+  -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
 # FIXME this test depends on an other test which requires largeinput. Need to circle the test with it(otb_data_use_large_input). It should not happen
 if(OTB_DATA_USE_LARGEINPUT)
@@ -775,61 +760,61 @@ endif()
 
 # ---  ENVI (GDAL) ---
 otb_add_test(NAME  ioTvMultiMonoChannelROI_ENVI2PNG COMMAND otbImageBaseTestDriver
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
-                     ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
-         otbMultiToMonoChannelExtractROI
-         ${INPUTDATA}/poupees_1canal.c1.hdr
-         ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
-         -startX 302 -startY 2 -sizeX 134 -sizeY 330
-         -channel 1)
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
+  ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
+  otbMultiToMonoChannelExtractROI
+  ${INPUTDATA}/poupees_1canal.c1.hdr
+  ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
+  -startX 302 -startY 2 -sizeX 134 -sizeY 330
+  -channel 1)
 
 # Tests to check if we can open JPEG2000 files specifying the resolution factor.
 # no access to data only PrintSelf() method.
 otb_add_test(NAME  ioTvMultiResolutionReading0 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
-                             ${TEMP}/ioTvMultiResolutionReading0.txt
+  ${TEMP}/ioTvMultiResolutionReading0.txt
   --ignore-lines-with 6 VectorImage Source PipelineMTime ImportImageContainer Pointer CacheSizeInBytes
-      otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k?&resol=0
-      ${TEMP}/ioTvMultiResolutionReading0.txt
-      )
+  otbVectorImageTest
+  ${INPUTDATA}/bretagne.j2k?&resol=0
+  ${TEMP}/ioTvMultiResolutionReading0.txt
+  )
 
 otb_add_test(NAME  ioTvMultiResolutionReading3 COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
-                             ${TEMP}/ioTvMultiResolutionReading3.txt
+  ${TEMP}/ioTvMultiResolutionReading3.txt
   --ignore-lines-with 6 VectorImage Source PipelineMTime ImportImageContainer Pointer CacheSizeInBytes
-      otbVectorImageTest
-      ${INPUTDATA}/bretagne.j2k?&resol=3
-      ${TEMP}/ioTvMultiResolutionReading3.txt
-      )
+  otbVectorImageTest
+  ${INPUTDATA}/bretagne.j2k?&resol=3
+  ${TEMP}/ioTvMultiResolutionReading3.txt
+  )
 
 otb_add_test(NAME ioTvOtbVectorImageTestSpot5 COMMAND otbImageBaseTestDriver
-   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
-                     ${TEMP}/ioOtbVectorImageTestSpot5.txt
-        otbVectorImageLegacyTest
-        LARGEINPUT{/SPOT5/TEHERAN/}
-        ${TEMP}/ioOtbVectorImageTestSpot5.txt)
+  --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
+  ${TEMP}/ioOtbVectorImageTestSpot5.txt
+  otbVectorImageLegacyTest
+  LARGEINPUT{/SPOT5/TEHERAN/}
+  ${TEMP}/ioOtbVectorImageTestSpot5.txt)
 
 otb_add_test(NAME ioTvOtbVectorImageTestFORMOSAT2 COMMAND otbImageBaseTestDriver
-   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
-                     ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt
-        otbVectorImageLegacyTest
-        LARGEINPUT{/FORMOSAT/Sudouest_20071013_MS_fmsat/}
-        ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
+  --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestFORMOSAT2.txt
+  ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt
+  otbVectorImageLegacyTest
+  LARGEINPUT{/FORMOSAT/Sudouest_20071013_MS_fmsat/}
+  ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
 
 if(GDAL_HAS_HDF5)
-otb_add_test(NAME ioTvOtbVectorImageTestCOSMOSKYMED COMMAND otbImageBaseTestDriver
-   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestCOSMOSKYMED.txt
-                     ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt
-        otbVectorImageLegacyTest
-        LARGEINPUT{/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
-        ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
+  otb_add_test(NAME ioTvOtbVectorImageTestCOSMOSKYMED COMMAND otbImageBaseTestDriver
+    --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestCOSMOSKYMED.txt
+    ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt
+    otbVectorImageLegacyTest
+    LARGEINPUT{/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
+    ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
 endif()
 
 otb_add_test(NAME ioTvOtbVectorImageTestRadarsat COMMAND otbImageBaseTestDriver
-   --compare-ascii ${EPSILON_3}
-   ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
-   ${TEMP}/ioOtbVectorImageTestRadarsat.txt
-   otbVectorImageLegacyTest
-   LARGEINPUT{/RADARSAT1/GOMA/SCENE01/}
-   ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
+  --compare-ascii ${EPSILON_3}
+  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
+  ${TEMP}/ioOtbVectorImageTestRadarsat.txt
+  otbVectorImageLegacyTest
+  LARGEINPUT{/RADARSAT1/GOMA/SCENE01/}
+  ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
