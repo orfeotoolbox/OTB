@@ -53,6 +53,8 @@ public:
   /** Create the appropriate MachineLearningModel depending on the particulars of the file. */
   static MachineLearningModelTypePointer CreateMachineLearningModel(const std::string& path, FileModeType mode);
 
+  static void CleanFactories();
+
 protected:
   MachineLearningModelFactory();
   ~MachineLearningModelFactory() ITK_OVERRIDE;
