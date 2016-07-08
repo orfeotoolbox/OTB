@@ -70,9 +70,9 @@ get_filename_component(OTB_SOURCE_DIR ${SUPERBUILD_SOURCE_DIR} PATH)
 
 
 if(MSVC)
-  find_program(ZIP_EXECUTABLE zip)
+  find_program(ZIP_EXECUTABLE 7z)
     if(NOT ZIP_EXECUTABLE)
-    message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
+    message(FATAL_ERROR "Cannot find 7z.exe. Please add it to your path")
   endif()
 endif()
 
