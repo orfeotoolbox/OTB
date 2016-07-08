@@ -203,6 +203,8 @@ function(func_install_xdk_files)
     else()
       file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*dll.*")
     endif()
+    func_lisp(LIB_FILES )
+
     install(FILES ${LIB_FILES} DESTINATION ${PKG_STAGE_DIR}/lib )
 
     file(GLOB ITK_EXTRA_DLL_FILES_1 "${DEPENDENCIES_INSTALL_DIR}/bin/libITK*.dll")

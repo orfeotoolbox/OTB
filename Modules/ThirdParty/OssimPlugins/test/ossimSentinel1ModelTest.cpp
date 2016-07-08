@@ -9,7 +9,6 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#define private public
 #include "ossimSentinel1Model.h"
 #include "ossimPluginProjectionFactory.h"
 #include <iostream>
@@ -68,14 +67,7 @@ int main(int argc, char * argv[])
 
       if (verbose)
       {
-         std::map<std::string, std::string> const& kwl = sensor->theProductKwl.getMap();
-         for (std::map<std::string, std::string>::const_iterator b = kwl.begin(), e = kwl.end()
-               ; b != e
-               ; ++b
-             )
-         {
-            std::clog << "kwl["<<b->first<<"] -> " << b->second << "\n";
-         }
+         sensor->print(std::clog);
       }
 
       ossimKeywordlist kwl;

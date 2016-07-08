@@ -810,7 +810,7 @@ namespace ossimplugins
          // Appart from TopSAR products, there won't be any burst
          //records, so this warning is unnecessary
          //ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
-         add(theProductKwl, BURST_NUMBER_KEY,                       "1");
+         add(theProductKwl, BURST_NUMBER_KEY,                       ossimString("1"));
          BurstRecordType burstRecord;
          burstRecord.startLine        = add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
          burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getTimeFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
