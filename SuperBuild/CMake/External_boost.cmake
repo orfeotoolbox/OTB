@@ -10,8 +10,8 @@ if(MSVC)
   set(BOOST_URL "http://download.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2")
   set(BOOST_URL_MD5 "65a840e1a0b13a558ff19eeb2c4f0cbe")
 else()
-  set(BOOST_URL "http://download.sourceforge.net/project/boost/boost/1.50.0/boost_1_50_0.tar.bz2")
-  set(BOOST_URL_MD5 "52dd00be775e689f55a987baebccc462")
+  set(BOOST_URL "http://download.sourceforge.net/project/boost/boost/1.57.0/boost_1_57_0.tar.bz2")
+  set(BOOST_URL_MD5 "1be49befbdd9a5ce9def2983ba3e7b76")
 endif()
 
 ExternalProject_Add(BOOST
