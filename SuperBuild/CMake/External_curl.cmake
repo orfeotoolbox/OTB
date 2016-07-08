@@ -11,21 +11,8 @@ endif()
 
 
 if(MSVC)
-
 if(NOT BUILD_SHARED_LIBS)
   message(FATAL_ERROR "static build or curl not supported")
-endif()
-
-if("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "amd64" OR
-    "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "AMD64" )
-  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
-else()
-  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
-endif()
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-  set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-release")
-else()
-  set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-debug")
 endif()
 
   ExternalProject_Add(CURL
@@ -41,7 +28,7 @@ endif()
     CONFIGURE_COMMAND ""
     BUILD_COMMAND nmake /f ${CURL_SB_BUILD_DIR}/winbuild/Makefile.vc mode=dll WITH_ZLIB=dll WITH_DEVEL=${SB_INSTALL_PREFIX}
     INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CURL_SB_BUILD_DIR}/builds/${CURL_INSTALL_DIR_PREFIX}-dll-zlib-dll-ipv6-sspi-winssl/ ${SB_INSTALL_PREFIX}
+    ${CURL_SB_BUILD_DIR}/builds/libcurl-vc-install/ ${SB_INSTALL_PREFIX}
     )
 
 else(UNIX)
