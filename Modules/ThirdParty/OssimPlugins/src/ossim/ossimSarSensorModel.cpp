@@ -1099,7 +1099,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::saveState(ossimKeywordlist& kwl, const char* prefix) const
    {
-      SCOPED_LOG(traceDebug, "ossimplugins::ossimSarSensorModel::loadState");
+      SCOPED_LOG(traceDebug, "ossimplugins::ossimSarSensorModel::saveState");
 
       add(kwl, HEADER_PREFIX, "version", k_version);
       return ossimSensorModel::saveState(kwl, prefix);
