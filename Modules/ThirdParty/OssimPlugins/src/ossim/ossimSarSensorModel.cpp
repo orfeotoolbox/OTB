@@ -30,7 +30,7 @@ using ossimplugins::time::seconds;
 #endif
 
 namespace {// Anonymous namespace
-   const bool         k_verbose = false; // global verbose constant; TODO: use an option
+   const bool         k_verbose = true; // global verbose constant; TODO: use an option
    const unsigned int k_version = 2;
 
    // Sometimes, we don't need to compare the actual distance, its square value is
@@ -84,7 +84,7 @@ namespace {// Anonymous namespace
    ossimTrace traceDebug ("ossimSarSensorModel:debug");
 
    typedef char const* const* strings_iterator;
-   static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC" };
+  static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "SSC","GRD", "MGD", "GEC", "EEC" };
 }// Anonymous namespace
 
 namespace ossimplugins

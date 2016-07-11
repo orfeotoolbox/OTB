@@ -50,7 +50,7 @@ public:
    : private equality_comparable<ProductType>
    , private less_than_comparable<ProductType>
    {
-      enum Type { SLC, GRD, MGD, GEC, EEC, MAX__, UNDEFINED__, FIRST__=0 };
+     enum Type { SLC, SSC, GRD, MGD, GEC, EEC, MAX__, UNDEFINED__, FIRST__=0 };
 
       explicit ProductType(unsigned char value)
          : m_value(Type(value))
