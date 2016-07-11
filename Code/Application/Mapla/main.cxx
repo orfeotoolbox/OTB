@@ -126,115 +126,13 @@ main( int argc, char* argv[] )
 
   //
   // 3. Initialize cache directory.
-  /*
-  try
-    {
-    mainWindow.SetupCacheDir();
-    }
-  catch( std::exception& exc )
-    {
-    QMessageBox::critical(
-      &mainWindow,
-      QCoreApplication::translate(
-	"Monteverdi",
-	"Monteverdi - Critical error!"
-      ),
-      QCoreApplication::translate(
-	"Monteverdi",
-	"Error while creating cache repository.\n\n"
-	"%1\n\n"
-	"Application will exit!"
-      )
-      .arg( exc.what() )
-    );
-
-    return ERROR_CODE_CACHE_DIR;
-    }
-  */
+  //
+  // N/A
 
   //
   // 4. Initialize database.
-  /*
-  try
-    {
-    mvd::CountType nb = application->OpenDatabase();
-
-    if( nb>0 )
-      {
-      QMessageBox::StandardButton button =
-        QMessageBox::warning(
-          &mainWindow,
-          QCoreApplication::translate(
-            "Monteverdi",
-            "Monteverdi - Warning!"
-          ),
-          QCoreApplication::translate(
-            "Monteverdi",
-            "There are %1 outdated dataset(s) in cache-directory.\n\n"
-            "Please remove cache-directory '%2' and restart Monteverdi\n\n"
-            "Do you want to delete cache-directory '%2' before quitting Monteverdi?"
-          ).arg( nb ).arg( application->GetCacheDir().path() ),
-          QMessageBox::Yes | QMessageBox::No,
-          QMessageBox::Yes
-        );
-
-      if( button==QMessageBox::Yes )
-        {
-        if( application->GetCacheDir()==QDir::home() )
-          {
-          // throw std::runtime_error(
-          //   mvd::ToStdString(
-          //     QCoreApplication::translate(
-          //       "Monteverdi",
-          //       "Tryed to remove home dir."
-          //     )
-          //   )
-          // );
-
-          QMessageBox::critical(
-            &mainWindow,
-            QCoreApplication::translate(
-              "Monteverdi",
-              "Monteverdi - Critical error!"
-            ),
-            QCoreApplication::translate(
-              "Monteverdi",
-              "Your Monteverdi cache-directory is set to your home directory '%1'. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.\n\nIt is generally a bad idea to set Monteverdi cache-directory to your home directory. Please choose another sub-directory.\n\nApplication will now exit."
-            )
-            .arg( application->GetCacheDir().path() ),
-            QMessageBox::Ok
-          );
-          }
-        else
-          {
-          itksys::SystemTools::RemoveADirectory(
-            QFile::encodeName( application->GetCacheDir().path() ).constData()
-          );
-          }
-        }
-
-      return ERROR_CODE_DATABASE;
-      }
-    }
-  catch( std::exception& exc )
-    {
-    QMessageBox::critical(
-      &mainWindow,
-      QCoreApplication::translate(
-        "Monteverdi",
-        "Monteverdi - Critical error!"
-      ),
-      QCoreApplication::translate(
-        "Monteverdi",
-        "Failed to open Monteverdi database.\n\nApplication will now exit!\n\n%2\n\nPlease, remove your Monteverdi cache-directory."
-      )
-      .arg( exc.what() ),
-      QMessageBox::Ok
-    );
-
-    return ERROR_CODE_DATABASE;
-    }
-  */
+  //
+  // N.A.
 
   //
   // 5. Show window.

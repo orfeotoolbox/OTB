@@ -99,10 +99,6 @@ public:
   void Initialize();
 
   /**
-   */
-  void SetupCacheDir();
-
-  /**
    * \brief This is a convenience static method that will return an
    * existing directory path selected by the user.
    *

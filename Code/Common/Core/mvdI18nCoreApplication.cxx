@@ -72,7 +72,6 @@ const char* I18nCoreApplication::DATASET_EXT = ".ds";
 
 const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
 {
-  "cacheDir",
   "geoidPath",
   "geoidPathActive",
   "overviewsEnabled",
@@ -88,22 +87,6 @@ const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
 /* STATIC IMPLEMENTATION SECTION                                             */
 
 I18nCoreApplication* I18nCoreApplication::m_Instance = NULL;
-
-/*******************************************************************************/
-bool
-I18nCoreApplication
-::IsCacheDirValid( const QString& path )
-{
-  QDir dir( path );
-  QFileInfo fileInfo( path );
-
-  return
-    fileInfo.exists() &&
-    fileInfo.isDir() &&
-    fileInfo.isReadable() &&
-    fileInfo.isWritable() &&
-    dir.dirName()==I18nCoreApplication::DEFAULT_CACHE_DIR_NAME;
-}
 
 /*******************************************************************************/
 bool
@@ -168,16 +151,11 @@ I18nCoreApplication
 /*****************************************************************************/
 QString
 I18nCoreApplication
-::DatasetPathName( QString& path,
-		   QString& name,
+::DatasetPathName( QString& name,
 		   const QString& imageFilename )
 {
   // convenient QFileInfo
   QFileInfo fileInfo( imageFilename );
-
-  // Dataset is stored into application cache-directory.
-  // E.g. '$HOME/<CACHE_DIR>'
-  path = I18nCoreApplication::Instance()->GetCacheDir().path();
 
   // get the md5 of the filename
   QByteArray result =
@@ -237,7 +215,7 @@ I18nCoreApplication
 /*****************************************************************************/
 DatasetModel*
 I18nCoreApplication
-::LoadDatasetModel( const QString& imageFilename,
+::LoadDatasetModel( const QString & imageFilename,
 		    int width,
 		    int height,
 		    bool forceCreate )
@@ -249,8 +227,7 @@ I18nCoreApplication
   QString path;
   QString name;
 
-  I18nCoreApplication::DatasetPathName( path, name, imageFilename );
-  qDebug() << "Dataset path:" << path;
+  I18nCoreApplication::DatasetPathName( name, imageFilename );
   qDebug() << "Dataset name:" << name;
 
   QString pathname( QDir( path ).filePath( name ) );
@@ -261,7 +238,7 @@ I18nCoreApplication
   try
     {
     // try if the filename is valid
-    VectorImageModel::EnsureValidImage(imageFilename);
+    VectorImageModel::EnsureValidImage( imageFilename );
 
     // get the basename from the filename to be used as an Alias
     QFileInfo finfo( imageFilename );
@@ -294,9 +271,9 @@ I18nCoreApplication
 /*****************************************************************************/
 void
 I18nCoreApplication
-::DeleteDatasetModel( const QString& hash )
+::DeleteDatasetModel( const QString & path, const QString & hash )
 {
-  QFileInfo finfo( I18nCoreApplication::ConstInstance()->GetCacheDir(), hash );
+  QFileInfo finfo( path, hash );
 
   QDir dir( finfo.filePath() );
 
@@ -433,7 +410,6 @@ I18nCoreApplication
 I18nCoreApplication
 ::I18nCoreApplication( QCoreApplication* qtApp ) :
   QObject( qtApp ),
-  m_CacheDir(),
   m_Settings( NULL ),
   m_Model( NULL ),
   m_IsRunningFromBuildDir( false )
@@ -508,58 +484,6 @@ I18nCoreApplication
     m_Model->setParent( this );
 
   emit ModelChanged( m_Model );
-}
-
-/*******************************************************************************/
-bool
-I18nCoreApplication
-::MakeCacheDir( const QString& path )
-{
-  // qDebug() << this << "::MakeCacheDir(" << path << ")";
-
-  //
-  // Check path.
-  QDir homeDir( path );
-
-  if (!homeDir.exists())
-    SystemError( ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ) );
-
-  if (homeDir.dirName() == I18nCoreApplication::DEFAULT_CACHE_DIR_NAME )
-	  qWarning() << tr("The selected directory seems to be an previous mvd2 directory, nevertheless we will create a new mvd2 repository into the selected directory.") ;
-
-  //
-  // Create cache-dir.
-  bool isNew = I18nCoreApplication::MakeDirTree(
-    homeDir.path(),
-    I18nCoreApplication::DEFAULT_CACHE_DIR_NAME,
-    &m_CacheDir
-  );
-
-  //
-  // Remember cache-dir.
-  StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_CACHE_DIR,
-    QDir::cleanPath( m_CacheDir.path() )
-  );
-
-  //
-  // Construct result-dir path.
-  I18nCoreApplication::MakeDirTree(
-    m_CacheDir.path(),
-    I18nCoreApplication::DEFAULT_CACHE_RESULT_DIR_NAME,
-    &m_ResultsDir
-  );
-
-  //
-  // Remember result-dir
-  StoreSettingsKey(
-    I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR,
-    QDir::cleanPath( m_ResultsDir.path() )
-  );
-
-  //
-  // Result.
-  return isNew;
 }
 
 /*******************************************************************************/
@@ -874,24 +798,6 @@ I18nCoreApplication
     QCoreApplication::applicationName(),
     this
   );
-
-  //
-  // Restore cache directory.
-  QVariant value(
-    RetrieveSettingsKey( I18nCoreApplication::SETTINGS_KEY_CACHE_DIR )
-  );
-
-  if( !value.isNull() )
-    {
-    QString path( value.toString() );
-
-    qDebug() << "Settings/cacheDir:" << path;
-
-    if( I18nCoreApplication::IsCacheDirValid( path ) )
-      {
-      m_CacheDir.setPath( path );
-      }
-    }
 
   //
   // Restore result directory.

@@ -112,7 +112,6 @@ class Monteverdi_EXPORT I18nCoreApplication
 public:
   enum SettingsKey
   {
-    SETTINGS_KEY_CACHE_DIR =0,
     SETTINGS_KEY_GEOID_PATH,
     SETTINGS_KEY_GEOID_PATH_ACTIVE,
     SETTINGS_KEY_OVERVIEWS_ENABLED,
@@ -206,15 +205,6 @@ public:
   // APPLICATION CACHE-DIRECTORY.
   //
 
-  /**
-   * \brief Create cache directory if not already existing.
-   *
-   * \param cacheDirStr path where the function will create the cache directory
-   * \return true if cache directory has just been created or false if
-   * it was already existing.
-   */
-  bool MakeCacheDir( const QString& cacheDirStr );
-
 
   /**
    * \brief setup elevation management
@@ -256,17 +246,9 @@ public:
   // TODO: Move method into Application class.
   inline QVariant RetrieveSettingsKey( const QString & key ) const;
 
-  /**
-   */
-  inline bool IsCacheDirValid() const;
-
   //
   // STATIC methods.
   //
-
-  /**
-   */
-  static bool IsCacheDirValid( const QString& path );
 
   /**
    */
@@ -304,8 +286,7 @@ public:
    * pathname of image file.
    */
   static
-    QString DatasetPathName( QString& path,
-                             QString& name,
+    QString DatasetPathName( QString& name,
                              const QString& imageFilename );
 
   /**
@@ -337,24 +318,12 @@ public:
   /**
    */
   static
-    void DeleteDatasetModel( const QString& hash );
+    void DeleteDatasetModel( const QString & path, const QString & hash );
 
   //
   // NON-STATIC methods.
   //
 
-  /**
-   * \brief Get the cache directory.
-   *
-   * \return Return the cache directory.
-   */
-  inline const QDir& GetCacheDir() const;
-
-  /**
-   */
-  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nCoreApplication.
-  inline QDir& GetCacheDir();
-  
   /**
    * \brief Get the results directory (where output from
    * OTBApplicaitons are stored).
@@ -526,12 +495,6 @@ private:
   static I18nCoreApplication* m_Instance;
 
   /**
-  * \brief Directory where all cached files are stored (repository of datasets).
-  */
-  // TODO: Move I18nCoreApplication::m_CacheDir to private section.
-  QDir m_CacheDir;
-
-  /**
   * \brief Directory where all result files from OTB applications are
   * stored 
   */
@@ -644,34 +607,9 @@ I18nCoreApplication
 /*****************************************************************************/
 const QDir&
 I18nCoreApplication
-::GetCacheDir() const
-{
-  return m_CacheDir;
-}
-
-/*****************************************************************************/
-const QDir&
-I18nCoreApplication
 ::GetResultsDir() const
 {
   return m_ResultsDir;
-}
-
-/*****************************************************************************/
-inline
-bool
-I18nCoreApplication
-::IsCacheDirValid() const
-{
-  return I18nCoreApplication::IsCacheDirValid( m_CacheDir.path() );
-}
-
-/*****************************************************************************/
-QDir&
-I18nCoreApplication
-::GetCacheDir()
-{
-  return m_CacheDir;
 }
 
 /*****************************************************************************/
