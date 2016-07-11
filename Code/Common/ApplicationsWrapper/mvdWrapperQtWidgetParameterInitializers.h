@@ -96,12 +96,6 @@ SetupForFilenameDrop( W* widget, const char* text =NULL );
  */
 template< typename W >
 void
-SetupForDatasetDrop( W* widget, const char* text =NULL );
-
-/**
- */
-template< typename W >
-void
 SetupOutputFilename( W* widget,
                      const QDir& dir,
                      const QString& prefix,
@@ -134,11 +128,8 @@ class FileSelectionInitializer : public std::unary_function<
   >
 {
 public:
-  inline FileSelectionInitializer( bool supportsDataset );
+  inline FileSelectionInitializer();
   inline result_type operator () ( argument_type widget ) const;
-
-private:
-  bool m_SupportsDataset;
 };
 
 /**
@@ -152,11 +143,8 @@ class InputImageInitializer : public std::unary_function<
   >
 {
 public:
-  inline InputImageInitializer( bool supportsDataset );
+  inline InputImageInitializer();
   inline result_type operator () ( argument_type widget ) const;
-
-private:
-  bool m_SupportsDataset;
 };
 
 /**
@@ -170,13 +158,12 @@ class InputImageListInitializer : public std::unary_function<
   >
 {
 public:
-  inline InputImageListInitializer( QWidget * view, bool supportsDataset );
+  inline InputImageListInitializer( QWidget * view );
 
   inline result_type operator () ( argument_type widget ) const;
 
 private:
   QWidget * m_View;
-  bool m_SupportsDataset;
 };
 
 /**
@@ -355,9 +342,7 @@ public:
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "Core/mvdDatabaseModel.h"
 #include "Core/mvdI18nCoreApplication.h"
-#include "Gui/mvdDatasetDragAndDropEventFilter.h"
 #include "Gui/mvdFilenameDragAndDropEventFilter.h"
 #endif //tag=QT4-boost-compatibility
 
@@ -370,8 +355,7 @@ namespace Wrapper
 /*****************************************************************************/
 inline
 FileSelectionInitializer
-::FileSelectionInitializer( bool supportsDataset ) :
-  m_SupportsDataset( supportsDataset )
+::FileSelectionInitializer()
 {
 }
 
@@ -382,20 +366,14 @@ FileSelectionInitializer
 ::operator () ( argument_type widget ) const
 {
   assert( widget!=NULL );
-  if( m_SupportsDataset )
-    {
-    SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
-    SetupForDatasetDrop( widget );
-    }
-  else
-    SetupForFilenameDrop( widget, "You can drop filename here." );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
 inline
 InputImageInitializer
-::InputImageInitializer( bool supportsDataset ) :
-  m_SupportsDataset( supportsDataset )
+::InputImageInitializer()
 {
 }
 
@@ -407,21 +385,14 @@ InputImageInitializer
 {
   assert( widget!=NULL );
 
-  if( m_SupportsDataset )
-    {
-    SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
-    SetupForDatasetDrop( widget );
-    }
-  else
-    SetupForFilenameDrop( widget, "You can drop filename here." );   
+  SetupForFilenameDrop( widget, "You can drop filename here." );   
 }
 
 /*****************************************************************************/
 inline
 InputImageListInitializer
-::InputImageListInitializer( QWidget * view, bool supportsDataset ) :
-  m_View( view ),
-  m_SupportsDataset( supportsDataset )
+::InputImageListInitializer( QWidget * view ) :
+  m_View( view )
 {
 }
 
@@ -433,18 +404,12 @@ InputImageListInitializer
 {
   assert( widget!=NULL );
 
-  if( m_SupportsDataset )
-    QObject::connect(
-      widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
-      m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
-    );
-  else
-    QObject::connect(
-      widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
-      m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
-    );
+  QObject::connect(
+    widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+    m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
+  );
 
-  SetupWidget( widget, FileSelectionInitializer( m_SupportsDataset ) );
+  SetupWidget( widget, FileSelectionInitializer() );
 }
 
 /*****************************************************************************/
@@ -479,7 +444,7 @@ InputFilenameListInitializer
     m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
   );
 
-  SetupWidget( widget, FileSelectionInitializer( false ) );
+  SetupWidget( widget, FileSelectionInitializer() );
 }
 
 /*****************************************************************************/
@@ -514,7 +479,7 @@ InputVectorDataListInitializer
     m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
   );
 
-  SetupWidget( widget, FileSelectionInitializer( false ) );
+  SetupWidget( widget, FileSelectionInitializer() );
 }
 
 /*****************************************************************************/
@@ -681,67 +646,6 @@ SetupForFilenameDrop( W* widget, const char* text )
   QObject::connect(
     eventFilter,
     SIGNAL( FilenameDropped( const QString& ) ),
-    // to:
-    lineEdit,
-    SLOT( setText( const QString& ) )
-  );
-}
-
-/*****************************************************************************/
-template< typename W >
-void
-SetupForDatasetDrop( W* widget, const char* text )
-{
-  assert( widget!=NULL );
-
-  QLineEdit* lineEdit = widget->GetInput();
-
-  //
-  // Setup widget.
-  bool signalsBlocked = lineEdit->blockSignals( true );
-  {
-  if( text!=NULL )
-    {
-    lineEdit->setPlaceholderText(
-      QCoreApplication::translate(
-        "mvd::Wrapper::QtWidgetView",
-        text
-      )
-    );
-    }
-
-  // lineEdit->setReadOnly( true );
-
-  lineEdit->setToolTip(
-    lineEdit->toolTip() +
-    "\n" +
-    QCoreApplication::translate(
-      "mvd::Wrapper::QtWidgetView",
-      "You can drag dataset from dataset-browser and drop it here."
-    )
-  );
-  }
-  lineEdit->blockSignals( signalsBlocked );
-
-  //
-  // Install event-filters.
-
-  assert(
-    I18nCoreApplication::ConstInstance()->GetModel()==
-    I18nCoreApplication::ConstInstance()->GetModel< DatabaseModel >()
-  );
-
-  QObject* eventFilter =
-    new DatasetDragAndDropEventFilter(
-      I18nCoreApplication::Instance()->GetModel< DatabaseModel >(),
-      lineEdit
-    );
-
-  lineEdit->installEventFilter( eventFilter );
-
-  QObject::connect(
-    eventFilter,
-    SIGNAL( ImageFilenameDropped( const QString& ) ),
     // to:
     lineEdit,
     SLOT( setText( const QString& ) )

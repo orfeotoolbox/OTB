@@ -34,7 +34,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdDatabaseModel.h"
 
 //
 #ifdef OTB_USE_QT4

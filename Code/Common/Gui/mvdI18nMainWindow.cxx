@@ -36,7 +36,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdBackgroundTask.h"
-#include "Core/mvdDatabaseConnection.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdImageImporter.h"
 #include "Core/mvdOverviewBuilder.h"
@@ -349,14 +348,7 @@ I18nMainWindow
       dir.setPath( path );
     }
 
-  bool isNew = I18nApplication::Instance()->MakeCacheDir( dir.path() );
-
-  //
-  // Setup initial empty database
-  if( isNew )
-    DatabaseConnection::InitializeDatabase();
-  else
-    qWarning()<<tr("The selected directory already contain a mvd2 directory, no new database will be created"); 
+  I18nApplication::Instance()->MakeCacheDir( dir.path() );
 }
 
 /*****************************************************************************/

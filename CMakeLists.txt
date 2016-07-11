@@ -121,7 +121,7 @@ if(CMAKE_VERSION VERSION_GREATER 2.8.11)
 endif()
 
 set(QT_USE_IMPORTED_TARGETS ON)
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtSql QtXml )
+find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtXml )
 include( ${QT_USE_FILE} )
 if( QT_FOUND )
   # message( "Qt plugins dir: '${QT_PLUGINS_DIR}'" )
@@ -267,9 +267,6 @@ add_subdirectory( i18n )
 
 # Data related files
 add_subdirectory( Data )
-
-# SQL related files.
-add_subdirectory( Sql )
 
 
 #----------------------------------------------------------------------------

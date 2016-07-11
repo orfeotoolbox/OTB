@@ -196,7 +196,7 @@ ApplicationLauncher
 
   // Create GUI based on module
   Wrapper::QtWidgetView * gui =
-    new Wrapper::QtWidgetView( otbApp, isStandalone, parent, flags );
+    new Wrapper::QtWidgetView( otbApp, parent, flags );
 
   gui->CreateGui();
 

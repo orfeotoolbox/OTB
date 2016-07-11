@@ -136,7 +136,6 @@ QtWidgetView
 /*****************************************************************************/
 QtWidgetView
 ::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-                bool isStandalone,
 		QWidget* parent,
 		Qt::WindowFlags flags ) :
   QWidget( parent, flags ),
@@ -145,8 +144,7 @@ QtWidgetView
   m_ExecButton( NULL ),
   m_QuitButton( NULL ),
   m_Message( NULL ),
-  m_IsClosable( true ),
-  m_IsStandalone( isStandalone )
+  m_IsClosable( true )
 {
   setObjectName( QtWidgetView::OBJECT_NAME );
 
@@ -341,8 +339,8 @@ QtWidgetView
 
   SetupWidget( widget, InputFilenameInitializer() );
   SetupWidget( widget, InputFilenameListInitializer( this ) );
-  SetupWidget( widget, InputImageInitializer( false /* !m_IsStandalone */) );
-  SetupWidget( widget, InputImageListInitializer( this, false /* !m_IsStandalone */ ) );
+  SetupWidget( widget, InputImageInitializer() );
+  SetupWidget( widget, InputImageListInitializer( this ) );
   SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
   SetupWidget( widget, InputVectorDataListInitializer( this ) );
@@ -355,11 +353,7 @@ QtWidgetView
 
   SetupWidget(
     widget,
-    OutputImageInitializer(
-      m_IsStandalone
-      ? QString()
-      : m_Application->GetName()
-    )
+    OutputImageInitializer( m_Application->GetName() )
   );
 
   SetupWidget( widget, OutputVectorDataInitializer() );
@@ -368,14 +362,14 @@ QtWidgetView
 /*******************************************************************************/
 void
 QtWidgetView
-::SetupFileSelectionWidget( QWidget * widget, bool supportsDataset )
+::SetupFileSelectionWidget( QWidget * widget )
 {
   assert( widget!=NULL );
   assert(
     qobject_cast< FileSelectionInitializer::argument_type >( widget )!=NULL
   );
 
-  FileSelectionInitializer initialize( supportsDataset );
+  FileSelectionInitializer initialize;
 
   initialize( qobject_cast< FileSelectionInitializer::argument_type >( widget ) );
 }

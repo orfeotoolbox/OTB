@@ -12,12 +12,7 @@ set( Common_Gui_SOURCES
   mvdColorDynamicsWidget.cxx
   mvdColorSetupController.cxx
   mvdColorSetupWidget.cxx
-  mvdDatabaseBrowserController.cxx
-  mvdDatabaseBrowserWidget.cxx
-  mvdDatabaseBrowserWidgetTest.cxx
-  mvdDatabaseTreeWidget.cxx
   mvdDatasetCreationProgressDialog.cxx
-  mvdDatasetDragAndDropEventFilter.cxx
   mvdDatasetPropertiesController.cxx
   mvdDatasetPropertiesWidget.cxx
   mvdDoubleValidator.cxx
@@ -69,12 +64,7 @@ set( Common_Gui_HEADERS_MOC
   mvdColorDynamicsWidget.h
   mvdColorSetupController.h
   mvdColorSetupWidget.h
-  mvdDatabaseBrowserController.h
-  mvdDatabaseBrowserWidget.h
-  mvdDatabaseBrowserWidgetTest.h
-  mvdDatabaseTreeWidget.h
   mvdDatasetCreationProgressDialog.h
-  mvdDatasetDragAndDropEventFilter.h
   mvdDatasetPropertiesController.h
   mvdDatasetPropertiesWidget.h
   mvdDoubleValidator.h
@@ -118,8 +108,6 @@ set( Common_Gui_FORMS
   mvdColorBandDynamicsWidget.ui
   mvdColorDynamicsWidget.ui
   mvdColorSetupWidget.ui
-  mvdDatabaseBrowserWidget.ui
-  mvdDatabaseBrowserWidgetTest.ui
   mvdDatasetCreationProgressDialog.ui
   mvdDatasetPropertiesWidget.ui
   mvdHistogramWidget.ui
@@ -139,7 +127,6 @@ set( Common_Gui_FORMS
 # Qt resources
 set( Common_Gui_RESOURCES
   # mvdApplicationsToolBox.qrc
-  # mvdDatabaseBrowserController.qrc
   # mvdIcons.qrc
 )
 

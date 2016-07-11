@@ -88,9 +88,6 @@ class Monteverdi_EXPORT QtWidgetView :
 	      READ IsClosable
 	      WRITE SetClosable );
 
-  Q_PROPERTY( bool isStandalone
-              READ IsStandalone );
-
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
@@ -103,7 +100,6 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-                bool isStandalone,
 		QWidget* parent =0,
 		Qt::WindowFlags flags =0 );
 
@@ -132,13 +128,6 @@ public:
   /**
    */
   inline bool IsClosable() const;
-
-  /**
-   */
-  bool IsStandalone() const
-  {
-    return m_IsStandalone;
-  }
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -195,7 +184,7 @@ private:
 
   /**
    */
-  void SetupFileSelectionWidget( QWidget *, bool supportsDataset );
+  void SetupFileSelectionWidget( QWidget * );
 
 //
 // Private attributes.
@@ -210,7 +199,6 @@ private:
   QLabel* m_Message;
 
   bool m_IsClosable : 1;
-  bool m_IsStandalone : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -314,7 +302,7 @@ void
 QtWidgetView
 ::OnFileSelectionWidgetAdded0( QWidget * widget )
 {
-  SetupFileSelectionWidget( widget, false );
+  SetupFileSelectionWidget( widget );
 }
 
 /*******************************************************************************/
@@ -323,7 +311,7 @@ void
 QtWidgetView
 ::OnFileSelectionWidgetAdded1( QWidget * widget )
 {
-  SetupFileSelectionWidget( widget, true );
+  SetupFileSelectionWidget( widget );
 }
 
 } // end namespace 'Wrapper'
