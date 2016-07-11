@@ -41,7 +41,11 @@ namespace {// Anonymous namespace
 void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::string & annotationXml, const std::string & geoXml)
 {
     ossimRefPtr<ossimXmlDocument> xmlDoc = new ossimXmlDocument(annotationXml);
-    const ossimXmlNode & xmlRoot = *xmlDoc->getRoot();
+    ossimRefPtr<ossimXmlNode> xRoot = xmlDoc->getRoot();
+    if (!xRoot) {
+       throw std::runtime_error("No root document found for TerraSarX annotation file "+annotationXml);
+    }
+    const ossimXmlNode & xmlRoot = *xRoot;
 
     //isGRD parse variant?
     std::string const& product_type = getTextFromFirstNode(xmlRoot, "productInfo/productVariantInfo/productVariant");
