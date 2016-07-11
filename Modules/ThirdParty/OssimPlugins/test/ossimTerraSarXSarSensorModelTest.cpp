@@ -14,7 +14,7 @@
 
 int main(int argc, char * argv[])
 {
-  std::cout.precision(9);
+  std::clog.precision(20);
   
   if(argc != 4)
     return EXIT_FAILURE;

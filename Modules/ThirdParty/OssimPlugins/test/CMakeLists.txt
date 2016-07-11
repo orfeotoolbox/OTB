@@ -65,17 +65,18 @@ foreach(entry ${s1_files})
   otb_add_test( NAME s1_forward_${name} COMMAND ossimSentinel1ModelTest 0 ${entry})
 endforeach()
 
-# #TSX tests
-# file(GLOB tsx_files ${CMAKE_SOURCE_DIR}/data/tsx/*)
-# #Loop over all S1 annotation files
-# foreach(entry ${tsx_files})
+## TSX tests
+# file(GLOB tsx_dirs ${INPUTDATA}/ossimPlugins/tsx/*)
+# Loop over all S1 annotation files
+# foreach(entry ${tsx_dirs})
 #   file(GLOB tsx_files ${CMAKE_SOURCE_DIR}/data/tsx/*)
 #   get_filename_component(name ${entry} NAME_WE)
 #   add_test( tsx_inverse_${name} ossimTerraSarXSarSensorModelTest ${entry} )
-#    add_test( tsx_forward_${name} ossimSentinel1SarSensorModelTest 0 ${entry})
+#   add_test( tsx_forward_${name} ossimSentinel1SarSensorModelTest 0 ${entry})
 # endforeach()
 
-# otb_add_test( NAME tsx_inverse_PANGKALANBUUN COMMAND ossimTerraSarXSarSensorModelTest 1 ${CMAKE_SOURCE_DIR}/data/tsx/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml ${CMAKE_SOURCE_DIR}/data/tsx/PANGKALANBUUN/GEOREF.xml)
+otb_add_test( NAME tsx_inverse_PANGKALANBUUN COMMAND ossimTerraSarXSarSensorModelTest 1 ${INPUTDATA}/ossimPlugins/tsx/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml ${INPUTDATA}/ossimPlugins/tsx/PANGKALANBUUN/GEOREF.xml)
 # otb_add_test( NAME tsx_forward_PANGKALANBUUN COMMAND ossimTerraSarXSarSensorModelTest 0 ${CMAKE_SOURCE_DIR}/data/tsx/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml ${CMAKE_SOURCE_DIR}/data/tsx/PANGKALANBUUN/GEOREF.xml)
+
 # otb_add_test( NAME tsx_inverse_UPSALA COMMAND ossimTerraSarXSarSensorModelTest 1 ${CMAKE_SOURCE_DIR}/data/tsx/UPSALA_GLACIER/TSX1_SAR__MGD.xml ${CMAKE_SOURCE_DIR}/data/tsx/UPSALA_GLACIER/GEOREF.xml)
 # otb_add_test( NAME tsx_forward_UPSALA COMMAND ossimTerraSarXSarSensorModelTest 0 ${CMAKE_SOURCE_DIR}/data/tsx/UPSALA_GLACIER/TSX1_SAR__MGD.xml ${CMAKE_SOURCE_DIR}/data/tsx/UPSALA_GLACIER/GEOREF.xml)
