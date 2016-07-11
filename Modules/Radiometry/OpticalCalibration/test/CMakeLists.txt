@@ -516,10 +516,10 @@ otb_add_test(NAME raTuSurfaceAdjacencyEffectCorrectionSchemeFilterNew COMMAND ot
 
 otb_add_test(NAME raTvImageToReflectanceImageFilterAuto COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
-  ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterAuto.img
   otbImageToReflectanceImageFilterAuto
   LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-  ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterAuto.img
   )
 
 otb_add_test(NAME raTuImageToReflectanceImageFilterAutoFORMOSAT2 COMMAND otbOpticalCalibrationTestDriver
