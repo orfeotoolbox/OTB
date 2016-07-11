@@ -9,9 +9,7 @@ set( Common_Core_SOURCES
   mvdAbstractWorker.cxx
   mvdBackgroundTask.cxx
   mvdCore.cxx
-  mvdDatasetDescriptor.cxx
   mvdDataStream.cxx
-  mvdDatasetModel.cxx
   mvdFilenameInterface.cxx
   mvdHistogramModel.cxx
   mvdI18nCoreApplication.cxx
@@ -47,8 +45,6 @@ set( Common_Core_HEADERS_MOC
   # mvdAlgorithm.h
   mvdBackgroundTask.h
   # mvdCore.h
-  mvdDatasetDescriptor.h
-  mvdDatasetModel.h
   mvdHistogramModel.h
   mvdI18nCoreApplication.h
   mvdImageImporter.h

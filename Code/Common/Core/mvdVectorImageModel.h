@@ -116,20 +116,6 @@ public:
   /** Destructor */
   virtual ~VectorImageModel();
 
-  /**
-   * \brief Get the parent DatasetModel.
-   *
-   * \return The parent DatasetModel.
-   */
-  virtual const DatasetModel* GetDatasetModel() const;
-
-  /**
-   * \brief Get the parent DatasetModel.
-   *
-   * \return The parent DatasetModel.
-   */
-  virtual DatasetModel* GetDatasetModel();
-
   /** */
   static void EnsureValidImage( const QString& filename );
 
@@ -348,9 +334,6 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "mvdDatasetModel.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace mvd

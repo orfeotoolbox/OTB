@@ -40,7 +40,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdDatasetModel.h"
 #include "Core/mvdStackedLayerModel.h"
 #include "Core/mvdTypes.h"
 #include "Core/mvdVectorImageModel.h"

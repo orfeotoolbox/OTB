@@ -135,10 +135,6 @@ public:
   //
   // VectorImageModel overloads.
 
-  virtual const DatasetModel* GetDatasetModel() const;
-
-  virtual DatasetModel* GetDatasetModel();
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

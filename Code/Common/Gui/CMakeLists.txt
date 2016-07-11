@@ -12,9 +12,6 @@ set( Common_Gui_SOURCES
   mvdColorDynamicsWidget.cxx
   mvdColorSetupController.cxx
   mvdColorSetupWidget.cxx
-  mvdDatasetCreationProgressDialog.cxx
-  mvdDatasetPropertiesController.cxx
-  mvdDatasetPropertiesWidget.cxx
   mvdDoubleValidator.cxx
   mvdDropLineEdit.cxx
   mvdFilenameDragAndDropEventFilter.cxx
@@ -64,9 +61,6 @@ set( Common_Gui_HEADERS_MOC
   mvdColorDynamicsWidget.h
   mvdColorSetupController.h
   mvdColorSetupWidget.h
-  mvdDatasetCreationProgressDialog.h
-  mvdDatasetPropertiesController.h
-  mvdDatasetPropertiesWidget.h
   mvdDoubleValidator.h
   mvdDropLineEdit.h
   mvdFilenameDragAndDropEventFilter.h
@@ -108,8 +102,6 @@ set( Common_Gui_FORMS
   mvdColorBandDynamicsWidget.ui
   mvdColorDynamicsWidget.ui
   mvdColorSetupWidget.ui
-  mvdDatasetCreationProgressDialog.ui
-  mvdDatasetPropertiesWidget.ui
   mvdHistogramWidget.ui
   mvdImportImagesDialog.ui
   mvdImportSubDatasetDialog.ui

@@ -162,7 +162,6 @@ protected:
 private:
   enum ModelType
   {
-    DATASET,
     IMAGE,
   };
 

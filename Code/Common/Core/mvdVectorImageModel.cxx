@@ -87,24 +87,6 @@ VectorImageModel
 }
 
 /*****************************************************************************/
-const DatasetModel*
-VectorImageModel
-::GetDatasetModel() const
-{
-  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
-  return GetParentModel< DatasetModel >();
-}
-
-/*****************************************************************************/
-DatasetModel*
-VectorImageModel
-::GetDatasetModel()
-{
-  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
-  return GetParentModel< DatasetModel >();
-}
-
-/*****************************************************************************/
 void
 VectorImageModel
 ::SetFilename( const QString& filename , int w, int h)
@@ -575,20 +557,7 @@ VectorImageModel
 {
   assert( GetProperties()!=NULL );
 
-  DatasetModel* datasetModel = GetDatasetModel();
-
-  if( datasetModel==NULL )
-    RefreshHistogram( NULL );
-
-  else
-    {
-    HistogramModel::BuildContext context(
-      true, // Force writing new histogram-model.
-      datasetModel->HistogramFileInfo( GetFilename() ).filePath()
-    );
-
-    RefreshHistogram( &context );
-    }
+  RefreshHistogram( NULL );
 }
 
 /*****************************************************************************/

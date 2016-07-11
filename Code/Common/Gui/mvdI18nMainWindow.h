@@ -268,14 +268,6 @@ protected:
 
   /**
    */
-  DatasetModel *
-    ImportDataset( const QString& filename,
-                   int width,
-                   int height,
-                   bool forceCreate );
-
-  /**
-   */
   VectorImageModel *
     ImportImage( const QString & filename,
                  int width,

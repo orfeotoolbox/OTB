@@ -39,7 +39,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdDatasetModel.h"
 #include "mvdI18nCoreApplication.h"
 #include "mvdProcessObjectObserver.h"
 #include "mvdVectorImageModel.h"

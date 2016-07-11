@@ -40,7 +40,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
-#include "mvdDatasetModel.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 
@@ -210,62 +209,6 @@ I18nCoreApplication
     }
 
   return imageModel;
-}
-
-/*****************************************************************************/
-DatasetModel*
-I18nCoreApplication
-::LoadDatasetModel( const QString & imageFilename,
-		    int width,
-		    int height,
-		    bool forceCreate )
-{
-  // New model.
-  DatasetModel* model = new DatasetModel();
-
-  // Retrive path and name.
-  QString path;
-  QString name;
-
-  I18nCoreApplication::DatasetPathName( name, imageFilename );
-  qDebug() << "Dataset name:" << name;
-
-  QString pathname( QDir( path ).filePath( name ) );
-
-  // Setup QObject
-  model->setObjectName( pathname );
-
-  try
-    {
-    // try if the filename is valid
-    VectorImageModel::EnsureValidImage( imageFilename );
-
-    // get the basename from the filename to be used as an Alias
-    QFileInfo finfo( imageFilename );
-
-    // Build model (relink to cached data).
-    DatasetModel::BuildContext context(
-      path, name, finfo.baseName(), width, height, forceCreate
-    );
-    model->BuildModel( &context );
-
-    // Load image if DatasetModel is empty.
-    if( !model->HasSelectedImageModel() )
-      {
-      // Import image from filename given (w; h) size to choose
-      // best-fit resolution.
-      model->ImportImage( imageFilename, width, height );
-      }
-    }
-  catch( ... )
-    {
-    delete model;
-    model = NULL;
-
-    throw;
-    }
- 
-  return model;
 }
 
 /*****************************************************************************/

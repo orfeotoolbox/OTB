@@ -299,23 +299,6 @@ public:
                     QObject * parent =NULL );
 
   /**
-   * \brief Load a DatasetModel from disk.
-   *
-   * \param imageFilename The input image filename.
-   * \param with The width (in pixels) of the screen best fit.
-   * \param height The height (in pixels) of the screen best fit.
-   * \param forceCreate true to force dataset creation even if there
-   * is already an existing non-empty dataset directory.
-   *
-   * \return The loaded DatasetModel instance or NULL if the method has failed.
-   */
-  static
-    DatasetModel* LoadDatasetModel( const QString& imageFilename,
-				    int width,
-				    int height,
-				    bool forceCreate );
-
-  /**
    */
   static
     void DeleteDatasetModel( const QString & path, const QString & hash );

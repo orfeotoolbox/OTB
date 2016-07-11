@@ -36,7 +36,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdBackgroundTask.h"
-#include "Core/mvdDatasetModel.h"
 #include "Core/mvdImageImporter.h"
 #include "Core/mvdOverviewBuilder.h"
 #include "Core/mvdVectorImageModel.h"
@@ -155,29 +154,6 @@ I18nMainWindow
 
   //
   return dockWidget;
-}
-
-/*****************************************************************************/
-DatasetModel *
-I18nMainWindow
-::ImportDataset( const QString& filename,
-                 int width,
-                 int height,
-                 bool forceCreate )
-{
-  return
-    QObjectCast< DatasetModel * >(
-      Import(
-        // New dataset-importer worker.
-        // It will be auto-deleted by background-task.
-        new ImageImporter(
-          filename,
-          forceCreate,
-          width, height
-        )
-      ),
-      "QObject is not a DatasetModel."
-    );
 }
 
 /*****************************************************************************/
