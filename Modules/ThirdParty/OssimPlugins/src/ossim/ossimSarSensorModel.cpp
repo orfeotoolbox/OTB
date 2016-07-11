@@ -345,6 +345,7 @@ namespace ossimplugins
 
          unsigned int count = 0;
 
+         // TODO: use only it or count!
          for(std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();it!=theOrbitRecords.end();++it,++count)
          {
             const DurationType current_time = abs(azimuthTime-it->azimuthTime);
@@ -881,8 +882,6 @@ namespace ossimplugins
       std::vector<GCPRecordType> gcpRecordSave, testGcps;
 
       gcpRecordSave.swap(theGCPRecords); // steal the data; `gcpRecordSave = move(theGCPRecords);` in C++11
-
-      unsigned int count = 0;
 
       unzip(gcpRecordSave, theGCPRecords, testGcps);
       assert(theGCPRecords.size() >= testGcps.size());

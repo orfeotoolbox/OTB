@@ -705,12 +705,21 @@ namespace details {
 // T() will still work.
 
 OSSIM_GENERATE_CONV(to_integer, char);
+OSSIM_GENERATE_CONV(to_integer, unsigned char);
+OSSIM_GENERATE_CONV(to_integer, signed char);
+OSSIM_GENERATE_CONV(to_integer, unsigned short);
 OSSIM_GENERATE_CONV(to_integer, short);
 OSSIM_GENERATE_CONV(to_integer, int);
 OSSIM_GENERATE_CONV(to_integer, unsigned int);
 OSSIM_GENERATE_CONV(to_integer, long);
-OSSIM_GENERATE_CONV(to_float,   ossim_float32);
-OSSIM_GENERATE_CONV(to_float,   ossim_float64);
+OSSIM_GENERATE_CONV(to_integer, unsigned long);
+#if defined(HAS_LONG_LONG) // TODO: add this configure option
+OSSIM_GENERATE_CONV(to_integer, long long);
+OSSIM_GENERATE_CONV(to_integer, unsigned long long);
+#endif
+OSSIM_GENERATE_CONV(to_float,   float);
+OSSIM_GENERATE_CONV(to_float,   double);
+OSSIM_GENERATE_CONV(to_float,   long double);
 #undef OSSIM_GENERATE_CONV
 
 template <> inline std::string to<std::string>(string_view const& v, string_view const& /*context*/)
