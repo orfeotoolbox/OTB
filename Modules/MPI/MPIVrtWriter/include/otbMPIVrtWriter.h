@@ -30,15 +30,23 @@
 
 #include <gdal.h>
 #include <gdal_priv.h>
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wshadow"
 #include <vrtdataset.h>
+# pragma GCC diagnostic pop
+#else
+#include <vrtdataset.h>
+#endif
+
 #include <ogr_spatialref.h>
 
 namespace otb {
 
 /**
  *\brief Write image data to multiple files with MPI processus and add a VRT file.
- * 
- * The image is divided into several pieces. 
+ *
+ * The image is divided into several pieces.
  * Each pieces is distributed to a MPI processus.
  * Each MPI processus write their pieces into a separate
  * file.
@@ -49,13 +57,13 @@ namespace otb {
  *\param availableRAM Available memory for streaming
  *\param writeVRTFile Activate the VRT file writing
  */
-template <typename TImage> void WriteMPI(TImage *img, const std::string &output, unsigned int availableRAM = 0, bool writeVRTFile=true) 
+template <typename TImage> void WriteMPI(TImage *img, const std::string &output, unsigned int availableRAM = 0, bool writeVRTFile=true)
 {
   typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
 
   unsigned int myRank = mpiConfig->GetMyRank();
   unsigned int nbProcs = mpiConfig->GetNbProcs();
-  
+
   typedef otb::ImageFileWriter<TImage>                                           WriterType;
   typedef otb::NumberOfDivisionsTiledStreamingManager<TImage>                    StreamingManagerType;
   typedef itk::RegionOfInterestImageFilter<TImage, TImage>                       ExtractFilterType;
@@ -107,7 +115,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
   joins.push_back(itksys::SystemTools::GetFilenamePath(output).append("/"));
   joins.push_back(itksys::SystemTools::GetFilenameWithoutExtension(output));
   std::string prefix = itksys::SystemTools::JoinPath(joins);
-  
+
 
   // Data type
   std::string dataTypeStr = "Float32";
@@ -142,7 +150,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
       {
       writer->SetAutomaticAdaptativeStreaming(availableRAM);
       }
-    
+
     // Pipeline execution
     try
     {
@@ -161,7 +169,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
   mpiConfig->barrier();
 
   // Write VRT file
-  try 
+  try
   {
     if (writeVRTFile && (myRank == 0))
     {
@@ -242,7 +250,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
                                       tileIndexY, //yOffDest
                                       tileSizeX, //xSizeDest
                                       tileSizeY, //ySizeDest
-                                      "near", 
+                                      "near",
                                       VRT_NODATA_UNSET);
         }
 
@@ -265,4 +273,3 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
 
 } // End namespace otb
 #endif //__otbMPIVrtWriter_h
-
