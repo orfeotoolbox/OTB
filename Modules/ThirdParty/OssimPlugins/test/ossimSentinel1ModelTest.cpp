@@ -52,7 +52,8 @@ int main(int argc, char * argv[])
       std::clog.setstate(std::ios_base::badbit);
    }
 
-   try {
+   try
+   {
       std::auto_ptr<ossimProjection> projection
          (ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
       if (!projection.get()) {
@@ -69,7 +70,6 @@ int main(int argc, char * argv[])
       {
          sensor->activateVerboseMode();
          sensor->print(std::clog);
-      }
       }
 
       ossimKeywordlist kwl;
