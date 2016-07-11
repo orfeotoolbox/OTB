@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
       if (a == "-v" || a == "-verbose") {
          verbose = true;
       } else if (inverse == undef)  {
-      inverse = atoi(argv[i]) == 1 ? inv : fwd;
+         inverse = atoi(argv[i]) == 1 ? inv : fwd;
       } else if (annotationXml.empty())  {
          annotationXml = a;
       } else {
