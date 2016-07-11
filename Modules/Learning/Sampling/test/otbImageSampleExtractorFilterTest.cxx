@@ -129,11 +129,9 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   otb::ogr::Layer dstLayer = output->GetLayer(0);
   OGRFieldDefn labelField(classFieldName.c_str(),OFTString);
   dstLayer.CreateField(labelField, true);
-  OGRErr err = dstLayer.ogr().StartTransaction();
+  const  OGRErr err = dstLayer.ogr().StartTransaction();
 
-  if (err != OGRERR_NONE) {
-    itkExceptionMacro(<< "Unable to start transaction for OGR layer " << dstLayer.ogr().GetName() << ".");
-  }
+  if (err == OGRERR_NONE) {
 
   otb::ogr::Layer::const_iterator featIt = inLayer.begin();
   for(; featIt!=inLayer.end(); ++featIt)
@@ -143,11 +141,9 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
     dstLayer.CreateFeature( dstFeature );
     }
 
-  err = dstLayer.ogr().CommitTransaction();
-  if (err != OGRERR_NONE)
+  const OGRErr err2 = dstLayer.ogr().CommitTransaction();
+  if (err2 == OGRERR_NONE)
     {
-    itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << dstLayer.ogr().GetName() << ".");
-    }
 
   output->Clear();
 
@@ -175,6 +171,17 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
 
   chrono.Stop();
   std::cout << "Extraction took "<< chrono.GetTotal() << " sec" << std::endl;
+    }
+  else {
+    std::cout<< "Unable to commit transaction for OGR layer " << dstLayer.ogr().GetName() << "." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  }
+  else {
+    std::cout << "Unable to start transaction for OGR layer " << dstLayer.ogr().GetName() << "." << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }
