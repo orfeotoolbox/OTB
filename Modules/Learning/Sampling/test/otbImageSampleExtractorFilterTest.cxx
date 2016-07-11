@@ -27,7 +27,7 @@ int otbImageSampleExtractorFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv
 {
   typedef otb::VectorImage<float> InputImageType;
   typedef otb::ImageSampleExtractorFilter<InputImageType> FilterType;
-  
+
   FilterType::Pointer filter = FilterType::New();
   std::cout << filter << std::endl;
   return EXIT_SUCCESS;
@@ -37,7 +37,7 @@ int otbImageSampleExtractorFilter(int argc, char* argv[])
 {
   typedef otb::VectorImage<float> InputImageType;
   typedef otb::ImageSampleExtractorFilter<InputImageType> FilterType;
-  
+
   if (argc < 3)
     {
     std::cout << "Usage : "<<argv[0]<< "  input_vector  output" << std::endl;
@@ -129,7 +129,12 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   otb::ogr::Layer dstLayer = output->GetLayer(0);
   OGRFieldDefn labelField(classFieldName.c_str(),OFTString);
   dstLayer.CreateField(labelField, true);
-  dstLayer.ogr().StartTransaction();
+  OGRErr err = dstLayer.ogr().StartTransaction();
+
+  if (err != OGRERR_NONE) {
+    itkExceptionMacro(<< "Unable to start transaction for OGR layer " << dstLayer.ogr().GetName() << ".");
+  }
+
   otb::ogr::Layer::const_iterator featIt = inLayer.begin();
   for(; featIt!=inLayer.end(); ++featIt)
     {
@@ -137,7 +142,13 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
     dstFeature.SetFrom( *featIt, TRUE );
     dstLayer.CreateFeature( dstFeature );
     }
-  dstLayer.ogr().CommitTransaction();
+
+  err = dstLayer.ogr().CommitTransaction();
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << dstLayer.ogr().GetName() << ".");
+    }
+
   output->Clear();
 
   otb::ogr::DataSource::Pointer outputUpdate =
