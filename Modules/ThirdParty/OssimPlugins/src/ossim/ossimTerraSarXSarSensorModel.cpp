@@ -13,6 +13,13 @@
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossimXmlTools.h>
 
+#if defined(USE_BOOST_TIME)
+            using boost::posix_time::microseconds;
+            using boost::posix_time::seconds;
+#else
+            using ossimplugins::time::microseconds;
+            using ossimplugins::time::seconds;
+#endif
 
 namespace {// Anonymous namespace
     const ossimString attTimeUTC = "timeUTC";
@@ -104,14 +111,17 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
     const DurationType td = azimuthTimeStop - azimuthTimeStart;
 
+    std::cout << "td " << td.total_microseconds() << '\n';
+    
     // numberOfRows
     unsigned int numberOfRows = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/numberOfRows")->getText().toUInt16();
 
     std::cout << "numberOfRows " << numberOfRows << '\n';
 
     //Compute azimuth time interval
-    theAzimuthTimeInterval = td / static_cast<double> (numberOfRows);
-
+    theAzimuthTimeInterval = td / static_cast<double> (numberOfRows - 1);
+    //theAzimuthTimeInterval = seconds(1./static_cast<double>(theRadarFrequency));
+      
     std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1 / theRadarFrequency) * 1000000 << '\n';
 
     //For Terrasar-X only 1 burst is supported for now
@@ -187,7 +197,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 #else
         using ossimplugins::time::microseconds;
 #endif
-        gcpRecord.azimuthTime = azimuthTimeStart + microseconds(deltaAzimuth * 1000000);
+        gcpRecord.azimuthTime = azimuthTimeStart + microseconds(deltaAzimuth * 1000000.);
 
         //Get delta range time
         gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);
