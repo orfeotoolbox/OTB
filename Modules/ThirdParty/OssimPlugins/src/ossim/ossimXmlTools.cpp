@@ -17,17 +17,17 @@
 
 ossimXmlNode const& ossimplugins::getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
-    ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
-    if (!wh) {
-        throw std::runtime_error("No '" + xpath.string() + "' subnode found");
-    }
-    return *wh;
+   ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
+   if (!wh) {
+      throw std::runtime_error("No '" + xpath.string() + "' subnode found");
+   }
+   return *wh;
 }
 
 ossimString const& ossimplugins::getTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
-    ossimString const& s = getExpectedFirstNode(node, xpath).getText();
-    return s;
+   ossimString const& s = getExpectedFirstNode(node, xpath).getText();
+   return s;
 }
 
 
@@ -45,21 +45,21 @@ ossimplugins::TimeType ossimplugins::getTimeFromFirstNode(ossimXmlNode const& no
 ossimplugins::time::ModifiedJulianDate
 ossimplugins::getModifiedJulianDateFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
-    ossimString const& s = getTextFromFirstNode(node, xpath);
-    return time::toModifiedJulianDate(s);
+   ossimString const& s = getTextFromFirstNode(node, xpath);
+   return time::toModifiedJulianDate(s);
 }
 
 double ossimplugins::getDoubleFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
-    const ossimString & s = getTextFromFirstNode(node, xpath);
-    return s.toDouble();
+   const ossimString & s = getTextFromFirstNode(node, xpath);
+   return s.toDouble();
 }
 
 ossimString const& ossimplugins::getOptionalTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
-  static const ossimString empty;
-  ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
-  return wh.valid() ? wh->getText() : empty;
+   static const ossimString empty;
+   ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
+   return wh.valid() ? wh->getText() : empty;
 }
 
 ossimString const& ossimplugins::getOnlyText(ossimXmlDocument const& doc, ossimString const& xpath)
