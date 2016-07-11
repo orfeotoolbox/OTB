@@ -650,6 +650,11 @@ otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res0 COMMAND otbIma
   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
   )
 
+# Only do the following test if we are using the OTB Openjpeg driver,
+# because gdal does not report jpeg2000 overview with size < 128
+# pixel, and will therefore interpolate.
+if(OTB_USE_OPENJPEG)
+
 # Read an area inside one tile at resolution 4 (jpeg2000 conformance file with
 # specific tile size at different resolution).
 otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res4 COMMAND otbImageBaseTestDriver
@@ -659,6 +664,8 @@ otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res4 COMMAND otbIma
   ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=4
   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
   )
+
+endif()
 
 # Read an area inside one tile at resolution 0 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
@@ -672,12 +679,12 @@ otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 COMMAND otbImag
 
 # Read an area inside one tile at resolution 5 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
-otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res5 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res5.tif
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
+otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res1 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res1.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res1_OUT.tif
   otbMultiChannelExtractROI
-  ${INPUTDATA}/lena512color.jp2?&resol=5
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
+  ${INPUTDATA}/lena512color.jp2?&resol=1
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res1_OUT.tif
   )
 
 
@@ -724,17 +731,6 @@ otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res3_2 COMMAND otbImageBa
   ${INPUTDATA}/bretagne.j2k?&resol=3
   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
   -startX 40 -startY 30 -sizeX 80 -sizeY 60 )
-
-# Read all the image with a resolution 5
-otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res5 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5.tif
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif
-  otbMultiChannelExtractROI
-  ${INPUTDATA}/bretagne.j2k?&resol=5
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif )
-
-
-
 
 # ---  RADARSAT (GDAL)  ---
 otb_add_test(NAME  ioTvMultiMonoChannelROI_RADARSAT2ENVI COMMAND otbImageBaseTestDriver
