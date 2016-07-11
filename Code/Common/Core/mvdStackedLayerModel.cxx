@@ -241,13 +241,13 @@ StackedLayerModel
 
   //
   // Check if signals have to be emitted.
-  bool emitCurrentChanged = m_Current<GetCount() && index<m_Current;
+  bool emitCurrentChanged = m_Current<GetCount() && index<=m_Current;
   bool emitReferenceChanged = m_Reference<GetCount() && index<=m_Reference;
 
   //
   // Remember new current index.
   SizeType current =
-    (index>=m_Current && GetCount()>0 )
+    index>=m_Current
     ? m_Current
     : ( m_Current>0
         ? m_Current - 1
