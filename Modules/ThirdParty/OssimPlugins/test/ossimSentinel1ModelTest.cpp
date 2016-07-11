@@ -67,7 +67,9 @@ int main(int argc, char * argv[])
 
       if (verbose)
       {
+         sensor->activateVerboseMode();
          sensor->print(std::clog);
+      }
       }
 
       ossimKeywordlist kwl;

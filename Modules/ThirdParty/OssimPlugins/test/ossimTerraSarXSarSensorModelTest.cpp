@@ -75,11 +75,15 @@ int main(int argc, char * argv[])
          throw std::runtime_error(
                "Unlike Expectations, the annotation file ("+annotationXml+") is not a Terra SAR Annotation File");
       }
-
-#if 0
+#if 1
+      if (verbose) {
+         sensor->activateVerboseMode();
+      }
+#else
       if (verbose)
       {
          sensor->print(std::clog);
+         sensor->activateVerboseMode();
       }
 
       ossimKeywordlist kwl;

@@ -202,6 +202,12 @@ public:
    virtual ~ossimSarSensorModel() = default;
 #endif
 
+   /** Puts the computations in verbose mode.
+    * Given an instance of \c ossimSarSensorModel, this cannot be reverted.
+    * @post `m_verbose` is true
+    */
+   void activateVerboseMode() { m_verbose = true; }
+
    virtual void lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightEllipsoid, ossimGpt& worldPt) const;
 
    virtual void lineSampleToWorld(const ossimDpt& imPt, ossimGpt& worldPt) const;
@@ -356,6 +362,7 @@ protected:
    GCPRecordType const& findClosestGCP(ossimDpt const& imPt) const;
 
 
+   bool                                        m_verbose;
    std::vector<OrbitRecordType>                theOrbitRecords;
    std::vector<GCPRecordType>                  theGCPRecords;
    std::vector<BurstRecordType>                theBurstRecords;

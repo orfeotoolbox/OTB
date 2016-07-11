@@ -30,7 +30,6 @@ using ossimplugins::time::seconds;
 #endif
 
 namespace {// Anonymous namespace
-   const bool         k_verbose = true; // global verbose constant; TODO: use an option
    const unsigned int k_version = 2;
 
    // Sometimes, we don't need to compare the actual distance, its square value is
@@ -112,14 +111,15 @@ namespace ossimplugins
    }
 
    ossimSarSensorModel::ossimSarSensorModel()
-      : theRadarFrequency(0.),
-      theAzimuthTimeInterval(seconds(0)),
-      theNearRangeTime(0.),
-      theRangeSamplingRate(0.),
-      theRangeResolution(0.),
-      theBistaticCorrectionNeeded(false),
-      theAzimuthTimeOffset(seconds(0)),
-      theRangeTimeOffset(0.)
+      : m_verbose(false)
+      , theRadarFrequency(0.)
+      , theAzimuthTimeInterval(seconds(0))
+      , theNearRangeTime(0.)
+      , theRangeSamplingRate(0.)
+      , theRangeResolution(0.)
+      , theBistaticCorrectionNeeded(false)
+      , theAzimuthTimeOffset(seconds(0))
+      , theRangeTimeOffset(0.)
       {}
 
    ossimSarSensorModel::GCPRecordType const&
@@ -850,11 +850,9 @@ namespace ossimplugins
             && (std::abs(estimatedRangeTime - gcpIt->slantRangeTime) <= rangeTimeTol)
             ;
 
-         const bool verbose = k_verbose;
-
          success = success && thisSuccess;
 
-         if(verbose)
+         if(m_verbose)
          {
             std::clog<<"GCP #"<<gcpId<< (thisSuccess ? "succeeded" : "failed") << '\n';
             std::clog<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
@@ -887,7 +885,6 @@ namespace ossimplugins
       assert(theGCPRecords.size() >= testGcps.size());
 
       bool success = true;
-      const bool verbose = k_verbose;
 
       unsigned int gcpId = 1;
 
@@ -910,7 +907,7 @@ namespace ossimplugins
          {
             success = false;
 
-            if(verbose)
+            if(m_verbose)
             {
                std::clog<<"GCP #"<<gcpId<<'\n';
                std::clog<<"Azimuth time: ref="<<gcpIt->azimuthTime<<", predicted: "<<estimatedAzimuthTime<<", res="<<to_simple_string(estimatedAzimuthTime-gcpIt->azimuthTime)<<'\n';
