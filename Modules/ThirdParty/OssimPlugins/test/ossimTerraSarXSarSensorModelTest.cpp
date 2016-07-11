@@ -31,7 +31,7 @@ int main(int argc, char * argv[])
 
   if(inverse)
     {
-    validate = sensor->autovalidateInverseModelFromGCPs();
+      validate = sensor->autovalidateInverseModelFromGCPs(1,1.1,500,0.0000000001);
     }
   else
     {
