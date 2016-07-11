@@ -36,7 +36,7 @@ list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib"
 if("${isSystemDir}" STREQUAL "-1")
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif("${isSystemDir}" STREQUAL "-1")
-  
+
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
 option(BUILD_TESTING "Build the testing tree." OFF)
 
@@ -190,6 +190,7 @@ option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
 option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
 option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
+option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
