@@ -95,7 +95,7 @@ int main(int argc, char * argv[])
 #endif
 
       const bool validate = inverse == inv
-         ? sensor->autovalidateInverseModelFromGCPs()
+         ? sensor->autovalidateInverseModelFromGCPs(1,1.1,500,0.0000000001);
          : sensor->autovalidateForwardModelFromGCPs()
          ;
 
