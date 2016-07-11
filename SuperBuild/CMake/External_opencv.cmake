@@ -14,7 +14,7 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENCV PNG_LIBRARY)
 
 ExternalProject_Add(OPENCV
   PREFIX OPENCV
-  URL "http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.11/opencv-2.4.11.zip/download"
+  URL "http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/2.4.11/opencv-2.4.11.zip"
   URL_MD5 32f498451bff1817a60e1aabc2939575
   BINARY_DIR ${OPENCV_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
