@@ -501,7 +501,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, TimeType & interpAzimuthTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const
    {
-      assert(!theOrbitRecords.size()<2&&"Orbit records vector contains less than 2 elements");
+      assert((theOrbitRecords.size()>=2) && "Orbit records vector contains less than 2 elements");
 
       std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();
 

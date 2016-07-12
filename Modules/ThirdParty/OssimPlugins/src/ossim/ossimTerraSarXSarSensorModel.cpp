@@ -67,18 +67,16 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     }
     const ossimXmlNode & xmlRoot = *xRoot;
 
-    //isGRD parse variant?
-    std::string const& product_type = getTextFromFirstNode(xmlRoot, "productInfo/productVariantInfo/productVariant");
-
-    std::clog << "type " <<  product_type << '\n';
-
+   // Product type
+    ossimString const& product_type = getTextFromFirstNode(xmlRoot, "productInfo/productVariantInfo/productVariant");
+    ossimNotify(ossimNotifyLevel_DEBUG) << "Product type: " <<  product_type << '\n';
     theProductType = ProductType(product_type);
 
     // First, lookup position/velocity records
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
     xmlDoc.findNodes("/level1Product/platform/orbit/stateVec",xnodes);
 
-    std::clog << "Number of states " << xnodes.size() << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "Number of states " << xnodes.size() << '\n';
 
     for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
     {
@@ -98,55 +96,51 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
         orbitRecord.velocity[2] = getDoubleFromFirstNode(**itNode, attVelZ);
 
         //Add one orbits record
-        std::clog << "Add theOrbitRecords\n";
+        ossimNotify(ossimNotifyLevel_DEBUG) << "Add theOrbitRecords\n";
         theOrbitRecords.push_back(orbitRecord);
     }
 
     //Parse the near range time (in seconds)
     theNearRangeTime = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/rangeTime/firstPixel");
-
-    std::clog << "theNearRangeTime " << theNearRangeTime << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "theNearRangeTime " << theNearRangeTime << '\n';
 
     //Parse the range sampling rate
     theRangeSamplingRate = getDoubleFromFirstNode(xmlRoot, "instrument/settings/RSF");
-
-    std::clog << "theRangeSamplingRate " << theRangeSamplingRate << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "theRangeSamplingRate " << theRangeSamplingRate << '\n';
 
     //Parse the range resolution
     theRangeResolution = getDoubleFromFirstNode(xmlRoot, "productSpecific/complexImageInfo/slantRangeResolution");
-
-    std::clog << "theRangeResolution " << theRangeResolution << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "theRangeResolution " << theRangeResolution << '\n';
 
     //Parse the radar frequency
     theRadarFrequency = getDoubleFromFirstNode(xmlRoot, "instrument/settings/settingRecord/PRF");
-
-    std::clog << "theRadarFrequency " << theRadarFrequency << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "theRadarFrequency " << theRadarFrequency << '\n';
 
     //Manage only strip map product for now (one burst)
 
     //Parse azimuth time start/stop
     const TimeType azimuthTimeStart = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC");
 
-    std::clog << "azimuthTimeStart " << azimuthTimeStart << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "azimuthTimeStart " << azimuthTimeStart << '\n';
 
     const TimeType azimuthTimeStop = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/stop/timeUTC");
 
-    std::clog << "azimuthTimeStop " << azimuthTimeStop << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "azimuthTimeStop " << azimuthTimeStop << '\n';
 
     const DurationType td = azimuthTimeStop - azimuthTimeStart;
 
-    std::clog << "td " << td.total_microseconds() << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "td " << td.total_microseconds() << '\n';
 
     // numberOfRows
     const unsigned int numberOfRows = getFromFirstNode<unsigned int>(xmlRoot, "productInfo/imageDataInfo/imageRaster/numberOfRows");
 
-    std::clog << "numberOfRows " << numberOfRows << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "numberOfRows " << numberOfRows << '\n';
 
     //Compute azimuth time interval
     theAzimuthTimeInterval = td / static_cast<double> (numberOfRows - 1);
     //theAzimuthTimeInterval = seconds(1./static_cast<double>(theRadarFrequency));
 
-    std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1 / theRadarFrequency) * 1000000 << '\n';
+    ossimNotify(ossimNotifyLevel_DEBUG) << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1. / theRadarFrequency) * 1000000. << '\n';
 
     //For Terrasar-X only 1 burst is supported for now
     BurstRecordType burstRecord;
@@ -176,7 +170,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
         const unsigned int polynomialDegree = xmlRoot.findFirstNode("productSpecific/projectedImageInfo/slantToGroundRangeProjection/polynomialDegree")->getText().toUInt16();
 
-        std::clog << "Number of coefficients " << polynomialDegree << '\n';
+        ossimNotify(ossimNotifyLevel_DEBUG) << "Number of coefficients " << polynomialDegree << '\n';
 
         ossimString path = "/level1Product/productSpecific/projectedImageInfo/slantToGroundRangeProjection/coefficient";
         const ossimString EXP = "exponent";
@@ -193,7 +187,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
                     xnodes[i]->getAttributeValue(s, EXP);
                     const double coeff = xnodes[i]->getText().toDouble();
                     coordRecord.coefs.push_back(coeff);
-                    std::clog << "Coef number " << i << " value: " << coeff << '\n';
+                    ossimNotify(ossimNotifyLevel_DEBUG) << "Coef number " << i << " value: " << coeff << '\n';
                 }
             }
         }
@@ -208,7 +202,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     xnodes.clear();
     xmlGeo->findNodes("/geoReference/geolocationGrid/gridPoint",xnodes);
 
-    std::clog<<"Found "<<xnodes.size()<<" GCPs\n";
+    ossimNotify(ossimNotifyLevel_DEBUG)<<"Found "<<xnodes.size()<<" GCPs\n";
 
     for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
     {
@@ -240,6 +234,8 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::open";
+   // traceDebug.setTraceFlag(true);
+   // traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
    const ossimString ext = file.ext().downcase();
    if ( !file.exists() || (ext != "tiff" && ext != "xml" ))
@@ -264,7 +260,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 
       if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " readAnnotationFile( safeFile )\n";
+         ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " open "<<xmlFileName<<" failed\n";
          return false;
       }
 
@@ -284,6 +280,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
       // automatically loaded/saved into ossimSensorModel
       theMeanGSD = (theGSD.x + theGSD.y)/2.0;
    }
+   return true;
 }
 
 /*virtual*/
@@ -305,9 +302,8 @@ std::ostream& ossimplugins::ossimTerraSarXSarSensorModel::print(std::ostream& ou
       << "\n------------------------------------------------"
       << "\n  theImageID            = " << theImageID
       << "\n  theImageSize          = " << theImageSize
-
       << "\n------------------------------------------------"
-      << "\n  " << endl;
+      << "\n" << endl;
 
    // Set the flags back.
    out.flags(f);
@@ -325,9 +321,12 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
    add(kwl, "support_data.calibration_lookup_flag", "false");
 
    // kwl.addList(theManifestKwl, true);
-   // kwl.addList(theProductKwl,  true);
+   kwl.addList(theProductKwl,  true);
 
-   return ossimSarSensorModel::saveState(kwl, prefix);
+   const bool success = ossimSarSensorModel::saveState(kwl, prefix);
+   ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << (success ? " success!" : " failure!") << '\n';
+   ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl.getSize() << " keywords saved.\n";
+   return success;
 }
 
 /*virtual*/
@@ -381,39 +380,48 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    }
    const ossimXmlNode & xmlRoot = *xRoot;
 
-   //isGRD parse variant?
    ossimXmlNode const& productInfo        = getExpectedFirstNode(xmlRoot, attProductInfo);
    ossimXmlNode const& productVariantInfo = getExpectedFirstNode(productInfo, attProductVariantInfo);
    ossimXmlNode const& sceneInfo          = getExpectedFirstNode(productInfo, attSceneInfo);
    ossimXmlNode const& settings           = getExpectedFirstNode(xmlRoot, attSettings);
    ossimXmlNode const& productSpecific    = getExpectedFirstNode(xmlRoot, attProductSpecific);
-   ossimString  const& productType        = getTextFromFirstNode(productVariantInfo, "productType");
-   std::clog << "type " <<  productType << '\n';
+
+   // Product type
+   ossimString  const& productType        = getTextFromFirstNode(productVariantInfo, "productVariant");
+   ossimNotify(ossimNotifyLevel_DEBUG) << "Product type: " <<  productType << '\n';
    theProductType = ProductType(productType);
+   add(theProductKwl, SUPPORT_DATA_PREFIX, "product_type", productType);
 
    // First, lookup position/velocity records
-   ossimRefPtr<ossimXmlNode> orbitList = xmlRoot.findFirstNode("/level1Product/platform/orbit");
+   ossimRefPtr<ossimXmlNode> orbitList = xmlRoot.findFirstNode("platform/orbit");
    if (!orbitList || 0 == addOrbitStateVectors(*orbitList)) {
+      add(theProductKwl,"orbitList.nb_orbits", "0");
       ossimNotify(ossimNotifyLevel_DEBUG) << "No orbitVectorList info available in metadata!!\n";
    }
 
    //Parse the near range time (in seconds)
    const ossimString & sNearRangeTime = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", sceneInfo, "rangeTime/firstPixel");
 
-   const double nearRangeTime  = to<double>(sNearRangeTime, " extracting slant_range_to_first_pixel from productInfo/sceneInfo/rangeTime/firstPixel field");
+   theNearRangeTime  = to<double>(sNearRangeTime, " extracting slant_range_to_first_pixel from productInfo/sceneInfo/rangeTime/firstPixel field");
+   ossimNotify(ossimNotifyLevel_DEBUG) << "theNearRangeTime " << theNearRangeTime << '\n';
 
    //Parse the range sampling rate
-   addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate",        settings, "RSF");
+   ossimString const& sRangeSamplingRate = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate",        settings, "RSF");
+   theRangeSamplingRate = to<double>(sRangeSamplingRate, " extracting range_sampling_rate from instrument/settings/RSF field");
+
 
    //Parse the range resolution
-   const double rangeSpacing = getDoubleFromFirstNode(productSpecific, "complexImageInfo/slantRangeResolution");
-   add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spacing", rangeSpacing);
-   theGSD.x = rangeSpacing; // TODO: check this must be maintained
+   theRangeResolution = getDoubleFromFirstNode(productSpecific, "complexImageInfo/slantRangeResolution");
+   add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spacing", theRangeResolution);
+   theGSD.x = theRangeResolution; // TODO: check this must be maintained
    // Originally, theGSD.x was obtained from
    // "/level1Product/productSpecific/complexImageInfo/projectedSpacingRange/slantRange";
+   ossimNotify(ossimNotifyLevel_DEBUG) << "theRangeResolution " << theRangeResolution << '\n';
 
    //Parse the radar frequency
-   addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",            settings, "settingRecord/PRF");
+   ossimString const& sRadarFrequency = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",            settings, "settingRecord/PRF");
+   theRadarFrequency = to<double>(sRadarFrequency, " extracting radar_frequency from instrument/settings/settingRecord/PRF field");
+   ossimNotify(ossimNotifyLevel_DEBUG) << "theRadarFrequency " << theRadarFrequency << '\n';
 
    //Manage only strip map product: i.e. TerraSarX has only one burst unlike S1
 
@@ -429,14 +437,15 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    // theAzimuthTimeInterval needs to be computed from:
    // - azimuth time start/stop difference
    const DurationType td = azimuthTimeStop - azimuthTimeStart;
-   std::clog << "td: " << td.total_microseconds() << " = " << azimuthTimeStop << " - " << azimuthTimeStart << '\n';
+   ossimNotify(ossimNotifyLevel_DEBUG) << "td: " << td.total_microseconds() << "us = " << azimuthTimeStop << " - " << azimuthTimeStart << '\n';
    // - numberOfRows
-   std::clog << "numberOfRows " << (end_line + 1) << '\n';
+   ossimNotify(ossimNotifyLevel_DEBUG) << "numberOfRows " << (end_line + 1) << '\n';
 
    // -> azimuth time interval, stored in seconds!
    theAzimuthTimeInterval = td / end_line; // end_line is already a double
    //theAzimuthTimeInterval = seconds(1./static_cast<double>(theRadarFrequency));
    add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", theAzimuthTimeInterval.total_seconds());
+   ossimNotify(ossimNotifyLevel_DEBUG) << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1. / theRadarFrequency) * 1000000. << '\n';
 
    //GRD (detected product)
 #if 0
@@ -454,7 +463,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
       //Read  coefficients
       const unsigned int polynomialDegree = xmlRoot.findFirstNode("productSpecific/projectedImageInfo/slantToGroundRangeProjection/polynomialDegree")->getText().toUInt16();
 
-      std::clog << "Number of coefficients " << polynomialDegree << '\n';
+      ossimNotify(ossimNotifyLevel_DEBUG) << "Number of coefficients " << polynomialDegree << '\n';
 
       ossimString path = "/level1Product/productSpecific/projectedImageInfo/slantToGroundRangeProjection/coefficient";
       const ossimString EXP = "exponent";
@@ -471,7 +480,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
                xnodes[i]->getAttributeValue(s, EXP);
                const double coeff = xnodes[i]->getText().toDouble();
                coordRecord.coefs.push_back(coeff);
-               std::clog << "Coef number " << i << " value: " << coeff << '\n';
+               ossimNotify(ossimNotifyLevel_DEBUG) << "Coef number " << i << " value: " << coeff << '\n';
             }
          }
       }
@@ -485,11 +494,12 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    const ossimFilename geoXml = searchGeoRefFile(annotationXml);
    ossimXmlDocument xmlGeo(geoXml);
    ossimRefPtr<ossimXmlNode> geoXmlRoot = xmlGeo.getRoot();
-   if (!xRoot) {
-      throw std::runtime_error("No geo document found for TerraSarX "+geoXml);
+   if (xmlGeo.hasError() || !xRoot) {
+      throw std::runtime_error("Cannot read geo-ref document found for TerraSarX: "+geoXml);
    }
-   readGeoLocationGrid(*geoXmlRoot, azimuthTimeStart, nearRangeTime);
+   readGeoLocationGrid(*geoXmlRoot, azimuthTimeStart, theNearRangeTime);
    // TODO: metadata file ?
+   return true;
 }
 
 std::size_t ossimplugins::ossimTerraSarXSarSensorModel::addOrbitStateVectors(
@@ -497,6 +507,7 @@ std::size_t ossimplugins::ossimTerraSarXSarSensorModel::addOrbitStateVectors(
 {
    std::vector<ossimRefPtr<ossimXmlNode> > stateVectorList;
    orbitList.findChildNodes("stateVec",stateVectorList);
+   ossimNotify(ossimNotifyLevel_DEBUG) << "Number of states " << stateVectorList.size() << '\n';
 
    const std::size_t stateVectorList_size = stateVectorList.size();
    char orbit_prefix_[256];
@@ -534,9 +545,9 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readGeoLocationGrid(
    char prefix[1024];
    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
 
-   productRoot.findChildNodes("/geoReference/geolocationGrid/gridPoint",xnodes);
+   productRoot.findChildNodes("geolocationGrid/gridPoint",xnodes);
 
-   std::clog<<"Found "<<xnodes.size()<<" GCPs\n";
+   ossimNotify(ossimNotifyLevel_DEBUG)<<"Found "<<xnodes.size()<<" GCPs\n";
 
    unsigned int idx = 0;
    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode, ++idx)
@@ -569,6 +580,7 @@ ossimFilename ossimplugins::ossimTerraSarXSarSensorModel::searchGeoRefFile(ossim
    if (!geoRefFile.exists()) {
       throw std::runtime_error("Cannot find GEOREF.xml file alongside "+file);
    }
+   ossimNotify(ossimNotifyLevel_DEBUG) << "Found georef file: " << geoRefFile << '\n';
    return geoRefFile;
 }
 

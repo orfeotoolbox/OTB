@@ -10,7 +10,7 @@
 // $Id$
 
 #include "ossimTerraSarXSarSensorModel.h"
-// #include "ossimPluginProjectionFactory.h"
+#include "ossimPluginProjectionFactory.h"
 #include <iostream>
 #include <memory>
 #include <map>
@@ -57,7 +57,7 @@ int main(int argc, char * argv[])
    }
 
    try {
-#if 0
+#if 1
       std::auto_ptr<ossimProjection> projection
          (ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
 #else
@@ -75,11 +75,7 @@ int main(int argc, char * argv[])
          throw std::runtime_error(
                "Unlike Expectations, the annotation file ("+annotationXml+") is not a Terra SAR Annotation File");
       }
-#if 1
-      if (verbose) {
-         sensor->activateVerboseMode();
-      }
-#else
+
       if (verbose)
       {
          sensor->print(std::clog);
@@ -87,12 +83,16 @@ int main(int argc, char * argv[])
       }
 
       ossimKeywordlist kwl;
-      sensor->saveState(kwl, "S1.");
-      sensor->loadState(kwl, "S1.");
+      sensor->saveState(kwl, "TSX.");
+
       if (verbose) {
+         std::clog << std::string(20, '-') << "<("<<kwl.getSize()<<")\n";
+         kwl.writeToStream(std::clog);
+         std::clog << ">" << std::string(20, '-') << "\n";
          sensor->print(std::clog);
       }
-#endif
+
+      sensor->loadState(kwl, "TSX.");
 
       const bool validate = inverse == inv
          ? sensor->autovalidateInverseModelFromGCPs(1,1.1,500,0.0000000001)
