@@ -32,29 +32,35 @@ if(UNIX)
   else() #Linux
     set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
   endif()
+  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-nis -no-javascript-jit -v")
+elseif(MSVC)
+  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -mp")
 endif()
 
-STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
-STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
-
-if(MSVC)
-  configure_file(
-    ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.bat.in
-    ${CMAKE_BINARY_DIR}/configure_qt4.bat
-    @ONLY)
-
-  set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.bat)
-
+if(USE_SYSTEM_FREETYPE)
+  set(FT_INCLUDE ${FREETYPE_INCLUDE_DIRS})
 else()
-  configure_file(
-    ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.sh.in
-    ${CMAKE_BINARY_DIR}/configure_qt4.sh
-    @ONLY)
-
-  set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.sh)
-
+  set(FT_INCLUDE ${_SB_FREETYPE_INCLUDE_DIRS})
 endif()
 
+file(TO_NATIVE_PATH ${FT_INCLUDE} FT_INCLUDE_NATIVE)
+file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT4_INSTALL_PREFIX_NATIVE)
+file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT4_INCLUDE_PREFIX_NATIVE)
+file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT4_LIB_PREFIX_NATIVE)
+
+if(WIN32)
+  set(QT4_BIN_EXT ".exe")
+  file(TO_NATIVE_PATH ${QT4_SB_SRC}/configure.exe QT4_CONFIGURE_SCRIPT)
+  set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.bat)
+  set(QT4_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.bat.in)
+else()
+  set(QT4_BIN_EXT "")
+  file(TO_NATIVE_PATH ${QT4_SB_SRC}/configure QT4_CONFIGURE_SCRIPT)
+  set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.sh)
+  set(QT4_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.sh.in)
+endif()
+
+configure_file(${QT4_CONFIGURE_COMMAND_IN} ${QT4_CONFIGURE_COMMAND} @ONLY )
 
 #Remove left over or previous installation from install prefix.
 #Existing files in install prefix was disturbing a second installation.
@@ -74,11 +80,12 @@ add_custom_target(QT4-uninstall
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/plugins"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/translations"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/lib/libQt*"
-  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/qmake"
-  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/lrelease"
-  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/moc"
-  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/rcc"
-  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/uic"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/qmake${QT4_BIN_EXT}"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/lrelease${QT4_BIN_EXT}"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/moc${QT4_BIN_EXT}"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/rcc${QT4_BIN_EXT}"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/uic${QT4_BIN_EXT}"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/libQt*"
   WORKING_DIRECTORY "${SB_INSTALL_PREFIX}"
   )
 
