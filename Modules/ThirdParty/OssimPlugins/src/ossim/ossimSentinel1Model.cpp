@@ -646,6 +646,7 @@ namespace ossimplugins
 
       ossimXmlNodePtr const& orbitList = productRoot.findFirstNode("generalAnnotation/orbitList");
       if (!orbitList) {
+         add(theProductKwl,"orbitList.nb_orbits", "0");
          ossimNotify(ossimNotifyLevel_DEBUG) << "No orbitVectorList info available in metadata!!\n";
       } else {
          addOrbitStateVectors(*orbitList);
@@ -1009,6 +1010,7 @@ namespace ossimplugins
 
       if(stateVectorList.empty())
       {
+         add(theProductKwl,"orbitList.nb_orbits", "0");
          ossimNotify(ossimNotifyLevel_DEBUG) << "No orbitVectorList info available in metadata!!\n";
          return;
       }
@@ -1036,7 +1038,7 @@ namespace ossimplugins
          addMandatory(theProductKwl, orbit_prefix + keyVelZ, *stateVectorList[i], attVelZ);
       }
 
-      add(theProductKwl,"orbitList.nb_orbits", static_cast<ossim_uint32>(stateVectorList_size));
+      add(theProductKwl,"orbitList.nb_orbits", stateVectorList_size);
    }
 
    bool ossimSentinel1Model::initImageSize(ossimIpt& imageSize) const
