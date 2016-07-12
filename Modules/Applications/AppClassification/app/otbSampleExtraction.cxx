@@ -105,7 +105,8 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "support_image.tif");
     SetDocExampleParameterValue("vec", "sample_positions.sqlite");
-    SetDocExampleParameterValue("pre","band_");
+    SetDocExampleParameterValue("outfield","prefix");
+    SetDocExampleParameterValue("outfield.prefix.name","band_");
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("out","sample_values.sqlite");
   }
