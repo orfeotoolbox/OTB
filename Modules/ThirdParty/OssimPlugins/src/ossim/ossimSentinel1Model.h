@@ -62,27 +62,27 @@ namespace ossimplugins
 #endif
       //@}
 
-      bool open(const ossimFilename& file);
+      virtual bool open(const ossimFilename& file) /*override*/;
 
       /*!
        * Returns pointer to a new instance, copy of this.
        */
-      virtual ossimObject* dup() const;
+      virtual ossimObject* dup() const /*override*/;
 
       /*!
        * Extends base-class implementation. Dumps contents of object to ostream.
        */
-      virtual std::ostream& print(std::ostream& out) const;
+      virtual std::ostream& print(std::ostream& out) const /*override*/;
 
       /*!
        * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
        * KWL files. Returns true if successful.
        */
       virtual bool saveState(ossimKeywordlist& kwl,
-            const char* prefix=NULL) const;
+            const char* prefix=NULL) const /*override*/;
 
       virtual bool loadState(ossimKeywordlist const& kwl,
-            const char* prefix=NULL);
+            const char* prefix=NULL) /*override*/;
 
       bool checkDirectory(const ossimFilename& file, const char* d, const char *ext) const;
 
@@ -130,6 +130,9 @@ namespace ossimplugins
       TYPE_DATA;
 
    private:
+      /** Internal function that reads annotation file.
+       * \throw std::exception possibly
+       */
       bool read(ossimFilename const& annotationXml);
       void readCalibrationMetadata();
       void readNoiseMetadata();
