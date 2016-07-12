@@ -790,8 +790,7 @@ MainWindow
     < HistogramWidget, HistogramController, QDockWidget >
     ( "HISTOGRAM",
       tr( "Histogram" ),
-      Qt::RightDockWidgetArea,
-      false
+      Qt::RightDockWidgetArea
     );
 
   tabifyDockWidget( m_QuicklookViewDock, m_HistogramDock );
@@ -830,7 +829,8 @@ MainWindow
     < ColorDynamicsWidget, ColorDynamicsController, QDockWidget >
     ( "COLOR_DYNAMICS",
       tr( "Color dynamics" ),
-      Qt::RightDockWidgetArea
+      Qt::RightDockWidgetArea,
+      I18nMainWindow::DOCK_LAYOUT_SCROLLABLE
     );
 
   // Tabify dock-widgets.
@@ -1553,7 +1553,7 @@ MainWindow
     ( "APPLICATIONS_BROWSER",
       tr( "OTB-Applications browser" ),
       Qt::RightDockWidgetArea,
-      true
+      I18nMainWindow::DOCK_LAYOUT_FLOATING
     );
 
   tabifyDockWidget( m_HistogramDock, m_OtbApplicationsBrowserDock );
