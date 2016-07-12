@@ -136,6 +136,16 @@ namespace ossimplugins {
          kwl.addPair(key, v, overwrite.shall_we());
          return v;
       }
+   template <std::size_t N> inline
+      void add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, char const (&v)[N], ShallOverwrite overwrite = ShallOverwrite::yes)
+      {
+         kwl.addPair(prefix, key, v, overwrite.shall_we());
+      }
+   template <std::size_t N> inline
+      void add(ossimKeywordlist & kwl, std::string const& key, char const (&v)[N], ShallOverwrite overwrite = ShallOverwrite::yes)
+      {
+         kwl.addPair(key, v, overwrite.shall_we());
+      }
    template <typename DataType> inline
       DataType const& add(ossimKeywordlist & kwl, std::string const& prefix, std::string const& key, DataType const& v, ShallOverwrite overwrite = ShallOverwrite::yes)
       {
