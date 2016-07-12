@@ -57,18 +57,27 @@ macro(macro_create_targets_for_package pkg)
       COMMAND ${CMAKE_COMMAND} --build "." --target install
       WORKING_DIRECTORY "${Monteverdi_BINARY_DIR}"
       )
-  else() #Unxies Using SuperBuild
-    if(ENABLE_MONTEVERDI)
+  else() #Using SuperBuild
+    #For out of source build,
+    #we assume the otb is built correctly with superbuild
+    if(OUT_OF_SOURCE_BUILD)
       add_custom_target(PACKAGE-${pkg}-check
-        COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
-	DEPENDS MVD
-        )
+        COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check")
+    else(OUT_OF_SOURCE_BUILD)
+      if(ENABLE_MONTEVERDI)
+        add_custom_target(PACKAGE-${pkg}-check
+          COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
+	  DEPENDS MVD
+          WORKING_DIRECTORY ${SUPERBUILD_BINARY_DIR}
+          )
       else(ENABLE_MONTEVERDI)
-      add_custom_target(PACKAGE-${pkg}-check
-        COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
-	DEPENDS OTB
-        )
-    endif(ENABLE_MONTEVERDI)
+        add_custom_target(PACKAGE-${pkg}-check
+          COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
+	  DEPENDS OTB
+          WORKING_DIRECTORY ${SUPERBUILD_BINARY_DIR}
+          )
+      endif(ENABLE_MONTEVERDI)
+    endif(OUT_OF_SOURCE_BUILD)
   endif()
 
   add_dependencies(PACKAGE-${pkg}-check PACKAGE-TOOLS)
