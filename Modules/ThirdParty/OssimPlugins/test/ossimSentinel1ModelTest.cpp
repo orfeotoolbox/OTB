@@ -9,8 +9,19 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wunused-parameter"
+#   pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#   pragma GCC diagnostic ignored "-Wshadow"
 #include "ossimSentinel1Model.h"
 #include "ossimPluginProjectionFactory.h"
+# pragma GCC diagnostic pop
+#else
+#include "ossimSentinel1Model.h"
+#include "ossimPluginProjectionFactory.h"
+#endif
+
 #include <iostream>
 #include <memory>
 #include <map>

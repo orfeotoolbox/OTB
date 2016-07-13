@@ -27,7 +27,7 @@ int otbImageSampleExtractorFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv
 {
   typedef otb::VectorImage<float> InputImageType;
   typedef otb::ImageSampleExtractorFilter<InputImageType> FilterType;
-  
+
   FilterType::Pointer filter = FilterType::New();
   std::cout << filter << std::endl;
   return EXIT_SUCCESS;
@@ -37,7 +37,7 @@ int otbImageSampleExtractorFilter(int argc, char* argv[])
 {
   typedef otb::VectorImage<float> InputImageType;
   typedef otb::ImageSampleExtractorFilter<InputImageType> FilterType;
-  
+
   if (argc < 3)
     {
     std::cout << "Usage : "<<argv[0]<< "  input_vector  output" << std::endl;
@@ -129,7 +129,10 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   otb::ogr::Layer dstLayer = output->GetLayer(0);
   OGRFieldDefn labelField(classFieldName.c_str(),OFTString);
   dstLayer.CreateField(labelField, true);
-  dstLayer.ogr().StartTransaction();
+  const  OGRErr err = dstLayer.ogr().StartTransaction();
+
+  if (err == OGRERR_NONE) {
+
   otb::ogr::Layer::const_iterator featIt = inLayer.begin();
   for(; featIt!=inLayer.end(); ++featIt)
     {
@@ -137,7 +140,11 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
     dstFeature.SetFrom( *featIt, TRUE );
     dstLayer.CreateFeature( dstFeature );
     }
-  dstLayer.ogr().CommitTransaction();
+
+  const OGRErr err2 = dstLayer.ogr().CommitTransaction();
+  if (err2 == OGRERR_NONE)
+    {
+
   output->Clear();
 
   otb::ogr::DataSource::Pointer outputUpdate =
@@ -164,6 +171,17 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
 
   chrono.Stop();
   std::cout << "Extraction took "<< chrono.GetTotal() << " sec" << std::endl;
+    }
+  else {
+    std::cout<< "Unable to commit transaction for OGR layer " << dstLayer.ogr().GetName() << "." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  }
+  else {
+    std::cout << "Unable to start transaction for OGR layer " << dstLayer.ogr().GetName() << "." << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }
