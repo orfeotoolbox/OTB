@@ -1184,18 +1184,18 @@ MainWindow
 
   stackedLayerModel->SetCurrent( imageModel );
 
-  bool hasReference = stackedLayerModel->HasReference();
+  if( gcs==0 )
+    {
+    if( unk==0 )
+      {
+      if( srt!=SRT_UNKNOWN )
+	stackedLayerModel->SetReference( imageModel  );
 
-  if( !hasReference && srt!=SRT_UNKNOWN )
-    stackedLayerModel->SetReference( imageModel  );
-
-  else if( hasReference && srt==SRT_UNKNOWN )
+      UserZoomExtent();
+      }
+    }
+  else if( unk==0 && srt==SRT_UNKNOWN )
     stackedLayerModel->SetReference( StackedLayerModel::NIL_INDEX );
-
-  //
-  // Set zoom-level which forces image-views refresh.
-  if( !hasReference )
-    UserZoomExtent();
 
   //
   // Re-activate rendering of image-views.
