@@ -126,13 +126,13 @@ std::string ossimplugins::time::to_simple_string(Duration const& d)
 {
    typedef unsigned long ulong;
    const double fs = d.as_day_frac() * 24L * 60 * 60; // in seconds
-   const ulong  ls(fs);
-   const ulong  us = ulong(fs * 1000*1000) % (1000*1000);
+   const ulong  ls = std::abs(fs);
+   const ulong  us = ulong(std::abs(fs * 1000*1000)) % (1000*1000);
    const ulong  s  = ls % 60;
    const ulong  m  = (ls/60) % 60;
    const ulong  h  = (ls/60/60);
    char buffer[1024];
-   const std::size_t N = s_printf(buffer, "%02d:%02d:%02d.%06ld", h, m, s, us);
+   const std::size_t N = s_printf(buffer, "%s%02d:%02d:%02d.%06ld", fs < 0 ? "-" : "", h, m, s, us);
    assert(N);
 
    return std::string(buffer, N);
