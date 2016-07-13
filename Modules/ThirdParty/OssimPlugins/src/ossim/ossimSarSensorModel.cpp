@@ -170,7 +170,10 @@ namespace ossimplugins
       ossimEcefPoint ellPt;
 
       // Simple iterative inversion of inverse model starting at closest gcp
-      projToSurface(refGcp,imPt,hgtRef,ellPt);
+      if (! projToSurface(refGcp,imPt,hgtRef,ellPt))  {
+         worldPt.makeNan();
+         return ;
+      }
 
       worldPt = ossimGpt(ellPt);
    }
@@ -188,7 +191,10 @@ namespace ossimplugins
       ossimEcefPoint ellPt;
 
       // Simple iterative inversion of inverse model starting at closest gcp
-      projToSurface(refGcp,imPt,hgtRef,ellPt);
+      if (! projToSurface(refGcp,imPt,hgtRef,ellPt))  {
+         worldPt.makeNan();
+         return ;
+      }
 
       worldPt = ossimGpt(ellPt);
    }
@@ -687,6 +693,14 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::projToSurface(const GCPRecordType & initGcp, const ossimDpt & target, const ossimHgtRef & hgtRef, ossimEcefPoint & ellPt) const
    {
+      const double hgt_ref = hgtRef.getRefHeight(initGcp.worldPt);
+      if (isnan(hgt_ref))
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "Cannot obtain reference height for " << initGcp.worldPt << ". Impossible to project " << initGcp << " to surface.\n";
+         return false;
+      }
+
       // Initialize current estimation
       ossimEcefPoint currentEstimation(initGcp.worldPt);
 
@@ -695,7 +709,7 @@ namespace ossimplugins
       ossimDpt currentImPoint(initGcp.imPt);
 
       ossim_float64 currentImSquareResidual = squareDistance(target,currentImPoint);
-      double currentHeightResidual = initGcp.worldPt.height() - hgtRef.getRefHeight(initGcp.worldPt);
+      double currentHeightResidual = initGcp.worldPt.height() - hgt_ref;
 
       bool init = true;
 

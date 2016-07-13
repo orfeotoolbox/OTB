@@ -78,28 +78,31 @@ int main(int argc, char * argv[])
       if (!projection.get()) {
          throw std::runtime_error("Cannot read annotation file ("+annotationXml+"). Cannot create a projection from it.");
       }
-
-      ossimTerraSarXSarSensorModel * sensor = dynamic_cast<ossimTerraSarXSarSensorModel*>(projection.get());
-      if (!sensor) {
-         throw std::runtime_error(
-               "Unlike Expectations, the annotation file ("+annotationXml+") is not a Terra SAR Annotation File");
-      }
-
-      if (verbose)
-      {
-         sensor->print(std::clog);
-         sensor->activateVerboseMode();
+      if (verbose) {
+         projection->print(std::clog);
       }
 
       ossimKeywordlist kwl;
-      sensor->saveState(kwl, "TSX.");
+      projection->saveState(kwl, "TSX.");
 
       if (verbose) {
          std::clog << std::string(20, '-') << "<("<<kwl.getSize()<<")\n";
          kwl.writeToStream(std::clog);
          std::clog << ">" << std::string(20, '-') << "\n";
-         sensor->print(std::clog);
+         projection->print(std::clog);
       }
+
+      ossimTerraSarXSarSensorModel * sensor = dynamic_cast<ossimTerraSarXSarSensorModel*>(projection.get());
+      if (!sensor) {
+         throw std::runtime_error(
+               "Unlike expectations, the annotation file ("+annotationXml+") is not a Terra SAR Annotation File");
+      }
+
+      if (verbose)
+      {
+         sensor->activateVerboseMode();
+      }
+
 
       sensor->loadState(kwl, "TSX.");
 

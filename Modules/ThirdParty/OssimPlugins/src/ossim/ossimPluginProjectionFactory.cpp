@@ -18,7 +18,7 @@
 #include "ossimPluginProjectionFactory.h"
 #include "ossimRadarSatModel.h"
 #include "ossimEnvisatAsarModel.h"
-// #include "ossimTerraSarModel.h"
+#include "ossimTerraSarModel.h"
 #include "ossimTerraSarXSarSensorModel.h"
 #include "ossimRadarSat2Model.h"
 #include "ossimErsSarModel.h"
@@ -86,7 +86,7 @@ namespace ossimplugins
       {
          return doUpcastModelToProjectionWhenOCG(model);
       }
-#if 0
+#if 1
    template <> inline
       ossimRefPtr<ossimProjection> doUpcastModelToProjection<ossimTerraSarModel>(ossimRefPtr<ossimTerraSarModel> model)
       {
@@ -142,34 +142,17 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       projection = doBuildProjection<ossimPleiadesModel>(filename);
    }
 
+   // Terra-SAR-X
+#if 0
+   // old Terra-SAR-X
    if ( !projection )
    {
-#if 0
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
-      }
-
-      ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
-
-      if ( model->open(filename) )
-      {
-         // Check if a coarse grid was generated, and use it instead:
-         projection = model->getReplacementOcgModel().get();
-         if (projection.valid())
-            model = 0; // Have OCG, don't need this one anymore
-         else
-            projection = model.get();
-      }
-      else
-      {
-         model = 0;
-      }
-#else
-      // projection = doBuildProjection<ossimTerraSarModel>(filename);
-      projection = doBuildProjection<ossimTerraSarXSarSensorModel>(filename);
+      projection = doBuildProjection<ossimTerraSarModel>(filename);
+   }
 #endif
+   if ( !projection )
+   {
+      projection = doBuildProjection<ossimTerraSarXSarSensorModel>(filename);
    }
 
    // ErsSar
@@ -409,7 +392,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       {
          result = new ossimSpot6Model();
       }
-
       else if (type == "ossimSentinel1Model")
       {
          result = new ossimSentinel1Model();

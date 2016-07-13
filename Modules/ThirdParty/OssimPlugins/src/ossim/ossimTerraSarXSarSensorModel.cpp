@@ -50,8 +50,17 @@ namespace {// Anonymous namespace
    const ossimString attProductVariantInfo = "productVariantInfo";
    const ossimString attProductVariant     = "productVariant";
    const ossimString attSceneInfo          = "sceneInfo";
+   const ossimString attImageRaster        = "imageDataInfo/imageRaster";
    const ossimString attSettings           = "instrument/settings";
    const ossimString attProductSpecific    = "productSpecific";
+   const ossimString attComplexImageInfo   = "complexImageInfo";
+   const ossimString attGeneralHeader      = "generalHeader";
+   const ossimString attSceneCenterCoord   = "sceneCenterCoord";
+
+   inline bool isnan(ossimGpt const& p) {
+      return std::isnan(p.latd()) || std::isnan(p.lond()) || std::isnan(p.height());
+   }   
+
 }// Anonymous namespace
 
 namespace ossimplugins {
@@ -295,15 +304,7 @@ std::ostream& ossimplugins::ossimTerraSarXSarSensorModel::print(std::ostream& ou
    // Capture stream flags since we are going to mess with them.
    std::ios_base::fmtflags f = out.flags();
 
-   out << "\nDump of ossimTerraSarXSarSensorModel at address " << hex << this
-      << dec
-      // TODO factorize these data back into ossimSarSensorModel (update
-      // ossimSentinel1Model in consequence)
-      << "\n------------------------------------------------"
-      << "\n  theImageID            = " << theImageID
-      << "\n  theImageSize          = " << theImageSize
-      << "\n------------------------------------------------"
-      << "\n" << endl;
+   out << "\nDump of ossimTerraSarXSarSensorModel at address " << hex << this << dec << endl;
 
    // Set the flags back.
    out.flags(f);
@@ -334,6 +335,9 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::loadState";
    SCOPED_LOG(traceDebug, MODULE);
+   theOrbitRecords.clear();
+   theGCPRecords.clear();
+   theBurstRecords.clear();
 
 #if 0
    theManifestKwl.addList(kwl, true);
@@ -383,8 +387,12 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    ossimXmlNode const& productInfo        = getExpectedFirstNode(xmlRoot, attProductInfo);
    ossimXmlNode const& productVariantInfo = getExpectedFirstNode(productInfo, attProductVariantInfo);
    ossimXmlNode const& sceneInfo          = getExpectedFirstNode(productInfo, attSceneInfo);
+   ossimXmlNode const& sceneCenterCoord   = getExpectedFirstNode(sceneInfo, attSceneCenterCoord);
+   ossimXmlNode const& imageRaster        = getExpectedFirstNode(productInfo, attImageRaster);
    ossimXmlNode const& settings           = getExpectedFirstNode(xmlRoot, attSettings);
    ossimXmlNode const& productSpecific    = getExpectedFirstNode(xmlRoot, attProductSpecific);
+   ossimXmlNode const& complexImageInfo   = getExpectedFirstNode(productSpecific, attComplexImageInfo);
+   ossimXmlNode const& generalHeader      = getExpectedFirstNode(xmlRoot, attGeneralHeader);
 
    // Product type
    ossimString  const& productType        = getTextFromFirstNode(productVariantInfo, "productVariant");
@@ -411,11 +419,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
 
 
    //Parse the range resolution
-   theRangeResolution = getDoubleFromFirstNode(productSpecific, "complexImageInfo/slantRangeResolution");
+   theRangeResolution = getDoubleFromFirstNode(complexImageInfo, "slantRangeResolution");
    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spacing", theRangeResolution);
-   theGSD.x = theRangeResolution; // TODO: check this must be maintained
-   // Originally, theGSD.x was obtained from
-   // "/level1Product/productSpecific/complexImageInfo/projectedSpacingRange/slantRange";
    ossimNotify(ossimNotifyLevel_DEBUG) << "theRangeResolution " << theRangeResolution << '\n';
 
    //Parse the radar frequency
@@ -432,7 +437,15 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    // forwarded exactly as written initially
    const TimeType azimuthTimeStart = time::toModifiedJulianDate(addMandatory(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", sceneInfo, "start/timeUTC"));
    const TimeType azimuthTimeStop  = time::toModifiedJulianDate(addMandatory(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  sceneInfo, "stop/timeUTC"));
-   const double end_line           = add(theProductKwl, BURST_PREFIX, "[0].end_line",           getFromFirstNode<unsigned int>(productInfo, "imageDataInfo/imageRaster/numberOfRows") - 1);
+   theImageSize.y = getFromFirstNode<unsigned int>(imageRaster, "numberOfRows");
+   const double end_line           = add(theProductKwl, BURST_PREFIX, "[0].end_line", theImageSize.y - 1);
+
+   BurstRecordType burstRecord;
+   burstRecord.startLine = 0;
+   burstRecord.azimuthStartTime = azimuthTimeStart;
+   burstRecord.azimuthStopTime = azimuthTimeStop;
+   burstRecord.endLine = end_line;
+   theBurstRecords.push_back(burstRecord);
 
    // theAzimuthTimeInterval needs to be computed from:
    // - azimuth time start/stop difference
@@ -490,7 +503,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    }
 #endif
 
-   //Parse GCPs
+   // Parse GCPs
    const ossimFilename geoXml = searchGeoRefFile(annotationXml);
    ossimXmlDocument xmlGeo(geoXml);
    ossimRefPtr<ossimXmlNode> geoXmlRoot = xmlGeo.getRoot();
@@ -499,12 +512,54 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    }
    readGeoLocationGrid(*geoXmlRoot, azimuthTimeStart, theNearRangeTime);
    // TODO: metadata file ?
+
+   // Fill other properties from ossimSensorModel
+   theSensorID = getTextFromFirstNode(generalHeader, "mission");
+   theImageID  = getTextFromFirstNode(sceneInfo, "sceneID");
+   theImageSize.x = getFromFirstNode<unsigned int>(imageRaster, "numberOfColumns");
+   // theGSD
+   if (isSSC()) {
+      theGSD.x = getFromFirstNode<double>(complexImageInfo, "projectedSpacingRange/slantRange");
+      theGSD.y = getFromFirstNode<double>(complexImageInfo, "projectedSpacingAzimuth");
+   } else {
+      // TODO: check values whether they aren't inverted
+      // x <-> rowSpacing and y <-> columnSpacing is what was done in original
+      // code
+      theGSD.x = getFromFirstNode<double>(imageRaster, "rowSpacing");
+      theGSD.y = getFromFirstNode<double>(imageRaster, "columnSpacing");
+   }
+   theRefGndPt.lat = getFromFirstNode<ossim_float64>(sceneCenterCoord, "lat");
+   theRefGndPt.lon = getFromFirstNode<ossim_float64>(sceneCenterCoord, "lon");
+
+   theRefImgPt.x = getFromFirstNode<ossim_float64>(sceneCenterCoord, "refColumn") - 1.0;
+   theRefImgPt.y = getFromFirstNode<ossim_float64>(sceneCenterCoord, "refRow")    - 1.0;
+
+#if 1
+   // GCPRecords need to be loaded into C++ data in order to use
+   // lineSampleToWorld()
+   // Assign the ossimSensorModel::theBoundGndPolygon
+   ossimGpt ul;
+   ossimGpt ur;
+   ossimGpt lr;
+   ossimGpt ll;
+   lineSampleToWorld(theImageClipRect.ul(), ul);
+   lineSampleToWorld(theImageClipRect.ur(), ur);
+   lineSampleToWorld(theImageClipRect.lr(), lr);
+   lineSampleToWorld(theImageClipRect.ll(), ll);
+   if (!isnan(ul) && !isnan(ur) && !isnan(lr) && !isnan(ll)) {
+      setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
+      // TODO: shouldn't we return false?
+      // even if we'are able to orthorectify geometries
+   }
+#endif
+
    return true;
 }
 
 std::size_t ossimplugins::ossimTerraSarXSarSensorModel::addOrbitStateVectors(
       ossimXmlNode const& orbitList)
 {
+   theOrbitRecords.clear();
    std::vector<ossimRefPtr<ossimXmlNode> > stateVectorList;
    orbitList.findChildNodes("stateVec",stateVectorList);
    ossimNotify(ossimNotifyLevel_DEBUG) << "Number of states " << stateVectorList.size() << '\n';
@@ -513,23 +568,40 @@ std::size_t ossimplugins::ossimTerraSarXSarSensorModel::addOrbitStateVectors(
    char orbit_prefix_[256];
    for (std::size_t i = 0; i != stateVectorList_size ; ++i)
    {
+      OrbitRecordType orbitRecord;
+
       //orbit_state_vectors
       const int pos = s_printf(orbit_prefix_, "orbitList.orbit[%d].", int(i));
       assert(pos > 0 && pos < sizeof(orbit_prefix_));
       const std::string orbit_prefix(orbit_prefix_, pos);
 
       // Store acquisition time
-      addMandatory(theProductKwl, orbit_prefix + keyTime,  *stateVectorList[i], attTimeUTC);
+      orbitRecord.azimuthTime = time::toModifiedJulianDate
+         (addMandatory(theProductKwl, orbit_prefix + keyTime,  *stateVectorList[i], attTimeUTC));
 
       // Retrieve ECEF position
-      addMandatory(theProductKwl, orbit_prefix + keyPosX, *stateVectorList[i], attPosX);
-      addMandatory(theProductKwl, orbit_prefix + keyPosY, *stateVectorList[i], attPosY);
-      addMandatory(theProductKwl, orbit_prefix + keyPosZ, *stateVectorList[i], attPosZ);
+      orbitRecord.position[0] = to<double>(
+            addMandatory(theProductKwl, orbit_prefix + keyPosX, *stateVectorList[i], attPosX),
+            " extracting X position in orbit");
+      orbitRecord.position[1] = to<double>(
+            addMandatory(theProductKwl, orbit_prefix + keyPosY, *stateVectorList[i], attPosY),
+            " extracting Y position in orbit");
+      orbitRecord.position[2] = to<double>(
+            addMandatory(theProductKwl, orbit_prefix + keyPosZ, *stateVectorList[i], attPosZ),
+            " extracting Z position in orbit");
 
       // Retrieve ECEF velocity
-      addMandatory(theProductKwl, orbit_prefix + keyVelX, *stateVectorList[i], attVelX);
-      addMandatory(theProductKwl, orbit_prefix + keyVelY, *stateVectorList[i], attVelY);
-      addMandatory(theProductKwl, orbit_prefix + keyVelZ, *stateVectorList[i], attVelZ);
+      orbitRecord.velocity[0] = to<double>(
+            addMandatory(theProductKwl, orbit_prefix + keyVelX, *stateVectorList[i], attVelX),
+            " extracting X velocity in orbit");
+      orbitRecord.velocity[1] = to<double>(
+            addMandatory(theProductKwl, orbit_prefix + keyVelY, *stateVectorList[i], attVelY),
+            " extracting Y velocity in orbit");
+      orbitRecord.velocity[2] = to<double>(
+            addMandatory(theProductKwl, orbit_prefix + keyVelZ, *stateVectorList[i], attVelZ),
+            " extracting Z velocity in orbit");
+
+      theOrbitRecords.push_back(orbitRecord);
    }
 
    add(theProductKwl,"orbitList.nb_orbits", stateVectorList_size);
@@ -542,6 +614,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readGeoLocationGrid(
       double       const  nearRangeTime)
 {
    SCOPED_LOG(traceDebug, "ossimTerraSarXSarSensorModel::readGeoLocationGrid");
+   theGCPRecords.clear();
    char prefix[1024];
    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
 
@@ -552,6 +625,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readGeoLocationGrid(
    unsigned int idx = 0;
    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode, ++idx)
    {
+      GCPRecordType gcpRecord;
       const int pos = s_printf(prefix, "%s[%d].", GCP_PREFIX.c_str(), idx);
       assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix));
 
@@ -562,14 +636,19 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readGeoLocationGrid(
 
       //Get delta range time
       // is seconds
-      add(theProductKwl, prefix, keySlantRangeTime, nearRangeTime + getDoubleFromFirstNode(**itNode, attTau));
+      gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);
+      add(theProductKwl, prefix, keySlantRangeTime, gcpRecord.slantRangeTime);
 
-      add(theProductKwl, prefix, keyImPtX, getDoubleFromFirstNode(**itNode, attCol) - 1.);
-      add(theProductKwl, prefix, keyImPtY, getDoubleFromFirstNode(**itNode, attRow) - 1.);
+      gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attCol) - 1.;
+      gcpRecord.imPt.y = getDoubleFromFirstNode(**itNode, attRow) - 1.;
+      add(theProductKwl, prefix, keyImPtX, gcpRecord.imPt.x);
+      add(theProductKwl, prefix, keyImPtY, gcpRecord.imPt.y);
 
-      addMandatory(theProductKwl, prefix, keyWorldPtLat, **itNode, attLat);
-      addMandatory(theProductKwl, prefix, keyWorldPtLon, **itNode, attLon);
-      addMandatory(theProductKwl, prefix, keyWorldPtHgt, **itNode, attHeight);
+      gcpRecord.worldPt.lat = to<double>(addMandatory(theProductKwl, prefix, keyWorldPtLat, **itNode, attLat),    " extracting latitude from " + attLat + " node");
+      gcpRecord.worldPt.lon = to<double>(addMandatory(theProductKwl, prefix, keyWorldPtLon, **itNode, attLon),    " extracting longitude from " + attLon + " node");
+      gcpRecord.worldPt.hgt = to<double>(addMandatory(theProductKwl, prefix, keyWorldPtHgt, **itNode, attHeight), " extracting height from " + attHeight + " node");
+
+      theGCPRecords.push_back(gcpRecord);
    }
    add(theProductKwl, GCP_NUMBER_KEY, idx);
 }
