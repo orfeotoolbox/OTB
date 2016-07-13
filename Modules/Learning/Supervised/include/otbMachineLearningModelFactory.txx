@@ -120,4 +120,95 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   itk::ObjectFactoryBase::RegisterFactory(factory);
 }
 
+template <class TInputValue, class TOutputValue>
+void
+MachineLearningModelFactory<TInputValue,TOutputValue>
+::CleanFactories()
+{
+  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
+
+  std::list<itk::ObjectFactoryBase*> factories = itk::ObjectFactoryBase::GetRegisteredFactories();
+  std::list<itk::ObjectFactoryBase*>::iterator itFac;
+
+  for (itFac = factories.begin(); itFac != factories.end() ; ++itFac)
+    {
+#ifdef OTB_USE_LIBSVM
+    LibSVMMachineLearningModelFactory<TInputValue,TOutputValue> *libsvmFactory =
+      dynamic_cast<LibSVMMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (libsvmFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(libsvmFactory);
+      continue;
+      }
+#endif
+#ifdef OTB_USE_OPENCV
+    // RandomForest
+    RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue> *rfFactory =
+      dynamic_cast<RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (rfFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(rfFactory);
+      continue;
+      }
+    // SVM
+    SVMMachineLearningModelFactory<TInputValue,TOutputValue> *svmFactory =
+      dynamic_cast<SVMMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (svmFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(svmFactory);
+      continue;
+      }
+    // Boost
+    BoostMachineLearningModelFactory<TInputValue,TOutputValue> *boostFactory =
+      dynamic_cast<BoostMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (boostFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(boostFactory);
+      continue;
+      }
+    // ANN
+    NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue> *annFactory =
+      dynamic_cast<NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (annFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(annFactory);
+      continue;
+      }
+    // Bayes
+    NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue> *bayesFactory =
+      dynamic_cast<NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (bayesFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(bayesFactory);
+      continue;
+      }
+    // Decision Tree
+    DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue> *dtFactory =
+      dynamic_cast<DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (dtFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(dtFactory);
+      continue;
+      }
+    // Gradient Boosted tree
+    GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue> *gbtFactory =
+      dynamic_cast<GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (gbtFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(gbtFactory);
+      continue;
+      }
+    // KNN
+    KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue> *knnFactory =
+      dynamic_cast<KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (knnFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(knnFactory);
+      continue;
+      }
+#endif
+    }
+
+}
+
 } // end namespace otb
