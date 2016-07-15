@@ -56,7 +56,15 @@
 // SPTW
 #include <algorithm>
 #include <vector>
+
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "sptw.h"
+# pragma GCC diagnostic pop
+#else
+#include "sptw.h"
+#endif
 
 // GDAL-OTB datatype brigde
 #include "otbGdalDataTypeBridge.h"
