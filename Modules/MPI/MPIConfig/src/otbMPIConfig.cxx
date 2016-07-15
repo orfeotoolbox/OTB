@@ -24,7 +24,15 @@
 #include <string>
 #include <cassert>
 
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <mpi.h>
+# pragma GCC diagnostic pop
+#else
+#include <mpi.h>
+#endif
+
 
 /**
   * Call the MPI routine MPIFunc with arguments Args (surrounded by
@@ -117,13 +125,13 @@ void MPIConfig::Init(int& argc, char** &argv, bool abortOnException) {
      logError("Negative MPI rank");
      abort(EXIT_FAILURE);
      }
-   
+
    m_MyRank = static_cast<unsigned int>(irank);
-   
+
    // Get MPI NbProocs
 
    int inbprocs=0;
-   
+
    OTB_MPI_CHECK_RESULT(MPI_Comm_size, (MPI_COMM_WORLD , &inbprocs));
 
    if(inbprocs<1)
@@ -160,4 +168,3 @@ void MPIConfig::logInfo(const std::string message) {
 }
 
 } // End namespace otb
-

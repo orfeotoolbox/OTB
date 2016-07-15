@@ -182,7 +182,7 @@ otb_add_test(NAME coTvExtractROITestMetaData_TIFF COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/coTvExtractROITestMetaData1.txt
   ${TEMP}/coTvExtractROITestMetaData2.txt
-  --ignore-lines-with 1 Origin:
+  --ignore-lines-with 4 Origin: Source: Image ImportImageContainer
   otbExtractROITestMetaData
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   ${TEMP}/coTvExtractROITestMetaData1.tif
@@ -195,7 +195,7 @@ otb_add_test(NAME coTvExtractROITestMetaData_HDR COMMAND otbImageBaseTestDriver
   --compare-ascii ${NOTOL}
   ${TEMP}/coTvExtractROITestMetaData1_hdr.txt
   ${TEMP}/coTvExtractROITestMetaData2_hdr.txt
-  --ignore-lines-with 1 Origin:
+  --ignore-lines-with 4 Origin: Source: Image ImportImageContainer
   otbExtractROITestMetaData
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   ${TEMP}/coTvExtractROITestMetaData1.hdr
@@ -383,7 +383,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     #otb_add_test(NAME ioTvVectorImageReadingInfo_${current_type} COMMAND otbImageBaseTestDriver
     #--ignore-order --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
     #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
-    #--ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner 
+    #--ignore-lines-with 4 CacheSizeInBytes SubDatasetIndex Driver Corner
     #otbVectorImageTest
     #${current_file}?&resol=0
     #${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
@@ -750,7 +750,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
     -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
     -startX 0 -startY 0 -sizeX ParseHdfSubsetName337 -sizeY 280 )
-  
+
   set_tests_properties(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI PROPERTIES DEPENDS ioTvMultiMonoChannelROI_RADARSAT2ENVI)
 endif()
 
