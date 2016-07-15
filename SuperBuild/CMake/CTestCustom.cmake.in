@@ -4,13 +4,23 @@ set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
 
 set(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
-  ".*SuperBuild.*LIBKML.*warning.*"
   ".*SuperBuild.GEOS.*"
   ".*SuperBuild.JPEG.*warning"
   ".*SuperBuild.TIFF.*warning.*"
-  ".*SuperBuild.GEOTIFF.*warning.*"
-  ".*SuperBuild.GDAL.config.status.*WARNING.*"
-  ".*SuperBuild.OSSIM.*warning.*"
+  ".*SuperBuild.ZLIB.src.ZLIB.*"
+  ".*SuperBuild.FFTW.FFTWD.src.*"
+  ".*SuperBuild.FFTW.FFTWF.src.*"
+  ".*SuperBuild.GEOTIFF.src.GEOTIFF*"
+  ".*SuperBuild.OPENCV.src.OPENCV.*"
+  ".*SuperBuild.GDAL.src.GDAL.*"
+  ".*SuperBuild.ITK.src.ITK.*"
+  ".*SuperBuild.OPENJPEG.tmp.*"
+  ".*SuperBuild.OSSIM.src.OSSIM.*"
+  ".*SuperBuild.PACKAGE-TOOLS.*"
+  ".*SuperBuild.CURL.src.CURL.*"
+  ".*SuperBuild.PNG.src.PNG.*"
+  ".*SuperBuild.JPEG.src.JPEG.*"
+  ".*SuperBuild.LIBKML.src.LIBKML.*"
   )
 
 # We disable all compiler warnings on superbuild. They are too numerous and pretty much useless
