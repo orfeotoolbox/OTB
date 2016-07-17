@@ -11,6 +11,14 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*SuperBuild.GEOTIFF.*warning.*"
   ".*SuperBuild.GDAL.config.status.*WARNING.*"
   ".*SuperBuild.OSSIM.*warning.*"
+  "ranlib:.*file:.*has no symbols"
+  "libtool:.*file:.*has no symbols"
+  "libtool:.compile:.*"
+  "libtool:.install:.warning:.relinking.*"
+  "make.*jobserver.unavailable.*"
+  "configure:.WARNING:.*"
+  "config.status:.WARNING.*"
+  ".*bash.*config.rpath.*"
   )
 
 # We disable all compiler warnings on superbuild. They are too numerous and pretty much useless
