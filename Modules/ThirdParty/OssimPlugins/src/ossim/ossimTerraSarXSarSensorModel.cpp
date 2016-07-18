@@ -318,7 +318,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::saveState";
    SCOPED_LOG(traceDebug, MODULE);
 
-   add(kwl, prefix, ossimKeywordNames::TYPE_KW, "ossimTerraSarXSarSensorModel");
+   add(kwl, prefix?prefix:"", ossimKeywordNames::TYPE_KW, "ossimTerraSarXSarSensorModel");
    add(kwl, "support_data.calibration_lookup_flag", "false");
 
    // kwl.addList(theManifestKwl, true);

@@ -126,7 +126,7 @@ namespace ossimplugins
       static const char MODULE[] = "ossimplugins::ossimSentinel1Model::saveState";
       SCOPED_LOG(traceDebug, MODULE);
 
-      add(kwl, prefix, ossimKeywordNames::TYPE_KW, "ossimSentinel1Model");
+      add(kwl, prefix?prefix:"", ossimKeywordNames::TYPE_KW, "ossimSentinel1Model");
       add(kwl, "support_data.calibration_lookup_flag", "true");
 
       kwl.addList(theManifestKwl, true);
