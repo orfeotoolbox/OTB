@@ -551,7 +551,7 @@ namespace ossimplugins
 
       ossimRefPtr<ossimXmlNode> xRoot = productXmlDocument.getRoot();
       if (!xRoot) {
-         throw std::runtime_error("No root document found for Sentinel1 annotation file "+annotationXml);
+         throw std::runtime_error(("No root document found for Sentinel1 annotation file "+annotationXml).string());
       }
       const ossimXmlNode & productRoot = *xRoot;
 

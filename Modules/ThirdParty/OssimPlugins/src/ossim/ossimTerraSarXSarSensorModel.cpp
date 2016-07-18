@@ -59,7 +59,7 @@ namespace {// Anonymous namespace
 
    inline bool isnan(ossimGpt const& p) {
       return std::isnan(p.latd()) || std::isnan(p.lond()) || std::isnan(p.height());
-   }   
+   }
 
 }// Anonymous namespace
 
@@ -380,7 +380,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    ossimXmlDocument xmlDoc(annotationXml);
    ossimRefPtr<ossimXmlNode> xRoot = xmlDoc.getRoot();
    if (!xRoot) {
-      throw std::runtime_error("No root document found for TerraSarX annotation file "+annotationXml);
+      throw std::runtime_error(("No root document found for TerraSarX annotation file "+annotationXml).string());
    }
    const ossimXmlNode & xmlRoot = *xRoot;
 

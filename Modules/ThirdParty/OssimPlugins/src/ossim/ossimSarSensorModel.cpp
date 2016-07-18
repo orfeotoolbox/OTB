@@ -694,7 +694,7 @@ namespace ossimplugins
    bool ossimSarSensorModel::projToSurface(const GCPRecordType & initGcp, const ossimDpt & target, const ossimHgtRef & hgtRef, ossimEcefPoint & ellPt) const
    {
       const double hgt_ref = hgtRef.getRefHeight(initGcp.worldPt);
-      if (isnan(hgt_ref))
+      if (std::isnan(hgt_ref))
       {
          ossimNotify(ossimNotifyLevel_FATAL)
             << "Cannot obtain reference height for " << initGcp.worldPt << ". Impossible to project " << initGcp << " to surface.\n";
