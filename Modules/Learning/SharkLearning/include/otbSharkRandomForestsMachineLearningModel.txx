@@ -76,9 +76,9 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     samples.push_back(value[i]);
     }
-  auto probas = m_RFModel(samples);
   if (quality != NULL)
     {
+    auto probas = m_RFModel(samples);
     if(m_ComputeMargin)
       {
       std::nth_element(probas.begin(), probas.begin()+1, 
