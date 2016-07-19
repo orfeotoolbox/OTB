@@ -77,7 +77,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
@@ -171,12 +171,12 @@ private:
     SetDocExampleParameterValue("transform.type.rotation.scaley", "2.");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* inputImage = GetParameterImage("in");
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectListSource_h
-#define __otbObjectListSource_h
+#ifndef otbObjectListSource_h
+#define otbObjectListSource_h
 
 #include "itkProcessObject.h"
 #include "otbObjectList.h"
@@ -76,7 +76,7 @@ public:
    * SmartPointer to a DataObject. If a subclass of ImageSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Graft the specified DataObject onto this ProcessObject's output.
@@ -170,9 +170,9 @@ protected:
   /** Constructor */
   ObjectListSource();
   /** Destructor */
-  virtual ~ObjectListSource() {}
+  ~ObjectListSource() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Ensure that the output lists are cleared before processing */
   virtual void  AllocateOutputs();
@@ -187,7 +187,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   ObjectListSource(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPathMeanDistanceFunctor_h
-#define __otbPathMeanDistanceFunctor_h
+#ifndef otbPathMeanDistanceFunctor_h
+#define otbPathMeanDistanceFunctor_h
 
 #include "otbMacro.h"
 #include "otbMath.h"

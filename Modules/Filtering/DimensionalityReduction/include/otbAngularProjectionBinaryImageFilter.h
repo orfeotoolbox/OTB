@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAngularProjectionBinaryImageFilter_h
-#define __otbAngularProjectionBinaryImageFilter_h
+#ifndef otbAngularProjectionBinaryImageFilter_h
+#define otbAngularProjectionBinaryImageFilter_h
 
 #include <vector>
 
@@ -86,10 +86,10 @@ public:
 
 protected:
   AngularProjectionBinaryImageFilter();
-  virtual ~AngularProjectionBinaryImageFilter() { }
+  ~AngularProjectionBinaryImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateOutputInformation();
-  virtual void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID );
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) ITK_OVERRIDE;
 
 private:
   AngularProjectionBinaryImageFilter(const Self&); // not implemented

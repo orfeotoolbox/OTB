@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMachineLearningModel_h
-#define __otbMachineLearningModel_h
+#ifndef otbMachineLearningModel_h
+#define otbMachineLearningModel_h
 
 #include "itkObject.h"
 #include "itkVariableLengthVector.h"
@@ -100,7 +100,7 @@ public:
   virtual void Train() =0;
 
   /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = NULL) const = 0;
+  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const = 0;
 
   /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
   virtual void PredictAll();
@@ -151,10 +151,10 @@ protected:
   MachineLearningModel();
 
   /** Destructor */
-  virtual ~MachineLearningModel();
+  ~MachineLearningModel() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Input list sample */
   typename InputListSampleType::Pointer m_InputListSample;

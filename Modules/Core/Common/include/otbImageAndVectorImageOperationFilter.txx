@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageAndVectorImageOperationFilter_txx
-#define __otbImageAndVectorImageOperationFilter_txx
+#ifndef otbImageAndVectorImageOperationFilter_txx
+#define otbImageAndVectorImageOperationFilter_txx
 
 #include "otbImageAndVectorImageOperationFilter.h"
 #include "itkObjectFactory.h"
@@ -71,7 +71,7 @@ const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage
 ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
 ::GetVectorInput()
 {
-  if (this->GetNumberOfInputs() < 2) return 0;
+  if (this->GetNumberOfInputs() < 2) return ITK_NULLPTR;
 
   return dynamic_cast<const VectorInputImageType*>(this->itk::ProcessObject::GetInput(1));
 }

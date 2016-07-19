@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperApplicationFactory_h
-#define __otbWrapperApplicationFactory_h
+#ifndef otbWrapperApplicationFactory_h
+#define otbWrapperApplicationFactory_h
 
 #include "otbWrapperApplicationFactoryBase.h"
 #include "itkVersion.h"
@@ -37,12 +37,12 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const
+  const char* GetITKSourceVersion(void) const ITK_OVERRIDE
     {
     return ITK_SOURCE_VERSION;
     }
 
-  virtual const char* GetDescription(void) const
+  const char* GetDescription(void) const ITK_OVERRIDE
     {
     return "ApplicationFactory";
     }
@@ -71,7 +71,7 @@ protected:
 
   }
 
-  virtual ~ApplicationFactory()
+  ~ApplicationFactory() ITK_OVERRIDE
   {
 
   }
@@ -79,7 +79,7 @@ protected:
   /** This method is provided by sub-classes of ObjectFactoryBase.
    * It should create the named itk object or return 0 if that object
    * is not supported by the factory implementation. */
-  virtual LightObject::Pointer CreateObject(const char* itkclassname )
+  LightObject::Pointer CreateObject(const char* itkclassname ) ITK_OVERRIDE
   {
     LightObject::Pointer ret;
     if ( m_ClassName == itkclassname)
@@ -91,8 +91,8 @@ protected:
   /** This method creates all the objects with the class overide of
    * itkclass name, which are provide by this object
    */
-  virtual std::list<LightObject::Pointer>
-  CreateAllObject(const char* itkclassname)
+  std::list<LightObject::Pointer>
+  CreateAllObject(const char* itkclassname) ITK_OVERRIDE
   {
     const std::string applicationClass("otbWrapperApplication");
     std::list<LightObject::Pointer> list;
@@ -133,4 +133,4 @@ private:
   }
 
 
-#endif // __otbWrapperApplication_h_
+#endif // otbWrapperApplication_h_

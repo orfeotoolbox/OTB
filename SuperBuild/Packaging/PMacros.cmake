@@ -52,23 +52,32 @@ endmacro()
 
 macro(macro_create_targets_for_package pkg)
 
-  if(WIN32)
+  if(WIN32 AND NOT MSVC)
     add_custom_target(PACKAGE-${pkg}-check
       COMMAND ${CMAKE_COMMAND} --build "." --target install
       WORKING_DIRECTORY "${Monteverdi_BINARY_DIR}"
       )
-  else() #Unxies Using SuperBuild
-    if(ENABLE_MONTEVERDI)
+  else() #Using SuperBuild
+    #For out of source build,
+    #we assume the otb is built correctly with superbuild
+    if(OUT_OF_SOURCE_BUILD)
       add_custom_target(PACKAGE-${pkg}-check
-        COMMAND ${CMAKE_COMMAND} --build "." --target install
-        WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/MVD/build"
-        )
-    else()
-      add_custom_target(PACKAGE-${pkg}-check
-        COMMAND ${CMAKE_COMMAND} --build "."  --target install
-        WORKING_DIRECTORY "${SUPERBUILD_BINARY_DIR}/OTB/build"
-        )
-    endif(ENABLE_MONTEVERDI)
+        COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check")
+    else(OUT_OF_SOURCE_BUILD)
+      if(ENABLE_MONTEVERDI)
+        add_custom_target(PACKAGE-${pkg}-check
+          COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
+	  DEPENDS MVD
+          WORKING_DIRECTORY ${SUPERBUILD_BINARY_DIR}
+          )
+      else(ENABLE_MONTEVERDI)
+        add_custom_target(PACKAGE-${pkg}-check
+          COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
+	  DEPENDS OTB
+          WORKING_DIRECTORY ${SUPERBUILD_BINARY_DIR}
+          )
+      endif(ENABLE_MONTEVERDI)
+    endif(OUT_OF_SOURCE_BUILD)
   endif()
 
   add_dependencies(PACKAGE-${pkg}-check PACKAGE-TOOLS)
@@ -90,7 +99,9 @@ macro(macro_create_targets_for_package pkg)
 
   #configure
   add_custom_target(PACKAGE-${pkg}-configure
-    COMMAND ${CMAKE_COMMAND}
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build"
+   WORKING_DIRECTORY "${PACKAGE_PROJECT_DIR}"
+    COMMAND ${CMAKE_COMMAND} "-G${CMAKE_GENERATOR}"
     "${PACKAGE_PROJECT_DIR}/src"
     WORKING_DIRECTORY "${PACKAGE_PROJECT_DIR}/build"
     DEPENDS PACKAGE-${pkg}-check
@@ -108,8 +119,8 @@ macro(macro_create_targets_for_package pkg)
   # creation of package is different from windows and unix like
   if(WIN32)
     add_custom_target(PACKAGE-${pkg}
-      COMMAND ${ZIP_EXECUTABLE}
-      "-rq" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
+      COMMAND ${ZIP_EXECUTABLE} "a"
+      "-ry" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}/*"
       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
       DEPENDS PACKAGE-${pkg}-build
       COMMENT "Creating ${CMAKE_BINARY_DIR}/${archive_name}.zip"

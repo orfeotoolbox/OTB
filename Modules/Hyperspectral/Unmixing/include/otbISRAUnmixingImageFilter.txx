@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbISRAUnmixingImageFilter_txx
-#define __otbISRAUnmixingImageFilter_txx
+#ifndef otbISRAUnmixingImageFilter_txx
+#define otbISRAUnmixingImageFilter_txx
 
 #include "otbISRAUnmixingImageFilter.h"
 #include <algorithm>

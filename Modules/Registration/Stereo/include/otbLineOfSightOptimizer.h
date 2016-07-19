@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineOfSightOptimizer_h
-#define __otbLineOfSightOptimizer_h
+#ifndef otbLineOfSightOptimizer_h
+#define otbLineOfSightOptimizer_h
 
 #include "itkObject.h"
 
@@ -66,7 +66,7 @@ public:
 
   /** Compute the best intersection between N lines of sight.
    *  Starting points of every line of sight are stored in the point set 'pointA'
-   *  ending points are stored in 'pointB' (however, the computation is symetrical)*/
+   *  ending points are stored in 'pointB' (however, the computation is symmetrical)*/
   PointType Compute(PointSetPointerType pointA, PointSetPointerType pointB);
 
   /** Get the residues from last computation */
@@ -84,7 +84,7 @@ protected:
   LineOfSightOptimizer();
 
   /** Destructor */
-  virtual ~LineOfSightOptimizer(){};
+  ~LineOfSightOptimizer() ITK_OVERRIDE{};
 
 
 private:

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVegetationIndicesFunctor_h
-#define __otbVegetationIndicesFunctor_h
+#ifndef otbVegetationIndicesFunctor_h
+#define otbVegetationIndicesFunctor_h
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
@@ -411,7 +411,7 @@ class NDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 public:
 
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "NDVI";
   }
@@ -419,10 +419,10 @@ public:
   /// Constructor
   NDVI() {}
   /// Desctructor
-  virtual ~NDVI() {}
+  ~NDVI() ITK_OVERRIDE {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
@@ -451,15 +451,15 @@ class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 public:
 
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "RVI";
   }
 
   RVI() {}
-  virtual ~RVI() {}
+  ~RVI() ITK_OVERRIDE {}
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
@@ -490,13 +490,13 @@ class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "PVI";
   }
 
   PVI() : m_A(0.90893), m_B(7.46216), m_Coeff(0.74) {}
-  virtual ~PVI() {}
+  ~PVI() ITK_OVERRIDE {}
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
@@ -516,7 +516,7 @@ public:
     return (m_B);
   }
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
@@ -549,13 +549,13 @@ class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 public:
 
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "SAVI";
   }
 
   SAVI() : m_L(0.5) {}
-  virtual ~SAVI() {}
+  ~SAVI() ITK_OVERRIDE {}
 
   /** Set/Get L correction */
   void SetL(const double L)
@@ -568,7 +568,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
@@ -603,13 +603,13 @@ class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 public:
 
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "TSAVI";
   }
 
   TSAVI() : m_A(0.7), m_S(0.9), m_X(0.08) {}
-  virtual ~TSAVI() {}
+  ~TSAVI() ITK_OVERRIDE {}
 
   /** Set/Get S and A parameters */
   void SetS(const double S)
@@ -639,7 +639,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
@@ -676,7 +676,7 @@ class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "WDVI";
   }
@@ -684,7 +684,7 @@ public:
   /// Constructor
   WDVI() : m_S(0.4) {}
   /// Desctructor
-  virtual ~WDVI() {}
+  ~WDVI() ITK_OVERRIDE {}
   // Operator on r and nir single pixel values
 /** Set/Get Slop of soil line */
   void SetS(const double s)
@@ -696,7 +696,7 @@ public:
     return (m_S);
   }
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
@@ -724,7 +724,7 @@ class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "MSAVI";
   }
@@ -736,7 +736,7 @@ public:
   {
     m_WDVIfunctor.SetS(m_S);
   }
-  virtual ~MSAVI() {}
+  ~MSAVI() ITK_OVERRIDE {}
 /** Set/Get Slop of soil line */
   void SetS(const double s)
   {
@@ -757,7 +757,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
@@ -799,16 +799,16 @@ class MSAVI2 : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "MSAVI2";
   }
 
   MSAVI2() {}
-  virtual ~MSAVI2() {}
+  ~MSAVI2() ITK_OVERRIDE {}
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
@@ -837,16 +837,16 @@ class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "GEMI";
   }
 
   GEMI() {}
-  virtual ~GEMI() {}
+  ~GEMI() ITK_OVERRIDE {}
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
@@ -891,13 +891,13 @@ class AVI : public RAndGAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "AVI";
   }
 
   AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {}
-  virtual ~AVI() {}
+  ~AVI() ITK_OVERRIDE {}
 /** Set/Get Lambda red parameter*/
   void SetLambdaR(const double lr)
   {
@@ -926,7 +926,7 @@ public:
     return (m_LambdaNir);
   }
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& g, const TInput3& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& g, const TInput3& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double dg = static_cast<double>(g);
@@ -986,13 +986,13 @@ class ARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "ARVI";
   }
 
   ARVI() : m_Gamma(0.5) {}
-  virtual ~ARVI() {}
+  ~ARVI() ITK_OVERRIDE {}
 
   /** Set/Get Gamma parameter */
   void SetGamma(const double gamma)
@@ -1005,7 +1005,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double db = static_cast<double>(b);
@@ -1040,13 +1040,13 @@ class TSARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "TSARVI";
   }
 
   TSARVI() : m_A(0.0), m_B(0.0), m_X(0.08), m_Gamma(0.5) {}
-  virtual ~TSARVI() {}
+  ~TSARVI() ITK_OVERRIDE {}
 
   /** Set/Get A and B parameters */
   void SetA(const double A)
@@ -1085,7 +1085,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double db = static_cast<double>(b);
@@ -1128,13 +1128,13 @@ class EVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "EVI";
   }
 
   EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {}
-  virtual ~EVI() {}
+  ~EVI() ITK_OVERRIDE {}
 /** Set/Get G parameter */
   void SetG(const double g)
   {
@@ -1172,7 +1172,7 @@ public:
     return (m_L);
   }
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double db = static_cast<double>(b);
@@ -1215,16 +1215,16 @@ class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "IPVI";
   }
 
   IPVI() {}
-  virtual ~IPVI() {}
+  ~IPVI() ITK_OVERRIDE {}
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
@@ -1254,14 +1254,14 @@ class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "TNDVI";
   }
 
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   TNDVI() {}
-  virtual ~TNDVI() {}
+  ~TNDVI() ITK_OVERRIDE {}
 
   NDVIFunctorType GetNDVI(void) const
   {
@@ -1269,7 +1269,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dval = this->GetNDVI() (r, nir) + 0.5;
     if (dval < 0)
@@ -1306,14 +1306,14 @@ class LAIFromNDVILogarithmic : public RAndNIRIndexBase<TInput1, TInput2, TOutput
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "LAIFromNDVILogarithmic";
   }
 
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   LAIFromNDVILogarithmic() : m_NdviSoil(0.10), m_NdviInf(0.89), m_ExtinctionCoefficient(0.71) {}
-  virtual ~LAIFromNDVILogarithmic() {}
+  ~LAIFromNDVILogarithmic() ITK_OVERRIDE {}
 
   NDVIFunctorType GetNDVI(void) const
   {
@@ -1348,7 +1348,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
     double dval = this->GetNDVI() (r, nir);
     if (dval < 0)
@@ -1392,14 +1392,14 @@ class LAIFromReflectancesLinear : public RAndNIRIndexBase<TInput1, TInput2, TOut
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "LAIFromReflectancesLinear";
   }
 
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   LAIFromReflectancesLinear() : m_RedCoef(-17.91), m_NirCoef(12.26) {}
-  virtual ~LAIFromReflectancesLinear() {}
+  ~LAIFromReflectancesLinear() ITK_OVERRIDE {}
 
   NDVIFunctorType GetReflectances(void) const
   {
@@ -1425,7 +1425,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
   {
       return (static_cast<TOutput>(m_RedCoef*r+m_NirCoef*nir));
   }
@@ -1461,7 +1461,7 @@ private:
   public:
 
     /** Return the index name */
-    virtual std::string GetName() const
+    std::string GetName() const ITK_OVERRIDE
     {
       return "LAIFromNDVIFormosat2Functor";
     }
@@ -1469,10 +1469,10 @@ private:
     /// Constructor
     LAIFromNDVIFormosat2Functor() {}
     /// Desctructor
-    virtual ~LAIFromNDVIFormosat2Functor() {}
+    ~LAIFromNDVIFormosat2Functor() ITK_OVERRIDE {}
     // Operator on r and nir single pixel values
   protected:
-    inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+    inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const ITK_OVERRIDE
     {
     double a = 0.1519;
     double b = 3.9443;

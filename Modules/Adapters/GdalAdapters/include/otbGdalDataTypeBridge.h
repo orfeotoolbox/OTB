@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbGdalDataTypeBridge_h
-#define __otbGdalDataTypeBridge_h
+#ifndef otbGdalDataTypeBridge_h
+#define otbGdalDataTypeBridge_h
 
 #include <typeinfo>
 #include "gdal.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabeledSampleLocalizationGenerator_txx
-#define __otbLabeledSampleLocalizationGenerator_txx
+#ifndef otbLabeledSampleLocalizationGenerator_txx
+#define otbLabeledSampleLocalizationGenerator_txx
 
 #include "otbLabeledSampleLocalizationGenerator.h"
 
@@ -69,7 +69,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 {
   if (this->GetNumberOfInputs() < idx)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const VectorDataType *>(this->Superclass::GetInput(idx));

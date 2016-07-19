@@ -63,7 +63,7 @@ public:
   itkTypeMacro(Vectorization, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("LSMSVectorization");
     SetDescription("Fourth step of the exact Large-Scale Mean-Shift segmentation workflow.");
@@ -102,11 +102,11 @@ private:
     SetDocExampleParameterValue("tilesizey","256");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     clock_t tic = clock();
 
@@ -154,7 +154,7 @@ private:
     std::vector<ImageType::PixelType>sum2(regionCount+1,defaultValue);
 
     otb::ogr::DataSource::Pointer ogrDS;
-    otb::ogr::Layer layer(NULL, false);
+    otb::ogr::Layer layer(ITK_NULLPTR, false);
 
     OGRSpatialReference oSRS(projRef.c_str());
     std::vector<std::string> options;
@@ -258,7 +258,7 @@ private:
     std::ostringstream sqloss;
     sqloss.str("");
     sqloss<<"SELECT * FROM \""<<layername<<"\" ORDER BY label";
-    otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), NULL, NULL);
+    otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
     otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
 
     //Geometry fusion
@@ -271,7 +271,7 @@ private:
       OGRMultiPolygon geomToMerge;
       geomToMerge.addGeometry(firstFeature.GetGeometry());
       bool merging = true;
-      otb::ogr::Feature nextFeature(NULL);
+      otb::ogr::Feature nextFeature(ITK_NULLPTR);
       bool haveMerged=false;
 
       while(merging)
@@ -345,7 +345,7 @@ private:
     if(extension==".shp"){
     sqloss.str("");
     sqloss<<"REPACK "<<layername;
-    ogrDS->ogr().ExecuteSQL(sqloss.str().c_str(), NULL, NULL);
+    ogrDS->ogr().ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
     }
 
     ogrDS->SyncToDisk();

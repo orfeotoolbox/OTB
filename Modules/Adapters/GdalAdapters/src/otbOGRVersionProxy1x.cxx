@@ -57,7 +57,7 @@ bool Delete(const char * name)
 {
   // Open dataset
   GDALDatasetType * poDS = Open(name,false);
-  GDALDriverType * poDriver = NULL;
+  GDALDriverType * poDriver = ITK_NULLPTR;
   if(poDS)
     {
     poDriver = poDS->GetDriver();

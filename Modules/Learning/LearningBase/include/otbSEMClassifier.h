@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSEMClassifier_h
-#define __otbSEMClassifier_h
+#ifndef otbSEMClassifier_h
+#define otbSEMClassifier_h
 
 #include "itkListSample.h"
 #include "itkSampleClassifierFilter.h"
@@ -154,7 +154,7 @@ public:
   int AddComponent(int id, ComponentType* component);
 
   /** Runs the optimization process. */
-  void Update();
+  void Update() ITK_OVERRIDE;
 
   /** Termination status after running optimization */
   typedef enum { CONVERGED = 0, NOT_CONVERGED = 1 } TerminationCodeType;
@@ -174,12 +174,12 @@ public:
   /* Return the classification result (as an image) */
   TOutputImage * GetOutputImage();
   
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 protected:
   SEMClassifier();
-  virtual ~SEMClassifier() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~SEMClassifier() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Initialize the first segmentation, either randomly or by using
    *  a ClassLabelVectorType given in SetClassLabels. */

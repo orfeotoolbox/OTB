@@ -90,7 +90,7 @@ public:
   itkTypeMacro(FusionOfClassifications, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("FusionOfClassifications");
     SetDescription("Fuses several classifications maps of the same image on the basis of class labels.");
@@ -168,7 +168,7 @@ private:
     SetDocExampleParameterValue("out","classification_fused.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
@@ -280,7 +280,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Clear any previous filter
     m_Filters.clear();

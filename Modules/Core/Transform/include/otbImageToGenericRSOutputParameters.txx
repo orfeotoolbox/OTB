@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToGenericRSOutputParameters_txx
-#define __otbImageToGenericRSOutputParameters_txx
+#ifndef otbImageToGenericRSOutputParameters_txx
+#define otbImageToGenericRSOutputParameters_txx
 
 
 #include "otbImageToGenericRSOutputParameters.h"
@@ -185,7 +185,7 @@ ImageToGenericRSOutputParameters<TImage>
   // Compute the output size
   double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
   double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
-
+ 
   PointType o, oX, oY;
   o[0] = m_OutputExtent.minX;
   o[1] = m_OutputExtent.maxY;
@@ -194,7 +194,7 @@ ImageToGenericRSOutputParameters<TImage>
   oY = o;
 
   oX[0] += sizeCartoX;
-  oY[1] += sizeCartoY;
+  oY[1] -= sizeCartoY;
 
   // Transform back into the input image
   PointType io = m_Transform->TransformPoint(o);
@@ -215,7 +215,7 @@ ImageToGenericRSOutputParameters<TImage>
 
   OyLength = vcl_sqrt(vcl_pow((double) ioIndex[0] - (double) ioYIndex[0], 2)
                       +  vcl_pow((double) ioIndex[1] - (double) ioYIndex[1], 2));
-
+  
   // Evaluate spacing
   SpacingType outputSpacing;
 

@@ -13,26 +13,29 @@ include(ExternalProject)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
+
 if(APPLE)
   if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW)
   endif()
   set(CMAKE_MACOSX_RPATH TRUE)
-  # use, i.e. don't skip the full RPATH for the build tree
-  set(CMAKE_SKIP_BUILD_RPATH  FALSE)
-  # when building, don't use the install RPATH already
-  # (but later on when installing)
-  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-  # add the automatically determined parts of the RPATH
-  # which point to directories outside the build tree to the install RPATH
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-  # the RPATH to be used when installing, but only if it's not a system directory
-  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-  if("${isSystemDir}" STREQUAL "-1")
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-  endif("${isSystemDir}" STREQUAL "-1")
 endif()
+
+# use, i.e. don't skip the full RPATH for the build tree
+set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+# when building, don't use the install RPATH already
+# (but later on when installing)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# the RPATH to be used when installing, but only if it's not a system directory
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif("${isSystemDir}" STREQUAL "-1")
 
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
 option(BUILD_TESTING "Build the testing tree." OFF)
@@ -51,26 +54,23 @@ option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 option(ENABLE_MONTEVERDI " Build Monteverdi on top of OTB" OFF)
 
-# check if superbuild is in OTB source or in stand-alone mode
-set(SUPERBUILD_IN_OTB_TREE OFF)
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
     REGEX "project\\\(OTB\\\)")
   if(NOT "${_CONTENT_CMAKELIST}" STREQUAL "")
-    set(SUPERBUILD_IN_OTB_TREE ON)
     # parse the version number
     file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _FULL_CONTENT_CMAKELIST)
     string(REGEX REPLACE ".*set\\(OTB_VERSION_MAJOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MAJOR "${_FULL_CONTENT_CMAKELIST}")
     string(REGEX REPLACE ".*set\\(OTB_VERSION_MINOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MINOR "${_FULL_CONTENT_CMAKELIST}")
     string(REGEX REPLACE ".*set\\(OTB_VERSION_PATCH \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_PATCH "${_FULL_CONTENT_CMAKELIST}")
     set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
-    message(STATUS "Found OTB version : ${SUPERBUILD_OTB_VERSION}")
+    message(STATUS "OTB version : ${SUPERBUILD_OTB_VERSION}")
   endif()
 endif()
-message(STATUS "Check if superbuild is in OTB tree : ${SUPERBUILD_IN_OTB_TREE}")
 
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
+file(TO_NATIVE_PATH "${SB_INSTALL_PREFIX}" SB_INSTALL_PREFIX_NATIVE)
 
 # Check if CMAKE_INSTALL_PREFIX is set by default
 if(WIN32)
@@ -113,71 +113,52 @@ if(MSVC)
   endif()
 endif()
 
-set(CMAKE_OPTS)
-list(APPEND CMAKE_OPTS "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
-list(APPEND CMAKE_OPTS "-DCMAKE_INSTALL_PREFIX=${SB_INSTALL_PREFIX}")
-list(APPEND CMAKE_OPTS "-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}")
-list(APPEND CMAKE_OPTS "-DCMAKE_PREFIX_PATH=${SB_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}")
-list(APPEND CMAKE_OPTS "-G${CMAKE_GENERATOR}")
-#list(APPEND CMAKE_OPTS "-DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
-#list(APPEND CMAKE_OPTS "-DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
-# list(APPEND CMAKE_OPTS "-DCMAKE_EXE_LINKER_FLAGS:STRING=${CMAKE_EXE_LINKER_FLAGS}")
-# list(APPEND CMAKE_OPTS "-DCMAKE_MODULE_LINKER_FLAGS:STRING=${CMAKE_MODULE_LINKER_FLAGS}")
-# list(APPEND CMAKE_OPTS "-DCMAKE_SHARED_LINKER_FLAGS:STRING=${CMAKE_SHARED_LINKER_FLAGS}")
-# list(APPEND CMAKE_OPTS "-DCMAKE_STATIC_LINKER_FLAGS:STRING=${CMAKE_STATIC_LINKER_FLAGS}")
+if(DEFINED ENV{CMAKE_PREFIX_PATH})
+  set(SB_CMAKE_PREFIX_PATH "$ENV{CMAKE_PREFIX_PATH};${SB_INSTALL_PREFIX}")
+else()
+  set(SB_CMAKE_PREFIX_PATH "${SB_INSTALL_PREFIX}")
+endif()
+
+set(SB_CMAKE_CACHE_ARGS)
+list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
+list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_PREFIX:PATH=${SB_INSTALL_PREFIX}")
+list(APPEND SB_CMAKE_CACHE_ARGS "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}")
+list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_PREFIX_PATH:PATH=${SB_CMAKE_PREFIX_PATH}")
 
 if(APPLE)
-  list(APPEND CMAKE_OPTS "-DCMAKE_MACOSX_RPATH:BOOL=${CMAKE_MACOSX_RPATH}")
-  list(APPEND CMAKE_OPTS "-DCMAKE_SKIP_BUILD_RPATH:BOOL=${CMAKE_SKIP_BUILD_RPATH}")
-  list(APPEND CMAKE_OPTS "-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=${CMAKE_BUILD_WITH_INSTALL_RPATH}")
-  list(APPEND CMAKE_OPTS "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
-  list(APPEND CMAKE_OPTS "-DCMAKE_INSTALL_RPATH:STRING=${CMAKE_INSTALL_RPATH}")
+  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_MACOSX_RPATH:BOOL=${CMAKE_MACOSX_RPATH}")
 endif()
 
 if(UNIX)
+  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_SKIP_BUILD_RPATH:BOOL=${CMAKE_SKIP_BUILD_RPATH}")
+  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=${CMAKE_BUILD_WITH_INSTALL_RPATH}")
+  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
+  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_RPATH:PATH=${CMAKE_INSTALL_RPATH}")
+endif()
+
+set(SB_CMAKE_ARGS "-G${CMAKE_GENERATOR}")
+if(UNIX)
   if(APPLE)
+    set(SB_CMAKE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
     set(SB_ENV_CONFIGURE_CMD env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
   else()
-    set(LDLIBVAR LD_LIBRARY_PATH)
-    set(SB_ENV_CONFIGURE_CMD env ${LDLIBVAR}=${SB_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}} CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
-#RK: check with GP    
-#    set(SB_CMAKE_COMMAND env ${LDLIBVAR}=${CMAKE_INSTALL_PREFIX}/lib:$ENV{${LDLIBVAR}}  CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND})
-    message(STATUS "Environment setup for Configure : ${SB_ENV_CONFIGURE_CMD}")
+    if( DEFINED ENV{LD_LIBRARY_PATH} )
+      set(LD_LIBRARY_PATH_VALUE ${SB_INSTALL_PREFIX}/lib:$ENV{LD_LIBRARY_PATH})
+    else()
+      set(LD_LIBRARY_PATH_VALUE ${SB_INSTALL_PREFIX}/lib)
+    endif()
+    set(SB_ENV_CONFIGURE_CMD env LD_LIBRARY_PATH=${LD_LIBRARY_PATH_VALUE} CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
+    set(SB_CMAKE_COMMAND env LD_LIBRARY_PATH=${LD_LIBRARY_PATH_VALUE} CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
   endif()
-endif()
-
-set(SB_CMAKE_COMMAND ${CMAKE_COMMAND} ${CMAKE_OPTS})
-
-# Call external projects
-if(USE_SYSTEM_GDAL)
-  set(CURL_DEFAULT ON)
+  message(STATUS "Environment setup for Configure (SB_ENV_CONFIGURE_CMD): ${SB_ENV_CONFIGURE_CMD}")
 else()
-  set(CURL_DEFAULT OFF)
+  #windows
+  set(SB_CMAKE_COMMAND ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
 endif()
+message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
 
-if(USE_SYSTEM_QT4)
-  set(SQLITE_DEFAULT ON)
-else()
-  set(SQLITE_DEFAULT OFF)
-endif()
-
-if(USE_SYSTEM_SQLITE)
-  set(QT4_DEFAULT ON)
-else()
-  set(QT4_DEFAULT OFF)
-endif()
-
-if(USE_SYSTEM_ZLIB)
-  set(PNG_DEFAULT ON)
-else()
-  set(PNG_DEFAULT OFF)
-endif()
-
-if(WIN32)
-  set(OSSIM_DEFAULT ON)
-else()
-  set(OSSIM_DEFAULT OFF)
-endif()
+set(FROM_SYSTEM_LIST)
+set(FROM_SUPERBUILD_LIST)
 
 #TODO: enforce check from ITK on directory length
 # Setup third parties
@@ -217,13 +198,17 @@ SETUP_SYSTEM_LIBRARY(PROJECT SHARK DEFAULT OFF)
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
 option(OTB_USE_CURL "Enable module Curl in OTB" ON)
-option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
+#RK: disabled libkml. problems on windows msvc
+if(MSVC)
+  option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
+else()
+  option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
+endif()
 option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
 option(OTB_USE_MAPNIK "Enable module Mapnik in OTB" OFF)
 option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
 option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
 option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
-option(OTB_USE_OPENJPEG "Enable module openjpeg in OTB" OFF)
 option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
@@ -281,6 +266,20 @@ else()
   include(External_otb)
 endif()
 
-if(UNIX)
-    add_subdirectory(Packaging)
+if(UNIX OR MSVC)
+  add_subdirectory(Packaging)
+endif()
+
+if(FROM_SYSTEM_LIST)
+  list(SORT FROM_SYSTEM_LIST)
+foreach( item ${FROM_SYSTEM_LIST})
+  message(STATUS "  Using system version of ${item}")
+endforeach()
+endif()
+
+if(FROM_SUPERBUILD_LIST)
+  list(SORT FROM_SUPERBUILD_LIST)
+foreach( item ${FROM_SUPERBUILD_LIST})
+  message(STATUS "  Using SuperBuild version of ${item}")
+endforeach()
 endif()

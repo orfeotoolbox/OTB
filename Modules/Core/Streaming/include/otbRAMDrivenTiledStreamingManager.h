@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAMDrivenTiledStreamingManager_h
-#define __otbRAMDrivenTiledStreamingManager_h
+#ifndef otbRAMDrivenTiledStreamingManager_h
+#define otbRAMDrivenTiledStreamingManager_h
 
 #include "otbStreamingManager.h"
 
@@ -74,11 +74,11 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region);
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
 
 protected:
   RAMDrivenTiledStreamingManager();
-  virtual ~RAMDrivenTiledStreamingManager();
+  ~RAMDrivenTiledStreamingManager() ITK_OVERRIDE;
 
   /** The number of MegaBytes of RAM available */
   unsigned int m_AvailableRAMInMB;

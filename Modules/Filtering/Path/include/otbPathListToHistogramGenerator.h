@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPathListToHistogramGenerator_h
-#define __otbPathListToHistogramGenerator_h
+#ifndef otbPathListToHistogramGenerator_h
+#define otbPathListToHistogramGenerator_h
 
 #include "itkSampleToHistogramFilter.h"
 #include "itkHistogram.h"
@@ -114,12 +114,12 @@ public:
 
 protected:
   PathListToHistogramGenerator();
-  virtual ~PathListToHistogramGenerator() {}
-  virtual void GenerateData();
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType);
+  ~PathListToHistogramGenerator() ITK_OVERRIDE {}
+  void GenerateData() ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

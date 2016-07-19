@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetRAMParameter_h
-#define __otbWrapperQtWidgetRAMParameter_h
+#ifndef otbWrapperQtWidgetRAMParameter_h
+#define otbWrapperQtWidgetRAMParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetRAMParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*);
-  virtual ~QtWidgetRAMParameter();
+  ~QtWidgetRAMParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetValue( int value );
@@ -49,9 +49,9 @@ private:
   QtWidgetRAMParameter(const QtWidgetRAMParameter&); //purposely not implemented
   void operator=(const QtWidgetRAMParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   QHBoxLayout *         m_QHBoxLayout;
   QSpinBox *            m_QSpinBox;

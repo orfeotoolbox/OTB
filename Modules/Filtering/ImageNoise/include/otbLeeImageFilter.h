@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeeImageFilter_h
-#define __otbLeeImageFilter_h
+#ifndef otbLeeImageFilter_h
+#define otbLeeImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -94,13 +94,13 @@ public:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 protected:
   LeeImageFilter();
-  virtual ~LeeImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LeeImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** LeeImageFilter can be multithreaded.
    * As such, it provides a definition of ThreadedGenerateData()
@@ -113,7 +113,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   LeeImageFilter(const Self &); //purposely not implemented

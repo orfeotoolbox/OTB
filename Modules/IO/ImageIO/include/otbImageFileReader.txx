@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileReader_txx
-#define __otbImageFileReader_txx
+#ifndef otbImageFileReader_txx
+#define otbImageFileReader_txx
 
 #include "otbImageFileReader.h"
 #include "otbConfigure.h"
@@ -435,7 +435,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
 
   // Don't add an empty ossim keyword list
-  if( otb_kwl.GetSize() != 0 )
+  if(!otb_kwl.Empty())
     {
       itk::EncapsulateMetaData<ImageKeywordlist>(dict,
                                                  MetaDataKey::OSSIMKeywordlistKey, otb_kwl);

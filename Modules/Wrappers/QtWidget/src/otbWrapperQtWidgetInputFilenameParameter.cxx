@@ -26,9 +26,9 @@ namespace Wrapper
 QtWidgetInputFilenameParameter::QtWidgetInputFilenameParameter(InputFilenameParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
   m_FilenameParam(param),
-  m_HLayout( NULL ),
-  m_Input( NULL ),
-  m_Button( NULL )
+  m_HLayout( ITK_NULLPTR ),
+  m_Input( ITK_NULLPTR ),
+  m_Button( ITK_NULLPTR )
 {
 }
 

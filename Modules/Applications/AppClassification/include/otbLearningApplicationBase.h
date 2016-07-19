@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbLearningApplicationBase_h
-#define __otbLearningApplicationBase_h
+#ifndef otbLearningApplicationBase_h
+#define otbLearningApplicationBase_h
 
 #include "otbConfigure.h"
 
@@ -135,6 +135,8 @@ public:
  
 protected:
   LearningApplicationBase();
+
+  ~LearningApplicationBase() ITK_OVERRIDE;
 
   /** Generic method to train and save the machine learning model. This method
    * uses specific train methods depending on the chosen model.*/

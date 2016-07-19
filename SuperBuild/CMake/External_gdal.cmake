@@ -1,20 +1,9 @@
-if( __EXTERNAL_GDAL__)
-  return()
-else()
-  set(__EXTERNAL_GDAL__ 1)
-endif()
+INCLUDE_ONCE_MACRO(GDAL)
 
-if(USE_SYSTEM_GDAL)
-  message(STATUS "  Using GDAL system version")
-  return()
-endif()
-
-SETUP_SUPERBUILD(PROJECT GDAL)
-
-message(STATUS "  Using GDAL SuperBuild version")
+SETUP_SUPERBUILD(GDAL)
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL TIFF CURL GEOTIFF PNG JPEG OPENJPEG SQLITE GEOS ZLIB EXPAT)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT)
 
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL TIFF_ROOT     --with-libtiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOTIFF_ROOT  --with-geotiff)
@@ -27,7 +16,6 @@ ADD_SUPERBUILD_CONFIGURE_VAR(GDAL EXPAT_ROOT    --with-expat)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL CURL_ROOT     --with-curl "/bin/curl-config")
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOS_ROOT     --with-geos "/bin/geos-config")
 
-set(GDAL_PATCH_COMMAND)
 set(GDAL_CONFIGURE_COMMAND)
 set(GDAL_BUILD_COMMAND)
 set(GDAL_INSTALL_COMMAND)
@@ -45,10 +33,14 @@ if(UNIX)
 
   # PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
   # COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/GDAL/GNUmakefile ${GDAL_SB_SRC}/swig/python/GNUmakefile
-  
-  ADD_SUPERBUILD_CONFIGURE_VAR(GDAL LIBKML_ROOT     --with-libkml)
 
-  set(GDAL_PATCH_COMMAND)
+  list(APPEND GDAL_SB_CONFIG "--with-libkml=no")
+  if(OTB_USE_LIBKML)
+    #RK: disabled libkml. Here are in External_otb.cmake
+    #ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(LIBKML)
+    #ADD_SUPERBUILD_CONFIGURE_VAR(GDAL LIBKML_ROOT     --with-libkml)
+  endif()
+
   set(GDAL_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${GDAL_SB_SRC}/configure"
     --prefix=${SB_INSTALL_PREFIX}
     --enable-static=no
@@ -68,6 +60,7 @@ if(UNIX)
     --with-ingres=no
     --with-jp2mrsid=no
     --with-kakadu=no
+    --with-jasper=no
     --with-libgrass=no
     --with-mrsid=no
     --with-msg=no
@@ -77,7 +70,7 @@ if(UNIX)
     --with-odbc=no
     --with-ogdi=no
     --with-pam
-    --with-pcidsk=no
+    --with-pcidsk=yes
     --with-pcraster=no
     --with-pcre=no
     --with-perl=no
@@ -88,6 +81,7 @@ if(UNIX)
     --with-spatialite=no
     --with-xerces=no
     --with-xml2=no
+    --with-pg=no
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
@@ -95,14 +89,9 @@ if(UNIX)
   #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
 
 else(MSVC)
-
-  ##remove libkml?
-  list(REMOVE_ITEM GDAL_DEPENDENCIES LIBKML)
-
   STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
   STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
   configure_file(${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
-  set(GDAL_PATCH_COMMAND)
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
   set(GDAL_BUILD_COMMAND nmake
     /f ${GDAL_SB_SRC}/makefile.vc
@@ -126,14 +115,12 @@ ExternalProject_Add(GDAL
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   DEPENDS ${GDAL_DEPENDENCIES}
-  PATCH_COMMAND ${GDAL_PATCH_COMMAND}
   CONFIGURE_COMMAND ${GDAL_CONFIGURE_COMMAND}
   BUILD_COMMAND ${GDAL_BUILD_COMMAND}
   INSTALL_COMMAND ${GDAL_INSTALL_COMMAND}
   )
 
-#avoid/fixup  second arg "GDAL-custom-patch" in macro
-SUPERBUILD_PATCH_SOURCE(GDAL "GDAL-custom-patch")
+SUPERBUILD_PATCH_SOURCE(GDAL)
 
 set(_SB_GDAL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)

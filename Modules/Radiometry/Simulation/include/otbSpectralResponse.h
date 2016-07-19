@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbSpectralResponse_h
-#define __otbSpectralResponse_h
+#ifndef otbSpectralResponse_h
+#define otbSpectralResponse_h
 
 #include "itkDataObject.h"
 #include <itkObjectFactory.h>
@@ -101,7 +101,7 @@ public:
   void Load(const std::string & filename, ValuePrecisionType coefNormalization = 1.0);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** get vector of spectral responses */
   VectorPairType & GetResponse()
@@ -160,7 +160,7 @@ protected:
   /** Constructor from a ASCII file */
   //SpectralResponse( const std::string & filename );
   /** Destructor */
-  virtual ~SpectralResponse()
+  ~SpectralResponse() ITK_OVERRIDE
   {
   }
 ;

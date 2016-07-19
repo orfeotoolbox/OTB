@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMinMaxAttributesLabelMapFilter_h
-#define __otbMinMaxAttributesLabelMapFilter_h
+#ifndef otbMinMaxAttributesLabelMapFilter_h
+#define otbMinMaxAttributesLabelMapFilter_h
 
 #include "itkLabelMapFilter.h"
 #include "itkSimpleDataObjectDecorator.h"
@@ -86,14 +86,14 @@ public:
   AttributesMapObjectType* GetMaximumOutput();
   const AttributesMapObjectType* GetMaximumOutput() const;
 
-  virtual DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
 protected:
   MinMaxAttributesLabelMapFilter();
-  ~MinMaxAttributesLabelMapFilter() {};
+  ~MinMaxAttributesLabelMapFilter() ITK_OVERRIDE {};
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   MinMaxAttributesLabelMapFilter(const Self&); //purposely not implemented

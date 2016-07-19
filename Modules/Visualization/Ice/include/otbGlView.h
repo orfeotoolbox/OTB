@@ -104,7 +104,7 @@ public:
   void Initialize(unsigned int sx, unsigned int sy);
 
   /**
-   * This method allows to add a new actor (deriving from GlActor) to
+   * This method allows adding a new actor (deriving from GlActor) to
    * the GlView. The actor can be identified by an optional key. If
    * not provided, and the default value is used, the method will
    * generate a key to identify the actor. In both case, the key is
@@ -132,7 +132,7 @@ public:
   void ClearActors();
 
   /**
-   * This method allows to retrieve a pointer to the actor identified
+   * This method allows retrieving a pointer to the actor identified
    * by the given key.
    * \param key The key identifying the actor to retrieve
    * \return A pointer to the retrieved actor. This pointer will be
@@ -277,7 +277,7 @@ public:
 protected:
   GlView();
 
-  virtual ~GlView();
+  ~GlView() ITK_OVERRIDE;
 
 private:
   // prevent implementation
@@ -325,7 +325,7 @@ GlView
   const otb::GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
 
@@ -619,7 +619,7 @@ GlView
   const GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
   // Get viewport current center and spacing.

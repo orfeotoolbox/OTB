@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBijectionCoherencyFilter_txx
-#define __otbBijectionCoherencyFilter_txx
+#ifndef otbBijectionCoherencyFilter_txx
+#define otbBijectionCoherencyFilter_txx
 
 #include "otbBijectionCoherencyFilter.h"
 
@@ -87,7 +87,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -99,7 +99,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -111,7 +111,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -123,7 +123,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(3));
 }

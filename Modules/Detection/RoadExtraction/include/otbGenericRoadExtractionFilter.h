@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRoadExtractionFilter_h
-#define __otbGenericRoadExtractionFilter_h
+#ifndef otbGenericRoadExtractionFilter_h
+#define otbGenericRoadExtractionFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
@@ -186,7 +186,7 @@ protected:
   /** Constructor */
   GenericRoadExtractionFilter();
   /** Destructor */
-  ~GenericRoadExtractionFilter() {}
+  ~GenericRoadExtractionFilter() ITK_OVERRIDE {}
 
   /** Prepare main computation method
    *  Note : this function isn't called
@@ -194,9 +194,9 @@ protected:
   void BeforeGenerateData(void);
 
   /** Main computation method */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

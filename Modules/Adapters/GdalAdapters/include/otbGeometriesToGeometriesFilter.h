@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometriesToGeometriesFilter_h
-#define __otbGeometriesToGeometriesFilter_h
+#ifndef otbGeometriesToGeometriesFilter_h
+#define otbGeometriesToGeometriesFilter_h
 
 /**\ingroup GeometriesFilters
  * \file    otbGeometriesToGeometriesFilter.h
@@ -86,13 +86,13 @@ protected:
   /** Destructor.
    * Does nothing.
    */
-  virtual ~GeometriesToGeometriesFilter();
+  ~GeometriesToGeometriesFilter() ITK_OVERRIDE;
 
   /** Processes the input to fill the output.
    * This is the main processing function. It either works \em in-place or by
    * \em copying the transformed input \c Feature s into the output.
    */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   /** \e In-place processing function.
@@ -358,7 +358,7 @@ protected:
   /** Default constructor. */
   DefaultGeometriesToGeometriesFilter();
   /** Destructor. */
-  virtual ~DefaultGeometriesToGeometriesFilter();
+  ~DefaultGeometriesToGeometriesFilter() ITK_OVERRIDE;
 
   /**
    * Hook that actually filters an OGR \c Layer.
@@ -370,7 +370,7 @@ protected:
    * \note When <tt>source == destination</tt>, it means this is an \em in-place
    * filter.
    */
-  virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const;
+  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const ITK_OVERRIDE;
   /**
    * Hook used to define the fields of the new layer.
    * \param[in] source  source \c Layer -- for reference
@@ -379,7 +379,7 @@ protected:
    * Just forwards the fields definition to the \c FieldTransformationPolicy
    * inherited from the \c TransformationFunctorDispatcherType.
    */
-  virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const
+  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const ITK_OVERRIDE
     {
     this->DefineFields(source, dest);
     }
@@ -391,4 +391,4 @@ protected:
 #include "otbGeometriesToGeometriesFilter.txx"
 #endif
 
-#endif // __otbGeometriesToGeometriesFilter_h
+#endif // otbGeometriesToGeometriesFilter_h

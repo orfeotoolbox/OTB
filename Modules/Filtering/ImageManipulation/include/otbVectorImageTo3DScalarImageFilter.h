@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImageTo3DScalarImageFilter_h
-#define __otbVectorImageTo3DScalarImageFilter_h
+#ifndef otbVectorImageTo3DScalarImageFilter_h
+#define otbVectorImageTo3DScalarImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -71,21 +71,21 @@ public:
 protected:
 
   /** Generate output information */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Generate input requested region */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Threaded Generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Constructor */
   VectorImageTo3DScalarImageFilter();
   /** Destructor */
-  virtual ~VectorImageTo3DScalarImageFilter() {}
+  ~VectorImageTo3DScalarImageFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VectorImageTo3DScalarImageFilter(const Self &); //purposely not implemented

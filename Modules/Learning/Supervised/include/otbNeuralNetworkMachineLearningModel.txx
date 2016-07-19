@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbNeuralNetworkMachineLearningModel_txx
-#define __otbNeuralNetworkMachineLearningModel_txx
+#ifndef otbNeuralNetworkMachineLearningModel_txx
+#define otbNeuralNetworkMachineLearningModel_txx
 
 #include <fstream>
 #include "otbNeuralNetworkMachineLearningModel.h"
@@ -40,7 +40,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
   m_TermCriteriaType(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS),
   m_MaxIter(1000),
   m_Epsilon(0.01),
-  m_CvMatOfLabels(0)
+  m_CvMatOfLabels(ITK_NULLPTR)
 {
   this->m_ConfidenceIndex = true;
   this->m_IsRegressionSupported = true;
@@ -74,7 +74,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
                                                                                cv::Mat & output)
 {
   unsigned int nbSamples = 0;
-  if (labels != NULL)
+  if (labels != ITK_NULLPTR)
     {
     nbSamples = labels->Size();
     }
@@ -244,7 +244,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
       }
     }
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
@@ -260,15 +260,16 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
   if ( !name.empty() )
     lname = name.c_str();
 
-  CvFileStorage* fs = 0;
-  fs = cvOpenFileStorage(filename.c_str(), 0, CV_STORAGE_WRITE);
+  CvFileStorage* fs = ITK_NULLPTR;
+  fs = cvOpenFileStorage(filename.c_str(), ITK_NULLPTR, CV_STORAGE_WRITE);
   if ( !fs )
     {
     itkExceptionMacro("Could not open the file " << filename << " for writing");
     }
 
   m_ANNModel->write(fs, lname);
-  cvWrite(fs, "class_labels", m_CvMatOfLabels);
+  if (m_CvMatOfLabels != ITK_NULLPTR)
+    cvWrite(fs, "class_labels", m_CvMatOfLabels);
 
   cvReleaseFileStorage(&fs);
 }
@@ -277,7 +278,7 @@ template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string & filename,
                                                                         const std::string & name)
 {
-  const char* lname = 0;
+  const char* lname = ITK_NULLPTR;
   if ( !name.empty() )
     lname = name.c_str();
 

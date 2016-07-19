@@ -31,10 +31,10 @@ int otbVectorMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  double PsiI = strtod(argv[3], NULL);
-  double KhiI = strtod(argv[4], NULL);
-  double PsiR = strtod(argv[5], NULL);
-  double KhiR = strtod(argv[6], NULL);
+  double PsiI = strtod(argv[3], ITK_NULLPTR);
+  double KhiI = strtod(argv[4], ITK_NULLPTR);
+  double PsiR = strtod(argv[5], ITK_NULLPTR);
+  double KhiR = strtod(argv[6], ITK_NULLPTR);
 
   typedef std::complex <double> InputPixelType;
   typedef double                OutputPixelType;

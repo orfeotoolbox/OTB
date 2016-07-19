@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPhysicalToRPCSensorModelImageFilter_txx
-#define __otbPhysicalToRPCSensorModelImageFilter_txx
+#ifndef otbPhysicalToRPCSensorModelImageFilter_txx
+#define otbPhysicalToRPCSensorModelImageFilter_txx
 
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbDEMHandler.h"

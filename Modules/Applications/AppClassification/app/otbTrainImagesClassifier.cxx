@@ -102,7 +102,7 @@ protected:
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
   SetName("TrainImagesClassifier");
   SetDescription(
@@ -199,7 +199,7 @@ void DoInit()
   SetDocExampleParameterValue("io.confmatout", "svmConfusionMatrixQB1.csv");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
@@ -275,7 +275,7 @@ void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
   otbAppLogINFO("Confusion matrix (rows = reference labels, columns = produced labels):\n" << os.str());
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   //Create training and validation for list samples and label list samples
   ConcatenateLabelListSampleFilterType::Pointer concatenateTrainingLabels =

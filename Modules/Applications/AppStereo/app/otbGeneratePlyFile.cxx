@@ -49,7 +49,7 @@ public:
 private:
   GeneratePlyFile(){}
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("GeneratePlyFile");
     SetDescription("Generate a 3D Ply file from a DEM and a color image.");
@@ -87,13 +87,13 @@ private:
     SetDocExampleParameterValue("incolor","image_color.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Update the UTM zone params
     MapProjectionParametersHandler::InitializeUTMParameters(this, "incolor", "map");
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     std::string outfname = GetParameterString("out");
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericMapProjection_h
-#define __otbGenericMapProjection_h
+#ifndef otbGenericMapProjection_h
+#define otbGenericMapProjection_h
 
 #include <iostream>
 #include <sstream>
@@ -95,7 +95,7 @@ public:
 
   virtual void PrintMap() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
 
   virtual bool InstanciateProjection();
 
@@ -108,9 +108,9 @@ public:
 
 protected:
   GenericMapProjection();
-  virtual ~GenericMapProjection();
+  ~GenericMapProjection() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   MapProjectionAdapter::Pointer m_MapProjection;
 

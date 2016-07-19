@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoteSensingRegion_h
-#define __otbRemoteSensingRegion_h
+#ifndef otbRemoteSensingRegion_h
+#define otbRemoteSensingRegion_h
 
 #include <algorithm>
 #include <iomanip>
@@ -78,7 +78,7 @@ public:
   /** ImageRegion typedef needed by the GetImageRegion() method */
   typedef itk::ImageRegion<2> ImageRegionType;
 
-  virtual typename Superclass::RegionType GetRegionType() const
+  typename Superclass::RegionType GetRegionType() const ITK_OVERRIDE
   {return Superclass::ITK_STRUCTURED_REGION; }
 
   /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
@@ -103,7 +103,7 @@ public:
 
   /** Destructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the destructor is public. */
-  virtual ~RemoteSensingRegion(){}
+  ~RemoteSensingRegion() ITK_OVERRIDE{}
 
   /** operator=. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so operator= is public. */
@@ -331,7 +331,7 @@ public:
 
 protected:
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     os << std::setprecision(15);
     os << indent << "RemoteSensingRegion" << std::endl;

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDotProductImageFilter_h
-#define __otbDotProductImageFilter_h
+#ifndef otbDotProductImageFilter_h
+#define otbDotProductImageFilter_h
 
 #include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"
@@ -137,9 +137,9 @@ public:
 protected:
   DotProductImageFilter();
 
-  virtual ~DotProductImageFilter() {}
+  ~DotProductImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   DotProductImageFilter(const Self &); //purposely not implemented

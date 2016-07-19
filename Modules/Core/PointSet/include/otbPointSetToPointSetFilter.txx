@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetToPointSetFilter_txx
-#define __otbPointSetToPointSetFilter_txx
+#ifndef otbPointSetToPointSetFilter_txx
+#define otbPointSetToPointSetFilter_txx
 
 #include "otbPointSetToPointSetFilter.h"
 
@@ -85,7 +85,7 @@ typename PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>::InputPointSe
 PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 ::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1) return 0;
+  if (this->GetNumberOfInputs() < 1) return ITK_NULLPTR;
 
   return static_cast<InputPointSetType*>
            (this->ProcessObjectType::GetInput(0));

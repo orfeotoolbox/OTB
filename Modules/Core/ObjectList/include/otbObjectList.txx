@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectList_txx
-#define __otbObjectList_txx
+#ifndef otbObjectList_txx
+#define otbObjectList_txx
 
 #include "otbObjectList.h"
 #include "itkMacro.h"

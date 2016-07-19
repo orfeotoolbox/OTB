@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbHistogramStatisticsFunction_txx
-#define __otbHistogramStatisticsFunction_txx
+#ifndef otbHistogramStatisticsFunction_txx
+#define otbHistogramStatisticsFunction_txx
 
 #include "otbHistogramStatisticsFunction.h"
 

@@ -46,7 +46,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConvertSensorToGeoPoint");
     SetDescription("Sensor to geographic coordinates conversion.");
@@ -96,11 +96,11 @@ private:
     SetDocExampleParameterValue("input.idy","200");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get input Image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

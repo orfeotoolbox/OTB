@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __otbWrapperElevationParametersHandler_h
-#define __otbWrapperElevationParametersHandler_h
+#ifndef otbWrapperElevationParametersHandler_h
+#define otbWrapperElevationParametersHandler_h
 
 #include "otbWrapperApplication.h"
 
@@ -67,4 +67,4 @@ protected:
 }
 
 
-#endif // __otbWrapperElevationParametersHandler_h_
+#endif // otbWrapperElevationParametersHandler_h_
