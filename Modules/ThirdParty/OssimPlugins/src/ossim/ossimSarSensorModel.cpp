@@ -20,6 +20,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 #if defined(USE_BOOST_TIME)
 using boost::posix_time::microseconds;

@@ -508,7 +508,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    ossimXmlDocument xmlGeo(geoXml);
    ossimRefPtr<ossimXmlNode> geoXmlRoot = xmlGeo.getRoot();
    if (xmlGeo.hasError() || !xRoot) {
-      throw std::runtime_error("Cannot read geo-ref document found for TerraSarX: "+geoXml);
+      throw std::runtime_error(("Cannot read geo-ref document found for TerraSarX: "+geoXml).string());
    }
    readGeoLocationGrid(*geoXmlRoot, azimuthTimeStart, theNearRangeTime);
    // TODO: metadata file ?
@@ -655,9 +655,9 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readGeoLocationGrid(
 
 ossimFilename ossimplugins::ossimTerraSarXSarSensorModel::searchGeoRefFile(ossimFilename const& file) const
 {
-   const ossimFilename geoRefFile = ossimFilename(file.path() + "/GEOREF.xml");
+   const ossimFilename geoRefFile(file.path() + "/GEOREF.xml");
    if (!geoRefFile.exists()) {
-      throw std::runtime_error("Cannot find GEOREF.xml file alongside "+file);
+      throw std::runtime_error(("Cannot find GEOREF.xml file alongside "+file).string());
    }
    ossimNotify(ossimNotifyLevel_DEBUG) << "Found georef file: " << geoRefFile << '\n';
    return geoRefFile;
