@@ -500,7 +500,8 @@ part_range<splitter_on_delim> split_on(String const& str, char delim) {
  * keyword list.
  * \see `to_with_default()` for the version that never fails, but returns a
  * default value otherwise (being `T()` by default).
- *
+ * \warning libc++ has an incorrect implementation of `eof()` and will not
+ * correctly handle the cases where the input string cannot be converted.
  */
 template <typename T>
 inline
@@ -531,6 +532,8 @@ T to(string_view const& v, string_view const& context)
  * to support generic programing in `get()` and `add()` helper functions for
  * keyword list.
  * \see `to()` for the version that fails by throwing exceptions.
+ * \warning libc++ has an incorrect implementation of `eof()` and will not
+ * correctly handle the cases where the input string cannot be converted.
  */
 template <typename T>
 inline
