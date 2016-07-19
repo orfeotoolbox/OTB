@@ -3,6 +3,7 @@ set(OTBSharkLearningTests
   otbSharkLearningTestDriver.cxx
   otbSharkMachineLearningModelCanRead.cxx
   otbSharkTrainMachineLearningModel.cxx
+  otbSharkImageClassificationFilter.cxx
   )
 
 add_executable(otbSharkLearningTestDriver ${OTBSharkLearningTests})

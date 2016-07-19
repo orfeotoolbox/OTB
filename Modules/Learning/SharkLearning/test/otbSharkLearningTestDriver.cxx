@@ -5,6 +5,7 @@ void RegisterTests()
   REGISTER_TEST(otbSharkRFMachineLearningModelNew);
   REGISTER_TEST(otbSharkRFMachineLearningModel);
   REGISTER_TEST(otbSharkRFMachineLearningModelCanRead);
+  REGISTER_TEST(otbSharkImageClassificationFilter);
 #endif
   
-}
+    }

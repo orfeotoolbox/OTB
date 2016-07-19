@@ -19,6 +19,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <chrono>
 
 #include <otbMachineLearningModel.h>
 #include "otbConfusionMatrixCalculator.h"
@@ -244,45 +245,56 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   double oa{0};
   auto sIt = samples->Begin();
   auto lIt = labels->Begin();
+
+  using TimeT = std::chrono::milliseconds;
+  auto start = std::chrono::system_clock::now();
   for(; sIt != samples->End(); ++sIt, ++lIt)
     {
     auto p = classifier->Predict(sIt.GetMeasurementVector())[0];
-    oa += (p==(lIt.GetMeasurementVector())[0])?1.0/samples->Size():0;
+    //    oa += (p==(lIt.GetMeasurementVector())[0])?1.0/samples->Size():0;
     }
-  std::cout << "Single sample OA = " << oa << '\n';
+  auto duration = std::chrono::duration_cast< TimeT> 
+    (std::chrono::system_clock::now() - start);
+  auto elapsed = duration.count();
+  std::cout << "Predict took " << elapsed << " ms\n";
+  //  std::cout << "Single sample OA = " << oa << '\n';
 //Load Model to new RF
   TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   RandomForestType::Pointer classifierLoad = RandomForestType::New();
 
   std::cout << "Load\n";
   classifierLoad->Load(argv[2]);
+  start = std::chrono::system_clock::now();
   classifierLoad->SetInputListSample(samples);
   classifierLoad->SetTargetListSample(predictedLoad);
   std::cout << "Predict loaded\n";
   classifierLoad->PredictAll();
+  duration = std::chrono::duration_cast< TimeT> 
+    (std::chrono::system_clock::now() - start);
+   elapsed = duration.count();
+   std::cout << "PredictAll took " << elapsed << " ms\n";
+   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
+   cmCalculatorLoad->SetProducedLabels(predictedLoad);
+   cmCalculatorLoad->SetReferenceLabels(labels);
+   cmCalculatorLoad->Compute();
 
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
+   std::cout<<"Confusion matrix: "<<std::endl;
+   std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
+   const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
+   std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
+   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+   if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+     {
+     return EXIT_SUCCESS;
+     }
+   else
+     {
+     return EXIT_FAILURE;
+     }
   
-    return EXIT_SUCCESS;
+   return EXIT_SUCCESS;
 }
 #endif
