@@ -106,6 +106,8 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::PredictAll()
 {
+
+  // TODO : compute confidence using batches needs to change the api of the model, so te confidences can be stored in a vector as the labels for the predict all
   std::vector<shark::RealVector> features;
   Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
   shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
