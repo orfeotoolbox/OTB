@@ -212,6 +212,7 @@ signals:
   void ClearProjectionRequired();
   void SetProjectionRequired();
   void UpdateProjectionRequired();
+  void ResetViewport();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

@@ -632,6 +632,14 @@ ImageViewWidget
     this,
     SLOT( OnUpdateProjectionRequired() )
   );
+
+  QObject::connect(
+    m_Renderer,
+    SIGNAL( ResetViewport() ),
+    // to:
+    this,
+    SLOT( OnResetViewport() )
+  );
 }
 
 /*******************************************************************************/
@@ -1695,6 +1703,7 @@ ImageViewWidget
     m_Renderer->GetReferenceModel< AbstractImageModel >();
 
   SpacingType nativeSpacing;
+
   // MANTIS-970: Fixed crash when no dataset is selected.
   // {
   if( imageModel==NULL )
@@ -2202,6 +2211,18 @@ ImageViewWidget
       .arg( exception.what() )
     );
     }
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnResetViewport()
+{
+  qDebug() << this << "::OnResetViewport()";
+
+  assert( m_Manipulator!=NULL );
+
+  m_Manipulator->ResetViewport();
 }
 
 /******************************************************************************/

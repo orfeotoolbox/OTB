@@ -826,8 +826,15 @@ ImageViewRenderer
 
 
   if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
+    {
     m_GlView->ClearActors();
 
+    //
+    // MANTIS-1244: image-view not reset when layer-stack is cleared.
+    // {
+    emit ResetViewport();
+    // }
+    }
   else
     {
       {
@@ -838,7 +845,8 @@ ImageViewRenderer
            ++it )
         if( !stackedLayerModel->Contains( *it ) )
           {
-          // qDebug() << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
+          // qDebug()
+	  //   << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
 
           m_GlView->RemoveActor( *it );
           }
