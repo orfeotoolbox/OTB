@@ -97,13 +97,14 @@ void buildModel(unsigned int num_classes, unsigned int num_samples,
 
 int otbSharkImageClassificationFilter(int argc, char * argv[])
 {
-  if(argc<4 || argc>6)
+  if(argc<5 || argc>7)
     {
-    std::cout << "Usage: input_image output_imae batchmode [in_model_name] [mask_name]\n";
+    std::cout << "Usage: input_image output_image output_confidence batchmode [in_model_name] [mask_name]\n";
     }
   std::string imfname = argv[1];
   std::string outfname = argv[2];
-  bool batch = (std::string(argv[3])=="1");
+  std::string conffname = argv[3]; 
+  bool batch = (std::string(argv[4])=="1");
   std::string modelfname = "/tmp/rf_model.txt";
   std::string maskfname{};
 
@@ -116,9 +117,9 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
 
   std::cout << "Image has " << num_features << " bands\n";
     
-  if(argc>4)
+  if(argc>5)
     {
-    modelfname = argv[4];
+    modelfname = argv[5];
     }
   else
     {
@@ -131,9 +132,9 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
   model->Load(modelfname);
   filter->SetModel(model);
   filter->SetInput(reader->GetOutput());
-  if(argc==6)
+  if(argc==7)
     {
-    maskfname = argv[5];
+    maskfname = argv[6];
     mask_reader->SetFileName(maskfname);
     filter->SetInputMask(mask_reader->GetOutput());
     }
@@ -143,6 +144,7 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
   writer->SetFileName(outfname);
   std::cout << "Classification\n";
   filter->SetBatch(batch);
+  filter->SetUseConfidenceMap(true);
   using TimeT = std::chrono::milliseconds;
   auto start = std::chrono::system_clock::now();
   writer->Update();
@@ -150,6 +152,11 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
     (std::chrono::system_clock::now() - start);
   auto elapsed = duration.count();
   std::cout << "Classification took " << elapsed << " ms\n";
+
+  auto confWriter = otb::ImageFileWriter<ClassificationFilterType::ConfidenceImageType>::New();
+  confWriter->SetInput(filter->GetOutputConfidence());
+  confWriter->SetFileName(conffname);
+  confWriter->Update();
 
   return EXIT_SUCCESS;
 }

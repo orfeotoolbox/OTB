@@ -28,6 +28,7 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSharkLearni
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
+  ${TEMP}/leSharkImageClassificationFilterConfidence.tif
   1
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
@@ -36,6 +37,7 @@ otb_add_test(NAME leTvImageClassificationFilterSharkClassic COMMAND  otbSharkLea
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
+  ${TEMP}/leSharkImageClassificationFilterConfidence.tif
   0
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
@@ -44,6 +46,7 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSharkLe
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
+  ${TEMP}/leSharkImageClassificationFilterConfidence.tif
   1
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   ${INPUTDATA}/Classification/QB_1_ortho_mask.tif
