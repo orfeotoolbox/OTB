@@ -39,6 +39,7 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
   this->SetNthOutput(0,TOutputImage::New());
   this->SetNthOutput(1,ConfidenceImageType::New());
   m_UseConfidenceMap = false;
+  m_Batch = false;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
@@ -84,12 +85,20 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     {
     itkGenericExceptionMacro(<< "No model for classification");
     }
+  if(m_Batch)
+    {
+    // The calls to m_Model->SetInputListSample() and
+    // m_Model->SetTargetListSample() make the model non thread safe.
+    // OpenMP allows to speed things up (configure with
+    // CMAKE_CXX_FLAGS:STRING=-fopenmp)
+    this->SetNumberOfThreads(1);
+    }
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+::ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
@@ -163,6 +172,92 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       ++confidenceIt;
       }
     progress.CompletedPixel();
+    }
+
+}
+
+template <class TInputImage, class TOutputImage, class TMaskImage>
+void
+SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
+::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+{
+
+  //Simplified case without masks nor confidences.
+  // Problems: the model is not thread safe when using predict all, because we set the samples. Two solutions : force one thread and use openmp so shark makes the parallel classification, or have one model per thread. Also, see if we can minimise the copies from pixels to samples with an adaptor.
+
+  MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
+  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() 
+                            && !m_Model->GetRegressionMode());
+  if (inputMaskPtr || computeConfidenceMap)
+    {
+    std::cout << "Redirecting to classic mode\n";
+    this->ClassicThreadedGenerateData(outputRegionForThread, threadId);
+    }
+  else
+    {
+    // Get the input pointers
+    InputImageConstPointerType inputPtr     = this->GetInput();
+    OutputImagePointerType     outputPtr    = this->GetOutput();
+    
+    // Progress reporting
+    itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+
+    // Define iterators
+    typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
+    typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
+
+    InputIteratorType inIt(inputPtr, outputRegionForThread);
+    OutputIteratorType outIt(outputPtr, outputRegionForThread);
+
+    typedef typename ModelType::InputValueType       InputValueType;
+    typedef typename ModelType::InputSampleType      InputSampleType;
+    typedef typename ModelType::InputListSampleType  InputListSampleType;
+    typedef typename ModelType::TargetValueType      TargetValueType;
+    typedef typename ModelType::TargetSampleType     TargetSampleType;
+    typedef typename ModelType::TargetListSampleType TargetListSampleType;
+
+    typename InputListSampleType::Pointer samples = InputListSampleType::New();
+    auto num_features = inputPtr->GetNumberOfComponentsPerPixel();
+    samples->SetMeasurementVectorSize(num_features);
+    InputSampleType sample(num_features);
+    // Fill the samples
+    for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
+      {
+      auto pix = inIt.Get();
+      for(size_t feat=0; feat<num_features; ++feat)
+        {
+        sample[feat]=pix[feat];
+        }
+      samples->PushBack(sample);
+      }
+    //Make the batch prediction
+    m_Model->SetInputListSample(samples);
+    typename TargetListSampleType::Pointer labels = TargetListSampleType::New();
+    m_Model->SetTargetListSample(labels);
+    m_Model->PredictAll();
+    // Set the output values
+    auto labIt = labels->Begin();
+    for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); ++labIt, ++outIt)
+      {
+      outIt.Set(labIt.GetMeasurementVector()[0]);
+      }
+    progress.CompletedPixel();
+    }
+}
+template <class TInputImage, class TOutputImage, class TMaskImage>
+void
+SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+{
+  if(m_Batch)
+    {
+    std::cout << "Batch mode\n";
+    this->BatchThreadedGenerateData(outputRegionForThread, threadId);
+    }
+  else
+    {
+    std::cout << "Classic mode\n";
+    this->ClassicThreadedGenerateData(outputRegionForThread, threadId);
     }
 
 }

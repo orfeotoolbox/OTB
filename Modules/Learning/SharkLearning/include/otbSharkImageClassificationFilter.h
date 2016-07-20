@@ -84,6 +84,9 @@ public:
   itkSetMacro(UseConfidenceMap, bool);
   itkGetMacro(UseConfidenceMap, bool);
 
+  itkSetMacro(Batch, bool);
+  itkGetMacro(Batch, bool);
+
   /**
    * If set, only pixels within the mask will be classified.
    * All pixels with a value greater than 0 in the mask, will be classified.
@@ -110,6 +113,8 @@ protected:
 
   /** Threaded generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   /** Before threaded generate data */
   void BeforeThreadedGenerateData() ITK_OVERRIDE;
   /**PrintSelf method */
@@ -125,6 +130,7 @@ private:
   LabelType m_DefaultLabel;
   /** Flag to produce the confidence map (if the model supports it) */
   bool m_UseConfidenceMap;
+  bool m_Batch;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
