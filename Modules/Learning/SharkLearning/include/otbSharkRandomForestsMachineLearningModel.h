@@ -94,6 +94,9 @@ public:
   itkGetMacro(ComputeMargin, bool);
   itkSetMacro(ComputeMargin, bool);
 
+  itkGetMacro(ConfidenceBatchMode, bool);
+  itkSetMacro(ConfidenceBatchMode, bool);
+
 
 protected:
   /** Constructor */
@@ -117,11 +120,14 @@ private:
   unsigned int m_NodeSize;
   float m_OobRatio;
   bool m_ComputeMargin;
+  bool m_ConfidenceBatchMode;
 
   /** Confidence list sample */
   typename ConfidenceListSampleType::Pointer m_ConfidenceListSample;
+  ConfidenceValueType ComputeConfidence(shark::RealVector probas, 
+                                        bool computeMargin) const;
 
-    };
+};
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
