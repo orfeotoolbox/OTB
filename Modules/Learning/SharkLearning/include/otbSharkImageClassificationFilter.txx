@@ -181,100 +181,116 @@ void
 SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
-
-  //Simplified case without masks nor confidences.
-  // Problems: the model is not thread safe when using predict all, because we set the samples. Two solutions : force one thread and use openmp so shark makes the parallel classification, or have one model per thread. Also, see if we can minimise the copies from pixels to samples with an adaptor.
-
   bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() 
                             && !m_Model->GetRegressionMode());
-  if (computeConfidenceMap)
-    {
-    std::cout << "Redirecting to classic mode\n";
-    this->ClassicThreadedGenerateData(outputRegionForThread, threadId);
-    }
-  else
-    {
-    // Get the input pointers
-    InputImageConstPointerType inputPtr     = this->GetInput();
-    MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
-    OutputImagePointerType     outputPtr    = this->GetOutput();
+  // Get the input pointers
+  InputImageConstPointerType inputPtr     = this->GetInput();
+  MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
+  OutputImagePointerType     outputPtr    = this->GetOutput();
+  ConfidenceImagePointerType confidencePtr = this->GetOutputConfidence();
     
-    // Progress reporting
-    itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  // Progress reporting
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-    // Define iterators
-    typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
-    typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
-    typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
+  // Define iterators
+  typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
+  typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
+  typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
 
-    InputIteratorType inIt(inputPtr, outputRegionForThread);
-    OutputIteratorType outIt(outputPtr, outputRegionForThread);
+  InputIteratorType inIt(inputPtr, outputRegionForThread);
+  OutputIteratorType outIt(outputPtr, outputRegionForThread);
 
-    MaskIteratorType maskIt;
+  MaskIteratorType maskIt;
+  if (inputMaskPtr)
+    {
+    maskIt = MaskIteratorType(inputMaskPtr, outputRegionForThread);
+    maskIt.GoToBegin();
+    }
+
+  typedef typename ModelType::InputValueType       InputValueType;
+  typedef typename ModelType::InputSampleType      InputSampleType;
+  typedef typename ModelType::InputListSampleType  InputListSampleType;
+  typedef typename ModelType::TargetValueType      TargetValueType;
+  typedef typename ModelType::TargetSampleType     TargetSampleType;
+  typedef typename ModelType::TargetListSampleType TargetListSampleType;
+  typedef typename ModelType::ConfidenceValueType      ConfidenceValueType;
+  typedef typename ModelType::ConfidenceSampleType     ConfidenceSampleType;
+  typedef typename ModelType::ConfidenceListSampleType ConfidenceListSampleType;
+
+  typename InputListSampleType::Pointer samples = InputListSampleType::New();
+  auto num_features = inputPtr->GetNumberOfComponentsPerPixel();
+  samples->SetMeasurementVectorSize(num_features);
+  InputSampleType sample(num_features);
+  // Fill the samples
+  bool validPoint = true;
+  for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
+    {
+    // Check pixel validity
     if (inputMaskPtr)
       {
-      maskIt = MaskIteratorType(inputMaskPtr, outputRegionForThread);
-      maskIt.GoToBegin();
+      validPoint = maskIt.Get() > 0;
+      ++maskIt;
       }
-
-    typedef typename ModelType::InputValueType       InputValueType;
-    typedef typename ModelType::InputSampleType      InputSampleType;
-    typedef typename ModelType::InputListSampleType  InputListSampleType;
-    typedef typename ModelType::TargetValueType      TargetValueType;
-    typedef typename ModelType::TargetSampleType     TargetSampleType;
-    typedef typename ModelType::TargetListSampleType TargetListSampleType;
-
-    typename InputListSampleType::Pointer samples = InputListSampleType::New();
-    auto num_features = inputPtr->GetNumberOfComponentsPerPixel();
-    samples->SetMeasurementVectorSize(num_features);
-    InputSampleType sample(num_features);
-    // Fill the samples
-    bool validPoint = true;
-    for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
+    if(validPoint)
       {
-      // Check pixel validity
-      if (inputMaskPtr)
+      auto pix = inIt.Get();
+      for(size_t feat=0; feat<num_features; ++feat)
         {
-        validPoint = maskIt.Get() > 0;
-        ++maskIt;
+        sample[feat]=pix[feat];
         }
-      if(validPoint)
-        {
-        auto pix = inIt.Get();
-        for(size_t feat=0; feat<num_features; ++feat)
-          {
-          sample[feat]=pix[feat];
-          }
-        samples->PushBack(sample);
-        }
+      samples->PushBack(sample);
       }
-    //Make the batch prediction
-    m_Model->SetInputListSample(samples);
-    typename TargetListSampleType::Pointer labels = TargetListSampleType::New();
-    m_Model->SetTargetListSample(labels);
-    m_Model->PredictAll();
-    // Set the output values
-    auto labIt = labels->Begin();
-    maskIt.GoToBegin();
-    for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); ++outIt)
-      {
-      if (inputMaskPtr)
-        {
-        validPoint = maskIt.Get() > 0;
-        ++maskIt;
-        }
-      if (validPoint)
-        {
-        outIt.Set(labIt.GetMeasurementVector()[0]);
-        ++labIt;
-        }
-      else
-        {
-        outIt.Set(m_DefaultLabel);
-        }
-      }
-    progress.CompletedPixel();
     }
+  //Make the batch prediction
+  m_Model->SetInputListSample(samples);
+  typename TargetListSampleType::Pointer labels = TargetListSampleType::New();
+  typename ConfidenceListSampleType::Pointer confidences = ConfidenceListSampleType::New();
+  if (computeConfidenceMap)
+    {
+    m_Model->SetConfidenceBatchMode(true);
+    m_Model->SetConfidenceListSample(confidences);
+    }
+  m_Model->SetTargetListSample(labels);
+  m_Model->PredictAll();
+  // Set the output values
+  ConfidenceMapIteratorType confidenceIt;
+  if (computeConfidenceMap)
+    {
+    confidenceIt = ConfidenceMapIteratorType(confidencePtr,outputRegionForThread);
+    confidenceIt.GoToBegin();
+    }
+
+  double confidenceIndex = 0.0;
+  auto labIt = labels->Begin();
+  auto confIt = confidences->Begin();
+  maskIt.GoToBegin();
+  for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); ++outIt)
+    {
+    if (inputMaskPtr)
+      {
+      validPoint = maskIt.Get() > 0;
+      ++maskIt;
+      }
+    if (validPoint)
+      {
+      outIt.Set(labIt.GetMeasurementVector()[0]);
+      ++labIt;
+      if(computeConfidenceMap)
+        {
+        confidenceIndex = confIt.GetMeasurementVector()[0];
+        confidenceIt.Set(confidenceIndex);
+        ++confidenceIt;
+        ++confIt;
+        }
+      }
+    else
+      {
+      outIt.Set(m_DefaultLabel);
+      confidenceIndex = 0.0;
+      }
+    }
+  progress.CompletedPixel();
 }
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
