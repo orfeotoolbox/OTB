@@ -46,10 +46,10 @@ typedef MachineLearningModelType::TargetValueType      TargetValueType;
 typedef MachineLearningModelType::TargetSampleType     TargetSampleType;
 typedef MachineLearningModelType::TargetListSampleType TargetListSampleType;
 
-void extractSamples(unsigned int num_classes, unsigned int num_samples,
-                    unsigned int num_features,
-                    InputListSampleType * samples, 
-                    TargetListSampleType * labels)
+void generateSamples(unsigned int num_classes, unsigned int num_samples,
+                     unsigned int num_features,
+                     InputListSampleType * samples, 
+                     TargetListSampleType * labels)
 {
   std::default_random_engine generator;
   std::uniform_int_distribution<int> label_distribution(1,num_classes);
@@ -66,24 +66,14 @@ void extractSamples(unsigned int num_classes, unsigned int num_samples,
     }
 }
 
-
-int otbSharkImageClassificationFilter(int itkNotUsed(argc), char * argv[])
+void buildModel(unsigned int num_classes, unsigned int num_samples,
+                unsigned int num_features, std::string modelfname)
 {
-  const char * imfname = argv[1];
-  const char * outfname = argv[2];
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(imfname);
-  reader->UpdateOutputInformation();
-
-  auto num_features = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-
-  std::cout << "Image has " << num_features << " bands\n";
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
   std::cout << "Sample generation\n";
-  extractSamples(3, 1000, num_features, samples, labels);
+  generateSamples(num_classes, num_samples, num_features, samples, labels);
 
   MachineLearningModelType::Pointer classifier = MachineLearningModelType::New();
   classifier->SetInputListSample(samples);
@@ -95,17 +85,49 @@ int otbSharkImageClassificationFilter(int itkNotUsed(argc), char * argv[])
   classifier->SetOobRatio(0.3);
   std::cout << "Training\n";
   classifier->Train();
+  classifier->Save(modelfname);
+}
 
+int otbSharkImageClassificationFilter(int argc, char * argv[])
+{
+  if(argc<4 || argc>5)
+    {
+    std::cout << "Usage: input_image output_imae batchmode [in_model_name]\n";
+    }
+  std::string imfname = argv[1];
+  std::string outfname = argv[2];
+  bool batch = (std::string(argv[3])=="1");
+  std::string modelfname = "/tmp/rf_model.txt";
+
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(imfname);
+  reader->UpdateOutputInformation();
+
+  auto num_features = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+
+  std::cout << "Image has " << num_features << " bands\n";
     
+  if(argc==5)
+    {
+    modelfname = argv[4];
+    }
+  else
+    {
+    buildModel(3, 1000, num_features, modelfname);
+    }
+
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
 
-  filter->SetModel(classifier.GetPointer());
+  MachineLearningModelType::Pointer model = MachineLearningModelType::New();
+  model->Load(modelfname);
+  filter->SetModel(model);
   filter->SetInput(reader->GetOutput());
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
   std::cout << "Classification\n";
+  filter->SetBatch(batch);
   using TimeT = std::chrono::milliseconds;
   auto start = std::chrono::system_clock::now();
   writer->Update();
