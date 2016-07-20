@@ -18,6 +18,7 @@
 #ifndef otbSubPixelDisparityImageFilter_txx
 #define otbSubPixelDisparityImageFilter_txx
 
+#include "otbSubPixelDisparityImageFilter.h"
 
 namespace otb
 {

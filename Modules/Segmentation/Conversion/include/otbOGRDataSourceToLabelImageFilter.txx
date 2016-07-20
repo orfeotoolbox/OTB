@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbOGRDataSourceToLabelImageFilter_txx
+#define otbOGRDataSourceToLabelImageFilter_txx
 
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
@@ -267,3 +269,5 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
 }
 
 } // end namespace otb
+
+#endif

@@ -21,6 +21,7 @@
 #ifndef otbFlexibleDistanceWithMissingValue_txx
 #define otbFlexibleDistanceWithMissingValue_txx
 
+#include "otbFlexibleDistanceWithMissingValue.h"
 #include "itkNumericTraits.h"
 
 namespace otb {

@@ -18,6 +18,7 @@
 #ifndef otbVectorDataToLabelMapWithAttributesFilter_txx
 #define otbVectorDataToLabelMapWithAttributesFilter_txx
 
+#include "otbVectorDataToLabelMapWithAttributesFilter.h"
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkNumericTraits.h"
 

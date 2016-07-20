@@ -18,6 +18,7 @@
 #ifndef otbConfusionMatrixCalculator_txx
 #define otbConfusionMatrixCalculator_txx
 
+#include "otbConfusionMatrixCalculator.h"
 
 namespace otb
 {

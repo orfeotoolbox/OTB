@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __SimpleParallelTiffWriter_h
-#define __SimpleParallelTiffWriter_h
+#ifndef otbSimpleParallelTiffWriter_h
+#define otbSimpleParallelTiffWriter_h
 
 
 #include "otbImageIOBase.h"

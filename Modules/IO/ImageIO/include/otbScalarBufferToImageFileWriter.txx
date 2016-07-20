@@ -15,7 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#ifndef otbScalarBufferToImageFileWriter_txx
+#define otbScalarBufferToImageFileWriter_txx
 
 #include "otbMacro.h"
 
@@ -122,3 +123,4 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>
 
 } // end namespace otb
 
+#endif

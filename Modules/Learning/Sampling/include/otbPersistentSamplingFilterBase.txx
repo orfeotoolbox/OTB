@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentSamplingFilterBase_txx
-#define __otbPersistentSamplingFilterBase_txx
+#ifndef otbPersistentSamplingFilterBase_txx
+#define otbPersistentSamplingFilterBase_txx
 
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbMaskedIteratorDecorator.h"

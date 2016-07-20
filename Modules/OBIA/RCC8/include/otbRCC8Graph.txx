@@ -18,6 +18,8 @@
 #ifndef otbRCC8Graph_txx
 #define otbRCC8Graph_txx
 
+#include "otbRCC8Graph.h"
+
 namespace otb
 {
 /**

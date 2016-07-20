@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSamplingRateCalculator_h
-#define __otbSamplingRateCalculator_h
+#ifndef otbSamplingRateCalculator_h
+#define otbSamplingRateCalculator_h
 
 #include "itkImageRegion.h"
 #include "itkVectorContainer.h"

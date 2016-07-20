@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageSampleExtractorFilter_h
-#define __otbImageSampleExtractorFilter_h
+#ifndef otbImageSampleExtractorFilter_h
+#define otbImageSampleExtractorFilter_h
 
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
