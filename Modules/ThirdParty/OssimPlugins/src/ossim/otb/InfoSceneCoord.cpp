@@ -9,15 +9,13 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <otb/InfoSceneCoord.h>
-#include <ossim/base/ossimDpt3d.h>
-#include <ossim/base/ossimKeywordlist.h>
+#include "otb/InfoSceneCoord.h"
+#include "ossimKeyWordListUtilities.h"
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimString.h>
 
 namespace ossimplugins
 {
-
 
 static const char PREFIX[]          = ".";
 static const char REF_ROW[]         = "refRow";
@@ -29,167 +27,140 @@ static const char RANGE_TIME[]      = "rangeTime";
 static const char INCIDENCE_ANGLE[] = "incidenceAngle";
 
 InfoSceneCoord::InfoSceneCoord():
-     _refRow(0),
-     _refColumn(0),
-     _lat(0.0),
-     _lon(0.0),
-     _azimuthTimeUTC(),
-     _rangeTime(0.0),
-     _incidenceAngle(0.)
+   m_refRow(0),
+   m_refColumn(0),
+   m_lat(0.0),
+   m_lon(0.0),
+   m_azimuthTimeUTC(),
+   m_rangeTime(0.0),
+   m_incidenceAngle(0.)
+   {
+   }
+
+bool InfoSceneCoord::saveState(ossimKeywordlist& kwl, std::string const& prefix) const
 {
+   const std::string pfx = prefix + PREFIX;
+   add(kwl, pfx, REF_ROW,         m_refRow);
+   add(kwl, pfx, REF_COLUMN,      m_refColumn);
+   add(kwl, pfx, LAT,             m_lat);
+   add(kwl, pfx, LON,             m_lon);
+   add(kwl, pfx, AZIMUTH_TIME,    m_azimuthTimeUTC);
+   add(kwl, pfx, RANGE_TIME,      m_rangeTime);
+   add(kwl, pfx, INCIDENCE_ANGLE, m_incidenceAngle);
+
+   return true;
 }
 
-InfoSceneCoord::~InfoSceneCoord()
+bool InfoSceneCoord::loadState(const ossimKeywordlist& kwl, std::string const& prefix)
 {
-}
+   static const char MODULE[] = "InfoSceneCoord::loadState";
+   const std::string pfx = prefix + PREFIX;
 
-
-InfoSceneCoord::InfoSceneCoord(const InfoSceneCoord& rhs):
-     _refRow(rhs._refRow),
-     _refColumn(rhs._refColumn),
-     _lat(rhs._lat),
-     _lon(rhs._lon),
-     _azimuthTimeUTC(rhs._azimuthTimeUTC),
-     _rangeTime(rhs._rangeTime),
-     _incidenceAngle(rhs._incidenceAngle)
-{
-}
-
-InfoSceneCoord& InfoSceneCoord::operator=(const InfoSceneCoord& rhs)
-{
-     _refRow = rhs._refRow;
-     _refColumn = rhs._refColumn;
-     _lat = rhs._lat;
-     _lon = rhs._lon;
-     _azimuthTimeUTC = rhs._azimuthTimeUTC;
-     _rangeTime =rhs._rangeTime;
-     _incidenceAngle = rhs._incidenceAngle;
-  return *this;
-}
-
-bool InfoSceneCoord::saveState(ossimKeywordlist& kwl, const char* prefix) const
-{
-  std::string pfx;
-  if (prefix)
-  {
-     pfx = prefix;
-  }
-  pfx += PREFIX;
-  kwl.add(pfx.c_str(), REF_ROW,  _refRow);
-  kwl.add(pfx.c_str(), REF_COLUMN, _refColumn);
-  kwl.add(pfx.c_str(), LAT, _lat);
-  kwl.add(pfx.c_str(), LON, _lon);
-  kwl.add(pfx.c_str(), AZIMUTH_TIME, _azimuthTimeUTC);
-  kwl.add(pfx.c_str(), RANGE_TIME, _rangeTime);
-  kwl.add(pfx.c_str(), INCIDENCE_ANGLE, _incidenceAngle);
-
-  return true;
-}
-
-bool InfoSceneCoord::loadState(const ossimKeywordlist& kwl, const char* prefix)
-{
-  static const char MODULE[] = "InfoSceneCoord::loadState";
-  bool result = true;
-  std::string pfx;
-  if (prefix)
-  {
-    pfx = prefix;
-  }
+#if 1
+   get(kwl, pfx, REF_ROW,         m_refRow);
+   get(kwl, pfx, REF_COLUMN,      m_refColumn);
+   get(kwl, pfx, LAT,             m_lat);
+   get(kwl, pfx, LON,             m_lon);
+   get(kwl, pfx, AZIMUTH_TIME,    m_azimuthTimeUTC);
+   get(kwl, pfx, RANGE_TIME,      m_rangeTime);
+   get(kwl, pfx, INCIDENCE_ANGLE, m_incidenceAngle);
+#else
    ossimString s;
    const char* lookup = 0;
 
-  pfx += PREFIX;
-  lookup = kwl.find(pfx.c_str(), REF_ROW);
-  if (lookup)
-  {
-    s = lookup;
-    _refRow = s.toUInt32();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
+   pfx += PREFIX;
+   lookup = kwl.find(pfx.c_str(), REF_ROW);
+   if (lookup)
+   {
+      s = lookup;
+      m_refRow = s.toUInt32();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " Keyword not found: " << REF_ROW << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
-  
-  lookup = kwl.find(pfx.c_str(), REF_COLUMN);
-  if (lookup)
-  {
-    s = lookup;
-    _refColumn = s.toUInt32();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << REF_COLUMN << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
+      result = false;
+   }
 
-  lookup = kwl.find(pfx.c_str(), LAT);
-  if (lookup)
-  {
-    s = lookup;
-    _lat = s.toDouble();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << LAT << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
+   lookup = kwl.find(pfx.c_str(), REF_COLUMN);
+   if (lookup)
+   {
+      s = lookup;
+      m_refColumn = s.toUInt32();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << REF_COLUMN << " in "<<pfx.c_str()<<" path.\n";
+      result = false;
+   }
 
-  lookup = kwl.find(pfx.c_str(), LON);
-  if (lookup)
-  {
-    s = lookup;
-    _lon = s.toDouble();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << LON << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
+   lookup = kwl.find(pfx.c_str(), LAT);
+   if (lookup)
+   {
+      s = lookup;
+      m_lat = s.toDouble();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << LAT << " in "<<pfx.c_str()<<" path.\n";
+      result = false;
+   }
 
-  lookup = kwl.find(pfx.c_str(), AZIMUTH_TIME);
-  if (lookup)
-  {
-    s = lookup;
-    _azimuthTimeUTC = s;
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << AZIMUTH_TIME << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
+   lookup = kwl.find(pfx.c_str(), LON);
+   if (lookup)
+   {
+      s = lookup;
+      m_lon = s.toDouble();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << LON << " in "<<pfx.c_str()<<" path.\n";
+      result = false;
+   }
 
-  lookup = kwl.find(pfx.c_str(), RANGE_TIME);
-  if (lookup)
-  {
-    s = lookup;
-    _rangeTime = s.toDouble();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << RANGE_TIME << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
+   lookup = kwl.find(pfx.c_str(), AZIMUTH_TIME);
+   if (lookup)
+   {
+      s = lookup;
+      m_azimuthTimeUTC = s;
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << AZIMUTH_TIME << " in "<<pfx.c_str()<<" path.\n";
+      result = false;
+   }
 
-  lookup = kwl.find(pfx.c_str(), INCIDENCE_ANGLE);
-  if (lookup)
-  {
-    s = lookup;
-    _incidenceAngle = s.toDouble();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << INCIDENCE_ANGLE << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
+   lookup = kwl.find(pfx.c_str(), RANGE_TIME);
+   if (lookup)
+   {
+      s = lookup;
+      m_rangeTime = s.toDouble();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << RANGE_TIME << " in "<<pfx.c_str()<<" path.\n";
+      result = false;
+   }
 
-   return result;
+   lookup = kwl.find(pfx.c_str(), INCIDENCE_ANGLE);
+   if (lookup)
+   {
+      s = lookup;
+      m_incidenceAngle = s.toDouble();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << INCIDENCE_ANGLE << " in "<<pfx.c_str()<<" path.\n";
+      result = false;
+   }
+#endif
+
+   return true;
 }
 }

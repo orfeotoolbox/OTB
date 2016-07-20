@@ -9,186 +9,169 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <otb/ImageNoise.h>
-#include <ossim/base/ossimDpt3d.h>
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimNotify.h>
+#include "otb/ImageNoise.h"
+#include "ossimKeyWordListUtilities.h"
 #include <ossim/base/ossimString.h>
 
 namespace ossimplugins
 {
 
-
-static const char PREFIX[]          = "imageNoise.";
-// static const char TIME_UTC[] = "timeUTC";
-static const char UTC_TIME[] = "timeUTC";
-static const char NOISE_ESTIMATE[] = "noiseEstimate.";
-static const char REFERENCE_POINT[] = "referencePoint";
-static const char VALIDITY_RANGE_MIN[] = "validityRangeMin";
-static const char VALIDITY_RANGE_MAX[] = "validityRangeMax";
-static const char POLYNOMIAL_DEGREE[] = "polynomialDegree";
-static const char COEFFICIENT[] = "coefficient";
+static const char PREFIX[]                    = "imageNoise.";
+// static const char TIME_UTC[]               = "timeUTC";
+static const char UTC_TIME[]                  = "timeUTC";
+static const char NOISE_ESTIMATE[]            = "noiseEstimate.";
+static const char REFERENCE_POINT[]           = "referencePoint";
+static const char VALIDITY_RANGE_MIN[]        = "validityRangeMin";
+static const char VALIDITY_RANGE_MAX[]        = "validityRangeMax";
+static const char POLYNOMIAL_DEGREE[]         = "polynomialDegree";
+static const char COEFFICIENT[]               = "coefficient";
 static const char NOISE_ESTIMATE_CONFIDENCE[] = "noiseEstimateConfidence";
 
 ImageNoise::ImageNoise():
-     _timeUTC(),
-     _validityRangeMin(0.),
-     _validityRangeMax(0.),
-     _referencePoint(0.),
-     _polynomialDegree(0),
-     _polynomialCoefficients(0)
+     m_timeUTC(),
+     m_validityRangeMin(0.),
+     m_validityRangeMax(0.),
+     m_referencePoint(0.),
+     m_polynomialDegree(0),
+     m_polynomialCoefficients(0)
 {
 }
 
-ImageNoise::~ImageNoise()
+bool ImageNoise::saveState(ossimKeywordlist& kwl, std::string const& prefix) const
 {
-}
+   const std::string pfx = prefix + PREFIX;
+   add(kwl, pfx, UTC_TIME,  m_timeUTC);
 
+   const std::string pfx2 = pfx + NOISE_ESTIMATE;
+   add(kwl, pfx2, VALIDITY_RANGE_MIN, m_validityRangeMin);
+   add(kwl, pfx2, VALIDITY_RANGE_MAX, m_validityRangeMax);
+   add(kwl, pfx2, REFERENCE_POINT,    m_referencePoint);
+   add(kwl, pfx2, POLYNOMIAL_DEGREE,  m_polynomialDegree);
 
-ImageNoise::ImageNoise(const ImageNoise& rhs):
-     _timeUTC(rhs._timeUTC),
-     _validityRangeMin(rhs._validityRangeMin),
-     _validityRangeMax(rhs._validityRangeMax),
-     _referencePoint(rhs._referencePoint),
-     _polynomialDegree(rhs._polynomialDegree),
-     _polynomialCoefficients(rhs._polynomialCoefficients)
-{
-}
-
-ImageNoise& ImageNoise::operator=(const ImageNoise& rhs)
-{
-     _timeUTC = rhs._timeUTC;
-     _validityRangeMin = rhs._validityRangeMin;
-     _validityRangeMax = rhs._validityRangeMax;
-     _referencePoint = rhs._referencePoint;
-     _polynomialDegree = rhs._polynomialDegree;
-    _polynomialCoefficients = rhs._polynomialCoefficients;
-  return *this;
-}
-
-bool ImageNoise::saveState(ossimKeywordlist& kwl, const char* prefix) const
-{
-   std::string pfx;
-   std::string pfx2;
-   if (prefix)
+   for(unsigned int i=0 ; i<m_polynomialCoefficients.size();i++)
    {
-      pfx = prefix;
+      ossimString iStr = ossimString::toString(i);
+      ossimString kw = ossimString(COEFFICIENT) + "["+iStr+ "]";
+      add(kwl, pfx2, kw.string(), m_polynomialCoefficients[i]);
    }
-  pfx += PREFIX;
-  kwl.add(pfx.c_str(), UTC_TIME,  _timeUTC);
-
-  pfx2 = pfx + NOISE_ESTIMATE;
-  kwl.add(pfx2.c_str(), VALIDITY_RANGE_MIN,  _validityRangeMin);
-  kwl.add(pfx2.c_str(), VALIDITY_RANGE_MAX,  _validityRangeMax);
-  kwl.add(pfx2.c_str(), REFERENCE_POINT,  _referencePoint);
-  kwl.add(pfx2.c_str(), POLYNOMIAL_DEGREE,  _polynomialDegree);
-
-  for(unsigned int i=0 ; i<_polynomialCoefficients.size();i++)
-  {
-         ossimString iStr = ossimString::toString(i);
-         ossimString kw = ossimString(COEFFICIENT) + "["+iStr+ "]";
-         kwl.add(pfx2.c_str(), kw.c_str(), _polynomialCoefficients[i]);
-  }
 
    return true;
 }
 
-bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
+bool ImageNoise::loadState(const ossimKeywordlist& kwl, std::string const& prefix)
 {
-  static const char MODULE[] = "ImageNoise::loadState";
-  bool result = true;
-  std::string pfx;
-  std::string pfx2;
-  if (prefix)
-  {
-    pfx = prefix;
-  }
+   static const char MODULE[] = "ImageNoise::loadState";
+   bool result = true;
+   const std::string pfx = prefix + PREFIX;
+   std::string pfx2;
    ossimString s;
    const char* lookup = 0;
 
-  pfx += PREFIX;
-  lookup = kwl.find(pfx.c_str(), UTC_TIME);
-  if (lookup)
-  {
-    s = lookup;
-    _timeUTC = s;
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << UTC_TIME << " in "<<pfx.c_str()<<" path.\n";
-    result = false;
-  }
-  pfx2 = pfx + NOISE_ESTIMATE;
-  lookup = kwl.find(pfx2.c_str(), VALIDITY_RANGE_MIN);
-  if (lookup)
-  {
-    s = lookup;
-    _validityRangeMin = s.toDouble();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MIN << " in "<<pfx2.c_str()<<" path.\n";
-    result = false;
-  }
-  lookup = kwl.find(pfx2.c_str(), VALIDITY_RANGE_MAX);
-  if (lookup)
-  {
-    s = lookup;
-    _validityRangeMax = s.toDouble();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MAX << " in "<<pfx2.c_str()<<" path\n";
-    result = false;
-  }
-  lookup = kwl.find(pfx2.c_str(), REFERENCE_POINT);
-  if (lookup)
-  {
-    s = lookup;
-    _referencePoint = s.toDouble();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << REFERENCE_POINT << " in "<<pfx2.c_str()<<" path\n";
-    result = false;
-  }
-  lookup = kwl.find(pfx2.c_str(), POLYNOMIAL_DEGREE);
-  if (lookup)
-  {
-    s = lookup;
-    _polynomialDegree = s.toInt32();
-  }
-  else
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << POLYNOMIAL_DEGREE << " in "<<pfx2.c_str()<<" path\n";
-    result = false;
-  }
+#if 1
+   get(kwl, pfx, UTC_TIME, m_timeUTC);
+#else
+   lookup = kwl.find(pfx.c_str(), UTC_TIME);
+   if (lookup)
 
-  for(unsigned int i=0 ; i<_polynomialDegree+1;i++)
-  {
+   {
+
+      s = lookup;
+      m_timeUTC = s;
+
+   }
+   else
+
+   {
+
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << UTC_TIME << " in "<<pfx.c_str()<<" path.\n";
+      result = false;
+
+   }
+#endif
+   pfx2 = pfx + NOISE_ESTIMATE;
+#if 1
+   get(kwl, pfx2, VALIDITY_RANGE_MIN, m_validityRangeMin);
+   get(kwl, pfx2, VALIDITY_RANGE_MAX, m_validityRangeMax);
+   get(kwl, pfx2, REFERENCE_POINT,    m_referencePoint);
+   get(kwl, pfx2, POLYNOMIAL_DEGREE,  m_polynomialDegree);
+#else
+   lookup = kwl.find(pfx2.c_str(), VALIDITY_RANGE_MIN);
+   if (lookup)
+   {
+      s = lookup;
+      m_validityRangeMin = s.toDouble();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MIN << " in "<<pfx2.c_str()<<" path.\n";
+      result = false;
+   }
+   lookup = kwl.find(pfx2.c_str(), VALIDITY_RANGE_MAX);
+   if (lookup)
+   {
+      s = lookup;
+      m_validityRangeMax = s.toDouble();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MAX << " in "<<pfx2.c_str()<<" path\n";
+      result = false;
+   }
+   lookup = kwl.find(pfx2.c_str(), REFERENCE_POINT);
+   if (lookup)
+   {
+      s = lookup;
+      m_referencePoint = s.toDouble();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << REFERENCE_POINT << " in "<<pfx2.c_str()<<" path\n";
+      result = false;
+   }
+   lookup = kwl.find(pfx2.c_str(), POLYNOMIAL_DEGREE);
+   if (lookup)
+   {
+      s = lookup;
+      m_polynomialDegree = s.toInt32();
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Keyword not found: " << POLYNOMIAL_DEGREE << " in "<<pfx2.c_str()<<" path\n";
+      result = false;
+   }
+#endif
+
+   for(unsigned int i=0 ; i<m_polynomialDegree+1;i++)
+   {
       ossimString iStr = ossimString::toString(i);
       ossimString kw = ossimString(COEFFICIENT) + "["+iStr+ "]";
+#if 1
+      double coeff;
+      get(kwl, pfx2, kw, coeff);
+      m_polynomialCoefficients.push_back(coeff);
+#else
       lookup = kwl.find(pfx2.c_str(), kw.c_str());
       if (lookup)
       {
-        s = lookup;
-        _polynomialCoefficients.push_back( s.toDouble() );
+         s = lookup;
+         m_polynomialCoefficients.push_back( s.toDouble() );
       }
       else
       {
-        ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << kw.c_str() << " in "<<pfx2.c_str()<<" path\n";
-        result = false;
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE << " Keyword not found: " << kw.c_str() << " in "<<pfx2.c_str()<<" path\n";
+         result = false;
       }
-  }
+#endif
+   }
 
 
-/*
+#if 0
    pfx += "ImageNoise.";
 
    const char* lookup = 0;
@@ -201,7 +184,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
       s = lookup;
       d = s.toDouble();
       JulianDate jd(d);
-      _date.set_day0hTU(jd);
+      m_date.set_day0hTU(jd);
    }
    else
    {
@@ -216,7 +199,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
    {
       s = lookup;
       d = s.toDouble();
-      _date.set_second(d);
+      m_date.set_second(d);
    }
    else
    {
@@ -230,7 +213,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
    {
       s = lookup;
       d = s.toDouble();
-      _date.set_decimal(d);
+      m_date.set_decimal(d);
    }
    else
    {
@@ -247,9 +230,9 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
       ossimDpt3d pt;
       pt.toPoint(ps);
 
-      _position[0] = pt.x;
-      _position[1] = pt.y;
-      _position[2] = pt.z;
+      m_position[0] = pt.x;
+      m_position[1] = pt.y;
+      m_position[2] = pt.z;
    }
    else
    {
@@ -266,9 +249,9 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
       ossimDpt3d pt;
       pt.toPoint(ps);
 
-      _speed[0] = pt.x;
-      _speed[1] = pt.y;
-      _speed[2] = pt.z;
+      m_speed[0] = pt.x;
+      m_speed[1] = pt.y;
+      m_speed[2] = pt.z;
    }
    else
    {
@@ -276,7 +259,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
          << MODULE << " Keyword not found: " << VELOCITY_KW << "\n";
       result = false;
    }
-*/
+#endif
    return result;
 }
 }

@@ -12,10 +12,12 @@
 #ifndef SceneCoord_h
 #define SceneCoord_h
 
-#include <otb/JSDDateTime.h>
-#include <otb/InfoSceneCoord.h>
+#include "otb/InfoSceneCoord.h"
+#include "ossimPluginConstants.h"
 #include <ossim/base/ossimConstants.h>
-#include <ossimPluginConstants.h>
+#include <string>
+#include <vector>
+#include <iosfwd>
 
 class ossimKeywordlist;
 
@@ -32,72 +34,57 @@ public:
    /**
     * @brief Constructor
     */
- SceneCoord();
+   SceneCoord();
 
    /**
-    * @brief Destructor
-    */
-  virtual ~SceneCoord();
-
-   /**
-    * @brief Copy constructor
-    */
-  SceneCoord(const SceneCoord& rhs);
-
-   /**
-    * @brief Affectation operator
-    */
-    SceneCoord& operator=(const SceneCoord& rhs);
-
-    /**
     * @brief Method to save object state to a keyword list.
     * @param kwl Keyword list to save to.
     * @param prefix added to keys when saved.
-    * @return true on success, false on error.
+    * @return true
+    * @throw std::runtime_error if a field cannot be encoded
     */
-   bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
+   bool saveState(ossimKeywordlist& kwl, std::string const& prefix="") const;
 
    /**
     * @brief Method to the load (recreate) the state of the object from a
     * keyword list. Return true if ok or false on error.
-    * @return true if load OK, false on error
+    * @return true
+    * @throw std::runtime_error if a field cannot be decoded
     */
-   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   bool loadState (const ossimKeywordlist &kwl, std::string const& prefix="");
    /*!
     * METHOD: print()
     * Fulfills base-class pure virtual. Dumps contents of object to ostream.
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   std::ostream& print(std::ostream& out) const;
 
-  void set_numberOfSceneCoord(const ossim_uint32& numberOfSceneCoord)
-  {
-    _numberOfSceneCoord = numberOfSceneCoord;
-  }
-  void set_centerSceneCoord(const InfoSceneCoord& centerSceneCoord)
-  {
-    _centerSceneCoord = centerSceneCoord;
-  }
-  void set_cornersSceneCoord(const std::vector<InfoSceneCoord>& cornersSceneCoord)
-  {
-    _tabCornersSceneCoord = cornersSceneCoord;
-  }
+   void set_numberOfSceneCoord(ossim_uint32 numberOfSceneCoord)
+   {
+      m_numberOfSceneCoord = numberOfSceneCoord;
+   }
+   void set_centerSceneCoord(const InfoSceneCoord& centerSceneCoord)
+   {
+      m_centerSceneCoord = centerSceneCoord;
+   }
+   void set_cornersSceneCoord(const std::vector<InfoSceneCoord>& cornersSceneCoord)
+   {
+      m_tabCornersSceneCoord = cornersSceneCoord;
+   }
 
-protected:
-
-      /**
-       * @brief Number of scene coordinate
-       */
-      ossim_uint32 _numberOfSceneCoord;
-      /**
-       * @brief Center scene coordinate.
-       */
-      InfoSceneCoord _centerSceneCoord;
-      /**
-       * @brief Corners InfoIncidenceAngle.
-       */
-      std::vector<InfoSceneCoord> _tabCornersSceneCoord;
-  
 private:
+
+   /**
+    * @brief Number of scene coordinate
+    */
+   ossim_uint32 m_numberOfSceneCoord;
+   /**
+    * @brief Center scene coordinate.
+    */
+   InfoSceneCoord m_centerSceneCoord;
+   /**
+    * @brief Corners InfoIncidenceAngle.
+    */
+   std::vector<InfoSceneCoord> m_tabCornersSceneCoord;
 };
 }
 

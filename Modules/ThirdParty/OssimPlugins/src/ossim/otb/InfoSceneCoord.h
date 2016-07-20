@@ -12,15 +12,14 @@
 #ifndef InfoSceneCoord_h
 #define InfoSceneCoord_h
 
-#include <vector>
-#include <ossim/base/ossimString.h>
 #include <ossimPluginConstants.h>
+#include <ossim/base/ossimConstants.h>
+#include <string>
 
 class ossimKeywordlist;
 
 namespace ossimplugins
 {
-
 
 /**
  * @ingroup InfoSceneCoord
@@ -35,98 +34,82 @@ public:
    InfoSceneCoord();
 
    /**
-    * @brief Destructor
-    */
-   virtual ~InfoSceneCoord();
-
-   /**
-    * @brief Copy constructor
-    */
-   InfoSceneCoord(const InfoSceneCoord& rhs);
-
-   /**
-    * @brief Affectation operator
-    */
-   InfoSceneCoord& operator=(const InfoSceneCoord& rhs);
-
-   /**
     * @brief Method to save object state to a keyword list.
     * @param kwl Keyword list to save to.
     * @param prefix added to keys when saved.
-    * @return true on success, false on error.
+    * @return true
+    * @throw std::runtime_error if a field cannot be encoded
     */
-   bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
+   bool saveState(ossimKeywordlist& kwl, std::string const& prefix="") const;
 
    /**
     * @brief Method to the load (recreate) the state of the object from a
     * keyword list. Return true if ok or false on error.
-    * @return true if load OK, false on error
+    * @return true
+    * @throw std::runtime_error if a field cannot be decoded
     */
-   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   bool loadState (const ossimKeywordlist &kwl, std::string const& prefix="");
 
    void set_refRow(ossim_uint32 value)
    {
-      _refRow = value;
+      m_refRow = value;
    }
    void set_refColumn(ossim_uint32 value)
    {
-      _refColumn = value;
+      m_refColumn = value;
    }
    void set_lat(double value)
    {
-	   _lat = value;
+      m_lat = value;
    }
    void set_lon(double value)
    {
-	   _lon = value;
+      m_lon = value;
    }
-   void set_azimuthTimeUTC(ossimString value)
+   void set_azimuthTimeUTC(std::string const& value)
    {
-	   _azimuthTimeUTC = value;
+      m_azimuthTimeUTC = value;
    }
    void set_rangeTime(double value)
    {
-	   _rangeTime = value;
+      m_rangeTime = value;
    }
    void set_incidenceAngle(double value)
    {
-      _incidenceAngle = value;
+      m_incidenceAngle = value;
    }
 
-
-protected:
-
-      /**
-       * @brief Reference Row (refRow node).
-       */
-      ossim_uint32 _refRow;
-
-      /**
-       * @brief Reference Column (refColumn node).
-       */
-      ossim_uint32 _refColumn;
-      /**
-       * @brief Latitude (lat node).
-       */
-      double _lat;
-      /**
-       * @brief Longitude (lon node).
-       */
-      double _lon;
-      /**
-       * @brief azimuth time  (azimuthTimeUTC node).
-       */
-      ossimString _azimuthTimeUTC;
-      /**
-       * @brief range time  (rangeTime node).
-       */
-      double _rangeTime;
-      /**
-       * @brief IncidenceAngle (incidenceAngle node).
-       */
-      double _incidenceAngle;
-
 private:
+
+   /**
+    * @brief Reference Row (refRow node).
+    */
+   ossim_uint32 m_refRow;
+
+   /**
+    * @brief Reference Column (refColumn node).
+    */
+   ossim_uint32 m_refColumn;
+   /**
+    * @brief Latitude (lat node).
+    */
+   double m_lat;
+   /**
+    * @brief Longitude (lon node).
+    */
+   double m_lon;
+   /**
+    * @brief azimuth time  (azimuthTimeUTC node).
+    */
+   std::string m_azimuthTimeUTC;
+   /**
+    * @brief range time  (rangeTime node).
+    */
+   double m_rangeTime;
+   /**
+    * @brief IncidenceAngle (incidenceAngle node).
+    */
+   double m_incidenceAngle;
 };
 }
 
