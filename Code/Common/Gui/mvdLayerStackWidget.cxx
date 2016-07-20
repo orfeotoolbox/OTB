@@ -350,9 +350,15 @@ LayerStackWidget
 {
   assert( m_UI!=NULL );
 
+
   assert( m_UI->deleteButton!=NULL );
 
   m_UI->deleteButton->setEnabled( enabled );
+
+
+  assert( m_UI->deleteAllButton!=NULL );
+
+  m_UI->deleteAllButton->setEnabled( enabled );
 }
 
 /*******************************************************************************/
