@@ -84,7 +84,13 @@ void buildModel(unsigned int num_classes, unsigned int num_samples,
   classifier->SetNodeSize(25);
   classifier->SetOobRatio(0.3);
   std::cout << "Training\n";
+  using TimeT = std::chrono::milliseconds;
+  auto start = std::chrono::system_clock::now();
   classifier->Train();
+  auto duration = std::chrono::duration_cast< TimeT> 
+    (std::chrono::system_clock::now() - start);
+  auto elapsed = duration.count();
+  std::cout << "Training took " << elapsed << " ms\n";
   classifier->Save(modelfname);
 }
 
