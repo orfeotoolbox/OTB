@@ -53,6 +53,8 @@ public:
   itkSetMacro(ViewportSize,SizeType);
   itkGetConstReferenceMacro(ViewportSize,SizeType);
 
+  void Reset();
+
   void SetRotationCenter(const PointType & center)
   {
     m_RotationCenter = center;
