@@ -36,6 +36,7 @@ typedef ClassificationFilterType::ValueType ValueType;
 typedef ClassificationFilterType::LabelType LabelType;
 typedef otb::SharkRandomForestsMachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
+typedef otb::ImageFileReader<LabeledImageType> MaskReaderType;
 typedef otb::ImageFileWriter<LabeledImageType> WriterType;
 
 typedef otb::SharkRandomForestsMachineLearningModel<PixelType,short unsigned int>         MachineLearningModelType;
@@ -96,15 +97,17 @@ void buildModel(unsigned int num_classes, unsigned int num_samples,
 
 int otbSharkImageClassificationFilter(int argc, char * argv[])
 {
-  if(argc<4 || argc>5)
+  if(argc<4 || argc>6)
     {
-    std::cout << "Usage: input_image output_imae batchmode [in_model_name]\n";
+    std::cout << "Usage: input_image output_imae batchmode [in_model_name] [mask_name]\n";
     }
   std::string imfname = argv[1];
   std::string outfname = argv[2];
   bool batch = (std::string(argv[3])=="1");
   std::string modelfname = "/tmp/rf_model.txt";
+  std::string maskfname{};
 
+  MaskReaderType::Pointer mask_reader = MaskReaderType::New();
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(imfname);
   reader->UpdateOutputInformation();
@@ -113,7 +116,7 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
 
   std::cout << "Image has " << num_features << " bands\n";
     
-  if(argc==5)
+  if(argc>4)
     {
     modelfname = argv[4];
     }
@@ -128,6 +131,12 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
   model->Load(modelfname);
   filter->SetModel(model);
   filter->SetInput(reader->GetOutput());
+  if(argc==6)
+    {
+    maskfname = argv[5];
+    mask_reader->SetFileName(maskfname);
+    filter->SetInputMask(mask_reader->GetOutput());
+    }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());

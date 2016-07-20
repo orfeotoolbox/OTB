@@ -39,3 +39,12 @@ otb_add_test(NAME leTvImageClassificationFilterSharkClassic COMMAND  otbSharkLea
   0
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
+
+otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSharkLearningTestDriver
+  otbSharkImageClassificationFilter
+  ${INPUTDATA}/Classification/QB_1_ortho.tif
+  ${TEMP}/leSharkImageClassificationFilterOutput.tif
+  1
+  ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
+  ${INPUTDATA}/Classification/QB_1_ortho_mask.tif
+  )

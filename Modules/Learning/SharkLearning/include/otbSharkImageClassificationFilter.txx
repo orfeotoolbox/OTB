@@ -185,10 +185,9 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
   //Simplified case without masks nor confidences.
   // Problems: the model is not thread safe when using predict all, because we set the samples. Two solutions : force one thread and use openmp so shark makes the parallel classification, or have one model per thread. Also, see if we can minimise the copies from pixels to samples with an adaptor.
 
-  MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
   bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() 
                             && !m_Model->GetRegressionMode());
-  if (inputMaskPtr || computeConfidenceMap)
+  if (computeConfidenceMap)
     {
     std::cout << "Redirecting to classic mode\n";
     this->ClassicThreadedGenerateData(outputRegionForThread, threadId);
@@ -197,6 +196,7 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     {
     // Get the input pointers
     InputImageConstPointerType inputPtr     = this->GetInput();
+    MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
     OutputImagePointerType     outputPtr    = this->GetOutput();
     
     // Progress reporting
@@ -204,10 +204,18 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 
     // Define iterators
     typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
+    typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
     typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
 
     InputIteratorType inIt(inputPtr, outputRegionForThread);
     OutputIteratorType outIt(outputPtr, outputRegionForThread);
+
+    MaskIteratorType maskIt;
+    if (inputMaskPtr)
+      {
+      maskIt = MaskIteratorType(inputMaskPtr, outputRegionForThread);
+      maskIt.GoToBegin();
+      }
 
     typedef typename ModelType::InputValueType       InputValueType;
     typedef typename ModelType::InputSampleType      InputSampleType;
@@ -221,14 +229,24 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     samples->SetMeasurementVectorSize(num_features);
     InputSampleType sample(num_features);
     // Fill the samples
+    bool validPoint = true;
     for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
       {
-      auto pix = inIt.Get();
-      for(size_t feat=0; feat<num_features; ++feat)
+      // Check pixel validity
+      if (inputMaskPtr)
         {
-        sample[feat]=pix[feat];
+        validPoint = maskIt.Get() > 0;
+        ++maskIt;
         }
-      samples->PushBack(sample);
+      if(validPoint)
+        {
+        auto pix = inIt.Get();
+        for(size_t feat=0; feat<num_features; ++feat)
+          {
+          sample[feat]=pix[feat];
+          }
+        samples->PushBack(sample);
+        }
       }
     //Make the batch prediction
     m_Model->SetInputListSample(samples);
@@ -237,9 +255,23 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     m_Model->PredictAll();
     // Set the output values
     auto labIt = labels->Begin();
-    for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); ++labIt, ++outIt)
+    maskIt.GoToBegin();
+    for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); ++outIt)
       {
-      outIt.Set(labIt.GetMeasurementVector()[0]);
+      if (inputMaskPtr)
+        {
+        validPoint = maskIt.Get() > 0;
+        ++maskIt;
+        }
+      if (validPoint)
+        {
+        outIt.Set(labIt.GetMeasurementVector()[0]);
+        ++labIt;
+        }
+      else
+        {
+        outIt.Set(m_DefaultLabel);
+        }
       }
     progress.CompletedPixel();
     }
