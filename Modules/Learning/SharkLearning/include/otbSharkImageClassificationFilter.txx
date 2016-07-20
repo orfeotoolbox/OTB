@@ -261,12 +261,14 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     confidenceIt.GoToBegin();
     }
 
-  double confidenceIndex = 0.0;
   auto labIt = labels->Begin();
   auto confIt = confidences->Begin();
   maskIt.GoToBegin();
-  for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); ++outIt)
+  for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); 
+       ++outIt)
     {
+    double confidenceIndex = 0.0;
+    TargetValueType labelValue{m_DefaultLabel};
     if (inputMaskPtr)
       {
       validPoint = maskIt.Get() > 0;
@@ -274,20 +276,19 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       }
     if (validPoint)
       {
-      outIt.Set(labIt.GetMeasurementVector()[0]);
+      labelValue = labIt.GetMeasurementVector()[0];
       ++labIt;
       if(computeConfidenceMap)
         {
         confidenceIndex = confIt.GetMeasurementVector()[0];
-        confidenceIt.Set(confidenceIndex);
-        ++confidenceIt;
         ++confIt;
         }
       }
-    else
+    outIt.Set(labelValue);
+    if (computeConfidenceMap)
       {
-      outIt.Set(m_DefaultLabel);
-      confidenceIndex = 0.0;
+      confidenceIt.Set(confidenceIndex);
+      ++confidenceIt;
       }
     }
   progress.CompletedPixel();
