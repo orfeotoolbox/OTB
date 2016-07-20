@@ -42,6 +42,8 @@ public:
   typedef typename Superclass::TargetSampleType           TargetSampleType;
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
+  typedef itk::FixedArray<ConfidenceValueType,1>            ConfidenceSampleType;
+  typedef itk::Statistics::ListSample<ConfidenceSampleType> ConfidenceListSampleType;
   
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
@@ -67,6 +69,14 @@ public:
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
   virtual bool CanWriteFile(const std::string &);
+  //@}
+
+  /**\name Confidence accessors for batch mode */
+  //@{
+  /** Set the confidence samples (to be used before PredictAll) */
+  itkSetObjectMacro(ConfidenceListSample,ConfidenceListSampleType);
+  /** Get the confidence values (to be used after PredictAll) */
+  itkGetObjectMacro(ConfidenceListSample,ConfidenceListSampleType);
   //@}
 
   itkGetMacro(NumberOfTrees,unsigned int);
@@ -107,6 +117,10 @@ private:
   unsigned int m_NodeSize;
   float m_OobRatio;
   bool m_ComputeMargin;
+
+  /** Confidence list sample */
+  typename ConfidenceListSampleType::Pointer m_ConfidenceListSample;
+
     };
 } // end namespace otb
 
