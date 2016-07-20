@@ -290,8 +290,8 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       confidenceIt.Set(confidenceIndex);
       ++confidenceIt;
       }
+    progress.CompletedPixel();
     }
-  progress.CompletedPixel();
 }
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
