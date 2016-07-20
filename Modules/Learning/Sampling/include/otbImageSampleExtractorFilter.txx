@@ -18,6 +18,7 @@
 #ifndef otbImageSampleExtractorFilter_txx
 #define otbImageSampleExtractorFilter_txx
 
+#include "otbImageSampleExtractorFilter.h"
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkProgressReporter.h"
 

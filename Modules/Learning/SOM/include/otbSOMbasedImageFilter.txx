@@ -21,7 +21,7 @@
 #ifndef otbSOMbasedImageFilter_txx
 #define otbSOMbasedImageFilter_txx
 
-#include "otbSOMbasedImageFilter.txx"
+#include "otbSOMbasedImageFilter.h"
 
 namespace otb {
 

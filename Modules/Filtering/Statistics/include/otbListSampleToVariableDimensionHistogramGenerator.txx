@@ -21,6 +21,7 @@
 #ifndef otbListSampleToVariableDimensionHistogramGenerator_txx
 #define otbListSampleToVariableDimensionHistogramGenerator_txx
 
+#include "otbListSampleToVariableDimensionHistogramGenerator.h"
 #include "otbMacro.h"
 #include "itkStatisticsAlgorithm.h"
 

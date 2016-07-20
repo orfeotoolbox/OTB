@@ -21,6 +21,7 @@ See IMTCopyright.txt for details.
 #ifndef otbSOMMap_txx
 #define otbSOMMap_txx
 
+#include "otbSOMMap.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
 namespace otb

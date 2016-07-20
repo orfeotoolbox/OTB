@@ -15,6 +15,7 @@
 #ifndef otbSimpleParallelTiffWriter_txx
 #define otbSimpleParallelTiffWriter_txx
 
+#include "otbSimpleParallelTiffWriter.h"
 #include "itkTimeProbe.h"
 
 using std::vector;
