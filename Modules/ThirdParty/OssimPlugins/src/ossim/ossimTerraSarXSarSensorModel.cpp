@@ -16,6 +16,8 @@
 #include "ossimSarSensorModelPathsAndKeys.h"
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimEnvironmentUtility.h>
+#include <ossim/base/ossimDirectory.h>
 #include <iostream>
 #include <cassert>
 
@@ -50,15 +52,23 @@ namespace {// Anonymous namespace
    const ossimString attProductVariantInfo = "productVariantInfo";
    const ossimString attProductVariant     = "productVariant";
    const ossimString attSceneInfo          = "sceneInfo";
-   const ossimString attImageRaster        = "imageDataInfo/imageRaster";
+   const ossimString attImageDataInfo      = "imageDataInfo";
+   const ossimString attImageRaster        = "imageRaster";
    const ossimString attSettings           = "instrument/settings";
    const ossimString attProductSpecific    = "productSpecific";
    const ossimString attComplexImageInfo   = "complexImageInfo";
    const ossimString attGeneralHeader      = "generalHeader";
    const ossimString attSceneCenterCoord   = "sceneCenterCoord";
+   const ossimString attSceneCornerCoord   = "sceneCornerCoord";
+   const ossimString attRangeTime          = "rangeTime";
+   const ossimString attPolLayer           = "polLayer";
+
+   const std::string ACQUISITION_INFO      = "acquisitionInfo.";
+   const std::string POLARISATION_LIST     = "polarisationList";
+   const std::string CALIBRATION_CALFACTOR = "calibration.calibrationConstant.calFactor";
 
    inline bool isnan(ossimGpt const& p) {
-      return std::isnan(p.latd()) || std::isnan(p.lond()) || std::isnan(p.height());
+      return ossim::isnan(p.latd()) || ossim::isnan(p.lond()) || ossim::isnan(p.height());
    }
 
 }// Anonymous namespace
@@ -66,6 +76,10 @@ namespace {// Anonymous namespace
 namespace ossimplugins {
    RTTI_DEF1(ossimTerraSarXSarSensorModel, "ossimTerraSarXSarSensorModel", ossimSarSensorModel);
 } // ossimplugins namespace
+
+ossimplugins::ossimTerraSarXSarSensorModel::ossimTerraSarXSarSensorModel()
+   : m_polLayerName("UNDEFINED")
+{}
 
 void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::string & annotationXml, const std::string & geoXml)
 {
@@ -243,33 +257,23 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::open";
-   // traceDebug.setTraceFlag(true);
-   // traceExec .setTraceFlag(true);
+   traceDebug.setTraceFlag(true);
+   traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
-   const ossimString ext = file.ext().downcase();
-   if ( !file.exists() || (ext != "tiff" && ext != "xml" ))
+   ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " try to open "<<file<<"\n";
+
+   try
    {
-      return false;
-   }
-   else
-   {
+      const ossimFilename xmlFileName = findTSXLeader(file);
+
       theGSD.makeNan();
 
       // -----[ Read product file
-      ossimFilename xmlFileName = file;
-
-      // If this is tiff file, look for corresponding annotation file
-      if(ext != "xml")
+      assert(xmlFileName.exists());
+      if ( !this->read(xmlFileName) )
       {
-         // TODO: update relative path to annotation file
-         const ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
-         const ossimFilename path = file.path().path();
-         xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
-      }
-
-      if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
-      {
-         ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " open "<<xmlFileName<<" failed\n";
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "Cannot read " << xmlFileName << " as TerraSarX model.\n";
          return false;
       }
 
@@ -288,8 +292,16 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 
       // automatically loaded/saved into ossimSensorModel
       theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+
+      return true;
+   } catch (std::exception const& e) {
+      if (traceExec())
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "Error while reading " << file << " as having a TerraSarX model: " << e.what() << "\n";
    }
-   return true;
+   ossimNotify(ossimNotifyLevel_FATAL)
+      << "Cannot read " << file << " as having a TerraSarX model.\n";
+   return false;
 }
 
 /*virtual*/
@@ -313,32 +325,60 @@ std::ostream& ossimplugins::ossimTerraSarXSarSensorModel::print(std::ostream& ou
 
 /*virtual*/
 bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
-      ossimKeywordlist& kwl, const char* prefix/* = NULL */) const
+      ossimKeywordlist& kwl, const char* prefix_/* = NULL */) const
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::saveState";
    SCOPED_LOG(traceDebug, MODULE);
 
-   add(kwl, prefix?prefix:"", ossimKeywordNames::TYPE_KW, "ossimTerraSarXSarSensorModel");
+   std::string const prefix = prefix_ ? prefix_ : "";
+   add(kwl, prefix, ossimKeywordNames::TYPE_KW, "ossimTerraSarXSarSensorModel");
    add(kwl, "support_data.calibration_lookup_flag", "false");
+
+   // polLayers + calfactors
+   for (unsigned int i=0, N=m_polLayerList.size(); i!=N ; ++i)
+   {
+      add(kwl, prefix, ACQUISITION_INFO + POLARISATION_LIST + '['+ossimString::toString(i)+']', m_polLayerList[i]);
+      add(kwl, prefix, CALIBRATION_CALFACTOR, m_calFactor[i]);
+   }
+
+   m_sceneCoord.saveState(kwl, prefix);
+
+   // noise
+   if (m_polLayerName != "UNDEFINED")
+   {
+      const std::size_t polLayerIdx = findPolLayerIdx(m_polLayerName);
+      m_noise[polLayerIdx].saveState(kwl, prefix);
+   }
+   else
+   {
+      for (std::size_t i=0, N=m_polLayerList.size(); i!=N ; ++i)
+      {
+         m_noise[i].saveState(kwl, prefix);
+      }
+   }
 
    // kwl.addList(theManifestKwl, true);
    kwl.addList(theProductKwl,  true);
 
-   const bool success = ossimSarSensorModel::saveState(kwl, prefix);
+   const bool success = ossimSarSensorModel::saveState(kwl, prefix_);
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << (success ? " success!" : " failure!") << '\n';
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl.getSize() << " keywords saved.\n";
+   ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl;
    return success;
 }
 
 /*virtual*/
-bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist const& kwl, const char* prefix/* = NULL */)
+bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist const& kwl, const char* prefix_/* = NULL */)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::loadState";
+   traceDebug.setTraceFlag(true);
+   traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
    theOrbitRecords.clear();
    theGCPRecords.clear();
    theBurstRecords.clear();
 
+   std::string const prefix = prefix_ ? prefix_ : "";
 #if 0
    theManifestKwl.addList(kwl, true);
 
@@ -348,31 +388,11 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
    }
 #endif
 
-   return ossimSarSensorModel::loadState(kwl, prefix);
-}
+   m_sceneCoord.loadState(kwl, prefix);
+   // TODO: noise
+   // TODO: calFactor
 
-bool ossimplugins::ossimTerraSarXSarSensorModel::readProduct(ossimFilename const & productXmlFile)
-{
-   try
-   {
-      const bool ret = read(productXmlFile);
-      if ( ret )
-      {
-#if 0
-         readCalibrationMetadata();
-         readNoiseMetadata();
-#endif
-         return true;
-      }
-   } catch (std::exception const& e) {
-      if (traceExec())
-         ossimNotify(ossimNotifyLevel_INFO)
-            << "Error while reading " << productXmlFile << " as TerraSarX model: " << e.what() << "\n";
-   }
-   if (traceExec())
-      ossimNotify(ossimNotifyLevel_FATAL)
-         << "Cannot read " << productXmlFile << " as TerraSarX model.\n";
-   return false;
+   return ossimSarSensorModel::loadState(kwl, prefix_);
 }
 
 bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annotationXml)
@@ -388,7 +408,9 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    ossimXmlNode const& productVariantInfo = getExpectedFirstNode(productInfo, attProductVariantInfo);
    ossimXmlNode const& sceneInfo          = getExpectedFirstNode(productInfo, attSceneInfo);
    ossimXmlNode const& sceneCenterCoord   = getExpectedFirstNode(sceneInfo, attSceneCenterCoord);
-   ossimXmlNode const& imageRaster        = getExpectedFirstNode(productInfo, attImageRaster);
+   ossimXmlNode const& rangeTime          = getExpectedFirstNode(sceneInfo, attRangeTime);
+   ossimXmlNode const& imageDataInfo      = getExpectedFirstNode(productInfo, attImageDataInfo);
+   ossimXmlNode const& imageRaster        = getExpectedFirstNode(imageDataInfo, attImageRaster);
    ossimXmlNode const& settings           = getExpectedFirstNode(xmlRoot, attSettings);
    ossimXmlNode const& productSpecific    = getExpectedFirstNode(xmlRoot, attProductSpecific);
    ossimXmlNode const& complexImageInfo   = getExpectedFirstNode(productSpecific, attComplexImageInfo);
@@ -435,8 +457,9 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
    // With this way of procedding, the time points are not altered, they are
    // forwarded exactly as written initially
-   const TimeType azimuthTimeStart = time::toModifiedJulianDate(addMandatory(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", sceneInfo, "start/timeUTC"));
-   const TimeType azimuthTimeStop  = time::toModifiedJulianDate(addMandatory(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  sceneInfo, "stop/timeUTC"));
+   readAzimuthTimes(sceneInfo, settings); // sets theAzimuthTimeStart and Stop
+   const TimeType azimuthTimeStart = time::toModifiedJulianDate(add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", theAzimuthTimeStart));
+   const TimeType azimuthTimeStop  = time::toModifiedJulianDate(add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  theAzimuthTimeStop));
    theImageSize.y = getFromFirstNode<unsigned int>(imageRaster, "numberOfRows");
    const double end_line           = add(theProductKwl, BURST_PREFIX, "[0].end_line", theImageSize.y - 1);
 
@@ -514,9 +537,16 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    // TODO: metadata file ?
 
    // Fill other properties from ossimSensorModel
-   theSensorID = getTextFromFirstNode(generalHeader, "mission");
-   theImageID  = getTextFromFirstNode(sceneInfo, "sceneID");
-   theImageSize.x = getFromFirstNode<unsigned int>(imageRaster, "numberOfColumns");
+   // initAcquisitionInfo
+   const std::size_t numberOfLayers = getFromFirstNode<std::size_t>(imageDataInfo, "numberOfLayers");
+   m_polLayerList   = getTextNodes(productInfo, "acquisitionInfo/polarisationList/polLayer");
+   if (numberOfLayers != m_polLayerList.size())
+   {
+      throw std::runtime_error("Number of layers found mismatch with the number of layer registered");
+   }
+   theSensorID      = getTextFromFirstNode(generalHeader, "mission");
+   theImageID       = getTextFromFirstNode(sceneInfo, "sceneID");
+   theImageSize.x   = getFromFirstNode<unsigned int>(imageRaster, "numberOfColumns");
    // theGSD
    if (isSSC()) {
       theGSD.x = getFromFirstNode<double>(complexImageInfo, "projectedSpacingRange/slantRange");
@@ -534,6 +564,21 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& annot
    theRefImgPt.x = getFromFirstNode<ossim_float64>(sceneCenterCoord, "refColumn") - 1.0;
    theRefImgPt.y = getFromFirstNode<ossim_float64>(sceneCenterCoord, "refRow")    - 1.0;
 
+   // azimuth_start_time/stop
+   add(theProductKwl, "azimuth_start_time", theAzimuthTimeStart);
+   add(theProductKwl, "azimuth_stop_time",  theAzimuthTimeStop);
+
+   addMandatory(theProductKwl, "range_first_time", rangeTime, "firstPixel");
+   addMandatory(theProductKwl, "range_last_time", rangeTime, "lastPixel");
+   addMandatory(theProductKwl, "generation_time", generalHeader, "generationTime");
+
+   initNoise(xmlDoc);
+   // getPolLayerFromImageFile
+   initCalibration(xmlDoc);
+   assert(!m_calFactor.empty());
+   add(theProductKwl, "calibration.calibrationConstant.calFactor", m_calFactor.back());
+
+   initSceneCoord(sceneCenterCoord, sceneInfo);
 #if 1
    // GCPRecords need to be loaded into C++ data in order to use
    // lineSampleToWorld()
@@ -655,11 +700,299 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readGeoLocationGrid(
 
 ossimFilename ossimplugins::ossimTerraSarXSarSensorModel::searchGeoRefFile(ossimFilename const& file) const
 {
-   const ossimFilename geoRefFile(file.path() + "/GEOREF.xml");
+   ossimFilename geoRefFile(file.path() + "/ANNOTATION/GEOREF.xml");
    if (!geoRefFile.exists()) {
-      throw std::runtime_error(("Cannot find GEOREF.xml file alongside "+file).string());
+      // May be in same directory
+      geoRefFile = file.path() + "/GEOREF.xml";
+      if (!geoRefFile.exists()) {
+         throw std::runtime_error(("Cannot find GEOREF.xml file alongside "+file).string());
+      }
    }
    ossimNotify(ossimNotifyLevel_DEBUG) << "Found georef file: " << geoRefFile << '\n';
    return geoRefFile;
 }
+
+void ossimplugins::ossimTerraSarXSarSensorModel::readAzimuthTimes(
+      ossimXmlNode const& sceneInfo, ossimXmlNode const& settings)
+{
+   theAzimuthTimeStart = getOptionalTextFromFirstNode(sceneInfo, "start/timeUTC").string();
+   if (theAzimuthTimeStart.empty())
+   {
+      theAzimuthTimeStart = getOptionalTextFromFirstNode(settings, "rxGainSetting/startTimeUTC").string();
+   }
+
+   theAzimuthTimeStop = getOptionalTextFromFirstNode(sceneInfo, "stop/timeUTC").string();
+   if (theAzimuthTimeStop.empty())
+   {
+      theAzimuthTimeStop = getOptionalTextFromFirstNode(settings, "rxGainSetting/stopTimeUTC").string();
+   }
+}
+
+ossimFilename ossimplugins::ossimTerraSarXSarSensorModel::findTSXLeader(ossimFilename const& file)
+{
+   if ( file.exists() && (file.ext().downcase() == "xml") )
+   {
+      return file;
+   }
+   else if (!file.exists())
+   {
+      throw std::runtime_error(("Cannot find TSX metadata file from the non-existing file: "+file).string());
+   }
+   else
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimplugins::ossimTerraSarXSarSensorModel::findTSXLeader "
+            << " directory scan turned off.  This is killing the factory open."
+            << " We should never scan a directory.  Need to resolve.\n";
+      }
+
+#if 1
+      ossimFilename imagePath = file.path();
+      if (imagePath.empty())
+         imagePath = ossimEnvironmentUtility::instance()->getCurrentWorkingDir();
+
+      ossimDirectory directory(imagePath.path());
+      std::vector<ossimFilename> vectName;
+      const ossimString reg = ".xml";
+      directory.findAllFilesThatMatch( vectName, reg, 1 );
+
+      for (std::size_t loop = 0, N=vectName.size() ; loop!=N ; ++loop)
+      {
+         ossimFilename const& curFile = vectName[loop];
+         if (starts_with(curFile.file(), "TSX"))
+         {
+            return curFile;
+         }
+      }
+#endif
+   }
+   throw std::runtime_error(("Cannot find TSX metadata file from: "+file).string());
+}
+
+ossimString const& ossimplugins::ossimTerraSarXSarSensorModel::findPolLayerName(
+      ossimXmlNode const& node, ossimString const& xpath) const
+{
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes; // TODO: reallocating this is not efficient
+   node.findChildNodes(attPolLayer, sub_nodes);
+   if (sub_nodes.empty())
+   {
+      throw std::runtime_error(("Could not find " + xpath + "/" + attPolLayer + " in TSX xml file.").string());
+   }
+   ossimString const& polLayerName = sub_nodes[0]->getText();
+   return polLayerName;
+}
+
+std::size_t ossimplugins::ossimTerraSarXSarSensorModel::findPolLayerIdx(
+      std::string const& polLayerName) const
+{
+   const std::vector<ossimString>::const_iterator b  = m_polLayerList.begin();
+   const std::vector<ossimString>::const_iterator e  = m_polLayerList.end();
+   const std::vector<ossimString>::const_iterator wh = std::find(b, e, polLayerName);
+
+   if(wh == e)
+   {
+      throw std::runtime_error("Unable to found polLayer in polLayer List");
+   }
+   const std::size_t polLayerIdx = std::distance(b, wh);
+   return polLayerIdx;
+}
+
+void ossimplugins::ossimTerraSarXSarSensorModel::getNoiseAtGivenNode(
+   ossimXmlNode const& noiseNode, ossimplugins::Noise& noise)
+{
+   std::vector<ImageNoise> tabImageNoise;
+
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::getNoise";
+   SCOPED_LOG(traceDebug, MODULE);
+
+   static const ossimString attNumberOfNoiseRecords = "numberOfNoiseRecords";
+   const std::size_t nbOfNoiseRecords = getFromFirstNode<std::size_t>(noiseNode, attNumberOfNoiseRecords);
+   noise.set_numberOfNoiseRecords(nbOfNoiseRecords);
+
+   static const ossimString attImageNoise           = "imageNoise";
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   noiseNode.findChildNodes(attImageNoise, xml_nodes);
+   if(xml_nodes.empty())
+   {
+      throw std::runtime_error("Could not find imageNoise node");
+   }
+
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node = xml_nodes.begin();
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   while (node != xml_nodes.end())
+   {
+      ImageNoise ev;
+      ev.set_timeUTC(getTextFromFirstNode(**node, attTimeUTC));
+
+      sub_nodes.clear();
+      static const ossimString attValidityRangeMin = "noiseEstimate/validityRangeMin";
+      static const ossimString attValidityRangeMax = "noiseEstimate/validityRangeMax";
+      static const ossimString attReferencePoint   = "noiseEstimate/referencePoint";
+      static const ossimString attPolynomialDegree = "noiseEstimate/polynomialDegree";
+      ev.set_validityRangeMin(getFromFirstNode<double>      (**node, attValidityRangeMin));
+      ev.set_validityRangeMax(getFromFirstNode<double>      (**node, attValidityRangeMax));
+      ev.set_referencePoint  (getFromFirstNode<double>      (**node, attReferencePoint));
+      ev.set_polynomialDegree(getFromFirstNode<ossim_uint32>(**node, attPolynomialDegree));
+
+      sub_nodes.clear();
+      ossimXmlNode::ChildListType nodelist;
+      (*node)->findChildNodes("noiseEstimate/coefficient",nodelist);
+      ossimXmlNode::ChildListType::const_iterator child_iter = nodelist.begin();
+      std::vector<double> polynomialCoefficients;
+      while(child_iter != nodelist.end())
+      {
+         double coefficient = ((*child_iter)->getText()).toDouble() ;
+         polynomialCoefficients.push_back(coefficient);
+         ++child_iter;
+      }
+      ev.set_polynomialCoefficients( polynomialCoefficients );
+
+      tabImageNoise.push_back(ev);
+
+      ++node;
+   }
+
+   noise.set_imageNoise(tabImageNoise);
+}
+
+void ossimplugins::ossimTerraSarXSarSensorModel::initNoise(
+      ossimXmlDocument const& xmlDocument)
+{
+   ossimString polLayerName;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initNoise";
+   SCOPED_LOG(traceDebug, MODULE);
+
+   m_noise.resize(m_polLayerList.size());
+
+   const ossimString xpath = "/level1Product/noise";
+
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   xmlDocument.findNodes(xpath, xml_nodes);
+   if (xml_nodes.empty())
+   {
+      throw std::runtime_error(("Could not find " + xpath + " in TSX xml file.").string());
+   }
+
+   std::vector<ossimRefPtr<ossimXmlNode> >::const_iterator node = xml_nodes.begin();
+   for ( ; node != xml_nodes.end() ; ++node)
+   {
+      sub_nodes.clear();
+      (*node)->findChildNodes(attPolLayer, sub_nodes);
+      if (sub_nodes.empty())
+      {
+         throw std::runtime_error(("Could not find " + xpath + "/" + attPolLayer + " in TSX xml file.").string());
+      }
+
+      ossimString const& polLayerName = sub_nodes[0]->getText();
+      const std::size_t polLayerIdx   = findPolLayerIdx(polLayerName);
+
+      m_noise[polLayerIdx].set_imagePolarisation(polLayerName);
+
+      getNoiseAtGivenNode(**node, m_noise[polLayerIdx]);
+   }
+}
+
+void ossimplugins::ossimTerraSarXSarSensorModel::initCalibration(
+      ossimXmlDocument const& xmlDocument)
+{
+   static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::initCalibration";
+   SCOPED_LOG(traceDebug, MODULE);
+
+   m_calFactor.resize(m_polLayerList.size());
+
+   const ossimString xpath      = "/level1Product/calibration/calibrationConstant";
+   const ossimString xCalFactor = "calFactor";
+
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   xmlDocument.findNodes(xpath, xml_nodes);
+   if(xml_nodes.empty())
+   {
+      throw std::runtime_error(("Could not find " + xpath + " in TSX xml file.").string());
+   }
+
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::const_iterator node = xml_nodes.begin();
+   for ( ; node != xml_nodes.end() ; ++node)
+   {
+      ossimString const& polLayerName = findPolLayerName(**node, xpath);
+      const std::size_t polLayerIdx   = findPolLayerIdx(polLayerName);
+
+      sub_nodes.clear();
+      (*node)->findChildNodes(xCalFactor, sub_nodes);
+      if (sub_nodes.empty())
+      {
+         throw std::runtime_error(("Could not find " + xpath + "/" + attPolLayer + " in TSX xml file.").string());
+      }
+      m_calFactor[polLayerIdx] = sub_nodes[0]->getText().toDouble();
+   }
+}
+
+void ossimplugins::ossimTerraSarXSarSensorModel::initSceneCoord(
+   ossimXmlNode const& sceneCenterCoord, ossimXmlNode const& sceneInfo)
+{
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initSceneCoord";
+   SCOPED_LOG(traceDebug, MODULE);
+
+   InfoSceneCoord isc;
+
+   isc.set_refRow        (getFromFirstNode<ossim_uint32>(sceneCenterCoord, "refRow"));
+   isc.set_refColumn     (getFromFirstNode<ossim_uint32>(sceneCenterCoord, "refColumn"));
+   isc.set_lat           (getFromFirstNode<double>      (sceneCenterCoord, "lat"));
+   isc.set_lon           (getFromFirstNode<double>      (sceneCenterCoord, "lon"));
+   isc.set_azimuthTimeUTC(getTextFromFirstNode          (sceneCenterCoord, "azimuthTimeUTC"));
+   isc.set_rangeTime     (getFromFirstNode<double>      (sceneCenterCoord, "rangeTime"));
+   isc.set_incidenceAngle(getFromFirstNode<double>      (sceneCenterCoord, "incidenceAngle"));
+
+   m_sceneCoord.set_centerSceneCoord(isc);
+
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes2;
+   sceneInfo.findChildNodes(attSceneCornerCoord, xnodes2);
+
+   if ( ! xnodes2.empty() )
+   {
+      std::vector<InfoSceneCoord> tabIsc;
+
+      for (ossim_uint32 i = 0; i < xnodes2.size(); ++i)
+      {
+         assert (xnodes2[i].valid());
+         ossimXmlNode const& node = *xnodes2[i];
+
+         InfoSceneCoord isc2;
+
+         isc2.set_refRow        (getFromFirstNode<ossim_uint32>(node, "refRow"));
+         isc2.set_refColumn     (getFromFirstNode<ossim_uint32>(node, "refColumn"));
+         isc2.set_lat           (getFromFirstNode<double>      (node, "lat"));
+         isc2.set_lon           (getFromFirstNode<double>      (node, "lon"));
+         isc2.set_azimuthTimeUTC(getTextFromFirstNode          (node, "azimuthTimeUTC"));
+         isc2.set_rangeTime     (getFromFirstNode<double>      (node, "rangeTime"));
+         isc2.set_incidenceAngle(getFromFirstNode<double>      (node, "incidenceAngle"));
+
+         tabIsc.push_back(isc2);
+      }
+
+      m_sceneCoord.set_cornersSceneCoord( tabIsc );
+      m_sceneCoord.set_numberOfSceneCoord( tabIsc.size() );
+   }
+}
+
+#if 0
+void ossimplugins::ossimTerraSarXSarSensorModel::initAcquisitionInfo(
+   const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)
+{
+   static const char MODULE[] = "ossimplugins::ossimTerraXSarSensorModel::initAcquisitionInfo";
+   SCOPED_LOG(traceDebug, MODULE);
+   ossimString     s;
+
+   result = tsDoc.getImagingMode(xdoc, m_imagingMode);
+   result = tsDoc.getAcquisitionSensor(xdoc, m_acquisitionSensor);
+   result = tsDoc.getLookDirection(xdoc, m_lookDirection);
+   result = tsDoc.getPolarisationMode(xdoc, m_polarisationMode);
+   result = tsDoc.getPolLayerList(xdoc, m_polLayerList);
+}
+
+#endif
 

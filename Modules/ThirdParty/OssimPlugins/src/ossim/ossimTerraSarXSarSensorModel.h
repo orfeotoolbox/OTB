@@ -13,6 +13,9 @@
 #define ossimTerraSarXSarSensorModel_HEADER
 
 #include "ossimSarSensorModel.h"
+#include "otb/Noise.h"
+#include "otb/SceneCoord.h"
+class ossimXmlDocument;
 
 namespace ossimplugins
 {
@@ -21,9 +24,10 @@ class OSSIM_PLUGINS_DLL ossimTerraSarXSarSensorModel : public ossimSarSensorMode
 {
 public:
 
-#if ! (defined(BOOST_NO_DEFAULTED_FUNCTIONS) || defined(BOOST_NO_CXX1_DEFAULTED_FUNCTIONS))
   /** Constructor */
-  ossimTerraSarXSarSensorModel() = default;
+  ossimTerraSarXSarSensorModel();
+
+#if ! (defined(BOOST_NO_DEFAULTED_FUNCTIONS) || defined(BOOST_NO_CXX1_DEFAULTED_FUNCTIONS))
 
   /** Copy constructor */
   ossimTerraSarXSarSensorModel(ossimTerraSarXSarSensorModel const& m) = default;
@@ -70,16 +74,23 @@ public:
   */
   void readAnnotationFile(const std::string & annotationXml, const std::string & geoXml);
 
-  /** Read product function: flavour that fills KWL.
-   * References:
-   * TerraSAR-X Image Product Guide
-   * SNAP source code (s1tbx-io/src/main/java/org/esa/s1tbx/io/terrasarx/TerraSarXProductDirectory.java)
-   */
-  bool readProduct(ossimFilename const &productXmlFile);
-
 protected:
 
   TYPE_DATA;
+
+  std::string theAzimuthTimeStart;
+  std::string theAzimuthTimeStop;
+
+  /// CalFactor (Calibration node).
+  std::vector<double>      m_calFactor;
+  /// PolLayer (AcquisitionInfo node).
+  // TODO: add getPolLayerFromImageFile
+  std::string              m_polLayerName;
+  std::vector<ossimString> m_polLayerList;
+  /// Noise (Noise node).
+  std::vector<Noise>       m_noise;
+  /// SceneCoord (SceneInfo node).
+  SceneCoord               m_sceneCoord;
 
 private:
   /** Internal function that reads annotation file.
@@ -98,11 +109,50 @@ private:
         TimeType     const& azimuthTimeStart,
         double       const  nearRangeTime);
 
+  /** Internal function dedicated to read Azimuth Time Start and Stop
+   */
+  void readAzimuthTimes(
+        ossimXmlNode const& sceneInfo,
+        ossimXmlNode const& settings);
+
   ossimFilename searchGeoRefFile(ossimFilename const& file) const;
 
+  /**
+   * Searches the metadata TerraSAR file (image or xml).
+   * @param[in] file image or metadata path.
+   * @return metadata path.
+   * @throw std::runtime_error if no metadataFile can be found.
+   */
+  ossimFilename findTSXLeader(ossimFilename const& file);
+
+  ossimString const& findPolLayerName(ossimXmlNode const& node, ossimString const& xpath) const;
+  std::size_t findPolLayerIdx(std::string const& polLayerName) const;
+  void getNoiseAtGivenNode(ossimXmlNode const& noiseNode, ossimplugins::Noise& noise);
+
+  /**
+   * Initialize ImageNoise parameters from TerraSAR product xml file.
+   * @param[in] xdoc Opened product xml file.
+   * @throw std::runtime_error if data cannot be found in XML file.
+   */
+  void initNoise(ossimXmlDocument const& xmlDocument);
+  /**
+   * Initialize Calibration parameters from TerraSAR product xml file.
+   * @param[in] xdoc Opened product xml file.
+   * @throw std::runtime_error if data cannot be found in XML file.
+   */
+  void initCalibration(ossimXmlDocument const& xmlDocument);
+
+  /**
+   * Initialize InfoIncidenceAngle parameters from TerraSAR product xml file.
+   * @param[in] xdoc Opened product xml file.
+   * @throw std::runtime_error if data cannot be found in XML file.
+   */
+  void initSceneCoord(
+        ossimXmlNode const& sceneCenterCoord, ossimXmlNode const& sceneInfo);
   // TODO: use a parameter
   ossimKeywordlist   theProductKwl;
 };
+
 
 } // end ossimplugins namespace
 
