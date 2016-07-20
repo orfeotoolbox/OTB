@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToSamplePositionFilter_h
-#define __otbOGRDataToSamplePositionFilter_h
+#ifndef otbOGRDataToSamplePositionFilter_h
+#define otbOGRDataToSamplePositionFilter_h
 
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"

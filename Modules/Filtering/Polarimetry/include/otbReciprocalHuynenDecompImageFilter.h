@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalHuynenDecompImageFilter_h
-#define __ReciprocalHuynenDecompImageFilter_h
+#ifndef otbReciprocalHuynenDecompImageFilter_h
+#define otbReciprocalHuynenDecompImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 

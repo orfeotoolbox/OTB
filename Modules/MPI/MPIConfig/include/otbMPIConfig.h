@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMPIConfig_h
-#define __otbMPIConfig_h
+#ifndef otbMPIConfig_h
+#define otbMPIConfig_h
 
 #include "itkObject.h"
 #include "itkMacro.h"

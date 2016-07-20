@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otBijectionCoherencyFilter_h
-#define __otBijectionCoherencyFilter_h
+#ifndef otbBijectionCoherencyFilter_h
+#define otbBijectionCoherencyFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbLineOfSightOptimizer.h"

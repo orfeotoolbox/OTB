@@ -12,9 +12,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __SimpleParallelTiffWriter_txx
-#define __SimpleParallelTiffWriter_txx
-
+#ifndef otbSimpleParallelTiffWriter_txx
+#define otbSimpleParallelTiffWriter_txx
 
 #include "itkTimeProbe.h"
 

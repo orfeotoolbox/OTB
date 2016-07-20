@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageSampleExtractorFilter_txx
-#define __otbImageSampleExtractorFilter_txx
+#ifndef otbImageSampleExtractorFilter_txx
+#define otbImageSampleExtractorFilter_txx
 
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkProgressReporter.h"

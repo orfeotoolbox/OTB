@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPatternSampler_h
-#define __otbPatternSampler_h
+#ifndef otbPatternSampler_h
+#define otbPatternSampler_h
 
 #include "otbSamplerBase.h"
 

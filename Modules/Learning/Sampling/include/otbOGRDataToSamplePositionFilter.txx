@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToSamplePositionFilter_txx
-#define __otbOGRDataToSamplePositionFilter_txx
+#ifndef otbOGRDataToSamplePositionFilter_txx
+#define otbOGRDataToSamplePositionFilter_txx
 
 #include "otbOGRDataToSamplePositionFilter.h"
 #include "itkTimeProbe.h"
