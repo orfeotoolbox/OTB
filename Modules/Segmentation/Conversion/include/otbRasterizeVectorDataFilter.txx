@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbRasterizeVectorDataFilter_txx
+#define otbRasterizeVectorDataFilter_txx
 
 #include "otbRasterizeVectorDataFilter.h"
 #include "otbOGRIOHelper.h"
@@ -209,3 +211,4 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 
 } // end namespace otb
 
+#endif

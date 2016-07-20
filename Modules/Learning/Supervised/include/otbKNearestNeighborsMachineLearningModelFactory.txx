@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbKNearestNeighborsMachineLearningModelFactory_txx
+#define otbKNearestNeighborsMachineLearningModelFactory_txx
+
 #include "otbKNearestNeighborsMachineLearningModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -62,3 +65,5 @@ KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif
