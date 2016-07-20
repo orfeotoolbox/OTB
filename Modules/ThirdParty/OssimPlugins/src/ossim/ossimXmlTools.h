@@ -20,6 +20,7 @@ class ossimXmlDocument;
 #include "ossimStringUtilities.h"
 #include "ossimTimeUtilities.h"
 #include <ossim/base/ossimXmlNode.h>
+#include <vector>
 
 namespace ossimplugins {
    namespace time {
@@ -31,6 +32,7 @@ namespace ossimplugins {
    typedef time::ModifiedJulianDate         TimeType;
 #endif
 
+   std::vector<ossimString> getTextNodes(ossimXmlNode const& node, ossimString const& xpath);
    ossimXmlNode const& getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath);
    ossimString const& getTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);
    ossimString const& getOptionalTextFromFirstNode(ossimXmlNode const& node, ossimString const& xpath);

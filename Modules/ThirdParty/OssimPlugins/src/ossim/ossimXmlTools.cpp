@@ -15,6 +15,22 @@
 #include <ossim/base/ossimNotify.h>
 // #include <ossim/base/ossimXmlNode.h>
 
+std::vector<ossimString> ossimplugins::getTextNodes(
+      ossimXmlNode const& node, ossimString const& xpath)
+{
+   std::vector<ossimString> res;
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+   node.findChildNodes(xpath, xnodes);
+   for (std::vector<ossimRefPtr<ossimXmlNode> >::const_iterator b = xnodes.begin(), e = xnodes.end()
+         ; b != e
+         ; ++b
+       )
+   {
+      res.push_back((*b)->getText());
+   }
+   return res;
+}
+
 ossimXmlNode const& ossimplugins::getExpectedFirstNode(ossimXmlNode const& node, ossimString const& xpath)
 {
    ossimRefPtr<ossimXmlNode> const& wh = node.findFirstNode(xpath);
