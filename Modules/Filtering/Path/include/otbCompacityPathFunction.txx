@@ -18,7 +18,7 @@
 #ifndef otbCompacityPathFunction_txx
 #define otbCompacityPathFunction_txx
 
-#include "otbPathFunction.h"
+#include "otbCompacityPathFunction.h"
 #include "itkNumericTraits.h"
 #include "otbMacro.h"
 #include "otbMath.h"

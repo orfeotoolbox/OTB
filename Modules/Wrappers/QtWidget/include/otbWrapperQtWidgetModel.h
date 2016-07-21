@@ -169,6 +169,8 @@ private:
   Application::Pointer m_Application;
 
   QtLogOutput::Pointer  m_LogOutput;
+
+  bool m_IsRunning;
 };
 
 

@@ -21,6 +21,7 @@
 #ifndef otbListSampleToHistogramListGenerator_txx
 #define otbListSampleToHistogramListGenerator_txx
 
+#include "otbListSampleToHistogramListGenerator.h"
 #include "itkArray.h"
 #include "otbMacro.h"
 

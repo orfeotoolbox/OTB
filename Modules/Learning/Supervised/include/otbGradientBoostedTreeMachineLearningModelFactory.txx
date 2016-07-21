@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbGradientBoostedTreeMachineLearningModelFactory_txx
+#define otbGradientBoostedTreeMachineLearningModelFactory_txx
+
 #include "otbGradientBoostedTreeMachineLearningModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -62,3 +65,5 @@ GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif

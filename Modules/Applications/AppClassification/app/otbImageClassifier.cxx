@@ -61,6 +61,13 @@ public:
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
   typedef ClassificationFilterType::ConfidenceImageType                                        ConfidenceImageType;
 
+protected:
+
+  ~ImageClassifier() ITK_OVERRIDE
+    {
+    MachineLearningModelFactoryType::CleanFactories();
+    }
+
 private:
   void DoInit() ITK_OVERRIDE
   {

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalHAlphaImageFilter_h
-#define __ReciprocalHAlphaImageFilter_h
+#ifndef otbReciprocalHAlphaImageFilter_h
+#define otbReciprocalHAlphaImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 #include "otbMath.h"

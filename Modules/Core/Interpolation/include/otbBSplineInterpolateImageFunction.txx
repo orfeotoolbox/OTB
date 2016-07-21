@@ -17,7 +17,7 @@
 =========================================================================*/
 #ifndef otbBSplineInterpolateImageFunction_txx
 #define otbBSplineInterpolateImageFunction_txx
-#include "itkBSplineInterpolateImageFunction.h"
+#include "otbBSplineInterpolateImageFunction.h"
 #include "itkImageLinearIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"

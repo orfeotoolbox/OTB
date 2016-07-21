@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRVectorDataIO_txx
-#define __otbOGRVectorDataIO_txx
-
 #include "otbOGRVectorDataIO.h"
 
 #include "ogrsf_frmts.h"
@@ -336,5 +333,3 @@ OGRVectorDataIO::GetOGRDriverName(std::string name) const
 }
 
 } // end namespace otb
-
-#endif

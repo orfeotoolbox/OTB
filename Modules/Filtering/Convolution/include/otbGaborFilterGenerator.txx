@@ -21,6 +21,7 @@
 #ifndef otbGaborFilterGenerator_txx
 #define otbGaborFilterGenerator_txx
 
+#include "otbGaborFilterGenerator.h"
 #include "otbMath.h"
 
 namespace otb

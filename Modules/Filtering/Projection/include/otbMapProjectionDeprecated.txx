@@ -18,6 +18,8 @@
 #ifndef otbMapProjectionDeprecated_txx
 #define otbMapProjectionDeprecated_txx
 
+#include "otbMapProjectionDeprecated.h"
+
 namespace otb
 {
 
