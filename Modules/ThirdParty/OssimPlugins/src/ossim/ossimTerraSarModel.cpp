@@ -3,15 +3,16 @@
 // "Copyright Centre National d'Etudes Spatiales"
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
-// 
+//
 //----------------------------------------------------------------------------
 // $Id$
 
 #include <ossimTerraSarModel.h>
 #include <ossimPluginCommon.h>
 #include <ossimTerraSarProductDoc.h>
+#include "ossimTraceHelpers.h"
 #include <ossim/base/ossimEnvironmentUtility.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimDirectory.h>
@@ -131,13 +132,13 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
    if ( rhs._sceneCoord )
    {
       _sceneCoord = new SceneCoord( *(rhs._sceneCoord) );
-   }  
+   }
 }
 
 ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
 {
    _noise.clear();
-   
+
 /*
  *    if (_noise != 0)
  {
@@ -158,14 +159,14 @@ ossimString ossimplugins::ossimTerraSarModel::getClassName() const
 
 ossimObject* ossimplugins::ossimTerraSarModel::dup() const
 {
-   return new ossimTerraSarModel(*this);   
+   return new ossimTerraSarModel(*this);
 }
 
-// Note : ground range to slant range coputation could be performed in three ways : 
+// Note : ground range to slant range coputation could be performed in three ways :
 //    (1) Slant Range to Ground Range polynomial inversion (coefficients given at mid-scene)
 //    (2) use of a parabolic model from three geolocated points
-//    (3) interpolation from the geolocation grid (separate file, most precise technique) 
-// In this version, (1) and (2) were implemented but (1) is imprecise on the test products. 
+//    (3) interpolation from the geolocation grid (separate file, most precise technique)
+// In this version, (1) and (2) were implemented but (1) is imprecise on the test products.
 double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
    const double c =  2.99792458e+8;
@@ -176,7 +177,9 @@ double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double c
 bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::open() -- ";
-  
+   traceDebug.setTraceFlag(true);
+   SCOPED_LOG(traceDebug, MODULE);
+
    _imageFilename = file.expand();
    _productXmlFile = ossimFilename::NIL;
    ossimFilename xmlfile;
@@ -273,7 +276,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       if (!createReplacementOCG()) break;
       return true;
    }
-   
+
    // If we broke out of the while, something happened...
    return false;
 
@@ -296,14 +299,14 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    {
       // Save our state:
       kwl.add(prefix, SR_GR_R0_KW, _SrToGr_R0);
-      
+
       ossimString kw1 = "sr_gr_exponent_";
       ossimString kw2 = "sr_gr_coeffs_";
 
       const ossim_uint32 COUNT = _SrToGr_exponent.size();
 
       kwl.add(prefix, NUMBER_SRGR_COEFFICIENTS_KW, COUNT);
-      
+
       for(ossim_uint32 i = 0; i < COUNT; ++i)
       {
          ossimString iStr = ossimString::toString(i);
@@ -319,7 +322,7 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT0_KW,  _alt_srgr_coefset[0]);
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT1_KW,  _alt_srgr_coefset[1]);
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT2_KW,  _alt_srgr_coefset[2]);
-      kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());   
+      kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());
 
       // Call base save state:
       result = ossimGeometricSarSensorModel::saveState(kwl, prefix);
@@ -348,10 +351,10 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix, kw2, _polarisationMode.c_str());
    kw2 = kw + POLARISATION_LIST;
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
-   {	
+   {
       ossimString iStr = ossimString::toString(i)+"]";
       ossimString kw3 = kw2+"[";
-      kw3 += iStr;  		
+      kw3 += iStr;
       kwl.add(prefix, kw3, _polLayerList[i].c_str());
    }
 
@@ -363,21 +366,22 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
          if(_polLayerList[idx] == _polLayer)
          {
             polLayerIdx = idx;
-         }    
-      }  
+         }
+      }
       _noise[polLayerIdx].saveState(kwl,prefix);
    }
    else
    {
       for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
-      {	
+      {
          _noise[i].saveState(kwl,prefix);
       }
-   }		
+   }
    _sceneCoord->saveState(kwl,prefix);
-   
+
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
-   {	
+   {
+      // Why are calFactor overwritten ?
       kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor[i]).c_str());
    }
    kwl.add(prefix, RADAR_FREQUENCY, ossimString::toString(_radarFrequency).c_str());
@@ -394,7 +398,8 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
          << MODULE << " exit status = " << (result?"true":"false\n")
          << std::endl;
    }
-   
+   // ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl;
+
    return result;
 }
 
@@ -441,7 +446,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          }
       }
    }
-   
+
 
    //---
    // Temp:  This must be cleared or you end up with a bounding rect of all
@@ -468,11 +473,11 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                <<  SR_GR_R0_KW << "\n";
-         } 
+         }
          result = false;
       }
-      
-      ossim_uint32 count = 0;      
+
+      ossim_uint32 count = 0;
       lookup = kwl.find(prefix, NUMBER_SRGR_COEFFICIENTS_KW);
       if (lookup)
       {
@@ -487,10 +492,10 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                << NUMBER_SRGR_COEFFICIENTS_KW << "\n";
-         } 
+         }
          result = false;
       }
-      
+
       ////////////////////////////////////////////////////
 
       if (result && count)
@@ -500,16 +505,16 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
 
          ossimString kw1 = "sr_gr_exponent_";
          ossimString kw2 = "sr_gr_coeffs_";
-          
+
          for(ossim_uint32 i = 0; i < count; ++i)
          {
             ossimString kw;
             ossimString iStr = ossimString::toString(i);
-            
+
             // sr_gr_exponents
             kw = kw1;
             kw += iStr;
-            
+
             lookup = kwl.find(prefix, kw);
             if (lookup)
             {
@@ -524,10 +529,10 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                      << MODULE
                      << "\nRequired keyword not found: "
                      << kw << "\n";
-               } 
+               }
                result = false;
             }
-            
+
             // _SrToGr_coeffs
             kw = kw2;
             kw += iStr;
@@ -545,13 +550,13 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                      << MODULE
                      << "\nRequired keyword not found: "
                      << kw << "\n";
-               } 
+               }
                result = false;
             }
          }
 
       } // matches:  if (result && count)
-  
+
       lookup = kwl.find(prefix, SC_RT_KW);
       if (lookup)
       {
@@ -566,7 +571,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                << SC_RT_KW << "\n";
-         } 
+         }
          result = false;
       }
 
@@ -584,10 +589,10 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                << SR_GR_SF_KW << "\n";
-         } 
+         }
          result = false;
       }
-      
+
       lookup = kwl.find(prefix, ALT_SR_GR_COEFFICIENT0_KW);
       if (lookup)
       {
@@ -602,7 +607,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                << ALT_SR_GR_COEFFICIENT0_KW << "\n";
-         } 
+         }
          result = false;
       }
       lookup = kwl.find(prefix, ALT_SR_GR_COEFFICIENT1_KW);
@@ -619,7 +624,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                << ALT_SR_GR_COEFFICIENT1_KW << "\n";
-         } 
+         }
          result = false;
       }
       lookup = kwl.find(prefix, ALT_SR_GR_COEFFICIENT2_KW);
@@ -636,7 +641,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                << ALT_SR_GR_COEFFICIENT2_KW << "\n";
-         } 
+         }
          result = false;
       }
 
@@ -653,10 +658,10 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
                << MODULE
                << "\nRequired keyword not found: "
                << PRODUCT_XML_FILE_KW << "\n";
-         } 
+         }
          result = false;
       }
-      
+
    } // matches: if (result)
 
    // Load the base class.
@@ -697,7 +702,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
       result = false;
    }
-     
+
    lookup = kwl.find(prefix, CALIBRATION_CALFACTOR);
    if (lookup)
    {
@@ -707,7 +712,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       {
          in >> tempValue;
          _calFactor[idx] = tempValue.toDouble();
-      		
+
       }
    }
    else
@@ -718,7 +723,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
             << MODULE
             << "\nRequired keyword not found: "
             << CALIBRATION_CALFACTOR << "\n";
-      } 
+      }
       result = false;
    }
 
@@ -736,7 +741,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
             << MODULE
             << "\nRequired keyword not found: "
             << RADAR_FREQUENCY << "\n";
-      } 
+      }
       result = false;
    }
 
@@ -753,7 +758,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
             << MODULE
             << "\nRequired keyword not found: "
             << AZ_START_TIME << "\n";
-      } 
+      }
       result = false;
    }
 
@@ -770,7 +775,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
             << MODULE
             << "\nRequired keyword not found: "
             << AZ_STOP_TIME << "\n";
-      } 
+      }
       result = false;
    }
 
@@ -822,7 +827,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
             << MODULE
             << "\nRequired keyword not found: "
             << GENERATION_TIME << "\n";
-      } 
+      }
       result = false;
    }
 
@@ -832,7 +837,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          << MODULE << " exit status = " << (result?"true":"false\n")
          << std::endl;
    }
-   
+
    return result;
 }
 
@@ -841,13 +846,13 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::print";
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
-   
+
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\nossimTerraSarModelclass data members:\n"
        << SR_GR_R0_KW << _SrToGr_R0 << "\n";
 
    ossim_uint32 i;
-   
+
    ossimString kw1 = "sr_gr_exponent_";
    for(i = 0; i < _SrToGr_exponent.size(); ++i)
    {
@@ -866,7 +871,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
       kw += iStr;
       kw += ": ";
       out << kw << _SrToGr_coeffs[i] << "\n";
-   }   
+   }
 
    out << SC_RT_KW << ": " << _sceneCenterRangeTime << "\n"
        << SR_GR_SF_KW << ": " << _SrToGr_scaling_factor << "\n"
@@ -874,7 +879,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
        << ALT_SR_GR_COEFFICIENT1_KW << ": " <<_alt_srgr_coefset[1] << "\n"
        << ALT_SR_GR_COEFFICIENT2_KW << ": " <<_alt_srgr_coefset[2] << "\n"
        << PRODUCT_XML_FILE_KW << ": " << _productXmlFile.c_str() << "\n";
-   
+
    ossimGeometricSarSensorModel::print(out);
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {
@@ -924,7 +929,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    out << kw2<<  ": " <<  _polarisationMode.c_str()<< "\n";
 /*   kw2 = kw + POLARISATION_LIST;
      for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
-     {	
+     {
      out << kw2 <<  "["<< i <<"] : " <<  _polLayer[i].c_str()<< "\n";
      if ( _noise[i]->print(out) == false )
      {
@@ -944,26 +949,26 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    return out;
 }
 
-/* 
+/*
 //  Version (1)
 double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
 // iterative polynomial inversion
 const double CLUM        = 2.99792458e+8 ;
 double EPSILON = 0.0000001 ;
-double iterError = 1.0 ; 
+double iterError = 1.0 ;
 int maxIter = 50, nIter=0 ;
-double estimatedGroundRange, estimatedSlantRangeTime, actualGroundRange, estimatedSlantRange ; 
+double estimatedGroundRange, estimatedSlantRangeTime, actualGroundRange, estimatedSlantRange ;
 
 
 // actual ground range computation relative to the image near side
 // in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-actualGroundRange = _refPoint->get_distance() - _sensor->get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ; 
+actualGroundRange = _refPoint->get_distance() - _sensor->get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ;
 
 estimatedSlantRangeTime = _sceneCenterRangeTime ;
 while ((fabs(iterError)>EPSILON)&& (nIter<maxIter)) {
 // estimated ground range computation from SrToGr
-estimatedGroundRange = 0.0 ; 
+estimatedGroundRange = 0.0 ;
 for (int i=0; i<_SrToGr_coeffs.size(); i++) {
 estimatedGroundRange += _SrToGr_coeffs[i]*pow(estimatedSlantRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
 }
@@ -972,7 +977,7 @@ estimatedGroundRange += _SrToGr_coeffs[i]*pow(estimatedSlantRangeTime-_SrToGr_R0
 iterError = actualGroundRange - estimatedGroundRange ;
 
 // estimated slant range update
-estimatedSlantRangeTime += iterError * 2.0 / CLUM ; 
+estimatedSlantRangeTime += iterError * 2.0 / CLUM ;
 
 nIter++;
 }
@@ -1005,34 +1010,34 @@ bool ossimplugins::ossimTerraSarModel::InitSensorParams(
    // double n_azilok = atof(n_azilok_str);
    const char* n_rnglok_str = kwl.find(prefix,"n_rnglok");
    double n_rnglok = atof(n_rnglok_str);
-   
+
    //ellipsoid parameters
    const char* ellip_maj_str = kwl.find(prefix,"ellip_maj");
    double ellip_maj = atof(ellip_maj_str) * 1000.0;  // km -> m
    const char* ellip_min_str = kwl.find(prefix,"ellip_min");
    double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
-   
-   
+
+
    if(_sensor != NULL)
    {
       delete _sensor;
    }
-   
+
    _sensor = new SensorParams();
-   
-   
+
+
    if (_isProductGeoreferenced)
    {
       const char* orbitDirection_str = kwl.find(prefix,"orbitDirection");
       std::string orbitDirection(orbitDirection_str) ;
-      int orbitDirectionSign ; 
+      int orbitDirectionSign ;
       if (orbitDirection=="DESCENDING") orbitDirectionSign = 1 ;
       else orbitDirectionSign = - 1 ;
-      
+
       const char* imageDataStartWith_str = kwl.find(prefix,"imageDataStartWith");
       std::string imageDataStartWith(imageDataStartWith_str) ;
       if (imageDataStartWith=="EARLYAZNEARRG") {
-         _sensor->set_col_direction(orbitDirectionSign); 
+         _sensor->set_col_direction(orbitDirectionSign);
          _sensor->set_lin_direction(orbitDirectionSign);
       } else if (imageDataStartWith=="EARLYAZFARRG") {
          _sensor->set_col_direction(-orbitDirectionSign);
@@ -1054,24 +1059,24 @@ bool ossimplugins::ossimTerraSarModel::InitSensorParams(
       _sensor->set_col_direction(1);
       _sensor->set_lin_direction(1);
    }
-   
+
    const char* lookDirection_str = kwl.find(prefix,"lookDirection");
    std::string lookDirection(lookDirection_str) ;
    if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor->set_sightDirection(SensorParams::Right) ;
    else _sensor->set_sightDirection(SensorParams::Left) ;
-   
+
    _sensor->set_sf(fr);
    const double CLUM        = 2.99792458e+8 ;
    double wave_length = CLUM / central_freq ;
    _sensor->set_rwl(wave_length);
    _sensor->set_nRangeLook(n_rnglok);
-   _sensor->set_prf(fa) ; 
-   // fa is the processing PRF 
+   _sensor->set_prf(fa) ;
+   // fa is the processing PRF
    //_sensor->set_prf(fa * n_azilok); // number of looks disabled
-   
-   _sensor->set_semiMajorAxis(ellip_maj) ; 
-   _sensor->set_semiMinorAxis(ellip_min) ; 
-   
+
+   _sensor->set_semiMajorAxis(ellip_maj) ;
+   _sensor->set_semiMinorAxis(ellip_min) ;
+
    return true;
 }
 
@@ -1083,10 +1088,10 @@ bool ossimplugins::ossimTerraSarModel::InitPlatformPosition(
     */
    const char* neph_str = kwl.find(prefix,"neph");
    int neph = atoi(neph_str);
-   
+
    Ephemeris** ephemeris = new Ephemeris*[neph];
-   
-   /* 
+
+   /*
     * Retrieval of ephemerisis
     */
    for (int i=0;i<neph;i++)
@@ -1094,32 +1099,32 @@ bool ossimplugins::ossimTerraSarModel::InitPlatformPosition(
       double pos[3];
       double vit[3];
       char name[64];
-      
-      
+
+
       sprintf(name,"eph%i_date",i);
       const char* date_str = kwl.find(prefix,name);
-      
+
       sprintf(name,"eph%i_posX",i);
       const char* px_str = kwl.find(prefix,name);
       pos[0] = atof(px_str);
-      
+
       sprintf(name,"eph%i_posY",i);
       const char* py_str = kwl.find(prefix,name);
       pos[1] = atof(py_str);
-      
+
       sprintf(name,"eph%i_posZ",i);
       const char* pz_str = kwl.find(prefix,name);
       pos[2] = atof(pz_str);
-      
-      
+
+
       sprintf(name,"eph%i_velX",i);
       const char* vx_str = kwl.find(prefix,name);
       vit[0] = atof(vx_str) ;
-      
+
       sprintf(name,"eph%i_velY",i);
       const char* vy_str = kwl.find(prefix,name);
       vit[1] = atof(vy_str) ;
-      
+
       sprintf(name,"eph%i_velZ",i);
       const char* vz_str = kwl.find(prefix,name);
       vit[2] = atof(vz_str) ;
@@ -1137,7 +1142,7 @@ bool ossimplugins::ossimTerraSarModel::InitPlatformPosition(
 
       ephemeris[i] = eph;
    }
-  
+
    /*
     * Creation of the platform position interpolator
     */
@@ -1187,7 +1192,7 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    if(_platformPosition != NULL)
    {
       Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-      if (ephemeris == NULL) return false ; 
+      if (ephemeris == NULL) return false ;
 
       _refPoint->set_ephemeris(ephemeris);
 
@@ -1206,7 +1211,7 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    // in the case of Georeferenced images, the ground range is stored in place of the slant range
    // (used for SlantRange computation relative to reference point, necessary for optimization)
    if (_isProductGeoreferenced) {
-      double estimatedGroundRange = 0.0 ; 
+      double estimatedGroundRange = 0.0 ;
       for (int i=0; i<static_cast<int>(_SrToGr_coeffs.size()); i++)
       {
          estimatedGroundRange += _SrToGr_coeffs[i]*pow(_sceneCenterRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
@@ -1234,14 +1239,14 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
       double acq_msec_last = (double) dateStop->get_second()+dateStop->get_decimal();
 
       double actualPRF = theImageSize.y/(acq_msec_last-acq_msec_first) ;
-      _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF); 
+      _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF);
    }
-   else   
+   else
       _sensor->set_nAzimuthLook(1.0);
 
    // Ground Control Points extracted from the model : scene center and corners
-   std::list<ossimGpt> groundGcpCoordinates ; 
-   std::list<ossimDpt> imageGcpCoordinates ; 
+   std::list<ossimGpt> groundGcpCoordinates ;
+   std::list<ossimDpt> imageGcpCoordinates ;
    char name[64];
    for (int k=0 ; k<5 ; k++) {
       sprintf(name,"cornersCol%i",k);
@@ -1261,11 +1266,11 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
 
       ossimDpt imageGCP(i,j);
       ossimGpt groundGCP(lat ,lon , height);
-      groundGcpCoordinates.push_back(groundGCP) ; 
+      groundGcpCoordinates.push_back(groundGCP) ;
       imageGcpCoordinates.push_back(imageGCP) ;
    }
 
-   // Default optimization 
+   // Default optimization
    optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
 
    return true;
@@ -1288,8 +1293,8 @@ bool ossimplugins::ossimTerraSarModel::InitSRGR(const ossimKeywordlist &kwl, con
 
    // SRtoGR coefficients and exponents
    char name[64];
-   double coeff ; 
-   int exponent ; 
+   double coeff ;
+   int exponent ;
    for(int i=0;i<srToGr_coeffs_number;i++)
    {
       sprintf(name,"SrToGr_coeffs_%i",i);
@@ -1306,7 +1311,7 @@ bool ossimplugins::ossimTerraSarModel::InitSRGR(const ossimKeywordlist &kwl, con
 
    // Range time for first mid and last pixel
    std::string orbitDirection(kwl.find(prefix,"orbitDirection")) ;
-   double t1, t2, t3 ; 
+   double t1, t2, t3 ;
    if (orbitDirection=="DESCENDING") {
       t3 = atof(kwl.find("start_rng"));
       t2 = atof(kwl.find("sc_rng"));
@@ -1320,13 +1325,13 @@ bool ossimplugins::ossimTerraSarModel::InitSRGR(const ossimKeywordlist &kwl, con
 
    // Range pixels numbers corresponding
    // double x1 = 0.0;
-   double x2 = atof(kwl.find("sc_pix")); 
-   double x3 = 2.0*(x2+1.0) -1.0 ; 
+   double x2 = atof(kwl.find("sc_pix"));
+   double x3 = 2.0*(x2+1.0) -1.0 ;
 
    _alt_srgr_coefset[0] = t1;
    _alt_srgr_coefset[1] = ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));
    _alt_srgr_coefset[2] = ((t2-t1)/x2 + (t1-t3)/x3)/(x2-x3);
-  
+
    return true;
 }
 
@@ -1339,9 +1344,9 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
-   
+
    bool result = true;
-   
+
    ossimString s;
 
    _isProductGeoreferenced = tsDoc.isProductGeoreferenced(xdoc);
@@ -1409,7 +1414,7 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
       {
          result = false;
       }
-      
+
       if ( tsDoc.getRangeGateLastPixel(xdoc, s) )
       {
          endRng = s.toDouble();
@@ -1418,7 +1423,7 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
       {
          result = false;
       }
-      
+
       if ( tsDoc.getSceneCenterRangeTime(xdoc, s) )
       {
          scRng = s.toDouble();
@@ -1426,10 +1431,10 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
       else
       {
          result = false;
-      }         
-      
+      }
+
       t2 = scRng;
-      
+
       if (desendingFlag)
       {
          t3 = startRng;
@@ -1440,7 +1445,7 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
          t1 = startRng;
          t3 = endRng;
       }
-      
+
       // Range pixels numbers corresponding
       if ( tsDoc.getSceneCenterRefColumn(xdoc, s) )
       {
@@ -1454,7 +1459,7 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
       {
          result = false;
       }
-      
+
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
@@ -1464,9 +1469,9 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
             << "\nx2:       " << x2
             << "\n";
       }
-      
+
       double x3 = 2.0*(x2+1.0) -1.0 ;
-      
+
       _alt_srgr_coefset[0] = t1;
       _alt_srgr_coefset[1] =
          ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));
@@ -1479,7 +1484,7 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
 
    return result;
 }
-   
+
 bool ossimplugins::ossimTerraSarModel::initPlatformPosition(const ossimXmlDocument* xdoc,
                                                             const ossimTerraSarProductDoc& tsDoc)
 {
@@ -1488,16 +1493,16 @@ bool ossimplugins::ossimTerraSarModel::initPlatformPosition(const ossimXmlDocume
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-   }   
-   
+   }
+
    // Initialize the platform position interpolator.
    if (_platformPosition)
    {
       delete _platformPosition;
    }
-   
+
    _platformPosition = new PlatformPosition();
-   
+
    bool result = tsDoc.initPlatformPosition(xdoc, _platformPosition);
 
    if (traceDebug())
@@ -1574,7 +1579,7 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
    // Set the base class reference points.
    // Note the "ONE BASED" image points from xml doc.
    //---
-   
+
    // Get the center sample.
    if ( tsDoc.getSceneCenterRefColumn(xdoc, s) )
    {
@@ -1655,7 +1660,7 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
    if ( tsDoc.getSceneCenterRangeTime(xdoc, s) )
    {
       _sceneCenterRangeTime = s.toDouble();
-      
+
       const double CLUM = 2.99792458e+8;
       double sceneCenterSlantRange = _sceneCenterRangeTime * CLUM / 2.0;
       _refPoint->set_distance(sceneCenterSlantRange);
@@ -1673,7 +1678,7 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
    //---
    if (_isProductGeoreferenced)
    {
-      double estimatedGroundRange = 0.0 ; 
+      double estimatedGroundRange = 0.0 ;
       for (int i=0; i<static_cast<int>(_SrToGr_coeffs.size()); i++)
       {
          estimatedGroundRange += _SrToGr_coeffs[i]*
@@ -1686,7 +1691,7 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
 
       CivilDateTime dateStart;
       CivilDateTime dateStop;
-      
+
       if (tsDoc.getAzimuthStartTime(xdoc, s) )
       {
          if (! ossim::iso8601TimeStringToCivilDate(s, dateStart) )
@@ -1715,18 +1720,18 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
          dateStart.get_decimal();
       double acq_msec_last = (double) dateStop.get_second() +
          dateStop.get_decimal();
-      
+
       double actualPRF = theImageSize.y/(acq_msec_last - acq_msec_first) ;
-      _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF); 
-      
+      _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF);
+
    }
    else
    {
       _sensor->set_nAzimuthLook(1.0);
    }
-   
+
    // Ground Control Points extracted from the model.
-   std::list<ossimGpt> groundGcpCoordinates; 
+   std::list<ossimGpt> groundGcpCoordinates;
    std::list<ossimDpt> imageGcpCoordinates;
    if ( tsDoc.initTiePoints(xdoc,
                             groundGcpCoordinates,
@@ -1742,7 +1747,7 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
 
    if (result)
    {
-      // Default optimization 
+      // Default optimization
       optimizeModel(groundGcpCoordinates, imageGcpCoordinates);
    }
 
@@ -1750,7 +1755,7 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " exit status = true\n";
-   } 
+   }
 
    return true;
 }
@@ -1765,8 +1770,8 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
-   }   
-   
+   }
+
    result = tsDoc.geNumberOfLayers(xdoc, s);
    if ( result == false )
    {
@@ -1774,7 +1779,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "unable to get Number Of Layers \n";
-      }   
+      }
       setErrorStatus();
       return false;
    }
@@ -1787,11 +1792,11 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "unable to get theSensorID \n";
-      }   
+      }
       setErrorStatus();
       return false;
    }
-   
+
    result = tsDoc.getImagingMode(xdoc, _imagingMode);
    if ( result == false )
    {
@@ -1799,7 +1804,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "unable to get Imaging Mode \n";
-      }   
+      }
       setErrorStatus();
       return false;
    }
@@ -1811,7 +1816,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "unable to get Acquisition Sensor \n";
-      }   
+      }
       setErrorStatus();
       return false;
    }
@@ -1822,7 +1827,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "unable to get Look direction \n";
-      }   
+      }
       setErrorStatus();
       return false;
    }
@@ -1833,7 +1838,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "unable to get Polarisation Mode \n";
-      }   
+      }
       setErrorStatus();
       return false;
    }
@@ -1844,7 +1849,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "unable to get Polarisation Layer list \n";
-      }   
+      }
       setErrorStatus();
       return false;
    }
@@ -1852,7 +1857,7 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
-   }   
+   }
 
    return result;
 }
@@ -1865,15 +1870,15 @@ bool ossimplugins::ossimTerraSarModel::initSceneCoord(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-   }   
-   
+   }
+
    if (_sceneCoord)
    {
       delete _sceneCoord;
    }
-   
+
    _sceneCoord = new SceneCoord();
-   
+
    bool result = tsDoc.initSceneCoord(xdoc, _sceneCoord);
 
    if (traceDebug())
@@ -1897,13 +1902,13 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
    std::vector<ImageNoise> tabImageNoise;
    ImageNoise              ev;
    tabImageNoise.clear();
- 
+
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::getNoise";
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-   }  
+   }
 
    if ( !xmlDocument )
    {
@@ -1913,7 +1918,7 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG: one of the getNoise parameter of the method is NULL" << std::endl;
       }
-      return false;	
+      return false;
    }
 
    xml_nodes.clear();
@@ -1931,7 +1936,7 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
       }
       return false;
    }
-    
+
    noise.set_numberOfNoiseRecords( xml_nodes[0]->getText().toInt32() );
 
 
@@ -1970,7 +1975,7 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
          return false;
       }
       ev.set_timeUTC(sub_nodes[0]->getText());
-    
+
       sub_nodes.clear();
       xpath = "noiseEstimate/validityRangeMin";
       (*node)->findChildNodes(xpath, sub_nodes);
@@ -2049,20 +2054,20 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
          double coefficient = ((*child_iter)->getText()).toDouble() ;
          polynomialCoefficients.push_back(coefficient);
          ++child_iter;
-      }                  
+      }
       ev.set_polynomialCoefficients( polynomialCoefficients );
- 
+
       tabImageNoise.push_back(ev);
 
       ++node;
    }
 
    noise.set_imageNoise(tabImageNoise);
- 
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
-   }   
+   }
 
    return true;
 }
@@ -2083,10 +2088,10 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
-   }   
+   }
 
    _noise.resize(_numberOfLayers);
-      
+
    xml_nodes.clear();
    xpath = "/level1Product/noise";
 
@@ -2122,20 +2127,20 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
          }
          return false;
       }
-    
+
       polLayerName = sub_nodes[0]->getText();
 
       ossim_uint32 polLayerIdx = 0;
       bool polLayerIdxFound = false;
-    
+
       for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
       {
          if(_polLayerList[idx] == polLayerName)
          {
             polLayerIdx = idx;
             polLayerIdxFound = true;
-         }    
-      }  
+         }
+      }
 
       if (!polLayerIdxFound)
       {
@@ -2147,12 +2152,12 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
          }
          return false;
       }
-	
+
       sub_nodes.clear();
 
       //_noise[polLayerIdx] = new Noise();
       _noise[polLayerIdx].set_imagePolarisation(polLayerName);
-   
+
       result = getNoiseAtGivenNode( (*node),_noise[polLayerIdx]);
       if(!result)
       {
@@ -2171,7 +2176,7 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
-   }   
+   }
 
    return true;
 }
@@ -2192,8 +2197,8 @@ bool ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
-   }   
-   
+   }
+
    xml_nodes.clear();
    xpath = "/level1Product/productComponents/imageData";
 
@@ -2230,7 +2235,7 @@ bool ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile(
          return false;
       }
       polLayerName = sub_nodes[0]->getText();
-	
+
       sub_nodes.clear();
       xpath = "file/location/filename";
       (*node)->findChildNodes(xpath, sub_nodes);
@@ -2254,11 +2259,11 @@ bool ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile(
       }
       ++node;
    }
-   
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
-   }   
+   }
    return true;
 }
 
@@ -2277,10 +2282,10 @@ bool ossimplugins::ossimTerraSarModel::initCalibration(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entering...\n";
-   }   
+   }
 
    _calFactor.resize(_numberOfLayers);
-      
+
    xml_nodes.clear();
    xpath = "/level1Product/calibration/calibrationConstant";
 
@@ -2316,20 +2321,20 @@ bool ossimplugins::ossimTerraSarModel::initCalibration(
          }
          return false;
       }
-    
+
       polLayerName = sub_nodes[0]->getText();
 
       ossim_uint32 polLayerIdx = 0;
       bool polLayerIdxFound = false;
-    
+
       for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
       {
          if(_polLayerList[idx] == polLayerName)
          {
             polLayerIdx = idx;
             polLayerIdxFound = true;
-         }    
-      }  
+         }
+      }
 
       if(!polLayerIdxFound)
       {
@@ -2339,15 +2344,15 @@ bool ossimplugins::ossimTerraSarModel::initCalibration(
             ossimNotify(ossimNotifyLevel_DEBUG)
                << MODULE << " DEBUG: Unable to found polLayer in polLayer List" << std::endl;
          }
-         return false;	
+         return false;
       }
-	
+
       sub_nodes.clear();
       xpath = "calFactor";
       (*node)->findChildNodes(xpath, sub_nodes);
       if (sub_nodes.size() == 0)
       {
-    	 setErrorStatus();
+         setErrorStatus();
          if(traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
@@ -2364,7 +2369,7 @@ bool ossimplugins::ossimTerraSarModel::initCalibration(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " leaving...\n";
-   }   
+   }
 
    return true;
 }
@@ -2395,7 +2400,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
             << std::endl;
       }
 
-//#if 0
+#if 1
       ossimFilename imagePath = file.path();
       if (imagePath.empty())
          imagePath = ossimEnvironmentUtility::instance()->getCurrentWorkingDir();
@@ -2420,22 +2425,19 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
          metadataFile = vectName[loop];
          res = true;
       }
-      else
-      {
-         if (traceDebug())
-         {
-            if (res)
-            {
-               this->print(ossimNotify(ossimNotifyLevel_DEBUG));
-            }
-            
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimplugins::ossimTerraSarModel::findTSXLeader "
-               << " exit status = " << (res?"true":"false\n")
-               << std::endl;
-         }
-      }
-//#endif
+#endif
+   }
+   if (traceDebug())
+   {
+      // if (res)
+      // {
+         // this->print(ossimNotify(ossimNotifyLevel_DEBUG));
+      // }
+
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimplugins::ossimTerraSarModel::findTSXLeader "
+         << " exit status = " << (res?"true: "+metadataFile:"false\n")
+         << std::endl;
    }
 
    return res;
@@ -2446,13 +2448,13 @@ void ossimplugins::ossimTerraSarModel::printInfo(ostream& os) const
 {
    os << "\n----------------- General Info on TSX-1 Image -------------------"
       << "\n  "
-      << "\n  Sensor ID :               			" << theSensorID
-      << "\n  Imaging Mode :               			" << _imagingMode
-      << "\n  Acquisition Sensor :        			" << _acquisitionSensor
-      << "\n  Look direction :          			" << _lookDirection
-      << "\n  Polarisation Mode :          			" << _polarisationMode
-      << "\n  Number of Layers :           			" << _numberOfLayers
-      << "\n  Polarisation List Size :     			" << _polLayerList.size()
+      << "\n  Sensor ID :                                       " << theSensorID
+      << "\n  Imaging Mode :                                    " << _imagingMode
+      << "\n  Acquisition Sensor :                              " << _acquisitionSensor
+      << "\n  Look direction :                                  " << _lookDirection
+      << "\n  Polarisation Mode :                               " << _polarisationMode
+      << "\n  Number of Layers :                                " << _numberOfLayers
+      << "\n  Polarisation List Size :                          " << _polLayerList.size()
       << "\n"
       << "\n------------------------------------------------------------------";
    for(ossim_uint32 idx = 0 ; idx < _polLayerList.size(); ++idx)
@@ -2461,7 +2463,7 @@ void ossimplugins::ossimTerraSarModel::printInfo(ostream& os) const
          << "\n calFactor :                                  " << _calFactor[idx]
 //               << "\n Image Noise  size :                          " << _noise[idx].get_imageNoise().size()
          << "\n------------------------------------------------------------";
-   }  
-   os << std::endl;	
+   }
+   os << std::endl;
 }
 
