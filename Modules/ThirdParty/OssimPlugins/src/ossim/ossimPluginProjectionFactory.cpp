@@ -121,6 +121,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
+   SCOPED_LOG(traceDebug, MODULE);
    ossimRefPtr<ossimProjection> projection = 0;
 
    // TODO: use a type-list to simplify this chain factory.
@@ -143,6 +144,13 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    }
 
    // Terra-SAR-X
+#if 1
+   if ( !projection )
+   {
+      projection = doBuildProjection<ossimTerraSarXSarSensorModel>(filename);
+   }
+#endif
+
 #if 0
    // old Terra-SAR-X
    if ( !projection )
@@ -150,11 +158,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       projection = doBuildProjection<ossimTerraSarModel>(filename);
    }
 #endif
-   if ( !projection )
-   {
-      projection = doBuildProjection<ossimTerraSarXSarSensorModel>(filename);
-   }
-
    // ErsSar
    if ( !projection )
    {
@@ -464,5 +467,14 @@ bool ossimPluginProjectionFactory::isTileMap(ossimFilename filename)const
   return res;
 }
 
+ossimPluginProjectionFactory::ossimPluginProjectionFactory()
+{
+   initialized_ = true;
+   // traceDebug.setTraceFlag(true);
+   // traceExec .setTraceFlag(true);
+}
+
+
 
 } // ossimplugins namespace
+

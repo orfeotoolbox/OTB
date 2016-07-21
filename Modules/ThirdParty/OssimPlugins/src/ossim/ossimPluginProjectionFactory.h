@@ -57,10 +57,7 @@ protected:
    bool isTileMap(ossimFilename filename) const;
 
 private:
-   ossimPluginProjectionFactory()
-   {
-      initialized_ = true;
-   }
+   ossimPluginProjectionFactory();
 
    ~ossimPluginProjectionFactory()
    {
