@@ -34,7 +34,7 @@ TerraSarBrightnessImageFilter<TInputImage, TOutputImage>
   // Load metada
   TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
   lImageMetadata->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
-  bool mdIsAvailable = lImageMetadata->CanRead();
+  const bool mdIsAvailable = lImageMetadata->CanRead();
 
   // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
   if (this->GetCalibrationFactor() == itk::NumericTraits<double>::Zero)
@@ -45,7 +45,7 @@ TerraSarBrightnessImageFilter<TInputImage, TOutputImage>
       }
     else
       {
-      itkExceptionMacro(<< "Invalid input image. Only TerraSar images are supproted");
+      itkExceptionMacro(<< "Invalid input image. Only TerraSar images are supported");
       }
     }
 }

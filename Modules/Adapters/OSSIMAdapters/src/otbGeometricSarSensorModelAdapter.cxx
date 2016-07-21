@@ -48,11 +48,7 @@ GeometricSarSensorModelAdapter::GeometricSarSensorModelAdapter():
 
 GeometricSarSensorModelAdapter::~GeometricSarSensorModelAdapter()
 {
-  if (m_SensorModel != ITK_NULLPTR)
-    {
-    delete m_SensorModel;
-    m_SensorModel = ITK_NULLPTR;
-    }
+  delete m_SensorModel;
 }
 
 
@@ -68,9 +64,10 @@ void GeometricSarSensorModelAdapter::CreateSensorModel(const ImageKeywordlist& i
 
   m_SensorModel = dynamic_cast<ossimplugins::ossimGeometricSarSensorModel*>(sensor);
   if (!m_SensorModel)
-  {
+    {
+    delete sensor;
     otbMsgDevMacro(<< "CreateSensorModel() failed");
-  }
+    }
 }
 
 ossimplugins::JSDDateTime GeometricSarSensorModelAdapter::getTime(double line)
@@ -79,9 +76,9 @@ ossimplugins::JSDDateTime GeometricSarSensorModelAdapter::getTime(double line)
 }
 
 void GeometricSarSensorModelAdapter::GetPlatformPositionAtLine(
-    double line, std::vector<double>& position, std::vector<double>& speed)
+  double line, std::vector<double>& position, std::vector<double>& speed)
 {
-       m_SensorModel->getPlatformPositionAtLine(line, position, speed);
+  m_SensorModel->getPlatformPositionAtLine(line, position, speed);
 }
 
 } // namespace otb

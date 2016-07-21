@@ -17,8 +17,6 @@
 =========================================================================*/
 #include "otbImageKeywordlist.h"
 
-#include <cassert>
-
 #include "otbMacro.h"
 
 #include "gdal_priv.h"
@@ -47,33 +45,13 @@
 #endif
 
 #include "otbSensorModelAdapter.h"
-#include <memory>
 #include <boost/scoped_ptr.hpp>
+#include <memory>
+#include <ostream>
+#include <cassert>
 
 namespace otb
 {
-
-ImageKeywordlist
-::ImageKeywordlist()
-{
-}
-
-ImageKeywordlist
-::ImageKeywordlist(const Self& p) : m_Keywordlist(p.m_Keywordlist)
-{
-}
-
-ImageKeywordlist
-::~ImageKeywordlist()
-{
-}
-
-void
-ImageKeywordlist::
-operator =(const Self& p)
-{
-  m_Keywordlist = p.m_Keywordlist;
-}
 
 bool
 ImageKeywordlist
@@ -94,7 +72,7 @@ ImageKeywordlist::
 GetMetadataByKey(const std::string& key) const
 {
   // Search for the key in the output map
-  KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
+  const KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
   // If the key can not be found, throw an exception
   if (it == m_Keywordlist.end())
@@ -110,16 +88,16 @@ bool
 ImageKeywordlist::
 HasKey(const std::string& key) const
 {
-  KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
+  const KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
-  return (it != m_Keywordlist.end());
+  return it != m_Keywordlist.end();
 }
 
 void
 ImageKeywordlist::
 ClearMetadataByKey(const std::string& key)
 {
-  m_Keywordlist[key] = "";
+  m_Keywordlist[key].clear();
 }
 
 void
@@ -156,6 +134,8 @@ convertToGDALRPC(GDALRPCInfo &rpc) const
       ossimKeywordlist geom_kwl;
       this->convertToOSSIMKeywordlist(geom_kwl);
 
+      // As the destructor is protected, we can not simply have rpcModel object
+      // on the stack :(
       ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
       if (rpcModel->loadState(geom_kwl))
       {
@@ -164,15 +144,15 @@ convertToGDALRPC(GDALRPCInfo &rpc) const
 
          if (ossimRpcStruct.type == 'B')
          {
-            rpc.dfSAMP_OFF = ossimRpcStruct.sampOffset;
-            rpc.dfLINE_OFF = ossimRpcStruct.lineOffset;
-            rpc.dfSAMP_SCALE = ossimRpcStruct.sampScale;
-            rpc.dfLINE_SCALE = ossimRpcStruct.lineScale;
-            rpc.dfLAT_OFF = ossimRpcStruct.latOffset;
-            rpc.dfLONG_OFF = ossimRpcStruct.lonOffset;
-            rpc.dfHEIGHT_OFF = ossimRpcStruct.hgtOffset;
-            rpc.dfLAT_SCALE = ossimRpcStruct.latScale;
-            rpc.dfLONG_SCALE = ossimRpcStruct.lonScale;
+            rpc.dfSAMP_OFF     = ossimRpcStruct.sampOffset;
+            rpc.dfLINE_OFF     = ossimRpcStruct.lineOffset;
+            rpc.dfSAMP_SCALE   = ossimRpcStruct.sampScale;
+            rpc.dfLINE_SCALE   = ossimRpcStruct.lineScale;
+            rpc.dfLAT_OFF      = ossimRpcStruct.latOffset;
+            rpc.dfLONG_OFF     = ossimRpcStruct.lonOffset;
+            rpc.dfHEIGHT_OFF   = ossimRpcStruct.hgtOffset;
+            rpc.dfLAT_SCALE    = ossimRpcStruct.latScale;
+            rpc.dfLONG_SCALE   = ossimRpcStruct.lonScale;
             rpc.dfHEIGHT_SCALE = ossimRpcStruct.hgtScale;
 
             memcpy(rpc.adfLINE_NUM_COEFF, ossimRpcStruct.lineNumCoef, sizeof(double) * 20);
@@ -190,13 +170,6 @@ convertToGDALRPC(GDALRPCInfo &rpc) const
 void
 ImageKeywordlist::
 Print(std::ostream& os, itk::Indent indent) const
-{
-  this->PrintSelf(os, indent.GetNextIndent());
-}
-
-void
-ImageKeywordlist::
-PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   ossimKeywordlist kwl;
   convertToOSSIMKeywordlist(kwl);
@@ -375,9 +348,8 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 ImageKeywordlist
 ReadGeometryFromGEOMFile(const std::string& filename)
 {
-  ossimKeywordlist geom_kwl;
   ImageKeywordlist otb_kwl;
-  ossimFilename ossimGeomFile = ossimFilename(filename);
+  ossimFilename ossimGeomFile(filename);
 
   if (ossimGeomFile.exists() && ossimGeomFile.isFile())
     {
@@ -398,11 +370,9 @@ ReadGeometryFromGEOMFile(const std::string& filename)
 //         {
 //         geom_kwl = kwl;
 //         }
-      geom_kwl = kwl;
+      otb_kwl.SetKeywordlist(kwl);
       }
     }
-
-  otb_kwl.SetKeywordlist(geom_kwl);
 
   return otb_kwl;
 }

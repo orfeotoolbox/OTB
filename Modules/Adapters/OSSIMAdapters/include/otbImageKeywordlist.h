@@ -18,13 +18,14 @@
 #ifndef otbImageKeywordlist_h
 #define otbImageKeywordlist_h
 
-#include <iostream>
-#include <map>
-
+#include "itkMacro.h"
+#include "itkIndent.h"
 #include "gdal.h"
+#include "ossimStringUtilities.h"
 
-#include "itkObject.h"
-#include "itkObjectFactory.h"
+#include <iosfwd>
+#include <map>
+#include <string>
 
 //forward declaration
 class ossimKeywordlist;
@@ -67,8 +68,6 @@ namespace internal
  * \sa ImageIOBase
  *
  * \ingroup Projections
- *
- *
  * \ingroup OTBOSSIMAdapters
  */
 class ITK_EXPORT ImageKeywordlist
@@ -82,6 +81,8 @@ public:
 
   typedef std::map<std::string, std::string> KeywordlistMap;
   typedef KeywordlistMap::size_type KeywordlistMapSizeType;
+
+  ImageKeywordlist() {}
 
   /** Get the internal map container */
   const KeywordlistMap& GetKeywordlist() const
@@ -109,46 +110,36 @@ public:
   /** Get the Data object descriptor corresponding to the given key */
   const std::string& GetMetadataByKey(const std::string& key) const;
 
+  /** Get the Data object descriptor corresponding to the given key. */
+  template <typename T>
+  T GetMetadataByKeyAs(const std::string& key) const
+    {
+    std::string const& v = GetMetadataByKey(key);
+    return ossimplugins::to<T>(v, " extracting " + key + " from KWL");
+    }
+
   /** return true if the key is in the dictionary */
   bool HasKey(const std::string& key) const;
 
   /** Clear a given field of the keyword list */
-  virtual void ClearMetadataByKey(const std::string& key);
+  void ClearMetadataByKey(const std::string& key);
 
-  virtual void AddKey(const std::string& key, const std::string& value);
+  void AddKey(const std::string& key, const std::string& value);
 
-  virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
+  void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
   /** try to convert the image keywordlist into a GDALRpcInfo structure
    *  return true if successful, false otherwise */
-  virtual bool convertToGDALRPC(GDALRPCInfo &rpc) const;
+  bool convertToGDALRPC(GDALRPCInfo &rpc) const;
 
-  virtual void Print(std::ostream& os, itk::Indent indent = 0) const;
-
-  ImageKeywordlist();
-  virtual ~ImageKeywordlist();
-
-  ImageKeywordlist(const Self &);
-  void operator =(const Self&);
+  void Print(std::ostream& os, itk::Indent indent = 0) const;
 
   bool operator ==(const Self&) const;
   inline bool operator != ( const Self & ) const;
 
-protected:
-  /** Methods invoked by Print() to print information about the object
-   * Typically not called by the user (use Print()
-   * instead) but used in the hierarchical print process to combine the
-   * output of several classes.  */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
 private:
   /** Geo information are in this map */
   KeywordlistMap m_Keywordlist;
-
-//  char m_Delimiter;
-
-//  void operator=(const Self&); //purposely not implemented
-
 };
 
 std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
