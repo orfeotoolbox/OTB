@@ -84,7 +84,6 @@ protected:
   /// CalFactor (Calibration node).
   std::vector<double>      m_calFactor;
   /// PolLayer (AcquisitionInfo node).
-  // TODO: add getPolLayerFromImageFile
   std::string              m_polLayerName;
   std::vector<ossimString> m_polLayerList;
   /// Noise (Noise node).
@@ -96,7 +95,7 @@ private:
   /** Internal function that reads annotation file.
    * \throw std::exception possibly
    */
-  bool read(ossimFilename const& annotationXml);
+  bool read(ossimFilename const& file);
 
   /** Internal function dedicated to read `OrbitStateRecords`.
    */
@@ -125,9 +124,13 @@ private:
    */
   ossimFilename findTSXLeader(ossimFilename const& file);
 
+  void getPolLayerFromImageFile(ossimXmlDocument const& xmlDocument, const ossimFilename& imageFilename);
   ossimString const& findPolLayerName(ossimXmlNode const& node, ossimString const& xpath) const;
   std::size_t findPolLayerIdx(std::string const& polLayerName) const;
   void getNoiseAtGivenNode(ossimXmlNode const& noiseNode, ossimplugins::Noise& noise);
+
+  void initAcquisitionInfo(
+        ossimXmlNode const& productInfo, ossimXmlNode const& imageDataInfo);
 
   /**
    * Initialize ImageNoise parameters from TerraSAR product xml file.
