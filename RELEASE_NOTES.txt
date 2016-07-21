@@ -2,11 +2,16 @@
  Monteverdi Release Note
 =========================
 
-Monteverdi 3.4.0 - Changes since version 3.2.0 (July ??th, 2016)
+Monteverdi 3.4.0 - Changes since version 3.2.0 (July 26th, 2016)
 =================================================================
 
 * Bug fixes:
+  * MANTIS-1256: elete-All button not disabled after layer-stack has been cleared
+  * MANTIS-1250: Main-window always show maximized
+  * MANTIS-1245: Monteverdi: no projection mode display problem
+  * MANTIS-1244: Emptying layer stack does not reset viewport state
   * MANTIS-1235: Monteverdi is not able to open S1 product (SLC SM product)
+  * MANTIS-1232: Layer stack disappear after opening an image (gnome 3)
   * MANTIS-1231: Monteverdi: shader effect does not follow the mouse cursor when moving
   * MANTIS-1205: Gamma slider effect inverted between full and quicklook view
   * MANTIS-1204: Zoom to full extent and zoom to layer extent does not preserve aspect ratio
