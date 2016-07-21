@@ -2218,7 +2218,7 @@ void
 ImageViewWidget
 ::OnResetViewport()
 {
-  qDebug() << this << "::OnResetViewport()";
+  // qDebug() << this << "::OnResetViewport()";
 
   assert( m_Manipulator!=NULL );
 
