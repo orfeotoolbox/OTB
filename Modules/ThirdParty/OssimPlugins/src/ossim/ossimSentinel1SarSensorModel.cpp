@@ -142,7 +142,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 #else
       theAzimuthTimeInterval = seconds(azimuthTimeInterval);
 #endif
-    std::clog << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds() << "us\n";
+    ossimNotify(ossimNotifyLevel_DEBUG) << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds() << "us\n";
 
 
     // Now read burst records as well
@@ -156,7 +156,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         burstRecord.startLine = 0;
         burstRecord.azimuthStartTime = getTimeFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productFirstLineUtcTime");
 
-        std::clog<< burstRecord.azimuthStartTime<<'\n';
+        ossimNotify(ossimNotifyLevel_DEBUG)<< burstRecord.azimuthStartTime<<'\n';
 
         burstRecord.azimuthStopTime = getTimeFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productLastLineUtcTime");
         burstRecord.endLine = getTextFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/numberOfLines").toUInt16()-1;
@@ -283,8 +283,8 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
             const DurationType timeSinceStart = gcpRecord.azimuthTime - acqStart;
 
             gcpRecord.imPt.y= timeSinceStart/theAzimuthTimeInterval + acqStartLine;
-            std::clog << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
-            std::clog << "imPt_y: " << gcpRecord.imPt.y << " = " << timeSinceStart.total_microseconds() << "/" << theAzimuthTimeInterval.total_microseconds() << "+" << acqStartLine << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG) << "timeSinceStart: " << timeSinceStart << " = " << gcpRecord.azimuthTime << " - " << acqStart <<  " (azTime-acqStart)"<< "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG) << "imPt_y: " << gcpRecord.imPt.y << " = " << timeSinceStart.total_microseconds() << "/" << theAzimuthTimeInterval.total_microseconds() << "+" << acqStartLine << "\n";
         }
         else
         {
