@@ -87,7 +87,9 @@ public:
   /** Get the imaging production year from the ossim metadata : generationTime variable */
   int GetProductionYear() const ITK_OVERRIDE;
 
-  /** Get the calibration.calFactor : generationTime variable */
+  /** Get the calibration.calFactor: generationTime variable.
+   * \pre `CanRead()`
+   */
   double GetCalibrationFactor() const;
 
   /** Get the number of noise records */
@@ -158,30 +160,47 @@ protected:
   TerraSarImageMetadataInterface();
   ~TerraSarImageMetadataInterface() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Evaluate polynom with Horner scheme*/
+  double Horner(std::vector<double> const& coefficients, const double tauMinusTauRef) const;
 
-  inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
-
+  /**
+   * \pre `CanRead()`
+   */
   double GetStartTimeUTC() const;
+  /**
+   * \pre `CanRead()`
+   */
   double GetStopTimeUTC() const;
+  /**
+   * \pre `CanRead()`
+   */
   RealType GetRangeTimeFirstPixel() const;
-
+  /**
+   * \pre `CanRead()`
+   */
   RealType GetRangeTimeLastPixel() const;
 
   /** convert a TimeUTC string to a julian day */
   double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
 
-  /** Get the polynomial degree for a given noise record */
+  /** Get the polynomial degree for a given noise record.
+   * \pre `CanRead()`
+   */
   unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
 
-  /** Get the polynomial coefficient for a given noise record */
+  /** Get the polynomial coefficient for a given noise record.
+   * \pre `CanRead()`
+   */
   DoubleVectorType GetNoisePolynomialCoefficients(unsigned int noiseRecord) const;
 
-  /** Get timeUTC noise acquisition in Julian day for a given noise record*/
+  /** Get timeUTC noise acquisition in Julian day for a given noise record.
+   * \pre `CanRead()`
+   */
   double GetNoiseTimeUTC(unsigned int noiseRecord) const;
 
-  /** Get noise reference point for a given noise record */
+  /** Get noise reference point for a given noise record.
+   * \pre `CanRead()`
+   */
   double GetNoiseReferencePoint(unsigned int noiseRecord) const;
 
 private:
