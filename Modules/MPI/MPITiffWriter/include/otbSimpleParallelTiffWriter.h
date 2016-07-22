@@ -12,8 +12,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __SimpleParallelTiffWriter_h
-#define __SimpleParallelTiffWriter_h
+#ifndef otbSimpleParallelTiffWriter_h
+#define otbSimpleParallelTiffWriter_h
 
 
 #include "otbImageIOBase.h"
@@ -56,7 +56,15 @@
 // SPTW
 #include <algorithm>
 #include <vector>
+
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "sptw.h"
+# pragma GCC diagnostic pop
+#else
+#include "sptw.h"
+#endif
 
 // GDAL-OTB datatype brigde
 #include "otbGdalDataTypeBridge.h"

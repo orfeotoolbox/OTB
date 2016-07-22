@@ -74,6 +74,8 @@ CommandLineLauncher::CommandLineLauncher(const char *) /*:
 CommandLineLauncher::~CommandLineLauncher()
 {
   this->DeleteWatcherList();
+  m_Application = ITK_NULLPTR;
+  ApplicationRegistry::CleanRegistry();
 }
 
 void CommandLineLauncher::DeleteWatcherList()

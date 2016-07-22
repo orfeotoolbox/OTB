@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalBarnesDecompImageFilter_h
-#define __ReciprocalBarnesDecompImageFilter_h
+#ifndef otbReciprocalBarnesDecompImageFilter_h
+#define otbReciprocalBarnesDecompImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 #include "otbMath.h"

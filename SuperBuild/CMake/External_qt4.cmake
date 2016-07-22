@@ -10,6 +10,9 @@ SETUP_SUPERBUILD(QT4)
 #   message(STATUS "  SuperBuild may fail to compile Qt4. If so, you should install it via package manager.")
 # endif()
 
+
+option(QT4_SB_ENABLE_GTK "Enable GTK+ stlye with qt using -gtkstlye. Default is OFF" OFF)
+
 if(NOT DEFINED git_protocol)
   set(git_protocol "git")
 endif()
@@ -30,8 +33,14 @@ if(UNIX)
   if(APPLE)
     set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
   else() #Linux
-    set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
+    if(QT4_SB_ENABLE_GTK)
+      message(STATUS "QT4_SB_ENABLE_GTK is activated. QT4 build includes  gtk+ and libfreetype, libpng (dependencies of gtk+ package)")
+      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
+    else()
+      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle")
+    endif()
   endif()
+  #common for all unix
   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-nis -no-javascript-jit -v")
 elseif(MSVC)
   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -mp")

@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbGeometriesProjectionFilter_txx
+#define otbGeometriesProjectionFilter_txx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
@@ -97,3 +99,5 @@ void otb::GeometriesProjectionFilter::SetOutputKeywordList(const ImageKeywordlis
   this->m_OutputKeywordList = kwl;
   this->Modified();
 }
+
+#endif

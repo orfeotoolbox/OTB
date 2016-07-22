@@ -15,10 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbGeometriesToGeometriesFilter_txx
+#define otbGeometriesToGeometriesFilter_txx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
+#include "otbGeometriesToGeometriesFilter.h"
 
 /*===========================================================================*/
 /*==================[ DefaultGeometriesToGeometriesFilter ]==================*/
@@ -111,3 +114,5 @@ void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry,Fiel
     inout.SetFeature(feat);
     }
 }
+
+#endif

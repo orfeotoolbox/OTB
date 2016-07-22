@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentSamplingFilterBase_h
-#define __otbPersistentSamplingFilterBase_h
+#ifndef otbPersistentSamplingFilterBase_h
+#define otbPersistentSamplingFilterBase_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"

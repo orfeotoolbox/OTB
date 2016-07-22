@@ -882,14 +882,16 @@ otb_test_application(NAME apTvClSampleExtraction
                              ${TEMP}/apTvClSampleExtractionOut.sqlite)
 
 #----------- TrainVectorClassifier TESTS ----------------
-otb_test_application(NAME apTvClTrainVectorClassifier
-                     APP  TrainVectorClassifier
-                     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
-                             -feat value_0 value_1 value_2 value_3
-                             -cfield class
-                             -classifier rf
-                             -io.confmatout ${TEMP}/apTvClTrainVectorClassifierConfMat.txt
-                             -io.out ${TEMP}/apTvClTrainVectorClassifierModel.rf
-                     VALID   --compare-ascii ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorClassifierModel.rf
-                             ${TEMP}/apTvClTrainVectorClassifierModel.rf)
+if(OTB_USE_OPENCV)
+  otb_test_application(NAME apTvClTrainVectorClassifier
+    APP  TrainVectorClassifier
+    OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+    -feat value_0 value_1 value_2 value_3
+    -cfield class
+    -classifier rf
+    -io.confmatout ${TEMP}/apTvClTrainVectorClassifierConfMat.txt
+    -io.out ${TEMP}/apTvClTrainVectorClassifierModel.rf
+    VALID   --compare-ascii ${NOTOL}
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorClassifierModel.rf
+    ${TEMP}/apTvClTrainVectorClassifierModel.rf)
+endif()

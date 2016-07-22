@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
-#define __ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
+#ifndef otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
+#define otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vcl_complex.h"

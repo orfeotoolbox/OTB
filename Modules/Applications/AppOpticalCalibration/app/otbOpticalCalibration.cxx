@@ -153,7 +153,7 @@ private:
 "- d is the earth-sun distance (in astronomical units) and depends on the acquisition's day and month \n"
 "- ESUN(b) is the mean TOA solar irradiance (or solar illumination) in W/m2/micrometers\n"
 "- θ is the solar zenith angle in degrees. \n"
-"Note that the application asks for the solar elevation angle, and will perfom the conversion to the zenith angle itself (ze. angle = 90° - el. angle).\n"
+"Note that the application asks for the solar elevation angle, and will perfom the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units : degrees).\n"
 "Note also that ESUN(b) not only depends on the band b, but also on the spectral sensitivity of the sensor in this particular band. "
 "In other words, the influence of spectral sensitivities is included within the ESUN different values.\n"
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
@@ -247,13 +247,13 @@ private:
     AddParameter(ParameterType_Group,"acqui.sun","Sun angles");
     SetParameterDescription("acqui.sun","This group contains the sun angles");
     //Sun elevation angle
-    AddParameter(ParameterType_Float, "acqui.sun.elev",   "Sun elevation angle (°)");
+    AddParameter(ParameterType_Float, "acqui.sun.elev", "Sun elevation angle (deg)");
     SetParameterDescription("acqui.sun.elev", "Sun elevation angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.sun.elev", 0.);
     SetMaximumParameterFloatValue("acqui.sun.elev", 120.);
     SetDefaultParameterFloat("acqui.sun.elev",90.0);
     //Sun azimuth angle
-    AddParameter(ParameterType_Float, "acqui.sun.azim",   "Sun azimuth angle (°)");
+    AddParameter(ParameterType_Float, "acqui.sun.azim", "Sun azimuth angle (deg)");
     SetParameterDescription("acqui.sun.azim", "Sun azimuth angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.sun.azim", 0.);
     SetMaximumParameterFloatValue("acqui.sun.azim", 360.);
@@ -262,13 +262,13 @@ private:
     AddParameter(ParameterType_Group,"acqui.view","Viewing angles");
     SetParameterDescription("acqui.view","This group contains the sensor viewing angles");
     //Viewing elevation angle
-    AddParameter(ParameterType_Float, "acqui.view.elev",   "Viewing elevation angle (°)");
+    AddParameter(ParameterType_Float, "acqui.view.elev",   "Viewing elevation angle (deg)");
     SetParameterDescription("acqui.view.elev", "Viewing elevation angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.view.elev", 0.);
     SetMaximumParameterFloatValue("acqui.view.elev", 120.);
     SetDefaultParameterFloat("acqui.view.elev",90.0);
     //Viewing azimuth angle
-    AddParameter(ParameterType_Float, "acqui.view.azim",   "Viewing azimuth angle (°)");
+    AddParameter(ParameterType_Float, "acqui.view.azim",   "Viewing azimuth angle (deg)");
     SetParameterDescription("acqui.view.azim", "Viewing azimuth angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.view.azim", 0.);
     SetMaximumParameterFloatValue("acqui.view.azim", 360.);

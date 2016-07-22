@@ -22,16 +22,16 @@
 
 namespace otb
 {
-ViewSettings::ViewSettings()
+ViewSettings::ViewSettings() :
+  m_Wkt( "" ),
+  m_RotationAngle( 0.0 ),
+  m_UseProjection( true ),
+  m_GeometryChanged( false )
 {
-  m_Origin.Fill(0);
-  m_Spacing.Fill(1);
-  m_ViewportSize.Fill(0);
-  m_Wkt="";
-  m_UseProjection = true;
-  m_GeometryChanged = false;
-  m_RotationCenter.Fill(0);
-  m_RotationAngle = 0;
+  m_Origin.Fill( 0 );
+  m_Spacing.Fill( 1 );
+  m_ViewportSize.Fill( 0 );
+  m_RotationCenter.Fill( 0 );
 }
 
 ViewSettings::~ViewSettings()

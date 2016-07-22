@@ -14,9 +14,9 @@
 #   pragma GCC diagnostic ignored "-Wunused-parameter"
 #   pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #   pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include "ossimTerraSarXSarSensorModel.h"
 #include "ossimPluginProjectionFactory.h"
-#endif
 #if defined(__GNUC__) || defined(__clang__)
 # pragma GCC diagnostic pop
 #endif

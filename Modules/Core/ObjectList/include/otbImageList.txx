@@ -18,6 +18,7 @@
 #ifndef otbImageList_txx
 #define otbImageList_txx
 
+#include "otbImageList.h"
 #include "otbMacro.h"
 
 namespace otb

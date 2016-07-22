@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalCovarianceToReciprocalCoherencyImageFilter_h
-#define __ReciprocalCovarianceToReciprocalCoherencyImageFilter_h
+#ifndef otbReciprocalCovarianceToReciprocalCoherencyImageFilter_h
+#define otbReciprocalCovarianceToReciprocalCoherencyImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 

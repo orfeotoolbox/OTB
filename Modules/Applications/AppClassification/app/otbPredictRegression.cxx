@@ -102,6 +102,13 @@ public:
   typedef ClassificationFilterType::LabelType                                                  LabelType;
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
 
+protected:
+
+  ~PredictRegression() ITK_OVERRIDE
+    {
+    MachineLearningModelFactoryType::CleanFactories();
+    }
+
 private:
   void DoInit() ITK_OVERRIDE
   {

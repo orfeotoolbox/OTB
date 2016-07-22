@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __MeanShiftSmoothingImageFilter_h
-#define __MeanShiftSmoothingImageFilter_h
+#ifndef otbMeanShiftSmoothingImageFilter_h
+#define otbMeanShiftSmoothingImageFilter_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"

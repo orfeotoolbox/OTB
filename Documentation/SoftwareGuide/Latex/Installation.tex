@@ -227,8 +227,8 @@ In fact there is no make install target for the SuperBuild.
 By default, SuperBuild will not use any of libraries installed on system. All \texttt{USE\_SYSTEM\_\textit{XXX}} are
 are set to FALSE. This is our recommended way of using SuperBuild. You are however free to use a system library
 if you want!. You must be very much aware of dependencies of those libraries you use from system. For example,
-if libjpeg is not used from superbuild using USE_SYSTEM_JPEG=TRUE then you should not use zlib from superbuild
-because zlib is a dependency of libjpeg. Here SuperBuild will not automagically set USE_SYSTEM_ZLIB=FALSE.
+if libjpeg is not used from superbuild using \texttt{USE\_SYSTEM\_JPEG=TRUE} then you should not use zlib from superbuild
+because zlib is a dependency of libjpeg. Here SuperBuild will not automagically set \texttt{USE\_SYSTEM\_ZLIB=FALSE}.
 You must do it yourself. The example of libjpeg - zlib dependency chain is so simple.
 Imagine the same case for GDAL which depends on zlib, libjpeg, libtiff(with big tiff support), geotiff,
 sqlite, curl, geos, libkml, openjpeg. This is one of the reasons we recommend to use SuperBuild exclusively or not.

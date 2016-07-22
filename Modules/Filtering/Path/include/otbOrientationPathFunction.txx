@@ -18,6 +18,7 @@
 #ifndef otbOrientationPathFunction_txx
 #define otbOrientationPathFunction_txx
 
+#include "otbOrientationPathFunction.h"
 #include "otbPathFunction.h"
 #include "itkNumericTraits.h"
 #include "otbMacro.h"

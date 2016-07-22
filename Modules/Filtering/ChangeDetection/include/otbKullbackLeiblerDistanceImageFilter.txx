@@ -20,6 +20,7 @@
 #ifndef otbKullbackLeiblerDistanceImageFilter_txx
 #define otbKullbackLeiblerDistanceImageFilter_txx
 
+#include "otbKullbackLeiblerDistanceImageFilter.h"
 #include <vector>
 
 #include "itkImageRegionConstIterator.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_tinyxml_h
-#define __otb_tinyxml_h
+#ifndef otb_tinyxml_h
+#define otb_tinyxml_h
 
 #ifndef TIXML_USE_STL
 #cmakedefine TIXML_USE_STL
