@@ -15,7 +15,6 @@
 #include <ossim/base/ossimString.h>
 #include <iomanip>
 
-
 namespace ossimplugins
 {
 static const char NOISE[] = "noise";
@@ -60,38 +59,8 @@ bool Noise::loadState(const ossimKeywordlist& kwl, std::string const& prefix)
    const char* lookup = 0;
    std::string s1 = pfx + ".";
 
-#if 1
    get(kwl, s1, NAME_OF_NOISE_POLARISATION_KW, m_polarisation);
-#else
-   lookup = kwl.find(s1.c_str(), NAME_OF_NOISE_POLARISATION_KW);
-   if (lookup)
-   {
-      m_polarisation = lookup;
-   }
-   else
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << NAME_OF_NOISE_POLARISATION_KW << "\n";
-      result = false;
-   }
-#endif
-
-#if 1
    get(kwl, s1, NUMBER_OF_NOISE_RECORDS_KW, m_numberOfNoiseRecords);
-#else
-   lookup = kwl.find(s1.c_str(), NUMBER_OF_NOISE_RECORDS_KW);
-   if (lookup)
-   {
-      s = lookup;
-      m_numberOfNoiseRecords = s.toUInt32();
-   }
-   else
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << NUMBER_OF_NOISE_RECORDS_KW << "\n";
-      result = false;
-   }
-#endif
 
    m_tabImageNoise.clear();
    for (unsigned int i = 0; i < m_numberOfNoiseRecords; ++i)
