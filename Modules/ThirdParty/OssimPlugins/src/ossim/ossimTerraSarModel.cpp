@@ -283,7 +283,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 } // End of: bool ossimTerraSarModel::open(const ossimFilename& file)
 
 bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
-                                                 const char* prefix) const
+                                                 const char* prefix_) const
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::saveState";
 
@@ -292,40 +292,42 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
 
+   const std::string prefix = prefix_ ? prefix_ : "";
+
    bool result = false;
 
    if ( (_alt_srgr_coefset.size() == 3) &&
         ( _SrToGr_exponent.size() == _SrToGr_coeffs.size()) )
    {
       // Save our state:
-      kwl.add(prefix, SR_GR_R0_KW, _SrToGr_R0);
+      kwl.add(prefix_, SR_GR_R0_KW, _SrToGr_R0);
 
       ossimString kw1 = "sr_gr_exponent_";
       ossimString kw2 = "sr_gr_coeffs_";
 
       const ossim_uint32 COUNT = _SrToGr_exponent.size();
 
-      kwl.add(prefix, NUMBER_SRGR_COEFFICIENTS_KW, COUNT);
+      kwl.add(prefix_, NUMBER_SRGR_COEFFICIENTS_KW, COUNT);
 
       for(ossim_uint32 i = 0; i < COUNT; ++i)
       {
          ossimString iStr = ossimString::toString(i);
          ossimString kw = kw1;
          kw += iStr;
-         kwl.add(prefix, kw, _SrToGr_exponent[i]);
+         kwl.add(prefix_, kw, _SrToGr_exponent[i]);
          kw = kw2;
          kw += iStr;
-         kwl.add(prefix, kw, _SrToGr_coeffs[i]);
+         kwl.add(prefix_, kw, _SrToGr_coeffs[i]);
       }
-      kwl.add(prefix, SC_RT_KW, _sceneCenterRangeTime);
-      kwl.add(prefix, SR_GR_SF_KW, _SrToGr_scaling_factor);
-      kwl.add(prefix, ALT_SR_GR_COEFFICIENT0_KW,  _alt_srgr_coefset[0]);
-      kwl.add(prefix, ALT_SR_GR_COEFFICIENT1_KW,  _alt_srgr_coefset[1]);
-      kwl.add(prefix, ALT_SR_GR_COEFFICIENT2_KW,  _alt_srgr_coefset[2]);
-      kwl.add(prefix, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());
+      kwl.add(prefix_, SC_RT_KW, _sceneCenterRangeTime);
+      kwl.add(prefix_, SR_GR_SF_KW, _SrToGr_scaling_factor);
+      kwl.add(prefix_, ALT_SR_GR_COEFFICIENT0_KW,  _alt_srgr_coefset[0]);
+      kwl.add(prefix_, ALT_SR_GR_COEFFICIENT1_KW,  _alt_srgr_coefset[1]);
+      kwl.add(prefix_, ALT_SR_GR_COEFFICIENT2_KW,  _alt_srgr_coefset[2]);
+      kwl.add(prefix_, PRODUCT_XML_FILE_KW, _productXmlFile.c_str());
 
       // Call base save state:
-      result = ossimGeometricSarSensorModel::saveState(kwl, prefix);
+      result = ossimGeometricSarSensorModel::saveState(kwl, prefix_);
    }
 
    //---
@@ -333,29 +335,29 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    //---
    if (result)
    {
-      // kwl.add(prefix, LOAD_FROM_PRODUCT_FILE_KW, "true");
+      // kwl.add(prefix_, LOAD_FROM_PRODUCT_FILE_KW, "true");
    }
 
-   kwl.add(prefix, PRODUCT_TYPE, _productType.c_str());
+   kwl.add(prefix_, PRODUCT_TYPE, _productType.c_str());
 
-   kwl.add(prefix, RADIOMETRIC_CORRECTION, _radiometricCorrection.c_str());
+   kwl.add(prefix_, RADIOMETRIC_CORRECTION, _radiometricCorrection.c_str());
 
    ossimString kw = ACQUISITION_INFO;
    ossimString kw2 = kw + IMAGING_MODE;
-   kwl.add(prefix, kw2, _imagingMode.c_str());
+   kwl.add(prefix_, kw2, _imagingMode.c_str());
    kw2 = kw + SENSOR;
-   kwl.add(prefix, kw2, _acquisitionSensor.c_str());
+   kwl.add(prefix_, kw2, _acquisitionSensor.c_str());
    kw2 = kw + LOOK_DIRECTION;
-   kwl.add(prefix, kw2, _lookDirection.c_str());
+   kwl.add(prefix_, kw2, _lookDirection.c_str());
    kw2 = kw + POLARISATION_MODE;
-   kwl.add(prefix, kw2, _polarisationMode.c_str());
+   kwl.add(prefix_, kw2, _polarisationMode.c_str());
    kw2 = kw + POLARISATION_LIST;
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {
       ossimString iStr = ossimString::toString(i)+"]";
       ossimString kw3 = kw2+"[";
       kw3 += iStr;
-      kwl.add(prefix, kw3, _polLayerList[i].c_str());
+      kwl.add(prefix_, kw3, _polLayerList[i].c_str());
    }
 
    if( _polLayer !="UNDEFINED")
@@ -382,15 +384,15 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {
       // Why are calFactor overwritten ?
-      kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor[i]).c_str());
+      kwl.add(prefix_, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor[i]).c_str());
    }
-   kwl.add(prefix, RADAR_FREQUENCY, ossimString::toString(_radarFrequency).c_str());
-   kwl.add(prefix, AZ_START_TIME, _azStartTime.c_str());
-   kwl.add(prefix, AZ_STOP_TIME, _azStopTime.c_str());
-   kwl.add(prefix, RG_FIRST_TIME, _rgFirstPixelTime.c_str());
-   kwl.add(prefix, RG_LAST_TIME, _rgLastPixelTime.c_str());
+   kwl.add(prefix_, RADAR_FREQUENCY, ossimString::toString(_radarFrequency).c_str());
+   kwl.add(prefix_, AZ_START_TIME, _azStartTime.c_str());
+   kwl.add(prefix_, AZ_STOP_TIME, _azStopTime.c_str());
+   kwl.add(prefix_, RG_FIRST_TIME, _rgFirstPixelTime.c_str());
+   kwl.add(prefix_, RG_LAST_TIME, _rgLastPixelTime.c_str());
 
-   kwl.add(prefix, GENERATION_TIME, _generationTime.c_str());
+   kwl.add(prefix_, GENERATION_TIME, _generationTime.c_str());
 
    if (traceDebug())
    {
@@ -398,13 +400,13 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
          << MODULE << " exit status = " << (result?"true":"false\n")
          << std::endl;
    }
-   // ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl;
+   ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl;
 
    return result;
 }
 
 bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
-                                                  const char *prefix)
+                                                  const char *prefix_)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::loadState";
 
@@ -412,12 +414,13 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
+   const std::string prefix = prefix_ ? prefix_ : "";
 
    const char* lookup = 0;
    ossimString s;
 
    // Check the type first.
-   lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
+   lookup = kwl.find(prefix_, ossimKeywordNames::TYPE_KW);
    if (lookup)
    {
       s = lookup;
@@ -428,14 +431,14 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
    }
 
    // Get the product.xml file name.
-   lookup = kwl.find(prefix, PRODUCT_XML_FILE_KW);
+   lookup = kwl.find(prefix_, PRODUCT_XML_FILE_KW);
 
    if (lookup)
    {
       _productXmlFile = lookup;
 
       // See if caller wants to load from xml vice keyword list.
-      lookup = kwl.find(prefix, LOAD_FROM_PRODUCT_FILE_KW);
+      lookup = kwl.find(prefix_, LOAD_FROM_PRODUCT_FILE_KW);
       if (lookup)
       {
          s = lookup;
@@ -455,11 +458,11 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
    theBoundGndPolygon.clear();
 
    // Load the base class.
-   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
+   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix_);
 
    if (result)
    {
-      lookup = kwl.find(prefix,SR_GR_R0_KW);
+      lookup = kwl.find(prefix_,SR_GR_R0_KW);
       if (lookup)
       {
          s = lookup;
@@ -478,7 +481,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
 
       ossim_uint32 count = 0;
-      lookup = kwl.find(prefix, NUMBER_SRGR_COEFFICIENTS_KW);
+      lookup = kwl.find(prefix_, NUMBER_SRGR_COEFFICIENTS_KW);
       if (lookup)
       {
          s = lookup;
@@ -515,7 +518,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
             kw = kw1;
             kw += iStr;
 
-            lookup = kwl.find(prefix, kw);
+            lookup = kwl.find(prefix_, kw);
             if (lookup)
             {
                s = lookup;
@@ -536,7 +539,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
             // _SrToGr_coeffs
             kw = kw2;
             kw += iStr;
-            lookup = kwl.find(prefix, kw);
+            lookup = kwl.find(prefix_, kw);
             if (lookup)
             {
                s = lookup;
@@ -557,7 +560,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
 
       } // matches:  if (result && count)
 
-      lookup = kwl.find(prefix, SC_RT_KW);
+      lookup = kwl.find(prefix_, SC_RT_KW);
       if (lookup)
       {
          s = lookup;
@@ -575,7 +578,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
 
-      lookup = kwl.find(prefix, SR_GR_SF_KW);
+      lookup = kwl.find(prefix_, SR_GR_SF_KW);
       if (lookup)
       {
          s = lookup;
@@ -593,7 +596,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
 
-      lookup = kwl.find(prefix, ALT_SR_GR_COEFFICIENT0_KW);
+      lookup = kwl.find(prefix_, ALT_SR_GR_COEFFICIENT0_KW);
       if (lookup)
       {
          s = lookup;
@@ -610,7 +613,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          }
          result = false;
       }
-      lookup = kwl.find(prefix, ALT_SR_GR_COEFFICIENT1_KW);
+      lookup = kwl.find(prefix_, ALT_SR_GR_COEFFICIENT1_KW);
       if (lookup)
       {
          s = lookup;
@@ -627,7 +630,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          }
          result = false;
       }
-      lookup = kwl.find(prefix, ALT_SR_GR_COEFFICIENT2_KW);
+      lookup = kwl.find(prefix_, ALT_SR_GR_COEFFICIENT2_KW);
       if (lookup)
       {
          s = lookup;
@@ -645,7 +648,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
 
-      lookup = kwl.find(prefix, PRODUCT_XML_FILE_KW);
+      lookup = kwl.find(prefix_, PRODUCT_XML_FILE_KW);
       if (lookup)
       {
          _productXmlFile = lookup;
@@ -703,7 +706,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       result = false;
    }
 
-   lookup = kwl.find(prefix, CALIBRATION_CALFACTOR);
+   lookup = kwl.find(prefix_, CALIBRATION_CALFACTOR);
    if (lookup)
    {
       std::istringstream in(lookup);
@@ -727,7 +730,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       result = false;
    }
 
-   lookup = kwl.find(prefix, RADAR_FREQUENCY);
+   lookup = kwl.find(prefix_, RADAR_FREQUENCY);
    if (lookup)
    {
       s = lookup;
@@ -745,7 +748,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       result = false;
    }
 
-   lookup = kwl.find(prefix, AZ_START_TIME);
+   lookup = kwl.find(prefix_, AZ_START_TIME);
    if (lookup)
    {
       _azStartTime = lookup;
@@ -762,7 +765,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       result = false;
    }
 
-   lookup = kwl.find(prefix, AZ_STOP_TIME);
+   lookup = kwl.find(prefix_, AZ_STOP_TIME);
    if (lookup)
    {
       _azStopTime = lookup;
@@ -779,7 +782,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       result = false;
    }
 
-   lookup = kwl.find(prefix, RG_FIRST_TIME);
+   lookup = kwl.find(prefix_, RG_FIRST_TIME);
    if (lookup)
    {
       _rgFirstPixelTime = lookup;
@@ -796,7 +799,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       result = false;
    }
 
-   lookup = kwl.find(prefix, RG_LAST_TIME);
+   lookup = kwl.find(prefix_, RG_LAST_TIME);
    if (lookup)
    {
       _rgLastPixelTime = lookup;
@@ -814,7 +817,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
    }
 
 
-   lookup = kwl.find(prefix, GENERATION_TIME);
+   lookup = kwl.find(prefix_, GENERATION_TIME);
    if (lookup)
    {
       _generationTime = lookup;
