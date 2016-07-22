@@ -18,12 +18,13 @@
 #ifndef otb_ViewSettings_h
 #define otb_ViewSettings_h
 
+#include "otbImageKeywordlist.h"
 #include "itkObject.h"
+#include "itkObjectFactory.h" // required by itkNewMacro
 #include "itkSmartPointer.h"
 #include "itkPoint.h"
 #include "itkVector.h"
 #include "itkSize.h"
-#include "otbImageKeywordlist.h"
 
 namespace otb
 {

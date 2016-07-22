@@ -18,7 +18,7 @@
 #include "ossimTerraSarXSarSensorModel.h"
 #include "ossimPluginProjectionFactory.h"
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic pop
+#   pragma GCC diagnostic pop
 #endif
 #include <iostream>
 #include <memory>
