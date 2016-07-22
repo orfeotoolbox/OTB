@@ -84,7 +84,6 @@ void
 SarImageMetadataInterface
 ::CreateCalibrationLookupData(const short itkNotUsed(t))
 {
-
 }
 
 const SarImageMetadataInterface::LookupDataPointerType
@@ -94,6 +93,7 @@ SarImageMetadataInterface
   if (HasCalibrationLookupDataFlag())
     {
     CreateCalibrationLookupData(type);
+    assert(m_SarLut && "We are supposed to have a support_data.calibration_lookup_flag=true");
     }
 
   return m_SarLut;

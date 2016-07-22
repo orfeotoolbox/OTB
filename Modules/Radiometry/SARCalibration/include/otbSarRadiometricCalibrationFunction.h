@@ -39,7 +39,6 @@ namespace otb
  *
  * \ingroup OTBSARCalibration
  */
-
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT SarRadiometricCalibrationFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
@@ -100,8 +99,7 @@ public:
    * \warning this method caches BufferedRegion information.
    * If the BufferedRegion has changed, user must call
    * SetInputImage again to update cached values. */
-  void SetInputImage( const InputImageType * ptr ) ITK_OVERRIDE;
-
+  void SetInputImage(const InputImageType * ptr ) ITK_OVERRIDE;
 
   /** Get/Set the Scale value */
   itkSetMacro(Scale, RealType);
@@ -155,11 +153,12 @@ public:
   itkSetMacro(ApplyRescalingFactor, bool);
   itkGetMacro(ApplyRescalingFactor, bool);
 
-    typedef SarCalibrationLookupData::Pointer LookupDataPointer;
+  typedef SarCalibrationLookupData::Pointer LookupDataPointer;
 
   /** Set SetCalibrationLookupData instance */
   void SetCalibrationLookupData(LookupDataPointer lut)
   {
+    assert(lut && "What an odd idea: setting the lut with.. nothing");
     m_Lut = lut;
   }
 
@@ -171,18 +170,15 @@ protected:
   /** default, empty, virtual dtor */
   ~SarRadiometricCalibrationFunction() ITK_OVERRIDE{}
 
-  /** print method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-
   /** Flags to indiciate if these values needs to be applied in calibration*/
 
 private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  RealType             m_Scale;
+  RealType                    m_Scale;
   bool                        m_EnableNoise;
-  RealType             m_RescalingFactor;
+  RealType                    m_RescalingFactor;
   bool                        m_ApplyAntennaPatternGain;
   bool                        m_ApplyIncidenceAngleCorrection;
   bool                        m_ApplyRangeSpreadLossCorrection;
@@ -193,9 +189,7 @@ private:
   ParametricFunctionPointer   m_AntennaPatternOldGain;
   ParametricFunctionPointer   m_IncidenceAngle;
   ParametricFunctionPointer   m_RangeSpreadLoss;
-  LookupDataPointer   m_Lut;
-
-
+  LookupDataPointer           m_Lut;
 };
 
 } // end namespace otb

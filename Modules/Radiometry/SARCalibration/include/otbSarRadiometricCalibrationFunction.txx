@@ -38,14 +38,13 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 , m_ApplyRangeSpreadLossCorrection(true)
 , m_ApplyLookupDataCorrection(false)
 , m_ApplyRescalingFactor(false)
-
 {
   /* intialize parametric functions */
-  m_Noise = ParametricFunctionType::New();
+  m_Noise                 = ParametricFunctionType::New();
   m_AntennaPatternNewGain = ParametricFunctionType::New();
   m_AntennaPatternOldGain = ParametricFunctionType::New();
-  m_IncidenceAngle = ParametricFunctionType::New();
-  m_RangeSpreadLoss = ParametricFunctionType::New();
+  m_IncidenceAngle        = ParametricFunctionType::New();
+  m_RangeSpreadLoss       = ParametricFunctionType::New();
 
   /* intialize default values in paramerticFunction instances  */
   m_Noise->SetConstantValue(0.0);
@@ -55,7 +54,6 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_RangeSpreadLoss->SetConstantValue(1.0);
 
 //  m_Lut = 0; //new LookupTableBase();
-
 }
 
 /**
@@ -75,17 +73,6 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   m_RangeSpreadLoss->SetInputImage(ptr);
 }
 
-/**
- * Print
- */
-template <class TInputImage, class TCoordRep>
-void
-SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  this->Superclass::PrintSelf(os, indent);
-}
-
 /* Function: EvaluateAtIndex. This computes the required values for each pixel
 * whose index is given in indexType argument. To convert index to point it uses
 * InputImage::TransformIndexToPhysicalPoint(). IncidenceAngle and similar are
@@ -96,11 +83,10 @@ typename SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-
   if (!this->IsInsideBuffer(index))
     {
     itkDebugMacro( << "ERROR with IsInsideBuffer");
-    return (itk::NumericTraits<OutputType>::max());
+    return itk::NumericTraits<OutputType>::max();
     }
 
   /* convert index to point */
@@ -116,25 +102,28 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     * digitalNumber is the output of vcl_abs() which is sqrt((I*I) + (Q*Q)). For
     * non-complex pixel types, vcl_abs() simply returns absolute value.
     */
-
   RealType digitalNumber = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
   RealType sigma = m_Scale * digitalNumber * digitalNumber;
 
   /** substract noise if enabled. */
   if (m_EnableNoise)
     {
+    assert(m_Noise);
     sigma  -= static_cast<RealType>(m_Noise->Evaluate(point));
     }
 
   /** Apply incidence angle correction if needed */
   if (m_ApplyIncidenceAngleCorrection)
     {
+    assert(m_IncidenceAngle);
     sigma *= vcl_sin(static_cast<RealType>(m_IncidenceAngle->Evaluate(point)));
     }
 
   /** Apply old and new antenna pattern gain. */
   if (m_ApplyAntennaPatternGain)
     {
+    assert(m_AntennaPatternNewGain);
+    assert(m_AntennaPatternOldGain);
     sigma *= static_cast<RealType>(m_AntennaPatternNewGain->Evaluate(point));
     sigma /= static_cast<RealType>(m_AntennaPatternOldGain->Evaluate(point));
     }
@@ -142,6 +131,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   /** Apply range spread loss if needed. */
   if (m_ApplyRangeSpreadLossCorrection)
     {
+    assert(m_RangeSpreadLoss);
     sigma *= static_cast<RealType>(m_RangeSpreadLoss->Evaluate(point));
     }
 
@@ -149,6 +139,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     * above values (incidence angle, rangespreadloss etc.. */
   if (m_ApplyLookupDataCorrection)
     {
+    assert(m_Lut);
     RealType lutVal = static_cast<RealType>(m_Lut->GetValue(index[0], index[1]));
     sigma /= lutVal * lutVal;
     }
@@ -156,9 +147,9 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   /** rescaling factor has effect only with CosmoSkymed Products */
   if (m_ApplyRescalingFactor)
     {
+    assert(m_RescalingFactor != 0);
     sigma /= m_RescalingFactor;
     }
-
 
   if(sigma < 0.0)
     {
