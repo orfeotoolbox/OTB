@@ -65,19 +65,22 @@ void GeometricSarSensorModelAdapter::CreateSensorModel(const ImageKeywordlist& i
   m_SensorModel = dynamic_cast<ossimplugins::ossimGeometricSarSensorModel*>(sensor);
   if (!m_SensorModel)
     {
+    const std::string clsname = sensor->RTTI_vinfo().getname();
     delete sensor;
-    otbMsgDevMacro(<< "CreateSensorModel() failed");
+    itkExceptionMacro(<< "Cannot create sensor model from geom of type `"<<clsname<<"`, which doesn't inherit `ossimGeometricSarSensorModel`.");
     }
 }
 
 ossimplugins::JSDDateTime GeometricSarSensorModelAdapter::getTime(double line)
 {
+  assert(m_SensorModel);
   return m_SensorModel->getTime(line);
 }
 
 void GeometricSarSensorModelAdapter::GetPlatformPositionAtLine(
   double line, std::vector<double>& position, std::vector<double>& speed)
 {
+  assert(m_SensorModel);
   m_SensorModel->getPlatformPositionAtLine(line, position, speed);
 }
 

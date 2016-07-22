@@ -36,11 +36,7 @@ PlatformPositionAdapter::PlatformPositionAdapter():
 
 PlatformPositionAdapter::~PlatformPositionAdapter()
 {
-  if (m_SensorModel != ITK_NULLPTR)
-    {
-    delete m_SensorModel;
-    m_SensorModel = ITK_NULLPTR;
-    }
+  delete m_SensorModel;
 }
 
 
@@ -56,21 +52,25 @@ void PlatformPositionAdapter::CreateSensorModel(const ImageKeywordlist& image_kw
 
   m_SensorModel = dynamic_cast<ossimplugins::ossimGeometricSarSensorModel*>(sensor);
   if (!m_SensorModel)
-  {
-    otbMsgDevMacro(<< "CreateSensorModel() failed");
-  }
+    {
+    const std::string clsname = sensor->RTTI_vinfo().getname();
+    delete sensor;
+    itkExceptionMacro(<< "Cannot create sensor model from geom of type `"<<clsname<<"`, which doesn't inherit `ossimGeometricSarSensorModel`.");
+    }
 }
 
 void PlatformPositionAdapter::GetPlatformPosition(
     double line, std::vector<double>& position, std::vector<double>& speed)
 {
+  assert(m_SensorModel);
   m_SensorModel->getPlatformPositionAtLine(line, position, speed);
 }
 
 void PlatformPositionAdapter::GetPlatformPositionAtTime(
     ossimplugins::JSDDateTime time, std::vector<double>& position, std::vector<double>& speed)
 {
-       m_SensorModel->get_platformPosition()->getPlatformPositionAtTime(time, position, speed);
+  assert(m_SensorModel);
+  m_SensorModel->get_platformPosition()->getPlatformPositionAtTime(time, position, speed);
 }
 
 } // namespace otb
