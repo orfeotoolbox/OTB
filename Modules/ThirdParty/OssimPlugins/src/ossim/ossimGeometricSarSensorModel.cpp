@@ -25,8 +25,6 @@
 
 namespace ossimplugins
 {
-
-
    static const char PRODUCT_GEOREFERENCED_FLAG_KW[] = "product_georeferenced_flag";
    static const char OPTIMIZATION_FACTOR_X_KW[] = "optimization_factor_x";
    static const char OPTIMIZATION_FACTOR_Y_KW[] = "optimization_factor_y";
@@ -74,29 +72,10 @@ namespace ossimplugins
 
    ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
    {
-      if (_platformPosition != 0)
-      {
-         delete _platformPosition;
-         _platformPosition = 0;
-      }
-
-      if(_sensor != 0)
-      {
-         delete _sensor;
-         _sensor = 0;
-      }
-
-      if (_sarSensor != 0)
-      {
-         delete _sarSensor;
-         _sarSensor = 0;
-      }
-
-      if(_refPoint != 0)
-      {
-         delete _refPoint;
-         _refPoint = 0;
-      }
+      delete _platformPosition;
+      delete _sensor;
+      delete _sarSensor;
+      delete _refPoint;
    }
 
    double ossimGeometricSarSensorModel::getSlantRange(double col) const
@@ -138,7 +117,7 @@ namespace ossimplugins
       }
       double lon, lat;
       // const double CLUM        = 2.99792458e+8 ;
-   
+
       // optimization
       double col = image_point.x - (image_point.x * _optimizationFactorX + _optimizationBiasX) ;
       double line = image_point.y - (image_point.y * _optimizationFactorY + _optimizationBiasY) ;
@@ -155,7 +134,7 @@ namespace ossimplugins
       {
          slantRange = getSlantRange(col) ;
       }
-   
+
       int etatLoc = _sarSensor->ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
 
       if(traceDebug())
@@ -614,7 +593,7 @@ bool ossimGeometricSarSensorModel::createReplacementOCG()
    _replacementOcgModel = new ossimCoarseGridModel;
    _replacementOcgModel->setInterpolationError(0.1);
    _replacementOcgModel->setMinGridSpacing(50);
-   
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_NOTICE)<<"\nComputing coarse grid..."<<endl;
@@ -759,31 +738,19 @@ void ossimGeometricSarSensorModel::lineSampleToWorld(const ossimDpt& image_point
 
 void ossimGeometricSarSensorModel::set_platformPosition(PlatformPosition* platformPosition)
 {
-   if(_platformPosition != 0)
-   {
-      delete _platformPosition;
-      _platformPosition = 0;
-   }
+   delete _platformPosition;
    _platformPosition = platformPosition->Clone();
 }
 
 void ossimGeometricSarSensorModel::set_sensorParams(SensorParams* sensorParams)
 {
-   if(_sensor != 0)
-   {
-      delete _sensor;
-      _sensor = 0;
-   }
+   delete _sensor;
    _sensor = sensorParams->Clone();
 }
 
 void ossimGeometricSarSensorModel::set_refPoint(RefPoint* refPoint)
 {
-   if(_refPoint != 0)
-   {
-      delete _refPoint;
-      _refPoint = 0;
-   }
+   delete _refPoint;
    _refPoint = refPoint->Clone();
 }
 
