@@ -22,10 +22,11 @@
 #include "gdal_priv.h"
 
 #if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#pragma GCC diagnostic ignored "-Wshadow"
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-parameter"
+#  pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#  pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include "ossim/base/ossimKeywordlist.h"
 #include "ossim/base/ossimString.h"
 #include "ossim/ossimPluginProjectionFactory.h"
@@ -33,15 +34,8 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/projection/ossimRpcModel.h"
-#pragma GCC diagnostic pop
-#else
-#include "ossim/base/ossimKeywordlist.h"
-#include "ossim/base/ossimString.h"
-#include "ossim/ossimPluginProjectionFactory.h"
-#include "ossim/imaging/ossimImageHandlerRegistry.h"
-#include "ossim/ossimTileMapModel.h"
-#include "ossim/projection/ossimProjectionFactoryRegistry.h"
-#include "ossim/projection/ossimRpcModel.h"
+#if defined(__GNUC__) || defined(__clang__)
+#  pragma GCC diagnostic pop
 #endif
 
 #include "otbSensorModelAdapter.h"
