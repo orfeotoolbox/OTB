@@ -435,7 +435,9 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
 {
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
-   // typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
+#if 0
+   typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
+#endif
    typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarXSarSensorModel));
 //   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
