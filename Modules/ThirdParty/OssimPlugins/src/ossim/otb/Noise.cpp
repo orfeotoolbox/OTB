@@ -34,7 +34,7 @@ bool Noise::saveState(ossimKeywordlist& kwl, std::string const& prefix) const
    const std::string pfx = prefix + NOISE;
 
    std::string s = pfx + "." + NAME_OF_NOISE_POLARISATION_KW;
-   add(kwl, pfx, m_polarisation);
+   add(kwl, s, m_polarisation);
 
    s = pfx + "." + NUMBER_OF_NOISE_RECORDS_KW;
    add(kwl, s, m_numberOfNoiseRecords);
