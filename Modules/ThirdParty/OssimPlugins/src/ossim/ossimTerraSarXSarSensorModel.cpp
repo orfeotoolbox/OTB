@@ -259,10 +259,11 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::open";
-   traceDebug.setTraceFlag(true);
-   traceExec .setTraceFlag(true);
+   // traceDebug.setTraceFlag(true);
+   // traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
-   ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " try to open "<<file<<"\n";
+   if (traceDebug())
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " try to open "<<file<<"\n";
 
    try
    {
@@ -334,7 +335,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
    add(kwl, prefix, ossimKeywordNames::TYPE_KW, "ossimTerraSarXSarSensorModel");
 #if 0
    // Don't add support_data.calibration_lookup_flag: its existence is
-   // interpreted as true on TB side... :( 
+   // interpreted as true on TB side... :(
    add(kwl, "support_data.calibration_lookup_flag", "false");
 #endif
 
