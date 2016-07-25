@@ -119,8 +119,8 @@ macro(macro_create_targets_for_package pkg)
   # creation of package is different from windows and unix like
   if(WIN32)
     add_custom_target(PACKAGE-${pkg}
-      COMMAND ${ZIP_EXECUTABLE} "a"
-      "-ry" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}/*"
+      COMMAND ${ZIP_EXECUTABLE} "a" "-r" "-y"
+      "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}/*"
       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
       DEPENDS PACKAGE-${pkg}-build
       COMMENT "Creating ${CMAKE_BINARY_DIR}/${archive_name}.zip"
