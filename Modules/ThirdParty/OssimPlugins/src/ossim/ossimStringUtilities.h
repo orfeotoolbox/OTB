@@ -559,6 +559,8 @@ namespace details {
      *
      * \return The string as an integer.
      * \throw std::runtime_error is the number cannot be converted.
+     * \todo Use a failure_policy in order to factorize code flavour (returns
+     * default value or throw an exception)
      */
     template <typename Int> inline Int to_integer(string_view const& v, string_view const& context)
     {
@@ -571,7 +573,6 @@ namespace details {
         bool is_negative = false;
         Int res = 0;
         if (it != end) {
-            // TODO: reject '-' with unsigned types
             switch (*it) {
                 case '-': is_negative = true; /*[[fallthrough]]*/
                 case '+': ++it;
@@ -612,7 +613,6 @@ namespace details {
         bool is_negative = false;
         Int res = 0;
         if (it != end) {
-            // TODO: reject '-' with unsigned types
             switch (*it) {
                 case '-': is_negative = true; /*[[fallthrough]]*/
                 case '+': ++it;
@@ -626,6 +626,74 @@ namespace details {
             }
         }
         return is_negative ? -res : res;
+    }
+
+    /**
+     * \brief Internal generic string to unsigned integer conversion (w/ exception).
+     * Tries to convert the input string into a integer type. If the
+     * string doesn't represent an integer value, an exception is thrown.
+     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
+     * co to restrict the code to integral types)
+     * \param[in] v  input string
+     * \param[in] context  context message for the exception thrown
+     *
+     * \return The string as an integer.
+     * \throw std::runtime_error is the number cannot be converted.
+     */
+    template <typename Int> inline Int to_uinteger(string_view const& v, string_view const& context)
+    {
+        // string_view::data() isn't compatible with strtol => we emulate it
+
+        // TODO: handle HEX, OCT, BIN, locales?
+        string_view::const_iterator it  = v.begin();
+        string_view::const_iterator end = v.end();
+
+        Int res = 0;
+        if (it != end) {
+            for ( ; it != end ; ++it) {
+                // only support arabic digits
+                if (!std::isdigit(*it)) {
+                    throw std::runtime_error("Cannot decode "+v+" as integer while " + context);
+                }
+                res  = 10 * res + *it - '0';
+            }
+        }
+        return res;
+    }
+
+    /**
+     * \brief Internal generic string to unsigned integer conversion (w/o exception).
+     * Tries to convert the input string into a integer type. If the
+     * string doesn't represent an integer value, the default value will be
+     * returned.
+     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
+     * co to restrict the code to integral types)
+     * \param[in] v  input string
+     * \param[in] def  default value returned in the conversion isn't possible
+     *
+     * \return The string as an integer.
+     * \return `def` if the string cannot be converted to an integer value.
+     * \throw None
+     */
+    template <typename Int> inline Int to_uinteger(string_view const& v, Int const def)
+    {
+        // string_view::data() isn't compatible with strtol => we emulate it
+
+        // TODO: handle HEX, OCT, BIN, locales?
+        string_view::const_iterator it  = v.begin();
+        string_view::const_iterator end = v.end();
+
+        Int res = 0;
+        if (it != end) {
+            for ( ; it != end ; ++it) {
+                // only support arabic digits
+                if (!std::isdigit(*it)) {
+                   return def;
+                }
+                res  = 10 * res + *it - '0';
+            }
+        }
+        return res;
     }
 
     /**
@@ -708,17 +776,17 @@ namespace details {
 // T() will still work.
 
 OSSIM_GENERATE_CONV(to_integer, char);
-OSSIM_GENERATE_CONV(to_integer, unsigned char);
+OSSIM_GENERATE_CONV(to_uinteger, unsigned char);
 OSSIM_GENERATE_CONV(to_integer, signed char);
-OSSIM_GENERATE_CONV(to_integer, unsigned short);
+OSSIM_GENERATE_CONV(to_uinteger, unsigned short);
 OSSIM_GENERATE_CONV(to_integer, short);
 OSSIM_GENERATE_CONV(to_integer, int);
-OSSIM_GENERATE_CONV(to_integer, unsigned int);
+OSSIM_GENERATE_CONV(to_uinteger, unsigned int);
 OSSIM_GENERATE_CONV(to_integer, long);
-OSSIM_GENERATE_CONV(to_integer, unsigned long);
+OSSIM_GENERATE_CONV(to_uinteger, unsigned long);
 #if defined(HAS_LONG_LONG) // TODO: add this configure option
 OSSIM_GENERATE_CONV(to_integer, long long);
-OSSIM_GENERATE_CONV(to_integer, unsigned long long);
+OSSIM_GENERATE_CONV(to_uinteger, unsigned long long);
 #endif
 OSSIM_GENERATE_CONV(to_float,   float);
 OSSIM_GENERATE_CONV(to_float,   double);
