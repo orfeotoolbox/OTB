@@ -13,6 +13,22 @@
 
 #include "ossimPluginConstants.h"
 
+#ifdef nan
+#  undef nan
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-parameter"
+// #  pragma GCC diagnostic ignored "-Woverloaded-virtual"
+// #  pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#include <ossim/base/ossimCommon.h> // nan
+#include <ossim/base/ossimString.h>
+#if defined(__GNUC__) || defined(__clang__)
+#  pragma GCC diagnostic pop
+#endif
+
 #include <algorithm>
 #include <iterator>
 #include <cassert>
@@ -25,13 +41,6 @@
 #include <cctype>
 #include <cstdarg>
 #include <string>
-#include <ossim/base/ossimString.h>
-
-#ifdef nan
-#undef nan
-#endif
-
-#include <ossim/base/ossimCommon.h> // nan
 
 namespace ossimplugins {
 
