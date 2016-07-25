@@ -202,7 +202,8 @@ BOOST_AUTO_TEST_CASE(to_int) {
    BOOST_CHECK_THROW(to<int>("0x12", "UT"), std::runtime_error);
 
    BOOST_CHECK_EQUAL(to<unsigned int>("12", "UT"), 12u);
-   BOOST_CHECK_EQUAL(to<unsigned int>("-1", "UT"), UINT_MAX);
+   BOOST_CHECK_EQUAL(to<int>("-1", "UT"), -1);
+   BOOST_CHECK_THROW(to<unsigned int>("-1", "UT"), std::runtime_error);
 }
 BOOST_AUTO_TEST_CASE(to_double) {
    BOOST_CHECK_CLOSE(to<double>("12", "UT"),       12,       0.00001);
