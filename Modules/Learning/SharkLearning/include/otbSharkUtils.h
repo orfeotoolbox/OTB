@@ -26,7 +26,7 @@ namespace Shark
 {
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<shark::RealVector> & output)
 {
-  assert(listSample != NULL);
+  assert(listSample != ITK_NULLPTR);
   // Sample index
   unsigned int sampleIdx = 0;
     
@@ -61,7 +61,7 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<unsigned int> & output)
 {
-  assert(listSample != NULL);
+  assert(listSample != ITK_NULLPTR);
   // Sample index
   unsigned int sampleIdx = 0;
     
