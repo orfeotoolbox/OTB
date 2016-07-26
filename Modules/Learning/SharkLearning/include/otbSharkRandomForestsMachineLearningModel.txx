@@ -119,11 +119,15 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::PredictAll()
 {
+  // the samples to be predicted have to be set
+  assert(this->GetInputListSample() != ITK_NULLPTR);
   std::vector<shark::RealVector> features;
   Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
   shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
   if(this->m_ConfidenceBatchMode)
     {
+    //the confidence samples have to exist  
+    assert(this->GetConfidenceListSample() != ITK_NULLPTR);
     auto probas = m_RFModel(inputSamples);
     ConfidenceListSampleType * confidences = this->GetConfidenceListSample();
     confidences->Clear();
