@@ -22,6 +22,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+#include "OTBOSSIMAdaptersExport.h"
+
 namespace otb
 {
 
