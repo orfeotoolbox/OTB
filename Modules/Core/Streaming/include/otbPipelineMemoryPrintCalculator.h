@@ -26,6 +26,8 @@
 #endif
 #include <set>
 
+#include "OTBStreamingExport.h"
+
 namespace otb
 {
 /** \class PipelineMemoryPrintCalculator
@@ -64,7 +66,7 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-class ITK_EXPORT PipelineMemoryPrintCalculator :
+class OTBStreaming_EXPORT PipelineMemoryPrintCalculator :
   public itk::Object
 {
 public:

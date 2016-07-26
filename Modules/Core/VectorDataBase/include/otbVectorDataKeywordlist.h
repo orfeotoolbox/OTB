@@ -46,8 +46,9 @@ namespace otb
  *
  * \ingroup OTBVectorDataBase
  */
+#include "OTBVectorDataBaseExport.h"
 
-class VectorDataKeywordlist
+class OTBVectorDataBase_EXPORT VectorDataKeywordlist
 {
 public:
   /** Smart pointer typedef support. */
@@ -162,7 +163,7 @@ private:
   FieldListType m_FieldList;
 
 };
-
+OTBVectorDataBase_EXPORT
 extern std::ostream & operator <<(std::ostream& os, const VectorDataKeywordlist& kwl);
 
 }
