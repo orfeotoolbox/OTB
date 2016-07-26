@@ -25,6 +25,8 @@ class OGRFeature;
 #include "ogr_core.h" // OGR enums
 #include "itkIndent.h"
 
+#include "OTBGdalAdaptersExport.h"
+
 namespace otb { namespace ogr {
 
 /*===========================================================================*/
@@ -41,7 +43,7 @@ namespace otb { namespace ogr {
  *
  * \ingroup OTBGdalAdapters
  */
-class FieldDefn
+class OTBGdalAdapters_EXPORT FieldDefn
   {
 public:
   FieldDefn(OGRFieldDefn& definition) : m_Definition(&definition){ }
@@ -65,6 +67,7 @@ bool operator==(FieldDefn const& lhs, FieldDefn const& rhs)
     &&   lhs.GetType() == rhs.GetType();
   }
 
+OTBGdalAdapters_EXPORT
 std::ostream & operator<<(std::ostream & os, FieldDefn const& defn);
 
 /*===========================================================================*/
@@ -91,7 +94,7 @@ class Feature;
  *
  * \ingroup OTBGdalAdapters
  */
-class Field
+class OTBGdalAdapters_EXPORT Field
 {
 public:
   /**
