@@ -31,6 +31,7 @@
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -44,7 +45,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT Application: public itk::Object
+class OTBApplicationEngine_EXPORT Application: public itk::Object
 {
 public:
   /** Standard class typedefs. */

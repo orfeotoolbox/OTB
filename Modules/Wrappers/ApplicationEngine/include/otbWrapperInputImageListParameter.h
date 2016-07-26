@@ -33,7 +33,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT InputImageListParameter : public Parameter
+class OTBApplicationEngine_EXPORT InputImageListParameter : public Parameter
 {
 public:
   /** Standard class typedef */

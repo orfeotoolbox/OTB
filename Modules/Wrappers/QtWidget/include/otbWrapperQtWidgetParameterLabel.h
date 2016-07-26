@@ -23,6 +23,8 @@
 #include "otbWrapperParameter.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBQtWidgetExport.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -33,7 +35,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetParameterLabel : public QWidget
+class OTBQtWidget_EXPORT QtWidgetParameterLabel : public QWidget
 {
   Q_OBJECT
 public:
