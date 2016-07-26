@@ -4,6 +4,7 @@ refletance image conversion. atmospheric correction for TOA (top of atmosphere) 
 into account the neighborhood contribution.")
 
 otb_module(OTBOpticalCalibration
+ENABLE_SHARED
   DEPENDS
     OTB6S
     OTBBoostAdapters
