@@ -105,7 +105,11 @@ SarImageMetadataInterface
 {
   const ImageKeywordlist & imageKeywordlist = this->GetImageKeywordlist();
   /* checking if the key exist is more than enough */
+#if 1
+  return imageKeywordlist.GetMetadataByKeyAs("support_data.calibration_lookup_flag", false);
+#else
   return imageKeywordlist.HasKey("support_data.calibration_lookup_flag");
+#endif
 }
 
 SarImageMetadataInterface::RealType

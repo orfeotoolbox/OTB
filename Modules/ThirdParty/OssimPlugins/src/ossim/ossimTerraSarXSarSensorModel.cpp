@@ -333,11 +333,9 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
 
    std::string const prefix = prefix_ ? prefix_ : "";
    add(kwl, prefix, ossimKeywordNames::TYPE_KW, "ossimTerraSarXSarSensorModel");
-#if 0
-   // Don't add support_data.calibration_lookup_flag: its existence is
-   // interpreted as true on TB side... :(
+   // support_data.calibration_lookup_flag is not mandatory on OTB side, but
+   // let's be explicit.
    add(kwl, "support_data.calibration_lookup_flag", "false");
-#endif
 
    // polLayers + calfactors
    for (unsigned int i=0, N=m_polLayerList.size(); i!=N ; ++i)
