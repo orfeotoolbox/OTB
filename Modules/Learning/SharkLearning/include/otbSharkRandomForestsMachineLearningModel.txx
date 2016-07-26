@@ -158,6 +158,10 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & itkNotUsed(name))
 {
   std::ofstream ofs(filename.c_str());
+  if(!ofs)
+    {
+    itkExceptionMacro(<< "Error opening " << filename.c_str() );
+    }
   boost::archive::polymorphic_text_oarchive oa(ofs);
   m_RFModel.save(oa,0);
 }

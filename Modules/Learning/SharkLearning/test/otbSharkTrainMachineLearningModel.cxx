@@ -46,8 +46,7 @@ typedef otb::ConfusionMatrixCalculator<TargetListSampleType, TargetListSampleTyp
 
 bool SharkReadDataFile(const std::string & infname, InputListSampleType * samples, TargetListSampleType * labels)
 {
-  std::ifstream ifs;
-  ifs.open(infname.c_str());
+  std::ifstream ifs(infname.c_str());
 
   if(!ifs)
     {
@@ -113,9 +112,7 @@ bool SharkReadDataFile(const std::string & infname, InputListSampleType * sample
 
 bool SharkReadDataRegressionFile(const std::string & infname, InputListSampleRegressionType * samples, TargetListSampleRegressionType * labels)
 {
-  std::ifstream ifs;
-  ifs.open(infname.c_str());
-
+  std::ifstream ifs(infname.c_str());
   if(!ifs)
     {
     std::cout<<"Could not read file "<<infname<<std::endl;

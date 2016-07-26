@@ -549,8 +549,12 @@ void DoExecute()
         }
       }
 
-    std::ofstream outFile;
-    outFile.open(this->GetParameterString("io.confmatout").c_str());
+    std::ofstream outFile{this->GetParameterString("io.confmatout").c_str()};
+    if(!outFile)
+      {
+      itkExceptionMacro(<< "Error opening " 
+                        << this->GetParameterString("io.confmatout").c_str());
+      }
     outFile << std::fixed;
     outFile.precision(10);
 
