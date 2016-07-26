@@ -200,7 +200,7 @@ macro(check_compiler_platform_flags)
       else()
         set(OTB_LIBRARY_BUILD_TYPE "STATIC")
       endif()
-      set(BUILD_SHARED_LIBS OFF)
+      #set(BUILD_SHARED_LIBS OFF)
     endif()
   endif()
   #-----------------------------------------------------------------------------
