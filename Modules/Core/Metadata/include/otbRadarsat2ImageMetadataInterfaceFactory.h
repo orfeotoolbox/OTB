@@ -19,6 +19,7 @@
 #define otbRadarsat2ImageMetadataInterfaceFactory_h
 
 #include "itkObjectFactoryBase.h"
+#include "OTBMetadataExport.h"
 
 namespace otb
 {
@@ -27,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT Radarsat2ImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT Radarsat2ImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

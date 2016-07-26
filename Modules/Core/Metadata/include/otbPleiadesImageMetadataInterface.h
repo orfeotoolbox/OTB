@@ -29,7 +29,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT PleiadesImageMetadataInterface : public OpticalImageMetadataInterface
+class OTBMetadata_EXPORT PleiadesImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 
