@@ -58,7 +58,7 @@ CURL_LIB = $(CURL_DIR)\lib\libcurl.lib wsock32.lib wldap32.lib winmm.lib
 # Uncomment for GEOS support (GEOS >= 3.1.0 required)
 GEOS_DIR=@CMAKE_WIN_INSTALL_PREFIX@
 GEOS_CFLAGS = -I$(GEOS_DIR)\include -I$(GEOS_DIR)\include\geos -DHAVE_GEOS
-GEOS_LIB     = $(GEOS_DIR)\lib\geos.lib $(GEOS_DIR)\lib\geos_c.lib
+GEOS_LIB     = $(GEOS_DIR)\lib\geos_i.lib $(GEOS_DIR)\lib\geos_c_i.lib
 
 # Uncomment for OpenJpeg support
 HAVE_OPENJPEG = YES
