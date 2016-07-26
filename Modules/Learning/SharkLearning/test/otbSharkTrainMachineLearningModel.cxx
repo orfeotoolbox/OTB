@@ -57,10 +57,9 @@ bool SharkReadDataFile(const std::string & infname, InputListSampleType * sample
 
   unsigned int nbfeatures = 0;
 
-  while (!ifs.eof())
+  std::string line;
+  while (std::getline(ifs, line))
     {
-    std::string line;
-    std::getline(ifs, line);
     boost::algorithm::trim(line);
 
     if(nbfeatures == 0)
