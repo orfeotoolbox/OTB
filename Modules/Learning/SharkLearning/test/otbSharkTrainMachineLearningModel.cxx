@@ -77,7 +77,7 @@ bool SharkReadDataFile(const std::string & infname, InputListSampleType * sample
 
       // Parse label
       TargetSampleType label;
-      label[0] = atoi(line.substr(0, pos).c_str());
+      label[0] = std::stoi(line.substr(0, pos).c_str());
 
       bool endOfLine = false;
       unsigned int id = 0;
@@ -95,7 +95,7 @@ bool SharkReadDataFile(const std::string & infname, InputListSampleType * sample
           {
           std::string feature = line.substr(pos,nextpos-pos);
           std::string::size_type semicolonpos = feature.find_first_of(":");
-          id = atoi(feature.substr(0,semicolonpos).c_str());
+          id = std::stoi(feature.substr(0,semicolonpos).c_str());
           sample[id - 1] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
           pos = nextpos;
           }
@@ -163,7 +163,7 @@ bool SharkReadDataRegressionFile(const std::string & infname, InputListSampleReg
           {
           std::string feature = line.substr(pos,nextpos-pos);
           std::string::size_type semicolonpos = feature.find_first_of(":");
-          id = atoi(feature.substr(0,semicolonpos).c_str());
+          id = std::stoi(feature.substr(0,semicolonpos).c_str());
           sample[id - 1] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
           pos = nextpos;
           }
