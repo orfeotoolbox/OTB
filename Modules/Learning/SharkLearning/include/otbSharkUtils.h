@@ -26,11 +26,12 @@ namespace Shark
 {
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<shark::RealVector> & output)
 {
+  assert(listSample != NULL);
   // Sample index
   unsigned int sampleIdx = 0;
     
   //Check for valid listSample
-  if(listSample != NULL && listSample->Size()>0)
+  if(listSample->Size()>0)
     {
     // Retrieve samples count
     output.clear();
@@ -60,11 +61,12 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<unsigned int> & output)
 {
+  assert(listSample != NULL);
   // Sample index
   unsigned int sampleIdx = 0;
     
   //Check for valid listSample
-  if(listSample != NULL && listSample->Size()>0)
+  if(listSample->Size()>0)
     {
     output.clear();
     // Build an iterator
