@@ -107,15 +107,34 @@ public:
     return m_Keywordlist.size();
   }
 
-  /** Get the Data object descriptor corresponding to the given key */
+  /** Get the Data object descriptor corresponding to the given key.
+   * \throw itk::Exception if the `key` is not found
+   */
   const std::string& GetMetadataByKey(const std::string& key) const;
 
-  /** Get the Data object descriptor corresponding to the given key. */
+  /** Get the Data object descriptor corresponding to the given key in the type
+   * specified (/w exceptions).
+   * \return the value associated to the `key` in the `T` type specified.
+   * \throw itk::Exception if the `key` is not found
+   * \throw std::runtime_error if the associated value cannot be converted
+   */
   template <typename T>
   T GetMetadataByKeyAs(const std::string& key) const
     {
     std::string const& v = GetMetadataByKey(key);
     return ossimplugins::to<T>(v, " extracting " + key + " from KWL");
+    }
+  /** Get the Data object descriptor corresponding to the given key in the type
+   * specified (w/ default value).
+   * \return the value associated to the `key` in the `T` type specified.
+   * \return `def` if the `key` is not found, or if the associated value cannot
+   * be deserialized to a value of type `T`
+   */
+  template <typename T>
+  T GetMetadataByKeyAs(const std::string& key, T const& def) const
+    {
+    const KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
+    return (it == m_Keywordlist.end()) ? def : ossimplugins::to_with_default<T>(it->second, def);
     }
 
   /** return true if the key is in the dictionary */
