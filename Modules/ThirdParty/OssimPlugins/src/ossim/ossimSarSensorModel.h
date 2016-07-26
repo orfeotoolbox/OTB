@@ -391,7 +391,7 @@ private:
    // Disable a warning, and disable inherited buggy assignment (buggy because
    // value semantics are incompatible with public inheritance thanks to
    // slicing)
-   using ossimSensorModel::operator=;
+   // using ossimSensorModel::operator=;
    using ossimOptimizableProjection::operator=;
 };
 
