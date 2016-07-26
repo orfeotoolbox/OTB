@@ -44,6 +44,17 @@
 
 namespace ossimplugins {
 
+namespace details {
+   /** Predicate to test whether two characters are equals, independently of
+    * their case.
+    */
+   struct i_equal {
+      bool operator()(char lhs, char rhs) const {
+         return std::tolower(lhs) == std::tolower(rhs);
+      }
+   };
+}
+
 /**\name String view + functions */
 //@{
 /** String view class.
@@ -214,7 +225,7 @@ public:
    /** Indexed access.
     * @pre `p < size(),` checked with an assertion.
     */
-   const_reference operator[](size_type p) {
+   const_reference operator[](size_type p) const {
       assert(p < size());
       return *(m_first+p);
    }
@@ -303,6 +314,14 @@ bool ends_with(string_view const& haystack, string_view const& needle)
       && std::equal(needle.rbegin(), needle.rend(), haystack.rbegin());
 }
 
+/** Tels whether two strings are equal, independently of their case. */
+inline
+bool iequal(string_view const& lhs, string_view const& rhs)
+{
+   return lhs.size() == rhs.size()
+      && std::equal(lhs.begin(), lhs.end(), rhs.begin(), details::i_equal());
+}
+
 /** Searches needle string within the haystack string. */
 inline
 string_view find(string_view const& haystack, string_view const& needle)
@@ -341,6 +360,18 @@ bool contains(string_view const& haystack, string_view const& needle)
 {
    return ! is_same_view(find(haystack, needle), string_view::null());
 }
+
+template <std::size_t N> inline string_view to_lower_to(string_view const& v, char (&dest)[N])
+{
+   std::size_t i=0;
+   std::size_t n = std::min(N, v.size());
+   for (; i!=n && v[i] != '\0' ; ++i)
+   {
+      dest[i] = std::tolower(v[i]);
+   }
+   return string_view(&dest[0], i);
+}
+
 //@}
 
 /**\name Splitting functions */
@@ -492,6 +523,238 @@ part_range<splitter_on_delim> split_on(String const& str, char delim) {
 
 /**\name string to number conversion */
 //@{
+
+namespace details
+{
+   template <typename T> struct name {
+      static char const* value() { return typeid(T).name(); }
+   };
+
+   namespace policy
+   {
+      template <typename T> struct throw_on_error {
+         throw_on_error(string_view const& context)
+            : m_context(context)
+            {}
+         T const& on_error(string_view const& v) const
+         {
+            throw std::runtime_error("Cannot decode "+v+" as "+name<T>::value()+" while " + m_context);
+         }
+      private:
+         string_view const m_context;
+      };
+      template <typename T> struct default_on_error {
+         default_on_error(T const& def) : m_default(def) {}
+         T const& on_error(string_view const&) const
+         {
+            return m_default;
+         }
+      private:
+         T const& m_default;
+      };
+   }// namespace policy
+
+    /**
+     * \brief Internal generic string to integer conversion.
+     * Tries to convert the input string into a integer type. If the
+     * string doesn't represent an integer value, `false` is returned.
+     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
+     * co to restrict the code to integral types)
+     * \param[in] v  input string
+     * \param[out] result As its name suggest
+     * \return Whether the operation is a success
+     * \throw None
+     * \sa `to<>()`
+     * \sa `to_with_default<>()`
+     * \sa `to_uinteger()`
+     * \sa `to_float()`
+     * \sa `to_bool()`
+     */
+    template <typename Int> inline bool to_integer(string_view const& v, Int & result)
+    {
+       // string_view::data() isn't compatible with strtol => we emulate it
+
+       // TODO: handle HEX, OCT, BIN, locales?
+       string_view::const_iterator it  = v.begin();
+       string_view::const_iterator end = v.end();
+
+       bool is_negative = false;
+       Int res = 0;
+       if (it != end) {
+          switch (*it) {
+             case '-': is_negative = true; /*[[fallthrough]]*/
+             case '+': ++it;
+          }
+          for ( ; it != end ; ++it) {
+             // only support arabic digits
+             if (!std::isdigit(*it)) {
+                return false;
+             }
+             res  = 10 * res + *it - '0';
+          }
+       }
+       result = is_negative ? -res : res;
+       return true;
+    }
+
+    /**
+     * \brief Internal generic string to unsigned integer conversion.
+     * Tries to convert the input string into a integer type. If the
+     * string doesn't represent an integer value, `false` is returned.
+     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
+     * co to restrict the code to integral types)
+     * \param[in] v  input string
+     * \param[out] result As its name suggest
+     * \return Whether the operation is a success
+     * \throw None
+     * \sa `to<>()`
+     * \sa `to_with_default<>()`
+     * \sa `to_integer()`
+     * \sa `to_float()`
+     * \sa `to_bool()`
+     */
+    template <typename Int> inline bool to_uinteger(string_view const& v, Int & result)
+    {
+       // string_view::data() isn't compatible with strtol => we emulate it
+
+       // TODO: handle HEX, OCT, BIN, locales?
+       string_view::const_iterator it  = v.begin();
+       string_view::const_iterator end = v.end();
+
+       Int res = 0;
+       if (it != end) {
+          for ( ; it != end ; ++it) {
+             // only support arabic digits
+             if (!std::isdigit(*it)) {
+                return false;
+             }
+             res  = 10 * res + *it - '0';
+          }
+       }
+       result = res;
+       return true;
+    }
+
+    /**
+     * \brief Internal generic string to float conversion.
+     * Tries to convert the input string into a floating point type. If the
+     * string doesn't represent a floating point value, `false` is returned.
+     * \tparam FloatType floating point type (`float`, `double`, `long double`)
+     * \param[in] v  input string
+     * \param[out] result As its name suggest. The special `"nan"` string is
+     * converted to `ossim::nan()`.
+     * \return Whether the operation is a success
+     * \throw None
+     * \sa `to<>()`
+     * \sa `to_with_default<>()`
+     * \sa `to_integer()`
+     * \sa `to_bool()`
+     */
+    template <typename FloatType> inline bool to_float(string_view const& v, FloatType & result)
+    {
+       // std::cout << "to_float<" << name<FloatType>::value() << ">(" << v << ")\n";
+       if (contains(v, "nan")) {
+          result = ::ossim::nan();
+          return true;
+       }
+       FloatType res = FloatType(); // 0-construction
+       if (!v.empty()) {
+          std::stringstream ss;
+          if (! (ss << v && (ss >> res >> std::ws).eof()))  {
+             return false;
+          }
+       }
+       result = res;
+       return true;
+    }
+
+    /**
+     * \brief Internal generic string to bool conversion.
+     * Tries to convert the input string into a boolean value. If the
+     * string doesn't represent a boolean value, `false` is returned.
+     * \tparam T expected to be bool, but ignored actually.
+     * \param[in] v  input string
+     * \param[out] result As its name suggest.
+     * \return Whether the operation is a success
+     * \throw None
+     * \sa `to<>()`
+     * \sa `to_with_default<>()`
+     * \sa `to_integer()`
+     * \sa `to_float()`
+     * \internal This function is template because of the `OSSIM_GENERATE_CONV` macro.
+     */
+    template <typename T> inline bool to_bool(string_view const& v, bool & result)
+    {
+       char b[10]; // more than enough for "1", "true", "on", "yes", "0", "false", ...
+       const string_view vlow = to_lower_to(v, b);
+       if (v == "1" || vlow == "true" || vlow == "on" || vlow == "yes")
+       {
+          result = true;
+          return true;
+       } else if (v == "0" || vlow == "false" || vlow == "off" || vlow == "no")
+       {
+          result = false;
+          return true;
+       } else
+       {
+          return false;
+       }
+    }
+
+    inline unsigned int decode_uint(string_view & v)
+    {
+        unsigned int res = 0;
+        for ( ; !v.empty() ; v.remove_prefix(1))
+        {
+            // only support arabic digits
+            if (!std::isdigit(v.front()))
+                break;
+            res  = 10 * res + v.front() - '0';
+        }
+        return res;
+    }
+
+   template <typename T> struct converter
+   {
+      static bool convert(string_view const& v, T & res)
+      {
+         // std::cout << "default converter<" << name<T>::value() << "> for " << v << "\n";
+         std::stringstream ss;
+         return (ss << v && (ss >> res >> std::ws).eof());
+      }
+   };
+#define OSSIM_GENERATE_CONV(internal_to, type) \
+   template <> struct name<type> { \
+      static char const* value() { return #type; } \
+   }; \
+   template <> struct converter<type> {\
+      static bool convert(string_view const& v, type & res) \
+      { return internal_to<type>(v, res); } \
+   };
+   // Note: specialization doesn't support default arguments, but default argument
+   // T() will still work.
+
+   OSSIM_GENERATE_CONV(to_bool,     bool);
+   OSSIM_GENERATE_CONV(to_integer,  char);
+   OSSIM_GENERATE_CONV(to_uinteger, unsigned char);
+   OSSIM_GENERATE_CONV(to_integer,  signed char);
+   OSSIM_GENERATE_CONV(to_uinteger, unsigned short);
+   OSSIM_GENERATE_CONV(to_integer,  short);
+   OSSIM_GENERATE_CONV(to_integer,  int);
+   OSSIM_GENERATE_CONV(to_uinteger, unsigned int);
+   OSSIM_GENERATE_CONV(to_integer,  long);
+   OSSIM_GENERATE_CONV(to_uinteger, unsigned long);
+#if defined(HAS_LONG_LONG) // TODO: add this configure option
+   OSSIM_GENERATE_CONV(to_integer,  long long);
+   OSSIM_GENERATE_CONV(to_uinteger, unsigned long long);
+#endif
+   OSSIM_GENERATE_CONV(to_float,    float);
+   OSSIM_GENERATE_CONV(to_float,    double);
+   OSSIM_GENERATE_CONV(to_float,    long double);
+#undef OSSIM_GENERATE_CONV
+
+} // ossimplugins::details namespace
+
 /**
  * \brief Generic string to whatever conversion -- failure means exception.
  * Tries to decode a value from a string.
@@ -516,13 +779,14 @@ template <typename T>
 inline
 T to(string_view const& v, string_view const& context)
 {
-   T res ;
-   std::stringstream ss;
-   if (ss << v && (ss >> res >> std::ws).eof())  {
+   using namespace details;
+   // std::cout << "to<" << name<T>::value() << ">(" << v << ")\n";
+   T res;
+   if (converter<T>::convert(v, res))
+   {
       return res;
    }
-   throw std::runtime_error("Cannot decode "+v+" as "+
-         typeid(T).name() + " while " + context);
+   return policy::throw_on_error<T>(context).on_error(v);
 }
 
 /**
@@ -548,266 +812,27 @@ template <typename T>
 inline
 T to_with_default(string_view const& v, T const& def = T())
 {
-   T res = def;
-   std::stringstream ss;
-   if (ss << v && (ss >> res >> std::ws).eof())  {
+   using namespace details;
+   // std::cout << "to_with_default<" << name<T>::value() << ">(" << v << ")\n";
+   T res;
+   if (converter<T>::convert(v, res))
+   {
       return res;
    }
-   return def;
+   return policy::default_on_error<T>(def).on_error(v);
 }
-
-namespace details {
-    /**
-     * \brief Internal generic string to integer conversion (w/ exception).
-     * Tries to convert the input string into a integer type. If the
-     * string doesn't represent an integer value, an exception is thrown.
-     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
-     * co to restrict the code to integral types)
-     * \param[in] v  input string
-     * \param[in] context  context message for the exception thrown
-     *
-     * \return The string as an integer.
-     * \throw std::runtime_error is the number cannot be converted.
-     * \todo Use a failure_policy in order to factorize code flavour (returns
-     * default value or throw an exception)
-     */
-    template <typename Int> inline Int to_integer(string_view const& v, string_view const& context)
-    {
-        // string_view::data() isn't compatible with strtol => we emulate it
-
-        // TODO: handle HEX, OCT, BIN, locales?
-        string_view::const_iterator it  = v.begin();
-        string_view::const_iterator end = v.end();
-
-        bool is_negative = false;
-        Int res = 0;
-        if (it != end) {
-            switch (*it) {
-                case '-': is_negative = true; /*[[fallthrough]]*/
-                case '+': ++it;
-            }
-            for ( ; it != end ; ++it) {
-                // only support arabic digits
-                if (!std::isdigit(*it)) {
-                    throw std::runtime_error("Cannot decode "+v+" as integer while " + context);
-                }
-                res  = 10 * res + *it - '0';
-            }
-        }
-        return is_negative ? -res : res;
-    }
-
-    /**
-     * \brief Internal generic string to integer conversion (w/o exception).
-     * Tries to convert the input string into a integer type. If the
-     * string doesn't represent an integer value, the default value will be
-     * returned.
-     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
-     * co to restrict the code to integral types)
-     * \param[in] v  input string
-     * \param[in] def  default value returned in the conversion isn't possible
-     *
-     * \return The string as an integer.
-     * \return `def` if the string cannot be converted to an integer value.
-     * \throw None
-     */
-    template <typename Int> inline Int to_integer(string_view const& v, Int const def)
-    {
-        // string_view::data() isn't compatible with strtol => we emulate it
-
-        // TODO: handle HEX, OCT, BIN, locales?
-        string_view::const_iterator it  = v.begin();
-        string_view::const_iterator end = v.end();
-
-        bool is_negative = false;
-        Int res = 0;
-        if (it != end) {
-            switch (*it) {
-                case '-': is_negative = true; /*[[fallthrough]]*/
-                case '+': ++it;
-            }
-            for ( ; it != end ; ++it) {
-                // only support arabic digits
-                if (!std::isdigit(*it)) {
-                   return def;
-                }
-                res  = 10 * res + *it - '0';
-            }
-        }
-        return is_negative ? -res : res;
-    }
-
-    /**
-     * \brief Internal generic string to unsigned integer conversion (w/ exception).
-     * Tries to convert the input string into a integer type. If the
-     * string doesn't represent an integer value, an exception is thrown.
-     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
-     * co to restrict the code to integral types)
-     * \param[in] v  input string
-     * \param[in] context  context message for the exception thrown
-     *
-     * \return The string as an integer.
-     * \throw std::runtime_error is the number cannot be converted.
-     */
-    template <typename Int> inline Int to_uinteger(string_view const& v, string_view const& context)
-    {
-        // string_view::data() isn't compatible with strtol => we emulate it
-
-        // TODO: handle HEX, OCT, BIN, locales?
-        string_view::const_iterator it  = v.begin();
-        string_view::const_iterator end = v.end();
-
-        Int res = 0;
-        if (it != end) {
-            for ( ; it != end ; ++it) {
-                // only support arabic digits
-                if (!std::isdigit(*it)) {
-                    throw std::runtime_error("Cannot decode "+v+" as integer while " + context);
-                }
-                res  = 10 * res + *it - '0';
-            }
-        }
-        return res;
-    }
-
-    /**
-     * \brief Internal generic string to unsigned integer conversion (w/o exception).
-     * Tries to convert the input string into a integer type. If the
-     * string doesn't represent an integer value, the default value will be
-     * returned.
-     * \tparam Int Integral type (In a perfect world, we'd used `enable_if` &
-     * co to restrict the code to integral types)
-     * \param[in] v  input string
-     * \param[in] def  default value returned in the conversion isn't possible
-     *
-     * \return The string as an integer.
-     * \return `def` if the string cannot be converted to an integer value.
-     * \throw None
-     */
-    template <typename Int> inline Int to_uinteger(string_view const& v, Int const def)
-    {
-        // string_view::data() isn't compatible with strtol => we emulate it
-
-        // TODO: handle HEX, OCT, BIN, locales?
-        string_view::const_iterator it  = v.begin();
-        string_view::const_iterator end = v.end();
-
-        Int res = 0;
-        if (it != end) {
-            for ( ; it != end ; ++it) {
-                // only support arabic digits
-                if (!std::isdigit(*it)) {
-                   return def;
-                }
-                res  = 10 * res + *it - '0';
-            }
-        }
-        return res;
-    }
-
-    /**
-     * \brief Internal generic string to float conversion (w/ exception).
-     * Tries to convert the input string into a floating point type. If the
-     * string doesn't represent a floating point value, an exception is thrown.
-     * \tparam FloatType floating point type (`float`, `double`, `long double`)
-     * \param[in] v  input string
-     * \param[in] context  context message for the exception thrown
-     *
-     * \return The string as a float. The special `"nan"` string is converted to
-     * `ossim::nan()`.
-     * \throw std::runtime_error is the number cannot be converted.
-     */
-    template <typename FloatType> inline FloatType to_float(string_view const& v, string_view const& context)
-    {
-       if (contains(v, "nan")) {
-          return ::ossim::nan();
-       }
-       FloatType res = FloatType(); // 0-construction
-       if (!v.empty()) {
-          std::stringstream ss;
-          if (! (ss << v && (ss >> res >> std::ws).eof()))  {
-             throw std::runtime_error("Cannot decode "+v+" as float value while " + context);
-          }
-       }
-       return res;
-    }
-
-    /**
-     * \brief Internal generic string to float conversion (w/o exception).
-     * Tries to convert the input string into a floating point type. If the
-     * string doesn't represent a floating point value, the default value will
-     * be returned.
-     * \tparam FloatType floating point type (`float`, `double`, `long double`)
-     * \param[in] v  input string
-     * \param[in] def  default value returned in the conversion isn't possible
-     *
-     * \return The string as a float. The special `"nan"` string is converted
-     * to `ossim::nan()`.
-     * \return `def` if the string cannot be converted to a floating point
-     * value.
-     * \throw None
-     */
-    template <typename FloatType> inline FloatType to_float(string_view const& v, FloatType const def)
-    {
-       if (contains(v, "nan")) {
-          return ::ossim::nan();
-       }
-       FloatType res = FloatType(); // 0-construction
-       if (!v.empty()) {
-          std::stringstream ss;
-          if (! (ss << v && (ss >> res >> std::ws).eof()))  {
-             return def;
-          }
-       }
-       return res;
-    }
-
-    inline unsigned int decode_uint(string_view & v)
-    {
-        unsigned int res = 0;
-        for ( ; !v.empty() ; v.remove_prefix(1))
-        {
-            // only support arabic digits
-            if (!std::isdigit(v.front()))
-                break;
-            res  = 10 * res + v.front() - '0';
-        }
-        return res;
-    }
-} // ossimplugins::details namespace
-
-#define OSSIM_GENERATE_CONV(internal_to, type) \
-   template <> inline type to<type>(string_view const& v, string_view const& context) \
-   { return details::internal_to<type>(v, context); } \
-   template <> inline type to_with_default<type>(string_view const& v, type const& def) \
-   { return details::internal_to<type>(v, def); }
-// Note: specialization doesn't support default arguments, but default argument
-// T() will still work.
-
-OSSIM_GENERATE_CONV(to_integer, char);
-OSSIM_GENERATE_CONV(to_uinteger, unsigned char);
-OSSIM_GENERATE_CONV(to_integer, signed char);
-OSSIM_GENERATE_CONV(to_uinteger, unsigned short);
-OSSIM_GENERATE_CONV(to_integer, short);
-OSSIM_GENERATE_CONV(to_integer, int);
-OSSIM_GENERATE_CONV(to_uinteger, unsigned int);
-OSSIM_GENERATE_CONV(to_integer, long);
-OSSIM_GENERATE_CONV(to_uinteger, unsigned long);
-#if defined(HAS_LONG_LONG) // TODO: add this configure option
-OSSIM_GENERATE_CONV(to_integer, long long);
-OSSIM_GENERATE_CONV(to_uinteger, unsigned long long);
-#endif
-OSSIM_GENERATE_CONV(to_float,   float);
-OSSIM_GENERATE_CONV(to_float,   double);
-OSSIM_GENERATE_CONV(to_float,   long double);
-#undef OSSIM_GENERATE_CONV
 
 template <> inline std::string to<std::string>(string_view const& v, string_view const& /*context*/)
 { return std::string(v.begin(), v.end()); }
 
-template <typename T> inline T const& to(T const& v, string_view const& /*context*/) { return v; }
-
-template <typename T> inline T const& to_with_default(T const& v, T const& /* default*/) { return v; }
+// Overload for fast conversion non to string.
+// TODO: add string_view -> which ever type of string
+inline std::string const& to(std::string const& v, string_view const& /*context*/) { return v; }
+inline std::string const& to_with_default(std::string const& v, std::string const& /* default*/) { return v; }
+inline ossimString const& to(ossimString const& v, string_view const& /*context*/) { return v; }
+inline ossimString const& to_with_default(ossimString const& v, ossimString const& /* default*/) { return v; }
+inline string_view const& to(string_view const& v, string_view const& /*context*/) { return v; }
+inline string_view const& to_with_default(string_view const& v, string_view const& /* default*/) { return v; }
 
 // template <> inline double to<double>(ossimplugins::string_view const& v)
 // { return details::to_float<double>(v); }

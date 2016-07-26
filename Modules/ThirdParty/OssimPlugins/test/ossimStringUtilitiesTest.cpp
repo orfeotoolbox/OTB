@@ -149,7 +149,28 @@ BOOST_AUTO_TEST_CASE(tests)
    BOOST_CHECK(!ends_with(s, "23"));
 }
 
+BOOST_AUTO_TEST_CASE(to_lower)
+{
+   char buf[5];
+   BOOST_CHECK_EQUAL(to_lower_to("a", buf), "a");
+   BOOST_CHECK_EQUAL(to_lower_to("ab", buf), "ab");
+   BOOST_CHECK_EQUAL(to_lower_to("abc", buf), "abc");
+   BOOST_CHECK_EQUAL(to_lower_to("abcd", buf), "abcd");
+   BOOST_CHECK_EQUAL(to_lower_to("abcde", buf), "abcde");
+   BOOST_CHECK_EQUAL(to_lower_to("abcdef", buf), "abcde"); // limited to 5 chars = sizeof(buf)
+   BOOST_CHECK_EQUAL(to_lower_to("A", buf), "a");
+   BOOST_CHECK_EQUAL(to_lower_to("AB", buf), "ab");
+   BOOST_CHECK_EQUAL(to_lower_to("ABC", buf), "abc");
+   BOOST_CHECK_EQUAL(to_lower_to("ABCD", buf), "abcd");
+   BOOST_CHECK_EQUAL(to_lower_to("ABCDE", buf), "abcde");
+   BOOST_CHECK_EQUAL(to_lower_to("ABCDEF", buf), "abcde"); // limited to 5 chars = sizeof(buf)
 
+   BOOST_CHECK_EQUAL(to_lower_to("aB", buf), "ab");
+   BOOST_CHECK_EQUAL(to_lower_to("aBc", buf), "abc");
+   BOOST_CHECK_EQUAL(to_lower_to("aBcD", buf), "abcd");
+   BOOST_CHECK_EQUAL(to_lower_to("aBcDe", buf), "abcde");
+   BOOST_CHECK_EQUAL(to_lower_to("aBcDeF", buf), "abcde"); // limited to 5 chars = sizeof(buf)
+}
 
 template <typename RangeType, std::size_t NbParts>
 void check_split(RangeType const& parts, char const* (&expected)[NbParts])
@@ -202,7 +223,8 @@ BOOST_AUTO_TEST_CASE(to_int) {
    BOOST_CHECK_THROW(to<int>("0x12", "UT"), std::runtime_error);
 
    BOOST_CHECK_EQUAL(to<unsigned int>("12", "UT"), 12u);
-   BOOST_CHECK_EQUAL(to<unsigned int>("-1", "UT"), UINT_MAX);
+   BOOST_CHECK_EQUAL(to<int>("-1", "UT"), -1);
+   BOOST_CHECK_THROW(to<unsigned int>("-1", "UT"), std::runtime_error);
 }
 BOOST_AUTO_TEST_CASE(to_double) {
    BOOST_CHECK_CLOSE(to<double>("12", "UT"),       12,       0.00001);
@@ -234,4 +256,25 @@ BOOST_AUTO_TEST_CASE(to_double) {
    BOOST_CHECK_CLOSE(to_with_default<double>("0x12", 42), 42, 0.00001);
 
    BOOST_CHECK(ossim::isnan(to<double>("nan", "UT")));
+}
+BOOST_AUTO_TEST_CASE(to_bool) {
+   BOOST_CHECK_EQUAL(to<bool>("1",     "UT"), true);
+   BOOST_CHECK_EQUAL(to<bool>("true",  "UT"), true);
+   BOOST_CHECK_EQUAL(to<bool>("on",    "UT"), true);
+   BOOST_CHECK_EQUAL(to<bool>("yes",   "UT"), true);
+   BOOST_CHECK_EQUAL(to<bool>("True",  "UT"), true);
+   BOOST_CHECK_EQUAL(to<bool>("oN",    "UT"), true);
+   BOOST_CHECK_EQUAL(to<bool>("YES",   "UT"), true);
+   BOOST_CHECK_EQUAL(to<bool>("0",     "UT"), false);
+   BOOST_CHECK_EQUAL(to<bool>("false", "UT"), false);
+   BOOST_CHECK_EQUAL(to<bool>("off",   "UT"), false);
+   BOOST_CHECK_EQUAL(to<bool>("no",    "UT"), false);
+   BOOST_CHECK_EQUAL(to<bool>("fALse", "UT"), false);
+   BOOST_CHECK_EQUAL(to<bool>("oFf",   "UT"), false);
+   BOOST_CHECK_EQUAL(to<bool>("nO",    "UT"), false);
+
+   BOOST_CHECK_THROW(to<bool>("abc", "UT"), std::runtime_error);
+   BOOST_CHECK_THROW(to<bool>("12h", "UT"), std::runtime_error);
+   BOOST_CHECK_THROW(to<bool>("0x12", "UT"), std::runtime_error);
+   BOOST_CHECK_THROW(to<bool>("oui", "UT"), std::runtime_error);
 }
