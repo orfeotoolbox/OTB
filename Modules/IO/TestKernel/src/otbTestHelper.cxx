@@ -244,6 +244,69 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
   return result;
 }
 
+int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
+                                       const StringList& testFilenamesAscii,
+                                       const StringList& ignoredLines)
+{
+  int result = 0;
+  // Creates iterators on baseline filenames vector and test filenames vector
+  StringListIt itbaselineFilenames = baselineFilenamesAscii.begin();
+  StringListIt itTestFilenames = testFilenamesAscii.begin();
+  StringListIt itIgnoredLines = ignoredLines.begin();
+
+  // Warning message
+  if (ignoredLines.size() > 0)
+    {
+    std::cout << "The lines containing the expressions ";
+    for (; itIgnoredLines != ignoredLines.end(); ++itIgnoredLines)
+      {
+      std::cout << (*itIgnoredLines) << " ";
+      }
+    std::cout << "are not considered" << std::endl;
+    }
+
+  // For each couple of baseline and test file, do the comparison
+  for (; (itbaselineFilenames != baselineFilenamesAscii.end())
+         && (itTestFilenames != testFilenamesAscii.end());
+       ++itbaselineFilenames, ++itTestFilenames)
+    {
+    std::string baselineFilenameAscii = (*itbaselineFilenames);
+    std::string testFilenameAscii = (*itTestFilenames);
+
+    std::map<std::string,
+             int> baselines =
+      this->RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
+    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    int multiResult = 1;
+    std::cout << "Number of baseline files: " << baselines.size() << std::endl;
+    while (baseline != baselines.rend() && (multiResult != 0))
+      {
+      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      this->ReportErrorsOff();
+      baseline->second = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
+                                                            (baseline->first).c_str(),
+                                                            m_Epsilon,
+                                                            ignoredLines);
+
+      multiResult = baseline->second;
+      ++baseline;
+      }
+    if (multiResult != 0)
+      {
+      baseline = baselines.rbegin();
+      this->ReportErrorsOn();
+      baseline->second
+        = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
+                                             (baseline->first).c_str(),
+                                             m_Epsilon,
+                                             ignoredLines);
+      }
+    result += multiResult;
+    }
+
+  return result;
+}
+
 int TestHelper::RegressionTestAllBinary(const StringList& baselineFilenamesBinary,
                                         const StringList& testFilenamesBinary)
 {
@@ -564,6 +627,371 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
       }
     }
   return (nbdiff != 0) ? 1 : 0;
+}
+
+int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
+                                        const double epsilon, StringList ignoredLines) const
+{
+  std::ifstream fluxfiletest(testAsciiFileName);
+  std::ifstream fluxfileref(baselineAsciiFileName);
+
+  std::string diffAsciiFileName(testAsciiFileName);
+  diffAsciiFileName += ".diff.txt";
+  std::ofstream fluxfilediff;
+  if (m_ReportErrors)
+    {
+    fluxfilediff.open(diffAsciiFileName.c_str());
+    }
+
+  std::string strfiletest;
+  std::string strfileref;
+
+  int nbdiff(0);
+  int numLine(1);
+  if (!fluxfiletest)
+    {
+    itkGenericExceptionMacro(<< "Impossible to open the test ASCII file <" << testAsciiFileName << ">.");
+    }
+  if (!fluxfileref)
+    {
+    itkGenericExceptionMacro(<< "Impossible to open the baseline ASCII file <" << baselineAsciiFileName << ">.");
+    }
+
+  //fill up a vector of string, in which each element is one line of the file
+  StringList listLineFileRef;
+  StringList listLineFileTest;
+  while (std::getline(fluxfileref, strfileref))
+    {
+    listLineFileRef.push_back(strfileref);
+    }
+  fluxfileref.close();
+
+  while (std::getline(fluxfiletest, strfiletest))
+    {
+    listLineFileTest.push_back(strfiletest);
+    }
+  fluxfiletest.close();
+
+  //These are to save up the differences
+  StringList listStrDiffLineFileRef;
+  StringList listStrDiffLineFileTest;
+
+  // filter ignored lines
+  // TODO
+  // filter lines with hexa adress (isHexaPointerAddress)
+
+  // Iterate over the baseline lines
+  unsigned int posTest = 0;
+  unsigned int posRef = 0;
+  unsigned int curPosTest;
+  StringList tokenRef;
+  StringList tokenTest;
+  StringList tokenTestSelected;
+  unsigned int nbTokenRef = 0;
+  unsigned int nbTokenTest = 0;
+
+  for (posRef=0 ; posRef<listLineFileRef.size() ; posRef++)
+    {
+    nbTokenRef = TokenizeLine(listLineFileRef[posRef],tokenRef);
+    if (nbTokenRef == 0)
+      {
+      // ignore lines without tokens
+      continue;
+      }
+    unsigned int bestLinePos = posTest;
+    //std::string bestLine;
+    int bestCommonTokens = -1;
+    for (curPosTest = posTest ; curPosTest < listLineFileTest.size() ; curPosTest++)
+      {
+      nbTokenTest = TokenizeLine(listLineFileTest[curPosTest],tokenTest);
+      if (nbTokenTest == 0)
+        {
+        // ignore lines without tokens
+        continue;
+        }
+      if (curPosTest == posTest)
+        {
+        tokenTestSelected = tokenTest;
+        }
+      // get number of first common tokens and the line with the best match
+      int commonTokens = 0;
+      for (unsigned int i = 0 ; i < std::min(nbTokenRef,nbTokenTest) ; i++)
+        {
+        if (tokenRef[i].compare(tokenTest[i]) == 0)
+          {
+          commonTokens++;
+          }
+        else
+          {
+          break;
+          }
+        }
+      if (commonTokens > bestCommonTokens)
+        {
+        bestCommonTokens = commonTokens;
+        bestLinePos = curPosTest;
+        tokenTestSelected = tokenTest;
+        // bestLine = listLineFileTest[curPosTest]
+        }
+      // test if lines are identic
+      if (commonTokens == std::max(nbTokenRef,nbTokenTest))
+        {
+        break;
+        }
+      }
+
+    // test if lines are identic
+    if (commonTokens == std::max(nbTokenRef,nbTokenTest))
+      {
+      
+      }
+    else
+      {
+      }
+      
+    // find position of the first identical string in test
+    differenceFoundInCurrentLine = CompareLines(strfileref, strfiletest, nbdiff, fluxfilediff, numLine,
+                                                  listStrDiffLineFileRef, listStrDiffLineFileTest, epsilon);
+
+    // find position of the first similar string in test (where only numeric values differs)
+
+    
+    
+    }
+  
+
+  std::vector<std::string>::iterator itRef = listLineFileRef.begin();
+  std::vector<std::string>::iterator itTest = listLineFileTest.begin();
+//   while (std::getline(fluxfileref, strfileref) != 0)
+ while ((itRef != listLineFileRef.end()) && (itTest != listLineFileTest.end()))
+    {
+    strfileref = *itRef;
+    strfiletest = *itTest;
+
+    //otbMsgDevMacro(<< "Comparing " << strfileref << " -with- " << strfiletest);
+
+    //Check is the current line should be ignored
+    bool ignoreCurrentLineRef = false;
+    bool ignoreCurrentLineTest = false;
+    if (ignoredLines.size() > 0)
+      {
+      for (std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+           itIgnoredLines != ignoredLines.end(); ++itIgnoredLines)
+        {
+        std::string            ignoredLinesAscii = (*itIgnoredLines);
+        std::string::size_type loc = strfileref.find(ignoredLinesAscii);
+        if (loc != std::string::npos)
+          {
+          ignoreCurrentLineRef = true;
+          }
+        loc = strfiletest.find(ignoredLinesAscii);
+        if (loc != std::string::npos)
+          {
+          ignoreCurrentLineTest = true;
+          }
+        }
+      }
+
+
+    // Ignore lines with "RTTI" and "Modified Time" inside by default : to avoid multibaseline
+    // between Linux and Win32 plateforms
+    if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+      {
+      if(isToBeIgnoredForAnyComparison(strfileref))
+        ignoreCurrentLineRef = true;
+
+      if(isToBeIgnoredForAnyComparison(strfiletest))
+        ignoreCurrentLineTest = true;
+      }
+
+    //Compare the lines only if none is supposed to be ignored
+    //Note: the iterator increment will take care of moving only the
+    //ignored one if the order does not matter
+    bool differenceFoundInCurrentLine = false;
+//    if (ignoreCurrentLineRef || ignoreCurrentLineTest)
+//      {
+//      otbMsgDevMacro( << "* ignoring");
+//      }
+    if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+      {
+      differenceFoundInCurrentLine = CompareLines(strfileref, strfiletest, nbdiff, fluxfilediff, numLine,
+                                                  listStrDiffLineFileRef, listStrDiffLineFileTest, epsilon);
+//      if (!differenceFoundInCurrentLine)
+//        {
+//        otbMsgDevMacro( << "* no difference found");
+//        }
+      }
+
+    if (ignoreCurrentLineRef) ++itRef;
+    if (ignoreCurrentLineTest) ++itTest;
+
+    if (m_IgnoreLineOrder)
+      {
+      if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+        {
+        if (differenceFoundInCurrentLine)
+          {
+          if (*itRef > *itTest)
+            {
+            fluxfilediff << "Additional line in test file: " << " : " << *itTest << std::endl;
+            ++itTest;
+            }
+          else
+            {
+            fluxfilediff << "Additional line in ref file: " << " : " << *itTest << std::endl;
+            ++itRef;
+            }
+          }
+        else
+          {
+          ++itRef;
+          ++itTest;
+          }
+        }
+      }
+    else
+      {
+		if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+		{
+			++itRef;
+			++itTest;
+		}
+      }
+
+    }
+
+  //Here, the line by line comparison is finished and at least one (ref or test) is at the end
+  //we simply output the content of the other one
+
+  while (itRef != listLineFileRef.end())
+    {
+    strfileref = *itRef;
+    std::stringstream buffstreamRef;
+    std::string       strRef = "";
+    buffstreamRef << strfileref;
+    buffstreamRef >> strRef;
+    fluxfilediff << "Additional line in ref file: " << numLine << " : " << strRef << std::endl;
+    nbdiff++;
+    if (m_ReportErrors)
+      {
+      listStrDiffLineFileRef.push_back(strfileref);
+      }
+    ++itRef;
+    }
+
+  while (itTest != listLineFileTest.end())
+    {
+    strfiletest = *itTest;
+    std::stringstream buffstreamTest;
+    std::string       strTest = "";
+    buffstreamTest << strfiletest;
+    buffstreamTest >> strTest;
+    fluxfilediff << "Additional line in test file: " << numLine << " : " << strTest << std::endl;
+    nbdiff++;
+    if (m_ReportErrors)
+      {
+      listStrDiffLineFileTest.push_back(strfiletest);
+      }
+    ++itTest;
+    }
+
+  if (m_ReportErrors)
+    {
+    fluxfilediff.close();
+    }
+
+  if (nbdiff != 0 && m_ReportErrors)
+    {
+    std::cout << "<DartMeasurement name=\"ASCIIFileError\" type=\"numeric/int\">";
+    std::cout << nbdiff;
+    std::cout << "</DartMeasurement>" << std::endl;
+    std::cout << "================================================================" << std::endl;
+    std::cout << "baseline ASCII File : " << baselineAsciiFileName << std::endl;
+    std::cout << "Test ASCII File     : " << testAsciiFileName << std::endl;
+    std::cout << "Diff ASCII File     : " << diffAsciiFileName << std::endl;
+    std::cout << "Tolerance value     : " << epsilon << std::endl;
+    std::cout << "Tolerance max check : " << m_EpsilonBoundaryChecking << std::endl;
+
+    //FIXME won't be intuitive for the non order case
+    unsigned int numLineDiff = std::min(listStrDiffLineFileRef.size(), listStrDiffLineFileTest.size());
+    std::cout << "Nb lines different : " << numLineDiff << std::endl;
+    for (unsigned int i = 0; i < numLineDiff; ++i)
+      {
+      std::cout << "   -------------------------------" << std::endl;
+      std::cout << "   Base << " << listStrDiffLineFileRef[i] << std::endl;
+      std::cout << "   Test >> " << listStrDiffLineFileTest[i] << std::endl;
+      }
+    for (unsigned int i = numLineDiff; i < listStrDiffLineFileRef.size(); ++i)
+      {
+      std::cout << "   -------------------------------" << std::endl;
+      std::cout << "   Base << " << listStrDiffLineFileRef[i] << std::endl;
+      }
+    for (unsigned int i = numLineDiff; i < listStrDiffLineFileTest.size(); ++i)
+      {
+      std::cout << "   -------------------------------" << std::endl;
+      std::cout << "   Test >> " << listStrDiffLineFileTest[i] << std::endl;
+      }
+    }
+  return (nbdiff != 0) ? 1 : 0;
+}
+
+int TestHelper::TokenizeLine(const std::string &line, StringList &tokens) const
+{
+  std::string::size_type pos;
+  tokens.clear();
+  std::string::size_type counter = 0;
+  bool isSeparator;
+  bool isToken = false;
+  int curChar;
+  for (pos = 0 ; pos < line.size() ; pos++)
+    {
+    isSeparator = true;
+    curChar = (int)(line[pos]);
+    // test if alphanumeric or '.' or '-' or '^' or '_' or '/'
+    if (isAlphaNum(curChar) || isPoint(curChar) || isMinusSign(curChar) ||
+        curChar == 94 || curChar == 95 || curChar == 47)
+      {
+      isSeparator = false;
+      }
+
+    if (isToken)
+      {
+      // already in a token
+      if (isSeparator)
+        {
+        // end of the token : record it
+        tokens.push_back(line.substr(pos-counter, counter));
+        isToken = false;
+        counter = 0;tokens.push_back(line.substr(pos-counter, counter));
+        }
+      else
+        {
+        // still in a token
+        counter++;
+        }
+      }
+    else
+      {
+      // not in a token
+      if (isSeparator)
+        {
+        // do nothing
+        }
+      else
+        {
+        // start of a token
+        isToken = true;
+        counter++;
+        }
+      }
+    }
+  // handle final token
+  if (isToken)
+    {
+    tokens.push_back(line.substr(line.size()-counter, counter));
+    }
+
+  return tokens.size();
 }
 
 /******************************************/
@@ -1429,6 +1857,11 @@ bool TestHelper::isPoint(int i) const
 bool TestHelper::isMinusSign(int i) const
 {
   return (i == 45);
+}
+
+bool TestHelper::isAlphaNum(int i) const
+{
+  return isNumber(i) || ((i > 64) && (i < 91)) || ((i > 96) && (i < 123));
 }
 
 bool TestHelper::isNumeric(const std::string& str) const

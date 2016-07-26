@@ -78,6 +78,10 @@ public:
                              const StringList& testFilenamesAscii,
                              const StringList& ignoredLines);
 
+  int RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
+                             const StringList& testFilenamesAscii,
+                             const StringList& ignoredLines);
+
   int RegressionTestAllBinary(const StringList& baselineFilenamesBinary,
                               const StringList& testFilenamesBinary);
 
@@ -113,6 +117,11 @@ private:
                               const double epsilon,
                               std::vector<std::string> ignoredLines) const;
 
+  int RegressionTestDiffFile(const char * testAsciiFileName,
+                              const char * baselineAsciiFileName,
+                              const double epsilon,
+                              std::vector<std::string> ignoredLines) const;
+
   int RegressionTestMetaData(const char *testImageFilename,
                              const char *baselineImageFilename,
                              const double toleranceDiffPixelImage) const;
@@ -121,11 +130,13 @@ private:
   bool isHexaNumber(int i) const;
   bool isPoint(int i) const;
   bool isMinusSign(int i) const;
+  bool isAlphaNum(int i) const;
   bool isNumeric(const std::string& str) const;
   bool isScientificNumeric(const std::string& str) const;
   bool isHexaPointerAddress(const std::string& str) const;
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
   std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
+  int TokenizeLine(const std::string &line, StringList &tokens) const;
   //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
   bool CompareLines(const std::string& strfileref,
                     const std::string& strfiletest,
