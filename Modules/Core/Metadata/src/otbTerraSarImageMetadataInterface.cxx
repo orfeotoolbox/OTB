@@ -318,10 +318,10 @@ unsigned int
 TerraSarImageMetadataInterface::GetNumberOfNoiseRecords() const
 {
   std::string key("noise.numberOfNoiseRecords");
-  return this->GetMetadataByKeyAs<double>(
+  return this->GetMetadataByKeyAs<unsigned int>(
     key,
     "no TerraSar Image",
-    std::numeric_limits<double>::quiet_NaN());
+    std::numeric_limits<unsigned int>::quiet_NaN());
 }
 
 unsigned int
@@ -332,10 +332,10 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(unsigned int noiseReco
   oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.polynomialDegree";
   const std::string key = oss.str();
   // Here, GetMetadataByKeyAs doesn't need to check CanRead()
-  return this->GetMetadataByKeyAs<double>(
+  return this->GetMetadataByKeyAs<unsigned int>(
     key,
     "no TerraSar Image",
-    std::numeric_limits<double>::quiet_NaN());
+    std::numeric_limits<unsigned int>::quiet_NaN());
 }
 
 
@@ -695,10 +695,10 @@ TerraSarImageMetadataInterface::GetRSF() const
 unsigned int
 TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles() const
 {
-  return this->GetMetadataByKeyAs<double>(
+  return this->GetMetadataByKeyAs<unsigned int>(
     "sceneCoord.numberOfSceneCornerCoord",
     "no TerraSar Image",
-    std::numeric_limits<double>::quiet_NaN());
+    std::numeric_limits<unsigned int>::quiet_NaN());
 }
 
 double
@@ -836,7 +836,6 @@ TerraSarImageMetadataInterface
 {
   std::vector<double>::const_reverse_iterator coefIt = coefficients.rbegin();
   double res = *coefIt;
-  ++coefIt;
 
   for (++coefIt ; coefIt != coefficients.rend() ; ++coefIt)
     {
