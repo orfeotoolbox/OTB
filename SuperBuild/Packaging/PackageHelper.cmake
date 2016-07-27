@@ -374,7 +374,7 @@ function(func_install_support_files)
   endif()
 
   ####################### Install VERSION ##########################
-  file(GLOB OTB_VERSION_FILES ${PKG_SHARE_SOURCE_DIR}/doc/OTB-*/VERSION)
+  file(GLOB OTB_VERSION_FILES ${OTB_INSTALL_DIR}/share/doc/OTB-*/VERSION)
   if(OTB_VERSION_FILES)
     list(SORT OTB_VERSION_FILES)
     list(GET OTB_VERSION_FILES -1 OTB_LATEST_VERSION_FILE)
