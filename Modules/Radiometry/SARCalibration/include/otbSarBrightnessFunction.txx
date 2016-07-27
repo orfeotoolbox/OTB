@@ -101,36 +101,25 @@ typename SarBrightnessFunction<TInputImage, TCoordRep>
 SarBrightnessFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  RealType result;
-  result = itk::NumericTraits<RealType>::Zero;
-
   if (!this->GetInputImage())
     {
-    return (itk::NumericTraits<OutputType>::max());
+    return itk::NumericTraits<OutputType>::max();
     }
 
   if (!this->IsInsideBuffer(index))
     {
-    return (itk::NumericTraits<OutputType>::max());
+    return itk::NumericTraits<OutputType>::max();
     }
-
-
-  FunctorRealType noise = itk::NumericTraits<FunctorRealType>::Zero;
-  FunctorRealType antennaPatternNewGain = itk::NumericTraits<FunctorRealType>::Zero;
-  FunctorRealType antennaPatternOldGain = itk::NumericTraits<FunctorRealType>::Zero;
-  FunctorRealType rangeSpreadLoss = itk::NumericTraits<FunctorRealType>::Zero;
-
-  if (m_EnableNoise)
-    {
-    noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
-    }
-  antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->EvaluateAtIndex(index));
-  antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
-  rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
 
   FunctorType functor;
+
+  const FunctorRealType antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->EvaluateAtIndex(index));
+  const FunctorRealType antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->EvaluateAtIndex(index));
+  const FunctorRealType rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->EvaluateAtIndex(index));
+
   if (m_EnableNoise)
     {
+    const FunctorRealType noise = static_cast<FunctorRealType>(m_Noise->EvaluateAtIndex(index));
     functor.SetNoise(noise);
     }
   functor.SetScale(m_Scale);
@@ -139,7 +128,7 @@ SarBrightnessFunction<TInputImage, TCoordRep>
   functor.SetRangeSpreadLoss(rangeSpreadLoss);
 
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
-  result = functor(value);
+  const RealType result = functor(value);
 
   return static_cast<OutputType>(result);
 }
