@@ -137,6 +137,9 @@ private:
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
   std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
   int TokenizeLine(const std::string &line, StringList &tokens) const;
+
+  // TODO : maybe merge this function with isToBeIgnoredForAnyComparison
+  bool IsLineValid(const std::string& str, const StringList &ignoredLines) const;
   //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
   bool CompareLines(const std::string& strfileref,
                     const std::string& strfiletest,
