@@ -52,30 +52,43 @@ SarBrightnessToImageFilter<TInputImage, TOutputImage>
 
   function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
 
-  ParametricFunctionPointer   noise;
-  ParametricFunctionPointer   antennaPatternNewGain;
-  ParametricFunctionPointer   antennaPatternOldGain;
-  ParametricFunctionPointer   rangeSpreadLoss;
-
-  noise = function->GetNoise();
+  ParametricFunctionPointer   noise = function->GetNoise();
   noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
   noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
   noise->EvaluateParametricCoefficient();
 
-  antennaPatternNewGain = function->GetAntennaPatternNewGain();
+  ParametricFunctionPointer   antennaPatternNewGain = function->GetAntennaPatternNewGain();
   antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
   antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
   antennaPatternNewGain->EvaluateParametricCoefficient();
 
-  antennaPatternOldGain = function->GetAntennaPatternOldGain();
+  ParametricFunctionPointer   antennaPatternOldGain = function->GetAntennaPatternOldGain();
   antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
   antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
   antennaPatternOldGain->EvaluateParametricCoefficient();
 
-  rangeSpreadLoss = function->GetRangeSpreadLoss();
+  ParametricFunctionPointer   rangeSpreadLoss = function->GetRangeSpreadLoss();
   rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
   rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
   rangeSpreadLoss->EvaluateParametricCoefficient();
+
+#if 0
+  this->Print(std::cout, id);
+#endif
+}
+
+template<class TInputImage, class TOutputImage>
+void
+SarBrightnessToImageFilter<TInputImage, TOutputImage>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+
+  if (this->GetFunction())
+    {
+    os << indent << "Function:\n";
+    this->GetFunction()->Print(os, indent.GetNextIndent());
+    }
 }
 
 
