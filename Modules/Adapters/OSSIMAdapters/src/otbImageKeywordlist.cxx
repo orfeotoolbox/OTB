@@ -196,16 +196,16 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   /* First try : test the OSSIM plugins factory       */
   /****************************************************/
   {
-  /** Before, the pluginfactory was tested if the ossim one returned false.
-    But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
-    thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
-    because the default include factory contains ossimQuickbirdTiffTileSource. */
+  /* Before, the pluginfactory was tested if the ossim one returned false.
+     But in the TSX case, the tif images were considered as ossimQuickbirdTiffTileSource
+     thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
+     because the default include factory contains ossimQuickbirdTiffTileSource. */
   boost::scoped_ptr<ossimProjection> projection(ossimplugins::ossimPluginProjectionFactory::instance()
-        ->createProjection(ossimFilename(filename.c_str()), 0));
+        ->createProjection(ossimFilename(filename), 0));
 
   if (projection)
     {
-    otbMsgDevMacro(<< "OSSIM plugin projection instantiated ! ");
+    otbMsgDevMacro(<< "OSSIM plugin projection instantiated!");
 
     hasMetaData = projection->saveState(geom_kwl);
     otb_kwl.SetKeywordlist(geom_kwl);
@@ -217,19 +217,22 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   /***********************************************/
   if (!hasMetaData)
     {
+    otbMsgDevMacro(<< "No compatible OSSIM plugin projection found! => Looking for other ways.");
     boost::scoped_ptr<ossimImageHandler> handler(ossimImageHandlerRegistry::instance()
-                                 ->open(ossimFilename(filename.c_str())));
+                                 ->open(ossimFilename(filename)));
     if (handler)
       {
-      otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
+      otbMsgDevMacro(<< "OSSIM Open Image SUCCESS!");
 
       // Add ossimPlugins model
       ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
 
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
+      otbMsgDevMacro(<<"Image has geometry? " << (geom.valid() ? "yes" : "no)"));
       if (geom.valid())
         {
         ossimProjection const* projection = geom->getProjection();
+        otbMsgDevMacro(<<"Geometry has Projection? " << (projection ? "yes" : "no"));
         if (projection)
           {
           hasMetaData = projection->saveState(geom_kwl);
@@ -237,12 +240,13 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
           // if the handler has found a sensor model, copy the tags found
           if (hasMetaData && dynamic_cast<ossimSensorModel const*>(projection))
             {
-            otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
+            otbMsgDevMacro(<<"OSSIM sensor projection instantiated from imageGeometry!");
             otb_kwl.SetKeywordlist(geom_kwl);
             // geom_kwl.print(std::cout);
             }
           else
             {
+            otbMsgDevMacro(<<"Cannot instantiate OSSIM sensor projection from imageGeometry!");
             hasMetaData = false;
             }
           } // projection
@@ -256,8 +260,9 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   if (!hasMetaData)
     {
     // If still no metadata, try the ".geom" file
-    ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
+    const ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
     otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
+    otbMsgDevMacro(<<"Try to read OSSIM sensor projection from hyppothetial .geom file (" << ossimGeomFile << ") -> " << otb_kwl.GetSize() << " keys found.");
 
     // also check any RPC tags
     ImageKeywordlist rpc_kwl;
@@ -328,11 +333,11 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
   if (!hasMetaData)
     {
-    otbMsgDevMacro(<< "OSSIM MetaData not present ! ");
+    otbMsgDevMacro(<< "OSSIM MetaData not present!");
     }
   else
     {
-    otbMsgDevMacro(<< "OSSIM MetaData present ! ");
+    otbMsgDevMacro(<< "OSSIM MetaData present!");
     //otbMsgDevMacro(<< geom_kwl);
     }
 
@@ -462,7 +467,7 @@ ReadGeometryFromRPCTag(const std::string& filename)
         }
       catch (const ossimException& itkNotUsed(e))
         {
-        otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
+        otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED!");
         }
 
       if (rpcModel->saveState(geom_kwl))
