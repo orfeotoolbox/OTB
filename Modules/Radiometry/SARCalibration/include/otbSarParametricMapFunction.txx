@@ -103,15 +103,16 @@ void
 SarParametricMapFunction<TInputImage, TCoordRep>
 ::EvaluateParametricCoefficient()
 {
+  // std::cout.precision(20);
   PointSetPointer pointSet = this->GetPointSet();
 
   PointType coef;
   PointType point;
   coef.Fill(0);
   point.Fill(0);
-  typename PointSetType::PixelType pointValue;
-  pointValue = itk::NumericTraits<PixelType>::Zero;
+  typename PointSetType::PixelType pointValue = itk::NumericTraits<PixelType>::Zero;
 
+  assert(pointSet && pointSet->GetNumberOfPoints() > 0 && "PointSet must be set before evaluating the parametric coefficient (at least one value)");
   if (pointSet->GetNumberOfPoints() == 0)
     {
     itkExceptionMacro(<< "PointSet must be set before evaluating the parametric coefficient (at least one value)");
@@ -157,8 +158,8 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       this->GetPointSet()->GetPoint(i, &point);
       this->GetPointSet()->GetPointData(i, &pointValue);
       b(i) = pointValue;
-      //std::cout << "point = " << point << std::endl;
-      //std::cout << "b(" << i << ") = " << pointValue << std::endl;
+      // std::cout << "point = " << point << std::endl;
+      // std::cout << "b(" << i << ") = " << pointValue << std::endl;
 
       for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
         {
@@ -167,7 +168,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
           {
           double ypart = vcl_pow( static_cast<double>(point[1]) / m_ProductHeight, static_cast<double>(ycoeff));
           a(i, xcoeff * m_Coeff.Rows() + ycoeff) = xpart * ypart;
-          //std::cout << "a(" << i << "," << xcoeff * m_Coeff.Rows() + ycoeff << ") = " <<  xpart * ypart << std::endl;
+          // std::cout << "a(" << i << "," << xcoeff * m_Coeff.Rows() + ycoeff << ") = " <<  xpart * ypart << std::endl;
           }
         }
       }
@@ -200,6 +201,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 {
   RealType result = itk::NumericTraits<RealType>::Zero;
 
+  assert(m_IsInitialize && "Must call EvaluateParametricCoefficient before evaluating");
   if (!m_IsInitialize)
     {
     itkExceptionMacro(<< "Must call EvaluateParametricCoefficient before evaluating");
@@ -225,7 +227,15 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "Polynom coefficients: "  << m_Coeff << std::endl;
+  if (m_PointSet)
+    {
+    os << indent << "Point set:\n";
+    m_PointSet->Print(os, indent.GetNextIndent());
+    }
+  os << indent << "Product width: " << m_ProductWidth << "\n";
+  os << indent << "Product height: " << m_ProductHeight << "\n";
+  os << indent << "Polynom coefficients: "  << m_Coeff << "\n";
+
 }
 
 

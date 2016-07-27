@@ -71,10 +71,6 @@ SarBrightnessToImageFilter<TInputImage, TOutputImage>
   rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
   rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
   rangeSpreadLoss->EvaluateParametricCoefficient();
-
-#if 0
-  this->Print(std::cout, id);
-#endif
 }
 
 template<class TInputImage, class TOutputImage>
