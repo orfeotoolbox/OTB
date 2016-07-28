@@ -29,29 +29,26 @@ namespace ossimplugins
 class OSSIM_PLUGINS_DLL Noise
 {
 public:
-   /**
-    * @brief Constructor
-    */
+   /// Constructor
    Noise();
 
    /**
-    * @brief Method to save object state to a keyword list.
-    * @param kwl Keyword list to save to.
-    * @param prefix added to keys when saved.
-    * @return true on success, false on error.
+    * Saves state to a keyword list.
+    * @param[in,out] kwl Keyword list to save to.
+    * @param[in] prefix added to keys when saved.
+    * @return true
+    * @throw std::runtime_error if a field cannot be encoded
     */
    bool saveState(ossimKeywordlist& kwl, std::string const& prefix="") const;
 
    /**
-    * @brief Method to the load (recreate) the state of the object from a
-    * keyword list. Return true if ok or false on error.
-    * @return true if load OK, false on error
+    * Loads (recreate) the state of the object from a keyword list.
+    * @return Whether the operation is a success
+    * @throw std::runtime_error if a field cannot be decoded
     */
    bool loadState (const ossimKeywordlist &kwl, std::string const& prefix="");
-   /*!
-    * METHOD: print()
-    * Fulfills base-class pure virtual. Dumps contents of object to ostream.
-    */
+
+   /// Dumps contents of object to ostream.
    std::ostream& print(std::ostream& out) const;
 
    // TODO: the numberOfNoiseRecords is redundant with m_tabImageNoise.size()
@@ -80,20 +77,13 @@ public:
 
 private:
 
-   /**
-    * @brief Image Noise.
-    */
+   /// Image Noise.
    ossim_uint32 m_numberOfNoiseRecords;
-   /**
-    * @brief Image Noise.
-    */
+   /// Image Noise.
    std::vector<ImageNoise> m_tabImageNoise;
 
-   /**
-    * @brief Noise Polarisation Layer.
-    */
+   /// Noise Polarisation Layer.
    std::string m_polarisation;
-
 };
 }
 

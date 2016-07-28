@@ -29,23 +29,22 @@ namespace ossimplugins
 class OSSIM_PLUGINS_DLL ImageNoise
 {
 public:
-   /**
-    * @brief Constructor
-    */
+   /// Constructor
    ImageNoise();
 
    /**
-    * @brief Method to save object state to a keyword list.
-    * @param kwl Keyword list to save to.
-    * @param prefix added to keys when saved.
-    * @return true on success, false on error.
+    * Saves state to a keyword list.
+    * @param[in,out] kwl Keyword list to save to.
+    * @param[in] prefix added to keys when saved.
+    * @return true
+    * @throw std::runtime_error if a field cannot be encoded
     */
    bool saveState(ossimKeywordlist& kwl, std::string const& prefix = "") const;
 
    /**
-    * @brief Method to the load (recreate) the state of the object from a
-    * keyword list. Return true if ok or false on error.
-    * @return true if load OK, false on error
+    * Loads (recreate) the state of the object from a keyword list.
+    * @return true
+    * @throw std::runtime_error if a field cannot be decoded
     */
    bool loadState (const ossimKeywordlist &kwl, std::string const& prefix = "");
 
@@ -112,31 +111,19 @@ public:
 
 private:
 
-   /**
-    * @brief TimeUTC (Noise/ImageNoise node).
-    */
+   /// TimeUTC (Noise/ImageNoise node).
    std::string m_timeUTC;
 
-   /**
-    * @brief ValidityRangeMin (Noise/ImageNoise node).
-    */
+   /// ValidityRangeMin (Noise/ImageNoise node).
    double m_validityRangeMin;
-   /**
-    * @brief ValidityRangeMax (Noise/ImageNoise node).
-    */
+   /// ValidityRangeMax (Noise/ImageNoise node).
    double m_validityRangeMax;
-   /**
-    * @brief Reference point (Noise/ImageNoise node).
-    */
+   /// Reference point (Noise/ImageNoise node).
    double m_referencePoint;
 
-   /**
-    * @brief Polynomial degree (Noise/ImageNoise node).
-    */
+   /// Polynomial degree (Noise/ImageNoise node).
    unsigned int m_polynomialDegree;
-   /**
-    * @brief Polynomial coefficients (Noise/ImageNoise node).
-    */
+   /// Polynomial coefficients (Noise/ImageNoise node).
    std::vector<double> m_polynomialCoefficients;
 
 };

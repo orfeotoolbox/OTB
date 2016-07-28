@@ -31,31 +31,26 @@ namespace ossimplugins
 class OSSIM_PLUGINS_DLL SceneCoord
 {
 public:
-   /**
-    * @brief Constructor
-    */
+   /// Constructor
    SceneCoord();
 
    /**
-    * @brief Method to save object state to a keyword list.
-    * @param kwl Keyword list to save to.
-    * @param prefix added to keys when saved.
+    * Saves state to a keyword list.
+    * @param[in,out] kwl Keyword list to save to.
+    * @param[in] prefix added to keys when saved.
     * @return true
     * @throw std::runtime_error if a field cannot be encoded
     */
    bool saveState(ossimKeywordlist& kwl, std::string const& prefix="") const;
 
    /**
-    * @brief Method to the load (recreate) the state of the object from a
-    * keyword list. Return true if ok or false on error.
+    * Loads (recreate) the state of the object from a keyword list.
     * @return true
     * @throw std::runtime_error if a field cannot be decoded
     */
    bool loadState (const ossimKeywordlist &kwl, std::string const& prefix="");
-   /*!
-    * METHOD: print()
-    * Fulfills base-class pure virtual. Dumps contents of object to ostream.
-    */
+   ///
+   /// Dumps contents of object to ostream.
    std::ostream& print(std::ostream& out) const;
 
    void set_numberOfSceneCoord(ossim_uint32 numberOfSceneCoord)
@@ -73,17 +68,11 @@ public:
 
 private:
 
-   /**
-    * @brief Number of scene coordinate
-    */
+   /// Number of scene coordinate
    ossim_uint32 m_numberOfSceneCoord;
-   /**
-    * @brief Center scene coordinate.
-    */
+   /// Center scene coordinate.
    InfoSceneCoord m_centerSceneCoord;
-   /**
-    * @brief Corners InfoIncidenceAngle.
-    */
+   /// Corners InfoIncidenceAngle.
    std::vector<InfoSceneCoord> m_tabCornersSceneCoord;
 };
 }
