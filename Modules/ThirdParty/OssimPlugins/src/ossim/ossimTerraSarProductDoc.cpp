@@ -279,156 +279,148 @@ bool ossimplugins::ossimTerraSarProductDoc::initPlatformPosition(
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::initSensorParams(
-   const ossimXmlDocument* xdoc, SensorParams* sp) const
+   const ossimXmlDocument& xdoc, SensorParams& sp) const
 {
    bool result = true;
 
-   if (xdoc && sp)
+   ossimString s;
+
+   // Get the number of azimuth looks.
+   if ( getNumberOfAzimuthLooks(&xdoc, s) )
    {
-      ossimString s;
+      sp.set_nAzimuthLook(s.toDouble());
+   }
+   else
+   {
+      result = false;
+   }
 
-      // Get the number of azimuth looks.
-      if ( getNumberOfAzimuthLooks(xdoc, s) )
+   // Get the number of range looks.
+   if ( getNumberOfRangeLooks(&xdoc, s) )
+   {
+      sp.set_nRangeLook(s.toDouble());
+   }
+   else
+   {
+      result = false;
+   }
+
+   // Get the nominal PRF
+   if ( getCommonPrf(&xdoc, s) )
+   {
+      sp.set_prf(s.toDouble());
+   }
+   else
+   {
+      result = false;
+   }
+
+   // Get the radar wave length.
+   if ( getRadarCenterFrequency(&xdoc, s) )
+   {
+      const double CLUM = 2.99792458e+8 ;
+      double waveLength = CLUM / s.toDouble();
+      sp.set_rwl(waveLength);
+   }
+   else
+   {
+      result = false;
+   }
+
+   if ( getLookDirection(&xdoc, s) )
+   {
+      if (s.upcase() == "RIGHT")
       {
-         sp->set_nAzimuthLook(s.toDouble());
+         sp.set_sightDirection(SensorParams::Right);
       }
       else
       {
-         result = false;
+         sp.set_sightDirection(SensorParams::Left);
       }
+   }
+   else
+   {
+      result = false;
+   }
 
-      // Get the number of range looks.
-      if ( getNumberOfRangeLooks(xdoc, s) )
-      {
-         sp->set_nRangeLook(s.toDouble());
-      }
-      else
-      {
-         result = false;
-      }
+   // Get the Sampling frequency.
+   if ( getCommonRsf(&xdoc, s) )
+   {
+      sp.set_sf(s.toDouble());
+   }
+   else
+   {
+      result = false;
+   }
 
-      // Get the nominal PRF
-      if ( getCommonPrf(xdoc, s) )
-      {
-         sp->set_prf(s.toDouble());
-      }
-      else
-      {
-         result = false;
-      }
+   // Ellipsoid hard coded to WGS84.
+   const double SEMI_MAJOR = 6378137.0;
+   const double SEMI_MINOR = 6356752.3142;
+   sp.set_semiMajorAxis(SEMI_MAJOR);
+   sp.set_semiMinorAxis(SEMI_MINOR);
 
-      // Get the radar wave length.
-      if ( getRadarCenterFrequency(xdoc, s) )
+   if ( isProductGeoreferenced(&xdoc) )
+   {
+      if ( getOrbitDirection(&xdoc, s) )
       {
-         const double CLUM = 2.99792458e+8 ;
-         double waveLength = CLUM / s.toDouble();
-         sp->set_rwl(waveLength);
-      }
-      else
-      {
-         result = false;
-      }
-
-      if ( getLookDirection(xdoc, s) )
-      {
-         if (s.upcase() == "RIGHT")
+         int orbitDirectionSign;
+         if ( s.upcase() == "DESCENDING" )
          {
-            sp->set_sightDirection(SensorParams::Right);
+            orbitDirectionSign = 1 ;
          }
          else
          {
-            sp->set_sightDirection(SensorParams::Left);
+            orbitDirectionSign = -1 ;
          }
-      }
-      else
-      {
-         result = false;
-      }
 
-      // Get the Sampling frequency.
-      if ( getCommonRsf(xdoc, s) )
-      {
-         sp->set_sf(s.toDouble());
-      }
-      else
-      {
-         result = false;
-      }
-
-      // Ellipsoid hard coded to WGS84.
-      const double SEMI_MAJOR = 6378137.0;
-      const double SEMI_MINOR = 6356752.3142;
-      sp->set_semiMajorAxis(SEMI_MAJOR);
-      sp->set_semiMinorAxis(SEMI_MINOR);
-      
-      if ( isProductGeoreferenced(xdoc) )
-      {
-         if ( getOrbitDirection(xdoc, s) )
+         if ( getImageDataStrartWith(&xdoc, s) )
          {
-            int orbitDirectionSign;
-            if ( s.upcase() == "DESCENDING" )
+            if (s=="EARLYAZNEARRG")
             {
-               orbitDirectionSign = 1 ;
+               sp.set_col_direction(orbitDirectionSign); 
+               sp.set_lin_direction(orbitDirectionSign);
+            }
+            else if (s=="EARLYAZFARRG")
+            {
+               sp.set_col_direction(-orbitDirectionSign);
+               sp.set_lin_direction(orbitDirectionSign);
+            }
+            else if (s=="LATEAZNEARRG")
+            {
+               sp.set_col_direction(orbitDirectionSign);
+               sp.set_lin_direction(-orbitDirectionSign);
+            }
+            else if (s=="LATEAZFARRG") {
+               sp.set_col_direction(-orbitDirectionSign);
+               sp.set_lin_direction(-orbitDirectionSign);
             }
             else
             {
-               orbitDirectionSign = -1 ;
-            }
-
-            if ( getImageDataStrartWith(xdoc, s) )
-            {
-               if (s=="EARLYAZNEARRG")
-               {
-                  sp->set_col_direction(orbitDirectionSign); 
-                  sp->set_lin_direction(orbitDirectionSign);
-               }
-               else if (s=="EARLYAZFARRG")
-               {
-                  sp->set_col_direction(-orbitDirectionSign);
-                  sp->set_lin_direction(orbitDirectionSign);
-               }
-               else if (s=="LATEAZNEARRG")
-               {
-                  sp->set_col_direction(orbitDirectionSign);
-                  sp->set_lin_direction(-orbitDirectionSign);
-               }
-               else if (s=="LATEAZFARRG") {
-                  sp->set_col_direction(-orbitDirectionSign);
-                  sp->set_lin_direction(-orbitDirectionSign);
-               }
-               else
-               {
-                  //---
-                  // COSAR Files are stored ing with early azimuth,
-                  // near range
-                  //---
-                  sp->set_col_direction(orbitDirectionSign);
-                  sp->set_lin_direction(orbitDirectionSign);
-               }
-            }
-            else
-            {
-               result = false;
+               //---
+               // COSAR Files are stored ing with early azimuth,
+               // near range
+               //---
+               sp.set_col_direction(orbitDirectionSign);
+               sp.set_lin_direction(orbitDirectionSign);
             }
          }
          else
          {
             result = false;
          }
-         
-      } // matches: if ( isProductGeoreferenced(xdoc) )
+      }
       else
       {
-         sp->set_col_direction(1);
-         sp->set_lin_direction(1);
+         result = false;
       }
-      
-   } // matches: if (xdoc && sp)
+
+   } // matches: if ( isProductGeoreferenced(xdoc) )
    else
    {
-      result = false;
+      sp.set_col_direction(1);
+      sp.set_lin_direction(1);
    }
-   
+
    return result;  
 }
 

@@ -103,16 +103,21 @@ namespace ossimplugins
          if(traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
-               << MODULE << " DEBUG: testing " << STATIC_TYPE_NAME(ProjectionType) << "\n";
+               << MODULE << " DEBUG: testing " << STATIC_TYPE_NAME(ProjectionType) << "... " << std::flush;
          }
 
          ossimRefPtr<ProjectionType> model = new ProjectionType();
          if ( model->open(filename) )
          {
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG) << (model.get() ? " OK" : "NOK") << "\n";
+            }
             return model.get();
          }
          else
          {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "NOK\n";
             return 0;
          }
       }
@@ -258,12 +263,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimString& name)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimString& name)";
-
-   if(traceDebug())
-   {
-        ossimNotify(ossimNotifyLevel_DEBUG)
-                   << MODULE << " DEBUG: Entering ...." << std::endl;
-   }
+   SCOPED_LOG(traceDebug, MODULE);
 
    // else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
    // {
@@ -326,12 +326,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    //***
 //   if(name == MY_NEW_MODEL)
 //      return new myNewModel;
-
-   if(traceDebug())
-   {
-        ossimNotify(ossimNotifyLevel_DEBUG)
-                   << MODULE << " DEBUG: Leaving ...." << std::endl;
-   }
 
    return 0;
 }

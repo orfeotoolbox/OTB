@@ -74,7 +74,7 @@ namespace ossimplugins
 
       std::vector<double> coefset = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
 
-      GR = _sensor->get_col_direction() * (col)* _pixel_spacing ;
+      GR = _sensor.get_col_direction() * (col)* _pixel_spacing ;
       GR0 = coefset[0];
       relativeGroundRange = GR-GR0;
       slantRange = coefset[1]
@@ -394,34 +394,27 @@ namespace ossimplugins
       const char* time_dir_pix = "INCREASE";
       const char* time_dir_lin = "INCREASE";
 
-      if(_sensor != NULL)
-      {
-         delete _sensor;
-      }
-
-      _sensor = new SensorParams();
-
       if(strcmp(time_dir_pix, "INCREASE") == 0)
       {
-         _sensor->set_col_direction(1);
+         _sensor.set_col_direction(1);
       }
       else
       {
-         _sensor->set_col_direction(-1);
+         _sensor.set_col_direction(-1);
       }
 
       if(strcmp(time_dir_lin, "INCREASE") == 0)
       {
-         _sensor->set_lin_direction(1);
+         _sensor.set_lin_direction(1);
       }
       else
       {
-         _sensor->set_lin_direction(-1);
+         _sensor.set_lin_direction(-1);
       }
 
-      _sensor->set_prf(fa);
-      _sensor->set_sf(fr);
-      _sensor->set_rwl(wave_length);
+      _sensor.set_prf(fa);
+      _sensor.set_sf(fr);
+      _sensor.set_rwl(wave_length);
 
       return true;
    }

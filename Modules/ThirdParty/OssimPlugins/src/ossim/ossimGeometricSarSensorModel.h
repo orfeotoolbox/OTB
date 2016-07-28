@@ -13,18 +13,17 @@
 #define ossimGeometricSarSensorModel_H 1
 
 #if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#pragma GCC diagnostic ignored "-Wshadow"
-#include <ossimPluginConstants.h>
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-parameter"
+#  pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#  pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#include "ossimPluginConstants.h"
+#include "otb/SensorParams.h"
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
-#pragma GCC diagnostic pop
-#else
-#include <ossimPluginConstants.h>
-#include <ossim/projection/ossimSensorModel.h>
-#include <ossim/projection/ossimCoarseGridModel.h>
+#if defined(__GNUC__) || defined(__clang__)
+#  pragma GCC diagnostic pop
 #endif
 
 #include <list>
@@ -34,8 +33,6 @@ namespace ossimplugins
 {
 
 class PlatformPosition;
-
-class SensorParams;
 
 class RefPoint;
 class SarSensor;
@@ -203,10 +200,10 @@ public:
     * @brief Accessors to the plateform, sensor parameters and reference point.
     */
    void set_platformPosition(PlatformPosition* platformPosition);
-   void set_sensorParams(SensorParams* sensorParams);
+   void set_sensorParams(SensorParams const& sensorParams);
    void set_refPoint(RefPoint* refPoint);
    PlatformPosition* get_platformPosition() const;
-   SensorParams* get_sensorParams() const;
+   SensorParams const& get_sensorParams() const;
    RefPoint* get_refPoint()  const;
 
 protected:
@@ -221,7 +218,7 @@ protected:
     * @brief Handle the position of the platform
     */
    PlatformPosition *_platformPosition;
-   SensorParams * _sensor;
+   SensorParams _sensor;
    RefPoint * _refPoint;
    // Note that this is only mutable because of bad design of the
    // classes, with a bunch of classes initializing the variables of

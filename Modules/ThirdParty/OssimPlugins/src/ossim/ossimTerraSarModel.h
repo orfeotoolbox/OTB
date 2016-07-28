@@ -130,7 +130,7 @@ namespace ossimplugins
       bool initPlatformPosition(const ossimXmlDocument* xdoc,
                                 const ossimTerraSarProductDoc& rsDoc);
 
-      bool initSensorParams(const ossimXmlDocument* xdoc,
+      bool initSensorParams(const ossimXmlDocument& xdoc,
                             const ossimTerraSarProductDoc& rsDoc);
 
       /**

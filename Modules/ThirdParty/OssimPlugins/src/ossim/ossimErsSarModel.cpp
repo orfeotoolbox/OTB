@@ -95,44 +95,37 @@ namespace ossimplugins
       const char* ellip_min_str = kwl.find(prefix, "ellip_min");
       double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-      if (_sensor != NULL)
-      {
-         delete _sensor;
-      }
-
-      _sensor = new SensorParams();
-
       if (strcmp(time_dir_pix.c_str(), "INCREASE") == 0)
       {
-         _sensor->set_col_direction(1);
+         _sensor.set_col_direction(1);
       }
       else
       {
-         _sensor->set_col_direction(-1);
+         _sensor.set_col_direction(-1);
       }
 
       if (strcmp(time_dir_lin.c_str(), "INCREASE") == 0)
       {
-         _sensor->set_lin_direction(1);
+         _sensor.set_lin_direction(1);
       }
       else
       {
-         _sensor->set_lin_direction(-1);
+         _sensor.set_lin_direction(-1);
       }
 
-      _sensor->set_sightDirection(SensorParams::Right) ;
+      _sensor.set_sightDirection(SensorParams::Right) ;
 
       double nlooks_az = atof(kwl.find(prefix, "nlooks_az"));
-      _sensor->set_nAzimuthLook(nlooks_az);
+      _sensor.set_nAzimuthLook(nlooks_az);
       double n_rnglok = atof(kwl.find(prefix, "n_rnglok"));
-      _sensor->set_nRangeLook(n_rnglok);
+      _sensor.set_nRangeLook(n_rnglok);
 
-      _sensor->set_prf(fa);
-      _sensor->set_sf(fr);
-      _sensor->set_rwl(wave_length);
+      _sensor.set_prf(fa);
+      _sensor.set_sf(fr);
+      _sensor.set_rwl(wave_length);
 
-      _sensor->set_semiMajorAxis(ellip_maj) ;
-      _sensor->set_semiMinorAxis(ellip_min) ;
+      _sensor.set_semiMajorAxis(ellip_maj) ;
+      _sensor.set_semiMinorAxis(ellip_min) ;
 
       return true;
    }
@@ -532,7 +525,7 @@ namespace ossimplugins
 
       double c = 2.99792458e+8;
 
-      double distance = (rng_gate * 1e-3 + ((double)sc_pix) * _sensor->get_nRangeLook() / _sensor->get_sf()) * (c / 2.0);
+      double distance = (rng_gate * 1e-3 + ((double)sc_pix) * _sensor.get_nRangeLook() / _sensor.get_sf()) * (c / 2.0);
 
       _refPoint->set_distance(distance);
 

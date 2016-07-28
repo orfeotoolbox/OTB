@@ -222,7 +222,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       initSRGR(xdoc.get(), tsDoc);
 
       if (!initPlatformPosition(xdoc.get(), tsDoc)) break;
-      if (!initSensorParams(xdoc.get(), tsDoc)) break;
+      if (!initSensorParams(*xdoc, tsDoc)) break;
       if (!initRefPoint(xdoc.get(), tsDoc)) break;
       if (!tsDoc.getProductType(xdoc.get(), _productType)) break;
       if (!tsDoc.getRadiometricCorrection(xdoc.get(), _radiometricCorrection)) break;
@@ -966,7 +966,7 @@ double estimatedGroundRange, estimatedSlantRangeTime, actualGroundRange, estimat
 
 // actual ground range computation relative to the image near side
 // in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-actualGroundRange = _refPoint->get_distance() - _sensor->get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ;
+actualGroundRange = _refPoint->get_distance() - _sensor.get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ;
 
 estimatedSlantRangeTime = _sceneCenterRangeTime ;
 while ((fabs(iterError)>EPSILON)&& (nIter<maxIter)) {
@@ -1021,14 +1021,6 @@ bool ossimplugins::ossimTerraSarModel::InitSensorParams(
    double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
 
-   if(_sensor != NULL)
-   {
-      delete _sensor;
-   }
-
-   _sensor = new SensorParams();
-
-
    if (_isProductGeoreferenced)
    {
       const char* orbitDirection_str = kwl.find(prefix,"orbitDirection");
@@ -1040,45 +1032,45 @@ bool ossimplugins::ossimTerraSarModel::InitSensorParams(
       const char* imageDataStartWith_str = kwl.find(prefix,"imageDataStartWith");
       std::string imageDataStartWith(imageDataStartWith_str) ;
       if (imageDataStartWith=="EARLYAZNEARRG") {
-         _sensor->set_col_direction(orbitDirectionSign);
-         _sensor->set_lin_direction(orbitDirectionSign);
+         _sensor.set_col_direction(orbitDirectionSign);
+         _sensor.set_lin_direction(orbitDirectionSign);
       } else if (imageDataStartWith=="EARLYAZFARRG") {
-         _sensor->set_col_direction(-orbitDirectionSign);
-         _sensor->set_lin_direction(orbitDirectionSign);
+         _sensor.set_col_direction(-orbitDirectionSign);
+         _sensor.set_lin_direction(orbitDirectionSign);
       } else if (imageDataStartWith=="LATEAZNEARRG") {
-         _sensor->set_col_direction(orbitDirectionSign);
-         _sensor->set_lin_direction(-orbitDirectionSign);
+         _sensor.set_col_direction(orbitDirectionSign);
+         _sensor.set_lin_direction(-orbitDirectionSign);
       } else if (imageDataStartWith=="LATEAZFARRG") {
-         _sensor->set_col_direction(-orbitDirectionSign);
-         _sensor->set_lin_direction(-orbitDirectionSign);
+         _sensor.set_col_direction(-orbitDirectionSign);
+         _sensor.set_lin_direction(-orbitDirectionSign);
       } else {
          // COSAR Files are stored starting with early azimuth, near range
-         _sensor->set_col_direction(orbitDirectionSign);
-         _sensor->set_lin_direction(orbitDirectionSign);
+         _sensor.set_col_direction(orbitDirectionSign);
+         _sensor.set_lin_direction(orbitDirectionSign);
       }
    }
    else
    {
-      _sensor->set_col_direction(1);
-      _sensor->set_lin_direction(1);
+      _sensor.set_col_direction(1);
+      _sensor.set_lin_direction(1);
    }
 
    const char* lookDirection_str = kwl.find(prefix,"lookDirection");
    std::string lookDirection(lookDirection_str) ;
-   if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor->set_sightDirection(SensorParams::Right) ;
-   else _sensor->set_sightDirection(SensorParams::Left) ;
+   if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor.set_sightDirection(SensorParams::Right) ;
+   else _sensor.set_sightDirection(SensorParams::Left) ;
 
-   _sensor->set_sf(fr);
+   _sensor.set_sf(fr);
    const double CLUM        = 2.99792458e+8 ;
    double wave_length = CLUM / central_freq ;
-   _sensor->set_rwl(wave_length);
-   _sensor->set_nRangeLook(n_rnglok);
-   _sensor->set_prf(fa) ;
+   _sensor.set_rwl(wave_length);
+   _sensor.set_nRangeLook(n_rnglok);
+   _sensor.set_prf(fa) ;
    // fa is the processing PRF
-   //_sensor->set_prf(fa * n_azilok); // number of looks disabled
+   //_sensor.set_prf(fa * n_azilok); // number of looks disabled
 
-   _sensor->set_semiMajorAxis(ellip_maj) ;
-   _sensor->set_semiMinorAxis(ellip_min) ;
+   _sensor.set_semiMajorAxis(ellip_maj) ;
+   _sensor.set_semiMinorAxis(ellip_min) ;
 
    return true;
 }
@@ -1242,10 +1234,10 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
       double acq_msec_last = (double) dateStop->get_second()+dateStop->get_decimal();
 
       double actualPRF = theImageSize.y/(acq_msec_last-acq_msec_first) ;
-      _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF);
+      _sensor.set_nAzimuthLook(_sensor.get_prf()/actualPRF);
    }
    else
-      _sensor->set_nAzimuthLook(1.0);
+      _sensor.set_nAzimuthLook(1.0);
 
    // Ground Control Points extracted from the model : scene center and corners
    std::list<ossimGpt> groundGcpCoordinates ;
@@ -1518,7 +1510,7 @@ bool ossimplugins::ossimTerraSarModel::initPlatformPosition(const ossimXmlDocume
    return result;
 }
 
-bool ossimplugins::ossimTerraSarModel::initSensorParams(const ossimXmlDocument* xdoc,
+bool ossimplugins::ossimTerraSarModel::initSensorParams(const ossimXmlDocument& xdoc,
                                                         const ossimTerraSarProductDoc& tsDoc)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initSensorParams";
@@ -1528,25 +1520,12 @@ bool ossimplugins::ossimTerraSarModel::initSensorParams(const ossimXmlDocument* 
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   if (_sensor )
-   {
-      delete _sensor;
-   }
-   _sensor =  new SensorParams();
-
-
    bool result = tsDoc.initSensorParams(xdoc, _sensor);
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "result for  tsDoc.initSensorParams " << result << endl;
-   }
-
-   if (!result)
-   {
-      delete _sensor;
-      _sensor = 0;
    }
 
    if (traceDebug())
@@ -1725,12 +1704,12 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
          dateStop.get_decimal();
 
       double actualPRF = theImageSize.y/(acq_msec_last - acq_msec_first) ;
-      _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF);
+      _sensor.set_nAzimuthLook(_sensor.get_prf()/actualPRF);
 
    }
    else
    {
-      _sensor->set_nAzimuthLook(1.0);
+      _sensor.set_nAzimuthLook(1.0);
    }
 
    // Ground Control Points extracted from the model.

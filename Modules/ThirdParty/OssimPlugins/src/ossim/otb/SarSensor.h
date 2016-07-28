@@ -13,14 +13,10 @@
 #define SarSensor_h
 
 #include <ossimPluginConstants.h>
-#include <otb/Sensor.h>
+#include "otb/Sensor.h"
 
 namespace ossimplugins
 {
-
-
-class SensorParams;
-class PlatformPosition;
 class GeographicEphemeris;
 class RectangularCoordinate;
 class JSDDateTime;
@@ -36,7 +32,7 @@ public:
    *
    * @remarks This constructor creates a copy of params and position
    */
-  SarSensor(SensorParams* params, PlatformPosition* position);
+  SarSensor(SensorParams const& params, PlatformPosition const& position);
   /**
    * @brief Destructor
    */
@@ -45,16 +41,16 @@ public:
   /**
    * @brief This function is able to convert image coordinates into geodetic world coordinates using a geometric SAR sensor model
    *
-   * @param distance : Slant range of the image point
-   * @param time :    Azimuth time of the image point
-   * @param height :  Altitude of the world point
-   * @retval lon :    Longitude of the world point
-   * @retval lat :    Latitude of the world point
+   * @param[in] distance Slant range of the image point
+   * @param[in] time    Azimuth time of the image point
+   * @param[in] height  Altitude of the world point
+   * @param[out] lon    Longitude of the world point
+   * @param[out] lat    Latitude of the world point
    *
-   * @remark : the doppler frequency is set to zero in this implementation
+   * @note the doppler frequency is set to zero in this implementation
    */
   virtual int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) const;
-protected:
+private:
 
   /**
    * @brief This function is able to convert image coordinates into rectangular world coordinates
@@ -63,7 +59,6 @@ protected:
                         double dist , double fDop , int sensVisee ,
                         double equRadius , double polRadius ,
                         double h , RectangularCoordinate* cart ) const;
-private:
 };
 
 }

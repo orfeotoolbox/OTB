@@ -102,55 +102,48 @@ namespace ossimplugins
       const char* dopcenLinear_str = kwl.find(prefix, "dopcen_range[1]");
       double dopcenLinear = atof(dopcenLinear_str);
 
-      if (_sensor != NULL)
-      {
-         delete _sensor;
-      }
-
-      _sensor = new SensorParams();
-
       /*
         if(strcmp(time_dir_pix.c_str(), "INCREASE") == 0)
         {
-        _sensor->set_col_direction(1);
+        _sensor.set_col_direction(1);
         }
         else
         {
-        _sensor->set_col_direction(-1);
+        _sensor.set_col_direction(-1);
         }
       */
       // WARNING: _col_direction hard-coded to 1, as level 1.0 image is not flipped.
-      _sensor->set_col_direction(1);
+      _sensor.set_col_direction(1);
 
       // TODO: Have to verify whether the time direction indicator should be always positive
       /*
         if(strcmp(time_dir_lin.c_str(), "INCREASE") == 0)
         {
-        _sensor->set_lin_direction(1);
+        _sensor.set_lin_direction(1);
         }
         else
         {
-        _sensor->set_lin_direction(-1);
+        _sensor.set_lin_direction(-1);
         }
       */
-      _sensor->set_lin_direction(1);
+      _sensor.set_lin_direction(1);
 
-      _sensor->set_sightDirection(SensorParams::Right) ;
+      _sensor.set_sightDirection(SensorParams::Right) ;
 
       double nlooks_az = atof(kwl.find(prefix, "nlooks_az"));
-      _sensor->set_nAzimuthLook(nlooks_az);
+      _sensor.set_nAzimuthLook(nlooks_az);
       double n_rnglok = atof(kwl.find(prefix, "n_rnglok"));
-      _sensor->set_nRangeLook(n_rnglok);
+      _sensor.set_nRangeLook(n_rnglok);
 
-      _sensor->set_prf(fa / 1000.); // For ALOS, the fa value in the leader file is in units of mHz
-      _sensor->set_sf(fr);
-      _sensor->set_rwl(wave_length);
+      _sensor.set_prf(fa / 1000.); // For ALOS, the fa value in the leader file is in units of mHz
+      _sensor.set_sf(fr);
+      _sensor.set_rwl(wave_length);
 
-      _sensor->set_semiMajorAxis(ellip_maj) ;
-      _sensor->set_semiMinorAxis(ellip_min) ;
+      _sensor.set_semiMajorAxis(ellip_maj) ;
+      _sensor.set_semiMinorAxis(ellip_min) ;
 
-      _sensor->set_dopcen(dopcen);
-      _sensor->set_dopcenLinear(dopcenLinear);
+      _sensor.set_dopcen(dopcen);
+      _sensor.set_dopcenLinear(dopcenLinear);
 
       return true;
    }
@@ -594,7 +587,7 @@ namespace ossimplugins
       const double c = 2.99792458e+8;
 
       const char* slantRange = kwl.find(prefix, "slant_range_to_1st_data_sample");
-      double distance = atof(slantRange) + static_cast<double>(sc_pix) * _sensor->get_nRangeLook() / _sensor->get_sf() * c / 2.0;
+      double distance = atof(slantRange) + static_cast<double>(sc_pix) * _sensor.get_nRangeLook() / _sensor.get_sf() * c / 2.0;
 
       _refPoint->set_distance(distance);
 

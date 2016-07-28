@@ -9,10 +9,11 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#include <ossimRadarSat2Model.h>
 #include <cmath>
 #include <cstdio>
+#include <cassert>
 
-#include <ossimRadarSat2Model.h>
 #include <ossimPluginCommon.h>
 #include <ossimRadarSat2ProductDoc.h>
 #include <ossim/base/ossimCommon.h>
@@ -88,15 +89,15 @@ double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
 
    // in the case of Georeferenced images, _refPoint->get_distance()
    // contains the ground range
-   relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
-   //relativeGroundRange = 1 + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
+   relativeGroundRange = _refPoint->get_distance() + _sensor.get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
+   //relativeGroundRange = 1 + _sensor.get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
    //relativeGroundRange = (8.78400000e+03)*theGSD.x;
 
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "_refPoint->get_distance(): " << _refPoint->get_distance()
-         << "\n_sensor->get_col_direction() " << _sensor->get_col_direction()
+         << "\n_sensor.get_col_direction() " << _sensor.get_col_direction()
          << "\n(col-_refPoint->get_pix_col()) "
          << (col-_refPoint->get_pix_col())
          << "\n_refPoint->get_pix_col() : " << _refPoint->get_pix_col()
@@ -386,39 +387,32 @@ bool ossimRadarSat2Model::InitSensorParams(const ossimKeywordlist &kwl,
    const char* ellip_min_str = kwl.find(prefix,"ellip_min");
    double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-   if(_sensor != 0)
-   {
-      delete _sensor;
-   }
-
-   _sensor = new SensorParams();
-
    const char* lineTimeOrdering_str = kwl.find(prefix,"lineTimeOrdering");
    std::string lineTimeOrdering(lineTimeOrdering_str) ;
    const char* pixelTimeOrdering_str = kwl.find(prefix,"pixelTimeOrdering");
    std::string pixelTimeOrdering(pixelTimeOrdering_str) ;
-   if (pixelTimeOrdering == "Increasing") _sensor->set_col_direction(1);
-   else _sensor->set_col_direction(- 1);
-   if (lineTimeOrdering == "Increasing") _sensor->set_lin_direction(1);
-   else _sensor->set_lin_direction(- 1);
+   if (pixelTimeOrdering == "Increasing") _sensor.set_col_direction(1);
+   else _sensor.set_col_direction(- 1);
+   if (lineTimeOrdering == "Increasing") _sensor.set_lin_direction(1);
+   else _sensor.set_lin_direction(- 1);
 
    const char* lookDirection_str = kwl.find(prefix,"lookDirection");
    std::string lookDirection(lookDirection_str) ;
-   if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor->set_sightDirection(SensorParams::Right) ;
-   else _sensor->set_sightDirection(SensorParams::Left) ;
+   if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor.set_sightDirection(SensorParams::Right) ;
+   else _sensor.set_sightDirection(SensorParams::Left) ;
 
-   _sensor->set_sf(fr);
+   _sensor.set_sf(fr);
    const double CLUM        = 2.99792458e+8 ;
    double wave_length = CLUM / central_freq ;
-   _sensor->set_rwl(wave_length);
-   _sensor->set_nAzimuthLook(n_azilok);
-   _sensor->set_nRangeLook(n_rnglok);
+   _sensor.set_rwl(wave_length);
+   _sensor.set_nAzimuthLook(n_azilok);
+   _sensor.set_nRangeLook(n_rnglok);
 
    // fa is the processing PRF
-   _sensor->set_prf(fa * n_azilok);
+   _sensor.set_prf(fa * n_azilok);
 
-   _sensor->set_semiMajorAxis(ellip_maj) ;
-   _sensor->set_semiMinorAxis(ellip_min) ;
+   _sensor.set_semiMajorAxis(ellip_maj) ;
+   _sensor.set_semiMinorAxis(ellip_min) ;
 
    return true;
 }
@@ -534,9 +528,9 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
    CivilDateTime * date = new CivilDateTime() ;
    if (! ossim::iso8601TimeStringToCivilDate(zeroDopplerTimeFirstLine, *date)) return false ;
 
-   if (_sensor->get_lin_direction() == -1) {
+   if (_sensor.get_lin_direction() == -1) {
       double time = (double) date->get_second() + date->get_decimal() ;  // upper left corner
-      time += theImageSize.y / _sensor->get_prf() ;
+      time += theImageSize.y / _sensor.get_prf() ;
       date->set_second((int) floor(time)) ;
       date->set_decimal(time - floor(time)) ;
    }
@@ -567,7 +561,7 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
    //---
    if (_isProductGeoreferenced)
    {
-      if (_sensor->get_col_direction() == 1)
+      if (_sensor.get_col_direction() == 1)
       {
          distance += 0.0; // upper left corner
       }
@@ -815,19 +809,7 @@ bool ossimRadarSat2Model::initSensorParams(
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
 
-   if (_sensor )
-   {
-      delete _sensor;
-   }
-   _sensor =  new SensorParams();
-
-   bool result = rsDoc.initSensorParams(xdoc, _sensor);
-
-   if (!result)
-   {
-      delete _sensor;
-      _sensor = 0;
-   }
+   bool result = rsDoc.initSensorParams(xdoc, &_sensor);
 
    if (traceDebug())
    {
@@ -850,7 +832,8 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
 
-   if ( !_sensor || !_platformPosition )
+   assert(_platformPosition);
+   if ( !_platformPosition )
    {
       if (traceDebug())
       {
@@ -910,11 +893,11 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
       }
    }
 
-   if (_sensor->get_lin_direction() == -1)
+   if (_sensor.get_lin_direction() == -1)
    {
       // upper left corner
       double time = (double) date.get_second() + date.get_decimal();
-      time += theImageSize.y / _sensor->get_prf() ;
+      time += theImageSize.y / _sensor.get_prf() ;
       date.set_second((int) floor(time)) ;
       date.set_decimal(time - floor(time));
    }
@@ -970,7 +953,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
    //---
    if (_isProductGeoreferenced)
    {
-      if (_sensor->get_col_direction() == 1)
+      if (_sensor.get_col_direction() == 1)
       {
          distance += 0 ; // upper left corner
       }

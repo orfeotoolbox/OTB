@@ -9,16 +9,16 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <otb/SarSensor.h>
-#include <otb/JSDDateTime.h>
-#include <otb/Ephemeris.h>
-#include <otb/GeographicEphemeris.h>
-#include <otb/Sensor.h>
-#include <otb/SensorParams.h>
-#include <otb/PlatformPosition.h>
-#include <otb/Equation.h>
-#include <otb/RectangularCoordinate.h>
-#include <otb/GeodesicCoordinate.h>
+#include "otb/SarSensor.h"
+#include "otb/JSDDateTime.h"
+#include "otb/Ephemeris.h"
+#include "otb/GeographicEphemeris.h"
+#include "otb/Sensor.h"
+#include "otb/SensorParams.h"
+#include "otb/PlatformPosition.h"
+#include "otb/Equation.h"
+#include "otb/RectangularCoordinate.h"
+#include "otb/GeodesicCoordinate.h"
 #include <complex>
 
 
@@ -26,7 +26,8 @@ namespace ossimplugins
 {
 
 
-SarSensor::SarSensor(SensorParams* params, PlatformPosition* position) : Sensor(params, position)
+SarSensor::SarSensor(SensorParams const& params, PlatformPosition const& position)
+   : Sensor(params, position)
 {
 }
 
@@ -36,40 +37,40 @@ SarSensor::~SarSensor()
 
 int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) const
 {
-  const double TWOPI      = 6.28318530717958647693 ;
+   const double TWOPI      = 6.28318530717958647693 ;
 
-  double semiMajorAxis = _params->get_semiMajorAxis() ;  // default : WGS84
-  double semiMinorAxis = _params->get_semiMinorAxis() ; // default : WGS84
+   double semiMajorAxis = m_params.get_semiMajorAxis() ;  // default : WGS84
+   double semiMinorAxis = m_params.get_semiMinorAxis() ; // default : WGS84
 
-  double lambda = _params->get_rwl();
-  int sensVisee ;
-  if (_params->get_sightDirection() == SensorParams::Right) sensVisee = 1 ;
-  else sensVisee = -1 ;
+   double lambda = m_params.get_rwl();
+   int sensVisee ;
+   if (m_params.get_sightDirection() == SensorParams::Right) sensVisee = 1 ;
+   else sensVisee = -1 ;
 
-  Ephemeris* satPosition = _position->Interpolate(time);
+   Ephemeris* satPosition = m_position.Interpolate(time);
 
-  GeographicEphemeris *geoEph = (GeographicEphemeris*)satPosition;
+   GeographicEphemeris *geoEph = (GeographicEphemeris*)satPosition;
 
-  RectangularCoordinate cart;
+   RectangularCoordinate cart;
 
-  double dopplerCentroid = _params->get_dopcen();
-  double dopcenLinear = _params->get_dopcenLinear();
-  if (dopcenLinear != 0.0)
-  {
-	  dopplerCentroid += dopcenLinear * distance/1000; // Hz/km
-  }
+   double dopplerCentroid = m_params.get_dopcen();
+   double dopcenLinear = m_params.get_dopcenLinear();
+   if (dopcenLinear != 0.0)
+   {
+      dopplerCentroid += dopcenLinear * distance/1000; // Hz/km
+   }
 
-  // note : the Doppler frequency is set to zero
-  int etatLoc = localisationSAR(*geoEph, lambda, distance, dopplerCentroid, sensVisee, semiMajorAxis , semiMinorAxis , height, &cart);
+   // note : the Doppler frequency is set to zero
+   int etatLoc = localisationSAR(*geoEph, lambda, distance, dopplerCentroid, sensVisee, semiMajorAxis , semiMinorAxis , height, &cart);
 
-  GeodesicCoordinate geo;
-  cart.AsGeodesicCoordinates(semiMajorAxis , semiMinorAxis, &geo);
-  lon = (geo.get_x())*360.0/TWOPI;
-  lat = (geo.get_y())*360.0/TWOPI;
+   GeodesicCoordinate geo;
+   cart.AsGeodesicCoordinates(semiMajorAxis , semiMinorAxis, &geo);
+   lon = (geo.get_x())*360.0/TWOPI;
+   lat = (geo.get_y())*360.0/TWOPI;
 
-  delete satPosition;
+   delete satPosition;
 
-  return etatLoc ;
+   return etatLoc ;
 }
 
 int SarSensor::localisationSAR ( GeographicEphemeris posSpeed , double lambda ,

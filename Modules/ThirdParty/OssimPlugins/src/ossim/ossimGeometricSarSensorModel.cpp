@@ -13,7 +13,6 @@
 
 #include <otb/Ephemeris.h>
 #include <otb/PlatformPosition.h>
-#include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
 #include <ossim/base/ossimTrace.h>
@@ -41,7 +40,6 @@ namespace ossimplugins
       :
       ossimSensorModel(),
       _platformPosition(0),
-      _sensor(0),
       _refPoint(0),
       _sarSensor(0),
       _isProductGeoreferenced(false),
@@ -57,7 +55,7 @@ namespace ossimplugins
       :
       ossimSensorModel(rhs),
       _platformPosition(rhs._platformPosition?rhs._platformPosition->Clone():(PlatformPosition*)0),
-      _sensor(rhs._sensor?rhs._sensor->Clone():(SensorParams*)0),
+      _sensor(rhs._sensor),
       _refPoint(rhs._refPoint?rhs._refPoint->Clone():( RefPoint *)0),
       _isProductGeoreferenced(rhs._isProductGeoreferenced),
       _optimizationFactorX(rhs._optimizationFactorX),
@@ -67,13 +65,12 @@ namespace ossimplugins
       _imageFilename(rhs._imageFilename),
       _productXmlFile(rhs._productXmlFile)
    {
-      _sarSensor = new SarSensor(_sensor,_platformPosition);
+      _sarSensor = new SarSensor(_sensor,*_platformPosition);
    }
 
    ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
    {
       delete _platformPosition;
-      delete _sensor;
       delete _sarSensor;
       delete _refPoint;
    }
@@ -83,14 +80,14 @@ namespace ossimplugins
       const double CLUM        = 2.99792458e+8 ;
 
       double dist = _refPoint->get_distance()
-         + _sensor->get_col_direction() * (col - (_refPoint->get_pix_col())) * ((CLUM / 2.0) * _sensor->get_nRangeLook() / _sensor->get_sf()) ;
+         + _sensor.get_col_direction() * (col - (_refPoint->get_pix_col())) * ((CLUM / 2.0) * _sensor.get_nRangeLook() / _sensor.get_sf()) ;
 
       return  dist;
    }
 
    JSDDateTime ossimGeometricSarSensorModel::getTime(double line) const
    {
-      double dt =  _sensor->get_lin_direction() * (line - _refPoint->get_pix_line()) * _sensor->get_nAzimuthLook() / _sensor->get_prf() ;
+      double dt =  _sensor.get_lin_direction() * (line - _refPoint->get_pix_line()) * _sensor.get_nAzimuthLook() / _sensor.get_prf() ;
       JSDDateTime time = _refPoint->get_ephemeris()->get_date();
       time.set_second(time.get_second() + dt);
       time.NormDate();
@@ -113,7 +110,7 @@ namespace ossimplugins
       if (!_sarSensor)
       {
          // bad design consequence, should be fixed.
-         _sarSensor = new SarSensor(_sensor, _platformPosition);
+         _sarSensor = new SarSensor(_sensor, *_platformPosition);
       }
       double lon, lat;
       // const double CLUM        = 2.99792458e+8 ;
@@ -284,11 +281,11 @@ namespace ossimplugins
          ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
       }
 
-      if (_platformPosition && _sensor && _refPoint)
+      if (_platformPosition && _refPoint)
       {
          if ( _platformPosition->saveState(kwl, prefix) )
          {
-            if ( _sensor->saveState(kwl, prefix) )
+            if ( _sensor.saveState(kwl, prefix?prefix:"") )
             {
                result = _refPoint->saveState(kwl, prefix);
 
@@ -367,11 +364,7 @@ namespace ossimplugins
       }
 
       // Load the sensor position state.
-      if ( !_sensor)
-      {
-         _sensor = new SensorParams();
-      }
-      if ( _sensor->loadState(kwl, prefix) == false )
+      if ( _sensor.loadState(kwl, prefix?prefix:"") == false )
       {
          if (traceDebug())
          {
@@ -382,7 +375,7 @@ namespace ossimplugins
          result = false;
       }
 
-      _sarSensor = new SarSensor(_sensor, _platformPosition);
+      _sarSensor = new SarSensor(_sensor, *_platformPosition);
 
       // Load the ref point.
       if ( !_refPoint)
@@ -548,10 +541,7 @@ std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
    {
       _platformPosition->saveState(kwl, prefix);
    }
-   if (_sensor)
-   {
-      _sensor->saveState(kwl, prefix);
-   }
+   _sensor.saveState(kwl, prefix);
    if (_refPoint)
    {
       _refPoint->saveState(kwl, prefix);
@@ -742,10 +732,9 @@ void ossimGeometricSarSensorModel::set_platformPosition(PlatformPosition* platfo
    _platformPosition = platformPosition->Clone();
 }
 
-void ossimGeometricSarSensorModel::set_sensorParams(SensorParams* sensorParams)
+void ossimGeometricSarSensorModel::set_sensorParams(SensorParams const& sensorParams)
 {
-   delete _sensor;
-   _sensor = sensorParams->Clone();
+   _sensor = sensorParams;
 }
 
 void ossimGeometricSarSensorModel::set_refPoint(RefPoint* refPoint)
@@ -761,7 +750,7 @@ PlatformPosition* ossimGeometricSarSensorModel::get_platformPosition() const
 }
 
 
-SensorParams* ossimGeometricSarSensorModel::get_sensorParams() const
+SensorParams const& ossimGeometricSarSensorModel::get_sensorParams() const
 {
    return _sensor;
 }

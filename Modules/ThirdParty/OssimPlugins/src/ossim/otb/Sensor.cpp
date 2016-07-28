@@ -9,32 +9,17 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <otb/Sensor.h>
-#include <otb/SensorParams.h>
-#include <otb/PlatformPosition.h>
-
-#include <cstring>
+#include "otb/Sensor.h"
 
 namespace ossimplugins
 {
 
-
-Sensor::Sensor(SensorParams* params, PlatformPosition* position)
-{
-  _params = params->Clone();
-  _position = position->Clone();
-}
+Sensor::Sensor(SensorParams const& params, PlatformPosition const& position)
+   : m_params(params)
+   , m_position(position)
+   {}
 
 Sensor::~Sensor()
-{
-  if(_params != NULL)
-  {
-    delete _params;
-  }
+{}
 
-  if(_position != NULL)
-  {
-    delete _position;
-  }
-}
 }

@@ -69,12 +69,12 @@ namespace ossimplugins
       /**
        * @brief Method to initialize SensorParams object from
        * TerraSAR product xml file.
-       * @param xdoc Opened product.xml file.
-       * @param sp Pointer to SensorParams object.
+       * @param[in] xdoc Opened product.xml file.
+       * @param[out] sp to SensorParams object.
        * @return true on success, false on error.
        */
-      bool initSensorParams(const ossimXmlDocument* xdoc,
-                            SensorParams* sp) const;
+      bool initSensorParams(const ossimXmlDocument& xdoc,
+                            SensorParams& sp) const;
       
       /**
        * @brief Method to initialize image size from

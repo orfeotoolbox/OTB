@@ -43,7 +43,7 @@ ossimCosmoSkymedModel::~ossimCosmoSkymedModel()
 double ossimCosmoSkymedModel::getSlantRangeFromGeoreferenced(double col) const
 {
   // in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-  double relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ;
+  double relativeGroundRange = _refPoint->get_distance() + _sensor.get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ;
 
   double slantRange = _SrGr_coeffs[0]
               + _SrGr_coeffs[1]*(relativeGroundRange-_SrGr_R0)
@@ -76,14 +76,6 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
   const char* ellip_min_str = kwl.find(prefix,"ellip_min");
   double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-  if(_sensor != NULL)
-  {
-    delete _sensor;
-  }
-
-  _sensor = new SensorParams();
-
-
   /**
   * @todo : � voir sur de vrais produits (exemples de DESCENDING et ASCENDING)
   */
@@ -95,32 +87,32 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 
   const char* lookDirection_str = kwl.find(prefix,"lookDirection");
   std::string lookDirection(lookDirection_str) ;
-  if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor->set_sightDirection(SensorParams::Right) ;
-  else _sensor->set_sightDirection(SensorParams::Left) ;
+  if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor.set_sightDirection(SensorParams::Right) ;
+  else _sensor.set_sightDirection(SensorParams::Left) ;
 
   const char* colsOrder_str = kwl.find(prefix,"colsOrder");
   std::string colsOrder(colsOrder_str) ;
   const char* linsOrder_str = kwl.find(prefix,"linsOrder");
   std::string linsOrder(linsOrder_str) ;
   if (colsOrder=="NEAR-FAR")
-    _sensor->set_col_direction(orbitDirectionSign);
-  else _sensor->set_col_direction(-orbitDirectionSign);
+    _sensor.set_col_direction(orbitDirectionSign);
+  else _sensor.set_col_direction(-orbitDirectionSign);
   if (linsOrder=="NEAR-FAR")
-    _sensor->set_lin_direction(orbitDirectionSign);
-  else _sensor->set_lin_direction(-orbitDirectionSign);
+    _sensor.set_lin_direction(orbitDirectionSign);
+  else _sensor.set_lin_direction(-orbitDirectionSign);
 
-  _sensor->set_sf(fr);
+  _sensor.set_sf(fr);
   const double CLUM        = 2.99792458e+8 ;
   double wave_length = CLUM / central_freq ;
-  _sensor->set_rwl(wave_length);
-  _sensor->set_nAzimuthLook(n_azilok);
-  _sensor->set_nRangeLook(n_rnglok);
+  _sensor.set_rwl(wave_length);
+  _sensor.set_nAzimuthLook(n_azilok);
+  _sensor.set_nRangeLook(n_rnglok);
 
   // fa is the processing PRF
-  _sensor->set_prf(fa * n_azilok);
+  _sensor.set_prf(fa * n_azilok);
 
-  _sensor->set_semiMajorAxis(ellip_maj) ;
-  _sensor->set_semiMinorAxis(ellip_min) ;
+  _sensor.set_semiMajorAxis(ellip_maj) ;
+  _sensor.set_semiMinorAxis(ellip_min) ;
 
   return true;
 }
@@ -243,7 +235,7 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
   _refPoint->set_pix_col(sc_pix);
   _refPoint->set_pix_line(sc_lin);
 
-  double relative_date = (azimuthStartTime + sc_lin/_sensor->get_prf());
+  double relative_date = (azimuthStartTime + sc_lin/_sensor.get_prf());
   int second = (int) relative_date ;
   double decimal = relative_date - second ;
   CivilDateTime * date = new CivilDateTime(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
@@ -263,7 +255,7 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
   }
 
   double c = 2.99792458e+8;
-  double distance = (rng_gate + sc_pix*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
+  double distance = (rng_gate + sc_pix*_sensor.get_nRangeLook()/_sensor.get_sf()) * (c/2.0);
 
   // in the case of Georeferenced images, the "relative" ground range is stored in place of the slant range
   // (used for SlantRange computation relative to reference point, necessary for optimization)

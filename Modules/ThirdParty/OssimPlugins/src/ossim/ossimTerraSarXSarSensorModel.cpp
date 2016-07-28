@@ -54,7 +54,8 @@ namespace {// Anonymous namespace
    const ossimString attSceneInfo          = "sceneInfo";
    const ossimString attImageDataInfo      = "imageDataInfo";
    const ossimString attImageRaster        = "imageRaster";
-   const ossimString attSettings           = "instrument/settings";
+   const ossimString attInstrument         = "instrument";
+   const ossimString attSettings           = "settings"; // instrument/settings
    const ossimString attProductSpecific    = "productSpecific";
    const ossimString attComplexImageInfo   = "complexImageInfo";
    const ossimString attGeneralHeader      = "generalHeader";
@@ -409,6 +410,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    }
    const ossimXmlNode & xmlRoot = *xRoot;
 
+   // TODO: move to a nodes structure
    ossimXmlNode const& productInfo        = getExpectedFirstNode(xmlRoot, attProductInfo);
    ossimXmlNode const& productVariantInfo = getExpectedFirstNode(productInfo, attProductVariantInfo);
    ossimXmlNode const& sceneInfo          = getExpectedFirstNode(productInfo, attSceneInfo);
@@ -416,7 +418,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    ossimXmlNode const& rangeTime          = getExpectedFirstNode(sceneInfo, attRangeTime);
    ossimXmlNode const& imageDataInfo      = getExpectedFirstNode(productInfo, attImageDataInfo);
    ossimXmlNode const& imageRaster        = getExpectedFirstNode(imageDataInfo, attImageRaster);
-   ossimXmlNode const& settings           = getExpectedFirstNode(xmlRoot, attSettings);
+   ossimXmlNode const& instrument         = getExpectedFirstNode(xmlRoot, attInstrument);
+   ossimXmlNode const& settings           = getExpectedFirstNode(instrument, attSettings);
    ossimXmlNode const& productSpecific    = getExpectedFirstNode(xmlRoot, attProductSpecific);
    ossimXmlNode const& complexImageInfo   = getExpectedFirstNode(productSpecific, attComplexImageInfo);
    ossimXmlNode const& generalHeader      = getExpectedFirstNode(xmlRoot, attGeneralHeader);
@@ -578,6 +581,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    initCalibration(xmlDoc);
    assert(!m_calFactor.empty());
    add(theProductKwl, "calibration.calibrationConstant.calFactor", m_calFactor.back());
+
+   addMandatory(theProductKwl, "radarFrequency", instrument, "radarParameters/centerFrequency");
 
    initSceneCoord(sceneCenterCoord, sceneInfo);
 #if 1

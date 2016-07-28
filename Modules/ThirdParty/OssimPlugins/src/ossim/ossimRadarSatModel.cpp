@@ -107,7 +107,7 @@ double ossimRadarSatModel::getSlantRangeFromGeoreferenced(double col) const
   double relativeGroundRange ;
 
   // in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-  relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ;
+  relativeGroundRange = _refPoint->get_distance() + _sensor.get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ;
 
   int numSet = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
   /**
@@ -753,45 +753,38 @@ bool ossimRadarSatModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
   const char* ellip_min_str = kwl.find(prefix,"ellip_min");
   double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-  if(_sensor != NULL)
-  {
-    delete _sensor;
-  }
-
-  _sensor = new SensorParams();
-
   if(strcmp(time_dir_pix, "INCREASE") == 0)
   {
-    _sensor->set_col_direction(1);
+    _sensor.set_col_direction(1);
   }
   else
   {
-    _sensor->set_col_direction(-1);
+    _sensor.set_col_direction(-1);
   }
 
   if(strcmp(time_dir_lin, "INCREASE") == 0)
   {
-    _sensor->set_lin_direction(1);
+    _sensor.set_lin_direction(1);
   }
   else
   {
-    _sensor->set_lin_direction(-1);
+    _sensor.set_lin_direction(-1);
   }
 
   const char* lookDirection_str = kwl.find(prefix,"lookDirection");
   ossimString lookDirection(lookDirection_str) ;
   lookDirection.trim(" ") ; // eliminates trailing blanks
-  if (lookDirection == "NORMAL") _sensor->set_sightDirection(SensorParams::Right) ;
-  else _sensor->set_sightDirection(SensorParams::Left) ;
+  if (lookDirection == "NORMAL") _sensor.set_sightDirection(SensorParams::Right) ;
+  else _sensor.set_sightDirection(SensorParams::Left) ;
 
-  _sensor->set_prf(fa);
-  _sensor->set_sf(fr);
-  _sensor->set_rwl(wave_length);
-  _sensor->set_nAzimuthLook(n_azilok);
-  _sensor->set_nRangeLook(n_rnglok);
+  _sensor.set_prf(fa);
+  _sensor.set_sf(fr);
+  _sensor.set_rwl(wave_length);
+  _sensor.set_nAzimuthLook(n_azilok);
+  _sensor.set_nRangeLook(n_rnglok);
 
-  _sensor->set_semiMajorAxis(ellip_maj) ;
-  _sensor->set_semiMinorAxis(ellip_min) ;
+  _sensor.set_semiMajorAxis(ellip_maj) ;
+  _sensor.set_semiMinorAxis(ellip_min) ;
 
   return true;
 }
@@ -1024,7 +1017,7 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 
   double c = 2.99792458e+8;
 
-  double distance = (rng_gate + ((double)sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
+  double distance = (rng_gate + ((double)sc_pix)*_sensor.get_nRangeLook()/_sensor.get_sf()) * (c/2.0);
 
   // in the case of Georeferenced images, the "relative" ground range is stored in place of the slant range
   // (used for SlantRange computation relative to reference point, necessary for optimization)
@@ -1042,8 +1035,8 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 //  Ephemeris * ephemeris = _refPoint->get_ephemeris() ;
 //  double velSat = sqrt(pow(ephemeris->get_speed()[0], 2)+ pow(ephemeris->get_speed()[1], 2)+ pow(ephemeris->get_speed()[2], 2));
 //  double prfeq = velSat / line_spacing ;
-//  _sensor->set_prf(prfeq);
-//  _sensor->set_nAzimuthLook(1.0);
+//  _sensor.set_prf(prfeq);
+//  _sensor.set_nAzimuthLook(1.0);
 ///**
 // * @todo : effacer
 // */
@@ -1064,7 +1057,7 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
     double acq_msec_last = atof(acq_msec_last_str);
 
     double actualPRF = 1000.0*theImageSize.y/(acq_msec_last-acq_msec_first) ;
-    _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF);
+    _sensor.set_nAzimuthLook(_sensor.get_prf()/actualPRF);
   }
 
   // Ground Control Points extracted from the model : scene center
