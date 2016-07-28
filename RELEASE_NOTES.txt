@@ -2,7 +2,7 @@
  Monteverdi Release Note
 =========================
 
-Monteverdi 3.4.0 - Changes since version 3.2.0 (July 26th, 2016)
+Monteverdi 3.4.0 - Changes since version 3.2.0 (July 28th, 2016)
 =================================================================
 
 * Bug fixes:
