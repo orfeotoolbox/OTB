@@ -187,6 +187,10 @@ public:
    */
   virtual void ResizeEvent( QResizeEvent* event ) =0;
 
+  /**
+   */
+  virtual void ResetViewport() =0;
+
 //
 // Public SLOTS.
 public slots:

@@ -130,7 +130,7 @@ I18nMainWindow
                    const QString& dockName,
                    const QString& dockTitle,
                    Qt::DockWidgetArea dockArea,
-                   bool isFloating )
+                   DockLayoutFlags flags )
 {
   // New dock.
   QDockWidget* dockWidget = new QDockWidget( dockTitle, this );
@@ -140,7 +140,7 @@ I18nMainWindow
   dockWidget->setWidget( widget );
 
   // Features.
-  dockWidget->setFloating( isFloating );
+  dockWidget->setFloating( flags.testFlag( DOCK_LAYOUT_FLOATING ) );
   dockWidget->setFeatures(
     QDockWidget::DockWidgetMovable |
     QDockWidget::DockWidgetFloatable |

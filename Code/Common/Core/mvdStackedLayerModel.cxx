@@ -247,7 +247,7 @@ StackedLayerModel
   //
   // Remember new current index.
   SizeType current =
-    index>=m_Current
+    index>m_Current
     ? m_Current
     : ( m_Current>0
         ? m_Current - 1
@@ -281,9 +281,11 @@ StackedLayerModel
   // Update reference pointer.
   if( emitReferenceChanged )
     SetReference(
-      index>=m_Reference
+      index>m_Reference
       ? m_Reference
-      : m_Reference - 1,
+      : ( m_Reference > 0
+	  ? m_Reference - 1
+	  : StackedLayerModel::NIL_INDEX ),
       true
     );
 
