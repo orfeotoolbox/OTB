@@ -48,27 +48,30 @@ namespace {// Anonymous namespace
    const ossimString attHeight      = "height";
    const ossimString attAzimuthTime = "azimuthTime";
 
-   const ossimString attProductInfo        = "productInfo";
-   const ossimString attProductVariantInfo = "productVariantInfo";
-   const ossimString attProductVariant     = "productVariant";
-   const ossimString attSceneInfo          = "sceneInfo";
-   const ossimString attImageDataInfo      = "imageDataInfo";
-   const ossimString attImageRaster        = "imageRaster";
-   const ossimString attInstrument         = "instrument";
-   const ossimString attSettings           = "settings"; // instrument/settings
-   const ossimString attProductSpecific    = "productSpecific";
-   const ossimString attComplexImageInfo   = "complexImageInfo";
-   const ossimString attGeneralHeader      = "generalHeader";
-   const ossimString attSceneCenterCoord   = "sceneCenterCoord";
-   const ossimString attSceneCornerCoord   = "sceneCornerCoord";
-   const ossimString attRangeTime          = "rangeTime";
-   const ossimString attPolLayer           = "polLayer";
-   const ossimString attImageData          = "/level1Product/productComponents/imageData";
-   const ossimString attPolLayerFileName   = "file/location/filename";
+   const ossimString attProductInfo          = "productInfo";
+   const ossimString attProductVariantInfo   = "productVariantInfo";
+   const ossimString attProductVariant       = "productVariant";
+   const ossimString attSceneInfo            = "sceneInfo";
+   const ossimString attImageDataInfo        = "imageDataInfo";
+   const ossimString attImageRaster          = "imageRaster";
+   const ossimString attInstrument           = "instrument";
+   const ossimString attSettings             = "settings"; // instrument/settings
+   const ossimString attProductSpecific      = "productSpecific";
+   const ossimString attComplexImageInfo     = "complexImageInfo";
+   const ossimString attGeneralHeader        = "generalHeader";
+   const ossimString attSceneCenterCoord     = "sceneCenterCoord";
+   const ossimString attSceneCornerCoord     = "sceneCornerCoord";
+   const ossimString attRangeTime            = "rangeTime";
+   const ossimString attPolLayer             = "polLayer";
+   const ossimString attImageData            = "/level1Product/productComponents/imageData";
+   const ossimString attPolLayerFileName     = "file/location/filename";
+   const ossimString attAcquisitionInfo      = "acquisitionInfo";
+   const ossimString attProcessingParameter  = "processing/processingParameter";
+   const ossimString attMissionInfo          = "missionInfo";
 
-   const std::string ACQUISITION_INFO      = "acquisitionInfo.";
-   const std::string POLARISATION_LIST     = "polarisationList";
-   const std::string CALIBRATION_CALFACTOR = "calibration.calibrationConstant.calFactor";
+   const std::string ACQUISITION_INFO        = "acquisitionInfo.";
+   const std::string POLARISATION_LIST       = "polarisationList";
+   const std::string CALIBRATION_CALFACTOR   = "calibration.calibrationConstant.calFactor";
 
    inline bool isnan(ossimGpt const& p) {
       return ossim::isnan(p.latd()) || ossim::isnan(p.lond()) || ossim::isnan(p.height());
@@ -79,6 +82,51 @@ namespace {// Anonymous namespace
 namespace ossimplugins {
    RTTI_DEF1(ossimTerraSarXSarSensorModel, "ossimTerraSarXSarSensorModel", ossimSarSensorModel);
 } // ossimplugins namespace
+
+/** Data aggregates that contains direct access to nodes.
+ * While accessing to XML information through an xpath is more user friendly,
+ * it's also much less efficient. That's why is approach has been chosen
+ * instead.
+ */
+struct ossimplugins::ossimTerraSarXSarSensorModel::Nodes
+{
+   Nodes(ossimXmlNode const& xmlRoot)
+      : productInfo         (getExpectedFirstNode(xmlRoot,            attProductInfo))
+      , productVariantInfo  (getExpectedFirstNode(productInfo,        attProductVariantInfo))
+      , sceneInfo           (getExpectedFirstNode(productInfo,        attSceneInfo))
+      , sceneCenterCoord    (getExpectedFirstNode(sceneInfo,          attSceneCenterCoord))
+      , rangeTime           (getExpectedFirstNode(sceneInfo,          attRangeTime))
+      , imageDataInfo       (getExpectedFirstNode(productInfo,        attImageDataInfo))
+      , imageRaster         (getExpectedFirstNode(imageDataInfo,      attImageRaster))
+      , instrument          (getExpectedFirstNode(xmlRoot,            attInstrument))
+      , settings            (getExpectedFirstNode(instrument,         attSettings))
+      , productSpecific     (getExpectedFirstNode(xmlRoot,            attProductSpecific))
+      , complexImageInfo    (getExpectedFirstNode(productSpecific,    attComplexImageInfo))
+      , generalHeader       (getExpectedFirstNode(xmlRoot,            attGeneralHeader))
+      , acquisitionInfo     (getExpectedFirstNode(productInfo,        attAcquisitionInfo))
+      , processingParameter (getExpectedFirstNode(xmlRoot,            attProcessingParameter))
+      , missionInfo         (getExpectedFirstNode(productInfo,        attMissionInfo))
+      {}
+
+   ossimXmlNode const& productInfo;
+   ossimXmlNode const& productVariantInfo;
+   ossimXmlNode const& sceneInfo;
+   ossimXmlNode const& sceneCenterCoord;
+   ossimXmlNode const& rangeTime;
+   ossimXmlNode const& imageDataInfo;
+   ossimXmlNode const& imageRaster;
+   ossimXmlNode const& instrument;
+   ossimXmlNode const& settings;
+   ossimXmlNode const& productSpecific;
+   ossimXmlNode const& complexImageInfo;
+   ossimXmlNode const& generalHeader;
+   ossimXmlNode const& acquisitionInfo;
+   ossimXmlNode const& processingParameter;
+   ossimXmlNode const& missionInfo;
+private:
+   Nodes(Nodes const&);
+   Nodes& operator=(Nodes const&);
+};
 
 ossimplugins::ossimTerraSarXSarSensorModel::ossimTerraSarXSarSensorModel()
    : m_polLayerName("UNDEFINED")
@@ -260,8 +308,8 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::open";
-   // traceDebug.setTraceFlag(true);
-   // traceExec .setTraceFlag(true);
+   traceDebug.setTraceFlag(true);
+   traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
    if (traceDebug())
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " try to open "<<file<<"\n";
@@ -345,6 +393,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
       add(kwl, prefix, CALIBRATION_CALFACTOR, m_calFactor[i]);
    }
 
+   m_sensorParams.saveState(kwl, prefix);
    m_sceneCoord.saveState(kwl, prefix);
 
    // noise
@@ -392,6 +441,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
    }
 #endif
 
+   m_sensorParams.loadState(kwl, prefix);
    m_sceneCoord.loadState(kwl, prefix);
    // TODO: noise
    // TODO: calFactor
@@ -401,6 +451,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
 
 bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
 {
+   SCOPED_LOG(traceDebug, "ossimTerraSarXSarSensorModel::read");
+
    const ossimFilename annotationXml = findTSXLeader(file);
 
    ossimXmlDocument xmlDoc(annotationXml);
@@ -410,22 +462,10 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    }
    const ossimXmlNode & xmlRoot = *xRoot;
 
-   // TODO: move to a nodes structure
-   ossimXmlNode const& productInfo        = getExpectedFirstNode(xmlRoot, attProductInfo);
-   ossimXmlNode const& productVariantInfo = getExpectedFirstNode(productInfo, attProductVariantInfo);
-   ossimXmlNode const& sceneInfo          = getExpectedFirstNode(productInfo, attSceneInfo);
-   ossimXmlNode const& sceneCenterCoord   = getExpectedFirstNode(sceneInfo, attSceneCenterCoord);
-   ossimXmlNode const& rangeTime          = getExpectedFirstNode(sceneInfo, attRangeTime);
-   ossimXmlNode const& imageDataInfo      = getExpectedFirstNode(productInfo, attImageDataInfo);
-   ossimXmlNode const& imageRaster        = getExpectedFirstNode(imageDataInfo, attImageRaster);
-   ossimXmlNode const& instrument         = getExpectedFirstNode(xmlRoot, attInstrument);
-   ossimXmlNode const& settings           = getExpectedFirstNode(instrument, attSettings);
-   ossimXmlNode const& productSpecific    = getExpectedFirstNode(xmlRoot, attProductSpecific);
-   ossimXmlNode const& complexImageInfo   = getExpectedFirstNode(productSpecific, attComplexImageInfo);
-   ossimXmlNode const& generalHeader      = getExpectedFirstNode(xmlRoot, attGeneralHeader);
+   Nodes nodes(xmlRoot);
 
    // Product type
-   ossimString  const& productType        = getTextFromFirstNode(productVariantInfo, "productVariant");
+   ossimString  const& productType        = getTextFromFirstNode(nodes.productVariantInfo, "productVariant");
    ossimNotify(ossimNotifyLevel_DEBUG) << "Product type: " <<  productType << '\n';
    theProductType = ProductType(productType);
    add(theProductKwl, SUPPORT_DATA_PREFIX, "product_type", productType);
@@ -438,23 +478,23 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    }
 
    //Parse the near range time (in seconds)
-   const ossimString & sNearRangeTime = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", sceneInfo, "rangeTime/firstPixel");
+   const ossimString & sNearRangeTime = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", nodes.sceneInfo, "rangeTime/firstPixel");
 
    theNearRangeTime  = to<double>(sNearRangeTime, " extracting slant_range_to_first_pixel from productInfo/sceneInfo/rangeTime/firstPixel field");
    ossimNotify(ossimNotifyLevel_DEBUG) << "theNearRangeTime " << theNearRangeTime << '\n';
 
    //Parse the range sampling rate
-   ossimString const& sRangeSamplingRate = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate",        settings, "RSF");
+   ossimString const& sRangeSamplingRate = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate",        nodes.settings, "RSF");
    theRangeSamplingRate = to<double>(sRangeSamplingRate, " extracting range_sampling_rate from instrument/settings/RSF field");
 
 
    //Parse the range resolution
-   theRangeResolution = getDoubleFromFirstNode(complexImageInfo, "slantRangeResolution");
+   theRangeResolution = getDoubleFromFirstNode(nodes.complexImageInfo, "slantRangeResolution");
    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spacing", theRangeResolution);
    ossimNotify(ossimNotifyLevel_DEBUG) << "theRangeResolution " << theRangeResolution << '\n';
 
    //Parse the radar frequency
-   ossimString const& sRadarFrequency = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",            settings, "settingRecord/PRF");
+   ossimString const& sRadarFrequency = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",            nodes.settings, "settingRecord/PRF");
    theRadarFrequency = to<double>(sRadarFrequency, " extracting radar_frequency from instrument/settings/settingRecord/PRF field");
    ossimNotify(ossimNotifyLevel_DEBUG) << "theRadarFrequency " << theRadarFrequency << '\n';
 
@@ -465,10 +505,10 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
    // With this way of procedding, the time points are not altered, they are
    // forwarded exactly as written initially
-   readAzimuthTimes(sceneInfo, settings); // sets theAzimuthTimeStart and Stop
+   readAzimuthTimes(nodes); // sets theAzimuthTimeStart and Stop
    const TimeType azimuthTimeStart = time::toModifiedJulianDate(add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", theAzimuthTimeStart));
    const TimeType azimuthTimeStop  = time::toModifiedJulianDate(add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  theAzimuthTimeStop));
-   theImageSize.y = getFromFirstNode<unsigned int>(imageRaster, "numberOfRows");
+   theImageSize.y = getFromFirstNode<unsigned int>(nodes.imageRaster, "numberOfRows");
    const double end_line           = add(theProductKwl, BURST_PREFIX, "[0].end_line", theImageSize.y - 1);
 
    BurstRecordType burstRecord;
@@ -545,36 +585,37 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    // TODO: metadata file ?
 
    // Fill other properties from ossimSensorModel
-   initAcquisitionInfo(productInfo, imageDataInfo);
-   theSensorID      = getTextFromFirstNode(generalHeader, "mission");
+   initAcquisitionInfo(nodes);
+   theSensorID      = getTextFromFirstNode(nodes.generalHeader, "mission");
    // theSensorID is added in parent class
 
-   theImageID       = getTextFromFirstNode(sceneInfo, "sceneID");
-   theImageSize.x   = getFromFirstNode<unsigned int>(imageRaster, "numberOfColumns");
+   theImageID       = getTextFromFirstNode(nodes.sceneInfo, "sceneID");
+   theImageSize.x   = getFromFirstNode<unsigned int>(nodes.imageRaster, "numberOfColumns");
    // theGSD
    if (isSSC()) {
-      theGSD.x = getFromFirstNode<double>(complexImageInfo, "projectedSpacingRange/slantRange");
-      theGSD.y = getFromFirstNode<double>(complexImageInfo, "projectedSpacingAzimuth");
+      theGSD.x = getFromFirstNode<double>(nodes.complexImageInfo, "projectedSpacingRange/slantRange");
+      theGSD.y = getFromFirstNode<double>(nodes.complexImageInfo, "projectedSpacingAzimuth");
    } else {
       // TODO: check values whether they aren't inverted
       // x <-> rowSpacing and y <-> columnSpacing is what was done in original
       // code
-      theGSD.x = getFromFirstNode<double>(imageRaster, "rowSpacing");
-      theGSD.y = getFromFirstNode<double>(imageRaster, "columnSpacing");
+      theGSD.x = getFromFirstNode<double>(nodes.imageRaster, "rowSpacing");
+      theGSD.y = getFromFirstNode<double>(nodes.imageRaster, "columnSpacing");
    }
-   theRefGndPt.lat = getFromFirstNode<ossim_float64>(sceneCenterCoord, "lat");
-   theRefGndPt.lon = getFromFirstNode<ossim_float64>(sceneCenterCoord, "lon");
+   theRefGndPt.lat = getFromFirstNode<ossim_float64>(nodes.sceneCenterCoord, "lat");
+   theRefGndPt.lon = getFromFirstNode<ossim_float64>(nodes.sceneCenterCoord, "lon");
 
-   theRefImgPt.x = getFromFirstNode<ossim_float64>(sceneCenterCoord, "refColumn") - 1.0;
-   theRefImgPt.y = getFromFirstNode<ossim_float64>(sceneCenterCoord, "refRow")    - 1.0;
+   initSensorParams(nodes);
+   theRefImgPt.x = getFromFirstNode<ossim_float64>(nodes.sceneCenterCoord, "refColumn") - 1.0;
+   theRefImgPt.y = getFromFirstNode<ossim_float64>(nodes.sceneCenterCoord, "refRow")    - 1.0;
 
    // azimuth_start_time/stop
    add(theProductKwl, "azimuth_start_time", theAzimuthTimeStart);
    add(theProductKwl, "azimuth_stop_time",  theAzimuthTimeStop);
 
-   addMandatory(theProductKwl, "range_first_time", rangeTime, "firstPixel");
-   addMandatory(theProductKwl, "range_last_time", rangeTime, "lastPixel");
-   addMandatory(theProductKwl, "generation_time", generalHeader, "generationTime");
+   addMandatory(theProductKwl, "range_first_time", nodes.rangeTime, "firstPixel");
+   addMandatory(theProductKwl, "range_last_time", nodes.rangeTime, "lastPixel");
+   addMandatory(theProductKwl, "generation_time", nodes.generalHeader, "generationTime");
 
    initNoise(xmlDoc);
    getPolLayerFromImageFile(xmlDoc, file);
@@ -582,9 +623,9 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    assert(!m_calFactor.empty());
    add(theProductKwl, "calibration.calibrationConstant.calFactor", m_calFactor.back());
 
-   addMandatory(theProductKwl, "radarFrequency", instrument, "radarParameters/centerFrequency");
+   addMandatory(theProductKwl, "radarFrequency", nodes.instrument, "radarParameters/centerFrequency");
 
-   initSceneCoord(sceneCenterCoord, sceneInfo);
+   initSceneCoord(nodes);
 #if 1
    // GCPRecords need to be loaded into C++ data in order to use
    // lineSampleToWorld()
@@ -718,19 +759,18 @@ ossimFilename ossimplugins::ossimTerraSarXSarSensorModel::searchGeoRefFile(ossim
    return geoRefFile;
 }
 
-void ossimplugins::ossimTerraSarXSarSensorModel::readAzimuthTimes(
-      ossimXmlNode const& sceneInfo, ossimXmlNode const& settings)
+void ossimplugins::ossimTerraSarXSarSensorModel::readAzimuthTimes(Nodes const& nodes)
 {
-   theAzimuthTimeStart = getOptionalTextFromFirstNode(sceneInfo, "start/timeUTC").string();
+   theAzimuthTimeStart = getOptionalTextFromFirstNode(nodes.sceneInfo, "start/timeUTC").string();
    if (theAzimuthTimeStart.empty())
    {
-      theAzimuthTimeStart = getOptionalTextFromFirstNode(settings, "rxGainSetting/startTimeUTC").string();
+      theAzimuthTimeStart = getOptionalTextFromFirstNode(nodes.settings, "rxGainSetting/startTimeUTC").string();
    }
 
-   theAzimuthTimeStop = getOptionalTextFromFirstNode(sceneInfo, "stop/timeUTC").string();
+   theAzimuthTimeStop = getOptionalTextFromFirstNode(nodes.sceneInfo, "stop/timeUTC").string();
    if (theAzimuthTimeStop.empty())
    {
-      theAzimuthTimeStop = getOptionalTextFromFirstNode(settings, "rxGainSetting/stopTimeUTC").string();
+      theAzimuthTimeStop = getOptionalTextFromFirstNode(nodes.settings, "rxGainSetting/stopTimeUTC").string();
    }
 }
 
@@ -965,26 +1005,25 @@ void ossimplugins::ossimTerraSarXSarSensorModel::initCalibration(
    }
 }
 
-void ossimplugins::ossimTerraSarXSarSensorModel::initSceneCoord(
-   ossimXmlNode const& sceneCenterCoord, ossimXmlNode const& sceneInfo)
+void ossimplugins::ossimTerraSarXSarSensorModel::initSceneCoord(Nodes const& nodes)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::initSceneCoord";
    SCOPED_LOG(traceDebug, MODULE);
 
    InfoSceneCoord isc;
 
-   isc.set_refRow        (getFromFirstNode<ossim_uint32>(sceneCenterCoord, "refRow"));
-   isc.set_refColumn     (getFromFirstNode<ossim_uint32>(sceneCenterCoord, "refColumn"));
-   isc.set_lat           (getFromFirstNode<double>      (sceneCenterCoord, "lat"));
-   isc.set_lon           (getFromFirstNode<double>      (sceneCenterCoord, "lon"));
-   isc.set_azimuthTimeUTC(getTextFromFirstNode          (sceneCenterCoord, "azimuthTimeUTC"));
-   isc.set_rangeTime     (getFromFirstNode<double>      (sceneCenterCoord, "rangeTime"));
-   isc.set_incidenceAngle(getFromFirstNode<double>      (sceneCenterCoord, "incidenceAngle"));
+   isc.set_refRow        (getFromFirstNode<ossim_uint32>(nodes.sceneCenterCoord, "refRow"));
+   isc.set_refColumn     (getFromFirstNode<ossim_uint32>(nodes.sceneCenterCoord, "refColumn"));
+   isc.set_lat           (getFromFirstNode<double>      (nodes.sceneCenterCoord, "lat"));
+   isc.set_lon           (getFromFirstNode<double>      (nodes.sceneCenterCoord, "lon"));
+   isc.set_azimuthTimeUTC(getTextFromFirstNode          (nodes.sceneCenterCoord, "azimuthTimeUTC"));
+   isc.set_rangeTime     (getFromFirstNode<double>      (nodes.sceneCenterCoord, "rangeTime"));
+   isc.set_incidenceAngle(getFromFirstNode<double>      (nodes.sceneCenterCoord, "incidenceAngle"));
 
    m_sceneCoord.set_centerSceneCoord(isc);
 
    std::vector<ossimRefPtr<ossimXmlNode> > xnodes2;
-   sceneInfo.findChildNodes(attSceneCornerCoord, xnodes2);
+   nodes.sceneInfo.findChildNodes(attSceneCornerCoord, xnodes2);
 
    if ( ! xnodes2.empty() )
    {
@@ -1013,25 +1052,104 @@ void ossimplugins::ossimTerraSarXSarSensorModel::initSceneCoord(
    }
 }
 
-void ossimplugins::ossimTerraSarXSarSensorModel::initAcquisitionInfo(
-   ossimXmlNode const& productInfo, ossimXmlNode const& imageDataInfo)
+bool ossimplugins::ossimTerraSarXSarSensorModel::isProductGeoreferenced(Nodes const& nodes) const
+{
+   // getProjection() == GROUNDRANGE
+   ossimString const& projection = getTextFromFirstNode(nodes.productVariantInfo, "projection");
+   return projection == "GROUNDRANGE";
+}
+
+void ossimplugins::ossimTerraSarXSarSensorModel::initSensorParams(Nodes const& nodes)
+{
+   static const char MODULE[] = "ossimplugins::ossimTerraXSarSensorModel::initSensorParams";
+   SCOPED_LOG(traceDebug, MODULE);
+
+   m_sensorParams.set_nAzimuthLook(getFromFirstNode<double>(nodes.processingParameter, "azimuthLooks"));
+   m_sensorParams.set_nRangeLook  (getFromFirstNode<double>(nodes.processingParameter, "rangeLooks"));
+   m_sensorParams.set_prf         (getFromFirstNode<double>(nodes.complexImageInfo,    "commonPRF"));
+   const double CLUM = 2.99792458e+8 ;
+   const double rcf = getFromFirstNode<double>(nodes.instrument, "radarParameters/centerFrequency");
+   if (rcf == 0.0)
+   {
+      throw std::runtime_error("Null Radar Center Frequency found in TSX annotation file, cannot compute the wavelength");
+   }
+   m_sensorParams.set_rwl         (CLUM / rcf);
+   ossimString const& rawDirection = getTextFromFirstNode(nodes.acquisitionInfo, "lookDirection");
+   char direction[10];
+   to_lower_to(rawDirection, direction);
+   if (strcmp(direction, "right") == 0)
+   {
+      m_sensorParams.set_sightDirection(SensorParams::Right);
+   } else if (strcmp(direction, "left") == 0)
+   {
+      m_sensorParams.set_sightDirection(SensorParams::Left);
+   } else
+   {
+      throw std::runtime_error(("Invalid sensor direction found in TSX file: "+rawDirection).string());
+   }
+   m_sensorParams.set_sf          (getFromFirstNode<double>(nodes.complexImageInfo, "commonRSF"));
+
+   // Ellipsoid hard coded to WGS84.
+   const double SEMI_MAJOR = 6378137.0;
+   const double SEMI_MINOR = 6356752.3142;
+   m_sensorParams.set_semiMajorAxis(SEMI_MAJOR);
+   m_sensorParams.set_semiMinorAxis(SEMI_MINOR);
+
+   if (isProductGeoreferenced(nodes)) // getProjection() == GROUNDRANGE
+   {
+      ossimString const& rawOrbitDirection = getTextFromFirstNode(nodes.missionInfo, "orbitDirection");
+      ossimString const& imageDataStartWith = getTextFromFirstNode(nodes.complexImageInfo, "imageDataStartWith");
+      char orbitDirection[50];
+      to_lower_to(rawOrbitDirection, orbitDirection);
+
+      const int orbitDirectionSign = strcmp(orbitDirection, "descending") == 0
+         ?  1
+         : -1;
+
+      if (imageDataStartWith=="EARLYAZNEARRG") {
+         m_sensorParams.set_col_direction(orbitDirectionSign);
+         m_sensorParams.set_lin_direction(orbitDirectionSign);
+      }
+      else if (imageDataStartWith=="EARLYAZFARRG") {
+         m_sensorParams.set_col_direction(-orbitDirectionSign);
+         m_sensorParams.set_lin_direction(orbitDirectionSign);
+      }
+      else if (imageDataStartWith=="LATEAZNEARRG") {
+         m_sensorParams.set_col_direction(orbitDirectionSign);
+         m_sensorParams.set_lin_direction(-orbitDirectionSign);
+      }
+      else if (imageDataStartWith=="LATEAZFARRG") {
+         m_sensorParams.set_col_direction(-orbitDirectionSign);
+         m_sensorParams.set_lin_direction(-orbitDirectionSign);
+      }
+      else { // COSAR Files are stored ing with early azimuth, near range
+         m_sensorParams.set_col_direction(orbitDirectionSign);
+         m_sensorParams.set_lin_direction(orbitDirectionSign);
+      }
+   } // matches: if ( isProductGeoreferenced(xdoc) )
+   else
+   {
+      m_sensorParams.set_col_direction(1);
+      m_sensorParams.set_lin_direction(1);
+   }
+}
+
+void ossimplugins::ossimTerraSarXSarSensorModel::initAcquisitionInfo(Nodes const& nodes)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraXSarSensorModel::initAcquisitionInfo";
    SCOPED_LOG(traceDebug, MODULE);
 
-   const ossimString attAcquisitionInfo = "acquisitionInfo";
-   ossimXmlNode const& acquisitionInfo = getExpectedFirstNode(productInfo, attAcquisitionInfo);
-
    // number of layers and m_polLayerList
-   const std::size_t numberOfLayers = getFromFirstNode<std::size_t>(imageDataInfo, "numberOfLayers");
-   m_polLayerList   = getTextNodes(acquisitionInfo, "polarisationList/polLayer");
+   const std::size_t numberOfLayers = getFromFirstNode<std::size_t>(nodes.imageDataInfo, "numberOfLayers");
+   m_polLayerList   = getTextNodes(nodes.acquisitionInfo, "polarisationList/polLayer");
    if (numberOfLayers != m_polLayerList.size())
    {
       throw std::runtime_error("Number of layers found mismatch with the number of layer registered");
    }
 
-   addMandatory(theProductKwl, "acquisitionInfo.imagingMode",      acquisitionInfo, "imagingMode");
-   addMandatory(theProductKwl, "acquisitionInfo.sensor",           acquisitionInfo, "sensor");
-   addMandatory(theProductKwl, "acquisitionInfo.lookDirection",    acquisitionInfo, "lookDirection");
-   addMandatory(theProductKwl, "acquisitionInfo.polarisationMode", acquisitionInfo, "polarisationMode");
+   addMandatory(theProductKwl, "acquisitionInfo.imagingMode",      nodes.acquisitionInfo, "imagingMode");
+   addMandatory(theProductKwl, "acquisitionInfo.sensor",           nodes.acquisitionInfo, "sensor");
+   addMandatory(theProductKwl, "acquisitionInfo.lookDirection",    nodes.acquisitionInfo, "lookDirection");
+   addMandatory(theProductKwl, "acquisitionInfo.polarisationMode", nodes.acquisitionInfo, "polarisationMode");
 }
+

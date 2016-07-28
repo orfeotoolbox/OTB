@@ -15,6 +15,7 @@
 #include "ossimSarSensorModel.h"
 #include "otb/Noise.h"
 #include "otb/SceneCoord.h"
+#include "otb/SensorParams.h"
 class ossimXmlDocument;
 
 namespace ossimplugins
@@ -90,8 +91,12 @@ protected:
   std::vector<Noise>       m_noise;
   /// SceneCoord (SceneInfo node).
   SceneCoord               m_sceneCoord;
+  /// Sensor parameters
+  SensorParams             m_sensorParams;
 
 private:
+  struct Nodes;
+
   /** Internal function that reads annotation file.
    * \throw std::exception possibly
    */
@@ -110,9 +115,7 @@ private:
 
   /** Internal function dedicated to read Azimuth Time Start and Stop
    */
-  void readAzimuthTimes(
-        ossimXmlNode const& sceneInfo,
-        ossimXmlNode const& settings);
+  void readAzimuthTimes(Nodes const& nodes);
 
   ossimFilename searchGeoRefFile(ossimFilename const& file) const;
 
@@ -129,8 +132,9 @@ private:
   std::size_t findPolLayerIdx(std::string const& polLayerName) const;
   void getNoiseAtGivenNode(ossimXmlNode const& noiseNode, ossimplugins::Noise& noise);
 
-  void initAcquisitionInfo(
-        ossimXmlNode const& productInfo, ossimXmlNode const& imageDataInfo);
+  bool isProductGeoreferenced(Nodes const& nodes) const;
+  void initSensorParams(Nodes const& nodes);
+  void initAcquisitionInfo(Nodes const& nodes);
 
   /**
    * Initialize ImageNoise parameters from TerraSAR product xml file.
@@ -147,11 +151,10 @@ private:
 
   /**
    * Initialize InfoIncidenceAngle parameters from TerraSAR product xml file.
-   * @param[in] xdoc Opened product xml file.
+   * @param[in] nodes XML nodes read from XML file
    * @throw std::runtime_error if data cannot be found in XML file.
    */
-  void initSceneCoord(
-        ossimXmlNode const& sceneCenterCoord, ossimXmlNode const& sceneInfo);
+  void initSceneCoord(Nodes const& nodes);
   // TODO: use a parameter
   ossimKeywordlist   theProductKwl;
 };
