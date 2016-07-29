@@ -1,44 +1,46 @@
 set( MonteverdiGui_SRCS
-  mvdColorSetupController.cxx         
-  mvdI18nApplication.cxx     
-  mvdLayerStackItemModel.cxx       
-  mvdShaderWidget.cxx
-  mvdColorSetupWidget.cxx  
-  mvdI18nMainWindow.cxx 
-  mvdLayerStackWidget.cxx   
-  mvdStatusBarWidget.cxx
-  mvdAboutDialog.cxx           
-  mvdDoubleValidator.cxx   
-  mvdImageViewManipulator.cxx 
-  mvdMainWindowTitleLoader.cxx     
-  mvdTaskProgressDialog.cxx
+  mvdAboutDialog.cxx
   mvdAbstractDragAndDropEventFilter.cxx
-  mvdDropLineEdit.cxx                
-  mvdImageViewRenderer.cxx     
-  mvdMultiResolutionPyramidWidget.cxx
-  mvdTreeWidget.cxx
-  mvdAbstractModelController.cxx   
+  mvdAbstractModelController.cxx
+  mvdApplicationLauncher.cxx
+  mvdApplicationsToolBox.cxx
+  mvdApplicationsToolBoxController.cxx
+  mvdColorBandDynamicsWidget.cxx
+  mvdColorDynamicsController.cxx
+  mvdColorDynamicsWidget.cxx
+  mvdColorSetupController.cxx
+  mvdColorSetupWidget.cxx
+  mvdDoubleValidator.cxx
+  mvdDropLineEdit.cxx
   mvdFilenameDragAndDropEventFilter.cxx
-  mvdImageViewWidget.cxx      
-  mvdMyWidget.cxx             
-  mvdTreeWidgetItem.cxx
-  mvdApplicationsToolBox.cxx   
-  mvdGui.cxx         
-  mvdImportImagesDialog.cxx 
-  mvdPixelDescriptionWidget.cxx    
-  mvdTreeWidgetItemDragAndDropEventFilter.cxx
-  mvdColorBandDynamicsWidget.cxx  
-  mvdHistogramController.cxx  
-  mvdImportSubDatasetDialog.cxx 
+  mvdGui.cxx
+  mvdHistogramController.cxx
+  mvdHistogramPlotPicker.cxx
+  mvdHistogramWidget.cxx
+  mvdI18nApplication.cxx
+  mvdI18nMainWindow.cxx
+  mvdImageViewRenderer.cxx
+  mvdImageViewManipulator.cxx
+  mvdImageViewWidget.cxx
+  mvdImportImagesDialog.cxx
+  mvdImportSubDatasetDialog.cxx
+  mvdKeymapDialog.cxx
+  mvdLayerStackController.cxx
+  mvdLayerStackItemModel.cxx
+  mvdLayerStackWidget.cxx
+  mvdMainWindowTitleLoader.cxx
+  mvdMultiResolutionPyramidWidget.cxx
+  mvdMyWidget.cxx
+  mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
-  mvdColorDynamicsController.cxx    
-  mvdHistogramPlotPicker.cxx   
-  mvdKeymapDialog.cxx    
   mvdQuicklookViewRenderer.cxx
-  mvdColorDynamicsWidget.cxx         
-  mvdHistogramWidget.cxx         
-  mvdLayerStackController.cxx 
-  mvdSearchableTreeWidget.cxx 
+  mvdSearchableTreeWidget.cxx
+  mvdShaderWidget.cxx
+  mvdStatusBarWidget.cxx
+  mvdTaskProgressDialog.cxx
+  mvdTreeWidget.cxx
+  mvdTreeWidgetItem.cxx
+  mvdTreeWidgetItemDragAndDropEventFilter.cxx
  )
 
 add_library( MonteverdiGui ${MonteverdiGui_SRCS} )
