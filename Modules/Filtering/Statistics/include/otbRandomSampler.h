@@ -28,7 +28,7 @@ namespace otb
  *
  * \brief Random sampler for iteration loops
  * 
- * This class allows to do random sampling during an iteration loop.
+ * This class allows doing random sampling during an iteration loop.
  * It uses the MersenneTwisterRandomGenerator.
  *
  * \ingroup OTBStatistics
