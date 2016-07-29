@@ -397,7 +397,9 @@ endmacro()
 
 message("\n======================= Begin of OTB cmake summary =======================\n")
 
-message( ${OTB_GIT_STATUS_MESSAGE})
+if(OTB_GIT_STATUS_MESSAGE)
+  message( ${OTB_GIT_STATUS_MESSAGE})
+endif()
 if(OTB_DATA_GIT_STATUS_MESSAGE)
   message( ${OTB_DATA_GIT_STATUS_MESSAGE})
 endif()
