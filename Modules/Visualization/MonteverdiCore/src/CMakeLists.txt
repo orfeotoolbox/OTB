@@ -1,31 +1,32 @@
 set( MonteverdiCore_SRCS
   mvdAbstractWorker.cxx
-  mvdHistogramModel.cxx
-  mvdImageSettings.cxx
-  mvdProcessObjectObserver.cxx
-  mvdTextStream.cxx
-  mvdBackgroundTask.cxx
-  mvdI18nCoreApplication.cxx
-  mvdImageSettingsInterface.cxx
-  mvdProgressInterface.cxx
-  mvdTypes.cxx
-  mvdAbstractImageModel.cxx
-  mvdCore.cxx
-  mvdImageImporter.cxx
-  mvdModifiableInterface.cxx
-  mvdQuicklookModel.cxx
-  mvdVectorImageModel.cxx
-  mvdAbstractLayerModel.cxx
-  mvdDataStream.cxx
-  mvdImagePlacenameLoader.cxx
-  mvdMyClass.cxx
-  mvdSerializableInterface.cxx
-  mvdVectorImageSettings.cxx
+  mvdApplicationsBrowser.cxx
   mvdAbstractModel.cxx
+  mvdAbstractImageModel.cxx
+  mvdAbstractLayerModel.cxx
+  mvdBackgroundTask.cxx
+  mvdCore.cxx
+  mvdDataStream.cxx
   mvdFilenameInterface.cxx
+  mvdHistogramModel.cxx
+  mvdI18nCoreApplication.cxx
+  mvdImageImporter.cxx
+  mvdImagePlacenameLoader.cxx
   mvdImageProperties.cxx
+  mvdImageSettings.cxx
+  mvdImageSettingsInterface.cxx
+  mvdModifiableInterface.cxx
+  mvdMyClass.cxx
   mvdOverviewBuilder.cxx
+  mvdProcessObjectObserver.cxx
+  mvdProgressInterface.cxx
+  mvdQuicklookModel.cxx
+  mvdSerializableInterface.cxx
   mvdStackedLayerModel.cxx
+  mvdTextStream.cxx
+  mvdTypes.cxx
+  mvdVectorImageModel.cxx
+  mvdVectorImageSettings.cxx
   mvdVisibleInterface.cxx
   )
 
