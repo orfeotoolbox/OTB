@@ -110,14 +110,13 @@ namespace ossimplugins
          if ( model->open(filename) )
          {
             if(traceDebug())
-            {
                ossimNotify(ossimNotifyLevel_DEBUG) << (model.get() ? " OK" : "NOK") << "\n";
-            }
             return model.get();
          }
          else
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "NOK\n";
+            if(traceDebug())
+               ossimNotify(ossimNotifyLevel_DEBUG) << "NOK\n";
             return 0;
          }
       }
