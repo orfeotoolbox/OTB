@@ -22,7 +22,11 @@
 #include <boost/shared_ptr.hpp>
 class OGRFieldDefn;
 class OGRFeature;
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
 #include "ogr_core.h" // OGR enums
+#pragma warning ( pop )
+
 #include "itkIndent.h"
 
 #include "OTBGdalAdaptersExport.h"
