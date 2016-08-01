@@ -175,10 +175,10 @@ namespace ossimplugins { namespace time {
 
    OSSIM_PLUGINS_DLL ModifiedJulianDate toModifiedJulianDate(string_view const& utcTimeString);
    inline Duration microseconds(double us) {
-      return Duration(us / (24L * 60L * 60L * 1000L * 1000L));
+      return Duration(us / (24ULL * 60 * 60 * 1000 * 1000));
    }
    inline Duration seconds(double us) {
-      return Duration(us / (24L * 60 * 60));
+      return Duration(us / (24ULL * 60 * 60));
    }
    OSSIM_PLUGINS_DLL std::string to_simple_string(ModifiedJulianDate const& d);
    OSSIM_PLUGINS_DLL std::string to_simple_string(Duration const& d);
