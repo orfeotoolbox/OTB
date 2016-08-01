@@ -111,23 +111,23 @@ std::string ossimplugins::time::to_simple_string(ModifiedJulianDate const& d)
    assert(s < 1000); // should be more than enough
    typedef unsigned long ulong;
    const double frac_sec = date.getFractionalSecond();
-   // const double fs2 = fmod(d.as_day_frac() * 24L*60*60, 1);
+   // const double fs2 = fmod(d.as_day_frac() * 24ULL*60*60, 1);
    // assert(fs2==frac_sec);
    // std::cout << "From: " << d.as_day_frac() << " -> frac_sec: " << fs2
-      // << " --> *10^6: " << fs2*1000L*1000
-      // << " --> %10^6: " << ulong(fs2*1000L*1000)%(1000L*1000)
+      // << " --> *10^6: " << fs2*1000ULL*1000
+      // << " --> %10^6: " << ulong(fs2*1000ULL*1000)%(1000ULL*1000)
       // << "\n";
    s += s_printf(&buffer[s], sizeof(buffer)-s, ".%06ld",
-         ulong(frac_sec * 1000L * 1000) % (1000L*1000));
+         ulong(frac_sec * 1000ULL * 1000) % (1000ULL*1000));
    return std::string(buffer, s);
 }
 
 std::string ossimplugins::time::to_simple_string(Duration const& d)
 {
    typedef unsigned long ulong;
-   const double fs = d.as_day_frac() * 24L * 60 * 60; // in seconds
+   const double fs = d.as_day_frac() * 24 * 60 * 60; // in seconds
    const ulong  ls = std::abs(fs);
-   const ulong  us = ulong(std::abs(fs * 1000*1000)) % (1000*1000);
+   const ulong  us = ulong(std::abs(fs * 1000ULL*1000)) % (1000ULL*1000);
    const ulong  s  = ls % 60;
    const ulong  m  = (ls/60) % 60;
    const ulong  h  = (ls/60/60);
