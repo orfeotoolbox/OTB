@@ -22,22 +22,21 @@
 #   pragma GCC diagnostic ignored "-Wunused-parameter"
 // #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #   pragma GCC diagnostic ignored "-Wshadow"
-#   include <ossim/projection/ossimSensorModel.h>
-#   include <ossim/elevation/ossimHgtRef.h>
-#   include "ossimTimeUtilities.h"
+#endif
 
-# pragma GCC diagnostic pop
+#include "ossimTimeUtilities.h"
+#include <ossim/projection/ossimSensorModel.h>
 
-#else
-#   include <ossim/projection/ossimSensorModel.h>
-#   include <ossim/elevation/ossimHgtRef.h>
-#   include "ossimTimeUtilities.h"
+#if defined(__GNUC__) || defined(__clang__)
+#   pragma GCC diagnostic pop
 #endif
 
 #if defined(USE_BOOST_TIME)
 #  include <boost/date_time/posix_time/posix_time.hpp>
 #include <ostream>
 #endif
+
+class ossimHgtRef;
 
 namespace ossimplugins
 {

@@ -15,7 +15,8 @@
 #include "ossimRangeUtilities.h"
 #include "ossimSarSensorModelPathsAndKeys.h"
 #include <ossim/base/ossimRegExp.h>
-#include <ossim/base/ossimLsrSpace.h>
+#include <ossim/base/ossimMatrix3x3.h>
+#include <ossim/elevation/ossimHgtRef.h>
 #include <boost/static_assert.hpp>
 #include <iostream>
 #include <vector>
