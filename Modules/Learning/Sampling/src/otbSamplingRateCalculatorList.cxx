@@ -1,0 +1,315 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#include "otbSamplingRateCalculatorList.h"
+#include "otbMacro.h"
+
+namespace otb
+{
+
+void
+SamplingRateCalculatorList
+::SetNthClassCount(unsigned int index,const ClassCountMapType &map)
+{
+  if (index >= this->Size())
+    {
+    unsigned int currentSize = this->Size();
+    for (unsigned int i = currentSize ; i < (index+1) ; i++ )
+      {
+      this->PushBack(SamplingRateCalculator::New());
+      }
+    }
+  this->GetNthElement(index)->SetClassCount(map);
+}
+
+const SamplingRateCalculatorList::MapRateType &
+SamplingRateCalculatorList
+::GetRatesByClass(unsigned int index)
+{
+  if (index >= this->Size())
+    {
+    itkGenericExceptionMacro("Requesting an index ("<<index<<") larger than list size ("<<this->Size()<<")");
+    }
+  return this->GetNthElement(index)->GetRatesByClass();
+}
+
+void
+SamplingRateCalculatorList
+::ClearRates(void)
+{
+  for (unsigned int i=0 ; i<this->Size() ; i++)
+    {
+    this->GetNthElement(i)->ClearRates();
+    }
+}
+
+void
+SamplingRateCalculatorList
+::SetAllSamples(PartitionType t)
+{
+  this->UpdateGlobalCounts();
+  switch (t)
+    {
+    case PROPORTIONAL:
+    case EQUAL:
+    case CUSTOM:
+      {
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetAllSamples();
+        }
+      break;
+      }
+    default:
+      itkGenericExceptionMacro("Unknown partition mode");
+      break;  
+    }
+}
+
+void
+SamplingRateCalculatorList
+::SetMinimumNbOfSamplesByClass(PartitionType t)
+{
+  this->UpdateGlobalCounts();
+  switch (t)
+    {
+    case PROPORTIONAL:
+    case EQUAL:
+      {
+      // Use the smallest class globally to derive the constant needed 
+      unsigned long smallest = itk::NumericTraits<unsigned long>::max();
+      ClassCountMapType::iterator it = m_GlobalCountMap.begin();
+      for (; it != m_GlobalCountMap.end() ; ++it)
+        {
+        std::cout << "global : " << it->second << std::endl;
+        if (smallest > it->second && it->second > 0UL)
+          {
+          smallest = it->second;
+          }
+        }
+      if (smallest == itk::NumericTraits<unsigned long>::max())
+        {
+        otbWarningMacro("All classes are empty !");
+        smallest = 0UL;
+        }
+      std::vector<unsigned long> needed;
+      needed.push_back(smallest);
+      this->SetNbOfSamplesAllClasses(needed,t);
+      break;
+      }
+    case CUSTOM:
+      {
+      // Use the smallest class in each input
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetMinimumNbOfSamplesByClass();
+        }
+      break;
+      }
+    default:
+      itkGenericExceptionMacro("Unknown partition mode");
+      break;  
+    }
+}
+
+void
+SamplingRateCalculatorList
+::SetNbOfSamplesAllClasses(std::vector<unsigned long> &nb, PartitionType t)
+{
+  if (nb.size() == 0)
+    {
+    itkGenericExceptionMacro("No number of samples given");
+    }
+  this->UpdateGlobalCounts();
+  ClassCountMapType::const_iterator it;
+  MapRateType::const_iterator curIt;
+  ClassCountMapType needed;
+  switch (t)
+    {
+    case PROPORTIONAL:
+      {
+      unsigned long curTotal;
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        needed.clear();
+        for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
+          {
+          curIt = this->GetNthElement(i)->GetRatesByClass().find(it->first);
+          if (curIt != this->GetNthElement(i)->GetRatesByClass().end() &&
+              it->second > 0UL)
+            {
+            curTotal = (curIt->second).Tot;
+            needed[it->first] = static_cast<unsigned long>(vcl_floor(
+              static_cast<double>(nb[0]) *
+              static_cast<double>(curTotal) /
+              static_cast<double>(it->second)));
+            }
+          else
+            {
+            needed[it->first] = 0UL;
+            }
+          }
+        this->GetNthElement(i)->SetNbOfSamplesByClass(needed);
+        }
+      break;
+      }
+    case EQUAL:
+      {
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetNbOfSamplesAllClasses(
+          static_cast<unsigned long>(vcl_floor(
+            (double)nb[0] / (double)this->Size())));
+        }
+      break;
+      }
+    case CUSTOM:
+      {
+      if (nb.size() < this->Size())
+        {
+        itkGenericExceptionMacro("Not enough values present to set custom requested numbers in all inputs");
+        }
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetNbOfSamplesAllClasses(nb[i]);
+        }
+      break;
+      }
+    default:
+      itkGenericExceptionMacro("Unknown partition mode");
+      break;  
+    }
+}
+
+void
+SamplingRateCalculatorList
+::SetNbOfSamplesByClass(const std::vector<ClassCountMapType> &required, PartitionType t)
+{
+  if (required.size() == 0)
+    {
+    itkGenericExceptionMacro("No number of samples given");
+    }
+  this->UpdateGlobalCounts();
+  MapRateType::const_iterator curIt;
+  ClassCountMapType::const_iterator it;
+  ClassCountMapType::const_iterator inputIt;
+  ClassCountMapType needed;
+  switch (t)
+    {
+    case PROPORTIONAL:
+      {
+      unsigned long curTotal;
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        needed.clear();
+        for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
+          {
+          curIt = this->GetNthElement(i)->GetRatesByClass().find(it->first);
+          inputIt = required[0].find(it->first);
+          if (curIt != this->GetNthElement(i)->GetRatesByClass().end() &&
+              inputIt != required[0].end() &&
+              it->second > 0UL)
+            {
+            curTotal = (curIt->second).Tot;
+            needed[it->first] = static_cast<unsigned long>(vcl_floor(
+              static_cast<double>(inputIt->second) *
+              static_cast<double>(curTotal) /
+              static_cast<double>(it->second)));
+            }
+          else
+            {
+            needed[it->first] = 0UL;
+            }
+          }
+        this->GetNthElement(i)->SetNbOfSamplesByClass(needed);
+        }
+      break;
+      }
+    case EQUAL:
+      {
+      unsigned long curTotal;
+      unsigned long curNeeded;
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        needed.clear();
+        for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
+          {
+          curIt = this->GetNthElement(i)->GetRatesByClass().find(it->first);
+          inputIt = required[0].find(it->first);
+          if (curIt != this->GetNthElement(i)->GetRatesByClass().end() &&
+              inputIt != required[0].end() &&
+              it->second > 0UL)
+            {
+            curTotal = (curIt->second).Tot;
+            curNeeded = static_cast<unsigned long>(vcl_floor(
+              static_cast<double>(inputIt->second) /
+              static_cast<double>(this->Size())));
+            needed[it->first] = std::min(curTotal,curNeeded);
+            }
+          else
+            {
+            needed[it->first] = 0UL;
+            }
+          }
+        this->GetNthElement(i)->SetNbOfSamplesByClass(needed);
+        }
+      break;
+      }
+    case CUSTOM:
+      {
+      if (required.size() < this->Size())
+        {
+        itkGenericExceptionMacro("Not enough values present to set custom requested numbers in all inputs");
+        }
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetNbOfSamplesByClass(required[i]);
+        }
+      break;
+      }
+    default:
+      itkGenericExceptionMacro("Unknown partition mode");
+      break;  
+    }
+}
+
+void
+SamplingRateCalculatorList
+::UpdateGlobalCounts()
+{
+  m_GlobalCountMap.clear();
+  for (unsigned int i=0 ; i<this->Size() ; i++)
+    {
+    const MapRateType &rates = this->GetNthElement(i)->GetRatesByClass();
+    MapRateType::const_iterator it = rates.begin();
+    for (; it != rates.end() ; ++it)
+      {
+      if (m_GlobalCountMap.count(it->first))
+        {
+        m_GlobalCountMap[it->first] += it->second.Tot;
+        }
+      else
+        {
+        m_GlobalCountMap[it->first] = it->second.Tot;
+        }
+      }
+    }
+}
+
+} // end of namespace otb
+
