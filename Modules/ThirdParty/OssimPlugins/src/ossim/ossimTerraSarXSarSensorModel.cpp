@@ -308,8 +308,8 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::open";
-   traceDebug.setTraceFlag(true);
-   traceExec .setTraceFlag(true);
+   // traceDebug.setTraceFlag(true);
+   // traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
    if (traceDebug())
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " try to open "<<file<<"\n";
@@ -424,8 +424,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
 bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist const& kwl, const char* prefix_/* = NULL */)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::loadState";
-   traceDebug.setTraceFlag(true);
-   traceExec .setTraceFlag(true);
+   // traceDebug.setTraceFlag(true);
+   // traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
    theOrbitRecords.clear();
    theGCPRecords.clear();
