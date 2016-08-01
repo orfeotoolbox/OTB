@@ -90,8 +90,8 @@ SamplingRateCalculator
     else
       {
       TripletType triplet;
-      triplet.Tot = it->second;
-      triplet.Required = 0UL;
+      triplet.Tot = 0UL;
+      triplet.Required = it->second;
       triplet.Rate = 0.0;
       m_RatesByClass[it->first] = triplet;
       }
