@@ -53,8 +53,7 @@ void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool> & flags, const 
 * value for each band. If flag is 0, the value will be ignored.
 * \param nanIsNoData If true, NaN values will be reported as no-data.
 */
-template<typename T> bool
-OTBMetadata_EXPORT IsNoData(const T & pixel, const
+template<typename T> bool IsNoData(const T & pixel, const
                                    std::vector<bool> & flags, const std::vector<double> & values, bool nanIsNoData = false) {
   assert(flags.size()>0);
   assert(values.size()>0);
@@ -89,8 +88,7 @@ OTBMetadata_EXPORT IsNoData(const T & pixel, const
 * and changed as well.
 *
 */
-template<typename T> T
-OTBMetadata_EXPORT ChangeNoData(const T & pixel, const
+template<typename T> T ChangeNoData(const T & pixel, const
                                     std::vector<bool> & flags,
                                     const std::vector<double> & values,
                                     const std::vector<double> & newValues,
@@ -115,7 +113,7 @@ OTBMetadata_EXPORT ChangeNoData(const T & pixel, const
 /**
  * Specialization of IsNoData function to handle itk::VariableLengthVector
  */
-template <typename T> bool OTBMetadata_EXPORT IsNoData(const itk::VariableLengthVector<T> & pixel, const std::vector<bool> & flags, const std::vector<double> & values, bool nanIsNoData = false)
+template <typename T> bool IsNoData(const itk::VariableLengthVector<T> & pixel, const std::vector<bool> & flags, const std::vector<double> & values, bool nanIsNoData = false)
 {
   assert(flags.size()>=pixel.Size());
   assert(values.size()>=pixel.Size());
@@ -134,8 +132,7 @@ template <typename T> bool OTBMetadata_EXPORT IsNoData(const itk::VariableLength
 /**
  * Specialization of ChangeNoData function to handle itk::VariableLengthVector
  */
-template <typename T> itk::VariableLengthVector<T>
-OTBMetadata_EXPORT ChangeNoData(const itk::VariableLengthVector<T> & pixel,
+template <typename T> itk::VariableLengthVector<T> ChangeNoData(const itk::VariableLengthVector<T> & pixel,
                                                                 const std::vector<bool> & flags,
                                                                 const std::vector<double> & values,
                                                                 const std::vector<double> & newValues,
@@ -161,8 +158,6 @@ OTBMetadata_EXPORT ChangeNoData(const itk::VariableLengthVector<T> & pixel,
 
   return outPixel;
 }
-
-
 
 } // End namespace otb
 
