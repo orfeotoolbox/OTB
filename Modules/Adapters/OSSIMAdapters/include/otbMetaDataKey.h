@@ -104,7 +104,7 @@ namespace MetaDataKey
 
   };
 
-  KeyType GetKeyType(const std::string& name);
+  KeyType OTBOSSIMAdapters_EXPORT GetKeyType(const std::string& name);
 
   typedef std::vector<double>               VectorType;
   typedef std::vector<bool>                 BoolVectorType;
@@ -119,7 +119,7 @@ namespace MetaDataKey
  *
  * \ingroup OTBOSSIMAdapters
  */
-class ITK_EXPORT OTB_GCP
+class OTBOSSIMAdapters_EXPORT OTB_GCP
 {
 public:
 

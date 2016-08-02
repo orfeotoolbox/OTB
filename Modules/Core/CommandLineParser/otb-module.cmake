@@ -1,7 +1,6 @@
 set(DOCUMENTATION "TODO")
 
 otb_module(OTBCommandLineParser
-ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK
