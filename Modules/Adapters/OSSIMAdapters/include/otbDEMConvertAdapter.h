@@ -27,7 +27,7 @@
 namespace otb
 {
 
-class DEMConvertAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT DEMConvertAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
