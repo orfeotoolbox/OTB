@@ -69,10 +69,11 @@ get_filename_component(SUPERBUILD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH)
 get_filename_component(OTB_SOURCE_DIR ${SUPERBUILD_SOURCE_DIR} PATH)
 
 
-if(MSVC)
-  find_program(ZIP_EXECUTABLE 7z)
+if(WIN32)
+  set(ZIP_EXE_NAMES 7z 7za)
+  find_program(ZIP_EXECUTABLE NAMES ${ZIP_EXE_NAMES})
     if(NOT ZIP_EXECUTABLE)
-    message(FATAL_ERROR "Cannot find 7z.exe. Please add it to your path")
+    message(FATAL_ERROR "Cannot find 7z executable. searched names ${ZIP_EXE_NAMES}. Please add it to your path")
   endif()
 endif()
 
@@ -166,7 +167,7 @@ else() #unixes
   set(Monteverdi_SOURCE_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/src/MVD")
   set(Monteverdi_BINARY_DIR     "${SUPERBUILD_BINARY_DIR}/MVD/build")
   set(MONTEVERDI_INSTALL_DIR    "${SUPERBUILD_INSTALL_DIR}")
-  set(OTB_INSTALL_DIR           "${SUPERBUILD_BINARY_DIR}/OTB/build")
+  set(OTB_INSTALL_DIR           "${SUPERBUILD_INSTALL_DIR}")
   set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
   set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
   set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")

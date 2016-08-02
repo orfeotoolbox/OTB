@@ -122,3 +122,6 @@ $RM -fr $OUT_DIR/tools
 $RM -f $OUT_DIR/pkgsetup
 
 $RM -f $OUT_DIR/make_symlinks
+
+
+open $OUT_DIR

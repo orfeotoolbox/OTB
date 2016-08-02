@@ -1,3 +1,53 @@
+OTB-v.5.6.0 - Changes since version 5.4.0 (July 28th, 2016)
+------------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for Changes-49: Improve classification on vectors
+  * Request for Changes-48: Add geometric correction to S1 Sensor Model 
+  * Request for Changes-47: Improve the CompareImages app
+  * Request for Changes-46: Sample extractor
+  * Request for Changes-45: CMake uninstall target
+  * Request for Changes-43: Update SuperBuild cmake script and thirdparty versions
+  * Request for Changes-42: Generator for completion scripts
+  * Request for Changes-40: clang modernize
+  * Request for Changes-41: Provide a summary after cmake configuration 
+  * Request for Changes-38: update gdal to 2.x version in superbuild
+  * Request for Changes-37: Enhance ManageNodata application
+  * Request for Changes-36: Samples selection filter
+  * Request for Changes-26: MPI Image File Writer
+
+* Bugfixes:
+  * MANTIS-1255: Remaining log when opening Sentinel1 product in Monteverdi
+  * MANTIS-1254: Checking/Unchecking parameters re-enable execute button on running application
+  * MANTIS-1252: msvc warning C4838 la conversion de 'double' en 'const float' requiert une conversion restrictive
+  * MANTIS-1251: OTB Superbuild does not forward compiler versions to external projects anymore
+  * MANTIS-1249: ioTvMultiChannelROI_*_JPEG2000_2_TIF_res5 are failing when using gdal openjpeg driver
+  * MANTIS-1247: Patch for various spelling errors
+  * MANTIS-1246: Inputs do not occupy the same physical space!
+  * MANTIS-1243: apTvCl*RegressionTest_monovar failing due to error in opencv
+  * MANTIS-1242: otbMapProjectionAdapter.cxx WARNING: Impossible to create the projection from Wkt: ossimUtmProjection
+  * MANTIS-1241: dl_close appears on apTvClTrainMethodANNImagesClassifierQB1
+  * MANTIS-1240: [ComputeImagesStatistics] Filename extension in uppercase are not supported
+  * MANTIS-1238: Train regression with ANN crashes
+  * MANTIS-1237: Inconsistent parameter order in OTB application
+  * MANTIS-1234: more tests are failing in superbuild
+  * MANTIS-1233: Exception in example Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
+  * MANTIS-1227: set all USE_SYSTEM_* to FALSE by default
+  * MANTIS-1225: internal openjpeg driver and confusing OTB_USE_OPENJPEG
+  * MANTIS-1223: Possible error in function "template <typename T> T InverseValue(const T & value)" defined in otbMath.h
+  * MANTIS-1220: show last git commit message during cmake configure
+  * MANTIS-1218: Segmentation fails - error message not understandable
+  * MANTIS-1217: Degree symbol badly displayed in OTB applications
+  * MANTIS-1215: OTB-FAQ page not found contribute.html (404)
+  * MANTIS-1214: incorrect install instruction for Mac OSX in OTBCookBook 5.4
+  * MANTIS-1213: incorrect years calculated in cookbook
+  * MANTIS-1212: OTB windows package contains two copies of otbapp_* dll
+  * MANTIS-1211: Patch for various spelling errors
+  * MANTIS-1210: make fails at downloading 'LIBSVM'
+  * MANTIS-1209: superbuild: fix qt build on osx
+  * MANTIS-1208: Need to click in image view to force computation of quantiles (shortcut 'Q')
+  * MANTIS-1207: OTB_SB_CMAKE_COMMAND uses in External_otb.cmake but not set
+
 OTB-v.5.4.0 - Changes since version 5.2.1 (2016/05/04)
 ------------------------------------------
 * Core
