@@ -38,8 +38,7 @@ namespace Utils
   bool OTBCommon_EXPORT IsLonLatValid(double lon, double lat);
 
   template <class T>
-    inline std::string
-  OTBCommon_EXPORT ConvertToString (const T& v)
+    inline std::string ConvertToString (const T& v)
   {
     std::stringstream s;
     s << v;
