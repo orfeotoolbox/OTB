@@ -25,6 +25,7 @@ namespace ossimplugins {
    extern const std::string GCP_PREFIX          ;
    extern const std::string GCP_NUMBER_KEY      ;
    extern const std::string NUMBER_KEY          ;
+   extern const std::string PRODUCT_XML_FILE_KW ;
 
    extern const std::string keySr0              ;
    extern const std::string keyGr0              ;

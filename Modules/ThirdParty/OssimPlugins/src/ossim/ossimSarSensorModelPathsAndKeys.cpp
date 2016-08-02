@@ -22,6 +22,7 @@ namespace ossimplugins {
    const std::string GCP_PREFIX          = "support_data.geom.gcp";
    const std::string GCP_NUMBER_KEY      = "support_data.geom.gcp.number";
    const std::string NUMBER_KEY          = "number";
+   const std::string PRODUCT_XML_FILE_KW = "product_xml_filename";
 
    const std::string keySr0              = "sr0";
    const std::string keyGr0              = "gr0";

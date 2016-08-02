@@ -454,6 +454,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    SCOPED_LOG(traceDebug, "ossimTerraSarXSarSensorModel::read");
 
    const ossimFilename annotationXml = findTSXLeader(file);
+   add(theProductKwl, PRODUCT_XML_FILE_KW, annotationXml.string());
 
    ossimXmlDocument xmlDoc(annotationXml);
    ossimRefPtr<ossimXmlNode> xRoot = xmlDoc.getRoot();
@@ -584,6 +585,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    readGeoLocationGrid(*geoXmlRoot, azimuthTimeStart, theNearRangeTime);
    // TODO: metadata file ?
 
+   // Beware, starting from KWL v2, the name follow snake_case
+   addMandatory(theProductKwl, "radiometric_correction", nodes.productVariantInfo, "radiometricCorrection");
    // Fill other properties from ossimSensorModel
    initAcquisitionInfo(nodes);
    theSensorID      = getTextFromFirstNode(nodes.generalHeader, "mission");
