@@ -326,7 +326,7 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
   output_file->OpenFile(filename.c_str());
 
   char url[256];
-  strcpy(url, urlString.c_str());
+  strncpy(url, urlString.c_str(), urlString.size());
 
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url));
 
