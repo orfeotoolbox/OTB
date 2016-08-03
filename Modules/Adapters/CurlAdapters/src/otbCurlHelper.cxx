@@ -317,8 +317,6 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 {
 #ifdef OTB_USE_CURL
 
-  otbMsgDevMacro(<< "Retrieving: " << urlString);
-
   CURLcode res = CURLE_OK;
 
   CurlResource::Pointer curlResource = CurlResource::New();
@@ -330,6 +328,8 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
   int len = static_cast<int>(urlString.size());
   strncpy(url, urlString.c_str(), len);
   url[len] = '\0';
+
+  otbMsgDevMacro(<< "Retrieving(CurlHelper::RetrieveFile): " << url );
 
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url));
 
