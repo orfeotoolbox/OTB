@@ -52,11 +52,11 @@ otbImportGeoInformationImageFilter.cxx
 
 
 set(GEOMGCP
-"pleiades/pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
-"wv2/wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+"pleiades/pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2}
+"wv2/wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF}
 "spot6/spot6-1"       #LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
 "QB/qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-"ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+"ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif}
 "rapideye/rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
 "sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 )
@@ -87,13 +87,13 @@ foreach( file ${GEOMGCP} )
   list(GET NEEDEDKW   ${GEOM_TESTNB} current_neededkw   )
   list(GET GEOTOL     ${GEOM_TESTNB} current_geotol )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
-  
+
   string(FIND ${current_geomgcp} "/" POS)
   math(EXPR POS "${POS} + 1")
   string(LENGTH ${current_geomgcp} LENGTH)
   math(EXPR SIZE "${LENGTH} - ${POS}")
   string(SUBSTRING ${current_geomgcp} ${POS} ${SIZE} TESTNAME)
-  
+
   otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
     otbSensorModel
     ${INPUTDATA}/${current_geomgcp}.geom
@@ -111,9 +111,9 @@ endforeach()
 
 #Faulty sensors
 #set(GEOMGCP
-#"radarsat2/gd-radarsat2-1" #LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif} 
-#"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos} 
-#"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos} 
+#"radarsat2/gd-radarsat2-1" #LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif}
+#"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos}
+#"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
 #"palsar/gd-palsar-1" #LARGEINPUT{PALSAR/200801280007/l1data/IMG-HH-ALPSRP037120700-H1.1__A} Ne reconnaît pas l'image
 #"s1/gd-s1-A" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 #)
@@ -131,13 +131,13 @@ set( GEOM_TESTNB 0)
 foreach( file ${GEOMGCP} )
   list(GET GEOMGCP   ${GEOM_TESTNB} current_geomgcp   )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
-  
+
   string(FIND ${current_geomgcp} "/" POS)
   math(EXPR POS "${POS} + 1")
   string(LENGTH ${current_geomgcp} LENGTH)
   math(EXPR SIZE "${LENGTH} - ${POS}")
   string(SUBSTRING ${current_geomgcp} ${POS} ${SIZE} TESTNAME)
-  
+
   otb_add_test(NAME prTvSensorModel_${TESTNAME} COMMAND otbProjectionTestDriver
     #BASELINE_FILES
     otbSensorModel
@@ -172,31 +172,31 @@ otb_add_test(NAME prTuVectorDataProjectionFilterFromGeoToMap COMMAND otbProjecti
 #-------------------- OrthoRectification tests --------------------------
 #------------------------------------------------------------------------
 set(IMG_TEST_ORTHO
-PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2 
+PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2
 WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF
 SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2
 QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif 
+IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif
 RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
 SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff
 )
 
 set(IMG_TYPE
 "pleiades-1"
-"wv2-1" 
+"wv2-1"
 "spot6-1"
 "qb-1"
-"ikonos-1"     
+"ikonos-1"
 "rapideye-1"
 "sentinel1"
 )
 
 set(GEOMGCP
-"pleiades/pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
-"wv2/wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+"pleiades/pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2}
+"wv2/wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF}
 "spot6/spot6-1"       #LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
 "QB/qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-"ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+"ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif}
 "rapideye/rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
 "sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 )
@@ -302,7 +302,7 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	foreach( current_mode ${MODE} )
 	  list(GET DEMDIR   ${MODENB} current_demdir   )
 	  math(EXPR MODENB "${MODENB} + 1")
-	  
+
 	  otb_add_test(NAME prTvOrthoRectification_${current_imgtype}_${current_mode} COMMAND otbProjectionTestDriver
 		  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
@@ -322,7 +322,7 @@ foreach(current_img ${IMG_TEST_ORTHO})
 		  ${current_demdir}
 		  ${current_is_compex}
 		)
-			  
+
 	endforeach()
 endforeach()
 #------------------------------------------------------------------------
@@ -462,11 +462,11 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToSensor COMMAND otbProje
 
 otb_add_test(NAME prTvImageToEnvelopeVectorDataFilter COMMAND otbProjectionTestDriver
   --compare-ogr ${EPSILON_6}
-  ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.kml
-  ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
+  ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.gmt
+  ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.gmt
   otbImageToEnvelopeVectorDataFilter
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
+  ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.gmt
   )
 
 otb_add_test(NAME prTuImageToEnvelopeVectorDataFilterNew COMMAND otbProjectionTestDriver
@@ -499,11 +499,11 @@ otb_add_test(NAME prTuImageToGenericRSOutputParametersNew COMMAND otbProjectionT
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToGeo COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.gmt
+  ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.gmt
   otbGeometriesProjectionFilterFromMapToGeo
   ${INPUTDATA}/ToulousePoints-examples.shp
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+  ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.gmt
   )
 
 otb_add_test(NAME leTvROIdataConversion COMMAND otbProjectionTestDriver
@@ -520,11 +520,11 @@ otb_add_test(NAME prTuProjectionBaseNew COMMAND otbProjectionTestDriver  otbProj
 
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToGeo COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.gmt
+  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.gmt
   otbVectorDataProjectionFilterFromMapToGeo
   ${INPUTDATA}/ToulousePoints-examples.shp
-  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.gmt
   )
 
 otb_add_test(NAME prTvPhysicalToRPCSensorModelImageFilter COMMAND otbProjectionTestDriver
@@ -1154,11 +1154,11 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_UTM COMMAND otbPro
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.gmt
+  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.gmt
   otbGeometriesProjectionFilterFromMapToEPSG
   ${INPUTDATA}/ToulousePoints-examples.shp
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.gmt
   4326 )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterPoints COMMAND otbProjectionTestDriver
@@ -1248,7 +1248,7 @@ set(GenericConversionChecking_INPUTS
     #)
 
   #set( VectorDataIntoImage_TESTNB 0)
-  
+
   #foreach( file ${VectorDataIntoImage_FILES} )
     #math(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
     #otb_add_test(NAME prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} COMMAND otbProjectionTestDriver
@@ -1258,15 +1258,15 @@ set(GenericConversionChecking_INPUTS
       #${INPUTDATA}/DEM/srtm_directory
       #3 )
   #endforeach()
-  
-  
+
+
 
   set(SENSOR_TYPES
     "QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF"
     "GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif"
     "WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF"
     )
-  
+
   foreach( file ${SENSOR_TYPES})
     # Get the sensor name
     set(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
