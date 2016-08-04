@@ -336,13 +336,6 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
       }
 #endif
 
-      theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
-      theSubImageOffset.x = 0.0;
-      theSubImageOffset.y = 0.0;
-
-      // automatically loaded/saved into ossimSensorModel
-      theMeanGSD = (theGSD.x + theGSD.y)/2.0;
-
       return true;
    } catch (std::exception const& e) {
       if (traceExec())
@@ -629,10 +622,18 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    addMandatory(theProductKwl, "radarFrequency", nodes.instrument, "radarParameters/centerFrequency");
 
    initSceneCoord(nodes);
-#if 1
-   // GCPRecords need to be loaded into C++ data in order to use
-   // lineSampleToWorld()
+
+   theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
+   theSubImageOffset.x = 0.0;
+   theSubImageOffset.y = 0.0;
+
+   // automatically loaded/saved into ossimSensorModel
+   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+
    // Assign the ossimSensorModel::theBoundGndPolygon
+   // - TODO: Shouldn't we use the value already computed in /level1Product/productInfo/sceneInfo/sceneCornerCoord?
+   //
+   // - GCPRecords need to be loaded into C++ data in order to use lineSampleToWorld()
    ossimGpt ul;
    ossimGpt ur;
    ossimGpt lr;
@@ -641,12 +642,15 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    lineSampleToWorld(theImageClipRect.ur(), ur);
    lineSampleToWorld(theImageClipRect.lr(), lr);
    lineSampleToWorld(theImageClipRect.ll(), ll);
+   // std::clog << "UL: " << theImageClipRect.ul() << " -> " << ul << "\n";
+   // std::clog << "UR: " << theImageClipRect.ur() << " -> " << ur << "\n";
+   // std::clog << "LR: " << theImageClipRect.lr() << " -> " << lr << "\n";
+   // std::clog << "LL: " << theImageClipRect.ll() << " -> " << ll << "\n";
    if (!isnan(ul) && !isnan(ur) && !isnan(lr) && !isnan(ll)) {
       setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
       // TODO: shouldn't we return false?
       // even if we'are able to orthorectify geometries
    }
-#endif
 
    return true;
 }
