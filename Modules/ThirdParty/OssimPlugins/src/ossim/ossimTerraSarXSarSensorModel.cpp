@@ -70,6 +70,8 @@ namespace {// Anonymous namespace
 
    const std::string ACQUISITION_INFO        = "acquisitionInfo.";
    const std::string POLARISATION_LIST       = "polarisationList";
+   const std::string SIZE                    = ".size";
+   const std::string KW_POLLIST              = ACQUISITION_INFO + POLARISATION_LIST;
    const std::string CALIBRATION_CALFACTOR   = "calibration.calibrationConstant.calFactor";
 
    inline bool isnan(ossimGpt const& p) {
@@ -378,9 +380,11 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
    add(kwl, "support_data.calibration_lookup_flag", "false");
 
    // polLayers + calfactors
+   add(kwl, prefix, KW_POLLIST + SIZE, m_polLayerList.size());
+   add(kwl, prefix, ACQUISITION_INFO + "polarisationLayerName", m_polLayerName);
    for (unsigned int i=0, N=m_polLayerList.size(); i!=N ; ++i)
    {
-      add(kwl, prefix, ACQUISITION_INFO + POLARISATION_LIST + '['+ossimString::toString(i)+']', m_polLayerList[i]);
+      add(kwl, prefix, KW_POLLIST + '['+ossimString::toString(i)+']', m_polLayerList[i]);
       add(kwl, prefix, CALIBRATION_CALFACTOR, m_calFactor[i]);
    }
 
@@ -407,7 +411,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
    const bool success = ossimSarSensorModel::saveState(kwl, prefix_);
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << (success ? " success!" : " failure!") << '\n';
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl.getSize() << " keywords saved.\n";
-#if 0
+#if 1
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ":\n" << kwl;
 #endif
    return success;
@@ -434,10 +438,36 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
    theBurstRecords.clear();
    theBoundGndPolygon.clear();
 
+   std::size_t nb_layers;
+   std::string polarization;
+   double calFactor;
+   get(kwl, prefix, KW_POLLIST + SIZE, nb_layers);
+   for (unsigned int i=0; i!=nb_layers ; ++i)
+   {
+      get(kwl, prefix, KW_POLLIST + '['+ossimString::toString(i)+']', polarization);
+      m_polLayerList.push_back(polarization);
+      get(kwl, prefix, CALIBRATION_CALFACTOR, calFactor);
+      m_calFactor.push_back(calFactor);
+
+   }
+
    m_sensorParams.loadState(kwl, prefix);
    m_sceneCoord.loadState(kwl, prefix);
-   // TODO: noise
-   // TODO: calFactor
+
+   // noise
+   get(kwl, prefix, ACQUISITION_INFO + "polarisationLayerName", m_polLayerName);
+   if (m_polLayerName != "UNDEFINED")
+   {
+      const std::size_t polLayerIdx = findPolLayerIdx(m_polLayerName);
+      m_noise[polLayerIdx].loadState(kwl, prefix);
+   }
+   else
+   {
+      for (std::size_t i=0, N=m_polLayerList.size(); i!=N ; ++i)
+      {
+         m_noise[i].loadState(kwl, prefix);
+      }
+   }
 
    return true;
 }
