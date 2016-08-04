@@ -66,14 +66,8 @@ int main(int argc, char * argv[])
    }
 
    try {
-#if 1
       std::auto_ptr<ossimProjection> projection
          (ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
-#else
-      std::auto_ptr<ossimTerraSarXSarSensorModel> projection
-         (new ossimplugins::ossimTerraSarXSarSensorModel());
-      projection->readAnnotationFile(annotationXml, geoXml);
-#endif
 
       if (!projection.get()) {
          throw std::runtime_error("Cannot read annotation file ("+annotationXml+"). Cannot create a projection from it.");
