@@ -536,12 +536,13 @@ std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
        << "\nossimGeometricSarSensorModel class data members:\n";
 
    const char* prefix = 0;
+   const std::string sPrefix = prefix ? prefix : "";
    ossimKeywordlist kwl;
    if (_platformPosition)
    {
       _platformPosition->saveState(kwl, prefix);
    }
-   _sensor.saveState(kwl, prefix);
+   _sensor.saveState(kwl, sPrefix);
    if (_refPoint)
    {
       _refPoint->saveState(kwl, prefix);
