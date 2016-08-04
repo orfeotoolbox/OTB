@@ -500,10 +500,10 @@ otb_add_test(NAME prTuImageToGenericRSOutputParametersNew COMMAND otbProjectionT
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToGeo COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+  ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.shp
   otbGeometriesProjectionFilterFromMapToGeo
   ${INPUTDATA}/ToulousePoints-examples.shp
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
+  ${BASELINE_FILES}/prTvGeometriesProjectionFilterFromMapToGeo.kml
   )
 
 otb_add_test(NAME leTvROIdataConversion COMMAND otbProjectionTestDriver
@@ -1155,10 +1155,10 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_UTM COMMAND otbPro
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.shp
   otbGeometriesProjectionFilterFromMapToEPSG
   ${INPUTDATA}/ToulousePoints-examples.shp
-  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
+  ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.shp
   4326 )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterPoints COMMAND otbProjectionTestDriver
