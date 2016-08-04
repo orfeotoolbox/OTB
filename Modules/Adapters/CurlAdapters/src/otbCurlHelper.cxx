@@ -326,15 +326,17 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 
   char url[256];
   int len = static_cast<int>(urlString.size());
-  strncpy(url, urlString.c_str(), len);
-  url[len] = '\0';
+  strncpy( url, urlString.c_str(), len + 1 );
 
-  otbMsgDevMacro(<< "Retrieving(CurlHelper::RetrieveFile): " << url );
+  otbMsgDevMacro(<< "Retrieving ( CurlHelper::RetrieveFile ): " << url );
 
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url));
 
   // Set timeout
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, m_Timeout));
+
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_FRESH_CONNECT, 1));
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_NOSIGNAL, 1));
 
   // Use our writing static function to avoid file descriptor
   // pointer crash on windows
