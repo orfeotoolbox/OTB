@@ -195,12 +195,18 @@ macro(check_compiler_platform_flags)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
       endif()
     else()
-      if(BUILD_SHARED_LIBS)
-        set(OTB_LIBRARY_BUILD_TYPE "SHARED")
-      else()
-        set(OTB_LIBRARY_BUILD_TYPE "STATIC")
+      # if CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS is on, then
+      # BUILD_SHARED_LIBS works as it would on other systems
+      if(NOT CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
+        if(BUILD_SHARED_LIBS)
+          set(OTB_LIBRARY_BUILD_TYPE "SHARED")
+        else()
+          set(OTB_LIBRARY_BUILD_TYPE "STATIC")
+        endif()
+        # turn off BUILD_SHARED_LIBS as OTB_LIBRARY_BUILD_TYPE
+        # is used on the libraries that have markup.
+        set(BUILD_SHARED_LIBS OFF)
       endif()
-      #set(BUILD_SHARED_LIBS OFF)
     endif()
   endif()
   #-----------------------------------------------------------------------------
