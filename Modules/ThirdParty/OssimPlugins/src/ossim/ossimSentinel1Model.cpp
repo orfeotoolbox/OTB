@@ -20,6 +20,10 @@
 #include <iostream>
 #include <cassert>
 
+#if defined(_MSC_VER)
+#include <windows.h>
+#endif
+
 #if defined(USE_BOOST_TIME)
             using boost::posix_time::microseconds;
             using boost::posix_time::seconds;
@@ -504,21 +508,44 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::checkDirectory(const ossimFilename& file, const char* d, const char* ext) const
    {
-      //check dir is valid first
-      ossimDirectory dir(file.path() + '/' + d + '/');
-      std::vector<ossimFilename> result;
-      dir.findAllFilesThatMatch(result, ext);
-      if ( result.empty() )
-      {
-         if (traceExec())
-         {
-            ossimNotify(ossimNotifyLevel_FATAL)
-               << " DEBUG:" << " checkDirectory failed for: " << file.path()   << "/" << d << " with ext ="<< ext << "\n";
-         }
-         return false;
-      }
+    std::stringstream strm;
+    std::vector<ossimFilename> result;
 
-      return true;
+	#if defined(_WIN32)
+		const char pathsep = '\\';
+	#else
+		const char pathsep = '/';
+	#endif
+
+	#if defined(_MSC_VER)
+	strm << file.path() << "\\" << d << pathsep << "*" << ext;
+	WIN32_FIND_DATA search_data;
+	memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
+	HANDLE handle = FindFirstFile(strm.str().c_str(), &search_data);
+	while(handle != INVALID_HANDLE_VALUE)  {
+	  result.push_back(std::string( search_data.cFileName ) );
+      if(FindNextFile(handle, &search_data) == FALSE)
+        break;
+	}
+	//Close the handle
+	FindClose(handle);
+
+	#else
+	strm << file.path() << pathsep << d << pathsep;
+    ossimDirectory dir( strm.str() );
+    dir.findAllFilesThatMatch(result, ext);
+	#endif
+
+    if ( result.empty() )
+    {
+		if (traceExec())
+        {
+            ossimNotify(ossimNotifyLevel_FATAL)
+            << " DEBUG:" << " checkDirectory failed for: " << strm.str() << " with ext ="<< ext << "\n";
+        }
+        return false;
+    }
+    return true;
    }
 
    bool ossimSentinel1Model::readProduct(const ossimFilename &productXmlFile)
