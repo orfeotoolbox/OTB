@@ -15,7 +15,6 @@
 #include "ossimKeyWordListUtilities.h"
 #include "ossimSarSensorModelPathsAndKeys.h"
 #include <ossim/base/ossimXmlDocument.h>
-#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimEnvironmentUtility.h>
 #include <ossim/base/ossimDirectory.h>
 #include <iostream>
@@ -374,7 +373,6 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
    SCOPED_LOG(traceDebug, MODULE);
 
    std::string const prefix = prefix_ ? prefix_ : "";
-   add(kwl, prefix, ossimKeywordNames::TYPE_KW, "ossimTerraSarXSarSensorModel");
    // support_data.calibration_lookup_flag is not mandatory on OTB side, but
    // let's be explicit.
    add(kwl, "support_data.calibration_lookup_flag", "false");
@@ -409,7 +407,9 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::saveState(
    const bool success = ossimSarSensorModel::saveState(kwl, prefix_);
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << (success ? " success!" : " failure!") << '\n';
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ": " << kwl.getSize() << " keywords saved.\n";
+#if 0
    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << ":\n" << kwl;
+#endif
    return success;
 }
 
@@ -420,26 +420,26 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
    // traceDebug.setTraceFlag(true);
    // traceExec .setTraceFlag(true);
    SCOPED_LOG(traceDebug, MODULE);
+   std::string const prefix = prefix_ ? prefix_ : "";
+
+   if (! ossimSarSensorModel::loadState(kwl, prefix_))
+   {
+      // If the parent class says this is not a TerraSarX product, then no need
+      // to process further
+      return false;
+   }
+
    theOrbitRecords.clear();
    theGCPRecords.clear();
    theBurstRecords.clear();
-
-   std::string const prefix = prefix_ ? prefix_ : "";
-#if 0
-   theManifestKwl.addList(kwl, true);
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "theManifestKwl.getSize()" << theManifestKwl.getSize() << "\n";
-   }
-#endif
+   theBoundGndPolygon.clear();
 
    m_sensorParams.loadState(kwl, prefix);
    m_sceneCoord.loadState(kwl, prefix);
    // TODO: noise
    // TODO: calFactor
 
-   return ossimSarSensorModel::loadState(kwl, prefix_);
+   return true;
 }
 
 bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)

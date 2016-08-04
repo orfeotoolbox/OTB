@@ -16,6 +16,7 @@
 #include "ossimSarSensorModelPathsAndKeys.h"
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimMatrix3x3.h>
+#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/elevation/ossimHgtRef.h>
 #include <boost/static_assert.hpp>
 #include <iostream>
@@ -1123,6 +1124,7 @@ namespace ossimplugins
    {
       SCOPED_LOG(traceDebug, "ossimplugins::ossimSarSensorModel::saveState");
 
+      add(kwl, prefix ? prefix : "", ossimKeywordNames::TYPE_KW, this->RTTI_vinfo().getname());
       add(kwl, HEADER_PREFIX, "version", k_version);
       return ossimSensorModel::saveState(kwl, prefix);
    }
@@ -1135,6 +1137,24 @@ namespace ossimplugins
 
       try
       {
+         std::string clsName;
+         get(kwl, prefix ? prefix : "", ossimKeywordNames::TYPE_KW, clsName);
+         if (clsName != this->RTTI_vinfo().getname())
+         {
+            // wrong type -> no need to process further
+            return  false;
+         }
+
+         try {
+            unsigned int version;
+            get(kwl, HEADER_PREFIX, "version", version);
+            if (version < k_version) {
+               throw std::runtime_error("Geom file generated with previous version of ossim plugins");
+            }
+         } catch (...) {
+            throw std::runtime_error("Geom file generated with previous version of ossim plugins");
+         }
+
          const bool success = ossimSensorModel::loadState(kwl, prefix);
          if (!success) {
             return false;
@@ -1168,16 +1188,6 @@ namespace ossimplugins
             get(kwl, GR_PREFIX, keyGr0, theGroundRangeToSlantRangeRecords);
          }
          get(kwl, theGCPRecords);
-
-         try {
-            unsigned int version;
-            get(kwl, HEADER_PREFIX, "version", version);
-            if (version < k_version) {
-               throw std::runtime_error("Geom file generated with previous version of ossim plugins");
-            }
-         } catch (...) {
-            throw std::runtime_error("Geom file generated with previous version of ossim plugins");
-         }
 
          optimizeTimeOffsetsFromGcps();
          return true;
