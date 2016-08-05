@@ -231,7 +231,7 @@ namespace ossimplugins {
    template <typename T>
    inline void get(ossimKeywordlist const& kwl, std::string const& prefix, std::string const& key, T & v)
    {
-      return get(kwl, prefix+key, v);
+      get(kwl, prefix+key, v);
    }
 
    inline void get(ossimKeywordlist const& kwl, std::string const& key, time::ModifiedJulianDate & v)
