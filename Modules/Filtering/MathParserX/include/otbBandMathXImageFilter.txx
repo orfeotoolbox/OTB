@@ -861,7 +861,7 @@ void BandMathXImageFilter< TImage >
 
         case 'm':
         {
-        mup::matrix_type vect = value.GetArray();
+        const mup::matrix_type &vect = value.GetArray();
         if ( vect.GetRows() == 1 ) //Vector
           m_outputsDimensions.push_back(vect.GetCols());
         else //Matrix
