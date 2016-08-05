@@ -426,17 +426,17 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
    SCOPED_LOG(traceDebug, MODULE);
    std::string const prefix = prefix_ ? prefix_ : "";
 
+   theOrbitRecords.clear();
+   theGCPRecords.clear();
+   theBurstRecords.clear();
+   theBoundGndPolygon.clear();
+
    if (! ossimSarSensorModel::loadState(kwl, prefix_))
    {
       // If the parent class says this is not a TerraSarX product, then no need
       // to process further
       return false;
    }
-
-   theOrbitRecords.clear();
-   theGCPRecords.clear();
-   theBurstRecords.clear();
-   theBoundGndPolygon.clear();
 
    std::size_t nb_layers;
    std::string polarization;
@@ -458,14 +458,17 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
    get(kwl, prefix, ACQUISITION_INFO + "polarisationLayerName", m_polLayerName);
    if (m_polLayerName != "UNDEFINED")
    {
+      m_noise.resize(m_polLayerList.size());
       const std::size_t polLayerIdx = findPolLayerIdx(m_polLayerName);
       m_noise[polLayerIdx].loadState(kwl, prefix);
    }
    else
    {
+      Noise noise;
       for (std::size_t i=0, N=m_polLayerList.size(); i!=N ; ++i)
       {
-         m_noise[i].loadState(kwl, prefix);
+         noise.loadState(kwl, prefix);
+         m_noise.push_back(noise);
       }
    }
 
