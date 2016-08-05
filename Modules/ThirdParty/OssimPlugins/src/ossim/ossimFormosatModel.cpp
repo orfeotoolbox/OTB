@@ -26,6 +26,8 @@ using namespace std;
 #include <ossim/base/ossimDpt3d.h>
 #include <ossim/base/ossimColumnVector3d.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/projection/ossimBilinearProjection.h>
+
 
 #include <ossimFormosatDimapSupportData.h>
 

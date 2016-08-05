@@ -29,6 +29,7 @@
 
 // Forward class declarations outside of namespace ossimplugins.
 class ossimXmlDocument;
+class ossimXmlNode;
 
 namespace ossimplugins
 {

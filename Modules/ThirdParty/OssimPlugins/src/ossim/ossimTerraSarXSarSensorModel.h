@@ -17,6 +17,7 @@
 #include "otb/SceneCoord.h"
 #include "otb/SensorParams.h"
 class ossimXmlDocument;
+class ossimXmlNode;
 
 namespace ossimplugins
 {
