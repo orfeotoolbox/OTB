@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOneRIBandImageToOneComplexBandImage_h
-#define __otbOneRIBandImageToOneComplexBandImage_h
+#ifndef otbOneRIBandImageToOneComplexBandImage_h
+#define otbOneRIBandImageToOneComplexBandImage_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -69,12 +69,12 @@ public:
 
 protected:
   OneRIBandImageToOneComplexBandImage();
-  virtual ~OneRIBandImageToOneComplexBandImage() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~OneRIBandImageToOneComplexBandImage() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   OneRIBandImageToOneComplexBandImage(const Self &); //purposely not implemented

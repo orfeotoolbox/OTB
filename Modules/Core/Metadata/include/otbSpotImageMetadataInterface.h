@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpotImageMetadataInterface_h
-#define __otbSpotImageMetadataInterface_h
+#ifndef otbSpotImageMetadataInterface_h
+#define otbSpotImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
 
@@ -51,52 +51,52 @@ public:
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias() const;
+  VariableLengthVectorType GetPhysicalBias() const ITK_OVERRIDE;
 
   /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain() const;
+  VariableLengthVectorType GetPhysicalGain() const ITK_OVERRIDE;
 
   /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance() const;
+  VariableLengthVectorType GetSolarIrradiance() const ITK_OVERRIDE;
 
   /** Get the imaging acquisition day from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetDay() const;
+  int GetDay() const ITK_OVERRIDE;
 
   /** Get the imaging acquisition month from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetMonth() const;
+  int GetMonth() const ITK_OVERRIDE;
 
   /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetYear() const;
+  int GetYear() const ITK_OVERRIDE;
 
   /** Get the imaging acquisition hour from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetHour() const;
+  int GetHour() const ITK_OVERRIDE;
 
   /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetMinute() const;
+  int GetMinute() const ITK_OVERRIDE;
 
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const;
+  int GetProductionDay() const ITK_OVERRIDE;
 
   /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const;
+  int GetProductionMonth() const ITK_OVERRIDE;
 
   /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const;
+  int GetProductionYear() const ITK_OVERRIDE;
 
   /** Get the sat elevation from the ossim metadata */
-  double GetSatElevation() const;
+  double GetSatElevation() const ITK_OVERRIDE;
 
   /** Get the sat azimuth from the ossim metadata */
-  double GetSatAzimuth() const;
+  double GetSatAzimuth() const ITK_OVERRIDE;
 
   /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const;
+  VariableLengthVectorType GetFirstWavelengths() const ITK_OVERRIDE;
 
   /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const;
+  VariableLengthVectorType GetLastWavelengths() const ITK_OVERRIDE;
 
   /** Get the enhanced band names (here nothing because the metadata did not provide band names) */
-  std::vector<std::string> GetEnhancedBandNames() const
+  std::vector<std::string> GetEnhancedBandNames() const ITK_OVERRIDE
   {
     return this->Superclass::GetBandName();
   }
@@ -111,21 +111,21 @@ public:
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as
    *  2 1 0 3 in the tiff file, this method which is overloaded for SPOT enables to retrieve the
    *  proper band. */
-  virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
+  unsigned int BandIndexToWavelengthPosition(unsigned int i) const ITK_OVERRIDE;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const;
+  std::vector<unsigned int> GetDefaultDisplay() const ITK_OVERRIDE;
 
-  bool CanRead() const;
+  bool CanRead() const ITK_OVERRIDE;
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const ITK_OVERRIDE;
 
 protected:
   SpotImageMetadataInterface();
-  virtual ~SpotImageMetadataInterface() {}
+  ~SpotImageMetadataInterface() ITK_OVERRIDE {}
 
 private:
 

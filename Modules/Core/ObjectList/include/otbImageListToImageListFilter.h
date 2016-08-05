@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListToImageListFilter_h
-#define __otbImageListToImageListFilter_h
+#ifndef otbImageListToImageListFilter_h
+#define otbImageListToImageListFilter_h
 
 #include "otbImageListSource.h"
 
@@ -70,9 +70,9 @@ protected:
   /** Constructor */
   ImageListToImageListFilter();
   /** Destructor */
-  virtual ~ImageListToImageListFilter() {}
+  ~ImageListToImageListFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageListToImageListFilter(const Self &); //purposely not implemented

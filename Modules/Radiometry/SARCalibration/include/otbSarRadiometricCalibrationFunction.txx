@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSarRadiometricCalibrationFunction_txx
-#define __otbSarRadiometricCalibrationFunction_txx
+#ifndef otbSarRadiometricCalibrationFunction_txx
+#define otbSarRadiometricCalibrationFunction_txx
 
 #include "otbSarRadiometricCalibrationFunction.h"
 #include "itkNumericTraits.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMModelEstimator_txx
-#define __otbSVMModelEstimator_txx
+#ifndef otbSVMModelEstimator_txx
+#define otbSVMModelEstimator_txx
 
 #include "otbSVMModelEstimator.h"
 #include "otbSVMCrossValidationCostFunction.h"
@@ -52,7 +52,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<ModelType *>(this->itk::ProcessObject::GetOutput(0));
 }

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRSResampleImageFilter_h
-#define __otbGenericRSResampleImageFilter_h
+#ifndef otbGenericRSResampleImageFilter_h
+#define otbGenericRSResampleImageFilter_h
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
@@ -265,20 +265,20 @@ public:
   }
 
   /** Override itk::ProcessObject method to let the internal filter do the propagation */
-  virtual void PropagateRequestedRegion(itk::DataObject *output);
+  void PropagateRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
 
 protected:
   GenericRSResampleImageFilter();
   /** Destructor */
-  virtual ~GenericRSResampleImageFilter() {};
+  ~GenericRSResampleImageFilter() ITK_OVERRIDE {};
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   virtual void UpdateTransform();
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   GenericRSResampleImageFilter(const Self &); //purposely not implemented

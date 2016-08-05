@@ -77,7 +77,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
@@ -171,12 +171,12 @@ private:
     SetDocExampleParameterValue("transform.type.rotation.scaley", "2.");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* inputImage = GetParameterImage("in");
 
@@ -247,6 +247,10 @@ private:
 
       m_GridResampler->SetOutputSize(recomputedSize);
       otbAppLogINFO( << "Output image size : " << recomputedSize );
+
+      // Output Image
+      SetParameterOutputImage("out", m_GridResampler->GetOutput());
+
       }
       break;
 
@@ -290,6 +294,8 @@ private:
       otbAppLogINFO( << "Output image size : " << recomputedSize );
       m_Resampler->SetTransform(transform);
 
+          // Output Image
+      SetParameterOutputImage("out", m_Resampler->GetOutput());
       }
       break;
 
@@ -420,6 +426,9 @@ private:
       recomputedSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(size[1]/OutputSpacing[1])));
       m_Resampler->SetOutputSize( recomputedSize );
       otbAppLogINFO( << "Output image size : " << recomputedSize );
+
+      // Output Image
+      SetParameterOutputImage("out", m_Resampler->GetOutput());
       }
       break;
       }
@@ -427,10 +436,10 @@ private:
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, inputImage->GetNumberOfComponentsPerPixel());
     m_Resampler->SetEdgePaddingValue(defaultValue);
+    m_GridResampler->SetEdgePaddingValue(defaultValue);
 
     m_Resampler->UpdateOutputInformation();
-    // Output Image
-    SetParameterOutputImage("out", m_Resampler->GetOutput());
+    m_GridResampler->UpdateOutputInformation();
   }
 
   ResampleFilterType::Pointer m_Resampler;

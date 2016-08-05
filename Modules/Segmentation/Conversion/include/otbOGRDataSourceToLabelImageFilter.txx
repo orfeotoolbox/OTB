@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbOGRDataSourceToLabelImageFilter_txx
+#define otbOGRDataSourceToLabelImageFilter_txx
 
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
@@ -235,7 +237,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   GDALSetGeoTransform(dataset,const_cast<double*>(geoTransform.GetDataPointer()));
 
   // Burn the geometries into the dataset
-   if (dataset != NULL)
+   if (dataset != ITK_NULLPTR)
      {
      std::vector<std::string> options;
 
@@ -250,9 +252,9 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
                           &m_BandsToBurn[0],
                           m_SrcDataSetLayers.size(),
                           &(m_SrcDataSetLayers[0]),
-                          NULL, NULL, &foreground[0],
+                          ITK_NULLPTR, ITK_NULLPTR, &foreground[0],
                           ogr::StringListConverter(options).to_ogr(),
-                          NULL, NULL );
+                          ITK_NULLPTR, ITK_NULLPTR );
      // release the dataset
      GDALClose( dataset );
      }
@@ -267,3 +269,5 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
 }
 
 } // end namespace otb
+
+#endif

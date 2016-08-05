@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSubsampleImageFilter_h
-#define __otbSubsampleImageFilter_h
+#ifndef otbSubsampleImageFilter_h
+#define otbSubsampleImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -104,7 +104,7 @@ protected:
     m_SubsampleFactor.Fill(1);
     //this->SetNumberOfThreads(1);
     }
-  virtual ~SubsampleImageFilter() {}
+  ~SubsampleImageFilter() ITK_OVERRIDE {}
 
   /** Internal test function to check if there is any direction to subsample */
   bool IsSubsampleFactorOne() const;
@@ -112,24 +112,24 @@ protected:
   /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
-  virtual void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
+  void CallCopyOutputRegionToInputRegion
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
+  void CallCopyInputRegionToOutputRegion
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) ITK_OVERRIDE;
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
    */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Set output image to 0 before processing */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Allows multithreading */
-  virtual void ThreadedGenerateData
-    (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData
+    (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SubsampleImageFilter (const Self &);   // purposely not implemented

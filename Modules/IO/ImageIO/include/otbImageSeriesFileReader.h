@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReader_h
-#define __otbImageSeriesFileReader_h
+#ifndef otbImageSeriesFileReader_h
+#define otbImageSeriesFileReader_h
 
 #include "otbImageSeriesFileReaderBase.h"
 
@@ -426,12 +426,12 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  virtual ~ImageSeriesFileReader () {}
+  ~ImageSeriesFileReader () ITK_OVERRIDE {}
 
   /**
    * Tests the coherency of the Meta File (especifically band selection) with the image types
    */
-  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)){}
+  void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) ITK_OVERRIDE{}
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -439,7 +439,7 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  virtual void GenerateData(DataObjectPointerArraySizeType idx);
+  void GenerateData(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::GenerateData;
 
   /**
@@ -447,10 +447,10 @@ protected:
    * This allows specific (or global) initialization in the GenerateData methods,
    * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
    */
-  virtual void AllocateListOfComponents(void);
+  void AllocateListOfComponents(void) ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     return Superclass::PrintSelf(os, indent);
   }

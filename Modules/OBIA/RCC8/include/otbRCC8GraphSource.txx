@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphSource_txx
-#define __otbRCC8GraphSource_txx
+#ifndef otbRCC8GraphSource_txx
+#define otbRCC8GraphSource_txx
 
 #include "otbRCC8GraphSource.h"
 
@@ -43,7 +43,7 @@ RCC8GraphSource<TOutputGraph>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputGraphType *> (this->ProcessObject::GetOutput(0));
 }

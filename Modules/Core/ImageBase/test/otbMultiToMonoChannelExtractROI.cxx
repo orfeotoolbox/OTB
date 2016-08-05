@@ -33,7 +33,7 @@ int generic_otbMultiToMonoChannelExtractROI(int itkNotUsed(argc),
   typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
   int cpt(0);
 
-  while (argv[cpt] != NULL)
+  while (argv[cpt] != ITK_NULLPTR)
     {
     std::string strArgv(argv[cpt]);
     if (strArgv == "-startX")

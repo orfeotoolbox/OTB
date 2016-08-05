@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSentinel1ImageMetadataInterface_h
-#define __otbSentinel1ImageMetadataInterface_h
+#ifndef otbSentinel1ImageMetadataInterface_h
+#define otbSentinel1ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
 
@@ -56,40 +56,40 @@ public:
   typedef Superclass::LookupDataPointerType LookupDataPointerType;
 
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const;
+  int GetProductionDay() const ITK_OVERRIDE;
 
   /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const;
+  int GetProductionMonth() const ITK_OVERRIDE;
 
   /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const;
+  int GetProductionYear() const ITK_OVERRIDE;
 
   /** check sensor ID */
-  bool CanRead() const;
+  bool CanRead() const ITK_OVERRIDE;
 
-  int GetDay() const;
+  int GetDay() const ITK_OVERRIDE;
 
-  int GetMonth() const;
+  int GetMonth() const ITK_OVERRIDE;
 
-  int GetYear() const;
+  int GetYear() const ITK_OVERRIDE;
 
-  int GetHour() const;
+  int GetHour() const ITK_OVERRIDE;
 
-  int GetMinute() const;
+  int GetMinute() const ITK_OVERRIDE;
 
-  UIntVectorType GetDefaultDisplay() const;
+  UIntVectorType GetDefaultDisplay() const ITK_OVERRIDE;
 
   /*SarImageMetadataInterface pure virutals rituals */
-  double GetPRF() const;
+  double GetPRF() const ITK_OVERRIDE;
 
-  double GetRSF() const;
+  double GetRSF() const ITK_OVERRIDE;
 
-  double GetRadarFrequency() const;
+  double GetRadarFrequency() const ITK_OVERRIDE;
 
-  double GetCenterIncidenceAngle() const;
+  double GetCenterIncidenceAngle() const ITK_OVERRIDE;
 
   /*get lookup data for calulating backscatter */
-  void CreateCalibrationLookupData(const short type);
+  void CreateCalibrationLookupData(const short type) ITK_OVERRIDE;
 
 protected:
 
@@ -97,7 +97,7 @@ protected:
   Sentinel1ImageMetadataInterface();
 
   /* class dtor */
-  virtual ~Sentinel1ImageMetadataInterface() {}
+  ~Sentinel1ImageMetadataInterface() ITK_OVERRIDE {}
 
 private:
 
@@ -118,20 +118,20 @@ private:
 
 
 
-struct Sentinel1CalibrationStruct {
-
+struct Sentinel1CalibrationStruct
+{
 public:
   double timeMJD;
+  double deltaMJD; // time difference to previous MJD in the list
   int line;
   std::vector<int> pixels;
+  std::vector<double> deltaPixels;
   std::vector<float> vect;
 };
 
 class Sentinel1CalibrationLookupData : public SarCalibrationLookupData
 {
-
 public:
-
 
   /** Standard typedefs */
   typedef Sentinel1CalibrationLookupData   Self;
@@ -154,17 +154,15 @@ public:
     , count(0)
     , lineTimeInterval(0.)
   {
-
   }
 
-  virtual ~Sentinel1CalibrationLookupData()
+  ~Sentinel1CalibrationLookupData() ITK_OVERRIDE
   {
-
   }
 
   void InitParameters(short type, double ft, double lt,
                       int lines, int c,
-                      std::vector<Sentinel1CalibrationStruct> vlist)
+                      std::vector<Sentinel1CalibrationStruct> const& vlist)
   {
     firstLineTime = ft;
     lastLineTime = lt;
@@ -175,21 +173,23 @@ public:
     lineTimeInterval = (lt - ft) / ((lines - 1) * 1.0);
   }
 
-  virtual double GetValue(const IndexValueType x, const IndexValueType y)
+  double GetValue(const IndexValueType x, const IndexValueType y) const ITK_OVERRIDE
   {
     const int calVecIdx = GetVectorIndex(y);
-    const Sentinel1CalibrationStruct vec0 = calibrationVectorList[calVecIdx];
-    const Sentinel1CalibrationStruct vec1 = calibrationVectorList[calVecIdx + 1];
+    assert(calVecIdx>=0 && calVecIdx < count-1);
+    const Sentinel1CalibrationStruct & vec0 = calibrationVectorList[calVecIdx];
+    const Sentinel1CalibrationStruct & vec1 = calibrationVectorList[calVecIdx + 1];
     const double azTime = firstLineTime + y * lineTimeInterval;
-    const double muY = (azTime - vec0.timeMJD) /(vec1.timeMJD - vec0.timeMJD);
+    const double muY = (azTime - vec0.timeMJD) / vec1.deltaMJD;
     const int pixelIdx = GetPixelIndex(x, calibrationVectorList[calVecIdx]);
-    const double muX = (static_cast<float>(x) - static_cast<float>(vec0.pixels[pixelIdx])) / (static_cast<float>(vec0.pixels[pixelIdx + 1] - vec0.pixels[pixelIdx]));
-    const double lutVal = (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1]) +
-      muY * ((1 - muX) * vec1.vect[pixelIdx] + muX *   vec1.vect[pixelIdx + 1]);
+    const double muX = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
+    const double lutVal
+        = (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1])
+        +       muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
     return lutVal;
   }
 
-  int GetVectorIndex(int y)
+  int GetVectorIndex(int y) const
   {
     for (int i = 1; i < count; i++)
       {
@@ -199,20 +199,13 @@ public:
         }
       }
     return -1;
-
   }
 
-  int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec)
+  int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec) const
   {
-    const int size = calVec.pixels.size();
-    for (int i = 0; i < size; i++)
-      {
-      if (x < calVec.pixels[i])
-        {
-        return i - 1;
-        }
-      }
-    return size - 2;
+      const int size = calVec.pixels.size();
+      std::vector<int>::const_iterator wh = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
+      return wh == calVec.pixels.end() ? size - 2 : std::distance(calVec.pixels.begin(),wh)-1;
   }
 
 private:
@@ -227,7 +220,6 @@ private:
   int count;
   std::vector<Sentinel1CalibrationStruct> calibrationVectorList;
   double lineTimeInterval;
-
 };
 
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMModelEstimator_h
-#define __otbSVMModelEstimator_h
+#ifndef otbSVMModelEstimator_h
+#define otbSVMModelEstimator_h
 
 #include "otbSVMModel.h"
 #include "itkProcessObject.h"
@@ -287,11 +287,11 @@ protected:
   /** Constructor */
   SVMModelEstimator();
   /** Destructor */
-  virtual ~SVMModelEstimator();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~SVMModelEstimator() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Starts the modelling process */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** This virtual function must be implemented in subclasses to
   populate the model with samples */

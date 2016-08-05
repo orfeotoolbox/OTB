@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbDecisionTreeMachineLearningModelFactory_txx
+#define otbDecisionTreeMachineLearningModelFactory_txx
+
 #include "otbDecisionTreeMachineLearningModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -62,3 +65,5 @@ DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif

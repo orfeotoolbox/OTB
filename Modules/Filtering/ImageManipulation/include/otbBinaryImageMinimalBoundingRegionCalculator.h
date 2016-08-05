@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBinaryImageMinimalBoundingRegionCalculator_h
-#define __otbBinaryImageMinimalBoundingRegionCalculator_h
+#ifndef otbBinaryImageMinimalBoundingRegionCalculator_h
+#define otbBinaryImageMinimalBoundingRegionCalculator_h
 
 #include "itkImageToImageFilter.h"
 #include "itkObjectFactory.h"
@@ -67,11 +67,11 @@ protected:
   /** Constructor */
   BinaryImageMinimalBoundingRegionCalculator();
   /** Destructor */
-  virtual ~BinaryImageMinimalBoundingRegionCalculator() {}
+  ~BinaryImageMinimalBoundingRegionCalculator() ITK_OVERRIDE {}
   /** Main computation method */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 private:
   BinaryImageMinimalBoundingRegionCalculator(const Self &); // purposely not implemented
   void operator =(const Self&); // purposely not implemented

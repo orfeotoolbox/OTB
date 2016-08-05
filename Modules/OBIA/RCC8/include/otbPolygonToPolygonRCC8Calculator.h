@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonToPolygonRCC8Calculator_h
-#define __otbPolygonToPolygonRCC8Calculator_h
+#ifndef otbPolygonToPolygonRCC8Calculator_h
+#define otbPolygonToPolygonRCC8Calculator_h
 
 #include "itkObject.h"
 #include "otbRCC8Value.h"
@@ -106,9 +106,9 @@ protected:
   /** Constructor */
   PolygonToPolygonRCC8Calculator();
   /** Destructor */
-  virtual ~PolygonToPolygonRCC8Calculator() {}
+  ~PolygonToPolygonRCC8Calculator() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The RCC8 relation value */

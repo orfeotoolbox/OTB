@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGridResampleImageFilter_txx
-#define __otbGridResampleImageFilter_txx
+#ifndef otbGridResampleImageFilter_txx
+#define otbGridResampleImageFilter_txx
 
 #include "otbGridResampleImageFilter.h"
 
@@ -238,8 +238,8 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
     }
 
   // Compute ReachableOutputRegion
-  // InputImage buffered region corresponds to a region of the ouptut
-  // image. Computing it beforehand allows to save IsInsideBuffer
+  // InputImage buffered region corresponds to a region of the output
+  // image. Computing it beforehand allows saving IsInsideBuffer
   // calls in the interpolation loop
   
   // Compute the padding due to the interpolator

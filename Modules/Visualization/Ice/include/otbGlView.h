@@ -104,7 +104,7 @@ public:
   void Initialize(unsigned int sx, unsigned int sy);
 
   /**
-   * This method allows to add a new actor (deriving from GlActor) to
+   * This method allows adding a new actor (deriving from GlActor) to
    * the GlView. The actor can be identified by an optional key. If
    * not provided, and the default value is used, the method will
    * generate a key to identify the actor. In both case, the key is
@@ -132,7 +132,7 @@ public:
   void ClearActors();
 
   /**
-   * This method allows to retrieve a pointer to the actor identified
+   * This method allows retrieving a pointer to the actor identified
    * by the given key.
    * \param key The key identifying the actor to retrieve
    * \return A pointer to the retrieved actor. This pointer will be
@@ -236,7 +236,7 @@ public:
   /**
    */
   template< typename P >
-  bool GetExtent( P & origin, P & extent, bool isOverlay =false ) const;
+  size_t GetExtent( P & origin, P & extent, bool isOverlay =false ) const;
 
   /**
    */
@@ -277,7 +277,7 @@ public:
 protected:
   GlView();
 
-  virtual ~GlView();
+  ~GlView() ITK_OVERRIDE;
 
 private:
   // prevent implementation
@@ -325,7 +325,7 @@ GlView
   const otb::GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
 
@@ -416,7 +416,7 @@ GlView
 
 
 template< typename P >
-bool
+size_t
 GlView
 ::GetExtent( P & origin, P & extent, bool isOverlay ) const
 {
@@ -425,7 +425,7 @@ GlView
     origin.Fill( 0 );
     extent.Fill( 0 );
 
-    return false;
+    return 0;
     }
 
 
@@ -434,6 +434,8 @@ GlView
 
   extent[ 0 ] = -std::numeric_limits< typename P::ValueType >::infinity();
   extent[ 1 ] = -std::numeric_limits< typename P::ValueType >::infinity();
+
+  size_t count = 0;
 
   for( ActorMapType::const_iterator it( m_Actors.begin() );
        it!=m_Actors.end();
@@ -476,10 +478,18 @@ GlView
 
       if( e[ 1 ]>extent[ 1 ] )
 	extent[ 1 ] = e[ 1 ];
+
+      ++ count;
       }
     }
 
-  return true;
+  if( count==0 )
+    {
+    origin.Fill( 0 );
+    extent.Fill( 0 );
+    }
+
+  return count;
 }
 
 
@@ -495,7 +505,7 @@ GlView
   e.Fill( 0 );
 
   // Get origin and extent of all layers in viewport system.
-  if( !GetExtent( o, e ) )
+  if( GetExtent( o, e )==0 )
     return false;
 
   // std::cout << "origin: [ " << o[ 0 ] << ", " << o[ 1 ] << " ]" << std::endl;
@@ -544,9 +554,9 @@ GlView
   // std::cout
   //   << std::hex << this << std::dec
   //   << "::ZoomToRegion( "
-  //   << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
-  //   << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
-  //   << "[ " << native[ 0 ] << ", " << native[ 1 ] << "] )"
+  //   << "[" << origin[ 0 ] << ", " << origin[ 1 ] << "], "
+  //   << "[" << extent[ 0 ] << ", " << extent[ 1 ] << "], "
+  //   << "[" << native[ 0 ] << ", " << native[ 1 ] << "] )"
   //   << std::endl;
 
   // Compute center point.
@@ -619,7 +629,7 @@ GlView
   const GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
   // Get viewport current center and spacing.

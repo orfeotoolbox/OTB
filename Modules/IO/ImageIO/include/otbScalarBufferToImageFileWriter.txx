@@ -15,7 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#ifndef otbScalarBufferToImageFileWriter_txx
+#define otbScalarBufferToImageFileWriter_txx
 
 #include "otbMacro.h"
 
@@ -27,7 +28,7 @@ namespace otb
 {
 template<class TBufferType, class TOutputPixelType>
 ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>
-::ScalarBufferToImageFileWriter() : m_Buffer(NULL), m_NumberOfChannels(0), m_InverseXSpacing(false)
+::ScalarBufferToImageFileWriter() : m_Buffer(ITK_NULLPTR), m_NumberOfChannels(0), m_InverseXSpacing(false)
 {
   m_Writer = WriterType::New();
   m_ImageSize.Fill(0);
@@ -122,3 +123,4 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>
 
 } // end namespace otb
 
+#endif

@@ -1,0 +1,38 @@
+diff -burN geos-3.4.2.orig/src/CMakeLists.txt geos-3.4.2/src/CMakeLists.txt
+--- geos-3.4.2.orig/src/CMakeLists.txt	2016-07-01 14:07:05.000000000 +0200
++++ geos-3.4.2/src/CMakeLists.txt	2016-07-01 14:07:39.000000000 +0200
+@@ -62,7 +62,7 @@
+ else()
+ 
+   add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
+-  add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
++#  add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
+ 
+   set_target_properties(geos
+     PROPERTIES
+@@ -70,11 +70,11 @@
+     VERSION ${VERSION}
+     CLEAN_DIRECT_OUTPUT 1)
+ 
+-  set_target_properties(geos-static
+-    PROPERTIES
+-    OUTPUT_NAME "geos"
+-    PREFIX "lib"
+-    CLEAN_DIRECT_OUTPUT 1)
++#  set_target_properties(geos-static
++#    PROPERTIES
++#    OUTPUT_NAME "geos"
++#    PREFIX "lib"
++#    CLEAN_DIRECT_OUTPUT 1)
+ 
+ endif()
+ 
+@@ -90,7 +90,7 @@
+ #################################################################################
+ 
+ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
+-  install(TARGETS geos geos-static
++  install(TARGETS geos
+     RUNTIME DESTINATION bin
+     LIBRARY DESTINATION lib
+     ARCHIVE DESTINATION lib)

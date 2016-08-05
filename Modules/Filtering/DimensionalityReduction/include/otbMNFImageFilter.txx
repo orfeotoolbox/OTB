@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMNFImageFilter_txx
-#define __otbMNFImageFilter_txx
+#ifndef otbMNFImageFilter_txx
+#define otbMNFImageFilter_txx
 #include "otbMNFImageFilter.h"
 
 #include "itkMacro.h"
@@ -497,6 +497,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 } // end of namespace otb
 
-#endif // __otbMNFImageFilter_txx
+#endif // otbMNFImageFilter_txx
 
 

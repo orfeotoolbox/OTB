@@ -173,7 +173,7 @@ const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
   tmpParam->SetActive(false);
   AddParameter(tmpParam);
 
-  tmpParam = NULL;
+  tmpParam = ITK_NULLPTR;
   /*
   AddParameter(ParameterType_OutputProcessXML,  key,   descr);
   SetParameterDescription(key, descr);
@@ -193,7 +193,7 @@ void ParameterGroup::AddInXMLParameter()
   tmpParam->SetActive(false);
   AddParameter(tmpParam);
 
-  tmpParam = NULL;
+  tmpParam = ITK_NULLPTR;
   /*
   AddParameter(ParameterType_InputProcessXML,  key,   descr);
   SetParameterDescription(key, descr);

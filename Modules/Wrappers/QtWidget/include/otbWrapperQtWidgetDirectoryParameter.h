@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetDirectoryParameter_h
-#define __otbWrapperQtWidgetDirectoryParameter_h
+#ifndef otbWrapperQtWidgetDirectoryParameter_h
+#define otbWrapperQtWidgetDirectoryParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -40,7 +40,7 @@ class ITK_ABI_EXPORT QtWidgetDirectoryParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*);
-  virtual ~QtWidgetDirectoryParameter();
+  ~QtWidgetDirectoryParameter() ITK_OVERRIDE;
 
 protected slots:
   void SetFileName( const QString& value );
@@ -50,9 +50,9 @@ private:
   QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&); //purposely not implemented
   void operator=(const QtWidgetDirectoryParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
 
   DirectoryParameter::Pointer m_DirectoryParam;

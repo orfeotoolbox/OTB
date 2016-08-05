@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSavitzkyGolayInterpolationFunctor_h
-#define __otbSavitzkyGolayInterpolationFunctor_h
+#ifndef otbSavitzkyGolayInterpolationFunctor_h
+#define otbSavitzkyGolayInterpolationFunctor_h
 
 #include "otbTimeSeries.h"
 #include "otbTimeSeriesLeastSquareFittingFunctor.h"

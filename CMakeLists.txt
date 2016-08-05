@@ -68,14 +68,30 @@ include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
 
+repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
+
+#-----------------------------------------------------------------------------
+# Configure the default OTB_DATA_ROOT for the location of OTB Data.
+find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
+)
+mark_as_advanced(OTB_DATA_ROOT)
+
+if(OTB_DATA_ROOT)
+  repository_status(${OTB_DATA_ROOT} OTB_DATA_GIT_STATUS_MESSAGE)
+endif()
+
 set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "4")
+set(OTB_VERSION_MINOR "6")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+
+string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
   set(OTB_INSTALL_RUNTIME_DIR bin)
@@ -204,14 +220,6 @@ option(BUILD_EXAMPLES "Build the Examples directory." OFF)
 #----------------------------------------------------------------------------
 set(OTB_TEST_OUTPUT_DIR "${OTB_BINARY_DIR}/Testing/Temporary")
 
-#-----------------------------------------------------------------------------
-# Configure the default OTB_DATA_ROOT for the location of OTB Data.
-find_path(OTB_DATA_ROOT
-  NAMES README-OTB-Data
-  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
-)
-mark_as_advanced(OTB_DATA_ROOT)
-
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
 mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
 if(OTB_DATA_USE_LARGEINPUT)
@@ -331,6 +339,10 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
 install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
 
+# Configure and install VERSION file
+configure_file(VERSION VERSION @ONLY)
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
 endif()
@@ -347,6 +359,8 @@ endif()
 # Provide an option for generating documentation.
 add_subdirectory(Utilities/Doxygen)
 
+add_subdirectory(Utilities/Completion)
+
 #----------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
@@ -362,69 +376,151 @@ endif()
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 
+# uninstall target
+configure_file(
+    "${CMAKE_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
+    "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
 
-# 04-apr-2016. point OTB.
-# create a single package with OTB + Monteverdi + Mapla.
-# The below loop is commented out since generation of single
-# package happens in monteverdi project.
+add_custom_target(uninstall
+  COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
 
-# if(WIN32 AND CMAKE_CROSSCOMPILING)
-#   if(DEFINED MXE_TARGET_DIR)
+#macro to put a fixed space between key, value  in summary
+macro(get_white_spaces var res)
+  string(LENGTH "${var}" len)
+  math(EXPR required_spaces "23 - ${len}")
+  set(${res})
+  foreach(loop_var RANGE ${required_spaces})
+    set(${res} "${${res}} ")
+  endforeach()
+endmacro()
 
-#     set(pefiles)
+message("\n======================= Begin of OTB cmake summary =======================\n")
 
-#     message(STATUS "MXE_TARGET_DIR = ${MXE_TARGET_DIR}")
+if(OTB_GIT_STATUS_MESSAGE)
+  message( ${OTB_GIT_STATUS_MESSAGE})
+endif()
+if(OTB_DATA_GIT_STATUS_MESSAGE)
+  message( ${OTB_DATA_GIT_STATUS_MESSAGE})
+endif()
 
-#     if(MXE_TARGET_DIR MATCHES "i686")
-#       set(mxearch x86)
-#       set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-win32)
-#     elseif(MXE_TARGET_DIR MATCHES "x86_64")
-#       set(mxearch x64)
-#       set(archive_name ${CMAKE_PROJECT_NAME}-${OTB_VERSION_STRING}-win64)
-#     endif()
+set(option_list ${OTB_MODULE_ACTIVATION_OPTION_LIST})
+list(SORT option_list)
 
-#     execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${archive_name}")
+foreach(otb_option
+    CMAKE_SOURCE_DIR
+    CMAKE_BINARY_DIR
+    CMAKE_INSTALL_PREFIX
+    CMAKE_COMMAND
+    CMAKE_C_COMPILER
+    CMAKE_CXX_COMPILER
+    CMAKE_MAKE_PROGRAM
+    CMAKE_GENERATOR
+    CMAKE_BUILD_TYPE
+    CMAKE_C_FLAGS
+    CMAKE_CXX_FLAGS
+    ${option_list}
+    OTB_WRAP_PYTHON
+    OTB_WRAP_JAVA
+    OTB_DATA_ROOT
+    )
+    get_white_spaces("${otb_option}" spaces)
+  message("${otb_option} ${spaces} = ${${otb_option}}")
+endforeach()
 
-#     get_filename_component(mxeroot ${MXE_TARGET_DIR} PATH)
-#     get_filename_component(mxeroot ${mxeroot} PATH)
+# set(modules_list_for_summary "${OTB_MODULES_ENABLED}")
+# list(SORT modules_list_for_summary)
+# string(REPLACE ";" " " modules_list_for_summary "${modules_list_for_summary}")
+# message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
+# unset(modules_list_for_summary)
 
-#     file(WRITE "${CMAKE_BINARY_DIR}/_mingw/CMakeLists.txt"
-#       "cmake_minimum_required(VERSION 2.6)
-#        include(CMakeParseArguments)
-#        set(CMAKE_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-#         include(${CMAKE_SOURCE_DIR}/CMake/MinGWPackage.cmake)
-#         package_mingw(
-#         ARCH \"${mxearch}\"
-#         MXEROOT \"${mxeroot}\"
-#         PREFIX_DIR \"${archive_name}\"
-#         PEFILES \"${pefiles}\"
-#         WITH_OTBGUI 1
-#         SEARCHDIRS \"\")")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_OPENCV" "OTB_USE_QT4")
+foreach(item ${option_list})
+  if(NOT ${item})
+    list(REMOVE_ITEM option_list "${item}" )
+  endif()
+endforeach()
 
-#     add_custom_target(configure-mingw
-#       COMMAND ${CMAKE_COMMAND}
-#       "${CMAKE_BINARY_DIR}/_mingw"
-#       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw")
+#To report non-optional dependencies inside summary
+list(APPEND option_list Boost)
+list(APPEND option_list GDAL)
+list(APPEND option_list GEOTIFF)
+list(APPEND option_list ITK)
+list(APPEND option_list OSSIM)
+list(APPEND option_list TINYXML)
 
-#     add_custom_target(prepare-mingw
-#       COMMAND ${CMAKE_COMMAND}
-#       "--build" "${CMAKE_BINARY_DIR}/_mingw" "--target" "install"
-#       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_mingw"
-#       DEPENDS configure-mingw)
+#RK
+#Q: Why these two guys here? we already have option_list
+#A: Because cmake case sensitivity with variables.
+if(OTB_USE_OPENCV)
+  list(APPEND option_list OpenCV)
+endif()
 
-#     find_program(ZIP_EXECUTABLE zip)
+if(OTB_USE_QT4)
+  list(APPEND option_list QT)
+endif()
+#sort again!
+list(SORT option_list)
 
-#     if(ZIP_EXECUTABLE)
-#       add_custom_target(packages
-#         COMMAND ${ZIP_EXECUTABLE} "-r" "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}"
-#         WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
-#         DEPENDS prepare-mingw)
-#     else()
-#       message(FATAL_ERROR "Cannot find zip executable. Please add it to your path")
-#     endif()
+foreach(dep ${option_list})
 
-#   # else(DEFINED MXE_TARGET_DIR)
-#   #   message(WARNING "MXE_TARGET_DIR must be defined and contains location of mxe root directory")
-#   endif(DEFINED MXE_TARGET_DIR)
+  string(REGEX REPLACE "OTB_USE_" "" dep ${dep})
 
-# endif(WIN32 AND CMAKE_CROSSCOMPILING)
+  unset(var1_key)
+  unset(var2_key)
+  unset(var3_key)
+
+  unset(var1_val)
+  unset(var2_val)
+  unset(var3_val)
+
+  set(var1_key "${dep}")
+  if(${dep}_VERSION_STRING)
+    set(var1_val ${${dep}_VERSION_STRING})
+  endif()
+  if(NOT var1_val)
+    if(${dep}_VERSION)
+      set(var1_val ${${dep}_VERSION})
+    endif()
+  endif()
+
+  if(DEFINED ${dep}_DIR)
+    set(var2_key  ${dep}_DIR)
+    set(var2_val ${${dep}_DIR})
+  else()
+    if(${dep}_INCLUDE_DIR)
+      set(var2_key  ${dep}_INCLUDE_DIR)
+      set(var2_val ${${dep}_INCLUDE_DIR})
+    elseif(${dep}_INCLUDE_DIRS)
+      set(var2_key  ${dep}_INCLUDE_DIRS)
+      set(var2_val ${${dep}_INCLUDE_DIRS})
+    endif()
+    if(${dep}_LIBRARY)
+      set(var3_key  ${dep}_LIBRARY)
+      set(var3_val ${${dep}_LIBRARY})
+    elseif(${dep}_LIBRARIES)
+      set(var3_key  ${dep}_LIBRARIES)
+      set(var3_val ${${dep}_LIBRARIES})
+    endif()
+  endif()
+
+  get_white_spaces("${var1_key}" insert_spaces1)
+  get_white_spaces("${var2_key}" insert_spaces2)
+  get_white_spaces("${var3_key}" insert_spaces3)
+
+  message("${var1_key} ${insert_spaces1} = ${var1_val}")
+  if(var2_val)
+    message("${var2_key} ${insert_spaces2} = ${var2_val}")
+  endif()
+  if(var3_val)
+    message("${var3_key} ${insert_spaces3} = ${var3_val}")
+  endif()
+
+endforeach()
+
+message("\nCMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator\n")
+
+message("======================= End of OTB cmake summary =======================")
+
+#don't need this one anymore. so unset it.
+unset(option_list)

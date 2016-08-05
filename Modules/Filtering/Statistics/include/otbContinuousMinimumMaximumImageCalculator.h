@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbContinuousMinimumMaximumImageCalculator_h
-#define __otbContinuousMinimumMaximumImageCalculator_h
+#ifndef otbContinuousMinimumMaximumImageCalculator_h
+#define otbContinuousMinimumMaximumImageCalculator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -134,8 +134,8 @@ public:
 
 protected:
   ContinuousMinimumMaximumImageCalculator();
-  virtual ~ContinuousMinimumMaximumImageCalculator() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ContinuousMinimumMaximumImageCalculator() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   PixelType         m_Minimum;
   PixelType         m_Maximum;

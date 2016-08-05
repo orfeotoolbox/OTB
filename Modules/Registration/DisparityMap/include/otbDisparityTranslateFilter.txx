@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityTranslateFilter_txx
-#define __otbDisparityTranslateFilter_txx
+#ifndef otbDisparityTranslateFilter_txx
+#define otbDisparityTranslateFilter_txx
 
 #include "otbDisparityTranslateFilter.h"
 
@@ -102,7 +102,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -114,7 +114,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -126,7 +126,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TGridImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -138,7 +138,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TGridImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -150,7 +150,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -162,7 +162,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<6)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TSensorImage *>(this->itk::ProcessObject::GetInput(5));
 }
@@ -174,7 +174,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -186,7 +186,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }

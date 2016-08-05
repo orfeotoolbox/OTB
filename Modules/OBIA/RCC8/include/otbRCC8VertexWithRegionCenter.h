@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8VertexWithRegionCenter_h
-#define __otbRCC8VertexWithRegionCenter_h
+#ifndef otbRCC8VertexWithRegionCenter_h
+#define otbRCC8VertexWithRegionCenter_h
 
 #include "otbRCC8VertexBase.h"
 

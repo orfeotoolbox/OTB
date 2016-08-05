@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputImageParameter_txx
-#define __otbWrapperInputImageParameter_txx
+#ifndef otbWrapperInputImageParameter_txx
+#define otbWrapperInputImageParameter_txx
 
 #include "otbWrapperInputImageParameter.h"
 

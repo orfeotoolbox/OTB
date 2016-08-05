@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGaussianAdditiveNoiseSampleListFilter_txx
-#define __otbGaussianAdditiveNoiseSampleListFilter_txx
+#ifndef otbGaussianAdditiveNoiseSampleListFilter_txx
+#define otbGaussianAdditiveNoiseSampleListFilter_txx
 
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"

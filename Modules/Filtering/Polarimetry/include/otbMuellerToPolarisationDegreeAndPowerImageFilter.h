@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MuellerToPolarisationDegreeAndPowerImageFilter_h
-#define __MuellerToPolarisationDegreeAndPowerImageFilter_h
+#ifndef otbMuellerToPolarisationDegreeAndPowerImageFilter_h
+#define otbMuellerToPolarisationDegreeAndPowerImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
@@ -227,7 +227,7 @@ public:
 
 protected:
    MuellerToPolarisationDegreeAndPowerImageFilter() {}
-  virtual ~MuellerToPolarisationDegreeAndPowerImageFilter() {}
+  ~MuellerToPolarisationDegreeAndPowerImageFilter() ITK_OVERRIDE {}
 
 private:
   MuellerToPolarisationDegreeAndPowerImageFilter(const Self&); //purposely not implemented

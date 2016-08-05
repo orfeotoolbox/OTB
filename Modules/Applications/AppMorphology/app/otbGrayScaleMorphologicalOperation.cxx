@@ -73,7 +73,7 @@ itkTypeMacro(GrayScaleMorphologicalOperation, otb::Application);
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
 SetName("GrayScaleMorphologicalOperation");
 SetDescription("Performs morphological operations on a grayscale input image");
@@ -139,12 +139,12 @@ SetDocExampleParameterValue("structype.ball.yradius", "5");
 SetDocExampleParameterValue("filter", "erode");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

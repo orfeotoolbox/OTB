@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarBrightnessToImageFilter_txx
-#define __otbSarBrightnessToImageFilter_txx
+#ifndef otbSarBrightnessToImageFilter_txx
+#define otbSarBrightnessToImageFilter_txx
 
 #include "otbSarBrightnessToImageFilter.h"
 

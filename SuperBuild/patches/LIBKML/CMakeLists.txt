@@ -6,14 +6,11 @@ set(libkml_VERSION_MAJOR "1")
 set(libkml_VERSION_MINOR "3")
 set(libkml_VERSION_PATCH "0")
 
+option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
+
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the library.
 set(libkml_VERSION_STRING "${libkml_VERSION_MAJOR}.${libkml_VERSION_MINOR}.${libkml_VERSION_PATCH}")
-
-set(BUILD_SHARED_LIBS ON)
-if(MSVC)
-set(BUILD_SHARED_LIBS OFF) #force off
-endif()
 
 # Allow sources in subdirectories to see the include files.
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)

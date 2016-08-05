@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileMapImageIOHelper_cxx
-#define __otbTileMapImageIOHelper_cxx
-
 #include "otbTileMapImageIOHelper.h"
 namespace otb
 {
@@ -94,5 +91,3 @@ const std::string TileMapImageIOHelper::ConvertDepthToScale(const unsigned int d
 }
 
 } // end namespace otb
-
-#endif

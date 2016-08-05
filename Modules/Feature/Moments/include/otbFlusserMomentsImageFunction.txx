@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserMomentsImageFunction_txx
-#define __otbFlusserMomentsImageFunction_txx
+#ifndef otbFlusserMomentsImageFunction_txx
+#define otbFlusserMomentsImageFunction_txx
 
 #include "otbFlusserMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

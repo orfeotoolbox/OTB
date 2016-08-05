@@ -78,7 +78,7 @@ public:
      FloatVectorImageType>                                        BasicResamplerType;
   
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Superimpose");
     SetDescription("Using available image metadata, project one image onto another one");
@@ -148,7 +148,7 @@ private:
     SetDocExampleParameterValue("out", "SuperimposedXS_to_PAN.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if(!HasUserValue("mode") && HasValue("inr") && HasValue("inm") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"),GetParameterImage("inm")))
       {
@@ -158,7 +158,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the inputs
     FloatVectorImageType* refImage = GetParameterImage("inr");

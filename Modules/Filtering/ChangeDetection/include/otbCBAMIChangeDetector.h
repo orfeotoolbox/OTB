@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCBAMIChangeDetector_h
-#define __otbCBAMIChangeDetector_h
+#ifndef otbCBAMIChangeDetector_h
+#define otbCBAMIChangeDetector_h
 
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "otbCBAMI.h"
@@ -81,7 +81,7 @@ public:
 
 protected:
   CBAMIChangeDetector() {}
-  virtual ~CBAMIChangeDetector() {}
+  ~CBAMIChangeDetector() ITK_OVERRIDE {}
 
 private:
   CBAMIChangeDetector(const Self &); //purposely not implemented

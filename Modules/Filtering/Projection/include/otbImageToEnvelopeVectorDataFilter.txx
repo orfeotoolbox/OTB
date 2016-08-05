@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEnvelopeVectorDataFilter_txx
-#define __otbImageToEnvelopeVectorDataFilter_txx
+#ifndef otbImageToEnvelopeVectorDataFilter_txx
+#define otbImageToEnvelopeVectorDataFilter_txx
 
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbDataNode.h"
@@ -54,7 +54,7 @@ const TInputImage *
 ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 ::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1) return 0;
+  if (this->GetNumberOfInputs() < 1) return ITK_NULLPTR;
 
   return dynamic_cast<const InputImageType*>
            (this->itk::ProcessObject::GetInput(0));

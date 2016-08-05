@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMollweidMapProjection_h
-#define __otbMollweidMapProjection_h
+#ifndef otbMollweidMapProjection_h
+#define otbMollweidMapProjection_h
 
 #include "otbGenericMapProjection.h"
 
@@ -56,7 +56,7 @@ public:
 
 protected:
   MollweidMapProjection();
-  virtual ~MollweidMapProjection();
+  ~MollweidMapProjection() ITK_OVERRIDE;
 
 private:
   MollweidMapProjection(const Self &); //purposely not implemented

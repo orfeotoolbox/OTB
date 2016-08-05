@@ -1,0 +1,50 @@
+diff -burN libgeos-714127ef49087634e7f6687424fdf041d18c3d0f.orig/CMakeLists.txt libgeos-714127ef49087634e7f6687424fdf041d18c3d0f/CMakeLists.txt
+--- libgeos-714127ef49087634e7f6687424fdf041d18c3d0f.orig/CMakeLists.txt	2016-07-01 14:03:31.000000000 +0200
++++ libgeos-714127ef49087634e7f6687424fdf041d18c3d0f/CMakeLists.txt	2016-07-01 14:05:21.000000000 +0200
+@@ -254,7 +254,7 @@
+ ENDMACRO(GET_SVN_REVISION)
+ 
+ # Determine SVN/Git revision
+-set(GEOS_BUILD_PACKAGED TRUE)
++#set(GEOS_BUILD_PACKAGED TRUE)
+ if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
+   set(GEOS_BUILD_PACKAGED FALSE)
+   GET_SVN_REVISION()
+diff -burN libgeos-714127ef49087634e7f6687424fdf041d18c3d0f.orig/src/CMakeLists.txt libgeos-714127ef49087634e7f6687424fdf041d18c3d0f/src/CMakeLists.txt
+--- libgeos-714127ef49087634e7f6687424fdf041d18c3d0f.orig/src/CMakeLists.txt	2016-07-01 14:03:30.000000000 +0200
++++ libgeos-714127ef49087634e7f6687424fdf041d18c3d0f/src/CMakeLists.txt	2016-07-01 14:05:56.000000000 +0200
+@@ -62,7 +62,7 @@
+ else()
+ 
+   add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
+-  add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
++ # add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
+ 
+   set_target_properties(geos
+     PROPERTIES
+@@ -70,11 +70,11 @@
+     VERSION ${VERSION}
+     CLEAN_DIRECT_OUTPUT 1)
+ 
+-  set_target_properties(geos-static
+-    PROPERTIES
+-    OUTPUT_NAME "geos"
+-    PREFIX "lib"
+-    CLEAN_DIRECT_OUTPUT 1)
++#  set_target_properties(geos-static
++#    PROPERTIES
++#    OUTPUT_NAME "geos"
++#    PREFIX "lib"
++#    CLEAN_DIRECT_OUTPUT 1)
+ 
+ endif()
+ 
+@@ -90,7 +90,7 @@
+ #################################################################################
+ 
+ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
+-  install(TARGETS geos geos-static
++  install(TARGETS geos
+     RUNTIME DESTINATION bin
+     LIBRARY DESTINATION lib
+     ARCHIVE DESTINATION lib)

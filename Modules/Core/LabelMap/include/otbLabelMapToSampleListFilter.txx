@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToSampleListFilter_txx
-#define __otbLabelMapToSampleListFilter_txx
+#ifndef otbLabelMapToSampleListFilter_txx
+#define otbLabelMapToSampleListFilter_txx
 
 #include "otbLabelMapToSampleListFilter.h"
 
@@ -70,7 +70,7 @@ LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputLabelMapType* >

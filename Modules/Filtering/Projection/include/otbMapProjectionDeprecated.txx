@@ -15,8 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapProjectionDeprecated_txx
-#define __otbMapProjectionDeprecated_txx
+#ifndef otbMapProjectionDeprecated_txx
+#define otbMapProjectionDeprecated_txx
+
+#include "otbMapProjectionDeprecated.h"
 
 namespace otb
 {

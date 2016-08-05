@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFrostImageFilter_h
-#define __otbFrostImageFilter_h
+#ifndef otbFrostImageFilter_h
+#define otbFrostImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -95,13 +95,13 @@ public:
   /** To be allowed to use the pipeline method FrostImageFilter needs
     * an input processing area larger than the output one.
     * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 protected:
   FrostImageFilter();
-  virtual ~FrostImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~FrostImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** FrostImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
@@ -112,7 +112,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   FrostImageFilter(const Self &); //purposely not implemented

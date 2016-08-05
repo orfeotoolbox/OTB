@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateVectorDataFilter_txx
-#define __otbConcatenateVectorDataFilter_txx
+#ifndef otbConcatenateVectorDataFilter_txx
+#define otbConcatenateVectorDataFilter_txx
 
 #include "otbConcatenateVectorDataFilter.h"
 
@@ -71,7 +71,7 @@ ConcatenateVectorDataFilter<TVectorData>
 {
   if (this->GetNumberOfInputs() < idx)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const VectorDataType *>(this->Superclass::GetInput(idx));
 }
@@ -123,7 +123,7 @@ void
 ConcatenateVectorDataFilter<TVectorData>
 ::ProcessNode(TreeNodeType * source, DataNodeType * outputDocument)
 {
-  if (source == 0)
+  if (source == ITK_NULLPTR)
     return;
 
 
