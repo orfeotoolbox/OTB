@@ -189,13 +189,7 @@ namespace ossimplugins
       GCPRecordType const& refGcp = findClosestGCP(imPt);
       ossimGpt      const& refPt = refGcp.worldPt;
 
-      ossimHgtRef hgtRef(AT_DEM);
-      const double hgt_ref = hgtRef.getRefHeight(refGcp.worldPt);
-      if (ossim::isnan(hgt_ref))
-      {
-         const ossim_float64 hgtSet = refGcp.worldPt.height();
-         hgtRef = ossimHgtRef (AT_HGT, hgtSet);
-      }
+      const ossimHgtRef hgtRef(AT_DEM);
 
       ossimEcefPoint ellPt;
 

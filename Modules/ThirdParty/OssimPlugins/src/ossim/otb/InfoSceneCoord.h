@@ -79,6 +79,8 @@ public:
       m_incidenceAngle = value;
    }
 
+   double get_lat() const { return m_lat;}
+   double get_lon() const { return m_lon;}
 private:
 
    /**

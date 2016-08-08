@@ -545,7 +545,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    // theAzimuthTimeInterval needs to be computed from:
    // - azimuth time start/stop difference
    const DurationType td = azimuthTimeStop - azimuthTimeStart;
-   ossimNotify(ossimNotifyLevel_DEBUG) << "td: " << td.total_microseconds() << "us = " << azimuthTimeStop << " - " << azimuthTimeStart << '\n';
+   // ossimNotify(ossimNotifyLevel_DEBUG) << "td: " << td.total_microseconds() << "us = " << azimuthTimeStop << " - " << azimuthTimeStart << '\n';
    // - numberOfRows
    ossimNotify(ossimNotifyLevel_DEBUG) << "numberOfRows " << (end_line + 1) << '\n';
 
@@ -664,6 +664,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    // - TODO: Shouldn't we use the value already computed in /level1Product/productInfo/sceneInfo/sceneCornerCoord?
    //
    // - GCPRecords need to be loaded into C++ data in order to use lineSampleToWorld()
+#if 0
    ossimGpt ul;
    ossimGpt ur;
    ossimGpt lr;
@@ -672,6 +673,13 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    lineSampleToWorld(theImageClipRect.ur(), ur);
    lineSampleToWorld(theImageClipRect.lr(), lr);
    lineSampleToWorld(theImageClipRect.ll(), ll);
+#else
+   assert(m_sceneCoord.size() == 4);
+   ossimGpt ul(m_sceneCoord[0].get_lat(), m_sceneCoord[0].get_lon());
+   ossimGpt ur(m_sceneCoord[1].get_lat(), m_sceneCoord[1].get_lon());
+   ossimGpt ll(m_sceneCoord[2].get_lat(), m_sceneCoord[2].get_lon());
+   ossimGpt lr(m_sceneCoord[3].get_lat(), m_sceneCoord[3].get_lon());
+#endif
    // std::clog << "UL: " << theImageClipRect.ul() << " -> " << ul << "\n";
    // std::clog << "UR: " << theImageClipRect.ur() << " -> " << ur << "\n";
    // std::clog << "LR: " << theImageClipRect.lr() << " -> " << lr << "\n";

@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 #include <iosfwd>
+#include <cassert>
 
 class ossimKeywordlist;
 
@@ -66,6 +67,10 @@ public:
       m_tabCornersSceneCoord = cornersSceneCoord;
    }
 
+   InfoSceneCoord const& operator[](std::size_t i) const {
+      assert(i < m_tabCornersSceneCoord.size());
+      return m_tabCornersSceneCoord[i];
+   }
 private:
 
    /// Number of scene coordinate
