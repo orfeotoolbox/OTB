@@ -952,7 +952,7 @@ namespace ossimplugins
          }
       }
 
-      theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : 0;
+      theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(0);
 
       // Then, fix the range time
       count=0;
