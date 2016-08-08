@@ -60,10 +60,10 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
   // Initialize moments
   for (unsigned int p = 0; p <= m_Pmax; p++)
     {
-    moments.at(p).resize(m_Qmax+1);
+    moments[p].resize(m_Qmax+1);
     for (unsigned int q = 0; q <= m_Qmax; q++)
       {
-      moments.at(p).at(q) =  ScalarComplexType(0.0, 0.0);
+      moments[p][q] =  ScalarComplexType(0.0, 0.0);
       }
     }
 
@@ -116,19 +116,19 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
 	    {
 	      pow2=vcl_pow(xqy,q);
 	    }
-	  
-	  moments.at(p).at(q) += pow1 * pow2 * value;
-	  
+
+	  moments[p][q] += pow1 * pow2 * value;
+
         }
       }
     }
-  
+
   // Normalisation
   for (int p = m_Pmax; p >= 0; p--)
     {
     for (int q= m_Qmax; q >= 0; q--)
       {
-      moments.at(p).at(q) /= moments.at(0).at(0);
+      moments[p][q] /= moments[0][0];
       }
     }
 
