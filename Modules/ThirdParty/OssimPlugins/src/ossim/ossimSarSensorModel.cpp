@@ -500,7 +500,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, TimeType & interpAzimuthTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const
    {
-      assert(!theOrbitRecords.size()<2&&"Orbit records vector contains less than 2 elements");
+      assert((theOrbitRecords.size()>=2) && "Orbit records vector contains less than 2 elements");
 
       std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();
 
@@ -952,7 +952,7 @@ namespace ossimplugins
          }
       }
 
-      theAzimuthTimeOffset = cumulAzimuthTime /= count;
+      theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : 0;
 
       // Then, fix the range time
       count=0;
@@ -973,7 +973,7 @@ namespace ossimplugins
          }
       }
 
-      theRangeTimeOffset = cumulRangeTime/=count;
+      theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
    }
 
    void get(
