@@ -146,7 +146,7 @@ private:
       }
     else
       {
-      otbAppLogFATAL("Unkown output field option : " << this->GetParameterString("outfield"));
+      otbAppLogFATAL("Unknown output field option : " << this->GetParameterString("outfield"));
       }
     
 

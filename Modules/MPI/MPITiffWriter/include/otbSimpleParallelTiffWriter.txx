@@ -770,7 +770,7 @@ SimpleParallelTiffWriter<TInputImage>
   this->ReleaseInputs();
 
   //Reset global shift on input region (box parameter)
-  //It allows to call multiple update over the writer
+  //It allows calling multiple updates over the writer
   m_ShiftOutputIndex.Fill(0);
 
   // Wait for other processes
