@@ -202,7 +202,7 @@ public:
    }
    template <typename String>
    bool belongs_to(String const& s) const{
-      return belongs_to(&*s.begin(), &*s.end());
+      return belongs_to(s.data(), s.data() + s.size());
    }
 
    size_type               size   () const { return m_size; }
