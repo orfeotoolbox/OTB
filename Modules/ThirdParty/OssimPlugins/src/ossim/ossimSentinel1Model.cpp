@@ -282,6 +282,7 @@ namespace ossimplugins
                true);
          return familyName + instrumentId;
       }
+      throw std::runtime_error("Cannot obtain Sensor ID");
    }
 
 #if 0
