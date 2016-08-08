@@ -339,12 +339,9 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
 
       return true;
    } catch (std::exception const& e) {
-      if (traceExec())
-         ossimNotify(ossimNotifyLevel_FATAL)
-            << "Error while reading " << file << " as having a TerraSarX model: " << e.what() << "\n";
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << "Error while reading " << file << " as having a TerraSarX model: " << e.what() << "\n";
    }
-   ossimNotify(ossimNotifyLevel_FATAL)
-      << "Cannot read " << file << " as having a TerraSarX model.\n";
    return false;
 }
 
