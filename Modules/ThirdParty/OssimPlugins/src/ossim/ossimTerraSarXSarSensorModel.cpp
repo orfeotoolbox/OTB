@@ -1108,16 +1108,16 @@ void ossimplugins::ossimTerraSarXSarSensorModel::initSensorParams(Nodes const& n
    const double rcf = getFromFirstNode<double>(nodes.instrument, "radarParameters/centerFrequency");
    if (rcf == 0.0)
    {
-      throw std::runtime_error("Null Radar Center Frequency found in TSX annotation file, cannot compute the wavelength");
+      throw std::runtime_error("Null Radar Center Frequency found in TSX annotation file, cannot compute the wavelenght");
    }
    m_sensorParams.set_rwl         (CLUM / rcf);
    ossimString const& rawDirection = getTextFromFirstNode(nodes.acquisitionInfo, "lookDirection");
-   char direction[10];
-   to_lower_to(rawDirection, direction);
-   if (strcmp(direction, "right") == 0)
+   char buffer[10]; // 10 is more than enough for "right" and "left"
+   const string_view direction = to_lower_to(rawDirection, buffer);
+   if (direction == "right")
    {
       m_sensorParams.set_sightDirection(SensorParams::Right);
-   } else if (strcmp(direction, "left") == 0)
+   } else if (direction == "left")
    {
       m_sensorParams.set_sightDirection(SensorParams::Left);
    } else

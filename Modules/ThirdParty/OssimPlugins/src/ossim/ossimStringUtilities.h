@@ -370,7 +370,7 @@ bool contains(string_view const& haystack, string_view const& needle)
  *
  * \pre If the input string is longer than the output destination, extraneous
  * characters will be trimmed.
- * \post a terminal 0 will be added.
+ * \post No terminal 0 will be added.
  * \return a `string_view` around the `dest` variable, but restricted to the
  * actual string produced.
  * \throw None
@@ -383,7 +383,7 @@ template <std::size_t N> inline string_view to_lower_to(string_view const& v, ch
    {
       dest[i] = std::tolower(v[i]);
    }
-   dest[std::min(i, N-1)] = '\0'; // ensure a terminal-0
+   // dest[std::min(i, N-1)] = '\0'; // ensure a terminal-0
    return string_view(&dest[0], i);
 }
 
@@ -396,7 +396,7 @@ template <std::size_t N> inline string_view to_lower_to(string_view const& v, ch
  *
  * \pre If the input string is longer than the output destination, extraneous
  * characters will be trimmed.
- * \post a terminal 0 will be added.
+ * \post No terminal 0 will be added.
  * \return a `string_view` around the `dest` variable, but restricted to the
  * actual string produced.
  * \throw None
@@ -409,7 +409,7 @@ template <std::size_t N> inline string_view to_upper_to(string_view const& v, ch
    {
       dest[i] = std::toupper(v[i]);
    }
-   dest[std::min(i, N-1)] = '\0'; // ensure a terminal-0
+   // dest[std::min(i, N-1)] = '\0'; // ensure a terminal-0
    return string_view(&dest[0], i);
 }
 
