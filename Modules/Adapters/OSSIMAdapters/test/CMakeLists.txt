@@ -21,7 +21,7 @@ otb_module_target_label(otbOSSIMAdaptersTestDriver)
 
 #KEYWORDLIST : OPTICAL SENSORS
 set(NAME_TESTS
-"pleiades-1" 
+"pleiades-1"
 "ikonos-1"
 "rapideye-1"
 "quickbird-1"
@@ -32,7 +32,7 @@ set(NAME_TESTS
 )
 
 set(IMG
-LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
+LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2}
 LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif}
 LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
 LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
@@ -80,16 +80,16 @@ foreach( file ${NAME_TESTS} )
              ${current_name}.geom
              0 # 1 : Check all keywords (ignore argv[2] and argv[3]) / 0 : Only check the needed keywords
             )
-            
-endforeach()     
+
+endforeach()
 
 #KEYWORDLIST : RADAR SENSORS
 set(NAME_TESTS
-"radarsat2-1" 
-"terrasarx-1" 
-"sentinel1-1" 
-"envisat-asar-1" 
-"radarsat1-1" 
+"radarsat2-1"
+"terrasarx-1"
+"sentinel1-1"
+"envisat-asar-1"
+"radarsat1-1"
 "ers2-1"
 )
 
@@ -116,8 +116,8 @@ foreach( file ${NAME_TESTS} )
              ${current_name}.geom
              1 # 1 : Check all keywords (ignore argv[2] and argv[3]) / 0 : Only check the needed keywords
             )
-            
-endforeach()       
+
+endforeach()
 
 
 otb_add_test(NAME ioTvOssimJpegFileRessourceLeak COMMAND otbOSSIMAdaptersTestDriver
@@ -155,16 +155,19 @@ otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
   -1.8 52   0.02 -0.018 232 422
   )
 
-otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdaptersTestDriver
-  --compare-ascii ${EPSILON_9}
-  ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
-  ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
-  otbGeometricSarSensorModelAdapterTest
-  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
-  ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
-
 otb_add_test(NAME uaTvGeometricSarSensorModelAdapterNew COMMAND otbOSSIMAdaptersTestDriver
   otbGeometricSarSensorModelAdapterNewTest)
+
+if (0)
+  # Inhibated for now, these two tests should be changed to use a Sar Product
+  # type which is not TerraSar-X
+  otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdaptersTestDriver
+    --compare-ascii ${EPSILON_9}
+    ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
+    ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
+    otbGeometricSarSensorModelAdapterTest
+    LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
+    ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
 
 otb_add_test(NAME uaTvPlatformPositionComputeBaselineTest COMMAND otbOSSIMAdaptersTestDriver
   --compare-ascii ${EPSILON_9}
@@ -173,6 +176,7 @@ otb_add_test(NAME uaTvPlatformPositionComputeBaselineTest COMMAND otbOSSIMAdapte
   otbPlatformPositionComputeBaselineTest
   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
+endif()
 
 otb_add_test(NAME uaTvPlatformPositionComputeBaselineNew COMMAND otbOSSIMAdaptersTestDriver
   otbPlatformPositionComputeBaselineNewTest)
