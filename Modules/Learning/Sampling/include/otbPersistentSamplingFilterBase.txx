@@ -33,8 +33,11 @@ template<class TInputImage, class TMaskImage>
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::PersistentSamplingFilterBase()
   : m_FieldName(std::string("class"))
+  , m_FieldIndex(0)  
   , m_LayerIndex(0)
   , m_OutLayerName(std::string("output"))
+  , m_OGRLayerCreationOptions()
+  , m_AdditionalFields()
 {
   this->SetNthOutput(0,TInputImage::New());
 }
