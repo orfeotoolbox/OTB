@@ -45,8 +45,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdApplication.h"
-#include "mvdMainWindow.h"
+#include "maplaApplication.h"
+#include "maplaMainWindow.h"
 
 enum ERROR_CODE
 {

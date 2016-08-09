@@ -65,7 +65,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="mvdMainWindow.qrc">
+    <iconset resource="maplaMainWindow.qrc">
      <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
    </property>
    <property name="text">
@@ -102,7 +102,7 @@
   </action>
  </widget>
  <resources>
-  <include location="mvdMainWindow.qrc"/>
+  <include location="maplaMainWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

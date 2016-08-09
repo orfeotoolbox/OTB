@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef __maplaMainWindow_h
+#define __maplaMainWindow_h
 
 //
 // Configuration include.
@@ -230,4 +230,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // __maplaMainWindow_h
