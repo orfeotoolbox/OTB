@@ -1,14 +1,12 @@
-set(
-  DOCUMENTATION
+set(DOCUMENTATION
   "This module provides the Monteverdi Application Launcher (Mapla)  program."
   )
 
-otb_module( OTBIce
+otb_module( OTBMapla
   DEPENDS
-
-  OTBCommon
-  MonteverdiCore
-  MonteverdiGui
+    OTBMonteverdiCore
+    OTBMonteverdiGUI
+    OTBQt4
 
   OPTIONAL_DEPENDS
   

@@ -1,12 +1,14 @@
-set(
-  DOCUMENTATION
+set(DOCUMENTATION
   "This module provides MonteverdiGui, the GUI library of the Monteverdi applications."
   )
 
-otb_module( MonteverdiGUI
+otb_module( OTBMonteverdiGUI
   DEPENDS
-
-  OTBCommon
+    OTBCommon
+    OTBIce
+    OTBIOGDAL
+    OTBMonteverdiCore
+    OTBQwt
 
   OPTIONAL_DEPENDS
   

@@ -1,14 +1,12 @@
-set(
-  DOCUMENTATION
+set(DOCUMENTATION
   "This module provides the Monteverdi program."
   )
 
-otb_module( OTBIce
+otb_module( OTBMonteverdi
   DEPENDS
-
-  OTBCommon
-  MonteverdiCore
-  MonteverdiGui
+    OTBMonteverdiCore
+    OTBMonteverdiGUI
+    OTBQt4
 
   OPTIONAL_DEPENDS
   
