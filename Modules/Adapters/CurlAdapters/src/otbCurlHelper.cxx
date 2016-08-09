@@ -330,6 +330,11 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 
   otbMsgDevMacro(<< "Retrieving ( CurlHelper::RetrieveFile ): " << url );
 
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_NOSIGNAL, 1));
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_IGNORE_CONTENT_LENGTH, 1));
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_FRESH_CONNECT , 1));
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_FORBID_REUSE , 1));
+
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url));
 
   // Set timeout
