@@ -1,5 +1,3 @@
-project( Mapla )
-
-set( Mapla_LIBRARIES Mapla )
+project( OTBMapla )
 
 otb_module_impl()

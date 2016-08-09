@@ -1,5 +1,3 @@
-project( Monteverdi )
-
-set( Monteverdi_LIBRARIES Monteverdi )
+project( OTBMonteverdi )
 
 otb_module_impl()

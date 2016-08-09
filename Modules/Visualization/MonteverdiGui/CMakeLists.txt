@@ -1,5 +1,5 @@
-project( MonteverdiGui )
+project( OTBMonteverdiGUI )
 
-set( MonteverdiCore_LIBRARIES MonteverdiGui )
+set( OTBMonteverdiGUI_LIBRARIES OTBMonteverdiGUI )
 
 otb_module_impl()
