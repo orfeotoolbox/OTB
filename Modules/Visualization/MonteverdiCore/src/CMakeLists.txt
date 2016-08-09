@@ -1,4 +1,4 @@
-set( MonteverdiCore_SRCS
+set( OTBMonteverdiCore_SRCS
   mvdAbstractWorker.cxx
   mvdApplicationsBrowser.cxx
   mvdAbstractModel.cxx
@@ -30,10 +30,22 @@ set( MonteverdiCore_SRCS
   mvdVisibleInterface.cxx
   )
 
-add_library( MonteverdiCore ${MonteverdiCore_SRCS} )
+add_library( OTBMonteverdiCore ${OTBMonteverdiCore_SRCS} )
 
-target_link_libraries( MonteverdiCore
+target_link_libraries( OTBMonteverdiCore
+  ${OTBCarto_LIBRARIES}
   ${OTBCommon_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
+  ${OTBImageIO_LIBRARIES}
+  ${OTBImageManipulation_LIBRARIES}
+  ${OTBIOGDAL_LIBRARIES}
+  ${OTBMetadata_LIBRARIES}
+  ${OTBObjectList_LIBRARIES}
+  ${OTBOSSIMAdapters_LIBRARIES}
+  ${OTBProjection_LIBRARIES}
+  ${OTBQt4_LIBRARIES}
+  ${OTBStatistics_LIBRARIES}
+  ${OTBTransform_LIBRARIES}
   )
 
-otb_module_target( MonteverdiCore )
+otb_module_target( OTBMonteverdiCore )

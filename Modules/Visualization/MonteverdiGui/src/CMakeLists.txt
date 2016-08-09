@@ -1,4 +1,4 @@
-set( MonteverdiGui_SRCS
+set( OTBMonteverdiGUI_SRCS
   mvdAboutDialog.cxx
   mvdAbstractDragAndDropEventFilter.cxx
   mvdAbstractModelController.cxx
@@ -43,10 +43,14 @@ set( MonteverdiGui_SRCS
   mvdTreeWidgetItemDragAndDropEventFilter.cxx
  )
 
-add_library( MonteverdiGui ${MonteverdiGui_SRCS} )
+add_library( OTBMonteverdiGUI ${OTBMonteverdiGUI_SRCS} )
 
-target_link_libraries( MonteverdiGui
+target_link_libraries( OTBMonteverdiGUI
   ${OTBCommon_LIBRARIES}
+  ${OTBIce_LIBRARIES}
+  ${OTBIOGDAL_LIBRARIES}
+  ${OTBMonteverdiCore_LIBRARIES}
+  ${OTBQwt_LIBRARIES}
   )
 
-otb_module_target( MonteverdiGui )
+otb_module_target( OTBMonteverdiGUI )
