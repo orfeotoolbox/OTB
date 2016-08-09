@@ -285,12 +285,15 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   typename TInputImage::PointType imgPoint;
   typename TInputImage::IndexType imgIndex;
+  
   switch (geom->getGeometryType())
     {
     case wkbPoint:
     case wkbPoint25D:
       {
       OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
+      if (castPoint == NULL) break;
+      
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
       const TInputImage* img = this->GetInput();
@@ -306,6 +309,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     case wkbLineString25D:
       {
       OGRLineString* castLineString = dynamic_cast<OGRLineString*>(geom);
+
       if (castLineString == NULL) break;
       this->ProcessLine(feature,castLineString,region,threadid);
       break;
