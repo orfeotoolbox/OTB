@@ -1,8 +1,8 @@
-set(DOCUMENTATION "This module imports Qt4 to the build system")
+set(DOCUMENTATION "This module imports QtGui to the build system")
 
-otb_module(OTBQt4
+otb_module(OTBQt4Gui
   DEPENDS
-    OTBQt4OpenGL
+    OTBQt4Base
     
   TEST_DEPENDS
     
