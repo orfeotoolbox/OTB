@@ -292,14 +292,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     case wkbPoint25D:
       {
       OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
-      if (castPoint == NULL) break;
+      if (castPoint == ITK_NULLPTR) break;
       
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
       const TInputImage* img = this->GetInput();
       const TMaskImage* mask = this->GetMask(); 
       img->TransformPhysicalPointToIndex(imgPoint,imgIndex);
-      if ((mask == NULL) || mask->GetPixel(imgIndex))
+      if ((mask == ITK_NULLPTR) || mask->GetPixel(imgIndex))
         {
         this->ProcessSample(feature, imgIndex, imgPoint, threadid);
         }
@@ -310,7 +310,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       OGRLineString* castLineString = dynamic_cast<OGRLineString*>(geom);
 
-      if (castLineString == NULL) break;
+      if (castLineString == ITK_NULLPTR) break;
       this->ProcessLine(feature,castLineString,region,threadid);
       break;
       }
@@ -318,7 +318,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     case wkbPolygon25D:
       {
       OGRPolygon* castPolygon = dynamic_cast<OGRPolygon*>(geom);
-      if (castPolygon == NULL) break;
+      if (castPolygon == ITK_NULLPTR) break;
       this->ProcessPolygon(feature,castPolygon,region,threadid);
       break;
       }
@@ -628,7 +628,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // prepare temporary input : split input features between available threads
   this->m_InMemoryInputs.clear();
   std::string tmpLayerName("thread");
-  OGRSpatialReference * oSRS = NULL;
+  OGRSpatialReference * oSRS = ITK_NULLPTR;
   if (inLayer.GetSpatialRef())
     {
     oSRS = inLayer.GetSpatialRef()->Clone();
@@ -655,7 +655,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   this->DispatchInputVectors(inLayer,tmpLayers);
 
-  inLayer.SetSpatialFilter(NULL);
+  inLayer.SetSpatialFilter(ITK_NULLPTR);
 }
 
 template<class TInputImage, class TMaskImage>
@@ -700,7 +700,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         ogr::Layer realLayer = realOutput->GetLayersCount() == 1
                                ? realOutput->GetLayer(0)
                                : realOutput->GetLayer(m_OutLayerName);
-        OGRSpatialReference * oSRS = NULL;
+        OGRSpatialReference * oSRS = ITK_NULLPTR;
         if (realLayer.GetSpatialRef())
           {
           oSRS = realLayer.GetSpatialRef()->Clone();
@@ -755,7 +755,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     {
     std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
     bool projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = NULL;
+    OGRSpatialReference * oSRS = ITK_NULLPTR;
     if(projectionInformationAvailable)
       {
       oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
