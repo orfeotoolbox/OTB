@@ -1,4 +1,4 @@
-set(DOCUMENTATION
+set( DOCUMENTATION
   "This module provides the Monteverdi program."
   )
 

@@ -39,4 +39,4 @@ target_link_libraries( monteverdi
   )
 
 #############################################################################
-otb_module_target( Monteverdi )
+otb_module_target( monteverdi )

@@ -2,7 +2,6 @@ set(DOCUMENTATION "This module imports Qt4 to the build system")
 
 otb_module(OTBQt4
   DEPENDS
-    OTBQt4OpenGL
     
   TEST_DEPENDS
     
