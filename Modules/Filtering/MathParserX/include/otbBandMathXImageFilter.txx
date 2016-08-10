@@ -518,7 +518,7 @@ template< typename TImage >
 std::string BandMathXImageFilter<TImage>
 ::GetExpression(int IDExpression) const
 {
-  return m_Expression.at(IDExpression);
+  return m_Expression[IDExpression];
 }
 
 
@@ -839,7 +839,7 @@ void BandMathXImageFilter< TImage >
 
   for(int i=0; i<(int) m_Expression.size(); ++i)
   {
-    ValueType value = m_VParser.at(0)[i]->EvalRef();
+    ValueType value = m_VParser[0][i]->EvalRef();
 
     switch (value.GetType())
     {   //ValueType
@@ -1084,19 +1084,17 @@ void BandMathXImageFilter<TImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // iterator on variables
-  typename std::vector<adhocStruct>::iterator iterVarStart,iterVar,iterVarEnd;
-  iterVarStart = m_AImage[threadId].begin();
-  iterVarEnd = m_AImage[threadId].end();
+  typename std::vector<adhocStruct>::iterator iterVarStart =
+    m_AImage[threadId].begin();
+  typename std::vector<adhocStruct>::iterator iterVarEnd =
+    m_AImage[threadId].end();
+  typename std::vector<adhocStruct>::iterator iterVar =
+    iterVarStart;
 
   // temporary output vectors
-  std::vector<PixelType> tmpOutputs;
+  std::vector<PixelType> tmpOutputs(m_Expression.size());
   for(unsigned int k=0; k<m_Expression.size(); ++k)
-    {
-    PixelType pix;
-    pix.SetSize(m_outputsDimensions[k]);
-    tmpOutputs.push_back(pix);
-    }
-
+    tmpOutputs[k].SetSize(m_outputsDimensions[k]);
 
   //----------------- --------------------- -----------------//
   //----------------- Variable affectations -----------------//
