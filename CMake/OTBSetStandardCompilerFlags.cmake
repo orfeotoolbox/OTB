@@ -313,8 +313,8 @@ check_compiler_warning_flags(C_WARNING_FLAGS CXX_WARNING_FLAGS)
 # Append OTB warnings to the CMake flags.
 # We do not set them in OTB_REQUIRED FLAGS because all project which
 # use OTB don't require these flags .
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_WARNING_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_WARNING_FLAGS}")
+set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS}")
 
 #-----------------------------------------------------------------------------
 #Check the set of platform flags the compiler supports
