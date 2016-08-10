@@ -1,0 +1,21 @@
+diff -burN libpng-1.2.56.orig/CMakeLists.txt libpng-1.2.56/CMakeLists.txt
+--- libpng-1.2.56.orig/CMakeLists.txt	2015-12-17 14:57:06.000000000 +0100
++++ libpng-1.2.56/CMakeLists.txt	2016-08-05 17:23:15.020051700 +0200
+@@ -91,12 +91,15 @@
+ endif()
+ 
+ # SET LIBNAME
+-set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
++option(OUTPUT_LIB_WITH_VERSION "output libary with version suffix" OFF)
++set(PNG_LIB_NAME png)
++if(OUTPUT_LIB_WITH_VERSION)
++  set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
++endif()
+ 
+ # to distinguish between debug and release lib
+ set(CMAKE_DEBUG_POSTFIX "d")
+ 
+-
+ # OUR SOURCES
+ set(libpng_sources
+   png.h
