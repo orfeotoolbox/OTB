@@ -3,9 +3,6 @@ set( OTBMonteverdiGUI_SRCS
   mvdAboutDialog.cxx
   mvdAbstractDragAndDropEventFilter.cxx
   mvdAbstractModelController.cxx
-  mvdApplicationLauncher.cxx
-  mvdApplicationsToolBox.cxx
-  mvdApplicationsToolBoxController.cxx
   mvdColorBandDynamicsWidget.cxx
   mvdColorDynamicsController.cxx
   mvdColorDynamicsWidget.cxx
@@ -51,7 +48,6 @@ set( OTBMonteverdiGUI_HEADERS_MOC
   mvdAbstractImageViewManipulator.h
   mvdAbstractImageViewRenderer.h
   mvdAbstractModelController.h
-  mvdApplicationsToolBox.h
   mvdColorBandDynamicsWidget.h
   mvdColorDynamicsController.h
   mvdColorDynamicsWidget.h
@@ -101,7 +97,6 @@ set( OTBMonteverdiGUI_HEADERS_MOC
 #############################################################################
 set( OTBMonteverdiGUI_FORMS
   mvdAboutDialog.ui
-  mvdApplicationsToolBox.ui
   mvdColorBandDynamicsWidget.ui
   mvdColorDynamicsWidget.ui
   mvdColorSetupWidget.ui
@@ -125,14 +120,33 @@ set( OTBMonteverdiGUI_FORMS
 
 #############################################################################
 set( OTBMonteverdiGUI_RESOURCES
-  # mvdApplicationsToolBox.qrc
-  # mvdDatabaseBrowserController.qrc
   # mvdIcons.qrc
 )
 
 #############################################################################
+if( OTBQtWidget )
+  list( APPEND OTBMonteverdiGUI_SRCS
+    mvdApplicationLauncher.cxx
+    mvdApplicationsToolBox.cxx
+    mvdApplicationsToolBoxController.cxx
+  )
+
+  list( APPEND OTBMonteverdiGUI_HEADERS_MOC
+    mvdApplicationsToolBox.h
+    )
+
+  list( APPEND OTBMonteverdiGUI_FORMS
+    mvdApplicationsToolBox.ui
+    )
+
+  list( APPEND OTBMonteverdiGUI_RESOURCES
+    # mvdApplicationsToolBox.qrc
+    )
+endif()
+
+#############################################################################
 qt4_wrap_cpp( OTBMonteverdiGUI_SRC_MOC ${OTBMonteverdiGUI_HEADERS_MOC} )
-qt4_wrap_ui( OTBMonteverdiGUI_FORMS_HEADERS ${OTBMonteverdiGUI_FORMS}  )
+qt4_wrap_ui( OTBMonteverdiGUI_FORMS_HEADERS ${OTBMonteverdiGUI_FORMS} )
 qt4_add_resources( OTBMonteverdiGUI_RESOURCES_RCC ${OTBMonteverdiGUI_RESOURCES} )
 
 #############################################################################

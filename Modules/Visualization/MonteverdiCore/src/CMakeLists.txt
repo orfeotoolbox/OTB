@@ -1,6 +1,6 @@
+#############################################################################
 set( OTBMonteverdiCore_SRCS
   mvdAbstractWorker.cxx
-  mvdApplicationsBrowser.cxx
   mvdAbstractModel.cxx
   mvdAbstractImageModel.cxx
   mvdAbstractLayerModel.cxx
@@ -30,8 +30,17 @@ set( OTBMonteverdiCore_SRCS
   mvdVisibleInterface.cxx
   )
 
+#############################################################################
+if( OTBApplicationEngine_ENABLED )
+  list( APPEND OTBMonteverdiCore_SRCS
+    mvdApplicationsBrowser.cxx
+  )
+endif()
+
+#############################################################################
 add_library( OTBMonteverdiCore ${OTBMonteverdiCore_SRCS} )
 
+#############################################################################
 target_link_libraries( OTBMonteverdiCore
   ${OTBCarto_LIBRARIES}
   ${OTBCommon_LIBRARIES}
@@ -48,4 +57,5 @@ target_link_libraries( OTBMonteverdiCore
   ${OTBTransform_LIBRARIES}
   )
 
+#############################################################################
 otb_module_target( OTBMonteverdiCore )
