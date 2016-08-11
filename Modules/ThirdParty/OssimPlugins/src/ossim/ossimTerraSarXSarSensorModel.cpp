@@ -323,8 +323,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
       assert(file.exists());
       if ( !this->read(file) )
       {
-         ossimNotify(ossimNotifyLevel_FATAL)
-            << "Cannot read " << file << " as having a TerraSarX model.\n";
+         ossimNotify(ossimNotifyLevel_DEBUG) << file << " doesn't have a TerraSarX model.\n";
          return false;
       }
 
@@ -476,15 +475,40 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
 {
    SCOPED_LOG(traceDebug, "ossimTerraSarXSarSensorModel::read");
 
-   const ossimFilename annotationXml = findTSXLeader(file);
+   ossimFilename annotationXml;
+   try {
+      annotationXml = findTSXLeader(file);
+   } catch (std::exception const& e) {
+      // not a TSX product: log what has been found and return "not a TSX
+      // product"
+      ossimNotify(ossimNotifyLevel_DEBUG) << "Not a TSX product: " << e.what() << "\n";
+      return false;
+   }
+
    add(theProductKwl, PRODUCT_XML_FILE_KW, annotationXml.string());
 
    ossimXmlDocument xmlDoc(annotationXml);
    ossimRefPtr<ossimXmlNode> xRoot = xmlDoc.getRoot();
-   if (!xRoot) {
-      throw std::runtime_error(("No root document found for TerraSarX annotation file "+annotationXml).string());
+   if (!xRoot)
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "No root document found for TerraSarX annotation file " << annotationXml << "\n";
+      return false;
    }
    const ossimXmlNode & xmlRoot = *xRoot;
+
+   if (xmlRoot.getTag() != "level1Product")
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "Root node is `" << xmlRoot.getTag() << "` and not `level1Product` => this is not a TSX product\n";
+      return false;
+   }
+   // TODO check if there could be other a field that says: "OK this is a TSX
+   // product!"
+
+   // From here, we suppose this is really a TSX product, any error is an error
+   // in the product annotation file.
+   // An exception will be thrown on the first error encountered.
+   // The way the projection factory is made (as a _chain factory_), other type
+   // of products will be tested, but they are more than likelly to fail.
 
    Nodes nodes(xmlRoot);
 

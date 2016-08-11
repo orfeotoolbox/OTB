@@ -99,7 +99,8 @@ private:
   struct Nodes;
 
   /** Internal function that reads annotation file.
-   * \throw std::exception possibly
+   * \return whether the file is a TSX product.
+   * \throw std::exception is field from the TSX product cannot be decoded.
    */
   bool read(ossimFilename const& file);
 
