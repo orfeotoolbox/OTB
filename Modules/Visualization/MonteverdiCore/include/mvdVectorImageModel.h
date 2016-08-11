@@ -57,7 +57,6 @@
 #include "mvdFilenameInterface.h"
 #include "mvdVectorImageSettings.h"
 #include "mvdTypes.h"
-#include "mvdColorSetupWidget.h"
 #endif //tag=QT4-boost-compatibility
 
 
