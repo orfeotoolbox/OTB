@@ -42,6 +42,8 @@ public:
 
   typedef std::vector<InputImageParameter::Pointer> InputImageParameterVectorType;
 
+  typedef itk::ImageBase<2> ImageBaseType;
+  
   /** Defining ::New() static method */
   itkNewMacro(Self);
 
@@ -60,7 +62,6 @@ public:
   /** Set one specific stored image filename. */
   bool SetNthFileName( const unsigned int id, const std::string & filename );
 
-
   /** Get the stored image filename list */
   std::vector<std::string> GetFileNameList() const;
 
@@ -77,7 +78,7 @@ public:
   void SetImageList(FloatVectorImageListType* imList);
 
   /** Add an image to the list. */
-  void AddImage(FloatVectorImageType* image);
+  void AddImage(ImageBaseType* image);
 
   bool HasValue() const ITK_OVERRIDE;
 
@@ -87,8 +88,7 @@ public:
 
  /** Clear all the list. */
   void ClearValue() ITK_OVERRIDE;
-
-
+  
 protected:
   /** Constructor */
   InputImageListParameter();

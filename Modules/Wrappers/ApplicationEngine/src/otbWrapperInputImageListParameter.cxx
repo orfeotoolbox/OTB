@@ -232,7 +232,7 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 }
 
 void
-InputImageListParameter::AddImage(FloatVectorImageType* image)
+InputImageListParameter::AddImage(ImageBaseType* image)
 {
   // Check input availability
   // TODO : when the logger will be available, redirect the exception
