@@ -26,6 +26,7 @@
 #include "itkLogger.h"
 #include "otbWrapperMacros.h"
 #include "otbWrapperInputImageParameter.h"
+#include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
@@ -446,6 +447,14 @@ public:
    * ComplexOutputImageParameter
    */
   ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
+
+  void AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img);
+
+  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
+
+  void ClearParameterInputImageList(std::string parameter);
+
+  unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
   
   /* Get an image value

@@ -1202,6 +1202,75 @@ ComplexOutputImageParameter::ImageBaseType * Application::GetParameterComplexOut
     }
 }
 
+void Application::AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+  
+  if(paramDown)
+    {
+    paramDown->AddImage(img);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+  
+}
+
+void Application::SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+
+  if(paramDown)
+    {
+    paramDown->SetNthImage(id,img);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+
+}
+
+void Application::ClearParameterInputImageList(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+
+  if(paramDown)
+    {
+    paramDown->ClearValue();
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+
+}
+
+unsigned int Application::GetNumberOfElementsInParameterInputImageList(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+
+  if(paramDown)
+    {
+    return paramDown->Size();
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+
+}
+
+
 
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
