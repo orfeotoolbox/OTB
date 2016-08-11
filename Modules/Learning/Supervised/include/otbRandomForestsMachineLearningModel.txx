@@ -66,12 +66,19 @@ void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Train()
 {
+  typename InputListSampleType::MeasurementVectorSizeType inputSize = this->GetInputListSample()->GetMeasurementVectorSize();
+
   //convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
 
   cv::Mat labels;
-  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
+  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), labels);
+
+  //clear the original sample lists to free some memory
+  this->GetInputListSample()->Clear();
+  this->GetTargetListSample()->Clear();
+
   //Mat var_type = Mat(ATTRIBUTES_PER_SAMPLE + 1, 1, CV_8U );
   //std::cout << "priors " << m_Priors[0] << std::endl;
   //Define random forests paramneters
@@ -92,13 +99,13 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                  m_TerminationCriteria          // termination criteria
                                  );
 
-  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
+  cv::Mat var_type = cv::Mat(inputSize + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
 
   if(m_RegressionMode)
-    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_NUMERICAL;
+    var_type.at<uchar>(inputSize, 0) = CV_VAR_NUMERICAL;
   else
-    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
+    var_type.at<uchar>(inputSize, 0) = CV_VAR_CATEGORICAL;
 
   //train the RT model
   m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
