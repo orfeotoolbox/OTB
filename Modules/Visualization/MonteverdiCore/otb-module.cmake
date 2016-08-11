@@ -19,6 +19,7 @@ otb_module( OTBMonteverdiCore
     OTBTransform
 
   OPTIONAL_DEPENDS
+    OTBApplicationEngine
   
   DESCRIPTION
   "${DOCUMENTATION}"

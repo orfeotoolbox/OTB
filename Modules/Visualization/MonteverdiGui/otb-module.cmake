@@ -12,7 +12,8 @@ otb_module( OTBMonteverdiGUI
     OTBQwt
 
   OPTIONAL_DEPENDS
-  
+    OTBQtWidget
+
   DESCRIPTION
   "${DOCUMENTATION}"
   )
