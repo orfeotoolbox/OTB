@@ -51,7 +51,7 @@ public:
   typedef itk::CenteredSimilarity2DTransform<double>       TransformType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
@@ -106,12 +106,12 @@ private:
     SetDocExampleParameterValue("transform.ro", "5");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // nothing to update
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the support image
     FloatVectorImageType*  inImage = GetParameterImage("in");

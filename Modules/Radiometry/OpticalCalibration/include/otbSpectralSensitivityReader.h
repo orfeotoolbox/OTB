@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpectralSensitivityReader_h
-#define __otbSpectralSensitivityReader_h
+#ifndef otbSpectralSensitivityReader_h
+#define otbSpectralSensitivityReader_h
 
 #include "itkProcessObject.h"
 #include "itkImageBase.h"
@@ -75,16 +75,16 @@ public:
 
 protected:
   SpectralSensitivityReader();
-  virtual ~SpectralSensitivityReader();
+  ~SpectralSensitivityReader() ITK_OVERRIDE;
 
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Find the filename using image metadata */
   void FindFileName();
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Struct use to remove multiple spaces in file */
   struct BothAre

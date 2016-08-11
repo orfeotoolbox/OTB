@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAeronetFileReader_h
-#define __otbAeronetFileReader_h
+#ifndef otbAeronetFileReader_h
+#define otbAeronetFileReader_h
 
 #include <string>
 #include <vector>
@@ -121,12 +121,12 @@ protected:
   /** Constructor */
   AeronetFileReader();
   /** Destructor */
-  virtual ~AeronetFileReader();
+  ~AeronetFileReader() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

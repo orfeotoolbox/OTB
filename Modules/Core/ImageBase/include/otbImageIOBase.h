@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageIOBase_h
-#define __otbImageIOBase_h
+#ifndef otbImageIOBase_h
+#define otbImageIOBase_h
 
 #include "itkLightProcessObject.h"
 #include "itkIndent.h"
@@ -417,8 +417,8 @@ public:
 
 protected:
   ImageIOBase();
-  virtual ~ImageIOBase();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageIOBase() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Used internally to keep track of the type of the pixel. */
   IOPixelType m_PixelType;
@@ -547,4 +547,4 @@ private:
 
 } // end namespace itk
 
-#endif // __otbImageIOBase_h
+#endif // otbImageIOBase_h

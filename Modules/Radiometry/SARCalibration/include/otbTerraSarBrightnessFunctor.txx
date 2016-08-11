@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTerraSarBrightnessFunctor_txx
-#define __otbTerraSarBrightnessFunctor_txx
+#ifndef otbTerraSarBrightnessFunctor_txx
+#define otbTerraSarBrightnessFunctor_txx
 
 #include "otbTerraSarBrightnessFunctor.h"
 

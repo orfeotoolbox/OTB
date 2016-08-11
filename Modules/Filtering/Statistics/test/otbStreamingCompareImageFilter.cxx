@@ -73,6 +73,7 @@ int otbStreamingCompareImageFilter(int itkNotUsed(argc), char * argv[])
   file << "MSE: " << filter->GetMSE() << std::endl;
   file << "MAE: " << filter->GetMAE() << std::endl;
   file << "PSNR: " << filter->GetPSNR() << std::endl;
+  file << "Count: " << filter->GetDiffCount() << std::endl;
 
   file.close();
 

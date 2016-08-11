@@ -7,6 +7,8 @@ if(Boost_LIBRARIES)
   set(OTBBoost_LIBRARIES "${Boost_LIBRARIES}")
 endif()
 
+set(Boost_VERSION_STRING "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}" CACHE INTERNAL "" FORCE)
+
 otb_module_impl()
 
 install(DIRECTORY ${OTBBoost_SOURCE_DIR}/src/boost

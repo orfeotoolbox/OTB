@@ -85,7 +85,7 @@ int otbGenericRSResampleImageFilter(int itkNotUsed(argc), char* argv[])
   OGRSpatialReference    oSRS;
   oSRS.SetProjCS("UTM");
   oSRS.SetUTM(31, true);
-  char * utmRef = NULL;
+  char * utmRef = ITK_NULLPTR;
   oSRS.exportToWkt(&utmRef);
 
   // Displacement Field spacing

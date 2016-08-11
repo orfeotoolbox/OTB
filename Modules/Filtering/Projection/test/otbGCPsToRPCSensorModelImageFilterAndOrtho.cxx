@@ -107,8 +107,8 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   orthoRectifFilter->SetOutputSpacing(spacing);
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[3], NULL);         //Origin easting
-  origin[1] = strtod(argv[4], NULL);         //Origin northing
+  origin[0] = strtod(argv[3], ITK_NULLPTR);         //Origin easting
+  origin[1] = strtod(argv[4], ITK_NULLPTR);         //Origin northing
   orthoRectifFilter->SetOutputOrigin(origin);
 
   utmMapProjection->SetZone(atoi(argv[9]));

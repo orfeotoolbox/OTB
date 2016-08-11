@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVarSol_h
-#define __otbVarSol_h
+#ifndef otbVarSol_h
+#define otbVarSol_h
 
 #include "itkMacro.h"
 #include "otbMath.h"

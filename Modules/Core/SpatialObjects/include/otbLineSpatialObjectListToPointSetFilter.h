@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSpatialObjectListToPointSetFilter_h
-#define __otbLineSpatialObjectListToPointSetFilter_h
+#ifndef otbLineSpatialObjectListToPointSetFilter_h
+#define otbLineSpatialObjectListToPointSetFilter_h
 
 
 #include "itkProcessObject.h"
@@ -71,8 +71,8 @@ public:
 
 protected:
   LineSpatialObjectListToPointSetFilter();
-  virtual ~LineSpatialObjectListToPointSetFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LineSpatialObjectListToPointSetFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LineSpatialObjectListToPointSetFilter(const Self &); //purposely not implemented

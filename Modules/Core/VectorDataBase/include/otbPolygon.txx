@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygon_txx
-#define __otbPolygon_txx
+#ifndef otbPolygon_txx
+#define otbPolygon_txx
 
 #include "otbPolygon.h"
 

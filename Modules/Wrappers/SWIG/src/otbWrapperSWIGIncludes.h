@@ -18,8 +18,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperSWIGIncludes_h
-#define __otbWrapperSWIGIncludes_h
+#ifndef otbWrapperSWIGIncludes_h
+#define otbWrapperSWIGIncludes_h
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperAddProcessToWatchEvent.h"

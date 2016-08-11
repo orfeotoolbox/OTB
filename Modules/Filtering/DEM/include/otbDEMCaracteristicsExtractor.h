@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMCaracteristicsExtractor_h
-#define __otbDEMCaracteristicsExtractor_h
+#ifndef otbDEMCaracteristicsExtractor_h
+#define otbDEMCaracteristicsExtractor_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -143,11 +143,11 @@ public:
 
 protected:
   DEMCaracteristicsExtractor();
-  virtual ~DEMCaracteristicsExtractor();
+  ~DEMCaracteristicsExtractor() ITK_OVERRIDE;
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   /** Angle parameters*/

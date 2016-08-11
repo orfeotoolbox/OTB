@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAssociativeSymmetricalSumImageFilter_h
-#define __otbAssociativeSymmetricalSumImageFilter_h
+#ifndef otbAssociativeSymmetricalSumImageFilter_h
+#define otbAssociativeSymmetricalSumImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 
 /** \class AssociativeSymmetricalSumImageFilter
- * \brief Implements an assymetric fusion of line detector image filter.
+ * \brief Implements an asymmetric fusion of line detector image filter.
  *
  * This class implements a fusion of the output images of
  * otb::LineRatioDetector and otb::LineCorrelationDetector
@@ -91,7 +91,7 @@ public:
 
 protected:
   AssociativeSymmetricalSumImageFilter() {}
-  virtual ~AssociativeSymmetricalSumImageFilter() {}
+  ~AssociativeSymmetricalSumImageFilter() ITK_OVERRIDE {}
 
 private:
   AssociativeSymmetricalSumImageFilter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAeronetData_h
-#define __otbAeronetData_h
+#ifndef otbAeronetData_h
+#define otbAeronetData_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -83,9 +83,9 @@ protected:
   /** Constructor */
   AeronetData();
   /** Destructor */
-  ~AeronetData() {}
+  ~AeronetData() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** Angstrom coefficient */

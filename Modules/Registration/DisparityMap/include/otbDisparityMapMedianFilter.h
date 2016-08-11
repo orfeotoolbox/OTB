@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapMedianFilter_h
-#define __otbDisparityMapMedianFilter_h
+#ifndef otbDisparityMapMedianFilter_h
+#define otbDisparityMapMedianFilter_h
 
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
 #include "itkOptMedianImageFilter.h"
@@ -148,8 +148,8 @@ public:
 
 protected:
   DisparityMapMedianFilter();
-  virtual ~DisparityMapMedianFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~DisparityMapMedianFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** MedianImageFilter needs a larger input requested region than
    * the output requested region.  As such, MedianImageFilter needs
@@ -157,13 +157,13 @@ protected:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
   /** Generate output information */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** apply median filter */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   DisparityMapMedianFilter(const Self&); //purposely not implemented

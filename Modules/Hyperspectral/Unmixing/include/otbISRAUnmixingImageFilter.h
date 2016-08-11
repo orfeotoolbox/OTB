@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbISRAUnmixingImageFilter_h
-#define __otbISRAUnmixingImageFilter_h
+#ifndef otbISRAUnmixingImageFilter_h
+#define otbISRAUnmixingImageFilter_h
 
 #include "itkNumericTraits.h"
 #include "otbUnaryFunctorImageFilter.h"
@@ -168,9 +168,9 @@ public:
 protected:
   ISRAUnmixingImageFilter();
 
-  virtual ~ISRAUnmixingImageFilter();
+  ~ISRAUnmixingImageFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ISRAUnmixingImageFilter(const Self &); //purposely not implemented

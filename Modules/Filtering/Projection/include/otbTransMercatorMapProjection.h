@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTransMercatorMapProjection_h
-#define __otbTransMercatorMapProjection_h
+#ifndef otbTransMercatorMapProjection_h
+#define otbTransMercatorMapProjection_h
 
 #include "otbGenericMapProjection.h"
 
@@ -61,7 +61,7 @@ public:
 
 protected:
   TransMercatorMapProjection();
-  virtual ~TransMercatorMapProjection();
+  ~TransMercatorMapProjection() ITK_OVERRIDE;
 
 private:
   TransMercatorMapProjection(const Self &); //purposely not implemented

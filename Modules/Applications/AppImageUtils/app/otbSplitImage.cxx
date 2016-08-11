@@ -46,7 +46,7 @@ public:
                                             FloatVectorImageType::InternalPixelType> FilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images");
@@ -73,12 +73,12 @@ private:
     SetDocExampleParameterValue("out", "splittedImage.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

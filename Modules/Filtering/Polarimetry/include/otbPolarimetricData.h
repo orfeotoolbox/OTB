@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolarimetricData_h
-#define __otbPolarimetricData_h
+#ifndef otbPolarimetricData_h
+#define otbPolarimetricData_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -76,9 +76,9 @@ protected:
   /** Constructor */
   PolarimetricData();
   /** Destructor */
-  virtual ~PolarimetricData() {}
+  ~PolarimetricData() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PolarimetricData(const Self &); //purposely not implemented

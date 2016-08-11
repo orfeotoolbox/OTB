@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __otbWrapperApplication_h
-#define __otbWrapperApplication_h
+#ifndef otbWrapperApplication_h
+#define otbWrapperApplication_h
 
 #include <string>
 #include "otbWrapperTypes.h"
@@ -699,7 +699,7 @@ protected:
   Application();
 
   /** Destructor */
-  virtual ~Application();
+  ~Application() ITK_OVERRIDE;
 
   /* Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);
@@ -879,4 +879,4 @@ private:
 //#include "otbWrapperApplication.txx"
 //#endif
 
-#endif // __otbWrapperApplication_h_
+#endif // otbWrapperApplication_h_

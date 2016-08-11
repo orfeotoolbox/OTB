@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAdhesionCorrectionFilter_txx
-#define __otbAdhesionCorrectionFilter_txx
+#ifndef otbAdhesionCorrectionFilter_txx
+#define otbAdhesionCorrectionFilter_txx
 
 #include "otbAdhesionCorrectionFilter.h"
 
@@ -97,7 +97,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -109,7 +109,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMask *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -121,7 +121,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<4)
   {
-    return 0;
+    return ITK_NULLPTR;
   }
   return static_cast<const TImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -133,7 +133,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMask *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -145,7 +145,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -157,7 +157,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TImage *>(this->itk::ProcessObject::GetOutput(2));
 }

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTransMercatorMapProjection_txx
-#define __otbTransMercatorMapProjection_txx
+#ifndef otbTransMercatorMapProjection_txx
+#define otbTransMercatorMapProjection_txx
 
 #include "otbTransMercatorMapProjection.h"
 #include "otbUtils.h"

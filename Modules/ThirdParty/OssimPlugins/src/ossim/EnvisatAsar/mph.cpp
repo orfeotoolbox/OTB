@@ -225,8 +225,9 @@ namespace ossimplugins
       buf3[3] = '\0';
       char buf2[3];
       buf2[2] = '\0';
-      char buf1[1];
+      char buf1[2];
       buf1[0] = '\0';
+      buf1[1] = '\0';
 
       is.read(buf8,8);
       data._product_name = buf8;

@@ -107,23 +107,23 @@ otb_test_application(NAME apTuUtReadImageInfoExtendedFilename_reader
                      APP  ReadImageInfo
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true&skipcarto=true
                      )
-                     
+
 
 set(TESTNAME
-"gd-pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
-"gd-wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+"gd-pleiades-1" #LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2}
+"gd-wv2-1"           #LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF}
 "gd-spot6-1"       #LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
 "gd-qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-"gd-ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+"gd-ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif}
 "gd-rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
 )
 
 set(IMG
-LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} 
-LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF} 
+LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2}
+LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF}
 LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2}
 LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
+LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif}
 LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
 )
 
@@ -131,7 +131,7 @@ set( GEOM_TESTNB 0)
 foreach( file ${IMG} )
   list(GET TESTNAME   ${GEOM_TESTNB} current_testname   )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
-  
+
   otb_test_application(NAME  apTuReadImageInfoTest_${current_testname}
                      APP  ReadImageInfo
                      OPTIONS -in ${file}
@@ -156,7 +156,7 @@ otb_test_application(NAME apTvUtQuicklookROI1Channel
 otb_test_application(NAME apTvUtQuicklookSpot5
                      APP Quicklook
                      OPTIONS -in LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-                             -out ${TEMP}/apTvUtQuicklookSpot5.tif
+                             -out ${TEMP}/apTvUtQuicklookSpot5.img
                              -cl Channel1 Channel2 Channel3
                              -rox 10
                              -roy 10
@@ -165,7 +165,7 @@ otb_test_application(NAME apTvUtQuicklookSpot5
                              -sr 2
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtQuicklookSpot5.tif
-                             ${TEMP}/apTvUtQuicklookSpot5.tif
+                             ${TEMP}/apTvUtQuicklookSpot5.img
                      )
 
 
@@ -353,4 +353,3 @@ otb_test_application(NAME apTvUtSplitImage
 
                              ${INPUTDATA}/poupees_sub_c3.png
                              ${TEMP}/apTvUtSplitImageOutput_2.tif)
-

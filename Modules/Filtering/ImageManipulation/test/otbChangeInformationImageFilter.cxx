@@ -36,7 +36,7 @@ int otbChangeInformationImageFilter(int itkNotUsed(argc), char * argv[])
   std::string newProj("Fake ProjRef");
   filter->SetOutputMetaData<std::string>(otb::MetaDataKey::ProjectionRefKey,&newProj);
   // erase that choice
-  filter->SetOutputMetaData<std::string>(otb::MetaDataKey::ProjectionRefKey,NULL);
+  filter->SetOutputMetaData<std::string>(otb::MetaDataKey::ProjectionRefKey,ITK_NULLPTR);
   // add a no data to the image
   std::vector<bool> flags;
   flags.push_back(true);

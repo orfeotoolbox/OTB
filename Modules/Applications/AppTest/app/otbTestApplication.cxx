@@ -38,7 +38,7 @@ public:
   itkTypeMacro(TestApplication, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
@@ -99,12 +99,12 @@ private:
     SetDocExampleParameterValue("filename", "myFilename.foo");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     //std::cout << "TestApplication::DoUpdateParameters" << std::endl;
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     //std::cout << "TestApplication::DoExecute" << std::endl;
   }

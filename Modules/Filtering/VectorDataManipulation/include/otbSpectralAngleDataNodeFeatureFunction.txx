@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbSpectralAngleDataNodeFeatureFunction_txx
-#define __otbSpectralAngleDataNodeFeatureFunction_txx
+#ifndef otbSpectralAngleDataNodeFeatureFunction_txx
+#define otbSpectralAngleDataNodeFeatureFunction_txx
 
 #include "otbSpectralAngleDataNodeFeatureFunction.h"
 

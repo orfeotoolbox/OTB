@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReliefColormapFunctor_txx
-#define __otbReliefColormapFunctor_txx
+#ifndef otbReliefColormapFunctor_txx
+#define otbReliefColormapFunctor_txx
 
 #include "otbReliefColormapFunctor.h"
 

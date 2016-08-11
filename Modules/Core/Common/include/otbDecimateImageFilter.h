@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbDecimateImageFilter_h
-#define __otbDecimateImageFilter_h
+#ifndef otbDecimateImageFilter_h
+#define otbDecimateImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

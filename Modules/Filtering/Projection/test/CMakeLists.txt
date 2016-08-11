@@ -58,6 +58,7 @@ set(GEOMGCP
 "QB/qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
 "ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
 "rapideye/rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+"sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 )
 
 set(NEEDEDKW
@@ -67,12 +68,24 @@ set(NEEDEDKW
 "line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #QB
 "line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Ikonos
 "line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Rapideye
+"number_lines number_samples orbitList support_data.geom.bursts support_data.geom.gcp support_data.pulse_repetition_frequency support_data.radar_frequency support_data.range_sampling_rate support_data.slant_range_to_first_pixel" # Sentinel1
 )
+
+set(GEOTOL
+  1 # Pleiades
+  1 # Worldview2
+  1 # Spot 6
+  1 # QB
+  1 # Ikonos
+  1 # Rapideye
+  5 # Sentinel1
+  )
 
 set( GEOM_TESTNB 0)
 foreach( file ${GEOMGCP} )
-  list(GET GEOMGCP   ${GEOM_TESTNB} current_geomgcp   )
+  list(GET GEOMGCP   ${GEOM_TESTNB}  current_geomgcp   )
   list(GET NEEDEDKW   ${GEOM_TESTNB} current_neededkw   )
+  list(GET GEOTOL     ${GEOM_TESTNB} current_geotol )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
   
   string(FIND ${current_geomgcp} "/" POS)
@@ -88,7 +101,7 @@ foreach( file ${GEOMGCP} )
     ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
     ${current_neededkw}
     1 # imgTol
-    1 # geoTol
+    ${current_geotol} # geoTol
     0 # create baseline (argv[7])
     1 # mode verbose
     1 # 0 : no keyword check  1 : check needed keywords
@@ -102,7 +115,7 @@ endforeach()
 #"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos} 
 #"terrasarx/gd-terrasarx-1" #LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos} 
 #"palsar/gd-palsar-1" #LARGEINPUT{PALSAR/200801280007/l1data/IMG-HH-ALPSRP037120700-H1.1__A} Ne reconnaît pas l'image
-#"s1/gd-s1-A" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} segfault
+#"s1/gd-s1-A" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 #)
 
 
@@ -165,6 +178,7 @@ SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_S
 QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif 
 RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff
 )
 
 set(IMG_TYPE
@@ -174,6 +188,7 @@ set(IMG_TYPE
 "qb-1"
 "ikonos-1"     
 "rapideye-1"
+"sentinel1"
 )
 
 set(GEOMGCP
@@ -183,6 +198,7 @@ set(GEOMGCP
 "QB/qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
 "ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif} 
 "rapideye/rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
+"sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
 )
 
 set(ORIGINSX
@@ -192,6 +208,7 @@ set(ORIGINSX
 375000
 340000
 430000
+787422
 )
 
 set(ORIGINSY
@@ -201,6 +218,7 @@ set(ORIGINSY
 4823000
 5524000
 6190000
+1664034
 )
 
 set(UTMZONES
@@ -210,6 +228,7 @@ set(UTMZONES
 31
 31
 55
+26
 )
 
 set(HEMIS
@@ -219,7 +238,39 @@ N
 N
 N
 S
+N
 )
+
+set(RESOL
+  0.5
+  0.5
+  0.5
+  0.5
+  0.5
+  0.5
+  4
+  )
+
+set(GRIDSPACING
+  4
+  4
+  4
+  4
+  4
+  4
+  4
+  32
+  )
+
+set(ISCOMPLEX
+  0
+  0
+  0
+  0
+  0
+  0
+  1
+  )
 
 set(MODE
 "noDEM"
@@ -242,6 +293,9 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	list(GET ORIGINSY   ${IMGNB} current_originy  )
 	list(GET UTMZONES   ${IMGNB} current_zone     )
 	list(GET HEMIS   ${IMGNB} current_hemis       )
+	list(GET RESOL ${IMGNB} current_resol         )
+	list(GET GRIDSPACING ${IMGNB} current_grid_spacing)
+	list(GET ISCOMPLEX ${IMGNB} current_is_compex)
 	math(EXPR IMGNB "${IMGNB} + 1")
 
 	set( MODENB 0)
@@ -259,13 +313,14 @@ foreach(current_img ${IMG_TEST_ORTHO})
 		  ${current_originy}
 		  500
 		  500
-		  0.5
-		  -0.5
+		  ${current_resol}
+		  -${current_resol}
 		  ${current_zone}
 		  ${current_hemis}
-		  4 # Spacing of the displacement field
+		  ${current_grid_spacing}  # Spacing of the displacement field
 		  ${MODENB}
 		  ${current_demdir}
+		  ${current_is_compex}
 		)
 			  
 	endforeach()

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphSource_h
-#define __otbRCC8GraphSource_h
+#ifndef otbRCC8GraphSource_h
+#define otbRCC8GraphSource_h
 
 #include "itkProcessObject.h"
 
@@ -54,9 +54,9 @@ protected:
   /** Constructor */
   RCC8GraphSource();
   /** Destructor */
-  virtual ~RCC8GraphSource() {}
+  ~RCC8GraphSource() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   RCC8GraphSource(const Self &); //purposely not implemented

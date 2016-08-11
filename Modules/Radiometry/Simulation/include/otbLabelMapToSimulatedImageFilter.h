@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelMapToSimulatedImageFilter_h
-#define __otbLabelMapToSimulatedImageFilter_h
+#ifndef otbLabelMapToSimulatedImageFilter_h
+#define otbLabelMapToSimulatedImageFilter_h
 
 
 #include "itkLabelMapFilter.h"
@@ -117,12 +117,12 @@ public:
 
 protected:
    LabelMapToSimulatedImageFilter();
-   virtual ~LabelMapToSimulatedImageFilter() {}
-   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+   ~LabelMapToSimulatedImageFilter() ITK_OVERRIDE {}
+   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-   virtual void BeforeThreadedGenerateData();
-   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
-   virtual void GenerateOutputInformation();
+   void BeforeThreadedGenerateData() ITK_OVERRIDE;
+   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+   void GenerateOutputInformation() ITK_OVERRIDE;
 
 
 private:

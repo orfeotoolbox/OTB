@@ -32,10 +32,10 @@ otb_test_application(NAME apTvRaOpticalCalibration_Formosat
                      APP  OpticalCalibration
                      OPTIONS -in ${INPUTDATA}/FORMOSAT_ROI_1000_100.tif
                              -level toa
-                             -out ${TEMP}/apTvRaOpticalCalibration_Formosat.tif
+                             -out ${TEMP}/apTvRaOpticalCalibration_Formosat.img
                      VALID   --compare-image ${EPSILON_7}
                              ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
-                             ${TEMP}/apTvRaOpticalCalibration_Formosat.tif )
+                             ${TEMP}/apTvRaOpticalCalibration_Formosat.img )
 
 otb_test_application(NAME apTvRaOpticalCalibration_QuickbirdPAN
                      APP  OpticalCalibration
@@ -50,10 +50,10 @@ otb_test_application(NAME apTvRaOpticalCalibration_Spot5
                      APP  OpticalCalibration
                      OPTIONS -in ${INPUTDATA}/SPOT5_ROI_1000_100.tif
                              -level toa
-                             -out ${TEMP}/apTvRaOpticalCalibration_Spot5.tif
+                             -out ${TEMP}/apTvRaOpticalCalibration_Spot5.img
                      VALID   --compare-image ${EPSILON_7}
                              ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
-                             ${TEMP}/apTvRaOpticalCalibration_Spot5.tif )
+                             ${TEMP}/apTvRaOpticalCalibration_Spot5.img )
 
 otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor
                      APP  OpticalCalibration

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMachineLearningModelFactory_h
-#define __otbMachineLearningModelFactory_h
+#ifndef otbMachineLearningModelFactory_h
+#define otbMachineLearningModelFactory_h
 
 #include "otbMachineLearningModel.h"
 #include "otbMachineLearningModelFactoryBase.h"
@@ -53,9 +53,11 @@ public:
   /** Create the appropriate MachineLearningModel depending on the particulars of the file. */
   static MachineLearningModelTypePointer CreateMachineLearningModel(const std::string& path, FileModeType mode);
 
+  static void CleanFactories();
+
 protected:
   MachineLearningModelFactory();
-  ~MachineLearningModelFactory();
+  ~MachineLearningModelFactory() ITK_OVERRIDE;
 
 private:
   MachineLearningModelFactory(const Self &); //purposely not implemented

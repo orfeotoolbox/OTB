@@ -51,7 +51,7 @@ public:
   itkTypeMacro(Despeckle, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Despeckle");
     SetDescription("Perform speckle noise reduction on SAR image.");
@@ -123,12 +123,12 @@ private:
     SetDocExampleParameterValue("out", "despeckle.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* inVImage = GetParameterImage("in");
 

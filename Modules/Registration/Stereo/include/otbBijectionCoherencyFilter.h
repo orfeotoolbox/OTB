@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otBijectionCoherencyFilter_h
-#define __otBijectionCoherencyFilter_h
+#ifndef otbBijectionCoherencyFilter_h
+#define otbBijectionCoherencyFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbLineOfSightOptimizer.h"
@@ -111,16 +111,16 @@ protected:
   BijectionCoherencyFilter();
 
   /** Destructor */
-  virtual ~BijectionCoherencyFilter(){};
+  ~BijectionCoherencyFilter() ITK_OVERRIDE{};
 
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Generate input requrested region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   BijectionCoherencyFilter(const Self&); //purposely not implemented

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQuaternaryFunctorImageFilter_txx
-#define __otbQuaternaryFunctorImageFilter_txx
+#ifndef otbQuaternaryFunctorImageFilter_txx
+#define otbQuaternaryFunctorImageFilter_txx
 
 #include "otbQuaternaryFunctorImageFilter.h"
 #include "itkImageRegionIterator.h"

@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingCompareImageFilter_h
-#define __otbStreamingCompareImageFilter_h
+#ifndef otbStreamingCompareImageFilter_h
+#define otbStreamingCompareImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"
@@ -123,37 +123,45 @@ public:
   }
   RealObjectType* GetMAEOutput();
   const RealObjectType* GetMAEOutput() const;
+  
+  /** Return the Number of Pixel which are different. */
+  RealType GetDiffCount() const
+  {
+    return this->GetDiffCountOutput()->Get();
+  }
+  RealObjectType* GetDiffCountOutput();
+  const RealObjectType* GetDiffCountOutput() const;
 
   itkGetMacro(PhysicalSpaceCheck,bool);
   itkSetMacro(PhysicalSpaceCheck,bool);
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs();
-  virtual void GenerateOutputInformation();
-  void Synthetize(void);
-  void Reset(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
 
 protected:
   PersistentCompareImageFilter();
-  virtual ~PersistentCompareImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentCompareImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType&
                              outputRegionForThread,
-                             itk::ThreadIdType threadId);
+                             itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Allows skipping the verification of physical space between
    *  the two input images (see flag m_PhysicalSpaceCheck)
    */
-  virtual void VerifyInputInformation();
+  void VerifyInputInformation() ITK_OVERRIDE;
 
 private:
   PersistentCompareImageFilter(const Self &); //purposely not implemented
@@ -164,6 +172,7 @@ private:
   itk::Array<PixelType> m_ThreadMinRef;
   itk::Array<PixelType> m_ThreadMaxRef;
   itk::Array<long>      m_Count;
+  itk::Array<long>      m_DiffCount;
   bool                  m_PhysicalSpaceCheck;
 }; // end of class PersistentCompareImageFilter
 
@@ -278,6 +287,20 @@ public:
   {
     return this->GetFilter()->GetMAEOutput();
   }
+  
+  /** Return the Number of Pixel different. */
+  RealType GetDiffCount() const
+  {
+    return this->GetFilter()->GetDiffCountOutput()->Get();
+  }
+  RealObjectType* GetDiffCountOutput()
+  {
+    return this->GetFilter()->GetDiffCountOutput();
+  }
+  const RealObjectType* GetDiffCountOutput() const
+  {
+    return this->GetFilter()->GetDiffCountOutput();
+  }
 
   /** Set the PhysicalSpaceCheck flag */
   void SetPhysicalSpaceCheck(bool flag)
@@ -295,7 +318,7 @@ protected:
   /** Constructor */
   StreamingCompareImageFilter() {};
   /** Destructor */
-  virtual ~StreamingCompareImageFilter() {}
+  ~StreamingCompareImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingCompareImageFilter(const Self &); //purposely not implemented

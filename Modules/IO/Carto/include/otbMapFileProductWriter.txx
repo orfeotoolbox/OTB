@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapFileProductWriter_txx
-#define __otbMapFileProductWriter_txx
+#ifndef otbMapFileProductWriter_txx
+#define otbMapFileProductWriter_txx
 
 #include "otbMapFileProductWriter.h"
 #include "itksys/SystemTools.hxx"
@@ -84,7 +84,7 @@ MapFileProductWriter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputImage * >

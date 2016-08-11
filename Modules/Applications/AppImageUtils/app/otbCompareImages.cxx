@@ -46,7 +46,7 @@ public:
   typedef otb::StreamingCompareImageFilter<FloatImageType> StreamingCompareImageFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("CompareImages");
     SetDescription("Estimator between 2 images.");
@@ -109,6 +109,10 @@ private:
     AddParameter(ParameterType_Float, "psnr",  "PSNR");
     SetParameterDescription("psnr", "Peak Signal to Noise Ratio value");
     SetParameterRole("psnr", Role_Output);
+    
+    AddParameter(ParameterType_Float, "count",  "count");
+    SetParameterDescription("count", "Nb of pixels which are different");
+    SetParameterRole("count", Role_Output);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("ref.in", "GomaApres.png");
@@ -121,7 +125,7 @@ private:
     SetDocExampleParameterValue("roi.sizey", "200");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Set channel interval
     if( HasValue("ref.in") )
@@ -156,7 +160,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Init filters
     m_ExtractRefFilter = ExtractROIMonoFilterType::New();
@@ -208,10 +212,12 @@ private:
     otbAppLogINFO( << "MSE: " << m_CompareFilter->GetMSE() );
     otbAppLogINFO( << "MAE: " << m_CompareFilter->GetMAE() );
     otbAppLogINFO( << "PSNR: " << m_CompareFilter->GetPSNR() );
+    otbAppLogINFO( << "Number of Pixel different: " << m_CompareFilter->GetDiffCount() );
 
     SetParameterFloat( "mse", m_CompareFilter->GetMSE() );
     SetParameterFloat( "mae", m_CompareFilter->GetMAE() );
     SetParameterFloat( "psnr", m_CompareFilter->GetPSNR() );
+    SetParameterFloat( "count", m_CompareFilter->GetDiffCount() );
   }
 
 
