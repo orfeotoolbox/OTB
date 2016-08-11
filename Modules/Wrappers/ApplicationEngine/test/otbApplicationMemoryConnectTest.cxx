@@ -40,7 +40,11 @@ int otbApplicationMemoryConnectTest(int argc, char * argv[])
 
   otb::Wrapper::Application::Pointer app2 = otb::Wrapper::ApplicationRegistry::CreateApplication("Smoothing");
 
-  if(app1.IsNull() || app2.IsNull())
+  otb::Wrapper::Application::Pointer app3 = otb::Wrapper::ApplicationRegistry::CreateApplication("Smoothing");
+
+  otb::Wrapper::Application::Pointer app4 = otb::Wrapper::ApplicationRegistry::CreateApplication("ConcatenateImages");
+  
+  if(app1.IsNull() || app2.IsNull() || app3.IsNull() || app4.IsNull())
     {
     std::cerr<<"Failed to create applications"<<std::endl;
     return EXIT_FAILURE;
@@ -53,8 +57,15 @@ int otbApplicationMemoryConnectTest(int argc, char * argv[])
 
   // Connect app1 to app2
   app2->SetParameterInputImage("in",app1->GetParameterOutputImage("out"));
-
-  app2->ExecuteAndWriteOutput();
+  app2->Execute();
+  
+  app3->SetParameterString("in",infname);
+  app3->Execute();
+  
+  app4->AddImageToParameterInputImageList("il",app2->GetParameterOutputImage("out"));
+  app4->AddImageToParameterInputImageList("il",app3->GetParameterOutputImage("out"));
+   
+  app4->ExecuteAndWriteOutput();
 
   return EXIT_SUCCESS;
 }
