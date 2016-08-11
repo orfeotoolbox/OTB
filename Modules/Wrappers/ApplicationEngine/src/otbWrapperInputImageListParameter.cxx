@@ -290,6 +290,13 @@ InputImageListParameter::Erase( unsigned int id )
   this->Modified();
 }
 
+unsigned int
+InputImageListParameter::Size() const
+{
+  return m_InputImageParameterVector.size();
+}
+
+
 void
 InputImageListParameter::ClearValue()
 {

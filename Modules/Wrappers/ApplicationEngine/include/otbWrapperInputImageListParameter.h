@@ -88,6 +88,9 @@ public:
 
  /** Clear all the list. */
   void ClearValue() ITK_OVERRIDE;
+
+  /** Retrieve number of elements */
+  unsigned int Size() const;
   
 protected:
   /** Constructor */
