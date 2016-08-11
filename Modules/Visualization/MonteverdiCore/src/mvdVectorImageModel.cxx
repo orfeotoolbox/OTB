@@ -47,9 +47,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAlgorithm.h"
-#include "Core/mvdQuicklookModel.h"
-#include "Core/mvdSystemError.h"
+#include "mvdAlgorithm.h"
+#include "mvdQuicklookModel.h"
+#include "mvdSystemError.h"
 
 
 

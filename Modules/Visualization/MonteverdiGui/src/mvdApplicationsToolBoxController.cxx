@@ -38,9 +38,9 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 //
-#include "Core/mvdTypes.h"
+#include "mvdTypes.h"
 //
-#include "Gui/mvdApplicationsToolBox.h"
+#include "mvdApplicationsToolBox.h"
 //
 #include "ApplicationsWrapper/mvdApplicationLauncher.h"
 #include "ApplicationsWrapper/mvdApplicationsBrowser.h"

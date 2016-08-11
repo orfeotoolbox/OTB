@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractDragAndDropEventFilter.h"
+#include "mvdAbstractDragAndDropEventFilter.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */

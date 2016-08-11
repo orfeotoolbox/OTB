@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdKeymapDialog.h"
-#include "Gui/ui_mvdKeymapDialog.h"
+#include "mvdKeymapDialog.h"
+#include "ui_mvdKeymapDialog.h"
 
 //
 // Qt includes (sorted by alphabetic order)

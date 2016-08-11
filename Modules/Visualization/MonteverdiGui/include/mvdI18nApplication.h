@@ -42,7 +42,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdI18nCoreApplication.h"
+#include "mvdI18nCoreApplication.h"
 
 //
 // Macros.

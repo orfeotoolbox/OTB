@@ -34,8 +34,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAlgorithm.h"
-#include "Gui/mvdDoubleValidator.h"
+#include "mvdAlgorithm.h"
+#include "mvdDoubleValidator.h"
 
 // Used for QString::number() calls. By default, QString::number()
 // uses a 6 digit precision.

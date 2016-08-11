@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdImageSettingsInterface.h"
+#include "mvdImageSettingsInterface.h"
 
 
 /*****************************************************************************/

@@ -45,9 +45,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
-#include "Gui/mvdAbstractImageViewRenderer.h"
-#include "Gui/mvdGui.h"
+#include "mvdTypes.h"
+#include "mvdAbstractImageViewRenderer.h"
+#include "mvdGui.h"
 
 
 /*****************************************************************************/

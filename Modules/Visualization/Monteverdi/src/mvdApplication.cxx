@@ -34,7 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdStackedLayerModel.h"
+#include "mvdStackedLayerModel.h"
 
 //
 #ifdef OTB_USE_QT4

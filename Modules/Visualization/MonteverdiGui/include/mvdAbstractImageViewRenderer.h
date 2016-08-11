@@ -45,7 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdStackedLayerModel.h"
+#include "mvdStackedLayerModel.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */

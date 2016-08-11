@@ -37,7 +37,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdImageSettings.h"
+#include "mvdImageSettings.h"
 
 
 namespace mvd

@@ -47,9 +47,9 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "Core/mvdAbstractModel.h"
-#include "Core/mvdTypes.h"
-#include "Core/mvdVisibleInterface.h"
+#include "mvdAbstractModel.h"
+#include "mvdTypes.h"
+#include "mvdVisibleInterface.h"
 #endif //tag=QT4-boost-compatibility
 
 /*****************************************************************************/

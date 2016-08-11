@@ -35,14 +35,14 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdBackgroundTask.h"
-#include "Core/mvdImageImporter.h"
-#include "Core/mvdOverviewBuilder.h"
-#include "Core/mvdVectorImageModel.h"
-#include "Gui/mvdAboutDialog.h"
-#include "Gui/mvdI18nApplication.h"
-#include "Gui/mvdImportImagesDialog.h"
-#include "Gui/mvdTaskProgressDialog.h"
+#include "mvdBackgroundTask.h"
+#include "mvdImageImporter.h"
+#include "mvdOverviewBuilder.h"
+#include "mvdVectorImageModel.h"
+#include "mvdAboutDialog.h"
+#include "mvdI18nApplication.h"
+#include "mvdImportImagesDialog.h"
+#include "mvdTaskProgressDialog.h"
 
 namespace mvd
 {

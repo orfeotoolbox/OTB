@@ -42,9 +42,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdCore.h"
-#include "Gui/mvdAbstractImageViewRenderer.h"
-#include "Gui/mvdGui.h"
+#include "mvdCore.h"
+#include "mvdAbstractImageViewRenderer.h"
+#include "mvdGui.h"
 
 
 #define USE_XP_REGION_OPTIM 0
@@ -435,8 +435,8 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdHistogramModel.h"
-#include "Gui/mvdAbstractImageViewManipulator.h"
+#include "mvdHistogramModel.h"
+#include "mvdAbstractImageViewManipulator.h"
 
 namespace mvd
 {

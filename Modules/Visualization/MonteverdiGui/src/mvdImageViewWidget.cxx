@@ -39,11 +39,11 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdStackedLayerModel.h"
-#include "Core/mvdVectorImageModel.h"
-#include "Gui/mvdAbstractImageViewManipulator.h"
+#include "mvdStackedLayerModel.h"
+#include "mvdVectorImageModel.h"
+#include "mvdAbstractImageViewManipulator.h"
 // See ::OnUpdateProjectionRequired()
-#include "Gui/mvdImageViewRenderer.h"
+#include "mvdImageViewRenderer.h"
 
 namespace mvd
 {

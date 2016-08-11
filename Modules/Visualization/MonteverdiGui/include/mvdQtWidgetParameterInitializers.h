@@ -342,8 +342,8 @@ public:
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "Core/mvdI18nCoreApplication.h"
-#include "Gui/mvdFilenameDragAndDropEventFilter.h"
+#include "mvdI18nCoreApplication.h"
+#include "mvdFilenameDragAndDropEventFilter.h"
 #endif //tag=QT4-boost-compatibility
 
 namespace mvd

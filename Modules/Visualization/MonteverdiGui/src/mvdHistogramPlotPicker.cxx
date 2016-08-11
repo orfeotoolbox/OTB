@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdHistogramPlotPicker.h"
+#include "mvdHistogramPlotPicker.h"
 
 
 /*****************************************************************************/
@@ -46,7 +46,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdHistogramWidget.h"
+#include "mvdHistogramWidget.h"
 
 namespace mvd
 {

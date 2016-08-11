@@ -56,10 +56,10 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
-#include "Core/mvdStackedLayerModel.h"
+#include "mvdTypes.h"
+#include "mvdStackedLayerModel.h"
 //
-#include "Gui/mvdI18nMainWindow.h"
+#include "mvdI18nMainWindow.h"
 
 
 /*****************************************************************************/
@@ -521,7 +521,7 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdImageViewWidget.h"
+#include "mvdImageViewWidget.h"
 
 //
 // Some constants.

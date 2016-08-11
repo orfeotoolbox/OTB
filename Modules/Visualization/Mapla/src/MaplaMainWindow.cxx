@@ -50,7 +50,7 @@
 # endif
 #endif
 //
-#include "Gui/mvdApplicationsToolBox.h"
+#include "mvdApplicationsToolBox.h"
 //
 #include "maplaApplication.h"
 // #include "mvdPreferencesDialog.h"

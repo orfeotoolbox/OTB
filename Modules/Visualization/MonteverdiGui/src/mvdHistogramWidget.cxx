@@ -48,7 +48,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdHistogramPlotPicker.h"
+#include "mvdHistogramPlotPicker.h"
 
 namespace mvd
 {

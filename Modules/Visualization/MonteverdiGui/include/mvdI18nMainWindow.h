@@ -383,7 +383,7 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractModelController.h"
+#include "mvdAbstractModelController.h"
 
 namespace mvd
 {

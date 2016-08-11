@@ -39,9 +39,9 @@
  
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAlgorithm.h"
-#include "Core/mvdI18nCoreApplication.h"
-//#include "Core/mvdTextStream.h"
+#include "mvdAlgorithm.h"
+#include "mvdI18nCoreApplication.h"
+//#include "mvdTextStream.h"
 #include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
 
 namespace mvd

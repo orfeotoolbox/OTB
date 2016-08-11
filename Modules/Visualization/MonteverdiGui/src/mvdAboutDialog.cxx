@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdAboutDialog.h"
-#include "Gui/ui_mvdAboutDialog.h"
+#include "mvdAboutDialog.h"
+#include "ui_mvdAboutDialog.h"
 
 //
 // Qt includes (sorted by alphabetic order)

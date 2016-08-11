@@ -39,9 +39,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAlgorithm.h"
-#include "Core/mvdImageSettings.h"
-#include "Gui/mvdGui.h"
+#include "mvdAlgorithm.h"
+#include "mvdImageSettings.h"
+#include "mvdGui.h"
 
 namespace mvd
 {

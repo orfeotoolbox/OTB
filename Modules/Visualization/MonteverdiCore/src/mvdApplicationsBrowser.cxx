@@ -19,7 +19,7 @@
 
 #include "mvdApplicationsBrowser.h"
 
-#include "Core/mvdAlgorithm.h"
+#include "mvdAlgorithm.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */

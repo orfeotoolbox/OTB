@@ -34,8 +34,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdGui.h"
-#include "Gui/mvdImageViewRenderer.h"
+#include "mvdGui.h"
+#include "mvdImageViewRenderer.h"
 
 namespace mvd
 {

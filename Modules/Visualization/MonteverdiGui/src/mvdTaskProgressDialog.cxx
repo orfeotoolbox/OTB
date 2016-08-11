@@ -38,8 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAbstractWorker.h"
-#include "Core/mvdBackgroundTask.h"
+#include "mvdAbstractWorker.h"
+#include "mvdBackgroundTask.h"
 
 namespace mvd
 {

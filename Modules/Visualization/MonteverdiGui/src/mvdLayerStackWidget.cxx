@@ -39,8 +39,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdGui.h"
-#include "Gui/mvdLayerStackItemModel.h"
+#include "mvdGui.h"
+#include "mvdLayerStackItemModel.h"
 
 namespace mvd
 {

@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractModelController.h"
+#include "mvdAbstractModelController.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
