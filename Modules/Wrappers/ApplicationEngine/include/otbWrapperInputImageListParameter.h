@@ -18,10 +18,8 @@
 #ifndef otbWrapperInputImageListParameter_h
 #define otbWrapperInputImageListParameter_h
 
-#include "otbImageFileReader.h"
-
 #include "otbWrapperParameter.h"
-#include "otbObjectList.h"
+#include "otbWrapperInputImageParameter.h"
 
 namespace otb
 {
@@ -42,8 +40,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::ImageFileReader<FloatVectorImageType> ImageFileReaderType;
-  typedef otb::ObjectList<ImageFileReaderType>  ImageFileReaderListType;
+  typedef std::vector<InputImageParameter::Pointer> InputImageParameterVectorType;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -100,13 +97,14 @@ protected:
   ~InputImageListParameter() ITK_OVERRIDE;
 
 
-  FloatVectorImageListType::Pointer m_ImageList;
-  ImageFileReaderListType::Pointer  m_ReaderList;
-
 private:
   InputImageListParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
 
+  InputImageParameterVectorType m_InputImageParameterVector;
+  FloatVectorImageListType::Pointer m_ImageList;
+  
+  
 }; // End class InputImage Parameter
 
 } // End namespace Wrapper
