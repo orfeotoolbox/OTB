@@ -231,6 +231,31 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
   this->Modified();
 }
 
+void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
+{
+  if(m_ImageList->Size()<i)
+    {
+    itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
+    }
+  try
+    {
+    img->UpdateOutputInformation();
+    }
+  catch(itk::ExceptionObject &)
+    {
+    return;
+    }
+  
+  // Try to build a new ParameterInputImage
+  InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+  
+  tmpInputImageParameter->SetImage(img);
+
+  m_InputImageParameterVector[i] = tmpInputImageParameter;
+  m_ImageList->SetNthElement(i,tmpInputImageParameter->GetFloatVectorImage());
+}
+
+
 void
 InputImageListParameter::AddImage(ImageBaseType* image)
 {

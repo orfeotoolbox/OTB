@@ -74,6 +74,9 @@ public:
   /** Get one specific stored image. */
   FloatVectorImageType* GetNthImage(unsigned int i) const;
 
+  /** Set one specific image. */
+  void SetNthImage(unsigned int i, ImageBaseType * img);
+  
   /** Set the list of image. */
   void SetImageList(FloatVectorImageListType* imList);
 
