@@ -264,6 +264,10 @@ private:
     m_RateCalculator->ClearRates();
     m_Periodic->GetFilter()->ClearOutputs();
     m_Random->GetFilter()->ClearOutputs();
+
+    // Setup ram
+    m_Periodic->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    m_Random->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     
     m_ReaderStat->SetFileName(this->GetParameterString("instats"));
     ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
