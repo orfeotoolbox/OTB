@@ -27,4 +27,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(mvdApplicationsToolBoxTest);
+  REGISTER_TEST(mvdApplicationsBrowserTest);
+  REGISTER_TEST(mvdFillToolBoxWidgetTreeTest);
 }
