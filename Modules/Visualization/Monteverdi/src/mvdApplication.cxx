@@ -38,7 +38,7 @@
 
 //
 #ifdef OTB_USE_QT4
-#  include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
+#  include "mvdOTBApplicationsModel.h"
 #endif
 
 //

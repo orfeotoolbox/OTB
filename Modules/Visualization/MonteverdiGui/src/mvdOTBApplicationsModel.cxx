@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
+#include "mvdOTBApplicationsModel.h"
 
 
 /*****************************************************************************/
@@ -37,8 +37,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "ApplicationsWrapper/mvdApplicationsBrowser.h"
-#include "ApplicationsWrapper/mvdApplicationLauncher.h"
+#include "mvdApplicationsBrowser.h"
+#include "mvdApplicationLauncher.h"
 
 namespace mvd
 {

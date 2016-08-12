@@ -29,8 +29,8 @@
 
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdApplicationsToolBox.h"
-#include "ApplicationsWrapper/mvdApplicationsBrowser.h"
-#include "ApplicationsWrapper/mvdApplicationLauncher.h"
+#include "mvdApplicationsBrowser.h"
+#include "mvdApplicationLauncher.h"
 
 int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
 { 

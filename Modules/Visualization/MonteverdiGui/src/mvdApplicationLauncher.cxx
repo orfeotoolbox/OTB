@@ -42,7 +42,7 @@
 #include "mvdAlgorithm.h"
 #include "mvdI18nCoreApplication.h"
 //#include "mvdTextStream.h"
-#include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
+#include "mvdWrapperQtWidgetView.h"
 
 namespace mvd
 {

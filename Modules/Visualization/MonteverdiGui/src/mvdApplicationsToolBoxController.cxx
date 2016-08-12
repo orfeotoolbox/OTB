@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
+#include "mvdApplicationsToolBoxController.h"
 
 
 /*****************************************************************************/
@@ -42,9 +42,9 @@
 //
 #include "mvdApplicationsToolBox.h"
 //
-#include "ApplicationsWrapper/mvdApplicationLauncher.h"
-#include "ApplicationsWrapper/mvdApplicationsBrowser.h"
-#include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
+#include "mvdApplicationLauncher.h"
+#include "mvdApplicationsBrowser.h"
+#include "mvdOTBApplicationsModel.h"
 
 namespace mvd
 {

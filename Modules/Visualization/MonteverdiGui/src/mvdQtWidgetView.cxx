@@ -50,7 +50,7 @@
 #include "mvdFilenameInterface.h"
 #include "mvdI18nCoreApplication.h"
 #include "mvdStackedLayerModel.h"
-#include "ApplicationsWrapper/mvdWrapperQtWidgetParameterInitializers.h"
+#include "mvdWrapperQtWidgetParameterInitializers.h"
 
 namespace mvd
 {
