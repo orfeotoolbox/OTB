@@ -151,12 +151,13 @@
 //
 // Macros
 
-#ifdef _DEBUG
-# define mvdUseInDebug( name ) name
-# define mvdUseInRelease( name ) 
-#else // _DEBUG
+// see http://stackoverflow.com/questions/2290509/debug-vs-ndebug#2290616
+#ifdef NDEBUG
 # define mvdUseInDebug( name )
 # define mvdUseInRelease( name ) name
-#endif // _DEBUG
+#else // NDEBUG
+# define mvdUseInDebug( name ) name
+# define mvdUseInRelease( name )
+#endif // NDEBUG
 
 #endif // __ConfigureMonteverdi_h
