@@ -405,7 +405,7 @@ public:
 
 
   /** 
-   * Set the input image parameter as an ImageBase * pointer instead
+   * Set the input image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
    * \in parameter The parameter key
@@ -416,18 +416,18 @@ public:
   void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
 
   /**
-   * Get the output image pamaraeter as an ImageBase * pointer instead
+   * Get the output image pamaraeter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
    * \in parameter The parameter key
-   * \return The ImageBase * pointer to the output image
+   * \return The ImageBase * to the output image
    * \throw itk::Exception if parameter is not found or not an
    * OutputImageParameter
    */
   OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
 
   /** 
-   * Set the input complex image parameter as an ImageBase * pointer instead
+   * Set the input complex image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
    * \in parameter The parameter key
@@ -438,7 +438,7 @@ public:
   void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
 
   /**
-   * Get the complex output image pamaraeter as an ImageBase * pointer instead
+   * Get the complex output image pamaraeter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
    * \in parameter The parameter key
@@ -448,12 +448,45 @@ public:
    */
   ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
 
+  /**
+   * Add an image to an InputImageList parameter as an ImageBase
+   * pointer instead of reading from file. Useful to connect pipelines
+   * between different application instances.
+   * \in parameter The parameter key
+   * \in img The ImageBase * of the image to add
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
   void AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img);
 
+  /**
+   * Set the nth image of an InputImageList parameter as an ImageBase pointer
+   * instead of reading from file. Useful to connect pipelines
+   * between different application instances.
+   * \in parameter The parameter key
+   * \in id Position at which to set the ImageBase pointer
+   * \in img The ImageBase * of the image to add
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter or if id is out of bounds
+   */ 
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
 
+  /**
+   * Clear all images from an InputImageList parameter.
+   *
+   * \in parameter The parameter key
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
   void ClearParameterInputImageList(std::string parameter);
 
+  /**
+   * Get the number of images in an InputImageList parameter.
+   * \in parameter The parameter key
+   * \return The number of images
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
   
