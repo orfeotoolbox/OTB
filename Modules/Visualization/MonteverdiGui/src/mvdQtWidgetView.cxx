@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdWrapperQtWidgetView.h"
+#include "mvdQtWidgetView.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -50,7 +50,7 @@
 #include "mvdFilenameInterface.h"
 #include "mvdI18nCoreApplication.h"
 #include "mvdStackedLayerModel.h"
-#include "mvdWrapperQtWidgetParameterInitializers.h"
+#include "mvdQtWidgetParameterInitializers.h"
 
 namespace mvd
 {

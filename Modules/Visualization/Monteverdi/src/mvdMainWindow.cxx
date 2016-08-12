@@ -43,7 +43,7 @@
 # include "mvdApplicationLauncher.h"
 # include "mvdApplicationsToolBoxController.h"
 # include "mvdOTBApplicationsModel.h"
-# include "mvdWrapperQtWidgetView.h"
+# include "mvdQtWidgetView.h"
 #endif
 //
 // #include "mvdDatabaseModel.h"

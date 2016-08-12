@@ -44,7 +44,7 @@
 # include "mvdApplicationsToolBoxController.h"
 # include "mvdOTBApplicationsModel.h"
 # if 1
-#   include "mvdWrapperQtWidgetView.h"
+#   include "mvdQtWidgetView.h"
 # else
 #   include "otbWrappperQtWidgetView.h"
 # endif
