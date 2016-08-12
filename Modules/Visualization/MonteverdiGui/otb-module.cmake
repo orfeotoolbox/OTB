@@ -14,6 +14,9 @@ otb_module( OTBMonteverdiGUI
   OPTIONAL_DEPENDS
     OTBQtWidget
 
+  TEST_DEPENDS
+    OTBTestKernel
+
   DESCRIPTION
   "${DOCUMENTATION}"
   )

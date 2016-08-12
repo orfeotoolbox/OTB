@@ -9,7 +9,10 @@ otb_module( OTBMonteverdi
     OTBQt4
 
   OPTIONAL_DEPENDS
-  
+
+  TEST_DEPENDS
+    OTBTestKernel
+
   DESCRIPTION
   "${DOCUMENTATION}"
   )
