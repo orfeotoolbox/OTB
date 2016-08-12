@@ -17,6 +17,10 @@ set( Monteverdi_FLOATING_TYPE
   STRING "The type of data in which input images are read (double/float)."
   )
 
+set(Monteverdi_UI_VERSION "1")
+
+set(Monteverdi_CONFIGURE_FILE "ConfigureMonteverdi.h" )
+
 #############################################################################
 configure_file( src/ConfigureMonteverdi.h.in ConfigureMonteverdi.h )
 
