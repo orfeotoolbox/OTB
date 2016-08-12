@@ -28,7 +28,7 @@ set( OTBMonteverdiGUI_SRCS
   mvdLayerStackWidget.cxx
   mvdMainWindowTitleLoader.cxx
   mvdMultiResolutionPyramidWidget.cxx
-  mvdMyWidget.cxx
+  #mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
   mvdQuicklookViewRenderer.cxx
@@ -43,55 +43,55 @@ set( OTBMonteverdiGUI_SRCS
 
 #############################################################################
 set( OTBMonteverdiGUI_HEADERS_MOC
-  mvdAboutDialog.h
-  mvdAbstractDragAndDropEventFilter.h
-  mvdAbstractImageViewManipulator.h
-  mvdAbstractImageViewRenderer.h
-  mvdAbstractModelController.h
-  mvdColorBandDynamicsWidget.h
-  mvdColorDynamicsController.h
-  mvdColorDynamicsWidget.h
-  mvdColorSetupController.h
-  mvdColorSetupWidget.h
-  mvdDatabaseBrowserController.h
-  mvdDatabaseBrowserWidget.h
-  mvdDatabaseBrowserWidgetTest.h
-  mvdDatabaseTreeWidget.h
-  mvdDatasetCreationProgressDialog.h
-  mvdDatasetDragAndDropEventFilter.h
-  mvdDatasetPropertiesController.h
-  mvdDatasetPropertiesWidget.h
-  mvdDoubleValidator.h
-  mvdDropLineEdit.h
-  mvdFilenameDragAndDropEventFilter.h
+  ../include/mvdAboutDialog.h
+  ../include/mvdAbstractDragAndDropEventFilter.h
+  ../include/mvdAbstractImageViewManipulator.h
+  ../include/mvdAbstractImageViewRenderer.h
+  ../include/mvdAbstractModelController.h
+  ../include/mvdColorBandDynamicsWidget.h
+  ../include/mvdColorDynamicsController.h
+  ../include/mvdColorDynamicsWidget.h
+  ../include/mvdColorSetupController.h
+  ../include/mvdColorSetupWidget.h
+  #../include/mvdDatabaseBrowserController.h
+  #../include/mvdDatabaseBrowserWidget.h
+  #../include/mvdDatabaseBrowserWidgetTest.h
+  #../include/mvdDatabaseTreeWidget.h
+  #../include/mvdDatasetCreationProgressDialog.h
+  #../include/mvdDatasetDragAndDropEventFilter.h
+  #../include/mvdDatasetPropertiesController.h
+  #../include/mvdDatasetPropertiesWidget.h
+  ../include/mvdDoubleValidator.h
+  ../include/mvdDropLineEdit.h
+  ../include/mvdFilenameDragAndDropEventFilter.h
   #mvdGui.h
-  mvdHistogramController.h
-  mvdHistogramPlotPicker.h
-  mvdHistogramWidget.h
-  mvdI18nApplication.h
-  mvdI18nMainWindow.h
-  mvdImageViewManipulator.h
-  mvdImageViewRenderer.h
-  mvdImageViewWidget.h
-  mvdImportImagesDialog.h
-  mvdImportSubDatasetDialog.h
-  mvdKeymapDialog.h
-  mvdLayerStackController.h
-  mvdLayerStackItemModel.h
-  mvdLayerStackWidget.h
-  mvdMainWindowTitleLoader.h
-  mvdMultiResolutionPyramidWidget.h
+  ../include/mvdHistogramController.h
+  ../include/mvdHistogramPlotPicker.h
+  ../include/mvdHistogramWidget.h
+  ../include/mvdI18nApplication.h
+  ../include/mvdI18nMainWindow.h
+  ../include/mvdImageViewManipulator.h
+  ../include/mvdImageViewRenderer.h
+  ../include/mvdImageViewWidget.h
+  ../include/mvdImportImagesDialog.h
+  ../include/mvdImportSubDatasetDialog.h
+  ../include/mvdKeymapDialog.h
+  ../include/mvdLayerStackController.h
+  ../include/mvdLayerStackItemModel.h
+  ../include/mvdLayerStackWidget.h
+  ../include/mvdMainWindowTitleLoader.h
+  ../include/mvdMultiResolutionPyramidWidget.h
   #mvdMyWidget.h
-  mvdPixelDescriptionWidget.h
-  mvdQuicklookViewManipulator.h
-  mvdQuicklookViewRenderer.h
-  mvdSearchableTreeWidget.h
-  mvdStatusBarWidget.h
-  mvdTaskProgressDialog.h
-  mvdTreeWidget.h
+  ../include/mvdPixelDescriptionWidget.h
+  ../include/mvdQuicklookViewManipulator.h
+  ../include/mvdQuicklookViewRenderer.h
+  ../include/mvdSearchableTreeWidget.h
+  ../include/mvdStatusBarWidget.h
+  ../include/mvdTaskProgressDialog.h
+  ../include/mvdTreeWidget.h
   #mvdTreeWidgetItem.h
-  mvdTreeWidgetItemDragAndDropEventFilter.h
-  mvdShaderWidget.h
+  ../include/mvdTreeWidgetItemDragAndDropEventFilter.h
+  ../include/mvdShaderWidget.h
 )
 
 #############################################################################
@@ -100,10 +100,10 @@ set( OTBMonteverdiGUI_FORMS
   mvdColorBandDynamicsWidget.ui
   mvdColorDynamicsWidget.ui
   mvdColorSetupWidget.ui
-  mvdDatabaseBrowserWidget.ui
-  mvdDatabaseBrowserWidgetTest.ui
-  mvdDatasetCreationProgressDialog.ui
-  mvdDatasetPropertiesWidget.ui
+  #mvdDatabaseBrowserWidget.ui
+  #mvdDatabaseBrowserWidgetTest.ui
+  #mvdDatasetCreationProgressDialog.ui
+  #mvdDatasetPropertiesWidget.ui
   mvdHistogramWidget.ui
   mvdImportImagesDialog.ui
   mvdImportSubDatasetDialog.ui
@@ -124,7 +124,7 @@ set( OTBMonteverdiGUI_RESOURCES
 )
 
 #############################################################################
-if( OTBQtWidget )
+if( OTBQtWidget_ENABLED )
   list( APPEND OTBMonteverdiGUI_SRCS
     mvdApplicationLauncher.cxx
     mvdApplicationsToolBox.cxx
@@ -132,7 +132,7 @@ if( OTBQtWidget )
   )
 
   list( APPEND OTBMonteverdiGUI_HEADERS_MOC
-    mvdApplicationsToolBox.h
+    ../include/mvdApplicationsToolBox.h
     )
 
   list( APPEND OTBMonteverdiGUI_FORMS
