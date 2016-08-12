@@ -129,6 +129,7 @@ if( OTBQtWidget_ENABLED )
     mvdApplicationLauncher.cxx
     mvdApplicationsToolBox.cxx
     mvdApplicationsToolBoxController.cxx
+    mvdOTBApplicationsModel.cxx
   )
 
   list( APPEND OTBMonteverdiGUI_HEADERS_MOC
