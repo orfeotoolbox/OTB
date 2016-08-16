@@ -1,7 +1,7 @@
 <RCC>
   <qresource prefix="/icons">
-    <file>../../../Data/Icons/execute.png</file>
-    <file>../../../Data/Icons/locked.png</file>
-    <file>../../../Data/Icons/unlocked.png</file>
+    <file>../../../../Utilities/Data/Icons/execute.png</file>
+    <file>../../../../Utilities/Data/Icons/locked.png</file>
+    <file>../../../../Utilities/Data/Icons/unlocked.png</file>
   </qresource>
 </RCC>

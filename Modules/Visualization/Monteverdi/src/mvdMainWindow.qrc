@@ -1,30 +1,30 @@
 <RCC>
   <qresource prefix="/icons">
-    <file alias="action_SaveScreenshot_Icon">../../../Data/Icons/image-export_24x24.png</file>
-    <file alias="action_LayerDeleteAll_Icon">../../../Data/Icons/layers-remove_24x24.png</file>
-    <file alias="action_Reload_Icon">../../../Data/Icons/reload_24x24.png</file>
-    <file alias="action_ApplyAll_Icon">../../../Data/Icons/check_24x24.png</file>
-    <file alias="action_LayerProjection_Icon">../../../Data/Icons/projection_24x24.png</file>
-    <file alias="action_LayerUp_Icon">../../../Data/Icons/layer-up_24x24.png</file>
-    <file alias="action_LayerBottom_Icon">../../../Data/Icons/layer-bottom_24x24.png</file>
-    <file alias="action_LayerDelete_Icon">../../../Data/Icons/layer-delete_24x24.png</file>
-    <file alias="action_LayerDown_Icon">../../../Data/Icons/layer-down_24x24.png</file>
-    <file alias="action_LayerTop_Icon">../../../Data/Icons/layer-top_24x24.png</file>
-    <file alias="action_ZoomFull_Icon">../../../Data/Icons/zoom-1to1.png</file>
-    <file alias="otb">../../../Data/Icons/monteverdi-32x32.png</file>
-    <file alias="process">../../../Data/Icons/alg.png</file>
-    <file>../../../Data/Icons/execute.png</file>
-    <file>../../../Data/Icons/locked.png</file>
-    <file>../../../Data/Icons/unlocked.png</file>
-    <file alias="forbidden">../../../Data/Icons/forbidden-128x128.png</file>
-    <file alias="action_ZoomIn_Icon">../../../Data/Icons/action-zoomin_24x24.png</file>
-    <file alias="action_ZoomExtent_Icon">../../../Data/Icons/action-zoomfullextent_24x24.png</file>
-    <file alias="action_ZoomOut_Icon">../../../Data/Icons/action-zoomout_24x24.png</file>
-    <file alias="action_ZoomLayer_Icon">../../../Data/Icons/action-zoomtolayer_24x24.png</file>
-    <file alias="action_Open_Icon">../../../Data/Icons/document-open_32x32.png</file>
+    <file alias="action_SaveScreenshot_Icon">../../../../Utilities/Data/Icons/image-export_24x24.png</file>
+    <file alias="action_LayerDeleteAll_Icon">../../../../Utilities/Data/Icons/layers-remove_24x24.png</file>
+    <file alias="action_Reload_Icon">../../../../Utilities/Data/Icons/reload_24x24.png</file>
+    <file alias="action_ApplyAll_Icon">../../../../Utilities/Data/Icons/check_24x24.png</file>
+    <file alias="action_LayerProjection_Icon">../../../../Utilities/Data/Icons/projection_24x24.png</file>
+    <file alias="action_LayerUp_Icon">../../../../Utilities/Data/Icons/layer-up_24x24.png</file>
+    <file alias="action_LayerBottom_Icon">../../../../Utilities/Data/Icons/layer-bottom_24x24.png</file>
+    <file alias="action_LayerDelete_Icon">../../../../Utilities/Data/Icons/layer-delete_24x24.png</file>
+    <file alias="action_LayerDown_Icon">../../../../Utilities/Data/Icons/layer-down_24x24.png</file>
+    <file alias="action_LayerTop_Icon">../../../../Utilities/Data/Icons/layer-top_24x24.png</file>
+    <file alias="action_ZoomFull_Icon">../../../../Utilities/Data/Icons/zoom-1to1.png</file>
+    <file alias="otb">../../../../Utilities/Data/Icons/monteverdi-32x32.png</file>
+    <file alias="process">../../../../Utilities/Data/Icons/alg.png</file>
+    <file>../../../../Utilities/Data/Icons/execute.png</file>
+    <file>../../../../Utilities/Data/Icons/locked.png</file>
+    <file>../../../../Utilities/Data/Icons/unlocked.png</file>
+    <file alias="forbidden">../../../../Utilities/Data/Icons/forbidden-128x128.png</file>
+    <file alias="action_ZoomIn_Icon">../../../../Utilities/Data/Icons/action-zoomin_24x24.png</file>
+    <file alias="action_ZoomExtent_Icon">../../../../Utilities/Data/Icons/action-zoomfullextent_24x24.png</file>
+    <file alias="action_ZoomOut_Icon">../../../../Utilities/Data/Icons/action-zoomout_24x24.png</file>
+    <file alias="action_ZoomLayer_Icon">../../../../Utilities/Data/Icons/action-zoomtolayer_24x24.png</file>
+    <file alias="action_Open_Icon">../../../../Utilities/Data/Icons/document-open_32x32.png</file>
   </qresource>
   <qresource prefix="/images">
-    <file alias="application_icon">../../../Data/Icons/monteverdi-128x128.png</file>
-    <file alias="application_splash">../../../Data/Icons/monteverdi-splash.png</file>
+    <file alias="application_icon">../../../../Utilities/Data/Icons/monteverdi-128x128.png</file>
+    <file alias="application_splash">../../../../Utilities/Data/Icons/monteverdi-splash.png</file>
   </qresource>
 </RCC>
