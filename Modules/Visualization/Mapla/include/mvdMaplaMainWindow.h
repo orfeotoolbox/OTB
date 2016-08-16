@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __maplaMainWindow_h
-#define __maplaMainWindow_h
+#ifndef __mvdMaplaMainWindow_h
+#define __mvdMaplaMainWindow_h
 
 //
 // Configuration include.

@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __maplaApplication_h
-#define __maplaApplication_h
+#ifndef __mvdMaplaApplication_h
+#define __mvdMaplaApplication_h
 
 //
 // Configuration include.

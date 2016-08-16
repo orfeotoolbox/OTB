@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#include "maplaMainWindow.h"
-#include "ui_maplaMainWindow.h"
+#include "mvdMaplaMainWindow.h"
+#include "ui_mvdMaplaMainWindow.h"
 
 
 /*****************************************************************************/
@@ -52,7 +52,7 @@
 //
 #include "mvdApplicationsToolBox.h"
 //
-#include "maplaApplication.h"
+#include "mvdMaplaApplication.h"
 // #include "mvdPreferencesDialog.h"
 
 namespace mvd
