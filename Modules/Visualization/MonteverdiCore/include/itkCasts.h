@@ -7,6 +7,8 @@
 #ifndef __itkCasts_h
 #define __itkCasts_h
 
+#include "itkSmartPointer.h"
+
 namespace itk
 {
 /**
