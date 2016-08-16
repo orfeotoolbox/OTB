@@ -130,10 +130,15 @@ if( OTBQtWidget_ENABLED )
     mvdApplicationsToolBox.cxx
     mvdApplicationsToolBoxController.cxx
     mvdOTBApplicationsModel.cxx
+    mvdQtWidgetView.cxx
   )
 
   list( APPEND OTBMonteverdiGUI_HEADERS_MOC
+    ../include/mvdApplicationLauncher.h
     ../include/mvdApplicationsToolBox.h
+    ../include/mvdApplicationsToolBoxController.h
+    ../include/mvdOTBApplicationsModel.h
+    ../include/mvdQtWidgetView.h
     )
 
   list( APPEND OTBMonteverdiGUI_FORMS
@@ -164,6 +169,7 @@ target_link_libraries( OTBMonteverdiGUI
   ${OTBIce_LIBRARIES}
   ${OTBIOGDAL_LIBRARIES}
   ${OTBMonteverdiCore_LIBRARIES}
+  ${OTBQtWidget_LIBRARIES}
   ${OTBQwt_LIBRARIES}
   )
 
