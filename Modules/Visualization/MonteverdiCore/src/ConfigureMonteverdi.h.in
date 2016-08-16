@@ -21,7 +21,7 @@
 
 //
 // Monteverdi project
-#define PROJECT_NAME "@PROJECT_NAME@"
+#define PROJECT_NAME "@Monteverdi_PROJECT_NAME@"
 
 //
 // Monteverdi version.

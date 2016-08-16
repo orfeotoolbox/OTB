@@ -21,6 +21,8 @@ set(Monteverdi_UI_VERSION "1")
 
 set(Monteverdi_CONFIGURE_FILE "ConfigureMonteverdi.h" )
 
+set(Monteverdi_PROJECT_NAME "Monteverdi")
+
 #############################################################################
 configure_file( src/ConfigureMonteverdi.h.in ConfigureMonteverdi.h )
 
