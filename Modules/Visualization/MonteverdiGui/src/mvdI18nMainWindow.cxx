@@ -74,8 +74,8 @@ I18nMainWindow::m_LastAcceptedDir( QDir::home().path() );
 
 /*****************************************************************************/
 I18nMainWindow
-::I18nMainWindow( QWidget* parent, Qt::WindowFlags flags ) :
-  QMainWindow( parent, flags )
+::I18nMainWindow( QWidget* p, Qt::WindowFlags flags ) :
+  QMainWindow( p, flags )
 {
 }
 

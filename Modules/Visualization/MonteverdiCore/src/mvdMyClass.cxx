@@ -66,8 +66,8 @@ namespace
 
 /*******************************************************************************/
 MyClass
-::MyClass( QObject* parent ) :
-  QObject( parent )
+::MyClass( QObject* p ) :
+  QObject( p )
 {
 }
 

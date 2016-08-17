@@ -66,8 +66,8 @@ const char* TREE_WIDGET_ITEM_MIME_TYPE = "application/x-qtreewidgetitemptrlist";
 
 /*****************************************************************************/
 TreeWidgetItemDragAndDropEventFilter
-::TreeWidgetItemDragAndDropEventFilter( QObject* parent  ) :
-  AbstractDragAndDropEventFilter( parent )
+::TreeWidgetItemDragAndDropEventFilter( QObject* p  ) :
+  AbstractDragAndDropEventFilter( p )
 {
 }
 

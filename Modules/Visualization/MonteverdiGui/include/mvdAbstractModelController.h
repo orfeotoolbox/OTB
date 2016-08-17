@@ -161,7 +161,7 @@ signals:
 protected:
 
   /** Constructor */
-  AbstractModelController( QWidget* widget, QObject* parent =NULL );
+  AbstractModelController( QWidget* widget, QObject* p =NULL );
 
 //
 // Protected attributes.

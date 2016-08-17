@@ -92,7 +92,7 @@ public:
   /** \brief Constructor. */
   ImageViewWidget( AbstractImageViewManipulator* manipulator,
                    AbstractImageViewRenderer* renderer,
-                   QWidget* parent =NULL,
+                   QWidget* p =NULL,
                    const QGLWidget* shareWidget =NULL,
                    Qt::WindowFlags f =0 );
 
@@ -100,7 +100,7 @@ public:
   ImageViewWidget( AbstractImageViewManipulator* manipulator,
                    AbstractImageViewRenderer* renderer,
                    QGLContext* context,
-                   QWidget* parent =NULL,
+                   QWidget* p =NULL,
                    const QGLWidget* shareWidget =NULL,
                    Qt::WindowFlags f =0 );
 
@@ -108,7 +108,7 @@ public:
   ImageViewWidget( AbstractImageViewManipulator* manipulator,
                    AbstractImageViewRenderer* renderer,
                    const QGLFormat& format,
-                   QWidget* parent =NULL,
+                   QWidget* p =NULL,
                    const QGLWidget *shareWidget =NULL,
                    Qt::WindowFlags f =0 );
 

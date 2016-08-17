@@ -107,7 +107,7 @@ public:
   /**
    * \brief Constructor.
    */
-  TreeWidgetItem( QTreeWidgetItem* parent =NULL,
+  TreeWidgetItem( QTreeWidgetItem* p =NULL,
                   const QString& text =QString(),
                   const QVariant& id =QVariant(),
                   const QStringList& columns = QStringList(),

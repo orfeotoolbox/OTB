@@ -67,8 +67,8 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 QuicklookViewRenderer
-::QuicklookViewRenderer( QObject* parent ) :
-  ImageViewRenderer( parent ),
+::QuicklookViewRenderer( QObject* p ) :
+  ImageViewRenderer( p ),
   m_GlRoiActor( otb::GlROIActor::New() )
 {
   assert( !m_GlRoiActor.IsNull() );

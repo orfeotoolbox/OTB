@@ -64,8 +64,8 @@ namespace mvd
 
 /*******************************************************************************/
 DropLineEdit
-::DropLineEdit( QWidget* parent ) :
-  QLineEdit( parent )
+::DropLineEdit( QWidget* p ) :
+  QLineEdit( p )
 {
   setReadOnly( true );
   setAcceptDrops( true );
@@ -73,8 +73,8 @@ DropLineEdit
 
 /*******************************************************************************/
 DropLineEdit
-::DropLineEdit( const QString& contents, QWidget* parent ) :
-  QLineEdit( contents, parent )
+::DropLineEdit( const QString& contents, QWidget* p ) :
+  QLineEdit( contents, p )
 {
   setReadOnly( true );
   setAcceptDrops( true );

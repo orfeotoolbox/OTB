@@ -64,8 +64,8 @@ namespace mvd
 
 /*******************************************************************************/
 QuicklookModel
-::QuicklookModel( QObject* parent ) :
-  VectorImageModel( parent )
+::QuicklookModel( QObject* p ) :
+  VectorImageModel( p )
 {
 }
 

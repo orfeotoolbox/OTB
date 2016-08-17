@@ -71,10 +71,10 @@ namespace mvd
 ImageViewWidget
 ::ImageViewWidget( AbstractImageViewManipulator* manipulator,
                    AbstractImageViewRenderer* renderer,
-                   QWidget* parent,
+                   QWidget* p,
                    const QGLWidget* shareWidget,
                    Qt::WindowFlags flags ) :
-  QGLWidget( parent, shareWidget, flags ),
+  QGLWidget( p, shareWidget, flags ),
   m_IsPickingEnabled( true ),
   m_PickingDefaultStatus( true ),
   m_Manipulator( NULL ),
@@ -91,10 +91,10 @@ ImageViewWidget
 ::ImageViewWidget( AbstractImageViewManipulator * manipulator,
                    AbstractImageViewRenderer * renderer,
                    QGLContext* context,
-                   QWidget* parent,
+                   QWidget* p,
                    const QGLWidget* shareWidget,
                    Qt::WindowFlags flags ) :
-  QGLWidget( context, parent, shareWidget, flags ),
+  QGLWidget( context, p, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
 #if USE_XP_REGION_OPTION
@@ -109,10 +109,10 @@ ImageViewWidget
 ::ImageViewWidget( AbstractImageViewManipulator * manipulator,
                    AbstractImageViewRenderer * renderer,
                    const QGLFormat& format,
-                   QWidget* parent,
+                   QWidget* p,
                    const QGLWidget* shareWidget,
                    Qt::WindowFlags flags ) :
-  QGLWidget( format, parent, shareWidget, flags ),
+  QGLWidget( format, p, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
 #if USE_XP_REGION_OPTION

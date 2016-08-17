@@ -90,7 +90,7 @@ class Monteverdi_EXPORT StatusBarWidget :
 public:
 
   /** \brief Constructor. */
-  StatusBarWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  StatusBarWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~StatusBarWidget();

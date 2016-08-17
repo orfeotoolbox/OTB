@@ -62,8 +62,8 @@ namespace mvd
 
 /*******************************************************************************/
 ApplicationsToolBoxController
-::ApplicationsToolBoxController( ApplicationsToolBox* widget, QObject* parent ) :
-  AbstractModelController( widget, parent )
+::ApplicationsToolBoxController( ApplicationsToolBox* widget, QObject* p ) :
+  AbstractModelController( widget, p )
 {
 }
 

@@ -134,8 +134,8 @@ const QColor RUBBER_BAND_COLOR( 0xFF, 0xFF, 0x00, 0xAA );
 
 /*******************************************************************************/
 HistogramWidget
-::HistogramWidget( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::HistogramWidget( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::HistogramWidget() ),
   m_PlotGrid( NULL ),
   m_PlotPicker( NULL ),

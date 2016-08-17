@@ -70,8 +70,8 @@ ImageImporter
 ::ImageImporter( const QString& filename,
 		 int width,
 		 int height,
-		 QObject* parent ) :
-  AbstractWorker( parent ),
+		 QObject* p ) :
+  AbstractWorker( p ),
   m_Filename( filename ),
   m_ModelType( IMAGE ),
   m_Width( width ),

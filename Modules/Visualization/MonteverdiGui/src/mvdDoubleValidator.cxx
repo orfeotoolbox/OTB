@@ -66,15 +66,15 @@ namespace
 
 /*******************************************************************************/
 DoubleValidator
-::DoubleValidator( QObject* parent ) :
-  QDoubleValidator( parent )
+::DoubleValidator( QObject* p ) :
+  QDoubleValidator( p )
 {
 }
 
 /*******************************************************************************/
 DoubleValidator
-::DoubleValidator( double bottom, double top, int decimals, QObject* parent ) :
-  QDoubleValidator( bottom, top, decimals, parent )
+::DoubleValidator( double bottom, double top, int decimals, QObject* p ) :
+  QDoubleValidator( bottom, top, decimals, p )
 {
 }
 

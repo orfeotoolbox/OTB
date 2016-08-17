@@ -108,7 +108,7 @@ public:
 public:
 
   /** \brief Constructor. */
-  StackedLayerModel( QObject* parent =NULL );
+  StackedLayerModel( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~StackedLayerModel();

@@ -48,8 +48,8 @@ namespace mvd
 
 /*******************************************************************************/
 AbstractModelController
-::AbstractModelController( QWidget* widget, QObject* parent ):
-  QObject( parent ),
+::AbstractModelController( QWidget* widget, QObject* p ):
+  QObject( p ),
   m_Widget( widget ),
   m_Model( NULL )
 {

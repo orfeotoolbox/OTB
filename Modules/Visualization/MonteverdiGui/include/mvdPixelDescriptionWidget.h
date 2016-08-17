@@ -88,7 +88,7 @@ class Monteverdi_EXPORT PixelDescriptionWidget :
 public:
 
   /** \brief Constructor. */
-  PixelDescriptionWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  PixelDescriptionWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~PixelDescriptionWidget();

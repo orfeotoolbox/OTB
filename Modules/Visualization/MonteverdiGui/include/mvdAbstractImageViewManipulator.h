@@ -259,7 +259,7 @@ protected:
 protected:
 
   /** \brief Constructor. */
-  AbstractImageViewManipulator( QObject* parent =NULL ):QObject( parent ){};
+  AbstractImageViewManipulator( QObject* p =NULL ):QObject( p ){};
 
 //
 // Protected attributes.

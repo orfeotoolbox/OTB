@@ -55,8 +55,8 @@ namespace mvd
 
 /*******************************************************************************/
 AbstractModel
-::AbstractModel( QObject* parent ) :
-  QObject( parent )
+::AbstractModel( QObject* p ) :
+  QObject( p )
 {
 }
 

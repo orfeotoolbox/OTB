@@ -100,7 +100,7 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* parent =0,
+		QWidget* p =0,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */

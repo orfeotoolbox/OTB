@@ -281,8 +281,8 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
 
 /*******************************************************************************/
 TreeWidget
-::TreeWidget( QWidget* parent  ):
-  QTreeWidget( parent )
+::TreeWidget( QWidget* p  ):
+  QTreeWidget( p )
 {
   setSelectionBehavior( QAbstractItemView::SelectRows );
 

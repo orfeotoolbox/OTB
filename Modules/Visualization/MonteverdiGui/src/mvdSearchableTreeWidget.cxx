@@ -67,8 +67,8 @@ namespace mvd
 
 /*******************************************************************************/
 SearchableTreeWidget
-::SearchableTreeWidget( QWidget* parent, Qt::WindowFlags flags ) :
-  QWidget( parent, flags ),
+::SearchableTreeWidget( QWidget* p, Qt::WindowFlags flags ) :
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::SearchableTreeWidget() )
 {
   m_UI->setupUi( this );

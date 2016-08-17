@@ -82,7 +82,7 @@ public:
 public:
 
   /** \brief Constructor. */
-  ColorSetupWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  ColorSetupWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~ColorSetupWidget();

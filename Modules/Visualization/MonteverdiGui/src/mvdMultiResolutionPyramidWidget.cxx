@@ -95,8 +95,8 @@ GDAL_FORMAT_NAMES[ otb::GDAL_FORMAT_COUNT ] =
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 MultiResolutionPyramidWidget
-::MultiResolutionPyramidWidget( QWidget * parent, Qt::WindowFlags flags ) :
-  QWidget( parent, flags ),
+::MultiResolutionPyramidWidget( QWidget * p, Qt::WindowFlags flags ) :
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::MultiResolutionPyramidWidget() )
 {
   m_UI->setupUi( this );

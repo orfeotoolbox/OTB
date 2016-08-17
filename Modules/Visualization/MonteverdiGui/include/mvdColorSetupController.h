@@ -91,7 +91,7 @@ public:
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
-  ColorSetupController( ColorSetupWidget* widget, QObject* parent =NULL );
+  ColorSetupController( ColorSetupWidget* widget, QObject* p =NULL );
 
   /**
    * \brief Destructor.

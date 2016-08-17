@@ -70,8 +70,8 @@ const double GAMMA_POWER = 1.1;
 
 /*****************************************************************************/
 ColorDynamicsWidget
-::ColorDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::ColorDynamicsWidget( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::ColorDynamicsWidget() ),
   m_NoDataValidator( NULL ),
   m_IsGrayscaleActivated( false )

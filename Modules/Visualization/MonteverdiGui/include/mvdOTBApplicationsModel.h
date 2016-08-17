@@ -92,7 +92,7 @@ public:
 public:
 
   /** \brief Constructor. */
-  OTBApplicationsModel( QObject* parent =NULL );
+  OTBApplicationsModel( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~OTBApplicationsModel();

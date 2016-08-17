@@ -97,7 +97,7 @@ public:
 
   /** \brief Constructor. */
   ImportImagesDialog( const QStringList & filename,
-		      QWidget * parent =NULL,
+		      QWidget * p =NULL,
 		      Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */

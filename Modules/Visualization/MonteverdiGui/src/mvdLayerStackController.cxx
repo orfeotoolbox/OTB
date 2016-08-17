@@ -71,8 +71,8 @@ namespace
 
 /*******************************************************************************/
 LayerStackController
-::LayerStackController( LayerStackWidget * widget, QObject * parent ) :
-  AbstractModelController( widget, parent )
+::LayerStackController( LayerStackWidget * widget, QObject * p ) :
+  AbstractModelController( widget, p )
 {
 }
 

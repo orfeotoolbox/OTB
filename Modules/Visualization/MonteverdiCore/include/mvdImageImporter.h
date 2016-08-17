@@ -99,7 +99,7 @@ public:
 		 bool isForceCreateEnabled,
 		 int width =-1,
 		 int height =-1,
-		 QObject* parent =NULL );
+		 QObject* p =NULL );
 
   /**
    * \brief Constructor (image-model).
@@ -112,7 +112,7 @@ public:
   ImageImporter( const QString& filename,
 		 int width =-1,
 		 int height =-1,
-		 QObject* parent =NULL );
+		 QObject* p =NULL );
 
   /**
    * \brief Destructor.

@@ -92,7 +92,7 @@ class Monteverdi_EXPORT LayerStackWidget :
 public:
 
   /** \brief Constructor. */
-  LayerStackWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  LayerStackWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~LayerStackWidget();

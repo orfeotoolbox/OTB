@@ -64,8 +64,8 @@ namespace mvd
 
 /*****************************************************************************/
 FilenameDragAndDropEventFilter
-::FilenameDragAndDropEventFilter( QObject* parent  ) :
-  AbstractDragAndDropEventFilter( parent )
+::FilenameDragAndDropEventFilter( QObject* p  ) :
+  AbstractDragAndDropEventFilter( p )
 {
 }
 

@@ -64,8 +64,8 @@ namespace mvd
 
 /*******************************************************************************/
 MyWidget
-::MyWidget( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::MyWidget( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::MyWidget() )
 {
   m_UI->setupUi( this );

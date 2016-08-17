@@ -129,7 +129,7 @@ public:
 // Public methods.
 public:
   /** Constructor */
-  ImageViewRenderer( QObject* parent = NULL );
+  ImageViewRenderer( QObject* p = NULL );
 
   /** Destructor */
   virtual ~ImageViewRenderer();

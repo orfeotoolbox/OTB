@@ -69,8 +69,8 @@ namespace
 
 /*******************************************************************************/
 BackgroundTask
-::BackgroundTask( AbstractWorker* worker, bool autoDestroy, QObject* parent ) :
-  QThread( parent ),
+::BackgroundTask( AbstractWorker* worker, bool autoDestroy, QObject* p ) :
+  QThread( p ),
   m_Worker( worker )
 {
   // Check worker argument.

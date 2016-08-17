@@ -86,7 +86,7 @@ class Monteverdi_EXPORT TreeWidgetItemDragAndDropEventFilter :
 public:
 
   /** \brief Constructor. */
-  TreeWidgetItemDragAndDropEventFilter( QObject* parent =NULL );
+  TreeWidgetItemDragAndDropEventFilter( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~TreeWidgetItemDragAndDropEventFilter();

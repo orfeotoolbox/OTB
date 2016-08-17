@@ -122,8 +122,8 @@ ImageViewRenderer::RenderingContext
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 ImageViewRenderer
-::ImageViewRenderer( QObject* parent ) :
-  AbstractImageViewRenderer( parent ),
+::ImageViewRenderer( QObject* p ) :
+  AbstractImageViewRenderer( p ),
   m_GlView( otb::GlView::New() ),
   m_EffectsEnabled( true )
 #ifdef _WIN32

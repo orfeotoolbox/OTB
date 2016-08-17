@@ -102,8 +102,8 @@ LayerStackItemModel
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 LayerStackItemModel
-::LayerStackItemModel( QObject* parent ) :
-  QAbstractItemModel( parent ),
+::LayerStackItemModel( QObject* p ) :
+  QAbstractItemModel( p ),
   m_StackedLayerModel( NULL )
 {
   // QObject::connect(
@@ -577,7 +577,7 @@ LayerStackItemModel
                 Qt::DropAction action,
                 int row,
                 int column,
-                const QModelIndex & parent )
+                const QModelIndex & p )
 {
   // qDebug()
   //   << this
@@ -587,7 +587,7 @@ LayerStackItemModel
 
   // qDebug() << "QMimeData::formats():" << data->formats();
 
-  return QAbstractItemModel::dropMimeData( data, action, row, column, parent );
+  return QAbstractItemModel::dropMimeData( data, action, row, column, p );
 }
 
 /*****************************************************************************/
@@ -678,7 +678,7 @@ QModelIndex
 LayerStackItemModel
 ::index( int row,
          int column,
-         const QModelIndex & parent ) const
+         const QModelIndex & p ) const
 {
   // qDebug()
   //   << this << "::index(" << row << "," << column << "," << parent << ")";
@@ -710,7 +710,7 @@ LayerStackItemModel
 /*****************************************************************************/
 bool
 LayerStackItemModel
-::insertRows( int row, int count, const QModelIndex & parent )
+::insertRows( int row, int count, const QModelIndex & p )
 {
   assert( !parent.isValid() );
   assert( count==1 );
@@ -718,7 +718,7 @@ LayerStackItemModel
   if( parent.isValid() || count!=1 )
     return false;
 
-  beginInsertRows( parent, row, row + count - 1 );
+  beginInsertRows( p, row, row + count - 1 );
   {
   // StackedLayerModel has already been grown.
 
@@ -791,7 +791,7 @@ LayerStackItemModel
 /*****************************************************************************/
 bool
 LayerStackItemModel
-::removeRows( int row, int count, const QModelIndex & parent )
+::removeRows( int row, int count, const QModelIndex & p )
 {
   assert( !parent.isValid() );
   assert( count==1 );
@@ -799,7 +799,7 @@ LayerStackItemModel
   if( parent.isValid() || count!=1 )
     return false;
 
-  beginRemoveRows( parent, row, row + count - 1 );
+  beginRemoveRows( p, row, row + count - 1 );
   {
   // StackedLayerModel has already been shortened.
 
@@ -813,7 +813,7 @@ LayerStackItemModel
 /*****************************************************************************/
 int
 LayerStackItemModel
-::rowCount( const QModelIndex & parent ) const
+::rowCount( const QModelIndex & p ) const
 {
   // qDebug() << this << "::rowCount(" << parent << ")";
 

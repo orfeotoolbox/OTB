@@ -67,9 +67,9 @@ namespace mvd
 /*******************************************************************************/
 TaskProgressDialog
 ::TaskProgressDialog( BackgroundTask* task,
-		      QWidget* parent,
+		      QWidget* p,
 		      Qt::WindowFlags flags ):
-  QProgressDialog( parent, flags ),
+  QProgressDialog( p, flags ),
   m_BackgroundTask( task ),
   m_Object( NULL ),
   m_Exception()

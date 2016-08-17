@@ -70,8 +70,8 @@ const double ImageViewManipulator::DEFAULT_DELTA = 0.1;
 
 ImageViewManipulator
 ::ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                        QObject* parent ) :
-  AbstractImageViewManipulator( parent ),
+                        QObject* p ) :
+  AbstractImageViewManipulator( p ),
   m_MousePressPosition(),
   m_ViewSettings( viewSettings ),
   m_NativeSpacing(),
@@ -90,8 +90,8 @@ ImageViewManipulator
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
 
 ImageViewManipulator
-::ImageViewManipulator( QObject* parent ) :
-  AbstractImageViewManipulator( parent ),
+::ImageViewManipulator( QObject* p ) :
+  AbstractImageViewManipulator( p ),
   m_MousePressPosition(),
   m_ViewSettings( otb::ViewSettings::New() ),
   m_NativeSpacing(),

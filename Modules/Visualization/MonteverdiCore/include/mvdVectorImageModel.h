@@ -110,7 +110,7 @@ public:
   static const unsigned int DEFAULT_LOD_SIZE;
 
   /** Constructor */
-  VectorImageModel( QObject* parent =NULL );
+  VectorImageModel( QObject* p =NULL );
 
   /** Destructor */
   virtual ~VectorImageModel();

@@ -79,7 +79,7 @@ int count = 0;
 #define BUG_WORKAROUND_MANTIS_947 1
 
 TreeWidgetItem
-::TreeWidgetItem( QTreeWidgetItem* parent,
+::TreeWidgetItem( QTreeWidgetItem* p,
                   const QString& text,
                   const QVariant& id,
                   const QStringList& columns,
@@ -87,7 +87,7 @@ TreeWidgetItem
 #if BUG_WORKAROUND_MANTIS_947
   QTreeWidgetItem( QStringList( text ) << QString() << columns, type )
 #else // BUG_WORKAROUND_MANTIS_947
-  QTreeWidgetItem( parent, QStringList( text ) << QString() << columns, type )
+  QTreeWidgetItem( p, QStringList( text ) << QString() << columns, type )
 #endif // BUG_WORKAROUND_MANTIS_947
 {
   assert( parent!=NULL );

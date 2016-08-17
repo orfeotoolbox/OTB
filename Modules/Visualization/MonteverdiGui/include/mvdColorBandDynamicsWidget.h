@@ -135,7 +135,7 @@ class Monteverdi_EXPORT ColorBandDynamicsWidget :
 public:
 
   /** Constructor */
-  ColorBandDynamicsWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  ColorBandDynamicsWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
   virtual ~ColorBandDynamicsWidget();

@@ -89,7 +89,7 @@ class Monteverdi_EXPORT ApplicationLauncher :
 public:
 
   /** \brief Constructor. */
-  ApplicationLauncher( QObject* parent =NULL );
+  ApplicationLauncher( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~ApplicationLauncher();
@@ -101,14 +101,14 @@ public:
   Wrapper::QtWidgetView *
     NewOtbApplicationWidget( const QString & appName,
                              bool isStandalone =false,
-			     QWidget * parent =NULL,
+			     QWidget * p =NULL,
 			     Qt::WindowFlags =0 ) const;
 
   /**
    */
   QWidget * NewOtbApplicationWindow( const QString & appName,
 				     bool isStandalone =false,
-				     QWidget * parent =NULL,
+				     QWidget * p =NULL,
 				     Qt::WindowFlags =0 ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/

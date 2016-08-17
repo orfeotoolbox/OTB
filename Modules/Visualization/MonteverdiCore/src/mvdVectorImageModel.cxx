@@ -69,8 +69,8 @@ const unsigned int VectorImageModel::DEFAULT_LOD_SIZE = 512;
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 VectorImageModel
-::VectorImageModel( QObject* parent ) :
-  AbstractImageModel( parent ),
+::VectorImageModel( QObject* p ) :
+  AbstractImageModel( p ),
   FilenameInterface(),
   m_Image(),
   m_ImageFileReader(),

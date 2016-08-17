@@ -92,7 +92,7 @@ class Monteverdi_EXPORT ApplicationsToolBox :
 public:
 
   /** \brief Constructor. */
-  ApplicationsToolBox( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  ApplicationsToolBox( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~ApplicationsToolBox();

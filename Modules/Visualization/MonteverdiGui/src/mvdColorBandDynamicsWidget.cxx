@@ -53,8 +53,8 @@ namespace mvd
 
 /*******************************************************************************/
 ColorBandDynamicsWidget
-::ColorBandDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::ColorBandDynamicsWidget( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::ColorBandDynamicsWidget() ),
   m_LowIntensityValidator( NULL ),
   m_HighIntensityValidator( NULL ),

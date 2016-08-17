@@ -68,8 +68,8 @@ namespace mvd
 
 /*******************************************************************************/
 ShaderWidget
-::ShaderWidget( QWidget * parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::ShaderWidget( QWidget * p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::ShaderWidget() )
 {
   m_UI->setupUi( this );

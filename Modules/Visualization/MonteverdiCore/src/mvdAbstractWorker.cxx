@@ -66,8 +66,8 @@ namespace
 
 /*******************************************************************************/
 AbstractWorker
-::AbstractWorker( QObject* parent ) :
-  QObject( parent )
+::AbstractWorker( QObject* p ) :
+  QObject( p )
 {
 }
 

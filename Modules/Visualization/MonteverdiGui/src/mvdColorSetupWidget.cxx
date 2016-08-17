@@ -78,8 +78,8 @@ const char* QCOMBOBOX_NAMES[] = {
 
 /*******************************************************************************/
 ColorSetupWidget
-::ColorSetupWidget( QWidget* parent, Qt::WindowFlags flags ) :
-  QWidget( parent, flags ),
+::ColorSetupWidget( QWidget* p, Qt::WindowFlags flags ) :
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::ColorSetupWidget() )
 {
   m_UI->setupUi( this );

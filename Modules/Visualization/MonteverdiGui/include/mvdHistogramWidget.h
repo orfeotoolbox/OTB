@@ -108,7 +108,7 @@ class Monteverdi_EXPORT HistogramWidget :
 public:
 
   /** \brief Constructor. */
-  HistogramWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  HistogramWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~HistogramWidget();

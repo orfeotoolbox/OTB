@@ -68,8 +68,8 @@ namespace mvd
 
 QuicklookViewManipulator
 ::QuicklookViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                            QObject* parent ) :
-  ImageViewManipulator( viewSettings, parent ),
+                            QObject* p ) :
+  ImageViewManipulator( viewSettings, p ),
   m_RoiOrigin(),
   m_RoiSpacing(),
   m_RoiSize()
@@ -82,8 +82,8 @@ QuicklookViewManipulator
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
 
 QuicklookViewManipulator
-::QuicklookViewManipulator( QObject* parent ) :
-  ImageViewManipulator( parent ),
+::QuicklookViewManipulator( QObject* p ) :
+  ImageViewManipulator( p ),
   m_RoiOrigin(),
   m_RoiSpacing(),
   m_RoiSize()

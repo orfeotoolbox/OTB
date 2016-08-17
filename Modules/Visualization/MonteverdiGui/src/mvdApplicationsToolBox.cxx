@@ -80,8 +80,8 @@ enum ItemType
 
 /*******************************************************************************/
 ApplicationsToolBox
-::ApplicationsToolBox( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::ApplicationsToolBox( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::ApplicationsToolBox() ),
   m_AppTags(),
   m_AppsDocNameToNameMap(),

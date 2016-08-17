@@ -48,8 +48,8 @@ namespace mvd
 
 /*******************************************************************************/
 AboutDialog
-::AboutDialog( QWidget* parent, Qt::WindowFlags flags ) :
-  QDialog( parent, flags ),
+::AboutDialog( QWidget* p, Qt::WindowFlags flags ) :
+  QDialog( p, flags ),
   m_UI( new mvd::Ui::AboutDialog() )
 {
   m_UI->setupUi( this );

@@ -70,7 +70,7 @@ class Monteverdi_EXPORT KeymapDialog :
 public:
 
   /** Constructor */
-  KeymapDialog( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  KeymapDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
   virtual ~KeymapDialog();

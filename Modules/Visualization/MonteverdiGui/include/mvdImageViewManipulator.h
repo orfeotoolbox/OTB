@@ -113,9 +113,9 @@ public:
   /** \brief Constructor. */
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
   ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                        QObject* parent =NULL );
+                        QObject* p =NULL );
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
-  ImageViewManipulator( QObject* parent =NULL );
+  ImageViewManipulator( QObject* p =NULL );
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */

@@ -67,8 +67,8 @@ namespace mvd
 
 /*******************************************************************************/
 LayerStackWidget
-::LayerStackWidget( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::LayerStackWidget( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::LayerStackWidget() )
 {
   m_UI->setupUi( this );

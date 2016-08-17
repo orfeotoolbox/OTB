@@ -114,7 +114,7 @@ public:
 // Public methods.
 public:
   /** Constructor */
-  QuicklookViewRenderer( QObject* parent = NULL );
+  QuicklookViewRenderer( QObject* p = NULL );
 
   /** Destructor */
   virtual ~QuicklookViewRenderer();

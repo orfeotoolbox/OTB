@@ -162,7 +162,7 @@ signals:
 protected:
 
   /** \brief Constructor. */
-  AbstractWorker( QObject* parent =NULL );
+  AbstractWorker( QObject* p =NULL );
 
 //
 // Protected attributes.

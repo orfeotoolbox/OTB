@@ -56,8 +56,8 @@ namespace mvd
 
 /*****************************************************************************/
 ColorDynamicsController
-::ColorDynamicsController( ColorDynamicsWidget* widget, QObject* parent ) :
-  AbstractModelController( widget, parent )
+::ColorDynamicsController( ColorDynamicsWidget* widget, QObject* p ) :
+  AbstractModelController( widget, p )
 {
 }
 

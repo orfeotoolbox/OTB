@@ -117,7 +117,7 @@ public:
 public:
 
   /** \brief Constructor. */
-  TreeWidget( QWidget* parent =NULL );
+  TreeWidget( QWidget* p =NULL );
 
   /** \brief Destructor. */
   virtual ~TreeWidget();

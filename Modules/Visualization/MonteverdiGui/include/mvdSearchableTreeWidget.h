@@ -95,7 +95,7 @@ public:
 public:
 
   /** \brief Constructor. */
-  SearchableTreeWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  SearchableTreeWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~SearchableTreeWidget();
