@@ -90,7 +90,7 @@ TreeWidgetItem
   QTreeWidgetItem( p, QStringList( text ) << QString() << columns, type )
 #endif // BUG_WORKAROUND_MANTIS_947
 {
-  assert( parent!=NULL );
+  assert( p!=NULL );
   // parent->addChild( this );
 
   SetId( id );
@@ -108,7 +108,7 @@ TreeWidgetItem
         Qt::ItemIsEnabled
       );
 #if BUG_WORKAROUND_MANTIS_947
-      parent->insertChild( 0, this );
+      p->insertChild( 0, this );
 #endif // BUG_WORKAROUND_MANTIS_947
     break;
 
@@ -123,7 +123,7 @@ TreeWidgetItem
         Qt::ItemIsSelectable
       );
 #if BUG_WORKAROUND_MANTIS_947
-      parent->addChild( this );
+      p->addChild( this );
 #endif // BUG_WORKAROUND_MANTIS_947
       break;
 

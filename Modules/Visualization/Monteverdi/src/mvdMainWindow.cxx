@@ -114,8 +114,8 @@ namespace mvd
 
 /*****************************************************************************/
 MainWindow
-::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
-  I18nMainWindow( parent, flags ),
+::MainWindow( QWidget* p, Qt::WindowFlags flags ) :
+  I18nMainWindow( p, flags ),
   m_UI( new mvd::Ui::MainWindow() ),
   m_ColorDynamicsDock( NULL ),
   m_ColorSetupDock( NULL ),

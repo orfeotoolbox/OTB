@@ -693,7 +693,7 @@ LayerStackItemModel
 #if 1
   AbstractLayerModel * layer = m_StackedLayerModel->At( row );
 
-  if( layer==NULL || parent.isValid() )
+  if( layer==NULL || p.isValid() )
     return QModelIndex();
 #endif
 
@@ -701,7 +701,7 @@ LayerStackItemModel
     createIndex(
       row,
       column,
-      parent.isValid()
+      p.isValid()
       ? NULL
       : m_StackedLayerModel->At( row )
     );
@@ -712,10 +712,10 @@ bool
 LayerStackItemModel
 ::insertRows( int row, int count, const QModelIndex & p )
 {
-  assert( !parent.isValid() );
+  assert( !p.isValid() );
   assert( count==1 );
 
-  if( parent.isValid() || count!=1 )
+  if( p.isValid() || count!=1 )
     return false;
 
   beginInsertRows( p, row, row + count - 1 );
@@ -793,10 +793,10 @@ bool
 LayerStackItemModel
 ::removeRows( int row, int count, const QModelIndex & p )
 {
-  assert( !parent.isValid() );
+  assert( !p.isValid() );
   assert( count==1 );
 
-  if( parent.isValid() || count!=1 )
+  if( p.isValid() || count!=1 )
     return false;
 
   beginRemoveRows( p, row, row + count - 1 );
@@ -815,16 +815,16 @@ int
 LayerStackItemModel
 ::rowCount( const QModelIndex & p ) const
 {
-  // qDebug() << this << "::rowCount(" << parent << ")";
+  // qDebug() << this << "::rowCount(" << p << ")";
 
   // qDebug() << "row-count:" <<
-  //   ( ( m_StackedLayerModel==NULL || parent.isValid() )
+  //   ( ( m_StackedLayerModel==NULL || p.isValid() )
   //     ? 0
   //     : m_StackedLayerModel->GetCount()
   //   );
 
   return
-    ( m_StackedLayerModel==NULL || parent.isValid() )
+    ( m_StackedLayerModel==NULL || p.isValid() )
     ? 0
     : m_StackedLayerModel->GetCount();
 }

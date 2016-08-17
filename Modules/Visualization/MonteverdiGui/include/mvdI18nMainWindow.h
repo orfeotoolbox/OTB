@@ -492,7 +492,7 @@ I18nMainWindow
 {
   QString path(
     QFileDialog::getExistingDirectory(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       options
@@ -518,7 +518,7 @@ I18nMainWindow
 {
   QString filename(
     QFileDialog::getOpenFileName(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       filter,
@@ -546,7 +546,7 @@ I18nMainWindow
 {
   QStringList filenames(
     QFileDialog::getOpenFileNames(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       filter,
@@ -576,7 +576,7 @@ I18nMainWindow
 {
   QString filename(
     QFileDialog::getSaveFileName(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       filter,

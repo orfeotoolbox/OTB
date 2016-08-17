@@ -116,7 +116,7 @@ public:
 // Public methods.
 public:
   /** \brief Constructor. */
-  MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
+  MainWindow( QWidget* p =0, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~MainWindow();

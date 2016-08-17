@@ -100,8 +100,8 @@ IsPathModified( I18nCoreApplication::SettingsKey enabledKey,
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 PreferencesDialog
-::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
-  QDialog( parent, flags ),
+::PreferencesDialog( QWidget* p, Qt::WindowFlags flags ) :
+  QDialog( p, flags ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
   m_ResultsDirModified( false ),
   m_GeoidFileModified( false ),

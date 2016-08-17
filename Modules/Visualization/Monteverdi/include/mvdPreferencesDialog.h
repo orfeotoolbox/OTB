@@ -85,7 +85,7 @@ class Monteverdi_EXPORT PreferencesDialog :
 public:
 
   /** Constructor */
-  PreferencesDialog( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  PreferencesDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
   virtual ~PreferencesDialog();

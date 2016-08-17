@@ -244,7 +244,7 @@ ApplicationLauncher
     ApplicationLauncher::NewOtbApplicationWidget(
       appName,
       isStandalone,
-      parent,
+      p,
       flags | Qt::Window
     );
 
