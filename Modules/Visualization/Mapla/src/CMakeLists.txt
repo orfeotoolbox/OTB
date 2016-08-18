@@ -45,6 +45,9 @@ qt4_wrap_cpp( OTBMapla_SRC_MOC ${OTBMapla_HEADERS_MOC} )
 qt4_wrap_ui( OTBMapla_FORMS_HEADERS ${OTBMapla_FORMS}  )
 qt4_add_resources( OTBMapla_RESOURCES_RCC ${OTBMapla_RESOURCES} )
 
+#############################################################################
+add_to_qt4_i18n_sources( ${OTBMapla_SRCS} )
+
 ##########################[Mapla library]####################################
 add_library( OTBMapla
   STATIC

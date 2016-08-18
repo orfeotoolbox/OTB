@@ -46,7 +46,7 @@ namespace mvd
 {
 
 /*
-  TRANSLATOR mvd::Application
+  TRANSLATOR mvd::MaplaApplication
 
   Necessary for lupdate to be aware of C++ namespaces.
 

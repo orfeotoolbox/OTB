@@ -28,7 +28,10 @@ qt4_wrap_cpp( OTBMonteverdi_SRC_MOC ${OTBMonteverdi_HEADERS_MOC} )
 qt4_wrap_ui( OTBMonteverdi_FORMS_HEADERS ${OTBMonteverdi_FORMS}  )
 qt4_add_resources( OTBMonteverdi_RESOURCES_RCC ${OTBMonteverdi_RESOURCES} )
 
+#############################################################################
+add_to_qt4_i18n_sources( ${OTBMonteverdi_SRCS} )
 
+#############################################################################
 add_library( OTBMonteverdi
   STATIC
   ${OTBMonteverdi_SRCS}

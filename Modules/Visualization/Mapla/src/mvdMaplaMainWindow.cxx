@@ -59,7 +59,7 @@ namespace mvd
 {
 
 /*
-  TRANSLATOR mvd::MainWindow
+  TRANSLATOR mvd::MaplaMainWindow
 
   Necessary for lupdate to be aware of C++ namespaces.
 
