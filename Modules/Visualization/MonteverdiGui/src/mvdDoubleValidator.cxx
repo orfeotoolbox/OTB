@@ -73,8 +73,8 @@ DoubleValidator
 
 /*******************************************************************************/
 DoubleValidator
-::DoubleValidator( double bottom, double top, int decimals, QObject* p ) :
-  QDoubleValidator( bottom, top, decimals, p )
+::DoubleValidator( double bottomVal, double topVal, int decim, QObject* p ) :
+  QDoubleValidator( bottomVal, topVal, decim, p )
 {
 }
 

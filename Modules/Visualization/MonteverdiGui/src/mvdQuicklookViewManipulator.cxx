@@ -135,17 +135,17 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::MousePressEvent( QMouseEvent* event )
+::MousePressEvent( QMouseEvent* e )
 {
-  ImageViewManipulator::MousePressEvent( event );
+  ImageViewManipulator::MousePressEvent( e );
 
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << ":" << event;
+  // qDebug() << this << ":" << e;
 
 
-  Qt::MouseButtons buttons = event->buttons();
-  Qt::KeyboardModifiers modifiers = event->modifiers();
+  Qt::MouseButtons buttons = e->buttons();
+  Qt::KeyboardModifiers modifiers = e->modifiers();
 
   if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
     {
@@ -167,14 +167,14 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::MouseMoveEvent( QMouseEvent* event)
+::MouseMoveEvent( QMouseEvent* e)
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << ":" << event;
+  // qDebug() << this << ":" << e;
 
-  Qt::MouseButtons buttons = event->buttons();
-  Qt::KeyboardModifiers modifiers = event->modifiers();
+  Qt::MouseButtons buttons = e->buttons();
+  Qt::KeyboardModifiers modifiers = e->modifiers();
 
   if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
     {
@@ -189,7 +189,7 @@ QuicklookViewManipulator
       center[ 1 ]
     );
 
-    m_MousePressPosition = event->pos();
+    m_MousePressPosition = e->pos();
 
     emit CenterRoiRequested( center );
     }
@@ -199,20 +199,20 @@ QuicklookViewManipulator
 /*
 void
 QuicklookViewManipulator
-::MouseReleaseEvent( QMouseEvent* event)
+::MouseReleaseEvent( QMouseEvent* e)
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << ":" << event;
+  // qDebug() << this << ":" << e;
 }
 */
 
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::ResizeEvent( QResizeEvent* event )
+::ResizeEvent( QResizeEvent* e )
 {
-  ImageViewManipulator::ResizeEvent( event );
+  ImageViewManipulator::ResizeEvent( e );
 
   emit ZoomToExtentRequested();
 }
@@ -220,29 +220,29 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::WheelEvent( QWheelEvent * mvdUseInDebug( event ) )
+::WheelEvent( QWheelEvent * mvdUseInDebug( e ) )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 }
 
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::KeyPressEvent( QKeyEvent * mvdUseInDebug( event ) )
+::KeyPressEvent( QKeyEvent * mvdUseInDebug( e ) )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << "::KeyPressEvent(" << event << ")";
+  // qDebug() << this << "::KeyPressEvent(" << e << ")";
 }
 
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::KeyReleaseEvent( QKeyEvent * mvdUseInDebug( event ) )
+::KeyReleaseEvent( QKeyEvent * mvdUseInDebug( e ) )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << "::KeyPressEvent(" << event << ")";
+  // qDebug() << this << "::KeyPressEvent(" << e << ")";
 }
 
 /*****************************************************************************/

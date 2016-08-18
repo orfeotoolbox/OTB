@@ -352,12 +352,12 @@ HistogramWidget
 void
 HistogramWidget
 ::SetData( RgbwChannel channel,
-	   double * const x, double * const y, size_t size,
+	   double * const xVal, double * const yVal, size_t sizeVal,
 	   double xMin, double yMin,
 	   double xMax, double yMax )
 {
-  assert( ( x==NULL && y==NULL && size==0 ) ||
-	  ( x!=NULL && y!=NULL && size!=0 ) );
+  assert( ( xVal==NULL && yVal==NULL && sizeVal==0 ) ||
+	  ( xVal!=NULL && yVal!=NULL && sizeVal!=0 ) );
 
   CountType begin = 0;
   CountType end = 0;
@@ -370,16 +370,16 @@ HistogramWidget
     assert( i<HistogramWidget::CURVE_COUNT );
     assert( m_PlotCurves[ i ]!=NULL );
 
-    m_PlotCurves[ i ]->setData( x, y, size );
+    m_PlotCurves[ i ]->setData( xVal, yVal, sizeVal );
 
-    if( x==NULL && y==NULL )
+    if( xVal==NULL && yVal==NULL )
       m_PlotCurves[ i ]->setVisible( false );
 
     /*
     qDebug()
       << RGBW_CHANNEL_NAMES[ i ]
       << "[" << xMin << "; " << xMax << "]"
-      << "x [" << yMin << "; " << yMax << "]";
+      << "xVal [" << yMin << "; " << yMax << "]";
     */
 
     m_Bounds[ i ].m_XMin = xMin;
@@ -516,7 +516,7 @@ HistogramWidget
 
   for( CountType i=begin; i<end; ++i )
     {
-    bool isVisible =
+    bool isCurveVisible =
       m_IsGrayscaleActivated
       ? i==RGBW_CHANNEL_WHITE
       : ( index==RGBW_CHANNEL_WHITE
@@ -525,9 +525,9 @@ HistogramWidget
 
     assert( i<HistogramWidget::CURVE_COUNT );
 
-    m_PlotCurves[ i ]->setVisible( isVisible );
-    m_LowPlotMarkers[ i ]->setVisible( isVisible );
-    m_HighPlotMarkers[ i ]->setVisible( isVisible );
+    m_PlotCurves[ i ]->setVisible( isCurveVisible );
+    m_LowPlotMarkers[ i ]->setVisible( isCurveVisible );
+    m_HighPlotMarkers[ i ]->setVisible( isCurveVisible );
     }
 }
 

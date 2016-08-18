@@ -178,9 +178,9 @@ TaskProgressDialog
 /*******************************************************************************/
 void
 TaskProgressDialog
-::OnDone( QObject* result )
+::OnDone( QObject* res )
 {
-  m_Object = result;
+  m_Object = res;
 
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
   //

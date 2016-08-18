@@ -89,50 +89,50 @@ DropLineEdit
 /*******************************************************************************/
 void
 DropLineEdit
-::dragEnterEvent( QDragEnterEvent* event )
+::dragEnterEvent( QDragEnterEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   // Accepts all proposed actions: check will be made in
   // dragMoveEvent().
-  event->acceptProposedAction();
+  e->acceptProposedAction();
 }
 
 /*******************************************************************************/
 void 
 DropLineEdit
-::dragMoveEvent( QDragMoveEvent* event )
+::dragMoveEvent( QDragMoveEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   /*
-  if( ( event->mimeData()->hasText() &&
-	QUrl( event->mimeData()->text() ).isLocalFile() ) ||
-      ( event->mimeData()->hasFormat(
+  if( ( e->mimeData()->hasText() &&
+	QUrl( e->mimeData()->text() ).isLocalFile() ) ||
+      ( e->mimeData()->hasFormat(
 	"application/x-qabstractitemmodeldatalist" ) ) )
   */
-  if( event->mimeData()->hasText() ||
-      event->mimeData()->hasFormat(
+  if( e->mimeData()->hasText() ||
+      e->mimeData()->hasFormat(
 	"application/x-qabstractitemmodeldatalist" ) )
     {
-    event->acceptProposedAction();
+    e->acceptProposedAction();
     }
   else
     {
-    event->ignore();
+    e->ignore();
     }
 }
 
 /*******************************************************************************/
 void
 DropLineEdit
-::dropEvent( QDropEvent *event )
+::dropEvent( QDropEvent *e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  if( event->mimeData()->hasText() )
+  if( e->mimeData()->hasText() )
     {
-    QUrl url( event->mimeData()->text() );
+    QUrl url( e->mimeData()->text() );
 
     /*
     if( url.isLocalFile() )
@@ -143,12 +143,12 @@ DropLineEdit
       }
     */
     }
-  else if( event->mimeData()->hasFormat(
+  else if( e->mimeData()->hasFormat(
 	     "application/x-qabstractitemmodeldatalist" ) )
     {
     // TODO: use  simpler mime type
     setText(
-      event->mimeData()->data( "application/x-qabstractitemmodeldatalist" )
+      e->mimeData()->data( "application/x-qabstractitemmodeldatalist" )
     );
     }
 }

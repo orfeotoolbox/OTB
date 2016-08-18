@@ -90,11 +90,11 @@ ImageViewWidget
 ImageViewWidget
 ::ImageViewWidget( AbstractImageViewManipulator * manipulator,
                    AbstractImageViewRenderer * renderer,
-                   QGLContext* context,
+                   QGLContext* glcontext,
                    QWidget* p,
                    const QGLWidget* shareWidget,
                    Qt::WindowFlags flags ) :
-  QGLWidget( context, p, shareWidget, flags ),
+  QGLWidget( glcontext, p, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
 #if USE_XP_REGION_OPTION
@@ -108,11 +108,11 @@ ImageViewWidget
 ImageViewWidget
 ::ImageViewWidget( AbstractImageViewManipulator * manipulator,
                    AbstractImageViewRenderer * renderer,
-                   const QGLFormat& format,
+                   const QGLFormat& glformat,
                    QWidget* p,
                    const QGLWidget* shareWidget,
                    Qt::WindowFlags flags ) :
-  QGLWidget( format, p, shareWidget, flags ),
+  QGLWidget( glformat, p, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
 #if USE_XP_REGION_OPTION
@@ -708,13 +708,13 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::mousePressEvent( QMouseEvent* event )
+::mousePressEvent( QMouseEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  QGLWidget::mousePressEvent( event );
+  QGLWidget::mousePressEvent( e );
 
-  m_Manipulator->MousePressEvent( event );
+  m_Manipulator->MousePressEvent( e );
 
   // Deactivate pixel picking during drag
   m_IsPickingEnabled = false;
@@ -723,15 +723,15 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::mouseMoveEvent( QMouseEvent* event )
+::mouseMoveEvent( QMouseEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   // Superclass default behaviour.
-  QGLWidget::mouseMoveEvent( event );
+  QGLWidget::mouseMoveEvent( e );
 
   // Delegate behaviour.
-  m_Manipulator->MouseMoveEvent( event );
+  m_Manipulator->MouseMoveEvent( e );
 
   //
   // Get layer-stack.
@@ -751,7 +751,7 @@ ImageViewWidget
 
     PointType ptView;
 
-    m_Manipulator->Transform( ptView, event->pos() );
+    m_Manipulator->Transform( ptView, e->pos() );
 
     //
     // Pick pixel of point in viewport space and return point in image
@@ -764,23 +764,23 @@ ImageViewWidget
 
     m_Renderer->Pick( ptView, pixels );
 
-    m_Renderer->UpdatePixelInfo( event->pos(), ptView, pixels );
+    m_Renderer->UpdatePixelInfo( e->pos(), ptView, pixels );
 
-    stackedLayerModel->EndEditPixelInfo( event->pos(), ptView );
+    stackedLayerModel->EndEditPixelInfo( e->pos(), ptView );
 
     //
     // Emit reference-layer pixel data.
-    emit PixelInfoChanged( event->pos(), ptView, stackedLayerModel->PixelInfos() );
+    emit PixelInfoChanged( e->pos(), ptView, stackedLayerModel->PixelInfos() );
 
     if( stackedLayerModel->HasCurrent() )
       emit PhysicalCursorPositionChanged(
-	event->pos(),
+	e->pos(),
 	ptView,
 	pixels[ stackedLayerModel->GetCurrentIndex() ].m_Point,
 	pixels[ stackedLayerModel->GetCurrentIndex() ].m_Pixel );
     else
       emit PhysicalCursorPositionChanged(
-	event->pos(),
+	e->pos(),
 	ptView,
 	PointType(),
 	DefaultImageType::PixelType()
@@ -845,13 +845,13 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::mouseReleaseEvent( QMouseEvent* event )
+::mouseReleaseEvent( QMouseEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  QGLWidget::mouseReleaseEvent( event );
+  QGLWidget::mouseReleaseEvent( e );
 
-  m_Manipulator->MouseReleaseEvent(event);
+  m_Manipulator->MouseReleaseEvent(e);
 
   // Reactivate picking after drag
   m_IsPickingEnabled = m_PickingDefaultStatus;
@@ -860,64 +860,64 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::mouseDoubleClickEvent( QMouseEvent* event )
+::mouseDoubleClickEvent( QMouseEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  QGLWidget::mouseDoubleClickEvent( event );
+  QGLWidget::mouseDoubleClickEvent( e );
 
-  m_Manipulator->MouseDoubleClickEvent( event );
+  m_Manipulator->MouseDoubleClickEvent( e );
 }
 
 /*******************************************************************************/
 void
 ImageViewWidget
-::wheelEvent( QWheelEvent* event )
+::wheelEvent( QWheelEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  QGLWidget::wheelEvent( event );
+  QGLWidget::wheelEvent( e );
 
-  m_Manipulator->WheelEvent(event);
+  m_Manipulator->WheelEvent(e);
 }
 
 /*******************************************************************************/
 void
 ImageViewWidget
-::resizeEvent( QResizeEvent* event )
+::resizeEvent( QResizeEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << "::resizeEvent(" << event << ")";
+  // qDebug() << this << "::resizeEvent(" << e << ")";
 
   // First, call superclass implementation
-  QGLWidget::resizeEvent( event );
+  QGLWidget::resizeEvent( e );
 
-  m_Manipulator->ResizeEvent( event );
+  m_Manipulator->ResizeEvent( e );
 }
 
 /*******************************************************************************/
 void
 ImageViewWidget
-::keyPressEvent( QKeyEvent* event )
+::keyPressEvent( QKeyEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  QGLWidget::keyPressEvent( event );
+  QGLWidget::keyPressEvent( e );
 
-  m_Manipulator->KeyPressEvent( event );
+  m_Manipulator->KeyPressEvent( e );
 }
 
 /*******************************************************************************/
 void
 ImageViewWidget
-::keyReleaseEvent( QKeyEvent* event )
+::keyReleaseEvent( QKeyEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  QGLWidget::keyReleaseEvent( event );
+  QGLWidget::keyReleaseEvent( e );
 
-  m_Manipulator->KeyReleaseEvent( event );
+  m_Manipulator->KeyReleaseEvent( e );
 }
 
 /*******************************************************************************/

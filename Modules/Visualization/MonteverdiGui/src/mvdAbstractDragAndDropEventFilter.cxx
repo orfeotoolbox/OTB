@@ -77,31 +77,31 @@ AbstractDragAndDropEventFilter
 /*****************************************************************************/
 bool
 AbstractDragAndDropEventFilter
-::eventFilter( QObject* object, QEvent* event )
+::eventFilter( QObject* object, QEvent* e )
 {
-  switch( event->type() )
+  switch( e->type() )
     {
     case QEvent::DragEnter:
-      return DragEnterEvent( object, dynamic_cast< QDragEnterEvent* >( event ) );
+      return DragEnterEvent( object, dynamic_cast< QDragEnterEvent* >( e ) );
       break;
 
     case QEvent::DragMove:
-      return DragMoveEvent( object, dynamic_cast< QDragMoveEvent* >( event ) );
+      return DragMoveEvent( object, dynamic_cast< QDragMoveEvent* >( e ) );
       break;
 
     case QEvent::DragLeave:
-      return DragLeaveEvent( object, dynamic_cast< QDragLeaveEvent* >( event ) );
+      return DragLeaveEvent( object, dynamic_cast< QDragLeaveEvent* >( e ) );
       break;
 
     case QEvent::Drop:
-      return DropEvent( object, dynamic_cast< QDropEvent* >( event ) );
+      return DropEvent( object, dynamic_cast< QDropEvent* >( e ) );
       break;
 
     default:
       break;
     }
 
-  return QObject::eventFilter( object, event );
+  return QObject::eventFilter( object, e );
 }
 
 /*****************************************************************************/

@@ -172,28 +172,28 @@ MultiResolutionPyramidWidget
 
 
   {
-  bool signalsBlocked = m_UI->baseSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->baseSpinBox->blockSignals( true );
 
   m_UI->baseSpinBox->setValue( 2 );
 
-  m_UI->baseSpinBox->blockSignals( signalsBlocked );
+  m_UI->baseSpinBox->blockSignals( prevSignalsBlocked );
   }
 
   {
-  bool signalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
 
   m_UI->levelsSpinBox->setValue( 1 );
 
-  m_UI->levelsSpinBox->blockSignals( signalsBlocked );
+  m_UI->levelsSpinBox->blockSignals( prevSignalsBlocked );
   }
 
   {
-  bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
 
   m_UI->sizeSpinBox->setRange( 1, std::numeric_limits< int >::max() );
   m_UI->sizeSpinBox->setValue( 1 );
 
-  m_UI->sizeSpinBox->blockSignals( signalsBlocked );
+  m_UI->sizeSpinBox->blockSignals( prevSignalsBlocked );
   }
 
 
@@ -221,7 +221,7 @@ MultiResolutionPyramidWidget
   );
 
 
-  unsigned int size =
+  unsigned int minSize =
     std::min(
       m_GDALOverviewsBuilder->GetWidth(),
       m_GDALOverviewsBuilder->GetHeight()
@@ -229,27 +229,27 @@ MultiResolutionPyramidWidget
 
 
   {
-  bool signalsBlocked = m_UI->baseSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->baseSpinBox->blockSignals( true );
 
-  m_UI->baseSpinBox->setRange( 2, size );
+  m_UI->baseSpinBox->setRange( 2, minSize );
   m_UI->baseSpinBox->setValue( m_GDALOverviewsBuilder->GetResolutionFactor() );
 
-  m_UI->baseSpinBox->blockSignals( signalsBlocked );
+  m_UI->baseSpinBox->blockSignals( prevSignalsBlocked );
   }
 
   {
-  bool signalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
 
   m_UI->levelsSpinBox->setRange( 0, m_GDALOverviewsBuilder->CountResolutions() );
   m_UI->levelsSpinBox->setValue( m_GDALOverviewsBuilder->GetNbResolutions() );
 
-  m_UI->levelsSpinBox->blockSignals( signalsBlocked );
+  m_UI->levelsSpinBox->blockSignals( prevSignalsBlocked );
   }
 
   {
-  bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
 
-  m_UI->sizeSpinBox->setRange( 1, size );
+  m_UI->sizeSpinBox->setRange( 1, minSize );
 
   assert(m_GDALOverviewsBuilder->CountResolutions() >= m_GDALOverviewsBuilder->GetNbResolutions() );
 
@@ -270,7 +270,7 @@ MultiResolutionPyramidWidget
     )
   );
 
-  m_UI->sizeSpinBox->blockSignals( signalsBlocked );
+  m_UI->sizeSpinBox->blockSignals( prevSignalsBlocked );
   }
 
 
@@ -314,7 +314,7 @@ MultiResolutionPyramidWidget
 {
   assert( !m_GDALOverviewsBuilder.IsNull() );
 
-  bool signalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->sizeSpinBox->blockSignals( true );
 
   unsigned int count = m_GDALOverviewsBuilder->CountResolutions();
 
@@ -338,7 +338,7 @@ MultiResolutionPyramidWidget
     )
   );
 
-  m_UI->sizeSpinBox->blockSignals( signalsBlocked );
+  m_UI->sizeSpinBox->blockSignals( prevSignalsBlocked );
 }
 
 /*****************************************************************************/
@@ -410,12 +410,12 @@ MultiResolutionPyramidWidget
     return;
 
   {
-  bool signalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
+  bool prevSignalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
 
   m_UI->levelsSpinBox->setValue( count );
   m_GDALOverviewsBuilder->SetNbResolutions( count );
 
-  m_UI->levelsSpinBox->blockSignals( signalsBlocked );
+  m_UI->levelsSpinBox->blockSignals( prevSignalsBlocked );
   }
 
   ClearResolutions();

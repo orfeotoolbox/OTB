@@ -73,8 +73,8 @@ namespace mvd
 
 /*******************************************************************************/
 HistogramPlotPicker
-::HistogramPlotPicker( const PlotCurveVector& curves, QwtPlotCanvas* canvas ) :
-  QwtPlotPicker( canvas ),
+::HistogramPlotPicker( const PlotCurveVector& curves, QwtPlotCanvas* can ) :
+  QwtPlotPicker( can ),
   m_PlotCurves( curves ),
   m_RubberBandPens(),
   m_IsGrayscaleActivated( false )
@@ -88,10 +88,10 @@ HistogramPlotPicker
 /*******************************************************************************/
 HistogramPlotPicker
 ::HistogramPlotPicker( const PlotCurveVector& curves,
-		       int xAxis,
-		       int yAxis,
-		       QwtPlotCanvas* canvas ) :
-  QwtPlotPicker( xAxis, yAxis, canvas ),
+		       int xA,
+		       int yA,
+		       QwtPlotCanvas* can ) :
+  QwtPlotPicker( xA, yA, can ),
   m_PlotCurves( curves ),
   m_RubberBandPens(),
   m_IsGrayscaleActivated( false )
@@ -106,17 +106,17 @@ HistogramPlotPicker
 /*******************************************************************************/
 HistogramPlotPicker
 ::HistogramPlotPicker( const PlotCurveVector& curves,
-		       int xAxis,
-		       int yAxis,
-		       DisplayMode trackerMode,
-		       QwtPlotCanvas* canvas ) :
+		       int xA,
+		       int yA,
+		       DisplayMode tracker,
+		       QwtPlotCanvas* can ) :
   QwtPlotPicker(
-    xAxis,
-    yAxis,
+    xA,
+    yA,
     QwtPicker::PointSelection,
     QwtPicker::UserRubberBand,
-    trackerMode,
-    canvas ),
+    tracker,
+    can ),
   m_PlotCurves( curves ),
   m_RubberBandPens(),
   m_IsGrayscaleActivated( false )
@@ -135,13 +135,13 @@ void
 HistogramPlotPicker
 ::SetRubberBandPen( RgbwChannel channel, const QPen& pen )
 {
-  CountType begin = 0;
-  CountType end = 0;
+  CountType start = 0;
+  CountType stop = 0;
 
-  if( !RgbwBounds( begin, end, channel ) )
+  if( !RgbwBounds( start, stop, channel ) )
     return;
 
-  for( CountType i=begin; i<end; ++i )
+  for( CountType i=start; i<stop; ++i )
     {
     m_RubberBandPens[ i ] = pen;
     }
@@ -188,15 +188,15 @@ HistogramPlotPicker
       pos.x(), rect.top()
     );
 
-    CountType begin = 0;
-    CountType end = 0;
+    CountType start = 0;
+    CountType stop = 0;
 
-    if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+    if( !RgbwBounds( start, stop, RGBW_CHANNEL_ALL ) )
       return;
 
     QwtDoublePoint p( invTransform( pos ) );
 
-    for( CountType i=begin; i<end; ++i )
+    for( CountType i=start; i<stop; ++i )
       if( m_PlotCurves[ i ]->isVisible() )
 	{
 	// RgbwChannel channel = static_cast< RgbwChannel >( i );
@@ -239,11 +239,11 @@ HistogramPlotPicker
   QString text;
   text.sprintf( "%.4f", point.x() );
 
-  CountType begin = 0;
-  CountType end = 0;
+  CountType start = 0;
+  CountType stop = 0;
 
-  if( RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
-    for( CountType i=begin; i<end; ++i )
+  if( RgbwBounds( start, stop, RGBW_CHANNEL_ALL ) )
+    for( CountType i=start; i<stop; ++i )
       if( m_PlotCurves[ i ]->isVisible() )
 	{
 	double c0 = 0.0;

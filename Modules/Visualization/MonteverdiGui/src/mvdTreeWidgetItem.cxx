@@ -80,14 +80,14 @@ int count = 0;
 
 TreeWidgetItem
 ::TreeWidgetItem( QTreeWidgetItem* p,
-                  const QString& text,
+                  const QString& txt,
                   const QVariant& id,
                   const QStringList& columns,
-                  TreeWidgetItem::ItemType type ) :
+                  TreeWidgetItem::ItemType itemType ) :
 #if BUG_WORKAROUND_MANTIS_947
-  QTreeWidgetItem( QStringList( text ) << QString() << columns, type )
+  QTreeWidgetItem( QStringList( txt ) << QString() << columns, itemType )
 #else // BUG_WORKAROUND_MANTIS_947
-  QTreeWidgetItem( p, QStringList( text ) << QString() << columns, type )
+  QTreeWidgetItem( p, QStringList( txt ) << QString() << columns, itemType )
 #endif // BUG_WORKAROUND_MANTIS_947
 {
   assert( p!=NULL );
@@ -95,7 +95,7 @@ TreeWidgetItem
 
   SetId( id );
 
-  switch( type )
+  switch( itemType )
     {
     case TreeWidgetItem::ITEM_TYPE_NODE:
       setChildIndicatorPolicy(

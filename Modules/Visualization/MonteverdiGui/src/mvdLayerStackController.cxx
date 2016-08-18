@@ -480,11 +480,11 @@ LayerStackController
 
   assert( widget->GetItemModel()!=NULL );
 
-  bool signalsBlocked = widget->blockSignals( true );
+  bool prevSignalsBlocked = widget->blockSignals( true );
   {
   widget->SetCurrent( index );
   }
-  widget->blockSignals( signalsBlocked );
+  widget->blockSignals( prevSignalsBlocked );
 }
 
 /*******************************************************************************/

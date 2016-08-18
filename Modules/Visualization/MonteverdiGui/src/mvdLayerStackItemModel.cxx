@@ -383,19 +383,19 @@ LayerStackItemModel
 /*****************************************************************************/
 QVariant
 LayerStackItemModel
-::data( const QModelIndex & index, int role ) const
+::data( const QModelIndex & idx, int role ) const
 {
-  // qDebug() << this << "::data(" << index << "," << role << ")";
+  // qDebug() << this << "::data(" << idx << "," << role << ")";
 
   // Get layer.
   assert( m_StackedLayerModel!=NULL );
 
-  assert( index.isValid() );
-  assert( !index.parent().isValid() );
-  assert( index.internalPointer()!=NULL );
+  assert( idx.isValid() );
+  assert( !idx.parent().isValid() );
+  assert( idx.internalPointer()!=NULL );
 
   const AbstractLayerModel * layer =
-    static_cast< const AbstractLayerModel * >( index.internalPointer() );
+    static_cast< const AbstractLayerModel * >( idx.internalPointer() );
 
   assert( layer!=NULL );
 
@@ -403,7 +403,7 @@ LayerStackItemModel
   switch( role )
     {
     case Qt::CheckStateRole:
-      if( index.column()!=COLUMN_NAME )
+      if( idx.column()!=COLUMN_NAME )
         return QVariant();
       else
         {
@@ -422,7 +422,7 @@ LayerStackItemModel
       break;
 
     case Qt::DisplayRole:
-      switch( index.column() )
+      switch( idx.column() )
         {
         case COLUMN_PROJ:
 	  return FromStdString( layer->GetAuthorityCode( true ) );
@@ -432,13 +432,13 @@ LayerStackItemModel
 	{
 	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
 
-	assert( index.row()>=0 );
+	assert( idx.row()>=0 );
 
-	if( index.row()>=0 &&
-	    static_cast< size_t >( index.row() )<pixels.size() &&
-	    pixels[ index.row() ].m_HasResolution )
+	if( idx.row()>=0 &&
+	    static_cast< size_t >( idx.row() )<pixels.size() &&
+	    pixels[ idx.row() ].m_HasResolution )
 	  return
-	    static_cast< qlonglong >( pixels[ index.row() ].m_Resolution );
+	    static_cast< qlonglong >( pixels[ idx.row() ].m_Resolution );
 	else
 	  return QVariant();
 	}
@@ -483,13 +483,13 @@ LayerStackItemModel
 	{
 	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
 
-	assert( index.row()>=0 );
+	assert( idx.row()>=0 );
 
-	if( index.row()>=0 &&
-	    static_cast< size_t >( index.row() )<pixels.size() &&
-	    pixels[ index.row() ].m_HasIndex )
+	if( idx.row()>=0 &&
+	    static_cast< size_t >( idx.row() )<pixels.size() &&
+	    pixels[ idx.row() ].m_HasIndex )
 	  return
-	    static_cast< qlonglong >( pixels[ index.row() ].m_Index[ index.column() - COLUMN_I ] );
+	    static_cast< qlonglong >( pixels[ idx.row() ].m_Index[ idx.column() - COLUMN_I ] );
 	else
 	  return QVariant();
 	}
@@ -501,13 +501,13 @@ LayerStackItemModel
 	{
 	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
 
-	assert( index.row()>=0 );
+	assert( idx.row()>=0 );
 
-	if( index.row()>=0 &&
-	    static_cast< size_t >( index.row() )<pixels.size() &&
-	    pixels[ index.row() ].m_HasPixel )
+	if( idx.row()>=0 &&
+	    static_cast< size_t >( idx.row() )<pixels.size() &&
+	    pixels[ idx.row() ].m_HasPixel )
 	  return
-	    pixels[ index.row() ].m_Pixel[ index.column() - COLUMN_R ];
+	    pixels[ idx.row() ].m_Pixel[ idx.column() - COLUMN_R ];
 	}
 	break;
 
@@ -516,13 +516,13 @@ LayerStackItemModel
 	{
 	const PixelInfo::Vector & pixels = m_StackedLayerModel->PixelInfos();
 
-	assert( index.row()>=0 );
+	assert( idx.row()>=0 );
 
-	if( index.row()>=0 &&
-	    static_cast< size_t >( index.row() )<pixels.size() &&
-	    pixels[ index.row() ].m_HasPoint )
+	if( idx.row()>=0 &&
+	    static_cast< size_t >( idx.row() )<pixels.size() &&
+	    pixels[ idx.row() ].m_HasPoint )
 	  return
-	    pixels[ index.row() ].m_Point[ index.column() - COLUMN_X ];
+	    pixels[ idx.row() ].m_Point[ idx.column() - COLUMN_X ];
 	}
 	  break;
 
@@ -532,9 +532,9 @@ LayerStackItemModel
       break;
     
     case Qt::FontRole:
-      assert( index.row()>=0 );
+      assert( idx.row()>=0 );
 
-      if( static_cast< StackedLayerModel::SizeType >( index.row() )==
+      if( static_cast< StackedLayerModel::SizeType >( idx.row() )==
 	  m_StackedLayerModel->GetReferenceIndex() )
 	{
 	QFont font;
@@ -546,7 +546,7 @@ LayerStackItemModel
       break;
 
     case Qt::ToolTipRole:
-      switch( index.column() )
+      switch( idx.column() )
 	{
 	case COLUMN_NAME:
 	  if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
@@ -573,7 +573,7 @@ LayerStackItemModel
 /*****************************************************************************/
 bool
 LayerStackItemModel
-::dropMimeData( const QMimeData * data,
+::dropMimeData( const QMimeData * dat,
                 Qt::DropAction action,
                 int row,
                 int column,
@@ -582,43 +582,43 @@ LayerStackItemModel
   // qDebug()
   //   << this
   //   << "::dropMimeData("
-  //   << data << "," << action << "," << row << "," << column << "," << parent
+  //   << dat << "," << action << "," << row << "," << column << "," << parent
   //   << ")";
 
-  // qDebug() << "QMimeData::formats():" << data->formats();
+  // qDebug() << "QMimeData::formats():" << dat->formats();
 
-  return QAbstractItemModel::dropMimeData( data, action, row, column, p );
+  return QAbstractItemModel::dropMimeData( dat, action, row, column, p );
 }
 
 /*****************************************************************************/
 Qt::ItemFlags
 LayerStackItemModel
-::flags( const QModelIndex & index ) const
+::flags( const QModelIndex & idx ) const
 {
-  if( !index.isValid() )
-    return QAbstractItemModel::flags( index );
+  if( !idx.isValid() )
+    return QAbstractItemModel::flags( idx );
 
-  Qt::ItemFlags flags =
-    QAbstractItemModel::flags( index )
+  Qt::ItemFlags iflags =
+    QAbstractItemModel::flags( idx )
     // | Qt::ItemIsDragEnabled
     // | Qt::ItemIsDropEnabled
     ;
 
-  if( index.column()==COLUMN_NAME )
-    flags |=
+  if( idx.column()==COLUMN_NAME )
+    iflags |=
         Qt::ItemIsUserCheckable
       | Qt::ItemIsEditable
       | Qt::ItemIsDragEnabled;
 
-  return flags;
+  return iflags;
 }
 
 /*****************************************************************************/
 bool
 LayerStackItemModel
-::hasChildren( const QModelIndex & index ) const
+::hasChildren( const QModelIndex & idx ) const
 {
-  return !index.isValid();
+  return !idx.isValid();
 }
 
 /*****************************************************************************/
@@ -736,20 +736,20 @@ QMimeData *
 LayerStackItemModel
 ::mimeData( const QModelIndexList & indexes ) const
 {
-  QMimeData * mimeData = QAbstractItemModel::mimeData( indexes );
-  assert( mimeData!=NULL );
+  QMimeData * mData = QAbstractItemModel::mimeData( indexes );
+  assert( mData!=NULL );
 
   typedef QList< QUrl > UrlList;
 
   UrlList urls;
 
-  foreach( const QModelIndex & index, indexes )
-    if( index.isValid() )
+  foreach( const QModelIndex & idx, indexes )
+    if( idx.isValid() )
       {
-      assert( index.internalPointer()!=NULL );
+      assert( idx.internalPointer()!=NULL );
 
       AbstractLayerModel * layer =
-	static_cast< AbstractLayerModel * >( index.internalPointer() );
+	static_cast< AbstractLayerModel * >( idx.internalPointer() );
 
       FilenameInterface * interface =
 	dynamic_cast< FilenameInterface * >( layer );
@@ -757,11 +757,11 @@ LayerStackItemModel
       urls << QUrl::fromLocalFile( interface->GetFilename() );
       }
 
-  mimeData->setUrls( urls );
+  mData->setUrls( urls );
 
-  // qDebug() << this << "mime-data:" << mimeData;
+  // qDebug() << this << "mime-data:" << mData;
 
-  return mimeData;
+  return mData;
 }
 
 /*****************************************************************************/
@@ -769,13 +769,13 @@ QStringList
 LayerStackItemModel
 ::mimeTypes() const
 {
-  QStringList mimeTypes( QAbstractItemModel::mimeTypes() );
+  QStringList mTypes( QAbstractItemModel::mimeTypes() );
 
-  mimeTypes << "text/uri-list";
+  mTypes << "text/uri-list";
 
-  // qDebug() << this << "mime-types:" << mimeTypes;
+  // qDebug() << this << "mime-types:" << mTypes;
 
-  return mimeTypes;
+  return mTypes;
 }
 
 /*****************************************************************************/
@@ -832,24 +832,24 @@ LayerStackItemModel
 /*****************************************************************************/
 bool
 LayerStackItemModel
-::setData( const QModelIndex & index,
+::setData( const QModelIndex & idx,
            const QVariant & value,
            int role )
 {
   // qDebug()
-  //   << this << "::setData(" << index << "," << value << "," << role << ")";
+  //   << this << "::setData(" << idx << "," << value << "," << role << ")";
 
-  if( index.column()==COLUMN_NAME && role==Qt::CheckStateRole )
+  if( idx.column()==COLUMN_NAME && role==Qt::CheckStateRole )
     {
-    // qDebug() << index.row() << "check-state:" << value;
+    // qDebug() << idx.row() << "check-state:" << value;
 
-    assert( !index.parent().isValid() );
-    assert( index.internalPointer()!=NULL );
+    assert( !idx.parent().isValid() );
+    assert( idx.internalPointer()!=NULL );
 
-    assert( index.internalPointer()!=NULL );
+    assert( idx.internalPointer()!=NULL );
 
     AbstractLayerModel * layer =
-      static_cast< AbstractLayerModel * >( index.internalPointer() );
+      static_cast< AbstractLayerModel * >( idx.internalPointer() );
 
     assert( layer!=NULL );
     assert( layer==dynamic_cast< VisibleInterface * >( layer ) );
@@ -872,7 +872,7 @@ LayerStackItemModel
         break;
       }
 
-    emit dataChanged( index, index );
+    emit dataChanged( idx, idx );
 
     return true;
     }
@@ -948,19 +948,19 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnLayerAboutToBeDeleted( size_t index )
+::OnLayerAboutToBeDeleted( size_t idx )
 {
   assert( m_StackedLayerModel!=NULL );
 
-  Disconnect( m_StackedLayerModel->At( index ) );
+  Disconnect( m_StackedLayerModel->At( idx ) );
 }
 
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnLayerAdded( size_t index )
+::OnLayerAdded( size_t idx )
 {
-  if( !insertRow( index ) )
+  if( !insertRow( idx ) )
     {
     assert( false && "QAbstractItemModel::insertRow() failed!" );
     return;
@@ -968,19 +968,19 @@ LayerStackItemModel
 
   assert( m_StackedLayerModel!=NULL );
 
-  Connect( m_StackedLayerModel->At( index ) );
+  Connect( m_StackedLayerModel->At( idx ) );
 }
 
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnLayerDeleted( size_t index )
+::OnLayerDeleted( size_t idx )
 {
 #ifdef _DEBUG
   bool isRowRemoved =
 #endif
 
-  removeRow( index );
+  removeRow( idx );
 
 #ifdef _DEBUG
   assert( isRowRemoved && "QAbstractItemModel::removeRow() failed!" );
@@ -997,7 +997,7 @@ LayerStackItemModel
   assert( m_StackedLayerModel!=NULL );
   assert( m_StackedLayerModel->IndexOf( layer )!=StackedLayerModel::NIL_INDEX );
 
-  QModelIndex index(
+  QModelIndex idx(
     createIndex(
       m_StackedLayerModel->IndexOf( layer ),
       COLUMN_NAME,
@@ -1005,7 +1005,7 @@ LayerStackItemModel
     )
   );
 
-  emit dataChanged( index, index );
+  emit dataChanged( idx, idx );
 }
 
 /*****************************************************************************/
@@ -1041,9 +1041,9 @@ LayerStackItemModel
 /*****************************************************************************/
 void
 LayerStackItemModel
-::OnReferenceChanged( size_t index )
+::OnReferenceChanged( size_t idx )
 {
-  // qDebug() << this << "::OnReferenceChanged(" << index << ")";
+  // qDebug() << this << "::OnReferenceChanged(" << idx << ")";
 
   assert( m_StackedLayerModel!=NULL );
 
@@ -1052,8 +1052,8 @@ LayerStackItemModel
   assert( LayerStackItemModel::COLUMN_COUNT>0 );
 
   emit dataChanged(
-    createIndex( index, 0, layer ),
-    createIndex( index, LayerStackItemModel::COLUMN_COUNT - 1, layer )
+    createIndex( idx, 0, layer ),
+    createIndex( idx, LayerStackItemModel::COLUMN_COUNT - 1, layer )
   );
 }
 

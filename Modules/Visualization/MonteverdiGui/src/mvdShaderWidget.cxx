@@ -94,18 +94,18 @@ ShaderWidget
 /*****************************************************************************/
 void
 ShaderWidget
-::SetGLSLEnabled( bool isEnabled )
+::SetGLSLEnabled( bool isGLSLEnabled )
 {
-  setEnabled( isEnabled );
+  setEnabled( isGLSLEnabled );
 
-  if( !isEnabled )
+  if( !isGLSLEnabled )
     {
     typedef QList< QWidget * > WidgetList;
 
-    WidgetList children( findChildren< QWidget * >() );
+    WidgetList childrenList( findChildren< QWidget * >() );
 
-    for( WidgetList::iterator it( children.begin() );
-	 it!=children.end();
+    for( WidgetList::iterator it( childrenList.begin() );
+	 it!=childrenList.end();
 	 ++ it )
       ( *it )->setToolTip(
 	tr( "Rendering effects have been disabled because OpenGL Shading Language minimal requirements have not been met while running on this system." )
@@ -116,7 +116,7 @@ ShaderWidget
 /*******************************************************************************/
 void
 ShaderWidget
-::SetGLSL140Enabled( bool isEnabled )
+::SetGLSL140Enabled( bool isGLSLEnabled )
 {
   assert( qApp!=NULL );
 
@@ -125,7 +125,7 @@ ShaderWidget
       qApp->translate( "mvd", EFFECT_NAMES[ EFFECT_GRADIENT ] )
     );
 
-  if( isEnabled )
+  if( isGLSLEnabled )
     {
     if( index<0 )
       m_UI->effectComboBox->addItem( tr( "mvd", EFFECT_NAMES[ EFFECT_GRADIENT ] ) );
@@ -212,9 +212,9 @@ ShaderWidget
 
       m_UI->sizeSpinBox->setValue( settings->GetSize() );
 
-      char const * const text = settings->GetValueName();
+      char const * const textName = settings->GetValueName();
 
-      if( text==NULL )
+      if( textName==NULL )
 	{
 	m_UI->valueLabel->setVisible( false );
 	m_UI->valueLabel->setText( QString() );
@@ -222,10 +222,10 @@ ShaderWidget
       else
 	{
 	m_UI->valueLabel->setVisible( true );
-	m_UI->valueLabel->setText( QString( text ).append( ":" ) );
+	m_UI->valueLabel->setText( QString( textName ).append( ":" ) );
 	}
 
-      m_UI->valueLineEdit->setVisible( text!=NULL );
+      m_UI->valueLineEdit->setVisible( textName!=NULL );
       m_UI->valueLineEdit->setText(
 	settings->HasValue()
 	? ToQString( settings->GetValue() )
