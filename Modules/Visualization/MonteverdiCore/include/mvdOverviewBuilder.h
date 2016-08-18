@@ -100,7 +100,7 @@ public:
    * \brief Constructor.
    */
   OverviewBuilder( const GDALOverviewsBuilderVector & builders,
-		   QObject * parent =NULL );
+		   QObject * p =NULL );
 
   /**
    * \brief Destructor.

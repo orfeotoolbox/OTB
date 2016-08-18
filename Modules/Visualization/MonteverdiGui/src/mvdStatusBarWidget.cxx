@@ -63,8 +63,8 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 StatusBarWidget
-::StatusBarWidget( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::StatusBarWidget( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::StatusBarWidget() )
 {
   m_UI->setupUi( this );

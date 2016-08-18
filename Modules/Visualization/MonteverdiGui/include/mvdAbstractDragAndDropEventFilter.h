@@ -115,7 +115,7 @@ signals:
 protected:
 
   /** \brief Constructor. */
-  AbstractDragAndDropEventFilter( QObject* parent =NULL );
+  AbstractDragAndDropEventFilter( QObject* p =NULL );
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent

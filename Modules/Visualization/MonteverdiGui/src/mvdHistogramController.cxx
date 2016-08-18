@@ -56,8 +56,8 @@ namespace mvd
 
 /*******************************************************************************/
 HistogramController
-::HistogramController( HistogramWidget* widget, QObject* parent ) :
-  AbstractModelController( widget, parent )
+::HistogramController( HistogramWidget* widget, QObject* p ) :
+  AbstractModelController( widget, p )
 {
 }
 

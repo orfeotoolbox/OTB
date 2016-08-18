@@ -66,8 +66,8 @@ namespace mvd
 
 /*******************************************************************************/
 ApplicationsBrowser
-::ApplicationsBrowser( QObject* parent ) :
-  QObject( parent ),
+::ApplicationsBrowser( QObject* p ) :
+  QObject( p ),
   m_AutoLoadPath("")
 {
 }

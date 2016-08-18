@@ -113,8 +113,8 @@ GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 AbstractLayerModel
-::AbstractLayerModel( QObject* parent ) :
-  AbstractModel( parent ),
+::AbstractLayerModel( QObject* p ) :
+  AbstractModel( p ),
   VisibleInterface()
 {
 }

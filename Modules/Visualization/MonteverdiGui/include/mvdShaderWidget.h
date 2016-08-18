@@ -93,7 +93,7 @@ class Monteverdi_EXPORT ShaderWidget :
 public:
 
   /** \brief Constructor. */
-  ShaderWidget( QWidget * parent =NULL,
+  ShaderWidget( QWidget * p =NULL,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */

@@ -78,8 +78,8 @@ StackedLayerModel::NIL_INDEX = -1;
 
 /*******************************************************************************/
 StackedLayerModel
-::StackedLayerModel( QObject* parent ) :
-  AbstractModel( parent ),
+::StackedLayerModel( QObject* p ) :
+  AbstractModel( p ),
   m_LayerModels(),
   m_Keys(),
   m_Current( StackedLayerModel::NIL_INDEX ),

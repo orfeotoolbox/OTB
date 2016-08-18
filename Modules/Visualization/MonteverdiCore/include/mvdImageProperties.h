@@ -103,7 +103,7 @@ public:
 
   /** \brief Constructor. */
 #if IMAGE_PROPERTIES_IS_QOBJECT
-  ImageProperties( QObject* parent =NULL );
+  ImageProperties( QObject* p =NULL );
 #else
   ImageProperties();
 #endif

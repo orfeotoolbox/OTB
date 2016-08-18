@@ -281,8 +281,8 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
 
 /*******************************************************************************/
 TreeWidget
-::TreeWidget( QWidget* parent  ):
-  QTreeWidget( parent )
+::TreeWidget( QWidget* p  ):
+  QTreeWidget( p )
 {
   setSelectionBehavior( QAbstractItemView::SelectRows );
 
@@ -316,25 +316,25 @@ TreeWidget
 {
   // qDebug() << this << "::mimeTypes()";
 
-  QStringList mimeTypes( QTreeWidget::mimeTypes() );
+  QStringList mTypes( QTreeWidget::mimeTypes() );
 
 #if USE_CUSTOM_MIME_DATA
 
-  mimeTypes << TreeWidget::ITEM_MIME_TYPE;
+  mTypes << TreeWidget::ITEM_MIME_TYPE;
 
 #endif // USE_CUSTOM_MIME_DATA
 
-  return mimeTypes;
+  return mTypes;
 }
 
 /*******************************************************************************/
 QMimeData*
 TreeWidget
-::mimeData( const QList< QTreeWidgetItem* > items ) const
+::mimeData( const QList< QTreeWidgetItem* > itemList ) const
 {
-  // qDebug() << this << "::mimeData(" << items << ")";
+  // qDebug() << this << "::mimeData(" << itemList << ")";
 
-  return EncodeMimeData( QTreeWidget::mimeData( items ), items );
+  return EncodeMimeData( QTreeWidget::mimeData( itemList ), itemList );
 }
 
 /*******************************************************************************/
@@ -344,11 +344,11 @@ TreeWidget
 {
   // This method is overloaded only to spy/debug Qt behavior.
 
-  Qt::DropActions actions = QTreeWidget::supportedDropActions();
+  Qt::DropActions supportedActions = QTreeWidget::supportedDropActions();
 
-  qDebug() << this << "::supportedDropActions():" << actions;
+  qDebug() << this << "::supportedDropActions():" << supportedActions;
 
-  return actions;
+  return supportedActions;
 }
 
 /*******************************************************************************/
@@ -366,101 +366,101 @@ TreeWidget
 /*******************************************************************************/
 void
 TreeWidget
-::dragEnterEvent( QDragEnterEvent* event )
+::dragEnterEvent( QDragEnterEvent* e )
 {
-  qDebug() << this << "::dragEnterEvent(" << event << ")";
+  qDebug() << this << "::dragEnterEvent(" << e << ")";
 
-  // event->acceptProposedAction();
+  // e->acceptProposedAction();
 
-  QTreeWidget::dragEnterEvent( event );
+  QTreeWidget::dragEnterEvent( e );
 }
 
 /*******************************************************************************/
 void 
 TreeWidget
-::dragMoveEvent( QDragMoveEvent* event )
+::dragMoveEvent( QDragMoveEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  qDebug() << this << "::dragMoveEvent(" << event << ")";
-  qDebug() << this << itemAt( event->pos() );
+  qDebug() << this << "::dragMoveEvent(" << e << ")";
+  qDebug() << this << itemAt( e->pos() );
 
-  QTreeWidget::dragMoveEvent( event );
+  QTreeWidget::dragMoveEvent( e );
 
-  QTreeWidgetItem* item = itemAt( event->pos() );
-  // const QMimeData * mimeData = event->mimeData();
+  QTreeWidgetItem* item = itemAt( e->pos() );
+  // const QMimeData * mimeData = e->mimeData();
 
 #if USE_CUSTOM_MIME_DATA
-  if( event->mimeData()->hasFormat( TreeWidget::ITEM_MIME_TYPE ) &&
+  if( e->mimeData()->hasFormat( TreeWidget::ITEM_MIME_TYPE ) &&
       item!=NULL )
 #else // USE_CUSTOM_MIME_DATA
   if( item!=NULL )
 #endif // USE_CUSTOM_MIME_DATA
     {
     qDebug() << "ACCEPT";
-    event->accept();
+    e->accept();
     }
   else
     {
     qDebug() << "IGNORE";
-    event->ignore();
+    e->ignore();
     }
 
   /*
-  if( event->source()==this )
+  if( e->source()==this )
     {
-    event->setDropAction( Qt::MoveAction );
-    event->accept();
+    e->setDropAction( Qt::MoveAction );
+    e->accept();
     }
   */
 
   /*
-  if( itemAt( event->pos() )==NULL )
-    event->ignore();
+  if( itemAt( e->pos() )==NULL )
+    e->ignore();
   else
-    event->accept();
+    e->accept();
   */
 }
 
 /*******************************************************************************/
 void
 TreeWidget
-::dragLeaveEvent( QDragLeaveEvent* event )
+::dragLeaveEvent( QDragLeaveEvent* e )
 {
-  qDebug() << this << "::dragLeaveEvent(" << event << ")";
+  qDebug() << this << "::dragLeaveEvent(" << e << ")";
 
-  QTreeWidget::dragLeaveEvent( event );
+  QTreeWidget::dragLeaveEvent( e );
 }
 
 /*******************************************************************************/
 void 
 TreeWidget
-::dropEvent( QDropEvent* event )
+::dropEvent( QDropEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << "::dropEvent(" << event << ")";
+  // qDebug() << this << "::dropEvent(" << e << ")";
 
   typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
 
-  QTreeWidgetItemList items;
+  QTreeWidgetItemList itemList;
 
-  DecodeMimeData( items, event->mimeData() );
+  DecodeMimeData( itemList, e->mimeData() );
 
-  if( event->source()==this )
+  if( e->source()==this )
     {
-    event->setDropAction( Qt::MoveAction );
-    // event->accept();
+    e->setDropAction( Qt::MoveAction );
+    // e->accept();
     }
 
-  qDebug() << "dropAction:" << event->dropAction();
+  qDebug() << "dropAction:" << e->dropAction();
 
-  QTreeWidget::dropEvent( event );
+  QTreeWidget::dropEvent( e );
 
-  qDebug() << "dropAction:" << event->dropAction();
+  qDebug() << "dropAction:" << e->dropAction();
 
   /*
-  QTreeWidgetItem * item = itemAt( event->pos() );
+  QTreeWidgetItem * item = itemAt( e->pos() );
 
   while( !item->flags().testFlag( Qt::ItemIsDropEnabled ) )
     {
@@ -482,14 +482,14 @@ TreeWidget
   */
 
   /*
-  for( QTreeWidgetItemList::const_iterator it = items.begin();
-       it!=items.end();
+  for( QTreeWidgetItemList::const_iterator it = itemList.begin();
+       it!=itemList.end();
        ++it )
     {
-    switch( event->dropAction() )
+    switch( e->dropAction() )
       {
       case Qt::MoveAction:
-        emit ItemMoved( *it, itemAt( event->pos() ) );
+        emit ItemMoved( *it, itemAt( e->pos() ) );
         break;
 
       default:
@@ -498,13 +498,13 @@ TreeWidget
     }
   */
 
-  QTreeWidgetItem * target = itemAt( event->pos() );
+  QTreeWidgetItem * target = itemAt( e->pos() );
 
-  qDebug() << "itemAt(" << event->pos() << "):" << target;
+  qDebug() << "itemAt(" << e->pos() << "):" << target;
 
-  if( event->source()==this )
-    for( QTreeWidgetItemList::const_iterator it = items.begin();
-         it!=items.end();
+  if( e->source()==this )
+    for( QTreeWidgetItemList::const_iterator it = itemList.begin();
+         it!=itemList.end();
          ++it )
       emit ItemMoved( *it, target );
 }

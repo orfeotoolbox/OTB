@@ -91,7 +91,7 @@ public:
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
-  HistogramController( HistogramWidget* widget, QObject* parent =NULL );
+  HistogramController( HistogramWidget* widget, QObject* p =NULL );
 
   /**
    * \brief Destructor.

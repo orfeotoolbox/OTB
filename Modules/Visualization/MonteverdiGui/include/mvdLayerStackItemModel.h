@@ -129,7 +129,7 @@ public:
 public:
 
   /** \brief Constructor. */
-  LayerStackItemModel( QObject* parent =NULL );
+  LayerStackItemModel( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~LayerStackItemModel();
@@ -148,7 +148,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
-  virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
+  virtual int columnCount( const QModelIndex & p = QModelIndex() ) const;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
@@ -166,7 +166,7 @@ public:
                   Qt::DropAction action,
                   int row,
                   int column,
-                  const QModelIndex & parent );
+                  const QModelIndex & p );
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
@@ -176,7 +176,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
    */
-  virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
+  virtual bool hasChildren( const QModelIndex & p = QModelIndex() ) const;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
@@ -191,7 +191,7 @@ public:
     QModelIndex
     index( int row,
            int column,
-           const QModelIndex & parent = QModelIndex() ) const;
+           const QModelIndex & p = QModelIndex() ) const;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
@@ -200,7 +200,7 @@ public:
     bool
     insertRows( int row,
                 int count,
-                const QModelIndex & parent = QModelIndex() );
+                const QModelIndex & p = QModelIndex() );
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeData
@@ -224,12 +224,12 @@ public:
     bool
     removeRows( int row,
                 int count,
-                const QModelIndex & parent = QModelIndex() );
+                const QModelIndex & p = QModelIndex() );
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
-  virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
+  virtual int rowCount( const QModelIndex & p = QModelIndex() ) const;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData

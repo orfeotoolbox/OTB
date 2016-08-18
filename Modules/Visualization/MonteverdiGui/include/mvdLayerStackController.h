@@ -86,7 +86,7 @@ class Monteverdi_EXPORT LayerStackController :
 public:
 
   /** \brief Constructor. */
-  LayerStackController( LayerStackWidget * widget, QObject * parent =NULL );
+  LayerStackController( LayerStackWidget * widget, QObject * p =NULL );
 
   /** \brief Destructor. */
   virtual ~LayerStackController();

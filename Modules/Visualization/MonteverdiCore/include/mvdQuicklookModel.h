@@ -93,7 +93,7 @@ public:
 public:
 
   /** Constructor */
-  QuicklookModel( QObject* parent =NULL );
+  QuicklookModel( QObject* p =NULL );
 
   /** Destructor */
   virtual ~QuicklookModel();

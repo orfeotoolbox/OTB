@@ -103,7 +103,7 @@ public:
   /** typedef */
 
   /** \brief Constructor. */
-  ApplicationsBrowser( QObject* parent =NULL );
+  ApplicationsBrowser( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~ApplicationsBrowser();

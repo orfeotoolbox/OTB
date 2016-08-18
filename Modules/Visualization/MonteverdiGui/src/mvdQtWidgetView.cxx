@@ -136,9 +136,9 @@ QtWidgetView
 /*****************************************************************************/
 QtWidgetView
 ::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* parent,
+		QWidget* p,
 		Qt::WindowFlags flags ) :
-  QWidget( parent, flags ),
+  QWidget( p, flags ),
   m_Application( otbApp ),
   m_Model( NULL ),
   m_ExecButton( NULL ),
@@ -377,9 +377,9 @@ QtWidgetView
 /*******************************************************************************/
 void
 QtWidgetView
-::closeEvent( QCloseEvent * event )
+::closeEvent( QCloseEvent * e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   if( !IsClosable() )
     {
@@ -392,12 +392,12 @@ QtWidgetView
       .arg( m_Application->GetDocName() )
     );
 
-    event->ignore();
+    e->ignore();
 
     return;
     }
 
-  QWidget::closeEvent( event );
+  QWidget::closeEvent( e );
 
   emit QuitSignal();
 

@@ -86,7 +86,7 @@ class Monteverdi_EXPORT MyClass :
 public:
 
   /** \brief Constructor. */
-  MyClass( QObject* parent =NULL );
+  MyClass( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~MyClass();

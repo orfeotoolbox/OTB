@@ -68,8 +68,8 @@ namespace mvd
 
 /*******************************************************************************/
 ApplicationLauncher
-::ApplicationLauncher( QObject* parent ) :
-  QObject( parent )
+::ApplicationLauncher( QObject* p ) :
+  QObject( p )
 {
 }
 
@@ -84,7 +84,7 @@ Wrapper::QtWidgetView *
 ApplicationLauncher
 ::NewOtbApplicationWidget( const QString & appName,
 			   bool isStandalone,
-			   QWidget * parent,
+			   QWidget * p,
 			   Qt::WindowFlags flags ) const
 {
   // Create module
@@ -196,7 +196,7 @@ ApplicationLauncher
 
   // Create GUI based on module
   Wrapper::QtWidgetView * gui =
-    new Wrapper::QtWidgetView( otbApp, parent, flags );
+    new Wrapper::QtWidgetView( otbApp, p, flags );
 
   gui->CreateGui();
 
@@ -207,7 +207,7 @@ QWidget *
 ApplicationLauncher
 ::NewOtbApplicationWindow( const QString & appName,
 			   bool isStandalone,
-			   QWidget * parent,
+			   QWidget * p,
 			   Qt::WindowFlags flags  ) const
 {
 #if 0
@@ -217,7 +217,7 @@ ApplicationLauncher
   assert( appWidget!=NULL );
   assert( appWidget->GetApplication() );
 
-  QMainWindow * mainWindow = new QMainWindow( parent, flags );
+  QMainWindow * mainWindow = new QMainWindow( p, flags );
 
   mainWindow->setWindowTitle(
     QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
@@ -244,7 +244,7 @@ ApplicationLauncher
     ApplicationLauncher::NewOtbApplicationWidget(
       appName,
       isStandalone,
-      parent,
+      p,
       flags | Qt::Window
     );
 

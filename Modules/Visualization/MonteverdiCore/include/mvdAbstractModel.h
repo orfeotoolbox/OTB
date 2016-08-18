@@ -132,7 +132,7 @@ signals:
 // Protected methods.
 protected:
   /** Constructor */
-  AbstractModel( QObject* parent =NULL );
+  AbstractModel( QObject* p =NULL );
 
   /**
    */

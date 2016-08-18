@@ -95,7 +95,7 @@ public:
    * \param parent Parent QObject of this QObject.
    */
   ApplicationsToolBoxController( ApplicationsToolBox* widget,
-			     QObject* parent =NULL );
+			     QObject* p =NULL );
 
   /**
    * \brief Destructor.

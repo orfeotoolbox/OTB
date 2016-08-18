@@ -67,8 +67,8 @@ namespace
 /*******************************************************************************/
 ImageProperties
 #if IMAGE_PROPERTIES_IS_QOBJECT
-::ImageProperties( QObject* parent ) :
-  QObject( parent ),
+::ImageProperties( QObject* p ) :
+  QObject( p ),
 #else
 ::ImageProperties() :
 #endif

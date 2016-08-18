@@ -96,7 +96,7 @@ public:
 
   /** \brief Constructor. */
   ImportSubDatasetDialog( const QString & filename,
-		     QWidget* parent = NULL,
+		     QWidget* p = NULL,
 		     Qt::WindowFlags flags = 0 );
 
   /** \brief Destructor. */

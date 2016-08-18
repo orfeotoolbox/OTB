@@ -92,9 +92,9 @@ HEADERS[ COLUMN_COUNT ] =
 /*****************************************************************************/
 ImportImagesDialog
 ::ImportImagesDialog( const QStringList & filenames,
-		      QWidget * parent,
+		      QWidget * p,
 		      Qt::WindowFlags flags  ) :
-  QDialog( parent, flags ),
+  QDialog( p, flags ),
   m_UI( new Ui::ImportImagesDialog() ),
   m_EffectiveCount( 0 )
 {

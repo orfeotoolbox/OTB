@@ -88,9 +88,9 @@ public:
   /** \brief Constructor. */
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
   QuicklookViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                            QObject* parent =NULL );
+                            QObject* p =NULL );
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
-  QuicklookViewManipulator( QObject* parent =NULL );
+  QuicklookViewManipulator( QObject* p =NULL );
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */

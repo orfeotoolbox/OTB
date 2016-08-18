@@ -84,7 +84,7 @@ class Monteverdi_EXPORT DoubleValidator :
 public:
 
   /** \brief Constructor. */
-  DoubleValidator( QObject* parent =NULL );
+  DoubleValidator( QObject* p =NULL );
 
   /**
    * \brief Constructor.
@@ -92,7 +92,7 @@ public:
   DoubleValidator( double bottom,
 		   double top,
 		   int decimals,
-		   QObject *parent = 0 );
+		   QObject *p = 0 );
 
   /** \brief Destructor. */
   virtual ~DoubleValidator();

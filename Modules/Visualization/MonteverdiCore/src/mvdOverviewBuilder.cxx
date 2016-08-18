@@ -71,8 +71,8 @@ namespace
 /*******************************************************************************/
 OverviewBuilder
 ::OverviewBuilder( const GDALOverviewsBuilderVector & builders,
-		   QObject * parent ) :
-  AbstractWorker( parent ),
+		   QObject * p ) :
+  AbstractWorker( p ),
   ProgressInterface(),
   m_GDALOverviewsBuilders( builders ),
   m_Index( 0 ),

@@ -71,8 +71,8 @@ namespace
 
 /*******************************************************************************/
 LayerStackController
-::LayerStackController( LayerStackWidget * widget, QObject * parent ) :
-  AbstractModelController( widget, parent )
+::LayerStackController( LayerStackWidget * widget, QObject * p ) :
+  AbstractModelController( widget, p )
 {
 }
 
@@ -480,11 +480,11 @@ LayerStackController
 
   assert( widget->GetItemModel()!=NULL );
 
-  bool signalsBlocked = widget->blockSignals( true );
+  bool prevSignalsBlocked = widget->blockSignals( true );
   {
   widget->SetCurrent( index );
   }
-  widget->blockSignals( signalsBlocked );
+  widget->blockSignals( prevSignalsBlocked );
 }
 
 /*******************************************************************************/

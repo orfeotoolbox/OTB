@@ -293,7 +293,7 @@ signals:
 protected:
 
   /** Constructor */
-  AbstractImageModel( QObject* parent =NULL );
+  AbstractImageModel( QObject* p =NULL );
 
   /**
    * \brief Set image properties pointer.

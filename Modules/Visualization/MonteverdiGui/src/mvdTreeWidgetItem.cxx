@@ -79,23 +79,23 @@ int count = 0;
 #define BUG_WORKAROUND_MANTIS_947 1
 
 TreeWidgetItem
-::TreeWidgetItem( QTreeWidgetItem* parent,
-                  const QString& text,
+::TreeWidgetItem( QTreeWidgetItem* p,
+                  const QString& txt,
                   const QVariant& id,
                   const QStringList& columns,
-                  TreeWidgetItem::ItemType type ) :
+                  TreeWidgetItem::ItemType itemType ) :
 #if BUG_WORKAROUND_MANTIS_947
-  QTreeWidgetItem( QStringList( text ) << QString() << columns, type )
+  QTreeWidgetItem( QStringList( txt ) << QString() << columns, itemType )
 #else // BUG_WORKAROUND_MANTIS_947
-  QTreeWidgetItem( parent, QStringList( text ) << QString() << columns, type )
+  QTreeWidgetItem( p, QStringList( txt ) << QString() << columns, itemType )
 #endif // BUG_WORKAROUND_MANTIS_947
 {
-  assert( parent!=NULL );
+  assert( p!=NULL );
   // parent->addChild( this );
 
   SetId( id );
 
-  switch( type )
+  switch( itemType )
     {
     case TreeWidgetItem::ITEM_TYPE_NODE:
       setChildIndicatorPolicy(
@@ -108,7 +108,7 @@ TreeWidgetItem
         Qt::ItemIsEnabled
       );
 #if BUG_WORKAROUND_MANTIS_947
-      parent->insertChild( 0, this );
+      p->insertChild( 0, this );
 #endif // BUG_WORKAROUND_MANTIS_947
     break;
 
@@ -123,7 +123,7 @@ TreeWidgetItem
         Qt::ItemIsSelectable
       );
 #if BUG_WORKAROUND_MANTIS_947
-      parent->addChild( this );
+      p->addChild( this );
 #endif // BUG_WORKAROUND_MANTIS_947
       break;
 

@@ -75,9 +75,9 @@ ImportSubDatasetDialog
 /*****************************************************************************/
 ImportSubDatasetDialog
 ::ImportSubDatasetDialog( const QString & filename,
-		     QWidget * parent,
+		     QWidget * p,
 		     Qt::WindowFlags flags  ):
-  QDialog( parent, flags ),
+  QDialog( p, flags ),
   m_UI( new mvd::Ui::ImportSubDatasetDialog() ),
   m_HasSubDatasets( false )
 {

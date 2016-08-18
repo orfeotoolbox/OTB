@@ -74,8 +74,8 @@ I18nMainWindow::m_LastAcceptedDir( QDir::home().path() );
 
 /*****************************************************************************/
 I18nMainWindow
-::I18nMainWindow( QWidget* parent, Qt::WindowFlags flags ) :
-  QMainWindow( parent, flags )
+::I18nMainWindow( QWidget* p, Qt::WindowFlags flags ) :
+  QMainWindow( p, flags )
 {
 }
 
@@ -160,8 +160,8 @@ I18nMainWindow
 VectorImageModel *
 I18nMainWindow
 ::ImportImage( const QString& filename,
-               int width,
-               int height )
+               int widthVal,
+               int heightVal )
 {
   return
     QObjectCast< VectorImageModel * >(
@@ -170,7 +170,7 @@ I18nMainWindow
         // It will be auto-deleted by background-task.
         new ImageImporter(
           filename,
-          width, height
+          widthVal, heightVal
         )
       ),
       "QObject is not a VectorImageModel."
@@ -265,9 +265,9 @@ I18nMainWindow
 /*****************************************************************************/
 void
 I18nMainWindow
-::closeEvent( QCloseEvent * event )
+::closeEvent( QCloseEvent * e )
 {
-  QMainWindow::closeEvent( event );
+  QMainWindow::closeEvent( e );
 }
 
 /*****************************************************************************/

@@ -158,7 +158,7 @@ public:
 public:
 
   /** \brief Constructor. */
-  HistogramModel( QObject* parent =NULL );
+  HistogramModel( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~HistogramModel();

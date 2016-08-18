@@ -90,10 +90,10 @@ class Monteverdi_EXPORT DropLineEdit :
 public:
 
   /** \brief Constructor. */
-  DropLineEdit( QWidget* parent =0 );
+  DropLineEdit( QWidget* p =0 );
 
   /** \brief Constructor. */
-  DropLineEdit( const QString& contents, QWidget* parent =0 );
+  DropLineEdit( const QString& contents, QWidget* p =0 );
 
   /** \brief Destructor. */
   virtual ~DropLineEdit();

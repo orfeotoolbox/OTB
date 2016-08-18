@@ -90,7 +90,7 @@ class Monteverdi_EXPORT MyWidget :
 public:
 
   /** \brief Constructor. */
-  MyWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  MyWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~MyWidget();

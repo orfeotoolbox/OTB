@@ -91,7 +91,7 @@ class Monteverdi_EXPORT MultiResolutionPyramidWidget :
 public:
 
   /** \brief Constructor. */
-  MultiResolutionPyramidWidget( QWidget * parent =NULL,
+  MultiResolutionPyramidWidget( QWidget * p =NULL,
 				Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */

@@ -86,7 +86,7 @@ class Monteverdi_EXPORT FilenameDragAndDropEventFilter :
 public:
 
   /** \brief Constructor. */
-  FilenameDragAndDropEventFilter( QObject* parent =NULL );
+  FilenameDragAndDropEventFilter( QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~FilenameDragAndDropEventFilter();

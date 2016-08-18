@@ -56,8 +56,8 @@ namespace mvd
 
 /*******************************************************************************/
 ColorSetupController
-::ColorSetupController( ColorSetupWidget* widget, QObject* parent ) :
-  AbstractModelController( widget, parent )
+::ColorSetupController( ColorSetupWidget* widget, QObject* p ) :
+  AbstractModelController( widget, p )
 {
 }
 

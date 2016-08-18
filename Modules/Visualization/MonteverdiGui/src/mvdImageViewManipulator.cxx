@@ -70,8 +70,8 @@ const double ImageViewManipulator::DEFAULT_DELTA = 0.1;
 
 ImageViewManipulator
 ::ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                        QObject* parent ) :
-  AbstractImageViewManipulator( parent ),
+                        QObject* p ) :
+  AbstractImageViewManipulator( p ),
   m_MousePressPosition(),
   m_ViewSettings( viewSettings ),
   m_NativeSpacing(),
@@ -90,8 +90,8 @@ ImageViewManipulator
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
 
 ImageViewManipulator
-::ImageViewManipulator( QObject* parent ) :
-  AbstractImageViewManipulator( parent ),
+::ImageViewManipulator( QObject* p ) :
+  AbstractImageViewManipulator( p ),
   m_MousePressPosition(),
   m_ViewSettings( otb::ViewSettings::New() ),
   m_NativeSpacing(),
@@ -368,20 +368,20 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::MousePressEvent( QMouseEvent* event )
+::MousePressEvent( QMouseEvent* e )
 {
 
-  // qDebug() << this << "::MousePressEvent(" << event << ")";
+  // qDebug() << this << "::MousePressEvent(" << e << ")";
 
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  switch( event->button() )
+  switch( e->button() )
     {
     case Qt::NoButton:
       break;
 
     case Qt::LeftButton:
-      m_MousePressPosition = event->pos();
+      m_MousePressPosition = e->pos();
       m_MousePressOrigin = m_ViewSettings->GetOrigin();
       m_IsMouseDragging = true;
       break;
@@ -418,29 +418,29 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::MouseMoveEvent( QMouseEvent* event )
+::MouseMoveEvent( QMouseEvent* e )
 {
-  // qDebug() << this << "::MouseMoveEvent(" << event << ")";
+  // qDebug() << this << "::MouseMoveEvent(" << e << ")";
 
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   /*
   qDebug() << "------------------------------------------------";
 
-  qDebug() << this << ":" << event;
+  qDebug() << this << ":" << e;
   */
 
-  Qt::MouseButtons buttons = event->buttons();
-  Qt::KeyboardModifiers modifiers = event->modifiers();
+  Qt::MouseButtons buttons = e->buttons();
+  Qt::KeyboardModifiers modifiers = e->modifiers();
 
   if( buttons==Qt::LeftButton &&
       ( modifiers==Qt::NoModifier || modifiers== Qt::ControlModifier ) )
     {
     // Cursor moves from press position to current position;
     // Image moves the same direction, so apply the negative translation.
-    Translate( m_MousePressPosition - event->pos() );
+    Translate( m_MousePressPosition - e->pos() );
 
-    m_MousePressPosition = event->pos();
+    m_MousePressPosition = e->pos();
 
     emit RefreshViewRequested();
 
@@ -456,23 +456,23 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::MouseReleaseEvent( QMouseEvent* event)
+::MouseReleaseEvent( QMouseEvent* e)
 {
-  // qDebug() << this << "::MouseReleaseEvent(" << event << ")";
+  // qDebug() << this << "::MouseReleaseEvent(" << e << ")";
 
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   /*
-  qDebug() << this << ":" << event;
+  qDebug() << this << ":" << e;
   */
 
   /*
-  Qt::MouseButtons buttons = event->buttons();
-  Qt::KeyboardModifiers modifiers = event->modifiers();
+  Qt::MouseButtons buttons = e->buttons();
+  Qt::KeyboardModifiers modifiers = e->modifiers();
   */
   // PointType center;
 
-  switch( event->button() )
+  switch( e->button() )
     {
     case Qt::NoButton:
       break;
@@ -507,19 +507,19 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::MouseDoubleClickEvent( QMouseEvent * event )
+::MouseDoubleClickEvent( QMouseEvent * e )
 {
-  // qDebug() << this << "::MouseDoubleClickEvent(" << event << ")";
+  // qDebug() << this << "::MouseDoubleClickEvent(" << e << ")";
 
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  if( event->button()==Qt::LeftButton && event->modifiers()==Qt::NoModifier )
+  if( e->button()==Qt::LeftButton && e->modifiers()==Qt::NoModifier )
     {
     PointType center;
 
     assert( !m_ViewSettings.IsNull() );
 
-    const QPoint & p = event->pos();
+    const QPoint & p = e->pos();
 
     m_ViewSettings->ScreenToViewPortTransform( p.x(), p.y(), center[ 0 ], center[ 1 ] );
 
@@ -530,49 +530,49 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::ResizeEvent( QResizeEvent * mvdUseInDebug( event ) )
+::ResizeEvent( QResizeEvent * mvdUseInDebug( e ) )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << "::ResizeEvent(" << event << ")";
+  // qDebug() << this << "::ResizeEvent(" << e << ")";
 
   /*
   qDebug() << m_ViewSettings.GetPointer();
 
   otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
 
-  qDebug() << size[ 0 ] << "," << size[ 1 ] << "\t" << event->size();
+  qDebug() << size[ 0 ] << "," << size[ 1 ] << "\t" << e->size();
   */
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT 
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
-  SetViewportSize( event->size().width(), event->size().height() );
+  SetViewportSize( e->size().width(), e->size().height() );
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 }
 
 /******************************************************************************/
 void
 ImageViewManipulator
-::WheelEvent( QWheelEvent* event )
+::WheelEvent( QWheelEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  Qt::MouseButtons buttons = event->buttons();
-  Qt::KeyboardModifiers modifiers = event->modifiers();
+  Qt::MouseButtons buttons = e->buttons();
+  Qt::KeyboardModifiers modifiers = e->modifiers();
 
   if( buttons!=Qt::NoButton )
     return;
 
   // Delta is rotation distance in number of 8th of degrees (see
   // http://qt-project.org/doc/qt-4.8/qwheelevent.html#delta).
-  assert( event->delta()!=0 );
-  int degrees = event->delta() / MOUSE_WHEEL_STEP_FACTOR;
+  assert( e->delta()!=0 );
+  int degrees = e->delta() / MOUSE_WHEEL_STEP_FACTOR;
 
   if( modifiers==Qt::ControlModifier )
     {
     PointType point;
 
-    Scale( event->pos(), degrees, &point );
+    Scale( e->pos(), degrees, &point );
 
     emit RefreshViewRequested();
 
@@ -581,18 +581,18 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::MetaModifier )
     {
-    // qDebug() << "META+Wheel" << event->delta();
+    // qDebug() << "META+Wheel" << e->delta();
 
     emit ShiftAlphaRequested(
       static_cast< double >(
-	m_AlphaGranularity * event->delta() /
+	m_AlphaGranularity * e->delta() /
 	( MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES )
       ) / 100.0
     );
     }
   else if( modifiers==(Qt::MetaModifier | Qt::ShiftModifier) )
     {
-    // qDebug() << "META+SHIFT+Wheel" << event->delta();
+    // qDebug() << "META+SHIFT+Wheel" << e->delta();
 
     emit UpdateGammaRequested(
       ImageViewManipulator::Factor(
@@ -604,7 +604,7 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::AltModifier )
     {
-    // qDebug() << "ALT+Wheel" << event->delta();
+    // qDebug() << "ALT+Wheel" << e->delta();
 
     emit ResizeShaderRequested(
       ImageViewManipulator::Factor(
@@ -615,7 +615,7 @@ ImageViewManipulator
     }
   else if( modifiers==(Qt::AltModifier | Qt::ShiftModifier) )
     {
-    // qDebug() << "ALT+SHIFT+Wheel" << event->delta();
+    // qDebug() << "ALT+SHIFT+Wheel" << e->delta();
 
     emit ReparamShaderRequested(
       ImageViewManipulator::Factor(
@@ -627,19 +627,19 @@ ImageViewManipulator
   //
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier) )
     {
-    // qDebug() << "CTRL+ALT+Wheel" << event->delta();
+    // qDebug() << "CTRL+ALT+Wheel" << e->delta();
 
     emit ShiftDynamicsRequested(
       m_DynamicsShiftGranularity *
       static_cast< double >(
-	event->delta() /
+	e->delta() /
 	( MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES )
       )
     );
     }
   else if( modifiers==(Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier) )
     {
-    // qDebug() << "CTRL+ALT+SHIFT+Wheel" << event->delta();
+    // qDebug() << "CTRL+ALT+SHIFT+Wheel" << e->delta();
 
     emit ScaleDynamicsRequested(
       ImageViewManipulator::Factor(
@@ -651,24 +651,24 @@ ImageViewManipulator
   //
   else if( modifiers==Qt::NoModifier )
     emit RotateLayersRequested(
-      event->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
+      e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
     );
 }
 
 /******************************************************************************/
 void
 ImageViewManipulator
-::KeyPressEvent( QKeyEvent* event )
+::KeyPressEvent( QKeyEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << "::KeyPressEvent(" << event << ")";
+  // qDebug() << this << "::KeyPressEvent(" << e << ")";
 
   QPoint vector( 0, 0 );
   int steps = 0;
 
-  int key = event->key();
-  Qt::KeyboardModifiers modifiers = event->modifiers();
+  int key = e->key();
+  Qt::KeyboardModifiers modifiers = e->modifiers();
 
   switch( key )
     {
@@ -701,28 +701,28 @@ ImageViewManipulator
       break;
 
     case Qt::Key_PageUp:
-      if( event->modifiers()==Qt::ShiftModifier )
+      if( e->modifiers()==Qt::ShiftModifier )
 	emit LayerToTopRequested();
       else
 	emit RaiseLayerRequested();
       break;
 
     case Qt::Key_PageDown:
-      if( event->modifiers()==Qt::ShiftModifier )
+      if( e->modifiers()==Qt::ShiftModifier )
 	emit LayerToBottomRequested();
       else
 	emit LowerLayerRequested();
       break;
 
     case Qt::Key_Home:
-      if( event->modifiers()==Qt::ShiftModifier )
+      if( e->modifiers()==Qt::ShiftModifier )
 	emit SelectFirstLayerRequested();
       else
 	emit SelectPreviousLayerRequested();
       break;
 
     case Qt::Key_End:
-      if( event->modifiers()==Qt::ShiftModifier )
+      if( e->modifiers()==Qt::ShiftModifier )
 	emit SelectLastLayerRequested();
       else
 	emit SelectNextLayerRequested();
@@ -863,13 +863,13 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::KeyReleaseEvent( QKeyEvent* event )
+::KeyReleaseEvent( QKeyEvent* e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
-  // qDebug() << this << "::KeyPressEvent(" << event << ")";
+  // qDebug() << this << "::KeyPressEvent(" << e << ")";
 
-  switch( event->key() )
+  switch( e->key() )
     {
     case Qt::Key_Control:
       SetFastRenderMode( false );

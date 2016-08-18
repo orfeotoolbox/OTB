@@ -63,8 +63,8 @@ namespace mvd
 
 /*******************************************************************************/
 OTBApplicationsModel
-::OTBApplicationsModel( QObject* parent ) :
-  AbstractModel( parent ),
+::OTBApplicationsModel( QObject* p ) :
+  AbstractModel( p ),
   m_ApplicationsBrowser( NULL ),
   m_ApplicationLauncher( NULL )
 {

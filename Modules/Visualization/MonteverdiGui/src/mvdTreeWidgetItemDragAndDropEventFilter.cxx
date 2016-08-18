@@ -66,8 +66,8 @@ const char* TREE_WIDGET_ITEM_MIME_TYPE = "application/x-qtreewidgetitemptrlist";
 
 /*****************************************************************************/
 TreeWidgetItemDragAndDropEventFilter
-::TreeWidgetItemDragAndDropEventFilter( QObject* parent  ) :
-  AbstractDragAndDropEventFilter( parent )
+::TreeWidgetItemDragAndDropEventFilter( QObject* p  ) :
+  AbstractDragAndDropEventFilter( p )
 {
 }
 
@@ -80,17 +80,17 @@ TreeWidgetItemDragAndDropEventFilter
 /*****************************************************************************/
 bool
 TreeWidgetItemDragAndDropEventFilter
-::DragEnterEvent( QObject *, QDragEnterEvent* event )
+::DragEnterEvent( QObject *, QDragEnterEvent* e )
 {
   //
   // Bypass event its MIME data does not contain not URL(s).
-  if( !event->mimeData()->hasFormat( TREE_WIDGET_ITEM_MIME_TYPE ) )
+  if( !e->mimeData()->hasFormat( TREE_WIDGET_ITEM_MIME_TYPE ) )
     return false;
 
   //
   // Accept event if its MIME data contains some URL(s) and they are
   // all local filenames.
-  event->acceptProposedAction();
+  e->acceptProposedAction();
 
   //
   // Eatup event.
@@ -120,10 +120,10 @@ TreeWidgetItemDragAndDropEventFilter
 /*****************************************************************************/
 bool
 TreeWidgetItemDragAndDropEventFilter
-::DropEvent( QObject *, QDropEvent * event )
+::DropEvent( QObject *, QDropEvent * e )
 {
-  assert( event!=NULL );
-  assert( event->mimeData()!=NULL );
+  assert( e!=NULL );
+  assert( e->mimeData()!=NULL );
 
 
   //
@@ -133,7 +133,7 @@ TreeWidgetItemDragAndDropEventFilter
 
   QTreeWidgetItemList items;
 
-  int count = DecodeMimeData( items, event->mimeData() );
+  int count = DecodeMimeData( items, e->mimeData() );
 
   if( count==0 )
     return false;

@@ -267,8 +267,8 @@ protected:
   /**
    * Constructor.
    */
-  AbstractImageViewRenderer( QObject* parent = NULL ) :
-    QObject( parent ),
+  AbstractImageViewRenderer( QObject* p = NULL ) :
+    QObject( p ),
     m_StackedLayerModel( NULL ),
     m_BypassRenderingEnabled( false ),
     m_GLSLEnabled( true )

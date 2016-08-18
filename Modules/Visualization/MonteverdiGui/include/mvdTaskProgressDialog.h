@@ -89,7 +89,7 @@ public:
    * \brief Constructor.
    */
   TaskProgressDialog( BackgroundTask* task,
-		      QWidget* parent =NULL,
+		      QWidget* p =NULL,
 		      Qt::WindowFlags flags =0 );
 
   /**

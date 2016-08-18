@@ -91,7 +91,7 @@ public:
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
-  ColorDynamicsController( ColorDynamicsWidget* widget, QObject* parent =NULL );
+  ColorDynamicsController( ColorDynamicsWidget* widget, QObject* p =NULL );
 
   /** \brief Destructor. */
   virtual ~ColorDynamicsController();

@@ -70,7 +70,7 @@ class Monteverdi_EXPORT AboutDialog :
 public:
 
   /** Constructor */
-  AboutDialog( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
+  AboutDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
   virtual ~AboutDialog();

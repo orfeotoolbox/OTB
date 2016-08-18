@@ -90,7 +90,7 @@ public:
    */
   BackgroundTask( AbstractWorker* worker,
 		  bool autoDestroy =true,
-		  QObject* parent =NULL );
+		  QObject* p =NULL );
 
   /**
    * \brief Destructor.

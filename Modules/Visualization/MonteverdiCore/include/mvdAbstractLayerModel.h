@@ -156,7 +156,7 @@ signals:
 protected:
 
   /** \brief Constructor. */
-  AbstractLayerModel( QObject* parent =NULL );
+  AbstractLayerModel( QObject* p =NULL );
 
   /**
    */

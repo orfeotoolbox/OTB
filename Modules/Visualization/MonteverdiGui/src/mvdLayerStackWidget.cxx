@@ -67,8 +67,8 @@ namespace mvd
 
 /*******************************************************************************/
 LayerStackWidget
-::LayerStackWidget( QWidget* parent, Qt::WindowFlags flags  ):
-  QWidget( parent, flags ),
+::LayerStackWidget( QWidget* p, Qt::WindowFlags flags  ):
+  QWidget( p, flags ),
   m_UI( new mvd::Ui::LayerStackWidget() )
 {
   m_UI->setupUi( this );
@@ -179,21 +179,21 @@ LayerStackWidget
 /*******************************************************************************/
 bool
 LayerStackWidget
-::eventFilter( QObject * object, QEvent * event )
+::eventFilter( QObject * object, QEvent * e )
 {
   assert( object==m_UI->treeView );
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   if( object!=m_UI->treeView )
     return false;
 
-  switch( event->type() )
+  switch( e->type() )
     {
     //
     // KEY RELEASE
     case QEvent::KeyRelease :
     {
-    QKeyEvent * keyEvent = dynamic_cast< QKeyEvent * >( event );
+    QKeyEvent * keyEvent = dynamic_cast< QKeyEvent * >( e );
     assert( keyEvent!=NULL );
 
     switch( keyEvent->key() )
@@ -233,13 +233,13 @@ LayerStackWidget
     // MOUSE-WHEEL
     case QEvent::Wheel :
     {
-    QWheelEvent * wheelEvent = dynamic_cast< QWheelEvent * >( event );
-    assert( wheelEvent!=NULL );
+    QWheelEvent * wEvent = dynamic_cast< QWheelEvent * >( e );
+    assert( wEvent!=NULL );
 
-    if( wheelEvent->modifiers()==Qt::ControlModifier )
+    if( wEvent->modifiers()==Qt::ControlModifier )
       {
       emit RotateLayersRequested(
-    	wheelEvent->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
+    	wEvent->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
       );
 
       return true;

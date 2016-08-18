@@ -116,7 +116,7 @@ public:
    */
   static inline
     QString
-    GetExistingDirectory( QWidget* parent =0,
+    GetExistingDirectory( QWidget* p =0,
 			  const QString& caption =QString(),
 			  const QString& dir = QString(),
 			  QFileDialog::Options options =QFileDialog::ShowDirsOnly
@@ -142,7 +142,7 @@ public:
    */
   static inline
     QString
-    GetOpenFileName( QWidget* parent =0,
+    GetOpenFileName( QWidget* p =0,
 		     const QString& caption =QString(),
 		     const QString& dir = QString(),
 		     const QString& filter = QString(),
@@ -169,7 +169,7 @@ public:
    */
   static inline
     QStringList
-    GetOpenFileNames( QWidget* parent =0,
+    GetOpenFileNames( QWidget* p =0,
 		      const QString& caption =QString(),
 		      const QString& dir =QString(),
 		      const QString& filter =QString(),
@@ -196,7 +196,7 @@ public:
    */
   static inline
     QString
-    GetSaveFileName( QWidget* parent =0,
+    GetSaveFileName( QWidget* p =0,
 		     const QString& caption =QString(),
 		     const QString& dir =QString(),
 		     const QString& filter =QString(),
@@ -485,14 +485,14 @@ I18nMainWindow
 inline
 QString
 I18nMainWindow
-::GetExistingDirectory( QWidget* parent,
+::GetExistingDirectory( QWidget* p,
 			const QString& caption,
 			const QString& dir,
 			QFileDialog::Options options )
 {
   QString path(
     QFileDialog::getExistingDirectory(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       options
@@ -509,7 +509,7 @@ I18nMainWindow
 inline
 QString
 I18nMainWindow
-::GetOpenFileName( QWidget* parent,
+::GetOpenFileName( QWidget* p,
 		   const QString& caption,
 		   const QString& dir,
 		   const QString& filter,
@@ -518,7 +518,7 @@ I18nMainWindow
 {
   QString filename(
     QFileDialog::getOpenFileName(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       filter,
@@ -537,7 +537,7 @@ I18nMainWindow
 inline
 QStringList
 I18nMainWindow
-::GetOpenFileNames( QWidget* parent,
+::GetOpenFileNames( QWidget* p,
 		    const QString& caption,
 		    const QString& dir,
 		    const QString& filter,
@@ -546,7 +546,7 @@ I18nMainWindow
 {
   QStringList filenames(
     QFileDialog::getOpenFileNames(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       filter,
@@ -567,7 +567,7 @@ I18nMainWindow
 inline
 QString
 I18nMainWindow
-::GetSaveFileName( QWidget* parent,
+::GetSaveFileName( QWidget* p,
 		   const QString& caption,
 		   const QString& dir,
 		   const QString& filter,
@@ -576,7 +576,7 @@ I18nMainWindow
 {
   QString filename(
     QFileDialog::getSaveFileName(
-      parent,
+      p,
       caption,
       dir.isEmpty() ? I18nMainWindow::m_LastAcceptedDir.path() : dir,
       filter,

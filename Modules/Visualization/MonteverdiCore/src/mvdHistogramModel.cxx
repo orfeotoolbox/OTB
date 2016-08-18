@@ -67,8 +67,8 @@ namespace
 
 /*******************************************************************************/
 HistogramModel
-::HistogramModel( QObject* parent ) :
-  AbstractModel( parent ),
+::HistogramModel( QObject* p ) :
+  AbstractModel( p ),
   m_Histograms(),
   m_MinPixel(),
   m_MaxPixel()

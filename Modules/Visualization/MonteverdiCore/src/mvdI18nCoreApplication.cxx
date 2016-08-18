@@ -177,7 +177,7 @@ I18nCoreApplication
 ::LoadImageModel( const QString & filename,
                   int width,
                   int height,
-                  QObject * parent )
+                  QObject * p )
 {
   try
     {
@@ -194,7 +194,7 @@ I18nCoreApplication
     {
     AbstractImageModel::BuildContext context( filename );
 
-    imageModel = new VectorImageModel( parent );
+    imageModel = new VectorImageModel( p );
 
     imageModel->SetFilename( filename, width, height );
 
