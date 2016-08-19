@@ -285,6 +285,7 @@ namespace ossimplugins
                true);
          return familyName + instrumentId;
       }
+      throw std::runtime_error("Cannot obtain Sensor ID");
    }
 
 #if 0
@@ -951,7 +952,7 @@ namespace ossimplugins
          addMandatory(theProductKwl, prefix, keyImPtX,          **itNode, attPixel);
 
          // In TOPSAR products, GCPs are weird (they fall in black lines
-         // between burst. This code allows to move them to a valid area of
+         // between burst. This code allows moving them to a valid area of
          // the image.
          if(theBurstRecords.size()>2)
          {

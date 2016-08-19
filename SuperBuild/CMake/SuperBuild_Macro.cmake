@@ -94,6 +94,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
   set(${project}_PATCH_DIR ${CMAKE_SOURCE_DIR}/patches/${project})
   string(TOLOWER ${project} patch_dir_prefix)
   set(PATCH_ARGS "${ARGV1}")
+
   if(WIN32)
     set(DIFF_FILE_MATCH_STRING "win")
     if(NOT PATCH_ARGS)
@@ -107,22 +108,29 @@ macro(SUPERBUILD_PATCH_SOURCE project)
     endif()
   endif() #WIN32
 
-  #If files_list is not empty we notify user about it.
-  #Custom patches requrired for...
+  #if an optional diff file is mentioned. then only that is applied
+  set(DOT_DIFF_FILES "${ARGV2}")
 
-  #glob all files ending with DIFF_FILE_MATCH_STRING.diff
-  file(GLOB files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*${DIFF_FILE_MATCH_STRING}.diff")
+  if(NOT DOT_DIFF_FILES)
+    #If DOT_DIFF_FILES is empty,
+    #we try to list files ending with all.diff of <DIFF_FILE_MATCH_STRING>.diff
+    #the final list is stored in DOT_DIFF_FILES and applied using patch.cmake
+    #Custom patches requrired for...
 
-  #glob all files ending with all.diff
-  file(GLOB all_files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*all.diff")
+    #glob all files ending with DIFF_FILE_MATCH_STRING.diff
+    file(GLOB files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*${DIFF_FILE_MATCH_STRING}.diff")
 
-  #merge two list for the final one
-  list(APPEND files_list ${all_files_list})
+    #glob all files ending with all.diff
+    file(GLOB all_files_list "${${project}_PATCH_DIR}/${patch_dir_prefix}*all.diff")
 
-  #because we are passing it cmake_command using -D!!
-  string(REPLACE ";" " " DOT_DIFF_FILES "${files_list}")
+    #merge two list for the final one
+    list(APPEND files_list ${all_files_list})
 
-  if(files_list)
+    #because we are passing it cmake_command using -D!!
+    string(REPLACE ";" " " DOT_DIFF_FILES "${files_list}")
+  endif()
+
+  if(DOT_DIFF_FILES)
     message(STATUS "  Custom patches required for ${project}")
     ExternalProject_Add_Step(${project} ${project}_custom_patch
       COMMAND

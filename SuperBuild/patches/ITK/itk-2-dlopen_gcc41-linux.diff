@@ -1,0 +1,14 @@
+#Purpose: loading application via python fails This was due to exporting symbols from shared library
+#GCC FAQ says to add RTLD_GLOBAL flag when using dlopen apart from -Wl,-E linker flags
+diff -burN InsightToolkit-4.10.0.orig/Modules/ThirdParty/KWSys/src/KWSys/DynamicLoader.cxx InsightToolkit-4.10.0/Modules/ThirdParty/KWSys/src/KWSys/DynamicLoader.cxx
+--- InsightToolkit-4.10.0.orig/Modules/ThirdParty/KWSys/src/KWSys/DynamicLoader.cxx	2016-08-17 11:32:27.000000000 +0200
++++ InsightToolkit-4.10.0/Modules/ThirdParty/KWSys/src/KWSys/DynamicLoader.cxx	2016-08-17 11:33:16.000000000 +0200
+@@ -491,7 +491,7 @@
+ //----------------------------------------------------------------------------
+ DynamicLoader::LibraryHandle DynamicLoader::OpenLibrary(const std::string& libname )
+ {
+-  return dlopen(libname.c_str(), RTLD_LAZY);
++  return dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL );
+ }
+
+ //----------------------------------------------------------------------------

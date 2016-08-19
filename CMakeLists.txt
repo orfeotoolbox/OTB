@@ -1,8 +1,4 @@
-if(WIN32)
-  cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
-else()
-  cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
-endif()
+cmake_minimum_required(VERSION 2.8.11)
 
 foreach(p
     CMP0025 # CMake 3.0
@@ -397,7 +393,9 @@ endmacro()
 
 message("\n======================= Begin of OTB cmake summary =======================\n")
 
-message( ${OTB_GIT_STATUS_MESSAGE})
+if(OTB_GIT_STATUS_MESSAGE)
+  message( ${OTB_GIT_STATUS_MESSAGE})
+endif()
 if(OTB_DATA_GIT_STATUS_MESSAGE)
   message( ${OTB_DATA_GIT_STATUS_MESSAGE})
 endif()

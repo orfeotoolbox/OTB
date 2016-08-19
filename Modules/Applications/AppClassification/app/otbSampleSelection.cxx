@@ -104,7 +104,7 @@ private:
       "  - layer : index specifying from which layer to pick geometries.\n"
       "  - field : set the field name containing the class.\n"
       "  - mask : an optional raster mask can be used to discard samples.\n"
-      "  - outrates : allows to output a CSV file that summarizes the sampling rates for each class.\n"
+      "  - outrates : allows outputting a CSV file that summarizes the sampling rates for each class.\n"
       
       "\nAs with the PolygonClassStatistics application, different types  of geometry are supported : "
       "polygons, lines, points. \nThe behavior of this application is different for each type of geometry :\n"
@@ -134,7 +134,7 @@ private:
     SetParameterDescription("instats","Input file storing statistics (XML format)");
 
     AddParameter(ParameterType_OutputFilename, "outrates", "Output rates");
-    SetParameterDescription("outrates","Output rates (CSV formated)");
+    SetParameterDescription("outrates","Output rates (CSV formatted)");
     MandatoryOff("outrates");
 
     AddParameter(ParameterType_Choice, "sampler", "Sampler type");
@@ -264,6 +264,10 @@ private:
     m_RateCalculator->ClearRates();
     m_Periodic->GetFilter()->ClearOutputs();
     m_Random->GetFilter()->ClearOutputs();
+
+    // Setup ram
+    m_Periodic->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    m_Random->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     
     m_ReaderStat->SetFileName(this->GetParameterString("instats"));
     ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
