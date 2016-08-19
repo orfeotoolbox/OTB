@@ -79,10 +79,10 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*****************************************************************************/
-MainWindow
-::MainWindow( QWidget* parent, Qt::WindowFlags flags ) :
+MaplaMainWindow
+::MaplaMainWindow( QWidget* parent, Qt::WindowFlags flags ) :
   I18nMainWindow( parent, flags ),
-  m_UI( new mvd::Ui::MainWindow() )
+  m_UI( new mvd::Ui::MaplaMainWindow() )
 #ifdef OTB_USE_QT4
   ,
   m_ApplicationsToolBoxController( NULL )
@@ -92,8 +92,8 @@ MainWindow
 }
 
 /*****************************************************************************/
-MainWindow
-::~MainWindow()
+MaplaMainWindow
+::~MaplaMainWindow()
 {
   delete m_UI;
   m_UI = NULL;
@@ -101,7 +101,7 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::virtual_SetupUI()
 {
   setObjectName( "Mapla" );
@@ -140,7 +140,7 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::virtual_ConnectUI()
 {
   //
@@ -160,7 +160,7 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::closeEvent( QCloseEvent* event )
 {
   assert( Application::Instance() );
@@ -178,7 +178,7 @@ MainWindow
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::on_action_Preferences_triggered()
 {
 #if 0
@@ -190,7 +190,7 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::OnAboutToChangeModel( const AbstractModel * )
 {
   // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
@@ -200,7 +200,7 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::OnModelChanged( AbstractModel* model )
 {
   // qDebug() << this << "::OnModelChanged(" << model << ")";
@@ -210,7 +210,7 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
 				 const QString & )
 {
@@ -243,7 +243,7 @@ MainWindow
 
 /*****************************************************************************/
 void
-MainWindow
+MaplaMainWindow
 ::OnExecutionDone( int status )
 {
   if( status<0 )

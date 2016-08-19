@@ -67,18 +67,18 @@ class ApplicationsToolBoxController;
 
 namespace Ui
 {
-class MainWindow;
+class MaplaMainWindow;
 }
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class MainWindow
+ * \class MaplaMainWindow
  *
  * \brief The application main-widow widget.
  */
-class Monteverdi_EXPORT MainWindow
+class Monteverdi_EXPORT MaplaMainWindow
   : public I18nMainWindow
 {
 
@@ -96,10 +96,10 @@ public:
 // Public methods.
 public:
   /** \brief Constructor. */
-  MainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
+  MaplaMainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~MainWindow();
+  virtual ~MaplaMainWindow();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -183,7 +183,7 @@ private:
   /**
    * \brief uic generated.
    */
-  Ui::MainWindow* m_UI;
+  Ui::MaplaMainWindow* m_UI;
 
 #ifdef OTB_USE_QT4
   /**
