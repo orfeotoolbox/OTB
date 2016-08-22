@@ -47,6 +47,8 @@ qt4_add_resources( OTBMapla_RESOURCES_RCC ${OTBMapla_RESOURCES} )
 
 #############################################################################
 add_to_qt4_i18n_sources( ${OTBMapla_SRCS} )
+add_to_qt4_i18n_headers( "../include" ${OTBMapla_SRCS} )
+add_to_qt4_i18n_forms( ${OTBMapla_FORMS} )
 
 ##########################[Mapla library]####################################
 add_library( OTBMapla

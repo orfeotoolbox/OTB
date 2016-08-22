@@ -26,8 +26,12 @@ if( OTBQt4_ENABLED )
 
     message( STATUS "Qt I18N source files: " ${OTB_QT_I18N_SOURCE_FILES} )
 
+    set( OTB_QT_I18N_PRO "${CMAKE_CURRENT_BINARY_DIR}/i18n.pro" )
+
+    generate_qt4_project( ${OTB_TS_TRANSLATIONS} ${OTB_QT_I18N_PRO} )
+
     qt4_create_translation( OTB_QM_TRANSLATIONS
-      ${OTB_QT_I18N_SOURCE_FILES}
+      ${OTB_QT_I18N_PRO}
       ${OTB_TS_TRANSLATIONS}
       )
 

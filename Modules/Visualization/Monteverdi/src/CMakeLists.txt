@@ -30,6 +30,8 @@ qt4_add_resources( OTBMonteverdi_RESOURCES_RCC ${OTBMonteverdi_RESOURCES} )
 
 #############################################################################
 add_to_qt4_i18n_sources( ${OTBMonteverdi_SRCS} )
+add_to_qt4_i18n_headers( "../include" ${OTBMonteverdi_SRCS} )
+add_to_qt4_i18n_forms( ${OTBMonteverdi_FORMS} )
 
 #############################################################################
 add_library( OTBMonteverdi
