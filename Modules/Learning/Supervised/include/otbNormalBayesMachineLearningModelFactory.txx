@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbNormalBayesMachineLearningModelFactory_txx
+#define otbNormalBayesMachineLearningModelFactory_txx
+
 #include "otbNormalBayesMachineLearningModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -62,3 +65,5 @@ NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif

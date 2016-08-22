@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageReference_h
-#define __otbImageReference_h
+#ifndef otbImageReference_h
+#define otbImageReference_h
 
 #include "itkPoint.h"
 
@@ -173,4 +173,4 @@ private:
 // #include "otbImageReference.txx"
 #endif
 
-#endif // __otbImageReference_h
+#endif // otbImageReference_h

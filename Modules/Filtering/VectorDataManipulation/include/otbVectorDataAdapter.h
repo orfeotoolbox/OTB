@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataAdapter_h
-#define __otbVectorDataAdapter_h
+#ifndef otbVectorDataAdapter_h
+#define otbVectorDataAdapter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 
@@ -75,12 +75,12 @@ public:
 
 protected:
   VectorDataAdapter() {};
-  virtual ~VectorDataAdapter() {}
+  ~VectorDataAdapter() ITK_OVERRIDE {}
 
-  virtual OutputPointType ProcessPoint(InputPointType point) const;
-  virtual OutputLinePointerType ProcessLine(InputLinePointerType line) const;
-  virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const;
-  virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const;
+  OutputPointType ProcessPoint(InputPointType point) const ITK_OVERRIDE;
+  OutputLinePointerType ProcessLine(InputLinePointerType line) const ITK_OVERRIDE;
+  OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const ITK_OVERRIDE;
+  OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const ITK_OVERRIDE;
 
 private:
   VectorDataAdapter(const Self &); //purposely not implemented

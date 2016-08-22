@@ -20,6 +20,10 @@
 #include "otb_tinyxml.h"
 #include <vector>
 
+#ifdef OTB_USE_MPI
+#include "otbMPIConfig.h"
+#endif
+
 const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
 std::string PrepareExpressionFromXML(std::string filename);
 std::vector<std::string> PrepareVectorExpressionFromXML(std::string filename);
@@ -100,18 +104,18 @@ std::string PrepareExpressionFromXML(std::string filename)
 
   expression.append(moduleName);
 
-  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != ITK_NULLPTR;
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
     std::string key="-";
     key.append(GetChildNodeTextOf(n_Parameter, "key"));
 
-    TiXmlElement* n_Values = NULL;
+    TiXmlElement* n_Values = ITK_NULLPTR;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)
       {
       std::string values;
-      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
+      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != ITK_NULLPTR;
           n_Value = n_Value->NextSiblingElement())
         {
         values.append(n_Value->GetText());
@@ -197,19 +201,19 @@ std::vector<std::string> PrepareVectorExpressionFromXML(std::string filename)
 
   expression.push_back(CleanWord(moduleName));
 
-  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != ITK_NULLPTR;
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
     std::string key="-";
     key.append(GetChildNodeTextOf(n_Parameter, "key"));
     expression.push_back(CleanWord(key));
 
-    TiXmlElement* n_Values = NULL;
+    TiXmlElement* n_Values = ITK_NULLPTR;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)
       {
       std::string values;
-      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
+      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != ITK_NULLPTR;
           n_Value = n_Value->NextSiblingElement())
         {
         expression.push_back(CleanWord(n_Value->GetText()));
@@ -241,15 +245,20 @@ std::string CleanWord(const std::string & word)
   // Suppress whitespace characters at the beginning and ending of the string
   std::string::size_type cleanStart = word.find_first_not_of(" \t");
   std::string::size_type cleanEnd = word.find_last_not_of(" \t\f\v\n\r");
+  // cleanStart == npos implies cleanEnd == npos
   if (cleanEnd != std::string::npos)
     {
-    res = word.substr(cleanStart,cleanEnd+1);
+    res = word.substr(cleanStart, cleanEnd - cleanStart + 1);
     }
   return res;
 }
 
 int main(int argc, char* argv[])
 {
+  #ifdef OTB_USE_MPI
+  otb::MPIConfig::Instance()->Init(argc,argv);
+  #endif
+  
   if (argc < 2)
     {
     std::cerr << "Usage : " << argv[0] << " module_name [MODULEPATH] [arguments]" << std::endl;
@@ -257,7 +266,7 @@ int main(int argc, char* argv[])
     }
 
   std::vector<std::string> vexp;
-    
+
   std::string exp;
   if (strcmp(argv[1], "-inxml") == 0)
     {
@@ -315,7 +324,7 @@ const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string ke
 
   if(parentElement)
     {
-    TiXmlElement* childElement = 0;
+    TiXmlElement* childElement = ITK_NULLPTR;
     childElement = parentElement->FirstChildElement(key.c_str());
 
     //same as childElement->GetText() does but that call is failing if there is

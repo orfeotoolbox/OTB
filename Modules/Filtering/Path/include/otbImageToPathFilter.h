@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToPathFilter_h
-#define __otbImageToPathFilter_h
+#ifndef otbImageToPathFilter_h
+#define otbImageToPathFilter_h
 
 #include "itkPathSource.h"
 
@@ -58,8 +58,8 @@ public:
 
 protected:
   ImageToPathFilter();
-  virtual ~ImageToPathFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageToPathFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToPathFilter(const Self &);

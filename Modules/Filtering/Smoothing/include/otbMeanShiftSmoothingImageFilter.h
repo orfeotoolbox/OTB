@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __MeanShiftSmoothingImageFilter_h
-#define __MeanShiftSmoothingImageFilter_h
+#ifndef otbMeanShiftSmoothingImageFilter_h
+#define otbMeanShiftSmoothingImageFilter_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -572,11 +572,11 @@ protected:
    *  Define output pixel size
    *
    **/
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** MeanShiftFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -588,21 +588,21 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   /** Allocates the outputs (need to be reimplemented since outputs have different type) */
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
   /** Constructor */
   MeanShiftSmoothingImageFilter();
 
   /** Destructor */
-  virtual ~MeanShiftSmoothingImageFilter();
+  ~MeanShiftSmoothingImageFilter() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
                                         const RealVector& jointPixel, const OutputRegionType& outputRegion,

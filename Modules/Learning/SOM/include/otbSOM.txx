@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOM_txx
-#define __otbSOM_txx
+#ifndef otbSOM_txx
+#define otbSOM_txx
 
 #include "otbSOM.h"
 #include "itkImageRegionIteratorWithIndex.h"

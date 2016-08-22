@@ -20,6 +20,8 @@
 
 #include "otbOGRDataToClassStatisticsFilter.h"
 #include "otbStatisticsXMLFileWriter.h"
+#include "otbGeometriesProjectionFilter.h"
+#include "otbGeometriesSet.h"
 
 namespace otb
 {
@@ -45,13 +47,17 @@ public:
   
   typedef otb::StatisticsXMLFileWriter<FloatVectorImageType::PixelType> StatWriterType;
 
+  typedef otb::GeometriesSet GeometriesType;
+
+  typedef otb::GeometriesProjectionFilter ProjectionFilterType;
+
 private:
   PolygonClassStatistics()
     {
    
     }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("PolygonClassStatistics");
     SetDescription("Computes statistics on a training polygon set.");
@@ -108,16 +114,53 @@ private:
     SetDocExampleParameterValue("out","polygonStat.xml");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
   otb::ogr::DataSource::Pointer vectors = 
     otb::ogr::DataSource::New(this->GetParameterString("vec"));
   std::string fieldName = this->GetParameterString("field");
+
+  // Reproject geometries
+  FloatVectorImageType::Pointer inputImg = this->GetParameterImage("in");
+  std::string imageProjectionRef = inputImg->GetProjectionRef();
+  FloatVectorImageType::ImageKeywordlistType imageKwl =
+    inputImg->GetImageKeywordlist();
+  std::string vectorProjectionRef =
+    vectors->GetLayer(GetParameterInt("layer")).GetProjectionRef();
+
+  otb::ogr::DataSource::Pointer reprojVector = vectors;
+  GeometriesType::Pointer inputGeomSet;
+  ProjectionFilterType::Pointer geometriesProjFilter;
+  GeometriesType::Pointer outputGeomSet;
+  bool doReproj = true;
+  // don't reproject for these cases
+  if (vectorProjectionRef.empty() ||
+      (imageProjectionRef == vectorProjectionRef) ||
+      (imageProjectionRef.empty() && imageKwl.GetSize() == 0))
+    doReproj = false;
+
+  if (doReproj)
+    {
+    inputGeomSet = GeometriesType::New(vectors);
+    reprojVector = otb::ogr::DataSource::New();
+    outputGeomSet = GeometriesType::New(reprojVector);
+    // Filter instanciation
+    geometriesProjFilter = ProjectionFilterType::New();
+    geometriesProjFilter->SetInput(inputGeomSet);
+    if (imageProjectionRef.empty())
+      {
+      geometriesProjFilter->SetOutputKeywordList(inputImg->GetImageKeywordlist()); // nec qd capteur
+      }
+    geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
+    geometriesProjFilter->SetOutput(outputGeomSet);
+    otbAppLogINFO("Reprojecting input vectors...");
+    geometriesProjFilter->Update();
+    }
 
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(this->GetParameterImage("in"));
@@ -125,9 +168,11 @@ private:
     {
     filter->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
     }
-  filter->SetOGRData(vectors);
+  filter->SetOGRData(reprojVector);
   filter->SetFieldName(fieldName);
   filter->SetLayerIndex(this->GetParameterInt("layer"));
+
+  AddProcess(filter->GetStreamer(),"Analyse polygons...");
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();

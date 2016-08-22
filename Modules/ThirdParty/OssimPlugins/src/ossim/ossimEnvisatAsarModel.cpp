@@ -120,10 +120,9 @@ namespace ossimplugins
       else
       {
          mph mph_rec;
-         dataFile >> mph_rec;
 
          // test if it is an ENVISAT Data file
-         if (mph_rec.is_valid())
+         if (dataFile >> mph_rec && mph_rec.is_valid())
          {
             if (traceDebug())
             {

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageClassificationFilter_h
-#define __otbImageClassificationFilter_h
+#ifndef otbImageClassificationFilter_h
+#define otbImageClassificationFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbMachineLearningModel.h"
@@ -106,14 +106,14 @@ protected:
   /** Constructor */
   ImageClassificationFilter();
   /** Destructor */
-  virtual ~ImageClassificationFilter() {}
+  ~ImageClassificationFilter() ITK_OVERRIDE {}
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
   /** Before threaded generate data */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageClassificationFilter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTestMain_h
-#define __otbTestMain_h
+#ifndef otbTestMain_h
+#define otbTestMain_h
 
 #include "otbConfigure.h"
 
@@ -32,6 +32,9 @@
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
+#ifdef OTB_USE_MPI
+#include "otbMPIConfig.h"
+#endif
 
 typedef int (*MainFuncPointer)(int, char*[]);
 std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
@@ -64,6 +67,10 @@ void LoadTestEnv()
 
 int main(int ac, char* av[])
 {
+  #ifdef OTB_USE_MPI
+  otb::MPIConfig::Instance()->Init(ac,av);
+  #endif
+  
   bool   lFlagRegression(false);
   double lToleranceDiffValue(0);
   double lEpsilon(0);
@@ -332,6 +339,11 @@ int main(int ac, char* av[])
 
 
     result = EXIT_SUCCESS;
+#ifdef OTB_USE_MPI
+    otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+    if (mpiConfig->GetMyRank() == 0)
+    {
+#endif
     std::cout << " -> Test EXIT SUCCESS." << std::endl;
     if (lFlagRegression == false)
       {
@@ -410,6 +422,9 @@ int main(int ac, char* av[])
       }
     std::cout << "-------------  End control baseline tests    -------------" << std::endl;
 
+#ifdef OTB_USE_MPI
+    }
+#endif
     return result;
     }
 }

@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingMinMaxImageFilter_h
-#define __otbStreamingMinMaxImageFilter_h
+#ifndef otbStreamingMinMaxImageFilter_h
+#define otbStreamingMinMaxImageFilter_h
 
 #include <vector>
 #include "otbPersistentImageFilter.h"
@@ -123,26 +123,26 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs();
-  virtual void GenerateOutputInformation();
-  void Synthetize(void);
-  void Reset(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
 
 protected:
   PersistentMinMaxImageFilter();
-  virtual ~PersistentMinMaxImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentMinMaxImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType&
                              outputRegionForThread,
-                             itk::ThreadIdType threadId);
+                             itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentMinMaxImageFilter(const Self &); //purposely not implemented
@@ -279,7 +279,7 @@ protected:
   /** Constructor */
   StreamingMinMaxImageFilter() {}
   /** Destructor */
-  virtual ~StreamingMinMaxImageFilter() {}
+  ~StreamingMinMaxImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingMinMaxImageFilter(const Self &); //purposely not implemented

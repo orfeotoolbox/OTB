@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelIFFactory_h
-#define __otbMultiChannelIFFactory_h
+#ifndef otbMultiChannelIFFactory_h
+#define otbMultiChannelIFFactory_h
 
 #include "otbVectorImageToImageListFilter.h"
 #include "otbVectorImage.h"

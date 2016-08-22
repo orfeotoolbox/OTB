@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSOMLearningBehaviorFunctor_h
-#define __otbSOMLearningBehaviorFunctor_h
+#ifndef otbSOMLearningBehaviorFunctor_h
+#define otbSOMLearningBehaviorFunctor_h
 
 namespace otb
 {

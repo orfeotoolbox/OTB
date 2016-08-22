@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSIXSTraits_h
-#define __otbSIXSTraits_h
+#ifndef otbSIXSTraits_h
+#define otbSIXSTraits_h
 
 #include "otbAtmosphericCorrectionParameters.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpectralAngleDistanceImageFilter_h
-#define __otbSpectralAngleDistanceImageFilter_h
+#ifndef otbSpectralAngleDistanceImageFilter_h
+#define otbSpectralAngleDistanceImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -81,9 +81,9 @@ protected:
   /** Constructor */
   SpectralAngleDistanceImageFilter();
   /** Destructor */
-  virtual ~SpectralAngleDistanceImageFilter() {}
+  ~SpectralAngleDistanceImageFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** SpectralAngleDistanceImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -95,9 +95,9 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
 private:
   SpectralAngleDistanceImageFilter(const Self &); //purposely not implemented

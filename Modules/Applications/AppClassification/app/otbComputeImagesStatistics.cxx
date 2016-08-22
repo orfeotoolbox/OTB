@@ -42,7 +42,7 @@ public:
   itkTypeMacro(ComputeImagesStatistics, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ComputeImagesStatistics");
     SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
@@ -71,12 +71,12 @@ private:
    SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     //Statistics estimator
     typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVImageFilterType;

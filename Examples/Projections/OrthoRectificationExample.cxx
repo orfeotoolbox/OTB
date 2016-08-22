@@ -152,8 +152,8 @@ int main(int argc, char* argv[])
   orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[5], NULL);
-  origin[1] = strtod(argv[6], NULL);
+  origin[0] = strtod(argv[5], ITK_NULLPTR);
+  origin[1] = strtod(argv[6], ITK_NULLPTR);
   orthoRectifFilter->SetOutputOrigin(origin);
 // Software Guide : EndCodeSnippet
 

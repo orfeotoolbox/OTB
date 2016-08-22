@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalCovarianceToCoherencyDegreeImageFilter_h
-#define __ReciprocalCovarianceToCoherencyDegreeImageFilter_h
+#ifndef otbReciprocalCovarianceToCoherencyDegreeImageFilter_h
+#define otbReciprocalCovarianceToCoherencyDegreeImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -144,7 +144,7 @@ public:
 
 protected:
   ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
-  virtual ~ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
+  ~ReciprocalCovarianceToCoherencyDegreeImageFilter() ITK_OVERRIDE {}
 
 private:
   ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGISConnectionImplementation_h
-#define __otbGISConnectionImplementation_h
+#ifndef otbGISConnectionImplementation_h
+#define otbGISConnectionImplementation_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

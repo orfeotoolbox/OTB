@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthoRectificationFilter_txx
-#define __otbOrthoRectificationFilter_txx
+#ifndef otbOrthoRectificationFilter_txx
+#define otbOrthoRectificationFilter_txx
 
 #include "otbOrthoRectificationFilter.h"
 #include "itkMetaDataObject.h"
@@ -26,7 +26,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
-::OrthoRectificationFilter(): m_MapProjection(NULL)
+::OrthoRectificationFilter(): m_MapProjection(ITK_NULLPTR)
 {}
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>

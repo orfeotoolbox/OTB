@@ -1,15 +1,6 @@
-if( __EXTERNAL_FFTW__)
-  return()
-else()  
-  set(__EXTERNAL_FFTW__ 1)
-endif()
+INCLUDE_ONCE_MACRO(FFTW)
 
-if(USE_SYSTEM_FFTW)
-  message(STATUS "  Using FFTW system version")
-  return()
-endif()  
-
-SETUP_SUPERBUILD(PROJECT FFTW)
+SETUP_SUPERBUILD(FFTW)
 
 set(FFTWF_SB_SRC ${CMAKE_BINARY_DIR}/FFTW/src/FFTWF)
 set(FFTWD_SB_SRC ${CMAKE_BINARY_DIR}/FFTW/src/FFTWD)
@@ -22,7 +13,6 @@ if(MSVC)
 endif()
 
 
-message(STATUS "  Using FFTW SuperBuild version")
 
 # Compile the float version of FFTW
 ExternalProject_Add(FFTWF
@@ -46,7 +36,7 @@ ExternalProject_Add(FFTWF
   DEPENDS ${FFTW_DEPENDENCIES}
   )
 
-SUPERBUILD_PATCH_SOURCE(FFTWF "patch-for-at-rpath")
+SUPERBUILD_PATCH_SOURCE(FFTWF)
 
 # Compile the double version of FFTW
 ExternalProject_Add(FFTWD
@@ -67,10 +57,11 @@ ExternalProject_Add(FFTWD
   --enable-threads
   --disable-fortran
   --disable-dependency-tracking
+  DEPENDS FFTWF
   )
 
 
-SUPERBUILD_PATCH_SOURCE(FFTWD "patch-for-at-rpath")
+SUPERBUILD_PATCH_SOURCE(FFTWD)
 
 ExternalProject_Add(FFTW
   PREFIX FFTW
@@ -78,7 +69,7 @@ ExternalProject_Add(FFTW
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND ""
-  DEPENDS FFTWF FFTWD
+  DEPENDS FFTWD
   )
 
 set(_SB_FFTW_INCLUDE_PATH ${SB_INSTALL_PREFIX}/include)

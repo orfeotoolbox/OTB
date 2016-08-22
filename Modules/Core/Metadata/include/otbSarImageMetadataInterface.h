@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSarImageMetadataInterface_h
-#define __otbSarImageMetadataInterface_h
+#ifndef otbSarImageMetadataInterface_h
+#define otbSarImageMetadataInterface_h
 
 #include <string>
 #include <vector>
@@ -100,7 +100,7 @@ public:
   virtual const std::string GetAcquisitionMode() const;
 
   /** Get the enhanced band names (No enhanced band name support for SAR) */
-  StringVectorType GetEnhancedBandNames() const
+  StringVectorType GetEnhancedBandNames() const ITK_OVERRIDE
   {
     StringVectorType nothing;
     return nothing;
@@ -108,12 +108,12 @@ public:
 
 protected:
   SarImageMetadataInterface();
-  virtual ~SarImageMetadataInterface() {}
+  ~SarImageMetadataInterface() ITK_OVERRIDE {}
 
   PointSetPointer GetConstantValuePointSet(const RealType& value) const;
   IndexType GetConstantPolynomialDegree() const;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   LookupDataPointerType m_SarLut;
 

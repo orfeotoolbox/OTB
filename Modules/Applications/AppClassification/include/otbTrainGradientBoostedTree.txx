@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainGradientBoostedTree_txx
-#define __otbTrainGradientBoostedTree_txx
+#ifndef otbTrainGradientBoostedTree_txx
+#define otbTrainGradientBoostedTree_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb

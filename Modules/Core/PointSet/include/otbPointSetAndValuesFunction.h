@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetAndValuesFunction_h
-#define __otbPointSetAndValuesFunction_h
+#ifndef otbPointSetAndValuesFunction_h
+#define otbPointSetAndValuesFunction_h
 
 #include "itkFunctionBase.h"
 #include "itkContinuousIndex.h"

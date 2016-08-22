@@ -26,7 +26,8 @@ namespace Wrapper
 QtWidgetModel
 ::QtWidgetModel(Application* app) :
   m_Application(app),
-  m_LogOutput()
+  m_LogOutput(),
+  m_IsRunning(false)
 {
   // Init only if not already done
   if(!m_Application->IsInitialized())
@@ -54,8 +55,11 @@ QtWidgetModel
   emit UpdateGui();
 
   // Notify all
-  bool applicationStatus = m_Application->IsApplicationReady();
-  emit SetApplicationReady(applicationStatus);
+  if (!m_IsRunning)
+    {
+    bool applicationStatus = m_Application->IsApplicationReady();
+    emit SetApplicationReady(applicationStatus);
+    }
 }
 
 void
@@ -64,6 +68,7 @@ QtWidgetModel
 {
   // Deactivate the Execute button while processing
   emit SetApplicationReady(false);
+  m_IsRunning = true;
 
   // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
@@ -94,6 +99,8 @@ void
 QtWidgetModel
 ::OnApplicationExecutionDone( int status )
 {
+  m_IsRunning = false;
+
   // Require GUI update.
   NotifyUpdate();
 

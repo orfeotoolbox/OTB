@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMachineLearningModel_txx
-#define __otbMachineLearningModel_txx
+#ifndef otbMachineLearningModel_txx
+#define otbMachineLearningModel_txx
 
 #include "otbMachineLearningModel.h"
 

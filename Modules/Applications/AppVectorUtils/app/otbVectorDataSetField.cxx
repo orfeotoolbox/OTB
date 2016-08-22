@@ -40,7 +40,7 @@ public:
   itkTypeMacro(VectorDataSetField, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("VectorDataSetField");
     SetDescription("Set a field in vector data.");
@@ -71,12 +71,12 @@ private:
     SetDocExampleParameterValue("fv", "Sample polygon");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do (for now)
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_InputData = GetParameterVectorData("in");
 

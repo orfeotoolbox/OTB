@@ -98,9 +98,7 @@ SIXSTraits::ComputeAtmosphericParameters(
     otb_6s_integer iinf =
       static_cast<otb_6s_integer>((wlinf - (float) .25) / SIXSStepOfWavelengthSpectralBandValues + (float) 1.5);
     otb_6s_integer      cpt = iinf - 1;
-    otb_6s_doublereal * s(NULL);
-    s = new otb_6s_doublereal[S_6S_SIZE];
-    memset(s, 0, S_6S_SIZE * sizeof(otb_6s_doublereal));
+    otb_6s_doublereal s[S_6S_SIZE];
     const ValuesVectorType& FilterFunctionValues6S = WavelengthSpectralBand->GetFilterFunctionValues6S();
     // Set the values of FilterFunctionValues6S in s between [iinf-1; isup]
     for (unsigned int i = 0; i < FilterFunctionValues6S.size() && cpt < S_6S_SIZE; ++i)
@@ -127,8 +125,6 @@ SIXSTraits::ComputeAtmosphericParameters(
                                     &tdif_up_ray,
                                     &tdif_up_aer);
     otbMsgDevMacro(<< "Done call 6S main function!");
-    delete[] s;
-    s = NULL;
     }
   catch (std::bad_alloc& err)
     {

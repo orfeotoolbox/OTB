@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConvexOrConcaveClassificationFilter_h
-#define __otbConvexOrConcaveClassificationFilter_h
+#ifndef otbConvexOrConcaveClassificationFilter_h
+#define otbConvexOrConcaveClassificationFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 namespace otb
@@ -212,7 +212,7 @@ public:
    *
    */
   using Superclass::SetInput;
-  void SetInput(const TInputImage * image)
+  void SetInput(const TInputImage * image) ITK_OVERRIDE
   {
     this->SetInput1(image);
   }
@@ -239,7 +239,7 @@ public:
   itkGetMacro(Sigma, double);
 
   /** Set the functor parameters before calling the ThreadedGenerateData() */
-  virtual void BeforeThreadedGenerateData(void)
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
   {
     this->GetFunctor().SetConvexLabel(m_ConvexLabel);
     this->GetFunctor().SetConcaveLabel(m_ConcaveLabel);
@@ -257,9 +257,9 @@ protected:
     m_Sigma        = 0.0;
     };
   /** Destructor */
-  virtual ~ConvexOrConcaveClassificationFilter() {}
+  ~ConvexOrConcaveClassificationFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "ConvexLabel: " << m_ConvexLabel << std::endl;

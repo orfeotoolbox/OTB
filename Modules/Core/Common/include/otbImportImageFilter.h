@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImportImageFilter_h
-#define __otbImportImageFilter_h
+#ifndef otbImportImageFilter_h
+#define otbImportImageFilter_h
 
 #include "itkImageSource.h"
 
@@ -142,26 +142,26 @@ public:
 
 protected:
   ImportImageFilter();
-  virtual ~ImportImageFilter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImportImageFilter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** This filter does not actually "produce" any data, rather it "wraps"
    * the user supplied data into an itk::Image.  */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** This is a source, so it must set the spacing, size, and largest possible
    * region for the output image that it will produce.
    * \sa ProcessObject::GenerateOutputInformation() */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** This filter can only produce the amount of data that it is given,
-   * so we must override ProcessObject::EnlargeOutputRequestedRegion()
+   * so we must ITK_OVERRIDE ProcessObject::EnlargeOutputRequestedRegion()
    * (The default implementation of a source produces the amount of
    * data requested.  This source, however, can only produce what it is
    * given.)
    *
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
+  void EnlargeOutputRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
 
 private:
   ImportImageFilter(const ImportImageFilter &); //purposely not implemented

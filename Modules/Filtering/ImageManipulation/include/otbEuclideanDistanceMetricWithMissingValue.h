@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbEuclideanDistanceMetricWithMissingValue_h
-#define __otbEuclideanDistanceMetricWithMissingValue_h
+#ifndef otbEuclideanDistanceMetricWithMissingValue_h
+#define otbEuclideanDistanceMetricWithMissingValue_h
 
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 
@@ -68,13 +68,13 @@ public:
   typedef typename TVector::ValueType ValueType;
 
   /** Gets the distance between the origin and x */
-  double Evaluate(const TVector& x) const
+  double Evaluate(const TVector& x) const ITK_OVERRIDE
   {
     return ::vcl_sqrt(Superclass::Evaluate(x));
   }
 
   /** Gets the distance between x1 and x2 */
-  double Evaluate(const TVector& x1, const TVector& x2) const
+  double Evaluate(const TVector& x1, const TVector& x2) const ITK_OVERRIDE
   {
     return ::vcl_sqrt(Superclass::Evaluate(x1, x2));
   }
@@ -95,7 +95,7 @@ public:
 
 protected:
   EuclideanDistanceMetricWithMissingValue() {}
-  virtual ~EuclideanDistanceMetricWithMissingValue() {}
+  ~EuclideanDistanceMetricWithMissingValue() ITK_OVERRIDE {}
 }; // end of class
 
 } // end namespace statistics

@@ -42,7 +42,7 @@ public:
                                                       FloatImageType>     CalibrationFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("SarRadiometricCalibration");
     SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.\n");
@@ -86,12 +86,12 @@ private:
     SetDocExampleParameterValue("out", "SarRadiometricCalibration.tif" );
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
 
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     otbAppLogWARNING("This application is deprecated, it will be renamed in next"
       " version of OTB. Please consider using the renamed copy SARCalibration."

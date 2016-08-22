@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentFilterStreamingDecorator_h
-#define __otbPersistentFilterStreamingDecorator_h
+#ifndef otbPersistentFilterStreamingDecorator_h
+#define otbPersistentFilterStreamingDecorator_h
 
 #include "otbStreamingImageVirtualWriter.h"
 #include "itkProcessObject.h"
@@ -70,17 +70,17 @@ public:
   itkGetConstObjectMacro(Filter, FilterType);
   itkGetObjectMacro(Streamer, StreamerType);
 
-  virtual void Update(void);
+  void Update(void) ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   PersistentFilterStreamingDecorator();
   /** Destructor */
-  virtual ~PersistentFilterStreamingDecorator() {}
+  ~PersistentFilterStreamingDecorator() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /// Object responsible for streaming
   StreamerPointerType m_Streamer;

@@ -64,19 +64,19 @@ public:
   void SetCurrentLayer(const std::string & layername);
 
   // Retrieve the full extent of the actor
-  virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const ITK_OVERRIDE;
 
   // Return actor extent in its own geometry
   void GetBoundingBox(double & ulx, double & uly, double & lrx, double & lry) const;
 
   // Update internal actor state with respect to ViewSettings
-  virtual void ProcessViewSettings();
+  void ProcessViewSettings() ITK_OVERRIDE;
 
   // Heavy load/unload operations of data
-  virtual void UpdateData();
+  void UpdateData() ITK_OVERRIDE;
 
   // Gl rendering of current state
-  virtual void Render();
+  void Render() ITK_OVERRIDE;
 
   PointType ViewportToVectorTransform(const PointType & point) const;
 
@@ -103,21 +103,21 @@ public:
   itkSetMacro(LineWidth,double);
   itkGetConstReferenceMacro(LineWidth,double);
 
-  std::string GetWkt() const;
+  std::string GetWkt() const ITK_OVERRIDE;
 
   //
   // otb::GlActor overloads.
   //
 
-  virtual bool TransformFromViewport( Point2d & out,
+  bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
-                                      bool isPhysical = true ) const;
+                                      bool isPhysical = true ) const ITK_OVERRIDE;
 
 
 protected:
   GlVectorActor();
   
-  virtual ~GlVectorActor();
+  ~GlVectorActor() ITK_OVERRIDE;
 
 
   // Internal class to hold tiles

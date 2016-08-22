@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileWriter_txx
-#define __otbStatisticsXMLFileWriter_txx
+#ifndef otbStatisticsXMLFileWriter_txx
+#define otbStatisticsXMLFileWriter_txx
 
 #include "otbStatisticsXMLFileWriter.h"
 #include "itkMacro.h"
@@ -69,9 +69,10 @@ StatisticsXMLFileWriter<TMeasurementVector>
     itkExceptionMacro(<<"The XML output FileName is empty, please set the filename via the method SetFileName");
 
   // Check that the right extension is given : expected .xml */
-  if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
+  std::string extension = itksys::SystemTools::GetFilenameLastExtension(m_FileName);
+  if (itksys::SystemTools::LowerCase(extension) != ".xml")
     {
-    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
+    itkExceptionMacro(<<extension
                       <<" is a wrong Extension FileName : Expected .xml");
     }
 
@@ -81,7 +82,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
-  TiXmlElement * root = NULL;
+  TiXmlElement * root = ITK_NULLPTR;
   if (m_MeasurementVectorContainer.size())
     {
     root = new TiXmlElement( "FeatureStatistics");
@@ -110,7 +111,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     }
     
   // Iterate on map containers
-  TiXmlElement * mapRoot = NULL;
+  TiXmlElement * mapRoot = ITK_NULLPTR;
   if (m_GenericMapContainer.size())
     {
     mapRoot = new TiXmlElement( "GeneralStatistics");

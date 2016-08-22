@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSimplifyPathListFilter_h
-#define __otbSimplifyPathListFilter_h
+#ifndef otbSimplifyPathListFilter_h
+#define otbSimplifyPathListFilter_h
 
 #include "otbUnaryFunctorObjectListFilter.h"
 #include "otbSimplifyPathFunctor.h"

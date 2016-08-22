@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperOutputFilenameParameter_h
-#define __otbWrapperOutputFilenameParameter_h
+#ifndef otbWrapperOutputFilenameParameter_h
+#define otbWrapperOutputFilenameParameter_h
 
 #include <string>
 #include "otbWrapperStringParameter.h"
@@ -48,7 +48,7 @@ public:
   itkTypeMacro(OutputFilenameParameter, Parameter);
 
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return m_StringParam->HasValue();
   }
@@ -66,7 +66,7 @@ public:
     }
 
   // Clear Value
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_StringParam->ClearValue();
   }
@@ -82,7 +82,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~OutputFilenameParameter()
+  ~OutputFilenameParameter() ITK_OVERRIDE
   {}
 
 private:

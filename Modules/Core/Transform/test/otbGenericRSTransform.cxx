@@ -38,13 +38,13 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
 
   // Build wgs ref
   oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = NULL;
+  char * wgsRef = ITK_NULLPTR;
   oSRS.exportToWkt(&wgsRef);
 
   // Build UTM ref
   oSRS.SetProjCS("UTM");
   oSRS.SetUTM(31, true);
-  char * utmRef = NULL;
+  char * utmRef = ITK_NULLPTR;
   oSRS.exportToWkt(&utmRef);
 
   // Build Lambert II ref
@@ -56,7 +56,7 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   double falseNorthingL2 = 2200000;
   oSRS.SetProjCS("Lambert II ");
   oSRS.SetLCC(stdParallel1, stdParallel2, originLatL2, originLongL2, falseEastingL2, falseNorthingL2);
-  char * lambertRef = NULL;
+  char * lambertRef = ITK_NULLPTR;
   oSRS.exportToWkt(&lambertRef);
 
   // Build the Transmercator ref
@@ -66,7 +66,7 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   oSRS.SetProjCS("Transmercator ");
   oSRS.SetWellKnownGeogCS("WGS84");
   oSRS.SetTM(originLatTmt, originLongTmt, 1, 0, 0);
-  char * tmtRef = NULL;
+  char * tmtRef = ITK_NULLPTR;
   oSRS.exportToWkt(&tmtRef);
 
   TransformType::Pointer wgs2utm        = TransformType::New();

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRectangle_txx
-#define __otbRectangle_txx
+#ifndef otbRectangle_txx
+#define otbRectangle_txx
 
 #include "otbRectangle.h"
 

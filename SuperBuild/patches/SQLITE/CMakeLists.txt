@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(sqlite)
 
-set(BUILD_SHARED_LIBS ON)
+option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
 
 include_directories("${CMAKE_SOURCE_DIR}")
 add_definitions(-DSQLITE_ENABLE_COLUMN_METADATA=1)

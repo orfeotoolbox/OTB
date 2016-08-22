@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbRasterizeVectorDataFilter_txx
+#define otbRasterizeVectorDataFilter_txx
 
 #include "otbRasterizeVectorDataFilter.h"
 #include "otbOGRIOHelper.h"
@@ -25,7 +27,7 @@ namespace otb
 template<class TVectorData, class TInputImage, class TOutputImage>
 RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 ::RasterizeVectorDataFilter()
- : m_OGRDataSourcePointer(0)
+ : m_OGRDataSourcePointer(ITK_NULLPTR)
 {
   this->SetNumberOfRequiredInputs(1);
 }
@@ -64,7 +66,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
     // Get the projection ref of the current VectorData
     std::string projectionRefWkt = vd->GetProjectionRef();
     bool        projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = NULL;
+    OGRSpatialReference * oSRS = ITK_NULLPTR;
 
     if (projectionInformationAvailable)
       {
@@ -83,14 +85,14 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 
     // Iterative method to build the layers from a VectorData
     OGRRegisterAll();
-    OGRLayer *   ogrCurrentLayer = NULL;
+    OGRLayer *   ogrCurrentLayer = ITK_NULLPTR;
     std::vector<OGRLayer *> ogrLayerVector;
     otb::OGRIOHelper::Pointer IOConversion = otb::OGRIOHelper::New();
 
     // The method ConvertDataTreeNodeToOGRLayers create the
     // OGRDataSource but don t release it. Destruction is done in the
     // desctructor
-    m_OGRDataSourcePointer = NULL;
+    m_OGRDataSourcePointer = ITK_NULLPTR;
     ogrLayerVector = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot,
                                                                   m_OGRDataSourcePointer,
                                                                   ogrCurrentLayer,
@@ -103,7 +105,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
       }
 
     // Destroy the oSRS
-    if (oSRS != NULL)
+    if (oSRS != ITK_NULLPTR)
       {
       OSRRelease(oSRS);
       }
@@ -184,15 +186,15 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
   GDALSetGeoTransform(dataset,const_cast<double*>(geoTransform.GetDataPointer()));
 
   // Burn the geometries into the dataset
-   if (dataset != NULL)
+   if (dataset != ITK_NULLPTR)
      {
      GDALRasterizeLayers( dataset, m_BandsToBurn.size(),
                           &(m_BandsToBurn[0]),
                           m_SrcDataSetLayers.size(),
                           &(m_SrcDataSetLayers[0]),
-                          NULL, NULL, &(m_FullBurnValues[0]),
-                          NULL,
-                          GDALDummyProgress, NULL );
+                          ITK_NULLPTR, ITK_NULLPTR, &(m_FullBurnValues[0]),
+                          ITK_NULLPTR,
+                          GDALDummyProgress, ITK_NULLPTR );
 
      // release the dataset
      GDALClose( dataset );
@@ -209,3 +211,4 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 
 } // end namespace otb
 
+#endif

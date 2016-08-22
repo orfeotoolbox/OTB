@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbLearningApplicationBase_txx
-#define __otbLearningApplicationBase_txx
+#ifndef otbLearningApplicationBase_txx
+#define otbLearningApplicationBase_txx
 
 #include "otbLearningApplicationBase.h"
 // only need this filter as a dummy process object
@@ -30,7 +30,14 @@ template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
 ::LearningApplicationBase() : m_RegressionFlag(false)
 {
-} 
+}
+
+template <class TInputValue, class TOutputValue>
+LearningApplicationBase<TInputValue,TOutputValue>
+::~LearningApplicationBase()
+{
+  ModelFactoryType::CleanFactories();
+}
 
 template <class TInputValue, class TOutputValue>
 void

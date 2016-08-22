@@ -120,8 +120,8 @@ InputVectorDataParameter::HasValue() const
 void
 InputVectorDataParameter::ClearValue()
 {
- m_VectorData  = NULL;
- m_Reader = NULL;
+ m_VectorData  = ITK_NULLPTR;
+ m_Reader = ITK_NULLPTR;
  m_FileName = "";
 }
 

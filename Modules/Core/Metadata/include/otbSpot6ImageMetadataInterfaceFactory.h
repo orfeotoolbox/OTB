@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpot6ImageMetadataInterfaceFactory_h
-#define __otbSpot6ImageMetadataInterfaceFactory_h
+#ifndef otbSpot6ImageMetadataInterfaceFactory_h
+#define otbSpot6ImageMetadataInterfaceFactory_h
 
 
 #include "itkObjectFactoryBase.h"
@@ -38,8 +38,8 @@ public:
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
+  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
+  const char* GetDescription(void) const ITK_OVERRIDE;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -56,7 +56,7 @@ public:
 
 protected:
   Spot6ImageMetadataInterfaceFactory();
-  virtual ~Spot6ImageMetadataInterfaceFactory();
+  ~Spot6ImageMetadataInterfaceFactory() ITK_OVERRIDE;
 
 private:
   Spot6ImageMetadataInterfaceFactory(const Self &); //purposely not implemented

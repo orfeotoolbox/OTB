@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFEnergyGaussianClassification_h
-#define __otbMRFEnergyGaussianClassification_h
+#ifndef otbMRFEnergyGaussianClassification_h
+#define otbMRFEnergyGaussianClassification_h
 
 #include "otbMRFEnergy.h"
 #include "otbMath.h"
@@ -61,14 +61,14 @@ public:
 
   itkTypeMacro(MRFEnergyGaussianClassification, MRFEnergy);
 
-  void SetNumberOfParameters(const unsigned int nParameters)
+  void SetNumberOfParameters(const unsigned int nParameters) ITK_OVERRIDE
   {
     Superclass::SetNumberOfParameters(nParameters);
     this->m_Parameters.SetSize(nParameters);
     this->Modified();
   }
 
-  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2)
+  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) ITK_OVERRIDE
   {
     if ((unsigned int) value2 >= this->GetNumberOfParameters() / 2)
       {
@@ -86,7 +86,7 @@ public:
 protected:
   // The constructor and destructor.
   MRFEnergyGaussianClassification() {};
-  virtual ~MRFEnergyGaussianClassification() {}
+  ~MRFEnergyGaussianClassification() ITK_OVERRIDE {}
 
 };
 }

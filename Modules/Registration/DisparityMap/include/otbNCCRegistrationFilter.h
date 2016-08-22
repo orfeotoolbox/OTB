@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNCCRegistrationFilter_h
-#define __otbNCCRegistrationFilter_h
+#ifndef otbNCCRegistrationFilter_h
+#define otbNCCRegistrationFilter_h
 
 #include "itkPDEDeformableRegistrationFilter.h"
 #include "otbNCCRegistrationFunction.h"
@@ -134,18 +134,18 @@ public:
 
 protected:
   NCCRegistrationFilter();
-  virtual ~NCCRegistrationFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~NCCRegistrationFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Initialize the state of filter and equation before each iteration. */
-  virtual void InitializeIteration();
+  void InitializeIteration() ITK_OVERRIDE;
 
   /** Apply update. */
   using Superclass::ApplyUpdate;
   virtual void ApplyUpdate(TimeStepType dt);
 
   /** Update the Input requested region. */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 private:
   NCCRegistrationFilter(const Self &); //purposely not implemented

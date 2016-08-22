@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRoadExtractionFilter_txx
-#define __otbGenericRoadExtractionFilter_txx
+#ifndef otbGenericRoadExtractionFilter_txx
+#define otbGenericRoadExtractionFilter_txx
 
 #include "otbGenericRoadExtractionFilter.h"
 #include "otbMath.h"

@@ -47,7 +47,7 @@ public:
   typedef otb::GenericRSTransform<>        TransformType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConvertCartoToGeoPoint");
     SetDescription("Convert cartographic coordinates to geographic one.");
@@ -88,11 +88,11 @@ private:
     SetDocExampleParameterValue("mapproj.utm.zone", "31");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the projectionRef
     std::string inputProjRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "mapproj");
