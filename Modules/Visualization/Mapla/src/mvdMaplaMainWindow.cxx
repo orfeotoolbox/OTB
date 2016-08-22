@@ -117,7 +117,7 @@ MaplaMainWindow
       this
     );
 
-  assert( Application::Instance() );
+  assert( MaplaApplication::Instance() );
 
   setCentralWidget( m_ApplicationsToolBoxController->GetWidget() );
 
@@ -163,10 +163,10 @@ void
 MaplaMainWindow
 ::closeEvent( QCloseEvent* event )
 {
-  assert( Application::Instance() );
+  assert( MaplaApplication::Instance() );
   assert(
-    Application::Instance()->GetModel()==
-    Application::Instance()->GetModel< OTBApplicationsModel >()
+    MaplaApplication::Instance()->GetModel()==
+    MaplaApplication::Instance()->GetModel< OTBApplicationsModel >()
   );
 
   SaveLayout( Monteverdi_UI_VERSION );
@@ -216,20 +216,20 @@ MaplaMainWindow
 {
 #ifdef OTB_USE_QT4
 
-  assert( Application::ConstInstance()!=NULL );
-  assert( Application::ConstInstance()->GetModel()!=NULL );
+  assert( MaplaApplication::ConstInstance()!=NULL );
+  assert( MaplaApplication::ConstInstance()->GetModel()!=NULL );
   assert(
-    Application::ConstInstance()->GetModel()==
-    Application::ConstInstance()->GetModel< OTBApplicationsModel >()
+    MaplaApplication::ConstInstance()->GetModel()==
+    MaplaApplication::ConstInstance()->GetModel< OTBApplicationsModel >()
   );
   assert(
-    Application::ConstInstance()
+    MaplaApplication::ConstInstance()
     ->GetModel< OTBApplicationsModel >()
     ->GetLauncher()!=NULL
   );
 
   QWidget * appWindow =
-    Application::ConstInstance()
+    MaplaApplication::ConstInstance()
     ->GetModel< OTBApplicationsModel >()
     ->GetLauncher()
     ->NewOtbApplicationWindow( appName, true, this );

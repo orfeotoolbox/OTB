@@ -65,10 +65,10 @@ class OTBApplicationsModel;
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class Application
+/** \class MaplaApplication
  *
  */
-class Monteverdi_EXPORT Application
+class Monteverdi_EXPORT MaplaApplication
   : public I18nApplication
 {
 
@@ -91,27 +91,27 @@ public:
    *
    * \param qtApp The parent Qt application (\see I18nApplication).
    */
-  Application( QApplication* qtApp );
+  MaplaApplication( QApplication* qtApp );
 
   /** \brief Destructor. */
-  virtual ~Application();
+  virtual ~MaplaApplication();
 
   //
   // STATIC METHODS.
 
   /**
    * \brief Access the const instance of application singleton.
-   * \return The const instance to the singleton Application.
+   * \return The const instance to the singleton MaplaApplication.
    */
   inline
-    static const Application* ConstInstance();
+    static const MaplaApplication* ConstInstance();
 
   /**
    * \brief Access the non-const instance of application singleton.
-   * \return The non-const instance to the singleton Application.
+   * \return The non-const instance to the singleton MaplaApplication.
    */
   inline
-    static Application* Instance();
+    static MaplaApplication* Instance();
 
   /**
    */
@@ -166,20 +166,20 @@ namespace mvd
 
 /*****************************************************************************/
 inline
-const Application*
-Application
+const MaplaApplication*
+MaplaApplication
 ::ConstInstance()
 {
-  return I18nCoreApplication::ConstInstance< Application >();
+  return I18nCoreApplication::ConstInstance< MaplaApplication >();
 }
 
 /*****************************************************************************/
 inline
-Application*
-Application
+MaplaApplication*
+MaplaApplication
 ::Instance()
 {
-  return I18nCoreApplication::Instance< Application >();
+  return I18nCoreApplication::Instance< MaplaApplication >();
 }
 
 } // end namespace 'mvd'

@@ -64,26 +64,26 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-Application
-::Application( QApplication* qtApp ) :
+MaplaApplication
+::MaplaApplication( QApplication* qtApp ) :
   I18nApplication( qtApp )
 {
 }
 
 /*******************************************************************************/
-Application
-::~Application()
+MaplaApplication
+::~MaplaApplication()
 {
 }
 
 /*******************************************************************************/
 void
-Application
+MaplaApplication
 ::virtual_InitializeCore()
 {
   I18nApplication::virtual_InitializeCore();
 
-  setObjectName( "Application" );
+  setObjectName( "MaplaApplication" );
 
   InitializeCore(
     "Monteverdi Application Launcher", Monteverdi_VERSION_STRING,
@@ -93,7 +93,7 @@ Application
 
 /*******************************************************************************/
 void
-Application
+MaplaApplication
 ::Foo()
 {
   SetModel( new OTBApplicationsModel( this ) );

@@ -82,11 +82,11 @@ main( int argc, char* argv[] )
   //
   // Coverity-14835
   // {
-  mvd::Application * application = NULL;
+  mvd::MaplaApplication * application = NULL;
 
   try
     {
-    application = new mvd::Application( &qtApp );
+    application = new mvd::MaplaApplication( &qtApp );
     assert( application!=NULL );
 
     application->Initialize();
@@ -119,7 +119,7 @@ main( int argc, char* argv[] )
 
   //
   // 2. Initialize main-window (UI).
-  mvd::MainWindow mainWindow;
+  mvd::MaplaMainWindow mainWindow;
   mainWindow.Initialize();
 
   application->Foo();
