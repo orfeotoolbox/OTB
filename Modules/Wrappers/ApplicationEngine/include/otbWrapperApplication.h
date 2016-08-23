@@ -416,7 +416,7 @@ public:
   void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
 
   /**
-   * Get the output image pamaraeter as an ImageBase * instead
+   * Get the output image parameter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
    * \in parameter The parameter key
@@ -438,7 +438,7 @@ public:
   void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
 
   /**
-   * Get the complex output image pamaraeter as an ImageBase * instead
+   * Get the complex output image parameter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
    * \in parameter The parameter key
