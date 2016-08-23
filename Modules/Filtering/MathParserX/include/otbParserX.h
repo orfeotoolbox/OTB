@@ -63,12 +63,16 @@ public:
   /** Convenient type definitions */
   typedef ParserX                                   ParserXType;
   typedef mup::Value                                ValueType;
+  typedef mup::IValue                               IValueType;
 
   /** Set the expression to be parsed */
   virtual void SetExpr(const std::string & Expression);
 
   /** Trigger the parsing */
   ValueType Eval();
+
+  /** Trigger the parsing but return a const ref */
+  const IValueType & EvalRef();
 
   /** Define a variable */
   void DefineVar(const std::string &sName, ValueType *fVar);

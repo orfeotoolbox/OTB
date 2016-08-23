@@ -177,6 +177,16 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // clean temporary inputs
   this->m_InMemoryInputs.clear();
 
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  
+  unsigned int actualNumberOfThreads = numberOfThreads;
+  
+  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
+    {
+    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
+    }
+
+  
   // gather temporary outputs and write to output
   const otb::ogr::DataSource* vectors = this->GetOGRData();
   itk::TimeProbe chrono;
@@ -198,7 +208,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
         }
   
-      for (unsigned int thread=0 ; thread < this->GetNumberOfThreads() ; thread++)
+      for (unsigned int thread=0 ; thread < actualNumberOfThreads ; thread++)
         {
         ogr::Layer inLayer = this->m_InMemoryOutputs[thread][count]->GetLayerChecked(0);
         if (!inLayer)
@@ -250,7 +260,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   TInputImage* outputImage = this->GetOutput();
   RegionType requestedRegion = outputImage->GetRequestedRegion();
 
-  ogr::Layer layer = this->m_InMemoryInputs[threadid]->GetLayerChecked(0);
+  ogr::Layer layer = this->m_InMemoryInputs.at(threadid)->GetLayerChecked(0);
   if (! layer)
     {
     return;
@@ -625,6 +635,13 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
 
+  unsigned int actualNumberOfThreads = numberOfThreads;
+
+  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
+    {
+    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
+    }
+  
   // prepare temporary input : split input features between available threads
   this->m_InMemoryInputs.clear();
   std::string tmpLayerName("thread");
@@ -635,7 +652,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     }
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   std::vector<ogr::Layer> tmpLayers;
-  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+  for (unsigned int i=0 ; i < actualNumberOfThreads ; i++)
     {
     ogr::DataSource::Pointer tmpOgrDS = ogr::DataSource::New();
     ogr::Layer tmpLayer = tmpOgrDS->CreateLayer(
@@ -685,9 +702,17 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   // Prepare in-memory outputs
   unsigned int numberOfThreads = this->GetNumberOfThreads();
+
+  unsigned int actualNumberOfThreads = numberOfThreads;
+
+  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
+    {
+    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
+    }
+  
   this->m_InMemoryOutputs.clear();
   std::string tmpLayerName("threadOut");
-  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+  for (unsigned int i=0 ; i < actualNumberOfThreads ; i++)
     {
     std::vector<OGRDataPointer> tmpContainer;
     // iterate over outputs, only process ogr::DataSource
