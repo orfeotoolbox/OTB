@@ -48,6 +48,7 @@ the `Orfeo ToolBox website <http://orfeo-toolbox.org>`_.
 .. toctree::
    :maxdepth: 2
 
+   Installation
    OTB-Applications
    Monteverdi
    Recipes
