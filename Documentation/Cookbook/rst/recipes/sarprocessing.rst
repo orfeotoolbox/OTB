@@ -73,7 +73,7 @@ Then the intensity image is despeckled with the Gamma-MAP filter :
 The produced images were then rescaled to intensities ranging from 0 to
 255 in order to be displayed.
 
-|image| |image| [fig:S1VVdespeckledextract]
+.. figure:: ../Art/SARImages/S1-VV-despeckled-extract.png
 
 Polarimetry
 -----------
@@ -100,7 +100,7 @@ from the Sinclair one, or the Mueller matrix from the coherency one. The
 figure below ([fig:polconv]) shows the workflow used in this
 application.
 
-|image| [fig:polconv]
+.. figure:: ../Art/SARImages/sarpol_conversion_schema.png
 
 The filters used in this application never handle matrices, but images
 where each band is related to their elements. As most of the time SAR
@@ -632,11 +632,11 @@ variable.
 The results are shown in the figures below ([fig:entropyimage] ,
 [fig:alphaimage] and [fig:anisotropyimage]).
 
-|image| [fig:entropyimage]
+.. figure:: ../Art/SARImages/entropyhot.png
 
-|image| [fig:alphaimage]
+.. figure:: ../Art/SARImages/alphahot.png
 
-|image| [fig:anisotropyimage]
+.. figure:: ../Art/SARImages/anisotropyhot.png
 
 Polarimetric synthetis
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -721,9 +721,9 @@ were used to produce the LL and LR images :
 The produced images were then rescaled to intensities ranging from 0 to
 255 in order to be displayed.
 
-|image| [fig:polsynthll]
+.. figure:: ../Art/SARImages/test-left-co-2.png
 
-|image| [fig:polsynthlr]
+.. figure:: ../Art/SARImages/test-left-cross-2.png
 
 Polarimetric data visualization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -801,11 +801,11 @@ Then, we rescale the produced images to intensities ranging from 0 to
 Figures below ([fig:hhfrisco] , [fig:hvfrisco] and [fig:vvfrisco]) show
 the images obtained :
 
-|image| [fig:hhfrisco]
+.. figure:: ../Art/SARImages/RSAT2_HH_Frisco.png
 
-|image| [fig:hvfrisco]
+.. figure:: ../Art/SARImages/RSAT2_HV_Frisco.png
 
-|image| [fig:vvfrisco]
+.. figure:: ../Art/SARImages/RSAT2_VV_Frisco.png
 
 Now the most interesting step. In order to get a friendly coloration of
 these data, we are going to use the Pauli decomposition, defined as
@@ -865,17 +865,4 @@ And finally, we merge the three bands into a single RGB image.
 
 The result is shown in the figure below ([fig:colorfrisco]).
 
-|image| [fig:colorfrisco]
-
-.. |image| image:: ../Art/SARImages/S1-VV-extract-int.png
-.. |image| image:: ../Art/SARImages/S1-VV-despeckled-extract.png
-.. |image| image:: ../Art/SARImages/sarpol_conversion_schema.png
-.. |image| image:: ../Art/SARImages/entropyhot.png
-.. |image| image:: ../Art/SARImages/alphahot.png
-.. |image| image:: ../Art/SARImages/anisotropyhot.png
-.. |image| image:: ../Art/SARImages/test-left-co-2.png
-.. |image| image:: ../Art/SARImages/test-left-cross-2.png
-.. |image| image:: ../Art/SARImages/RSAT2_HH_Frisco.png
-.. |image| image:: ../Art/SARImages/RSAT2_HV_Frisco.png
-.. |image| image:: ../Art/SARImages/RSAT2_VV_Frisco.png
-.. |image| image:: ../Art/SARImages/visuPauli.png
+.. figure:: ../Art/SARImages/visuPauli.png

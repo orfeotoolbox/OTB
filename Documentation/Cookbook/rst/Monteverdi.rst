@@ -222,7 +222,7 @@ A standard DMG package is available for for MacOS X 10.10. Please go the
 GUI : what does it look like ?
 ------------------------------
 
-|image| [fig:mongui]
+.. image:: Art/MonteverdiImages/gui.png
 
 This is ’s main window (figure  [fig:mongui]) where the different
 functionalities are reachable:
@@ -339,9 +339,8 @@ The dock on the right side is divided into four tabs :
 Each tab is represented by the figures below ( [fig:quickhisto]
  [fig:colorsetdyn]).
 
-|image| [fig:quickhisto]
-
-|image| [fig:colorsetdyn]
+.. figure:: Art/MonteverdiImages/quickhisto.png
+.. figure:: Art/MonteverdiImages/colsetdyn.png
 
 Layer stack
 ~~~~~~~~~~~
@@ -376,7 +375,7 @@ Concerning the six icons, from left to right:
 
 The layer stack is represented in the figure below ( [fig:layerstack]) :
 
-|image| [fig:layerstack]
+.. figure:: Art/MonteverdiImages/layerstack.png
 
 Examples
 --------
@@ -390,7 +389,7 @@ window. The applications are arranged in thematic functionalities; the
 user can also quickly find the wanted application by typing its name in
 the dedicated field at the top of the loading window.
 
-|image| [fig:applications]
+.. figure:: Art/MonteverdiImages/applications.png
 
 Optical calibration
 ~~~~~~~~~~~~~~~~~~~
@@ -413,7 +412,7 @@ In the figure below ( [fig:OC]), by taking a look at the layer stack,
 one can notice that the values of the calibrated image are now expressed
 in spectral radiance.
 
-|image| [fig:OC]
+.. figure:: Art/MonteverdiImages/OC.png
 
 BandMath
 ~~~~~~~~
@@ -429,7 +428,7 @@ transformed image, the mode is located at position :math:`354737.1454`,
 that’s to say 1000 times farther away approximately (the cursors aren’t
 placed exactly at the same position in the screenshots).
 
-|image| [fig:BM]
+.. figure:: Art/MonteverdiImages/BM.png
 
 Segmentation
 ~~~~~~~~~~~~
@@ -442,7 +441,7 @@ format. Thus, the value of the mode option must be set to raster. The
 following figure ( [fig:seg12]) shows the original image and the labels
 image.
 
-|image| [fig:seg12]
+.. figure:: Art/MonteverdiImages/seg1-2.png
 
 Gray colors aren’t very convenient for visualizing a segmentation.
 That’s why we are going to use another application, the ColorMapping one
@@ -453,7 +452,7 @@ adjacent regions is maximized. For this purpose, we can use the method
 optimal (set the value of this option to optimal). The figure below
 ( [fig:seg3]) shows the result of such colorization.
 
-|image| [fig:seg3]
+.. figure:: Art/MonteverdiImages/seg3.png
 
 Now it should be nice to superimpose this colorization with the original
 image to assess the quality of the segmentation. provides the user a
@@ -464,7 +463,7 @@ circle to convenience. The figure below ( [fig:seg4]) shows the result
 of such colorization. We encourage the reader to test the other layer
 effects.
 
-|image| [fig:seg4]
+.. figure:: Art/MonteverdiImages/seg4.png
 
 Polarimetry
 ~~~~~~~~~~~
@@ -502,7 +501,7 @@ In this example, we are going to use three applications :
 In the figure below ( [fig:pol1]), we show the obtained result, with the
 local contrast layer effect.
 
-|image| [fig:pol1]
+.. figure:: Art/MonteverdiImages/pol1.png
 
 Pansharpening
 ~~~~~~~~~~~~~
@@ -513,9 +512,9 @@ this application needs a panchromatic image, a XS image, and an output
 image. These images are represented in the figures below ( [fig:ps12]
 and  [fig:ps3]):
 
-|image| [fig:ps12]
+.. figure:: Art/MonteverdiImages/ps1-2.png
 
-|image| [fig:ps3]
+.. figure:: Art/MonteverdiImages/ps3.png
 
 Now, in order to inspect the result properly, these three images are
 loaded in . The pansharpened image is placed to the top of the stack
@@ -527,9 +526,9 @@ layer, and different layer effects are applied to it :
 -  in figure  [fig:ps5] : translucency effect, to compare the result
    with the panchromatic image.
 
-|image| [fig:ps4]
+.. figure:: Art/MonteverdiImages/ps4.png
 
-|image| [fig:ps5]
+.. figure:: Art/MonteverdiImages/ps5.png
 
 Conclusion
 ~~~~~~~~~~
@@ -549,19 +548,3 @@ repository (https://git.orfeo-toolbox.org/otb-data.git):
       (pansharpening example)
 
 -  in OTB-Data/Input/mv2-test : QB\_1\_ortho.tif
-
-.. |image| image:: ../Art/MonteverdiImages/gui.png
-.. |image| image:: ../Art/MonteverdiImages/quickhisto.png
-.. |image| image:: ../Art/MonteverdiImages/colsetdyn.png
-.. |image| image:: ../Art/MonteverdiImages/layerstack.png
-.. |image| image:: ../Art/MonteverdiImages/applications.png
-.. |image| image:: ../Art/MonteverdiImages/OC.png
-.. |image| image:: ../Art/MonteverdiImages/BM.png
-.. |image| image:: ../Art/MonteverdiImages/seg1-2.png
-.. |image| image:: ../Art/MonteverdiImages/seg3.png
-.. |image| image:: ../Art/MonteverdiImages/seg4.png
-.. |image| image:: ../Art/MonteverdiImages/pol1.png
-.. |image| image:: ../Art/MonteverdiImages/ps1-2.png
-.. |image| image:: ../Art/MonteverdiImages/ps3.png
-.. |image| image:: ../Art/MonteverdiImages/ps4.png
-.. |image| image:: ../Art/MonteverdiImages/ps5.png

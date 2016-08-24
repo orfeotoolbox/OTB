@@ -63,6 +63,12 @@ foreach(qt_image ${qt_images})
   configure_file(${qt_image} ${RST_GENERATED_SOURCE_DIR}/Art/QtImages/${out_file} COPYONLY)
 endforeach()
 
+file(GLOB sar_images ${CMAKE_CURRENT_SOURCE_DIR}/Art/SARImages/*.png)
+foreach(sar_image ${sar_images})
+  get_filename_component(out_file ${sar_image} NAME)
+  configure_file(${sar_image} ${RST_GENERATED_SOURCE_DIR}/Art/SARImages/${out_file} COPYONLY)
+endforeach()
+
 file(GLOB rst_sources1 ${RST_SOURCES}/*.rst)
 foreach(rst_file ${rst_sources1})
   get_filename_component(out_file ${rst_file} NAME)
