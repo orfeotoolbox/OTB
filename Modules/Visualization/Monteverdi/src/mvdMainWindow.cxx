@@ -220,7 +220,12 @@ MainWindow
   assert( m_UI!=NULL );
 
   setObjectName( PROJECT_NAME );
+
+#ifdef _DEBUG
+  setWindowTitle( PROJECT_NAME "(Debug)" );
+#else // _DEBUG
   setWindowTitle( PROJECT_NAME );
+#endif // _DEBUG
 
   InitializeCentralWidget();
 
@@ -1974,7 +1979,11 @@ MainWindow
     assert( imageModel!=NULL );
 
     setWindowTitle(
+#ifdef _DEBUG
+      QString( PROJECT_NAME " (Debug) - %1" )
+#else // _DEBUG
       QString( PROJECT_NAME " - %1" )
+#endif // _DEBUG
       .arg( QFileInfo( imageModel->GetFilename() ).fileName() )
     );
 
