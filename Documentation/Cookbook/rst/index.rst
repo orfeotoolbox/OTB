@@ -19,10 +19,9 @@ OTB Applications and more recently the Monteverdi tool has helped to
 broaden the audience of the library, giving access to its
 functionalities to non-developers.
 
-Meanwhile, the `OTB Software
-Guide <http://orfeo-toolbox.org/SoftwareGuide/>`__has grown to more than
+Meanwhile, the `OTB Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_ has grown to more than
 700 pages of documented code examples, which, combined with the class
-documentation with the `Doxygen <http://orfeo-toolbox.org/doxygen/>`__,
+documentation with the `Doxygen <http://orfeo-toolbox.org/doxygen/>`_,
 allows developer users to find their way through the Orfeo ToolBox so
 as to write code suiting their needs.
 
@@ -44,7 +43,7 @@ common remote sensing tasks, detailing how they can be achieved with
 either Monteverdi or an application.
 
 For more information on the Orfeo ToolBox, please feel free to visit
-the `Orfeo ToolBox website <http://orfeo-toolbox.org>`__.
+the `Orfeo ToolBox website <http://orfeo-toolbox.org>`_.
 
 .. toctree::
    :maxdepth: 2

@@ -4,73 +4,73 @@ A brief tour of OTB-Applications
 Introduction
 ------------
 
-**OTB Applications** was perhaps the older package of the **Orfeo
-Toolbox** suite after the OTB package itself. Since the **Orfeo
-Toolbox** is a library providing remote sensing functionalities, the
+OTB Applications was perhaps the older package of the Orfeo
+Toolbox suite after the OTB package itself. Since the Orfeo
+Toolbox is a library providing remote sensing functionalities, the
 only applications that were distributed at the beginning were the
 examples from the Software Guide and the tests. These applications are
 very useful for the developer because their code is very short and only
 demonstrates one functionality at a time. In many cases, a real
 application would require :
 
--  combining together two or more functions from the **Orfeo Toolbox**
+-  combining together two or more functions from the Orfeo Toolbox
 
 -  providing a nice high level interface to handle : parameters, input
    data, output data and communication with the user
 
-The **OTB Applications** package was originally designed to provide
+The OTB Applications package was originally designed to provide
 applications performing simple remote sensing tasks, more complex than
 simple examples from the Software Guide, and with a more user-friendly
 interface (either graphical or command-line), to demonstrate the use of
-the **Orfeo Toolbox** functions. The most popular applications are maybe
+the Orfeo Toolbox functions. The most popular applications are maybe
 the *otbImageViewerManager* , which allows to open a collection of
 images and navigate in them, and the
 *otbSupervisedClassificationApplication* , which allowed to delineate
 training regions of interest on the image and classify the image with a
 SVM classifier trained with these regions (this application is no longer
 maintained since the same functionnality is available through the
-corresponding **Monteverdi** module). During the first 3 years of the
-**Orfeo Toolbox** development, many more applications have been added to
+corresponding Monteverdi module). During the first 3 years of the
+Orfeo Toolbox development, many more applications have been added to
 this package, to perform various tasks. Most of them came with a
 graphical user interface, apart from some small utilities that are
 command-line.
 
-The development and release of the **Monteverdi** software (see
+The development and release of the Monteverdi software (see
 chapter [chap:Monteverdi] at the end of year 2009 changed a lot of
-things for the **OTB Applications** package: most of non-developer users
-were looking for quite a long time for an application providing **Orfeo
-Toolbox** functionalities under a unified graphical interface. Many
-applications from the **OTB Applications** package were integrated to
-**Monteverdi** as modules, and the **OTB Applications** package lost a
+things for the OTB Applications package: most of non-developer users
+were looking for quite a long time for an application providing Orfeo
+Toolbox functionalities under a unified graphical interface. Many
+applications from the OTB Applications package were integrated to
+Monteverdi as modules, and the OTB Applications package lost a
 lot of its usefulness. No more applications were added to the package
 and it was barely maintained, as new graphical tools were directly
-embedded within **Monteverdi** .
+embedded within Monteverdi .
 
-Then, some people started to regain interest in the **OTB Applications**
-package. **Monteverdi** is a great tool to perform numerous remote
+Then, some people started to regain interest in the OTB Applications
+package. Monteverdi is a great tool to perform numerous remote
 sensing and image processing task in a minute, but it is not well
 adapted to heavier (and longer) processing, scripting and batch
-processing. Therefore, in 2010 the **OTB Applications** package has been
+processing. Therefore, in 2010 the OTB Applications package has been
 revamped: old applications have been moved to a legacy folder for
 backward compatibility, and the development team started to populate the
 package with compact command-line tools to perform various heavy
 processing tasks.
 
-Later on in 2011, the **OTB Applications** has been further revamped.
-Because of the increasing need to interface the **OTB Applications**
+Later on in 2011, the OTB Applications has been further revamped.
+Because of the increasing need to interface the OTB Applications
 into other software and to provide auto-generated interfaces, the
-**Orfeo Toolbox** development team decided to develop a new application
+Orfeo Toolbox development team decided to develop a new application
 framework. The main idea of this framework is the following: each
 application is written once for all in a shared library (also known as
 plugin). This plugin can be auto-loaded into appropriate tools wihtout
 recompiling, and is able to fully describe its parameters, behaviour and
 documentation.
 
-The tools to use the plugins can be extended, but **Orfeo Toolbox**
+The tools to use the plugins can be extended, but Orfeo Toolbox
 shipped the following:
 
 -  A command-line laucher, which is almost equivalent to the former
-   **OTB Applications** command-line interface,
+   OTB Applications command-line interface,
 
 -  A graphical launcher, with an auto-generated QT interface, providing
    ergonomic parameters setting, display of documentation, and progress
@@ -86,12 +86,12 @@ QGis. You can find a short guide about it
 `here <http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications>`_ .
 
 To facilitate the use of these tools and applications, they will now be
-shipped with the standard **Orfeo Toolbox** package. It means that the
-former **OTB-Applications** package has entered its maintenance cycle :
+shipped with the standard Orfeo Toolbox package. It means that the
+former OTB-Applications package has entered its maintenance cycle :
 no new feature will be pushed there, and all development is done
-directly inside the **Orfeo Toolbox** package.
+directly inside the Orfeo Toolbox package.
 
-The **OTB Applications** are now rich of more than 40 tools, which are
+The OTB Applications are now rich of more than 40 tools, which are
 listed in the the applications reference documentation, presented in
 chapter [chap:apprefdoc], page .
 
@@ -110,7 +110,7 @@ Other binaries can be available as packages (OSGeo packages,
 Debian/Ubuntu packages, OpenSuse packages), however be advised that they
 may not be up-to-date nor delivered with full features. If you want to
 build from source or if we don’t provide packages for your system, some
-informations are available into the , in the section **(**\ Building
+informations are available into the , in the section (\ Building
 from Source)
 
 Windows
@@ -187,8 +187,8 @@ distributions :
 
     libx11-6 libxext6 libxau6 libxxf86vm1 libxdmcp6 libdrm2
 
-Monteverdi also requires the standard graphics libraries **libgl1** and
-**libglu1**. Make sure you have at least one version of them installed
+Monteverdi also requires the standard graphics libraries libgl1 and
+libglu1. Make sure you have at least one version of them installed
 in your system.
 
 The applications can be launched from the Mapla launcher. If you want to
@@ -242,7 +242,7 @@ Notes:
 Other packages
 ~~~~~~~~~~~~~~
 
-**Warning !** These packages may not be up-to-date with latest OTB
+Warning ! These packages may not be up-to-date with latest OTB
 releases. In addition, some features of the library may not be available
 on every platform. Some of these are not maintained by OTB-team. If you
 want to get involved in the packaging of OTB for your favourite
@@ -256,11 +256,11 @@ There are OTB packages for Debian (unstable) since version 5.2.0. OTB
 Applications packages may be available as Debian packages through APT
 repositories:
 
--  **otb-bin** for command line applications
+-  otb-bin for command line applications
 
--  **otb-bin-qt** for Qt applications
+-  otb-bin-qt for Qt applications
 
--  **python-otb** for python applications
+-  python-otb for python applications
 
 Due to license issues, the OTB package built in Debian doesn’t contain
 6S. As a consequence, the package does not contain the
@@ -272,11 +272,11 @@ Ubuntu 12.04 and higher
 For Ubuntu 12.04 and higher, OTB Applications packages may be available
 as Debian packages through APT repositories:
 
--  **otb-bin** for command line applications
+-  otb-bin for command line applications
 
--  **otb-bin-qt** for Qt applications
+-  otb-bin-qt for Qt applications
 
--  **python-otb** for python applications
+-  python-otb for python applications
 
 Since release 3.14.1, OTB Applications packages are available in the
 `ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`__
@@ -303,9 +303,9 @@ install the packages through the graphical interface.
 
 For further informations about Ubuntu packages go to
 `ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`__
-launchpad page and click on **Read about installing**.
+launchpad page and click on Read about installing.
 
-**apt-add-repository** will try to retrieve the GPG keys of the
+apt-add-repository will try to retrieve the GPG keys of the
 repositories to certify the origin of the packages. If you are behind a
 http proxy, this step won’t work and apt-add-repository will stall and
 eventually quit. You can temporarily ignore this error and proceed with
@@ -390,7 +390,7 @@ graphical user interface versions of the application in the same simple
 way we used to launch the old applications. The command-line interface
 is prefixed by ``otbcli_``, while the Qt interface is prefixed by
 ``otbgui_``. For instance, calling ``otbcli_Convert`` will launch the
-command-line interface of the **Convert** application, while
+command-line interface of the Convert application, while
 ``otbgui_Convert`` will launch its GUI.
 
 Passing arguments to the command-line version (prefixed by ``otbcli_``)
@@ -439,7 +439,7 @@ application with the script called ``otbcli_Orthorectification``.
 Launching an application with no or incomplete parameters will make the
 launcher display a summary of the parameters, indicating the mandatory
 parameters missing to allow for application execution. Here is an
-example with the **OrthoRectification** application:
+example with the OrthoRectification application:
 
 ::
 
@@ -516,16 +516,16 @@ launch the graphical user interface, one will start the
 
 The resulting graphical application displays a window with several tabs:
 
--  **Parameters** is where you set the parameters and execute the
+-  Parameters is where you set the parameters and execute the
    application.
 
--  **Logs** is where you see the informations given by the application
+-  Logs is where you see the informations given by the application
    during its execution.
 
--  **Progress** is where you see a progress bar of the execution (not
+-  Progress is where you see a progress bar of the execution (not
    available for all applications).
 
--  **Documentation** is where you find a summary of the application
+-  Documentation is where you find a summary of the application
    documentation.
 
 In this interface, every optional parameter has a check box that you
