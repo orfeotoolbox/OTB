@@ -45,6 +45,12 @@
 #define Monteverdi_UI_VERSION @Monteverdi_UI_VERSION@
 
 //
+// Directories
+#define Monteverdi_INSTALL_BIN_DIR "@OTB_INSTALL_BIN_DIR@"
+#define Monteverdi_INSTALL_INCLUDE_DIR "@OTB_INSTALL_INCLUDE_DIR@"
+#define Monteverdi_INSTALL_LIB_DIR "@OTB_INSTALL_LIB_DIR@"
+#define Monteverdi_INSTALL_DATA_DIR "@OTB_INSTALL_DATA_DIR@"
+
 //
 #define OTB_VERSION_CHECK( M, m, p )					\
   (OTB_VERSION_MAJOR>(M) ||						\
@@ -52,18 +58,13 @@
 			       OTB_VERSION_MINOR==(m) && OTB_VERSION_PATH>=(p))))
 
 //
-// Directories
-#define Monteverdi_INSTALL_BIN_DIR "@Monteverdi_INSTALL_BIN_DIR@"
-#define Monteverdi_INSTALL_INCLUDE_DIR "@Monteverdi_INSTALL_INCLUDE_DIR@"
-#define Monteverdi_INSTALL_LIB_DIR "@Monteverdi_INSTALL_LIB_DIR@"
-#define Monteverdi_INSTALL_DATA_DIR "@Monteverdi_INSTALL_DATA_DIR@"
-//
 // Sub-directories
 #define Monteverdi_INSTALL_DATA_I18N_DIR Monteverdi_INSTALL_DATA_DIR "/i18n"
 
 //
 // Files
 #define Monteverdi_CONFIGURE_FILE "@Monteverdi_CONFIGURE_FILE@"
+#define Monteverdi_BUILD_DIR_FILE "CMakeCache.txt"
 
 //
 // Miscellaneous

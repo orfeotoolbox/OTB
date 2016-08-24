@@ -602,7 +602,7 @@ I18nCoreApplication
   QDir prefix( bin_dir );
   while ( prefix.cdUp() )
     {
-    if ( QDir(prefix).cd(Monteverdi_INSTALL_BIN_DIR) )
+    if ( QDir(prefix).cd( Monteverdi_INSTALL_BIN_DIR) )
       {
       prefixFound = true;
       break;
@@ -620,8 +620,8 @@ I18nCoreApplication
   QDir i18n_dir( prefix );
 
   // At this point the candidate install prefix can also be the build dir root
-  if ( prefix.exists( Monteverdi_CONFIGURE_FILE )
-       && i18n_dir.cd("i18n") )
+  if ( prefix.exists( Monteverdi_BUILD_DIR_FILE  )
+       && i18n_dir.cd( "i18n" ) )
     {
     m_IsRunningFromBuildDir = true;
 
@@ -643,7 +643,7 @@ I18nCoreApplication
       << tr( "Running from install directory '%1'." )
       .arg( prefix.path() );
 
-    if (i18n_dir.cd(Monteverdi_INSTALL_DATA_I18N_DIR))
+    if ( i18n_dir.cd( Monteverdi_INSTALL_DATA_I18N_DIR ) )
       {
       qDebug()
 	<< tr( "Loading translation files from directory '%1'." )
