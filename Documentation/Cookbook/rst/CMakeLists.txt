@@ -18,6 +18,12 @@ configure_file(${CookBook_SOURCE_DIR}/CMake/RunApplicationsRstGenerator.sh.cmake
   ${RST_GENERATED_SOURCE_DIR}/RunApplicationsRstGenerator.sh
   @ONLY)
 
+file(GLOB images ${CookBook_SOURCE_DIR}/Art/*.*)
+foreach(image ${images})
+  get_filename_component(out_file ${image} NAME)
+  configure_file(${image} ${RST_GENERATED_SOURCE_DIR}/Art/${out_file} COPYONLY)
+endforeach()
+
 file(GLOB mvd_images ${CookBook_SOURCE_DIR}/Art/MonteverdiImages/*.*)
 foreach(mvd_image ${mvd_images})
 #  message(${mvd_image})

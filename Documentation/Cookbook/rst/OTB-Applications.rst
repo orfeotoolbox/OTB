@@ -534,13 +534,10 @@ mandatory parameters cannot be unchecked.
 
 The interface of the application is shown here as an example.
 
-|image| [fig:rescaleParam]
-
-|image| [fig:rescaleLogs]
-
-|image| [fig:rescaleProgress]
-
-|image| [fig:rescaleDocumentation]
+.. figure:: Art/QtImages/rescale_param.png
+.. figure:: Art/QtImages/rescale_logs.png
+.. figure:: Art/QtImages/rescale_progress.png
+.. figure:: Art/QtImages/rescale_documentation.png
 
 Using the Python interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -673,7 +670,7 @@ toolbox, which is accessible with Processing :math:`\rightarrow`
 Toolbox. Switch to “advanced interface” in the bottom of the application
 widget and OTB applications will be there.
 
-|image| [fig:otb-qgis]
+.. figure:: Art/QtImages/qgis-otb.png
 
 Using a custom OTB
 ^^^^^^^^^^^^^^^^^^
@@ -682,16 +679,9 @@ If QGIS cannot find OTB, the “applications folder” and “binaries folder”
 can be set from the settings in the Processing :math:`\rightarrow`
 Settings :math:`\rightarrow` “service provider”.
 
-|image| [fig:otb-qgis-settings]
+.. figure:: Art/QtImages/qgis-otb-settings.png
 
 On some versions of QGIS, if an existing OTB installation is found, the
 textfield settings will not be shown. To use a custom OTB instead of the
 existing one, you will need to replace the otbcli, otbgui and library
 files in QGIS installation directly.
-
-.. |image| image:: ../Art/QtImages/rescale_param.png
-.. |image| image:: ../Art/QtImages/rescale_logs.png
-.. |image| image:: ../Art/QtImages/rescale_progress.png
-.. |image| image:: ../Art/QtImages/rescale_documentation.png
-.. |image| image:: ../Art/QtImages/qgis-otb.png
-.. |image| image:: ../Art/QtImages/qgis-otb-settings.png

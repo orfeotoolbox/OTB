@@ -24,7 +24,8 @@ cd $HOME/sources
 
 git clone https://github.com/CS-SI/OTB-Documents
 
-ii). Run cmake to configure cookbook build
+ii). Run cmake to configure cookbook build, you wil need to add /path/where/you/installed/otb/lib/python to PYTHONPATH
+and /path/where/you/installed/otb/lib/applications to ITK_AUTOLOAD_PATH:
 
 mkdir ~/build-cookbook
 
