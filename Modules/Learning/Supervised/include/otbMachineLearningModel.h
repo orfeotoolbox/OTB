@@ -89,7 +89,7 @@ public:
 
   /**\name Confidence value typedef */
   typedef TConfidenceValue                              ConfidenceValueType;
-
+  typedef itk::VariableLengthVector<ConfidenceValueType> ConfidenceValueVectorType;
   /**\name Standard macros */
   //@{
   /** Run-time type information (and related methods). */
@@ -99,11 +99,14 @@ public:
   /** Train the machine learning model */
   virtual void Train() =0;
 
-  /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const = 0;
+  /** TODO: Update documentation */
+  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const;
 
-  /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
-  virtual void PredictAll();
+  /** TODO: Update documentation*/
+  TargetListSampleType * PredictBatch(const InputListSampleType * input, ConfidenceValueVectorType * quality = ITK_NULLPTR) const;
+  
+  /** TODO: Update documentation and mark as deprecated */
+  void PredictAll();
 
   /**\name Classification model file manipulation */
   //@{
@@ -130,6 +133,7 @@ public:
   //@{
   itkSetObjectMacro(InputListSample,InputListSampleType);
   itkGetObjectMacro(InputListSample,InputListSampleType);
+  itkGetConstObjectMacro(InputListSample,InputListSampleType);
   //@}
 
   /**\name Classification output accessors */
@@ -153,6 +157,13 @@ protected:
   /** Destructor */
   ~MachineLearningModel() ITK_OVERRIDE;
 
+  /** Practical implementation of prediction */
+  virtual TargetListSampleType * DoPredictBatch(const InputListSampleType *, ConfidenceValueVectorType * = ITK_NULLPTR) const
+  {
+    // TODO: Change me to virtual pure
+    itkExceptionMacro("Should be implemented");
+  }
+  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
@@ -172,6 +183,10 @@ protected:
 
   /** flag that tells if the model support confidence index output */
   bool m_ConfidenceIndex;
+
+  /** Is DoPredictBatch multi-threaded ? */
+  bool m_IsDoPredictBatchMultiThreaded;
+
 private:
   MachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

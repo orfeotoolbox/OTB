@@ -58,15 +58,56 @@ void
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::PredictAll()
 {
-  TargetListSampleType * targets = this->GetTargetListSample();
+  typename TargetListSampleType::Pointer targets = this->GetTargetListSample();
   targets->Clear();
 
-  for(typename InputListSampleType::ConstIterator sIt = this->GetInputListSample()->Begin();
-      sIt!=this->GetInputListSample()->End(); ++sIt)
+  typename TargetListSampleType::Pointer tmpTargets = this->PredictBatch(this->GetInputListSample());
+
+  targets->Graft(tmpTargets);
+}
+
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
+typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::TargetSampleType
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::Predict(const InputSampleType& input, ConfidenceValueType *quality) const
+{
+  typename InputListSampleType::Pointer ls = InputListSampleType::New();
+  ls->PushBack(input);
+
+  ConfidenceValueVectorType vquality;
+
+  typename TargetListSampleType::Pointer ts = PredictBatch(ls,&vquality);
+
+  if(vquality.Size()!=0)
     {
-    targets->PushBack(this->Predict(sIt.GetMeasurementVector()));
+    *quality = vquality[0];
+    }
+
+  assert(ts->Size()==1&&"Measurement vector should have 1 element exactly");
+  
+  return ts->GetMeasurementVector(0)[0];
+}
+
+
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
+typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::TargetListSampleType * 
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::PredictBatch(const InputListSampleType * input, ConfidenceValueVectorType * quality) const
+{
+  if(m_IsDoPredictBatchMultiThreaded)
+    {
+    // Simply calls DoPredictBatch
+    return this->DoPredictBatch(input,quality);
+    }
+  else
+    {
+    // OpenMP threading here
+    return this->DoPredictBatch(input,quality);
     }
 }
+
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void
