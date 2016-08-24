@@ -24,6 +24,7 @@
 #include "otbSystem.h"
 #include <itksys/SystemTools.hxx>
 #include <fstream>
+#include <string>
 
 #include "itkImageIOFactory.h"
 #include "itkPixelTraits.h"
@@ -258,8 +259,13 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
   // Update FileName
   this->m_FileName = lFileName;
+  
+  std::string lFileNameOssimKeywordlist;
 
-  std::string lFileNameOssimKeywordlist = this->m_FileName;
+  if(!GetDerivedDatasetSourceFileName(m_FileName,lFileNameOssimKeywordlist))
+    {
+    lFileNameOssimKeywordlist = this->m_FileName;
+    }
 
   // Test if the file exists and if it can be opened.
   // An exception will be thrown otherwise.
@@ -525,6 +531,29 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
+bool
+ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GetDerivedDatasetSourceFileName(const std::string & filename, std::string & sourceFilename) const
+{
+  
+  const size_t dsds_pos = filename.find("DERIVED_SUBDATASET:");
+  
+  if(dsds_pos != std::string::npos)
+      {
+      // Derived subdataset from gdal
+      const size_t nPrefixLen = strlen("DERIVED_SUBDATASET:");
+
+      const size_t alg_pos = filename.find(":",dsds_pos+nPrefixLen+1);
+      if (alg_pos != std::string::npos)
+        {
+        sourceFilename = filename.substr(alg_pos+1,filename.size() - alg_pos);
+        return true;
+        }
+      }
+  return false;
+}
+
+template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::TestFileExistanceAndReadability()
@@ -536,13 +565,19 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     return;
     }
 
+  std::string fileToCheck;
+  if(!GetDerivedDatasetSourceFileName(m_FileName,fileToCheck))
+    {
+    fileToCheck = m_FileName;
+    }
+  
   // Test if the file exists.
-  if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
+  if (!itksys::SystemTools::FileExists(fileToCheck.c_str()))
     {
     otb::ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << "The file doesn't exist. "
-        << std::endl << "Filename = " << this->m_FileName
+        << std::endl << "Filename = " << fileToCheck
         << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
@@ -551,16 +586,16 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   // Test if the file can be open for reading access.
   //Only if m_FileName specify a filename (not a dirname)
-  if (itksys::SystemTools::FileExists(this->m_FileName.c_str(), true) == true)
+  if (itksys::SystemTools::FileExists(fileToCheck.c_str(), true) == true)
     {
     std::ifstream readTester;
-    readTester.open(this->m_FileName.c_str());
+    readTester.open(fileToCheck.c_str());
     if (readTester.fail())
       {
       readTester.close();
       std::ostringstream msg;
       msg << "The file couldn't be opened for reading. "
-          << std::endl << "Filename: " << this->m_FileName
+          << std::endl << "Filename: " << fileToCheck
           << std::endl;
       otb::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
       throw e;
@@ -619,7 +654,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       //Supprime l'extension
       GdalFileName = System::GetRootName(strFileName);
       }
-
     else
       {
       // Sinon le filename est le nom du fichier a ouvrir
@@ -627,6 +661,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     fic_trouve = true;
     }
+  
   otbMsgDevMacro(<< "lFileNameGdal : " << GdalFileName.c_str());
   otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
   return (fic_trouve);
