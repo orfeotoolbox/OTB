@@ -10,12 +10,19 @@ Welcome to OTB CookBook's documentation!
 
 *The ORFEO Toolbox is not a black box.*
 
-Foreword
-========
+Orfeo ToolBox (OTB) is an open-source set of tools for remote sensing images
+processing, distributed under the CeCILL-v2 license.  It has been initiated and
+funded by CNES (French space agency) in the frame of a program named ORFEO to
+prepare, accompany and promote the use and the exploitation of the images
+derived from Pléiades satellites (PHR). Orfeo ToolBox aims at enabling large
+images state-of-the-art processing even on limited resources laptops, and is
+shipped with a set of extensible ready-to-use tools for classical remote sensing
+tasks, as well as a fully integrated, end-users oriented software called
+Monteverdi.
 
-Since 2006, Orfeo ToolBox has become a rich library used in many
-remote sensing context, from research work to operational systems. The
-OTB Applications and more recently the Monteverdi tool has helped to
+Since its begining in 2006, Orfeo ToolBox has become a rich library used in many
+remote sensing context: from research work to operational systems. The
+OTB applications and more recently Monteverdi have helped to
 broaden the audience of the library, giving access to its
 functionalities to non-developers.
 
