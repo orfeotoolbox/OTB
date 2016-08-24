@@ -1,8 +1,4 @@
-if(WIN32)
-  cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
-else()
-  cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
-endif()
+cmake_minimum_required(VERSION 2.8.11)
 
 foreach(p
     CMP0025 # CMake 3.0
@@ -90,6 +86,8 @@ set(OTB_VERSION_MAJOR "5")
 set(OTB_VERSION_MINOR "7")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+
+string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
   set(OTB_INSTALL_RUNTIME_DIR bin)
@@ -337,6 +335,10 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
 install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
 
+# Configure and install VERSION file
+configure_file(VERSION VERSION @ONLY)
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
 endif()
@@ -391,7 +393,9 @@ endmacro()
 
 message("\n======================= Begin of OTB cmake summary =======================\n")
 
-message( ${OTB_GIT_STATUS_MESSAGE})
+if(OTB_GIT_STATUS_MESSAGE)
+  message( ${OTB_GIT_STATUS_MESSAGE})
+endif()
 if(OTB_DATA_GIT_STATUS_MESSAGE)
   message( ${OTB_DATA_GIT_STATUS_MESSAGE})
 endif()

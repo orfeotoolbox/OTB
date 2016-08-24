@@ -373,6 +373,14 @@ function(func_install_support_files)
     install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
   endif()
 
+  ####################### Install VERSION ##########################
+  file(GLOB OTB_VERSION_FILES ${OTB_INSTALL_DIR}/share/doc/OTB-*/VERSION)
+  if(OTB_VERSION_FILES)
+    list(SORT OTB_VERSION_FILES)
+    list(GET OTB_VERSION_FILES -1 OTB_LATEST_VERSION_FILE)
+    install(FILES ${OTB_LATEST_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
+  endif()
+
 endfunction()
 
 function(func_install_otb_support_files)

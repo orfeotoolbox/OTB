@@ -14,10 +14,10 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   "make.*jobserver.unavailable.*"
   "configure:.WARNING:.*"
   ".*SuperBuild.OSSIM.src.OSSIM.*"
-  "*.SuperBuild.LIBKML.src.LIBKML.*"
+  ".*SuperBuild.LIBKML.src.LIBKML.*"
   ".*SuperBuild.GDAL.config.status.*WARNING.*"
   ".bin.bash:.*config.rpath:.*directory"
-  "loading initial cache file .*CURL-cache.cmake"
+  "loading.initial.cache.file.*CURL-cache.cmake"
   "SuperBuild.OPENCV.src.OPENCV.modules"
   )
 

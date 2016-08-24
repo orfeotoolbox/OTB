@@ -87,6 +87,8 @@ protected:
 
   /** Update the function list and input parameters*/
   void BeforeThreadedGenerateData() ITK_OVERRIDE;
+
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 private:
   SarBrightnessToImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

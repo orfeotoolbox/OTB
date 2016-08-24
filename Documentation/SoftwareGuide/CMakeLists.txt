@@ -52,6 +52,7 @@ IF( NOT OTB_SOURCE_DIR )
   MESSAGE(FATAL_ERROR "OTB source directory is not set. Please add OTB_SOURCE_DIR to your cmake cache.")
 ENDIF( NOT OTB_SOURCE_DIR )
 
+set(OTB_VERSION_STRING_FULL "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 #OPTION(GENERATE_MONTEVERDI_DOC "Generate Monteverdi user guide as well" OFF)
 
@@ -81,7 +82,7 @@ ENDIF( BUILD_FIGURES )
 # Find ImageMagick tools
 # This is used to convert image formats
 #
-INCLUDE (${CMAKE_ROOT}/Modules/FindImageMagick.cmake)
+find_program(IMAGEMAGICK_CONVERT_EXECUTABLE convert)
 IF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)
   MESSAGE(FATAL_ERROR "ImageMagick convert utility was not found. Please pass to advanced mode and provide its full path")
 ENDIF(NOT IMAGEMAGICK_CONVERT_EXECUTABLE)

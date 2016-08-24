@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPatternSampler_h
-#define __otbPatternSampler_h
+#ifndef otbPatternSampler_h
+#define otbPatternSampler_h
 
 #include "otbSamplerBase.h"
 
@@ -28,7 +28,7 @@ namespace otb
  *
  * \brief Periodic sampler for iteration loops
  * 
- * This class allows to do periodic sampling during an iteration loop.
+ * This class allows doing periodic sampling during an iteration loop.
  *
  * \ingroup OTBStatistics
  */

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_curl_h
-#define __otb_curl_h
+#ifndef otb_curl_h
+#define otb_curl_h
 
 #cmakedefine OTB_CURL_MULTI_AVAILABLE
 #include <curl/curl.h>

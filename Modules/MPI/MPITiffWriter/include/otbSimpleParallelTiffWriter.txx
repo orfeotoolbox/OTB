@@ -12,10 +12,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __SimpleParallelTiffWriter_txx
-#define __SimpleParallelTiffWriter_txx
+#ifndef otbSimpleParallelTiffWriter_txx
+#define otbSimpleParallelTiffWriter_txx
 
-
+#include "otbSimpleParallelTiffWriter.h"
 #include "itkTimeProbe.h"
 
 using std::vector;
@@ -770,7 +770,7 @@ SimpleParallelTiffWriter<TInputImage>
   this->ReleaseInputs();
 
   //Reset global shift on input region (box parameter)
-  //It allows to call multiple update over the writer
+  //It allows calling multiple updates over the writer
   m_ShiftOutputIndex.Fill(0);
 
   // Wait for other processes

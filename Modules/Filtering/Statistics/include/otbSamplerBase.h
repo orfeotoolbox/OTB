@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSamplerBase_h
-#define __otbSamplerBase_h
+#ifndef otbSamplerBase_h
+#define otbSamplerBase_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

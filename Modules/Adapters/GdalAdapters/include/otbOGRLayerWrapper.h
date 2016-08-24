@@ -179,7 +179,7 @@ public:
    * id will be updated (in case it was previously set)
    *
    * \throw itk::ExceptionObject if the feature can't be set.
-   * \pre The Layer need to support <em>OLCRandomWrite</em> capability.
+   * \pre The Layer needs to support <em>OLCRandomWrite</em> capability.
    * \sa \c OGRLayer::SetFeature()
    * \warning Calls to this function may invalidate any feature iterator
    * previously obtained depending on the actual \c OGRDriver.

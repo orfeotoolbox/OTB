@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbOGRDataSourceToLabelImageFilter_txx
+#define otbOGRDataSourceToLabelImageFilter_txx
 
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
@@ -239,7 +241,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
      {
      std::vector<std::string> options;
 
-     std::vector<double> foreground(nbBands,m_ForegroundValue);
+     std::vector<double> foreground(nbBands*m_SrcDataSetLayers.size(),m_ForegroundValue);
 
      if(m_BurnAttributeMode)
        {
@@ -267,3 +269,5 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
 }
 
 } // end namespace otb
+
+#endif

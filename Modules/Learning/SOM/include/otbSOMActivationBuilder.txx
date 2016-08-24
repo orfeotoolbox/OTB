@@ -18,6 +18,7 @@
 #ifndef otbSOMActivationBuilder_txx
 #define otbSOMActivationBuilder_txx
 
+#include "otbSOMActivationBuilder.h"
 #include "itkImageRegionIterator.h"
 
 namespace otb

@@ -166,7 +166,7 @@ private :
   void OutputsDimensions();
 
   std::vector<std::string>                  m_Expression;
-  std::vector<ParserType::Pointer>          m_VParser;
+  std::vector< std::vector<ParserType::Pointer> > m_VParser;
   std::vector< std::vector<adhocStruct> >   m_AImage;
   std::vector< adhocStruct >                m_VVarName;
   std::vector< adhocStruct >                m_VAllowedVarNameAuto;

@@ -26,7 +26,8 @@ otb_module(OTBApplicationEngine
     OTBCommandLine
     OTBEdge
     OTBAppImageUtils
-
+    OTBAppFiltering
+    
   DESCRIPTION
     "${DOCUMENTATION}"
 )

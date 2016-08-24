@@ -15,8 +15,8 @@
       PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMPIVrtWriter_h
-#define __otbMPIVrtWriter_h
+#ifndef otbMPIVrtWriter_h
+#define otbMPIVrtWriter_h
 
 #include "otbMPIConfig.h"
 #include "otbImageFileWriter.h"

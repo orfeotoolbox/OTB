@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRandomSampler_h
-#define __otbRandomSampler_h
+#ifndef otbRandomSampler_h
+#define otbRandomSampler_h
 
 #include "otbSamplerBase.h"
 
@@ -28,7 +28,7 @@ namespace otb
  *
  * \brief Random sampler for iteration loops
  * 
- * This class allows to do random sampling during an iteration loop.
+ * This class allows doing random sampling during an iteration loop.
  * It uses the MersenneTwisterRandomGenerator.
  *
  * \ingroup OTBStatistics

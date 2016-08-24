@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <iostream>
 #include <vector>
 
 #include "sptw.h"

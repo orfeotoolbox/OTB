@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbMachineLearningModelFactory_txx
+#define otbMachineLearningModelFactory_txx
+
 #include "otbMachineLearningModelFactory.h"
 #include "otbConfigure.h"
 
@@ -212,3 +215,5 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif
