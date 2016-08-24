@@ -177,7 +177,9 @@ and this image is produced with the commands inside this
 `file <http://hg.orfeo-toolbox.org/OTB-Applications/file/3ce975605013/Testing/Classification/CMakeLists.txt>`_ .
 
 
-|image2| |image3| |image4| 
+.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_fusion.jpg
+.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif.jpg
 
 Figure 2: From left to right: Original image, result image with fusion (with monteverdi viewer) of original image and fancy classification and input image with fancy color classification from labeled image. 
 
@@ -238,9 +240,12 @@ The `Figure 2` represents them after a color mapping by the same LUT.
 Thus, 4 classes (water: blue, roads: gray,vegetation: green, 
 buildings with red roofs: red) are observable on each of them.
 
-|image5| |image6| |image7| 
-
-|image8| |image9| |image10|
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C1_CM.png
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C2_CM.png
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C3_CM.png
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C4_CM.png
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C5_CM.png
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C6_CM.png
 
 Figure 3: Six fancy colored classified images to be fused, generated from 6 different SVM models. 
 
@@ -252,7 +257,8 @@ input classifications. The white parts of the fused image correspond to
 the undecided class labels, i.e. to pixels for which there is not a
 unique majority voting.
 
-|image11| |image12|
+.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_MV_C123456_CM.png
 
 Figure 4: From left to right: Original image, and fancy colored classified image obtained by a majority voting fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white)
 
@@ -305,7 +311,8 @@ Shafer*, the fusion of the six input classification maps represented in
 fusion gives access to a more precise and robust classification map
 based on the confidence level in each classifier.
 
-|image13| |image14|
+.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. figure:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
 
 Figure 5: From left to right: Original image, and fancy colored classified image obtained by a Dempster Shafer fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white). 
 
@@ -433,7 +440,9 @@ a class index) from an input predictor. The workflow is the same as
 classification. First, the regression model is trained, then it can be
 used to predict output values. The applications to do that are and .
 
-|image15| |image16| |image17|
+.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
+.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png
 Figure 6: From left to right: Original image, fancy colored classified image and regularized classification map with radius equal to 3 pixels. 
 
 The input data set for training must have the following structure :
@@ -617,19 +626,3 @@ follows :
                                    -field  class
                                    -out    polygonStat.xml
 
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_fusion.jpg
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif.jpg
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C1_CM.png
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C2_CM.png
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C3_CM.png
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C4_CM.png
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C5_CM.png
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C6_CM.png
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_MV_C123456_CM.png
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
-.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png
