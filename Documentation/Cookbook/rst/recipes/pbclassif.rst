@@ -1,8 +1,6 @@
 Classification
 ==============
 
-.. _section4:
-
 Pixel based classification
 --------------------------
 
@@ -40,25 +38,18 @@ Building the training data set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As the chain is supervised, we first need to build a training set with
-positive examples of different objects of interest. This can be done
-with Monteverdi Vectorization module (`Figure 1`). These polygons must be saved in
-OGR vector format supported by GDAL like ESRI shapefile for example.
-
-This operation will be reproduced on each image used as input of the
-training function.
+positive examples of different objects of interest. These polygons must
+be saved in OGR vector format supported by GDAL like ESRI shapefile for
+example.
 
 Please note that the positive examples in the vector data should have a
-*Class* field with a label value higher than 1 and coherent in
+\`\`Class\`\` field with a label value higher than 1 and coherent in
 each images.
 
-.. figure::  ../Art/MonteverdiImages/monteverdi_vectorization_module_for_classification.png
-
-Figure 1: A training data set builded with the vectorization monteverdi module.
-
-You can generate the vector data set with `Quantum GIS <http://www.qgis.org/>`_  
-software for example and save it in an OGR vector format supported by `GDAL <http://www.gdal.org/>`_  
-(ESRI sphapefile for example). **OTB Applications** should be able to
-transform the vector data into the image coordinate system.
+You can generate the vector data set with software for example and save
+it in an OGR vector format supported by (ESRI shapefile for example).
+should be able to transform the vector data into the image coordinate
+system.
 
 Performing the learning scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -421,44 +412,112 @@ NoData and Undecided labels have a default value equal to 0.
 Example
 ~~~~~~~
 
-Resulting from the *ColorMapping* application presented in section
-:ref:`section4` and illustrated in `Figure 2`. 
-The `Figure 6` shows a regularization of a classification map composed 
-of 4 classes: water, roads, vegetation and buildings with red roofs. 
-The radius of the ball shaped structuring element is equal to 3 pixels, 
-which corresponds to a ball included in a 7 x 7 pixels square. 
-Pixels with more than one majority class keep their original labels.
+Resulting from the application presented in section
+[ssec:classificationcolormapping], and illustrated in Fig.
+[fig:MeanShiftVectorImageFilter], the Fig.
+[fig:ClassificationMapRegularizationApplication] shows a regularization
+of a classification map composed of 4 classes: water, roads, vegetation
+and buildings with red roofs. The radius of the ball shaped structuring
+element is equal to 3 pixels, which corresponds to a ball included in a
+7 x 7 pixels square. Pixels with more than one majority class keep their
+original labels.
+
+|image| |image| |image| [fig:ClassificationMapRegularizationApplication]
+
+Regression
+----------
+
+The machine learning models in OpenCV and LibSVM also support a
+regression mode : they can be used to predict a numeric value (i.e. not
+a class index) from an input predictor. The workflow is the same as
+classification. First, the regression model is trained, then it can be
+used to predict output values. The applications to do that are and .
 
 |image15| |image16| |image17|
 Figure 6: From left to right: Original image, fancy colored classified image and regularized classification map with radius equal to 3 pixels. 
 
-.. |image1| image:: ../Art/MonteverdiImages/monteverdi_vectorization_module_for_classification.png
-.. |image2| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-                    :scale: 88%
+The input data set for training must have the following structure :
 
-.. |image3| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_fusion.jpg
-                    :scale: 88%
+-  *n* components for the input predictors
 
-.. |image4| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif.jpg
-                    :scale: 88%
+-  one component for the corresponding output value
 
-.. |image5| image:: ../Art/MonteverdiImages/QB_1_ortho_C1_CM.png
-                    :scale: 88%
+The application supports 2 input formats :
 
-.. |image6| image:: ../Art/MonteverdiImages/QB_1_ortho_C2_CM.png
-                    :scale: 88%
+-  An image list : each image should have components matching the
+   structure detailed earlier (*n* feature components + 1 output value)
 
-.. |image7| image:: ../Art/MonteverdiImages/QB_1_ortho_C3_CM.png
-                    :scale: 88%
+-  A CSV file : the first *n* columns are the feature components and the
+   last one is the output value
 
-.. |image8| image:: ../Art/MonteverdiImages/QB_1_ortho_C4_CM.png
-                    :scale: 88%
+If you have separate images for predictors and output values, you can
+use the application.
 
-.. |image9| image:: ../Art/MonteverdiImages/QB_1_ortho_C5_CM.png
-                    :scale: 88%
+::
 
-.. |image10| image:: ../Art/MonteverdiImages/QB_1_ortho_C6_CM.png
-                    :scale: 88%
+    otbcli_ConcatenateImages  -il features.tif  output_value.tif
+                              -out training_set.tif
+
+Statistics estimation
+~~~~~~~~~~~~~~~~~~~~~
+
+As in classification, a statistics estimation step can be performed
+before training. It allows to normalize the dynamic of the input
+predictors to a standard one : zero mean, unit standard deviation. The
+main difference with the classification case is that with regression,
+the dynamic of output values can also be reduced.
+
+The statistics file format is identical to the output file from
+application, for instance :
+
+::
+
+    <?xml version="1.0" ?>
+    <FeatureStatistics>
+        <Statistic name="mean">
+            <StatisticVector value="198.796" />
+            <StatisticVector value="283.117" />
+            <StatisticVector value="169.878" />
+            <StatisticVector value="376.514" />
+        </Statistic>
+        <Statistic name="stddev">
+            <StatisticVector value="22.6234" />
+            <StatisticVector value="41.4086" />
+            <StatisticVector value="40.6766" />
+            <StatisticVector value="110.956" />
+        </Statistic>
+    </FeatureStatistics>
+
+In the application, normalization of input predictors and output values
+is optional. There are 3 options :
+
+-  No statistic file : normalization disabled
+
+-  Statistic file with *n* components : normalization enabled for input
+   predictors only
+
+-  Statistic file with *n+1* components : normalization enabled for
+   input predictors and output values
+
+If you use an image list as training set, you can run application. It
+will produce a statistics file suitable for input and output
+normalization (third option).
+
+::
+
+    otbcli_ComputeImagesStatistics  -il   training_set.tif
+                                    -out  stats.xml
+
+Training
+~~~~~~~~
+
+Initially, the machine learning models in OTB only used classification.
+But since they come from external libraries (OpenCV and LibSVM), the
+regression mode was already implemented in these external libraries. So
+the integration of these models in OTB has been improved in order to
+allow the usage of regression mode. As a consequence , the machine
+learning models have nearly the same set of parameters for
+classification and regression mode.
 
 .. |image11| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
 .. |image12| image:: ../Art/MonteverdiImages/QB_1_ortho_MV_C123456_CM.png
@@ -468,8 +527,109 @@ Figure 6: From left to right: Original image, fancy colored classified image and
 .. |image15| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
              :scale: 88%
 
-.. |image16| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
-             :scale: 88%
+-  Decision Trees
 
-.. |image17| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png
-             :scale: 88%
+-  Gradient Boosted Trees
+
+-  Neural Network
+
+-  Random Forests
+
+-  K-Nearest Neighbors
+
+The behaviour of application is very similar to . From the input data
+set, a portion of the samples is used for training, whereas the other
+part is used for validation. The user may also set the model to train
+and its parameters. Once the training is done, the model is stored in an
+output file.
+
+::
+
+    otbcli_TrainRegression  -io.il                training_set.tif
+                            -io.imstat            stats.xml
+                            -io.out               model.txt
+                            -sample.vtr           0.5
+                            -classifier           knn
+                            -classifier.knn.k     5
+                            -classifier.knn.rule  median
+
+Prediction
+~~~~~~~~~~
+
+Once the model is trained, it can be used in application to perform the
+prediction on an entire image containing input predictors (i.e. an image
+with only *n* feature components). If the model was trained with
+normalization, the same statistic file must be used for prediction. The
+behavior of with respect to statistic file is identical to :
+
+-  no statistic file : normalization off
+
+-  *n* components : input only
+
+-  *n+1* components : input and output
+
+The model to use is read from file (the one produced during training).
+
+::
+
+    otbcli_PredictRegression  -in     features_bis.tif
+                              -model  model.txt
+                              -imstat stats.xml
+                              -out    prediction.tif
+
+Samples selection
+-----------------
+
+Since release 5.4, new functionalities related to the handling of the
+vectors from the training data set (see also [sssec:building]) were
+added to OTB.
+
+The first improvement was provided by the application
+PolygonClassStatistics. This application processes a set of training
+geometries, and outputs statistics about the sample distribution in the
+input geometries (in the form of a xml file) :
+
+-  number of samples per class
+
+-  number of samples per geometry
+
+Supported geometries are polygons, lines and points; depending on the
+geometry type, this application behaves differently :
+
+-  polygon : select pixels whose center is inside the polygon
+
+-  lines : select pixels intersecting the line
+
+-  points : select closest pixel to the provided point
+
+The application also takes as input a support image, but the values of
+its pixels are not used. The purpose is rather to define the image grid
+that will later provide the samples. The user can also provide a raster
+mask, that will be used to discard pixel positions.
+
+A simple use of the application PolygonClassStatistics could be as
+follows :
+
+::
+
+    otbcli_PolygonClassStatistics  -in     support_image.tif
+                                   -vec    variousTrainingVectors.sqlite
+                                   -field  class
+                                   -out    polygonStat.xml
+
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_fusion.jpg
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif.jpg
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C1_CM.png
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C2_CM.png
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C3_CM.png
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C4_CM.png
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C5_CM.png
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_C6_CM.png
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_MV_C123456_CM.png
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image| image:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
+.. |image| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png

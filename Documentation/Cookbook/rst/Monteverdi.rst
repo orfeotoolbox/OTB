@@ -1,5 +1,5 @@
-A brief tour of 
-================
+A brief tour of Monteverdi
+==========================
 
 Introduction
 ------------

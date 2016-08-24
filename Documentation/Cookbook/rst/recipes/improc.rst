@@ -18,11 +18,81 @@ two images.
                     -exp "abs(im1b1 - im2b1)"
                     -out output_image
 
-The naming convention “im[x]b[y]” designates the y\ :sup:`th` band of the x\ :sup:`th` input image.
+The naming convention “im[x]b[y]” designates the yth band of the xth
+input image.
 
 The *BandMath* application embeds built-in operators and functions
 listed in `muparser documentation <http://muparser.sourceforge.net/mup_features.html#idDef2>`_ thus
 allowing a vast choice of possible operations.
+
+Images with no-data values
+--------------------------
+
+Image files can contain a no-data value in their metadata. It represents
+a special pixel value that should be treated as “no data available for
+this pixel”. For instance, SRTM tiles use a particular no-data value of
+-32768 (usually found on sea areas).
+
+On multiband images, the no-data values are handled independently for
+each band. The case of an image with no-data values defined only for a
+subset of its bands is supported.
+
+This metadata is now handled by OTB image readers and writer (using the
+GDAL driver). The no-data value can be read from an image files and
+stored in the image metadata dictionary. It can also be exported by
+image writers. The OTB filters that produce a no-data value are able to
+export this value so that the output file will store it.
+
+An application has been created to manage the no-data value. The
+application has the following features :
+
+-  Build a mask corresponding to the no-data pixels in the input image :
+   it gives you a binary image of the no-data pixels in your input
+   image.
+
+-  Change the no-data value of the input image : it will change all
+   pixels that carry the old no-data value to the new one and update the
+   metadata
+
+-  Apply an external mask to the input image as no-data : all the pixels
+   that corresponds have a null mask value are flagged as no-data in the
+   output image.
+
+For instance, the following command converts the no-data value of the
+input image to the default value for DEM (which is -32768) :
+
+::
+
+    otbcli_ManageNoData -in input_image.tif
+                        -out output_image.tif
+                        -mode changevalue
+                        -mode.changevalue.newv -32768
+
+The third mode “apply” can be useful if you apply a formula to the
+entire image. This will likely change the values of pixels flagged as
+no-data, but the no-data value in the image metadata doesn’t change. If
+you want to fix all no-data pixels to their original value, you can
+extract the mask of the original image and apply it on the output image.
+For instance:
+
+::
+
+    otbcli_ManageNoData -in input_image.tif
+                        -out mask.tif
+                        -mode buildmask
+
+    otbcli_BandMath -il input_image.tif
+                    -out filtered_image.tif
+                    -exp "2*im1b1-4"
+
+    otbcli_ManageNoData -in filtered_image.tif
+                        -out output_image.tif
+                        -mode apply
+                        -mode.apply.mask mask.tif
+
+You can also use this “apply” mode with an additional parameter
+“mode.apply.ndval”. This parameter allow to set the output nodata value
+applying according to your input mask.
 
 Segmentation
 ------------
@@ -43,17 +113,25 @@ manipulate efficiently.
 The experience of segmenting large remote sensing images is packed into
 a single *Segmentation* in **OTB Applications** .
 
-You can find more information about this application in this `blog <http://blog.orfeo-toolbox.org/preview/coming-next-large-scale-segmentation>`_ .
+You can find more information about this application
+`here <http://blog.orfeo-toolbox.org/preview/coming-next-large-scale-segmentation>`__.
 
 Large-Scale Mean-Shift (LSMS) segmentation
 ------------------------------------------
 
 LSMS is a segmentation workflow which allows to perform tile-wise
 segmentation of very large image with theoretical guarantees of getting
-identical results to those without tiling. It has been developed by
-David Youssefi and Julien Michel during David internship at CNES and is
-to be published soon.
+identical results to those without tiling.
 
+It has been developed by David Youssefi and Julien Michel during David
+
+internship at CNES.
+
+For more a complete description of the LSMS method, please refer to the
+following publication, *J. Michel, D. Youssefi and M. Grizonnet, “Stable
+Mean-Shift Algorithm and Its Application to the Segmentation of
+Arbitrarily Large Remote Sensing Images,” in IEEE Transactions on
+Geoscience and Remote Sensing, vol. 53, no. 2, pp. 952-964, Feb. 2015.*
 The workflow consists in chaining 3 or 4 dedicated applications and
 produces a GIS vector file with artifact-free polygons corresponding to
 the segmented image, as well as mean and variance of the radiometry of

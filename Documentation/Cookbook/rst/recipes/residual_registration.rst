@@ -5,14 +5,14 @@ Image registration is a fundamental problem in image processing. The aim
 is to align two or more images of the same scene often taken at
 different times, from different viewpoints, or by different sensors. It
 is a basic step for orthorectification, image stitching, image fusion,
-change detection etc. But this process is also critical for stereo
+change detection, and others. But this process is also critical for stereo
 reconstruction process to be able to obtain an accurate estimation of
 epipolar geometry.
 
 Sensor model is generally not sufficient to provide image registrations.
 Indeed, several sources of geometric distortion can be contained in
 optical remote sensing images including earth rotation, platform
-movement, non linearity etc.
+movement, non linearity, etc.
 
 They result in geometric errors on scene level, image level and pixel
 level. It is critical to rectify the errors before a thematic map is

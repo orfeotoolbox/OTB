@@ -9,14 +9,12 @@ Welcome to OTB CookBook's documentation!
 .. toctree::
    :maxdepth: 3
 
+   CookBook
    OTB-Applications
    Monteverdi
-   Monteverdi2
    Recipes
+   WrappedApplications
    Applications
-
-   
-
 
 Indices and tables
 ==================

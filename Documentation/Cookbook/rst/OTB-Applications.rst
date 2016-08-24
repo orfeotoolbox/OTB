@@ -89,7 +89,7 @@ To facilitate the use of these tools and applications, they will now be
 shipped with the standard **Orfeo Toolbox** package. It means that the
 former **OTB-Applications** package has entered its maintenance cycle :
 no new feature will be pushed there, and all development is done
-directly inside the **Orfeo Toolbox** paackage.
+directly inside the **Orfeo Toolbox** package.
 
 The **OTB Applications** are now rich of more than 40 tools, which are
 listed in the the applications reference documentation, presented in
@@ -98,62 +98,176 @@ chapter [chap:apprefdoc], page .
 Installation
 ------------
 
-We provide different binary packages for OTB-Applications:
+We provide different standalone binary packages for OTB-Applications:
 
--  for Windows platform (XP/Seven) through OsGeo4W installer (32/64bit)
+-  for Windows platform (7 or higher)
 
--  for Ubuntu 12.04 and higher
+-  for 64bit Linux distribution
 
--  for OpenSuse 12.X and higher
+-  for MacOS X
 
--  for MacOSX through MacPorts software
+Other binaries can be available as packages (OSGeo packages,
+Debian/Ubuntu packages, OpenSuse packages), however be advised that they
+may not be up-to-date nor delivered with full features. If you want to
+build from source or if we don’t provide packages for your system, some
+informations are available into the , in the section **(**\ Building
+from Source)
 
-If you want build from source or if we don’t provide packages for your
-system, some informations are available into the `OTB Software
-Guide <http://orfeo-toolbox.org/SoftwareGuide>`_  , in the section
-**(**\ Building from Source)
+Windows
+~~~~~~~
 
-Windows XP/Seven
-~~~~~~~~~~~~~~~~
+We provide for Windows Seven and later through standalone packages. They
+are cross-compiled with MinGW, for 32bit and 64bit platforms. They
+contain all and their launchers (both command line and graphical
+launchers are provided). Check the download page : `OTB Download
+page <https://www.orfeo-toolbox.org/download>`__
 
-Since version 3.12, we provide OTB Applications packages through OSGeo4W
-for Windows XP/Seven users:
+There is a 32bit and a 64bit version. They contain the same directory
+structure:
 
--  **otb-bin** for command line and QT applications
+-  ``monteverdi.bat`` : A launcher script for
 
--  **otb-python** for python applications
+-  ``mapla.bat`` : A launcher script for Mapla
 
-Follow the instructions in the installer and select the packages you
-want to add. The installer will proceed with the installation of
-selected packages and all their dependencies. For the **otb-bin**
-packages, it will be available directly in the OSGeo4W shell, for
-example run
+-  ``otbenv.bat`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing application launchers (otbcli.bat,
+   otbgui.bat) and the DLLs.
+
+-  ``lib`` : A folder containing application DLLs.
+
+The applications can be launched from the Mapla launcher. If you want to
+use the otbcli and otbgui launchers, you can initialize a command prompt
+with ``otbenv.bat``.
+
+Linux 64bit
+~~~~~~~~~~~
+
+We provide for Linux 64bit OS through standalone packages. They contain
+all OTB Applications and their launchers (both command line and
+graphical launchers are provided). Check the download page : `OTB
+Download page <https://www.orfeo-toolbox.org/download>`__
+
+This package is a self-extractible archive. You may uncompress it with a
+double-click on the file, or with the command line :
 
 ::
 
-    otbgui_BandMath.
+    > chmod +x OTB-&\otbversion&-Linux64.run
+    > ./OTB-&\otbversion&-Linux64.run
 
-For the **otb-python** packages, you can simply check from an OSGeo4W
-shell the list of available applications:
+Please note that the resulting installation is not meant to be moved,
+you should uncompress the archive in its final location. Once the
+archive is extracted, the directory structure is made of :
+
+-  ``monteverdi.sh`` : A launcher script for
+
+-  ``mapla.sh`` : A launcher script for Mapla
+
+-  ``otbenv.profile`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing application launchers (otbcli.sh,
+   otbgui.sh), Monteverdi and Mapla.
+
+-  ``lib`` : A folder containing all shared libraries and OTB
+   applications.
+
+-  ``share`` : A folder containing common resources and copyright
+   mentions.
+
+In order to run the command line launchers, this package doesn’t require
+any special library that is not present in most modern Linux
+distributions. The graphical executable (otbgui launchers, Monteverdi
+and Mapla) use the X11 libraries, which are widely used in a lot of
+distributions :
 
 ::
 
-    python
-    import otbApplication
-    print str( otbApplication.Registry.GetAvailableApplications() )
+    libx11-6 libxext6 libxau6 libxxf86vm1 libxdmcp6 libdrm2
+
+Monteverdi also requires the standard graphics libraries **libgl1** and
+**libglu1**. Make sure you have at least one version of them installed
+in your system.
+
+The applications can be launched from the Mapla launcher. If you want to
+use the otbcli and otbgui launchers, you can initialize your environment
+with ``source otbenv.profile``.
 
 MacOS X
 ~~~~~~~
 
-OTB Applications are now available on
-`MacPorts <http://http://www.macports.org/>`_ . The port name is called
-orfeotoolbox. You can follow the `MacPorts
-documentation <http://guide.macports.org/>`_  to install MacPorts
-first, then install the orfeotoolbox port. After the installation, you
-can used directly on your system, the OTB applications.
+We provide for MacOS X through a standalone package. This package is a
+self-extractible archive, quite similar to the Linux one. You may
+uncompress it with the command line :
+
+::
+
+    > chmod +x  OTB-&\otbversion&-Darwin64.run
+    > ./OTB-&\otbversion&-Darwin64.run
+
+Once the archive is extracted, you can see OTB--Darwin64 directory in
+the same direcrtory along with OTB--Darwin64.run
+
+Contents of OTB--Darwin64 is briefly listed below:
+
+-  ``Monteverdi.app`` : A Mac OSX .app for Monteverdi
+
+-  ``Mapla.app`` : A Mac OSX .app for Mapla.
+
+-  ``bin`` : A folder containing application launchers (otbcli.sh,
+   otbgui.sh), monteverdi and mapla binaries.
+
+-  ``lib`` : A folder containing all shared libraries and OTB
+   applications.
+
+-  ``share`` : A folder containing common resources and copyright
+   mentions.
+
+Notes:
+
+-  If you want to use the otbcli and otbgui launchers, you must access
+   them via a terminal prompt.
+
+-  The OSX .app are provided for monteverdi (viewer) and mapla
+   (application browser).
+
+-  You must use monteverdi and mapla through their .app files only.
+
+-  You are allowed to move these .app files and refrain from moving or
+   deleting OTB--Darwin64 after extraction. In case you need to have OTB
+   installed in some other directory. Extract the .run file there.
+
+Other packages
+~~~~~~~~~~~~~~
+
+**Warning !** These packages may not be up-to-date with latest OTB
+releases. In addition, some features of the library may not be available
+on every platform. Some of these are not maintained by OTB-team. If you
+want to get involved in the packaging of OTB for your favourite
+platform, please contact us through the developer’s mailing list :
+otb-developers@googlegroups.com.
+
+Debian
+^^^^^^
+
+There are OTB packages for Debian (unstable) since version 5.2.0. OTB
+Applications packages may be available as Debian packages through APT
+repositories:
+
+-  **otb-bin** for command line applications
+
+-  **otb-bin-qt** for Qt applications
+
+-  **python-otb** for python applications
+
+Due to license issues, the OTB package built in Debian doesn’t contain
+6S. As a consequence, the package does not contain the
+OpticalCalibration application.
 
 Ubuntu 12.04 and higher
-~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^
 
 For Ubuntu 12.04 and higher, OTB Applications packages may be available
 as Debian packages through APT repositories:
@@ -165,8 +279,11 @@ as Debian packages through APT repositories:
 -  **python-otb** for python applications
 
 Since release 3.14.1, OTB Applications packages are available in the
-`ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`_ 
+`ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`__
 repository.
+
+Since release 5.2.0, the Ubuntu packages derive from the Debian
+packages.
 
 You can add it by using these command-lines:
 
@@ -185,7 +302,7 @@ If you are using *Synaptic*, you can add the repositories, update and
 install the packages through the graphical interface.
 
 For further informations about Ubuntu packages go to
-`ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`_ 
+`ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`__
 launchpad page and click on **Read about installing**.
 
 **apt-add-repository** will try to retrieve the GPG keys of the
@@ -197,7 +314,7 @@ about a signature problem. This warning won’t prevent you from
 installing the packages.
 
 OpenSuse 12.X and higher
-~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 For OpenSuse 12.X and higher, OTB Applications packages are available
 through *zypper*.
@@ -224,7 +341,7 @@ Now run:
 
 Alternatively you can use the One-Click Installer from the `openSUSE
 Download
-page <http://software.opensuse.org/search?q=Orfeo&baseproject=openSUSE%3A11.4&lang=en&include_home=true&exclude_debug=true>`_ 
+page <http://software.opensuse.org/search?q=Orfeo&baseproject=openSUSE%3A11.4&lang=en&include_home=true&exclude_debug=true>`__
 or add the above repositories and install through Yast Package
 Management.
 
@@ -243,29 +360,38 @@ following repositories with these command-lines:
 
 and then add the OTB packages as shown above.
 
+MacPort
+^^^^^^^
+
+OTB Applications are now available on
+`MacPorts <http://http://www.macports.org/>`__. The port name is called
+’orfeotoolbox’. You can follow the `MacPorts
+documentation < http://guide.macports.org/>`__ to install MacPorts
+first, then install the ’orfeotoolbox’ port. After the installation, you
+can used directly on your system, the OTB applications.
+
 Using the applications
 ----------------------
 
-Using the new **OTB Applications** framework is slightly more complex
-than launching a command-line tool. This section describes all the ways
-to launch the new applications. Apart from the simplified access, which
-is similar to the former access to **OTB Applications** , you will need
-to know the application name and optionally the path where the
-applications plugins are stored. For applications shipped with **Orfeo
-Toolbox** , the name of each application can be found in
+Using the new framework is slightly more complex than launching a
+command-line tool. This section describes all the ways to launch the new
+applications. Apart from the simplified access, which is similar to the
+former access to , you will need to know the application name and
+optionally the path where the applications plugins are stored. For
+applications shipped with , the name of each application can be found in
 chapter [chap:apprefdoc], page .
 
 Simplified use
 ~~~~~~~~~~~~~~
 
-All standard applications delivered in with **Orfeo Toolbox** comes with
-simplified scripts in the system path, allowing to launch the
-command-line and graphical user interface versions of the application in
-the same simple way we used to launch the old applications. The
-command-line interface is prefixed by ``otbcli_``, while the Qt
-interface is prefixed by ``otbgui_``. For instance, calling
-``otbcli_Convert`` will launch the command-line interface of the
-**Convert** application, while ``otbgui_Convert`` will launch its GUI.
+All standard applications delivered in with comes with simplified
+scripts in the system path, allowing to launch the command-line and
+graphical user interface versions of the application in the same simple
+way we used to launch the old applications. The command-line interface
+is prefixed by ``otbcli_``, while the Qt interface is prefixed by
+``otbgui_``. For instance, calling ``otbcli_Convert`` will launch the
+command-line interface of the **Convert** application, while
+``otbgui_Convert`` will launch its GUI.
 
 Passing arguments to the command-line version (prefixed by ``otbcli_``)
 is explained in next sub-section.
@@ -280,7 +406,7 @@ results in the following help to be displayed:
 
 ::
 
-    $ otbApplicationLauncherCommandLine 
+    $ otbApplicationLauncherCommandLine
     Usage : ./otbApplicationLauncherCommandLine module_name [MODULEPATH] [arguments]
 
 The ``module_name`` parameter corresponds to the application name. The
@@ -289,21 +415,21 @@ a path where the shared library (or plugin) corresponding to
 ``module_name`` is.
 
 It is also possible to set this path with the environment variable
-``ITK_AUTOLOAD_PATH``, making the ``[MODULEPATH]`` optional. This
+``OTB_APPLICATION_PATH``, making the ``[MODULEPATH]`` optional. This
 variable is checked by default when no ``[MODULEPATH]`` argument is
-given. When using multiple paths in ``ITK_AUTOLOAD_PATH``, one must make
-sure to use the standard path separator of the target system, which is
-``:`` on Unix, and ``;`` on Windows.
+given. When using multiple paths in ``OTB_APPLICATION_PATH``, one must
+make sure to use the standard path separator of the target system, which
+is ``:`` on Unix, and ``;`` on Windows.
 
 An error in the application name (i.e. in parameter ``module_name``)
 will make the ``otbApplicationLauncherCommandLine`` lists the name of
 all applications found in the available path (either ``[MODULEPATH]``
-and/or ``ITK_AUTOLOAD_PATH``).
+and/or ``OTB_APPLICATION_PATH``).
 
 To ease the use of the applications, and try avoiding extensive
 environment customization, ready-to-use scripts are provided by the OTB
 installation to launch each application, and takes care of adding the
-standard application installation path to the ``ITK_AUTOLOAD_PATH``
+standard application installation path to the ``OTB_APPLICATION_PATH``
 environment variable.
 
 These scripts are named ``otbcli_<ApplicationName>`` and do not need any
@@ -325,37 +451,37 @@ example with the **OrthoRectification** application:
     NAME: OrthoRectification
     DESCRIPTION: This application allows to ortho-rectify optical images from supported sensors.
 
-    EXAMPLE OF USE: 
+    EXAMPLE OF USE:
     otbcli_OrthoRectification -io.in QB_TOULOUSE_MUL_Extract_500_500.tif -io.out QB_Toulouse_ortho.tif
 
     DOCUMENTATION: http://www.orfeo-toolbox.org/Applications/OrthoRectification.html
     ======================= PARAMETERS =======================
-            -progress                        <boolean>        Report progress 
-    MISSING -io.in                           <string>         Input Image 
+            -progress                        <boolean>        Report progress
+    MISSING -io.in                           <string>         Input Image
     MISSING -io.out                          <string> [pixel] Output Image  [pixel=uint8/int8/uint16/int16/uint32/int32/float/double]
             -map                             <string>         Output Map Projection [utm/lambert2/lambert93/transmercator/wgs/epsg]
-    MISSING -map.utm.zone                    <int32>          Zone number 
-            -map.utm.northhem                <boolean>        Northern Hemisphere 
-            -map.transmercator.falseeasting  <float>          False easting 
-            -map.transmercator.falsenorthing <float>          False northing 
-            -map.transmercator.scale         <float>          Scale factor 
-            -map.epsg.code                   <int32>          EPSG Code 
+    MISSING -map.utm.zone                    <int32>          Zone number
+            -map.utm.northhem                <boolean>        Northern Hemisphere
+            -map.transmercator.falseeasting  <float>          False easting
+            -map.transmercator.falsenorthing <float>          False northing
+            -map.transmercator.scale         <float>          Scale factor
+            -map.epsg.code                   <int32>          EPSG Code
             -outputs.mode                    <string>         Parameters estimation modes [auto/autosize/autospacing]
-    MISSING -outputs.ulx                     <float>          Upper Left X 
-    MISSING -outputs.uly                     <float>          Upper Left Y 
-    MISSING -outputs.sizex                   <int32>          Size X 
-    MISSING -outputs.sizey                   <int32>          Size Y 
-    MISSING -outputs.spacingx                <float>          Pixel Size X 
-    MISSING -outputs.spacingy                <float>          Pixel Size Y 
-            -outputs.isotropic               <boolean>        Force isotropic spacing by default 
-            -elev.dem                        <string>         DEM directory 
-            -elev.geoid                      <string>         Geoid File 
-            -elev.default                    <float>          Average Elevation 
+    MISSING -outputs.ulx                     <float>          Upper Left X
+    MISSING -outputs.uly                     <float>          Upper Left Y
+    MISSING -outputs.sizex                   <int32>          Size X
+    MISSING -outputs.sizey                   <int32>          Size Y
+    MISSING -outputs.spacingx                <float>          Pixel Size X
+    MISSING -outputs.spacingy                <float>          Pixel Size Y
+            -outputs.isotropic               <boolean>        Force isotropic spacing by default
+            -elev.dem                        <string>         DEM directory
+            -elev.geoid                      <string>         Geoid File
+            -elev.default                    <float>          Average Elevation
             -interpolator                    <string>         Interpolation [nn/linear/bco]
-            -interpolator.bco.radius         <int32>          Radius for bicubic interpolation 
-            -opt.rpc                         <int32>          RPC modeling (points per axis) 
-            -opt.ram                         <int32>          Available memory for processing (in MB) 
-            -opt.gridspacing                 <float>          Resampling grid spacing 
+            -interpolator.bco.radius         <int32>          Radius for bicubic interpolation
+            -opt.rpc                         <int32>          RPC modeling (points per axis)
+            -opt.ram                         <int32>          Available memory for processing (in MB)
+            -opt.gridspacing                 <float>          Resampling grid spacing
 
 For a detailed description of the application behaviour and parameters,
 please check the application reference documentation presented
@@ -381,11 +507,11 @@ This launcher needs the same two arguments as the command line launcher
 
     $ otbApplicationLauncherQt module_name [MODULEPATH]
 
-The application paths can be set with the ``ITK_AUTOLOAD_PATH``
+The application paths can be set with the ``OTB_APPLICATION_PATH``
 environment variable, as for the command line launcher. Also, as for the
 command-line application, a more simple script is generated and
 installed by OTB to ease the configuration of the module path : to
-launch the *Rescale* graphical user interface, one will start the
+launch the graphical user interface, one will start the
 ``otbgui_Rescale`` script.
 
 The resulting graphical application displays a window with several tabs:
@@ -406,15 +532,15 @@ In this interface, every optional parameter has a check box that you
 have to tick if you want to set a value and use this parameter. The
 mandatory parameters cannot be unchecked.
 
-The interface of the application *Rescale* is shown here as an example.
+The interface of the application is shown here as an example.
 
-|image1| [fig:rescaleParam]
+|image| [fig:rescaleParam]
 
-|image2| [fig:rescaleLogs]
+|image| [fig:rescaleLogs]
 
-|image3| [fig:rescaleProgress]
+|image| [fig:rescaleProgress]
 
-|image4| [fig:rescaleDocumentation]
+|image| [fig:rescaleDocumentation]
 
 Using the Python interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -439,12 +565,12 @@ In this module, two main classes can be manipulated :
    interact with an application instance created by the ``Registry``
 
 As for the command line and GUI launchers, the path to the application
-modules needs to be properly set with the ``ITK_AUTOLOAD_PATH``
+modules needs to be properly set with the ``OTB_APPLICATION_PATH``
 environment variable. The standard location on Unix systems is
 ``/usr/lib/otb/applications``. On Windows, the applications are
 available in the ``otb-bin`` OSGeo4W package, and the environment is
 configured automatically so you don’t need to tweak
-``ITK_AUTOLOAD_PATH``.
+``OTB_APPLICATION_PATH``.
 
 Here is one example of how to use Python to run the ``Smoothing``
 application, changing the algorithm at each iteration.
@@ -519,7 +645,7 @@ time
 
 ::
 
-    otbcli_BandMath -inxml saved_applications_parameters.xml 
+    otbcli_BandMath -inxml saved_applications_parameters.xml
                     -exp "(im1b1 - im2b1)"
 
 In this cas it will use as mathematical expression “(im1b1 - im2b1)”
@@ -536,7 +662,36 @@ the application name. Use in this case:
 It will retrieve the application name and related parameters from the
 input xml file and launch in this case the BandMath applications.
 
-.. |image1| image:: ./Art/QtImages/rescale_param.png
-.. |image2| image:: ./Art/QtImages/rescale_logs.png
-.. |image3| image:: ./Art/QtImages/rescale_progress.png
-.. |image4| image:: ./Art/QtImages/rescale_documentation.png
+Using OTB from QGIS
+~~~~~~~~~~~~~~~~~~~
+
+The processing toolbox
+^^^^^^^^^^^^^^^^^^^^^^
+
+OTB applications are available from QGIS. Use them from the processing
+toolbox, which is accessible with Processing :math:`\rightarrow`
+Toolbox. Switch to “advanced interface” in the bottom of the application
+widget and OTB applications will be there.
+
+|image| [fig:otb-qgis]
+
+Using a custom OTB
+^^^^^^^^^^^^^^^^^^
+
+If QGIS cannot find OTB, the “applications folder” and “binaries folder”
+can be set from the settings in the Processing :math:`\rightarrow`
+Settings :math:`\rightarrow` “service provider”.
+
+|image| [fig:otb-qgis-settings]
+
+On some versions of QGIS, if an existing OTB installation is found, the
+textfield settings will not be shown. To use a custom OTB instead of the
+existing one, you will need to replace the otbcli, otbgui and library
+files in QGIS installation directly.
+
+.. |image| image:: ../Art/QtImages/rescale_param.png
+.. |image| image:: ../Art/QtImages/rescale_logs.png
+.. |image| image:: ../Art/QtImages/rescale_progress.png
+.. |image| image:: ../Art/QtImages/rescale_documentation.png
+.. |image| image:: ../Art/QtImages/qgis-otb.png
+.. |image| image:: ../Art/QtImages/qgis-otb-settings.png
