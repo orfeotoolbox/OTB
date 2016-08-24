@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-export PYTHONPATH=@OTB_DIR@/lib:$PYTHONPATH
-export PYTHONPATH=@OTB_DIR@/Modules/Wrappers/SWIG/src:$PYTHONPATH
-
-export OTB_APPLICATION_PATH=@OTB_DIR@/lib/otb/applications
-
-@PYTHON_EXECUTABLE@ @PROJECT_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py
+export LD_LIBRARY_PATH=@OTB_INSTALL_PREFIX@/lib:$LD_LIBRARY_PATH
+export PYTHONPATH=@OTB_INSTALL_PREFIX@/lib:@OTB_INSTALL_PREFIX@/lib/otb/python:$PYTHONPATH
+export OTB_APPLICATION_PATH=@OTB_INSTALL_PREFIX@/lib/otb/applications
+@PYTHON_EXECUTABLE@ @CMAKE_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py
