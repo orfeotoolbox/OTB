@@ -149,94 +149,94 @@ For each option parameter, the list below gives the formula used.
 
 #. msinclairtocoherency (SinclairToReciprocalCoherencyMatrixFunctor)
 
-   #. :math:` 0.5 . (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} `
+   #. :math:`0.5 . (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*}`
 
-   #. :math:` 0.5 . (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} `
+   #. :math:`0.5 . (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*}`
 
-   #. :math:` 0.5 . (S_{hh}+S_{vv}).(2 S_{hv})^{*} `
+   #. :math:`0.5 . (S_{hh}+S_{vv}).(2 S_{hv})^{*}`
 
-   #. :math:` 0.5 . (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} `
+   #. :math:`0.5 . (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*}`
 
-   #. :math:` 0.5 . (S_{hh}-S_{vv}).(2 S_{hv})^{*} `
+   #. :math:`0.5 . (S_{hh}-S_{vv}).(2 S_{hv})^{*}`
 
-   #. :math:` 0.5 . (2 S_{hv}).(2 S_{hv})^{*} `
+   #. :math:`0.5 . (2 S_{hv}).(2 S_{hv})^{*}`
 
 #. msinclairtocovariance (SinclairToReciprocalCovarianceMatrixFunctor)
 
-   #. :math:` S_{hh}.S_{hh}^{*} `
+   #. :math:`S_{hh}.S_{hh}^{*}`
 
-   #. :math:` \sqrt{2}.S_{hh}.S_{hv}^{*} `
+   #. :math:`\sqrt{2}.S_{hh}.S_{hv}^{*}`
 
-   #. :math:` S_{hh}.S_{vv}^{*} `
+   #. :math:`S_{hh}.S_{vv}^{*}`
 
-   #. :math:` 2.S_{hv}.S_{hv}^{*} `
+   #. :math:`2.S_{hv}.S_{hv}^{*}`
 
-   #. :math:` \sqrt{2}.S_{hv}.S_{vv}^{*} `
+   #. :math:`\sqrt{2}.S_{hv}.S_{vv}^{*}`
 
-   #. :math:` S_{vv}.S_{vv}^{*} `
+   #. :math:`S_{vv}.S_{vv}^{*}`
 
 #. msinclairtocircovariance
    (SinclairToReciprocalCircularCovarianceMatrixFunctor)
 
-   #. :math:` S_{ll}.S_{ll}^{*} `
+   #. :math:`S_{ll}.S_{ll}^{*}`
 
-   #. :math:` S_{ll}.S_{lr}^{*} `
+   #. :math:`S_{ll}.S_{lr}^{*}`
 
-   #. :math:` S_{ll}.S_{rr}^{*} `
+   #. :math:`S_{ll}.S_{rr}^{*}`
 
-   #. :math:` S_{lr}.S_{lr}^{*} `
+   #. :math:`S_{lr}.S_{lr}^{*}`
 
-   #. :math:` S_{lr}.S_{rr}^{*} `
+   #. :math:`S_{lr}.S_{rr}^{*}`
 
-   #. :math:` S_{rr}.S_{rr}^{*} `
+   #. :math:`S_{rr}.S_{rr}^{*}`
 
    With:
 
-   -  :math:` S_{ll} = 0.5(S_{hh}+2j S_{hv}-S_{vv}) `
+   -  :math:`S_{ll} = 0.5(S_{hh}+2j S_{hv}-S_{vv})`
 
-   -  :math:` S_{lr} = 0.5(j S_{hh}+j S_{vv}) `
+   -  :math:`S_{lr} = 0.5(j S_{hh}+j S_{vv})`
 
-   -  :math:` S_{rr} = 0.5(-S_{hh}+2j S_{hv}+S_{vv}) `
+   -  :math:`S_{rr} = 0.5(-S_{hh}+2j S_{hv}+S_{vv})`
 
 #. mcoherencytomueller (ReciprocalCoherencyToReciprocalMuellerFunctor)
 
-   #. :math:` 0.5*( C_{11}+C_{22}+C_{33} ) `
+   #. :math:`0.5*( C_{11}+C_{22}+C_{33} )`
 
-   #. :math:` Re(C_{12}) + Im(C_{22}) `
+   #. :math:`Re(C_{12}) + Im(C_{22})`
 
-   #. :math:` Re(C_{13}) `
+   #. :math:`Re(C_{13})`
 
-   #. :math:` Im(C_{23}) `
+   #. :math:`Im(C_{23})`
 
-   #. :math:` Re(C_{12}) `
+   #. :math:`Re(C_{12})`
 
-   #. :math:` 0.5*( C_{11}+C_{22}-C_{33} ) `
+   #. :math:`0.5*( C_{11}+C_{22}-C_{33} )`
 
-   #. :math:` Re(C_{23}) `
+   #. :math:`Re(C_{23})`
 
-   #. :math:` Im(C_{13}) `
+   #. :math:`Im(C_{13})`
 
-   #. :math:` -Re(C_{13}) `
+   #. :math:`-Re(C_{13})`
 
-   #. :math:` -Re(C_{23}) `
+   #. :math:`-Re(C_{23})`
 
-   #. :math:` 0.5.Re(VAL1) `
+   #. :math:`0.5.Re(VAL1)`
 
-   #. :math:` 0.5.Im(VAL0) `
+   #. :math:`0.5.Im(VAL0)`
 
-   #. :math:` Im(C_{23}) `
+   #. :math:`Im(C_{23})`
 
-   #. :math:` Im(C_{13}) `
+   #. :math:`Im(C_{13})`
 
-   #. :math:` 0.5.Im(VAL1^{*}) `
+   #. :math:`0.5.Im(VAL1^{*})`
 
-   #. :math:` 0.5.Re(VAL0) `
+   #. :math:`0.5.Re(VAL0)`
 
    With:
 
-   -  :math:` VAL0 = C_{33}+C_{12}-C_{11}-(C_{12}-C_{22})^{*}  `
+   -  :math:`VAL0 = C_{33}+C_{12}-C_{11}-(C_{12}-C_{22})^{*}`
 
-   -  :math:` VAL1 = -C_{33}+C_{12}-C_{11}-(C_{12}-C_{22})^{*} `
+   -  :math:`VAL1 = -C_{33}+C_{12}-C_{11}-(C_{12}-C_{22})^{*}`
 
    Where :math:`C_{ij}` are related to the elements of the reciprocal
    coherence matrix.
@@ -244,26 +244,26 @@ For each option parameter, the list below gives the formula used.
 #. mcovariancetocoherencydegree
    (ReciprocalCovarianceToCoherencyDegreeFunctor)
 
-   #. :math:` abs(S_{hh}.S_{vv}^{*}) / sqrt(S_{hh}.S_{hh}^{*}) / sqrt(S_{vv}.S_{vv}^{*}) `
+   #. :math:`abs(S_{hh}.S_{vv}^{*}) / sqrt(S_{hh}.S_{hh}^{*}) / sqrt(S_{vv}.S_{vv}^{*})`
 
-   #. :math:` abs(S_{hv}.S_{vv}^{*}) / sqrt(S_{hv}.S_{hv}^{*}) / sqrt(S_{vv}.S_{vv}^{*}) `
+   #. :math:`abs(S_{hv}.S_{vv}^{*}) / sqrt(S_{hv}.S_{hv}^{*}) / sqrt(S_{vv}.S_{vv}^{*})`
 
-   #. :math:` abs(S_{hh}.S_{hv}^{*}) / sqrt(S_{hh}.S_{hh}^{*}) / sqrt(S_{hv}.S_{hv}^{*}) `
+   #. :math:`abs(S_{hh}.S_{hv}^{*}) / sqrt(S_{hh}.S_{hh}^{*}) / sqrt(S_{hv}.S_{hv}^{*})`
 
 #. mcovariancetocoherency
    (ReciprocalCovarianceToReciprocalCoherencyFunctor)
 
-   #. :math:` 0.5 . ( C_{33} + C_{13} + C_{13}^{*} + C_{11} ) `
+   #. :math:`0.5 . ( C_{33} + C_{13} + C_{13}^{*} + C_{11} )`
 
-   #. :math:` 0.5 . ( -C_{33} - C_{13} + C_{13}^{*} + C_{11} ) `
+   #. :math:`0.5 . ( -C_{33} - C_{13} + C_{13}^{*} + C_{11} )`
 
-   #. :math:` 0.5 . ( \sqrt{2}.C_{12} + \sqrt{2}.C_{23}^{*} ) `
+   #. :math:`0.5 . ( \sqrt{2}.C_{12} + \sqrt{2}.C_{23}^{*} )`
 
-   #. :math:` 0.5 . ( C_{33} - C_{13} - C_{13}^{*} + C_{11} ) `
+   #. :math:`0.5 . ( C_{33} - C_{13} - C_{13}^{*} + C_{11} )`
 
-   #. :math:` 0.5 . ( \sqrt{2}.C_{12} - \sqrt{2}.C_{23}^{*} ) `
+   #. :math:`0.5 . ( \sqrt{2}.C_{12} - \sqrt{2}.C_{23}^{*} )`
 
-   #. :math:` 0.5 . ( 2 . C_{22} ) `
+   #. :math:`0.5 . ( 2 . C_{22} )`
 
    Where :math:`C_{ij}` are related to the elements of the reciprocal
    linear covariance matrix.
@@ -271,168 +271,168 @@ For each option parameter, the list below gives the formula used.
 #. mlinearcovariancetocircularcovariance
    (ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor)
 
-   #. :math:` 0.25 . ( C_{33}-i.\sqrt{2}.C_{23}-C_{13}+i.\sqrt{2}.C_{23}^{*}-C_{13}^{*}+2.C_{22}-i.\sqrt{2}.C_{12}+i.\sqrt{2}.C_{12}^{*}+C_{11} ) `
+   #. :math:`0.25 . ( C_{33}-i.\sqrt{2}.C_{23}-C_{13}+i.\sqrt{2}.C_{23}^{*}-C_{13}^{*}+2.C_{22}-i.\sqrt{2}.C_{12}+i.\sqrt{2}.C_{12}^{*}+C_{11} )`
 
-   #. :math:` 0.25 . ( i.\sqrt{2}.C_{33}+2.C_{23}-i.\sqrt{2}.C_{13}+i.\sqrt{2}.C_{13}^{*}+2.C_{12}^{*}-i.\sqrt{2}.C_{11} ) `
+   #. :math:`0.25 . ( i.\sqrt{2}.C_{33}+2.C_{23}-i.\sqrt{2}.C_{13}+i.\sqrt{2}.C_{13}^{*}+2.C_{12}^{*}-i.\sqrt{2}.C_{11} )`
 
-   #. :math:` 0.25 . ( -C_{33}+i.\sqrt{2}.C_{23}+C_{13}+i.\sqrt{2}.C_{23}^{*}+C_{13}^{*}+2.C_{22}-i.\sqrt{2}.C_{12}-i.\sqrt{2}.C_{12}^{*}-C_{11} ) `
+   #. :math:`0.25 . ( -C_{33}+i.\sqrt{2}.C_{23}+C_{13}+i.\sqrt{2}.C_{23}^{*}+C_{13}^{*}+2.C_{22}-i.\sqrt{2}.C_{12}-i.\sqrt{2}.C_{12}^{*}-C_{11} )`
 
-   #. :math:` 0.25 . ( 2.C_{33}+2.C_{13}+2.C_{13}^{*}+2.C_{11} ) `
+   #. :math:`0.25 . ( 2.C_{33}+2.C_{13}+2.C_{13}^{*}+2.C_{11} )`
 
-   #. :math:` 0.25 . ( i.\sqrt{2}.C_{33}+i.\sqrt{2}.C_{13}+2.C_{23}^{*}-i.\sqrt{2}.C_{13}^{*}+2.C_{12}-i.\sqrt{2}.C_{11} ) `
+   #. :math:`0.25 . ( i.\sqrt{2}.C_{33}+i.\sqrt{2}.C_{13}+2.C_{23}^{*}-i.\sqrt{2}.C_{13}^{*}+2.C_{12}-i.\sqrt{2}.C_{11} )`
 
-   #. :math:` 0.25 . ( C_{33}+i.\sqrt{2}.C_{23}-C_{13}-i.\sqrt{2}.C_{23}^{*}-C_{13}^{*}+2.C_{22}+i.\sqrt{2}.C_{12}-i.\sqrt{2}.C_{12}^{*}+C_{11} ) `
+   #. :math:`0.25 . ( C_{33}+i.\sqrt{2}.C_{23}-C_{13}-i.\sqrt{2}.C_{23}^{*}-C_{13}^{*}+2.C_{22}+i.\sqrt{2}.C_{12}-i.\sqrt{2}.C_{12}^{*}+C_{11} )`
 
    Where :math:`C_{ij}` are related to the elements of the reciprocal
    linear covariance matrix.
 
 #. muellertomcovariance (MuellerToReciprocalCovarianceFunctor)
 
-   #. :math:` 0.5.(M_{11}+M_{22}+2.M_{12}) `
+   #. :math:`0.5.(M_{11}+M_{22}+2.M_{12})`
 
-   #. :math:` 0.5.\sqrt{2}.[(M_{13}+M_{23}) + j.(M_{14}+M_{24})] `
+   #. :math:`0.5.\sqrt{2}.[(M_{13}+M_{23}) + j.(M_{14}+M_{24})]`
 
-   #. :math:` -0.5.(M_{33}+M_{44}) - j.M_{34} `
+   #. :math:`-0.5.(M_{33}+M_{44}) - j.M_{34}`
 
-   #. :math:` M_{11}-M_{22} `
+   #. :math:`M_{11}-M_{22}`
 
-   #. :math:` 0.5.\sqrt{2}.[(M_{13}-M_{23}) + j.(M_{14}-M_{24})] `
+   #. :math:`0.5.\sqrt{2}.[(M_{13}-M_{23}) + j.(M_{14}-M_{24})]`
 
-   #. :math:` 0.5.(M_{11}+M_{22}-2.M_{12}) `
+   #. :math:`0.5.(M_{11}+M_{22}-2.M_{12})`
 
 — Bistatic case —
 
 #. bsinclairtocoherency (SinclairToCoherencyMatrixFunctor)
 
-   #. :math:` (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} `
+   #. :math:`(S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*}`
 
-   #. :math:` (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} `
+   #. :math:`(S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*}`
 
-   #. :math:` (S_{hh}+S_{vv}).(S_{hv}+S_{vh})^{*} `
+   #. :math:`(S_{hh}+S_{vv}).(S_{hv}+S_{vh})^{*}`
 
-   #. :math:` (S_{hh}+S_{vv}).( j (S_{hv}-S_{vh}))^{*} `
+   #. :math:`(S_{hh}+S_{vv}).( j (S_{hv}-S_{vh}))^{*}`
 
-   #. :math:` (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} `
+   #. :math:`(S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*}`
 
-   #. :math:` (S_{hh}-S_{vv}).(S_{hv}+S_{vh})^{*} `
+   #. :math:`(S_{hh}-S_{vv}).(S_{hv}+S_{vh})^{*}`
 
-   #. :math:` (S_{hh}-S_{vv}).( j (S_{hv}-S_{vh}))^{*} `
+   #. :math:`(S_{hh}-S_{vv}).( j (S_{hv}-S_{vh}))^{*}`
 
-   #. :math:` (S_{hv}+S_{vh}).(S_{hv}+S_{vh})^{*} `
+   #. :math:`(S_{hv}+S_{vh}).(S_{hv}+S_{vh})^{*}`
 
-   #. :math:` (S_{hv}+S_{vh}).( j (S_{hv}-S_{vh}))^{*} `
+   #. :math:`(S_{hv}+S_{vh}).( j (S_{hv}-S_{vh}))^{*}`
 
-   #. :math:` j (S_{hv}-S_{vh}).( j (S_{hv}-S_{vh}))^{*} `
+   #. :math:`j (S_{hv}-S_{vh}).( j (S_{hv}-S_{vh}))^{*}`
 
 #. bsinclairtocovariance (SinclairToCovarianceMatrixFunctor)
 
-   #. :math:` S_{hh}.S_{hh}^{*} `
+   #. :math:`S_{hh}.S_{hh}^{*}`
 
-   #. :math:` S_{hh}.S_{hv}^{*} `
+   #. :math:`S_{hh}.S_{hv}^{*}`
 
-   #. :math:` S_{hh}.S_{vh}^{*} `
+   #. :math:`S_{hh}.S_{vh}^{*}`
 
-   #. :math:` S_{hh}.S_{vv}^{*} `
+   #. :math:`S_{hh}.S_{vv}^{*}`
 
-   #. :math:` S_{hv}.S_{hv}^{*} `
+   #. :math:`S_{hv}.S_{hv}^{*}`
 
-   #. :math:` S_{hv}.S_{vh}^{*} `
+   #. :math:`S_{hv}.S_{vh}^{*}`
 
-   #. :math:` S_{hv}.S_{vv}^{*} `
+   #. :math:`S_{hv}.S_{vv}^{*}`
 
-   #. :math:` S_{vh}.S_{vh}^{*} `
+   #. :math:`S_{vh}.S_{vh}^{*}`
 
-   #. :math:` S_{vh}.S_{vv}^{*} `
+   #. :math:`S_{vh}.S_{vv}^{*}`
 
-   #. :math:` S_{vv}.S_{vv}^{*} `
+   #. :math:`S_{vv}.S_{vv}^{*}`
 
 #. bsinclairtocircovariance (SinclairToCircularCovarianceMatrixFunctor)
 
-   #. :math:` S_{ll}.S_{ll}^{*} `
+   #. :math:`S_{ll}.S_{ll}^{*}`
 
-   #. :math:` S_{ll}.S_{lr}^{*} `
+   #. :math:`S_{ll}.S_{lr}^{*}`
 
-   #. :math:` S_{ll}.S_{rl}^{*} `
+   #. :math:`S_{ll}.S_{rl}^{*}`
 
-   #. :math:` S_{ll}.S_{rr}^{*} `
+   #. :math:`S_{ll}.S_{rr}^{*}`
 
-   #. :math:` S_{lr}.S_{lr}^{*} `
+   #. :math:`S_{lr}.S_{lr}^{*}`
 
-   #. :math:` S_{lr}.S_{rl}^{*} `
+   #. :math:`S_{lr}.S_{rl}^{*}`
 
-   #. :math:` S_{lr}.S_{rr}^{*} `
+   #. :math:`S_{lr}.S_{rr}^{*}`
 
-   #. :math:` S_{rl}.S_{rl}^{*} `
+   #. :math:`S_{rl}.S_{rl}^{*}`
 
-   #. :math:` S_{rl}.S_{rr}^{*} `
+   #. :math:`S_{rl}.S_{rr}^{*}`
 
-   #. :math:` S_{rr}.S_{rr}^{*} `
+   #. :math:`S_{rr}.S_{rr}^{*}`
 
    With:
 
-   -  :math:` S_{ll} = 0.5(S_{hh}+j S_{hv}+j S_{vh}-S_{vv}) `
+   -  :math:`S_{ll} = 0.5(S_{hh}+j S_{hv}+j S_{vh}-S_{vv})`
 
-   -  :math:` S_{lr} = 0.5(j S_{hh}+S_{hv}-S_{vh}+j S_{vv}) `
+   -  :math:`S_{lr} = 0.5(j S_{hh}+S_{hv}-S_{vh}+j S_{vv})`
 
-   -  :math:` S_{rl} = 0.5(j S_{hh}-S_{hv}+ S_{vh}+j S_{vv}) `
+   -  :math:`S_{rl} = 0.5(j S_{hh}-S_{hv}+ S_{vh}+j S_{vv})`
 
-   -  :math:` S_{rr} = 0.5(-S_{hh}+j S_{hv}+j S_{vh}+S_{vv}) `
+   -  :math:`S_{rr} = 0.5(-S_{hh}+j S_{hv}+j S_{vh}+S_{vv})`
 
    — Both cases —
 
 #. sinclairtomueller (SinclairToMueller)
 
-   #. :math:` 0.5 Re( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) `
+   #. :math:`0.5 Re( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} )`
 
-   #. :math:` 0.5 Re( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) `
+   #. :math:`0.5 Re( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} )`
 
-   #. :math:` Re( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) `
+   #. :math:`Re( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} )`
 
-   #. :math:` Im( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) `
+   #. :math:`Im( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} )`
 
-   #. :math:` 0.5 Re( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) `
+   #. :math:`0.5 Re( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} )`
 
-   #. :math:` 0.5 Re( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) `
+   #. :math:`0.5 Re( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} )`
 
-   #. :math:` Re( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) `
+   #. :math:`Re( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} )`
 
-   #. :math:` Im( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) `
+   #. :math:`Im( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} )`
 
-   #. :math:` Re( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) `
+   #. :math:`Re( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} )`
 
-   #. :math:` Im( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) `
+   #. :math:`Im( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} )`
 
-   #. :math:` Re( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) `
+   #. :math:`Re( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} )`
 
-   #. :math:` Im( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) `
+   #. :math:`Im( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} )`
 
-   #. :math:` Re( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) `
+   #. :math:`Re( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} )`
 
-   #. :math:` Im( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) `
+   #. :math:`Im( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} )`
 
-   #. :math:` Re( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) `
+   #. :math:`Re( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} )`
 
-   #. :math:` Im( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) `
+   #. :math:`Im( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} )`
 
    With :
 
-   -  :math:` T_{xx} = -S_{hh} `
+   -  :math:`T_{xx} = -S_{hh}`
 
-   -  :math:` T_{xy} = -S_{hv} `
+   -  :math:`T_{xy} = -S_{hv}`
 
-   -  :math:` T_{yx} = S_{vh} `
+   -  :math:`T_{yx} = S_{vh}`
 
-   -  :math:` T_{yy} = S_{vv} `
+   -  :math:`T_{yy} = S_{vv}`
 
 #. muellertopoldegandpower (MuellerToPolarisationDegreeAndPowerFunctor)
 
-   #. :math:` P_{min} `
+   #. :math:`P_{min}`
 
-   #. :math:` P_{max} `
+   #. :math:`P_{max}`
 
-   #. :math:` DegP_{min} `
+   #. :math:`DegP_{min}`
 
-   #. :math:` DegP_{max} `
+   #. :math:`DegP_{max}`
 
 Examples :
 
@@ -549,17 +549,17 @@ Alpha, A(Anisotropy).
 Here are the formula used (refer to the previous section about how the
 coherence matrix is obtained from the Sinclair one):
 
-#. :math:` entropy = -\sum_{i=0}^{2} \frac{p[i].\log{p[i]}}{\log{3}} `
+#. :math:`entropy = -\sum_{i=0}^{2} \frac{p[i].\log{p[i]}}{\log{3}}`
 
-#. :math:` \alpha = \sum_{i=0}^{2} p[i].\alpha_{i} `
+#. :math:`\alpha = \sum_{i=0}^{2} p[i].\alpha_{i}`
 
-#. :math:` anisotropy = \frac {SortedEigenValues[1] - SortedEigenValues[2]}{SortedEigenValues[1] + SortedEigenValues[2]} `
+#. :math:`anisotropy = \frac {SortedEigenValues[1] - SortedEigenValues[2]}{SortedEigenValues[1] + SortedEigenValues[2]}`
 
 Where:
 
--  :math:` p[i] = max(SortedEigenValues[i], 0) / \sum_{i=0}^{2, SortedEigenValues[i]>0} SortedEigenValues[i] `
+-  :math:`p[i] = max(SortedEigenValues[i], 0) / \sum_{i=0}^{2, SortedEigenValues[i]>0} SortedEigenValues[i]`
 
--  :math:` \alpha_{i} = \left| SortedEigenVector[i] \right|* \frac{180}{\pi}`
+-  :math:`\alpha_{i} = \left| SortedEigenVector[i] \right|* \frac{180}{\pi}`
 
 Example :
 
