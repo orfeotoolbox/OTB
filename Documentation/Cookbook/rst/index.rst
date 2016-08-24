@@ -53,13 +53,12 @@ For more information on the Orfeo ToolBox, please feel free to visit
 the `Orfeo ToolBox website <http://orfeo-toolbox.org>`_.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    Installation
    OTB-Applications
    Monteverdi
    Recipes
-   WrappedApplications
    Applications
 
 Indices and tables
