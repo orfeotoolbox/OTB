@@ -18,6 +18,10 @@
 #ifndef otbMachineLearningModel_txx
 #define otbMachineLearningModel_txx
 
+#ifdef _OPENMP
+ # include <omp.h>
+#endif
+
 #include "otbMachineLearningModel.h"
 
 namespace otb
@@ -75,15 +79,17 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
   typename InputListSampleType::Pointer ls = InputListSampleType::New();
   ls->PushBack(input);
 
-  ConfidenceValueVectorType vquality;
+  typename ConfidenceListSampleType::Pointer vquality = ITK_NULLPTR;
 
-  typename TargetListSampleType::Pointer ts = PredictBatch(ls,&vquality);
+  if(quality != ITK_NULLPTR)
+    vquality = ConfidenceListSampleType::New();
+  
+  typename TargetListSampleType::Pointer ts = PredictBatch(ls,vquality);
 
-  if(vquality.Size()!=0)
+  if(vquality.IsNotNull() && quality != ITK_NULLPTR && vquality->Size() != 0)
     {
-    *quality = vquality[0];
+    *quality = vquality->GetMeasurementVector(0)[0];
     }
-
   assert(ts->Size()==1&&"Measurement vector should have 1 element exactly");
   
   return ts->GetMeasurementVector(0)[0];
@@ -94,8 +100,8 @@ template <class TInputValue, class TOutputValue, class TConfidenceValue>
 typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::TargetListSampleType * 
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::PredictBatch(const InputListSampleType * input, ConfidenceValueVectorType * quality) const
-{
+::PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality) const
+{  
   if(m_IsDoPredictBatchMultiThreaded)
     {
     // Simply calls DoPredictBatch
@@ -103,11 +109,62 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     }
   else
     {
+    
+    #ifdef _OPENMP
     // OpenMP threading here
+
+    typename TargetListSampleType::Pointer targets = TargetListSampleType::New();
+    
+    #pragma omp parallel
+    {
+    unsigned int nb_threads = omp_get_num_threads();
+    unsigned int nb_batches = vcl_ceil((double)input->Size()/(double)nb_threads);
+
+    std::vector<typename InputListSampleType::Pointer> batches(nb_batches,InputListSampleType::New());
+    std::vector<typename TargetListSampleType::Pointer> target_batches(nb_batches);
+    std::vector<typename ConfidenceListSampleType::Pointer> confidence_batches(nb_batches,quality!=ITK_NULLPTR?ConfidenceListSampleType::New():ITK_NULLPTR);
+
+    if(quality!=ITK_NULLPTR)
+      {
+      quality->Clear();
+      }
+    
+    #pragma omp for
+    for(typename InputListSampleType::InstanceIdentifier id = 0;
+        id<input->Size();++id)
+      {
+      // Assign a proxy VariableLengthVector to avoid deep copy
+      batches[id%nb_batches]->PushBack(InputSampleType(input->GetMeasurementVector(id).GetDataPointer(),input->GetMeasurementVector(id).Size()));
+      }
+    
+    #pragma omp for    
+    for(unsigned int batch_id = 0; batch_id < nb_batches;++batch_id)
+      {
+      // TODO handle quality layer here
+      target_batches[batch_id] = this->DoPredictBatch(batches[batch_id],confidence_batches[batch_id]);
+      }
+   
+    for(unsigned int batch_id = 0; batch_id < nb_batches;++batch_id)
+      {
+      typename InputSampleType::ElementIdentifier id = 0;
+      for(typename TargetListSampleType::Iterator it = target_batches[batch_id]->Begin();
+          it != target_batches[batch_id]->End();++it,++id)
+        {
+        targets->PushBack(it.GetMeasurementVector());
+
+        if(quality!=ITK_NULLPTR && confidence_batches[batch_id].IsNotNull())
+          {
+          quality->PushBack(confidence_batches[batch_id]->GetMeasurementVector(id));
+          }
+        }
+      }
+    }
+    return targets;
+    #else
     return this->DoPredictBatch(input,quality);
+    #endif
     }
 }
-
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void

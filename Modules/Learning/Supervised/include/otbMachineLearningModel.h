@@ -89,7 +89,9 @@ public:
 
   /**\name Confidence value typedef */
   typedef TConfidenceValue                              ConfidenceValueType;
-  typedef itk::VariableLengthVector<ConfidenceValueType> ConfidenceValueVectorType;
+  typedef itk::FixedArray<ConfidenceValueType,1>            ConfidenceSampleType;
+  typedef itk::Statistics::ListSample<ConfidenceSampleType> ConfidenceListSampleType;
+
   /**\name Standard macros */
   //@{
   /** Run-time type information (and related methods). */
@@ -103,7 +105,7 @@ public:
   TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const;
 
   /** TODO: Update documentation*/
-  TargetListSampleType * PredictBatch(const InputListSampleType * input, ConfidenceValueVectorType * quality = ITK_NULLPTR) const;
+  TargetListSampleType * PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
   
   /** TODO: Update documentation and mark as deprecated */
   void PredictAll();
@@ -158,7 +160,7 @@ protected:
   ~MachineLearningModel() ITK_OVERRIDE;
 
   /** Practical implementation of prediction */
-  virtual TargetListSampleType * DoPredictBatch(const InputListSampleType *, ConfidenceValueVectorType * = ITK_NULLPTR) const
+  virtual TargetListSampleType * DoPredictBatch(const InputListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const
   {
     // TODO: Change me to virtual pure
     itkExceptionMacro("Should be implemented");
@@ -173,6 +175,8 @@ protected:
   /** Target list sample */
   typename TargetListSampleType::Pointer m_TargetListSample;
 
+  typename ConfidenceListSampleType::Pointer m_ConfidenceListSample;
+  
   /** flag to choose between classification and regression modes */
   bool m_RegressionMode;
   
