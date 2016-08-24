@@ -1,5 +1,5 @@
-Using `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images in **OTB Applications** and **Monteverdi**
-==============================================================================================================
+Using Pleiades images in OTB Applications and Monteverdi
+========================================================
 
 The typical `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_
 product is a pansharpened image of 40 000 by 40 000 pixels large, with 4
@@ -27,31 +27,31 @@ you should try to access them on a per tile basis, because anytime you
 ask for a given tile more than once, the performances of your processing
 chains drop.
 
-What does it mean? In **Orfeo Toolbox** , the streaming (on the flow)
+What does it mean? In Orfeo Toolbox , the streaming (on the flow)
 pipeline execution will try to stay synchronised with the input image
 tiling scheme to avoid decoding the same tile several time. But you may
-know that in the **Orfeo Toolbox** world, one can easily chain numerous
+know that in the Orfeo Toolbox world, one can easily chain numerous
 processing, some them enlarging the requested region to process the
 output - like neighbourhood based operators for instance - or even
 completely change the image geometry - like ortho-rectification for
 instance. And this chaining freedom is also at the heart of
-**Monteverdi** . In short, it is very easy to build a processing
-pipeline in **Orfeo Toolbox** or chain of modules in **Monteverdi** that
-will get incredibly bad performances, even if the **Orfeo Toolbox**
+Monteverdi . In short, it is very easy to build a processing
+pipeline in Orfeo Toolbox or chain of modules in Monteverdi that
+will get incredibly bad performances, even if the Orfeo Toolbox
 back-end does its best to stay in tune with tiles. And here, we do not
 even speak of sub-sampling the whole dataset at some point in the
 pipeline, which will lead to even more incredibly poor performances, and
 is however done anytime a viewer is called on a module output in
-**Monteverdi** .
+Monteverdi .
 
-So, can **Monteverdi** or **OTB Applications** open and process
+So, can Monteverdi or OTB Applications open and process
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images?
-Fortunately yes. **Monteverdi** even takes advantage of
+Fortunately yes. Monteverdi even takes advantage of
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  ability to
 generate coarser scale images for quick-look generation for
 visualisation purposes. But to ease the use of
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images in
-**Monteverdi** , we chose to open them in a separate data type, and to
+Monteverdi , we chose to open them in a separate data type, and to
 lock the use of most of modules for this data type. It can only be used
 in the Viewer module and a dedicated module allowing to uncompress a
 user-defined part of a
@@ -60,7 +60,7 @@ can still force the data type during the opening of the image, but this
 is not advised: the advised way to use the other modules with
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  data is to first
 uncompress to disk your area of interest, and then open it again in
-**Monteverdi** (careful, you may need a lot of disk space to do this).
+Monteverdi (careful, you may need a lot of disk space to do this).
 As for the applications, they will work fine even on
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  data, but keep in
@@ -69,7 +69,7 @@ are try to achieve. Again, the advised way of working would be to
 uncompress your area of interest first and then work with the
 uncompressed file, as you used to with other data.
 
-A final word about metadata: **OTB Applications** and **Monteverdi** can
+A final word about metadata: OTB Applications and Monteverdi can
 read the Dimap V2 (note that we also read the less non-official Dimap
 V1.1 format) metadata file associated with the
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  file in the
@@ -77,17 +77,17 @@ V1.1 format) metadata file associated with the
 the RPC localisation model for geo-coding and the information needed to
 perform radiometric calibration. These metadata will be written in an
 associated geometry file (with a *.geom* extension) when uncompressing
-your area of interest to disk, so that both **Monteverdi** and **OTB
-Applications** will be able to retrieve them, even for images extracts.
+your area of interest to disk, so that both Monteverdi and OTB
+Applications will be able to retrieve them, even for images extracts.
 
 .. _section1:
 
 
-Opening a `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image in **Monteverdi**
+Opening a `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image in Monteverdi
 ----------------------------------------------------------------------------------------
 
 Opening a `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image in
-**Monteverdi** is not different from opening other kind of dataset: use
+Monteverdi is not different from opening other kind of dataset: use
 the *Open Dataset* item from the *File* menu, and select the JP2 file
 corresponding to you image using the file browser.
 
@@ -102,12 +102,12 @@ corresponding to you image using the file browser.
 
 
 `Figure 1` shows the dialog box when opening a `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_
-image in **Monteverdi** . One can see some changes with respect to
+image in Monteverdi . One can see some changes with respect to
 the classical dialog box for images opening.
 The first novelty is a combo box allowing to choose the resolution of
 the `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  file one wants
-to decode. As said in the introduction of this section, **Orfeo
-Toolbox** can take advantage of
+to decode. As said in the introduction of this section, Orfeo
+Toolbox can take advantage of
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  capability to
 access coarser resolution ver efficiently. If you select for instance
 the *Resolution: 1* item, you will end with an image half the size of
@@ -122,14 +122,14 @@ the *Resolution: 1* image has a ground samping distance of 4 meters.
 The second novelty is a check-box called *Save quicklook for future
 re-use*. This option allows to speed-up the loading of a
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image within
-**Monteverdi** . In fact, when loading a
+Monteverdi . In fact, when loading a
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image,
-**Monteverdi** generates a quicklook of this image to be used as a
+Monteverdi generates a quicklook of this image to be used as a
 minimap in the *Viewer Module* as well as in the *Uncompress Jpeg2000
 image* module. This quicklook is the coarser level of resolution from
 the `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  file: it
 should decode easily, but can still take a while. This is why if the
-check-box is checked, **Monteverdi** will write this quicklook in
+check-box is checked, Monteverdi will write this quicklook in
 uncompressed *Tiff* format next to the
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  file. For
 instance, if the file name is:
@@ -138,7 +138,7 @@ instance, if the file name is:
 
     IMG_PHR1A_MS_201204011017343_SEN_IPU_20120529_1596-002_R1C1.JP2
 
-**Monteverdi** will write, if it can, the following files in the same
+Monteverdi will write, if it can, the following files in the same
 directory:
 
 ::
@@ -146,18 +146,18 @@ directory:
     IMG_PHR1A_MS_201204011017343_SEN_IPU_20120529_1596-002_R1C1.JP2_ql_by_otb.tif
     IMG_PHR1A_MS_201204011017343_SEN_IPU_20120529_1596-002_R1C1.JP2_ql_by_otb.geom
 
-Next time one will try to open this image in **Monteverdi** , the
+Next time one will try to open this image in Monteverdi , the
 application will find these files and load directly the quicklook from
 them, instead of decoding it from the
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  file, resulting in
-an instant loading of the image in **Monteverdi** . Since the wheight of
+an instant loading of the image in Monteverdi . Since the wheight of
 these extra files is ususally of a few megaoctets, it is recommended to
 keep this option checked unless one has a very good reason not to. Now
 that the `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image is
-loaded in **Monteverdi** , it appears in the main **Monteverdi** window,
+loaded in Monteverdi , it appears in the main Monteverdi window,
 as shown in `Figure 2`.
 
-Viewing a `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image in **Monteverdi**
+Viewing a `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image in Monteverdi
 ----------------------------------------------------------------------------------------
 
 You can open the `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_
@@ -165,7 +165,7 @@ image in the viewer, either by using the contextual menu or by opening
 the *Viewer Module* through the menu bar.
 
 You can notice that the viewer opens quickly without showing the
-traditional progress bar. This is because **Monteverdi** already loaded
+traditional progress bar. This is because Monteverdi already loaded
 the quick-look upon opening, and we do not need to re-compute it each
 time the image is opened in the *Viewer Module*.
 
@@ -189,7 +189,7 @@ large, so it might be convenient to switch the viewer style from
 *Scroll Window* for better localisation of the viewed area. To do so,
 one can go to the *Setup* tab of the *Viewer Control Window*.
 
-Handling mega-tiles in **Monteverdi**
+Handling mega-tiles in Monteverdi
 --------------------------------------
 
 If the `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  product is
@@ -197,8 +197,8 @@ very large, it might happen that the image is actually splitted into
 several `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  files,
 also called mega-tiles. Since the area of interest might span two or
 more mega-tiles, it is convenient to stitch together these tiles so as
-to get the entire scene into one **Monteverdi** dataset. To do so, one
-must first open all mega-tiles in **Monteverdi** , as described in :ref:`section1`.
+to get the entire scene into one Monteverdi dataset. To do so, one
+must first open all mega-tiles in Monteverdi , as described in :ref:`section1`.
 Once all mega-tiles are opened as shown in `Figure 1`
 
 Once this is done, one can use the *Mosaic Images module* from the
@@ -215,10 +215,10 @@ then use this dataset as a regular
 
 Figure 4: Pleiades mega-tiles and output mosaic in Monteverdi
 
-Partial uncompressing of `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images in **Monteverdi**
+Partial uncompressing of `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images in Monteverdi
 --------------------------------------------------------------------------------------------------------
 
-The next very important thing one can do with **Monteverdi** is to
+The next very important thing one can do with Monteverdi is to
 select an area of interest in the
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image so as to
 uncompress it to disk. To do so, open the
@@ -241,36 +241,36 @@ this user-defined area. On the left, in red, one can find the start
 index and size of corresponding region.
 
 The module also displays a green rectangle, which shows the minimum set
-of tiles to be decoded to decode the red area: **this is the region that
-will actually be decoded to disk**. On the left, in green, one can find
+of tiles to be decoded to decode the red area: this is the region that
+will actually be decoded to disk. On the left, in green, one can find
 information about this region: how many tiles it contains, and what will
 be the size of the corresponding decoded output file.
 
 Once one chose her area of interest, one can click on the *Save* button,
 and select an output file. The module will write a geometry file (with
 the *.geom* extension) with all useful metadata in it, so that when
-reading back the file in **Monteverdi** or in **OTB Applications** ,
+reading back the file in Monteverdi or in OTB Applications ,
 geometry and radiometry based functionalities can still be used.
 
 
-Other processing of `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images with **Monteverdi**
+Other processing of `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images with Monteverdi
 -----------------------------------------------------------------------------------------------------
 
 For all the reasons exposed in the foreword of this section, we do not
 allow to use directly
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images in the
-remaining of **Monteverdi** modules: the advised way of doing so is to
+remaining of Monteverdi modules: the advised way of doing so is to
 first uncompress the area of interest to disk.
 
-Processing of `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images with **OTB Applications**
+Processing of `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images with OTB Applications
 -----------------------------------------------------------------------------------------------------
 
-The **OTB Applications** are able to work directly with
+The OTB Applications are able to work directly with
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  images. However,
 keep in mind that performances may be limited due to the reasons exposed
 in the foreword of this section. If you experiment poor performances
 with some application, try to uncompress the area of interest from your
-image with **Monteverdi** first. One can also use the *ExtractROI*
+image with Monteverdi first. One can also use the *ExtractROI*
 application for this purpose.
 
 One thing that is interesting to know is that one can access the coarser
