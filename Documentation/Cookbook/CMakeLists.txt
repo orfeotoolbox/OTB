@@ -87,7 +87,7 @@ configure_file(${RST_SOURCES}/Makefile.in ${RST_GENERATED_SOURCE_DIR}/Makefile @
 add_custom_target(generate_otbapps_rst
   ALL
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
   COMMENT "Auto-generating Application Reference Documentation in RST"
   )
 
