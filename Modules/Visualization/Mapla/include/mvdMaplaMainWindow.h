@@ -76,6 +76,8 @@ class MaplaMainWindow;
 /**
  * \class MaplaMainWindow
  *
+ * \ingroup Mapla
+ *
  * \brief The application main-widow widget.
  */
 class Monteverdi_EXPORT MaplaMainWindow

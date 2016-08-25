@@ -67,6 +67,8 @@ class OTBApplicationsModel;
 
 /** \class MaplaApplication
  *
+ * \ingroup Mapla
+ *
  */
 class Monteverdi_EXPORT MaplaApplication
   : public I18nApplication
