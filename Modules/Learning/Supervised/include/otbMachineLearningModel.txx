@@ -32,7 +32,8 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::MachineLearningModel() :
   m_RegressionMode(false),
   m_IsRegressionSupported(false),
-  m_ConfidenceIndex(false)
+  m_ConfidenceIndex(false),
+  m_IsDoPredictBatchMultiThreaded(false)
 {}
 
 
@@ -77,12 +78,16 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::Predict(const InputSampleType& input, ConfidenceValueType *quality) const
 {
   typename InputListSampleType::Pointer ls = InputListSampleType::New();
+  ls->SetMeasurementVectorSize(input.Size());
   ls->PushBack(input);
 
   typename ConfidenceListSampleType::Pointer vquality = ITK_NULLPTR;
 
   if(quality != ITK_NULLPTR)
+    {
     vquality = ConfidenceListSampleType::New();
+    vquality->SetMeasurementVectorSize(1);
+    }
   
   typename TargetListSampleType::Pointer ts = PredictBatch(ls,vquality);
 
@@ -98,7 +103,7 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::TargetListSampleType * 
+::TargetListSampleType::Pointer
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality) const
 {  
@@ -114,6 +119,7 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     // OpenMP threading here
 
     typename TargetListSampleType::Pointer targets = TargetListSampleType::New();
+    targets->SetMeasurementVectorSize(1);
     
     #pragma omp parallel
     {
@@ -128,13 +134,24 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
       {
       quality->Clear();
       }
+
+    #pragma omp for    
+    for(unsigned int batch_id = 0; batch_id < nb_batches;++batch_id)
+      {
+      batches[batch_id]->SetMeasurementVectorSize(input->GetMeasurementVectorSize());
+      if(confidence_batches[batch_id].IsNotNull())
+        {
+        confidence_batches[batch_id]->SetMeasurementVectorSize(1);
+        }
+      }
     
     #pragma omp for
     for(typename InputListSampleType::InstanceIdentifier id = 0;
         id<input->Size();++id)
       {
       // Assign a proxy VariableLengthVector to avoid deep copy
-      batches[id%nb_batches]->PushBack(InputSampleType(input->GetMeasurementVector(id).GetDataPointer(),input->GetMeasurementVector(id).Size()));
+      // batches[id%nb_batches]->PushBack(InputSampleType(input->GetMeasurementVector(id).GetDataPointer(),input->GetMeasurementVector(id).Size()));
+      batches[id%nb_batches]->PushBack(input->GetMeasurementVector(id));
       }
     
     #pragma omp for    

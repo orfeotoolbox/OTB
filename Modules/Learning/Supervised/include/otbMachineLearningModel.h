@@ -105,7 +105,7 @@ public:
   TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const;
 
   /** TODO: Update documentation*/
-  TargetListSampleType * PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
+  typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
   
   /** TODO: Update documentation and mark as deprecated */
   void PredictAll();
@@ -146,6 +146,8 @@ public:
   itkGetObjectMacro(TargetListSample,TargetListSampleType);
   //@}
 
+  itkGetObjectMacro(ConfidenceListSample,ConfidenceListSampleType);
+  
   /**\name Use model in regression mode */
   //@{
   itkGetMacro(RegressionMode,bool);
@@ -160,7 +162,7 @@ protected:
   ~MachineLearningModel() ITK_OVERRIDE;
 
   /** Practical implementation of prediction */
-  virtual TargetListSampleType * DoPredictBatch(const InputListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const
+  virtual typename TargetListSampleType::Pointer DoPredictBatch(const InputListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const
   {
     // TODO: Change me to virtual pure
     itkExceptionMacro("Should be implemented");
