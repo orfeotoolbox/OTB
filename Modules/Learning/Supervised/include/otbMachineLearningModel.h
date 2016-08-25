@@ -161,12 +161,11 @@ protected:
   /** Destructor */
   ~MachineLearningModel() ITK_OVERRIDE;
 
-  /** Practical implementation of prediction */
-  virtual typename TargetListSampleType::Pointer DoPredictBatch(const InputListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const
-  {
-    // TODO: Change me to virtual pure
-    itkExceptionMacro("Should be implemented");
-  }
+  /** TODO: Document me 
+    *  Default implementation will call DoPredict iteratively */
+  virtual typename TargetListSampleType::Pointer DoPredictBatch(const InputListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const;
+ 
+  virtual TargetSampleType DoPredict(const InputSampleType&, ConfidenceValueType * = ITK_NULLPTR) const = 0;  
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;

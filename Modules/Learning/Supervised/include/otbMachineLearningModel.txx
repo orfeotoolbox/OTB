@@ -77,27 +77,8 @@ typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::Predict(const InputSampleType& input, ConfidenceValueType *quality) const
 {
-  typename InputListSampleType::Pointer ls = InputListSampleType::New();
-  ls->SetMeasurementVectorSize(input.Size());
-  ls->PushBack(input);
-
-  typename ConfidenceListSampleType::Pointer vquality = ITK_NULLPTR;
-
-  if(quality != ITK_NULLPTR)
-    {
-    vquality = ConfidenceListSampleType::New();
-    vquality->SetMeasurementVectorSize(1);
-    }
-  
-  typename TargetListSampleType::Pointer ts = PredictBatch(ls,vquality);
-
-  if(vquality.IsNotNull() && quality != ITK_NULLPTR && vquality->Size() != 0)
-    {
-    *quality = vquality->GetMeasurementVector(0)[0];
-    }
-  assert(ts->Size()==1&&"Measurement vector should have 1 element exactly");
-  
-  return ts->GetMeasurementVector(0)[0];
+  // Call protected specialization entry point
+  return this->DoPredict(input,quality);
 }
 
 
@@ -107,6 +88,11 @@ typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality) const
 {  
+  if(quality!=ITK_NULLPTR)
+    {
+    quality->Clear();
+    }
+  
   if(m_IsDoPredictBatchMultiThreaded)
     {
     // Simply calls DoPredictBatch
@@ -117,50 +103,60 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     
     #ifdef _OPENMP
     // OpenMP threading here
-
-    typename TargetListSampleType::Pointer targets = TargetListSampleType::New();
+    
+    std::vector<typename InputListSampleType::Pointer> batches;
+    std::vector<typename TargetListSampleType::Pointer> target_batches;
+    std::vector<typename ConfidenceListSampleType::Pointer> confidence_batches;
+    
+    typename TargetListSampleType::Pointer targets;
+    
+    targets = TargetListSampleType::New();
     targets->SetMeasurementVectorSize(1);
+
+    unsigned int nb_threads(0), threadId(0), nb_batches(0);
     
-    #pragma omp parallel
+#pragma omp parallel shared(nb_threads,nb_batches,batches,target_batches,confidence_batches) private(threadId)
     {
-    unsigned int nb_threads = omp_get_num_threads();
-    unsigned int nb_batches = vcl_ceil((double)input->Size()/(double)nb_threads);
-
-    std::vector<typename InputListSampleType::Pointer> batches(nb_batches,InputListSampleType::New());
-    std::vector<typename TargetListSampleType::Pointer> target_batches(nb_batches);
-    std::vector<typename ConfidenceListSampleType::Pointer> confidence_batches(nb_batches,quality!=ITK_NULLPTR?ConfidenceListSampleType::New():ITK_NULLPTR);
-
-    if(quality!=ITK_NULLPTR)
-      {
-      quality->Clear();
-      }
-
-    #pragma omp for    
-    for(unsigned int batch_id = 0; batch_id < nb_batches;++batch_id)
-      {
-      batches[batch_id]->SetMeasurementVectorSize(input->GetMeasurementVectorSize());
-      if(confidence_batches[batch_id].IsNotNull())
-        {
-        confidence_batches[batch_id]->SetMeasurementVectorSize(1);
-        }
-      }
+    nb_threads = omp_get_num_threads();
+    threadId = omp_get_thread_num();
+    nb_batches = std::min(nb_threads,(unsigned int)input->Size());
+    unsigned int batch_size = ((unsigned int)input->Size()/nb_batches)+(threadId<input->Size()%nb_batches?1:0);
     
-    #pragma omp for
-    for(typename InputListSampleType::InstanceIdentifier id = 0;
-        id<input->Size();++id)
+    if(threadId == 0)
+      {
+      batches.resize(nb_batches, ITK_NULLPTR);
+      target_batches.resize(nb_batches,ITK_NULLPTR);
+      confidence_batches.resize(nb_batches,ITK_NULLPTR);
+      }
+    #pragma omp barrier
+    
+    if(threadId<nb_batches)
+      {
+      batches[threadId] = InputListSampleType::New();
+      batches[threadId]->SetMeasurementVectorSize(input->GetMeasurementVectorSize());
+      if(quality != ITK_NULLPTR)
+        {
+        confidence_batches[threadId] = ConfidenceListSampleType::New();
+        confidence_batches[threadId]->SetMeasurementVectorSize(1);
+        }
+      
+    
+
+    for(typename InputListSampleType::InstanceIdentifier id = threadId*batch_size;
+        id<(threadId*batch_size)+batch_size;++id)
       {
       // Assign a proxy VariableLengthVector to avoid deep copy
-      // batches[id%nb_batches]->PushBack(InputSampleType(input->GetMeasurementVector(id).GetDataPointer(),input->GetMeasurementVector(id).Size()));
-      batches[id%nb_batches]->PushBack(input->GetMeasurementVector(id));
+      //batches[id%nb_batches]->PushBack(InputSampleType(input->GetMeasurementVector(id).GetDataPointer(),input->GetMeasurementVector(id).Size()));
+      batches[threadId]->PushBack(input->GetMeasurementVector(id));
       }
+
     
-    #pragma omp for    
-    for(unsigned int batch_id = 0; batch_id < nb_batches;++batch_id)
-      {
-      // TODO handle quality layer here
-      target_batches[batch_id] = this->DoPredictBatch(batches[batch_id],confidence_batches[batch_id]);
+      #pragma omp critical
+      target_batches[threadId] = this->DoPredictBatch(batches[threadId],confidence_batches[threadId]);
       }
-   
+    }
+
+    
     for(unsigned int batch_id = 0; batch_id < nb_batches;++batch_id)
       {
       typename InputSampleType::ElementIdentifier id = 0;
@@ -175,12 +171,49 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
           }
         }
       }
-    }
     return targets;
+    }
     #else
     return this->DoPredictBatch(input,quality);
     #endif
+}
+
+
+
+template <class TInputValue, class TOutputValue, class TConfidenceValue>
+typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::TargetListSampleType::Pointer
+MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+::DoPredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality) const
+{
+  typename TargetListSampleType::Pointer targets = TargetListSampleType::New();
+  targets->SetMeasurementVectorSize(1);
+  
+  if(quality != ITK_NULLPTR)
+    {
+    quality->Clear();
+    quality->SetMeasurementVectorSize(1);
     }
+
+  for(typename InputListSampleType::ConstIterator it = input->Begin();
+      it!=input->End();++it)
+    {
+    TargetSampleType target;
+    ConfidenceValueType confidence;
+
+    if(quality!=ITK_NULLPTR)
+      {
+      target = this->DoPredict(it.GetMeasurementVector(),&confidence);
+      quality->PushBack(confidence);
+      }
+    else
+      {
+      target = this->DoPredict(it.GetMeasurementVector());
+      }
+    targets->PushBack(target);
+    }
+  
+  return targets;
 }
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
