@@ -61,11 +61,13 @@ class VectorImageModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
-  * \class ImagePlacenameLoader
-  *
-  * \brief 
-  *
-  */
+ * \class ImagePlacenameLoader
+ *
+ * \ingroup MonteverdiCore
+ *
+ * \brief 
+ *
+ */
 class ImagePlacenameLoader : public QObject
 {
     Q_OBJECT;

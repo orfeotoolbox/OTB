@@ -68,6 +68,8 @@ namespace mvd
 
 /** \class ModifiableInterface
  *
+ * \ingroup MonteverdiCore
+ *
  */
 class Monteverdi_EXPORT ModifiableInterface
 {

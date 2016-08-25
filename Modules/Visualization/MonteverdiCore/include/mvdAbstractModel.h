@@ -72,6 +72,8 @@ namespace mvd
 
 /** \class AbstractModel
  *
+ * \ingroup MonteverdiCore
+ *
  */
 class Monteverdi_EXPORT AbstractModel :
     public QObject

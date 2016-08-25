@@ -73,6 +73,8 @@ namespace mvd
 /**
  * \class SystemError
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT SystemError :

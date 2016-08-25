@@ -72,6 +72,8 @@ namespace mvd
 /**
  * \class ImageProperties
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 #define IMAGE_PROPERTIES_IS_QOBJECT 0

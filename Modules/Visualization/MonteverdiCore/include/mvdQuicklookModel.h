@@ -73,6 +73,8 @@ namespace mvd
 
 /** \class QuicklookModel
  *
+ * \ingroup MonteverdiCore
+ *
  */
 class Monteverdi_EXPORT QuicklookModel :
     public VectorImageModel

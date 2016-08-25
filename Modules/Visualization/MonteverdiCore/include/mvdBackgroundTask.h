@@ -69,6 +69,8 @@ class AbstractWorker;
 /**
  * \class BackgroundTask
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT BackgroundTask :

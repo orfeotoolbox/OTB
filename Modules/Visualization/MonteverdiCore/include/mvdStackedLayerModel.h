@@ -72,6 +72,8 @@ class AbstractLayerModel;
 /**
  * \class StackedLayerModel
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT StackedLayerModel :

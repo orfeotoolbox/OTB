@@ -69,6 +69,8 @@ namespace mvd
 /**
  * \class ImageSettings
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT ImageSettings

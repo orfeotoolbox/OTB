@@ -78,6 +78,7 @@ class QuicklookModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /** \class AbstractImageModel
+ * \ingroup MonteverdiCore
  *
  */
 class Monteverdi_EXPORT AbstractImageModel :

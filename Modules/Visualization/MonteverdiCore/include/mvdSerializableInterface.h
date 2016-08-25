@@ -70,6 +70,8 @@ namespace mvd
 /**
  * \class SerializableInterface
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief 'Template method' pattern applied to serializable objects.
  */
 class Monteverdi_EXPORT SerializableInterface

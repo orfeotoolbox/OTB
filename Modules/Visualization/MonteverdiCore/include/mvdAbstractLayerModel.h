@@ -97,6 +97,8 @@ Monteverdi_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::strin
 /**
  * \class AbstractLayerModel
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT AbstractLayerModel :

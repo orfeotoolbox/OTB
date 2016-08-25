@@ -86,6 +86,8 @@ class AbstractImageModel;
 
 /**
  * \class HistogramModel
+ *
+ * \ingroup MonteverdiCore
  */
 class Monteverdi_EXPORT HistogramModel :
     public AbstractModel,

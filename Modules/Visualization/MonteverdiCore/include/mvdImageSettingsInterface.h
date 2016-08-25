@@ -68,6 +68,8 @@ class ImageSettings;
 /**
  * \class ImageSettingsInterface
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT ImageSettingsInterface

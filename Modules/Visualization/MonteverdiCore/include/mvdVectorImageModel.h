@@ -81,6 +81,8 @@ class DatasetModel;
 
 /** \class VectorImageModel
  *
+ * \ingroup MonteverdiCore
+ *
  */
 class Monteverdi_EXPORT VectorImageModel :
     public AbstractImageModel,

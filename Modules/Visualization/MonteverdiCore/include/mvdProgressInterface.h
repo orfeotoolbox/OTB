@@ -68,6 +68,8 @@ namespace mvd
 /**
  * \class ProgressInterface
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT ProgressInterface

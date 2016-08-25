@@ -72,6 +72,8 @@ namespace mvd
 /**
  * \class VectorImageSettings
  *
+ * \ingroup MonteverdiCore
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT VectorImageSettings :
