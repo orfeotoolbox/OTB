@@ -96,6 +96,8 @@ class MainWindow;
 /**
  * \class MainWindow
  *
+ * \ingroup Monteverdi
+ *
  * \brief The application main-widow widget.
  */
 class Monteverdi_EXPORT MainWindow

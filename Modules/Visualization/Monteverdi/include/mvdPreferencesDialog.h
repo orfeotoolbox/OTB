@@ -69,6 +69,8 @@ class PreferencesDialog;
 
 /** \class PreferencesDialog
  *
+ * \ingroup Monteverdi
+ *
  */
 class Monteverdi_EXPORT PreferencesDialog :
     public QDialog
