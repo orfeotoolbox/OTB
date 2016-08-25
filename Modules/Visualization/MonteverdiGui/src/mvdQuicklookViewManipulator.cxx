@@ -220,7 +220,7 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::WheelEvent( QWheelEvent * mvdUseInDebug( e ) )
+::WheelEvent( QWheelEvent * otbUseInDebug( e ) )
 {
   assert( e!=NULL );
 }
@@ -228,7 +228,7 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::KeyPressEvent( QKeyEvent * mvdUseInDebug( e ) )
+::KeyPressEvent( QKeyEvent * otbUseInDebug( e ) )
 {
   assert( e!=NULL );
 
@@ -238,7 +238,7 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::KeyReleaseEvent( QKeyEvent * mvdUseInDebug( e ) )
+::KeyReleaseEvent( QKeyEvent * otbUseInDebug( e ) )
 {
   assert( e!=NULL );
 
