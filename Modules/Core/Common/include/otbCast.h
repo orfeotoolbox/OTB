@@ -1,15 +1,27 @@
 /*=========================================================================
- * TODO: Add licence notice.
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
  *=======================================================================*/
 
-// Submitted by Stéphane ALBERT (otb.salbert@gmail.com).
-
-#ifndef __itkCasts_h
-#define __itkCasts_h
+#ifndef __otbCast_h
+#define __otbCast_h
 
 #include "itkSmartPointer.h"
 
-namespace itk
+namespace otb
 {
 /**
  * \brief dynamic_cast<>() like operator to work with itk::SmartPointer<>.
@@ -79,6 +91,6 @@ ConstCast( const itk::SmartPointer< const T1 > & p1 )
     );
 }
 
-} // end namespace itk.
+} // end namespace otb.
 
-#endif // __itkCasts_h
+#endif // __otbCast_h

@@ -51,72 +51,15 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#ifndef Q_MOC_RUN  // See:
+		   // https://bugreports.qt-project.org/browse/QTBUG-22829
+		   // //tag=QT4-boost-compatibility
+#include <otbCast.h>
 #include <otbImage.h>
 #include <otbImageFileReader.h>
 #include <otbImageFileWriter.h>
 #include <otbVectorImage.h>
 #endif //tag=QT4-boost-compatibility
-
-
-////
-//// O T B
-////
-
-// TODO: Contribute to OTB!
-namespace otb
-{
-/**
- */
-template< typename T2, typename T1 >
-inline
-itk::SmartPointer< T2 >
-DynamicCast( const itk::SmartPointer< T1 >& p1 )
-{
-  return
-    typename itk::SmartPointer< T2 >(
-      dynamic_cast< typename itk::SmartPointer< T2 >::ObjectType* >(
-	p1.GetPointer()
-      )
-    );
-}
-
-/**
- */
-template< typename T2, typename T1 >
-inline
-itk::SmartPointer< const T2 >
-ConstCast( const itk::SmartPointer< T1 >& p1 )
-{
-  return
-    typename itk::SmartPointer< const T2 >(
-      const_cast< typename itk::SmartPointer< const T2 >::ObjectType* >(
-	p1.GetPointer()
-      )
-    );
-}
-
-/**
- */
-template< typename T2, typename T1 >
-inline
-itk::SmartPointer< T2 >
-ConstCast( const itk::SmartPointer< const T1 >& p1 )
-{
-  return
-    typename itk::SmartPointer< T2 >(
-      const_cast< typename itk::SmartPointer< T2 >::ObjectType* >(
-	p1.GetPointer()
-      )
-    );
-}
-
-} // end of namespace otb.
-
-
-////
-//// M V D 2
-////
 
 //
 // Monteverdi includes (sorted by alphabetic order)
