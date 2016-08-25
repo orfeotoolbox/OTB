@@ -5,6 +5,7 @@ OTB-v.5.6.1 - Changes since version 5.6.0 (August 26th, 2016)
   * 0001262: OTB 5.7 vector sampler bug
   * 0001259: Patch for various spelling errors in 5.6.0
   * 0001258: Patch to only use OTB_GIT_STATUS_MESSAGE in message function if set.
+  * 0001266: Fix covariance computation with high float values
 
 OTB-v.5.6.0 - Changes since version 5.4.0 (July 28th, 2016)
 ------------------------------------------------------------
