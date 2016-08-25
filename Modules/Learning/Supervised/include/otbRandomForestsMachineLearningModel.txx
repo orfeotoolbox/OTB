@@ -111,7 +111,7 @@ template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & value, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

@@ -170,8 +170,6 @@ public:
 
   /** Train the machine learning model */
   void Train() ITK_OVERRIDE;
-  /** Predict values using the model */
-  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const ITK_OVERRIDE;
 
   /** Save the model to file */
   void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
@@ -195,6 +193,9 @@ protected:
   /** Destructor */
   ~NeuralNetworkMachineLearningModel() ITK_OVERRIDE;
 
+  /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const ITK_OVERRIDE;
+  
   void LabelsToMat(const TargetListSampleType * listSample, cv::Mat & output);
 
   /** PrintSelf method */
