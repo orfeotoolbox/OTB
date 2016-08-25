@@ -59,6 +59,8 @@ class AboutDialog;
 
 /** \class AboutDialog
  *
+ * \ingroup MonteverdiGui
+ *
  */
 class Monteverdi_EXPORT AboutDialog :
     public QDialog

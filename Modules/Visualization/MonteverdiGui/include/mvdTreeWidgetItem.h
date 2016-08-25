@@ -70,6 +70,8 @@ class TreeWidgetItem;
 /**
  * \class TreeWidgetItem
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief 
  */
 class Monteverdi_EXPORT TreeWidgetItem :

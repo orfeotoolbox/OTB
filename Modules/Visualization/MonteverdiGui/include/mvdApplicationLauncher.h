@@ -72,6 +72,8 @@ class QtWidgetView;
 /**
  * \class ApplicationLauncher
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT ApplicationLauncher :

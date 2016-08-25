@@ -72,6 +72,8 @@ namespace mvd
 /**
  * \class ImageViewManipulator
  *
+ * \ingroup MonteverdiGui
+ *
  *  \brief TODO.
  */
 class Monteverdi_EXPORT ImageViewManipulator :

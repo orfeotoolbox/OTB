@@ -67,6 +67,8 @@ namespace mvd
 /**
  * \class DoubleValidator
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT DoubleValidator :

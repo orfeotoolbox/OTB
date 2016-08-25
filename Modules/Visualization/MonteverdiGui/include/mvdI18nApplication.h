@@ -69,6 +69,8 @@ namespace mvd
 
 /** \class I18nApplication
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief The MVD2 application (which is different from
  * QApplication).
  * 

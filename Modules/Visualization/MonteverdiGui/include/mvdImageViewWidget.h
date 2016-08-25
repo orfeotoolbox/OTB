@@ -70,6 +70,8 @@ class AbstractImageViewManipulator;
 
 /** \class ImageViewWidget
  *
+ * \ingroup MonteverdiGui
+ *
  */
 class Monteverdi_EXPORT ImageViewWidget :
     public QGLWidget

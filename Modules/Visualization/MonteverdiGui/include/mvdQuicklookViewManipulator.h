@@ -69,6 +69,8 @@ namespace mvd
 /**
  * \class QuicklookViewManipulator
  *
+ * \ingroup MonteverdiGui
+ *
  *  \brief TODO.
  */
 class Monteverdi_EXPORT QuicklookViewManipulator :

@@ -74,6 +74,8 @@ class ApplicationsToolBox;
 /**
  * \class ApplicationsToolBox
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */

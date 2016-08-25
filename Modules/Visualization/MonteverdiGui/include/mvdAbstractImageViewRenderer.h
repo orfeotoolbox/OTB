@@ -70,6 +70,8 @@ class StackedLayerModel;
 /**
  * \class AbstractImageViewRenderer
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief TODO.
  */
 class AbstractImageViewRenderer :

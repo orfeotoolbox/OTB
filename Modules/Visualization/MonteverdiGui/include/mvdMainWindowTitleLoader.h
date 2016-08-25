@@ -59,13 +59,15 @@ class VectorImageModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
-  * \class MainWindowTitleLoader
-  *
-  * \brief Imports an image into a Monteverdi dataset
-  *
-  * This class is used to deport the dataset creation
-  * in a separate thread
-  */
+ * \class MainWindowTitleLoader
+ *
+ * \ingroup MonteverdiGui
+ *
+ * \brief Imports an image into a Monteverdi dataset
+ *
+ * This class is used to deport the dataset creation
+ * in a separate thread
+ */
 class Monteverdi_EXPORT MainWindowTitleLoader : public QObject
 {
     Q_OBJECT;

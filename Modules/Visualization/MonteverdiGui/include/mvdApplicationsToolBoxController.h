@@ -72,6 +72,8 @@ class ApplicationsToolBox;
 /**
  * \class ApplicationsToolBoxController
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
 class Monteverdi_EXPORT ApplicationsToolBoxController :

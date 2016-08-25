@@ -70,8 +70,10 @@ class VectorImageModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class I18nMainWindow
+ * \class I18nMainWindow 
  *
+ * \ingroup MonteverdiGui
+*
  * \brief Main-window widget base for the i18n application.
  */
 class Monteverdi_EXPORT I18nMainWindow

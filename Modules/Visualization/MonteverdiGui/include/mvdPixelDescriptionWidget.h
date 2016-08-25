@@ -71,6 +71,8 @@ class PixelDescriptionWidget;
 /**
  * \class PixelDescriptionWidget
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief Widget to show current pixel under cursor description 
  */
 class Monteverdi_EXPORT PixelDescriptionWidget :

@@ -69,6 +69,8 @@ class HistogramWidget;
 /**
  * \class HistogramController
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
 class Monteverdi_EXPORT HistogramController :

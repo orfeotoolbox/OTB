@@ -69,6 +69,8 @@ class LayerStackWidget;
 /**
  * \class LayerStackController
  *
+ * \ingroup MonteverdiGui
+ *
  * \brief WIP.
  */
 class Monteverdi_EXPORT LayerStackController :

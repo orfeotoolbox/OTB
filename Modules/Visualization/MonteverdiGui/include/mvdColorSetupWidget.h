@@ -59,6 +59,8 @@ class ColorSetupWidget;
 
 /**
  * \class ColorSetupWidget
+ *
+ * \ingroup MonteverdiGui
  */
 class Monteverdi_EXPORT ColorSetupWidget :
     public QWidget

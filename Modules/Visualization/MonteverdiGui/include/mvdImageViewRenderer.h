@@ -81,6 +81,8 @@ namespace mvd
 
 /**
  * \class ImageViewRenderer
+ *
+ * \ingroup MonteverdiGui
  */
 class Monteverdi_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer

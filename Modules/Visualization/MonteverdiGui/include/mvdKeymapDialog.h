@@ -59,6 +59,8 @@ class KeymapDialog;
 
 /** \class KeymapDialog
  *
+ * \ingroup MonteverdiGui
+ *
  */
 class Monteverdi_EXPORT KeymapDialog :
     public QDialog
