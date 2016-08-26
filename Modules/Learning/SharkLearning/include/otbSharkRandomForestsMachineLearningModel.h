@@ -61,21 +61,21 @@ public:
   itkTypeMacro(SharkRandomForestsMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
-  virtual void Train();
+  virtual void Train() ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="");
+  virtual void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="");
+  virtual void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &);
+  virtual bool CanReadFile(const std::string &) ITK_OVERRIDE;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &);
+  virtual bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
 
