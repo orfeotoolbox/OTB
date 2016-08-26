@@ -563,7 +563,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
             {
             for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
               {
-              threadSecondOrder(r, c) += vectorValue[r] * vectorValue[c];
+              threadSecondOrder(r, c) += static_cast<PrecisionType>(vectorValue[r]) * static_cast<PrecisionType>(vectorValue[c]);
               }
             }
           threadSecondOrderComponent += vectorValue.GetSquaredNorm();
