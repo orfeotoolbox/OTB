@@ -100,6 +100,7 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     {
     // Simply calls DoPredictBatch
     this->DoPredictBatch(input,0,input->Size(),targets,quality);
+    return targets;
     }
   else
     {
@@ -136,8 +137,11 @@ void
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
+  assert(input != ITK_NULLPTR);
+  assert(targets != ITK_NULLPTR);
+  
   assert(input->Size()==targets->Size()&&"Input sample list and target label list do not have the same size.");
-  assert(quality==ITK_NULLPTR||quality->Size()==input->Size()&&"Quality samples list is not null and does not have the same size as input samples list");
+  assert(((quality==ITK_NULLPTR)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
 
   if(startIndex+size>input->Size())
     {
