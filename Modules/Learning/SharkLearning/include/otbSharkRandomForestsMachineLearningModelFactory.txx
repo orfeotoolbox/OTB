@@ -15,6 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbSharkRandomForestsMachineLearningModelFactory_txx
+#define __otbSharkRandomForestsMachineLearningModelFactory_txx
+
+
 #include "otbSharkRandomForestsMachineLearningModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -62,3 +66,5 @@ SharkRandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif
