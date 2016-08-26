@@ -163,8 +163,8 @@ protected:
 
   /** TODO: Document me 
     *  Default implementation will call DoPredict iteratively */
-  virtual typename TargetListSampleType::Pointer DoPredictBatch(const InputListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const;
- 
+  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const;
+   
   virtual TargetSampleType DoPredict(const InputSampleType&, ConfidenceValueType * = ITK_NULLPTR) const = 0;  
   
   /** PrintSelf method */
