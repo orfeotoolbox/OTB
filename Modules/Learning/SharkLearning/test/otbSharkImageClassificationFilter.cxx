@@ -40,17 +40,17 @@ typedef otb::ImageFileReader<LabeledImageType> MaskReaderType;
 typedef otb::ImageFileWriter<LabeledImageType> WriterType;
 
 typedef otb::SharkRandomForestsMachineLearningModel<PixelType,short unsigned int>         MachineLearningModelType;
-typedef MachineLearningModelType::InputValueType       InputValueType;
-typedef MachineLearningModelType::InputSampleType      InputSampleType;
-typedef MachineLearningModelType::InputListSampleType  InputListSampleType;
-typedef MachineLearningModelType::TargetValueType      TargetValueType;
-typedef MachineLearningModelType::TargetSampleType     TargetSampleType;
-typedef MachineLearningModelType::TargetListSampleType TargetListSampleType;
+typedef MachineLearningModelType::InputValueType       LocalInputValueType;
+typedef MachineLearningModelType::InputSampleType      LocalInputSampleType;
+typedef MachineLearningModelType::InputListSampleType  LocalInputListSampleType;
+typedef MachineLearningModelType::TargetValueType      LocalTargetValueType;
+typedef MachineLearningModelType::TargetSampleType     LocalTargetSampleType;
+typedef MachineLearningModelType::TargetListSampleType LocalTargetListSampleType;
 
 void generateSamples(unsigned int num_classes, unsigned int num_samples,
                      unsigned int num_features,
-                     InputListSampleType * samples, 
-                     TargetListSampleType * labels)
+                     LocalInputListSampleType * samples, 
+                     LocalTargetListSampleType * labels)
 {
   std::default_random_engine generator;
   std::uniform_int_distribution<int> label_distribution(1,num_classes);
@@ -58,8 +58,8 @@ void generateSamples(unsigned int num_classes, unsigned int num_samples,
   for(size_t scount=0; scount<num_samples; ++scount)
     {
     LabeledPixelType label = label_distribution(generator);
-    InputSampleType sample(num_features);
-    for(auto i=0; i<num_features; ++i)
+    LocalInputSampleType sample(num_features);
+    for(unsigned int i=0; i<num_features; ++i)
       sample[i]= feat_distribution(generator);
     samples->SetMeasurementVectorSize(num_features);
     samples->PushBack(sample); 
@@ -70,8 +70,8 @@ void generateSamples(unsigned int num_classes, unsigned int num_samples,
 void buildModel(unsigned int num_classes, unsigned int num_samples,
                 unsigned int num_features, std::string modelfname)
 {
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+  LocalInputListSampleType::Pointer samples = LocalInputListSampleType::New();
+  LocalTargetListSampleType::Pointer labels = LocalTargetListSampleType::New();
 
   std::cout << "Sample generation\n";
   generateSamples(num_classes, num_samples, num_features, samples, labels);
