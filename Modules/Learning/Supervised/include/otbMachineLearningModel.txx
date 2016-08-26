@@ -24,6 +24,8 @@
 
 #include "otbMachineLearningModel.h"
 
+#include "itkMultiThreader.h"
+
 namespace otb
 {
 
@@ -111,6 +113,8 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     
     #pragma omp parallel shared(nb_threads,nb_batches) private(threadId)
     {
+    // Get number of threads configured with ITK
+    omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
     nb_threads = omp_get_num_threads();
     threadId = omp_get_thread_num();
     nb_batches = std::min(nb_threads,(unsigned int)input->Size());

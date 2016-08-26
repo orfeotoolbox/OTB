@@ -64,6 +64,10 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Train()
 {
+#ifdef _OPENMP
+  omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
+#endif
+  
   std::vector<shark::RealVector> features;
   std::vector<unsigned int> class_labels;
 
@@ -142,12 +146,15 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     itkExceptionMacro(<<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[");
     }
-
   
   std::vector<shark::RealVector> features;
   Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
   shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
 
+  #ifdef _OPENMP
+  omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
+  #endif
+  
   auto probas = m_RFModel(inputSamples);
 
   if(quality != ITK_NULLPTR)
@@ -172,6 +179,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     TargetSampleType target;
     target[0] = static_cast<TOutputValue>(p);
     targets->SetMeasurementVector(id,target);
+    ++id;
     }
 }
 
