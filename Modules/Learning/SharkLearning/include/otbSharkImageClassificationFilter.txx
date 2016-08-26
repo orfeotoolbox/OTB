@@ -91,7 +91,10 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     // m_Model->SetTargetListSample() make the model non thread safe.
     // OpenMP allows to speed things up (configure with
     // CMAKE_CXX_FLAGS:STRING=-fopenmp)
+    #ifdef _OPENMP
+    // OpenMP will take care of threading
     this->SetNumberOfThreads(1);
+    #endif
     }
 }
 
@@ -208,14 +211,14 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     maskIt.GoToBegin();
     }
 
-  typedef typename ModelType::InputValueType       InputValueType;
+  // typedef typename ModelType::InputValueType       InputValueType;
   typedef typename ModelType::InputSampleType      InputSampleType;
   typedef typename ModelType::InputListSampleType  InputListSampleType;
   typedef typename ModelType::TargetValueType      TargetValueType;
-  typedef typename ModelType::TargetSampleType     TargetSampleType;
+  // typedef typename ModelType::TargetSampleType     TargetSampleType;
   typedef typename ModelType::TargetListSampleType TargetListSampleType;
-  typedef typename ModelType::ConfidenceValueType      ConfidenceValueType;
-  typedef typename ModelType::ConfidenceSampleType     ConfidenceSampleType;
+  // typedef typename ModelType::ConfidenceValueType      ConfidenceValueType;
+  // typedef typename ModelType::ConfidenceSampleType     ConfidenceSampleType;
   typedef typename ModelType::ConfidenceListSampleType ConfidenceListSampleType;
 
   typename InputListSampleType::Pointer samples = InputListSampleType::New();
@@ -243,16 +246,14 @@ SharkImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       }
     }
   //Make the batch prediction
-  m_Model->SetInputListSample(samples);
-  typename TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  typename ConfidenceListSampleType::Pointer confidences = ConfidenceListSampleType::New();
-  if (computeConfidenceMap)
-    {
-    m_Model->SetConfidenceBatchMode(true);
-    m_Model->SetConfidenceListSample(confidences);
-    }
-  m_Model->SetTargetListSample(labels);
-  m_Model->PredictAll();
+  typename TargetListSampleType::Pointer labels;
+  typename ConfidenceListSampleType::Pointer confidences;
+  if(computeConfidenceMap)
+    confidences = ConfidenceListSampleType::New();
+
+  // This call is threadsafe
+  labels = m_Model->PredictBatch(samples,confidences);
+  
   // Set the output values
   ConfidenceMapIteratorType confidenceIt;
   if (computeConfidenceMap)
