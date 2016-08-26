@@ -21,7 +21,21 @@
 #include <fstream>
 #include "itkMacro.h"
 #include "otbSharkRandomForestsMachineLearningModel.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #include <shark/Models/Converter.h>
+#pragma GCC diagnostic pop
+#else
+#include <shark/Models/Converter.h>
+#endif
+
+
+
 #include "otbSharkUtils.h"
 #include <algorithm>
 
@@ -34,8 +48,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 {
   this->m_ConfidenceIndex = true;
   this->m_IsRegressionSupported = false;
-  this->m_ConfidenceBatchMode = false;
-  m_ConfidenceListSample = ConfidenceListSampleType::New();
+  this->m_IsDoPredictBatchMultiThreaded = true;
 }
 
 
@@ -93,7 +106,7 @@ template <class TInputValue, class TOutputValue>
 typename SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & value, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   shark::RealVector samples;
   for(size_t i = 0; i < value.Size();i++)
@@ -117,38 +130,48 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::PredictAll()
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
-  // the samples to be predicted have to be set
-  assert(this->GetInputListSample() != ITK_NULLPTR);
-  std::vector<shark::RealVector> features;
-  Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
-  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
-  if(this->m_ConfidenceBatchMode)
+  assert(input != ITK_NULLPTR);
+  assert(targets != ITK_NULLPTR);
+
+  assert(input->Size()==targets->Size()&&"Input sample list and target label list do not have the same size.");
+  assert(((quality==ITK_NULLPTR)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
+  
+  if(startIndex+size>input->Size())
     {
-    //the confidence samples have to exist  
-    assert(this->GetConfidenceListSample() != ITK_NULLPTR);
-    auto probas = m_RFModel(inputSamples);
-    ConfidenceListSampleType * confidences = this->GetConfidenceListSample();
-    confidences->Clear();
+    itkExceptionMacro(<<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[");
+    }
+
+  
+  std::vector<shark::RealVector> features;
+  Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
+  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
+
+  auto probas = m_RFModel(inputSamples);
+
+  if(quality != ITK_NULLPTR)
+    {
+    unsigned int id = startIndex;
     for(const auto& p : probas.elements())
       {
       ConfidenceSampleType confidence;
       auto conf = ComputeConfidence(p, m_ComputeMargin);
       confidence[0] = static_cast<ConfidenceValueType>(conf);
-      confidences->PushBack(confidence);
+      quality->SetMeasurementVector(id,confidence);
+      ++id;
       }
     }
+    
   shark::ArgMaxConverter<shark::RFClassifier> amc;
   amc.decisionFunction() = m_RFModel;
   auto prediction = amc(inputSamples);
-  TargetListSampleType * targets = this->GetTargetListSample();
-  targets->Clear();
+  unsigned int id = startIndex;
   for(const auto& p : prediction.elements())
     {
     TargetSampleType target;
     target[0] = static_cast<TOutputValue>(p);
-    targets->PushBack(target);
+    targets->SetMeasurementVector(id,target);
     }
 }
 

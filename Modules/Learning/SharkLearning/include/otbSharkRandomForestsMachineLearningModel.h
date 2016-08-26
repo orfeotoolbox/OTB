@@ -20,7 +20,18 @@
 
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #include "shark/Algorithms/Trainers/RFTrainer.h"
+#pragma GCC diagnostic pop
+#else
+#include "shark/Algorithms/Trainers/RFTrainer.h"
+#endif
 
 namespace otb
 {
@@ -42,8 +53,8 @@ public:
   typedef typename Superclass::TargetSampleType           TargetSampleType;
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  typedef itk::FixedArray<ConfidenceValueType,1>            ConfidenceSampleType;
-  typedef itk::Statistics::ListSample<ConfidenceSampleType> ConfidenceListSampleType;
+  typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
+  typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
   
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
@@ -51,8 +62,6 @@ public:
 
   /** Train the machine learning model */
   virtual void Train();
-  /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
 
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="");
@@ -60,8 +69,6 @@ public:
   /** Load the model from file */
   virtual void Load(const std::string & filename, const std::string & name="");
 
-  /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
-  virtual void PredictAll() override;
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
@@ -71,13 +78,6 @@ public:
   virtual bool CanWriteFile(const std::string &);
   //@}
 
-  /**\name Confidence accessors for batch mode */
-  //@{
-  /** Set the confidence samples (to be used before PredictAll) */
-  itkSetObjectMacro(ConfidenceListSample,ConfidenceListSampleType);
-  /** Get the confidence values (to be used after PredictAll) */
-  itkGetObjectMacro(ConfidenceListSample,ConfidenceListSampleType);
-  //@}
 
   itkGetMacro(NumberOfTrees,unsigned int);
   itkSetMacro(NumberOfTrees,unsigned int);
@@ -94,10 +94,6 @@ public:
   itkGetMacro(ComputeMargin, bool);
   itkSetMacro(ComputeMargin, bool);
 
-  itkGetMacro(ConfidenceBatchMode, bool);
-  itkSetMacro(ConfidenceBatchMode, bool);
-
-
 protected:
   /** Constructor */
   SharkRandomForestsMachineLearningModel();
@@ -105,6 +101,12 @@ protected:
   /** Destructor */
   virtual ~SharkRandomForestsMachineLearningModel();
 
+  /** Predict values using the model */
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const ITK_OVERRIDE;
+
+  
+  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
+  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -120,10 +122,8 @@ private:
   unsigned int m_NodeSize;
   float m_OobRatio;
   bool m_ComputeMargin;
-  bool m_ConfidenceBatchMode;
 
   /** Confidence list sample */
-  typename ConfidenceListSampleType::Pointer m_ConfidenceListSample;
   ConfidenceValueType ComputeConfidence(shark::RealVector probas, 
                                         bool computeMargin) const;
 
