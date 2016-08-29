@@ -295,12 +295,10 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 {
   if(m_BatchMode)
     {
-    std::cout << "Batch mode\n";
     this->BatchThreadedGenerateData(outputRegionForThread, threadId);
     }
   else
     {
-    std::cout << "Classic mode\n";
     this->ClassicThreadedGenerateData(outputRegionForThread, threadId);
     }
 
