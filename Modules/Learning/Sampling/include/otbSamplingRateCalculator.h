@@ -38,7 +38,7 @@ class ITK_EXPORT SamplingRateCalculator
 {
 public:
   /** Standard typedefs */
-  typedef SamplingRateCalculator                     Self;
+  typedef SamplingRateCalculator        Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -93,6 +93,8 @@ public:
 
   /** Clear internal data */
   void ClearRates(void);
+
+  static ClassCountMapType ReadRequiredSamples(std::string filename);
 
 protected:
   /** Constructor */
