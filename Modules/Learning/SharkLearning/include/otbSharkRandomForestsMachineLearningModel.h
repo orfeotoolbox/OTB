@@ -27,10 +27,10 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#endif
 #include "shark/Algorithms/Trainers/RFTrainer.h"
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
-#else
-#include "shark/Algorithms/Trainers/RFTrainer.h"
 #endif
 
 namespace otb
