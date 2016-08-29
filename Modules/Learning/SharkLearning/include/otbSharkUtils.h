@@ -52,7 +52,8 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
     const unsigned int sampleSize = listSample->GetMeasurementVectorSize();
 
     // Fill the output vector
-    while(sampleIdx<start+size)
+
+    for (auto const endOfRange = start+size ; sampleIdx < endOfRange ; ++sampleIdx)
       {
       // Retrieve sample
       typename T::MeasurementVectorType sample = listSample->GetMeasurementVector(sampleIdx);
@@ -65,7 +66,6 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
         rv[i] = sample[i];
         }
       output.push_back(rv);
-      ++sampleIdx;
       }
     }
 }
