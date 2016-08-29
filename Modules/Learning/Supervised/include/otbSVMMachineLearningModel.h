@@ -135,7 +135,7 @@ protected:
   ~SVMMachineLearningModel() ITK_OVERRIDE;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const ITK_OVERRIDE;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
 
   
   /** PrintSelf method */

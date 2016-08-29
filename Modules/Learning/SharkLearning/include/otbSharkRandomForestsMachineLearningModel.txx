@@ -117,7 +117,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     samples.push_back(value[i]);
     }
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     auto probas = m_RFModel(samples);
     (*quality) = ComputeConfidence(probas, m_ComputeMargin);
