@@ -80,7 +80,7 @@ class MaplaMainWindow;
  *
  * \brief The application main-widow widget.
  */
-class Monteverdi_EXPORT MaplaMainWindow
+class ITK_EXPORT MaplaMainWindow
   : public I18nMainWindow
 {
 

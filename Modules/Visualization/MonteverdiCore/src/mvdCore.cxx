@@ -62,7 +62,7 @@ namespace
 {
 } // end of anonymous namespace.
 
-Monteverdi_EXPORT const char*
+ITK_EXPORT const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
   "RGBW_CHANNEL_RED",
   "RGBW_CHANNEL_GREEN",

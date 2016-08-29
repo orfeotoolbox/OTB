@@ -2,24 +2,6 @@
 #define __ConfigureMonteverdi_h
 
 //
-// Windows DLL import/export macros.
-#cmakedefine BUILD_SHARED_LIBS
-#if defined( _WIN32 ) || defined( _WIN64 ) || defined(WIN32)
-   #ifdef  BUILD_SHARED_LIBS
-      #define Monteverdi_IMPORT __declspec(dllimport)
-      #define Monteverdi_EXPORT __declspec(dllexport)
-   #else
-      // Empty definition when build statically.
-      #define Monteverdi_IMPORT
-      #define Monteverdi_EXPORT
-   #endif
-#else 
-   //Empty definition on non Windows plateforms.
-   #define Monteverdi_IMPORT
-   #define Monteverdi_EXPORT
-#endif
-
-//
 // Monteverdi project
 #define PROJECT_NAME "@Monteverdi_PROJECT_NAME@"
 
@@ -142,6 +124,7 @@
 #endif
 
 #include "otbConfigure.h"
+#include "otbMacro.h"
 
 //
 // Options

@@ -81,7 +81,7 @@ class QuicklookModel;
  * \ingroup MonteverdiCore
  *
  */
-class Monteverdi_EXPORT AbstractImageModel :
+class ITK_EXPORT AbstractImageModel :
     public AbstractLayerModel
 {
 

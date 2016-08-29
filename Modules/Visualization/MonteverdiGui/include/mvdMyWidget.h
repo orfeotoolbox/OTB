@@ -77,7 +77,7 @@ class MyWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT MyWidget :
+class ITK_EXPORT MyWidget :
     public QWidget
 {
 

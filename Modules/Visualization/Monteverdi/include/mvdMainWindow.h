@@ -100,7 +100,7 @@ class MainWindow;
  *
  * \brief The application main-widow widget.
  */
-class Monteverdi_EXPORT MainWindow
+class ITK_EXPORT MainWindow
   : public I18nMainWindow
 {
 

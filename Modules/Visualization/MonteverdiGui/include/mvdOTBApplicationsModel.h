@@ -75,7 +75,7 @@ class ApplicationLauncher;
  * \ingroup MonteverdiGui
  *
  */
-class Monteverdi_EXPORT OTBApplicationsModel :
+class ITK_EXPORT OTBApplicationsModel :
     public AbstractModel
 {
 

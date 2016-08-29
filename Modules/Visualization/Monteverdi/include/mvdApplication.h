@@ -70,7 +70,7 @@ class OTBApplicationsModel;
  * \ingroup Monteverdi
  *
  */
-class Monteverdi_EXPORT Application
+class ITK_EXPORT Application
   : public I18nApplication
 {
 

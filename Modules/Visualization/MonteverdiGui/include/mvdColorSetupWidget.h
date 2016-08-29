@@ -62,7 +62,7 @@ class ColorSetupWidget;
  *
  * \ingroup MonteverdiGui
  */
-class Monteverdi_EXPORT ColorSetupWidget :
+class ITK_EXPORT ColorSetupWidget :
     public QWidget
 {
   Q_OBJECT;

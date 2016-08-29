@@ -73,7 +73,7 @@ class LayerStackWidget;
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT LayerStackController :
+class ITK_EXPORT LayerStackController :
     public AbstractModelController
 {
 

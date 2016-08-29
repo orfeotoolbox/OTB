@@ -69,7 +69,7 @@ class AbstractModel;
  *
  * \ingroup MonteverdiGui
  */
-class Monteverdi_EXPORT AbstractModelController :
+class ITK_EXPORT AbstractModelController :
     public QObject
 {
 

@@ -84,7 +84,7 @@ namespace mvd
  *
  * \ingroup MonteverdiGui
  */
-class Monteverdi_EXPORT ImageViewRenderer :
+class ITK_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer
 {
 

@@ -71,7 +71,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT DoubleValidator :
+class ITK_EXPORT DoubleValidator :
     public QDoubleValidator
 {
 

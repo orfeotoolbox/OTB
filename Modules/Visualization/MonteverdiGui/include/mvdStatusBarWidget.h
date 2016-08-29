@@ -77,7 +77,7 @@ class StatusBarWidget;
  * \brief Status Bar widget
  * widget class.
  */
-class Monteverdi_EXPORT StatusBarWidget :
+class ITK_EXPORT StatusBarWidget :
     public QWidget
 {
 

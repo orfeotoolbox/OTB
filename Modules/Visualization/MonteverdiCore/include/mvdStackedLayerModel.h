@@ -76,7 +76,7 @@ class AbstractLayerModel;
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT StackedLayerModel :
+class ITK_EXPORT StackedLayerModel :
     public AbstractModel
 {
 

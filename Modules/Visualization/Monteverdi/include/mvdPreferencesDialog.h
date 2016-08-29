@@ -72,7 +72,7 @@ class PreferencesDialog;
  * \ingroup Monteverdi
  *
  */
-class Monteverdi_EXPORT PreferencesDialog :
+class ITK_EXPORT PreferencesDialog :
     public QDialog
 {
 

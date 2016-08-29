@@ -73,7 +73,7 @@ namespace mvd
  *
  *  \brief Base class for QWidget manipulation
  */
-class Monteverdi_EXPORT AbstractImageViewManipulator :
+class ITK_EXPORT AbstractImageViewManipulator :
     public QObject
 {
 

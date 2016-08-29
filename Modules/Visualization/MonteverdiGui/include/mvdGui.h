@@ -103,7 +103,7 @@ enum Resolution
 /**
  * Constant naming effect values.
  */
-Monteverdi_EXPORT
+ITK_EXPORT
 extern
 char const * const
 RESOLUTION_NAMES[ RESOLUTION_COUNT ];
@@ -127,14 +127,14 @@ enum TileSize
 /**
  * Constant naming effect values.
  */
-Monteverdi_EXPORT
+ITK_EXPORT
 extern
 char const * const
 TILE_SIZE_NAMES[ TILE_SIZE_COUNT ];
 
 /**
  */
-Monteverdi_EXPORT
+ITK_EXPORT
 extern
 int
 TILE_SIZE_VALUE[ TILE_SIZE_COUNT ];
@@ -163,7 +163,7 @@ namespace mvd
 
 /**
  */
-Monteverdi_EXPORT
+ITK_EXPORT
 void
 AddItemsInto( QComboBox * comboBox,
 	      const char * context,

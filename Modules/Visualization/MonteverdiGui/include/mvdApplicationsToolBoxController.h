@@ -76,7 +76,7 @@ class ApplicationsToolBox;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class Monteverdi_EXPORT ApplicationsToolBoxController :
+class ITK_EXPORT ApplicationsToolBoxController :
     public AbstractModelController
 {
 

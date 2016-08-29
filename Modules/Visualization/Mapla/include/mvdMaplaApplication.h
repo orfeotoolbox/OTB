@@ -70,7 +70,7 @@ class OTBApplicationsModel;
  * \ingroup Mapla
  *
  */
-class Monteverdi_EXPORT MaplaApplication
+class ITK_EXPORT MaplaApplication
   : public I18nApplication
 {
 

@@ -88,7 +88,7 @@ namespace mvd
  * signal.
  *
  */
-class Monteverdi_EXPORT ApplicationsBrowser :
+class ITK_EXPORT ApplicationsBrowser :
     public QObject
 {
 

@@ -79,7 +79,7 @@ class ApplicationsToolBox;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT ApplicationsToolBox :
+class ITK_EXPORT ApplicationsToolBox :
     public QWidget
 {
 

@@ -74,7 +74,7 @@ class TreeWidgetItem;
  *
  * \brief 
  */
-class Monteverdi_EXPORT TreeWidgetItem :
+class ITK_EXPORT TreeWidgetItem :
     public QTreeWidgetItem // not a QObject
 {
 

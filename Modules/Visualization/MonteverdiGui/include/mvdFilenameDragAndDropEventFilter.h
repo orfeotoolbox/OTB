@@ -73,7 +73,7 @@ namespace mvd
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT FilenameDragAndDropEventFilter :
+class ITK_EXPORT FilenameDragAndDropEventFilter :
     public AbstractDragAndDropEventFilter
 {
 

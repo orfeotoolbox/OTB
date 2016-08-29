@@ -71,7 +71,7 @@ namespace mvd
  * \ingroup MonteverdiCore
  *
  */
-class Monteverdi_EXPORT ModifiableInterface
+class ITK_EXPORT ModifiableInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

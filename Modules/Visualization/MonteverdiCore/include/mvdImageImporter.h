@@ -75,7 +75,7 @@ namespace mvd
  * \brief Import image worker. It is parametrized by the image
  * filename and the desired (width, height) best-fit size.
  */
-class Monteverdi_EXPORT ImageImporter :
+class ITK_EXPORT ImageImporter :
     public AbstractWorker
 {
 

@@ -73,7 +73,7 @@ class AbstractImageViewManipulator;
  * \ingroup MonteverdiGui
  *
  */
-class Monteverdi_EXPORT ImageViewWidget :
+class ITK_EXPORT ImageViewWidget :
     public QGLWidget
 {
 

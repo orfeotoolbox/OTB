@@ -68,7 +68,7 @@ class VectorImageModel;
  * This class is used to deport the dataset creation
  * in a separate thread
  */
-class Monteverdi_EXPORT MainWindowTitleLoader : public QObject
+class ITK_EXPORT MainWindowTitleLoader : public QObject
 {
     Q_OBJECT;
 

@@ -73,7 +73,7 @@ class BackgroundTask;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT TaskProgressDialog :
+class ITK_EXPORT TaskProgressDialog :
     public QProgressDialog
 {
 

@@ -81,7 +81,7 @@ namespace mvd
  *
  * \see I18nCoreApplication.
  */
-class Monteverdi_EXPORT I18nApplication
+class ITK_EXPORT I18nApplication
   : public I18nCoreApplication
 {
 

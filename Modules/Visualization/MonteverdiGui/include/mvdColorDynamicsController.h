@@ -73,7 +73,7 @@ class ColorDynamicsWidget;
  *
  * \brief Color-dynamics widget controller for VectorImageModel objects.
  */
-class Monteverdi_EXPORT ColorDynamicsController :
+class ITK_EXPORT ColorDynamicsController :
     public AbstractModelController
 {
 

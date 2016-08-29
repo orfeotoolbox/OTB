@@ -89,7 +89,7 @@ class AbstractImageModel;
  *
  * \ingroup MonteverdiCore
  */
-class Monteverdi_EXPORT HistogramModel :
+class ITK_EXPORT HistogramModel :
     public AbstractModel,
     private SerializableInterface
 {

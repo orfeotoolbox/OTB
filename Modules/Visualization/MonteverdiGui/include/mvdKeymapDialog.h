@@ -62,7 +62,7 @@ class KeymapDialog;
  * \ingroup MonteverdiGui
  *
  */
-class Monteverdi_EXPORT KeymapDialog :
+class ITK_EXPORT KeymapDialog :
     public QDialog
 {
   Q_OBJECT;

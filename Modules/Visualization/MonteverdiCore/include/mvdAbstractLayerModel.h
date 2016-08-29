@@ -85,11 +85,11 @@ enum SpatialReferenceType
 
 /**
  */
-Monteverdi_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
+ITK_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
 
 /**
  */
-Monteverdi_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
+ITK_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -101,7 +101,7 @@ Monteverdi_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::strin
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT AbstractLayerModel :
+class ITK_EXPORT AbstractLayerModel :
     public AbstractModel,
     public VisibleInterface
 {

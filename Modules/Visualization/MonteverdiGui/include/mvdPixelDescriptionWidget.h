@@ -75,7 +75,7 @@ class PixelDescriptionWidget;
  *
  * \brief Widget to show current pixel under cursor description 
  */
-class Monteverdi_EXPORT PixelDescriptionWidget :
+class ITK_EXPORT PixelDescriptionWidget :
     public QWidget
 {
 

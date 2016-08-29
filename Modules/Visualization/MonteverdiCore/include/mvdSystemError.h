@@ -77,7 +77,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT SystemError :
+class ITK_EXPORT SystemError :
     public std::runtime_error
 {
 

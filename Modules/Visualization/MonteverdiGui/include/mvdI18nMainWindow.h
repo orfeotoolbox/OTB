@@ -76,7 +76,7 @@ class VectorImageModel;
 *
  * \brief Main-window widget base for the i18n application.
  */
-class Monteverdi_EXPORT I18nMainWindow
+class ITK_EXPORT I18nMainWindow
   : public QMainWindow
 {
 

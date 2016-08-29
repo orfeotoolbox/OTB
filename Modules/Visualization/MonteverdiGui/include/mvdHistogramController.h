@@ -73,7 +73,7 @@ class HistogramWidget;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class Monteverdi_EXPORT HistogramController :
+class ITK_EXPORT HistogramController :
     public AbstractModelController
 {
 

@@ -84,7 +84,7 @@ class DatasetModel;
  * \ingroup MonteverdiCore
  *
  */
-class Monteverdi_EXPORT VectorImageModel :
+class ITK_EXPORT VectorImageModel :
     public AbstractImageModel,
     public FilenameInterface
 {

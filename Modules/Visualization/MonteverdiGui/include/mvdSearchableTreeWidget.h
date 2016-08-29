@@ -78,7 +78,7 @@ class SearchableTreeWidget;
  * \brief Database content browser. Presents:
  * - Cached datasets.
  */
-class Monteverdi_EXPORT SearchableTreeWidget :
+class ITK_EXPORT SearchableTreeWidget :
     public QWidget
 {
 

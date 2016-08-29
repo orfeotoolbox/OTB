@@ -76,7 +76,7 @@ class QtWidgetView;
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT ApplicationLauncher :
+class ITK_EXPORT ApplicationLauncher :
     public QObject
 {
 

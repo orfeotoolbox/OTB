@@ -75,7 +75,7 @@ namespace mvd
  *
  * \ingroup MonteverdiGui
  */
-class Monteverdi_EXPORT QuicklookViewRenderer :
+class ITK_EXPORT QuicklookViewRenderer :
     public ImageViewRenderer
 {
 

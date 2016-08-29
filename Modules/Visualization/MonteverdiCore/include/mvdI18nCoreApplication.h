@@ -99,7 +99,7 @@ class VectorImageModel;
  * for example, provide sessio management), the specialized instance
  * can be passed as argument of constructor.
  */
-class Monteverdi_EXPORT I18nCoreApplication
+class ITK_EXPORT I18nCoreApplication
   : public QObject
 {
 

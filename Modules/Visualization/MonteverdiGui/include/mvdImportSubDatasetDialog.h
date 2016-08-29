@@ -78,7 +78,7 @@ class ImportSubDatasetDialog;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT ImportSubDatasetDialog :
+class ITK_EXPORT ImportSubDatasetDialog :
     public QDialog
 {
 

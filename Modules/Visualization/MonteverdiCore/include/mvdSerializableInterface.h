@@ -74,7 +74,7 @@ namespace mvd
  *
  * \brief 'Template method' pattern applied to serializable objects.
  */
-class Monteverdi_EXPORT SerializableInterface
+class ITK_EXPORT SerializableInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

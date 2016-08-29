@@ -93,7 +93,7 @@ namespace Ui
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT TreeWidget :
+class ITK_EXPORT TreeWidget :
     public QTreeWidget
 {
 

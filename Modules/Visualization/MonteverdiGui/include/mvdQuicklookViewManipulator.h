@@ -73,7 +73,7 @@ namespace mvd
  *
  *  \brief TODO.
  */
-class Monteverdi_EXPORT QuicklookViewManipulator :
+class ITK_EXPORT QuicklookViewManipulator :
     public ImageViewManipulator
 {
 

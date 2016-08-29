@@ -79,7 +79,7 @@ class ImageSettings;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi_EXPORT ShaderWidget :
+class ITK_EXPORT ShaderWidget :
   public QWidget,
   public ImageSettingsInterface
 {

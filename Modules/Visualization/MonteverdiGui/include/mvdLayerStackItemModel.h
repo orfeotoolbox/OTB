@@ -74,7 +74,7 @@ class StackedLayerModel;
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT LayerStackItemModel :
+class ITK_EXPORT LayerStackItemModel :
     public QAbstractItemModel
 {
 

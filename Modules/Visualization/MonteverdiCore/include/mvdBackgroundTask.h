@@ -73,7 +73,7 @@ class AbstractWorker;
  *
  * \brief WIP.
  */
-class Monteverdi_EXPORT BackgroundTask :
+class ITK_EXPORT BackgroundTask :
     public QThread
 {
 

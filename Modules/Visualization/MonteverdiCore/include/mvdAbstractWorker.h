@@ -73,7 +73,7 @@ namespace mvd
  *
  * \brief Abstract worker object used as a base-class for threaded tasks.
  */
-class Monteverdi_EXPORT AbstractWorker :
+class ITK_EXPORT AbstractWorker :
     public QObject
 {
 

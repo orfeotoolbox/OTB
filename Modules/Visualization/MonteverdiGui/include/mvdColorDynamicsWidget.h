@@ -74,7 +74,7 @@ class ColorDynamicsWidget;
  *
  * \ingroup MonteverdiGui
  */
-class Monteverdi_EXPORT ColorDynamicsWidget :
+class ITK_EXPORT ColorDynamicsWidget :
     public QWidget
 {
 
