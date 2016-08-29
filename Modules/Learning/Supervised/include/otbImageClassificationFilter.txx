@@ -39,7 +39,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
   this->SetNthOutput(0,TOutputImage::New());
   this->SetNthOutput(1,ConfidenceImageType::New());
   m_UseConfidenceMap = false;
-  m_BatchMode = false;
+  m_BatchMode = true;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
@@ -249,7 +249,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 
   // This call is threadsafe
   labels = m_Model->PredictBatch(samples,confidences);
-  
+
   // Set the output values
   ConfidenceMapIteratorType confidenceIt;
   if (computeConfidenceMap)
@@ -259,7 +259,6 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     }
 
   auto labIt = labels->Begin();
-  auto confIt = confidences->Begin();
   maskIt.GoToBegin();
   for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); 
        ++outIt)
@@ -277,8 +276,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       ++labIt;
       if(computeConfidenceMap)
         {
-        confidenceIndex = confIt.GetMeasurementVector()[0];
-        ++confIt;
+        confidenceIndex = confidences->GetMeasurementVector(labIt.GetInstanceIdentifier())[0];
         }
       }
     outIt.Set(labelValue);
