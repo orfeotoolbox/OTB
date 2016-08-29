@@ -160,13 +160,7 @@ protected:
 
   /** Destructor */
   ~MachineLearningModel() ITK_OVERRIDE;
-
-  /** TODO: Document me 
-    *  Default implementation will call DoPredict iteratively */
-  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const;
-   
-  virtual TargetSampleType DoPredict(const InputSampleType&, ConfidenceValueType * = ITK_NULLPTR) const = 0;  
-  
+ 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
@@ -193,6 +187,12 @@ protected:
   bool m_IsDoPredictBatchMultiThreaded;
 
 private:
+  /** TODO: Document me 
+    *  Default implementation will call DoPredict iteratively */
+  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const;
+  
+  virtual TargetSampleType DoPredict(const InputSampleType&, ConfidenceValueType * = ITK_NULLPTR) const = 0;  
+ 
   MachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 };
