@@ -344,7 +344,7 @@ QtWidgetView
   SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
   SetupWidget( widget, InputVectorDataListInitializer( this ) );
-#if defined( _DEBUG )
+#if defined( OTB_DEBUG )
   SetupWidget( widget, ToolTipInitializer() );
 #endif
 
@@ -621,7 +621,7 @@ QtWidgetView
 {
   qWarning() << what;
 
-#if defined( _DEBUG )
+#if defined( OTB_DEBUG )
   QMessageBox::warning(
     this,
     PROJECT_NAME,

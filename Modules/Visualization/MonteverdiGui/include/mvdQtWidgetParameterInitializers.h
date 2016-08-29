@@ -500,9 +500,8 @@ ToolTipInitializer::result_type
 ToolTipInitializer
 ::operator () ( argument_type otbUseInDebug( widget ) ) const
 {
+#if defined( OTB_DEBUG )
   assert( widget!=NULL );
-
-#if defined( _DEBUG )
 
   widget->setToolTip(
     widget->toolTip() +
@@ -511,7 +510,7 @@ ToolTipInitializer
     ")"
   );
 
-#endif // defined( _DEBUG )
+#endif // defined( OTB_DEBUG )
 }
 
 /*****************************************************************************/

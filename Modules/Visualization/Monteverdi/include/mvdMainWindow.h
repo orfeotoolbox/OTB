@@ -26,7 +26,7 @@
 #include "ConfigureMonteverdi.h"
 
 #define USE_TABBED_VIEW 0
-#define USE_PIXEL_DESCRIPTION ( ( defined( _DEBUG ) && 0 ) || 0 )
+#define USE_PIXEL_DESCRIPTION ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
 
 #define RENDER_IMAGE_VIEW_DISABLED 0
 #define RENDER_QUICKLOOK_VIEW_DISABLED 0
@@ -37,7 +37,7 @@
 
 
 #ifndef USE_OTB_APPS
-#  define USE_OTB_APPS ( ( defined( _DEBUG ) && 0 ) || 1 )
+#  define USE_OTB_APPS ( ( defined( OTB_DEBUG ) && 0 ) || 1 )
 #endif
 
 //

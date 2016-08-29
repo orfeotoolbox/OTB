@@ -28,9 +28,9 @@
 //
 #define USE_VIEW_SETTINGS_SIDE_EFFECT 1
 //
-#define USE_REMOTE_DESKTOP_DISABLED_RENDERING ((defined( _DEBUG ) && 0) || 0)
+#define USE_REMOTE_DESKTOP_DISABLED_RENDERING ((defined( OTB_DEBUG ) && 0) || 0)
 //
-#define DISABLE_QUICKLOOK_VIEW ( ( defined( _DEBUG ) && 0 ) || 0 )
+#define DISABLE_QUICKLOOK_VIEW ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */

@@ -320,7 +320,7 @@ StackedLayerModel
 
   oss << "Layer #" << m_LayerCount++;
 
-#ifdef _DEBUG 
+#ifdef OTB_DEBUG 
   oss << " (" << layerModel->metaObject()->className()
       << "@" << std::hex << layerModel << ")";
 #endif

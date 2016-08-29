@@ -70,7 +70,7 @@ main( int argc, char* argv[] )
 
   //
   // 0. Splash-screen.
-#if !defined( _DEBUG )
+#if !defined( OTB_DEBUG )
   QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
   QSplashScreen splash(pixmap);
   splash.show();
@@ -136,10 +136,10 @@ main( int argc, char* argv[] )
 
   //
   // 5. Show window.
-#if defined( _DEBUG )
-#else // _DEBUG
+#if defined( OTB_DEBUG )
+#else // OTB_DEBUG
   splash.finish(&mainWindow);
-#endif // _DEBUG
+#endif // OTB_DEBUG
 
   // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();

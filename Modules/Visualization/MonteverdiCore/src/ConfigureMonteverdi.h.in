@@ -84,7 +84,7 @@
 #endif
 
 #ifndef ECHO_QDEBUG
-#define ECHO_QDEBUG     !NO_QECHO && !NO_QDEBUG && defined( _DEBUG ) && 1
+#define ECHO_QDEBUG     !NO_QECHO && !NO_QDEBUG && defined( OTB_DEBUG ) && 1
 #endif
 
 #ifndef ECHO_QWARNING
@@ -100,7 +100,7 @@
 #endif
 
 #ifndef LOG_QDEBUG
-#define LOG_QDEBUG      !NO_QLOG && !NO_QDEBUG && defined( _DEBUG ) && 0
+#define LOG_QDEBUG      !NO_QLOG && !NO_QDEBUG && defined( OTB_DEBUG ) && 0
 #endif
 
 #ifndef LOG_QWARNING
@@ -129,8 +129,8 @@
 //
 // Options
 
-// #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
-#define USE_OPTION_SAMPLE ((defined( _DEBUG )  && 0) || 0)
+// #if (defined( OTB_DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
+#define USE_OPTION_SAMPLE ((defined( OTB_DEBUG )  && 0) || 0)
 
 //
 // Macros

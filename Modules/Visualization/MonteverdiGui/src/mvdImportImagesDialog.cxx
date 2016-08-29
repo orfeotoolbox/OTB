@@ -302,7 +302,7 @@ ImportImagesDialog
       // Append items.
       itemModel->appendRow( items );
       }
-#if ( defined( _DEBUG ) && 1 ) || 0
+#if ( defined( OTB_DEBUG ) && 1 ) || 0
     else
       qDebug() << "Skipped:" << filenames[ i ];
 #endif

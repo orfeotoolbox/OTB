@@ -976,13 +976,13 @@ void
 LayerStackItemModel
 ::OnLayerDeleted( size_t idx )
 {
-#ifdef _DEBUG
+#ifdef OTB_DEBUG
   bool isRowRemoved =
 #endif
 
   removeRow( idx );
 
-#ifdef _DEBUG
+#ifdef OTB_DEBUG
   assert( isRowRemoved && "QAbstractItemModel::removeRow() failed!" );
 #endif
 }

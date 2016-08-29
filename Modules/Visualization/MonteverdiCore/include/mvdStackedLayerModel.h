@@ -316,7 +316,7 @@ private:
 private slots:
 };
 
-#if _DEBUG
+#if OTB_DEBUG
 inline void trace( const std::vector< std::string > & );
 #endif
 
@@ -931,7 +931,7 @@ StackedLayerModel
 }
 
 /*****************************************************************************/
-#if _DEBUG
+#if OTB_DEBUG
 
 inline
 void

@@ -150,7 +150,7 @@ TaskProgressDialog
   //
   // Trace (for debugging purposes) if background-task thread is still
   // running when destroying this dialog.
-#if ( defined( _DEBUG ) && 1 ) || 0
+#if ( defined( OTB_DEBUG ) && 1 ) || 0
   if( m_BackgroundTask!=NULL &&
       m_BackgroundTask->isRunning() )
     {

@@ -103,7 +103,7 @@ namespace mvd
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
 
-#define FORCE_NO_GLSL ( ( defined( _DEBUG ) && 0 ) || 0 )
+#define FORCE_NO_GLSL ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -221,11 +221,11 @@ MainWindow
 
   setObjectName( PROJECT_NAME );
 
-#ifdef _DEBUG
+#ifdef OTB_DEBUG
   setWindowTitle( PROJECT_NAME "(Debug)" );
-#else // _DEBUG
+#else // OTB_DEBUG
   setWindowTitle( PROJECT_NAME );
-#endif // _DEBUG
+#endif // OTB_DEBUG
 
   InitializeCentralWidget();
 
@@ -920,7 +920,7 @@ MainWindow
   comboBox->setObjectName( "referenceLayerComboBox" );
   comboBox->setMinimumSize(
     QSize(
-#ifdef _DEBUG
+#ifdef OTB_DEBUG
       116,
 #else
       128,
@@ -1979,11 +1979,11 @@ MainWindow
     assert( imageModel!=NULL );
 
     setWindowTitle(
-#ifdef _DEBUG
+#ifdef OTB_DEBUG
       QString( PROJECT_NAME " (Debug) - %1" )
-#else // _DEBUG
+#else // OTB_DEBUG
       QString( PROJECT_NAME " - %1" )
-#endif // _DEBUG
+#endif // OTB_DEBUG
       .arg( QFileInfo( imageModel->GetFilename() ).fileName() )
     );
 

@@ -532,7 +532,7 @@ void
 ImageViewManipulator
 ::ResizeEvent( QResizeEvent * otbUseInDebug( e ) )
 {
-  assert( e!=NULL );
+  // assert( e!=NULL );
 
   // qDebug() << this << "::ResizeEvent(" << e << ")";
 
@@ -546,6 +546,8 @@ ImageViewManipulator
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT 
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
+  assert( e!=NULL );
+
   SetViewportSize( e->size().width(), e->size().height() );
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 }
