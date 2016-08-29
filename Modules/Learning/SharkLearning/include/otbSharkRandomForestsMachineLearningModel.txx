@@ -112,7 +112,7 @@ typename SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
-  shark::RealVector samples;
+  shark::RealVector samples(value.Size());
   for(size_t i = 0; i < value.Size();i++)
     {
     samples.push_back(value[i]);

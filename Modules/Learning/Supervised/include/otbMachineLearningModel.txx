@@ -154,19 +154,18 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 
   for(unsigned int id = startIndex;id<startIndex+size;++id)
     {
-    TargetSampleType target;
-    ConfidenceValueType confidence;
-
     if(quality!=ITK_NULLPTR)
       {
-      target = this->DoPredict(input->GetMeasurementVector(id),&confidence);
+      ConfidenceValueType confidence = 0;
+      const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id),&confidence);
       quality->SetMeasurementVector(id,confidence);
+      targets->SetMeasurementVector(id,target);
       }
     else
       {
-      target = this->DoPredict(input->GetMeasurementVector(id));
+      const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id));
+      targets->SetMeasurementVector(id,target);
       }
-    targets->SetMeasurementVector(id,target);
     }
 }
 
