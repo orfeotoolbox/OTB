@@ -74,6 +74,10 @@ LearningApplicationBase<TInputValue,TOutputValue>
   InitKNNParams();
 #endif
 
+#ifdef OTB_USE_SHARK
+  InitSharkRandomForestsParams();
+#endif
+  
 }
 
 template <class TInputValue, class TOutputValue>
@@ -135,6 +139,15 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
     #endif
     }
+  if(modelName == "sharkrf")
+    {
+    #ifdef OTB_USE_SHARK
+    TrainSharkRandomForests(trainingListSample,trainingLabeledListSample,modelPath);
+    #else
+    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+    #endif
+    }
+  
   // OpenCV SVM implementation is buggy with linear kernel
   // Users should use the libSVM implementation instead.
   // else if (modelName == "svm")

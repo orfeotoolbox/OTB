@@ -15,7 +15,7 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbSharkImageClassificationFilter.h"
+#include "otbImageClassificationFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -30,7 +30,7 @@ typedef unsigned short LabeledPixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
-typedef otb::SharkImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
+typedef otb::ImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
 typedef ClassificationFilterType::ModelType ModelType;
 typedef ClassificationFilterType::ValueType ValueType;
 typedef ClassificationFilterType::LabelType LabelType;
@@ -143,7 +143,7 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
   std::cout << "Classification\n";
-  filter->SetBatch(batch);
+  filter->SetBatchMode(batch);
   filter->SetUseConfidenceMap(true);
   using TimeT = std::chrono::milliseconds;
   auto start = std::chrono::system_clock::now();

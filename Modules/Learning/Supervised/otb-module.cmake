@@ -12,7 +12,8 @@ otb_module(OTBSupervised
   OPTIONAL_DEPENDS
     OTBOpenCV
     OTBSVMLearning
-
+    OTBSharkLearning
+    
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO

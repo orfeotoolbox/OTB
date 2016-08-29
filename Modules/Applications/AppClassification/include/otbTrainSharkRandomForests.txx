@@ -16,7 +16,7 @@
  =========================================================================*/
 #ifndef __otbTrainSharkRandomForests_txx
 #define __otbTrainSharkRandomForests_txx
-#include "otbSharkLearningApplicationBase.h"
+#include "otbLearningApplicationBase.h"
 
 namespace otb
 {

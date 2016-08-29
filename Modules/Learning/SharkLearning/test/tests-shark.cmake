@@ -18,11 +18,6 @@ otb_add_test(NAME leTuSharkRFMachineLearningModelCanReadFail COMMAND otbSharkLea
   )
 set_property(TEST leTuSharkRFMachineLearningModelCanReadFail PROPERTY WILL_FAIL true)
 
-otb_add_test(NAME leTvImageClassificationFilterSharkLoadModel COMMAND otbSharkLearningTestDriver
-  otbImageClassificationFilterLoadModel
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${TEMP}/shark_rf_model.txt
-  )
 
 otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSharkLearningTestDriver
   otbSharkImageClassificationFilter
