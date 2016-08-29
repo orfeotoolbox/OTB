@@ -80,8 +80,8 @@ namespace mvd
 
 /*****************************************************************************/
 MaplaMainWindow
-::MaplaMainWindow( QWidget* parent, Qt::WindowFlags flags ) :
-  I18nMainWindow( parent, flags ),
+::MaplaMainWindow( QWidget * p, Qt::WindowFlags flags ) :
+  I18nMainWindow( p, flags ),
   m_UI( new mvd::Ui::MaplaMainWindow() )
 #ifdef OTB_USE_QT4
   ,
@@ -161,7 +161,7 @@ MaplaMainWindow
 /*****************************************************************************/
 void
 MaplaMainWindow
-::closeEvent( QCloseEvent* event )
+::closeEvent( QCloseEvent* e )
 {
   assert( MaplaApplication::Instance() );
   assert(
@@ -171,7 +171,7 @@ MaplaMainWindow
 
   SaveLayout( Monteverdi_UI_VERSION );
 
-  I18nMainWindow::closeEvent( event );
+  I18nMainWindow::closeEvent( e );
 }
 
 /*****************************************************************************/

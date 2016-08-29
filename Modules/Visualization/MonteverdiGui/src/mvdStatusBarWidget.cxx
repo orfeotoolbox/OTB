@@ -95,10 +95,10 @@ StatusBarWidget
 /*****************************************************************************/
 void
 StatusBarWidget
-::SetGLSLEnabled( bool isEnabled )
+::SetGLSLEnabled( bool enabled )
 {
   m_UI->renderModelLabel->setText(
-    isEnabled
+    enabled
     ? tr( "GLSL" )
     : tr( "OpenGL" )
   );

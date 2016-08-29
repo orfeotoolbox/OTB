@@ -1178,7 +1178,7 @@ MainWindow
 
   assert( referenceLayerComboBox!=NULL );
 
-  bool signalsBlocked = referenceLayerComboBox->blockSignals( true );
+  bool blocked = referenceLayerComboBox->blockSignals( true );
   // }
 
   //
@@ -1212,7 +1212,7 @@ MainWindow
   //
   // BUGFIX: MANTIS-1120
   // {
-  referenceLayerComboBox->blockSignals( signalsBlocked );
+  referenceLayerComboBox->blockSignals( blocked );
   // }
   //
 
@@ -1257,23 +1257,23 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::closeEvent( QCloseEvent* event )
+::closeEvent( QCloseEvent * e )
 {
-  assert( event!=NULL );
+  assert( e!=NULL );
 
   {
     //
     // List OTB-application widgets.
     typedef QList< mvd::Wrapper::QtWidgetView * > QtWidgetViewList;
 
-    QtWidgetViewList children( findChildren< mvd::Wrapper::QtWidgetView * >() );
+    QtWidgetViewList c( findChildren< mvd::Wrapper::QtWidgetView * >() );
 
     QStringList names;
 
     //
     // Find out which OTB-applications are running.
-    for( QtWidgetViewList::iterator it( children.begin() );
-	 it!=children.end();
+    for( QtWidgetViewList::iterator it( c.begin() );
+	 it!=c.end();
 	 ++ it )
       {
       assert( *it );
@@ -1304,7 +1304,7 @@ MainWindow
 	.arg( names.join( "\n- " ) )
       );
 
-      event->ignore();
+      e->ignore();
 
       return;
       }
@@ -1332,7 +1332,7 @@ MainWindow
 
       if( button==QMessageBox::No )
 	{
-	event->ignore();
+	e->ignore();
 
 	return;
 	}
@@ -1345,7 +1345,7 @@ MainWindow
 
   //
   // Otherwise, close.
-  I18nMainWindow::closeEvent( event );
+  I18nMainWindow::closeEvent( e );
 }
 
 /*****************************************************************************/
@@ -1426,13 +1426,13 @@ MainWindow
   assert( comboBox!=NULL );
 
 
-  bool signalsBlocked = comboBox->blockSignals( true );
+  bool blocked = comboBox->blockSignals( true );
   {
   comboBox->clear();
 
   comboBox->addItem( "None" );
   }
-  comboBox->blockSignals( signalsBlocked );
+  comboBox->blockSignals( blocked );
 
 
   if( model==NULL )

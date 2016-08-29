@@ -644,13 +644,13 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::resizeGL( int width, int height )
+::resizeGL( int w, int h )
 {
-  QGLWidget::resizeGL( width, height );
+  QGLWidget::resizeGL( w, h );
 
   assert( m_Renderer!=NULL );
 
-  m_Renderer->ResizeGL( width, height );
+  m_Renderer->ResizeGL( w, h );
 }
 
 /*******************************************************************************/
@@ -666,20 +666,20 @@ ImageViewWidget
   // Get new rendering-context.
   assert( m_Renderer!=NULL );
 
-  AbstractImageViewRenderer::RenderingContext* context =
+  AbstractImageViewRenderer::RenderingContext* c =
     m_Renderer->NewRenderingContext();
 
-  assert( context!=NULL );
+  assert( c!=NULL );
 
   //
   // Setup new rendering-context.
   assert( m_Manipulator!=NULL );
 
-  m_Manipulator->SetupRenderingContext( context );
+  m_Manipulator->SetupRenderingContext( c );
 
   //
   // OpenGL paint using new rendering-context.
-  m_Renderer->PaintGL( context );
+  m_Renderer->PaintGL( c );
 
   //
   // Post-rendering tasks.
@@ -701,8 +701,8 @@ ImageViewWidget
 
   //
   // Relase rendering-context.
-  delete context;
-  context = NULL;
+  delete c;
+  c = NULL;
 }
 
 /*******************************************************************************/
@@ -1132,11 +1132,11 @@ ImageViewWidget
 /*****************************************************************************/
 bool
 ImageViewWidget
-::SetBypassRenderingEnabled( bool isEnabled )
+::SetBypassRenderingEnabled( bool enabled )
 {
   assert( m_Renderer!=NULL );
 
-  return m_Renderer->SetBypassRenderingEnabled( isEnabled );
+  return m_Renderer->SetBypassRenderingEnabled( enabled );
 }
 
 /*****************************************************************************/
@@ -1150,9 +1150,9 @@ ImageViewWidget
 /*****************************************************************************/
 void
 ImageViewWidget
-::SetPickingEnabled( bool isEnabled )
+::SetPickingEnabled( bool enabled )
 {
-  m_IsPickingEnabled = isEnabled;
+  m_IsPickingEnabled = enabled;
 }
 
 /*****************************************************************************/
@@ -1289,13 +1289,13 @@ ImageViewWidget
 		settings.GetRgbChannels()
 	      );
 
-	      for( VectorImageSettings::ChannelVector::const_iterator it(
+	      for( VectorImageSettings::ChannelVector::const_iterator vis(
 		     rgb.begin()
 		   );
-		   it!=rgb.end();
-		   ++it )
-		if( *it > rgbChannel )
-		  rgbChannel = *it;
+		   vis!=rgb.end();
+		   ++vis )
+		if( *vis > rgbChannel )
+		  rgbChannel = *vis;
 	    }
 
 	    CountType nbComponents = vim->GetNbComponents();
