@@ -152,16 +152,19 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     itkExceptionMacro(<<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[");
     }
 
-  for(unsigned int id = startIndex;id<startIndex+size;++id)
+  if(quality != ITK_NULLPTR)
     {
-    if(quality!=ITK_NULLPTR)
+    for(unsigned int id = startIndex;id<startIndex+size;++id)
       {
       ConfidenceValueType confidence = 0;
       const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id),&confidence);
       quality->SetMeasurementVector(id,confidence);
       targets->SetMeasurementVector(id,target);
       }
-    else
+    }
+  else
+    {
+    for(unsigned int id = startIndex;id<startIndex+size;++id)
       {
       const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id));
       targets->SetMeasurementVector(id,target);
