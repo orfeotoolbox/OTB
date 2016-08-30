@@ -214,11 +214,11 @@ option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
 option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 
-if(${ENABLE_MONTEVERDI})
-  set(OTB_USE_OPENGL ON)
-  set(OTB_USE_GLEW ON)
-endif()
+set(OTB_USE_OPENGL ${ENABLE_MONTEVERDI})
+set(OTB_USE_GLEW ${ENABLE_MONTEVERDI})
+set(OTB_USE_QWT ${ENABLE_MONTEVERDI})
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
@@ -257,12 +257,8 @@ foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
   message(STATUS "|----------------------------------------------------------")
 endforeach()
 
-# Main external projet : dependencies are included (if needed) in each external project
-if(ENABLE_MONTEVERDI)
-  include(External_mvd)
-else()
-  include(External_otb)
-endif()
+include(External_otb)
+
 
 if(UNIX OR MSVC)
   add_subdirectory(Packaging)
