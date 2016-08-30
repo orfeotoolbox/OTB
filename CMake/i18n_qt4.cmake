@@ -15,7 +15,7 @@ endmacro()
 # Func
 function( add_to_qt4_i18n_files RESULT )
   foreach( F ${ARGN} )
-    message( "${F}" )
+    #message( "${F}" )
 
     get_filename_component( ABS_FILE ${F} ABSOLUTE )
 
@@ -54,11 +54,11 @@ macro( add_to_qt4_i18n_headers INCLUDE_DIR )
   endforeach()
 
 
-  message( "HEADERS=${HEADERS}" )
+  #message( "HEADERS=${HEADERS}" )
 
 
   foreach( F ${HEADERS} )
-    message( "F=${F}" )
+    #message( "F=${F}" )
 
     set( ABS_FILE "${ABS_INCLUDE_DIR}/${F}" )
 
