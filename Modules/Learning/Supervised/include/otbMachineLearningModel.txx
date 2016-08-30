@@ -118,14 +118,18 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     nb_threads = omp_get_num_threads();
     threadId = omp_get_thread_num();
     nb_batches = std::min(nb_threads,(unsigned int)input->Size());
-    unsigned int batch_size = ((unsigned int)input->Size()/nb_batches);
-    unsigned int batch_start = threadId*batch_size;
-    if(threadId == nb_threads-1)
+    // Ensure that we do not spawn unncessary threads
+    if(threadId<nb_batches)
       {
-      batch_size+=input->Size()%nb_batches;
-      }
+      unsigned int batch_size = ((unsigned int)input->Size()/nb_batches);
+      unsigned int batch_start = threadId*batch_size;
+      if(threadId == nb_threads-1)
+        {
+        batch_size+=input->Size()%nb_batches;
+        }
     
-    this->DoPredictBatch(input,batch_start,batch_size,targets,quality);
+      this->DoPredictBatch(input,batch_start,batch_size,targets,quality);
+      }
     }
     #else
     this->DoPredictBatch(input,0,input->Size(),targets,quality);
