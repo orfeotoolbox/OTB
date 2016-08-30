@@ -7,10 +7,14 @@ if(MSVC)
 		${CMAKE_SOURCE_DIR}/patches/GEOS/CMakeLists.txt
 		${CMAKE_SOURCE_DIR}/patches/GEOS/nmake.opt
 		${GEOS_SB_SRC})
+		
 	set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND} -DGEOS_SB_SRC=${GEOS_SB_SRC})
+	
 else()
 	set(GEOS_PATCH_COMMAND)
+	
 	set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND})
+	
 endif()
 
 ExternalProject_Add(GEOS

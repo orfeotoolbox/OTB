@@ -22,7 +22,7 @@ JPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\jpeg.lib
 #if using an external png library uncomment the follwing lines
 PNG_EXTERNAL_LIB = 1
 PNGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
-PNG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libpng.lib
+PNG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libpng16.lib
 
 # if using an external libtiff library
 TIFF_INC = -I@CMAKE_WIN_INSTALL_PREFIX@\include
