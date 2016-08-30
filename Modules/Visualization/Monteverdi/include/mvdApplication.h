@@ -67,7 +67,7 @@ class OTBApplicationsModel;
 
 /** \class Application
  *
- * \ingroup Monteverdi
+ * \ingroup OTBMonteverdi
  *
  */
 class ITK_EXPORT Application

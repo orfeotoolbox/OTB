@@ -69,7 +69,7 @@ class PreferencesDialog;
 
 /** \class PreferencesDialog
  *
- * \ingroup Monteverdi
+ * \ingroup OTBMonteverdi
  *
  */
 class ITK_EXPORT PreferencesDialog :

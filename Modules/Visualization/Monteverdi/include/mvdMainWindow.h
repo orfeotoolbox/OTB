@@ -96,7 +96,7 @@ class MainWindow;
 /**
  * \class MainWindow
  *
- * \ingroup Monteverdi
+ * \ingroup OTBMonteverdi
  *
  * \brief The application main-widow widget.
  */
