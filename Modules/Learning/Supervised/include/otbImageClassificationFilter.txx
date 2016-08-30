@@ -218,7 +218,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
   typedef typename ModelType::ConfidenceListSampleType ConfidenceListSampleType;
 
   typename InputListSampleType::Pointer samples = InputListSampleType::New();
-  auto num_features = inputPtr->GetNumberOfComponentsPerPixel();
+  unsigned int num_features = inputPtr->GetNumberOfComponentsPerPixel();
   samples->SetMeasurementVectorSize(num_features);
   InputSampleType sample(num_features);
   // Fill the samples
@@ -233,7 +233,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       }
     if(validPoint)
       {
-      auto pix = inIt.Get();
+      typename InputImageType::PixelType pix = inIt.Get();
       for(size_t feat=0; feat<num_features; ++feat)
         {
         sample[feat]=pix[feat];
@@ -258,7 +258,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     confidenceIt.GoToBegin();
     }
 
-  auto labIt = labels->Begin();
+  typename TargetListSampleType::ConstIterator labIt = labels->Begin();
   maskIt.GoToBegin();
   for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); 
        ++outIt)
