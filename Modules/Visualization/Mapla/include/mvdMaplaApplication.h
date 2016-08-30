@@ -67,7 +67,7 @@ class OTBApplicationsModel;
 
 /** \class MaplaApplication
  *
- * \ingroup Mapla
+ * \ingroup OTBMapla
  *
  */
 class ITK_EXPORT MaplaApplication

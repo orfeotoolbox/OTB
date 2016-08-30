@@ -76,7 +76,7 @@ class MaplaMainWindow;
 /**
  * \class MaplaMainWindow
  *
- * \ingroup Mapla
+ * \ingroup OTBMapla
  *
  * \brief The application main-widow widget.
  */
