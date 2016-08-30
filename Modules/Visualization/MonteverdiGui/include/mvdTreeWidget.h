@@ -88,7 +88,7 @@ namespace Ui
 /**
  * \class TreeWidget
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.

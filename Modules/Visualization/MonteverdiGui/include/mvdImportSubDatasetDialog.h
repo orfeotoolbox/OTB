@@ -73,7 +73,7 @@ class ImportSubDatasetDialog;
 /**
  * \class ImportSubDatasetDialog
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.

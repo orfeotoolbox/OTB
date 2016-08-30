@@ -69,7 +69,7 @@ class ColorDynamicsWidget;
 /**
  * \class ColorDynamicsController
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Color-dynamics widget controller for VectorImageModel objects.
  */

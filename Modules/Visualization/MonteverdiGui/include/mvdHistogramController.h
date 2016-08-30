@@ -69,7 +69,7 @@ class HistogramWidget;
 /**
  * \class HistogramController
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */

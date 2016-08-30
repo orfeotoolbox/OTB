@@ -73,7 +73,7 @@ class SearchableTreeWidget;
 /**
  * \class SearchableTreeWidget
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Database content browser. Presents:
  * - Cached datasets.

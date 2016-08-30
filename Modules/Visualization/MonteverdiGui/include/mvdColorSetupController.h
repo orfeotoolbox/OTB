@@ -69,7 +69,7 @@ class ColorSetupWidget;
 /**
  * \class ColorSetupController
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */

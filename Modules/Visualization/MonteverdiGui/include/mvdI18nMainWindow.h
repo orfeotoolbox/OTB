@@ -72,7 +72,7 @@ class VectorImageModel;
 /**
  * \class I18nMainWindow 
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
 *
  * \brief Main-window widget base for the i18n application.
  */

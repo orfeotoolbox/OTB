@@ -70,7 +70,7 @@ class StackedLayerModel;
 /**
  * \class LayerStackItemModel
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief WIP.
  */

@@ -59,7 +59,7 @@ class AboutDialog;
 
 /** \class AboutDialog
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  */
 class ITK_EXPORT AboutDialog :

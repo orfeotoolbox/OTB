@@ -74,7 +74,7 @@ namespace Wrapper
 /**
  * \class ApplicationLauncher
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief WIP.
  */

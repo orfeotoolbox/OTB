@@ -73,7 +73,7 @@ namespace mvd
 /**
  * \class QuicklookViewRenderer
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  */
 class ITK_EXPORT QuicklookViewRenderer :
     public ImageViewRenderer

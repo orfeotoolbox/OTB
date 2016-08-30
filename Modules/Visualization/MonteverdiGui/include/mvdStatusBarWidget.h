@@ -72,7 +72,7 @@ class StatusBarWidget;
 /**
  * \class StatusBarWidget
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Status Bar widget
  * widget class.

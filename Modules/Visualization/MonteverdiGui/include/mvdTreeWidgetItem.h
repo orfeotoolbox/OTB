@@ -70,7 +70,7 @@ class TreeWidgetItem;
 /**
  * \class TreeWidgetItem
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief 
  */

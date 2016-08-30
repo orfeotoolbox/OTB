@@ -72,7 +72,7 @@ class QtWidgetView;
 /**
  * \class ApplicationLauncher
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief WIP.
  */

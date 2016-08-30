@@ -72,7 +72,7 @@ class ApplicationsToolBox;
 /**
  * \class ApplicationsToolBoxController
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */

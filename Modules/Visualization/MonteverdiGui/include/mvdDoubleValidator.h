@@ -67,7 +67,7 @@ namespace mvd
 /**
  * \class DoubleValidator
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  * \brief WIP.
  */

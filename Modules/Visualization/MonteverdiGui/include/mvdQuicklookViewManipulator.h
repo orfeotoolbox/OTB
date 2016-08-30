@@ -69,7 +69,7 @@ namespace mvd
 /**
  * \class QuicklookViewManipulator
  *
- * \ingroup MonteverdiGui
+ * \ingroup OTBMonteverdiGui
  *
  *  \brief TODO.
  */
