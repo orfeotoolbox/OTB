@@ -157,7 +157,9 @@ protected:
   //
   // QwtPlotPicker overrides.
 
-  QwtText trackerText( const QwtDoublePoint & )const;
+  using QwtPlotPicker::trackerText;
+
+  virtual QwtText trackerText( const QwtDoublePoint & ) const;
 
 //
 // Protected attributes.
