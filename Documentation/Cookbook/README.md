@@ -9,6 +9,12 @@ Converting existing latex to rst is not that straightforward. All rst files for 
 For others in recipes, we used a tool called pandoc to get an inital rst and then edited out errors manually. You do not have to generate them again.
 The old Cookbook in otb-documents is deprecated.
 
+Requirements
+============
+install OTB, sphnix, sphinx-rtd-theme
+
+aptitude install python-sphinx python-sphinx-rtd-theme
+
 How to build the Cookbook:
 ==========================
 
