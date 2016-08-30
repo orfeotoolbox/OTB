@@ -88,8 +88,11 @@ template <class TInputValue, class TOutputValue>
 typename SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::ConfidenceValueType
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::ComputeConfidence(shark::RealVector probas, bool computeMargin) const
+::ComputeConfidence(shark::RealVector & probas, bool computeMargin) const
 {
+  assert(!probas.empty()&&"probas vector is empty");
+  assert((!computeMargin||probas.size()>1)&&"probas size should be at least 2 if computeMargin is true");
+  
   ConfidenceValueType conf{0};
   if(computeMargin)
     {
@@ -119,7 +122,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     }
   if (quality != ITK_NULLPTR)
     {
-    auto probas = m_RFModel(samples);
+    shark::RealVector probas = m_RFModel(samples);
     (*quality) = ComputeConfidence(probas, m_ComputeMargin);
     }
   shark::ArgMaxConverter<shark::RFClassifier> amc;
@@ -155,12 +158,12 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
   #endif
   
-  auto probas = m_RFModel(inputSamples);
+  shark::Data<shark::RealVector> probas = m_RFModel(inputSamples);
 
   if(quality != ITK_NULLPTR)
     {
     unsigned int id = startIndex;
-    for(const auto& p : probas.elements())
+    for(shark::RealVector && p : probas.elements())
       {
       ConfidenceSampleType confidence;
       auto conf = ComputeConfidence(p, m_ComputeMargin);
