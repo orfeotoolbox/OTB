@@ -41,6 +41,9 @@
 namespace otb
 {
 
+static const char DerivedSubdatasetPrefix[] = "DERIVED_SUBDATASET:";
+static const size_t DerivedSubdatasetPrefixLength = sizeof(DerivedSubdatasetPrefix);
+
 template<class T>
 bool PixelIsComplex(const std::complex<T>& /*dummy*/)
 {
@@ -260,12 +263,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Update FileName
   this->m_FileName = lFileName;
   
-  std::string lFileNameOssimKeywordlist;
-
-  if(!GetDerivedDatasetSourceFileName(m_FileName,lFileNameOssimKeywordlist))
-    {
-    lFileNameOssimKeywordlist = this->m_FileName;
-    }
+  std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
 
   // Test if the file exists and if it can be opened.
   // An exception will be thrown otherwise.
@@ -531,26 +529,24 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-bool
+std::string
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::GetDerivedDatasetSourceFileName(const std::string & filename, std::string & sourceFilename) const
+::GetDerivedDatasetSourceFileName(const std::string & filename) const
 {
   
-  const size_t dsds_pos = filename.find("DERIVED_SUBDATASET:");
+  const size_t dsds_pos = filename.find(DerivedSubdatasetPrefix);
   
   if(dsds_pos != std::string::npos)
       {
       // Derived subdataset from gdal
-      const size_t nPrefixLen = strlen("DERIVED_SUBDATASET:");
-
-      const size_t alg_pos = filename.find(":",dsds_pos+nPrefixLen+1);
+      const size_t alg_pos = filename.find(":",dsds_pos+DerivedSubdatasetPrefixLength);
       if (alg_pos != std::string::npos)
         {
-        sourceFilename = filename.substr(alg_pos+1,filename.size() - alg_pos);
-        return true;
+        std::string sourceFilename = filename.substr(alg_pos+1,filename.size() - alg_pos);
+        return sourceFilename;
         }
       }
-  return false;
+  return filename;
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
@@ -565,11 +561,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     return;
     }
 
-  std::string fileToCheck;
-  if(!GetDerivedDatasetSourceFileName(m_FileName,fileToCheck))
-    {
-    fileToCheck = m_FileName;
-    }
+  std::string fileToCheck = GetDerivedDatasetSourceFileName(m_FileName);
   
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(fileToCheck.c_str()))
@@ -586,7 +578,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   // Test if the file can be open for reading access.
   //Only if m_FileName specify a filename (not a dirname)
-  if (itksys::SystemTools::FileExists(fileToCheck.c_str(), true) == true)
+  if (itksys::SystemTools::FileExists(fileToCheck.c_str(), true))
     {
     std::ifstream readTester;
     readTester.open(fileToCheck.c_str());

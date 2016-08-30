@@ -180,7 +180,7 @@ private:
   bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
 
   // Retrieve the real source file name if derived dataset */
-  bool GetDerivedDatasetSourceFileName(const std::string& filename, std::string & sourceFilename) const;
+  std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
   
   ImageFileReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
