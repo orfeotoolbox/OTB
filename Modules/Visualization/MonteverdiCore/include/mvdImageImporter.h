@@ -70,7 +70,7 @@ namespace mvd
 /**
  * \class ImageImporter
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief Import image worker. It is parametrized by the image
  * filename and the desired (width, height) best-fit size.

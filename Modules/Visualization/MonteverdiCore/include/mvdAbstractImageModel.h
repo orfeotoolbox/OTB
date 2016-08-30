@@ -78,7 +78,7 @@ class QuicklookModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /** \class AbstractImageModel
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  */
 class ITK_EXPORT AbstractImageModel :

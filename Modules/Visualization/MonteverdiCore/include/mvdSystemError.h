@@ -73,7 +73,7 @@ namespace mvd
 /**
  * \class SystemError
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

@@ -72,7 +72,7 @@ class AbstractLayerModel;
 /**
  * \class StackedLayerModel
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

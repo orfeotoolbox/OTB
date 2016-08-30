@@ -87,7 +87,7 @@ class AbstractImageModel;
 /**
  * \class HistogramModel
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  */
 class ITK_EXPORT HistogramModel :
     public AbstractModel,

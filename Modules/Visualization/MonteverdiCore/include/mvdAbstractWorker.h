@@ -69,7 +69,7 @@ namespace mvd
 /**
  * \class AbstractWorker
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief Abstract worker object used as a base-class for threaded tasks.
  */

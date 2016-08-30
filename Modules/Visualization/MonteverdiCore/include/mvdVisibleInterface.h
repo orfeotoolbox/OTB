@@ -68,7 +68,7 @@ namespace mvd
 /**
  * \class VisibleInterface
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

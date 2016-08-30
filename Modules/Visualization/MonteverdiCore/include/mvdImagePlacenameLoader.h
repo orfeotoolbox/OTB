@@ -63,7 +63,7 @@ class VectorImageModel;
 /**
  * \class ImagePlacenameLoader
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief 
  *

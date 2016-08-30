@@ -69,7 +69,7 @@ class AbstractWorker;
 /**
  * \class BackgroundTask
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

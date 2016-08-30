@@ -68,7 +68,7 @@ namespace mvd
 /**
  * \class ProgressInterface
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

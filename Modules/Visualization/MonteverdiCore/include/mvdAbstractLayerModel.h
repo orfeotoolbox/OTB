@@ -97,7 +97,7 @@ ITK_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt
 /**
  * \class AbstractLayerModel
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

@@ -72,7 +72,7 @@ namespace mvd
 
 /** \class AbstractModel
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  */
 class ITK_EXPORT AbstractModel :

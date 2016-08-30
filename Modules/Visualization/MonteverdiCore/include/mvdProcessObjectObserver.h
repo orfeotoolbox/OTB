@@ -70,7 +70,7 @@ class ProgressInterface;
 /**
  * \class ProcessObjectObserver
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

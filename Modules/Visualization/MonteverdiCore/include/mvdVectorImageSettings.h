@@ -72,7 +72,7 @@ namespace mvd
 /**
  * \class VectorImageSettings
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

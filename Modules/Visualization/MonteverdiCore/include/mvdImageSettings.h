@@ -69,7 +69,7 @@ namespace mvd
 /**
  * \class ImageSettings
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

@@ -77,7 +77,7 @@ class VectorImageModel;
 
 /** \class I18nCoreApplication
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief The MVD2 core-application (which is different from
  * QCoreApplication).

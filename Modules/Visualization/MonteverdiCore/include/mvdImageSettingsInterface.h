@@ -68,7 +68,7 @@ class ImageSettings;
 /**
  * \class ImageSettingsInterface
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */

@@ -68,7 +68,7 @@ namespace mvd
 
 /** \class ModifiableInterface
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  */
 class ITK_EXPORT ModifiableInterface

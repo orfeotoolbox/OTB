@@ -71,7 +71,7 @@ namespace mvd
 /**
  * \class ApplicationsBrowser
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief Search for available applications in a directory.
  * 

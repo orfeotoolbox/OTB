@@ -73,7 +73,7 @@ namespace mvd
 
 /** \class QuicklookModel
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  */
 class ITK_EXPORT QuicklookModel :

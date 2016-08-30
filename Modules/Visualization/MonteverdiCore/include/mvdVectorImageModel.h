@@ -81,7 +81,7 @@ class DatasetModel;
 
 /** \class VectorImageModel
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  */
 class ITK_EXPORT VectorImageModel :

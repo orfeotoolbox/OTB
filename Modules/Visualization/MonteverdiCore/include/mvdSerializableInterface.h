@@ -70,7 +70,7 @@ namespace mvd
 /**
  * \class SerializableInterface
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief 'Template method' pattern applied to serializable objects.
  */

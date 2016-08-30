@@ -69,7 +69,7 @@ namespace mvd
 /**
  * \class FilenameInterface
  *
- * \ingroup MonteverdiCore
+ * \ingroup OTBMonteverdiCore
  *
  * \brief WIP.
  */
