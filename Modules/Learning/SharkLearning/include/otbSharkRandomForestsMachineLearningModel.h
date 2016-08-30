@@ -124,7 +124,7 @@ private:
   bool m_ComputeMargin;
 
   /** Confidence list sample */
-  ConfidenceValueType ComputeConfidence(shark::RealVector probas, 
+  ConfidenceValueType ComputeConfidence(shark::RealVector & probas, 
                                         bool computeMargin) const;
 
 };

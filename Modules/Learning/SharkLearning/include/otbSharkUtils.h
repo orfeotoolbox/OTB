@@ -33,21 +33,23 @@ namespace otb
 {
 namespace Shark
 {
-template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<shark::RealVector> & output, const unsigned int & start, const unsigned int& size)
+template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<shark::RealVector> & output, unsigned int start, unsigned int size)
 {
   assert(listSample != ITK_NULLPTR);
-  assert(start+size<=listSample->Size());
 
+  if(start+size>listSample.Size())
+    {
+    itkGenericExceptionMacro(<<"Requested range ["<<start<<", "<<start+size<<"[ is out of bound for input list sample (range [0, "<<listSample->Size()<<"[");
+    }
+  
+  output.clear();
+      
   // Sample index
   unsigned int sampleIdx = start;
     
   //Check for valid listSample
   if(listSample->Size()>0)
     {
-    // Retrieve samples count
-    output.clear();
-
-
     // Retrieve samples size alike
     const unsigned int sampleSize = listSample->GetMeasurementVectorSize();
 
@@ -56,7 +58,7 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
     for (auto const endOfRange = start+size ; sampleIdx < endOfRange ; ++sampleIdx)
       {
       // Retrieve sample
-      typename T::MeasurementVectorType sample = listSample->GetMeasurementVector(sampleIdx);
+      typename T::MeasurementVectorType const & sample = listSample->GetMeasurementVector(sampleIdx);
 	   
       // Define a shark::RealVector
       shark::RealVector rv(sampleSize);
@@ -65,30 +67,34 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
         {
         rv[i] = sample[i];
         }
-      output.push_back(rv);
+      using std::move;
+      output.emplace_back(move(rv));
       }
     }
 }
 
-template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<unsigned int> & output, const unsigned int & start, const unsigned int & size)
+template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<unsigned int> & output, unsigned int start, unsigned int size)
 {
   assert(listSample != ITK_NULLPTR);
-  assert(start+size<=listSample->Size());
 
+  if(start+size>listSample.Size())
+    {
+    itkGenericExceptionMacro(<<"Requested range ["<<start<<", "<<start+size<<"[ is out of bound for input list sample (range [0, "<<listSample->Size()<<"[");
+    }
+
+  output.clear();
+  
   // Sample index
   unsigned int sampleIdx = start;
     
   //Check for valid listSample
   if(listSample->Size()>0)
     {
-    // Retrieve samples count
-    output.clear();
-
     // Fill the output vector
     while(sampleIdx<start+size)
       {
       // Retrieve sample
-      typename T::MeasurementVectorType sample = listSample->GetMeasurementVector(sampleIdx);
+      typename T::MeasurementVectorType const & sample = listSample->GetMeasurementVector(sampleIdx);
 	   
       // Define a shark::RealVector
       output.push_back(sample[0]);
