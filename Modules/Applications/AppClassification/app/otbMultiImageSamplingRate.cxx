@@ -43,7 +43,7 @@ public:
   typedef otb::SamplingRateCalculatorList           RateCalculatorListType;
   
   typedef RateCalculatorListType::ClassCountMapType      ClassCountMapType;
-  typedef RateCalculatorType::MapRateType           MapRateType;
+  typedef RateCalculatorListType::MapRateType           MapRateType;
 
   typedef itk::VariableLengthVector<float> MeasurementType;
   typedef otb::StatisticsXMLFileReader<MeasurementType> XMLReaderType;
@@ -89,7 +89,7 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputFilenameList,  "il",   "Input list");
+    AddParameter(ParameterType_InputFilenameList,  "il",   "Input statistics");
     SetParameterDescription("il", "List of statistics files for each input image.");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output sampling rates");
@@ -150,26 +150,27 @@ private:
   void DoExecute()
     {
     // Clear state
-    m_CalculatorList->ClearRates();
+    m_CalculatorList->Clear();
     std::vector<std::string> inputs = this->GetParameterStringList("il");
     unsigned int nbInputs = inputs.size();
-    m_CalculatorList->Resize(nbInputs);
     XMLReaderType::Pointer statReader = XMLReaderType::New();
     for (unsigned int i=0 ; i<nbInputs ; i++ )
       {
+      m_CalculatorList->PushBack(otb::SamplingRateCalculator::New());
       statReader->SetFileName(inputs[i]);
       ClassCountMapType classCount = statReader->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
       m_CalculatorList->SetNthClassCount(i,classCount);
       }
 
     // Cautions : direct mapping between the enum PartitionType and the choice order
-    RateCalculatorListType::PartitionType partitionMode = this->GetParameterInt("mim");
+    RateCalculatorListType::PartitionType partitionMode =
+      static_cast<RateCalculatorListType::PartitionType>(this->GetParameterInt("mim"));
 
     unsigned int minParamSize = 1;
     if (partitionMode == RateCalculatorListType::CUSTOM)
       {
       // Check we have enough inputs for the custom mode
-      minParamSize = nbInputs
+      minParamSize = nbInputs;
       }
     
     switch (this->GetParameterInt("strategy"))
@@ -233,17 +234,33 @@ private:
       break;
       }
 
-    std::ostringstream oss;
+    std::ostringstream oss;    
     std::string outputPath(this->GetParameterString("out"));
-    // TODO : split ext
+    std::string outputBase = outputPath.substr(0, outputPath.find_last_of('.'));
+    std::string outputExt = outputPath.substr(outputPath.find_last_of('.'), std::string::npos);
     for (unsigned int i=0 ; i<nbInputs ; i++ )
       {
+      // Print results
       oss.str(std::string(""));
-      // create output filename
-      // write output
-      m_RateCalculator->Write(this->GetParameterString("outrates"));
+      oss << " className  requiredSamples  totalSamples  rate" << std::endl;
+      MapRateType rates = m_CalculatorList->GetRatesByClass(i);
+      MapRateType::const_iterator itRates = rates.begin();
+      for(; itRates != rates.end(); ++itRates)
+        {
+        otb::SamplingRateCalculator::TripletType tpt = itRates->second;
+        oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate;
+        if (tpt.Required > tpt.Tot)
+          {
+          oss << "\t[OVERFLOW]";
+          }
+        oss << std::endl;
+        }
+      otbAppLogINFO("Sampling rates for image "<< i+1 <<" : " << oss.str());
+      // Output results to disk
+      oss.str(std::string(""));
+      oss << outputBase << "_" << i+1 << outputExt;
+      m_CalculatorList->GetNthElement(i)->Write(oss.str());
       }
-    
   }
 
   RateCalculatorListType::Pointer m_CalculatorList;
