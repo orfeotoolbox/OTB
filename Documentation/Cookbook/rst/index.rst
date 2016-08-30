@@ -6,8 +6,6 @@
 Welcome to OTB CookBook's documentation!
 ========================================
 
-.. image:: Art/logo.png
-
 *The ORFEO Toolbox is not a black box.*
 
 Orfeo ToolBox (OTB) is an open-source set of tools for remote sensing images
