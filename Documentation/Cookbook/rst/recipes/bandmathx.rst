@@ -1,9 +1,5 @@
 .. highlight:: c++
 
-.. role:: math(raw)
-   :format: html latex
-..
-
 BandMathImageFilterX (based on muParserX)
 =========================================
 
