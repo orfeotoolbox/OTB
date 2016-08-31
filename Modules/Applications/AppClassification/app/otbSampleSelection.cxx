@@ -258,12 +258,24 @@ private:
     std::ostringstream oss;
     oss << " className  requiredSamples  totalSamples  rate" << std::endl;
     MapRateType::const_iterator itRates = rates.begin();
+    unsigned int overflowCount = 0;
     for(; itRates != rates.end(); ++itRates)
       {
       otb::SamplingRateCalculator::TripletType tpt = itRates->second;
-      oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate << std::endl;
+      oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate;
+      if (tpt.Required > tpt.Tot)
+        {
+        overflowCount++;
+        oss << "\t[OVERFLOW]";
+        }
+      oss << std::endl;
       }
     otbAppLogINFO("Sampling rates : " << oss.str());
+    if (overflowCount)
+      {
+      std::string plural(overflowCount>1?"s":"");
+      otbAppLogWARNING(<< overflowCount << " case"<<plural<<" of overflow detected! (requested number of samples higher than total available samples)");
+      }
 
     // Open input geometries
     otb::ogr::DataSource::Pointer vectors =

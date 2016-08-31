@@ -238,6 +238,7 @@ private:
     std::string outputPath(this->GetParameterString("out"));
     std::string outputBase = outputPath.substr(0, outputPath.find_last_of('.'));
     std::string outputExt = outputPath.substr(outputPath.find_last_of('.'), std::string::npos);
+    unsigned int overflowCount = 0;
     for (unsigned int i=0 ; i<nbInputs ; i++ )
       {
       // Print results
@@ -251,6 +252,7 @@ private:
         oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate;
         if (tpt.Required > tpt.Tot)
           {
+          overflowCount++;
           oss << "\t[OVERFLOW]";
           }
         oss << std::endl;
@@ -260,6 +262,11 @@ private:
       oss.str(std::string(""));
       oss << outputBase << "_" << i+1 << outputExt;
       m_CalculatorList->GetNthElement(i)->Write(oss.str());
+      }
+    if (overflowCount)
+      {
+      std::string plural(overflowCount>1?"s":"");
+      otbAppLogWARNING(<< overflowCount << " case"<<plural<<" of overflow detected! (requested number of samples higher than total available samples)");
       }
   }
 
