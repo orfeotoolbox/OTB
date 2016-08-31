@@ -633,7 +633,7 @@ LayerStackItemModel
   //   << section << "," << orientation << "," << role
   //   << ")";
 
-  assert( orientation==Qt::Horizontal );
+  // assert( orientation==Qt::Horizontal );
 
   switch( role )
     {
