@@ -9,6 +9,10 @@ otbImageClassificationFilter.cxx
 otbMachineLearningRegressionTests.cxx
 )
 
+if(OTB_USE_SHARK)
+set(OTBSupervisedTests ${OTBSupervisedTests} otbSharkImageClassificationFilter.cxx)
+endif()
+
 add_executable(otbSupervisedTestDriver ${OTBSupervisedTests})
 target_link_libraries(otbSupervisedTestDriver ${OTBSupervised-Test_LIBRARIES})
 otb_module_target_label(otbSupervisedTestDriver)
@@ -54,3 +58,6 @@ if(OTB_USE_OPENCV)
   include(tests-opencv.cmake)
 endif()
 
+if(OTB_USE_SHARK)
+  include(tests-shark.cmake)
+endif()

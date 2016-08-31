@@ -56,6 +56,14 @@ void RegisterTests()
   REGISTER_TEST(otbKNearestNeighborsRegressionTests);
   REGISTER_TEST(otbRandomForestsRegressionTests);
 #endif  
+
+#ifdef OTB_USE_SHARK
+  REGISTER_TEST(otbSharkRFMachineLearningModelNew);
+  REGISTER_TEST(otbSharkRFMachineLearningModel);
+  REGISTER_TEST(otbSharkRFMachineLearningModelCanRead);
+  REGISTER_TEST(otbSharkImageClassificationFilter);
+#endif
+  
   REGISTER_TEST(otbImageClassificationFilterNew);
   REGISTER_TEST(otbImageClassificationFilter);
 }
