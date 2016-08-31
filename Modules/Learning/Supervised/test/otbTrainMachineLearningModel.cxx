@@ -1037,6 +1037,8 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
 #endif
 
 #ifdef OTB_USE_SHARK
+#include <chrono> // If shark is on, then we are using c++11
+
 bool SharkReadDataFile(const std::string & infname, InputListSampleType * samples, TargetListSampleType * labels)
 {
   std::ifstream ifs(infname.c_str());
@@ -1230,7 +1232,6 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   
   //Predict single samples
   std::cout << "Predict single samples\n";
-  double oa{0};
   auto sIt = samples->Begin();
   auto lIt = labels->Begin();
 
@@ -1238,8 +1239,7 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   auto start = std::chrono::system_clock::now();
   for(; sIt != samples->End(); ++sIt, ++lIt)
     {
-    auto p = classifier->Predict(sIt.GetMeasurementVector())[0];
-    //    oa += (p==(lIt.GetMeasurementVector())[0])?1.0/samples->Size():0;
+    classifier->Predict(sIt.GetMeasurementVector())[0];
     }
   auto duration = std::chrono::duration_cast< TimeT> 
     (std::chrono::system_clock::now() - start);
