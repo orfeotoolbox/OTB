@@ -264,7 +264,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
        ++outIt)
     {
     double confidenceIndex = 0.0;
-    TargetValueType labelValue{m_DefaultLabel};
+    TargetValueType labelValue(m_DefaultLabel);
     if (inputMaskPtr)
       {
       validPoint = maskIt.Get() > 0;

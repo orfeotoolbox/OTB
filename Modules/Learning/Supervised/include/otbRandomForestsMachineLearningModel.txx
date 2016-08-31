@@ -204,9 +204,9 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 {
   cv::Mat cvMat = m_RFModel->getVarImportance();
   VariableImportanceMatrixType itkMat(cvMat.rows,cvMat.cols);
-  for(unsigned int i =0; i<cvMat.rows; i++)
+  for(int i =0; i<cvMat.rows; i++)
     {
-    for(unsigned int j =0; j<cvMat.cols; j++)
+    for(int j =0; j<cvMat.cols; j++)
       {
       itkMat(i,j)=cvMat.at<float>(i,j);
       }
