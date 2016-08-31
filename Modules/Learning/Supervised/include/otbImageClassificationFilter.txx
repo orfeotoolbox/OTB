@@ -273,18 +273,23 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     if (validPoint)
       {
       labelValue = labIt.GetMeasurementVector()[0];
-      ++labIt;
-      if(computeConfidenceMap)
+
+       if(computeConfidenceMap)
         {
         confidenceIndex = confidences->GetMeasurementVector(labIt.GetInstanceIdentifier())[0];
         }
+       
+      ++labIt;    
       }
+    
     outIt.Set(labelValue);
-    if (computeConfidenceMap)
+
+    if(computeConfidenceMap)
       {
       confidenceIt.Set(confidenceIndex);
       ++confidenceIt;
       }
+    
     progress.CompletedPixel();
     }
 }

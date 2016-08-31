@@ -96,6 +96,7 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
   if(quality!=ITK_NULLPTR)
     {
     quality->Clear();
+    quality->Resize(input->Size());
     }
   
   if(m_IsDoPredictBatchMultiThreaded)
