@@ -33,14 +33,16 @@ void
 SamplerBase::SetNumberOfElements(unsigned long needed, unsigned long total)
 {
   bool modified = false;
+  unsigned long neededChecked = needed;
   if (needed > total)
     {
-    itkExceptionMacro(<< "Needed elements (" << needed << 
-      ") greater than total elements" << total << ")." << std::endl);
+    itkWarningMacro(<< "Needed elements (" << needed <<
+      ") will be clamped to total elements (" << total << ")" << std::endl);
+    neededChecked = total;
     }
-  if (m_NeededElements != needed)
+  if (m_NeededElements != neededChecked)
     {
-    m_NeededElements = needed;
+    m_NeededElements = neededChecked;
     modified = true;
     }
   if (m_TotalElements != total)
@@ -66,9 +68,22 @@ void
 SamplerBase::SetRate(double rate, unsigned long total)
 {
   bool modified = false;
-  if (m_Rate != rate)
+  double rateChecked = rate;
+  if (rate > 1.0)
     {
-    m_Rate = rate;
+    itkWarningMacro(<< "Rate (" << rate <<
+      ") will be clamped to 1.0" << std::endl);
+    rateChecked = 1.0;
+    }
+  if (rate < 0.0)
+    {
+    itkWarningMacro(<< "Rate (" << rate <<
+      ") will be clamped to 0.0" << std::endl);
+    rateChecked = 0.0;
+    }
+  if (m_Rate != rateChecked)
+    {
+    m_Rate = rateChecked;
     modified = true;
     }
   if (m_TotalElements != total)
