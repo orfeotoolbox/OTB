@@ -74,6 +74,7 @@ ImageViewManipulator
   AbstractImageViewManipulator( p ),
   m_MousePressPosition(),
   m_ViewSettings( viewSettings ),
+  m_Timer( NULL ),
   m_NativeSpacing(),
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
@@ -94,6 +95,7 @@ ImageViewManipulator
   AbstractImageViewManipulator( p ),
   m_MousePressPosition(),
   m_ViewSettings( otb::ViewSettings::New() ),
+  m_Timer( NULL ),
   m_NativeSpacing(),
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
@@ -555,7 +557,7 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::WheelEvent( QWheelEvent* e )
+::WheelEvent( QWheelEvent * e )
 {
   assert( e!=NULL );
 
@@ -571,15 +573,9 @@ ImageViewManipulator
   int degrees = e->delta() / MOUSE_WHEEL_STEP_FACTOR;
 
   if( modifiers==Qt::ControlModifier )
-    {
-    PointType point;
-
-    Scale( e->pos(), degrees, &point );
-
-    emit RefreshViewRequested();
-
-    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
-    }
+    emit RotateLayersRequested(
+      e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
+    );
   //
   else if( modifiers==Qt::MetaModifier )
     {
@@ -652,9 +648,32 @@ ImageViewManipulator
     }
   //
   else if( modifiers==Qt::NoModifier )
-    emit RotateLayersRequested(
-      e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)
-    );
+    {
+    if( m_Timer==NULL )
+      {
+      m_Timer = new QTimer();
+
+      QObject::connect(
+	m_Timer,
+	SIGNAL( timeout() ), 
+	// to:
+	this,
+	SLOT( OnTimeout() )
+      );
+      }
+
+    m_Timer->start( 500 );
+
+    SetFastRenderMode( true );
+
+    PointType point;
+
+    Scale( e->pos(), degrees, &point );
+
+    emit RefreshViewRequested();
+
+    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
+    }
 }
 
 /******************************************************************************/
@@ -696,10 +715,6 @@ ImageViewManipulator
 
     case Qt::Key_Minus:
       steps = -m_ZoomGranularity;
-      break;
-
-    case Qt::Key_Control:
-      SetFastRenderMode( true );
       break;
 
     case Qt::Key_PageUp:
@@ -865,22 +880,11 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::KeyReleaseEvent( QKeyEvent* e )
+::KeyReleaseEvent( QKeyEvent * )
 {
-  assert( e!=NULL );
+  // assert( e!=NULL );
 
   // qDebug() << this << "::KeyPressEvent(" << e << ")";
-
-  switch( e->key() )
-    {
-    case Qt::Key_Control:
-      SetFastRenderMode( false );
-      emit RefreshViewRequested();
-      break;
-
-    default:
-      break;
-    }
 }
 
 /******************************************************************************/
@@ -980,6 +984,18 @@ ImageViewManipulator
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
+void
+ImageViewManipulator
+::OnTimeout()
+{
+  assert( m_Timer!=NULL );
 
-/*****************************************************************************/
+  SetFastRenderMode( false );
+
+  emit RefreshViewRequested();
+
+  delete m_Timer;
+  m_Timer = NULL;
+}
+
 } // end namespace 'mvd'

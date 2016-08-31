@@ -350,6 +350,9 @@ private:
 private:
   /**
    */
+  QTimer * m_Timer;
+  /**
+   */
   SpacingType m_NativeSpacing;
   /**
    */
@@ -381,6 +384,9 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  void OnTimeout();
 };
 
 } // end namespace 'mvd'
