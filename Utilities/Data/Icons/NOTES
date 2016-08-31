@@ -1,0 +1,13 @@
+Some usefull command :
+
+Pad image to fit a squared size :
+> convert -gravity center -extent 128x128  -background None input output
+
+Resize an image
+> convert -resize 48x48 input output
+
+To generate a MS-Windows .ico , see :
+  * http://freecode.com/projects/png2ico
+  * http://www.winterdrache.de/freeware/png2ico/
+  
+  

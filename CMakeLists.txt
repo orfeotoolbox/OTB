@@ -63,6 +63,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
+include( i18n_qt4 )
+
+reset_qt4_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -357,7 +360,7 @@ add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
 
-#----------------------------------------------------------------------
+#----------------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
   add_custom_target(SuperBuild-archive
@@ -520,3 +523,7 @@ message("======================= End of OTB cmake summary ======================
 
 #don't need this one anymore. so unset it.
 unset(option_list)
+
+#----------------------------------------------------------------------------
+# I18N
+add_subdirectory( i18n )
