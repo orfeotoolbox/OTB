@@ -263,7 +263,7 @@ I18nCoreApplication
     //
     // DEBUG
     case QtDebugMsg:
-#if (ECHO_QDEBUG) || FORCE_QDEBUG
+#if ECHO_QDEBUG || FORCE_QDEBUG
 #if _WIN32
       OutputDebugString( message );
       OutputDebugString( "\n" );
@@ -277,7 +277,7 @@ I18nCoreApplication
     //
     // WARNING
     case QtWarningMsg:
-#if (ECHO_QWARNING) || FORCE_QWARNING
+#if ECHO_QWARNING || FORCE_QWARNING
 #if _WIN32
       OutputDebugString( "WARNG> " );
       OutputDebugString( message );
@@ -292,7 +292,7 @@ I18nCoreApplication
     //
     // CRITICAL
     case QtCriticalMsg:
-#if (ECHO_QCRITICAL) || FORCE_QCRITICAL
+#if ECHO_QCRITICAL || FORCE_QCRITICAL
 #if _WIN32
       OutputDebugString( "ERROR> " );
       OutputDebugString( message );
@@ -315,7 +315,7 @@ I18nCoreApplication
     //
     // FATAL
     case QtFatalMsg:
-#if (ECHO_QFATAL) || FORCE_QFATAL
+#if ECHO_QFATAL || FORCE_QFATAL
 #if _WIN32
       OutputDebugString( "FATAL> " );
       OutputDebugString( message );
