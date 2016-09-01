@@ -1,6 +1,8 @@
 # ![OTB](https://git.orfeo-toolbox.org/otb.git/blob_plain/HEAD:/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
 ## Open Source processing of remote sensing images
 
+[![Join the chat at https://gitter.im/orfeotoolbox/OTB](https://badges.gitter.im/orfeotoolbox/OTB.svg)](https://gitter.im/orfeotoolbox/OTB?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Orfeo ToolBox (OTB) is an open-source C++ library for remote sensing images
 processing, distributed under the CeCILL-v2 license.  It has been initiated and
 funded by CNES (French space agency) in the frame of a program named ORFEO to
