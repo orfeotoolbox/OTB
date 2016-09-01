@@ -18,7 +18,7 @@
 #ifndef __SharkUtils_h
 #define __SharkUtils_h
 
-//#include <shark/Algorithms/Trainers/RFTrainer.h>
+#include "otbRequiresSharkCheck.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -118,5 +118,5 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
 }
 }
 
-
 #endif
+

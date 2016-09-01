@@ -18,6 +18,8 @@
 #ifndef __otbSharkRandomForestsMachineLearningModel_h
 #define __otbSharkRandomForestsMachineLearningModel_h
 
+#include "otbRequiresSharkCheck.h"
+
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
