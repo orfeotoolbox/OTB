@@ -173,7 +173,7 @@ private :
   std::vector< adhocStruct >                m_VAllowedVarNameAddedByUser;
   std::vector< adhocStruct >                m_VFinalAllowedVarName;   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
   std::vector< adhocStruct >                m_VNotAllowedVarName;
-  std::vector< int >                        m_outputsDimensions;
+  std::vector< unsigned int >                        m_outputsDimensions;
 
   unsigned int                             m_SizeNeighbourhood;
 
