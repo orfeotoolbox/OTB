@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+cd `dirname $0`
+
+# NOTE: $OUT_DIR is also used in make_sylinks script (see below)
+# Avoid any pre-mature optimization on variable names here.
+
+OUT_DIR=`pwd`
+CAT=`which cat`
+RM=`which rm`
+CHMOD=`which chmod`
+SED=`which sed`
+
+PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
+
+# No no interference with LD_LIBRARY_PATH
+LD_LIBRARY_PATH=
+
+echo "Configuring..."
+BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
+# run patchelf
+for bin_file in $BINARY_FILES; do
+    #echo "adding rpath to $OUT_DIR/$bin_file"
+    if [ -f $OUT_DIR/$bin_file ]; then
+        $PATCH_ELF_EXE --set-rpath "$OUT_DIR/lib" $OUT_DIR/$bin_file
+    fi
+done
+
+I_AM_XDK=@IS_XDK@
+
+if [ "$I_AM_XDK" = true ] ; then
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
+    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+else
+
+$CAT > $OUT_DIR/monteverdi.sh << EOF
+#!/bin/sh
+unset LD_LIBRARY_PATH
+
+. $OUT_DIR/bin/env_exports
+
+export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+
+$OUT_DIR/bin/monteverdi "\$@"
+EOF
+
+$CHMOD +x $OUT_DIR/monteverdi.sh
+
+$CAT > $OUT_DIR/mapla.sh << EOF
+#!/bin/sh
+unset LD_LIBRARY_PATH
+
+. $OUT_DIR/bin/env_exports
+
+export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+
+$OUT_DIR/bin/mapla "\$@"
+EOF
+
+$CHMOD +x $OUT_DIR/mapla.sh
+
+$CAT > $OUT_DIR/bin/env_exports << EOF
+#!/bin/sh
+
+export LC_NUMERIC=C
+
+if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
+  LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+fi
+
+GDAL_DATA=$OUT_DIR/share/gdal
+GEOTIFF_CSV=$OUT_DIR/share/espg_csv
+
+export GDAL_DATA
+export GEOTIFF_CSV
+export LD_LIBRARY_PATH
+EOF
+
+$CAT > $OUT_DIR/otbenv.profile << EOF
+#!/bin/sh
+PATH=\$PATH:$OUT_DIR/bin
+GDAL_DATA=$OUT_DIR/share/gdal
+GEOTIFF_CSV=$OUT_DIR/share/espg_csv
+
+export LC_NUMERIC=C
+export PATH
+export GDAL_DATA
+export GEOTIFF_CSV
+EOF
+
+fi
+
+#echo "Creating symbolic links..."
+. ./make_symlinks
+
+$RM -fr $OUT_DIR/tools
+
+$RM -f $OUT_DIR/pkgsetup
+
+$RM -f $OUT_DIR/make_symlinks

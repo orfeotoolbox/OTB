@@ -43,7 +43,7 @@ public:
   itkTypeMacro(MeanShiftSmoothing, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("MeanShiftSmoothing");
     SetDescription("Perform mean shift filtering");
@@ -100,7 +100,7 @@ private:
     MandatoryOff("rangeramp");
 
     AddParameter(ParameterType_Empty, "modesearch", "Mode search.");
-    SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path . Be careful, with this option, the result will slightly depend on thread number");
+    SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number");
     EnableParameter("modesearch");
 
 
@@ -115,21 +115,10 @@ private:
 
   }
 
-  void DoUpdateParameters()
-  {
-    if(IsParameterEnabled("modesearch"))
-      {
-      MandatoryOn("foutpos");
-      EnableParameter("foutpos");
-      }
-    else
-      {
-      MandatoryOff("foutpos");
-      DisableParameter("foutpos");
-      }
-  }
+  void DoUpdateParameters() ITK_OVERRIDE
+  {}
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* input = GetParameterImage("in");
 
@@ -142,6 +131,7 @@ private:
     m_Filter->SetThreshold(GetParameterFloat("thres"));
     m_Filter->SetMaxIterationNumber(GetParameterInt("maxiter"));
     m_Filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
+    m_Filter->SetModeSearch(IsParameterEnabled("modesearch"));
 
     //Compute the margin used to ensure exact results (tile wise smoothing)
     //This margin is valid for the default uniform kernel used by the
@@ -156,11 +146,13 @@ private:
       }
 
     SetParameterOutputImage("fout", m_Filter->GetOutput());
-    SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
+    if (IsParameterEnabled("foutpos") && HasValue("foutpos"))
+      {
+      SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
+      }
     if(!IsParameterEnabled("modesearch"))
       {
-        otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
-        m_Filter->SetModeSearch(false);
+      otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
       }
    }
 

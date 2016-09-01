@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateVectorDataFilter_h
-#define __otbConcatenateVectorDataFilter_h
+#ifndef otbConcatenateVectorDataFilter_h
+#define otbConcatenateVectorDataFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbVectorData.h"
@@ -79,11 +79,11 @@ public:
 
 protected:
   ConcatenateVectorDataFilter();
-  virtual ~ConcatenateVectorDataFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ConcatenateVectorDataFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Triggers the Computation of the sample list */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Recursive method to visit efficiently the vectordata*/
   void ProcessNode(TreeNodeType * source, DataNodeType * outputDocument);

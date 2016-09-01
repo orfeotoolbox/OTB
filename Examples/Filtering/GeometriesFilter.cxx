@@ -32,7 +32,7 @@ struct SwapXYFunctor
   typedef OGRGeometry TransformedElementType;
   otb::ogr::UniqueGeometryPtr operator()(OGRGeometry const* in) const
     {
-    otb::ogr::UniqueGeometryPtr out(in ? in->clone() : 0);
+    otb::ogr::UniqueGeometryPtr out(in ? in->clone() : ITK_NULLPTR);
     if (out)
       {
 #if GDAL_VERSION_NUM >= 1900
@@ -71,7 +71,7 @@ int main (int argc, char **argv)
 
     otb::ogr::DataSource::Pointer output
       = workingInplace ? input
-      : outputIsStdout ? 0
+      : outputIsStdout ? ITK_NULLPTR
       :                  otb::ogr::DataSource::New( outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
     std::cout << "input: " << otb::ogr::version_proxy::GetFileListAsStringVector(&input->ogr())[0] << " should be: " << inputFile << "\n";
     if (output)
@@ -94,7 +94,7 @@ int main (int argc, char **argv)
       }
     else
       {
-      filter->UpdateOutputData(0);
+      filter->UpdateOutputData(ITK_NULLPTR);
       assert(filter->GetOutput() && "output not set");
       filter->GetOutput()->Print(std::cout, 0);
       }

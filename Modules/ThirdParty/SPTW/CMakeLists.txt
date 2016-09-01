@@ -1,0 +1,8 @@
+project(OTBSPTW)
+set(OTBSPTW_THIRD_PARTY 1)
+
+set(OTBSPTW_INCLUDE_DIRS ${OTBSPTW_SOURCE_DIR}/src)
+set(OTBSPTW_LIBRARIES otbSPTW)
+
+
+otb_module_impl()

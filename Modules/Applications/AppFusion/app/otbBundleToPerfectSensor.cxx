@@ -50,7 +50,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("BundleToPerfectSensor");
     SetDescription("Perform P+XS pansharpening");
@@ -69,6 +69,9 @@ private:
     SetParameterDescription("inp"," Input panchromatic image.");
     AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
     SetParameterDescription("inxs"," Input XS image.");
+
+    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
+    SetParameterDescription("out"," Output image.");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -89,8 +92,7 @@ private:
     
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     SetParameterDescription("lms"," Spacing of the deformation field. Default is 10 times the PAN image spacing.");
-    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
-    SetParameterDescription("out"," Output image.");
+
     AddRAMParameter();
 
     MandatoryOff("lms");
@@ -102,7 +104,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if(!HasUserValue("mode") && HasValue("inp") && HasValue("inxs") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inp"),GetParameterImage("inxs")))
       {
@@ -111,7 +113,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* panchroV = GetParameterImage("inp");
     FloatVectorImageType* xs = GetParameterImage("inxs");

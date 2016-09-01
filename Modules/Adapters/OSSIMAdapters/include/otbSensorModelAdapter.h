@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSensorModelAdapter_h
-#define __otbSensorModelAdapter_h
+#ifndef otbSensorModelAdapter_h
+#define otbSensorModelAdapter_h
 
 #include "otbDEMHandler.h"
 
@@ -48,7 +48,7 @@ class SensorModelAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef SensorModelAdapter          Self;
+  typedef SensorModelAdapter            Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -98,7 +98,7 @@ public:
   double Optimize();
 
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
-  bool IsValidSensorModel();
+  bool IsValidSensorModel() const;
 
   /** Read geom file and instanciate sensor model */
   bool ReadGeomFile(const std::string & infile);
@@ -108,7 +108,7 @@ public:
 
 protected:
   SensorModelAdapter();
-  virtual ~SensorModelAdapter();
+  ~SensorModelAdapter() ITK_OVERRIDE;
 
 private:
   SensorModelAdapter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMultiSegmentationToRCC8GraphFilter_txx
-#define __otbImageMultiSegmentationToRCC8GraphFilter_txx
+#ifndef otbImageMultiSegmentationToRCC8GraphFilter_txx
+#define otbImageMultiSegmentationToRCC8GraphFilter_txx
 
 #include "otbImageMultiSegmentationToRCC8GraphFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"
@@ -133,7 +133,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   // Input image list pointer
   InputImageListPointerType segList = this->GetInput();
 
-  // Ouptut graph pointer
+  // Output graph pointer
   OutputGraphPointerType graph = this->GetOutput();
 
   // invert value vector

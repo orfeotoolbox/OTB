@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleGenerator_txx
-#define __otbListSampleGenerator_txx
+#ifndef otbListSampleGenerator_txx
+#define otbListSampleGenerator_txx
 
 #include "otbListSampleGenerator.h"
 
@@ -97,7 +97,7 @@ ListSampleGenerator<TImage, TVectorData>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const ImageType *>(this->ProcessObject::GetInput(0));
@@ -121,7 +121,7 @@ ListSampleGenerator<TImage, TVectorData>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const VectorDataType *>(this->ProcessObject::GetInput(1));
@@ -326,6 +326,7 @@ ListSampleGenerator<TImage, TVectorData>
 
   assert(trainingListSample->Size() == trainingListLabel->Size());
   assert(validationListSample->Size() == validationListLabel->Size());
+  this->UpdateProgress(1.0f);
 }
 
 template <class TImage, class TVectorData>
@@ -399,23 +400,30 @@ ListSampleGenerator<TImage, TVectorData>
        itmap != m_ClassesSize.end();
        ++itmap)
     {
-    m_ClassesProbTraining[itmap->first] = minSizeTraining / itmap->second;
-    m_ClassesProbValidation[itmap->first] = minSizeValidation / itmap->second;
-    if(!m_BoundByMin)
+    if (m_BoundByMin)
+      {
+      m_ClassesProbTraining[itmap->first] = minSizeTraining / itmap->second;
+      m_ClassesProbValidation[itmap->first] = minSizeValidation / itmap->second;
+      }
+    else
       {
       long int maxSizeT = (itmap->second)*(1.0 - m_ValidationTrainingProportion);
       long int maxSizeV = (itmap->second)*m_ValidationTrainingProportion;
-      maxSizeT = (m_MaxTrainingSize == -1)?maxSizeT:m_MaxTrainingSize;
-      maxSizeV = (m_MaxValidationSize == -1)?maxSizeV:m_MaxValidationSize;
-    
-      //not enough samples to respect the bounds
-      if(maxSizeT+maxSizeV > itmap->second)
+
+      // Check if max sizes respect the maximum bounds
+      double correctionRatioTrain = 1.0;
+      if((m_MaxTrainingSize > -1) && (m_MaxTrainingSize < maxSizeT))
         {
-        maxSizeT = (itmap->second)*(1.0 - m_ValidationTrainingProportion);
-        maxSizeV = (itmap->second)*m_ValidationTrainingProportion;
+        correctionRatioTrain = (double)(m_MaxTrainingSize) / (double)(maxSizeT);
         }
-      m_ClassesProbTraining[itmap->first] = maxSizeT/(itmap->second);
-      m_ClassesProbValidation[itmap->first] = maxSizeV/(itmap->second);
+      double correctionRatioValid = 1.0;
+      if((m_MaxValidationSize > -1) && (m_MaxValidationSize < maxSizeV))
+        {
+        correctionRatioValid = (double)(m_MaxValidationSize) / (double)(maxSizeV);
+        }
+      double correctionRatio = std::min(correctionRatioTrain,correctionRatioValid);
+      m_ClassesProbTraining[itmap->first] = correctionRatio*(1.0 - m_ValidationTrainingProportion);
+      m_ClassesProbValidation[itmap->first] = correctionRatio*m_ValidationTrainingProportion;
       }
     }
 }

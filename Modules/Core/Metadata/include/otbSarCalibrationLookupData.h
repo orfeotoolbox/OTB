@@ -35,14 +35,13 @@ class ITK_EXPORT SarCalibrationLookupData : public itk::LightObject {
   SarCalibrationLookupData()
     :m_Type(0)
   {
-
   }
 
-  virtual ~SarCalibrationLookupData()
+  ~SarCalibrationLookupData() ITK_OVERRIDE
   {
   }
 
-  virtual double GetValue(const IndexValueType itkNotUsed(x), const IndexValueType itkNotUsed(y))
+  virtual double GetValue(const IndexValueType itkNotUsed(x), const IndexValueType itkNotUsed(y)) const
   {
     return 1.0;
   }
@@ -54,7 +53,7 @@ class ITK_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   itkGetMacro(Type, short);
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const
+  void PrintSelf(std::ostream & os, itk::Indent indent) const ITK_OVERRIDE
   {
     os << indent << " lookup table type:'" << m_Type << "'" << std::endl;
     Superclass::PrintSelf(os, indent);

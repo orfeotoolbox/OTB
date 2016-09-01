@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToOGRDataFilter_h
-#define __otbPersistentImageToOGRDataFilter_h
+#ifndef otbPersistentImageToOGRDataFilter_h
+#define otbPersistentImageToOGRDataFilter_h
 
 #include "otbPersistentImageFilter.h"
 
@@ -104,6 +104,12 @@ public:
    * for fusioning streaming tiles.
    */
   itkGetMacro(StreamSize, SizeType);
+  
+  /** Set the geometry type */
+  itkSetMacro(GeometryType,OGRwkbGeometryType);
+  
+  /** Get the geometry type */
+  itkGetMacro(GeometryType,OGRwkbGeometryType);
 
   /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
@@ -118,6 +124,15 @@ public:
 
   /** Set the OGR layer creation options */
   void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
+  
+  /** Get the OGR layer creation options */
+  const std::vector<std::string> & GetOGRLayerCreationOptions(void);
+
+  /** Set the field type for class label */
+  itkSetMacro(FieldType,OGRFieldType);
+
+  /** Get the field type for class label */
+  itkGetMacro(FieldType,OGRFieldType);
 
 protected:
   PersistentImageToOGRDataFilter();
@@ -139,6 +154,7 @@ private:
   OGRwkbGeometryType m_GeometryType;
   SizeType m_StreamSize;
   std::vector<std::string> m_OGRLayerCreationOptions;
+  OGRFieldType m_FieldType;
 
 }; // end of class
 } // end namespace otb

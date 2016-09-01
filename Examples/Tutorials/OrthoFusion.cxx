@@ -139,8 +139,8 @@ int main(int argc, char* argv[])
   spacing[1] = atof(argv[11]);
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[6], NULL);
-  origin[1] = strtod(argv[7], NULL);
+  origin[0] = strtod(argv[6], ITK_NULLPTR);
+  origin[1] = strtod(argv[7], ITK_NULLPTR);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

@@ -44,6 +44,13 @@ $ make
 $ make install
 \end{verbatim}
 
+Remember to set the \texttt{OTB\_APPLICATION\_PATH} environment variable to
+allow monteverdi to find the OTB applications:
+\begin{verbatim}
+export OTB_APPLICATION_PATH=~/OTB/build/lib/otb/applications
+./bin/monteverdi
+\end{verbatim}
+
 \section{Windows}
 
 Everything that is needed for Monteverdi development on Windows, including compiling from source, is covered in details on the OTB wiki at:

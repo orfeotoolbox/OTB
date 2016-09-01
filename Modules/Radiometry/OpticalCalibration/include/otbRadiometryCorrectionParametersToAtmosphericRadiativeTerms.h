@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
-#define __otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
+#ifndef otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
+#define otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
 
 #include "otbAtmosphericRadiativeTerms.h"
 #include "otbImageMetadataCorrectionParameters.h"

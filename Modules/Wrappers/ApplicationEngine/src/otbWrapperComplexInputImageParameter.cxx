@@ -52,10 +52,10 @@ ComplexInputImageParameter::SetFromFileName(const std::string& filename)
   if (!filename.empty())
     {
     ComplexFloatVectorReaderType::Pointer reader = ComplexFloatVectorReaderType::New();
-    reader->SetFileName(filename);
 
     try
       {
+      reader->SetFileName(filename);
       reader->UpdateOutputInformation();
       }
     catch(itk::ExceptionObject & /*err*/)
@@ -127,15 +127,6 @@ ComplexInputImageParameter::SetImage(ComplexFloatVectorImageType* image)
   this->SetImage<ComplexFloatVectorImageType>( image );
 }
 
-
-template <class TComplexInputImage>
-void
-ComplexInputImageParameter::SetImage(TComplexInputImage* image)
-{
-  m_Image = image;
-}
-
-
 bool
 ComplexInputImageParameter::HasValue() const
 {
@@ -148,9 +139,9 @@ ComplexInputImageParameter::HasValue() const
 void
 ComplexInputImageParameter::ClearValue()
 {
-  m_Image   = NULL;
-  m_Reader = NULL;
-  m_Caster = NULL;
+  m_Image   = ITK_NULLPTR;
+  m_Reader = ITK_NULLPTR;
+  m_Caster = ITK_NULLPTR;
   m_FileName = "";
   m_PreviousFileName="";
   m_UseFilename = true;

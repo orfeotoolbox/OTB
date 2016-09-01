@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSimpleRcsPanSharpeningFusionImageFilter_h
-#define __otbSimpleRcsPanSharpeningFusionImageFilter_h
+#ifndef otbSimpleRcsPanSharpeningFusionImageFilter_h
+#define otbSimpleRcsPanSharpeningFusionImageFilter_h
 
 #include "otbConvolutionImageFilter.h"
 #include "otbImage.h"
@@ -94,13 +94,13 @@ protected:
   SimpleRcsPanSharpeningFusionImageFilter();
 
   /** Destructor */
-  virtual ~SimpleRcsPanSharpeningFusionImageFilter() {};
+  ~SimpleRcsPanSharpeningFusionImageFilter() ITK_OVERRIDE {};
 
   /** Call to generate data, wiring composite internal minipipeline */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SimpleRcsPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented

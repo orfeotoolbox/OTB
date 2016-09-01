@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSarBrightnessFunction_txx
-#define __otbSarBrightnessFunction_txx
+#ifndef otbSarBrightnessFunction_txx
+#define otbSarBrightnessFunction_txx
 
 #include "otbSarBrightnessFunction.h"
 #include "itkNumericTraits.h"
@@ -70,6 +70,26 @@ SarBrightnessFunction<TInputImage, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
+  if (m_Noise)
+    {
+    os << indent << "Noise:\n";
+    m_Noise->Print(os, indent.GetNextIndent());
+    }
+  if (m_AntennaPatternNewGain)
+    {
+    os << indent << "AntennaPatternNewGain:\n";
+    m_AntennaPatternNewGain->Print(os, indent.GetNextIndent());
+    }
+  if (m_AntennaPatternOldGain)
+    {
+    os << indent << "AntennaPatternOldGain:\n";
+    m_AntennaPatternOldGain->Print(os, indent.GetNextIndent());
+    }
+  if (m_RangeSpreadLoss)
+    {
+    os << indent << "RangeSpreadLoss:\n";
+    m_RangeSpreadLoss->Print(os, indent.GetNextIndent());
+    }
 }
 
 /**

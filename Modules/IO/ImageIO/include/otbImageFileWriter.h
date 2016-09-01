@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileWriter_h
-#define __otbImageFileWriter_h
+#ifndef otbImageFileWriter_h
+#define otbImageFileWriter_h
 
 #include "otbImageIOBase.h"
 #include "itkProcessObject.h"
@@ -43,7 +43,7 @@ namespace otb
  * ImageFileWriter will write directly the streaming buffer in the image file, so
  * that the output image never needs to be completely allocated
  *
- * ImageFileWriter supports extended filenames, which allow controling
+ * ImageFileWriter supports extended filenames, which allow controlling
  * some properties of the output file. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.
@@ -165,7 +165,7 @@ public:
 
   /** Override Update() from ProcessObject because this filter
    *  has no output. */
-  virtual void Update();
+  void Update() ITK_OVERRIDE;
 
   /** ImageFileWriter Methods */
   virtual void SetFileName(const char* extendedFileName);
@@ -198,11 +198,11 @@ public:
 
 protected:
   ImageFileWriter();
-  virtual ~ImageFileWriter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageFileWriter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Does the real work. */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   ImageFileWriter(const ImageFileWriter &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetAndValuesFunction_h
-#define __otbPointSetAndValuesFunction_h
+#ifndef otbPointSetAndValuesFunction_h
+#define otbPointSetAndValuesFunction_h
 
 #include "itkFunctionBase.h"
 #include "itkContinuousIndex.h"
@@ -46,11 +46,8 @@ public:
   typedef itk::SmartPointer<const Self>
   ConstPointer;
 
-  /** New macro */
-  itkNewMacro(Self);
-
   /** Creation through object factory macro */
-  itkTypeMacro(PointSetAndValuesFunction, FunctionBase);
+  itkTypeMacro(PointSetAndValuesFunction, itk::FunctionBase);
 
   typedef TPointSet                           PointSetType;
   typedef typename PointSetType::ConstPointer PointSetConstPointerType;

@@ -45,11 +45,11 @@ private:
   {
   }
 
-  virtual ~ObtainUTMZoneFromGeoPoint()
+  ~ObtainUTMZoneFromGeoPoint() ITK_OVERRIDE
   {
   }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ObtainUTMZoneFromGeoPoint");
     SetDescription("UTM zone determination from a geographic point.");
@@ -79,12 +79,12 @@ private:
     SetDocExampleParameterValue("lon","124.0");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
                                                   GetParameterFloat("lat"));

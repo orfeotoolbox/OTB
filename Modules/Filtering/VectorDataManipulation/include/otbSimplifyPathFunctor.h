@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSimplifyPathFunctor_h
-#define __otbSimplifyPathFunctor_h
+#ifndef otbSimplifyPathFunctor_h
+#define otbSimplifyPathFunctor_h
 
 #include "otbMath.h"
 

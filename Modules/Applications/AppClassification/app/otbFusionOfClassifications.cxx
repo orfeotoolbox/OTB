@@ -90,7 +90,7 @@ public:
   itkTypeMacro(FusionOfClassifications, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("FusionOfClassifications");
     SetDescription("Fuses several classifications maps of the same image on the basis of class labels.");
@@ -168,7 +168,7 @@ private:
     SetDocExampleParameterValue("out","classification_fused.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
@@ -245,16 +245,6 @@ private:
 
       MapOfClassesType::iterator  itMapOfClassesRef, itMapOfClassesProd;
 
-      /*for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
-        {
-        std::cout << "mapOfClassesRefClX[" << itMapOfClassesRef->first << "] = " << itMapOfClassesRef->second << std::endl;
-        }
-      std::cout << std::endl;
-      for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
-        {
-        std::cout << "mapOfClassesProdClX[" << itMapOfClassesProd->first << "] = " << itMapOfClassesProd->second << std::endl;
-        }*/
-
       // Formatting confusionMatrixClX from confusionMatrixClXTemp in order to make confusionMatrixClX a square matrix
       // from the reference labels in mapOfClassesRefClX
       int indiceLabelRef = 0, indiceLabelProd = 0;
@@ -284,16 +274,13 @@ private:
           }
         ++indiceLabelRef;
         }
-
-      //std::cout << "confusionMatrixClXTemp:" << std::endl << confusionMatrixClXTemp << std::endl << std::endl;
-      //std::cout << "confusionMatrixClX:" << std::endl << confusionMatrixClX << std::endl;
       }
     inFile.close();
     return EXIT_SUCCESS;
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Clear any previous filter
     m_Filters.clear();

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphFileWriter_txx
-#define __otbRCC8GraphFileWriter_txx
+#ifndef otbRCC8GraphFileWriter_txx
+#define otbRCC8GraphFileWriter_txx
 
 #include "otbRCC8GraphFileWriter.h"
 #include "otbRCC8VertexIterator.h"
@@ -92,7 +92,7 @@ RCC8GraphFileWriter<TInputGraph>
   itkDebugMacro(<< "Writing a RCC8Graph file");
 
   // Make sure input is available
-  if (input == 0)
+  if (input == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "No input to writer!");
     }

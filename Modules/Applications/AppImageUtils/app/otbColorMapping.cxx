@@ -244,7 +244,7 @@ public:
     <FloatImageType, LabelImageType>                   CasterToLabelImageType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ColorMapping");
     SetDescription("Maps an input label image to 8-bits RGB using look-up tables.");
@@ -392,7 +392,7 @@ private:
     SetDocExampleParameterValue("out", "Colorized_ROI_QB_MUL_1_SVN_CLASS_MULTI.tif");
  }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Make sure the operation color->label is not called with methods continuous or image.
     // These methods are not implemented for this operation yet.
@@ -406,7 +406,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     if(GetParameterInt("op")==0)
     {
@@ -577,10 +577,7 @@ private:
 
       // Generate
       histogramFilter->Update();
-      const HistogramListType * histogramList = histogramFilter->GetOutput(); //
-      // HistogramPointerType histoBand=histogramList->GetNelements(0);
-      //  std::cout<<histoBand->GetFrequency(0, 0)<<std::endl;
-
+      const HistogramListType * histogramList = histogramFilter->GetOutput();
 
       ImageMetadataInterfaceType::Pointer
           metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(supportImage->GetMetaDataDictionary());

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_openjpeg_h
-#define __otb_openjpeg_h
+#ifndef otb_openjpeg_h
+#define otb_openjpeg_h
 
 /* different API between 2.0 and 2.1 */
 #define OTBOpenJPEG_VERSION_NUMBER @OTBOpenJPEG_VERSION_NUMBER@

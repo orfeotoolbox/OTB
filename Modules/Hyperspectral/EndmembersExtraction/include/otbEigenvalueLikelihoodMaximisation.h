@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEigenvalueLikelihoodMaximisation_h
-#define __otbEigenvalueLikelihoodMaximisation_h
+#ifndef otbEigenvalueLikelihoodMaximisation_h
+#define otbEigenvalueLikelihoodMaximisation_h
 
 #include "itkObjectFactory.h"
 #include "itkLightObject.h"
@@ -104,8 +104,8 @@ public:
 
 protected:
   EigenvalueLikelihoodMaximisation();
-  virtual ~EigenvalueLikelihoodMaximisation() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~EigenvalueLikelihoodMaximisation() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   EigenvalueLikelihoodMaximisation(const Self &); //purposely not implemented

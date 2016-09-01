@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSFSTexturesFunctor_h
-#define __otbSFSTexturesFunctor_h
+#ifndef otbSFSTexturesFunctor_h
+#define otbSFSTexturesFunctor_h
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"

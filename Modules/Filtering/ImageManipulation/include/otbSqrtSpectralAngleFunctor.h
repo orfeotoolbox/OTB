@@ -15,10 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSqrtSpectralAngleFunctor_h
-#define __otbSqrtSpectralAngleFunctor_h
+#ifndef otbSqrtSpectralAngleFunctor_h
+#define otbSqrtSpectralAngleFunctor_h
 
 #include "otbSpectralAngleFunctor.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -39,10 +40,10 @@ public:
   typedef SpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
 
   SqrtSpectralAngleFunctor() {}
-  virtual ~SqrtSpectralAngleFunctor() {}
+  ~SqrtSpectralAngleFunctor() ITK_OVERRIDE {}
 
 protected:
-  virtual TOutputPixel Evaluate(const TInputVectorPixel& inPix) const
+  TOutputPixel Evaluate(const TInputVectorPixel& inPix) const ITK_OVERRIDE
   {
     return static_cast<TOutputPixel>(vcl_sqrt(Superclass::Evaluate(inPix)));
   }

@@ -34,14 +34,18 @@ QtWidgetComplexInputImageParameter::~QtWidgetComplexInputImageParameter()
 
 void QtWidgetComplexInputImageParameter::DoUpdateGUI()
 {
-  QString text(
-    QFile::decodeName(
-      m_ComplexInputImageParam->GetFileName().c_str()
-    )
-  );
+  //update lineedit if HasUserValue flag is set(from xml)
+  if(m_ComplexInputImageParam->HasUserValue())
+    {
+    QString text(
+      QFile::decodeName(
+        m_ComplexInputImageParam->GetFileName().c_str()
+      )
+    );
 
-  if (text != m_Input->text())
-    m_Input->setText(text);
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetComplexInputImageParameter::DoCreateWidget()
@@ -75,24 +79,48 @@ void QtWidgetComplexInputImageParameter::SelectFile()
   fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("Raster files (*)");
 
+  assert( m_Input!=NULL );
+
+  if( !m_Input->text().isEmpty() )
+    {
+    QFileInfo finfo( m_Input->text() );
+
+    fileDialog.setDirectory(
+      finfo.isDir()
+      ? finfo.absoluteFilePath()
+      : finfo.absoluteDir()
+      );
+    }
+
   if (fileDialog.exec())
     {
-    this->SetFileName( fileDialog.selectedFiles().at(0) );
-
-    m_Input->setText(fileDialog.selectedFiles().at(0));
+    if ( this->SetFileName( fileDialog.selectedFiles().at(0) ) == true )
+      m_Input->setText(fileDialog.selectedFiles().at(0));
+    else
+      {
+      std::ostringstream oss;
+      oss << "The given file "
+          << QFile::encodeName(	fileDialog.selectedFiles().at( 0 ) ).constData()
+          << " is not valid.";
+      this->GetModel()->SendLogWARNING( oss.str() );
+      }
     }
 }
 
-void QtWidgetComplexInputImageParameter::SetFileName(const QString& value)
+bool QtWidgetComplexInputImageParameter::SetFileName(const QString& value)
 {
+  bool res = false;
   // save value
-  m_ComplexInputImageParam->SetFromFileName(
-    QFile::encodeName( value ).constData()
-  );
+  if( m_ComplexInputImageParam->SetFromFileName(
+    QFile::encodeName( value ).constData()) == true)
+    {
+    res = true;
+    // notify of value change
+    QString key( m_ComplexInputImageParam->GetKey() );
+    emit ParameterChanged(key);
+    }
 
-  // notify of value change
-  QString key( m_ComplexInputImageParam->GetKey() );
-  emit ParameterChanged(key);
+  return res;
 }
 
 }

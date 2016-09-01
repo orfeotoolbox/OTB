@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFineRegistrationImageFilter_txx
-#define __otbFineRegistrationImageFilter_txx
+#ifndef otbFineRegistrationImageFilter_txx
+#define otbFineRegistrationImageFilter_txx
 
 #include "otbFineRegistrationImageFilter.h"
 
@@ -70,7 +70,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
   // Default offset
   m_InitialOffset.Fill(0);
 
-  m_Transform = NULL;
+  m_Transform = ITK_NULLPTR;
  }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
@@ -98,7 +98,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
  {
   if (this->GetNumberOfInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
  }
@@ -110,7 +110,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
  {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
  }
@@ -122,7 +122,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
  {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputDisplacementField *>(this->itk::ProcessObject::GetOutput(1));
  }

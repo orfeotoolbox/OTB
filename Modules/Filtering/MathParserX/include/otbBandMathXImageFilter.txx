@@ -18,12 +18,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBandMathXImageFilter_txx
-#define __otbBandMathXImageFilter_txx
+#ifndef otbBandMathXImageFilter_txx
+#define otbBandMathXImageFilter_txx
 #include "otbBandMathXImageFilter.h"
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkImageScanlineConstIterator.h"
+#include "itkImageScanlineIterator.h"
+#include "itkImageRegionConstIteratorWithOnlyIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
@@ -515,7 +518,7 @@ template< typename TImage >
 std::string BandMathXImageFilter<TImage>
 ::GetExpression(int IDExpression) const
 {
-  return m_Expression.at(IDExpression);
+  return m_Expression[IDExpression];
 }
 
 
@@ -567,8 +570,8 @@ void BandMathXImageFilter<TImage>
   for(unsigned int i=0; i<m_VAllowedVarNameAuto.size(); i++)
     m_VFinalAllowedVarName.push_back(m_VAllowedVarNameAuto[i]);
 
-
-  for(unsigned int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression) // For each expression
+  unsigned int nbExpr = m_Expression.size();
+  for(unsigned int IDExpression=0; IDExpression < nbExpr; ++IDExpression) // For each expression
   {
       ParserType::Pointer dummyParser = ParserType::New();
       dummyParser->SetExpr(this->GetExpression(IDExpression));
@@ -608,14 +611,17 @@ void BandMathXImageFilter<TImage>
   }
 
 
-  // Register variables for each parser (important : one parser per thread)
+  // Register variables for each parser (important : one parser per thread and per expression)
   m_VParser.clear();
   unsigned int nbThreads = this->GetNumberOfThreads();
-  typename std::vector<ParserType::Pointer>::iterator        itParser;
-  m_VParser.resize(nbThreads);
-  for(itParser = m_VParser.begin(); itParser < m_VParser.end(); itParser++)
+  for (unsigned int k=0 ; k<nbThreads ; k++)
     {
-      *itParser = ParserType::New();
+    std::vector<ParserType::Pointer> parserList;
+    for (unsigned int i=0 ; i<nbExpr ; i++)
+      {
+      parserList.push_back(ParserType::New());
+      }
+    m_VParser.push_back(parserList);
     }
 
   // Important to remember that variables of m_VVarName come from a call of GetExprVar method
@@ -724,7 +730,10 @@ void BandMathXImageFilter<TImage>
 
 
         //Register variable
-        m_VParser.at(i)->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value));
+        for (unsigned int k=0 ; k<nbExpr ; k++)
+          {
+          m_VParser[i][k]->DefineVar(m_AImage[i][j].name, &(m_AImage[i][j].value));
+          }
 
 
         initValue += 0.001;
@@ -732,6 +741,15 @@ void BandMathXImageFilter<TImage>
           initValue=0.1;
       }
   }
+
+  // Set expressions
+  for (unsigned int k=0 ; k<nbThreads ; k++)
+    {
+    for (unsigned int i=0 ; i<nbExpr ; i++)
+      {
+      m_VParser[k][i]->SetExpr(m_Expression[i]);
+      }
+    }
 
 }
 
@@ -821,11 +839,14 @@ void BandMathXImageFilter< TImage >
 
   for(int i=0; i<(int) m_Expression.size(); ++i)
   {
-    m_VParser.at(0)->SetExpr(m_Expression[i]);
-    ValueType value = m_VParser.at(0)->Eval();
+    ValueType value = m_VParser[0][i]->EvalRef();
 
     switch (value.GetType())
     {   //ValueType
+        case 'b':
+        itkExceptionMacro(<< "Booleans not supported." << std::endl);
+        break;
+        
         case 'i':
         m_outputsDimensions.push_back(1);
         break;
@@ -839,13 +860,18 @@ void BandMathXImageFilter< TImage >
         break;
 
         case 'm':
-        mup::matrix_type vect = value.GetArray();
+        {
+        const mup::matrix_type &vect = value.GetArray();
         if ( vect.GetRows() == 1 ) //Vector
           m_outputsDimensions.push_back(vect.GetCols());
         else //Matrix
           itkExceptionMacro(<< "Result of the evaluation can't be a matrix." << std::endl);
+        }
         break;
 
+        default:
+          itkExceptionMacro(<< "Unknown output type : "<< value.GetType() << std::endl);
+        break;
     }
 
     //std::cout << "Type = " << value.GetType() << " dimension = " << m_outputsDimensions.back() << std::endl;
@@ -1024,17 +1050,19 @@ void BandMathXImageFilter<TImage>
   //----------------- --------- -----------------//
   //----------------- Iterators -----------------//
   //----------------- --------- -----------------//
-  typedef itk::ImageRegionConstIterator<TImage> ImageRegionConstIteratorType;
-  std::vector< ImageRegionConstIteratorType > Vit;
+  typedef itk::ImageScanlineConstIterator<TImage> ImageScanlineConstIteratorType;
+  typedef itk::ImageScanlineIterator<TImage> ImageScanlineIteratorType;
+  typedef itk::ImageRegionConstIteratorWithOnlyIndex<TImage> IndexIteratorType;
+  std::vector< ImageScanlineConstIteratorType > Vit;
   Vit.resize(nbInputImages);
   for(unsigned int j=0; j < nbInputImages; ++j)
-    Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
+    Vit[j] = ImageScanlineConstIteratorType (this->GetNthInput(j), outputRegionForThread);
     
 
-  std::vector< ImageRegionConstIteratorType > VoutIt;
+  std::vector< ImageScanlineIteratorType > VoutIt;
   VoutIt.resize(m_Expression.size());
   for(unsigned int j=0; j < VoutIt.size(); ++j)
-    VoutIt[j] = ImageRegionConstIteratorType (this->GetOutput(j), outputRegionForThread);
+    VoutIt[j] = ImageScanlineIteratorType (this->GetOutput(j), outputRegionForThread);
     
 
   //Special case : neighborhoods
@@ -1049,10 +1077,24 @@ void BandMathXImageFilter<TImage>
         VNit.back().NeedToUseBoundaryConditionOn();
      }
 
+  // Index only iterator
+  IndexIteratorType indexIterator(this->GetNthInput(0), outputRegionForThread);
 
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
+  // iterator on variables
+  typename std::vector<adhocStruct>::iterator iterVarStart =
+    m_AImage[threadId].begin();
+  typename std::vector<adhocStruct>::iterator iterVarEnd =
+    m_AImage[threadId].end();
+  typename std::vector<adhocStruct>::iterator iterVar =
+    iterVarStart;
+
+  // temporary output vectors
+  std::vector<PixelType> tmpOutputs(m_Expression.size());
+  for(unsigned int k=0; k<m_Expression.size(); ++k)
+    tmpOutputs[k].SetSize(m_outputsDimensions[k]);
 
   //----------------- --------------------- -----------------//
   //----------------- Variable affectations -----------------//
@@ -1060,23 +1102,25 @@ void BandMathXImageFilter<TImage>
   for(unsigned int j=0; j < nbInputImages; ++j)       {  Vit[j].GoToBegin();     }
   for(unsigned int j=0; j < m_Expression.size(); ++j) {  VoutIt[j].GoToBegin();  }
   for(unsigned int j=0; j < VNit.size(); ++j)         {  VNit[j].GoToBegin();    }
+  indexIterator.GoToBegin();
 
   while(!Vit[0].IsAtEnd()) // For each pixel
-  {
-
-    int ngbhNameIndex=0; int index;
-    for(unsigned int j=0; j < m_AImage[threadId].size(); ++j) // For each variable, perform a copy
     {
+    while(!Vit[0].IsAtEndOfLine()) // For each line
+      {
+      int ngbhNameIndex=0; int index;
 
-       switch (m_AImage[threadId][j].type)
+      iterVar = iterVarStart;
+      while (iterVar != iterVarEnd)
         {
-
+        switch (iterVar->type)
+          {
           case 0 : //idxX
-            m_AImage[threadId][j].value = static_cast<double>(Vit[0].GetIndex()[0]);
+            iterVar->value = static_cast<double>(indexIterator.GetIndex()[0]);
           break;
 
           case 1 : //idxY
-            m_AImage[threadId][j].value = static_cast<double>(Vit[0].GetIndex()[1]);
+            iterVar->value = static_cast<double>(indexIterator.GetIndex()[1]);
           break;
 
           case 2 : //Spacing X (imiPhyX)
@@ -1088,28 +1132,28 @@ void BandMathXImageFilter<TImage>
           break;
 
           case 4 : //vector
-            // m_AImage[threadId][j].info[0] : Input image #ID
-            for(int p=0; p < m_AImage[threadId][j].value.GetCols(); ++p)
-              m_AImage[threadId][j].value.At(0,p) = Vit[m_AImage[threadId][j].info[0]].Get()[p];
+            // iterVar->info[0] : Input image #ID
+            for(int p=0; p < iterVar->value.GetCols(); ++p)
+              iterVar->value.At(0,p) = Vit[iterVar->info[0]].Get()[p];
           break;
 
           case 5 : //pixel
-            // m_AImage[threadId][j].info[0] : Input image #ID
-            // m_AImage[threadId][j].info[1] : Band #ID
-            m_AImage[threadId][j].value = Vit[m_AImage[threadId][j].info[0]].Get()[m_AImage[threadId][j].info[1]];
+            // iterVar->info[0] : Input image #ID
+            // iterVar->info[1] : Band #ID
+            iterVar->value = Vit[iterVar->info[0]].Get()[iterVar->info[1]];
           break;
 
           case 6 : //neighborhood
     
-          // m_AImage[threadId][j].info[1] : Band #ID
-          if (m_AImage[threadId][j].info[2]*m_AImage[threadId][j].info[3] != (int) VNit[ngbhNameIndex].Size() )
+          // iterVar->info[1] : Band #ID
+          if (iterVar->info[2]*iterVar->info[3] != (int) VNit[ngbhNameIndex].Size() )
             itkExceptionMacro(<< "Size of muparserx variable is different from its related otb neighborhood iterator")
 
           index=0;
-          for(int rows=0; rows<m_AImage[threadId][j].info[3]; ++rows)
-            for(int cols=0; cols<m_AImage[threadId][j].info[2]; ++cols)
+          for(int rows=0; rows<iterVar->info[3]; ++rows)
+            for(int cols=0; cols<iterVar->info[2]; ++cols)
               {
-                m_AImage[threadId][j].value.At(rows,cols) = VNit[ngbhNameIndex].GetPixel(index)[m_AImage[threadId][j].info[1]];
+                iterVar->value.At(rows,cols) = VNit[ngbhNameIndex].GetPixel(index)[iterVar->info[1]];
                 index++;
               }
 
@@ -1127,72 +1171,76 @@ void BandMathXImageFilter<TImage>
           default :
             itkExceptionMacro(<< "Type of the variable is unknown");
           break;
-        }
-    }//End while
+          }
 
+        iterVar++;
+        }//End while on vars
 
-  //----------------- ----------- -----------------//
-  //----------------- Evaluations -----------------//
-  //----------------- ----------- -----------------//
-  for(unsigned int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression)
-  {
-
-        m_VParser[threadId]->SetExpr(m_Expression[IDExpression]);
-
-        value = m_VParser[threadId]->Eval();
+      //----------------- ----------- -----------------//
+      //----------------- Evaluations -----------------//
+      //----------------- ----------- -----------------//
+      for(unsigned int IDExpression=0; IDExpression<m_Expression.size(); ++IDExpression)
+        {
+        value = m_VParser[threadId][IDExpression]->EvalRef();
 
         switch (value.GetType())
-        {   //ValueType
-            case 'i':
-            VoutIt[IDExpression].Get()[0] = value.GetInteger();
-            break;
+          {   //ValueType
+          case 'i':
+          tmpOutputs[IDExpression][0] = value.GetInteger();
+          break;
 
-            case 'f':
-            VoutIt[IDExpression].Get()[0] = value.GetFloat();
-            break;
+          case 'f':
+          tmpOutputs[IDExpression][0] = value.GetFloat();
+          break;
 
-            case 'c':
-            itkExceptionMacro(<< "Complex numbers are not supported." << std::endl);
-            break;
+          case 'c':
+          itkExceptionMacro(<< "Complex numbers are not supported." << std::endl);
+          break;
 
-            case 'm':
-            mup::matrix_type vect = value.GetArray();
-
+          case 'm':
+            {
+            const mup::matrix_type &vect = value.GetArray();
+  
             if ( vect.GetRows() == 1 ) //Vector
               for(int p=0; p<vect.GetCols(); ++p)
-                VoutIt[IDExpression].Get()[p] = vect.At(0,p).GetFloat();
+                tmpOutputs[IDExpression][p] = vect.At(0,p).GetFloat();
             else //Matrix
               itkExceptionMacro(<< "Result of the evaluation can't be a matrix." << std::endl);
-            break;
-        }
-
+            }
+          break;
+          }
  
         //----------------- Pixel affectations -----------------//
-        for(unsigned int p=0; p<VoutIt[IDExpression].Get().GetSize(); ++p)
-        {
-            // Case value is equal to -inf or inferior to the minimum value
-            // allowed by the PixelValueType cast
-            if (VoutIt[IDExpression].Get()[p] < double(itk::NumericTraits<PixelValueType>::NonpositiveMin()))
+        for(unsigned int p=0; p<m_outputsDimensions[IDExpression]; ++p)
+          {
+          // Case value is equal to -inf or inferior to the minimum value
+          // allowed by the PixelValueType cast
+          if (tmpOutputs[IDExpression][p] < double(itk::NumericTraits<PixelValueType>::NonpositiveMin()))
             {
-                VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelValueType>::NonpositiveMin();
-                m_ThreadUnderflow[threadId]++;
+            tmpOutputs[IDExpression][p] = itk::NumericTraits<PixelValueType>::NonpositiveMin();
+            m_ThreadUnderflow[threadId]++;
             }
-            // Case value is equal to inf or superior to the maximum value
-            // allowed by the PixelValueType cast
-            else if (VoutIt[IDExpression].Get()[p] > double(itk::NumericTraits<PixelValueType>::max()))
+          // Case value is equal to inf or superior to the maximum value
+          // allowed by the PixelValueType cast
+          else if (tmpOutputs[IDExpression][p] > double(itk::NumericTraits<PixelValueType>::max()))
             {
-               VoutIt[IDExpression].Get()[p] = itk::NumericTraits<PixelValueType>::max();
-               m_ThreadOverflow[threadId]++;
+            tmpOutputs[IDExpression][p] = itk::NumericTraits<PixelValueType>::max();
+            m_ThreadOverflow[threadId]++;
             }
+          }
+        VoutIt[IDExpression].Set(tmpOutputs[IDExpression]);
         }
+
+      for(unsigned int j=0; j < nbInputImages; ++j)        {   ++Vit[j];    }
+      for(unsigned int j=0; j < m_Expression.size(); ++j)  {   ++VoutIt[j]; }
+      for(unsigned int j=0; j < VNit.size(); ++j)          {   ++VNit[j];   }
+      ++indexIterator;
+
+      progress.CompletedPixel();
+      }
+    for(unsigned int j=0; j < nbInputImages; ++j)        {   Vit[j].NextLine();    }
+    for(unsigned int j=0; j < m_Expression.size(); ++j)  {   VoutIt[j].NextLine(); }
     }
-
-    for(unsigned int j=0; j < nbInputImages; ++j)        {   ++Vit[j];    }
-    for(unsigned int j=0; j < m_Expression.size(); ++j)  {   ++VoutIt[j]; }
-    for(unsigned int j=0; j < VNit.size(); ++j)          {   ++VNit[j];   }
-
-    progress.CompletedPixel();
-  }
 
 }
 

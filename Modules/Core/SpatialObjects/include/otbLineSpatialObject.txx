@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSpatialObject_txx
-#define __otbLineSpatialObject_txx
+#ifndef otbLineSpatialObject_txx
+#define otbLineSpatialObject_txx
 
 
 #include "otbLineSpatialObject.h"
@@ -223,7 +223,7 @@ LineSpatialObject<VDimension>
 {
   // otbMsgDevMacro( "Checking the point [" << point << "] is on the Line" );
 
-  if (name == NULL)
+  if (name == ITK_NULLPTR)
     {
     if (IsInside(point))
       {

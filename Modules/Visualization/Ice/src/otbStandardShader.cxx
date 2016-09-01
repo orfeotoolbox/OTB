@@ -46,8 +46,8 @@ StandardShader::~StandardShader()
 
 std::string StandardShader::GetSource() const
 {
-  const char * glVersion = NULL;
-  const char * glslVersion = NULL;
+  const char * glVersion = ITK_NULLPTR;
+  const char * glslVersion = ITK_NULLPTR;
   if(!otb::GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion))
     {
     itkExceptionMacro(<<" Required GL and GLSL versions were not found (GL version is "<<glVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GL_VERSION<<", GLSL version is "<<glslVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GLSL_VERSION<<")");
@@ -85,7 +85,7 @@ std::string StandardShader::GetSource() const
     "uniform int shader_vertical_slider_flag;\n"                        \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
-    "gl_FragColor = clamp(pow((p+shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n" \
+    "gl_FragColor = pow( clamp( ( p+shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
     "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
     "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
     "gl_FragColor[3] = 0.;\n"                                           \

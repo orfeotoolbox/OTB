@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonListToRCC8GraphFilter_txx
-#define __otbPolygonListToRCC8GraphFilter_txx
+#ifndef otbPolygonListToRCC8GraphFilter_txx
+#define otbPolygonListToRCC8GraphFilter_txx
 
 #include "otbPolygonListToRCC8GraphFilter.h"
 #include "itkProgressReporter.h"
@@ -59,7 +59,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TPolygonList *>
@@ -179,7 +179,7 @@ void
 PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 ::BeforeThreadedGenerateData()
 {
-  // Ouptut graph pointer
+  // Output graph pointer
   OutputGraphPointerType      graph = this->GetOutput();
   PolygonListConstPointerType inputPtr = this->GetInput();
 
@@ -227,7 +227,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 {
   //std::cout<<"Starting thread "<<threadId <<" to work on range ["<<startIndex<<", "<<stopIndex<<"]"<<std::endl;
 
-  // Ouptut graph pointer
+  // Output graph pointer
   OutputGraphPointerType      graph = this->GetOutput();
   PolygonListConstPointerType inputPtr = this->GetInput();
 

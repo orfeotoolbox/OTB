@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFittingPolygonListFilter_h
-#define __otbImageFittingPolygonListFilter_h
+#ifndef otbImageFittingPolygonListFilter_h
+#define otbImageFittingPolygonListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
@@ -91,11 +91,11 @@ protected:
   /** Constructor */
   ImageFittingPolygonListFilter();
   /** Destructor */
-  virtual ~ImageFittingPolygonListFilter() {}
+  ~ImageFittingPolygonListFilter() ITK_OVERRIDE {}
   /** GenerateData method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   virtual double computeValue(ImageConstPointerType image,
                               VertexType middlePoint,

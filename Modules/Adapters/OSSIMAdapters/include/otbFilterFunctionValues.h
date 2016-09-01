@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFilterFunctionValues_h
-#define __otbFilterFunctionValues_h
+#ifndef otbFilterFunctionValues_h
+#define otbFilterFunctionValues_h
 
 #include <vector>
 #include <iostream>
@@ -98,10 +98,10 @@ protected:
   /** Constructor */
   FilterFunctionValues();
   /** Destructor */
-  ~FilterFunctionValues() {}
+  ~FilterFunctionValues() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   FilterFunctionValues(const Self &); //purposely not implemented

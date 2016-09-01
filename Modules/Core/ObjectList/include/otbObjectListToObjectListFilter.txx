@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectListToObjectListFilter_txx
-#define __otbObjectListToObjectListFilter_txx
+#ifndef otbObjectListToObjectListFilter_txx
+#define otbObjectListToObjectListFilter_txx
 
 #include "otbObjectListToObjectListFilter.h"
 #include "itkProgressReporter.h"
@@ -51,7 +51,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputList *>
@@ -131,12 +131,12 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
 ::ThreadedGenerateData(unsigned int /*startIndex*/, unsigned int /*stopIndex*/, itk::ThreadIdType /*threadId*/)
 {
   // The following code is equivalent to:
-  // itkExceptionMacro("subclass should override this method!!!");
+  // itkExceptionMacro("subclass should ITK_OVERRIDE this method!!!");
   // The ExceptionMacro is not used because gcc warns that a
   // 'noreturn' function does return
   std::ostringstream message;
   message << "itk::ERROR: " << this->GetNameOfClass()
-          << "(" << this << "): " << "Subclass should override this method!!!";
+          << "(" << this << "): " << "Subclass should ITK_OVERRIDE this method!!!";
   itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);
   throw e_;
 

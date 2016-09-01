@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTimeSeriesLSFF_h
-#define __otbTimeSeriesLSFF_h
+#ifndef otbTimeSeriesLSFF_h
+#define otbTimeSeriesLSFF_h
 
 #include "vnl/algo/vnl_matrix_inverse.h"
 #include "vnl/vnl_transpose.h"

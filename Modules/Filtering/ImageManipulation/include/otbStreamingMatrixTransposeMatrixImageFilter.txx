@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingMatrixTransposeMatrixImageFilter_txx
-#define __otbStreamingMatrixTransposeMatrixImageFilter_txx
+#ifndef otbStreamingMatrixTransposeMatrixImageFilter_txx
+#define otbStreamingMatrixTransposeMatrixImageFilter_txx
 
 #include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 
@@ -226,12 +226,6 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  input1Ptr->SetRequestedRegion(outputRegionForThread);
-  input2Ptr->SetRequestedRegion(outputRegionForThread);
-  input1Ptr->PropagateRequestedRegion();
-  input1Ptr->UpdateOutputData();
-  input2Ptr->PropagateRequestedRegion();
-  input2Ptr->UpdateOutputData();
 
   itk::ImageRegionConstIterator<TInputImage> it1(input1Ptr, outputRegionForThread);
   itk::ImageRegionConstIterator<TInputImage2> it2(input2Ptr, outputRegionForThread);

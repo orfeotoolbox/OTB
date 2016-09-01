@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToRandomLineGenerator_txx
-#define __otbVectorDataToRandomLineGenerator_txx
+#ifndef otbVectorDataToRandomLineGenerator_txx
+#define otbVectorDataToRandomLineGenerator_txx
 
 #include "otbVectorDataToRandomLineGenerator.h"
 

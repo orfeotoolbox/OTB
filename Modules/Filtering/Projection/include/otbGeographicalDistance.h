@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeographicalDistance_h
-#define __otbGeographicalDistance_h
+#ifndef otbGeographicalDistance_h
+#define otbGeographicalDistance_h
 
 #include "itkNumericTraits.h"
 #include "itkDistanceMetric.h"
@@ -67,10 +67,10 @@ public:
 
   /** Gets the distance between the origin point and x. This function
    *  work with SetOrigin() function */
-  virtual double Evaluate(const VectorType & x) const;
+  double Evaluate(const VectorType & x) const ITK_OVERRIDE;
 
   /* Gets the distance between x and y points */
-  virtual double Evaluate(const VectorType & x, const VectorType & y) const;
+  double Evaluate(const VectorType & x, const VectorType & y) const ITK_OVERRIDE;
 
   /** Set the earth radius */
   itkSetMacro(EarthRadius, double);
@@ -83,10 +83,10 @@ protected:
   GeographicalDistance();
 
   /** Destructor */
-  virtual ~GeographicalDistance(){}
+  ~GeographicalDistance() ITK_OVERRIDE{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   GeographicalDistance(const Self &);  //purposely not implemented

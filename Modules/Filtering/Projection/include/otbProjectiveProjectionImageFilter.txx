@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProjectiveProjectionImageFilter_txx
-#define __otbProjectiveProjectionImageFilter_txx
+#ifndef otbProjectiveProjectionImageFilter_txx
+#define otbProjectiveProjectionImageFilter_txx
 
 #include "otbProjectiveProjectionImageFilter.h"
 

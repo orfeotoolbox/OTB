@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileReader_h
-#define __otbImageFileReader_h
+#ifndef otbImageFileReader_h
+#define otbImageFileReader_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -73,7 +73,7 @@ public:
  * It interfaces with an ImageIO class to read in the data and
  * supports streaming (partial reading) if the source dataset does so.
  *
- * ImageFileReader supports extended filenames, which allow controling
+ * ImageFileReader supports extended filenames, which allow controlling
  * how the source dataset is read. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.
@@ -120,17 +120,17 @@ public:
   typedef ExtendedFilenameToReaderOptions            FNameHelperType;
 
   /** Prepare image allocation at the first call of the pipeline processing */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Does the real work. */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Give the reader a chance to indicate that it will produce more
    * output than it was requested to produce. ImageFileReader cannot
    * currently read a portion of an image (since the ImageIO objects
    * cannot read a portion of an image), so the ImageFileReader must
    * enlarge the RequestedRegion to the size of the image on disk. */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
+  void EnlargeOutputRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
 
   /** Set/Get the ImageIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular ImageIO can
@@ -160,8 +160,8 @@ public:
 
 protected:
   ImageFileReader();
-  virtual ~ImageFileReader();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageFileReader() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Convert a block of pixels from one type to another. */
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);
@@ -179,6 +179,9 @@ private:
     */
   bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
 
+  // Retrieve the real source file name if derived dataset */
+  std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
+  
   ImageFileReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
@@ -207,4 +210,4 @@ private:
 #include "otbImageFileReader.txx"
 #endif
 
-#endif // __otbImageFileReader_h
+#endif // otbImageFileReader_h

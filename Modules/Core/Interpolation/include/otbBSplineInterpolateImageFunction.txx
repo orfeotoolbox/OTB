@@ -15,9 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplineInterpolateImageFunction_txx
-#define __otbBSplineInterpolateImageFunction_txx
-#include "itkBSplineInterpolateImageFunction.h"
+#ifndef otbBSplineInterpolateImageFunction_txx
+#define otbBSplineInterpolateImageFunction_txx
+#include "otbBSplineInterpolateImageFunction.h"
 #include "itkImageLinearIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
@@ -95,7 +95,7 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
     }
   else
     {
-    m_Coefficients = NULL;
+    m_Coefficients = ITK_NULLPTR;
     }
 }
 

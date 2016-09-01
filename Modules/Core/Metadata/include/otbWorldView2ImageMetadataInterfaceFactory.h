@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWorldView2ImageMetadataInterfaceFactory_h
-#define __otbWorldView2ImageMetadataInterfaceFactory_h
+#ifndef otbWorldView2ImageMetadataInterfaceFactory_h
+#define otbWorldView2ImageMetadataInterfaceFactory_h
 
 
 #include "itkObjectFactoryBase.h"
@@ -38,8 +38,8 @@ public:
   typedef itk::SmartPointer<const Self>           ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
+  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
+  const char* GetDescription(void) const ITK_OVERRIDE;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -57,7 +57,7 @@ public:
 
 protected:
   WorldView2ImageMetadataInterfaceFactory();
-  virtual ~WorldView2ImageMetadataInterfaceFactory();
+  ~WorldView2ImageMetadataInterfaceFactory() ITK_OVERRIDE;
 
 private:
   WorldView2ImageMetadataInterfaceFactory(const Self &); //purposely not implemented

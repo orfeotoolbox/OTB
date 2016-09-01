@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonToPolygonRCC8Calculator_txx
-#define __otbPolygonToPolygonRCC8Calculator_txx
+#ifndef otbPolygonToPolygonRCC8Calculator_txx
+#define otbPolygonToPolygonRCC8Calculator_txx
 
 #include "otbPolygonToPolygonRCC8Calculator.h"
 #include "otbMacro.h"

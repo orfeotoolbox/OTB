@@ -15,13 +15,22 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRLayerWrapper_h
-#define __otbOGRLayerWrapper_h
+#ifndef otbOGRLayerWrapper_h
+#define otbOGRLayerWrapper_h
 
 // #include <iosfwd> // std::ostream&
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/shared_ptr.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/utility/enable_if.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/shared_ptr.hpp>
+#include <boost/iterator/iterator_facade.hpp>
+#include <boost/utility/enable_if.hpp>
+#endif
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
 #include "otbOGRVersionProxy.h"
@@ -170,7 +179,7 @@ public:
    * id will be updated (in case it was previously set)
    *
    * \throw itk::ExceptionObject if the feature can't be set.
-   * \pre The Layer need to support <em>OLCRandomWrite</em> capability.
+   * \pre The Layer needs to support <em>OLCRandomWrite</em> capability.
    * \sa \c OGRLayer::SetFeature()
    * \warning Calls to this function may invalidate any feature iterator
    * previously obtained depending on the actual \c OGRDriver.
@@ -221,7 +230,7 @@ public:
    */
   operator int boolean ::* () const
     {
-    return m_Layer ? &boolean::i : 0;
+    return m_Layer ? &boolean::i : ITK_NULLPTR;
     }
 
   /** Access to raw \c OGRLayer.
@@ -323,12 +332,12 @@ public:
     struct enabler {};
   public:
     feature_iter()
-      : m_Layer(0), m_Crt(0) {}
+      : m_Layer(ITK_NULLPTR), m_Crt(ITK_NULLPTR) {}
     explicit feature_iter(otb::ogr::Layer & layer)
       : m_Layer(&layer), m_Crt(layer.GetNextFeature()) {}
     template <class OtherValue> feature_iter(
       feature_iter<OtherValue> const& other,
-      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = 0
+      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = ITK_NULLPTR
     )
       : m_Layer(other.m_Layer), m_Crt(other.m_Crt)
       {}
@@ -539,4 +548,4 @@ inline bool operator!=(Layer const& lhs, Layer const& rhs)
 // #include "otbLayerWrapper.txx"
 #endif
 
-#endif // __otbOGRLayerWrapper_h
+#endif // otbOGRLayerWrapper_h

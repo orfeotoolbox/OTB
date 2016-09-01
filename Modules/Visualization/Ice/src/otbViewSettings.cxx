@@ -22,20 +22,40 @@
 
 namespace otb
 {
-ViewSettings::ViewSettings()
+ViewSettings::ViewSettings() :
+  m_Wkt( "" ),
+  m_RotationAngle( 0.0 ),
+  m_UseProjection( true ),
+  m_GeometryChanged( false )
 {
-  m_Origin.Fill(0);
-  m_Spacing.Fill(1);
-  m_ViewportSize.Fill(0);
-  m_Wkt="";
-  m_UseProjection = true;
-  m_GeometryChanged = false;
-  m_RotationCenter.Fill(0);
-  m_RotationAngle = 0;
+  m_Origin.Fill( 0 );
+  m_Spacing.Fill( 1 );
+  m_ViewportSize.Fill( 0 );
+  m_RotationCenter.Fill( 0 );
 }
 
 ViewSettings::~ViewSettings()
 {}
+
+void
+ViewSettings
+::Reset()
+{
+  m_Origin.Fill( 0 );
+  m_Spacing.Fill( 1 );
+  m_ViewportSize.Fill( 0 );
+
+  m_Wkt = "";
+
+  m_KeywordList = KeywordListType();
+
+  m_UseProjection = true;
+  m_GeometryChanged = false;
+
+  m_RotationCenter.Fill( 0 );
+
+  m_RotationAngle = 0.0;
+}
 
 void ViewSettings::GetViewportExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
@@ -176,6 +196,9 @@ ViewSettings
 ::GetScale( const PointType & origin, const PointType & extent, bool isSigned ) const
 {
   SpacingType spacing;
+
+  assert( m_ViewportSize[ 0 ]!=0 );
+  assert( m_ViewportSize[ 1 ]!=0 );
 
   spacing[ 0 ] = ( extent[ 0 ] - origin[ 0 ] ) / m_ViewportSize[ 0 ];
   spacing[ 1 ] = ( extent[ 1 ] - origin[ 1 ] ) / m_ViewportSize[ 1 ];
