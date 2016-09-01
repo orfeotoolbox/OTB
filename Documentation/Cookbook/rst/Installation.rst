@@ -12,20 +12,20 @@ We provide different standalone binary packages for OTB-Applications:
 Other binaries can be available as packages (OSGeo packages,
 Debian/Ubuntu packages, OpenSuse packages), however be advised that they
 may not be up-to-date nor delivered with full features. If you want to
-build from source or if we don’t provide packages for your system, some
-informations are available into the , in the section (\ Building
-from Source)
+build from source or if we don’t provide packages for your system,
+information is available in the `Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_,
+in the section "Building from Source".
 
 Windows
 -------
 
 We provide for Windows Seven and later through standalone packages. They
-are cross-compiled with MinGW, for 32bit and 64bit platforms. They
-contain all and their launchers (both command line and graphical
-launchers are provided). Check the download page : `OTB Download
-page <https://www.orfeo-toolbox.org/download>`__
+are cross-compiled with MinGW, for 32 bits and 64 bits platforms. They
+contain all applications and their launchers (both command line and graphical
+launchers are provided).
+Check the `Download page <https://www.orfeo-toolbox.org/download>`__
 
-There is a 32bit and a 64bit version. They contain the same directory
+There is a 32 bits and a 64 bits version. They contain the same directory
 structure:
 
 -  ``monteverdi.bat`` : A launcher script for Monteverdi
@@ -47,18 +47,17 @@ with ``otbenv.bat``.
 Linux 64bit
 -----------
 
-We provide for Linux 64bit OS through standalone packages. They contain
+We provide for Linux 64 bits OS through standalone packages. They contain
 all OTB Applications and their launchers (both command line and
-graphical launchers are provided). Check the download page : `OTB
-Download page <https://www.orfeo-toolbox.org/download>`__
+graphical launchers are provided). Check the `Download page <https://www.orfeo-toolbox.org/download>`__
 
 This package is a self-extractible archive. You may uncompress it with a
 double-click on the file, or with the command line :
 
 ::
 
-    > chmod +x OTB-&\otbversion&-Linux64.run
-    > ./OTB-&\otbversion&-Linux64.run
+    chmod +x OTB-X.Y.Z-Linux64.run
+    ./OTB-X.Y.Z-Linux64.run
 
 Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
@@ -107,13 +106,13 @@ uncompress it with the command line :
 
 ::
 
-    > chmod +x  OTB-&\otbversion&-Darwin64.run
-    > ./OTB-&\otbversion&-Darwin64.run
+    chmod +x  OTB-X.Y.Z-Darwin64.run
+    ./OTB-X.Y.Z-Darwin64.run
 
-Once the archive is extracted, you can see OTB--Darwin64 directory in
-the same direcrtory along with OTB--Darwin64.run
+Once the archive is extracted, you can see OTB-X.Y.Z-Darwin64 directory in
+the same direcrtory along with OTB-X.Y.Z-Darwin64.run
 
-Contents of OTB--Darwin64 is briefly listed below:
+Contents of OTB-X.Y.Z-Darwin64 is briefly listed below:
 
 -  ``Monteverdi.app`` : A Mac OSX .app for Monteverdi
 
@@ -139,17 +138,17 @@ Notes:
 -  You must use monteverdi and mapla through their .app files only.
 
 -  You are allowed to move these .app files and refrain from moving or
-   deleting OTB--Darwin64 after extraction. In case you need to have OTB
+   deleting OTB-X.Y.Z-Darwin64 after extraction. In case you need to have OTB
    installed in some other directory. Extract the .run file there.
 
 Other packages
 --------------
 
-Warning ! These packages may not be up-to-date with latest OTB
+Warning! These packages may not be up-to-date with latest OTB
 releases. In addition, some features of the library may not be available
 on every platform. Some of these are not maintained by OTB-team. If you
 want to get involved in the packaging of OTB for your favourite
-platform, please contact us through the developer’s mailing list :
+platform, please contact us through the developer’s mailing list:
 otb-developers@googlegroups.com.
 
 Debian

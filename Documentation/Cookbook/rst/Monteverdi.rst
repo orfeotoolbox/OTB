@@ -1,48 +1,40 @@
-A brief tour of Monteverdi
-==========================
+Monteverdi
+==========
 
-Introduction
-------------
+Monteverdi is a satellite image viewer. Its main features are:
 
-The package makes available a set of simple software tools, designed to
-demonstrate what can be done with . Many users started using these
-applications for real processing tasks, so we tried to make them more
-generic, more robust and easy to use. users have been asking for an
-integrated application for a while, since using several applications for
-a complete processing (ortho-rectification, segmentation,
-classification, etc.) can be a burden. The OTB team received a request
-from CNES’ Strategy and Programs Office in order to provide an
-integrated application for capacity building activities (teaching,
-simple image manipulation, etc.). The specifications included ease of
-integration of new processing modules.
-
-**Warning** : since version 3.0.0, there is only one , which replaces
-monteverdi2 and the original monteverdi 1 (version lower than 1.24.0).
+- **Performance**: Navigate instantly in full size satellite images thanks to its
+  hardware accelerated rendering engine. Compose tiles or compare multiple images in a stack with
+  rapid cycling and shader effects.
+- **Sensor geometry support**: View raw images directly in sensor geometry! Resampling is
+  handled by the GPU through texture mapping. OTB automagically handles
+  coordinates mapping between actors and viewport geometries.
+- **Powerful**: Access to all processing application from OTB. Orthorectification,
+  optical calibration, classification, SAR processing, and much more!
 
 GUI : what does it look like ?
 ------------------------------
 
 .. image:: Art/MonteverdiImages/gui.png
 
-This is ’s main window (figure  [fig:mongui]) where the different
-functionalities are reachable:
+This is Monteverdi’s main window where the different functionalities are reachable:
 
--  1. Main menu
+#. Main menu
 
--  2. Top toolbar
+#. Top toolbar
 
--  3. Image displaying
+#. Image displaying
 
--  4. Right side dock
+#. Right side dock
 
--  5. Stack layer
+#. Stack layer
 
 Main menu
 ~~~~~~~~~
 
 The main menu is made up of four items. The main one is the File item,
-from which you can : open a image, load the otb applications, and
-finally quit . The Edit item lets the user change his/her preferences.
+from which you can: open a image, load the otb applications, and
+finally quit. The Edit item lets the user change his/her preferences.
 The view item is intended to let the user display or hide different
 parts of the main window. Finally, the Help item lets the user know the
 ’About’ information of the software, and also can display an useful
@@ -53,29 +45,28 @@ Top toolbar
 
 The top toolbar is made up of ten icons; from left to right:
 
--  1st : open one or more image(s)
+#. open one or more image(s)
 
--  2nd : zoom in
+#. zoom in
 
--  3rd : zoom out
+#. zoom out
 
--  4th : zoom to full extent
+#. zoom to full extent
 
--  5th : zoom to layer extent
+#. zoom to layer extent
 
--  6th : zoom to full resolution
+#. zoom to full resolution
 
--  7th : gives/changes the current projection, used as reference of the
-   view
+#. gives/changes the current projection, used as reference of the view
 
--  8th : selects the effect to be applied to the selected layer :
+#. selects the effect to be applied to the selected layer :
    chessboard, local constrast, local translucency, normal, spectral
    angle, swipe (horizontal and vertical)
 
--  9th : a parameter used for the following effects : chessboard, local
+#. a parameter used for the following effects : chessboard, local
    contrast, local translucency, spectral angle
 
--  10th : a parameter used for the following effects : local constrast,
+#. a parameter used for the following effects : local constrast,
    spectral angle
 
 Image displaying
