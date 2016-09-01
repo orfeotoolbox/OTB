@@ -166,6 +166,8 @@ public:
 
   virtual const PointType& Transform( PointType&, const QPoint& ) const;
 
+  virtual void ResetViewport();
+
   //
   // Events.
 
