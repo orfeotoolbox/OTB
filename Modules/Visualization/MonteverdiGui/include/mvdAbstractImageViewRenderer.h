@@ -225,6 +225,9 @@ public:
   inline bool IsGLSLEnabled() const;
   /**
    */
+  virtual bool IsEffectsEnabled() const = 0;
+  /**
+   */
   inline bool ZoomToRegion( const PointType & origin,
 			    const PointType & extent,
 			    PointType & center,

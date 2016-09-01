@@ -422,6 +422,9 @@ private slots:
   /**
    */
   void OnRefreshViewRequested();
+  /**
+   */
+  void OnResetViewport();
 };
 
 }// end namespace 'mvd'

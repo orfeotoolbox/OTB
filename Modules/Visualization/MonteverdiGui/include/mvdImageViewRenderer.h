@@ -196,6 +196,8 @@ public:
                const PointType & vcenter,
                const SpacingType & vspacing ) const;
 
+  virtual bool IsEffectsEnabled() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -212,6 +214,7 @@ signals:
   void ClearProjectionRequired();
   void SetProjectionRequired();
   void UpdateProjectionRequired();
+  void ResetViewport();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

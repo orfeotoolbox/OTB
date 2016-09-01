@@ -368,6 +368,30 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
+::ResetViewport()
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
+
+  m_ViewSettings->Reset();
+
+  m_ViewSettings->SetViewportSize( size );
+
+  m_NativeSpacing.Fill( 1.0 );
+  m_ZoomFactor = 1.0;
+
+  emit RoiChanged(
+    GetOrigin(),
+    GetViewportSize(),
+    GetSpacing(),
+    m_ViewSettings->GetViewportCenter()
+  );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
 ::MousePressEvent( QMouseEvent* e )
 {
 
