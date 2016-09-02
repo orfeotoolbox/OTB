@@ -13,6 +13,7 @@ function(repository_status root_repo_dir result_var1)
   execute_process(COMMAND ${GIT_EXECUTABLE} config --get remote.origin.url
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE git_remote_origin_url
+    TIMEOUT 120
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
   if(git_remote_origin_url)
     get_filename_component(dir_name ${git_remote_origin_url} NAME)
@@ -23,6 +24,7 @@ function(repository_status root_repo_dir result_var1)
   execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%H --oneline
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE last_commit_id
+    TIMEOUT 120
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
   #git symbolic-ref --short -q HEAD does not work on older git version
@@ -31,6 +33,7 @@ function(repository_status root_repo_dir result_var1)
   execute_process(COMMAND ${GIT_EXECUTABLE} symbolic-ref -q HEAD
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE git_symbolic_ref_output
+    TIMEOUT 120
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
   set(branch_name)
@@ -47,10 +50,12 @@ function(repository_status root_repo_dir result_var1)
   execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%H
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE OTB_WC_REVISION
+    TIMEOUT 120
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
   execute_process(COMMAND ${GIT_EXECUTABLE} status -s
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE OTB_WC_STATUS
+    TIMEOUT 120
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
   message(STATUS "Repository status (${dir_name}) :")
   message(STATUS "  Repository revision is ${OTB_WC_REVISION}")
