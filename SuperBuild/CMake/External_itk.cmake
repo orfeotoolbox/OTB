@@ -162,10 +162,4 @@ ExternalProject_Add(ITK
 
 set(ITK_DIFF_FILES ${CMAKE_SOURCE_DIR}/patches/ITK/itk-1-fftw-all.diff)
 
-if(UNIX AND NOT APPLE)
-  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.2)
-    set (ITK_DIFF_FILES "${ITK_DIFF_FILES} ${CMAKE_SOURCE_DIR}/patches/ITK/itk-2-dlopen_gcc41-linux.diff")
-  endif()
-endif()
-
 SUPERBUILD_PATCH_SOURCE(ITK "" ${ITK_DIFF_FILES})
