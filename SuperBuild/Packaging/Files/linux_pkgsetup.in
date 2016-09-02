@@ -80,7 +80,7 @@ EOF
 $CAT > $OUT_DIR/otbenv.profile << EOF
 #!/bin/sh
 PATH=\$PATH:$OUT_DIR/bin
-PYTHONPATH=\$PYTHONPATH:$OUT_DIR/lib/python
+PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
 GDAL_DATA=$OUT_DIR/share/gdal
 GEOTIFF_CSV=$OUT_DIR/share/espg_csv
 
@@ -90,6 +90,8 @@ export GDAL_DATA
 export GEOTIFF_CSV
 export PYTHONPATH
 EOF
+
+$CHMOD +x $OUT_DIR/otbenv.profile
 
 fi
 
