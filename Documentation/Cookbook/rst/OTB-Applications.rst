@@ -1,76 +1,22 @@
-A brief tour of OTB-Applications
+A brief tour of OTB Applications
 ================================
 
 Introduction
 ------------
 
-OTB Applications was perhaps the older package of the Orfeo
-Toolbox suite after the OTB package itself. Since the Orfeo
-Toolbox is a library providing remote sensing functionalities, the
-only applications that were distributed at the beginning were the
-examples from the Software Guide and the tests. These applications are
-very useful for the developer because their code is very short and only
-demonstrates one functionality at a time. In many cases, a real
-application would require :
+OTB ships with more than 90 ready to use applications for remote sensing tasks.
+They usually expose existing processing functions from the underlying C++
+library, or compose them into high level pipelines. OTB applications allow to:
 
--  combining together two or more functions from the Orfeo Toolbox
+-  combine together two or more functions from the Orfeo Toolbox,
 
--  providing a nice high level interface to handle : parameters, input
-   data, output data and communication with the user
+-  provide a nice high level interface to handle: parameters, input
+   data, output data and communication with the user.
 
-The OTB Applications package was originally designed to provide
-applications performing simple remote sensing tasks, more complex than
-simple examples from the Software Guide, and with a more user-friendly
-interface (either graphical or command-line), to demonstrate the use of
-the Orfeo Toolbox functions. The most popular applications are maybe
-the *otbImageViewerManager* , which allows to open a collection of
-images and navigate in them, and the
-*otbSupervisedClassificationApplication* , which allowed to delineate
-training regions of interest on the image and classify the image with a
-SVM classifier trained with these regions (this application is no longer
-maintained since the same functionnality is available through the
-corresponding Monteverdi module). During the first 3 years of the
-Orfeo Toolbox development, many more applications have been added to
-this package, to perform various tasks. Most of them came with a
-graphical user interface, apart from some small utilities that are
-command-line.
+OTB applications can be launched in different ways, and accessed from different
+entry points. The framework can be extended, but Orfeo Toolbox ships with the following:
 
-The development and release of the Monteverdi software (see
-chapter [chap:Monteverdi] at the end of year 2009 changed a lot of
-things for the OTB Applications package: most of non-developer users
-were looking for quite a long time for an application providing Orfeo
-Toolbox functionalities under a unified graphical interface. Many
-applications from the OTB Applications package were integrated to
-Monteverdi as modules, and the OTB Applications package lost a
-lot of its usefulness. No more applications were added to the package
-and it was barely maintained, as new graphical tools were directly
-embedded within Monteverdi .
-
-Then, some people started to regain interest in the OTB Applications
-package. Monteverdi is a great tool to perform numerous remote
-sensing and image processing task in a minute, but it is not well
-adapted to heavier (and longer) processing, scripting and batch
-processing. Therefore, in 2010 the OTB Applications package has been
-revamped: old applications have been moved to a legacy folder for
-backward compatibility, and the development team started to populate the
-package with compact command-line tools to perform various heavy
-processing tasks.
-
-Later on in 2011, the OTB Applications has been further revamped.
-Because of the increasing need to interface the OTB Applications
-into other software and to provide auto-generated interfaces, the
-Orfeo Toolbox development team decided to develop a new application
-framework. The main idea of this framework is the following: each
-application is written once for all in a shared library (also known as
-plugin). This plugin can be auto-loaded into appropriate tools wihtout
-recompiling, and is able to fully describe its parameters, behaviour and
-documentation.
-
-The tools to use the plugins can be extended, but Orfeo Toolbox
-shipped the following:
-
--  A command-line laucher, which is almost equivalent to the former
-   OTB Applications command-line interface,
+-  A command-line laucher, to call applications from the terminal,
 
 -  A graphical launcher, with an auto-generated QT interface, providing
    ergonomic parameters setting, display of documentation, and progress
@@ -80,46 +26,26 @@ shipped the following:
    set-up and executed into a high-level language such as Python or Java
    for instance.
 
-Additionally, `QGis <http://www.qgis.org/>`_  plugins built on top of
-the SWIG/Python interface are available with seamless integration within
-QGis. You can find a short guide about it
-`here <http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications>`_ .
+-  `QGIS <http://www.qgis.org/>`_  plugin built on top of
+   the SWIG/Python interface is available with seamless integration within
+   QGIS.
 
-To facilitate the use of these tools and applications, they will now be
-shipped with the standard Orfeo Toolbox package. It means that the
-former OTB-Applications package has entered its maintenance cycle :
-no new feature will be pushed there, and all development is done
-directly inside the Orfeo Toolbox package.
-
-The OTB Applications are now rich of more than 40 tools, which are
+The OTB Applications are now rich of more than 90 tools, which are
 listed in the the applications reference documentation, presented in
-chapter [chap:apprefdoc], page .
+chapter [chap:apprefdoc], page.
 
 Using the applications
 ----------------------
 
-Using the new framework is slightly more complex than launching a
-command-line tool. This section describes all the ways to launch the new
-applications. Apart from the simplified access, which is similar to the
-former access to , you will need to know the application name and
-optionally the path where the applications plugins are stored. For
-applications shipped with , the name of each application can be found in
-chapter [chap:apprefdoc], page .
+Common framework
+~~~~~~~~~~~~~~~~
 
-Simplified use
-~~~~~~~~~~~~~~
-
-All standard applications delivered in with comes with simplified
-scripts in the system path, allowing to launch the command-line and
-graphical user interface versions of the application in the same simple
-way we used to launch the old applications. The command-line interface
-is prefixed by ``otbcli_``, while the Qt interface is prefixed by
+All standard applications shared the same implementation and expose
+automatically generated interfaces.
+Thus, the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
 ``otbgui_``. For instance, calling ``otbcli_Convert`` will launch the
 command-line interface of the Convert application, while
 ``otbgui_Convert`` will launch its GUI.
-
-Passing arguments to the command-line version (prefixed by ``otbcli_``)
-is explained in next sub-section.
 
 Using the command-line launcher
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
