@@ -554,12 +554,10 @@ function(func_prepare_package)
   set(EXE_EXT "")
   set(SCR_EXT ".sh")
   set(LIB_EXT ".so")
-  set(PYMODULE_EXT ".so")
   if(WIN32)
     set(EXE_EXT ".exe")
     set(LIB_EXT ".dll")
     set(SCR_EXT ".bat")
-    set(PYMODULE_EXT ".pyd")
     set(DEST_LIB_DIR bin)
   elseif(APPLE)
     set(LIB_EXT ".dylib")
@@ -622,8 +620,9 @@ function(func_prepare_package)
   endforeach()
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
-  if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
-    list(APPEND PKG_PEFILES "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+
+  if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${LIB_EXT}")
+    list(APPEND PKG_PEFILES "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${LIB_EXT}")
     install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python DESTINATION ${PKG_STAGE_DIR}/lib)
   endif()
 
@@ -1039,7 +1038,6 @@ set(APPLE_SYSTEM_DLLS
   Carbon.framework
   AppKit.framework
   Foundation.framework
-  Python.framework
   AGL.framework
   OpenGL.framework
   libgcc_s.*dylib
