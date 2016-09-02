@@ -37,13 +37,11 @@ else
 $CAT > $OUT_DIR/monteverdi.sh << EOF
 #!/bin/sh
 unset LD_LIBRARY_PATH
-if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
-  export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
-fi
-export LC_NUMERIC=C
+
+. $OUT_DIR/bin/env_exports
+
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
-export GDAL_DATA=$OUT_DIR/share/gdal
-export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+
 $OUT_DIR/bin/monteverdi "\$@"
 EOF
 
@@ -52,18 +50,32 @@ $CHMOD +x $OUT_DIR/monteverdi.sh
 $CAT > $OUT_DIR/mapla.sh << EOF
 #!/bin/sh
 unset LD_LIBRARY_PATH
-if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
-  export LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
-fi
-export LC_NUMERIC=C
-unset LD_LIBRARY_PATH
+
+. $OUT_DIR/bin/env_exports
+
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
-export GDAL_DATA=$OUT_DIR/share/gdal
-export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+
 $OUT_DIR/bin/mapla "\$@"
 EOF
 
 $CHMOD +x $OUT_DIR/mapla.sh
+
+$CAT > $OUT_DIR/bin/env_exports << EOF
+#!/bin/sh
+
+export LC_NUMERIC=C
+
+if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
+  LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+fi
+
+GDAL_DATA=$OUT_DIR/share/gdal
+GEOTIFF_CSV=$OUT_DIR/share/espg_csv
+
+export GDAL_DATA
+export GEOTIFF_CSV
+export LD_LIBRARY_PATH
+EOF
 
 $CAT > $OUT_DIR/otbenv.profile << EOF
 #!/bin/sh

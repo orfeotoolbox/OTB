@@ -21,6 +21,7 @@ otbWrapperApplicationDocTests.cxx
 otbWrapperApplicationHtmlDocGeneratorTest.cxx
 otbWrapperInputVectorDataParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
+otbApplicationMemoryConnectTest.cxx
 )
 
 add_executable(otbApplicationEngineTestDriver ${OTBApplicationEngineTests})
@@ -172,3 +173,7 @@ otb_add_test(NAME owTuDocExampleStructureNew COMMAND otbApplicationEngineTestDri
   otbWrapperDocExampleStructureNew
   )
 
+otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineTestDriver otbApplicationMemoryConnectTest
+  ${CMAKE_BINARY_DIR}/lib/otb/applications
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/owTvApplicationMemoryConnectTestOutput.tif)

@@ -37,7 +37,7 @@ bool
 Spot6ImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
-  if (sensorID.find("SPOT 6") != std::string::npos)
+  if (sensorID.find("SPOT 6") != std::string::npos || sensorID.find("SPOT 7") != std::string::npos)
     return true;
   else
     return false;
@@ -789,7 +789,7 @@ Spot6ImageMetadataInterface
   if (nbBands == 1)
     {
     //if (sensorId.find("PHR") != std::string::npos)
-    if (sensorId == "SPOT 6") // todo
+    if (sensorId == "SPOT 6" || sensorId == "SPOT 7") // todo: updated values for Spot7
       {
       const float pan[601] =
         {
@@ -1406,7 +1406,7 @@ Spot6ImageMetadataInterface
     }
   else if (nbBands > 1 && nbBands < 5)
     {
-    if (sensorId == "SPOT 6") // todo
+    if (sensorId == "SPOT 6" || sensorId == "SPOT 7") // todo: updated values for Spot7
       {
       //band B0 (blue band)
       const float b0[601] =

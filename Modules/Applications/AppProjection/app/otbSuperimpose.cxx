@@ -131,7 +131,7 @@ private:
     SetParameterDescription("interpolator.bco", "Bicubic interpolation leads to very good image quality but is slow.");
 
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows controling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
 
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");

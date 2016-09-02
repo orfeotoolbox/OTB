@@ -1,6 +1,4 @@
-import otbApplication
-app = otbApplication.Registry_CreateApplication('TrainImagesClassifier')
-app.SetParameterFloat('classifier.libsvm.opt',True)
-print app.GetParameterValue('classifier.libsvm.opt')
-
-
+def test(otb, argv):
+	app = otb.Registry.CreateApplication('TrainImagesClassifier')
+	app.SetParameterFloat('classifier.libsvm.opt',True)
+	print app.GetParameterValue('classifier.libsvm.opt')

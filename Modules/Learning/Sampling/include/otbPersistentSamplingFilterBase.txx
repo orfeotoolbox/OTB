@@ -177,6 +177,16 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // clean temporary inputs
   this->m_InMemoryInputs.clear();
 
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  
+  unsigned int actualNumberOfThreads = numberOfThreads;
+  
+  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
+    {
+    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
+    }
+
+  
   // gather temporary outputs and write to output
   const otb::ogr::DataSource* vectors = this->GetOGRData();
   itk::TimeProbe chrono;
@@ -198,7 +208,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
         }
   
-      for (unsigned int thread=0 ; thread < this->GetNumberOfThreads() ; thread++)
+      for (unsigned int thread=0 ; thread < actualNumberOfThreads ; thread++)
         {
         ogr::Layer inLayer = this->m_InMemoryOutputs[thread][count]->GetLayerChecked(0);
         if (!inLayer)
@@ -250,7 +260,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   TInputImage* outputImage = this->GetOutput();
   RegionType requestedRegion = outputImage->GetRequestedRegion();
 
-  ogr::Layer layer = this->m_InMemoryInputs[threadid]->GetLayerChecked(0);
+  ogr::Layer layer = this->m_InMemoryInputs.at(threadid)->GetLayerChecked(0);
   if (! layer)
     {
     return;
@@ -292,14 +302,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     case wkbPoint25D:
       {
       OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
-      if (castPoint == NULL) break;
+      if (castPoint == ITK_NULLPTR) break;
       
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
       const TInputImage* img = this->GetInput();
       const TMaskImage* mask = this->GetMask(); 
       img->TransformPhysicalPointToIndex(imgPoint,imgIndex);
-      if ((mask == NULL) || mask->GetPixel(imgIndex))
+      if ((mask == ITK_NULLPTR) || mask->GetPixel(imgIndex))
         {
         this->ProcessSample(feature, imgIndex, imgPoint, threadid);
         }
@@ -310,7 +320,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       OGRLineString* castLineString = dynamic_cast<OGRLineString*>(geom);
 
-      if (castLineString == NULL) break;
+      if (castLineString == ITK_NULLPTR) break;
       this->ProcessLine(feature,castLineString,region,threadid);
       break;
       }
@@ -318,7 +328,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     case wkbPolygon25D:
       {
       OGRPolygon* castPolygon = dynamic_cast<OGRPolygon*>(geom);
-      if (castPolygon == NULL) break;
+      if (castPolygon == ITK_NULLPTR) break;
       this->ProcessPolygon(feature,castPolygon,region,threadid);
       break;
       }
@@ -625,17 +635,24 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
 
+  unsigned int actualNumberOfThreads = numberOfThreads;
+
+  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
+    {
+    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
+    }
+  
   // prepare temporary input : split input features between available threads
   this->m_InMemoryInputs.clear();
   std::string tmpLayerName("thread");
-  OGRSpatialReference * oSRS = NULL;
+  OGRSpatialReference * oSRS = ITK_NULLPTR;
   if (inLayer.GetSpatialRef())
     {
     oSRS = inLayer.GetSpatialRef()->Clone();
     }
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   std::vector<ogr::Layer> tmpLayers;
-  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+  for (unsigned int i=0 ; i < actualNumberOfThreads ; i++)
     {
     ogr::DataSource::Pointer tmpOgrDS = ogr::DataSource::New();
     ogr::Layer tmpLayer = tmpOgrDS->CreateLayer(
@@ -655,7 +672,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   this->DispatchInputVectors(inLayer,tmpLayers);
 
-  inLayer.SetSpatialFilter(NULL);
+  inLayer.SetSpatialFilter(ITK_NULLPTR);
 }
 
 template<class TInputImage, class TMaskImage>
@@ -685,9 +702,17 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   // Prepare in-memory outputs
   unsigned int numberOfThreads = this->GetNumberOfThreads();
+
+  unsigned int actualNumberOfThreads = numberOfThreads;
+
+  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
+    {
+    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
+    }
+  
   this->m_InMemoryOutputs.clear();
   std::string tmpLayerName("threadOut");
-  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+  for (unsigned int i=0 ; i < actualNumberOfThreads ; i++)
     {
     std::vector<OGRDataPointer> tmpContainer;
     // iterate over outputs, only process ogr::DataSource
@@ -700,7 +725,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         ogr::Layer realLayer = realOutput->GetLayersCount() == 1
                                ? realOutput->GetLayer(0)
                                : realOutput->GetLayer(m_OutLayerName);
-        OGRSpatialReference * oSRS = NULL;
+        OGRSpatialReference * oSRS = ITK_NULLPTR;
         if (realLayer.GetSpatialRef())
           {
           oSRS = realLayer.GetSpatialRef()->Clone();
@@ -755,7 +780,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     {
     std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
     bool projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = NULL;
+    OGRSpatialReference * oSRS = ITK_NULLPTR;
     if(projectionInformationAvailable)
       {
       oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));

@@ -27,7 +27,8 @@ ENABLE_SHARED
     OTBCommandLine
     OTBEdge
     OTBAppImageUtils
-
+    OTBAppFiltering
+    
   DESCRIPTION
     "${DOCUMENTATION}"
 )
