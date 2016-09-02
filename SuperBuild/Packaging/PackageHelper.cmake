@@ -70,6 +70,7 @@ macro(macro_super_package)
   list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/bin") #monteverdi, mapla
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncherCommandLine..
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb/python") #otbApplication.py
 
   set(EXE_SEARCHDIRS ${OTB_INSTALL_DIR}/bin)
   list(APPEND  EXE_SEARCHDIRS ${MONTEVERDI_INSTALL_DIR}/bin)
@@ -552,14 +553,14 @@ function(func_prepare_package)
   set(DEST_APP_DIR lib/otb/applications)
   set(EXE_EXT "")
   set(SCR_EXT ".sh")
-  set(LIB_EXT "*so")
+  set(LIB_EXT ".so")
   if(WIN32)
     set(EXE_EXT ".exe")
-    set(LIB_EXT "*dll")
+    set(LIB_EXT ".dll")
     set(SCR_EXT ".bat")
     set(DEST_LIB_DIR bin)
   elseif(APPLE)
-    set(LIB_EXT "*dylib")
+    set(LIB_EXT ".dylib")
   endif()
 
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks_temp  "")
@@ -609,7 +610,7 @@ function(func_prepare_package)
     endif()
   endforeach()
 
-  file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
+  file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
 
   #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
   #NOTE: this is not used in windows yet..
@@ -619,6 +620,11 @@ function(func_prepare_package)
   endforeach()
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
+
+  if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${LIB_EXT}")
+    list(APPEND PKG_PEFILES "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${LIB_EXT}")
+    install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python DESTINATION ${PKG_STAGE_DIR}/lib)
+  endif()
 
   set(ALLOWED_SYSTEM_DLLS_SEARCH_PATHS
     /usr/lib
@@ -1015,6 +1021,7 @@ set(LINUX_SYSTEM_DLLS
   libSM.so*
   libICE.so*
   libXrandr.so*
+  libpython*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
