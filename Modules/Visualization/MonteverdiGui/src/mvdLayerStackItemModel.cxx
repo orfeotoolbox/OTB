@@ -625,7 +625,7 @@ LayerStackItemModel
 QVariant
 LayerStackItemModel
 ::headerData( int section,
-              Qt::Orientation orientation,
+              Qt::Orientation /**orientation*/,
               int role ) const
 {
   // qDebug()
