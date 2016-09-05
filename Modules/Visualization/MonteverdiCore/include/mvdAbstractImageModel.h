@@ -97,6 +97,7 @@ public:
   /**
    * \class BuildContext
    * \brief WIP.
+   * \ingroup OTBMonteverdiCore
    */
   class BuildContext
   {
