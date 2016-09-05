@@ -70,7 +70,7 @@ class StackedLayerModel;
 /**
  * \class AbstractImageViewRenderer
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief TODO.
  */

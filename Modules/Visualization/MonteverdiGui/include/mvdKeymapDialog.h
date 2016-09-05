@@ -59,7 +59,7 @@ class KeymapDialog;
 
 /** \class KeymapDialog
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  */
 class ITK_EXPORT KeymapDialog :

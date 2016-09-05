@@ -69,7 +69,7 @@ namespace mvd
 
 /** \class AbstractImageViewManipulator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  *  \brief Base class for QWidget manipulation
  */

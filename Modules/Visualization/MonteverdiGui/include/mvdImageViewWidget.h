@@ -70,7 +70,7 @@ class AbstractImageViewManipulator;
 
 /** \class ImageViewWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  */
 class ITK_EXPORT ImageViewWidget :

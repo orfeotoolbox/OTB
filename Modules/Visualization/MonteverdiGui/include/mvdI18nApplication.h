@@ -69,7 +69,7 @@ namespace mvd
 
 /** \class I18nApplication
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief The MVD2 application (which is different from
  * QApplication).

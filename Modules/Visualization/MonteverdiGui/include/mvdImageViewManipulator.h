@@ -72,7 +72,7 @@ namespace mvd
 /**
  * \class ImageViewManipulator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  *  \brief TODO.
  */

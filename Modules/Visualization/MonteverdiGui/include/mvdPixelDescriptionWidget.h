@@ -71,7 +71,7 @@ class PixelDescriptionWidget;
 /**
  * \class PixelDescriptionWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Widget to show current pixel under cursor description 
  */

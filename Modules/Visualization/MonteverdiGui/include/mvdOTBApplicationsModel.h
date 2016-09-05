@@ -72,7 +72,7 @@ class ApplicationLauncher;
 
 /** \class OTBApplicationsModel
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  */
 class ITK_EXPORT OTBApplicationsModel :

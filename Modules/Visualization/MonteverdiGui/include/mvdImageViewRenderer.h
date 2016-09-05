@@ -82,7 +82,7 @@ namespace mvd
 /**
  * \class ImageViewRenderer
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  */
 class ITK_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer
