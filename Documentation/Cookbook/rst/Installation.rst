@@ -61,7 +61,7 @@ double-click on the file, or with the command line :
 
 Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
-archive is extracted, the directory structure is made of :
+archive is extracted, the directory structure is made of:
 
 -  ``monteverdi.sh`` : A launcher script for Monteverdi
 
@@ -96,6 +96,18 @@ in your system.
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize your environment
 with ``source otbenv.profile``.
+
+Notes:
+
+- You must use monteverdi and mapla through ``mapla.sh`` and ``monteverdi.sh`` helper scripts in extracted directory.
+
+- The helper scripts for monteverdi and mapla set required environment variables
+
+- You might be tempted to move ``OTB-X.Y-Linux64`` into another location say /usr/local/ after extraction. But avoid this action!
+
+- To have ``OTB-X.Y-Linux64`` installed in /usr/local or /opt execute OTB-X.Y-Linux64.run in that directory.
+
+- Multiple installation of OTB can exists in same system without one conflicting the other!
 
 MacOS X
 -------
