@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export LD_LIBRARY_PATH=@OTB_INSTALL_PREFIX@/lib:$LD_LIBRARY_PATH
+export PYTHONPATH=@OTB_INSTALL_PREFIX@/lib:@OTB_INSTALL_PREFIX@/lib/otb/python:$PYTHONPATH
+export OTB_APPLICATION_PATH=@OTB_INSTALL_PREFIX@/lib/otb/applications
+@PYTHON_EXECUTABLE@ @CMAKE_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py

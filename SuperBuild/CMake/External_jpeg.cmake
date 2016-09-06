@@ -2,16 +2,6 @@ INCLUDE_ONCE_MACRO(JPEG)
 
 SETUP_SUPERBUILD(JPEG)
 
-if(WIN32)
-  set(JPEG_PATCH_COMMAND ${CMAKE_COMMAND}
-    -E copy
-    ${CMAKE_SOURCE_DIR}/patches/JPEG/jconfigint.h.in
-    ${JPEG_SB_SRC}/win/)
-
-else()
-  set(JPEG_PATCH_COMMAND)
-endif()
-
 ExternalProject_Add(JPEG
   PREFIX JPEG
   URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
@@ -29,7 +19,6 @@ ExternalProject_Add(JPEG
     -DWITH_ARITH_DEC=TRUE
     -DWITH_JAVA=FALSE
     ${JPEG_SB_SRC}
-    PATCH_COMMAND ${JPEG_PATCH_COMMAND}
   )
 
 SUPERBUILD_PATCH_SOURCE(JPEG)
