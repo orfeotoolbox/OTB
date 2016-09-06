@@ -700,6 +700,12 @@ function(func_process_deps infile)
   if(WIN32)
     string(TOLOWER "${infile}" infile_lower )
   endif()
+
+  is_system_dll(is_system "${infile}")
+  if(EXISTS ${infile} AND NOT is_system)
+    get_filename_component(infile ${infile} NAME)
+  endif()
+
   get_filename_component(bn ${infile} NAME)
 
   list_contains(contains "${bn}" "${alldlls}")
