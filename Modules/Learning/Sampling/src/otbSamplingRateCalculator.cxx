@@ -134,53 +134,62 @@ SamplingRateCalculator
 {
   std::ifstream ifs(filename.c_str());
 
+  typedef std::vector<boost::iterator_range<std::string::const_iterator> > ListType;
+
   if (ifs)
     {
     this->ClearRates();
     std::string line;
     TripletType tpt;
     std::string sep("");
-    while(!ifs.eof())
+    ListType parts;
+    while(std::getline(ifs,line))
       {
-      std::getline(ifs,line);
       if (line.empty()) continue;
       std::string::size_type pos = line.find_first_not_of(" \t");
       if (pos != std::string::npos && line[pos] == '#') continue;
 
-      if (sep.size() == 0)
+      if (sep.empty())
         {
         // Try to detect the separator
-        std::string separators("\t;,");
+        std::vector<std::string> separators(4);
+        separators[0] = "\t";
+        separators[1] = ";";
+        separators[2] = ",";
+        separators[3] = " ";
+        ListType words;
         for (unsigned int k=0 ; k<separators.size() ; k++)
           {
-          std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,separators[k]);
+          boost::split(words, line, boost::is_any_of(separators[k]));
           if (words.size() == 4)
             {
-            sep.push_back(separators[k]);
+            sep = separators[k];
             break;
             }
           }
-        if (sep.size() == 0) continue;
+        if (sep.empty()) continue;
         }
       // parse the line
-      std::vector<itksys::String> parts = itksys::SystemTools::SplitString(line,sep[0]);
+      boost::split(parts, line, boost::is_any_of(sep));
       if (parts.size() == 4)
         {
-        std::string::size_type pos1 = parts[0].find_first_not_of(" \t");
-        std::string::size_type pos2 = parts[0].find_last_not_of(" \t");
-        std::string::size_type pos3 = parts[1].find_first_not_of(" \t");
-        std::string::size_type pos4 = parts[1].find_last_not_of(" \t");
-        std::string::size_type pos5 = parts[2].find_first_not_of(" \t");
-        std::string::size_type pos6 = parts[2].find_last_not_of(" \t");
-        std::string::size_type pos7 = parts[3].find_first_not_of(" \t");
-        std::string::size_type pos8 = parts[3].find_last_not_of(" \t");
-        if (pos1 != std::string::npos && pos3 != std::string::npos &&
-            pos5 != std::string::npos && pos7 != std::string::npos)
+        std::string::size_type pos1 = line.find_first_not_of(" \t", parts[0].begin() - line.begin());
+        std::string::size_type pos2 = line.find_last_not_of(" \t", parts[0].end() - line.begin() -1);
+        std::string::size_type pos3 = line.find_first_not_of(" \t", parts[1].begin() - line.begin());
+        std::string::size_type pos4 = line.find_last_not_of(" \t", parts[1].end() - line.begin() -1);
+        std::string::size_type pos5 = line.find_first_not_of(" \t", parts[2].begin() - line.begin());
+        std::string::size_type pos6 = line.find_last_not_of(" \t", parts[2].end() - line.begin() -1);
+        std::string::size_type pos7 = line.find_first_not_of(" \t", parts[3].begin() - line.begin());
+        std::string::size_type pos8 = line.find_last_not_of(" \t", parts[3].end() - line.begin() -1);
+        if (pos2 != std::string::npos && pos1 <= pos2 &&
+            pos4 != std::string::npos && pos3 <= pos4 &&
+            pos6 != std::string::npos && pos5 <= pos6 &&
+            pos8 != std::string::npos && pos7 <= pos8)
           {
-          std::string name = parts[0].substr(pos1, pos2 - pos1 + 1);
-          std::string val1 = parts[1].substr(pos3, pos4 - pos3 + 1);
-          std::string val2 = parts[2].substr(pos5, pos6 - pos5 + 1);
-          std::string val3 = parts[3].substr(pos7, pos8 - pos7 + 1);
+          std::string name = line.substr(pos1, pos2 - pos1 + 1);
+          std::string val1 = line.substr(pos3, pos4 - pos3 + 1);
+          std::string val2 = line.substr(pos5, pos6 - pos5 + 1);
+          std::string val3 = line.substr(pos7, pos8 - pos7 + 1);
           tpt.Required = boost::lexical_cast<unsigned long>(val1);
           tpt.Tot = boost::lexical_cast<unsigned long>(val2);
           tpt.Rate = boost::lexical_cast<double>(val3);
@@ -228,50 +237,58 @@ SamplingRateCalculator
 
 SamplingRateCalculator::ClassCountMapType
 SamplingRateCalculator
-::ReadRequiredSamples(std::string filename)
+::ReadRequiredSamples(const std::string& filename)
 {
   ClassCountMapType output;
   std::ifstream ifs(filename.c_str());
+
+  typedef std::vector<boost::iterator_range<std::string::const_iterator> > ListType;
 
   if (ifs)
     {
     std::string line;
     std::string sep("");
+    ListType parts;
 
-    while(!ifs.eof())
+    while(std::getline(ifs,line))
       {
-      std::getline(ifs,line);
       if (line.empty()) continue;
       std::string::size_type pos = line.find_first_not_of(" \t");
       if (pos != std::string::npos && line[pos] == '#') continue;
 
-      if (sep.size() == 0)
+      if (sep.empty())
         {
         // Try to detect the separator
-        std::string separators("\t;,");
+        std::vector<std::string> separators(4);
+        separators[0] = "\t";
+        separators[1] = ";";
+        separators[2] = ",";
+        separators[3] = " ";
+        ListType words;
         for (unsigned int k=0 ; k<separators.size() ; k++)
           {
-          std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,separators[k]);
+          boost::split(words, line, boost::is_any_of(separators[k]));
           if (words.size() >= 2)
             {
-            sep.push_back(separators[k]);
+            sep = separators[k];
             break;
             }
           }
-        if (sep.size() == 0) continue;
+        if (sep.empty()) continue;
         }
       // parse the line
-      std::vector<itksys::String> parts = itksys::SystemTools::SplitString(line,sep[0]);
+      boost::split(parts, line, boost::is_any_of(sep));
       if (parts.size() >= 2)
         {
-        std::string::size_type pos1 = parts[0].find_first_not_of(" \t");
-        std::string::size_type pos2 = parts[0].find_last_not_of(" \t");
-        std::string::size_type pos3 = parts[1].find_first_not_of(" \t");
-        std::string::size_type pos4 = parts[1].find_last_not_of(" \t");
-        if (pos1 != std::string::npos && pos3 != std::string::npos)
+        std::string::size_type pos1 = line.find_first_not_of(" \t", parts[0].begin() - line.begin());
+        std::string::size_type pos2 = line.find_last_not_of(" \t", parts[0].end() - line.begin() -1);
+        std::string::size_type pos3 = line.find_first_not_of(" \t", parts[1].begin() - line.begin());
+        std::string::size_type pos4 = line.find_last_not_of(" \t", parts[1].end() - line.begin() -1);
+        if (pos2 != std::string::npos && pos1 <= pos2 &&
+            pos4 != std::string::npos && pos3 <= pos4)
           {
-          std::string name = parts[0].substr(pos1, pos2 - pos1 + 1);
-          std::string value = parts[1].substr(pos3, pos4 - pos3 + 1);
+          std::string name = line.substr(pos1, pos2 - pos1 + 1);
+          std::string value = line.substr(pos3, pos4 - pos3 + 1);
           output[name] = boost::lexical_cast<unsigned long>(value);
           }
         }

@@ -94,7 +94,7 @@ public:
   /** Clear internal data */
   void ClearRates(void);
 
-  static ClassCountMapType ReadRequiredSamples(std::string filename);
+  static ClassCountMapType ReadRequiredSamples(const std::string& filename);
 
 protected:
   /** Constructor */
