@@ -56,8 +56,8 @@ double-click on the file, or with the command line :
 
 .. parsed-literal::
 
-   chmod +x OTB-|version|-Linux64.run
-   ./OTB-|version|-Linux64.run
+   chmod +x OTB-|release|-Linux64.run
+   ./OTB-|release|-Linux64.run
 
 Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
@@ -103,9 +103,9 @@ Notes:
 
 - The helper scripts for monteverdi and mapla set required environment variables
 
-- You might be tempted to move "OTB-|version|-Linux64" into another location say /usr/local/ after extraction. But avoid this action!
+- You might be tempted to move "OTB-|release|-Linux64" into another location say /usr/local/ after extraction. But avoid this action!
 
-- To have "OTB-|version|-Linux64" installed in /usr/local or /opt execute "OTB-|version|-Linux64.run" in that directory.
+- To have "OTB-|release|-Linux64" installed in /usr/local or /opt execute "OTB-|release|-Linux64.run" in that directory.
 
 - Multiple installation of OTB can exists in same system without one conflicting the other!
 
@@ -118,13 +118,13 @@ uncompress it with the command line :
 
 .. parsed-literal::
 
-    chmod +x OTB-|version|-Linux64.run
-    ./OTB-|version|-Linux64.run
+    chmod +x OTB-|release|-Linux64.run
+    ./OTB-|release|-Linux64.run
 
-Once the archive is extracted, you can see OTB-|version|-Darwin64 directory in
-the same direcrtory along with OTB-|version|-Darwin64.run
+Once the archive is extracted, you can see OTB-|release|-Darwin64 directory in
+the same direcrtory along with OTB-|release|-Darwin64.run
 
-Contents of OTB-|version|-Darwin64 is briefly listed below:
+Contents of OTB-|release|-Darwin64 is briefly listed below:
 
 -  ``Monteverdi.app`` : A Mac OSX .app for Monteverdi
 
@@ -150,7 +150,7 @@ Notes:
 -  You must use monteverdi and mapla through their .app files only.
 
 -  You are allowed to move these .app files and refrain from moving or
-   deleting OTB-|version|-Darwin64 after extraction. In case you need to have OTB
+   deleting OTB-|release|-Darwin64 after extraction. In case you need to have OTB
    installed in some other directory. Extract the .run file there.
 
 Other packages
