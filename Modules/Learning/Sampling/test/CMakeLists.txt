@@ -102,7 +102,7 @@ otb_add_test(NAME leTuSamplingRateCalculatorListNew COMMAND otbSamplingTestDrive
 
 otb_add_test(NAME leTvSamplingRateCalculatorList COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/leTvSamplingRateCalculatorListList.txt
+  ${BASELINE_FILES}/leTvSamplingRateCalculatorList.txt
   ${TEMP}/leTvSamplingRateCalculatorList.txt
   otbSamplingRateCalculatorList
   ${TEMP}/leTvSamplingRateCalculatorList.txt)
