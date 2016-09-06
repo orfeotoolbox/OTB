@@ -18,6 +18,7 @@
 
 #include "otbSamplerBase.h"
 #include "otbMath.h"
+#include "itkMath.h"
 
 namespace otb
 {
