@@ -190,9 +190,9 @@ SamplingRateCalculator
           std::string val1 = line.substr(pos3, pos4 - pos3 + 1);
           std::string val2 = line.substr(pos5, pos6 - pos5 + 1);
           std::string val3 = line.substr(pos7, pos8 - pos7 + 1);
-          tpt.Required = boost::lexical_cast<unsigned long>(val1);
-          tpt.Tot = boost::lexical_cast<unsigned long>(val2);
-          tpt.Rate = boost::lexical_cast<double>(val3);
+          tpt.Required = Utils::LexicalCast<unsigned long>(val1, "number of samples");
+          tpt.Tot = Utils::LexicalCast<unsigned long>(val2, "number of samples");
+          tpt.Rate = Utils::LexicalCast<double>(val3, "rate");
           m_RatesByClass[name] = tpt;
           }
         }
@@ -289,7 +289,7 @@ SamplingRateCalculator
           {
           std::string name = line.substr(pos1, pos2 - pos1 + 1);
           std::string value = line.substr(pos3, pos4 - pos3 + 1);
-          output[name] = boost::lexical_cast<unsigned long>(value);
+          output[name] = Utils::LexicalCast<unsigned long>(value, "number of samples");
           }
         }
       }
