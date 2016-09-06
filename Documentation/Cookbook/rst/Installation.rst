@@ -273,13 +273,3 @@ following repositories with these command-lines:
     http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
 
 and then add the OTB packages as shown above.
-
-MacPort
-~~~~~~~
-
-OTB Applications are now available on
-`MacPorts <http://http://www.macports.org/>`__. The port name is called
-’orfeotoolbox’. You can follow the `MacPorts
-documentation < http://guide.macports.org/>`__ to install MacPorts
-first, then install the ’orfeotoolbox’ port. After the installation, you
-can used directly on your system, the OTB applications.
