@@ -81,7 +81,7 @@ SamplerBase::SetRate(double rate, unsigned long total)
       ") will be clamped to 0.0" << std::endl);
     rateChecked = 0.0;
     }
-  if (m_Rate != rateChecked)
+  if (itk::Math::NotAlmostEquals(m_Rate, rateChecked))
     {
     m_Rate = rateChecked;
     modified = true;
