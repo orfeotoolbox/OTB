@@ -700,6 +700,12 @@ function(func_process_deps infile)
   if(WIN32)
     string(TOLOWER "${infile}" infile_lower )
   endif()
+
+  is_system_dll(is_system "${infile}")
+  if(EXISTS ${infile} AND NOT is_system)
+    get_filename_component(infile ${infile} NAME)
+  endif()
+
   get_filename_component(bn ${infile} NAME)
 
   list_contains(contains "${bn}" "${alldlls}")
@@ -742,17 +748,19 @@ function(func_process_deps infile)
                     ${CMAKE_BINARY_DIR}/make_symlinks_temp
                     "ln -sf $OUT_DIR/lib/${linked_to_file} $OUT_DIR/lib/${basename_of_sofile}\n"
                     )
-                  #message("${sofile} is a symlink to ${linked_to_file}")
+                  # message("${sofile} is a symlink to ${linked_to_file}")
                 else() # is_symlink
                   if(NOT "${basename_of_sofile}" MATCHES "otbapp_")
-                    file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_LIB_DIR} "${sofile}\n")
-                    #just install the so file to <staging-dir>/lib
-                    #install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib MESSAGE_NEVER)
-                    # Finally touch a file in temp directory for globbing later
-                    # message("touching ${basename_of_sofile}")
-                    execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
-                  endif() #if(.. MATCHES "otbapp_")
-                endif() #is_symlink
+                    if( EXISTS ${SEARCHDIR}/${sofile} )
+                      file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_LIB_DIR} "${sofile}\n")
+                      #just install the so file to <staging-dir>/lib
+                      #install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib MESSAGE_NEVER)
+                      # Finally touch a file in temp directory for globbing later
+                      # message("touching ${basename_of_sofile}")
+                      execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
+                    endif() # ( EXISTS ${SEARCHDIR}/${sofile} )
+                  endif() # if(.. MATCHES "otbapp_")
+                endif() # is_symlink
               endif() #is_valid
             endforeach()
           endif(is_executable)

@@ -1,6 +1,6 @@
 diff -burN lpng1616.orig/CMakeLists.txt lpng1616/CMakeLists.txt
 --- lpng1616.orig/CMakeLists.txt	2016-09-06 09:49:13.951978634 +0200
-+++ lpng1616/CMakeLists.txt	2016-09-06 10:41:01.911954335 +0200
++++ lpng1616/CMakeLists.txt	2016-09-06 14:08:21.275857081 +0200
 @@ -17,7 +17,16 @@
  set(PNGLIB_MAJOR 1)
  set(PNGLIB_MINOR 6)
@@ -40,7 +40,19 @@ diff -burN lpng1616.orig/CMakeLists.txt lpng1616/CMakeLists.txt
  if(PNG_SHARED)
    add_library(${PNG_LIB_NAME} SHARED ${libpng_sources})
    set(PNG_LIB_TARGETS ${PNG_LIB_NAME})
-@@ -286,18 +292,18 @@
+@@ -253,9 +259,8 @@
+ # SET UP LINKS
+ if(PNG_SHARED)
+   set_target_properties(${PNG_LIB_NAME} PROPERTIES
+-#   VERSION 16.${PNGLIB_RELEASE}.1.6.16
+-    VERSION 16.${PNGLIB_RELEASE}.0
+-    SOVERSION 16
++    VERSION ${PNGLIB_VERSION}
++    SOVERSION ${PNGLIB_MAJOR}
+     CLEAN_DIRECT_OUTPUT 1)
+ endif()
+ if(PNG_STATIC)
+@@ -286,18 +291,18 @@
        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
  
@@ -63,7 +75,7 @@ diff -burN lpng1616.orig/CMakeLists.txt lpng1616/CMakeLists.txt
        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpng${CMAKE_SHARED_LIBRARY_SUFFIX}
           DESTINATION ${CMAKE_INSTALL_LIBDIR})
      endif(NOT WIN32)
-@@ -305,12 +311,12 @@
+@@ -305,12 +310,12 @@
  
    if(PNG_STATIC)
      if(NOT WIN32 OR CYGWIN OR MINGW)
@@ -79,7 +91,7 @@ diff -burN lpng1616.orig/CMakeLists.txt lpng1616/CMakeLists.txt
  endif()
  
  if(NOT SKIP_INSTALL_HEADERS AND NOT SKIP_INSTALL_ALL )
-@@ -362,4 +368,3 @@
+@@ -362,4 +367,3 @@
  # to create msvc import lib for mingw compiled shared lib
  # pexports libpng.dll > libpng.def
  # lib /def:libpng.def /machine:x86
