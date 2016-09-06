@@ -130,29 +130,28 @@ void
 SamplingRateCalculatorList
 ::SetNbOfSamplesAllClasses(std::vector<unsigned long> &nb, PartitionType t)
 {
-  if (nb.size() == 0)
+  if (nb.empty())
     {
     itkGenericExceptionMacro("No number of samples given");
     }
   this->UpdateGlobalCounts();
   ClassCountMapType::const_iterator it;
-  MapRateType::const_iterator curIt;
   ClassCountMapType needed;
   switch (t)
     {
     case PROPORTIONAL:
       {
-      unsigned long curTotal;
       for (unsigned int i=0 ; i<this->Size() ; i++)
         {
         needed.clear();
         for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
           {
-          curIt = this->GetNthElement(i)->GetRatesByClass().find(it->first);
-          if (curIt != this->GetNthElement(i)->GetRatesByClass().end() &&
+          const MapRateType& rates = this->GetNthElement(i)->GetRatesByClass();
+          MapRateType::const_iterator curIt = rates.find(it->first);
+          if (curIt != rates.end() &&
               it->second > 0UL)
             {
-            curTotal = (curIt->second).Tot;
+            unsigned long curTotal = (curIt->second).Tot;
             needed[it->first] = static_cast<unsigned long>(vcl_floor(
               static_cast<double>(nb[0]) *
               static_cast<double>(curTotal) /
@@ -199,12 +198,11 @@ void
 SamplingRateCalculatorList
 ::SetNbOfSamplesByClass(const std::vector<ClassCountMapType> &required, PartitionType t)
 {
-  if (required.size() == 0)
+  if (required.empty())
     {
     itkGenericExceptionMacro("No number of samples given");
     }
   this->UpdateGlobalCounts();
-  MapRateType::const_iterator curIt;
   ClassCountMapType::const_iterator it;
   ClassCountMapType::const_iterator inputIt;
   ClassCountMapType needed;
@@ -212,19 +210,19 @@ SamplingRateCalculatorList
     {
     case PROPORTIONAL:
       {
-      unsigned long curTotal;
       for (unsigned int i=0 ; i<this->Size() ; i++)
         {
         needed.clear();
         for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
           {
-          curIt = this->GetNthElement(i)->GetRatesByClass().find(it->first);
+          const MapRateType &rates = this->GetNthElement(i)->GetRatesByClass();
+          MapRateType::const_iterator curIt = rates.find(it->first);
           inputIt = required[0].find(it->first);
-          if (curIt != this->GetNthElement(i)->GetRatesByClass().end() &&
+          if (curIt != rates.end() &&
               inputIt != required[0].end() &&
               it->second > 0UL)
             {
-            curTotal = (curIt->second).Tot;
+            unsigned long curTotal = (curIt->second).Tot;
             needed[it->first] = static_cast<unsigned long>(vcl_floor(
               static_cast<double>(inputIt->second) *
               static_cast<double>(curTotal) /
@@ -241,21 +239,20 @@ SamplingRateCalculatorList
       }
     case EQUAL:
       {
-      unsigned long curTotal;
-      unsigned long curNeeded;
       for (unsigned int i=0 ; i<this->Size() ; i++)
         {
         needed.clear();
         for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
           {
-          curIt = this->GetNthElement(i)->GetRatesByClass().find(it->first);
+          const MapRateType &rates = this->GetNthElement(i)->GetRatesByClass();
+          MapRateType::const_iterator curIt = rates.find(it->first);
           inputIt = required[0].find(it->first);
-          if (curIt != this->GetNthElement(i)->GetRatesByClass().end() &&
+          if (curIt != rates.end() &&
               inputIt != required[0].end() &&
               it->second > 0UL)
             {
-            curTotal = (curIt->second).Tot;
-            curNeeded = static_cast<unsigned long>(vcl_floor(
+            unsigned long curTotal = (curIt->second).Tot;
+            unsigned long curNeeded = static_cast<unsigned long>(vcl_floor(
               static_cast<double>(inputIt->second) /
               static_cast<double>(this->Size())));
             needed[it->first] = std::min(curTotal,curNeeded);
@@ -298,14 +295,7 @@ SamplingRateCalculatorList
     MapRateType::const_iterator it = rates.begin();
     for (; it != rates.end() ; ++it)
       {
-      if (m_GlobalCountMap.count(it->first))
-        {
-        m_GlobalCountMap[it->first] += it->second.Tot;
-        }
-      else
-        {
-        m_GlobalCountMap[it->first] = it->second.Tot;
-        }
+      m_GlobalCountMap[it->first] += it->second.Tot;
       }
     }
 }
