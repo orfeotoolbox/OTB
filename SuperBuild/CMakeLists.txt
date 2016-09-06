@@ -137,6 +137,19 @@ if(UNIX)
 endif()
 
 set(SB_CMAKE_ARGS "-G${CMAKE_GENERATOR}")
+
+set(SB_CONFIGURE_ARGS)
+
+list(APPEND SB_CONFIGURE_ARGS "--prefix=${CMAKE_INSTALL_PREFIX}")
+
+if(BUILD_SHARED_LIBS)
+  list(APPEND SB_CONFIGURE_ARGS "--enable-static=no")
+  list(APPEND SB_CONFIGURE_ARGS "--enable-shared=yes")
+else()
+  list(APPEND SB_CONFIGURE_ARGS "--enable-static=yes")
+  list(APPEND SB_CONFIGURE_ARGS "--enable-shared=no")
+endif()
+
 if(UNIX)
   if(APPLE)
     set(SB_CMAKE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
