@@ -96,7 +96,6 @@ SamplingRateCalculatorList
       ClassCountMapType::iterator it = m_GlobalCountMap.begin();
       for (; it != m_GlobalCountMap.end() ; ++it)
         {
-        std::cout << "global : " << it->second << std::endl;
         if (smallest > it->second && it->second > 0UL)
           {
           smallest = it->second;
