@@ -584,6 +584,15 @@ I18nCoreApplication
   //
   // 1. default UI language is english (no translation).
   QLocale sys_lc( QLocale::system() );
+
+  // Trace system locale.
+  qWarning()
+    << "Language:" << QLocale::languageToString( sys_lc.language() );
+
+  qWarning()
+    << "Country:" << QLocale::countryToString( sys_lc.country() );
+
+  // Check system locale.
   if( sys_lc.language() == QLocale::C ||
       ( sys_lc.language() == QLocale::English &&
         sys_lc.country() == QLocale::UnitedStates ) )
