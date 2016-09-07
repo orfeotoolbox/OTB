@@ -678,7 +678,7 @@ HistogramModel
       .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
       .arg( lMain.elapsed() );
     }
-  catch( const std::exception & exception )
+  catch( const std::exception & )
     {
     qWarning()
       << tr( "Zero relevant pixels found when computing histogram (probably because of no-data settings)" );
