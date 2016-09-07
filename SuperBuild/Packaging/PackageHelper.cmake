@@ -70,6 +70,7 @@ macro(macro_super_package)
   list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/bin") #monteverdi, mapla
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncherCommandLine..
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb/python") #otbApplication.py
 
   set(EXE_SEARCHDIRS ${OTB_INSTALL_DIR}/bin)
   list(APPEND  EXE_SEARCHDIRS ${MONTEVERDI_INSTALL_DIR}/bin)
@@ -552,14 +553,16 @@ function(func_prepare_package)
   set(DEST_APP_DIR lib/otb/applications)
   set(EXE_EXT "")
   set(SCR_EXT ".sh")
-  set(LIB_EXT "*so")
+  set(LIB_EXT ".so")
+  set(PYMODULE_EXT ".so")
   if(WIN32)
     set(EXE_EXT ".exe")
-    set(LIB_EXT "*dll")
+    set(LIB_EXT ".dll")
     set(SCR_EXT ".bat")
+    set(PYMODULE_EXT ".pyd")
     set(DEST_LIB_DIR bin)
   elseif(APPLE)
-    set(LIB_EXT "*dylib")
+    set(LIB_EXT ".dylib")
   endif()
 
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks_temp  "")
@@ -609,7 +612,7 @@ function(func_prepare_package)
     endif()
   endforeach()
 
-  file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
+  file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
 
   #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
   #NOTE: this is not used in windows yet..
@@ -619,6 +622,10 @@ function(func_prepare_package)
   endforeach()
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
+  if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+    list(APPEND PKG_PEFILES "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+    install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python DESTINATION ${PKG_STAGE_DIR}/lib)
+  endif()
 
   set(ALLOWED_SYSTEM_DLLS_SEARCH_PATHS
     /usr/lib
@@ -693,6 +700,12 @@ function(func_process_deps infile)
   if(WIN32)
     string(TOLOWER "${infile}" infile_lower )
   endif()
+
+  is_system_dll(is_system "${infile}")
+  if(EXISTS ${infile} AND NOT is_system)
+    get_filename_component(infile ${infile} NAME)
+  endif()
+
   get_filename_component(bn ${infile} NAME)
 
   list_contains(contains "${bn}" "${alldlls}")
@@ -735,17 +748,19 @@ function(func_process_deps infile)
                     ${CMAKE_BINARY_DIR}/make_symlinks_temp
                     "ln -sf $OUT_DIR/lib/${linked_to_file} $OUT_DIR/lib/${basename_of_sofile}\n"
                     )
-                  #message("${sofile} is a symlink to ${linked_to_file}")
+                  # message("${sofile} is a symlink to ${linked_to_file}")
                 else() # is_symlink
                   if(NOT "${basename_of_sofile}" MATCHES "otbapp_")
-                    file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_LIB_DIR} "${sofile}\n")
-                    #just install the so file to <staging-dir>/lib
-                    #install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib MESSAGE_NEVER)
-                    # Finally touch a file in temp directory for globbing later
-                    # message("touching ${basename_of_sofile}")
-                    execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
-                  endif() #if(.. MATCHES "otbapp_")
-                endif() #is_symlink
+                    if( NOT IS_DIRECTORY ${sofile} )
+                      file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_LIB_DIR} "${sofile}\n")
+                      #just install the so file to <staging-dir>/lib
+                      #install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib MESSAGE_NEVER)
+                      # Finally touch a file in temp directory for globbing later
+                      # message("touching ${basename_of_sofile}")
+                      execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
+                    endif() # ( EXISTS ${SEARCHDIR}/${sofile} )
+                  endif() # if(.. MATCHES "otbapp_")
+                endif() # is_symlink
               endif() #is_valid
             endforeach()
           endif(is_executable)
@@ -1015,6 +1030,7 @@ set(LINUX_SYSTEM_DLLS
   libSM.so*
   libICE.so*
   libXrandr.so*
+  libpython*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
@@ -1031,6 +1047,7 @@ set(APPLE_SYSTEM_DLLS
   Carbon.framework
   AppKit.framework
   Foundation.framework
+  Python.framework
   AGL.framework
   OpenGL.framework
   libgcc_s.*dylib
