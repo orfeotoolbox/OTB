@@ -11,7 +11,7 @@ The old Cookbook in otb-documents is deprecated.
 
 Requirements
 ============
-install OTB, sphnix, sphinx-rtd-theme
+install OTB, sphinx, sphinx-rtd-theme
 
 aptitude install python-sphinx python-sphinx-rtd-theme
 
