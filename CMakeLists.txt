@@ -63,6 +63,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
+include( i18n_qt4 )
+
+reset_qt4_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -87,6 +90,17 @@ set(OTB_VERSION_MINOR "7")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
+# Monteverdi version number (follows OTB)
+set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
+set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
+set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
+set( Monteverdi_VERSION_SUFFIX "" )
+
+set( Monteverdi_VERSION_STRING
+  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
+  )
+
+#-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
@@ -357,7 +371,7 @@ add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
 
-#----------------------------------------------------------------------
+#----------------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
   add_custom_target(SuperBuild-archive
@@ -520,3 +534,7 @@ message("======================= End of OTB cmake summary ======================
 
 #don't need this one anymore. so unset it.
 unset(option_list)
+
+#----------------------------------------------------------------------------
+# I18N
+add_subdirectory( i18n )

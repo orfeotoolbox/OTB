@@ -2,10 +2,8 @@ Applications
 ============
 
 This chapter is the reference documentation for applications delivered
-with . It provides detailed description of the application behaviour and
-parameters, as well as python and bash snippets to use them
-applications. For a general introduction on applications delivered with
-, please read chapter[chap:otb-applications], page .
+with OTB. It provides detailed description of the application behaviour and
+parameters, as well as python and bash snippets describing how to use them.
 
 .. toctree::
 	:maxdepth: 3
