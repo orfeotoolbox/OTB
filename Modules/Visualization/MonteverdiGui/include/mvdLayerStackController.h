@@ -69,7 +69,7 @@ class LayerStackWidget;
 /**
  * \class LayerStackController
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */

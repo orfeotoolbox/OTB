@@ -51,7 +51,7 @@ otb_module_target( OTBMonteverdi )
 if (WIN32)
   # Windows Resource file need to have the full path to icon
   # if the .ico is not in the current dir
-  set( Monteverdi_App_WIN32_ICON ${Monteverdi_SOURCE_DIR}/Data/Icons/monteverdi.ico)
+  set( Monteverdi_App_WIN32_ICON ${OTB_SOURCE_DIR}/Utilities/Data/Icons/monteverdi.ico)
   configure_file(
     mvdWin32.rc.in
     mvdWin32.rc

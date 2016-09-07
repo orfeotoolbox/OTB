@@ -795,8 +795,7 @@ MainWindow
     < HistogramWidget, HistogramController, QDockWidget >
     ( "HISTOGRAM",
       tr( "Histogram" ),
-      Qt::RightDockWidgetArea,
-      false
+      Qt::RightDockWidgetArea
     );
 
   tabifyDockWidget( m_QuicklookViewDock, m_HistogramDock );
@@ -835,7 +834,8 @@ MainWindow
     < ColorDynamicsWidget, ColorDynamicsController, QDockWidget >
     ( "COLOR_DYNAMICS",
       tr( "Color dynamics" ),
-      Qt::RightDockWidgetArea
+      Qt::RightDockWidgetArea,
+      I18nMainWindow::DOCK_LAYOUT_SCROLLABLE
     );
 
   // Tabify dock-widgets.
@@ -1189,18 +1189,18 @@ MainWindow
 
   stackedLayerModel->SetCurrent( imageModel );
 
-  bool hasReference = stackedLayerModel->HasReference();
+  if( gcs==0 )
+    {
+    if( unk==0 )
+      {
+      if( srt!=SRT_UNKNOWN )
+	stackedLayerModel->SetReference( imageModel  );
 
-  if( !hasReference && srt!=SRT_UNKNOWN )
-    stackedLayerModel->SetReference( imageModel  );
-
-  else if( hasReference && srt==SRT_UNKNOWN )
+      UserZoomExtent();
+      }
+    }
+  else if( unk==0 && srt==SRT_UNKNOWN )
     stackedLayerModel->SetReference( StackedLayerModel::NIL_INDEX );
-
-  //
-  // Set zoom-level which forces image-views refresh.
-  if( !hasReference )
-    UserZoomExtent();
 
   //
   // Re-activate rendering of image-views.
@@ -1558,7 +1558,7 @@ MainWindow
     ( "APPLICATIONS_BROWSER",
       tr( "OTB-Applications browser" ),
       Qt::RightDockWidgetArea,
-      true
+      I18nMainWindow::DOCK_LAYOUT_FLOATING
     );
 
   tabifyDockWidget( m_HistogramDock, m_OtbApplicationsBrowserDock );
@@ -2039,7 +2039,7 @@ MainWindow
 void
 MainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
-				 const QString & docName )
+                                 const QString & /**docName*/ )
 {
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );

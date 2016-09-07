@@ -60,7 +60,7 @@ class ColorSetupWidget;
 /**
  * \class ColorSetupWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  */
 class ITK_EXPORT ColorSetupWidget :
     public QWidget

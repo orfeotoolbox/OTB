@@ -67,7 +67,7 @@ class AbstractModel;
 /**
  * \class AbstractModelController
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  */
 class ITK_EXPORT AbstractModelController :
     public QObject

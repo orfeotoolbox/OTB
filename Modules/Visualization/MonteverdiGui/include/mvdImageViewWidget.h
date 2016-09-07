@@ -70,7 +70,7 @@ class AbstractImageViewManipulator;
 
 /** \class ImageViewWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  */
 class ITK_EXPORT ImageViewWidget :
@@ -422,6 +422,9 @@ private slots:
   /**
    */
   void OnRefreshViewRequested();
+  /**
+   */
+  void OnResetViewport();
 };
 
 }// end namespace 'mvd'

@@ -69,7 +69,7 @@ namespace mvd
 
 /** \class AbstractImageViewManipulator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  *  \brief Base class for QWidget manipulation
  */
@@ -188,6 +188,10 @@ public:
   /**
    */
   virtual void ResizeEvent( QResizeEvent* event ) =0;
+
+  /**
+   */
+  virtual void ResetViewport() =0;
 
 //
 // Public SLOTS.

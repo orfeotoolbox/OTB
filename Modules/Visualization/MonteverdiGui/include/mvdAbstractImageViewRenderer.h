@@ -70,7 +70,7 @@ class StackedLayerModel;
 /**
  * \class AbstractImageViewRenderer
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief TODO.
  */
@@ -223,6 +223,9 @@ public:
   /**
    */
   inline bool IsGLSLEnabled() const;
+  /**
+   */
+  virtual bool IsEffectsEnabled() const = 0;
   /**
    */
   inline bool ZoomToRegion( const PointType & origin,

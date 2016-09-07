@@ -72,7 +72,7 @@ namespace mvd
 /**
  * \class ImageViewManipulator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  *  \brief TODO.
  */
@@ -167,6 +167,8 @@ public:
   virtual void ZoomOut();
 
   virtual const PointType& Transform( PointType&, const QPoint& ) const;
+
+  virtual void ResetViewport();
 
   //
   // Events.

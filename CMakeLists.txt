@@ -94,6 +94,17 @@ set(OTB_VERSION_MINOR "7")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
+# Monteverdi version number (follows OTB)
+set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
+set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
+set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
+set( Monteverdi_VERSION_SUFFIX "" )
+
+set( Monteverdi_VERSION_STRING
+  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
+  )
+
+#-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)

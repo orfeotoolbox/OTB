@@ -121,6 +121,8 @@ inline void SetupWidget( QWidget * widget, const F& functor );
 /**
  * \class FileSelectionInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class FileSelectionInitializer : public std::unary_function<
@@ -136,6 +138,8 @@ public:
 /**
  * \class InputImageInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputImageInitializer : public std::unary_function<
@@ -150,6 +154,8 @@ public:
 
 /**
  * \class InputImageListInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -170,6 +176,8 @@ private:
 /**
  * \class InputVectorDataInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputVectorDataInitializer : public std::unary_function<
@@ -182,6 +190,8 @@ public:
 
 /**
  * \class InputVectorDataListInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -201,6 +211,8 @@ private:
 /**
  * \class InputFilenameInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputFilenameInitializer : public std::unary_function<
@@ -213,6 +225,8 @@ public:
 
 /**
  * \class InputFilenameListInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -232,6 +246,8 @@ private:
 /**
  * \class InputProcessXMLInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputProcessXMLInitializer : public std::unary_function<
@@ -244,6 +260,8 @@ public:
 
 /**
  * \class OutputImageInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -264,6 +282,8 @@ private:
 /**
  * \class OutputVectorDataInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class OutputVectorDataInitializer : public std::unary_function<
@@ -279,6 +299,8 @@ private:
 
 /**
  * \class OutputFilenameInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -296,6 +318,8 @@ private:
 /**
  * \class OutputProcessXMLInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class OutputProcessXMLInitializer : public std::unary_function<
@@ -311,6 +335,8 @@ private:
 
 /**
  * \class ToolTipInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */

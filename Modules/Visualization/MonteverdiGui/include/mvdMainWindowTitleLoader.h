@@ -61,7 +61,7 @@ class VectorImageModel;
 /**
  * \class MainWindowTitleLoader
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Imports an image into a Monteverdi dataset
  *

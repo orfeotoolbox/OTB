@@ -82,7 +82,7 @@ namespace mvd
 /**
  * \class ImageViewRenderer
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  */
 class ITK_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer
@@ -196,6 +196,8 @@ public:
                const PointType & vcenter,
                const SpacingType & vspacing ) const;
 
+  virtual bool IsEffectsEnabled() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -212,6 +214,7 @@ signals:
   void ClearProjectionRequired();
   void SetProjectionRequired();
   void UpdateProjectionRequired();
+  void ResetViewport();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
