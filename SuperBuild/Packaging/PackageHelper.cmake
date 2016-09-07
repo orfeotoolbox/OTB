@@ -751,7 +751,7 @@ function(func_process_deps infile)
                   # message("${sofile} is a symlink to ${linked_to_file}")
                 else() # is_symlink
                   if(NOT "${basename_of_sofile}" MATCHES "otbapp_")
-                    if( EXISTS ${SEARCHDIR}/${sofile} )
+                    if( NOT IS_DIRECTORY ${sofile} )
                       file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_LIB_DIR} "${sofile}\n")
                       #just install the so file to <staging-dir>/lib
                       #install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib MESSAGE_NEVER)
