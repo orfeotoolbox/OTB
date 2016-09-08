@@ -11,12 +11,14 @@ The old Cookbook in otb-documents is deprecated.
 
 Requirements
 ============
-install OTB, sphinx, sphinx-rtd-theme
+Install OTB, sphinx, sphinx-rtd-theme:
 
 aptitude install python-sphinx python-sphinx-rtd-theme
 
 How to build the Cookbook:
 ==========================
+
+You will need a build of OTB with python wrapping enabled (SuperBuild is fine). Then:
 
     mkdir ~/build-cookbook
     cd ~/build-cookbook
@@ -26,6 +28,8 @@ How to build the Cookbook:
 View results
 ============
 
-Open the cookbook documentation in a firefox tab!
+Open the cookbook documentation in a browser tab:
 
-firefox ~/build-cookbook/rst/_build/html/index.html
+    firefox ~/build-cookbook/rst/_build/html/index.html
+
+To upload it somewhere, copy the _build/html directory.
