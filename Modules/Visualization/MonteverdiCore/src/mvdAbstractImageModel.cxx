@@ -156,7 +156,7 @@ AbstractImageModel
       oss <<ToStdString( tr("BAND ") )<< count;
       outputBandNames.push_back(oss.str());
       }
-    
+
     // set the output QStringList
     qBandNames1 = ToQStringList( outputBandNames );
     }
