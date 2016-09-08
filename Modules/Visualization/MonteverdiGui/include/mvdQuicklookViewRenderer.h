@@ -75,7 +75,7 @@ namespace mvd
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT QuicklookViewRenderer :
+class OTBMonteverdiGUI_EXPORT QuicklookViewRenderer :
     public ImageViewRenderer
 {
 

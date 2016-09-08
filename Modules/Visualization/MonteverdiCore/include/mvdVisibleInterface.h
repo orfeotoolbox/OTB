@@ -72,7 +72,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT VisibleInterface
+class OTBMonteverdiCore_EXPORT VisibleInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

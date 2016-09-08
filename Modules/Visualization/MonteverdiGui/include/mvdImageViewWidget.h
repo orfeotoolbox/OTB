@@ -73,7 +73,7 @@ class AbstractImageViewManipulator;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT ImageViewWidget :
+class OTBMonteverdiGUI_EXPORT ImageViewWidget :
     public QGLWidget
 {
 

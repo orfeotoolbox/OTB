@@ -76,7 +76,7 @@ class ApplicationsToolBox;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class ITK_EXPORT ApplicationsToolBoxController :
+class OTBMonteverdiGUI_EXPORT ApplicationsToolBoxController :
     public AbstractModelController
 {
 
@@ -148,7 +148,7 @@ private:
 //
 // Private attributes.
 private:
-  
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //

@@ -73,7 +73,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT ImageSettings
+class OTBMonteverdiCore_EXPORT ImageSettings
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

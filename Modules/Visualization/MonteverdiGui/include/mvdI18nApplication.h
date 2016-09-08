@@ -73,7 +73,7 @@ namespace mvd
  *
  * \brief The MVD2 application (which is different from
  * QApplication).
- * 
+ *
  * I18nApplication do not derive from QApplication to prevent a dread
  * diamong multiple inheritance scheme which could not be resolved
  * using virtual inheritance (because Qt is not designed for).
@@ -81,7 +81,7 @@ namespace mvd
  *
  * \see I18nCoreApplication.
  */
-class ITK_EXPORT I18nApplication
+class OTBMonteverdiGUI_EXPORT I18nApplication
   : public I18nCoreApplication
 {
 

@@ -75,7 +75,7 @@ class ColorBandDynamicsWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT ColorBandDynamicsWidget :
+class OTBMonteverdiGUI_EXPORT ColorBandDynamicsWidget :
     public QWidget
 {
 

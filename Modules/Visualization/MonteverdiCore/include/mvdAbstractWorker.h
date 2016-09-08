@@ -73,7 +73,7 @@ namespace mvd
  *
  * \brief Abstract worker object used as a base-class for threaded tasks.
  */
-class ITK_EXPORT AbstractWorker :
+class OTBMonteverdiCore_EXPORT AbstractWorker :
     public QObject
 {
 
@@ -153,7 +153,7 @@ signals:
   /**
    * \brief Signal emitted when an exception has been caught by this worker.
    *
-   * \param 
+   * \param
    */
   void ExceptionRaised( QString what );
 

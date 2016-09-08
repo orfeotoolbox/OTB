@@ -73,7 +73,7 @@ class ColorSetupWidget;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class ITK_EXPORT ColorSetupController :
+class OTBMonteverdiGUI_EXPORT ColorSetupController :
     public AbstractModelController
 {
 

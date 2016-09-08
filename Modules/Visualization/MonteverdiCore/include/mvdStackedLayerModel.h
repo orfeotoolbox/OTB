@@ -76,7 +76,7 @@ class AbstractLayerModel;
  *
  * \brief WIP.
  */
-class ITK_EXPORT StackedLayerModel :
+class OTBMonteverdiCore_EXPORT StackedLayerModel :
     public AbstractModel
 {
 
@@ -306,7 +306,7 @@ private:
   // Usually, information is a singular term which denotes a
   // plural. Since there's a container of several pixel-infos and we
   // usually name container variables by using the plural form, an 's'
-  // is appended to PixelInfo. 
+  // is appended to PixelInfo.
   PixelInfo::Vector m_PixelInfos;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -540,7 +540,7 @@ StackedLayerModel
   return
     it==m_LayerModels.end()
     ? NULL
-    : it->second;  
+    : it->second;
 }
 
 /*****************************************************************************/

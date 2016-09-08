@@ -81,7 +81,7 @@ namespace mvd
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT HistogramPlotPicker :
+class OTBMonteverdiGUI_EXPORT HistogramPlotPicker :
     public QwtPlotPicker
 {
 
@@ -187,7 +187,7 @@ private:
 // Private attributes.
 private:
   /**
-   * \brief 
+   * \brief
    */
   static const CountType CURVE_COUNT = 4;
 

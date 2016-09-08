@@ -81,7 +81,7 @@ class VectorImageModel;
  *
  * \brief The MVD2 core-application (which is different from
  * QCoreApplication).
- * 
+ *
  * I18nCoreApplication do not derive from QCoreApplication to
  * prevent a dread diamong multiple inheritance scheme which could not
  * be resolved using virtual inheritance (because Qt is not designed
@@ -99,7 +99,7 @@ class VectorImageModel;
  * for example, provide sessio management), the specialized instance
  * can be passed as argument of constructor.
  */
-class ITK_EXPORT I18nCoreApplication
+class OTBMonteverdiCore_EXPORT I18nCoreApplication
   : public QObject
 {
 
@@ -210,7 +210,7 @@ public:
 
   /**
    * \brief setup elevation management
-   * 
+   *
    */
   bool ElevationSetup();
 
@@ -481,12 +481,12 @@ private:
 
   /**
   * \brief Directory where all result files from OTB applications are
-  * stored 
+  * stored
   */
   QDir m_ResultsDir;
 
   /**
-   * \brief Application settings 
+   * \brief Application settings
    */
   QSettings * m_Settings;
 

@@ -74,7 +74,7 @@ class StackedLayerModel;
  *
  * \brief TODO.
  */
-class AbstractImageViewRenderer :
+class OTBMonteverdiGUI_EXPORT AbstractImageViewRenderer :
     public QObject
 {
 

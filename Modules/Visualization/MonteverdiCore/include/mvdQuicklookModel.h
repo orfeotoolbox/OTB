@@ -76,7 +76,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT QuicklookModel :
+class OTBMonteverdiCore_EXPORT QuicklookModel :
     public VectorImageModel
 {
 

@@ -73,7 +73,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT FilenameInterface
+class OTBMonteverdiCore_EXPORT FilenameInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

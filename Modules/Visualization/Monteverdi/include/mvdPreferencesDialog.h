@@ -24,7 +24,7 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
 
-
+#include "OTBMonteverdiExport.h"
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -72,7 +72,7 @@ class PreferencesDialog;
  * \ingroup OTBMonteverdi
  *
  */
-class ITK_EXPORT PreferencesDialog :
+class OTBMonteverdi_EXPORT PreferencesDialog :
     public QDialog
 {
 

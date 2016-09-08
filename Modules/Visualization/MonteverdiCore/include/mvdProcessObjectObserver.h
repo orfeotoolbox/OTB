@@ -74,7 +74,7 @@ class ProgressInterface;
  *
  * \brief WIP.
  */
-class ITK_EXPORT ProcessObjectObserver :
+class OTBMonteverdiCore_EXPORT ProcessObjectObserver :
     public itk::Command
 {
 

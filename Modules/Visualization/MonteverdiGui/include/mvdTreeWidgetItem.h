@@ -72,9 +72,9 @@ class TreeWidgetItem;
  *
  * \ingroup OTBMonteverdiGUI
  *
- * \brief 
+ * \brief
  */
-class ITK_EXPORT TreeWidgetItem :
+class OTBMonteverdiGUI_EXPORT TreeWidgetItem :
     public QTreeWidgetItem // not a QObject
 {
 
@@ -133,7 +133,7 @@ public:
   inline QString GetText() const;
 
   /**
-   * \brief Get the datasetID 
+   * \brief Get the datasetID
    */
   inline QString GetHash() const;
 

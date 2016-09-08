@@ -77,7 +77,7 @@ namespace mvd
  * \brief WIP.
  */
 #define IMAGE_PROPERTIES_IS_QOBJECT 0
-class ITK_EXPORT ImageProperties
+class OTBMonteverdiCore_EXPORT ImageProperties
 #if IMAGE_PROPERTIES_IS_QOBJECT
   : public QObject
 #endif

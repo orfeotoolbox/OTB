@@ -72,7 +72,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT ProgressInterface
+class OTBMonteverdiCore_EXPORT ProgressInterface
 {
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 

@@ -74,7 +74,7 @@ class StackedLayerModel;
  *
  * \brief WIP.
  */
-class ITK_EXPORT LayerStackItemModel :
+class OTBMonteverdiGUI_EXPORT LayerStackItemModel :
     public QAbstractItemModel
 {
 

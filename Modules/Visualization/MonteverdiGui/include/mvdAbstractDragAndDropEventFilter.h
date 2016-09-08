@@ -73,7 +73,7 @@ namespace mvd
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT AbstractDragAndDropEventFilter :
+class OTBMonteverdiGUI_EXPORT AbstractDragAndDropEventFilter :
     public QObject
 {
 

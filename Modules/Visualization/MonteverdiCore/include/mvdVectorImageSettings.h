@@ -76,7 +76,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT VectorImageSettings :
+class OTBMonteverdiCore_EXPORT VectorImageSettings :
     public ImageSettings
 {
 

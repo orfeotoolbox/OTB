@@ -73,7 +73,7 @@ class LayerStackWidget;
  *
  * \brief WIP.
  */
-class ITK_EXPORT LayerStackController :
+class OTBMonteverdiGUI_EXPORT LayerStackController :
     public AbstractModelController
 {
 

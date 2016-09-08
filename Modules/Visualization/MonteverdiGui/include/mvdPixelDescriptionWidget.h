@@ -73,9 +73,9 @@ class PixelDescriptionWidget;
  *
  * \ingroup OTBMonteverdiGUI
  *
- * \brief Widget to show current pixel under cursor description 
+ * \brief Widget to show current pixel under cursor description
  */
-class ITK_EXPORT PixelDescriptionWidget :
+class OTBMonteverdiGUI_EXPORT PixelDescriptionWidget :
     public QWidget
 {
 
@@ -105,10 +105,10 @@ public:
 public slots:
 
   void OnCurrentPhysicalUpdated(const QStringList&);
-  
+
   void OnCurrentGeographicUpdated(const QStringList& /*currentGeo const QString &*/);
 
-  void OnCurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+  void OnCurrentPixelValueUpdated(const VectorImageType::PixelType &,
                                   const QStringList& bandNames);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -156,7 +156,7 @@ private:
   /**
    * \brief text to search in the widget tree
    */
-  QString                  m_SearchText;  
+  QString                  m_SearchText;
 
   /**
    * \brief Root items
@@ -167,7 +167,7 @@ private:
 
    /**
    * \brief child items
-   */ 
+   */
   QTreeWidgetItem*    m_CartographicItem;
   QTreeWidgetItem*    m_GeographicItem;
 

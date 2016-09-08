@@ -96,7 +96,7 @@ enum RgbwChannel
 /**
  * Constant naming video-channels.
  */
-extern ITK_EXPORT
+extern OTBMonteverdiCore_EXPORT
 const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ];
 
@@ -137,7 +137,7 @@ enum Effect
 /**
  * Constant naming effect values.
  */
-ITK_EXPORT
+OTBMonteverdiCore_EXPORT
 extern
 char const * const
 EFFECT_NAMES[ EFFECT_COUNT ];

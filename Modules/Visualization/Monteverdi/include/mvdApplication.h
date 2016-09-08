@@ -25,6 +25,7 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
 
+#include "OTBMonteverdiExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -70,7 +71,7 @@ class OTBApplicationsModel;
  * \ingroup OTBMonteverdi
  *
  */
-class ITK_EXPORT Application
+class OTBMonteverdi_EXPORT Application
   : public I18nApplication
 {
 

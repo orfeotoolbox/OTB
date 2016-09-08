@@ -79,7 +79,7 @@ class ApplicationsToolBox;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT ApplicationsToolBox :
+class OTBMonteverdiGUI_EXPORT ApplicationsToolBox :
     public QWidget
 {
 
@@ -107,7 +107,7 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags, 
+  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags,
                                            const ApplicationDocNameToNameMap& docNameToNameMap);
   void OnSearchBoxChanged( const QString & search );
   void OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column );

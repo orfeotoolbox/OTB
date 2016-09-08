@@ -61,6 +61,7 @@
 //
 #include "mvdI18nMainWindow.h"
 
+#include "OTBMonteverdiExport.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -100,7 +101,7 @@ class MainWindow;
  *
  * \brief The application main-widow widget.
  */
-class ITK_EXPORT MainWindow
+class OTBMonteverdi_EXPORT MainWindow
   : public I18nMainWindow
 {
 

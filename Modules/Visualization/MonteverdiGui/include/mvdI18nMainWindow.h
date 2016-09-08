@@ -25,7 +25,6 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
 
-
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -70,13 +69,13 @@ class VectorImageModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class I18nMainWindow 
+ * \class I18nMainWindow
  *
  * \ingroup OTBMonteverdiGUI
 *
  * \brief Main-window widget base for the i18n application.
  */
-class ITK_EXPORT I18nMainWindow
+class OTBMonteverdiGUI_EXPORT I18nMainWindow
   : public QMainWindow
 {
 
@@ -258,7 +257,7 @@ protected:
 		   DockLayoutFlags flags = DOCK_LAYOUT_NONE );
   /**
    */
-  const AbstractModelController * 
+  const AbstractModelController *
     GetController( const QDockWidget * ) const;
   /**
    */
@@ -307,7 +306,7 @@ protected:
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
 //
-// Protected slots. 
+// Protected slots.
 protected slots:
 
   /**
@@ -346,7 +345,7 @@ private:
 
   /**
    */
-  
+
 //
 // Private attributes.
 private:

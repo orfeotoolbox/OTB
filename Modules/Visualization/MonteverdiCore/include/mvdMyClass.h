@@ -73,7 +73,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT MyClass :
+class OTBMonteverdiCore_EXPORT MyClass :
     public QObject
 {
 

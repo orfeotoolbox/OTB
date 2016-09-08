@@ -62,7 +62,7 @@ class AboutDialog;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT AboutDialog :
+class OTBMonteverdiGUI_EXPORT AboutDialog :
     public QDialog
 {
   Q_OBJECT;

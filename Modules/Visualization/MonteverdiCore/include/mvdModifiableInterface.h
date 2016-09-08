@@ -71,7 +71,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT ModifiableInterface
+class OTBMonteverdiCore_EXPORT ModifiableInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

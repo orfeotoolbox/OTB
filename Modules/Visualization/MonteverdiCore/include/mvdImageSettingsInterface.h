@@ -72,7 +72,7 @@ class ImageSettings;
  *
  * \brief WIP.
  */
-class ITK_EXPORT ImageSettingsInterface
+class OTBMonteverdiCore_EXPORT ImageSettingsInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

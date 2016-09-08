@@ -77,7 +77,7 @@ namespace Ui
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT DropLineEdit :
+class OTBMonteverdiGUI_EXPORT DropLineEdit :
     public QLineEdit
 {
 

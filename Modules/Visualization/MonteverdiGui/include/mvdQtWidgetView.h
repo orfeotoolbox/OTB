@@ -79,11 +79,11 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class ITK_EXPORT QtWidgetView :
+class OTBMonteverdiGUI_EXPORT QtWidgetView :
     public QWidget
 {
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-  
+
   Q_OBJECT
 
   Q_PROPERTY( bool isClosable
@@ -143,7 +143,7 @@ public slots:
 // Signals.
 signals:
   void QuitSignal();
-  
+
   void OTBApplicationOutputImageChanged( const QString &, const QString &);
 
   void ExecuteAndWriteOutput();

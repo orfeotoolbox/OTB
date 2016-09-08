@@ -62,7 +62,7 @@ class ColorSetupWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT ColorSetupWidget :
+class OTBMonteverdiGUI_EXPORT ColorSetupWidget :
     public QWidget
 {
   Q_OBJECT;
@@ -245,7 +245,7 @@ private:
    */
   Ui::ColorSetupWidget* m_UI;
 
-  /** 
+  /**
    * \brief The list of (user) component names.
    * \sa ColorSetupWidget::component Q_PROPERTY.
    */

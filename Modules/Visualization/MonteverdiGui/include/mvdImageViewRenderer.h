@@ -84,7 +84,7 @@ namespace mvd
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT ImageViewRenderer :
+class OTBMonteverdiGUI_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer
 {
 
@@ -295,7 +295,7 @@ private:
   ModelActorPair m_ReferencePair;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-  
+
 //
 // SLOTS.
 private slots:
