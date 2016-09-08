@@ -5,17 +5,17 @@
 #
 
 def test(otb, argv):
-	print "Available applications : " + str(otb.Registry.GetAvailableApplications())
+	print( "Available applications : " + str(otb.Registry.GetAvailableApplications()) )
 
 	app = otb.Registry.CreateApplication("Smoothing")
-	print app.GetParametersKeys()
+	print( app.GetParametersKeys() )
 
 	app.SetParameterString("in", argv[1])
 
-	for type in ['mean', 'gaussian', 'anidif']:
-		print 'Testing ' + type
-		app.SetParameterString("type", type)
-		app.SetParameterString("out", argv[2] + type + ".tif")
+	for type_ in ['mean', 'gaussian', 'anidif']:
+		print( 'Testing ' + type_ )
+		app.SetParameterString("type", type_)
+		app.SetParameterString("out", argv[2] + type_ + ".tif")
 		app.ExecuteAndWriteOutput()
 
-		print dir(app)
+		print( dir(app) )

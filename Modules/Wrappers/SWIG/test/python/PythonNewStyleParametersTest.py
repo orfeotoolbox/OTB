@@ -14,9 +14,9 @@ def test(otb, argv):
 	app = otb.Registry.CreateApplication('OrthoRectification')
 
 	# test GetParameterTypeAsString() method in python.
-	print app.GetParameterTypeAsString(otb.ParameterType_InputImage)
-	print app.GetParameterTypeAsString(otb.ParameterType_String)
-	print app.GetParameterTypeAsString(otb.ParameterType_Empty)
+	print( app.GetParameterTypeAsString(otb.ParameterType_InputImage) )
+	print( app.GetParameterTypeAsString(otb.ParameterType_String) )
+	print( app.GetParameterTypeAsString(otb.ParameterType_Empty) )
 
 	# one test for each parameter type (string, float, int, ...)
 
