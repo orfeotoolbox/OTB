@@ -71,9 +71,21 @@ namespace ossimplugins
       , theSLC(false)
       , theTOPSAR(false)
    {
+	#if defined(_MSC_VER)
+      this->theFindFileHandle = INVALID_HANDLE_VALUE;
+  #endif
+
       // theManifestDoc = new ossimXmlDocument();
    }
-
+   void ossimSentinel1Model::~ossimSentinel1Model()
+   {
+	#if defined(_MSC_VER)
+	if(this->theFindFileHandle != INVALID_HANDLE_VALUE)
+  {
+     FindClose(this->theFindFileHandle);
+  }
+  #endif
+   }
    void ossimSentinel1Model::clearFields()
    {
       theOCN    = false;
@@ -522,14 +534,12 @@ namespace ossimplugins
 	strm << file.path() << "\\" << d << pathsep << "*" << ext;
 	WIN32_FIND_DATA search_data;
 	memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
-	HANDLE handle = FindFirstFile(strm.str().c_str(), &search_data);
-	while(handle != INVALID_HANDLE_VALUE)  {
+	this->theFindFileHandle = FindFirstFile(strm.str().c_str(), &search_data);
+	while(this->theFindFileHandle != INVALID_HANDLE_VALUE)  {
 	  result.push_back(std::string( search_data.cFileName ) );
-      if(FindNextFile(handle, &search_data) == FALSE)
+      if(FindNextFile(this->theFindFileHandle, &search_data) == FALSE)
         break;
 	}
-	//Close the handle
-	FindClose(handle);
 
 	#else
 	strm << file.path() << pathsep << d << pathsep;
