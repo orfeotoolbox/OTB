@@ -12,7 +12,6 @@ CHMOD=`which chmod`
 SED=`which sed`
 CP=`which cp`
 MKDIR=`which mkdir`
-WHICH_ENV=`which env`
 
 # find install_name_tool
 INSTALL_NAME_TOOL=`which install_name_tool`
@@ -59,14 +58,14 @@ else
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
-		<key>CFBundleExecutable</key>
-		<string>STARTUP_FILE</string>
-		<key>CFBundleIconFile</key>
-		<string>Monteverdi.icns</string>
-		<key>CFBundleInfoDictionaryVersion</key>
-		<string>6.0</string>
-		<key>CFBundlePackageType</key>
-		<string>APPL</string>
+	  <key>CFBundleExecutable</key>
+	  <string>STARTUP_FILE</string>
+	  <key>CFBundleIconFile</key>
+	  <string>Monteverdi.icns</string>
+	  <key>CFBundleInfoDictionaryVersion</key>
+	  <string>6.0</string>
+	  <key>CFBundlePackageType</key>
+	  <string>APPL</string>
 	  <key>CFBundleLongVersionString</key>
 	  <string>LONG_VERSION</string>
 	  <key>CFBundleShortVersionString</key>
@@ -76,7 +75,7 @@ else
 EOF
 
     $CAT > $OUT_DIR/Mapla.app/Contents/MacOS/Mapla << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
@@ -87,7 +86,7 @@ EOF
     $CHMOD +x $OUT_DIR/Mapla.app/Contents/MacOS/Mapla
 
     $CAT > $OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi << EOF
-#!$WHICH_ENV bash
+#!/bin/sh
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
@@ -109,6 +108,22 @@ EOF
     $SED -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
     $SED -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
 
+$CAT > $OUT_DIR/otbenv.profile << EOF
+#!/bin/sh
+PATH=\$PATH:$OUT_DIR/bin
+PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
+GDAL_DATA=$OUT_DIR/share/gdal
+GEOTIFF_CSV=$OUT_DIR/share/espg_csv
+
+export LC_NUMERIC=C
+export PATH
+export GDAL_DATA
+export GEOTIFF_CSV
+export PYTHONPATH
+EOF
+
+$CHMOD +x $OUT_DIR/otbenv.profile
+
 fi
 
 
@@ -122,3 +137,6 @@ $RM -fr $OUT_DIR/tools
 $RM -f $OUT_DIR/pkgsetup
 
 $RM -f $OUT_DIR/make_symlinks
+
+
+open $OUT_DIR

@@ -166,14 +166,14 @@ private :
   void OutputsDimensions();
 
   std::vector<std::string>                  m_Expression;
-  std::vector<ParserType::Pointer>          m_VParser;
+  std::vector< std::vector<ParserType::Pointer> > m_VParser;
   std::vector< std::vector<adhocStruct> >   m_AImage;
   std::vector< adhocStruct >                m_VVarName;
   std::vector< adhocStruct >                m_VAllowedVarNameAuto;
   std::vector< adhocStruct >                m_VAllowedVarNameAddedByUser;
   std::vector< adhocStruct >                m_VFinalAllowedVarName;   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
   std::vector< adhocStruct >                m_VNotAllowedVarName;
-  std::vector< int >                        m_outputsDimensions;
+  std::vector< unsigned int >                        m_outputsDimensions;
 
   unsigned int                             m_SizeNeighbourhood;
 

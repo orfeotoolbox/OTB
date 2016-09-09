@@ -48,15 +48,18 @@ otb_test_application(NAME apTvUtVectorDataSetField
                      )
 
 
-#----------- OSMDownloader TESTS ----------------
-otb_test_application(NAME apTvUtOSMDownloader
-                     APP OSMDownloader
-                     OPTIONS -support LARGEINPUT{DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF}
-                             -key highway
-                             -out ${TEMP}/apTvUtOSMDownloader.shp
-                     VALID   --compare-ogr ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/otbOSMDownloaderOutput.shp
-                             ${TEMP}/apTvUtOSMDownloader.shp)
+# ----------- OSMDownloader TESTS ----------------
+#RK: JIRA-1078: the test is failing on once in every two days.
+#it doesn't make much sense to keep this test which grabs input from openstreetmap
+#server. So skipping them below. (2/sep/2016)
+# otb_test_application(NAME apTvUtOSMDownloader
+#                      APP OSMDownloader
+#                      OPTIONS -support LARGEINPUT{DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF}
+#                              -key highway
+#                              -out ${TEMP}/apTvUtOSMDownloader.shp
+#                      VALID   --compare-ogr ${NOTOL}
+#                              ${OTBAPP_BASELINE_FILES}/otbOSMDownloaderOutput.shp
+#                              ${TEMP}/apTvUtOSMDownloader.shp)
 
 
 #----------- ConcatenateVectorData TESTS ----------------

@@ -245,9 +245,10 @@ std::string CleanWord(const std::string & word)
   // Suppress whitespace characters at the beginning and ending of the string
   std::string::size_type cleanStart = word.find_first_not_of(" \t");
   std::string::size_type cleanEnd = word.find_last_not_of(" \t\f\v\n\r");
+  // cleanStart == npos implies cleanEnd == npos
   if (cleanEnd != std::string::npos)
     {
-    res = word.substr(cleanStart,cleanEnd+1);
+    res = word.substr(cleanStart, cleanEnd - cleanStart + 1);
     }
   return res;
 }
@@ -265,7 +266,7 @@ int main(int argc, char* argv[])
     }
 
   std::vector<std::string> vexp;
-    
+
   std::string exp;
   if (strcmp(argv[1], "-inxml") == 0)
     {
