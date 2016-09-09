@@ -7,6 +7,7 @@ if(WIN32)
   # on windows, loading the module _otbApplication requires the otbossimplugins*.dll
   # which is in the 'bin/<CMAKE_BUILD_TYPE>' folder
   set(TEST_DRIVER ${TEST_DRIVER}
+    --add-before-env PATH ${CMAKE_BINARY_DIR}/bin
     --add-before-env PATH $<TARGET_FILE_DIR:OTBCommon>)
 endif(WIN32)
 
