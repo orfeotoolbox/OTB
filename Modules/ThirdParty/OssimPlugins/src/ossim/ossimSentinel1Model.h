@@ -152,11 +152,6 @@ namespace ossimplugins
       bool               theOCN;
       bool               theSLC;
       bool               theTOPSAR;
-
-	#if defined(_MSC_VER)
-      HANDLE theFindFileHandle;
-  #endif
-
    }; //end class ossimSentinel1Model
 
 }  //end namespace ossimplugins
