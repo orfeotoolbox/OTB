@@ -32,6 +32,8 @@
 //// Must be included before system/custom includes.
 #include <QtCore>
 
+#include "OTBMonteverdiCoreExport.h"
+
 //
 // System includes (sorted by alphabetic order)
 

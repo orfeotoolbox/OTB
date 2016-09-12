@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -578,7 +579,7 @@ ToStdString( const std::vector<T> & vec)
     oss<<*it<< " ";
     ++it;
     }
-  
+
   return oss.str();
 }
 

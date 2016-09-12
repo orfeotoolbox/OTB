@@ -19,6 +19,7 @@
 #ifndef __mvdApplicationsBrowser_h
 #define __mvdApplicationsBrowser_h
 
+
 //
 // Configuration include.
 //// Included at first position before any other ones.
@@ -26,6 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */

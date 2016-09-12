@@ -46,6 +46,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
 #endif //tag=QT4-boost-compatibility
+#include "OTBMonteverdiGUIExport.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)

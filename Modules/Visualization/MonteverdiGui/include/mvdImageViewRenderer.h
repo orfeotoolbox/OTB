@@ -50,7 +50,7 @@
 // OTB includes (sorted by alphabetic order)
 #include "otbGlActor.h"
 #include "otbGlView.h"
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractImageViewRenderer.h"

@@ -43,7 +43,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbViewSettings.h"
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"

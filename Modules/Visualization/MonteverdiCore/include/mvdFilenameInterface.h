@@ -19,6 +19,7 @@
 #ifndef __mvdFilenameInterface_h
 #define __mvdFilenameInterface_h
 
+#include "OTBMonteverdiCoreExport.h"
 //
 // Configuration include.
 //// Included at first position before any other ones.
@@ -26,6 +27,8 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */

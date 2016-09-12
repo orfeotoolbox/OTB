@@ -126,9 +126,6 @@
 #include "otbConfigure.h"
 #include "otbMacro.h"
 
-#include "OTBMonteverdiGUIExport.h"
-#include "OTBMonteverdiCoreExport.h"
-
 //
 // Options
 
