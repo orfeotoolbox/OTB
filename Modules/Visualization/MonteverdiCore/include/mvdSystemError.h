@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdSystemError_h
-#define __mvdSystemError_h
+#ifndef mvdSystemError_h
+#define mvdSystemError_h
 
 //
 // Configuration include.
@@ -125,4 +125,4 @@ private:
 /* INLINE SECTION                                                            */
 
 
-#endif // __mvdSystemError_h
+#endif // mvdSystemError_h

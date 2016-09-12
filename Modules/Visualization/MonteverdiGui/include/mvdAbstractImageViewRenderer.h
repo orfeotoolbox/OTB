@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractImageViewRenderer_h
-#define __mvdAbstractImageViewRenderer_h
+#ifndef mvdAbstractImageViewRenderer_h
+#define mvdAbstractImageViewRenderer_h
 
 //
 // Configuration include.
@@ -523,4 +523,4 @@ AbstractImageViewRenderer
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractImageViewRenderer_h
+#endif // mvdAbstractImageViewRenderer_h

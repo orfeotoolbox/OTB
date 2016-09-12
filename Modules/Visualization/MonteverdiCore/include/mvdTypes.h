@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdTypes_h
-#define __mvdTypes_h
+#ifndef mvdTypes_h
+#define mvdTypes_h
 
 //
 // Configuration include.
@@ -306,4 +306,4 @@ QObjectCast( QObject * object, const QString & string = QString() )
 /*******************************************************************************/
 } // end namespace 'mvd'
 
-#endif // __mvdTypes_h
+#endif // mvdTypes_h

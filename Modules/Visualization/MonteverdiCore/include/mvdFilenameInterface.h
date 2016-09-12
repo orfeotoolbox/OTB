@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdFilenameInterface_h
-#define __mvdFilenameInterface_h
+#ifndef mvdFilenameInterface_h
+#define mvdFilenameInterface_h
 
 //
 // Configuration include.
@@ -148,4 +148,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdFilenameInterface_h
+#endif // mvdFilenameInterface_h

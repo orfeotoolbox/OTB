@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdHistogramWidget_h
-#define __mvdHistogramWidget_h
+#ifndef mvdHistogramWidget_h
+#define mvdHistogramWidget_h
 
 //
 // Configuration include.
@@ -338,4 +338,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdHistogramWidget_h
+#endif // mvdHistogramWidget_h

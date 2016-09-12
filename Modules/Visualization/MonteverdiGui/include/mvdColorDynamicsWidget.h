@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdColorDynamicsWidget_h
-#define __mvdColorDynamicsWidget_h
+#ifndef mvdColorDynamicsWidget_h
+#define mvdColorDynamicsWidget_h
 
 //
 // Configuration include.
@@ -370,4 +370,4 @@ ColorDynamicsWidget
 
 } // end namespace 'mvd'
 
-#endif // __mvdColorDynamicsWidget_h
+#endif // mvdColorDynamicsWidget_h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdStackedLayerModel_h
-#define __mvdStackedLayerModel_h
+#ifndef mvdStackedLayerModel_h
+#define mvdStackedLayerModel_h
 
 //
 // Configuration include.
@@ -953,4 +953,4 @@ trace( const std::vector< std::string > & strv )
 
 } // end namespace 'mvd'
 
-#endif // __mvdStackedLayerModel_h
+#endif // mvdStackedLayerModel_h

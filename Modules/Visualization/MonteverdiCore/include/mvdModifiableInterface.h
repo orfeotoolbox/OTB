@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdModifiableInterface_h
-#define __mvdModifiableInterface_h
+#ifndef mvdModifiableInterface_h
+#define mvdModifiableInterface_h
 
 //
 // Configuration include.
@@ -125,4 +125,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdModifiableInterface_h
+#endif // mvdModifiableInterface_h

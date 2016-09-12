@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationLauncher_h
-#define __mvdApplicationLauncher_h
+#ifndef mvdApplicationLauncher_h
+#define mvdApplicationLauncher_h
 
 //
 // Configuration include.
@@ -178,4 +178,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationLauncher_h
+#endif // mvdApplicationLauncher_h

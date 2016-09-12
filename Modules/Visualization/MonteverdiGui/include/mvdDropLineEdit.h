@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDropLineEdit_h
-#define __mvdDropLineEdit_h
+#ifndef mvdDropLineEdit_h
+#define mvdDropLineEdit_h
 
 //
 // Configuration include.
@@ -156,4 +156,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdDropLineEdit_h
+#endif // mvdDropLineEdit_h

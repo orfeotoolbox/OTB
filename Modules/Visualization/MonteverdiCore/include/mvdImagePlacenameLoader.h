@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdImagePlacenameLoader_h
-#define __mvdImagePlacenameLoader_h
+#ifndef mvdImagePlacenameLoader_h
+#define mvdImagePlacenameLoader_h
 
 //
 // Configuration include.
@@ -94,4 +94,4 @@ private:
   
 } // end namespace 'mvd'
 
-#endif // __mvdImageModel_h
+#endif // mvdImageModel_h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdQtWidgetParameterInitializers_h
-#define __mvdQtWidgetParameterInitializers_h
+#ifndef mvdQtWidgetParameterInitializers_h
+#define mvdQtWidgetParameterInitializers_h
 
 //
 // Configuration include.
@@ -734,4 +734,4 @@ SetupWidget( QWidget * widget, const F & functor )
 
 } // end namespace 'mvd'
 
-#endif // __mvdQtWidgetParameterInitializers_h
+#endif // mvdQtWidgetParameterInitializers_h

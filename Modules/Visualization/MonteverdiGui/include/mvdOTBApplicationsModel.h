@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdOTBApplicationsModel_h
-#define __mvdOTBApplicationsModel_h
+#ifndef mvdOTBApplicationsModel_h
+#define mvdOTBApplicationsModel_h
 
 //
 // Configuration include.
@@ -215,4 +215,4 @@ OTBApplicationsModel
 
 } // end namespace 'mvd'
 
-#endif // __mvdOTBApplicationsModel_h
+#endif // mvdOTBApplicationsModel_h

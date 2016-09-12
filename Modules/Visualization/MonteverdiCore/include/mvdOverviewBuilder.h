@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdOverviewBuilder_h
-#define __mvdOverviewBuilder_h
+#ifndef mvdOverviewBuilder_h
+#define mvdOverviewBuilder_h
 
 //
 // Configuration include.
@@ -214,4 +214,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdOverviewBuilder_h
+#endif // mvdOverviewBuilder_h

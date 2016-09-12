@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractModel_h
-#define __mvdAbstractModel_h
+#ifndef mvdAbstractModel_h
+#define mvdAbstractModel_h
 
 //
 // Configuration include.
@@ -252,4 +252,4 @@ AbstractModel
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractModel_h
+#endif // mvdAbstractModel_h

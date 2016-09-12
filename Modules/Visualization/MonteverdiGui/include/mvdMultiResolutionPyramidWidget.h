@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdMultiResolutionPyramidWidget_h
-#define __mvdMultiResolutionPyramidWidget_h
+#ifndef mvdMultiResolutionPyramidWidget_h
+#define mvdMultiResolutionPyramidWidget_h
 
 //
 // Configuration include.
@@ -174,4 +174,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdMultiResolutionPyramidWidget_h
+#endif // mvdMultiResolutionPyramidWidget_h

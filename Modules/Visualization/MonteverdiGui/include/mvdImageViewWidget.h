@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImageViewWidget_h
-#define __mvdImageViewWidget_h
+#ifndef mvdImageViewWidget_h
+#define mvdImageViewWidget_h
 
 //
 // Configuration include.
@@ -497,4 +497,4 @@ ImageViewWidget
 
 } // End of namespace 'mvd'
 
-#endif // __mvdImageViewWidget_h
+#endif // mvdImageViewWidget_h

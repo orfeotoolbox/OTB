@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMainWindowTitleLoader_h
-#define __mvdMainWindowTitleLoader_h
+#ifndef mvdMainWindowTitleLoader_h
+#define mvdMainWindowTitleLoader_h
 
 //
 // Configuration include.
@@ -94,4 +94,4 @@ private:
   
 } // end namespace 'mvd'
 
-#endif // __mvdImageModel_h
+#endif // mvdImageModel_h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdStream_h
-#define __mvdStream_h
+#ifndef mvdStream_h
+#define mvdStream_h
 
 //
 // Configuration include.
@@ -1019,4 +1019,4 @@ operator >> ( QTextStream& stream,
 
 } // end namespace 'mvd'
 
-#endif // __mvdStream_h
+#endif // mvdStream_h

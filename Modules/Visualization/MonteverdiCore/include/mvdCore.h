@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdCore_h
-#define __mvdCore_h
+#ifndef mvdCore_h
+#define mvdCore_h
 
 //
 // Configuration include.
@@ -376,4 +376,4 @@ IsVersionGreaterEqual( const QString& v0, const QString& v1 )
 
 } // end namespace 'mvd'.
 
-#endif // __mvdCore_h
+#endif // mvdCore_h

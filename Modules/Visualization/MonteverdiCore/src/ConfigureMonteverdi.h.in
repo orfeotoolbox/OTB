@@ -1,5 +1,5 @@
-#ifndef __ConfigureMonteverdi_h
-#define __ConfigureMonteverdi_h
+#ifndef ConfigureMonteverdi_h
+#define ConfigureMonteverdi_h
 
 //
 // Monteverdi project
@@ -135,4 +135,4 @@
 //
 // Macros
 
-#endif // __ConfigureMonteverdi_h
+#endif // ConfigureMonteverdi_h

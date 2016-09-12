@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdI18nCoreApplication_h
-#define __mvdI18nCoreApplication_h
+#ifndef mvdI18nCoreApplication_h
+#define mvdI18nCoreApplication_h
 
 //
 // Configuration include.
@@ -706,4 +706,4 @@ I18nCoreApplication
 
 } // end namespace 'mvd'
 
-#endif // __I18nCoreApplication_h
+#endif // I18nCoreApplication_h

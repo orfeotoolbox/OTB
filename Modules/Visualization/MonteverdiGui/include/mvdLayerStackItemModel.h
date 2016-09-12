@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdLayerStackItemModel_h
-#define __mvdLayerStackItemModel_h
+#ifndef mvdLayerStackItemModel_h
+#define mvdLayerStackItemModel_h
 
 //
 // Configuration include.
@@ -337,4 +337,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdLayerStackItemModel_h
+#endif // mvdLayerStackItemModel_h

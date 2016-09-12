@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractImageViewManipulator_h
-#define __mvdAbstractImageViewManipulator_h
+#ifndef mvdAbstractImageViewManipulator_h
+#define mvdAbstractImageViewManipulator_h
 
 //
 // Configuration include.
@@ -302,4 +302,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractImageViewManipulator_h
+#endif // mvdAbstractImageViewManipulator_h

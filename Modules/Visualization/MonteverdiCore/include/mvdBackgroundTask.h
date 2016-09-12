@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdBackgroundTask_h
-#define __mvdBackgroundTask_h
+#ifndef mvdBackgroundTask_h
+#define mvdBackgroundTask_h
 
 //
 // Configuration include.
@@ -182,4 +182,4 @@ BackgroundTask::GetWorker() const
 
 } // end namespace 'mvd'
 
-#endif // __mvdBackgroundTask_h
+#endif // mvdBackgroundTask_h

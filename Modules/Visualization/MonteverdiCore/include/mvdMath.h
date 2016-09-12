@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdMath_h
-#define __mvdMath_h
+#ifndef mvdMath_h
+#define mvdMath_h
 
 //
 // Configuration include.
@@ -183,4 +183,4 @@ Lerp( const T& k,
 
 } // end namespace 'mvd'
 
-#endif // __mvdMath_h
+#endif // mvdMath_h

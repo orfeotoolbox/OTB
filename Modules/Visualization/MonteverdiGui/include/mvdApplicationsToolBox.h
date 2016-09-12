@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationsToolBox_h
-#define __mvdApplicationsToolBox_h
+#ifndef mvdApplicationsToolBox_h
+#define mvdApplicationsToolBox_h
 
 //
 // Configuration include.
@@ -194,4 +194,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationsToolBox_h
+#endif // mvdApplicationsToolBox_h

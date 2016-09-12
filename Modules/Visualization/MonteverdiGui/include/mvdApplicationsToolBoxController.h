@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationsToolBoxController_h
-#define __mvdApplicationsToolBoxController_h
+#ifndef mvdApplicationsToolBoxController_h
+#define mvdApplicationsToolBoxController_h
 
 //
 // Configuration include.
@@ -166,4 +166,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationsToolBoxController_h
+#endif // mvdApplicationsToolBoxController_h

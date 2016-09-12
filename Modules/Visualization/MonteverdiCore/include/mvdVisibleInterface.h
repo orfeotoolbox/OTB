@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdVisibleInterface_h
-#define __mvdVisibleInterface_h
+#ifndef mvdVisibleInterface_h
+#define mvdVisibleInterface_h
 
 //
 // Configuration include.
@@ -167,4 +167,4 @@ VisibleInterface
 
 } // end namespace 'mvd'
 
-#endif // __mvdVisibleInterface_h
+#endif // mvdVisibleInterface_h

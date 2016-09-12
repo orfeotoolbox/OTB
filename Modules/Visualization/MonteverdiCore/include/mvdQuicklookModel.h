@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdQuicklookModel_h
-#define __mvdQuicklookModel_h
+#ifndef mvdQuicklookModel_h
+#define mvdQuicklookModel_h
 
 //
 // Configuration include.
@@ -230,4 +230,4 @@ QuicklookModel
 
 } // end namespace 'mvd'
 
-#endif // __mvdQuicklookModel_h
+#endif // mvdQuicklookModel_h

@@ -121,7 +121,7 @@ HistogramModel
   // Get the index of measurement in 1D-histogram.
   Histogram::IndexType index;
   if( !histogram->GetIndex( measurement, index ) )
-    throw itk::RangeError( __FILE__, __LINE__ );
+    throw itk::RangeError( FILE__, LINE__ );
 
   assert( index.GetSize()==1 );
 

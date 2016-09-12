@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImageImporter_h
-#define __mvdImageImporter_h
+#ifndef mvdImageImporter_h
+#define mvdImageImporter_h
 
 //
 // Configuration include.
@@ -231,4 +231,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageImporter_h
+#endif // mvdImageImporter_h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDoubleValidator_h
-#define __mvdDoubleValidator_h
+#ifndef mvdDoubleValidator_h
+#define mvdDoubleValidator_h
 
 //
 // Configuration include.
@@ -169,4 +169,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdDoubleValidator_h
+#endif // mvdDoubleValidator_h

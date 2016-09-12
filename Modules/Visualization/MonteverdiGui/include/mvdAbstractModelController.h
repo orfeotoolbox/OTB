@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractModelController_h
-#define __mvdAbstractModelController_h
+#ifndef mvdAbstractModelController_h
+#define mvdAbstractModelController_h
 
 //
 // Configuration include.
@@ -316,4 +316,4 @@ AbstractModelController
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractModelController_h
+#endif // mvdAbstractModelController_h
