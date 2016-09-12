@@ -323,7 +323,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
       assert(file.exists());
       if ( !this->read(file) )
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << file << " doesn't have a TerraSarX model.\n";
+         if (traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG) << file << " doesn't have a TerraSarX model.\n";
          return false;
       }
 
@@ -481,7 +482,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    } catch (std::exception const& e) {
       // not a TSX product: log what has been found and return "not a TSX
       // product"
-      ossimNotify(ossimNotifyLevel_DEBUG) << "Not a TSX product: " << e.what() << "\n";
+      if (traceDebug())
+         ossimNotify(ossimNotifyLevel_DEBUG) << "Not a TSX product: " << e.what() << "\n";
       return false;
    }
 
@@ -1221,4 +1223,3 @@ void ossimplugins::ossimTerraSarXSarSensorModel::initAcquisitionInfo(Nodes const
    addMandatory(theProductKwl, "acquisitionInfo.lookDirection",    nodes.acquisitionInfo, "lookDirection");
    addMandatory(theProductKwl, "acquisitionInfo.polarisationMode", nodes.acquisitionInfo, "polarisationMode");
 }
-
