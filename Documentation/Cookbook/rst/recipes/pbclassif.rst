@@ -4,18 +4,194 @@ Classification
 Pixel based classification
 --------------------------
 
-The classification in the application framework provides a supervised
-pixel-wise classification chain based on learning from multiple images,
-and using one specified machine learning method like SVM, Bayes, KNN,
-Random Forests, Artificial Neural Network, and others...(see application
-help of *TrainImagesClassifier* for further details about all the
-available classifiers). It supports huge images through streaming and
-multi-threading. The classification chain performs a training step based
-on the intensities of each pixel as features. Please note that all the
-input images must have the same number of bands to be comparable.
+Orfeo ToolBox ships with a set of application to perform supervised
+pixel-based image classification. This framework allows to learn from
+multiple images, and using several machine learning method such as
+SVM, Bayes, KNN, Random Forests, Artificial Neural Network, and
+others...(see application help of *TrainImagesClassifier* and
+*TrainOGRLayersClassifier* for further details about all the available
+classifiers). Here is an overview of the complete workflow:
 
-Statistics estimation
-~~~~~~~~~~~~~~~~~~~~~
+1. Compute samples statistics for each image
+2. Compute sampling rates for each image (only if more than one input image)
+3. Select samples positions for each image
+4. Extract samples measurements for each image
+5. Compute images statistics
+6. Train machine learning model from samples
+
+Samples statistics estimation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first step of the framework is to know how many samples are
+available for each class in your image. The *PolygonClassStatistics*
+will do this job for you. This application processes a set of training
+geometries and an image and outputs statistics about available samples
+(i.e. pixel covered by the image and out of a no-data mask if
+provided), in the form of a xml file:
+
+-  number of samples per class
+
+-  number of samples per geometry
+
+Supported geometries are polygons, lines and points. Depending on the
+geometry type, this application behaves differently:
+
+-  polygon: select pixels whose center falls inside the polygon
+
+-  lines: select pixels intersecting the line
+
+-  points: select closest pixel to the provided point
+
+The application will require the input image, but it is only used to
+define the footprint in which samples will be selected. The user can
+also provide a raster mask, that will be used to discard pixel
+positions, using parameter *-mask*.
+
+A simple use of the application PolygonClassStatistics could be as
+follows :
+
+::
+
+    otbcli_PolygonClassStatistics  -in     LANDSAT_MultiTempIm_clip_GapF_20140309.tif
+                                   -vec    training.shp 
+                                   -field  CODE 
+                                   -out    classes.xml
+
+The field parameter is the name of the field that corresponds to class
+labels in the input geometries.
+
+The output XML file will look like this::
+   
+   <?xml version="1.0" ?>
+   <GeneralStatistics>
+    <Statistic name="samplesPerClass">
+        <StatisticMap key="11" value="56774" />
+        <StatisticMap key="12" value="59347" />
+        <StatisticMap key="211" value="25317" />
+        <StatisticMap key="221" value="2087" />
+        <StatisticMap key="222" value="2080" />
+        <StatisticMap key="31" value="8149" />
+        <StatisticMap key="32" value="1029" />
+        <StatisticMap key="34" value="3770" />
+        <StatisticMap key="36" value="941" />
+        <StatisticMap key="41" value="2630" />
+        <StatisticMap key="51" value="11221" />
+    </Statistic>
+    <Statistic name="samplesPerVector">
+        <StatisticMap key="0" value="3" />
+        <StatisticMap key="1" value="2" />
+        <StatisticMap key="10" value="86" />
+        <StatisticMap key="100" value="21" />
+        <StatisticMap key="1000" value="3" />
+        <StatisticMap key="1001" value="27" />
+        <StatisticMap key="1002" value="7" />
+        ...
+
+
+
+Samples selection
+~~~~~~~~~~~~~~~~~
+
+Now, we know exactly how many samples are available in the image for
+each class and each geometry in the training set. From this
+statistics, we can now compute the sampling rates to apply for each
+classes, and perform the sample selection. This will be done by the
+*SampleSelection* application.
+
+There are several strategies to compute those sampling rates:
+
+* **Constant strategy:** All classes will be sampled with the same number
+  of samples, which is user-defined.
+* **Smallest class strategy:** The class with the least number of samples
+  will be fully sampled. All other classes will be sampled with the
+  same number of samples.
+* **Take all strategy:** Take all the available samples
+* **By class strategy:** Set a target number of samples for each
+  class. The number of samples for each class is read from a CSV file.
+
+To actually select the sample positions, there are two available
+sampler:
+
+* **Random:** Randomly select samples while respecting the sampling
+  rate
+* **Periodic:** Sample periodically using the sampling rate
+
+The application will make sure that samples spans the whole training
+set extent by adjusting the sampling rate. Depending on the strategy
+to determine the sampling rate, some geometries of the training set
+might not be sampled.
+
+The application will accept as input the input image and training
+geometries, as well class statistics xml file computed during previous
+step. It will output a vector file containing point geometries which
+indicate the location of the samples.
+
+::
+
+   otbcli_SampleSelection -in LANDSAT_MultiTempIm_clip_GapF_20140309.tif
+                          -vec training.shp
+                          -instats classes.xml
+                          -field CODE
+                          -strategy smallest
+                          -outrates rates.csv
+                          -out samples.sqlite
+    
+The csv file written by the optional *outrates* parameter sums-up what
+has been done during samples selection::
+     
+     #className requiredSamples totalSamples rate
+     11	 941	56774	0.0165745
+     12	 941	59347	0.0158559
+     211 941  25317	0.0371687
+     221 941  2087	0.450886
+     222 941  2080	0.452404
+     31	 941	8149	0.115474
+     32	 941	1029	0.91448
+     34	 941	3770	0.249602
+     36	 941	941 	1
+     41	 941	2630	0.357795
+     51	 941	11221	0.0838606
+
+
+.. figure:: ../Art/ClassifImages/sample-selection.png
+
+   This image shows the polygons of the training with a color
+   corresponding to their class. The red dot shows the samples that
+   have been selected.
+
+
+Samples extraction
+~~~~~~~~~~~~~~~~~~
+
+Now that we selected the location of the samples, we will attach
+measurement to them. This is the purpose of the *SampleExtraction*
+application. It will walk through the list of samples and extract the
+underlying pixel values. If no *-out* parameter is given, the
+*SampleExtraction* application can work in update mode, thus allowing
+to extract features from multiple images of the same location.
+
+Features will be stored in fields attached to each sample. Field name
+can be generated from a prefix a sequence of numbers (i.e. if
+prefix is 'feature_' then features will be named 'feature_0',
+'feature_1', ...). This can be achieved with the *-outfield prefix*
+option. Alternatively, one can set explicit names for all features
+using the *-outfield list* option.
+
+::
+
+   otbcli_SampleExtraction -in LANDSAT_MultiTempIm_clip_GapF_20140309.tif
+                           -vec samples.sqlite
+                           -outfield prefix
+                           -outfield.prefix.name band_
+                           -field CODE
+
+
+.. figure:: ../Art/ClassifImages/samples-extraction.png
+
+   Attributes table of the 
+            
+Images statistics estimation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to make these features comparable between each training images,
 the first step consists in estimating the input images statistics. These
@@ -34,66 +210,13 @@ based on pooled variance of each band and finally export them to an XML
 file. The features statistics XML file will be an input of the following
 tools.
 
-Building the training data set
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As the chain is supervised, we first need to build a training set with
-positive examples of different objects of interest. These polygons must
-be saved in OGR vector format supported by GDAL like ESRI shapefile for
-example.
+Working with several images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Please note that the positive examples in the vector data should have a
-\`\`Class\`\` field with a label value higher than 1 and coherent in
-each images.
+Training the model
+~~~~~~~~~~~~~~~~~~
 
-You can generate the vector data set with software for example and save
-it in an OGR vector format supported by (ESRI shapefile for example).
-should be able to transform the vector data into the image coordinate
-system.
-
-Performing the learning scheme
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Once images statistics have been estimated, the learning scheme is the
-following:
-
-#. For each input image:
-
-   #. Read the region of interest (ROI) inside the shapefile,
-
-   #. Generate validation and training data within the ROI,
-
-   #. Add vectors respectively to the training samples set and the
-      validation samples set.
-
-#. Increase the size of the training samples set and balance it by
-   generating new noisy samples from the previous ones,
-
-#. Perform the learning with this training set
-
-#. Estimate performances of the classifier on the validation samples set
-   (confusion matrix, precision, recall and F-Score).
-
-Let us consider a SVM classification. These steps can be performed by
-the *TrainImagesClassifier* command-line using the following:
-
-::
-
-    otbcli_TrainImagesClassifier -io.il      im1.tif im2.tif im3.tif
-                                 -io.vd      vd1.shp vd2.shp vd3.shp
-                                 -io.imstat  images_statistics.xml
-                                 -classifier svm (classifier_for_the_training)
-                                 -io.out     model.svm
-
-Additional groups of parameters are also available (see application help
-for more details):
-
--  ``-elev`` Handling of elevation (DEM or average elevation)
-
--  ``-sample`` Group of parameters for sampling
-
--  ``-classifier`` Classifiers to use for the training, and their
-   corresponding groups of parameters
 
 Using the classification model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -585,44 +708,4 @@ The model to use is read from file (the one produced during training).
                               -model  model.txt
                               -imstat stats.xml
                               -out    prediction.tif
-
-Samples selection
------------------
-
-Since release 5.4, new functionalities related to the handling of the
-vectors from the training data set (see also [sssec:building]) were
-added to OTB.
-
-The first improvement was provided by the application
-PolygonClassStatistics. This application processes a set of training
-geometries, and outputs statistics about the sample distribution in the
-input geometries (in the form of a xml file) :
-
--  number of samples per class
-
--  number of samples per geometry
-
-Supported geometries are polygons, lines and points; depending on the
-geometry type, this application behaves differently :
-
--  polygon : select pixels whose center is inside the polygon
-
--  lines : select pixels intersecting the line
-
--  points : select closest pixel to the provided point
-
-The application also takes as input a support image, but the values of
-its pixels are not used. The purpose is rather to define the image grid
-that will later provide the samples. The user can also provide a raster
-mask, that will be used to discard pixel positions.
-
-A simple use of the application PolygonClassStatistics could be as
-follows :
-
-::
-
-    otbcli_PolygonClassStatistics  -in     support_image.tif
-                                   -vec    variousTrainingVectors.sqlite
-                                   -field  class
-                                   -out    polygonStat.xml
 
