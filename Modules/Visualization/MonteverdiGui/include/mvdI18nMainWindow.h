@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdI18nMainWindow_h
-#define __mvdI18nMainWindow_h
+#ifndef mvdI18nMainWindow_h
+#define mvdI18nMainWindow_h
 
 //
 // Configuration include.
@@ -616,4 +616,4 @@ I18nMainWindow
 
 } // end namespace 'mvd'
 
-#endif // __I18nMainWindow_h
+#endif // I18nMainWindow_h

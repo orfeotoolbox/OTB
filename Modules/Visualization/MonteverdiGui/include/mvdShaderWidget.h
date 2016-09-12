@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdShaderWidget_h
-#define __mvdShaderWidget_h
+#ifndef mvdShaderWidget_h
+#define mvdShaderWidget_h
 
 //
 // Configuration include.
@@ -167,4 +167,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdShaderWidget_h
+#endif // mvdShaderWidget_h

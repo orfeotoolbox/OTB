@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdGui_h
-#define __mvdGui_h
+#ifndef mvdGui_h
+#define mvdGui_h
 
 //
 // Configuration include.
@@ -184,4 +184,4 @@ namespace mvd
 
 } // end namespace 'mvd'.
 
-#endif // __mvdGui_h
+#endif // mvdGui_h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractWorker_h
-#define __mvdAbstractWorker_h
+#ifndef mvdAbstractWorker_h
+#define mvdAbstractWorker_h
 
 //
 // Configuration include.
@@ -231,4 +231,4 @@ AbstractWorker::GetFirstProgressText() const
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractWorker_h
+#endif // mvdAbstractWorker_h

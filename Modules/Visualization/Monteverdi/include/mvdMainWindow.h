@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef mvdMainWindow_h
+#define mvdMainWindow_h
 
 //
 // Configuration include.
@@ -552,4 +552,4 @@ MainWindow
 
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // mvdMainWindow_h

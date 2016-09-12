@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdPreferencesDialog_h
-#define __mvdPreferencesDialog_h
+#ifndef mvdPreferencesDialog_h
+#define mvdPreferencesDialog_h
 
 //
 // Configuration include.
@@ -160,4 +160,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdAboutDialog_h
+#endif // mvdAboutDialog_h

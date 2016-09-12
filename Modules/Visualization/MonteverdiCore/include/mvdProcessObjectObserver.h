@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdProcessObjectObserver_h
-#define __mvdProcessObjectObserver_h
+#ifndef mvdProcessObjectObserver_h
+#define mvdProcessObjectObserver_h
 
 //
 // Configuration include.
@@ -183,4 +183,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdProcessObjectObserver_h
+#endif // mvdProcessObjectObserver_h

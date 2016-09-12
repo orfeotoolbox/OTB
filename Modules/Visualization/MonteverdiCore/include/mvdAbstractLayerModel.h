@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractLayerModel_h
-#define __mvdAbstractLayerModel_h
+#ifndef mvdAbstractLayerModel_h
+#define mvdAbstractLayerModel_h
 
 
 //
@@ -228,4 +228,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractLayerModel_h
+#endif // mvdAbstractLayerModel_h

@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdImageViewRenderer_h
-#define __mvdImageViewRenderer_h
+#ifndef mvdImageViewRenderer_h
+#define mvdImageViewRenderer_h
 
 //
 // Configuration include.
@@ -362,4 +362,4 @@ ImageViewRenderer
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageViewRenderer_h
+#endif // mvdImageViewRenderer_h

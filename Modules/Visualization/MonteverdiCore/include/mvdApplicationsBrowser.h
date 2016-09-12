@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationsBrowser_h
-#define __mvdApplicationsBrowser_h
+#ifndef mvdApplicationsBrowser_h
+#define mvdApplicationsBrowser_h
 
 
 //
@@ -198,4 +198,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationsBrowser_h
+#endif // mvdApplicationsBrowser_h

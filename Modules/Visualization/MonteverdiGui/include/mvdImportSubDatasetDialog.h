@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImportSubDatasetDialog_h
-#define __mvdImportSubDatasetDialog_h
+#ifndef mvdImportSubDatasetDialog_h
+#define mvdImportSubDatasetDialog_h
 
 //
 // Configuration include.
@@ -201,4 +201,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdImportSubDatasetDialog_h
+#endif // mvdImportSubDatasetDialog_h

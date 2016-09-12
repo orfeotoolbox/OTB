@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImportImagesDialog_h
-#define __mvdImportImagesDialog_h
+#ifndef mvdImportImagesDialog_h
+#define mvdImportImagesDialog_h
 
 //
 // Configuration include.
@@ -205,4 +205,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdImportImagesDialog_h
+#endif // mvdImportImagesDialog_h

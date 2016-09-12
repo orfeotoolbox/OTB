@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdI18nApplication_h
-#define __mvdI18nApplication_h
+#ifndef mvdI18nApplication_h
+#define mvdI18nApplication_h
 
 //
 // Configuration include.
@@ -195,4 +195,4 @@ I18nApplication
 
 } // end namespace 'mvd'
 
-#endif // __I18nApplication_h
+#endif // I18nApplication_h

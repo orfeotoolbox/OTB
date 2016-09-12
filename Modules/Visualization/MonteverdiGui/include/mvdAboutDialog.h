@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAboutDialog_h
-#define __mvdAboutDialog_h
+#ifndef mvdAboutDialog_h
+#define mvdAboutDialog_h
 
 //
 // Configuration include.
@@ -108,4 +108,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdAboutDialog_h
+#endif // mvdAboutDialog_h

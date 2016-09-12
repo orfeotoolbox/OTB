@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdStatusBarWidget_h
-#define __mvdStatusBarWidget_h
+#ifndef mvdStatusBarWidget_h
+#define mvdStatusBarWidget_h
 
 //
 // Configuration include.
@@ -202,4 +202,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdStatusBarWidget_h
+#endif // mvdStatusBarWidget_h

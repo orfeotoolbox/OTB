@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImageSettings_h
-#define __mvdImageSettings_h
+#ifndef mvdImageSettings_h
+#define mvdImageSettings_h
 
 //
 // Configuration include.
@@ -409,4 +409,4 @@ ImageSettings
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageSettings_h
+#endif // mvdImageSettings_h

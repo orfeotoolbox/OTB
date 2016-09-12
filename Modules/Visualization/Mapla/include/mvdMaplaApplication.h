@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMaplaApplication_h
-#define __mvdMaplaApplication_h
+#ifndef mvdMaplaApplication_h
+#define mvdMaplaApplication_h
 
 //
 // Configuration include.
@@ -188,4 +188,4 @@ MaplaApplication
 
 } // end namespace 'mvd'
 
-#endif // __maplaApplication_h
+#endif // maplaApplication_h

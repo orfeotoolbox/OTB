@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWrapperQtWidgetView_h
-#define __mvdWrapperQtWidgetView_h
+#ifndef mvdWrapperQtWidgetView_h
+#define mvdWrapperQtWidgetView_h
 
 //
 // Configuration include.

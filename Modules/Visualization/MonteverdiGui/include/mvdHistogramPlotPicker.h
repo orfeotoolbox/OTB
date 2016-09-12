@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdHistogramPlotPicker_h
-#define __mvdHistogramPlotPicker_h
+#ifndef mvdHistogramPlotPicker_h
+#define mvdHistogramPlotPicker_h
 
 //
 // Configuration include.
@@ -221,4 +221,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdHistogramPlotPicker_h
+#endif // mvdHistogramPlotPicker_h

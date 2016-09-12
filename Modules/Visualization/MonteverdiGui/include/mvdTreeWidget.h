@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdTreeWidget_h
-#define __mvdTreeWidget_h
+#ifndef mvdTreeWidget_h
+#define mvdTreeWidget_h
 
 //
 // Configuration include.
@@ -220,4 +220,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdTreeWidget_h
+#endif // mvdTreeWidget_h

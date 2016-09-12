@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdApplication_h
-#define __mvdApplication_h
+#ifndef mvdApplication_h
+#define mvdApplication_h
 
 //
 // Configuration include.
@@ -231,4 +231,4 @@ Application
 
 } // end namespace 'mvd'
 
-#endif // __Application_h
+#endif // mvdApplication_h

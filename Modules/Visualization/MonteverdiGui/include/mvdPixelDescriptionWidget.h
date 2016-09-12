@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdPixelDescriptionWidget_h
-#define __mvdPixelDescriptionWidget_h
+#ifndef mvdPixelDescriptionWidget_h
+#define mvdPixelDescriptionWidget_h
 
 //
 // Configuration include.
@@ -183,4 +183,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdPixelDescriptionWidget_h
+#endif // mvdPixelDescriptionWidget_h

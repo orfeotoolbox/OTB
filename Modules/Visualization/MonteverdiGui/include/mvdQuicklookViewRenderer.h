@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdQuicklookViewRenderer_h
-#define __mvdQuicklookViewRenderer_h
+#ifndef mvdQuicklookViewRenderer_h
+#define mvdQuicklookViewRenderer_h
 
 //
 // Configuration include.
@@ -200,4 +200,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdQuicklookViewRenderer_h
+#endif // mvdQuicklookViewRenderer_h

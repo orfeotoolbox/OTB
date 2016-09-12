@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdKeymapDialog_h
-#define __mvdKeymapDialog_h
+#ifndef mvdKeymapDialog_h
+#define mvdKeymapDialog_h
 
 //
 // Configuration include.
@@ -108,4 +108,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdKeymapDialog_h
+#endif // mvdKeymapDialog_h

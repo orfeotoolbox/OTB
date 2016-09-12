@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractDragAndDropEventFilter_h
-#define __mvdAbstractDragAndDropEventFilter_h
+#ifndef mvdAbstractDragAndDropEventFilter_h
+#define mvdAbstractDragAndDropEventFilter_h
 
 //
 // Configuration include.
@@ -169,4 +169,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractDragAndDropEventFilter_h
+#endif // mvdAbstractDragAndDropEventFilter_h

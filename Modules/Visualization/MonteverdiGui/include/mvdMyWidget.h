@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdMyWidget_h
-#define __mvdMyWidget_h
+#ifndef mvdMyWidget_h
+#define mvdMyWidget_h
 
 //
 // Configuration include.
@@ -149,4 +149,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdMyWidget_h
+#endif // mvdMyWidget_h

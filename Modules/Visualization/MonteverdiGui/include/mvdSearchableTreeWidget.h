@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdSearchableTreeWidget_h
-#define __mvdSearchableTreeWidget_h
+#ifndef mvdSearchableTreeWidget_h
+#define mvdSearchableTreeWidget_h
 
 //
 // Configuration include.
@@ -186,4 +186,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdSearchableTreeWidget_h
+#endif // mvdSearchableTreeWidget_h

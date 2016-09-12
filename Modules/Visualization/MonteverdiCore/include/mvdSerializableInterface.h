@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdSerializableInterface_h
-#define __mvdSerializableInterface_h
+#ifndef mvdSerializableInterface_h
+#define mvdSerializableInterface_h
 
 //
 // Configuration include.
@@ -148,4 +148,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdSerializableInterface_h
+#endif // mvdSerializableInterface_h

@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdVectorImageModel_h
-#define __mvdVectorImageModel_h
+#ifndef mvdVectorImageModel_h
+#define mvdVectorImageModel_h
 
 //
 // Configuration include.
@@ -400,4 +400,4 @@ VectorImageModel
 
 } // end namespace 'mvd'
 
-#endif // __mvdVectorImageModel_h
+#endif // mvdVectorImageModel_h

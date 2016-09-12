@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdProgressInterface_h
-#define __mvdProgressInterface_h
+#ifndef mvdProgressInterface_h
+#define mvdProgressInterface_h
 
 //
 // Configuration include.
@@ -137,4 +137,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdProgressInterface_h
+#endif // mvdProgressInterface_h

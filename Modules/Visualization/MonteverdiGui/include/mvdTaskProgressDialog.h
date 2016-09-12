@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdTaskProgressDialog_h
-#define __mvdTaskProgressDialog_h
+#ifndef mvdTaskProgressDialog_h
+#define mvdTaskProgressDialog_h
 
 //
 // Configuration include.
@@ -201,4 +201,4 @@ TaskProgressDialog
 
 } // end namespace 'mvd'
 
-#endif // __mvdTaskProgressDialog_h
+#endif // mvdTaskProgressDialog_h

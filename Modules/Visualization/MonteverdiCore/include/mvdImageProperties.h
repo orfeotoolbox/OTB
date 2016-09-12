@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImageProperties_h
-#define __mvdImageProperties_h
+#ifndef mvdImageProperties_h
+#define mvdImageProperties_h
 
 //
 // Configuration include.
@@ -304,4 +304,4 @@ ImageProperties
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageProperties_h
+#endif // mvdImageProperties_h

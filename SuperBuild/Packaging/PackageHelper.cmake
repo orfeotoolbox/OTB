@@ -61,20 +61,24 @@ macro(macro_super_package)
   else() #unixes
     list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
     list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #superbuild .so /.dylib
-    list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/lib/otb") #mvd so
   endif()
 
   #common for all platforms.
   set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
   list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #superbuild, mxe binaries
-  list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/bin") #monteverdi, mapla
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncherCommandLine..
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb/python") #otbApplication.py
 
   set(EXE_SEARCHDIRS ${OTB_INSTALL_DIR}/bin)
-  list(APPEND  EXE_SEARCHDIRS ${MONTEVERDI_INSTALL_DIR}/bin)
   list(APPEND  EXE_SEARCHDIRS ${DEPENDENCIES_INSTALL_DIR}/bin)
+
+  # detect OTB version major and minor
+  file(GLOB _installed_otb_ver ${OTB_INSTALL_DIR}/lib/cmake/OTB-*)
+  list(SORT _installed_otb_ver)
+  list(GET _installed_otb_ver -1 _latest_installed_otb_ver)
+  get_filename_component(OTB_LATEST_MAJOR_MINOR ${_latest_installed_otb_ver} NAME)
+  message(STATUS "Latest OTB found : ${OTB_LATEST_MAJOR_MINOR}")
 
   macro_empty_package_staging_directory()
 
@@ -327,7 +331,6 @@ function(func_install_support_files)
       OTB_APPLICATIONS_DIR
       PKG_STAGE_DIR
       PACKAGE_SUPPORT_FILES_DIR
-      MONTEVERDI_INSTALL_DIR
       OTB_INSTALL_DIR
       )
     if(NOT DEFINED ${req})
@@ -342,7 +345,7 @@ function(func_install_support_files)
     func_install_otb_support_files()
 
     #check if monteverdi executable is built?
-    if(EXISTS "${MONTEVERDI_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
+    if(EXISTS "${OTB_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
       func_install_monteverdi_support_files()
     endif()
 
@@ -375,11 +378,9 @@ function(func_install_support_files)
   endif()
 
   ####################### Install VERSION ##########################
-  file(GLOB OTB_VERSION_FILES ${OTB_INSTALL_DIR}/share/doc/OTB-*/VERSION)
-  if(OTB_VERSION_FILES)
-    list(SORT OTB_VERSION_FILES)
-    list(GET OTB_VERSION_FILES -1 OTB_LATEST_VERSION_FILE)
-    install(FILES ${OTB_LATEST_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
+  if(EXISTS ${OTB_INSTALL_DIR}/share/doc/${OTB_LATEST_MAJOR_MINOR}/VERSION)
+    install(FILES ${OTB_INSTALL_DIR}/share/doc/${OTB_LATEST_MAJOR_MINOR}/VERSION
+            DESTINATION ${PKG_STAGE_DIR})
   endif()
 
 endfunction()
@@ -388,7 +389,6 @@ function(func_install_otb_support_files)
   foreach(req
       PKG_STAGE_DIR
       OTB_INSTALL_DIR
-      MONTEVERDI_INSTALL_DIR
       DEPENDENCIES_INSTALL_DIR
       OTB_APPLICATIONS_DIR
       )
@@ -471,11 +471,11 @@ function(func_install_monteverdi_support_files)
 
   #<prefix>/share for otb i18n directory. This is different from qt's i18N directory
   #which is <prefix>/share/qt4/translations.
-  set(PKG_OTB_I18N_DIR "${PKG_STAGE_DIR}/${Monteverdi_INSTALL_DATA_DIR}/i18n")
+  set(PKG_OTB_I18N_DIR "${PKG_STAGE_DIR}/${OTB_INSTALL_DATA_DIR}/i18n")
 
   # Just check if required variables are defined.
   foreach(req
-      Monteverdi_SOURCE_DIR
+      OTB_SOURCE_DIR
       PACKAGE_SUPPORT_FILES_DIR
       QT_PLUGINS_DIR
       PKG_STAGE_BIN_DIR
@@ -516,23 +516,20 @@ function(func_install_monteverdi_support_files)
   install(FILES ${QT_TRANSLATIONS_FILES}  DESTINATION ${PKG_I18N_DIR})
 
   #translation of monteverdi specific strings
-  file(GLOB APP_TS_FILES ${Monteverdi_SOURCE_DIR}/i18n/*.ts) # qm files
+  if(NOT EXISTS "${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n")
+    message(FATAL_ERROR "error ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n not exists")
+  endif()
+  file(GLOB APP_TS_FILES ${OTB_SOURCE_DIR}/i18n/*.ts) # qm files
   foreach(APP_TS_FILE ${APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
-    install(FILES ${Monteverdi_BINARY_DIR}/i18n/${APP_TS_FILENAME}.qm
+    install(FILES ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n/${APP_TS_FILENAME}.qm
       DESTINATION ${PKG_OTB_I18N_DIR}
       )
   endforeach()
 
-  #set(PKG_OTB_ccSHARE_SOURCE_DIR "${MONTEVERDI_INSTALL_DIR}")
-  # if(WIN32)
-  #   set(PKG_OTB_ccSHARE_SOURCE_DIR "${MONTEVERDI_INSTALL_DIR}/share")
-  # endif()
-  if(NOT EXISTS "${MONTEVERDI_INSTALL_DIR}/share/otb/i18n")
-    message(FATAL_ERROR "error ${MONTEVERDI_INSTALL_DIR}/share/otb/i18n not exists")
-  endif()
+  
   ####################### install otb share ###########################
-  install(DIRECTORY ${MONTEVERDI_INSTALL_DIR}/share/otb DESTINATION ${PKG_SHARE_DEST_DIR})
+  #install(DIRECTORY ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n DESTINATION ${PKG_SHARE_DEST_DIR}/otb)
 
 endfunction()
 
