@@ -218,6 +218,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   try
     {
     this->Load(file);
+    m_RFModel.name();
     }
   catch(...)
     {
