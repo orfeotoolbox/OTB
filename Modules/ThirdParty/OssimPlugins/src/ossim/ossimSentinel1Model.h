@@ -33,6 +33,34 @@
 
 class OSSIMDLLEXPORT ossimXmlNode;
 class OSSIMDLLEXPORT ossimString;
+#if defined(_MSC_VER)
+#include <windows.h>
+
+struct FindFileHandle {
+	explicit FindFileHandle(std::string const& path)  {
+        memset(&m_search_data, 0, sizeof(WIN32_FIND_DATA));
+        m_h = FindFirstFile(path.c_str(), &m_search_data);
+        if (!is_valid() && (GetLastError() != ERROR_FILE_NOT_FOUND))
+		throw std::runtime_error("ossimSentinel1Model: FindFirstFile returned: " + GetLastError() );
+    }
+
+	bool is_valid() const { return m_h != INVALID_HANDLE_VALUE; }
+
+    ~FindFileHandle() { if (is_valid())	FindClose(m_h);  }
+
+    bool next() {
+       assert(is_valid());
+       return (FindNextFile(m_h, &m_search_data) == true);
+    }
+
+    std::string crt_filename() const { return m_search_data.cFileName; }
+private:
+
+    HANDLE m_h;
+    WIN32_FIND_DATA m_search_data;
+};
+
+#endif
 
 namespace ossimplugins
 {

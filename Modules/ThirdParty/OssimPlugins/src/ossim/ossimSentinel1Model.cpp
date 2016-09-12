@@ -20,10 +20,6 @@
 #include <iostream>
 #include <cassert>
 
-#if defined(_MSC_VER)
-#include <windows.h>
-#endif
-
 #if defined(USE_BOOST_TIME)
             using boost::posix_time::microseconds;
             using boost::posix_time::seconds;
@@ -121,7 +117,7 @@ namespace ossimplugins
    bool ossimSentinel1Model::saveState(ossimKeywordlist& kwl,
                                       const char* prefix) const
    {
-      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::saveState";
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::saveState ";
       SCOPED_LOG(traceDebug, MODULE);
 
       kwl.add(prefix,
@@ -147,7 +143,7 @@ namespace ossimplugins
    bool ossimSentinel1Model::loadState(const ossimKeywordlist& kwl,
                                       const char* prefix)
    {
-      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::loadState";
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::loadState ";
       SCOPED_LOG(traceDebug, MODULE);
 
       theManifestKwl.addList(kwl, true);
@@ -174,7 +170,7 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::open(const ossimFilename& file)
    {
-      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::open";
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::open ";
       //traceDebug.setTraceFlag(true);
       SCOPED_LOG(traceDebug, MODULE);
 
@@ -295,7 +291,7 @@ namespace ossimplugins
 #if 0
    bool ossimSentinel1Model::getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern)
    {
-      static const char MODULE[] = "ossimSentinel1SafeManifest::getAnnotationFileLocation";
+      static const char MODULE[] = "ossimSentinel1SafeManifest::getAnnotationFileLocation ";
       //traceDebug.setTraceFlag(true);
       const ossimString prefix = "support_data.";
       const ossimString xpath =  "/xfdu:XFDU/dataObjectSection/dataObject";
@@ -328,7 +324,7 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::standAloneProductInformation(ossimXmlDocument const& manifestDoc)
    {
-      static const char MODULE[] = "ossimSentinel1ProductDoc::parseSafe";
+      static const char MODULE[] = "ossimSentinel1ProductDoc::parseSafe ";
 
       const ossimString prefix = "support_data.";
 
@@ -519,18 +515,13 @@ namespace ossimplugins
 	#endif
 
 	#if defined(_MSC_VER)
-	strm << file.path() << "\\" << d << pathsep << "*" << ext;
-	WIN32_FIND_DATA search_data;
-	memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
-	HANDLE handle = FindFirstFile(strm.str().c_str(), &search_data);
-	while(handle != INVALID_HANDLE_VALUE)  {
-	  result.push_back(std::string( search_data.cFileName ) );
-      if(FindNextFile(handle, &search_data) == FALSE)
-        break;
+	strm << file.path() << pathsep << d << pathsep << "*" << ext;
+	FindFileHandle handle(strm.str());
+	if (handle.is_valid()) {
+	  do {
+		result.push_back(handle.crt_filename());
+	  } while (handle.next());
 	}
-	//Close the handle
-	FindClose(handle);
-
 	#else
 	strm << file.path() << pathsep << d << pathsep;
     ossimDirectory dir( strm.str() );
