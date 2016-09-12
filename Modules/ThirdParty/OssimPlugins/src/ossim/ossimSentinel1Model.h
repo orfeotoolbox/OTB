@@ -40,8 +40,11 @@ struct FindFileHandle {
 	explicit FindFileHandle(std::string const& path)  {
         memset(&m_search_data, 0, sizeof(WIN32_FIND_DATA));
         m_h = FindFirstFile(path.c_str(), &m_search_data);
-        if (!is_valid() && (GetLastError() != ERROR_FILE_NOT_FOUND))
-		throw std::runtime_error("ossimSentinel1Model: FindFirstFile returned: " + GetLastError() );
+        if (!is_valid() && (GetLastError() != ERROR_FILE_NOT_FOUND)) {
+		  char err_msg[1024];
+          ossimplugins::s_printf(err_msg, "ossimSentinel1Model: cannot list file in directory '%s' : '%d'", path, GetLastError());
+		throw std::runtime_error( err_msg );
+		}
     }
 
 	bool is_valid() const { return m_h != INVALID_HANDLE_VALUE; }
