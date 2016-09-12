@@ -21,7 +21,7 @@
 #include <cassert>
 
 #if defined(_MSC_VER)
-#include "ossimWin32FindFileHandle.h" 
+#include "ossimWin32FindFileHandle.h"
 #endif
 
 #if defined(USE_BOOST_TIME)
@@ -121,7 +121,7 @@ namespace ossimplugins
    bool ossimSentinel1Model::saveState(ossimKeywordlist& kwl,
                                       const char* prefix) const
    {
-      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::saveState ";
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::saveState";
       SCOPED_LOG(traceDebug, MODULE);
 
       kwl.add(prefix,
@@ -147,7 +147,7 @@ namespace ossimplugins
    bool ossimSentinel1Model::loadState(const ossimKeywordlist& kwl,
                                       const char* prefix)
    {
-      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::loadState ";
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::loadState";
       SCOPED_LOG(traceDebug, MODULE);
 
       theManifestKwl.addList(kwl, true);
@@ -174,7 +174,7 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::open(const ossimFilename& file)
    {
-      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::open ";
+      static const char MODULE[] = "ossimplugins::ossimSentinel1Model::open";
       //traceDebug.setTraceFlag(true);
       SCOPED_LOG(traceDebug, MODULE);
 
@@ -295,7 +295,7 @@ namespace ossimplugins
 #if 0
    bool ossimSentinel1Model::getAnnotationFileLocation(const ossimFilename &manifestFile, const char* pattern)
    {
-      static const char MODULE[] = "ossimSentinel1SafeManifest::getAnnotationFileLocation ";
+      static const char MODULE[] = "ossimSentinel1SafeManifest::getAnnotationFileLocation";
       //traceDebug.setTraceFlag(true);
       const ossimString prefix = "support_data.";
       const ossimString xpath =  "/xfdu:XFDU/dataObjectSection/dataObject";
@@ -328,7 +328,7 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::standAloneProductInformation(ossimXmlDocument const& manifestDoc)
    {
-      static const char MODULE[] = "ossimSentinel1ProductDoc::parseSafe ";
+      static const char MODULE[] = "ossimSentinel1ProductDoc::parseSafe";
 
       const ossimString prefix = "support_data.";
 
