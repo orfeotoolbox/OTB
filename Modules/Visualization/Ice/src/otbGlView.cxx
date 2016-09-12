@@ -55,7 +55,6 @@ void GlView::Initialize(unsigned int sx, unsigned int sy)
   this->ClearActors();
 
   this->Resize(sx,sy);
- 
 }
 
 void GlView::Resize(unsigned int sx, unsigned int sy)

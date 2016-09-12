@@ -241,7 +241,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
      {
      std::vector<std::string> options;
 
-     std::vector<double> foreground(nbBands,m_ForegroundValue);
+     std::vector<double> foreground(nbBands*m_SrcDataSetLayers.size(),m_ForegroundValue);
 
      if(m_BurnAttributeMode)
        {

@@ -24,11 +24,11 @@ namespace Wrapper
 {
 
 InputImageListParameter::InputImageListParameter()
+  : m_InputImageParameterVector(),
+    m_ImageList(FloatVectorImageListType::New())
 {
   this->SetName("Input Image List");
   this->SetKey("inList");
-  m_ImageList = FloatVectorImageListType::New();
-  m_ReaderList = ImageFileReaderListType::New();
 }
 
 InputImageListParameter::~InputImageListParameter()
@@ -50,22 +50,21 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
     // File existance checked by the reader
     if (!filename.empty())
       {
-      ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-      try
+      // Try to build a new ParameterInputImage
+      InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+
+      tmpInputImageParameter->SetFromFileName(filename);
+
+      if(!tmpInputImageParameter->HasValue())
         {
-        reader->SetFileName(filename);
-        reader->UpdateOutputInformation();
-        }
-      catch(itk::ExceptionObject & /*err*/)
-        {
+        // If loading failed
         this->ClearValue();
         isOk = false;
         break;
         }
 
-      // everything went fine, store the object references
-      m_ReaderList->PushBack(reader);
-      m_ImageList->PushBack(reader->GetOutput());
+      m_InputImageParameterVector.push_back(tmpInputImageParameter);
+      m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
       }
     }
 
@@ -83,7 +82,7 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
 void
 InputImageListParameter::AddNullElement()
 {
-  m_ReaderList->PushBack(ITK_NULLPTR);
+  m_InputImageParameterVector.push_back(ITK_NULLPTR);
   m_ImageList->PushBack(ITK_NULLPTR);
   SetActive(false);
   this->Modified();
@@ -97,21 +96,20 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
   // File existance checked by the reader
   if (!filename.empty())
     {
-    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-    reader->SetFileName(filename);
-    try
+    // Try to build a new ParameterInputImage
+    InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+
+    tmpInputImageParameter->SetFromFileName(filename);
+    
+    if(!tmpInputImageParameter->HasValue())
       {
-      reader->UpdateOutputInformation();
-      }
-    catch(itk::ExceptionObject & /*err*/)
-      {
+      // If loading failed
       this->ClearValue();
       return false;
       }
-
-    // everything went fine, store the object references
-    m_ReaderList->PushBack(reader);
-    m_ImageList->PushBack(reader->GetOutput());
+    
+    m_InputImageParameterVector.push_back(tmpInputImageParameter);
+    m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
     SetActive(true);
     this->Modified();
     return true;
@@ -123,9 +121,9 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
 bool
 InputImageListParameter::SetNthFileName( const unsigned int id, const std::string & filename )
 {
-  if( m_ReaderList->Size()<id )
+  if( m_InputImageParameterVector.size()<id )
     {
-    itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ReaderList->Size()<<" images available.");
+    itkExceptionMacro(<< "No image "<<id<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
     }
 
   // TODO : when the logger will be available, redirect the exception
@@ -133,21 +131,19 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
   // File existance checked by the reader
   if (!filename.empty())
     {
-    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-    reader->SetFileName(filename);
-    try
-      {
-      reader->UpdateOutputInformation();
-      }
-    catch(itk::ExceptionObject &)
+    InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+
+    tmpInputImageParameter->SetFromFileName(filename);
+
+    if(tmpInputImageParameter->HasValue())
       {
       this->ClearValue();
       return false;
       }
 
-    m_ReaderList->SetNthElement(id, reader);
-    m_ImageList->SetNthElement(id, reader->GetOutput());
-
+    m_InputImageParameterVector[id] = tmpInputImageParameter;
+    m_ImageList->SetNthElement(id,tmpInputImageParameter->GetFloatVectorImage());
+      
     this->Modified();
     SetActive(true);
     return true;
@@ -160,36 +156,27 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
 std::vector<std::string>
 InputImageListParameter::GetFileNameList() const
 {
-  if (m_ReaderList)
+  std::vector<std::string> filenames;
+
+  for(InputImageParameterVectorType::const_iterator it = m_InputImageParameterVector.begin();
+      it!=m_InputImageParameterVector.end();++it)
     {
-    std::vector<std::string> filenames;
-    for(unsigned int i=0; i<m_ReaderList->Size(); i++)
-      {
-      if( m_ReaderList->GetNthElement(i) )
-        filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
-      }
-
-    return filenames;
+    filenames.push_back( (*it)->GetFileName() );
     }
-
-  itkExceptionMacro(<< "No filename value");
+  
+  return filenames;
 }
 
 
 std::string
 InputImageListParameter::GetNthFileName( unsigned int i ) const
 {
-  if (m_ReaderList)
-    {
-    if(m_ReaderList->Size()<i)
+    if(m_InputImageParameterVector.size()<i)
       {
-      itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ReaderList->Size()<<" images available.");
+      itkExceptionMacro(<< "No image "<<i<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
       }
 
-    return m_ReaderList->GetNthElement(i)->GetFileName();
-    }
-
-  itkExceptionMacro(<< "No filename value");
+    return m_InputImageParameterVector[i]->GetFileName();
 }
 
 FloatVectorImageListType*
@@ -226,19 +213,51 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
     return;
     }
 
-  m_ImageList = imList;
-  m_ReaderList = ImageFileReaderListType::Pointer();
-  for(unsigned int i=0; i<m_ImageList->Size(); i++)
-    {
-    m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
-    }
+  // Clear previous values
+  this->ClearValue();
 
+  for(unsigned int i = 0; i<imList->Size(); i++)
+    {
+    // Try to build a new ParameterInputImage
+    InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+    
+    tmpInputImageParameter->SetImage(imList->GetNthElement(i));
+    
+    m_InputImageParameterVector.push_back(tmpInputImageParameter);
+    m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
+    }
+  
   SetActive(true);
   this->Modified();
 }
 
+void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
+{
+  if(m_ImageList->Size()<i)
+    {
+    itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
+    }
+  try
+    {
+    img->UpdateOutputInformation();
+    }
+  catch(itk::ExceptionObject &)
+    {
+    return;
+    }
+  
+  // Try to build a new ParameterInputImage
+  InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+  
+  tmpInputImageParameter->SetImage(img);
+
+  m_InputImageParameterVector[i] = tmpInputImageParameter;
+  m_ImageList->SetNthElement(i,tmpInputImageParameter->GetFloatVectorImage());
+}
+
+
 void
-InputImageListParameter::AddImage(FloatVectorImageType* image)
+InputImageListParameter::AddImage(ImageBaseType* image)
 {
   // Check input availability
   // TODO : when the logger will be available, redirect the exception
@@ -252,8 +271,12 @@ InputImageListParameter::AddImage(FloatVectorImageType* image)
     return;
     }
 
-  m_ImageList->PushBack( image );
-  m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
+  InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+  
+  tmpInputImageParameter->SetImage(image);
+  
+  m_InputImageParameterVector.push_back(tmpInputImageParameter);
+  m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
 
   this->Modified();
 }
@@ -287,16 +310,23 @@ InputImageListParameter::Erase( unsigned int id )
     }
 
   m_ImageList->Erase( id );
-  m_ReaderList->Erase( id );
+  m_InputImageParameterVector.erase(m_InputImageParameterVector.begin()+id);
 
   this->Modified();
 }
+
+unsigned int
+InputImageListParameter::Size() const
+{
+  return m_InputImageParameterVector.size();
+}
+
 
 void
 InputImageListParameter::ClearValue()
 {
   m_ImageList->Clear();
-  m_ReaderList->Clear();
+  m_InputImageParameterVector.clear();
 
   SetActive(false);
   this->Modified();

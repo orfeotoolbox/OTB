@@ -1,8 +1,4 @@
-if(WIN32)
-  cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
-else()
-  cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
-endif()
+cmake_minimum_required(VERSION 2.8.11)
 
 foreach(p
     CMP0025 # CMake 3.0
@@ -67,6 +63,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
+include( i18n_qt4 )
+
+reset_qt4_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -90,6 +89,19 @@ set(OTB_VERSION_MAJOR "5")
 set(OTB_VERSION_MINOR "7")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+
+# Monteverdi version number (follows OTB)
+set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
+set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
+set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
+set( Monteverdi_VERSION_SUFFIX "" )
+
+set( Monteverdi_VERSION_STRING
+  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
+  )
+
+#-----------------------------------------------------------------------------
+string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
   set(OTB_INSTALL_RUNTIME_DIR bin)
@@ -337,6 +349,10 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
 install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
 
+# Configure and install VERSION file
+configure_file(VERSION VERSION @ONLY)
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
 endif()
@@ -355,7 +371,7 @@ add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
 
-#----------------------------------------------------------------------
+#----------------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
   add_custom_target(SuperBuild-archive
@@ -370,6 +386,7 @@ endif()
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 
+#-----------------------------------------------------------------------------
 # uninstall target
 configure_file(
     "${CMAKE_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
@@ -379,6 +396,18 @@ configure_file(
 add_custom_target(uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
 
+#-----------------------------------------------------------------------------
+# Packaging options for Windows packages
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  option(GENERATE_PACKAGE "Generate OTB package" OFF)
+  option(GENERATE_XDK "Generate XDK for OTB development" OFF)
+  if(GENERATE_PACKAGE OR GENERATE_XDK)
+    set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
+    add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
+  endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
+endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
+
+#-----------------------------------------------------------------------------
 #macro to put a fixed space between key, value  in summary
 macro(get_white_spaces var res)
   string(LENGTH "${var}" len)
@@ -391,7 +420,9 @@ endmacro()
 
 message("\n======================= Begin of OTB cmake summary =======================\n")
 
-message( ${OTB_GIT_STATUS_MESSAGE})
+if(OTB_GIT_STATUS_MESSAGE)
+  message( ${OTB_GIT_STATUS_MESSAGE})
+endif()
 if(OTB_DATA_GIT_STATUS_MESSAGE)
   message( ${OTB_DATA_GIT_STATUS_MESSAGE})
 endif()
@@ -516,3 +547,7 @@ message("======================= End of OTB cmake summary ======================
 
 #don't need this one anymore. so unset it.
 unset(option_list)
+
+#----------------------------------------------------------------------------
+# I18N
+add_subdirectory( i18n )

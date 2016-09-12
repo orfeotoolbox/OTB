@@ -1,0 +1,197 @@
+/*=========================================================================
+
+  Program:   Monteverdi
+  Language:  C++
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See Copyright.txt for details.
+
+  Monteverdi is distributed under the CeCILL licence version 2. See
+  Licence_CeCILL_V2-en.txt or
+  http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef mvdApplicationsToolBox_h
+#define mvdApplicationsToolBox_h
+
+//
+// Configuration include.
+//// Included at first position before any other ones.
+#include "ConfigureMonteverdi.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+#include <QtGui>
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
+
+
+#define USE_ALGORITHM_ROOT_NODE 0
+
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
+//
+// External classes pre-declaration.
+namespace
+{
+}
+
+namespace mvd
+{
+//
+// Internal classes pre-declaration.
+namespace Ui
+{
+class ApplicationsToolBox;
+};
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
+/**
+ * \class ApplicationsToolBox
+ *
+ * \ingroup OTBMonteverdiGUI
+ *
+ * \brief Widget template skeleton to copy-paste when adding a new
+ * widget class.
+ */
+class ITK_EXPORT ApplicationsToolBox :
+    public QWidget
+{
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
+  Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public methods.
+public:
+
+  /** \brief Constructor. */
+  ApplicationsToolBox( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+
+  /** \brief Destructor. */
+  virtual ~ApplicationsToolBox();
+
+  /** Get TreeWidget */
+  // QTreeWidget * GetAlgorithmsTree();
+
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Public SLOTS.
+public slots:
+  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags, 
+                                           const ApplicationDocNameToNameMap& docNameToNameMap);
+  void OnSearchBoxChanged( const QString & search );
+  void OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column );
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
+//
+// Signals.
+signals:
+  void ApplicationToLaunchSelected(const QString &, const QString &);
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
+//
+// Protected methods.
+protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Protected attributes.
+protected:
+
+//
+// Private methods.
+private:
+  /**
+   * \brief fill the widget tree using the tags map
+   */
+  void FillTreeUsingTags();
+
+  /**
+   * \brief Launch the appName algorithm
+   */
+  void LaunchApplication( const QString& appName );
+
+  /**
+   * \brief Helper method to check if searchText matches any of the
+   * algorithms string contained in the map
+   */
+  bool IsSearchTextMatchAnyAlgorithm( const QString & tagName,
+				      const QString & search );
+
+  /**
+   * \brief Helper method to get the DocName of an application from an
+   * application name
+   */
+  QString GetApplicationDocNameByApplicationName( const QString & appName );
+
+
+//
+// Private attributes.
+private:
+  /**
+   * \brief uic generated.
+   */
+  Ui::ApplicationsToolBox* m_UI;
+
+  /**
+   * \brief map storing applications and its tags
+   */
+  ApplicationsTagContainer m_AppTags;
+
+  /**
+   * \brief map storing applications docName and appName association
+   */
+  ApplicationDocNameToNameMap m_AppsDocNameToNameMap;
+
+  /**
+   * \brief text to search in the widget tree
+   */
+  QString m_SearchText;
+
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
+//
+// Slots.
+private slots:
+};
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+} // end namespace 'mvd'
+
+#endif // mvdApplicationsToolBox_h

@@ -146,7 +146,7 @@ private:
       }
     else
       {
-      otbAppLogFATAL("Unkown output field option : " << this->GetParameterString("outfield"));
+      otbAppLogFATAL("Unknown output field option : " << this->GetParameterString("outfield"));
       }
     
 
@@ -158,7 +158,9 @@ private:
     filter->SetClassFieldName(this->GetParameterString("field"));
     filter->SetOutputFieldPrefix(namePrefix);
     filter->SetOutputFieldNames(nameList);
+    filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
+    
     AddProcess(filter->GetStreamer(),"Extracting sample values...");
     filter->Update();
     output->SyncToDisk();

@@ -28,7 +28,7 @@ namespace otb
  *
  * \brief Periodic sampler for iteration loops
  * 
- * This class allows to do periodic sampling during an iteration loop.
+ * This class allows doing periodic sampling during an iteration loop.
  *
  * \ingroup OTBStatistics
  */

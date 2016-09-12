@@ -1,0 +1,138 @@
+#ifndef ConfigureMonteverdi_h
+#define ConfigureMonteverdi_h
+
+//
+// Monteverdi project
+#define PROJECT_NAME "@Monteverdi_PROJECT_NAME@"
+
+//
+// Monteverdi version.
+#define Monteverdi_VERSION_MAJOR @Monteverdi_VERSION_MAJOR@
+#define Monteverdi_VERSION_MINOR @Monteverdi_VERSION_MINOR@
+#define Monteverdi_VERSION_PATCH @Monteverdi_VERSION_PATCH@
+#define Monteverdi_VERSION_SUFFIX @Monteverdi_VERSION_SUFFIX@
+
+#define Monteverdi_VERSION_STRING "@Monteverdi_VERSION_STRING@"
+
+//
+// Monteverdi data version.
+#define Monteverdi_DATA_VERSION_MAJOR @Monteverdi_DATA_VERSION_MAJOR@
+#define Monteverdi_DATA_VERSION_MINOR @Monteverdi_DATA_VERSION_MINOR@
+#define Monteverdi_DATA_VERSION_PATCH @Monteverdi_DATA_VERSION_PATCH@
+
+#define Monteverdi_DATA_VERSION_STRING "@Monteverdi_DATA_VERSION_STRING@"
+
+//
+// Monteverdi data version.
+#define Monteverdi_UI_VERSION @Monteverdi_UI_VERSION@
+
+//
+// Directories
+#define Monteverdi_INSTALL_BIN_DIR "@OTB_INSTALL_BIN_DIR@"
+#define Monteverdi_INSTALL_INCLUDE_DIR "@OTB_INSTALL_INCLUDE_DIR@"
+#define Monteverdi_INSTALL_LIB_DIR "@OTB_INSTALL_LIB_DIR@"
+#define Monteverdi_INSTALL_DATA_DIR "@OTB_INSTALL_DATA_DIR@"
+
+//
+#define OTB_VERSION_CHECK( M, m, p )					\
+  (OTB_VERSION_MAJOR>(M) ||						\
+   (OTB_VERSION_MAJOR==(M) && (OTB_VERSION_MINOR>(m) ||			\
+			       OTB_VERSION_MINOR==(m) && OTB_VERSION_PATH>=(p))))
+
+//
+// Sub-directories
+#define Monteverdi_INSTALL_DATA_I18N_DIR Monteverdi_INSTALL_DATA_DIR "/i18n"
+
+//
+// Files
+#define Monteverdi_CONFIGURE_FILE "@Monteverdi_CONFIGURE_FILE@"
+#define Monteverdi_BUILD_DIR_FILE "CMakeCache.txt"
+
+//
+// Miscellaneous
+#define Monteverdi_FLOATING_TYPE @Monteverdi_FLOATING_TYPE@
+#define Monteverdi_DIMENSION int( 2 )
+
+//
+// Qt Message handling and logging.
+#ifndef NO_QECHO
+#define NO_QECHO        0
+#endif
+
+#ifndef NO_QDEBUG
+#define NO_QDEBUG       0
+#endif
+
+#ifndef NO_QWARNING
+#define NO_QWARNING     0
+#endif
+
+#ifndef NO_QCRITICAL
+#define NO_QCRITICAL    0
+#endif
+
+#ifndef NO_QFATAL
+#define NO_QFATAL       0
+#endif
+
+#ifndef NO_QLOG
+#define NO_QLOG         0
+#endif
+
+#ifndef NO_QTHROW
+#define NO_QTHROW       0
+#endif
+
+#ifndef ECHO_QDEBUG
+#define ECHO_QDEBUG     ( !NO_QECHO && !NO_QDEBUG && defined( OTB_DEBUG ) && 1 )
+#endif
+
+#ifndef ECHO_QWARNING
+#define ECHO_QWARNING   ( !NO_QECHO && !NO_QWARNING && 1 )
+#endif
+
+#ifndef ECHO_QCRITICAL
+#define ECHO_QCRITICAL  ( !NO_QECHO && !NO_QCRITICAL && 1 )
+#endif
+
+#ifndef ECHO_QFATAL
+#define ECHO_QFATAL     ( !NO_QECHO && !NO_QFATAL && 1 )
+#endif
+
+#ifndef LOG_QDEBUG
+#define LOG_QDEBUG      ( !NO_QLOG && !NO_QDEBUG && defined( OTB_DEBUG ) && 0 )
+#endif
+
+#ifndef LOG_QWARNING
+#define LOG_QWARNING    ( !NO_QLOG && !NO_QWARNING && 0 )
+#endif
+
+#ifndef LOG_QCRITICAL
+#define LOG_QCRITICAL   ( !NO_QLOG && !NO_QCRITICAL && 0 )
+#endif
+
+#ifndef LOG_QFATAL
+#define LOG_QFATAL      ( !NO_QLOG && !NO_QFATAL && 0 )
+#endif
+
+#ifndef THROW_QCRITICAL
+#define THROW_QCRITICAL ( !NO_QTHROW && !NO_QCRITICAL && 1 )
+#endif
+
+#ifndef THROW_QFATAL
+#define THROW_QFATAL    ( !NO_QTHROW && !NO_QFATAL && 1 )
+#endif
+
+#include "otbConfigure.h"
+#include "otbMacro.h"
+
+//
+// Options
+
+// #if (defined( OTB_DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
+#define USE_OPTION_SAMPLE ((defined( OTB_DEBUG )  && 0) || 0)
+
+//
+// Macros
+
+#endif // ConfigureMonteverdi_h
