@@ -20,6 +20,10 @@
 #include <iostream>
 #include <cassert>
 
+#if defined(_MSC_VER)
+#include "ossimWin32FindFileHandle.h" 
+#endif
+
 #if defined(USE_BOOST_TIME)
             using boost::posix_time::microseconds;
             using boost::posix_time::seconds;
@@ -516,7 +520,7 @@ namespace ossimplugins
 
 	#if defined(_MSC_VER)
 	strm << file.path() << pathsep << d << pathsep << "*" << ext;
-	FindFileHandle handle(strm.str());
+	ossimWin32FindFileHandle handle(strm.str());
 	if (handle.is_valid()) {
 	  do {
 		result.push_back(handle.crt_filename());
