@@ -657,10 +657,11 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                                -classifier libsvm
                                -classifier.libsvm.opt true
                                -io.out ${TEMP}/clsvmModelQB123.svm
-                               -rand 121212
-                       VALID   --compare-ascii ${NOTOL}
-                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
-                               ${TEMP}/clsvmModelQB123.svm)
+                               -rand 121212)
+# RK: 09/2016. same reason explained for leTvSVMImageModelEstimatorTrainWithOptimization test
+#                       VALID   --compare-ascii ${NOTOL}
+#                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
+#                               ${TEMP}/clsvmModelQB123.svm
 
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                       APP  TrainImagesClassifier
@@ -687,10 +688,12 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                                -classifier libsvm
                                -classifier.libsvm.opt true
                                -io.out ${TEMP}/clsvmModelQB456.svm
-                               -rand 121212
-                       VALID   --compare-ascii ${NOTOL}
-                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
-                               ${TEMP}/clsvmModelQB456.svm)
+                               -rand 121212)
+
+# RK: 09/2016. same reason explained for leTvSVMImageModelEstimatorTrainWithOptimization test
+#                       VALID   --compare-ascii ${NOTOL}
+#                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
+#                               ${TEMP}/clsvmModelQB456.svm
 
 otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                       APP  TrainImagesClassifier
