@@ -4,7 +4,7 @@ def test(otb, argv):
 	try:
 		app.GetParameterInt('szx')
 	except RuntimeError, e:
-		print "Exception message : " + e.args[0]
+		print( "Exception message : " + e.args[0] )
 		if e.args[0].startswith("boost::bad_any_cast"):
 			exit(1)
 

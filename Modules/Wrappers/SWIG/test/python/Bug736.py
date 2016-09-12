@@ -10,8 +10,8 @@ def test(otbApplication, argv):
 
 	RadiometricIndices.SetParameterStringList("list",	["Vegetation:NDVI","Vegetation:RVI","Vegetation:IPVI"])
 
-	print RadiometricIndices.GetParameterStringList("list")
+	print( RadiometricIndices.GetParameterStringList("list") )
 
-	print RadiometricIndices.GetParameterValue("list")
+	print( RadiometricIndices.GetParameterValue("list") )
 
 	RadiometricIndices.ExecuteAndWriteOutput()

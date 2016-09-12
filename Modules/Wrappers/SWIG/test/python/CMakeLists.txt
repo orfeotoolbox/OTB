@@ -5,9 +5,9 @@ set(TEST_DRIVER otbTestDriver
 
 if(WIN32)
   # on windows, loading the module _otbApplication requires the otbossimplugins*.dll
-  # which is in the 'bin' folder
+  # which is in the 'bin/<CMAKE_BUILD_TYPE>' folder
   set(TEST_DRIVER ${TEST_DRIVER}
-    --add-before-env PATH ${OTB_BINARY_DIR}/bin)
+    --add-before-env PATH $<TARGET_FILE_DIR:OTBCommon>)
 endif(WIN32)
 
 add_test( NAME pyTvSmoothing
