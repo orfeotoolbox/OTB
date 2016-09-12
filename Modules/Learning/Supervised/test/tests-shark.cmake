@@ -1,25 +1,25 @@
-otb_add_test(NAME leTuSharkRFMachineLearningModelNew COMMAND otbSharkLearningTestDriver
+otb_add_test(NAME leTuSharkRFMachineLearningModelNew COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModelNew)
 
-otb_add_test(NAME leTvSharkRFMachineLearningModel COMMAND otbSharkLearningTestDriver
+otb_add_test(NAME leTvSharkRFMachineLearningModel COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModel
   ${INPUTDATA}/letter.scale
   ${TEMP}/shark_rf_model.txt
   )
 
-otb_add_test(NAME leTuSharkRFMachineLearningModelCanRead COMMAND otbSharkLearningTestDriver
+otb_add_test(NAME leTuSharkRFMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModelCanRead
   ${TEMP}/shark_rf_model.txt
   )
 
-otb_add_test(NAME leTuSharkRFMachineLearningModelCanReadFail COMMAND otbSharkLearningTestDriver
+otb_add_test(NAME leTuSharkRFMachineLearningModelCanReadFail COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModelCanRead
   ${INPUTDATA}/ROI_QB_MUL_4_svmModel.txt
   )
 set_property(TEST leTuSharkRFMachineLearningModelCanReadFail PROPERTY WILL_FAIL true)
 
 
-otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSharkLearningTestDriver
+otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSupervisedTestDriver
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
@@ -28,7 +28,7 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSharkLearni
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
 
-otb_add_test(NAME leTvImageClassificationFilterSharkClassic COMMAND  otbSharkLearningTestDriver
+otb_add_test(NAME leTvImageClassificationFilterSharkClassic COMMAND  otbSupervisedTestDriver
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
@@ -37,7 +37,7 @@ otb_add_test(NAME leTvImageClassificationFilterSharkClassic COMMAND  otbSharkLea
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
 
-otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSharkLearningTestDriver
+otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSupervisedTestDriver
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
