@@ -36,6 +36,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <tr1/type_traits>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -101,8 +102,13 @@ class ITK_EXPORT HistogramModel :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types.
+// Public types & constants.
 public:
+
+  /**
+   */
+  static const int PRECISION = 4;
+
   /** */
   typedef
     // itk::NumericTraits< T >::FloatType and
@@ -579,6 +585,10 @@ HistogramModel
     m_MinPixel = filterStats->GetMinimum();
     m_MaxPixel = filterStats->GetMaximum();
 
+    // Define corrected min/MAX pixels.
+    DefaultImageType::PixelType minPixel( m_MinPixel );
+    DefaultImageType::PixelType maxPixel( m_MaxPixel );
+
     // Extract sigmas for each band from covariance matrix.
     typename StatisticsFilter::MatrixType covariance(
       filterStats->GetFilter()->GetCovariance()
@@ -629,9 +639,45 @@ HistogramModel
 	    << ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
 	  */
 
-	  bins[ i ] = ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
+	  bins[ i ] = ceil( ( maxPixel[ i ] - minPixel[ i ] ) / h );
 	  }
 	}
+
+      // MANTIS-1275
+      // {
+#if 1
+      if( minPixel[ i ]==maxPixel[ i ] )	
+	{
+	if( std::tr1::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+	  {
+	  double epsilon =
+	    std::pow(
+	      10.0,
+	      static_cast< double >( -HistogramModel::PRECISION - 1 )
+	    );
+
+	  if( minPixel[ i ] >
+	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() )
+	    minPixel[ i ] -= epsilon;
+
+	  if( maxPixel[ i ] <
+	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() )
+	    maxPixel[ i ] += epsilon;
+	  }
+	else
+	  {
+	  if( minPixel[ i ] >
+	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() )
+	    -- minPixel[ i ];
+
+	  if( maxPixel[ i ] <
+	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() )
+	    ++ maxPixel[ i ];
+	  }
+	}
+      // }
+      //
+#endif
       }
 
     // std::cout << bins;
@@ -655,8 +701,8 @@ HistogramModel
     histogramFilter->SetInput( imageModel->ToImage() );
 
     // Setup histogram filter.
-    histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
-    histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
+    histogramFilter->GetFilter()->SetHistogramMin( minPixel );
+    histogramFilter->GetFilter()->SetHistogramMax( maxPixel );
     histogramFilter->GetFilter()->SetNumberOfBins( bins );
     histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
     histogramFilter->GetFilter()->SetNoDataFlag(
