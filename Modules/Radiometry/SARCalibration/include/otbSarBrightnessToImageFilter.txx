@@ -91,20 +91,6 @@ SarBrightnessToImageFilter<TInputImage, TOutputImage>
     }
 }
 
-template<class TInputImage, class TOutputImage>
-void
-SarBrightnessToImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-
-  if (this->GetFunction())
-    {
-    os << indent << "Function:\n";
-    this->GetFunction()->Print(os, indent.GetNextIndent());
-    }
-}
-
 
 } // end namespace otb
 
