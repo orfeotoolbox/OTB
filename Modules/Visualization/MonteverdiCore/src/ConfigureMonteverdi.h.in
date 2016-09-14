@@ -84,7 +84,7 @@
 #endif
 
 #ifndef ECHO_QDEBUG
-#define ECHO_QDEBUG     ( !NO_QECHO && !NO_QDEBUG && defined( OTB_DEBUG ) && 1 )
+#define ECHO_QDEBUG     ( ( !NO_QECHO && !NO_QDEBUG && defined( OTB_DEBUG ) && 1 ) || 0 )
 #endif
 
 #ifndef ECHO_QWARNING
