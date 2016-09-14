@@ -65,6 +65,7 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+#define PRECISION_MARGIN 4
 
 /**
  * \brief Array of enhanced band names that OTB can return.
@@ -591,6 +592,17 @@ HistogramWidget
 
     if( m_Bounds[ i ].m_YMax>yMax )
       yMax = m_Bounds[ i ].m_YMax;
+    }
+
+  if( xMin==xMax )
+    {
+    double epsilon = PRECISION_MARGIN * m_Precision;
+
+    if( xMin >= std::numeric_limits< double >::min() + epsilon )
+      xMin -= epsilon;
+
+    if( xMax <= std::numeric_limits< double >::max() - epsilon )
+      xMax += epsilon;
     }
 
   qDebug()
