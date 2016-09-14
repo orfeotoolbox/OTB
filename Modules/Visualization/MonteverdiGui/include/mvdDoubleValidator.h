@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -71,7 +71,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT DoubleValidator :
+class OTBMonteverdiGUI_EXPORT DoubleValidator :
     public QDoubleValidator
 {
 

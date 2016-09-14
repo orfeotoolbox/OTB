@@ -27,6 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -71,7 +72,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT ModifiableInterface
+class OTBMonteverdiCore_EXPORT ModifiableInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

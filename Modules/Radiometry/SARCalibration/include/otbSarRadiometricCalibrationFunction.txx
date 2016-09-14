@@ -102,7 +102,11 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     * digitalNumber is the output of vcl_abs() which is sqrt((I*I) + (Q*Q)). For
     * non-complex pixel types, vcl_abs() simply returns absolute value.
     */
-  RealType digitalNumber = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
+	const std::complex<float> pVal = this->GetInputImage()->GetPixel(index);
+	const RealType digitalNumber = std::sqrt(
+    (pVal.real() * pVal.real()) + (pVal.imag()* pVal.imag()));
+
+
   RealType sigma = m_Scale * digitalNumber * digitalNumber;
 
   /** substract noise if enabled. */

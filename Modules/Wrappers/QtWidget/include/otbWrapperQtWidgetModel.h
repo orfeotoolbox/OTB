@@ -30,7 +30,7 @@ namespace otb
 namespace Wrapper
 {
 
-class ITK_ABI_EXPORT AppliThread : public QThread
+class OTBQtWidget_EXPORT AppliThread : public QThread
 {
  Q_OBJECT
 
@@ -80,7 +80,7 @@ private:
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetModel : public QObject
+class OTBQtWidget_EXPORT QtWidgetModel : public QObject
 {
   Q_OBJECT
 public:

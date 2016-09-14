@@ -39,7 +39,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -73,7 +73,7 @@ class AbstractImageViewManipulator;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT ImageViewWidget :
+class OTBMonteverdiGUI_EXPORT ImageViewWidget :
     public QGLWidget
 {
 

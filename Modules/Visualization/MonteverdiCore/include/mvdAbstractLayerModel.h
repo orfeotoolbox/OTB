@@ -19,6 +19,7 @@
 #ifndef mvdAbstractLayerModel_h
 #define mvdAbstractLayerModel_h
 
+
 //
 // Configuration include.
 //// Included at first position before any other ones.
@@ -26,6 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -85,11 +87,11 @@ enum SpatialReferenceType
 
 /**
  */
-ITK_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
+OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
 
 /**
  */
-ITK_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
+OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -101,7 +103,7 @@ ITK_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt
  *
  * \brief WIP.
  */
-class ITK_EXPORT AbstractLayerModel :
+class OTBMonteverdiCore_EXPORT AbstractLayerModel :
     public AbstractModel,
     public VisibleInterface
 {

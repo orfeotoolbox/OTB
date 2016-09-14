@@ -43,7 +43,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -76,7 +76,7 @@ class QtWidgetView;
  *
  * \brief WIP.
  */
-class ITK_EXPORT ApplicationLauncher :
+class OTBMonteverdiGUI_EXPORT ApplicationLauncher :
     public QObject
 {
 

@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -93,7 +93,7 @@ namespace Ui
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT TreeWidget :
+class OTBMonteverdiGUI_EXPORT TreeWidget :
     public QTreeWidget
 {
 
@@ -130,7 +130,7 @@ public:
 // Public SLOTS.
 public slots:
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/  
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
@@ -157,7 +157,7 @@ protected:
   virtual void dragMoveEvent( QDragMoveEvent* event );
   virtual void dragLeaveEvent( QDragLeaveEvent* event );
   virtual void dropEvent( QDropEvent* event );
-    
+
   virtual Qt::DropActions supportedDropActions() const;
   virtual void startDrag( Qt::DropActions supportedActions );
 

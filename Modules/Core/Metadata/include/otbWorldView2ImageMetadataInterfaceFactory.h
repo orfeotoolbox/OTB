@@ -18,8 +18,8 @@
 #ifndef otbWorldView2ImageMetadataInterfaceFactory_h
 #define otbWorldView2ImageMetadataInterfaceFactory_h
 
-
 #include "itkObjectFactoryBase.h"
+#include "OTBMetadataExport.h"
 
 namespace otb
 {
@@ -28,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT WorldView2ImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT WorldView2ImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

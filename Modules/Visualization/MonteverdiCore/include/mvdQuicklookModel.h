@@ -27,7 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
-
+#include "OTBMonteverdiCoreExport.h"
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -76,7 +76,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT QuicklookModel :
+class OTBMonteverdiCore_EXPORT QuicklookModel :
     public VectorImageModel
 {
 

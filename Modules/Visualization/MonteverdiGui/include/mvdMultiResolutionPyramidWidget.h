@@ -42,6 +42,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbGDALOverviewsBuilder.h"
+#include "OTBMonteverdiGUIExport.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -78,7 +79,7 @@ class MultiResolutionPyramidWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT MultiResolutionPyramidWidget :
+class OTBMonteverdiGUI_EXPORT MultiResolutionPyramidWidget :
     public QWidget
 {
 

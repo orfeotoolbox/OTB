@@ -32,6 +32,8 @@
 //// Must be included before system/custom includes.
 #include <QtCore>
 
+#include "OTBMonteverdiCoreExport.h"
+
 //
 // System includes (sorted by alphabetic order)
 
@@ -65,17 +67,17 @@ class VectorImageModel;
  *
  * \ingroup OTBMonteverdiCore
  *
- * \brief 
+ * \brief
  *
  */
-class ImagePlacenameLoader : public QObject
+class OTBMonteverdiCore_EXPORT ImagePlacenameLoader : public QObject
 {
     Q_OBJECT;
 
 public:
   /** \brief Constructor */
   ImagePlacenameLoader(VectorImageModel* model);
-    
+
 public slots:
   /** \brief load the placename */
   void LoadPlacename();
@@ -86,12 +88,12 @@ signals:
 
   /** \brief Triggered when processing is finished */
   void Finished();
-  
+
 private:
 
   VectorImageModel* m_Model;
 };
-  
+
 } // end namespace 'mvd'
 
 #endif // mvdImageModel_h

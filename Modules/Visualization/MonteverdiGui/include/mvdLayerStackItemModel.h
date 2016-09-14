@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -74,7 +74,7 @@ class StackedLayerModel;
  *
  * \brief WIP.
  */
-class ITK_EXPORT LayerStackItemModel :
+class OTBMonteverdiGUI_EXPORT LayerStackItemModel :
     public QAbstractItemModel
 {
 

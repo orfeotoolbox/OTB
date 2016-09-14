@@ -20,6 +20,10 @@
 #include <iostream>
 #include <cassert>
 
+#if defined(_MSC_VER)
+#include "ossimWin32FindFileHandle.h"
+#endif
+
 #if defined(USE_BOOST_TIME)
             using boost::posix_time::microseconds;
             using boost::posix_time::seconds;
@@ -502,21 +506,39 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::checkDirectory(const ossimFilename& file, const char* d, const char* ext) const
    {
-      //check dir is valid first
-      ossimDirectory dir(file.path() + '/' + d + '/');
-      std::vector<ossimFilename> result;
-      dir.findAllFilesThatMatch(result, ext);
-      if ( result.empty() )
-      {
-         if (traceExec())
-         {
-            ossimNotify(ossimNotifyLevel_FATAL)
-               << " DEBUG:" << " checkDirectory failed for: " << file.path()   << "/" << d << " with ext ="<< ext << "\n";
-         }
-         return false;
-      }
+    std::stringstream strm;
+    std::vector<ossimFilename> result;
 
-      return true;
+	#if defined(_WIN32)
+		const char pathsep = '\\';
+	#else
+		const char pathsep = '/';
+	#endif
+
+	#if defined(_MSC_VER)
+	strm << file.path() << pathsep << d << pathsep << "*" << ext;
+	ossimWin32FindFileHandle handle(strm.str());
+	if (handle.is_valid()) {
+	  do {
+		result.push_back(handle.crt_filename());
+	  } while (handle.next());
+	}
+	#else
+	strm << file.path() << pathsep << d << pathsep;
+    ossimDirectory dir( strm.str() );
+    dir.findAllFilesThatMatch(result, ext);
+	#endif
+
+    if ( result.empty() )
+    {
+		if (traceExec())
+        {
+            ossimNotify(ossimNotifyLevel_FATAL)
+            << " DEBUG:" << " checkDirectory failed for: " << strm.str() << " with ext ="<< ext << "\n";
+        }
+        return false;
+    }
+    return true;
    }
 
    bool ossimSentinel1Model::readProduct(const ossimFilename &productXmlFile)

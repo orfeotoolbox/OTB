@@ -33,7 +33,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT ChoiceParameter
+class OTBApplicationEngine_EXPORT ChoiceParameter
   : public Parameter
 {
 public:

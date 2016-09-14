@@ -18,6 +18,7 @@
 #ifndef otbImageMetadataCorrectionParameters_h
 #define otbImageMetadataCorrectionParameters_h
 
+#include "OTBOpticalCalibrationExport.h"
 #include "itkObject.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
@@ -39,7 +40,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT ImageMetadataCorrectionParameters : public itk::DataObject
+class OTBOpticalCalibration_EXPORT ImageMetadataCorrectionParameters : public itk::DataObject
 {
 public:
   /** Standard typedefs */

@@ -126,10 +126,14 @@ SarBrightnessFunction<TInputImage, TCoordRep>
   functor.SetAntennaPatternNewGain(antennaPatternNewGain);
   functor.SetAntennaPatternOldGain(antennaPatternOldGain);
   functor.SetRangeSpreadLoss(rangeSpreadLoss);
+  
+	const std::complex<float> pVal = this->GetInputImage()->GetPixel(index);
+	const RealType value = std::sqrt(
+    (pVal.real() * pVal.real()) + (pVal.imag()* pVal.imag())
+  );
 
-  const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
   const RealType result = functor(value);
-
+  
   return static_cast<OutputType>(result);
 }
 

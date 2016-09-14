@@ -26,10 +26,12 @@
 #include "itkVector.h"
 #include "itkSize.h"
 
+#include "OTBIceExport.h"
+
 namespace otb
 {
 
-class ViewSettings 
+class OTBIce_EXPORT ViewSettings 
   : public itk::Object
 {
 public:

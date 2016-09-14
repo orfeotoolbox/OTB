@@ -749,7 +749,7 @@ namespace ossimplugins
          ossimEcefVector p_fx, p_fy, p_fh,dx(d,0,0),dy(0,d,0),dz(0,0,d);
          ossimDpt tmpImPt;
 
-         ossim_float64 rdx,rdy,rdz, fdx,fdy,fdz;
+         ossim_float64 rdx(0.0),rdy(0.0),rdz(0.0), fdx(0.0),fdy(0.0),fdz(0.0);
 
          ossimGpt currentEstimationWorld(currentEstimation);
          ossimGpt tmpGpt = ossimGpt(currentEstimation+dx);
