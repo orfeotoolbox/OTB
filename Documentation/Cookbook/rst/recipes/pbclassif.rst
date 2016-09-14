@@ -9,7 +9,7 @@ pixel-based image classification. This framework allows to learn from
 multiple images, and using several machine learning method such as
 SVM, Bayes, KNN, Random Forests, Artificial Neural Network, and
 others...(see application help of ``TrainImagesClassifier`` and
-``TrainOGRLayersClassifier`` for further details about all the available
+``TrainVectorClassifier`` for further details about all the available
 classifiers). Here is an overview of the complete workflow:
 
 1. Compute samples statistics for each image
