@@ -8,8 +8,8 @@ Orfeo ToolBox ships with a set of application to perform supervised
 pixel-based image classification. This framework allows to learn from
 multiple images, and using several machine learning method such as
 SVM, Bayes, KNN, Random Forests, Artificial Neural Network, and
-others...(see application help of *TrainImagesClassifier* and
-*TrainOGRLayersClassifier* for further details about all the available
+others...(see application help of ``TrainImagesClassifier`` and
+``TrainOGRLayersClassifier`` for further details about all the available
 classifiers). Here is an overview of the complete workflow:
 
 1. Compute samples statistics for each image
@@ -23,7 +23,7 @@ Samples statistics estimation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first step of the framework is to know how many samples are
-available for each class in your image. The *PolygonClassStatistics*
+available for each class in your image. The ``PolygonClassStatistics``
 will do this job for you. This application processes a set of training
 geometries and an image and outputs statistics about available samples
 (i.e. pixel covered by the image and out of a no-data mask if
@@ -45,9 +45,9 @@ geometry type, this application behaves differently:
 The application will require the input image, but it is only used to
 define the footprint in which samples will be selected. The user can
 also provide a raster mask, that will be used to discard pixel
-positions, using parameter *-mask*.
+positions, using parameter ``-mask``.
 
-A simple use of the application PolygonClassStatistics could be as
+A simple use of the application ``PolygonClassStatistics`` could be as
 follows :
 
 ::
@@ -57,7 +57,7 @@ follows :
                                    -field  CODE 
                                    -out    classes.xml
 
-The field parameter is the name of the field that corresponds to class
+The ``-field`` parameter is the name of the field that corresponds to class
 labels in the input geometries.
 
 The output XML file will look like this::
@@ -96,7 +96,7 @@ Now, we know exactly how many samples are available in the image for
 each class and each geometry in the training set. From this
 statistics, we can now compute the sampling rates to apply for each
 classes, and perform the sample selection. This will be done by the
-*SampleSelection* application.
+``SampleSelection`` application.
 
 There are several strategies to compute those sampling rates:
 
@@ -136,7 +136,7 @@ indicate the location of the samples.
                           -outrates rates.csv
                           -out samples.sqlite
     
-The csv file written by the optional *outrates* parameter sums-up what
+The csv file written by the optional ``-outrates`` parameter sums-up what
 has been done during samples selection::
      
      #className requiredSamples totalSamples rate
@@ -164,18 +164,18 @@ Samples extraction
 ~~~~~~~~~~~~~~~~~~
 
 Now that we selected the location of the samples, we will attach
-measurement to them. This is the purpose of the *SampleExtraction*
+measurement to them. This is the purpose of the ``SampleExtraction``
 application. It will walk through the list of samples and extract the
-underlying pixel values. If no *-out* parameter is given, the
-*SampleExtraction* application can work in update mode, thus allowing
+underlying pixel values. If no ``-out`` parameter is given, the
+``SampleExtraction`` application can work in update mode, thus allowing
 to extract features from multiple images of the same location.
 
 Features will be stored in fields attached to each sample. Field name
 can be generated from a prefix a sequence of numbers (i.e. if
-prefix is 'feature_' then features will be named 'feature_0',
-'feature_1', ...). This can be achieved with the *-outfield prefix*
+prefix is ``feature_`` then features will be named ``feature_0``,
+``feature_1``, ...). This can be achieved with the ``-outfield prefix``
 option. Alternatively, one can set explicit names for all features
-using the *-outfield list* option.
+using the ``-outfield list`` option.
 
 ::
 
@@ -188,35 +188,166 @@ using the *-outfield list* option.
 
 .. figure:: ../Art/ClassifImages/samples-extraction.png
 
-   Attributes table of the 
+   Attributes table of the updated samples file. 
             
+
+Working with several images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the training set spans several images, the ``MultiImageSamplingRate``
+application allows to compute the appropriate sampling rates per image
+and per class, in order to get samples that spans the whole images
+coverage.
+
+It is first required to run the ``PolygonClassStatistics`` application
+on each image of the set separately. The ``MultiImageSamplingRate``
+application will then read all the produced statistics XML files and
+derive the sampling rates according the sampling strategy. For more
+information, please refer to the `Samples statistics estimation`_ section.
+
+There are 3 modes for the sampling rates estimation from multiple
+images:
+
+* **Proportional mode:** For each class, the requested number of
+  samples is divided proportionally among the images.
+* **Equal mode:** For each class, the requested number of samples is
+  divided equally among the images.
+* **Custom mode:** The user indicates the target number of samples for
+  each image.
+
+The different behaviours for each mode and strategy are described as follows.
+
+:math:`T_i( c )` and :math:`N_i( c )` refers resp. to the total number and needed number
+of samples in image :math:`i` for class :math:`c`. Let's call :math:`L` the total number of
+image.
+
+* **Strategy = all**
+  
+  - Same behaviour for all modes proportional, equal, custom : take all samples
+  
+* **Strategy = constant** (let's call :math:`M` the global number of samples per
+  class required)
+
+  - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M * T_i( c ) / sum_k( T_k(c) )`
+  - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M / L`
+  - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M_i` where :math:`M_i` is the custom requested number of samples
+    for image i
+
+* **Strategy = byClass** (let's call :math:`M(c)` the global number of samples for
+  class c)
+
+  - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M(c) * T_i( c ) / sum_k( T_k(c) )`
+  - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M(c) / L`
+  - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
+    :math:`Ni( c ) = M_i(c)` where :math:`M_i(c)` is the custom requested number of
+    samples for each image :math:`i` and each class :math:`c`
+  
+* **Strategy = smallest class**
+      
+  - *Mode = proportional:* the smallest class is computed globally, then this smallest size is used for the strategy constant+proportional
+  - *Mode = equal:* the smallest class is computed globally, then this smallest size is used for the strategy constant+equal
+  - *Mode = custom:* the smallest class is computed and used for each image separately
+
+The ``MultiImageSamplingRate`` application can be used as follows:
+
+::
+
+   otbcli_MultiImageSamplingRate -il stats1.xml stats2.xml stats3.xml
+                                 -out rates.csv
+                                 -strategy smallest
+                                 -mim proportional
+    
+          
+The output filename from ``-out`` parameter will be used to generate as
+many filenames as necessary (e.g. one per input filename), called
+``rates_1.csv``, ``rates_2.csv`` ... 
+
+Once rates are computed for each image, sample selection can be
+performed on each corresponding image using the by class strategy:
+
+::
+   
+   otbcli_SampleSelection -in img1.tif
+                          -vec training.shp
+                          -instats stats1.xml
+                          -field CODE
+                          -strategy byclass
+                          -strategy.byclass.in rates_1.csv
+                          -out samples1.sqlite
+
+Samples extraction can then be performed on each image b y following
+the `Samples extraction`_ step. The learning application can process
+several samples files.
+    
 Images statistics estimation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to make these features comparable between each training images,
-the first step consists in estimating the input images statistics. These
-statistics will be used to center and reduce the intensities (mean of 0
-and standard deviation of 1) of samples based on the vector data
-produced by the user. To do so, the *ComputeImagesStatistics* tool can
-be used:
+Some machine learning algorithms converge faster if the range of
+features is :math:`[-1,1]` or :math:`[0,1]`. Other will be sensitive
+to relative ranges between feature, e.g. a feature with a larger range
+might have more weight in the final decision. This is for instance the
+case for machine learning algorithm using euclidean distance at some
+point to compare features. In those cases, it is advised to normalize
+all features to the range :math:`[-1,1]` before performing the
+learning. For this purpose, the ``ComputeImageStatistics`` application
+allows to compute and output to an XML file the mean and standard
+deviation based on pooled variance of each band for one or several
+images.
 
 ::
 
     otbcli_ComputeImagesStatistics -il  im1.tif im2.tif im3.tif
                                    -out images_statistics.xml
 
-This tool will compute each band mean, compute the standard deviation
-based on pooled variance of each band and finally export them to an XML
-file. The features statistics XML file will be an input of the following
-tools.
+The output statistics file can then be fed to the training and
+classification applications.
 
-
-Working with several images
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Training the model
 ~~~~~~~~~~~~~~~~~~
 
+Now that the training samples are ready, we can perform the learning
+using the ``TrainVectorClassifier`` application.
+
+::
+
+   otbcli_TrainVectorClassifier -io.vd samples.sqlite
+                                -cfield CODE
+                                -io.out model.rf
+                                -classifier rf
+                                -feat band_0 band_1 band_2 band_3 band_4 band_5 band_6
+
+The ``-classifier`` parameter allows to choose which machine learning
+model algorithm to train. Please refer to the `Train Vector
+Classifier`_ application reference documentation.
+
+In case of multiple samples files, you can add them to the ``-io.vd``
+parameter (see  `Working with several images`_ section).
+
+The feature to be used for training must be explicitly listed using
+the ``-feat`` parameter. Order of the list matters.
+
+If you want to use a statistic file for features normalization, you
+can pass it using the ``-io.stats`` parameter. Make sure that the
+order of feature statistics in the statistics file matches the order
+of feature passed to the ``-feat`` option.
+
+The field in vector data allowing to specify the label of each sample
+can be set using the ``-cfield`` option.
+
+By default, the application will estimate the trained classifier
+performances on the same set of samples that has been used for
+training. The ``-io.vd`` parameter allows to specify a different
+samples file for this purpose, for a more fair estimation of the
+performances. Note that this performances estimation scheme can also
+be estimated afterward (see `Validating the classification model`_
+section).
+                     
 
 Using the classification model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -228,12 +359,13 @@ classify pixel inside defined classes on a new image using the
 ::
 
     otbcli_ImageClassifier -in     image.tif
-                           -imstat images_statistics.xml
-                           -model  model.svm
+                           -model  model.rf
                            -out    labeled_image.tif
 
 You can set an input mask to limit the classification to the mask area
 with value >0.
+
+-imstat images_statistics.xml
 
 Validating the classification model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
