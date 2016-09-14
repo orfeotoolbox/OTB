@@ -797,6 +797,15 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         double vTest;
         double vRef;
         double vNorm;
+        // test if hexadecimal adress
+        bool isRefTokenHexa = isHexaPointerAddress(
+                                curLineRef,
+                                tokenRef[i].begin()-curLineRef.begin(),
+                                tokenRef[i].size());
+        bool isTestTokenHexa = isHexaPointerAddress(
+                                curLineTest,
+                                tokenTest[i].begin()-curLineTest.begin(),
+                                tokenTest[i].size());
         // cast ref token
         bool isRefTokenNum = true;
         try
@@ -817,8 +826,13 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
           {
           isTestTokenNum = false;
           }
-          
-        if (isRefTokenNum && isTestTokenNum)
+
+        if (isRefTokenHexa && isTestTokenHexa)
+          {
+          // these tokens are equivalent (we don't compare pointer adress)
+          commonTokens++;
+          }
+        else if (isRefTokenNum && isTestTokenNum)
           {
           // test difference against epsilon
           vNorm = (vcl_abs(vRef) + vcl_abs(vTest)) * 0.5;
@@ -988,6 +1002,9 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
       continue;
       }
     boost::split(tokenTest, curLineTest, boost::is_any_of(separators));
+    // remove empty tokens
+    TokenListType::iterator testEndFiltered = std::remove_if(tokenTest.begin(), tokenTest.end(), IsTokenEmpty);
+    tokenTest.resize(testEndFiltered-tokenTest.begin());
     nbTokenTest = tokenTest.size();
     if (nbTokenTest == 0)
       {
@@ -2109,6 +2126,30 @@ bool TestHelper::isHexaPointerAddress(const std::string& str) const
     ++i;
     }
   return result;
+}
+
+bool TestHelper::isHexaPointerAddress(const std::string& str, size_t pos, size_t size) const
+{
+  if (size < 3)
+    {
+    return false;
+    }
+
+  if (str[pos] != 48 || (str[pos+1] != 120))
+    {
+    // pointer adress has to begin with '0x'
+    return false;
+    }
+
+  // check all other characters are in [a-f0-9]
+  for (unsigned int i=2 ; i<size ; i++)
+    {
+    if (!isHexaNumber(str[pos+i]))
+      {
+      return false;
+      }
+    }
+  return true;
 }
 
 void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) const

@@ -135,6 +135,7 @@ private:
   bool isNumeric(const std::string& str) const;
   bool isScientificNumeric(const std::string& str) const;
   bool isHexaPointerAddress(const std::string& str) const;
+  bool isHexaPointerAddress(const std::string& str, size_t pos, size_t size) const;
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
   std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
   int TokenizeLine(const std::string &line, StringList &tokens) const;
