@@ -19,6 +19,7 @@
 #include "otbSamplerBase.h"
 #include "otbMath.h"
 #include "itkMath.h"
+#include <cmath>
 
 namespace otb
 {
@@ -82,7 +83,7 @@ SamplerBase::SetRate(double rate, unsigned long total)
       ") will be clamped to 0.0" << std::endl);
     rateChecked = 0.0;
     }
-  if (fabs(m_Rate-rateChecked) > 1e-12)
+  if (std::fabs(m_Rate-rateChecked) > 1e-12)
     {
     m_Rate = rateChecked;
     modified = true;
