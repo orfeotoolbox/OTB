@@ -1,0 +1,93 @@
+diff -burN geos-3.5.0.orig/CMakeLists.txt geos-3.5.0/CMakeLists.txt
+--- geos-3.5.0.orig/CMakeLists.txt	2016-09-02 11:02:28.833742143 +0200
++++ geos-3.5.0/CMakeLists.txt	2016-09-02 11:05:05.897748116 +0200
+@@ -55,6 +55,9 @@
+ # Check custom global options
+ #################################################################################
+ 
++option(GEOS_BUILD_STATIC
++  "Set to OFF|ON (default) to control build of GEOS tests package" OFF)
++
+ option(GEOS_ENABLE_TESTS
+   "Set to OFF|ON (default) to control build of GEOS tests package" ON)
+ 
+@@ -317,18 +320,18 @@
+ 
+   # Define "make check" as alias for "make test"
+   add_custom_target(check COMMAND ctest)
+-
++add_subdirectory(tests)
+ endif()
+ 
+ #################################################################################
+ # Configure subdirectories
+ #################################################################################
+-include(GenerateSourceGroups)
++#include(GenerateSourceGroups)
+ 
+ add_subdirectory(include)
+ add_subdirectory(src)
+ add_subdirectory(capi)
+-add_subdirectory(tests)
++
+ add_subdirectory(tools)
+ 
+ #################################################################################
+diff -burN geos-3.5.0.orig/include/CMakeLists.txt geos-3.5.0/include/CMakeLists.txt
+--- geos-3.5.0.orig/include/CMakeLists.txt	2016-09-02 11:02:28.837742143 +0200
++++ geos-3.5.0/include/CMakeLists.txt	2016-09-02 11:03:03.581743464 +0200
+@@ -54,4 +54,4 @@
+ #################################################################################
+ # Group source files for IDE source explorers (e.g. Visual Studio)
+ #################################################################################
+-GenerateSourceGroups(include)
++#GenerateSourceGroups(include)
+diff -burN geos-3.5.0.orig/src/CMakeLists.txt geos-3.5.0/src/CMakeLists.txt
+--- geos-3.5.0.orig/src/CMakeLists.txt	2016-09-02 11:02:28.869742144 +0200
++++ geos-3.5.0/src/CMakeLists.txt	2016-09-02 11:05:14.621748447 +0200
+@@ -62,7 +62,18 @@
+ else()
+ 
+   add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
++  if(GEOS_BUILD_STATIC)
+   add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
++  set_target_properties(geos-static
++    PROPERTIES
++    OUTPUT_NAME "geos"
++    PREFIX "lib"
++    CLEAN_DIRECT_OUTPUT 1)
++  install(TARGETS geos geos-static
++    RUNTIME DESTINATION bin
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib)
++endif()
+ 
+   set_target_properties(geos
+     PROPERTIES
+@@ -70,11 +81,6 @@
+     VERSION ${VERSION}
+     CLEAN_DIRECT_OUTPUT 1)
+ 
+-  set_target_properties(geos-static
+-    PROPERTIES
+-    OUTPUT_NAME "geos"
+-    PREFIX "lib"
+-    CLEAN_DIRECT_OUTPUT 1)
+ 
+ endif()
+ 
+@@ -90,7 +96,7 @@
+ #################################################################################
+ 
+ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
+-  install(TARGETS geos geos-static
++  install(TARGETS geos
+     RUNTIME DESTINATION bin
+     LIBRARY DESTINATION lib
+     ARCHIVE DESTINATION lib)
+@@ -99,4 +105,4 @@
+ #################################################################################
+ # Group source files for IDE source explorers (e.g. Visual Studio)
+ #################################################################################
+-GenerateSourceGroups(src)
++#GenerateSourceGroups(src)

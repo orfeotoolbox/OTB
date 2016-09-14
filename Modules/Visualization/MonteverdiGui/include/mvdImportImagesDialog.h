@@ -42,7 +42,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbGDALOverviewsBuilder.h"
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -78,7 +78,7 @@ class ImportImagesDialog;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT ImportImagesDialog :
+class OTBMonteverdiGUI_EXPORT ImportImagesDialog :
     public QDialog
 {
 

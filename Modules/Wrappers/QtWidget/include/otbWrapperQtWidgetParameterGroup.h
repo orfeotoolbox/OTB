@@ -38,7 +38,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:

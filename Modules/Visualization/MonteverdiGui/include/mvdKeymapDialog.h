@@ -37,7 +37,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -62,7 +62,7 @@ class KeymapDialog;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT KeymapDialog :
+class OTBMonteverdiGUI_EXPORT KeymapDialog :
     public QDialog
 {
   Q_OBJECT;

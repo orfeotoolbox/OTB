@@ -20,6 +20,7 @@
 
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
+#include "OTBOpticalCalibrationExport.h"
 
 namespace otb
 {
@@ -30,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT WavelengthSpectralBands : public itk::DataObject
+class OTBOpticalCalibration_EXPORT WavelengthSpectralBands : public itk::DataObject
 {
 public:
   /** Standard typedefs */

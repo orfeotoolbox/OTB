@@ -46,7 +46,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -92,7 +92,7 @@ class HistogramWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT HistogramWidget :
+class OTBMonteverdiGUI_EXPORT HistogramWidget :
     public QWidget
 {
 
@@ -123,7 +123,7 @@ public:
 		  double yMin, double yMax );
 
   /**
-   * \brief 
+   * \brief
    */
   void SetData( RgbwChannel channel,
 		double * const x,
@@ -225,7 +225,7 @@ private:
 // Private attributes.
 private:
   /**
-   * \brief 
+   * \brief
    */
   static const CountType CURVE_COUNT = 4;
 

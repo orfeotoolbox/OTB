@@ -25,6 +25,8 @@
 /* ITK Libraries */
 #include "otbImageIOBase.h"
 
+#include "OTBIOGDALExport.h"
+
 namespace otb
 {
 class GDALDatasetWrapper;
@@ -63,7 +65,7 @@ class GDALDataTypeWrapper;
  *
  * \ingroup OTBIOGDAL
  */
-class ITK_EXPORT GDALImageIO : public otb::ImageIOBase
+class OTBIOGDAL_EXPORT GDALImageIO : public otb::ImageIOBase
 {
 public:
 

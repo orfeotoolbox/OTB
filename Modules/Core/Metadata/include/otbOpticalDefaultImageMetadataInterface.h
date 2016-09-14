@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT OpticalDefaultImageMetadataInterface : public OpticalImageMetadataInterface
+class OTBMetadata_EXPORT OpticalDefaultImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 

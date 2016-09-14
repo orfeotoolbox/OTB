@@ -24,6 +24,7 @@
 #include <string>
 #include <fstream>
 
+#include "OTBCartoExport.h"
 #include "otbVectorData.h"
 #include "otbVectorDataSource.h"
 
@@ -71,7 +72,7 @@ namespace otb {
  *
  * \ingroup OTBCarto
  */
-class  ITK_EXPORT OSMDataToVectorDataGenerator :
+class OTBCarto_EXPORT OSMDataToVectorDataGenerator :
     public VectorDataSource< otb::VectorData<> >
 {
 public:

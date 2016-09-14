@@ -21,6 +21,8 @@
 #include <string>
 #include <vector>
 
+#include "OTBOpticalCalibrationExport.h"
+
 #include "itkProcessObject.h"
 
 namespace otb
@@ -33,7 +35,7 @@ class AeronetData;
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT AeronetFileReaderException
+class OTBOpticalCalibration_EXPORT AeronetFileReaderException
   : public itk::ExceptionObject
 {
 public:
@@ -72,7 +74,7 @@ public:
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT AeronetFileReader : public itk::ProcessObject
+class OTBOpticalCalibration_EXPORT AeronetFileReader : public itk::ProcessObject
 {
 public:
   /** Standards typedef */
