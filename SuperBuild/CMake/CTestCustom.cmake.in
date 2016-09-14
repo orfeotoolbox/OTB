@@ -15,10 +15,14 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   "configure:.WARNING:.*"
   ".*SuperBuild.OSSIM.src.OSSIM.*"
   ".*SuperBuild.LIBKML.src.LIBKML.*"
-  ".*SuperBuild.GDAL.config.status.*WARNING.*"
-  ".bin.bash:.*config.rpath:.*directory"
-  "loading.initial.cache.file.*CURL-cache.cmake"
+  ".bin.bash:.*config.rpath:.*directory.*"
+  ".*the.curl.cmake.build.system.is.poorly.maintained.*"
+  ".*config.status:.WARNING:.*GDALmake.opt.in.*"
   "SuperBuild.OPENCV.src.OPENCV.modules"
+  ".*gdal_priv.h.*[Ww]arning.*"
+  ".*cpl_string.h.*[Ww]arning.*"
+  ".*ogr_feature.h.*[Ww]arning.*"
+  ".*cpl_serv.h.*[Ww]arning.*"
   )
 
 # We disable all compiler warnings on superbuild. They are too numerous and pretty much useless

@@ -38,7 +38,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -68,14 +68,14 @@ class VectorImageModel;
  * This class is used to deport the dataset creation
  * in a separate thread
  */
-class ITK_EXPORT MainWindowTitleLoader : public QObject
+class OTBMonteverdiGUI_EXPORT MainWindowTitleLoader : public QObject
 {
     Q_OBJECT;
 
 public:
   /** \brief Constructor */
   MainWindowTitleLoader(VectorImageModel* model);
-    
+
 public slots:
   /** \brief Trigger the dataset creation */
   void LoadTitle();
@@ -86,12 +86,12 @@ signals:
 
   /** \brief Triggered when processing is finished */
   void Finished();
-  
+
 private:
 
   VectorImageModel* m_Model;
 };
-  
+
 } // end namespace 'mvd'
 
 #endif // mvdImageModel_h

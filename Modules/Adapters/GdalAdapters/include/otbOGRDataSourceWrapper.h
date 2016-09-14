@@ -72,7 +72,9 @@ namespace otb { namespace ogr {
  *
  * \ingroup OTBGdalAdapters
  */
-class DataSource : public itk::DataObject , public boost::noncopyable
+ #include "OTBGdalAdaptersExport.h"
+ 
+class OTBGdalAdapters_EXPORT DataSource : public itk::DataObject , public boost::noncopyable
   {
 public:
   /**\name Standard ITK typedefs */

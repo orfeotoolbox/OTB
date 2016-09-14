@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -77,7 +78,7 @@ namespace mvd
  * \brief Import image worker. It is parametrized by the image
  * filename and the desired (width, height) best-fit size.
  */
-class ITK_EXPORT OverviewBuilder :
+class OTBMonteverdiCore_EXPORT OverviewBuilder :
     public AbstractWorker,
     public ProgressInterface
 {

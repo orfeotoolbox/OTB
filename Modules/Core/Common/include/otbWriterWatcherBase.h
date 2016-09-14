@@ -25,6 +25,8 @@
 #include "itkProcessObject.h"
 #include "itkTimeProbe.h"
 
+#include "OTBCommonExport.h"
+
 namespace otb
 {
 
@@ -43,7 +45,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class /*ITK_EXPORT*/ WriterWatcherBase
+class OTBCommon_EXPORT WriterWatcherBase
 {
 public:
 

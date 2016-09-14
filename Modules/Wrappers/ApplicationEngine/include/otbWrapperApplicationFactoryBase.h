@@ -18,6 +18,7 @@
 #ifndef otbWrapperApplicationFactoryBase_h
 #define otbWrapperApplicationFactoryBase_h
 
+#include "OTBApplicationEngineExport.h"
 #include "itkObjectFactoryBase.h"
 #include "otbWrapperApplication.h"
 
@@ -26,7 +27,7 @@ namespace otb
 namespace Wrapper
 {
 
-class ITK_ABI_EXPORT ApplicationFactoryBase : public itk::ObjectFactoryBase
+class OTBApplicationEngine_EXPORT ApplicationFactoryBase : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

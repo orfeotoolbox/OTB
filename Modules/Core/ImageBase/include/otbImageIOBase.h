@@ -24,6 +24,8 @@
 
 #include <string>
 
+#include "OTBImageBaseExport.h"
+
 namespace otb
 {
 
@@ -56,7 +58,7 @@ namespace otb
  *
  * \ingroup OTBImageBase
  */
-class ITK_EXPORT ImageIOBase : public itk::LightProcessObject
+class OTBImageBase_EXPORT ImageIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */

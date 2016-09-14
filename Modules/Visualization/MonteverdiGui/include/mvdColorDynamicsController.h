@@ -40,7 +40,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -73,7 +73,7 @@ class ColorDynamicsWidget;
  *
  * \brief Color-dynamics widget controller for VectorImageModel objects.
  */
-class ITK_EXPORT ColorDynamicsController :
+class OTBMonteverdiGUI_EXPORT ColorDynamicsController :
     public AbstractModelController
 {
 

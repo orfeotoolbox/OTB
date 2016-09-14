@@ -60,7 +60,7 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #endif //tag=QT4-boost-compatibility
 
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -412,7 +412,7 @@ InputImageInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );   
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
@@ -721,7 +721,7 @@ SetupWidget( QWidget * widget, const F & functor )
   typedef QList< Widget > WidgetList;
 
   WidgetList list( widget->findChildren< Widget >() );
-  
+
   for( typename WidgetList::iterator it( list.begin() );
        it!=list.end();
        ++it )

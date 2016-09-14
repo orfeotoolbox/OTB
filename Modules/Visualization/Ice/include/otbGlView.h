@@ -75,7 +75,7 @@ assert_NaN( T val )
  * All parameters related to scene description (origin, spacing, angle
  * ...) are stored and managed by the ViewSettings class.
  */
-class GlView 
+class OTBIce_EXPORT GlView 
   : public itk::Object
 {
 public:

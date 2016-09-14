@@ -40,6 +40,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "OTBMonteverdiGUIExport.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -73,7 +74,7 @@ class HistogramWidget;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class ITK_EXPORT HistogramController :
+class OTBMonteverdiGUI_EXPORT HistogramController :
     public AbstractModelController
 {
 

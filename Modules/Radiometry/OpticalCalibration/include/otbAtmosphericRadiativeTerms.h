@@ -18,6 +18,7 @@
 #ifndef otbAtmosphericRadiativeTerms_h
 #define otbAtmosphericRadiativeTerms_h
 
+#include "OTBOpticalCalibrationExport.h"
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
@@ -37,7 +38,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
+class OTBOpticalCalibration_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
 {
 public:
   /** Standard typedefs */
@@ -164,7 +165,7 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT AtmosphericRadiativeTerms : public itk::DataObject
+class OTBOpticalCalibration_EXPORT AtmosphericRadiativeTerms : public itk::DataObject
 {
 public:
   /** Standard typedefs */

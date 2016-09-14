@@ -37,7 +37,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetProgressReport : public QWidget
+class OTBQtWidget_EXPORT QtWidgetProgressReport : public QWidget
 {
   Q_OBJECT
 public:

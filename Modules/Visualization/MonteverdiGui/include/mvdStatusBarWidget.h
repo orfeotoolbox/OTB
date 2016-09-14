@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -77,7 +77,7 @@ class StatusBarWidget;
  * \brief Status Bar widget
  * widget class.
  */
-class ITK_EXPORT StatusBarWidget :
+class OTBMonteverdiGUI_EXPORT StatusBarWidget :
     public QWidget
 {
 

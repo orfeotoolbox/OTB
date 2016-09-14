@@ -338,7 +338,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
     PixelType px1(output1->GetNumberOfComponentsPerPixel());
     PixelType px2(output2->GetNumberOfComponentsPerPixel());
 
-    float coefs[15] = { 0.1 , 0.2 , 0.3 , 0.4 , 0.5 , 0.6 , 0.7 , 0.8 , 0.9 , 1.0 , 1.1 , 1.2 , 1.3 , 1.4 , 1.5};
+    float coefs[15] = { 0.1f , 0.2f , 0.3f , 0.4f , 0.5f , 0.6f , 0.7f , 0.8f , 0.9f , 1.0f , 1.1f , 1.2f , 1.3f , 1.4f , 1.5f};
 
     //expression 1
     px1[0]=0;

@@ -23,7 +23,7 @@
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #endif //tag=QT4-boost-compatibility
-
+#include "OTBQtWidgetExport.h"
 
 namespace otb
 {
@@ -35,7 +35,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtStringSelectionWidget : public QWidget
+class OTBQtWidget_EXPORT QtStringSelectionWidget : public QWidget
 {
   Q_OBJECT
 

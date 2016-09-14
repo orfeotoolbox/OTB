@@ -3,6 +3,7 @@ set(DOCUMENTATION
   )
 
 otb_module( OTBMonteverdiGUI
+  ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBIce

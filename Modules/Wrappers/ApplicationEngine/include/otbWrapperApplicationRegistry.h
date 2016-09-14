@@ -35,7 +35,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT ApplicationRegistry : public itk::Object
+class OTBApplicationEngine_EXPORT ApplicationRegistry : public itk::Object
 {
 public:
   /** Standard class typedefs. */
