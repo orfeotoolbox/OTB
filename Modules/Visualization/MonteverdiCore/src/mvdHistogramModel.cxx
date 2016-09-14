@@ -60,12 +60,26 @@ namespace
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
-
+/*****************************************************************************/
+DefaultImageType::PixelType::ValueType
+HistogramModel
+::GetEpsilon()
+{
+  if( std::tr1::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+    return
+      std::pow(
+	10.0,
+	static_cast< DefaultImageType::PixelType::ValueType >(
+	  -HistogramModel::PRECISION - 1
+	)
+      );
+  else
+    return 1;
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 HistogramModel
 ::HistogramModel( QObject* p ) :
   AbstractModel( p ),

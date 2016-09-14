@@ -166,6 +166,9 @@ public:
 //
 // Public methods.
 public:
+  /**
+   */
+  static DefaultImageType::PixelType::ValueType GetEpsilon();
 
   /** \brief Constructor. */
   HistogramModel( QObject* p =NULL );
@@ -624,32 +627,15 @@ HistogramModel
       // {
       if( minPixel[ i ]==maxPixel[ i ] )	
 	{
-	if( std::tr1::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
-	  {
-	  double epsilon =
-	    std::pow(
-	      10.0,
-	      static_cast< double >( -HistogramModel::PRECISION - 1 )
-	    );
+	double epsilon = HistogramModel::GetEpsilon();
 
-	  if( minPixel[ i ] >
-	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() )
-	    minPixel[ i ] -= epsilon;
+	if( minPixel[ i ] >=
+	    std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() + epsilon )
+	  minPixel[ i ] -= epsilon;
 
-	  if( maxPixel[ i ] <
-	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() )
+	if( maxPixel[ i ] <=
+	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() - epsilon )
 	    maxPixel[ i ] += epsilon;
-	  }
-	else
-	  {
-	  if( minPixel[ i ] >
-	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() )
-	    -- minPixel[ i ];
-
-	  if( maxPixel[ i ] <
-	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() )
-	    ++ maxPixel[ i ];
-	  }
 	}
       // }
       //
