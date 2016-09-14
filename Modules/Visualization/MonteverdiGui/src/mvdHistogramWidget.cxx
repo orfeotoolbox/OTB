@@ -146,6 +146,7 @@ HistogramWidget
   // m_LowPlotMarkers(),
   // m_HighPlotMarkers(),
   m_Bounds(),
+  m_Precision( 0.0 ),
   m_IsGrayscaleActivated( false )
 {
   m_UI->setupUi( this );
@@ -321,6 +322,22 @@ HistogramWidget
 
   delete m_UI;
   m_UI = NULL;
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::SetPrecision( double p )
+{
+  m_Precision = p;
+}
+
+/*******************************************************************************/
+double
+HistogramWidget
+::GetPrecision() const
+{
+  return m_Precision;
 }
 
 /*******************************************************************************/
@@ -576,11 +593,9 @@ HistogramWidget
       yMax = m_Bounds[ i ].m_YMax;
     }
 
-  /*
   qDebug()
     << "[" << xMin << "; " << xMax << "]"
     << "x [" << yMin << "; " << yMax << "]";
-  */
 
   m_UI->histogramPlot->setAxisScale( QwtPlot::xBottom, xMin, xMax );
   m_UI->histogramPlot->setAxisScale( QwtPlot::yLeft, yMin, yMax );
