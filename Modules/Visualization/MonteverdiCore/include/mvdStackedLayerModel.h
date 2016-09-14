@@ -318,7 +318,7 @@ private slots:
 };
 
 #if OTB_DEBUG
-inline void trace( const std::vector< std::string > & );
+inline void trace( const StringVector & );
 #endif
 
 } // end namespace 'mvd'.
@@ -936,10 +936,8 @@ StackedLayerModel
 
 inline
 void
-trace( const std::vector< std::string > & strv )
+trace( const StringVector & strv )
 {
-  typedef std::vector< std::string > StringVector;
-
   qDebug() << "{";
 
   for( StringVector::const_iterator it( strv.begin() );
