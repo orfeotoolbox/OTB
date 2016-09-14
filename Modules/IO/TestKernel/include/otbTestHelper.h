@@ -26,6 +26,7 @@
 #include <vector>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "otbStringUtils.h"
 
 #include "otbMetaDataKey.h"
 
@@ -137,6 +138,8 @@ private:
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
   std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
   int TokenizeLine(const std::string &line, StringList &tokens) const;
+
+  static bool IsTokenEmpty(boost::iterator_range<std::string::const_iterator> &token);
 
   // TODO : maybe merge this function with isToBeIgnoredForAnyComparison
   bool IsLineValid(const std::string& str, const StringList &ignoredLines) const;
