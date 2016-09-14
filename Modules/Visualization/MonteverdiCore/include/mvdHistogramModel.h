@@ -176,11 +176,15 @@ public:
    */
   bool IsValid() const;
 
-  /** */
-  inline MeasurementType Quantile( CountType band, double p ) const;
+  /**
+   */
+  bool IsMonoValue() const;
 
   /** */
-  inline MeasurementType Quantile( CountType band, double p, Bound bound ) const;
+  MeasurementType Quantile( CountType band, double p ) const;
+
+  /** */
+  MeasurementType Quantile( CountType band, double p, Bound bound ) const;
 
   /** */
   double
@@ -329,34 +333,6 @@ HistogramModel
 ::GetMaxPixel() const
 {
   return m_MaxPixel;
-}
-
-/*******************************************************************************/
-inline
-HistogramModel::MeasurementType
-HistogramModel
-::Quantile( unsigned int band,
-	    double p ) const
-{
-  assert( band<m_Histograms->Size() );
-
-  return m_Histograms->GetNthElement( band )->Quantile( 0, p );
-}
-
-/*******************************************************************************/
-inline
-HistogramModel::MeasurementType
-HistogramModel
-::Quantile( unsigned int band,
-	    double p,
-	    Bound bound ) const
-{
-  assert( band<m_Histograms->Size() );
-
-  return m_Histograms->GetNthElement( band )->Quantile(
-    0,
-    bound==BOUND_UPPER ? 1.0 - p : p
-  );
 }
 
 /*******************************************************************************/
@@ -645,7 +621,6 @@ HistogramModel
 
       // MANTIS-1275
       // {
-#if 1
       if( minPixel[ i ]==maxPixel[ i ] )	
 	{
 	if( std::tr1::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
@@ -677,7 +652,6 @@ HistogramModel
 	}
       // }
       //
-#endif
       }
 
     // std::cout << bins;

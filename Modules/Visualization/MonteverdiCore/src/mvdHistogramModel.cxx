@@ -94,6 +94,51 @@ HistogramModel
 }
 
 /*******************************************************************************/
+bool
+HistogramModel
+::IsMonoValue() const
+{
+  // qDebug() << this << "::IsMonoValue() ->" << m_MinPixel==m_MaxPixel;
+
+  return m_MinPixel==m_MaxPixel;
+}
+
+/*******************************************************************************/
+HistogramModel::MeasurementType
+HistogramModel
+::Quantile( unsigned int band,
+	    double p ) const
+{
+  assert( band<m_Histograms->Size() );
+
+  qDebug()
+    << "Quantile" << p << ":" <<
+    ( IsMonoValue()
+      ? m_MinPixel[ band ]
+      : m_Histograms->GetNthElement( band )->Quantile( 0, p ) );
+
+  return
+    IsMonoValue()
+    ? m_MinPixel[ band ]
+    : m_Histograms->GetNthElement( band )->Quantile( 0, p );
+}
+
+/*******************************************************************************/
+HistogramModel::MeasurementType
+HistogramModel
+::Quantile( unsigned int band,
+	    double p,
+	    Bound bound ) const
+{
+  return Quantile(
+    band, 
+    bound==BOUND_UPPER
+    ? 1.0 - p
+    : p
+  );
+}
+
+/*******************************************************************************/
 double
 HistogramModel
 ::Percentile( CountType band, MeasurementType intensity, Bound bound ) const
