@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -79,7 +79,7 @@ class LayerStackWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT LayerStackWidget :
+class OTBMonteverdiGUI_EXPORT LayerStackWidget :
     public QWidget
 {
 

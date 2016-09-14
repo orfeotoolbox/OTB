@@ -117,7 +117,9 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     * non-complex pixel types, vcl_abs() simply returns absolute value.
     */
 
-  RealType digitalNumber = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
+	const std::complex<float> pVal = this->GetInputImage()->GetPixel(index);
+	const RealType digitalNumber = std::sqrt((pVal.real() * pVal.real()) + (pVal.imag()* pVal.imag()));
+
   RealType sigma = m_Scale * digitalNumber * digitalNumber;
 
   /** substract noise if enabled. */
@@ -158,7 +160,6 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     {
     sigma /= m_RescalingFactor;
     }
-
 
   if(sigma < 0.0)
     {

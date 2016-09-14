@@ -19,6 +19,7 @@
 #define otbUtils_h
 
 #include "itkMacro.h"
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -34,7 +35,7 @@ namespace otb
 namespace Utils
 {
   /** Check that the values for lon, lat are reasonable */
-  bool IsLonLatValid(double lon, double lat);
+  bool OTBCommon_EXPORT IsLonLatValid(double lon, double lat);
 
   template <class T>
     inline std::string ConvertToString (const T& v)

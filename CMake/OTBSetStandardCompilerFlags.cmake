@@ -22,6 +22,17 @@
 include(OTB_CheckCCompilerFlag)
 include(OTB_CheckCXXCompilerFlag)
 
+macro( set_debug_flags )
+  string( TOUPPER "${CMAKE_BUILD_TYPE}" MODE )
+
+  if( "${MODE}" STREQUAL "DEBUG" )
+    message( STATUS "Adding -DOTB_DEBUG" )
+
+    set( CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DOTB_DEBUG" )
+    set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DOTB_DEBUG" )
+  endif()
+endmacro()
+
 function(check_c_compiler_warning_flags c_flag_var)
   set(local_c_flags "")
   set(flag_list "${ARGN}")
@@ -195,12 +206,18 @@ macro(check_compiler_platform_flags)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
       endif()
     else()
-      if(BUILD_SHARED_LIBS)
-        set(OTB_LIBRARY_BUILD_TYPE "SHARED")
-      else()
-        set(OTB_LIBRARY_BUILD_TYPE "STATIC")
+      # if CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS is on, then
+      # BUILD_SHARED_LIBS works as it would on other systems
+      if(NOT CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
+        if(BUILD_SHARED_LIBS)
+          set(OTB_LIBRARY_BUILD_TYPE "SHARED")
+        else()
+          set(OTB_LIBRARY_BUILD_TYPE "STATIC")
+        endif()
+        # turn off BUILD_SHARED_LIBS as OTB_LIBRARY_BUILD_TYPE
+        # is used on the libraries that have markup.
+        set(BUILD_SHARED_LIBS OFF)
       endif()
-      set(BUILD_SHARED_LIBS OFF)
     endif()
   endif()
   #-----------------------------------------------------------------------------
@@ -309,6 +326,8 @@ check_compiler_warning_flags(C_WARNING_FLAGS CXX_WARNING_FLAGS)
 # use OTB don't require these flags .
 set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS}")
+
+set_debug_flags()
 
 #-----------------------------------------------------------------------------
 #Check the set of platform flags the compiler supports

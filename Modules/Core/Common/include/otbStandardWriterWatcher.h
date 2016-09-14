@@ -48,7 +48,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class /*ITK_EXPORT*/ StandardWriterWatcher : public WriterWatcherBase
+class OTBCommon_EXPORT StandardWriterWatcher : public WriterWatcherBase
 {
 public:
 

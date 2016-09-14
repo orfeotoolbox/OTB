@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -74,7 +75,7 @@ class ProgressInterface;
  *
  * \brief WIP.
  */
-class ITK_EXPORT ProcessObjectObserver :
+class OTBMonteverdiCore_EXPORT ProcessObjectObserver :
     public itk::Command
 {
 

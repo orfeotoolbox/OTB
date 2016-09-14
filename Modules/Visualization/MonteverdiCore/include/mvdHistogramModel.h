@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -90,7 +91,7 @@ class AbstractImageModel;
  *
  * \ingroup OTBMonteverdiCore
  */
-class ITK_EXPORT HistogramModel :
+class OTBMonteverdiCore_EXPORT HistogramModel :
     public AbstractModel,
     private SerializableInterface
 {
@@ -591,7 +592,7 @@ HistogramModel
 	// qDebug() << "#" << i << ":" << sigma;
 
 	assert( sigma >= 0.0 );
-     
+
 	if( sigma<=0.0 )
 	  {
 	  bins[ i ] = 1;

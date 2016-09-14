@@ -25,6 +25,8 @@
 #include "itkPoint.h"
 #include "itkDataObject.h"
 
+#include "OTBVectorDataBaseExport.h"
+
 namespace otb
 {
 
@@ -52,7 +54,7 @@ namespace otb
  *
  * \ingroup OTBVectorDataBase
  */
-class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
+class OTBVectorDataBase_EXPORT VectorDataIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */

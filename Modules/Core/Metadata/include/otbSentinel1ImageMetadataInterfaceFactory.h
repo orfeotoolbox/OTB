@@ -18,7 +18,7 @@
 #ifndef otbSentinel1ImageMetadataInterfaceFactory_h
 #define otbSentinel1ImageMetadataInterfaceFactory_h
 
-
+#include "OTBMetadataExport.h"
 #include "itkObjectFactoryBase.h"
 
 namespace otb
@@ -28,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT Sentinel1ImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT Sentinel1ImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

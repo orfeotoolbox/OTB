@@ -22,6 +22,8 @@
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 
+#include "OTBGdalAdaptersExport.h"
+
 // Forward declarations
 namespace otb {
 namespace ogr {
@@ -62,7 +64,7 @@ namespace otb
  *
  * \ingroup OTBGdalAdapters
  */
-class ITK_EXPORT GeometriesSource : public itk::ProcessObject, boost::noncopyable
+class OTBGdalAdapters_EXPORT GeometriesSource : public itk::ProcessObject, boost::noncopyable
   {
 public:
   /**\name Standard ITK typedefs */

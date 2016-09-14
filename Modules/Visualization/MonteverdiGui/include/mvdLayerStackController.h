@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModelController.h"
@@ -73,7 +73,7 @@ class LayerStackWidget;
  *
  * \brief WIP.
  */
-class ITK_EXPORT LayerStackController :
+class OTBMonteverdiGUI_EXPORT LayerStackController :
     public AbstractModelController
 {
 

@@ -42,7 +42,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdImageViewManipulator.h"
@@ -73,7 +73,7 @@ namespace mvd
  *
  *  \brief TODO.
  */
-class ITK_EXPORT QuicklookViewManipulator :
+class OTBMonteverdiGUI_EXPORT QuicklookViewManipulator :
     public ImageViewManipulator
 {
 

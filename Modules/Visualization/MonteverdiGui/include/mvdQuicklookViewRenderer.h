@@ -42,7 +42,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbGlROIActor.h"
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdImageViewRenderer.h"
@@ -75,7 +75,7 @@ namespace mvd
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT QuicklookViewRenderer :
+class OTBMonteverdiGUI_EXPORT QuicklookViewRenderer :
     public ImageViewRenderer
 {
 

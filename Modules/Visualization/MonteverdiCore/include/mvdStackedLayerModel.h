@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -76,7 +77,7 @@ class AbstractLayerModel;
  *
  * \brief WIP.
  */
-class ITK_EXPORT StackedLayerModel :
+class OTBMonteverdiCore_EXPORT StackedLayerModel :
     public AbstractModel
 {
 
@@ -306,7 +307,7 @@ private:
   // Usually, information is a singular term which denotes a
   // plural. Since there's a container of several pixel-infos and we
   // usually name container variables by using the plural form, an 's'
-  // is appended to PixelInfo. 
+  // is appended to PixelInfo.
   PixelInfo::Vector m_PixelInfos;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -317,7 +318,7 @@ private slots:
 };
 
 #if OTB_DEBUG
-inline void trace( const std::vector< std::string > & );
+inline void trace( const StringVector & );
 #endif
 
 } // end namespace 'mvd'.
@@ -540,7 +541,7 @@ StackedLayerModel
   return
     it==m_LayerModels.end()
     ? NULL
-    : it->second;  
+    : it->second;
 }
 
 /*****************************************************************************/
@@ -935,10 +936,8 @@ StackedLayerModel
 
 inline
 void
-trace( const std::vector< std::string > & strv )
+trace( const StringVector & strv )
 {
-  typedef std::vector< std::string > StringVector;
-
   qDebug() << "{";
 
   for( StringVector::const_iterator it( strv.begin() );

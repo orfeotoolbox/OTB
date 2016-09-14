@@ -18,10 +18,12 @@
 #ifndef otb_GlVersionChecker_h
 #define otb_GlVersionChecker_h
 
+#include "OTBIceExport.h"
+
 namespace otb
 {
 
-class GlVersionChecker
+class OTBIce_EXPORT GlVersionChecker
 {
 public:
 
@@ -44,7 +46,7 @@ public:
    * than GL_NO_ERROR.
    */
   static const char * GLVersion();
-  
+
   /**
    * \return The OpenGL Shading-Language version used at runtime. The
    * call to this method requires a valid OpenGL rendering context. An
@@ -109,7 +111,7 @@ private:
   static bool SplitVersion( const char * version,
                             int& major,
                             int& minor,
-                            int& release );  
+                            int& release );
 };
 
 } // End namespace otb

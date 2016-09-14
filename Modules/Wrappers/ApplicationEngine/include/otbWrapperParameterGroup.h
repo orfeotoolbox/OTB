@@ -32,7 +32,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT ParameterGroup
+class OTBApplicationEngine_EXPORT ParameterGroup
   : public Parameter
 {
 public:

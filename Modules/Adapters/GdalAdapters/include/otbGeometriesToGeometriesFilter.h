@@ -46,7 +46,7 @@ namespace otb
  *
  * \ingroup OTBGdalAdapters
  */
-class ITK_EXPORT GeometriesToGeometriesFilter : public GeometriesSource
+class OTBGdalAdapters_EXPORT GeometriesToGeometriesFilter : public GeometriesSource
   {
 public:
   /**\name Standard ITK typedefs */
@@ -172,7 +172,7 @@ private:
  * Helper class to operate an exact copy of the fields from a source layer.
  * \since OTB v 3.14.0
  */
-struct FieldCopyTransformation
+struct OTBGdalAdapters_EXPORT FieldCopyTransformation
   {
   OGRFeatureDefn & getDefinition(ogr::Layer & outLayer) const
     {

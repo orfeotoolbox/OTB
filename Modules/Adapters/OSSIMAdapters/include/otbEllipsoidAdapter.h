@@ -21,6 +21,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+#include "OTBOSSIMAdaptersExport.h"
+
 class ossimEllipsoid;
 
 namespace otb
@@ -37,7 +39,7 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  **/
 
-class EllipsoidAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT EllipsoidAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */

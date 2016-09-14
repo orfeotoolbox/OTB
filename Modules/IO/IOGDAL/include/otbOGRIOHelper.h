@@ -23,11 +23,15 @@
 #include "otbVectorData.h"
 #include "otbOGRVersionProxy.h"
 
+#include "OTBIOGDALExport.h"
+
+
 class GDALDataset;
 class OGRGeometryCollection;
 class OGRLayer;
 class OGRSpatialReference;
 class OGRGeometry;
+
 
 namespace otb
 {
@@ -38,7 +42,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class OGRIOHelper: public itk::Object
+class OTBIOGDAL_EXPORT OGRIOHelper: public itk::Object
 {
 public:
   /** Standard class typedefs. */

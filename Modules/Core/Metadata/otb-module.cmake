@@ -3,6 +3,7 @@ metadata files from different types of sensor (both optical and radar sensor typ
 are supported. for instance: Pleiades, SPOT6, TerraSar, and so on).")
 
 otb_module(OTBMetadata
+ENABLE_SHARED
   DEPENDS
     OTBObjectList
     OTBBoostAdapters

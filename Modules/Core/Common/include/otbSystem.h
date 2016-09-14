@@ -24,6 +24,8 @@
 #include "itksys/SystemTools.hxx"
 #include "itkMacro.h"
 
+#include "OTBCommonExport.h"
+
 namespace otb
 {
 
@@ -35,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class ITK_EXPORT System
+class OTBCommon_EXPORT System
 {
 public:
 

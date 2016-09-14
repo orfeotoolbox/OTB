@@ -33,7 +33,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT InputVectorDataListParameter : public Parameter
+class OTBApplicationEngine_EXPORT InputVectorDataListParameter : public Parameter
 {
 public:
   /** Standard class typedef */
