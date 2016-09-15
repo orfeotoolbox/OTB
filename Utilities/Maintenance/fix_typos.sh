@@ -23,7 +23,7 @@
 #  DEALINGS IN THE SOFTWARE.
 ###############################################################################
 
-#Portion of the script is based on fix_tipos.sh in gdal source
+#Portion of the script is based on fix_typos.sh in gdal source
 
 #Install codespell (pip install codespell or git https://github.com/lucasdemarchi/codespell.git)
 # Note GDAL is using a patched version to support white list and full filename for exclude files
