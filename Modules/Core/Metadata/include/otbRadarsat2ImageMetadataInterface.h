@@ -30,7 +30,7 @@ namespace otb
  * \ingroup OTBMetadata
  */
 
-class ITK_ABI_EXPORT Radarsat2ImageMetadataInterface : public SarImageMetadataInterface
+class OTBMetadata_EXPORT Radarsat2ImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
 

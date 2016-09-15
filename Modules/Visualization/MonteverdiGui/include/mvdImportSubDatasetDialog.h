@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -78,7 +78,7 @@ class ImportSubDatasetDialog;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT ImportSubDatasetDialog :
+class OTBMonteverdiGUI_EXPORT ImportSubDatasetDialog :
     public QDialog
 {
 

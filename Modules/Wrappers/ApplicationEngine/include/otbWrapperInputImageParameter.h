@@ -32,7 +32,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT InputImageParameter : public Parameter
+class OTBApplicationEngine_EXPORT InputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -92,7 +92,7 @@ public:
 
   /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
-  ITK_ABI_EXPORT TOutputImage*  CastImage();
+  TOutputImage*  CastImage();
     
   /** Cast an image to an image of the same type
   * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
@@ -162,7 +162,7 @@ private:
 // so that the linker knows they exist when building OTB Applications
 
 #define otbDeclareCastImageMacro(InputImageType, OutputImageType)   \
-  template<> OutputImageType *                                          \
+  template<> OTBApplicationEngine_EXPORT OutputImageType *                                          \
   InputImageParameter::CastImage<InputImageType , OutputImageType>();    \
 
 #define otbGenericDeclareCastImageMacro(InputImageType, prefix)     \

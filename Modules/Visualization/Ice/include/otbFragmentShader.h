@@ -18,13 +18,15 @@
 #ifndef otb_FragmentShader_h
 #define otb_FragmentShader_h
 
-#include "itkObject.h"
-#include "itkPoint.h"
+#include "OTBIceExport.h"
+
+#include <itkObject.h>
+#include <itkPoint.h>
 
 namespace otb
 {
 
-class FragmentShader 
+class OTBIce_EXPORT FragmentShader
   : public itk::Object
 {
 public:

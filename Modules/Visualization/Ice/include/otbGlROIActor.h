@@ -29,7 +29,7 @@
 namespace otb
 {
 
-class GlROIActor 
+class OTBIce_EXPORT GlROIActor 
   : public GlActor
 {
 public:

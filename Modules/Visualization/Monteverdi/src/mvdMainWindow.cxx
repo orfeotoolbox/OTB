@@ -222,7 +222,7 @@ MainWindow
   setObjectName( PROJECT_NAME );
 
 #ifdef OTB_DEBUG
-  setWindowTitle( PROJECT_NAME "(Debug)" );
+  setWindowTitle( PROJECT_NAME " (Debug)" );
 #else // OTB_DEBUG
   setWindowTitle( PROJECT_NAME );
 #endif // OTB_DEBUG

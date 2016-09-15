@@ -23,6 +23,7 @@
 
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
+#include "OTBOSSIMAdaptersExport.h"
 
 namespace otb
 {
@@ -31,44 +32,44 @@ namespace otb
  */
 namespace MetaDataKey
 {
-  extern char const* DriverShortNameKey;
-  extern char const* DriverLongNameKey;
+  extern OTBOSSIMAdapters_EXPORT char const* DriverShortNameKey;
+  extern OTBOSSIMAdapters_EXPORT char const* DriverLongNameKey;
 
-  extern char const* ProjectionRefKey;
+  extern OTBOSSIMAdapters_EXPORT char const* ProjectionRefKey;
 
-  extern char const* GCPProjectionKey;
-  extern char const* GCPParametersKey;
-  extern char const* GCPCountKey;
+  extern OTBOSSIMAdapters_EXPORT char const* GCPProjectionKey;
+  extern OTBOSSIMAdapters_EXPORT char const* GCPParametersKey;
+  extern OTBOSSIMAdapters_EXPORT char const* GCPCountKey;
 
-  extern char const* GeoTransformKey;
+  extern OTBOSSIMAdapters_EXPORT char const* GeoTransformKey;
 
-  extern char const* MetadataKey;
-  extern char const* SubMetadataKey;
+  extern OTBOSSIMAdapters_EXPORT char const* MetadataKey;
+  extern OTBOSSIMAdapters_EXPORT char const* SubMetadataKey;
 
-  extern char const* UpperLeftCornerKey;
-  extern char const* UpperRightCornerKey;
-  extern char const* LowerLeftCornerKey;
-  extern char const* LowerRightCornerKey;
+  extern OTBOSSIMAdapters_EXPORT char const* UpperLeftCornerKey;
+  extern OTBOSSIMAdapters_EXPORT char const* UpperRightCornerKey;
+  extern OTBOSSIMAdapters_EXPORT char const* LowerLeftCornerKey;
+  extern OTBOSSIMAdapters_EXPORT char const* LowerRightCornerKey;
 
-  extern char const* ColorTableNameKey;
-  extern char const* ColorEntryCountKey;
-  extern char const* ColorEntryAsRGBKey;
+  extern OTBOSSIMAdapters_EXPORT char const* ColorTableNameKey;
+  extern OTBOSSIMAdapters_EXPORT char const* ColorEntryCountKey;
+  extern OTBOSSIMAdapters_EXPORT char const* ColorEntryAsRGBKey;
 
-  extern char const* OSSIMKeywordlistKey;
-  extern char const* OSSIMKeywordlistDelimiterKey;
+  extern OTBOSSIMAdapters_EXPORT char const* OSSIMKeywordlistKey;
+  extern OTBOSSIMAdapters_EXPORT char const* OSSIMKeywordlistDelimiterKey;
 
-  extern char const* VectorDataKeywordlistKey;
-  extern char const* VectorDataKeywordlistDelimiterKey;
+  extern OTBOSSIMAdapters_EXPORT char const* VectorDataKeywordlistKey;
+  extern OTBOSSIMAdapters_EXPORT char const* VectorDataKeywordlistDelimiterKey;
 
-  extern char const* ResolutionFactor;
-  extern char const* SubDatasetIndex;
-  extern char const* CacheSizeInBytes;
+  extern OTBOSSIMAdapters_EXPORT char const* ResolutionFactor;
+  extern OTBOSSIMAdapters_EXPORT char const* SubDatasetIndex;
+  extern OTBOSSIMAdapters_EXPORT char const* CacheSizeInBytes;
 
-  extern char const* TileHintX;
-  extern char const* TileHintY;
+  extern OTBOSSIMAdapters_EXPORT char const* TileHintX;
+  extern OTBOSSIMAdapters_EXPORT char const* TileHintY;
 
-  extern char const * NoDataValueAvailable;
-  extern char const * NoDataValue;
+  extern OTBOSSIMAdapters_EXPORT char const * NoDataValueAvailable;
+  extern OTBOSSIMAdapters_EXPORT char const * NoDataValue;
 
 
   enum  KeyType
@@ -103,7 +104,7 @@ namespace MetaDataKey
 
   };
 
-  KeyType GetKeyType(const std::string& name);
+  KeyType OTBOSSIMAdapters_EXPORT GetKeyType(const std::string& name);
 
   typedef std::vector<double>               VectorType;
   typedef std::vector<bool>                 BoolVectorType;
@@ -118,7 +119,7 @@ namespace MetaDataKey
  *
  * \ingroup OTBOSSIMAdapters
  */
-class ITK_EXPORT OTB_GCP
+class OTBOSSIMAdapters_EXPORT OTB_GCP
 {
 public:
 

@@ -21,6 +21,7 @@
 #include "itkPoint.h"
 #include "itkMultiThreader.h"
 #include "otbCurlHelperInterface.h"
+#include "OTBCartoExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 
-class ITK_EXPORT CoordinateToName : public itk::Object
+class OTBCarto_EXPORT CoordinateToName : public itk::Object
 {
 public:
   /** Standard class typedefs. */

@@ -29,7 +29,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT SpotImageMetadataInterface : public OpticalImageMetadataInterface
+class OTBMetadata_EXPORT SpotImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 

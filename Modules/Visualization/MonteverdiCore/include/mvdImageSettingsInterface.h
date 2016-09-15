@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -72,7 +73,7 @@ class ImageSettings;
  *
  * \brief WIP.
  */
-class ITK_EXPORT ImageSettingsInterface
+class OTBMonteverdiCore_EXPORT ImageSettingsInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

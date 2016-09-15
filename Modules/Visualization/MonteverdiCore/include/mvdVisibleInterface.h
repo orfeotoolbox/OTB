@@ -42,10 +42,9 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiCoreExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
-
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -72,7 +71,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT VisibleInterface
+class OTBMonteverdiCore_EXPORT VisibleInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/

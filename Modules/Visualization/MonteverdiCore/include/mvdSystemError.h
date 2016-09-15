@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -77,7 +78,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT SystemError :
+class OTBMonteverdiCore_EXPORT SystemError :
     public std::runtime_error
 {
 
@@ -89,7 +90,7 @@ public:
 
   /** \brief Constructor. */
   SystemError( const std::string& message =std::string() ) :
-    std::runtime_error( itksys::SystemTools::GetLastSystemError() 
+    std::runtime_error( itksys::SystemTools::GetLastSystemError()
         + ": " + message) {};
 
   /** \brief Destructor. */

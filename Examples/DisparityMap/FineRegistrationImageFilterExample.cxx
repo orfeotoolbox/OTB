@@ -181,7 +181,7 @@ int main(int argc, char** argv)
   // We need to set the sub-pixel accuracy we want to obtain:
   //
   // Software Guide : EndLatex
-  registrator->SetSubPixelAccuracy(atof(argv[10]));
+  registrator->SetConvergenceAccuracy(atof(argv[10]));
 
   // Software Guide : BeginLatex
   //

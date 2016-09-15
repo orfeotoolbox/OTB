@@ -27,6 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -55,7 +56,6 @@
 #include "mvdTypes.h"
 #endif //tag=QT4-boost-compatibility
 
-
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -81,7 +81,7 @@ class QuicklookModel;
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT AbstractImageModel :
+class OTBMonteverdiCore_EXPORT AbstractImageModel :
     public AbstractLayerModel
 {
 
@@ -232,7 +232,7 @@ public:
 
   /**
    * \return The estimated spacing of the native image at full resolution
-   * 
+   *
    */
   inline const SpacingType& GetEstimatedGroundSpacing() const;
 

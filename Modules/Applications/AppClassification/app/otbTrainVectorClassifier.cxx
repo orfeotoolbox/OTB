@@ -92,7 +92,7 @@ private:
     AddParameter(ParameterType_Group, "io", "Input and output data");
     SetParameterDescription("io", "This group of parameters allows setting input and output data.");
 
-    AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector Data");
+    AddParameter(ParameterType_InputVectorDataList, "io.vd", "Input Vector Data");
     SetParameterDescription("io.vd", "Input geometries used for training (note : all geometries from the layer will be used)");
 
     AddParameter(ParameterType_InputFilename, "io.stats", "Input XML image statistics file");
@@ -122,7 +122,7 @@ private:
     AddParameter(ParameterType_Group, "valid", "Validation data");
     SetParameterDescription("valid", "This group of parameters defines validation data.");
 
-    AddParameter(ParameterType_InputVectorData, "valid.vd", "Validation Vector Data");
+    AddParameter(ParameterType_InputVectorDataList, "valid.vd", "Validation Vector Data");
     SetParameterDescription("valid.vd", "Geometries used for validation "
       "(must contain the same fields used for training, all geometries from the layer will be used)");
     MandatoryOff("valid.vd");
@@ -148,9 +148,9 @@ private:
   {
     if ( HasValue("io.vd") )
       {
-      std::string vectorFile = GetParameterString("io.vd");
+      std::vector<std::string> vectorFileList = GetParameterStringList("io.vd");
       ogr::DataSource::Pointer ogrDS =
-        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+        ogr::DataSource::New(vectorFileList[0], ogr::DataSource::Modes::Read);
       ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
       ogr::Feature feature = layer.ogr().GetNextFeature();
 
@@ -242,13 +242,30 @@ void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc)
 
 void DoExecute()
   {
-  std::string shapefile = GetParameterString("io.vd");
-  std::string modelfile = GetParameterString("io.out");
   typedef int LabelPixelType;
   typedef itk::FixedArray<LabelPixelType,1> LabelSampleType;
   typedef itk::Statistics::ListSample <LabelSampleType> LabelListSampleType;
 
-  const int nbFeatures = GetSelectedItems("feat").size();
+  // Prepare selected field names (their position may change between two inputs)
+  std::vector<int> selectedIdx = GetSelectedItems("feat");
+  const unsigned int nbFeatures = selectedIdx.size();
+  std::vector<std::string> fieldNames = GetChoiceNames("feat");
+  std::vector<std::string> selectedNames(nbFeatures);
+  for (unsigned int i=0 ; i<nbFeatures ; i++)
+    {
+    selectedNames[i] = fieldNames[selectedIdx[i]];
+    }
+  std::vector<int> featureFieldIndex(nbFeatures, -1);
+  int cFieldIndex = -1;
+
+  // List of available fields
+  std::ostringstream oss;
+  for (unsigned int i=0 ; i<fieldNames.size() ; i++)
+    {
+    if (i) oss << ", ";
+    oss << fieldNames[i];
+    }
+  std::string availableFields(oss.str());
 
   // Statistics for shift/scale
   MeasurementType meanMeasurementVector;
@@ -269,50 +286,55 @@ void DoExecute()
     stddevMeasurementVector.Fill(1.);
     }
 
-  ogr::DataSource::Pointer source = ogr::DataSource::New(shapefile, ogr::DataSource::Modes::Read);
-  ogr::Layer layer = source->GetLayer(this->GetParameterInt("layer"));
-  ogr::Feature feature = layer.ogr().GetNextFeature();
-  bool goesOn = feature.addr() != 0;
-
   ListSampleType::Pointer input = ListSampleType::New();
   LabelListSampleType::Pointer target = LabelListSampleType::New();
   input->SetMeasurementVectorSize(nbFeatures);
 
-  int cFieldIndex=-1;
-  std::vector<int> featureFieldIndex = GetSelectedItems("feat");
-  if (feature.addr())
+  std::vector<std::string> vectorFileList = GetParameterStringList("io.vd");
+  for (unsigned int k=0 ; k<vectorFileList.size() ; k++)
     {
+    otbAppLogINFO("Reading input vector file "<<k+1<<"/"<<vectorFileList.size());
+    ogr::DataSource::Pointer source = ogr::DataSource::New(vectorFileList[k], ogr::DataSource::Modes::Read);
+    ogr::Layer layer = source->GetLayer(this->GetParameterInt("layer"));
+    ogr::Feature feature = layer.ogr().GetNextFeature();
+    bool goesOn = feature.addr() != 0;
+    if (!goesOn)
+      {
+      otbAppLogWARNING("The layer "<<GetParameterInt("layer")<<" of "
+        <<vectorFileList[k]<<" is empty, input is skipped.");
+      continue;
+      }
+
+    // Check all needed fields are present :
+    //   - check class field
     cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
-    }
-
-  // Check that the class field exists
-  if (cFieldIndex < 0)
-    {
-    std::ostringstream oss;
-    std::vector<std::string> names = GetChoiceNames("feat");
-    for (unsigned int i=0 ; i<names.size() ; i++)
+    if (cFieldIndex < 0)
+      otbAppLogFATAL("The field name for class label ("<<GetParameterString("cfield")
+        <<") has not been found in the input vector file! Choices are "<< availableFields);
+    //   - check feature fields
+    for (unsigned int i=0 ; i<nbFeatures ; i++)
       {
-      if (i) oss << ", ";
-      oss << names[i];
+      featureFieldIndex[i] = feature.ogr().GetFieldIndex(selectedNames[i].c_str());
+      if (featureFieldIndex[i] < 0)
+        otbAppLogFATAL("The field name for feature "<<selectedNames[i]
+        <<" has not been found in the input vector file! Choices are "<< availableFields);
       }
-    otbAppLogFATAL("The field name for class label ("<<GetParameterString("cfield")
-      <<") has not been found in the input vector file! Choices are "<< oss.str());
-    }
 
-  while(goesOn)
-    {
-    if(feature.ogr().IsFieldSet(cFieldIndex))
+    while(goesOn)
       {
-      MeasurementType mv;
-      mv.SetSize(nbFeatures);
-      for(int idx=0; idx < nbFeatures; ++idx)
-        mv[idx] = feature.ogr().GetFieldAsDouble(featureFieldIndex[idx]);
+      if(feature.ogr().IsFieldSet(cFieldIndex))
+        {
+        MeasurementType mv;
+        mv.SetSize(nbFeatures);
+        for(unsigned int idx=0; idx < nbFeatures; ++idx)
+          mv[idx] = feature.ogr().GetFieldAsDouble(featureFieldIndex[idx]);
 
-      input->PushBack(mv);
-      target->PushBack(feature.ogr().GetFieldAsInteger(cFieldIndex));
+        input->PushBack(mv);
+        target->PushBack(feature.ogr().GetFieldAsInteger(cFieldIndex));
+        }
+      feature = layer.ogr().GetNextFeature();
+      goesOn = feature.addr() != 0;
       }
-    feature = layer.ogr().GetNextFeature();
-    goesOn = feature.addr() != 0;
     }
 
   ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
@@ -321,14 +343,8 @@ void DoExecute()
   trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
   trainingShiftScaleFilter->Update();
 
-  ListSampleType::Pointer listSample;
-  LabelListSampleType::Pointer labelListSample;
-
-  listSample = trainingShiftScaleFilter->GetOutput();
-  labelListSample = target;
-
-  ListSampleType::Pointer trainingListSample = listSample;
-  LabelListSampleType::Pointer trainingLabeledListSample = labelListSample;
+  ListSampleType::Pointer trainingListSample= trainingShiftScaleFilter->GetOutput();
+  TargetListSampleType::Pointer trainingLabeledListSample = target;
 
   //--------------------------
   // Estimate model
@@ -344,34 +360,55 @@ void DoExecute()
   // Import validation data
   if (HasValue("valid.vd") && IsParameterEnabled("valid.vd"))
     {
-    std::string validFile = this->GetParameterString("valid.vd");
-    source = ogr::DataSource::New(validFile, ogr::DataSource::Modes::Read);
-    layer = source->GetLayer(this->GetParameterInt("valid.layer"));
-    feature = layer.ogr().GetNextFeature();
-    goesOn = feature.addr() != 0;
-
-    // find usefull field indexes
-
-    // TODO : detect corresponding indexes in validation data set, for the moment
-    // Assume they have the same fields, in the same order.
-
     input = ListSampleType::New();
     target = LabelListSampleType::New();
     input->SetMeasurementVectorSize(nbFeatures);
-    while(goesOn)
-      {
-      if(feature.ogr().IsFieldSet(cFieldIndex))
-        {
-        MeasurementType mv;
-        mv.SetSize(nbFeatures);
-        for(int idx=0; idx < nbFeatures; ++idx)
-          mv[idx] = feature.ogr().GetFieldAsDouble(featureFieldIndex[idx]);
 
-        input->PushBack(mv);
-        target->PushBack(feature.ogr().GetFieldAsInteger(cFieldIndex));
+    std::vector<std::string> validFileList = this->GetParameterStringList("valid.vd");
+    for (unsigned int k=0 ; k<validFileList.size() ; k++)
+      {
+      otbAppLogINFO("Reading validation vector file "<<k+1<<"/"<<validFileList.size());
+      ogr::DataSource::Pointer source = ogr::DataSource::New(validFileList[k], ogr::DataSource::Modes::Read);
+      ogr::Layer layer = source->GetLayer(this->GetParameterInt("valid.layer"));
+      ogr::Feature feature = layer.ogr().GetNextFeature();
+      bool goesOn = feature.addr() != 0;
+      if (!goesOn)
+        {
+        otbAppLogWARNING("The layer "<<GetParameterInt("valid.layer")<<" of "
+          <<validFileList[k]<<" is empty, input is skipped.");
+        continue;
         }
-      feature = layer.ogr().GetNextFeature();
-      goesOn = feature.addr() != 0;
+
+      // Check all needed fields are present :
+      //   - check class field
+      cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
+      if (cFieldIndex < 0)
+        otbAppLogFATAL("The field name for class label ("<<GetParameterString("cfield")
+          <<") has not been found in the input vector file! Choices are "<< availableFields);
+      //   - check feature fields
+      for (unsigned int i=0 ; i<nbFeatures ; i++)
+        {
+        featureFieldIndex[i] = feature.ogr().GetFieldIndex(selectedNames[i].c_str());
+        if (featureFieldIndex[i] < 0)
+          otbAppLogFATAL("The field name for feature "<<selectedNames[i]
+          <<" has not been found in the input vector file! Choices are "<< availableFields);
+        }
+
+      while(goesOn)
+        {
+        if(feature.ogr().IsFieldSet(cFieldIndex))
+          {
+          MeasurementType mv;
+          mv.SetSize(nbFeatures);
+          for(unsigned int idx=0; idx < nbFeatures; ++idx)
+            mv[idx] = feature.ogr().GetFieldAsDouble(featureFieldIndex[idx]);
+
+          input->PushBack(mv);
+          target->PushBack(feature.ogr().GetFieldAsInteger(cFieldIndex));
+          }
+        feature = layer.ogr().GetNextFeature();
+        goesOn = feature.addr() != 0;
+        }
       }
 
     ShiftScaleFilterType::Pointer validShiftScaleFilter = ShiftScaleFilterType::New();

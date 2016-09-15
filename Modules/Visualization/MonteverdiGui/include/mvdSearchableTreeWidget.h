@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 // #include "mvdTypes.h"
@@ -78,7 +78,7 @@ class SearchableTreeWidget;
  * \brief Database content browser. Presents:
  * - Cached datasets.
  */
-class ITK_EXPORT SearchableTreeWidget :
+class OTBMonteverdiGUI_EXPORT SearchableTreeWidget :
     public QWidget
 {
 

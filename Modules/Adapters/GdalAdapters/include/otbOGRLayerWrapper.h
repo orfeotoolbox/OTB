@@ -49,6 +49,7 @@ class Layer;
  * Compares layers identities.
  * \return whether the two layers are in fact the same.
  */
+ OTBGdalAdapters_EXPORT
 bool operator==(Layer const& lhs, Layer const& rhs);
 
 /**\ingroup gGeometry
@@ -72,7 +73,7 @@ bool operator==(Layer const& lhs, Layer const& rhs);
  *
  * \ingroup OTBGdalAdapters
  */
-class Layer
+class OTBGdalAdapters_EXPORT Layer
   {
 public:
   /**\name ITK standard definitions */

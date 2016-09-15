@@ -43,7 +43,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -75,7 +75,7 @@ class ApplicationLauncher;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT OTBApplicationsModel :
+class OTBMonteverdiGUI_EXPORT OTBApplicationsModel :
     public AbstractModel
 {
 
@@ -194,7 +194,7 @@ OTBApplicationsModel
 ::GetBrowser()
 {
   return m_ApplicationsBrowser;
-}  
+}
 /*****************************************************************************/
 inline
 const ApplicationLauncher*
@@ -211,7 +211,7 @@ OTBApplicationsModel
 ::GetLauncher()
 {
   return m_ApplicationLauncher;
-}  
+}
 
 } // end namespace 'mvd'
 

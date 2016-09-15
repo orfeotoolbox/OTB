@@ -18,9 +18,7 @@
 #ifndef otb_StandardShader_h
 #define otb_StandardShader_h
 
-
-#include "itkObjectFactory.h"
-
+#include <itkObjectFactory.h>
 #include "otbFragmentShader.h"
 #include "otbImageSettings.h"
 
@@ -39,7 +37,7 @@ typedef enum
 } ShaderType;
 
 
-class StandardShader 
+class OTBIce_EXPORT StandardShader
   : public FragmentShader
 {
 public:
@@ -68,10 +66,10 @@ public:
 
   itkSetMacro(ChessboardSize,double);
   itkGetConstReferenceMacro(ChessboardSize,double);
-  
+
   itkSetMacro(SliderPosition,double);
   itkGetConstReferenceMacro(SliderPosition,double);
-  
+
   itkSetMacro(VerticalSlider,bool);
   itkGetMacro(VerticalSlider,bool);
 

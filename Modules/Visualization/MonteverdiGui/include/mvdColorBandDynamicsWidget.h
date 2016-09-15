@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -75,7 +75,7 @@ class ColorBandDynamicsWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT ColorBandDynamicsWidget :
+class OTBMonteverdiGUI_EXPORT ColorBandDynamicsWidget :
     public QWidget
 {
 

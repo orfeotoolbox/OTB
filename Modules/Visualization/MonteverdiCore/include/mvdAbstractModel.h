@@ -27,7 +27,6 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
-
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -47,7 +46,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiCoreExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -75,7 +74,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT AbstractModel :
+class OTBMonteverdiCore_EXPORT AbstractModel :
     public QObject
 {
 

@@ -18,6 +18,8 @@
 #ifndef otbWrapperMapProjectionParametersHandler_h
 #define otbWrapperMapProjectionParametersHandler_h
 
+#include "OTBApplicationEngineExport.h"
+
 #include "otbWrapperApplication.h"
 
 namespace otb
@@ -52,14 +54,14 @@ public:
     * Add a Group containing several choices for map projections
     *
     */
-  static ITK_ABI_EXPORT void AddMapProjectionParameters(Application::Pointer app, const std::string & key);
+  static OTBApplicationEngine_EXPORT void AddMapProjectionParameters(Application::Pointer app, const std::string & key);
 
   /**
     * Helper method : Compute the ProjectionRef knowing the map
     * projection picked up by the user
     *
     */
-  static ITK_ABI_EXPORT const std::string GetProjectionRefFromChoice(const Application::Pointer app,
+  static OTBApplicationEngine_EXPORT const std::string GetProjectionRefFromChoice(const Application::Pointer app,
                                                       const std::string & key);
 
 
@@ -69,7 +71,7 @@ public:
     *       The key must be totally if the InputImageParameter belongs
     *       to a ParamaterGroup, ie set io.in
     */
-  static ITK_ABI_EXPORT void InitializeUTMParameters(Application::Pointer app,
+  static OTBApplicationEngine_EXPORT void InitializeUTMParameters(Application::Pointer app,
                                       const std::string & imageKey,
                                       const std::string & mapKey );
 

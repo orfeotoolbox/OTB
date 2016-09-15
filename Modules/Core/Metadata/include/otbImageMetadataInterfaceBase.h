@@ -25,6 +25,8 @@
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
 
+#include "OTBMetadataExport.h"
+
 namespace otb
 {
 
@@ -35,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT ImageMetadataInterfaceBase : public itk::Object
+class OTBMetadata_EXPORT ImageMetadataInterfaceBase : public itk::Object
 {
 public:
 

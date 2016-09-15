@@ -24,6 +24,8 @@
 #include "itkTransform.h"
 #include "otbGenericRSTransform.h"
 
+#include "OTBProjectionExport.h"
+
 class OGRCoordinateTransformation;
 
 namespace otb
@@ -41,7 +43,7 @@ namespace internal
  *
  * \since OTB v 3.14.0
  */
-struct ReprojectTransformationFunctor
+struct OTBProjection_EXPORT ReprojectTransformationFunctor
   {
   typedef OGRGeometry TransformedElementType;
 
@@ -151,7 +153,7 @@ private:
  *
  * \ingroup OTBProjection
  */
-class ITK_EXPORT GeometriesProjectionFilter : public GeometriesToGeometriesFilter
+class OTBProjection_EXPORT GeometriesProjectionFilter : public GeometriesToGeometriesFilter
 {
 public:
   /**\name Standard ITK typedefs */
