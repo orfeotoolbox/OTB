@@ -323,8 +323,8 @@ using the ``TrainVectorClassifier`` application.
                                 -feat band_0 band_1 band_2 band_3 band_4 band_5 band_6
 
 The ``-classifier`` parameter allows to choose which machine learning
-model algorithm to train. Please refer to the `Train Vector
-Classifier`_ application reference documentation.
+model algorithm to train. Please refer to the
+``TrainVectorClassifier`` application reference documentation.
 
 In case of multiple samples files, you can add them to the ``-io.vd``
 parameter (see  `Working with several images`_ section).
