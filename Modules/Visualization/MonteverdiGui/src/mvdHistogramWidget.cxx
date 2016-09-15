@@ -605,9 +605,9 @@ HistogramWidget
       xMax += epsilon;
     }
 
-  qDebug()
-    << "[" << xMin << "; " << xMax << "]"
-    << "x [" << yMin << "; " << yMax << "]";
+  // qDebug()
+  //   << "[" << xMin << "; " << xMax << "]"
+  //   << "x [" << yMin << "; " << yMax << "]";
 
   m_UI->histogramPlot->setAxisScale( QwtPlot::xBottom, xMin, xMax );
   m_UI->histogramPlot->setAxisScale( QwtPlot::yLeft, yMin, yMax );
