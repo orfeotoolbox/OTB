@@ -61,7 +61,7 @@ namespace
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 /*****************************************************************************/
-DefaultImageType::PixelType::ValueType
+HistogramModel::RealType
 HistogramModel
 ::GetEpsilon()
 {
@@ -172,7 +172,7 @@ HistogramModel
     Histogram::MeasurementType binMax(
       histogram->GetBinMax( 0, histogram->GetSize( 0 ) - 1 )
     );
-  
+
     // Due to float/double conversion, it can happen
     // that the minimum or maximum value go slightly outside the histogram
     // Clamping the value solves the issue and avoid RangeError
@@ -197,19 +197,24 @@ HistogramModel
   MeasurementType minI = histogram->GetBinMin( 0, index[ 0 ] );
   MeasurementType maxI = histogram->GetBinMax( 0, index[ 0 ] );
 
+  assert( minI <= maxI );
+
+  MeasurementType rangeI = vcl_abs( maxI - minI );
+
   // Frequency of current bin
-  Histogram::AbsoluteFrequencyType frequency( histogram->GetFrequency( index ) );
+  Histogram::AbsoluteFrequencyType frequency(
+    histogram->GetFrequency( index )
+  );
 
-  // Initialize result (contribution of current bin)
-  const MeasurementType epsilon = 1.0E-6;
-  double percent = 0.;
-
-  if ( vcl_abs(maxI - minI) > epsilon )
-    {
-    percent = frequency
-      * (bound == BOUND_LOWER ? (intensity - minI) : (maxI - intensity) )
-      / ( maxI - minI );
-    }
+  double percent =
+    ( IsMonoValue() ||
+      rangeI <= std::numeric_limits< MeasurementType >::epsilon() )
+    ? 0.0
+    : frequency
+      * ( bound == BOUND_LOWER
+	  ? ( intensity - minI )
+	  : ( maxI - intensity ) )
+      / rangeI;
 
   // Number of bins of histogram.
   Histogram::SizeType::SizeValueType binCount = histogram->Size();

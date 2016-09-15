@@ -168,7 +168,7 @@ public:
 public:
   /**
    */
-  static DefaultImageType::PixelType::ValueType GetEpsilon();
+  static RealType GetEpsilon();
 
   /** \brief Constructor. */
   HistogramModel( QObject* p =NULL );
