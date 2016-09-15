@@ -750,6 +750,8 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
 
       // get number of equivalent separators and tokens to find the best match
       int commonTokens = 0;
+      int firstCommonTokens = 0;
+      int firstNumericToken = -1;
       unsigned int commonSeparators = 0;
       std::vector<unsigned int> differencesPos;
       for (unsigned int i = 0 ; i < std::min(nbTokenRef,nbTokenTest) ; i++)
@@ -811,6 +813,11 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         try
           {
           vRef = boost::lexical_cast<double>(tokenRef[i]);
+          // record the first numeric token position
+          if (firstNumericToken<0)
+            {
+            firstNumericToken = static_cast<int>(i);
+            }
           }
         catch (boost::bad_lexical_cast &)
           {
@@ -830,6 +837,10 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         if (isRefTokenHexa && isTestTokenHexa)
           {
           // these tokens are equivalent (we don't compare pointer adress)
+          if (differencesPos.empty())
+            {
+            firstCommonTokens++;
+            }
           commonTokens++;
           }
         else if (isRefTokenNum && isTestTokenNum)
@@ -846,6 +857,10 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
             {
             // these tokens are equivalent
             commonTokens++;
+            if (differencesPos.empty())
+              {
+              firstCommonTokens++;
+              }
             }
           }
         else
@@ -857,11 +872,31 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
                                  tokenTest[i].size()) == 0)
             {
             commonTokens++;
+            if (differencesPos.empty())
+              {
+              firstCommonTokens++;
+              }
             }
           else
             {
             differencesPos.push_back(i);
             }
+          }
+        }
+      // finish iteration of all tokens from reference line to detect first numeric token
+      for (unsigned int i = std::min(nbTokenRef,nbTokenTest) ; i < nbTokenRef ; i++)
+        {
+        try
+          {
+          boost::lexical_cast<double>(tokenRef[i]);
+          // record the first numeric token position
+          if (firstNumericToken<0)
+            {
+            firstNumericToken = static_cast<int>(i);
+            }
+          }
+        catch (boost::bad_lexical_cast &)
+          {
           }
         }
 
@@ -870,9 +905,15 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         // All the separators are not equivalent : reject line
         continue;
         }
-      if (commonTokens > bestCommonTokens)
+      if (firstNumericToken > firstCommonTokens)
         {
-        bestCommonTokens = commonTokens;
+        // if there are non-numeric tokens before a numeric one, all non-numeric
+        // tokens must match (we make sure to compare the same field name)
+        continue;
+        }
+      if (firstCommonTokens > bestCommonTokens)
+        {
+        bestCommonTokens = firstCommonTokens;
         bestLinePos = curPosTest;
         tokenTestSelected = tokenTest;
         nbTokenTestSelected = nbTokenTest;
@@ -886,7 +927,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
           }
         }
       // test if lines are identic
-      if (static_cast<unsigned int>(commonTokens) == std::max(nbTokenRef,nbTokenTest))
+      if (static_cast<unsigned int>(firstCommonTokens) == std::max(nbTokenRef,nbTokenTest))
         {
         break;
         }
@@ -918,7 +959,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         nbdiff++;
         }
 
-      if (bestCommonTokens < std::max(nbTokenRef,nbTokenTestSelected))
+      if (bestCommonTokens < static_cast<int>(std::max(nbTokenRef,nbTokenTestSelected)))
         {
         nbdiff++;
         std::string &lineTestSelected = listLineFileTest[bestLinePos];
