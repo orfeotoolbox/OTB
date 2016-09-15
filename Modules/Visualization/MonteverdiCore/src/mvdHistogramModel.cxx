@@ -163,19 +163,28 @@ HistogramModel
   // Contruct 1D measurement vector.
   assert( histogram->GetMeasurementVectorSize()==1 );
   Histogram::MeasurementVectorType measurement( 1 );
-  measurement[ 0 ] = intensity;
 
-  // Due to float/double conversion, it can happen
-  // that the minimum or maximum value go slightly outside the histogram
-  // Clamping the value solves the issue and avoid RangeError
- // itk::NumericsTraits<>::Clamp(...) was removed
-  // TODO : when otb::Clamp will be developped, use this function
-  measurement[0]  =
-    measurement[0] < histogram->GetBinMin(0, 0)
-    ? histogram->GetBinMin(0, 0)
-    : ( measurement[0] > histogram->GetBinMax(0, histogram->GetSize(0) - 1)
-	? histogram->GetBinMax(0, histogram->GetSize(0) - 1)
-	: measurement[0] );
+  {
+    assert( histogram->GetSize( 0 ) > 0 );
+
+    Histogram::MeasurementType binMin( histogram->GetBinMin( 0, 0 ) );
+
+    Histogram::MeasurementType binMax(
+      histogram->GetBinMax( 0, histogram->GetSize( 0 ) - 1 )
+    );
+  
+    // Due to float/double conversion, it can happen
+    // that the minimum or maximum value go slightly outside the histogram
+    // Clamping the value solves the issue and avoid RangeError
+    // itk::NumericsTraits<>::Clamp(...) was removed
+    // TODO : when otb::Clamp will be developped, use this function
+    measurement[ 0 ]  =
+      intensity < binMin
+      ? binMin
+      : ( intensity > binMax
+	  ? binMax
+	  : intensity );
+  }
 
   // Get the index of measurement in 1D-histogram.
   Histogram::IndexType index;
