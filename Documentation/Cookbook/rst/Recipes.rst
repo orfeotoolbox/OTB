@@ -10,8 +10,6 @@ future needs.
 .. toctree::
    :maxdepth: 6
 
-
-   recipes/pleiades.rst
    recipes/optpreproc.rst
    recipes/sarprocessing.rst
    recipes/residual_registration.rst
