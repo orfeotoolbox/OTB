@@ -45,7 +45,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  virtual ErsSarRecord* Instanciate() = 0;
+  virtual ErsSarRecord* Instantiate() = 0;
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance

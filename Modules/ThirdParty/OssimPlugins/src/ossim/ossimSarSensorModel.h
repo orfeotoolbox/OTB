@@ -224,7 +224,7 @@ public:
     * \param[in] worldPoint World point to geocode
     * \param[out] azimuthTime Estimated zero-doppler azimuth time
     * \param[out] rangeTime Estimated range time
-    * \return True if sucess, false otherwise. In this case,
+    * \return True if success, false otherwise. In this case,
     * azimuthTime and rangeTime will not be modified.
     */
    /*virtual*/ bool worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime) const;
