@@ -34,8 +34,8 @@ The OTB Applications are now rich of more than 90 tools, which are
 listed in the the applications reference documentation, presented in
 chapter [chap:apprefdoc], page.
 
-Using the applications
-----------------------
+Running the applications
+------------------------
 
 Common framework
 ~~~~~~~~~~~~~~~~
@@ -223,7 +223,7 @@ configured automatically so you don’t need to tweak
 Here is one example of how to use Python to run the ``Smoothing``
 application, changing the algorithm at each iteration.
 
-::
+.. code-block:: python
 
     #  Example on the use of the Smoothing application
     #
@@ -263,6 +263,38 @@ application, changing the algorithm at each iteration.
 
       # This will execute the application and save the output file
       app.ExecuteAndWriteOutput()
+
+
+Using OTB from QGIS
+~~~~~~~~~~~~~~~~~~~
+
+The processing toolbox
+^^^^^^^^^^^^^^^^^^^^^^
+
+OTB applications are available from QGIS. Use them from the processing
+toolbox, which is accessible with Processing :math:`\rightarrow`
+Toolbox. Switch to “advanced interface” in the bottom of the application
+widget and OTB applications will be there.
+
+.. figure:: Art/QtImages/qgis-otb.png
+
+Using a custom OTB
+^^^^^^^^^^^^^^^^^^
+
+If QGIS cannot find OTB, the “applications folder” and “binaries folder”
+can be set from the settings in the Processing :math:`\rightarrow`
+Settings :math:`\rightarrow` “service provider”.
+
+.. figure:: Art/QtImages/qgis-otb-settings.png
+
+On some versions of QGIS, if an existing OTB installation is found, the
+textfield settings will not be shown. To use a custom OTB instead of the
+existing one, you will need to replace the otbcli, otbgui and library
+files in QGIS installation directly.
+
+
+Advanced applications capabilities
+----------------------------------
 
 Load/Save OTB-Applications parameters from/to file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -310,29 +342,68 @@ the application name. Use in this case:
 It will retrieve the application name and related parameters from the
 input xml file and launch in this case the BandMath applications.
 
-Using OTB from QGIS
-~~~~~~~~~~~~~~~~~~~
+In-memory connection between applications
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The processing toolbox
-^^^^^^^^^^^^^^^^^^^^^^
+Applications are often use as parts of larger processing
+chains. Chaining applications currently requires to write/read back
+images between applications, resulting in heavy I/O operations and a
+significant amount of time dedicated to writing temporary files.
 
-OTB applications are available from QGIS. Use them from the processing
-toolbox, which is accessible with Processing :math:`\rightarrow`
-Toolbox. Switch to “advanced interface” in the bottom of the application
-widget and OTB applications will be there.
+Since OTB 5.8, it is possible to connect an output image parameter
+from one application to the input image parameter of the next
+parameter. This results in the wiring of the internal ITK/OTB
+pipelines together, allowing to perform image streaming between the
+applications. There is therefore no more writing of temporary
+images. The last application of the processing chain is responsible
+for writing the final result images.
 
-.. figure:: Art/QtImages/qgis-otb.png
+In-memory connection between applications is available both at the C++
+API level and using the  python bindings to the application presented
+in the `Using the Python interface`_ section.
 
-Using a custom OTB
-^^^^^^^^^^^^^^^^^^
+Here is a python code sample connecting several applications together:
 
-If QGIS cannot find OTB, the “applications folder” and “binaries folder”
-can be set from the settings in the Processing :math:`\rightarrow`
-Settings :math:`\rightarrow` “service provider”.
+.. code-block:: python
+   
+                import otbApplications as otb
+                
+                app1 = otb.Registry.CreateApplication("Smoothing")
+                app2 = otb.Registry.CreateApplication("Smoothing")
+                app3 = otb.Registry.CreateApplication("Smoothing")
+                app4 = otb.Registry.CreateApplication("ConcatenateImages")
+   
+                app1.IN = argv[1]
+                app1.Execute()
 
-.. figure:: Art/QtImages/qgis-otb-settings.png
+                # Connection between app1.out and app2.in
+                app2.SetParameterInputImage("in",app1.GetParameterOutputImage("out"))
 
-On some versions of QGIS, if an existing OTB installation is found, the
-textfield settings will not be shown. To use a custom OTB instead of the
-existing one, you will need to replace the otbcli, otbgui and library
-files in QGIS installation directly.
+                # Execute call is mandatory to wire the pipeline and expose the
+                # application output. It does not write image
+                app2.Execute()
+   
+                app3.IN = argv[1]
+
+                # Execute call is mandatory to wire the pipeline and expose the
+                # application output. It does not write image
+                app3.Execute()
+
+                # Connection between app2.out, app3.out and app4.il using images list
+                app4.AddImageToParameterInputImageList("il",app2.GetParameterOutputImage("out"));
+                app4.AddImageToParameterInputImageList("il",app3.GetParameterOutputImage("out"));
+
+                app4.OUT = argv[2]
+
+                # Call to ExecuteAndWriteOutput() both wires the pipeline and
+                # actually writes the output, only necessary for last application of
+                # the chain.
+                app4.ExecuteAndWriteOutput()
+
+**Note:** Streaming will only work properly if the application internal
+implementation does not break it, for instance by using an internal
+writer to write intermediate data. In this case, execution should
+still be correct, but some intermediate data will be read or written.
+                
+Parallel execution with MPI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
