@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationsToolBox_h
-#define __mvdApplicationsToolBox_h
+#ifndef mvdApplicationsToolBox_h
+#define mvdApplicationsToolBox_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -79,7 +79,7 @@ class ApplicationsToolBox;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT ApplicationsToolBox :
+class OTBMonteverdiGUI_EXPORT ApplicationsToolBox :
     public QWidget
 {
 
@@ -107,7 +107,7 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags, 
+  void OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& appsTags,
                                            const ApplicationDocNameToNameMap& docNameToNameMap);
   void OnSearchBoxChanged( const QString & search );
   void OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column );
@@ -194,4 +194,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationsToolBox_h
+#endif // mvdApplicationsToolBox_h

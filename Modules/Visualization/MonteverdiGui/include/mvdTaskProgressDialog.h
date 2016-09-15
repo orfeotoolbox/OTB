@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdTaskProgressDialog_h
-#define __mvdTaskProgressDialog_h
+#ifndef mvdTaskProgressDialog_h
+#define mvdTaskProgressDialog_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -73,7 +73,7 @@ class BackgroundTask;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT TaskProgressDialog :
+class OTBMonteverdiGUI_EXPORT TaskProgressDialog :
     public QProgressDialog
 {
 
@@ -201,4 +201,4 @@ TaskProgressDialog
 
 } // end namespace 'mvd'
 
-#endif // __mvdTaskProgressDialog_h
+#endif // mvdTaskProgressDialog_h

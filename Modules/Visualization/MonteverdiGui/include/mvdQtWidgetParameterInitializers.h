@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdQtWidgetParameterInitializers_h
-#define __mvdQtWidgetParameterInitializers_h
+#ifndef mvdQtWidgetParameterInitializers_h
+#define mvdQtWidgetParameterInitializers_h
 
 //
 // Configuration include.
@@ -60,7 +60,7 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #endif //tag=QT4-boost-compatibility
 
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -412,7 +412,7 @@ InputImageInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );   
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
@@ -721,7 +721,7 @@ SetupWidget( QWidget * widget, const F & functor )
   typedef QList< Widget > WidgetList;
 
   WidgetList list( widget->findChildren< Widget >() );
-  
+
   for( typename WidgetList::iterator it( list.begin() );
        it!=list.end();
        ++it )
@@ -734,4 +734,4 @@ SetupWidget( QWidget * widget, const F & functor )
 
 } // end namespace 'mvd'
 
-#endif // __mvdQtWidgetParameterInitializers_h
+#endif // mvdQtWidgetParameterInitializers_h

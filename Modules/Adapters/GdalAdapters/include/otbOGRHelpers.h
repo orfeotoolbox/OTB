@@ -31,6 +31,8 @@
 #include "cpl_string.h" // CSLCount
 #endif
 
+#include "OTBGdalAdaptersExport.h"
+
 namespace otb
 {
 namespace ogr
@@ -55,7 +57,7 @@ namespace ogr
  *
  * \ingroup OTBGdalAdapters
  */
-struct StringListConverter
+struct OTBGdalAdapters_EXPORT StringListConverter
 {
 
   template <class ContainerType>

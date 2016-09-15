@@ -3,6 +3,7 @@ set( DOCUMENTATION
   )
 
 otb_module( OTBMonteverdi
+  ENABLE_SHARED
   DEPENDS
     OTBMonteverdiCore
     OTBMonteverdiGUI

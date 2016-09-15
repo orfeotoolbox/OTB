@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdColorSetupWidget_h
-#define __mvdColorSetupWidget_h
+#ifndef mvdColorSetupWidget_h
+#define mvdColorSetupWidget_h
 
 //
 // Configuration include.
@@ -37,7 +37,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -62,7 +62,7 @@ class ColorSetupWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT ColorSetupWidget :
+class OTBMonteverdiGUI_EXPORT ColorSetupWidget :
     public QWidget
 {
   Q_OBJECT;
@@ -245,7 +245,7 @@ private:
    */
   Ui::ColorSetupWidget* m_UI;
 
-  /** 
+  /**
    * \brief The list of (user) component names.
    * \sa ColorSetupWidget::component Q_PROPERTY.
    */
@@ -333,4 +333,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdColorSetupWidget_h
+#endif // mvdColorSetupWidget_h

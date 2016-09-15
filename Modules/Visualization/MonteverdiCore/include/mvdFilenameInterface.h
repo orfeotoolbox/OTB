@@ -16,9 +16,10 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdFilenameInterface_h
-#define __mvdFilenameInterface_h
+#ifndef mvdFilenameInterface_h
+#define mvdFilenameInterface_h
 
+#include "OTBMonteverdiCoreExport.h"
 //
 // Configuration include.
 //// Included at first position before any other ones.
@@ -26,6 +27,8 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -73,7 +76,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT FilenameInterface
+class OTBMonteverdiCore_EXPORT FilenameInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
@@ -148,4 +151,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdFilenameInterface_h
+#endif // mvdFilenameInterface_h

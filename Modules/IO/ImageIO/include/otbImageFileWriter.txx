@@ -44,6 +44,8 @@
 
 #include "otb_boost_tokenizer_header.h"
 
+#include "otbStringUtils.h"
+
 namespace otb
 {
 
@@ -492,22 +494,17 @@ ImageFileWriter<TInputImage>
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
-    typedef boost::tokenizer<boost::char_separator<char> > Tokenizer;
-
-    boost::char_separator<char> sep(":");
-    Tokenizer tokens(m_FilenameHelper->GetBox(), sep);
-
-    Tokenizer::iterator it = tokens.begin();
-    typename InputImageRegionType::IndexType start;
+ 	std::vector<int> boxVector;
+ 	Utils::ConvertStringToVector( 
+ 	m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+ 	
+ 	typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
 
-    start[0] = atoi(it->c_str());  // first index on X
-    ++it;
-    start[1] = atoi(it->c_str());  // first index on Y
-    ++it;
-    size[0]  = atoi(it->c_str());  // size along X
-    ++it;
-    size[1]  = atoi(it->c_str());  // size along Y
+    start[0] = boxVector[0];  // first index on X
+    start[1] = boxVector[1];  // first index on Y
+    size[0]  = boxVector[2];  // size along X
+    size[1]  = boxVector[3];  // size along Y
 
     inputRegion.SetSize(size);
 

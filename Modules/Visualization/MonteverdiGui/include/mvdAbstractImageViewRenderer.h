@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractImageViewRenderer_h
-#define __mvdAbstractImageViewRenderer_h
+#ifndef mvdAbstractImageViewRenderer_h
+#define mvdAbstractImageViewRenderer_h
 
 //
 // Configuration include.
@@ -42,7 +42,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdStackedLayerModel.h"
@@ -74,7 +74,7 @@ class StackedLayerModel;
  *
  * \brief TODO.
  */
-class AbstractImageViewRenderer :
+class OTBMonteverdiGUI_EXPORT AbstractImageViewRenderer :
     public QObject
 {
 
@@ -523,4 +523,4 @@ AbstractImageViewRenderer
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractImageViewRenderer_h
+#endif // mvdAbstractImageViewRenderer_h

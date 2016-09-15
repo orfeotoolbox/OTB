@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdHistogramController_h
-#define __mvdHistogramController_h
+#ifndef mvdHistogramController_h
+#define mvdHistogramController_h
 
 //
 // Configuration include.
@@ -40,6 +40,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "OTBMonteverdiGUIExport.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -73,7 +74,7 @@ class HistogramWidget;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class ITK_EXPORT HistogramController :
+class OTBMonteverdiGUI_EXPORT HistogramController :
     public AbstractModelController
 {
 
@@ -197,4 +198,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdHistogramController_h
+#endif // mvdHistogramController_h

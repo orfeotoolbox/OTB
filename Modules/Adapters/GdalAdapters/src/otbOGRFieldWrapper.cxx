@@ -24,6 +24,11 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"
 #pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
+#include "ogr_feature.h"
+#pragma warning ( pop )
 #else
 #include "ogr_feature.h"
 #endif

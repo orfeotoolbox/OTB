@@ -109,9 +109,9 @@ HistogramModel
   // Due to float/double conversion, it can happen
   // that the minimum or maximum value go slightly outside the histogram
   // Clamping the value solves the issue and avoid RangeError
- // itk::NumericsTraits<>::Clamp(...) was removed 
+ // itk::NumericsTraits<>::Clamp(...) was removed
   // TODO : when otb::Clamp will be developped, use this function
-  measurement[0]  = 
+  measurement[0]  =
     measurement[0] < histogram->GetBinMin(0, 0)
     ? histogram->GetBinMin(0, 0)
     : ( measurement[0] > histogram->GetBinMax(0, histogram->GetSize(0) - 1)
@@ -135,14 +135,14 @@ HistogramModel
   // Initialize result (contribution of current bin)
   const MeasurementType epsilon = 1.0E-6;
   double percent = 0.;
-  
+
   if ( vcl_abs(maxI - minI) > epsilon )
     {
-    percent = frequency 
-      * (bound == BOUND_LOWER ? (intensity - minI) : (maxI - intensity) ) 
+    percent = frequency
+      * (bound == BOUND_LOWER ? (intensity - minI) : (maxI - intensity) )
       / ( maxI - minI );
     }
-  
+
   // Number of bins of histogram.
   Histogram::SizeType::SizeValueType binCount = histogram->Size();
 

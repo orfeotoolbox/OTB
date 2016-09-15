@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdLayerStackWidget_h
-#define __mvdLayerStackWidget_h
+#ifndef mvdLayerStackWidget_h
+#define mvdLayerStackWidget_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -79,7 +79,7 @@ class LayerStackWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT LayerStackWidget :
+class OTBMonteverdiGUI_EXPORT LayerStackWidget :
     public QWidget
 {
 
@@ -246,4 +246,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdLayerStackWidget_h
+#endif // mvdLayerStackWidget_h

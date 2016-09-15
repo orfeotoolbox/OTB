@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationLauncher_h
-#define __mvdApplicationLauncher_h
+#ifndef mvdApplicationLauncher_h
+#define mvdApplicationLauncher_h
 
 //
 // Configuration include.
@@ -43,7 +43,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -76,7 +76,7 @@ class QtWidgetView;
  *
  * \brief WIP.
  */
-class ITK_EXPORT ApplicationLauncher :
+class OTBMonteverdiGUI_EXPORT ApplicationLauncher :
     public QObject
 {
 
@@ -178,4 +178,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationLauncher_h
+#endif // mvdApplicationLauncher_h

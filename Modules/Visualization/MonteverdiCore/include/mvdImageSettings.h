@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImageSettings_h
-#define __mvdImageSettings_h
+#ifndef mvdImageSettings_h
+#define mvdImageSettings_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -73,7 +74,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT ImageSettings
+class OTBMonteverdiCore_EXPORT ImageSettings
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
@@ -408,4 +409,4 @@ ImageSettings
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageSettings_h
+#endif // mvdImageSettings_h

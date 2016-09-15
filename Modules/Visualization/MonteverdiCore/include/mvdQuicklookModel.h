@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdQuicklookModel_h
-#define __mvdQuicklookModel_h
+#ifndef mvdQuicklookModel_h
+#define mvdQuicklookModel_h
 
 //
 // Configuration include.
@@ -27,7 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
-
+#include "OTBMonteverdiCoreExport.h"
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -76,7 +76,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT QuicklookModel :
+class OTBMonteverdiCore_EXPORT QuicklookModel :
     public VectorImageModel
 {
 
@@ -230,4 +230,4 @@ QuicklookModel
 
 } // end namespace 'mvd'
 
-#endif // __mvdQuicklookModel_h
+#endif // mvdQuicklookModel_h

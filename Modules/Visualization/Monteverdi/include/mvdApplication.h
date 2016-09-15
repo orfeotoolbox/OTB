@@ -17,14 +17,15 @@
 
 =========================================================================*/
 
-#ifndef __mvdApplication_h
-#define __mvdApplication_h
+#ifndef mvdApplication_h
+#define mvdApplication_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
 
+#include "OTBMonteverdiExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -70,7 +71,7 @@ class OTBApplicationsModel;
  * \ingroup OTBMonteverdi
  *
  */
-class ITK_EXPORT Application
+class OTBMonteverdi_EXPORT Application
   : public I18nApplication
 {
 
@@ -230,4 +231,4 @@ Application
 
 } // end namespace 'mvd'
 
-#endif // __Application_h
+#endif // mvdApplication_h

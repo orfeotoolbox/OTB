@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAlgorithm_h
-#define __mvdAlgorithm_h
+#ifndef mvdAlgorithm_h
+#define mvdAlgorithm_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -578,7 +579,7 @@ ToStdString( const std::vector<T> & vec)
     oss<<*it<< " ";
     ++it;
     }
-  
+
   return oss.str();
 }
 
@@ -757,4 +758,4 @@ ToHumanReadableSize( qint64 size, bool isInBits )
 } // end namespace 'mvd'
 
 
-#endif // __mvdAlgorithm_h
+#endif // mvdAlgorithm_h

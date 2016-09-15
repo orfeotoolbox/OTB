@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdLayerStackItemModel_h
-#define __mvdLayerStackItemModel_h
+#ifndef mvdLayerStackItemModel_h
+#define mvdLayerStackItemModel_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -74,7 +74,7 @@ class StackedLayerModel;
  *
  * \brief WIP.
  */
-class ITK_EXPORT LayerStackItemModel :
+class OTBMonteverdiGUI_EXPORT LayerStackItemModel :
     public QAbstractItemModel
 {
 
@@ -337,4 +337,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdLayerStackItemModel_h
+#endif // mvdLayerStackItemModel_h

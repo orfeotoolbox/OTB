@@ -34,7 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT ListViewParameter
+class OTBApplicationEngine_EXPORT ListViewParameter
   : public Parameter
 {
 public:

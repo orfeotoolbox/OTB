@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdImageViewRenderer_h
-#define __mvdImageViewRenderer_h
+#ifndef mvdImageViewRenderer_h
+#define mvdImageViewRenderer_h
 
 //
 // Configuration include.
@@ -50,7 +50,7 @@
 // OTB includes (sorted by alphabetic order)
 #include "otbGlActor.h"
 #include "otbGlView.h"
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractImageViewRenderer.h"
@@ -84,7 +84,7 @@ namespace mvd
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT ImageViewRenderer :
+class OTBMonteverdiGUI_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer
 {
 
@@ -295,7 +295,7 @@ private:
   ModelActorPair m_ReferencePair;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-  
+
 //
 // SLOTS.
 private slots:
@@ -362,4 +362,4 @@ ImageViewRenderer
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageViewRenderer_h
+#endif // mvdImageViewRenderer_h

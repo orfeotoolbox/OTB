@@ -386,6 +386,7 @@ endif()
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 
+#-----------------------------------------------------------------------------
 # uninstall target
 configure_file(
     "${CMAKE_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
@@ -395,6 +396,18 @@ configure_file(
 add_custom_target(uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
 
+#-----------------------------------------------------------------------------
+# Packaging options for Windows packages
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  option(GENERATE_PACKAGE "Generate OTB package" OFF)
+  option(GENERATE_XDK "Generate XDK for OTB development" OFF)
+  if(GENERATE_PACKAGE OR GENERATE_XDK)
+    set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
+    add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
+  endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
+endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
+
+#-----------------------------------------------------------------------------
 #macro to put a fixed space between key, value  in summary
 macro(get_white_spaces var res)
   string(LENGTH "${var}" len)

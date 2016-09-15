@@ -20,7 +20,7 @@
 
 #include <algorithm>
 
-
+#include "OTBMetadataExport.h"
 #include "otbImageMetadataInterfaceBase.h"
 
 namespace otb
@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT DefaultImageMetadataInterface : public ImageMetadataInterfaceBase
+class OTBMetadata_EXPORT DefaultImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
 

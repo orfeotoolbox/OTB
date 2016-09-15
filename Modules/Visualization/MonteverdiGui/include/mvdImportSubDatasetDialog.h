@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImportSubDatasetDialog_h
-#define __mvdImportSubDatasetDialog_h
+#ifndef mvdImportSubDatasetDialog_h
+#define mvdImportSubDatasetDialog_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -78,7 +78,7 @@ class ImportSubDatasetDialog;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT ImportSubDatasetDialog :
+class OTBMonteverdiGUI_EXPORT ImportSubDatasetDialog :
     public QDialog
 {
 
@@ -201,4 +201,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdImportSubDatasetDialog_h
+#endif // mvdImportSubDatasetDialog_h

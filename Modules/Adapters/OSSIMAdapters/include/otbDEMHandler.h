@@ -26,6 +26,8 @@
 #include "itkObjectFactory.h"
 #include "itkPoint.h"
 
+#include "OTBOSSIMAdaptersExport.h"
+
 class ossimElevManager;
 
 namespace otb
@@ -83,7 +85,7 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  */
 
-class ITK_EXPORT DEMHandler : public itk::Object
+class OTBOSSIMAdapters_EXPORT DEMHandler : public itk::Object
 {
 public:
   /** Standard class typedefs. */

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdMath_h
-#define __mvdMath_h
+#ifndef mvdMath_h
+#define mvdMath_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -142,7 +143,7 @@ Lerp2( X& x, Y& y,
   const K& _1_minus_k( 1 - k );
 
   x = k * x1 + _1_minus_k * x0;
-  y = k * y1 + _1_minus_k * y1;
+  y = k * y1 + _1_minus_k * y0;
 }
 
 /*******************************************************************************/
@@ -183,4 +184,4 @@ Lerp( const T& k,
 
 } // end namespace 'mvd'
 
-#endif // __mvdMath_h
+#endif // mvdMath_h

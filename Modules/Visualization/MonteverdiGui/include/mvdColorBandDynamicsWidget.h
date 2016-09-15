@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdColorBandDynamicsWidget_h
-#define __mvdColorBandDynamicsWidget_h
+#ifndef mvdColorBandDynamicsWidget_h
+#define mvdColorBandDynamicsWidget_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -75,7 +75,7 @@ class ColorBandDynamicsWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT ColorBandDynamicsWidget :
+class OTBMonteverdiGUI_EXPORT ColorBandDynamicsWidget :
     public QWidget
 {
 
@@ -272,4 +272,4 @@ private slots:
 
 } // end namespace 'mvd'.
 
-#endif // __mvdColorBandDynamicsWidget_h
+#endif // mvdColorBandDynamicsWidget_h

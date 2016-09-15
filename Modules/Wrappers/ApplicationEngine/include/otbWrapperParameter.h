@@ -22,6 +22,7 @@
 #include "itkObjectFactory.h"
 
 #include "otbWrapperTypes.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -56,7 +57,7 @@ enum DefaultValueMode
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT Parameter
+class OTBApplicationEngine_EXPORT Parameter
   : public itk::Object
 {
 public:

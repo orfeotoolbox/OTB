@@ -81,6 +81,22 @@ ENHANCED_BAND_NAMES[ 10 ] = {
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+namespace hidden
+{
+
+// Do never call this private hidden function.
+void fix_unused_variable_warning()
+{
+  // This variable is used to declare OTB band names to the Qt I18N
+  // translation process.
+  //
+  // The translated string are used by side effect to the
+  // QObject::translate() function which searches the translated
+  // strings from the .qm files loaded at runtime.
+  (void)ENHANCED_BAND_NAMES;
+}
+
+};
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
@@ -156,7 +172,7 @@ AbstractImageModel
       oss <<ToStdString( tr("BAND ") )<< count;
       outputBandNames.push_back(oss.str());
       }
-    
+
     // set the output QStringList
     qBandNames1 = ToQStringList( outputBandNames );
     }

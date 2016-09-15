@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMaplaMainWindow_h
-#define __mvdMaplaMainWindow_h
+#ifndef mvdMaplaMainWindow_h
+#define mvdMaplaMainWindow_h
 
 //
 // Configuration include.
@@ -47,6 +47,7 @@
 //
 #include "mvdI18nMainWindow.h"
 
+#include "OTBMaplaExport.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -80,7 +81,7 @@ class MaplaMainWindow;
  *
  * \brief The application main-widow widget.
  */
-class ITK_EXPORT MaplaMainWindow
+class OTBMapla_EXPORT MaplaMainWindow
   : public I18nMainWindow
 {
 
@@ -232,4 +233,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __maplaMainWindow_h
+#endif // maplaMainWindow_h

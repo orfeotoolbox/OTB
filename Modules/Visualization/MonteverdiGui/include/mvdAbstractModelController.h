@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractModelController_h
-#define __mvdAbstractModelController_h
+#ifndef mvdAbstractModelController_h
+#define mvdAbstractModelController_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -69,7 +69,7 @@ class AbstractModel;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class ITK_EXPORT AbstractModelController :
+class OTBMonteverdiGUI_EXPORT AbstractModelController :
     public QObject
 {
 
@@ -316,4 +316,4 @@ AbstractModelController
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractModelController_h
+#endif // mvdAbstractModelController_h

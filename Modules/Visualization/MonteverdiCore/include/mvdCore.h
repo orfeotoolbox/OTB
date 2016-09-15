@@ -17,8 +17,9 @@
 
 =========================================================================*/
 
-#ifndef __mvdCore_h
-#define __mvdCore_h
+#ifndef mvdCore_h
+#define mvdCore_h
+
 
 //
 // Configuration include.
@@ -27,6 +28,8 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -96,7 +99,7 @@ enum RgbwChannel
 /**
  * Constant naming video-channels.
  */
-extern ITK_EXPORT
+extern OTBMonteverdiCore_EXPORT
 const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ];
 
@@ -137,7 +140,7 @@ enum Effect
 /**
  * Constant naming effect values.
  */
-ITK_EXPORT
+OTBMonteverdiCore_EXPORT
 extern
 char const * const
 EFFECT_NAMES[ EFFECT_COUNT ];
@@ -376,4 +379,4 @@ IsVersionGreaterEqual( const QString& v0, const QString& v1 )
 
 } // end namespace 'mvd'.
 
-#endif // __mvdCore_h
+#endif // mvdCore_h

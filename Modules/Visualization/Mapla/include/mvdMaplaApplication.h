@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMaplaApplication_h
-#define __mvdMaplaApplication_h
+#ifndef mvdMaplaApplication_h
+#define mvdMaplaApplication_h
 
 //
 // Configuration include.
@@ -46,6 +46,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdI18nApplication.h"
 
+#include "OTBMaplaExport.h"
+
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -70,7 +72,7 @@ class OTBApplicationsModel;
  * \ingroup OTBMapla
  *
  */
-class ITK_EXPORT MaplaApplication
+class OTBMapla_EXPORT MaplaApplication
   : public I18nApplication
 {
 
@@ -186,4 +188,4 @@ MaplaApplication
 
 } // end namespace 'mvd'
 
-#endif // __maplaApplication_h
+#endif // maplaApplication_h
