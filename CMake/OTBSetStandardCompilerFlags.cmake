@@ -22,6 +22,17 @@
 include(OTB_CheckCCompilerFlag)
 include(OTB_CheckCXXCompilerFlag)
 
+macro( set_debug_flags )
+  string( TOUPPER "${CMAKE_BUILD_TYPE}" MODE )
+
+  if( "${MODE}" STREQUAL "DEBUG" )
+    message( STATUS "Adding -DOTB_DEBUG" )
+
+    set( CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DOTB_DEBUG" )
+    set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DOTB_DEBUG" )
+  endif()
+endmacro()
+
 function(check_c_compiler_warning_flags c_flag_var)
   set(local_c_flags "")
   set(flag_list "${ARGN}")
@@ -315,6 +326,8 @@ check_compiler_warning_flags(C_WARNING_FLAGS CXX_WARNING_FLAGS)
 # use OTB don't require these flags .
 set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS}")
+
+set_debug_flags()
 
 #-----------------------------------------------------------------------------
 #Check the set of platform flags the compiler supports
