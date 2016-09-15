@@ -201,63 +201,6 @@ private:
   {
   }
 
-  ClassCountMapType ReadRequiredSamples(std::string filename)
-    {
-    ClassCountMapType output;
-    std::ifstream ifs(filename.c_str());
-
-    if (ifs)
-      {
-      std::string line;
-      std::string sep("");
-    
-      while(!ifs.eof())
-        {
-        std::getline(ifs,line);
-        if (line.empty()) continue;
-        std::string::size_type pos = line.find_first_not_of(" \t");
-        if (pos != std::string::npos && line[pos] == '#') continue;
-        
-        if (sep.size() == 0)
-          {
-          // Try to detect the separator
-          std::string separators("\t;,");
-          for (unsigned int k=0 ; k<separators.size() ; k++)
-            {
-            std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,separators[k]);
-            if (words.size() >= 2)
-              {
-              sep.push_back(separators[k]);
-              break;
-              }
-            }
-          if (sep.size() == 0) continue;
-          }
-        // parse the line
-        std::vector<itksys::String> parts = itksys::SystemTools::SplitString(line,sep[0]);
-        if (parts.size() >= 2)
-          {
-          std::string::size_type pos1 = parts[0].find_first_not_of(" \t");
-          std::string::size_type pos2 = parts[0].find_last_not_of(" \t");
-          std::string::size_type pos3 = parts[1].find_first_not_of(" \t");
-          std::string::size_type pos4 = parts[1].find_last_not_of(" \t");
-          if (pos1 != std::string::npos && pos3 != std::string::npos)
-            {
-            std::string name = parts[0].substr(pos1, pos2 - pos1 + 1);
-            std::string value = parts[1].substr(pos3, pos4 - pos3 + 1);
-            output[name] = boost::lexical_cast<unsigned long>(value);
-            }
-          }
-        }
-      ifs.close();
-      }
-    else
-      {
-      otbAppLogFATAL(<< " Couldn't open " << filename);
-      }
-    return output;
-    }
-
   void DoExecute()
     {
     // Clear state
@@ -280,7 +223,7 @@ private:
         {
         otbAppLogINFO("Sampling strategy : set number of samples for each class");
         ClassCountMapType requiredCount = 
-          this->ReadRequiredSamples(this->GetParameterString("strategy.byclass.in"));
+          otb::SamplingRateCalculator::ReadRequiredSamples(this->GetParameterString("strategy.byclass.in"));
         m_RateCalculator->SetNbOfSamplesByClass(requiredCount);
         }
       break;
@@ -319,12 +262,24 @@ private:
     std::ostringstream oss;
     oss << " className  requiredSamples  totalSamples  rate" << std::endl;
     MapRateType::const_iterator itRates = rates.begin();
+    unsigned int overflowCount = 0;
     for(; itRates != rates.end(); ++itRates)
       {
       otb::SamplingRateCalculator::TripletType tpt = itRates->second;
-      oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate << std::endl;
+      oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate;
+      if (tpt.Required > tpt.Tot)
+        {
+        overflowCount++;
+        oss << "\t[OVERFLOW]";
+        }
+      oss << std::endl;
       }
     otbAppLogINFO("Sampling rates : " << oss.str());
+    if (overflowCount)
+      {
+      std::string plural(overflowCount>1?"s":"");
+      otbAppLogWARNING(<< overflowCount << " case"<<plural<<" of overflow detected! (requested number of samples higher than total available samples)");
+      }
 
     // Open input geometries
     otb::ogr::DataSource::Pointer vectors =
