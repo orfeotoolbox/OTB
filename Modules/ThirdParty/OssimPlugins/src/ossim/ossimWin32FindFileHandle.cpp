@@ -12,7 +12,13 @@ ossimWin32FindFileHandle::ossimWin32FindFileHandle(std::string const& path)
     if (!is_valid() && (GetLastError() != ERROR_FILE_NOT_FOUND)) 
 	{
 		char err_msg[1024];
-        s_printf(err_msg, "ossimSentinel1Model: cannot list file in directory '%s' : '%d'", path, GetLastError());
+    
+    s_printf(
+       err_msg,
+       "ossimSentinel1Model: cannot list files in directory '%s' : '%d'",
+       path.c_str(),
+       GetLastError()
+      );
 		throw std::runtime_error( err_msg );
 	}
 }
