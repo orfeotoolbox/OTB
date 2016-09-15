@@ -164,7 +164,7 @@ int otbSensorModel(int argc, char* argv[])
   bool checkNeededKw = atoi(argv[9]);
 
   // -------------------
-  // Some instanciations  
+  // Some instantiations  
   // -------------------
   otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
     
@@ -283,7 +283,7 @@ int otbSensorModel(int argc, char* argv[])
   GeographicalDistanceType::Pointer geoDistance = GeographicalDistanceType::New();
   
   //--------------------------	
-  // Some instanciations (end)
+  // Some instantiations (end)
   //--------------------------
 	
 	

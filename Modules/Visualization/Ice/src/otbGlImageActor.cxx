@@ -543,7 +543,7 @@ void GlImageActor::LoadTile(Tile& tile)
 
     glGenTextures( 1, &tile.m_TextureId );
 
-    // Following assert is somtimes false on some OpenGL systems for
+    // Following assert is sometimes false on some OpenGL systems for
     // some unknown reason even though the glGenTexture() call has
     // succeeded.
     // assert( glGetError()==GL_NO_ERROR );

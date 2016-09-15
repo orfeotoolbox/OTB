@@ -26,10 +26,10 @@
 // Software Guide : BeginLatex
 //
 // The Markov Random Field framework can be used to apply an edge preserving
-// filtering, thus playing a role of restauration.
+// filtering, thus playing a role of restoration.
 //
 // This example applies the \doxygen{otb}{MarkovRandomFieldFilter} for
-// image restauration. The structure of the example is similar to the other MRF example.
+// image restoration. The structure of the example is similar to the other MRF example.
 // The original image is assumed to be coded in one byte, thus 256 states
 // are possible for each pixel. The only other modifications reside in the energy
 // function chosen for the fidelity and for the regularization.
@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginLatex
   //
-  // The regularization and the fidelity energy are declared and instanciated:
+  // The regularization and the fidelity energy are declared and instantiated:
   //
   //  Software Guide : EndLatex
 
@@ -229,15 +229,15 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:MRF_RESTAURATION} shows the output of the Markov Random
-  // Field restauration.
+  // Field restoration.
   //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.44\textwidth]{MarkovRestauration.eps}
-  // \itkcaption[MRF restauration]{Result of applying
+  // \itkcaption[MRF restoration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
-  // image for restauration. From left to right : original image, restaured image
+  // image for restoration. From left to right : original image, restaured image
   // with edge preservation.}
   // \label{fig:MRF_RESTAURATION}
   // \end{figure}

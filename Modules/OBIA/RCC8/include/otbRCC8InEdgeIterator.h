@@ -66,7 +66,7 @@ public:
   VertexPointerType GetSourceVertex(void);
   /**
    * Return the source vertex index of the current edge.
-   * \return The souce vertex index.
+   * \return The source vertex index.
    */
   VertexDescriptorType GetSourceIndex(void);
   /**

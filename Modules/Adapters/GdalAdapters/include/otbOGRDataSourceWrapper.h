@@ -434,13 +434,13 @@ public:
   Layer const GetLayerChecked(std::string const& name) const;
 
   /**
-   * Excecutes the statement..
+   * Executes the statement..
    * \param[in] statement  textual description of the SQL statement.
    * \param[in] poSpatialFilter  \c Geometry representing a spatial filter -- may be null.
    * \param[in] pszDialect  allows control of the statement dialect. If set to
    *                     NULL, the OGR SQL engine will be used, except for
    *                     RDBMS drivers that will use their dedicated SQL
-   *                     engine, unless OGRSQL is explicitely passed as the
+   *                     engine, unless OGRSQL is explicitly passed as the
    *                     dialect.
    * \return a new \c Layer that contains the matching \c Features. In case of
    * error, or no matching result sets, a \em null Layer will be returned.

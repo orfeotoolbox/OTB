@@ -50,7 +50,7 @@ class GDALDataTypeWrapper;
  * \em Warning : the index coordinate system used in GDAL is attached
  * to the corner of the top left pixel, whereas in OTB, the index
  * coordinate system is attached to the centre of the top-left
- * pixel. It means that the origin coefficents read from the
+ * pixel. It means that the origin coefficients read from the
  * GDAL geotransform are the location of the top-left pixel
  * corner. This is why this location has to be shifted by
  * half a pixel to be used as an OTB origin. In a nutshell,
@@ -97,7 +97,7 @@ public:
   itkSetMacro(IsVectorImage, bool);
   itkGetMacro(IsVectorImage, bool);
 
-  /** Set/get wether the driver will write RPC tags to TIFF */
+  /** Set/get whether the driver will write RPC tags to TIFF */
   itkSetMacro(WriteRPCTags,bool);
   itkGetMacro(WriteRPCTags,bool);
 
@@ -134,7 +134,7 @@ public:
     return true;
   }
 
-  /** Set the spacing and dimention information for the set filename. */
+  /** Set the spacing and dimension information for the set filename. */
   void ReadImageInformation() ITK_OVERRIDE;
 
   /** Reads the data from disk into the memory buffer provided. */
@@ -158,7 +158,7 @@ public:
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
   bool CanStreamWrite() ITK_OVERRIDE;
 
-  /** Writes the spacing and dimentions of the image.
+  /** Writes the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
   void WriteImageInformation() ITK_OVERRIDE;
 

@@ -90,7 +90,7 @@ public:
   /** Return the Wkt representation of the projection*/
   virtual std::string GetWkt();
 
-  /** Instanciate the projection according to the Wkt specification*/
+  /** Instantiate the projection according to the Wkt specification*/
   virtual void SetWkt(const std::string& projectionRefWkt);
 
   virtual void PrintMap() const;

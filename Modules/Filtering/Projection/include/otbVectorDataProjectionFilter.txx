@@ -262,7 +262,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 }
 
 /**
- * Instanciate the transformation according to information
+ * Instantiate the transformation according to information
  */
 template <class TInputVectorData, class TOutputVectorData>
 void
@@ -270,7 +270,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 ::InstanciateTransform(void)
 {
 
-//   otbMsgDevMacro(<< "Information to instanciate transform (VectorDataProjectionFilter): ");
+//   otbMsgDevMacro(<< "Information to instantiate transform (VectorDataProjectionFilter): ");
 //   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
 //   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
 //   otbMsgDevMacro(<< " * Input keyword list: "
@@ -336,7 +336,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   InputVectorDataPointer  inputPtr = this->GetInput();
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
-  //Instanciate the transform
+  //Instantiate the transform
   this->InstanciateTransform();
 
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;

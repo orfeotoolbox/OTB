@@ -66,11 +66,11 @@ ImageRegionMultidimensionalSplitter< VImageDimension >
                        << this->ComputeSplits(numberOfPieces, region, splits) );
     }
 
-  unsigned int splittedRegionIndex[VImageDimension]; // index into splitted
+  unsigned int splittedRegionIndex[VImageDimension]; // index into split
                                                      // regions
   unsigned int i;
 
-  // determine which splitted region we are in
+  // determine which split region we are in
   unsigned int offset = splitI;
   for ( i = VImageDimension - 1; i > 0; i-- )
     {
@@ -123,8 +123,8 @@ ImageRegionMultidimensionalSplitter< VImageDimension >
 
 /**
  * given the requestedNumber of regions to split the "region" argument
- * into, it retures the number of splitted regions in each dimension
- * as "splits" and returns the total number of splitted regions
+ * into, it retures the number of split regions in each dimension
+ * as "splits" and returns the total number of split regions
  */
 template< unsigned int VImageDimension >
 unsigned int

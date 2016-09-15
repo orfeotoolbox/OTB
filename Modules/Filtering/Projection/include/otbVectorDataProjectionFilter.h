@@ -47,7 +47,7 @@ namespace otb
   * system of the image (origin on the top left). The value need to be provided by the
   * SetInputSpacing, SetInputOrigin, SetOutputSpacing and SetOutputOrigin methods.
   *
-  * The two transforms derived from itk::Transform and will be instanciated as
+  * The two transforms derived from itk::Transform and will be instantiated as
   * otb::GenericMapProjection or otb::InverseSensorModel or otb::ForwardSensorModel
   * (according to the available information).
   *

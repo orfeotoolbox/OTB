@@ -477,7 +477,7 @@ private:
 	else if ( (convType>=8) && (convType<=11)) // bsinclairtocoherency bsinclairtocovariance bsinclairtocircovariance sinclairtomueller
 	{
 	    if ( (!inhh) || (!inhv) || (!invh) || (!invv) )
-	        otbAppLogFATAL( << "Please, ensure that HH, HV, VH and VV complex images have been provided (paramaters inhh, inhv, invh, invv).");
+	        otbAppLogFATAL( << "Please, ensure that HH, HV, VH and VV complex images have been provided (parameters inhh, inhv, invh, invv).");
 	}
 	else if ( (convType==7) || (convType==12) ) // muellertomcovariance muellertopoldegandpower
 	{

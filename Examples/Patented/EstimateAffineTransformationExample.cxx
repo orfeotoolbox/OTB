@@ -33,7 +33,7 @@
 // \doxygen{otb}{LeastSquareAffineTransformEstimator} will be used
 // to generate a transformation field by using
 // mean square optimisation to estimate
-// an affine transfrom from the point set.
+// an affine transform from the point set.
 //
 // The first step toward the use of these filters is to include the
 // appropriate header files.

@@ -35,7 +35,7 @@ namespace otb
  *
  * The edge computation is divided into two steps.
  *
- * First, a linear search is perfomed to detect a first pixel belonging to the edge of
+ * First, a linear search is performed to detect a first pixel belonging to the edge of
  * the object.
  *
  * From that pixel and until the algorithm comes back to this position, the neighborhood
@@ -45,7 +45,7 @@ namespace otb
  * opposite directions, thus producing an edge with a null surface and twice the length of the
  * object as perimeter.
  *
- * This leads to consistant result for geometric descriptors (for instance compacity).
+ * This leads to consistent result for geometric descriptors (for instance compacity).
  * \sa ImageToPathFilter
  *
  * \ingroup OTBPath

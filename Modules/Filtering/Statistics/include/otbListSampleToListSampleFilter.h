@@ -24,7 +24,7 @@ namespace otb {
 namespace Statistics {
 
 /** \class ListSampleToListSampleFilter
- *  \brief This class is a base class for fitlers using ListSample as
+ *  \brief This class is a base class for filters using ListSample as
  *  input and returning ListSample.
  *
  *

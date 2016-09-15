@@ -131,7 +131,7 @@ private:
 
     m_InputGeomSet = InputGeometriesType::New(OGRDSin);
 
-    // Filter instanciation
+    // Filter instantiation
     m_GeometriesProjFilter = ProjectionFilterType::New();
     m_GeometriesProjFilter->SetInput(m_InputGeomSet);
 

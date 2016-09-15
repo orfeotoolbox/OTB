@@ -323,7 +323,7 @@ void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::BeforeThreadedGenerateData()
 {
-  // Instanciate all transforms
+  // Instantiate all transforms
   this->m_ReferenceToGroundTransform = RSTransformType::New();
   this->m_ReferenceToGroundTransform->SetInputKeywordList(this->m_ReferenceKeywordList);
   this->m_ReferenceToGroundTransform->InstanciateTransform();

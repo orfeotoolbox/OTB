@@ -232,7 +232,7 @@ bool MapProjectionAdapter::InstanciateProjection()
         std::string projectionString(kwl.find("type"));
         if (projectionString.find("ossimEquDistCylProjection") != string::npos)
           {
-            otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection: " << projectionString);
+            otbMsgDevMacro(<< "WARNING: Not instantiating a ossimEquDistCylProjection: " << projectionString);
             otbMsgDevMacro(<< "Wkt was: " << kwl);
             otbMsgDevMacro(<< "From RefWkt: " << m_ProjectionRefWkt);
             return false;

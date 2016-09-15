@@ -89,7 +89,7 @@ void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPolygon & g)
     if (ring)
       {
       do_transform(*ring); // no need to go through the redispatch cycle
-      // how to commit the change ? Are ring modifications automatically commited ?
+      // how to commit the change ? Are ring modifications automatically committed ?
       }
     }
   OGRLinearRing * ring = g.getExteriorRing();
@@ -97,7 +97,7 @@ void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPolygon & g)
   if (ring)
     {
     do_transform(*ring); // no need to go through the redispatch cycle
-    // how to commit the change ? Are ring modifications automatically commited ?
+    // how to commit the change ? Are ring modifications automatically committed ?
     }
 }
 

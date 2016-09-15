@@ -303,7 +303,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       {
       itkExceptionMacro(
         << "BSQ : the value type '" << lStrCodePix <<
-        "' (second line) set in the header file is not reconized as correct value.");
+        "' (second line) set in the header file is not recognized as correct value.");
       }
     else
       {
@@ -397,7 +397,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   int lNbBitsPerPixels;
   file >> lNbBitsPerPixels;
 
-  //Read "SENSCODAGE" information (optionnal)
+  //Read "SENSCODAGE" information (optional)
   file >> lString;
   if (lString.empty() == false)
     {
@@ -420,7 +420,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
           {
           itkExceptionMacro(
             << "BSQ : the value SENSCODAGE '" << lString <<
-            "' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");
+            "' set in the header file is not recognized as correct value. Possible values are INTEL or IEEE");
           }
         else
           {
@@ -593,7 +593,7 @@ void BSQImageIO::WriteImageInformation()
   otbSetTypeBsqMacro(DOUBLE, "R8")
   else
     {
-    itkExceptionMacro(<< "BSQ format doesn't reconized (TYPE).");
+    itkExceptionMacro(<< "BSQ format doesn't recognized (TYPE).");
     }
 
   std::string lString;

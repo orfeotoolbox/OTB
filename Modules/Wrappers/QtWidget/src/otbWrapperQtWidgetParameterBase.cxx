@@ -46,7 +46,7 @@ void QtWidgetParameterBase::UpdateGUI()
   // Update the GUI
   this->DoUpdateGUI();
 
-  // Emit State of the Parameter to update this paramter checkbox
+  // Emit State of the Parameter to update this parameter checkbox
   if (!m_Param->GetMandatory())
     {
     bool state = m_Param->GetActive();

@@ -35,12 +35,12 @@
 int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
 { 
   //
-  // instanciate the algorithms toolbox widget
+  // instantiate the algorithms toolbox widget
   QApplication app(argc, argv);
   mvd::ApplicationsToolBox *  appToolBox = new mvd::ApplicationsToolBox();
 
   //
-  // instanciate applications browser
+  // instantiate applications browser
   mvd::ApplicationsBrowser *  browser = new mvd::ApplicationsBrowser();
 
   //
@@ -63,7 +63,7 @@ int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
   browser->SearchAvailableApplicationsTags();
 
   //
-  // instanciate Application launcher
+  // instantiate Application launcher
   mvd::ApplicationLauncher * launcher = new mvd::ApplicationLauncher();
     
   //

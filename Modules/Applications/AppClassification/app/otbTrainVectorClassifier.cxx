@@ -350,7 +350,7 @@ void DoExecute()
     feature = layer.ogr().GetNextFeature();
     goesOn = feature.addr() != 0;
 
-    // find usefull field indexes
+    // find useful field indexes
 
     // TODO : detect corresponding indexes in validation data set, for the moment
     // Assume they have the same fields, in the same order.

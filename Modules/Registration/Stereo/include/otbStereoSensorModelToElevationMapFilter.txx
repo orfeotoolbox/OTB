@@ -402,7 +402,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
     typename GenericRSTransform3DType::InputPointType in3DPoint, out3DPoint;
     typename InputImageType::IndexType index;
 
-    // Retrieve intial height
+    // Retrieve initial height
     double initHeight = outputIt.Get();
     double optimalHeight = initHeight;
     double optimalCorrelation = 0;

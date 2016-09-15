@@ -165,7 +165,7 @@ void
 ImageToGenericRSOutputParameters<TImage>
 ::EstimateOutputOrigin()
 {
-  // Set the output orgin in carto
+  // Set the output origin in carto
   // projection
   PointType   origin;
   origin[0] = m_OutputExtent.minX + 0.5 * this->GetOutputSpacing()[0];

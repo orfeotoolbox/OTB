@@ -174,7 +174,7 @@ public:
   typedef typename InputImageFaceListType::iterator
   InputImageFaceListIterator;
 
-  /** Labelled image neighborhood interator typedef */
+  /** Labelled image neighborhood iterator typedef */
   typedef itk::NeighborhoodIterator<TClassifiedImage>
   LabelledImageNeighborhoodIterator;
 

@@ -144,7 +144,7 @@ private:
                           " (norm of spectral bands vector). The application has two different modes that affects the nature of its output.\n\nIn raster mode,"
                           " the output of the application is a classical image of unique labels identifying the segmented regions. The labeled output can be passed to the"
                           " ColorMapping application to render regions with contrasted colours. Please note that this mode loads the whole input image into memory, and as such"
-                          " can not handle large images. \n\nTo segment large data, one can use the vector mode. In this case, the output of the application is a"
+                          " can not handle large images. \n\n To segment large data, one can use the vector mode. In this case, the output of the application is a"
                           " vector file or database. The input image is split into tiles (whose size can be set using the tilesize parameter), and each tile is loaded, segmented"
                           " with the chosen algorithm, vectorized, and written into the output file or database. This piece-wise behavior ensure that memory will never get overloaded,"
                           " and that images of any size can be processed. There are few more options in the vector mode. The simplify option allows simplifying the geometry"

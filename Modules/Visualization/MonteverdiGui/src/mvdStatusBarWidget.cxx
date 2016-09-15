@@ -174,7 +174,7 @@ StatusBarWidget
   QStringList coordinates( m_UI->pixelIndexLineEdit->text().split( ',' ) );
 
   //
-  // Check splitted coordinates format.
+  // Check split coordinates format.
   assert( coordinates.size()==1 || coordinates.size()==2 );
 
   if( coordinates.size()!=1 && coordinates.size()!=2 )

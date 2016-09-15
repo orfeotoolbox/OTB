@@ -26,7 +26,7 @@ if(UNIX)
   #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
   separate_arguments(GDAL_SB_EXTRA_OPTIONS)
 
-  #we dont do any framework build on osx. So let's be sure on case of gdal
+  #we don't do any framework build on osx. So let's be sure on case of gdal
   if(APPLE)
     list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
   endif()

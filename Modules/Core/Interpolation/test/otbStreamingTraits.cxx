@@ -38,7 +38,7 @@ int otbStreamingTraitsImage(int itkNotUsed(argc), char* itkNotUsed(argv) [])
   typedef otb::Image<PixelType, Dimension>      ImageType;
   typedef otb::StreamingTraits<ImageType>       StreamingTraits;
 
-  // Check that all internal types can be instanciated
+  // Check that all internal types can be instantiated
   TestInstanciate<StreamingTraits::NearestNeighborInterpolationType>();
   TestInstanciate<StreamingTraits::LinearInterpolationType>();
   TestInstanciate<StreamingTraits::BSplineInterpolationType>();
@@ -60,7 +60,7 @@ int otbStreamingTraitsVectorImage(int itkNotUsed(argc), char * itkNotUsed(argv) 
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;
   typedef otb::StreamingTraits<ImageType>             StreamingTraits;
 
-  // Check that all internal types can be instanciated
+  // Check that all internal types can be instantiated
   TestInstanciate<StreamingTraits::NearestNeighborInterpolationType>();
   TestInstanciate<StreamingTraits::LinearInterpolationType>();
   TestInstanciate<StreamingTraits::GaussianInterpolationType>();

@@ -233,6 +233,6 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
   otb_add_test(NAME ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} COMMAND otbIOGDALTestDriver
     otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
     ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
-    1 5 10 2) #old file hdr sans extesions
+    1 5 10 2) #old file hdr sans extensions
 
 endforeach()

@@ -42,7 +42,7 @@ namespace otb
  * known as the carrier, and a gaussian-shaped function, also knwown as the envelop.
  *
  * Please note that this helper class generates a filter whose coefficients are the real part
- * of a complex Gabor fucntion.
+ * of a complex Gabor function.
  *
  * The formula used to compute these coefficients is as follows:
  *
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(GaborFilterGenerator, Object);
 
-  // usefull typedefs
+  // useful typedefs
   typedef TPrecision                PrecisionType;
   typedef itk::Array<PrecisionType> ArrayType;
   typedef itk::Size<2>              RadiusType;
@@ -141,7 +141,7 @@ private:
   /** Output filter coefficient array */
   ArrayType m_Filter;
 
-  /** Wether we need to regenerate the filter */
+  /** Whether we need to regenerate the filter */
   mutable bool m_NeedToRegenerateFilter;
 
 };

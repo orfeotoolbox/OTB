@@ -478,7 +478,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
   const TOutputDEMImage * outputDEM = this->GetDEMOutput();
 
   //create splits
-  // for each map we check if the input region can be splitted into threadNb
+  // for each map we check if the input region can be split into threadNb
   m_NumberOfSplit.resize(this->GetNumberOf3DMaps());
 
   unsigned int maximumRegionsNumber = 1;
@@ -498,7 +498,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
                                                                                         this->GetNumberOfThreads());
       }
     m_NumberOfSplit[k] = regionsNumber;
-    otbMsgDevMacro( "map " << k << " will be splitted into " << regionsNumber << " regions" );
+    otbMsgDevMacro( "map " << k << " will be split into " << regionsNumber << " regions" );
     if (maximumRegionsNumber < regionsNumber) maximumRegionsNumber = regionsNumber;
 
     }
@@ -726,7 +726,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
       else
         {
         splitRegion = requestedRegion;
-        otbMsgDevMacro( "map " << k << " will not be splitted " );
+        otbMsgDevMacro( "map " << k << " will not be split " );
         }
       }
     }

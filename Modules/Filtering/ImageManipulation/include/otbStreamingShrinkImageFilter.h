@@ -234,7 +234,7 @@ private:
   PersistentShrinkImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /* the output shrinked image */
+  /* the output shrunk image */
   OutputImagePointer m_ShrinkedOutput;
 
   /** The shrink factor */

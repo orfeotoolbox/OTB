@@ -42,14 +42,14 @@ namespace otb
 /** \class MapFileProductWriter
  * \brief This class produces Map file product ie a file .map,
  *        the tiles to draw in a mapserver, and finally
- *        a shapefile wich describe the tiles and where to find them
+ *        a shapefile which describe the tiles and where to find them
  *        on the disk.
  *
  * This filter begins by tiling the input image. An accessor
  * SetTileSize allows setting the size of each tile. For each tile
  * generated, an entry is added to the shapefile to store the location
  * where the file is saved on the disk.
- * The product generated are a mapfile wich is the configuration file
+ * The product generated are a mapfile which is the configuration file
  * for mapservers, a tile index and finally the tiles.
  * This class allow the user to specify the cgi-bin used (SetCGIPath)
  * and the directory where to store the index shapefile and the tiles
@@ -190,7 +190,7 @@ private:
   /** Add a layer to the mapfile*/
   void AddLayer();
 
-  /** Intialize vd*/
+  /** Initialize vd*/
   void InitializeVectorData();
 
   InputImagePointer    m_VectorImage;

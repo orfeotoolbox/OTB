@@ -95,7 +95,7 @@ OTB-v.5.4.0 - Changes since version 5.2.1 (2016/05/04)
     * 0001153: Superimpose app in PHR mode reports wrong origin/spacing/keywordlist
     * 0001154: Exception raised when opening LUM or LUM+HDR
     * 0001152: maximum number of class in KMean application limited to 255
-    * 0001140: Lost pixel position informations in layer stack
+    * 0001140: Lost pixel position information in layer stack
 
   * OTB-Packaging
     * 0001141: muparser 2.2.4 is missing in superbuild archive 5.2.1
@@ -340,7 +340,7 @@ OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
     * Enhance p to xs registration formula
     * Reduce Curl dependencies
     * Remove 6S dependency for VarSol computation
-    * Clean and udpate the Mapnik adapters code into OTB
+    * Clean and update the Mapnik adapters code into OTB
     * Add an option to limit the number of samples by class into otbListSampleGenerator
     * Fix BCO interpolation about coefficients normalization
     * Fix missing boost namespace
@@ -372,13 +372,13 @@ OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
         * OGRLayerClassifier
   * Updated applications:
     * Smoothing: add conductance parameter for anidifusion which was added recently in ITK filter
-    * Smoothing: keep the time step independant from the image spacing
+    * Smoothing: keep the time step independent from the image spacing
     * HomologousPoint: proper computation of the opposite region
     * Rasterization: fix computation of output image extent
     * GridBasedImageResampling: fix the wrong channel number otbGridBasedImageResampling.
     * ColorMapping: clamp before cast to uchar
     * OpticalCalibration: the toc computation is no more marked as experimental
-    * OpticalCalibration: add an internal test to check if RSR file is correclty set
+    * OpticalCalibration: add an internal test to check if RSR file is correctly set
     * BundleToPerfectSensor and SuperImpose: Allowing to force default mode with Pleiades images
     * SuperImpose: fix a bug in PHR mode detection logic
     * TrainImagesClassifier: add option to limit the min number of samples to the smallest class
@@ -415,10 +415,10 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/09/04)
       GDAL and OSSIM. OTB uses pixel centered convention, whereas GDAL and
       OSSIM use corner pixel convention. More details on JIRA #647 and Mantis
       #942
-    * Major performance improvment of Haralick Texture computation (6 to 10 times
+    * Major performance improvement of Haralick Texture computation (6 to 10 times
       faster)
     * Add new texture feature (dissimilarity) in ScalarImageToAdvancedTexturesFilter
-    * Improvments of Simulation code in order to be able to use the solar
+    * Improvements of Simulation code in order to be able to use the solar
       irradiance information when working with spectral responses for simulations.
     * Support Jpeg2000 images through GDAL drivers (can use OpenJpeg, Kakadu, ECW)
     * Reading/Writing RPC coefficients in GeoTIFF tags
@@ -691,13 +691,13 @@ OTB-v.3.18.1 - Changes since version 3.18.0 (2013/07/22)
       * Update Stereo application documentation example with new parameters
       * Add a log message about color mapping method used by application
     * Core Framework
-      * Intialize properly QtWidgetChoiceParameter
-    * Increase minimun cmake version to 2.8.3 wwhen build applications
+      * Initialize properly QtWidgetChoiceParameter
+    * Increase minimum cmake version to 2.8.3 wwhen build applications
 
 OTB-v.3.18 - Changes since version 3.16 (2013/07/05)
 --------------------------------------------------------
 
-Among the classical improvements and bug fixes to exisiting functionnalities, this release provides
+Among the classical improvements and bug fixes to existing functionnalities, this release provides
 the following main functionnalities :
  * Huge improvements in Stereo framework, to compute DEM from stereo pairs :
    check the StereoFramework application !
@@ -728,7 +728,7 @@ The full list of improvements comes here :
       * BijectionCoherencyFilter : from 2 disparity maps, compute coherency left-right and right-left, and output a mask of coherent disparities
       * Multi3DToDEMFilter : fuse several 3D images to produce an elevation map
       * DisparityTranslateFilter : filter to translate epipolar disparities into sensor disparities
-    * PixelWiseBlockMatchingImageFilter : fix initialisation of metric and disparities
+    * PixelWiseBlockMatchingImageFilter : fix initialization of metric and disparities
     * PixelWiseBlockMatchingImageFilter : supports a shift on the subsampled grid
     * SubPixelDisparityImageFilter : supports a subsampled grid (with shift)
     * PixelWiseBlockMatchingImageFilter & SubPixelDisparityImageFilter : subsampled disparities are now consistent with the dispmap index spaces
@@ -837,7 +837,7 @@ The full list of improvements comes here :
     * 0000668: Precision loss when loading/saving/reloading
     * 0000666: upper quantile is not set to 0.0 on integer image type, when using min/max button
     * 0000656: Import Windows does not close
-    * 0000659: At first startup, 'mvd2' dir is not created but Monteverdi2 shoudl create it
+    * 0000659: At first startup, 'mvd2' dir is not created but Monteverdi2 should create it
     * 0000660: Wrong display settings saved
     * 0000657: Radiometry values hide WGS84 coordinates in status bar
     * 0000654: When minimzing the window, all widgets are closed
@@ -898,7 +898,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
   * Learning
     * Improved ListSample generation
       * Added support for interior rings
-      * Fixed support for class mininum size
+      * Fixed support for class minimum size
     * Added a filter for classification map regularization by majority voting
 
   * Segmentation
@@ -930,7 +930,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
       * Added new tile fusion application (TileFusion)
       * Added new end-to-end stereo pair to Digital Surface Model application (StereoFramework)
 
-    * Miscellanous
+    * Miscellaneous
       * Added an optional clamp in OpticalCalibration application output
       * Added segmentation algorithm based on multiscale morphological structures classification in Segmentation application
       * Added an optional output to the ReadImageInfo application to write the keyword list to a geom file
@@ -1067,7 +1067,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * Add BlockMatchingImageFilter class for fast 2D block-matching
     * Add NCCBlockMatching functor
     * Add LPBlockMatching functor
-    * Adding an optionnal geoid file, and the possibility to use height
+    * Adding an optional geoid file, and the possibility to use height
       above ellispoid in DEMToImageGenerator
     * Add SubPixelDisparityImageFilter class to interpolate disparities
     * Add DisparityMapMedianFilter class
@@ -1156,7 +1156,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * Use InputFilename and OutputFilename instead of Filename
     * New option in SVMClassifier application: sample.edg (non mandatory)
       to manage special cases with small samples
-    * In KMeansClassification, Changing the random intialisation method
+    * In KMeansClassification, Changing the random initialization method
       since it can generate centroids that are too far from the image
       distribution and will never move
     * Add AddRANDParameter option in order to set mersenne twister seed
@@ -1785,7 +1785,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
     * 0000341: weird french warning in ms dos command window with
       monteverdi 1.7 exe
     * 0000313: Unable to perform orthofusion of WV2 PAN+XS (4 bands)
-    * 0000239: Trouble in pixel descrition in Monteverdi viewer
+    * 0000239: Trouble in pixel description in Monteverdi viewer
     * 0000336: Viewer Histogram settings not applied after channel
       order changes
     * 0000304: Advanced save dataset module with scaling on results in
@@ -1838,7 +1838,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
     a DEM tiles directory, with optional hillshading
   * New ColorMapping module: apply a colormap to a mono band image
   * Viewer module: add multi input support, with slideshow or transparency
-    mode, add more rendering functions, add splitted/packed layout option
+    mode, add more rendering functions, add split/packed layout option
   * Vectorization module: new semi-automatic mode based on segmentation
     results proposals
 
@@ -1894,7 +1894,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 
 * System
   * Internal liblas updated to 1.6.0b2 + OTB patches (root CMakeList.txt)
-  * Internal libsvm updated to 3.0 + OTB patches (additionnal kernels)
+  * Internal libsvm updated to 3.0 + OTB patches (additional kernels)
   * Internal ITK: removed compilation of medical image formats library
     and associated ImageIO
   * Internal ITK: removed dependency on libtiff, libjpeg, libpng and zlib,
@@ -2203,7 +2203,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
     - Added an orthofusion application (otbOrthoFusionAppli)
 
 *Markov:
-      Added full Markov framework for segmentation, restauration
+      Added full Markov framework for segmentation, restoration
       and filtering
       Added related classes:
     - otb::MarkovRandomFieldFilter
@@ -2569,7 +2569,7 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
     - Added the otb::BayesianFusionImageFilter, a pan-sharpening
       filter which
-      algoritm has been kindly contributed by Julien Radoux.
+      algorithm has been kindly contributed by Julien Radoux.
 
 
 *Documentation:

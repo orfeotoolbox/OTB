@@ -65,7 +65,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 }
 
 /**
- * Instanciate the transformation according to information
+ * Instantiate the transformation according to information
  */
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
@@ -83,7 +83,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     itk::ExposeMetaData<std::string>(m_InputDictionary, MetaDataKey::ProjectionRefKey, m_InputProjectionRef);
     }
 
-  otbMsgDevMacro(<< "Information to instanciate transform: ");
+  otbMsgDevMacro(<< "Information to instantiate transform: ");
   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
   otbMsgDevMacro(<< " * Input keyword list: "

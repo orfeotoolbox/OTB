@@ -105,7 +105,7 @@ MapFileProductWriter<TInputImage>
 
 
 /**
- * Write lauch the tiling and the mapFile generation and write on the
+ * Write launch the tiling and the mapFile generation and write on the
  * disk the indexfile as a shapefile
  */
 template <class TInputImage>
@@ -546,7 +546,7 @@ MapFileProductWriter<TInputImage>
   m_File <<"\t\t#IMAGEURL '/ms_tmp/'" << std::endl;
 
   m_File <<"\t\t# WMS server settings" << std::endl;
-  m_File <<"\t\t# NOTE : the user must change the path to the mapserver excecutable in the "<<std::endl;
+  m_File <<"\t\t# NOTE : the user must change the path to the mapserver executable in the "<<std::endl;
   m_File <<"\t\t#  wms_onlineresource field"<<std::endl;
   m_File <<"\t\tMETADATA" << std::endl;
   m_File <<"\t\t 'wms_title'           'Level0'" << std::endl;

@@ -29,7 +29,7 @@
 // In this example, we present OTB's implementation of SEM, through the class
 // \doxygen{otb}{SEMClassifier}. This class performs a stochastic version
 // of the EM algorithm, but instead of inheriting from
-// \doxygen{itk}{ExpectationMaximizationMixtureModelEstimator}, we choosed to
+// \doxygen{itk}{ExpectationMaximizationMixtureModelEstimator}, we chose to
 // inherit from \subdoxygen{itk}{Statistics}{ListSample< TSample >},
 // in the same way as \doxygen{otb}{SVMClassifier}.
 //
@@ -159,7 +159,7 @@ int main(int argc, char * argv[])
 //  Software Guide : BeginLatex
 //
 //  By default, \doxygen{otb}{SEMClassifier} performs initialization of
-// \code{ModelComponentBase} by as many instanciation of
+// \code{ModelComponentBase} by as many instantiation of
 // \subdoxygen{otb}{Statistics}{GaussianModelComponent} as the number of
 // classes to estimate in the mixture. Nevertheless, the user may add specific
 // distribution into the mixture estimation. It is permitted by the use of
@@ -182,7 +182,7 @@ int main(int argc, char * argv[])
 
 //  Software Guide : BeginLatex
 //
-//  Once the pipeline is instanciated. The segmentation by itself may be
+//  Once the pipeline is instantiated. The segmentation by itself may be
 // launched by using the \code{Update} function.
 //  Software Guide : EndLatex
 

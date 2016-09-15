@@ -166,7 +166,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  // Instanciate the transform
+  // Instantiate the transform
   transform->InstanciateTransform();
 
   // Generate the inverse transform

@@ -88,7 +88,7 @@ protected:
     return ret;
   }
 
-  /** This method creates all the objects with the class overide of
+  /** This method creates all the objects with the class override of
    * itkclass name, which are provide by this object
    */
   std::list<LightObject::Pointer>

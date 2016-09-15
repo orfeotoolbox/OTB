@@ -29,7 +29,7 @@ namespace otb
  *  as the parameter (called characteristic) for which this maxima occurs.
  *
  *  The maxima can be retrieved by the GetOutput() image, while the characteristics
- *  can be retreived by the GetOutputCharacteristics().
+ *  can be retrieved by the GetOutputCharacteristics().
  *
  *  Please note that this characteristics can be scaled using the InitialValue and Step
  *  parameter corresponding to the input profile.

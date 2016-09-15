@@ -29,7 +29,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;
   typedef otb::PhysicalToRPCSensorModelImageFilter<ImageType> PhysicalToSensorModelType;
 
-  // Object instanciation
+  // Object instantiation
   PhysicalToSensorModelType::Pointer estimator = PhysicalToSensorModelType::New();
 
   if(argc == 4)

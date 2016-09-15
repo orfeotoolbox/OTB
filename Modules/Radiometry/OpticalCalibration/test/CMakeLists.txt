@@ -102,7 +102,7 @@ otb_add_test(NAME raTvReflectanceToImageImageFilterDayMounth COMMAND otbOpticalC
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvReflectanceToImageImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -579,7 +579,7 @@ otb_add_test(NAME raTvImageToReflectanceImageFilterDayMounth COMMAND otbOpticalC
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvImageToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -639,7 +639,7 @@ otb_add_test(NAME raTvLuminanceToReflectanceImageFilterDayMonth COMMAND otbOptic
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvLuminanceToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -908,7 +908,7 @@ otb_add_test(NAME raTvReflectanceToLuminanceImageFilterDayMonth COMMAND otbOptic
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvImageToLuminanceImageFilter COMMAND otbOpticalCalibrationTestDriver

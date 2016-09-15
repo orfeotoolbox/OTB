@@ -62,7 +62,7 @@ void FillHalf(typename ImageType::Pointer image, const typename ImageType::Regio
   }
 }
 
-// Test template instanciation
+// Test template instantiation
 int otbMaskedIteratorDecoratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2> ImageType;

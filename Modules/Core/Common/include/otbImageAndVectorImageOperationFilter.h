@@ -35,7 +35,7 @@ class ITK_EXPORT ImageAndVectorImageOperationFunctor
 public:
   typedef typename TVectorInput::ValueType                        InternalInputPixelType;
   typedef typename TOutput::ValueType                             InternalOutputPixelType;
-  typedef enum {MULTIPLICATION, ADDITION, DIVISON, SUBSTRACTION } OperatorType;
+  typedef enum {MULTIPLICATION, ADDITION, DIVISION, SUBTRACTION } OperatorType;
 
   ImageAndVectorImageOperationFunctor()
     {
@@ -70,7 +70,7 @@ public:
         vInTmp += static_cast<InternalInputPixelType>(inPix);
         break;
         }
-      case DIVISON:
+      case DIVISION:
         {
         if (inPix != 0) vInTmp /= static_cast<InternalInputPixelType>(inPix);
         else
@@ -79,7 +79,7 @@ public:
           }
         break;
         }
-      case SUBSTRACTION:
+      case SUBTRACTION:
         {
         vInTmp -= static_cast<InternalInputPixelType>(inPix);
         break;
@@ -104,9 +104,9 @@ protected:
 /** \class ImageAndVectorImageOperationFilter
  * \brief Provides simple pixel to pixel operation between Image and VectorImage.
  *
- * Apply an operation (multiplication, division, addition or substraction) between
+ * Apply an operation (multiplication, division, addition or subtraction) between
  * the input image and each channel of the vector input image.
- * Use SetOperation( MULTIPLICATION, ADDITION, DIVISON or SUBSTRACTION ) to select the wanted operation.
+ * Use SetOperation( MULTIPLICATION, ADDITION, DIVISION or SUBTRACTION ) to select the wanted operation.
  * Default is an addition.
  *
  * This class is templated over the input Image and VectorImage and output VectorImage types.

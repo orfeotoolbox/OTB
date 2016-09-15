@@ -185,7 +185,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   // average elevation
   rightEpiPoint = m_LeftToRightTransform->TransformPoint(leftInputOrigin);
 
-  // The begining of the epipolar line in the left image is the image
+  // The beginning of the epipolar line in the left image is the image
   // of rightEpiPoint at a lower elevation (using the offset)
   rightEpiPoint[2] = localElevation - m_ElevationOffset;
   leftEpiLineStart = m_RightToLeftTransform->TransformPoint(rightEpiPoint);
@@ -406,7 +406,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
     // average elevation
     epiPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
-    // The begining of the epipolar line in the left image is the image
+    // The beginning of the epipolar line in the left image is the image
     // of epiPoint2 at a lower elevation (using the offset)
     epiPoint2[2] = localElevation - m_ElevationOffset;
     startLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);

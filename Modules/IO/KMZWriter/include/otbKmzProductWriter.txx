@@ -586,7 +586,7 @@ KmzProductWriter<TInputImage>
         this->AddFileToKMZ(jpg_absolute_path, jpg_in_kmz);
         this->AddFileToKMZ(kml_absolute_path, kml_in_kmz);
 
-        // Remove the unecessary files with stdio method :remove
+        // Remove the unnecessary files with stdio method :remove
         if (remove(kml_absolute_path.str().c_str())  ||  remove(jpg_absolute_path.str().c_str()))
           {
           itkExceptionMacro(

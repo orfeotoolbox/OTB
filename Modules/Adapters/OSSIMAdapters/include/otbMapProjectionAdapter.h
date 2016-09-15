@@ -105,7 +105,7 @@ private:
   bool m_ReinstanciateProjection;
 };
 
-// Some usefull free functions related to ossim
+// Some useful free functions related to ossim
 namespace Utils
 {
 int OTBOSSIMAdapters_EXPORT GetZoneFromGeoPoint(double lon, double lat);

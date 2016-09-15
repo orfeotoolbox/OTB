@@ -56,7 +56,7 @@ VectorDataFileReader<TOutputVectorData>
      this is intended to be called before attempting to use
      VectorDataIO classes for actually reading the file. If the file
      doesn't exist or it is not readable, and exception with an
-     approriate message will be thrown. */
+     appropriate message will be thrown. */
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>

@@ -48,7 +48,7 @@ int otbVectorDataTransformFilter (int itkNotUsed(argc), char * argv[])
   typedef otb::VectorDataProjectionFilter<VectorDataType,
     VectorDataType>                                   VDProjectionFilterType;
 
-  // Instanciate the image reader
+  // Instantiate the image reader
   ReaderType::Pointer      reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();

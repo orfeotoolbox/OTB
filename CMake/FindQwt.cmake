@@ -6,7 +6,7 @@
 #  QWT_INCLUDE_DIR - where to find qwt_plot.h
 #  QWT_INCLUDE_DIRS - qwt includes
 #  QWT_LIBRARY - where to find the Qwt library
-#  QWT_LIBRARIES - aditional libraries
+#  QWT_LIBRARIES - additional libraries
 #  QWT_MAJOR_VERSION - major version
 #  QWT_MINOR_VERSION - minor version
 #  QWT_PATCH_VERSION - patch version

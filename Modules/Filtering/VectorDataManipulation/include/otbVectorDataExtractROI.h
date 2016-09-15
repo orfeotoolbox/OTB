@@ -81,7 +81,7 @@ public:
   typedef typename PolygonType::VertexListType    VertexListType;
   typedef typename PolygonType::VertexListPointer VertexListPointer;
 
-  /** TODO : automatize the dimension of the region*/
+  /** TODO : automate the dimension of the region*/
   typedef otb::RemoteSensingRegion<typename VertexType::CoordRepType> RegionType;
   typedef typename  RegionType::IndexType                             IndexType;
   typedef typename  RegionType::SizeType                              SizeType;

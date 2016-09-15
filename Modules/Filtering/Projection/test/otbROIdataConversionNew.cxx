@@ -29,9 +29,9 @@ int otbROIdataConversionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   typedef otb::Image<PixelType,  Dimension>                      ROIImageType;
   typedef otb::ROIdataConversion<InputImageType, ROIImageType>   ConvertorType;
 
-  ConvertorType::Pointer convertor = ConvertorType::New();
+  ConvertorType::Pointer converter = ConvertorType::New();
 
-  std::cout << convertor << std::endl;
+  std::cout << converter << std::endl;
 
   return EXIT_SUCCESS;
 }

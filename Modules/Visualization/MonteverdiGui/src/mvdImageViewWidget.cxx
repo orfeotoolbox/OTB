@@ -708,7 +708,7 @@ ImageViewWidget
     }
 
   //
-  // Relase rendering-context.
+  // Release rendering-context.
   delete c;
   c = NULL;
 }
@@ -977,7 +977,7 @@ ImageViewWidget
 {
 #if QT_VERSION < QT_VERSION_CHECK( 4, 7, 0 )
   qWarning() <<
-    tr( "Unable to list suppored OpenGL versions using QGLFormat. "
+    tr( "Unable to list supported OpenGL versions using QGLFormat. "
 	"Qt version is %1. Please upgrade to Qt 4.7.0 or newer." )
     .arg( qVersion() )
     .toLatin1()

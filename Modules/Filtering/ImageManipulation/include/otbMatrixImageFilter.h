@@ -119,7 +119,7 @@ protected:
   /** MatrixImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
    * that is called for each process thread. Image datas are automatically allocated
-   * throught the parent class calling the ThreadedGenerateData() method.
+   * through the parent class calling the ThreadedGenerateData() method.
    * ThreadedGenerateData() can only write the area of the image specified by the parameter "outputRegionForThread"
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),

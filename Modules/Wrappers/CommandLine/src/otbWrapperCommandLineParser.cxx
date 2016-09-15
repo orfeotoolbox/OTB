@@ -225,7 +225,7 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
     }
 
   // The SplitString keep the separator in the string.
-  // If exists a space a the beginnig of the string, it will be interpreted...
+  // If exists a space a the beginning of the string, it will be interpreted...
   // We have to delete it
   if( spaceSplittedExp[0][0] == ' ' )
     {
@@ -529,7 +529,7 @@ CommandLineParser::IsAValidKey( const std::string & foundKey )
   // the starting dash should be already removed
   tmp.append(".");
 
-  // To be a key, the string must be a serie of groups separated by dots so that :
+  // To be a key, the string must be a series of groups separated by dots so that :
   // - each group has at least one character
   // - each group contains only alphanumeric characters (and lowercase)
   // - there is at least one group

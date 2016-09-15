@@ -128,7 +128,7 @@ private:
    * \param[in] source  source \c Layer for reference (in case it has relevant
    * information).
    * \return a new \c OGRSpatialReference that the client code shall release
-   * with the appropiate OGR function.
+   * with the appropriate OGR function.
    * \return 0 by default.
    * \todo Return a <tt>unique_ptr<OGRSpatialReference></tt>.
    */
@@ -205,7 +205,7 @@ struct OTBGdalAdapters_EXPORT FieldCopyTransformation
   void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const;
 private:
   /** Associative table to know how fields are mapped from one layer to another.
-   * This table is necesary as:
+   * This table is necessary as:
    * - some data source drivers add their own fields (as a consequence, the
    * number of fields differ between two layers).
    * - other data source drivers truncate the name of the fields (as a
@@ -255,7 +255,7 @@ struct TransformationFunctorDispatcher
  * the transformation work.
  *
  * If you need to change the number of elements in a layer, use a \c
- * TransformationFunctor that works on layers. The dispatching mecanism will
+ * TransformationFunctor that works on layers. The dispatching mechanism will
  * automatically end up here.
  * \tparam TransformationFunctor actual transformation functor
  * \since OTB v 3.14.0
@@ -312,7 +312,7 @@ private:
 
 /**\ingroup GeometriesFilters
  * \class DefaultGeometriesToGeometriesFilter
- * Generic helper class to filter geometries sets given a tranformation functor.
+ * Generic helper class to filter geometries sets given a transformation functor.
  * This generic class provides the default behaviour for most filters that we
  * may need to implement.
  *

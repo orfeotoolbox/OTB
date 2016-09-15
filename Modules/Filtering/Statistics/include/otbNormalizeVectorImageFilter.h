@@ -134,7 +134,7 @@ class ITK_EXPORT NormalizeVectorImageFilter
               typename TOutputImage::PixelType > >
 {
 public:
-  /** Standart class typedefs */
+  /** Standard class typedefs */
   typedef NormalizeVectorImageFilter Self;
   typedef UnaryFunctorVectorImageFilter< TInputImage, TOutputImage,
             Functor::NormalizeVectorImageFunctor<

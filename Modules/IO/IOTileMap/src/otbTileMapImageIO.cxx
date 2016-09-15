@@ -498,7 +498,7 @@ void TileMapImageIO::ReadImageInformation()
       m_AddressMode = TileMapAdressingStyle::GM;
       }
 
-    // File suffix and addres mode must be set with accessors
+    // File suffix and address mode must be set with accessors
     otbMsgDevMacro(<< "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
     }
 
