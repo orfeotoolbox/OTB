@@ -16,7 +16,7 @@ ossimWin32FindFileHandle::ossimWin32FindFileHandle(std::string const& path)
     s_printf(
        err_msg,
        "ossimSentinel1Model: cannot list files in directory '%s' : '%d'",
-       path,
+       path.c_str(),
        GetLastError()
       );
 		throw std::runtime_error( err_msg );
