@@ -158,6 +158,29 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     }
 }
 
+template <class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GenerateData(void)
+{
+  this->AllocateOutputs();
+  this->BeforeThreadedGenerateData();
+
+  // struct to store filter pointer
+  VectorThreadStruct str;
+  str.Filter = this;
+
+  // Get the output pointer
+  //const InputImageType *outputPtr = this->GetOutput();
+
+  this->GetMultiThreader()->SetNumberOfThreads( this->GetNumberOfThreads() );
+  this->GetMultiThreader()->SetSingleMethod(this->VectorThreaderCallback, &str);
+
+  // multithread the execution
+  this->GetMultiThreader()->SingleMethodExecute();
+
+  this->AfterThreadedGenerateData();
+}
 
 template <class TInputImage, class TMaskImage>
 void
@@ -365,6 +388,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       break;
       }
     }
+}
+
+template <class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::VectorThreadedGenerateData(const ogr::DataSource& inputForThread, itk::ThreadIdType threadid)
+{
+  // TODO
 }
 
 template <class TInputImage, class TMaskImage>
@@ -857,6 +888,28 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   return this->m_AdditionalFields;
 }
 
+template<class TInputImage, class TMaskImage>
+ITK_THREAD_RETURN_TYPE
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::VectorThreaderCallback(void *arg)
+{
+  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+
+  int threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  int threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+
+  // split the data and get effective total.
+  int total = threadCount;
+
+  RegionType requestedRegion = str->Filter->GetOutput()->GetRequestedRegion();
+
+  if (threadId < total)
+    {
+    str->Filter->ThreadedGenerateData(requestedRegion,threadId);
+    }
+  
+  return ITK_THREAD_RETURN_VALUE;
+}
 
 } // end namespace otb
 

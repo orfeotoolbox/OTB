@@ -104,6 +104,9 @@ protected:
    *  the requested region for the mask */
   virtual void GenerateInputRequestedRegion();
 
+  /** Generate data should thread over */
+  virtual void GenerateData(void);
+
   /** Prepare temporary input and output OGR data sources */
   virtual void BeforeThreadedGenerateData(void);
 
@@ -113,6 +116,9 @@ protected:
 
   /** Start of main processing loop */
   virtual void ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid);
+
+  /** Start of main processing loop */
+  virtual void VectorThreadedGenerateData(const ogr::DataSource& inputForThread, itk::ThreadIdType threadid);
 
   /** Process a geometry, recursive method when the geometry is a collection */
   void ExploreGeometry(const ogr::Feature& feature,
@@ -195,6 +201,14 @@ protected:
 
   /** Get a reference over the additional fields */
   const std::vector<SimpleFieldDefn>& GetAdditionalFields();
+
+  static ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void *arg);
+
+  struct VectorThreadStruct
+    {
+      Pointer Filter;
+    };
+
 
 private:
   PersistentSamplingFilterBase(const Self &); //purposely not implemented
