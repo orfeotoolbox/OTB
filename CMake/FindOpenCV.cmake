@@ -71,6 +71,9 @@ if ( opencv_INCLUDE_DIR )
   endif()
 endif()
 
+if(NOT OPENCV_SEARCH_PATH)
+  get_filename_component(OPENCV_SEARCH_PATH "${opencv_INCLUDE_DIR}" PATH)
+endif()
 
 # Prefer the static library.
 find_library(
