@@ -14,7 +14,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT InputProcessXMLParameter
+class OTBApplicationEngine_EXPORT InputProcessXMLParameter
   : public Parameter
 {
 public:

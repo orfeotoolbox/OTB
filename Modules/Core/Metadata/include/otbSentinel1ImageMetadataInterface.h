@@ -31,7 +31,7 @@ namespace otb
  * \ingroup OTBMetadata
  */
 
-class ITK_ABI_EXPORT Sentinel1ImageMetadataInterface : public SarImageMetadataInterface
+class OTBMetadata_EXPORT Sentinel1ImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
 

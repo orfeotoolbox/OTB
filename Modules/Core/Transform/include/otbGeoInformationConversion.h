@@ -20,6 +20,7 @@
 #define otbGeoInformationConversion_h
 
 #include <string>
+#include "OTBTransformExport.h"
 
 namespace otb
 {
@@ -34,11 +35,11 @@ namespace otb
 namespace GeoInformationConversion
 {
   /** method used to create a wkt from an epsg number  */
-  std::string ToWKT(int srid);
-  std::string ToWKT(const std::string& candidateSrid);
+  OTBTransform_EXPORT std::string ToWKT(int srid);
+  OTBTransform_EXPORT std::string ToWKT(const std::string& candidateSrid);
 
   /** this method try to morph a wkt to ESRI WKT format and returns the error code**/
-  bool IsESRIValidWKT(const std::string &Wkt);
+  OTBTransform_EXPORT bool IsESRIValidWKT(const std::string &Wkt);
 }
 
 } // End namespace otb

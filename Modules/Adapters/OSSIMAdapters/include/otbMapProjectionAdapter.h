@@ -24,6 +24,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+#include "OTBOSSIMAdaptersExport.h"
+
 class ossimProjection;
 
 namespace otb
@@ -44,7 +46,7 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  **/
 
-class MapProjectionAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT MapProjectionAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -106,7 +108,7 @@ private:
 // Some usefull free functions related to ossim
 namespace Utils
 {
-int GetZoneFromGeoPoint(double lon, double lat);
+int OTBOSSIMAdapters_EXPORT GetZoneFromGeoPoint(double lon, double lat);
 }
 
 

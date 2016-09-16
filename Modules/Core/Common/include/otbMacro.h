@@ -225,4 +225,15 @@ namespace otb
 
 #  define otbUnusedMacro(x) do { (void)sizeof(x); } while(0)
 
+//
+// Unused variable warnings in Debug/Release management.
+// see http://stackoverflow.com/questions/2290509/debug-vs-ndebug#2290616
+#ifdef OTB_DEBUG
+# define otbUseInDebug( name ) name
+# define otbUseInRelease( name )
+#else // NDEBUG
+# define otbUseInDebug( name )
+# define otbUseInRelease( name ) name
+#endif // NDEBUG
+
 #endif //end of otbMacro.h

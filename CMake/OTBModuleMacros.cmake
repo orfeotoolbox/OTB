@@ -11,7 +11,12 @@ include(${_OTBModuleMacros_DIR}/OTBApplicationMacros.cmake)
 # don't work. Set the option to off and hide it.
 if(APPLE AND CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION  VERSION_LESS "4.3")
   set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
+elseif(APPLE)
+  #RK:  compiler visibility nor woking on osx with appleclang xcode.
+  #gcc is a symlink to clang
+  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
 endif()
+
 include(GenerateExportHeader)
 
 if(OTB_CPPCHECK_TEST)
@@ -108,7 +113,7 @@ macro(otb_module_impl)
   add_custom_target(${otb-module}-all ALL SOURCES ${_srcs})
 
   otb_module_use(${OTB_MODULE_${otb-module}_DEPENDS})
-  
+
   foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
     if (${dep}_ENABLED)
       otb_module_use(${dep})
@@ -117,11 +122,11 @@ macro(otb_module_impl)
 
   if(NOT DEFINED ${otb-module}_LIBRARIES)
     set(${otb-module}_LIBRARIES "")
-    
+
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_DEPENDS)
       list(APPEND ${otb-module}_LIBRARIES "${${dep}_LIBRARIES}")
     endforeach()
-    
+
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
       if (${dep}_ENABLED)
         list(APPEND ${otb-module}_LIBRARIES "${${dep}_LIBRARIES}")
@@ -137,7 +142,7 @@ macro(otb_module_impl)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
     install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT Development)
   endif()
-  
+
   if(NOT OTB_SOURCE_DIR)
     # When building a module outside the OTB source tree, find the export
     # header.

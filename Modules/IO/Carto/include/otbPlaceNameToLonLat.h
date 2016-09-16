@@ -19,6 +19,7 @@
 #define otbPlaceNameToLonLat_h
 
 #include "otbCurlHelperInterface.h"
+#include "OTBCartoExport.h"
 
 namespace otb
 {
@@ -31,7 +32,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 
-class ITK_EXPORT PlaceNameToLonLat : public itk::Object
+class OTBCarto_EXPORT PlaceNameToLonLat : public itk::Object
 {
 public:
   /** Standard class typedefs. */

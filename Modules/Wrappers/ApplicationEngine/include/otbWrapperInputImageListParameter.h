@@ -18,10 +18,8 @@
 #ifndef otbWrapperInputImageListParameter_h
 #define otbWrapperInputImageListParameter_h
 
-#include "otbImageFileReader.h"
-
 #include "otbWrapperParameter.h"
-#include "otbObjectList.h"
+#include "otbWrapperInputImageParameter.h"
 
 namespace otb
 {
@@ -33,7 +31,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT InputImageListParameter : public Parameter
+class OTBApplicationEngine_EXPORT InputImageListParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -42,9 +40,10 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::ImageFileReader<FloatVectorImageType> ImageFileReaderType;
-  typedef otb::ObjectList<ImageFileReaderType>  ImageFileReaderListType;
+  typedef std::vector<InputImageParameter::Pointer> InputImageParameterVectorType;
 
+  typedef itk::ImageBase<2> ImageBaseType;
+  
   /** Defining ::New() static method */
   itkNewMacro(Self);
 
@@ -63,7 +62,6 @@ public:
   /** Set one specific stored image filename. */
   bool SetNthFileName( const unsigned int id, const std::string & filename );
 
-
   /** Get the stored image filename list */
   std::vector<std::string> GetFileNameList() const;
 
@@ -76,11 +74,14 @@ public:
   /** Get one specific stored image. */
   FloatVectorImageType* GetNthImage(unsigned int i) const;
 
+  /** Set one specific image. */
+  void SetNthImage(unsigned int i, ImageBaseType * img);
+  
   /** Set the list of image. */
   void SetImageList(FloatVectorImageListType* imList);
 
   /** Add an image to the list. */
-  void AddImage(FloatVectorImageType* image);
+  void AddImage(ImageBaseType* image);
 
   bool HasValue() const ITK_OVERRIDE;
 
@@ -91,7 +92,9 @@ public:
  /** Clear all the list. */
   void ClearValue() ITK_OVERRIDE;
 
-
+  /** Retrieve number of elements */
+  unsigned int Size() const;
+  
 protected:
   /** Constructor */
   InputImageListParameter();
@@ -100,13 +103,14 @@ protected:
   ~InputImageListParameter() ITK_OVERRIDE;
 
 
-  FloatVectorImageListType::Pointer m_ImageList;
-  ImageFileReaderListType::Pointer  m_ReaderList;
-
 private:
   InputImageListParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
 
+  InputImageParameterVectorType m_InputImageParameterVector;
+  FloatVectorImageListType::Pointer m_ImageList;
+  
+  
 }; // End class InputImage Parameter
 
 } // End namespace Wrapper

@@ -110,11 +110,11 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
 	  ScalarComplexType pow2(1,0);
 	  if(p!=0 || x!=0 || y != 0)
 	    {
-	      pow1=vcl_pow(xpy,p);
+	      pow1 = std::pow(xpy, static_cast<int>(p) );
 	    }
 	  if(q!=0 || x!=0 || y != 0)
 	    {
-	      pow2=vcl_pow(xqy,q);
+	      pow2 = std::pow(xqy, static_cast<int>(q) );
 	    }
 
 	  moments[p][q] += pow1 * pow2 * value;

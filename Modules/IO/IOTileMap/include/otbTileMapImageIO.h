@@ -30,6 +30,8 @@
 
 #include "otbCurlHelperInterface.h"
 
+#include "OTBIOTileMapExport.h"
+
 namespace otb
 {
 
@@ -46,7 +48,7 @@ enum TileMapAdressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
  *
  * \ingroup OTBIOTileMap
  */
-class ITK_EXPORT TileMapImageIO : public otb::ImageIOBase
+class OTBIOTileMap_EXPORT TileMapImageIO : public otb::ImageIOBase
 {
 public:
 

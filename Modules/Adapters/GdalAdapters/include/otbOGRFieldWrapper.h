@@ -22,8 +22,17 @@
 #include <boost/shared_ptr.hpp>
 class OGRFieldDefn;
 class OGRFeature;
+#if defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
 #include "ogr_core.h" // OGR enums
+#pragma warning ( pop )
+#else
+#include "ogr_core.h" // OGR enums
+#endif
 #include "itkIndent.h"
+
+#include "OTBGdalAdaptersExport.h"
 
 namespace otb { namespace ogr {
 
@@ -41,7 +50,7 @@ namespace otb { namespace ogr {
  *
  * \ingroup OTBGdalAdapters
  */
-class FieldDefn
+class OTBGdalAdapters_EXPORT FieldDefn
   {
 public:
   FieldDefn(OGRFieldDefn& definition) : m_Definition(&definition){ }
@@ -65,6 +74,7 @@ bool operator==(FieldDefn const& lhs, FieldDefn const& rhs)
     &&   lhs.GetType() == rhs.GetType();
   }
 
+OTBGdalAdapters_EXPORT
 std::ostream & operator<<(std::ostream & os, FieldDefn const& defn);
 
 /*===========================================================================*/
@@ -91,7 +101,7 @@ class Feature;
  *
  * \ingroup OTBGdalAdapters
  */
-class Field
+class OTBGdalAdapters_EXPORT Field
 {
 public:
   /**
@@ -166,7 +176,7 @@ public:
 
   /** \copydoc Field::ogr() const */
   OGRField & ogr();
-    
+
 private:
   /**\name Unchecked definitions
    * All the definitions that follow do the real work. However, they are not the
@@ -201,11 +211,11 @@ private:
    * All the fields decoding is at the wrong place (\c OGRFeature instead of
    * \c OGRField) => need for an index.
    */
-   
+
   int        m_index;
 };
 
-} 
+}
 } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="/">
+    <file>../../../../Utilities/Data/Icons/execute.png</file>
+    <file>../../../../Utilities/Data/Icons/locked.png</file>
+    <file>../../../../Utilities/Data/Icons/unlocked.png</file>
+  </qresource>
+</RCC>

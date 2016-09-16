@@ -5,9 +5,11 @@
 #include <itkNumericTraits.h>
 #include <itkObjectFactory.h>
 
+#include "OTBMetadataExport.h"
+
 namespace otb {
 
-class ITK_EXPORT SarCalibrationLookupData : public itk::LightObject {
+class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   public:
 
