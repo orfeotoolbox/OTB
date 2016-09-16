@@ -107,18 +107,11 @@ protected:
   /** Generate data should thread over */
   virtual void GenerateData(void);
 
-  /** Prepare temporary input and output OGR data sources */
-  virtual void BeforeThreadedGenerateData(void);
-
-  /** Gather data from multiple threads and
-   *  write to output OGRDataSource (if any) */
-  virtual void AfterThreadedGenerateData(void);
+  /** Allocate in-memory layers for input and outputs */
+  virtual void AllocateOutputs(void);
 
   /** Start of main processing loop */
-  virtual void ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid);
-
-  /** Start of main processing loop */
-  virtual void VectorThreadedGenerateData(const ogr::DataSource& inputForThread, itk::ThreadIdType threadid);
+  virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);
 
   /** Process a geometry, recursive method when the geometry is a collection */
   void ExploreGeometry(const ogr::Feature& feature,
@@ -161,27 +154,16 @@ protected:
   /** Get the region bounding a set of features */
   RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
 
-  /** Prepares in-memory layers for each thread,
-   *  then calls DispatchInputVectors() for the actual dispatch */
-  virtual void PrepareInputVectors();
-
   /** Method to split the input OGRDataSource between several containers
    *  for each thread. Default is to put the same number of features for
    *  each thread.*/
-  virtual void DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers);
+  virtual void DispatchInputVectors(void);
 
-  /** Prepare output feature containers for each thread and each output
-   *  OGRDataSource*/
-  virtual void PrepareOutputVectors();
+  /** Gather the content of in-memory output layer into the filter outputs */
+  virtual void GatherOutputVectors(void);
 
   /** Utility method to add new fields on an output layer */
   virtual void InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS);
-
-  /** In-memory containers storing input geometries for each thread*/
-  std::vector<OGRDataPointer> m_InMemoryInputs;
-
-  /** In-memory containers storing position during iteration loop*/
-  std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
 
   typedef struct {
     std::string Name;
@@ -202,13 +184,20 @@ protected:
   /** Get a reference over the additional fields */
   const std::vector<SimpleFieldDefn>& GetAdditionalFields();
 
+  /** Callback function to launch VectorThreadedGenerateData in each thread */
   static ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void *arg);
 
+  /** basically the same struct as itk::ImageSource::ThreadStruct */
   struct VectorThreadStruct
     {
       Pointer Filter;
     };
 
+  /** Give access to in-memory input layers */
+  ogr::Layer GetInMemoryInput(unsigned int threadId);
+
+  /** Give access to in-memory output layers */
+  ogr::Layer GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
 
 private:
   PersistentSamplingFilterBase(const Self &); //purposely not implemented
@@ -231,6 +220,12 @@ private:
 
   /** Additional field definitions to add in output data sources */
   std::vector<SimpleFieldDefn> m_AdditionalFields;
+
+  /** In-memory containers storing input geometries for each thread*/
+  std::vector<OGRDataPointer> m_InMemoryInputs;
+
+  /** In-memory containers storing position during iteration loop*/
+  std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
 
 };
 } // End namespace otb
