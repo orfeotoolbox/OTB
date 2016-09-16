@@ -32,7 +32,7 @@ class ImageKeywordlist;
  * \class SensorModelAdapter
  * \brief Wrapper class to group all dependencies to ossim for sensor models
  *
- * This class is NOT intented to be used outside of OTB. Use the
+ * This class is NOT intended to be used outside of OTB. Use the
  * InverseSensorModel and ForwardSensorModel. If you feel that you need to use
  * it directly, think again!
  *

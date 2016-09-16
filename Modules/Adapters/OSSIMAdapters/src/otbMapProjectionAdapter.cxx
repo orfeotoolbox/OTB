@@ -90,7 +90,7 @@ MapProjectionAdapter::InternalMapProjectionPointer MapProjectionAdapter::GetMapP
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
   if ((m_ReinstanciateProjection) || (m_MapProjection == ITK_NULLPTR))
     {
-    this->InstanciateProjection();
+    this->InstantiateProjection();
     }
 
   return this->m_MapProjection;
@@ -101,7 +101,7 @@ MapProjectionAdapter::InternalMapProjectionConstPointer MapProjectionAdapter::Ge
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
   if ((m_ReinstanciateProjection) || (m_MapProjection == ITK_NULLPTR))
     {
-    itkExceptionMacro(<< "m_MapProjection not up-to-date, call InstanciateProjection() first");
+    itkExceptionMacro(<< "m_MapProjection not up-to-date, call InstantiateProjection() first");
     }
 
   return this->m_MapProjection;
@@ -126,7 +126,7 @@ void MapProjectionAdapter::SetWkt(const std::string& projectionRefWkt)
 {
   this->m_ProjectionRefWkt = projectionRefWkt;
   m_ReinstanciateProjection = true;
-  this->InstanciateProjection(); //Should not be needed, but it is...
+  this->InstantiateProjection(); //Should not be needed, but it is...
   this->Modified();
 }
 
@@ -134,7 +134,7 @@ void MapProjectionAdapter::SetParameter(const std::string& key, const std::strin
 {
   m_ParameterStore[key] = value;
   m_ReinstanciateProjection = true;
-  this->InstanciateProjection(); //Should not be needed, but it is...
+  this->InstantiateProjection(); //Should not be needed, but it is...
   this->Modified();
 }
 
@@ -215,7 +215,7 @@ std::string MapProjectionAdapter::GetParameter(const std::string& key) const
   return "";
 }
 
-bool MapProjectionAdapter::InstanciateProjection()
+bool MapProjectionAdapter::InstantiateProjection()
 {
   if ((this->m_ReinstanciateProjection) || (m_MapProjection == ITK_NULLPTR))
     {

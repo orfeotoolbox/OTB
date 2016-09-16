@@ -1120,10 +1120,10 @@ void GlImageActor::UpdateTransforms()
 
   if( hasChanged )
     {
-    // std::cout << std::hex << this << " -> InstanciateTransform()" << std::endl;
+    // std::cout << std::hex << this << " -> InstantiateTransform()" << std::endl;
 
-    m_ViewportToImageTransform->InstanciateTransform();
-    m_ImageToViewportTransform->InstanciateTransform();
+    m_ViewportToImageTransform->InstantiateTransform();
+    m_ImageToViewportTransform->InstantiateTransform();
     }
 
   // std::cout << "}" << std::endl;

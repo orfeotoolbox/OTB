@@ -167,7 +167,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
     }
 
   // Instantiate the transform
-  transform->InstanciateTransform();
+  transform->InstantiateTransform();
 
   // Generate the inverse transform
   TransformType::Pointer inverseTransform = TransformType::New();

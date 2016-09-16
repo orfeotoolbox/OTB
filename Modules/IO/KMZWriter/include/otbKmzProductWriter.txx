@@ -446,7 +446,7 @@ KmzProductWriter<TInputImage>
         m_Transform->SetInputKeywordList(m_ResampleVectorImage->GetImageKeywordlist());
         m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
         m_Transform->SetOutputProjectionRef(wgsRef);
-        m_Transform->InstanciateTransform();
+        m_Transform->InstantiateTransform();
 
         InputPointType  inputPoint;
         OutputPointType outputPoint;

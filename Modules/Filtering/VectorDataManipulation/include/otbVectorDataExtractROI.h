@@ -135,7 +135,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   int CounterClockWise(PointType firstPoint, PointType secondPoint, PointType thirdPoint);
-  bool IsSegementIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD);
+  bool IsSegmentIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD);
 
   bool        m_ProjectionNeeded;
   RegionType  m_ROI;

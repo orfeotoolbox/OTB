@@ -243,8 +243,8 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   m_LeftToGroundTransform->SetInputKeywordList(m_LeftKeywordList);
   m_RightToGroundTransform->SetInputKeywordList(m_RightKeywordList);
 
-  m_LeftToGroundTransform->InstanciateTransform();
-  m_RightToGroundTransform->InstanciateTransform();
+  m_LeftToGroundTransform->InstantiateTransform();
+  m_RightToGroundTransform->InstantiateTransform();
 }
 
 template <class TDisparityImage, class TOutputImage,

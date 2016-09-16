@@ -77,7 +77,7 @@ ImageToGenericRSOutputParameters<TImage>
   m_Transform->SetOutputDictionary(this->GetInput()->GetMetaDataDictionary());
   m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
   m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 }
 
 

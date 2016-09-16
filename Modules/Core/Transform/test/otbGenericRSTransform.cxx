@@ -72,7 +72,7 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   TransformType::Pointer wgs2utm        = TransformType::New();
   wgs2utm->SetInputProjectionRef(wgsRef);
   wgs2utm->SetOutputProjectionRef(utmRef);
-  wgs2utm->InstanciateTransform();
+  wgs2utm->InstantiateTransform();
 
   TransformType::Pointer utm2wgs        = TransformType::New();
   wgs2utm->GetInverse(utm2wgs);
@@ -80,7 +80,7 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   TransformType::Pointer wgs2lambert    = TransformType::New();
   wgs2lambert->SetInputProjectionRef(wgsRef);
   wgs2lambert->SetOutputProjectionRef(lambertRef);
-  wgs2lambert->InstanciateTransform();
+  wgs2lambert->InstantiateTransform();
 
   TransformType::Pointer lambert2wgs    = TransformType::New();
   wgs2lambert->GetInverse(lambert2wgs);
@@ -88,7 +88,7 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   TransformType::Pointer wgs2tmt        = TransformType::New();
   wgs2tmt->SetInputProjectionRef(wgsRef);
   wgs2tmt->SetOutputProjectionRef(tmtRef);
-  wgs2tmt->InstanciateTransform();
+  wgs2tmt->InstantiateTransform();
 
   TransformType::Pointer tmt2wgs        = TransformType::New();
   wgs2tmt->GetInverse(tmt2wgs);
@@ -96,27 +96,27 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   TransformType::Pointer wgs2wgs        = TransformType::New();
   wgs2wgs->SetInputProjectionRef(wgsRef);
   wgs2wgs->SetOutputProjectionRef(wgsRef);
-  wgs2wgs->InstanciateTransform();
+  wgs2wgs->InstantiateTransform();
 
   TransformType::Pointer utm2utm        = TransformType::New();
   utm2utm->SetInputProjectionRef(utmRef);
   utm2utm->SetOutputProjectionRef(utmRef);
-  utm2utm->InstanciateTransform();
+  utm2utm->InstantiateTransform();
 
   TransformType::Pointer lambert2lambert = TransformType::New();
   lambert2lambert->SetInputProjectionRef(lambertRef);
   lambert2lambert->SetOutputProjectionRef(lambertRef);
-  lambert2lambert->InstanciateTransform();
+  lambert2lambert->InstantiateTransform();
 
   TransformType::Pointer tmt2tmt        = TransformType::New();
   tmt2tmt->SetInputProjectionRef(tmtRef);
   tmt2tmt->SetOutputProjectionRef(tmtRef);
-  tmt2tmt->InstanciateTransform();
+  tmt2tmt->InstantiateTransform();
 
   TransformType::Pointer utm2lambert    = TransformType::New();
   utm2lambert->SetInputProjectionRef(utmRef);
   utm2lambert->SetOutputProjectionRef(lambertRef);
-  utm2lambert->InstanciateTransform();
+  utm2lambert->InstantiateTransform();
 
   TransformType::Pointer lambert2utm    = TransformType::New();
   utm2lambert->GetInverse(lambert2utm);
@@ -124,7 +124,7 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   TransformType::Pointer utm2tmt        = TransformType::New();
   utm2tmt->SetInputProjectionRef(utmRef);
   utm2tmt->SetOutputProjectionRef(tmtRef);
-  utm2tmt->InstanciateTransform();
+  utm2tmt->InstantiateTransform();
 
   TransformType::Pointer tmt2utm        = TransformType::New();
   utm2tmt->GetInverse(tmt2utm);
@@ -132,7 +132,7 @@ int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
   TransformType::Pointer lambert2tmt    = TransformType::New();
   lambert2tmt->SetInputProjectionRef(lambertRef);
   lambert2tmt->SetOutputProjectionRef(tmtRef);
-  lambert2tmt->InstanciateTransform();
+  lambert2tmt->InstantiateTransform();
 
   TransformType::Pointer tmt2lambert    = TransformType::New();
   lambert2tmt->GetInverse(tmt2lambert);

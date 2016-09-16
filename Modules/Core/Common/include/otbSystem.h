@@ -57,7 +57,14 @@ public:
   static bool ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum);
 
   /** Parse a filename with additional information */
-  static bool ParseFileNameForAdditonalInfo(const std::string& id, std::string& file, unsigned int& addNum);
+  static bool ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum);
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. use
+* ParseFileNameForAdditionalInfo instead*/
+  static bool ParseFileNameForAdditonalInfo (const std::string& id, std::string& file, unsigned int& addNum)
+  {
+    return ParseFileNameForAdditionalInfo(id, file, addNum);
+  }
 };
 
 } // namespace otb

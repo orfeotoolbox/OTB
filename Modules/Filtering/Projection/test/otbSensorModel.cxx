@@ -231,7 +231,7 @@ int otbSensorModel(int argc, char* argv[])
   img2wgs->SetInputProjectionRef("");
   img2wgs->SetOutputProjectionRef(wgsRef);
   img2wgs->SetInputKeywordList(kwlist);
-  img2wgs->InstanciateTransform();
+  img2wgs->InstantiateTransform();
 
 
   // Instantiate WGS->Image transform
@@ -244,7 +244,7 @@ int otbSensorModel(int argc, char* argv[])
   wgs2img->SetInputProjectionRef("");
   wgs2img->SetOutputProjectionRef(wgsRef);
   wgs2img->SetOutputKeywordList(kwlist);
-  wgs2img->InstanciateTransform();
+  wgs2img->InstantiateTransform();
 
   // ossim classes
   ossimKeywordlist ossimKwlist;

@@ -164,7 +164,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
     m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
     }
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 }
 
 template <class TInputImage, class TOutputImage>

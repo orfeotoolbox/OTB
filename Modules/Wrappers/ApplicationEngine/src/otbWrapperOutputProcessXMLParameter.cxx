@@ -252,7 +252,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
            }
          else if (typeAsString == "Empty")
            {
-           //Nothing to do. copy emtpyValue
+           //Nothing to do. copy emptyValue
            value = emptyValue;
            }
 

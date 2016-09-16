@@ -118,7 +118,7 @@ public:
   VectorType GetVector();
 
   /** Initialize the lowerbound and upper bound vecotor, Fill m_LookupArray with
-    * -1 and set m_TotalFreqency to zero */
+    * -1 and set m_TotalFrequency to zero */
   void Initialize(const unsigned int nbins, const PixelValueType min,
                   const PixelValueType max, const bool symmetry = true);
 

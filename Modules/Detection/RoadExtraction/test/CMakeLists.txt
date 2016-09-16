@@ -211,14 +211,14 @@ otb_add_test(NAME feTpSimplifyManyPathListFilter COMMAND otbRoadExtractionTestDr
 
 otb_add_test(NAME feTvNeighborhoodScalarProductFilter COMMAND otbRoadExtractionTestDriver
   --compare-n-images ${EPSILON_6} 2
-  ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
-  ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
-  ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
-  ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+  ${BASELINE}/feTvNeighborhoodScalarProductModulusOutput.hdr
+  ${TEMP}/feTvNeighborhoodScalarProductModulusOutput.hdr
+  ${BASELINE}/feTvNeighborhoodScalarProductDirectionOutput.hdr
+  ${TEMP}/feTvNeighborhoodScalarProductDirectionOutput.hdr
   otbNeighborhoodScalarProductFilter
   ${INPUTDATA}/InputForRoadDetection_SpectralAngle.hdr
-  ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
-  ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+  ${TEMP}/feTvNeighborhoodScalarProductModulusOutput.hdr
+  ${TEMP}/feTvNeighborhoodScalarProductDirectionOutput.hdr
   1.0
   )
 

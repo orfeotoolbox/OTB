@@ -154,7 +154,7 @@ protected:
    * If the filename to test is an imageFileName, the file name may be modified in
    * order to add the appropriated path
    */
-  virtual void TestFileExistanceAndReadability(std::string& file, FileType fileType);
+  virtual void TestFileExistenceAndReadability(std::string& file, FileType fileType);
   virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
 
   void GenerateData(void) ITK_OVERRIDE;

@@ -58,7 +58,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   itkDebugMacro("returning MapProjection address " << this->m_Transform);
   if ((!m_TransformUpToDate) || (m_Transform.IsNull()))
     {
-    itkExceptionMacro(<< "m_Transform not up-to-date, call InstanciateTransform() first");
+    itkExceptionMacro(<< "m_Transform not up-to-date, call InstantiateTransform() first");
     }
 
   return this->m_Transform;
@@ -70,7 +70,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-::InstanciateTransform(void)
+::InstantiateTransform(void)
 {
   m_Transform = TransformType::New();
 
@@ -309,7 +309,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   inverseTransform->SetOutputOrigin(m_InputOrigin);
 
   // Instantiate transform
-  inverseTransform->InstanciateTransform();
+  inverseTransform->InstantiateTransform();
 
   return true;
 }

@@ -326,14 +326,14 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   // Instantiate all transforms
   this->m_ReferenceToGroundTransform = RSTransformType::New();
   this->m_ReferenceToGroundTransform->SetInputKeywordList(this->m_ReferenceKeywordList);
-  this->m_ReferenceToGroundTransform->InstanciateTransform();
+  this->m_ReferenceToGroundTransform->InstantiateTransform();
 
   this->m_MovingToGroundTransform.clear();
   for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
     {
     RSTransformType::Pointer transfo = RSTransformType::New();
     transfo->SetInputKeywordList(this->m_MovingKeywordLists[k]);
-    transfo->InstanciateTransform();
+    transfo->InstantiateTransform();
     this->m_MovingToGroundTransform.push_back(transfo);
     }
 }

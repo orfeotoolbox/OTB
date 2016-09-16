@@ -365,7 +365,7 @@ MapFileProductWriter<TInputImage>
         m_Transform  = TransformType::New();
         m_Transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
         m_Transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
-        m_Transform->InstanciateTransform();
+        m_Transform->InstantiateTransform();
 
         InputPointType  inputPoint;
         SizeType        sizeTile;

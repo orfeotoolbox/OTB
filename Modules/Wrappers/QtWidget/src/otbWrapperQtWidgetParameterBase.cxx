@@ -77,7 +77,7 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 // current widget
 void QtWidgetParameterBase::SetActivationState( bool value )
 {
-  //filter out EmptyParamter
+  //filter out EmptyParameter
   if(strcmp(m_Param->GetNameOfClass(), "EmptyParameter") == 0)
     {
     //only set user value if there is a change

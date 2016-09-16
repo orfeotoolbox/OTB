@@ -25,6 +25,8 @@
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 namespace Functor
@@ -171,14 +173,22 @@ public:
   itkGetMacro(UseAddition, bool);
   itkGetMacro(UseMultiplication, bool);
   itkGetMacro(UseDivision, bool);
-  itkGetMacro(UseSubstraction, bool);
+  itkGetMacro(UseSubtraction, bool);
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED.  */
+  virtual bool GetUseSubstraction()
+  {
+    otbWarningMacro(
+      << "GetUseSubstraction has been deprecated.  Please use GetUseSubtraction() instead");
+    return GetUseSubtraction();
+  }
 
   void UseAddition()
   {
     m_UseAddition = true;
     m_UseMultiplication = false;
     m_UseDivision = false;
-    m_UseSubstraction = false;
+    m_UseSubtraction = false;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(1));
     this->Modified();
   }
@@ -187,7 +197,7 @@ public:
     m_UseAddition = false;
     m_UseMultiplication = true;
     m_UseDivision = false;
-    m_UseSubstraction = false;
+    m_UseSubtraction = false;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(0));
     this->Modified();
   }
@@ -196,16 +206,16 @@ public:
     m_UseAddition = false;
     m_UseMultiplication = false;
     m_UseDivision = true;
-    m_UseSubstraction = false;
+    m_UseSubtraction = false;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(2));
     this->Modified();
   }
-  void UseSubstraction()
+  void UseSubtraction()
   {
     m_UseAddition = false;
     m_UseMultiplication = false;
     m_UseDivision = false;
-    m_UseSubstraction = true;
+    m_UseSubtraction = true;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(3));
     this->Modified();
   }
@@ -226,7 +236,7 @@ private:
   bool m_UseAddition;
   bool m_UseMultiplication;
   bool m_UseDivision;
-  bool m_UseSubstraction;
+  bool m_UseSubtraction;
 };
 
 } // end namespace otb

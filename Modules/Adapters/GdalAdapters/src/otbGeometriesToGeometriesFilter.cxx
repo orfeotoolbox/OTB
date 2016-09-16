@@ -189,7 +189,7 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 void otb::GeometriesToGeometriesFilter::GenerateData(void )
 {
   this->DoAllocateOutputs();
-  this->DoFinalizeInitialisation();
+  this->DoFinalizeInitialization();
 
   InputGeometriesType::ConstPointer  input  = this->GetInput();
   // assert(input && "Cann't filter to a nil geometries set");

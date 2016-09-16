@@ -267,7 +267,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData>
 void
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::InstanciateTransform(void)
+::InstantiateTransform(void)
 {
 
 //   otbMsgDevMacro(<< "Information to instantiate transform (VectorDataProjectionFilter): ");
@@ -303,7 +303,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   m_Transform->SetOutputSpacing(m_OutputSpacing);
   m_Transform->SetOutputOrigin(m_OutputOrigin);
 
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
   // retrieve the output projection ref
   // if it is not specified and end up being geographic,
   // only the m_Transform will know
@@ -337,7 +337,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
   //Instantiate the transform
-  this->InstanciateTransform();
+  this->InstantiateTransform();
 
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
   OutputDataTreePointerType tree = outputPtr->GetDataTree();

@@ -343,7 +343,7 @@ VectorDataExtractROI<TVectorData>
 template <class TVectorData>
 bool
 VectorDataExtractROI<TVectorData>
-::IsSegementIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD)
+::IsSegmentIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD)
 {
 
   PointType vertexA, vertexB, vertexC, vertexD;
@@ -456,7 +456,7 @@ VectorDataExtractROI<TVectorData>
   genericTransform->SetOutputDictionary(inputDict);
   genericTransform->SetOutputOrigin(this->GetInput()->GetOrigin());
   genericTransform->SetOutputSpacing(this->GetInput()->GetSpacing());
-  genericTransform->InstanciateTransform();
+  genericTransform->InstantiateTransform();
 
   otbMsgDevMacro(<< genericTransform);
 

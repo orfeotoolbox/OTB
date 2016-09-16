@@ -72,7 +72,7 @@ namespace otb
  * \example  Markov/MarkovClassification1Example.cxx
  * \example  Markov/MarkovClassification2Example.cxx
  * \example  Markov/MarkovRegularizationExample.cxx
- * \example  Markov/MarkovRestaurationExample.cxx
+ * \example  Markov/MarkovRestorationExample.cxx
  *
  *
  * \ingroup OTBMarkov

@@ -187,7 +187,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
      {
      mapToGroundTransform->SetOutputProjectionRef(m_ProjectionRef);
      }*/
-    mapToGroundTransform->InstanciateTransform();
+    mapToGroundTransform->InstantiateTransform();
 
     typename InputMapType::SizeType inputSize = imgPtr->GetLargestPossibleRegion().GetSize();
 
@@ -405,7 +405,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     groundToSensorTransform->SetOutputKeywordList(imgPtr->GetImageKeywordlist());
     groundToSensorTransform->SetOutputOrigin(imgPtr->GetOrigin());
     groundToSensorTransform->SetOutputSpacing(imgPtr->GetSpacing());
-    groundToSensorTransform->InstanciateTransform();
+    groundToSensorTransform->InstantiateTransform();
 
     typename T3DImage::RegionType mapRegion = imgPtr->GetLargestPossibleRegion();
 
@@ -532,7 +532,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
     m_GroundTransform = RSTransform2DType::New();
     m_GroundTransform->SetInputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
     m_GroundTransform->SetOutputProjectionRef(m_ProjectionRef);
-    m_GroundTransform->InstanciateTransform();
+    m_GroundTransform->InstantiateTransform();
     }
 
 }

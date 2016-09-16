@@ -172,7 +172,7 @@ void otb::GeometriesProjectionFilter::GenerateOutputInformation(void)
 }
 
 /*virtual*/
-void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
+void otb::GeometriesProjectionFilter::DoFinalizeInitialization()
 {
   m_Transform = InternalTransformType::New();
 
@@ -188,9 +188,9 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
   m_Transform->SetOutputSpacing(m_OutputImageReference.GetSpacing());
   m_Transform->SetOutputOrigin(m_OutputImageReference.GetOrigin());
 
-  // As the InputProjectionRef can't be known yet, InstanciateTransform() will
+  // As the InputProjectionRef can't be known yet, InstantiateTransform() will
   // be called from DoProcessLayer
-  // m_Transform->InstanciateTransform();
+  // m_Transform->InstantiateTransform();
 
   m_TransformationFunctor->SetOnePointTransformation(m_Transform);
 
@@ -226,7 +226,7 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
   // Finish the initialization phase as somethings depends on the current layer
   // to process.
   m_Transform->SetInputProjectionRef(source.GetProjectionRef());
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 
   if (source == destination)
     {

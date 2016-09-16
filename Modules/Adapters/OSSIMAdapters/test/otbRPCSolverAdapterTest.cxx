@@ -72,7 +72,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
   RSTranformType::Pointer fwd2dTransform = RSTranformType::New();
   fwd2dTransform->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  fwd2dTransform->InstanciateTransform();
+  fwd2dTransform->InstantiateTransform();
 
   ImageType::SizeType  size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
@@ -130,10 +130,10 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   // Build forward and inverse rpc transform
   RSTranform3dType::Pointer rpcFwdTransform = RSTranform3dType::New();
   rpcFwdTransform->SetInputKeywordList(rpcKwl);
-  rpcFwdTransform->InstanciateTransform();
+  rpcFwdTransform->InstantiateTransform();
   RSTranformType::Pointer rpcInvTransform = RSTranformType::New();
   rpcInvTransform->SetOutputKeywordList(rpcKwl);
-  rpcInvTransform->InstanciateTransform();
+  rpcInvTransform->InstantiateTransform();
 
   EuclideanDistanceMetricType::Pointer euclideanDistanceMetric = EuclideanDistanceMetricType::New();
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();

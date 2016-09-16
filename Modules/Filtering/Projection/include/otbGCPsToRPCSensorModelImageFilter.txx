@@ -243,7 +243,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
   rsTransform->SetInputKeywordList(m_Keywordlist);
-  rsTransform->InstanciateTransform();
+  rsTransform->InstantiateTransform();
 
   ContinuousIndexType   idFix, idOut;
   Continuous3DIndexType idOut3D, idTrans3D;

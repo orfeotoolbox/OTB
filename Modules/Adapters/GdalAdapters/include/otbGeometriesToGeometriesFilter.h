@@ -32,6 +32,8 @@
 #include <boost/type_traits/is_same.hpp>
 #include "otbOGRLayerWrapper.h"
 
+#include "otbMacro.h"
+
 // forward declarations
 namespace otb { namespace internal {
 struct ProcessVisitor;
@@ -163,8 +165,17 @@ private:
    *
    * The default implementation does nothing.
    */
-  virtual void                     DoFinalizeInitialisation() {}
+  virtual void                     DoFinalizeInitialization() {}
   //@}
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void DoFinalizeInitialisation()
+  {
+    otbWarningMacro(
+      << "DoFinalizeInitialisation has been deprecated.  Please use DoFinalizeInitialization() instead");
+    this->DoFinalizeInitialization();
+  }
+  
   friend struct otb::internal::ProcessVisitor;
   };
 

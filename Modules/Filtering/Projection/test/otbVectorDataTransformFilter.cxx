@@ -70,10 +70,10 @@ int otbVectorDataTransformFilter (int itkNotUsed(argc), char * argv[])
 
   // Set up the transform (Apply a translation of 8 pixels in the y direction)
   TransformType::Pointer transform = TransformType::New();
-  TranslationParamType   tranlationParam;
-  tranlationParam[0] = 0;
-  tranlationParam[1] = 8. * reader->GetOutput()->GetSpacing()[1];
-  transform->SetTranslation(tranlationParam);
+  TranslationParamType   translationParam;
+  translationParam[0] = 0;
+  translationParam[1] = 8. * reader->GetOutput()->GetSpacing()[1];
+  transform->SetTranslation(translationParam);
 
   VectorDataTransformType::Pointer transformFilter = VectorDataTransformType::New();
   transformFilter->SetInput(vdproj->GetOutput());

@@ -48,7 +48,7 @@ namespace otb {
  * Offset of the estimated affine transform can be retrieved using the
  * GetOffset() method.
  *
- * Alternatively, the GetAffineTransfrom() methods return a pointer to
+ * Alternatively, the GetAffineTransform() methods return a pointer to
  * a fully set-up forward affine transform (\sa AffineTransform).
  *
  * Estimation errors are available per dimension using the

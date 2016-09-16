@@ -63,7 +63,7 @@ int otbImageAndVectorImageOperationFilterTest(int itkNotUsed(argc), char * argv[
   writerAdd->SetFileName(outfnameAdd);
   writerAdd->Update();
 
-  filter->UseSubstraction();
+  filter->UseSubtraction();
   writerSub->SetInput(filter->GetOutput());
   writerSub->SetFileName(outfnameSub);
   writerSub->Update();

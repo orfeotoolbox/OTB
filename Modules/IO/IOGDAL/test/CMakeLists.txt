@@ -135,7 +135,7 @@ otb_add_test(NAME ioTuOGRVectorDataIOCanWriteMapInfo COMMAND otbIOGDALTestDriver
 
 otb_add_test(NAME ioTuOGRVectorDataIOCanWriteGML COMMAND otbIOGDALTestDriver
   otbOGRVectorDataIOCanWrite
-  ${INPUTDATA}/adressPoint.gml)
+  ${INPUTDATA}/addressPoint.gml)
 
 otb_add_test(NAME ioTuGDALImageIOCanRead_IKONOS_RED COMMAND otbIOGDALTestDriver otbGDALImageIOTestCanRead
   LARGEINPUT{IKONOS/PARIS/po_79039_red_0000000.tif})
@@ -218,7 +218,7 @@ endif()
 
 otb_add_test(NAME ioTuOGRVectorDataIOTestCanReadGML COMMAND otbIOGDALTestDriver
   otbOGRVectorDataIOTestCanRead
-  ${INPUTDATA}/adressPoint.gml)
+  ${INPUTDATA}/addressPoint.gml)
 
 otb_add_test(NAME ioTuOGRVectorDataIOTestCanReadMapInfo COMMAND otbIOGDALTestDriver
   otbOGRVectorDataIOTestCanRead

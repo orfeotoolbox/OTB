@@ -132,7 +132,7 @@ VectorImageModel
   m_ToWgs84 = otb::GenericRSTransform<>::New();
   m_ToWgs84->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
   m_ToWgs84->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-  m_ToWgs84->InstanciateTransform();
+  m_ToWgs84->InstantiateTransform();
 
   //Compute estimated spacing here
   //m_EstimatedGroundSpacing

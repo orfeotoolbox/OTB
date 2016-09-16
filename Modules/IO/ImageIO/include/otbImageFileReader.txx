@@ -126,7 +126,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   // Test if the file exist and if it can be open.
   // An exception will be thrown otherwise.
-  this->TestFileExistanceAndReadability();
+  this->TestFileExistenceAndReadability();
 
   // Tell the ImageIO to read the file
   OutputImagePixelType *buffer =
@@ -273,7 +273,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   try
     {
     m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
+    this->TestFileExistenceAndReadability();
     }
   catch (itk::ExceptionObject & err)
     {
@@ -552,7 +552,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::TestFileExistanceAndReadability()
+::TestFileExistenceAndReadability()
 {
   // Test if the file a server name : if so the test is skipped
   if (this->m_FileName.find(std::string("http://")) == 0 ||

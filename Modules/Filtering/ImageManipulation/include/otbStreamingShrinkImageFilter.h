@@ -196,11 +196,18 @@ public:
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
-  OutputImageType * GetShrinkedOutput()
+  OutputImageType * GetShrunkOutput()
   {
-    return m_ShrinkedOutput;
+    return m_ShrunkOutput;
   }
 
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  OutputImageType * GetShrinkedOutput()
+  {
+    otbWarningMacro(<< "GetShrinkedOutput has been deprecated.  Please use GetShrunkOutput instead");
+    return GetShrunkOutput();
+  }
+  
   void Synthetize(void) ITK_OVERRIDE;
 
   void Reset(void) ITK_OVERRIDE;
@@ -235,7 +242,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   /* the output shrunk image */
-  OutputImagePointer m_ShrinkedOutput;
+  OutputImagePointer m_ShrunkOutput;
 
   /** The shrink factor */
   unsigned int m_ShrinkFactor;
@@ -294,7 +301,7 @@ public:
 
   OutputImageType * GetOutput()
   {
-    return this->GetFilter()->GetShrinkedOutput();
+    return this->GetFilter()->GetShrunkOutput();
   }
 
   otbSetObjectMemberMacro(Filter, ShrinkFactor, unsigned int);

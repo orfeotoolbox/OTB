@@ -64,14 +64,14 @@ int otbGenericRSTransformFromImage(int itkNotUsed(argc), char* argv[])
   wgs2img->SetInputProjectionRef(wgsRef);
   wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->InstanciateTransform();
+  wgs2img->InstantiateTransform();
 
   // Instantiate Image->WGS transform
   TransformType::Pointer img2wgs = TransformType::New();
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->InstanciateTransform();
+  img2wgs->InstantiateTransform();
 
   return EXIT_SUCCESS;
 }
@@ -125,14 +125,14 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int itkNotUsed(arg
   wgs2img->SetInputProjectionRef(wgsRef);
   wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   wgs2img->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img->InstanciateTransform();
+  wgs2img->InstantiateTransform();
 
   // Instantiate Image->WGS transform
   TransformType::Pointer img2wgs = TransformType::New();
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->InstanciateTransform();
+  img2wgs->InstantiateTransform();
 
 
 // Instantiate WGS->Image transform 3D
@@ -140,14 +140,14 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int itkNotUsed(arg
   wgs2img3d->SetInputProjectionRef(wgsRef);
   wgs2img3d->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   wgs2img3d->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  wgs2img3d->InstanciateTransform();
+  wgs2img3d->InstantiateTransform();
 
   // Instantiate Image->WGS transform 3D
   Transform3DType::Pointer img2wgs3d = Transform3DType::New();
   img2wgs3d->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs3d->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   img2wgs3d->SetOutputProjectionRef(wgsRef);
-  img2wgs3d->InstanciateTransform();
+  img2wgs3d->InstantiateTransform();
 
 
   std::cout<< std::setprecision(8) << std::endl;

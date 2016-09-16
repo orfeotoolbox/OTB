@@ -19,7 +19,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}, {QB_Suburb.png}
-//    OUTPUTS: {MarkovRestauration.png}
+//    OUTPUTS: {MarkovRestoration.png}
 //    10.0 30 1.0 1
 //  Software Guide : EndCommandLineArgs
 
@@ -228,18 +228,18 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:MRF_RESTAURATION} shows the output of the Markov Random
+  // Figure~\ref{fig:MRF_RESTORATION} shows the output of the Markov Random
   // Field restoration.
   //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
-  // \includegraphics[width=0.44\textwidth]{MarkovRestauration.eps}
+  // \includegraphics[width=0.44\textwidth]{MarkovRestoration.eps}
   // \itkcaption[MRF restoration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
   // image for restoration. From left to right : original image, restaured image
   // with edge preservation.}
-  // \label{fig:MRF_RESTAURATION}
+  // \label{fig:MRF_RESTORATION}
   // \end{figure}
   //
   // Software Guide : EndLatex

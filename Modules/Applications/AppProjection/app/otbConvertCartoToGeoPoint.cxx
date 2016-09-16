@@ -97,13 +97,13 @@ private:
     // Get the projectionRef
     std::string inputProjRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "mapproj");
 
-    // Instantiate a GenericRSTranform
+    // Instantiate a GenericRSTransform
     // Input : coordiante system picked up by the user
     // Output : WGS84 corresponding to epsg code 4326
     TransformType::Pointer  transform = TransformType::New();
     transform->SetInputProjectionRef(inputProjRef);
     transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-    transform->InstanciateTransform();
+    transform->InstantiateTransform();
 
     TransformType::InputPointType   cartoPoint;
     TransformType::OutputPointType  geoPoint;

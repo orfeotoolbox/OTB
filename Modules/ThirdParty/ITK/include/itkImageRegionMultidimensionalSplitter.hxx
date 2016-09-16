@@ -66,7 +66,7 @@ ImageRegionMultidimensionalSplitter< VImageDimension >
                        << this->ComputeSplits(numberOfPieces, region, splits) );
     }
 
-  unsigned int splittedRegionIndex[VImageDimension]; // index into split
+  unsigned int splitRegionIndex[VImageDimension]; // index into split
                                                      // regions
   unsigned int i;
 
@@ -80,18 +80,18 @@ ImageRegionMultidimensionalSplitter< VImageDimension >
       dimensionOffset *= splits[j];
       }
 
-    splittedRegionIndex[i] = offset / dimensionOffset;
-    offset -= ( splittedRegionIndex[i] * dimensionOffset );
+    splitRegionIndex[i] = offset / dimensionOffset;
+    offset -= ( splitRegionIndex[i] * dimensionOffset );
     }
-  splittedRegionIndex[0] = offset;
+  splitRegionIndex[0] = offset;
 
   // compute the region size and index
   for ( i = 0; i < VImageDimension; i++ )
     {
-    splitIndex[i] += Math::Floor<IndexValueType>( ( splittedRegionIndex[i] ) * ( regionSize[i] / double(splits[i]) ) );
-    if ( splittedRegionIndex[i] < splits[i] - 1 )
+    splitIndex[i] += Math::Floor<IndexValueType>( ( splitRegionIndex[i] ) * ( regionSize[i] / double(splits[i]) ) );
+    if ( splitRegionIndex[i] < splits[i] - 1 )
       {
-      splitSize[i] = Math::Floor<SizeValueType>( ( splittedRegionIndex[i] + 1 ) * ( regionSize[i] / double(splits[i]) ) )
+      splitSize[i] = Math::Floor<SizeValueType>( ( splitRegionIndex[i] + 1 ) * ( regionSize[i] / double(splits[i]) ) )
                      - splitIndex[i];
       }
     else

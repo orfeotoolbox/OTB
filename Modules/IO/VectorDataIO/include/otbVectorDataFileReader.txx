@@ -60,7 +60,7 @@ VectorDataFileReader<TOutputVectorData>
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>
-::TestFileExistanceAndReadability()
+::TestFileExistenceAndReadability()
 {
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
@@ -135,7 +135,7 @@ VectorDataFileReader<TOutputVectorData>
   try
     {
     m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
+    this->TestFileExistenceAndReadability();
     }
   catch (itk::ExceptionObject & err)
     {
@@ -198,7 +198,7 @@ VectorDataFileReader<TOutputVectorData>
   try
     {
     m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
+    this->TestFileExistenceAndReadability();
     }
   catch (itk::ExceptionObject & err)
     {

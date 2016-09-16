@@ -1122,7 +1122,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
       by libkml)
     * GenericRSTransform can now be optimized using a set of tie-points,
       calling ossim internal sensor model refining implementation
-    * PackedWidgetManager & SplittedWidgetManager : add method to set the
+    * PackedWidgetManager & SplitWidgetManager : add method to set the
       label of each group
     * HistogramActionHandler : limit moves of asymptots with min/max of
       histogram
@@ -2223,7 +2223,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
     - MarkovClassification1Example
     - MarkovClassification2Example
     - MarkovRegularizationExample
-    - MarkovRestaurationExample
+    - MarkovRestorationExample
 
 *Projections
       Added Lambert 93 cartographic projection with

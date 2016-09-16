@@ -179,7 +179,7 @@ protected:
   OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const ITK_OVERRIDE;
   OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const ITK_OVERRIDE;
 
-  virtual void InstanciateTransform(void);
+  virtual void InstantiateTransform(void);
 
   void GenerateOutputInformation(void) ITK_OVERRIDE;
   void GenerateData(void) ITK_OVERRIDE;

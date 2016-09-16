@@ -361,9 +361,9 @@ private:
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
-    rsTransform->InstanciateTransform();
-    rsTransform1ToWGS84->InstanciateTransform();
-    rsTransform2ToWGS84->InstanciateTransform();
+    rsTransform->InstantiateTransform();
+    rsTransform1ToWGS84->InstantiateTransform();
+    rsTransform2ToWGS84->InstantiateTransform();
 
 
     if(GetParameterString("mode")=="full")

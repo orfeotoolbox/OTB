@@ -24,9 +24,9 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
+#include "otbAsymmetricFusionOfLineDetectorImageFilter.h"
 
-int otbAssymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
+int otbAsymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -49,7 +49,7 @@ int otbAssymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
 
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
 
-  typedef otb::AssymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
+  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
       InterpolatorType> FilterType;
 
   FilterType::Pointer FilterAssSymSum = FilterType::New();

@@ -76,7 +76,7 @@ TileMapImageIO::TileMapImageIO()
   m_ServerName = "";
   m_CacheDirectory = ".";
   m_FileSuffix = "png";
-  m_AddressMode = TileMapAdressingStyle::OSM;
+  m_AddressMode = TileMapAddressingStyle::OSM;
 
   m_FileNameIsServerName = false;
 
@@ -246,7 +246,7 @@ void TileMapImageIO::GenerateURL(double x, double y)
   std::ostringstream urlStream;
 
   // Google Map
-  if (m_AddressMode == TileMapAdressingStyle::GM)
+  if (m_AddressMode == TileMapAddressingStyle::GM)
     {
     std::ostringstream quad;
     XYToQuadTree(x, y, quad);
@@ -255,7 +255,7 @@ void TileMapImageIO::GenerateURL(double x, double y)
     urlStream << quad.str();
     }
   // Open Street Map
-  else if (m_AddressMode == TileMapAdressingStyle::OSM)
+  else if (m_AddressMode == TileMapAddressingStyle::OSM)
     {
     urlStream << m_ServerName;
     urlStream << m_Depth;
@@ -266,7 +266,7 @@ void TileMapImageIO::GenerateURL(double x, double y)
     urlStream << "." << m_FileSuffix;
     }
   // Near Map
-  else if (m_AddressMode == TileMapAdressingStyle::NEARMAP)
+  else if (m_AddressMode == TileMapAddressingStyle::NEARMAP)
     {
     urlStream << m_ServerName;
     urlStream << "hl=en&x=";
@@ -278,7 +278,7 @@ void TileMapImageIO::GenerateURL(double x, double y)
     urlStream << "&nml=Vert&s=Ga";
     }
   // Local addressing
-  else if (m_AddressMode == TileMapAdressingStyle::LOCAL)
+  else if (m_AddressMode == TileMapAddressingStyle::LOCAL)
     {
     std::ostringstream quad, filename;
     XYToQuadTree2(x, y, quad);
@@ -449,16 +449,16 @@ void TileMapImageIO::ReadImageInformation()
     switch (atoi(mode.c_str()))
       {
       case 0:
-        m_AddressMode = TileMapAdressingStyle::GM;
+        m_AddressMode = TileMapAddressingStyle::GM;
         break;
       case 1:
-        m_AddressMode = TileMapAdressingStyle::OSM;
+        m_AddressMode = TileMapAddressingStyle::OSM;
         break;
       case 2:
-        m_AddressMode = TileMapAdressingStyle::NEARMAP;
+        m_AddressMode = TileMapAddressingStyle::NEARMAP;
         break;
       case 3:
-        m_AddressMode = TileMapAdressingStyle::LOCAL;
+        m_AddressMode = TileMapAddressingStyle::LOCAL;
         break;
       default:
         itkExceptionMacro(<< "Addressing style unknown");
@@ -480,22 +480,22 @@ void TileMapImageIO::ReadImageInformation()
     if (m_ServerName == osmServer)
       {
       m_FileSuffix = "png";
-      m_AddressMode = TileMapAdressingStyle::OSM;
+      m_AddressMode = TileMapAddressingStyle::OSM;
       }
     else if (m_ServerName == nmServer)
       {
       m_FileSuffix = "jpg";
-      m_AddressMode = TileMapAdressingStyle::NEARMAP;
+      m_AddressMode = TileMapAddressingStyle::NEARMAP;
       }
     else if (m_ServerName == otbServer1)
       {
       m_FileSuffix = "jpg";
-      m_AddressMode = TileMapAdressingStyle::LOCAL;
+      m_AddressMode = TileMapAddressingStyle::LOCAL;
       }
     else
       {
       m_FileSuffix = "jpg";
-      m_AddressMode = TileMapAdressingStyle::GM;
+      m_AddressMode = TileMapAddressingStyle::GM;
       }
 
     // File suffix and address mode must be set with accessors
@@ -503,7 +503,7 @@ void TileMapImageIO::ReadImageInformation()
     }
 
   // The OSM tiles are 4 bands png, while HillShade & NearMap are 3 bands jpeg
-  if (m_AddressMode == TileMapAdressingStyle::OSM)
+  if (m_AddressMode == TileMapAddressingStyle::OSM)
     this->SetNumberOfComponents(4);
   else
     this->SetNumberOfComponents(3);
