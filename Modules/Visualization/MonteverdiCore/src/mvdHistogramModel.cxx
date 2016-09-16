@@ -125,11 +125,11 @@ HistogramModel
 {
   assert( band<m_Histograms->Size() );
 
-  qDebug()
-    << "Quantile" << p << ":" <<
-    ( IsMonoValue()
-      ? m_MinPixel[ band ]
-      : m_Histograms->GetNthElement( band )->Quantile( 0, p ) );
+  // qDebug()
+  //   << "Quantile" << p << ":" <<
+  //   ( IsMonoValue()
+  //     ? m_MinPixel[ band ]
+  //     : m_Histograms->GetNthElement( band )->Quantile( 0, p ) );
 
   return
     IsMonoValue()
