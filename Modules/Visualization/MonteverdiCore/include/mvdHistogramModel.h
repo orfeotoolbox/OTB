@@ -37,7 +37,7 @@
 
 //
 // System includes (sorted by alphabetic order)
-#include <tr1/type_traits>
+#include <boost/type_traits/is_floating_point.hpp>
 
 //
 // ITK includes (sorted by alphabetic order)
