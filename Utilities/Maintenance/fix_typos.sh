@@ -44,9 +44,6 @@ if ! test -d fix_typos; then
     curl https://raw.githubusercontent.com/qgis/QGIS/master/scripts/spelling.dat | sed "s/:/->/" | grep -v "colour->" | grep -v "colours->" > qgis.txt
     curl https://anonscm.debian.org/cgit/lintian/lintian.git/plain/data/spelling/corrections| grep "||" | grep -v "#" | sed "s/||/->/" > debian.txt
     cat codespell/data/dictionary.txt qgis.txt debian.txt | awk 'NF' > otb_dict.txt
-
-    #echo "difered->deferred" >> gdal_dict.txt
-    #echo "differed->deferred" >> gdal_dict.txt
     cd ..
 fi
 
@@ -59,5 +56,16 @@ EXCLUDED_FILES="$EXCLUDED_FILES,*/Documentation/*"
 #Exclude also Copyright folder for now
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Copyright/*,*/SuperBuild/Copyright/*,*/Utilities/Maintenance/*,LICENSE,*/i18n/*"
 
+#We use also words white list to
+#This list should be updated after each release when deprecated classes/methods are removed
+# use with --words-white-list=$WORDS_WHITE_LIST
 
-python3 fix_typos/codespell/codespell.py codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES -D fix_typos/otb_dict.txt ../..
+# WORDS_WHITE_LIST="Assymmetric"
+# WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Instanciate"
+# WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Initialisation"
+
+#FIXME need to add all deprecated classes and methods with typos in the white list
+
+
+
+python3 fix_typos/codespell/codespell.py codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES -D fix_typos/otb_dict.txt  ../..
