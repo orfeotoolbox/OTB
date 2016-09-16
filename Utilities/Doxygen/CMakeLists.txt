@@ -109,10 +109,7 @@ find_package( Perl )
 
 if( PERL_FOUND )
   set( OTB_DOXYGEN_INPUT_FILTER
-    "${PERL_EXECUTABLE} ${OTB_BINARY_DIR}/Utilities/Doxygen/otbdoxygen.pl" )
-
-  configure_file(${OTB_SOURCE_DIR}/Utilities/Doxygen/otbdoxygen.pl.in
-               ${OTB_BINARY_DIR}/Utilities/Doxygen/otbdoxygen.pl)
+    "${PERL_EXECUTABLE} ${OTB_SOURCE_DIR}/Utilities/Doxygen/otbgroup.pl" )
 else()
   set( OTB_DOXYGEN_INPUT_FILTER )
 endif()
@@ -154,7 +151,6 @@ if (BUILD_DOCUMENTATION)
     #COMMAND ${CMAKE_COMMAND} -E copy
     #  ${OTB_SOURCE_DIR}/Utilities/Doxygen/favicon.ico
     #  ${OTB_BINARY_DIR}/Documentation/Doxygen/html
-    DEPENDS         ${OTB_BINARY_DIR}/Utilities/Doxygen/otbdoxygen.pl
    # DEPENDS         ${OTB_BINARY_DIR}/Documentation/Doxygen/Examples.dox
     WORKING_DIRECTORY ${OTB_BINARY_DIR}/Utilities/Doxygen
     )
