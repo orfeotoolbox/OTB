@@ -166,7 +166,8 @@ protected:
 
   void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void FillNeighborhoodHistogram(std::map<PixelType, unsigned int>& histoNeigh, 
+  //Get a histogram of frequencies of labels with the 2 highest frequencies sorted in decreasing order
+  void FillNeighborhoodHistogram(std::vector<std::pair<PixelType, unsigned int> >& histoNeigh, 
                                  const NeighborhoodIteratorType &nit,
                                  const KernelIteratorType kernelBegin,
                                  const KernelIteratorType kernelEnd);
@@ -176,7 +177,7 @@ protected:
     typedef std::pair<PixelType, unsigned int> HistoValueType;
     bool operator()(const HistoValueType& a, const HistoValueType& b)
     {
-      return a.second < b.second;
+      return a.second > b.second;
     }
   };
 
