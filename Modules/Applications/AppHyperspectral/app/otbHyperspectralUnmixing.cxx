@@ -18,7 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
 #include "otbNCLSUnmixingImageFilter.h"
@@ -30,9 +29,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
-typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> StreamingStatisticsVectorImageFilterType;
-
 typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
 typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             NCLSUnmixingFilterType;
