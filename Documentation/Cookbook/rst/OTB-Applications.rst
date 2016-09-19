@@ -407,3 +407,61 @@ still be correct, but some intermediate data will be read or written.
                 
 Parallel execution with MPI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Provided that Orfeo ToolBox has been built with MPI and SPTW modules
+activated, it is possible to use MPI for massive parallel computation
+and writing of an output image. A simple call to ``mpirun`` before the
+command-line activates this behaviour, with the following logic. MPI
+writing is only triggered if:
+
+- OTB is built with MPI and SPTW,
+  
+- The number of MPI processes is greater than 1,
+    
+- The output filename is ``.tif`` or ``.vrt``
+
+  
+In this case, the output image will be divived into several tiles
+according to the number of MPI processes specified to the ``mpirun``
+command, and all tiles will be computed in parallel.
+  
+If the output filename extension is ``.tif``, tiles will be written in
+parallel to a single Tiff file using SPTW (Simple Parallel Tiff Writer).
+
+If the output filename extension is ``.vrt``, each tile will be
+written to a separate Tiff file, and a global VRT_ file will be written.
+
+.. _VRT: http://gdal.org/gdal_vrttut.html
+
+Here is an example of MPI call on a cluster::
+
+  $ mpirun -np $nb_procs --hostfile $PBS_NODEFILE  \
+    otbcli_BundleToPerfectSensor \
+    -inp $ROOT/IMG_PHR1A_P_001/IMG_PHR1A_P_201605260427149_ORT_1792732101-001_R1C1.JP2 \
+    -inxs $ROOT/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201605260427149_ORT_1792732101-002_R1C1.JP2 \
+    -out $ROOT/pxs.tif uint16 -ram 1024
+    
+    ------------ JOB INFO 1043196.tu-adm01 -------------
+
+    JOBID           : 1043196.tu-adm01
+    USER            : michelj
+    GROUP           : ctsiap
+    JOB NAME        : OTB_mpi
+    SESSION         : 631249
+    RES REQSTED     : mem=1575000mb,ncpus=560,place=free,walltime=04:00:00
+    RES USED        : cpupercent=1553,cput=00:56:12,mem=4784872kb,ncpus=560,vmem=18558416kb,
+    walltime=00:04:35
+    BILLING         : 42:46:40 (ncpus x walltime)
+    QUEUE           : t72h
+    ACCOUNT         : null
+    JOB EXIT CODE   : 0
+    
+  ------------ END JOB INFO 1043196.tu-adm01 ---------
+
+One can see that the registration and pan-sharpening of the
+panchromatic and multispectral bands of a Pleiades image has bee split
+among 560 cpus and took only 56 seconds.
+
+Note that this MPI parallel invocation of applications is only
+available for command-line calls to OTB applications, and only for
+images output parameters.
