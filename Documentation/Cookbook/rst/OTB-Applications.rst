@@ -16,7 +16,7 @@ library, or compose them into high level pipelines. OTB applications allow to:
 OTB applications can be launched in different ways, and accessed from different
 entry points. The framework can be extended, but Orfeo Toolbox ships with the following:
 
--  A command-line laucher, to call applications from the terminal,
+-  A command-line launcher, to call applications from the terminal,
 
 -  A graphical launcher, with an auto-generated QT interface, providing
    ergonomic parameters setting, display of documentation, and progress
@@ -145,7 +145,7 @@ Command-line examples are provided in chapter [chap:apprefdoc], page .
 Using the GUI launcher
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The graphical interface for the applications provides a usefull
+The graphical interface for the applications provides a useful
 interactive user interface to set the parameters, choose files, and
 monitor the execution progress.
 
@@ -170,7 +170,7 @@ The resulting graphical application displays a window with several tabs:
 -  Parameters is where you set the parameters and execute the
    application.
 
--  Logs is where you see the informations given by the application
+-  Logs is where you see the output given by the application
    during its execution.
 
 -  Progress is where you see a progress bar of the execution (not
@@ -258,7 +258,7 @@ application, changing the algorithm at each iteration.
       # Here we configure the smoothing algorithm
       app.SetParameterString("type", type)
 
-      # Set the output filename, using the algorithm to differenciate the outputs
+      # Set the output filename, using the algorithm to differentiate the outputs
       app.SetParameterString("out", argv[2] + type + ".tif")
 
       # This will execute the application and save the output file
@@ -313,7 +313,7 @@ An example is worth a thousand words
                     -outxml saved_applications_parameters.xml
 
 Then, you can run the applications with the same parameters using the
-output xml file previously saved. For this, you have to use the inxml
+output XML file previously saved. For this, you have to use the inxml
 parameter:
 
 ::
@@ -328,7 +328,7 @@ time
     otbcli_BandMath -inxml saved_applications_parameters.xml
                     -exp "(im1b1 - im2b1)"
 
-In this cas it will use as mathematical expression “(im1b1 - im2b1)”
+In this case it will use as mathematical expression “(im1b1 - im2b1)”
 instead of “abs(im1b1 - im2b1)”.
 
 Finally, you can also launch applications directly from the command-line
@@ -340,7 +340,7 @@ the application name. Use in this case:
     otbApplicationLauncherCommandLine -inxml saved_applications_parameters.xml
 
 It will retrieve the application name and related parameters from the
-input xml file and launch in this case the BandMath applications.
+input XML file and launch in this case the BandMath applications.
 
 In-memory connection between applications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -362,7 +362,7 @@ In-memory connection between applications is available both at the C++
 API level and using the  python bindings to the application presented
 in the `Using the Python interface`_ section.
 
-Here is a python code sample connecting several applications together:
+Here is a Python code sample connecting several applications together:
 
 .. code-block:: python
    
@@ -421,7 +421,7 @@ writing is only triggered if:
 - The output filename is ``.tif`` or ``.vrt``
 
   
-In this case, the output image will be divived into several tiles
+In this case, the output image will be divided into several tiles
 according to the number of MPI processes specified to the ``mpirun``
 command, and all tiles will be computed in parallel.
   
@@ -459,7 +459,7 @@ Here is an example of MPI call on a cluster::
   ------------ END JOB INFO 1043196.tu-adm01 ---------
 
 One can see that the registration and pan-sharpening of the
-panchromatic and multispectral bands of a Pleiades image has bee split
+panchromatic and multi-spectral bands of a Pleiades image has bee split
 among 560 cpus and took only 56 seconds.
 
 Note that this MPI parallel invocation of applications is only

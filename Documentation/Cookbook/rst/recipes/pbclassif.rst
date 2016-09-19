@@ -27,7 +27,7 @@ available for each class in your image. The ``PolygonClassStatistics``
 will do this job for you. This application processes a set of training
 geometries and an image and outputs statistics about available samples
 (i.e. pixel covered by the image and out of a no-data mask if
-provided), in the form of a xml file:
+provided), in the form of a XML file:
 
 -  number of samples per class
 
@@ -122,7 +122,7 @@ to determine the sampling rate, some geometries of the training set
 might not be sampled.
 
 The application will accept as input the input image and training
-geometries, as well class statistics xml file computed during previous
+geometries, as well class statistics XML file computed during previous
 step. It will output a vector file containing point geometries which
 indicate the location of the samples.
 
@@ -215,7 +215,7 @@ images:
 * **Custom mode:** The user indicates the target number of samples for
   each image.
 
-The different behaviours for each mode and strategy are described as follows.
+The different behaviors for each mode and strategy are described as follows.
 
 :math:`T_i( c )` and :math:`N_i( c )` refers resp. to the total number and needed number
 of samples in image :math:`i` for class :math:`c`. Let's call :math:`L` the total number of
@@ -223,7 +223,7 @@ image.
 
 * **Strategy = all**
   
-  - Same behaviour for all modes proportional, equal, custom : take all samples
+  - Same behavior for all modes proportional, equal, custom : take all samples
   
 * **Strategy = constant** (let's call :math:`M` the global number of samples per
   class required)
@@ -397,10 +397,10 @@ Fancy classification results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Color mapping can be used to apply color transformations on the final
-graylevel label image. It allows to get an RGB classification map by
+gray level label image. It allows to get an RGB classification map by
 re-mapping the image values to be suitable for display purposes. One can
 use the *ColorMapping* application. This tool will replace each label
-with an 8-bits RGB color specificied in a mapping file. The mapping file
+with an 8-bits RGB color specified in a mapping file. The mapping file
 should look like this :
 
 ::
@@ -445,7 +445,7 @@ After having processed several classifications of the same input image
 but from different models or methods (SVM, KNN, Random Forest,...), it
 is possible to make a fusion of these classification maps with the
 *FusionOfClassifications* application which uses either majority voting
-or the Demspter Shafer framework to handle this fusion. The Fusion of
+or the Dempster-Shafer framework to handle this fusion. The Fusion of
 Classifications generates a single more robust and precise
 classification map which combines the information extracted from the
 input list of labeled images.
@@ -465,7 +465,7 @@ parameters :
 
 -  ``-undecidedlabel`` label for the undecided class (default value = 0)
 
-The input pixels with the nodata class label are simply ignored by the
+The input pixels with the no-data class label are simply ignored by the
 fusion process. Moreover, the output pixels for which the fusion process
 does not result in a unique class label, are set to the undecided value.
 
@@ -543,7 +543,7 @@ each of them should be confronted with a ground truth. For this purpose,
 the masses of belief of the class labels resulting from a classifier are
 estimated from its confusion matrix, which is itself exported as a
 \*.CSV file with the help of the *ComputeConfusionMatrix* application.
-Thus, using the Dempster Shafer method to fuse classification maps needs
+Thus, using the Dempster-Shafer method to fuse classification maps needs
 an additional input list of such \*.CSV files corresponding to their
 respective confusion matrices.
 
@@ -569,9 +569,9 @@ based on the confidence level in each classifier.
 .. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
 .. figure:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
 
-Figure 5: From left to right: Original image, and fancy colored classified image obtained by a Dempster Shafer fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white). 
+Figure 5: From left to right: Original image, and fancy colored classified image obtained by a Dempster-Shafer fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white). 
 
-Recommandations to properly use the fusion of classification maps
+Recommendations to properly use the fusion of classification maps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to properly use the *FusionOfClassifications* application, some
@@ -586,7 +586,7 @@ the interpretation of the ``OutputFusedClassificationImage``.
 Majority voting based classification map regularization
 -------------------------------------------------------
 
-Resulting classification maps can be regularized in order to smoothen
+Resulting classification maps can be regularized in order to smooth
 irregular classes. Such a regularization process improves classification
 results by making more homogeneous areas which are easier to handle.
 
@@ -663,7 +663,7 @@ images, which means that the value of each pixel corresponds to the
 class label it belongs to. The ``InputLabeledImage`` is commonly an
 image generated with a classification algorithm such as the SVM
 classification. Remark: both ``InputLabeledImage`` and
-``OutputLabeledImage`` are not necessarily of the same datatype.
+``OutputLabeledImage`` are not necessarily of the same type.
 Secondly, if ip.suvbool == true, the Undecided label value must be
 different from existing labels in the input labeled image in order to
 avoid any ambiguity in the interpretation of the regularized
@@ -801,7 +801,7 @@ classification and regression mode.
 
 -  K-Nearest Neighbors
 
-The behaviour of application is very similar to . From the input data
+The behavior of application is very similar to . From the input data
 set, a portion of the samples is used for training, whereas the other
 part is used for validation. The user may also set the model to train
 and its parameters. Once the training is done, the model is stored in an
