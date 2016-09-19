@@ -74,7 +74,7 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
   ## header files, for now, limit the number of
   ## warnings to level 3
   if( MSVC )
-    set(VerboseWarningsFlag -W3 )
+    set(VerboseWarningsFlag /W3 )
     ## A better solution would be to use -Wall,
     ## and then disable warnings one by one
     ## set(VerboseWarningsFlag -Wall -wd4820 -wd4682 )
@@ -184,6 +184,7 @@ macro(check_compiler_platform_flags)
          # see http://msdn.microsoft.com/en-us/library/ms173499.aspx
          if(MSVC_VERSION GREATER 1310)
            set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} /bigobj")
+            set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} /Zc:strictStrings")
          endif()
        endif()
   endif()
