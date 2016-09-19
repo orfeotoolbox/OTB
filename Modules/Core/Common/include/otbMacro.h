@@ -236,4 +236,13 @@ namespace otb
 # define otbUseInRelease( name ) name
 #endif // NDEBUG
 
+#if defined(__GNUC__) || defined(__clang__)
+#define OTB_DEPRECATED(func) func __attribute__ ((deprecated))
+#elif defined(_MSC_VER)
+#define OTB_DEPRECATED(func) __declspec(deprecated) func
+#else
+#pragma message("WARNING: You need to implement OTB_DEPRECATED for this compiler")
+#define OTB_DEPRECATED(func) func
+#endif
+
 #endif //end of otbMacro.h

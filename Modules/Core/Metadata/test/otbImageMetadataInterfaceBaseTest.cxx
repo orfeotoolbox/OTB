@@ -58,7 +58,9 @@ int otbImageMetadataInterfaceBaseTest(int itkNotUsed(argc), char* argv[])
     file << "GCPId:           " << lImageMetadata->GetGCPId(gcpIdx) << std::endl;
     file << "GCPInfo:         " << lImageMetadata->GetGCPInfo(gcpIdx) << std::endl;
   }
-  file << "SensorID:        " << lImageMetadata->GetSensorID( ) << std::endl;
+  std::string sensorId;
+  lImageMetadata->GetSensorID( sensorId );
+  file << "SensorID:        " << sensorId << std::endl;
   file << "NumberOfBands:   " << lImageMetadata->GetNumberOfBands( ) << std::endl;
   file << "XPixelSpacing:   " << lImageMetadata->GetXPixelSpacing( ) << std::endl;
   file << "YPixelSpacing:   " << lImageMetadata->GetYPixelSpacing( ) << std::endl;
