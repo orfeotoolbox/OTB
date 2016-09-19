@@ -142,7 +142,11 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QSpinBox" name="overviewsSpinBox"/>
+         <widget class="QSpinBox" name="overviewsSpinBox">
+          <property name="maximum">
+           <number>999999999</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
