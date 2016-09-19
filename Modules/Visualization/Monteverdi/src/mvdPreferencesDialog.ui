@@ -112,22 +112,6 @@
         <string>GDAL Overviews</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_5">
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="overviewsCheckBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Generate</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1">
          <widget class="QLabel" name="overviewsLabel">
           <property name="sizePolicy">
@@ -145,6 +129,35 @@
          <widget class="QSpinBox" name="overviewsSpinBox">
           <property name="maximum">
            <number>999999999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="overviewsCheckBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Generate</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="pixelLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>pixel(s)</string>
           </property>
          </widget>
         </item>
