@@ -166,6 +166,11 @@ protected:
 
   void GenerateOutputInformation() ITK_OVERRIDE;
 
+  void FillNeighborhoodHistogram(std::map<PixelType, unsigned int>& histoNeigh, 
+                                 const NeighborhoodIteratorType &nit,
+                                 const KernelIteratorType kernelBegin,
+                                 const KernelIteratorType kernelEnd);
+
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
