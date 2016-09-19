@@ -51,8 +51,7 @@ const KernelIteratorType kernelEnd)
   PixelType majorityLabel = 0; //Value of the more representative pixels in the neighborhood
   unsigned int majorityFreq = 0; //Number of pixels with the more representative value (majorityLabel) in the neighborhood
 
-  unsigned int i;
-  KernelIteratorType kernel_it;
+
 
   std::map<PixelType, unsigned int> histoNeigh;
 
@@ -60,6 +59,8 @@ const KernelIteratorType kernelEnd)
 
   if (centerPixel != m_LabelForNoDataPixels)
   {
+  unsigned int i;
+  KernelIteratorType kernel_it;
     for (i = 0, kernel_it = kernelBegin; kernel_it < kernelEnd; ++kernel_it, ++i)
     {
       // if structuring element is positive, use the pixel under that element
