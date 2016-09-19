@@ -114,6 +114,8 @@ private:
     SetParameterDescription("count", "Nb of pixels which are different");
     SetParameterRole("count", Role_Output);
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("ref.in", "GomaApres.png");
     SetDocExampleParameterValue("ref.channel", "1");
@@ -206,6 +208,8 @@ private:
     m_CompareFilter->SetInput1(m_ExtractRefFilter->GetOutput());
     m_CompareFilter->SetInput2(m_ExtractMeasFilter->GetOutput());
     m_CompareFilter->SetPhysicalSpaceCheck(false);
+    m_CompareFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(m_CompareFilter->GetStreamer(), "Comparing...");
     m_CompareFilter->Update();
 
     // Show result

@@ -108,6 +108,8 @@ private:
     SetDefaultParameterInt("tilesizey", 500);
     SetMinimumParameterIntValue("tilesizey", 1);
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in","smooth.tif");
     SetDocExampleParameterValue("inseg","segmentation.tif");
@@ -142,6 +144,8 @@ private:
 
     StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
     stats->SetInput(labelIn);
+    stats->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(stats->GetStreamer(), "Retrieve region count...");
     stats->Update();
     unsigned int regionCount=stats->GetMaximum();
 
