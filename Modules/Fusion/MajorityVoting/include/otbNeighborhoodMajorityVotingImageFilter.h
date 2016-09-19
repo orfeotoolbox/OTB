@@ -149,6 +149,9 @@ public:
   //Creates a SetKeepOriginalLabelBool method
   itkSetMacro(KeepOriginalLabelBool, bool);
 
+  //Process only isolated pixels
+  itkSetMacro(OnlyIsolatedPixels, bool);
+
 
 protected:
   NeighborhoodMajorityVotingImageFilter();
@@ -167,10 +170,11 @@ protected:
   void GenerateOutputInformation() ITK_OVERRIDE;
 
   //Get a histogram of frequencies of labels with the 2 highest frequencies sorted in decreasing order
-  void FillNeighborhoodHistogram(std::vector<std::pair<PixelType, unsigned int> >& histoNeigh, 
-                                 const NeighborhoodIteratorType &nit,
-                                 const KernelIteratorType kernelBegin,
-                                 const KernelIteratorType kernelEnd);
+  // and return the frequency of the label of the center pixel
+  unsigned int FillNeighborhoodHistogram(std::vector<std::pair<PixelType, unsigned int> >& histoNeigh, 
+                                         const NeighborhoodIteratorType &nit,
+                                         const KernelIteratorType kernelBegin,
+                                         const KernelIteratorType kernelEnd);
 
   struct CompareHistoFequencies
   {
@@ -191,6 +195,7 @@ private:
   PixelType m_LabelForNoDataPixels;
   PixelType m_LabelForUndecidedPixels;
   bool m_KeepOriginalLabelBool;
+  bool m_OnlyIsolatedPixels;
 
 }; // end of class
 
