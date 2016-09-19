@@ -167,6 +167,7 @@ HistogramController
 
     widget->SetData( chan, x, y, size, xMin, yMin, xMax, yMax );
 
+    widget->SetPrecision( HistogramModel::GetEpsilon() );
     widget->SetLowMarker( chan, settings.GetLowIntensity( chan ) );
     widget->SetHighMarker( chan, settings.GetHighIntensity( chan ) );
 

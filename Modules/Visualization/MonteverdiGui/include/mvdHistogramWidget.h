@@ -159,6 +159,14 @@ public:
    */
   void Clear();
 
+  /**
+   */
+  void SetPrecision( double );
+
+  /**
+   */
+  double GetPrecision() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -290,6 +298,10 @@ private:
   /**
    */
   Bounds m_Bounds[ CURVE_COUNT ];
+
+  /**
+   */
+  double m_Precision;
 
   /**
    */

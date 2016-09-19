@@ -699,8 +699,12 @@ ColorDynamicsController
 
   //
   // Access histogram-model.
-  assert( imageModel->GetHistogramModel()!=NULL );
-  bool hasValidHistogram = imageModel->GetHistogramModel()->IsValid();
+  const HistogramModel * histogramModel = imageModel->GetHistogramModel();
+  assert( histogramModel!=NULL );
+
+  bool hasValidHistogram =
+    histogramModel->IsValid() &&
+    !histogramModel->IsMonoValue();
 
   // Block this controller's signals to prevent display refreshed
   // but let let widget(s) signal their changes so linked values

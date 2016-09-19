@@ -37,6 +37,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <boost/type_traits/is_floating_point.hpp>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -102,8 +103,13 @@ class OTBMonteverdiCore_EXPORT HistogramModel :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types.
+// Public types & constants.
 public:
+
+  /**
+   */
+  static const int PRECISION = 4;
+
   /** */
   typedef
     // itk::NumericTraits< T >::FloatType and
@@ -160,6 +166,9 @@ public:
 //
 // Public methods.
 public:
+  /**
+   */
+  static RealType GetEpsilon();
 
   /** \brief Constructor. */
   HistogramModel( QObject* p =NULL );
@@ -171,11 +180,15 @@ public:
    */
   bool IsValid() const;
 
-  /** */
-  inline MeasurementType Quantile( CountType band, double p ) const;
+  /**
+   */
+  bool IsMonoValue() const;
 
   /** */
-  inline MeasurementType Quantile( CountType band, double p, Bound bound ) const;
+  MeasurementType Quantile( CountType band, double p ) const;
+
+  /** */
+  MeasurementType Quantile( CountType band, double p, Bound bound ) const;
 
   /** */
   double
@@ -324,34 +337,6 @@ HistogramModel
 ::GetMaxPixel() const
 {
   return m_MaxPixel;
-}
-
-/*******************************************************************************/
-inline
-HistogramModel::MeasurementType
-HistogramModel
-::Quantile( unsigned int band,
-	    double p ) const
-{
-  assert( band<m_Histograms->Size() );
-
-  return m_Histograms->GetNthElement( band )->Quantile( 0, p );
-}
-
-/*******************************************************************************/
-inline
-HistogramModel::MeasurementType
-HistogramModel
-::Quantile( unsigned int band,
-	    double p,
-	    Bound bound ) const
-{
-  assert( band<m_Histograms->Size() );
-
-  return m_Histograms->GetNthElement( band )->Quantile(
-    0,
-    bound==BOUND_UPPER ? 1.0 - p : p
-  );
 }
 
 /*******************************************************************************/
@@ -580,6 +565,10 @@ HistogramModel
     m_MinPixel = filterStats->GetMinimum();
     m_MaxPixel = filterStats->GetMaximum();
 
+    // Define corrected min/MAX pixels.
+    DefaultImageType::PixelType minPixel( m_MinPixel );
+    DefaultImageType::PixelType maxPixel( m_MaxPixel );
+
     // Extract sigmas for each band from covariance matrix.
     typename StatisticsFilter::MatrixType covariance(
       filterStats->GetFilter()->GetCovariance()
@@ -630,9 +619,26 @@ HistogramModel
 	    << ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
 	  */
 
-	  bins[ i ] = ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
+	  bins[ i ] = ceil( ( maxPixel[ i ] - minPixel[ i ] ) / h );
 	  }
 	}
+
+      // MANTIS-1275
+      // {
+      if( minPixel[ i ]==maxPixel[ i ] )	
+	{
+	double epsilon = HistogramModel::GetEpsilon();
+
+	if( minPixel[ i ] >=
+	    std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() + epsilon )
+	  minPixel[ i ] -= epsilon;
+
+	if( maxPixel[ i ] <=
+	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() - epsilon )
+	    maxPixel[ i ] += epsilon;
+	}
+      // }
+      //
       }
 
     // std::cout << bins;
@@ -656,8 +662,8 @@ HistogramModel
     histogramFilter->SetInput( imageModel->ToImage() );
 
     // Setup histogram filter.
-    histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
-    histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
+    histogramFilter->GetFilter()->SetHistogramMin( minPixel );
+    histogramFilter->GetFilter()->SetHistogramMax( maxPixel );
     histogramFilter->GetFilter()->SetNumberOfBins( bins );
     histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
     histogramFilter->GetFilter()->SetNoDataFlag(

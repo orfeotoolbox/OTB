@@ -304,9 +304,9 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="mvdIcons.qrc">
-         <normaloff>:/icons/Data/Icons/unlocked.png</normaloff>
-         <normalon>:/icons/Data/Icons/locked.png</normalon>:/icons/Data/Icons/unlocked.png</iconset>
+        <iconset>
+         <normaloff>:/icons/Utilities/Data/Icons/unlocked.png</normaloff>
+         <normalon>:/icons/Utilities/Data/Icons/locked.png</normalon>:/icons/Utilities/Data/Icons/unlocked.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -342,7 +342,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="mvdIcons.qrc">
+      <iconset>
        <normaloff>:/icons/Data/Icons/execute.png</normaloff>:/icons/Data/Icons/execute.png</iconset>
      </property>
      <property name="iconSize">
