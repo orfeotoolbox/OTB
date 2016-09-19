@@ -171,6 +171,15 @@ protected:
                                  const KernelIteratorType kernelBegin,
                                  const KernelIteratorType kernelEnd);
 
+  struct CompareHistoFequencies
+  {
+    typedef std::pair<PixelType, unsigned int> HistoValueType;
+    bool operator()(const HistoValueType& a, const HistoValueType& b)
+    {
+      return a.second < b.second;
+    }
+  };
+
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

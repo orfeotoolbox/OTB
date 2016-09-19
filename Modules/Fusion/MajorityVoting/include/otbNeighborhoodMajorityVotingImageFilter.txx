@@ -50,13 +50,8 @@ const KernelIteratorType kernelEnd)
 {
   PixelType majorityLabel = 0; //Value of the more representative pixels in the neighborhood
   unsigned int majorityFreq = 0; //Number of pixels with the more representative value (majorityLabel) in the neighborhood
-
-
-
-
-
+  
   PixelType centerPixel = nit.GetCenterPixel();
-
 
   if (centerPixel != m_LabelForNoDataPixels)
     {
@@ -64,15 +59,10 @@ const KernelIteratorType kernelEnd)
     this->FillNeighborhoodHistogram(histoNeigh, nit, kernelBegin, kernelEnd);
 
     //Extraction of the more representative Label in the neighborhood (majorityLabel) and its Frequency (majorityFreq)
-    typename std::map<PixelType, unsigned int>::iterator histoIt;
-    for (histoIt = histoNeigh.begin(); histoIt != histoNeigh.end(); ++histoIt)
-      {
-      if (histoIt->second > majorityFreq)
-        {
-        majorityFreq = histoIt->second; //Frequency
-        majorityLabel = histoIt->first; //Label
-        }
-      }
+    typename std::map<PixelType, unsigned int>::iterator histoIt
+      = std::max_element(histoNeigh.begin(), histoNeigh.end(), CompareHistoFequencies());
+    majorityFreq = histoIt->second; //Frequency
+    majorityLabel = histoIt->first; //Label
 
     //If the majorityLabel is NOT unique in the neighborhood
     for (histoIt = histoNeigh.begin(); histoIt != histoNeigh.end(); ++histoIt)
@@ -93,10 +83,10 @@ const KernelIteratorType kernelEnd)
     }//END if (centerPixel != m_LabelForNoDataPixels)
 
   //If (centerPixel == m_LabelForNoDataPixels)
-    else
-      {
-      majorityLabel = m_LabelForNoDataPixels;
-      }
+  else
+    {
+    majorityLabel = m_LabelForNoDataPixels;
+    }
 
   return majorityLabel;
 }
