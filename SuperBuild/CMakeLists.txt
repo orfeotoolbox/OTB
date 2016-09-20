@@ -68,6 +68,16 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   endif()
 endif()
 
+get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set (CMAKE_INSTALL_PREFIX
+    "${PARENT_OF_BINARY_DIR}/superbuild_install"
+    CACHE
+    PATH
+    "default install path for superbuild"
+    FORCE )
+endif()
+
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 file(TO_NATIVE_PATH "${SB_INSTALL_PREFIX}" SB_INSTALL_PREFIX_NATIVE)
@@ -279,14 +289,17 @@ endif()
 
 if(FROM_SYSTEM_LIST)
   list(SORT FROM_SYSTEM_LIST)
-foreach( item ${FROM_SYSTEM_LIST})
-  message(STATUS "  Using system version of ${item}")
-endforeach()
+  foreach( item ${FROM_SYSTEM_LIST})
+    message(STATUS "  Using system version of ${item}")
+  endforeach()
 endif()
 
 if(FROM_SUPERBUILD_LIST)
   list(SORT FROM_SUPERBUILD_LIST)
-foreach( item ${FROM_SUPERBUILD_LIST})
-  message(STATUS "  Using SuperBuild version of ${item}")
-endforeach()
+  foreach( item ${FROM_SUPERBUILD_LIST})
+    message(STATUS "  Using SuperBuild version of ${item}")
+  endforeach()
 endif()
+
+message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
