@@ -39,11 +39,9 @@ Sentinel1ImageMetadataInterface
 bool
 Sentinel1ImageMetadataInterface::CanRead() const
 {
-  std::string sensorID;
+  const std::string sensorId = GetSensorID(sensorID);
   
-  bool res = GetSensorID(sensorID);
-  
-  return sensorID.find("SENTINEL-1") != std::string::npos;
+  return sensorId.find("SENTINEL-1") != std::string::npos;
 }
 
 void

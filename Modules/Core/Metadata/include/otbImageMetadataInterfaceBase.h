@@ -121,7 +121,8 @@ public:
   const ImageKeywordlistType GetImageKeywordlist() const;
 
   /** This method is deprecated. Please use bool GetSensorID(std::string& ) **/
-  OTB_DEPRECATED( std::string const GetSensorID() const );
+  /** OTB_DEPRECATED( ) **/
+  std::string const GetSensorID() const;
   
   /** Get the sensor ID from the ossim metadata */
   bool GetSensorID(std::string & sensorId) const;
