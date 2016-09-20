@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
   //  sail input parameters are :
   //  \begin{itemize}
   //  \item leaf area index (LAI).
-  //  \item average leaf angle (Ang) in $\deg$.
+  //  \item average leaf angle (Angle) in $\deg$.
   //  \item soil coefficient (PSoil).
   //  \item diffuse/direct radiation (Skyl).
   //  \item hot spot (HSpot).
