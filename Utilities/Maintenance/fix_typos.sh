@@ -23,15 +23,6 @@
 #  DEALINGS IN THE SOFTWARE.
 ###############################################################################
 
-#FIXME
-#Rename AssymetricFusionOfDetectorImageFilter to AsymetricFusionOfDetectorImageFilter
-#Rename Restauration to Restoration
-#Rename InstanciateTransform() to InstantiateTransform()
-#Rename Adressing  ==> Addressing
-# ../../Modules/Core/Metadata/include/otbDefaultImageMetadataInterface.h:155: clas  ==> class  | disabled because of name clash in c++
-# m_ShrinkedOutput -> m_ShrunkOutput
-# convertor -> converter
-
 if ! test -d fix_typos; then
     # Get even rouault fork of codespell that adds --words-white-list and full filename support for -S option
     mkdir fix_typos
@@ -53,19 +44,33 @@ EXCLUDED_FILES="*/.git*"
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Modules/ThirdParty/6S/*,*/Modules/ThirdParty/SiftFast/*,*/Modules/ThirdParty/SPTW/*,*/SuperBuild/patches/*,*/Utilities/Doxygen/*"
 #Exclude also documentation for now
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Documentation/*"
-#Exclude also Copyright folder for now
-EXCLUDED_FILES="$EXCLUDED_FILES,*/Copyright/*,*/SuperBuild/Copyright/*,*/Utilities/Maintenance/*,LICENSE,*/i18n/*"
+#Exclude also Copyright folder
+EXCLUDED_FILES="$EXCLUDED_FILES,*/Copyright/*,*/SuperBuild/Copyright/*"
+# exclude maintenance, translation, license
+EXCLUDED_FILES="$EXCLUDED_FILES,*/Utilities/Maintenance/*,*/fix_typos/*,LICENSE,*/i18n/*"
 
-#We use also words white list to
+#We use also words white list to handle deprecated classes/methods which are still there and contains some typos
+
 #This list should be updated after each release when deprecated classes/methods are removed
 # use with --words-white-list=$WORDS_WHITE_LIST
 
-# WORDS_WHITE_LIST="Assymmetric"
-# WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Instanciate"
-# WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Initialisation"
+#for deprecated class AssymmetricFusionOfLineDetectorImageFilter
+WORDS_WHITE_LIST="Assymmetric"
+#for deprecated method InstanciateProjection in multiple classes
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Instanciate"
+#for deprecated method DoFinalizeInitialisation in otbGeometriesToGeometriesFilter.h
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Initialisation"
+#for deprecated method getSubstraction
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Substraction"
+#for deprecated method ParseFileNameForAdditonalInfo
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Additonal"
+# for "Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France" in LabelMapToLabelImageFilter
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Developement"
+# for deprecated method GetShrinkedOutput in otbStreamingShrinkImageFilter
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Shrinked"
+# for dum variable in prosail
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,dum"
 
-#FIXME need to add all deprecated classes and methods with typos in the white list
-
-
-
-python3 fix_typos/codespell/codespell.py codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES -D fix_typos/otb_dict.txt  ../..
+python3 fix_typos/codespell/codespell.py codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
+        --words-white-list=$WORDS_WHITE_LIST \
+        -D fix_typos/otb_dict.txt  ../..
