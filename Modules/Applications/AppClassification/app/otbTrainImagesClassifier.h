@@ -42,7 +42,7 @@
 # include "otbNeuralNetworkMachineLearningModel.h"
 #endif
 
-#ifdef OTB_USE_LIBSVM 
+#ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModel.h"
 #endif
 
@@ -52,7 +52,6 @@
 // Validation
 #include "otbConfusionMatrixCalculator.h"
 
-#include "itkTimeProbe.h"
 #include "otbStandardFilterWatcher.h"
 
 // Normalize the samples
@@ -115,7 +114,7 @@ public:
   // Machine Learning models
   typedef otb::MachineLearningModelFactory<InternalPixelType, ListSampleGeneratorType::ClassLabelType> MachineLearningModelFactoryType;
   typedef MachineLearningModelFactoryType::MachineLearningModelTypePointer ModelPointerType;
-  
+
 #ifdef OTB_USE_OPENCV
   typedef otb::RandomForestsMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> RandomForestType;
   typedef otb::KNearestNeighborsMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> KNNType;
@@ -127,10 +126,10 @@ public:
   typedef otb::NormalBayesMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> NormalBayesType;
 #endif
 
-#ifdef OTB_USE_LIBSVM 
+#ifdef OTB_USE_LIBSVM
   typedef otb::LibSVMMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> LibSVMType;
 #endif
- 
+
   // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
@@ -155,10 +154,10 @@ private:
 
   void LogConfusionMatrix(ConfusionMatrixCalculatorType* confMatCalc);
 
-#ifdef OTB_USE_LIBSVM 
+#ifdef OTB_USE_LIBSVM
   void InitLibSVMParams();
-#endif  
-  
+#endif
+
 #ifdef OTB_USE_OPENCV
   void InitBoostParams();
   void InitSVMParams();
@@ -170,10 +169,10 @@ private:
   void InitKNNParams();
 #endif
 
-#ifdef OTB_USE_LIBSVM 
+#ifdef OTB_USE_LIBSVM
   void TrainLibSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
-#endif 
-  
+#endif
+
 #ifdef OTB_USE_OPENCV
   void TrainBoost(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
   void TrainSVM(ListSampleType::Pointer trainingListSample, LabelListSampleType::Pointer trainingLabeledListSample);
