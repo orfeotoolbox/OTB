@@ -181,6 +181,14 @@ protected:
 
   virtual void InstantiateTransform(void);
 
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void InstanciateTransform()
+  {
+    otbWarningMacro(
+      << "InstanciateTransform has been deprecated.  Please use InstanciateTransform() instead");
+    this->InstantiateTransform();
+  }
+
   void GenerateOutputInformation(void) ITK_OVERRIDE;
   void GenerateData(void) ITK_OVERRIDE;
 
