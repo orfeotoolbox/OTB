@@ -86,8 +86,10 @@ MaplaApplication
   setObjectName( "MaplaApplication" );
 
   InitializeCore(
-    "Monteverdi Application Launcher", Monteverdi_VERSION_STRING,
-    "OrfeoToolBox", "orfeo-toolbox.org"
+    "Monteverdi Application Launcher",
+    QString( "OTB %1" ).arg( OTB_VERSION_STRING ),
+    "OrfeoToolBox",
+    "orfeo-toolbox.org"
   );
 }
 

@@ -73,7 +73,7 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
   ## is reporting 1000's of wanings in windows
   ## header files, for now, limit the number of
   ## warnings to level 3
-  if( WIN32 )
+  if( MSVC )
     set(VerboseWarningsFlag -W3 )
     ## A better solution would be to use -Wall,
     ## and then disable warnings one by one

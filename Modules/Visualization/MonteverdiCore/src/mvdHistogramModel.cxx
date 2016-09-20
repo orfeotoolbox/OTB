@@ -60,12 +60,26 @@ namespace
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
-
+/*****************************************************************************/
+HistogramModel::RealType
+HistogramModel
+::GetEpsilon()
+{
+  if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+    return
+      std::pow(
+	10.0,
+	static_cast< DefaultImageType::PixelType::ValueType >(
+	  -HistogramModel::PRECISION - 1
+	)
+      );
+  else
+    return 1;
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 HistogramModel
 ::HistogramModel( QObject* p ) :
   AbstractModel( p ),
@@ -94,6 +108,51 @@ HistogramModel
 }
 
 /*******************************************************************************/
+bool
+HistogramModel
+::IsMonoValue() const
+{
+  // qDebug() << this << "::IsMonoValue() ->" << m_MinPixel==m_MaxPixel;
+
+  return m_MinPixel==m_MaxPixel;
+}
+
+/*******************************************************************************/
+HistogramModel::MeasurementType
+HistogramModel
+::Quantile( unsigned int band,
+	    double p ) const
+{
+  assert( band<m_Histograms->Size() );
+
+  // qDebug()
+  //   << "Quantile" << p << ":" <<
+  //   ( IsMonoValue()
+  //     ? m_MinPixel[ band ]
+  //     : m_Histograms->GetNthElement( band )->Quantile( 0, p ) );
+
+  return
+    IsMonoValue()
+    ? m_MinPixel[ band ]
+    : m_Histograms->GetNthElement( band )->Quantile( 0, p );
+}
+
+/*******************************************************************************/
+HistogramModel::MeasurementType
+HistogramModel
+::Quantile( unsigned int band,
+	    double p,
+	    Bound bound ) const
+{
+  return Quantile(
+    band, 
+    bound==BOUND_UPPER
+    ? 1.0 - p
+    : p
+  );
+}
+
+/*******************************************************************************/
 double
 HistogramModel
 ::Percentile( CountType band, MeasurementType intensity, Bound bound ) const
@@ -104,19 +163,28 @@ HistogramModel
   // Construct 1D measurement vector.
   assert( histogram->GetMeasurementVectorSize()==1 );
   Histogram::MeasurementVectorType measurement( 1 );
-  measurement[ 0 ] = intensity;
 
-  // Due to float/double conversion, it can happen
-  // that the minimum or maximum value go slightly outside the histogram
-  // Clamping the value solves the issue and avoid RangeError
- // itk::NumericsTraits<>::Clamp(...) was removed
-  // TODO : when otb::Clamp will be developed, use this function
-  measurement[0]  =
-    measurement[0] < histogram->GetBinMin(0, 0)
-    ? histogram->GetBinMin(0, 0)
-    : ( measurement[0] > histogram->GetBinMax(0, histogram->GetSize(0) - 1)
-	? histogram->GetBinMax(0, histogram->GetSize(0) - 1)
-	: measurement[0] );
+  {
+    assert( histogram->GetSize( 0 ) > 0 );
+
+    Histogram::MeasurementType binMin( histogram->GetBinMin( 0, 0 ) );
+
+    Histogram::MeasurementType binMax(
+      histogram->GetBinMax( 0, histogram->GetSize( 0 ) - 1 )
+    );
+
+    // Due to float/double conversion, it can happen
+    // that the minimum or maximum value go slightly outside the histogram
+    // Clamping the value solves the issue and avoid RangeError
+    // itk::NumericsTraits<>::Clamp(...) was removed
+    // TODO : when otb::Clamp will be developed, use this function
+    measurement[ 0 ]  =
+      intensity < binMin
+      ? binMin
+      : ( intensity > binMax
+	  ? binMax
+	  : intensity );
+  }
 
   // Get the index of measurement in 1D-histogram.
   Histogram::IndexType index;
@@ -129,19 +197,24 @@ HistogramModel
   MeasurementType minI = histogram->GetBinMin( 0, index[ 0 ] );
   MeasurementType maxI = histogram->GetBinMax( 0, index[ 0 ] );
 
+  assert( minI <= maxI );
+
+  MeasurementType rangeI = vcl_abs( maxI - minI );
+
   // Frequency of current bin
-  Histogram::AbsoluteFrequencyType frequency( histogram->GetFrequency( index ) );
+  Histogram::AbsoluteFrequencyType frequency(
+    histogram->GetFrequency( index )
+  );
 
-  // Initialize result (contribution of current bin)
-  const MeasurementType epsilon = 1.0E-6;
-  double percent = 0.;
-
-  if ( vcl_abs(maxI - minI) > epsilon )
-    {
-    percent = frequency
-      * (bound == BOUND_LOWER ? (intensity - minI) : (maxI - intensity) )
-      / ( maxI - minI );
-    }
+  double percent =
+    ( IsMonoValue() ||
+      rangeI <= std::numeric_limits< MeasurementType >::epsilon() )
+    ? 0.0
+    : frequency
+      * ( bound == BOUND_LOWER
+	  ? ( intensity - minI )
+	  : ( maxI - intensity ) )
+      / rangeI;
 
   // Number of bins of histogram.
   Histogram::SizeType::SizeValueType binCount = histogram->Size();

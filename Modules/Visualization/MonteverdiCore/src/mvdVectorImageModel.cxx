@@ -421,16 +421,18 @@ VectorImageModel
     VectorImageSettings::ChannelVector::value_type band =
       GetSettings().GetRgbwChannel( channel );
 
+    bool isInvalid = !histogramModel->IsValid() /* || histogramModel->IsMonoValue() */;
+
     GetSettings().SetLowIntensity(
       channel,
-      !histogramModel->IsValid()
+      isInvalid
       ? min[ band ]
       : histogramModel->Quantile( band , 0.02, BOUND_LOWER )
     );
 
     GetSettings().SetHighIntensity(
       channel,
-      !histogramModel->IsValid()
+      isInvalid
       ? max[ band ]
       : histogramModel->Quantile( band , 0.02, BOUND_UPPER )
     );

@@ -168,7 +168,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbD
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif  # output fieldFileName
   3 # radius
   2 # sradius
-  0.1 # precision
+  0.01 # precision
   2 # Mean square
   1 # Grid step
   0 # Initial offset x
@@ -188,7 +188,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenc
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif  # output fieldFileName
   3 # radius
   2 # sradius
-  0.1 # precision
+  0.01 # precision
   3 # Mean reciprocal difference
   1 # Grid step
   0 # Initial offset x
@@ -208,7 +208,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation C
   ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif  # output fieldFileName
   3 # radius
   2 # sradius
-  0.1 # precision
+  0.01 # precision
   1 # Normalized Correlation
   1 # Grid step
   0 # Initial offset x
@@ -228,7 +228,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithCorrelation COMMAND otb
   ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif  # output fieldFileName
   3 # radius
   2 # sradius
-  0.1 # precision
+  0.01 # precision
   0 # Correlation
   1 # Grid step
   0 # Initial offset x

@@ -65,6 +65,7 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+#define PRECISION_MARGIN 4
 
 /**
  * \brief Array of enhanced band names that OTB can return.
@@ -146,6 +147,7 @@ HistogramWidget
   // m_LowPlotMarkers(),
   // m_HighPlotMarkers(),
   m_Bounds(),
+  m_Precision( 0.0 ),
   m_IsGrayscaleActivated( false )
 {
   m_UI->setupUi( this );
@@ -321,6 +323,22 @@ HistogramWidget
 
   delete m_UI;
   m_UI = NULL;
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::SetPrecision( double p )
+{
+  m_Precision = p;
+}
+
+/*******************************************************************************/
+double
+HistogramWidget
+::GetPrecision() const
+{
+  return m_Precision;
 }
 
 /*******************************************************************************/
@@ -576,11 +594,20 @@ HistogramWidget
       yMax = m_Bounds[ i ].m_YMax;
     }
 
-  /*
-  qDebug()
-    << "[" << xMin << "; " << xMax << "]"
-    << "x [" << yMin << "; " << yMax << "]";
-  */
+  if( xMin==xMax )
+    {
+    double epsilon = PRECISION_MARGIN * m_Precision;
+
+    if( xMin >= std::numeric_limits< double >::min() + epsilon )
+      xMin -= epsilon;
+
+    if( xMax <= std::numeric_limits< double >::max() - epsilon )
+      xMax += epsilon;
+    }
+
+  // qDebug()
+  //   << "[" << xMin << "; " << xMax << "]"
+  //   << "x [" << yMin << "; " << yMax << "]";
 
   m_UI->histogramPlot->setAxisScale( QwtPlot::xBottom, xMin, xMax );
   m_UI->histogramPlot->setAxisScale( QwtPlot::yLeft, yMin, yMax );
