@@ -54,7 +54,7 @@ namespace otb { namespace ogr {
  * \class DataSource
  * \brief Collection of geometric objects.
  *
- * This class is meant to supercede \c otb::VectorData class.  It provides
+ * This class is meant to supersede \c otb::VectorData class.  It provides
  * an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c GDALDataset.
  *

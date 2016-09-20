@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   double LAI = static_cast<double> (atof(argv[7]));
-  double Angl = static_cast<double> (atof(argv[8]));
+  double Angle = static_cast<double> (atof(argv[8]));
   double PSoil = static_cast<double> (atof(argv[9]));
   double Skyl = static_cast<double> (atof(argv[10]));
   double HSpot = static_cast<double> (atof(argv[11]));
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
   SailType::Pointer sail = SailType::New();
 
   sail->SetLAI(LAI);
-  sail->SetAngl(Angl);
+  sail->SetAngl(Angle);
   sail->SetPSoil(PSoil);
   sail->SetSkyl(Skyl);
   sail->SetHSpot(HSpot);
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
   //  \item Cm 0.009
   //  \item N 1.2
   //  \item LAI 2
-  //  \item Angl 50
+  //  \item Angle 50
   //  \item PSoil 1
   //  \item Skyl 70
   //  \item HSpot 0.2
