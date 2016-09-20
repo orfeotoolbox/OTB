@@ -27,6 +27,22 @@ otb_add_test(NAME leTvNeighborhoodMajorityVotingImageFilterTest COMMAND otbMajor
   5 #yRadius
   10 #LabelForNoDataPixels
   7 #LabelForUndecidedPixels
+  0 #OnlyIsolatedPixels
+  )
+
+otb_add_test(NAME leTvNeighborhoodMajorityVotingIsolPixTest COMMAND otbMajorityVotingTestDriver
+  --compare-image ${NOTOL}
+  ${BASELINE}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_oip1.tif
+  ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_oip1.tif
+  otbNeighborhoodMajorityVotingImageFilterTest
+  ${INPUTDATA}/Classification/QB_1_ortho_4Cls_N_Classified_OTB.tif
+  ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_oip1.tif
+  false #KeepOriginalLabelBool
+  2 #xRadius
+  5 #yRadius
+  10 #LabelForNoDataPixels
+  7 #LabelForUndecidedPixels
+  1 #OnlyIsolatedPixels
   )
 
 otb_add_test(NAME leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting COMMAND otbMajorityVotingTestDriver

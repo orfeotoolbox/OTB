@@ -100,6 +100,11 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   seBall.CreateStructuringElement();
   NeighMajVotingFilter->SetKernel(seBall);
 
+  if(argc==9)
+    {
+    NeighMajVotingFilter->SetOnlyIsolatedPixels(static_cast<bool>(atoi(argv[8])));
+    }
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFileName);
   writer->SetInput(NeighMajVotingFilter->GetOutput());
