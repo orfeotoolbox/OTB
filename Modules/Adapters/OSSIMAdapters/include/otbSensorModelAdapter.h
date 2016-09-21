@@ -44,7 +44,7 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class SensorModelAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT SensorModelAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */

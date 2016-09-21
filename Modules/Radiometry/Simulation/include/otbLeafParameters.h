@@ -22,7 +22,7 @@
 #include "itkDataObject.h"
 #include "itkMacro.h"
 #include "itkObjectFactory.h"
-
+#include "OTBSimulationExport.h"
 
 namespace otb
 {
@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 
-class ITK_EXPORT LeafParameters : public itk::DataObject
+class OTBSimulation_EXPORT LeafParameters : public itk::DataObject
 {
    public:
       /** Standard class typedefs */

@@ -20,6 +20,7 @@
 #define otbTileMapImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
+#include "OTBIOTileMapExport.h"
 
 namespace otb
 {
@@ -28,7 +29,7 @@ namespace otb
  *
  * \ingroup OTBIOTileMap
  */
-class ITK_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOTileMap_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

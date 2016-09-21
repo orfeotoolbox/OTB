@@ -28,5 +28,10 @@ export OTB_APPLICATION_PATH
 # avoid numerical issues caused by locale
 export LC_NUMERIC=C
 
+# Source GDAL_DATA, EPSG_CSV
+if [ -f $CURRENT_SCRIPT_DIR/env_exports ]; then
+    . $CURRENT_SCRIPT_DIR/env_exports
+fi
+
 # start the application
 $OTB_CLI_LAUNCHER "$@"

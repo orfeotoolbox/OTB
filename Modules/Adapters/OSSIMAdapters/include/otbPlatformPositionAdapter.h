@@ -23,6 +23,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+#include "OTBOSSIMAdaptersExport.h"
+
 namespace ossimplugins
 {
 class ossimGeometricSarSensorModel;
@@ -46,7 +48,7 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class PlatformPositionAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT PlatformPositionAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */

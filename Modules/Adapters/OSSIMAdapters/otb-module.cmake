@@ -4,6 +4,7 @@ several purposes: sensor models (especially RPC), metadata parsers, DEM handlers
 so on.")
 
 otb_module(OTBOSSIMAdapters
+ENABLE_SHARED
   DEPENDS
     OTBOpenThreads
     OTBITK

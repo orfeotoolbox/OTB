@@ -26,7 +26,7 @@
 #include <vector>
 #include "otbConfigure.h"
 #include "itkFixedArray.h"
-
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -42,7 +42,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT DocExampleStructure :
+class OTBApplicationEngine_EXPORT DocExampleStructure :
   public itk::Object
 {
 public:

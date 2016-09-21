@@ -1,6 +1,7 @@
 set(DOCUMENTATION "Adapters for the Curl library.")
 
 otb_module(OTBCurlAdapters
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK

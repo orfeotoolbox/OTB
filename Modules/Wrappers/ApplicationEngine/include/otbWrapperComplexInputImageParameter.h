@@ -32,7 +32,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT ComplexInputImageParameter : public Parameter
+class OTBApplicationEngine_EXPORT ComplexInputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */

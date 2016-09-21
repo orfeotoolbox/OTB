@@ -37,7 +37,7 @@
 namespace otb
 {
 
-class GlImageActor 
+class OTBIce_EXPORT GlImageActor 
   : public GlActor, public GeoInterface
 {
 public:

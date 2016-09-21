@@ -61,19 +61,24 @@ macro(macro_super_package)
   else() #unixes
     list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
     list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #superbuild .so /.dylib
-    list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/lib/otb") #mvd so
   endif()
 
   #common for all platforms.
   set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
   list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #superbuild, mxe binaries
-  list(APPEND PKG_SEARCHDIRS "${MONTEVERDI_INSTALL_DIR}/bin") #monteverdi, mapla
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncherCommandLine..
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb/python") #otbApplication.py
 
   set(EXE_SEARCHDIRS ${OTB_INSTALL_DIR}/bin)
-  list(APPEND  EXE_SEARCHDIRS ${MONTEVERDI_INSTALL_DIR}/bin)
   list(APPEND  EXE_SEARCHDIRS ${DEPENDENCIES_INSTALL_DIR}/bin)
+
+  # detect OTB version major and minor
+  file(GLOB _installed_otb_ver ${OTB_INSTALL_DIR}/lib/cmake/OTB-*)
+  list(SORT _installed_otb_ver)
+  list(GET _installed_otb_ver -1 _latest_installed_otb_ver)
+  get_filename_component(OTB_LATEST_MAJOR_MINOR ${_latest_installed_otb_ver} NAME)
+  message(STATUS "Latest OTB found : ${OTB_LATEST_MAJOR_MINOR}")
 
   macro_empty_package_staging_directory()
 
@@ -326,7 +331,6 @@ function(func_install_support_files)
       OTB_APPLICATIONS_DIR
       PKG_STAGE_DIR
       PACKAGE_SUPPORT_FILES_DIR
-      MONTEVERDI_INSTALL_DIR
       OTB_INSTALL_DIR
       )
     if(NOT DEFINED ${req})
@@ -341,7 +345,7 @@ function(func_install_support_files)
     func_install_otb_support_files()
 
     #check if monteverdi executable is built?
-    if(EXISTS "${MONTEVERDI_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
+    if(EXISTS "${OTB_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
       func_install_monteverdi_support_files()
     endif()
 
@@ -374,11 +378,9 @@ function(func_install_support_files)
   endif()
 
   ####################### Install VERSION ##########################
-  file(GLOB OTB_VERSION_FILES ${OTB_INSTALL_DIR}/share/doc/OTB-*/VERSION)
-  if(OTB_VERSION_FILES)
-    list(SORT OTB_VERSION_FILES)
-    list(GET OTB_VERSION_FILES -1 OTB_LATEST_VERSION_FILE)
-    install(FILES ${OTB_LATEST_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
+  if(EXISTS ${OTB_INSTALL_DIR}/share/doc/${OTB_LATEST_MAJOR_MINOR}/VERSION)
+    install(FILES ${OTB_INSTALL_DIR}/share/doc/${OTB_LATEST_MAJOR_MINOR}/VERSION
+            DESTINATION ${PKG_STAGE_DIR})
   endif()
 
 endfunction()
@@ -387,7 +389,6 @@ function(func_install_otb_support_files)
   foreach(req
       PKG_STAGE_DIR
       OTB_INSTALL_DIR
-      MONTEVERDI_INSTALL_DIR
       DEPENDENCIES_INSTALL_DIR
       OTB_APPLICATIONS_DIR
       )
@@ -470,11 +471,11 @@ function(func_install_monteverdi_support_files)
 
   #<prefix>/share for otb i18n directory. This is different from qt's i18N directory
   #which is <prefix>/share/qt4/translations.
-  set(PKG_OTB_I18N_DIR "${PKG_STAGE_DIR}/${Monteverdi_INSTALL_DATA_DIR}/i18n")
+  set(PKG_OTB_I18N_DIR "${PKG_STAGE_DIR}/${OTB_INSTALL_DATA_DIR}/i18n")
 
   # Just check if required variables are defined.
   foreach(req
-      Monteverdi_SOURCE_DIR
+      OTB_SOURCE_DIR
       PACKAGE_SUPPORT_FILES_DIR
       QT_PLUGINS_DIR
       PKG_STAGE_BIN_DIR
@@ -515,23 +516,20 @@ function(func_install_monteverdi_support_files)
   install(FILES ${QT_TRANSLATIONS_FILES}  DESTINATION ${PKG_I18N_DIR})
 
   #translation of monteverdi specific strings
-  file(GLOB APP_TS_FILES ${Monteverdi_SOURCE_DIR}/i18n/*.ts) # qm files
+  if(NOT EXISTS "${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n")
+    message(FATAL_ERROR "error ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n not exists")
+  endif()
+  file(GLOB APP_TS_FILES ${OTB_SOURCE_DIR}/i18n/*.ts) # qm files
   foreach(APP_TS_FILE ${APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
-    install(FILES ${Monteverdi_BINARY_DIR}/i18n/${APP_TS_FILENAME}.qm
+    install(FILES ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n/${APP_TS_FILENAME}.qm
       DESTINATION ${PKG_OTB_I18N_DIR}
       )
   endforeach()
 
-  #set(PKG_OTB_ccSHARE_SOURCE_DIR "${MONTEVERDI_INSTALL_DIR}")
-  # if(WIN32)
-  #   set(PKG_OTB_ccSHARE_SOURCE_DIR "${MONTEVERDI_INSTALL_DIR}/share")
-  # endif()
-  if(NOT EXISTS "${MONTEVERDI_INSTALL_DIR}/share/otb/i18n")
-    message(FATAL_ERROR "error ${MONTEVERDI_INSTALL_DIR}/share/otb/i18n not exists")
-  endif()
+  
   ####################### install otb share ###########################
-  install(DIRECTORY ${MONTEVERDI_INSTALL_DIR}/share/otb DESTINATION ${PKG_SHARE_DEST_DIR})
+  #install(DIRECTORY ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n DESTINATION ${PKG_SHARE_DEST_DIR}/otb)
 
 endfunction()
 
@@ -552,14 +550,16 @@ function(func_prepare_package)
   set(DEST_APP_DIR lib/otb/applications)
   set(EXE_EXT "")
   set(SCR_EXT ".sh")
-  set(LIB_EXT "*so")
+  set(LIB_EXT ".so")
+  set(PYMODULE_EXT ".so")
   if(WIN32)
     set(EXE_EXT ".exe")
-    set(LIB_EXT "*dll")
+    set(LIB_EXT ".dll")
     set(SCR_EXT ".bat")
+    set(PYMODULE_EXT ".pyd")
     set(DEST_LIB_DIR bin)
   elseif(APPLE)
-    set(LIB_EXT "*dylib")
+    set(LIB_EXT ".dylib")
   endif()
 
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks_temp  "")
@@ -609,7 +609,7 @@ function(func_prepare_package)
     endif()
   endforeach()
 
-  file(GLOB OTB_APPS_LIST ${OTB_APPLICATIONS_DIR}/otbapp_${LIB_EXT}) # /lib/otb
+  file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
 
   #see the first comment about VAR_IN_PKGSETUP_CONFIGURE
   #NOTE: this is not used in windows yet..
@@ -619,6 +619,10 @@ function(func_prepare_package)
   endforeach()
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
+  if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+    list(APPEND PKG_PEFILES "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+    install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python DESTINATION ${PKG_STAGE_DIR}/lib)
+  endif()
 
   set(ALLOWED_SYSTEM_DLLS_SEARCH_PATHS
     /usr/lib
@@ -693,6 +697,12 @@ function(func_process_deps infile)
   if(WIN32)
     string(TOLOWER "${infile}" infile_lower )
   endif()
+
+  is_system_dll(is_system "${infile}")
+  if(EXISTS ${infile} AND NOT is_system)
+    get_filename_component(infile ${infile} NAME)
+  endif()
+
   get_filename_component(bn ${infile} NAME)
 
   list_contains(contains "${bn}" "${alldlls}")
@@ -735,17 +745,19 @@ function(func_process_deps infile)
                     ${CMAKE_BINARY_DIR}/make_symlinks_temp
                     "ln -sf $OUT_DIR/lib/${linked_to_file} $OUT_DIR/lib/${basename_of_sofile}\n"
                     )
-                  #message("${sofile} is a symlink to ${linked_to_file}")
+                  # message("${sofile} is a symlink to ${linked_to_file}")
                 else() # is_symlink
                   if(NOT "${basename_of_sofile}" MATCHES "otbapp_")
-                    file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_LIB_DIR} "${sofile}\n")
-                    #just install the so file to <staging-dir>/lib
-                    #install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib MESSAGE_NEVER)
-                    # Finally touch a file in temp directory for globbing later
-                    # message("touching ${basename_of_sofile}")
-                    execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
-                  endif() #if(.. MATCHES "otbapp_")
-                endif() #is_symlink
+                    if( NOT IS_DIRECTORY ${sofile} )
+                      file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_LIB_DIR} "${sofile}\n")
+                      #just install the so file to <staging-dir>/lib
+                      #install(FILES "${sofile}" DESTINATION ${PKG_STAGE_DIR}/lib MESSAGE_NEVER)
+                      # Finally touch a file in temp directory for globbing later
+                      # message("touching ${basename_of_sofile}")
+                      execute_process(COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/temp_so_names_dir/${basename_of_sofile}")
+                    endif() # ( EXISTS ${SEARCHDIR}/${sofile} )
+                  endif() # if(.. MATCHES "otbapp_")
+                endif() # is_symlink
               endif() #is_valid
             endforeach()
           endif(is_executable)
@@ -1015,6 +1027,7 @@ set(LINUX_SYSTEM_DLLS
   libSM.so*
   libICE.so*
   libXrandr.so*
+  libpython*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
@@ -1031,6 +1044,7 @@ set(APPLE_SYSTEM_DLLS
   Carbon.framework
   AppKit.framework
   Foundation.framework
+  Python.framework
   AGL.framework
   OpenGL.framework
   libgcc_s.*dylib

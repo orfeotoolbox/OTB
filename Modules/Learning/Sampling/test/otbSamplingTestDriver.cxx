@@ -11,4 +11,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageSampleExtractorFilterNew);
   REGISTER_TEST(otbImageSampleExtractorFilter);
   REGISTER_TEST(otbImageSampleExtractorFilterUpdate);
+  REGISTER_TEST(otbSamplingRateCalculatorListNew);
+  REGISTER_TEST(otbSamplingRateCalculatorList);
 }

@@ -34,7 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetView : public QWidget
+class OTBQtWidget_EXPORT QtWidgetView : public QWidget
 {
   Q_OBJECT
 public:
