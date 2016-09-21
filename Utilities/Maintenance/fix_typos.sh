@@ -47,7 +47,7 @@ EXCLUDED_FILES="$EXCLUDED_FILES,*/Documentation/SoftwareGuide/Art/*,*/Documentat
 #Exclude also Copyright folder
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Copyright/*,*/SuperBuild/Copyright/*"
 # exclude maintenance, translation, license
-EXCLUDED_FILES="$EXCLUDED_FILES,*/Utilities/Maintenance/*,*/fix_typos/*,LICENSE,*/i18n/*"
+EXCLUDED_FILES="$EXCLUDED_FILES,*/Utilities/Maintenance/fix_typos.sh,*/fix_typos/*,LICENSE,*/i18n/*"
 
 #We use also words white list to handle deprecated classes/methods which are still there and contains some typos
 
