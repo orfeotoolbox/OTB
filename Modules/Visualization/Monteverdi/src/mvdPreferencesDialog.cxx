@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdCore.h"
 #include "mvdGui.h"
 #include "mvdI18nApplication.h"
 #include "mvdI18nMainWindow.h"
@@ -130,6 +131,35 @@ PreferencesDialog
   );
 
   //
+  // GDAL overviews.
+  {
+    QVariant value(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_OVERVIEWS_ENABLED
+      )
+    );
+
+    m_UI->overviewsCheckBox->setChecked(
+      !value.isValid()
+      ? OVERVIEWS_ENABLED_DEFAULT
+      : value.toBool()
+    );
+  }
+  {
+    QVariant value(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_OVERVIEWS_SIZE
+      )
+    );
+
+    m_UI->overviewsSpinBox->setValue(
+      !value.isValid()
+      ? OVERVIEWS_SIZE_DEFAULT
+      : value.toInt()
+    );
+  }
+
+  //
   // Rendering settings.
   {
     QVariant value(
@@ -140,7 +170,7 @@ PreferencesDialog
 
     m_UI->resolutionComboBox->setCurrentIndex(
       !value.isValid()
-      ? RESOLUTION_LOWER
+      ? RESOLUTION_DEFAULT
       : value.toInt()
     );
   }
@@ -259,6 +289,17 @@ PreferencesDialog
   I18nApplication::Instance()->StoreSettingsKey(
     I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
     m_UI->geoidLineEdit->text()
+  );
+
+  //
+  // Overview settings.
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_OVERVIEWS_ENABLED,
+    m_UI->overviewsCheckBox->isChecked()
+  );
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_OVERVIEWS_SIZE,
+    m_UI->overviewsSpinBox->value()
   );
 
   //
