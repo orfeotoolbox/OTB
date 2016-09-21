@@ -80,7 +80,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Version M.m.pl (codename)</string>
+          <string>OTB version M.m.pl (codename)</string>
          </property>
         </widget>
        </item>

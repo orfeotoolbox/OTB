@@ -65,14 +65,10 @@ HistogramModel::RealType
 HistogramModel
 ::GetEpsilon()
 {
-  if( std::tr1::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+  if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
     return
-      std::pow(
-	10.0,
-	static_cast< DefaultImageType::PixelType::ValueType >(
-	  -HistogramModel::PRECISION - 1
-	)
-      );
+      std::pow( 10.0, -HistogramModel::PRECISION - 1 );
+
   else
     return 1;
 }

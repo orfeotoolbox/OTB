@@ -53,7 +53,7 @@ FilterFunctionValues
     total2 += m_FilterFunctionValues6S[centerIndex];
     if (total2 > total / 2) break;
     }
-  return m_MinSpectralValue + m_UserStep * centerIndex;
+  return m_MinSpectralValue + 0.0025 * centerIndex;
 }
 
 /**PrintSelf method */
