@@ -151,7 +151,7 @@ application will find these files and load directly the quicklook from
 them, instead of decoding it from the
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  file, resulting in
 an instant loading of the image in Monteverdi . Since the wheight of
-these extra files is ususally of a few megaoctets, it is recommended to
+these extra files is usually of a few megaoctets, it is recommended to
 keep this option checked unless one has a very good reason not to. Now
 that the `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image is
 loaded in Monteverdi , it appears in the main Monteverdi window,
@@ -185,7 +185,7 @@ see the actual name of the place under mouse pointer). Last, as said in
 the foreword of this section,
 `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  image can be quite
 large, so it might be convenient to switch the viewer style from
-*Packed* to *Splitted*, in which case you will be able to maximize the
+*Packed* to *Split*, in which case you will be able to maximize the
 *Scroll Window* for better localisation of the viewed area. To do so,
 one can go to the *Setup* tab of the *Viewer Control Window*.
 
@@ -193,7 +193,7 @@ Handling mega-tiles in Monteverdi
 --------------------------------------
 
 If the `Pleiades <http://smsc.cnes.fr/PLEIADES/index.htm>`_  product is
-very large, it might happen that the image is actually splitted into
+very large, it might happen that the image is actually split into
 several `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  files,
 also called mega-tiles. Since the area of interest might span two or
 more mega-tiles, it is convenient to stitch together these tiles so as
@@ -230,7 +230,7 @@ uncompress it to disk. To do so, open the
 Figure 5: A Pleiades image in Monteverdi Uncompress Jpeg2000 image module. (c) CNES 2012
 
 `Figure 5` shows what this module looks like. On the left, one can find
-informations about the images dimensions, resolution level, and number of
+information about the images dimensions, resolution level, and number of
 `Jpeg2000 <http://en.wikipedia.org/wiki/JPEG_2000>`_  tiles in image,
 dimension of tiles, and size of tiles in mega-octets. The center part of
 the module is the most important one: it displays a quick-look of the

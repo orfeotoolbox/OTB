@@ -425,7 +425,7 @@ def ApplicationToRst(appname):
     if len(seealso) >=2:
         output += RstHeading("See Also", '~')
 #        output += ":See Also:" + linesep + linesep
-        output += "These additional ressources can be useful for further information: " + linesep
+        output += "These additional resources can be useful for further information: " + linesep
         # hlink="<http://www.readthedocs.org/" + ConvertString(app.GetDocSeeAlso()) + ".html>`_ "
         # output += linesep + "`" + ConvertString(app.GetDocSeeAlso()) + " " + hlink + linesep + linesep
         output += linesep + ConvertString(app.GetDocSeeAlso()) + linesep + linesep

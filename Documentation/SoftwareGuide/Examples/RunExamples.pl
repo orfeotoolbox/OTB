@@ -27,7 +27,7 @@
 # 
 # Please do not specify paths along with the file names. A list of search paths 
 # where input data files may be found is specified through CMAKE. Paths are 
-# specified in a colon seperated list such as
+# specified in a colon separated list such as
 #     /Insight/Examples/Data:/VTK/VTKData
 # Specifying the root path will suffice. A recursive search for input data 
 # is done.
@@ -54,7 +54,7 @@
 # Note that the eps files are flipped, not the inputs or the outputs themselves. The
 # files that are used in the command line arguments etc are the original ones. In other 
 # words every image that you see in the SW guide that is the same as or is generated
-# from the list of images in teh CMakeLists file is a flipped version!
+# from the list of images in the CMakeLists file is a flipped version!
 # 
 use File::Spec; #for platform independent file paths
 use File::Find; #for platform independent recursive search of input images in 
@@ -77,11 +77,11 @@ $numArgs = $#ARGV + 1;
 if( $numArgs < 5 )
   {
       print "Usage arguments: \n";
-      print "  Name of the .cxx/.txx file (with extenstion).\n";
+      print "  Name of the .cxx/.txx file (with extension).\n";
       print "  OTBExecsDirectoryPath \n";
       print "  Cmake file to be generated\n";
       print "  Name of the TEX file generated, so dependencies can be specified\n";
-      print "  Ouput folder to store generated images\n";
+      print "  Output folder to store generated images\n";
       print "  Double Colon separated list of possible include directories for input images\n";
   die;
   }

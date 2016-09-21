@@ -222,7 +222,7 @@ type is advised for this output image.
 ::
 
     otbcli_LSMSSmallRegionsMerging -in filtered_range.tif
-                                   -inseg segementation.tif
+                                   -inseg segmentation.tif
                                    -out segmentation_merged.tif uint32 
                                    -minsize 10 
                                    -tilesizex 256 
@@ -303,17 +303,17 @@ The application can be used like this:
                                   -out      FuzzyModel.xml
 
 The output file ``FuzzyModel.xml`` contains the optimal model to perform
-informations fusion.
+information fusion.
 
 First Step: Compute Descriptors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first step in the classifier fusion based validation is to compute,
-for each studied polyline, the choosen descriptors. In this context, the
+for each studied polyline, the chosen descriptors. In this context, the
 *ComputePolylineFeatureFromImage* application can be used for a large
 range of descriptors. It has the following inputs :
 
--  ``-in`` an image (of the sudied scene) corresponding to the choosen
+-  ``-in`` an image (of the sudied scene) corresponding to the chosen
    descriptor (NDVI, building Mask…)
 
 -  ``-vd`` a vector data containing polyline of interest
@@ -338,7 +338,7 @@ pixels along a polyline that verifies the formula “NDVI >0.4” :
                                            -out   VD_NONDVI.shp
 
 ``NDVI.TIF`` is the NDVI mono band image of the studied scene. This step
-must be repeated for each choosen descriptor:
+must be repeated for each chosen descriptor:
 
 ::
 

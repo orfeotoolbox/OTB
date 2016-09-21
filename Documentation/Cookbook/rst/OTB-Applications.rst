@@ -16,7 +16,7 @@ library, or compose them into high level pipelines. OTB applications allow to:
 OTB applications can be launched in different ways, and accessed from different
 entry points. The framework can be extended, but Orfeo Toolbox ships with the following:
 
--  A command-line laucher, to call applications from the terminal,
+-  A command-line launcher, to call applications from the terminal,
 
 -  A graphical launcher, with an auto-generated QT interface, providing
    ergonomic parameters setting, display of documentation, and progress
@@ -145,7 +145,7 @@ Command-line examples are provided in chapter [chap:apprefdoc], page .
 Using the GUI launcher
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The graphical interface for the applications provides a usefull
+The graphical interface for the applications provides a useful
 interactive user interface to set the parameters, choose files, and
 monitor the execution progress.
 
@@ -170,7 +170,7 @@ The resulting graphical application displays a window with several tabs:
 -  Parameters is where you set the parameters and execute the
    application.
 
--  Logs is where you see the informations given by the application
+-  Logs is where you see the information given by the application
    during its execution.
 
 -  Progress is where you see a progress bar of the execution (not
@@ -258,7 +258,7 @@ application, changing the algorithm at each iteration.
       # Here we configure the smoothing algorithm
       app.SetParameterString("type", type)
 
-      # Set the output filename, using the algorithm to differenciate the outputs
+      # Set the output filename, using the algorithm to differentiate the outputs
       app.SetParameterString("out", argv[2] + type + ".tif")
 
       # This will execute the application and save the output file

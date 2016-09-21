@@ -251,7 +251,7 @@ After you can run:
 If you are using *Synaptic*, you can add the repositories, update and
 install the packages through the graphical interface.
 
-For further informations about Ubuntu packages go to
+For further information about Ubuntu packages go to
 `ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`__
 launchpad page and click on Read about installing.
 

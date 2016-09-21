@@ -41,9 +41,9 @@ fi
 #Build exclude files and directory list
 EXCLUDED_FILES="*/.git*"
 #Exclude third parties code, patches from superbuild and doxygen files
-EXCLUDED_FILES="$EXCLUDED_FILES,*/Modules/ThirdParty/6S/*,*/Modules/ThirdParty/SiftFast/*,*/Modules/ThirdParty/SPTW/*,*/SuperBuild/patches/*,*/Utilities/Doxygen/*"
+EXCLUDED_FILES="$EXCLUDED_FILES,*/Modules/ThirdParty/6S/*,*/Modules/ThirdParty/SiftFast/*,*/Modules/ThirdParty/SPTW/*,*/SuperBuild/patches/*"
 #Exclude also documentation for now
-EXCLUDED_FILES="$EXCLUDED_FILES,*/Documentation/*"
+EXCLUDED_FILES="$EXCLUDED_FILES,*/Documentation/SoftwareGuide/Art/*,*/Documentation/Cookbook/Art/*,*/Documentation/SoftwareGuide/Latex/Hyperspectral.txt,*/Documentation/Latex/Insight.bib"
 #Exclude also Copyright folder
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Copyright/*,*/SuperBuild/Copyright/*"
 # exclude maintenance, translation, license
@@ -70,6 +70,8 @@ WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Developement"
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Shrinked"
 # for dum variable in prosail
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,dum"
+# for pary variable
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,pary"
 
 python3 fix_typos/codespell/codespell.py codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
         --words-white-list=$WORDS_WHITE_LIST \

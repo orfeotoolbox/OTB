@@ -16,7 +16,7 @@ All of OTB's algorithms are accessible from its graphical interface called
 Monteverdi, from QGIS, Python, the command line or C++. Monteverdi is an easy to
 use, hardware accelerated visualization tool for satellite images in sensor
 geometry. With it, end-users can visualize huge raw imagery products
-and access all of the applications in the toolbox. From ressource limited
+and access all of the applications in the toolbox. From resource limited
 laptops to high performance clusters, OTB is available on Windows, Linux and
 Mac. It is community driven, extensible and heavily documented.
 Orfeo ToolBox is not a black box!
@@ -24,7 +24,7 @@ Orfeo ToolBox is not a black box!
 This is the CookBook documentation for users. If you are new to OTB and
 Monteverdi, start here. It will go through how to install OTB on your system,
 how to start using Monteverdi and OTB applications to view and process your
-data, and recipies on how to accomplish typical remote sensing tasks.
+data, and recipes on how to accomplish typical remote sensing tasks.
 Finally, there is also documentation on every application shipped with OTB.
 
 For other documentation, be sure to read:
