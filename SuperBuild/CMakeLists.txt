@@ -52,7 +52,6 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 # General options
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
-option(ENABLE_MONTEVERDI " Build Monteverdi on top of OTB" OFF)
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
@@ -66,6 +65,16 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
     set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
     message(STATUS "OTB version : ${SUPERBUILD_OTB_VERSION}")
   endif()
+endif()
+
+get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set (CMAKE_INSTALL_PREFIX
+    "${PARENT_OF_BINARY_DIR}/superbuild_install"
+    CACHE
+    PATH
+    "default install path for superbuild"
+    FORCE )
 endif()
 
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
@@ -229,9 +238,11 @@ option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
 option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 
-set(OTB_USE_OPENGL ${ENABLE_MONTEVERDI})
-set(OTB_USE_GLEW ${ENABLE_MONTEVERDI})
-set(OTB_USE_QWT ${ENABLE_MONTEVERDI})
+#Problem: below cmake setting will fail!
+#-DOTB_USE_OPENGL=ON -DOTB_USE_GLEW=ON -DOTB_USE_QWT=ON
+#This is because ENABLE_MONTEVERDI is OFF by default
+# This brings a lot of twisted logic. so taking out this option
+
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
@@ -279,14 +290,17 @@ endif()
 
 if(FROM_SYSTEM_LIST)
   list(SORT FROM_SYSTEM_LIST)
-foreach( item ${FROM_SYSTEM_LIST})
-  message(STATUS "  Using system version of ${item}")
-endforeach()
+  foreach( item ${FROM_SYSTEM_LIST})
+    message(STATUS "  Using system version of ${item}")
+  endforeach()
 endif()
 
 if(FROM_SUPERBUILD_LIST)
   list(SORT FROM_SUPERBUILD_LIST)
-foreach( item ${FROM_SUPERBUILD_LIST})
-  message(STATUS "  Using SuperBuild version of ${item}")
-endforeach()
+  foreach( item ${FROM_SUPERBUILD_LIST})
+    message(STATUS "  Using SuperBuild version of ${item}")
+  endforeach()
 endif()
+
+message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
