@@ -559,6 +559,11 @@ Spot6ImageMetadataInterface::GetSatElevation() const
   // MSD: for the moment take only topCenter value
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
   double value = atof(valueString.c_str());
+
+  // Elevation is measured from ground, incidence from zenith
+  // Elevation angle = 90° - Incidence angle
+  value = 90. - value;
+
   return value;
 }
 
@@ -617,17 +622,14 @@ Spot6ImageMetadataInterface
   if (nbBands == 1)
     {
     wavel.SetSize(1);
-    wavel.Fill(0.455); // todo
     }
-  else if (nbBands > 1 && nbBands < 5) // todo
+  else if (nbBands > 1 && nbBands < 5)
     {
     wavel.SetSize(4);
-    wavel[0] = 0.454;
-    wavel[1] = 0.527;
-    wavel[2] = 0.624;
-    wavel[3] = 0.756;
     }
   else itkExceptionMacro(<< "Invalid number of bands...");
+
+  wavel.Fill(0.4);
 
   return wavel;
 }
@@ -655,20 +657,17 @@ Spot6ImageMetadataInterface
   int nbBands = this->GetNumberOfBands();
 
   // Panchromatic case
-  if (nbBands == 1) // todo
+  if (nbBands == 1)
     {
     wavel.SetSize(1);
-    wavel.Fill(0.744);
     }
-  else if (nbBands > 1 && nbBands < 5) // todo
+  else if (nbBands > 1 && nbBands < 5)
     {
     wavel.SetSize(4);
-    wavel[0] = 0.519;
-    wavel[1] = 0.587;
-    wavel[2] = 0.694;
-    wavel[3] = 0.880;
     }
   else itkExceptionMacro(<< "Invalid number of bands...");
+
+  wavel.Fill(1.0);
 
   return wavel;
 }
