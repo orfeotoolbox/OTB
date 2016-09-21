@@ -52,7 +52,6 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 # General options
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
-option(ENABLE_MONTEVERDI " Build Monteverdi on top of OTB" OFF)
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
@@ -239,9 +238,11 @@ option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
 option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 
-set(OTB_USE_OPENGL ${ENABLE_MONTEVERDI})
-set(OTB_USE_GLEW ${ENABLE_MONTEVERDI})
-set(OTB_USE_QWT ${ENABLE_MONTEVERDI})
+#Problem: below cmake setting will fail!
+#-DOTB_USE_OPENGL=ON -DOTB_USE_GLEW=ON -DOTB_USE_QWT=ON
+#This is because ENABLE_MONTEVERDI is OFF by default
+# This brings a lot of twisted logic. so taking out this option
+
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
