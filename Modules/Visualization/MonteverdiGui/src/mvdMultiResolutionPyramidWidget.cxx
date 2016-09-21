@@ -40,7 +40,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdCore.h"
 #include "mvdGui.h"
+#include "mvdI18nCoreApplication.h"
 
 namespace mvd
 {
@@ -237,13 +239,15 @@ MultiResolutionPyramidWidget
   m_UI->baseSpinBox->blockSignals( prevSignalsBlocked );
   }
 
+  unsigned int maxResolutions = m_GDALOverviewsBuilder->CountResolutions();
+
   {
-  bool prevSignalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
+    bool prevSignalsBlocked = m_UI->levelsSpinBox->blockSignals( true );
 
-  m_UI->levelsSpinBox->setRange( 0, m_GDALOverviewsBuilder->CountResolutions() );
-  m_UI->levelsSpinBox->setValue( m_GDALOverviewsBuilder->GetNbResolutions() );
+    m_UI->levelsSpinBox->setRange( 0, maxResolutions );
+    m_UI->levelsSpinBox->setValue( m_GDALOverviewsBuilder->GetNbResolutions() );
 
-  m_UI->levelsSpinBox->blockSignals( prevSignalsBlocked );
+    m_UI->levelsSpinBox->blockSignals( prevSignalsBlocked );
   }
 
   {
@@ -251,7 +255,8 @@ MultiResolutionPyramidWidget
 
   m_UI->sizeSpinBox->setRange( 1, minSize );
 
-  assert(m_GDALOverviewsBuilder->CountResolutions() >= m_GDALOverviewsBuilder->GetNbResolutions() );
+  assert( maxResolutions >=
+	  m_GDALOverviewsBuilder->GetNbResolutions() );
 
   // Force C++ implicit cast by declaring local variables to force compiler
   // to find correct std::pow() signature.
@@ -260,8 +265,8 @@ MultiResolutionPyramidWidget
   // error: call of pow(unsigned int, unsigned int) is ambiguous
   double rf = m_GDALOverviewsBuilder->GetResolutionFactor();
 
-  int m = 
-    m_GDALOverviewsBuilder->CountResolutions() -
+  unsigned int m = 
+    maxResolutions -
     m_GDALOverviewsBuilder->GetNbResolutions();
 
   m_UI->sizeSpinBox->setValue(
