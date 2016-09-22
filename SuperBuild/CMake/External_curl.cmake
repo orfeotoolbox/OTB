@@ -15,18 +15,11 @@ if(MSVC)
     return()
   endif()
 
-  execute_process(
-  COMMAND ${CMAKE_C_COMPILER}
-  ERROR_VARIABLE ev
-  OUTPUT_VARIABLE ov
-  OUTPUT_QUIET
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  if("${ev}" MATCHES "x86")
-	set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
-  else()
-	set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
-  endif()
+if("${OTB_MSVC_COMPILER_ARCH}" MATCHES "x86")
+  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
+else()
+  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
+endif()
 
   set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-release-dll-zlib-dll-ipv6-sspi-winssl")
 
