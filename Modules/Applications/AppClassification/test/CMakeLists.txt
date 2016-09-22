@@ -112,6 +112,10 @@ endif()
 
 set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 
+# This is a black list for classifier that can not have a baseline
+# because they are using randomness and seed can not be set
+set(classifier_without_basline "SHARKRF")
+
 # Loop on classifiers
 foreach(classifier ${classifierList})
   string(TOLOWER ${classifier} lclassifier)
@@ -121,6 +125,13 @@ foreach(classifier ${classifierList})
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
   set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
 
+  set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
+
+  list(FIND classifier_without_basline ${classifier} _classifier_has_baseline)
+  if(NOT ${_classifier_has_baseline} EQUAL -1)
+    set(valid "")
+  endif()
+  
   otb_test_application(
                        NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
                        APP      TrainImagesClassifier
@@ -132,9 +143,7 @@ foreach(classifier ${classifierList})
                                 -io.out ${TEMP}/${OUTMODELFILE}
                                 -rand 121212
 
-                       VALID    ${ascii_comparison}
-                                ${ascii_ref_path}/${OUTMODELFILE}
-                                ${TEMP}/${OUTMODELFILE}
+                       VALID    ${valid}
                        )
 
   otb_test_application(
@@ -149,9 +158,7 @@ foreach(classifier ${classifierList})
                                 -rand 121212
                                 -outxml ${TEMP}/cl${classifier}_OutXML1.xml
 
-                       VALID    ${ascii_comparison}
-                                ${ascii_ref_path}/${OUTMODELFILE}
-                                ${TEMP}/OutXML1_${OUTMODELFILE}
+                       VALID ${valid}
                        )
 
   otb_test_application(
@@ -163,9 +170,7 @@ foreach(classifier ${classifierList})
                                 -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
 
-                       VALID    ${ascii_comparison}
-                                ${ascii_ref_path}/${OUTMODELFILE}
-                                ${TEMP}/OutXML2_${OUTMODELFILE}
+                       VALID    ${valid}
                        )
 
                      #set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1)
