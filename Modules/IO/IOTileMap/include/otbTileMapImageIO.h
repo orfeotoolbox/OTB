@@ -35,9 +35,9 @@
 namespace otb
 {
 
-namespace TileMapAdressingStyle
+namespace TileMapAddressingStyle
 {
-enum TileMapAdressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
+enum TileMapAddressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
 }
 
 /** \class TileMapImageIO
@@ -215,7 +215,7 @@ private:
   std::string                                  m_CacheDirectory;
   std::string                                  m_ServerName;
   std::string                                  m_FileSuffix;
-  TileMapAdressingStyle::TileMapAdressingStyle m_AddressMode;
+  TileMapAddressingStyle::TileMapAddressingStyle m_AddressMode;
 
   bool m_FlagWriteImageInformation;
 

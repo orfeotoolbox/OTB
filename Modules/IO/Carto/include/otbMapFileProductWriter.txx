@@ -105,7 +105,7 @@ MapFileProductWriter<TInputImage>
 
 
 /**
- * Write lauch the tiling and the mapFile generation and write on the
+ * Write launch the tiling and the mapFile generation and write on the
  * disk the indexfile as a shapefile
  */
 template <class TInputImage>
@@ -365,7 +365,7 @@ MapFileProductWriter<TInputImage>
         m_Transform  = TransformType::New();
         m_Transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
         m_Transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
-        m_Transform->InstanciateTransform();
+        m_Transform->InstantiateTransform();
 
         InputPointType  inputPoint;
         SizeType        sizeTile;
@@ -546,7 +546,7 @@ MapFileProductWriter<TInputImage>
   m_File <<"\t\t#IMAGEURL '/ms_tmp/'" << std::endl;
 
   m_File <<"\t\t# WMS server settings" << std::endl;
-  m_File <<"\t\t# NOTE : the user must change the path to the mapserver excecutable in the "<<std::endl;
+  m_File <<"\t\t# NOTE : the user must change the path to the mapserver executable in the "<<std::endl;
   m_File <<"\t\t#  wms_onlineresource field"<<std::endl;
   m_File <<"\t\tMETADATA" << std::endl;
   m_File <<"\t\t 'wms_title'           'Level0'" << std::endl;

@@ -26,7 +26,7 @@ Here are suggested steps for the Monteverdi beginner.
 
    Monteverdi depends on OTB. You have to fill up the OTB_DIR variable with the
    location of the compiled OTB. If you use ccmake or cmake-gui, you have an
-   inteface to enter the value.
+   interface to enter the value.
 
 
 Please submit bug reports using the OTB bug tracker at:

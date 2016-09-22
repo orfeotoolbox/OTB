@@ -27,7 +27,7 @@
 //
 // This example illustrates the use of the \doxygen{otb}{TouziEdgeDetectorImageFilter}.
 // This filter belongs to the family of the fixed false alarm rate
-// edge detectors but it is apropriate for SAR images, where the
+// edge detectors but it is appropriate for SAR images, where the
 // speckle noise is considered as multiplicative. By analogy with the
 // classical gradient-based edge detectors which are suited to the
 // additive noise case, this filter computes a ratio of local means in

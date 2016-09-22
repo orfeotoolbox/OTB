@@ -70,7 +70,7 @@ public:
 
 private:
   /**
-   * This class may not be instanciated
+   * This class may not be instantiated
    * Intentionally not implemented
    */
   WaveletOperator ();

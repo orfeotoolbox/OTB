@@ -52,7 +52,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(LineOfSightOptimizer, itk::Object);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TPrecision  PrecisionType;
   typedef TLabel      LabelType;
   typedef itk::DefaultStaticMeshTraits<TLabel,3,3,TPrecision> MeshType;

@@ -4,7 +4,7 @@ macro(macro_super_package)
   cmake_parse_arguments(PKG  "" "STAGE_DIR" "" ${ARGN} )
 
   if(${PKG_STAGE_DIR} STREQUAL "")
-    message(FATAL_ERROR "PKG_STAGE_DIR is emtpy. Just can't continue.")
+    message(FATAL_ERROR "PKG_STAGE_DIR is empty. Just can't continue.")
   endif()
 
   if(NOT WIN32 AND NOT APPLE)
@@ -232,7 +232,7 @@ function(func_install_xdk_files)
     file(GLOB OPENCV_CONFIG_FILES_2 "${DEPENDENCIES_INSTALL_DIR}/OpenCV*.cmake")
     install(FILES ${OPENCV_CONFIG_FILES_2} DESTINATION ${PKG_STAGE_DIR})
 
-    #mxe installs qt in a seperate directory under install prefix. So..
+    #mxe installs qt in a separate directory under install prefix. So..
     set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}/qt")
 
     #qt/bin is also a special case for mxe.

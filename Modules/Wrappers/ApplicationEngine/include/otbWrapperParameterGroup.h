@@ -50,7 +50,7 @@ public:
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
 
-  /** Remove choices made in ListViewParamter widget*/
+  /** Remove choices made in ListViewParameter widget*/
   void ClearChoices(std::string paramKey);
 
   /** Get the choices made in a ListView Parameter widget*/

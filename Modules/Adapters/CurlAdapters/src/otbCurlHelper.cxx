@@ -408,7 +408,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     // Add easy handle to multi handle
     CurlHandleError::ProcessCURLcode(curl_multi_add_handle(multiHandle->GetCurlMultiResource(), lEasyHandle->GetCurlResource()));
 
-    // Add hanle to vector
+    // Add handle to vector
     listCurlHandles.push_back(lEasyHandle);
     ++url;
     ++file;

@@ -76,7 +76,7 @@ std::istream& operator>>(std::istream& is, Data& data)
 		  {
 			if (header.get_rec_seq() == 1)
 			  { // ImageOptionsFileDescriptor
-			  RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
+			  RadarSatRecord* record = factory.Instantiate(header.get_rec_seq());
 			  if (record != NULL)
 				  {
 			    record->Read(is);
@@ -98,7 +98,7 @@ std::istream& operator>>(std::istream& is, Data& data)
 			else if ((header.get_rec_seq() == 2))
 			  { // First line ProcessedDataRecord
 				lineLength = header.get_length() ;
-				RadarSatRecord* record = factory.Instanciate(2);
+				RadarSatRecord* record = factory.Instantiate(2);
 				if (record != NULL)
 			  	{
 				  record->Read(is);
@@ -117,7 +117,7 @@ std::istream& operator>>(std::istream& is, Data& data)
 			  }
 			else if ((header.get_rec_seq() == (1+nbLin)))
 			  { // Last line ProcessedDataRecord
-			  RadarSatRecord* record = factory.Instanciate(2);
+			  RadarSatRecord* record = factory.Instantiate(2);
 				if (record != NULL)
 				  {
 				  record->Read(is);

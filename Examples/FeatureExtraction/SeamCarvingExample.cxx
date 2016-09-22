@@ -82,7 +82,7 @@ int main(int itkNotUsed(argc), char * argv[])
   //  Software Guide : BeginLatex
   //
   // Energy is computed according to the gradient of the image, thus an
-  // \doxygen{itk}{GradientMagnitudeImageFilter} is instanciated
+  // \doxygen{itk}{GradientMagnitudeImageFilter} is instantiated
   //
   //  Software Guide : EndLatex
 
@@ -134,7 +134,7 @@ int main(int itkNotUsed(argc), char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Now that all elements have been instanciated, we start to plug the pipeline
+  // Now that all elements have been instantiated, we start to plug the pipeline
   // and to define the loop.
   //
   //  Software Guide : EndLatex

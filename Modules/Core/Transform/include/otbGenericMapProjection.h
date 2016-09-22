@@ -90,14 +90,22 @@ public:
   /** Return the Wkt representation of the projection*/
   virtual std::string GetWkt();
 
-  /** Instanciate the projection according to the Wkt specification*/
+  /** Instantiate the projection according to the Wkt specification*/
   virtual void SetWkt(const std::string& projectionRefWkt);
 
   virtual void PrintMap() const;
 
   OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
 
-  virtual bool InstanciateProjection();
+  virtual bool InstantiateProjection();
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  virtual bool InstanciateProjection()
+  {
+    otbWarningMacro(
+      << "InstanciateProjection has been deprecated.  Please use InstantiateProjection() instead");
+    return this->InstanciateProjection();
+  }
 
   const MapProjectionAdapter* GetMapProjection() const;
 

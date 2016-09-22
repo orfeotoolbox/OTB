@@ -656,7 +656,7 @@ public:
  *  and ETM+ Images", IEEE Trans. on Geoscience and Remote Sensing,
  *  vol 44, no 9.
  *
- *  NDBSI > -0.2 is a strong (necesary, but not sufficient)
+ *  NDBSI > -0.2 is a strong (necessary, but not sufficient)
  *  indication of the presence of bare soil areas.
  *
  * \ingroup Functor
@@ -802,7 +802,7 @@ public:
  *  automatic cloud cover assessment (ACCA)", Poc. of SPIE, vol 4049,
  *  pp. 348-355, 2000.
  *
- *  NDSIVis > 0.5 is a strong (necesary, but not sufficient)
+ *  NDSIVis > 0.5 is a strong (necessary, but not sufficient)
  *  indication of the presence of snow areas.
  *
  * \ingroup Functor

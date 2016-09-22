@@ -1,4 +1,4 @@
-Some usefull command :
+Some useful command :
 
 Pad image to fit a squared size :
 > convert -gravity center -extent 128x128  -background None input output

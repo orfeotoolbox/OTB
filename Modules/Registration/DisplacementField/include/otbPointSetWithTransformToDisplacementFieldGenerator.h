@@ -73,7 +73,7 @@ public:
   typedef typename TransformType::Pointer        TransformPointerType;
   typedef typename TransformType::ParametersType ParametersType;
 
-  /** Set/Get the Transfrom. */
+  /** Set/Get the Transform. */
   itkSetObjectMacro(Transform, TransformType);
   itkGetObjectMacro(Transform, TransformType);
 

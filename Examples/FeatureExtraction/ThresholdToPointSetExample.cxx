@@ -78,7 +78,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // A reader is instanciated to read the input image
+  // A reader is instantiated to read the input image
   //
   //  Software Guide : EndLatex
 
@@ -124,7 +124,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // To manipulate and display the result of this filter, we manually
-  // instanciate a point set and we call the \code{Update()} method on the
+  // instantiate a point set and we call the \code{Update()} method on the
   // threshold filter to trigger the pipeline execution.
   //
   // After this step, the \code{pointSet} variable contains the point set.

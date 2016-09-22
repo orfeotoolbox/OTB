@@ -24,6 +24,8 @@
 #include "otbLineCorrelationDetectorImageFilter.h"
 #include "otbAssociativeSymmetricalSumImageFilter.h"
 
+#include "vcl_deprecated_header.h"
+
 namespace otb
 {
 

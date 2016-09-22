@@ -72,7 +72,7 @@ class ITK_EXPORT LocalGradientVectorImageFilter
               typename TOutputImage::PixelType > >
 {
 public:
-  /** Standart class typedefs */
+  /** Standard class typedefs */
   typedef LocalGradientVectorImageFilter Self;
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
             Functor::LocalGradientOperator<

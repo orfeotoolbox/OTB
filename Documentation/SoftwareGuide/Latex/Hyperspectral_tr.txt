@@ -236,7 +236,7 @@ The existing algorithms are:
 \ Begin {itemize}
 \ Item {MVSA (Minimum Volume Simplex
 Analysis) [Li2008].}
-\ Item {VSS (Volume Minimum Encosing Simplex)
+\ Item {VSS (Volume Minimum Enclosing Simplex)
 [Chan2009].}
 \ Item {SISAL (Simplex Identification via Augmented Split
 Lagrangian) [Dias2009].}

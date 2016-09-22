@@ -200,7 +200,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     * Helper method : Compute the UTM parameters relative to an image Origin
     * Note: The key of the image must be set to be able to get the image.
     *       The key must be totally if the InputImageParameter belongs
-    *       to a ParamaterGroup, ie set io.in
+    *       to a ParameterGroup, ie set io.in
     */
 void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointer app,
                                                    const std::string & imageKey,

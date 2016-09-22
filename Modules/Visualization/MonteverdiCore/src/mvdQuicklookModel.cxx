@@ -115,7 +115,7 @@ QuicklookModel
   // First time?
   if( buildContext->IsBeingStored() && !inMemory )
     {
-    // Instanciate a quicklook file writer.
+    // Instantiate a quicklook file writer.
     VectorImageFileWriterType::Pointer fileWriter(
       VectorImageFileWriterType::New()
     );

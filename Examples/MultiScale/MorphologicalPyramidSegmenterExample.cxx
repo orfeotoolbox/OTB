@@ -27,7 +27,7 @@
 // This example illustrates the use of the
 // \subdoxygen{otb}{MorphologicalPyramid}{Segmenter}. This class performs
 // the segmentation of a detail image extracted from a morphological
-// pyramid analysis. The Segmentation is perfomed using the
+// pyramid analysis. The Segmentation is performed using the
 // \doxygen{itk}{ConnectedThresholdImageFilter}. The seeds are
 // extracted from the image using the
 // \doxygen{otb}{ImageToPointSetFilter}. The thresolds are set by
@@ -117,7 +117,7 @@ int main(int itkNotUsed(argc), char * argv[])
 //
 // We instantiate the segmenter and set its parameters as follows. We
 // plug the output of the readers for the details image and the
-// original image; we set the boolean variable which controls wether
+// original image; we set the boolean variable which controls whether
 // the segmented details are bright or dark; we set the quantile used
 // to threshold the details image in order to obtain the seed points
 // for the segmentation; we set the quantile for setting the threshold

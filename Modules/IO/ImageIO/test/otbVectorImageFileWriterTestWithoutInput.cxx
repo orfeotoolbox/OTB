@@ -54,7 +54,7 @@ int otbVectorImageFileWriterScalarTestWithoutInputGeneric(int argc, char* argv[]
   typedef itk::ImageRegionIterator<ImageType> IteratorType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 
-  // INSTANCIATIONS
+  // INSTANTIATIONS
   typename WriterType::Pointer writer = WriterType::New();
   typename ImageType::Pointer image = ImageType::New();
 
@@ -157,7 +157,7 @@ int otbVectorImageFileWriterComplexTestWithoutInputGeneric(int argc, char* argv[
   typedef itk::ImageRegionIterator<ImageType> IteratorType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 
-  // INSTANCIATIONS
+  // INSTANTIATIONS
   typename WriterType::Pointer writer = WriterType::New();
   typename ImageType::Pointer image = ImageType::New();
 

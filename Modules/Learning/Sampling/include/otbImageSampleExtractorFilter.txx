@@ -198,7 +198,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
         for (unsigned int i=0 ; i<nbBand ; ++i)
           {
           imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
-          // Fill the ouptut OGRDataSource
+          // Fill the output OGRDataSource
           dstFeature[m_SampleFieldNames[i]].SetValue(imgComp);
           }
         outputLayer.CreateFeature( dstFeature );

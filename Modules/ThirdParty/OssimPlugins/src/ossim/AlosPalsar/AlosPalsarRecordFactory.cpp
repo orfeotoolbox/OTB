@@ -27,7 +27,7 @@ AlosPalsarRecordFactory::~AlosPalsarRecordFactory()
 {
 }
 
-AlosPalsarRecord* AlosPalsarRecordFactory::Instanciate(int id)
+AlosPalsarRecord* AlosPalsarRecordFactory::Instantiate(int id)
 {
   if (traceDebug())
   {
@@ -40,7 +40,7 @@ AlosPalsarRecord* AlosPalsarRecordFactory::Instanciate(int id)
   }
   else
   {
-    return record->Instanciate();
+    return record->Instantiate();
   }
 }
 

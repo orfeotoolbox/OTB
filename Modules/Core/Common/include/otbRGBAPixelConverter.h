@@ -31,7 +31,7 @@ namespace otb
  * type
  *
  * To be usable, the desired conversion must be implemented through
- * partial specialisation mecanism.
+ * partial specialisation mechanism.
  *
  *
  * \ingroup OTBCommon

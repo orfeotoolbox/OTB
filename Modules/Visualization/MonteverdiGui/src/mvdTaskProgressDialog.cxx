@@ -77,7 +77,7 @@ TaskProgressDialog
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
   //
   // Do not take ownership of background-task to leave display
-  // independant of execution of background-tas.
+  // independent of execution of background-tas.
   //
   // m_BackgroundTask->setParent( this );
 

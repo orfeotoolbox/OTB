@@ -27,11 +27,11 @@ int otbROIdataConversionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<PixelType,  Dimension>                InputImageType;
   typedef otb::Image<PixelType,  Dimension>                      ROIImageType;
-  typedef otb::ROIdataConversion<InputImageType, ROIImageType>   ConvertorType;
+  typedef otb::ROIdataConversion<InputImageType, ROIImageType>   ConverterType;
 
-  ConvertorType::Pointer convertor = ConvertorType::New();
+  ConverterType::Pointer converter = ConverterType::New();
 
-  std::cout << convertor << std::endl;
+  std::cout << converter << std::endl;
 
   return EXIT_SUCCESS;
 }

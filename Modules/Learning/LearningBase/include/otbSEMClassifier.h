@@ -91,7 +91,7 @@ public:
   typedef itk::Statistics::MembershipSample<SampleType> OutputType;
 
   /** Type of the mixture model component base class.
-   * Due to the stochastic purpose, the inital list of sample (from TInputImage)
+   * Due to the stochastic purpose, the initial list of sample (from TInputImage)
    * is duplicated as many times as the number of classes (into SampleLists). */
   typedef otb::Statistics::ModelComponentBase<ClassSampleType> ComponentType;
   typedef typename ComponentType::Pointer                      ComponentPointerType;

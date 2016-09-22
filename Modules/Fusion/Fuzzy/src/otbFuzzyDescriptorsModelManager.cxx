@@ -143,7 +143,7 @@ FuzzyDescriptorsModelManager
           param.push_back(value);
         }
 
-      // Add descriptor parmaeters
+      // Add descriptor parameters
       currentDescriptor.second = param;
 
       // Add the pai to the model

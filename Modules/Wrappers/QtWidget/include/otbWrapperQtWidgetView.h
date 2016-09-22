@@ -53,7 +53,7 @@ public slots:
   void UnhandledException(QString message);
 
 private slots:
-  void UpdateMessageAfterExcuteClicked();
+  void UpdateMessageAfterExecuteClicked();
   void UpdateMessageAfterApplicationReady(bool val);
 
 signals:

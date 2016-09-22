@@ -209,7 +209,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
         VectorDataElementType   vdelement;
         PointTypeList           pointList;
 
-        // put the current layer pointer to the begining
+        // put the current layer pointer to the beginning
         for( TiXmlElement* currentNode = currentLayer->FirstChildElement("nd");
              currentNode != ITK_NULLPTR;
              currentNode = currentNode->NextSiblingElement() )
@@ -293,7 +293,7 @@ OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, const st
   // Form the vector data with the values parsed
   for(unsigned int idx = 0; idx < m_VectorDataElementList.size(); ++idx)
     {
-    // Instanciate a datanode
+    // Instantiate a datanode
     DataNodeType::Pointer currentDataNode = DataNodeType::New();
 
     // Get the current PointTypeList
@@ -359,7 +359,7 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(const std::string& key)
   // KeyList
   if(!this->IsKeyPresent(key))
     {
-    // TODO leave this functionnality for AddKey ?
+    // TODO leave this functionality for AddKey ?
     m_KeyList.push_back(key);
     this->ParseXmlFile();
     }
@@ -378,7 +378,7 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(const std::string& key, const 
     itkExceptionMacro(<<"Requested key is empty, please set a valid one");
 
   // Add the key set as parameters in the KeyList
-  // TODO leave this functionnality for AddKey ?
+  // TODO leave this functionality for AddKey ?
   if(!this->IsKeyPresent(key))
     {
     m_KeyList.push_back(key);

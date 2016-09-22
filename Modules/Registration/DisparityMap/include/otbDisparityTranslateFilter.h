@@ -59,7 +59,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(DisparityTranslateFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TDisparityImage  DispMapType;
   typedef TGridImage       GridType;
   typedef TMaskImage       MaskType;
@@ -121,7 +121,7 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
+  /** Generate input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Threaded generate data */

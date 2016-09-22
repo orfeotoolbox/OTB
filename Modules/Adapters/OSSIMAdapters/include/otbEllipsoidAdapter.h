@@ -54,11 +54,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(EllipsoidAdapter, itk::Object);
 
-  /** Convert a XYZ coordinate into a lon, lat, heigh on the ellipsoid */
+  /** Convert a XYZ coordinate into a lon, lat, height on the ellipsoid */
   void XYZToLonLatHeight(double x, double y, double z,
                          double& lon, double& lat, double& h) const;
 
-  /** Convert a lon, lat, heigh on the ellipsoid into a XYZ geocentric system*/
+  /** Convert a lon, lat, height on the ellipsoid into a XYZ geocentric system*/
   void LonLatHeightToXYZ(double lon, double lat, double h,
                          double& x, double& y, double& z) const;
 

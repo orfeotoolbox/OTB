@@ -59,7 +59,7 @@ public:
   static const char * GLSLVersion();
 
   /**
-   * \brief Check that OpenGL required capabilites have been reached.
+   * \brief Check that OpenGL required capabilities have been reached.
    *
    * \param glVersion The returned OpenGL version or <code>NULL</code>
    * if its query has failed.

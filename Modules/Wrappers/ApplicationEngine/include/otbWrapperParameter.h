@@ -179,7 +179,7 @@ public:
     return m_Root.GetPointer();
   }
 
-  /** Is the paramter a root or a child of another param */
+  /** Is the parameter a root or a child of another param */
   virtual bool IsRoot() const
   {
     return (this == m_Root.GetPointer());
@@ -209,7 +209,7 @@ public:
     return m_IsChecked;
   }
 
-  /** Modify the state of the checkbox relative to this paramter */
+  /** Modify the state of the checkbox relative to this parameter */
   virtual void SetChecked(const bool value)
   {
     m_IsChecked = value;

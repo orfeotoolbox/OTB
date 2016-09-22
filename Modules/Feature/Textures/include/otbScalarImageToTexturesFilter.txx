@@ -333,7 +333,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     double marginalDevSquared = 0.;
     double pixelVariance = 0.;
 
-    //Create and Intialize marginalSums
+    //Create and Initialize marginalSums
     std::vector<double> marginalSums(m_NumberOfBinsPerAxis, 0);
 
     //get co-occurrence vector and totalfrequency
@@ -396,7 +396,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       pixelVarianceSquared = 1.;
       }
 
-    //Initalize texture variables;
+    //Initialize texture variables;
     PixelValueType energy      = itk::NumericTraits< PixelValueType >::Zero;
     PixelValueType entropy     = itk::NumericTraits< PixelValueType >::Zero;
     PixelValueType correlation = itk::NumericTraits< PixelValueType >::Zero;

@@ -173,7 +173,7 @@ int main(int itkNotUsed(argc), char* argv[])
 //
 //  Software Guide : BeginLatex
 //
-// As an alternative to standart \code{SOMType}, one can decide to use
+// As an alternative to standard \code{SOMType}, one can decide to use
 // an \doxygen{otb}{PeriodicSOM}, which behaves like \doxygen{otb}{SOM} but
 // is to be considered to as a torus instead of a simple map. Hence, the
 // neighborhood behavior of the winning neuron does not depend on its location
@@ -268,7 +268,7 @@ int main(int itkNotUsed(argc), char* argv[])
 //
 //  Software Guide : BeginLatex
 //
-//  Now comes the intialization of the functors.
+//  Now comes the initialization of the functors.
 //
 //  Software Guide : EndLatex
 
