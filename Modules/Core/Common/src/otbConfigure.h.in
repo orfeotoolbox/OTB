@@ -16,7 +16,7 @@
 
 #cmakedefine OTB_WINDOWS_EXPORT_ALL_SYMBOLS
 
-/* Show developper debug messages */
+/* Show developer debug messages */
 #cmakedefine OTB_SHOW_ALL_MSG_DEBUG
 
 #cmakedefine OTB_USE_GDAL_20

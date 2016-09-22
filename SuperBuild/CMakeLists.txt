@@ -22,6 +22,21 @@ if(APPLE)
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
+if(MSVC)
+  execute_process(
+  COMMAND ${CMAKE_C_COMPILER}
+  ERROR_VARIABLE ev
+  OUTPUT_VARIABLE ov
+  OUTPUT_QUIET
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  
+  set(OTB_MSVC_COMPILER_ARCH x64)
+  if("${ev}" MATCHES "x86")
+    set(OTB_MSVC_COMPILER_ARCH x86)
+  endif()
+  
+endif()
+
 # use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # when building, don't use the install RPATH already
@@ -52,7 +67,6 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 # General options
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
-option(ENABLE_MONTEVERDI " Build Monteverdi on top of OTB" OFF)
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
@@ -128,6 +142,8 @@ if(DEFINED ENV{CMAKE_PREFIX_PATH})
 else()
   set(SB_CMAKE_PREFIX_PATH "${SB_INSTALL_PREFIX}")
 endif()
+
+list(REMOVE_DUPLICATES SB_CMAKE_PREFIX_PATH)
 
 set(SB_CMAKE_CACHE_ARGS)
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
@@ -239,9 +255,11 @@ option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
 option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 
-set(OTB_USE_OPENGL ${ENABLE_MONTEVERDI})
-set(OTB_USE_GLEW ${ENABLE_MONTEVERDI})
-set(OTB_USE_QWT ${ENABLE_MONTEVERDI})
+#Problem: below cmake setting will fail!
+#-DOTB_USE_OPENGL=ON -DOTB_USE_GLEW=ON -DOTB_USE_QWT=ON
+#This is because ENABLE_MONTEVERDI is OFF by default
+# This brings a lot of twisted logic. so taking out this option
+
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)

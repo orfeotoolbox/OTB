@@ -121,7 +121,7 @@ signals:
    * \brief Signal emitted when execution otb::Application has finished.
    *
    * \param status The result status of the otb::application (-1 when
-   * an exception has occured).
+   * an exception has occurred).
    */
   void SetProgressReportDone( int status =0 );
 
@@ -146,7 +146,7 @@ protected slots:
   void ExecuteAndWriteOutputSlot();
 
   /**
-   * \brief Slots called everytime one of the widget needs to be
+   * \brief Slots called every time one of the widget needs to be
    * updated (e.g. by specialized parameter widgets).
    *
    * This slot is protected so it can only be called via Qt

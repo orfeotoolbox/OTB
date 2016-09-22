@@ -72,7 +72,7 @@ The top toolbar is made up of ten icons; from left to right:
 Image displaying
 ~~~~~~~~~~~~~~~~
 
-This part of the main window is intented to display the images loaded by
+This part of the main window is intended to display the images loaded by
 the user. There are many nice keyboard shortcuts or mouse tricks that
 let the user have a better experience in navigating throughout the
 loaded images. These shortcuts and tricks are given within the Help item

@@ -5,7 +5,7 @@ macro(macro_setup_cmake_project pkg)
   include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
 
   #reset it again in macro(macro_create_targets_for_package pkg)
-  #because thats the cmake macros way.
+  #because that's the cmake macros way.
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build")
 

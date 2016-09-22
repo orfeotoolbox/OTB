@@ -29,7 +29,7 @@
 // extraction and segmentation are computed using quantiles. A pre
 // processing step is applied by multiplying the full resolution
 // brighter details (resp. darker details) with the original image
-// (resp. the inverted original image). This perfoms an enhancement of
+// (resp. the inverted original image). This performs an enhancement of
 // the regions contour precision. The details from the pyramid are set
 // via the \code{SetBrighterDetails()} and \code{SetDarkerDetails()}
 // methods. The brighter and darker details depend on the filter used

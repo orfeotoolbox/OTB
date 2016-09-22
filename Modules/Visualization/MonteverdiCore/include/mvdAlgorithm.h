@@ -209,7 +209,7 @@ operator >> ( QDataStream& stream,
 /**
  * \brief Convert a StringVector object to a QStringList object.
  *
- * Because Qt uses a shallow mecanism to copy containers, the returned
+ * Because Qt uses a shallow mechanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
 inline
@@ -220,7 +220,7 @@ ToQStringList( const StringVector& sv );
  * \brief Append the content of a StringVector object to the content
  * of a QStringList object.
  *
- * Because Qt uses a shallow mecanism to copy containers, the returned
+ * Because Qt uses a shallow mechanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
 inline

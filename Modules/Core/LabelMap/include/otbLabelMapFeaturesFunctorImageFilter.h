@@ -33,7 +33,7 @@ namespace otb {
  *
  *  The LabelObject type must be an AttributeMapLabelObject.
  *
- *  This filter can not be instanciated on its own, since its purpose
+ *  This filter can not be instantiated on its own, since its purpose
  *  is to provide a base class for all LabelMap attributes enriching filters
  *
  * \sa otb::AttributeMapLabelObject

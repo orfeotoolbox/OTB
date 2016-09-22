@@ -27,9 +27,9 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
 
   ObjectType::Pointer obj = ObjectType::New();
 
-  bool hasRisedException;
+  bool hasRaisedException;
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -39,16 +39,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetPhysicalBias() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
 
   try
@@ -59,16 +59,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetPhysicalGain() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -78,16 +78,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetSolarIrradiance() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -97,16 +97,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetDay() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -116,16 +116,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetMonth() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -135,16 +135,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetYear() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -154,16 +154,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetHour() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -173,16 +173,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetMinute() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -192,16 +192,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetProductionDay() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -211,16 +211,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetProductionMonth() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -230,16 +230,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetProductionYear() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -249,16 +249,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetSatElevation() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -268,16 +268,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetSatAzimuth() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -287,16 +287,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetFirstWavelengths() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -306,16 +306,16 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     {
     std::cout << "ExceptionObject caught for GetLastWavelengths() !" << std::endl;
     std::cout << err << std::endl;
-    hasRisedException =true;
+    hasRaisedException =true;
     }
 
-  if(!hasRisedException)
+  if(!hasRaisedException)
     {
     std::cerr << " Should has raise an exception !"<< std::endl;
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {
@@ -332,7 +332,7 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
     return EXIT_FAILURE;
     }
 
-  hasRisedException = false;
+  hasRaisedException = false;
 
   try
     {

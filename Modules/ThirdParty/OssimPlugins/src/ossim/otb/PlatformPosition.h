@@ -47,7 +47,7 @@ namespace ossimplugins
       PlatformPosition(const PlatformPosition& rhs);
 
       /**
-       * @brief Constructor with initialisation
+       * @brief Constructor with initialization
        * @param data Ephemeris
        * @param nbrData Number of Ephemeris in data
        * @remarks All the ephemeris have to be in the same coordinates system
@@ -63,7 +63,7 @@ namespace ossimplugins
 
       /**
        * @brief This function interpolates its ephemeris to create a new ephemeris at the given date and time
-       * @param date Date and time at wich the interpolation have to be done
+       * @param date Date and time at which the interpolation have to be done
        * @return The ephemeris at the given date, or NULL if an error occurs
        */
       Ephemeris* Interpolate(JSDDateTime date) const;
@@ -71,7 +71,7 @@ namespace ossimplugins
 
       /**
        * @brief This function interpolates its ephemeris to create and extract platform's position and speed
-       * @param date Date and time at wich the interpolation have to be done
+       * @param date Date and time at which the interpolation have to be done
        * @return true, or false if an error occurs
        */
       bool getPlatformPositionAtTime(JSDDateTime time, std::vector<double>& position, std::vector<double>& speed);

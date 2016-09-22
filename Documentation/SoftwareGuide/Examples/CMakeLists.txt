@@ -90,8 +90,8 @@ MACRO(CONVERT_AND_FLIP_IMG SOME_IMG EPS_IMG PATH)
 ENDMACRO(CONVERT_AND_FLIP_IMG)
 
 # Convert an image from some file format to EPS for inclusion in Latex using
-# ImageMagick or bmeps.. This image is an input image. A seperate macro is necessary
-# cause input images do not have any dependecies
+# ImageMagick or bmeps.. This image is an input image. A separate macro is necessary
+# cause input images do not have any dependencies
 IF(OTB_USE_BMEPS)
   MACRO(CONVERT_INPUT_IMG SOME_IMG EPS_IMG PATH)
     ADD_CUSTOM_COMMAND(
@@ -124,8 +124,8 @@ ENDIF(OTB_USE_BMEPS)
 
 
 # # Convert an image from some file format to EPS for inclusion in Latex using
-# # jpg2ps.. This image is an input image. A seperate macro is necessary
-# # cause input images do not have any dependecies
+# # jpg2ps.. This image is an input image. A separate macro is necessary
+# # cause input images do not have any dependencies
 # #in case of input image is in jpeg
 # MACRO(CONVERT_INPUT_COMPRESSED_IMG BASIC_OPTION SOME_IMG EPS_IMG PATH)
 #   ADD_CUSTOM_COMMAND(
@@ -149,8 +149,8 @@ ENDIF(OTB_USE_BMEPS)
 
 
 # Convert an image from some file format to EPS for inclusion in Latex using
-# ImageMagick.. This image is an input image. A seperate macro is necessary
-# cause input images do not have any dependecies. Also flip
+# ImageMagick.. This image is an input image. A separate macro is necessary
+# cause input images do not have any dependencies. Also flip
 MACRO(CONVERT_AND_FLIP_INPUT_IMG SOME_IMG EPS_IMG PATH)
   ADD_CUSTOM_COMMAND(
       SOURCE      "${PATH}/${SOME_IMG}"
@@ -357,7 +357,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification1Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification2Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification3Example.cxx
-  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRestaurationExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRestorationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRegularizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetClassificationExample.cxx

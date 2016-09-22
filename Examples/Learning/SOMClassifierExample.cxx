@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 // As for the SOM learning step, we must define the types for the
 // \code{otb::SOMMap}, and therefore, also for the distance to be
 // used. We will also define the type for the SOM reader, which is
-// actually an \subdoxygen{otb}{ImageFileReader} which the appropiate
+// actually an \subdoxygen{otb}{ImageFileReader} which the appropriate
 // image type.
 //
 //  Software Guide : EndLatex

@@ -44,9 +44,9 @@ public:
 
   /**
    * @brief Instanciatse a new Record
-   * @param id Id of the Record we want to instanciate
+   * @param id Id of the Record we want to instantiate
    */
-  EnvisatAsarRecord* Instanciate(std::string id);
+  EnvisatAsarRecord* Instantiate(std::string id);
 
 protected:
   /**

@@ -106,7 +106,7 @@ getModifiedJulianDate(ossimString const& utcTimeString)
    }
 
    /* Below method could replace all above split and convert. But there is a lot of
-      checks done in  ossimLocalTm::setIso8601( ) which slows us down. And I dont
+      checks done in  ossimLocalTm::setIso8601( ) which slows us down. And I don't
       want that. */
    /*
       ossimLocalTm otm;

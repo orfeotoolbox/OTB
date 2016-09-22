@@ -141,7 +141,7 @@ main( int argc, char* argv[] )
   splash.finish(&mainWindow);
 #endif // OTB_DEBUG
 
-  // Usefull when developping/debugging to avoid overlapping other windows.
+  // Useful when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
 
   //

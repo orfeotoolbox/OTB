@@ -12,8 +12,8 @@ target_link_libraries(MarkovClassification3Example ${OTB_LIBRARIES})
 add_executable(MarkovRegularizationExample MarkovRegularizationExample.cxx)
 target_link_libraries(MarkovRegularizationExample ${OTB_LIBRARIES})
 
-add_executable(MarkovRestaurationExample MarkovRestaurationExample.cxx)
-target_link_libraries(MarkovRestaurationExample ${OTB_LIBRARIES})
+add_executable(MarkovRestorationExample MarkovRestorationExample.cxx)
+target_link_libraries(MarkovRestorationExample ${OTB_LIBRARIES})
 
 
 if(BUILD_TESTING)

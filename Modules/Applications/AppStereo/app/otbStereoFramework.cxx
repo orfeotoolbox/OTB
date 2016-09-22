@@ -339,7 +339,7 @@ private:
 
     AddDocTag(Tags::Stereo);
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "input", "Input parameters");
     SetParameterDescription("input","This group of parameters allows one to parametrize input data.");
 
@@ -360,7 +360,7 @@ private:
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "output", "Output parameters");
     SetParameterDescription("output","This group of parameters allows one to choose the DSM resolution, nodata value, and projection parameters.");
 
@@ -417,7 +417,7 @@ private:
     AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
     SetParameterDescription("stereorect","This group of parameters allows one to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
 

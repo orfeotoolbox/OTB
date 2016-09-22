@@ -31,7 +31,7 @@ namespace otb
  *
  * ImageFileWriter writes its input data to a single output file.
  * ImageFileWriter interfaces with an ImageIO class to write out the
- * data whith streaming process.
+ * data with streaming process.
  *
  * ImageFileWriter will divide the output into several pieces
  * (controlled by SetNumberOfDivisionsStrippedStreaming, SetNumberOfLinesStrippedStreaming,

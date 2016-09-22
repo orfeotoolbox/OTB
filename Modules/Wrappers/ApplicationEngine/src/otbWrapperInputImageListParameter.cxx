@@ -47,7 +47,7 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
     const std::string filename = filenames[i];
     // TODO : when the logger will be available, redirect the exception
     // in the logger (like what is done in MsgReporter)
-    // File existance checked by the reader
+    // File existence checked by the reader
     if (!filename.empty())
       {
       // Try to build a new ParameterInputImage
@@ -93,7 +93,7 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
 {
   // TODO : when the logger will be available, redirect the exception
   // in the logger (like what is done in MsgReporter)
-  // File existance checked by the reader
+  // File existence checked by the reader
   if (!filename.empty())
     {
     // Try to build a new ParameterInputImage
@@ -128,7 +128,7 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
 
   // TODO : when the logger will be available, redirect the exception
   // in the logger (like what is done in MsgReporter)
-  // File existance checked by the reader
+  // File existence checked by the reader
   if (!filename.empty())
     {
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();

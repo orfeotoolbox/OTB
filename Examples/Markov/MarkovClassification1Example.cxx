@@ -27,7 +27,7 @@
 //
 // This example illustrates the details of the \doxygen{otb}{MarkovRandomFieldFilter}.
 // This filter is an application of the Markov Random Fields for classification,
-// segmentation or restauration.
+// segmentation or restoration.
 //
 // This example applies the \doxygen{otb}{MarkovRandomFieldFilter} to
 // classify an image into four classes defined by their mean and variance. The
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   //  Finally, we define the different classes necessary for the Markov classification.
-  //  A \doxygen{otb}{MarkovRandomFieldFilter} is instanciated, this is the
+  //  A \doxygen{otb}{MarkovRandomFieldFilter} is instantiated, this is the
   // main class which connect the other to do the Markov classification.
   //
   //  Software Guide : EndLatex
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{otb}{MRFSamplerRandomMAP}, which derives from the
-  // \doxygen{otb}{MRFSampler}, is instanciated. The sampler is in charge of
+  // \doxygen{otb}{MRFSampler}, is instantiated. The sampler is in charge of
   // proposing a modification for a given site. The
   // \doxygen{otb}{MRFSamplerRandomMAP}, randomly pick one possible value
   // according to the MAP probability.
@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{otb}{MRFOptimizerMetropoli}, which derives from the
-  // \doxygen{otb}{MRFOptimizer}, is instanciated. The optimizer is in charge
+  // \doxygen{otb}{MRFOptimizer}, is instantiated. The optimizer is in charge
   // of accepting or rejecting the value proposed by the sampler. The
   // \doxygen{otb}{MRFSamplerRandomMAP}, accept the proposal according to the
   // variation of energy it causes and a temperature parameter.
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Two energy, deriving from the \doxygen{otb}{MRFEnergy} class need to be instanciated. One energy
+  // Two energy, deriving from the \doxygen{otb}{MRFEnergy} class need to be instantiated. One energy
   // is required for the regularization, taking into account the relashionship between neighborhing pixels
   // in the classified image. Here it is done with the \doxygen{otb}{MRFEnergyPotts} which implement
   // a Potts model.
@@ -284,7 +284,7 @@ int main(int argc, char* argv[])
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.44\textwidth]{MarkovRandomField1.eps}
-  // \itkcaption[MRF restauration]{Result of applying
+  // \itkcaption[MRF restoration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
   // image for classification. The result is obtained after 20 iterations with a
   // random sampler and a Metropolis optimizer. From left to right : original image,

@@ -30,13 +30,13 @@ int otbMapProjectionAdapterTest(int itkNotUsed(argc), char* argv[])
   file << std::setprecision(15);
 
   {
-  /** Test the ability to instanciate a projection from a wkt string*/
+  /** Test the ability to instantiate a projection from a wkt string*/
   std::string projectionRefWkt =
     "PROJCS[\"UTM Zone 31, Northern Hemisphere\", GEOGCS[\"WGS 84\", DATUM[\"WGS_1984\", SPHEROID[\"WGS 84\", 6378137, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], TOWGS84[0, 0, 0, 0, 0, 0, 0], AUTHORITY[\"EPSG\",\"6326\"]], PRIMEM[\"Greenwich\", 0, AUTHORITY[\"EPSG\",\"8901\"]], UNIT[\"degree\", 0.0174532925199433, AUTHORITY[\"EPSG\",\"9108\"]], AXIS[\"Lat\", NORTH], AXIS[\"Long\", EAST], AUTHORITY[\"EPSG\",\"4326\"]], PROJECTION[\"Transverse_Mercator\"], PARAMETER[\"latitude_of_origin\", 0], PARAMETER[\"central_meridian\", 3], PARAMETER[\"scale_factor\", 0.9996], PARAMETER[\"false_easting\", 500000], PARAMETER[\"false_northing\", 0], UNIT[\"Meter\", 1]]";
 
   otb::MapProjectionAdapter::Pointer genericMapProjection = otb::MapProjectionAdapter::New();
   genericMapProjection->SetWkt(projectionRefWkt);
-  file << "Instanciating from : " << projectionRefWkt << std::endl;
+  file << "Instantiating from : " << projectionRefWkt << std::endl;
   file << genericMapProjection->GetWkt() << std::endl << std::endl;
 
   double lon = 1.44;
@@ -59,12 +59,12 @@ int otbMapProjectionAdapterTest(int itkNotUsed(argc), char* argv[])
   }
 
   {
-  /** Test the ability to instanciate a projection from an ossim string*/
+  /** Test the ability to instantiate a projection from an ossim string*/
   std::string projectionRefWkt ="ossimUtmProjection";
 
   otb::MapProjectionAdapter::Pointer genericMapProjection = otb::MapProjectionAdapter::New();
   genericMapProjection->SetWkt(projectionRefWkt);
-  file << "Instanciating from : " << projectionRefWkt << std::endl;
+  file << "Instantiating from : " << projectionRefWkt << std::endl;
   file << genericMapProjection->GetWkt() << std::endl << std::endl;
 
   double lon = 1.44;
@@ -87,12 +87,12 @@ int otbMapProjectionAdapterTest(int itkNotUsed(argc), char* argv[])
   }
 
   {
-  /** Test the ability to instanciate a projection from an short string*/
+  /** Test the ability to instantiate a projection from an short string*/
   std::string projectionRefWkt ="Utm";
 
   otb::MapProjectionAdapter::Pointer genericMapProjection = otb::MapProjectionAdapter::New();
   genericMapProjection->SetWkt(projectionRefWkt);
-  file << "Instanciating from : " << projectionRefWkt << std::endl;
+  file << "Instantiating from : " << projectionRefWkt << std::endl;
   file << genericMapProjection->GetWkt() << std::endl << std::endl;
 
   double lon = 1.44;
@@ -115,12 +115,12 @@ int otbMapProjectionAdapterTest(int itkNotUsed(argc), char* argv[])
   }
 
   {
-  /** Test the ability to instanciate a projection from an short string*/
+  /** Test the ability to instantiate a projection from an short string*/
   std::string projectionRefWkt ="Mercator";
 
   otb::MapProjectionAdapter::Pointer genericMapProjection = otb::MapProjectionAdapter::New();
   genericMapProjection->SetWkt(projectionRefWkt);
-  file << "Instanciating from : " << projectionRefWkt << std::endl;
+  file << "Instantiating from : " << projectionRefWkt << std::endl;
   file << genericMapProjection->GetWkt() << std::endl << std::endl;
 
   double lon = 1.44;
@@ -143,12 +143,12 @@ int otbMapProjectionAdapterTest(int itkNotUsed(argc), char* argv[])
   }
 
   {
-  /** Test the ability to instanciate a projection from an short string*/
+  /** Test the ability to instantiate a projection from an short string*/
   std::string projectionRefWkt ="LambertConformalConic";
 
   otb::MapProjectionAdapter::Pointer genericMapProjection = otb::MapProjectionAdapter::New();
   genericMapProjection->SetWkt(projectionRefWkt);
-  file << "Instanciating from : " << projectionRefWkt << std::endl;
+  file << "Instantiating from : " << projectionRefWkt << std::endl;
   file << genericMapProjection->GetWkt() << std::endl << std::endl;
 
   double lon = 1.44;
@@ -172,14 +172,14 @@ int otbMapProjectionAdapterTest(int itkNotUsed(argc), char* argv[])
 
 
   {
-  /** Test the ability to instanciate an Utm projection in a different zone */
+  /** Test the ability to instantiate an Utm projection in a different zone */
   std::string projectionRefWkt ="Utm";
 
   otb::MapProjectionAdapter::Pointer genericMapProjection = otb::MapProjectionAdapter::New();
   genericMapProjection->SetWkt(projectionRefWkt);
   genericMapProjection->SetParameter("Zone", "46");
   genericMapProjection->SetParameter("Hemisphere", "S");
-  file << "Instanciating from : " << projectionRefWkt << " with some extra parameters" << std::endl;
+  file << "Instantiating from : " << projectionRefWkt << " with some extra parameters" << std::endl;
   file << genericMapProjection->GetWkt() << std::endl << std::endl;
 
   double lon = 91.44;

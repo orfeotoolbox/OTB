@@ -83,7 +83,7 @@ struct OTBGdalAdapters_EXPORT StringListConverter
     assert(CSLCount(const_cast <char**>(&m_raw[0])) == static_cast<int>(boost::size(strings)));
     }
   /**
-   * Acces to the OGR compliant list of strings.
+   * Access to the OGR compliant list of strings.
    */
   char ** to_ogr() const
     {

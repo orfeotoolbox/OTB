@@ -160,7 +160,7 @@ private:
   // This reflects the input image tiling
   SizeType   m_TileHint;
 
-  // This contains the ImageRegion that is currently beeing split
+  // This contains the ImageRegion that is currently being split
   RegionType m_ImageRegion;
 
   // This contains the requested number of splits

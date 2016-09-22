@@ -57,7 +57,6 @@ if(OUT_OF_SOURCE_BUILD)
   else()
     set(SUPERBUILD_BINARY_DIR "" CACHE PATH "path to superbuild binary directory")
     set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
-    option(ENABLE_MONTEVERDI "enable monteverdi" ON)
     set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild binary directory")
   endif()
 else(OUT_OF_SOURCE_BUILD)
@@ -74,8 +73,6 @@ else(OUT_OF_SOURCE_BUILD)
     #get_filename_component(OTB_INSTALL_DIR ${OTB_INSTALL_DIR} PATH)
   #endif()
 endif(OUT_OF_SOURCE_BUILD)
-
-
 
 if(WIN32)
   set(ZIP_EXE_NAMES 7z 7za)

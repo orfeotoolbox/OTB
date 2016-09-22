@@ -15,7 +15,7 @@ endif()
 endmacro()
 
 # Macro SETUP_SUPERBUILD
-# Initialize usefull variables to build a superbuild project
+# Initialize useful variables to build a superbuild project
 macro(SETUP_SUPERBUILD NEW_SB_PROJECT)
   list(APPEND FROM_SUPERBUILD_LIST ${NEW_SB_PROJECT})
   set(${NEW_SB_PROJECT}_DEPENDENCIES "")

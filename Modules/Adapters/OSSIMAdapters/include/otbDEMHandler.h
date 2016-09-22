@@ -106,7 +106,7 @@ public:
   virtual void OpenDEMDirectory(const char* DEMDirectory);
   virtual void OpenDEMDirectory(const std::string& DEMDirectory);
 
-  /** return true if the directoty contain DEM */
+  /** return true if the directory contain DEM */
   virtual bool IsValidDEMDirectory(const char* DEMDirectory);
 
   /**

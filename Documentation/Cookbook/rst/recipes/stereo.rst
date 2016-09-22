@@ -392,7 +392,7 @@ couple with image :math:`index_{0}` and :math:`index_{1}`, a second with
 image :math:`index_{1}` and :math:`index_{2}`, and so on. If left blank
 images are processed by pairs (which is equivalent as using “ 0 1,2 3,4
 5 ” …). In addition to the usual elevation and projection parameters,
-main parameters have been splitted in groups detailled below:
+main parameters have been split in groups detailed below:
 
 Output :
     output parameters : DSM resolution, NoData value, Cell Fusion

@@ -39,7 +39,7 @@ Monteverdi 3.2.0 - Changes since version 3.0.0 (March 30th, 2016)
   * MANTIS-1148: OTB-applications not loaded
   * MANTIS-1147: With Monteverdi develop branch of today : opening large images with overview file leads to eating all available memory
   * MANTIS-1144: Unable to keep unconstrained dynamic mode
-  * MANTIS-1140: Lost pixel position informations in layer stack
+  * MANTIS-1140: Lost pixel position information in layer stack
   * MANTIS-1138: Numeric value editing hell
   * MANTIS-1136: Unable to open sensor products (with RPC) in Monteverdi
   * MANTIS-1131: Non projected visualization mode seems slow
@@ -63,12 +63,12 @@ Monteverdi 3.2.0 - Changes since version 3.0.0 (March 30th, 2016)
 Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
 ====================================================================
 
-* Versionning
+* Versioning
   - Monteverdi2 discontinued and becomes Monteverdi 3.0.0
   - MApLa (Monteverdi Application Launcher) has been created.
 
 * Repository data
-  - The cache directory and persitent database has been abandonned: Monteverdi 3 works more like a viewer than a catalogue.
+  - The cache directory and persitent database has been abandoned: Monteverdi 3 works more like a viewer than a catalogue.
 
 * OTB-application features
   - OTB-applications are now loaded on demand via the File/Load OTB-applications menu item.
@@ -148,7 +148,7 @@ Monteverdi2-0.8.0 - Changes since version 0.6.0 (September 4th, 2014)
 
 * Repository data
   - Updated Monteverdi2_DATA_VERSION to 1.0.0.
-  - Data version is now independant from program version.
+  - Data version is now independent from program version.
   - Previous repository data is not supported (user needs to delete its $(HOME)/mvd2 cache directory before starting Monteverdi2).
 
 * OTB-application features:
