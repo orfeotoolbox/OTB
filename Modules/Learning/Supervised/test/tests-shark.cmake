@@ -20,6 +20,11 @@ set_property(TEST leTuSharkRFMachineLearningModelCanReadFail PROPERTY WILL_FAIL 
 
 
 otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSupervisedTestDriver
+  --compare-n-images ${NOTOL} 2 
+  ${BASELINE}/leSharkImageClassificationFilterOutput.tif
+  ${TEMP}/leSharkImageClassificationFilterOutput.tif
+  ${BASELINE}/leSharkImageClassificationFilterConfidence.tif
+  ${TEMP}/leSharkImageClassificationFilterConfidence.tif   
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
@@ -41,10 +46,15 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSupervisedT
 #   )
 
 otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSupervisedTestDriver
+  --compare-n-images ${NOTOL} 2 
+  ${BASELINE}/leSharkImageClassificationFilterWithMaskOutput.tif
+  ${TEMP}/leSharkImageClassificationFilterWithMaskOutput.tif
+  ${BASELINE}/leSharkImageClassificationFilterWithMaskConfidence.tif
+  ${TEMP}/leSharkImageClassificationFilterWithMaskConfidence.tif   
   otbSharkImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
-  ${TEMP}/leSharkImageClassificationFilterOutput.tif
-  ${TEMP}/leSharkImageClassificationFilterConfidence.tif
+  ${TEMP}/leSharkImageClassificationFilterWithMaskOutput.tif
+  ${TEMP}/leSharkImageClassificationFilterWithMaskConfidence.tif
   1
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   ${INPUTDATA}/Classification/QB_1_ortho_mask.tif
