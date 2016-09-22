@@ -196,7 +196,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
-  boost::archive::polymorphic_text_oarchive oa(ofs);
+  shark::TextOutArchive oa(ofs);
   m_RFModel.save(oa,0);
 }
 
@@ -206,7 +206,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
   std::ifstream ifs(filename.c_str());
-  boost::archive::polymorphic_text_iarchive ia(ifs);
+  shark::TextInArchive ia(ifs);
   m_RFModel.load(ia,0);
 }
 
