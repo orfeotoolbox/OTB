@@ -265,7 +265,7 @@ MultiResolutionPyramidWidget
   // error: call of pow(unsigned int, unsigned int) is ambiguous
   double rf = m_GDALOverviewsBuilder->GetResolutionFactor();
 
-  unsigned int m = 
+  int m = 
     maxResolutions -
     m_GDALOverviewsBuilder->GetNbResolutions();
 
