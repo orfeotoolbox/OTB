@@ -1230,21 +1230,20 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   std::cout<<"Kappa: "<<kappaIdx<<std::endl;
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
   
-  //Predict single samples
-  std::cout << "Predict single samples\n";
-  auto sIt = samples->Begin();
-  auto lIt = labels->Begin();
-
-  using TimeT = std::chrono::milliseconds;
-  auto start = std::chrono::system_clock::now();
-  for(; sIt != samples->End(); ++sIt, ++lIt)
-    {
-    classifier->Predict(sIt.GetMeasurementVector())[0];
-    }
-  auto duration = std::chrono::duration_cast< TimeT> 
-    (std::chrono::system_clock::now() - start);
-  auto elapsed = duration.count();
-  std::cout << "Predict took " << elapsed << " ms\n";
+  // //Predict single samples. Written for benchmarking purposes, but
+  // too long for regression testing
+  // std::cout << "Predict single samples\n";
+  // auto sIt = samples->Begin();
+  // auto lIt = labels->Begin();
+  // auto start = std::chrono::system_clock::now();
+  // for(; sIt != samples->End(); ++sIt, ++lIt)
+  //   {
+  //   classifier->Predict(sIt.GetMeasurementVector())[0];
+  //   }
+  // auto duration = std::chrono::duration_cast< TimeT> 
+  //   (std::chrono::system_clock::now() - start);
+  // auto elapsed = duration.count();
+  // std::cout << "Predict took " << elapsed << " ms\n";
   //  std::cout << "Single sample OA = " << oa << '\n';
 //Load Model to new RF
   TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
@@ -1252,16 +1251,17 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
 
   std::cout << "Load\n";
   classifierLoad->Load(argv[2]);
-  start = std::chrono::system_clock::now();
+  auto start = std::chrono::system_clock::now();
   classifierLoad->SetInputListSample(samples);
   classifierLoad->SetTargetListSample(predictedLoad);
   std::cout << "Predict loaded\n";
   classifierLoad->PredictAll();
-  duration = std::chrono::duration_cast< TimeT> 
+  using TimeT = std::chrono::milliseconds;
+  auto duration = std::chrono::duration_cast< TimeT> 
     (std::chrono::system_clock::now() - start);
-   elapsed = duration.count();
-   std::cout << "PredictAll took " << elapsed << " ms\n";
-   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
+  auto elapsed = duration.count();
+  std::cout << "PredictAll took " << elapsed << " ms\n";
+  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
    cmCalculatorLoad->SetProducedLabels(predictedLoad);
    cmCalculatorLoad->SetReferenceLabels(labels);
