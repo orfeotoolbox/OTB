@@ -3,6 +3,7 @@ classification and regression framework, currently based on
 OpenCV and/or libSVM")
 
 otb_module(OTBSupervised
+ENABLE_SHARED
   DEPENDS
     OTBBoost
     OTBCommon

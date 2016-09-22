@@ -35,12 +35,12 @@
 #include "otbDEMHandler.h"
 #include "otbStandardShader.h"
 #include <GL/freeglut.h>
-
+#include  "OTBIceViewerExport.h"
 
 namespace otb
 {
 
-class IceViewer 
+class OTBIceViewer_EXPORT IceViewer 
   : public itk::Object
 {
 public:

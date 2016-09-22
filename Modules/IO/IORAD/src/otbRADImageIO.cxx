@@ -113,7 +113,7 @@ bool RADImageIO::CanReadFile(const char* filename)
     }
 
   //Read header information
-  bool lResult = InternalReadHeaderInformation(lFileName, header_file, false);
+  bool lResult = InternalReadHeaderInformation(lFileName, header_file, true);
   header_file.close();
   return (lResult);
 }

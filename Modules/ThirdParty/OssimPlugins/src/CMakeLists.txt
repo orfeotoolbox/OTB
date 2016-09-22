@@ -58,6 +58,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ossim)
 file(GLOB_RECURSE ossimplugins_gdal_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/gdal/*.cpp")
 file(GLOB_RECURSE ossimplugins_ossim_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/ossim/*.cpp")
 
+if(NOT WIN32)
+list(REMOVE_ITEM ossimplugins_ossim_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/ossim/ossimWin32FindFileHandle.cpp")
+endif()
 set(ossimplugins_SOURCES
   ${ossimplugins_gdal_SRCS}
   ${ossimplugins_ossim_SRCS}

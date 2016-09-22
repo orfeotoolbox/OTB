@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT SarDefaultImageMetadataInterface : public SarImageMetadataInterface
+class OTBMetadata_EXPORT SarDefaultImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
 

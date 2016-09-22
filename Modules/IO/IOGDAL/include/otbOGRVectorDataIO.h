@@ -25,6 +25,8 @@
 #include "otbVectorData.h"
 #include "otbOGRVersionProxy.h"
 
+#include "OTBIOGDALExport.h"
+
 namespace otb
 {
 
@@ -39,7 +41,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class ITK_EXPORT OGRVectorDataIO
+class OTBIOGDAL_EXPORT OGRVectorDataIO
   : public VectorDataIOBase
 {
 public:

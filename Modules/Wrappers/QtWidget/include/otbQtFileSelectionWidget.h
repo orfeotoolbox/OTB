@@ -25,6 +25,7 @@
 #include "otbWrapperQtWidgetParameterBase.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBQtWidgetExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtFileSelectionWidget : public QWidget
+class OTBQtWidget_EXPORT QtFileSelectionWidget : public QWidget
 {
   Q_OBJECT
 public:

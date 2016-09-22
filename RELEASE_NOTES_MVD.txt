@@ -1,0 +1,236 @@
+=========================
+ Monteverdi Release Note
+=========================
+
+Monteverdi 3.4.0 - Changes since version 3.2.0 (July 28th, 2016)
+=================================================================
+
+* Bug fixes:
+  * MANTIS-1256: elete-All button not disabled after layer-stack has been cleared
+  * MANTIS-1250: Main-window always show maximized
+  * MANTIS-1245: Monteverdi: no projection mode display problem
+  * MANTIS-1244: Emptying layer stack does not reset viewport state
+  * MANTIS-1235: Monteverdi is not able to open S1 product (SLC SM product)
+  * MANTIS-1232: Layer stack disappear after opening an image (gnome 3)
+  * MANTIS-1231: Monteverdi: shader effect does not follow the mouse cursor when moving
+  * MANTIS-1221: Error build Monteverdi2 3.2.0 in Arch Linux
+  * MANTIS-1205: Gamma slider effect inverted between full and quicklook view
+  * MANTIS-1204: Zoom to full extent and zoom to layer extent does not preserve aspect ratio
+
+* RFC:
+  * Request for Changes-44: Improve OTB-applications display & search in Monteverd & Mapla 
+
+Monteverdi 3.2.0 - Changes since version 3.0.0 (March 30th, 2016)
+=================================================================
+
+* Bug fixes:
+  * MANTIS-1203: Clicking on 1:1 button several time result in strange cycling behaviour
+  * MANTIS-1202: Wrong aspect ratio at loading
+  * MANTIS-1197: Clicking on minimap to navigate result in monteverdi crashing
+  * MANTIS-1196: OTB-application Quit button closes widget but not window when using Mapla
+  * MANTIS-1179: Using the Upper Bound mode for resolution lookup in preferences result in wrong resolution used
+  * MANTIS-1178: Zoom to full resolution does not zoom to 1 image pixel = 1 screen pixel for georeferenced data
+  * MANTIS-1159: TrainImageClassifier sample.vtr parameter is sometime ignored
+  * MANTIS-1157: Monteverdi crashes when trying to move the view without any images
+  * MANTIS-1156: Linux standalone package doesn't work on Fedora 22
+  * MANTIS-1154: Exception raised when opening LUM or LUM+HDR
+  * MANTIS-1153: Superimpose app in PHR mode reports wrong origin/spacing/keywordlist
+  * MANTIS-1152: Maximum number of class in KMean application limited to 255
+  * MANTIS-1148: OTB-applications not loaded
+  * MANTIS-1147: With Monteverdi develop branch of today : opening large images with overview file leads to eating all available memory
+  * MANTIS-1144: Unable to keep unconstrained dynamic mode
+  * MANTIS-1140: Lost pixel position informations in layer stack
+  * MANTIS-1138: Numeric value editing hell
+  * MANTIS-1136: Unable to open sensor products (with RPC) in Monteverdi
+  * MANTIS-1131: Non projected visualization mode seems slow
+  * MANTIS-1125: Use OTB_APPLICATION_PATH in startup files
+  * MANTIS-1122: Black screen after Zoom-to-extent (MinGW)
+  * MANTIS-1120: Unwanted zoom-to-extent when loading second image
+  * MANTIS-1118: Crash when restoring UI layout if quicklook view is visible at startup.
+  * MANTIS-1111: Geoid-file <arning message needs restart displayed when not needed.
+  * MANTIS-1105: Quicklook and ROI badly displayed when opening no-proj image
+  * MANTIS-1096: The quicklook is often lost
+  * MANTIS-0827: Import of image with 0 as value on the whole area is impossible
+
+
+* RFC:
+  * Request for Changes-20: Take screenshot
+  * Request for Changes-21: Support CDS import
+  * Request for Changes-23: Ice as an Orfeo ToolBox module
+  * Request for Changes-25: Disable Ice shaders if OpenGL version is lower than 2.0 (especially when using via remote-desktop service).
+  * Request for Changes-24: MVD/OTB GDAL overviews multi-resolution pyramid configuration
+
+Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
+====================================================================
+
+* Versionning
+  - Monteverdi2 discontinued and becomes Monteverdi 3.0.0
+  - MApLa (Monteverdi Application Launcher) has been created.
+
+* Repository data
+  - The cache directory and persitent database has been abandonned: Monteverdi 3 works more like a viewer than a catalogue.
+
+* OTB-application features
+  - OTB-applications are now loaded on demand via the File/Load OTB-applications menu item.
+  - The OTB-applications browser dock-widget is now floating by default but can still be docked.
+  - OTB-applications pannels are now opened as pop-up dialogs (same as in OTB) instead of being tabbed.
+
+* GUI features
+
+  - Internationalization:
+    + Updated French translation.
+
+  - Color dynamics:
+    + Added alpha (translucency) control.
+
+  - Multi-image management:
+    + Several images can be loaded and viewed simultaneously.
+    + Added layer-stack dock-widget to manage layers (order, delete, drop from file manager etc.) and display some information (sensor-mode, mutli-resolution pyramid level, effect, index undex cursor, pixel intensities for RGB bands, physical position under cursor).
+
+  - Rendering/Image navigation:
+    + Dynamic reprojection of all images in projection of selected image.
+    + Added per-layer dynamic mouse-cursor effects (chessboard, gradient, local contrast, local translucency, spectral angle, swipe).
+    + Improved zooming functions (zoom to overall extent, zoom to layer extent, zoom to 1:1 scale).
+    + Added keyboard & mouse shortcuts to improve interactive navigation & edit per-layer effects (see Help/Keymap... menu item).
+
+  - Miscellaneous UI features:
+    + Added rendering preferences (level of multi-resolution pyramid algorithm, image tile-size).
+    + Added Help/Keymap... documentation.
+    + Added save/restore window layout.
+
+* Mapla features
+  - Standalone program
+  - Consists of a main-window containing the OTB-application browser
+  - Ability to launch several OTB-application pannels as pop-up dialogs.
+
+* Bugfixes:
+  - MANTIS-1104: Crash as soon as I open an image
+    (http://bugs.orfeo-toolbox.org/view.php?id=1104)
+  - MANTIS-1100: Crash when trying to Apply same parameters (dynamic, effects, color map...) on images with different number of bands
+    (http://bugs.orfeo-toolbox.org/view.php?id=1100)
+  - MANTIS-1072: I18nCoreApplication::ElevationSetup() exceptions not displayed
+    (http://bugs.orfeo-toolbox.org/view.php?id=1072)
+  - MANTIS-1070: otb::DEMHandler not updated properly when resetting DEM-directory and/or Geoid-file
+    (http://bugs.orfeo-toolbox.org/view.php?id=1070)
+  - MANTIS-1064: Exception thrown () when moving image in layer-stack by drag-n-dropping
+    (http://bugs.orfeo-toolbox.org/view.php?id=1064)
+  - MANTIS-1015: libxml-dev dependency missing for libotb-dev
+    (http://bugs.orfeo-toolbox.org/view.php?id=1015)
+  - MANTIS-902: Report missing otbIce headers when building Monteverdi2
+    (http://bugs.orfeo-toolbox.org/view.php?id=902)
+  - MANTIS-894: Monteverdi 2 does not support LUM image format, contrary to Monteverdi 1
+    (http://bugs.orfeo-toolbox.org/view.php?id=894)
+  - MANTIS-1017: Missing gdal-bin dependency in package libotb-dev
+    (http://bugs.orfeo-toolbox.org/view.php?id=1017)
+  - MANTIS-1033: Crash when updating no data value in mv2
+    (http://bugs.orfeo-toolbox.org/view.php?id=1033)
+  - MANTIS-897: Most of OTB applications crash with JP2 image as input
+    (http://bugs.orfeo-toolbox.org/view.php?id=897)
+  - MANTIS-634: Steps of Quantiles spin-box are to coarse
+    (http://bugs.orfeo-toolbox.org/view.php?id=634)
+  - MANTIS-639: Using keyboard arrows with Monteverdi2 maximized grabs all keyboards events
+    (http://bugs.orfeo-toolbox.org/view.php?id=639)
+  - MANTIS-633: Can not edit spinner fields in Video Color Dynamics widget
+    (http://bugs.orfeo-toolbox.org/view.php?id=633)
+  - MANTIS-637: Displacements associated with vertical keyboard arrows are inverted with respect to Monteverdi 1.x
+    (http://bugs.orfeo-toolbox.org/view.php?id=637)
+  - MANTIS-636: Displacement related to keyboard arrows is to small
+    (http://bugs.orfeo-toolbox.org/view.php?id=636)
+  - MANTIS-645:  Viewport goes black or diminish when maximising or resizing the window after opening image
+    (http://bugs.orfeo-toolbox.org/view.php?id=645)
+  - MANTIS-646: Viewport is black or diminish when maximising or resizing the window before opening image
+    (http://bugs.orfeo-toolbox.org/view.php?id=646)
+  - MANTIS-654: When minimzing the window, all widgets are closed
+    (http://bugs.orfeo-toolbox.org/view.php?id=654)
+
+Monteverdi2-0.8.0 - Changes since version 0.6.0 (September 4th, 2014)
+=====================================================================
+
+* Repository data
+  - Updated Monteverdi2_DATA_VERSION to 1.0.0.
+  - Data version is now independant from program version.
+  - Previous repository data is not supported (user needs to delete its $(HOME)/mvd2 cache directory before starting Monteverdi2).
+
+* OTB-application features:
+  - Removed duplicate Qt OTB-application wrappers to re-use OTB ones.
+  - Removed message-box informing user that the OTB-application has succeeded.
+  - Displayed different drop messages for file and image parameters.
+
+* GUI features:
+
+  - Internationalization:
+    + Updated French translation.
+
+  - Color-dynamics:
+    + Support of gamma-corection.
+    + Changed quantile spinner step to 0.1.
+
+  - Database-browser:
+    + Add/Rename/Delete/Move user groups where to store datasets.
+    + Move dataset between groups.
+    + Imported datasets are stored in Database/Temporary group.
+    + Import dataset by drag-n-dropping file from system's file-explorer into database-browser.
+    + Added option to also delete source image, .ovr and .geom files when deleting dataset.
+    + Disabled 'Renamed dataset' item from contextual menu when dataset is also disabled.
+    + Fixed crash when deleting inconsistent dataset.
+
+  - Rendering/Image navigation:
+    + Switched to OTB-Ice rendering engine based on OpenGL shaders.
+    + Right-click to use dynamic local-contrast tool.
+    + Fast image navigation mode.
+    + Checked against OpenGL and OpenGL Shading-Language version and rendering capabilities at startup.
+
+* Core features:
+  - Fixed support of No-data value of otb::StreamingHistogramVectorImageFilter.
+  - Added SQLite database into cache directory to manage repository.
+  - Support of user groups where to store datasets in.
+  - Cleaned OTB duplicate classes.
+  - SQLite database, XML descriptor files and histogram files version checking.
+
+* Bugfixes:
+  - MANTIS-964: Wrong update of Gamme cursor position
+    (http://bugs.orfeo-toolbox.org/view.php?id=964)
+  - MANTIS-960: Drop from file explorer doest not work.
+    (http://bugs.orfeo-toolbox.org/view.php?id=960)
+  - [WORKAROUND] MANTIS-947: Droping dataset to the last subgroup of the data tree crash the application
+    (http://bugs.orfeo-toolbox.org/view.php?id=947)
+  - [WORKAROUND] MANTIS-934: Crash when importing second image into repository.
+    (http://bugs.orfeo-toolbox.org/view.php?id=934)
+  - MANTIS-933: Drag a dataset from temporary in the dataset manager outside the tree leads to a crash
+    (http://bugs.orfeo-toolbox.org/view.php?id=933)
+  - MANTIS-929: Drag and Drop in otb application a dataset leads to the disappearance of the dataset into the widget
+    (http://bugs.orfeo-toolbox.org/view.php?id=929)
+  - MANTIS-928: Output results of applications are not selected in the dataset manager
+    (http://bugs.orfeo-toolbox.org/view.php?id=928)
+  - MANTIS-921: Application freezes at the end of image import.
+    (http://bugs.orfeo-toolbox.org/view.php?id=921)
+  - MANTIS-920: Wide unzoom aborts application
+    (http://bugs.orfeo-toolbox.org/view.php?id=920)
+  - MANTIS-918: Image-view shift on click
+    (http://bugs.orfeo-toolbox.org/view.php?id=918)
+  - MANTIS-915:  In mvd2 applications wrappers InputImageList parameters, only the first item of the list is dropable
+    (http://bugs.orfeo-toolbox.org/view.php?id=915)
+  - MANTIS-909: Color-setup on PANCHRO images.
+    (http://bugs.orfeo-toolbox.org/view.php?id=909)
+  - MANTIS-908: Vector-image model settings serialization persistence (gamma)
+    (http://bugs.orfeo-toolbox.org/view.php?id=908)
+  - MANTIS-907: Serialization/persistence of viewport settings
+    (http://bugs.orfeo-toolbox.org/view.php?id=907)
+  - MANTIS-876: Monteveri2 crashes on startup
+    (http://bugs.orfeo-toolbox.org/view.php?id=876)
+  - MANTIS-854: Exception aborts Monteverdi2 when running with an old-version '.../mvd2' repository
+    (http://bugs.orfeo-toolbox.org/view.php?id=854)
+  - MANTIS-822: Parameter values in scientific notation are not always parsed
+    (http://bugs.orfeo-toolbox.org/view.php?id=822)
+
+* Qt4:
+  - Added QtSql to link stage.
+  - Using qsqlite4 driver plugin at runtime.
+
+* OTB:
+  - Upgraded source code to compile using OTB-ITKv4 API.
+  - Monteverdi2-0.8.0 is built on OTB-4.2.
+
+* Build:
+  - MinGW compilation support.
+  - Enabled use of shared libraries when compiling with MinGW.

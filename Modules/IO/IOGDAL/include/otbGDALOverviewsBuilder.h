@@ -26,6 +26,8 @@
 #include "otbGDALDatasetWrapper.h"
 #include "otbConfigure.h"
 
+#include "OTBIOGDALExport.h"
+
 namespace otb
 {
 
@@ -77,7 +79,7 @@ enum GDALFormat
 
 /**
  */
-class GDALOverviewsBuilder : public itk::ProcessObject
+class OTBIOGDAL_EXPORT GDALOverviewsBuilder : public itk::ProcessObject
 {
 public:
   typedef GDALOverviewsBuilder Self;

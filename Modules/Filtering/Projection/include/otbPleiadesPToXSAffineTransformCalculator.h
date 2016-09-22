@@ -21,6 +21,7 @@
 #include "itkLightObject.h"
 #include "itkScalableAffineTransform.h"
 #include "itkImageBase.h"
+#include "OTBProjectionExport.h"
 
 namespace otb {
 /**
@@ -46,7 +47,7 @@ namespace otb {
  *
  * \ingroup OTBProjection
  */
-class ITK_EXPORT PleiadesPToXSAffineTransformCalculator
+class OTBProjection_EXPORT PleiadesPToXSAffineTransformCalculator
   : public itk::LightObject
 {
 public:
