@@ -163,7 +163,7 @@ private:
     SetDocExampleParameterValue("il", "stats_1.xml stats_2.xml");
     SetDocExampleParameterValue("out", "rates.csv");
     SetDocExampleParameterValue("strategy", "smallest");
-    SetDocExampleParameterValue("mode","proportional");
+    SetDocExampleParameterValue("mim","proportional");
   }
 
   void DoUpdateParameters()

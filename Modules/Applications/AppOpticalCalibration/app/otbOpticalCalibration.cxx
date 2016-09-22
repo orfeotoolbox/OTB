@@ -153,7 +153,7 @@ private:
 "- d is the earth-sun distance (in astronomical units) and depends on the acquisition's day and month \n"
 "- ESUN(b) is the mean TOA solar irradiance (or solar illumination) in W/m2/micrometers\n"
 "- θ is the solar zenith angle in degrees. \n"
-"Note that the application asks for the solar elevation angle, and will perfom the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units : degrees).\n"
+"Note that the application asks for the solar elevation angle, and will perform the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units : degrees).\n"
 "Note also that ESUN(b) not only depends on the band b, but also on the spectral sensitivity of the sensor in this particular band. "
 "In other words, the influence of spectral sensitivities is included within the ESUN different values.\n"
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
@@ -174,7 +174,7 @@ private:
 "# Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
 "1540.494123 : 1826.087443 : 1982.671954 : 1094.747446\n\n"
 
-"Finally, the 'Logs' tab provides usefull messages that can help the user in knowing the process different status." );
+"Finally, the 'Logs' tab provides useful messages that can help the user in knowing the process different status." );
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -376,7 +376,7 @@ private:
       {
         ossOutput << std::endl << "File: " << m_inImageName << std::endl;
 
-        //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
+        //Check if valid metadata information are available to compute ImageToLuminance and LuminanceToReflectance
         FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
         itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
         OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
@@ -560,14 +560,14 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    //Main filters instanciations
+    //Main filters instantiations
     m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
     m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
     m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
     m_ReflectanceToLuminanceFilter          = ReflectanceToLuminanceImageFilterType::New();
     m_LuminanceToImageFilter                = LuminanceToImageImageFilterType::New();
 
-    //Other instanciations
+    //Other instantiations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
     //m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();

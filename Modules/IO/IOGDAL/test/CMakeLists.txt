@@ -135,7 +135,7 @@ otb_add_test(NAME ioTuOGRVectorDataIOCanWriteMapInfo COMMAND otbIOGDALTestDriver
 
 otb_add_test(NAME ioTuOGRVectorDataIOCanWriteGML COMMAND otbIOGDALTestDriver
   otbOGRVectorDataIOCanWrite
-  ${INPUTDATA}/adressPoint.gml)
+  ${INPUTDATA}/addressPoint.gml)
 
 otb_add_test(NAME ioTuGDALImageIOCanRead_IKONOS_RED COMMAND otbIOGDALTestDriver otbGDALImageIOTestCanRead
   LARGEINPUT{IKONOS/PARIS/po_79039_red_0000000.tif})
@@ -218,7 +218,7 @@ endif()
 
 otb_add_test(NAME ioTuOGRVectorDataIOTestCanReadGML COMMAND otbIOGDALTestDriver
   otbOGRVectorDataIOTestCanRead
-  ${INPUTDATA}/adressPoint.gml)
+  ${INPUTDATA}/addressPoint.gml)
 
 otb_add_test(NAME ioTuOGRVectorDataIOTestCanReadMapInfo COMMAND otbIOGDALTestDriver
   otbOGRVectorDataIOTestCanRead
@@ -233,6 +233,6 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
   otb_add_test(NAME ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} COMMAND otbIOGDALTestDriver
     otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
     ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
-    1 5 10 2) #old file hdr sans extesions
+    1 5 10 2) #old file hdr sans extensions
 
 endforeach()

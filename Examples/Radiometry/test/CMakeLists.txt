@@ -68,7 +68,7 @@ otb_add_test(NAME raTeAtmosphericCorrectionSequencementTest COMMAND ${OTB_TEST_D
     # LuminanceToReflectance parameters
     27.3    #solar azimuthal elevation
     4       #day
-    12      #mounth
+    12      #month
     # AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters
     152.7
     2.5

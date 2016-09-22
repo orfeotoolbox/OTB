@@ -24,7 +24,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 
-//Just to get the forwad/inverse definitions
+//Just to get the forward/inverse definitions
 #include "otbWaveletOperatorBase.h"
 
 namespace otb {

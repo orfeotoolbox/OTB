@@ -43,7 +43,7 @@ namespace otb { namespace ogr {
  * \class FieldDefn
  * \brief Encapsulation of \c OGRFieldDefn: field definition.
  * \invariant <tt>m_Definition != 0</tt>
- * \invariant \c m_Definition lifetime is of the responsability of the owning \c
+ * \invariant \c m_Definition lifetime is of the responsibility of the owning \c
  * \c OGRFeatureDefn.
  * \sa OGRFieldDefn
  * \since OTB v 3.14.0

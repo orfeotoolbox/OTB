@@ -102,7 +102,7 @@ InputProcessXMLParameter::GetPixelTypeFromString(std::string strType)
     }
   else
     {
-    /*by default return float. Eg: if strType is emtpy because of no pixtype
+    /*by default return float. Eg: if strType is empty because of no pixtype
     node in xml which was the case earlier
     */
     return ImagePixelType_float;
@@ -417,7 +417,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       } //end updateFromXML
     //choice also comes as setint and setstring why??
     }
-  ret = 0; //resetting return to zero, we dont use it anyway for now.
+  ret = 0; //resetting return to zero, we don't use it anyway for now.
 
   fclose(fp);
 

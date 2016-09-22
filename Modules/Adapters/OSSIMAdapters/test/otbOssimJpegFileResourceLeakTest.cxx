@@ -36,7 +36,7 @@
 
 // This test demonstrate that handler->close() does not release the file descriptor for jpeg files.
 
-int otbOssimJpegFileRessourceLeakTest(int argc, char * argv[])
+int otbOssimJpegFileResourceLeakTest(int argc, char * argv[])
 {
   if (argc != 3)
     {

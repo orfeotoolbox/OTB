@@ -94,7 +94,7 @@ protected:
   ImageToVectorImageCastFilter() {}
   /// Detructor
   ~ImageToVectorImageCastFilter() ITK_OVERRIDE {}
-  /// Additionnal output information for allocation
+  /// Additional output information for allocation
   void GenerateOutputInformation(void) ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();

@@ -75,7 +75,7 @@ private:
 
   StereoRectificationGridGenerator()
   {
-    // Instanciate deformation field source
+    // Instantiate deformation field source
     m_DisplacementFieldSource = DisplacementFieldSourceType::New();
     m_LeftInvertDisplacementFieldFilter = InverseDisplacementFieldFilterType::New();
     m_RightInvertDisplacementFieldFilter = InverseDisplacementFieldFilterType::New();

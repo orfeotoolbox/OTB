@@ -67,13 +67,13 @@ otb_add_test(NAME feTeExtractSegmentsByStepsExampleTest COMMAND ${OTB_TEST_DRIVE
     10 3 10 0.5 10 10 3 10 0.5
 )
 
-# ------- AssymmetricFusionOfLineDetectorExampleTest----------
+# ------- AsymmetricFusionOfLineDetectorExampleTest----------
 
-otb_add_test(NAME feTeAssymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
+otb_add_test(NAME feTeAsymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
     ${BASELINE}/amstLineFusion.png
     ${TEMP}/amstLineFusion.png
-  Execute $<TARGET_FILE:AssymmetricFusionOfLineDetectorExample>
+  Execute $<TARGET_FILE:AsymmetricFusionOfLineDetectorExample>
     ${INPUTDATA}/amst.png
     ${TEMP}/amstLineFusion.png
     5 1

@@ -92,6 +92,12 @@ EFFECT_NAMES[ EFFECT_COUNT ] =
   QT_TRANSLATE_NOOP( "mvd", "Swipe (vertical)" ),
 };
 
+bool
+OVERVIEWS_ENABLED_DEFAULT = true;
+
+int
+OVERVIEWS_SIZE_DEFAULT = 512;
+
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */

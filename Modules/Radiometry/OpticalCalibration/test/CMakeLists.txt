@@ -82,12 +82,12 @@ otb_add_test(NAME raTvSpectralSensitivityReaderTest COMMAND otbOpticalCalibratio
   ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
   )
 
-otb_add_test(NAME raTvReflectanceToImageImageFilterDayMounth COMMAND otbOpticalCalibrationTestDriver
+otb_add_test(NAME raTvReflectanceToImageImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvReflectanceToImageImageFilterDayMounth.tif
+  ${TEMP}/raTvReflectanceToImageImageFilterDayMonth.tif
   otbReflectanceToImageImageFilter
   ${BASELINE}/raTvImageToReflectanceImageFilter.tif
-  ${TEMP}/raTvReflectanceToImageImageFilterDayMounth.tif
+  ${TEMP}/raTvReflectanceToImageImageFilterDayMonth.tif
   0.2 #radius
   1   #channel 1 alpha
   2   #channel 2 alpha
@@ -102,7 +102,7 @@ otb_add_test(NAME raTvReflectanceToImageImageFilterDayMounth COMMAND otbOpticalC
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvReflectanceToImageImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -559,12 +559,12 @@ otb_add_test(NAME raTuAtmosphericRadiativeTermsSingleChannelNew COMMAND otbOptic
   otbAtmosphericRadiativeTermsSingleChannelNew
   )
 
-otb_add_test(NAME raTvImageToReflectanceImageFilterDayMounth COMMAND otbOpticalCalibrationTestDriver
+otb_add_test(NAME raTvImageToReflectanceImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
-  ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterDayMonth.tif
   otbImageToReflectanceImageFilter
   ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterDayMonth.tif
   0.2 #radius
   1   #channel 1 alpha
   2   #channel 2 alpha
@@ -579,7 +579,7 @@ otb_add_test(NAME raTvImageToReflectanceImageFilterDayMounth COMMAND otbOpticalC
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvImageToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -629,17 +629,17 @@ otb_add_test(NAME raTvRomaniaImageToReflectance COMMAND otbOpticalCalibrationTes
 
 otb_add_test(NAME raTvLuminanceToReflectanceImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
-  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMonth.tif
   otbLuminanceToReflectanceImageFilter
   ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMonth.tif
   0.2 #radius
   10  #channel 1 illumination
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvLuminanceToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -898,17 +898,17 @@ otb_add_test(NAME raTvReflectanceToLuminanceImageFilter COMMAND otbOpticalCalibr
 
 otb_add_test(NAME raTvReflectanceToLuminanceImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvverySmallFSATSWImageFilterDayMounth.tif
+  ${TEMP}/raTvverySmallFSATSWImageFilterDayMonth.tif
   otbReflectanceToLuminanceImageFilter
   ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
-  ${TEMP}/raTvverySmallFSATSWImageFilterDayMounth.tif
+  ${TEMP}/raTvverySmallFSATSWImageFilterDayMonth.tif
   0.2 #radius
   10  #channel 1 illumination
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvImageToLuminanceImageFilter COMMAND otbOpticalCalibrationTestDriver

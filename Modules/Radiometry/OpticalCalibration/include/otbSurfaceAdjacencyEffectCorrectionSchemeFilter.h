@@ -129,7 +129,7 @@ private:
  *  \brief Correct the scheme taking care of the surrounding pixels.
  *
  *   The SurfaceAdjacencyEffectCorrectionSchemeFilter class allows introducing a neighbor correction to the
- *   reflectance estimation. The satelite signal is considered as to be a combinaison of the signal coming from
+ *   reflectance estimation. The satellite signal is considered as to be a combinaison of the signal coming from
  *   the target pixel and a weighting of the siganls coming from the neighbor pixels.
  *
  * \ingroup Radiometry

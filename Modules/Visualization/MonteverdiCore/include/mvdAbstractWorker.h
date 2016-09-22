@@ -146,7 +146,7 @@ signals:
    *  \brief Signal emitted when task (i.e. thread) has finished
    *  correctly or incorrectly.
    *
-   * Use this signal to foward to thead quit() slot when job has
+   * Use this signal to forward to thead quit() slot when job has
    * finished.
    */
   void Finished();

@@ -152,7 +152,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
 
     m_V1 = ges.V;
 
-    // Compute cannonical correlation matrix
+    // Compute canonical correlation matrix
     m_Rho = ges.D.get_diagonal();
     m_Rho = m_Rho.apply(&vcl_sqrt);
 

@@ -50,7 +50,7 @@ private:
     SetDocName("SARPolarSynth");
     SetDocLongDescription("This application gives, for each pixel, the power that would have been received by a SAR system with a basis different from the classical (H,V) one (polarimetric synthetis).\n" 
 						  "The new basis A and B are indicated through two Jones vectors, defined by the user thanks to orientation (psi) and ellipticity (khi) parameters.\n"
-						  "These parameters are namely psii, khii, psir and khir. The suffixes (i) and (r) refer to the transmiting antenna and the receiving antenna respectively.\n"
+						  "These parameters are namely psii, khii, psir and khir. The suffixes (i) and (r) refer to the transmitting antenna and the receiving antenna respectively.\n"
 						  "Orientations and ellipticities are given in degrees, and are between -90/90 degrees and -45/45 degrees respectively.\n " 
 						  "\n"
 						  "Four polarization architectures can be processed : \n"

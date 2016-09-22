@@ -62,7 +62,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 {
 
   // See Unser, 1993, Part II, Equation 2.5,
-  //   or Unser, 1999, Box 2. for an explaination.
+  //   or Unser, 1999, Box 2. for an explanation.
 
   double c0 = 1.0;
 
@@ -173,8 +173,8 @@ void
 BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 ::SetInitialCausalCoefficient(double z)
 {
-  /* begining InitialCausalCoefficient */
-  /* See Unser, 1999, Box 2 for explaination */
+  /* beginning InitialCausalCoefficient */
+  /* See Unser, 1999, Box 2 for explanation */
 
   double        sum, zn, z2n, iz;
   unsigned long horizon;
@@ -220,7 +220,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 ::SetInitialAntiCausalCoefficient(double z)
 {
   // this initialization corresponds to mirror boundaries
-  /* See Unser, 1999, Box 2 for explaination */
+  /* See Unser, 1999, Box 2 for explanation */
   //  Also see erratum at http://bigwww.epfl.ch/publications/unser9902.html
   m_Scratch[m_DataLength[m_IteratorDirection] - 1] =
     (z / (z * z - 1.0)) *

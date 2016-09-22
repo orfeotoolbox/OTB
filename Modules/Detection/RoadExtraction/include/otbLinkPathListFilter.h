@@ -93,16 +93,16 @@ protected:
    * \param v2 second vertex (first path ending),
    * \param v3 third vertex (second path beginning),
    * \param v4 fourth vertex (second path after beginning),
-   * \return True or false wether the condition is verified or not.
+   * \return True or false whether the condition is verified or not.
    **/
   bool VerifyAngularCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4);
 
   /**
    * Actually link the end of path p1 to the beginning of path p2.
    * \param p1 First path to link,
-   * \param revert1 wether p1 need to be reverted or not,
+   * \param revert1 whether p1 need to be reverted or not,
    * \param p2 second path to link,
-   * \param revert2 wether p2 need to be reverted or not,
+   * \param revert2 whether p2 need to be reverted or not,
    * \return the linked path.
    */
   PathPointerType LinkPath(PathPointerType p1, bool revert1, PathPointerType p2, bool revert2);

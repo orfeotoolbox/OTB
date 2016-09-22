@@ -103,7 +103,7 @@ public:
     return m_Function;
   }
 
-  /** Initialize tables: need to be call explicitely */
+  /** Initialize tables: need to be call explicitly */
   virtual void Initialize();
 
   /** Weights normalization accessors*/

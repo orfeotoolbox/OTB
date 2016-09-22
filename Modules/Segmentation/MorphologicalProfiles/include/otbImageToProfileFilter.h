@@ -31,7 +31,7 @@ namespace otb
  *  \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots, n_{N}\} \}
  *  \f]
  *
- * with \f$ \{n_{1},\ldots, n_{N}\} \f$ beeing a range of parameter. This class is a base class templated
+ * with \f$ \{n_{1},\ldots, n_{N}\} \f$ being a range of parameter. This class is a base class templated
  * by the type of the filter \f$ \phi \f$. The SetProfileParameter() is a virtual method meant to be
  * rewritten so that the filter can be correctly set up in sub-classes.
  *

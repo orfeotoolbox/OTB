@@ -32,7 +32,7 @@ namespace MorphologicalPyramid
  * This class performs the segmentation of a detail image extracted from a
  * morphological pyramid analysis.
  *
- * The Segmentation is perfomed using the ConnectedThresholdImageFilter. The seeds
+ * The Segmentation is performed using the ConnectedThresholdImageFilter. The seeds
  * are extracted from the image using the ImageToPointSetFilter. The thresolds are set
  * by using quantiles computed with the HistogramGenerator.
  *

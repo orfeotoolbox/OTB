@@ -543,7 +543,7 @@ void GlImageActor::LoadTile(Tile& tile)
 
     glGenTextures( 1, &tile.m_TextureId );
 
-    // Following assert is somtimes false on some OpenGL systems for
+    // Following assert is sometimes false on some OpenGL systems for
     // some unknown reason even though the glGenTexture() call has
     // succeeded.
     // assert( glGetError()==GL_NO_ERROR );
@@ -1120,10 +1120,10 @@ void GlImageActor::UpdateTransforms()
 
   if( hasChanged )
     {
-    // std::cout << std::hex << this << " -> InstanciateTransform()" << std::endl;
+    // std::cout << std::hex << this << " -> InstantiateTransform()" << std::endl;
 
-    m_ViewportToImageTransform->InstanciateTransform();
-    m_ImageToViewportTransform->InstanciateTransform();
+    m_ViewportToImageTransform->InstantiateTransform();
+    m_ImageToViewportTransform->InstantiateTransform();
     }
 
   // std::cout << "}" << std::endl;

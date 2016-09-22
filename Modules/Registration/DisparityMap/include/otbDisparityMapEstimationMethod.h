@@ -118,7 +118,7 @@ public:
   itkSetObjectMacro(Metric, MetricType);
   itkGetObjectMacro(Metric, MetricType);
 
-  /** Set/Get the Transfrom. */
+  /** Set/Get the Transform. */
   itkSetObjectMacro(Transform, TransformType);
   itkGetObjectMacro(Transform, TransformType);
 

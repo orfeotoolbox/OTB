@@ -19,7 +19,7 @@ To be able to use OTB classes from within IDL or ENVI, the main requirement is t
 The mechanism is simple. A layer is added to call the OTB routine with
 IDL inputs and outputs, an executable is created and finally an IDL mechanism will create IDL routines that will use our OTB routine.
 First we will see how to create the project in section~\ref{buildProject}. Then we will see how to wrap a simple OTB algorithm (Canny filter) in section~\ref{canny}, and later a complete explanation of
-the C++ (section~\ref{cfiles}) and IDL files contents will be studied (section~\ref{idlfiles}) . Finaly, we will see how to integrate those new IDL routines in the ENVI GUI (section~\ref{envi}).
+the C++ (section~\ref{cfiles}) and IDL files contents will be studied (section~\ref{idlfiles}) . Finally, we will see how to integrate those new IDL routines in the ENVI GUI (section~\ref{envi}).
 
 \section{How to Build the Project: CMake and CMakeLists.txt}
 \label{buildProject}
@@ -234,7 +234,7 @@ After this simple example, let's see more complete (and complex) explanations of
 \subsection{Input and Output Types}
 To make things easy, we chose to create one C++ file for each wanted IDL function. Those files are \code{.h} and \code{.cxx} files stored in \code{Code/Sources/Example1} in the example tree.
 
-To avoid multiple definitions due to links between executables, an ifndef/define block has to be writen:\\
+To avoid multiple definitions due to links between executables, an ifndef/define block has to be written:\\
 \code{\#ifndef \_myfunction\_h}\\
 \code{\#ifndef \_myfunction\_h}\\
 And, at the end of the \code{.h} file:

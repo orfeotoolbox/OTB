@@ -112,7 +112,7 @@ protected:
   void GenerateOutputInformation() ITK_OVERRIDE;
 
   /**
-   * Test wether a parameter is angular or not.
+   * Test whether a parameter is angular or not.
    * \param index The index of the parameter to test.
    */
   bool IsAngular(unsigned int index);

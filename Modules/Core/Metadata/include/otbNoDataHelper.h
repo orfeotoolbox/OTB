@@ -32,13 +32,13 @@ namespace otb
 {
 
 /**
- * Reads no data flag from the MetaDataDictionnary dict to flags and values
+ * Reads no data flag from the MetaDataDictionary dict to flags and values
  * vectors. Returns true upon success.
  */
 bool OTBMetadata_EXPORT ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool> & flags, std::vector<double> & values);
 
 /**
- * Write no data flags to the MetaDataDictionnary dict from flags and values
+ * Write no data flags to the MetaDataDictionary dict from flags and values
  * vectors. Returns true upon success.
  */
 void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool> & flags, const std::vector<double> & values, itk::MetaDataDictionary& dict);

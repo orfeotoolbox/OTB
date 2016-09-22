@@ -145,6 +145,20 @@ extern
 char const * const
 EFFECT_NAMES[ EFFECT_COUNT ];
 
+/**
+ */
+OTBMonteverdiCore_EXPORT
+extern
+bool
+OVERVIEWS_ENABLED_DEFAULT;
+
+/**
+ */
+OTBMonteverdiCore_EXPORT
+extern
+int
+OVERVIEWS_SIZE_DEFAULT;
+
 } // end of namespace mvd.
 
 

@@ -378,7 +378,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     {
     std::ostringstream msg;
     msg << "Output number 1<<" << dir << " = " << (1 << dir) << " not allocated\n";
-    msg << "Number of excpected outputs " << this->GetNumberOfOutputs() << "\n";
+    msg << "Number of expected outputs " << this->GetNumberOfOutputs() << "\n";
     throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     }
 

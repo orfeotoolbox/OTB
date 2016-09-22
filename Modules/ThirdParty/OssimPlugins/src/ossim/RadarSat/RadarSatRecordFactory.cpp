@@ -21,7 +21,7 @@ RadarSatRecordFactory::~RadarSatRecordFactory()
 {
 }
 
-RadarSatRecord* RadarSatRecordFactory::Instanciate(int id)
+RadarSatRecord* RadarSatRecordFactory::Instantiate(int id)
 {
 	RadarSatRecord* record = _availableRecords[id];
 	if(record == NULL)
@@ -30,7 +30,7 @@ RadarSatRecord* RadarSatRecordFactory::Instanciate(int id)
 	}
 	else
 	{
-		return record->Instanciate();
+		return record->Instantiate();
 	}
 }
 

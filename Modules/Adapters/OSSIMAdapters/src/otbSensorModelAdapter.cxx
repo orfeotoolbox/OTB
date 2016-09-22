@@ -207,7 +207,7 @@ double SensorModelAdapter::Optimize()
 
     ossimRpcProjection * simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
 
-     //Handle expections
+     //Handle exceptions
     if ( (sensorModel == ITK_NULLPTR ) && (simpleRpcModel == ITK_NULLPTR ) )
        itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
 
@@ -254,7 +254,7 @@ bool SensorModelAdapter::WriteGeomFile(const std::string & outfile)
 
     ossimRpcProjection * simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
 
-    //Handle expections
+    //Handle exceptions
     if ( (sensorModel == ITK_NULLPTR ) && (simpleRpcModel == ITK_NULLPTR ) )
        itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
 

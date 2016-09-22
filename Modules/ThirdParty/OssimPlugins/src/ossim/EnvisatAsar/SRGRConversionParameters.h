@@ -58,7 +58,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  EnvisatAsarRecord* Instanciate()
+  EnvisatAsarRecord* Instantiate()
   {
     return new SRGRConversionParameters();
   };

@@ -753,7 +753,7 @@ SimpleParallelTiffWriter<TInputImage>
     }
 
   /*
-   * Writting the geom (only master process)
+   * Writing the geom (only master process)
    */
   if ( otb::MPIConfig::Instance()->GetMyRank() == 0 &&
       (m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile()) )

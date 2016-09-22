@@ -19,23 +19,17 @@
 
 
 #include "itkMacro.h"
+
 #include <iostream>
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 
-int otbAssymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
+#include "otbAsymmetricFusionOfLineDetectorImageFilter.h"
+
+int otbAsymmetricFusionOfLineDetectorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-
-  // Width of the linear feature = 2*WidthLine+1
-  unsigned int WidthLine((unsigned int) ::atoi(argv[3]));
-  // Length of the linear feature = 2*LengthLine+1
-  unsigned int LengthLine((unsigned int) ::atoi(argv[4]));
-
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;
   const unsigned int Dimension = 2;
@@ -44,29 +38,14 @@ int otbAssymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageDirectionType;
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
 
-  typedef otb::AssymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
+  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
       InterpolatorType> FilterType;
 
-  FilterType::Pointer FilterAssSymSum = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
 
-  FilterAssSymSum->SetWidthLine(WidthLine);
-  FilterAssSymSum->SetLengthLine(LengthLine);
-
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-
-  reader->SetFileName(inputFilename);
-  writer->SetFileName(outputFilename);
-
-  FilterAssSymSum->SetInput(reader->GetOutput());
-  writer->SetInput(FilterAssSymSum->GetOutput());
-
-  writer->Update();
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }

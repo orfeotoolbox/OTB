@@ -103,7 +103,10 @@ public:
    * factor^n. 
    */
   unsigned int
-  CountResolutions( unsigned int factor, unsigned int size =1 ) const;
+  CountResolutions( unsigned int factor, unsigned int size ) const;
+
+  unsigned int
+  CountResolutions( unsigned int size ) const;
 
   unsigned int
   CountResolutions() const;

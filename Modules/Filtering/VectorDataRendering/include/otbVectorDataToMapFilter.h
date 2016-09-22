@@ -53,7 +53,7 @@ namespace otb
    * The OSM style type provides styles to render a vector data the
    * OSM way. These styles must be specified usind the method
    * "AddStyle()".
-   * The Binary style type provides automaticaly a set of styles to
+   * The Binary style type provides automatically a set of styles to
    * render a vectro data as a binary mask (foreground pixel value
    * 255, background pixel value 0).
    *

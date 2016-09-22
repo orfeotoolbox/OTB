@@ -525,7 +525,7 @@ int main(int argc, char *argv[])
 
   //  Here we configure all the writers required to see the intermediate
   //  outputs of the pipeline. This is added here only for
-  //  pedagogical/debugging purposes. These intermediate output are normaly not
+  //  pedagogical/debugging purposes. These intermediate output are normally not
   //  required. Only the output of the final thresholding filter should be
   //  relevant.  Observing intermediate output is helpful in the process of
   //  fine tuning the parameters of filters in the pipeline.
@@ -626,7 +626,7 @@ int main(int argc, char *argv[])
   writer4->Update();
 
   // The following writer type is used to save the output of the
-  // time-crossing map in a file with appropiate pixel representation. The
+  // time-crossing map in a file with appropriate pixel representation. The
   // advantage of saving this image in native format is that it can be used
   // with a viewer to help determine an appropriate threshold to be used on
   // the output of the \code{fastmarching} filter.

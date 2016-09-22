@@ -104,8 +104,8 @@ otb_add_test(NAME dmTvSubPixelDisparityImageFilterNCC COMMAND otbDisparityMapTes
   1 # NCC
   1 # Parabolic
   2 # radius
-  -3 +3 # hdisp treshold
-  -2 2 # vdisp treshold
+  -3 +3 # hdisp threshold
+  -2 2 # vdisp threshold
   )
 
 otb_add_test(NAME dmTuSubPixelDisparityImageFilterNew COMMAND otbDisparityMapTestDriver

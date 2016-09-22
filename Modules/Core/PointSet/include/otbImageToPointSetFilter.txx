@@ -292,7 +292,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
     }
   // else
   //   {
-  //   otherwise don't use this thread. Sometimes the threads dont
+  //   otherwise don't use this thread. Sometimes the threads don't
   //   break up very well and it is just as efficient to leave a
   //   few threads idle.
   //   }

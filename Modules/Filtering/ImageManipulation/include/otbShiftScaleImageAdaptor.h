@@ -32,11 +32,11 @@ namespace Accessor
  *
  * ShiftScalePixelAccessor shifts the input pixel by Shift
  * and then scales the pixel by Scale. All computations
- * are performed in the precison of the input pixel's RealType
+ * are performed in the precision of the input pixel's RealType
  *
  * ShiftScalePixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
- * applies the funtion to it and cast the result according
+ * applies the function to it and cast the result according
  * to the types defined as template parameters
  *
  * \ingroup ImageAdaptors

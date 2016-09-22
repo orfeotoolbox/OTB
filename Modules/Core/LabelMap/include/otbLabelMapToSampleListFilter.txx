@@ -106,7 +106,7 @@ LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
   while( !it.IsAtEnd() )
     {
     // Get the measurement vector size of the output samplelist : once
-    // in the begining of the iterator
+    // in the beginning of the iterator
     if( isFirstIteration )
       {
       typename OutputSampleListType::MeasurementVectorSizeType measurementSize;

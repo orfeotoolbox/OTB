@@ -467,7 +467,7 @@ I18nCoreApplication
 	);
 
       // BUGFIX: When geoid file has not been updated by
-      // otb::DEMHandler, the filename may be erronous and unchecked
+      // otb::DEMHandler, the filename may be erroneous and unchecked
       // so, add a check, in this case, to report input error to the
       // user.
       if( !geoidUpdated )
@@ -486,7 +486,7 @@ I18nCoreApplication
     catch( const std::exception & err )
       {
       qWarning()
-	<< ToStdString( tr( "An error occured while loading the geoid file, "
+	<< ToStdString( tr( "An error occurred while loading the geoid file, "
 			    "no geoid file will be used:" ) ).c_str()
 	<< err.what();
 
@@ -523,7 +523,7 @@ I18nCoreApplication
     catch( const std::exception & err )
       {
       qWarning()
-	<< ToStdString( tr( "An error occured while loading the DEM directory, "
+	<< ToStdString( tr( "An error occurred while loading the DEM directory, "
 			    "no DEM will be used:" ) ).c_str()
 	<< err.what();
 
