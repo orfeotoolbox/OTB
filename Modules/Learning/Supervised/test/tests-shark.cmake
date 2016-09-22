@@ -28,14 +28,17 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSupervisedT
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
 
-otb_add_test(NAME leTvImageClassificationFilterSharkClassic COMMAND  otbSupervisedTestDriver
-  otbSharkImageClassificationFilter
-  ${INPUTDATA}/Classification/QB_1_ortho.tif
-  ${TEMP}/leSharkImageClassificationFilterOutput.tif
-  ${TEMP}/leSharkImageClassificationFilterConfidence.tif
-  0
-  ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
-  )
+# This test has been added for benchmarking purposes. However, it is
+# far too long to be part of regression testing
+
+# otb_add_test(NAME leTvImageClassificationFilterSharkClassic COMMAND  otbSupervisedTestDriver
+#   otbSharkImageClassificationFilter
+#   ${INPUTDATA}/Classification/QB_1_ortho.tif
+#   ${TEMP}/leSharkImageClassificationFilterOutput.tif
+#   ${TEMP}/leSharkImageClassificationFilterConfidence.tif
+#   0
+#   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
+#   )
 
 otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSupervisedTestDriver
   otbSharkImageClassificationFilter
