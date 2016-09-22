@@ -60,15 +60,17 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
       // Retrieve sample
       typename T::MeasurementVectorType const & sample = listSample->GetMeasurementVector(sampleIdx);
 	   
-      // Define a shark::RealVector
-      shark::RealVector rv(sampleSize);
-      // Loop on sample size
-      for(unsigned int i = 0; i < sampleSize; ++i)
-        {
-        rv[i] = sample[i];
-        }
-      using std::move;
-      output.emplace_back(move(rv));
+      // // Define a shark::RealVector
+      // shark::RealVector rv(sampleSize);
+      // // Loop on sample size
+      // for(unsigned int i = 0; i < sampleSize; ++i)
+      //   {
+      //   rv[i] = sample[i];
+      //   }
+      // using std::move;
+      // output.emplace_back(move(rv));
+
+      output.emplace_back(&sample[0], &sample[0]+sampleSize);
       }
     }
 }
