@@ -139,5 +139,6 @@ if(PDFLATEX_COMMAND)
     ALL
     COMMAND ${CMAKE_MAKE_PROGRAM} latexpdf
     WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
+    DEPENDS generate_otbapps_rst
     COMMENT "Building RST documentation in pdf")
 endif()
