@@ -40,6 +40,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
+#include "mvdCore.h"
+#include "mvdI18nCoreApplication.h"
 
 namespace mvd
 {
@@ -210,7 +212,25 @@ ImportImagesDialog
 
 	flags |= Qt::ItemIsSelectable;
 
-	unsigned int count = builder->CountResolutions( 2, 256 );
+	unsigned int count = 0;
+
+	{
+	  assert( I18nCoreApplication::Instance()!=NULL );
+
+	  QVariant value(
+	    I18nCoreApplication::Instance()->RetrieveSettingsKey(
+	      I18nCoreApplication::SETTINGS_KEY_OVERVIEWS_SIZE
+	    )
+	  );
+
+	  count =
+	    builder->CountResolutions(
+	      2,
+	      value.isValid()
+	      ? value.toInt()
+	      : OVERVIEWS_SIZE_DEFAULT
+	    );
+	}
 
 	if( builder->GetOverviewsCount()>0 )
 	  builder->SetBypassEnabled( true );

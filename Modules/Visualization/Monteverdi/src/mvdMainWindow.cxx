@@ -1227,8 +1227,19 @@ MainWindow
   if( filenames.isEmpty() )
     return;
 
-  if( !BuildGDALOverviews( filenames ) )
-    return;
+  assert( I18nCoreApplication::Instance()!=NULL );
+
+  {
+    QVariant value(
+      I18nApplication::Instance()->RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_OVERVIEWS_ENABLED
+      )
+    );
+
+    if( !( value.isValid() ? value.toBool() : OVERVIEWS_ENABLED_DEFAULT ) ||
+	!BuildGDALOverviews( filenames ) )
+      return;
+  }
 
   if( filenames.count()==1 )
     ImportImage( filenames.front(), 0 );
