@@ -713,8 +713,8 @@ void NonOptGlImageActor::UpdateTransforms()
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
     m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
     }
-  m_ViewportToImageTransform->InstanciateTransform();
-  m_ImageToViewportTransform->InstanciateTransform();
+  m_ViewportToImageTransform->InstantiateTransform();
+  m_ImageToViewportTransform->InstantiateTransform();
 }
 
 

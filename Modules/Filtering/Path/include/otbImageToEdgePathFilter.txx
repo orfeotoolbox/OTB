@@ -141,7 +141,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
     int move = nextStart;
     // edgeFound indicate that the edge has been found.
     bool EdgeFound = false;
-    // LastWasPositive indicate wether the previous pixel belong to the object or not
+    // LastWasPositive indicate whether the previous pixel belong to the object or not
     bool LastWasPositive(false);
     // While unexplored pixels remain and no edge was found
     while ((move < nextStart + 8) && (!EdgeFound))

@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 
   // Software Guide : BeginLatex
   //
-  // Now, we need to instanciate the NCCRegistrationFilter which is going to perform the registration:
+  // Now, we need to instantiate the NCCRegistrationFilter which is going to perform the registration:
   //
   // Software Guide : EndLatex
 

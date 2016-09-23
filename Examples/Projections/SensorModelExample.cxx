@@ -359,7 +359,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // We use the sensor model to get the pixel coordinates in the input
-// image and we transform this coodinates to an index. Then we store
+// image and we transform this coordinates to an index. Then we store
 // the index in the array. Note that the \code{TransformPoint()}
 // method of the model has been overloaded so that it can be used with
 // a 3D point when the height of the ground point is known (DEM availability).

@@ -60,7 +60,7 @@ public:
 
   /** Decision rule once the KNN are found :
    *  [for classification]
-   *   - KNN_VOTING : output value with maximum occurences (for classification)
+   *   - KNN_VOTING : output value with maximum occurrences (for classification)
    *  [for regression]
    *   - KNN_MEAN : output mean value of neighbors
    *   - KNN_MEDIAN : output median value of neighbors

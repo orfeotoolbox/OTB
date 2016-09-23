@@ -67,12 +67,12 @@ int count = 0;
 
 /*******************************************************************************/
 
-// MANTIS-947: Workaroung for QTreeWidget::itemAt() returning NULL for
+// MANTIS-947: Workaround for QTreeWidget::itemAt() returning NULL for
 // last item of view after DatabaseBrowserController::UpdateTree() has
 // been called subsequent to insert new group.
 //
 // This workaround reverts the order of insertion of NODE items so
-// that the last item is always at first index instead of lsat one.
+// that the last item is always at first index instead of last one.
 //
 // Side effect: This inverts the order for all QTreeWidget using
 // mvd::TreeWidgetItem, not only those in DatabaseBrowser view.

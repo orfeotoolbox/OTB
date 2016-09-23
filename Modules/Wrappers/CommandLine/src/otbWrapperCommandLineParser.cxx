@@ -213,41 +213,41 @@ CommandLineParser::GetModuleName( std::string & modName, const std::vector<std::
 CommandLineParser::ParseResultType
 CommandLineParser::GetModuleName( std::string & modName, const std::string & exp )
 {
-  std::vector<itksys::String> spaceSplittedExp = itksys::SystemTools::SplitString(exp.c_str(), ' ', false);
+  std::vector<itksys::String> spaceSplitExp = itksys::SystemTools::SplitString(exp.c_str(), ' ', false);
   // if the chain is "  module", SplitString will return: [ ], [module]
-  for(unsigned int i=0; i<spaceSplittedExp.size(); i++)
+  for(unsigned int i=0; i<spaceSplitExp.size(); i++)
     {
-    if( spaceSplittedExp[i] == " ")
+    if( spaceSplitExp[i] == " ")
       {
-      spaceSplittedExp.erase(spaceSplittedExp.begin()+i);
+      spaceSplitExp.erase(spaceSplitExp.begin()+i);
       i--;
       }
     }
 
   // The SplitString keep the separator in the string.
-  // If exists a space a the beginnig of the string, it will be interpreted...
+  // If exists a space a the beginning of the string, it will be interpreted...
   // We have to delete it
-  if( spaceSplittedExp[0][0] == ' ' )
+  if( spaceSplitExp[0][0] == ' ' )
     {
-    spaceSplittedExp[0].erase(spaceSplittedExp[0].begin());
+    spaceSplitExp[0].erase(spaceSplitExp[0].begin());
     }
 
   itksys::RegularExpression reg;
   reg.compile("([^0-9a-zA-Z])");
   // The first element must be the module path, non " -" allowed.
-  if( spaceSplittedExp[0].substr(0, 2) == " -" || spaceSplittedExp.size() == 0 )
+  if( spaceSplitExp[0].substr(0, 2) == " -" || spaceSplitExp.size() == 0 )
     {
     return NOMODULENAME;
     }
 
   // It must contain only alphanumerical character
-  if(reg.find(spaceSplittedExp[0]))
+  if(reg.find(spaceSplitExp[0]))
     {
     return INVALIDMODULENAME;
     }
   else
     {
-    modName = spaceSplittedExp[0];
+    modName = spaceSplitExp[0];
     }
 
   return OK;
@@ -357,27 +357,27 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
   // Only if the key has values associated
   if( tempModKey.size() > 0 )
     {
-    std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()).c_str(), ' ', false);
+    std::vector<itksys::String> spaceSplit = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()).c_str(), ' ', false);
 
     // Remove " " string element
-    for(unsigned int i=0; i<spaceSplitted.size(); i++)
+    for(unsigned int i=0; i<spaceSplit.size(); i++)
       {
-      if( spaceSplitted[i] == " ")
+      if( spaceSplit[i] == " ")
         {
-        spaceSplitted.erase(spaceSplitted.begin()+i);
+        spaceSplit.erase(spaceSplit.begin()+i);
         i--;
         }
       }
 
     // Remove space at the beginning of the string and cast into std::vector<std::string>
-    for(unsigned int i=0; i<spaceSplitted.size(); i++)
+    for(unsigned int i=0; i<spaceSplit.size(); i++)
       {
-      while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
+      while( spaceSplit[i].size()>0  && spaceSplit[i][0] == ' ' )
         {
-        spaceSplitted[i] = spaceSplitted[i].substr(1, spaceSplitted[i].size());
+        spaceSplit[i] = spaceSplit[i].substr(1, spaceSplit[i].size());
         }
 
-      res.push_back(spaceSplitted[i]);
+      res.push_back(spaceSplit[i]);
       }
     }
   return res;
@@ -529,7 +529,7 @@ CommandLineParser::IsAValidKey( const std::string & foundKey )
   // the starting dash should be already removed
   tmp.append(".");
 
-  // To be a key, the string must be a serie of groups separated by dots so that :
+  // To be a key, the string must be a series of groups separated by dots so that :
   // - each group has at least one character
   // - each group contains only alphanumeric characters (and lowercase)
   // - there is at least one group

@@ -156,7 +156,7 @@ HistogramModel
   // Get histogram of band.
   Histogram::Pointer histogram( m_Histograms->GetNthElement( band ) );
 
-  // Contruct 1D measurement vector.
+  // Construct 1D measurement vector.
   assert( histogram->GetMeasurementVectorSize()==1 );
   Histogram::MeasurementVectorType measurement( 1 );
 
@@ -173,7 +173,7 @@ HistogramModel
     // that the minimum or maximum value go slightly outside the histogram
     // Clamping the value solves the issue and avoid RangeError
     // itk::NumericsTraits<>::Clamp(...) was removed
-    // TODO : when otb::Clamp will be developped, use this function
+    // TODO : when otb::Clamp will be developed, use this function
     measurement[ 0 ]  =
       intensity < binMin
       ? binMin
@@ -305,7 +305,7 @@ HistogramModel
     y[ i ] = f;
 
     // Warning:
-    // coordinates for (x, y) curve will cause graphical artefacts if
+    // coordinates for (x, y) curve will cause graphical artifacts if
     // max[ bin ]!=min[ bin + 1].
 
 #elif HISTOGRAM_CURVE_TYPE==1

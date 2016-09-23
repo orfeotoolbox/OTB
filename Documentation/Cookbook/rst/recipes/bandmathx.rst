@@ -307,7 +307,7 @@ Please, also refer to the next section “Application Programming
 Interface” ([ssec:API]).
 
 **Function ndvi** This function implements the classical normalized
-difference vegetation index; it tkaes two inputs. For instance:
+difference vegetation index; it takes two inputs. For instance:
 
 .. math:: ndvi(im1b1,im1b4)
 

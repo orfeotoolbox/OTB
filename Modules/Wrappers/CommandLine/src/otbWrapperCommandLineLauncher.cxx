@@ -384,13 +384,13 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression));
 
-    // if param is a Group, dont do anything, ParamGroup dont have values
+    // if param is a Group, don't do anything, ParamGroup don't have values
     if (type != ParameterType_Group)
       {
       // Get the attribute relative to this key as vector
       values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
 
-      // If the param does not exists in the cli, dont try to set a
+      // If the param does not exists in the cli, don't try to set a
       // value on it, an exception will be thrown later in this function
       if (paramExists)
         {
@@ -551,7 +551,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             }
         // Update the flag UserValue
         param->SetUserValue(true);
-        // Call the DoUpdateParameter to update dependant params
+        // Call the DoUpdateParameter to update dependent params
         m_Application->UpdateParameters();
         }
       }
@@ -570,7 +570,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     // it must be set if :
     //  - The param is root
     //  - The param is not root and belonging to a Mandatory Group
-    //    wich is activated
+    //    which is activated
     bool mustBeSet = false;
     const bool hasValue = m_Application->HasValue(paramKey);
 
@@ -756,7 +756,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   // it must be set if :
   //  - The param is root
   //  - The param is not root and belonging to a Mandatory Group
-  //    wich is activated
+  //    which is activated
   bool isMissing = false;
   if (!m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression))
     {

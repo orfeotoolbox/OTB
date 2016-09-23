@@ -45,7 +45,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  virtual AlosPalsarRecord* Instanciate() = 0;
+  virtual AlosPalsarRecord* Instantiate() = 0;
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance

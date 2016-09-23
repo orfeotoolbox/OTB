@@ -424,7 +424,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   new_maskIt.GoToBegin();
   new_disparityIt.GoToBegin();
 
-  /** INITIALISATION */
+  /** INITIALIZATION */
   while (!new_maskIt.IsAtEnd() && !new_disparityIt.IsAtEnd())
     {
     old_maskIt.SetIndex(new_maskIt.GetIndex());

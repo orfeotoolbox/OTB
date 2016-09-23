@@ -172,7 +172,7 @@ private:
       ImageIO classes for actually reading the file. If the file
       doesn't exist or it is not readable, and exception with an
       appropriate message will be thrown. */
-  void TestFileExistanceAndReadability();
+  void TestFileExistenceAndReadability();
 
   /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.

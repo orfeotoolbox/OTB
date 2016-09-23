@@ -120,7 +120,7 @@ BackgroundTask
     SLOT( OnObjectDestroyed( QObject* ) )
   );
 
-  // Conditionaly auto-destroy this background task.
+  // Conditionally auto-destroy this background task.
   if( autoDestroy )
     {
     // When thread has finished.
@@ -147,7 +147,7 @@ BackgroundTask
 ::~BackgroundTask()
 {
   // Trace.
-  // qDebug() << this << "is being detroyed.";
+  // qDebug() << this << "is being destroyed.";
 
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
   //

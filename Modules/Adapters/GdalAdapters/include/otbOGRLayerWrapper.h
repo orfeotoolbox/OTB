@@ -96,7 +96,7 @@ public:
    * On destruction of the proxy class, the internal \c OGRLayer is left alone.
    *
    * \warning If the datasource hosting the layer (built with this constructor)
-   * is deleted, the layer won't be usable anymore. Unfortunatelly, there is no
+   * is deleted, the layer won't be usable anymore. Unfortunately, there is no
    * mean to report this to this layer proxy.
    */
   Layer(OGRLayer* layer, bool modifiable);
@@ -403,7 +403,7 @@ public:
    * \warning The definition obtained shall not be modified. Use the \c *Field
    * functions instead.
    * \internal
-   * The return type shall have been const, but unfortunatelly \c OGRFeatureDefn
+   * The return type shall have been const, but unfortunately \c OGRFeatureDefn
    * is not const-correct.
    * \sa \c OGRLayer::GetLayerDefn()
    */
@@ -416,7 +416,7 @@ public:
    * different form depending on the limitations of the format driver.
    *
    * \pre This function shall not be called while there are \c Feature in
-   * existance that were obtained or created with the previous layer definition.
+   * existence that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be created
    * \sa \c OGRLayer::CreateField()
    * \warning Calls to this function may invalidate any feature iterator
@@ -430,7 +430,7 @@ public:
    * \param[in] fieldIndex  index of the field to remove.
    *
    * \pre This function shall not be called while there are \c Feature in
-   * existance that were obtained or created with the previous layer definition.
+   * existence that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be deleted
    * \sa \c OGRLayer::DeleteField()
    * \pre To be available, this function requires OTB to be compiled against OGR
@@ -448,7 +448,7 @@ public:
    * taken into account.
    *
    * \pre This function shall not be called while there are \c Feature in
-   * existance that were obtained or created with the previous layer definition.
+   * existence that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be modified
    * \sa \c OGRLayer::AlterFieldDefn()
    * \pre To be available, this function requires OTB to be compiled against OGR
@@ -463,7 +463,7 @@ public:
    * \param[in] newPos  new field index position
    *
    * \pre This function shall not be called while there are \c Feature in
-   * existance that were obtained or created with the previous layer definition.
+   * existence that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be modified
    * \sa \c OGRLayer::ReorderField()
    * \pre To be available, this function requires OTB to be compiled against OGR
@@ -476,7 +476,7 @@ public:
    * \param[in] map array that tells the new position of each field.
    *
    * \pre This function shall not be called while there are \c Feature in
-   * existance that were obtained or created with the previous layer definition.
+   * existence that were obtained or created with the previous layer definition.
    * \throw itk::ExceptionObject if the new field cannot be modified
    * \sa \c OGRLayer::ReorderFields()
    * \pre To be available, this function requires OTB to be compiled against OGR
@@ -532,7 +532,7 @@ private:
 
 #if 0
   /** Related DataSource.
-   * Needed to acces OTB meta information.
+   * Needed to access OTB meta information.
    */
   DataSourcePtr m_DataSource;
 #endif

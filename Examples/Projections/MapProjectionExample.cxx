@@ -38,7 +38,7 @@
 // file, over 30 projections are defined and ready to use. It is easy
 // to add new one.
 //
-// The otbGenericMapProjection enables you to instanciate a map
+// The otbGenericMapProjection enables you to instantiate a map
 // projection from a WKT (Well Known Text) string, which is popular
 // with OGR for example.
 //

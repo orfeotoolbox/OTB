@@ -211,7 +211,7 @@ private:
   float m_ForestAccuracy;
   /** The type of the termination criteria */
   int m_TerminationCriteria;
-  /** Wether to compute margin (difference in probability between the
+  /** Whether to compute margin (difference in probability between the
    * 2 most voted classes) instead of confidence (probability of the most
    * voted class) in prediction*/
   bool m_ComputeMargin;

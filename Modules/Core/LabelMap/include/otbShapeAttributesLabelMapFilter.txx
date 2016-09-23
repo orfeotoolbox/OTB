@@ -317,7 +317,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     // first, the dimension 0
     if (idx[0] == borderMin[0])
       {
-      // the begining of the line
+      // the beginning of the line
       physicalSizeOnBorder += sizePerPixelPerDimension[0];
       }
     if (idx[0] + (long) length - 1 == borderMax[0])
@@ -377,7 +377,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     // the other ones
     for (DimensionType i = 1; i < LabelObjectType::ImageDimension; ++i)
       {
-      // do this one here to avoid the double assigment in the following loop
+      // do this one here to avoid the double assignment in the following loop
       // when i == j
       centralMoments[i][i] += length * physicalPosition[i] * physicalPosition[i];
       // central moments are symmetrics, so avoid to compute them 2 times

@@ -93,7 +93,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(Multi3DMapToDEMFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef T3DImage                InputMapType;
   typedef TOutputDEMImage         OutputImageType;
   typedef TMaskImage              MaskImageType;
@@ -234,7 +234,7 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
+  /** Generate input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Before threaded generate data */

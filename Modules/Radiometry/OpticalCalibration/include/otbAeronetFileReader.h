@@ -87,7 +87,7 @@ public:
   /** Runtime type information */
   itkTypeMacro(AeronetFileReader, itk::ProcessObject);
 
-  /** Overiding of the GetOutput() method */
+  /** Overriding of the GetOutput() method */
   virtual AeronetData * GetOutput(void);
 
   /** Set the filename  */

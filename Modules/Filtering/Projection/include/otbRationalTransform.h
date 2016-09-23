@@ -81,7 +81,7 @@ public:
   void SetNumeratorDegree(unsigned int value)
   {
     this->m_NumeratorDegree = value;
-    this->InitalizeParameters();
+    this->InitializeParameters();
   }
 
   /** Get the numerator degree */
@@ -91,7 +91,7 @@ public:
   void SetDenominatorDegree(unsigned int value)
   {
     this->m_DenominatorDegree = value;
-    this->InitalizeParameters();
+    this->InitializeParameters();
   }
 
   /** Get the denominator degree */
@@ -164,7 +164,7 @@ public:
   }
 
   /** Initialize Parameters size  */
-  void InitalizeParameters()
+  void InitializeParameters()
   {
     this->m_Parameters.SetSize(this->GetNumberOfParameters());
     this->m_Parameters.Fill(0);
@@ -180,7 +180,7 @@ public:
 protected:
   RationalTransform() : Superclass(16), m_NumeratorDegree(3), m_DenominatorDegree(3)
     {
-    this->InitalizeParameters();
+    this->InitializeParameters();
     }
 
 

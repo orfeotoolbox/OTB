@@ -234,8 +234,8 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // \textbf{FIXME: set the methods}
-  //   \index{otb::AssymetricFusionOfDetector!SetWidthLine()}
-  //  \index{otb::AssymetricFusionOfDetector!SetLengthLine()}
+  //   \index{otb::AsymmetricFusionOfDetector!SetWidthLine()}
+  //  \index{otb::AsymmetricFusionOfDetector!SetLengthLine()}
 
   //  The filter is executed by invoking the \code{Update()} method. If the
   //  filter is part of a larger image processing pipeline, calling
@@ -254,18 +254,18 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
-  // shows the result of applying the AssymetricFusionOf edge detector filter
+  // shows the result of applying the AsymmetricFusionOf edge detector filter
   // to a SAR image.  \begin{figure} \center
   // \includegraphics[width=0.25\textwidth]{amst.eps}
   // \includegraphics[width=0.25\textwidth]{amstSegmentExtractionBySteps.eps}
   // \itkcaption[Line Correlation Detector Application]{Result of applying
-  // the \doxygen{otb}{AssymetricFusionOfDetectorImageFilter} to a SAR
+  // the \doxygen{otb}{AsymmetricFusionOfDetectorImageFilter} to a SAR
   // image. From left to right : original image, line intensity and
   // edge orientation.}  \label{fig:LINECORRELATION_FILTER} \end{figure}
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}
+  //  \item \doxygen{otb}{AsymmetricFusionOfDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex
 

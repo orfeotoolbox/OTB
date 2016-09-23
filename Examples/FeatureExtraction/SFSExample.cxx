@@ -33,7 +33,7 @@
 //
 // This example illustrates the use of the
 // \doxygen{otb}{SFSTexturesImageFilter}.
-// This filter computes the Structural Feature Set as descibed in
+// This filter computes the Structural Feature Set as described in
 // \cite{SFS}. These features are textural parameters which give
 // information about the structure of lines passing through each pixel
 // of the image.

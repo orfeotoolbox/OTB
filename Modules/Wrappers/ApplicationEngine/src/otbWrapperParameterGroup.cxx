@@ -95,9 +95,9 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
 {
   ParameterKey pKey( paramKey );
   // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
+  std::vector<std::string> splitKey = pKey.Split();
 
-  if( splittedKey.size() > 1 )
+  if( splitKey.size() > 1 )
     {
       // Get the last subkey
       std::string lastkey = pKey.GetLastElement();
@@ -134,19 +134,19 @@ ParameterGroup::ClearChoices(std::string paramKey)
 {
   ParameterKey pKey( paramKey );
   // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
+  std::vector<std::string> splitKey = pKey.Split();
 
   std::string parentkey;
   Parameter::Pointer parentParam;
 
-  if (splittedKey.size() > 1)
+  if (splitKey.size() > 1)
     {
     parentkey = pKey.GetRoot();
     parentParam = GetParameterByKey(parentkey);
     }
   else
     {
-    parentParam = GetParameterByKey(splittedKey[0]);
+    parentParam = GetParameterByKey(splitKey[0]);
     }
 
    // parentParam must be a choice, a listBox or this is an error
@@ -210,19 +210,19 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
   std::vector<int> selectedItems;
   ParameterKey pKey( paramKey );
   // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
+  std::vector<std::string> splitKey = pKey.Split();
 
   std::string parentkey;
   Parameter::Pointer parentParam;
 
-  if (splittedKey.size() > 1)
+  if (splitKey.size() > 1)
     {
     parentkey = pKey.GetRoot();
     parentParam = GetParameterByKey(parentkey);
     }
   else
     {
-    parentParam = GetParameterByKey(splittedKey[0]);
+    parentParam = GetParameterByKey(splitKey[0]);
     }
 
    // parentParam must be a choice, a listBox or this is an error
@@ -487,7 +487,7 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
 {
   ParameterKey pKey(paramKey);
   // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
+  std::vector<std::string> splitKey = pKey.Split();
 
   // Get the last subkey
   std::string lastkey = pKey.GetLastElement();
@@ -496,7 +496,7 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
   std::string parentkey;
   Parameter::Pointer parentParam;
 
-  if (splittedKey.size() > 1)
+  if (splitKey.size() > 1)
     {
     parentkey = pKey.GetRoot();
     parentParam = GetParameterByKey(parentkey);
@@ -642,11 +642,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
     newParam->SetKey(lastkey);
     newParam->SetName(paramName);
 
-    // If splittedKey is greater than 1, that means that the parameter
+    // If splitKey is greater than 1, that means that the parameter
     // is not a root, and have a parent(s):
     // - Add the parent as root of this param
     // - Add the param as a child of its parents
-    if (splittedKey.size() > 1)
+    if (splitKey.size() > 1)
       {
       newParam->SetRoot(parentParam);
       parentParam->AddChild(newParam);
@@ -678,7 +678,7 @@ ParameterGroup::GetParameterByKey(std::string name)
   ParameterKey pName(name);
 
  // Split the parameter name
-  std::vector<std::string> splittedName = pName.Split();
+  std::vector<std::string> splitName = pName.Split();
 
   // Get the first parameter key
   std::string parentName = pName.GetFirstElement();
@@ -702,7 +702,7 @@ ParameterGroup::GetParameterByKey(std::string name)
     }
 
   // If the name contains a child, make a recursive call
-  if (splittedName.size() > 1)
+  if (splitName.size() > 1)
     {
     // Handle ParameterGroup case
     ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
@@ -710,12 +710,12 @@ ParameterGroup::GetParameterByKey(std::string name)
       {
       // Remove the parent from the param name
       std::ostringstream childNameOss;
-      std::vector<std::string>::const_iterator vvit = splittedName.begin() + 1;
-      while(vvit != splittedName.end())
+      std::vector<std::string>::const_iterator vvit = splitName.begin() + 1;
+      while(vvit != splitName.end())
         {
         childNameOss << *vvit;
         ++vvit;
-        if (vvit != splittedName.end())
+        if (vvit != splitName.end())
           {
           childNameOss << ".";
           }
@@ -729,29 +729,29 @@ ParameterGroup::GetParameterByKey(std::string name)
     ChoiceParameter* parentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
     if (parentAsChoice)
       {
-      // Check that splittedName[1] is one of the choice
+      // Check that splitName[1] is one of the choice
       ParameterGroup::Pointer associatedParam;
 
-      // will throw if splittedName[1] is not a choice key
-      associatedParam = parentAsChoice->GetChoiceParameterGroupByKey(splittedName[1]);
+      // will throw if splitName[1] is not a choice key
+      associatedParam = parentAsChoice->GetChoiceParameterGroupByKey(splitName[1]);
 
-      if (splittedName.size() > 2)
+      if (splitName.size() > 2)
         {
         if (associatedParam.IsNull())
           {
-          itkExceptionMacro(<< "Choice " << splittedName[1] << "in "
-                            << splittedName[0] << "  has no key named "
-                            << splittedName[2]);
+          itkExceptionMacro(<< "Choice " << splitName[1] << "in "
+                            << splitName[0] << "  has no key named "
+                            << splitName[2]);
           }
 
         // Remove the parent and the choice value from the param name
         std::ostringstream childNameOss;
-        std::vector<std::string>::const_iterator vvvit = splittedName.begin() + 2;
-        while(vvvit != splittedName.end())
+        std::vector<std::string>::const_iterator vvvit = splitName.begin() + 2;
+        while(vvvit != splitName.end())
           {
           childNameOss << *vvvit;
           ++vvvit;
-          if (vvvit != splittedName.end())
+          if (vvvit != splitName.end())
             {
             childNameOss << ".";
             }

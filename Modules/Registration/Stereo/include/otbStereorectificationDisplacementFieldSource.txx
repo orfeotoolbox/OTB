@@ -134,7 +134,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
   leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
 
-  leftToGroundTransform->InstanciateTransform();
+  leftToGroundTransform->InstantiateTransform();
 
   // Retrieve the deformation field pointers
   OutputImageType * leftDFPtr = this->GetLeftDisplacementFieldOutput();
@@ -143,11 +143,11 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   // Set up  the RS transforms
   m_LeftToRightTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
   m_LeftToRightTransform->SetOutputKeywordList(m_RightImage->GetImageKeywordlist());
-  m_LeftToRightTransform->InstanciateTransform();
+  m_LeftToRightTransform->InstantiateTransform();
 
   m_RightToLeftTransform->SetInputKeywordList(m_RightImage->GetImageKeywordlist());
   m_RightToLeftTransform->SetOutputKeywordList(m_LeftImage->GetImageKeywordlist());
-  m_RightToLeftTransform->InstanciateTransform();
+  m_RightToLeftTransform->InstantiateTransform();
 
   // Now, we must determine the optimized size, spacing and origin of the
   // stereo-rectified images, as well as the position of the origin in
@@ -185,7 +185,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   // average elevation
   rightEpiPoint = m_LeftToRightTransform->TransformPoint(leftInputOrigin);
 
-  // The begining of the epipolar line in the left image is the image
+  // The beginning of the epipolar line in the left image is the image
   // of rightEpiPoint at a lower elevation (using the offset)
   rightEpiPoint[2] = localElevation - m_ElevationOffset;
   leftEpiLineStart = m_RightToLeftTransform->TransformPoint(rightEpiPoint);
@@ -317,7 +317,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 
   leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
 
-  leftToGroundTransform->InstanciateTransform();
+  leftToGroundTransform->InstantiateTransform();
 
   // Retrieve the output pointers
   OutputImageType * leftDFPtr = this->GetLeftDisplacementFieldOutput();
@@ -406,7 +406,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
     // average elevation
     epiPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
 
-    // The begining of the epipolar line in the left image is the image
+    // The beginning of the epipolar line in the left image is the image
     // of epiPoint2 at a lower elevation (using the offset)
     epiPoint2[2] = localElevation - m_ElevationOffset;
     startLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);

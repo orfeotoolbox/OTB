@@ -159,9 +159,17 @@ GDALOverviewsBuilder
 /***************************************************************************/
 unsigned int
 GDALOverviewsBuilder
+::CountResolutions( unsigned int minSize ) const
+{
+  return CountResolutions( m_ResolutionFactor, minSize );
+}
+
+/***************************************************************************/
+unsigned int
+GDALOverviewsBuilder
 ::CountResolutions() const
 {
-  return CountResolutions( m_ResolutionFactor );
+  return CountResolutions( 1 );
 }
 
 /***************************************************************************/

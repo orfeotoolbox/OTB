@@ -126,7 +126,7 @@ public:
 
   void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const ITK_OVERRIDE
   {
-    itkExceptionMacro(<<  "Subclasses should ITK_OVERRIDE this method (ComputeJacobianWithRespectToParamters)" );
+    itkExceptionMacro(<<  "Subclasses should ITK_OVERRIDE this method (ComputeJacobianWithRespectToParameters)" );
   }
 
   /** Set the transformation parameters and update internal transformation.

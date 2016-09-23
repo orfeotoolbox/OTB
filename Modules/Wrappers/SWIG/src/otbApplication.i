@@ -29,7 +29,7 @@
 #define SWIG_FILE_WITH_INIT
 %}
 
-// Langage specific extension
+// Language specific extension
 %include "Python.i"
 %include "Java.i"
 %include "Ruby.i"
@@ -587,7 +587,7 @@ class ApplicationProxy(object):
 		  keep hide the SetParameter** calls within this method so that it seems like
 		  an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
 		  here 'in' and 'out' are    parameters in the 'otb application' with instance App
-		  Ofcourse, we dont blindly accept any attributes as python, we check them against
+		  Ofcourse, we don't blindly accept any attributes as python, we check them against
 		  list of existing parameters for application with 'self.GetParametersKeys(True)'
 		  """
 		  if attr is not None:

@@ -51,7 +51,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     // Instantiate an affine transformation Pointer
     AffineTransformType::Pointer affineTransform    = AffineTransformType::New();
 
-    // Instanciate reader
+    // Instantiate reader
     ReaderType::Pointer reader = ReaderType::New();
 
     // Get the image file

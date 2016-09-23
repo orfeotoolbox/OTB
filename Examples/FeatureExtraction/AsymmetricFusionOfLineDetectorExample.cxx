@@ -165,9 +165,9 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  The image obtained with the reader is passed as input to the
-  //  \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}. The pipeline is built as follows.
+  //  \doxygen{otb}{AsymmetricFusionOfDetectorImageFilter}. The pipeline is built as follows.
   //
-  //  \index{otb::AssymetricFusionOfDetectorImageFilter!SetInput()}
+  //  \index{otb::AsymmetricFusionOfDetectorImageFilter!SetInput()}
   //
   //  Software Guide : EndLatex
 
@@ -183,8 +183,8 @@ int main(int argc, char * argv[])
   //  allow setting the minimum length and the typical witdh of the
   //  lines which are to be detected.
   //
-  //  \index{otb::AssymetricFusionOfDetector!SetWidthLine()}
-  //  \index{otb::AssymetricFusionOfDetector!SetLengthLine()}
+  //  \index{otb::AsymmetricFusionOfDetector!SetWidthLine()}
+  //  \index{otb::AsymmetricFusionOfDetector!SetLengthLine()}
   //
   //  Software Guide : EndLatex
 
@@ -211,12 +211,12 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:LINEFUSION_FILTER}
-  // shows the result of applying the AssymetricFusionOf edge detector filter
+  // shows the result of applying the AsymmetricFusionOf edge detector filter
   // to a SAR image.  \begin{figure} \center
   // \includegraphics[width=0.25\textwidth]{amst.eps}
   // \includegraphics[width=0.25\textwidth]{amstLineFusion.eps}
   // \itkcaption[Line Correlation Detector Application]{Result of applying
-  // the \doxygen{otb}{AssymetricFusionOfDetectorImageFilter} to a SAR
+  // the \doxygen{otb}{AsymmetricFusionOfDetectorImageFilter} to a SAR
   // image. From left to right : original image, line intensity.}  \label{fig:LINEFUSION_FILTER} \end{figure}
   //
   //  Software Guide : EndLatex

@@ -63,9 +63,6 @@ sensors are :
 
 -  Formosat
 
-Optical calibration with **OTB Applications** 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The *OpticalCalibration* application allows to perform optical
 calibration. The mandatory parameters are the input and output images.
 All other parameters are optional. By default the level of calibration
@@ -84,40 +81,6 @@ A basic TOC calibration task can be performed with the following command:
 
     otbcli_OpticalCalibration -in  input_image -out output_image -level toc
 
-Optical calibration with **Monteverdi** 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-These transformations can also be done in **Monteverdi** .
-
-The 6S model needs atmospheric parameters to be able to compute
-radiative terms to estimate the atmospheric contributions on the input
-signal. Default parameters are available in the module. For atmospheric
-parameters, it is possible to indicate AERONET file. The AERONET
-(AErosol RObotic NETwork) program is a federation of ground-based remote
-sensing aerosol networks established by NASA and PHOTONS (Univ. of Lille
-1, CNES, and CNRS-INSU) and is greatly expanded by collaborators from
-national agencies, institutes, universities, individual scientists, and
-partners. The program provides accessible public domain database of
-aerosol optical, mircrophysical and radiative properties.
-
-The module produces four outputs:
-
--  Luminance image.
-
--  TOA reflectance image.
-
--  TOC reflectance image.
-
--  Difference TOA-TOC image, which allows to get the estimation of
-   atmospheric contribution.
-
-.. figure:: ../Art/MonteverdiImages/monteverdi_optical_calibration.png
-
-   Figure 1 : Optical calibration module.
-
-.. figure:: ../Art/MonteverdiImages/monteverdi_optical_calibration_outputs.png
-
-   Figure 2 : Optical calibration module’s outputs.
 
 Pan-sharpening
 --------------
@@ -164,9 +127,6 @@ This fusion operation requires two different steps :
 Using either **OTB Applications** or modules from **Monteverdi** , it is
 possible to perform both steps in a row, or step-by-step fusion, as
 described in the above sections.
-
-Pan-sharpening with **OTB Applications** 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The *BundleToPerfectSensor* application allows to perform both steps in
 a row. Seamless sensor modelling is used to perform zooming and
@@ -226,38 +186,10 @@ Increasing the available amount of RAM may also result in better
 computation time, seems it optimises the use of the system resources.
 Default value is 256 Mb.
 
-Pan-sharpening with **Monteverdi** 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**Monteverdi** allows to perform step-by-step fusion. The followings
-screenshots highlight operations needed to perform Pan-Sharpening.
-
--  Open panchromatic and multispectral images in monteverdi using the
-   *Open Dataset* module or using the ``-il`` option of the
-   **Monteverdi** executable.
-
--  The *Superimpose* module is used to zoomed and registered the
-   multispectral on the panchromatic image. As a result, we get a
-   multispectral dataset with the same geographic extension and the same
-   resolution as the panchromatic image, cf  [fig:qbmulsuper].
-
-.. figure:: ../Art/MonteverdiImages/monteverdi_QB_PAN_ROI.png
-
-
-
-.. figure:: ../Art/MonteverdiImages/monteverdi_QB_MUL_Superimpose.png
-
-   Figure 4 : Panchromatic, Zoomed, and registered multispectral image. 
-
-
--  Now the *Simple RCS pan-sharpening* module can be used using the
-   panchromatic and the multispectral images as inputs. It produces a
-   multispectral image with the same resolution and geographic extension
-   (cf `Figure 5`).
 
 .. figure:: ../Art/MonteverdiImages/monteverdi_QB_XS_pan-sharpened.png
 
-   Figure 5 : Pan-sharpened image using the simple RCS module. 
+Figure 5 : Pan-sharpened image using Orfeo ToolBox. 
 
 Please also note that since registration and zooming of the
 multi-spectral image with the panchromatic image relies on sensor
