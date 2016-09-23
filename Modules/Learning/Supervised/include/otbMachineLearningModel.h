@@ -107,7 +107,7 @@ public:
   /** TODO: Update documentation*/
   typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
   
-  /** TODO: Update documentation and mark as deprecated */
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
   void PredictAll();
 
   /**\name Classification model file manipulation */

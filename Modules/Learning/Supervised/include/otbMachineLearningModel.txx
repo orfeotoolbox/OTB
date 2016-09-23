@@ -65,6 +65,8 @@ void
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::PredictAll()
 {
+  itkWarningMacro("MachineLearningModel::PredictAll() has been DEPRECATED. Use MachineLearningModel::PredictBatch() instead.");
+  
   typename TargetListSampleType::Pointer targets = this->GetTargetListSample();
   targets->Clear();
   
