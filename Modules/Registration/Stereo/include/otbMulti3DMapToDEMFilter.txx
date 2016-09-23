@@ -410,28 +410,44 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     typename T3DImage::RegionType mapRegion = imgPtr->GetLargestPossibleRegion();
 
     itk::ContinuousIndex<double, 2> mapContiIndex;
-    IndexType maxMapIndex;
-    IndexType minMapIndex;
+    long int maxMapIndex[2] = { 0, 0 };
+    long int minMapIndex[2] = { 0, 0 };
     maxMapIndex[0] = static_cast<long int> (mapRegion.GetIndex(0) + mapRegion.GetSize(0));
     maxMapIndex[1] = static_cast<long int> (mapRegion.GetIndex(1) + mapRegion.GetSize(1));
     minMapIndex[0] = static_cast<long int> (mapRegion.GetIndex(0));
     minMapIndex[1] = static_cast<long int> (mapRegion.GetIndex(1));
 
-    IndexType minMapRequestedIndex;
+    long int minMapRequestedIndex[2] = { 0, 0 };
     minMapRequestedIndex[0]= maxMapIndex[0]+1;
     minMapRequestedIndex[1]= maxMapIndex[1]+1;
-    IndexType maxMapRequestedIndex;
+
+    long int maxMapRequestedIndex[2] = { 0, 0 };
     maxMapRequestedIndex[0]= 0;
     maxMapRequestedIndex[1]= 0;
 
     for (unsigned int i = 0; i < 8; i++)
       {
-      TDPointType tmpSensor = groundToSensorTransform->TransformPoint(corners[i]);
+      TDPointType tmpSensor = groundToSensorTransform->TransformPoint( corners[i] );
 
-      minMapRequestedIndex[0] = std::min(minMapRequestedIndex[0], static_cast<long int> (tmpSensor[0] - m_Margin[0]));
-      minMapRequestedIndex[1] = std::min(minMapRequestedIndex[1], static_cast<long int> (tmpSensor[1] - m_Margin[1]));
-      maxMapRequestedIndex[0] = std::max(maxMapRequestedIndex[0], static_cast<long int> (tmpSensor[0] + m_Margin[0]));
-      maxMapRequestedIndex[1] = std::max(maxMapRequestedIndex[1], static_cast<long int> (tmpSensor[1] + m_Margin[1]));
+      minMapRequestedIndex[0] = std::min(
+        minMapRequestedIndex[0],
+        static_cast<long int> ( tmpSensor[0] - m_Margin[0] )
+        );
+
+      minMapRequestedIndex[1] = std::min(
+        minMapRequestedIndex[1],
+        static_cast<long int> ( tmpSensor[1] - m_Margin[1] )
+        );
+
+      maxMapRequestedIndex[0] = std::max(
+        maxMapRequestedIndex[0],
+        static_cast<long int> ( tmpSensor[0] + m_Margin[0] )
+        );
+
+      maxMapRequestedIndex[1] = std::max(
+        maxMapRequestedIndex[1],
+        static_cast<long int> ( tmpSensor[1] + m_Margin[1] )
+        );
 
       minMapRequestedIndex[0] = std::max(minMapRequestedIndex[0], minMapIndex[0]);
       minMapRequestedIndex[1] = std::max(minMapRequestedIndex[1], minMapIndex[1]);
@@ -459,6 +475,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
       }
 
     imgPtr->SetRequestedRegion(requestedRegion);
+    
     TMaskImage *mskPtr = const_cast<TMaskImage *> (this->GetMaskInput(k));
     if (mskPtr)
       {

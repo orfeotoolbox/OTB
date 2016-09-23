@@ -300,7 +300,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CorrelationLineDetectorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AssymmetricFusionOfLineDetectorExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AsymmetricFusionOfLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LocalHoughExample.cxx
   #${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineSegmentDetectorExample.cxx
   #${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RightAngleDetectionExample.cxx
