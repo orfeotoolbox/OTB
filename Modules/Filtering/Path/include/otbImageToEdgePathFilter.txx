@@ -63,7 +63,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   typename PadFilterType::Pointer pad = PadFilterType::New();
   pad->SetInput(inputImage);
   pad->SetConstant(initPadConstant);
-  long unsigned int padSize[2] = {1, 1};
+  SizeType padSize = { 1, 1 };
   pad->SetPadUpperBound(padSize);
   pad->SetPadLowerBound(padSize);
   pad->Update();
