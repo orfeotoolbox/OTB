@@ -179,7 +179,7 @@ namespace otb
     catch (...) \
       { \
       std::ostringstream message; \
-      message << "otb::ERROR Unknow error while running " << # command << " (catch(...) )"; \
+      message << "otb::ERROR Unknown error while running " << # command << " (catch(...) )"; \
       ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
       throw e_; \
       } \
@@ -210,7 +210,7 @@ namespace otb
     catch (...) \
       { \
       std::ostringstream message; \
-      message << "otb::ERROR Unknow error while running " << # command << " (catch(...) )"; \
+      message << "otb::ERROR Unknown error while running " << # command << " (catch(...) )"; \
       ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
       throw e_; \
       } \

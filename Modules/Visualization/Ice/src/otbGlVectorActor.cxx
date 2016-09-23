@@ -653,8 +653,8 @@ void GlVectorActor::UpdateTransforms()
     m_VectorToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
     m_VectorToViewportTransform->SetInputProjectionRef((m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetProjectionRef()));
     }
-  m_ViewportToVectorTransform->InstanciateTransform();
-  m_VectorToViewportTransform->InstanciateTransform();
+  m_ViewportToVectorTransform->InstantiateTransform();
+  m_VectorToViewportTransform->InstantiateTransform();
 }
 
 

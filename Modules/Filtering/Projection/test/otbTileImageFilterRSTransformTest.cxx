@@ -73,7 +73,7 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
     // Set-up transform
     RSTransformType::Pointer rsTransform = RSTransformType::New();
     rsTransform->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-    rsTransform->InstanciateTransform();
+    rsTransform->InstantiateTransform();
     transforms.push_back(rsTransform);
 
     tileFilter->SetInput(i,reader->GetOutput());
@@ -84,7 +84,7 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
   // Build RS transform for tiled image
   RSTransformType::Pointer mosaicRsTransform = RSTransformType::New();
   mosaicRsTransform->SetInputKeywordList(tileFilter->GetOutput()->GetImageKeywordlist());
-  mosaicRsTransform->InstanciateTransform();
+  mosaicRsTransform->InstantiateTransform();
 
   // Check that individual RSTransform gives the same result as tiled
   // transform

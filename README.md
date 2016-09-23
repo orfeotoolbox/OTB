@@ -14,7 +14,7 @@ Monteverdi.
 [![Travis Build Status](https://travis-ci.org/orfeotoolbox/OTB.png?branch=develop)](https://travis-ci.org/orfeotoolbox/OTB)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeo-toolbox) 
 
-### Ressources
+### Resources
 * [OTB's website](https://www.orfeo-toolbox.org/)
 * [Documentation](https://www.orfeo-toolbox.org/documentation/)
 * [Downloads](https://www.orfeo-toolbox.org/download/)

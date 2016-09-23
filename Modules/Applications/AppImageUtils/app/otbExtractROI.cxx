@@ -238,7 +238,7 @@ private:
       rsTransform->SetInputProjectionRef(referencePtr->GetProjectionRef());
       rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
       rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
-      rsTransform->InstanciateTransform();
+      rsTransform->InstantiateTransform();
 
       FloatVectorImageType::IndexType uli_ref,uri_ref,lli_ref,lri_ref;
 

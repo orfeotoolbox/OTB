@@ -71,7 +71,7 @@ public:
   VertexPointerType GetTargetVertex(void);
   /**
    * Return the source vertex index of the current edge.
-   * \return The souce vertex index.
+   * \return The source vertex index.
    */
   VertexDescriptorType GetSourceIndex(void);
   /**

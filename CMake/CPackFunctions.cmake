@@ -166,7 +166,7 @@ function(configure_app_package app with_otb_apps)
       # I guess it's because cpack already handles installing the runtime,
       # but here we build with a particular version of Visual, but
       # some OSGeo4W dependencies are built upon other runtimes
-      set(MVD2_ADDITIONNAL_DLLS
+      set(MVD2_ADDITIONAL_DLLS
         ${OSGEO4W_ROOT}/bin/msvcp60.dll
         ${OSGEO4W_ROOT}/bin/msvcp70.dll
         ${OSGEO4W_ROOT}/bin/msvcp71.dll
@@ -179,12 +179,12 @@ function(configure_app_package app with_otb_apps)
       # I really don't understand why.
       # Let's add them manually
 
-      set(MVD2_ADDITIONNAL_DLLS
-        ${MVD2_ADDITIONNAL_DLLS}
+      set(MVD2_ADDITIONAL_DLLS
+        ${MVD2_ADDITIONAL_DLLS}
         ${OSGEO4W_ROOT}/bin/libgcc_s_dw2-1.dll
         ${OSGEO4W_ROOT}/bin/libiconv-2.dll)
 
-      foreach(dll ${MVD2_ADDITIONNAL_DLLS})
+      foreach(dll ${MVD2_ADDITIONAL_DLLS})
         if (EXISTS ${dll})
           install( FILES ${dll} DESTINATION bin COMPONENT Runtime )
         endif()

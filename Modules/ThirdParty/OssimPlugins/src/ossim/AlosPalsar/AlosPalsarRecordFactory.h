@@ -45,10 +45,10 @@ public:
   void RegisterRecord(int id, AlosPalsarRecord * record);
 
   /**
-   * @brief Instanciate a new Record
-   * @param id Id of the Record we want to instanciate
+   * @brief Instantiate a new Record
+   * @param id Id of the Record we want to instantiate
    */
-  AlosPalsarRecord* Instanciate(int id) ;
+  AlosPalsarRecord* Instantiate(int id) ;
 protected:
 
   /**

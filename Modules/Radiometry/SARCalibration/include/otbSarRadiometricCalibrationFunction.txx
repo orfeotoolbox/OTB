@@ -39,14 +39,14 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 , m_ApplyLookupDataCorrection(false)
 , m_ApplyRescalingFactor(false)
 {
-  /* intialize parametric functions */
+  /* initialize parametric functions */
   m_Noise                 = ParametricFunctionType::New();
   m_AntennaPatternNewGain = ParametricFunctionType::New();
   m_AntennaPatternOldGain = ParametricFunctionType::New();
   m_IncidenceAngle        = ParametricFunctionType::New();
   m_RangeSpreadLoss       = ParametricFunctionType::New();
 
-  /* intialize default values in paramerticFunction instances  */
+  /* initialize default values in paramerticFunction instances  */
   m_Noise->SetConstantValue(0.0);
   m_AntennaPatternNewGain->SetConstantValue(1.0);
   m_AntennaPatternOldGain->SetConstantValue(1.0);
@@ -109,7 +109,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 
   RealType sigma = m_Scale * digitalNumber * digitalNumber;
 
-  /** substract noise if enabled. */
+  /** subtract noise if enabled. */
   if (m_EnableNoise)
     {
     assert(m_Noise);

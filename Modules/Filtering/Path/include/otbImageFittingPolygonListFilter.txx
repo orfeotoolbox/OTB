@@ -59,7 +59,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
 }
 
 //FIXME
-//There is an issue here with integer and continous indexes
+//There is an issue here with integer and continuous indexes
 //maybe we should use the itk::LineConstIterator
 template <class TPath, class TImage>
 void

@@ -104,10 +104,10 @@ add_test( NAME pyTvNewStyleParameters
   ${TEMP}/pyTvNewStyleParametersTest.tif
   ${OTB_DATA_ROOT}/Input/apTvUtSmoothingTest_OutXML.xml)
 
-add_test( NAME pyTvNewStyleParametersInstanciateAll
+add_test( NAME pyTvNewStyleParametersInstantiateAll
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
-  PythonNewStyleParametersInstanciateAllTest
+  PythonNewStyleParametersInstantiateAllTest
   )
 
 add_test( NAME pyTvConnectApplications

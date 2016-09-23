@@ -63,7 +63,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase
   : public ImageListSource<TImage>
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReaderBase     Self;
   typedef ImageListSource<TImage>       Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -154,7 +154,7 @@ protected:
    * If the filename to test is an imageFileName, the file name may be modified in
    * order to add the appropriated path
    */
-  virtual void TestFileExistanceAndReadability(std::string& file, FileType fileType);
+  virtual void TestFileExistenceAndReadability(std::string& file, FileType fileType);
   virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
 
   void GenerateData(void) ITK_OVERRIDE;
@@ -174,7 +174,7 @@ protected:
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 

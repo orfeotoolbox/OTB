@@ -13,6 +13,10 @@ JPEG_SUPPORTED = 1
 
 GDAL_HOME="@CMAKE_WIN_INSTALL_PREFIX@"
 
+# Uncomment the following if you are building for 64-bit windows
+# (x64). You'll need to have PATH, INCLUDE and LIB set up for 64-bit
+# compiles.
+WIN64=@BUILDING_WIN64@
 
 #if using an external jpeg library uncomment the follwing lines
 JPEG_EXTERNAL_LIB = 1

@@ -731,7 +731,7 @@ ImageFileWriter<TInputImage>
     Convert(m_ImageIO->GetIORegion(), ioRegion, m_ShiftOutputIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
 
-  // before this test, bad stuff would happend when they don't match
+  // before this test, bad stuff would happened when they don't match
   if (bufferedRegion != ioRegion)
     {
     if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion)

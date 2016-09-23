@@ -22,7 +22,7 @@ This application computes radiometric and shape attributes on a vector dataset,
 using an image. The results are stored in the attribute table. Shape attributes
 are : number of pixels, flatness, roundness, elongation, perimeter. Radiometric
 attributes are for each band of the input image : mean, standard-deviation,
-median, variance, kurtosis, skewness. The result could be use to perform futher
+median, variance, kurtosis, skewness. The result could be use to perform further
 object-oriented image analysis.
 "
   GIT_REPOSITORY https://github.com/sertit/SertitObject.git

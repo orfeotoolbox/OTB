@@ -22,27 +22,7 @@ together with other GIS data.
 This figure illustrates the generic workflow in the case of image series
 registration:
 
-                             +--------------------------+
-                             |       InputSeries        |
-                             +--------------------------+
-                             |       Sensor Model       |
-                             +--------------------------+
-                             |           DEM            |
-                             +--------------------------+
-                             |  Geo-referenced Series   |
-                             +--------------------------+
-                             |    Homologous Points     |
-                             +--------------------------+
-                             | Bundle-block Adjustement |
-                             +--------------------------+
-                             |    Fine Registration     |
-                             +--------------------------+
-                             |   Registered Series      |
-                             +--------------------------+
-                             |     Map Projection       |
-                             +--------------------------+ 
-                             |   Cartographic Series    |
-                             +--------------------------+
+.. image:: ../Art/residual_registration-figure.png
 
 We will now illustrate this process by applying this workflow to
 register two images. This process can be easily extended to perform

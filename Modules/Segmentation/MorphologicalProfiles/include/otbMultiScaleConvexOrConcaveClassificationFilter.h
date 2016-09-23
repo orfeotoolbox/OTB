@@ -132,7 +132,7 @@ public:
 private:
   /** Sigma (tolerance) parameter */
   double m_Sigma;
-  /** Seperate between convex and concave labels */
+  /** Separate between convex and concave labels */
   TLabeled m_LabelSeparator;
 
 };

@@ -3,7 +3,7 @@ otb_module_test()
 set(OTBOSSIMAdaptersTests
 otbOSSIMAdaptersTestDriver.cxx
 otbTestImageKeywordlist.cxx
-otbOssimJpegFileRessourceLeakTest.cxx
+otbOssimJpegFileResourceLeakTest.cxx
 otbMapProjectionAdapterTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
@@ -120,8 +120,8 @@ foreach( file ${NAME_TESTS} )
 endforeach()
 
 
-otb_add_test(NAME ioTvOssimJpegFileRessourceLeak COMMAND otbOSSIMAdaptersTestDriver
-  otbOssimJpegFileRessourceLeakTest
+otb_add_test(NAME ioTvOssimJpegFileResourceLeak COMMAND otbOSSIMAdaptersTestDriver
+  otbOssimJpegFileResourceLeakTest
   ${INPUTDATA}/poupees.jpg
   1200
   )

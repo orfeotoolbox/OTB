@@ -44,22 +44,22 @@ public:
    JSDDateTime(const JSDDateTime& rhs);
 
    /**
-    * @brief Constructor with date initialisation
+    * @brief Constructor with date initialization
     */
    JSDDateTime(JulianDate day0hTU, double second, double decimal);
 
    /**
-    * @brief Constructor with date initialisation using a CivilDateTime
+    * @brief Constructor with date initialization using a CivilDateTime
     */
    JSDDateTime(CivilDateTime& rhs);
 
    /**
-    * @brief Constructor with date initialisation using a CivilDateTime
+    * @brief Constructor with date initialization using a CivilDateTime
     */
    JSDDateTime(JulianDate& rhs);
 
    /**
-    * @brief Constructor with date initialisation using a MJDDateTime (Modified Julian Date - Used for ENVISAT)
+    * @brief Constructor with date initialization using a MJDDateTime (Modified Julian Date - Used for ENVISAT)
     */
    JSDDateTime(MJDDateTime& rhs);
 

@@ -1555,7 +1555,7 @@ Application::IsApplicationReady()
       // return false when does not have value and:
       //  - The param is root
       //  - The param is not root and belonging to a Mandatory Group
-      //    wich is activated
+      //    which is activated
       if ( !this->HasValue(*it)  && IsMandatory(*it) )
         {
         if( GetParameterByKey(*it)->IsRoot() )

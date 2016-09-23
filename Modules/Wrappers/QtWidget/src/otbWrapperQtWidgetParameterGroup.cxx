@@ -130,7 +130,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
         QGroupBox* group = new QGroupBox;
         group->setLayout(vboxLayout);
 
-        // Make the paramter Group checkable when it is not mandatory
+        // Make the parameter Group checkable when it is not mandatory
         if (!param->GetMandatory() )
           {
           group->setCheckable(true);

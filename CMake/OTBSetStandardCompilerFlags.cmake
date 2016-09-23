@@ -99,7 +99,7 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
       #-wd1419 #Needed for Intel compilers with remark  #1419: external declaration in primary source file
       #-wd1572 #Needed for Intel compilers with remark  #1572: floating-point equality and inequality comparisons are unreliable
       #-wd2259 #Needed for Intel compilers with remark  #2259: non-pointer conversion from "otb::SizeValueType={unsigned long}" to "double" may lose significant bits
-      #-wd1268 #Needed for Intel compliers with warning #1268: support for exported templates is disabled
+      #-wd1268 #Needed for Intel compilers with warning #1268: support for exported templates is disabled
     else()
       set(VerboseWarningsFlag -Wall )
     endif ()
@@ -149,7 +149,7 @@ macro(check_compiler_platform_flags)
   if(MSVC)
     if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
       if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
-          message(STATUS "The size of the stack is already defined, so we dont't modified it.")
+          message(STATUS "The size of the stack is already defined, so we don't modified it.")
       else()
           set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /STACK:10000000")
           message(STATUS "The stack size is set to 10 Mbytes (/STACK:10000000).")

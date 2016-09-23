@@ -255,11 +255,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
   leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());
-  leftToGroundTransform->InstanciateTransform();
+  leftToGroundTransform->InstantiateTransform();
 
   RSTransform2DType::Pointer rightToGroundTransform = RSTransform2DType::New();
   rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());
-  rightToGroundTransform->InstanciateTransform();
+  rightToGroundTransform->InstantiateTransform();
 
   // left image
   typename SensorImageType::SizeType inputSize = leftImgPtr->GetLargestPossibleRegion().GetSize();
@@ -382,7 +382,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 
   RSTransformType::Pointer groundToLeftTransform = RSTransformType::New();
   groundToLeftTransform->SetOutputKeywordList(leftSensor->GetImageKeywordlist());
-  groundToLeftTransform->InstanciateTransform();
+  groundToLeftTransform->InstantiateTransform();
 
   // For the disparity maps and mask
   // Iterate over OutputRequestedRegion corners for elevation min and max
@@ -638,8 +638,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   m_LeftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());
   m_RightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
 
-  m_LeftToGroundTransform->InstanciateTransform();
-  m_RightToGroundTransform->InstanciateTransform();
+  m_LeftToGroundTransform->InstantiateTransform();
+  m_RightToGroundTransform->InstantiateTransform();
 
   // ensure empty regions are not processed
   if (requestedRegion.GetSize(0) == 0 && requestedRegion.GetSize(1) == 0)

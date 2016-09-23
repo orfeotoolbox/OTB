@@ -210,7 +210,16 @@ private:
    * forwarded to the functor. \c ogr::Layer specific settings will be set at
    * the last moment from \c DoProcessLayer().
    */
-  void DoFinalizeInitialisation() ITK_OVERRIDE;
+  void DoFinalizeInitialization() ITK_OVERRIDE;
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void DoFinalizeInitialisation()
+  {
+    otbWarningMacro(
+      << "DoFinalizeInitialisation has been deprecated.  Please use DoFinalizeInitialization() instead");
+    this->DoFinalizeInitialization();
+  }
+  
   /**
    * Hook used to define the fields of the new layer.
    * \param[in] source  source \c Layer -- for reference

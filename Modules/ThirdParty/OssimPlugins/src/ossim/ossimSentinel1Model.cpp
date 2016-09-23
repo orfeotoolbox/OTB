@@ -831,7 +831,7 @@ namespace ossimplugins
       productRoot.findChildNodes("swathTiming/burstList/burst",xnodes);
       if (xnodes.empty())
       {
-         // Appart from TopSAR products, there won't be any burst
+         // Apart from TopSAR products, there won't be any burst
          //records, so this warning is unnecessary
          //ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
          add(theProductKwl, BURST_NUMBER_KEY,                       ossimString("1"));

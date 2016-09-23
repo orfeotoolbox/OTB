@@ -107,7 +107,7 @@ image formats. In order to do so, the Geospatial Data Abstraction Library, GDAL
       the full format list.
 
       Since GDAL is itself a multi-format library, the GDAL IO
-factory is able to choose the appropriate ressource for reading and
+factory is able to choose the appropriate resource for reading and
 writing images.
 
 In most cases the mechanism is transparent to the user who only interacts
@@ -214,14 +214,14 @@ This case leads to the following question : which geo-referencing element
 should be used when opening this image in an OTB reader. In fact, it depends on
 the users need. For an orthorectification application, the sensor model must be
 used. In order to specify which information should be skipped, a syntax of 
-extended filenames has been developped for both reader and writer. 
+extended filenames has been developed for both reader and writer. 
 
 
 \subsection{Syntax}
 
 The reader and writer extended file name support is based on the same syntax,
 only the options are different.  To benefit from the extended file name
-mecanism, the following syntax is to be used:
+mechanism, the following syntax is to be used:
 
 \begin{verbatim}
 Path/Image.ext?&key1=<value1>&key2=<value2>
@@ -264,7 +264,7 @@ IMPORTANT: Note that you'll probably need to "quote" the filename.
   \begin{itemize}
   \item Skip geometric information
   \item Clears the keyword list
-  \item Keeps the projectionref and the origin/spacing informations
+  \item Keeps the projectionref and the origin/spacing information
   \item false by default. 
   \end{itemize}
 \item \begin{verbatim}&skiprpctag=<(bool)true>\end{verbatim}

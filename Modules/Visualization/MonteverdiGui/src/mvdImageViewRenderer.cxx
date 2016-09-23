@@ -93,7 +93,7 @@ ImageViewRenderer::RenderingContext
 
   m_Resolution =
     !value.isValid()
-    ? RESOLUTION_NEAREST
+    ? RESOLUTION_DEFAULT
     : static_cast< Resolution >( value.toInt() );
   }
 
@@ -106,7 +106,7 @@ ImageViewRenderer::RenderingContext
 
   m_TileSize =
     !value.isValid()
-    ? 256
+    ? TILE_SIZE_VALUE[ TILE_SIZE_DEFAULT ]
     : value.toInt();
   }
 }

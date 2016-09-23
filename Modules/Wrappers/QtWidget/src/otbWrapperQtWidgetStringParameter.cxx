@@ -36,7 +36,7 @@ void QtWidgetStringParameter::DoUpdateGUI()
 {
   m_Input->setToolTip(m_StringParam->GetDescription());
 
-  // Update the lineEdit only if there is a change and thats not empty or whitespaces
+  // Update the lineEdit only if there is a change and that's not empty or whitespaces
   QString text( m_StringParam->GetValue().c_str() );
   if (!text.trimmed().isEmpty() && text != m_Input->text())
     {

@@ -49,7 +49,7 @@ class ITK_EXPORT ImageSeriesFileReader
   : public ImageSeriesFileReaderBase<TImage, TInternalImage>
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                             Self;
   typedef ImageSeriesFileReaderBase<TImage, TInternalImage> Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
@@ -124,7 +124,7 @@ protected:
   /** AllocateListOfComponents
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 
@@ -162,7 +162,7 @@ class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2
   : public ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2> >
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                                                  Self;
   typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2> > Superclass;
   typedef itk::SmartPointer<Self>                                                Pointer;
@@ -231,7 +231,7 @@ protected:
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 
@@ -268,7 +268,7 @@ class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPi
   : public ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                                                        Self;
   typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> > Superclass;
   typedef itk::SmartPointer<Self>                                                      Pointer;
@@ -337,7 +337,7 @@ protected:
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 
@@ -375,7 +375,7 @@ class ITK_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInte
   : public ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                                                              Self;
   typedef ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> > Superclass;
   typedef itk::SmartPointer<Self>                                                            Pointer;
@@ -445,7 +445,7 @@ protected:
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   void AllocateListOfComponents(void) ITK_OVERRIDE;
 

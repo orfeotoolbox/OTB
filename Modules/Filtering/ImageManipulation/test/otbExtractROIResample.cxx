@@ -24,7 +24,7 @@
 
 // Pipeline reader -> Resampler (with Identity transform) -> ExtractROI
 // -> Writer
-// the resample is optionaly removed with the command line parameter.
+// the resample is optionally removed with the command line parameter.
 //
 
 int otbExtractROIResample(int argc, char* argv[])

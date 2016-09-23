@@ -37,12 +37,12 @@ public:
    CivilDateTime();
 
    /**
-    * @brief Constructor with date and time initialisation
+    * @brief Constructor with date and time initialization
     */
    CivilDateTime(int year, int month, int day, int second, double decimal);
 
    /**
-    * @brief Constructor with date and time initialisation using an utc string
+    * @brief Constructor with date and time initialization using an utc string
     */
    CivilDateTime(char* Utc);
 

@@ -105,7 +105,15 @@ public:
   itkGetMacro(AboveEllipsoid,bool);
   itkBooleanMacro(AboveEllipsoid);
 
-  void InstanciateTransform();
+  void InstantiateTransform();
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void InstanciateTransform()
+  {
+    otbWarningMacro(
+      << "InstanciateTransform has been deprecated.  Please use InstanciateTransform() instead");
+    this->InstantiateTransform();
+  }
 
   /**
    * Set/Get input & output projections.
@@ -168,7 +176,7 @@ public:
     this->SetOutputProjectionRef(image->GetProjectionRef());
     this->SetOutputKeywordList(image->GetImageKeywordlist());
 
-    InstanciateTransform();
+    InstantiateTransform();
     }
 
 protected:
