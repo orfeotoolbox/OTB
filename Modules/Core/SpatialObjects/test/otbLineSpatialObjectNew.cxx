@@ -21,8 +21,7 @@
 
 int otbLineSpatialObjectNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  const unsigned int Dimension = 2;
-  typedef otb::LineSpatialObject<Dimension> LineSpatialObjectType;
+  typedef otb::LineSpatialObject<2> LineSpatialObjectType;
 
   // Instantiating object
   LineSpatialObjectType::Pointer object = LineSpatialObjectType::New();
