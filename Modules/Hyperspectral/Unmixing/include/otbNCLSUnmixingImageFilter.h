@@ -98,7 +98,7 @@ private:
  *
  * This filter takes as input a multiband image and a matrix.
  * If the matrix is called \f$A\f$, it solves, for each pixel \f$p\f$, the system
- * \f$A \cdot x = p\f$ in the least square sense, with additionnal constraints on the solution
+ * \f$A \cdot x = p\f$ in the least square sense, with additional constraints on the solution
  * \f$\hat{x}\f$ ensuring positivity (each component is positive) and additivity (the sum of
  * all components is 1).
  *

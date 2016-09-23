@@ -271,14 +271,14 @@ PersistentHistogramVectorImageFilter<TInputImage>
 
     PixelType vectorValue = it.Get();
 
-       bool skipSampleNoData=false;
-       if(m_NoDataFlag)
+    bool skipSampleNoData=false;
+    if(m_NoDataFlag)
       {
       unsigned int itComp=0;
-         while( itComp < vectorValue.GetSize() )
-           {
-           if (vectorValue[itComp]==m_NoDataValue)
-                {
+      while( itComp < vectorValue.GetSize() )
+	{
+	if (vectorValue[itComp]==m_NoDataValue)
+	  {
           skipSampleNoData=true;
           itComp++;
           }
@@ -287,7 +287,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
           skipSampleNoData=false;
           break;
           }
-           }
+	}
       }
 
     if( !skipSampleNoData )

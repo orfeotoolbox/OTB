@@ -40,7 +40,7 @@ int otbLog10ThresholdedImageFilterTest(int argc, char* argv[])
   typedef itk::ImageRegionIterator<ImageType> IteratorType;
   typedef otb::Log10ThresholdedImageFilter<ImageType, ImageType> FilterType;
 
-  // INSTANCIATIONS
+  // INSTANTIATIONS
   ImageType::Pointer image = ImageType::New();
   ImageType::Pointer imageOut = ImageType::New();
   FilterType::Pointer filter = FilterType::New();

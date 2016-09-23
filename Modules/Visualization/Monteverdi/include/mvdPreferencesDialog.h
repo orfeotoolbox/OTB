@@ -16,15 +16,15 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdPreferencesDialog_h
-#define __mvdPreferencesDialog_h
+#ifndef mvdPreferencesDialog_h
+#define mvdPreferencesDialog_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
 
-
+#include "OTBMonteverdiExport.h"
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -72,7 +72,7 @@ class PreferencesDialog;
  * \ingroup OTBMonteverdi
  *
  */
-class ITK_EXPORT PreferencesDialog :
+class OTBMonteverdi_EXPORT PreferencesDialog :
     public QDialog
 {
 
@@ -160,4 +160,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdAboutDialog_h
+#endif // mvdAboutDialog_h

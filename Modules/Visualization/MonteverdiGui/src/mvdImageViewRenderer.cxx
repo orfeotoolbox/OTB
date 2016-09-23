@@ -93,7 +93,7 @@ ImageViewRenderer::RenderingContext
 
   m_Resolution =
     !value.isValid()
-    ? RESOLUTION_NEAREST
+    ? RESOLUTION_DEFAULT
     : static_cast< Resolution >( value.toInt() );
   }
 
@@ -106,7 +106,7 @@ ImageViewRenderer::RenderingContext
 
   m_TileSize =
     !value.isValid()
-    ? 256
+    ? TILE_SIZE_VALUE[ TILE_SIZE_DEFAULT ]
     : value.toInt();
   }
 }
@@ -357,7 +357,6 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   // qDebug() << this << "::PaintGL(" << c << ")";
-  // qDebug() << "{";
 
   // qDebug() << m_GlView.GetPointer();
 
@@ -411,8 +410,6 @@ ImageViewRenderer
   // qDebug() << m_GlView.GetPointer() << "::AfterRendering()";
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-
-  // qDebug() << "}\n";
 }
 
 /*****************************************************************************/
@@ -829,8 +826,15 @@ ImageViewRenderer
 
 
   if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
+    {
     m_GlView->ClearActors();
 
+    //
+    // MANTIS-1244: image-view not reset when layer-stack is cleared.
+    // {
+    emit ResetViewport();
+    // }
+    }
   else
     {
       {
@@ -841,7 +845,8 @@ ImageViewRenderer
            ++it )
         if( !stackedLayerModel->Contains( *it ) )
           {
-          // qDebug() << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
+          // qDebug()
+	  //   << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
 
           m_GlView->RemoveActor( *it );
           }
@@ -1094,6 +1099,14 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
+bool
+ImageViewRenderer
+::IsEffectsEnabled() const
+{
+    return m_EffectsEnabled;
+}
+
+/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void
@@ -1108,6 +1121,9 @@ ImageViewRenderer
   //   << "] )";
 
   assert( !m_GlView.IsNull() );
+
+  if( !m_EffectsEnabled )
+    return;
 
   for( PixelInfo::Vector::const_iterator it( pixels.begin() );
        it != pixels.end();
@@ -1173,6 +1189,11 @@ ImageViewRenderer
 	p_screen[ 0 ] = screen.x();
 	p_screen[ 1 ] =
 	  m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
+
+	// qDebug()
+	//   << "otb::StandardShader::SetCenter("
+	//   << p_screen[ 0 ] << "," << p_screen[ 1 ]
+	//   << ")";
 
 	shader->SetCenter( p_screen );
 

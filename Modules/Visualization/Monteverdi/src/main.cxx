@@ -32,7 +32,7 @@
 #include <QPixmap>
 #include <QSplashScreen>
 
-#define USE_SPLASH_SCREEN 0
+#define USE_SPLASH_SCREEN ( ( !defined( OTB_DEBUG ) && 0 ) || 0 )
 
 //
 // System includes (sorted by alphabetic order)
@@ -72,7 +72,7 @@ main( int argc, char* argv[] )
 
   //
   // 0. Splash-screen.
-#if !defined( OTB_DEBUG ) && USE_SPLASH_SCREEN
+#if USE_SPLASH_SCREEN
   QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
   QSplashScreen splash(pixmap);
   splash.show();
@@ -155,20 +155,11 @@ main( int argc, char* argv[] )
 
   //
   // 3. Show window.
-#if defined( OTB_DEBUG )
-  // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
-
-#else // OTB_DEBUG
 
 #if USE_SPLASH_SCREEN
   splash.finish( &mainWindow );
 #endif // USE_SPLASH_SCREEN
-
-  // TODO: Correctly manage main-window state via application settings.
-  mainWindow.showMaximized();
-
-#endif // OTB_DEBUG
 
   //
   // 4. Check OpenGL capabilities

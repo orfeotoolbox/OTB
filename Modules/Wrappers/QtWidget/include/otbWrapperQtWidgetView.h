@@ -34,7 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetView : public QWidget
+class OTBQtWidget_EXPORT QtWidgetView : public QWidget
 {
   Q_OBJECT
 public:
@@ -53,7 +53,7 @@ public slots:
   void UnhandledException(QString message);
 
 private slots:
-  void UpdateMessageAfterExcuteClicked();
+  void UpdateMessageAfterExecuteClicked();
   void UpdateMessageAfterApplicationReady(bool val);
 
 signals:

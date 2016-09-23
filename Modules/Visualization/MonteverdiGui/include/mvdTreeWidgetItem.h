@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdTreeWidgetItem_h
-#define __mvdTreeWidgetItem_h
+#ifndef mvdTreeWidgetItem_h
+#define mvdTreeWidgetItem_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -70,11 +70,11 @@ class TreeWidgetItem;
 /**
  * \class TreeWidgetItem
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
- * \brief 
+ * \brief
  */
-class ITK_EXPORT TreeWidgetItem :
+class OTBMonteverdiGUI_EXPORT TreeWidgetItem :
     public QTreeWidgetItem // not a QObject
 {
 
@@ -133,7 +133,7 @@ public:
   inline QString GetText() const;
 
   /**
-   * \brief Get the datasetID 
+   * \brief Get the datasetID
    */
   inline QString GetHash() const;
 
@@ -265,4 +265,4 @@ TreeWidgetItem
 
 } // end namespace 'mvd'
 
-#endif // __mvdTreeWidgetItem_h
+#endif // mvdTreeWidgetItem_h

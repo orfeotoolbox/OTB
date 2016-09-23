@@ -25,6 +25,8 @@
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 namespace Functor
@@ -35,7 +37,7 @@ class ITK_EXPORT ImageAndVectorImageOperationFunctor
 public:
   typedef typename TVectorInput::ValueType                        InternalInputPixelType;
   typedef typename TOutput::ValueType                             InternalOutputPixelType;
-  typedef enum {MULTIPLICATION, ADDITION, DIVISON, SUBSTRACTION } OperatorType;
+  typedef enum {MULTIPLICATION, ADDITION, DIVISION, SUBTRACTION } OperatorType;
 
   ImageAndVectorImageOperationFunctor()
     {
@@ -70,7 +72,7 @@ public:
         vInTmp += static_cast<InternalInputPixelType>(inPix);
         break;
         }
-      case DIVISON:
+      case DIVISION:
         {
         if (inPix != 0) vInTmp /= static_cast<InternalInputPixelType>(inPix);
         else
@@ -79,7 +81,7 @@ public:
           }
         break;
         }
-      case SUBSTRACTION:
+      case SUBTRACTION:
         {
         vInTmp -= static_cast<InternalInputPixelType>(inPix);
         break;
@@ -104,9 +106,9 @@ protected:
 /** \class ImageAndVectorImageOperationFilter
  * \brief Provides simple pixel to pixel operation between Image and VectorImage.
  *
- * Apply an operation (multiplication, division, addition or substraction) between
+ * Apply an operation (multiplication, division, addition or subtraction) between
  * the input image and each channel of the vector input image.
- * Use SetOperation( MULTIPLICATION, ADDITION, DIVISON or SUBSTRACTION ) to select the wanted operation.
+ * Use SetOperation( MULTIPLICATION, ADDITION, DIVISION or SUBTRACTION ) to select the wanted operation.
  * Default is an addition.
  *
  * This class is templated over the input Image and VectorImage and output VectorImage types.
@@ -171,14 +173,22 @@ public:
   itkGetMacro(UseAddition, bool);
   itkGetMacro(UseMultiplication, bool);
   itkGetMacro(UseDivision, bool);
-  itkGetMacro(UseSubstraction, bool);
+  itkGetMacro(UseSubtraction, bool);
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED.  */
+  virtual bool GetUseSubstraction()
+  {
+    otbWarningMacro(
+      << "GetUseSubstraction has been deprecated.  Please use GetUseSubtraction() instead");
+    return GetUseSubtraction();
+  }
 
   void UseAddition()
   {
     m_UseAddition = true;
     m_UseMultiplication = false;
     m_UseDivision = false;
-    m_UseSubstraction = false;
+    m_UseSubtraction = false;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(1));
     this->Modified();
   }
@@ -187,7 +197,7 @@ public:
     m_UseAddition = false;
     m_UseMultiplication = true;
     m_UseDivision = false;
-    m_UseSubstraction = false;
+    m_UseSubtraction = false;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(0));
     this->Modified();
   }
@@ -196,16 +206,16 @@ public:
     m_UseAddition = false;
     m_UseMultiplication = false;
     m_UseDivision = true;
-    m_UseSubstraction = false;
+    m_UseSubtraction = false;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(2));
     this->Modified();
   }
-  void UseSubstraction()
+  void UseSubtraction()
   {
     m_UseAddition = false;
     m_UseMultiplication = false;
     m_UseDivision = false;
-    m_UseSubstraction = true;
+    m_UseSubtraction = true;
     this->GetFunctor().SetOperator(static_cast<OperatorType>(3));
     this->Modified();
   }
@@ -226,7 +236,7 @@ private:
   bool m_UseAddition;
   bool m_UseMultiplication;
   bool m_UseDivision;
-  bool m_UseSubstraction;
+  bool m_UseSubtraction;
 };
 
 } // end namespace otb

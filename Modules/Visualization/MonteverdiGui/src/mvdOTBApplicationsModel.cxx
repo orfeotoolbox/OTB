@@ -69,11 +69,11 @@ OTBApplicationsModel
   m_ApplicationLauncher( NULL )
 {
   //
-  // instanciate apps browser
+  // instantiate apps browser
   m_ApplicationsBrowser = new ApplicationsBrowser( this );  
 
   //
-  // instanciate app launcher
+  // instantiate app launcher
   m_ApplicationLauncher = new ApplicationLauncher( this );
 
   // initialize the app browser with empty string. The default

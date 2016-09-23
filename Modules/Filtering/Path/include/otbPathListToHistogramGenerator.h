@@ -25,7 +25,7 @@
 #include "itkVector.h"
 #include "otbObjectList.h"
 
-//TODO : write a HistogramSource when outputing Histogram
+//TODO : write a HistogramSource when outputting Histogram
 
 namespace otb
 {

@@ -95,7 +95,7 @@ int main(int itkNotUsed(argc), char * argv[])
 
   // Software Guide : BeginLatex
   //
-  // We instanciate the different filters of the pipeline as before.
+  // We instantiate the different filters of the pipeline as before.
   //
   // Software Guide : EndLatex
 

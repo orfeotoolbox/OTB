@@ -263,7 +263,7 @@ I18nCoreApplication
     //
     // DEBUG
     case QtDebugMsg:
-#if (ECHO_QDEBUG) || FORCE_QDEBUG
+#if ECHO_QDEBUG || FORCE_QDEBUG
 #if _WIN32
       OutputDebugString( message );
       OutputDebugString( "\n" );
@@ -277,7 +277,7 @@ I18nCoreApplication
     //
     // WARNING
     case QtWarningMsg:
-#if (ECHO_QWARNING) || FORCE_QWARNING
+#if ECHO_QWARNING || FORCE_QWARNING
 #if _WIN32
       OutputDebugString( "WARNG> " );
       OutputDebugString( message );
@@ -292,7 +292,7 @@ I18nCoreApplication
     //
     // CRITICAL
     case QtCriticalMsg:
-#if (ECHO_QCRITICAL) || FORCE_QCRITICAL
+#if ECHO_QCRITICAL || FORCE_QCRITICAL
 #if _WIN32
       OutputDebugString( "ERROR> " );
       OutputDebugString( message );
@@ -315,7 +315,7 @@ I18nCoreApplication
     //
     // FATAL
     case QtFatalMsg:
-#if (ECHO_QFATAL) || FORCE_QFATAL
+#if ECHO_QFATAL || FORCE_QFATAL
 #if _WIN32
       OutputDebugString( "FATAL> " );
       OutputDebugString( message );
@@ -467,7 +467,7 @@ I18nCoreApplication
 	);
 
       // BUGFIX: When geoid file has not been updated by
-      // otb::DEMHandler, the filename may be erronous and unchecked
+      // otb::DEMHandler, the filename may be erroneous and unchecked
       // so, add a check, in this case, to report input error to the
       // user.
       if( !geoidUpdated )
@@ -486,7 +486,7 @@ I18nCoreApplication
     catch( const std::exception & err )
       {
       qWarning()
-	<< ToStdString( tr( "An error occured while loading the geoid file, "
+	<< ToStdString( tr( "An error occurred while loading the geoid file, "
 			    "no geoid file will be used:" ) ).c_str()
 	<< err.what();
 
@@ -523,7 +523,7 @@ I18nCoreApplication
     catch( const std::exception & err )
       {
       qWarning()
-	<< ToStdString( tr( "An error occured while loading the DEM directory, "
+	<< ToStdString( tr( "An error occurred while loading the DEM directory, "
 			    "no DEM will be used:" ) ).c_str()
 	<< err.what();
 
@@ -584,6 +584,15 @@ I18nCoreApplication
   //
   // 1. default UI language is english (no translation).
   QLocale sys_lc( QLocale::system() );
+
+  // Trace system locale.
+  qWarning()
+    << "Language:" << QLocale::languageToString( sys_lc.language() );
+
+  qWarning()
+    << "Country:" << QLocale::countryToString( sys_lc.country() );
+
+  // Check system locale.
   if( sys_lc.language() == QLocale::C ||
       ( sys_lc.language() == QLocale::English &&
         sys_lc.country() == QLocale::UnitedStates ) )

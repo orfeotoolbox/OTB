@@ -52,7 +52,7 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
   // Get number of input vectorDatas
   unsigned int nbInputs = parseResult->GetNumberOfParameters("--InputVectorDatas");
 
-  // Instanciate a concatenate filter
+  // Instantiate a concatenate filter
     // Concatenate the vector datas
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
 

@@ -22,7 +22,7 @@ ErsSarRecordFactory::~ErsSarRecordFactory()
 {
 }
 
-ErsSarRecord* ErsSarRecordFactory::Instanciate(int id)
+ErsSarRecord* ErsSarRecordFactory::Instantiate(int id)
 {
   ErsSarRecord* record = _availableRecords[id];
   if (record == NULL)
@@ -31,7 +31,7 @@ ErsSarRecord* ErsSarRecordFactory::Instanciate(int id)
   }
   else
   {
-    return record->Instanciate();
+    return record->Instantiate();
   }
 }
 

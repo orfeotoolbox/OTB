@@ -61,7 +61,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  ErsSarRecord* Instanciate()
+  ErsSarRecord* Instantiate()
   {
     return new ErsSarFacilityData();
   };

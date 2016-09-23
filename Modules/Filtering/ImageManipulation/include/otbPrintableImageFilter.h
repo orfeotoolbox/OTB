@@ -191,7 +191,7 @@ public:
   {
     return m_ChannelList;
   }
-  /* Set the selected channle index (order is important) */
+  /* Set the selected channel index (order is important) */
   void SetChannelList(ChannelsType chList)
   {
     if (chList.size() != 3)

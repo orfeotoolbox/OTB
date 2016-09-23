@@ -26,7 +26,7 @@ if(UNIX)
   #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
   separate_arguments(GDAL_SB_EXTRA_OPTIONS)
 
-  #we dont do any framework build on osx. So let's be sure on case of gdal
+  #we don't do any framework build on osx. So let's be sure on case of gdal
   if(APPLE)
     list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
   endif()
@@ -89,6 +89,12 @@ if(UNIX)
   #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
 
 else(MSVC)
+  if("${OTB_MSVC_COMPILER_ARCH}" MATCHES "x86")
+    set(BUILDING_WIN64 "NO")
+  else()
+    set(BUILDING_WIN64 "YES")
+  endif()
+
   STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
   STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
   configure_file(${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)

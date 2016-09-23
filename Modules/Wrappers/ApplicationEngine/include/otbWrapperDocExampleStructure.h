@@ -26,7 +26,7 @@
 #include <vector>
 #include "otbConfigure.h"
 #include "itkFixedArray.h"
-
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -42,7 +42,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT DocExampleStructure :
+class OTBApplicationEngine_EXPORT DocExampleStructure :
   public itk::Object
 {
 public:
@@ -96,7 +96,7 @@ public:
   /** Set one example comment */
   void SetExampleComment( const std::string & comm, unsigned int i);
 
-  /** Add an example using comment. Retrun the index of the new example.*/
+  /** Add an example using comment. Return the index of the new example.*/
   unsigned int  AddExample( const std::string & comm = "");
 
   /** Generation of the documentation for CommandLine for one specific
@@ -106,11 +106,11 @@ public:
  /** Generation of the documentation for CommandLine. */
   std::string GenerateCLExample();
 
-  /** Generation of teh documentation for Qt for one specific
+  /** Generation of the documentation for Qt for one specific
   * example. */
   std::string GenerateHtmlExample( unsigned int exId );
 
-  /** Generation of teh documentation for Qt. */
+  /** Generation of the documentation for Qt. */
   std::string GenerateHtmlExample();
 
 protected:

@@ -95,7 +95,7 @@ private:
   EstimateInnerProductPCAImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** The number of output Pricipal Components */
+  /** The number of output Principal Components */
   unsigned int m_NumberOfPrincipalComponentsRequired;
 
   /** Enable/Disable center data */

@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdTypes_h
-#define __mvdTypes_h
+#ifndef mvdTypes_h
+#define mvdTypes_h
 
 //
 // Configuration include.
@@ -27,6 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -306,4 +307,4 @@ QObjectCast( QObject * object, const QString & string = QString() )
 /*******************************************************************************/
 } // end namespace 'mvd'
 
-#endif // __mvdTypes_h
+#endif // mvdTypes_h

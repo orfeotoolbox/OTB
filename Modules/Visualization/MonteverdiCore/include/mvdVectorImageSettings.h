@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdVectorImageSettings_h
-#define __mvdVectorImageSettings_h
+#ifndef mvdVectorImageSettings_h
+#define mvdVectorImageSettings_h
 
 //
 // Configuration include.
@@ -76,7 +76,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT VectorImageSettings :
+class OTBMonteverdiCore_EXPORT VectorImageSettings :
     public ImageSettings
 {
 
@@ -660,4 +660,4 @@ VectorImageSettings
 
 } // end namespace 'mvd'
 
-#endif // __mvdVectorImageSettings_h
+#endif // mvdVectorImageSettings_h

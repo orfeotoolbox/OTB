@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdLayerStackController_h
-#define __mvdLayerStackController_h
+#ifndef mvdLayerStackController_h
+#define mvdLayerStackController_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModelController.h"
@@ -69,11 +69,11 @@ class LayerStackWidget;
 /**
  * \class LayerStackController
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
-class ITK_EXPORT LayerStackController :
+class OTBMonteverdiGUI_EXPORT LayerStackController :
     public AbstractModelController
 {
 
@@ -204,4 +204,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdLayerStackController_h
+#endif // mvdLayerStackController_h

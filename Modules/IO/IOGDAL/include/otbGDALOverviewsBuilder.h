@@ -26,6 +26,8 @@
 #include "otbGDALDatasetWrapper.h"
 #include "otbConfigure.h"
 
+#include "OTBIOGDALExport.h"
+
 namespace otb
 {
 
@@ -77,7 +79,7 @@ enum GDALFormat
 
 /**
  */
-class GDALOverviewsBuilder : public itk::ProcessObject
+class OTBIOGDAL_EXPORT GDALOverviewsBuilder : public itk::ProcessObject
 {
 public:
   typedef GDALOverviewsBuilder Self;
@@ -101,7 +103,10 @@ public:
    * factor^n. 
    */
   unsigned int
-  CountResolutions( unsigned int factor, unsigned int size =1 ) const;
+  CountResolutions( unsigned int factor, unsigned int size ) const;
+
+  unsigned int
+  CountResolutions( unsigned int size ) const;
 
   unsigned int
   CountResolutions() const;

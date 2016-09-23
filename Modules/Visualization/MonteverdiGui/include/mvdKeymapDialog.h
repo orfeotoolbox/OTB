@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdKeymapDialog_h
-#define __mvdKeymapDialog_h
+#ifndef mvdKeymapDialog_h
+#define mvdKeymapDialog_h
 
 //
 // Configuration include.
@@ -37,7 +37,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -59,10 +59,10 @@ class KeymapDialog;
 
 /** \class KeymapDialog
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT KeymapDialog :
+class OTBMonteverdiGUI_EXPORT KeymapDialog :
     public QDialog
 {
   Q_OBJECT;
@@ -108,4 +108,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdKeymapDialog_h
+#endif // mvdKeymapDialog_h

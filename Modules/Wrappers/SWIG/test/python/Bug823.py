@@ -1,13 +1,11 @@
-import otbApplication,sys
+from sys import exit
+def test(otb, argv):
+	app = otb.Registry.CreateApplication('Rasterization')
+	try:
+		app.GetParameterInt('szx')
+	except RuntimeError, e:
+		print( "Exception message : " + e.args[0] )
+		if e.args[0].startswith("boost::bad_any_cast"):
+			exit(1)
 
-app = otbApplication.Registry.CreateApplication('Rasterization')
-
-try:
-  app.GetParameterInt('szx')
-except RuntimeError as e:
-  print "Exception message : " + e.args[0]
-  if e.args[0].startswith("boost::bad_any_cast"):
-    sys.exit(1)
-
-sys.exit(0)
-
+		exit(0)

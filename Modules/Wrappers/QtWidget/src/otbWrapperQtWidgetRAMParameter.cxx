@@ -48,7 +48,7 @@ void QtWidgetRAMParameter::DoCreateWidget()
   // Set a valid range
   // Using m_UnsignedIntParam->GetMaximum() to set the maximum range
   // of the SpinBox give a maximum of 0. The SpinBox max is an
-  // interger and m_UnsignedIntParam->GetMaximum() returns an unsigned
+  // integer and m_UnsignedIntParam->GetMaximum() returns an unsigned
   // integer which is 2 times the itk::NumericTraits<int>::max().
   // static_cast<int>(m_UnsignedIntParam->GetMaximum()) = 0 then.
   m_QSpinBox->setRange(itk::NumericTraits<int>::Zero,

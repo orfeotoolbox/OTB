@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdProgressInterface_h
-#define __mvdProgressInterface_h
+#ifndef mvdProgressInterface_h
+#define mvdProgressInterface_h
 
 //
 // Configuration include.
@@ -26,7 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
-
+#include "OTBMonteverdiCoreExport.h"
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -72,7 +72,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT ProgressInterface
+class OTBMonteverdiCore_EXPORT ProgressInterface
 {
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -137,4 +137,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdProgressInterface_h
+#endif // mvdProgressInterface_h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdTreeWidget_h
-#define __mvdTreeWidget_h
+#ifndef mvdTreeWidget_h
+#define mvdTreeWidget_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -88,12 +88,12 @@ namespace Ui
 /**
  * \class TreeWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT TreeWidget :
+class OTBMonteverdiGUI_EXPORT TreeWidget :
     public QTreeWidget
 {
 
@@ -130,7 +130,7 @@ public:
 // Public SLOTS.
 public slots:
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/  
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
@@ -157,7 +157,7 @@ protected:
   virtual void dragMoveEvent( QDragMoveEvent* event );
   virtual void dragLeaveEvent( QDragLeaveEvent* event );
   virtual void dropEvent( QDropEvent* event );
-    
+
   virtual Qt::DropActions supportedDropActions() const;
   virtual void startDrag( Qt::DropActions supportedActions );
 
@@ -220,4 +220,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdTreeWidget_h
+#endif // mvdTreeWidget_h

@@ -625,7 +625,7 @@ LayerStackItemModel
 QVariant
 LayerStackItemModel
 ::headerData( int section,
-              Qt::Orientation orientation,
+              Qt::Orientation /**orientation*/,
               int role ) const
 {
   // qDebug()
@@ -722,7 +722,7 @@ LayerStackItemModel
   {
   // StackedLayerModel has already been grown.
 
-  // TODO: Allocate additionnal row data here.
+  // TODO: Allocate additional row data here.
   }
   endInsertRows();
 
@@ -803,7 +803,7 @@ LayerStackItemModel
   {
   // StackedLayerModel has already been shortened.
 
-  // TODO: Release additionnal row data here.
+  // TODO: Release additional row data here.
   }
   endRemoveRows();
 

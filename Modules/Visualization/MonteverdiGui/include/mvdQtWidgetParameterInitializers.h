@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdQtWidgetParameterInitializers_h
-#define __mvdQtWidgetParameterInitializers_h
+#ifndef mvdQtWidgetParameterInitializers_h
+#define mvdQtWidgetParameterInitializers_h
 
 //
 // Configuration include.
@@ -60,7 +60,7 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #endif //tag=QT4-boost-compatibility
 
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -121,6 +121,8 @@ inline void SetupWidget( QWidget * widget, const F& functor );
 /**
  * \class FileSelectionInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class FileSelectionInitializer : public std::unary_function<
@@ -136,6 +138,8 @@ public:
 /**
  * \class InputImageInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputImageInitializer : public std::unary_function<
@@ -150,6 +154,8 @@ public:
 
 /**
  * \class InputImageListInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -170,6 +176,8 @@ private:
 /**
  * \class InputVectorDataInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputVectorDataInitializer : public std::unary_function<
@@ -182,6 +190,8 @@ public:
 
 /**
  * \class InputVectorDataListInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -201,6 +211,8 @@ private:
 /**
  * \class InputFilenameInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputFilenameInitializer : public std::unary_function<
@@ -213,6 +225,8 @@ public:
 
 /**
  * \class InputFilenameListInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -232,6 +246,8 @@ private:
 /**
  * \class InputProcessXMLInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class InputProcessXMLInitializer : public std::unary_function<
@@ -244,6 +260,8 @@ public:
 
 /**
  * \class OutputImageInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -264,6 +282,8 @@ private:
 /**
  * \class OutputVectorDataInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class OutputVectorDataInitializer : public std::unary_function<
@@ -279,6 +299,8 @@ private:
 
 /**
  * \class OutputFilenameInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -296,6 +318,8 @@ private:
 /**
  * \class OutputProcessXMLInitializer
  *
+ * \ingroup OTBMonteverdiGUI
+ *
  * \brief WIP.
  */
 class OutputProcessXMLInitializer : public std::unary_function<
@@ -311,6 +335,8 @@ private:
 
 /**
  * \class ToolTipInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
@@ -386,7 +412,7 @@ InputImageInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );   
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
@@ -695,7 +721,7 @@ SetupWidget( QWidget * widget, const F & functor )
   typedef QList< Widget > WidgetList;
 
   WidgetList list( widget->findChildren< Widget >() );
-  
+
   for( typename WidgetList::iterator it( list.begin() );
        it!=list.end();
        ++it )
@@ -708,4 +734,4 @@ SetupWidget( QWidget * widget, const F & functor )
 
 } // end namespace 'mvd'
 
-#endif // __mvdQtWidgetParameterInitializers_h
+#endif // mvdQtWidgetParameterInitializers_h

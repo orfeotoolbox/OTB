@@ -128,7 +128,7 @@ I18nMainWindow
                    const QString& dockName,
                    const QString& dockTitle,
                    Qt::DockWidgetArea dockArea,
-                   bool isFloating )
+                   DockLayoutFlags flags )
 {
   // New dock.
   QDockWidget* dockWidget = new QDockWidget( dockTitle, this );
@@ -138,7 +138,7 @@ I18nMainWindow
   dockWidget->setWidget( widget );
 
   // Features.
-  dockWidget->setFloating( isFloating );
+  dockWidget->setFloating( flags.testFlag( DOCK_LAYOUT_FLOATING ) );
   dockWidget->setFeatures(
     QDockWidget::DockWidgetMovable |
     QDockWidget::DockWidgetFloatable |
@@ -276,7 +276,7 @@ I18nMainWindow
 ::virtual_InitializeUI()
 {
   // Change to NULL model to force emitting GUI signals when GUI is
-  // instanciated. So, GUI will be initialized and controller-widgets
+  // instantiated. So, GUI will be initialized and controller-widgets
   // disabled.
   I18nApplication::Instance()->SetModel( NULL );
 }

@@ -22,6 +22,17 @@
 include(OTB_CheckCCompilerFlag)
 include(OTB_CheckCXXCompilerFlag)
 
+macro( set_debug_flags )
+  string( TOUPPER "${CMAKE_BUILD_TYPE}" MODE )
+
+  if( "${MODE}" STREQUAL "DEBUG" )
+    message( STATUS "Adding -DOTB_DEBUG" )
+
+    set( CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DOTB_DEBUG" )
+    set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DOTB_DEBUG" )
+  endif()
+endmacro()
+
 function(check_c_compiler_warning_flags c_flag_var)
   set(local_c_flags "")
   set(flag_list "${ARGN}")
@@ -62,7 +73,7 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
   ## is reporting 1000's of wanings in windows
   ## header files, for now, limit the number of
   ## warnings to level 3
-  if( WIN32 )
+  if( MSVC )
     set(VerboseWarningsFlag -W3 )
     ## A better solution would be to use -Wall,
     ## and then disable warnings one by one
@@ -88,7 +99,7 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
       #-wd1419 #Needed for Intel compilers with remark  #1419: external declaration in primary source file
       #-wd1572 #Needed for Intel compilers with remark  #1572: floating-point equality and inequality comparisons are unreliable
       #-wd2259 #Needed for Intel compilers with remark  #2259: non-pointer conversion from "otb::SizeValueType={unsigned long}" to "double" may lose significant bits
-      #-wd1268 #Needed for Intel compliers with warning #1268: support for exported templates is disabled
+      #-wd1268 #Needed for Intel compilers with warning #1268: support for exported templates is disabled
     else()
       set(VerboseWarningsFlag -Wall )
     endif ()
@@ -138,7 +149,7 @@ macro(check_compiler_platform_flags)
   if(MSVC)
     if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
       if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
-          message(STATUS "The size of the stack is already defined, so we dont't modified it.")
+          message(STATUS "The size of the stack is already defined, so we don't modified it.")
       else()
           set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /STACK:10000000")
           message(STATUS "The stack size is set to 10 Mbytes (/STACK:10000000).")
@@ -195,12 +206,18 @@ macro(check_compiler_platform_flags)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
       endif()
     else()
-      if(BUILD_SHARED_LIBS)
-        set(OTB_LIBRARY_BUILD_TYPE "SHARED")
-      else()
-        set(OTB_LIBRARY_BUILD_TYPE "STATIC")
+      # if CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS is on, then
+      # BUILD_SHARED_LIBS works as it would on other systems
+      if(NOT CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
+        if(BUILD_SHARED_LIBS)
+          set(OTB_LIBRARY_BUILD_TYPE "SHARED")
+        else()
+          set(OTB_LIBRARY_BUILD_TYPE "STATIC")
+        endif()
+        # turn off BUILD_SHARED_LIBS as OTB_LIBRARY_BUILD_TYPE
+        # is used on the libraries that have markup.
+        set(BUILD_SHARED_LIBS OFF)
       endif()
-      set(BUILD_SHARED_LIBS OFF)
     endif()
   endif()
   #-----------------------------------------------------------------------------
@@ -309,6 +326,8 @@ check_compiler_warning_flags(C_WARNING_FLAGS CXX_WARNING_FLAGS)
 # use OTB don't require these flags .
 set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS}")
+
+set_debug_flags()
 
 #-----------------------------------------------------------------------------
 #Check the set of platform flags the compiler supports

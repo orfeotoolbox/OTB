@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdShaderWidget_h
-#define __mvdShaderWidget_h
+#ifndef mvdShaderWidget_h
+#define mvdShaderWidget_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdImageSettingsInterface.h"
@@ -74,12 +74,12 @@ class ImageSettings;
 /**
  * \class ShaderWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT ShaderWidget :
+class OTBMonteverdiGUI_EXPORT ShaderWidget :
   public QWidget,
   public ImageSettingsInterface
 {
@@ -167,4 +167,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdShaderWidget_h
+#endif // mvdShaderWidget_h

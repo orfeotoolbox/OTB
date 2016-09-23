@@ -355,7 +355,7 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
 {
   // For speed improvements we could make each case a separate function and use
   // function pointers to reference the correct weight order.
-  // Another possiblity would be to loop inside the case statement (reducing the number
+  // Another possibility would be to loop inside the case statement (reducing the number
   // of switch statement executions to one per routine call.
   // Left as is for now for readability.
   double w, w1, w2, w3, w4, w5, t, t0, t1, t2;

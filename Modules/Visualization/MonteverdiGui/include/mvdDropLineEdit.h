@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDropLineEdit_h
-#define __mvdDropLineEdit_h
+#ifndef mvdDropLineEdit_h
+#define mvdDropLineEdit_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -72,12 +72,12 @@ namespace Ui
 /**
  * \class DropLineEdit
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT DropLineEdit :
+class OTBMonteverdiGUI_EXPORT DropLineEdit :
     public QLineEdit
 {
 
@@ -156,4 +156,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdDropLineEdit_h
+#endif // mvdDropLineEdit_h

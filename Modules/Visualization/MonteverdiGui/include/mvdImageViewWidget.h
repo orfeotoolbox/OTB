@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImageViewWidget_h
-#define __mvdImageViewWidget_h
+#ifndef mvdImageViewWidget_h
+#define mvdImageViewWidget_h
 
 //
 // Configuration include.
@@ -39,7 +39,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -70,10 +70,10 @@ class AbstractImageViewManipulator;
 
 /** \class ImageViewWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT ImageViewWidget :
+class OTBMonteverdiGUI_EXPORT ImageViewWidget :
     public QGLWidget
 {
 
@@ -422,6 +422,9 @@ private slots:
   /**
    */
   void OnRefreshViewRequested();
+  /**
+   */
+  void OnResetViewport();
 };
 
 }// end namespace 'mvd'
@@ -494,4 +497,4 @@ ImageViewWidget
 
 } // End of namespace 'mvd'
 
-#endif // __mvdImageViewWidget_h
+#endif // mvdImageViewWidget_h

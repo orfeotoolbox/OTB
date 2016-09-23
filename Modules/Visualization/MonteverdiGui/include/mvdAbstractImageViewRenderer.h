@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractImageViewRenderer_h
-#define __mvdAbstractImageViewRenderer_h
+#ifndef mvdAbstractImageViewRenderer_h
+#define mvdAbstractImageViewRenderer_h
 
 //
 // Configuration include.
@@ -42,7 +42,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdStackedLayerModel.h"
@@ -70,11 +70,11 @@ class StackedLayerModel;
 /**
  * \class AbstractImageViewRenderer
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief TODO.
  */
-class AbstractImageViewRenderer :
+class OTBMonteverdiGUI_EXPORT AbstractImageViewRenderer :
     public QObject
 {
 
@@ -223,6 +223,9 @@ public:
   /**
    */
   inline bool IsGLSLEnabled() const;
+  /**
+   */
+  virtual bool IsEffectsEnabled() const = 0;
   /**
    */
   inline bool ZoomToRegion( const PointType & origin,
@@ -520,4 +523,4 @@ AbstractImageViewRenderer
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractImageViewRenderer_h
+#endif // mvdAbstractImageViewRenderer_h

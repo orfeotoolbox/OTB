@@ -30,7 +30,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT EmptyParameter
+class OTBApplicationEngine_EXPORT EmptyParameter
   : public Parameter
 {
 public:

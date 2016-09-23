@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractImageViewManipulator_h
-#define __mvdAbstractImageViewManipulator_h
+#ifndef mvdAbstractImageViewManipulator_h
+#define mvdAbstractImageViewManipulator_h
 
 //
 // Configuration include.
@@ -42,7 +42,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -69,11 +69,11 @@ namespace mvd
 
 /** \class AbstractImageViewManipulator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  *  \brief Base class for QWidget manipulation
  */
-class ITK_EXPORT AbstractImageViewManipulator :
+class OTBMonteverdiGUI_EXPORT AbstractImageViewManipulator :
     public QObject
 {
 
@@ -189,6 +189,10 @@ public:
    */
   virtual void ResizeEvent( QResizeEvent* event ) =0;
 
+  /**
+   */
+  virtual void ResetViewport() =0;
+
 //
 // Public SLOTS.
 public slots:
@@ -298,4 +302,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractImageViewManipulator_h
+#endif // mvdAbstractImageViewManipulator_h

@@ -31,7 +31,7 @@ namespace otb
  *
  * ImageFileWriter writes its input data to a single output file.
  * ImageFileWriter interfaces with an ImageIO class to write out the
- * data whith streaming process.
+ * data with streaming process.
  *
  * ImageFileWriter will divide the output into several pieces
  * (controlled by SetNumberOfDivisionsStrippedStreaming, SetNumberOfLinesStrippedStreaming,
@@ -43,7 +43,7 @@ namespace otb
  * ImageFileWriter will write directly the streaming buffer in the image file, so
  * that the output image never needs to be completely allocated
  *
- * ImageFileWriter supports extended filenames, which allow controling
+ * ImageFileWriter supports extended filenames, which allow controlling
  * some properties of the output file. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.

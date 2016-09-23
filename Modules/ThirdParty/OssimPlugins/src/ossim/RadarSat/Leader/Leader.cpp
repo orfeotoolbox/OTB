@@ -81,7 +81,7 @@ std::istream& operator>>(std::istream& is, Leader& data)
 		  RadarSatRecord* record;
 		  if ( (header.get_rec_seq() == 2) && (header.get_length() == 8960) )
 		    {
-		    record = factory.Instanciate(header.get_rec_seq() + 5); // case of SCN, SCW
+		    record = factory.Instantiate(header.get_rec_seq() + 5); // case of SCN, SCW
         if (record != NULL)
           {
           record->Read(is);
@@ -96,7 +96,7 @@ std::istream& operator>>(std::istream& is, Leader& data)
 		    }
 		  else
 		    {
-        record = factory.Instanciate(header.get_rec_seq());
+        record = factory.Instantiate(header.get_rec_seq());
         if (record != NULL)
           {
           record->Read(is);

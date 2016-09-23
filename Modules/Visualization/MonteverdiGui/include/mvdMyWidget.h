@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdMyWidget_h
-#define __mvdMyWidget_h
+#ifndef mvdMyWidget_h
+#define mvdMyWidget_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -72,12 +72,12 @@ class MyWidget;
 /**
  * \class MyWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT MyWidget :
+class OTBMonteverdiGUI_EXPORT MyWidget :
     public QWidget
 {
 
@@ -149,4 +149,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdMyWidget_h
+#endif // mvdMyWidget_h

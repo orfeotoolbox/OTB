@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdVectorImageModel_h
-#define __mvdVectorImageModel_h
+#ifndef mvdVectorImageModel_h
+#define mvdVectorImageModel_h
 
 //
 // Configuration include.
@@ -27,6 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -84,7 +85,7 @@ class DatasetModel;
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT VectorImageModel :
+class OTBMonteverdiCore_EXPORT VectorImageModel :
     public AbstractImageModel,
     public FilenameInterface
 {
@@ -160,7 +161,7 @@ public:
   //
   // AbstractImageModel overrides.
 
-  /** 
+  /**
    * Get the number of available LOD.
    */
   virtual CountType GetNbLod() const;
@@ -227,7 +228,7 @@ signals:
   void CurrentPhysicalUpdated(const QStringList&);
   void CurrentGeographicUpdated(const QStringList&);
   void CurrentRadioUpdated(const QString&);
-  void CurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+  void CurrentPixelValueUpdated(const VectorImageType::PixelType &,
                                 const QStringList& );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -273,7 +274,7 @@ private:
     Closest( double invZoomfactor,
              unsigned int lodCount );
 
-  /** 
+  /**
     * helper to setup the lod image using a width/height or a zoom factor
     */
   void SetupCurrentLodImage(int w, int h);
@@ -316,7 +317,7 @@ private:
   /** List of all Level of detail (Resolution) available from the file */
   CountType m_LodCount;
 
-  //  Generic RS Transform to get lat/long coordinates 
+  //  Generic RS Transform to get lat/long coordinates
   otb::GenericRSTransform<>::Pointer m_ToWgs84;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -399,4 +400,4 @@ VectorImageModel
 
 } // end namespace 'mvd'
 
-#endif // __mvdVectorImageModel_h
+#endif // mvdVectorImageModel_h

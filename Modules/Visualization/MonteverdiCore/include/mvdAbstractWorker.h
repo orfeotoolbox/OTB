@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractWorker_h
-#define __mvdAbstractWorker_h
+#ifndef mvdAbstractWorker_h
+#define mvdAbstractWorker_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -73,7 +74,7 @@ namespace mvd
  *
  * \brief Abstract worker object used as a base-class for threaded tasks.
  */
-class ITK_EXPORT AbstractWorker :
+class OTBMonteverdiCore_EXPORT AbstractWorker :
     public QObject
 {
 
@@ -145,7 +146,7 @@ signals:
    *  \brief Signal emitted when task (i.e. thread) has finished
    *  correctly or incorrectly.
    *
-   * Use this signal to foward to thead quit() slot when job has
+   * Use this signal to forward to thead quit() slot when job has
    * finished.
    */
   void Finished();
@@ -153,7 +154,7 @@ signals:
   /**
    * \brief Signal emitted when an exception has been caught by this worker.
    *
-   * \param 
+   * \param
    */
   void ExceptionRaised( QString what );
 
@@ -230,4 +231,4 @@ AbstractWorker::GetFirstProgressText() const
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractWorker_h
+#endif // mvdAbstractWorker_h

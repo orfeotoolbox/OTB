@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdImageProperties_h
-#define __mvdImageProperties_h
+#ifndef mvdImageProperties_h
+#define mvdImageProperties_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -77,7 +78,7 @@ namespace mvd
  * \brief WIP.
  */
 #define IMAGE_PROPERTIES_IS_QOBJECT 0
-class ITK_EXPORT ImageProperties
+class OTBMonteverdiCore_EXPORT ImageProperties
 #if IMAGE_PROPERTIES_IS_QOBJECT
   : public QObject
 #endif
@@ -303,4 +304,4 @@ ImageProperties
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageProperties_h
+#endif // mvdImageProperties_h

@@ -36,7 +36,7 @@ namespace Functor
 {
 /**
    * \class LuminanceToImageImageFunctor
-   * \brief Substract beta to the Input and multiply by alpha.
+   * \brief Subtract beta to the Input and multiply by alpha.
    *
    * \sa LuminanceToImageImageFilter
    * \ingroup Functor

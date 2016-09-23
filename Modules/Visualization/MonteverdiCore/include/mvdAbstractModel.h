@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractModel_h
-#define __mvdAbstractModel_h
+#ifndef mvdAbstractModel_h
+#define mvdAbstractModel_h
 
 //
 // Configuration include.
@@ -26,7 +26,6 @@
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
-
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -47,7 +46,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiCoreExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -75,7 +74,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class ITK_EXPORT AbstractModel :
+class OTBMonteverdiCore_EXPORT AbstractModel :
     public QObject
 {
 
@@ -252,4 +251,4 @@ AbstractModel
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractModel_h
+#endif // mvdAbstractModel_h

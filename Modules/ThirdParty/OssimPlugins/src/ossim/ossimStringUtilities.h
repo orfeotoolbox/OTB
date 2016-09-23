@@ -111,19 +111,19 @@ public:
    // typedef std::reverse_iterator<char_iterator> reverse_iterator;
    typedef std::reverse_iterator<char_iterator> const_reverse_iterator;
 
-   /** Construtor from a standard string.
+   /** Constructor from a standard string.
     *@post `data()[size()] == '\0'`
     */
    string_view(std::string const& s)
       : m_size(s.size()), m_first(s.c_str())
       {}
-   /** Construtor from an ossim string.
+   /** Constructor from an ossim string.
     *@post `data()[size()] == '\0'`
     */
    string_view(ossimString const& s)
        : m_size(s.size()), m_first(s.c_str())
        {}
-   /** Construtor from an array of characters.
+   /** Constructor from an array of characters.
     * @post `data()[size()] == '\0'` <= the array is built with this kind of
     * syntax: `char const a[]="foobar";`
     */
@@ -131,7 +131,7 @@ public:
    string_view(char const (&array)[N])
       : m_size(N), m_first(&array[0])
       {}
-   /** Construtor from a pointer to a 0-terminated raw string.
+   /** Constructor from a pointer to a 0-terminated raw string.
     * @post `data()[size()] == '\0'`
     */
    string_view(char const* ptr)
@@ -144,7 +144,7 @@ public:
          assert(first <= last);
       }
 #endif
-   /** Construtor from an input iterator and a size.
+   /** Constructor from an input iterator and a size.
     * @post there is no guarantee `data()[size()] == '\0'`.
     */
    template <typename II>
@@ -152,7 +152,7 @@ public:
       : m_size(size_), m_first(first)
       {}
 
-   /** Construtor from a pair of input interators.
+   /** Constructor from a pair of input iterators.
     * @post there is no guarantee `data()[size()] == '\0'`.
     */
    template <typename II>
@@ -496,7 +496,7 @@ part_range<splitter_on_delim> split_on(String const& str, char delim) {
  * \note For efficiency reasons, the function has been specialized for integral
  * floating point, and string types.
  * \note That alternative to `ossimString::toXxxx()` function has been defined
- * to support generic programing in `get()` and `add()` helper functions for
+ * to support generic programming in `get()` and `add()` helper functions for
  * keyword list.
  * \see `to_with_default()` for the version that never fails, but returns a
  * default value otherwise (being `T()` by default).
@@ -528,7 +528,7 @@ T to(string_view const& v, string_view const& context)
  * \note For efficiency reasons, the function has been specialized for integral
  * floating point, and string types.
  * \note That alternative to `ossimString::toXxxx()` function has been defined
- * to support generic programing in `get()` and `add()` helper functions for
+ * to support generic programming in `get()` and `add()` helper functions for
  * keyword list.
  * \see `to()` for the version that fails by throwing exceptions.
  */

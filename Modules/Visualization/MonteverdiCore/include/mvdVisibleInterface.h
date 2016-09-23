@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdVisibleInterface_h
-#define __mvdVisibleInterface_h
+#ifndef mvdVisibleInterface_h
+#define mvdVisibleInterface_h
 
 //
 // Configuration include.
@@ -42,10 +42,9 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiCoreExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
-
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -72,7 +71,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT VisibleInterface
+class OTBMonteverdiCore_EXPORT VisibleInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
@@ -167,4 +166,4 @@ VisibleInterface
 
 } // end namespace 'mvd'
 
-#endif // __mvdVisibleInterface_h
+#endif // mvdVisibleInterface_h

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationsToolBoxController_h
-#define __mvdApplicationsToolBoxController_h
+#ifndef mvdApplicationsToolBoxController_h
+#define mvdApplicationsToolBoxController_h
 
 //
 // Configuration include.
@@ -42,6 +42,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "OTBMonteverdiGUIExport.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -72,11 +73,11 @@ class ApplicationsToolBox;
 /**
  * \class ApplicationsToolBoxController
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class ITK_EXPORT ApplicationsToolBoxController :
+class OTBMonteverdiGUI_EXPORT ApplicationsToolBoxController :
     public AbstractModelController
 {
 
@@ -148,7 +149,7 @@ private:
 //
 // Private attributes.
 private:
-  
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -166,4 +167,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationsToolBoxController_h
+#endif // mvdApplicationsToolBoxController_h

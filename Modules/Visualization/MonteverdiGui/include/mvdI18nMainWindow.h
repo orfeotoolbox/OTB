@@ -17,14 +17,13 @@
 
 =========================================================================*/
 
-#ifndef __mvdI18nMainWindow_h
-#define __mvdI18nMainWindow_h
+#ifndef mvdI18nMainWindow_h
+#define mvdI18nMainWindow_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
-
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -42,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -70,13 +69,13 @@ class VectorImageModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class I18nMainWindow 
+ * \class I18nMainWindow
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
 *
  * \brief Main-window widget base for the i18n application.
  */
-class ITK_EXPORT I18nMainWindow
+class OTBMonteverdiGUI_EXPORT I18nMainWindow
   : public QMainWindow
 {
 
@@ -89,6 +88,14 @@ class ITK_EXPORT I18nMainWindow
 //
 // Public types.
 public:
+  enum DockLayout
+  {
+    DOCK_LAYOUT_NONE = 0,
+    DOCK_LAYOUT_FLOATING = 1,
+    DOCK_LAYOUT_SCROLLABLE = 2,
+  };
+
+  typedef QFlags< DockLayout > DockLayoutFlags;
 
 //
 // Public methods.
@@ -227,7 +234,7 @@ protected:
 		     const QString& dockName,
 		     const QString& dockTitle,
 		     Qt::DockWidgetArea dockArea,
-		     bool isFloating =false );
+		     DockLayoutFlags flags = DOCK_LAYOUT_NONE );
 
   /**
    */
@@ -237,7 +244,7 @@ protected:
     AddDockWidget( const QString& dockName,
 		   const QString& dockTitle,
 		   Qt::DockWidgetArea dockArea,
-		   bool isFloating =false );
+		   DockLayoutFlags flags = DOCK_LAYOUT_NONE );
 
   /**
    */
@@ -247,10 +254,10 @@ protected:
     AddDockWidget( const QString& dockName,
 		   const QString& dockTitle,
 		   Qt::DockWidgetArea dockArea,
-		   bool isFloating =false );
+		   DockLayoutFlags flags = DOCK_LAYOUT_NONE );
   /**
    */
-  const AbstractModelController * 
+  const AbstractModelController *
     GetController( const QDockWidget * ) const;
   /**
    */
@@ -299,7 +306,7 @@ protected:
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
 //
-// Protected slots. 
+// Protected slots.
 protected slots:
 
   /**
@@ -338,7 +345,7 @@ private:
 
   /**
    */
-  
+
 //
 // Private attributes.
 private:
@@ -433,20 +440,20 @@ template< typename TWidget, typename TDockWidget >
 inline
 TDockWidget*
 I18nMainWindow
-::AddDockWidget( const QString& dockName,
-		 const QString& dockTitle,
+::AddDockWidget( const QString & dockName,
+		 const QString & dockTitle,
 		 Qt::DockWidgetArea dockArea,
-		 bool isFloating )
+		 DockLayoutFlags flags )
 {
-  TWidget* widget = new TWidget( this );
+  TWidget * widget = new TWidget( this );
 
-  TDockWidget* dockWidget =
+  TDockWidget * dockWidget =
     AddWidgetToDock(
       widget,
       dockName,
       dockTitle,
       dockArea,
-      isFloating
+      flags
     );
 
   return dockWidget;
@@ -457,20 +464,34 @@ template< typename TWidget, typename TController, typename TDockWidget >
 inline
 TDockWidget*
 I18nMainWindow
-::AddDockWidget( const QString& dockName,
-		 const QString& dockTitle,
+::AddDockWidget( const QString & dockName,
+		 const QString & dockTitle,
 		 Qt::DockWidgetArea dockArea,
-		 bool isFloating )
+		 DockLayoutFlags flags )
 {
-  TWidget* widget = new TWidget( this );
+  TWidget * widget = new TWidget( this );
 
-  TDockWidget* dockWidget =
+  QWidget * pannel = widget;
+
+  if( flags.testFlag( DOCK_LAYOUT_SCROLLABLE ) )
+    {
+    QScrollArea * scrollArea = new QScrollArea( this );
+
+    scrollArea->setWidgetResizable( true );
+
+    scrollArea->setWidget( widget );
+
+    pannel = scrollArea;
+    }
+
+
+  TDockWidget * dockWidget =
     AddWidgetToDock(
-      widget,
+      pannel,
       dockName,
       dockTitle,
       dockArea,
-      isFloating
+      flags
     );
 
   new TController(
@@ -595,4 +616,4 @@ I18nMainWindow
 
 } // end namespace 'mvd'
 
-#endif // __I18nMainWindow_h
+#endif // I18nMainWindow_h

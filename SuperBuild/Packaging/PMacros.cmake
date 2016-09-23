@@ -5,7 +5,7 @@ macro(macro_setup_cmake_project pkg)
   include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
 
   #reset it again in macro(macro_create_targets_for_package pkg)
-  #because thats the cmake macros way.
+  #because that's the cmake macros way.
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build")
 
@@ -28,14 +28,13 @@ macro(macro_setup_cmake_project pkg)
    include(CMakeParseArguments)
    include(CMakeDetermineSystem)
    set(CMAKE_BUILD_TYPE             Release)
-   set(Monteverdi_SOURCE_DIR        \"${Monteverdi_SOURCE_DIR}\")
-   set(Monteverdi_BINARY_DIR        \"${Monteverdi_BINARY_DIR}\")
-   set(MONTEVERDI_INSTALL_DIR       \"${MONTEVERDI_INSTALL_DIR}\")
-   set(Monteverdi_INSTALL_DATA_DIR  \"share/otb\")
+   set(OTB_SOURCE_DIR               \"${OTB_SOURCE_DIR}\")
+   set(OTB_BINARY_DIR               \"${OTB_BINARY_DIR}\")
+   set(OTB_INSTALL_DIR              \"${OTB_INSTALL_DIR}\")
+   set(OTB_INSTALL_DATA_DIR         \"share/otb\")
    set(QT_PLUGINS_DIR               \"${QT_PLUGINS_DIR}\")
    set(QT_TRANSLATIONS_DIR          \"${QT_TRANSLATIONS_DIR}\")
    set(DEPENDENCIES_INSTALL_DIR     \"${DEPENDENCIES_INSTALL_DIR}\")
-   set(OTB_INSTALL_DIR              \"${OTB_INSTALL_DIR}\")
    set(PACKAGE_SUPPORT_FILES_DIR    \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
    set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
    set(ITK_VERSION_STRING           \"${ITK_VERSION_STRING}\")
@@ -55,7 +54,7 @@ macro(macro_create_targets_for_package pkg)
   if(WIN32 AND NOT MSVC)
     add_custom_target(PACKAGE-${pkg}-check
       COMMAND ${CMAKE_COMMAND} --build "." --target install
-      WORKING_DIRECTORY "${Monteverdi_BINARY_DIR}"
+      WORKING_DIRECTORY "${OTB_BINARY_DIR}"
       )
   else() #Using SuperBuild
     #For out of source build,
@@ -64,19 +63,11 @@ macro(macro_create_targets_for_package pkg)
       add_custom_target(PACKAGE-${pkg}-check
         COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check")
     else(OUT_OF_SOURCE_BUILD)
-      if(ENABLE_MONTEVERDI)
-        add_custom_target(PACKAGE-${pkg}-check
-          COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
-	  DEPENDS MVD
-          WORKING_DIRECTORY ${SUPERBUILD_BINARY_DIR}
-          )
-      else(ENABLE_MONTEVERDI)
-        add_custom_target(PACKAGE-${pkg}-check
-          COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
-	  DEPENDS OTB
-          WORKING_DIRECTORY ${SUPERBUILD_BINARY_DIR}
-          )
-      endif(ENABLE_MONTEVERDI)
+      add_custom_target(PACKAGE-${pkg}-check
+        COMMAND ${CMAKE_COMMAND} -E echo "Building PACKAGE-${pkg}-check"
+	      DEPENDS OTB
+        WORKING_DIRECTORY ${SUPERBUILD_BINARY_DIR}
+        )      
     endif(OUT_OF_SOURCE_BUILD)
   endif()
 

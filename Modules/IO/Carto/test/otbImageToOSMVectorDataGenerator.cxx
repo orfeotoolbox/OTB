@@ -70,12 +70,12 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
   typedef std::pair<std::string, std::string>      KeyValueType;
   typedef std::vector<KeyValueType>                KeyValueListType;
 
-  // Instanciate the image reader
+  // Instantiate the image reader
   ReaderType::Pointer      reader = ReaderType::New();
   reader->SetFileName(parseResult->GetInputImage());
   reader->UpdateOutputInformation();
 
-  // VectorData generator instanciation
+  // VectorData generator instantiation
   FilterType::Pointer vdgenerator = FilterType::New();
   vdgenerator->SetInput(reader->GetOutput());
   if(parseResult->IsOptionPresent("--OSM"))
@@ -126,7 +126,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     writer->SetInput(vd);
     }
 
-  // trigger the excecution
+  // trigger the execution
   writer->Update();
 
   return EXIT_SUCCESS;

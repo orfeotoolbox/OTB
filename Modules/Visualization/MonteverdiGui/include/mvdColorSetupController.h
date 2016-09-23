@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdColorSetupController_h
-#define __mvdColorSetupController_h
+#ifndef mvdColorSetupController_h
+#define mvdColorSetupController_h
 
 //
 // Configuration include.
@@ -40,7 +40,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -69,11 +69,11 @@ class ColorSetupWidget;
 /**
  * \class ColorSetupController
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class ITK_EXPORT ColorSetupController :
+class OTBMonteverdiGUI_EXPORT ColorSetupController :
     public AbstractModelController
 {
 
@@ -226,4 +226,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdColorSetupController_h
+#endif // mvdColorSetupController_h

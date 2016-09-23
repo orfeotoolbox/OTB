@@ -90,6 +90,17 @@ set(OTB_VERSION_MINOR "7")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
+# Monteverdi version number (follows OTB)
+set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
+set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
+set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
+set( Monteverdi_VERSION_SUFFIX "" )
+
+set( Monteverdi_VERSION_STRING
+  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
+  )
+
+#-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
@@ -375,6 +386,7 @@ endif()
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 
+#-----------------------------------------------------------------------------
 # uninstall target
 configure_file(
     "${CMAKE_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
@@ -384,6 +396,18 @@ configure_file(
 add_custom_target(uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
 
+#-----------------------------------------------------------------------------
+# Packaging options for Windows packages
+if(WIN32 OR CMAKE_CROSSCOMPILING)
+  option(GENERATE_PACKAGE "Generate OTB package" OFF)
+  option(GENERATE_XDK "Generate XDK for OTB development" OFF)
+  if(GENERATE_PACKAGE OR GENERATE_XDK)
+    set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
+    add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
+  endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
+endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
+
+#-----------------------------------------------------------------------------
 #macro to put a fixed space between key, value  in summary
 macro(get_white_spaces var res)
   string(LENGTH "${var}" len)
@@ -433,7 +457,7 @@ endforeach()
 # message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
 # unset(modules_list_for_summary)
 
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_OPENCV" "OTB_USE_QT4")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT4")
 foreach(item ${option_list})
   if(NOT ${item})
     list(REMOVE_ITEM option_list "${item}" )
@@ -451,9 +475,6 @@ list(APPEND option_list TINYXML)
 #RK
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
-if(OTB_USE_OPENCV)
-  list(APPEND option_list OpenCV)
-endif()
 
 if(OTB_USE_QT4)
   list(APPEND option_list QT)

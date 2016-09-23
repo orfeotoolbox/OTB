@@ -16,8 +16,9 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdApplicationsBrowser_h
-#define __mvdApplicationsBrowser_h
+#ifndef mvdApplicationsBrowser_h
+#define mvdApplicationsBrowser_h
+
 
 //
 // Configuration include.
@@ -26,6 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -74,11 +76,11 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  * \brief Search for available applications in a directory.
- * 
+ *
  * This class provides the functionnalities to look for
  * otbWrapperApplication apps in a given directory. The method used to
  * set the directory is SetAutoLoadPath(const std::string &).
- * 
+ *
  * If applications are available in the directory set by the user,
  * tags of each application are extracted.
  *
@@ -88,7 +90,7 @@ namespace mvd
  * signal.
  *
  */
-class ITK_EXPORT ApplicationsBrowser :
+class OTBMonteverdiCore_EXPORT ApplicationsBrowser :
     public QObject
 {
 
@@ -120,10 +122,10 @@ public:
   StringVector GetApplicationTags(const std::string& appName);
 
   /** return std::map storing tag/apps association for all the
-    * applications in the search path 
+    * applications in the search path
     */
   void SearchAvailableApplicationsTags();
- 
+
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -136,7 +138,7 @@ public slots:
 //
 // Signals.
 signals:
-  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &, 
+  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &,
                                         const ApplicationDocNameToNameMap &);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -196,4 +198,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdApplicationsBrowser_h
+#endif // mvdApplicationsBrowser_h

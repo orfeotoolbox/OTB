@@ -3,7 +3,9 @@ set(DOCUMENTATION
   )
 
 otb_module( OTBMonteverdiCore
+  ENABLE_SHARED
   DEPENDS
+    OTBBoost
     OTBCarto
     OTBCommon
     OTBImageBase
@@ -20,7 +22,7 @@ otb_module( OTBMonteverdiCore
 
   OPTIONAL_DEPENDS
     OTBApplicationEngine
-  
+
   DESCRIPTION
   "${DOCUMENTATION}"
   )

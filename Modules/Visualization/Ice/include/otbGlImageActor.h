@@ -37,7 +37,7 @@
 namespace otb
 {
 
-class GlImageActor 
+class OTBIce_EXPORT GlImageActor 
   : public GlActor, public GeoInterface
 {
 public:
@@ -263,7 +263,7 @@ private:
   // Unload tile from GPU
   void UnloadTile(Tile& tile);
 
-  // Clean the loaded tiles, getting rid of unecessary ones
+  // Clean the loaded tiles, getting rid of unnecessary ones
   void CleanLoadedTiles();
 
   // Clear all loaded tiles

@@ -292,13 +292,13 @@ ImageViewManipulator
 #else
   otb::ViewSettings::SpacingType spacing( m_NativeSpacing );
 
-  // Here, zoom to arbitray scale-factor relative to
+  // Here, zoom to arbitrary scale-factor relative to
   // viewport spacing.
   //
   // If viewport spacing has previously been set to
   // image-spacing, it zooms to arbitrary scale-factor.
   //
-  // This is especially usefull to set user-arbitrary scale level
+  // This is especially useful to set user-arbitrary scale level
   // such as when editing scale-level in status-bar.
   spacing[ 0 ] /= scale;
   spacing[ 1 ] /= scale;
@@ -365,6 +365,30 @@ ImageViewManipulator
   );
 
   return viewport;
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::ResetViewport()
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
+
+  m_ViewSettings->Reset();
+
+  m_ViewSettings->SetViewportSize( size );
+
+  m_NativeSpacing.Fill( 1.0 );
+  m_ZoomFactor = 1.0;
+
+  emit RoiChanged(
+    GetOrigin(),
+    GetViewportSize(),
+    GetSpacing(),
+    m_ViewSettings->GetViewportCenter()
+  );
 }
 
 /******************************************************************************/

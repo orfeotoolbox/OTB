@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdMainWindow_h
-#define __mvdMainWindow_h
+#ifndef mvdMainWindow_h
+#define mvdMainWindow_h
 
 //
 // Configuration include.
@@ -61,6 +61,7 @@
 //
 #include "mvdI18nMainWindow.h"
 
+#include "OTBMonteverdiExport.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -100,7 +101,7 @@ class MainWindow;
  *
  * \brief The application main-widow widget.
  */
-class ITK_EXPORT MainWindow
+class OTBMonteverdi_EXPORT MainWindow
   : public I18nMainWindow
 {
 
@@ -551,4 +552,4 @@ MainWindow
 
 } // end namespace 'mvd'
 
-#endif // __MainWindow_h
+#endif // mvdMainWindow_h

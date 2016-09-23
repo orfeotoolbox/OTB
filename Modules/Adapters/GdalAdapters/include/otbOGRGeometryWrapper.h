@@ -27,6 +27,8 @@
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 #endif
 
+#include "OTBGdalAdaptersExport.h"
+
 class OGRGeometry;
 
 namespace otb { namespace ogr {
@@ -41,7 +43,7 @@ namespace internal {
  * consequence, it is not in an anonymous namespace , but in \c
  * otb::ogr::internal.
  */
-struct GeometryDeleter
+struct OTBGdalAdapters_EXPORT GeometryDeleter
   {
   void operator()(OGRGeometry* p);
   };
@@ -99,34 +101,34 @@ struct GeometryDeleter
  */
 typedef boost::interprocess::unique_ptr<OGRGeometry, internal::GeometryDeleter> UniqueGeometryPtr;
 ///Do these features intersect?
-bool Intersects (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Intersects (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Returns wheither if two geometries are equivalent.
-bool Equals (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Equals (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for disjointness.
-bool Disjoint (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Disjoint (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for touching.
-bool Touches (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Touches (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for crossing.
-bool Crosses (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Crosses (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for containment.
-bool Within (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Within (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for containment.
-bool Contains (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Contains (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for overlap.
-bool Overlaps (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Overlaps (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes distance between two geometries.
-double Distance (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT double Distance (OGRGeometry const& lhs, OGRGeometry const& rhs);
 
 /// Computes intersection.
-UniqueGeometryPtr Intersection (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr Intersection (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes union.
-UniqueGeometryPtr Union (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr Union (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes union using cascading.
-UniqueGeometryPtr UnionCascaded (OGRGeometry const& this_);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr UnionCascaded (OGRGeometry const& this_);
 /// Computes difference.
-UniqueGeometryPtr Difference (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr Difference (OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes symmetric difference.
-UniqueGeometryPtr SymDifference (OGRGeometry const& lhs, OGRGeometry const& rhs); // -1.8
+OTBGdalAdapters_EXPORT UniqueGeometryPtr SymDifference (OGRGeometry const& lhs, OGRGeometry const& rhs); // -1.8
 
 /** Simplifies Geometry.
  * This function tries to uses the best simplication algorithm available in the
@@ -137,19 +139,19 @@ UniqueGeometryPtr SymDifference (OGRGeometry const& lhs, OGRGeometry const& rhs)
  * \sa \c OGRGeometry::Simplify()
  * \sa \c OGRGeometry::SimplifyPreserveTopology()
  */
-UniqueGeometryPtr Simplify(OGRGeometry const& g, double tolerance);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr Simplify(OGRGeometry const& g, double tolerance);
 
 /** Simplifies Geometry with no guarantee of preserving the geometry.
  * \pre Requires GDAL 1.8.0
  * \sa \c OGRGeometry::Simplify()
  */
-UniqueGeometryPtr SimplifyDontPreserveTopology(OGRGeometry const& g, double tolerance);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr SimplifyDontPreserveTopology(OGRGeometry const& g, double tolerance);
 
 /** Simplifies Geometry while preserving topology.
  * \pre Requires GDAL 1.9.0
  * \sa \c OGRGeometry::SimplifyPreserveTopology()
  */
-UniqueGeometryPtr SimplifyPreserveTopology(OGRGeometry const& g, double tolerance);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr SimplifyPreserveTopology(OGRGeometry const& g, double tolerance);
 
 /** @} */
 

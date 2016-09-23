@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAboutDialog_h
-#define __mvdAboutDialog_h
+#ifndef mvdAboutDialog_h
+#define mvdAboutDialog_h
 
 //
 // Configuration include.
@@ -37,7 +37,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -59,10 +59,10 @@ class AboutDialog;
 
 /** \class AboutDialog
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  */
-class ITK_EXPORT AboutDialog :
+class OTBMonteverdiGUI_EXPORT AboutDialog :
     public QDialog
 {
   Q_OBJECT;
@@ -108,4 +108,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdAboutDialog_h
+#endif // mvdAboutDialog_h

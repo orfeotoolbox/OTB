@@ -5,6 +5,7 @@ PROSPECT (leaf optical properties) and SAIL (canopy bidirectional reflectance)
 models, as well as PROSAIL, which is the combination of the two previous ones.")
 
 otb_module(OTBSimulation
+ENABLE_SHARED
   DEPENDS
     OTBStatistics
     OTBITK

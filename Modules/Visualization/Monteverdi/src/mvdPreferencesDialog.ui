@@ -112,6 +112,26 @@
         <string>GDAL Overviews</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_5">
+        <item row="1" column="1">
+         <widget class="QLabel" name="overviewsLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Minimum size:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QSpinBox" name="overviewsSpinBox">
+          <property name="maximum">
+           <number>999999999</number>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="overviewsCheckBox">
           <property name="sizePolicy">
@@ -128,8 +148,8 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLabel" name="overviewsLabel">
+        <item row="1" column="3">
+         <widget class="QLabel" name="pixelLabel">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -137,12 +157,9 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Minimum size:</string>
+           <string>pixel(s)</string>
           </property>
          </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QSpinBox" name="overviewsSpinBox"/>
         </item>
        </layout>
       </widget>

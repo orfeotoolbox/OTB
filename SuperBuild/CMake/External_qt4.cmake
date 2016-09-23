@@ -11,7 +11,7 @@ SETUP_SUPERBUILD(QT4)
 # endif()
 
 
-option(QT4_SB_ENABLE_GTK "Enable GTK+ stlye with qt using -gtkstlye. Default is OFF" OFF)
+option(QT4_SB_ENABLE_GTK "Enable GTK+ style with qt using -gtkstlye. Default is OFF" OFF)
 
 if(NOT DEFINED git_protocol)
   set(git_protocol "git")
@@ -68,7 +68,7 @@ configure_file(${QT4_CONFIGURE_COMMAND_IN} ${QT4_CONFIGURE_COMMAND} @ONLY )
 
 #Remove left over or previous installation from install prefix.
 #Existing files in install prefix was disturbing a second installation.
-#even afer the QT4 directory is removed from build
+#even after the QT4 directory is removed from build
 
 add_custom_target(QT4-uninstall
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtCore"

@@ -2,14 +2,6 @@
 project( OTBMonteverdiCore )
 
 #############################################################################
-set( Monteverdi_VERSION_MAJOR "3" )
-set( Monteverdi_VERSION_MINOR "5" )
-set( Monteverdi_VERSION_PATCH "0" )
-set( Monteverdi_VERSION_SUFFIX "" )
-
-set( Monteverdi_VERSION_STRING
-  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
-  )
 
 set( Monteverdi_FLOATING_TYPE
   "float"

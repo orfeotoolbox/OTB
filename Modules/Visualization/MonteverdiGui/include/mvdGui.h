@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdGui_h
-#define __mvdGui_h
+#ifndef mvdGui_h
+#define mvdGui_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -97,13 +97,15 @@ enum Resolution
   RESOLUTION_LOWER,
   RESOLUTION_UPPER,
   //
-  RESOLUTION_COUNT
+  RESOLUTION_COUNT,
+  //
+  RESOLUTION_DEFAULT = RESOLUTION_NEAREST,
 };
 
 /**
  * Constant naming effect values.
  */
-ITK_EXPORT
+OTBMonteverdiGUI_EXPORT
 extern
 char const * const
 RESOLUTION_NAMES[ RESOLUTION_COUNT ];
@@ -127,14 +129,14 @@ enum TileSize
 /**
  * Constant naming effect values.
  */
-ITK_EXPORT
+OTBMonteverdiGUI_EXPORT
 extern
 char const * const
 TILE_SIZE_NAMES[ TILE_SIZE_COUNT ];
 
 /**
  */
-ITK_EXPORT
+OTBMonteverdiGUI_EXPORT
 extern
 int
 TILE_SIZE_VALUE[ TILE_SIZE_COUNT ];
@@ -163,7 +165,7 @@ namespace mvd
 
 /**
  */
-ITK_EXPORT
+OTBMonteverdiGUI_EXPORT
 void
 AddItemsInto( QComboBox * comboBox,
 	      const char * context,
@@ -184,4 +186,4 @@ namespace mvd
 
 } // end namespace 'mvd'.
 
-#endif // __mvdGui_h
+#endif // mvdGui_h

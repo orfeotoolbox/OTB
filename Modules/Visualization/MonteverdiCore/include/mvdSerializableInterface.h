@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdSerializableInterface_h
-#define __mvdSerializableInterface_h
+#ifndef mvdSerializableInterface_h
+#define mvdSerializableInterface_h
 
 //
 // Configuration include.
@@ -27,7 +27,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
-
+#include "OTBMonteverdiCoreExport.h"
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -74,7 +74,7 @@ namespace mvd
  *
  * \brief 'Template method' pattern applied to serializable objects.
  */
-class ITK_EXPORT SerializableInterface
+class OTBMonteverdiCore_EXPORT SerializableInterface
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
@@ -148,4 +148,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdSerializableInterface_h
+#endif // mvdSerializableInterface_h

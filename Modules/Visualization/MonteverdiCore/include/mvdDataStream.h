@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDataStream_h
-#define __mvdDataStream_h
+#ifndef mvdDataStream_h
+#define mvdDataStream_h
 
 //
 // Configuration include.
@@ -26,6 +26,8 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -209,4 +211,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdDataStream_h
+#endif // mvdDataStream_h

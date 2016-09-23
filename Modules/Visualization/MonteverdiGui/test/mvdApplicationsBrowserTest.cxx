@@ -33,7 +33,7 @@
 int mvdApplicationsBrowserTest(int argc, char* argv[])
 { 
   //
-  // instanciate applications browser
+  // instantiate applications browser
   mvd::ApplicationsBrowser *  browser = new mvd::ApplicationsBrowser();
 
   //

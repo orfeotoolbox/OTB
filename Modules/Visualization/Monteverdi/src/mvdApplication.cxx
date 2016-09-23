@@ -128,7 +128,7 @@ Application
   setObjectName( "Application" );
 
   InitializeCore(
-    PROJECT_NAME, Monteverdi_VERSION_STRING,
+    PROJECT_NAME, QString( "OTB %1" ).arg(  OTB_VERSION_STRING ),
     "OrfeoToolBox", "orfeo-toolbox.org"
   );
 

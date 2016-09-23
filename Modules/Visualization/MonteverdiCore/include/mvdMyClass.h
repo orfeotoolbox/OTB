@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdMyClass_h
-#define __mvdMyClass_h
+#ifndef mvdMyClass_h
+#define mvdMyClass_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -73,7 +74,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class ITK_EXPORT MyClass :
+class OTBMonteverdiCore_EXPORT MyClass :
     public QObject
 {
 
@@ -158,4 +159,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdMyClass_h
+#endif // mvdMyClass_h

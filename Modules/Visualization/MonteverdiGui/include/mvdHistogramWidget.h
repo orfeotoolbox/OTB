@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdHistogramWidget_h
-#define __mvdHistogramWidget_h
+#ifndef mvdHistogramWidget_h
+#define mvdHistogramWidget_h
 
 //
 // Configuration include.
@@ -46,7 +46,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -87,12 +87,12 @@ class HistogramWidget;
 /**
  * \class HistogramWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT HistogramWidget :
+class OTBMonteverdiGUI_EXPORT HistogramWidget :
     public QWidget
 {
 
@@ -123,7 +123,7 @@ public:
 		  double yMin, double yMax );
 
   /**
-   * \brief 
+   * \brief
    */
   void SetData( RgbwChannel channel,
 		double * const x,
@@ -158,6 +158,14 @@ public:
   /**
    */
   void Clear();
+
+  /**
+   */
+  void SetPrecision( double );
+
+  /**
+   */
+  double GetPrecision() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -225,7 +233,7 @@ private:
 // Private attributes.
 private:
   /**
-   * \brief 
+   * \brief
    */
   static const CountType CURVE_COUNT = 4;
 
@@ -293,6 +301,10 @@ private:
 
   /**
    */
+  double m_Precision;
+
+  /**
+   */
   bool m_IsGrayscaleActivated;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -338,4 +350,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdHistogramWidget_h
+#endif // mvdHistogramWidget_h

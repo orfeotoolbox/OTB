@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 // section \ref{ssec:LearningFromImages} for an example of model
 // estimation and storage to a file).
 //
-// When using a user defined kernel, an explicit instanciation has
+// When using a user defined kernel, an explicit instantiation has
 // to be performed.
 //
 // Software Guide : EndLatex

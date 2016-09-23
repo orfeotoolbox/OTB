@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdQuicklookViewManipulator_h
-#define __mvdQuicklookViewManipulator_h
+#ifndef mvdQuicklookViewManipulator_h
+#define mvdQuicklookViewManipulator_h
 
 //
 // Configuration include.
@@ -42,7 +42,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdImageViewManipulator.h"
@@ -69,11 +69,11 @@ namespace mvd
 /**
  * \class QuicklookViewManipulator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  *  \brief TODO.
  */
-class ITK_EXPORT QuicklookViewManipulator :
+class OTBMonteverdiGUI_EXPORT QuicklookViewManipulator :
     public ImageViewManipulator
 {
 
@@ -194,4 +194,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdQuicklookViewManipulator_h
+#endif // mvdQuicklookViewManipulator_h

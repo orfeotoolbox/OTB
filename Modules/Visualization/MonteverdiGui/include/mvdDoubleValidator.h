@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDoubleValidator_h
-#define __mvdDoubleValidator_h
+#ifndef mvdDoubleValidator_h
+#define mvdDoubleValidator_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -67,11 +67,11 @@ namespace mvd
 /**
  * \class DoubleValidator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
-class ITK_EXPORT DoubleValidator :
+class OTBMonteverdiGUI_EXPORT DoubleValidator :
     public QDoubleValidator
 {
 
@@ -169,4 +169,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdDoubleValidator_h
+#endif // mvdDoubleValidator_h

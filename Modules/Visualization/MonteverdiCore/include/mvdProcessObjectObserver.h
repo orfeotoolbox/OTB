@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdProcessObjectObserver_h
-#define __mvdProcessObjectObserver_h
+#ifndef mvdProcessObjectObserver_h
+#define mvdProcessObjectObserver_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -74,7 +75,7 @@ class ProgressInterface;
  *
  * \brief WIP.
  */
-class ITK_EXPORT ProcessObjectObserver :
+class OTBMonteverdiCore_EXPORT ProcessObjectObserver :
     public itk::Command
 {
 
@@ -182,4 +183,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdProcessObjectObserver_h
+#endif // mvdProcessObjectObserver_h

@@ -55,7 +55,7 @@ namespace otb {
  * The RMS (root mean square) ground error is available through the
  * appropriate getter.
  *
- * Please note that GCPs are infered to be given in physical
+ * Please note that GCPs are inferred to be given in physical
  * coordinates. This is seamless in most cases.
  *
  * Please note that at least 16 GCPs are required to estimate a proper

@@ -31,7 +31,7 @@ namespace otb
  * This class implements the Touzi's ratio edge detector used to detect
  * contours.
  *
- * We define a square region of size 2n+1 that we devided in two regions.
+ * We define a square region of size 2n+1 that we divided in two regions.
  *
  * The response of the edge detector between two regions 1 and 2 in
  * one direction \f$ \theta_{i} \f$ is:
@@ -110,7 +110,7 @@ protected:
   /** TouziEdgeDetectorImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
    * that is called for each process thread. Image datas are automatically allocated
-   * throught the parent class calling the ThreadedGenerateData() method.
+   * through the parent class calling the ThreadedGenerateData() method.
    * ThreadedGenerateData() can only write the area of the image specified by the parameter "outputRegionForThread"
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),

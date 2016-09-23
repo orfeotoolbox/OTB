@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdStatusBarWidget_h
-#define __mvdStatusBarWidget_h
+#ifndef mvdStatusBarWidget_h
+#define mvdStatusBarWidget_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
@@ -72,12 +72,12 @@ class StatusBarWidget;
 /**
  * \class StatusBarWidget
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Status Bar widget
  * widget class.
  */
-class ITK_EXPORT StatusBarWidget :
+class OTBMonteverdiGUI_EXPORT StatusBarWidget :
     public QWidget
 {
 
@@ -202,4 +202,4 @@ namespace mvd
 
 } // end namespace 'mvd'
 
-#endif // __mvdStatusBarWidget_h
+#endif // mvdStatusBarWidget_h

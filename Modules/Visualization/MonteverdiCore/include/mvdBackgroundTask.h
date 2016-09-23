@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdBackgroundTask_h
-#define __mvdBackgroundTask_h
+#ifndef mvdBackgroundTask_h
+#define mvdBackgroundTask_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -73,7 +74,7 @@ class AbstractWorker;
  *
  * \brief WIP.
  */
-class ITK_EXPORT BackgroundTask :
+class OTBMonteverdiCore_EXPORT BackgroundTask :
     public QThread
 {
 
@@ -182,4 +183,4 @@ BackgroundTask::GetWorker() const
 
 } // end namespace 'mvd'
 
-#endif // __mvdBackgroundTask_h
+#endif // mvdBackgroundTask_h

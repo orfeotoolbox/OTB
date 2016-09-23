@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdStream_h
-#define __mvdStream_h
+#ifndef mvdStream_h
+#define mvdStream_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -131,7 +132,7 @@ WriteStreamTag( QTextStream& stream,
  * \param stream Stream to read from.
  * \param tag Text tag which has been read.
  * \param expected The expected tag name. If non-empty, value read
- * from stream is checked agaisnt expected value; an
+ * from stream is checked against expected value; an
  * std::runtime_exception is thrown if both values doest not match.
  * \param skipWS Skip whitespace following tag name.
  *
@@ -1019,4 +1020,4 @@ operator >> ( QTextStream& stream,
 
 } // end namespace 'mvd'
 
-#endif // __mvdStream_h
+#endif // mvdStream_h

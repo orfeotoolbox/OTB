@@ -215,7 +215,7 @@ private:
   /** Offset for co-occurence */
   OffsetType m_Offset;
 
-  /** Radius of the neighborhood iterator which is minumum of m_Radius */
+  /** Radius of the neighborhood iterator which is minimum of m_Radius */
   SizeType m_NeighborhoodRadius;
 
   /** Number of bins per axis */

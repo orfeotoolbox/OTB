@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractDragAndDropEventFilter_h
-#define __mvdAbstractDragAndDropEventFilter_h
+#ifndef mvdAbstractDragAndDropEventFilter_h
+#define mvdAbstractDragAndDropEventFilter_h
 
 //
 // Configuration include.
@@ -41,7 +41,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -68,12 +68,12 @@ namespace mvd
 /**
  * \class AbstractDragAndDropEventFilter
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class ITK_EXPORT AbstractDragAndDropEventFilter :
+class OTBMonteverdiGUI_EXPORT AbstractDragAndDropEventFilter :
     public QObject
 {
 
@@ -169,4 +169,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractDragAndDropEventFilter_h
+#endif // mvdAbstractDragAndDropEventFilter_h

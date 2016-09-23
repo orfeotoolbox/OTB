@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAlgorithm_h
-#define __mvdAlgorithm_h
+#ifndef mvdAlgorithm_h
+#define mvdAlgorithm_h
 
 //
 // Configuration include.
@@ -26,6 +26,7 @@
 #include "ConfigureMonteverdi.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBMonteverdiCoreExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -208,7 +209,7 @@ operator >> ( QDataStream& stream,
 /**
  * \brief Convert a StringVector object to a QStringList object.
  *
- * Because Qt uses a shallow mecanism to copy containers, the returned
+ * Because Qt uses a shallow mechanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
 inline
@@ -219,7 +220,7 @@ ToQStringList( const StringVector& sv );
  * \brief Append the content of a StringVector object to the content
  * of a QStringList object.
  *
- * Because Qt uses a shallow mecanism to copy containers, the returned
+ * Because Qt uses a shallow mechanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
 inline
@@ -578,7 +579,7 @@ ToStdString( const std::vector<T> & vec)
     oss<<*it<< " ";
     ++it;
     }
-  
+
   return oss.str();
 }
 
@@ -757,4 +758,4 @@ ToHumanReadableSize( qint64 size, bool isInBits )
 } // end namespace 'mvd'
 
 
-#endif // __mvdAlgorithm_h
+#endif // mvdAlgorithm_h

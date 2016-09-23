@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdImageViewManipulator_h
-#define __mvdImageViewManipulator_h
+#ifndef mvdImageViewManipulator_h
+#define mvdImageViewManipulator_h
 
 //
 // Configuration include.
@@ -43,7 +43,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbViewSettings.h"
-
+#include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
@@ -72,11 +72,11 @@ namespace mvd
 /**
  * \class ImageViewManipulator
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  *  \brief TODO.
  */
-class ITK_EXPORT ImageViewManipulator :
+class OTBMonteverdiGUI_EXPORT ImageViewManipulator :
     public AbstractImageViewManipulator
 {
 
@@ -167,6 +167,8 @@ public:
   virtual void ZoomOut();
 
   virtual const PointType& Transform( PointType&, const QPoint& ) const;
+
+  virtual void ResetViewport();
 
   //
   // Events.
@@ -470,4 +472,4 @@ ImageViewManipulator
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageViewManipulator_h
+#endif // mvdImageViewManipulator_h

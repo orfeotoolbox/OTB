@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWrapperQtWidgetView_h
-#define __mvdWrapperQtWidgetView_h
+#ifndef mvdWrapperQtWidgetView_h
+#define mvdWrapperQtWidgetView_h
 
 //
 // Configuration include.
@@ -46,6 +46,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
 #endif //tag=QT4-boost-compatibility
+#include "OTBMonteverdiGUIExport.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -74,16 +75,16 @@ namespace Wrapper
 /**
  * \class ApplicationLauncher
  *
- * \ingroup OTBMonteverdiGui
+ * \ingroup OTBMonteverdiGUI
  *
  * \brief WIP.
  */
 
-class ITK_EXPORT QtWidgetView :
+class OTBMonteverdiGUI_EXPORT QtWidgetView :
     public QWidget
 {
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-  
+
   Q_OBJECT
 
   Q_PROPERTY( bool isClosable
@@ -143,7 +144,7 @@ public slots:
 // Signals.
 signals:
   void QuitSignal();
-  
+
   void OTBApplicationOutputImageChanged( const QString &, const QString &);
 
   void ExecuteAndWriteOutput();
@@ -208,7 +209,7 @@ private:
 // Slots.
 private slots:
 
-  // slot in charge of emiting a signal to the catalogue mainWindow.
+  // slot in charge of emitting a signal to the catalogue mainWindow.
   // when received, the main application need to get the output
   // image filename{s} set by the user in this OTB application (if any).
   void OnApplicationExecutionDone( int );
