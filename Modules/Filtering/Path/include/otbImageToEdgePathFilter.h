@@ -75,6 +75,7 @@ public:
   typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
 
   typedef typename InputImageType::PixelType PixelType;
+  typedef typename InputImageType::SizeType SizeType;
 
   /** Set and Get foreground value */
   itkSetMacro(ForegroundValue, PixelType);
