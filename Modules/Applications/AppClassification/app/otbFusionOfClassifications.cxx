@@ -96,16 +96,16 @@ private:
     SetDescription("Fuses several classifications maps of the same image on the basis of class labels.");
     SetDocName("Fusion of Classifications");
     SetDocLongDescription("This application allows you to fuse several classification maps and produces a single more robust classification map. "
-        "Fusion is done either by mean of Majority Voting, or with the Dempster Shafer combination method on class labels.\n "
-        "-MAJORITY VOTING: for each pixel, the class with the highest number of votes is selected.\n "
-        "-DEMPSTER SHAFER: for each pixel, the class label for which the Belief Function is maximal is selected. This Belief Function is calculated "
+        "Fusion is done either by mean of Majority Voting, or with the Dempster Shafer combination method on class labels.\n\n"
+        "  - MAJORITY VOTING: for each pixel, the class with the highest number of votes is selected.\n"
+        "  - DEMPSTER SHAFER: for each pixel, the class label for which the Belief Function is maximal is selected. This Belief Function is calculated "
         "by mean of the Dempster Shafer combination of Masses of Belief, and indicates the belief that each input classification map presents for each label "
         "value. Moreover, the Masses of Belief are based on the input confusion matrices of each classification map, either by using the PRECISION or RECALL "
         "rates, or the OVERALL ACCURACY, or the KAPPA coefficient. Thus, each input classification map needs to be associated with its corresponding input "
         "confusion matrix file for the Dempster Shafer fusion.\n"
-        "-Input pixels with the NODATA label are not handled in the fusion of classification maps. Moreover, pixels for which all the input classifiers are set to NODATA "
+        "  - Input pixels with the NODATA label are not handled in the fusion of classification maps. Moreover, pixels for which all the input classifiers are set to NODATA "
         "keep this value in the output fused image.\n"
-        "-In case of number of votes equality, the UNDECIDED label is attributed to the pixel.");
+        "  - In case of number of votes equality, the UNDECIDED label is attributed to the pixel.\n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageClassifier application");
