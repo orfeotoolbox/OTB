@@ -33,7 +33,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddChoice("classifier.sharkrf", "Shark Random forests classifier");
   SetParameterDescription("classifier.sharkrf",
                           "This group of parameters allows setting Shark Random Forests classifier parameters. "
-                          "See complete documentation here \\url{http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html}.");
+                          "See complete documentation here \\url{http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html}.\n It is noteworthy that training is parallel.");
   //MaxNumberOfTrees
   AddParameter(ParameterType_Int, "classifier.sharkrf.nbtrees",
                "Maximum number of trees in the forest");
