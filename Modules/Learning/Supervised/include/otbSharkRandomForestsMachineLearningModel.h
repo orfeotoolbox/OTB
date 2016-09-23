@@ -35,6 +35,19 @@
 #pragma GCC diagnostic pop
 #endif
 
+
+/** \class SharkRandomForestsMachineLearningModel
+ *  \brief Shark version of Random Forests algorithm
+ *
+ *  This is a specialization of MachineLearningModel class allowing to
+ *  use Shark implementation of the Random Forests algorithm.
+ *
+ *  It is noteworthy that training step is parallel.
+ * 
+ *  For more information, see
+ *  http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html
+ */
+
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
@@ -80,20 +93,38 @@ public:
   virtual bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
-
+  /** From Shark doc: Get the number of trees to grow.*/
   itkGetMacro(NumberOfTrees,unsigned int);
+  /** From Shark doc: Set the number of trees to grow.*/
   itkSetMacro(NumberOfTrees,unsigned int);
 
+  /** From Shark doc: Get the number of random attributes to investigate at each node.*/
   itkGetMacro(MTry, unsigned int);
+  /** From Shark doc: Set the number of random attributes to investigate at each node.*/
   itkSetMacro(MTry, unsigned int);
 
+  /** From Shark doc: Controls when a node is considered pure. If set
+* to 1, a node is pure when it only consists of a single node.
+*/
   itkGetMacro(NodeSize, unsigned int);
+    /** From Shark doc: Controls when a node is considered pure. If
+* set to 1, a node is pure when it only consists of a single node.
+ */
   itkSetMacro(NodeSize, unsigned int);
-  
+
+  /** From Shark doc: Get the fraction of the original training
+* dataset to use as the out of bag sample. The default value is
+* 0.66.*/
   itkGetMacro(OobRatio, float);
+
+  /** From Shark doc: Set the fraction of the original training
+* dataset to use as the out of bag sample. The default value is 0.66.
+*/
   itkSetMacro(OobRatio, float);
 
+  /** If true, margin confidence value will be computed */
   itkGetMacro(ComputeMargin, bool);
+  /** If true, margin confidence value will be computed */
   itkSetMacro(ComputeMargin, bool);
 
 protected:
