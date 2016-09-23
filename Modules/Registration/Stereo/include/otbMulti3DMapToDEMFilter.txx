@@ -410,18 +410,18 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     typename T3DImage::RegionType mapRegion = imgPtr->GetLargestPossibleRegion();
 
     itk::ContinuousIndex<double, 2> mapContiIndex;
-    long int maxMapIndex[2];
-    long int minMapIndex[2];
+    long int maxMapIndex[2] = { 0, 0 };
+    long int minMapIndex[2] = { 0, 0 };
     maxMapIndex[0] = static_cast<long int> (mapRegion.GetIndex(0) + mapRegion.GetSize(0));
     maxMapIndex[1] = static_cast<long int> (mapRegion.GetIndex(1) + mapRegion.GetSize(1));
     minMapIndex[0] = static_cast<long int> (mapRegion.GetIndex(0));
     minMapIndex[1] = static_cast<long int> (mapRegion.GetIndex(1));
 
-    long int minMapRequestedIndex[2];
+    long int minMapRequestedIndex[2] = { 0, 0 };
     minMapRequestedIndex[0]= maxMapIndex[0]+1;
     minMapRequestedIndex[1]= maxMapIndex[1]+1;
 
-    long int maxMapRequestedIndex[2];
+    long int maxMapRequestedIndex[2] = { 0, 0 };
     maxMapRequestedIndex[0]= 0;
     maxMapRequestedIndex[1]= 0;
 
@@ -475,6 +475,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
       }
 
     imgPtr->SetRequestedRegion(requestedRegion);
+    
     TMaskImage *mskPtr = const_cast<TMaskImage *> (this->GetMaskInput(k));
     if (mskPtr)
       {
