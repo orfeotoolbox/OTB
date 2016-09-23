@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __SharkUtils_h
-#define __SharkUtils_h
+#ifndef otbSharkUtils_h
+#define otbSharkUtils_h
 
 #include "otbRequiresSharkCheck.h"
 

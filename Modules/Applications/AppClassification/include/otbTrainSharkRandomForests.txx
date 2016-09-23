@@ -14,8 +14,9 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainSharkRandomForests_txx
-#define __otbTrainSharkRandomForests_txx
+#ifndef otbTrainSharkRandomForests_txx
+#define otbTrainSharkRandomForests_txx
+
 #include "otbLearningApplicationBase.h"
 
 namespace otb

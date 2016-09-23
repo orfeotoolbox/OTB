@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSharkRandomForestsMachineLearningModel_h
-#define __otbSharkRandomForestsMachineLearningModel_h
+#ifndef otbSharkRandomForestsMachineLearningModel_h
+#define otbSharkRandomForestsMachineLearningModel_h
 
 #include "otbRequiresSharkCheck.h"
 

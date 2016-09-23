@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSharkRandomForestsMachineLearningModelFactory_txx
-#define __otbSharkRandomForestsMachineLearningModelFactory_txx
+#ifndef otbSharkRandomForestsMachineLearningModelFactory_txx
+#define otbSharkRandomForestsMachineLearningModelFactory_txx
 
 
 #include "otbSharkRandomForestsMachineLearningModelFactory.h"
