@@ -2026,7 +2026,9 @@ bool TestHelper::isNumber(int i) const
 
 bool TestHelper::isHexaNumber(int i) const
 {
-  return (((i > 47) && (i < 58)) || ((i > 96) && (i < 103)));
+  return (((i > 47) && (i < 58)) ||
+          ((i > 96) && (i < 103)) ||
+          ((i > 64) && (i < 71)));
 }
 
 bool TestHelper::isPoint(int i) const
@@ -2176,13 +2178,18 @@ bool TestHelper::isHexaPointerAddress(const std::string& str, size_t pos, size_t
     return false;
     }
 
-  if (str[pos] != 48 || (str[pos+1] != 120))
+  // pointer adress has to begin with '0x'
+  // it may also start with '00' but with size of 16 (assuming 64bit adress)
+  if (str[pos] != 48)
     {
-    // pointer adress has to begin with '0x'
     return false;
     }
+  if (!(str[pos+1] == 120 || (str[pos+1] == 48 && size == 16)))
+    {
+    return false
+    }
 
-  // check all other characters are in [a-f0-9]
+  // check all other characters are in [A-Fa-f0-9]
   for (unsigned int i=2 ; i<size ; i++)
     {
     if (!isHexaNumber(str[pos+i]))
