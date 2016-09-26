@@ -36,22 +36,6 @@ For other documentation, be sure to read:
 - `Doxygen <http://orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
   of the C++ API.
 
-Contents
-========
-
-.. toctree::
-   :maxdepth: 3
-
-   Installation
-   OTB-Applications
-   Monteverdi
-   Recipes
-   Applications
-
-Indices and tables
-==================
-
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

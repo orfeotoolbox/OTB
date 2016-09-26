@@ -556,7 +556,11 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::ResizeEvent( QResizeEvent * otbUseInDebug( e ) )
+#if USE_VIEW_SETTINGS_SIDE_EFFECT 
+::ResizeEvent( QResizeEvent * )
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+::ResizeEvent( QResizeEvent * e )
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 {
   // assert( e!=NULL );
 

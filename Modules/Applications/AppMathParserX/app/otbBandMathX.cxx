@@ -87,7 +87,7 @@ private:
       "\n"
       "                   im1b1 + im2b1 \n"
       "                   im1b2 + im2b2       (2)\n"
-      "                         ...."
+      "                   ..."
       "\n\nNevertheless, the first expression is by far much pleaseant. We call this new functionality the 'batch mode'\n"
       "(performing the same operation in a band-to-band fashion).\n"
 
