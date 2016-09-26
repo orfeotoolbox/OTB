@@ -9,7 +9,7 @@ otb_add_test(NAME leTvSharkRFMachineLearningModel COMMAND otbSupervisedTestDrive
 
 otb_add_test(NAME leTuSharkRFMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModelCanRead
-  ${TEMP}/shark_rf_model.txt
+  ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
 
 otb_add_test(NAME leTuSharkRFMachineLearningModelCanReadFail COMMAND otbSupervisedTestDriver
