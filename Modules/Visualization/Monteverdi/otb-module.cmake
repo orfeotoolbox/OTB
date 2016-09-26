@@ -8,6 +8,7 @@ otb_module( OTBMonteverdi
     OTBMonteverdiCore
     OTBMonteverdiGUI
     OTBQt4
+    OTBQtAdapters
 
   OPTIONAL_DEPENDS
 
