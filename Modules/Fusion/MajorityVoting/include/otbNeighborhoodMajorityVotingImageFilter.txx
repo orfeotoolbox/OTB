@@ -61,7 +61,7 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
     //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
     unsigned int freqCenterLabel = this->FillNeighborhoodHistogram(histoNeighVec, nit, kernelBegin, kernelEnd);
 
-    if(m_OnlyIsolatedPixels && freqCenterLabel > m_IsolatedThreshold)
+    if(m_OnlyIsolatedPixels && freqCenterLabel < m_IsolatedThreshold)
       {
       //If we want to filter only isolated pixels, keep the label if
       //there are enough pixels with the center label to consider that

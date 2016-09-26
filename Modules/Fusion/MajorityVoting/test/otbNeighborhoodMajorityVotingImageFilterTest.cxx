@@ -112,3 +112,104 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int argc, char* argv[])
+{
+  typedef unsigned char PixelType; // 8 bits
+  const unsigned int Dimension = 2;
+
+  typedef otb::Image<PixelType, Dimension> ImageType;
+
+  ImageType::Pointer image = ImageType::New();
+  ImageType::IndexType start;
+
+  start[0] =   0;
+  start[1] =   0;
+
+  ImageType::SizeType size;
+  size[0]  = 100;
+  size[1]  = 100;
+
+  ImageType::RegionType region;
+
+  region.SetSize(size);
+  region.SetIndex(start);
+  image->SetRegions(region);
+  image->Allocate();
+  image->FillBuffer(itk::NumericTraits<PixelType>::Zero);
+
+  // Neighborhood majority voting filter type
+  typedef otb::NeighborhoodMajorityVotingImageFilter<ImageType> NeighborhoodMajorityVotingFilterType;
+
+  // Binary ball Structuring Element type
+  typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
+  typedef StructuringType::RadiusType RadiusType;
+
+
+  // Neighborhood majority voting filter
+  NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter;
+  NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
+
+  NeighMajVotingFilter->SetInput(image);
+
+  StructuringType seBall;
+  RadiusType rad;
+
+
+  NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
+    
+  rad[0] = 1;
+  rad[1] = 1;
+
+  NeighMajVotingFilter->SetLabelForNoDataPixels(10);
+      
+  NeighMajVotingFilter->SetLabelForUndecidedPixels(7);
+
+  seBall.SetRadius(rad);
+  seBall.CreateStructuringElement();
+  NeighMajVotingFilter->SetKernel(seBall);
+
+  NeighMajVotingFilter->SetOnlyIsolatedPixels(true);
+
+  PixelType value = 255;
+  ImageType::IndexType coordinate;
+  coordinate[0] = 10;
+  coordinate[1] = 10;
+
+  image->SetPixel(coordinate, value);
+  image->Update();
+  NeighMajVotingFilter->SetIsolatedThreshold(1);
+  NeighMajVotingFilter->Update();
+
+  if(NeighMajVotingFilter->GetOutput()->GetPixel(coordinate) == value)
+    {
+    std::cout << "one pixel\n";
+    return EXIT_FAILURE;
+    }
+
+  coordinate[0] = 10;
+  coordinate[1] = 11;
+  image->SetPixel(coordinate, value);
+  image->Update();
+
+  NeighMajVotingFilter->SetIsolatedThreshold(1);
+  NeighMajVotingFilter->Update();
+
+  if(NeighMajVotingFilter->GetOutput()->GetPixel(coordinate) == value)
+    {
+    std::cout << "2 pixels thres = 1" << '\n';
+    return EXIT_FAILURE;
+    }
+
+  NeighMajVotingFilter->SetIsolatedThreshold(3);
+  NeighMajVotingFilter->Update();
+
+  if(NeighMajVotingFilter->GetOutput()->GetPixel(coordinate) != value)
+    {
+    std::cout << "2 pixels thres = 2" << '\n';
+    return EXIT_FAILURE;
+    }
+
+
+  return EXIT_SUCCESS;
+}

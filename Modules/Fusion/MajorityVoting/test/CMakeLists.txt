@@ -45,6 +45,10 @@ otb_add_test(NAME leTvNeighborhoodMajorityVotingIsolPixTest COMMAND otbMajorityV
   1 #OnlyIsolatedPixels
   )
 
+otb_add_test(NAME leTvNeighborhoodMajorityVotingIsolThresPixTest COMMAND otbMajorityVotingTestDriver
+  otbNeighborhoodMajorityVotingImageFilterIsolatedTest
+  )
+
 otb_add_test(NAME leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting COMMAND otbMajorityVotingTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/leSVMImageClassificationWithNMVFilterOutput.tif
