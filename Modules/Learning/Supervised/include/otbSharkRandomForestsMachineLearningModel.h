@@ -46,6 +46,8 @@
  * 
  *  For more information, see
  *  http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html
+ * 
+ *  \ingroup OTBSupervised
  */
 
 namespace otb
