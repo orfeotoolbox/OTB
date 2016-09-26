@@ -39,7 +39,8 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, TKernel>::Neigh
   this->SetLabelForUndecidedPixels(itk::NumericTraits<PixelType>::NonpositiveMin()); //m_LabelForUndecidedPixels = 0
   this->SetKeepOriginalLabelBool(true); //m_KeepOriginalLabelBool = true
   this->SetOnlyIsolatedPixels(false); //process all pixels 
-    }
+  this->SetIsolatedThreshold(1);
+}
 
 
 template<class TInputImage, class TOutputImage, class TKernel>
@@ -60,9 +61,11 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
     //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
     unsigned int freqCenterLabel = this->FillNeighborhoodHistogram(histoNeighVec, nit, kernelBegin, kernelEnd);
 
-    if(m_OnlyIsolatedPixels && freqCenterLabel > 1)
+    if(m_OnlyIsolatedPixels && freqCenterLabel > m_IsolatedThreshold)
       {
-      //The center label is not unique in the neighborhood and we only want to filter isolated pixesl
+      //If we want to filter only isolated pixels, keep the label if
+      //there are enough pixels with the center label to consider that
+      //it is not isolated
       majorityLabel = centerPixel;
       }
     else

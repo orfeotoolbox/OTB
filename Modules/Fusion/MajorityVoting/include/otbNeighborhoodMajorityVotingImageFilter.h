@@ -151,6 +151,7 @@ public:
 
   //Process only isolated pixels
   itkSetMacro(OnlyIsolatedPixels, bool);
+  itkSetMacro(IsolatedThreshold, unsigned int);
 
 
 protected:
@@ -195,7 +196,12 @@ private:
   PixelType m_LabelForNoDataPixels;
   PixelType m_LabelForUndecidedPixels;
   bool m_KeepOriginalLabelBool;
+
+  //Choose to filter only isolated pixels
   bool m_OnlyIsolatedPixels;
+  //The center pixel is isolated if there are fewer neighbours than
+  //this threshold with the same label
+  unsigned int m_IsolatedThreshold;
 
 }; // end of class
 
