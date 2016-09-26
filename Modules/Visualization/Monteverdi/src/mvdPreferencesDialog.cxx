@@ -35,6 +35,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include <otbQtAdapters.h>
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -431,7 +432,7 @@ PreferencesDialog
 ::on_srtmButton_clicked()
 {
   QString srtmDir(
-    I18nMainWindow::GetExistingDirectory(
+    otb::GetExistingDirectory(
       this,
       tr( "Select the directory containing DEM files." )
     )
@@ -451,7 +452,7 @@ PreferencesDialog
 ::on_geoidButton_clicked()
 {
   QString geoidFile(
-    I18nMainWindow::GetOpenFileName(
+    otb::GetOpenFileName(
       this,
       tr( "Select a geoid file." )
     )
@@ -471,7 +472,7 @@ PreferencesDialog
 ::on_resultDirButton_clicked()
 {
   QString resultsDir(
-    I18nMainWindow::GetExistingDirectory(
+    otb::GetExistingDirectory(
       this,
       tr( "Select the default directory for results data: " )
     )

@@ -36,6 +36,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include <otbQtAdapters.h>
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -1653,7 +1654,7 @@ MainWindow
   //
   // Select filename.
   ImportImages(
-    I18nMainWindow::GetOpenFileNames( this, tr( "Open file..." ) )
+    otb::GetOpenFileNames( this, tr( "Open file..." ) )
   );
 }
 
