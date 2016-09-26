@@ -130,3 +130,8 @@ otb_create_application(
   NAME           MultiImageSamplingRate
   SOURCES        otbMultiImageSamplingRate.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           CompositeTrain
+  SOURCES        otbCompositeTrain.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
