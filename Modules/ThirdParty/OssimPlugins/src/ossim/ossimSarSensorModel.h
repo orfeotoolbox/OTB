@@ -313,6 +313,12 @@ protected:
    // TODO: Document me
    /*virtual*/ void groundRangeToSlantRange(const double & groundRange, const TimeType & azimuthTime, double & slantRange) const;
 
+   /**
+    * Estimate ground range to slant range from ground range to slant range
+    * coefficients
+    */
+   void estimateGRToSRFromSRToGR(const unsigned int degree);
+   
    // TODO: Document me
    /*virtual*/ void applyCoordinateConversion(const double & in, const TimeType& azimuthTime, const std::vector<CoordinateConversionRecordType> & records, double & out) const;
    /**

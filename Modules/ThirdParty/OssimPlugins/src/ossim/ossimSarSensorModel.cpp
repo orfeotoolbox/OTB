@@ -17,6 +17,7 @@
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimMatrix3x3.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimPolynom.h>
 #include <ossim/elevation/ossimHgtRef.h>
 #include <boost/static_assert.hpp>
 #include <iostream>
@@ -412,6 +413,41 @@ namespace ossimplugins
    {
       applyCoordinateConversion(groundRange,azimuthTime,theGroundRangeToSlantRangeRecords,slantRange);
    }
+
+  void ossimSarSensorModel::estimateGRToSRFromSRToGR(const unsigned int degree)
+  {
+    //TODO Implement polynomial inversion to estimate slant range to ground
+    //range coefficients from slant range to ground range coefficients
+
+    //
+
+    const unsigned int m = degree;
+    
+    //Polynoms use for estimation
+    ossimPolynom< ossim_float64 , 1 >::EXPT_SET theExpSet;
+    ossimPolynom< ossim_float64 , 1 >  thePoly;
+
+    vector< ossimPolynom< ossim_float64 , 1 >::VAR_TUPLE > inputs(m);
+    vector< ossim_float64 > outputs(m);
+
+    vector< ossimPolynom< ossim_float64 , 1 >::VAR_TUPLE >::iterator pit;
+    vector< ossim_float64 >::iterator it;
+    
+    for (unsigned int i = 0; i <= m; i++)
+      {
+        //Fill inputs i with rangetime (starting from firstPixelTime)
+        //inputs[i] = theNearRangeTime + (lastPixelTime - theNearRangeTime) * i / m;
+        //Compute polynomial values using slantrangetogroundrange coefficients
+        //outputs[i] = Maths.computePolynomialValue(sltRgTime[i] - referencePoint, s2gCoef);
+      }
+    
+    double rms=0.0;
+    bool resfit = thePoly.LMSfit(theExpSet, inputs, outputs, &rms);
+    if (!resfit)
+      {
+        ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimSarSensorModel::estimateGRToSRFromSRToGR():  polynom LMS fit failed "<< std::endl;
+      }
+  }
 
    void ossimSarSensorModel::applyCoordinateConversion(const double & in, const TimeType& azimuthTime, const std::vector<CoordinateConversionRecordType> & records, double & out) const
    {

@@ -231,7 +231,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     //GRD (detected product)
     if(isGRD())
     {
-        //Retrieve Slant Range to Ground range coeddifcients
+        //Retrieve Slant Range to Ground range coefficients
         CoordinateConversionRecordType coordRecord;
 
         //Get azimuth time start (again)
@@ -582,7 +582,6 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
    ossimNotify(ossimNotifyLevel_DEBUG) << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1. / theRadarFrequency) * 1000000. << '\n';
 
    //GRD (detected product)
-#if 0
    if(isGRD())
    {
       //Retrieve Slant Range to Ground range coeddifcients
@@ -603,6 +602,8 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
       const ossimString EXP = "exponent";
       ossimString s;
 
+      std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+      
       xmlDoc.findNodes(path, xnodes);
 
       if ( xnodes.size() )
@@ -621,8 +622,14 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
       assert(!coordRecord.coefs.empty()&&"The srgr record has empty coefs vector.");
 
       theSlantRangeToGroundRangeRecords.push_back(coordRecord);
+
+      //Estimate GroundRangeToSlantRange coefficients from Slant Range to Ground
+      //range coefficients
+
+      //Estimate degree of GRToSR of degree 11
+      const unsigned int deg = 11;
+      estimateGRToSRFromSRToGR(deg);
    }
-#endif
 
    // Parse GCPs
    const ossimFilename geoXml = searchGeoRefFile(annotationXml);
