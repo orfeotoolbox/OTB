@@ -2186,7 +2186,7 @@ bool TestHelper::isHexaPointerAddress(const std::string& str, size_t pos, size_t
     }
   if (!(str[pos+1] == 120 || (str[pos+1] == 48 && size == 16)))
     {
-    return false
+    return false;
     }
 
   // check all other characters are in [A-Fa-f0-9]
