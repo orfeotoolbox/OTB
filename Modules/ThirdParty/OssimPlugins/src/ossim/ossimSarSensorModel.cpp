@@ -424,21 +424,41 @@ namespace ossimplugins
     const unsigned int m = degree;
     
     //Polynoms use for estimation
+
+    //TODO: i don't understand how to initialize theExpSet used in LMSFit
     ossimPolynom< ossim_float64 , 1 >::EXPT_SET theExpSet;
+    ossimPolynom< ossim_float64 , 1 >::EXP_TUPLE orders;
+
+    //Store estimated polynom in an ossimPolynom
     ossimPolynom< ossim_float64 , 1 >  thePoly;
+
+    for (unsigned int i = 0; i <= m; i++)
+      {
+        orders.push_back(1);
+      }
+    theExpSet = thePoly.builExpSet(orders);
 
     vector< ossimPolynom< ossim_float64 , 1 >::VAR_TUPLE > inputs(m);
     vector< ossim_float64 > outputs(m);
 
     vector< ossimPolynom< ossim_float64 , 1 >::VAR_TUPLE >::iterator pit;
     vector< ossim_float64 >::iterator it;
+
+    //TODO compute maximum rang time of entire scene (or read in metadata for tsx?)
+    const double maxRangeTime = 0;
     
     for (unsigned int i = 0; i <= m; i++)
       {
         //Fill inputs i with rangetime (starting from firstPixelTime)
-        //inputs[i] = theNearRangeTime + (lastPixelTime - theNearRangeTime) * i / m;
+        inputs[i][0] = theNearRangeTime + (maxRangeTime - theNearRangeTime) * i / m;
         //Compute polynomial values using slantrangetogroundrange coefficients
-        //outputs[i] = Maths.computePolynomialValue(sltRgTime[i] - referencePoint, s2gCoef);
+
+        double acc = 0.;
+        unsigned int j = theSlantRangeToGroundRangeRecords[0].coefs.size() - 1;
+        while ( j > 0) {
+            acc = (acc + theSlantRangeToGroundRangeRecords[0].coefs[i--]) * inputs[i][0];
+        }
+        outputs[i] = acc + theSlantRangeToGroundRangeRecords[0].coefs[0];
       }
     
     double rms=0.0;
