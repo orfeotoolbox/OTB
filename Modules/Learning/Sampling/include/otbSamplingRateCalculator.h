@@ -70,6 +70,9 @@ public:
 
   /** Method to set a percentage of samples for each class */
   void SetPercentageOfSamples(double percent);
+
+  /** Method to set the total number of samples to generate */
+  void SetTotalNumberOfSamples(unsigned long value);  
   
   /** Method to choose a sampling strategy based on the smallest class.
    * The number of samples in each class is set to this minimum size*/

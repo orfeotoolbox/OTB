@@ -174,6 +174,14 @@ private:
     SetMinimumParameterFloatValue("strategy.percent.p",0);
     SetMaximumParameterFloatValue("strategy.percent.p",1);
     SetDefaultParameterFloat("strategy.percent.p",0.5);
+
+    AddChoice("strategy.total","Set the total number of samples to generate, and use class proportions.");
+    SetParameterDescription("strategy.total","Set the total number of samples to generate, and use class proportions.");
+
+    AddParameter(ParameterType_Int,"strategy.total.v","The number of samples to generate");
+    SetParameterDescription("strategy.total.v","The number of samples to generate");
+    SetMinimumParameterIntValue("strategy.total.v",1);
+    SetDefaultParameterInt("strategy.total.v",1000);
     
     AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
     SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
@@ -246,19 +254,27 @@ private:
       // percent
       case 2:
       {
-      otbAppLogINFO("Sampluing strategy: set a percentage of samples for each class.");
+      otbAppLogINFO("Sampling strategy: set a percentage of samples for each class.");
       m_RateCalculator->SetPercentageOfSamples(this->GetParameterFloat("strategy.percent.p"));
       }
       break;
-      // smallest class
+      // total
       case 3:
+      {
+      otbAppLogINFO("Sampling strategy: set the total number of samples to generate, use classes proportions.");
+      m_RateCalculator->SetTotalNumberOfSamples(this->GetParameterInt("strategy.total.v"));
+      }
+      break;
+
+      // smallest class
+      case 4:
         {
         otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
         m_RateCalculator->SetMinimumNbOfSamplesByClass();
         }
       break;
       // all samples
-      case 4:
+      case 5:
         {
         otbAppLogINFO("Sampling strategy : take all samples");
         m_RateCalculator->SetAllSamples();
