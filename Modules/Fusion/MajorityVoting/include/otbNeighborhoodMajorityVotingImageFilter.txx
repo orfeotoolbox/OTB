@@ -61,7 +61,7 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
     //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
     unsigned int freqCenterLabel = this->FillNeighborhoodHistogram(histoNeighVec, nit, kernelBegin, kernelEnd);
 
-    if(m_OnlyIsolatedPixels && freqCenterLabel < m_IsolatedThreshold)
+    if(m_OnlyIsolatedPixels && freqCenterLabel > m_IsolatedThreshold)
       {
       //If we want to filter only isolated pixels, keep the label if
       //there are enough pixels with the center label to consider that
@@ -70,22 +70,24 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
       }
     else
       {
-      //Extraction of the more representative Label in the neighborhood (majorityLabel) and its Frequency (majorityFreq)
-      majorityFreq = histoNeighVec[0].second; //Frequency
-      majorityLabel = histoNeighVec[0].first; //Label
-      //If the majorityLabel is NOT unique in the neighborhood
-      if(histoNeighVec[1].second == majorityFreq && histoNeighVec[1].first != majorityLabel)
+    //Extraction of the more representative Label in the neighborhood (majorityLabel) and its Frequency (majorityFreq)
+    majorityFreq = histoNeighVec[0].second; //Frequency
+    majorityLabel = histoNeighVec[0].first; //Label
+    //If the majorityLabel is NOT unique in the neighborhood
+    if(histoNeighVec[1].second == majorityFreq && histoNeighVec[1].first != majorityLabel)
+      {
+      if (m_KeepOriginalLabelBool == true)
         {
-        if (m_KeepOriginalLabelBool == true)
-          {
-          majorityLabel = centerPixel;
-          }
-        else
-          {
-          majorityLabel = m_LabelForUndecidedPixels;
-          }
+        majorityLabel = centerPixel;
+        }
+      else
+        {
+        majorityLabel = m_LabelForUndecidedPixels;
         }
       }
+
+      }
+
 
     }//END if (centerPixel != m_LabelForNoDataPixels)
 
