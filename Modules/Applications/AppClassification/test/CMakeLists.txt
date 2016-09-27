@@ -88,7 +88,7 @@ set(rf_parameters "")
 set(knn_parameters "")
 
 # Validation depending on mode
-set(ascii_comparison --compare-ascii ${NOTOL})
+set(ascii_comparison --compare-ascii ${EPSILON_6})
 set(raster_comparison --compare-image ${NOTOL})
 set(raster_comparison_two --compare-n-images ${NOTOL} 2)
 
