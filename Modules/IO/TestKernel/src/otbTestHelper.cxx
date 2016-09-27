@@ -796,91 +796,107 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
           break;
           }
         // ----------- comparing current token --------------------
-        double vTest;
-        double vRef;
-        double vNorm;
-        // test if hexadecimal adress
-        bool isRefTokenHexa = isHexaPointerAddress(
-                                curLineRef,
-                                tokenRef[i].begin()-curLineRef.begin(),
-                                tokenRef[i].size());
-        bool isTestTokenHexa = isHexaPointerAddress(
-                                curLineTest,
-                                tokenTest[i].begin()-curLineTest.begin(),
-                                tokenTest[i].size());
-        // cast ref token
-        bool isRefTokenNum = true;
-        try
+        bool areTokensEquivalent = false;
+        // first : try direct string comparison
+        if (curLineRef.compare(
+              tokenRef[i].begin() - curLineRef.begin(),
+              tokenRef[i].size(),
+              curLineTest,
+              tokenTest[i].begin() - curLineTest.begin(),
+              tokenTest[i].size()) == 0)
           {
-          vRef = boost::lexical_cast<double>(tokenRef[i]);
-          // record the first numeric token position
-          if (firstNumericToken<0)
+          areTokensEquivalent = true;
+          }
+        else
+          {
+          // examine other cases :
+          // test if hexadecimal adress
+          bool isRefTokenHexa = isHexaPointerAddress(
+                                  curLineRef,
+                                  tokenRef[i].begin()-curLineRef.begin(),
+                                  tokenRef[i].size());
+          bool isTestTokenHexa = isHexaPointerAddress(
+                                  curLineTest,
+                                  tokenTest[i].begin()-curLineTest.begin(),
+                                  tokenTest[i].size());
+          if (isRefTokenHexa && isTestTokenHexa)
             {
-            firstNumericToken = static_cast<int>(i);
+            // these tokens are equivalent (we don't compare pointer adress)
+            areTokensEquivalent = true;
+            }
+          else
+            {
+            double vTest;
+            double vRef;
+            double vNorm;
+            // cast ref token
+            bool isRefTokenNum = true;
+            try
+              {
+              vRef = boost::lexical_cast<double>(tokenRef[i]);
+              // record the first numeric token position
+              if (firstNumericToken<0)
+                {
+                firstNumericToken = static_cast<int>(i);
+                }
+              }
+            catch (boost::bad_lexical_cast &)
+              {
+              isRefTokenNum = false;
+              }
+            // cast test token
+            bool isTestTokenNum = true;
+            try
+              {
+              vTest = boost::lexical_cast<double>(tokenTest[i]);
+              }
+            catch (boost::bad_lexical_cast &)
+              {
+              isTestTokenNum = false;
+              }
+            if (isRefTokenNum && isTestTokenNum)
+              {
+              // test difference against epsilon
+              vNorm = (vcl_abs(vRef) + vcl_abs(vTest)) * 0.5;
+              if ((vNorm <= m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
+                || (vcl_abs(vRef-vTest) <= epsilon * vNorm)) //epsilon as relative error
+                {
+                // these tokens are equivalent
+                areTokensEquivalent = true;
+                }
+              }
+            else
+              {
+              // test for special tokens
+              for (unsigned int j=0 ; j<m_SpecialTokens.size() ; j++)
+                {
+                if (curLineRef.compare(
+                      tokenRef[i].begin() - curLineRef.begin(),
+                      tokenRef[i].size(),
+                      m_SpecialTokens[j].first) == 0 &&
+                    curLineTest.compare(
+                      tokenTest[i].begin() - curLineTest.begin(),
+                      tokenTest[i].size(),
+                      m_SpecialTokens[j].second) == 0)
+                  {
+                  areTokensEquivalent = true;
+                  break;
+                  }
+                }
+              }
             }
           }
-        catch (boost::bad_lexical_cast &)
+        if (areTokensEquivalent)
           {
-          isRefTokenNum = false;
-          }
-        // cast test token
-        bool isTestTokenNum = true;
-        try
-          {
-          vTest = boost::lexical_cast<double>(tokenTest[i]);
-          }
-        catch (boost::bad_lexical_cast &)
-          {
-          isTestTokenNum = false;
-          }
-
-        if (isRefTokenHexa && isTestTokenHexa)
-          {
-          // these tokens are equivalent (we don't compare pointer adress)
+          commonTokens++;
           if (differencesPos.empty())
             {
             firstCommonTokens++;
             }
-          commonTokens++;
-          }
-        else if (isRefTokenNum && isTestTokenNum)
-          {
-          // test difference against epsilon
-          vNorm = (vcl_abs(vRef) + vcl_abs(vTest)) * 0.5;
-          if ((vNorm > m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
-            && (vcl_abs(vRef-vTest) > epsilon * vNorm)) //epsilon as relative error
-            {
-            // record different numeric token
-            differencesPos.push_back(i);
-            }
-          else
-            {
-            // these tokens are equivalent
-            commonTokens++;
-            if (differencesPos.empty())
-              {
-              firstCommonTokens++;
-              }
-            }
           }
         else
           {
-          if (curLineRef.compare(tokenRef[i].begin() - curLineRef.begin(),
-                                 tokenRef[i].size(),
-                                 curLineTest,
-                                 tokenTest[i].begin() - curLineTest.begin(),
-                                 tokenTest[i].size()) == 0)
-            {
-            commonTokens++;
-            if (differencesPos.empty())
-              {
-              firstCommonTokens++;
-              }
-            }
-          else
-            {
-            differencesPos.push_back(i);
-            }
+          differencesPos.push_back(i);
           }
         }
       // finish iteration of all tokens from reference line to detect first numeric token

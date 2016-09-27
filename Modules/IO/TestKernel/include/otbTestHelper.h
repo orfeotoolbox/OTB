@@ -65,7 +65,10 @@ public:
     m_ReportErrors(false),
     m_IgnoreLineOrder(false),
     m_MaxArea(1024*1024)
-  {}
+  {
+    m_SpecialTokens.push_back(std::pair<std::string,std::string>(
+      std::string("Integer"),std::string("Integer64")));
+  }
 
   ~TestHelper() ITK_OVERRIDE{}
 
@@ -170,6 +173,8 @@ private:
   const unsigned int m_MaxArea;
 
   void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
+
+  std::vector<std::pair<std::string, std::string> > m_SpecialTokens;
 };
 }
 
