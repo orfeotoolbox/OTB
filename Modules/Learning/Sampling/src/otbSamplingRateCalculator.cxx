@@ -110,6 +110,19 @@ SamplingRateCalculator
     }
 }
 
+
+void SamplingRateCalculator
+::SetPercentageOfSamples(double percent)
+{
+  MapRateType::iterator it = m_RatesByClass.begin();
+  for (; it != m_RatesByClass.end() ; ++it)
+    {
+    it->second.Required = static_cast<unsigned long>(vcl_floor(0.5+percent * it->second.Tot));
+    it->second.Rate = percent;
+    }
+
+}
+
 void 
 SamplingRateCalculator
 ::Write(std::string filename)

@@ -166,6 +166,15 @@ private:
     AddParameter(ParameterType_Int, "strategy.constant.nb", "Number of samples for all classes");
     SetParameterDescription("strategy.constant.nb", "Number of samples for all classes");
 
+    AddChoice("strategy.percent","Use a percentage of the samples available for each class");
+    SetParameterDescription("strategy.percent","Use a percentage of the samples available for each class");
+
+    AddParameter(ParameterType_Float,"strategy.percent.p","The percentage to use");
+    SetParameterDescription("strategy.percent.p","The percentage to use");
+    SetMinimumParameterFloatValue("strategy.percent.p",0);
+    SetMaximumParameterFloatValue("strategy.percent.p",1);
+    SetDefaultParameterFloat("strategy.percent.p",0.5);
+    
     AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
     SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
 
@@ -234,15 +243,22 @@ private:
         m_RateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("strategy.constant.nb"));
         }
       break;
-      // smallest class
+      // percent
       case 2:
+      {
+      otbAppLogINFO("Sampluing strategy: set a percentage of samples for each class.");
+      m_RateCalculator->SetPercentageOfSamples(this->GetParameterFloat("strategy.percent.p"));
+      }
+      break;
+      // smallest class
+      case 3:
         {
         otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
         m_RateCalculator->SetMinimumNbOfSamplesByClass();
         }
       break;
       // all samples
-      case 3:
+      case 4:
         {
         otbAppLogINFO("Sampling strategy : take all samples");
         m_RateCalculator->SetAllSamples();
