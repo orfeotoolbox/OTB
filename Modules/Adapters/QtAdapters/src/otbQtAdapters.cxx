@@ -20,6 +20,9 @@
 #include "otbQtAdapters.h"
 
 
+#include <cassert>
+
+
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -100,7 +103,7 @@ GetOpenFileName( QWidget * p,
   );
 
   if( !filename.isNull() )
-    SetWorkingDir( QFileInfo( filename ).path() );
+    SetWorkingDir( filename );
 
   return filename;
 }
@@ -126,9 +129,7 @@ GetOpenFileNames( QWidget * p,
   );
 
   if( !filenames.isEmpty() )
-    SetWorkingDir(
-      QFileInfo( filenames.back() ).path()
-    );
+    SetWorkingDir( filenames.back() );
 
   return filenames;
 }
@@ -154,7 +155,7 @@ GetSaveFileName( QWidget * p,
   );
 
   if( !filename.isNull() )
-    SetWorkingDir( QFileInfo( filename ).path() );
+    SetWorkingDir( filename );
 
   return filename;
 }
@@ -168,9 +169,11 @@ GetWorkingDir()
 
 /*****************************************************************************/
 bool
-SetWorkingDir( const QString & path )
+SetWorkingDir( const QString & filepath )
 {
-  return QDir::setCurrent( path );
+  assert( !filepath.isEmpty() );
+
+  return QDir::setCurrent( QFileInfo( filepath ).path() );
 }
 
 } // end namespace 'otb'
