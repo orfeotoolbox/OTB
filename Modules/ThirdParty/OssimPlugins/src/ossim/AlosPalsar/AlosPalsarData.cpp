@@ -159,7 +159,7 @@ bool AlosPalsarData::saveState(ossimKeywordlist& kwl,
   if (datafiledesc != NULL)
   {
     kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(), true);
-    // slant range to 1st data sample in metres
+    // slant range to 1st data sample in meters
     kwl.add(prefix, "slant_range_to_1st_data_sample", signalData->get_slant_range_to_1st_data_sample(), true);
   }
   else

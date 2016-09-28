@@ -57,7 +57,7 @@ int otbBandsStatisticsAttributesLabelMapFilter(int itkNotUsed(argc), char* argv[
   const char * lfname   = argv[2];
   const char * outfname = argv[3];
 
-  // Filters instanciation
+  // Filters instantiation
   ReaderType::Pointer                reader              = ReaderType::New();
   LabeledReaderType::Pointer         labeledReader       = LabeledReaderType::New();
   LabelMapFilterType::Pointer        filter              = LabelMapFilterType::New();

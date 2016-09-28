@@ -56,11 +56,11 @@ VectorDataFileReader<TOutputVectorData>
      this is intended to be called before attempting to use
      VectorDataIO classes for actually reading the file. If the file
      doesn't exist or it is not readable, and exception with an
-     approriate message will be thrown. */
+     appropriate message will be thrown. */
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>
-::TestFileExistanceAndReadability()
+::TestFileExistenceAndReadability()
 {
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
@@ -135,7 +135,7 @@ VectorDataFileReader<TOutputVectorData>
   try
     {
     m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
+    this->TestFileExistenceAndReadability();
     }
   catch (itk::ExceptionObject & err)
     {
@@ -198,7 +198,7 @@ VectorDataFileReader<TOutputVectorData>
   try
     {
     m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
+    this->TestFileExistenceAndReadability();
     }
   catch (itk::ExceptionObject & err)
     {

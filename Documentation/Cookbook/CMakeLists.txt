@@ -37,6 +37,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURC
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/recipes)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/Art)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/Art/MonteverdiImages)
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/Art/ClassifImages)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/Art/QtImages)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/_static)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_GENERATED_SOURCE_DIR}/_templates)
@@ -55,6 +56,12 @@ file(GLOB mvd_images ${CMAKE_CURRENT_SOURCE_DIR}/Art/MonteverdiImages/*.*)
 foreach(mvd_image ${mvd_images})
   get_filename_component(out_file ${mvd_image} NAME)
   configure_file(${mvd_image} ${RST_GENERATED_SOURCE_DIR}/Art/MonteverdiImages/${out_file} COPYONLY)
+endforeach()
+
+file(GLOB classif_images ${CMAKE_CURRENT_SOURCE_DIR}/Art/ClassifImages/*.*)
+foreach(classif_image ${classif_images})
+  get_filename_component(out_file ${classif_image} NAME)
+  configure_file(${classif_image} ${RST_GENERATED_SOURCE_DIR}/Art/ClassifImages/${out_file} COPYONLY)
 endforeach()
 
 file(GLOB qt_images ${CMAKE_CURRENT_SOURCE_DIR}/Art/QtImages/*.png)
@@ -104,10 +111,34 @@ add_custom_target(CookBookHTMLFromRST
   DEPENDS generate_otbapps_rst
   COMMENT "Building RST documentation in html")
 
-# add_custom_target(CookBookHTMLFromPDF
-#   ALL
-#   COMMAND ${CMAKE_MAKE_PROGRAM} pdf
-#   WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
-#   COMMENT "Building RST documentation in pdf")
+find_program(TAR_COMMAND
+  NAMES tar
+  PATHS /usr/bin
+)
+mark_as_advanced(TAR_COMMAND)
 
-# add_dependencies(CookBookHTMLFromPDF CookBookHTMLFromRST)
+if(TAR_COMMAND)
+  add_custom_target(CookBookArchive
+    ALL
+    COMMAND ${TAR_COMMAND}
+      --transform "s/^html/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/"
+      -czf ${CMAKE_BINARY_DIR}/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz html
+    WORKING_DIRECTORY ${RST_BUILD_DIR}
+    DEPENDS CookBookHTMLFromRST
+    COMMENT "Creating archive for html CookBook")
+endif()
+
+find_program(PDFLATEX_COMMAND
+  NAMES pdflatex
+  PATHS /usr/bin
+)
+mark_as_advanced(PDFLATEX_COMMAND)
+
+if(PDFLATEX_COMMAND)
+  add_custom_target(CookBookPDFFromRST
+    ALL
+    COMMAND ${CMAKE_MAKE_PROGRAM} latexpdf
+    WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
+    DEPENDS generate_otbapps_rst
+    COMMENT "Building RST documentation in pdf")
+endif()

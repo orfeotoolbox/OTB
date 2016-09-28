@@ -99,7 +99,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 {
   // set the output dataset
   this->SetNthOutput(1+level,data);
-  // instanciate the corresponding samplers
+  // instantiate the corresponding samplers
   if (m_Samplers.size() < (level + 1))
     {
     m_Samplers.resize(level + 1);

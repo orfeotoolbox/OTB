@@ -51,7 +51,7 @@
 //
 // The band order in the image products can be also quite tricky. It could be in the wavelength order,
 // as it is the case for Quickbird (1: Blue, 2: Green, 3: Red, 4: NIR), in this case, you
-// have to be carefull to reverse the order if you want a natural display. It could also be reverse
+// have to be careful to reverse the order if you want a natural display. It could also be reverse
 // to facilitate direct viewing, as for SPOT5 (1: NIR, 2: Red, 3: Green, 4: SWIR) but in this situations
 // you have to be careful when you process the image.
 //

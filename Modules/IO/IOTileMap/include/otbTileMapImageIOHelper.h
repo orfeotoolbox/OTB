@@ -50,7 +50,7 @@ public:
   itkTypeMacro(TileMapImageIOHelper, itk::Object);
   itkNewMacro(Self);
 
-  /** Correspondance between depth and scale for the quad tree paradigm*/
+  /** Correspondence between depth and scale for the quad tree paradigm*/
   const std::string ConvertDepthToScale(const unsigned int depth) const;
 
 protected:

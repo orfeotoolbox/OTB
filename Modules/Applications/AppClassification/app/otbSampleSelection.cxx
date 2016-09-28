@@ -87,27 +87,27 @@ private:
       "The input support image and the input training vectors shall be given in "
       "parameters 'in' and 'vec' respectively. Only the sampling grid (origin, size, spacing)"
       "will be read in the input image.\n"
-      "There are several strategies to select samples (parameter strategy) :\n"
-      "  - smallest (default) : select the same number of sample in each class\n" 
-      "    so that the smallest one is fully sampled.\n"
-      "  - constant : select the same number of samples N in each class\n" 
-      "    (with N below or equal to the size of the smallest class).\n"
-      "  - byclass : set the required number for each class manually, with an input CSV file\n" 
-      "    (first column is class name, second one is the required samples number).\n"
-      "There is also a choice on the sampling type to performs :\n"
+      "There are several strategies to select samples (parameter strategy) : \n\n"
+      "  - smallest (default) : select the same number of sample in each class" 
+      " so that the smallest one is fully sampled.\n"
+      "  - constant : select the same number of samples N in each class" 
+      " (with N below or equal to the size of the smallest class).\n"
+      "  - byclass : set the required number for each class manually, with an input CSV file" 
+      " (first column is class name, second one is the required samples number).\n\n"
+      "There is also a choice on the sampling type to performs : \n\n"
       "  - periodic : select samples uniformly distributed\n"
-      "  - random : select samples randomly distributed\n"
+      "  - random : select samples randomly distributed\n\n"
       "Once the strategy and type are selected, the application outputs samples positions"
       "(parameter out).\n\n"
       
-      "The other parameters to look at are :\n"
+      "The other parameters to look at are : \n\n"
       "  - layer : index specifying from which layer to pick geometries.\n"
       "  - field : set the field name containing the class.\n"
       "  - mask : an optional raster mask can be used to discard samples.\n"
       "  - outrates : allows outputting a CSV file that summarizes the sampling rates for each class.\n"
       
       "\nAs with the PolygonClassStatistics application, different types  of geometry are supported : "
-      "polygons, lines, points. \nThe behavior of this application is different for each type of geometry :\n"
+      "polygons, lines, points. \nThe behavior of this application is different for each type of geometry : \n\n"
       "  - polygon: select points whose center is inside the polygon\n"
       "  - lines  : select points intersecting the line\n"
       "  - points : select closest point to the provided point\n");
@@ -309,7 +309,7 @@ private:
       inputGeomSet = GeometriesType::New(vectors);
       reprojVector = otb::ogr::DataSource::New();
       outputGeomSet = GeometriesType::New(reprojVector);
-      // Filter instanciation
+      // Filter instantiation
       geometriesProjFilter = ProjectionFilterType::New();
       geometriesProjFilter->SetInput(inputGeomSet);
       if (imageProjectionRef.empty())

@@ -4,96 +4,350 @@ Classification
 Pixel based classification
 --------------------------
 
-The classification in the application framework provides a supervised
-pixel-wise classification chain based on learning from multiple images,
-and using one specified machine learning method like SVM, Bayes, KNN,
-Random Forests, Artificial Neural Network, and others...(see application
-help of *TrainImagesClassifier* for further details about all the
-available classifiers). It supports huge images through streaming and
-multi-threading. The classification chain performs a training step based
-on the intensities of each pixel as features. Please note that all the
-input images must have the same number of bands to be comparable.
+Orfeo ToolBox ships with a set of application to perform supervised
+pixel-based image classification. This framework allows to learn from
+multiple images, and using several machine learning method such as
+SVM, Bayes, KNN, Random Forests, Artificial Neural Network, and
+others...(see application help of ``TrainImagesClassifier`` and
+``TrainVectorClassifier`` for further details about all the available
+classifiers). Here is an overview of the complete workflow:
 
-Statistics estimation
-~~~~~~~~~~~~~~~~~~~~~
+1. Compute samples statistics for each image
+2. Compute sampling rates for each image (only if more than one input image)
+3. Select samples positions for each image
+4. Extract samples measurements for each image
+5. Compute images statistics
+6. Train machine learning model from samples
 
-In order to make these features comparable between each training images,
-the first step consists in estimating the input images statistics. These
-statistics will be used to center and reduce the intensities (mean of 0
-and standard deviation of 1) of samples based on the vector data
-produced by the user. To do so, the *ComputeImagesStatistics* tool can
-be used:
+Samples statistics estimation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first step of the framework is to know how many samples are
+available for each class in your image. The ``PolygonClassStatistics``
+will do this job for you. This application processes a set of training
+geometries and an image and outputs statistics about available samples
+(i.e. pixel covered by the image and out of a no-data mask if
+provided), in the form of a XML file:
+
+-  number of samples per class
+
+-  number of samples per geometry
+
+Supported geometries are polygons, lines and points. Depending on the
+geometry type, this application behaves differently:
+
+-  polygon: select pixels whose center falls inside the polygon
+
+-  lines: select pixels intersecting the line
+
+-  points: select closest pixel to the provided point
+
+The application will require the input image, but it is only used to
+define the footprint in which samples will be selected. The user can
+also provide a raster mask, that will be used to discard pixel
+positions, using parameter ``-mask``.
+
+A simple use of the application ``PolygonClassStatistics`` could be as
+follows :
+
+::
+
+    otbcli_PolygonClassStatistics  -in     LANDSAT_MultiTempIm_clip_GapF_20140309.tif
+                                   -vec    training.shp 
+                                   -field  CODE 
+                                   -out    classes.xml
+
+The ``-field`` parameter is the name of the field that corresponds to class
+labels in the input geometries.
+
+The output XML file will look like this::
+   
+   <?xml version="1.0" ?>
+   <GeneralStatistics>
+    <Statistic name="samplesPerClass">
+        <StatisticMap key="11" value="56774" />
+        <StatisticMap key="12" value="59347" />
+        <StatisticMap key="211" value="25317" />
+        <StatisticMap key="221" value="2087" />
+        <StatisticMap key="222" value="2080" />
+        <StatisticMap key="31" value="8149" />
+        <StatisticMap key="32" value="1029" />
+        <StatisticMap key="34" value="3770" />
+        <StatisticMap key="36" value="941" />
+        <StatisticMap key="41" value="2630" />
+        <StatisticMap key="51" value="11221" />
+    </Statistic>
+    <Statistic name="samplesPerVector">
+        <StatisticMap key="0" value="3" />
+        <StatisticMap key="1" value="2" />
+        <StatisticMap key="10" value="86" />
+        <StatisticMap key="100" value="21" />
+        <StatisticMap key="1000" value="3" />
+        <StatisticMap key="1001" value="27" />
+        <StatisticMap key="1002" value="7" />
+        ...
+
+
+
+Samples selection
+~~~~~~~~~~~~~~~~~
+
+Now, we know exactly how many samples are available in the image for
+each class and each geometry in the training set. From this
+statistics, we can now compute the sampling rates to apply for each
+classes, and perform the sample selection. This will be done by the
+``SampleSelection`` application.
+
+There are several strategies to compute those sampling rates:
+
+* **Constant strategy:** All classes will be sampled with the same number
+  of samples, which is user-defined.
+* **Smallest class strategy:** The class with the least number of samples
+  will be fully sampled. All other classes will be sampled with the
+  same number of samples.
+* **Take all strategy:** Take all the available samples
+* **By class strategy:** Set a target number of samples for each
+  class. The number of samples for each class is read from a CSV file.
+
+To actually select the sample positions, there are two available
+sampler:
+
+* **Random:** Randomly select samples while respecting the sampling
+  rate
+* **Periodic:** Sample periodically using the sampling rate
+
+The application will make sure that samples spans the whole training
+set extent by adjusting the sampling rate. Depending on the strategy
+to determine the sampling rate, some geometries of the training set
+might not be sampled.
+
+The application will accept as input the input image and training
+geometries, as well class statistics XML file computed during previous
+step. It will output a vector file containing point geometries which
+indicate the location of the samples.
+
+::
+
+   otbcli_SampleSelection -in LANDSAT_MultiTempIm_clip_GapF_20140309.tif
+                          -vec training.shp
+                          -instats classes.xml
+                          -field CODE
+                          -strategy smallest
+                          -outrates rates.csv
+                          -out samples.sqlite
+    
+The csv file written by the optional ``-outrates`` parameter sums-up what
+has been done during samples selection::
+     
+     #className requiredSamples totalSamples rate
+     11	 941	56774	0.0165745
+     12	 941	59347	0.0158559
+     211 941  25317	0.0371687
+     221 941  2087	0.450886
+     222 941  2080	0.452404
+     31	 941	8149	0.115474
+     32	 941	1029	0.91448
+     34	 941	3770	0.249602
+     36	 941	941 	1
+     41	 941	2630	0.357795
+     51	 941	11221	0.0838606
+
+
+.. figure:: ../Art/ClassifImages/sample-selection.png
+
+   This image shows the polygons of the training with a color
+   corresponding to their class. The red dot shows the samples that
+   have been selected.
+
+
+Samples extraction
+~~~~~~~~~~~~~~~~~~
+
+Now that we selected the location of the samples, we will attach
+measurement to them. This is the purpose of the ``SampleExtraction``
+application. It will walk through the list of samples and extract the
+underlying pixel values. If no ``-out`` parameter is given, the
+``SampleExtraction`` application can work in update mode, thus allowing
+to extract features from multiple images of the same location.
+
+Features will be stored in fields attached to each sample. Field name
+can be generated from a prefix a sequence of numbers (i.e. if
+prefix is ``feature_`` then features will be named ``feature_0``,
+``feature_1``, ...). This can be achieved with the ``-outfield prefix``
+option. Alternatively, one can set explicit names for all features
+using the ``-outfield list`` option.
+
+::
+
+   otbcli_SampleExtraction -in LANDSAT_MultiTempIm_clip_GapF_20140309.tif
+                           -vec samples.sqlite
+                           -outfield prefix
+                           -outfield.prefix.name band_
+                           -field CODE
+
+
+.. figure:: ../Art/ClassifImages/samples-extraction.png
+
+   Attributes table of the updated samples file. 
+            
+
+Working with several images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the training set spans several images, the ``MultiImageSamplingRate``
+application allows to compute the appropriate sampling rates per image
+and per class, in order to get samples that spans the whole images
+coverage.
+
+It is first required to run the ``PolygonClassStatistics`` application
+on each image of the set separately. The ``MultiImageSamplingRate``
+application will then read all the produced statistics XML files and
+derive the sampling rates according the sampling strategy. For more
+information, please refer to the `Samples statistics estimation`_ section.
+
+There are 3 modes for the sampling rates estimation from multiple
+images:
+
+* **Proportional mode:** For each class, the requested number of
+  samples is divided proportionally among the images.
+* **Equal mode:** For each class, the requested number of samples is
+  divided equally among the images.
+* **Custom mode:** The user indicates the target number of samples for
+  each image.
+
+The different behaviors for each mode and strategy are described as follows.
+
+:math:`T_i( c )` and :math:`N_i( c )` refers resp. to the total number and needed number
+of samples in image :math:`i` for class :math:`c`. Let's call :math:`L` the total number of
+image.
+
+* **Strategy = all**
+  
+  - Same behavior for all modes proportional, equal, custom : take all samples
+  
+* **Strategy = constant** (let's call :math:`M` the global number of samples per
+  class required)
+
+  - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M * T_i( c ) / sum_k( T_k(c) )`
+  - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M / L`
+  - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M_i` where :math:`M_i` is the custom requested number of samples
+    for image i
+
+* **Strategy = byClass** (let's call :math:`M(c)` the global number of samples for
+  class c)
+
+  - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M(c) * T_i( c ) / sum_k( T_k(c) )`
+  - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = M(c) / L`
+  - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
+    :math:`Ni( c ) = M_i(c)` where :math:`M_i(c)` is the custom requested number of
+    samples for each image :math:`i` and each class :math:`c`
+  
+* **Strategy = smallest class**
+      
+  - *Mode = proportional:* the smallest class is computed globally, then this smallest size is used for the strategy constant+proportional
+  - *Mode = equal:* the smallest class is computed globally, then this smallest size is used for the strategy constant+equal
+  - *Mode = custom:* the smallest class is computed and used for each image separately
+
+The ``MultiImageSamplingRate`` application can be used as follows:
+
+::
+
+   otbcli_MultiImageSamplingRate -il stats1.xml stats2.xml stats3.xml
+                                 -out rates.csv
+                                 -strategy smallest
+                                 -mim proportional
+    
+          
+The output filename from ``-out`` parameter will be used to generate as
+many filenames as necessary (e.g. one per input filename), called
+``rates_1.csv``, ``rates_2.csv`` ... 
+
+Once rates are computed for each image, sample selection can be
+performed on each corresponding image using the by class strategy:
+
+::
+   
+   otbcli_SampleSelection -in img1.tif
+                          -vec training.shp
+                          -instats stats1.xml
+                          -field CODE
+                          -strategy byclass
+                          -strategy.byclass.in rates_1.csv
+                          -out samples1.sqlite
+
+Samples extraction can then be performed on each image b y following
+the `Samples extraction`_ step. The learning application can process
+several samples files.
+    
+Images statistics estimation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some machine learning algorithms converge faster if the range of
+features is :math:`[-1,1]` or :math:`[0,1]`. Other will be sensitive
+to relative ranges between feature, e.g. a feature with a larger range
+might have more weight in the final decision. This is for instance the
+case for machine learning algorithm using euclidean distance at some
+point to compare features. In those cases, it is advised to normalize
+all features to the range :math:`[-1,1]` before performing the
+learning. For this purpose, the ``ComputeImageStatistics`` application
+allows to compute and output to an XML file the mean and standard
+deviation based on pooled variance of each band for one or several
+images.
 
 ::
 
     otbcli_ComputeImagesStatistics -il  im1.tif im2.tif im3.tif
                                    -out images_statistics.xml
 
-This tool will compute each band mean, compute the standard deviation
-based on pooled variance of each band and finally export them to an XML
-file. The features statistics XML file will be an input of the following
-tools.
+The output statistics file can then be fed to the training and
+classification applications.
 
-Building the training data set
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As the chain is supervised, we first need to build a training set with
-positive examples of different objects of interest. These polygons must
-be saved in OGR vector format supported by GDAL like ESRI shapefile for
-example.
+Training the model
+~~~~~~~~~~~~~~~~~~
 
-Please note that the positive examples in the vector data should have a
-\`\`Class\`\` field with a label value higher than 1 and coherent in
-each images.
-
-You can generate the vector data set with software for example and save
-it in an OGR vector format supported by (ESRI shapefile for example).
-should be able to transform the vector data into the image coordinate
-system.
-
-Performing the learning scheme
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Once images statistics have been estimated, the learning scheme is the
-following:
-
-#. For each input image:
-
-   #. Read the region of interest (ROI) inside the shapefile,
-
-   #. Generate validation and training data within the ROI,
-
-   #. Add vectors respectively to the training samples set and the
-      validation samples set.
-
-#. Increase the size of the training samples set and balance it by
-   generating new noisy samples from the previous ones,
-
-#. Perform the learning with this training set
-
-#. Estimate performances of the classifier on the validation samples set
-   (confusion matrix, precision, recall and F-Score).
-
-Let us consider a SVM classification. These steps can be performed by
-the *TrainImagesClassifier* command-line using the following:
+Now that the training samples are ready, we can perform the learning
+using the ``TrainVectorClassifier`` application.
 
 ::
 
-    otbcli_TrainImagesClassifier -io.il      im1.tif im2.tif im3.tif
-                                 -io.vd      vd1.shp vd2.shp vd3.shp
-                                 -io.imstat  images_statistics.xml
-                                 -classifier svm (classifier_for_the_training)
-                                 -io.out     model.svm
+   otbcli_TrainVectorClassifier -io.vd samples.sqlite
+                                -cfield CODE
+                                -io.out model.rf
+                                -classifier rf
+                                -feat band_0 band_1 band_2 band_3 band_4 band_5 band_6
 
-Additional groups of parameters are also available (see application help
-for more details):
+The ``-classifier`` parameter allows to choose which machine learning
+model algorithm to train. Please refer to the
+``TrainVectorClassifier`` application reference documentation.
 
--  ``-elev`` Handling of elevation (DEM or average elevation)
+In case of multiple samples files, you can add them to the ``-io.vd``
+parameter (see  `Working with several images`_ section).
 
--  ``-sample`` Group of parameters for sampling
+The feature to be used for training must be explicitly listed using
+the ``-feat`` parameter. Order of the list matters.
 
--  ``-classifier`` Classifiers to use for the training, and their
-   corresponding groups of parameters
+If you want to use a statistic file for features normalization, you
+can pass it using the ``-io.stats`` parameter. Make sure that the
+order of feature statistics in the statistics file matches the order
+of feature passed to the ``-feat`` option.
+
+The field in vector data allowing to specify the label of each sample
+can be set using the ``-cfield`` option.
+
+By default, the application will estimate the trained classifier
+performances on the same set of samples that has been used for
+training. The ``-io.vd`` parameter allows to specify a different
+samples file for this purpose, for a more fair estimation of the
+performances. Note that this performances estimation scheme can also
+be estimated afterward (see `Validating the classification model`_
+section).
+                     
 
 Using the classification model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,12 +359,13 @@ classify pixel inside defined classes on a new image using the
 ::
 
     otbcli_ImageClassifier -in     image.tif
-                           -imstat images_statistics.xml
-                           -model  model.svm
+                           -model  model.rf
                            -out    labeled_image.tif
 
 You can set an input mask to limit the classification to the mask area
 with value >0.
+
+-imstat images_statistics.xml
 
 Validating the classification model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,10 +397,10 @@ Fancy classification results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Color mapping can be used to apply color transformations on the final
-graylevel label image. It allows to get an RGB classification map by
+gray level label image. It allows to get an RGB classification map by
 re-mapping the image values to be suitable for display purposes. One can
 use the *ColorMapping* application. This tool will replace each label
-with an 8-bits RGB color specificied in a mapping file. The mapping file
+with an 8-bits RGB color specified in a mapping file. The mapping file
 should look like this :
 
 ::
@@ -190,7 +445,7 @@ After having processed several classifications of the same input image
 but from different models or methods (SVM, KNN, Random Forest,...), it
 is possible to make a fusion of these classification maps with the
 *FusionOfClassifications* application which uses either majority voting
-or the Demspter Shafer framework to handle this fusion. The Fusion of
+or the Dempster-Shafer framework to handle this fusion. The Fusion of
 Classifications generates a single more robust and precise
 classification map which combines the information extracted from the
 input list of labeled images.
@@ -210,7 +465,7 @@ parameters :
 
 -  ``-undecidedlabel`` label for the undecided class (default value = 0)
 
-The input pixels with the nodata class label are simply ignored by the
+The input pixels with the no-data class label are simply ignored by the
 fusion process. Moreover, the output pixels for which the fusion process
 does not result in a unique class label, are set to the undecided value.
 
@@ -288,7 +543,7 @@ each of them should be confronted with a ground truth. For this purpose,
 the masses of belief of the class labels resulting from a classifier are
 estimated from its confusion matrix, which is itself exported as a
 \*.CSV file with the help of the *ComputeConfusionMatrix* application.
-Thus, using the Dempster Shafer method to fuse classification maps needs
+Thus, using the Dempster-Shafer method to fuse classification maps needs
 an additional input list of such \*.CSV files corresponding to their
 respective confusion matrices.
 
@@ -314,9 +569,9 @@ based on the confidence level in each classifier.
 .. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
 .. figure:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
 
-Figure 5: From left to right: Original image, and fancy colored classified image obtained by a Dempster Shafer fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white). 
+Figure 5: From left to right: Original image, and fancy colored classified image obtained by a Dempster-Shafer fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white). 
 
-Recommandations to properly use the fusion of classification maps
+Recommendations to properly use the fusion of classification maps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to properly use the *FusionOfClassifications* application, some
@@ -331,7 +586,7 @@ the interpretation of the ``OutputFusedClassificationImage``.
 Majority voting based classification map regularization
 -------------------------------------------------------
 
-Resulting classification maps can be regularized in order to smoothen
+Resulting classification maps can be regularized in order to smooth
 irregular classes. Such a regularization process improves classification
 results by making more homogeneous areas which are easier to handle.
 
@@ -408,7 +663,7 @@ images, which means that the value of each pixel corresponds to the
 class label it belongs to. The ``InputLabeledImage`` is commonly an
 image generated with a classification algorithm such as the SVM
 classification. Remark: both ``InputLabeledImage`` and
-``OutputLabeledImage`` are not necessarily of the same datatype.
+``OutputLabeledImage`` are not necessarily of the same type.
 Secondly, if ip.suvbool == true, the Undecided label value must be
 different from existing labels in the input labeled image in order to
 avoid any ambiguity in the interpretation of the regularized
@@ -546,7 +801,7 @@ classification and regression mode.
 
 -  K-Nearest Neighbors
 
-The behaviour of application is very similar to . From the input data
+The behavior of application is very similar to . From the input data
 set, a portion of the samples is used for training, whereas the other
 part is used for validation. The user may also set the model to train
 and its parameters. Once the training is done, the model is stored in an
@@ -585,44 +840,4 @@ The model to use is read from file (the one produced during training).
                               -model  model.txt
                               -imstat stats.xml
                               -out    prediction.tif
-
-Samples selection
------------------
-
-Since release 5.4, new functionalities related to the handling of the
-vectors from the training data set (see also [sssec:building]) were
-added to OTB.
-
-The first improvement was provided by the application
-PolygonClassStatistics. This application processes a set of training
-geometries, and outputs statistics about the sample distribution in the
-input geometries (in the form of a xml file) :
-
--  number of samples per class
-
--  number of samples per geometry
-
-Supported geometries are polygons, lines and points; depending on the
-geometry type, this application behaves differently :
-
--  polygon : select pixels whose center is inside the polygon
-
--  lines : select pixels intersecting the line
-
--  points : select closest pixel to the provided point
-
-The application also takes as input a support image, but the values of
-its pixels are not used. The purpose is rather to define the image grid
-that will later provide the samples. The user can also provide a raster
-mask, that will be used to discard pixel positions.
-
-A simple use of the application PolygonClassStatistics could be as
-follows :
-
-::
-
-    otbcli_PolygonClassStatistics  -in     support_image.tif
-                                   -vec    variousTrainingVectors.sqlite
-                                   -field  class
-                                   -out    polygonStat.xml
 

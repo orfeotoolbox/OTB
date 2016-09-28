@@ -89,7 +89,7 @@ public:
 
   /** Set the value of the parameter a and b.
    * Those parameters are defined as static component in order to call it far
-   * away from the instanciation of the class (through the SOM training for instance) */
+   * away from the instantiation of the class (through the SOM training for instance) */
   static double Alpha;
   static double Beta;
   static void SetAlphaBeta(double a, double b);
@@ -102,7 +102,7 @@ protected:
   ~FlexibleDistanceWithMissingValue() ITK_OVERRIDE {}
 };  // end of class
 
-/** Static variable instanciation */
+/** Static variable instantiation */
 template<class TVector>
 double FlexibleDistanceWithMissingValue<TVector>::Alpha = 1.0;
 

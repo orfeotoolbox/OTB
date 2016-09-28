@@ -221,7 +221,7 @@ private:
   /** Set to 0 by default.*/
   LabelType m_InitialLabel;
 
-  //TODO dont need this attributes now compute with VectorDataProperties
+  //TODO don't need this attributes now compute with VectorDataProperties
 
   SpacingType   m_Spacing;
   OriginType    m_Origin;

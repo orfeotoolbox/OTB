@@ -49,13 +49,13 @@ int otbReduceSpectralResponse(int argc, char * argv[])
   /** Load the spectral response file*/
   mySpectralResponse->Load(spectreFile, 100.0);
   SatRSRPointerType myRSR = SatRSRType::New();
-  /** Set the satelite number of bands */
+  /** Set the satellite number of bands */
   myRSR->SetNbBands(nbBand);
-  /** Load the satelite response file*/
+  /** Load the satellite response file*/
   myRSR->Load(RSRfile);
   //Instantiation
   ReduceResponseTypePointerType myReduceResponse = ReduceResponseType::New();
-  /** Load the satelite response in the simulator */
+  /** Load the satellite response in the simulator */
   myReduceResponse->SetInputSatRSR(myRSR);
   /** Load the spectral response of the object in the simulator*/
   myReduceResponse->SetInputSpectralResponse(mySpectralResponse);

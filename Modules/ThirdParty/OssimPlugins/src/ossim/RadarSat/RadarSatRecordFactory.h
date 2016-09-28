@@ -43,10 +43,10 @@ public:
   void RegisterRecord(int id, RadarSatRecord * record);
 
   /**
-   * @brief Instanciates a new Record
-   * @param id Id of the Record we want to instanciate
+   * @brief Instantiates a new Record
+   * @param id Id of the Record we want to instantiate
    */
-  RadarSatRecord* Instanciate(int id) ;
+  RadarSatRecord* Instantiate(int id) ;
 protected:
 
   /**

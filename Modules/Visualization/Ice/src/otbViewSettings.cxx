@@ -129,12 +129,12 @@ void ViewSettings::SetPersepectiveAngle()
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
   forwardTransform->SetInputKeywordList(m_KeywordList);
   forwardTransform->SetInputProjectionRef(m_Wkt);
-  forwardTransform->InstanciateTransform();
+  forwardTransform->InstantiateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
   inverseTransform->SetOutputProjectionRef(m_Wkt);
   inverseTransform->SetOutputKeywordList(m_KeywordList);
-  inverseTransform->InstanciateTransform();
+  inverseTransform->InstantiateTransform();
 
   PointType centerPoint = GetViewportCenter();
 
@@ -163,12 +163,12 @@ void ViewSettings::SetNorthUpAngle()
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
   forwardTransform->SetInputKeywordList(m_KeywordList);
   forwardTransform->SetInputProjectionRef(m_Wkt);
-  forwardTransform->InstanciateTransform();
+  forwardTransform->InstantiateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
   inverseTransform->SetOutputProjectionRef(m_Wkt);
   inverseTransform->SetOutputKeywordList(m_KeywordList);
-  inverseTransform->InstanciateTransform();
+  inverseTransform->InstantiateTransform();
   
   PointType centerPoint = GetViewportCenter();
   

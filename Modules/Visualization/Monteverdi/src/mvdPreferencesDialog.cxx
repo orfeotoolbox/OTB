@@ -115,7 +115,7 @@ PreferencesDialog
   m_UI->setupUi( this );
 
   //
-  // Runtime UI initilization.
+  // Runtime UI initialization.
   m_UI->settingsGroupBox->setVisible( false );
 
   AddItemsInto( m_UI->resolutionComboBox, "mvd", RESOLUTION_NAMES, RESOLUTION_COUNT );

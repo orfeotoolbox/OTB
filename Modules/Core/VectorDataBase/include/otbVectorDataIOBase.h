@@ -119,7 +119,7 @@ public:
     return false;
   }
 
-  /*   /\** Read the spacing and dimentions of the VectorData. */
+  /*   /\** Read the spacing and dimensions of the VectorData. */
   /*    * Assumes SetFileName has been called with a valid file name. *\/ */
   /*   virtual void ReadVectorDataInformation() = 0; */
 

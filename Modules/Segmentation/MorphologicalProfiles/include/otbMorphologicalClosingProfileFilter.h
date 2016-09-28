@@ -35,7 +35,7 @@ namespace otb
  * NO. 2, February 2001, p. 309-320.
  * \par
  *
- * The opening profile is a set of images beeing the result of a geodesic morphological
+ * The opening profile is a set of images being the result of a geodesic morphological
  * closing by reconstruction with an increasing range of structuring element sizes.
  *
  * For more information on profiles please refer to the documentation of the otb::ImageToProfileFilter

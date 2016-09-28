@@ -155,8 +155,8 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     nbBands = this->GetInput()->GetNumberOfComponentsPerPixel();
     bytePerPixel = sizeof(InputPixelType);
 
-    // buffer casted in unsigned long cause under Win32 the adress
-    // don't begin with 0x, the adress in not interpreted as
+    // buffer casted in unsigned long cause under Win32 the address
+    // don't begin with 0x, the address in not interpreted as
     // hexadecimal but alpha numeric value, then the conversion to
     // integer make us pointing to an non allowed memory block => Crash.
     std::ostringstream stream;
@@ -227,8 +227,8 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       size = this->GetInputMask()->GetLargestPossibleRegion().GetSize();
       nbBands = this->GetInputMask()->GetNumberOfComponentsPerPixel();
       bytePerPixel = sizeof(InputPixelType);
-      // buffer casted in unsigned long cause under Win32 the adress
-      // don't begin with 0x, the adress in not interpreted as
+      // buffer casted in unsigned long cause under Win32 the address
+      // don't begin with 0x, the address in not interpreted as
       // hexadecimal but alpha numeric value, then the conversion to
       // integer make us pointing to an non allowed memory block => Crash.
       std::ostringstream maskstream;

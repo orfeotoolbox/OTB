@@ -66,7 +66,7 @@ IF( NOT OTB_DATA_LARGEINPUT_ROOT )
 ENDIF( NOT OTB_DATA_LARGEINPUT_ROOT )
 
 # OTB_DATA_PATHS is searched recursively.. you need not enter sub-directories
-SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input::${OTB_DATA_LARGEINPUT_ROOT}" CACHE STRING "Where the OTB data is. Enter a double colon seperated list.")
+SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input::${OTB_DATA_LARGEINPUT_ROOT}" CACHE STRING "Where the OTB data is. Enter a double colon separated list.")
 
 #
 # Rebuild the Software Guide figures or not ?

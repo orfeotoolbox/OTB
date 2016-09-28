@@ -59,7 +59,7 @@ public:
   typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
   /** InputImage dimension constant */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  /** Overiding the SetInput() and GetInput() methods */
+  /** Overriding the SetInput() and GetInput() methods */
   using Superclass::SetInput;
   virtual void SetInput(const InputImageType * image);
   InputImageType * GetInput(void);

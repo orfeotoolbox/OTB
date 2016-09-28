@@ -77,7 +77,7 @@ template <TransformDirection::TransformationDirection TTransform>
 char UtmMapProjection<TTransform>
 ::GetHemisphere() const
 {
-  //If this happens, we have to better control the instanciation of
+  //If this happens, we have to better control the instantiation of
   //the projection.
   assert(this->GetParameter("Hemisphere").size() > 0);
   char hemisphere = this->GetParameter("Hemisphere")[0];

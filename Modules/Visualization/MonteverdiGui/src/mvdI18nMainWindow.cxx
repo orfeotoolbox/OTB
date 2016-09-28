@@ -274,7 +274,7 @@ I18nMainWindow
 ::virtual_InitializeUI()
 {
   // Change to NULL model to force emitting GUI signals when GUI is
-  // instanciated. So, GUI will be initialized and controller-widgets
+  // instantiated. So, GUI will be initialized and controller-widgets
   // disabled.
   I18nApplication::Instance()->SetModel( NULL );
 }

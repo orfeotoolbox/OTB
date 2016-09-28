@@ -45,7 +45,7 @@ RCC8Graph<TVertex>
 }
 /**
  * Initialize a range of vertex.
- * \param num The index of the last vertices to intialize.
+ * \param num The index of the last vertices to initialize.
  */
 template <class TVertex>
 void

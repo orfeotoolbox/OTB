@@ -58,7 +58,7 @@ int otbKmzProductWriter(int argc, char* argv[])
   const char * demPath       = argv[2];
   const char * kmzFileName   = argv[3];
 
-  // Instanciate reader
+  // Instantiate reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
@@ -150,7 +150,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-  // Instanciate reader
+  // Instantiate reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(parseResult->GetInputImage());
 

@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
   // \center
   // \includegraphics[width=0.44\textwidth]{MarkovRegularization.eps}
   // \includegraphics[width=0.44\textwidth]{MarkovRegularization-scaled.eps}
-  // \itkcaption[MRF restauration]{Result of applying
+  // \itkcaption[MRF restoration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to regularized the result of another
   // classification. From left to right : original classification, regularized
   // classification}

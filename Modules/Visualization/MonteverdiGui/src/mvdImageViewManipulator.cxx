@@ -290,13 +290,13 @@ ImageViewManipulator
 #else
   otb::ViewSettings::SpacingType spacing( m_NativeSpacing );
 
-  // Here, zoom to arbitray scale-factor relative to
+  // Here, zoom to arbitrary scale-factor relative to
   // viewport spacing.
   //
   // If viewport spacing has previously been set to
   // image-spacing, it zooms to arbitrary scale-factor.
   //
-  // This is especially usefull to set user-arbitrary scale level
+  // This is especially useful to set user-arbitrary scale level
   // such as when editing scale-level in status-bar.
   spacing[ 0 ] /= scale;
   spacing[ 1 ] /= scale;
@@ -554,7 +554,11 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::ResizeEvent( QResizeEvent * otbUseInDebug( e ) )
+#if USE_VIEW_SETTINGS_SIDE_EFFECT 
+::ResizeEvent( QResizeEvent * )
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+::ResizeEvent( QResizeEvent * e )
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 {
   // assert( e!=NULL );
 

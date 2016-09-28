@@ -162,7 +162,7 @@ public:
   const VectorDataType* GetVectorDataByName(const std::string& key, const std::string& value);
 
 protected:
-  /** Generate Data method : lauch the process */
+  /** Generate Data method : launch the process */
   void GenerateData() ITK_OVERRIDE;
 
   /**

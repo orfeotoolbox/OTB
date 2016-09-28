@@ -596,7 +596,7 @@ Next we apply the H-alpha-A decomposition:
                              -out haa_extract.tif 
 
 The result has three bands : entropy (0..1) - alpha (0..90) - anisotropy
-(0..1). It is splitted into 3 mono-band images thanks to following
+(0..1). It is split into 3 mono-band images thanks to following
 command :
 
 ::

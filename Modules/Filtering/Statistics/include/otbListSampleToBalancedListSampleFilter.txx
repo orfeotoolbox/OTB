@@ -218,7 +218,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
      // Retrieve the current label
      LabelMeasurementVectorType currentLabelMeasurement = labelIt.GetMeasurementVector();
 
-     // Build a temporary ListSample wiht the current
+     // Build a temporary ListSample with the current
      // measurement vector to generate noised versions of this
      // measurement vector
      InputSampleListPointer tempListSample = InputSampleListType::New();

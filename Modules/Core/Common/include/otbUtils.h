@@ -27,7 +27,7 @@ namespace otb
 /** \class Utils
  * \brief Utils operations.
  *
- * Some usefull utilities in use across the library
+ * Some useful utilities in use across the library
  *
  *
  * \ingroup OTBCommon

@@ -55,13 +55,13 @@ namespace otb
  *
  * Correlation parameters are as follows :
  * - The radius allows tuning patches size (default is 3),
- * - The CorrelationThreshold allows setting a threshold bellow which
+ * - The CorrelationThreshold allows setting a threshold below which
  *   correlation is considered to fail. If the correlation maxima is
- *   bellow this threshold, the estimated elevation is
+ *   below this threshold, the estimated elevation is
  *   discarded (default is 0.7).
  * - The VarianceThreshold allows discarding master patches for which
- *   variance is too small to yeld reliable correlation. If the
- *   variance of the current master patch lies bellow this threshold, no
+ *   variance is too small to yield reliable correlation. If the
+ *   variance of the current master patch lies below this threshold, no
  *   elevation exploration is performed at this location (default is 4).
  *
  *   This filter supports multi-threading and streaming. It can

@@ -70,7 +70,7 @@ void QtWidgetListViewParameter::DoCreateWidget()
 {
   m_ListView = new QListWidget();
   m_ListView->setToolTip(m_ListViewParam->GetDescription());
-  m_ListView->setSelectionMode(QAbstractItemView::MultiSelection);
+  m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
   connect( m_ListView, SIGNAL(itemSelectionChanged()), this, SLOT(SelectedItems()) );
 

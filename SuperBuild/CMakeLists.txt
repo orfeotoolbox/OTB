@@ -22,6 +22,21 @@ if(APPLE)
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
+if(MSVC)
+  execute_process(
+  COMMAND ${CMAKE_C_COMPILER}
+  ERROR_VARIABLE ev
+  OUTPUT_VARIABLE ov
+  OUTPUT_QUIET
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  
+  set(OTB_MSVC_COMPILER_ARCH x64)
+  if("${ev}" MATCHES "x86")
+    set(OTB_MSVC_COMPILER_ARCH x86)
+  endif()
+  
+endif()
+
 # use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # when building, don't use the install RPATH already
@@ -127,6 +142,8 @@ if(DEFINED ENV{CMAKE_PREFIX_PATH})
 else()
   set(SB_CMAKE_PREFIX_PATH "${SB_INSTALL_PREFIX}")
 endif()
+
+list(REMOVE_DUPLICATES SB_CMAKE_PREFIX_PATH)
 
 set(SB_CMAKE_CACHE_ARGS)
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")

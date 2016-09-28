@@ -167,7 +167,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       ParameterType type = app->GetParameterType(key);
       std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
 
-      // if param is a Group, dont do anything, ParamGroup dont have values
+      // if param is a Group, don't do anything, ParamGroup don't have values
       if (type != ParameterType_Group)
       {
        bool paramExists = app->HasUserValue(key) && app->IsParameterEnabled(key);
@@ -183,7 +183,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 
            if(eParam!=ITK_NULLPTR)
              {
-             //Dont use app->HasUserValue which returns false always because of
+             //Don't use app->HasUserValue which returns false always because of
              //EmptyParameter::HasValue() is false for EmptyParameter
              if(eParam->HasUserValue())
                {
@@ -252,7 +252,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
            }
          else if (typeAsString == "Empty")
            {
-           //Nothing to do. copy emtpyValue
+           //Nothing to do. copy emptyValue
            value = emptyValue;
            }
 
