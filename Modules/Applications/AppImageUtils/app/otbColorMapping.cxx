@@ -353,7 +353,7 @@ private:
     // Optimal LUT
     AddChoice("method.optimal","Compute an optimized look-up table");
     SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighboring labels"
-                            " in a segmentation are mapped to highly contrasted colors.\n"
+                            " in a segmentation are mapped to highly contrasted colors. "
                             "[color to label] Searching all the colors present in the image to compute a continuous label list");
     AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
     SetParameterDescription("method.optimal.background","Value of the background label");
