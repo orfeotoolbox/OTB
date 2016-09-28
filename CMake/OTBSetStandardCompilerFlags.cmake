@@ -146,17 +146,19 @@ macro(check_compiler_platform_flags)
   # Since CMake 2.8.11, the size of the stack is not modified by CMake on
   # windows platform, it uses the default size: with visual compiler it is 1Mbyte
   # which is to lower for us (thanks to 6S code).
-  # if(MSVC)
-  #   if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
-  #     message(STATUS "The size of the stack is already defined, so we don't modified it.")
-  #   else()
-  #     set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /STACK:10000000")
-  #     message(STATUS "The stack size is set to 10 Mbytes (/STACK:10000000).")
-  #   endif()
-  # elseif(MINGW)
-  #   set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -Wl,--stack,10000000")
-  #   message(STATUS "The stack size is set to 10 Mbytes (-Wl,--stack,10000000).")
-  # endif() # if(MSVC)
+  if(MSVC)
+    if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
+      if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
+          message(STATUS "The size of the stack is already defined, so we don't modified it.")
+      else()
+          set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /STACK:10000000")
+          message(STATUS "The stack size is set to 10 Mbytes (/STACK:10000000).")
+      endif()
+    endif() #if (${CMAKE_VERSION..
+  elseif(MINGW)
+    set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -Wl,--stack,10000000")
+    message(STATUS "The stack size is set to 10 Mbytes (-Wl,--stack,10000000).")
+  endif() # if(MSVC)
 
   # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
   # warnings
