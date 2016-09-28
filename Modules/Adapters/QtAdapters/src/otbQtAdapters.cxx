@@ -173,7 +173,13 @@ SetWorkingDir( const QString & filepath )
 {
   assert( !filepath.isEmpty() );
 
-  return QDir::setCurrent( QFileInfo( filepath ).path() );
+  QFileInfo finfo( filepath );
+
+  return QDir::setCurrent(
+    finfo.isDir()
+    ? filepath
+    : finfo.path()
+  );
 }
 
 } // end namespace 'otb'
