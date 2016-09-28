@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -67,34 +69,28 @@ void QtWidgetOutputProcessXMLParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetOutputProcessXMLParameter::SelectFile()
+
+void
+QtWidgetOutputProcessXMLParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
-
-  fileDialog.setNameFilter("XML File (*.xml)");
-
   assert( m_Input!=NULL );
 
-  if( !m_Input->text().isEmpty() )
-    {
-    QFileInfo finfo( m_Input->text() );
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "XML File (*.xml)" ),
+      NULL )
+  );
 
-    fileDialog.setDirectory(
-      finfo.isDir()
-      ? finfo.absoluteFilePath()
-      : finfo.absoluteDir()
-    );
-    }
+  if( filename.isEmpty() )
+    return;
 
-  if (fileDialog.exec())
-    {
-    this->SetFileName( fileDialog.selectedFiles().at(0) );
-
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+  m_Input->setText( filename );
 }
+
 
 void QtWidgetOutputProcessXMLParameter::SetFileName(const QString& value)
 {

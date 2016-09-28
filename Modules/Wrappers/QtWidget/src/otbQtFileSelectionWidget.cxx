@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbQtFileSelectionWidget.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -63,28 +65,29 @@ void QtFileSelectionWidget::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtFileSelectionWidget::SelectFile()
+
+void
+QtFileSelectionWidget
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("All files (*)");
+  assert( m_Input!=NULL );
 
-  QFileInfo finfo( QString::fromStdString( GetFilename() ) );
-
-  fileDialog.setDirectory(
-    finfo.isDir()
-    ? finfo.absoluteFilePath()
-    : finfo.absoluteDir()
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "All files (*)" ),
+      NULL )
   );
 
-  if (fileDialog.exec())
-    {
-    QString filemane(fileDialog.selectedFiles().at(0));
-    m_Input->setText(filemane);
-    }
+  if( filename.isEmpty() )
+    return;
+
+  m_Input->setText( filename  );
 }
 
 
 }
+
 }

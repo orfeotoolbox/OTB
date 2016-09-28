@@ -99,5 +99,7 @@ void QtWidgetParameterBase::Reset(  )
   m_Param->SetAutomaticValue(false);
   this->UpdateGUI();
 }
+
 }
+
 }

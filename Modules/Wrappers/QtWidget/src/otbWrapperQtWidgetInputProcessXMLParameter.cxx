@@ -17,6 +17,10 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 
+
+#include <otbQtAdapters.h>
+
+
 namespace otb
 {
 namespace Wrapper
@@ -70,38 +74,32 @@ void QtWidgetInputProcessXMLParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetInputProcessXMLParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
-  fileDialog.setNameFilter("XML File (*.xml)");
 
+void
+QtWidgetInputProcessXMLParameter
+::SelectFile()
+{
   assert( m_Input!=NULL );
 
-  if( !m_Input->text().isEmpty() )
-    {
-    QFileInfo finfo( m_Input->text() );
+  QString filename(
+    GetOpenFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "XML File (*.xml)" ),
+      NULL,
+      QFileDialog::ReadOnly
+    )
+  );
 
-    fileDialog.setDirectory(
-      finfo.isDir()
-      ? finfo.absoluteFilePath()
-      : finfo.absoluteDir()
-    );
-    }
+  if( filename.isEmpty() )
+    return;
 
-  if (fileDialog.exec())
-    {
-    QString name = fileDialog.selectedFiles().at(0);
+  SetFileName( filename );
 
-    if( !name.isEmpty() )
-      {
-      this->SetFileName( name );
-
-      m_Input->setText(name);
-      }
-    }
+  m_Input->setText( filename  );
 }
+
 
 void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
