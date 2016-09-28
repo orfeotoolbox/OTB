@@ -124,9 +124,9 @@ public:
   ParameterGroup* GetParameterList();
 
   /* Get the internal application parameter specified
-   *
+   * if the follow flag is on, the function returns the target of proxy parameters
    * WARNING: this method may disappear from the API */
-  Parameter* GetParameterByKey(std::string parameter);
+  Parameter* GetParameterByKey(std::string parameter, bool follow=true);
 
   /* Get the internal application parameter specified
    *

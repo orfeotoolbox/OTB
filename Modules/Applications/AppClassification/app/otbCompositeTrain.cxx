@@ -20,6 +20,7 @@
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
+#include "otbWrapperProxyParameter.h"
 #include "itkStdStreamLogOutput.h"
 
 namespace otb
@@ -75,8 +76,27 @@ private:
     // share parameters with PolygonClassStatistics
     this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("in"));
     this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("vec"));
-    this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("field"));
+    //this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("field"));
     this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("layer"));
+
+    AddParameter(ParameterType_Group, "sample", "Training and validation samples parameters");
+    SetParameterDescription("sample",
+                          "This group of parameters allows you to set training and validation sample lists parameters.");
+
+    ParameterGroup* paramSample = dynamic_cast<ParameterGroup*>(GetParameterByKey("sample"));
+    if (paramSample)
+      {
+      ProxyParameter::Pointer fieldProxy = ProxyParameter::New();
+      fieldProxy->SetInternalParameter(m_PolygonAnalysis->GetParameterByKey("field"));
+      fieldProxy->SetKey("vfn");
+      fieldProxy->SetName(m_PolygonAnalysis->GetParameterByKey("field")->GetName());
+      fieldProxy->SetDescription(m_PolygonAnalysis->GetParameterByKey("field")->GetDescription());
+      paramSample->AddParameter(fieldProxy.GetPointer());
+      }
+    else
+      {
+      otbAppLogFATAL("Wrong casting of group parameter");
+      }
 
     // share parameters with SampleSelection
     this->GetParameterList()->AddParameter(m_SampleSelection->GetParameterByKey("out"));
@@ -115,7 +135,7 @@ private:
     // "layer" -> "SampleSelection.in"
     m_SampleSelection->SetParameterString("in",this->GetParameterString("in"));
     m_SampleSelection->SetParameterString("vec",this->GetParameterString("vec"));
-    m_SampleSelection->SetParameterString("field",this->GetParameterString("field"));
+    m_SampleSelection->SetParameterString("field",this->GetParameterString("sample.vfn"));
     m_SampleSelection->SetParameterInt("layer",this->GetParameterInt("layer"));
 
     if (HasValue("out"))
