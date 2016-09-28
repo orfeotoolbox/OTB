@@ -1,0 +1,22 @@
+diff -burN ossim-1.8.20-3.orig/ossim/include/ossim/matrix/newmatap.h ossim-1.8.20-3/ossim/include/ossim/matrix/newmatap.h
+--- ossim-1.8.20-3.orig/ossim/include/ossim/matrix/newmatap.h	2016-09-28 12:19:25.675442854 +0200
++++ ossim-1.8.20-3/ossim/include/ossim/matrix/newmatap.h	2016-09-28 12:20:57.847442134 +0200
+@@ -57,13 +57,15 @@
+ // 1,...,k-1,k+1,...l,k,l+1,...,p to
+ void LeftCircularUpdateCholesky(UpperTriangularMatrix &chol, int k, int l); 
+ 
++/* PATCH for otb terrasarx. need to add OSSIM_DLL to other methods before
++ * pushing this patch to ossim */
+ 
+-void SVD(const Matrix&, DiagonalMatrix&, Matrix&, Matrix&,
++void OSSIM_DLL SVD(const Matrix&, DiagonalMatrix&, Matrix&, Matrix&,
+     bool=true, bool=true);
+ 
+-void SVD(const Matrix&, DiagonalMatrix&);
++void OSSIM_DLL SVD(const Matrix&, DiagonalMatrix&);
+ 
+-inline void SVD(const Matrix& A, DiagonalMatrix& D, Matrix& U,
++inline void OSSIM_DLL SVD(const Matrix& A, DiagonalMatrix& D, Matrix& U,
+    bool withU = true) { SVD(A, D, U, U, withU, false); }
+ 
+ void SortSV(DiagonalMatrix& D, Matrix& U, bool ascending = false);
