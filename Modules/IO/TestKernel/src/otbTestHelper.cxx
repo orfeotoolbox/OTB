@@ -2195,12 +2195,16 @@ bool TestHelper::isHexaPointerAddress(const std::string& str, size_t pos, size_t
     }
 
   // pointer adress has to begin with '0x'
-  // it may also start with '00' but with size of 16 (assuming 64bit adress)
+  // it may also start with '00' with a size of 16 (64bit adress)
+  // or start with '01' with a size of 8 (32bit adress)
+  // Note: the '01' may change with systems (02, 03, ...)
   if (str[pos] != 48)
     {
     return false;
     }
-  if (!(str[pos+1] == 120 || (str[pos+1] == 48 && size == 16)))
+  if (!(str[pos+1] == 120 ||
+        (str[pos+1] == 48 && size == 16) ||
+        (str[pos+1] == 49 && size == 8)))
     {
     return false;
     }
