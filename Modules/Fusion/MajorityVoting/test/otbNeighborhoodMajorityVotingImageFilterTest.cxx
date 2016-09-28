@@ -160,56 +160,48 @@ int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int argc, char* argv[])
     
   rad[0] = 1;
   rad[1] = 1;
-
   NeighMajVotingFilter->SetLabelForNoDataPixels(10);
-      
   NeighMajVotingFilter->SetLabelForUndecidedPixels(7);
-
   seBall.SetRadius(rad);
   seBall.CreateStructuringElement();
   NeighMajVotingFilter->SetKernel(seBall);
-
   NeighMajVotingFilter->SetOnlyIsolatedPixels(true);
-
   PixelType value = 255;
   ImageType::IndexType coordinate;
   coordinate[0] = 10;
   coordinate[1] = 10;
-
   image->SetPixel(coordinate, value);
   image->Update();
   NeighMajVotingFilter->SetIsolatedThreshold(1);
   NeighMajVotingFilter->Update();
-
-  if(NeighMajVotingFilter->GetOutput()->GetPixel(coordinate) == value)
+  PixelType result = NeighMajVotingFilter->GetOutput()->GetPixel(coordinate);
+//Should be filtered
+  if(result == value)
     {
     std::cout << "one pixel\n";
     return EXIT_FAILURE;
     }
-
   coordinate[0] = 10;
   coordinate[1] = 11;
   image->SetPixel(coordinate, value);
   image->Update();
-
-  NeighMajVotingFilter->SetIsolatedThreshold(1);
+  NeighMajVotingFilter->Modified(); //needed for the filter to be updated
   NeighMajVotingFilter->Update();
-
-  if(NeighMajVotingFilter->GetOutput()->GetPixel(coordinate) == value)
+  result = NeighMajVotingFilter->GetOutput()->GetPixel(coordinate);
+  // Should not be filtered
+  if( result != value)
     {
-    std::cout << "2 pixels thres = 1" << '\n';
+    std::cout << "2 pixels thres = 1 result = " << int{result} << '\n';
     return EXIT_FAILURE;
     }
-
   NeighMajVotingFilter->SetIsolatedThreshold(3);
   NeighMajVotingFilter->Update();
-
-  if(NeighMajVotingFilter->GetOutput()->GetPixel(coordinate) != value)
+  result = NeighMajVotingFilter->GetOutput()->GetPixel(coordinate);
+//Should be filtered
+  if(result == value)
     {
     std::cout << "2 pixels thres = 2" << '\n';
     return EXIT_FAILURE;
     }
-
-
   return EXIT_SUCCESS;
 }
