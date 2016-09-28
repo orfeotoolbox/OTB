@@ -89,15 +89,16 @@ if(UNIX)
   #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
 
 else(MSVC)
-  if("${OTB_MSVC_COMPILER_ARCH}" MATCHES "x86")
-    set(BUILDING_WIN64 "NO")
-  else()
-    set(BUILDING_WIN64 "YES")
-  endif()
-
   STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
   STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
-  configure_file(${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+  configure_file(
+  ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in 
+  ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+  
+  if("${OTB_MSVC_COMPILER_ARCH}" MATCHES "x64")
+    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES")
+  endif()
+  
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
   set(GDAL_BUILD_COMMAND nmake
     /f ${GDAL_SB_SRC}/makefile.vc
