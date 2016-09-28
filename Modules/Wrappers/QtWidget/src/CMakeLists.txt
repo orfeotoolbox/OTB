@@ -76,10 +76,13 @@ set(OTBQtWidget_MOC_HDR
 QT4_WRAP_CPP(OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR})
 
 add_library(OTBQtWidget ${OTBQtWidget_SRC} ${OTBQtWidget_MOC_SRC})
-target_link_libraries(OTBQtWidget
+
+target_link_libraries( OTBQtWidget
   ${OTBApplicationEngine_LIBRARIES}
   ${OTBQt4_LIBRARIES}
+  ${OTBQtAdapters_LIBRARIES}
   )
+
 otb_module_target(OTBQtWidget)
 
 add_executable(otbApplicationLauncherQt otbApplicationLauncherQt.cxx)
