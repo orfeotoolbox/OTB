@@ -286,6 +286,133 @@ SamplingRateCalculatorList
 
 void
 SamplingRateCalculatorList
+::SetPercentageOfSamples(std::vector<double> &p, PartitionType t)
+{
+  if (p.empty())
+    {
+    itkGenericExceptionMacro("No percentage given");
+    }
+  
+  this->UpdateGlobalCounts();
+  
+  ClassCountMapType::const_iterator it;
+  ClassCountMapType needed;
+  switch (t)
+    {
+    case PROPORTIONAL:
+      {
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetPercentageOfSamples(p[0]);
+        }
+      break;
+      }
+    case EQUAL:
+      {
+      needed.clear();
+      for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
+        {
+        needed[it->first]=static_cast<unsigned long>(vcl_floor(0.5 + it->second * p[0] / (double)this->Size()));
+        }
+
+      
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetNbOfSamplesByClass(needed);
+        }        
+      break;
+      }
+    case CUSTOM:
+      {
+      if (p.size() < this->Size())
+        {
+        itkGenericExceptionMacro("Not enough values present to set custom percents in all inputs");
+        }
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetPercentageOfSamples(p[i]);
+        }
+      break;
+      }
+    default:
+      itkGenericExceptionMacro("Unknown partition mode");
+      break;  
+    }
+}
+
+void
+SamplingRateCalculatorList
+::SetTotalNumberOfSamples(std::vector<unsigned long> &tot, PartitionType t)
+{
+  if (tot.empty())
+    {
+    itkGenericExceptionMacro("No percentage given");
+    }
+  
+  this->UpdateGlobalCounts();
+  
+  ClassCountMapType needed;
+  switch (t)
+    {
+    case PROPORTIONAL:
+      {
+      unsigned long total_nb_samples = 0UL;
+
+      std::vector<unsigned long> nb_samples(this->Size(),0UL);
+      
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        // Compute the total number of samples for image i
+        const MapRateType & rates = this->GetNthElement(i)->GetRatesByClass();
+      
+        for(MapRateType::const_iterator it = rates.begin();it!=rates.end();++it)
+          {
+          nb_samples[i]+=it->second.Tot;
+          }
+
+        total_nb_samples+=nb_samples[i];
+        }
+        
+        for (unsigned int i=0 ; i<this->Size() ; i++)
+          {        
+            this->GetNthElement(i)->SetTotalNumberOfSamples(vcl_floor(0.5+tot[0]*nb_samples[i]/static_cast<double>(total_nb_samples)));
+        }
+      break;
+      }
+    case EQUAL:
+      {
+
+      unsigned long total_by_image = static_cast<unsigned long>(vcl_floor(tot[0]/static_cast<double>(this->Size())));
+      
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetTotalNumberOfSamples(total_by_image);
+        }        
+      break;
+      }
+    case CUSTOM:
+      {
+      if (tot.size() < this->Size())
+        {
+        itkGenericExceptionMacro("Not enough values present to set total samples in all inputs");
+        }
+      for (unsigned int i=0 ; i<this->Size() ; i++)
+        {
+        this->GetNthElement(i)->SetTotalNumberOfSamples(tot[i]);
+        }
+      break;
+      }
+    default:
+      itkGenericExceptionMacro("Unknown partition mode");
+      break;  
+    }
+  
+
+}
+
+
+void
+SamplingRateCalculatorList
 ::UpdateGlobalCounts()
 {
   m_GlobalCountMap.clear();
