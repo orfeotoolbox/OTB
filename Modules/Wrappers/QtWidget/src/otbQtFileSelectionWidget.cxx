@@ -24,14 +24,34 @@ namespace otb
 namespace Wrapper
 {
 
-QtFileSelectionWidget::QtFileSelectionWidget()
-  : QWidget()
+QtFileSelectionWidget
+::QtFileSelectionWidget() :
+  QWidget(),
+  m_HLayout( NULL ),
+  m_Input( NULL ),
+  m_Button( NULL ),
+  m_Checkbox( NULL ),
+  m_IOMode( IO_MODE_INPUT )
 {
   this->DoCreateWidget();
 }
 
 QtFileSelectionWidget::~QtFileSelectionWidget()
 {
+}
+
+void
+QtFileSelectionWidget
+::SetIOMode( IOMode mode )
+{
+  m_IOMode = mode;
+}
+
+QtFileSelectionWidget::IOMode
+QtFileSelectionWidget
+::GetIOMode() const
+{
+  return m_IOMode;
 }
 
 void QtFileSelectionWidget::DoUpdateGUI()
@@ -73,12 +93,20 @@ QtFileSelectionWidget
   assert( m_Input!=NULL );
 
   QString filename(
-    GetSaveFileName(
-      this,
-      QString(),
-      m_Input->text(),
-      tr( "All files (*)" ),
-      NULL )
+    m_IOMode == IO_MODE_INPUT
+    ? GetOpenFileName(
+        this,
+	QString(),
+	m_Input->text(),
+	tr( "All files (*)" ),
+	NULL,
+	QFileDialog::ReadOnly )
+    : GetSaveFileName(
+        this,
+	QString(),
+	m_Input->text(),
+	tr( "All files (*)" ),
+	NULL )
   );
 
   if( filename.isEmpty() )
