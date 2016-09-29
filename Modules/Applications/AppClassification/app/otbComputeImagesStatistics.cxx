@@ -66,6 +66,8 @@ private:
     SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse." );
     MandatoryOff("out");
 
+    AddRAMParameter();
+
    // Doc example parameter settings
    SetDocExampleParameterValue("il", "QB_1_ortho.tif");
    SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
@@ -128,6 +130,7 @@ private:
       processName << "Processing Image (" << imageId+1 << "/" << imageList->Size() << ")";
       AddProcess(statsEstimator->GetStreamer(), processName.str().c_str());
       statsEstimator->SetInput(image);
+      statsEstimator->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       if( HasValue( "bv" )==true )
         {
         statsEstimator->SetIgnoreUserDefinedValue(true);
