@@ -202,6 +202,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   // Prepare temporary input
   this->m_InMemoryInputs.clear();
+  this->m_InMemoryInputs.reserve(numberOfThreads);
   std::string tmpLayerName("thread");
   OGRSpatialReference * oSRS = ITK_NULLPTR;
   if (inLayer.GetSpatialRef())
@@ -225,11 +226,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       tmpLayer.CreateField(fieldDefn);
       }
     this->m_InMemoryInputs.push_back(tmpOgrDS);
-    //tmpLayers.push_back(tmpLayer);
     }
 
   // Prepare in-memory outputs
   this->m_InMemoryOutputs.clear();
+  this->m_InMemoryOutputs.reserve(numberOfThreads);
   tmpLayerName = std::string("threadOut");
   for (unsigned int i=0 ; i < numberOfThreads ; i++)
     {
@@ -714,6 +715,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   std::vector<ogr::Layer> tmpLayers;
+  tmpLayers.reserve(numberOfThreads);
   for (unsigned int i=0 ; i<numberOfThreads ; i++)
     {
     tmpLayers.push_back(this->GetInMemoryInput(i));
