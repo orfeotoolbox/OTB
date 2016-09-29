@@ -985,16 +985,29 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         for (unsigned int k=0 ; k < std::min(nbTokenRef,nbTokenTestSelected) ; k++)
           {
           // record the separator
+          unsigned int sizeSepRef;
+          unsigned int startSepRef;
           if (k)
             {
-            ossBase << curLineRef.substr(tokenRef[k-1].end()-curLineRef.begin(),
-                                         tokenRef[k].begin()-tokenRef[k-1].end());
-            ossTest << std::string(tokenRef[k].begin()-tokenRef[k-1].end(), ' ');
+            startSepRef = tokenRef[k-1].end()-curLineRef.begin();
+            sizeSepRef = tokenRef[k].begin()-tokenRef[k-1].end();
             }
           else
             {
-            ossBase << curLineRef.substr(0,tokenRef[0].begin()-curLineRef.begin());
-            ossTest << std::string(tokenRef[0].begin()-curLineRef.begin(), ' ');
+            startSepRef = 0;
+            sizeSepRef = tokenRef[0].begin()-curLineRef.begin();
+            }
+          ossBase << curLineRef.substr(startSepRef, sizeSepRef);
+          for (unsigned int j=0 ; j<sizeSepRef ; j++)
+            {
+            if (curLineRef[startSepRef+j] == '\t')
+              {
+              ossTest << "\t";
+              }
+            else
+              {
+              ossTest << " ";
+              }
             }
           // record the token
           bool isTokenEquivalent = true;
@@ -1010,7 +1023,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
             {
             ossBase << curLineRef.substr(tokenRef[k].begin()-curLineRef.begin(),
                                          tokenRef[k].size());
-            ossTest << std::string(tokenRef[k].size(), '-');
+            ossTest << std::string(tokenRef[k].size(), '_');
             }
           else
             {
