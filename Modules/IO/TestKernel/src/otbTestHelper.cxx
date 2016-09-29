@@ -700,6 +700,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
   unsigned int nbTokenRef = 0;
   unsigned int nbTokenTest = 0;
   unsigned int nbTokenTestSelected = 0;
+  bool isFirstMissingRefLine = true;
 
   for (posRef=0 ; posRef<listLineFileRef.size() ; posRef++)
     {
@@ -950,9 +951,14 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
       }
 
     // depending on the best number of common tokens ...
-    if (bestCommonTokens < 0)
+    if (bestCommonTokens <= 0)
       {
       // line not found in test
+      if (isFirstMissingRefLine)
+        {
+        listStrDiffLineFile.push_back("   -------------------------------");
+        isFirstMissingRefLine = false;
+        }
       listStrDiffLineFile.push_back(std::string("   Base << ")+curLineRef);
       if (m_ReportErrors)
         {
@@ -965,6 +971,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
       // record skipped lines in test file
       for (unsigned int k=0 ; k < skippedTestLines.size() ; k++)
         {
+        isFirstMissingRefLine = true;
         if (k== 0)
           listStrDiffLineFile.push_back("   -------------------------------");
         listStrDiffLineFile.push_back(std::string("   Test >> ")+listLineFileTest[skippedTestLines[k]]);
@@ -1056,6 +1063,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
           fluxfilediff << "In baseline l."<< posRef+1 <<" : "<< ossBase.str() << std::endl;
           fluxfilediff << "In test     l."<< bestLinePos+1 << " : "<<ossTest.str() << std::endl;
           }
+        isFirstMissingRefLine = true;
         }
 
       // update posTest
