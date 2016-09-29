@@ -26,6 +26,16 @@
 namespace otb
 {
 
+
+template <typename TPixel>
+struct DummyFexFunctor
+{
+  TPixel operator()(const TPixel& p)
+  {
+    return p;
+  }
+};
+
 /**
  * \class PersistentImageSampleExtractorFilter
  * 
@@ -33,37 +43,40 @@ namespace otb
  * 
  * \ingroup OTBSampling
  */
-template<class TInputImage>
+template<class TInputImage, class TFeatureExtractionFunctor= 
+         DummyFexFunctor<typename TInputImage::PixelType> >
 class ITK_EXPORT PersistentImageSampleExtractorFilter :
-  public PersistentSamplingFilterBase<TInputImage>
-{
-public:
-  /** Standard Self typedef */
-  typedef PersistentImageSampleExtractorFilter            Self;
-  typedef PersistentSamplingFilterBase<TInputImage>     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+    public PersistentSamplingFilterBase<TInputImage>
+  {
+  public:
+    /** Standard Self typedef */
+    typedef PersistentImageSampleExtractorFilter            Self;
+    typedef PersistentSamplingFilterBase<TInputImage>     Superclass;
+    typedef itk::SmartPointer<Self>                         Pointer;
+    typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  typedef TInputImage                                     InputImageType;
-  typedef typename InputImageType::Pointer                InputImagePointer;
-  typedef typename InputImageType::RegionType             RegionType;
-  typedef typename InputImageType::PointType              PointType;
-  typedef typename InputImageType::IndexType              IndexType;
-  typedef typename InputImageType::PixelType              PixelType;
-  typedef typename InputImageType::InternalPixelType      InternalPixelType;
+    typedef TInputImage                                     InputImageType;
+    typedef typename InputImageType::Pointer                InputImagePointer;
+    typedef typename InputImageType::RegionType             RegionType;
+    typedef typename InputImageType::PointType              PointType;
+    typedef typename InputImageType::IndexType              IndexType;
+    typedef typename InputImageType::PixelType              PixelType;
+    typedef typename InputImageType::InternalPixelType      InternalPixelType;
 
-  typedef ogr::DataSource                                 OGRDataType;
-  typedef ogr::DataSource::Pointer                        OGRDataPointer;
+    typedef TFeatureExtractionFunctor                       FeatureExtractionFunctorType;
 
-  typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+    typedef ogr::DataSource                                 OGRDataType;
+    typedef ogr::DataSource::Pointer                        OGRDataPointer;
 
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+    typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
-  /** Runtime information support. */
-  itkTypeMacro(PersistentImageSampleExtractorFilter, PersistentSamplingFilterBase);
+    /** Method for creation through the object factory. */
+    itkNewMacro(Self);
 
-  /** Set the output samples OGR container
+    /** Runtime information support. */
+    itkTypeMacro(PersistentImageSampleExtractorFilter, PersistentSamplingFilterBase);
+
+    /** Set the output samples OGR container
    * (shall be equal to the input container for an 'update' mode) */
   void SetOutputSamples(ogr::DataSource* data);
 
@@ -83,6 +96,27 @@ public:
 
   /** Get the sample names */
   const std::vector<std::string> & GetSampleFieldNames();
+
+  /** Get the functor object.  The functor is returned by reference.
+   * (Functors do not have to derive from itk::LightObject, so they do
+   * not necessarily have a reference count. So we cannot return a
+   * SmartPointer.) */
+  FeatureExtractionFunctorType& GetFunctor()
+  {
+    return m_FeatureExtraction;
+  }
+
+  /** Set the functor object.  This replaces the current Functor with a
+   * copy of the specified Functor. This allows the user to specify a
+   * functor that has ivars set differently than the default functor.
+   * This method requires an operator!=() be defined on the functor
+   * (or the compiler's default implementation of operator!=() being
+   * appropriate). */
+  void SetFunctor(const FeatureExtractionFunctorType& functor)
+  {
+    m_FeatureExtraction = functor;
+    this->Modified();
+  }
 
 protected:
   /** Constructor */
@@ -110,7 +144,10 @@ private:
 
   /** List of field names for each component */
   std::vector<std::string> m_SampleFieldNames;
-};
+
+  /** Feature extraction function */
+  FeatureExtractionFunctorType m_FeatureExtraction;
+  };
 
 /**
  * \class ImageSampleExtractorFilter
@@ -121,9 +158,11 @@ private:
  *
  * \ingroup OTBSampling
  */
-template<class TInputImage>
+template<class TInputImage, class TFeatureExtractionFunctor=
+         DummyFexFunctor<typename TInputImage::PixelType> >
 class ITK_EXPORT ImageSampleExtractorFilter :
-  public PersistentFilterStreamingDecorator<PersistentImageSampleExtractorFilter<TInputImage> >
+    public PersistentFilterStreamingDecorator<PersistentImageSampleExtractorFilter<TInputImage, 
+                                                                                   TFeatureExtractionFunctor> >
 {
 public:
   /** Standard Self typedef */
@@ -135,6 +174,7 @@ public:
   typedef itk::SmartPointer<const Self>   ConstPointer;
 
   typedef TInputImage                     InputImageType;
+  typedef TFeatureExtractionFunctor       FeatureExtractionFunctorType;
   typedef otb::ogr::DataSource            OGRDataType;
   
   typedef typename Superclass::FilterType             FilterType;
