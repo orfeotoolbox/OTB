@@ -99,12 +99,12 @@ private:
     SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class. By default, 'ip.undecidedlabel = 0'.");
     SetDefaultParameterInt("ip.undecidedlabel", 0.0);
 
-    AddParameter(ParameterType_Empty, "ip.ipobool", "Process isolated pixels only");
-    SetParameterDescription("ip.ipobool", "Only pixels whose label is unique in the neighbordhood will be processed. By default, 'ip.ipobool = false'.");
+    AddParameter(ParameterType_Empty, "ip.onlyisolatedpixels", "Process isolated pixels only");
+    SetParameterDescription("ip.onlyisolatedpixels", "Only pixels whose label is unique in the neighbordhood will be processed. By default, 'ip.onlyisolatedpixels = false'.");
 
-    AddParameter(ParameterType_Int, "ip.ipothres", "Threshold for isolated pixels");
-    SetParameterDescription("ip.ipothres", "Maximum number of neighbours with the same label as the center pixel to consider that it is an isolated pixel. By default, 'ip.ipothres = 1'.");       
-    SetDefaultParameterInt("ip.ipothres", 1);
+    AddParameter(ParameterType_Int, "ip.isolatedthreshold", "Threshold for isolated pixels");
+    SetParameterDescription("ip.isolatedthreshold", "Maximum number of neighbours with the same label as the center pixel to consider that it is an isolated pixel. By default, 'ip.isolatedthreshold = 1'.");       
+    SetDefaultParameterInt("ip.isolatedthreshold", 1);
 
 
     AddRAMParameter();
@@ -114,7 +114,7 @@ private:
     SetDocExampleParameterValue("io.out", "clLabeledImageQB123_1_CMR_r2_nodl_10_undl_7.tif");
     SetDocExampleParameterValue("ip.radius", "2");
     SetDocExampleParameterValue("ip.suvbool", "true");
-    SetDocExampleParameterValue("ip.ipobool", "true");
+    SetDocExampleParameterValue("ip.onlyisolatedpixels", "true");
     SetDocExampleParameterValue("ip.nodatalabel", "10");
     SetDocExampleParameterValue("ip.undecidedlabel", "7");
   }
@@ -158,10 +158,10 @@ private:
       }
 
     // Process isolated pixels only
-    if (IsParameterEnabled("ip.ipobool"))
+    if (IsParameterEnabled("ip.onlyisolatedpixels"))
       {
       m_NeighMajVotingFilter->SetOnlyIsolatedPixels(true);
-      m_NeighMajVotingFilter->SetIsolatedThreshold(GetParameterInt("ip.ipothres"));
+      m_NeighMajVotingFilter->SetIsolatedThreshold(GetParameterInt("ip.isolatedthreshold"));
       }
     else
       {
