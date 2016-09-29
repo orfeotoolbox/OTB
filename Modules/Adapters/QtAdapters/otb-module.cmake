@@ -5,6 +5,9 @@ otb_module( OTBQtAdapters
   DEPENDS
     OTBQt4
 
+  # TEST_DEPENDS
+  #   OTBCommon
+
   DESCRIPTION
     "${DOCUMENTATION}"
 )
