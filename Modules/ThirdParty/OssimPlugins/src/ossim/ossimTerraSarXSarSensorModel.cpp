@@ -17,6 +17,8 @@
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimEnvironmentUtility.h>
 #include <ossim/base/ossimDirectory.h>
+#include <ossim/base/ossimPolynom.h>
+
 #include <iostream>
 #include <cassert>
 
@@ -473,7 +475,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::loadState(ossimKeywordlist cons
 }
 
 bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
-{
+{ 
    SCOPED_LOG(traceDebug, "ossimTerraSarXSarSensorModel::read");
 
    ossimFilename annotationXml;
@@ -628,7 +630,25 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
 
       //Estimate degree of GRToSR of degree 11
       const unsigned int deg = 11;
-      estimateGRToSRFromSRToGR(deg);
+
+      //Parse the last pixel time (last column) available in TSX metadata
+
+      //Parse the last pixel time (in seconds)
+      const ossimString & sLastPixelTime = addMandatory(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_last_pixel", nodes.sceneInfo, "rangeTime/lastPixel");
+
+      const double maxRangeTime = to<double>(sLastPixelTime, " extracting slant_range_to_last_pixel from productInfo/sceneInfo/rangeTime/lastPixel field");
+      ossimNotify(ossimNotifyLevel_DEBUG) << "maxRangeTime " << maxRangeTime << '\n';
+
+      const double referencePoint = xmlRoot.findFirstNode("productSpecific/projectedImageInfo/slantToGroundRangeProjection/referencePoint")->getText().toDouble();
+
+      ossimNotify(ossimNotifyLevel_DEBUG) << "Reference point " << referencePoint << '\n';
+      
+      std::cout << "maxRangeTime " << maxRangeTime << '\n';
+      //Estimate the polynom
+      estimateGRToSRFromSRToGR(deg, maxRangeTime, referencePoint, azimuthTimeStart);
+
+      //Check estimated polynoms
+      //std::cout << "GRToSR coefs " << theGroundRangeToSlantRangeRecords[0].coefs[0] << std::endl; 
    }
 
    // Parse GCPs
@@ -1229,4 +1249,75 @@ void ossimplugins::ossimTerraSarXSarSensorModel::initAcquisitionInfo(Nodes const
    addMandatory(theProductKwl, "acquisitionInfo.sensor",           nodes.acquisitionInfo, "sensor");
    addMandatory(theProductKwl, "acquisitionInfo.lookDirection",    nodes.acquisitionInfo, "lookDirection");
    addMandatory(theProductKwl, "acquisitionInfo.polarisationMode", nodes.acquisitionInfo, "polarisationMode");
+}
+
+void ossimplugins::ossimTerraSarXSarSensorModel::estimateGRToSRFromSRToGR(const unsigned int degree, const double maxRangeTime, const double referencePoint, const TimeType azimuthTimeStart)
+{
+  //TODO Implement polynomial inversion to estimate slant range to ground
+  //range coefficients from slant range to ground range coefficients
+
+  //const unsigned int m = degree;
+    
+  //Polynoms use for estimation
+
+  //TODO: i don't understand how to initialize theExpSet used in LMSFit
+  ossimPolynom< ossim_float64 , 1 >::EXPT_SET expSet;
+  ossimPolynom< ossim_float64 , 1 >::EXP_TUPLE orders;
+
+  //Store estimated polynom in an ossimPolynom
+  ossimPolynom< ossim_float64 , 1 >  poly;
+
+  orders.push_back(degree);
+  
+  expSet = poly.builExpSet(orders);
+
+  std::vector< ossimPolynom< ossim_float64 , 1 >::VAR_TUPLE > inputs;
+  inputs.resize(degree+1);
+  std::vector< ossim_float64 > outputs;
+  outputs.resize(degree+1);
+  
+  vector< ossimPolynom< ossim_float64 , 1 >::VAR_TUPLE >::iterator pit;
+  vector< ossim_float64 >::iterator it;
+
+  int i;
+  for (pit=inputs.begin(), i=0; pit!=inputs.end(); ++pit,++i)
+    {
+      double input_time = theNearRangeTime + (maxRangeTime - theNearRangeTime) * i / degree;
+      pit->push_back( input_time );
+      //Compute polynomial values using slantrangetogroundrange coefficients
+      double acc = 0.;
+      unsigned int j = theSlantRangeToGroundRangeRecords[0].coefs.size() - 1;
+      while ( j > 0) {
+        acc = (acc + theSlantRangeToGroundRangeRecords[0].coefs[j--]) * (input_time - referencePoint);
+      }
+      outputs[i] = acc + theSlantRangeToGroundRangeRecords[0].coefs[0];
+    }
+    
+  double rms=0.0;
+  bool resfit = poly.LMSfit(expSet, inputs, outputs, &rms);
+  if (!resfit)
+    {
+      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimSarSensorModel::estimateGRToSRFromSRToGR():  polynom LMS fit failed "<< std::endl;
+    }
+
+  std::cout << "Estimated polynom: " << poly << std::endl;
+  std::cout << "RMS: " << rms << std::endl;
+
+  //Now fill coefficients
+  //Retrieve Slant Range to Ground range coefficients
+  CoordinateConversionRecordType coordRecord;
+
+  //Get azimuth time start (again)
+  coordRecord.azimuthTime = azimuthTimeStart;
+
+  //Set ground range origin to 0 (FIXME?)
+  coordRecord.rg0 = 0.;
+
+  //Fill coefficients
+  //loop on monoms
+  for ( typename ossimPolynom< ossim_float64 , 1 >::MONOM_MAP::const_iterator it = poly.getMonoms().begin(); it != poly.getMonoms().end() ; ++it )
+    {
+      coordRecord.coefs.push_back(it->second);
+    }
+  theGroundRangeToSlantRangeRecords.push_back(coordRecord);
 }

@@ -76,6 +76,11 @@ public:
   */
   void readAnnotationFile(const std::string & annotationXml, const std::string & geoXml);
 
+  /**
+    * Estimate ground range to slant range from ground range to slant range
+    * coefficients
+    */
+  void estimateGRToSRFromSRToGR(const unsigned int degree, const double maxRangeTime, const double referencePoint, const TimeType azimuthTimeStart);
 protected:
 
   TYPE_DATA;
