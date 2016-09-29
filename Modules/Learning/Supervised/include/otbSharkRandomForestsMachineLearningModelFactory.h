@@ -15,54 +15,52 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef otbRandomForestsMachineLearningModelFactory_h
-#define otbRandomForestsMachineLearningModelFactory_h
-
-#include "otbRequiresOpenCVCheck.h"
+#ifndef otbSharkRandomForestsMachineLearningModelFactory_h
+#define otbSharkRandomForestsMachineLearningModelFactory_h
 
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 
 namespace otb
 {
-/** \class RandomForestsMachineLearningModelFactory
- * \brief Creation of an instance of a RandomForestsMachineLearningModel object using the object factory
+/** \class SharkRandomForestsMachineLearningModelFactory
+ * \brief Creation of an instance of a SharkRandomForestsMachineLearningModel object using the object factory
  *
  * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT RandomForestsMachineLearningModelFactory : public itk::ObjectFactoryBase
+class ITK_EXPORT SharkRandomForestsMachineLearningModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef RandomForestsMachineLearningModelFactory             Self;
+  typedef SharkRandomForestsMachineLearningModelFactory             Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
-  const char* GetDescription(void) const ITK_OVERRIDE;
+  virtual const char* GetITKSourceVersion(void) const;
+  virtual const char* GetDescription(void) const;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RandomForestsMachineLearningModelFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(SharkRandomForestsMachineLearningModelFactory, itk::ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    Pointer RFFactory = RandomForestsMachineLearningModelFactory::New();
+    Pointer RFFactory = SharkRandomForestsMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(RFFactory);
   }
 
 protected:
-  RandomForestsMachineLearningModelFactory();
-  ~RandomForestsMachineLearningModelFactory() ITK_OVERRIDE;
+  SharkRandomForestsMachineLearningModelFactory();
+  virtual ~SharkRandomForestsMachineLearningModelFactory();
 
 private:
-  RandomForestsMachineLearningModelFactory(const Self &); //purposely not implemented
+  SharkRandomForestsMachineLearningModelFactory(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
 };
@@ -70,7 +68,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRandomForestsMachineLearningModelFactory.txx"
+#include "otbSharkRandomForestsMachineLearningModelFactory.txx"
 #endif
 
 #endif
