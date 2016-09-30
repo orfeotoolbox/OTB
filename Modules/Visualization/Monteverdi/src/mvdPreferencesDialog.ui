@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>445</width>
-    <height>397</height>
+    <height>425</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -176,22 +176,6 @@
         <string>Rendering</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="2" column="0">
-         <widget class="QLabel" name="tileSizeLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string>Size of the image-tile which is loaded when view shifts to an unloaded area.</string>
-          </property>
-          <property name="text">
-           <string>Image tile size</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="resolutionLabel">
           <property name="sizePolicy">
@@ -208,15 +192,51 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="2">
+        <item row="1" column="1">
          <widget class="QComboBox" name="resolutionComboBox">
           <property name="toolTip">
            <string>Method to choose level of resolution pyramid when scale is between two levels</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1" colspan="2">
+        <item row="2" column="0">
+         <widget class="QLabel" name="tileSizeLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Size of the image-tile which is loaded when view shifts to an unloaded area.</string>
+          </property>
+          <property name="text">
+           <string>Image tile size</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
          <widget class="QComboBox" name="tileSizeComboBox"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="glRadioButton">
+          <property name="text">
+           <string>OpenGL texture</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">glButtonGroup</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="glslRadioButton">
+          <property name="text">
+           <string>OpenGL Shading Language</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">glButtonGroup</string>
+          </attribute>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -380,4 +400,7 @@
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="glButtonGroup"/>
+ </buttongroups>
 </ui>
