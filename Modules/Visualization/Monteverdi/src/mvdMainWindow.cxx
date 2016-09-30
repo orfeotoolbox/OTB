@@ -185,7 +185,7 @@ MainWindow
   // be called because it might proceed to some OpenGL setup.
   bool isGLSL =
     m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) &&
-    !noForceGLSL;
+    !forceNoGLSL;
 
 #if FORCE_NO_GLSL
   qWarning() << "No-GLSL is always forced in this build!";
