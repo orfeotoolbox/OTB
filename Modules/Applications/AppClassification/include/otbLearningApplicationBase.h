@@ -31,20 +31,24 @@
 #include "otbMachineLearningModelFactory.h"
 
 #ifdef OTB_USE_OPENCV
-# include "otbKNearestNeighborsMachineLearningModel.h"
-# include "otbRandomForestsMachineLearningModel.h"
+#include "otbKNearestNeighborsMachineLearningModel.h"
+#include "otbRandomForestsMachineLearningModel.h"
 // OpenCV SVM implementation is buggy with linear kernel
 // Users should use the libSVM implementation instead.
-//# include "otbSVMMachineLearningModel.h"
-# include "otbBoostMachineLearningModel.h"
-# include "otbDecisionTreeMachineLearningModel.h"
-# include "otbGradientBoostedTreeMachineLearningModel.h"
-# include "otbNormalBayesMachineLearningModel.h"
-# include "otbNeuralNetworkMachineLearningModel.h"
+//#include "otbSVMMachineLearningModel.h"
+#include "otbBoostMachineLearningModel.h"
+#include "otbDecisionTreeMachineLearningModel.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
+#include "otbNormalBayesMachineLearningModel.h"
+#include "otbNeuralNetworkMachineLearningModel.h"
 #endif
 
 #ifdef OTB_USE_LIBSVM 
 #include "otbLibSVMMachineLearningModel.h"
+#endif
+
+#ifdef OTB_USE_SHARK
+#include "otbSharkRandomForestsMachineLearningModel.h"
 #endif
 
 namespace otb
@@ -62,11 +66,12 @@ namespace Wrapper
  * methods. The classes derived from LearningApplicationBase only need these
  * 3 methods to handle the machine learning model.
  *
- * There are multiple machine learning models in OTB, some imported from OpenCV,
- * and one imported from LibSVM. They all have different parameters. The
- * purpose of this class is to handle the creation of all parameters related to
- * machine learning models (in DoInit() ), and to dispatch the calls to
- * specific train functions in function Train().
+ * There are multiple machine learning models in OTB, some imported
+ * from OpenCV and one imported from LibSVM. They all have
+ * different parameters. The purpose of this class is to handle the
+ * creation of all parameters related to machine learning models (in
+ * DoInit() ), and to dispatch the calls to specific train functions
+ * in function Train().
  *
  * This class is templated over scalar types for input and output values.
  * Typically, the input value type will be either float of double. The choice
@@ -131,7 +136,11 @@ public:
 #ifdef OTB_USE_LIBSVM 
   typedef otb::LibSVMMachineLearningModel<InputValueType, OutputValueType> LibSVMType;
 #endif
- 
+
+#ifdef OTB_USE_SHARK
+  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
+#endif
+  
 protected:
   LearningApplicationBase();
 
@@ -206,6 +215,13 @@ private:
                 typename TargetListSampleType::Pointer trainingLabeledListSample,
                 std::string modelPath);
 #endif
+
+#ifdef OTB_USE_SHARK
+  void InitSharkRandomForestsParams();
+  void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
+                               typename TargetListSampleType::Pointer trainingLabeledListSample,
+                               std::string modelPath);
+#endif
   //@}
 };
 
@@ -228,6 +244,9 @@ private:
 #endif
 #ifdef OTB_USE_LIBSVM
 #include "otbTrainLibSVM.txx"
+#endif
+#ifdef OTB_USE_SHARK
+#include "otbTrainSharkRandomForests.txx"
 #endif
 #endif
 
