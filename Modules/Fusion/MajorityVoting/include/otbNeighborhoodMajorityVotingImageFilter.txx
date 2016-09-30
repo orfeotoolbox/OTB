@@ -45,16 +45,16 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, TKernel>::Neigh
 
 template<class TInputImage, class TOutputImage, class TKernel>
 typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
-                                               TKernel>::PixelType NeighborhoodMajorityVotingImageFilter<TInputImage,
-                                                                                                         TOutputImage, TKernel>::Evaluate(const NeighborhoodIteratorType &nit,
-                                                                                                                                          const KernelIteratorType kernelBegin,
-                                                                                                                                          const KernelIteratorType kernelEnd) 
+                                               TKernel>::PixelType 
+NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, 
+                                      TKernel>::Evaluate(const NeighborhoodIteratorType &nit,
+                                                         const KernelIteratorType kernelBegin,
+                                                         const KernelIteratorType kernelEnd) 
 {
   const PixelType centerPixel = nit.GetCenterPixel();
   if (centerPixel != m_LabelForNoDataPixels)
     {
-   
-         //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
+    //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
     const HistoSummary histoSummary = this->FillNeighborhoodHistogram(nit, kernelBegin, kernelEnd);
 
     if(m_OnlyIsolatedPixels && histoSummary.freqCenterLabel > m_IsolatedThreshold)
@@ -67,7 +67,8 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
     else
       {
       //If the majorityLabel is NOT unique in the neighborhood
-      if(histoSummary.secondFreq == histoSummary.majorityFreq && histoSummary.secondLabel != histoSummary.majorityLabel)
+      if(histoSummary.secondFreq == histoSummary.majorityFreq && 
+         histoSummary.secondLabel != histoSummary.majorityLabel)
         {
         if (m_KeepOriginalLabelBool == true)
           {
@@ -78,12 +79,8 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
           return m_LabelForUndecidedPixels;
           }
         }
-
       }
-
-
     }//END if (centerPixel != m_LabelForNoDataPixels)
-
 //If (centerPixel == m_LabelForNoDataPixels)
   else
     {
@@ -95,11 +92,11 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
 
 template<class TInputImage, class TOutputImage, class TKernel>
 const typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
-                                                     TKernel>::HistoSummary NeighborhoodMajorityVotingImageFilter<TInputImage,
-                                                                                                                  TOutputImage, 
-                                                                                                                  TKernel>::FillNeighborhoodHistogram(const NeighborhoodIteratorType &nit,
-                                                                                                                                                      const KernelIteratorType kernelBegin,
-                                                                                                                                                      const KernelIteratorType kernelEnd) const
+                                                     TKernel>::HistoSummary 
+NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, 
+                                      TKernel>::FillNeighborhoodHistogram(const NeighborhoodIteratorType &nit,
+                                                                          const KernelIteratorType kernelBegin,
+                                                                          const KernelIteratorType kernelEnd) const
 {  
   std::map<PixelType, unsigned int> histoNeigh;
   PixelType centerPixel = nit.GetCenterPixel();
@@ -118,7 +115,6 @@ const typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
       histoNeigh[label] += 1;
       }
     }
-
   std::vector< std::pair<PixelType, unsigned int> > histoNeighVec;
   std::copy(histoNeigh.begin(), histoNeigh.end(), std::back_inserter(histoNeighVec));
   const typename std::vector<std::pair<PixelType, unsigned int> >::iterator histoIt = histoNeighVec.begin();
