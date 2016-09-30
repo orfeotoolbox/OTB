@@ -232,6 +232,8 @@ option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
 option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
 option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
+option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
+
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
@@ -253,6 +255,7 @@ option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
 option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+option(OTB_USE_SHARK "Enable module Shark in OTB" OFF)
 option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 
 #Problem: below cmake setting will fail!
@@ -321,3 +324,4 @@ endif()
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
+

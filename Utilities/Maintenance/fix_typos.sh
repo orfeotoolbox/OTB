@@ -73,6 +73,6 @@ WORDS_WHITE_LIST="$WORDS_WHITE_LIST,dum"
 # for pary variable
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,pary"
 
-python3 fix_typos/codespell/codespell.py codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
+python3 fix_typos/codespell/codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
         --words-white-list=$WORDS_WHITE_LIST \
         -D fix_typos/otb_dict.txt  ../..
