@@ -170,7 +170,7 @@ MainWindow
 /*****************************************************************************/
 bool
 MainWindow
-::CheckGLCapabilities()
+::CheckGLCapabilities( bool forceNoGLSL )
 {
   assert( m_ImageView!=NULL );
   assert( m_ImageView->GetRenderer()!=NULL );
@@ -181,9 +181,15 @@ MainWindow
   //     m_ImageView->GetRenderer()==NULL )
   //   return false;
 
-  bool isGLSL = m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
+  // Even if force no-GLSL option is set CheckGLCapabilities() should
+  // be called because it might proceed to some OpenGL setup.
+  bool isGLSL =
+    m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) &&
+    !noForceGLSL;
 
 #if FORCE_NO_GLSL
+  qWarning() << "No-GLSL is always forced in this build!";
+
   m_ImageView->GetRenderer()->SetGLSLEnabled( false );
 
   isGLSL = false;

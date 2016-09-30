@@ -58,17 +58,33 @@ enum ERROR_CODE
   ERROR_CODE_USAGE = -5,
 };
 
+
+struct Flags
+{
+  Flags() :
+    loadOTBApplications( false ),
+    forceNoGLSL( false )
+  {
+  }
+
+  bool loadOTBApplications: 1;
+  bool forceNoGLSL: 1;
+};
+
+
 /*****************************************************************************/
 /* FUNCTIONS DECLARATION                                                     */
+/*****************************************************************************/
 
 
 /*****************************************************************************/
 /* MAIN                                                                      */
-
+/*****************************************************************************/
 int
 main( int argc, char* argv[] )
 {
   QApplication qtApp( argc, argv );
+  Flags flags;
 
   //
   // 0. Splash-screen.
@@ -93,8 +109,9 @@ main( int argc, char* argv[] )
 	  QCoreApplication::translate(
 	    PROJECT_NAME,
 	    "Usage: %1 [-h|--help] [-a|--applications] [<filename>...]\n"
-	    "  -h, --help         display this help message.\n"
+	    "  -1, --no-glsl      force OpenGL 1.x compatible rendering."
 	    "  -a, --applications load OTB-applications from OTB_APPLICATIONS_PATH."
+	    "  -h, --help         display this help message.\n"
 	  )
 	  .arg( QFileInfo( argv[ 0 ] ).baseName() )
 	)
@@ -102,10 +119,24 @@ main( int argc, char* argv[] )
 
       return ERROR_CODE_USAGE;
       }
-    else
+
+    else if( it->compare( "-a" )==0 ||
+	     it->compare( "--applications" )==0 )
       {
-      ++ it;
+      flags.loadOTBApplications = true;
+
+      it = args.erase( it );
       }
+
+    else if(it->compare( "-1" )==0 ||
+	    it->compare( "--no-glsl" )==0 )
+      {
+      flags.forceNoGLSL = true;
+
+      it = args.erase( it );
+      }
+    else
+      ++ it;
   }
 
   //
@@ -163,47 +194,27 @@ main( int argc, char* argv[] )
 
   //
   // 4. Check OpenGL capabilities
-  if( !mainWindow.CheckGLCapabilities() )
+  if( !mainWindow.CheckGLCapabilities( flags.forceNoGLSL ) )
     return ERROR_CODE_GL_VERSION;
 
   //
-  // 5. Parse command-line filenames.
-  args.pop_front();
-  {
-  bool otbApplications = false;
-
-  for( QStringList::iterator it( args.begin() );
-       it!=args.end(); )
-    if( it->compare( "-a" )==0 ||
-	it->compare( "--applications" )==0 )
-      {
-      if( !otbApplications )
-	{
+  // 5. Load OTB-applications.
+  if( flags.loadOTBApplications )
 #if USE_OTB_APPS
-	mainWindow.SetupOTBApplications();
+    mainWindow.SetupOTBApplications();
 #else // USE_OTB_APPS
-	qWarning() << "OTB-applications support is not included in this build.";
+    qWarning() << "OTB-applications support is not included in this build.";
 #endif // USE_OTB_APPS
 
-	it = args.erase( it );
-	}
-      }
-    else
-      {
-      ++ it;
-      }
-  }
+  //
+  // 6. Load command-line filenames.
+  args.pop_front();
 
   mainWindow.ImportImages( args );
-
 
   //
   // 6. Let's go: run the application and return exit code.
   int result = QCoreApplication::instance()->exec();
-
-  /*
-  application->CloseDatabase();
-  */
 
   // Coverity-14835
   // {

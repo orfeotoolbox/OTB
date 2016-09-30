@@ -126,7 +126,7 @@ public:
 
   /**
    */
-  bool CheckGLCapabilities();
+  bool CheckGLCapabilities( bool forceNoGLSL = false );
 
   /**
    */
