@@ -175,7 +175,7 @@ protected:
   unsigned int FillNeighborhoodHistogram(std::vector<std::pair<PixelType, unsigned int> >& histoNeigh, 
                                          const NeighborhoodIteratorType &nit,
                                          const KernelIteratorType kernelBegin,
-                                         const KernelIteratorType kernelEnd);
+                                         const KernelIteratorType kernelEnd) const;
 
   struct CompareHistoFequencies
   {
