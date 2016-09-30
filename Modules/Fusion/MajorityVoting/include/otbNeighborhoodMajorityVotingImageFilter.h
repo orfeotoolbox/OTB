@@ -169,22 +169,31 @@ protected:
                      const KernelIteratorType kernelEnd) ITK_OVERRIDE;
 
   void GenerateOutputInformation() ITK_OVERRIDE;
+  
+  //Type to store the useful information from the label histogram  
+  struct HistoSummary
+  {
+    unsigned int freqCenterLabel;
+    unsigned int majorityFreq;
+    PixelType majorityLabel;
+    unsigned int secondFreq;
+    PixelType secondLabel;
+  };
+  //Functor sort histogram in decreasing order
+    struct CompareHistoFequencies
+    {
+      typedef std::pair<PixelType, unsigned int> HistoValueType;
+      bool operator()(const HistoValueType& a, const HistoValueType& b)
+      {
+        return a.second > b.second;
+      }
+    };
 
   //Get a histogram of frequencies of labels with the 2 highest frequencies sorted in decreasing order
   // and return the frequency of the label of the center pixel
-  unsigned int FillNeighborhoodHistogram(std::vector<std::pair<PixelType, unsigned int> >& histoNeigh, 
-                                         const NeighborhoodIteratorType &nit,
-                                         const KernelIteratorType kernelBegin,
-                                         const KernelIteratorType kernelEnd) const;
-
-  struct CompareHistoFequencies
-  {
-    typedef std::pair<PixelType, unsigned int> HistoValueType;
-    bool operator()(const HistoValueType& a, const HistoValueType& b)
-    {
-      return a.second > b.second;
-    }
-  };
+  const HistoSummary FillNeighborhoodHistogram(const NeighborhoodIteratorType &nit,
+                                               const KernelIteratorType kernelBegin,
+                                               const KernelIteratorType kernelEnd) const;
 
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
