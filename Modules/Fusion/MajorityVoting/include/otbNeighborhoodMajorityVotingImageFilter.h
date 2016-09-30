@@ -191,9 +191,9 @@ protected:
 
   //Get a histogram of frequencies of labels with the 2 highest frequencies sorted in decreasing order
   // and return the frequency of the label of the center pixel
-  const HistoSummary FillNeighborhoodHistogram(const NeighborhoodIteratorType &nit,
-                                               const KernelIteratorType kernelBegin,
-                                               const KernelIteratorType kernelEnd) const;
+    const HistoSummary ComputeNeighborhoodHistogramSummary(const NeighborhoodIteratorType &nit,
+                                                           const KernelIteratorType kernelBegin,
+                                                           const KernelIteratorType kernelEnd) const;
 
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented

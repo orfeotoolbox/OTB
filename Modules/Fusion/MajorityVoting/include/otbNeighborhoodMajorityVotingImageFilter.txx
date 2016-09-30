@@ -55,7 +55,7 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
   if (centerPixel != m_LabelForNoDataPixels)
     {
     //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
-    const HistoSummary histoSummary = this->FillNeighborhoodHistogram(nit, kernelBegin, kernelEnd);
+    const HistoSummary histoSummary = this->ComputeNeighborhoodHistogramSummary(nit, kernelBegin, kernelEnd);
 
     if(m_OnlyIsolatedPixels && histoSummary.freqCenterLabel > m_IsolatedThreshold)
       {
@@ -94,7 +94,7 @@ template<class TInputImage, class TOutputImage, class TKernel>
 const typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
                                                      TKernel>::HistoSummary 
 NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, 
-                                      TKernel>::FillNeighborhoodHistogram(const NeighborhoodIteratorType &nit,
+                                      TKernel>::ComputeNeighborhoodHistogramSummary(const NeighborhoodIteratorType &nit,
                                                                           const KernelIteratorType kernelBegin,
                                                                           const KernelIteratorType kernelEnd) const
 {  
