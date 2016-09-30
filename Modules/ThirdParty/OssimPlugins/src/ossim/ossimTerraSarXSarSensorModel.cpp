@@ -596,6 +596,7 @@ bool ossimplugins::ossimTerraSarXSarSensorModel::read(ossimFilename const& file)
       coordRecord.rg0 = 0.;
 
       //Read  coefficients
+      //TODO Read coefficients using addMandatory method
       const unsigned int polynomialDegree = xmlRoot.findFirstNode("productSpecific/projectedImageInfo/slantToGroundRangeProjection/polynomialDegree")->getText().toUInt16();
 
       ossimNotify(ossimNotifyLevel_DEBUG) << "Number of coefficients " << polynomialDegree << '\n';
@@ -1290,7 +1291,12 @@ void ossimplugins::ossimTerraSarXSarSensorModel::estimateGRToSRFromSRToGR(const 
       while ( j > 0) {
         acc = (acc + theSlantRangeToGroundRangeRecords[0].coefs[j--]) * (input_time - referencePoint);
       }
-      outputs[i] = acc + theSlantRangeToGroundRangeRecords[0].coefs[0];
+
+      //Fill input observations with computed ground range records
+      pit->push_back(acc + theSlantRangeToGroundRangeRecords[0].coefs[0]);
+
+      //Fill output observations with sampled range times
+      outputs[i] = input_time;
     }
     
   double rms=0.0;

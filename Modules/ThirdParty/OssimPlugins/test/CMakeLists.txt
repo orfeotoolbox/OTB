@@ -87,5 +87,5 @@ otb_add_test( NAME tsx_inverse_TORONTO COMMAND ossimTerraSarXSarSensorModelTest 
 # otb_add_test( NAME tsx_forward_PANGKALANBUUN COMMAND ossimTerraSarXSarSensorModelTest 0 ${CMAKE_SOURCE_DIR}/data/tsx/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml ${CMAKE_SOURCE_DIR}/data/tsx/PANGKALANBUUN/GEOREF.xml)
 
 #Test with GRD product
-#otb_add_test( NAME tsx_inverse_UPSALA COMMAND ossimTerraSarXSarSensorModelTest 1 ${INPUTDATA}/ossimPlugins/tsx/UPSALA_GLACIER/TSX1_SAR__MGD.xml ${INPUTDATA}/ossimPlugins/tsx/UPSALA_GLACIER/GEOREF.xml)
+otb_add_test( NAME tsx_inverse_UPSALA COMMAND ossimTerraSarXSarSensorModelTest 1 ${INPUTDATA}/ossimPlugins/tsx/UPSALA_GLACIER/TSX1_SAR__MGD.xml ${INPUTDATA}/ossimPlugins/tsx/UPSALA_GLACIER/GEOREF.xml)
 #otb_add_test( NAME tsx_forward_UPSALA COMMAND ossimTerraSarXSarSensorModelTest 0 ${INPUTDATA}/ossimPlugins/tsx/UPSALA_GLACIER/TSX1_SAR__MGD.xml ${INPUTDATA}/ossimPlugins/tsx/UPSALA_GLACIER/GEOREF.xml)
