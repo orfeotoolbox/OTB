@@ -115,29 +115,19 @@ unsigned int NeighborhoodMajorityVotingImageFilter<TInputImage,
     {
     // if structuring element is positive, use the pixel under that element
     // in the image
-
+    // note we use GetPixel() on the SmartNeighborhoodIterator to
+    // respect boundary conditions
     PixelType label = nit.GetPixel(i);
     if ((*kernel_it > itk::NumericTraits<KernelPixelType>::Zero) && (label != m_LabelForNoDataPixels))
       {
-      // note we use GetPixel() on the SmartNeighborhoodIterator to
-      // respect boundary conditions
-
       //If the current label has already been added to the histogram histoNeigh
-      if (histoNeigh.count(label) > 0)
-        {
-        histoNeigh[label]++;
-        }
-      else
-        {
-        histoNeigh[label] = 1;
-        }
+      histoNeigh[label] += 1;
       }
     }
   std::copy(histoNeigh.begin(), histoNeigh.end(), std::back_inserter(histoNeighVec));
   typename std::vector<std::pair<PixelType, unsigned int> >::iterator histoIt = histoNeighVec.begin();
   std::nth_element(histoNeighVec.begin(), histoIt+1,
                    histoNeighVec.end(), CompareHistoFequencies());
-
   return histoNeigh[centerPixel];
 }
 
