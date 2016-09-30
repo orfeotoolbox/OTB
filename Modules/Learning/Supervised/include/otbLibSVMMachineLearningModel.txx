@@ -71,7 +71,7 @@ template <class TInputValue, class TOutputValue>
 typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
 
