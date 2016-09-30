@@ -109,9 +109,9 @@ unsigned int NeighborhoodMajorityVotingImageFilter<TInputImage,
 {  
   std::map<PixelType, unsigned int> histoNeigh;
   PixelType centerPixel = nit.GetCenterPixel();
-  unsigned int i;
-  KernelIteratorType kernel_it;
-  for (i = 0, kernel_it = kernelBegin; kernel_it < kernelEnd; ++kernel_it, ++i)
+  unsigned int i = 0; 
+  for (KernelIteratorType kernel_it = kernelBegin; 
+       kernel_it < kernelEnd; ++kernel_it, ++i)
     {
     // if structuring element is positive, use the pixel under that element
     // in the image
@@ -125,7 +125,7 @@ unsigned int NeighborhoodMajorityVotingImageFilter<TInputImage,
       }
     }
   std::copy(histoNeigh.begin(), histoNeigh.end(), std::back_inserter(histoNeighVec));
-  typename std::vector<std::pair<PixelType, unsigned int> >::iterator histoIt = histoNeighVec.begin();
+  const typename std::vector<std::pair<PixelType, unsigned int> >::iterator histoIt = histoNeighVec.begin();
   std::nth_element(histoNeighVec.begin(), histoIt+1,
                    histoNeighVec.end(), CompareHistoFequencies());
   return histoNeigh[centerPixel];
