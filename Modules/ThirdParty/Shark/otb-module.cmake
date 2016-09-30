@@ -9,7 +9,7 @@ otb_module(OTBShark
     "${DOCUMENTATION}"
   )
 
+otb_module_activation_option("Enable SHARK dependent modules" OFF)
 
 otb_module_requires_cxx11()
 
-otb_module_activation_option("Enable SHARK dependent modules" OFF)
