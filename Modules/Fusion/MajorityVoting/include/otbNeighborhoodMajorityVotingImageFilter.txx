@@ -69,21 +69,21 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
       }
     else
       {
-    //Extraction of the more representative Label in the neighborhood (majorityLabel) and its Frequency (majorityFreq)
-    majorityFreq = histoNeighVec[0].second; //Frequency
-    majorityLabel = histoNeighVec[0].first; //Label
-    //If the majorityLabel is NOT unique in the neighborhood
-    if(histoNeighVec[1].second == majorityFreq && histoNeighVec[1].first != majorityLabel)
-      {
-      if (m_KeepOriginalLabelBool == true)
+      //Extraction of the more representative Label in the neighborhood (majorityLabel) and its Frequency (majorityFreq)
+      majorityFreq = histoNeighVec[0].second; //Frequency
+      majorityLabel = histoNeighVec[0].first; //Label
+      //If the majorityLabel is NOT unique in the neighborhood
+      if(histoNeighVec[1].second == majorityFreq && histoNeighVec[1].first != majorityLabel)
         {
-        majorityLabel = centerPixel;
+        if (m_KeepOriginalLabelBool == true)
+          {
+          majorityLabel = centerPixel;
+          }
+        else
+          {
+          majorityLabel = m_LabelForUndecidedPixels;
+          }
         }
-      else
-        {
-        majorityLabel = m_LabelForUndecidedPixels;
-        }
-      }
 
       }
 
@@ -91,12 +91,12 @@ typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
     }//END if (centerPixel != m_LabelForNoDataPixels)
 
 //If (centerPixel == m_LabelForNoDataPixels)
-else
-  {
-  majorityLabel = m_LabelForNoDataPixels;
-  }
+  else
+    {
+    majorityLabel = m_LabelForNoDataPixels;
+    }
 
-return majorityLabel;
+  return majorityLabel;
 }
 
 template<class TInputImage, class TOutputImage, class TKernel>
