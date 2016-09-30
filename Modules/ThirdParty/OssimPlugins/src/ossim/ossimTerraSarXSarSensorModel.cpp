@@ -133,7 +133,10 @@ private:
 
 ossimplugins::ossimTerraSarXSarSensorModel::ossimTerraSarXSarSensorModel()
    : m_polLayerName("UNDEFINED")
-{}
+{
+  //TSX polynoms are in time conventions
+  m_isPolyInTime = true;
+}
 
 void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::string & annotationXml, const std::string & geoXml)
 {
@@ -280,7 +283,6 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     xmlGeo->findNodes("/geoReference/geolocationGrid/gridPoint",xnodes);
 
     ossimNotify(ossimNotifyLevel_DEBUG)<<"Found "<<xnodes.size()<<" GCPs\n";
-
     for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
     {
         GCPRecordType gcpRecord;
@@ -292,10 +294,25 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
         //Get delta range time
         gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);
 
-        gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attCol) - 1.;
+        if ( isGRD() )
+          {
+            //For GRD products we have to convert T/Tau to column/row
+            double line;
+            this->azimuthTimeToLine(gcpRecord.azimuthTime, line);
+            
+            const double range = gcpRecord.slantRangeTime * theRangeSamplingRate;
 
-        gcpRecord.imPt.y = getDoubleFromFirstNode(**itNode, attRow) - 1.;
-
+            //FIXME why minus 1 here?
+            gcpRecord.imPt.x = line - 1.;
+            gcpRecord.imPt.y = range - 1.;
+          }
+        else
+          {
+            //Retrieve directly col/row from metadata
+            gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attCol) - 1.;
+            gcpRecord.imPt.y = getDoubleFromFirstNode(**itNode, attRow) - 1.;
+          }
+        
         ossimGpt geoPoint;
         gcpRecord.worldPt.lat = getDoubleFromFirstNode(**itNode, attLat);
         gcpRecord.worldPt.lon = getDoubleFromFirstNode(**itNode, attLon);
@@ -822,16 +839,35 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readGeoLocationGrid(
 
       // Get delta acquisition time
       const double deltaAzimuth = getDoubleFromFirstNode(**itNode, attT);
-      const TimeType azimuthTime = azimuthTimeStart + seconds(deltaAzimuth);
-      add(theProductKwl, prefix, attAzimuthTime, azimuthTime);
+      gcpRecord.azimuthTime = azimuthTimeStart + seconds(deltaAzimuth);
+      add(theProductKwl, prefix, attAzimuthTime, gcpRecord.azimuthTime);
 
       //Get delta range time
       // is seconds
       gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);
       add(theProductKwl, prefix, keySlantRangeTime, gcpRecord.slantRangeTime);
 
-      gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attCol) - 1.;
-      gcpRecord.imPt.y = getDoubleFromFirstNode(**itNode, attRow) - 1.;
+      if ( isGRD() )
+        {
+          //For GRD products we have to convert T/Tau to column/row
+          double line;
+          this->azimuthTimeToLine(gcpRecord.azimuthTime, line);
+            
+          const double range = gcpRecord.slantRangeTime;
+          double groundRange;
+          slantRangeToGroundRange(range, gcpRecord.azimuthTime, groundRange);
+
+          //FIXME why minus 1 here?
+          gcpRecord.imPt.x = line;
+          gcpRecord.imPt.y = groundRange / theRangeResolution;
+        }
+      else
+        {
+          //Retrieve directly col/row from metadata
+          gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attCol) - 1.;
+          gcpRecord.imPt.y = getDoubleFromFirstNode(**itNode, attRow) - 1.;
+        }
+      
       add(theProductKwl, prefix, keyImPtX, gcpRecord.imPt.x);
       add(theProductKwl, prefix, keyImPtY, gcpRecord.imPt.y);
 

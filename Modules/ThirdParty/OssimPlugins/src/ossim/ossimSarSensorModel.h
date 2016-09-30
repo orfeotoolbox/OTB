@@ -207,6 +207,10 @@ public:
     */
    void activateVerboseMode() { m_verbose = true; }
 
+   /** SR2G and G2SR polynoms conventions are in time
+    */
+   void SetisPolyInTime (bool mode) { m_isPolyInTime = mode; }
+
    virtual void lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightEllipsoid, ossimGpt& worldPt) const;
 
    virtual void lineSampleToWorld(const ossimDpt& imPt, ossimGpt& worldPt) const;
@@ -313,11 +317,7 @@ protected:
    // TODO: Document me
    /*virtual*/ void groundRangeToSlantRange(const double & groundRange, const TimeType & azimuthTime, double & slantRange) const;
 
-   /**
-    * Estimate ground range to slant range from ground range to slant range
-    * coefficients
-    */
-   void estimateGRToSRFromSRToGR(const unsigned int degree);
+   
    
    // TODO: Document me
    /*virtual*/ void applyCoordinateConversion(const double & in, const TimeType& azimuthTime, const std::vector<CoordinateConversionRecordType> & records, double & out) const;
@@ -388,7 +388,8 @@ protected:
    ProductType                                 theProductType; // GRD/SLC
    DurationType                                theAzimuthTimeOffset; // Offset computed
    double                                      theRangeTimeOffset; // Offset in seconds, computed
-
+   bool                                        m_isPolyInTime;
+   
    static const double C;
 private:
    /** Disabled assignment operator.  */

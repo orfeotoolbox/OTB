@@ -123,6 +123,7 @@ namespace ossimplugins
       , theBistaticCorrectionNeeded(false)
       , theAzimuthTimeOffset(seconds(0))
       , theRangeTimeOffset(0.)
+      , m_isPolyInTime(false)  
       {}
 
    ossimSarSensorModel::GCPRecordType const&
@@ -403,15 +404,29 @@ namespace ossimplugins
       }
    }
 
-   void ossimSarSensorModel::slantRangeToGroundRange(const double & slantRange, const TimeType & azimuthTime, double & groundRange) const
-   {
-      applyCoordinateConversion(slantRange,azimuthTime,theSlantRangeToGroundRangeRecords,groundRange);
-   }
+  void ossimSarSensorModel::slantRangeToGroundRange(const double & slantRange, const TimeType & azimuthTime, double & groundRange) const
+  {
+    if (m_isPolyInTime)
+      { 
+        applyCoordinateConversion(slantRange / (C/2),azimuthTime,theSlantRangeToGroundRangeRecords,groundRange);
+      }
+    else
+      {
+        applyCoordinateConversion(slantRange,azimuthTime,theSlantRangeToGroundRangeRecords,groundRange);
+      }
+  }
 
-   void ossimSarSensorModel::groundRangeToSlantRange(const double & groundRange, const TimeType & azimuthTime, double & slantRange) const
-   {
-      applyCoordinateConversion(groundRange,azimuthTime,theGroundRangeToSlantRangeRecords,slantRange);
-   }
+  void ossimSarSensorModel::groundRangeToSlantRange(const double & groundRange, const TimeType & azimuthTime, double & slantRange) const
+  {
+    if (m_isPolyInTime)
+      {
+        applyCoordinateConversion(groundRange / (C/2),azimuthTime,theGroundRangeToSlantRangeRecords,slantRange);
+      }
+    else
+      {
+        applyCoordinateConversion(groundRange,azimuthTime,theGroundRangeToSlantRangeRecords,slantRange);
+      }
+  }
 
   
 
