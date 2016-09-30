@@ -442,6 +442,7 @@ foreach(otb_option
     CMAKE_BUILD_TYPE
     CMAKE_C_FLAGS
     CMAKE_CXX_FLAGS
+    OTB_HAS_CXX11
     ${option_list}
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA
