@@ -99,8 +99,9 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
                                                                           const KernelIteratorType kernelBegin,
                                                                           const KernelIteratorType kernelEnd) const
 {  
-  std::map<PixelType, unsigned int> histoNeigh;
-  PixelType centerPixel = nit.GetCenterPixel();
+  typedef std::map<PixelType, unsigned int> HistogramType;
+  typedef std::vector<std::pair<PixelType, unsigned int> > HistoAsVectorType;
+  HistogramType histoNeigh;
   unsigned int i = 0; 
   for (KernelIteratorType kernel_it = kernelBegin; 
        kernel_it < kernelEnd; ++kernel_it, ++i)
@@ -109,21 +110,20 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
     // in the image
     // note we use GetPixel() on the SmartNeighborhoodIterator to
     // respect boundary conditions
-    PixelType label = nit.GetPixel(i);
-    if ((*kernel_it > itk::NumericTraits<KernelPixelType>::Zero) && (label != m_LabelForNoDataPixels))
+    const PixelType label = nit.GetPixel(i);
+    if ((*kernel_it > itk::NumericTraits<KernelPixelType>::Zero) && 
+        (label != m_LabelForNoDataPixels))
       {
-      //If the current label has already been added to the histogram histoNeigh
       histoNeigh[label] += 1;
       }
     }
-  std::vector< std::pair<PixelType, unsigned int> > histoNeighVec;
-  std::copy(histoNeigh.begin(), histoNeigh.end(), std::back_inserter(histoNeighVec));
-  const typename std::vector<std::pair<PixelType, unsigned int> >::iterator histoIt = histoNeighVec.begin();
-  std::nth_element(histoNeighVec.begin(), histoIt+1,
+  HistoAsVectorType histoNeighVec(histoNeigh.begin(), histoNeigh.end());
+  //Sort the 2 max elements to the beginning
+  std::nth_element(histoNeighVec.begin(), histoNeighVec.begin()+1,
                    histoNeighVec.end(), CompareHistoFequencies());
   typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
                                                  TKernel>::HistoSummary result;
-  result.freqCenterLabel = histoNeigh[centerPixel];
+  result.freqCenterLabel = histoNeigh[nit.GetCenterPixel()];
   result.majorityFreq = histoNeighVec[0].second;
   result.majorityLabel = histoNeighVec[0].first;
   result.secondFreq = histoNeighVec[1].second;
