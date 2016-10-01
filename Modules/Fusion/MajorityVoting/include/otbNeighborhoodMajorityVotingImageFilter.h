@@ -175,10 +175,8 @@ protected:
   struct HistoSummary
   {
     unsigned int freqCenterLabel;
-    unsigned int majorityFreq;
     PixelType majorityLabel;
-    unsigned int secondFreq;
-    PixelType secondLabel;
+    bool majorityUnique;
   };
 
   struct CompareHistoFequencies

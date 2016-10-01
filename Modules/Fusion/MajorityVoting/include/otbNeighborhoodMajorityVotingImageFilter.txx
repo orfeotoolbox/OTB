@@ -72,8 +72,7 @@ NeighborhoodMajorityVotingImageFilter<TInputImage,
     else
       {
       //If the majorityLabel is NOT unique in the neighborhood
-      if(histoSummary.secondFreq == histoSummary.majorityFreq && 
-         histoSummary.secondLabel != histoSummary.majorityLabel)
+      if(!histoSummary.majorityUnique)
         {
         if (m_KeepOriginalLabelBool == true)
           {
@@ -123,10 +122,8 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
   typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
                                                  TKernel>::HistoSummary result;
   result.freqCenterLabel = histoNeigh[nit.GetCenterPixel()];
-  result.majorityFreq = histoNeighVec[0].second;
   result.majorityLabel = histoNeighVec[0].first;
-  result.secondFreq = histoNeighVec[1].second;
-  result.secondLabel = histoNeighVec[1].first;
+  result.majorityUnique = (histoNeighVec[0].second != histoNeighVec[1].second);
   return result;
 }
 
