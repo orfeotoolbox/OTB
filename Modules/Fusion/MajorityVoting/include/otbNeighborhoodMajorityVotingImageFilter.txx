@@ -46,12 +46,13 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, TKernel>::Neigh
 template<class TInputImage, class TOutputImage, class TKernel>
 typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
                                                TKernel>::PixelType 
-NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, 
-                                      TKernel>::Evaluate(const NeighborhoodIteratorType &nit,
-                                                         const KernelIteratorType kernelBegin,
-                                                         const KernelIteratorType kernelEnd) 
+NeighborhoodMajorityVotingImageFilter<TInputImage, 
+                                      TOutputImage, TKernel>::Evaluate(const NeighborhoodIteratorType &nit,
+                                                                       const KernelIteratorType kernelBegin,
+                                                                       const KernelIteratorType kernelEnd) 
 {
   const PixelType centerPixel = nit.GetCenterPixel();
+  PixelType result = centerPixel; 
   if (centerPixel != m_LabelForNoDataPixels)
     {
     //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
@@ -62,32 +63,32 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
       //If we want to filter only isolated pixels, keep the label if
       //there are enough pixels with the center label to consider that
       //it is not isolated
-      return centerPixel;
+      result = centerPixel;
       }
     else
       {
+      //Extraction of the more representative Label in the neighborhood (majorityLabel)
+      result = histoSummary.majorityLabel;
       //If the majorityLabel is NOT unique in the neighborhood
-      if(histoSummary.secondFreq == histoSummary.majorityFreq && 
-         histoSummary.secondLabel != histoSummary.majorityLabel)
+      if(histoSummary.secondFreq == histoSummary.majorityFreq && histoSummary.secondLabel != histoSummary.majorityLabel)
         {
         if (m_KeepOriginalLabelBool == true)
           {
-          return centerPixel;
+          result = centerPixel;
           }
         else
           {
-          return m_LabelForUndecidedPixels;
+          result = m_LabelForUndecidedPixels;
           }
         }
       }
     }//END if (centerPixel != m_LabelForNoDataPixels)
-//If (centerPixel == m_LabelForNoDataPixels)
+  //If (centerPixel == m_LabelForNoDataPixels)
   else
     {
-    return m_LabelForNoDataPixels;
+    result = m_LabelForNoDataPixels;
     }
-
-  return centerPixel;
+  return result;
 }
 
 template<class TInputImage, class TOutputImage, class TKernel>
@@ -123,14 +124,12 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
   typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
                                                  TKernel>::HistoSummary result;
   result.freqCenterLabel = histoNeigh[centerPixel];
-  result.majorityFreq = histoNeighVec[0].first;
-  result.majorityLabel = histoNeighVec[0].second;
-  result.secondFreq = histoNeighVec[1].first;
-  result.secondLabel = histoNeighVec[1].second;
+  result.majorityFreq = histoNeighVec[0].second;
+  result.majorityLabel = histoNeighVec[0].first;
+  result.secondFreq = histoNeighVec[1].second;
+  result.secondLabel = histoNeighVec[1].first;
   return result;
 }
-
-
 
 template<class TInputImage, class TOutputImage, class TKernel>
 void
