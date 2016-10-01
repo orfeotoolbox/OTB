@@ -52,43 +52,42 @@ NeighborhoodMajorityVotingImageFilter<TInputImage,
                                                                        const KernelIteratorType kernelEnd) 
 {
   const PixelType centerPixel = nit.GetCenterPixel();
-  PixelType result = centerPixel; 
-  if (centerPixel != m_LabelForNoDataPixels)
+  if (centerPixel == m_LabelForNoDataPixels)
+    {
+    return m_LabelForNoDataPixels;
+    }
+  else
     {
     //Get a histogram of label frequencies where the 2 highest are at the beginning and sorted
-    const HistoSummary histoSummary = this->ComputeNeighborhoodHistogramSummary(nit, kernelBegin, kernelEnd);
-
-    if(m_OnlyIsolatedPixels && histoSummary.freqCenterLabel > m_IsolatedThreshold)
+    const HistoSummary histoSummary = 
+      this->ComputeNeighborhoodHistogramSummary(nit, kernelBegin, kernelEnd);
+    if(m_OnlyIsolatedPixels && 
+       histoSummary.freqCenterLabel > m_IsolatedThreshold)
       {
       //If we want to filter only isolated pixels, keep the label if
       //there are enough pixels with the center label to consider that
       //it is not isolated
-      result = centerPixel;
+      return centerPixel;
       }
     else
       {
-      //Extraction of the more representative Label in the neighborhood (majorityLabel)
-      result = histoSummary.majorityLabel;
       //If the majorityLabel is NOT unique in the neighborhood
-      if(histoSummary.secondFreq == histoSummary.majorityFreq && histoSummary.secondLabel != histoSummary.majorityLabel)
+      if(histoSummary.secondFreq == histoSummary.majorityFreq && 
+         histoSummary.secondLabel != histoSummary.majorityLabel)
         {
         if (m_KeepOriginalLabelBool == true)
           {
-          result = centerPixel;
+          return centerPixel;
           }
         else
           {
-          result = m_LabelForUndecidedPixels;
+          return m_LabelForUndecidedPixels;
           }
         }
+      //Extraction of the more representative Label in the neighborhood (majorityLabel)
+      return histoSummary.majorityLabel;
       }
     }//END if (centerPixel != m_LabelForNoDataPixels)
-  //If (centerPixel == m_LabelForNoDataPixels)
-  else
-    {
-    result = m_LabelForNoDataPixels;
-    }
-  return result;
 }
 
 template<class TInputImage, class TOutputImage, class TKernel>
