@@ -191,7 +191,7 @@ int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), c
   // Should not be filtered
   if( result != value)
     {
-    std::cout << "2 pixels thres = 1 result = " << int{result} << '\n';
+    std::cout << "2 pixels thres = 1 result = " << int(result) << '\n';
     return EXIT_FAILURE;
     }
   NeighMajVotingFilter->SetIsolatedThreshold(3);
