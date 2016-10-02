@@ -113,7 +113,7 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int argc, char* argv[])
+int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef unsigned char PixelType; // 8 bits
   const unsigned int Dimension = 2;
