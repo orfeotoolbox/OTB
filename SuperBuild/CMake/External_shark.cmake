@@ -2,11 +2,11 @@ if(NOT __EXTERNAL_SHARK__)
 set(__EXTERNAL_SHARK__ 1)
 
 if(USE_SYSTEM_SHARK)
-  message(STATUS "  Using SHARK system version")
+  message(STATUS "  Using system version of SHARK")
 else()
   SETUP_SUPERBUILD(PROJECT SHARK)
   cmake_minimum_required(VERSION 3.1)
-  message(STATUS "  Using SHARK SuperBuild version")
+  message(STATUS "  Using SuperBuild version of SHARK")
 
   # declare dependencies
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(SHARK BOOST)
