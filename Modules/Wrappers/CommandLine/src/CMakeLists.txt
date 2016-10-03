@@ -15,6 +15,8 @@ add_executable(otbApplicationLauncherCommandLine otbApplicationLauncherCommandLi
 target_link_libraries(otbApplicationLauncherCommandLine OTBCommandLine)
 otb_module_target(otbApplicationLauncherCommandLine)
 
+set_linker_stack_size_flag(otbApplicationLauncherCommandLine 10000000)
+
 # Where we will install the script in the build tree
 get_target_property(CLI_OUTPUT_DIR otbApplicationLauncherCommandLine RUNTIME_OUTPUT_DIRECTORY)
 
