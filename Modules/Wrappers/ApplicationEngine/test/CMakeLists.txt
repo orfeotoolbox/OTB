@@ -177,3 +177,7 @@ otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineT
   $<TARGET_FILE_DIR:otbapp_Smoothing>
   ${INPUTDATA}/poupees.tif
   ${TEMP}/owTvApplicationMemoryConnectTestOutput.tif)
+
+otb_add_test(NAME owTvParameterGroup COMMAND otbApplicationEngineTestDriver
+  otbWrapperParameterList
+  )
