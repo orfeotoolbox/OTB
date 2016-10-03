@@ -36,6 +36,7 @@
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperProxyParameter.h"
 
 #include "otb_boost_string_header.h"
 
@@ -664,6 +665,31 @@ void
 ParameterGroup::AddParameter(Parameter::Pointer p)
 {
   m_ParameterList.push_back(p);
+}
+
+bool
+ParameterGroup::ReplaceParameter(Parameter::Pointer p)
+{
+  // find current parameter in the current group
+  Parameter::Pointer parentParam;
+  ParameterListType::iterator vit;
+  std::string inputKey(p->GetKey());
+  for (vit = m_ParameterList.begin(); vit != m_ParameterList.end(); ++vit)
+    {
+    if (inputKey.compare((*vit)->GetKey()) == 0)
+      {
+      parentParam = *vit;
+      break;
+      }
+    }
+  if (parentParam.IsNull())
+    {
+    return false;
+    }
+  // don't check type compatibility here, we may want to handle special cases
+  // at higher level
+  *vit = p;
+  return true;
 }
 
 Parameter::Pointer
