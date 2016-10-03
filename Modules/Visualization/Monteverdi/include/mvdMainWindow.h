@@ -326,6 +326,10 @@ private:
 
 #endif // USE_PIXEL_DESCRIPTION
 
+  /**
+   */
+  void SetGLSLEnabled( bool );
+
   //
   // I18nMainWindow overrides.
 
@@ -423,6 +427,11 @@ private:
   /**
    */
   int m_GLSL140;
+
+  /**
+   */
+  bool m_isGLSLAvailable : 1;
+  bool m_ForceNoGLSL : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

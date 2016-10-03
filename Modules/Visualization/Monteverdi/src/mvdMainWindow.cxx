@@ -138,7 +138,9 @@ MainWindow
   m_ShaderWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL ),
   m_KeymapDialog( NULL ),
-  m_GLSL140( -2 )
+  m_GLSL140( -2 ),
+  m_isGLSLAvailable( false ),
+  m_ForceNoGLSL( false )
 {
   m_UI->setupUi( this );
 
@@ -181,20 +183,27 @@ MainWindow
   //     m_ImageView->GetRenderer()==NULL )
   //   return false;
 
-  // Even if force no-GLSL option is set CheckGLCapabilities() should
-  // be called because it might proceed to some OpenGL setup.
-  bool isGLSL =
-    m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 ) &&
-    !forceNoGLSL;
+  m_isGLSLAvailable =
+    m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
 
 #if FORCE_NO_GLSL
   qWarning() << "No-GLSL is always forced in this build!";
 
-  m_ImageView->GetRenderer()->SetGLSLEnabled( false );
+  m_ForceNoGLSL = true;
 
-  isGLSL = false;
+#else
+  m_ForceNoGLSL = forceNoGLSL;
+
 #endif // FORCE_NO_GLSL
 
+  SetGLSLEnabled( m_isGLSLAvailable && !m_ForceNoGLSL );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::SetGLSLEnabled( bool enabled )
+{
   // MANTIS-1204
   // {
   //
@@ -202,20 +211,17 @@ MainWindow
   assert( GetQuicklookView()!=NULL );
   assert( GetQuicklookView()->GetRenderer()!=NULL );
 
-  GetQuicklookView()->GetRenderer()->SetGLSLEnabled( isGLSL );
+  GetQuicklookView()->GetRenderer()->SetGLSLEnabled( enabled );
   // }
 
   assert( m_ShaderWidget!=NULL );
 
-  m_ShaderWidget->SetGLSLEnabled( isGLSL );
+  m_ShaderWidget->SetGLSLEnabled( enabled );
   m_ShaderWidget->SetGLSL140Enabled( m_GLSL140>=0 );
 
   assert( m_StatusBarWidget!=NULL );
 
-  m_StatusBarWidget->SetGLSLEnabled( isGLSL );
-
-
-  return true;
+  m_StatusBarWidget->SetGLSLEnabled( enabled );
 }
 
 /*****************************************************************************/
