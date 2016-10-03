@@ -110,6 +110,40 @@ SamplingRateCalculator
     }
 }
 
+
+void SamplingRateCalculator
+::SetPercentageOfSamples(double percent)
+{
+  MapRateType::iterator it = m_RatesByClass.begin();
+  for (; it != m_RatesByClass.end() ; ++it)
+    {
+    it->second.Required = static_cast<unsigned long>(vcl_floor(0.5+percent * it->second.Tot));
+    it->second.Rate = percent;
+    }
+}
+
+void SamplingRateCalculator
+::SetTotalNumberOfSamples(unsigned long value)
+{
+  // First, get total number of samples
+  unsigned long totalNumberOfSamplesAvailable = 0;
+
+  MapRateType::iterator it = m_RatesByClass.begin();
+  for (; it != m_RatesByClass.end() ; ++it)
+    {
+    totalNumberOfSamplesAvailable+=it->second.Tot;
+    }
+
+  // Then compute number of samples for each class
+  for (it = m_RatesByClass.begin(); it != m_RatesByClass.end() ; ++it)
+    {
+    double ratio = it->second.Tot / static_cast<double>(totalNumberOfSamplesAvailable);
+
+    it->second.Required = static_cast<unsigned long>(0.5+ratio*value);
+    this->UpdateRate(it->first);
+    }
+}
+
 void 
 SamplingRateCalculator
 ::Write(std::string filename)

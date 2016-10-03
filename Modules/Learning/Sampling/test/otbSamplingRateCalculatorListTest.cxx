@@ -72,6 +72,12 @@ int otbSamplingRateCalculatorList(int itkNotUsed(argc), char* argv[])
   std::vector<unsigned long> nbSamplesCst;
   nbSamplesCst.push_back(151);
 
+  std::vector<double> percent;
+  percent.push_back(0.33);
+
+  std::vector<unsigned long> total;
+  total.push_back(300);
+
   std::vector<unsigned long> nbSamplesCstCustom;
   nbSamplesCstCustom.push_back(70);
   nbSamplesCstCustom.push_back(80);
@@ -183,6 +189,38 @@ int otbSamplingRateCalculatorList(int itkNotUsed(argc), char* argv[])
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
     }
 
+  file <<"#Test the strategy : percent - proportional"<<std::endl;
+  rateCalcList->SetPercentageOfSamples(percent,typeProportional);
+  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
+    {
+    file << "# Input "<< i << std::endl;
+    rateCalcList->GetNthElement(i)->Print(file, indent_1);
+    }
+  
+  file <<"#Test the strategy : percent - equal"<<std::endl;
+  rateCalcList->SetPercentageOfSamples(percent,typeEqual);
+  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
+    {
+    file << "# Input "<< i << std::endl;
+    rateCalcList->GetNthElement(i)->Print(file, indent_1);
+    }
+
+  file <<"#Test the strategy : total - proportional"<<std::endl;
+  rateCalcList->SetTotalNumberOfSamples(total,typeProportional);
+  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
+    {
+    file << "# Input "<< i << std::endl;
+    rateCalcList->GetNthElement(i)->Print(file, indent_1);
+    }
+  
+  file <<"#Test the strategy : total - equal"<<std::endl;
+  rateCalcList->SetTotalNumberOfSamples(total,typeEqual);
+  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
+    {
+    file << "# Input "<< i << std::endl;
+    rateCalcList->GetNthElement(i)->Print(file, indent_1);
+    }
+  
   file.close();
   return EXIT_SUCCESS;
 }

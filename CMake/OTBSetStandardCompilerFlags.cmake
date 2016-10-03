@@ -316,3 +316,18 @@ set_debug_flags()
 #-----------------------------------------------------------------------------
 #Check the set of platform flags the compiler supports
 check_compiler_platform_flags()
+
+
+# Usage: set_linker_stack_size_flag(otbApplicationLauncherCommandLine 10000000)
+# The above macro call will set LINK_FLAGS executable target named
+# otbApplicationLauncherCommandLine to 10Mbytes
+macro(set_linker_stack_size_flag exe_target requested_stack_size)
+  # Since CMake 2.8.11, the size of the stack is not modified by CMake on
+  # windows platform, it uses the default size: with visual compiler it is 1Mbyte
+  # which is to lower for us (thanks to 6S code).
+  if(MSVC)
+    set_target_properties(${exe_target} PROPERTIES LINK_FLAGS "/STACK:${requested_stack_size}")
+  elseif(MINGW)
+    set_target_properties(${exe_target} PROPERTIES LINK_FLAGS "-Wl,--stack,${requested_stack_size}")
+  endif()
+endmacro()

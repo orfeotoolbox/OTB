@@ -94,6 +94,16 @@ private:
       "    - if mim = proportional, then Ni( c ) = M(c) * Ti( c ) / sum_k( Tk(c) )\n\n"
       "    - if mim = equal       , then Ni( c ) = M(c) / L\n\n"
       "    - if mim = custom      , then Ni( c ) = Mi(c) where Mi(c) is the custom requested number of samples for image i and class c\n\n"
+      "  * strategy = percent :"
+      " For each image i and each class c:\n\n"
+      "    - if mim = proportional, then Ni( c ) = p * Ti( c ) where p is the global percentage of samples\n\n"
+      "    - if mim = equal       , then Ni( c ) = p * sum_k(Tk(c)]/L where p is the global percentage of samples\n\n"
+      "    - if mim = custom      , then Ni( c ) = p(i) * Ti(c) where p(i) is the percentage of samples for image i. c\n\n"
+      "  * strategy = total :"
+      " For each image i and each class c:\n\n"
+      "    - if mim = proportional, then Ni( c ) = total * (sum_k(Ti(k))/sum_kl(Tl(k))) * (Ti(c)/sum_k(Ti(k))) where total is the total number of samples specified.\n\n"
+      "    - if mim = equal       , then Ni( c ) = (total / L) * (Ti(c)/sum_k(Ti(k))) where total is the total number of samples specified.\n\n"
+      "    - if mim = custom      , then Ni( c ) = total(i) * (Ti(c)/sum_k(Ti(k))) where total(i) is the total number of samples specified for image i. \n\n"                          
       "  * strategy = smallest class\n\n"
       "    - if mim = proportional, then the smallest class size (computed globally) is used for the strategy constant+proportional.\n\n"
       "    - if mim = equal       , then the smallest class size (computed globally) is used for the strategy constant+equal.\n\n"
@@ -135,6 +145,18 @@ private:
     AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
     SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
 
+    AddChoice("strategy.percent","Use a percentage of the samples available for each class");
+    SetParameterDescription("strategy.percent","Use a percentage of the samples available for each class");
+
+    AddParameter(ParameterType_String,"strategy.percent.p","The percentage(s) to use");
+    SetParameterDescription("strategy.percent.p","The percentage(s) to use " "In the case of the custom multi-image mode, several values can be given for each image.");
+
+    AddChoice("strategy.total","Set the total number of samples to generate, and use class proportions.");
+    SetParameterDescription("strategy.total","Set the total number of samples to generate, and use class proportions.");
+
+    AddParameter(ParameterType_String,"strategy.total.v","The number of samples to generate");
+    SetParameterDescription("strategy.total.v","The number of samples to generate" "In the case of the custom multi-image mode, several values can be given for each image.");
+ 
     AddChoice("strategy.all","Take all samples");
     SetParameterDescription("strategy.all","Take all samples");
 
@@ -231,15 +253,68 @@ private:
         m_CalculatorList->SetNbOfSamplesAllClasses(countList, partitionMode);
         }
       break;
-      // smallest class
+      // percent 
       case 2:
+        {
+        std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.percent.p"),' ');
+        std::vector<double> percentList;
+        for (unsigned int i=0 ; i<parts.size() ; i++)
+          {
+          if (!parts[i].empty())
+            {
+            std::string::size_type pos1 = parts[i].find_first_not_of(" \t");
+            std::string::size_type pos2 = parts[i].find_last_not_of(" \t");
+            std::string value(parts[i].substr(pos1, pos2 - pos1 + 1));
+            percentList.push_back(boost::lexical_cast<double>(parts[i]));
+
+            if(percentList.back()<0 || percentList.back()>1)
+              {
+              otbAppLogFATAL("Percent parameter should be in range [0,1]");
+              } 
+            }
+          }
+        if (percentList.size() < minParamSize)
+          {
+          otbAppLogFATAL("Missing arguments in strategy.percent.p to process sampling rates");
+          }
+        otbAppLogINFO("Sampling strategy : set a percentage of samples to be used.");
+        m_CalculatorList->SetPercentageOfSamples(percentList, partitionMode);        
+        }
+      break;
+
+      // total
+      case 3:
+        {
+        std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.total.v"),' ');
+        std::vector<unsigned long> totalList;
+        for (unsigned int i=0 ; i<parts.size() ; i++)
+          {
+          if (!parts[i].empty())
+            {
+            std::string::size_type pos1 = parts[i].find_first_not_of(" \t");
+            std::string::size_type pos2 = parts[i].find_last_not_of(" \t");
+            std::string value(parts[i].substr(pos1, pos2 - pos1 + 1));
+            totalList.push_back(boost::lexical_cast<unsigned long>(parts[i]));
+            }
+          }
+        if (totalList.size() < minParamSize)
+          {
+          otbAppLogFATAL("Missing arguments in strategy.total.v to process sampling rates");
+          }
+        otbAppLogINFO("Sampling strategy : set a constant number of samples for all classes");
+        m_CalculatorList->SetTotalNumberOfSamples(totalList, partitionMode);
+        }
+      break;
+
+      // smallest class
+      case 4:
         {
         otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
         m_CalculatorList->SetMinimumNbOfSamplesByClass(partitionMode);
         }
       break;
       // all samples
-      case 3:
+      case 5:
         {
         otbAppLogINFO("Sampling strategy : take all samples");
         m_CalculatorList->SetAllSamples(partitionMode);

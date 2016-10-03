@@ -42,18 +42,9 @@ otbImageToLuminanceImageFilter.cxx
 add_executable(otbOpticalCalibrationTestDriver ${OTBOpticalCalibrationTests})
 target_link_libraries(otbOpticalCalibrationTestDriver ${OTBOpticalCalibration-Test_LIBRARIES})
 otb_module_target_label(otbOpticalCalibrationTestDriver)
-
-# Since CMake 2.8.11, the size of the stack is not modified by CMake on
-# windows platform, it uses the default size: with visual compiler it is 1Mbyte
-# which is to lower for us (thanks to 6S code).
-if(MSVC)
-  set_target_properties(otbOpticalCalibrationTestDriver PROPERTIES LINK_FLAGS "/STACK:10000000")
-elseif(MINGW)
-  set_target_properties(otbOpticalCalibrationTestDriver PROPERTIES LINK_FLAGS "-Wl,--stack,10000000")
-endif()
+set_linker_stack_size_flag(otbOpticalCalibrationTestDriver 10000000)
 
 # Tests Declaration
-
 otb_add_test(NAME raTuSpectralSensitivityReaderNew COMMAND otbOpticalCalibrationTestDriver
   otbSpectralSensitivityReaderNew
   )
