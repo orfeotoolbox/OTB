@@ -27,7 +27,12 @@ if(PROJECT_NAME STREQUAL "OTBPackaging")
     get_filename_component(OTB_SOURCE_DIR ${OTBPackaging_SOURCE_DIR} PATH)
     get_filename_component(OTB_SOURCE_DIR ${OTB_SOURCE_DIR} PATH)
   endif()
-endif()
+  
+  option(OTB_WRAP_PYTHON "enable python wrapping" ON)
+  if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
+    find_package ( PythonInterp REQUIRED )
+  endif()
+endif() #if(PROJECT_NAME STREQUAL ..
 
 if(NOT GENERATE_PACKAGE AND NOT GENERATE_XDK)
   #well. we don't have any businees here. Let's move on..
@@ -172,6 +177,7 @@ else() #unixes
   set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
   set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
 endif()
+
 
 macro_setup_cmake_project(OTB)
 if(GENERATE_XDK)
