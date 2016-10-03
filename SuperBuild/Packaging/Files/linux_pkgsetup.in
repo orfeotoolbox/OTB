@@ -135,8 +135,8 @@ if [ "$found_python_lib" == "1" ]; then
     printf %s\\n "Found python library: $python_lib_file_path "
     ln -sf $python_lib_file_path $OUT_DIR/lib/$python_INSTALLED_SONAME
     printf %s\\n "To use OTB python binding you need to export below environment variables:"
-    printf %s\\n "export LD_LIBRARY_PATH=$OUT_DIR/lib and"
-    printf %s\\n "export PYTHONPATH=$OUT_DIR/lib/python"
+    printf %s\\n "'export LD_LIBRARY_PATH=$OUT_DIR/lib' and"
+    printf %s\\n "'export PYTHONPATH=$OUT_DIR/lib/python'"
     printf %s\\n "And then from python prompt import otbApplication."
     printf %s\\n "eg: python -c 'import otbApplication'"
 else

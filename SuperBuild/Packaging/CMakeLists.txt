@@ -178,7 +178,6 @@ else() #unixes
   set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
 endif()
 
-
 macro_setup_cmake_project(OTB)
 if(GENERATE_XDK)
   macro_setup_cmake_project(XDK)
