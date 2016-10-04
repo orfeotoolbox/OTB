@@ -19,176 +19,23 @@ in the section "Building from Source".
 Windows
 -------
 
-We provide for Windows Seven and later through standalone packages. They
-are cross-compiled with MinGW, for 32 bits and 64 bits platforms. They
-contain all applications and their launchers (both command line and graphical
-launchers are provided).
-Check the `Download page <https://www.orfeo-toolbox.org/download>`__
-
-There is a 32 bits and a 64 bits version. They contain the same directory
-structure:
-
--  ``monteverdi.bat`` : A launcher script for Monteverdi
-
--  ``mapla.bat`` : A launcher script for Mapla
-
--  ``otbenv.bat`` : A script to initialize the environment for OTB
-   executables
-
--  ``bin`` : A folder containing application launchers (otbcli.bat,
-   otbgui.bat) and the DLLs.
-
--  ``lib`` : A folder containing application DLLs.
-
-The applications can be launched from the Mapla launcher. If you want to
-use the otbcli and otbgui launchers, you can initialize a command prompt
-with ``otbenv.bat``.
+.. include:: Installation_Windows.txt
 
 Linux 64bit
 -----------
 
-We provide for Linux 64 bits OS through standalone packages. They contain
-all OTB Applications and their launchers (both command line and
-graphical launchers are provided). Check the `Download page <https://www.orfeo-toolbox.org/download>`__
-
-This package is a self-extractible archive. You may uncompress it with a
-double-click on the file, or with the command line :
-
-.. parsed-literal::
-
-   chmod +x OTB-|release|-Linux64.run
-   ./OTB-|release|-Linux64.run
-
-Please note that the resulting installation is not meant to be moved,
-you should uncompress the archive in its final location. Once the
-archive is extracted, the directory structure is made of:
-
--  ``monteverdi.sh`` : A launcher script for Monteverdi
-
--  ``mapla.sh`` : A launcher script for Mapla
-
--  ``otbenv.profile`` : A script to initialize the environment for OTB
-   executables
-
--  ``bin`` : A folder containing application launchers (otbcli.sh,
-   otbgui.sh), Monteverdi and Mapla.
-
--  ``lib`` : A folder containing all shared libraries and OTB
-   applications.
-
--  ``share`` : A folder containing common resources and copyright
-   mentions.
-
-In order to run the command line launchers, this package doesn’t require
-any special library that is not present in most modern Linux
-distributions. The graphical executable (otbgui launchers, Monteverdi
-and Mapla) use the X11 libraries, which are widely used in a lot of
-distributions :
-
-::
-
-    libx11-6 libxext6 libxau6 libxxf86vm1 libxdmcp6 libdrm2
-
-Monteverdi also requires the standard graphics libraries libgl1 and
-libglu1. Make sure you have at least one version of them installed
-in your system.
-
-The applications can be launched from the Mapla launcher. If you want to
-use the otbcli and otbgui launchers, you can initialize your environment
-with ``source otbenv.profile``.
-
-Notes:
-
-- You must use monteverdi and mapla through ``mapla.sh`` and ``monteverdi.sh`` helper scripts in extracted directory.
-
-- The helper scripts for monteverdi and mapla set required environment variables
-
-- You might be tempted to move "OTB-|release|-Linux64" into another location say /usr/local/ after extraction. But avoid this action!
-
-- To have "OTB-|release|-Linux64" installed in /usr/local or /opt execute "OTB-|release|-Linux64.run" in that directory.
-
-- Multiple installation of OTB can exists in same system without one conflicting the other!
+.. include:: Installation_Linux.txt
 
 FAQ for Packaging
 -----------------
 
-Q: I am getting an error message...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-::
-
-   Cannot mix incompatible Qt library (version 0x40806) with this library (version 0x40807)
-   Aborted
-
-A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk libs in OTB package. The fix you need is to remove those libs from package.
-
-.. parsed-literal::
-
-   cd /path/to/OTB-|release|-Linux64
-   rm -f lib/libQt* && rm -fr lib/gtk
-
-Q: Monteverdi and Mapla applications look different from my other applications.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a default gtk theme (plastic)
-which is distributed with the OTB package!.  We do this to be on safe side, like when a user does
-not have gtk libraries installed when using our package.
-
-gtk libraries in the package is  the reason why you are getting a default "plastic" look & feel that
-makes it look different from other GUI applications.
-To get same look and feel, you can "force"  Monteverdi and Mapla to use system GTK.
-
-::
-
-   export OTB_USE_SYSTEM_GTK=1
-
-And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-|release|-Linux64
-To get back default behaviour, unset OTB_USE_SYSTEM_GTK=1 or set OTB_USE_SYSTEM_GTK=0
-
+.. include:: Installation_FAQ.txt
 
 MacOS X
 -------
 
-We provide for MacOS X through a standalone package. This package is a
-self-extractible archive, quite similar to the Linux one. You may
-uncompress it with the command line :
-
-.. parsed-literal::
-
-    chmod +x OTB-|release|-Linux64.run
-    ./OTB-|release|-Linux64.run
-
-Once the archive is extracted, you can see OTB-|release|-Darwin64 directory in
-the same direcrtory along with OTB-|release|-Darwin64.run
-
-Contents of OTB-|release|-Darwin64 is briefly listed below:
-
--  ``Monteverdi.app`` : A Mac OSX .app for Monteverdi
-
--  ``Mapla.app`` : A Mac OSX .app for Mapla.
-
--  ``bin`` : A folder containing application launchers (otbcli.sh,
-   otbgui.sh), monteverdi and mapla binaries.
-
--  ``lib`` : A folder containing all shared libraries and OTB
-   applications.
-
--  ``share`` : A folder containing common resources and copyright
-   mentions.
-
-Notes:
-
--  If you want to use the otbcli and otbgui launchers, you must access
-   them via a terminal prompt.
-
--  The OSX .app are provided for monteverdi (viewer) and mapla
-   (application browser).
-
--  You must use monteverdi and mapla through their .app files only.
-
--  You are allowed to move these .app files and refrain from moving or
-   deleting OTB-|release|-Darwin64 after extraction. In case you need to have OTB
-   installed in some other directory. Extract the .run file there.
-
+.. include:: Installation_Macx.txt
+             
 Other packages
 --------------
 
