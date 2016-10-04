@@ -104,7 +104,7 @@ public:
   {
     otbWarningMacro(
       << "InstanciateProjection has been deprecated.  Please use InstantiateProjection() instead");
-    return this->InstanciateProjection();
+    return this->InstantiateProjection();
   }
 
   const MapProjectionAdapter* GetMapProjection() const;
