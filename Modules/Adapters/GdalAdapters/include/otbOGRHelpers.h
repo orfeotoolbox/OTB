@@ -31,6 +31,8 @@
 #include "cpl_string.h" // CSLCount
 #endif
 
+#include "OTBGdalAdaptersExport.h"
+
 namespace otb
 {
 namespace ogr
@@ -55,7 +57,7 @@ namespace ogr
  *
  * \ingroup OTBGdalAdapters
  */
-struct StringListConverter
+struct OTBGdalAdapters_EXPORT StringListConverter
 {
 
   template <class ContainerType>
@@ -81,7 +83,7 @@ struct StringListConverter
     assert(CSLCount(const_cast <char**>(&m_raw[0])) == static_cast<int>(boost::size(strings)));
     }
   /**
-   * Acces to the OGR compliant list of strings.
+   * Access to the OGR compliant list of strings.
    */
   char ** to_ogr() const
     {

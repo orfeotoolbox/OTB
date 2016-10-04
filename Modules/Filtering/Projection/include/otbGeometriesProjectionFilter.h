@@ -24,6 +24,8 @@
 #include "itkTransform.h"
 #include "otbGenericRSTransform.h"
 
+#include "OTBProjectionExport.h"
+
 class OGRCoordinateTransformation;
 
 namespace otb
@@ -41,7 +43,7 @@ namespace internal
  *
  * \since OTB v 3.14.0
  */
-struct ReprojectTransformationFunctor
+struct OTBProjection_EXPORT ReprojectTransformationFunctor
   {
   typedef OGRGeometry TransformedElementType;
 
@@ -151,7 +153,7 @@ private:
  *
  * \ingroup OTBProjection
  */
-class ITK_EXPORT GeometriesProjectionFilter : public GeometriesToGeometriesFilter
+class OTBProjection_EXPORT GeometriesProjectionFilter : public GeometriesToGeometriesFilter
 {
 public:
   /**\name Standard ITK typedefs */
@@ -208,7 +210,16 @@ private:
    * forwarded to the functor. \c ogr::Layer specific settings will be set at
    * the last moment from \c DoProcessLayer().
    */
-  void DoFinalizeInitialisation() ITK_OVERRIDE;
+  void DoFinalizeInitialization() ITK_OVERRIDE;
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void DoFinalizeInitialisation()
+  {
+    otbWarningMacro(
+      << "DoFinalizeInitialisation has been deprecated.  Please use DoFinalizeInitialization() instead");
+    this->DoFinalizeInitialization();
+  }
+  
   /**
    * Hook used to define the fields of the new layer.
    * \param[in] source  source \c Layer -- for reference

@@ -203,7 +203,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // \itkcaption[PCA Filter (forward trasnformation)]{Result of applying the
   // \doxygen{otb}{FastICAImageFilter} to an image. From left
   // to right:
-  // original image, color composition with first three independant
+  // original image, color composition with first three independent
   // components and output of the
   // inverse mode (the input RGB image).}
   // \label{fig:FastICA_FILTER}

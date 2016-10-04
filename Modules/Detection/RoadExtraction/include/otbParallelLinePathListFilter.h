@@ -103,7 +103,7 @@ protected:
   * (not necessarily the path ending).
   * Return true if the condition is verified.
   *
-  * This is the first criteria to be fullfilled.
+  * This is the first criteria to be fulfilled.
   **/
   bool VerifyAngularCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4);
 
@@ -116,7 +116,7 @@ protected:
   * (not necessarily the path ending).
   * Return true if the condition is verified.
   *
-  * This is the second criteria to be fullfilled.
+  * This is the second criteria to be fulfilled.
   **/
   bool VerifyMaxDistanceCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4);
 
@@ -131,7 +131,7 @@ protected:
   * (not necessarily the path ending).
   * Return true if the condition is verified.
   *
-  * This is the third criteria to be fullfilled.
+  * This is the third criteria to be fulfilled.
   **/
   bool VerifyCommonDistanceCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4);
 

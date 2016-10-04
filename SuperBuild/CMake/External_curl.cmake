@@ -9,33 +9,21 @@ if(NOT APPLE)
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OPENSSL)
 endif()
 
-
 if(MSVC)
   if(NOT BUILD_SHARED_LIBS)
     message(FATAL_ERROR "static build or curl not supported")
     return()
-endif()
+  endif()
 
-if(NOT DEFINED ENV{PROCESSOR_ARCHITECTURE})
-  message(FATAL_ERROR "PROCESSOR_ARCHITECTURE env variable is not defined")
-  return()
-endif()
-
-if("$ENV{PROCESSOR_ARCHITECTURE}" MATCHES "AMD64" )
+if(OTB_MSVC_COMPILER_ARCH_IS_X64)
   set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
 else()
   set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
 endif()
 
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-  set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-release")
-else()
-  set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-debug")
-endif()
+  set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-release-dll-zlib-dll-ipv6-sspi-winssl")
 
-set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-dll-zlib-dll-ipv6-sspi-winssl")
-
-ExternalProject_Add(CURL
+  ExternalProject_Add(CURL
   PREFIX CURL
   URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
   URL_MD5 58943642ea0ed050ab0431ea1caf3a6f

@@ -29,7 +29,7 @@
 #define SWIG_FILE_WITH_INIT
 %}
 
-// Langage specific extension
+// Language specific extension
 %include "Python.i"
 %include "Java.i"
 %include "Ruby.i"
@@ -445,13 +445,13 @@ class ApplicationProxy(object):
       self.__dict__["application"].SetParameterString(groupkey, value)
 
   def __str__(self):
-      return self.__dict__["application"].GetParameterAsString(self.groupkey)
+    return self.__dict__["application"].GetParameterAsString(self.groupkey)
 
   def __eq__(self, other):
     if not type(other) == type(self):
-			return (self.__str__() == other)
+      return (self.__str__() == other)
     else:
-			return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
+      return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
   def __ne__(self, other):
     return not self.__eq__(other)
@@ -461,10 +461,9 @@ class ApplicationProxy(object):
 
   def __setattr__(self,attr,value):
     if attr not in self.__dict__:
-        return self.__dict__["application"].SetParameterValue( self.groupkey + "." + attr.lower(), value )
+      return self.__dict__["application"].SetParameterValue( self.groupkey + "." + attr.lower(), value )
     else:
-        return dict.__setattr__(self, attr, value)
-
+      return dict.__setattr__(self, attr, value)
 
 }
 #endif
@@ -537,7 +536,7 @@ class ApplicationProxy(object):
 			elif paramType in [ParameterType_Choice]:
 			  return ApplicationProxy(self, paramKey, value)
 			else:
-			  print "Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey)
+			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
 			return
 
 		def GetParameterValue(self, paramKey):
@@ -562,7 +561,7 @@ class ApplicationProxy(object):
 			elif paramType in [ParameterType_Group, ParameterType_Choice]:
 			  return ApplicationProxy(self, paramKey)
 			else:
-			  print "Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey)
+			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
 			return None
 
 		def __getattr__(self,attr):
@@ -588,7 +587,7 @@ class ApplicationProxy(object):
 		  keep hide the SetParameter** calls within this method so that it seems like
 		  an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
 		  here 'in' and 'out' are    parameters in the 'otb application' with instance App
-		  Ofcourse, we dont blindly accept any attributes as python, we check them against
+		  Ofcourse, we don't blindly accept any attributes as python, we check them against
 		  list of existing parameters for application with 'self.GetParametersKeys(True)'
 		  """
 		  if attr is not None:
@@ -702,8 +701,8 @@ class ApplicationProxy(object):
       elif dt == 'double':
         return self.GetVectorImageAsDoubleNumpyArray_(paramKey)
       else:
-        print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
-        print "int8, int16, int32, uint8, uint16, uint32, float, double"
+        print ("Unknown datatype '" + dt + "'. Using float instead. Available types are:")
+        print ("int8, int16, int32, uint8, uint16, uint32, float, double")
         return self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
     def GetImageAsNumpyArray(self, paramKey, dt='float'):
@@ -731,8 +730,8 @@ class ApplicationProxy(object):
         numpy_vector_image = self.GetVectorImageAsDoubleNumpyArray_(paramKey)
 
       else:
-        print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
-        print "int8, int16, int32, uint8, uint16, uint32, float, double"
+        print ("Unknown datatype '" + dt + "'. Using float instead. Available types are:")
+        print ("int8, int16, int32, uint8, uint16, uint32, float, double")
         numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
       if len(numpy_vector_image.shape) > 2:

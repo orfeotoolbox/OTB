@@ -16,7 +16,10 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetComplexOutputImageParameter.h"
-#include "otbWrapperTypes.h"
+
+
+#include <otbQtAdapters.h>
+#include <otbWrapperTypes.h>
 
 namespace otb
 {
@@ -77,19 +80,31 @@ void QtWidgetComplexOutputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetComplexOutputImageParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
-  fileDialog.setNameFilter("Raster files (*)");
 
-  if (fileDialog.exec())
-    {
-    //this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+void
+QtWidgetComplexOutputImageParameter
+::SelectFile()
+{
+  assert( m_Input!=NULL );
+
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "Raster files (*)" ),
+      NULL
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  SetFileName( filename );
+
+  m_Input->setText( filename  );
 }
+
 
 void QtWidgetComplexOutputImageParameter::SetFileName(const QString& value)
 {

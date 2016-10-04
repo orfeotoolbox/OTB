@@ -29,7 +29,7 @@ template <class TInputImage, class TOutputImage, class TPrecision>
 ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 ::ImageToHessianDeterminantImageFilter()
 {
-  // Filter intialization
+  // Filter initialization
   m_HessianFilter = ImageToHessianImageFilterType::New();
   m_DeterminantFilter = DeterminantFilterType::New();
 

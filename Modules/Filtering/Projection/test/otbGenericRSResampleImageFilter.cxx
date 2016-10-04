@@ -42,7 +42,7 @@ typedef otb::ImageFileWriter<ImageType>    WriterType;
 
 int otbGenericRSResampleImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
-  // SmartPointer instanciation
+  // SmartPointer instantiation
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
   std::cout << resampler << std::endl;
   return EXIT_SUCCESS;
@@ -51,7 +51,7 @@ int otbGenericRSResampleImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(a
 int otbGenericRSResampleImageFilter(int itkNotUsed(argc), char* argv[])
 {
 
-  // SmartPointer instanciation
+  // SmartPointer instantiation
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
 
   const char * infname = argv[1];
@@ -135,7 +135,7 @@ int otbGenericRSResampleImageFilterFromMap(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
 
-  // SmartPointer instanciation
+  // SmartPointer instantiation
   ExtractROIType::Pointer extractor = ExtractROIType::New();
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
 
@@ -144,7 +144,7 @@ int otbGenericRSResampleImageFilterFromMap(int itkNotUsed(argc), char* argv[])
   double iGridSpacing    = atof(argv[2]);
   int    useInRpc        = atoi(argv[3]);
 
-  // Reader Instanciation
+  // Reader Instantiation
   ReaderType::Pointer         reader    = ReaderType::New();
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();

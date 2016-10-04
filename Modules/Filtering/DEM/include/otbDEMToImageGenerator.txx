@@ -78,19 +78,19 @@ void DEMToImageGenerator<TDEMImage>
     }
 }
 
-// InstanciateTransform method
+// InstantiateTransform method
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
-::InstanciateTransform()
+::InstantiateTransform()
 {
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 }
 
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
 ::BeforeThreadedGenerateData()
 {
-  InstanciateTransform();
+  InstantiateTransform();
   DEMImagePointerType DEMImage = this->GetOutput();
 
   // allocate the output buffer

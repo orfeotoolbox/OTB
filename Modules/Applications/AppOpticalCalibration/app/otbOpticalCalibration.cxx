@@ -152,8 +152,8 @@ private:
 "- pi is the famous mathematical constant (3.14159...) \n"
 "- d is the earth-sun distance (in astronomical units) and depends on the acquisition's day and month \n"
 "- ESUN(b) is the mean TOA solar irradiance (or solar illumination) in W/m2/micrometers\n"
-"- θ is the solar zenith angle in degrees. \n"
-"Note that the application asks for the solar elevation angle, and will perfom the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units : degrees).\n"
+"- θ is the solar zenith angle in degrees.\n\n"
+"Note that the application asks for the solar elevation angle, and will perform the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units : degrees).\n"
 "Note also that ESUN(b) not only depends on the band b, but also on the spectral sensitivity of the sensor in this particular band. "
 "In other words, the influence of spectral sensitivities is included within the ESUN different values.\n"
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
@@ -164,17 +164,17 @@ private:
 "by taking into account the original formula that the metadata files assumes.\n\n"
 
 "Below, we give two examples of txt files containing information about gains/biases and solar illuminations :\n\n"
-"- gainbias.txt :\n"
+"- gainbias.txt :\n\n"
 "# Gain values for each band. Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
 "10.4416 : 9.529 : 8.5175 : 14.0063\n"
 "# Bias values for each band.\n"
 "0.0 : 0.0 : 0.0 : 0.0\n\n"
-"- solarillumination.txt : \n"
+"- solarillumination.txt : \n\n"
 "# Solar illumination values in watt/m2/micron ('micron' means actually 'for each band').\n"
 "# Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
 "1540.494123 : 1826.087443 : 1982.671954 : 1094.747446\n\n"
 
-"Finally, the 'Logs' tab provides usefull messages that can help the user in knowing the process different status." );
+"Finally, the 'Logs' tab provides useful messages that can help the user in knowing the process different status." );
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -376,7 +376,7 @@ private:
       {
         ossOutput << std::endl << "File: " << m_inImageName << std::endl;
 
-        //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
+        //Check if valid metadata information are available to compute ImageToLuminance and LuminanceToReflectance
         FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
         itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
         OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
@@ -560,14 +560,14 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    //Main filters instanciations
+    //Main filters instantiations
     m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
     m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
     m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
     m_ReflectanceToLuminanceFilter          = ReflectanceToLuminanceImageFilterType::New();
     m_LuminanceToImageFilter                = LuminanceToImageImageFilterType::New();
 
-    //Other instanciations
+    //Other instantiations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
     //m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();

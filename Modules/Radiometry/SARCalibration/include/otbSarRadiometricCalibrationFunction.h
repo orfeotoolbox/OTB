@@ -174,7 +174,7 @@ protected:
   /** print method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  /** Flags to indiciate if these values needs to be applied in calibration*/
+  /** Flags to indicate if these values needs to be applied in calibration*/
 
 private:
   SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented

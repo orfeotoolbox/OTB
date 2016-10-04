@@ -316,7 +316,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
     }
 
   //Remove incoherences between disparity and median//
-  // creation of the auxilliary image that store positions of incoherences between the median and the input disparity map
+  // creation of the auxiliary image that store positions of incoherences between the median and the input disparity map
   MaskImagePointerType image_aux = MaskImageType::New();
   image_aux->SetRegions(input->GetRequestedRegion());
   image_aux->Allocate();

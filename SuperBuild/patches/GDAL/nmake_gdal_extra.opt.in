@@ -13,7 +13,6 @@ JPEG_SUPPORTED = 1
 
 GDAL_HOME="@CMAKE_WIN_INSTALL_PREFIX@"
 
-
 #if using an external jpeg library uncomment the follwing lines
 JPEG_EXTERNAL_LIB = 1
 JPEGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
@@ -22,7 +21,7 @@ JPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\jpeg.lib
 #if using an external png library uncomment the follwing lines
 PNG_EXTERNAL_LIB = 1
 PNGDIR = @CMAKE_WIN_INSTALL_PREFIX@\include
-PNG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libpng16.lib
+PNG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libpng.lib
 
 # if using an external libtiff library
 TIFF_INC = -I@CMAKE_WIN_INSTALL_PREFIX@\include
@@ -58,7 +57,7 @@ CURL_LIB = $(CURL_DIR)\lib\libcurl.lib wsock32.lib wldap32.lib winmm.lib
 # Uncomment for GEOS support (GEOS >= 3.1.0 required)
 GEOS_DIR=@CMAKE_WIN_INSTALL_PREFIX@
 GEOS_CFLAGS = -I$(GEOS_DIR)\include -I$(GEOS_DIR)\include\geos -DHAVE_GEOS
-GEOS_LIB     = $(GEOS_DIR)\lib\geos.lib $(GEOS_DIR)\lib\geos_c.lib
+GEOS_LIB     = $(GEOS_DIR)\lib\geos_i.lib $(GEOS_DIR)\lib\geos_c_i.lib
 
 # Uncomment for OpenJpeg support
 HAVE_OPENJPEG = YES
@@ -66,7 +65,6 @@ OPENJPEG_ENABLED = YES
 OPENJPEG_VERSION = 20100
 OPENJPEG_CFLAGS = -I@CMAKE_WIN_INSTALL_PREFIX@\include
 OPENJPEG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\openjp2.lib
-
 
 
 ##################################################################

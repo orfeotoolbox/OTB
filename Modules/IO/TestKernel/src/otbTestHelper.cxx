@@ -868,7 +868,7 @@ int TestHelper::RegressionTestMetaData(const char *testImageFilename, const char
   ImageType::Pointer blImPtr = baselineReader->GetOutput();
   ImageType::Pointer testImPtr = testReader->GetOutput();
 
-  // test orgin
+  // test origin
   if (blImPtr->GetOrigin() != testImPtr->GetOrigin())
     {
     std::cerr << "The origin of the baseline image and Test image do not match!" << std::endl;
@@ -1243,7 +1243,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
         OGRFeature::DestroyFeature( test_poFeature );
         fclose(test_f);
 
-        //Check ASCII comparaison
+        //Check ASCII comparison
         std::vector<std::string> ignoredLines;
         ignoredLines.clear();
         nbdiff = RegressionTestAsciiFile(test_filename.c_str(), ref_filename.c_str(), toleranceDiffValue,

@@ -76,10 +76,13 @@ set(OTBQtWidget_MOC_HDR
 QT4_WRAP_CPP(OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR})
 
 add_library(OTBQtWidget ${OTBQtWidget_SRC} ${OTBQtWidget_MOC_SRC})
-target_link_libraries(OTBQtWidget
+
+target_link_libraries( OTBQtWidget
   ${OTBApplicationEngine_LIBRARIES}
   ${OTBQt4_LIBRARIES}
+  ${OTBQtAdapters_LIBRARIES}
   )
+
 otb_module_target(OTBQtWidget)
 
 add_executable(otbApplicationLauncherQt otbApplicationLauncherQt.cxx)
@@ -89,6 +92,7 @@ target_link_libraries(otbApplicationLauncherQt
   ${OTBQt4_LIBRARIES}
   )
 otb_module_target(otbApplicationLauncherQt)
+set_linker_stack_size_flag(otbApplicationLauncherQt 10000000)
 
 # Where we will install the script in the build tree
 get_target_property(GUI_OUTPUT_DIR otbApplicationLauncherQt RUNTIME_OUTPUT_DIRECTORY)

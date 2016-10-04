@@ -37,7 +37,7 @@ int otbImageToLabelMapWithAttributesFilter(int itkNotUsed(argc), char* argv[])
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
   typedef otb::ImageFileReader<LabeledImageType>               LabeledReaderType;
 
-  // SmartPointer instanciation
+  // SmartPointer instantiation
   FilterType::Pointer         filter = FilterType::New();
   ReaderType::Pointer         reader = ReaderType::New();
   LabeledReaderType::Pointer  labeledReader = LabeledReaderType::New();

@@ -19,7 +19,7 @@
 //  Software Guide : BeginCommandLineArgs
 //
 // INPUTS:  {verySmallFSATSW.tif}
-// OUTPUTS: {siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif}, {verySmallFSATSW_visu.png}, {siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png}
+// OUTPUTS: {siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW.tif}, {verySmallFSATSW_visu.png}, {siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW_visu.png}
 // 1 4
 //  Software Guide : EndCommandLineArgs
 //
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
    // \begin{figure}
    // \center
    // \includegraphics[width=0.44\textwidth]{verySmallFSATSW_visu.eps}
-   // \includegraphics[width=0.44\textwidth]{siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.eps}
+   // \includegraphics[width=0.44\textwidth]{siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW_visu.eps}
    // \itkcaption[LAIFromNDVIImageTransform Filter]{LAI generation \emph{(right)} from NDVI applied on Formosat 2 Image \emph{(left)} .}
    // \label{fig:LAIFromNDVIImageTransform}
    // \end{figure}

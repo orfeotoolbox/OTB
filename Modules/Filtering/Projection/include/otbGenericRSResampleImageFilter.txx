@@ -45,7 +45,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_EstimateOutputRpcModel = false;
   m_RpcEstimationUpdated   = false;
 
-  // internal filters instanciation
+  // internal filters instantiation
   m_Resampler         = ResamplerType::New();
   m_InputRpcEstimator = InputRpcModelEstimatorType::New();
   m_OutputRpcEstimator= OutputRpcModelEstimatorType::New();
@@ -92,7 +92,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     this->EstimateInputRpcModel();
     }
 
-  // Instanciate the RS transform
+  // Instantiate the RS transform
   this->UpdateTransform();
 
   m_Resampler->SetInput(this->GetInput());
@@ -151,7 +151,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
 /**
   * Fill with the default dict of the input and the output
-  * and instanciate the transform
+  * and instantiate the transform
   */
 template <class TInputImage, class TOutputImage>
 void
@@ -164,7 +164,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
     m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
     }
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -262,7 +262,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   const InputImageType* input = this->GetInput();
 
   // Update the transform with input information
-  // Done here because the transform is not instanciated
+  // Done here because the transform is not instantiated
   // yet
   this->UpdateTransform();
 

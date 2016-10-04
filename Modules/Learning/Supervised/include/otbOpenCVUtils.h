@@ -38,7 +38,7 @@
 #include <opencv2/ml/ml.hpp>
 #endif
 
-
+#include "OTBSupervisedExport.h"
 
 #include "itkListSample.h"
 

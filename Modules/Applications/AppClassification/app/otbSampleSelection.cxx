@@ -87,27 +87,29 @@ private:
       "The input support image and the input training vectors shall be given in "
       "parameters 'in' and 'vec' respectively. Only the sampling grid (origin, size, spacing)"
       "will be read in the input image.\n"
-      "There are several strategies to select samples (parameter strategy) :\n"
-      "  - smallest (default) : select the same number of sample in each class\n" 
-      "    so that the smallest one is fully sampled.\n"
-      "  - constant : select the same number of samples N in each class\n" 
-      "    (with N below or equal to the size of the smallest class).\n"
-      "  - byclass : set the required number for each class manually, with an input CSV file\n" 
-      "    (first column is class name, second one is the required samples number).\n"
-      "There is also a choice on the sampling type to performs :\n"
+      "There are several strategies to select samples (parameter strategy) : \n\n"
+      "  - smallest (default) : select the same number of sample in each class" 
+      " so that the smallest one is fully sampled.\n"
+      "  - constant : select the same number of samples N in each class" 
+      " (with N below or equal to the size of the smallest class).\n"
+      "  - byclass : set the required number for each class manually, with an input CSV file"
+      " (first column is class name, second one is the required samples number).\n\n"
+      "  - percent: set a target global percentage of samples to use. Class proportions will be respected. \n\n"
+      "  - total: set a target total number of samples to use. Class proportions will be respected. \n\n"
+      "There is also a choice on the sampling type to performs : \n\n"
       "  - periodic : select samples uniformly distributed\n"
-      "  - random : select samples randomly distributed\n"
+      "  - random : select samples randomly distributed\n\n"
       "Once the strategy and type are selected, the application outputs samples positions"
       "(parameter out).\n\n"
       
-      "The other parameters to look at are :\n"
+      "The other parameters to look at are : \n\n"
       "  - layer : index specifying from which layer to pick geometries.\n"
       "  - field : set the field name containing the class.\n"
       "  - mask : an optional raster mask can be used to discard samples.\n"
       "  - outrates : allows outputting a CSV file that summarizes the sampling rates for each class.\n"
       
       "\nAs with the PolygonClassStatistics application, different types  of geometry are supported : "
-      "polygons, lines, points. \nThe behavior of this application is different for each type of geometry :\n"
+      "polygons, lines, points. \nThe behavior of this application is different for each type of geometry : \n\n"
       "  - polygon: select points whose center is inside the polygon\n"
       "  - lines  : select points intersecting the line\n"
       "  - points : select closest point to the provided point\n");
@@ -166,6 +168,23 @@ private:
     AddParameter(ParameterType_Int, "strategy.constant.nb", "Number of samples for all classes");
     SetParameterDescription("strategy.constant.nb", "Number of samples for all classes");
 
+    AddChoice("strategy.percent","Use a percentage of the samples available for each class");
+    SetParameterDescription("strategy.percent","Use a percentage of the samples available for each class");
+
+    AddParameter(ParameterType_Float,"strategy.percent.p","The percentage to use");
+    SetParameterDescription("strategy.percent.p","The percentage to use");
+    SetMinimumParameterFloatValue("strategy.percent.p",0);
+    SetMaximumParameterFloatValue("strategy.percent.p",1);
+    SetDefaultParameterFloat("strategy.percent.p",0.5);
+
+    AddChoice("strategy.total","Set the total number of samples to generate, and use class proportions.");
+    SetParameterDescription("strategy.total","Set the total number of samples to generate, and use class proportions.");
+
+    AddParameter(ParameterType_Int,"strategy.total.v","The number of samples to generate");
+    SetParameterDescription("strategy.total.v","The number of samples to generate");
+    SetMinimumParameterIntValue("strategy.total.v",1);
+    SetDefaultParameterInt("strategy.total.v",1000);
+    
     AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
     SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
 
@@ -201,63 +220,6 @@ private:
   {
   }
 
-  ClassCountMapType ReadRequiredSamples(std::string filename)
-    {
-    ClassCountMapType output;
-    std::ifstream ifs(filename.c_str());
-
-    if (ifs)
-      {
-      std::string line;
-      std::string sep("");
-    
-      while(!ifs.eof())
-        {
-        std::getline(ifs,line);
-        if (line.empty()) continue;
-        std::string::size_type pos = line.find_first_not_of(" \t");
-        if (pos != std::string::npos && line[pos] == '#') continue;
-        
-        if (sep.size() == 0)
-          {
-          // Try to detect the separator
-          std::string separators("\t;,");
-          for (unsigned int k=0 ; k<separators.size() ; k++)
-            {
-            std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,separators[k]);
-            if (words.size() >= 2)
-              {
-              sep.push_back(separators[k]);
-              break;
-              }
-            }
-          if (sep.size() == 0) continue;
-          }
-        // parse the line
-        std::vector<itksys::String> parts = itksys::SystemTools::SplitString(line,sep[0]);
-        if (parts.size() >= 2)
-          {
-          std::string::size_type pos1 = parts[0].find_first_not_of(" \t");
-          std::string::size_type pos2 = parts[0].find_last_not_of(" \t");
-          std::string::size_type pos3 = parts[1].find_first_not_of(" \t");
-          std::string::size_type pos4 = parts[1].find_last_not_of(" \t");
-          if (pos1 != std::string::npos && pos3 != std::string::npos)
-            {
-            std::string name = parts[0].substr(pos1, pos2 - pos1 + 1);
-            std::string value = parts[1].substr(pos3, pos4 - pos3 + 1);
-            output[name] = boost::lexical_cast<unsigned long>(value);
-            }
-          }
-        }
-      ifs.close();
-      }
-    else
-      {
-      otbAppLogFATAL(<< " Couldn't open " << filename);
-      }
-    return output;
-    }
-
   void DoExecute()
     {
     // Clear state
@@ -280,7 +242,7 @@ private:
         {
         otbAppLogINFO("Sampling strategy : set number of samples for each class");
         ClassCountMapType requiredCount = 
-          this->ReadRequiredSamples(this->GetParameterString("strategy.byclass.in"));
+          otb::SamplingRateCalculator::ReadRequiredSamples(this->GetParameterString("strategy.byclass.in"));
         m_RateCalculator->SetNbOfSamplesByClass(requiredCount);
         }
       break;
@@ -291,15 +253,30 @@ private:
         m_RateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("strategy.constant.nb"));
         }
       break;
-      // smallest class
+      // percent
       case 2:
+      {
+      otbAppLogINFO("Sampling strategy: set a percentage of samples for each class.");
+      m_RateCalculator->SetPercentageOfSamples(this->GetParameterFloat("strategy.percent.p"));
+      }
+      break;
+      // total
+      case 3:
+      {
+      otbAppLogINFO("Sampling strategy: set the total number of samples to generate, use classes proportions.");
+      m_RateCalculator->SetTotalNumberOfSamples(this->GetParameterInt("strategy.total.v"));
+      }
+      break;
+
+      // smallest class
+      case 4:
         {
         otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
         m_RateCalculator->SetMinimumNbOfSamplesByClass();
         }
       break;
       // all samples
-      case 3:
+      case 5:
         {
         otbAppLogINFO("Sampling strategy : take all samples");
         m_RateCalculator->SetAllSamples();
@@ -319,12 +296,24 @@ private:
     std::ostringstream oss;
     oss << " className  requiredSamples  totalSamples  rate" << std::endl;
     MapRateType::const_iterator itRates = rates.begin();
+    unsigned int overflowCount = 0;
     for(; itRates != rates.end(); ++itRates)
       {
       otb::SamplingRateCalculator::TripletType tpt = itRates->second;
-      oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate << std::endl;
+      oss << itRates->first << "\t" << tpt.Required << "\t" << tpt.Tot << "\t" << tpt.Rate;
+      if (tpt.Required > tpt.Tot)
+        {
+        overflowCount++;
+        oss << "\t[OVERFLOW]";
+        }
+      oss << std::endl;
       }
     otbAppLogINFO("Sampling rates : " << oss.str());
+    if (overflowCount)
+      {
+      std::string plural(overflowCount>1?"s":"");
+      otbAppLogWARNING(<< overflowCount << " case"<<plural<<" of overflow detected! (requested number of samples higher than total available samples)");
+      }
 
     // Open input geometries
     otb::ogr::DataSource::Pointer vectors =
@@ -354,7 +343,7 @@ private:
       inputGeomSet = GeometriesType::New(vectors);
       reprojVector = otb::ogr::DataSource::New();
       outputGeomSet = GeometriesType::New(reprojVector);
-      // Filter instanciation
+      // Filter instantiation
       geometriesProjFilter = ProjectionFilterType::New();
       geometriesProjFilter->SetInput(inputGeomSet);
       if (imageProjectionRef.empty())

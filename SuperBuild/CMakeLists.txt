@@ -22,6 +22,21 @@ if(APPLE)
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
+if(MSVC)
+  execute_process(
+  COMMAND ${CMAKE_C_COMPILER}
+  ERROR_VARIABLE ev
+  OUTPUT_VARIABLE ov
+  OUTPUT_QUIET
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  
+  set(OTB_MSVC_COMPILER_ARCH_IS_X64 TRUE)
+  if("${ev}" MATCHES "x86")
+    set(OTB_MSVC_COMPILER_ARCH_IS_X64 FALSE)
+  endif()
+  
+endif()
+
 # use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # when building, don't use the install RPATH already
@@ -52,7 +67,8 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 # General options
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
-option(ENABLE_MONTEVERDI " Build Monteverdi on top of OTB" OFF)
+
+option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
@@ -66,6 +82,16 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
     set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
     message(STATUS "OTB version : ${SUPERBUILD_OTB_VERSION}")
   endif()
+endif()
+
+get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
+  set (CMAKE_INSTALL_PREFIX
+    "${PARENT_OF_BINARY_DIR}/superbuild_install"
+    CACHE
+    PATH
+    "default install path for superbuild"
+    FORCE )
 endif()
 
 set(SB_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
@@ -119,6 +145,8 @@ else()
   set(SB_CMAKE_PREFIX_PATH "${SB_INSTALL_PREFIX}")
 endif()
 
+list(REMOVE_DUPLICATES SB_CMAKE_PREFIX_PATH)
+
 set(SB_CMAKE_CACHE_ARGS)
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_PREFIX:PATH=${SB_INSTALL_PREFIX}")
@@ -137,6 +165,19 @@ if(UNIX)
 endif()
 
 set(SB_CMAKE_ARGS "-G${CMAKE_GENERATOR}")
+
+set(SB_CONFIGURE_ARGS)
+
+list(APPEND SB_CONFIGURE_ARGS "--prefix=${CMAKE_INSTALL_PREFIX}")
+
+if(BUILD_SHARED_LIBS)
+  list(APPEND SB_CONFIGURE_ARGS "--enable-static=no")
+  list(APPEND SB_CONFIGURE_ARGS "--enable-shared=yes")
+else()
+  list(APPEND SB_CONFIGURE_ARGS "--enable-static=yes")
+  list(APPEND SB_CONFIGURE_ARGS "--enable-shared=no")
+endif()
+
 if(UNIX)
   if(APPLE)
     set(SB_CMAKE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
@@ -193,6 +234,8 @@ option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
 option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
 option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
+option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
+
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
@@ -214,11 +257,14 @@ option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
 option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+option(OTB_USE_SHARK "Enable module Shark in OTB" OFF)
+option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 
-if(${ENABLE_MONTEVERDI})
-  set(OTB_USE_OPENGL ON)
-  set(OTB_USE_GLEW ON)
-endif()
+#Problem: below cmake setting will fail!
+#-DOTB_USE_OPENGL=ON -DOTB_USE_GLEW=ON -DOTB_USE_QWT=ON
+#This is because ENABLE_MONTEVERDI is OFF by default
+# This brings a lot of twisted logic. so taking out this option
+
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
@@ -257,12 +303,8 @@ foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
   message(STATUS "|----------------------------------------------------------")
 endforeach()
 
-# Main external projet : dependencies are included (if needed) in each external project
-if(ENABLE_MONTEVERDI)
-  include(External_mvd)
-else()
-  include(External_otb)
-endif()
+include(External_otb)
+
 
 if(UNIX OR MSVC)
   add_subdirectory(Packaging)
@@ -270,14 +312,18 @@ endif()
 
 if(FROM_SYSTEM_LIST)
   list(SORT FROM_SYSTEM_LIST)
-foreach( item ${FROM_SYSTEM_LIST})
-  message(STATUS "  Using system version of ${item}")
-endforeach()
+  foreach( item ${FROM_SYSTEM_LIST})
+    message(STATUS "  Using system version of ${item}")
+  endforeach()
 endif()
 
 if(FROM_SUPERBUILD_LIST)
   list(SORT FROM_SUPERBUILD_LIST)
-foreach( item ${FROM_SUPERBUILD_LIST})
-  message(STATUS "  Using SuperBuild version of ${item}")
-endforeach()
+  foreach( item ${FROM_SUPERBUILD_LIST})
+    message(STATUS "  Using SuperBuild version of ${item}")
+  endforeach()
 endif()
+
+message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
+

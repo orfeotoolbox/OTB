@@ -1,0 +1,25 @@
+          
+We provide for Windows Seven and later through standalone packages. They
+are cross-compiled with MinGW, for 32 bits and 64 bits platforms. They
+contain all applications and their launchers (both command line and graphical
+launchers are provided).
+Check the `Download page <https://www.orfeo-toolbox.org/download>`__
+
+There is a 32 bits and a 64 bits version. They contain the same directory
+structure:
+
+-  ``monteverdi.bat`` : A launcher script for Monteverdi
+
+-  ``mapla.bat`` : A launcher script for Mapla
+
+-  ``otbenv.bat`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing application launchers (otbcli.bat,
+   otbgui.bat) and the DLLs.
+
+-  ``lib`` : A folder containing application DLLs.
+
+The applications can be launched from the Mapla launcher. If you want to
+use the otbcli and otbgui launchers, you can initialize a command prompt
+with ``otbenv.bat``.

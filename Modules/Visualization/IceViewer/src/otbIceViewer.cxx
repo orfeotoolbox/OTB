@@ -220,7 +220,7 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
   // Initialize glfw
   if(!glfwInit())
     {
-    itkExceptionMacro(<<"Could not initalize glfw!");
+    itkExceptionMacro(<<"Could not initialize glfw!");
     }
 
   // Initialize glut (ugly workaround)
@@ -602,7 +602,7 @@ void IceViewer::DrawHelp()
   oss<<"- Highlight selected image by holding backspace"<<std::endl;
   oss<<"- Zoom to full extent of selected dataset with W"<<std::endl;
   oss<<"- Zoom to full resolution fo selected images with Q (images only, as full resolution has no meaning for vectors)"<<std::endl;
-  oss<<"- Set rotation angle to perspective view with Y to accomodate heavy off-nadir viewing angle images"<<std::endl;
+  oss<<"- Set rotation angle to perspective view with Y to accommodate heavy off-nadir viewing angle images"<<std::endl;
   oss<<"- Set rotation angle to north up view with J"<<std::endl;
   oss<<"- Reset rotation angle with I"<<std::endl;
   oss<<"- Note that all images are reprojected in the first loaded dataset geometry (highligthed with * *). To change reference geometry to selected dataset, press P key."<<std::endl;
@@ -631,7 +631,7 @@ void IceViewer::DrawHelp()
   oss<<"Vector controls:"<<std::endl;
   oss<<"- Enable/disable fill polygon mode with F key"<<std::endl;
   oss<<"- Enable/disable solid border mode with S key"<<std::endl;
-  oss<<"- Tune alpha (transparancy) value with LEFT CTRL + mouse wheel"<<std::endl;
+  oss<<"- Tune alpha (transparency) value with LEFT CTRL + mouse wheel"<<std::endl;
   oss<<"- Tune line width with RIGHT SHIFT + mouse wheel"<<std::endl;
   oss<<"- Rotate vector color with LEFT ALT + mouse wheel"<<std::endl;
   oss<<"- Enable/disable optimized rendering for large vector (simplification of geometries, geometries smaller than 100 * viewport pixel sizes are not rendered)."<<std::endl<<"  Optimized rendering is only active if there are more feature to render than pixels in in the viewport."<<std::endl;

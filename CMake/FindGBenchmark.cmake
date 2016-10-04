@@ -11,7 +11,7 @@ endif ()
 
 if (NOT GBENCHMARK_INCLUDE_DIR)
   find_path(GBENCHMARK_INCLUDE_DIR NAMES benchmark.h PATH_SUFFIXES benchmark)
-  set(GBENCHMARK_INCLUDE_DIR ${GBENCHMARK_INCLUDE_DIR}/benchmark CACHE PATH "Google.benchmark include direcory")
+  set(GBENCHMARK_INCLUDE_DIR ${GBENCHMARK_INCLUDE_DIR}/benchmark CACHE PATH "Google.benchmark include directory")
 endif ()
 
 mark_as_advanced(GBENCHMARK_INCLUDE_DIR)

@@ -73,7 +73,7 @@ public:
  * It interfaces with an ImageIO class to read in the data and
  * supports streaming (partial reading) if the source dataset does so.
  *
- * ImageFileReader supports extended filenames, which allow controling
+ * ImageFileReader supports extended filenames, which allow controlling
  * how the source dataset is read. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.
@@ -172,13 +172,16 @@ private:
       ImageIO classes for actually reading the file. If the file
       doesn't exist or it is not readable, and exception with an
       appropriate message will be thrown. */
-  void TestFileExistanceAndReadability();
+  void TestFileExistenceAndReadability();
 
   /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
     */
   bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
 
+  // Retrieve the real source file name if derived dataset */
+  std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
+  
   ImageFileReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 

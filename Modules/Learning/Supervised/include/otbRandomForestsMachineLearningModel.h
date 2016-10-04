@@ -62,8 +62,6 @@ public:
 
   /** Train the machine learning model */
   void Train() ITK_OVERRIDE;
-  /** Predict values using the model */
-  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const ITK_OVERRIDE;
 
   /** Save the model to file */
   void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
@@ -136,6 +134,10 @@ protected:
   /** Destructor */
   ~RandomForestsMachineLearningModel() ITK_OVERRIDE;
 
+  /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+
+  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
@@ -209,7 +211,7 @@ private:
   float m_ForestAccuracy;
   /** The type of the termination criteria */
   int m_TerminationCriteria;
-  /** Wether to compute margin (difference in probability between the
+  /** Whether to compute margin (difference in probability between the
    * 2 most voted classes) instead of confidence (probability of the most
    * voted class) in prediction*/
   bool m_ComputeMargin;

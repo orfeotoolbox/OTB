@@ -272,8 +272,8 @@ Image CreateImageFromMatlabData(double* pdata, int rows, int cols)
         }
 
         for(int j = (cols&~3); j < cols; j++) {
-            pixels[j] = pdata[i+j*rows];
-            pixels[j+stride] = pdata[i+j*rows+1];
+            pixels[j] = (float) pdata[i+j*rows];
+            pixels[j+stride] = (float) pdata[i+j*rows+1];
         }
     }
 

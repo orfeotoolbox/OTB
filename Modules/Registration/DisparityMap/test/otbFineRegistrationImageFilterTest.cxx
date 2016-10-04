@@ -94,7 +94,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   registration->SetMovingInput(/*mreader*/mextract->GetOutput());
   registration->SetRadius(radius);
   registration->SetSearchRadius(sradius);
-  registration->SetSubPixelAccuracy(precision);
+  registration->SetConvergenceAccuracy(precision);
   registration->SetGridStep(gridStep);
 
   RegistrationFilterType::SpacingType offset;

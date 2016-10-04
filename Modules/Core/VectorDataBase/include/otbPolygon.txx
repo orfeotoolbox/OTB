@@ -33,7 +33,7 @@ Polygon<TValue>
 }
 
 /**
- * Check wether point is strictly inside the polygon.
+ * Check whether point is strictly inside the polygon.
  * \param point The point to check.
  * \return True if the point is inside the polygon.
  */
@@ -113,7 +113,7 @@ Polygon<TValue>
 }
 
 /**
- * Check wether point is strictly on the edge of the polygon.
+ * Check whether point is strictly on the edge of the polygon.
  * \param point The point to check.
  * \return True if the point is on the edge of the polygon.
  */
@@ -268,7 +268,7 @@ Polygon<TValue>
   return resp;
 }
 /**
- * Check wether two segments [a1a2] and [b1b2] are strictly crossing.
+ * Check whether two segments [a1a2] and [b1b2] are strictly crossing.
  * \param a1 First point of the first segment,
  * \param a1 Second point of the first segment,
  * \param a1 First point of the second segment,
@@ -325,7 +325,7 @@ Polygon<TValue>
   return resp;
 }
 /**
- * Check wether two segments[a1a2] and [b1b2] are touching without crossing.
+ * Check whether two segments[a1a2] and [b1b2] are touching without crossing.
  * \param a1 First point of the first segment,
  * \param a1 Second point of the first segment,
  * \param a1 First point of the second segment,

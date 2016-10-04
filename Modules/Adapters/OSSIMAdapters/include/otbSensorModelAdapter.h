@@ -32,7 +32,7 @@ class ImageKeywordlist;
  * \class SensorModelAdapter
  * \brief Wrapper class to group all dependencies to ossim for sensor models
  *
- * This class is NOT intented to be used outside of OTB. Use the
+ * This class is NOT intended to be used outside of OTB. Use the
  * InverseSensorModel and ForwardSensorModel. If you feel that you need to use
  * it directly, think again!
  *
@@ -44,7 +44,7 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class SensorModelAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT SensorModelAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -100,7 +100,7 @@ public:
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
   bool IsValidSensorModel() const;
 
-  /** Read geom file and instanciate sensor model */
+  /** Read geom file and instantiate sensor model */
   bool ReadGeomFile(const std::string & infile);
 
   /** Write geom file corresponding to sensor model */

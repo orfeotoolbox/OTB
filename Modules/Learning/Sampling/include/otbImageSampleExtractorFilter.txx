@@ -58,15 +58,6 @@ PersistentImageSampleExtractorFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentImageSampleExtractorFilter<TInputImage>
-::Synthetize(void)
-{
-  // clear temporary outputs
-  this->m_InMemoryOutputs.clear();
-}
-
-template<class TInputImage>
-void
-PersistentImageSampleExtractorFilter<TInputImage>
 ::Reset(void)
 {
   // Check output field names
@@ -165,20 +156,15 @@ PersistentImageSampleExtractorFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentImageSampleExtractorFilter<TInputImage>
-::ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid)
+::ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid)
 {
   // Retrieve inputs
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
 
-  ogr::Layer layer = this->m_InMemoryInputs[threadid]->GetLayerChecked(0);
-  if (! layer)
-    {
-    return;
-    }
-  ogr::Layer outputLayer = this->m_InMemoryOutputs[threadid][0]->GetLayerChecked(0);
+  ogr::Layer outputLayer = this->GetInMemoryOutput(threadid);
 
-  itk::ProgressReporter progress( this, threadid, layer.GetFeatureCount(true) );
+  itk::ProgressReporter progress( this, threadid, layerForThread.GetFeatureCount(true) );
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
   OGRGeometry *geom;
@@ -186,8 +172,8 @@ PersistentImageSampleExtractorFilter<TInputImage>
   IndexType imgIndex;
   PixelType imgPixel;
   double imgComp;
-  ogr::Layer::const_iterator featIt = layer.begin();
-  for(; featIt!=layer.end(); ++featIt)
+  ogr::Layer::const_iterator featIt = layerForThread.begin();
+  for(; featIt!=layerForThread.end(); ++featIt)
     {
     geom = featIt->ogr().GetGeometryRef();
     switch (geom->getGeometryType())
@@ -212,7 +198,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
         for (unsigned int i=0 ; i<nbBand ; ++i)
           {
           imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
-          // Fill the ouptut OGRDataSource
+          // Fill the output OGRDataSource
           dstFeature[m_SampleFieldNames[i]].SetValue(imgComp);
           }
         outputLayer.CreateFeature( dstFeature );

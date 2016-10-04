@@ -29,7 +29,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TInputValue, class TOutputValue>
-class ITK_EXPORT MachineLearningModelFactory : public MachineLearningModelFactoryBase
+class MachineLearningModelFactory : public MachineLearningModelFactoryBase
 {
 public:
   /** Standard class typedefs. */

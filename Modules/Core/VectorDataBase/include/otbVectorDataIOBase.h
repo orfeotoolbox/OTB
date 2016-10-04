@@ -25,6 +25,8 @@
 #include "itkPoint.h"
 #include "itkDataObject.h"
 
+#include "OTBVectorDataBaseExport.h"
+
 namespace otb
 {
 
@@ -52,7 +54,7 @@ namespace otb
  *
  * \ingroup OTBVectorDataBase
  */
-class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
+class OTBVectorDataBase_EXPORT VectorDataIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */
@@ -117,7 +119,7 @@ public:
     return false;
   }
 
-  /*   /\** Read the spacing and dimentions of the VectorData. */
+  /*   /\** Read the spacing and dimensions of the VectorData. */
   /*    * Assumes SetFileName has been called with a valid file name. *\/ */
   /*   virtual void ReadVectorDataInformation() = 0; */
 

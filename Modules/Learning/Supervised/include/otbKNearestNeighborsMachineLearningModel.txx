@@ -85,7 +85,7 @@ template <class TInputValue, class TTargetValue>
 typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::TargetSampleType
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

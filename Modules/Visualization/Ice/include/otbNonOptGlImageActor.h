@@ -1,19 +1,18 @@
 #ifndef otb_NonOptGlImageActor_h
 #define otb_NonOptGlImageActor_h
 
-#include "otbGlActor.h"
-
 #include "otbVectorImage.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
 
+#include "otbGlActor.h"
 
 namespace otb
 {
 
-class NonOptGlImageActor 
+class OTBIce_EXPORT NonOptGlImageActor
   : public GlActor
 {
 public:
@@ -52,7 +51,7 @@ public:
   const SpacingType & GetSpacing() const;
 
   std::string GetWkt() const;
-  
+
   ImageKeywordlistType GetKwl() const;
 
   itkSetMacro(UseShader,bool);
@@ -71,7 +70,7 @@ public:
   itkSetMacro(MaxBlue,double);
   itkGetMacro(MaxRed,double);
   itkGetMacro(MaxGreen,double);
-  itkGetMacro(MaxBlue,double);  
+  itkGetMacro(MaxBlue,double);
 
   itkSetMacro(RedIdx,unsigned int);
   itkGetMacro(RedIdx,unsigned int);
@@ -84,7 +83,7 @@ public:
 
 protected:
   NonOptGlImageActor();
-  
+
   virtual ~NonOptGlImageActor();
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
@@ -143,8 +142,8 @@ protected:
     double m_MaxBlue;
   };
 
-  typedef std::vector<Tile>                                                       TileVectorType;    
-  
+  typedef std::vector<Tile>                                                       TileVectorType;
+
 private:
   // prevent implementation
   NonOptGlImageActor(const Self&);
@@ -152,11 +151,11 @@ private:
 
   // Load tile to GPU
   void LoadTile(Tile& tile);
-  
+
   // Unload tile from GPU
   void UnloadTile(Tile& tile);
 
-  // Clean the loaded tiles, getting rid of unecessary ones
+  // Clean the loaded tiles, getting rid of unnecessary ones
   void CleanLoadedTiles();
 
   // Clear all loaded tiles
@@ -176,11 +175,11 @@ private:
   void UpdateTransforms();
 
   static void InitShaders();
- 
+
    unsigned int m_TileSize;
 
   std::string m_FileName;
-  
+
   ReaderType::Pointer m_FileReader;
 
   TileVectorType m_LoadedTiles;
@@ -208,7 +207,7 @@ private:
   unsigned int m_NumberOfComponents;
 
   bool m_UseShader;
-  
+
   static unsigned int m_StandardShader;
   static unsigned int m_StandardShaderProgram;
   static bool m_ShaderInitialized;

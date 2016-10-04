@@ -72,7 +72,7 @@ namespace otb
  * \example  Markov/MarkovClassification1Example.cxx
  * \example  Markov/MarkovClassification2Example.cxx
  * \example  Markov/MarkovRegularizationExample.cxx
- * \example  Markov/MarkovRestaurationExample.cxx
+ * \example  Markov/MarkovRestorationExample.cxx
  *
  *
  * \ingroup OTBMarkov
@@ -174,7 +174,7 @@ public:
   typedef typename InputImageFaceListType::iterator
   InputImageFaceListIterator;
 
-  /** Labelled image neighborhood interator typedef */
+  /** Labelled image neighborhood iterator typedef */
   typedef itk::NeighborhoodIterator<TClassifiedImage>
   LabelledImageNeighborhoodIterator;
 

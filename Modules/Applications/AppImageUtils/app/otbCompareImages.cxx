@@ -52,7 +52,7 @@ private:
     SetDescription("Estimator between 2 images.");
 
     // Documentation
-    SetDocName("Images comparaison");
+    SetDocName("Images comparison");
     SetDocLongDescription("This application computes MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR (Peak Signal to Noise Ratio) between the channel of two images (reference and measurement). The user has to set the used channel and can specify a ROI.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -113,6 +113,8 @@ private:
     AddParameter(ParameterType_Float, "count",  "count");
     SetParameterDescription("count", "Nb of pixels which are different");
     SetParameterRole("count", Role_Output);
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("ref.in", "GomaApres.png");
@@ -202,10 +204,12 @@ private:
     m_ExtractRefFilter->SetChannel( this->GetParameterInt("ref.channel") );
     m_ExtractMeasFilter->SetChannel( this->GetParameterInt("meas.channel") );
 
-    // Compute comparaison
+    // Compute comparison
     m_CompareFilter->SetInput1(m_ExtractRefFilter->GetOutput());
     m_CompareFilter->SetInput2(m_ExtractMeasFilter->GetOutput());
     m_CompareFilter->SetPhysicalSpaceCheck(false);
+    m_CompareFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(m_CompareFilter->GetStreamer(), "Comparing...");
     m_CompareFilter->Update();
 
     // Show result

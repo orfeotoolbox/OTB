@@ -26,6 +26,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "OTBIOTileMapExport.h"
+
 namespace otb
 {
 
@@ -36,7 +38,7 @@ namespace otb
  * \ingroup OTBIOTileMap
  */
 
-class TileMapImageIOHelper: public itk::Object
+class OTBIOTileMap_EXPORT TileMapImageIOHelper: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -48,7 +50,7 @@ public:
   itkTypeMacro(TileMapImageIOHelper, itk::Object);
   itkNewMacro(Self);
 
-  /** Correspondance between depth and scale for the quad tree paradigm*/
+  /** Correspondence between depth and scale for the quad tree paradigm*/
   const std::string ConvertDepthToScale(const unsigned int depth) const;
 
 protected:

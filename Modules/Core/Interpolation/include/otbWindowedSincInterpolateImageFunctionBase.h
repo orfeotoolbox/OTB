@@ -101,7 +101,7 @@ namespace otb
  * classes.
  *
  * \par
- * The fouth (TCoordRep) is again standard for interpolating functions,
+ * The fourth (TCoordRep) is again standard for interpolating functions,
  * and should be float or double.
  *
  * \par CAVEATS

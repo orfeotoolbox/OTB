@@ -30,7 +30,7 @@ namespace otb
 namespace Wrapper
 {
 
-class ITK_ABI_EXPORT AppliThread : public QThread
+class OTBQtWidget_EXPORT AppliThread : public QThread
 {
  Q_OBJECT
 
@@ -80,7 +80,7 @@ private:
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetModel : public QObject
+class OTBQtWidget_EXPORT QtWidgetModel : public QObject
 {
   Q_OBJECT
 public:
@@ -121,7 +121,7 @@ signals:
    * \brief Signal emitted when execution otb::Application has finished.
    *
    * \param status The result status of the otb::application (-1 when
-   * an exception has occured).
+   * an exception has occurred).
    */
   void SetProgressReportDone( int status =0 );
 
@@ -146,7 +146,7 @@ protected slots:
   void ExecuteAndWriteOutputSlot();
 
   /**
-   * \brief Slots called everytime one of the widget needs to be
+   * \brief Slots called every time one of the widget needs to be
    * updated (e.g. by specialized parameter widgets).
    *
    * This slot is protected so it can only be called via Qt

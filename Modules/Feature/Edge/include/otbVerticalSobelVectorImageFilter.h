@@ -67,7 +67,7 @@ class ITK_EXPORT VerticalSobelVectorImageFilter
               typename TOutputImage::PixelType > >
 {
 public:
-  /** Standart class typedefs */
+  /** Standard class typedefs */
   typedef VerticalSobelVectorImageFilter Self;
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
             Functor::VerticalSobelOperator<

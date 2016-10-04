@@ -30,7 +30,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT RAMParameter : public Parameter
+class OTBApplicationEngine_EXPORT RAMParameter : public Parameter
 {
 public:
   /** Standard class typedef */

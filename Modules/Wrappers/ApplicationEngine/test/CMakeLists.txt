@@ -174,6 +174,6 @@ otb_add_test(NAME owTuDocExampleStructureNew COMMAND otbApplicationEngineTestDri
   )
 
 otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineTestDriver otbApplicationMemoryConnectTest
-  ${CMAKE_BINARY_DIR}/lib/otb/applications
+  $<TARGET_FILE_DIR:otbapp_Smoothing>
   ${INPUTDATA}/poupees.tif
   ${TEMP}/owTvApplicationMemoryConnectTestOutput.tif)

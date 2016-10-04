@@ -9,7 +9,7 @@
 #  LIBSVM_INCLUDE_DIR - where to find svm.h
 #  LIBSVM_INCLUDE_DIRS - libsvm includes
 #  LIBSVM_LIBRARY - where to find the LibSVM library
-#  LIBSVM_LIBRARIES - aditional libraries
+#  LIBSVM_LIBRARIES - additional libraries
 #  LIBSVM_MAJOR_VERSION - major version
 #  LIBSVM_MINOR_VERSION - minor version
 #  LIBSVM_PATCH_VERSION - patch version

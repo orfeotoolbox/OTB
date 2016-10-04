@@ -80,13 +80,13 @@ ConvertStringToVector(std::string const &str, T& ret, std::string const& errmsg,
 {
   typedef std::vector<boost::iterator_range<std::string::const_iterator> > ListType;
 
-  ListType splitted;
+  ListType split;
 
-  boost::split(splitted, str, boost::is_any_of(delims));
+  boost::split(split, str, boost::is_any_of(delims));
 
-  for(size_t i = 0; i < splitted.size(); i++)
+  for(size_t i = 0; i < split.size(); i++)
     {
-    typename T::value_type value = LexicalCast<typename T::value_type> (splitted[i], errmsg);
+    typename T::value_type value = LexicalCast<typename T::value_type> (split[i], errmsg);
     ret.push_back(value);
     }
 }
@@ -118,16 +118,16 @@ void SplitStringToSingleKeyValue(const std::string& str,
   typedef boost::iterator_range<std::string::const_iterator> BoostRangeIteratorType;
   typedef std::list< BoostRangeIteratorType > ListType;
 
-  ListType splitted;
+  ListType split;
 
-  boost::split( splitted, str, boost::is_any_of(delims), boost::token_compress_on );
+  boost::split( split, str, boost::is_any_of(delims), boost::token_compress_on );
 
-  typename ListType::iterator it = splitted.begin();
+  typename ListType::iterator it = split.begin();
   BoostRangeIteratorType kIt = boost::trim_copy((*it));
   key.assign( kIt.begin(), kIt.end());
   ++it;
 
-  if( it != splitted.end())
+  if( it != split.end())
     {
     value =  LexicalCast<T>(boost::trim_copy(*it), errmsg);
     ++it;

@@ -124,7 +124,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
     otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(0);
     }
 
-  grsTrasnform->InstanciateTransform();
+  grsTrasnform->InstantiateTransform();
 
   // Test
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
