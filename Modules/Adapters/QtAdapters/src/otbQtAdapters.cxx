@@ -70,7 +70,9 @@ GetExistingDirectory( QWidget * p,
   QString path(
     QFileDialog::getExistingDirectory(
       p,
-      caption,
+      caption.isEmpty()
+      ? QObject::tr( "Select directory..." )
+      : caption,
       dir,
       options
     )
@@ -94,7 +96,9 @@ GetOpenFileName( QWidget * p,
   QString filename(
     QFileDialog::getOpenFileName(
       p,
-      caption,
+      caption.isEmpty()
+      ? QObject::tr( "Open file..." )
+      : caption,
       dir,
       filter,
       selectedFilter,
@@ -120,7 +124,9 @@ GetOpenFileNames( QWidget * p,
   QStringList filenames(
     QFileDialog::getOpenFileNames(
       p,
-      caption,
+      caption.isEmpty()
+      ? QObject::tr( "Open file..." )
+      : caption,
       dir,
       filter,
       selectedFilter,
@@ -146,7 +152,9 @@ GetSaveFileName( QWidget * p,
   QString filename(
     QFileDialog::getSaveFileName(
       p,
-      caption,
+      caption.isEmpty()
+      ? QObject::tr( "Save file..." )
+      : caption,
       dir,
       filter,
       selectedFilter,
