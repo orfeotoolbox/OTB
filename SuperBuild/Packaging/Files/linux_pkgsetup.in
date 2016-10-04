@@ -98,8 +98,57 @@ fi
 #echo "Creating symbolic links..."
 . ./make_symlinks
 
+if [ ! -f "$OTB_PYTHON_EXE" ] ; then
+    OTB_PYTHON_EXE=`which python`
+fi
+
+python_INSTALLED_SONAME=@python_INSTALLED_SONAME@
+
+python_major_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[0])")
+python_minor_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[1])")
+python_patch_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[2])")
+python_version="$python_major_version.$python_minor_version.$python_patch_version"
+printf %s\\n "Python executable found in : $OTB_PYTHON_EXE ($python_version)"
+
+if [ $python_major_version -gt 2 ]; then
+    printf %s\\n "OTB python bindings requires python2.6 or python2.7 but current detected python version is $python_version"
+    printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
+    printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
+    printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python2.7 ./OTB-X.Y-Linux64.run"
+    exit 0;
+fi
+python_INSTSONAME=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));")
+
+python_lib_dirs="/usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu"
+found_python_lib="0"
+python_lib_file_path=""
+for list_of_dir in $python_lib_dirs
+do
+    if [ -f "$list_of_dir/$python_INSTSONAME" ]; then
+        python_lib_file_path="$list_of_dir/$python_INSTSONAME"
+        found_python_lib="1"
+        break
+    fi
+done
+
+if [ "$found_python_lib" == "1" ]; then
+    printf %s\\n "Found python library: $python_lib_file_path "
+    ln -sf $python_lib_file_path $OUT_DIR/lib/$python_INSTALLED_SONAME
+    printf %s\\n "To use OTB python binding you need to export below environment variables:"
+    printf %s\\n "'export LD_LIBRARY_PATH=$OUT_DIR/lib' and"
+    printf %s\\n "'export PYTHONPATH=$OUT_DIR/lib/python'"
+    printf %s\\n "And then from python prompt import otbApplication."
+    printf %s\\n "eg: python -c 'import otbApplication'"
+else
+    printf %s\\n "$python_INSTSONAME cannot be found in any of search directories."
+    printf %s\\n "We had searched following directories $python_lib_dirs"
+    printf %s\\n "If you don't have python-dev package installed, install it and make a symlink"
+    printf %s\\n "If you don't have python headers and so installed on a custom location, then make a symlink"
+    printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME $OUT_DIR/lib/$python_INSTALLED_SONAME"
+fi
+
 $RM -fr $OUT_DIR/tools
 
-$RM -f $OUT_DIR/pkgsetup
+#$RM -f $OUT_DIR/pkgsetup
 
 $RM -f $OUT_DIR/make_symlinks

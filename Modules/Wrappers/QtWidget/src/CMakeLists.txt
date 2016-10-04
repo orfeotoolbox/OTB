@@ -89,6 +89,7 @@ target_link_libraries(otbApplicationLauncherQt
   ${OTBQt4_LIBRARIES}
   )
 otb_module_target(otbApplicationLauncherQt)
+set_linker_stack_size_flag(otbApplicationLauncherQt 10000000)
 
 # Where we will install the script in the build tree
 get_target_property(GUI_OUTPUT_DIR otbApplicationLauncherQt RUNTIME_OUTPUT_DIRECTORY)
