@@ -677,7 +677,7 @@ The application can be used like this:
                                             -ip.undecidedlabel  7
                                             -io.out             regularized.tif
 
-Recommandations to properly use the majority voting based regularization
+Recommendations to properly use the majority voting based regularization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to properly use the *ClassificationMapRegularization*
