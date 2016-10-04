@@ -808,6 +808,34 @@ ImageViewRenderer
   m_GlView->SetRenderingOrder( stackedLayerModel->GetKeys(), false );
 }
 
+
+/*******************************************************************************/
+void
+ImageViewRenderer
+::virtual_ClearScene( bool keepViewport )
+{
+  // qDebug() << this << "::virtual_ClearScene()";
+
+  // Remove all actors.
+  m_GlView->ClearActors();
+
+  // Clear reference actor.
+  m_ReferencePair.second = otb::GlActor::Pointer();
+
+  // Nothing more if keep viewport is enabled.
+  if( keepViewport )
+    return;
+
+  // Clear reference layer.
+  m_ReferencePair.first = NULL;
+
+  //
+  // MANTIS-1244: image-view not reset when layer-stack is cleared.
+  // {
+  emit ResetViewport();
+  // }
+}
+
 /*******************************************************************************/
 void
 ImageViewRenderer
@@ -826,30 +854,23 @@ ImageViewRenderer
 
 
   if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
-    {
-    m_GlView->ClearActors();
+    ClearScene();
 
-    //
-    // MANTIS-1244: image-view not reset when layer-stack is cleared.
-    // {
-    emit ResetViewport();
-    // }
-    }
   else
     {
       {
       otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
       for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
-           it!=keys.end();
-           ++it )
-        if( !stackedLayerModel->Contains( *it ) )
-          {
-          // qDebug()
+	   it!=keys.end();
+	   ++it )
+	if( !stackedLayerModel->Contains( *it ) )
+	  {
+	  // qDebug()
 	  //   << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
 
-          m_GlView->RemoveActor( *it );
-          }
+	  m_GlView->RemoveActor( *it );
+	  }
       }
 
 
@@ -903,8 +924,6 @@ ImageViewRenderer
           );
 
           m_GlView->AddActor( glImageActor, it->first );
-
-          // glImageActor->SetVisible( vectorImageModel->IsVisible() );
 
           // qDebug() <<
 	  //   QString( "Added image-actor '%1' from file '%2'" )

@@ -269,6 +269,7 @@ private:
   //
   // AbstractImageViewRenderer overloads.
 
+  virtual void virtual_ClearScene( bool );
   virtual void virtual_UpdateScene();
   virtual void virtual_RefreshScene();
 
