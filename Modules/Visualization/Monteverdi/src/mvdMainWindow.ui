@@ -51,7 +51,10 @@
     <addaction name="action_ZoomExtent"/>
     <addaction name="action_ZoomLayer"/>
     <addaction name="separator"/>
+    <addaction name="action_GLSL"/>
+    <addaction name="separator"/>
     <addaction name="action_SaveScreenshot"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -163,6 +166,9 @@
    </property>
   </action>
   <action name="action_ZoomIn">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -269,6 +275,25 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionOpenGL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>OpenGL texture</string>
+   </property>
+  </action>
+  <action name="action_GLSL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use OpenGL Shading Language (GLSL)</string>
    </property>
   </action>
  </widget>
