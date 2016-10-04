@@ -114,7 +114,7 @@ set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 
 # This is a black list for classifier that can not have a baseline
 # because they are using randomness and seed can not be set
-set(classifier_without_basline "SHARKRF")
+set(classifier_without_baseline "SHARKRF")
 
 # Loop on classifiers
 foreach(classifier ${classifierList})
@@ -125,10 +125,10 @@ foreach(classifier ${classifierList})
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
   set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
 
-  set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
-
-  list(FIND classifier_without_basline ${classifier} _classifier_has_baseline)
-  if(NOT ${_classifier_has_baseline} EQUAL -1)
+  list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
+  else()
     set(valid "")
   endif()
   
@@ -146,6 +146,12 @@ foreach(classifier ${classifierList})
                        VALID    ${valid}
                        )
 
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML1_${OUTMODELFILE})
+  else()
+    set(valid "")
+  endif()
+
   otb_test_application(
                        NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
                        APP      TrainImagesClassifier
@@ -160,6 +166,12 @@ foreach(classifier ${classifierList})
 
                        VALID ${valid}
                        )
+
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML2_${OUTMODELFILE})
+  else()
+    set(valid "")
+  endif()
 
   otb_test_application(
                        NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1

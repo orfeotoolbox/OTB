@@ -15,10 +15,10 @@ if(MSVC)
     return()
   endif()
 
-if("${OTB_MSVC_COMPILER_ARCH}" MATCHES "x86")
-  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
-else()
+if(OTB_MSVC_COMPILER_ARCH_IS_X64)
   set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
+else()
+  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
 endif()
 
   set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-release-dll-zlib-dll-ipv6-sspi-winssl")

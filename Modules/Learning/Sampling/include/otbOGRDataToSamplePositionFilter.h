@@ -85,8 +85,7 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentSamplingFilterBase);
 
-  /** Synthetize the persistent filter*/
-  virtual void Synthetize(void);
+  virtual void Synthetize(void){}
 
   /** Reset method called before starting the streaming*/
   virtual void Reset(void);
@@ -135,7 +134,7 @@ protected:
   /** Method to split the input OGRDataSource
    *  according to the class partition
    */
-  virtual void DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers);
+  virtual void DispatchInputVectors(void);
 
 private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented

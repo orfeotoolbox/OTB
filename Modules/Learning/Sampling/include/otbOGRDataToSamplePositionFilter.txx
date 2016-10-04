@@ -36,15 +36,6 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 template<class TInputImage, class TMaskImage, class TSampler>
 void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
-::Synthetize(void)
-{
-  // clear temporary outputs
-  this->m_InMemoryOutputs.clear();
-}
-
-template<class TInputImage, class TMaskImage, class TSampler>
-void
-PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::Reset(void)
 {
   // Reset samplers
@@ -185,7 +176,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
       ogrTmpPoint.setX(imgPoint[0]);
       ogrTmpPoint.setY(imgPoint[1]);
 
-      ogr::Layer outputLayer = this->m_InMemoryOutputs[threadid][i]->GetLayerChecked(0);
+      ogr::Layer outputLayer = this->GetInMemoryOutput(threadid,i);
       ogr::Feature feat(outputLayer.GetLayerDefn());
       feat.SetFrom(feature);
       feat[this->GetOriginFieldName()].SetValue(static_cast<int>(feature.GetFID()));
@@ -199,8 +190,43 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 template<class TInputImage, class TMaskImage, class TSampler>
 void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
-::DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers)
+::DispatchInputVectors()
 {
+  TInputImage* outputImage = this->GetOutput();
+  ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
+  ogr::Layer inLayer = vectors->GetLayer(this->GetLayerIndex());
+
+  const RegionType& requestedRegion = outputImage->GetRequestedRegion();
+  itk::ContinuousIndex<double> startIndex(requestedRegion.GetIndex());
+  itk::ContinuousIndex<double> endIndex(requestedRegion.GetUpperIndex());
+  startIndex[0] += -0.5;
+  startIndex[1] += -0.5;
+  endIndex[0] += 0.5;
+  endIndex[1] += 0.5;
+  itk::Point<double, 2> startPoint;
+  itk::Point<double, 2> endPoint;
+  outputImage->TransformContinuousIndexToPhysicalPoint(startIndex, startPoint);
+  outputImage->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
+
+  // create geometric extent
+  OGRPolygon tmpPolygon;
+  OGRLinearRing ring;
+  ring.addPoint(startPoint[0],startPoint[1],0.0);
+  ring.addPoint(startPoint[0],endPoint[1]  ,0.0);
+  ring.addPoint(endPoint[0]  ,endPoint[1]  ,0.0);
+  ring.addPoint(endPoint[0]  ,startPoint[1],0.0);
+  ring.addPoint(startPoint[0],startPoint[1],0.0);
+  tmpPolygon.addRing(&ring);
+
+  inLayer.SetSpatialFilter(&tmpPolygon);
+
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  std::vector<ogr::Layer> tmpLayers;
+  for (unsigned int i=0 ; i<numberOfThreads ; i++)
+    {
+    tmpLayers.push_back(this->GetInMemoryInput(i));
+    }
+
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   ogr::Layer::const_iterator featIt = inLayer.begin();
   std::string className;
@@ -212,6 +238,8 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     className = featIt->ogr().GetFieldAsString(this->GetFieldIndex());
     tmpLayers[m_ClassPartition[className]].CreateFeature( dstFeature );
     }
+
+  inLayer.SetSpatialFilter(ITK_NULLPTR);
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
