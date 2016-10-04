@@ -440,6 +440,10 @@ private:
 private slots:
 
   /**
+   */
+  void on_action_GLSL_triggered( bool );
+
+  /**
    * \brief Qt auto-connected slot which is called when Help/About
    * menu action is activated.
    */
