@@ -21,7 +21,6 @@ macro(macro_setup_cmake_project pkg)
     set(PKG_GENERATE_XDK OFF)
   endif()
 
-
   #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
   "cmake_minimum_required(VERSION 3.2)
@@ -40,9 +39,15 @@ macro(macro_setup_cmake_project pkg)
    set(ITK_VERSION_STRING           \"${ITK_VERSION_STRING}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    set(PATCHELF_PROGRAM              ${PATCHELF_PROGRAM})
+   set(PYTHON_EXECUTABLE             \"${PYTHON_EXECUTABLE}\")
    ${EXTRA_CACHE_CONFIG}
    include(\"${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake\")
    macro_super_package(STAGE_DIR \"${archive_name}\")"
+  )
+
+configure_file(
+  ${SUPERBUILD_SOURCE_DIR}/Packaging/README
+  ${PACKAGE_PROJECT_DIR}/src/README
   )
 
   macro_create_targets_for_package(${pkg})

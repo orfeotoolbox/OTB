@@ -44,6 +44,19 @@ macro(macro_super_package)
     message(FATAL_ERROR "${loader_program_names} not found in ${loader_program_PATHS}. please check LOADER_PROGRAM variable is set correctly")
   endif()
 
+    execute_process(
+      COMMAND ${PYTHON_EXECUTABLE}
+      -c
+      "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));"
+      RESULT_VARIABLE python_INSTALLED_SONAME_rv
+      OUTPUT_VARIABLE python_INSTALLED_SONAME_ov
+      )
+
+    if(NOT python_INSTALLED_SONAME_rv EQUAL 0)
+      message( FATAL_ERROR "python_INSTALLED_SONAME_rv=${python_INSTALLED_SONAME_rv}: Cannot find python library")
+    endif()
+    set(python_INSTALLED_SONAME "${python_INSTALLED_SONAME_ov}")
+    
   include(GetPrerequisites)
 
   set(PKG_SEARCHDIRS)
@@ -118,7 +131,6 @@ macro(macro_super_package)
 
   ############# install package configure script ################
   if(UNIX AND NOT WIN32)
-
     #avoid OTB stuff inside make_symlinks script
     file(STRINGS "${CMAKE_BINARY_DIR}/make_symlinks_temp" make_symlinks_list)
     func_lisp( make_symlinks_list )
@@ -144,6 +156,7 @@ macro(macro_super_package)
     if(APPLE)
       set(PKGSETUP_IN_FILENAME macx_pkgsetup.in)
     endif()
+
     configure_file(${PACKAGE_SUPPORT_FILES_DIR}/${PKGSETUP_IN_FILENAME}
       ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
 
@@ -162,6 +175,10 @@ macro(macro_super_package)
   if(PKG_GENERATE_XDK)
     func_install_xdk_files()
   endif()
+
+  install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/README
+    DESTINATION ${PKG_STAGE_DIR})
 
 endmacro(macro_super_package)
 

@@ -105,6 +105,12 @@ There are several strategies to compute those sampling rates:
 * **Smallest class strategy:** The class with the least number of samples
   will be fully sampled. All other classes will be sampled with the
   same number of samples.
+* **Percent strategy:** Each class will be sampled with a user-defined
+  percentage (same value for all classes) of samples available in this
+  class.
+* **Total strategy:** A global number of samples to generate is
+  divided proportionally among each class (classes proportions are
+  enforced).
 * **Take all strategy:** Take all the available samples
 * **By class strategy:** Set a target number of samples for each
   class. The number of samples for each class is read from a CSV file.
@@ -229,9 +235,9 @@ image.
   class required)
 
   - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
-    :math:`N_i( c ) = M * T_i( c ) / sum_k( T_k(c) )`
+    :math:`N_i( c ) = \frac{M * T_i( c )}{sum_k( T_k(c)}`
   - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
-    :math:`N_i( c ) = M / L`
+    :math:`N_i( c ) = \frac{M}{L}`
   - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
     :math:`N_i( c ) = M_i` where :math:`M_i` is the custom requested number of samples
     for image i
@@ -240,13 +246,31 @@ image.
   class c)
 
   - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
-    :math:`N_i( c ) = M(c) * T_i( c ) / sum_k( T_k(c) )`
+    :math:`N_i( c ) = M(c) * \frac{T_i( c )}{sum_k( T_k(c))}`
   - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
-    :math:`N_i( c ) = M(c) / L`
+    :math:`N_i( c ) = \frac{M(c)}{L}`
   - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
     :math:`Ni( c ) = M_i(c)` where :math:`M_i(c)` is the custom requested number of
     samples for each image :math:`i` and each class :math:`c`
-  
+
+* **Strategy = percent**
+
+  - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = p * T_i(c)` where :math:`p` is the user-defined percentage
+  - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = p * \frac{sum_k(Tk(c))}{L}` where :math:`p` is the user-defined percentage
+  - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
+    :math:`Ni( c ) = p(i) * T_i(c)` where :math:`p(i)` is the user-defined percentage for image :math:`i`
+
+* **Strategy = total**
+
+  - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = total * (\frac{sum_k(Ti(k))}{sum_kl(Tl(k))}) * (\frac{Ti(c)}{sum_k(Ti(k))})` where :math:`total` is the total number of samples specified
+  - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
+    :math:`N_i( c ) = (total / L) * (\frac{Ti(c)}{sum_k(Ti(k))})` where :math:`total` is the total number of samples specified
+  - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
+    :math:`Ni( c ) = total(i) * (\frac{Ti(c)}{sum_k(Ti(k))})` where :math:`total(i)` is the total number of samples specified for image :math:`i`
+    
 * **Strategy = smallest class**
       
   - *Mode = proportional:* the smallest class is computed globally, then this smallest size is used for the strategy constant+proportional
@@ -392,6 +416,8 @@ class.
                                   -ref.vector.in     vectordata.shp
                                   -ref.vector.field  Class (name_of_label_field)
                                   -out               confusion_matrix.csv
+
+.. _fancy_classification_results:
 
 Fancy classification results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -653,7 +679,7 @@ The application can be used like this:
                                             -ip.undecidedlabel  7
                                             -io.out             regularized.tif
 
-Recommandations to properly use the majority voting based regularization
+Recommendations to properly use the majority voting based regularization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to properly use the *ClassificationMapRegularization*
@@ -674,10 +700,9 @@ NoData and Undecided labels have a default value equal to 0.
 Example
 ~~~~~~~
 
-Resulting from the application presented in section
-[ssec:classificationcolormapping], and illustrated in Fig.
-[fig:MeanShiftVectorImageFilter], the Fig.
-[fig:ClassificationMapRegularizationApplication] shows a regularization
+Resulting from the application presented in section :ref:`fancy_classification_results`
+and illustrated in Fig. [fig:MeanShiftVectorImageFilter],
+the Fig.[fig:ClassificationMapRegularizationApplication] shows a regularization
 of a classification map composed of 4 classes: water, roads, vegetation
 and buildings with red roofs. The radius of the ball shaped structuring
 element is equal to 3 pixels, which corresponds to a ball included in a
@@ -698,6 +723,7 @@ used to predict output values. The applications to do that are and .
 .. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
 .. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
 .. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png
+
 Figure 6: From left to right: Original image, fancy colored classified image and regularized classification map with radius equal to 3 pixels. 
 
 The input data set for training must have the following structure :
