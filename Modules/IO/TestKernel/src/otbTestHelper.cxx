@@ -726,6 +726,11 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
     std::vector<unsigned int> differencesPosSelected;
     for (curPosTest = posTest ; curPosTest < listLineFileTest.size() ; curPosTest++)
       {
+      // stop searching after 30 lines tested
+      if (curPosTest > posTest + 30)
+        {
+        break;
+        }
       std::string &curLineTest = listLineFileTest[curPosTest];
       if (!IsLineValid(curLineTest,ignoredLines))
         {
