@@ -35,6 +35,7 @@ macro(macro_setup_cmake_project pkg)
    set(QT_TRANSLATIONS_DIR          \"${QT_TRANSLATIONS_DIR}\")
    set(DEPENDENCIES_INSTALL_DIR     \"${DEPENDENCIES_INSTALL_DIR}\")
    set(PACKAGE_SUPPORT_FILES_DIR    \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
+   set(PACKAGE_VERSION_STRING       \"${PACKAGE_VERSION_STRING}\")
    set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
    set(ITK_VERSION_STRING           \"${ITK_VERSION_STRING}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
@@ -45,10 +46,20 @@ macro(macro_setup_cmake_project pkg)
    macro_super_package(STAGE_DIR \"${archive_name}\")"
   )
 
-configure_file(
-  ${SUPERBUILD_SOURCE_DIR}/Packaging/README
-  ${PACKAGE_PROJECT_DIR}/src/README
-  )
+  if(UNIX)
+    if(APPLE)
+      set(README_FILE ${OTB_SOURCE_DIR}/Documentation/Cookbook/rst/Installation_Macx.txt)
+    else() #not osx
+      set(README_FILE ${OTB_SOURCE_DIR}/Documentation/Cookbook/rst/Installation_Linux.txt)
+    endif() #if(APPLE)
+  else() #windows
+    set(README_FILE ${OTB_SOURCE_DIR}/Documentation/Cookbook/rst/Installation_Windows.txt)
+  endif() #if(UNIX)
+
+  configure_file(
+    "${README_FILE}"
+    ${PACKAGE_PROJECT_DIR}/src/README
+    )
 
   macro_create_targets_for_package(${pkg})
 
