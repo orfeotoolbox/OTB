@@ -73,7 +73,6 @@ const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
 {
   "geoidPath",
   "geoidPathActive",
-  "useGLSL",
   "overviewsEnabled",
   "overviewsSize",
   "resolutionAlgorithm",

@@ -164,16 +164,6 @@ PreferencesDialog
   {
     QVariant value(
       I18nApplication::Instance()->RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_USE_GLSL
-      )
-    );
-
-    // m_UI->glRadioButton->setChecked();
-    // m_UI->glslRadioButton->setChecked();
-  }
-  {
-    QVariant value(
-      I18nApplication::Instance()->RetrieveSettingsKey(
 	I18nCoreApplication::SETTINGS_KEY_RESOLUTION
       )
     );
@@ -184,6 +174,7 @@ PreferencesDialog
       : value.toInt()
     );
   }
+
   {
     QVariant value(
       I18nApplication::Instance()->RetrieveSettingsKey(
