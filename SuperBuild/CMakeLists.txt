@@ -30,9 +30,9 @@ if(MSVC)
   OUTPUT_QUIET
   OUTPUT_STRIP_TRAILING_WHITESPACE)
   
-  set(OTB_MSVC_COMPILER_ARCH x64)
+  set(OTB_MSVC_COMPILER_ARCH_IS_X64 TRUE)
   if("${ev}" MATCHES "x86")
-    set(OTB_MSVC_COMPILER_ARCH x86)
+    set(OTB_MSVC_COMPILER_ARCH_IS_X64 FALSE)
   endif()
   
 endif()
@@ -68,6 +68,8 @@ mark_as_advanced(DOWNLOAD_LOCATION)
 option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
+option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
+
 if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
   file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
     REGEX "project\\\(OTB\\\)")
@@ -83,7 +85,7 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
 endif()
 
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
   set (CMAKE_INSTALL_PREFIX
     "${PARENT_OF_BINARY_DIR}/superbuild_install"
     CACHE

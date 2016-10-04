@@ -158,34 +158,119 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     }
 }
 
-
 template <class TInputImage, class TMaskImage>
 void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::BeforeThreadedGenerateData(void)
+::GenerateData(void)
 {
-  this->PrepareInputVectors();
+  this->AllocateOutputs();
+  this->BeforeThreadedGenerateData();
 
-  this->PrepareOutputVectors();
+  // Split the data into in-memory layers
+  this->DispatchInputVectors();
+
+  // struct to store filter pointer
+  VectorThreadStruct str;
+  str.Filter = this;
+
+  // Get the output pointer
+  //const InputImageType *outputPtr = this->GetOutput();
+
+  this->GetMultiThreader()->SetNumberOfThreads( this->GetNumberOfThreads() );
+  this->GetMultiThreader()->SetSingleMethod(this->VectorThreaderCallback, &str);
+
+  // multithread the execution
+  this->GetMultiThreader()->SingleMethodExecute();
+
+  // gather the data from in-memory output layers
+  this->GatherOutputVectors();
+
+  this->AfterThreadedGenerateData();
 }
 
 template <class TInputImage, class TMaskImage>
 void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::AfterThreadedGenerateData(void)
+::AllocateOutputs(void)
+{
+  Superclass::AllocateOutputs();
+
+  ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
+  ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
+
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
+
+  // Prepare temporary input
+  this->m_InMemoryInputs.clear();
+  this->m_InMemoryInputs.reserve(numberOfThreads);
+  std::string tmpLayerName("thread");
+  OGRSpatialReference * oSRS = ITK_NULLPTR;
+  if (inLayer.GetSpatialRef())
+    {
+    oSRS = inLayer.GetSpatialRef()->Clone();
+    }
+  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
+  //std::vector<ogr::Layer> tmpLayers;
+  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+    {
+    ogr::DataSource::Pointer tmpOgrDS = ogr::DataSource::New();
+    ogr::Layer tmpLayer = tmpOgrDS->CreateLayer(
+      tmpLayerName,
+      oSRS,
+      inLayer.GetGeomType());
+    // add field definitions
+    for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
+      {
+      OGRFieldDefn originDefn(layerDefn.GetFieldDefn(k));
+      ogr::FieldDefn fieldDefn(originDefn);
+      tmpLayer.CreateField(fieldDefn);
+      }
+    this->m_InMemoryInputs.push_back(tmpOgrDS);
+    }
+
+  // Prepare in-memory outputs
+  this->m_InMemoryOutputs.clear();
+  this->m_InMemoryOutputs.reserve(numberOfThreads);
+  tmpLayerName = std::string("threadOut");
+  for (unsigned int i=0 ; i < numberOfThreads ; i++)
+    {
+    std::vector<OGRDataPointer> tmpContainer;
+    // iterate over outputs, only process ogr::DataSource
+    for (unsigned int k=0 ; k < this->GetNumberOfOutputs() ; k++)
+      {
+      ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource *>(
+        this->itk::ProcessObject::GetOutput(k));
+      if (realOutput)
+        {
+        ogr::Layer realLayer = realOutput->GetLayersCount() == 1
+                               ? realOutput->GetLayer(0)
+                               : realOutput->GetLayer(m_OutLayerName);
+        OGRFeatureDefn &outLayerDefn = realLayer.GetLayerDefn();
+        ogr::DataSource::Pointer tmpOutput = ogr::DataSource::New();
+        ogr::Layer tmpLayer = tmpOutput->CreateLayer(
+          tmpLayerName, oSRS,  realLayer.GetGeomType());
+        // add field definitions
+        for (int f=0 ; f < outLayerDefn.GetFieldCount() ; f++)
+          {
+          OGRFieldDefn originDefn(outLayerDefn.GetFieldDefn(f));
+          tmpLayer.CreateField(originDefn);
+          }
+        tmpContainer.push_back(tmpOutput);
+        }
+      }
+    this->m_InMemoryOutputs.push_back(tmpContainer);
+    }
+}
+
+template <class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GatherOutputVectors(void)
 {
   // clean temporary inputs
   this->m_InMemoryInputs.clear();
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
-  
-  unsigned int actualNumberOfThreads = numberOfThreads;
-  
-  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
-    {
-    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
-    }
-
   
   // gather temporary outputs and write to output
   const otb::ogr::DataSource* vectors = this->GetOGRData();
@@ -208,7 +293,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
         }
   
-      for (unsigned int thread=0 ; thread < actualNumberOfThreads ; thread++)
+      for (unsigned int thread=0 ; thread < numberOfThreads ; thread++)
         {
         ogr::Layer inLayer = this->m_InMemoryOutputs[thread][count]->GetLayerChecked(0);
         if (!inLayer)
@@ -248,29 +333,24 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     }
   chrono.Stop();
   otbMsgDebugMacro(<< "write ogr points took " << chrono.GetTotal() << " sec");
+  this->m_InMemoryOutputs.clear();
 }
 
 template <class TInputImage, class TMaskImage>
 void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid)
+::ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid)
 {
   // Retrieve inputs
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   TInputImage* outputImage = this->GetOutput();
   RegionType requestedRegion = outputImage->GetRequestedRegion();
 
-  ogr::Layer layer = this->m_InMemoryInputs.at(threadid)->GetLayerChecked(0);
-  if (! layer)
-    {
-    return;
-    }
-
-  itk::ProgressReporter progress( this, threadid, layer.GetFeatureCount(true) );
+  itk::ProgressReporter progress( this, threadid, layerForThread.GetFeatureCount(true) );
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
-  ogr::Layer::const_iterator featIt = layer.begin();
-  for(; featIt!=layer.end(); ++featIt)
+  ogr::Layer::const_iterator featIt = layerForThread.begin();
+  for(; featIt!=layerForThread.end(); ++featIt)
     {
     // Compute the intersection of thread region and polygon bounding region, called "considered region"
     // This need not be done in ThreadedGenerateData and could be pre-processed and cached before filter execution if needed
@@ -603,7 +683,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::PrepareInputVectors()
+::DispatchInputVectors()
 {
   TInputImage* outputImage = this->GetOutput();
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
@@ -634,52 +714,13 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   inLayer.SetSpatialFilter(&tmpPolygon);
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
-
-  unsigned int actualNumberOfThreads = numberOfThreads;
-
-  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
+  std::vector<ogr::Layer> tmpLayers;
+  tmpLayers.reserve(numberOfThreads);
+  for (unsigned int i=0 ; i<numberOfThreads ; i++)
     {
-    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
+    tmpLayers.push_back(this->GetInMemoryInput(i));
     }
   
-  // prepare temporary input : split input features between available threads
-  this->m_InMemoryInputs.clear();
-  std::string tmpLayerName("thread");
-  OGRSpatialReference * oSRS = ITK_NULLPTR;
-  if (inLayer.GetSpatialRef())
-    {
-    oSRS = inLayer.GetSpatialRef()->Clone();
-    }
-  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
-  std::vector<ogr::Layer> tmpLayers;
-  for (unsigned int i=0 ; i < actualNumberOfThreads ; i++)
-    {
-    ogr::DataSource::Pointer tmpOgrDS = ogr::DataSource::New();
-    ogr::Layer tmpLayer = tmpOgrDS->CreateLayer(
-      tmpLayerName,
-      oSRS,
-      inLayer.GetGeomType());
-    // add field definitions
-    for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
-      {
-      OGRFieldDefn originDefn(layerDefn.GetFieldDefn(k));
-      ogr::FieldDefn fieldDefn(originDefn);
-      tmpLayer.CreateField(fieldDefn);
-      }
-    this->m_InMemoryInputs.push_back(tmpOgrDS);
-    tmpLayers.push_back(tmpLayer);
-    }
-
-  this->DispatchInputVectors(inLayer,tmpLayers);
-
-  inLayer.SetSpatialFilter(ITK_NULLPTR);
-}
-
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::DispatchInputVectors(ogr::Layer &inLayer, std::vector<ogr::Layer> &tmpLayers)
-{
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   ogr::Layer::const_iterator featIt = inLayer.begin();
   unsigned int counter=0;
@@ -693,58 +734,8 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     if (counter >= tmpLayers.size())
       counter = 0;
     }
-}
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::PrepareOutputVectors()
-{
-  // Prepare in-memory outputs
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
-
-  unsigned int actualNumberOfThreads = numberOfThreads;
-
-  if(numberOfThreads > this->GetOutput()->GetRequestedRegion().GetSize()[1])
-    {
-    actualNumberOfThreads = this->GetOutput()->GetRequestedRegion().GetSize()[1];
-    }
-  
-  this->m_InMemoryOutputs.clear();
-  std::string tmpLayerName("threadOut");
-  for (unsigned int i=0 ; i < actualNumberOfThreads ; i++)
-    {
-    std::vector<OGRDataPointer> tmpContainer;
-    // iterate over outputs, only process ogr::DataSource
-    for (unsigned int k=0 ; k < this->GetNumberOfOutputs() ; k++)
-      {
-      ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource *>(
-        this->itk::ProcessObject::GetOutput(k));
-      if (realOutput)
-        {
-        ogr::Layer realLayer = realOutput->GetLayersCount() == 1
-                               ? realOutput->GetLayer(0)
-                               : realOutput->GetLayer(m_OutLayerName);
-        OGRSpatialReference * oSRS = ITK_NULLPTR;
-        if (realLayer.GetSpatialRef())
-          {
-          oSRS = realLayer.GetSpatialRef()->Clone();
-          }
-        OGRFeatureDefn &layerDefn = realLayer.GetLayerDefn();
-        ogr::DataSource::Pointer tmpOutput = ogr::DataSource::New();
-        ogr::Layer tmpLayer = tmpOutput->CreateLayer(
-          tmpLayerName, oSRS,  realLayer.GetGeomType());
-        // add field definitions
-        for (int f=0 ; f < layerDefn.GetFieldCount() ; f++)
-          {
-          OGRFieldDefn originDefn(layerDefn.GetFieldDefn(f));
-          tmpLayer.CreateField(originDefn);
-          }
-        tmpContainer.push_back(tmpOutput);
-        }
-      }
-    this->m_InMemoryOutputs.push_back(tmpContainer);
-    }
+  inLayer.SetSpatialFilter(ITK_NULLPTR);
 }
 
 template<class TInputImage, class TMaskImage>
@@ -857,6 +848,53 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   return this->m_AdditionalFields;
 }
 
+template<class TInputImage, class TMaskImage>
+ITK_THREAD_RETURN_TYPE
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::VectorThreaderCallback(void *arg)
+{
+  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+
+  int threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  int threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+
+  ogr::Layer layer = str->Filter->GetInMemoryInput(threadId);
+
+  if (threadId < threadCount)
+    {
+    str->Filter->ThreadedGenerateVectorData(layer,threadId);
+    }
+
+  return ITK_THREAD_RETURN_VALUE;
+}
+
+template<class TInputImage, class TMaskImage>
+ogr::Layer
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GetInMemoryInput(unsigned int threadId)
+{
+  if (threadId >= m_InMemoryInputs.size())
+    {
+    itkExceptionMacro(<< "Requested in-memory input layer not available " << threadId << " (total size : "<< m_InMemoryInputs.size() <<").");
+    }
+  return m_InMemoryInputs[threadId]->GetLayerChecked(0);
+}
+
+template<class TInputImage, class TMaskImage>
+ogr::Layer
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GetInMemoryOutput(unsigned int threadId, unsigned int index)
+{
+  if (threadId >= m_InMemoryOutputs.size())
+    {
+    itkExceptionMacro(<< "Requested in-memory output layer not available " << threadId << " (total size : "<< m_InMemoryOutputs.size() <<").");
+    }
+  if (index >= m_InMemoryOutputs[threadId].size())
+    {
+    itkExceptionMacro(<< "Requested output dataset not available " << index << " (available : "<< m_InMemoryOutputs[threadId].size() <<").");
+    }
+  return m_InMemoryOutputs[threadId][index]->GetLayerChecked(0);
+}
 
 } // end namespace otb
 
