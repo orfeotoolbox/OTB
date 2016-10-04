@@ -16,12 +16,14 @@ build from source or if we don’t provide packages for your system,
 information is available in the `Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_,
 in the section "Building from Source".
 
+You can get latest binary packages from our `Download page <https://www.orfeo-toolbox.org/download>`__.
+
 Windows
 -------
 
 .. include:: Installation_Windows.txt
 
-Linux 64bit
+Linux x86_64
 -----------
 
 .. include:: Installation_Linux.txt

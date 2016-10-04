@@ -1,6 +1,5 @@
-We provide for Linux 64 bits OS through standalone packages. They contain
-all OTB Applications and their launchers (both command line and
-graphical launchers are provided). Check the `Download page <https://www.orfeo-toolbox.org/download>`__
+We provide binary package for GNU/Linux x86_64. This package include
+all of OTB applications along with commandline and graphical launchers.
 
 This package is a self-extractible archive. You may uncompress it with a
 double-click on the file, or with the command line :
