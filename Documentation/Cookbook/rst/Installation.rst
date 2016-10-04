@@ -26,10 +26,6 @@ Linux 64bit
 
 .. include:: Installation_Linux.txt
 
-FAQ for Packaging
------------------
-
-.. include:: Installation_FAQ.txt
 
 MacOS X
 -------
