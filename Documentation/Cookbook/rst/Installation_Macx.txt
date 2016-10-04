@@ -1,0 +1,40 @@
+We provide for MacOS X through a standalone package. This package is a
+self-extractible archive, quite similar to the Linux one. You may
+uncompress it with the command line :
+
+.. parsed-literal::
+
+    chmod +x OTB-|release|-Linux64.run
+    ./OTB-|release|-Linux64.run
+
+Once the archive is extracted, you can see OTB-|release|-Darwin64 directory in
+the same direcrtory along with OTB-|release|-Darwin64.run
+
+Contents of OTB-|release|-Darwin64 is briefly listed below:
+
+-  ``Monteverdi.app`` : A Mac OSX .app for Monteverdi
+
+-  ``Mapla.app`` : A Mac OSX .app for Mapla.
+
+-  ``bin`` : A folder containing application launchers (otbcli.sh,
+   otbgui.sh), monteverdi and mapla binaries.
+
+-  ``lib`` : A folder containing all shared libraries and OTB
+   applications.
+
+-  ``share`` : A folder containing common resources and copyright
+   mentions.
+
+Notes:
+
+-  If you want to use the otbcli and otbgui launchers, you must access
+   them via a terminal prompt.
+
+-  The OSX .app are provided for monteverdi (viewer) and mapla
+   (application browser).
+
+-  You must use monteverdi and mapla through their .app files only.
+
+-  You are allowed to move these .app files and refrain from moving or
+   deleting OTB-|release|-Darwin64 after extraction. In case you need to have OTB
+   installed in some other directory. Extract the .run file there.
