@@ -16,8 +16,8 @@ else()
 
   ExternalProject_Add(SHARK
     PREFIX SHARK
-    GIT_REPOSITORY "https://github.com/Shark-ML/Shark/"
-    GIT_TAG "master"
+    URL "https://github.com/Shark-ML/Shark/archive/349f29bd71c370e0f88f7fc9aa66fa5c4768fcb0.zip"
+    URL_MD5 d6e4310f943e8dda4a0151612b5c62ce
     SOURCE_DIR ${SHARK_SB_SRC}
     BINARY_DIR ${SHARK_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
