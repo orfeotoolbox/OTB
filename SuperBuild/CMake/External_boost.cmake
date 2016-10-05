@@ -2,71 +2,30 @@ INCLUDE_ONCE_MACRO(BOOST)
 
 SETUP_SUPERBUILD(BOOST)
 
-set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-set(_SB_Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)
+#all we loose is one single test from not building boost unit-testing-framework.
+#That is single test code. I don't see why we can't use something in-house
+#change test code to not use boost unit-testing-framework and all is well.
 
-set(BOOST_SB_CONFIG)
 if(MSVC)
-  if(OTB_MSVC_COMPILER_ARCH_IS_X64)
-    set(BOOST_SB_CONFIG architecture=x86 address-model=64)
-  else()
-    set(BOOST_SB_CONFIG architecture=x86)
-  endif()
-endif()
-
-set(BOOST_SB_CONFIG
-  ${BOOST_SB_CONFIG}
-  variant=release
-  link=shared
-  threading=single
-  runtime-link=shared
-  --prefix=${SB_INSTALL_PREFIX}
-  --includedir=${_SB_Boost_INCLUDE_DIR}
-  --libdir=${_SB_Boost_LIBRARY_DIR}
-  --layout=system
-  --with-system
-  --with-serialization
-  --with-filesystem
-  --with-test
-  -d0
-  )
-
-if(UNIX)
-  set(BOOST_BOOTSTRAP_FILE "./bootstrap.sh")
-  set(BOOST_B2_EXE "./b2")
+  set(BOOST_URL "http://download.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2")
+  set(BOOST_URL_MD5 "65a840e1a0b13a558ff19eeb2c4f0cbe")
 else()
-  set(BOOST_BOOTSTRAP_FILE "bootstrap.bat")
-  set(BOOST_B2_EXE "b2.exe")
+  set(BOOST_URL "http://download.sourceforge.net/project/boost/boost/1.50.0/boost_1_50_0.tar.bz2")
+  set(BOOST_URL_MD5 "52dd00be775e689f55a987baebccc462")
 endif()
-
-set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
-  -E chdir ${BOOST_SB_SRC}
-  ${BOOST_BOOTSTRAP_FILE}
-  --prefix=${SB_INSTALL_PREFIX}
-  )
-
-set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
-  -E chdir ${BOOST_SB_SRC}
-  ${BOOST_B2_EXE}
-  ${BOOST_SB_CONFIG}
-  )
-
-set(BOOST_INSTALL_COMMAND ${CMAKE_COMMAND}
-  -E chdir ${BOOST_SB_SRC}
-  ${BOOST_B2_EXE}
-  ${BOOST_SB_CONFIG}
-  install
-  )
 
 ExternalProject_Add(BOOST
   PREFIX BOOST
-  URL "http://download.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2"
-  URL_MD5 65a840e1a0b13a558ff19eeb2c4f0cbe
+  URL "${BOOST_URL}"
+  URL_MD5 ${BOOST_URL_MD5}
   BINARY_DIR ${BOOST_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
-  BUILD_COMMAND ${BOOST_BUILD_COMMAND}
-  INSTALL_COMMAND ${BOOST_INSTALL_COMMAND}
+  CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
+  PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_SOURCE_DIR}/patches/BOOST/CMakeLists.txt
+  ${BOOST_SB_SRC}
   )
 
+set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+set(_SB_Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)

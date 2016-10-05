@@ -48,12 +48,16 @@ function(repository_status root_repo_dir result_var1)
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE OTB_WC_REVISION
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+
+  message(STATUS "Repository status (${dir_name}) :")
+  message(STATUS "  Repository revision is ${OTB_WC_REVISION}")
+
   execute_process(COMMAND ${GIT_EXECUTABLE} status -s
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE OTB_WC_STATUS
+    TIMEOUT 20
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
-  message(STATUS "Repository status (${dir_name}) :")
-  message(STATUS "  Repository revision is ${OTB_WC_REVISION}")
+
   if(OTB_WC_STATUS)
     message(STATUS "  Local file modifications (${dir_name}) :")
     string(REPLACE "\n" "\n--     " OTB_WC_STATUS_PRETTYPRINT "    ${OTB_WC_STATUS}")
