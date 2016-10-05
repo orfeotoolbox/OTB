@@ -26,4 +26,4 @@ ExternalProject_Add(SHARK
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   )
 
-set(_SB_SHARK_DIR ${SB_INSTALL_PREFIX}/share/Shark)
+set(_SB_Shark_DIR ${SB_INSTALL_PREFIX}/lib/cmake/Shark)
