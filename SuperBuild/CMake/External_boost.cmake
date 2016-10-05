@@ -18,7 +18,7 @@ set(BOOST_SB_CONFIG
   ${BOOST_SB_CONFIG}
   variant=release
   link=shared
-  threading=single
+  threading=multi
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
   --includedir=${_SB_Boost_INCLUDE_DIR}
@@ -28,6 +28,9 @@ set(BOOST_SB_CONFIG
   --with-serialization
   --with-filesystem
   --with-test
+  --with-date_time
+  --with-program_options
+  --with-thread
   -d0
   )
 
@@ -49,12 +52,6 @@ set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
   ${BOOST_B2_EXE}
   ${BOOST_SB_CONFIG}
-  )
-
-set(BOOST_INSTALL_COMMAND ${CMAKE_COMMAND}
-  -E chdir ${BOOST_SB_SRC}
-  ${BOOST_B2_EXE}
-  ${BOOST_SB_CONFIG}
   install
   )
 
@@ -67,6 +64,6 @@ ExternalProject_Add(BOOST
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
   BUILD_COMMAND ${BOOST_BUILD_COMMAND}
-  INSTALL_COMMAND ${BOOST_INSTALL_COMMAND}
+  INSTALL_COMMAND ""
   )
 
