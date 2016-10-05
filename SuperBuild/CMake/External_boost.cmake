@@ -6,12 +6,11 @@ set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 set(_SB_Boost_LIBRARY_DIR ${SB_INSTALL_PREFIX}/lib)
 
 set(BOOST_SB_CONFIG)
-if(MSVC)
-  if(OTB_MSVC_COMPILER_ARCH_IS_X64)
-    set(BOOST_SB_CONFIG architecture=x86 address-model=64)
-  else()
-    set(BOOST_SB_CONFIG architecture=x86)
-  endif()
+
+if(OTB_COMPILER_ARCH_IS_X64)
+  set(BOOST_SB_CONFIG architecture=x86 address-model=64)
+else()
+  set(BOOST_SB_CONFIG architecture=x86)
 endif()
 
 set(BOOST_SB_CONFIG

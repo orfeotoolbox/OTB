@@ -92,10 +92,10 @@ else(MSVC)
   STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
   STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
   configure_file(
-  ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in 
-  ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+    ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
+    ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
   
-  if(OTB_MSVC_COMPILER_ARCH_IS_X64)
+  if(OTB_COMPILER_ARCH_IS_X64)
     file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES")
   endif()
   
