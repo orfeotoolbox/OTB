@@ -263,12 +263,17 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
 
     Parameter* param = this_->GetParameterByKey(key);
-    bool updateFromXML = true;
 
-    if(param->HasUserValue())
-      updateFromXML = false;
+    // std::cout
+    //   << "'" << paramName << "'\t"
+    //   << key << "\t"
+    //   << typeAsString << "\t"
+    //   << type << "\t"
+    //   << ParameterType_OutputImage << "\t"
+    //   << param->HasUserValue() << "\t"
+    //   << value << std::endl;
 
-    if(updateFromXML)
+    if( !param->HasUserValue() )
       {
       param->SetUserValue(true);
       param->SetActive(true);
@@ -289,16 +294,27 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
         {
         this_->SetParameterString(key, value);
         }
-      else if (type == ParameterType_OutputImage)
+      else if( type == ParameterType_OutputImage )
         {
-        OutputImageParameter *paramDown = dynamic_cast<OutputImageParameter*>(param);
-        if(paramDown!=ITK_NULLPTR)
-          {
-          paramDown->SetFileName(value);
-          std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "pixtype");
-          ImagePixelType outPixType = GetPixelTypeFromString(pixTypeAsString);
-          paramDown->SetPixelType(outPixType);
-          }
+	assert( dynamic_cast< OutputImageParameter * >( param )==param );
+
+        OutputImageParameter * outImageParam =
+	  dynamic_cast< OutputImageParameter * >( param );
+
+	assert( outImageParam!=ITK_NULLPTR );
+
+	outImageParam->SetFileName( value );
+
+	std::string pixelType(
+	  GetChildNodeTextOf(n_Parameter, "pixtype" )
+	);
+
+	if( pixelType.empty() )
+	  std::runtime_error( "Invalid pixel type (empty string)." );
+
+	outImageParam->SetPixelType(
+	  GetPixelTypeFromString( pixelType )
+	);
         }
       else if (type == ParameterType_ComplexOutputImage)
         {
