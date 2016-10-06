@@ -47,10 +47,10 @@ public:
 
   void AddParameter(Parameter::Pointer p);
 
-  /** Method to substitute a parameter in a group. The new parameter
-   *  should match the key of the replaced parameter.
+  /** Method to add or substitute a parameter in a group. If there is already
+   *  a parameter with the given key, the parameter is replaced.
    *  The function returns true on success, false on failure */
-  bool ReplaceParameter(Parameter::Pointer p);
+  bool SetParameter(Parameter::Pointer p, std::string &key);
 
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
@@ -97,6 +97,10 @@ public:
   {
     return true;
   }
+
+  /** Resolve potential proxy parameters by following their targets until
+   *  a non-proxy parameter. It will detect cycles and report an error */
+  static Parameter* ResolveParameter(Parameter *param);
 
 protected:
   ParameterGroup();

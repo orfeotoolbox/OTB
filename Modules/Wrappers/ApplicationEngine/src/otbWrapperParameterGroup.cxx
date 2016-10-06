@@ -668,28 +668,63 @@ ParameterGroup::AddParameter(Parameter::Pointer p)
 }
 
 bool
-ParameterGroup::ReplaceParameter(Parameter::Pointer p)
+ParameterGroup::SetParameter(Parameter::Pointer p, std::string &key)
 {
-  // find current parameter in the current group
-  Parameter::Pointer parentParam;
-  ParameterListType::iterator vit;
-  std::string inputKey(p->GetKey());
-  for (vit = m_ParameterList.begin(); vit != m_ParameterList.end(); ++vit)
+  bool ret = true;
+  ParameterKey pName(key);
+  std::vector<std::string> splitName = pName.Split();
+  std::string lastkey = pName.GetLastElement();
+  std::string parentkey = pName.GetRoot();
+  ParameterGroup* parentGroup = this;
+  if( splitName.size() > 1 )
     {
-    if (inputKey.compare((*vit)->GetKey()) == 0)
+    Parameter* parentParam = GetParameterByKey(parentkey);
+    parentGroup = dynamic_cast<ParameterGroup*>(parentParam);
+    if (parentGroup)
       {
-      parentParam = *vit;
-      break;
+      ret = parentGroup->SetParameter(p,lastkey);
+      }
+    else
+      {
+      ret = false;
       }
     }
-  if (parentParam.IsNull())
+  else
     {
-    return false;
+    // find current parameter in the current group
+    Parameter::Pointer oldParam;
+    ParameterListType::iterator vit;
+    for (vit = m_ParameterList.begin(); vit != m_ParameterList.end(); ++vit)
+      {
+      if (lastkey.compare((*vit)->GetKey()) == 0)
+        {
+        oldParam = *vit;
+        break;
+        }
+      }
+    if (oldParam.IsNull())
+      {
+      // parameter to replace not found : simply add the new one
+      AddParameter(p);
+      }
+    else
+      {
+      // parameter already exists : replace it
+      *vit = p;
+      }
+    p->SetKey(lastkey);
+    }
+  if (ret)
+    {
+    if( splitName.size() > 1 )
+      {
+      p->SetRoot(parentGroup);
+      parentGroup->AddChild(p);
+      }
     }
   // don't check type compatibility here, we may want to handle special cases
   // at higher level
-  *vit = p;
-  return true;
+  return ret;
 }
 
 Parameter::Pointer
@@ -798,6 +833,34 @@ unsigned int
 ParameterGroup::GetNumberOfParameters()
 {
   return m_ParameterList.size();
+}
+
+Parameter* ParameterGroup::ResolveParameter(Parameter *param)
+{
+  Parameter* ret = param;
+  if (ret == ITK_NULLPTR)
+    {
+    itkGenericExceptionMacro("Can't resolve NULL parameter!");
+    }
+  while (dynamic_cast<ProxyParameter*>(ret))
+    {
+    ProxyParameter* castParam = dynamic_cast<ProxyParameter*>(ret);
+    ProxyParameter::ProxyTargetType target = castParam->GetTarget();
+    ParameterGroup* targetGroup = dynamic_cast<ParameterGroup*>(target.first.GetPointer());
+    if (targetGroup)
+      {
+      ret = targetGroup->GetParameterByKey(target.second);
+      }
+    else
+      {
+      itkGenericExceptionMacro("Target group of a proxy parameter is not of type ParameterGroup");
+      }
+    if (ret == param)
+      {
+      itkGenericExceptionMacro("Cycle detected with proxy parameters!");
+      }
+    }
+  return ret;
 }
 
 }
