@@ -40,7 +40,8 @@ int otbWrapperParameterList(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   typedef otb::Wrapper::StringParameter StringPrm;
   typedef otb::Wrapper::IntParameter    IntPrm;
   typedef otb::Wrapper::ProxyParameter  ProxyPrm;
-  
+
+  // setup first group of parameters
   GroupPrm::Pointer parameters = GroupPrm::New();
 
   StringPrm::Pointer strParam = StringPrm::New();
@@ -48,26 +49,48 @@ int otbWrapperParameterList(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   IntPrm::Pointer numParam = IntPrm::New();
   numParam->SetKey("num");
-
-  IntPrm::Pointer hiddenParam = IntPrm::New();
-  hiddenParam->SetKey("hidden");
-
-  ProxyPrm::Pointer proxyParam = ProxyPrm::New();
-  proxyParam->SetKey("num");
-  proxyParam->SetInternalParameter(hiddenParam);
+  numParam->SetValue(1);
 
   parameters->AddParameter(strParam.GetPointer());
   parameters->AddParameter(numParam.GetPointer());
 
-  if (parameters->ReplaceParameter(hiddenParam.GetPointer()))
+  // setup second group of parameters
+  GroupPrm::Pointer otherParameters = GroupPrm::New();
+
+  IntPrm::Pointer hiddenParam = IntPrm::New();
+  hiddenParam->SetKey("hidden");
+  hiddenParam->SetValue(2);
+
+  otherParameters->AddParameter(hiddenParam.GetPointer());
+
+  ProxyPrm::Pointer proxyParam = ProxyPrm::New();
+  ProxyPrm::ProxyTargetType target;
+  target.first = otherParameters;
+  target.second = "hidden";
+  proxyParam->SetTarget(target);
+
+  // try to set a proxy to "hidden" in the first group
+  std::string proxyKey("num");
+  if (! parameters->SetParameter(proxyParam.GetPointer(), proxyKey))
     {
-    std::cout << "Parameter with different keys replaced !" << std::endl;
+    std::cout << "Failed to replace with proxy parameter" << std::endl;
     return EXIT_FAILURE;
     }
 
-  if (! parameters->ReplaceParameter(proxyParam.GetPointer()))
+  // check that we get the right value in "num"
+  otb::Wrapper::Parameter* resultParam = GroupPrm::ResolveParameter(parameters->GetParameterByKey("num"));
+  IntPrm* castInt = dynamic_cast<IntPrm*>(resultParam);
+  if (castInt)
     {
-    std::cout << "Failed to replace with proxy parameter" << std::endl;
+    if (castInt->GetValue() != 2)
+      {
+      std::cout << "Failed to setup proxy on int parameter, got "<< castInt->GetValue()<< ", expected 2."<< std::endl;
+      return EXIT_FAILURE;
+      }
+    }
+  else
+    {
+    std::cout << "Can't cast parameter to Int, probably wrong type."<< std::endl;
     return EXIT_FAILURE;
     }
 
