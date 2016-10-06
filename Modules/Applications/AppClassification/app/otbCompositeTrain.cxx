@@ -21,6 +21,7 @@
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
 #include "otbWrapperProxyParameter.h"
+#include "otbWrapperParameterKey.h"
 #include "itkStdStreamLogOutput.h"
 
 namespace otb
@@ -55,6 +56,26 @@ protected:
     }
 
 private:
+
+  bool Connect(Application *app1, std::string key1, Application *app2, std::string key2)
+  {
+    Parameter* rawParam1 = app1->GetParameterByKey(key1, false);
+    if (dynamic_cast<ProxyParameter*>(rawParam1))
+      {
+      otbAppLogWARNING("First parameter is already connected !");
+      return false;
+      }
+    ProxyParameter::Pointer proxyParam = ProxyParameter::New();
+    ProxyParameter::ProxyTargetType target;
+    target.first = app2->GetParameterList();
+    target.second = key2;
+    proxyParam->SetTarget(target);
+    proxyParam->SetName(rawParam1->GetName());
+    proxyParam->SetDescription(rawParam1->GetDescription());
+
+    return app1->GetParameterList()->SetParameter(proxyParam.GetPointer(),key1);
+  }
+
   void DoInit() ITK_OVERRIDE
   {
     SetName("CompositeTrain");
@@ -83,20 +104,7 @@ private:
     SetParameterDescription("sample",
                           "This group of parameters allows you to set training and validation sample lists parameters.");
 
-    ParameterGroup* paramSample = dynamic_cast<ParameterGroup*>(GetParameterByKey("sample"));
-    if (paramSample)
-      {
-      ProxyParameter::Pointer fieldProxy = ProxyParameter::New();
-      fieldProxy->SetInternalParameter(m_PolygonAnalysis->GetParameterByKey("field"));
-      fieldProxy->SetKey("vfn");
-      fieldProxy->SetName(m_PolygonAnalysis->GetParameterByKey("field")->GetName());
-      fieldProxy->SetDescription(m_PolygonAnalysis->GetParameterByKey("field")->GetDescription());
-      paramSample->AddParameter(fieldProxy.GetPointer());
-      }
-    else
-      {
-      otbAppLogFATAL("Wrong casting of group parameter");
-      }
+    this->Connect(this, "sample.vfn", m_PolygonAnalysis, "field");
 
     // share parameters with SampleSelection
     this->GetParameterList()->AddParameter(m_SampleSelection->GetParameterByKey("out"));
