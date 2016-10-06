@@ -103,7 +103,7 @@ Parameter* Application::GetParameterByKey(std::string name, bool follow)
   Parameter* param = GetParameterList()->GetParameterByKey(name);
   if (follow)
     {
-    param = ResolveParameter(param);
+    param = ParameterGroup::ResolveParameter(param);
     }
   return param;
 }
@@ -1630,25 +1630,6 @@ itk::ProcessObject* Application::GetProgressSource() const
 std::string Application::GetProgressDescription() const
 {
   return m_ProgressSourceDescription;
-}
-
-Parameter* Application::ResolveParameter(Parameter *param)
-{
-  Parameter* ret = param;
-  if (ret == ITK_NULLPTR)
-    {
-    itkGenericExceptionMacro("Can't resolve NULL parameter!");
-    }
-  while (dynamic_cast<ProxyParameter*>(ret))
-    {
-    ProxyParameter* castParam = dynamic_cast<ProxyParameter*>(ret);
-    ret = castParam->GetInternalParameter();
-    if (ret == param)
-      {
-      itkGenericExceptionMacro("Cycle detected with proxy parameters!");
-      }
-    }
-  return ret;
 }
 
 }

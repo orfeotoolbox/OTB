@@ -737,10 +737,6 @@ public:
      m_IsInXMLParsed = false;
    }
 
-  /** Resolve potential proxy parameters by following their targets until
-   *  a non-proxy parameter. It will detect cycles and report an error */
-  static Parameter* ResolveParameter(Parameter *param);
-
 protected:
   /** Constructor */
   Application();
