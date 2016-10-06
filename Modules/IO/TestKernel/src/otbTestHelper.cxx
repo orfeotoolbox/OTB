@@ -21,6 +21,7 @@
 
 #include "otbTestHelper.h"
 #include "otbMacro.h"
+#include "otbStringUtils.h"
 #include <iostream>
 #include <fstream>
 #include <cctype>
@@ -234,6 +235,69 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
       this->ReportErrorsOn();
       baseline->second
         = this->RegressionTestAsciiFile(testFilenameAscii.c_str(),
+                                             (baseline->first).c_str(),
+                                             m_Epsilon,
+                                             ignoredLines);
+      }
+    result += multiResult;
+    }
+
+  return result;
+}
+
+int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
+                                       const StringList& testFilenamesAscii,
+                                       const StringList& ignoredLines)
+{
+  int result = 0;
+  // Creates iterators on baseline filenames vector and test filenames vector
+  StringListIt itbaselineFilenames = baselineFilenamesAscii.begin();
+  StringListIt itTestFilenames = testFilenamesAscii.begin();
+  StringListIt itIgnoredLines = ignoredLines.begin();
+
+  // Warning message
+  if (ignoredLines.size() > 0)
+    {
+    std::cout << "The lines containing the expressions ";
+    for (; itIgnoredLines != ignoredLines.end(); ++itIgnoredLines)
+      {
+      std::cout << (*itIgnoredLines) << " ";
+      }
+    std::cout << "are not considered" << std::endl;
+    }
+
+  // For each couple of baseline and test file, do the comparison
+  for (; (itbaselineFilenames != baselineFilenamesAscii.end())
+         && (itTestFilenames != testFilenamesAscii.end());
+       ++itbaselineFilenames, ++itTestFilenames)
+    {
+    std::string baselineFilenameAscii = (*itbaselineFilenames);
+    std::string testFilenameAscii = (*itTestFilenames);
+
+    std::map<std::string,
+             int> baselines =
+      this->RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
+    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    int multiResult = 1;
+    std::cout << "Number of baseline files: " << baselines.size() << std::endl;
+    while (baseline != baselines.rend() && (multiResult != 0))
+      {
+      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      this->ReportErrorsOff();
+      baseline->second = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
+                                                            (baseline->first).c_str(),
+                                                            m_Epsilon,
+                                                            ignoredLines);
+
+      multiResult = baseline->second;
+      ++baseline;
+      }
+    if (multiResult != 0)
+      {
+      baseline = baselines.rbegin();
+      this->ReportErrorsOn();
+      baseline->second
+        = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
                                              (baseline->first).c_str(),
                                              m_Epsilon,
                                              ignoredLines);
@@ -564,6 +628,592 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
       }
     }
   return (nbdiff != 0) ? 1 : 0;
+}
+
+int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
+                                        const double epsilon, StringList ignoredLines) const
+{
+  typedef std::vector<boost::iterator_range<std::string::const_iterator> > TokenListType;
+  
+  std::ifstream fluxfiletest(testAsciiFileName);
+  std::ifstream fluxfileref(baselineAsciiFileName);
+
+  std::string diffAsciiFileName(testAsciiFileName);
+  diffAsciiFileName += ".diff.txt";
+  std::ofstream fluxfilediff;
+  if (m_ReportErrors)
+    {
+    fluxfilediff.open(diffAsciiFileName.c_str());
+    }
+
+  std::string strfiletest;
+  std::string strfileref;
+
+  int nbdiff(0);
+  if (!fluxfiletest)
+    {
+    itkGenericExceptionMacro(<< "Impossible to open the test ASCII file <" << testAsciiFileName << ">.");
+    }
+  if (!fluxfileref)
+    {
+    itkGenericExceptionMacro(<< "Impossible to open the baseline ASCII file <" << baselineAsciiFileName << ">.");
+    }
+
+  //fill up a vector of string, in which each element is one line of the file
+  StringList listLineFileRef;
+  StringList listLineFileTest;
+  while (std::getline(fluxfileref, strfileref))
+    {
+    listLineFileRef.push_back(strfileref);
+    }
+  fluxfileref.close();
+
+  while (std::getline(fluxfiletest, strfiletest))
+    {
+    listLineFileTest.push_back(strfiletest);
+    }
+  fluxfiletest.close();
+
+  if (m_IgnoreLineOrder)
+    {
+    std::sort(listLineFileRef.begin(), listLineFileRef.end());
+    std::sort(listLineFileTest.begin(), listLineFileTest.end());
+    }
+
+  //These are to save up the differences
+  StringList listStrDiffLineFile;
+
+  // filter ignored lines
+  // TODO
+  // filter lines with hexa adress (isHexaPointerAddress)
+  // use  isToBeIgnoredForAnyComparison()
+
+  // Iterate over the baseline lines
+  unsigned int posTest = 0;
+  unsigned int posRef = 0;
+  unsigned int curPosTest;
+  TokenListType tokenRef;
+  TokenListType tokenTest;
+  TokenListType tokenTestSelected;
+  std::string separators(" \t,;:=[]{}()<>");
+  std::string emptyStr("");
+  unsigned int nbTokenRef = 0;
+  unsigned int nbTokenTest = 0;
+  unsigned int nbTokenTestSelected = 0;
+  bool isFirstMissingRefLine = true;
+
+  for (posRef=0 ; posRef<listLineFileRef.size() ; posRef++)
+    {
+    std::string &curLineRef = listLineFileRef[posRef];
+    if (!IsLineValid(curLineRef,ignoredLines))
+      {
+      continue;
+      }
+    boost::split(tokenRef, curLineRef, boost::is_any_of(separators));
+    // remove empty tokens
+    TokenListType::iterator refEndFiltered = std::remove_if(tokenRef.begin(), tokenRef.end(), IsTokenEmpty);
+    tokenRef.resize(refEndFiltered-tokenRef.begin());
+    nbTokenRef = tokenRef.size();
+    if (nbTokenRef == 0)
+      {
+      // ignore lines without tokens
+      continue;
+      }
+    unsigned int bestLinePos = posTest;
+    int bestCommonTokens = -1;
+    std::vector<unsigned int> validTestLines;
+    std::vector<unsigned int> skippedTestLines;
+    std::vector<unsigned int> differencesPosSelected;
+    for (curPosTest = posTest ; curPosTest < listLineFileTest.size() ; curPosTest++)
+      {
+      // stop searching after 30 lines tested
+      if (curPosTest > posTest + 30)
+        {
+        break;
+        }
+      std::string &curLineTest = listLineFileTest[curPosTest];
+      if (!IsLineValid(curLineTest,ignoredLines))
+        {
+        continue;
+        }
+      boost::split(tokenTest, curLineTest, boost::is_any_of(separators));
+      // remove empty tokens
+      TokenListType::iterator testEndFiltered = std::remove_if(tokenTest.begin(), tokenTest.end(), IsTokenEmpty);
+      tokenTest.resize(testEndFiltered-tokenTest.begin());
+      nbTokenTest = tokenTest.size();
+      if (nbTokenTest == 0)
+        {
+        // ignore lines without tokens
+        continue;
+        }
+      //if (curPosTest == posTest)
+      //  {
+      //  tokenTestSelected = tokenTest;
+      //  }
+
+      // from this point : the test line is considered valid
+      validTestLines.push_back(curPosTest);
+
+      // get number of equivalent separators and tokens to find the best match
+      int commonTokens = 0;
+      int firstCommonTokens = 0;
+      int firstNumericToken = -1;
+      unsigned int commonSeparators = 0;
+      std::vector<unsigned int> differencesPos;
+      for (unsigned int i = 0 ; i < std::min(nbTokenRef,nbTokenTest) ; i++)
+        {
+        //------ comparing previous separator ------
+        std::string sepRef("");
+        std::string sepTest("");
+        unsigned int endSepRef;
+        unsigned int endSepTest;
+        unsigned int startSepRef;
+        unsigned int startSepTest;
+        if (i)
+          {
+          startSepRef  = tokenRef[i-1].end() - curLineRef.begin();
+          startSepTest = tokenTest[i-1].end() - curLineTest.begin();
+          endSepRef  = tokenRef[i].begin() - curLineRef.begin();
+          endSepTest = tokenTest[i].begin() - curLineTest.begin();
+          }
+        else
+          {
+          startSepRef  = 0;
+          startSepTest = 0;
+          endSepRef  = tokenRef[0].begin() - curLineRef.begin();
+          endSepTest = tokenTest[0].begin() - curLineTest.begin();
+          }
+        for (unsigned int iRef=startSepRef ; iRef < endSepRef ; iRef++ )
+          {
+          if (curLineRef[iRef] != ' ' && curLineRef[iRef] != '\t')
+            sepRef += curLineRef[iRef];
+          }
+        for (unsigned int iTest=startSepTest ; iTest < endSepTest ; iTest++ )
+          {
+          if (curLineTest[iTest] != ' ' && curLineTest[iTest] != '\t')
+            sepTest += curLineTest[iTest];
+          }
+        if (sepRef.compare(sepTest) == 0)
+          {
+          commonSeparators++;
+          }
+        else
+          {
+          break;
+          }
+        // ----------- comparing current token --------------------
+        bool areTokensEquivalent = false;
+        // first : try direct string comparison
+        if (curLineRef.compare(
+              tokenRef[i].begin() - curLineRef.begin(),
+              tokenRef[i].size(),
+              curLineTest,
+              tokenTest[i].begin() - curLineTest.begin(),
+              tokenTest[i].size()) == 0)
+          {
+          areTokensEquivalent = true;
+          }
+        else
+          {
+          // examine other cases :
+          // test if hexadecimal adress
+          bool isRefTokenHexa = isHexaPointerAddress(
+                                  curLineRef,
+                                  tokenRef[i].begin()-curLineRef.begin(),
+                                  tokenRef[i].size());
+          bool isTestTokenHexa = isHexaPointerAddress(
+                                  curLineTest,
+                                  tokenTest[i].begin()-curLineTest.begin(),
+                                  tokenTest[i].size());
+          if (isRefTokenHexa && isTestTokenHexa)
+            {
+            // these tokens are equivalent (we don't compare pointer adress)
+            areTokensEquivalent = true;
+            }
+          else
+            {
+            double vTest;
+            double vRef;
+            double vNorm;
+            // cast ref token
+            bool isRefTokenNum = true;
+            try
+              {
+              vRef = boost::lexical_cast<double>(tokenRef[i]);
+              // record the first numeric token position
+              if (firstNumericToken<0)
+                {
+                firstNumericToken = static_cast<int>(i);
+                }
+              }
+            catch (boost::bad_lexical_cast &)
+              {
+              isRefTokenNum = false;
+              }
+            // cast test token
+            bool isTestTokenNum = true;
+            try
+              {
+              vTest = boost::lexical_cast<double>(tokenTest[i]);
+              }
+            catch (boost::bad_lexical_cast &)
+              {
+              isTestTokenNum = false;
+              }
+            if (isRefTokenNum && isTestTokenNum)
+              {
+              // test difference against epsilon
+              vNorm = (vcl_abs(vRef) + vcl_abs(vTest)) * 0.5;
+              if ((vNorm <= m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
+                || (vcl_abs(vRef-vTest) <= epsilon * vNorm)) //epsilon as relative error
+                {
+                // these tokens are equivalent
+                areTokensEquivalent = true;
+                }
+              }
+            else
+              {
+              // test for special tokens
+              for (unsigned int j=0 ; j<m_SpecialTokens.size() ; j++)
+                {
+                if (curLineRef.compare(
+                      tokenRef[i].begin() - curLineRef.begin(),
+                      tokenRef[i].size(),
+                      m_SpecialTokens[j].first) == 0 &&
+                    curLineTest.compare(
+                      tokenTest[i].begin() - curLineTest.begin(),
+                      tokenTest[i].size(),
+                      m_SpecialTokens[j].second) == 0)
+                  {
+                  areTokensEquivalent = true;
+                  break;
+                  }
+                }
+              }
+            }
+          }
+        if (areTokensEquivalent)
+          {
+          commonTokens++;
+          if (differencesPos.empty())
+            {
+            firstCommonTokens++;
+            }
+          }
+        else
+          {
+          differencesPos.push_back(i);
+          }
+        }
+      // finish iteration of all tokens from reference line to detect first numeric token
+      for (unsigned int i = std::min(nbTokenRef,nbTokenTest) ; i < nbTokenRef ; i++)
+        {
+        try
+          {
+          boost::lexical_cast<double>(tokenRef[i]);
+          // record the first numeric token position
+          if (firstNumericToken<0)
+            {
+            firstNumericToken = static_cast<int>(i);
+            }
+          }
+        catch (boost::bad_lexical_cast &)
+          {
+          }
+        }
+
+      if (commonSeparators < std::min(nbTokenRef,nbTokenTest))
+        {
+        // All the separators are not equivalent : reject line
+        continue;
+        }
+      if (firstNumericToken > firstCommonTokens)
+        {
+        // if there are non-numeric tokens before a numeric one, all non-numeric
+        // tokens must match (we make sure to compare the same field name)
+        continue;
+        }
+      if (firstCommonTokens > bestCommonTokens)
+        {
+        bestCommonTokens = firstCommonTokens;
+        bestLinePos = curPosTest;
+        tokenTestSelected = tokenTest;
+        nbTokenTestSelected = nbTokenTest;
+        differencesPosSelected = differencesPos;
+        skippedTestLines.clear();
+        unsigned int k=0;
+        while (validTestLines[k] < curPosTest)
+          {
+          skippedTestLines.push_back(validTestLines[k]);
+          k++;
+          }
+        }
+      // test if lines are identic
+      if (static_cast<unsigned int>(firstCommonTokens) == std::max(nbTokenRef,nbTokenTest))
+        {
+        break;
+        }
+      }
+
+    // depending on the best number of common tokens ...
+    if (bestCommonTokens <= 0)
+      {
+      // line not found in test
+      if (isFirstMissingRefLine)
+        {
+        listStrDiffLineFile.push_back("   -------------------------------");
+        isFirstMissingRefLine = false;
+        }
+      listStrDiffLineFile.push_back(std::string("   Base << ")+curLineRef);
+      if (m_ReportErrors)
+        {
+        fluxfilediff << "In baseline l."<<posRef+1<<" : "<<curLineRef<< std::endl;
+        }
+      nbdiff++;
+      }
+    else
+      {
+      // record skipped lines in test file
+      for (unsigned int k=0 ; k < skippedTestLines.size() ; k++)
+        {
+        isFirstMissingRefLine = true;
+        if (k== 0)
+          listStrDiffLineFile.push_back("   -------------------------------");
+        listStrDiffLineFile.push_back(std::string("   Test >> ")+listLineFileTest[skippedTestLines[k]]);
+        if (m_ReportErrors)
+          {
+          fluxfilediff << "In test     l."<<skippedTestLines[k]+1<<" : "<<listLineFileTest[skippedTestLines[k]] << std::endl;
+          }
+        nbdiff++;
+        }
+
+      if (bestCommonTokens < static_cast<int>(std::max(nbTokenRef,nbTokenTestSelected)))
+        {
+        nbdiff++;
+        std::string &lineTestSelected = listLineFileTest[bestLinePos];
+        // record the diff
+        std::ostringstream ossBase;
+        std::ostringstream ossTest;
+        for (unsigned int k=0 ; k < std::min(nbTokenRef,nbTokenTestSelected) ; k++)
+          {
+          // record the separator
+          unsigned int sizeSepRef;
+          unsigned int startSepRef;
+          if (k)
+            {
+            startSepRef = tokenRef[k-1].end()-curLineRef.begin();
+            sizeSepRef = tokenRef[k].begin()-tokenRef[k-1].end();
+            }
+          else
+            {
+            startSepRef = 0;
+            sizeSepRef = tokenRef[0].begin()-curLineRef.begin();
+            }
+          ossBase << curLineRef.substr(startSepRef, sizeSepRef);
+          for (unsigned int j=0 ; j<sizeSepRef ; j++)
+            {
+            if (curLineRef[startSepRef+j] == '\t')
+              {
+              ossTest << "\t";
+              }
+            else
+              {
+              ossTest << " ";
+              }
+            }
+          // record the token
+          bool isTokenEquivalent = true;
+          for (unsigned int t=0 ; t < differencesPosSelected.size() ; t++)
+            {
+            if (k == differencesPosSelected[t])
+              {
+              isTokenEquivalent = false;
+              break;
+              }
+            }
+          if (isTokenEquivalent)
+            {
+            ossBase << curLineRef.substr(tokenRef[k].begin()-curLineRef.begin(),
+                                         tokenRef[k].size());
+            ossTest << std::string(tokenRef[k].size(), '_');
+            }
+          else
+            {
+            unsigned int maxTokenSize = std::max(tokenRef[k].size(),tokenTestSelected[k].size());
+            ossBase << curLineRef.substr(tokenRef[k].begin()-curLineRef.begin(),
+                                         tokenRef[k].size())
+                    << std::string(maxTokenSize - tokenRef[k].size(), ' ');
+            ossTest << lineTestSelected.substr(tokenTestSelected[k].begin()-lineTestSelected.begin(),
+                                               tokenTestSelected[k].size())
+                    << std::string(maxTokenSize - tokenTestSelected[k].size(), ' ');
+            }
+          }
+        // process token in excess on any side
+        if (nbTokenRef >= nbTokenTestSelected)
+          {
+          ossBase << curLineRef.substr(tokenRef[nbTokenTestSelected-1].end()-curLineRef.begin());
+          if (nbTokenRef > nbTokenTestSelected)
+            ossTest << "|";
+          }
+        else if (nbTokenRef < nbTokenTestSelected)
+          {
+          ossBase << "|";
+          ossTest << lineTestSelected.substr(tokenTestSelected[nbTokenRef-1].end()-lineTestSelected.begin());
+          }
+        listStrDiffLineFile.push_back("   -------------------------------");
+        listStrDiffLineFile.push_back(std::string("   Base << ")+ossBase.str());
+        listStrDiffLineFile.push_back(std::string("   Test >> ")+ossTest.str());
+        if (m_ReportErrors)
+          {
+          fluxfilediff << "In baseline l."<< posRef+1 <<" : "<< ossBase.str() << std::endl;
+          fluxfilediff << "In test     l."<< bestLinePos+1 << " : "<<ossTest.str() << std::endl;
+          }
+        isFirstMissingRefLine = true;
+        }
+
+      // update posTest
+      posTest = bestLinePos + 1;
+      }
+    }
+
+  // process remaining lines in test file
+  for (curPosTest = posTest ; curPosTest < listLineFileTest.size() ; curPosTest++)
+    {
+    std::string &curLineTest = listLineFileTest[curPosTest];
+    if (!IsLineValid(curLineTest,ignoredLines))
+      {
+      continue;
+      }
+    boost::split(tokenTest, curLineTest, boost::is_any_of(separators));
+    // remove empty tokens
+    TokenListType::iterator testEndFiltered = std::remove_if(tokenTest.begin(), tokenTest.end(), IsTokenEmpty);
+    tokenTest.resize(testEndFiltered-tokenTest.begin());
+    nbTokenTest = tokenTest.size();
+    if (nbTokenTest == 0)
+      {
+      // ignore lines without tokens
+      continue;
+      }
+    // this test line is valid
+    //listStrDiffLineFile.push_back("   -------------------------------");
+    listStrDiffLineFile.push_back(std::string("   Test >> ")+curLineTest);
+    if (m_ReportErrors)
+      {
+      fluxfilediff << "In test     l."<<curPosTest+1<<" : "<<curLineTest << std::endl;
+      }
+    nbdiff++;
+    }
+  
+  if (m_ReportErrors)
+    {
+    fluxfilediff.close();
+    }
+
+  if (nbdiff != 0 && m_ReportErrors)
+    {
+    std::cout << "<DartMeasurement name=\"ASCIIFileError\" type=\"numeric/int\">";
+    std::cout << nbdiff;
+    std::cout << "</DartMeasurement>" << std::endl;
+    std::cout << "================================================================" << std::endl;
+    std::cout << "baseline ASCII File : " << baselineAsciiFileName << std::endl;
+    std::cout << "Test ASCII File     : " << testAsciiFileName << std::endl;
+    std::cout << "Diff ASCII File     : " << diffAsciiFileName << std::endl;
+    std::cout << "Tolerance value     : " << epsilon << std::endl;
+    std::cout << "Tolerance max check : " << m_EpsilonBoundaryChecking << std::endl;
+    std::cout << "Nb lines different : " << nbdiff << std::endl;
+    
+    for (unsigned int i=0 ; i<listStrDiffLineFile.size() ; i++)
+      {
+      std::cout << listStrDiffLineFile[i] << std::endl;
+      }
+    }
+  
+  return (nbdiff != 0) ? 1 : 0;
+}
+
+bool TestHelper::IsTokenEmpty(boost::iterator_range<std::string::const_iterator> &token)
+{
+  return token.empty();
+}
+
+int TestHelper::TokenizeLine(const std::string &line, StringList &tokens) const
+{
+  std::string::size_type pos;
+  tokens.clear();
+  std::string::size_type counter = 0;
+  bool isSeparator;
+  bool isToken = false;
+  int curChar;
+  for (pos = 0 ; pos < line.size() ; pos++)
+    {
+    isSeparator = true;
+    curChar = (int)(line[pos]);
+    // test if alphanumeric or '.' or '-' or '^' or '_' or '/'
+    if (isAlphaNum(curChar) || isPoint(curChar) || isMinusSign(curChar) ||
+        curChar == 94 || curChar == 95 || curChar == 47)
+      {
+      isSeparator = false;
+      }
+
+    if (isToken)
+      {
+      // already in a token
+      if (isSeparator)
+        {
+        // end of the token : record it
+        tokens.push_back(line.substr(pos-counter, counter));
+        isToken = false;
+        counter = 0;tokens.push_back(line.substr(pos-counter, counter));
+        }
+      else
+        {
+        // still in a token
+        counter++;
+        }
+      }
+    else
+      {
+      // not in a token
+      if (isSeparator)
+        {
+        // do nothing
+        }
+      else
+        {
+        // start of a token
+        isToken = true;
+        counter++;
+        }
+      }
+    }
+  // handle final token
+  if (isToken)
+    {
+    tokens.push_back(line.substr(line.size()-counter, counter));
+    }
+
+  return tokens.size();
+}
+
+bool TestHelper::IsLineValid(const std::string& str, const StringList &ignoredLines) const
+{
+  bool ret = true;
+  if (isToBeIgnoredForAnyComparison(str))
+    {
+    ret = false;
+    }
+  else
+    {
+    for (unsigned int i=0 ; i<ignoredLines.size() ; i++)
+      {
+      if (str.find(ignoredLines[i]) != std::string::npos)
+        {
+        ret = false;
+        break;
+        }
+      }
+    }
+  return ret;
 }
 
 /******************************************/
@@ -1418,7 +2068,9 @@ bool TestHelper::isNumber(int i) const
 
 bool TestHelper::isHexaNumber(int i) const
 {
-  return (((i > 47) && (i < 58)) || ((i > 96) && (i < 103)));
+  return (((i > 47) && (i < 58)) ||
+          ((i > 96) && (i < 103)) ||
+          ((i > 64) && (i < 71)));
 }
 
 bool TestHelper::isPoint(int i) const
@@ -1429,6 +2081,11 @@ bool TestHelper::isPoint(int i) const
 bool TestHelper::isMinusSign(int i) const
 {
   return (i == 45);
+}
+
+bool TestHelper::isAlphaNum(int i) const
+{
+  return isNumber(i) || ((i > 64) && (i < 91)) || ((i > 96) && (i < 123));
 }
 
 bool TestHelper::isNumeric(const std::string& str) const
@@ -1554,6 +2211,40 @@ bool TestHelper::isHexaPointerAddress(const std::string& str) const
     ++i;
     }
   return result;
+}
+
+bool TestHelper::isHexaPointerAddress(const std::string& str, size_t pos, size_t size) const
+{
+  if (size < 3)
+    {
+    return false;
+    }
+
+  // pointer adress has to begin with '0x'
+  // it may also start with '00' with a size of 16 (64bit adress)
+  // or start with '0' with a size of 8 (32bit adress)
+  // Note: the last pattern seems a bit weak but cases like '00B5FA18' or
+  // '01C46D80' both are valid hexadecimal adresses on windows
+  if (str[pos] != 48)
+    {
+    return false;
+    }
+  if (!(str[pos+1] == 120 ||
+        (str[pos+1] == 48 && size == 16) ||
+        (size == 8)))
+    {
+    return false;
+    }
+
+  // check all other characters are in [A-Fa-f0-9]
+  for (unsigned int i=2 ; i<size ; i++)
+    {
+    if (!isHexaNumber(str[pos+i]))
+      {
+      return false;
+      }
+    }
+  return true;
 }
 
 void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) const
