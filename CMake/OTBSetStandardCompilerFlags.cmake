@@ -167,7 +167,6 @@ macro(check_compiler_platform_flags)
          # see http://msdn.microsoft.com/en-us/library/ms173499.aspx
          if(MSVC_VERSION GREATER 1310)
            set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} /bigobj")
-            set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} /Zc:strictStrings")
          endif()
        endif()
   endif()
