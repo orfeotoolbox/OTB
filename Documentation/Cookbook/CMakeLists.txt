@@ -10,6 +10,25 @@ endif()
 #find OTB
 find_package(OTB REQUIRED)
 
+if( OTB_FOUND )
+  include(${OTB_USE_FILE})
+  message(STATUS "Found OTB: ${OTB_DIR} (found version \"${OTB_VERSION}\")")
+else()
+  message(FATAL_ERROR "OTB not found. Please set OTB_DIR")
+  return()
+endif()
+
+set(OTB_PYTHONPATH)
+if( EXISTS "${OTB_DIR}/CMakeCache.txt" )
+  set(OTB_INSTALL_PREFIX ${OTB_DIR})
+  set(OTB_PYTHONPATH "${OTB_INSTALL_PREFIX}/Modules/Wrappers/SWIG/src")
+elseif( EXISTS "${OTB_DIR}/UseOTB.cmake" )
+  get_filename_component(OTB_INSTALL_PREFIX ${OTB_DIR} PATH)
+  get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
+  get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
+  set(OTB_PYTHONPATH "${OTB_INSTALL_PREFIX}/lib/otb/python")
+endif()
+
 #find Python
 find_package(PythonInterp REQUIRED)
 
@@ -94,8 +113,15 @@ foreach(rst_file ${rst_sources3})
   configure_file(${rst_file} ${RST_GENERATED_SOURCE_DIR}/Applications/${out_file} COPYONLY)
 endforeach()
 
+file(GLOB rst_sources4 ${RST_SOURCES}/*.txt)
+foreach(rst_file ${rst_sources4})
+  get_filename_component(out_file ${rst_file} NAME)
+  configure_file(${rst_file} ${RST_GENERATED_SOURCE_DIR}/${out_file} COPYONLY)
+endforeach()
+
 configure_file(${RST_SOURCES}/conf.py.in ${RST_GENERATED_SOURCE_DIR}/conf.py @ONLY)
 configure_file(${RST_SOURCES}/Makefile.in ${RST_GENERATED_SOURCE_DIR}/Makefile @ONLY)
+
 
 add_custom_target(generate_otbapps_rst
   ALL

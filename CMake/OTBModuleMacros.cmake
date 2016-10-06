@@ -147,6 +147,14 @@ macro(otb_module_impl)
     # When building a module outside the OTB source tree, find the export
     # header.
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_BINARY_DIR}/include)
+  else()
+    # if OTB_SOURCE_DIR is set all auto-generated export headers for a class
+    # goes into OTBCommon_BINARY_DIR/src.
+    # Hence it is requred to include   ${OTBCommon_BINARY_DIR} to list of
+    # ${otb-module}_INCLUDE_DIRS. Not doing this will force developer to
+    # to include them explicitly for each module which can result in
+    # more problems. ( stephane albert)
+    list(APPEND ${otb-module}_INCLUDE_DIRS ${OTBCommon_BINARY_DIR})
   endif()
 
   if(${otb-module}_INCLUDE_DIRS)

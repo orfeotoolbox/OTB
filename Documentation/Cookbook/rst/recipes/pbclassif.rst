@@ -417,6 +417,8 @@ class.
                                   -ref.vector.field  Class (name_of_label_field)
                                   -out               confusion_matrix.csv
 
+.. _fancy_classification_results:
+
 Fancy classification results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -677,7 +679,7 @@ The application can be used like this:
                                             -ip.undecidedlabel  7
                                             -io.out             regularized.tif
 
-Recommandations to properly use the majority voting based regularization
+Recommendations to properly use the majority voting based regularization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to properly use the *ClassificationMapRegularization*
@@ -698,10 +700,9 @@ NoData and Undecided labels have a default value equal to 0.
 Example
 ~~~~~~~
 
-Resulting from the application presented in section
-[ssec:classificationcolormapping], and illustrated in Fig.
-[fig:MeanShiftVectorImageFilter], the Fig.
-[fig:ClassificationMapRegularizationApplication] shows a regularization
+Resulting from the application presented in section :ref:`fancy_classification_results`
+and illustrated in Fig. [fig:MeanShiftVectorImageFilter],
+the Fig.[fig:ClassificationMapRegularizationApplication] shows a regularization
 of a classification map composed of 4 classes: water, roads, vegetation
 and buildings with red roofs. The radius of the ball shaped structuring
 element is equal to 3 pixels, which corresponds to a ball included in a

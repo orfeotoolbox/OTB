@@ -41,6 +41,12 @@ class OTBQtWidget_EXPORT QtFileSelectionWidget : public QWidget
 {
   Q_OBJECT
 public:
+  enum IOMode
+  {
+    IO_MODE_INPUT = 0,
+    IO_MODE_OUTPUT = 1,
+  };
+
   QtFileSelectionWidget();
   ~QtFileSelectionWidget() ITK_OVERRIDE;
 
@@ -69,6 +75,9 @@ public:
     return m_Input;
   }
 
+  void SetIOMode( IOMode );
+  IOMode GetIOMode() const;
+
 protected slots:
   void SelectFile();
 
@@ -82,9 +91,10 @@ private:
 
 
   QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
+  QLineEdit * m_Input;
   QPushButton * m_Button;
-  QCheckBox *   m_Checkbox;
+  QCheckBox * m_Checkbox;
+  IOMode m_IOMode;
 };
 
 

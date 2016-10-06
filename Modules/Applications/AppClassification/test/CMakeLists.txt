@@ -90,7 +90,7 @@ set(knn_parameters "")
 set(sharkrf_parameters "")
 
 # Validation depending on mode
-set(ascii_comparison --compare-ascii ${NOTOL})
+set(ascii_comparison --compare-ascii ${EPSILON_6})
 set(raster_comparison --compare-image ${NOTOL})
 set(raster_comparison_two --compare-n-images ${NOTOL} 2)
 
@@ -114,7 +114,7 @@ set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 
 # This is a black list for classifier that can not have a baseline
 # because they are using randomness and seed can not be set
-set(classifier_without_basline "SHARKRF")
+set(classifier_without_baseline "SHARKRF")
 
 # Loop on classifiers
 foreach(classifier ${classifierList})
@@ -125,10 +125,10 @@ foreach(classifier ${classifierList})
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
   set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
 
-  set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
-
-  list(FIND classifier_without_basline ${classifier} _classifier_has_baseline)
-  if(NOT ${_classifier_has_baseline} EQUAL -1)
+  list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
+  else()
     set(valid "")
   endif()
   
@@ -146,6 +146,12 @@ foreach(classifier ${classifierList})
                        VALID    ${valid}
                        )
 
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML1_${OUTMODELFILE})
+  else()
+    set(valid "")
+  endif()
+
   otb_test_application(
                        NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
                        APP      TrainImagesClassifier
@@ -160,6 +166,12 @@ foreach(classifier ${classifierList})
 
                        VALID ${valid}
                        )
+
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML2_${OUTMODELFILE})
+  else()
+    set(valid "")
+  endif()
 
   otb_test_application(
                        NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
@@ -638,7 +650,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                               -classifier.libsvm.opt true
                               -rand 121212
                               -io.out ${TEMP}/clsvmModelQB1_allOpt_InXML.svm
-                      VALID   --compare-ascii ${NOTOL}
+                      VALID   ${ascii_comparison}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
 
@@ -652,7 +664,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                               -io.out ${TEMP}/clsvmModelQB1_OutXML.svm
                               -rand 121212
                               -outxml ${TEMP}/clsvmModelQB1_OutXML.xml
-                      VALID   --compare-ascii ${NOTOL}
+                      VALID   ${ascii_comparison}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_OutXML.svm)
 
@@ -683,7 +695,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                               -classifier.libsvm.opt true
                               -io.out ${TEMP}/clsvmModelQB1.svm
                               -rand 121212
-                      VALID   --compare-ascii ${NOTOL}
+                      VALID   ${ascii_comparison}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1.svm)
 
@@ -718,7 +730,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                               -classifier.libsvm.opt true
                               -rand 121212
                               -io.out ${TEMP}/clsvmModelQB1_allOpt.svm
-                      VALID   --compare-ascii ${NOTOL}
+                      VALID   ${ascii_comparison}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_allOpt.svm)
 endif()
@@ -840,7 +852,7 @@ otb_test_application(NAME apTvClTrainRegressionTest_monovar
                              -classifier.rf.ra 0.0001
                              -classifier.rf.max 6
                              -classifier.rf.acc 0.0005
-                    VALID    --compare-ascii ${NOTOL}
+                    VALID    ${ascii_comparison}
                              ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.rf
                              ${TEMP}/apTvClTrainRegressionTest_monovar.rf)
 
@@ -905,7 +917,7 @@ if(OTB_USE_OPENCV)
     -classifier rf
     -io.confmatout ${TEMP}/apTvClTrainVectorClassifierConfMat.txt
     -io.out ${TEMP}/apTvClTrainVectorClassifierModel.rf
-    VALID   --compare-ascii ${NOTOL}
+    VALID   ${ascii_comparison}
     ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorClassifierModel.rf
     ${TEMP}/apTvClTrainVectorClassifierModel.rf)
 endif()

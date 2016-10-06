@@ -4,6 +4,7 @@ set(OTBTestKernelTests
   otbCompareAsciiTests3.cxx
   otbCompareAsciiTests4.cxx
   otbCompareAsciiTests5.cxx
+  otbCompareAsciiTests6.cxx
   otbCompareAsciiTestScientificNotation.cxx
   otbCompareAsciiTests.cxx
   otbCompareAsciiTestsEpsilon3_WhiteSpace.cxx
@@ -114,3 +115,11 @@ otb_add_test(NAME tsTvCompareAsciiepsilon3_WhiteSpaceKO COMMAND otbTestKernelTes
   ${TEMP}/tsTvCompareAsciiEpsilon3_TestKO.txt
   )
 set_property(TEST tsTvCompareAsciiepsilon3_WhiteSpaceKO PROPERTY WILL_FAIL true)
+otb_add_test(NAME tsTvCompareAscii6 COMMAND otbTestKernelTestDriver
+  --compare-ascii ${EPSILON_3}
+  ${TEMP}/tsTvCompareAscii6_ref.txt
+  ${TEMP}/tsTvCompareAscii6_test.txt
+  otbCompareAsciiTests6
+  ${TEMP}/tsTvCompareAscii6_ref.txt
+  ${TEMP}/tsTvCompareAscii6_test.txt
+  )

@@ -95,7 +95,7 @@ else(MSVC)
   ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in 
   ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
   
-  if("${OTB_MSVC_COMPILER_ARCH}" MATCHES "x64")
+  if(OTB_MSVC_COMPILER_ARCH_IS_X64)
     file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES")
   endif()
   
