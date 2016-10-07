@@ -6,20 +6,21 @@
 Welcome to OTB CookBook's documentation!
 ========================================
 
-`Orfeo ToolBox (OTB) <http://orfeo-toolbox.org>`_ is an open source project for state-of-the-art remote
-sensing. Built on the shoulders of the open-source geospatial community, it can
-process high resolution optical, multispectral and radar images at the terabyte
-scale. A wide variety of applications are available: from ortho-rectification or
-pansharpening, all the way to classification, SAR processing, and much more!
+`Orfeo ToolBox (OTB) <http://orfeo-toolbox.org>` is an open-source project for
+state-of-the-art remote sensing. Built on the shoulders of the open-source
+geospatial community, it can process high resolution optical, multispectral and
+radar images at the terabyte scale. A wide variety of applications are
+available: from ortho-rectification or pansharpening, all the way to
+classification, SAR processing, and much more!
 
-All of OTB's algorithms are accessible from its graphical interface called
-Monteverdi, from QGIS, Python, the command line or C++. Monteverdi is an easy to
-use, hardware accelerated visualization tool for satellite images in sensor
-geometry. With it, end-users can visualize huge raw imagery products
-and access all of the applications in the toolbox. From resource limited
-laptops to high performance clusters, OTB is available on Windows, Linux and
-Mac. It is community driven, extensible and heavily documented.
-Orfeo ToolBox is not a black box!
+All of OTB's algorithms are accessible from Monteverdi, QGIS, Python, the
+command line or C++. Monteverdi is an easy to use visualization tool with an
+emphasis on hardware accelerated rendering for high resolution imagery (optical
+and SAR).  With it, end-users can visualize huge raw imagery products and
+access all of the applications in the toolbox. From resource limited laptops
+to high performance MPI clusters, OTB is available on Windows, Linux and Mac.
+It is community driven, extensible and heavily documented.  Orfeo ToolBox is
+not a black box!
 
 This is the CookBook documentation for users. If you are new to OTB and
 Monteverdi, start here. It will go through how to install OTB on your system,
