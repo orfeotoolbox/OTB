@@ -44,10 +44,6 @@ int otbWaveletPacketTransform_generic(int itkNotUsed(argc), char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
 
-#ifdef _MSC_VER
-  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
-#endif  
-
   /* Wavelet choice */
   const otb::Wavelet::Wavelet wvltID = TWavelet;
 
