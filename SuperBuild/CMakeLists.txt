@@ -7,9 +7,12 @@ project(OTB-SuperBuild)
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_SOURCE_DIR}/../CMake
-    ${CMAKE_MODULE_PATH})
+    ${CMAKE_MODULE_PATH}
+    )
 
 include(ExternalProject)
+
+include(OTBCheckCpp11Keywords)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 

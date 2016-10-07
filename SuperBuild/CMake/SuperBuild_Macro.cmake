@@ -174,3 +174,10 @@ macro(SUPERBUILD_UPDATE_CMAKE_VARIABLES PROJECT with_prefix)
   set(_SB_${PROJECT}_LIBRARY ${SB_INSTALL_PREFIX}/lib/${lib_file})
 
 endmacro()
+
+macro(package_require_cxx11 project)
+  if(NOT OTB_HAS_CXX11)
+    message(FATAL_ERROR "Project '${project}' requires C++11 support. Consider adding --std=c++11 to your compiler flags or disabling it.")
+  endif()
+endmacro()
+
