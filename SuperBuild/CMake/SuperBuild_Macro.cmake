@@ -177,7 +177,7 @@ endmacro()
 
 macro(package_require_cxx11 project)
   if(NOT OTB_HAS_CXX11)
-    message(FATAL_ERROR "Project '${project}' requires C++11 support. Consider adding --std=c++11 to your compiler flags or disabling it.")
+    message(FATAL_ERROR "${project} requires C++11 support. consider adding --std=c++11 to your cxx compiler flags or disable ${project} ")
   endif()
 endmacro()
 

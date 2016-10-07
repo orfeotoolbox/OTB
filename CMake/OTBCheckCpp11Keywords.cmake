@@ -1,9 +1,21 @@
 include(CheckCXXSourceCompiles)
 
+unset(OTB_HAS_CXX11 CACHE)
 CHECK_CXX_SOURCE_COMPILES("
-#include <iostream>
-#include <memory>
+#if __cplusplus <= 199711L
+  #error Compiler is not C++11 compliant
+#endif
 
+int main(int argc, char *argv[])
+{
+  return 0;
+}
+"
+OTB_HAS_CXX11 )
+
+unset(OTB_CXX_HAS_UNIQUE_PTR CACHE)
+CHECK_CXX_SOURCE_COMPILES("
+#include <memory>
 struct Foo
 {
   Foo()  { }
@@ -19,21 +31,20 @@ int main(int argc, char *argv[])
 "
 OTB_CXX_HAS_UNIQUE_PTR )
 
-
+unset(OTB_CXX_HAS_OVERRIDE_SPECIFIER CACHE)
 CHECK_CXX_SOURCE_COMPILES("
-#include <iostream>
 struct A
 {
-  A() {}
-  ~A() {}
-  virtual void foo() { std::cout << \"A::foo()\n\"; }
+  A()  { }
+  ~A() { }
+  virtual void foo( ) {  }
 };
 
 struct B : A
 {
-  B() {}
-  ~B() {}
-  void foo() override { std::cout << \"B::foo()\n\"; }
+  B()  { }
+  ~B() { }
+  void foo( ) override {  }
 };
 
 int main(int argc, char *argv[])
@@ -42,12 +53,12 @@ int main(int argc, char *argv[])
   p->foo();
   return 0;
 }
+
 "
 OTB_CXX_HAS_OVERRIDE_SPECIFIER )
 
-
+unset(OTB_CXX_HAS_NULLPTR CACHE)
 CHECK_CXX_SOURCE_COMPILES("
-#include <iostream>
 int main(int argc, char *argv[])
 {
   int *p = nullptr;
@@ -62,14 +73,3 @@ OTB_CXX_HAS_NULLPTR )
 #   ${CMAKE_SOURCE_DIR}/CMake/otbTestUniquePtr.cpp
 #   )
 
-CHECK_CXX_SOURCE_COMPILES("
-#if __cplusplus <= 199711L
-  #error Compiler is not C++11 compliant
-#endif
-
-int main(int argc, char *argv[])
-{
-  return 0;
-}
-"
-OTB_HAS_CXX11 )
