@@ -1,20 +1,15 @@
 #!/usr/bin/env bash
 
-cd `dirname $0`
+DIRNAME_0=$(dirname "$0")
+
+cd "$DIRNAME_0"
 
 # NOTE: $OUT_DIR is also used in make_sylinks script (see below)
 # Avoid any pre-mature optimization on variable names here.
-OUT_DIR=`pwd`
-
-CAT=`which cat`
-RM=`which rm`
-CHMOD=`which chmod`
-SED=`which sed`
-CP=`which cp`
-MKDIR=`which mkdir`
+OUT_DIR=$(pwd)
 
 # find install_name_tool
-INSTALL_NAME_TOOL=`which install_name_tool`
+INSTALL_NAME_TOOL=$(which install_name_tool)
 if [ -z "$INSTALL_NAME_TOOL" ]; then
     echo "install_name_tool does not exists.."
     echo "please install install_name_tool and make sure it can be found from PATH"
@@ -30,8 +25,8 @@ BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
 # #add rpath to LC_RPATH using install_name_tool
 for bin_file in $BINARY_FILES; do
     #echo "adding rpath to $OUT_DIR/$bin_file"
-    if [ -f $OUT_DIR/$bin_file ]; then
-       $INSTALL_NAME_TOOL -add_rpath "$OUT_DIR/lib" "$OUT_DIR/$bin_file"
+    if [ -f "$OUT_DIR/$bin_file" ]; then
+       "$INSTALL_NAME_TOOL" -add_rpath "$OUT_DIR/lib" "$OUT_DIR/$bin_file"
     fi
 done
 
@@ -42,18 +37,18 @@ I_AM_XDK=@IS_XDK@
 
 if [ "$I_AM_XDK" = true ] ; then
 
-    $SED -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
-    $SED -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
-    $SED -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+    sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
+    sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
+    sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
 else
 
-    $RM -fr Mapla.app
-    $RM -fr Monteveridi.app
+    rm -fr Mapla.app
+    rm -fr Monteveridi.app
 
-    $MKDIR -p Mapla.app/Contents/{MacOS,Resources}
-    $MKDIR -p Monteverdi.app/Contents/{MacOS,Resources}
+    mkdir -p Mapla.app/Contents/{MacOS,Resources}
+    mkdir -p Monteverdi.app/Contents/{MacOS,Resources}
 
-    $CAT > Mapla.app/Contents/Info.plist << EOF
+    cat > "Mapla.app/Contents/Info.plist" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -74,7 +69,7 @@ else
 </plist>
 EOF
 
-    $CAT > $OUT_DIR/Mapla.app/Contents/MacOS/Mapla << EOF
+    cat > "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla" << EOF
 #!/bin/sh
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
@@ -83,9 +78,9 @@ export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 $OUT_DIR/bin/mapla "\$@"
 EOF
 
-    $CHMOD +x $OUT_DIR/Mapla.app/Contents/MacOS/Mapla
+    chmod +x "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
 
-    $CAT > $OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi << EOF
+    cat > "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi" << EOF
 #!/bin/sh
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
@@ -94,21 +89,21 @@ export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 $OUT_DIR/bin/monteverdi "\$@"
 EOF
 
-    $CHMOD +x $OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi
+    chmod +x "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
 
-    $CP Mapla.app/Contents/Info.plist Monteverdi.app/Contents/Info.plist
-    $CP $OUT_DIR/Monteverdi.icns Monteverdi.app/Contents/Resources/
-    $CP $OUT_DIR/Monteverdi.icns Mapla.app/Contents/Resources/
+    cp "Mapla.app/Contents/Info.plist" "Monteverdi.app/Contents/Info.plist"
+    cp "$OUT_DIR/Monteverdi.icns" "Monteverdi.app/Contents/Resources/"
+    cp "$OUT_DIR/Monteverdi.icns" "Mapla.app/Contents/Resources/"
 
-    $SED -i "" "s,STARTUP_FILE,Mapla,g" Mapla.app/Contents/Info.plist
-    $SED -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" Mapla.app/Contents/Info.plist
-    $SED -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" Mapla.app/Contents/Info.plist
+    sed -i "" "s,STARTUP_FILE,Mapla,g" Mapla.app/Contents/Info.plist
+    sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" Mapla.app/Contents/Info.plist
+    sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" Mapla.app/Contents/Info.plist
 
-    $SED -i "" "s,STARTUP_FILE,Monteverdi,g" Monteverdi.app/Contents/Info.plist
-    $SED -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
-    $SED -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
+    sed -i "" "s,STARTUP_FILE,Monteverdi,g" Monteverdi.app/Contents/Info.plist
+    sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
+    sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" Monteverdi.app/Contents/Info.plist
 
-$CAT > $OUT_DIR/otbenv.profile << EOF
+cat > "$OUT_DIR/otbenv.profile" << EOF
 #!/bin/sh
 PATH=\$PATH:$OUT_DIR/bin
 PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
@@ -122,7 +117,7 @@ export GEOTIFF_CSV
 export PYTHONPATH
 EOF
 
-$CHMOD +x $OUT_DIR/otbenv.profile
+chmod +x "$OUT_DIR/otbenv.profile"
 
 fi
 
@@ -130,13 +125,13 @@ fi
 # echo "Creating symbolic links..."
 . ./make_symlinks
 
-$RM -f $OUT_DIR/Monteverdi.icns
+rm -f "$OUT_DIR/Monteverdi.icns"
 
-$RM -fr $OUT_DIR/tools
+rm -fr "$OUT_DIR/tools"
 
-$RM -f $OUT_DIR/pkgsetup
+rm -f "$OUT_DIR/pkgsetup"
 
-$RM -f $OUT_DIR/make_symlinks
+rm -f "$OUT_DIR/make_symlinks"
 
 
-open $OUT_DIR
+open "$OUT_DIR"
