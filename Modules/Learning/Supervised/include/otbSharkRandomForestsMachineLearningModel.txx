@@ -158,10 +158,9 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
   #endif
   
-  shark::Data<shark::RealVector> probas = m_RFModel(inputSamples);
-
   if(quality != ITK_NULLPTR)
     {
+    shark::Data<shark::RealVector> probas = m_RFModel(inputSamples);
     unsigned int id = startIndex;
     for(shark::RealVector && p : probas.elements())
       {
