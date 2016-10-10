@@ -37,9 +37,6 @@ int otbWaveletFilterBank(int itkNotUsed(argc), char * argv[])
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
 
-#ifdef _MSC_VER
-  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
-#endif  
   /* Reading */
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);

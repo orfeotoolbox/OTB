@@ -44,9 +44,7 @@ int otbWaveletTransform_generic(int argc, char * argv[])
        itk::MultiThreader::SetGlobalDefaultNumberOfThreads(NbOfThreads);
   }
 
-#ifdef _MSC_VER
-  itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
-#endif  
+
   const int Dimension = 2;
   typedef double                           PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
