@@ -1046,7 +1046,6 @@ void GlImageActor::UpdateResolution()
     m_FileReader = ReaderType::New();
     m_FileReader->SetFileName(extFilename.str());
     m_FileReader->GetOutput()->UpdateOutputInformation();
-    std::cout<<"GlImageActor::UpdateResolution"<<std::endl;
   // std::cout << "Switched to resolution: " << m_CurrentResolution <<
   // std::endl;
     }
