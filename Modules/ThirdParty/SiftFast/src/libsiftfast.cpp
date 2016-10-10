@@ -57,7 +57,8 @@
 #endif
 #endif
 
-using namespace std;
+//using namespace std;
+#include <algorithm>
 
 #define PI 3.141592654f
 #define SQRT2 1.4142136f
@@ -106,7 +107,7 @@ int Scales = 3;
 float InitSigma = 1.6f;
 float PeakThresh;
 
-static list<Keypoint> s_listKeypoints;
+static std::list<Keypoint> s_listKeypoints;
 
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -212,7 +213,7 @@ void FreeKeypoints(Keypoint keypt);
 void DestroyAllResources();
 }
 
-static list<Image> s_listImages;
+static std::list<Image> s_listImages;
 Image CreateImage(int rows, int cols)
 {
     Image im;
@@ -235,7 +236,7 @@ Image CreateImage(int rows, int cols)
 
 void DestroyAllImages()
 {
-    for(list<Image>::iterator it = s_listImages.begin(); it != s_listImages.end(); ++it) {
+    for(std::list<Image>::iterator it = s_listImages.begin(); it != s_listImages.end(); ++it) {
         sift_aligned_free((*it)->pixels);
         sift_aligned_free(*it);
     }
@@ -474,7 +475,7 @@ void SubtractImage(Image imgdst, Image img0, Image img1)
 #endif
 }
 
-static map<float, float* > s_mapkernel; // assumes GaussTruncate doesn't change!, if freeing second, subtract 4 bytes
+static std::map<float, float* > s_mapkernel; // assumes GaussTruncate doesn't change!, if freeing second, subtract 4 bytes
 
 void GaussianBlur(Image imgdst, Image image, float fblur)
 {
@@ -489,7 +490,7 @@ void GaussianBlur(Image imgdst, Image image, float fblur)
     ksize += !(ksize&1); // make it odd
 
     float* kernel = NULL;
-    for( map<float, float* >::iterator it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it) {
+    for( std::map<float, float* >::iterator it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it) {
         if( fabsf(fblur-it->first) < 0.001f ) {
             kernel = it->second;
             break;
@@ -533,7 +534,7 @@ void ConvHorizontal(Image imgdst, Image image, float* kernel, int ksize)
 {
     DVSTARTPROFILE();
 
-    static vector<float> _buf; //TODO, make 16 byte aligned
+    static std::vector<float> _buf; //TODO, make 16 byte aligned
     _buf.resize(image->cols + ksize);
     float* buf = &_buf[0];
     int rows = image->rows, cols = image->cols, stride = image->stride;
@@ -558,7 +559,7 @@ void ConvVertical(Image image, float* kernel, int ksize)
 {
     DVSTARTPROFILE();
 
-    static vector<float> _buf; //TODO, make 16 byte aligned
+    static std::vector<float> _buf; //TODO, make 16 byte aligned
     _buf.resize(image->rows + ksize);
     float* buf = &_buf[0];
     int rows = image->rows, cols = image->cols, stride = image->stride;
@@ -591,7 +592,7 @@ void ConvBuffer(float* buf, float* kernel, int bufsize, int ksize)
 
 #ifdef __SSE__
 
-typedef vector<float*> LISTBUF;
+typedef std::vector<float*> LISTBUF;
 static LISTBUF  s_listconvbuf; //TODO, make 16 byte aligned
 static int s_convbufsize = 0; // the size of all the buffers in s_listconvbuf
 static int SIFT_ALIGNED16(s_convmask[4]) = {static_cast<int>(0xffffffff),static_cast<int>(0xffffffff),static_cast<int>(0xffffffff),0};
@@ -612,7 +613,7 @@ void ConvHorizontalFast(Image imgdst, Image image, float* kernel, int ksize)
     int width = (ksize >= 0 ? ksize : ksize-1)>>1;
     float* _pixels = image->pixels, *_pdst = imgdst->pixels;
 
-    int convsize = max(100000,4*(cols + ksize)+36);
+    int convsize = std::max(100000,4*(cols + ksize)+36);
 
     if( s_listconvbuf.size() == 0 || s_convbufsize < convsize ) {
         for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
@@ -761,7 +762,7 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
 
     DVSTARTPROFILE();
 
-    int convsize = max(100000,32*(image->rows + ksize+4));
+    int convsize = std::max(100000,32*(image->rows + ksize+4));
 
     if( s_listconvbuf.size() == 0 || s_convbufsize < convsize ) {
         for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
@@ -1264,8 +1265,8 @@ void SolveLinearSystem(float* Y, float* H, int dim)
 
         if( bestj != i ) {
             for(int j = 0; j < dim; ++j)
-                swap(H[bestj*dim+j], H[i*dim+j]);
-            swap(Y[bestj],Y[i]);
+                std::swap(H[bestj*dim+j], H[i*dim+j]);
+            std::swap(Y[bestj],Y[i]);
         }
 
         for(int j = i+1; j < dim; ++j) {
@@ -1689,7 +1690,7 @@ void FreeKeypoints(Keypoint keypt)
 void DestroyAllResources()
 {
     DestroyAllImages();
-    for( map<float, float* >::iterator it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it)
+    for( std::map<float, float* >::iterator it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it)
         sift_aligned_free(it->second-1);
     s_mapkernel.clear();
 #ifdef __SSE__
@@ -1698,7 +1699,7 @@ void DestroyAllResources()
     s_listconvbuf.clear();
     s_convbufsize = 0;
 #endif
-    for(list<Keypoint>::iterator it = s_listKeypoints.begin(); it != s_listKeypoints.end(); ++it)
+    for(std::list<Keypoint>::iterator it = s_listKeypoints.begin(); it != s_listKeypoints.end(); ++it)
         sift_aligned_free(*it);
     s_listKeypoints.clear();
 }
