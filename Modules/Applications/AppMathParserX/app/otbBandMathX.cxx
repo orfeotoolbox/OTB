@@ -98,7 +98,7 @@ private:
       "- I is an number identifying the image input (remember, input #0 = im1, and so on)\n"
       "- J is an number identifying the band (remember, first band is indexed by 1)\n"
       "- KxP are two numbers that represent the size of the neighborhood (first one is related to the horizontal direction)\n"
-      "All neighborhood are centred, thus K and P must be odd numbers.\n"
+      "All neighborhood are centered, thus K and P must be odd numbers.\n"
       "Many operators come with this new functionality: dotpr, mean var median min max...\n"
       "For instance, if im1 represents the pixel of 3 bands image:\n\n"
       "               im1 - mean(im1b1N5x5,im1b2N5x5,im1b3N5x5)       (3)\n"
