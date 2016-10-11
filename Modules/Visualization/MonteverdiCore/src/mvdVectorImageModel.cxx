@@ -172,8 +172,10 @@ VectorImageModel
       DefaultImageFileReaderType::New()
     );
 
-    imageFileReader->SetFileName( QFile::encodeName( filename ).constData() );
-    imageFileReader->UpdateOutputInformation();
+    QString fname = filename;
+    
+    imageFileReader->SetFileName( QFile::encodeName( fname.append(QString("?&skipgeom=true"))).constData());
+    imageFileReader->GetOutput()->UpdateOutputInformation();
     }
 
   catch( std::exception& exc )
