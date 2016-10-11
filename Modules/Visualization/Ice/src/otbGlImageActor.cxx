@@ -140,7 +140,8 @@ void GlImageActor::Initialize(const std::string & filename)
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(m_FileName);
   m_FileReader->GetOutput()->UpdateOutputInformation();
-  std::cout<<"GlImageActor::Initialize"<<std::endl;
+
+  //std::cout<<"GlImageActor::Initialize"<<std::endl;
 
   m_LargestRegion = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
