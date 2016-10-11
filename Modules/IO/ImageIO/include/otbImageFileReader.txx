@@ -65,7 +65,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
    m_ExceptionMessage(""),
    m_ActualIORegion(),
    m_FilenameHelper(FNameHelperType::New()),
-   m_AdditionalNumber(0)
+   m_AdditionalNumber(0),
+   m_KeywordListUpToDate(false)
 {
 }
 
@@ -262,14 +263,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
   // Update FileName
   this->m_FileName = lFileName;
-  
-  std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
 
   // Test if the file exists and if it can be opened.
   // An exception will be thrown otherwise.
   // We catch the exception because some ImageIO's may not actually
   // open a file. Still reports file error if no ImageIO is loaded.
-
+  
   try
     {
     m_ExceptionMessage = "";
@@ -279,12 +278,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
     m_ExceptionMessage = err.GetDescription();
     }
-
+  
   if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
     {
     this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), otb::ImageIOFactory::ReadMode);
     }
-
+  
   if (this->m_ImageIO.IsNull())
     {
     //this->Print(std::cerr);
@@ -425,25 +424,30 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   output->SetOrigin(origin);         // Set the image origin
   output->SetDirection(direction);   // Set the image direction cosines
 
-  // Update otb Keywordlist
-  ImageKeywordlist otb_kwl;
-  if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
+  if(!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
     {
-    otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
-    otbMsgDevMacro(<< "Loading internal kwl");
-    }
-  else
-    {
-    otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-    otbMsgDevMacro(<< "Loading external kwl");
-    }
-
-  // Don't add an empty ossim keyword list
-  if(!otb_kwl.Empty())
-    {
+    
+    std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
+  
+    // Update otb Keywordlist
+    ImageKeywordlist otb_kwl;
+    if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
+      {
+      otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
+      otbMsgDevMacro(<< "Loading internal kwl");
+      }
+    else
+      {
+      otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
+      otbMsgDevMacro(<< "Loading external kwl");
+      }
+    
+    // Don't add an empty ossim keyword list
+    if(!otb_kwl.Empty())
+      {
       itk::EncapsulateMetaData<ImageKeywordlist>(dict,
                                                  MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    }
+      }
   /*else
     {
     //
@@ -484,6 +488,21 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     }*/
 
+    m_KeywordListUpToDate = true;
+    }
+  else
+    {
+    // Read back from existing dictionnary
+    ImageKeywordlist otb_kwl;
+    itk::ExposeMetaData<ImageKeywordlist>(this->GetOutput()->GetMetaDataDictionary(),
+                                                 MetaDataKey::OSSIMKeywordlistKey,otb_kwl);
+    // And add to new one
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                                 MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+
+    }
+
+  
   // If Skip ProjectionRef is activated, remove ProjRef from dict
   if (m_FilenameHelper->GetSkipCarto())
     {
@@ -670,13 +689,55 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetFileName(const char* extendedFileName)
+::SetFileName(const char* in)
 {
-  if (extendedFileName)
+  const std::string skip_geom_key = "skipgeom";
+  const std::string geom_key = "geom";
+  
+  if (in)
     {
-    this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-    this->m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-    this->Modified();
+    // First, see if the simple filename has changed
+    typename FNameHelperType::Pointer helper = FNameHelperType::New();
+    
+    helper->SetExtendedFileName(in);
+    std::string simpleFileName = helper->GetSimpleFileName();
+
+    if(simpleFileName == this->m_FileName)
+      {
+      // Then, see if the option map changed
+      const typename ExtendedFilenameHelper::OptionMapType & newMap = helper->GetOptionMap();
+      const typename ExtendedFilenameHelper::OptionMapType & oldMap = m_FilenameHelper->GetOptionMap();
+
+      // Both maps are not completely the same
+      if(oldMap.size() != newMap.size() || !std::equal(oldMap.begin(),oldMap.end(),newMap.begin()))
+        {
+        this->Modified();
+        
+        // Now check if keywordlist needs to be generated again
+        // Condition is: one of the old or new map has the skip_geom
+        // key and the other does not
+        // OR
+        // one of the old or new map has the geom key and the other
+        // does not
+        // OR
+        // both have the geom key but the geom value is different
+        if((oldMap.count(skip_geom_key) != newMap.count(skip_geom_key))
+           || (oldMap.count(geom_key) != newMap.count(geom_key))
+           || ((oldMap.count(geom_key) && newMap.count(geom_key))
+               && oldMap.find(geom_key)->second != newMap.find(geom_key)->second))
+          {
+          m_KeywordListUpToDate = false;
+          }
+        }
+      }
+    else
+      {
+      this->m_FileName = simpleFileName;
+      m_KeywordListUpToDate = false;
+      this->Modified();
+      }
+    
+    m_FilenameHelper = helper;
     }
 }
 
