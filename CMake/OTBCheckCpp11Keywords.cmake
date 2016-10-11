@@ -2,14 +2,21 @@ include(CheckCXXSourceCompiles)
 
 unset(OTB_HAS_CXX11 CACHE)
 CHECK_CXX_SOURCE_COMPILES("
-#if __cplusplus <= 199711L
-  #error Compiler is not C++11 compliant
+#ifdef _MSC_VER
+  #if _MSC_VER <= 1700
+    #error Compiler is not C++11 compliant
+  #endif
+#else
+  #if __cplusplus <= 199711L
+    #error Compiler is not C++11 compliant
+  #endif
 #endif
 
 int main(int argc, char *argv[])
 {
   return 0;
 }
+
 "
 OTB_HAS_CXX11 )
 
