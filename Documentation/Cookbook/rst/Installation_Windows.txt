@@ -1,12 +1,9 @@
-          
-We provide for Windows Seven and later through standalone packages. They
-are cross-compiled with MinGW, for 32 bits and 64 bits platforms. They
-contain all applications and their launchers (both command line and graphical
-launchers are provided).
-Check the `Download page <https://www.orfeo-toolbox.org/download>`__
+We provide standalone packages for Windows 7 and later. Download it from the
+`here <https://www.orfeo-toolbox.org/download>`__, and pick the correct version
+(32 bit or 64 bit) depending on your system.
 
-There is a 32 bits and a 64 bits version. They contain the same directory
-structure:
+Extract the archive and use one of the launchers, they contain all applications
+and their launchers (both command line and graphical launchers are provided):
 
 -  ``monteverdi.bat`` : A launcher script for Monteverdi
 
