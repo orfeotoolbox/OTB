@@ -28,8 +28,15 @@ how to start using Monteverdi and OTB applications to view and process your
 data, and recipes on how to accomplish typical remote sensing tasks.
 Finally, there is also documentation on every application shipped with OTB.
 
+Get started now with the :doc:`Installation` chapter.
+
+Get help, share your experience and contribute to the Orfeo-Toolbox project by
+joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
+`users mailing list <https://groups.google.com/forum/?hl=fr#!forum/otb-users/join>`_.
+
 For other documentation, be sure to read:
 
+- OTB's website: `www.orfeo-toolbox.org <https://www.orfeo-toolbox.org/>`_
 - `OTB Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_ for advanced users and developers.
   The software guide contains documented code examples,
   descriptions of the ITK pipeline model, multithreading and
@@ -37,6 +44,3 @@ For other documentation, be sure to read:
 - `Doxygen <http://orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
   of the C++ API.
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
