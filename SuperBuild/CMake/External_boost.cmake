@@ -13,6 +13,13 @@ else()
   set(BOOST_SB_CONFIG architecture=x86)
 endif()
 
+if(NOT WIN32)
+  set(BOOST_SB_CONFIG
+    ${BOOST_SB_CONFIG}
+    -dll-path=${SB_INSTALL_PREFIX}/lib
+    )
+endif()
+
 set(BOOST_SB_CONFIG
   ${BOOST_SB_CONFIG}
   variant=release
@@ -22,7 +29,6 @@ set(BOOST_SB_CONFIG
   --prefix=${SB_INSTALL_PREFIX}
   --includedir=${_SB_Boost_INCLUDE_DIR}
   --libdir=${_SB_Boost_LIBRARY_DIR}
-  --layout=system
   --with-system
   --with-serialization
   --with-filesystem
