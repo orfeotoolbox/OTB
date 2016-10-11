@@ -1040,10 +1040,6 @@ void GlImageActor::UpdateResolution()
     std::ostringstream extFilename;
     extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
 
-    // ReaderType::New() is forced because of warning message
-    // 'Duplicated option detected: <option>. Using value <value>.'
-    // output by otb::ExtendedFilenameHelper.
-    m_FileReader = ReaderType::New();
     m_FileReader->SetFileName(extFilename.str());
     m_FileReader->GetOutput()->UpdateOutputInformation();
   // std::cout << "Switched to resolution: " << m_CurrentResolution <<
