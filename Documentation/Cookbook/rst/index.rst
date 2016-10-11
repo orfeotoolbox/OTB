@@ -6,7 +6,7 @@
 Welcome to OTB CookBook's documentation!
 ========================================
 
-`Orfeo ToolBox (OTB) <http://orfeo-toolbox.org>` is an open-source project for
+`Orfeo ToolBox (OTB) <http://orfeo-toolbox.org>`_ is an open-source project for
 state-of-the-art remote sensing. Built on the shoulders of the open-source
 geospatial community, it can process high resolution optical, multispectral and
 radar images at the terabyte scale. A wide variety of applications are

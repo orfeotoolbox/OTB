@@ -613,7 +613,7 @@ void ConvHorizontalFast(Image imgdst, Image image, float* kernel, int ksize)
     int width = (ksize >= 0 ? ksize : ksize-1)>>1;
     float* _pixels = image->pixels, *_pdst = imgdst->pixels;
 
-    int convsize = std::max(100000,4*(cols + ksize)+36);
+    int convsize = (std::max)(100000,4*(cols + ksize)+36);
 
     if( s_listconvbuf.size() == 0 || s_convbufsize < convsize ) {
         for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
@@ -762,7 +762,7 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
 
     DVSTARTPROFILE();
 
-    int convsize = std::max(100000,32*(image->rows + ksize+4));
+    int convsize = (std::max)(100000,32*(image->rows + ksize+4));
 
     if( s_listconvbuf.size() == 0 || s_convbufsize < convsize ) {
         for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
