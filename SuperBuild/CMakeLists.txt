@@ -7,9 +7,12 @@ project(OTB-SuperBuild)
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_SOURCE_DIR}/../CMake
-    ${CMAKE_MODULE_PATH})
+    ${CMAKE_MODULE_PATH}
+    )
 
 include(ExternalProject)
+
+include(OTBCheckCpp11Keywords)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 
@@ -22,19 +25,38 @@ if(APPLE)
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
+set(OTB_COMPILER_ARCH_IS_X64 TRUE)
+
 if(MSVC)
   execute_process(
-  COMMAND ${CMAKE_C_COMPILER}
-  ERROR_VARIABLE ev
-  OUTPUT_VARIABLE ov
-  OUTPUT_QUIET
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
+    COMMAND ${CMAKE_C_COMPILER}
+    ERROR_VARIABLE ev
+    OUTPUT_VARIABLE ov
+    OUTPUT_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
   
-  set(OTB_MSVC_COMPILER_ARCH_IS_X64 TRUE)
+  set(OTB_COMPILER_ARCH_IS_X64 TRUE)
+  set(OTB_COMPILER_ARCH x64)
   if("${ev}" MATCHES "x86")
-    set(OTB_MSVC_COMPILER_ARCH_IS_X64 FALSE)
+    set(OTB_COMPILER_ARCH x86)
+    set(OTB_COMPILER_ARCH_IS_X64 FALSE)
   endif()
-  
+
+endif() #MSVC
+
+if(UNIX)
+  execute_process(
+    COMMAND uname -m
+    ERROR_VARIABLE ev
+    OUTPUT_VARIABLE ov
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  set(OTB_COMPILER_ARCH ${ov})
+  set(OTB_COMPILER_ARCH_IS_X64 FALSE)
+  if("${ov}" STREQUAL "x86_64")
+    set(OTB_COMPILER_ARCH_IS_X64 TRUE)
+  endif()
 endif()
 
 # use, i.e. don't skip the full RPATH for the build tree
