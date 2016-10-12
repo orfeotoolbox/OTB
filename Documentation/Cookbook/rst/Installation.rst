@@ -24,7 +24,7 @@ Windows
 .. include:: Installation_Windows.txt
 
 Linux x86_64
------------
+------------
 
 .. include:: Installation_Linux.txt
 
@@ -33,7 +33,7 @@ MacOS X
 -------
 
 .. include:: Installation_Macx.txt
-             
+
 Other packages
 --------------
 
