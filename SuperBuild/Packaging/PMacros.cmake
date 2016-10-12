@@ -50,14 +50,14 @@ macro(macro_setup_cmake_project pkg)
    include(CMakeParseArguments)
    include(CMakeDetermineSystem)
    set(CMAKE_BUILD_TYPE             Release)
-   set(OTB_SOURCE_DIR               \"${OTB_SOURCE_DIR}\")
+   set(PACKAGE_OTB_SRC_DIR               \"${PACKAGE_OTB_SRC_DIR}\")
    set(OTB_BINARY_DIR               \"${OTB_BINARY_DIR}\")
    set(OTB_INSTALL_DIR              \"${OTB_INSTALL_DIR}\")
    set(OTB_INSTALL_DATA_DIR         \"${PKG_OTB_INSTALL_DATA_DIR}\")
    set(QT_PLUGINS_DIR               \"${QT_PLUGINS_DIR}\")
    set(QT_TRANSLATIONS_DIR          \"${QT_TRANSLATIONS_DIR}\")
    set(DEPENDENCIES_INSTALL_DIR     \"${DEPENDENCIES_INSTALL_DIR}\")
-   set(PACKAGE_SUPPORT_FILES_DIR    \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
+   set(PACKAGE_SUPPORT_FILES_DIR    \"${PACKAGE_OTB_SRC_DIR}/SuperBuild/Packaging/Files\")
 
    set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
    set(PKG_ITK_SB_VERSION           \"${PKG_ITK_SB_VERSION}\")
@@ -75,12 +75,12 @@ macro(macro_setup_cmake_project pkg)
 
   if(UNIX)
     if(APPLE)
-      set(README_FILE ${OTB_SOURCE_DIR}/Documentation/Cookbook/rst/Installation_Macx.txt)
+      set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Macx.txt)
     else() #not osx
-      set(README_FILE ${OTB_SOURCE_DIR}/Documentation/Cookbook/rst/Installation_Linux.txt)
+      set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Linux.txt)
     endif() #if(APPLE)
   else() #windows
-    set(README_FILE ${OTB_SOURCE_DIR}/Documentation/Cookbook/rst/Installation_Windows.txt)
+    set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows.txt)
   endif() #if(UNIX)
 
   configure_file(

@@ -495,7 +495,7 @@ function(func_install_monteverdi_support_files)
 
   # Just check if required variables are defined.
   foreach(req
-      OTB_SOURCE_DIR
+      PACKAGE_OTB_SRC_DIR
       PACKAGE_SUPPORT_FILES_DIR
       QT_PLUGINS_DIR
       PKG_STAGE_BIN_DIR
@@ -541,7 +541,7 @@ function(func_install_monteverdi_support_files)
     message(FATAL_ERROR "Error ${OTB_INSTALL_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME} not exists")
   endif()
   
-  file(GLOB APP_TS_FILES ${OTB_SOURCE_DIR}/i18n/*.ts) # qm files
+  file(GLOB APP_TS_FILES ${PACKAGE_OTB_SRC_DIR}/i18n/*.ts) # qm files
   foreach(APP_TS_FILE ${APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
     install(FILES ${OTB_INSTALL_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME}/${APP_TS_FILENAME}.qm

@@ -14,8 +14,8 @@ if(NOT PROJECT_NAME)
 endif()
 
 if(PROJECT_NAME STREQUAL "OTB-SuperBuild")
-  if(NOT OTB_SOURCE_DIR)
-    get_filename_component(OTB_SOURCE_DIR ${OTB-SuperBuild_SOURCE_DIR} PATH)
+  if(NOT PACKAGE_OTB_SRC_DIR)
+    get_filename_component(PACKAGE_OTB_SRC_DIR ${OTB-SuperBuild_SOURCE_DIR} PATH)
   endif()
 endif()
 
@@ -23,9 +23,9 @@ set(OUT_OF_SOURCE_BUILD FALSE)
 if(PROJECT_NAME STREQUAL "OTBPackaging")
   set(OUT_OF_SOURCE_BUILD TRUE)
   set(GENERATE_PACKAGE ON)
-  if(NOT OTB_SOURCE_DIR)
-    get_filename_component(OTB_SOURCE_DIR ${OTBPackaging_SOURCE_DIR} PATH)
-    get_filename_component(OTB_SOURCE_DIR ${OTB_SOURCE_DIR} PATH)
+  if(NOT PACKAGE_OTB_SRC_DIR)
+    get_filename_component(PACKAGE_OTB_SRC_DIR ${OTBPackaging_SOURCE_DIR} PATH)
+    get_filename_component(PACKAGE_OTB_SRC_DIR ${PACKAGE_OTB_SRC_DIR} PATH)
   endif()
   
   option(OTB_WRAP_PYTHON "enable python wrapping" ON)
@@ -45,10 +45,10 @@ if(WIN32 AND NOT MSVC)
   endif()
 endif()
 
-if(NOT OTB_SOURCE_DIR)
-  message(FATAL_ERROR "you must set OTB_SOURCE_DIR")
+if(NOT PACKAGE_OTB_SRC_DIR)
+  message(FATAL_ERROR "you must set PACKAGE_OTB_SRC_DIR")
 endif()
-set(SUPERBUILD_SOURCE_DIR ${OTB_SOURCE_DIR}/SuperBuild)
+set(SUPERBUILD_SOURCE_DIR ${PACKAGE_OTB_SRC_DIR}/SuperBuild)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/PMacros.cmake)
 
@@ -89,7 +89,7 @@ endif()
 
 if(WIN32 AND NOT MSVC)
   foreach(req
-      OTB_SOURCE_DIR
+      PACKAGE_OTB_SRC_DIR
       OTB_BINARY_DIR
       OTB_INSTALL_DIR
       )
@@ -103,7 +103,7 @@ else() #Unix like
       SUPERBUILD_BINARY_DIR
       SUPERBUILD_INSTALL_DIR
       SUPERBUILD_SOURCE_DIR
-      OTB_SOURCE_DIR
+      PACKAGE_OTB_SRC_DIR
       )
     if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
       message(FATAL_ERROR "you must set ${req}")
@@ -165,7 +165,7 @@ endif()
 
 #get version of OTB from source_dir/CMakeLists.txt
 get_version(
-  INPUT_FILE   "${OTB_SOURCE_DIR}/CMakeLists.txt"
+  INPUT_FILE   "${PACKAGE_OTB_SRC_DIR}/CMakeLists.txt"
   MATCH_STRINGS "OTB_VERSION_MAJOR" "OTB_VERSION_MINOR" "OTB_VERSION_PATCH"
   PREFIX PKG
   )
