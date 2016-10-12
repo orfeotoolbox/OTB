@@ -21,7 +21,7 @@ set(BOOST_SB_CONFIG
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
   --includedir=${_SB_Boost_INCLUDE_DIR}
-  --libdir=${_SB_Boost_LIBRARY_DIR}
+  --libdir=${_SB_BOOST_LIBRARYDIR}
   --with-system
   --with-serialization
   --with-filesystem
