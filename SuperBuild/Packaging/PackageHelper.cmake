@@ -143,8 +143,8 @@ macro(macro_super_package)
     set(IS_XDK "false")
     if(PKG_GENERATE_XDK)
       set(IS_XDK "true")
-      if("${ITK_VERSION_STRING}" STREQUAL "")
-        message(FATAL_ERROR "ITK_VERSION_STRING not set. This is required for XDK")
+      if("${PKG_ITK_SB_VERSION}" STREQUAL "")
+        message(FATAL_ERROR "PKG_ITK_SB_VERSION not set. This is required for XDK")
       endif()
 
       #avoid OTB stuff inside pkgsetup for XDK
@@ -386,18 +386,18 @@ function(func_install_support_files)
     install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
   endif()
 
+  set(PKG_VERSION_FILE "${OTB_INSTALL_DIR}/share/doc/${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/VERSION")
+  
   ####################### Install copyrights ##########################
-  if(WIN32)
-    #do install license for windows package
-  else()
+  if(NOT MINGW)
+    #install license for windows package
     install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR})
     install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
   endif()
 
   ####################### Install VERSION ##########################
-  if(EXISTS ${OTB_INSTALL_DIR}/share/doc/${OTB_LATEST_MAJOR_MINOR}/VERSION)
-    install(FILES ${OTB_INSTALL_DIR}/share/doc/${OTB_LATEST_MAJOR_MINOR}/VERSION
-            DESTINATION ${PKG_STAGE_DIR})
+  if(EXISTS ${PKG_VERSION_FILE} )
+    install(FILES ${PKG_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
   endif()
 
 endfunction()
@@ -484,22 +484,25 @@ function(func_install_monteverdi_support_files)
   #qt4's distributes some translation of common message string used in Qt.
   #This are provided with any qt installation. We reuse them in otb package
   #so as not to reinvent the wheels.
-  set(PKG_I18N_DIR "${PKG_STAGE_DIR}/lib/qt4/translations")
+  set(PKG_QT_TRANSLATIONS_DIR "${PKG_STAGE_DIR}/lib/qt4/translations")
 
   #<prefix>/share for otb i18n directory. This is different from qt's i18N directory
   #which is <prefix>/share/qt4/translations.
-  set(PKG_OTB_I18N_DIR "${PKG_STAGE_DIR}/${OTB_INSTALL_DATA_DIR}/i18n")
+  #set(PKG_xxOTB_Ixxx18N_DIR "${PKG_STAGE_DIR}/${OTB_INSTALL_DATA_DIR}/i18n")
+
+  set(PKG_OTB_TRANSLATIONS_DIRNAME "${OTB_INSTALL_DATA_DIR}/i18n")
+  
 
   # Just check if required variables are defined.
   foreach(req
-      OTB_SOURCE_DIR
+      PACKAGE_OTB_SRC_DIR
       PACKAGE_SUPPORT_FILES_DIR
       QT_PLUGINS_DIR
       PKG_STAGE_BIN_DIR
       PKG_QTSQLITE_FILENAME
       PKG_QTPLUGINS_DIR
-      PKG_I18N_DIR
-      PKG_OTB_I18N_DIR
+      PKG_QT_TRANSLATIONS_DIR
+      PKG_OTB_TRANSLATIONS_DIRNAME
       )
     if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
       message(FATAL_ERROR "you must set ${req} before calling this method")
@@ -525,29 +528,27 @@ function(func_install_monteverdi_support_files)
   install(FILES ${QT_PLUGINS_DIR}/sqldrivers/${PKG_QTSQLITE_FILENAME}
     DESTINATION ${PKG_QTPLUGINS_DIR}/sqldrivers)
 
-  ####################### install translations ###########################
+  ####################### install qt4 translations ###########################
   #get all translations already distributed with qt4
   get_qt_translation_files(QT_TRANSLATIONS_FILES)
 
   #install all files in ${QT_TRANSLATIONS_FILES}
-  install(FILES ${QT_TRANSLATIONS_FILES}  DESTINATION ${PKG_I18N_DIR})
+  install(FILES ${QT_TRANSLATIONS_FILES}  DESTINATION ${PKG_QT_TRANSLATIONS_DIR})
 
+  ####################### install monteverdi translations #####################
   #translation of monteverdi specific strings
-  if(NOT EXISTS "${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n")
-    message(FATAL_ERROR "error ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n not exists")
+  if(NOT EXISTS "${OTB_INSTALL_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME}")
+    message(FATAL_ERROR "Error ${OTB_INSTALL_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME} not exists")
   endif()
-  file(GLOB APP_TS_FILES ${OTB_SOURCE_DIR}/i18n/*.ts) # qm files
+  
+  file(GLOB APP_TS_FILES ${PACKAGE_OTB_SRC_DIR}/i18n/*.ts) # qm files
   foreach(APP_TS_FILE ${APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
-    install(FILES ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n/${APP_TS_FILENAME}.qm
-      DESTINATION ${PKG_OTB_I18N_DIR}
+    install(FILES ${OTB_INSTALL_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME}/${APP_TS_FILENAME}.qm
+      DESTINATION ${PKG_STAGE_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME}
       )
   endforeach()
-
   
-  ####################### install otb share ###########################
-  #install(DIRECTORY ${OTB_INSTALL_DIR}/share/${OTB_LATEST_MAJOR_MINOR}/i18n DESTINATION ${PKG_SHARE_DEST_DIR}/otb)
-
 endfunction()
 
 macro(macro_empty_package_staging_directory)

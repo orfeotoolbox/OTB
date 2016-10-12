@@ -14,8 +14,8 @@ if(NOT PROJECT_NAME)
 endif()
 
 if(PROJECT_NAME STREQUAL "OTB-SuperBuild")
-  if(NOT OTB_SOURCE_DIR)
-    get_filename_component(OTB_SOURCE_DIR ${OTB-SuperBuild_SOURCE_DIR} PATH)
+  if(NOT PACKAGE_OTB_SRC_DIR)
+    get_filename_component(PACKAGE_OTB_SRC_DIR ${OTB-SuperBuild_SOURCE_DIR} PATH)
   endif()
 endif()
 
@@ -23,9 +23,9 @@ set(OUT_OF_SOURCE_BUILD FALSE)
 if(PROJECT_NAME STREQUAL "OTBPackaging")
   set(OUT_OF_SOURCE_BUILD TRUE)
   set(GENERATE_PACKAGE ON)
-  if(NOT OTB_SOURCE_DIR)
-    get_filename_component(OTB_SOURCE_DIR ${OTBPackaging_SOURCE_DIR} PATH)
-    get_filename_component(OTB_SOURCE_DIR ${OTB_SOURCE_DIR} PATH)
+  if(NOT PACKAGE_OTB_SRC_DIR)
+    get_filename_component(PACKAGE_OTB_SRC_DIR ${OTBPackaging_SOURCE_DIR} PATH)
+    get_filename_component(PACKAGE_OTB_SRC_DIR ${PACKAGE_OTB_SRC_DIR} PATH)
   endif()
   
   option(OTB_WRAP_PYTHON "enable python wrapping" ON)
@@ -45,10 +45,10 @@ if(WIN32 AND NOT MSVC)
   endif()
 endif()
 
-if(NOT OTB_SOURCE_DIR)
-  message(FATAL_ERROR "you must set OTB_SOURCE_DIR")
+if(NOT PACKAGE_OTB_SRC_DIR)
+  message(FATAL_ERROR "you must set PACKAGE_OTB_SRC_DIR")
 endif()
-set(SUPERBUILD_SOURCE_DIR ${OTB_SOURCE_DIR}/SuperBuild)
+set(SUPERBUILD_SOURCE_DIR ${PACKAGE_OTB_SRC_DIR}/SuperBuild)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/PMacros.cmake)
 
@@ -89,7 +89,7 @@ endif()
 
 if(WIN32 AND NOT MSVC)
   foreach(req
-      OTB_SOURCE_DIR
+      PACKAGE_OTB_SRC_DIR
       OTB_BINARY_DIR
       OTB_INSTALL_DIR
       )
@@ -103,7 +103,7 @@ else() #Unix like
       SUPERBUILD_BINARY_DIR
       SUPERBUILD_INSTALL_DIR
       SUPERBUILD_SOURCE_DIR
-      OTB_SOURCE_DIR
+      PACKAGE_OTB_SRC_DIR
       )
     if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
       message(FATAL_ERROR "you must set ${req}")
@@ -154,17 +154,26 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set(PACKAGE_PLATFORM_NAME "Linux")
 endif()
 
-if(WIN32 AND NOT MSVC)
-  set(ITK_VERSION_STRING)
-  set(PACKAGE_VERSION_STRING ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
-else()
-  get_version("${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake" "ITK_SB_VERSION" ITK_SB_VERSION)
-  set(ITK_VERSION_STRING "${get_version_ITK_SB_VERSION}")
-  get_version("${OTB_SOURCE_DIR}/CMakeLists.txt" "OTB_VERSION_" OTB_VERSION_STRING)
-  set(PACKAGE_VERSION_STRING ${get_version_OTB_VERSION_STRING})
-endif() #WIN32 AND NOT MSVC
+#get itk version from External_itk.cmake if not on mingw
+if(NOT MINGW)
+  get_version(
+    INPUT_FILE   "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
+    MATCH_STRINGS "ITK_SB_VERSION"
+    PREFIX PKG
+    )
+endif()
 
-if(WIN32 AND NOT MSVC)
+#get version of OTB from source_dir/CMakeLists.txt
+get_version(
+  INPUT_FILE   "${PACKAGE_OTB_SRC_DIR}/CMakeLists.txt"
+  MATCH_STRINGS "OTB_VERSION_MAJOR" "OTB_VERSION_MINOR" "OTB_VERSION_PATCH"
+  PREFIX PKG
+  )
+
+set(PKG_OTB_VERSION_STRING
+  ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
+
+if(MINGW)
   set(OTB_BINARY_DIR              "${OTB_BINARY_DIR}")
   set(OTB_INSTALL_DIR             "${OTB_INSTALL_DIR}")
   set(DEPENDENCIES_INSTALL_DIR    "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
