@@ -1,17 +1,14 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-cd `dirname $0`
+DIRNAME_0=$(dirname "$0")
+cd  "$DIRNAME_0"
 
 # NOTE: $OUT_DIR is also used in make_sylinks script (see below)
 # Avoid any pre-mature optimization on variable names here.
 
-OUT_DIR=`pwd`
-CAT=`which cat`
-RM=`which rm`
-CHMOD=`which chmod`
-SED=`which sed`
+OUT_DIR=$(pwd)
 
-PATCH_ELF_EXE=$OUT_DIR/tools/patchelf
+PATCH_ELF_EXE="$OUT_DIR/tools/patchelf"
 
 # No no interference with LD_LIBRARY_PATH
 LD_LIBRARY_PATH=
@@ -21,20 +18,20 @@ BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
 # run patchelf
 for bin_file in $BINARY_FILES; do
     #echo "adding rpath to $OUT_DIR/$bin_file"
-    if [ -f $OUT_DIR/$bin_file ]; then
-        $PATCH_ELF_EXE --set-rpath "$OUT_DIR/lib" $OUT_DIR/$bin_file
+    if [ -f "$OUT_DIR/$bin_file" ]; then
+        "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$OUT_DIR/$bin_file"
     fi
 done
 
 I_AM_XDK=@IS_XDK@
 
 if [ "$I_AM_XDK" = true ] ; then
-    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
-    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKConfig.cmake
-    $SED -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKConfig.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
 else
 
-$CAT > $OUT_DIR/monteverdi.sh << EOF
+cat > "$OUT_DIR/monteverdi.sh" << EOF
 #!/bin/sh
 unset LD_LIBRARY_PATH
 
@@ -45,9 +42,9 @@ export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 $OUT_DIR/bin/monteverdi "\$@"
 EOF
 
-$CHMOD +x $OUT_DIR/monteverdi.sh
+chmod +x "$OUT_DIR/monteverdi.sh"
 
-$CAT > $OUT_DIR/mapla.sh << EOF
+cat > "$OUT_DIR/mapla.sh" << EOF
 #!/bin/sh
 unset LD_LIBRARY_PATH
 
@@ -58,9 +55,9 @@ export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 $OUT_DIR/bin/mapla "\$@"
 EOF
 
-$CHMOD +x $OUT_DIR/mapla.sh
+chmod +x "$OUT_DIR/mapla.sh"
 
-$CAT > $OUT_DIR/bin/env_exports << EOF
+cat > "$OUT_DIR/bin/env_exports" << EOF
 #!/bin/sh
 
 export LC_NUMERIC=C
@@ -77,7 +74,7 @@ export GEOTIFF_CSV
 export LD_LIBRARY_PATH
 EOF
 
-$CAT > $OUT_DIR/otbenv.profile << EOF
+cat > "$OUT_DIR/otbenv.profile" << EOF
 #!/bin/sh
 PATH=\$PATH:$OUT_DIR/bin
 PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
@@ -91,7 +88,7 @@ export GEOTIFF_CSV
 export PYTHONPATH
 EOF
 
-$CHMOD +x $OUT_DIR/otbenv.profile
+chmod +x "$OUT_DIR/otbenv.profile"
 
 fi
 
@@ -99,7 +96,7 @@ fi
 . ./make_symlinks
 
 if [ ! -f "$OTB_PYTHON_EXE" ] ; then
-    OTB_PYTHON_EXE=`which python`
+    OTB_PYTHON_EXE=$(which python)
 fi
 
 python_INSTALLED_SONAME=@python_INSTALLED_SONAME@
@@ -110,7 +107,7 @@ python_patch_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[2])
 python_version="$python_major_version.$python_minor_version.$python_patch_version"
 printf %s\\n "Python executable found in : $OTB_PYTHON_EXE ($python_version)"
 
-if [ $python_major_version -gt 2 ]; then
+if [ "$python_major_version" -gt 2 ]; then
     printf %s\\n "OTB python bindings requires python2.6 or python2.7 but current detected python version is $python_version"
     printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
@@ -131,9 +128,9 @@ do
     fi
 done
 
-if [ "$found_python_lib" == "1" ]; then
+if [ "$found_python_lib" -eq "1" ]; then
     printf %s\\n "Found python library: $python_lib_file_path "
-    ln -sf $python_lib_file_path $OUT_DIR/lib/$python_INSTALLED_SONAME
+    ln -sf "$python_lib_file_path" "$OUT_DIR/lib/$python_INSTALLED_SONAME"
     printf %s\\n "To use OTB python binding you need to export below environment variables:"
     printf %s\\n "'export LD_LIBRARY_PATH=$OUT_DIR/lib' and"
     printf %s\\n "'export PYTHONPATH=$OUT_DIR/lib/python'"
@@ -148,10 +145,10 @@ else
 fi
 
 # PKG_OTB_VERSION_STRING=@PKG_OTB_VERSION_STRING@
-$SED -i "s,|release|,@PKG_OTB_VERSION_STRING@,g" $OUT_DIR/README
+sed -i "s,|release|,@PKG_OTB_VERSION_STRING@,g" "$OUT_DIR/README"
 
-$RM -fr $OUT_DIR/tools
+rm -fr "$OUT_DIR/tools"
 
-$RM -f $OUT_DIR/pkgsetup
+rm -f  "$OUT_DIR/pkgsetup"
 
-$RM -f $OUT_DIR/make_symlinks
+rm -f  "$OUT_DIR/make_symlinks"
