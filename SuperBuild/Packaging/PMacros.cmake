@@ -10,9 +10,9 @@ macro(macro_setup_cmake_project pkg)
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build")
 
   if("${pkg}" STREQUAL "XDK")
-    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   else()
-    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   endif()
 
   if("${pkg}" STREQUAL "XDK")
@@ -21,6 +21,29 @@ macro(macro_setup_cmake_project pkg)
     set(PKG_GENERATE_XDK OFF)
   endif()
 
+  set(ConfigureMonteverdi_H ${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h)
+  if(NOT EXISTS ${ConfigureMonteverdi_H})
+    message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
+  endif()
+
+  file(STRINGS "${ConfigureMonteverdi_H}" ConfigureMonteverdi_H_CONTENTS REGEX "^#define.Monteverdi_INSTALL_DATA_DIR")
+  string(REGEX REPLACE
+    "^#define.Monteverdi_INSTALL_DATA_DIR" ""
+    ConfigureMonteverdi_H_CONTENTS
+    ${ConfigureMonteverdi_H_CONTENTS} )
+
+  if(NOT ConfigureMonteverdi_H_CONTENTS)
+    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H}. Cannot continue")
+  endif()
+
+  string(REGEX REPLACE "\"" "" PKG_OTB_INSTALL_DATA_DIR "${ConfigureMonteverdi_H_CONTENTS}")
+
+  if(NOT PKG_OTB_INSTALL_DATA_DIR)
+    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H_CONTENTS}. Cannot continue")
+  endif()
+
+  string(STRIP "${PKG_OTB_INSTALL_DATA_DIR}" PKG_OTB_INSTALL_DATA_DIR)
+    
   #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
   "cmake_minimum_required(VERSION 3.2)
@@ -30,19 +53,23 @@ macro(macro_setup_cmake_project pkg)
    set(OTB_SOURCE_DIR               \"${OTB_SOURCE_DIR}\")
    set(OTB_BINARY_DIR               \"${OTB_BINARY_DIR}\")
    set(OTB_INSTALL_DIR              \"${OTB_INSTALL_DIR}\")
-   set(OTB_INSTALL_DATA_DIR         \"share/otb\")
+   set(OTB_INSTALL_DATA_DIR         \"${PKG_OTB_INSTALL_DATA_DIR}\")
    set(QT_PLUGINS_DIR               \"${QT_PLUGINS_DIR}\")
    set(QT_TRANSLATIONS_DIR          \"${QT_TRANSLATIONS_DIR}\")
    set(DEPENDENCIES_INSTALL_DIR     \"${DEPENDENCIES_INSTALL_DIR}\")
    set(PACKAGE_SUPPORT_FILES_DIR    \"${OTB_SOURCE_DIR}/SuperBuild/Packaging/Files\")
-   set(PACKAGE_VERSION_STRING       \"${PACKAGE_VERSION_STRING}\")
+
    set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
-   set(ITK_VERSION_STRING           \"${ITK_VERSION_STRING}\")
+   set(PKG_ITK_SB_VERSION           \"${PKG_ITK_SB_VERSION}\")
+   set(PKG_OTB_VERSION_MAJOR        \"${PKG_OTB_VERSION_MAJOR}\")
+   set(PKG_OTB_VERSION_MINOR        \"${PKG_OTB_VERSION_MINOR}\")
+   set(PKG_OTB_VERSION_PATCH        \"${PKG_OTB_VERSION_PATCH}\")
+   set(PKG_OTB_VERSION_STRING       \"${PKG_OTB_VERSION_STRING}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    set(PATCHELF_PROGRAM              ${PATCHELF_PROGRAM})
    set(PYTHON_EXECUTABLE             \"${PYTHON_EXECUTABLE}\")
    ${EXTRA_CACHE_CONFIG}
-   include(\"${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake\")
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake)
    macro_super_package(STAGE_DIR \"${archive_name}\")"
   )
 
@@ -99,9 +126,9 @@ macro(macro_create_targets_for_package pkg)
 
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
   if("${pkg}" STREQUAL "XDK")
-    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   else()
-    set(archive_name ${PACKAGE_NAME}-${PACKAGE_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
   endif()
 
   #configure
@@ -140,7 +167,7 @@ macro(macro_create_targets_for_package pkg)
       "${archive_name}"
       "${CMAKE_INSTALL_PREFIX}/${archive_name}"
       "${archive_name}.run"
-      "${PACKAGE_LONG_NAME} ${PACKAGE_VERSION_STRING}"
+      "${PACKAGE_LONG_NAME} ${PKG_OTB_VERSION_STRING}"
       "./pkgsetup"
       WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
       DEPENDS PACKAGE-${pkg}-build
@@ -165,36 +192,53 @@ macro(macro_create_targets_for_package pkg)
 endmacro(macro_create_targets_for_package)
 
 
-#macro:  get_version
-#args :
- # input_file         - Input cmake file where the version variable is set via cmake set() command.
- #                      Example: ${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake
- #match_string        - A match string to filter out required set() commands.
- #                      Example: "ITK_SB_VERSION" will get all set(ITK_SB_VERSION_MAJOR)
- #                      set(ITK_SB_VERSION_MINOR) set(ITK_SB_VERSION_PATCH)
- # cmake_var_to_check - Name of variable that has the version string stored using set(..)
- #                      command inside the input_file.
- #                      Example: ITK_SB_VERSION. This is same as match_string but not always
- # Sample usage:
- # get_version(
- # "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
- # "ITK_SB_VERSION"
- #  ITK_SB_VERSION)
-macro(get_version input_file match_string check_cmake_var)
-  if(EXISTS "${input_file}")
-    file(STRINGS "${input_file}" _version_vars   REGEX "set\\\(${match_string}")
-    set(temp_file_name "${CMAKE_BINARY_DIR}/CMakeFiles/version_vars_${match_string}.cmake")
-    file(WRITE "${temp_file_name}" "#version\n")
-    foreach(_version_var ${_version_vars})
-      file(APPEND "${temp_file_name}" "${_version_var}\n")
-    endforeach()
-    include("${temp_file_name}")
-    if(${check_cmake_var})
-      set(get_version_${check_cmake_var} "${${check_cmake_var}}")
-    else()
-      message(FATAL_ERROR "macro(get_version): Cannot find ${check_cmake_var}!")
-    endif()
-  else()
-    message(FATAL_ERROR "macro(get_version): File '${input_file}' does not exists")
+# macro:  get_version
+# args :
+# INPUT_FILE     - Input cmake file where the version variable is set via cmake set() command.
+#
+# MATCH_STRINGS  - list of cmake variables that are set in INPUT_FILE.
+#                - eg: set(OTB_VERSION_MAJOR "5") or set(OTB_VERSION_PATCH 85)
+#                - It works on both qouted and non-quoted values.
+#
+# PREFIX         - optional prefix string where you need to have the output stored
+#
+# Sample usage:
+#
+# get_version(
+# "INPUT_FILE ${SUPERBUILD_SOURCE_DIR}/../CMakeLists.txt"
+# "MATCH_STRING OTB_VERSION_MAJOR, OTB_VERSION_MINOR"
+#  PREFIX PKG)
+# The above call will search set(OTB_VERSION_MAJOR [0-9]) and set(OTB_VERSION_MINOR [0-9]) 
+# in the file CMakeLists.txt and if a match is found, it store the value of set command
+# into a variable PKG_OTB_VERSION_MAJOR. Note that PKG is the prefix we given. If no
+# prefix is set, it uses get_version. so the result variables will be
+# get_version_OTB_VERSION_MAJOR and get_version_OTB_VERSION_MINOR
+
+macro(get_version)
+  cmake_parse_arguments(gv  "" "INPUT_FILE;PREFIX" "MATCH_STRINGS" ${ARGN} )
+  
+  if(NOT EXISTS "${gv_INPUT_FILE}")
+    message(FATAL_ERROR "macro(get_version): File '${gv_INPUT_FILE}' does not exists")
   endif()
+
+  if(NOT gv_PREFIX)
+    set(gv_PREFIX "get_version")
+  endif()
+  
+  file(STRINGS "${gv_INPUT_FILE}" gv_INPUT_FILE_CONTENTS)  
+  foreach(gv_match_string ${gv_MATCH_STRINGS})
+    foreach(gv_line ${gv_INPUT_FILE_CONTENTS})
+      string(REGEX MATCH  "^set.${gv_match_string}\\ .*[0-9].*\\\)$" matched "${gv_line}")
+      if(matched)
+        string(REGEX REPLACE  "^set.${gv_match_string}."  "" gv_output_string "${matched}")
+        string(REPLACE  "${gv_match_string}" "${gv_match_string}" gv_output_string ${gv_output_string})
+        if(gv_output_string)
+          string(REGEX REPLACE  "\\\)$" "" gv_output_string "${gv_output_string}")
+          string(REGEX REPLACE "\"" "" gv_output_string "${gv_output_string}")
+          string(STRIP "${gv_output_string}" gv_output_string)
+        endif()
+        set(${gv_PREFIX}_${gv_match_string}  "${gv_output_string}")
+      endif()
+    endforeach()
+  endforeach()  
 endmacro()
