@@ -108,8 +108,8 @@ VectorImageModel
   //   << std::endl;
 
   m_ImageFileReader->SetFileName( QFile::encodeName( GetFilename() ) );
-  m_ImageFileReader->UpdateOutputInformation();
-
+  m_ImageFileReader->GetOutput()->UpdateOutputInformation();
+  
   // Retrieve the list of Lod from file
   m_LodCount = m_ImageFileReader->GetOverviewsCount();
 
@@ -172,8 +172,10 @@ VectorImageModel
       DefaultImageFileReaderType::New()
     );
 
-    imageFileReader->SetFileName( QFile::encodeName( filename ).constData() );
-    imageFileReader->UpdateOutputInformation();
+    QString fname = filename;
+    
+    imageFileReader->SetFileName( QFile::encodeName( fname.append(QString("?&skipgeom=true"))).constData());
+    imageFileReader->GetOutput()->UpdateOutputInformation();
     }
 
   catch( std::exception& exc )
@@ -539,15 +541,9 @@ VectorImageModel
   lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
 
   // Update m_ImageFileReader
-  DefaultImageFileReaderType::Pointer fileReader(
-    DefaultImageFileReaderType::New()
-  );
-
-  fileReader->SetFileName( QFile::encodeName( lodFilename ).constData() );
-  fileReader->UpdateOutputInformation();
-
-  m_ImageFileReader = fileReader;
-
+  m_ImageFileReader->SetFileName( QFile::encodeName( lodFilename ).constData() );
+  m_ImageFileReader->GetOutput()->UpdateOutputInformation();
+  
   // (Always) Update m_Image reference.
   m_Image = m_ImageFileReader->GetOutput();
 }

@@ -27,9 +27,9 @@ done
 I_AM_XDK="@IS_XDK@"
 
 if [ "$I_AM_XDK" = true ] ; then
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/Modules/ITKZLIB.cmake
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKConfig.cmake
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@ITK_VERSION_STRING@/ITKTargets-release.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKConfig.cmake
+    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
 else
 
 cat > "$OUT_DIR/monteverdi.sh" << EOF
@@ -147,8 +147,8 @@ else
     printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME $OUT_DIR/lib/$python_INSTALLED_SONAME"
 fi
 
-# PACKAGE_VERSION_STRING=@PACKAGE_VERSION_STRING@
-sed -i "s,|release|,@PACKAGE_VERSION_STRING@,g" "$OUT_DIR/README"
+# PKG_OTB_VERSION_STRING=@PKG_OTB_VERSION_STRING@
+sed -i "s,|release|,@PKG_OTB_VERSION_STRING@,g" $OUT_DIR/README
 
 rm -fr "$OUT_DIR/tools"
 

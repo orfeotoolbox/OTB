@@ -154,17 +154,26 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set(PACKAGE_PLATFORM_NAME "Linux")
 endif()
 
-if(WIN32 AND NOT MSVC)
-  set(ITK_VERSION_STRING)
-  set(PACKAGE_VERSION_STRING ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
-else()
-  get_version("${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake" "ITK_SB_VERSION" ITK_SB_VERSION)
-  set(ITK_VERSION_STRING "${get_version_ITK_SB_VERSION}")
-  get_version("${OTB_SOURCE_DIR}/CMakeLists.txt" "OTB_VERSION_" OTB_VERSION_STRING)
-  set(PACKAGE_VERSION_STRING ${get_version_OTB_VERSION_STRING})
-endif() #WIN32 AND NOT MSVC
+#get itk version from External_itk.cmake if not on mingw
+if(NOT MINGW)
+  get_version(
+    INPUT_FILE   "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
+    MATCH_STRINGS "ITK_SB_VERSION"
+    PREFIX PKG
+    )
+endif()
 
-if(WIN32 AND NOT MSVC)
+#get version of OTB from source_dir/CMakeLists.txt
+get_version(
+  INPUT_FILE   "${OTB_SOURCE_DIR}/CMakeLists.txt"
+  MATCH_STRINGS "OTB_VERSION_MAJOR" "OTB_VERSION_MINOR" "OTB_VERSION_PATCH"
+  PREFIX PKG
+  )
+
+set(PKG_OTB_VERSION_STRING
+  ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
+
+if(MINGW)
   set(OTB_BINARY_DIR              "${OTB_BINARY_DIR}")
   set(OTB_INSTALL_DIR             "${OTB_INSTALL_DIR}")
   set(DEPENDENCIES_INSTALL_DIR    "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
