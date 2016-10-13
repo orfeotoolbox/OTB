@@ -685,7 +685,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
 
   // filter ignored lines
   // TODO
-  // filter lines with hexa adress (isHexaPointerAddress)
+  // filter lines with hexa address (isHexaPointerAddress)
   // use  isToBeIgnoredForAnyComparison()
 
   // Iterate over the baseline lines
@@ -816,7 +816,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         else
           {
           // examine other cases :
-          // test if hexadecimal adress
+          // test if hexadecimal address
           bool isRefTokenHexa = isHexaPointerAddress(
                                   curLineRef,
                                   tokenRef[i].begin()-curLineRef.begin(),
@@ -827,7 +827,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
                                   tokenTest[i].size());
           if (isRefTokenHexa && isTestTokenHexa)
             {
-            // these tokens are equivalent (we don't compare pointer adress)
+            // these tokens are equivalent (we don't compare pointer address)
             areTokensEquivalent = true;
             }
           else
@@ -2220,11 +2220,11 @@ bool TestHelper::isHexaPointerAddress(const std::string& str, size_t pos, size_t
     return false;
     }
 
-  // pointer adress has to begin with '0x'
-  // it may also start with '00' with a size of 16 (64bit adress)
-  // or start with '0' with a size of 8 (32bit adress)
+  // pointer address has to begin with '0x'
+  // it may also start with '00' with a size of 16 (64bit address)
+  // or start with '0' with a size of 8 (32bit address)
   // Note: the last pattern seems a bit weak but cases like '00B5FA18' or
-  // '01C46D80' both are valid hexadecimal adresses on windows
+  // '01C46D80' both are valid hexadecimal addresses on windows
   if (str[pos] != 48)
     {
     return false;

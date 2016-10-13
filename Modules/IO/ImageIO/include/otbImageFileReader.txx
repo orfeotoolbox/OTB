@@ -492,7 +492,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
   else
     {
-    // Read back from existing dictionnary
+    // Read back from existing dictionary
     ImageKeywordlist otb_kwl;
     itk::ExposeMetaData<ImageKeywordlist>(this->GetOutput()->GetMetaDataDictionary(),
                                                  MetaDataKey::OSSIMKeywordlistKey,otb_kwl);
