@@ -2,7 +2,6 @@ INCLUDE_ONCE_MACRO(BOOST)
 
 SETUP_SUPERBUILD(BOOST)
 
-set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
 
 set(BOOST_SB_CONFIG)
@@ -20,7 +19,7 @@ set(BOOST_SB_CONFIG
   threading=multi
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
-  --includedir=${_SB_Boost_INCLUDE_DIR}
+  --includedir=${SB_INSTALL_PREFIX}/include
   --libdir=${_SB_BOOST_LIBRARYDIR}
   --with-system
   --with-serialization
@@ -53,6 +52,7 @@ set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
   install
   )
 
+#NOTE: update _SB_Boost_INCLUDE_DIR below when you change version number
 ExternalProject_Add(BOOST
   PREFIX BOOST
   URL "http://download.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2"
@@ -63,6 +63,10 @@ ExternalProject_Add(BOOST
   CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
   BUILD_COMMAND ${BOOST_BUILD_COMMAND}
   INSTALL_COMMAND ""
-  )
+)
+
+#HINT: avoid all uses of  _SB_* in External_<project>.cmake
+# and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
+set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_60)
 
 SUPERBUILD_PATCH_SOURCE(BOOST)
