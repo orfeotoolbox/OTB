@@ -812,8 +812,11 @@ private:
         }
         else if (IMIName != IMIOptDfltName)
         {
-          if (lImageMetadataInterface->GetSpectralSensitivity()->Size() > 0)
-            m_paramAcqui->SetWavelengthSpectralBand(lImageMetadataInterface->GetSpectralSensitivity());
+          //Avoid to call GetSpectralSensitivity() multiple times
+          OpticalImageMetadataInterface::WavelengthSpectralBandVectorType spectralSensitivity = lImageMetadataInterface->GetSpectralSensitivity();
+          
+          if (spectralSensitivity->Size() > 0)
+            m_paramAcqui->SetWavelengthSpectralBand(spectralSensitivity);
         }
         // Check that m_paramAcqui contains a real spectral profile.
         if (m_paramAcqui->GetWavelengthSpectralBand()->Size() == 0)
