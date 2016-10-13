@@ -67,6 +67,9 @@ ExternalProject_Add(BOOST
 
 #HINT: avoid all uses of  _SB_* in External_<project>.cmake
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
-set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_60)
-
+if(MSVC)
+  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_60)
+else()
+  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+endif()
 SUPERBUILD_PATCH_SOURCE(BOOST)
