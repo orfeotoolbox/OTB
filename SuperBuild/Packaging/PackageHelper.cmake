@@ -1013,6 +1013,7 @@ set(WINDOWS_SYSTEM_DLLS
   concrt*.*.dll
   odbc32.dll
   psapi.dll
+  python...dll
   vcomp*.*.dll)
 
 set(LINUX_SYSTEM_DLLS
