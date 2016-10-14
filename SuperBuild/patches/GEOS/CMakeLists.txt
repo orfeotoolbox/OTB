@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
+project(GEOS_SUPERBUILD)
+
 add_custom_target(build_with_nmake 
 ALL DEPENDS 
 COMMAND
