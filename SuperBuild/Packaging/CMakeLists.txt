@@ -48,11 +48,13 @@ endif()
 if(NOT PACKAGE_OTB_SRC_DIR)
   message(FATAL_ERROR "you must set PACKAGE_OTB_SRC_DIR")
 endif()
+
 set(SUPERBUILD_SOURCE_DIR ${PACKAGE_OTB_SRC_DIR}/SuperBuild)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/PMacros.cmake)
 
 if(OUT_OF_SOURCE_BUILD)
+  include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
   if(BUILD_TESTING)
     include(CTest)
   endif()
@@ -158,7 +160,7 @@ endif()
 if(NOT MINGW)
   get_version(
     INPUT_FILE   "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
-    MATCH_STRINGS "ITK_SB_VERSION"
+    MATCH_STRINGS "SB_ITK_VERSION_MAJOR" "SB_ITK_VERSION_MINOR"
     PREFIX PKG
     )
 endif()
