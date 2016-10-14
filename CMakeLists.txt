@@ -174,6 +174,13 @@ endmacro()
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
+if(MSVC)
+  option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Build OTB with shared libraries." ON)
+  set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS})
+else()
+  set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
+endif()
+
 #-----------------------------------------------------------------------------
 # Option to activate deprecated classes
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
