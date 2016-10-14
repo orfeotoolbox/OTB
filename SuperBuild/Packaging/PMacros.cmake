@@ -198,7 +198,7 @@ endmacro(macro_create_targets_for_package)
 #
 # MATCH_STRINGS  - list of cmake variables that are set in INPUT_FILE.
 #                - eg: set(OTB_VERSION_MAJOR "5") or set(OTB_VERSION_PATCH 85)
-#                - It works on both qouted and non-quoted values.
+#                - It works on both quoted and non-quoted values.
 #
 # PREFIX         - optional prefix string where you need to have the output stored
 #
