@@ -28,7 +28,6 @@ set(BOOST_SB_CONFIG
   --with-date_time
   --with-program_options
   --with-thread
-  -d0
   )
 
 if(UNIX)
