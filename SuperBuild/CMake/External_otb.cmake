@@ -213,10 +213,3 @@ ExternalProject_Add_Step(OTB install_copyright
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${OTB_SB_SRC}/Copyright ${CMAKE_INSTALL_PREFIX}/share/copyright
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Copyright ${CMAKE_INSTALL_PREFIX}/share/copyright
   DEPENDEES install)
-
-# detect OTB version number
-if (SUPERBUILD_OTB_VERSION)
-  set(_SB_OTB_DIR ${SB_INSTALL_PREFIX}/lib/cmake/OTB-${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR})
-else()
-  set(_SB_OTB_DIR ${SB_INSTALL_PREFIX})
-endif()
