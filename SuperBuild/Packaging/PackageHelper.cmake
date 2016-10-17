@@ -86,13 +86,6 @@ macro(macro_super_package)
   set(EXE_SEARCHDIRS ${OTB_INSTALL_DIR}/bin)
   list(APPEND  EXE_SEARCHDIRS ${DEPENDENCIES_INSTALL_DIR}/bin)
 
-  # detect OTB version major and minor
-  file(GLOB _installed_otb_ver ${OTB_INSTALL_DIR}/lib/cmake/OTB-*)
-  list(SORT _installed_otb_ver)
-  list(GET _installed_otb_ver -1 _latest_installed_otb_ver)
-  get_filename_component(OTB_LATEST_MAJOR_MINOR ${_latest_installed_otb_ver} NAME)
-  message(STATUS "Latest OTB found : ${OTB_LATEST_MAJOR_MINOR}")
-
   macro_empty_package_staging_directory()
 
   set(PKG_PEFILES)
@@ -1020,6 +1013,7 @@ set(WINDOWS_SYSTEM_DLLS
   concrt*.*.dll
   odbc32.dll
   psapi.dll
+  python...dll
   vcomp*.*.dll)
 
 set(LINUX_SYSTEM_DLLS
