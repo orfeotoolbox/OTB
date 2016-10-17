@@ -162,7 +162,12 @@ namespace ossimplugins
 
    ossimFilename ossimSentinel1Model::searchManifestFile(const ossimFilename& file) const
    {
+
+      #ifndef _WIN32
       const ossimFilename manifestFile = ossimFilename(file.path().path() + "/manifest.safe");
+      #else
+      const ossimFilename manifestFile = ossimFilename(file.path().path() + "\\manifest.safe");
+      #endif
 
       if(!manifestFile.exists())
       {
@@ -238,13 +243,13 @@ namespace ossimplugins
 
          if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " this->readProduct( safeFile )\n";
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
             return false;
          }
 
          if ( !this->initImageSize( theImageSize ) )
          {
-           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails\n";
+           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails \n";
            return false;
          }
 
