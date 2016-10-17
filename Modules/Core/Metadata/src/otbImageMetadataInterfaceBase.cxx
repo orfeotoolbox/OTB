@@ -305,36 +305,23 @@ ImageMetadataInterfaceBase::GetImageKeywordlist() const
   return imageKeywordlist;
 }
 
-std::string const
+
+std::string const&
 ImageMetadataInterfaceBase::GetSensorID() const
-{
-  std::string s;
-  
-  GetSensorID( s );
-  
-  return s;
-
-}
-
-bool
-ImageMetadataInterfaceBase::GetSensorID(std::string & sensorId) const
 {
   ImageKeywordlistType imageKeywordlist;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  if ( dict.HasKey(MetaDataKey::OSSIMKeywordlistKey) )
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if ( !imageKeywordlist.HasKey("sensor") ) 
+  if (!imageKeywordlist.HasKey("sensor"))
     {
-    return false;
+    return k_empty_string;
     }
-    
-  sensorId = imageKeywordlist.GetMetadataByKey("sensor");
-  
-  return true;
-  
+
+  return imageKeywordlist.GetMetadataByKey("sensor");
 }
 
 unsigned int
@@ -557,10 +544,7 @@ ImageMetadataInterfaceBase
     //os << indent << "LowerLeftCorner: " << this->GetLowerLeftCorner( ) << std::endl;
     //os << indent << "LowerRightCorner:" << this->GetLowerRightCorner( ) << std::endl;
     //os << indent << "ImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
-    std::string sensorId;
-    
-    this->GetSensorID( sensorId );
-    os << indent << "SensorID:        " << sensorId << std::endl;
+    os << indent << "SensorID:        " << this->GetSensorID( ) << std::endl;
     os << indent << "NumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
 
     std::vector<std::string> bandNameList = this->GetBandName();

@@ -53,8 +53,7 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-  std::string sensorId;
-  imageMetadataInterface->GetSensorID(sensorId);
+  const std::string sensorId = imageMetadataInterface->GetSensorID();
 
   outfile << sensorId << std::endl;
 

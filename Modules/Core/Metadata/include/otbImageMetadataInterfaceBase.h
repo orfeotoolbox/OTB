@@ -20,7 +20,6 @@
 
 #include <string>
 
-#include "otbMacro.h"
 #include "otbImageKeywordlist.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
@@ -120,12 +119,9 @@ public:
   /** Get the ImageKeywordlist */
   const ImageKeywordlistType GetImageKeywordlist() const;
 
-  /** This method is deprecated. Please use bool GetSensorID(std::string& ) **/
-  OTB_DEPRECATED( std::string const GetSensorID() const );
-  
   /** Get the sensor ID from the ossim metadata */
-  bool GetSensorID(std::string & sensorId) const;
-  
+  std::string const& GetSensorID() const;
+
   /** Get the number of bands from the ossim metadata */
   UnsignedIntType GetNumberOfBands() const;
 
