@@ -138,10 +138,16 @@ public:
 
   /** Get the ImageKeywordlist */
   ImageKeywordlistType GetImageKeywordlist();
+
   const ImageKeywordlistType GetImageKeywordlist() const;
 
+  /** This method is less performant and has extra copy.
+  Please use bool GetSensorID(std::string& ) **/
+  std::string const GetSensorID() const;
+
   /** Get the sensor ID from the ossim metadata */
-  std::string GetSensorID() const;
+  bool GetSensorID(std::string & sensorId) const;
+
   //otbMetadataGetMacro(SensorID, std::string);
 
   /** Get the number of bands from the ossim metadata */
