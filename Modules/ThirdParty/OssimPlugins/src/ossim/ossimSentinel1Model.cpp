@@ -243,13 +243,13 @@ namespace ossimplugins
 
          if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
          {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )\n";
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
             return false;
          }
 
          if ( !this->initImageSize( theImageSize ) )
          {
-           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails\n";
+           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails \n";
            return false;
          }
 
