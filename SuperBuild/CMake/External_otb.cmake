@@ -160,11 +160,15 @@ set(OTB_SB_COMPILATION_FLAGS
   -DCMAKE_STATIC_LINKER_FLAGS:STRING=${CMAKE_STATIC_LINKER_FLAGS}
   )
 
+ add_custom_command(OUTPUT otb_depends_done.txt
+ COMMAND cmake -E touch otb_depends_done.txt
+ DEPENDS ${OTB_DEPENDENCIES}
+ )
 add_custom_target(OTB_DEPENDS
-DEPENDS ${OTB_DEPENDENCIES}
-COMMAND -E echo "Building only otb dependencies: ${OTB_DEPENDENCIES}"
+DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/otb_depends_done.txt
 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 COMMENT "Built all otb dependencies: ${OTB_DEPENDENCIES}"
+VERBATIM
 )
 
 ExternalProject_Add(OTB
