@@ -162,7 +162,12 @@ namespace ossimplugins
 
    ossimFilename ossimSentinel1Model::searchManifestFile(const ossimFilename& file) const
    {
+
+      #ifndef _WIN32
       const ossimFilename manifestFile = ossimFilename(file.path().path() + "/manifest.safe");
+      #else
+      const ossimFilename manifestFile = ossimFilename(file.path().path() + "\\manifest.safe");
+      #endif
 
       if(!manifestFile.exists())
       {
