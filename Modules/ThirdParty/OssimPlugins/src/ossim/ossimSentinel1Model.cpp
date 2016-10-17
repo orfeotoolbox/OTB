@@ -166,7 +166,7 @@ namespace ossimplugins
 
       if(!manifestFile.exists())
       {
-         ossimNotify(ossimNotifyLevel_WARN) << "manifest.safe " << manifestFile << " doesn't exist...\n";
+         ossimNotify(ossimNotifyLevel_DEBUG) << "manifest.safe " << manifestFile << " doesn't exist...\n";
          return "";
       }
       return manifestFile;
@@ -238,7 +238,7 @@ namespace ossimplugins
 
          if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
          {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )\n";
+            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " this->readProduct( safeFile )\n";
             return false;
          }
 
