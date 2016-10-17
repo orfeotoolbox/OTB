@@ -313,6 +313,7 @@ ImageMetadataInterfaceBase::GetSensorID() const
   GetSensorID( s );
   
   return s;
+
 }
 
 bool
@@ -556,7 +557,10 @@ ImageMetadataInterfaceBase
     //os << indent << "LowerLeftCorner: " << this->GetLowerLeftCorner( ) << std::endl;
     //os << indent << "LowerRightCorner:" << this->GetLowerRightCorner( ) << std::endl;
     //os << indent << "ImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
-    os << indent << "SensorID:        " << this->GetSensorID( ) << std::endl;
+    std::string sensorId;
+    
+    this->GetSensorID( sensorId );
+    os << indent << "SensorID:        " << sensorId << std::endl;
     os << indent << "NumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
 
     std::vector<std::string> bandNameList = this->GetBandName();
