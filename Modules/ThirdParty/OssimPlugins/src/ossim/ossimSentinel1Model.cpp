@@ -198,37 +198,42 @@ namespace ossimplugins
          const ossimFilename safeFile = searchManifestFile(file);
          theManifestDirectory = safeFile.path();
          if (!safeFile.empty())
-         {
-            if ( !this->isSentinel1(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
-               return false;
-            }
-            ossimXmlDocument manifestDoc;
-            if (!manifestDoc.openFile(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
-               return false;
-            }
-            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
+           {
+             if ( !this->isSentinel1(safeFile))
+               {
+                 ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
+                 return false;
+               }
+             ossimXmlDocument manifestDoc;
+             if (!manifestDoc.openFile(safeFile))
+               {
+                 ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
+                 return false;
+               }
+             ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
 
-            theImageID = getImageId(manifestDoc);
-            if (theImageID.empty()) {
+             theImageID = getImageId(manifestDoc);
+             if (theImageID.empty()) {
                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
                return false;
-            }
+             }
 
-            if (! standAloneProductInformation(manifestDoc))  {
+             if (! standAloneProductInformation(manifestDoc))  {
                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load product information from " << safeFile << "\n";
                return false;
-            }
+             }
 
-            theSensorID = initSensorID(manifestDoc);
-            if (theSensorID.empty()) {
+             theSensorID = initSensorID(manifestDoc);
+             if (theSensorID.empty()) {
                ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
                return false;
-            }
-         }
+             }
+           }
+         else
+           {
+             //The manifest file was not found. Not able to open this product
+             return false;
+           }
 
          // -----[ Read product file
          ossimFilename xmlFileName = file;
