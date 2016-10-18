@@ -44,6 +44,11 @@ static ossimTrace traceDebug = ossimTrace("ossimPluginProjectionFactory:debug");
 #include <ossimFormosatModel.h>
 #include <ossimFormosatDimapSupportData.h>
 
+#ifndef _WIN32
+#include <limits.h> //PATH_MAX
+#include <stdlib.h> //realpath
+ #include <errno.h>
+#endif
 namespace ossimplugins
 {
    bool ossimPluginProjectionFactory::initialized_;
@@ -115,24 +120,40 @@ namespace ossimplugins
       }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
-   const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
+   const ossimFilename& file_name, ossim_uint32 /*entryIdx*/)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
    ossimRefPtr<ossimProjection> projection = 0;
    //traceDebug.setTraceFlag(true);
+
+#ifndef _WIN32
+   char real_path[PATH_MAX + 1];
+   char *ret_path = NULL;
+   ret_path = realpath(file_name, real_path);
+   if( ret_path == NULL)
+   {
+      fprintf(stderr, "%s: error calling realpath( ). err: '%s'\n", MODULE, strerror(errno));
+      return NULL;
+   }
+   const ossimFilename abs_file_name( real_path );
+#else
+   //GetFullPathName function is not thread safe. better use absolute path on windows
+   //https://msdn.microsoft.com/en-us/library/windows/desktop/aa364963%28v=vs.85%29.aspx
+   const ossimFilename abs_file_name( file_name );
+#endif
 
    // TODO: use a type-list to simplify this chain factory.
 
    // Sentinel1
    if ( !projection )
    {
-      projection = doBuildProjection<ossimSentinel1Model>(filename);
+      projection = doBuildProjection<ossimSentinel1Model>(abs_file_name);
    }
 
    if ( !projection )
    {
 #if 1
-      projection = doBuildProjection<ossimRadarSat2Model>(filename);
+      projection = doBuildProjection<ossimRadarSat2Model>(abs_file_name);
 #else
       if(traceDebug())
       {
@@ -141,7 +162,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
 
       ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
-      if ( model->open(filename) )
+      if ( model->open(abs_file_name) )
       {
          // Check if a coarse grid was generated, and use it instead:
          projection = model->getReplacementOcgModel().get();
@@ -160,7 +181,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    // Pleiades
    if ( !projection )
    {
-      projection = doBuildProjection<ossimPleiadesModel>(filename);
+      projection = doBuildProjection<ossimPleiadesModel>(abs_file_name);
    }
 
    if ( !projection )
@@ -174,7 +195,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 
       ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
 
-      if ( model->open(filename) )
+      if ( model->open(abs_file_name) )
       {
          // Check if a coarse grid was generated, and use it instead:
          projection = model->getReplacementOcgModel().get();
@@ -188,29 +209,29 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          model = 0;
       }
 #else
-      projection = doBuildProjection<ossimTerraSarModel>(filename);
+      projection = doBuildProjection<ossimTerraSarModel>(abs_file_name);
 #endif
    }
 
    // ErsSar
    if ( !projection )
    {
-      projection = doBuildProjection<ossimErsSarModel>(filename);
+      projection = doBuildProjection<ossimErsSarModel>(abs_file_name);
    }
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimEnvisatAsarModel>(filename);
+      projection = doBuildProjection<ossimEnvisatAsarModel>(abs_file_name);
    }
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimRadarSatModel>(filename);
+      projection = doBuildProjection<ossimRadarSatModel>(abs_file_name);
    }
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimAlosPalsarModel>(filename);
+      projection = doBuildProjection<ossimAlosPalsarModel>(abs_file_name);
    }
 
    if (!projection)
@@ -221,15 +242,15 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             << MODULE << " DEBUG: testing ossimFormosatModel" << std::endl;
       }
 
-      ossimFilename formosatTest = filename;
+      ossimFilename formosatTest = abs_file_name;
       formosatTest = formosatTest.setExtension("geom");
       if(!formosatTest.exists())
       {
-         formosatTest = filename.path();
+         formosatTest = abs_file_name.path();
          formosatTest = formosatTest.dirCat(ossimFilename("METADATA.DIM"));
          if (formosatTest.exists() == false)
          {
-            formosatTest = filename.path();
+            formosatTest = abs_file_name.path();
             formosatTest = formosatTest.dirCat(ossimFilename("metadata.dim"));
          }
       }
@@ -251,13 +272,13 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimTileMapModel>(filename);
+      projection = doBuildProjection<ossimTileMapModel>(abs_file_name);
    }
 
    // Spot6
    if ( !projection )
    {
-      projection = doBuildProjection<ossimSpot6Model>(filename);
+      projection = doBuildProjection<ossimSpot6Model>(abs_file_name);
    }
 
 
