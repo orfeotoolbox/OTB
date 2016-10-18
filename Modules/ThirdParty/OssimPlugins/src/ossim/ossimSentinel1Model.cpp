@@ -718,7 +718,7 @@ namespace ossimplugins
         }
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
-      ossimNotify(ossimNotifyLevel_INFO) << files.size() << " calibration files found in " << theManifestDirectory << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << files.size() << " calibration files found in " << theManifestDirectory << "\n";
       std::stringstream strm;
       for (; it != files.end(); ++it)
       {
