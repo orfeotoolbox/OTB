@@ -8,7 +8,6 @@ foreach(_otb_module_activation_option IN LISTS OTB_MODULE_ACTIVATION_OPTION_LIST
        "#cmakedefine ${_otb_module_activation_option}\n")
 endforeach()
 
-set(OTB_WINDOWS_EXPORT_ALL_SYMBOLS ${CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS})
 configure_file(${OTBCommon_BINARY_DIR}/otbConfigure.h.in otbConfigure.h)
 
 set(OTBCommon_INCLUDE_DIRS

@@ -39,9 +39,7 @@ otb_add_test(NAME leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting
   ${BASELINE}/leSVMImageClassificationWithNMVFilterOutput.tif
   ${TEMP}/leSVMImageClassificationWithNMVFilterOutput.tif
   otbNeighborhoodMajorityVotingImageFilterTest
-  ${TEMP}/leSVMImageClassificationFilterOutput.tif
+  ${BASELINE}/leSVMImageClassificationFilterOutput.tif
   ${TEMP}/leSVMImageClassificationWithNMVFilterOutput.tif
   false
   )
-set_property(TEST leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting PROPERTY DEPENDS leTvSVMImageClassificationFilter)
-

@@ -130,10 +130,11 @@ set(ITK_SB_COMPILATION_FLAGS
   -DCMAKE_STATIC_LINKER_FLAGS:STRING=${CMAKE_STATIC_LINKER_FLAGS}
   )
 
-#later used below for _SB_ITK_DIR and then in packaging
-set(ITK_SB_VERSION 4.10)
-set(ITK_SB_VERSION_FULL ${ITK_SB_VERSION}.0)
-set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${ITK_SB_VERSION})
+#variables are later used in packaging
+set(SB_ITK_VERSION_MAJOR "4")
+set(SB_ITK_VERSION_MINOR "10")
+
+set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_ITK_VERSION_MINOR})
 
 ExternalProject_Add(ITK
   PREFIX ITK

@@ -5,5 +5,5 @@ A more detailed description can be found on the project website:
 https://github.com/remicres/otb-mosaic
 "
   GIT_REPOSITORY https://github.com/remicres/otb-mosaic.git
-  GIT_TAG 964778a05c66a1215504ca2a8bfc4b87da7989b9
+  GIT_TAG 64cb06798fb237e10f929c1adaab37441e09fbc3
 )

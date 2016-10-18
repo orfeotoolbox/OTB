@@ -32,8 +32,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-using namespace ossimplugins;
-
 double
 getModifiedJulianDate(ossimString const& utcTimeString)
 {
@@ -121,7 +119,7 @@ void check_time(char const* format, char const* sDate,
       int hour, int min, int sec, double fsec)
 {
    // std::cout << "Test " << sDate << " against " << format << std::endl;
-   const ossimDate d = time::details::strptime(format, sDate);
+   const ossimDate d = ossimplugins::time::details::strptime(format, sDate);
    BOOST_CHECK_EQUAL(d.getYear(), year);
    BOOST_CHECK_EQUAL(d.getMonth(), month);
    BOOST_CHECK_EQUAL(d.getDay(), day);
@@ -151,7 +149,7 @@ void check_time(char const* format, char const* sDate,
    // Check string conversion
    // Yes, this is likelly to fail du to double imprecisions
    // - official ossimDate string conversion
-   time::ModifiedJulianDate mjd = time::toModifiedJulianDate(sDate);
+   ossimplugins::time::ModifiedJulianDate mjd = ossimplugins::time::toModifiedJulianDate(sDate);
    // std::cout << "MJD("<<sDate<<"): " << mjd.as_day_frac() << std::endl;
    BOOST_CHECK_CLOSE_FRACTION(d.getModifiedJulian(), mjd.as_day_frac(), 1e-12);
    std::ostringstream oss;
@@ -168,7 +166,7 @@ void check_time(char const* format, char const* sDate,
 
    // We know this test will fail because of float rounding => just display
    std::cout.precision(16);
-   std::cout << mjd << " as a simple string (" << time::to_simple_string(mjd)
+   std::cout << mjd << " as a simple string (" << ossimplugins::time::to_simple_string(mjd)
       << ") is expected to differ from " << sDate << "\n";
    // BOOST_CHECK_EQUAL(to_simple_string(mjd), sDate);
 }

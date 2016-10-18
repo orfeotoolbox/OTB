@@ -17,19 +17,41 @@
 =========================================================================*/
 #include "otbQtFileSelectionWidget.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
 {
 
-QtFileSelectionWidget::QtFileSelectionWidget()
-  : QWidget()
+QtFileSelectionWidget
+::QtFileSelectionWidget() :
+  QWidget(),
+  m_HLayout( NULL ),
+  m_Input( NULL ),
+  m_Button( NULL ),
+  m_Checkbox( NULL ),
+  m_IOMode( IO_MODE_INPUT )
 {
   this->DoCreateWidget();
 }
 
 QtFileSelectionWidget::~QtFileSelectionWidget()
 {
+}
+
+void
+QtFileSelectionWidget
+::SetIOMode( IOMode mode )
+{
+  m_IOMode = mode;
+}
+
+QtFileSelectionWidget::IOMode
+QtFileSelectionWidget
+::GetIOMode() const
+{
+  return m_IOMode;
 }
 
 void QtFileSelectionWidget::DoUpdateGUI()
@@ -63,28 +85,37 @@ void QtFileSelectionWidget::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtFileSelectionWidget::SelectFile()
+
+void
+QtFileSelectionWidget
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("All files (*)");
+  assert( m_Input!=NULL );
 
-  QFileInfo finfo( QString::fromStdString( GetFilename() ) );
-
-  fileDialog.setDirectory(
-    finfo.isDir()
-    ? finfo.absoluteFilePath()
-    : finfo.absoluteDir()
+  QString filename(
+    m_IOMode == IO_MODE_INPUT
+    ? GetOpenFileName(
+        this,
+	QString(),
+	m_Input->text(),
+	tr( "All files (*)" ),
+	NULL,
+	QFileDialog::ReadOnly )
+    : GetSaveFileName(
+        this,
+	QString(),
+	m_Input->text(),
+	tr( "All files (*)" ),
+	NULL )
   );
 
-  if (fileDialog.exec())
-    {
-    QString filemane(fileDialog.selectedFiles().at(0));
-    m_Input->setText(filemane);
-    }
+  if( filename.isEmpty() )
+    return;
+
+  m_Input->setText( filename  );
 }
 
 
 }
+
 }

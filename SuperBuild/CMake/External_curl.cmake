@@ -15,11 +15,11 @@ if(MSVC)
     return()
   endif()
 
-if("${OTB_MSVC_COMPILER_ARCH}" MATCHES "x86")
-  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
-else()
-  set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
-endif()
+  if(OTB_COMPILER_ARCH_IS_X64)
+    set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
+  else()
+    set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
+  endif()
 
   set(CURL_INSTALL_DIR_PREFIX "${CURL_INSTALL_DIR_PREFIX}-release-dll-zlib-dll-ipv6-sspi-winssl")
 
@@ -39,6 +39,7 @@ endif()
   )
 
 else(UNIX)
+
   ExternalProject_Add(CURL
     PREFIX CURL
     URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
@@ -57,6 +58,9 @@ else(UNIX)
     ${CURL_SB_CONFIG}
     DEPENDS ${CURL_DEPENDENCIES}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+    LOG_CONFIGURE 1
+    LOG_BUILD 1
+    LOG_INSTALL 1
     )
 endif()
 

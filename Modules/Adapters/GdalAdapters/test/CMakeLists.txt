@@ -2,7 +2,10 @@ otb_module_test()
 
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   add_executable(otbOGRTests otbOGRDataSourceWrapperNew.cxx)
-  target_link_libraries(otbOGRTests ${OTBGdalAdapters-Test_LIBRARIES})
+  target_link_libraries(
+    otbOGRTests
+    ${OTBGdalAdapters-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
   
   add_test(NAME coTuOGRDataSourceWrapperNew
            COMMAND otbOGRTests coTuOGRDataSourceWrapperNew

@@ -69,8 +69,8 @@ public:
 
   /** Get the output samples OGR container */
   ogr::DataSource* GetOutputSamples();
-  
-  virtual void Synthetize(void);
+
+  virtual void Synthetize(void){}
 
   /** Reset method called before starting the streaming*/
   virtual void Reset(void);
@@ -95,7 +95,7 @@ protected:
   virtual void GenerateInputRequestedRegion();
 
   /** process only points */
-  virtual void ThreadedGenerateData(const RegionType&, itk::ThreadIdType threadid);
+  virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);
 
 private:
   PersistentImageSampleExtractorFilter(const Self &); //purposely not implemented

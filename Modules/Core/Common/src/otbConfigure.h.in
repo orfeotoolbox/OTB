@@ -3,18 +3,9 @@
 #define OTB_VERSION_PATCH @OTB_VERSION_PATCH@
 #define OTB_VERSION_STRING "@OTB_VERSION_STRING@"
 
-/* TODO : do we need a compile macro for BUILD_SHARED_LIBS ? */
-#if 0
-#cmakedefine OTB_BUILD_SHARED_LIBS
-#ifdef OTB_BUILD_SHARED_LIBS
-#define OTBDLL
-#else
-#define OTBSTATIC
-#define OSSIMSTATIC
-#endif
-#endif
+#cmakedefine OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 
-#cmakedefine OTB_WINDOWS_EXPORT_ALL_SYMBOLS
+#cmakedefine OTB_BUILD_SHARED_LIBS
 
 /* Show developer debug messages */
 #cmakedefine OTB_SHOW_ALL_MSG_DEBUG
