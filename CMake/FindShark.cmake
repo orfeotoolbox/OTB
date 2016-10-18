@@ -6,14 +6,30 @@
 #   SHARK_LIBRARIES   - List of libraries required for shark.
 #
 
-if( SHARK_INCLUDE_DIR )
-    # Already in cache, be silent
-   set( Shark_FIND_QUIETLY TRUE )
-endif()
+set(SHARK_SEARCH_PATH)
 
-find_path( SHARK_INCLUDE_DIR shark/Core/shark.h PATH_SUFFIXES shark )
+set(SHARK_CONFIG_FILE)
 
-find_library( SHARK_LIBRARY NAMES shark )
+if(Shark_DIR)
+  get_filename_component(SHARK_SEARCH_PATH "${Shark_DIR}" PATH)
+  get_filename_component(SHARK_SEARCH_PATH "${SHARK_SEARCH_PATH}" PATH)
+  get_filename_component(SHARK_SEARCH_PATH "${SHARK_SEARCH_PATH}" PATH)
+
+  if(EXISTS "${Shark_DIR}/SharkConfig.cmake")
+    set(SHARK_CONFIG_FILE ${Shark_DIR}/SharkConfig.cmake)
+  endif()
+
+endif() #if(Shark_DIR)
+
+find_path( SHARK_INCLUDE_DIR shark/Core/Shark.h
+  PATHS "${SHARK_SEARCH_PATH}"
+  PATH_SUFFIXES include include/shark shark)
+
+find_library( SHARK_LIBRARY
+  NAMES shark
+  PATHS "${SHARK_SEARCH_PATH}"
+  PATH_SUFFIXES lib
+  )
 
 mark_as_advanced( SHARK_INCLUDE_DIR
                   SHARK_LIBRARY )
@@ -25,10 +41,12 @@ find_package(
 )
 
 if(NOT Boost_FOUND)
-	message(FATAL_ERROR "Please make sure Boost 1.48.0 is installed on your system")
+  message(FATAL_ERROR "Please make sure Boost 1.48.0 is installed on your system")
 endif()
 
-find_file(SHARK_CONFIG_FILE SharkConfig.cmake PATH_SUFFIXES lib/cmake/Shark share/Shark)
+if(NOT SHARK_CONFIG_FILE)
+  find_file(SHARK_CONFIG_FILE SharkConfig.cmake PATH_SUFFIXES lib/cmake/Shark share/Shark)
+endif()
 if(SHARK_CONFIG_FILE)
   file(STRINGS "${SHARK_CONFIG_FILE}" SHARK_CONFIG_FILE_CONTENTS)
   string(REGEX REPLACE
