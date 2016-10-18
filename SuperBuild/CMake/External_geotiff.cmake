@@ -40,16 +40,8 @@ if(UNIX)
     --enable-static=no
     ${GEOTIFF_SB_CONFIG}
     BUILD_COMMAND $(MAKE)
-    INSTALL_COMMAND $(MAKE) install
-    LOG_CONFIGURE 1
-    LOG_BUILD 1
-    LOG_INSTALL 1
-    )
+    INSTALL_COMMAND $(MAKE) install)
 
-  # [LOG_CONFIGURE 1]           # Wrap configure in script to log output
-  # [LOG_BUILD 1]               # Wrap build in script to log output
-  # [LOG_TEST 1]                # Wrap test in script to log output
-  # [LOG_INSTALL 1]             # Wrap install in script to log output
   SUPERBUILD_PATCH_SOURCE(GEOTIFF)
 
 else()
