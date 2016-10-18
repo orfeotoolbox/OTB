@@ -160,7 +160,7 @@ otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdapter
   ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
   otbGeometricSarSensorModelAdapterTest
-  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
+  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
 
 otb_add_test(NAME uaTvGeometricSarSensorModelAdapterNew COMMAND otbOSSIMAdaptersTestDriver
