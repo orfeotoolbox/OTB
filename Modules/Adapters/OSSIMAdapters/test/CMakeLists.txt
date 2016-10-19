@@ -155,22 +155,29 @@ otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
   -1.8 52   0.02 -0.018 232 422
   )
 
-# commented below test. these are moved to dev_sar_tsx branch for further checks
-# otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdaptersTestDriver
-#   --compare-ascii ${EPSILON_9}
-#   ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
-#   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
-#   otbGeometricSarSensorModelAdapterTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
-#   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
+# These two tests must be fixed in dev_sar_tsx branch before merge.
+# gdal without tsx driver will fail below two tests.(run with GDAL_SKIP=TSX)
+# if run without GDAL_SKIP=TSX, gdal tsx driver is used to parse metadata
+# and read .cos file. Also we read metadata through ossimTerraSarModel.
+# I am not sure if that will rewrite some metadata or how OTB handles
+# if both can read terrasarx. But I want to say things are not looking good.
+# We must deactivate GDAL tsx driver if available like we do for Jasper
+# and always rely on ossimTerrSarModel.
+otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdaptersTestDriver
+  --compare-ascii ${EPSILON_9}
+  ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
+  ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
+  otbGeometricSarSensorModelAdapterTest
+  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
+  ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
 
-# otb_add_test(NAME uaTvPlatformPositionComputeBaselineTest COMMAND otbOSSIMAdaptersTestDriver
-#   --compare-ascii ${EPSILON_9}
-#   ${BASELINE_FILES}/uaTvPlatformPositionComputeBaselineTest.txt
-#   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt
-#   otbPlatformPositionComputeBaselineTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
-#   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
+otb_add_test(NAME uaTvPlatformPositionComputeBaselineTest COMMAND otbOSSIMAdaptersTestDriver
+  --compare-ascii ${EPSILON_9}
+  ${BASELINE_FILES}/uaTvPlatformPositionComputeBaselineTest.txt
+  ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt
+  otbPlatformPositionComputeBaselineTest
+  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
+  ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
 
 otb_add_test(NAME uaTvGeometricSarSensorModelAdapterNew COMMAND otbOSSIMAdaptersTestDriver
   otbGeometricSarSensorModelAdapterNewTest)
