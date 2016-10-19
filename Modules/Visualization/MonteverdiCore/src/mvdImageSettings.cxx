@@ -110,7 +110,7 @@ ImageSettings
     qApp->translate(
       "mvd", EFFECT_NAMES[ m_Effect ]
     )
-    .toLocal8Bit().constData();
+    .toLatin1().constData();
 }
 
 /*****************************************************************************/

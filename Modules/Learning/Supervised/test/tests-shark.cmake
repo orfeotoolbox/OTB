@@ -7,16 +7,16 @@ otb_add_test(NAME leTvSharkRFMachineLearningModel COMMAND otbSupervisedTestDrive
   ${TEMP}/shark_rf_model.txt
   )
 
-otb_add_test(NAME leTuSharkRFMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
+otb_add_test(NAME leTvSharkRFMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModelCanRead
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
 
-otb_add_test(NAME leTuSharkRFMachineLearningModelCanReadFail COMMAND otbSupervisedTestDriver
+otb_add_test(NAME leTvSharkRFMachineLearningModelCanReadFail COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModelCanRead
   ${INPUTDATA}/ROI_QB_MUL_4_svmModel.txt
   )
-set_property(TEST leTuSharkRFMachineLearningModelCanReadFail PROPERTY WILL_FAIL true)
+set_property(TEST leTvSharkRFMachineLearningModelCanReadFail PROPERTY WILL_FAIL true)
 
 
 otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSupervisedTestDriver

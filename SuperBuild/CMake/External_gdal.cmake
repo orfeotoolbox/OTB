@@ -92,10 +92,10 @@ else(MSVC)
   STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
   STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
   configure_file(
-  ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in 
-  ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+    ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
+    ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
   
-  if(OTB_MSVC_COMPILER_ARCH_IS_X64)
+  if(OTB_COMPILER_ARCH_IS_X64)
     file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES")
   endif()
   
@@ -125,6 +125,8 @@ ExternalProject_Add(GDAL
   CONFIGURE_COMMAND ${GDAL_CONFIGURE_COMMAND}
   BUILD_COMMAND ${GDAL_BUILD_COMMAND}
   INSTALL_COMMAND ${GDAL_INSTALL_COMMAND}
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_PATCH_SOURCE(GDAL)

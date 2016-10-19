@@ -19,15 +19,9 @@
 #include "otbImageMetadataInterfaceBase.h"
 
 #include "otbNoDataHelper.h"
-#include "otbMacro.h"
-#include "otbFastExposeMetaData.h"
 #include "itkMetaDataObject.h"
 #include "itksys/SystemTools.hxx"
 
-namespace {
-  const std::string           k_empty_string;
-  const otb::ImageKeywordlist k_empty_KWL;
-}
 
 namespace otb
 {
@@ -37,18 +31,32 @@ ImageMetadataInterfaceBase
 {
 }
 
-std::string const&
+std::string
 ImageMetadataInterfaceBase::GetProjectionRef() const
 {
+  std::string metadata;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  return FastExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::ProjectionRefKey), k_empty_string);
+
+  if (dict.HasKey(MetaDataKey::ProjectionRefKey))
+    {
+    itk::ExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::ProjectionRefKey), metadata);
+    return (metadata);
+    }
+  else return ("");
 }
 
-std::string const&
+std::string
 ImageMetadataInterfaceBase::GetGCPProjection() const
 {
+  std::string metadata;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  return FastExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::GCPProjectionKey), k_empty_string);
+
+  if (dict.HasKey(MetaDataKey::GCPProjectionKey))
+    {
+    itk::ExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::GCPProjectionKey), metadata);
+    return (metadata);
+    }
+  else return ("");
 }
 
 unsigned int
@@ -62,148 +70,158 @@ ImageMetadataInterfaceBase::GetGCPCount() const
     itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, GCPCount);
     }
 
-  return GCPCount;
+  return (GCPCount);
 }
 
 OTB_GCP&
 ImageMetadataInterfaceBase::GetGCPs(unsigned int GCPnum)
 {
+  std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   std::ostringstream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
+  key = lStream.str();
 
   if (dict.HasKey(key))
     {
 
     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
     }
-  return m_GCP;
+  return (m_GCP);
 }
 
-std::string const&
+std::string
 ImageMetadataInterfaceBase::GetGCPId(unsigned int GCPnum) const
 {
+  std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   std::ostringstream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
+  key = lStream.str();
 
-  return FastExposeMetaData<OTB_GCP>(dict, key, OTB_GCP()).m_Id;
-}
-
-std::string const&
-ImageMetadataInterfaceBase::GetGCPInfo(unsigned int GCPnum) const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  std::ostringstream lStream;
-  lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
-
-#if 1
-  return FastExposeMetaData<OTB_GCP>(dict, key, OTB_GCP()).m_Info;
-#else
   if (dict.HasKey(key))
     {
     OTB_GCP gcp;
     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-    return gcp.m_Info;
+    return (gcp.m_Id);
     }
-  else return k_empty_string;
-#endif
+  else return ("");
+}
+
+std::string
+ImageMetadataInterfaceBase::GetGCPInfo(unsigned int GCPnum) const
+{
+  std::string key;
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  std::ostringstream lStream;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
+  key = lStream.str();
+
+  if (dict.HasKey(key))
+    {
+    OTB_GCP gcp;
+    itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+    return (gcp.m_Info);
+    }
+  else return ("");
 }
 
 double
 ImageMetadataInterfaceBase::GetGCPRow(unsigned int GCPnum) const
 {
+  std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   std::ostringstream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
+  key = lStream.str();
 
   if (dict.HasKey(key))
     {
     OTB_GCP gcp;
     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-    return gcp.m_GCPRow;
+    return (gcp.m_GCPRow);
     }
-  else return 0;
+  else return (0);
 }
 
 double
 ImageMetadataInterfaceBase::GetGCPCol(unsigned int GCPnum) const
 {
+  std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   std::ostringstream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
+  key = lStream.str();
 
   if (dict.HasKey(key))
     {
     OTB_GCP gcp;
     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-    return gcp.m_GCPCol;
+    return (gcp.m_GCPCol);
     }
-  else return 0;
+  else return (0);
 }
 
 double
 ImageMetadataInterfaceBase::GetGCPX(unsigned int GCPnum) const
 {
+  std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   std::ostringstream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
+  key = lStream.str();
 
   if (dict.HasKey(key))
     {
     OTB_GCP gcp;
     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-    return gcp.m_GCPX;
+    return (gcp.m_GCPX);
     }
-  else return 0;
+  else return (0);
 }
 
 double
 ImageMetadataInterfaceBase::GetGCPY(unsigned int GCPnum) const
 {
+  std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   std::ostringstream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
+  key = lStream.str();
 
   if (dict.HasKey(key))
     {
     OTB_GCP gcp;
     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-    return gcp.m_GCPY;
+    return (gcp.m_GCPY);
     }
-  else return 0;
+  else return (0);
 }
 
 double
 ImageMetadataInterfaceBase::GetGCPZ(unsigned int GCPnum) const
 {
+  std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   std::ostringstream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
-  const std::string key = lStream.str();
+  key = lStream.str();
 
   if (dict.HasKey(key))
     {
     OTB_GCP gcp;
     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-    return gcp.m_GCPZ;
+    return (gcp.m_GCPZ);
     }
-  else return 0;
+  else return (0);
 }
 
 bool
@@ -222,7 +240,7 @@ ImageMetadataInterfaceBase::GetGeoTransform() const
     {
     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::GeoTransformKey, adfGeoTransform);
     }
-  return adfGeoTransform;
+  return (adfGeoTransform);
 }
 
 ImageMetadataInterfaceBase::VectorType
@@ -235,7 +253,7 @@ ImageMetadataInterfaceBase::GetUpperLeftCorner() const
     {
     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::UpperLeftCornerKey, UpperLeftCorner);
     }
-  return UpperLeftCorner;
+  return (UpperLeftCorner);
 }
 
 ImageMetadataInterfaceBase::VectorType
@@ -248,7 +266,7 @@ ImageMetadataInterfaceBase::GetUpperRightCorner() const
     {
     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::UpperRightCornerKey, UpperRightCorner);
     }
-  return UpperRightCorner;
+  return (UpperRightCorner);
 }
 
 ImageMetadataInterfaceBase::VectorType
@@ -261,7 +279,7 @@ ImageMetadataInterfaceBase::GetLowerLeftCorner() const
     {
     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::LowerLeftCornerKey, LowerLeftCorner);
     }
-  return LowerLeftCorner;
+  return (LowerLeftCorner);
 }
 
 ImageMetadataInterfaceBase::VectorType
@@ -274,11 +292,10 @@ ImageMetadataInterfaceBase::GetLowerRightCorner() const
     {
     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::LowerRightCornerKey, LowerRightCorner);
     }
-  return LowerRightCorner;
+  return (LowerRightCorner);
 }
 
-#if 0
-  ImageMetadataInterfaceBase::ImageKeywordlistType
+ImageMetadataInterfaceBase::ImageKeywordlistType
 ImageMetadataInterfaceBase::GetImageKeywordlist()
 {
   ImageKeywordlistType imageKeywordlist;
@@ -288,9 +305,8 @@ ImageMetadataInterfaceBase::GetImageKeywordlist()
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  return imageKeywordlist;
+  return (imageKeywordlist);
 }
-#endif
 
 const ImageMetadataInterfaceBase::ImageKeywordlistType
 ImageMetadataInterfaceBase::GetImageKeywordlist() const
@@ -302,26 +318,37 @@ ImageMetadataInterfaceBase::GetImageKeywordlist() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  return imageKeywordlist;
+  return (imageKeywordlist);
 }
 
-
-std::string const&
+std::string const
 ImageMetadataInterfaceBase::GetSensorID() const
+{
+  std::string s;
+  GetSensorID( s );
+  return s;
+}
+
+bool
+ImageMetadataInterfaceBase::GetSensorID(std::string & sensorId) const
 {
   ImageKeywordlistType imageKeywordlist;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  if ( dict.HasKey(MetaDataKey::OSSIMKeywordlistKey) )
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("sensor"))
+
+  if ( !imageKeywordlist.HasKey("sensor") )
     {
-    return k_empty_string;
+    return false;
     }
 
-  return imageKeywordlist.GetMetadataByKey("sensor");
+  sensorId = imageKeywordlist.GetMetadataByKey("sensor");
+
+  return true;
+
 }
 
 unsigned int
@@ -340,7 +367,8 @@ ImageMetadataInterfaceBase::GetNumberOfBands() const
     return 0;
     }
 
-  const unsigned int value = imageKeywordlist.GetMetadataByKeyAs<unsigned int>("support_data.number_bands");
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.number_bands");
+  unsigned int value = atoi(valueString.c_str());
   return value;
 }
 
@@ -389,13 +417,15 @@ ImageMetadataInterfaceBase::GetXPixelSpacing() const
 
   if (imageKeywordlist.HasKey("meters_per_pixel_x"))
     {
-    const double value = imageKeywordlist.GetMetadataByKeyAs<double>("meters_per_pixel_x");
+    std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_x");
+    double value = atof(valueString.c_str());
     return value;
     }
 
   if (imageKeywordlist.HasKey("pixel_spacing"))
     {
-    const double value = imageKeywordlist.GetMetadataByKeyAs<double>("pixel_spacing");
+    std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
+    double value = atof(valueString.c_str());
     return value;
     }
 
@@ -413,15 +443,17 @@ ImageMetadataInterfaceBase::GetYPixelSpacing() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (imageKeywordlist.HasKey("meters_per_pixel_y")) // searched twice...
+  if (imageKeywordlist.HasKey("meters_per_pixel_y"))
     {
-    const double value = imageKeywordlist.GetMetadataByKeyAs<double>("meters_per_pixel_y");
+    std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_y");
+    double value = atof(valueString.c_str());
     return value;
     }
 
-  if (imageKeywordlist.HasKey("pixel_spacing")) // searched twice...
+  if (imageKeywordlist.HasKey("pixel_spacing"))
     {
-    const double value = imageKeywordlist.GetMetadataByKeyAs<double>("pixel_spacing");
+    std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
+    double value = atof(valueString.c_str());
     return value;
     }
 
@@ -432,8 +464,9 @@ ImageMetadataInterfaceBase::GetYPixelSpacing() const
 void
 ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict)
 {
-  const std::vector<std::string> keys = dict.GetKeys();
 
+  std::vector<std::string> keys = dict.GetKeys();
+ 
 // an extra dependency just for printing is a bad idea.
 //  VectorDataKeywordlist    vectorDataKeywordlistValue;
   unsigned int             i(0);
@@ -465,13 +498,13 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       {
       VectorType vvalue;
       itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
-
+      
       for (i = 0; i < vvalue.size(); ++i)
         {
         os << indent << "---> " << keys[itkey] << "[" << i << "] = " << vvalue[i] << std::endl;
         }
       vvalue.clear();
-
+      
       break;
       }
       case MetaDataKey::TDOUBLE:
@@ -495,7 +528,7 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       {
       ImageKeywordlist         kwl;
       itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], kwl);
-
+      
       os << indent << "---> " << keys[itkey] << std::endl;
       kwl.Print(os);
       break;
@@ -509,6 +542,7 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       default:
         break;
       }
+
     }
 }
 
@@ -544,7 +578,9 @@ ImageMetadataInterfaceBase
     //os << indent << "LowerLeftCorner: " << this->GetLowerLeftCorner( ) << std::endl;
     //os << indent << "LowerRightCorner:" << this->GetLowerRightCorner( ) << std::endl;
     //os << indent << "ImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
-    os << indent << "SensorID:        " << this->GetSensorID( ) << std::endl;
+    std::string sensorId;
+    this->GetSensorID( sensorId );
+    os << indent << "SensorID:        " << sensorId << std::endl;
     os << indent << "NumberOfBands:   " << this->GetNumberOfBands( ) << std::endl;
 
     std::vector<std::string> bandNameList = this->GetBandName();
@@ -575,50 +611,5 @@ ImageMetadataInterfaceBase
     }
 }
 
-std::string const&
-ImageMetadataInterfaceBase
-::GetMetadataByKey(std::string const& key, std::string const& context) const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  // TODO: isn't it a precondition that should be check with an assertion?
-  // Indeed, other failures return a default value
-  if (!this->CanRead())
-    {
-    otbMsgDevMacro(<< "Cannot fetch " << key << " in KWL: invalid Metadata: " << context);
-    itkExceptionMacro(<< "Invalid Metadata, " << context);
-    }
-
-  ImageKeywordlistType const& imageKeywordlist
-    = FastExposeMetaData<ImageKeywordlistType>(dict,  MetaDataKey::OSSIMKeywordlistKey, k_empty_KWL);
-  if (IsEmpty(imageKeywordlist))
-    {
-    otbMsgDevMacro(<< "Cannot fetch " << key << " in KWL: No ossimKWL");
-    return k_empty_string;
-    }
-  ImageKeywordlistType::KeywordlistMap const& kwl = imageKeywordlist.GetKeywordlist();
-  ImageKeywordlistType::KeywordlistMap::const_iterator const wh = kwl.find(key);
-  if (wh == kwl.end())
-    {
-    otbMsgDevMacro(<< "Cannot fetch " << key << " in KWL: key not found.");
-    return k_empty_string;
-    }
-  else
-    {
-    otbMsgDevMacro(<< "KWL["<<key<<"] fetched: " << wh->second);
-    return wh->second;
-    }
-}
-
-bool ImageMetadataInterfaceBase::IsEmpty(std::string const& s) const
-{
-  return &s == &k_empty_string;
-}
-
-bool ImageMetadataInterfaceBase::IsEmpty(ImageKeywordlistType const& kwl) const
-{
-  return &kwl == &k_empty_KWL;
-}
-
 
 } // end namespace otb
-

@@ -7,9 +7,12 @@ project(OTB-SuperBuild)
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_SOURCE_DIR}/../CMake
-    ${CMAKE_MODULE_PATH})
+    ${CMAKE_MODULE_PATH}
+    )
 
 include(ExternalProject)
+
+include(OTBCheckCpp11Keywords)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 
@@ -22,19 +25,38 @@ if(APPLE)
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
+set(OTB_COMPILER_ARCH_IS_X64 TRUE)
+
 if(MSVC)
   execute_process(
-  COMMAND ${CMAKE_C_COMPILER}
-  ERROR_VARIABLE ev
-  OUTPUT_VARIABLE ov
-  OUTPUT_QUIET
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
+    COMMAND ${CMAKE_C_COMPILER}
+    ERROR_VARIABLE ev
+    OUTPUT_VARIABLE ov
+    OUTPUT_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
   
-  set(OTB_MSVC_COMPILER_ARCH_IS_X64 TRUE)
+  set(OTB_COMPILER_ARCH_IS_X64 TRUE)
+  set(OTB_COMPILER_ARCH x64)
   if("${ev}" MATCHES "x86")
-    set(OTB_MSVC_COMPILER_ARCH_IS_X64 FALSE)
+    set(OTB_COMPILER_ARCH x86)
+    set(OTB_COMPILER_ARCH_IS_X64 FALSE)
   endif()
-  
+
+endif() #MSVC
+
+if(UNIX)
+  execute_process(
+    COMMAND uname -m
+    ERROR_VARIABLE ev
+    OUTPUT_VARIABLE ov
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  set(OTB_COMPILER_ARCH ${ov})
+  set(OTB_COMPILER_ARCH_IS_X64 FALSE)
+  if("${ov}" STREQUAL "x86_64")
+    set(OTB_COMPILER_ARCH_IS_X64 TRUE)
+  endif()
 endif()
 
 # use, i.e. don't skip the full RPATH for the build tree
@@ -70,19 +92,16 @@ option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
 option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
 
-if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
-  file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
-    REGEX "project\\\(OTB\\\)")
-  if(NOT "${_CONTENT_CMAKELIST}" STREQUAL "")
-    # parse the version number
-    file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _FULL_CONTENT_CMAKELIST)
-    string(REGEX REPLACE ".*set\\(OTB_VERSION_MAJOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MAJOR "${_FULL_CONTENT_CMAKELIST}")
-    string(REGEX REPLACE ".*set\\(OTB_VERSION_MINOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MINOR "${_FULL_CONTENT_CMAKELIST}")
-    string(REGEX REPLACE ".*set\\(OTB_VERSION_PATCH \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_PATCH "${_FULL_CONTENT_CMAKELIST}")
-    set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
-    message(STATUS "OTB version : ${SUPERBUILD_OTB_VERSION}")
-  endif()
-endif()
+#get version of OTB from source_dir/CMakeLists.txt
+get_version(
+  INPUT_FILE   "${CMAKE_SOURCE_DIR}/../CMakeLists.txt"
+  MATCH_STRINGS "OTB_VERSION_MAJOR" "OTB_VERSION_MINOR" "OTB_VERSION_PATCH"
+  PREFIX SUPERBUILD
+  )
+
+set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
+
+message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)

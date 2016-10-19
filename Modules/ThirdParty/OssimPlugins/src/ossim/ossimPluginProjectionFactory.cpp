@@ -19,7 +19,6 @@
 #include "ossimRadarSatModel.h"
 #include "ossimEnvisatAsarModel.h"
 #include "ossimTerraSarModel.h"
-#include "ossimTerraSarXSarSensorModel.h"
 #include "ossimRadarSat2Model.h"
 #include "ossimErsSarModel.h"
 #include "ossimAlosPalsarModel.h"
@@ -45,6 +44,11 @@ static ossimTrace traceDebug = ossimTrace("ossimPluginProjectionFactory:debug");
 #include <ossimFormosatModel.h>
 #include <ossimFormosatDimapSupportData.h>
 
+#ifndef _WIN32
+#include <limits.h> //PATH_MAX
+#include <stdlib.h> //realpath
+ #include <errno.h>
+#endif
 namespace ossimplugins
 {
    bool ossimPluginProjectionFactory::initialized_;
@@ -86,13 +90,11 @@ namespace ossimplugins
       {
          return doUpcastModelToProjectionWhenOCG(model);
       }
-#if 1
    template <> inline
       ossimRefPtr<ossimProjection> doUpcastModelToProjection<ossimTerraSarModel>(ossimRefPtr<ossimTerraSarModel> model)
       {
          return doUpcastModelToProjectionWhenOCG(model);
       }
-#endif
 
 
    template <typename ProjectionType>
@@ -103,84 +105,133 @@ namespace ossimplugins
          if(traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
-               << MODULE << " DEBUG: testing " << STATIC_TYPE_NAME(ProjectionType) << "... " << std::flush;
+               << MODULE << " DEBUG: testing " << STATIC_TYPE_NAME(ProjectionType) << "\n";
          }
 
          ossimRefPtr<ProjectionType> model = new ProjectionType();
          if ( model->open(filename) )
          {
-            if(traceDebug())
-               ossimNotify(ossimNotifyLevel_DEBUG) << (model.get() ? " OK" : "NOK") << "\n";
             return model.get();
          }
          else
          {
-            if(traceDebug())
-               ossimNotify(ossimNotifyLevel_DEBUG) << "NOK\n";
             return 0;
          }
       }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
-   const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
+   const ossimFilename& file_name, ossim_uint32 /*entryIdx*/)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
-   SCOPED_LOG(traceDebug, MODULE);
    ossimRefPtr<ossimProjection> projection = 0;
+   //traceDebug.setTraceFlag(true);
+
+#ifndef _WIN32
+   char real_path[PATH_MAX + 1];
+   char *ret_path = NULL;
+   ret_path = realpath(file_name, real_path);
+   if( ret_path == NULL)
+   {
+      fprintf(stderr, "%s: error calling realpath( ). err: '%s'\n", MODULE, strerror(errno));
+      return NULL;
+   }
+   const ossimFilename abs_file_name( real_path );
+#else
+   //GetFullPathName function is not thread safe. better use absolute path on windows
+   //https://msdn.microsoft.com/en-us/library/windows/desktop/aa364963%28v=vs.85%29.aspx
+   const ossimFilename abs_file_name( file_name );
+#endif
 
    // TODO: use a type-list to simplify this chain factory.
 
    // Sentinel1
    if ( !projection )
    {
-      projection = doBuildProjection<ossimSentinel1Model>(filename);
+      projection = doBuildProjection<ossimSentinel1Model>(abs_file_name);
    }
 
    if ( !projection )
    {
-      projection = doBuildProjection<ossimRadarSat2Model>(filename);
+#if 1
+      projection = doBuildProjection<ossimRadarSat2Model>(abs_file_name);
+#else
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG: testing ossimRadarSat2Model" << std::endl;
+      }
+
+      ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
+      if ( model->open(abs_file_name) )
+      {
+         // Check if a coarse grid was generated, and use it instead:
+         projection = model->getReplacementOcgModel().get();
+         if (projection.valid())
+            model = 0; // Have OCG, don't need this one anymore
+         else
+            projection = model.get();
+      }
+      else
+      {
+         model = 0;
+      }
+#endif
    }
 
    // Pleiades
    if ( !projection )
    {
-      projection = doBuildProjection<ossimPleiadesModel>(filename);
+      projection = doBuildProjection<ossimPleiadesModel>(abs_file_name);
    }
 
-   // Terra-SAR-X
-#if 1
    if ( !projection )
    {
-      projection = doBuildProjection<ossimTerraSarXSarSensorModel>(filename);
-   }
-#endif
-
 #if 0
-   // old Terra-SAR-X
-   if ( !projection )
-   {
-      projection = doBuildProjection<ossimTerraSarModel>(filename);
-   }
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
+      }
+
+      ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
+
+      if ( model->open(abs_file_name) )
+      {
+         // Check if a coarse grid was generated, and use it instead:
+         projection = model->getReplacementOcgModel().get();
+         if (projection.valid())
+            model = 0; // Have OCG, don't need this one anymore
+         else
+            projection = model.get();
+      }
+      else
+      {
+         model = 0;
+      }
+#else
+      projection = doBuildProjection<ossimTerraSarModel>(abs_file_name);
 #endif
+   }
+
    // ErsSar
    if ( !projection )
    {
-      projection = doBuildProjection<ossimErsSarModel>(filename);
+      projection = doBuildProjection<ossimErsSarModel>(abs_file_name);
    }
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimEnvisatAsarModel>(filename);
+      projection = doBuildProjection<ossimEnvisatAsarModel>(abs_file_name);
    }
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimRadarSatModel>(filename);
+      projection = doBuildProjection<ossimRadarSatModel>(abs_file_name);
    }
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimAlosPalsarModel>(filename);
+      projection = doBuildProjection<ossimAlosPalsarModel>(abs_file_name);
    }
 
    if (!projection)
@@ -191,15 +242,15 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             << MODULE << " DEBUG: testing ossimFormosatModel" << std::endl;
       }
 
-      ossimFilename formosatTest = filename;
+      ossimFilename formosatTest = abs_file_name;
       formosatTest = formosatTest.setExtension("geom");
       if(!formosatTest.exists())
       {
-         formosatTest = filename.path();
+         formosatTest = abs_file_name.path();
          formosatTest = formosatTest.dirCat(ossimFilename("METADATA.DIM"));
          if (formosatTest.exists() == false)
          {
-            formosatTest = filename.path();
+            formosatTest = abs_file_name.path();
             formosatTest = formosatTest.dirCat(ossimFilename("metadata.dim"));
          }
       }
@@ -221,13 +272,13 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 
    if (!projection)
    {
-      projection = doBuildProjection<ossimTileMapModel>(filename);
+      projection = doBuildProjection<ossimTileMapModel>(abs_file_name);
    }
 
    // Spot6
    if ( !projection )
    {
-      projection = doBuildProjection<ossimSpot6Model>(filename);
+      projection = doBuildProjection<ossimSpot6Model>(abs_file_name);
    }
 
 
@@ -262,7 +313,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimString& name)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimString& name)";
-   SCOPED_LOG(traceDebug, MODULE);
+
+   if(traceDebug())
+   {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+                   << MODULE << " DEBUG: Entering ...." << std::endl;
+   }
 
    // else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
    // {
@@ -273,16 +329,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
       return new ossimRadarSat2Model();
    }
-   else if (name == STATIC_TYPE_NAME(ossimTerraSarXSarSensorModel))
-   {
-      return new ossimTerraSarXSarSensorModel();
-   }
-#if 0
    else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
    {
       return new ossimTerraSarModel();
    }
-#endif
    else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
    {
      return new ossimErsSarModel;
@@ -326,6 +376,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 //   if(name == MY_NEW_MODEL)
 //      return new myNewModel;
 
+   if(traceDebug())
+   {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+                   << MODULE << " DEBUG: Leaving ...." << std::endl;
+   }
+
    return 0;
 }
 
@@ -346,16 +402,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       {
          result = new ossimRadarSat2Model();
       }
-      else if (type == "ossimTerraSarXSarSensorModel")
-      {
-         result = new ossimTerraSarXSarSensorModel();
-      }
-#if 0
       else if (type == "ossimTerraSarModel")
       {
          result = new ossimTerraSarModel();
       }
-#endif
       else if (type == "ossimErsSarModel")
       {
          result = new ossimErsSarModel();
@@ -388,6 +438,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       {
          result = new ossimSpot6Model();
       }
+
       else if (type == "ossimSentinel1Model")
       {
          result = new ossimSentinel1Model();
@@ -428,10 +479,7 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
 {
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
-#if 0
    typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
-#endif
-   typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarXSarSensorModel));
 //   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
@@ -462,14 +510,5 @@ bool ossimPluginProjectionFactory::isTileMap(ossimFilename filename)const
   return res;
 }
 
-ossimPluginProjectionFactory::ossimPluginProjectionFactory()
-{
-   initialized_ = true;
-   // traceDebug.setTraceFlag(true);
-   // traceExec .setTraceFlag(true);
-}
-
-
 
 } // ossimplugins namespace
-

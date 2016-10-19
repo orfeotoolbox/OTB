@@ -161,11 +161,18 @@ namespace ossimplugins
 
    ossimFilename ossimSentinel1Model::searchManifestFile(const ossimFilename& file) const
    {
+
+      #ifndef _WIN32
       const ossimFilename manifestFile = ossimFilename(file.path().path() + "/manifest.safe");
+      #else
+      const ossimFilename manifestFile = ossimFilename(file.path().path() + "\\manifest.safe");
+      #endif
 
       if(!manifestFile.exists())
       {
-         ossimNotify(ossimNotifyLevel_WARN) << "manifest.safe " << manifestFile << " doesn't exist...\n";
+         if (traceDebug()) {
+            ossimNotify(ossimNotifyLevel_DEBUG) << "manifest.safe " << manifestFile << " doesn't exist...\n";
+         }
          return "";
       }
       return manifestFile;
@@ -188,38 +195,45 @@ namespace ossimplugins
 
          // -----[ Read manifest file
          const ossimFilename safeFile = searchManifestFile(file);
+
+         if ( safeFile.empty() ) return false;
+
          theManifestDirectory = safeFile.path();
-         if (!safeFile.empty())
+
+         if ( !this->isSentinel1(safeFile))
          {
-            if ( !this->isSentinel1(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
-               return false;
-            }
-            ossimXmlDocument manifestDoc;
-            if (!manifestDoc.openFile(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
-               return false;
-            }
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
+            return false;
+         }
+         ossimXmlDocument manifestDoc;
+         if (!manifestDoc.openFile(safeFile)) {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
+            return false;
+         }
+
+         if (traceDebug()) {
             ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
+         }
 
-            theImageID = getImageId(manifestDoc);
-            if (theImageID.empty()) {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
-               return false;
-            }
+         theImageID = getImageId(manifestDoc);
+         if (theImageID.empty()) {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
+            return false;
+         }
 
-            if (! standAloneProductInformation(manifestDoc))  {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load product information from " << safeFile << "\n";
-               return false;
-            }
+         if (! standAloneProductInformation(manifestDoc))  {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load product information from " << safeFile << "\n";
+            return false;
+         }
 
-            theSensorID = initSensorID(manifestDoc);
-            if (theSensorID.empty()) {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
-               return false;
-            }
+         theSensorID = initSensorID(manifestDoc);
+         if (theSensorID.empty()) {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
+            return false;
+         }
+
+         if (traceDebug()) {
+            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " checking for  xml file \n";
          }
 
          // -----[ Read product file
@@ -235,13 +249,13 @@ namespace ossimplugins
 
          if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
          {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )\n";
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
             return false;
          }
 
          if ( !this->initImageSize( theImageSize ) )
          {
-           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails\n";
+           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails \n";
            return false;
          }
 
@@ -714,7 +728,7 @@ namespace ossimplugins
         }
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
-      ossimNotify(ossimNotifyLevel_INFO) << files.size() << " calibration files found in " << theManifestDirectory << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << files.size() << " calibration files found in " << theManifestDirectory << "\n";
       std::stringstream strm;
       for (; it != files.end(); ++it)
       {
