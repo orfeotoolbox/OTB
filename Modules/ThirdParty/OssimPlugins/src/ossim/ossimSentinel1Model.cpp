@@ -172,7 +172,7 @@ namespace ossimplugins
       if(!manifestFile.exists())
       {
          if (traceDebug()) {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "manifest.safe " << manifestFile << " doesn't exist...\n";
+            ossimNotify(ossimNotifyLevel_DEBUG) << " manifest.safe " << manifestFile << " doesn't exist...\n";
          }
          return "";
       }
@@ -192,22 +192,22 @@ namespace ossimplugins
       {
          return false;
       }
-      else
+
+      theGSD.makeNan();
+
+      // -----[ Read manifest file
+      const ossimFilename safeFile = searchManifestFile(file);
+
+      if ( !safeFile.empty() )
       {
-         theGSD.makeNan();
-
-         // -----[ Read manifest file
-         const ossimFilename safeFile = searchManifestFile(file);
-
-         if ( safeFile.empty() ) return false;
 
          theManifestDirectory = safeFile.path();
 
-         if ( !this->isSentinel1(safeFile))
-         {
+         if ( !this->isSentinel1(safeFile)) {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
             return false;
          }
+
          ossimXmlDocument manifestDoc;
          if (!manifestDoc.openFile(safeFile)) {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
@@ -234,53 +234,79 @@ namespace ossimplugins
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
             return false;
          }
+      }
+      else
+      {
+         /* Keep this notify as WARN. code should not reach here.
+         If manifest.safe is not found then we are not loading a valid S1 dataset.
+         If the input is tiff or annotation xml, then also there must exists a
+         manifest.safe. However, we are forced to read only annotaion xml and
+         make ossimSentinel1Model out of it for the sake of
+         "ossimSentinel1ModelTest". This is not a very good idea to allow
+         reading a fake dataset.  So user must be warned!
+         */
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE
+            << " manifest.safe not found. but checking if xml file is valid" << "\n";
+      }
 
-         if (traceDebug()) {
-            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " checking for  xml file \n";
-         }
+      // -----[ Read product file
+      ossimFilename xmlFileName = file;
 
-         // -----[ Read product file
-         ossimFilename xmlFileName = file;
+      // If this is tiff file, look for corresponding annotation file
+      if(ext != "xml")
+      {
+         const ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
+         const ossimFilename path = file.path().path();
+         xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
+      }
 
-         // If this is tiff file, look for corresponding annotation file
-         if(ext != "xml")
-           {
-           const ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
-           const ossimFilename path = file.path().path();
-           xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
-           }
+      if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
+      {
 
-         if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
-         {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
-            return false;
-         }
+         /* Must be a FATAL error. Because when you reach here there are three possibilities.
+         1. manifest.safe file exists, but annotation xml does not
+         2. manifest.safe and annotation xmlexists, readProduct() returns false.
+         3. manifest.safe does not exists and annotation file is not a valid S1
+            dataset. (case when loading a different product xml file (eg: terrasarx).
 
-         if ( !this->initImageSize( theImageSize ) )
-         {
-           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails \n";
-           return false;
-         }
+         All these cases should not go slient on error message. It must be FATAL errors.
 
-         theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
-         theSubImageOffset.x = 0.0;
-         theSubImageOffset.y = 0.0;
+         */
 
-         // automatically loaded/saved into ossimSensorModel
-         theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE
+            << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
+         return false;
+      }
+
+      if ( !this->initImageSize( theImageSize ) )
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE
+            << " this->initImageSize( theImageSize ) fails \n";
+         return false;
+      }
+
+      theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
+      theSubImageOffset.x = 0.0;
+      theSubImageOffset.y = 0.0;
+
+      // automatically loaded/saved into ossimSensorModel
+      theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
 #if 0
-         if ( !this->initSRGR( ) )
-         {
+      if ( !this->initSRGR( ) )
+      {
          ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )\n";
          return false;
-         }
+      }
 #endif
 
-         // Commit the operation
-         theProductXmlFile = file;
-         return true;
-      }
+      // Commit the operation
+      theProductXmlFile = file;
+      return true;
+
    }
 
    ossimString const& ossimSentinel1Model::getImageId(ossimXmlDocument const& manifestDoc) const
@@ -593,6 +619,25 @@ namespace ossimplugins
       assert(productRoot.get());
 
       const ossimXmlNode & adsHeader = getExpectedFirstNode(*productRoot,attAdsHeader);
+      const ossimString missionId = getTextFromFirstNode(adsHeader, "missionId");
+
+      if( (missionId == "S1A" ) ||
+          (missionId == "S1B" ) ||
+          (missionId == "ASA" ) )
+      {
+         if (traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "missionId from annotationXml is: '" << missionId << "'\n" ;
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "Not a valid sentinel1 annotation xml. missionId is: '"
+            << missionId << "'\n" ;
+         return false;
+         }
+
+
       const ossimString & polarisation = getTextFromFirstNode(adsHeader, "polarisation");
       const ossimString & productType  = getTextFromFirstNode(adsHeader, "productType");
       theProductType = ProductType(productType);

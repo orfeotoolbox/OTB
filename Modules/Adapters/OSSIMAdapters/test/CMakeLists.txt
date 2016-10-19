@@ -155,13 +155,13 @@ otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
   -1.8 52   0.02 -0.018 232 422
   )
 
-# commented below test. these are moved to dev_sar_tsx branch for further checks
+#commented below test. these are moved to dev_sar_tsx branch for further checks
 # otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdaptersTestDriver
 #   --compare-ascii ${EPSILON_9}
 #   ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
 #   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
 #   otbGeometricSarSensorModelAdapterTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
+#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC//TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
 #   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
 
 # otb_add_test(NAME uaTvPlatformPositionComputeBaselineTest COMMAND otbOSSIMAdaptersTestDriver
@@ -169,9 +169,8 @@ otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
 #   ${BASELINE_FILES}/uaTvPlatformPositionComputeBaselineTest.txt
 #   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt
 #   otbPlatformPositionComputeBaselineTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080321T133220_20080321T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
+#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC//TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
 #   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
-
 
 otb_add_test(NAME uaTvGeometricSarSensorModelAdapterNew COMMAND otbOSSIMAdaptersTestDriver
   otbGeometricSarSensorModelAdapterNewTest)
