@@ -132,7 +132,14 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    ret_path = realpath(file_name, real_path);
    if( ret_path == NULL)
    {
-      fprintf(stderr, "%s: error calling realpath( ). err: '%s'\n", MODULE, strerror(errno));
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE
+            << " error calling realpath(" << file_name << "). errno "
+            << strerror(errno) << std::endl;
+      }
+
       return NULL;
    }
    const ossimFilename abs_file_name( real_path );
