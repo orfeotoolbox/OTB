@@ -237,7 +237,17 @@ namespace ossimplugins
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_WARN) << MODULE << " manifest.safe not found. but checking if xml file is valid" << "\n";
+         /* Keep this notify as WARN. code should not reach here.
+         If manifest.safe is not found then we are not loading a valid S1 dataset.
+         If the input is tiff or annotation xml, then also there must exists a
+         manifest.safe. However, we are forced to read only annotaion xml and
+         make ossimSentinel1Model out of it for the sake of
+         "ossimSentinel1ModelTest". This is not a very good idea to allow
+         reading a fake dataset.  So user must be warned!
+         */
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE
+            << " manifest.safe not found. but checking if xml file is valid" << "\n";
       }
 
       // -----[ Read product file
@@ -253,14 +263,28 @@ namespace ossimplugins
 
       if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
       {
-//         if( traceExec()
-         ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
+
+         /* Must be a FATAL error. Because when you reach here there are three possibilities.
+         1. manifest.safe file exists, but annotation xml does not
+         2. manifest.safe and annotation xmlexists, readProduct() returns false.
+         3. manifest.safe does not exists and annotation file is not a valid S1
+            dataset. (case when loading a different product xml file (eg: terrasarx).
+
+         All these cases should not go slient on error message. It must be FATAL errors.
+
+         */
+
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE
+            << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
          return false;
       }
 
       if ( !this->initImageSize( theImageSize ) )
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails \n";
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE
+            << " this->initImageSize( theImageSize ) fails \n";
          return false;
       }
 
