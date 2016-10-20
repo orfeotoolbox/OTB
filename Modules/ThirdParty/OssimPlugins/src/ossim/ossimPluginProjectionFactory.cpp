@@ -132,7 +132,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    ret_path = realpath(file_name, real_path);
    if( ret_path == NULL)
    {
-      if(traceDebug())
+      if(traceExec())
       {
          ossimNotify(ossimNotifyLevel_FATAL)
             << MODULE
