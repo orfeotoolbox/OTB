@@ -29,6 +29,11 @@
 
 //
 // Qwt includes
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_magnifier.h>
@@ -36,7 +41,16 @@
 #include <qwt_plot_panner.h>
 // #include <qwt_plot_zoomer.h>
 #include <qwt_scale_engine.h>
-
+#pragma GCC diagnostic pop
+#else
+#include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
+#include <qwt_plot_magnifier.h>
+#include <qwt_plot_marker.h>
+#include <qwt_plot_panner.h>
+// #include <qwt_plot_zoomer.h>
+#include <qwt_scale_engine.h>
+#endif
 //
 // System includes (sorted by alphabetic order)
 
