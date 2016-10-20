@@ -20,3 +20,31 @@ foreach(file ${files})
     message(STATUS "File $ENV{DESTDIR}${file} does not exist.")
   endif()
 endforeach(file)
+
+set(otb_dir_name "OTB-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@")
+
+set(installed_dirs)
+# include/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/include/${otb_dir_name}")
+# lib/{otb,python} directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/lib/otb")
+# lib/cmake/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/lib/cmake/${otb_dir_name}")
+# share/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/share/${otb_dir_name}")
+# share/doc/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/share/doc/${otb_dir_name}")
+
+foreach(installed_dir ${installed_dirs})
+  message(STATUS "Uninstalling ${installed_dir}")
+  if(EXISTS "${installed_dir}" AND IS_DIRECTORY "${installed_dir}")
+    execute_process(COMMAND
+      "@CMAKE_COMMAND@" -E remove_directory "${installed_dir}"
+      OUTPUT_VARIABLE out_rmdir
+      RESULT_VARIABLE res_rmdir
+      )
+    if(NOT "${res_rmdir}" STREQUAL 0)
+      message(FATAL_ERROR "Problem when removing ${installed_dir}")
+    endif()
+  endif()
+endforeach()
