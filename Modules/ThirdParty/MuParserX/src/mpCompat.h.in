@@ -18,16 +18,29 @@
 #ifndef MUP_COMPAT_H
 #define MUP_COMPAT_H
 
-#if @OTB_MUPARSERX_HIDE_OVERRIDE@
-#define override
-#endif
+/* defined if OTB_CXX_HAS_UNIQUE_PTR cmake check is OK.
+/* See CMake/OTBCheckCpp11Keywords.cmake for more details */
+#cmakedefine OTB_CXX_HAS_UNIQUE_PTR
 
-#if @OTB_MUPARSERX_HIDE_UNIQUE_PTR@
+#ifndef OTB_CXX_HAS_UNIQUE_PTR
 #define unique_ptr auto_ptr
 #endif
 
-#if @OTB_MUPARSERX_HIDE_NULLPTR@
+/* defined if OTB_CXX_HAS_OVERRIDE_SPECIFIER cmake check is OK.
+/* See CMake/OTBCheckCpp11Keywords.cmake for more details */
+#cmakedefine OTB_CXX_HAS_OVERRIDE_SPECIFIER
+
+#ifndef OTB_CXX_HAS_OVERRIDE_SPECIFIER
+#define unique_ptr auto_ptr
+#endif
+
+/* defined if OTB_CXX_HAS_NULLPTR cmake check is OK.
+/* See CMake/OTBCheckCpp11Keywords.cmake for more details */
+#cmakedefine OTB_CXX_HAS_NULLPTR
+
+#ifndef OTB_CXX_HAS_NULLPTR
 #define nullptr NULL
 #endif
 
-#endif
+
+#endif //MUP_COMPAT_H
