@@ -66,6 +66,7 @@ OTB_CXX_HAS_OVERRIDE_SPECIFIER )
 
 unset(OTB_CXX_HAS_NULLPTR CACHE)
 CHECK_CXX_SOURCE_COMPILES("
+#include <cstddef>
 int main(int argc, char *argv[])
 {
   int *p = nullptr;
