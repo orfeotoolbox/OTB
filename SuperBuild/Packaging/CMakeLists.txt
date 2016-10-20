@@ -165,6 +165,8 @@ if(NOT MINGW)
     )
 endif()
 
+set(PKG_ITK_SB_VERSION "${PKG_SB_ITK_VERSION_MAJOR}.${PKG_SB_ITK_VERSION_MINOR}")
+
 #get version of OTB from source_dir/CMakeLists.txt
 get_version(
   INPUT_FILE   "${PACKAGE_OTB_SRC_DIR}/CMakeLists.txt"
