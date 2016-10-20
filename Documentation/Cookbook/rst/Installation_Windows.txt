@@ -1,6 +1,7 @@
-We provide standalone packages for Windows 7 and later. Download it from the
-`here <https://www.orfeo-toolbox.org/download>`__, and pick the correct version
-(32 bit or 64 bit) depending on your system.
+Windows binary packages are available for Windows 7 or higher. They can
+be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_ .
+
+Pick the correct version (32 bit or 64 bit) depending on your system.
 
 Extract the archive and use one of the launchers, they contain all applications
 and their launchers (both command line and graphical launchers are provided):
@@ -20,3 +21,10 @@ and their launchers (both command line and graphical launchers are provided):
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize a command prompt
 with ``otbenv.bat``.
+
+Notes:
+~~~~~~
+- You must have "Visual C++ Redistributable for Visual Studio 2015" installed for using this package.
+  It can be downloaded freely from `microsoft <https://www.microsoft.com/en-us/download/details.aspx?id=48145>`_
+    
+
