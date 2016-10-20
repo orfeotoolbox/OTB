@@ -173,7 +173,7 @@ macro(macro_super_package)
   # We need qt.conf on windows and linux. macx is still to be tested.
   # So just not add this without testing
   if(NOT APPLE)
-    install(PROGRAMS
+    install(FILES
       ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
       DESTINATION ${PKG_STAGE_DIR}/bin
       )
