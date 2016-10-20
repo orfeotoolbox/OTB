@@ -156,9 +156,19 @@ macro(macro_super_package)
     install(PROGRAMS
       ${CMAKE_BINARY_DIR}/pkgsetup
       ${CMAKE_BINARY_DIR}/make_symlinks
-      DESTINATION ${PKG_STAGE_DIR})
+      DESTINATION ${PKG_STAGE_DIR}
+      )
 
-    ########### install patchelf( linux only) ##################
+    #We need qt.conf on windows and linux. macx is still to be tested.
+    #So just not add this without testing
+    if(NOT APPLE)
+      install(PROGRAMS
+        ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
+        DESTINATION ${PKG_STAGE_DIR}/bin
+        )
+    endif()
+  
+  ########### install patchelf( linux only) ##################
     if(NOT APPLE)
       install(PROGRAMS ${PATCHELF_PROGRAM}
         DESTINATION ${PKG_STAGE_DIR}/tools)
@@ -507,14 +517,6 @@ function(func_install_monteverdi_support_files)
   if(APPLE)
     install(FILES ${PACKAGE_SUPPORT_FILES_DIR}/Monteverdi.icns
       DESTINATION ${PKG_STAGE_DIR})
-  endif()
-
-  if(WIN32)
-    ####################### install mingw qt.conf ##########################
-    if(EXISTS ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf)
-      install(FILES ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
-        DESTINATION ${PKG_STAGE_BIN_DIR})
-    endif()
   endif()
 
   ####################### install sqldriver plugin ########################

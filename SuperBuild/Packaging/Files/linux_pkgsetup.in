@@ -97,9 +97,7 @@ fi
 
 
 cat > "$OUT_DIR/bin/qt.conf" << EOF
-[Paths]
-Translations=$OUT_DIR/lib/qt4/translations
-Plugins=$OUT_DIR/lib/qt4/plugins
+
 EOF
 
 if [ ! -f "$OTB_PYTHON_EXE" ] ; then
