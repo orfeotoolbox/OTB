@@ -62,6 +62,9 @@ ExternalProject_Add(BOOST
   CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
   BUILD_COMMAND ${BOOST_BUILD_COMMAND}
   INSTALL_COMMAND ""
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1  
 )
 
 #HINT: avoid all uses of  _SB_* in External_<project>.cmake
