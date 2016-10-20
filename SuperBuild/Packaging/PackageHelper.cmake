@@ -158,15 +158,6 @@ macro(macro_super_package)
       ${CMAKE_BINARY_DIR}/make_symlinks
       DESTINATION ${PKG_STAGE_DIR}
       )
-
-    #We need qt.conf on windows and linux. macx is still to be tested.
-    #So just not add this without testing
-    if(NOT APPLE)
-      install(PROGRAMS
-        ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
-        DESTINATION ${PKG_STAGE_DIR}/bin
-        )
-    endif()
   
   ########### install patchelf( linux only) ##################
     if(NOT APPLE)
@@ -177,6 +168,15 @@ macro(macro_super_package)
 
   if(PKG_GENERATE_XDK)
     func_install_xdk_files()
+  endif()
+
+  # We need qt.conf on windows and linux. macx is still to be tested.
+  # So just not add this without testing
+  if(NOT APPLE)
+    install(PROGRAMS
+      ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
+      DESTINATION ${PKG_STAGE_DIR}/bin
+      )
   endif()
 
   install(FILES
