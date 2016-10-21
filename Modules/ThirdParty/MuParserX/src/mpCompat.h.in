@@ -31,7 +31,7 @@
 #cmakedefine OTB_CXX_HAS_OVERRIDE_SPECIFIER
 
 #ifndef OTB_CXX_HAS_OVERRIDE_SPECIFIER
-#define unique_ptr auto_ptr
+#define override
 #endif
 
 /* defined if OTB_CXX_HAS_NULLPTR cmake check is OK. */
