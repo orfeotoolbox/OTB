@@ -29,7 +29,6 @@
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
 #include "otbRADImageIOFactory.h"
-#include "otbMWImageIOFactory.h"
 
 #ifdef OTB_USE_OPENJPEG
 #include "otbJPEG2000ImageIOFactory.h"
@@ -105,7 +104,6 @@ ImageIOFactory::RegisterBuiltInFactories()
 #endif
       itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory(MWImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(ONERAImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(MSTARImageIOFactory::New());
 
