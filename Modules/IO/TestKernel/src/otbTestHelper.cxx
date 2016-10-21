@@ -832,9 +832,9 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
             }
           else
             {
-            double vTest;
-            double vRef;
-            double vNorm;
+            double vTest=0.;
+            double vRef=0.;
+            double vNorm=0.;
             // cast ref token
             bool isRefTokenNum = true;
             try
