@@ -169,7 +169,7 @@ public:
 public:
 
   /** Destructor */
-  virtual ~AbstractImageModel();
+  ~AbstractImageModel() ITK_OVERRIDE;
 
   /** */
   inline int GetId() const;
@@ -318,9 +318,9 @@ protected:
     GetMetaDataInterface() const;
 
   //
-  // AbstractModel overrides.
+  // AbstractModel methods.
 
-  virtual void virtual_BuildModel( void* context );
+  void virtual_BuildModel( void* context ) ITK_OVERRIDE;
 
 //
 // Protected attributes.

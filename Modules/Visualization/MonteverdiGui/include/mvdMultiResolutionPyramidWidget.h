@@ -98,7 +98,7 @@ public:
 				Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~MultiResolutionPyramidWidget();
+  ~MultiResolutionPyramidWidget() ITK_OVERRIDE;
 
   /**
    */

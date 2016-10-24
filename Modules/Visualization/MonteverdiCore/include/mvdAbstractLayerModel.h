@@ -119,7 +119,7 @@ class OTBMonteverdiCore_EXPORT AbstractLayerModel :
 public:
 
   /** \brief Destructor. */
-  virtual ~AbstractLayerModel();
+  ~AbstractLayerModel() ITK_OVERRIDE;
 
   /**
    */
@@ -190,7 +190,7 @@ private:
 
   //
   // VisibleInterface overloads.
-  virtual void virtual_SignalVisibilityChanged( bool );
+  void virtual_SignalVisibilityChanged( bool ) ITK_OVERRIDE;
 
 //
 // Private attributes.

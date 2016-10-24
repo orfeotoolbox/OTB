@@ -120,7 +120,7 @@ public:
   /**
    * \brief Destructor.
    */
-  virtual ~ImageImporter();
+  ~ImageImporter() ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -175,9 +175,9 @@ private:
   //
   // AbstractWorker oveloads.
 
-  QObject* virtual_Do();
+  QObject* virtual_Do() ITK_OVERRIDE;
 
-  QString virtual_GetFirstProgressText() const;
+  QString virtual_GetFirstProgressText() const ITK_OVERRIDE;
 
 
 //

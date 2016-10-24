@@ -75,7 +75,7 @@ public:
   KeymapDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
-  virtual ~KeymapDialog();
+  ~KeymapDialog() ITK_OVERRIDE;
 
 //
 // SIGNALS.

@@ -174,7 +174,7 @@ public:
   HistogramModel( QObject* p =NULL );
 
   /** \brief Destructor. */
-  virtual ~HistogramModel();
+  ~HistogramModel() ITK_OVERRIDE;
 
   /**
    */
@@ -229,10 +229,10 @@ signals:
 protected:
 
   //
-  // AbstractModel overrides.
+  // AbstractModel methods.
 
   /** */
-  virtual void virtual_BuildModel( void* context =NULL );
+  void virtual_BuildModel( void* context =NULL ) ITK_OVERRIDE;
 
 //
 // Protected attributes.
@@ -271,12 +271,12 @@ private:
     void template_BuildModel_M( BuildContext * =NULL );
 
   //
-  // SerializableInterface overrides.
+  // SerializableInterface methods.
   //
 
-  virtual void virtual_Read( QIODevice* device );
+  void virtual_Read( QIODevice* device ) ITK_OVERRIDE;
 
-  virtual void virtual_Write( QIODevice& device ) const;
+  void virtual_Write( QIODevice& device ) const ITK_OVERRIDE;
 
 //
 // Private attributes.

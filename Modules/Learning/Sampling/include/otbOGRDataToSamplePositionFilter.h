@@ -85,10 +85,10 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentSamplingFilterBase);
 
-  virtual void Synthetize(void){}
+  void Synthetize(void) ITK_OVERRIDE{}
 
   /** Reset method called before starting the streaming*/
-  virtual void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
   /** Get a reference to the internal samplers at a given level */
   SamplerMapType& GetSamplers(unsigned int level);
@@ -112,7 +112,7 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Get/Set of the field name storing the original FID of each sample */
@@ -123,18 +123,18 @@ protected:
   /** Constructor */
   PersistentOGRDataToSamplePositionFilter();
   /** Destructor */
-  virtual ~PersistentOGRDataToSamplePositionFilter() {}
+  ~PersistentOGRDataToSamplePositionFilter() ITK_OVERRIDE {}
 
   /** Call samplers on a current position, for a given class */
-  virtual void ProcessSample(const ogr::Feature& feature,
+  void ProcessSample(const ogr::Feature& feature,
                              typename TInputImage::IndexType& imgIndex,
                              typename TInputImage::PointType& imgPoint,
-                             itk::ThreadIdType& threadid);
+                             itk::ThreadIdType& threadid) ITK_OVERRIDE;
 
   /** Method to split the input OGRDataSource
    *  according to the class partition
    */
-  virtual void DispatchInputVectors(void);
+  void DispatchInputVectors(void) ITK_OVERRIDE;
 
 private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
@@ -249,7 +249,7 @@ protected:
   /** Constructor */
   OGRDataToSamplePositionFilter() {}
   /** Destructor */
-  virtual ~OGRDataToSamplePositionFilter() {}
+  ~OGRDataToSamplePositionFilter() ITK_OVERRIDE {}
 
 private:
   OGRDataToSamplePositionFilter(const Self &); //purposely not implemented

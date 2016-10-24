@@ -94,7 +94,7 @@ public:
   ApplicationLauncher( QObject* p =NULL );
 
   /** \brief Destructor. */
-  virtual ~ApplicationLauncher();
+  ~ApplicationLauncher() ITK_OVERRIDE;
 
   /**
    * \return A new instance of the automatically-generated widget of

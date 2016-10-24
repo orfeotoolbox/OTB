@@ -101,7 +101,7 @@ public:
 // Public methods.
 public:
   /** \brief Destructor. */
-  virtual ~I18nMainWindow();
+  ~I18nMainWindow() ITK_OVERRIDE;
 
   /**
    */
@@ -190,9 +190,9 @@ protected:
   bool RestoreLayout( int version );
 
   //
-  // QMainWindow overrides.
+  // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event );
+  void closeEvent( QCloseEvent* event ) ITK_OVERRIDE;
 
 //
 // Protected attributes.

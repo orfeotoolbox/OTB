@@ -122,7 +122,7 @@ public:
   MainWindow( QWidget* p =0, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~MainWindow();
+  ~MainWindow() ITK_OVERRIDE;
 
   /**
    */
@@ -178,9 +178,9 @@ protected:
   using I18nMainWindow::ImportImage;
 
   //
-  // QMainWindow overrides.
+  // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event );
+  void closeEvent( QCloseEvent* event ) ITK_OVERRIDE;
 
 //
 // Protected attributes.
@@ -194,11 +194,11 @@ protected slots:
 
   /**
    */
-  void OnAboutToChangeModel( const AbstractModel * );
+  void OnAboutToChangeModel( const AbstractModel * ) ITK_OVERRIDE;
 
   /**
    */
-  void OnModelChanged( AbstractModel * );
+  void OnModelChanged( AbstractModel * ) ITK_OVERRIDE;
 
   /**
    */
@@ -327,13 +327,13 @@ private:
 #endif // USE_PIXEL_DESCRIPTION
 
   //
-  // I18nMainWindow overrides.
+  // I18nMainWindow methods.
 
-  virtual void virtual_SetupUI();
+  void virtual_SetupUI() ITK_OVERRIDE;
 
-  virtual void virtual_ConnectUI();
+  void virtual_ConnectUI() ITK_OVERRIDE;
 
-  virtual void virtual_InitializeUI();
+  void virtual_InitializeUI() ITK_OVERRIDE;
 
 //
 // Private attributes.

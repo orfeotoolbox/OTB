@@ -89,7 +89,7 @@ class OTBMonteverdiCore_EXPORT AbstractWorker :
 public:
 
   /** \brief Destructor. */
-  virtual ~AbstractWorker();
+  ~AbstractWorker() ITK_OVERRIDE;
 
   /**
    */

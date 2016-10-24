@@ -98,7 +98,7 @@ public:
   MaplaApplication( QApplication* qtApp );
 
   /** \brief Destructor. */
-  virtual ~MaplaApplication();
+  ~MaplaApplication() ITK_OVERRIDE;
 
   //
   // STATIC METHODS.
@@ -141,7 +141,7 @@ protected:
 // Protected attributes.
 protected:
 
-  void virtual_InitializeCore();
+  void virtual_InitializeCore() ITK_OVERRIDE;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

@@ -94,21 +94,21 @@ protected:
   /** Constructor */
   PersistentSamplingFilterBase();
   /** Destructor */
-  virtual ~PersistentSamplingFilterBase() {}
+  ~PersistentSamplingFilterBase() ITK_OVERRIDE {}
 
   /** Use the same output information as input image, check the field index
    *  and the mask footprint */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Use an empty region to input image (pixel values not needed) and set
    *  the requested region for the mask */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Generate data should thread over */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Allocate in-memory layers for input and outputs */
-  virtual void AllocateOutputs(void);
+  void AllocateOutputs(void) ITK_OVERRIDE;
 
   /** Start of main processing loop */
   virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);

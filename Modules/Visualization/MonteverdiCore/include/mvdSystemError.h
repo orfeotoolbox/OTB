@@ -94,7 +94,7 @@ public:
         + ": " + message) {};
 
   /** \brief Destructor. */
-  virtual ~SystemError() throw() {};
+  ~SystemError() throw() ITK_OVERRIDE {};
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

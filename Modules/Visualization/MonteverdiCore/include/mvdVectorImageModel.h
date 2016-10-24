@@ -116,7 +116,7 @@ public:
   VectorImageModel( QObject* p =NULL );
 
   /** Destructor */
-  virtual ~VectorImageModel();
+  ~VectorImageModel() ITK_OVERRIDE;
 
   /** */
   static void EnsureValidImage( const QString& filename );
@@ -159,22 +159,22 @@ public:
   CountType ComputeBestLod( int width, int height ) const;
 
   //
-  // AbstractImageModel overrides.
+  // AbstractImageModel methods.
 
   /**
    * Get the number of available LOD.
    */
-  virtual CountType GetNbLod() const;
+  CountType GetNbLod() const ITK_OVERRIDE;
 
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
-  virtual ImageBaseType::ConstPointer ToImageBase() const;
+  ImageBaseType::ConstPointer ToImageBase() const ITK_OVERRIDE;
 
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
-  virtual ImageBaseType::Pointer ToImageBase();
+  ImageBaseType::Pointer ToImageBase() ITK_OVERRIDE;
 
   /**
    * Get the placename from the center pixel
@@ -182,11 +182,11 @@ public:
   std::string GetCenterPixelPlaceName();
 
   //
-  // AbstractModel overrides.
+  // AbstractModel methods.
 
-  virtual bool IsModified() const;
+  bool IsModified() const ITK_OVERRIDE;
 
-  virtual void ClearModified();
+  void ClearModified() ITK_OVERRIDE;
 
   // get image size in byte
   std::streamoff GetImageSizeInBytes()
@@ -238,12 +238,12 @@ signals:
 protected:
 
   //
-  // AbstractModel overrides.
+  // AbstractModel methods.
 
-  virtual void virtual_BuildModel( void* context =NULL );
+  void virtual_BuildModel( void* context =NULL ) ITK_OVERRIDE;
 
   //
-  // AbstractImageModel overrides.
+  // AbstractImageModel methods.
 
   void InitializeColorSetupSettings();
 
@@ -288,20 +288,20 @@ private:
   void BuildGdalOverviews();
 
   //
-  // AbstractLayerModel overrides.
+  // AbstractLayerModel methods.
 
-  virtual std::string virtual_GetWkt() const;
-  virtual bool virtual_HasKwl() const;
-  virtual void virtual_ToWgs84( const PointType &,
+  std::string virtual_GetWkt() const ITK_OVERRIDE;
+  bool virtual_HasKwl() const ITK_OVERRIDE;
+  void virtual_ToWgs84( const PointType &,
 				PointType &,
-				double & alt ) const;
+				double & alt ) const ITK_OVERRIDE;
 
   //
-  // AbstractImageModel overrides.
+  // AbstractImageModel methods.
 
-  virtual void virtual_SetCurrentLod( CountType lod );
+  void virtual_SetCurrentLod( CountType lod ) ITK_OVERRIDE;
 
-  virtual void virtual_RefreshHistogram();
+  void virtual_RefreshHistogram() ITK_OVERRIDE;
 
 //
 // Private attributes.
