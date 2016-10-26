@@ -25,7 +25,7 @@ if( OTBQt4_ENABLED )
       "WARNING: OTB_I18N_MERGE_TS:BOOL option is set to ON. 'make clean' will delete .ts files from source directory!"
       )
 
-    message( STATUS "Qt I18N source files: " ${OTB_QT_I18N_SOURCE_FILES} )
+    message( STATUS "Qt I18N source files: ${OTB_QT_I18N_SOURCE_FILES}")
 
     set( OTB_QT_I18N_PRO "${CMAKE_CURRENT_BINARY_DIR}/i18n.pro" )
 
@@ -39,9 +39,9 @@ if( OTBQt4_ENABLED )
         COMMAND ${QT_LUPDATE_EXECUTABLE}
         ARGS -locations none -pro ${OTB_QT_I18N_PRO} -ts ${_abs_ts}
         DEPENDS
-          #${OTB_QT_I18N_HEADER_FILES}
-          #${OTB_QT_I18N_SOURCE_FILES}
-          #${OTB_QT_I18N_FORM_FILES}
+          ${OTB_QT_I18N_HEADER_FILES}
+          ${OTB_QT_I18N_SOURCE_FILES}
+          ${OTB_QT_I18N_FORM_FILES}
           ${OTB_QT_I18N_PRO}
         VERBATIM)
     endforeach()
