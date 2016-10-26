@@ -6,6 +6,7 @@ set( OTB_TS_TRANSLATIONS
 # en_US.ts
   fr_FR.ts
 )
+unset(OTB_QM_TRANSLATIONS)
 
 #----------------------------------------------------------------------------
 # Configuration option to enable creation/merging of source .ts files
@@ -28,19 +29,27 @@ if( OTBQt4_ENABLED )
 
     set( OTB_QT_I18N_PRO "${CMAKE_CURRENT_BINARY_DIR}/i18n.pro" )
 
-    generate_qt4_project( ${OTB_TS_TRANSLATIONS} ${OTB_QT_I18N_PRO} )
+    generate_qt4_project( ${OTB_QT_I18N_PRO} )
 
-    qt4_create_translation( OTB_QM_TRANSLATIONS
-      ${OTB_QT_I18N_PRO}
-      ${OTB_TS_TRANSLATIONS}
-      )
+    foreach(_ts_name ${OTB_TS_TRANSLATIONS})
+      get_filename_component(_abs_ts ${_ts_name} ABSOLUTE)
 
-  else()
-    qt4_add_translation( OTB_QM_TRANSLATIONS
-      ${OTB_TS_TRANSLATIONS}
-      )
-
+      message( STATUS "Merge TS : ${_abs_ts}")
+      add_custom_command(OUTPUT ${_abs_ts}
+        COMMAND ${QT_LUPDATE_EXECUTABLE}
+        ARGS -locations none -pro ${OTB_QT_I18N_PRO} -ts ${_abs_ts}
+        DEPENDS
+          #${OTB_QT_I18N_HEADER_FILES}
+          #${OTB_QT_I18N_SOURCE_FILES}
+          #${OTB_QT_I18N_FORM_FILES}
+          ${OTB_QT_I18N_PRO}
+        VERBATIM)
+    endforeach()
   endif()
+
+  qt4_add_translation(OTB_QM_TRANSLATIONS
+      ${OTB_TS_TRANSLATIONS}
+      )
 
   # Custom build targets.
   add_custom_target( i18n ALL DEPENDS i18n_qt )

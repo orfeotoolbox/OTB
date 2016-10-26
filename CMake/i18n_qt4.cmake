@@ -46,7 +46,7 @@ macro( add_to_qt4_i18n_headers INCLUDE_DIR )
     CACHE INTERNAL "" FORCE
     )
 
-
+  unset(HEADERS)
   foreach( F ${ARGN} )
     string( REPLACE ".cxx" ".h" HEADER ${F} )
 
@@ -85,7 +85,7 @@ endmacro()
 
 #
 #
-macro( generate_qt4_project TRANSLATIONS FILENAME )
+macro( generate_qt4_project FILENAME )
   message( STATUS "Generating Qt4 '${FILENAME}' project file for I18N." )
 
   file( WRITE
@@ -100,7 +100,6 @@ HEADERS = ${OTB_QT_I18N_HEADER_FILES}
 SOURCES = ${OTB_QT_I18N_SOURCE_FILES}
 
 FORMS = ${OTB_QT_I18N_FORM_FILES}
-
-TRANSLATIONS = ${TRANSLATIONS}"
+"
     )
 endmacro()
