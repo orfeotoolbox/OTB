@@ -64,6 +64,7 @@ else()
     -Dlzma:BOOL=FALSE
     -Djbig:BOOL=FALSE
     -Dzlib:BOOL=TRUE
+    -DWITH_OPENGL:BOOL=FALSE
     -Dpixarlog:BOOL=TRUE
     ${TIFF_SB_CONFIG}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
