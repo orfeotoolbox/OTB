@@ -1160,8 +1160,6 @@ MainWindow
   if( imageModel==NULL )
     return 0;
 
-  otb::SetWorkingDir( filename );
-
   //
   // Bypass rendering of image-views.
   assert( m_ImageView!=NULL );
