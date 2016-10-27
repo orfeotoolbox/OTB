@@ -96,7 +96,7 @@ bool
 OVERVIEWS_ENABLED_DEFAULT = true;
 
 int
-OVERVIEWS_SIZE_DEFAULT = 512;
+OVERVIEWS_SIZE_DEFAULT = 4096;
 
 
 /*****************************************************************************/
