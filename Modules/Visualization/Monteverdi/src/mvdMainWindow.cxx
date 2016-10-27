@@ -1575,7 +1575,8 @@ MainWindow
     < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
     ( "APPLICATIONS_BROWSER",
       tr( "OTB-Applications browser" ),
-      Qt::RightDockWidgetArea
+      Qt::RightDockWidgetArea,
+      I18nMainWindow::DOCK_LAYOUT_FLOATING
     );
 
   tabifyDockWidget( m_HistogramDock, m_OtbApplicationsBrowserDock );
