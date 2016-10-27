@@ -87,7 +87,17 @@ set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
 mark_as_advanced(DOWNLOAD_LOCATION)
 
 # General options
-option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
+option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
+mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  find_path(OTB_DATA_LARGEINPUT_ROOT
+    NAMES OTBData.readme
+    HINTS $ENV{OTB_DATA_LARGEINPUT_ROOT}
+  )
+  mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
+endif()
+
+
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
 option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
@@ -288,9 +298,6 @@ option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
 
-if(ENABLE_OTB_LARGE_INPUTS)
-  find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
-endif()
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
