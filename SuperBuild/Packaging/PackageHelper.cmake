@@ -154,6 +154,9 @@ macro(macro_super_package)
     set(IS_XDK "false")     
     if(PKG_GENERATE_XDK)
       set(IS_XDK "true")
+      set(WITH_PYTHON "false")
+      message(STATUS "OTB_WRAP_PYTHON is set. But this will not be included in XDK")
+
       if("${PKG_ITK_SB_VERSION}" STREQUAL "")
         message(FATAL_ERROR "PKG_ITK_SB_VERSION not set. This is required for XDK")
       endif()
@@ -665,15 +668,19 @@ function(func_prepare_package)
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
   if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
-    list(
-      APPEND
-      PKG_PEFILES
-      "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}"
-      )
+    #DO NOT ADD _otbApplication.* to PKG_PEFILES. we install it in next step with
+    # install( DIRECTORY ..
+    # list(
+    #   APPEND
+    #   PKG_PEFILES
+    #   "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}"
+    #   )
+
     install(
       DIRECTORY
       ${OTB_INSTALL_DIR}/lib/otb/python
-      DESTINATION ${PKG_STAGE_DIR}/lib/)
+      DESTINATION ${PKG_STAGE_DIR}/lib/
+      )
   else()
     if(OTB_WRAP_PYTHON)
       message(FATAL_ERROR "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
