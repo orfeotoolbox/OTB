@@ -153,7 +153,7 @@ if [ "$found_python_lib" -eq "1" ]; then
     printf %s\\n "To use OTB python bindings:"
     printf %s\\n "'export PYTHONPATH=$OUT_DIR/lib/python'"
     printf %s\\n "To test OTB python bindings:"
-    printf %s\\n "python -c 'import otbApplication'"
+    printf %s\\n "$OTB_PYTHON_EXE -c 'import otbApplication'"
 else
     printf %s\\n "*****Error occured during installation******"
     printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
