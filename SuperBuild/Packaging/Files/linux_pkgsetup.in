@@ -100,6 +100,10 @@ cat > "$OUT_DIR/bin/qt.conf" << EOF
 
 EOF
 
+WITH_PYTHON=@WITH_PYTHON@
+
+if [ "$WITH_PYTHON" = true ] ; then
+
 if [ ! -f "$OTB_PYTHON_EXE" ] ; then
     OTB_PYTHON_EXE=$(which python)
 fi
@@ -148,6 +152,8 @@ else
     printf %s\\n "If you don't have python headers and so installed on a custom location, then make a symlink"
     printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME $OUT_DIR/lib/$python_INSTALLED_SONAME"
 fi
+
+fi;
 
 # PKG_OTB_VERSION_STRING=@PKG_OTB_VERSION_STRING@
 sed -i "s,|release|,@PKG_OTB_VERSION_STRING@,g" "$OUT_DIR/README"

@@ -145,8 +145,13 @@ macro(macro_super_package)
       file(APPEND ${CMAKE_BINARY_DIR}/make_symlinks
         "${make_symlink_cmd}\n")
     endforeach()
+    
+    set(WITH_PYTHON "false")
+    if(OTB_WRAP_PYTHON)
+       set(WITH_PYTHON "true")
+     endif()
 
-    set(IS_XDK "false")
+    set(IS_XDK "false")     
     if(PKG_GENERATE_XDK)
       set(IS_XDK "true")
       if("${PKG_ITK_SB_VERSION}" STREQUAL "")
@@ -668,7 +673,11 @@ function(func_prepare_package)
     install(
       DIRECTORY
       ${OTB_INSTALL_DIR}/lib/otb/python
-      DESTINATION ${PKG_STAGE_DIR}/lib)
+      DESTINATION ${PKG_STAGE_DIR}/lib/)
+  else()
+    if(OTB_WRAP_PYTHON)
+      message(FATAL_ERROR "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
+      endif()
   endif()
 
   # Take gtk libs from system. we should fix this to take from custom
@@ -833,6 +842,8 @@ function(func_process_deps infile)
             if(MSVC)
               string(REGEX MATCHALL "dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
               string(REGEX REPLACE "dependencies.." "" loader_ov "${loader_ov}")
+              # take out string 'Image has the following'
+              string(REGEX REPLACE "Image.has.the.following" "" loader_ov "${loader_ov}")	      
               #beware of .DLL and .dll
               string(REGEX REPLACE ".DLL" ".dll" loader_ov "${loader_ov}")
               #convert to cmake list
