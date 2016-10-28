@@ -140,8 +140,7 @@ public:
     // Public methods.
   public:
     /** \brief Constructor. */
-    BuildContext( bool isBeingStored,
-		  const QString& filename =QString() ) :
+    BuildContext( bool isBeingStored, const QString& filename =QString() ) :
       m_Filename( filename ),
       m_IsBeingStored( isBeingStored )
     {
@@ -191,10 +190,10 @@ public:
   MeasurementType Quantile( CountType band, double p, Bound bound ) const;
 
   /** */
-  double
-    Percentile( CountType band,
-		MeasurementType intensity,
-		Bound bound ) const;
+  double Percentile(
+    CountType band,
+    MeasurementType intensity,
+    Bound bound ) const;
 
   /** */
   inline VectorPixelType GetMinPixel() const;
@@ -208,13 +207,14 @@ public:
 
   /**
    */
-  void GetData( CountType band,
-		double * const x,
-		double * const y,
-		double& xMin,
-		double& xMax,
-		double& yMin,
-		double& yMax ) const;
+  void GetData(
+    CountType band,
+    double * const x,
+    double * const y,
+    double& xMin,
+    double& xMax,
+    double& yMin,
+    double& yMax ) const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -509,7 +509,6 @@ HistogramModel
   CountType components = imageModel->ToImage()->GetNumberOfComponentsPerPixel();
   assert( components>0 );
 
-  //
   // Always initialize min and Max pixels.
 
   m_MinPixel = DefaultImageType::PixelType( components );
@@ -520,7 +519,6 @@ HistogramModel
 
   try
     {
-    //
     // 1st pass: process min/MAX for each band.
 
     qDebug() << QString( "%1: Pass #1 - finding pixel min/maxes..." )
@@ -529,17 +527,12 @@ HistogramModel
     lPass1.start();
 
     // Define histogram-filter type.
-    typedef
-      otb::StreamingHistogramVectorImageFilter<
-	typename TImageModel::SourceImageType >
-      HistogramFilter;
-
+    typedef otb::StreamingHistogramVectorImageFilter<
+      typename TImageModel::SourceImageType > HistogramFilter;
 
     // Connect statistics pipe-section.
-    typedef
-      otb::StreamingStatisticsVectorImageFilter<
-	typename TImageModel::SourceImageType >
-      StatisticsFilter;
+    typedef otb::StreamingStatisticsVectorImageFilter<
+      typename TImageModel::SourceImageType > StatisticsFilter;
 
     typename StatisticsFilter::Pointer filterStats( StatisticsFilter::New() );
 
@@ -585,82 +578,82 @@ HistogramModel
       // qDebug() << "#" << i << ": " << n;
 
       if( n <= 1.0 )
-	{
-	bins[ i ] = 1;
-	}
+        {
+        bins[ i ] = 1;
+        }
       else
-	{
-	RealType sigma = sqrt( covariance( i, i ) );
+        {
+        RealType sigma = sqrt( covariance( i, i ) );
 
-	// qDebug() << "#" << i << ":" << sigma;
+        // qDebug() << "#" << i << ":" << sigma;
 
-	assert( sigma >= 0.0 );
+        assert( sigma >= 0.0 );
 
-	if( sigma<=0.0 )
-	  {
-	  bins[ i ] = 1;
-	  }
-	else
-	  {
-	  // Scott's formula
-	  // See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
-	  RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
+        if( sigma<=0.0 )
+          {
+          bins[ i ] = 1;
+          }
+        else
+          {
+          // Scott's formula
+          // See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
+          RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
 
-	  /*
-	    qDebug()
-	    << "#" << i
-	    << ": h = pow(" << n << "," << 1.0 / 3.0 << ") ="
-	    << h;
+          /*
+            qDebug()
+            << "#" << i
+            << ": h = pow(" << n << "," << 1.0 / 3.0 << ") ="
+            << h;
 
-	    qDebug()
-	    << "#" << i
-	    << ": bins[" << i << "] = ceil( ("
-	    << m_MaxPixel[ i ] << "-" << m_MinPixel[ i ] << ") / " << h << ") ="
-	    << ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
-	  */
+            qDebug()
+            << "#" << i
+            << ": bins[" << i << "] = ceil( ("
+            << m_MaxPixel[ i ] << "-" << m_MinPixel[ i ] << ") / " << h << ") ="
+            << ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
+          */
 
-	  bins[ i ] = ceil( ( maxPixel[ i ] - minPixel[ i ] ) / h );
+          bins[ i ] = ceil( ( maxPixel[ i ] - minPixel[ i ] ) / h );
 
-    // at least 1 bin is needed
-    bins[i] = std::max(bins[i],1U);
-	  }
-	}
+          // at least 1 bin is needed
+          bins[i] = std::max(bins[i],1U);
+          }
+        }
 
       // MANTIS-1275
       // {
-      if( minPixel[ i ]==maxPixel[ i ] )	
-	{
-	double epsilon = HistogramModel::GetEpsilon();
+      if( minPixel[ i ]==maxPixel[ i ] )
+        {
+        double epsilon = HistogramModel::GetEpsilon();
 
-  // make sure the epsilon is not hidden when using large values
-  if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
-    {
-    double absValue = vcl_abs(minPixel[i]);
-    // compute smallest epsilon for absolute pixel value (1.5 factor is for safety)
-    double limitEpsilon = absValue *
-      (double)std::numeric_limits<DefaultImageType::PixelType::ValueType>::epsilon()
-      * 1.5;
-    epsilon = std::max(epsilon,limitEpsilon);
-    }
+        // make sure the epsilon is not hidden when using large values
+        if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+          {
+          double absValue = vcl_abs(minPixel[i]);
+          // compute smallest epsilon for absolute pixel value (1.5 factor is for safety)
+          double limitEpsilon = absValue *
+            (double)std::numeric_limits<DefaultImageType::PixelType::ValueType>::epsilon()
+            * 1.5;
+          epsilon = std::max(epsilon,limitEpsilon);
+          }
 
-  double lowerBound;
-  // With C++11, we can use std::numeric_limits<>::lowest()
-  if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
-    {
-    lowerBound = epsilon - std::numeric_limits< DefaultImageType::PixelType::ValueType >::max();
-    }
-  else
-    {
-    lowerBound = std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() + epsilon;
-    }
-  double upperBound = std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() - epsilon;
+        double lowerBound;
+        // With C++11, we can use std::numeric_limits<>::lowest()
+        if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+          {
+          lowerBound = epsilon - std::numeric_limits< DefaultImageType::PixelType::ValueType >::max();
+          }
+        else
+          {
+          lowerBound = std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() + epsilon;
+          }
+        double upperBound = std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() - epsilon;
 
-  if( minPixel[ i ] >= lowerBound )
-      minPixel[ i ] -= epsilon;
+        if( minPixel[ i ] >= lowerBound )
+            minPixel[ i ] -= epsilon;
 
-	if( maxPixel[ i ] <= upperBound )
-	    maxPixel[ i ] += epsilon;
-	}
+        if( maxPixel[ i ] <= upperBound )
+            maxPixel[ i ] += epsilon;
+        }
       // }
       //
       }
