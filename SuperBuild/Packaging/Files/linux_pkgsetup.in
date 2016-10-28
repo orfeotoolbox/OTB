@@ -114,15 +114,23 @@ python_major_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[0])
 python_minor_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[1])")
 python_patch_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[2])")
 python_version="$python_major_version.$python_minor_version.$python_patch_version"
-printf %s\\n "Python executable found in : $OTB_PYTHON_EXE ($python_version)"
 
-if [ "$python_major_version" -gt 2 ]; then
+python_check_failed() {
+    printf %s\\n "*****Error occured during installation******"
     printf %s\\n "OTB python bindings requires python2.6 or python2.7 but current detected python version is $python_version"
     printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
     printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python2.7 ./OTB-X.Y-Linux64.run"
-    exit 0;
+    exit 1;
+}
+if [ "$python_major_version" -gt 2 ]; then
+python_check_failed
 fi
+
+if [ "$python_minor_version" -lt 5 ]; then
+python_check_failed
+fi
+
 python_INSTSONAME=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));")
 
 python_lib_dirs="/usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu"
@@ -138,13 +146,17 @@ do
 done
 
 if [ "$found_python_lib" -eq "1" ]; then
-    printf %s\\n "Found python library: $python_lib_file_path "
+    printf %s\\n "OTB python bindings will be configured for $OTB_PYTHON_EXE ( version: $python_version )"
+    printf %s\\n "Found python library: $python_lib_file_path"
     ln -sf "$python_lib_file_path" "$OUT_DIR/lib/$python_INSTALLED_SONAME"
-    printf %s\\n "To use OTB python binding you need to export below environment variables:"
-    printf %s\\n "'export LD_LIBRARY_PATH=$OUT_DIR/lib' and"
+    "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$OUT_DIR/lib/python/_otbApplication.so"
+    printf %s\\n "To use OTB python bindings:"
     printf %s\\n "'export PYTHONPATH=$OUT_DIR/lib/python'"
-    printf %s\\n "To test python bindings: python -c 'import otbApplication'"
+    printf %s\\n "To test OTB python bindings:"
+    printf %s\\n "$OTB_PYTHON_EXE -c 'import otbApplication'"
 else
+    printf %s\\n "*****Error occured during installation******"
+    printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
     printf %s\\n "$python_INSTSONAME cannot be found in any of search directories."
     printf %s\\n "We had searched following directories $python_lib_dirs"
     printf %s\\n "If you don't have python-dev package installed, install it and make a symlink"

@@ -28,6 +28,8 @@ if(NOT PROJECT_NAME)
   option(OTB_WRAP_PYTHON "enable python wrapping" ON)
   if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
     find_package ( PythonInterp REQUIRED )
+    mark_as_advanced(PYTHON_INCLUDE_DIR)
+    mark_as_advanced(PYTHON_LIBRARY)
   endif()
 
  if(WIN32 AND NOT MSVC)
