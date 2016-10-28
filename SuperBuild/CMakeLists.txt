@@ -318,8 +318,8 @@ if(FROM_SUPERBUILD_LIST)
   endforeach()
 endif()
 
-message(STATUS "OTB_TARGET_SYSTEM_ARCH=[${OTB_TARGET_SYSTEM_ARCH}]\n")
-message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=[${OTB_TARGET_SYSTEM_ARCH_IS_X64}]\n")
+message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
+message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
