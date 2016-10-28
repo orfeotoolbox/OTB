@@ -620,6 +620,9 @@ HistogramModel
 	  */
 
 	  bins[ i ] = ceil( ( maxPixel[ i ] - minPixel[ i ] ) / h );
+
+    // at least 1 bin is needed
+    bins[i] = std::max(bins[i],1U);
 	  }
 	}
 
@@ -629,19 +632,40 @@ HistogramModel
 	{
 	double epsilon = HistogramModel::GetEpsilon();
 
-	if( minPixel[ i ] >=
-	    std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() + epsilon )
-	  minPixel[ i ] -= epsilon;
+  // make sure the epsilon is not hidden when using large values
+  if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+    {
+    double absValue = vcl_abs(minPixel[i]);
+    // compute smallest epsilon for absolute pixel value (1.5 factor is for safety)
+    double limitEpsilon = absValue *
+      (double)std::numeric_limits<DefaultImageType::PixelType::ValueType>::epsilon()
+      * 1.5;
+    epsilon = std::max(epsilon,limitEpsilon);
+    }
 
-	if( maxPixel[ i ] <=
-	      std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() - epsilon )
+  double lowerBound;
+  // With C++11, we can use std::numeric_limits<>::lowest()
+  if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
+    {
+    lowerBound = epsilon - std::numeric_limits< DefaultImageType::PixelType::ValueType >::max();
+    }
+  else
+    {
+    lowerBound = std::numeric_limits< DefaultImageType::PixelType::ValueType >::min() + epsilon;
+    }
+  double upperBound = std::numeric_limits< DefaultImageType::PixelType::ValueType >::max() - epsilon;
+
+  if( minPixel[ i ] >= lowerBound )
+      minPixel[ i ] -= epsilon;
+
+	if( maxPixel[ i ] <= upperBound )
 	    maxPixel[ i ] += epsilon;
 	}
       // }
       //
       }
 
-    // std::cout << bins;
+    // std::cout << "Number of bins : "<< bins << std::endl;
 
     qDebug() << QString( "%1: Pass #1 - done (%2 ms)." )
       .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
