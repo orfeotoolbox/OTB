@@ -67,6 +67,8 @@ macro(macro_setup_cmake_project pkg)
    set(PKG_OTB_VERSION_STRING       \"${PKG_OTB_VERSION_STRING}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    set(PATCHELF_PROGRAM              ${PATCHELF_PROGRAM})
+   set(OTB_TARGET_SYSTEM_ARCH        ${OTB_TARGET_SYSTEM_ARCH})
+   set(OTB_TARGET_SYSTEM_ARCH_IS_X64 ${OTB_TARGET_SYSTEM_ARCH_IS_X64})   
    set(PYTHON_EXECUTABLE             \"${PYTHON_EXECUTABLE}\")
    ${EXTRA_CACHE_CONFIG}
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake)

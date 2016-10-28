@@ -15,7 +15,7 @@ if(MSVC)
     return()
   endif()
 
-  if(OTB_COMPILER_ARCH_IS_X64)
+  if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
     set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x64")
   else()
     set(CURL_INSTALL_DIR_PREFIX "libcurl-vc-x86")
