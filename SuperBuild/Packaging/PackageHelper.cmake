@@ -803,6 +803,10 @@ function(func_process_deps infile)
 
   is_system_dll(is_system "${infile}")
   if(EXISTS ${infile} AND NOT is_system)
+    if(APPLE)
+      # We want all non-system deps to start with rpath
+      message(WARNING "Found dependency without relative path : ${infile}")
+    endif()
     get_filename_component(infile ${infile} NAME)
   endif()
 
