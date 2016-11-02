@@ -67,7 +67,7 @@ if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
 fi
 
 GDAL_DATA=$OUT_DIR/share/gdal
-GEOTIFF_CSV=$OUT_DIR/share/espg_csv
+GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 
 export GDAL_DATA
 export GEOTIFF_CSV
@@ -79,7 +79,7 @@ cat > "$OUT_DIR/otbenv.profile" << EOF
 PATH=\$PATH:$OUT_DIR/bin
 PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
 GDAL_DATA=$OUT_DIR/share/gdal
-GEOTIFF_CSV=$OUT_DIR/share/espg_csv
+GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 
 export LC_NUMERIC=C
 export PATH
