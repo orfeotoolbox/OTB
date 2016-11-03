@@ -71,6 +71,8 @@ else()
     )
 endif()
 
+SUPERBUILD_PATCH_SOURCE(TIFF)
+
 set(_SB_TIFF_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
   set(_SB_TIFF_LIBRARY ${SB_INSTALL_PREFIX}/lib/libtiff_i.lib)
