@@ -97,7 +97,9 @@ fi
 
 
 cat > "$OUT_DIR/bin/qt.conf" << EOF
-
+[Paths]
+Translations=$OUT_DIR/lib/qt4/translations
+Plugins=$OUT_DIR/lib/qt4/plugins
 EOF
 
 WITH_PYTHON=@WITH_PYTHON@
