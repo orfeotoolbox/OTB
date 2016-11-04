@@ -21,28 +21,6 @@ macro(macro_setup_cmake_project pkg)
     set(PKG_GENERATE_XDK OFF)
   endif()
 
-  set(ConfigureMonteverdi_H ${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h)
-  if(NOT EXISTS ${ConfigureMonteverdi_H})
-    message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
-  endif()
-
-  file(STRINGS "${ConfigureMonteverdi_H}" ConfigureMonteverdi_H_CONTENTS REGEX "^#define.Monteverdi_INSTALL_DATA_DIR")
-  string(REGEX REPLACE
-    "^#define.Monteverdi_INSTALL_DATA_DIR" ""
-    ConfigureMonteverdi_H_CONTENTS
-    ${ConfigureMonteverdi_H_CONTENTS} )
-
-  if(NOT ConfigureMonteverdi_H_CONTENTS)
-    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H}. Cannot continue")
-  endif()
-
-  string(REGEX REPLACE "\"" "" PKG_OTB_INSTALL_DATA_DIR "${ConfigureMonteverdi_H_CONTENTS}")
-
-  if(NOT PKG_OTB_INSTALL_DATA_DIR)
-    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H_CONTENTS}. Cannot continue")
-  endif()
-
-  string(STRIP "${PKG_OTB_INSTALL_DATA_DIR}" PKG_OTB_INSTALL_DATA_DIR)
     
   #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
@@ -53,7 +31,6 @@ macro(macro_setup_cmake_project pkg)
    set(PACKAGE_OTB_SRC_DIR           \"${PACKAGE_OTB_SRC_DIR}\")
    set(OTB_BINARY_DIR                \"${OTB_BINARY_DIR}\")
    set(OTB_INSTALL_DIR               \"${OTB_INSTALL_DIR}\")
-   set(OTB_INSTALL_DATA_DIR          \"${PKG_OTB_INSTALL_DATA_DIR}\")
    set(QT_PLUGINS_DIR                \"${QT_PLUGINS_DIR}\")
    set(QT_TRANSLATIONS_DIR           \"${QT_TRANSLATIONS_DIR}\")
    set(DEPENDENCIES_INSTALL_DIR      \"${DEPENDENCIES_INSTALL_DIR}\")

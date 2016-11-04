@@ -191,9 +191,9 @@ macro(macro_super_package)
     func_install_xdk_files()
   endif()
 
-  # We need qt.conf on windows and linux. macx is still to be tested.
-  # So just not add this without testing
-  if(NOT APPLE)
+  # We need qt.conf on windows. for macx and linux we write it
+  # after extracting package
+  if(WIN32 AND NOT PKG_GENERATE_XDK)
     install(FILES
       ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
       DESTINATION ${PKG_STAGE_DIR}/bin
@@ -514,10 +514,39 @@ function(func_install_monteverdi_support_files)
 
   #<prefix>/share for otb i18n directory. This is different from qt's i18N directory
   #which is <prefix>/share/qt4/translations.
-  #set(PKG_xxOTB_Ixxx18N_DIR "${PKG_STAGE_DIR}/${OTB_INSTALL_DATA_DIR}/i18n")
+  #set(PKG_xxOTB_Ixxx18N_DIR "${PKG_STAGE_DIR}/${PKG_OTB_INSTALL_DATA_DIR}/i18n")
+  # we find this value by parsing ConfigureMonteverdi.h
+  set(ConfigureMonteverdi_H "${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h")
+  if(NOT EXISTS "${ConfigureMonteverdi_H}")
+    message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
+  endif()
 
-  set(PKG_OTB_TRANSLATIONS_DIRNAME "${OTB_INSTALL_DATA_DIR}/i18n")
+  file(
+    STRINGS "${ConfigureMonteverdi_H}"
+    ConfigureMonteverdi_H_CONTENTS
+    REGEX "^#define.Monteverdi_INSTALL_DATA_DIR")
+
+  string(REGEX REPLACE
+    "^#define.Monteverdi_INSTALL_DATA_DIR" ""
+    ConfigureMonteverdi_H_CONTENTS
+    ${ConfigureMonteverdi_H_CONTENTS} )
+
+  if(NOT ConfigureMonteverdi_H_CONTENTS)
+    message(FATAL_ERROR "Parse error in ${ConfigureMonteverdi_H}. Cannot continue")
+  endif()
+
+  string(
+    REGEX REPLACE "\"" ""
+    PKG_OTB_INSTALL_DATA_DIR
+    "${ConfigureMonteverdi_H_CONTENTS}")
+
+  if(NOT PKG_OTB_INSTALL_DATA_DIR)
+    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H_CONTENTS}. Cannot continue")
+  endif()
   
+  string(STRIP "${PKG_OTB_INSTALL_DATA_DIR}" PKG_OTB_INSTALL_DATA_DIR)
+
+  set(PKG_OTB_TRANSLATIONS_DIRNAME "${PKG_OTB_INSTALL_DATA_DIR}/i18n")
 
   # Just check if required variables are defined.
   foreach(req
@@ -772,8 +801,15 @@ function(func_process_deps infile)
     string(TOLOWER "${infile}" infile_lower )
   endif()
 
+  # is_system_dll is first pass check the file is not a system dll
+  # there is a second pass after looking all searchdirs which is where
+  # we make the call to list it as not-found-dlls
   is_system_dll(is_system "${infile}")
   if(EXISTS ${infile} AND NOT is_system)
+    if(APPLE)
+      # We want all non-system deps to start with rpath
+      message(FATAL_ERROR "Found dependency without @rpath : ${infile}")
+    endif()
     get_filename_component(infile ${infile} NAME)
   endif()
 

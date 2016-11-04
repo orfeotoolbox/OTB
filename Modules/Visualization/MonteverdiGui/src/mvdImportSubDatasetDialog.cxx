@@ -172,7 +172,15 @@ ImportSubDatasetDialog
   // Fill item-model.
   otb::GDALImageIO::Pointer gdalIO( otb::GDALImageIO::New() );
 
-  std::string fname( QFile::encodeName( filename ).constData() );
+  // Check for existing options other than sdataidx
+  int posOptions = filename.indexOf(QChar('?'));
+  int posSubDataIdx = filename.indexOf(QString("sdataidx"));
+  QString cleanFilename(filename);
+  if (posOptions > 0 && posSubDataIdx <= posOptions)
+    {
+    cleanFilename = filename.section('?',0,0);
+    }
+  std::string fname( QFile::encodeName( cleanFilename ).constData() );
 
   if( gdalIO->CanReadFile( fname.c_str() ) )
     {

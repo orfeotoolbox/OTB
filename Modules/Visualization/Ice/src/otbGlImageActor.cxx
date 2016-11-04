@@ -1037,7 +1037,12 @@ void GlImageActor::UpdateResolution()
     m_CurrentResolution = newResolution;
     
     std::ostringstream extFilename;
-    extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
+    extFilename<<m_FileName;
+    if ( m_FileName.find('?') == std::string::npos )
+      {
+      extFilename << '?';
+      }
+    extFilename<<"&resol="<<m_CurrentResolution;
 
     m_FileReader->SetFileName(extFilename.str());
     m_FileReader->GetOutput()->UpdateOutputInformation();
@@ -1180,7 +1185,12 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
       resol = m_AvailableResolutions.size()-1;
       }
 
-    extFilename<<m_FileName<<"?&resol="<<m_AvailableResolutions[resol];
+    extFilename<<m_FileName;
+    if ( m_FileName.find('?') == std::string::npos )
+      {
+      extFilename << '?';
+      }
+    extFilename<<"&resol="<<m_AvailableResolutions[resol];
     reader->SetFileName(extFilename.str());
 
     ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
