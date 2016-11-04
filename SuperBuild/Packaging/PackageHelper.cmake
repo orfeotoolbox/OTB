@@ -68,15 +68,30 @@ macro(macro_super_package)
       if(DEFINED ENV{UniversalCRTSdkDir})
         file(TO_CMAKE_PATH "$ENV{UniversalCRTSdkDir}" UCRT_SDK_DIR)
         list(
-        APPEND 
-        PKG_SEARCHDIRS 
-        "${UCRT_SDK_DIR}/Redist/ucrt/DLLs/${OTB_TARGET_SYSTEM_ARCH}"
-        ) #ucrt dlls
+          APPEND
+          PKG_SEARCHDIRS
+          "${UCRT_SDK_DIR}/Redist/ucrt/DLLs/${OTB_TARGET_SYSTEM_ARCH}"
+          ) #ucrt dlls
       else()
         message(FATAL_ERROR
 	  "UniversalCRTSdkDir variable not set. 
           call vcvarsall.bat <arch> first before starting build.")
       endif()
+
+      #addtional msvc redist dll from VCINSTALLDIR
+      if(DEFINED ENV{VCINSTALLDIR})
+        file(TO_CMAKE_PATH "$ENV{VCINSTALLDIR}" PKG_VCINSTALLDIR)
+        list(
+          APPEND
+          PKG_SEARCHDIRS
+          "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.CRT/"
+          "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.OPENMP/"
+          )
+      else()
+        message(FATAL_ERROR
+	  "VCINSTALLDIR variable not set. call vcvarsall.bat <arch> first before starting build.")
+      endif()
+
     else()
       file(GLOB MXE_GCC_LIB_DIR "${DEPENDENCIES_INSTALL_DIR}/bin/gcc*")
       list(APPEND PKG_SEARCHDIRS ${MXE_GCC_LIB_DIR})
@@ -883,10 +898,11 @@ function(func_process_deps infile)
           endif()
           if(WIN32)
             if(MSVC)
-              string(REGEX MATCHALL "dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
-              string(REGEX REPLACE "dependencies.." "" loader_ov "${loader_ov}")
-              # take out string 'Image has the following'
-              string(REGEX REPLACE "Image.has.the.following" "" loader_ov "${loader_ov}")	      
+              #skip entries from section 'delay load dependencies'
+              string(REGEX MATCHALL 
+              "Image.has.the.following.dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
+              string(REGEX REPLACE 
+              "Image.has.the.following.dependencies.." "" loader_ov "${loader_ov}")
               #beware of .DLL and .dll
               string(REGEX REPLACE ".DLL" ".dll" loader_ov "${loader_ov}")
               #convert to cmake list
@@ -1109,11 +1125,11 @@ set(WINDOWS_SYSTEM_DLLS
   rpcrt4.dll
   winspool.drv
   normaliz.dll
-  concrt*.*.dll
   odbc32.dll
   psapi.dll
   python...dll
-  vcomp*.*.dll)
+  Image.has.the.following.delay.load
+  )
 
 set(LINUX_SYSTEM_DLLS
   libm.so
