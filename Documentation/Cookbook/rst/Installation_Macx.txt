@@ -4,8 +4,8 @@ uncompress it with the command line :
 
 .. parsed-literal::
 
-    chmod +x OTB-|release|-Linux64.run
-    ./OTB-|release|-Linux64.run
+    chmod +x OTB-|release|-Darwin64.run
+    ./OTB-|release|-Darwin64.run
 
 Once the archive is extracted, you can see OTB-|release|-Darwin64 directory in
 the same direcrtory along with OTB-|release|-Darwin64.run
