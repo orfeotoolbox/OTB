@@ -39,7 +39,6 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbStreamingMinMaxImageFilter.h"
-#include "otbStreamingStatisticsImageFilter.h"
 #include "otbExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -182,9 +181,6 @@ public:
 
   typedef otb::StreamingMinMaxImageFilter
     <FloatImageType>                          MinMaxFilterType;
-
-  typedef otb::StreamingStatisticsImageFilter
-    <FloatImageType>                          StatisticsFilterType;
 
   typedef otb::ExtractROI
     <FloatPixelType,FloatPixelType>           ExtractFilterType;

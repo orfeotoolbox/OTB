@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetDirectoryParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -68,20 +70,27 @@ void QtWidgetDirectoryParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetDirectoryParameter::SelectFile()
+
+void
+QtWidgetDirectoryParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::Directory);
-  fileDialog.setNameFilter("Select a Directory");
+  assert( m_Input!=NULL );
 
-  if (fileDialog.exec())
-    {
-    this->SetFileName( fileDialog.selectedFiles().at(0) );
+  QString dir(
+    GetExistingDirectory(
+      this,
+      QString(),
+      m_Input->text()
+    )
+  );
 
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+  if( dir.isEmpty() )
+    return;
+
+  m_Input->setText( dir );
 }
+
 
 void QtWidgetDirectoryParameter::SetFileName(const QString& value)
 {

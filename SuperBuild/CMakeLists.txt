@@ -7,9 +7,14 @@ project(OTB-SuperBuild)
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_SOURCE_DIR}/../CMake
-    ${CMAKE_MODULE_PATH})
+    ${CMAKE_MODULE_PATH}
+    )
 
 include(ExternalProject)
+
+include(OTBCheckCpp11Keywords)
+
+include(OTBCheckTargetSystemArch)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 
@@ -20,21 +25,6 @@ if(APPLE)
     cmake_policy(SET CMP0042 NEW)
   endif()
   set(CMAKE_MACOSX_RPATH TRUE)
-endif()
-
-if(MSVC)
-  execute_process(
-  COMMAND ${CMAKE_C_COMPILER}
-  ERROR_VARIABLE ev
-  OUTPUT_VARIABLE ov
-  OUTPUT_QUIET
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-  
-  set(OTB_MSVC_COMPILER_ARCH x64)
-  if("${ev}" MATCHES "x86")
-    set(OTB_MSVC_COMPILER_ARCH x86)
-  endif()
-  
 endif()
 
 # use, i.e. don't skip the full RPATH for the build tree
@@ -65,25 +55,34 @@ set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
 mark_as_advanced(DOWNLOAD_LOCATION)
 
 # General options
-option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
-option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
-
-if(EXISTS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt")
-  file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _CONTENT_CMAKELIST
-    REGEX "project\\\(OTB\\\)")
-  if(NOT "${_CONTENT_CMAKELIST}" STREQUAL "")
-    # parse the version number
-    file(STRINGS "${CMAKE_SOURCE_DIR}/../CMakeLists.txt" _FULL_CONTENT_CMAKELIST)
-    string(REGEX REPLACE ".*set\\(OTB_VERSION_MAJOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MAJOR "${_FULL_CONTENT_CMAKELIST}")
-    string(REGEX REPLACE ".*set\\(OTB_VERSION_MINOR \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_MINOR "${_FULL_CONTENT_CMAKELIST}")
-    string(REGEX REPLACE ".*set\\(OTB_VERSION_PATCH \"([0-9]+)\"\\).*" "\\1" SUPERBUILD_OTB_VERSION_PATCH "${_FULL_CONTENT_CMAKELIST}")
-    set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
-    message(STATUS "OTB version : ${SUPERBUILD_OTB_VERSION}")
-  endif()
+option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
+mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  find_path(OTB_DATA_LARGEINPUT_ROOT
+    NAMES OTBData.readme
+    HINTS $ENV{OTB_DATA_LARGEINPUT_ROOT}
+  )
+  mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
 endif()
 
+
+option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
+
+option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
+
+#get version of OTB from source_dir/CMakeLists.txt
+get_version(
+  INPUT_FILE   "${CMAKE_SOURCE_DIR}/../CMakeLists.txt"
+  MATCH_STRINGS "OTB_VERSION_MAJOR" "OTB_VERSION_MINOR" "OTB_VERSION_PATCH"
+  PREFIX SUPERBUILD
+  )
+
+set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VERSION_MINOR}.${SUPERBUILD_OTB_VERSION_PATCH}")
+
+message("OTB version : ${SUPERBUILD_OTB_VERSION}")
+
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
   set (CMAKE_INSTALL_PREFIX
     "${PARENT_OF_BINARY_DIR}/superbuild_install"
     CACHE
@@ -232,6 +231,8 @@ option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
 option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
 option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
+option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
+
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
@@ -253,6 +254,7 @@ option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
 option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+option(OTB_USE_SHARK "Enable module Shark in OTB" OFF)
 option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 
 #Problem: below cmake setting will fail!
@@ -264,9 +266,6 @@ option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
 
-if(ENABLE_OTB_LARGE_INPUTS)
-  find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
-endif()
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
@@ -319,5 +318,9 @@ if(FROM_SUPERBUILD_LIST)
   endforeach()
 endif()
 
+message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
+message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
+
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
+

@@ -7,11 +7,11 @@
 def test(otb, argv):
 	app = otb.Registry.CreateApplication('BandMath')
 
-	imagelist = argv[2:-1]
-	app.SetParameterStringList("il", imagelist, True)
-
 	app.SetParameterString("inxml", argv[1])
 	app.UpdateParameters()
+
+	imagelist = argv[2:-1]
+	app.SetParameterStringList("il", imagelist, True)
 
 	app.SetParameterString("out"  , argv[-1])
 	app.ExecuteAndWriteOutput()

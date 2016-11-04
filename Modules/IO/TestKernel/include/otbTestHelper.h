@@ -26,6 +26,7 @@
 #include <vector>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "otbStringUtils.h"
 
 #include "otbMetaDataKey.h"
 
@@ -64,7 +65,10 @@ public:
     m_ReportErrors(false),
     m_IgnoreLineOrder(false),
     m_MaxArea(1024*1024)
-  {}
+  {
+    m_SpecialTokens.push_back(std::pair<std::string,std::string>(
+      std::string("Integer"),std::string("Integer64")));
+  }
 
   ~TestHelper() ITK_OVERRIDE{}
 
@@ -75,6 +79,10 @@ public:
                                 const StringList& testFilenamesMetaData);
 
   int RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
+                             const StringList& testFilenamesAscii,
+                             const StringList& ignoredLines);
+
+  int RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
                              const StringList& testFilenamesAscii,
                              const StringList& ignoredLines);
 
@@ -113,6 +121,11 @@ private:
                               const double epsilon,
                               std::vector<std::string> ignoredLines) const;
 
+  int RegressionTestDiffFile(const char * testAsciiFileName,
+                              const char * baselineAsciiFileName,
+                              const double epsilon,
+                              std::vector<std::string> ignoredLines) const;
+
   int RegressionTestMetaData(const char *testImageFilename,
                              const char *baselineImageFilename,
                              const double toleranceDiffPixelImage) const;
@@ -121,11 +134,19 @@ private:
   bool isHexaNumber(int i) const;
   bool isPoint(int i) const;
   bool isMinusSign(int i) const;
+  bool isAlphaNum(int i) const;
   bool isNumeric(const std::string& str) const;
   bool isScientificNumeric(const std::string& str) const;
   bool isHexaPointerAddress(const std::string& str) const;
+  bool isHexaPointerAddress(const std::string& str, size_t pos, size_t size) const;
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
   std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
+  int TokenizeLine(const std::string &line, StringList &tokens) const;
+
+  static bool IsTokenEmpty(boost::iterator_range<std::string::const_iterator> &token);
+
+  // TODO : maybe merge this function with isToBeIgnoredForAnyComparison
+  bool IsLineValid(const std::string& str, const StringList &ignoredLines) const;
   //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
   bool CompareLines(const std::string& strfileref,
                     const std::string& strfiletest,
@@ -152,6 +173,8 @@ private:
   const unsigned int m_MaxArea;
 
   void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
+
+  std::vector<std::pair<std::string, std::string> > m_SpecialTokens;
 };
 }
 

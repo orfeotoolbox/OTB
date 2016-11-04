@@ -6,7 +6,6 @@ otb_add_test(NAME leTvLibSVMMachineLearningModel COMMAND otbSupervisedTestDriver
 otb_add_test(NAME leTuLibSVMMachineLearningModelNew COMMAND otbSupervisedTestDriver
   otbLibSVMMachineLearningModelNew)
 
-
 otb_add_test(NAME leTvImageClassificationFilterLibSVM COMMAND otbSupervisedTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/leSVMImageClassificationFilterOutput.tif
@@ -17,11 +16,11 @@ otb_add_test(NAME leTvImageClassificationFilterLibSVM COMMAND otbSupervisedTestD
   ${TEMP}/leImageClassificationFilterLibSVMOutput.tif
   )
 
-otb_add_test(NAME leTuLibSVMMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
+otb_add_test(NAME leTvLibSVMMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbLibSVMMachineLearningModelCanRead
   ${TEMP}/libsvm_model.txt
   )
-set_property(TEST leTuLibSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvLibSVMMachineLearningModel)
+set_property(TEST leTvLibSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvLibSVMMachineLearningModel)
 
 otb_add_test(NAME leTvLibSVMMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbLibSVMRegressionTests

@@ -255,6 +255,55 @@ def ApplicationParametersToRst(app,paramlist,deep = False,current=""):
 
     return output
 
+def ApplicationParametersToRstV2(app,paramlist,deep = False,current=""):
+    output = ""
+    # current level
+    level = 0
+    # First run
+    if len(current)==0:
+        output += "This section describes in details the parameters available for this application. Table [#]_ presents a summary of these parameters and the parameters keys to be used in command-line and programming languages. Application key is *" + app.GetName() + "* ."  + linesep
+        output += GenerateParametersTable(app,paramlist)
+    else:
+        level = len(current.split('.'))
+    indentLevel = level
+    if deep == False:
+        indentLevel += 1
+    # compute prefix
+    bulletStyle = "-*+"
+    prefix = ""
+    if indentLevel > 0:
+        prefix = (' ' * (indentLevel-1)) + bulletStyle[(indentLevel-1)%3] + ' '
+    # find parameter for current param
+    currentlevelparams = []
+    for param in paramlist:
+        if param.startswith(current) and len(param.split('.')) == level+1:
+            currentlevelparams.append(param)
+    if len(currentlevelparams) > 0:
+        output+= linesep
+        for param in currentlevelparams:
+            if app.GetParameterType(param) == otbApplication.ParameterType_Group and level == 0:
+                output+= prefix+"**["+ ConvertString(app.GetParameterName(param))+ "]**"
+            else:
+                output+= prefix+"**"+ ConvertString(app.GetParameterName(param))+ "**"
+            descr =  RstifyDescription(app.GetParameterDescription(param))
+            if len(descr):
+                output+= ": "+descr
+            if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
+                output+= " Available choices are: "
+                additionalKeys = []
+                for choiceKey in app.GetChoiceKeys(param):
+                    additionalKeys.append(param+'.'+choiceKey)
+                nextParamList = paramlist + tuple(additionalKeys)
+            else:
+                nextParamList = paramlist
+            output+= linesep
+            ret = ApplicationParametersToRstV2(app,nextParamList,deep,param)
+            if indentLevel == 0 and len(ret)==0:
+                output+= linesep
+            output+= ret
+        output+= linesep
+    return output
+
 def GetApplicationExampleCommandLine(app,idx):
 
     output = "%s%s%s\t%s" % ("::", linesep , linesep, "otbcli_")
@@ -392,7 +441,7 @@ def ApplicationToRst(appname):
     output += RstHeading("Parameters", '-')
     depth = GetParametersDepth(app.GetParametersKeys())
     deep = depth > 0
-    output += ApplicationParametersToRst(app,app.GetParametersKeys(),deep) + linesep
+    output += ApplicationParametersToRstV2(app,app.GetParametersKeys(),deep) + linesep
     if app.GetNumberOfExamples() > 1:
         output += RstHeading("Examples", '-') + linesep
         #output += appdetailslevel + "{Examples}" + "\\label{appexamples:" + appname + "}" + linesep

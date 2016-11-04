@@ -199,6 +199,7 @@ private:
       otbAppLogDEBUG( << "Shrink starts..." );
 
       shrinkFilter->SetShrinkFactor(shrinkFactor);
+      shrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       AddProcess(shrinkFilter->GetStreamer(), "Computing shrink Image for min/max estimation...");
 
       if ( rescaleType == "log2")
@@ -210,14 +211,12 @@ private:
 
         shrinkFilter->SetInput(m_TransferLog->GetOutput());
         rescaler->SetInput(m_TransferLog->GetOutput());
-        shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
         shrinkFilter->Update();
         }
       else
         {
         shrinkFilter->SetInput(input);
         rescaler->SetInput(input);
-        shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
         shrinkFilter->Update();
         }
 
@@ -226,7 +225,7 @@ private:
         {
         maskShrinkFilter->SetShrinkFactor(shrinkFactor);
         maskShrinkFilter->SetInput(mask);
-        maskShrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
+        maskShrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
         maskShrinkFilter->Update();
         }
 

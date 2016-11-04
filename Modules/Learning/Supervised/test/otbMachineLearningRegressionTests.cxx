@@ -24,6 +24,8 @@
 const double otb_epsilon_01 = 0.1;
 #endif
 
+#include "otbMachineLearningModel.h"
+
 #ifdef OTB_USE_OPENCV
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbSVMMachineLearningModel.h"

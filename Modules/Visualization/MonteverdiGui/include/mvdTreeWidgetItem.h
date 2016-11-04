@@ -118,7 +118,7 @@ public:
   /**
    * \brief Destructor.
    */
-  virtual ~TreeWidgetItem();
+  ~TreeWidgetItem() ITK_OVERRIDE;
 
   /**
    */
@@ -143,7 +143,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qtreewidgetitem.html#clone
    */
-  virtual QTreeWidgetItem* clone() const;
+  QTreeWidgetItem* clone() const ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

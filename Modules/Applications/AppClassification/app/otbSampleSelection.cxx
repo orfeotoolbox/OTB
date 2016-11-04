@@ -92,8 +92,10 @@ private:
       " so that the smallest one is fully sampled.\n"
       "  - constant : select the same number of samples N in each class" 
       " (with N below or equal to the size of the smallest class).\n"
-      "  - byclass : set the required number for each class manually, with an input CSV file" 
+      "  - byclass : set the required number for each class manually, with an input CSV file"
       " (first column is class name, second one is the required samples number).\n\n"
+      "  - percent: set a target global percentage of samples to use. Class proportions will be respected. \n\n"
+      "  - total: set a target total number of samples to use. Class proportions will be respected. \n\n"
       "There is also a choice on the sampling type to performs : \n\n"
       "  - periodic : select samples uniformly distributed\n"
       "  - random : select samples randomly distributed\n\n"
@@ -166,6 +168,23 @@ private:
     AddParameter(ParameterType_Int, "strategy.constant.nb", "Number of samples for all classes");
     SetParameterDescription("strategy.constant.nb", "Number of samples for all classes");
 
+    AddChoice("strategy.percent","Use a percentage of the samples available for each class");
+    SetParameterDescription("strategy.percent","Use a percentage of the samples available for each class");
+
+    AddParameter(ParameterType_Float,"strategy.percent.p","The percentage to use");
+    SetParameterDescription("strategy.percent.p","The percentage to use");
+    SetMinimumParameterFloatValue("strategy.percent.p",0);
+    SetMaximumParameterFloatValue("strategy.percent.p",1);
+    SetDefaultParameterFloat("strategy.percent.p",0.5);
+
+    AddChoice("strategy.total","Set the total number of samples to generate, and use class proportions.");
+    SetParameterDescription("strategy.total","Set the total number of samples to generate, and use class proportions.");
+
+    AddParameter(ParameterType_Int,"strategy.total.v","The number of samples to generate");
+    SetParameterDescription("strategy.total.v","The number of samples to generate");
+    SetMinimumParameterIntValue("strategy.total.v",1);
+    SetDefaultParameterInt("strategy.total.v",1000);
+    
     AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
     SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
 
@@ -234,15 +253,30 @@ private:
         m_RateCalculator->SetNbOfSamplesAllClasses(GetParameterInt("strategy.constant.nb"));
         }
       break;
-      // smallest class
+      // percent
       case 2:
+      {
+      otbAppLogINFO("Sampling strategy: set a percentage of samples for each class.");
+      m_RateCalculator->SetPercentageOfSamples(this->GetParameterFloat("strategy.percent.p"));
+      }
+      break;
+      // total
+      case 3:
+      {
+      otbAppLogINFO("Sampling strategy: set the total number of samples to generate, use classes proportions.");
+      m_RateCalculator->SetTotalNumberOfSamples(this->GetParameterInt("strategy.total.v"));
+      }
+      break;
+
+      // smallest class
+      case 4:
         {
         otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
         m_RateCalculator->SetMinimumNbOfSamplesByClass();
         }
       break;
       // all samples
-      case 3:
+      case 5:
         {
         otbAppLogINFO("Sampling strategy : take all samples");
         m_RateCalculator->SetAllSamples();

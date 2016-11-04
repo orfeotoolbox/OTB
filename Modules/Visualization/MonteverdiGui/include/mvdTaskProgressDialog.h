@@ -97,7 +97,7 @@ public:
   /**
    * \brief Destructor.
    */
-  virtual ~TaskProgressDialog();
+  ~TaskProgressDialog() ITK_OVERRIDE;
 
   /**
    */

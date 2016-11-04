@@ -68,6 +68,12 @@ public:
   /** Method to set the same number of required samples in each class */
   void SetNbOfSamplesAllClasses(unsigned long);
 
+  /** Method to set a percentage of samples for each class */
+  void SetPercentageOfSamples(double percent);
+
+  /** Method to set the total number of samples to generate */
+  void SetTotalNumberOfSamples(unsigned long value);  
+  
   /** Method to choose a sampling strategy based on the smallest class.
    * The number of samples in each class is set to this minimum size*/
   void SetMinimumNbOfSamplesByClass(void);
@@ -101,10 +107,10 @@ protected:
   SamplingRateCalculator();
 
   /** Destructor */
-  virtual ~SamplingRateCalculator() {}
+  ~SamplingRateCalculator() ITK_OVERRIDE {}
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SamplingRateCalculator(const Self &);    //purposely not implemented

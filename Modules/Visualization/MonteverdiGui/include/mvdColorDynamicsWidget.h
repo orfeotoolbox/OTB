@@ -120,7 +120,7 @@ public:
   ColorDynamicsWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor. */
-  virtual ~ColorDynamicsWidget();
+  ~ColorDynamicsWidget() ITK_OVERRIDE;
 
   /**
    */

@@ -108,6 +108,8 @@ private:
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
+    AddRAMParameter();
+
    // Doc example parameter settings
    SetDocExampleParameterValue("in", "ROI_QB_MUL_4.tif");
    SetDocExampleParameterValue("mask", "\"((b1>80)*intensity>95)\"");
@@ -139,7 +141,8 @@ private:
     if (IsParameterEnabled("obia") && HasValue("obia"))
       m_Connected->GetFilter()->SetOBIAExpression(GetParameterString("obia"));
 
-    AddProcess(m_Connected,"Computing segmentation");
+    m_Connected->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(m_Connected->GetStreamer(),"Computing segmentation");
     m_Connected->Update();
 
     /*

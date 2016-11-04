@@ -121,7 +121,7 @@ public:
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */
-  virtual ~ImageViewManipulator();
+  ~ImageViewManipulator() ITK_OVERRIDE;
 
   //
   // AbstractImageViewManipulator overloads.
@@ -130,64 +130,64 @@ public:
   //
   // Accessors.
 
-  virtual void SetViewportSize( int width, int height );
+  void SetViewportSize( int width, int height ) ITK_OVERRIDE;
 
-  virtual SizeType GetViewportSize() const;
+  SizeType GetViewportSize() const ITK_OVERRIDE;
 
-  virtual void SetOrigin( const PointType& origin );
+  void SetOrigin( const PointType& origin ) ITK_OVERRIDE;
 
-  virtual PointType GetOrigin() const;
+  PointType GetOrigin() const ITK_OVERRIDE;
 
-  virtual void SetSpacing( const SpacingType& spacing );
+  void SetSpacing( const SpacingType& spacing ) ITK_OVERRIDE;
 
-  virtual SpacingType GetSpacing() const;
+  SpacingType GetSpacing() const ITK_OVERRIDE;
 
-  virtual void SetNativeSpacing( const SpacingType& );
+  void SetNativeSpacing( const SpacingType& ) ITK_OVERRIDE;
 
-  virtual void SetWkt( const std::string& wkt );
+  void SetWkt( const std::string& wkt ) ITK_OVERRIDE;
 
-  virtual void SetKeywordList(
+  void SetKeywordList(
     const DefaultImageType::ImageKeywordlistType& kwl
-  );
+  ) ITK_OVERRIDE;
 
-  virtual PointType GetCenter() const;
+  PointType GetCenter() const ITK_OVERRIDE;
 
-  virtual ZoomType GetFixedZoomType() const;
+  ZoomType GetFixedZoomType() const ITK_OVERRIDE;
 
   //
   // Controls.
 
-  virtual
+  
     void
     SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const;
+      AbstractImageViewRenderer::RenderingContext * const ) const ITK_OVERRIDE;
 
-  virtual void ZoomIn();
+  void ZoomIn() ITK_OVERRIDE;
 
-  virtual void ZoomOut();
+  void ZoomOut() ITK_OVERRIDE;
 
-  virtual const PointType& Transform( PointType&, const QPoint& ) const;
+  const PointType& Transform( PointType&, const QPoint& ) const ITK_OVERRIDE;
 
-  virtual void ResetViewport();
+  void ResetViewport() ITK_OVERRIDE;
 
   //
   // Events.
 
-  virtual void MouseMoveEvent( QMouseEvent* event );
+  void MouseMoveEvent( QMouseEvent* event ) ITK_OVERRIDE;
 
-  virtual void MousePressEvent( QMouseEvent* event );
+  void MousePressEvent( QMouseEvent* event ) ITK_OVERRIDE;
 
-  virtual void MouseReleaseEvent( QMouseEvent* event );
+  void MouseReleaseEvent( QMouseEvent* event ) ITK_OVERRIDE;
 
-  virtual void MouseDoubleClickEvent( QMouseEvent * );
+  void MouseDoubleClickEvent( QMouseEvent * ) ITK_OVERRIDE;
 
-  virtual void WheelEvent( QWheelEvent* event);
+  void WheelEvent( QWheelEvent* event) ITK_OVERRIDE;
 
-  virtual void ResizeEvent( QResizeEvent* event );
+  void ResizeEvent( QResizeEvent* event ) ITK_OVERRIDE;
 
-  virtual void KeyPressEvent( QKeyEvent* event );
+  void KeyPressEvent( QKeyEvent* event ) ITK_OVERRIDE;
 
-  virtual void KeyReleaseEvent( QKeyEvent* event );
+  void KeyReleaseEvent( QKeyEvent* event ) ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
@@ -198,9 +198,9 @@ public slots:
   //
   // AbstractImageViewManipulator overloads.
 
-  virtual void CenterOn( const PointType& point );
+  void CenterOn( const PointType& point ) ITK_OVERRIDE;
 
-  virtual void ZoomTo( double scale );
+  void ZoomTo( double scale ) ITK_OVERRIDE;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -352,6 +352,9 @@ private:
 private:
   /**
    */
+  QTimer * m_Timer;
+  /**
+   */
   SpacingType m_NativeSpacing;
   /**
    */
@@ -383,6 +386,9 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  void OnTimeout();
 };
 
 } // end namespace 'mvd'

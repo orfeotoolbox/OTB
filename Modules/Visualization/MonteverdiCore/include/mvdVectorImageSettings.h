@@ -108,7 +108,7 @@ public:
   /**
    * \brief Destructor.
    */
-  virtual ~VectorImageSettings();
+  ~VectorImageSettings() ITK_OVERRIDE;
 
   /**
    * \brief Assignment operator.

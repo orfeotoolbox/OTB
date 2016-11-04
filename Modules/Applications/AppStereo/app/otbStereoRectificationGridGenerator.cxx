@@ -239,7 +239,8 @@ private:
       m_DEMToImageGenerator->AboveEllipsoidOn();
 
       m_StatisticsFilter->SetInput(m_DEMToImageGenerator->GetOutput());
-      AddProcess(m_StatisticsFilter,"Computing DEM statistics ...");
+      m_StatisticsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+      AddProcess(m_StatisticsFilter->GetStreamer(),"Computing DEM statistics ...");
       m_StatisticsFilter->Update();
 
       otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());

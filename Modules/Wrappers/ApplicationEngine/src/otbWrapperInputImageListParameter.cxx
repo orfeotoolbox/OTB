@@ -135,7 +135,7 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
 
     tmpInputImageParameter->SetFromFileName(filename);
 
-    if(tmpInputImageParameter->HasValue())
+    if(!tmpInputImageParameter->HasValue())
       {
       this->ClearValue();
       return false;

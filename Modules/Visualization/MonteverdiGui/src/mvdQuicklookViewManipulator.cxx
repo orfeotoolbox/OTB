@@ -234,7 +234,7 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::KeyReleaseEvent( QKeyEvent * otbUseInDebug( e ) )
+::KeyReleaseEvent( QKeyEvent * )
 {
 }
 

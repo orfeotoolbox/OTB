@@ -124,6 +124,7 @@ void QtWidgetInputVectorDataListParameter::DoCreateWidget()
   fileLayout->setSpacing(0);
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   fileLayout->addWidget(fileSelection);
   m_InputVectorDataListParam->AddNullElement();
@@ -295,6 +296,7 @@ QtWidgetInputVectorDataListParameter::AddFile()
     }
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
@@ -344,6 +346,7 @@ QtWidgetInputVectorDataListParameter::EraseFile()
   m_FileLayout = new QVBoxLayout();
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);

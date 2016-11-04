@@ -109,7 +109,7 @@ public:
 
     /**
      */
-    virtual ~RenderingContext();
+    ~RenderingContext() ITK_OVERRIDE;
 
     /**
      */
@@ -134,11 +134,11 @@ public:
   ImageViewRenderer( QObject* p = NULL );
 
   /** Destructor */
-  virtual ~ImageViewRenderer();
+  ~ImageViewRenderer() ITK_OVERRIDE;
 
   /**
    */
-  virtual bool CheckGLCapabilities( int * );
+  bool CheckGLCapabilities( int * ) ITK_OVERRIDE;
 
   /**
    */
@@ -150,45 +150,45 @@ public:
   //
   // AbstractImageViewRenderer overloads.
 
-  virtual bool GetLayerDynamics( const StackedLayerModel::KeyType & key,
+  bool GetLayerDynamics( const StackedLayerModel::KeyType & key,
 				 ParametersType & params,
-				 bool isGlobal ) const;
+				 bool isGlobal ) const ITK_OVERRIDE;
 
-  virtual const AbstractLayerModel* GetReferenceModel() const;
+  const AbstractLayerModel* GetReferenceModel() const ITK_OVERRIDE;
 
-  virtual AbstractLayerModel * GetReferenceModel();
+  AbstractLayerModel * GetReferenceModel() ITK_OVERRIDE;
 
-  virtual void GetLayerExtent( const StackedLayerModel::KeyType & key,
+  void GetLayerExtent( const StackedLayerModel::KeyType & key,
                                PointType& origin,
-                               PointType& extent ) const;
+                               PointType& extent ) const ITK_OVERRIDE;
 
-  virtual void GetReferenceExtent( PointType& origin,
-                                   PointType& extent ) const;
+  void GetReferenceExtent( PointType& origin,
+                                   PointType& extent ) const ITK_OVERRIDE;
 
-  virtual void GetViewExtent( PointType& origin,
-                              PointType& extent ) const;
+  void GetViewExtent( PointType& origin,
+                              PointType& extent ) const ITK_OVERRIDE;
 
-  virtual
-  AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
+  
+  AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const ITK_OVERRIDE;
 
-  virtual void InitializeGL();
+  void InitializeGL() ITK_OVERRIDE;
 
-  virtual void ResizeGL( int width, int height );
+  void ResizeGL( int width, int height ) ITK_OVERRIDE;
 
-  virtual
-  void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
+  
+  void PaintGL( const AbstractImageViewRenderer::RenderingContext* context ) ITK_OVERRIDE;
 
-  virtual void Pick( const PointType & view,
-                     PixelInfo::Vector & pixels ) const;
+  void Pick( const PointType & view,
+                     PixelInfo::Vector & pixels ) const ITK_OVERRIDE;
 
-  virtual void GetResolutions( PixelInfo::Vector & pixels ) const;
+  void GetResolutions( PixelInfo::Vector & pixels ) const ITK_OVERRIDE;
 
-  virtual bool TransformToView( PointType & point,
+  bool TransformToView( PointType & point,
 				const StackedLayerModel::KeyType &,
 				const IndexType &,
-				bool isPhysical ) const;
+				bool isPhysical ) const ITK_OVERRIDE;
 
-  virtual void SaveScreenshot( const QString & ) const;
+  void SaveScreenshot( const QString & ) const ITK_OVERRIDE;
 
   bool
     Reproject( PointType & center,
@@ -196,15 +196,15 @@ public:
                const PointType & vcenter,
                const SpacingType & vspacing ) const;
 
-  virtual bool IsEffectsEnabled() const;
+  bool IsEffectsEnabled() const ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
 public slots:
-  virtual void UpdatePixelInfo( const QPoint & screen,
+  void UpdatePixelInfo( const QPoint & screen,
 				const PointType & view,
-				const PixelInfo::Vector & pixels );
+				const PixelInfo::Vector & pixels ) ITK_OVERRIDE;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -269,23 +269,23 @@ private:
   //
   // AbstractImageViewRenderer overloads.
 
-  virtual void virtual_UpdateScene();
-  virtual void virtual_RefreshScene();
+  void virtual_UpdateScene() ITK_OVERRIDE;
+  void virtual_RefreshScene() ITK_OVERRIDE;
 
-  virtual bool virtual_ZoomToRegion( const PointType & origin,
+  bool virtual_ZoomToRegion( const PointType & origin,
 				     const PointType & extent,
 				     PointType & center,
-				     SpacingType & spacing ) const;
+				     SpacingType & spacing ) const ITK_OVERRIDE;
 
-  virtual bool virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const;
+  bool virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const ITK_OVERRIDE;
 
-  virtual bool virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
+  bool virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
 				    PointType & center,
-				    SpacingType & spacing ) const;
+				    SpacingType & spacing ) const ITK_OVERRIDE;
 
-  virtual bool virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
+  bool virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
 				   PointType & center,
-				   SpacingType & spacing ) const;
+				   SpacingType & spacing ) const ITK_OVERRIDE;
 
 //
 // Private attributes.

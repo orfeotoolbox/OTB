@@ -79,7 +79,7 @@ template <class TInputValue, class TOutputValue>
 typename GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

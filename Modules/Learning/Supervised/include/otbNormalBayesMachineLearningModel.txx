@@ -61,7 +61,7 @@ template <class TInputValue, class TOutputValue>
 typename NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

@@ -82,6 +82,14 @@ public:
   /** Method to manually set the number of samples required in each class */
   void SetNbOfSamplesByClass(const std::vector<ClassCountMapType> &required, PartitionType t);
 
+  /** Method to use a percentage of the samples available in each
+    * class */
+  void SetPercentageOfSamples(std::vector<double> &p, PartitionType t);
+
+  /** Method to set the total number of samples and use classes proportions 
+   */
+  void SetTotalNumberOfSamples(std::vector<unsigned long> &tot, PartitionType t);
+  
 protected:
   /** Constructor */
   SamplingRateCalculatorList(){}

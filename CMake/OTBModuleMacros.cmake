@@ -147,6 +147,14 @@ macro(otb_module_impl)
     # When building a module outside the OTB source tree, find the export
     # header.
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_BINARY_DIR}/include)
+  else()
+    # if OTB_SOURCE_DIR is set all auto-generated export headers for a class
+    # goes into OTBCommon_BINARY_DIR/src.
+    # Hence it is required to include   ${OTBCommon_BINARY_DIR} to list of
+    # ${otb-module}_INCLUDE_DIRS. Not doing this will force developer to
+    # to include them explicitly for each module which can result in
+    # more problems. ( stephane albert)
+    list(APPEND ${otb-module}_INCLUDE_DIRS ${OTBCommon_BINARY_DIR})
   endif()
 
   if(${otb-module}_INCLUDE_DIRS)
@@ -323,4 +331,10 @@ macro(otb_module_target _name)
   if(_install)
     otb_module_target_install(${_name})
   endif()
+endmacro()
+
+macro(otb_module_requires_cxx11)
+  if(${otb-module}_ENABLED AND NOT ${OTB_HAS_CXX11})
+    message(FATAL_ERROR "Module ${otb-module} requires C++11 support. Consider adding --std=c++11 to your compiler flags or disabling it.")
+  endif()  
 endmacro()

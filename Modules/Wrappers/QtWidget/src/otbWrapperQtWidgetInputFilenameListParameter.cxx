@@ -125,6 +125,7 @@ void QtWidgetInputFilenameListParameter::DoCreateWidget()
   fileLayout->setSpacing(0);
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   fileLayout->addWidget(fileSelection);
   m_InputFilenameListParam->AddNullElement();
@@ -296,6 +297,7 @@ QtWidgetInputFilenameListParameter::AddFile()
     }
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
@@ -345,6 +347,7 @@ QtWidgetInputFilenameListParameter::EraseFile()
   m_FileLayout = new QVBoxLayout();
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);

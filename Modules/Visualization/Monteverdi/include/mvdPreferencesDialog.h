@@ -90,7 +90,7 @@ public:
   PreferencesDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
-  virtual ~PreferencesDialog();
+  ~PreferencesDialog() ITK_OVERRIDE;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

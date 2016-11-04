@@ -35,6 +35,10 @@
 #include "otbLibSVMMachineLearningModelFactory.h"
 #endif
 
+#ifdef OTB_USE_SHARK
+#include "otbSharkRandomForestsMachineLearningModelFactory.h"
+#endif
+
 #include "itkMutexLockHolder.h"
 
 
@@ -98,6 +102,10 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 #endif
 
+#ifdef OTB_USE_SHARK
+  RegisterFactory(SharkRandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+#endif
+  
 #ifdef OTB_USE_OPENCV
   RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
@@ -107,8 +115,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-#endif
-
+#endif  
 }
 
 template <class TInputValue, class TOutputValue>
@@ -144,6 +151,17 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       continue;
       }
 #endif
+
+#ifdef OTB_USE_SHARK
+    SharkRandomForestsMachineLearningModelFactory<TInputValue,TOutputValue> *sharkRFFactory =
+      dynamic_cast<SharkRandomForestsMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (sharkRFFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(sharkRFFactory);
+      continue;
+      }
+#endif
+
 #ifdef OTB_USE_OPENCV
     // RandomForest
     RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue> *rfFactory =
@@ -209,7 +227,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(knnFactory);
       continue;
       }
-#endif
+#endif   
     }
 
 }

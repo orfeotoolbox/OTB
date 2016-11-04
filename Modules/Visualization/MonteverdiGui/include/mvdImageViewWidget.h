@@ -115,7 +115,7 @@ public:
                    Qt::WindowFlags f =0 );
 
   /** \brief Destructor. */
-  virtual ~ImageViewWidget();
+  ~ImageViewWidget() ITK_OVERRIDE;
 
   /**
    */
@@ -253,21 +253,21 @@ protected:
   //
   // Qt overloads.
 
-  virtual void initializeGL();
-  virtual void resizeGL( int widgth, int height );
-  virtual void paintGL();
+  void initializeGL() ITK_OVERRIDE;
+  void resizeGL( int widgth, int height ) ITK_OVERRIDE;
+  void paintGL() ITK_OVERRIDE;
 
-  virtual void mouseMoveEvent( QMouseEvent* event );
-  virtual void mouseReleaseEvent( QMouseEvent* event );
-  virtual void mousePressEvent( QMouseEvent* event );
-  virtual void mouseDoubleClickEvent( QMouseEvent * event );
+  void mouseMoveEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void mouseReleaseEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void mousePressEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void mouseDoubleClickEvent( QMouseEvent * event ) ITK_OVERRIDE;
 
-  virtual void wheelEvent( QWheelEvent* event);
+  void wheelEvent( QWheelEvent* event) ITK_OVERRIDE;
 
-  virtual void keyPressEvent( QKeyEvent* event );
-  virtual void keyReleaseEvent( QKeyEvent* event );
+  void keyPressEvent( QKeyEvent* event ) ITK_OVERRIDE;
+  void keyReleaseEvent( QKeyEvent* event ) ITK_OVERRIDE;
 
-  virtual void resizeEvent( QResizeEvent* event );
+  void resizeEvent( QResizeEvent* event ) ITK_OVERRIDE;
 
 
 //

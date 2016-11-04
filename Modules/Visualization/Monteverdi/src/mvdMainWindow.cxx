@@ -36,6 +36,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include <otbQtAdapters.h>
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -956,8 +957,14 @@ void
 MainWindow
 ::InitializeStatusBarWidgets()
 {
-  m_StatusBarWidget = new StatusBarWidget(statusBar());
-  statusBar()->addPermanentWidget(m_StatusBarWidget, 1);
+  // MANTIS-
+  assert( m_StatusBarWidget==NULL );
+
+  m_StatusBarWidget = new StatusBarWidget( statusBar() );
+
+  statusBar()->addPermanentWidget( m_StatusBarWidget, 1 );
+
+  m_StatusBarWidget->setEnabled( false );
 }
 
 /*****************************************************************************/
@@ -1051,7 +1058,10 @@ MainWindow
     if( importDialog->HasSubDatasets() )
       {
       if( importDialog->exec()==QDialog::Rejected )
-	return 0;
+        {
+        delete importDialog;
+        return 0;
+        }
 
       IntVector::size_type count = 0;
       IntVector indices;
@@ -1063,11 +1073,16 @@ MainWindow
 	   ++ i )
 	count +=
 	  ImportImage(
-	    QString( "%1?&sdataidx=%2" ).arg( filename ).arg( indices[ i ] ),
+	    QString( "%1%2&sdataidx=%3" ).arg( filename ).arg( filename.count(QChar('?')) ? "" : "?" ).arg( indices[ i ] ),
 	    index + count
 	  );
 
+      delete importDialog;
       return count;
+      }
+    else
+      {
+      delete importDialog;
       }
   }
   // CDS import.
@@ -1568,8 +1583,7 @@ MainWindow
     < ApplicationsToolBox, ApplicationsToolBoxController, QDockWidget >
     ( "APPLICATIONS_BROWSER",
       tr( "OTB-Applications browser" ),
-      Qt::RightDockWidgetArea,
-      I18nMainWindow::DOCK_LAYOUT_FLOATING
+      Qt::RightDockWidgetArea
     );
 
   tabifyDockWidget( m_HistogramDock, m_OtbApplicationsBrowserDock );
@@ -1653,7 +1667,7 @@ MainWindow
   //
   // Select filename.
   ImportImages(
-    I18nMainWindow::GetOpenFileNames( this, tr( "Open file..." ) )
+    otb::GetOpenFileNames( this, tr( "Open file..." ) )
   );
 }
 
@@ -1957,8 +1971,16 @@ MainWindow
 
   AbstractLayerModel * layerModel = stackedLayerModel->Get( key );
 
+  assert( m_StatusBarWidget!=NULL );
+
   if( !layerModel )
+    {
+    m_StatusBarWidget->setEnabled( false );
+
     return;
+    }
+
+  m_StatusBarWidget->setEnabled( true );
 
   if( layerModel->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2376,11 +2398,8 @@ MainWindow
     m_StatusBarWidget->SetPixelIndex( IndexType(), false );
     m_StatusBarWidget->SetText( tr( "Select layer..." ) );
 
-    m_StatusBarWidget->setEnabled( false );
     return;
     }
-
-  m_StatusBarWidget->setEnabled( true );
 
   StackedLayerModel::SizeType current = stackedLayerModel->GetCurrentIndex();
   assert( current!=StackedLayerModel::NIL_INDEX );

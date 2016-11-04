@@ -113,7 +113,7 @@ public:
   HistogramWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~HistogramWidget();
+  ~HistogramWidget() ITK_OVERRIDE;
 
   /**
    * \brief

@@ -88,7 +88,7 @@ public:
 public:
 
   /** Destructor */
-  virtual ~AbstractModelController();
+  ~AbstractModelController() ITK_OVERRIDE;
 
   /** */
   void SetModel( AbstractModel* );

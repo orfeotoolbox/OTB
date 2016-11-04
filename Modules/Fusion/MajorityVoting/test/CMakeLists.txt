@@ -27,6 +27,11 @@ otb_add_test(NAME leTvNeighborhoodMajorityVotingImageFilterTest COMMAND otbMajor
   5 #yRadius
   10 #LabelForNoDataPixels
   7 #LabelForUndecidedPixels
+  0 #OnlyIsolatedPixels
+  )
+
+otb_add_test(NAME leTvNeighborhoodMajorityVotingIsolThresPixTest COMMAND otbMajorityVotingTestDriver
+  otbNeighborhoodMajorityVotingImageFilterIsolatedTest
   )
 
 otb_add_test(NAME leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting COMMAND otbMajorityVotingTestDriver
@@ -34,9 +39,7 @@ otb_add_test(NAME leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting
   ${BASELINE}/leSVMImageClassificationWithNMVFilterOutput.tif
   ${TEMP}/leSVMImageClassificationWithNMVFilterOutput.tif
   otbNeighborhoodMajorityVotingImageFilterTest
-  ${TEMP}/leSVMImageClassificationFilterOutput.tif
+  ${BASELINE}/leSVMImageClassificationFilterOutput.tif
   ${TEMP}/leSVMImageClassificationWithNMVFilterOutput.tif
   false
   )
-set_property(TEST leTvSVMImageClassificationFilterWithNeighborhoodMajorityVoting PROPERTY DEPENDS leTvSVMImageClassificationFilter)
-

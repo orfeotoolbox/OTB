@@ -42,9 +42,9 @@ otbImageToLuminanceImageFilter.cxx
 add_executable(otbOpticalCalibrationTestDriver ${OTBOpticalCalibrationTests})
 target_link_libraries(otbOpticalCalibrationTestDriver ${OTBOpticalCalibration-Test_LIBRARIES})
 otb_module_target_label(otbOpticalCalibrationTestDriver)
+set_linker_stack_size_flag(otbOpticalCalibrationTestDriver 10000000)
 
 # Tests Declaration
-
 otb_add_test(NAME raTuSpectralSensitivityReaderNew COMMAND otbOpticalCalibrationTestDriver
   otbSpectralSensitivityReaderNew
   )

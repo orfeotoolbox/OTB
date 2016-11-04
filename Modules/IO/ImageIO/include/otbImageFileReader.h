@@ -202,6 +202,8 @@ private:
   FNameHelperType::Pointer m_FilenameHelper;
 
   unsigned int m_AdditionalNumber;
+
+  bool m_KeywordListUpToDate;
 };
 
 } //namespace otb

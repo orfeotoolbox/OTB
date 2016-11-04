@@ -171,6 +171,7 @@ private:
   filter->SetOGRData(reprojVector);
   filter->SetFieldName(fieldName);
   filter->SetLayerIndex(this->GetParameterInt("layer"));
+  filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
   AddProcess(filter->GetStreamer(),"Analyse polygons...");
   filter->Update();

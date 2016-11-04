@@ -124,7 +124,7 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("OpticalCalibration");
-    SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6. For other sensors the application also allows providing calibration parameters manually.");
+    SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6, Spot7. For other sensors the application also allows providing calibration parameters manually.");
     // Documentation
     SetDocName("Optical calibration");
     SetDocLongDescription("The application allows converting pixel values from DN (for Digital Numbers) to reflectance. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illuminations.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illuminations, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported. Note that computing TOC reflectivity will internally compute first TOA and then TOC reflectance. \n"
@@ -812,8 +812,11 @@ private:
         }
         else if (IMIName != IMIOptDfltName)
         {
-          if (lImageMetadataInterface->GetSpectralSensitivity()->Size() > 0)
-            m_paramAcqui->SetWavelengthSpectralBand(lImageMetadataInterface->GetSpectralSensitivity());
+          //Avoid to call GetSpectralSensitivity() multiple times
+          OpticalImageMetadataInterface::WavelengthSpectralBandVectorType spectralSensitivity = lImageMetadataInterface->GetSpectralSensitivity();
+          
+          if (spectralSensitivity->Size() > 0)
+            m_paramAcqui->SetWavelengthSpectralBand(spectralSensitivity);
         }
         // Check that m_paramAcqui contains a real spectral profile.
         if (m_paramAcqui->GetWavelengthSpectralBand()->Size() == 0)
