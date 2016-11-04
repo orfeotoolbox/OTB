@@ -898,10 +898,11 @@ function(func_process_deps infile)
           endif()
           if(WIN32)
             if(MSVC)
-              string(REGEX MATCHALL "dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
-              string(REGEX REPLACE "dependencies.." "" loader_ov "${loader_ov}")
-              # take out string 'Image has the following'
-              string(REGEX REPLACE "Image.has.the.following" "" loader_ov "${loader_ov}")
+              #skip entries from section 'delay load dependencies'
+              string(REGEX MATCHALL 
+              "Image.has.the.following.dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
+              string(REGEX REPLACE 
+              "Image.has.the.following.dependencies.." "" loader_ov "${loader_ov}")
               #beware of .DLL and .dll
               string(REGEX REPLACE ".DLL" ".dll" loader_ov "${loader_ov}")
               #convert to cmake list
@@ -1127,7 +1128,7 @@ set(WINDOWS_SYSTEM_DLLS
   odbc32.dll
   psapi.dll
   python...dll
-  delay.load
+  Image.has.the.following.delay.load
   )
 
 set(LINUX_SYSTEM_DLLS
