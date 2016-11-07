@@ -1,4 +1,4 @@
-OTB-v.5.8.0 - Changes since version 5.6.1 (November 7th, 2016)
+OTB-v.5.8.0 - Changes since version 5.6.1 (November 8th, 2016)
 --------------------------------------------------------------
 
 * Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
