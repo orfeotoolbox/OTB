@@ -46,6 +46,14 @@ public:
   /** Filters typedef */
   typedef itk::MemberCommand< Self >        AddProcessCommandType;
 
+  typedef struct
+    {
+    Application::Pointer App;
+    std::string Desc;
+    } InternalApplication;
+
+  typedef std::map<std::string, InternalApplication> InternalAppContainer;
+
 protected:
   void LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event)
     {
@@ -55,7 +63,41 @@ protected:
       }
     }
 
+  CompositeTrain()
+    {
+    m_LogOutput = itk::StdStreamLogOutput::New();
+    m_LogOutput->SetStream(m_Oss);
+    m_AddProcessCommand = AddProcessCommandType::New();
+    m_AddProcessCommand->SetCallbackFunction(this, &CompositeTrain::LinkWatchers);
+    }
+
 private:
+
+  InternalAppContainer m_AppContainer;
+
+  /**
+   * Method to instanciate and register a new internal application
+   * \param appType Type of the application to instanciate
+   * \param key Identifier associated to the created application
+   * \param desc Description of the internal application
+   */
+  bool AddApplication(std::string appType, std::string key, std::string desc)
+    {
+    if (m_AppContainer.count(key))
+      {
+      otbAppLogWARNING("The requested identifier for internal application is already used ("<<key<<")");
+      return false;
+      }
+    InternalAppContainer container;
+    container.App = ApplicationRegistry::CreateApplication(appType);
+    container.Desc = desc;
+    // Setup logger
+    container.App->GetLogger()->AddLogOutput(m_LogOutput);
+    container.App->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
+    container.App->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
+    m_AppContainer[key] = container;
+    return true;
+    }
 
   bool Connect(Application *app1, std::string key1, Application *app2, std::string key2)
   {
@@ -76,6 +118,37 @@ private:
     return app1->GetParameterList()->SetParameter(proxyParam.GetPointer(),key1);
   }
 
+  bool Connect(std::string key1, std::string key2)
+  {
+    size_t pos1 = key1.find('.');
+    size_t pos2 = key2.find('.');
+    Application *app1 = this;
+    Application *app2 = this;
+    std::string key1Check(key1);
+    std::string key2Check(key2);
+
+    if (pos1 != std::string::npos && m_AppContainer.count(key1.substr(0,pos1)))
+      {
+      app1 = m_AppContainer[key1.substr(0,pos1)].App;
+      key1Check = key1.substr(pos1+1);
+      }
+    if (pos2 != std::string::npos && m_AppContainer.count(key2.substr(0,pos2)))
+      {
+      app2 = m_AppContainer[key2.substr(0,pos2)].App;
+      key2Check = key2.substr(pos2+1);
+      }
+
+    return this->Connect(app1, key1Check, app2, key2Check);
+  }
+
+  void DoExecuteInternal(std::string key)
+    {
+    otbAppLogINFO(<< m_AppContainer[key].Desc <<"...");
+    m_AppContainer[key].App->Execute();
+    otbAppLogINFO(<< "\n" << m_Oss.str());
+    m_Oss.str(std::string(""));
+    }
+
   void DoInit() ITK_OVERRIDE
   {
     SetName("CompositeTrain");
@@ -88,11 +161,9 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    std::string appName("PolygonClassStatistics");
-    m_PolygonAnalysis = ApplicationRegistry::CreateApplication(appName);
+    this->AddApplication("PolygonClassStatistics", "polystat","Polygon analysis");
 
-    appName = "SampleSelection";
-    m_SampleSelection = ApplicationRegistry::CreateApplication(appName);
+    this->AddApplication("SampleSelection", "select", "Sample selection");
 
     // share parameters with PolygonClassStatistics
     this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("in"));
@@ -104,14 +175,11 @@ private:
     SetParameterDescription("sample",
                           "This group of parameters allows you to set training and validation sample lists parameters.");
 
-    this->Connect(this, "sample.vfn", m_PolygonAnalysis, "field");
+    this->Connect("sample.vfn", "polystat.field");
 
     // share parameters with SampleSelection
     this->GetParameterList()->AddParameter(m_SampleSelection->GetParameterByKey("out"));
     this->GetParameterList()->AddParameter(m_SampleSelection->GetParameterByKey("strategy"));
-
-    m_LogOutput = itk::StdStreamLogOutput::New();
-    m_LogOutput->SetStream(m_Oss);
 
     m_PolygonAnalysis->GetLogger()->AddLogOutput(m_LogOutput);
     m_PolygonAnalysis->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
@@ -120,8 +188,6 @@ private:
 
     // Progress
     // Add the callback to be added when a AddProcessToWatch event is invoked
-    m_AddProcessCommand = AddProcessCommandType::New();
-    m_AddProcessCommand->SetCallbackFunction(this, &CompositeTrain::LinkWatchers);
     m_PolygonAnalysis->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
     m_SampleSelection->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
 
@@ -160,15 +226,8 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    otbAppLogINFO(<< "Polygon analysis...");
-    m_PolygonAnalysis->Execute();
-    otbAppLogINFO(<< "\n" << m_Oss.str());
-    m_Oss.str(std::string(""));
-    otbAppLogINFO(<< "Sample selection...");
-    m_SampleSelection->Execute();
-    otbAppLogINFO(<< "\n" << m_Oss.str());
-    m_Oss.str(std::string(""));
-
+    this->DoExecuteInternal("polystat");
+    this->DoExecuteInternal("select");
   }// END DoExecute()
 
   Application::Pointer m_PolygonAnalysis;
