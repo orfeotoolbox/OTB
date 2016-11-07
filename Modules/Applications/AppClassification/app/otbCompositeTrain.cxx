@@ -73,8 +73,6 @@ protected:
 
 private:
 
-  InternalAppContainer m_AppContainer;
-
   /**
    * Method to instanciate and register a new internal application
    * \param appType Type of the application to instanciate
@@ -88,7 +86,7 @@ private:
       otbAppLogWARNING("The requested identifier for internal application is already used ("<<key<<")");
       return false;
       }
-    InternalAppContainer container;
+    InternalApplication container;
     container.App = ApplicationRegistry::CreateApplication(appType);
     container.Desc = desc;
     // Setup logger
@@ -99,13 +97,21 @@ private:
     return true;
     }
 
-  bool Connect(Application *app1, std::string key1, Application *app2, std::string key2)
+  /**
+   * Connect two existing parameters together. The first parameter will point to
+   * the second parameter.
+   */
+  bool Connect(std::string fromKey, std::string toKey)
   {
+    std::string key1(fromKey);
+    std::string key2(toKey);
+    Application *app1 = DecodeKey(key1);
+    Application *app2 = DecodeKey(key2);
+
     Parameter* rawParam1 = app1->GetParameterByKey(key1, false);
     if (dynamic_cast<ProxyParameter*>(rawParam1))
       {
-      otbAppLogWARNING("First parameter is already connected !");
-      return false;
+      otbAppLogWARNING("Parameter is already connected ! Override current connection");
       }
     ProxyParameter::Pointer proxyParam = ProxyParameter::New();
     ProxyParameter::ProxyTargetType target;
@@ -114,39 +120,67 @@ private:
     proxyParam->SetTarget(target);
     proxyParam->SetName(rawParam1->GetName());
     proxyParam->SetDescription(rawParam1->GetDescription());
-
     return app1->GetParameterList()->SetParameter(proxyParam.GetPointer(),key1);
   }
 
-  bool Connect(std::string key1, std::string key2)
-  {
-    size_t pos1 = key1.find('.');
-    size_t pos2 = key2.find('.');
-    Application *app1 = this;
-    Application *app2 = this;
-    std::string key1Check(key1);
-    std::string key2Check(key2);
+  /**
+   * Share a parameter between the composite application and an internal application
+   * The local parameter is created as a proxy to the internal parameter.
+   * \param localKey New parameter key in the composite application
+   * \param internalKey Key to the internal parameter to expose
+   * \param name Name for the local parameter, if empty the target's name is used
+   * \param desc Description for the local parameter, if empty the target's description is used
+   */
+  bool ShareParameter(std::string localKey,
+                      std::string internalKey,
+                      std::string name = std::string(),
+                      std::string desc = std::string())
+    {
+    std::string internalKeyCheck(internalKey);
+    Application *app = DecodeKey(internalKeyCheck);
+    Parameter* rawTarget = app->GetParameterByKey(internalKeyCheck, false);
 
-    if (pos1 != std::string::npos && m_AppContainer.count(key1.substr(0,pos1)))
+    ProxyParameter::Pointer proxyParam = ProxyParameter::New();
+    ProxyParameter::ProxyTargetType target;
+    target.first = app->GetParameterList();
+    target.second = internalKeyCheck;
+    proxyParam->SetTarget(target);
+    proxyParam->SetName( name.empty() ? rawTarget->GetName() : name);
+    proxyParam->SetDescription(desc.empty() ? rawTarget->GetDescription() : desc);
+    return this->GetParameterList()->SetParameter(proxyParam.GetPointer(),localKey);
+    }
+
+  /**
+   * Decode a key to extract potential prefix for internal applications
+   * If a valid prefix (corresponding to an internal app) is found:
+   *   - prefix is removed from the input key which is altered.
+   *   - the function returns a pointer to the internal application
+   * If no valid prefix is found, the input key is not modified, and the
+   * function returns 'this'.
+   */
+  Application* DecodeKey(std::string &key)
+    {
+    Application *ret = this;
+    size_t pos = key.find('.');
+    if (pos != std::string::npos && m_AppContainer.count(key.substr(0,pos)))
       {
-      app1 = m_AppContainer[key1.substr(0,pos1)].App;
-      key1Check = key1.substr(pos1+1);
+      ret = m_AppContainer[key.substr(0,pos)].App;
+      key = key.substr(pos+1);
       }
-    if (pos2 != std::string::npos && m_AppContainer.count(key2.substr(0,pos2)))
-      {
-      app2 = m_AppContainer[key2.substr(0,pos2)].App;
-      key2Check = key2.substr(pos2+1);
-      }
+    return ret;
+    }
 
-    return this->Connect(app1, key1Check, app2, key2Check);
-  }
-
-  void DoExecuteInternal(std::string key)
+  void ExecuteInternal(std::string key)
     {
     otbAppLogINFO(<< m_AppContainer[key].Desc <<"...");
     m_AppContainer[key].App->Execute();
     otbAppLogINFO(<< "\n" << m_Oss.str());
     m_Oss.str(std::string(""));
+    }
+
+  void UpdateParametersInternal(std::string key)
+    {
+    m_AppContainer[key].App->UpdateParameters();
     }
 
   void DoInit() ITK_OVERRIDE
@@ -161,35 +195,29 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    this->AddApplication("PolygonClassStatistics", "polystat","Polygon analysis");
+    AddParameter(ParameterType_Group, "sample", "Training and validation samples parameters");
+    SetParameterDescription("sample", "This group of parameters allows you to "
+      "set training and validation sample lists parameters.");
 
-    this->AddApplication("SampleSelection", "select", "Sample selection");
+    AddApplication("PolygonClassStatistics", "polystat","Polygon analysis");
+    AddApplication("SampleSelection", "select", "Sample selection");
 
     // share parameters with PolygonClassStatistics
-    this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("in"));
-    this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("vec"));
-    //this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("field"));
-    this->GetParameterList()->AddParameter(m_PolygonAnalysis->GetParameterByKey("layer"));
-
-    AddParameter(ParameterType_Group, "sample", "Training and validation samples parameters");
-    SetParameterDescription("sample",
-                          "This group of parameters allows you to set training and validation sample lists parameters.");
-
-    this->Connect("sample.vfn", "polystat.field");
+    ShareParameter("in","polystat.in");
+    ShareParameter("vec","polystat.vec");
+    ShareParameter("layer","polystat.layer");
+    ShareParameter("sample.vfn", "polystat.field");
 
     // share parameters with SampleSelection
-    this->GetParameterList()->AddParameter(m_SampleSelection->GetParameterByKey("out"));
-    this->GetParameterList()->AddParameter(m_SampleSelection->GetParameterByKey("strategy"));
+    ShareParameter("out", "select.out");
+    ShareParameter("strat", "select.strategy");
 
-    m_PolygonAnalysis->GetLogger()->AddLogOutput(m_LogOutput);
-    m_PolygonAnalysis->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
-    m_SampleSelection->GetLogger()->AddLogOutput(m_LogOutput);
-    m_SampleSelection->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
-
-    // Progress
-    // Add the callback to be added when a AddProcessToWatch event is invoked
-    m_PolygonAnalysis->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
-    m_SampleSelection->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
+    // synchronize some parameters together:
+    Connect("select.in",    "polystat.in");
+    Connect("select.vec",   "polystat.vec");
+    Connect("select.field", "polystat.field");
+    Connect("select.layer", "polystat.layer");
+    Connect("select.instats", "polystat.out");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.in", "clLabeledImageQB123_1.tif");
@@ -202,37 +230,24 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    // copy common values
-    // "in" -> "SampleSelection.in"
-    // "vec" -> "SampleSelection.in"
-    // "field" -> "SampleSelection.in"
-    // "layer" -> "SampleSelection.in"
-    m_SampleSelection->SetParameterString("in",this->GetParameterString("in"));
-    m_SampleSelection->SetParameterString("vec",this->GetParameterString("vec"));
-    m_SampleSelection->SetParameterString("field",this->GetParameterString("sample.vfn"));
-    m_SampleSelection->SetParameterInt("layer",this->GetParameterInt("layer"));
-
     if (HasValue("out"))
       {
       // TODO : get dirname, and prepare name of temporary output
-      m_PolygonAnalysis->SetParameterString("out", std::string("foo.xml"));
-      m_SampleSelection->SetParameterString("instats", std::string("foo.xml"));
+      m_AppContainer["polystat"].App->SetParameterString("out", std::string("foo.xml"));
       }
 
     // DoUpdateParameters on sub-application
-    m_PolygonAnalysis->UpdateParameters();
-    m_SampleSelection->UpdateParameters();
+    UpdateParametersInternal("polystat");
+    UpdateParametersInternal("select");
   }
 
   void DoExecute() ITK_OVERRIDE
   {
-    this->DoExecuteInternal("polystat");
-    this->DoExecuteInternal("select");
+    this->ExecuteInternal("polystat");
+    this->ExecuteInternal("select");
   }// END DoExecute()
 
-  Application::Pointer m_PolygonAnalysis;
-
-  Application::Pointer m_SampleSelection;
+  InternalAppContainer m_AppContainer;
 
   itk::StdStreamLogOutput::Pointer  m_LogOutput;
 
