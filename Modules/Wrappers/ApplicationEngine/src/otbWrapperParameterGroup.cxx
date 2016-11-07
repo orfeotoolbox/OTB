@@ -62,7 +62,11 @@ ParameterGroup::GetParametersKeys(bool recursive)
   for (pit = m_ParameterList.begin(); pit != m_ParameterList.end(); ++pit)
     {
     Parameter* param = *pit;
-    parameters.push_back( param->GetKey() );
+    std::string currentKey(param->GetKey());
+    parameters.push_back( currentKey );
+
+    // follow proxy parameters
+    param = this->ResolveParameter(param);
 
     if (recursive && dynamic_cast<ParameterGroup*>(param))
       {
@@ -71,7 +75,7 @@ ParameterGroup::GetParametersKeys(bool recursive)
       for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
-        parameters.push_back( std::string(paramAsGroup->GetKey()) + "."  + *it );
+        parameters.push_back( currentKey + "."  + *it );
         }
       }
     else if (recursive && dynamic_cast<ChoiceParameter*>(param))
@@ -82,7 +86,7 @@ ParameterGroup::GetParametersKeys(bool recursive)
       for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
-        parameters.push_back( std::string(paramAsChoice->GetKey()) + "."  + *it );
+        parameters.push_back( currentKey + "."  + *it );
         }
       }
     }
@@ -734,7 +738,7 @@ ParameterGroup::GetParameterByIndex(unsigned int i)
 }
 
 Parameter::Pointer
-ParameterGroup::GetParameterByKey(std::string name)
+ParameterGroup::GetParameterByKey(std::string name, bool follow)
 {
   ParameterKey pName(name);
 
@@ -760,6 +764,13 @@ ParameterGroup::GetParameterByKey(std::string name)
   if (parentParam.IsNull())
     {
     itkExceptionMacro(<< "Could not find parameter " << name)
+    }
+
+  // follow proxy parameters
+  if (follow)
+    {
+    Parameter *rawParam = this->ResolveParameter(parentParam.GetPointer());
+    parentParam = rawParam;
     }
 
   // If the name contains a child, make a recursive call

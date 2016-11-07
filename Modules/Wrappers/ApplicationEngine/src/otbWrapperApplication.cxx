@@ -100,12 +100,7 @@ ParameterGroup* Application::GetParameterList()
 
 Parameter* Application::GetParameterByKey(std::string name, bool follow)
 {
-  Parameter* param = GetParameterList()->GetParameterByKey(name);
-  if (follow)
-    {
-    param = ParameterGroup::ResolveParameter(param);
-    }
-  return param;
+  return GetParameterList()->GetParameterByKey(name, follow);
 }
 
 void Application::SetParameterInt(std::string parameter, int value, bool hasUserValueFlag)
