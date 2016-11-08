@@ -247,6 +247,19 @@ if(OTB_DATA_USE_LARGEINPUT)
   mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
 endif()
 
+# Small macro to copy a file and rename it
+macro(otb_copy_rename _input _output)
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_input}" "${_output}"
+    RESULT_VARIABLE _err_code
+    OUTPUT_QUIET
+    ERROR_QUIET
+    )
+  if(_err_code)
+    message(FATAL_ERROR "Failed to copy file ${_input} to ${_output}")
+  endif()
+endmacro()
+
 #Generate cmake variables with a set of largeinput data used in tests
 include(OTBManageLargeInputPaths)
 

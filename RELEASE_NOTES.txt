@@ -1,3 +1,67 @@
+OTB-v.5.8.0 - Changes since version 5.6.1 (November 8th, 2016)
+--------------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for Changes-35: FineRegistration, performances increased
+  * Request for Changes-51: Move Monteverdi into OTB
+  * Request for Changes-52: Faster BandMathX
+  * Request for changes-53: Connect applications in memory
+  * Request for Changes-54: Get OTB ready for gdal derived subdatasets
+  * Request for Changes-55: Monteverdi: Mouse-wheel zoom without CTRL
+  * Request for Changes-56: Spot7 metadata support
+  * Request for Changes-57: Migrate Cookbook to RST
+  * Request for Changes-58: Sampling on multiple images
+  * Request for Changes-59: Build support for msvc 2015 with OTB xdk
+  * Request for Changes-60: Shorter Release Process
+  * Request for Changes-61: Use codespell to fix common misspellings in source code
+  * Request for Changes-62: Enhance text comparison in dashboard
+  * Request for Changes-63: Refactor threading mechanism in sampling filters
+  * Request for Changes-64: Missing RAM for persistent filters in application
+  * Request for Changes-65: Add Shark Random forests implementation
+  * Request for Changes-67: ClassificationMapRegularization option for isolated pixels only
+  * Request for Changes-68: New sampling strategies in classification framework
+
+* Bugfixes :
+
+  * Monteverdi
+    * 0001298: Monteverdi crash with this image
+    * 0001305: SuperBuild falling at BOOST build step
+    * 0001283: GDAL overviews dialog pops under OTB-applications dock
+    * 0001284: GDAL overviews default min-size = 4096 px
+    * 0001282: Status-bar is not always disable at startup
+    * 0001278: Add force OpenGL 1.x compatibility option
+    * 0001267: Monteverdi: unclear "gdal overview" minimum size parameter
+    * 0001274: SuperBuild GLUT compilation problem
+    * 0001277: Missing icon(s) in color-dynamics widget
+    * 0001275: Monteverdi: Histogram view problem with binary image
+    * 0001300: monteverdi $input_filename crash with relative path
+    * 0001303: Memory issue in Monteverdi with images with subdatasets (HDF4)
+    * 0001299: Monteverdi shortcuts list needs some updates
+    * 0001291: Word "Échiquier" is not displayed properly in layer stack (effect column)
+
+  * OTB-Packaging
+    * 0001290: Unable to run OTB applications from Mapla.app on Mac OS X
+    * 0001297: No translation files in Windows standalone package (branch release-5.8)
+
+  * Orfeo Toolbox (OTB)
+    * 0001308: Typo in otbenv.profile and otbenv.cmd
+    * 0001286: Sentinel-1 sensor metadata are not retrieved properly if application is run inside the SAFE directory
+    * 0001287: Using S1 images in monteverdi is slow
+    * 0001268: Patch for spelling error in 5.6.1
+    * 0001306: SuperBuild falling at TIFF build step (GLUT_Xmu_LIBRARY NOTFOUND)
+
+  * OTB-applications
+    * 0001301: Mapla application does not provide translation files
+
+OTB-v.5.6.1 - Changes since version 5.6.0 (August 26th, 2016)
+-------------------------------------------------------------
+
+* Bugfixes :
+  * 0001262: OTB 5.7 vector sampler bug
+  * 0001259: Patch for various spelling errors in 5.6.0
+  * 0001258: Patch to only use OTB_GIT_STATUS_MESSAGE in message function if set.
+  * 0001266: Fix covariance computation with high float values
+
 OTB-v.5.6.0 - Changes since version 5.4.0 (July 28th, 2016)
 ------------------------------------------------------------
 
