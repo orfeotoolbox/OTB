@@ -55,7 +55,7 @@ int main(int itkNotUsed(argc), char * argv[])
 
 // Software Guide : BeginLatex
 //
-// We need now to declare the data types that we will be using and instanciate the
+// We need now to declare the data types that we will be using and instantiate the
 // reader (which is a \doxygen{otb}{PointSetFileReader}).
 //
 // Software Guide : EndLatex
@@ -90,7 +90,7 @@ int main(int itkNotUsed(argc), char * argv[])
 // You can access to subdatasets' information available in the HDF file using
 // the \code{GetSubDatasetInfo} method of \doxygen{otb}{GDALImageIO}.
 // It allows storing HDF subdatasets names and descriptions in vector of string.
-// You can find below how to print the name and the decription
+// You can find below how to print the name and the description
 // of all the subdatasets.
 //
 // Software Guide : EndLatex

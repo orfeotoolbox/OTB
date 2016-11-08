@@ -19,6 +19,7 @@
 #define otbMachineLearningModelFactoryBase_h
 
 #include "itkMutexLock.h"
+#include "OTBSupervisedExport.h"
 
 namespace otb
 {
@@ -31,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBSupervised
  */
-class ITK_EXPORT MachineLearningModelFactoryBase : public itk::Object
+class OTBSupervised_EXPORT MachineLearningModelFactoryBase : public itk::Object
 {
 public:
   /** Standard class typedefs. */

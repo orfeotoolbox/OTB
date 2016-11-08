@@ -28,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT OpticalImageMetadataInterfaceFactory : public itk::Object
+class OTBMetadata_EXPORT OpticalImageMetadataInterfaceFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */

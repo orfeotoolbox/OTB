@@ -502,10 +502,11 @@ otb_add_test(NAME ioTvImageFileReaderServerNameOTBTest COMMAND otbImageIOTestDri
   ${OTB_DATA_ROOT}/Examples/osmfile.otb)
 set_property(TEST ioTvImageFileReaderServerNameOTBTest PROPERTY RESOURCE_LOCK web_access)
 
-otb_add_test(NAME ioTvImageFileReaderServerNameHTTPTest COMMAND otbImageIOTestDriver
-  otbImageFileReaderServerName
-  http://tile.openstreetmap.org/)
-set_property(TEST ioTvImageFileReaderServerNameHTTPTest PROPERTY RESOURCE_LOCK web_access)
+#dashboard_hell
+# otb_add_test(NAME ioTvImageFileReaderServerNameHTTPTest COMMAND otbImageIOTestDriver
+#   otbImageFileReaderServerName
+#   http://tile.openstreetmap.org/)
+# set_property(TEST ioTvImageFileReaderServerNameHTTPTest PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvPipelineMetadataHandlingTest COMMAND otbImageIOTestDriver
   --compare-metadata ${EPSILON_9}
@@ -1296,9 +1297,8 @@ otb_add_test(NAME  ioTvImageFileReaderIntHDR2LUM COMMAND otbImageIOTestDriver
 set_tests_properties(ioTvImageFileReaderIntHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderIntLUM2HDR)
 
 otb_add_test(NAME  ioTvImageFileReaderPNG2ENVI COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+  --compare-image ${EPSILON_9}        ${BASELINE}/ioImageFileReaderPNG2ENVI.hdr
                                 ${TEMP}/ioImageFileReaderPNG2ENVI.hdr
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
-set_tests_properties(ioTvImageFileReaderPNG2ENVI PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)

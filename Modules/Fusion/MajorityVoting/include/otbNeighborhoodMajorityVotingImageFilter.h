@@ -149,6 +149,10 @@ public:
   //Creates a SetKeepOriginalLabelBool method
   itkSetMacro(KeepOriginalLabelBool, bool);
 
+  //Process only isolated pixels
+  itkSetMacro(OnlyIsolatedPixels, bool);
+  itkSetMacro(IsolatedThreshold, unsigned int);
+
 
 protected:
   NeighborhoodMajorityVotingImageFilter();
@@ -166,6 +170,31 @@ protected:
 
   void GenerateOutputInformation() ITK_OVERRIDE;
 
+
+  //Type to store the useful information from the label histogram  
+  struct HistoSummary
+  {
+    unsigned int freqCenterLabel;
+    PixelType majorityLabel;
+    bool majorityUnique;
+  };
+
+  struct CompareHistoFequencies
+  {
+    typedef std::pair<PixelType, unsigned int> HistoValueType;
+    bool operator()(const HistoValueType& a, const HistoValueType& b)
+    {
+      return a.second > b.second;
+    }
+  };
+
+  //Get a histogram of frequencies of labels with the 2 highest
+  // frequencies sorted in decreasing order and return the frequency
+  // of the label of the center pixel
+  const HistoSummary ComputeNeighborhoodHistogramSummary(const NeighborhoodIteratorType &nit,
+                                                         const KernelIteratorType kernelBegin,
+                                                         const KernelIteratorType kernelEnd) const;
+
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -176,6 +205,12 @@ private:
   PixelType m_LabelForNoDataPixels;
   PixelType m_LabelForUndecidedPixels;
   bool m_KeepOriginalLabelBool;
+
+  //Choose to filter only isolated pixels
+  bool m_OnlyIsolatedPixels;
+  //The center pixel is isolated if there are fewer neighbours than
+  //this threshold with the same label
+  unsigned int m_IsolatedThreshold;
 
 }; // end of class
 

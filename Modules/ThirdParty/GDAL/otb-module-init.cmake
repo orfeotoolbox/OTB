@@ -26,6 +26,7 @@ endif()
 
 #------------------- Helper Macro ---------------------
 macro(gdal_try_run msg_type var source_file)
+message(STATUS "Performing Test ${var}")
 set(${var})
 try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
@@ -132,6 +133,13 @@ endif()
 
 gdal_try_run(STATUS GDAL_HAS_HDF5 gdalFormatsTest.c HDF5)
 gdal_try_run(STATUS GDAL_HAS_HDF4 gdalFormatsTest.c HDF4)
+
+#check some vector formats
+#TODO: fix gdalFormatsTest.c to work with gdal 1.x and 2.x
+# gdal_try_run(FATAL_ERROR GDAL_HAS_SQLite gdalFormatsTest.c SQLite)
+# gdal_try_run(FATAL_ERROR GDAL_HAS_VRT gdalFormatsTest.c VRT)
+# gdal_try_run(FATAL_ERROR GDAL_HAS_KML gdalFormatsTest.c KML)
+# gdal_try_run(STATUS GDAL_HAS_LIBKML gdalFormatsTest.c LIBKML)
 
 #------------------- TESTS (END)---------------------
 

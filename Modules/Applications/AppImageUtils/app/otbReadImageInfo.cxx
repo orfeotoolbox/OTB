@@ -73,7 +73,7 @@ private:
     SetParameterDescription("outkwl", "This option allows extracting the OSSIM keywordlist of the image into a geom file.");
     MandatoryOff("outkwl");
 
-    //Create output parameters to store image informations
+    //Create output parameters to store image information
     AddParameter(ParameterType_Int,"indexx","Start index X");
     SetParameterDescription("indexx","X start index");
     SetParameterRole("indexx", Role_Output);
@@ -127,8 +127,8 @@ private:
     SetParameterRole("time", Role_Output);
     EnableParameter("time");
 
-    AddParameter(ParameterType_Float,"ullat","Upper left lattitude");
-    SetParameterDescription("ullat", "Lattitude of the upper left corner.");
+    AddParameter(ParameterType_Float,"ullat","Upper left latitude");
+    SetParameterDescription("ullat", "Latitude of the upper left corner.");
     SetParameterRole("ullat", Role_Output);
     SetDefaultParameterFloat("ullat", 0);
 
@@ -137,8 +137,8 @@ private:
     SetParameterRole("ullon", Role_Output);
     SetDefaultParameterFloat("ullon", 0);
 
-    AddParameter(ParameterType_Float,"urlat","Upper right lattitude");
-    SetParameterDescription("urlat", "Lattitude of the upper right corner.");
+    AddParameter(ParameterType_Float,"urlat","Upper right latitude");
+    SetParameterDescription("urlat", "Latitude of the upper right corner.");
     SetParameterRole("urlat", Role_Output);
     SetDefaultParameterFloat("urlat", 0);
 
@@ -147,8 +147,8 @@ private:
     SetParameterRole("urlon", Role_Output);
     SetDefaultParameterFloat("urlon", 0);
 
-    AddParameter(ParameterType_Float,"lrlat","Lower right lattitude");
-    SetParameterDescription("lrlat", "Lattitude of the lower right corner.");
+    AddParameter(ParameterType_Float,"lrlat","Lower right latitude");
+    SetParameterDescription("lrlat", "Latitude of the lower right corner.");
     SetParameterRole("lrlat", Role_Output);
     SetDefaultParameterFloat("lrlat", 0);
 
@@ -157,8 +157,8 @@ private:
     SetParameterRole("lrlon", Role_Output);
     SetDefaultParameterFloat("lrlon", 0);
 
-    AddParameter(ParameterType_Float,"lllat","Lower left lattitude");
-    SetParameterDescription("lllat", "Lattitude of the lower left corner.");
+    AddParameter(ParameterType_Float,"lllat","Lower left latitude");
+    SetParameterDescription("lllat", "Latitude of the lower left corner.");
     SetParameterRole("lllat", Role_Output);
     SetDefaultParameterFloat("lllat", 0);
 
@@ -257,7 +257,7 @@ private:
 
     ossOutput << std::endl << "Image general information:" << std::endl;
 
-    // Read informations
+    // Read information
     typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
     ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
 

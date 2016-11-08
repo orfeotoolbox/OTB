@@ -500,7 +500,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::zeroDopplerLookup(const ossimEcefPoint & inputPt, TimeType & interpAzimuthTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const
    {
-      assert(!theOrbitRecords.size()<2&&"Orbit records vector contains less than 2 elements");
+      assert((theOrbitRecords.size()>=2) && "Orbit records vector contains less than 2 elements");
 
       std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();
 
@@ -686,6 +686,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::projToSurface(const GCPRecordType & initGcp, const ossimDpt & target, const ossimHgtRef & hgtRef, ossimEcefPoint & ellPt) const
    {
+     
       // Initialize current estimation
       ossimEcefPoint currentEstimation(initGcp.worldPt);
 
@@ -731,7 +732,7 @@ namespace ossimplugins
          ossimEcefVector p_fx, p_fy, p_fh,dx(d,0,0),dy(0,d,0),dz(0,0,d);
          ossimDpt tmpImPt;
 
-         ossim_float64 rdx,rdy,rdz, fdx,fdy,fdz;
+         ossim_float64 rdx(0.0),rdy(0.0),rdz(0.0), fdx(0.0),fdy(0.0),fdz(0.0);
 
          ossimGpt currentEstimationWorld(currentEstimation);
          ossimGpt tmpGpt = ossimGpt(currentEstimation+dx);
@@ -766,13 +767,13 @@ namespace ossimplugins
          // Invert system
          try {
             dR = B.i() * F;
-#if !(defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__))
          } catch (NEWMAT::SingularException const& e) {
-            // NEWMATH exception
-            throw std::runtime_error(e.what());
-#endif
-         } catch (...) {
-            throw std::runtime_error("Cannot invert 3x3 matrix in projToSurface");
+         ellPt = currentEstimation;
+         
+         ossimNotify(ossimNotifyLevel_WARN) <<"ossim::SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far ("<<ellPt<<") for output point ("<<target<<")\n";
+         std::clog << "initGCP: " << initGcp.imPt <<", "<<initGcp.worldPt<< "\n";
+         
+         return true;
          }
 
          // Update estimate
@@ -952,7 +953,7 @@ namespace ossimplugins
          }
       }
 
-      theAzimuthTimeOffset = cumulAzimuthTime /= count;
+      theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(0);
 
       // Then, fix the range time
       count=0;
@@ -973,7 +974,7 @@ namespace ossimplugins
          }
       }
 
-      theRangeTimeOffset = cumulRangeTime/=count;
+      theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
    }
 
    void get(

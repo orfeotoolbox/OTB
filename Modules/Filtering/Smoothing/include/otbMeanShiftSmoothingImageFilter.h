@@ -333,7 +333,7 @@ public:
     return bucketIndex;
   }
 
-  /** Converts a N+1-dimensional bucket index into the 1D list index useable by
+  /** Converts a N+1-dimensional bucket index into the 1D list index usable by
    GetBucket() */
   int BucketIndexToBucketListIndex(const BucketImageIndexType & bucketIndex) const
   {

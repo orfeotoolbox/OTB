@@ -78,7 +78,7 @@ namespace otb
  *
  * SimpleParallelTiffWriter writes its input data to a single output file.
  * SimpleParallelTiffWriter interfaces with an MPI-IO based class to write out the
- * data whith streaming process and mutliple processing nodes.
+ * data with streaming process and multiple processing nodes.
  *
  * SimpleParallelTiffWriter will divide the output into several pieces
  * (controlled by SetNumberOfDivisionsStrippedStreaming, SetNumberOfLinesStrippedStreaming,

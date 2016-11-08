@@ -71,7 +71,7 @@ void
 VectorDataProperties<TVectorData>
 ::ComputeBoundingRegion()
 {
-  /** Initialize the bouding region to null*/
+  /** Initialize the bounding region to null*/
   IndexType index;
   SizeType  size;
   index.Fill(itk::NumericTraits<Type>::ZeroValue());

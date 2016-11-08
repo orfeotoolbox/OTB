@@ -84,7 +84,7 @@ public:
     vnlMat[2][1] = std::conj(ComplexType(Coherency[4]));
     vnlMat[2][2] = ComplexType(T2,  0.);
 
-    // Only compute the left symetry to respect the previous Hermitian Analisys code
+    // Only compute the left symmetry to respect the previous Hermitian Analisys code
     vnl_complex_eigensystem syst(vnlMat, false, true);
     const VNLMatrixType eigenVectors( syst.L );
     const VNLVectorType eigenValues(syst.W);

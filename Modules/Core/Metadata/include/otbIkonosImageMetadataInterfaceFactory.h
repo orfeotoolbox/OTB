@@ -18,7 +18,7 @@
 #ifndef otbIkonosImageMetadataInterfaceFactory_h
 #define otbIkonosImageMetadataInterfaceFactory_h
 
-
+#include "OTBMetadataExport.h"
 #include "itkObjectFactoryBase.h"
 
 namespace otb
@@ -28,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT IkonosImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT IkonosImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

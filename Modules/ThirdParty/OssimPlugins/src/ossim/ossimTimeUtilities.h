@@ -40,7 +40,7 @@ namespace ossimplugins { namespace time {
          /**@name Construction/destruction
          */
          //@{
-         /** Initialisation constructor.
+         /** Initialization constructor.
          */
          explicit DayFrac() {} // = default;
          explicit DayFrac(double day_frac) : m_day_frac(day_frac) {}
@@ -121,7 +121,7 @@ namespace ossimplugins { namespace time {
          /**@name Construction/destruction
          */
          //@{
-         /** Initialisation constructor.
+         /** Initialization constructor.
          */
          Duration() {} // = default;
          explicit Duration(double day_frac)
@@ -164,7 +164,7 @@ namespace ossimplugins { namespace time {
          /**@name Construction/destruction
          */
          //@{
-         /** Initialisation constructor.
+         /** Initialization constructor.
          */
          ModifiedJulianDate() {} // = default;
          explicit ModifiedJulianDate(double day_frac)
@@ -222,7 +222,7 @@ namespace boost { namespace posix_time {
          /**@name Construction/destruction
          */
          //@{
-         /** Initialisation constructor.
+         /** Initialization constructor.
          */
          precise_duration() {} // = default;
          explicit precise_duration(double usec_frac)

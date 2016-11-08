@@ -60,7 +60,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(BijectionCoherencyFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TDisparityImage  DispMapType;
   typedef TOutputImage     MaskType;
 
@@ -116,7 +116,7 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
+  /** Generate input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Threaded generate data */

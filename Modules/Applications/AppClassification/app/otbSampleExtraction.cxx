@@ -158,7 +158,9 @@ private:
     filter->SetClassFieldName(this->GetParameterString("field"));
     filter->SetOutputFieldPrefix(namePrefix);
     filter->SetOutputFieldNames(nameList);
+    filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
+    
     AddProcess(filter->GetStreamer(),"Extracting sample values...");
     filter->Update();
     output->SyncToDisk();

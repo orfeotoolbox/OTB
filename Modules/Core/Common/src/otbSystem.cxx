@@ -181,7 +181,7 @@ bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned
  * it will return filelocation/file.*** in file
  * and 10 in addNum additional
  */
-bool System::ParseFileNameForAdditonalInfo(const std::string& id, std::string& file, unsigned int& addNum)
+bool System::ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum)
 {
   std::size_t pos = id.rfind(":");
   if (pos == std::string::npos) return false;

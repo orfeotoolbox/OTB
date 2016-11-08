@@ -18,7 +18,7 @@
 #ifndef otbOpticalDefaultImageMetadataInterfaceFactory_h
 #define otbOpticalDefaultImageMetadataInterfaceFactory_h
 
-
+#include "OTBMetadataExport.h"
 #include "itkObjectFactoryBase.h"
 
 namespace otb
@@ -29,7 +29,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT OpticalDefaultImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT OpticalDefaultImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

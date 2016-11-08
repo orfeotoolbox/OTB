@@ -29,7 +29,7 @@ namespace otb
  * \class GeographicalDistance
  * \brief Compute the metric distance between two geographical points
  *
- * Vector lenght must be at least two, otherwise the Evaluate method
+ * Vector length must be at least two, otherwise the Evaluate method
  * will throw an exception.
  *
  * First dimension is assumed to be the longitude, and second
@@ -62,7 +62,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TVector                                  VectorType;
 
   /** Gets the distance between the origin point and x. This function

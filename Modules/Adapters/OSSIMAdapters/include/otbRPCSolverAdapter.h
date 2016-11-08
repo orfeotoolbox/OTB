@@ -26,6 +26,7 @@
 #include "itkPoint.h"
 #include "itkSize.h"
 
+#include "OTBOSSIMAdaptersExport.h"
 
 class ossimRpcSolver;
 
@@ -43,7 +44,7 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class RPCSolverAdapter
+class OTBOSSIMAdapters_EXPORT RPCSolverAdapter
 {
 public:
   /** Standard class typedefs. */

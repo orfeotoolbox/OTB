@@ -80,7 +80,7 @@ int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
     QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel());
     progressReport->SetApplication(app);
   
-    // Create a dock widget containg the progress widget
+    // Create a dock widget containing the progress widget
     QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
     qdock->setWidget(progressReport);
   

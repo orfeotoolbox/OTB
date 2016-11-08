@@ -37,7 +37,7 @@ double
 GeographicalDistance<TVector>
 ::Evaluate(const VectorType & x) const
 {
-  // First check if vector lenght is sufficient
+  // First check if vector length is sufficient
   if(x.Size()<2)
     itkExceptionMacro(<<"Vector length must be at least 2 to compute geographical distance.");
 
@@ -55,7 +55,7 @@ double
 GeographicalDistance<TVector>
 ::Evaluate(const VectorType & x, const VectorType & y) const
 {
-  // First check if vector lenght is sufficient
+  // First check if vector length is sufficient
   if(x.Size()<2 || y.Size()<2)
     itkExceptionMacro(<<"Vector length must be at least 2 to compute geographical distance.");
 
@@ -64,7 +64,7 @@ GeographicalDistance<TVector>
   const double Two = One + One;
   const double Deg2Rad = CONST_PI/180.;
 
-  // Compute lattitude and longitude differences
+  // Compute latitude and longitude differences
   double dLat = (vcl_fabs(x[1] - y[1])) * Deg2Rad;
   double dLon = (vcl_fabs(x[0] - y[0])) * Deg2Rad;
 

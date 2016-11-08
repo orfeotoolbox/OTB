@@ -154,7 +154,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
     ++defIt;
     }
 
-  // Convert physical bouding box to requested region
+  // Convert physical bounding box to requested region
   typename InputImageType::IndexType inputStartIndex, inputEndIndex;
   inputPtr->TransformPhysicalPointToIndex(inputStartPoint, inputStartIndex);
   inputPtr->TransformPhysicalPointToIndex(inputEndPoint, inputEndIndex);

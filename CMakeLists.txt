@@ -1,8 +1,4 @@
-if(WIN32)
-  cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
-else()
-  cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
-endif()
+cmake_minimum_required(VERSION 2.8.11)
 
 foreach(p
     CMP0025 # CMake 3.0
@@ -67,6 +63,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
+include( i18n_qt4 )
+
+reset_qt4_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -87,10 +86,21 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "6")
-set(OTB_VERSION_PATCH "1")
+set(OTB_VERSION_MINOR "8")
+set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
+# Monteverdi version number (follows OTB)
+set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
+set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
+set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
+set( Monteverdi_VERSION_SUFFIX "" )
+
+set( Monteverdi_VERSION_STRING
+  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
+  )
+
+#-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
 if(NOT OTB_INSTALL_RUNTIME_DIR)
@@ -164,6 +174,13 @@ endmacro()
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
+if(MSVC)
+  option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Build OTB with shared libraries." ON)
+  set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS})
+else()
+  set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
+endif()
+
 #-----------------------------------------------------------------------------
 # Option to activate deprecated classes
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
@@ -181,11 +198,11 @@ include(OTBSetStandardCompilerFlags)
 # TODO check if we need this
 #include(otbTestFriendTemplatedFunction)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OTB_REQUIRED_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_REQUIRED_CXX_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
-set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+set(CMAKE_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS}")
+set(CMAKE_MODULE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
 
 # detect some C++11 keywords
 include(OTBCheckCpp11Keywords)
@@ -229,6 +246,19 @@ if(OTB_DATA_USE_LARGEINPUT)
   )
   mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
 endif()
+
+# Small macro to copy a file and rename it
+macro(otb_copy_rename _input _output)
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_input}" "${_output}"
+    RESULT_VARIABLE _err_code
+    OUTPUT_QUIET
+    ERROR_QUIET
+    )
+  if(_err_code)
+    message(FATAL_ERROR "Failed to copy file ${_input} to ${_output}")
+  endif()
+endmacro()
 
 #Generate cmake variables with a set of largeinput data used in tests
 include(OTBManageLargeInputPaths)
@@ -361,7 +391,7 @@ add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
 
-#----------------------------------------------------------------------
+#----------------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
   add_custom_target(SuperBuild-archive
@@ -376,6 +406,7 @@ endif()
 # Create target to download data from the OTBData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 
+#-----------------------------------------------------------------------------
 # uninstall target
 configure_file(
     "${CMAKE_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
@@ -385,6 +416,19 @@ configure_file(
 add_custom_target(uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
 
+# #-----------------------------------------------------------------------------
+# # Packaging options for Windows packages
+# if(WIN32 OR CMAKE_CROSSCOMPILING)
+#   option(GENERATE_PACKAGE "Generate OTB package" OFF)
+#   option(GENERATE_XDK "Generate XDK for OTB development" OFF)
+#   if(GENERATE_PACKAGE OR GENERATE_XDK)
+#     set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
+#     set(PACKAGE_OTB_SRC_DIR ${OTB_SOURCE_DIR})
+#     add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
+#   endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
+# endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
+
+#-----------------------------------------------------------------------------
 #macro to put a fixed space between key, value  in summary
 macro(get_white_spaces var res)
   string(LENGTH "${var}" len)
@@ -419,6 +463,7 @@ foreach(otb_option
     CMAKE_BUILD_TYPE
     CMAKE_C_FLAGS
     CMAKE_CXX_FLAGS
+    OTB_HAS_CXX11
     ${option_list}
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA
@@ -434,7 +479,7 @@ endforeach()
 # message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
 # unset(modules_list_for_summary)
 
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_OPENCV" "OTB_USE_QT4")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT4")
 foreach(item ${option_list})
   if(NOT ${item})
     list(REMOVE_ITEM option_list "${item}" )
@@ -452,9 +497,6 @@ list(APPEND option_list TINYXML)
 #RK
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
-if(OTB_USE_OPENCV)
-  list(APPEND option_list OpenCV)
-endif()
 
 if(OTB_USE_QT4)
   list(APPEND option_list QT)
@@ -524,3 +566,7 @@ message("======================= End of OTB cmake summary ======================
 
 #don't need this one anymore. so unset it.
 unset(option_list)
+
+#----------------------------------------------------------------------------
+# I18N
+add_subdirectory( i18n )

@@ -48,7 +48,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  virtual EnvisatAsarRecord* Instanciate() =0;
+  virtual EnvisatAsarRecord* Instantiate() =0;
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance

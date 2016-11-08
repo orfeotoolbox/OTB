@@ -77,7 +77,7 @@ template <class TInputValue, class TOutputValue>
 typename BoostMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

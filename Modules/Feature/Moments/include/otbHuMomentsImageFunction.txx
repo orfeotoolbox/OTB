@@ -71,7 +71,7 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
   // Define complex type
   typedef std::complex<ScalarRealType> ComplexType;
 
-  // Define and intialize cumulants for complex moments
+  // Define and initialize cumulants for complex moments
   ComplexType c11, c20, c02, c30, c03, c21, c12;
   c11 = itk::NumericTraits<ComplexType>::Zero;
   c20 = itk::NumericTraits<ComplexType>::Zero;

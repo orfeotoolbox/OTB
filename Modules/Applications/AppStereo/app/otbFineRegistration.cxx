@@ -205,6 +205,12 @@ private:
     SetMinimumParameterFloatValue("spa", 0.0);
     MandatoryOff("spa");
 
+    AddParameter(ParameterType_Float,  "cva",   "ConvergenceAccuracy");
+    SetParameterDescription( "cva", "Metric extrema will be refined up to the given accuracy. Default is 0.01" );
+    SetDefaultParameterFloat("cva", 0.01);
+    SetMinimumParameterFloatValue("cva", 0.0);
+    MandatoryOff("cva");
+
     AddParameter(ParameterType_Float,  "vmlt",   "Validity Mask Lower Threshold");
     SetParameterDescription( "vmlt", "Lower threshold to obtain a validity mask." );
     MandatoryOff("vmlt");
@@ -249,8 +255,6 @@ private:
     radius[0] = GetParameterInt("mrx");
     radius[1] = GetParameterInt("mry");
 
-    double accuracy = static_cast<double>(GetParameterFloat("spa"));
-
     ssrate[0] = GetParameterFloat("ssrx");
     ssrate[1] = GetParameterFloat("ssry");
 
@@ -265,12 +269,22 @@ private:
     otbAppLogINFO("Metric radius     : "<<radius<<" (pixels)");
     otbAppLogINFO("Sub-sampling rate : "<<ssrate<<" (pixels)");
     otbAppLogINFO("Coarse offset     : "<<initialOffset<<" (physical unit)");
-    otbAppLogINFO("Accuracy          : "<<accuracy<<" (physical unit)");
 
     m_Registration = RegistrationFilterType::New();
     m_Registration->SetRadius(radius);
     m_Registration->SetSearchRadius(sradius);
-    m_Registration->SetSubPixelAccuracy(accuracy);
+    if (IsParameterEnabled("cva") && HasValue("cva"))
+    {
+        double convAccuracy = static_cast<double>(GetParameterFloat("cva"));
+        m_Registration->SetConvergenceAccuracy(convAccuracy);
+        otbAppLogINFO("Convergence Accuracy          : "<<convAccuracy<<" (physical unit)");
+    }
+    if (IsParameterEnabled("spa") && HasValue("spa"))
+    {
+        double subPixAccuracy = static_cast<double>(GetParameterFloat("spa"));
+        m_Registration->SetSubPixelAccuracy(subPixAccuracy);
+        otbAppLogINFO("SubPixel Accuracy          : "<<subPixAccuracy<<" (physical unit)");
+    }
     m_Registration->SetGridStep(ssrate);
     m_Registration->SetInitialOffset(initialOffset);
 

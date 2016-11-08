@@ -6,6 +6,7 @@ otbOGRDataToSamplePositionFilterTest.cxx
 otbSamplingRateCalculatorTest.cxx
 otbOGRDataToClassStatisticsFilterTest.cxx
 otbImageSampleExtractorFilterTest.cxx
+otbSamplingRateCalculatorListTest.cxx
 )
 
 add_executable(otbSamplingTestDriver ${OTBSamplingTests})
@@ -92,3 +93,16 @@ otb_add_test(NAME leTvImageSampleExtractorFilterUpdate COMMAND otbSamplingTestDr
   otbImageSampleExtractorFilterUpdate
   ${INPUTDATA}/variousVectors.sqlite
   ${TEMP}/leTvImageSampleExtractorFilterUpdateTest.shp)
+
+# ---------------- SamplingRateCalculatorList ---------------------------------
+otb_add_test(NAME leTuSamplingRateCalculatorListNew COMMAND otbSamplingTestDriver
+            otbSamplingRateCalculatorListNew 
+  
+  )
+
+otb_add_test(NAME leTvSamplingRateCalculatorList COMMAND otbSamplingTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/leTvSamplingRateCalculatorList.txt
+  ${TEMP}/leTvSamplingRateCalculatorList.txt
+  otbSamplingRateCalculatorList
+  ${TEMP}/leTvSamplingRateCalculatorList.txt)

@@ -133,7 +133,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   transform->SetInputOrigin(this->GetInputImage()->GetOrigin());
   transform->SetInputSpacing(this->GetInputImage()->GetSpacing());
 
-  transform->InstanciateTransform();
+  transform->InstantiateTransform();
   return transform->TransformPoint(inputPoint);
 }
 

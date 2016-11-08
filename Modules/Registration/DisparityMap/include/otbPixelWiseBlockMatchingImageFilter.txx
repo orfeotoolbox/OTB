@@ -554,7 +554,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels()*(m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity + 1)*(m_MaximumVerticalDisparity - m_MinimumVerticalDisparity + 1),100);
 
 
-  // Handle initialisation properly
+  // Handle initialization properly
   typename InputMaskImageType::Pointer initMaskPtr = InputMaskImageType::New();
   initMaskPtr->SetRegions(outputRegionForThread);
   initMaskPtr->Allocate();
@@ -710,7 +710,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
             double metric = m_Functor(leftIt,rightIt);
 
               // If we are at first loop, fill both outputs
-              // We adapt the disparity value to keep consistant with disparity map index space
+              // We adapt the disparity value to keep consistent with disparity map index space
             if(initIt.Get()==0)
                 {
                 outHDispIt.Set(static_cast<DisparityPixelType>(hdisparity) * stepDisparityInv);

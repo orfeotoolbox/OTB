@@ -42,9 +42,9 @@ otbImageToLuminanceImageFilter.cxx
 add_executable(otbOpticalCalibrationTestDriver ${OTBOpticalCalibrationTests})
 target_link_libraries(otbOpticalCalibrationTestDriver ${OTBOpticalCalibration-Test_LIBRARIES})
 otb_module_target_label(otbOpticalCalibrationTestDriver)
+set_linker_stack_size_flag(otbOpticalCalibrationTestDriver 10000000)
 
 # Tests Declaration
-
 otb_add_test(NAME raTuSpectralSensitivityReaderNew COMMAND otbOpticalCalibrationTestDriver
   otbSpectralSensitivityReaderNew
   )
@@ -82,12 +82,12 @@ otb_add_test(NAME raTvSpectralSensitivityReaderTest COMMAND otbOpticalCalibratio
   ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
   )
 
-otb_add_test(NAME raTvReflectanceToImageImageFilterDayMounth COMMAND otbOpticalCalibrationTestDriver
+otb_add_test(NAME raTvReflectanceToImageImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvReflectanceToImageImageFilterDayMounth.tif
+  ${TEMP}/raTvReflectanceToImageImageFilterDayMonth.tif
   otbReflectanceToImageImageFilter
   ${BASELINE}/raTvImageToReflectanceImageFilter.tif
-  ${TEMP}/raTvReflectanceToImageImageFilterDayMounth.tif
+  ${TEMP}/raTvReflectanceToImageImageFilterDayMonth.tif
   0.2 #radius
   1   #channel 1 alpha
   2   #channel 2 alpha
@@ -102,7 +102,7 @@ otb_add_test(NAME raTvReflectanceToImageImageFilterDayMounth COMMAND otbOpticalC
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvReflectanceToImageImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -235,10 +235,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif ${TOULOUSEQBDIR}/02APR01105228-P1BS-000000128955_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${TOULOUSEQBDIR})
+  otb_copy_rename(${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif ${TOULOUSEQBDIR}/02APR01105228-P1BS-000000128955_01_P001.TIF)
 
   otb_add_test(NAME raTvLuminanceToImageImageFilterAutoQuickbirdPAN COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${TOULOUSEQBDIR}/raTvSMALLTOULOUSELuminanceToImageImageFilterAutoQuickbirdPAN.tif
@@ -255,10 +253,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif ${TOULOUSEQBDIR}/02APR01105228-M1BS-000000128955_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${TOULOUSEQBDIR})
+  otb_copy_rename(${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif ${TOULOUSEQBDIR}/02APR01105228-M1BS-000000128955_01_P001.TIF)
 
   otb_add_test(NAME raTvLuminanceToImageImageFilterAutoQuickbirdXS COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${TOULOUSEQBDIR}/raTvSMALLTOULOUSELuminanceToImageImageFilterAutoQuickbirdXS.tif
@@ -274,10 +270,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${ROMEWV2DIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${ROMEWV2DIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif ${ROMEWV2DIR}/09DEC10103019-M2AS-052298844010_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${ROMEWV2DIR})
+  otb_copy_rename(${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif ${ROMEWV2DIR}/09DEC10103019-M2AS-052298844010_01_P001.TIF)
 
   otb_add_test(NAME raTvLuminanceToImageImageFilterAutoWV2MULTI COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${ROMEWV2DIR}/raTvSMALLROMELuminanceToImageImageFilterAutoWV2Multi.tif
@@ -292,10 +286,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   set(BLOSSEVILLEIKONOSDIR ${TEMP}/OpticalCalibLumToImIkonos)
   file(MAKE_DIRECTORY ${BLOSSEVILLEIKONOSDIR})
   file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*metadata.txt ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*pan*)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${BLOSSEVILLEIKONOSDIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif ${BLOSSEVILLEIKONOSDIR}/po_2619900_pan_0000000.tif COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${BLOSSEVILLEIKONOSDIR})
+  otb_copy_rename(${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif ${BLOSSEVILLEIKONOSDIR}/po_2619900_pan_0000000.tif)
 
   otb_add_test(NAME raTvLuminanceToImageImageFilterAutoIkonos COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${BLOSSEVILLEIKONOSDIR}/raTvSMALLBLOSSEVILLELuminanceToImageImageFilterAutoIkonos.tif
@@ -310,10 +302,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   set(TEHERANSPOT5DIR ${TEMP}/OpticalCalibLumToImSPOT5)
   file(MAKE_DIRECTORY ${TEHERANSPOT5DIR})
   file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/*.DIM)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${TEHERANSPOT5DIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif ${TEHERANSPOT5DIR}/IMAGERY.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${TEHERANSPOT5DIR})
+  otb_copy_rename(${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif ${TEHERANSPOT5DIR}/IMAGERY.TIF)
 
   otb_add_test(NAME raTvLuminanceToImageImageFilterAutoSpot5 COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${TEHERANSPOT5DIR}/raTvSMALLTEHERANLuminanceToImageImageFilterAutoSpot5.img
@@ -329,10 +319,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${ROMEWV2DIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${ROMEWV2DIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif ${ROMEWV2DIR}/09DEC10103019-P2AS-052298844010_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${ROMEWV2DIR})
+  otb_copy_rename(${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif ${ROMEWV2DIR}/09DEC10103019-P2AS-052298844010_01_P001.TIF)
 
   otb_add_test(NAME raTvLuminanceToImageImageFilterAutoWV2PAN COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${ROMEWV2DIR}/raTvSMALLROMELuminanceToImageImageFilterAutoWV2PAN.tif
@@ -348,10 +336,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${SUDOUESTFORMOSATDIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/FORMOSAT/Sudouest_20071013_MS_fmsat)
   file(GLOB MTDATA ${MTDATADIR}/*.DIM)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${SUDOUESTFORMOSATDIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvImageToLuminanceImageFilterAutoFormosat.tif ${SUDOUESTFORMOSATDIR}/IMAGERY.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${SUDOUESTFORMOSATDIR})
+  otb_copy_rename(${BASELINE}/raTvImageToLuminanceImageFilterAutoFormosat.tif ${SUDOUESTFORMOSATDIR}/IMAGERY.TIF)
 
   otb_add_test(NAME raTvLuminanceToImageImageFilterAutoFORMOSAT COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${SUDOUESTFORMOSATDIR}/raTvSMALLSOLuminanceToImageImageFilterAutoFormosat.img
@@ -367,10 +353,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif ${TOULOUSEQBDIR}/02APR01105228-P1BS-000000128955_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${TOULOUSEQBDIR})
+  otb_copy_rename(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif ${TOULOUSEQBDIR}/02APR01105228-P1BS-000000128955_01_P001.TIF)
 
   otb_add_test(NAME raTvReflectanceToLuminanceImageFilterAutoQuickbirdPAN COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdPAN.tif
@@ -384,10 +368,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${ROMEWV2DIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${ROMEWV2DIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif ${ROMEWV2DIR}/09DEC10103019-P2AS-052298844010_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${ROMEWV2DIR})
+  otb_copy_rename(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif ${ROMEWV2DIR}/09DEC10103019-P2AS-052298844010_01_P001.TIF)
 
   otb_add_test(NAME raTvReflectanceToLuminanceImageFilterAutoWV2PAN COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
@@ -400,10 +382,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   set(TEHERANSPOT5DIR ${TEMP}/OpticalCalibRefToLumSPOT5)
   file(MAKE_DIRECTORY ${TEHERANSPOT5DIR})
   file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/*.DIM)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${TEHERANSPOT5DIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif ${TEHERANSPOT5DIR}/IMAGERY.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${TEHERANSPOT5DIR})
+  otb_copy_rename(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif ${TEHERANSPOT5DIR}/IMAGERY.TIF)
 
   otb_add_test(NAME raTvReflectanceToLuminanceImageFilterAutoSpot5 COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif
@@ -416,10 +396,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   set(BLOSSEVILLEIKONOSDIR ${TEMP}/OpticalCalibRefToLumIkonos)
   file(MAKE_DIRECTORY ${BLOSSEVILLEIKONOSDIR})
   file(GLOB MTDATA ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*metadata.txt ${OTB_DATA_LARGEINPUT_ROOT}/IKONOS/BLOSSEVILLE/*pan*)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${BLOSSEVILLEIKONOSDIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif ${BLOSSEVILLEIKONOSDIR}/po_2619900_pan_0000000.tif COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${BLOSSEVILLEIKONOSDIR})
+  otb_copy_rename(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif ${BLOSSEVILLEIKONOSDIR}/po_2619900_pan_0000000.tif)
 
   otb_add_test(NAME raTvReflectanceToLuminanceImageFilterAutoIkonos COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
@@ -433,10 +411,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${TOULOUSEQBDIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif ${TOULOUSEQBDIR}/02APR01105228-M1BS-000000128955_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${TOULOUSEQBDIR})
+  otb_copy_rename(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif ${TOULOUSEQBDIR}/02APR01105228-M1BS-000000128955_01_P001.TIF)
 
   otb_add_test(NAME raTvReflectanceToLuminanceImageFilterAutoQuickbirdXS COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoQuickbirdXS.tif
@@ -450,10 +426,8 @@ if(OTB_DATA_USE_LARGEINPUT)
   file(MAKE_DIRECTORY ${ROMEWV2DIR})
   set(MTDATADIR ${OTB_DATA_LARGEINPUT_ROOT}/WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL)
   file(GLOB MTDATA ${MTDATADIR}/*TIL ${MTDATADIR}/*RPB ${MTDATADIR}/*XML ${MTDATADIR}/*IMD)
-  foreach(f ${MTDATA})
-    configure_file(${f} ${ROMEWV2DIR} COPYONLY)
-  endforeach(f)
-  configure_file(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif ${ROMEWV2DIR}/09DEC10103019-M2AS-052298844010_01_P001.TIF COPYONLY)
+  file(COPY ${MTDATA} DESTINATION ${ROMEWV2DIR})
+  otb_copy_rename(${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif ${ROMEWV2DIR}/09DEC10103019-M2AS-052298844010_01_P001.TIF)
 
   otb_add_test(NAME raTvReflectanceToLuminanceImageFilterAutoWV2MULTI COMMAND otbOpticalCalibrationTestDriver
     --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
@@ -559,12 +533,12 @@ otb_add_test(NAME raTuAtmosphericRadiativeTermsSingleChannelNew COMMAND otbOptic
   otbAtmosphericRadiativeTermsSingleChannelNew
   )
 
-otb_add_test(NAME raTvImageToReflectanceImageFilterDayMounth COMMAND otbOpticalCalibrationTestDriver
+otb_add_test(NAME raTvImageToReflectanceImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
-  ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterDayMonth.tif
   otbImageToReflectanceImageFilter
   ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterDayMonth.tif
   0.2 #radius
   1   #channel 1 alpha
   2   #channel 2 alpha
@@ -579,7 +553,7 @@ otb_add_test(NAME raTvImageToReflectanceImageFilterDayMounth COMMAND otbOpticalC
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvImageToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -629,17 +603,17 @@ otb_add_test(NAME raTvRomaniaImageToReflectance COMMAND otbOpticalCalibrationTes
 
 otb_add_test(NAME raTvLuminanceToReflectanceImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
-  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMonth.tif
   otbLuminanceToReflectanceImageFilter
   ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
+  ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMonth.tif
   0.2 #radius
   10  #channel 1 illumination
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvLuminanceToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -898,17 +872,17 @@ otb_add_test(NAME raTvReflectanceToLuminanceImageFilter COMMAND otbOpticalCalibr
 
 otb_add_test(NAME raTvReflectanceToLuminanceImageFilterDayMonth COMMAND otbOpticalCalibrationTestDriver
   --compare-image ${EPSILON_12}  ${INPUTDATA}/verySmallFSATSW.tif
-  ${TEMP}/raTvverySmallFSATSWImageFilterDayMounth.tif
+  ${TEMP}/raTvverySmallFSATSWImageFilterDayMonth.tif
   otbReflectanceToLuminanceImageFilter
   ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
-  ${TEMP}/raTvverySmallFSATSWImageFilterDayMounth.tif
+  ${TEMP}/raTvverySmallFSATSWImageFilterDayMonth.tif
   0.2 #radius
   10  #channel 1 illumination
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
   3   #day
-  5   #mounth
+  5   #month
   )
 
 otb_add_test(NAME raTvImageToLuminanceImageFilter COMMAND otbOpticalCalibrationTestDriver

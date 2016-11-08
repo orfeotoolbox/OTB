@@ -29,7 +29,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT FormosatImageMetadataInterface : public OpticalImageMetadataInterface
+class OTBMetadata_EXPORT FormosatImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 

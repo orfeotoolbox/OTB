@@ -73,6 +73,15 @@ if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otb6S PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 endif()
 
+# Below "extra" compile flags are needed for proper functioning of 6S
+# library. Without these flags especially /Oy- OpticalCalibration tests
+# are failing. the flags are automatially added by VS generator.
+# But due to time constraints and processing power available on testing VMs,
+# using Visual Studio generator is not possible.
+if(MSVC_VERSION GREATER 1800)
+  set_target_properties(otb6S PROPERTIES COMPILE_FLAGS "/Ob1 /Oy- /GS")
+endif()
+
 install(TARGETS otb6S
   EXPORT ${OTB3P_INSTALL_EXPORT_NAME}
   RUNTIME DESTINATION ${OTB3P_INSTALL_RUNTIME_DIR} COMPONENT RuntimeLibraries

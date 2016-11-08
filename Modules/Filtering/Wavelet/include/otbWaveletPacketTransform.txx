@@ -72,7 +72,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD, TCo
   itk::ProgressAccumulator * progress)
 {
   // We cannot know in advance the nomber of filters in this mini-pipeline
-  // So we decrease the weigth of each filter in order to tend to 1... slowly...
+  // So we decrease the weight of each filter in order to tend to 1... slowly...
   static float accumulatorWeight = 1.;
 
   if (this->GetCost()->Evaluate(depth, outputPtr))

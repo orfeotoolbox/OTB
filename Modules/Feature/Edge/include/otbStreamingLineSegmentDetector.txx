@@ -73,7 +73,7 @@ PersistentStreamingLineSegmentDetector<TInputImage>
   extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
   extract->Update();
 
-  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
+  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
   // but LSD filter need the projection ref if available
   extract->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
 

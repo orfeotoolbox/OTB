@@ -60,7 +60,7 @@ public:
 
   /** Decision rule once the KNN are found :
    *  [for classification]
-   *   - KNN_VOTING : output value with maximum occurences (for classification)
+   *   - KNN_VOTING : output value with maximum occurrences (for classification)
    *  [for regression]
    *   - KNN_MEAN : output mean value of neighbors
    *   - KNN_MEDIAN : output median value of neighbors
@@ -73,8 +73,6 @@ public:
 
   /** Train the machine learning model */
   void Train() ITK_OVERRIDE;
-  /** Predict values using the model */
-  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const ITK_OVERRIDE;
 
   /** Save the model to file */
   void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
@@ -98,6 +96,10 @@ protected:
   /** Destructor */
   ~KNearestNeighborsMachineLearningModel() ITK_OVERRIDE;
 
+  /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+
+  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 

@@ -36,7 +36,7 @@ namespace otb
    *  vertices between them, the euclidean distance to this line is computed. If for one vertex, this distance
    *  is upper than the tolerance threshold, the path is considered to be inconsistent and no vertices can be removed.
    *
-   *  If the path is considered consistent (which will occure at least with a 2 vertices path),
+   *  If the path is considered consistent (which will occur at least with a 2 vertices path),
    * only the beginning and ending
    *  vertices are kept and a new search iteration begin at its end.
    *
@@ -46,7 +46,7 @@ namespace otb
    * the SimplifyPathFunctor.
    *
    *   <b>Recent API changes:</b>
-   * Now part of the UnaryFunctorObjectListFilter hierachy, replace call to SetTolerance()
+   * Now part of the UnaryFunctorObjectListFilter hierarchy, replace call to SetTolerance()
    * by GetFunctor().SetTolerance().
    *
    *

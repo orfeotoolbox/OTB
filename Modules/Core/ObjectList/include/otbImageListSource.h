@@ -55,7 +55,7 @@ public:
   typedef ImageList<OutputImageType>                 OutputImageListType;
   typedef typename OutputImageListType::Pointer      OutputImageListPointerType;
   typedef typename OutputImageListType::ConstPointer OutputImageListConstPointerType;
-  /** Overiding of the GetOutput() method */
+  /** Overriding of the GetOutput() method */
   virtual OutputImageListType * GetOutput(void);
 
 protected:

@@ -115,7 +115,7 @@ private:
     // Build the Output Map Projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "outputs", "Output Image Grid");
     SetParameterDescription("outputs","This group of parameters allows one to define the grid on which the input image will be resampled.");
 
@@ -193,7 +193,7 @@ private:
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
     AddChoice("interpolator.bco",    "Bicubic interpolation");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows one to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows one to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetParameterDescription("interpolator","This group of parameters allows one to define how the input image will be interpolated during resampling.");
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
     SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
@@ -287,7 +287,7 @@ private:
        SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
 
       // Handle the spacing and size field following the mode
-      // choosed by the user
+      // chose by the user
       switch (GetParameterInt("outputs.mode") )
         {
         case Mode_UserDefined:
@@ -595,7 +595,7 @@ private:
     // Get the input image
     FloatVectorImageType* inImage = GetParameterImage("io.in");
 
-    // Resampler Instanciation
+    // Resampler Instantiation
     m_ResampleFilter = ResampleFilterType::New();
     m_ResampleFilter->SetInput(inImage);
 

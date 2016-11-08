@@ -29,7 +29,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT WorldView2ImageMetadataInterface : public OpticalImageMetadataInterface
+class OTBMetadata_EXPORT WorldView2ImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 

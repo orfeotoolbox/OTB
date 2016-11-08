@@ -34,7 +34,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::VectorDataTransformFilter()
 {
 //  m_Transform = GenericTransformType::New();
-  // with ITK v4 you can't instanciate a transform (virtual). We do NOT want to
+  // with ITK v4 you can't instantiate a transform (virtual). We do NOT want to
   // use the otb::Transform or we loose the capability of using all the existing
   // itk transform, so we just keep it as NULL and you have to be careful not
   // to burn yourself when using it.

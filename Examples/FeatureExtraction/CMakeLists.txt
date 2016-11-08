@@ -1,7 +1,7 @@
 project(FeatureExtractionExamples)
 
-add_executable(AssymmetricFusionOfLineDetectorExample AssymmetricFusionOfLineDetectorExample.cxx)
-target_link_libraries(AssymmetricFusionOfLineDetectorExample ${OTB_LIBRARIES})
+add_executable(AsymmetricFusionOfLineDetectorExample AsymmetricFusionOfLineDetectorExample.cxx)
+target_link_libraries(AsymmetricFusionOfLineDetectorExample ${OTB_LIBRARIES})
 
 add_executable(CloudDetectionExample CloudDetectionExample.cxx)
 target_link_libraries(CloudDetectionExample ${OTB_LIBRARIES})

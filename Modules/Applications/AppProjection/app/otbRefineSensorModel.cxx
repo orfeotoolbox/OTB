@@ -194,7 +194,7 @@ private:
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
   rsTransform->SetOutputProjectionRef(MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map"));
-  rsTransform->InstanciateTransform();
+  rsTransform->InstantiateTransform();
 
   std::ofstream ofs;
   ofs<<std::fixed;

@@ -11,7 +11,7 @@ Style Guidelines for the ITK Software Guide
      do++;
      }
 
-2. \doxygen{} - The first occurence of a class in a section should use this
+2. \doxygen{} - The first occurrence of a class in a section should use this
    (or for those in sub-name spaces like itk::Statistics::) use \subdoxygen{}.
 
    Subsequent references to the class name should just use plain text (do not

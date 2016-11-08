@@ -187,7 +187,7 @@ int main(int argc, char* argv[])
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.44\textwidth]{MarkovRandomField2.eps}
-  // \itkcaption[MRF restauration]{Result of applying
+  // \itkcaption[MRF restoration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
   // image for classification. The result is obtained after 5 iterations with a
   // MAP random sampler and an ICM optimizer. From left to right : original image,

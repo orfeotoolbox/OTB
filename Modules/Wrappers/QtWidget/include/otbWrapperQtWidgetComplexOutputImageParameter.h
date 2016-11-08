@@ -35,7 +35,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetComplexOutputImageParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetComplexOutputImageParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:

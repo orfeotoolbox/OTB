@@ -34,6 +34,8 @@ ExternalProject_Add(FFTWF
   --disable-fortran
   --disable-dependency-tracking
   DEPENDS ${FFTW_DEPENDENCIES}
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_PATCH_SOURCE(FFTWF)
@@ -58,6 +60,8 @@ ExternalProject_Add(FFTWD
   --disable-fortran
   --disable-dependency-tracking
   DEPENDS FFTWF
+  LOG_BUILD 1
+  LOG_INSTALL 1  
   )
 
 

@@ -200,7 +200,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Train()
 
 template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
-  TInputValue, TOutputValue>::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
+  TInputValue, TOutputValue>::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;

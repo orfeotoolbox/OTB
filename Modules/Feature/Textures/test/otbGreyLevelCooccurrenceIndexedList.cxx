@@ -84,7 +84,7 @@ int otbGreyLevelCooccurrenceIndexedList(int, char* [] )
     bool passed = true;
     try
       {
-      // Check Intialize method.
+      // Check Initialize method.
       cooccurrenceObj1->Initialize(4, 0, 8);
       bool symmetry = cooccurrenceObj1->GetSymmetry();
       float totalFrequency = cooccurrenceObj1->GetTotalFrequency();

@@ -24,10 +24,8 @@ namespace otb
 {
 
 ExtendedFilenameToWriterOptions
-::ExtendedFilenameToWriterOptions() : itk::Object()
+::ExtendedFilenameToWriterOptions() : ExtendedFilenameHelper()
 {
-  m_FilenameHelper = FNameHelperType::New();
-
   m_Options.simpleFileName.first  = false;
   m_Options.simpleFileName.second = "";
 
@@ -54,12 +52,12 @@ void
 ExtendedFilenameToWriterOptions
 ::SetExtendedFileName(const char *extFname)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extFname);
+  this->Superclass::SetExtendedFileName(extFname);
   // TODO: Rename map to a less confusing (with std::map) name
-  MapType map = this->m_FilenameHelper->GetOptionMap();
+  MapType map = this->GetOptionMap();
 
   m_Options.simpleFileName.first  = true;
-  m_Options.simpleFileName.second = this->m_FilenameHelper->GetSimpleFileName();
+  m_Options.simpleFileName.second = this->GetSimpleFileName();
 
   MapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )
@@ -188,12 +186,6 @@ ExtendedFilenameToWriterOptions
 ::SimpleFileNameIsSet () const
 {
   return m_Options.simpleFileName.first;
-}
-const char*
-ExtendedFilenameToWriterOptions
-::GetSimpleFileName () const
-{
-  return m_Options.simpleFileName.second.c_str();
 }
 
 bool

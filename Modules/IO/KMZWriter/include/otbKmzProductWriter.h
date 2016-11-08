@@ -34,7 +34,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkCastImageFilter.h"
 
-// Possiblity to includes vectordatas necessary includes
+// Possibility to includes vectordatas necessary includes
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 

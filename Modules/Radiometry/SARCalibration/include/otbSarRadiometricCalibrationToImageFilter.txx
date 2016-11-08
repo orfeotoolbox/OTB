@@ -91,9 +91,9 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   /* Below lines will toggle the necessary flags which can help skip some
    * computation. For example, if there is lookup value and ofcourse antenna
    * pattern gain is not required. Even if we try to compute the value with
-   * SarParametricFuntion we  get 1. This is the safe side. But as we are so sure
+   * SarParametricFunction we  get 1. This is the safe side. But as we are so sure
    * we skip all those calls to EvaluateParametricCoefficient and also the
-   * Evalute(). For the function the value is 1 by default.
+   * Evaluate(). For the function the value is 1 by default.
    */
   function->SetApplyAntennaPatternGain(!apply);
   function->SetApplyIncidenceAngleCorrection(!apply);

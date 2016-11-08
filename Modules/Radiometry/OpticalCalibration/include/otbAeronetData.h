@@ -21,6 +21,7 @@
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
+#include "OTBOpticalCalibrationExport.h"
 
 namespace otb
 {
@@ -33,7 +34,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT AeronetData :  public itk::DataObject
+class OTBOpticalCalibration_EXPORT AeronetData :  public itk::DataObject
 {
 public:
   /** Standard class typedefs. */

@@ -95,7 +95,7 @@ ImageToOSMVectorDataGenerator<TImage>
   transform->SetInputKeywordList(input->GetImageKeywordlist());
   transform->SetInputProjectionRef(input->GetProjectionRef());
   transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-  transform->InstanciateTransform();
+  transform->InstantiateTransform();
 
   // Compute the 4 corners in the cartographic coordinate system
   std::vector< IndexType> vindex;

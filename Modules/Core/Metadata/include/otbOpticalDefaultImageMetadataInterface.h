@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT OpticalDefaultImageMetadataInterface : public OpticalImageMetadataInterface
+class OTBMetadata_EXPORT OpticalDefaultImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
 
@@ -152,7 +152,7 @@ public:
 
   bool CanRead() const ITK_OVERRIDE
   {
-    // This clas is the default one, it has to be able to call every metadata
+    // This class is the default one, it has to be able to call every metadata
     return false;
   }
 

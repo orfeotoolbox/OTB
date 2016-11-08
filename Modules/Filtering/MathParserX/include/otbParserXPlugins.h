@@ -355,7 +355,7 @@ public:
 
     const mup::char_type* GetDesc() const ITK_OVERRIDE
     {
-      return "vmin(m1) - overall minimun";
+      return "vmin(m1) - overall minimum";
     }
 
     mup::IToken* Clone() const ITK_OVERRIDE

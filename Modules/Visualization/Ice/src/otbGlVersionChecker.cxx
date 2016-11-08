@@ -194,7 +194,7 @@ GlVersionChecker
     throw std::runtime_error( required );
 
   //
-  // Compare splitted versions.
+  // Compare split versions.
 
   if( verMaj<reqMaj )
     return -1;

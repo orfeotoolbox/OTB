@@ -44,7 +44,7 @@ namespace otb
  * which parameter is the current iteration. It returns a beta value of type double.
  *
  * The SOMMap produced as output can be either initialized with a constant custom value or randomly
- * generated following a normal law. The seed for the random intialization can be modified.
+ * generated following a normal law. The seed for the random initialization can be modified.
  *
  * \sa SOMMap
  * \sa SOMActivationBuilder
@@ -157,9 +157,9 @@ private:
   double m_BetaEnd;
   /** Initial neighborhood size */
   SizeType m_NeighborhoodSizeInit;
-  /** Minimum intial neuron weights */
+  /** Minimum initial neuron weights */
   ValueType m_MinWeight;
-  /** Maximum intial neuron weights */
+  /** Maximum initial neuron weights */
   ValueType m_MaxWeight;
   /** Random initialization bool */
   bool m_RandomInit;

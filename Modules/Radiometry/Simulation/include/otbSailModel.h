@@ -18,7 +18,7 @@
 #ifndef otbSailModel_h
 #define otbSailModel_h
 
-
+#include "OTBSimulationExport.h"
 #include "otbSpectralResponse.h"
 #include "otbDataSpecP5B.h"
 #include "otbSimulationStep2Base.h"
@@ -37,7 +37,7 @@ namespace otb
  */
 
 
-class ITK_EXPORT SailModel : public SimulationStep2Base
+class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
 {
    public:
       /** Standard class typedefs */

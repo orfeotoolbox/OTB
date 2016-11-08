@@ -18,7 +18,7 @@
 #ifndef otbFormosatImageMetadataInterfaceFactory_h
 #define otbFormosatImageMetadataInterfaceFactory_h
 
-
+#include "OTBMetadataExport.h"
 #include "itkObjectFactoryBase.h"
 
 namespace otb
@@ -28,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT FormosatImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT FormosatImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

@@ -165,19 +165,19 @@ private:
     * to an N-dimensional index. */
   void GeneratePointsToIndex();
 
-  /** Determines the indicies to use give the splines region of support */
+  /** Determines the indices to use give the splines region of support */
   void DetermineRegionOfSupport(vnl_matrix<long>& evaluateIndex,
                                 const ContinuousIndexType& x,
                                 unsigned int splineOrder) const;
 
-  /** Set the indicies in evaluateIndex at the boundaries based on mirror
+  /** Set the indices in evaluateIndex at the boundaries based on mirror
     * boundary conditions. */
   void ApplyMirrorBoundaryConditions(vnl_matrix<long>& evaluateIndex,
                                      unsigned int splineOrder) const;
 
   Iterator               m_CIterator;       // Iterator for traversing spline coefficients.
   unsigned long          m_MaxNumberInterpolationPoints;    // number of neighborhood points used for interpolation
-  std::vector<IndexType> m_PointsToIndex;     // Preallocation of interpolation neighborhood indicies
+  std::vector<IndexType> m_PointsToIndex;     // Preallocation of interpolation neighborhood indices
 
   CoefficientFilterPointer m_CoefficientFilter;
 

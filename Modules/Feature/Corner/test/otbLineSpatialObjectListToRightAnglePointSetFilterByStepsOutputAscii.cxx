@@ -135,7 +135,7 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii(int itk
     segmentOrtho->GetPoint(i, &pRight);
     outfile << " Right Angle found in point : " <<  pRight << std::endl;
 
-    /** Exemple To extract The coordinate of the segment (Just for example)*/
+    /** Example To extract The coordinate of the segment (Just for example)*/
     segmentOrtho->GetPointData(i, &outputVectorLines);
     outputLinesList->push_back(outputVectorLines[0]);
     outputLinesList->push_back(outputVectorLines[1]);

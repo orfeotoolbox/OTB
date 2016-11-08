@@ -24,6 +24,8 @@
 #include "itksys/SystemTools.hxx"
 #include "itkMacro.h"
 
+#include "OTBCommonExport.h"
+
 namespace otb
 {
 
@@ -35,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class ITK_EXPORT System
+class OTBCommon_EXPORT System
 {
 public:
 
@@ -55,7 +57,14 @@ public:
   static bool ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum);
 
   /** Parse a filename with additional information */
-  static bool ParseFileNameForAdditonalInfo(const std::string& id, std::string& file, unsigned int& addNum);
+  static bool ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum);
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. use
+* ParseFileNameForAdditionalInfo instead*/
+  static bool ParseFileNameForAdditonalInfo (const std::string& id, std::string& file, unsigned int& addNum)
+  {
+    return ParseFileNameForAdditionalInfo(id, file, addNum);
+  }
 };
 
 } // namespace otb

@@ -19,6 +19,7 @@
 #define otbOGRVectorDataIOFactory_h
 
 #include "itkObjectFactoryBase.h"
+#include "OTBIOGDALExport.h"
 
 namespace otb
 {
@@ -27,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class ITK_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
+class OTBIOGDAL_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

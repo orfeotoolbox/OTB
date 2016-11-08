@@ -141,7 +141,7 @@ private:
   /** Test whether the given filename exist and it is readable.
       If the file doesn't exist or it is not readable, and exception with an
       appropriate message will be thrown. */
-  void TestFileExistanceAndReadability();
+  void TestFileExistenceAndReadability();
 
 };
 

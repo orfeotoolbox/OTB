@@ -20,6 +20,7 @@
 
 #include "itkEventObject.h"
 #include "itkProcessObject.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -33,7 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT AddProcessToWatchEvent: public itk::EventObject
+class OTBApplicationEngine_EXPORT AddProcessToWatchEvent: public itk::EventObject
 {
 public:
 

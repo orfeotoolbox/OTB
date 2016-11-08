@@ -127,15 +127,6 @@ ComplexInputImageParameter::SetImage(ComplexFloatVectorImageType* image)
   this->SetImage<ComplexFloatVectorImageType>( image );
 }
 
-
-template <class TComplexInputImage>
-void
-ComplexInputImageParameter::SetImage(TComplexInputImage* image)
-{
-  m_Image = image;
-}
-
-
 bool
 ComplexInputImageParameter::HasValue() const
 {

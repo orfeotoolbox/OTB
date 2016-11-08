@@ -21,6 +21,7 @@
 #include <iosfwd>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBCurlAdaptersExport.h"
 
 namespace otb
 {
@@ -34,7 +35,7 @@ namespace otb
  *
  * \ingroup OTBCurlAdapters
  */
-class ITK_EXPORT CurlHelperInterface : public itk::Object
+class OTBCurlAdapters_EXPORT CurlHelperInterface : public itk::Object
 {
 public:
   /** Standard class typedefs. */

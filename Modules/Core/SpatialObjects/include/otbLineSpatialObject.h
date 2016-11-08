@@ -81,7 +81,7 @@ public:
   }
 
   /** Return the number of points in the list */
-  unsigned long GetNumberOfPoints(void) const ITK_OVERRIDE
+  itk::SizeValueType GetNumberOfPoints(void) const ITK_OVERRIDE
   {
     return m_Points.size();
   }

@@ -27,7 +27,7 @@
 namespace otb {
 
 /**
- * Standart (useless) definition for unknown wavelet
+ * Standard (useless) definition for unknown wavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator>
 const char *

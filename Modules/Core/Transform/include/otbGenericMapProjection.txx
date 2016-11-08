@@ -72,9 +72,9 @@ template<TransformDirection::TransformationDirection TDirectionOfMapping, class 
     unsigned int NOutputDimensions>
 bool
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::InstanciateProjection()
+::InstantiateProjection()
 {
-  return m_MapProjection->InstanciateProjection();
+  return m_MapProjection->InstantiateProjection();
 }
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,

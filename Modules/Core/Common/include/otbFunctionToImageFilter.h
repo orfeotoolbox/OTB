@@ -93,6 +93,10 @@ public:
   {
     return m_PixelFunction;
   }
+  FunctionType const* GetFunction() const
+  {
+    return m_PixelFunction;
+  }
 
 
   /** Image dimensions */

@@ -75,7 +75,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(DisparityMapToDEMFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TDisparityImage         DisparityMapType;
   typedef TInputImage             SensorImageType;
   typedef TOutputDEMImage         DEMImageType;
@@ -151,7 +151,7 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
+  /** Generate input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Before threaded generate data */

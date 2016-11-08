@@ -21,6 +21,7 @@
 #include "itkLightObject.h"
 #include "itkScalableAffineTransform.h"
 #include "itkImageBase.h"
+#include "OTBProjectionExport.h"
 
 namespace otb {
 /**
@@ -30,13 +31,13 @@ namespace otb {
  * Pleiades sensor bundle are exactly homotetic, it is therefore
  * possible to corregister the pancrhomatic and multispectral images
  * with a simple affine transform without using any sensor
- * modelling. This yelds a very accurate corregistration and avoid the
+ * modelling. This yields a very accurate corregistration and avoid the
  * use of a DSM which may cause registration errors due to height errors.
  *
  * This calculator is a helper class to build the affine transform. It
  * consists in only two static methods: one to check if the transform
  * calculation applies to the given pair of images, the other to
- * actually estimate the transfrom.
+ * actually estimate the transform.
  *
  * The estimated transform returned by the latter transforms
  * pancrhomatic image positions to multispectral image positions. If
@@ -46,7 +47,7 @@ namespace otb {
  *
  * \ingroup OTBProjection
  */
-class ITK_EXPORT PleiadesPToXSAffineTransformCalculator
+class OTBProjection_EXPORT PleiadesPToXSAffineTransformCalculator
   : public itk::LightObject
 {
 public:
@@ -64,7 +65,7 @@ public:
   /**
    * This function checks if the transform calculation applies to the
    * given pair of images. Checked items are:
-   * - Both images are sucessfully undertood by OTB as Pleiades images,
+   * - Both images are successfully undertood by OTB as Pleiades images,
    * - Both images processing level is SENSOR",
    * - XS and Pan ids (except last 4 letters) are equal.
    * \return True if the calculation applies

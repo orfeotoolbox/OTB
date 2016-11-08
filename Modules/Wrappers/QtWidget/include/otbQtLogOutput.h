@@ -25,6 +25,8 @@
 //#include "itkObjectFactory.h"
 //#include "itkProcessObject.h"
 
+#include "OTBQtWidgetExport.h"
+
 namespace otb
 {
 
@@ -36,7 +38,7 @@ namespace otb
  *
  */
 
-class ITK_ABI_EXPORT QtLogOutput : public QObject, public itk::LogOutput
+class OTBQtWidget_EXPORT QtLogOutput : public QObject, public itk::LogOutput
 {
 Q_OBJECT
 public:

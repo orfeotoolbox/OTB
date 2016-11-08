@@ -187,8 +187,8 @@ void GlROIActor::UpdateTransforms()
       m_ImageToViewportTransform->SetOutputProjectionRef( settings->GetWkt() );
       m_ImageToViewportTransform->SetOutputKeywordList( settings->GetKeywordList() );
 
-      m_ViewportToImageTransform->InstanciateTransform();
-      m_ImageToViewportTransform->InstanciateTransform();
+      m_ViewportToImageTransform->InstantiateTransform();
+      m_ImageToViewportTransform->InstantiateTransform();
       }
     }
   else
@@ -204,8 +204,8 @@ void GlROIActor::UpdateTransforms()
       m_ImageToViewportTransform = RSTransformType::New();
       m_ViewportToImageTransform = RSTransformType::New();
 
-      m_ImageToViewportTransform->InstanciateTransform();
-      m_ViewportToImageTransform->InstanciateTransform();
+      m_ImageToViewportTransform->InstantiateTransform();
+      m_ViewportToImageTransform->InstantiateTransform();
       }
     }
 }

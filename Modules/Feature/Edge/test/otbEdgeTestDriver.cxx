@@ -5,7 +5,7 @@ void RegisterTests()
   REGISTER_TEST(otbEdgeDetectorImageFilter);
   REGISTER_TEST(otbHorizontalSobelVectorImageFilterNewTest);
   REGISTER_TEST(otbHorizontalSobelVectorImageFilterTest);
-  REGISTER_TEST(otbAssymmetricFusionOfLineDetector);
+  REGISTER_TEST(otbAsymmetricFusionOfLineDetector);
   REGISTER_TEST(otbLocalHoughDraw);
   REGISTER_TEST(otbAssociativeSymmetricalSum);
   REGISTER_TEST(otbPersistentVectorizationFilterNew);
@@ -24,7 +24,7 @@ void RegisterTests()
   REGISTER_TEST(otbLocalHough);
   REGISTER_TEST(otbExtractSegments);
   REGISTER_TEST(otbExtractSegmentsNew);
-  REGISTER_TEST(otbAssymmetricFusionOfLineDetectorNew);
+  REGISTER_TEST(otbAsymmetricFusionOfLineDetectorNew);
   REGISTER_TEST(otbLineRatioDetector);
   REGISTER_TEST(otbTouziEdgeDetectorDirection);
   REGISTER_TEST(otbTouziEdgeDetectorNew);

@@ -20,6 +20,10 @@
 #include <iostream>
 #include <cassert>
 
+#if defined(_MSC_VER)
+#include "ossimWin32FindFileHandle.h"
+#endif
+
 #if defined(USE_BOOST_TIME)
             using boost::posix_time::microseconds;
             using boost::posix_time::seconds;
@@ -158,11 +162,18 @@ namespace ossimplugins
 
    ossimFilename ossimSentinel1Model::searchManifestFile(const ossimFilename& file) const
    {
+
+      #ifndef _WIN32
       const ossimFilename manifestFile = ossimFilename(file.path().path() + "/manifest.safe");
+      #else
+      const ossimFilename manifestFile = ossimFilename(file.path().path() + "\\manifest.safe");
+      #endif
 
       if(!manifestFile.exists())
       {
-         ossimNotify(ossimNotifyLevel_WARN) << "manifest.safe " << manifestFile << " doesn't exist...\n";
+         if (traceDebug()) {
+            ossimNotify(ossimNotifyLevel_DEBUG) << " manifest.safe " << manifestFile << " doesn't exist...\n";
+         }
          return "";
       }
       return manifestFile;
@@ -181,88 +192,121 @@ namespace ossimplugins
       {
          return false;
       }
-      else
+
+      theGSD.makeNan();
+
+      // -----[ Read manifest file
+      const ossimFilename safeFile = searchManifestFile(file);
+
+      if ( !safeFile.empty() )
       {
-         theGSD.makeNan();
 
-         // -----[ Read manifest file
-         const ossimFilename safeFile = searchManifestFile(file);
          theManifestDirectory = safeFile.path();
-         if (!safeFile.empty())
-         {
-            if ( !this->isSentinel1(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
-               return false;
-            }
-            ossimXmlDocument manifestDoc;
-            if (!manifestDoc.openFile(safeFile))
-            {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
-               return false;
-            }
-            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
 
-            theImageID = getImageId(manifestDoc);
-            if (theImageID.empty()) {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
-               return false;
-            }
-
-            if (! standAloneProductInformation(manifestDoc))  {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load product information from " << safeFile << "\n";
-               return false;
-            }
-
-            theSensorID = initSensorID(manifestDoc);
-            if (theSensorID.empty()) {
-               ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
-               return false;
-            }
-         }
-
-         // -----[ Read product file
-         ossimFilename xmlFileName = file;
-
-         // If this is tiff file, look for corresponding annotation file
-         if(ext != "xml")
-           {
-           const ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
-           const ossimFilename path = file.path().path();
-           xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
-           }
-
-         if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
-         {
-            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->readProduct( safeFile )\n";
+         if ( !this->isSentinel1(safeFile)) {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Not a Sentinel 1 manifest file " << safeFile << "\n";
             return false;
          }
 
-         if ( !this->initImageSize( theImageSize ) )
-         {
-           ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initImageSize( theImageSize ) fails\n";
-           return false;
+         ossimXmlDocument manifestDoc;
+         if (!manifestDoc.openFile(safeFile)) {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Invalid Manifest file " << safeFile << "\n";
+            return false;
          }
 
-         theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
-         theSubImageOffset.x = 0.0;
-         theSubImageOffset.y = 0.0;
+         if (traceDebug()) {
+            ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
+         }
 
-         // automatically loaded/saved into ossimSensorModel
-         theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+         theImageID = getImageId(manifestDoc);
+         if (theImageID.empty()) {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
+            return false;
+         }
+
+         if (! standAloneProductInformation(manifestDoc))  {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load product information from " << safeFile << "\n";
+            return false;
+         }
+
+         theSensorID = initSensorID(manifestDoc);
+         if (theSensorID.empty()) {
+            ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
+            return false;
+         }
+      }
+      else
+      {
+         /* Keep this notify as WARN. code should not reach here.
+         If manifest.safe is not found then we are not loading a valid S1 dataset.
+         If the input is tiff or annotation xml, then also there must exists a
+         manifest.safe. However, we are forced to read only annotaion xml and
+         make ossimSentinel1Model out of it for the sake of
+         "ossimSentinel1ModelTest". This is not a very good idea to allow
+         reading a fake dataset.  So user must be warned!
+         */
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE
+            << " manifest.safe not found. but checking if xml file is valid" << "\n";
+      }
+
+      // -----[ Read product file
+      ossimFilename xmlFileName = file;
+
+      // If this is tiff file, look for corresponding annotation file
+      if(ext != "xml")
+      {
+         const ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
+         const ossimFilename path = file.path().path();
+         xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
+      }
+
+      if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
+      {
+
+         /* Must be a FATAL error. Because when you reach here there are three possibilities.
+         1. manifest.safe file exists, but annotation xml does not
+         2. manifest.safe and annotation xmlexists, readProduct() returns false.
+         3. manifest.safe does not exists and annotation file is not a valid S1
+            dataset. (case when loading a different product xml file (eg: terrasarx).
+
+         All these cases should not go slient on error message. It must be FATAL errors.
+
+         */
+
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE
+            << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
+         return false;
+      }
+
+      if ( !this->initImageSize( theImageSize ) )
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE
+            << " this->initImageSize( theImageSize ) fails \n";
+         return false;
+      }
+
+      theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
+      theSubImageOffset.x = 0.0;
+      theSubImageOffset.y = 0.0;
+
+      // automatically loaded/saved into ossimSensorModel
+      theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
 #if 0
-         if ( !this->initSRGR( ) )
-         {
+      if ( !this->initSRGR( ) )
+      {
          ossimNotify(ossimNotifyLevel_FATAL) << MODULE << " this->initSRGR( )\n";
          return false;
-         }
+      }
 #endif
 
-         // Commit the operation
-         theProductXmlFile = file;
-         return true;
-      }
+      // Commit the operation
+      theProductXmlFile = file;
+      return true;
+
    }
 
    ossimString const& ossimSentinel1Model::getImageId(ossimXmlDocument const& manifestDoc) const
@@ -285,6 +329,7 @@ namespace ossimplugins
                true);
          return familyName + instrumentId;
       }
+      throw std::runtime_error("Cannot obtain Sensor ID");
    }
 
 #if 0
@@ -504,21 +549,39 @@ namespace ossimplugins
 
    bool ossimSentinel1Model::checkDirectory(const ossimFilename& file, const char* d, const char* ext) const
    {
-      //check dir is valid first
-      ossimDirectory dir(file.path() + '/' + d + '/');
-      std::vector<ossimFilename> result;
-      dir.findAllFilesThatMatch(result, ext);
-      if ( result.empty() )
-      {
-         if (traceExec())
-         {
-            ossimNotify(ossimNotifyLevel_FATAL)
-               << " DEBUG:" << " checkDirectory failed for: " << file.path()   << "/" << d << " with ext ="<< ext << "\n";
-         }
-         return false;
-      }
+    std::stringstream strm;
+    std::vector<ossimFilename> result;
 
-      return true;
+	#if defined(_WIN32)
+		const char pathsep = '\\';
+	#else
+		const char pathsep = '/';
+	#endif
+
+	#if defined(_MSC_VER)
+	strm << file.path() << pathsep << d << pathsep << "*" << ext;
+	ossimWin32FindFileHandle handle(strm.str());
+	if (handle.is_valid()) {
+	  do {
+		result.push_back(handle.crt_filename());
+	  } while (handle.next());
+	}
+	#else
+	strm << file.path() << pathsep << d << pathsep;
+    ossimDirectory dir( strm.str() );
+    dir.findAllFilesThatMatch(result, ext);
+	#endif
+
+    if ( result.empty() )
+    {
+		if (traceExec())
+        {
+            ossimNotify(ossimNotifyLevel_FATAL)
+            << " DEBUG:" << " checkDirectory failed for: " << strm.str() << " with ext ="<< ext << "\n";
+        }
+        return false;
+    }
+    return true;
    }
 
    bool ossimSentinel1Model::readProduct(const ossimFilename &productXmlFile)
@@ -556,6 +619,25 @@ namespace ossimplugins
       assert(productRoot.get());
 
       const ossimXmlNode & adsHeader = getExpectedFirstNode(*productRoot,attAdsHeader);
+      const ossimString missionId = getTextFromFirstNode(adsHeader, "missionId");
+
+      if( (missionId == "S1A" ) ||
+          (missionId == "S1B" ) ||
+          (missionId == "ASA" ) )
+      {
+         if (traceDebug())
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "missionId from annotationXml is: '" << missionId << "'\n" ;
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "Not a valid sentinel1 annotation xml. missionId is: '"
+            << missionId << "'\n" ;
+         return false;
+         }
+
+
       const ossimString & polarisation = getTextFromFirstNode(adsHeader, "polarisation");
       const ossimString & productType  = getTextFromFirstNode(adsHeader, "productType");
       theProductType = ProductType(productType);
@@ -690,7 +772,7 @@ namespace ossimplugins
         }
       std::vector<ossimFilename>::const_iterator it = files.begin();
 
-      ossimNotify(ossimNotifyLevel_INFO) << files.size() << " calibration files found in " << theManifestDirectory << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << files.size() << " calibration files found in " << theManifestDirectory << "\n";
       std::stringstream strm;
       for (; it != files.end(); ++it)
       {
@@ -807,7 +889,7 @@ namespace ossimplugins
       productRoot.findChildNodes("swathTiming/burstList/burst",xnodes);
       if (xnodes.empty())
       {
-         // Appart from TopSAR products, there won't be any burst
+         // Apart from TopSAR products, there won't be any burst
          //records, so this warning is unnecessary
          //ossimNotify(ossimNotifyLevel_DEBUG) << "No burst records available in metadata!!\n";
          add(theProductKwl, BURST_NUMBER_KEY,                       ossimString("1"));

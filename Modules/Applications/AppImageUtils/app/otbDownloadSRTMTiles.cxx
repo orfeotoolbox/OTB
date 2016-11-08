@@ -167,7 +167,7 @@ private:
        rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
        rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
 
-       rsTransformToWGS84->InstanciateTransform();
+       rsTransformToWGS84->InstantiateTransform();
 
        const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
        const PointType origin=inImage->GetOrigin();

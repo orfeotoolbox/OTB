@@ -30,7 +30,7 @@ test is to make sure there are not missing module dependencies.  It also tests
 for syntax and missing #include's.
 """
 
-# BANNED_HEADERS = Headers to not test because of dependecy issues, etc.
+# BANNED_HEADERS = Headers to not test because of dependency issues, etc.
 
 
 HEADER = """/*=========================================================================

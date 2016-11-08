@@ -24,7 +24,7 @@ namespace otb
 {
 
 /**
- * Check wether point is strictly inside the polygon.
+ * Check whether point is strictly inside the polygon.
  * \param point The point to check.
  * \return True if the point is inside the polygon.
  */
@@ -208,7 +208,7 @@ void
 Rectangle<TValue>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  os << indent << "Verticies:  " << m_VertexList << std::endl;
+  os << indent << "Vertices:  " << m_VertexList << std::endl;
 }
 
 } // End namespace otb

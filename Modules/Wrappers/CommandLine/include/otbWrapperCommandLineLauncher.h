@@ -137,7 +137,7 @@ protected:
   void LoadApplication();
 
   /** Parse the user expression, extract the key and the associated
-    * string and set it as value of each corresonding application
+    * string and set it as value of each corresponding application
     *  parameter.
     */
   CommandLineLauncher::ParamResultType LoadParameters();
@@ -158,7 +158,7 @@ protected:
   /** Display the output parameter (Role == RoleOutput) */
   void DisplayOutputParameters();
 
-  /** Load the watchers for internal progress and writeing progress report. */
+  /** Load the watchers for internal progress and writing progress report. */
   void LinkWatchers(itk::Object * caller, const itk::EventObject & event);
 
   /** Clear watcher list, deleting its pointers. */

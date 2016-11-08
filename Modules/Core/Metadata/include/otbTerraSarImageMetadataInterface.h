@@ -33,7 +33,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT TerraSarImageMetadataInterface : public SarImageMetadataInterface
+class OTBMetadata_EXPORT TerraSarImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
 

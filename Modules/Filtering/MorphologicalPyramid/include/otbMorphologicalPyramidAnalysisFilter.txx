@@ -228,7 +228,7 @@ MorphologicalPyramidAnalysisFilter<TInputImage, TOutputImage, TMorphoFilter>
 
     otbMsgDevMacro(
       << "MorphologicalPyramidAnalysisFilter: DownSampling OK " << currentImage->GetLargestPossibleRegion().GetSize());
-    // New current image is appeneded to the output list
+    // New current image is appended to the output list
     OutputImageList->PushBack(currentImage);
 
     // Image upsampling

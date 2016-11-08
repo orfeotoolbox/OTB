@@ -32,7 +32,7 @@ namespace otb
  * \brief Convert any data container type into a VariableLengthVector.
  *
  * To be usable, the desired conversion must be implemented through
- * partial specialisation mecanism.
+ * partial specialisation mechanism.
  *
  *
  * \ingroup OTBCommon

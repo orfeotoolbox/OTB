@@ -22,6 +22,7 @@
 #include "itkImageBase.h"
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
+#include "OTBOpticalCalibrationExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT SpectralSensitivityReader : public itk::ProcessObject
+class OTBOpticalCalibration_EXPORT SpectralSensitivityReader : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */

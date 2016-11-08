@@ -76,7 +76,7 @@ namespace otb
  *  resampling grid. Please keep in mind that the whole grid is loaded
  *  into memory, and that the epipolar lines direction may only vary
  *  smoothly. When working with large images, a coarse grid-step will
- *  generally be accurate enough and will preserve the memory ressources.
+ *  generally be accurate enough and will preserve the memory resources.
  *
  *  \sa StreamingWarpImageFilter
  *  \sa StereoSensorModelToElevationMapFilter

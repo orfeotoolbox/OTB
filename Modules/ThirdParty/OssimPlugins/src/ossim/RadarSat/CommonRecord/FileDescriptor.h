@@ -58,7 +58,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  RadarSatRecord* Instanciate()
+  RadarSatRecord* Instantiate()
   {
     return new FileDescriptor();
   };
@@ -152,7 +152,7 @@ public:
     return _seq_loc;
   };
   /**
-   * @brief Sequence number lenght
+   * @brief Sequence number length
    */
   int   get_seq_len()
   {
@@ -187,7 +187,7 @@ public:
     return _rec_len;
   };
   /**
-   * @brief Record lenght location
+   * @brief Record length location
    */
   int get_rlen_loc()
   {
@@ -464,7 +464,7 @@ protected:
    */
   int   _seq_loc;
   /**
-   * @brief Sequence number lenght
+   * @brief Sequence number length
    */
   int   _seq_len;
   /**
@@ -484,7 +484,7 @@ protected:
    */
   std::string _rec_len;
   /**
-   * @brief Record lenght location
+   * @brief Record length location
    */
   int _rlen_loc;
   /**

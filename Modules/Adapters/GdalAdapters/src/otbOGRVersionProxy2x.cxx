@@ -87,7 +87,7 @@ std::string GetDriverClassName()
 namespace raii
 {
 // This class is used in the next function, so as to prevent any
-// ressource leak on char ** returned by dataset->GetFileList()
+// resource leak on char ** returned by dataset->GetFileList()
 class CharPPCapsule
 {
 public:

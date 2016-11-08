@@ -270,7 +270,7 @@ int compareDatasetInfoGDAL(DatasetInfoGDAL *create, DatasetInfoGDAL *WR, std::os
          (create->m_GeoTransfoParam[4] == WR->m_GeoTransfoParam[4]) &&
          ( (create->m_GeoTransfoParam[5] == WR->m_GeoTransfoParam[5]) || (create->m_GeoTransfoParam[5] == -WR->m_GeoTransfoParam[5]) )  )
       {
-      os << "Same GeoTranform" <<std::endl;
+      os << "Same GeoTransform" <<std::endl;
       }
     else
       {

@@ -56,7 +56,7 @@ MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput(this->GetInput());
   extract->SetExtractionRegion(this->GetOutput()->GetRequestedRegion());
-  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
+  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
 
   // meanshift filtering
 

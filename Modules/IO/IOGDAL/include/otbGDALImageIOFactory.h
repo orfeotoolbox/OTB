@@ -21,6 +21,8 @@
 
 #include "itkObjectFactoryBase.h"
 
+#include "OTBIOGDALExport.h"
+
 namespace otb
 {
 /** \class GDALImageIOFactory
@@ -28,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class ITK_EXPORT GDALImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOGDAL_EXPORT GDALImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

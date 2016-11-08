@@ -53,7 +53,7 @@ namespace Functor
 *  (surprisingly) required for the IterationThreshold.
 *
 *  The functor function uses \code NumberOfIterations \endcode, \code BetaInit \endcode, \code BetaEnd \endcode parameters, that is
-*  why it is necessary to call a specific method for \code IterationThreshold \endcode intialization.
+*  why it is necessary to call a specific method for \code IterationThreshold \endcode initialization.
 *
 *  \sa SOM
  *

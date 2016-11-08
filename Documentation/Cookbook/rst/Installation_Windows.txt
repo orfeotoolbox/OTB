@@ -1,0 +1,30 @@
+Windows binary packages are available for Windows 7 or higher. They can
+be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_ .
+
+Pick the correct version (32 bit or 64 bit) depending on your system.
+
+Extract the archive and use one of the launchers, they contain all applications
+and their launchers (both command line and graphical launchers are provided):
+
+-  ``monteverdi.bat`` : A launcher script for Monteverdi
+
+-  ``mapla.bat`` : A launcher script for Mapla
+
+-  ``otbenv.bat`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing application launchers (otbcli.bat,
+   otbgui.bat) and the DLLs.
+
+-  ``lib`` : A folder containing application DLLs.
+
+The applications can be launched from the Mapla launcher. If you want to
+use the otbcli and otbgui launchers, you can initialize a command prompt
+with ``otbenv.bat``.
+
+Notes:
+~~~~~~
+- You must have "Visual C++ Redistributable for Visual Studio 2015" installed for using this package.
+  It can be downloaded freely from `microsoft <https://www.microsoft.com/en-us/download/details.aspx?id=48145>`_
+    
+

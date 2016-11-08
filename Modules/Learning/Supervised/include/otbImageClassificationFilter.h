@@ -67,7 +67,7 @@ public:
   typedef typename OutputImageType::PixelType  LabelType;
 
   typedef MachineLearningModel<ValueType, LabelType> ModelType;
-  typedef typename ModelType::Pointer    ModelPointerType;
+  typedef typename ModelType::Pointer                ModelPointerType;
 
   typedef otb::Image<double>                    ConfidenceImageType;
   typedef typename ConfidenceImageType::Pointer ConfidenceImagePointerType;
@@ -84,6 +84,10 @@ public:
   itkSetMacro(UseConfidenceMap, bool);
   itkGetMacro(UseConfidenceMap, bool);
 
+  itkSetMacro(BatchMode, bool);
+  itkGetMacro(BatchMode, bool);
+  itkBooleanMacro(BatchMode);
+  
   /**
    * If set, only pixels within the mask will be classified.
    * All pixels with a value greater than 0 in the mask, will be classified.
@@ -110,6 +114,8 @@ protected:
 
   /** Threaded generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   /** Before threaded generate data */
   void BeforeThreadedGenerateData() ITK_OVERRIDE;
   /**PrintSelf method */
@@ -125,6 +131,7 @@ private:
   LabelType m_DefaultLabel;
   /** Flag to produce the confidence map (if the model supports it) */
   bool m_UseConfidenceMap;
+  bool m_BatchMode;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -182,7 +182,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   SizeType       size = modulusImage->GetRequestedRegion().GetSize();
   InputIndexType id = modulusImage->GetRequestedRegion().GetIndex();
 
-  // Don't take in carre the boudary of the image.
+  // Don't take in carre the boundary of the image.
   // Special cases for streamed call
   if (modulusImage->GetRequestedRegion().GetIndex()[0] == 0)
     {
@@ -392,7 +392,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   if (nfa_rect > 0.) return nfa_rect;
 
-  /*Try to improve the precison of the oriented */
+  /*Try to improve the precision of the oriented */
   CopyRectangle(r, rec);
   for (n = 0; n < 5; ++n)
     {

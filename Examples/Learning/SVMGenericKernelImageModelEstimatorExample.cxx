@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  Once the \doxygen{otb}{SVMImageModelEstimator} is instanciated,
+//  Once the \doxygen{otb}{SVMImageModelEstimator} is instantiated,
 //  it is possible to add the new kernel and its parameters.
 //
 //  Then in addition to the initial code:
@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  The instanciation of the kernel is to be implemented. The kernel which is
+//  The instantiation of the kernel is to be implemented. The kernel which is
 //  used here is a linear combination of a polynomial kernel and an RBF one.
 //  It is written as $$\mu k_1(x, y) + (1-\mu) k_2(x, y)$$ with
 //  $k_1(x, y)=\left( \gamma_1 x\cdot y + c_0 \right) ^d$ and
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 //  \item \code{DegreePoly} ($d$),
 //  \item \code{GammaRBF} ($\gamma_2$).
 //  \end{itemize}
-//  Their instanciations are achieved through the use of the \code{SetValue}
+//  Their instantiations are achieved through the use of the \code{SetValue}
 //  function.
 //
 //  Software Guide : EndLatex

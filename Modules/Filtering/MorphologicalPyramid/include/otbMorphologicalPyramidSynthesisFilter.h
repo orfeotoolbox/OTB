@@ -30,7 +30,7 @@ namespace otb
  * Once a morphological pyramidal decompisition has been made, it is
  * possible to rebuild without any loss of information the original
  * image at full resolution. The MorphologicalPyramidsynthesisFilter
- * provides such a functionality. At each iteration, it perfoms the
+ * provides such a functionality. At each iteration, it performs the
  * up-sampling of the current image using the
  * otb::morphologicalPyramid::Resampler filter, the addition of
  * the details lost in down-sampling, and the addition of the details

@@ -129,7 +129,7 @@ GeoInterface
   // By default, spacing is (1, 1) if sub-class has no scale-related
   // spacing.
   //
-  // This method is especially usefull in otb::GlView::ZoomToFull() in
+  // This method is especially useful in otb::GlView::ZoomToFull() in
   // order to correct transformed zooming factors.
 
   return INITIALIZER.GetSpacing();

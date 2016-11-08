@@ -48,10 +48,10 @@ public:
   void RegisterRecord(int id, ErsSarRecord * record);
 
   /**
-   * @brief Instanciate a new Record
-   * @param id Id of the Record we want to instanciate
+   * @brief Instantiate a new Record
+   * @param id Id of the Record we want to instantiate
    */
-  ErsSarRecord* Instanciate(int id) ;
+  ErsSarRecord* Instantiate(int id) ;
 protected:
 
   /**

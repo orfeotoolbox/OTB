@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBGdalAdapters
  */
-class ITK_EXPORT GeometriesSet : public itk::DataObject
+class OTBGdalAdapters_EXPORT GeometriesSet : public itk::DataObject
   {
 public:
   /**\name Standard ITK typedefs */

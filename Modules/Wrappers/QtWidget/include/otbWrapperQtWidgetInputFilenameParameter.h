@@ -35,7 +35,7 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetInputFilenameParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetInputFilenameParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:

@@ -67,7 +67,7 @@ public:
 
 protected:
 
-  /** Moment estimation from intial neighborhood */
+  /** Moment estimation from initial neighborhood */
   void  MakeSumAndMoments(const TInput& input);
   /** Moment estimation from raw data */
   void  MakeSumAndMoments(const itk::Image<typename TInput::ImageType::PixelType, 1> * input);

@@ -47,7 +47,7 @@ public:
   /** Template parameter typedef*/
   typedef TOutputGraph                      OutputGraphType;
   typedef typename OutputGraphType::Pointer OutputGraphPointerType;
-  /** Overiding of the GetOutput() method */
+  /** Overriding of the GetOutput() method */
   virtual OutputGraphType * GetOutput(void);
 
 protected:

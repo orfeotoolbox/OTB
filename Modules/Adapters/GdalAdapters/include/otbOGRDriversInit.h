@@ -20,6 +20,8 @@
 
 #include <boost/noncopyable.hpp>
 
+#include "OTBGdalAdaptersExport.h"
+
 namespace otb { namespace ogr {
   /**\ingroup Geometry
    * Singleton-like class to provide lazy-registering of all \c OGRDriver's.
@@ -37,7 +39,7 @@ namespace otb { namespace ogr {
    * VC++)
    * - Non-copyable
    */
-  class Drivers : private boost::noncopyable
+  class OTBGdalAdapters_EXPORT Drivers : private boost::noncopyable
   {
   /** \name Singleton related functions */
   //@{

@@ -39,7 +39,7 @@ namespace otb
  * computed from a pyramidal segmentation.
  *
  * A batch of boost operation has been embedded in order to provide
- * basic functionnality such as adding a new edge, or retrieving the
+ * basic functionality such as adding a new edge, or retrieving the
  * number of vertices. A method is also provided to retrieve the boost
  * graph object, in case more advanced processing is required. One
  * should remember that if a peculiar operation is needed for some
@@ -129,7 +129,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Initialize a range of vertex.
-   * \param num The index of the last vertices to intialize.
+   * \param num The index of the last vertices to initialize.
    */
   void InitializeGraph(unsigned int num);
 

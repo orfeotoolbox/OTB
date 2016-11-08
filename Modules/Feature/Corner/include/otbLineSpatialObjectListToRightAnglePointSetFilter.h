@@ -95,7 +95,7 @@ public:
 protected:
 
   /**
-   * Without the GenrateOutputInformation below it does not work
+   * Without the GenerateOutputInformation below it does not work
    * Because the ProcessObject class do a static_cast to allow memory and copy
    * the output (here a pointset). It works fine with images but with pointsets
    * no size is specified ...

@@ -72,7 +72,7 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
       return EXIT_FAILURE;
     }
 
-  otbGenericMsgDebugMacro(<< "Foreward model creation...");
+  otbGenericMsgDebugMacro(<< "Forward model creation...");
   forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
   if( forward_model->IsValidSensorModel() == false )
     {

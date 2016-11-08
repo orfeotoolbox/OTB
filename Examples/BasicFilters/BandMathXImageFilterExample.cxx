@@ -139,7 +139,7 @@ int main( int argc, char* argv[])
 //  Software Guide : BeginLatex
 //
 //  Now, we can define the expression. The variable im1 represents a pixel (made of 4 components) of the input image.
-//  The variable im1b1N5x5 represents a neigborhood of size 5x5 around this pixel (and so on for each band).
+//  The variable im1b1N5x5 represents a neighborhood of size 5x5 around this pixel (and so on for each band).
 //  The last element we need is the operator 'mean'. By setting its inputs with four neigborhoods, we tell this operator to process the four related bands.
 //  As output, it will produce a vector of four components; this is consistent with the fact that we wish to perform a difference with im1.
 //
@@ -154,7 +154,7 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  Note that the importance of the averaging is driven by the names of the neigborhood variables.
+//  Note that the importance of the averaging is driven by the names of the neighborhood variables.
 //  Last thing we have to do, is to set the pipeline:
 //
 //  Software Guide : EndLatex

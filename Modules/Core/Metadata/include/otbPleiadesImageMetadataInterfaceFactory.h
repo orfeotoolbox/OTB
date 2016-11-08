@@ -18,8 +18,8 @@
 #ifndef otbPleiadesImageMetadataInterfaceFactory_h
 #define otbPleiadesImageMetadataInterfaceFactory_h
 
-
 #include "itkObjectFactoryBase.h"
+#include "OTBMetadataExport.h"
 
 namespace otb
 {
@@ -28,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT PleiadesImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT PleiadesImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

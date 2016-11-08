@@ -23,6 +23,7 @@
 #include <ostream>
 #include <itksys/RegularExpression.hxx>
 #include "itkMacro.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -37,7 +38,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT ParameterKey
+class OTBApplicationEngine_EXPORT ParameterKey
 {
 public:
 

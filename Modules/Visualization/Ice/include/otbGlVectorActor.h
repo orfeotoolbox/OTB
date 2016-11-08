@@ -36,7 +36,7 @@ class GLUtesselator;
 namespace otb
 {
 
-class GlVectorActor 
+class OTBIce_EXPORT GlVectorActor 
   : public GlActor, public GeoInterface
 {
 public:

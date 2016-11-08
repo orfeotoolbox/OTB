@@ -38,7 +38,7 @@ namespace otb {
  * signals (Through multiscale wavelet transforms) by means of line detection
  * in the scatterplot.
  *
- * It is implemeted as a multi-filter that performs wavelet decomposition of the N
+ * It is implemented as a multi-filter that performs wavelet decomposition of the N
  * images, Sample list construction of the scatter plot sample, histogram estimation
  * of the phase and source detection...
  *

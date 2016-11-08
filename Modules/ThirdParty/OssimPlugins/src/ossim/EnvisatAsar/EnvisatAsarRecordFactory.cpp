@@ -21,7 +21,7 @@ EnvisatAsarRecordFactory::~EnvisatAsarRecordFactory()
 {
 }
 
-EnvisatAsarRecord* EnvisatAsarRecordFactory::Instanciate(std::string id)
+EnvisatAsarRecord* EnvisatAsarRecordFactory::Instantiate(std::string id)
 {
 	EnvisatAsarRecord* record = _availableRecords[id];
 	if(record == NULL)
@@ -30,7 +30,7 @@ EnvisatAsarRecord* EnvisatAsarRecordFactory::Instanciate(std::string id)
 	}
 	else
 	{
-		return record->Instanciate();
+		return record->Instantiate();
 	}
 }
 

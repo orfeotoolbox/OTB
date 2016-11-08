@@ -149,7 +149,7 @@ private:
     inputGeomSet = GeometriesType::New(vectors);
     reprojVector = otb::ogr::DataSource::New();
     outputGeomSet = GeometriesType::New(reprojVector);
-    // Filter instanciation
+    // Filter instantiation
     geometriesProjFilter = ProjectionFilterType::New();
     geometriesProjFilter->SetInput(inputGeomSet);
     if (imageProjectionRef.empty())
@@ -171,6 +171,7 @@ private:
   filter->SetOGRData(reprojVector);
   filter->SetFieldName(fieldName);
   filter->SetLayerIndex(this->GetParameterInt("layer"));
+  filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
   AddProcess(filter->GetStreamer(),"Analyse polygons...");
   filter->Update();

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mvd::LayerStackWidget</class>
+ <widget class="QWidget" name="mvd::LayerStackWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>305</width>
+    <height>124</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>3</number>
+   </property>
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <item row="1" column="0">
+    <widget class="QTreeView" name="treeView">
+     <property name="locale">
+      <locale language="C" country="AnyCountry"/>
+     </property>
+     <property name="dragEnabled">
+      <bool>false</bool>
+     </property>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::InternalMove</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::CopyAction</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <item>
+      <widget class="QToolButton" name="topButton">
+       <property name="toolTip">
+        <string>Move selected layer to top of stack</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerTop_Icon</normaloff>:/icons/action_LayerTop_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="upButton">
+       <property name="toolTip">
+        <string>Move selected layer up within the stack</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerUp_Icon</normaloff>:/icons/action_LayerUp_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="downButton">
+       <property name="toolTip">
+        <string>Move selected layer down within the stack</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerDown_Icon</normaloff>:/icons/action_LayerDown_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="bottomButton">
+       <property name="toolTip">
+        <string>Move selected layer to bottom of stack</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerBottom_Icon</normaloff>:/icons/action_LayerBottom_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="projectionButton">
+       <property name="toolTip">
+        <string>Use selected layer as projection reference</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerProjection_Icon</normaloff>:/icons/action_LayerProjection_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="applyButton">
+       <property name="toolTip">
+        <string>Apply all display settings (color-setup, color-dynamics, shader etc.) of selected layer to all other layers</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_ApplyAll_Icon</normaloff>:/icons/action_ApplyAll_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="reloadButton">
+       <property name="toolTip">
+        <string>Reload data file</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_Reload_Icon</normaloff>:/icons/action_Reload_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QToolButton" name="deleteAllButton">
+       <property name="toolTip">
+        <string>Delete all layers</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerDeleteAll_Icon</normaloff>:/icons/action_LayerDeleteAll_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="deleteButton">
+       <property name="toolTip">
+        <string>Delete selected layer</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_LayerDelete_Icon</normaloff>:/icons/action_LayerDelete_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../Application/Monteverdi/mvdMainWindow.qrc"/>
+ </resources>
+ <connections/>
+</ui>

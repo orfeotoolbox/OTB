@@ -139,6 +139,14 @@ protected:
     std::vector<double> noDataValues;
 
     ReadNoDataFlags(this->GetInput()->GetMetaDataDictionary(),noDataValueAvailable,noDataValues);
+
+    // don't pass empty containers to the functor
+    if (noDataValueAvailable.empty() || noDataValues.empty())
+      {
+      const TInputImage* input = this->GetInput();
+      noDataValueAvailable.assign(input->GetNumberOfComponentsPerPixel(),false);
+      noDataValues.assign(input->GetNumberOfComponentsPerPixel(),0.0);
+      }
     
     this->GetFunctor().m_Flags = noDataValueAvailable;
     this->GetFunctor().m_Values = noDataValues;

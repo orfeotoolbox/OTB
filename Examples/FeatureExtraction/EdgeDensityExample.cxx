@@ -97,7 +97,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // We define now the type for the function which will be used by the
   // edge density filter to estimate this density. Here we choose a
   // function which counts the number of non null pixels per area. The
-  // fucntion takes as template the type of the image to be processed.
+  // function takes as template the type of the image to be processed.
   //
   // Software Guide : EndLatex
 
@@ -120,7 +120,7 @@ int main(int itkNotUsed(argc), char* argv[])
   //
   // Finally, we can define the type for the edge density filter which
   // takes as template the input and output image types, the edge
-  // detector type, and the count fucntion type..
+  // detector type, and the count function type..
   //
   // Software Guide : EndLatex
 

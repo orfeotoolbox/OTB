@@ -95,7 +95,7 @@ private:
   /** Delta - threshold for growing region */
   InputPixelType m_LowerThresholdDelta;
 
-  /** Intial replace value*/
+  /** Initial replace value*/
   OutputPixelType m_ReplaceValue;
 
 }; // end class LabelizeconnectedThresholdImageFilter

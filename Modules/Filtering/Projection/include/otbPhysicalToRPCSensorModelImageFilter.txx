@@ -66,7 +66,7 @@ PhysicalToRPCSensorModelImageFilter<TImage>
     // Generate GCPs from physical sensor model
     RSTransformPointerType  rsTransform = RSTransformType::New();
     rsTransform->SetInputKeywordList(input->GetImageKeywordlist());
-    rsTransform->InstanciateTransform();
+    rsTransform->InstantiateTransform();
 
     // Compute the size of the grid
     typename ImageType::SizeType  size = input->GetLargestPossibleRegion().GetSize();

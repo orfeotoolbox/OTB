@@ -47,7 +47,7 @@ namespace otb
   * system of the image (origin on the top left). The value need to be provided by the
   * SetInputSpacing, SetInputOrigin, SetOutputSpacing and SetOutputOrigin methods.
   *
-  * The two transforms derived from itk::Transform and will be instanciated as
+  * The two transforms derived from itk::Transform and will be instantiated as
   * otb::GenericMapProjection or otb::InverseSensorModel or otb::ForwardSensorModel
   * (according to the available information).
   *
@@ -179,7 +179,15 @@ protected:
   OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const ITK_OVERRIDE;
   OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const ITK_OVERRIDE;
 
-  virtual void InstanciateTransform(void);
+  virtual void InstantiateTransform(void);
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void InstanciateTransform()
+  {
+    otbWarningMacro(
+      << "InstanciateTransform has been deprecated.  Please use InstanciateTransform() instead");
+    this->InstantiateTransform();
+  }
 
   void GenerateOutputInformation(void) ITK_OVERRIDE;
   void GenerateData(void) ITK_OVERRIDE;

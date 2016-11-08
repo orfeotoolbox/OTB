@@ -114,7 +114,7 @@ private:
  * be "STATS::FeatureName::StatisticName".
  *
  * The flag ReducedAttributesSet allows computing only non-redundant
- * statistics and statistics usefull for classification (not spatially
+ * statistics and statistics useful for classification (not spatially
  * dependent statitistics). Reduced set contains only mean, variance,
  * skewness and kurtosis.
  *

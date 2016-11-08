@@ -129,8 +129,8 @@ private:
 
     rsTransform->SetOutputProjectionRef(colorPtr->GetProjectionRef());
     rsTransform->SetOutputKeywordList(colorPtr->GetImageKeywordlist());
-    rsTransform->InstanciateTransform();
-    toMap->InstanciateTransform();
+    rsTransform->InstantiateTransform();
+    toMap->InstantiateTransform();
 
     unsigned long nbValidPoints = 0;
 

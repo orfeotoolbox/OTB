@@ -28,7 +28,7 @@ namespace Functor
 {
 
 /** \class LabelObjectWithClassLabelFieldsFunctor
- *  \brief Returns additionnal OGR fields to be saved in VectorData
+ *  \brief Returns additional OGR fields to be saved in VectorData
  *
  * \sa LabelObjectFieldsFunctor
  *

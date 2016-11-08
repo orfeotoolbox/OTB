@@ -77,7 +77,7 @@ public:
     itkSetMacro(Radius, InputImageSizeType);
     itkGetMacro(Radius, InputImageSizeType);
 
-    /** Set unsinged int radius */
+    /** Set unsigned int radius */
     void SetRadius(unsigned int radius)
     {
       m_Radius.Fill(radius);

@@ -183,18 +183,25 @@ template <class TInputImage, class TOutputImage>
 TOutputImage*
 InputImageParameter::SimpleCastImage()
 {
-  TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
+  if ( dynamic_cast<TOutputImage*> (m_Image.GetPointer()) )
+    {
+    return dynamic_cast<TOutputImage*> (m_Image.GetPointer());
+    }
+  else
+    {
+    TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
 
-  typedef itk::CastImageFilter<TInputImage, TOutputImage> CasterType;
-  typename CasterType::Pointer caster = CasterType::New();
+    typedef itk::CastImageFilter<TInputImage, TOutputImage> CasterType;
+    typename CasterType::Pointer caster = CasterType::New();
 
-  caster->SetInput(realInputImage);
-  caster->UpdateOutputInformation();
+    caster->SetInput(realInputImage);
+    caster->UpdateOutputInformation();
 
-  m_Image = caster->GetOutput();
-  m_Caster = caster;
+    m_Image = caster->GetOutput();
+    m_Caster = caster;
 
-  return caster->GetOutput();
+    return caster->GetOutput();
+    }
 }
 
 

@@ -30,7 +30,7 @@ namespace Functor
 /** \class SOMLearningBehaviorFunctor
 * \brief Classical Beta behavior over SOM training phase
 *
-*  This class implements an standart evolution of the \f$ \beta \f$ weightening
+*  This class implements an standard evolution of the \f$ \beta \f$ weightening
 *  coefficient over the SOM training.
 *
 *  \f[

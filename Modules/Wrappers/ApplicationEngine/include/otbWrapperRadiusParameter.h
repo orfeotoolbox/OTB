@@ -30,7 +30,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT RadiusParameter
+class OTBApplicationEngine_EXPORT RadiusParameter
   : public IntParameter
 {
 public:

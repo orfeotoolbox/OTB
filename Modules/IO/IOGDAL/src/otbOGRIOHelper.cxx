@@ -946,7 +946,7 @@ unsigned int OGRIOHelper
         itkExceptionMacro(<< "Problem while creating multiline.");
         }
 
-      // Instanciate a new  ogrMultiLineString feature
+      // Instantiate a new  ogrMultiLineString feature
       OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*) OGRGeometryFactory::createGeometry(
         wkbMultiLineString);
 
@@ -971,7 +971,7 @@ unsigned int OGRIOHelper
         itkExceptionMacro(<< "Problem while creating multipolygon.");
         }
 
-      // Instanciate a new multipolygon feature
+      // Instantiate a new multipolygon feature
       OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*) OGRGeometryFactory::createGeometry(wkbMultiPolygon);
       OGRFeature *     ogrFeature;
 
@@ -1280,7 +1280,7 @@ std::vector<OGRLayer*> OGRIOHelper
       }
       case FEATURE_MULTILINE:
       {
-      // Instanciate a new  ogrMultiLineString feature
+      // Instantiate a new  ogrMultiLineString feature
       OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*) OGRGeometryFactory::createGeometry(
         wkbMultiLineString);
 
@@ -1299,7 +1299,7 @@ std::vector<OGRLayer*> OGRIOHelper
       }
       case FEATURE_MULTIPOLYGON:
       {
-      // Instanciate a new multipolygon feature
+      // Instantiate a new multipolygon feature
       OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*) OGRGeometryFactory::createGeometry(wkbMultiPolygon);
       OGRFeature *     ogrFeature;
 

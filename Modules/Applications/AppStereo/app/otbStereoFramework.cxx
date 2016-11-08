@@ -39,7 +39,6 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbStreamingMinMaxImageFilter.h"
-#include "otbStreamingStatisticsImageFilter.h"
 #include "otbExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -183,9 +182,6 @@ public:
   typedef otb::StreamingMinMaxImageFilter
     <FloatImageType>                          MinMaxFilterType;
 
-  typedef otb::StreamingStatisticsImageFilter
-    <FloatImageType>                          StatisticsFilterType;
-
   typedef otb::ExtractROI
     <FloatPixelType,FloatPixelType>           ExtractFilterType;
 
@@ -321,7 +317,7 @@ private:
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
                           "between one or multiple stereo pair in sensor geometry. The output is projected in "
                           "desired geographic or cartographic map projection (UTM by default). The pipeline is made of the following steps:\n"
-                          "for each sensor pair :\n"
+                          "for each sensor pair :\n\n"
                           "\t- compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
                           "\t- resample the stereo pair into epipolar geometry using BCO interpolation\n"
                           "\t- create masks for each epipolar image : remove black borders and resample"
@@ -331,7 +327,7 @@ private:
                           "\t- apply an optional median filter\n"
                           "\t- filter disparities based on the correlation score  and exploration bounds\n"
                           "\t- translate disparities in sensor geometry\n"
-                          "\t  convert disparity to 3D Map.\n"
+                          "\t  convert disparity to 3D Map.\n\n"
                           "Then fuse all 3D maps to produce DSM.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
@@ -339,7 +335,7 @@ private:
 
     AddDocTag(Tags::Stereo);
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "input", "Input parameters");
     SetParameterDescription("input","This group of parameters allows one to parametrize input data.");
 
@@ -360,7 +356,7 @@ private:
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "output", "Output parameters");
     SetParameterDescription("output","This group of parameters allows one to choose the DSM resolution, nodata value, and projection parameters.");
 
@@ -417,7 +413,7 @@ private:
     AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
     SetParameterDescription("stereorect","This group of parameters allows one to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
 

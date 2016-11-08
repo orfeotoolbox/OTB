@@ -97,14 +97,14 @@ public:
   const InputLabelMapType * GetInput(void);
   const InputLabelMapType * GetInput(unsigned int idx);
 
-  /* Set the functor used to provide additionnal OGR fields */
+  /* Set the functor used to provide additional OGR fields */
   void SetFieldsFunctor(const FieldsFunctorType& functor)
   {
     m_FieldsFunctor = functor;
     this->Modified();
   }
 
-  /* Get the functor used to provide additionnal OGR fields */
+  /* Get the functor used to provide additional OGR fields */
   FieldsFunctorType& GetFieldsFunctor()
   {
     return m_FieldsFunctor;

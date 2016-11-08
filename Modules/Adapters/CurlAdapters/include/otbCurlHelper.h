@@ -33,7 +33,7 @@ namespace otb
  *
  * \ingroup OTBCurlAdapters
  */
-class ITK_EXPORT CurlHelper : public CurlHelperInterface
+class OTBCurlAdapters_EXPORT CurlHelper : public CurlHelperInterface
 {
 public:
   /** Standard class typedefs. */
@@ -46,11 +46,11 @@ public:
   itkNewMacro(Self);
 
   bool TestUrlAvailability(const std::string& url) const ITK_OVERRIDE;
-  
+
   bool IsCurlReturnHttpError(const std::string& url) const;
-  
+
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const ITK_OVERRIDE;
-  
+
   int RetrieveFile(const std::string& urlString, std::string filename) const ITK_OVERRIDE;
 
   int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const ITK_OVERRIDE;
@@ -60,7 +60,7 @@ public:
                         int maxConnect) const ITK_OVERRIDE;
 
   itkGetMacro(Timeout,long int);
-  
+
   itkSetMacro(Timeout,long int);
 
 protected:

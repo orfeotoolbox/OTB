@@ -75,7 +75,7 @@ assert_NaN( T val )
  * All parameters related to scene description (origin, spacing, angle
  * ...) are stored and managed by the ViewSettings class.
  */
-class GlView 
+class OTBIce_EXPORT GlView 
   : public itk::Object
 {
 public:
@@ -96,7 +96,7 @@ public:
   itkNewMacro(Self);
 
   /**
-   * The Intialize method will reset the OpenGl viewport to the given
+   * The Initialize method will reset the OpenGl viewport to the given
    * size, clear view settings and remove any existing actor.
    * \param sx Width of the viewport
    * \param sy Height of the viewport
@@ -141,7 +141,7 @@ public:
   ActorType::Pointer GetActor(const std::string & key) const;
 
   /**
-   * Tells wether an otb::GlActor is contained given its storage key.
+   * Tells whether an otb::GlActor is contained given its storage key.
    *
    * @param key otb::GlActor storage key.
    *
@@ -668,7 +668,7 @@ GlView
 
   // Apply extent vector length to view spacing.
   //
-  // MANTIS-1178: Lenght of vector e must be divided by native
+  // MANTIS-1178: Length of vector e must be divided by native
   // spacing.
   //
   // MANTIS-1203: absolute value of native spacing should be
@@ -692,7 +692,7 @@ GlView
 
   // Apply extent vector length to view spacing.
   //
-  // MANTIS-1178: Lenght of vector e must be divided by native
+  // MANTIS-1178: Length of vector e must be divided by native
   // spacing.
   //
   // MANTIS-1203: absolute value of native spacing should be

@@ -78,7 +78,7 @@ public:
   itkGetMacro(Orientation, ValueType);
 
   /**
-   * Check wether point is strictly inside the rectangle.
+   * Check whether point is strictly inside the rectangle.
    * \param point The point to check.
    * \return True if the point is inside the polygon.
    */

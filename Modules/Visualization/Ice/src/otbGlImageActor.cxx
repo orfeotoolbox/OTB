@@ -139,7 +139,7 @@ void GlImageActor::Initialize(const std::string & filename)
 
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(m_FileName);
-  m_FileReader->UpdateOutputInformation();
+  m_FileReader->GetOutput()->UpdateOutputInformation();
 
   m_LargestRegion = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
@@ -543,7 +543,7 @@ void GlImageActor::LoadTile(Tile& tile)
 
     glGenTextures( 1, &tile.m_TextureId );
 
-    // Following assert is somtimes false on some OpenGL systems for
+    // Following assert is sometimes false on some OpenGL systems for
     // some unknown reason even though the glGenTexture() call has
     // succeeded.
     // assert( glGetError()==GL_NO_ERROR );
@@ -983,7 +983,7 @@ void GlImageActor::UpdateResolution()
 
   // Arbitrary higher than any distance we will compute here
   double minDist = 50000.;
-  m_CurrentResolution = 0;
+  unsigned int newResolution = 0;
 
   // OTB always include full resolution level in available resolutions.
   assert( !m_AvailableResolutions.empty() );
@@ -1015,9 +1015,9 @@ void GlImageActor::UpdateResolution()
 	isFound = true;
 
 	minDist = vcl_abs(diff);
-	m_CurrentResolution = std::distance(m_AvailableResolutions.begin(),it);
+	newResolution = std::distance(m_AvailableResolutions.begin(),it);
 
-	// std::cout << "found: " << m_CurrentResolution << std::endl;
+	// std::cout << "found: " << newResolution << std::endl;
 	}
       }
 
@@ -1026,23 +1026,29 @@ void GlImageActor::UpdateResolution()
       {
       assert( m_AvailableResolutions.size() > 0 );
 
-      m_CurrentResolution = m_AvailableResolutions.size() - 1;
+      newResolution = m_AvailableResolutions.size() - 1;
 
       // std::cout << "not found: " << m_CurrentResolution << std::endl;
       }
     }
 
-  std::ostringstream extFilename;
-  extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
+  if(newResolution != m_CurrentResolution)
+    {
+    m_CurrentResolution = newResolution;
+    
+    std::ostringstream extFilename;
+    extFilename<<m_FileName;
+    if ( m_FileName.find('?') == std::string::npos )
+      {
+      extFilename << '?';
+      }
+    extFilename<<"&resol="<<m_CurrentResolution;
 
-  // ReaderType::New() is forced because of warning message
-  // 'Duplicated option detected: <option>. Using value <value>.'
-  // output by otb::ExtendedFilenameHelper.
-  m_FileReader = ReaderType::New();
-  m_FileReader->SetFileName(extFilename.str());
-  m_FileReader->UpdateOutputInformation();
-
-  // std::cout << "Switched to resolution: " << m_CurrentResolution << std::endl;
+    m_FileReader->SetFileName(extFilename.str());
+    m_FileReader->GetOutput()->UpdateOutputInformation();
+  // std::cout << "Switched to resolution: " << m_CurrentResolution <<
+  // std::endl;
+    }
 }
 
 void GlImageActor::UpdateTransforms()
@@ -1120,10 +1126,10 @@ void GlImageActor::UpdateTransforms()
 
   if( hasChanged )
     {
-    // std::cout << std::hex << this << " -> InstanciateTransform()" << std::endl;
+    // std::cout << std::hex << this << " -> InstantiateTransform()" << std::endl;
 
-    m_ViewportToImageTransform->InstanciateTransform();
-    m_ImageToViewportTransform->InstanciateTransform();
+    m_ViewportToImageTransform->InstantiateTransform();
+    m_ImageToViewportTransform->InstantiateTransform();
     }
 
   // std::cout << "}" << std::endl;
@@ -1179,7 +1185,12 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
       resol = m_AvailableResolutions.size()-1;
       }
 
-    extFilename<<m_FileName<<"?&resol="<<m_AvailableResolutions[resol];
+    extFilename<<m_FileName;
+    if ( m_FileName.find('?') == std::string::npos )
+      {
+      extFilename << '?';
+      }
+    extFilename<<"&resol="<<m_AvailableResolutions[resol];
     reader->SetFileName(extFilename.str());
 
     ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();

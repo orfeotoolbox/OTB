@@ -34,7 +34,7 @@ namespace otb
  * with \f$b\f$ being the spectral band, \f$r\f$ the reference pixel and \f$p\f$
  * the current pixel.
  *
- * Since the spectral angle deals with multi-bands image, the InputImage pixels are suposed to
+ * Since the spectral angle deals with multi-bands image, the InputImage pixels are supposed to
  * support the [] operator, and the input image to support the GetNumberOfComponentsPerPixel() method.
  *
  * \sa VectorImage

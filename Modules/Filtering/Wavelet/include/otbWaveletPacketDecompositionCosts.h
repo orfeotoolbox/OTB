@@ -56,7 +56,7 @@ public:
 
   typedef TImage ImageType;
 
-  /** Acces to the data */
+  /** Access to the data */
   static unsigned int NumberOfAllowedDecompositions;
 
   /** Evaluate the cost */

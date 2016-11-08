@@ -105,7 +105,7 @@ private:
     // Get input Image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
-    // Instanciate a ForwardSensor Model
+    // Instantiate a ForwardSensor Model
     ModelType::Pointer model = ModelType::New();
     model->SetImageGeometry(inImage->GetImageKeywordlist());
     if ( model->IsValidSensorModel() == false )

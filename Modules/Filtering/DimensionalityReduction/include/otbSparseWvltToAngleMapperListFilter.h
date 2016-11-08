@@ -33,7 +33,7 @@ namespace otb {
  *
  * This class performs a kind of scatter plot of wavelet coeff of N images and yields
  * the angle values (through a generalized spherical coordinate representation)) of
- * the most significant coeff (up to a threashold).
+ * the most significant coeff (up to a threshold).
  *
  * \ingroup Threaded
  *

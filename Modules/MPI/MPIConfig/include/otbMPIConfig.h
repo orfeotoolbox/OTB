@@ -25,7 +25,7 @@
 namespace otb {
 
 /** \class MPI config
-  *  \brief Manage MPI ressources
+  *  \brief Manage MPI resources
   * TODO
   *
   *

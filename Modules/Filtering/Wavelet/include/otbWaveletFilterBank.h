@@ -68,7 +68,7 @@ namespace otb {
  *
  * And conversely in the inverse transformation.
  *
- * \todo: At present version, there is not consideration on meta data information that can be transmited
+ * \todo: At present version, there is not consideration on meta data information that can be transmitted
  * from the input(s) to the output(s)...
  *
  * The two choice (Wavelet::FORWARD/Wavelet::INVERSE) yield specific implementation of the templates (header redeclaration
@@ -144,7 +144,7 @@ private:
  *
  * And conversely in the inverse transformation.
  *
- * \todo: At present version, there is not consideration on meta data information that can be transmited
+ * \todo: At present version, there is not consideration on meta data information that can be transmitted
  * from the input(s) to the output(s)...
  *
  * \sa WaveletOperator
@@ -329,7 +329,7 @@ private:
  *
  * And conversely in the inverse transformation.
  *
- * \todo: At present version, there is not consideration on meta data information that can be transmited
+ * \todo: At present version, there is not consideration on meta data information that can be transmitted
  * from the input(s) to the output(s)...
  *
  * \sa WaveletOperator

@@ -5,12 +5,15 @@ otb_module_test()
 #include_directories(${PROJECT_SOURCE_DIR}/Modules/ThirdParty/OssimPlugins/src/ossim ${OSSIM_INCLUDE_DIR})
 #==== UT for utilities
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
-  add_executable(ossimStringUtilitiesTest ossimStringUtilitiesTest.cpp)
-  target_link_libraries(ossimStringUtilitiesTest
-    otbossimplugins
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-  otb_module_target_label(ossimStringUtilitiesTest)
-  otb_add_test(NAME ossimStringUtilitiesTest COMMAND ossimStringUtilitiesTest )
+  #this test is failing on osx due to a bug in AppleClang stdc++ (Luc Hermitte)
+ if(NOT APPLE)
+   add_executable(ossimStringUtilitiesTest ossimStringUtilitiesTest.cpp)
+   target_link_libraries(ossimStringUtilitiesTest
+     otbossimplugins
+     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+   otb_module_target_label(ossimStringUtilitiesTest)
+   otb_add_test(NAME ossimStringUtilitiesTest COMMAND ossimStringUtilitiesTest )
+ endif()
 
   add_executable(ossimTimeUtilitiesTest ossimTimeUtilitiesTest.cpp)
   target_link_libraries(ossimTimeUtilitiesTest

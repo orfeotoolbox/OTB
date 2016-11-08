@@ -134,7 +134,7 @@ protected:
   virtual void GenerateData();
 
   /** stores the pointer to the membership function.
-   * subclasses use this funtion to store their membership function
+   * subclasses use this function to store their membership function
    * object after dynamic creation, when available */
   void SetPdfMembershipFunction(MembershipFunctionType* function);
 

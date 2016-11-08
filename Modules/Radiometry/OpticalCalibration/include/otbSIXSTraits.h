@@ -18,6 +18,7 @@
 #ifndef otbSIXSTraits_h
 #define otbSIXSTraits_h
 
+#include "OTBOpticalCalibrationExport.h"
 #include "otbAtmosphericCorrectionParameters.h"
 
 namespace otb
@@ -34,7 +35,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT SIXSTraits
+class OTBOpticalCalibration_EXPORT SIXSTraits
 {
 public:
 

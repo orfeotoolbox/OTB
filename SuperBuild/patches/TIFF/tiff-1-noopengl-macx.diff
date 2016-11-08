@@ -1,0 +1,38 @@
+diff -burN tiff-4.0.6.orig/CMakeLists.txt tiff-4.0.6/CMakeLists.txt
+--- tiff-4.0.6.orig/CMakeLists.txt	2016-10-27 17:24:17.000000000 +0200
++++ tiff-4.0.6/CMakeLists.txt	2016-10-27 17:25:43.000000000 +0200
+@@ -602,19 +602,23 @@
+ endif()
+ 
+ # OpenGL and GLUT
+-find_package(OpenGL)
+-find_package(GLUT)
+-set(HAVE_OPENGL FALSE)
+-if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND GLUT_FOUND)
++option(WITH_OPENGL "Enable opengl and glut support" ON)
++
++if(WITH_OPENGL)  
++  find_package(OpenGL)
++  find_package(GLUT)
++  set(HAVE_OPENGL FALSE)
++  if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND GLUT_FOUND)
+   set(HAVE_OPENGL TRUE)
++  endif()
++  # Purely to satisfy the generated headers:
++  check_include_file(GL/gl.h HAVE_GL_GL_H)
++  check_include_file(GL/glu.h HAVE_GL_GLU_H)
++  check_include_file(GL/glut.h HAVE_GL_GLUT_H)
++  check_include_file(GLUT/glut.h HAVE_GLUT_GLUT_H)
++  check_include_file(OpenGL/gl.h HAVE_OPENGL_GL_H)
++  check_include_file(OpenGL/glu.h HAVE_OPENGL_GLU_H)
+ endif()
+-# Purely to satisfy the generated headers:
+-check_include_file(GL/gl.h HAVE_GL_GL_H)
+-check_include_file(GL/glu.h HAVE_GL_GLU_H)
+-check_include_file(GL/glut.h HAVE_GL_GLUT_H)
+-check_include_file(GLUT/glut.h HAVE_GLUT_GLUT_H)
+-check_include_file(OpenGL/gl.h HAVE_OPENGL_GL_H)
+-check_include_file(OpenGL/glu.h HAVE_OPENGL_GLU_H)
+ 
+ # Win32 IO
+ set(win32_io FALSE)

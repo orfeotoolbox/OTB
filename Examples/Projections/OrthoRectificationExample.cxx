@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // Now we need to
-// instanciate the map projection, set the {\em zone} and {\em hemisphere}
+// instantiate the map projection, set the {\em zone} and {\em hemisphere}
 // parameters and pass this projection to the orthorectification filter.
 //
 // Software Guide : EndLatex

@@ -30,10 +30,10 @@ ReliefColormapFunctor<TScalar, TRGBPixel>
 ::operator() (const TScalar &v) const
 {
 
-  float m_Borders[]     = {0.0,  0.00001, 0.2,  0.43, 0.71, 1.0};
-  float m_RedValues[]   = {0.75, 0.64,    0.47, 0.89, 0.58, 1.0};
-  float m_GreenValues[] = {0.91, 0.84,    0.76, 0.90, 0.32, 1.0};
-  float m_BlueValues[]  = {0.96, 0.59,    0.40, 0.57, 0.00, 1.0};
+  float m_Borders[]     = {0.0f,  0.00001f, 0.2f,  0.43f, 0.71f, 1.0f};
+  float m_RedValues[]   = {0.75f, 0.64f,    0.47f, 0.89f, 0.58f, 1.0f};
+  float m_GreenValues[] = {0.91f, 0.84f,    0.76f, 0.90f, 0.32f, 1.0f};
+  float m_BlueValues[]  = {0.96f, 0.59f,    0.40f, 0.57f, 0.00f, 1.0f};
 
   // Map the input scalar between [0, 1].
   RealType value = this->RescaleInputValue(v);

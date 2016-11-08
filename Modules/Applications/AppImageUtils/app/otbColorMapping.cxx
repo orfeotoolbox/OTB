@@ -293,8 +293,6 @@ private:
     SetParameterDescription("out","Output image filename");
     SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
-    AddRAMParameter();
-
     // --- OPERATION --- : Label to color / Color to label
     AddParameter(ParameterType_Choice, "op", "Operation");
     SetParameterDescription("op","Selection of the operation to execute (default is : label to color).");
@@ -353,7 +351,7 @@ private:
     // Optimal LUT
     AddChoice("method.optimal","Compute an optimized look-up table");
     SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighboring labels"
-                            " in a segmentation are mapped to highly contrasted colors.\n"
+                            " in a segmentation are mapped to highly contrasted colors. "
                             "[color to label] Searching all the colors present in the image to compute a continuous label list");
     AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
     SetParameterDescription("method.optimal.background","Value of the background label");
@@ -384,6 +382,7 @@ private:
     SetMinimumParameterIntValue("method.image.up", 0);
     SetMaximumParameterIntValue("method.image.up", 100);
 
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "ROI_QB_MUL_1_SVN_CLASS_MULTI.png");
@@ -611,6 +610,8 @@ private:
       m_StatisticsMapFromLabelImageFilter = StreamingStatisticsMapFromLabelImageFilterType::New();
       m_StatisticsMapFromLabelImageFilter->SetInput(GetParameterImage("method.image.in"));
       m_StatisticsMapFromLabelImageFilter->SetInputLabelImage(m_CasterToLabelImage->GetOutput());
+      m_StatisticsMapFromLabelImageFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+      AddProcess(m_StatisticsMapFromLabelImageFilter->GetStreamer(), "Computing statistics on labels...");
       m_StatisticsMapFromLabelImageFilter->Update();
 
       StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType

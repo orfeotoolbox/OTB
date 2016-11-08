@@ -34,7 +34,7 @@ namespace otb
  * are thus detected  automatically from this. The filter then reads necessary
  * parameters required to perform SarCalibration in a generic way.
  *
- * BeforeThreadedGenerateData() instanciate a SarRadiometricCalibrationFunction
+ * BeforeThreadedGenerateData() instantiate a SarRadiometricCalibrationFunction
  * and pass the values taken from SarImageMetadataInterface instance to it. This
  * is where the actual computation of sigma (backscatter) occurs.
  *
@@ -48,7 +48,7 @@ namespace otb
  *
  * \see \c otb::SarParametricFunction
  * \see \c otb::SarCalibrationLookupBase
- * References (Retreived on 08-Sept-2015)
+ * References (Retrieved on 08-Sept-2015)
  * Sentinel1 - https://sentinel.esa.int/web/sentinel/sentinel-1-sar-wiki/-/wiki/Sentinel%20One/Application+of+Radiometric+Calibration+LUT
  * Radarsat2 - http://gs.mdacorporation.com/products/sensor/radarsat2/RS2_Product_Description.pdf
  *

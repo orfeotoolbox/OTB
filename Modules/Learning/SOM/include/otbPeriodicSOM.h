@@ -45,7 +45,7 @@ namespace otb
  * which parameter is the current iteration. It returns a beta value of type \code double \endcode.
  *
  * The SOMMap produced as output can be either initialized with a constant custom value or randomly
- * generated following a normal law. The seed for the random intialization can be modified.
+ * generated following a normal law. The seed for the random initialization can be modified.
  *
  * \sa SOMMap
  * \sa SOMActivationBuilder

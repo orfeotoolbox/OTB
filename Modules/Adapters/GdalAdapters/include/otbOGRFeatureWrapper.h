@@ -37,6 +37,8 @@ class OGRFeatureDefn;
 namespace otb {
 namespace ogr {
 class Feature;
+
+OTBGdalAdapters_EXPORT
 bool operator==(Feature const& lhs, Feature const& rhs);
 
 /**\ingroup gGeometry
@@ -61,7 +63,7 @@ bool operator==(Feature const& lhs, Feature const& rhs);
  *
  * \ingroup OTBGdalAdapters
  */
-class Feature
+class OTBGdalAdapters_EXPORT Feature
   {
 public:
   /**\name Construction, copy and destruction */

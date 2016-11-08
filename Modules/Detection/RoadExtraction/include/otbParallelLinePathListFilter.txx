@@ -178,7 +178,7 @@ ParallelLinePathListFilter<TPath>
  * (not necessarily the path ending).
  * Return true if the condition is verified.
  *
- * This is the first criteria to be fullfilled.
+ * This is the first criteria to be fulfilled.
  **/
 template <class TPath>
 bool
@@ -207,7 +207,7 @@ ParallelLinePathListFilter<TPath>
  * (not necessarily the path ending).
  * Return true if the condition is verified.
  *
- * This is the second criteria to be fullfilled.
+ * This is the second criteria to be fulfilled.
  **/
 template <class TPath>
 bool
@@ -246,7 +246,7 @@ ParallelLinePathListFilter<TPath>
  * (not necessarily the path ending).
  * Return true if the condition is verified.
  *
- * This is the third criteria to be fullfilled.
+ * This is the third criteria to be fulfilled.
  **/
 template <class TPath>
 bool

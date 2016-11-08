@@ -32,7 +32,7 @@ namespace otb
  *   template parameters. It has to implement the Evaluate() method (see EuclideanDistanceMetric for more details).
  *
  *   By default, the algorithm tries to match points from pointset 1 to points from pointset 2. If back matching is activated,
- *   it will aslo try to match points from pointset 2 to points from pointset 2, and discard matches that do not appear both in
+ *   it will also try to match points from pointset 2 to points from pointset 2, and discard matches that do not appear both in
  *   forward and backward matching.
  *
  *   Matches are stored in a landmark object containing both matched points and point data. The landmark data will hold the distance value

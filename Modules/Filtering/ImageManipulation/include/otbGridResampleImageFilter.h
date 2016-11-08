@@ -37,7 +37,7 @@ namespace otb
  * 
  *  This is equivalent to a itk::ResampleImageFilter using an
  *  itk::IdentityTransform, except that it is slightly more efficient
- *  and that in this simplified case it is possible to explicitely
+ *  and that in this simplified case it is possible to explicitly
  *  compute the input requested region. The GridResampleImageFilter
  *  therefore supports streaming, contrary to the
  *  itk::ResampleImageFilter.

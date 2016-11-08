@@ -125,11 +125,6 @@ PatternSampler::ImportPatterns(const std::string &data, ParameterType &param)
 
   // split the string on slash caracters
   size_t sep1 = data.find('/');
-  size_t sep2 = std::string::npos;
-  if (sep1 != std::string::npos)
-    {
-    sep2 = data.find('/',sep1+1);
-    }
 
   // convert string into bool sequence
   for (size_t pos=0 ; pos < data.size() ; ++pos)
@@ -157,7 +152,7 @@ PatternSampler::ImportPatterns(const std::string &data, ParameterType &param)
 
   if (sep1 != std::string::npos)
     {
-    sep2 = data.find('/',sep1+1);
+    size_t sep2 = data.find('/',sep1+1);
     for (size_t pos=(sep1+1) ; pos < data.size() ; ++pos)
       {
       if (pos == sep2)

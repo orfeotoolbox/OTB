@@ -235,15 +235,15 @@ ImageToImageRCC8Calculator<TInputImage>
   structElement2.CreateStructuringElement();
   dilateFilter1->SetKernel(structElement1);
   dilateFilter2->SetKernel(structElement2);
-  /// The erosion is performed to get the surounding edge of this
-  /// region by substraction to the original image
+  /// The erosion is performed to get the surrounding edge of this
+  /// region by subtraction to the original image
   dilateFilter1->SetInput(m_BoolImage1);
   dilateFilter1->Update();
   subtractFilter1->SetInput2(m_BoolImage1);
   subtractFilter1->SetInput1(dilateFilter1->GetOutput());
   subtractFilter1->Update();
-  /// The erosion is performed to get the surounding edge of this
-  /// region by substraction to the original image
+  /// The erosion is performed to get the surrounding edge of this
+  /// region by subtraction to the original image
   dilateFilter2->SetInput(m_BoolImage2);
   dilateFilter2->Update();
   subtractFilter2->SetInput2(m_BoolImage2);

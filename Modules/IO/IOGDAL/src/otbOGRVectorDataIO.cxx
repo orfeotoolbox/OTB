@@ -52,7 +52,7 @@ bool
 OGRVectorDataIO::CanReadFile(const char* filename) const
 {
   otb::ogr::version_proxy::GDALDatasetType * poDS = ogr::version_proxy::Open(filename, true);
-  
+
   if (poDS == ITK_NULLPTR)
     {
     std::cerr<<"Can not read file "<<filename<<" with GDALOpen"<<std::endl;
@@ -325,7 +325,8 @@ OGRVectorDataIO::GetOGRDriverName(std::string name) const
     else if (extension == ".GML") driverOGR = "GML";
     else if (extension == ".GPX") driverOGR = "GPX";
     else if (extension == ".SQLITE") driverOGR = "SQLite";
-     else if (extension==".KML") driverOGR="KML";
+    else if (extension==".KML") driverOGR="KML";
+    else if (extension == ".GMT") driverOGR = "OGR_GMT";
     else driverOGR = "NOT-FOUND";
     }
   //std::cout << name << " " << driverOGR <<" "<<upperName<< " "<< upperName.substr(0, 3) << std::endl;

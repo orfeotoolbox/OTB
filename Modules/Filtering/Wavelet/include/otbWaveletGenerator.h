@@ -47,7 +47,7 @@ enum Wavelet {
 /** \class WaveletGenerator
  * \brief Wavelet coefficient definition
  *
- * The wavelet coefficent definitions mainly come from
+ * The wavelet coefficient definitions mainly come from
  * "Ten Lecture on Wavelets", of Ingrid Daubechies,
  * Society for Industrial and Applied Mathematics, 1992.
  *

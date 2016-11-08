@@ -86,7 +86,7 @@ public:
    * Subclasses must provide this method. */
   virtual TValue EvaluateAtIndex(const IndexType& index) const = 0;
 
-  /** Evaluate the function at specified ContinousIndex position.
+  /** Evaluate the function at specified ContinuousIndex position.
    * Subclasses must provide this method. */
   virtual TValue EvaluateAtContinuousIndex(const ContinuousIndexType& index) const = 0;
 

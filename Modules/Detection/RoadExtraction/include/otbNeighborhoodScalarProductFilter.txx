@@ -81,7 +81,7 @@ NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
 
     while ((!neighInputIt.IsAtEnd()) && (!outputIt.IsAtEnd()) && (!outputDirIt.IsAtEnd()))
       {
-      // local variable intialization
+      // local variable initialization
       int    neighborhoodNumberMax = 0;
       double scalarMaxValue = 0;
       //TODO for a more general algorithm this might be replaced by:

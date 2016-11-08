@@ -54,7 +54,7 @@ namespace otb { namespace ogr {
  * \class DataSource
  * \brief Collection of geometric objects.
  *
- * This class is meant to supercede \c otb::VectorData class.  It provides
+ * This class is meant to supersede \c otb::VectorData class.  It provides
  * an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c GDALDataset.
  *
@@ -72,7 +72,9 @@ namespace otb { namespace ogr {
  *
  * \ingroup OTBGdalAdapters
  */
-class DataSource : public itk::DataObject , public boost::noncopyable
+ #include "OTBGdalAdaptersExport.h"
+ 
+class OTBGdalAdapters_EXPORT DataSource : public itk::DataObject , public boost::noncopyable
   {
 public:
   /**\name Standard ITK typedefs */
@@ -432,13 +434,13 @@ public:
   Layer const GetLayerChecked(std::string const& name) const;
 
   /**
-   * Excecutes the statement..
+   * Executes the statement..
    * \param[in] statement  textual description of the SQL statement.
    * \param[in] poSpatialFilter  \c Geometry representing a spatial filter -- may be null.
    * \param[in] pszDialect  allows control of the statement dialect. If set to
    *                     NULL, the OGR SQL engine will be used, except for
    *                     RDBMS drivers that will use their dedicated SQL
-   *                     engine, unless OGRSQL is explicitely passed as the
+   *                     engine, unless OGRSQL is explicitly passed as the
    *                     dialect.
    * \return a new \c Layer that contains the matching \c Features. In case of
    * error, or no matching result sets, a \em null Layer will be returned.

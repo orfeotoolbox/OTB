@@ -1,0 +1,98 @@
+diff -burN lpng1616.orig/CMakeLists.txt lpng1616/CMakeLists.txt
+--- lpng1616.orig/CMakeLists.txt	2016-09-06 09:49:13.951978634 +0200
++++ lpng1616/CMakeLists.txt	2016-09-06 14:08:21.275857081 +0200
+@@ -17,7 +17,16 @@
+ set(PNGLIB_MAJOR 1)
+ set(PNGLIB_MINOR 6)
+ set(PNGLIB_RELEASE 16)
+-set(PNGLIB_NAME libpng${PNGLIB_MAJOR}${PNGLIB_MINOR})
++
++option(VERSIONED_OUTPUT_LIB "create output library with major.minor suffix" OFF)
++
++set(PNGLIB_NAME libpng)
++set(PNG_LIB_NAME png)
++if(VERSIONED_OUTPUT_LIB)
++  set(PNGLIB_NAME libpng${PNGLIB_MAJOR}${PNGLIB_MINOR})
++  set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
++endif()
++
+ set(PNGLIB_VERSION ${PNGLIB_MAJOR}.${PNGLIB_MINOR}.${PNGLIB_RELEASE})
+ 
+ # needed packages
+@@ -56,11 +65,9 @@
+ option(PNG_DEBUG         "Build with debug output" NO)
+ option(PNGARG            "Disable ANSI-C prototypes" NO)
+ 
+-# SET LIBNAME
+-set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
+ 
+ # to distinguish between debug and release lib
+-set(CMAKE_DEBUG_POSTFIX "d")
++#set(CMAKE_DEBUG_POSTFIX "d")
+ 
+ # Use the prebuilt pnglibconf.h file from the scripts folder
+ # TODO: fix this by building with awk; without this no cmake build can be
+@@ -121,7 +128,6 @@
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR})
+ 
+ unset(PNG_LIB_TARGETS)
+-
+ if(PNG_SHARED)
+   add_library(${PNG_LIB_NAME} SHARED ${libpng_sources})
+   set(PNG_LIB_TARGETS ${PNG_LIB_NAME})
+@@ -253,9 +259,8 @@
+ # SET UP LINKS
+ if(PNG_SHARED)
+   set_target_properties(${PNG_LIB_NAME} PROPERTIES
+-#   VERSION 16.${PNGLIB_RELEASE}.1.6.16
+-    VERSION 16.${PNGLIB_RELEASE}.0
+-    SOVERSION 16
++    VERSION ${PNGLIB_VERSION}
++    SOVERSION ${PNGLIB_MAJOR}
+     CLEAN_DIRECT_OUTPUT 1)
+ endif()
+ if(PNG_STATIC)
+@@ -286,18 +291,18 @@
+       LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+       ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
++    if(VERSIONED_OUTPUT_LIB)
+   if(PNG_SHARED)
+     # Create a symlink for libpng.dll.a => libpng16.dll.a on Cygwin
+     if(CYGWIN OR MINGW)
+-       get_target_property(BUILD_TARGET_LOCATION ${PNG_LIB_NAME} LOCATION_${CMAKE_BUILD_TYPE})
+-       CREATE_SYMLINK(${BUILD_TARGET_LOCATION} libpng${CMAKE_IMPORT_LIBRARY_SUFFIX})
++       #get_target_property(BUILD_TARGET_LOCATION ${PNG_LIB_NAME} LOCATION_${CMAKE_BUILD_TYPE})
++       CREATE_SYMLINK( $<TARGET_FILE:${PNG_LIB_NAME}> libpng${CMAKE_IMPORT_LIBRARY_SUFFIX})
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpng${CMAKE_IMPORT_LIBRARY_SUFFIX}
+          DESTINATION ${CMAKE_INSTALL_LIBDIR})
+     endif(CYGWIN OR MINGW)
+ 
+     if(NOT WIN32)
+-      get_target_property(BUILD_TARGET_LOCATION ${PNG_LIB_NAME} LOCATION_${CMAKE_BUILD_TYPE})
+-      CREATE_SYMLINK(${BUILD_TARGET_LOCATION} libpng${CMAKE_SHARED_LIBRARY_SUFFIX})
++      CREATE_SYMLINK($<TARGET_FILE:${PNG_LIB_NAME}> libpng${CMAKE_SHARED_LIBRARY_SUFFIX})
+       install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpng${CMAKE_SHARED_LIBRARY_SUFFIX}
+          DESTINATION ${CMAKE_INSTALL_LIBDIR})
+     endif(NOT WIN32)
+@@ -305,12 +310,12 @@
+ 
+   if(PNG_STATIC)
+     if(NOT WIN32 OR CYGWIN OR MINGW)
+-      get_target_property(BUILD_TARGET_LOCATION ${PNG_LIB_NAME_STATIC} LOCATION_${CMAKE_BUILD_TYPE})
+-      CREATE_SYMLINK(${BUILD_TARGET_LOCATION} libpng${CMAKE_STATIC_LIBRARY_SUFFIX})
++      CREATE_SYMLINK($<TARGET_FILE:${PNG_LIB_NAME}> libpng${CMAKE_STATIC_LIBRARY_SUFFIX})
+       install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpng${CMAKE_STATIC_LIBRARY_SUFFIX}
+          DESTINATION ${CMAKE_INSTALL_LIBDIR})
+     endif(NOT WIN32 OR CYGWIN OR MINGW)
+- endif()
++  endif(PNG_STATIC)
++  endif(VERSIONED_OUTPUT_LIB)
+ endif()
+ 
+ if(NOT SKIP_INSTALL_HEADERS AND NOT SKIP_INSTALL_ALL )
+@@ -362,4 +367,3 @@
+ # to create msvc import lib for mingw compiled shared lib
+ # pexports libpng.dll > libpng.def
+ # lib /def:libpng.def /machine:x86
+-

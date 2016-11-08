@@ -78,6 +78,7 @@ const ExtensionDriverAssociation k_ExtensionDriverMap[] =
     {".SHP", "ESRI Shapefile"},
     {".TAB", "MapInfo File"},
     {".GML", "GML"},
+    {".GMT", "OGR_GMT"},
     {".GPX", "GPX"},
     {".SQLITE", "SQLite"},
     {".KML", "KML"},
@@ -198,7 +199,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
   bool ds_exists = (ds!=ITK_NULLPTR);
 
   ogr::version_proxy::Close(ds);
-  
+
 
   if (ds_exists && mode == Modes::Overwrite)
     {
@@ -279,7 +280,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
     OGRLayer * ol = m_DataSource->CreateLayer(
       name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
     if (!ol)
-      { 
+      {
       itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
                                << "> in the GDALDataset file <" << GetDatasetDescription()
         <<">: " << CPLGetLastErrorMsg());
@@ -369,7 +370,7 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
   OGRLayer * l0 = &srcLayer.ogr();
   OGRLayer * ol = m_DataSource->CopyLayer(l0, newName.c_str(), papszOptions);
   if (!ol)
-    {    
+    {
     itkGenericExceptionMacro(<< "Failed to copy the layer <"
       << srcLayer.GetName() << "> into the new layer <" <<newName
                              << "> in the GDALDataset file <" <<  GetDatasetDescription()
@@ -402,7 +403,7 @@ void otb::ogr::DataSource::DeleteLayer(size_t i)
 
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
-    {      
+    {
     itkExceptionMacro(<< "Cannot delete " << i << "th layer in the GDALDataset <"
                       <<  GetDatasetDescription() << "> as it contains only " << nb_layers << "layers.");
     }
@@ -465,7 +466,7 @@ size_t otb::ogr::DataSource::GetLayerID(std::string const& name) const
 {
   int const id = GetLayerIDUnchecked(name);
   if (id < 0)
-    {    
+    {
     itkExceptionMacro( << "Cannot fetch any layer named <" << name
                        << "> in the GDALDataset <" <<  GetDatasetDescription() << ">: "
       << CPLGetLastErrorMsg());
@@ -478,7 +479,7 @@ otb::ogr::Layer otb::ogr::DataSource::GetLayerChecked(size_t i)
   assert(m_DataSource && "Datasource not initialized");
   const int nb_layers = GetLayersCount();
   if (int(i) >= nb_layers)
-    {    
+    {
     itkExceptionMacro(<< "Cannot fetch " << i << "th layer in the GDALDataset <"
                       << GetDatasetDescription() << "> as it contains only " << nb_layers << "layers.");
     }

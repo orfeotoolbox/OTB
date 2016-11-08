@@ -81,7 +81,7 @@ SVMModel<TValue, TLabel>::Initialize()
     } */
   m_ModelUpToDate = false;
 
-  // Intialize problem
+  // Initialize problem
   m_Problem.l = 0;
   m_Problem.y = ITK_NULLPTR;
   m_Problem.x = ITK_NULLPTR;
@@ -202,7 +202,7 @@ SVMModel<TValue, TLabel>::BuildProblem()
     m_Problem.y[i] = 0;
     m_Problem.x[i] = new struct svm_node[elements];
 
-    // Intialize elements (value = 0; index = -1)
+    // Initialize elements (value = 0; index = -1)
     for (unsigned int j = 0; j < static_cast<unsigned int>(elements); ++j)
       {
       m_Problem.x[i][j].index = -1;
@@ -442,7 +442,7 @@ SVMModel<TValue, TLabel>::EvaluateHyperplanesDistances(const MeasurementType& me
   x[measure.size()].index = -1;
   x[measure.size()].value = 0;
 
-  // Intialize distances vector
+  // Initialize distances vector
   DistancesVectorType distances(m_Model->nr_class*(m_Model->nr_class - 1) / 2);
 
   // predict distances vector

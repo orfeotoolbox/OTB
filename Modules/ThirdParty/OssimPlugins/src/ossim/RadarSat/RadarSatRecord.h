@@ -44,7 +44,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  virtual RadarSatRecord* Instanciate() =0;
+  virtual RadarSatRecord* Instantiate() =0;
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance

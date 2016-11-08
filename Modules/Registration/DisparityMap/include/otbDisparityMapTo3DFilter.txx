@@ -226,7 +226,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   // Check that the keywordlists are not empty
   if (m_LeftKeywordList.GetSize() == 0 || m_RightKeywordList.GetSize() == 0)
     {
-    itkExceptionMacro(<<"At least one of the image keywordlist is empty : can't instanciate corresponding projection");
+    itkExceptionMacro(<<"At least one of the image keywordlist is empty : can't instantiate corresponding projection");
     }
 }
 
@@ -236,15 +236,15 @@ void
 DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImage>
 ::BeforeThreadedGenerateData()
 {
-  // Instanciate transforms
+  // Instantiate transforms
   m_LeftToGroundTransform = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
 
   m_LeftToGroundTransform->SetInputKeywordList(m_LeftKeywordList);
   m_RightToGroundTransform->SetInputKeywordList(m_RightKeywordList);
 
-  m_LeftToGroundTransform->InstanciateTransform();
-  m_RightToGroundTransform->InstanciateTransform();
+  m_LeftToGroundTransform->InstantiateTransform();
+  m_RightToGroundTransform->InstantiateTransform();
 }
 
 template <class TDisparityImage, class TOutputImage,

@@ -26,7 +26,7 @@ namespace otb
 /** \class ClosePathFunctor
 *    \brief This filter close the input path, making the last point equal to the first one.
 *
-* This filter may be useful when a truely closed polygon is needed (to draw it for example)
+* This filter may be useful when a truly closed polygon is needed (to draw it for example)
 *
 * \sa UnaryFunctorObjectListFilter
 *

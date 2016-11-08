@@ -24,11 +24,13 @@
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkMacro.h"
 #endif //tag=QT4-boost-compatibility
+#include "OTBQtWidgetExport.h"
+
 namespace otb
 {
 namespace Wrapper
 {
-class ITK_ABI_EXPORT QtApplication : public QApplication
+class OTBQtWidget_EXPORT QtApplication : public QApplication
 {
   Q_OBJECT
 

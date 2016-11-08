@@ -22,6 +22,7 @@
 #include "itkObjectFactory.h"
 
 #include "otbWrapperTypes.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -56,7 +57,7 @@ enum DefaultValueMode
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT Parameter
+class OTBApplicationEngine_EXPORT Parameter
   : public itk::Object
 {
 public:
@@ -178,7 +179,7 @@ public:
     return m_Root.GetPointer();
   }
 
-  /** Is the paramter a root or a child of another param */
+  /** Is the parameter a root or a child of another param */
   virtual bool IsRoot() const
   {
     return (this == m_Root.GetPointer());
@@ -208,7 +209,7 @@ public:
     return m_IsChecked;
   }
 
-  /** Modify the state of the checkbox relative to this paramter */
+  /** Modify the state of the checkbox relative to this parameter */
   virtual void SetChecked(const bool value)
   {
     m_IsChecked = value;

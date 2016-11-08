@@ -84,7 +84,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
     functionValues->SetMinSpectralValue(inter.first);
     functionValues->SetMaxSpectralValue(inter.second - step);
 
-  //TODO Is it the effecient method Problem in 6STraits
+  //TODO Is it the efficient method Problem in 6STraits
     functionValues->SetUserStep( step );
 
     m_DataAtmosphericCorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);

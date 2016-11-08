@@ -30,11 +30,11 @@ namespace otb
  *
  * The segmentation algorithm used is based on seeds extraction using the ImageToPointSetFilter, followed by
  * a connected threshold segmentation using the ConnectedThresholdImageFilter. A final relabelling step is done
- * with the LabelImageFilter adn RelabelImageFilter to remove object whose sizes are to small regarding the
+ * with the LabelImageFilter and RelabelImageFilter to remove object whose sizes are to small regarding the
  * MinimumObjectSize parameter. The threshold for seeds extraction and segmentation are computed using quantiles.
  *
  * A pre processing step is applied by multiplying the full resolution brighter details (resp. darker details)
- * with the original image (resp. the inverted original image). This perfoms an enhancement of the regions contour
+ * with the original image (resp. the inverted original image). This performs an enhancement of the regions contour
  * precision.
  *
  * The details from the pyramid are set via the SetBrighterDetails() and SetDarkerDetails() methods. The brighter and

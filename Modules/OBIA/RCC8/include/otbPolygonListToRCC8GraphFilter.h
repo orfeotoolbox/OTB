@@ -99,7 +99,7 @@ public:
   }
 
   /**
-   * Get the number of occurences of the given value
+   * Get the number of occurrences of the given value
    * \return The value.
    */
   unsigned int GetRelationsCount(RCC8ValueType val);
@@ -130,7 +130,7 @@ protected:
 
   virtual void AfterThreadedGenerateData();
 
-  /** startIndex and stopIndex represent the indeces of the vertex to
+  /** startIndex and stopIndex represent the indices of the vertex to
   examine in thread threadId */
   virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId);
 

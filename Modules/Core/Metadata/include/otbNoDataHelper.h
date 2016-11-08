@@ -21,6 +21,7 @@
 #include <cassert>
 #include "vnl/vnl_math.h"
 #include <itkVariableLengthVector.h>
+#include "OTBMetadataExport.h"
 
 namespace itk
 {
@@ -30,17 +31,17 @@ class MetaDataDictionary;
 namespace otb
 {
 
-/** 
- * Reads no data flag from the MetaDataDictionnary dict to flags and values
- * vectors. Returns true upon success. 
+/**
+ * Reads no data flag from the MetaDataDictionary dict to flags and values
+ * vectors. Returns true upon success.
  */
-bool ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool> & flags, std::vector<double> & values);
+bool OTBMetadata_EXPORT ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool> & flags, std::vector<double> & values);
 
-/** 
- * Write no data flags to the MetaDataDictionnary dict from flags and values
- * vectors. Returns true upon success. 
+/**
+ * Write no data flags to the MetaDataDictionary dict from flags and values
+ * vectors. Returns true upon success.
  */
-void WriteNoDataFlags(const std::vector<bool> & flags, const std::vector<double> & values, itk::MetaDataDictionary& dict);
+void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool> & flags, const std::vector<double> & values, itk::MetaDataDictionary& dict);
 
 /**
 * Test if the pixel corresponds to a no data pixel according to a
@@ -75,14 +76,14 @@ template<typename T> bool IsNoData(const T & pixel, const
 * Reads a pixel and change the no data value if it is found. No data
 * value is changed either if the pixel value is NaN or if the pixel
 * value equals the no data value and flag is true.
-* 
+*
 * \param pixel The pixel to process \param flags A vector of size > 1
 * containing a flag per band to indicate if a no data value is
 * available for this band
 * \param values A vector of size > 1 corresponding to the current no data
 * value for each band. If flag is 0, the value will be ignored.
 * \param newValues A vector of size > 1 corresponding to the new no data
-* value for each band. If flag is 0, the value will be ignored 
+* value for each band. If flag is 0, the value will be ignored
 * \param nanIsNoData If true, NaN values will be considered as no-data
 * and changed as well.
 *
@@ -95,7 +96,7 @@ template<typename T> T ChangeNoData(const T & pixel, const
   assert(flags.size()>0);
   assert(values.size()>0);
   assert(newValues.size()>0);
-  
+
   if(nanIsNoData && vnl_math_isnan(pixel))
     {
     return static_cast<T>(newValues[0]);
@@ -142,7 +143,7 @@ template <typename T> itk::VariableLengthVector<T> ChangeNoData(const itk::Varia
   assert(newValues.size()>=pixel.Size());
 
   itk::VariableLengthVector<T> outPixel(pixel.Size());
-  
+
   for(unsigned int i = 0; i < pixel.Size();++i)
     {
     if((nanIsNoData && vnl_math_isnan(pixel[i])) || (flags[i] && (pixel[i] == values[i])))
@@ -157,8 +158,6 @@ template <typename T> itk::VariableLengthVector<T> ChangeNoData(const itk::Varia
 
   return outPixel;
 }
-
-
 
 } // End namespace otb
 

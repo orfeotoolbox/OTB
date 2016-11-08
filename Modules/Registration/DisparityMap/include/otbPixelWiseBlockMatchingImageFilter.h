@@ -311,7 +311,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(PixelWiseBlockMatchingImageFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TInputImage                                       InputImageType;
   typedef TOutputMetricImage                                OutputMetricImageType;
   typedef TOutputDisparityImage                             OutputDisparityImageType;
@@ -449,7 +449,7 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
+  /** Generate input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Before threaded generate data */

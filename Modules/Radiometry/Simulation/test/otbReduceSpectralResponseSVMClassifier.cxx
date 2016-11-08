@@ -73,9 +73,9 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   float percentage = atof(argv[8]);
 
   SatRSRPointerType satRSR = SatRSRType::New();
-  /** Set the satelite number of bands */
+  /** Set the satellite number of bands */
   satRSR->SetNbBands(nbBand);
-  /** Load the satelite response file*/
+  /** Load the satellite response file*/
   satRSR->Load(fileSatG);
 
   //divide into training and testing files
@@ -146,7 +146,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
 
     //Compute Reduce Spectral Response
     ReduceResponseTypePointerType reduceResponse = ReduceResponseType::New();
-    /** Load the satelite response in the simulator */
+    /** Load the satellite response in the simulator */
     reduceResponse->SetInputSatRSR(satRSR);
     /** Load the spectral response of the object in the simulator*/
     reduceResponse->SetInputSpectralResponse(spectralResponse);
@@ -196,7 +196,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
 
     //Compute Reduce Spectral Response
     ReduceResponseTypePointerType reduceResponse = ReduceResponseType::New();
-    /** Load the satelite response in the simulator */
+    /** Load the satellite response in the simulator */
     reduceResponse->SetInputSatRSR(satRSR);
     /** Load the spectral response of the object in the simulator*/
     reduceResponse->SetInputSpectralResponse(spectralResponse);

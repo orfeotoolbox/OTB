@@ -85,15 +85,26 @@ int otbBandMathXImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
   IteratorType it2(image2, region);
   IteratorType it3(image3, region);
 
+  ImageType::PixelType val1, val2, val3;
+  val1.SetSize(D1);
+  val2.SetSize(D2);
+  val3.SetSize(D3);
+
   for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
   {
     ImageType::IndexType i1 = it1.GetIndex();
     ImageType::IndexType i2 = it2.GetIndex();
     ImageType::IndexType i3 = it3.GetIndex();
 
-    it1.Get()[0] = i1[0] + i1[1] -50; it1.Get()[1] = i1[0] * i1[1] -50; it1.Get()[2] = i1[0] / (i1[1]+1)+5;
-    it2.Get()[0] = i2[0] * i2[1];
-    it3.Get()[0] = i3[0] + i3[1] * i3[1];
+    val1[0] = i1[0] + i1[1] -50;
+    val1[1] = i1[0] * i1[1] -50;
+    val1[2] = i1[0] / (i1[1]+1)+5;
+    val2[0] = i2[0] * i2[1];
+    val3[0] = i3[0] + i3[1] * i3[1];
+
+    it1.Set(val1);
+    it2.Set(val2);
+    it3.Set(val3);
 
   }
 
@@ -117,8 +128,6 @@ int otbBandMathXImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 
   std::cout << "\n---  Standard Use\n";
   std::cout << "Parsed Expression :   " << filter->GetExpression(0) << std::endl;
-
-
 
   //Sub-test 1
   IteratorType itoutput1(output1, region);
@@ -329,7 +338,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
     PixelType px1(output1->GetNumberOfComponentsPerPixel());
     PixelType px2(output2->GetNumberOfComponentsPerPixel());
 
-    float coefs[15] = { 0.1 , 0.2 , 0.3 , 0.4 , 0.5 , 0.6 , 0.7 , 0.8 , 0.9 , 1.0 , 1.1 , 1.2 , 1.3 , 1.4 , 1.5};
+    float coefs[15] = { 0.1f , 0.2f , 0.3f , 0.4f , 0.5f , 0.6f , 0.7f , 0.8f , 0.9f , 1.0f , 1.1f , 1.2f , 1.3f , 1.4f , 1.5f};
 
     //expression 1
     px1[0]=0;

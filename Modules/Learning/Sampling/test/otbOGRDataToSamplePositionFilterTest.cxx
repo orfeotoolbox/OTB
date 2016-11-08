@@ -304,6 +304,9 @@ int otbOGRDataToSamplePositionFilterPattern(int argc, char* argv[])
 
   otb::PatternSampler::ParameterType param1, param2, param3;
   param1.Seed = 0UL;
+  param1.MaxPatternSize=0UL;
+  param1.Pattern1 = std::vector<bool>();
+  param1.Pattern2 = std::vector<bool>();
   param2 = param1;
   param3 = param1;
   otb::PatternSampler::ImportPatterns(patternClass1,param1);

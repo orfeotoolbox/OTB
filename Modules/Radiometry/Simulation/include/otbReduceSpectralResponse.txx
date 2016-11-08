@@ -165,9 +165,9 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
    m_InputSpectralResponse->Load(spectralResponseFile, coefNormSpectre);
 
    m_InputSatRSR=InputRSRType::New();
-   /** Set the satelite number of bands */
+   /** Set the satellite number of bands */
    m_InputSatRSR->SetNbBands(nbRSRBands);
-   /** Load the satelite response file*/
+   /** Load the satellite response file*/
    m_InputSatRSR->Load(RSRFile, coefNormRSR);
 }
 

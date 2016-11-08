@@ -120,8 +120,8 @@ void DoInit() ITK_OVERRIDE
     "validation sets per class and per image.\n Several classifier parameters can be set depending on the chosen classifier. In the "
     "validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels. "
     "In the header of the optional confusion matrix output file, the validation (reference) and predicted (produced) class labels"
-    " are ordered according to the rows/columns of the confusion matrix.\n This application is based on LibSVM and on OpenCV Machine Learning "
-    "classifiers, and is compatible with OpenCV 2.3.1 and later.");
+    " are ordered according to the rows/columns of the confusion matrix.\n This application is based on LibSVM and OpenCV Machine Learning "
+    "(2.3.1 and later).");
   SetDocLimitations("None");
   SetDocAuthors("OTB-Team");
   SetDocSeeAlso("OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html ");

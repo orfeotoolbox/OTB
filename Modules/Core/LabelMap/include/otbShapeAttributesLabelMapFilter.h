@@ -188,7 +188,7 @@ private:
  * the Flusser moments for each LabelObject.
  *
  * The flag ReducedAttributesSet allows computing only non-redundant
- * statistics and statistics usefull for classification (not spatially
+ * statistics and statistics useful for classification (not spatially
  * dependent statitistics). Reduced set contains only Flusser moments,
  * physical size, elongation, Feret diameter (if activated),
  * perimeter (if activated) and roundness (if activated).

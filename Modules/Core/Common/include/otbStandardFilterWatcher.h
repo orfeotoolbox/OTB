@@ -48,7 +48,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class /*ITK_EXPORT*/ StandardFilterWatcher : public FilterWatcherBase
+class OTBCommon_EXPORT StandardFilterWatcher : public FilterWatcherBase
 {
 public:
 

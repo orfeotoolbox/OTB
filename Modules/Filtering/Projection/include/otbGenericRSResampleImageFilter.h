@@ -218,7 +218,7 @@ public:
     m_InputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-  /** unsigned int as paramater */
+  /** unsigned int as parameter */
   void SetInputRpcGridSize(unsigned int gridSize)
   {
     m_InputRpcEstimator->SetGridSize(gridSize);
@@ -241,7 +241,7 @@ public:
     m_OutputRpcEstimator->SetGridSize(gridSize);
     this->Modified();
   }
-  /** unsigned int as paramater */
+  /** unsigned int as parameter */
   void SetOutputRpcGridSize(unsigned int gridSize)
   {
     m_OutputRpcEstimator->SetGridSize(gridSize);

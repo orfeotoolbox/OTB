@@ -66,7 +66,7 @@ public:
   itkSetMacro(Optimisation, bool);
 
   /**
-   * Get the number of occurences of the given value
+   * Get the number of occurrences of the given value
    * \return The value.
    */
   unsigned int GetRelationsCount(RCC8ValueType val);

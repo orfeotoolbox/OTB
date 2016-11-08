@@ -24,6 +24,8 @@
 #include "itkObjectFactory.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBQtWidgetExport.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -39,7 +41,7 @@ class QtWidgetParameterBase;
  * \ingroup OTBQtWidget
  *
  */
-class ITK_ABI_EXPORT QtWidgetParameterFactory : public itk::Object
+class OTBQtWidget_EXPORT QtWidgetParameterFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */

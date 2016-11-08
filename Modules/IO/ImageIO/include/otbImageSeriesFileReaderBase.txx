@@ -105,7 +105,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   m_ListOfBandSelection.clear();
   m_ListOfRegionSelection.clear();
 
-  this->TestFileExistanceAndReadability(m_FileName, kFileName);
+  this->TestFileExistenceAndReadability(m_FileName, kFileName);
 
   std::string aLine;
   std::ifstream inputFile(m_FileName.c_str(), std::ios_base::in);
@@ -184,7 +184,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     // Get the Image fileName
     // The test may modify image file name to add the path
     // Or throw an exception when not found nor readable
-    TestFileExistanceAndReadability(aLine, kImageFileName);
+    TestFileExistenceAndReadability(aLine, kImageFileName);
     m_ListOfFileNames.push_back(aLine);
     std::string imageFileName = aLine;
 
@@ -409,7 +409,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
-::TestFileExistanceAndReadability(std::string& file, FileType fileType)
+::TestFileExistenceAndReadability(std::string& file, FileType fileType)
 {
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(file.c_str()))

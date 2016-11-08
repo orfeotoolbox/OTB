@@ -20,6 +20,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBOSSIMAdaptersExport.h"
 
 class ossimLocalTm;
 //class ossimDate;
@@ -36,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBOSSIMAdapters
  **/
-class DateTimeAdapter : public itk::Object
+class OTBOSSIMAdapters_EXPORT DateTimeAdapter : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -50,35 +51,35 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(DateTimeAdapter, itk::Object);
-  
+
   /** Year Accessor*/
   int GetYear();
-  
+
   /** Month Accessor*/
   int GetMonth();
-  
+
   /** Day Accessor*/
   int GetDay();
-  
+
   /** Hour Accessor*/
   int GetHour();
-  
+
   /** Minute Accessor*/
   int GetMinute();
-  
+
   /** Seconds Accessor*/
   double GetSeconds() const;
-  
+
   /** Set the date and time from an Iso8601 string
    *  Return true if the date is valid
    */
   bool SetFromIso8601(const std::string &date);
-  
+
   /** Return the delta with an other date, expressed in seconds */
   double GetDeltaInSeconds(const DateTimeAdapter *pastDate);
-  
+
   // TODO : add print self function
-  
+
 protected:
   DateTimeAdapter();
   ~DateTimeAdapter() ITK_OVERRIDE;

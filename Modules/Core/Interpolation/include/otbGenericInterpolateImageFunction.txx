@@ -168,7 +168,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     }
 }
 
-/** Initialize tables: need to be call explicitely */
+/** Initialize tables: need to be call explicitly */
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
@@ -178,7 +178,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   this->ResetOffsetTable();
   // Tables initialization
   this->InitializeTables();
-  // fill the weigth table
+  // fill the weight table
   this->FillWeightOffsetTable();
   m_TablesHaveBeenGenerated = true;
 }

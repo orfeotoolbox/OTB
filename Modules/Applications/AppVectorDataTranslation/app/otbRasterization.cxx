@@ -263,7 +263,7 @@ private:
           RSTransformType::Pointer rsTransform = RSTransformType::New();
           rsTransform->SetInputProjectionRef(inputProjectionRef);
           rsTransform->SetOutputProjectionRef(outputProjectionRef);
-          rsTransform->InstanciateTransform();
+          rsTransform->InstantiateTransform();
 
           corner = rsTransform->TransformPoint(corner);
           }
@@ -293,7 +293,7 @@ private:
           RSTransformType::Pointer rsTransform = RSTransformType::New();
           rsTransform->SetInputProjectionRef(inputProjectionRef);
           rsTransform->SetOutputProjectionRef(outputProjectionRef);
-          rsTransform->InstanciateTransform();
+          rsTransform->InstantiateTransform();
 
           lrout = rsTransform->TransformPoint(lrout);
           }

@@ -23,12 +23,14 @@
 #include "itkPoint.h"
 #include "itkVector.h"
 #include "itkSize.h"
+
 #include "otbImageKeywordlist.h"
+#include "OTBIceExport.h"
 
 namespace otb
 {
 
-class ViewSettings 
+class OTBIce_EXPORT ViewSettings 
   : public itk::Object
 {
 public:
@@ -150,15 +152,15 @@ private:
   ViewSettings(const Self&);
   void operator=(const Self&);
 
-  PointType   m_Origin;
+  PointType m_Origin;
   SpacingType m_Spacing;
-  SizeType    m_ViewportSize;
+  SizeType m_ViewportSize;
   std::string m_Wkt;
   KeywordListType m_KeywordList;
-  bool m_UseProjection;
-  bool m_GeometryChanged;
-  PointType   m_RotationCenter;
-  double      m_RotationAngle;
+  PointType m_RotationCenter;
+  double m_RotationAngle;
+  bool m_UseProjection : 1;
+  bool m_GeometryChanged : 1;
 
 }; // End class ViewSettings
 

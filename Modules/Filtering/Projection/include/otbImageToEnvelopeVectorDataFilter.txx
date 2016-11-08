@@ -111,7 +111,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->SetInputProjectionRef(inputPtr->GetProjectionRef());
   m_Transform->SetInputKeywordList(inputPtr->GetImageKeywordlist());
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 }
 
 

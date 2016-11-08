@@ -106,7 +106,7 @@ int main(int itkNotUsed(argc), char* argv[])
 //  Software Guide : BeginLatex
 //
 //  We read the images. It is worth to note that, in order to ensure
-//  the pipeline coherence, the output of the objects which preceed the
+//  the pipeline coherence, the output of the objects which precede the
 //  model estimator in the pipeline, must be up to date, so we call
 //  the corresponding \code{Update} methods.
 //

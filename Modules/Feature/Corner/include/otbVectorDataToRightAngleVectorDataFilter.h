@@ -33,7 +33,7 @@ namespace otb
  *  included in the input VectorData. It outputs a vector data
  *  containing right angle localizations symbolized by points.
  *
- *  The entire input vector data will be processed concidering the two
+ *  The entire input vector data will be processed considering the two
  *  firsts vertex of each line features as a segment.
  *
  *

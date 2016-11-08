@@ -112,7 +112,7 @@
 #                [VERSION TRUE|FALSE]
 #               )
 #
-# Create jave documentation based on files or packages. For more
+# Create java documentation based on files or packages. For more
 # details please read the javadoc manpage.
 #
 # There are two main signatures for create_javadoc. The first
@@ -120,7 +120,7 @@
 #
 #   Example:
 #   create_javadoc(my_example_doc
-#     PACKAGES com.exmaple.foo com.example.bar
+#     PACKAGES com.example.foo com.example.bar
 #     SOURCEPATH ${CMAKE_CURRENT_SOURCE_PATH}
 #     CLASSPATH ${CMAKE_JAVA_INCLUDE_PATH}
 #     WINDOWTITLE "My example"

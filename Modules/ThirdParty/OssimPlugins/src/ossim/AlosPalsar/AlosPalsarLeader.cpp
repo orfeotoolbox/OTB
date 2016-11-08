@@ -73,7 +73,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarLeader& data)
     }
     else
     {
-      AlosPalsarRecord* record = factory.Instanciate(header.get_rec_seq());
+      AlosPalsarRecord* record = factory.Instantiate(header.get_rec_seq());
       if (record != NULL)
       {
         record->Read(is);

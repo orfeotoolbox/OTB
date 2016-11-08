@@ -37,7 +37,7 @@ namespace otb {
  * \ingroup OTBCarto
  */
 template < class TImage>
-class  ITK_EXPORT ImageToOSMVectorDataGenerator :
+class ImageToOSMVectorDataGenerator :
     public OSMDataToVectorDataGenerator
 {
 public:

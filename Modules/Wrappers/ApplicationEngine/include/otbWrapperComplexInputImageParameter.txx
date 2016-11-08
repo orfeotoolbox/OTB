@@ -166,6 +166,15 @@ ComplexInputImageParameter::CastVectorImageFromImage()
   return caster->GetOutput();
 }
 
+template <class TComplexInputImage>
+void
+ComplexInputImageParameter::SetImage(TComplexInputImage* image)
+{
+  m_UseFilename = false;
+  m_Image = image;
+}
+
+
 
 } // End namespace Wrapper
 } // End namespace otb

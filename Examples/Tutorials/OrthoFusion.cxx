@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   // We declare the projection (here we chose the UTM projection, other choices
-  // are possible) and retrieve the paremeters from the command line:
+  // are possible) and retrieve the parameters from the command line:
   // \begin{itemize}
   // \item the UTM zone
   // \item the hemisphere

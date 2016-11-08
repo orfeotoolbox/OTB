@@ -20,6 +20,7 @@
 
 #include <string>
 #include <vector>
+#include "OTBMetadataExport.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkPointSet.h"
 #include "otbSarCalibrationLookupData.h"
@@ -34,7 +35,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT SarImageMetadataInterface : public ImageMetadataInterfaceBase
+class OTBMetadata_EXPORT SarImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
 

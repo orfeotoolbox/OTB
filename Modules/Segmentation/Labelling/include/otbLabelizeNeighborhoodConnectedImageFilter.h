@@ -30,7 +30,7 @@ namespace otb
  *
  *  This class implements base class otb::LabelizeImageFilterBase
  *
- *  First seeds are obtained with a theshold filter
+ *  First seeds are obtained with a threshold filter
  *  For each seed, itk::NeighborhoodConnectedImageFilter labels pixel
  *  Finally, filter produce a regions map
  *
@@ -117,7 +117,7 @@ private:
   /** Delta - threshold for growing region */
   InputPixelType m_LowerThresholdDelta;
 
-  /** Intial replace value*/
+  /** Initial replace value*/
   OutputPixelType m_ReplaceValue;
 
 }; // end class LabelizeconnectedThresholdImageFilter

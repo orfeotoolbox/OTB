@@ -180,12 +180,12 @@ otb_test_application(NAME  apTuPrVectorDataReprojectionFromImageToMap
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
-                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite
+                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp
                              -out.proj user
                              -out.proj.user.map  lambert93
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.sqlite
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite)
+                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                      APP  VectorDataReprojection

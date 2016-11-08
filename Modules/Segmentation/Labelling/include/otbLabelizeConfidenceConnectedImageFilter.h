@@ -92,13 +92,13 @@ public:
   /** Set replace value */
   itkSetMacro(ReplaceValue, OutputPixelType);
 
-  /** Set initial neigborhood radius */
+  /** Set initial neighborhood radius */
   const unsigned int& GetInitialNeighborhoodRadius()
   {
     return this->m_RegionGrowingFilter->GetInitialNeighborhoodRadius();
   }
 
-  /** Set initial neigborhood radius */
+  /** Set initial neighborhood radius */
   void SetInitialNeighborhoodRadius(const unsigned int initial)
   {
     this->m_RegionGrowingFilter->SetInitialNeighborhoodRadius(initial);
@@ -116,7 +116,7 @@ private:
   LabelizeConfidenceConnectedImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Intial replace value*/
+  /** Initial replace value*/
   OutputPixelType m_ReplaceValue;
 
 }; // end class LabelizeconnectedThresholdImageFilter

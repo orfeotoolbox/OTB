@@ -380,7 +380,8 @@ int main(int ac, char* av[])
       // Non regression test for ascii files
       if ((baselineFilenamesAscii.size() > 0) && (testFilenamesAscii.size() > 0))
         {
-        result += testHelper->RegressionTestAllAscii(baselineFilenamesAscii, testFilenamesAscii, ignoredLines);
+        //result += testHelper->RegressionTestAllAscii(baselineFilenamesAscii, testFilenamesAscii, ignoredLines);
+        result += testHelper->RegressionTestAllDiff(baselineFilenamesAscii, testFilenamesAscii, ignoredLines);
         }
       /******************************************************************************/
       // Non regression test for binary files

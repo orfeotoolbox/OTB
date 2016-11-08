@@ -214,7 +214,7 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "NumberOfIterations: " << m_NumberOfIterations << std::endl;
-  os << indent << "IntialValue: " << m_InitialValue << std::endl;
+  os << indent << "InitialValue: " << m_InitialValue << std::endl;
   os << indent << "Step: " << m_Step << std::endl;
 }
 } // End namespace otb

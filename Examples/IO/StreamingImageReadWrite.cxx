@@ -25,7 +25,7 @@
 //  streaming. That means that a filter for which the
 //  \code{ThreadedGenerateData} method is implemented, will only produce the
 //  data for the region requested by the following filter in the
-//  pipeline. Therefore, in order to use the streaming functionnality
+//  pipeline. Therefore, in order to use the streaming functionality
 //  one needs to use a filter at the end of the pipeline which
 //  requests for adjacent regions of the image to be processed. In
 //  ITK, the \doxygen{itk}{StreamingImageFilter} class is used for

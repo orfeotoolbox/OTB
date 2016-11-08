@@ -159,7 +159,7 @@ void
 SEMClassifier<TInputImage, TOutputImage>
 ::SetClassLabels(TOutputImage * imgLabels)
 {
-  otbMsgDebugMacro(<< "Initalizing segmentation from an external image");
+  otbMsgDebugMacro(<< "Initializing segmentation from an external image");
 
   typename TInputImage::SizeType size = imgLabels->GetBufferedRegion().GetSize();
   int                            theSize = (int) size[0] * size[1];
@@ -362,7 +362,7 @@ SEMClassifier<TInputImage, TOutputImage>
       }
     else
       {
-      // Be sure, the sum of intial proportion remains to 1
+      // Be sure, the sum of initial proportion remains to 1
       double                                  sumProportion = 0.0;
       typename ProportionVectorType::iterator iterProportion = m_InitialProportions.begin();
       do

@@ -30,7 +30,7 @@ ImageSettings::ImageSettings()
     m_MaxGreen( 255 ),
     m_MinBlue( 0 ),
     m_MaxBlue( 255 ),
-    m_UseNoData( true ),
+    m_UseNoData( false ),
     m_NoData( 0 ),
     m_Gamma( 1. ),
     m_Alpha( 1. ),

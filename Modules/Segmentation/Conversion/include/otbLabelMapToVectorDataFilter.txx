@@ -116,7 +116,7 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
     //TODO hole in the polygon are not handle yet by the functor
     node->SetPolygonExteriorRing(correctPolygon);
 
-    /** Store additionnal fields given by functor */
+    /** Store additional fields given by functor */
     std::map<std::string, std::string> fields = m_FieldsFunctor(const_cast <LabelObjectType *> (labelObject));
     std::map<std::string, std::string>::const_iterator it2;
     for ( it2 = fields.begin(); it2 != fields.end(); ++it2 )

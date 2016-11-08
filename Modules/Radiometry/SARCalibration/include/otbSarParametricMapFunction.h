@@ -116,7 +116,7 @@ public:
   /** Get/Set the PolynomalSize pointer*/
   void SetPolynomalSize(const IndexType PolynomalSize);
 
-  /** Evaluate parametric coefficent from pointset */
+  /** Evaluate parametric coefficient from pointset */
   void EvaluateParametricCoefficient();
 
   /** Set constante value for evaluation*/

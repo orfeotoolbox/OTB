@@ -53,11 +53,11 @@ namespace otb
   * Fe(i), Fe(j) and Fe(k) being descriptors.
   *
   * The criterion can be set through SetCriterionFormula() as a
-  * string refering to "Belief" and "Plausibility" from the
+  * string referring to "Belief" and "Plausibility" from the
   * Dempster-Shafer theory. By default the criterion is:
   * "((Belief + Plausibility)/2) >= 0.5"
   *
-  * The concidered features will be the intersection between
+  * The considered features will be the intersection between
   * the features embedded in this filter and the features embedded
   * in the input vector data. For now, the filter uses "NONDVI" and
   * "ROADSA" features.

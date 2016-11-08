@@ -18,7 +18,7 @@
 #ifndef otbProspectModel_h
 #define otbProspectModel_h
 
-
+#include "OTBSimulationExport.h"
 #include "otbLeafParameters.h"
 
 #include "otbDataSpecP5B.h"
@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 
-class ITK_EXPORT ProspectModel : public SimulationStep1Base
+class OTBSimulation_EXPORT ProspectModel : public SimulationStep1Base
 {
    public:
       /** Standard class typedefs */

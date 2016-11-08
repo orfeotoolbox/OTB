@@ -28,11 +28,11 @@ template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionTyp
 StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::StreamingResampleImageFilter()
 {
-  // internal filters instanciation
+  // internal filters instantiation
   m_DisplacementFilter = DisplacementFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
 
-  // Initialize the displacement field spacing to zero : inconsistant
+  // Initialize the displacement field spacing to zero : inconsistent
   // value
   this->SetDisplacementFieldSpacing(itk::NumericTraits<SpacingType>::ZeroValue());
 

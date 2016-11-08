@@ -31,7 +31,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT ApplicationHtmlDocGenerator
+class OTBApplicationEngine_EXPORT ApplicationHtmlDocGenerator
 {
 public:
  /** Standard class typedef */

@@ -169,6 +169,8 @@ private:
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
     MandatoryOff("outmatrix");
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "FilterOutput.tif");
@@ -420,7 +422,8 @@ private:
 
       m_MinMaxFilter = MinMaxFilterType::New();
       m_MinMaxFilter->SetInput(m_ForwardFilter->GetOutput());
-      m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(50);
+      //m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(50);
+      m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
       AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
       m_MinMaxFilter->Update();

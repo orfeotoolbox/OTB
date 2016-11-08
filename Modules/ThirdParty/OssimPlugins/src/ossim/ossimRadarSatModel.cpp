@@ -224,7 +224,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
       ossimNotify(ossimNotifyLevel_DEBUG) << "Begin reading VDF file" << std::endl;
       }
 
-    RadarSatRecord* recordVDF = factoryVDF.Instanciate(headerVDF.get_rec_seq());
+    RadarSatRecord* recordVDF = factoryVDF.Instantiate(headerVDF.get_rec_seq());
     if (recordVDF != NULL && headerVDF.get_rec_seq() == 1)
       {
       recordVDF->Read(volumeDirFile);
@@ -280,7 +280,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
             ossimNotify(ossimNotifyLevel_DEBUG)<< "Begin reading DAT file" << std::endl;
             }
 
-          RadarSatRecord* recordDAT = factoryDAT.Instanciate(headerDAT.get_rec_seq());
+          RadarSatRecord* recordDAT = factoryDAT.Instantiate(headerDAT.get_rec_seq());
           if (recordDAT != NULL && headerDAT.get_rec_seq() == 1)
             {
             recordDAT->Read(dataFile);

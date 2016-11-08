@@ -87,7 +87,7 @@
 // \footnote{Before version 4.2, this class was storing all correction
 // parameters} \doxygen{otb}{AtmosphericCorrectionParameters}.
 // \item The acquisition correction parameters : sensor related information
-// about the way the image was taken, usualy available with the image
+// about the way the image was taken, usually available with the image
 // metadata (for instance : solar angles, spectral
 // sensitivity, ...). They are stored in the class
 // \doxygen{otb}{ImageMetadataCorrectionParameters}.
@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // The \doxygen{otb}{ImageMetadataCorrectionParameters} class stores
-  // several parameters that are generaly present in the image metadata :
+  // several parameters that are generally present in the image metadata :
   // \begin{itemize}
   // \item The zenithal and azimutal solar angles that describe the solar incidence
   // configuration (in degrees);
@@ -624,7 +624,7 @@ int main(int argc, char *argv[])
 //  Software Guide : BeginLatex
 //
 // At this step, each filter of the chain is instancied and every one has its
-// input paramters set. A name can be given to the output image, each filter
+// input parameters set. A name can be given to the output image, each filter
 //  can be linked to the next one and create the final processing chain.
 //
 //  Software Guide : EndLatex

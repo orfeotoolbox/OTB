@@ -24,7 +24,7 @@
 //  Software Guide : BeginLatex
 //
 //  First, we are going to use \doxygen{otb}{VectorImage} instead of the now
-// traditionnal \doxygen{otb}{Image}. So we include the required header:
+// traditional \doxygen{otb}{Image}. So we include the required header:
 //
 //  Software Guide : EndLatex
 

@@ -68,7 +68,7 @@ public:
     return true;
   }
 
-  /** Set the spacing and dimention information for the set filename. */
+  /** Set the spacing and dimension information for the set filename. */
   void ReadImageInformation() ITK_OVERRIDE;
 
   /** Reads the data from disk into the memory buffer provided. */
@@ -89,7 +89,7 @@ public:
     return true;
   }
 
-  /** Writes the spacing and dimentions of the image.
+  /** Writes the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
   void WriteImageInformation() ITK_OVERRIDE;
 

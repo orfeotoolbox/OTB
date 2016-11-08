@@ -26,6 +26,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+#include "OTBOSSIMAdaptersExport.h"
+
 //forward declaration
 class ossimKeywordlist;
 
@@ -71,7 +73,7 @@ namespace internal
  *
  * \ingroup OTBOSSIMAdapters
  */
-class ITK_EXPORT ImageKeywordlist
+class OTBOSSIMAdapters_EXPORT ImageKeywordlist
 {
 public:
   /** Standard class typedefs. */
@@ -151,12 +153,20 @@ private:
 
 };
 
+OTBOSSIMAdapters_EXPORT
 std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 
 // Free function to handle the keywordlist <-> files
+OTBOSSIMAdapters_EXPORT
 ImageKeywordlist ReadGeometryFromImage(const std::string& filename, bool checkRpcTag=true);
+
+OTBOSSIMAdapters_EXPORT
 ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
+
+OTBOSSIMAdapters_EXPORT
 ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
+
+OTBOSSIMAdapters_EXPORT
 void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
 inline

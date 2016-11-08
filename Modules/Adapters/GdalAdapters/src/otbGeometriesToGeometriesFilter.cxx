@@ -33,7 +33,7 @@
  * Internal class used to dispatch filters on either \c ogr::DataSource, or \c
  * ogr::Layer.
  * As \c GeometriesSet is a variant that can contain either a \c ogr::DataSource
- * or a \c ogr::Layer, we need a way to dispath filtering operations on the
+ * or a \c ogr::Layer, we need a way to dispatch filtering operations on the
  * right type. This is done thanks to \c ProcessVisitor.
  * \since OTB v 3.14.0
  */
@@ -126,7 +126,7 @@ struct otb::internal::ProcessVisitor : boost::static_visitor<>
     }
 
   /**
-   * Fall-back visiting function for invalid mixed tranformations (layer ->
+   * Fall-back visiting function for invalid mixed transformations (layer ->
    * datasource).
    * The only transformations accepted are
    * - layer -> layer,
@@ -189,7 +189,7 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 void otb::GeometriesToGeometriesFilter::GenerateData(void )
 {
   this->DoAllocateOutputs();
-  this->DoFinalizeInitialisation();
+  this->DoFinalizeInitialization();
 
   InputGeometriesType::ConstPointer  input  = this->GetInput();
   // assert(input && "Cann't filter to a nil geometries set");

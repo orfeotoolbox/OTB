@@ -89,7 +89,7 @@ RCC8EdgeIterator<TGraph>
 }
 /**
  * Return the source vertex index of the current edge.
- * \return The souce vertex index.
+ * \return The source vertex index.
  */
 template <class TGraph>
 typename RCC8EdgeIterator<TGraph>

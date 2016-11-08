@@ -81,7 +81,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   /** Get The input Lines*/
   typename InputLinesListType::Pointer inputLinesList = const_cast<InputLinesListType *>(this->GetInput());
 
-  /** Instancition of Cheking availability Matrix*/
+  /** Instancition of Checking availability Matrix*/
   unsigned int numberOfLines = inputLinesList->size();
   checkMatrixType              segmentsUsedMatrix(numberOfLines, numberOfLines);
   segmentsUsedMatrix.Fill(0);

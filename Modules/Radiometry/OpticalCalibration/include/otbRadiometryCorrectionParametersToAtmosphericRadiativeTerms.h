@@ -35,7 +35,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-  class ITK_EXPORT RadiometryCorrectionParametersToAtmosphericRadiativeTerms
+  class RadiometryCorrectionParametersToAtmosphericRadiativeTerms
   {
   public:
 

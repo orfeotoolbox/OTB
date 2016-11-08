@@ -31,7 +31,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT StringListParameter
+class OTBApplicationEngine_EXPORT StringListParameter
   : public Parameter
 {
 public:

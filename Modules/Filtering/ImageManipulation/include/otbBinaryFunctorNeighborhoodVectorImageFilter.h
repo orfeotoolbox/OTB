@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class BinaryFunctorNeighborhoodVectorImageFilter
- * \brief Implements neighborhood-wise generic operation of two images beeing vector images.
+ * \brief Implements neighborhood-wise generic operation of two images being vector images.
  *
  * This class is parameterized over the types of the two input images
  * and the type of the output image.  It is also parameterized by the

@@ -38,7 +38,7 @@ class ITK_EXPORT SamplingRateCalculator
 {
 public:
   /** Standard typedefs */
-  typedef SamplingRateCalculator                     Self;
+  typedef SamplingRateCalculator        Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -68,6 +68,12 @@ public:
   /** Method to set the same number of required samples in each class */
   void SetNbOfSamplesAllClasses(unsigned long);
 
+  /** Method to set a percentage of samples for each class */
+  void SetPercentageOfSamples(double percent);
+
+  /** Method to set the total number of samples to generate */
+  void SetTotalNumberOfSamples(unsigned long value);  
+  
   /** Method to choose a sampling strategy based on the smallest class.
    * The number of samples in each class is set to this minimum size*/
   void SetMinimumNbOfSamplesByClass(void);
@@ -94,15 +100,17 @@ public:
   /** Clear internal data */
   void ClearRates(void);
 
+  static ClassCountMapType ReadRequiredSamples(const std::string& filename);
+
 protected:
   /** Constructor */
   SamplingRateCalculator();
 
   /** Destructor */
-  virtual ~SamplingRateCalculator() {}
+  ~SamplingRateCalculator() ITK_OVERRIDE {}
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SamplingRateCalculator(const Self &);    //purposely not implemented

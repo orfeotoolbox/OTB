@@ -30,7 +30,7 @@ namespace otb
  * \ingroup OTBMetadata
  */
 
-class ITK_ABI_EXPORT Radarsat2ImageMetadataInterface : public SarImageMetadataInterface
+class OTBMetadata_EXPORT Radarsat2ImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
 
@@ -87,7 +87,7 @@ public:
 
   double GetCenterIncidenceAngle() const ITK_OVERRIDE;
 
-  /*get lookup data for calulating backscatter */
+  /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) ITK_OVERRIDE;
 
 

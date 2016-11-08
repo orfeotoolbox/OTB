@@ -45,6 +45,10 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
 
   // Default sub-pixel precision
   m_SubPixelAccuracy = 0.1;
+  m_ConvergenceAccuracy = 0.01;
+  
+  // Max number of iterations
+  m_MaxIter = 100;
 
   // Flags
   m_UseSpacing = true;
@@ -282,6 +286,72 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     }
   return;
  }
+ 
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+double
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::callMetric(double val1,double val2,double &oldRes,bool &flag)
+{
+   typename TranslationType::ParametersType paramsgn(2);
+   paramsgn[0]=val1;
+   paramsgn[1]=val2;
+   
+   double res=oldRes;
+   flag=false;
+   
+   try
+   {
+      res=m_Metric->GetValue(paramsgn);
+   }
+   catch(itk::ExceptionObject& err)
+   {
+      flag=true;
+      itkWarningMacro(<< err.GetDescription());
+   }
+        
+   return res;
+} 
+
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+void
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::updateOptParams(double potBestVal,double parx,double pary,double &bestVal, typename TranslationType::ParametersType& optParams)
+{
+    if (bestVal>potBestVal)
+    {
+        bestVal=potBestVal;
+        optParams[0]=parx;
+        optParams[1]=pary;
+    }
+}
+
+
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+void
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::updatePoints(double& gn, double& in1, double& in2, double &in3,  
+               double& out1, double& out2, double& out3, double& out4)
+{
+    out1=out2;
+    out2=in3;
+    out3=in1+gn*(in2-in1);
+    out4=in2-gn*(in2-in1);
+    
+} 
+
+
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
+void
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
+::updateMinimize(double& a, double& b)
+{
+    if(!m_Minimize)
+    {
+        a = -a;
+        b = -b;
+    }
+}
+
 
 template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
 void
@@ -322,7 +392,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
   double currentMetric, optMetric;
 
   // Optimal translation parameters
-  typename TranslationType::ParametersType params(2), optParams(2), tmpOptParams(2);
+  typename TranslationType::ParametersType params(2), optParams(2);
 
   // Final displacement value
   DisplacementValueType displacementValue;
@@ -334,6 +404,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
 
   // Get fixed image spacing
   SpacingType fixedSpacing = fixedPtr->GetSpacing();
+
 
   // Walk the images
   while (!outputIt.IsAtEnd() && !outputDfIt.IsAtEnd() )
@@ -366,6 +437,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     currentMetricRegion.Crop(fixedPtr->GetLargestPossibleRegion());
     m_Metric->SetFixedImageRegion(currentMetricRegion);
     m_Metric->Initialize();
+
 
     // Compute the local offset if required (and the transform was specified)
     if (m_Transform.IsNotNull())
@@ -408,45 +480,90 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
         }
         }
       }
+  
+    
 
-    // Dichotomic sub-pixel
+    //golden section search
+    typename TranslationType::ParametersType paramsgn(2);
+    double gn=(sqrt(5.0)-1.0)/2.0;
     SpacingType subPixelSpacing = fixedSpacing;
-    while(subPixelSpacing[0] > m_SubPixelAccuracy || subPixelSpacing[1] > m_SubPixelAccuracy)
-      {
-      // Perform 1 step of dichotomic search
-      subPixelSpacing /= 2.;
+    double ax=optParams[0]-static_cast<double>(subPixelSpacing[0]);
+    double ay=optParams[1]-static_cast<double>(subPixelSpacing[1]);
+    double bx=optParams[0]+static_cast<double>(subPixelSpacing[0]);
+    double by=optParams[1]+static_cast<double>(subPixelSpacing[1]);
 
-      // Store last opt params
-      tmpOptParams = optParams;
+    
+    double cx=bx-gn*(bx-ax);
+    double cy=optParams[1];//by-gn*(by-ay);
+    double dx=ax+gn*(bx-ax);
+    double dy=optParams[1];//ay+gn*(by-ay);
+    double fc=0,fd=0;
+    bool exitWhile=false;
+    int nbIter=0;
+    double bestvalold=itk::NumericTraits<double>::max(),bestval=optMetric;
+    double diff=itk::NumericTraits<double>::max();
+    double diffx=itk::NumericTraits<double>::max();
+    double diffy=itk::NumericTraits<double>::max();
+    
+    //init
+    fc=callMetric(cx,cy,fc,exitWhile);
+    fd=callMetric(dx,dy,fd,exitWhile);
+    updateMinimize(fc,fd);
 
-      for(int i = -1; i <= 1; i+=2)
+    //loop
+    while (  (diffx > m_SubPixelAccuracy || diffy > m_SubPixelAccuracy) 
+             && (diff>m_ConvergenceAccuracy) 
+             && (!exitWhile) 
+             && (nbIter<=m_MaxIter)) 
+    {
+        nbIter++;
+    
+        // x direction
+        if (fc<fd)
         {
-        for(int j = -1; j <= 1; j+=2)
-          {
-          params = tmpOptParams;
-          params[0] += static_cast<double>(i*subPixelSpacing[0]);
-          params[1] += static_cast<double>(j*subPixelSpacing[1]);
-
-          try
-          {
-            // compute currentMetric
-            currentMetric = m_Metric->GetValue(params);
-
-            // Check for maximum
-            if((m_Minimize && (currentMetric < optMetric)) || (!m_Minimize && (currentMetric > optMetric)))
-              {
-              optMetric = currentMetric;
-              optParams = params;
-              }
-          }
-          catch(itk::ExceptionObject& err)
-          {
-            itkWarningMacro(<<err.GetDescription());
-
-          }
-          }
+            updateOptParams(fc,cx,cy,bestval,optParams);   
+            updatePoints(gn,ay,by,cx,bx,dx,dy,cy);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
         }
-      }
+        else
+        {
+            updateOptParams(fd,dx,dy,bestval,optParams);
+            updatePoints(gn,by,ay,dx,ax,cx,cy,dy);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
+        }
+        updateMinimize(fc,fd);
+        
+        // y direction
+        if (fc<fd)
+        {
+            updateOptParams(fc,cx,cy,bestval,optParams);
+            updatePoints(gn,ax,bx,cy,by,dy,dx,cx);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
+        }
+        else
+        {
+            updateOptParams(fd,dx,dy,bestval,optParams);
+            updatePoints(gn,bx,ax,dy,ay,cy,cx,dx);
+            fc=callMetric(cx,cy,fc,exitWhile);
+            fd=callMetric(dx,dy,fd,exitWhile);
+        }
+        updateMinimize(fc,fd);
+        
+        // Before eventual exit, take benefit from the last evaluations of fd and fc
+        updateOptParams(fd,dx,dy,bestval,optParams);
+        updateOptParams(fc,cx,cy,bestval,optParams);
+        
+        if(!m_Minimize)
+            bestval=-bestval;
+            
+        diff= fabs(bestval-bestvalold);
+        bestvalold=bestval;
+        diffx=fabs(bx-ax);
+        diffy=fabs(by-ay);
+	}
 
     // Store the offset and the correlation value
     outputIt.Set(optMetric);
@@ -461,6 +578,8 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
       displacementValue[1] = optParams[1]/fixedSpacing[1];
       }
     outputDfIt.Set(displacementValue);
+    
+    
     // Update iterators
     ++outputIt;
     ++outputDfIt;

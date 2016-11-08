@@ -22,16 +22,16 @@
 
 namespace otb
 {
-ViewSettings::ViewSettings()
+ViewSettings::ViewSettings() :
+  m_Wkt( "" ),
+  m_RotationAngle( 0.0 ),
+  m_UseProjection( true ),
+  m_GeometryChanged( false )
 {
-  m_Origin.Fill(0);
-  m_Spacing.Fill(1);
-  m_ViewportSize.Fill(0);
-  m_Wkt="";
-  m_UseProjection = true;
-  m_GeometryChanged = false;
-  m_RotationCenter.Fill(0);
-  m_RotationAngle = 0;
+  m_Origin.Fill( 0 );
+  m_Spacing.Fill( 1 );
+  m_ViewportSize.Fill( 0 );
+  m_RotationCenter.Fill( 0 );
 }
 
 ViewSettings::~ViewSettings()
@@ -129,12 +129,12 @@ void ViewSettings::SetPersepectiveAngle()
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
   forwardTransform->SetInputKeywordList(m_KeywordList);
   forwardTransform->SetInputProjectionRef(m_Wkt);
-  forwardTransform->InstanciateTransform();
+  forwardTransform->InstantiateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
   inverseTransform->SetOutputProjectionRef(m_Wkt);
   inverseTransform->SetOutputKeywordList(m_KeywordList);
-  inverseTransform->InstanciateTransform();
+  inverseTransform->InstantiateTransform();
 
   PointType centerPoint = GetViewportCenter();
 
@@ -163,12 +163,12 @@ void ViewSettings::SetNorthUpAngle()
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
   forwardTransform->SetInputKeywordList(m_KeywordList);
   forwardTransform->SetInputProjectionRef(m_Wkt);
-  forwardTransform->InstanciateTransform();
+  forwardTransform->InstantiateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
   inverseTransform->SetOutputProjectionRef(m_Wkt);
   inverseTransform->SetOutputKeywordList(m_KeywordList);
-  inverseTransform->InstanciateTransform();
+  inverseTransform->InstantiateTransform();
   
   PointType centerPoint = GetViewportCenter();
   

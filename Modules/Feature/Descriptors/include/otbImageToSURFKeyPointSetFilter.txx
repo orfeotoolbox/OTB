@@ -551,7 +551,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
     if (dist < 6 * S)
       {
-      // Haar Wavelets responses accumulated in an histogram with Pi/3 precison
+      // Haar Wavelets responses accumulated in an histogram with Pi/3 precision
       if ((col > pas && col < Largeur - pas) && (raw > pas && raw < Largeur - pas))
         {
 

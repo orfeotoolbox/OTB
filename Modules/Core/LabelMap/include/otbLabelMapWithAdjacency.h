@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class LabelMapWithAdjacency
-*   \brief This class is a LabelMap with additionnal adjacency information.
+*   \brief This class is a LabelMap with additional adjacency information.
 *
 *   The adjacency information is stored as a map of set of labels, in
 *   order to avoid duplicated neighbors.
@@ -160,7 +160,7 @@ public:
     MergeFunctorType mergeFunctor;
     typename LabelObjectType::Pointer loOut = mergeFunctor(lo1, lo2);
 
-    // Move every occurence of label2 to label1 in adjacency map
+    // Move every occurrence of label2 to label1 in adjacency map
     for(typename AdjacentLabelsContainerType::iterator it = m_AdjacencyMap[label2].begin();
         it != m_AdjacencyMap[label2].end(); ++it)
       {
