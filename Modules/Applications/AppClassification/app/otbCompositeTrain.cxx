@@ -23,6 +23,7 @@
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "itkStdStreamLogOutput.h"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -232,8 +233,7 @@ private:
   {
     if (HasValue("out"))
       {
-      // TODO : get dirname, and prepare name of temporary output
-      m_AppContainer["polystat"].App->SetParameterString("out", std::string("foo.xml"));
+      m_AppContainer["polystat"].App->SetParameterString("out", GetParameterString("out") + std::string("_stats.xml") );
       }
 
     // DoUpdateParameters on sub-application
