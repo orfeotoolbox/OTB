@@ -114,6 +114,16 @@ protected:
   Application* DecodeKey(std::string &key);
 
   /**
+   * Get the internal application with the given identifier
+   */
+  Application* GetInternalApplication(std::string id);
+
+  /**
+   * Get the description of an internal application
+   */
+  std::string GetInternalAppDescription(std::string id);
+
+  /**
    * Utility function to call Execute() on an internal app and get its output logs
    */
   void ExecuteInternal(std::string key);
@@ -121,7 +131,7 @@ protected:
   /**
    * Utility function to call UpdateParameters() on an internal app
    */
-  void UpdateParametersInternal(std::string key);
+  void UpdateInternalParameters(std::string key);
 
 private:
   CompositeApplication(const CompositeApplication &); //purposely not implemented

@@ -127,21 +127,39 @@ CompositeApplication
   return ret;
 }
 
+Application*
+CompositeApplication
+::GetInternalApplication(std::string id)
+{
+  if (!m_AppContainer.count(id))
+    otbAppLogFATAL("Unknown internal application : "<<id);
+  return m_AppContainer[id].App;
+}
+
+std::string
+CompositeApplication
+::GetInternalAppDescription(std::string id)
+{
+  if (!m_AppContainer.count(id))
+    otbAppLogFATAL("Unknown internal application : "<<id);
+  return m_AppContainer[id].Desc;
+}
+
 void
 CompositeApplication
 ::ExecuteInternal(std::string key)
 {
-  otbAppLogINFO(<< m_AppContainer[key].Desc <<"...");
-  m_AppContainer[key].App->Execute();
+  otbAppLogINFO(<< GetInternalAppDescription(key) <<"...");
+  GetInternalApplication(key)->Execute();
   otbAppLogINFO(<< "\n" << m_Oss.str());
   m_Oss.str(std::string(""));
 }
 
 void
 CompositeApplication
-::UpdateParametersInternal(std::string key)
+::UpdateInternalParameters(std::string key)
 {
-  m_AppContainer[key].App->UpdateParameters();
+  GetInternalApplication(key)->UpdateParameters();
 }
 
 } // end namespace Wrapper
