@@ -253,8 +253,15 @@ private:
         m_CalculatorList->SetNbOfSamplesAllClasses(countList, partitionMode);
         }
       break;
-      // percent 
+      // smallest class
       case 2:
+        {
+        otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
+        m_CalculatorList->SetMinimumNbOfSamplesByClass(partitionMode);
+        }
+      break;
+      // percent
+      case 3:
         {
         std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.percent.p"),' ');
         std::vector<double> percentList;
@@ -283,7 +290,7 @@ private:
       break;
 
       // total
-      case 3:
+      case 4:
         {
         std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.total.v"),' ');
         std::vector<unsigned long> totalList;
@@ -303,14 +310,6 @@ private:
           }
         otbAppLogINFO("Sampling strategy : set a constant number of samples for all classes");
         m_CalculatorList->SetTotalNumberOfSamples(totalList, partitionMode);
-        }
-      break;
-
-      // smallest class
-      case 4:
-        {
-        otbAppLogINFO("Sampling strategy : fit the number of samples based on the smallest class");
-        m_CalculatorList->SetMinimumNbOfSamplesByClass(partitionMode);
         }
       break;
       // all samples
