@@ -17,6 +17,8 @@
 #include "otbWrapperCompositeApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "otbOGRDataToSamplePositionFilter.h"
+#include "otbSamplingRateCalculator.h"
 
 namespace otb
 {
@@ -36,6 +38,14 @@ public:
   itkNewMacro(Self)
 
   itkTypeMacro(TrainImagesClassifier, otb::Wrapper::CompositeApplication)
+
+  /** filters typedefs*/
+  typedef otb::OGRDataToSamplePositionFilter<
+    FloatVectorImageType,
+    UInt8ImageType,
+    otb::PeriodicSampler>                           PeriodicSamplerType;
+
+  typedef otb::SamplingRateCalculator::MapRateType  MapRateType;
 
 protected:
 
@@ -114,10 +124,14 @@ void DoInit() ITK_OVERRIDE
     "Ratio between training and validation samples (0.0 = all training, 1.0 = "
     "all validation) (default = 0.5).");
   SetParameterFloat("sample.vtr", 0.5);
+  SetMaximumParameterFloatValue("sample.vtr",1.0);
+  SetMinimumParameterFloatValue("sample.vtr",0.0);
 
   ShareParameter("sample.vfn","training.cfield");
-  ShareParameter("sample.strategy","rates.strategy");
-  ShareParameter("sample.mim","rates.mim");
+
+  // hide sampling parameters
+  //ShareParameter("sample.strategy","rates.strategy");
+  //ShareParameter("sample.mim","rates.mim");
 
   // Classifier settings
   ShareParameter("classifier","training.classifier");
@@ -129,9 +143,13 @@ void DoInit() ITK_OVERRIDE
   Connect("select.layer", "polystat.layer");
 
   Connect("extraction.in",    "select.in");
-  Connect("extraction.vec",   "select.vec");
+  Connect("extraction.vec",   "select.out");
   Connect("extraction.field", "select.field");
   Connect("extraction.layer", "select.layer");
+
+  ShareParameter("ram","polystat.ram");
+  Connect("select.ram", "polystat.ram");
+  Connect("extraction.ram", "polystat.ram");
 
   Connect("select.rand", "training.rand");
 
@@ -154,23 +172,6 @@ void DoInit() ITK_OVERRIDE
 
 void DoUpdateParameters() ITK_OVERRIDE
 {
-  // TODO : if an image is present, check number of bands and fill training.field ListView
-  if (HasValue("io.il"))
-    {
-    FloatVectorImageListType* imageList = GetParameterImageList("io.il");
-    FloatVectorImageType::Pointer image = imageList->GetNthElement(imgIndex);
-    //image->UpdateOutputInformation();
-    unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
-    GetInternalApplication("training")->ClearChoices("feat");
-    std::string key("feat.value");
-    std::string value("value_");
-    for (unsigned int i=0 ; i<nbBands ; i++)
-      {
-      std::ostringstream oss;
-      oss << i;
-      GetInternalApplication("training")->AddChoices(key+oss.str(),value+oss.str());
-      }
-    }
 }
 
 void DoExecute() ITK_OVERRIDE
@@ -178,20 +179,172 @@ void DoExecute() ITK_OVERRIDE
   FloatVectorImageListType* imageList = GetParameterImageList("io.il");
   std::vector<std::string> vectorFileList = GetParameterStringList("io.vd");
   unsigned int nbInputs = imageList->Size();
+
+  // Prepare temporary file names
   std::string outModel(GetParameterString("io.out"));
   std::vector<std::string> polyStatOutputs;
   std::vector<std::string> ratesOutputs;
+  std::vector<std::string> sampleOutputs;
+  std::vector<std::string> sampleTrainOutputs;
+  std::vector<std::string> sampleValidOutputs;
+  std::string rateOut(outModel + "_rates.csv");
+  for (unsigned int i=0 ; i<nbInputs ; i++)
+    {
+    std::ostringstream oss;
+    oss <<i+1;
+    std::string strIndex(oss.str());
+    polyStatOutputs.push_back(outModel + "_stats_" + strIndex + ".xml");
+    ratesOutputs.push_back(outModel + "_rates_" + strIndex + ".csv");
+    sampleOutputs.push_back(outModel + "_samples_" + strIndex + ".sqlite");
+    sampleTrainOutputs.push_back(outModel + "_trainSamples_" + strIndex + ".sqlite");
+    sampleValidOutputs.push_back(outModel + "_validSamples_" + strIndex + ".sqlite");
+    }
 
   // Polygons stats
   for (unsigned int i=0 ; i<nbInputs ; i++)
     {
-    std::ostringstream oss;
-    oss << outModel << "_stats"<<i<<".xml";
-    polyStatOutputs.push_back(oss.str());
     GetInternalApplication("polystat")->SetParameterInputImage("in",imageList->GetNthElement(i));
     GetInternalApplication("polystat")->SetParameterString("vec",vectorFileList[i]);
-    GetInternalApplication("polystat")->SetParameterString("out",oss.str());
+    GetInternalApplication("polystat")->SetParameterString("out",polyStatOutputs[i]);
+    ExecuteInternal("polystat");
     }
+
+  // compute sampling rates
+  GetInternalApplication("rates")->SetParameterStringList("il",polyStatOutputs);
+  GetInternalApplication("rates")->SetParameterString("out",rateOut);
+  GetInternalApplication("rates")->SetParameterString("mim","proportional");
+  double vtr = GetParameterFloat("sample.vtr");
+  if (GetParameterInt("sample.bm") != 0)
+    {
+    GetInternalApplication("rates")->SetParameterString("strategy","smallest");
+    }
+  else
+    {
+    long mt = GetParameterInt("sample.mt");
+    long mv = GetParameterInt("sample.mv");
+    if (mt > -1)
+      {
+      if (mv > -1)
+        {
+        GetInternalApplication("rates")->SetParameterString("strategy","constant");
+        GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb",mt+mv);
+        }
+      else
+        {
+        if (vtr < 0.99999)
+          {
+          GetInternalApplication("rates")->SetParameterString("strategy","constant");
+          GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb", static_cast<int>((double) mt / (1.0 - vtr)));
+          }
+        else
+          {
+          // no limit on validation samples and almost no training : take all samples
+          GetInternalApplication("rates")->SetParameterString("strategy","all");
+          }
+        }
+      }
+    else
+      {
+      if (mv > -1)
+        {
+        if (vtr > 0.00001)
+          {
+          GetInternalApplication("rates")->SetParameterString("strategy","constant");
+          GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb", static_cast<int>((double) mv / vtr));
+          }
+        else
+          {
+          // no limit on training samples and almost no validation samples : take all samples
+          GetInternalApplication("rates")->SetParameterString("strategy","all");
+          }
+        }
+      else
+        {
+        GetInternalApplication("rates")->SetParameterString("strategy","all");
+        }
+      }
+    }
+  ExecuteInternal("rates");
+
+  // Select & extract samples
+  GetInternalApplication("select")->SetParameterString("sampler", "random");
+  GetInternalApplication("select")->SetParameterString("strategy","byclass");
+  GetInternalApplication("extraction")->SetParameterString("outfield", "prefix");
+  GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name","value_");
+  for (unsigned int i=0 ; i<nbInputs ; i++)
+    {
+    GetInternalApplication("select")->SetParameterInputImage("in",imageList->GetNthElement(i));
+    GetInternalApplication("select")->SetParameterString("vec",vectorFileList[i]);
+    GetInternalApplication("select")->SetParameterString("out",sampleOutputs[i]);
+    GetInternalApplication("select")->SetParameterString("instats",polyStatOutputs[i]);
+    GetInternalApplication("select")->SetParameterString("strategy.byclass.in",ratesOutputs[i]);
+    // select sample positions
+    ExecuteInternal("select");
+    // extract sample descriptors
+    ExecuteInternal("extraction");
+
+    // Split between training and validation
+    ogr::DataSource::Pointer source = ogr::DataSource::New(sampleOutputs[i], ogr::DataSource::Modes::Read);
+    ogr::DataSource::Pointer destTrain = ogr::DataSource::New(sampleTrainOutputs[i], ogr::DataSource::Modes::Overwrite);
+    ogr::DataSource::Pointer destValid = ogr::DataSource::New(sampleValidOutputs[i], ogr::DataSource::Modes::Overwrite);
+    // read sampling rates from ratesOutputs[i]
+    SamplingRateCalculator::Pointer rateCalculator = SamplingRateCalculator::New();
+    rateCalculator->Read(ratesOutputs[i]);
+    // Compute sampling rates for train and valid
+    const MapRateType &inputRates = rateCalculator->GetRatesByClass();
+    MapRateType trainRates;
+    MapRateType validRates;
+    otb::SamplingRateCalculator::TripletType tpt;
+    for (MapRateType::const_iterator it = inputRates.begin() ;
+         it != inputRates.end() ;
+         ++it)
+      {
+      unsigned long total = std::min(it->second.Required,it->second.Tot );
+      unsigned long neededValid = static_cast<unsigned long>((double) total * vtr );
+      unsigned long neededTrain = total - neededValid;
+      tpt.Tot = total;
+      tpt.Required = neededTrain;
+      tpt.Rate = (1.0 - vtr);
+      trainRates[it->first] = tpt;
+      tpt.Tot = neededValid;
+      tpt.Required = neededValid;
+      tpt.Rate = 1.0;
+      validRates[it->first] = tpt;
+      }
+
+    // Use an otb::OGRDataToSamplePositionFilter with 2 outputs
+    PeriodicSamplerType::SamplerParameterType param;
+    param.Offset = 0;
+    param.MaxJitter = 0;
+    PeriodicSamplerType::Pointer splitter = PeriodicSamplerType::New();
+    splitter->SetInput(imageList->GetNthElement(i));
+    splitter->SetOGRData(source);
+    splitter->SetOutputPositionContainerAndRates(destTrain, trainRates, 0);
+    splitter->SetOutputPositionContainerAndRates(destValid, validRates, 1);
+    splitter->SetFieldName(this->GetParameterString("sample.vfn"));
+    splitter->SetLayerIndex(0);
+    splitter->SetSamplerParameters(param);
+    splitter->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
+    AddProcess(splitter->GetStreamer(),"Split samples between training and validation...");
+    splitter->Update();
+    }
+
+  // train model
+  GetInternalApplication("training")->SetParameterStringList("io.vd",sampleTrainOutputs);
+  GetInternalApplication("training")->SetParameterStringList("valid.vd",sampleValidOutputs);
+  UpdateInternalParameters("training");
+  // set field names
+  FloatVectorImageType::Pointer image = imageList->GetNthElement(0);
+  unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
+  std::vector<std::string> selectedNames;
+  for (unsigned int i=0 ; i<nbBands ; i++)
+    {
+    std::ostringstream oss;
+    oss << i;
+    selectedNames.push_back("value_"+oss.str());
+    }
+  GetInternalApplication("training")->SetParameterStringList("feat",selectedNames);
+  ExecuteInternal("training");
 }
 
 };
