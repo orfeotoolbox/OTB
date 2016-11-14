@@ -33,11 +33,8 @@ else
 
 cat > "$OUT_DIR/monteverdi.sh" << EOF
 #!/bin/sh
-unset LD_LIBRARY_PATH
 
-. $OUT_DIR/bin/env_exports
-
-export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+. $OUT_DIR/otbenv.profile
 
 $OUT_DIR/bin/monteverdi "\$@"
 EOF
@@ -46,47 +43,69 @@ chmod +x "$OUT_DIR/monteverdi.sh"
 
 cat > "$OUT_DIR/mapla.sh" << EOF
 #!/bin/sh
-unset LD_LIBRARY_PATH
 
-. $OUT_DIR/bin/env_exports
-
-export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+. $OUT_DIR/otbenv.profile
 
 $OUT_DIR/bin/mapla "\$@"
 EOF
 
 chmod +x "$OUT_DIR/mapla.sh"
 
-cat > "$OUT_DIR/bin/env_exports" << EOF
-#!/bin/sh
-
-export LC_NUMERIC=C
-
-if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" == "0" ]; then
-  LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
-fi
-
-GDAL_DATA=$OUT_DIR/share/gdal
-GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
-
-export GDAL_DATA
-export GEOTIFF_CSV
-export LD_LIBRARY_PATH
-EOF
-
 cat > "$OUT_DIR/otbenv.profile" << EOF
 #!/bin/sh
-PATH=\$PATH:$OUT_DIR/bin
+
+# The below environment variables only affect current shell
+# So if you run again from a terminal. you need to run the script again
+# see how this is sourced in monteverdi.sh and mapla.sh
+
+# unset any existing LD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
+
+# if OTB_USE_SYSTEM_GTK is not set or is set to zero,
+# we must include <OUT_DIR>/lib/gtk because glib files are
+# installed there. 
+
+# OTB_USE_SYSTEM_GTK is not set by default
+if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" = "0" ]; then
+  LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+  export LD_LIBRARY_PATH
+fi
+
+# check and set OTB_APPLICATION_PATH
+if [ -z "\$OTB_APPLICATION_PATH" ] || [ "\$OTB_APPLICATION_PATH" = "" ]; then
+    OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+else
+    OTB_APPLICATION_PATH=\$(readlink -f "\$OTB_APPLICATION_PATH")
+    if ! [ "\$OTB_APPLICATION_PATH" = "$OUT_DIR/lib/otb/applications" ]; then 
+	OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications:\$OTB_APPLICATION_PATH
+    fi
+fi
+
+# Add bin direcotory to system PATH
+PATH=$OUT_DIR/bin:\$PATH
+
+# export PYTHONPATH to import otbApplication.py
 PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
+
+# set numeric locale to C
+LC_NUMERIC=C
+
+# set GDAL_DATA variable used by otb application
 GDAL_DATA=$OUT_DIR/share/gdal
+
+# set GEOTIFF_CSV variable used by otb application
 GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 
-export LC_NUMERIC=C
-export PATH
+# export variables
+export LC_NUMERIC
 export GDAL_DATA
 export GEOTIFF_CSV
+export OTB_APPLICATION_PATH
+export PATH
 export PYTHONPATH
+
 EOF
+
 
 chmod +x "$OUT_DIR/otbenv.profile"
 
