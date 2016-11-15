@@ -265,12 +265,12 @@ void DoExecute()
   
   if(selectedIdx.empty())
     {
-    // TODO: issue error here
+    otbAppLogFATAL(<<"No features have been selected to train the classifier on!");
     }
   
   if(selectedCFieldIdx.empty())
     {
-    // TODO: issue error here
+    otbAppLogFATAL(<<"No field has been selected for data labelling!");
     }
 
   const unsigned int nbFeatures = selectedIdx.size();
