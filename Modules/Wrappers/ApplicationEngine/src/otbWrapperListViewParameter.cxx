@@ -23,7 +23,12 @@ namespace Wrapper
 {
 
 ListViewParameter::ListViewParameter()
-  : m_CurrentChoice(0)
+  : m_ChoiceList(),
+    m_CurrentChoice(0),
+    m_SelectedItems(),
+    m_SelectedKeys(),
+    m_SelectedNames(),
+    m_SingleSelection(false)
 {
 }
 
@@ -150,6 +155,12 @@ ListViewParameter::SetSelectedItemsByNames()
 {
   std::vector<int> selectedItems;
   std::vector<std::string> names = this->GetChoiceNames();
+
+  if(m_SingleSelection && m_SelectedNames.size() > 1)
+    {
+    itkExceptionMacro(<<"Single selection mode is on, but there are "<<m_SelectedNames.size()<<" selected items");
+    }
+  
   for(unsigned int i=0; i<m_SelectedNames.size(); i++)
     {
     const std::string selectedName = m_SelectedNames[i];
@@ -186,6 +197,12 @@ ListViewParameter::SetSelectedItemsByKeys()
 {
   std::vector<int> selectedItems;
   std::vector<std::string> keys = this->GetChoiceKeys();
+
+if(m_SingleSelection && m_SelectedKeys.size() > 1)
+    {
+    itkExceptionMacro(<<"Single selection mode is on, but there are "<<m_SelectedKeys.size()<<" selected items");
+    }
+  
   for(unsigned int i=0; i<m_SelectedKeys.size(); i++)
     {
     const std::string selectedKey = m_SelectedKeys[i];
