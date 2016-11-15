@@ -109,11 +109,11 @@ private:
     AddParameter(ParameterType_ListView,  "feat", "Field names for training features.");
     SetParameterDescription("feat","List of field names in the input vector data to be used as features for training.");
 
-    AddParameter(ParameterType_String,"cfield","Field containing the class id for supervision");
+    AddParameter(ParameterType_ListView,"cfield","Field containing the class id for supervision");
     SetParameterDescription("cfield","Field containing the class id for supervision. "
       "Only geometries with this field available will be taken into account.");
-    SetParameterString("cfield","class");
-
+    SetListViewSingleSelectionMode("cfield",true);
+      
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Index of the layer to use in the input vector file.");
     MandatoryOff("layer");
@@ -155,14 +155,27 @@ private:
       ogr::Feature feature = layer.ogr().GetNextFeature();
 
       ClearChoices("feat");
+      ClearChoices("cfield");
+      
       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
         {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
         key = item;
         std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
         std::transform(key.begin(), end, key.begin(), tolower);
-        key="feat."+key.substr(0, end - key.begin());
-        AddChoice(key,item);
+        
+        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        
+        if(fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal)
+          {
+          std::string tmpKey="feat."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
+        if(fieldType == OFTInteger || fieldType == OFTInteger64)
+          {
+          std::string tmpKey="cfield."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
         }
       }
   }
@@ -248,13 +261,29 @@ void DoExecute()
 
   // Prepare selected field names (their position may change between two inputs)
   std::vector<int> selectedIdx = GetSelectedItems("feat");
+  std::vector<int> selectedCFieldIdx = GetSelectedItems("cfield");
+  
+  if(selectedIdx.empty())
+    {
+    // TODO: issue error here
+    }
+  
+  if(selectedCFieldIdx.empty())
+    {
+    // TODO: issue error here
+    }
+
   const unsigned int nbFeatures = selectedIdx.size();
   std::vector<std::string> fieldNames = GetChoiceNames("feat");
+  std::vector<std::string> cFieldNames = GetChoiceNames("cfield");
   std::vector<std::string> selectedNames(nbFeatures);
   for (unsigned int i=0 ; i<nbFeatures ; i++)
     {
     selectedNames[i] = fieldNames[selectedIdx[i]];
     }
+
+  std::string selectedCFieldName = cFieldNames[selectedCFieldIdx.front()];
+
   std::vector<int> featureFieldIndex(nbFeatures, -1);
   int cFieldIndex = -1;
 
@@ -307,9 +336,9 @@ void DoExecute()
 
     // Check all needed fields are present :
     //   - check class field
-    cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
+    cFieldIndex = feature.ogr().GetFieldIndex(selectedCFieldName.c_str());
     if (cFieldIndex < 0)
-      otbAppLogFATAL("The field name for class label ("<<GetParameterString("cfield")
+      otbAppLogFATAL("The field name for class label ("<<selectedCFieldName
         <<") has not been found in the input vector file! Choices are "<< availableFields);
     //   - check feature fields
     for (unsigned int i=0 ; i<nbFeatures ; i++)
