@@ -71,7 +71,7 @@ int otbWrapperParameterList(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   // try to set a proxy to "hidden" in the first group
   std::string proxyKey("num");
-  if (! parameters->SetParameter(proxyParam.GetPointer(), proxyKey))
+  if (! parameters->ReplaceParameter(proxyKey, proxyParam.GetPointer()))
     {
     std::cout << "Failed to replace with proxy parameter" << std::endl;
     return EXIT_FAILURE;
