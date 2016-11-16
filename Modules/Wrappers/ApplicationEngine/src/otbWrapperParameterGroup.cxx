@@ -732,9 +732,14 @@ ParameterGroup::SetParameter(Parameter::Pointer p, std::string &key)
 }
 
 Parameter::Pointer
-ParameterGroup::GetParameterByIndex(unsigned int i)
+ParameterGroup::GetParameterByIndex(unsigned int i, bool follow)
 {
-  return m_ParameterList[i];
+  Parameter *param = m_ParameterList[i];
+  if (follow)
+    {
+    param = this->ResolveParameter(param);
+    }
+  return Parameter::Pointer(param);
 }
 
 Parameter::Pointer

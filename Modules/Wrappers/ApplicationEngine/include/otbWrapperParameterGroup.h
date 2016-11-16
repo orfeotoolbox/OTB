@@ -66,7 +66,7 @@ public:
    * or the path to a choice value */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
-  Parameter::Pointer GetParameterByIndex(unsigned int i);
+  Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow=true);
 
   Parameter::Pointer GetParameterByKey(std::string name, bool follow=true);
 
