@@ -20,6 +20,7 @@
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
+#include "otbWrapperParameterKey.h"
 
 namespace otb
 {
@@ -89,7 +90,7 @@ CompositeApplication
   proxyParam->SetTarget(target);
   proxyParam->SetName(rawParam1->GetName());
   proxyParam->SetDescription(rawParam1->GetDescription());
-  return app1->GetParameterList()->SetParameter(proxyParam.GetPointer(),key1);
+  return app1->GetParameterList()->ReplaceParameter(key1, proxyParam.GetPointer());
 }
 
 bool
@@ -103,6 +104,11 @@ CompositeApplication
   Application *app = DecodeKey(internalKeyCheck);
   Parameter* rawTarget = app->GetParameterByKey(internalKeyCheck, false);
 
+  // Check source
+  ParameterKey pKey(localKey);
+  std::string proxyKey(pKey.GetLastElement());
+
+  // Create and setup proxy parameter
   ProxyParameter::Pointer proxyParam = ProxyParameter::New();
   ProxyParameter::ProxyTargetType target;
   target.first = app->GetParameterList();
@@ -110,7 +116,20 @@ CompositeApplication
   proxyParam->SetTarget(target);
   proxyParam->SetName( name.empty() ? rawTarget->GetName() : name);
   proxyParam->SetDescription(desc.empty() ? rawTarget->GetDescription() : desc);
-  return this->GetParameterList()->SetParameter(proxyParam.GetPointer(),localKey);
+  proxyParam->SetKey(proxyKey);
+
+  // Get group parameter where the proxy should be added
+  Parameter::Pointer baseParam(proxyParam.GetPointer());
+  ParameterGroup *parentGroup = this->GetParameterList();
+  if (localKey.find('.') != std::string::npos)
+    {
+    Parameter::Pointer parentParam = this->GetParameterList()->GetParameterByKey(pKey.GetRoot());
+    parentGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
+    baseParam->SetRoot(parentGroup);
+    parentGroup->AddChild(baseParam);
+    }
+  parentGroup->AddParameter(baseParam);
+  return true;
 }
 
 Application*

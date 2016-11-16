@@ -47,10 +47,9 @@ public:
 
   void AddParameter(Parameter::Pointer p);
 
-  /** Method to add or substitute a parameter in a group. If there is already
-   *  a parameter with the given key, the parameter is replaced.
+  /** Method to substitute a parameter in a group. 
    *  The function returns true on success, false on failure */
-  bool SetParameter(Parameter::Pointer p, std::string &key);
+  bool ReplaceParameter(std::string &key, Parameter::Pointer p);
 
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
@@ -66,7 +65,7 @@ public:
    * or the path to a choice value */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
-  Parameter::Pointer GetParameterByIndex(unsigned int i);
+  Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow=true);
 
   Parameter::Pointer GetParameterByKey(std::string name, bool follow=true);
 
