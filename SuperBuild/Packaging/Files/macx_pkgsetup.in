@@ -36,6 +36,7 @@ SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@
 I_AM_XDK=@IS_XDK@
 
 if [ "$I_AM_XDK" = true ] ; then
+
     sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
     sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKConfig.cmake
     sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
@@ -90,6 +91,25 @@ export GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 $OUT_DIR/bin/monteverdi "\$@"
 EOF
 
+    cat > "$OUT_DIR/Monteverdi.app/Contents/Resources/qt.conf" << EOF
+[Paths]
+Translations=$OUT_DIR/lib/qt4/translations
+Plugins=$OUT_DIR/lib/qt4/plugins
+EOF
+
+    cat > "$OUT_DIR/Mapla.app/Contents/Resources/qt.conf" << EOF
+[Paths]
+Translations=$OUT_DIR/lib/qt4/translations
+Plugins=$OUT_DIR/lib/qt4/plugins
+EOF
+
+    cat > "$OUT_DIR/bin/qt.conf" << EOF
+[Paths]
+Translations=$OUT_DIR/lib/qt4/translations
+Plugins=$OUT_DIR/lib/qt4/plugins
+EOF
+        
+    
     chmod +x "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
 
     cp "Mapla.app/Contents/Info.plist" "Monteverdi.app/Contents/Info.plist"
@@ -109,7 +129,7 @@ cat > "$OUT_DIR/otbenv.profile" << EOF
 PATH=\$PATH:$OUT_DIR/bin
 PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
 GDAL_DATA=$OUT_DIR/share/gdal
-GEOTIFF_CSV=$OUT_DIR/share/espg_csv
+GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 
 export LC_NUMERIC=C
 export PATH

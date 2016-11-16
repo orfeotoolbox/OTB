@@ -122,7 +122,7 @@ public:
   TreeWidget( QWidget* p =NULL );
 
   /** \brief Destructor. */
-  virtual ~TreeWidget();
+  ~TreeWidget() ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -149,17 +149,17 @@ protected:
   //
   // QTreeWidget overloads.
 
-  virtual QStringList mimeTypes() const;
+  QStringList mimeTypes() const ITK_OVERRIDE;
 
-  virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
+  QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const ITK_OVERRIDE;
 
-  virtual void dragEnterEvent( QDragEnterEvent* event );
-  virtual void dragMoveEvent( QDragMoveEvent* event );
-  virtual void dragLeaveEvent( QDragLeaveEvent* event );
-  virtual void dropEvent( QDropEvent* event );
+  void dragEnterEvent( QDragEnterEvent* event ) ITK_OVERRIDE;
+  void dragMoveEvent( QDragMoveEvent* event ) ITK_OVERRIDE;
+  void dragLeaveEvent( QDragLeaveEvent* event ) ITK_OVERRIDE;
+  void dropEvent( QDropEvent* event ) ITK_OVERRIDE;
 
-  virtual Qt::DropActions supportedDropActions() const;
-  virtual void startDrag( Qt::DropActions supportedActions );
+  Qt::DropActions supportedDropActions() const ITK_OVERRIDE;
+  void startDrag( Qt::DropActions supportedActions ) ITK_OVERRIDE;
 
 //
 // Protected attributes.

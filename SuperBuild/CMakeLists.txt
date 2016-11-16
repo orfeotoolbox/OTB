@@ -14,6 +14,8 @@ include(ExternalProject)
 
 include(OTBCheckCpp11Keywords)
 
+include(OTBCheckTargetSystemArch)
+
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
@@ -23,40 +25,6 @@ if(APPLE)
     cmake_policy(SET CMP0042 NEW)
   endif()
   set(CMAKE_MACOSX_RPATH TRUE)
-endif()
-
-set(OTB_COMPILER_ARCH_IS_X64 TRUE)
-
-if(MSVC)
-  execute_process(
-    COMMAND ${CMAKE_C_COMPILER}
-    ERROR_VARIABLE ev
-    OUTPUT_VARIABLE ov
-    OUTPUT_QUIET
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-  
-  set(OTB_COMPILER_ARCH_IS_X64 TRUE)
-  set(OTB_COMPILER_ARCH x64)
-  if("${ev}" MATCHES "x86")
-    set(OTB_COMPILER_ARCH x86)
-    set(OTB_COMPILER_ARCH_IS_X64 FALSE)
-  endif()
-
-endif() #MSVC
-
-if(UNIX)
-  execute_process(
-    COMMAND uname -m
-    ERROR_VARIABLE ev
-    OUTPUT_VARIABLE ov
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  set(OTB_COMPILER_ARCH ${ov})
-  set(OTB_COMPILER_ARCH_IS_X64 FALSE)
-  if("${ov}" STREQUAL "x86_64")
-    set(OTB_COMPILER_ARCH_IS_X64 TRUE)
-  endif()
 endif()
 
 # use, i.e. don't skip the full RPATH for the build tree
@@ -87,7 +55,17 @@ set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
 mark_as_advanced(DOWNLOAD_LOCATION)
 
 # General options
-option(ENABLE_OTB_LARGE_INPUTS " Use the OTB-LargeInputs for testing" OFF)
+option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
+mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  find_path(OTB_DATA_LARGEINPUT_ROOT
+    NAMES OTBData.readme
+    HINTS $ENV{OTB_DATA_LARGEINPUT_ROOT}
+  )
+  mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
+endif()
+
+
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
 option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
@@ -288,9 +266,6 @@ option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
 
-if(ENABLE_OTB_LARGE_INPUTS)
-  find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
-endif()
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
@@ -342,6 +317,9 @@ if(FROM_SUPERBUILD_LIST)
     message(STATUS "  Using SuperBuild version of ${item}")
   endforeach()
 endif()
+
+message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
+message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")

@@ -99,7 +99,7 @@ public:
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~ShaderWidget();
+  ~ShaderWidget() ITK_OVERRIDE;
 
   /**
    */
@@ -138,7 +138,7 @@ protected:
 private:
 
   /** */
-  virtual void virtual_SetSettings( ImageSettings * );
+  void virtual_SetSettings( ImageSettings * ) ITK_OVERRIDE;
 
 //
 // Private attributes.

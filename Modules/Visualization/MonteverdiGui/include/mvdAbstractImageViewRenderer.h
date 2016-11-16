@@ -120,7 +120,7 @@ public:
   /**
    * Destructor.
    */
-  virtual ~AbstractImageViewRenderer(){};
+  ~AbstractImageViewRenderer() ITK_OVERRIDE{};
 
   /**
    */

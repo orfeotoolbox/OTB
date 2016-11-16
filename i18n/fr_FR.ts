@@ -37,7 +37,7 @@
     <name>Mapla</name>
     <message>
         <source>Question!</source>
-        <translation>Question !</translation>
+        <translation type="obsolete">Question !</translation>
     </message>
     <message>
         <source>The following exception has been caught while initializing the software:
@@ -45,7 +45,7 @@
 %1
 
 The application may not function as expected. Do you want to continue?</source>
-        <translation>L&apos;exception suivante a été rattrapé pendant l&apos;inialisation du logiciel :
+        <translation type="obsolete">L&apos;exception suivante a été rattrapé pendant l&apos;inialisation du logiciel :
 
 %1
 
@@ -238,8 +238,8 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <translation></translation>
     </message>
     <message>
-        <source>Version M.m.pl (codename)</source>
-        <translation>Version M.m.pl (nom_de_code)</translation>
+        <source>OTB version M.m.pl (codename)</source>
+        <translation>Version OTB M.m.pl (nom_de_code)</translation>
     </message>
 </context>
 <context>
@@ -374,7 +374,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <translation></translation>
     </message>
     <message>
-        <source>Failed to instanciate OTB-application &apos;%1&apos;.</source>
+        <source>Failed to instantiate OTB-application &apos;%1&apos;.</source>
         <translation>Échec lors de l&apos;instanciation de l&apos;application OTB &apos;%1&apos;.</translation>
     </message>
 </context>
@@ -759,264 +759,18 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
 </context>
 <context>
-    <name>mvd::DatabaseBrowserController</name>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Inconsistent Dataset disabled</source>
-        <translation type="obsolete">Jeu de données inconsistent désactivé</translation>
-    </message>
-    <message>
-        <source>Warning!</source>
-        <translation>Avertissement !</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
-        <translation>Êtes-vous certain de vouloir supprimer le jeu de données &apos;%1&apos; ?</translation>
-    </message>
-    <message>
-        <source>Failed to load dataset.
-
-%1</source>
-        <translation>Échec lors du chargement du jeu de données
-
-%1</translation>
-    </message>
-    <message>
-        <source>Failed to load dataset.
-</source>
-        <translation>Échec lors du chargement du jeu de données.</translation>
-    </message>
-    <message>
-        <source>Data is not consistent.</source>
-        <translation>Les données sont incohérentes.</translation>
-    </message>
-    <message>
-        <source>
-- &apos;%1&apos;</source>
-        <translation type="obsolete">- &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Delete:%1</source>
-        <translation type="obsolete">Supprimer : %1</translation>
-    </message>
-    <message>
-        <source>Error!</source>
-        <translation>Erreur !</translation>
-    </message>
-    <message>
-        <source>Failed to remove &apos;%1&apos;.</source>
-        <translation>Impossible de supprimer &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>New group</source>
-        <translation>Nouveau groupe</translation>
-    </message>
-    <message>
-        <source>Also delete:</source>
-        <translation>Supprimer aussi :</translation>
-    </message>
-</context>
-<context>
-    <name>mvd::DatabaseBrowserWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulaire</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <source>Datasets</source>
-        <translation type="obsolete">Jeux de données</translation>
-    </message>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Search Dataset ...</source>
-        <translation type="obsolete">Rechercher un jeu de données...</translation>
-    </message>
-    <message>
-        <source>Search Dataset...</source>
-        <translation>Rechercher jeu de données...</translation>
-    </message>
-</context>
-<context>
-    <name>mvd::DatabaseBrowserWidgetTest</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulaire</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Search Dataset...</source>
-        <translation>Rechercher jeu de données...</translation>
-    </message>
-</context>
-<context>
-    <name>mvd::DatabaseConnection</name>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SQLite database file &apos;%1&apos; not found!</source>
-        <translation>Fichier de base de données SQLite &apos;%1&apos; non trouvé !</translation>
-    </message>
-    <message>
-        <source>Failed to open database: </source>
-        <translation>Échec lors de l&apos;ouverture de la base de données :</translation>
-    </message>
-    <message>
-        <source>Failed to prepare query: </source>
-        <translation>Échec lors de la préparation de la requête :</translation>
-    </message>
-    <message>
-        <source>Failed to execute query: </source>
-        <translation>Échec de lors de l&apos;exécution de la requête :</translation>
-    </message>
-    <message>
-        <source>Failed to batch query: </source>
-        <translation>Échec lors de l&apos;exécution d&apos;une requête de traitement par lot :</translation>
-    </message>
-</context>
-<context>
-    <name>mvd::DatabaseError</name>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <source>No database error</source>
-        <translation>Pas d&apos;erreur de base de données</translation>
-    </message>
-    <message>
-        <source>Database connection error</source>
-        <translation>Erreur de connexion à la base de données</translation>
-    </message>
-    <message>
-        <source>SQL statement syntax error</source>
-        <translation>Erreur de syntaxe de la requête SQL</translation>
-    </message>
-    <message>
-        <source>Database transaction failed error</source>
-        <translation>Erreur durant la transaction avec la base de données</translation>
-    </message>
-    <message>
-        <source>Unknown database error</source>
-        <translation>Erreur inconnue (base de données)</translation>
-    </message>
-</context>
-<context>
-    <name>mvd::DatabaseModel</name>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Failed to remove file &apos;%1&apos;.</source>
-        <translation type="obsolete">Échec de la suppression du fichier &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Failed to access parent directory of &apos;%1&apos;.</source>
-        <translation type="obsolete">Echec de l&apos;accès au répertoire parent &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Failed to remove dataset directory &apos;%1&apos;.</source>
-        <translation type="obsolete">Echec lors de la suppression du répertoire du dataset &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>%1 outdated datasets. Please clear cache directory.</source>
-        <translation>%1 datasets obsolètes. Veuillez vider votre répertoire de cache.</translation>
-    </message>
-    <message>
-        <source>Database format version %1 is not supported anymore.</source>
-        <translation>La version &apos;%1&apos; du format de la base de données n&apos;est plus supportée.</translation>
-    </message>
-</context>
-<context>
-    <name>mvd::DatabaseQueries</name>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>mvd::DatabaseTreeWidget</name>
-    <message>
-        <source></source>
-        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Delete Dataset</source>
-        <translation type="obsolete">Supprimer dataset</translation>
-    </message>
-    <message>
-        <source>Rename Dataset</source>
-        <translation type="obsolete">Renommer dataset</translation>
-    </message>
-    <message>
-        <source>Delete dataset</source>
-        <translation>Supprimer le jeu de données</translation>
-    </message>
-    <message>
-        <source>Rename dataset</source>
-        <translation>Renommer le jeu de données</translation>
-    </message>
-    <message>
-        <source>Add group</source>
-        <translation>Ajouter un groupe</translation>
-    </message>
-    <message>
-        <source>Delete group</source>
-        <translation>Supprimer un groupe</translation>
-    </message>
-    <message>
-        <source>Rename group</source>
-        <translation>Renommer un groupe</translation>
-    </message>
-</context>
-<context>
     <name>mvd::DatasetCreationProgressDialog</name>
     <message>
         <source>Please wait while processing...</source>
-        <translation>Traitement en cours. Merci d&apos;attendre...</translation>
+        <translation type="obsolete">Traitement en cours. Merci d&apos;attendre...</translation>
     </message>
     <message>
         <source>Importing image:</source>
-        <translation>Import de l&apos;image:</translation>
-    </message>
-    <message>
-        <source>/home/otbval/LargeInput/mvd2/dataset.ds</source>
-        <translation></translation>
+        <translation type="obsolete">Import de l&apos;image:</translation>
     </message>
     <message>
         <source>into dataset:</source>
-        <translation>dans le jeu de données :</translation>
-    </message>
-    <message>
-        <source>/home/user/cache/mvd2/dataset.ds</source>
-        <translation></translation>
+        <translation type="obsolete">dans le jeu de données :</translation>
     </message>
     <message>
         <source></source>
@@ -1049,63 +803,63 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>unknown</source>
-        <translation>inconnu(e)</translation>
+        <translation type="obsolete">inconnu(e)</translation>
     </message>
     <message>
         <source>File Informations</source>
-        <translation>Informations fichier</translation>
+        <translation type="obsolete">Informations fichier</translation>
     </message>
     <message>
         <source>File</source>
-        <translation>Fichier</translation>
+        <translation type="obsolete">Fichier</translation>
     </message>
     <message>
         <source>Directory</source>
-        <translation>Répertoire</translation>
+        <translation type="obsolete">Répertoire</translation>
     </message>
     <message>
         <source>Size in Bytes</source>
-        <translation>Taille (en octets)</translation>
+        <translation type="obsolete">Taille (en octets)</translation>
     </message>
     <message>
         <source>Image Informations</source>
-        <translation>Informations image</translation>
+        <translation type="obsolete">Informations image</translation>
     </message>
     <message>
         <source>Dimension</source>
-        <translation>Dimension</translation>
+        <translation type="obsolete">Dimension</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Origine</translation>
+        <translation type="obsolete">Origine</translation>
     </message>
     <message>
         <source>Number of components</source>
-        <translation>Nombre de composantes</translation>
+        <translation type="obsolete">Nombre de composantes</translation>
     </message>
     <message>
         <source>Block size</source>
-        <translation>Taille de bloc</translation>
+        <translation type="obsolete">Taille de bloc</translation>
     </message>
     <message>
         <source>Placename</source>
-        <translation>Toponyme</translation>
+        <translation type="obsolete">Toponyme</translation>
     </message>
     <message>
         <source>Metadatas</source>
-        <translation>Méta-données</translation>
+        <translation type="obsolete">Méta-données</translation>
     </message>
     <message>
         <source>Sensor</source>
-        <translation>Capteur</translation>
+        <translation type="obsolete">Capteur</translation>
     </message>
     <message>
         <source>Default RGB</source>
-        <translation>RVB par défaut</translation>
+        <translation type="obsolete">RVB par défaut</translation>
     </message>
     <message>
         <source>Estimated ground spacing</source>
-        <translation>Résolution au sol (estimée)</translation>
+        <translation type="obsolete">Résolution au sol (estimée)</translation>
     </message>
     <message>
         <source>Exception caught when checking version of dataset &apos;%1&apos;: </source>
@@ -1117,7 +871,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Exception caught when checking version of dataset &apos;%1&apos;.</source>
-        <translation>Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;.</translation>
+        <translation type="obsolete">Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;.</translation>
     </message>
 </context>
 <context>
@@ -1132,15 +886,15 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <name>mvd::DatasetPropertiesWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="obsolete">Formulaire</translation>
     </message>
     <message>
         <source>Property</source>
-        <translation>Propriété</translation>
+        <translation type="obsolete">Propriété</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation type="obsolete">Valeur</translation>
     </message>
     <message>
         <source></source>
@@ -1249,7 +1003,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>%1: Generating histogram (M)...</source>
-        <translation type="obsolete">%1: Generation de l&apos;histogramme (M)...</translation>
+        <translation>%1: Génération de l&apos;histogramme (M)...</translation>
     </message>
     <message>
         <source>%1: Histogram (M) generated (%2 ms).</source>
@@ -1270,6 +1024,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <message>
         <source>%1: Histogram written (%2 ms)...</source>
         <translation>%1 : histogram écrit (%2 ms)...</translation>
+    </message>
+    <message>
+        <source>Zero relevant pixels found when computing histogram (probably because of no-data settings)</source>
+        <translation>Aucun pixel utilisable lors du calcul d'histogramme (probablement à cause des réglages no-data)</translation>
     </message>
 </context>
 <context>
@@ -1484,7 +1242,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>The selected directory seems to be an previous mvd2 directory, nevertheless we will create a new mvd2 repository into the selected directory.</source>
-        <translation>Le répertoire sélectionné semble être un répertoire mvd2 antérieur ; néanmoins nous allons créer un nouveau dépôt mvd2 à l&apos;intérieur du répertoire sélectionné.</translation>
+        <translation type="obsolete">Le répertoire sélectionné semble être un répertoire mvd2 antérieur ; néanmoins nous allons créer un nouveau dépôt mvd2 à l&apos;intérieur du répertoire sélectionné.</translation>
     </message>
     <message>
         <source>Geoid file &apos;%1&apos; not found!</source>
@@ -1492,15 +1250,31 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>An error occured while loading the geoid file, no geoid file will be used:</source>
-        <translation>Une erreur s&apos;est produite durant le chargement du fichier géoide, aucune géoide ne sera utilisée :</translation>
+        <translation type="obsolete">Une erreur s&apos;est produite durant le chargement du fichier géoide, aucune géoide ne sera utilisée :</translation>
     </message>
     <message>
         <source>An error occured while loading the DEM directory, no DEM will be used:</source>
-        <translation>Une erreur s&apos;est produite durant le chargement du répertoire MNT, aucun MNT ne sera utilisé :</translation>
+        <translation type="obsolete">Une erreur s&apos;est produite durant le chargement du répertoire MNT, aucun MNT ne sera utilisé :</translation>
     </message>
     <message>
         <source>Class &apos;I18nCoreApplication&apos; instance must be provided a QCoreApplication&apos; pointer at construction time!</source>
         <translation>Il faut fournir un pointeur vers une instance de &quot;QCoreApplication&quot; lors de la construction d&apos;une instance de la classe &quot;I18nCoreApplication&quot; !</translation>
+    </message>
+    <message>
+        <source>Cannot access settings file.</source>
+        <translation>Impossible d'accéder au fichiers des paramètres</translation>
+    </message>
+    <message>
+        <source>Bad settings file format.</source>
+        <translation>Mauvais format pour le fichier de paramètres</translation>
+    </message>
+    <message>
+        <source>An error occurred while loading the geoid file, no geoid file will be used:</source>
+        <translation>Erreur lors du chargement du fichier géoide, aucun géoide ne sera utilisé:</translation>
+    </message>
+    <message>
+        <source>An error occurred while loading the DEM directory, no DEM will be used:</source>
+        <translation>Erreur lors du chargement du répertoire DEM, aucun DEM ne sera utilisé:</translation>
     </message>
 </context>
 <context>
@@ -1516,7 +1290,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Do you want to specify a custom repository location?</source>
-        <translation>Voulez-vous définir un chemin de dépôt personnalisé ?</translation>
+        <translation type="obsolete">Voulez-vous définir un chemin de dépôt personnalisé ?</translation>
     </message>
     <message>
         <source>Please, select directory where the </source>
@@ -1536,7 +1310,7 @@ Default cache-directory location is: &apos;%1&apos;.
 Warning:
 - Your account needs to have write access to this directory;
 - Please be aware that this directory can consume significant disk space.</source>
-        <translation>Monteverdi maintient un dépôt où sont stockées des données additionnelles liées à chaque image (par exemple, réglage d&apos;affichage, histogrammes, aperçus etc.).
+        <translation type="obsolete">Monteverdi maintient un dépôt où sont stockées des données additionnelles liées à chaque image (par exemple, réglage d&apos;affichage, histogrammes, aperçus etc.).
 
 L&apos;emplacement par défaut du répertoire de cache est : &apos;%1&apos;.
 
@@ -1546,15 +1320,15 @@ Attention :
     </message>
     <message>
         <source>Please, select directory where the Monteverdi cache repository will be stored.</source>
-        <translation>Veuillez sélectionner le répertoire où sera stocké le dépôt de Monteverdi.</translation>
+        <translation type="obsolete">Veuillez sélectionner le répertoire où sera stocké le dépôt de Monteverdi.</translation>
     </message>
     <message>
         <source>Welcome new Monteverdi user!</source>
-        <translation>Bienvenu, nouvel utilisateur Monteverdi !</translation>
+        <translation type="obsolete">Bienvenu, nouvel utilisateur Monteverdi !</translation>
     </message>
     <message>
         <source>The selected directory already contain a mvd2 directory, no new database will be created</source>
-        <translation>The répertoire sélectionné contien déjà un répertoire mvd2 ; aucune nouvelle base de données ne va être créée</translation>
+        <translation type="obsolete">The répertoire sélectionné contien déjà un répertoire mvd2 ; aucune nouvelle base de données ne va être créée</translation>
     </message>
 </context>
 <context>
@@ -1566,7 +1340,7 @@ Attention :
     </message>
     <message>
         <source>Importing image &apos;%1&apos; as dataset into cache directory...</source>
-        <translation>Image &apos;%1&apos; en cours d&apos;import comme dataset dans le répertoire de cache...</translation>
+        <translation type="obsolete">Image &apos;%1&apos; en cours d&apos;import comme dataset dans le répertoire de cache...</translation>
     </message>
     <message>
         <source>Loading image &apos;%1&apos;...</source>
@@ -1690,7 +1464,7 @@ Si vous exécutez cette application via une système d&apos;écran déporté, le
     </message>
     <message>
         <source>Unable to list suppored OpenGL versions using QGLFormat. Qt version is %1. Please upgrade to Qt 4.7.0 or newer.</source>
-        <translation>Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
+        <translation type="obsolete">Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
     </message>
     <message>
         <source>Runtime version of OpenGL used by Qt %1: %2.%3.</source>
@@ -1715,6 +1489,10 @@ Si vous exécutez cette application via une système d&apos;écran déporté, le
         <translation>Exeception rattrapée pendant la sauvegarde de la capture d&apos;écran dans le fichier &apos;%1&apos; :
 
 %2</translation>
+    </message>
+    <message>
+        <source>Unable to list supported OpenGL versions using QGLFormat. Qt version is %1. Please upgrade to Qt 4.7.0 or newer.</source>
+        <translation>Impossible de lister les versions OpenGL supportées à partir du QGLFormat. La version de Qt est %1. Veuillez mettre à jour Qt à la version 4.7.0 ou ultérieure.</translation>
     </message>
 </context>
 <context>
@@ -2926,7 +2704,7 @@ p, li { white-space: pre-wrap; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mouse wheel&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rotate layers&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Zoom in out&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;td&gt;
@@ -2934,7 +2712,7 @@ p, li { white-space: pre-wrap; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mouse wheel&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Zoom in out&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rotate layers&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;td&gt;
@@ -3431,7 +3209,7 @@ p, li { white-space: pre-wrap; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Molette&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rotation circulaire des couches dans de la pile&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Zoom avant/arrière&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;td&gt;
@@ -3439,7 +3217,7 @@ p, li { white-space: pre-wrap; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Molette&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Zoom avant/arrière&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rotation circulaire des couches dans de la pile&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;td&gt;
@@ -4138,11 +3916,11 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>&amp;Import image...</source>
-        <translation>&amp;Importer image...</translation>
+        <translation type="obsolete">&amp;Importer image...</translation>
     </message>
     <message>
         <source>Import image...</source>
-        <translation>Importer image...</translation>
+        <translation type="obsolete">Importer image...</translation>
     </message>
     <message>
         <source>Ctrl++</source>
@@ -4226,7 +4004,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Enable OTB_USE_QT4 preprocessor definition at compile time!</source>
-        <translation>Activer la définition de pré-processeur OTB_USE_QT4 lors de la compilation !</translation>
+        <translation type="obsolete">Activer la définition de pré-processeur OTB_USE_QT4 lors de la compilation !</translation>
     </message>
     <message>
         <source>Layer stack</source>
@@ -4316,6 +4094,82 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     <message>
         <source>Location</source>
         <translation>Localisation</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::MaplaApplication</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::MaplaMainWindow</name>
+    <message>
+        <source>Main window</source>
+        <translation>Fenêtre principale</translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation>&amp;Fichier</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation>Aid&amp;e</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation>Éditio&amp;n</translation>
+    </message>
+    <message>
+        <source>&amp;Quit</source>
+        <translation>&amp;Quitter</translation>
+    </message>
+    <message>
+        <source>Quit application.</source>
+        <translation>Quitter l&apos;application.</translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation>Ctrl+Q</translation>
+    </message>
+    <message>
+        <source>&amp;Import image...</source>
+        <translation>&amp;Importer image...</translation>
+    </message>
+    <message>
+        <source>Import image...</source>
+        <translation>Importer une image...</translation>
+    </message>
+    <message>
+        <source>Import image-file.</source>
+        <translation>Importer un fichier image.</translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation>Ctrl+O</translation>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation>&amp;À propos de...</translation>
+    </message>
+    <message>
+        <source>About...</source>
+        <translation>À propos de...</translation>
+    </message>
+    <message>
+        <source>Prefere&amp;nces</source>
+        <translation>Préfére&amp;nces</translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Enable OTB_USE_QT4 preprocessor definition at compile time!</source>
+        <translation>Activer la définition de pré-processeur OTB_USE_QT4 lors de la compilation !</translation>
     </message>
 </context>
 <context>
@@ -4647,7 +4501,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Resolution</source>
-        <translation type="obsolete">Resolution</translation>
+        <translation type="obsolete">Résolution</translation>
     </message>
     <message>
         <source>OTB filter</source>
@@ -4684,6 +4538,10 @@ Merci d&apos;en sélectionner un autre.</translation>
     <message>
         <source>Minimum size:</source>
         <translation>Taille minimum :</translation>
+    </message>
+    <message>
+        <source>pixel(s)</source>
+        <translation>pixel(s)</translation>
     </message>
 </context>
 <context>
@@ -4892,6 +4750,46 @@ Merci d&apos;en sélectionner un autre.</translation>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Read tag &apos;%1&apos; does not match expected tag &apos;%2&apos;.</source>
+        <translation>L'étiquette lue &apos;%1&apos; ne correspond pas à l'étiquette attendue &apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <source>Invalid tag name &apos;%1&apos;.</source>
+        <translation>Nom d'étiquette invalide &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <source>Array dimension (%1) does not match expected dimension (%2).</source>
+        <translation>Les dimensions du tableau (%1) ne correspondent pas aux dimensions attendues (%2).</translation>
+    </message>
+    <message>
+        <source>Histogram sample count (%1) does not match written sample count (%2).</source>
+        <translation>Le nombre d'échantillons dans l'histrogramme (%1) ne correspond pas au nombre d'échantillons écrits (%2).</translation>
+    </message>
+    <message>
+        <source>Histogram mins dimension (%1) does not match expected dimension (%2).</source>
+        <translation>La taille des minima d'histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
+    </message>
+    <message>
+        <source>Histogram maxs dimension (%1) does not match expected dimension (%2).</source>
+        <translation>La taille des maxima d'histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
+    </message>
+    <message>
+        <source>Histogram dimension (%1) does not match expected dimension (%2).</source>
+        <translation>La taille de l'histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
+    </message>
+    <message>
+        <source>Histogram bin count (%1) does not match expected bin count (%2).</source>
+        <translation>Le nombre de barres dans l'histogramme (%1) ne correspond pas à la valeur attendue (%2).</translation>
+    </message>
+    <message>
+        <source>Histogram sample count (%1) does not match expected sample count (%2).</source>
+        <translation>Le nombre d'échantillons dans l'histogramme (%1) ne correspond pas à la valeur attendue (%2).</translation>
+    </message>
+    <message>
+        <source>Read sample count (histogram) (%1) does not match written sample count (%2).</source>
+        <translation>Le nombre d'échantillons lus (histrogramme) (%1) ne correspond pas au nombre d'échantillons écrits (%2).</translation>
     </message>
 </context>
 <context>

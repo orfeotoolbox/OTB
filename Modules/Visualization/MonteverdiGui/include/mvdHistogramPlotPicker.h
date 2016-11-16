@@ -121,7 +121,7 @@ public:
 		       QwtPlotCanvas* canvas );
 
   /** \brief Destructor. */
-  virtual ~HistogramPlotPicker();
+  ~HistogramPlotPicker() ITK_OVERRIDE;
 
   /**
    */
@@ -132,9 +132,9 @@ public:
   void SetGrayscaleActivated( bool activated );
 
   //
-  // QwtPlotPicker overrides.
+  // QwtPlotPicker methods.
 
-  void drawRubberBand( QPainter* painter ) const;
+  void drawRubberBand( QPainter* painter ) const ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -155,11 +155,11 @@ signals:
 protected:
 
   //
-  // QwtPlotPicker overrides.
+  // QwtPlotPicker methods.
 
   using QwtPlotPicker::trackerText;
 
-  virtual QwtText trackerText( const QwtDoublePoint & ) const;
+  QwtText trackerText( const QwtDoublePoint & ) const ITK_OVERRIDE;
 
 //
 // Protected attributes.

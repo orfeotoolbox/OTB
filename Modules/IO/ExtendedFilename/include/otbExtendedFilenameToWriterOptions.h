@@ -73,7 +73,7 @@ public:
   };
 
   /* Set Methods */
-  virtual void SetExtendedFileName(const char * extFname);
+  void SetExtendedFileName(const char * extFname) ITK_OVERRIDE;
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
   bool WriteGEOMFileIsSet () const;

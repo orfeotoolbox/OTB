@@ -64,11 +64,14 @@ else()
     -Dlzma:BOOL=FALSE
     -Djbig:BOOL=FALSE
     -Dzlib:BOOL=TRUE
+    -DWITH_OPENGL:BOOL=FALSE
     -Dpixarlog:BOOL=TRUE
     ${TIFF_SB_CONFIG}
     CMAKE_COMMAND ${SB_CMAKE_COMMAND}
     )
 endif()
+
+SUPERBUILD_PATCH_SOURCE(TIFF)
 
 set(_SB_TIFF_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)

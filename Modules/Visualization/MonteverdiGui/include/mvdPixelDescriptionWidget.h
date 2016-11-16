@@ -93,7 +93,7 @@ public:
   PixelDescriptionWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~PixelDescriptionWidget();
+  ~PixelDescriptionWidget() ITK_OVERRIDE;
 
   /** Get TreeWidget */
   QTreeWidget * GetDescriptionTree();

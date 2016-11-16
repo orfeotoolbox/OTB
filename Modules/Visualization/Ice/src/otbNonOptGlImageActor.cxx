@@ -679,7 +679,12 @@ void NonOptGlImageActor::UpdateResolution()
   m_CurrentResolution = closest;
 
   std::ostringstream extFilename;
-  extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
+  extFilename<<m_FileName;
+  if ( m_FileName.find('?') == std::string::npos )
+    {
+    extFilename << '?';
+    }
+  extFilename<<"&resol="<<m_CurrentResolution;
 
   // std::cout<<"Extfname = "<<extFilename.str()<<std::endl;
 

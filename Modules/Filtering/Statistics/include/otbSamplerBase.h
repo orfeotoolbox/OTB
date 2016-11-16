@@ -75,7 +75,7 @@ protected:
   SamplerBase();
    
   /** Destructor */
-  virtual ~SamplerBase() {}
+  ~SamplerBase() ITK_OVERRIDE {}
   
   /** Current count of selected elements */
   unsigned long m_ChosenElements;

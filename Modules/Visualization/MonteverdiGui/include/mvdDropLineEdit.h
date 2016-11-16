@@ -98,7 +98,7 @@ public:
   DropLineEdit( const QString& contents, QWidget* p =0 );
 
   /** \brief Destructor. */
-  virtual ~DropLineEdit();
+  ~DropLineEdit() ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -118,9 +118,9 @@ signals:
 // Protected methods.
 protected:
 
-  virtual void dragEnterEvent( QDragEnterEvent* event );
-  virtual void dragMoveEvent( QDragMoveEvent* event );
-  virtual void dropEvent( QDropEvent* event );
+  void dragEnterEvent( QDragEnterEvent* event ) ITK_OVERRIDE;
+  void dragMoveEvent( QDragMoveEvent* event ) ITK_OVERRIDE;
+  void dropEvent( QDropEvent* event ) ITK_OVERRIDE;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

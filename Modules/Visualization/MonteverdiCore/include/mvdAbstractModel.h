@@ -89,7 +89,7 @@ class OTBMonteverdiCore_EXPORT AbstractModel :
 public:
 
   /** Destructor */
-  virtual ~AbstractModel();
+  ~AbstractModel() ITK_OVERRIDE;
 
   /** */
   template< typename TModel >

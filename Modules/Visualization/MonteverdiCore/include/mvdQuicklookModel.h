@@ -98,7 +98,7 @@ public:
   QuicklookModel( QObject* p =NULL );
 
   /** Destructor */
-  virtual ~QuicklookModel();
+  ~QuicklookModel() ITK_OVERRIDE;
 
   /**
    * \brief Get the parent image-model of this quicklook image as an
@@ -159,7 +159,7 @@ signals:
 protected:
 
   /** */
-  virtual void virtual_BuildModel( void* context =NULL );
+  void virtual_BuildModel( void* context =NULL ) ITK_OVERRIDE;
 
 //
 // Protected attributes.

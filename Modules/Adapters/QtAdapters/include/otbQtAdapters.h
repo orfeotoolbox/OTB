@@ -198,6 +198,11 @@ bool
 OTBQtAdapters_EXPORT
 SetWorkingDir( const QString & path );
 
+/**
+ * \brief Static path to the last directory used in file dialogs
+ */
+static QString RecentDirectory;
+
 } // end namespace 'otb'.
 
 

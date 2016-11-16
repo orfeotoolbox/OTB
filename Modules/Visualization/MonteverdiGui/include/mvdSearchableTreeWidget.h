@@ -100,7 +100,7 @@ public:
   SearchableTreeWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~SearchableTreeWidget();
+  ~SearchableTreeWidget() ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

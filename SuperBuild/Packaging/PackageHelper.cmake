@@ -53,7 +53,8 @@ macro(macro_super_package)
       )
 
     if(NOT python_INSTALLED_SONAME_rv EQUAL 0)
-      message( FATAL_ERROR "python_INSTALLED_SONAME_rv=${python_INSTALLED_SONAME_rv}: Cannot find python library")
+      message( FATAL_ERROR
+	"python_INSTALLED_SONAME_rv=${python_INSTALLED_SONAME_rv}: Cannot find python library")
     endif()
     set(python_INSTALLED_SONAME "${python_INSTALLED_SONAME_ov}")
     
@@ -64,6 +65,33 @@ macro(macro_super_package)
     if(MSVC)
       list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #all other dlls
       list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #Qt & Qwt dlls
+      if(DEFINED ENV{UniversalCRTSdkDir})
+        file(TO_CMAKE_PATH "$ENV{UniversalCRTSdkDir}" UCRT_SDK_DIR)
+        list(
+          APPEND
+          PKG_SEARCHDIRS
+          "${UCRT_SDK_DIR}/Redist/ucrt/DLLs/${OTB_TARGET_SYSTEM_ARCH}"
+          ) #ucrt dlls
+      else()
+        message(FATAL_ERROR
+	  "UniversalCRTSdkDir variable not set. 
+          call vcvarsall.bat <arch> first before starting build.")
+      endif()
+
+      #addtional msvc redist dll from VCINSTALLDIR
+      if(DEFINED ENV{VCINSTALLDIR})
+        file(TO_CMAKE_PATH "$ENV{VCINSTALLDIR}" PKG_VCINSTALLDIR)
+        list(
+          APPEND
+          PKG_SEARCHDIRS
+          "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.CRT/"
+          "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.OPENMP/"
+          )
+      else()
+        message(FATAL_ERROR
+	  "VCINSTALLDIR variable not set. call vcvarsall.bat <arch> first before starting build.")
+      endif()
+
     else()
       file(GLOB MXE_GCC_LIB_DIR "${DEPENDENCIES_INSTALL_DIR}/bin/gcc*")
       list(APPEND PKG_SEARCHDIRS ${MXE_GCC_LIB_DIR})
@@ -132,10 +160,18 @@ macro(macro_super_package)
       file(APPEND ${CMAKE_BINARY_DIR}/make_symlinks
         "${make_symlink_cmd}\n")
     endforeach()
+    
+    set(WITH_PYTHON "false")
+    if(OTB_WRAP_PYTHON)
+       set(WITH_PYTHON "true")
+     endif()
 
-    set(IS_XDK "false")
+    set(IS_XDK "false")     
     if(PKG_GENERATE_XDK)
       set(IS_XDK "true")
+      set(WITH_PYTHON "false")
+      message(STATUS "OTB_WRAP_PYTHON is set. But this will not be included in XDK")
+
       if("${PKG_ITK_SB_VERSION}" STREQUAL "")
         message(FATAL_ERROR "PKG_ITK_SB_VERSION not set. This is required for XDK")
       endif()
@@ -170,9 +206,9 @@ macro(macro_super_package)
     func_install_xdk_files()
   endif()
 
-  # We need qt.conf on windows and linux. macx is still to be tested.
-  # So just not add this without testing
-  if(NOT APPLE)
+  # We need qt.conf on windows. for macx and linux we write it
+  # after extracting package
+  if(WIN32 AND NOT PKG_GENERATE_XDK)
     install(FILES
       ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
       DESTINATION ${PKG_STAGE_DIR}/bin
@@ -373,7 +409,8 @@ function(func_install_support_files)
 
   ####################### install GDAL data ############################
   if(NOT EXISTS "${GDAL_DATA}/epsg.wkt")
-    message(FATAL_ERROR "Cannot generate package without GDAL_DATA : ${GDAL_DATA} ${DEPENDENCIES_INSTALL_DIR}")
+    message(FATAL_ERROR
+      "Cannot generate package without GDAL_DATA : ${GDAL_DATA} ${DEPENDENCIES_INSTALL_DIR}")
   endif()
 
   install(DIRECTORY ${GDAL_DATA} DESTINATION ${PKG_SHARE_DEST_DIR})
@@ -389,7 +426,8 @@ function(func_install_support_files)
     install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
   endif()
 
-  set(PKG_VERSION_FILE "${OTB_INSTALL_DIR}/share/doc/${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/VERSION")
+  set(PKG_VERSION_FILE
+    "${OTB_INSTALL_DIR}/share/doc/${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/VERSION")
   
   ####################### Install copyrights ##########################
   if(NOT MINGW)
@@ -491,10 +529,39 @@ function(func_install_monteverdi_support_files)
 
   #<prefix>/share for otb i18n directory. This is different from qt's i18N directory
   #which is <prefix>/share/qt4/translations.
-  #set(PKG_xxOTB_Ixxx18N_DIR "${PKG_STAGE_DIR}/${OTB_INSTALL_DATA_DIR}/i18n")
+  #set(PKG_xxOTB_Ixxx18N_DIR "${PKG_STAGE_DIR}/${PKG_OTB_INSTALL_DATA_DIR}/i18n")
+  # we find this value by parsing ConfigureMonteverdi.h
+  set(ConfigureMonteverdi_H "${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h")
+  if(NOT EXISTS "${ConfigureMonteverdi_H}")
+    message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
+  endif()
 
-  set(PKG_OTB_TRANSLATIONS_DIRNAME "${OTB_INSTALL_DATA_DIR}/i18n")
+  file(
+    STRINGS "${ConfigureMonteverdi_H}"
+    ConfigureMonteverdi_H_CONTENTS
+    REGEX "^#define.Monteverdi_INSTALL_DATA_DIR")
+
+  string(REGEX REPLACE
+    "^#define.Monteverdi_INSTALL_DATA_DIR" ""
+    ConfigureMonteverdi_H_CONTENTS
+    ${ConfigureMonteverdi_H_CONTENTS} )
+
+  if(NOT ConfigureMonteverdi_H_CONTENTS)
+    message(FATAL_ERROR "Parse error in ${ConfigureMonteverdi_H}. Cannot continue")
+  endif()
+
+  string(
+    REGEX REPLACE "\"" ""
+    PKG_OTB_INSTALL_DATA_DIR
+    "${ConfigureMonteverdi_H_CONTENTS}")
+
+  if(NOT PKG_OTB_INSTALL_DATA_DIR)
+    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H_CONTENTS}. Cannot continue")
+  endif()
   
+  string(STRIP "${PKG_OTB_INSTALL_DATA_DIR}" PKG_OTB_INSTALL_DATA_DIR)
+
+  set(PKG_OTB_TRANSLATIONS_DIRNAME "${PKG_OTB_INSTALL_DATA_DIR}/i18n")
 
   # Just check if required variables are defined.
   foreach(req
@@ -548,7 +615,11 @@ endfunction()
 
 macro(macro_empty_package_staging_directory)
   message(STATUS "Empty package staging directory: ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
+  execute_process(
+    COMMAND ${CMAKE_COMMAND}
+    -E remove_directory
+    "${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}"
+    )
 endmacro() #macro_empty_package_staging_directory
 
 #NOTE:
@@ -583,7 +654,9 @@ function(func_prepare_package)
   set(VAR_IN_PKGSETUP_CONFIGURE "bin/otbApplicationLauncherCommandLine")
   set(PKG_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
   if(NOT EXISTS "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
-    message(FATAL_ERROR "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found.")
+    message(
+      FATAL_ERROR
+      "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found.")
   endif()
 
   set(EXE_FILES)
@@ -615,6 +688,11 @@ function(func_prepare_package)
     endforeach() #EXE_SEARCH_DIR
   endforeach()
 
+  # special case for msvc: ucrtbase.dll must be explicitly vetted.
+  if(MSVC)
+    list(APPEND PKG_PEFILES "ucrtbase.dll")
+  endif()
+  
   #loop again to report if anything is not found
   foreach( EXE_FILE ${EXE_FILES} )
     if(NOT FOUND_${EXE_FILE})
@@ -628,23 +706,50 @@ function(func_prepare_package)
   #NOTE: this is not used in windows yet..
   foreach(OTB_APP_SO ${OTB_APPS_LIST})
     get_filename_component(OTB_APP_SO_NAME ${OTB_APP_SO} NAME)
-    set(VAR_IN_PKGSETUP_CONFIGURE "${VAR_IN_PKGSETUP_CONFIGURE} lib/otb/applications/${OTB_APP_SO_NAME}")
+    set(VAR_IN_PKGSETUP_CONFIGURE
+      "${VAR_IN_PKGSETUP_CONFIGURE} lib/otb/applications/${OTB_APP_SO_NAME}")
   endforeach()
 
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
   if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
-    list(APPEND PKG_PEFILES "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
-    install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python DESTINATION ${PKG_STAGE_DIR}/lib)
+    #DO NOT ADD _otbApplication.* to PKG_PEFILES. we install it in next step with
+    # install( DIRECTORY ..
+    # list(
+    #   APPEND
+    #   PKG_PEFILES
+    #   "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}"
+    #   )
+
+    install(
+      DIRECTORY
+      ${OTB_INSTALL_DIR}/lib/otb/python
+      DESTINATION ${PKG_STAGE_DIR}/lib/
+      )
+  else()
+    if(OTB_WRAP_PYTHON)
+      message(FATAL_ERROR "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
+      endif()
   endif()
 
-  set(ALLOWED_SYSTEM_DLLS_SEARCH_PATHS
+  # Take gtk libs from system. we should fix this to take from custom
+  # build location
+  set(GTK_SYSTEM_LIBS_SEARCH_PATHS
     /usr/lib
     /lib64 )
 
   func_install_support_files()
 
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/temp_so_names_dir")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/temp_so_names_dir")
+  execute_process(
+    COMMAND ${CMAKE_COMMAND}
+    -E remove_directory
+    "${CMAKE_BINARY_DIR}/temp_so_names_dir"
+    )
+  
+  execute_process(
+    COMMAND ${CMAKE_COMMAND}
+    -E make_directory
+    "${CMAKE_BINARY_DIR}/temp_so_names_dir"
+    )
 
   set(alldlls)
   set(notfound_dlls)
@@ -661,7 +766,7 @@ function(func_prepare_package)
       if(${found_index} GREATER -1)
         #find_file (<VAR> NAMES name PATHS paths... NO_DEFAULT_PATH)
         find_file ( ${allowed_system_dll}_abs_path NAMES ${allowed_system_dll}
-          PATHS ${ALLOWED_SYSTEM_DLLS_SEARCH_PATHS} NO_DEFAULT_PATH)
+          PATHS ${GTK_SYSTEM_LIBS_SEARCH_PATHS} NO_DEFAULT_PATH)
         if(${allowed_system_dll}_abs_path)
           file(GLOB fff "${${allowed_system_dll}_abs_path}*")
           foreach(f ${fff})
@@ -711,8 +816,15 @@ function(func_process_deps infile)
     string(TOLOWER "${infile}" infile_lower )
   endif()
 
+  # is_system_dll is first pass check the file is not a system dll
+  # there is a second pass after looking all searchdirs which is where
+  # we make the call to list it as not-found-dlls
   is_system_dll(is_system "${infile}")
   if(EXISTS ${infile} AND NOT is_system)
+    if(APPLE)
+      # We want all non-system deps to start with rpath
+      message(FATAL_ERROR "Found dependency without @rpath : ${infile}")
+    endif()
     get_filename_component(infile ${infile} NAME)
   endif()
 
@@ -734,6 +846,7 @@ function(func_process_deps infile)
         if(EXISTS ${SEARCHDIR}/${infile})
           set(DLL_FOUND TRUE)
           message(STATUS "Processing ${SEARCHDIR}/${infile}")
+ 
           is_file_executable("${SEARCHDIR}/${infile}" is_executable)
           if(is_executable)
             file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_BIN_DIR} "${SEARCHDIR}/${infile}\n")
@@ -785,8 +898,11 @@ function(func_process_deps infile)
           endif()
           if(WIN32)
             if(MSVC)
-              string(REGEX MATCHALL "dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
-              string(REGEX REPLACE "dependencies.." "" loader_ov "${loader_ov}")
+              #skip entries from section 'delay load dependencies'
+              string(REGEX MATCHALL 
+              "Image.has.the.following.dependencies.(.*[Dd][Ll][Ll])" loader_ov "${loader_ov}")
+              string(REGEX REPLACE 
+              "Image.has.the.following.dependencies.." "" loader_ov "${loader_ov}")
               #beware of .DLL and .dll
               string(REGEX REPLACE ".DLL" ".dll" loader_ov "${loader_ov}")
               #convert to cmake list
@@ -988,7 +1104,6 @@ function(func_lisp install_list )
 endfunction() # func_lisp
 
 set(WINDOWS_SYSTEM_DLLS
-  msvc.*dll
   user32.dll
   gdi32.dll
   shell32.dll
@@ -1009,14 +1124,12 @@ set(WINDOWS_SYSTEM_DLLS
   glu32.dll
   rpcrt4.dll
   winspool.drv
-  api-ms-win-crt*.*.dll
-  vcruntime*.*.dll
   normaliz.dll
-  concrt*.*.dll
   odbc32.dll
   psapi.dll
   python...dll
-  vcomp*.*.dll)
+  Image.has.the.following.delay.load
+  )
 
 set(LINUX_SYSTEM_DLLS
   libm.so

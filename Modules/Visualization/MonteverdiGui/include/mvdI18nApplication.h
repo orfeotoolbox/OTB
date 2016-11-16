@@ -103,7 +103,7 @@ public:
   I18nApplication( QApplication* qtApp );
 
   /** \brief Destructor. */
-  virtual ~I18nApplication();
+  ~I18nApplication() ITK_OVERRIDE;
 
   //
   // APPLICATION SINGLETON.
@@ -145,7 +145,7 @@ signals:
 // Protected methods.
 protected:
 
-  virtual void virtual_InitializeCore();
+  void virtual_InitializeCore() ITK_OVERRIDE;
 
 //
 // Protected attributes.

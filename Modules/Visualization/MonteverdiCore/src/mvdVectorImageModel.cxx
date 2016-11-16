@@ -173,8 +173,11 @@ VectorImageModel
     );
 
     QString fname = filename;
-    
-    imageFileReader->SetFileName( QFile::encodeName( fname.append(QString("?&skipgeom=true"))).constData());
+    if (!filename.contains(QChar('?')))
+      {
+      fname.append(QChar('?'));
+      }
+    imageFileReader->SetFileName( QFile::encodeName( fname.append(QString("&skipgeom=true"))).constData());
     imageFileReader->GetOutput()->UpdateOutputInformation();
     }
 
@@ -538,7 +541,12 @@ VectorImageModel
   QString lodFilename( GetFilename() );
 
   // If model is a multi-resolution image.
-  lodFilename.append( QString( "?&resol=%1" ).arg( lod ) );
+  if (lodFilename.count(QChar('?')) == 0)
+    {
+    // the filename is not an extended filename yet
+    lodFilename.append( QChar('?') );
+    }
+  lodFilename.append( QString( "&resol=%1" ).arg( lod ) );
 
   // Update m_ImageFileReader
   m_ImageFileReader->SetFileName( QFile::encodeName( lodFilename ).constData() );

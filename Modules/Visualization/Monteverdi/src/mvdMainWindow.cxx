@@ -1130,7 +1130,10 @@ MainWindow
     if( importDialog->HasSubDatasets() )
       {
       if( importDialog->exec()==QDialog::Rejected )
-	return 0;
+        {
+        delete importDialog;
+        return 0;
+        }
 
       IntVector::size_type count = 0;
       IntVector indices;
@@ -1142,11 +1145,16 @@ MainWindow
 	   ++ i )
 	count +=
 	  ImportImage(
-	    QString( "%1?&sdataidx=%2" ).arg( filename ).arg( indices[ i ] ),
+	    QString( "%1%2&sdataidx=%3" ).arg( filename ).arg( filename.count(QChar('?')) ? "" : "?" ).arg( indices[ i ] ),
 	    index + count
 	  );
 
+      delete importDialog;
       return count;
+      }
+    else
+      {
+      delete importDialog;
       }
   }
   // CDS import.
@@ -1231,8 +1239,6 @@ MainWindow
 
   if( imageModel==NULL )
     return 0;
-
-  otb::SetWorkingDir( filename );
 
   //
   // Bypass rendering of image-views.

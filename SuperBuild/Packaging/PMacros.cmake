@@ -21,53 +21,32 @@ macro(macro_setup_cmake_project pkg)
     set(PKG_GENERATE_XDK OFF)
   endif()
 
-  set(ConfigureMonteverdi_H ${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h)
-  if(NOT EXISTS ${ConfigureMonteverdi_H})
-    message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
-  endif()
-
-  file(STRINGS "${ConfigureMonteverdi_H}" ConfigureMonteverdi_H_CONTENTS REGEX "^#define.Monteverdi_INSTALL_DATA_DIR")
-  string(REGEX REPLACE
-    "^#define.Monteverdi_INSTALL_DATA_DIR" ""
-    ConfigureMonteverdi_H_CONTENTS
-    ${ConfigureMonteverdi_H_CONTENTS} )
-
-  if(NOT ConfigureMonteverdi_H_CONTENTS)
-    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H}. Cannot continue")
-  endif()
-
-  string(REGEX REPLACE "\"" "" PKG_OTB_INSTALL_DATA_DIR "${ConfigureMonteverdi_H_CONTENTS}")
-
-  if(NOT PKG_OTB_INSTALL_DATA_DIR)
-    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H_CONTENTS}. Cannot continue")
-  endif()
-
-  string(STRIP "${PKG_OTB_INSTALL_DATA_DIR}" PKG_OTB_INSTALL_DATA_DIR)
     
   #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
   "cmake_minimum_required(VERSION 3.2)
    include(CMakeParseArguments)
    include(CMakeDetermineSystem)
-   set(CMAKE_BUILD_TYPE             Release)
-   set(PACKAGE_OTB_SRC_DIR               \"${PACKAGE_OTB_SRC_DIR}\")
-   set(OTB_BINARY_DIR               \"${OTB_BINARY_DIR}\")
-   set(OTB_INSTALL_DIR              \"${OTB_INSTALL_DIR}\")
-   set(OTB_INSTALL_DATA_DIR         \"${PKG_OTB_INSTALL_DATA_DIR}\")
-   set(QT_PLUGINS_DIR               \"${QT_PLUGINS_DIR}\")
-   set(QT_TRANSLATIONS_DIR          \"${QT_TRANSLATIONS_DIR}\")
-   set(DEPENDENCIES_INSTALL_DIR     \"${DEPENDENCIES_INSTALL_DIR}\")
-   set(PACKAGE_SUPPORT_FILES_DIR    \"${PACKAGE_OTB_SRC_DIR}/SuperBuild/Packaging/Files\")
-
-   set(CMAKE_INSTALL_PREFIX         \"${CMAKE_INSTALL_PREFIX}\")
-   set(PKG_ITK_SB_VERSION           \"${PKG_ITK_SB_VERSION}\")
-   set(PKG_OTB_VERSION_MAJOR        \"${PKG_OTB_VERSION_MAJOR}\")
-   set(PKG_OTB_VERSION_MINOR        \"${PKG_OTB_VERSION_MINOR}\")
-   set(PKG_OTB_VERSION_PATCH        \"${PKG_OTB_VERSION_PATCH}\")
-   set(PKG_OTB_VERSION_STRING       \"${PKG_OTB_VERSION_STRING}\")
+   set(CMAKE_BUILD_TYPE              Release)
+   set(PACKAGE_OTB_SRC_DIR           \"${PACKAGE_OTB_SRC_DIR}\")
+   set(OTB_BINARY_DIR                \"${OTB_BINARY_DIR}\")
+   set(OTB_INSTALL_DIR               \"${OTB_INSTALL_DIR}\")
+   set(QT_PLUGINS_DIR                \"${QT_PLUGINS_DIR}\")
+   set(QT_TRANSLATIONS_DIR           \"${QT_TRANSLATIONS_DIR}\")
+   set(DEPENDENCIES_INSTALL_DIR      \"${DEPENDENCIES_INSTALL_DIR}\")
+   set(PACKAGE_SUPPORT_FILES_DIR     \"${PACKAGE_OTB_SRC_DIR}/SuperBuild/Packaging/Files\")
+   set(CMAKE_INSTALL_PREFIX          \"${CMAKE_INSTALL_PREFIX}\")
+   set(PKG_ITK_SB_VERSION            \"${PKG_ITK_SB_VERSION}\")
+   set(PKG_OTB_VERSION_MAJOR         \"${PKG_OTB_VERSION_MAJOR}\")
+   set(PKG_OTB_VERSION_MINOR         \"${PKG_OTB_VERSION_MINOR}\")
+   set(PKG_OTB_VERSION_PATCH         \"${PKG_OTB_VERSION_PATCH}\")
+   set(PKG_OTB_VERSION_STRING        \"${PKG_OTB_VERSION_STRING}\")
+   set(PYTHON_EXECUTABLE             \"${PYTHON_EXECUTABLE}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
    set(PATCHELF_PROGRAM              ${PATCHELF_PROGRAM})
-   set(PYTHON_EXECUTABLE             \"${PYTHON_EXECUTABLE}\")
+   set(OTB_TARGET_SYSTEM_ARCH        ${OTB_TARGET_SYSTEM_ARCH})
+   set(OTB_TARGET_SYSTEM_ARCH_IS_X64 ${OTB_TARGET_SYSTEM_ARCH_IS_X64})   
+   set(OTB_WRAP_PYTHON               ${OTB_WRAP_PYTHON})
    ${EXTRA_CACHE_CONFIG}
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake)
    macro_super_package(STAGE_DIR \"${archive_name}\")"

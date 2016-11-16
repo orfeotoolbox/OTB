@@ -88,7 +88,7 @@ class OTBMonteverdiGUI_EXPORT AbstractDragAndDropEventFilter :
 public:
 
   /** \brief Destructor. */
-  virtual ~AbstractDragAndDropEventFilter();
+  ~AbstractDragAndDropEventFilter() ITK_OVERRIDE;
 
   //
   // QObject overloads.
@@ -96,7 +96,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
    */
-  virtual bool eventFilter( QObject* watched, QEvent* event );
+  bool eventFilter( QObject* watched, QEvent* event ) ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

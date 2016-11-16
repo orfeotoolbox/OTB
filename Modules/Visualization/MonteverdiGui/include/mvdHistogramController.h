@@ -99,7 +99,7 @@ public:
   /**
    * \brief Destructor.
    */
-  virtual ~HistogramController();
+  ~HistogramController() ITK_OVERRIDE;
 
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -130,15 +130,15 @@ private:
   void ResetWidget( RgbwChannel channel );
 
   //
-  // AbstractModelController overrides.
+  // AbstractModelController methods.
 
-  virtual void Connect( AbstractModel* );
+  void Connect( AbstractModel* ) ITK_OVERRIDE;
 
-  virtual void ClearWidget();
+  void ClearWidget() ITK_OVERRIDE;
 
-  virtual void virtual_ResetWidget( bool = false );
+  void virtual_ResetWidget( bool = false ) ITK_OVERRIDE;
 
-  virtual void Disconnect( AbstractModel* );
+  void Disconnect( AbstractModel* ) ITK_OVERRIDE;
 
 //
 // Private attributes.

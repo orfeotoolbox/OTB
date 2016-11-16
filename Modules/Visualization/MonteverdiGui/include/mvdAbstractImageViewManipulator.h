@@ -88,7 +88,7 @@ class OTBMonteverdiGUI_EXPORT AbstractImageViewManipulator :
 public:
 
   /** \brief Destructor. */
-  virtual ~AbstractImageViewManipulator() {};
+  ~AbstractImageViewManipulator() ITK_OVERRIDE {};
 
   //
   // Accessors

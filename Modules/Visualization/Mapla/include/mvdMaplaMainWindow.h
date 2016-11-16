@@ -102,7 +102,7 @@ public:
   MaplaMainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~MaplaMainWindow();
+  ~MaplaMainWindow() ITK_OVERRIDE;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -117,9 +117,9 @@ signals:
 protected:
 
   //
-  // QMainWindow overrides.
+  // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event );
+  void closeEvent( QCloseEvent* event ) ITK_OVERRIDE;
 
 //
 // Protected attributes.
@@ -133,11 +133,11 @@ protected slots:
 
   /**
    */
-  void OnAboutToChangeModel( const AbstractModel* );
+  void OnAboutToChangeModel( const AbstractModel* ) ITK_OVERRIDE;
 
   /**
    */
-  void OnModelChanged( AbstractModel* );
+  void OnModelChanged( AbstractModel* ) ITK_OVERRIDE;
 
   /**
    */
@@ -174,11 +174,11 @@ private:
   void InitializeCentralWidget();
 
   //
-  // I18nMainWindow overrides.
+  // I18nMainWindow methods.
 
-  virtual void virtual_SetupUI();
+  void virtual_SetupUI() ITK_OVERRIDE;
 
-  virtual void virtual_ConnectUI();
+  void virtual_ConnectUI() ITK_OVERRIDE;
 
 //
 // Private attributes.

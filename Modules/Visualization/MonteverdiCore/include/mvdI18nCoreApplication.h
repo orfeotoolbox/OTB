@@ -140,7 +140,7 @@ public:
   I18nCoreApplication( QCoreApplication* qtApp );
 
   /** \brief Destructor. */
-  virtual ~I18nCoreApplication();
+  ~I18nCoreApplication() ITK_OVERRIDE;
 
   /**
    */

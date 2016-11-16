@@ -97,7 +97,7 @@ public:
   OTBApplicationsModel( QObject* p =NULL );
 
   /** \brief Destructor. */
-  virtual ~OTBApplicationsModel();
+  ~OTBApplicationsModel() ITK_OVERRIDE;
 
   /** \brief Fill Widget Tree */
   void FillTree();
@@ -131,9 +131,9 @@ signals:
 protected:
 
   //
-  // AbstractModel overrides.
+  // AbstractModel methods.
 
-  void virtual_BuildModel( void* context =NULL );
+  void virtual_BuildModel( void* context =NULL ) ITK_OVERRIDE;
 
 //
 // Protected attributes.

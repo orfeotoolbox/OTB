@@ -22,7 +22,6 @@
 
 #include <cassert>
 
-
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -73,13 +72,16 @@ GetExistingDirectory( QWidget * p,
       caption.isEmpty()
       ? QObject::tr( "Select directory..." )
       : caption,
-      dir,
+      dir.isEmpty() ? RecentDirectory : dir,
       options
     )
   );
 
   if( !path.isNull() )
+    {
+    // Absolute path expected from QFileDialog
     SetWorkingDir( path );
+    }
 
   return path;
 }
@@ -99,13 +101,14 @@ GetOpenFileName( QWidget * p,
       caption.isEmpty()
       ? QObject::tr( "Open file..." )
       : caption,
-      dir,
+      dir.isEmpty() ? RecentDirectory : dir,
       filter,
       selectedFilter,
       options
     )
   );
 
+  // Absolute path expected from QFileDialog
   if( !filename.isNull() )
     SetWorkingDir( filename );
 
@@ -127,13 +130,14 @@ GetOpenFileNames( QWidget * p,
       caption.isEmpty()
       ? QObject::tr( "Open file..." )
       : caption,
-      dir,
+      dir.isEmpty() ? RecentDirectory : dir,
       filter,
       selectedFilter,
       options
     )
   );
 
+  // Absolute path expected from QFileDialog
   if( !filenames.isEmpty() )
     SetWorkingDir( filenames.back() );
 
@@ -155,13 +159,14 @@ GetSaveFileName( QWidget * p,
       caption.isEmpty()
       ? QObject::tr( "Save file..." )
       : caption,
-      dir,
+      dir.isEmpty() ? RecentDirectory : dir,
       filter,
       selectedFilter,
       options
     )
   );
 
+  // Absolute path expected from QFileDialog
   if( !filename.isNull() )
     SetWorkingDir( filename );
 
@@ -172,7 +177,7 @@ GetSaveFileName( QWidget * p,
 QString
 GetWorkingDir()
 {
-  return QDir::currentPath();
+  return RecentDirectory;
 }
 
 /*****************************************************************************/
@@ -183,11 +188,20 @@ SetWorkingDir( const QString & filepath )
 
   QFileInfo finfo( filepath );
 
+#if 0
   return QDir::setCurrent(
     finfo.isDir()
     ? filepath
     : finfo.path()
   );
+#else
+  // TODO : add mutex if needed
+  QString dir = finfo.isDir() ? filepath : finfo.path();
+  if ( !QFileInfo(dir).isDir() )
+    return false;
+  RecentDirectory = finfo.isDir() ? filepath : finfo.path();
+  return true;
+#endif
 }
 
 } // end namespace 'otb'

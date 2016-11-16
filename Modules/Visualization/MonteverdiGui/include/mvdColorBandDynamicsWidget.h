@@ -140,7 +140,7 @@ public:
   ColorBandDynamicsWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
-  virtual ~ColorBandDynamicsWidget();
+  ~ColorBandDynamicsWidget() ITK_OVERRIDE;
 
   /** */
   RgbwChannel GetChannelLabel() const;

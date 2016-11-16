@@ -5,11 +5,8 @@ SETUP_SUPERBUILD(BOOST)
 set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
 
 set(BOOST_SB_CONFIG)
-
-if(OTB_COMPILER_ARCH_IS_X64)
-  set(BOOST_SB_CONFIG architecture=x86 address-model=64)
-else()
-  set(BOOST_SB_CONFIG architecture=x86)
+if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
+  set(BOOST_SB_CONFIG address-model=64)
 endif()
 
 set(BOOST_SB_CONFIG
