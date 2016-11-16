@@ -672,7 +672,7 @@ ParameterGroup::AddParameter(Parameter::Pointer p)
 }
 
 bool
-ParameterGroup::SetParameter(Parameter::Pointer p, std::string &key)
+ParameterGroup::ReplaceParameter(std::string &key, Parameter::Pointer p)
 {
   bool ret = true;
   ParameterKey pName(key);
@@ -686,7 +686,7 @@ ParameterGroup::SetParameter(Parameter::Pointer p, std::string &key)
     parentGroup = dynamic_cast<ParameterGroup*>(parentParam);
     if (parentGroup)
       {
-      ret = parentGroup->SetParameter(p,lastkey);
+      ret = parentGroup->ReplaceParameter(lastkey, p);
       }
     else
       {
@@ -708,15 +708,15 @@ ParameterGroup::SetParameter(Parameter::Pointer p, std::string &key)
       }
     if (oldParam.IsNull())
       {
-      // parameter to replace not found : simply add the new one
-      AddParameter(p);
+      // parameter to replace not found : return false
+      ret = false;
       }
     else
       {
       // parameter already exists : replace it
       *vit = p;
+      p->SetKey(lastkey);
       }
-    p->SetKey(lastkey);
     }
   if (ret)
     {
