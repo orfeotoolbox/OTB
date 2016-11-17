@@ -744,7 +744,7 @@ void Application::SetListViewSingleSelectionMode(std::string parameter, bool sta
     paramListView->SetSingleSelection(status);
     }
   else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to float");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ListView");
   
 }
 
