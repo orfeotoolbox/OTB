@@ -51,6 +51,20 @@ protected:
 
 private:
 
+bool RemoveFile(std::string &filePath)
+{
+  bool res = true;
+  if(itksys::SystemTools::FileExists(filePath.c_str()))
+    {
+    res = itksys::SystemTools::RemoveFile(filePath.c_str());
+    if (!res)
+      {
+      otbAppLogINFO(<<"Unable to remove file  "<<filePath);
+      }
+    }
+  return res;
+}
+
 void DoInit() ITK_OVERRIDE
 {
   SetName("TrainImagesClassifier");
@@ -152,6 +166,11 @@ void DoInit() ITK_OVERRIDE
   Connect("extraction.ram", "polystat.ram");
 
   Connect("select.rand", "training.rand");
+
+  AddParameter(ParameterType_Empty,"cleanup","Temporary files cleaning");
+  EnableParameter("cleanup");
+  SetParameterDescription("cleanup","If activated, the application will try to clean all temporary files it created");
+  MandatoryOff("cleanup");
 
   // Doc example parameter settings
   SetDocExampleParameterValue("io.il", "QB_1_ortho.tif");
@@ -345,6 +364,21 @@ void DoExecute() ITK_OVERRIDE
     }
   GetInternalApplication("training")->SetParameterStringList("feat",selectedNames);
   ExecuteInternal("training");
+
+  // cleanup
+  if(IsParameterEnabled("cleanup"))
+    {
+    otbAppLogINFO(<<"Final clean-up ...");
+
+    for(unsigned int i=0 ; i<nbInputs ; i++)
+      {
+      RemoveFile(polyStatOutputs[i]);
+      RemoveFile(ratesOutputs[i]);
+      RemoveFile(sampleOutputs[i]);
+      RemoveFile(sampleTrainOutputs[i]);
+      RemoveFile(sampleValidOutputs[i]);
+      }
+    }
 }
 
 };
