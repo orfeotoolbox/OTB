@@ -269,6 +269,7 @@ private:
   //
   // AbstractImageViewRenderer overloads.
 
+  void virtual_ClearScene( bool ) ITK_OVERRIDE;
   void virtual_UpdateScene() ITK_OVERRIDE;
   void virtual_RefreshScene() ITK_OVERRIDE;
 
