@@ -33,6 +33,12 @@ namespace ogr
 namespace version_proxy
 {
 
+OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
+{
+  return false;
+}
+
+
 GDALDatasetType * Open(const char * filename, bool readOnly)
 {
   return OGRSFDriverRegistrar::Open(filename,!readOnly);

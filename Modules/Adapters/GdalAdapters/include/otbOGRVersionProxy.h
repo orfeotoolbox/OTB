@@ -23,6 +23,16 @@
 #include "otbConfigure.h"
 #include "itkMacro.h"
 
+#if defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
+#include "ogr_core.h" // OGR enums
+#pragma warning ( pop )
+#else
+#include "ogr_core.h" // OGR enums
+#endif
+
+
 #ifdef OTB_USE_GDAL_20
 class GDALDataset;
 class GDALDriver;
@@ -39,6 +49,12 @@ namespace ogr
 {
 namespace version_proxy
 {
+
+/**
+* With Gdal >= 2.0, this function will test equality between type and
+* OFTInteger64 enum. Otherwise, it returns false. 
+*/
+OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type);
 
 /** 
  * This namespace holds proxy functions hiding interface changes in gdal 2.0 
