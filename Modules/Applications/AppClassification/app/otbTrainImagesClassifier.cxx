@@ -112,7 +112,7 @@ void DoInit() ITK_OVERRIDE
   ShareParameter("io.confmatout","training.io.confmatout");
   ShareParameter("io.out","training.io.out");
 
-  ElevationParametersHandler::AddElevationParameters(this, "elev");
+  ShareParameter("elev","polystat.elev");
 
   // Sampling settings
   AddParameter(ParameterType_Group, "sample", "Training and validation samples parameters");
@@ -159,6 +159,7 @@ void DoInit() ITK_OVERRIDE
   // Synchronization between applications
   Connect("select.field", "polystat.field");
   Connect("select.layer", "polystat.layer");
+  Connect("select.elev",  "polystat.elev");
 
   Connect("extraction.in",    "select.in");
   Connect("extraction.vec",   "select.out");
@@ -219,9 +220,6 @@ void DoExecute() ITK_OVERRIDE
       otbAppLogFATAL("Missing validation vector data files to match number of images ("<<nbInputs<<").");
       }
     }
-
-  // Setup the DEM Handler
-  otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
   // Prepare temporary file names
   std::string outModel(GetParameterString("io.out"));
