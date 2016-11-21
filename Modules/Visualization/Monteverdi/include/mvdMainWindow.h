@@ -126,7 +126,7 @@ public:
 
   /**
    */
-  bool CheckGLCapabilities();
+  bool CheckGLCapabilities( bool forceNoGLSL = false );
 
   /**
    */
@@ -326,6 +326,10 @@ private:
 
 #endif // USE_PIXEL_DESCRIPTION
 
+  /**
+   */
+  void SetGLSLEnabled( bool );
+
   //
   // I18nMainWindow methods.
 
@@ -424,11 +428,20 @@ private:
    */
   int m_GLSL140;
 
+  /**
+   */
+  bool m_isGLSLAvailable : 1;
+  bool m_ForceNoGLSL : 1;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Private slots.
 private slots:
+
+  /**
+   */
+  void on_action_GLSL_triggered( bool );
 
   /**
    * \brief Qt auto-connected slot which is called when Help/About

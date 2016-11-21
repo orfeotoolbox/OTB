@@ -281,6 +281,10 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
        
       ++labIt;    
       }
+    else
+      {
+      labelValue = m_DefaultLabel;
+      }
     
     outIt.Set(labelValue);
 

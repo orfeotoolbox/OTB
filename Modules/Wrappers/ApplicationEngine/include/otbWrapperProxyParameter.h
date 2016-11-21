@@ -17,6 +17,8 @@ namespace Wrapper
  * The target parameter of this proxy is defined as a pair of a group parameter
  * containing the target and the targets key. It allows to define proxies on
  * parameters that may be themselves replaced by a proxy
+ *
+ * \ingroup OTBApplicationEngine
  */
 class ProxyParameter : public Parameter
 {

@@ -139,7 +139,9 @@ MainWindow
   m_ShaderWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL ),
   m_KeymapDialog( NULL ),
-  m_GLSL140( -2 )
+  m_GLSL140( -2 ),
+  m_isGLSLAvailable( false ),
+  m_ForceNoGLSL( false )
 {
   m_UI->setupUi( this );
 
@@ -171,7 +173,7 @@ MainWindow
 /*****************************************************************************/
 bool
 MainWindow
-::CheckGLCapabilities()
+::CheckGLCapabilities( bool forceNoGLSL )
 {
   assert( m_ImageView!=NULL );
   assert( m_ImageView->GetRenderer()!=NULL );
@@ -182,35 +184,105 @@ MainWindow
   //     m_ImageView->GetRenderer()==NULL )
   //   return false;
 
-  bool isGLSL = m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
+  m_isGLSLAvailable =
+    m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
 
 #if FORCE_NO_GLSL
-  m_ImageView->GetRenderer()->SetGLSLEnabled( false );
+  qWarning() << "No-GLSL is always forced in this build!";
 
-  isGLSL = false;
+  m_ForceNoGLSL = true;
+
+#else
+  m_ForceNoGLSL = forceNoGLSL;
+
 #endif // FORCE_NO_GLSL
 
-  // MANTIS-1204
-  // {
+  bool isGLSL = m_isGLSLAvailable && !m_ForceNoGLSL;
+
+  {
+    assert( m_UI!=NULL );
+    assert( m_UI->action_GLSL!=NULL );
+
+    bool isBlocked = m_UI->action_GLSL->blockSignals( true );
+
+    m_UI->action_GLSL->setEnabled( m_isGLSLAvailable );
+    m_UI->action_GLSL->setChecked( isGLSL );
+
+    m_UI->action_GLSL->blockSignals( isBlocked );
+  }
+
+  SetGLSLEnabled( isGLSL );
+
+  return ( !m_isGLSLAvailable || m_ForceNoGLSL ) || m_isGLSLAvailable;
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::SetGLSLEnabled( bool enabled )
+{
   //
-  // Forward GLSL state to quicklook view.
-  assert( GetQuicklookView()!=NULL );
-  assert( GetQuicklookView()->GetRenderer()!=NULL );
+  // Image view
+  {
+    assert( m_ImageView!=NULL );
 
-  GetQuicklookView()->GetRenderer()->SetGLSLEnabled( isGLSL );
-  // }
+    AbstractImageViewRenderer * renderer = m_ImageView->GetRenderer();
 
+    assert( renderer!=NULL );
+
+    if( renderer->SetGLSLEnabled( enabled )!=enabled )
+      {
+      renderer->ClearScene( true );
+      renderer->UpdateScene();
+
+      m_ImageView->updateGL();
+      }
+  }
+
+  {
+    ImageViewWidget * quicklookView = GetQuicklookView();
+    assert( quicklookView!=NULL );
+
+    // MANTIS-1204
+    // {
+    //
+    // Forward GLSL state to quicklook view.
+    assert( GetQuicklookView()->GetRenderer()!=NULL );
+
+    AbstractImageViewRenderer * renderer = quicklookView->GetRenderer();
+
+    assert( renderer!=NULL );
+
+    if( renderer->SetGLSLEnabled( enabled )!=enabled )
+      {
+      renderer->ClearScene( true );
+      renderer->UpdateScene();
+
+      quicklookView->updateGL();
+      }
+    // }
+  }
+
+  //
+  // Shader widget
   assert( m_ShaderWidget!=NULL );
 
-  m_ShaderWidget->SetGLSLEnabled( isGLSL );
+  m_ShaderWidget->SetGLSLEnabled( enabled );
   m_ShaderWidget->SetGLSL140Enabled( m_GLSL140>=0 );
 
+  //
+  // Status bar widget.
   assert( m_StatusBarWidget!=NULL );
 
-  m_StatusBarWidget->SetGLSLEnabled( isGLSL );
+  m_StatusBarWidget->SetGLSLEnabled( enabled );
 
-
-  return true;
+  //
+  // Paint
+  // if( mustRefresh )
+  //   {
+  //   m_ImageView->updateGL();
+  //   quicklookView->updateGL();
+  //   }
 }
 
 /*****************************************************************************/
@@ -1636,6 +1708,16 @@ MainWindow
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+/*****************************************************************************/
+void
+MainWindow
+::on_action_GLSL_triggered( bool checked )
+{
+  // qDebug() << this << "::on_action_GLSL_triggered(" << checked << ")";
+
+  SetGLSLEnabled( m_isGLSLAvailable && !m_ForceNoGLSL && checked );
+}
+
 /*****************************************************************************/
 void
 MainWindow

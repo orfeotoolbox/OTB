@@ -103,7 +103,9 @@ last() : return "tata"
         }
       else
         {
-          itkGenericExceptionMacro( "Invalid key "<<val<<". Must be in lowercase, containing alphanumerical characters or \".\"");
+            itkGenericExceptionMacro( "Invalid key '"
+                                      << val <<
+                                      "'. Must be in lowercase, containing alphanumerical characters or \".\"");
         }
     }
 
