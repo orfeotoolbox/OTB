@@ -217,6 +217,7 @@ struct PixelInfo
     m_Point(),
     m_Index(),
     m_Pixel(),
+    m_Resolution (1),
     m_HasPoint( false ),
     m_HasIndex( false ),
     m_HasPixel( false ),

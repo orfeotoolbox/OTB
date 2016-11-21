@@ -137,7 +137,7 @@ void SamplingRateCalculator
   // Then compute number of samples for each class
   for (it = m_RatesByClass.begin(); it != m_RatesByClass.end() ; ++it)
     {
-    double ratio = it->second.Tot / static_cast<double>(totalNumberOfSamplesAvailable);
+    double ratio = totalNumberOfSamplesAvailable != 0 ? it->second.Tot / static_cast<double>(totalNumberOfSamplesAvailable): 0;
 
     it->second.Required = static_cast<unsigned long>(0.5+ratio*value);
     this->UpdateRate(it->first);

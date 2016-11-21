@@ -372,19 +372,33 @@ SamplingRateCalculatorList
 
         total_nb_samples+=nb_samples[i];
         }
-        
-        for (unsigned int i=0 ; i<this->Size() ; i++)
-          {        
+
+      const Superclass::InternalContainerSizeType sampleListSize = this->Size();
+        for (unsigned int i=0 ; i<sampleListSize ; i++)
+          {
+          if (total_nb_samples != 0)
+            {
             this->GetNthElement(i)->SetTotalNumberOfSamples(vcl_floor(0.5+tot[0]*nb_samples[i]/static_cast<double>(total_nb_samples)));
+            }
+          else
+            {
+            this->GetNthElement(i)->SetTotalNumberOfSamples(0);
+            }
         }
       break;
       }
     case EQUAL:
       {
+      const Superclass::InternalContainerSizeType sampleListSize = this->Size();
 
-      unsigned long total_by_image = static_cast<unsigned long>(vcl_floor(tot[0]/static_cast<double>(this->Size())));
-      
-      for (unsigned int i=0 ; i<this->Size() ; i++)
+      unsigned long total_by_image = 0;
+        
+      if (sampleListSize != 0)
+        {
+        total_by_image = static_cast<unsigned long>(vcl_floor(tot[0]/static_cast<double>(sampleListSize)));
+        }
+
+      for (unsigned int i=0 ; i<sampleListSize ; i++)
         {
         this->GetNthElement(i)->SetTotalNumberOfSamples(total_by_image);
         }        
