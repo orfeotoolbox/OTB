@@ -45,7 +45,6 @@ ExternalProject_Add(MAKESELF
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND ""
-  DEPENDS PATCHELF
   )
 
 if(APPLE)
@@ -65,6 +64,7 @@ ExternalProject_Add(PATCHELF
   TMP_DIR             "${PATCHELF_TMP_DIR}"
   CONFIGURE_COMMAND "./configure" "--prefix" "${PATCHELF_INSTALL_DIR}"
   INSTALL_COMMAND ""
+  DEPENDS MAKESELF
   )
 
-add_custom_target(PACKAGE-TOOLS DEPENDS MAKESELF)
+add_custom_target(PACKAGE-TOOLS DEPENDS PATCHELF)
