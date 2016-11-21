@@ -19,7 +19,8 @@
 #define __otbWaveletsSynopsisImageToWaveletsBandsListFilter_h
 
 #include "otbImageToImageListFilter.h"
-#include "otbExtractROI.h"
+#include "itkRegionOfInterestImageFilter.h"
+
 
 namespace otb
 {
@@ -51,10 +52,13 @@ public:
   typedef typename InputImageType::RegionType             RegionType;
   typedef TImageList                                      OutputImageListType;
   typedef typename OutputImageListType::ImageType         OutputImageType;
-  typedef otb::ExtractROI<
-               typename InputImageType::PixelType,
-               typename OutputImageType::PixelType>       ExtractFilterType;
-  typedef typename ExtractFilterType::Pointer             ExtractFilterPointerType;
+
+  typedef itk::RegionOfInterestImageFilter<
+	  InputImageType,
+	  InputImageType > ExtractFilterType;
+  
+  typedef typename ExtractFilterType::Pointer ExtractFilterPointerType;
+  
   typedef std::vector<ExtractFilterPointerType>           ExtractFilterVectorType;
 
   /** Set the number of levels */

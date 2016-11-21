@@ -132,7 +132,7 @@ WaveletsSynopsisImageToWaveletsBandsListFilter<TImage,TImageList>
       currentRegion.SetIndex(currentIndex);
       currentRegion.SetSize(currentSize);
       //std::cout<<"Band: "<<i<<", region "<<currentRegion<<std::endl;
-      currentExtract->SetExtractionRegion(currentRegion);
+      currentExtract->SetRegionOfInterest(currentRegion);
     }
     m_ExtractFiltersUpToDate = true;
   }
