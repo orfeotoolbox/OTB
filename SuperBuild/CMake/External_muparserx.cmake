@@ -7,16 +7,10 @@ if(APPLE)
   set(MUPARSERX_FLAGS "-DCMAKE_CXX_FLAGS:STRING=-std=c++0x")
 endif()
 
-# We provide a zip archive of last muparserx release (3.0.5)
-# Archive was generated using commit sha on muparserx github page
-# Commands to create source archive:
-# wget https://github.com/beltoforion/muparserx/archive/2ace83b5411f1ab9940653c2bab0efa5140efb71.zip
-# mv 2ace83b5411f1ab9940653c2bab0efa5140efb71.zip muparserx_v3_0_5.zip
-
 ExternalProject_Add(MUPARSERX
   PREFIX MUPARSERX
-  URL "https://www.orfeo-toolbox.org/packages/muparserx_v3_0_5.zip"
-  URL_MD5 ad86b88c159ab68f4bfc99d71166e3c5
+  URL "https://github.com/beltoforion/muparserx/archive/v4.0.7.zip"
+  URL_MD5 67819fc478436ea8f647c804e6f2e1a2
   BINARY_DIR ${MUPARSERX_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
