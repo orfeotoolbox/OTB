@@ -61,7 +61,7 @@ public:
 
 protected:
   /** Main computation method */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.

@@ -42,9 +42,9 @@ public:
   typedef TInputImage                                                                InputImageType;
   typedef TOutputImage                                                               OutputImageType;
 
-  itkStaticConstMacro( ImageDimension,            unsigned int,                      ::itk::GetImageDimension<InputImageType>::ImageDimension );
-  itkStaticConstMacro( MotherWaveletOperator,     MotherWaveletOperatorEnumType,     TMotherWaveletOperator );
-  itkStaticConstMacro( DirectionOfTransformation, DirectionOfTransformationEnumType, otb::Wavelet::FORWARD );
+  itkStaticConstMacro( ImageDimension,            unsigned int, InputImageType::ImageDimension );
+  itkStaticConstMacro( MotherWaveletOperator,     short,        TMotherWaveletOperator );
+  itkStaticConstMacro( DirectionOfTransformation, short ,       otb::Wavelet::FORWARD );
 
   typedef WaveletInverseImageFilter<InputImageType,OutputImageType, TMotherWaveletOperator>  Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType>                    Superclass;

@@ -99,14 +99,17 @@ WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList,TImage>
 template <class TImageList, class TImage>
 void
 WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList,TImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType & outputRegionForThread,
+                       itk::ThreadIdType threadId)
 {
   // Retrieve input and output pointers
   typename InputImageListType::Pointer inputPtr = this->GetInput();
   typename OutputImageType::Pointer outputPtr = this->GetOutput();
 
   // Set up progress reporting
-  itk::ProgressReporter progress(this,threadId,outputRegionForThread.GetNumberOfPixels());
+  itk::ProgressReporter progress(this,
+                                 threadId,
+                                 outputRegionForThread.GetNumberOfPixels());
 
   // defines input and output iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
