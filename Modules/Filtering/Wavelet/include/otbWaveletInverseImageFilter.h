@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletInverseImageFilter_h
-#define __otbWaveletInverseImageFilter_h
+#ifndef otbWaveletInverseImageFilter_h
+#define otbWaveletInverseImageFilter_h
 
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"

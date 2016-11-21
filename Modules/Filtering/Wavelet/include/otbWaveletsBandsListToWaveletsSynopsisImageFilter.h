@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWaveletsBandsListToWaveletsSynopsisImageFilter_h
-#define __otbWaveletsBandsListToWaveletsSynopsisImageFilter_h
+#ifndef otbWaveletsBandsListToWaveletsSynopsisImageFilter_h
+#define otbWaveletsBandsListToWaveletsSynopsisImageFilter_h
 
 #include "otbImageListToImageFilter.h"
 
