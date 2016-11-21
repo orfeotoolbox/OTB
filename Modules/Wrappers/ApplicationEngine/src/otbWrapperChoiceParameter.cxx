@@ -31,7 +31,6 @@ ChoiceParameter::~ChoiceParameter()
 {
 }
 
-
 void
 ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
 {
@@ -117,7 +116,7 @@ ChoiceParameter::GetChoiceParameterGroupByKey( std::string choiceKey )
       }
     }
 
-  itkExceptionMacro(<< "Cannot find " << choiceKey);
+  itkExceptionMacro(<< "Cannot find choice key: '" << choiceKey  << "'");
 }
 
 unsigned int

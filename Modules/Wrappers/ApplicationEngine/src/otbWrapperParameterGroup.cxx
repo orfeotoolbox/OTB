@@ -120,11 +120,15 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
       else
         {
           itkExceptionMacro(<<parentkey << " is not a choice");
+		  
         }
     }
   else
     {
-      itkExceptionMacro(<<"No choice parameter key given");
+		itkExceptionMacro(
+					 << "No choice parameter key given: paramKey = '"
+					 << paramKey
+					 << "'");
     }
 }
 
