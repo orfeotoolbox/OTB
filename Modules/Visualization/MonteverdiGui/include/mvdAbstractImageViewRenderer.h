@@ -250,6 +250,7 @@ public:
 
 // public slots
 public slots:
+  inline void ClearScene( bool keepViewport = false );
   inline void UpdateScene();
   inline void RefreshScene();
 
@@ -280,7 +281,6 @@ protected:
   {
   }
 
-
 //
 // Protected attributes.
 protected:
@@ -292,7 +292,7 @@ protected:
 private:
   /**
    */
-  // virtual void virtual_ClearScene() {};
+  virtual void virtual_ClearScene( bool ) {};
   /**
    */
   virtual void virtual_PrepareScene() {};
@@ -454,6 +454,15 @@ AbstractImageViewRenderer
   m_GLSLEnabled = isEnabled;
 
   return wasEnabled;
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
+::ClearScene( bool keepViewport )
+{
+  virtual_ClearScene( keepViewport );
 }
 
 /*****************************************************************************/

@@ -143,8 +143,13 @@ gdal_try_run(STATUS GDAL_HAS_HDF4 gdalFormatsTest.c HDF4)
 
 #------------------- TESTS (END)---------------------
 
+set(RUN_GDAL_SYMBOLS_TEST TRUE)
+if("${CMAKE_SYSTEM_NAME}" MATCHES "OpenBSD")
+  set(RUN_GDAL_SYMBOLS_TEST FALSE)
+endif()
+
 #FOR UNIX SYSTEMS ONLY
-if(UNIX)
+if(RUN_GDAL_SYMBOLS_TEST)
   # Prepare bash script
   configure_file(${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest.sh.in ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh @ONLY)
   execute_process(COMMAND chmod u+x ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh)

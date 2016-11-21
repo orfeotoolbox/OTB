@@ -167,10 +167,6 @@ private:
 
   /**
    */
-  QPushButton * m_IgnoreButton;
-
-  /**
-   */
   GDALOverviewsBuilderVector m_GDALOverviewsBuilders;
 
   /**
