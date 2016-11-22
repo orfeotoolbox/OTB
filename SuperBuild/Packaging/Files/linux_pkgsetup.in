@@ -8,18 +8,20 @@ cd  "$DIRNAME_0"
 
 OUT_DIR=$(pwd)
 
-PATCH_ELF_EXE="$OUT_DIR/tools/patchelf"
+PATCH_ELF_EXE="$OUT_DIR/patchelf"
 
 # No no interference with LD_LIBRARY_PATH
 LD_LIBRARY_PATH=
 
 echo "Configuring..."
-BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
+#BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
+BINARY_FILES=$(find $OUT_DIR/lib $OUT_DIR/lib/otb/applications $OUT_DIR/bin -maxdepth 1 -type f -exec file {} \; | grep -i elf|cut -f1 -d':')
+
 # run patchelf
 for bin_file in $BINARY_FILES; do
-    #echo "adding rpath to $OUT_DIR/$bin_file"
-    if [ -f "$OUT_DIR/$bin_file" ]; then
-        "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$OUT_DIR/$bin_file"
+    #echo "adding rpath to $bin_file"
+    if [ -f "$bin_file" ]; then
+        "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$bin_file"
     fi
 done
 

@@ -2,6 +2,8 @@ macro(macro_setup_cmake_project pkg)
 
   message( "-- Configuring ${pkg} package")
 
+  set(PATCHELF_PROGRAM)
+  set(MAKESELF_SCRIPT)
   include(${SUPERBUILD_SOURCE_DIR}/CMake/External_pkgtools.cmake)
 
   #reset it again in macro(macro_create_targets_for_package pkg)
@@ -9,18 +11,18 @@ macro(macro_setup_cmake_project pkg)
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build")
 
-  if("${pkg}" STREQUAL "XDK")
-    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
-  else()
-    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
-  endif()
-
-  if("${pkg}" STREQUAL "XDK")
+   if("${pkg}" STREQUAL "XDK")
     set(PKG_GENERATE_XDK ON)
   else()
     set(PKG_GENERATE_XDK OFF)
   endif()
 
+ 
+  if(PKG_GENERATE_XDK)
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+  else()
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+  endif()
     
   #set archive name inside loop
   file(WRITE "${PACKAGE_PROJECT_DIR}/src/CMakeLists.txt"
@@ -42,42 +44,45 @@ macro(macro_setup_cmake_project pkg)
    set(PKG_OTB_VERSION_PATCH         \"${PKG_OTB_VERSION_PATCH}\")
    set(PKG_OTB_VERSION_STRING        \"${PKG_OTB_VERSION_STRING}\")
    set(PYTHON_EXECUTABLE             \"${PYTHON_EXECUTABLE}\")
+   set(PATCHELF_PROGRAM              \"${PATCHELF_PROGRAM}\")
    set(PKG_GENERATE_XDK              ${PKG_GENERATE_XDK})
-   set(PATCHELF_PROGRAM              ${PATCHELF_PROGRAM})
    set(OTB_TARGET_SYSTEM_ARCH        ${OTB_TARGET_SYSTEM_ARCH})
    set(OTB_TARGET_SYSTEM_ARCH_IS_X64 ${OTB_TARGET_SYSTEM_ARCH_IS_X64})   
    set(OTB_WRAP_PYTHON               ${OTB_WRAP_PYTHON})
+   set(PKG_OTB_DEBUG                 ${PKG_OTB_DEBUG})
    ${EXTRA_CACHE_CONFIG}
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageMacros.cmake)
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/InstallSupportFiles.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageGlobals.cmake)
    macro_super_package(STAGE_DIR \"${archive_name}\")"
   )
 
-  if(UNIX)
-    if(APPLE)
-      set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Macx.txt)
-    else() #not osx
-      set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Linux.txt)
-    endif() #if(APPLE)
-  else() #windows
-    set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows.txt)
-  endif() #if(UNIX)
+if(APPLE)
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Macx.txt)
+elseif(LINUX) #not osx
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Linux.txt)
+elseif(WIN32) #windows
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows.txt)
+endif()
 
-  configure_file(
-    "${README_FILE}"
-    ${PACKAGE_PROJECT_DIR}/src/README
-    )
+configure_file(
+  "${README_FILE}"
+  ${PACKAGE_PROJECT_DIR}/src/README
+  )
 
-  macro_create_targets_for_package(${pkg})
+macro_create_targets_for_package(${pkg})
 
 endmacro()
 
 macro(macro_create_targets_for_package pkg)
 
   if(WIN32 AND NOT MSVC)
-    add_custom_target(PACKAGE-${pkg}-check
-      COMMAND ${CMAKE_COMMAND} --build "." --target install
-      WORKING_DIRECTORY "${OTB_BINARY_DIR}"
-      )
+
+     add_custom_target(PACKAGE-${pkg}-check
+       COMMAND ${CMAKE_COMMAND} --build "." --target install
+       WORKING_DIRECTORY "${OTB_BINARY_DIR}"
+       )
   else() #Using SuperBuild
     #For out of source build,
     #we assume the otb is built correctly with superbuild
@@ -94,32 +99,32 @@ macro(macro_create_targets_for_package pkg)
   endif()
 
   add_dependencies(PACKAGE-${pkg}-check PACKAGE-TOOLS)
+#  add_dependencies(PACKAGE-${pkg}-check PACKAGE-${pkg}-clean)
 
-  if("${pkg}" STREQUAL "XDK")
-    set(PACKAGE_PLATFORM_NAME_ "xdk-${PACKAGE_PLATFORM_NAME}")
-    set(PKG_GENERATE_XDK ON)
-  else()
-    set(PACKAGE_PLATFORM_NAME_ "${PACKAGE_PLATFORM_NAME}")
-    set(PKG_GENERATE_XDK OFF)
+
+  if(NOT archive_name)
+    message(FATAL_ERROR "archive_name not set. Cannot continue")
   endif()
-
+  
   set(PACKAGE_PROJECT_DIR ${CMAKE_BINARY_DIR}/PACKAGE-${pkg})
-  if("${pkg}" STREQUAL "XDK")
-    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
-  else()
-    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
-  endif()
 
+  if(WIN32)
+    set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${archive_name}.zip")
+  else()
+    set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${archive_name}.run")
+  endif()
+    
   #configure
   add_custom_target(PACKAGE-${pkg}-configure
-  COMMAND ${CMAKE_COMMAND} -E make_directory "${PACKAGE_PROJECT_DIR}/build"
+    COMMAND ${CMAKE_COMMAND} -E remove "${PACKAGE_OUTPUT_FILE}"
+  COMMAND ${CMAKE_COMMAND} -E make_directory  "${PACKAGE_PROJECT_DIR}/build"
    WORKING_DIRECTORY "${PACKAGE_PROJECT_DIR}"
     COMMAND ${CMAKE_COMMAND} "-G${CMAKE_GENERATOR}"
     "${PACKAGE_PROJECT_DIR}/src"
     WORKING_DIRECTORY "${PACKAGE_PROJECT_DIR}/build"
     DEPENDS PACKAGE-${pkg}-check
     )
-
+#  COMMAND ${CMAKE_COMMAND} -E remove_directory "${PACKAGE_PROJECT_DIR}"
   #build
   add_custom_target(PACKAGE-${pkg}-build
     COMMAND ${CMAKE_COMMAND}
@@ -130,13 +135,15 @@ macro(macro_create_targets_for_package pkg)
 
   #create package
   # creation of package is different from windows and unix like
+  # WORKING_DIRECTORY must be CMAKE_INSTALL_PREFIX and not
+  # CMAKE_CURRENT_BINARY_DIR like in unix
   if(WIN32)
     add_custom_target(PACKAGE-${pkg}
       COMMAND ${ZIP_EXECUTABLE} "a" "-r" "-y"
-      "${CMAKE_BINARY_DIR}/${archive_name}.zip" "${archive_name}/*"
+      "${PACKAGE_OUTPUT_FILE}" "${archive_name}/*"
       WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
       DEPENDS PACKAGE-${pkg}-build
-      COMMENT "Creating ${CMAKE_BINARY_DIR}/${archive_name}.zip"
+      COMMENT "Creating ${PACKAGE_OUTPUT_FILE}"
       )
   else()
     add_custom_target(PACKAGE-${pkg}
@@ -150,20 +157,17 @@ macro(macro_create_targets_for_package pkg)
       "./pkgsetup"
       WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
       DEPENDS PACKAGE-${pkg}-build
-      COMMENT "Creating ${CMAKE_CURRENT_BINARY_DIR}/${archive_name}.run"
+      COMMENT "Creating ${PACKAGE_OUTPUT_FILE}"
       )
   endif()
 
-  set(PACKAGE_EXTENSION .run)
-  if(WIN32)
-    set(PACKAGE_EXTENSION .zip)
-  endif()
+
 
   #clean
   add_custom_target(PACKAGE-${pkg}-clean
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-${pkg}"
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}/PACKAGE-TOOLS"
-    COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${archive_name}${PACKAGE_EXTENSION}"
+    COMMAND ${CMAKE_COMMAND} -E remove "${PACKAGE_OUTPUT_FILE}"
     COMMAND ${CMAKE_COMMAND} "${CMAKE_BINARY_DIR}"
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     )
