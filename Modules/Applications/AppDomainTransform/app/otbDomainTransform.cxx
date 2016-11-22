@@ -72,8 +72,15 @@ namespace otb
 							 "Select wavelet form. default is HAAR");
 
 				AddChoice("mode.wavelet.form.haar", "HAAR");
-				AddChoice("mode.wavelet.form.symlet8", "SYMLET8");
-
+				AddChoice("mode.wavelet.form.db4", "DAUBECHIES4");
+				AddChoice("mode.wavelet.form.db6", "DAUBECHIES6");
+				AddChoice("mode.wavelet.form.db8", "DAUBECHIES8");
+				AddChoice("mode.wavelet.form.db12", "DAUBECHIES12");
+				AddChoice("mode.wavelet.form.db20", "DAUBECHIES20");
+				AddChoice("mode.wavelet.form.sb24", "SPLINE_BIORTHOGONAL_2_4");
+				AddChoice("mode.wavelet.form.sb44", "SPLINE_BIORTHOGONAL_4_4");
+				AddChoice("mode.wavelet.form.sym8", "SYMLET8");
+				
 				//Default value  
 				SetParameterString("mode", "wavelet");
 				SetParameterString("mode.wavelet.form", "haar");
