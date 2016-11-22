@@ -342,9 +342,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::ResolutionFactor, m_AdditionalNumber);
     }
 
-  // This value is used by JPEG2000ImageIO and not by the others ImageIO
-  itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes, 135000000);
-
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
   //
