@@ -9,18 +9,16 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Mines-Telecom. All rights reserved.
-  See IMTCopyright.txt for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 /* 
-This test code will run a WaveletImageFilter on given input image.
-Output from this filter is fed to WaveletInverseImageFilter which does the inverse
-transform that will result in the same input image. 
+This test code will run a WaveletImageFilter on given input image. Output 
+from this filter is then fed to WaveletInverseImageFilter which does 
+the inverse transform. Hence output of inverse transform passed to
+ImageFileWriter will result in the input image. 
 
 Wavelet operator used is HAAR (otb::Wavelet::HAAR).
 This filter works only in single-threaded setup 
