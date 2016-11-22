@@ -47,6 +47,10 @@ public:
 
   void AddParameter(Parameter::Pointer p);
 
+  /** Method to substitute a parameter in a group. 
+   *  The function returns true on success, false on failure */
+  bool ReplaceParameter(std::string &key, Parameter::Pointer p);
+
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
 
@@ -61,9 +65,9 @@ public:
    * or the path to a choice value */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
-  Parameter::Pointer GetParameterByIndex(unsigned int i);
+  Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow=true);
 
-  Parameter::Pointer GetParameterByKey(std::string name);
+  Parameter::Pointer GetParameterByKey(std::string name, bool follow=true);
 
   /** rashad: Add xml parameters eg: -inxml -outxml */
   void AddInXMLParameter();
@@ -92,6 +96,10 @@ public:
   {
     return true;
   }
+
+  /** Resolve potential proxy parameters by following their targets until
+   *  a non-proxy parameter. It will detect cycles and report an error */
+  static Parameter* ResolveParameter(Parameter *param);
 
 protected:
   ParameterGroup();
