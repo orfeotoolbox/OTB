@@ -21,6 +21,7 @@
 #include "otbWaveletImageFilter.h"
 #include "otbWaveletInverseImageFilter.h"
 #include "otbWaveletGenerator.h"
+#include "itkConfigure.h"
 
 namespace otb
 {
@@ -46,10 +47,15 @@ namespace otb
 			void DoInit() ITK_OVERRIDE
 			{
 				SetName("DomainTransform");
-				SetDescription("Domain Transform application for wavelet and fourier");
+#if defined(ITK_USE_FFTWF) || defined(ITK_USE_FFTWD)
+				const char * app_descr = "Domain Transform application for wavelet and fourier";
+#else
+				const char * app_descr = "Domain Transform application for wavelet";
+#endif
+				SetDescription(app_descr);
 
 				// Documentation
-				SetDocName("Domain Transform application for wavelet and fourier");
+				SetDocName(app_descr);
 				SetDocLongDescription("TODO");
 				SetDocLimitations("None");
 				SetDocAuthors("OTB-Team");
@@ -63,8 +69,10 @@ namespace otb
 
 				AddParameter(ParameterType_Choice, "mode", "mode");
 				SetParameterDescription("mode", "transform mode");
+#if defined(ITK_USE_FFTWF) || defined(ITK_USE_FFTWD)
 				AddChoice("mode.fft", "FFT transform");
 				SetParameterDescription("mode.fft", "FFT transform");
+#endif
 				AddChoice("mode.wavelet", "wavelet");
 				SetParameterDescription("mode.wavelet", "Wavelet transform");
 				AddParameter(ParameterType_Choice,
