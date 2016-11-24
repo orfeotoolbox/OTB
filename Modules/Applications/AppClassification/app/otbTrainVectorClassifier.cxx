@@ -171,7 +171,7 @@ private:
           std::string tmpKey="feat."+key.substr(0, end - key.begin());
           AddChoice(tmpKey,item);
           }
-        if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
           {
           std::string tmpKey="cfield."+key.substr(0, end - key.begin());
           AddChoice(tmpKey,item);
