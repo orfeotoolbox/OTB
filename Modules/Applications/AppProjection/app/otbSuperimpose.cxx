@@ -104,6 +104,7 @@ private:
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     SetParameterDescription("lms","Generate a coarser deformation field with the given spacing");
     SetDefaultParameterFloat("lms", 4.);
+    DisableParameter("lms");
     MandatoryOff("lms");
 
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
@@ -214,20 +215,24 @@ private:
     
     if(GetParameterString("mode")=="default")
       {
+      FloatVectorImageType::SpacingType defSpacing;
       if(IsParameterEnabled("lms"))
         {
         float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
         otbAppLogDEBUG("Generating coarse deformation field (spacing="<<defScalarSpacing<<")");
-        FloatVectorImageType::SpacingType defSpacing;
 
         defSpacing[0] = defScalarSpacing;
         defSpacing[1] = defScalarSpacing;
 
         if (spacing[0]<0.0) defSpacing[0] *= -1.0;
         if (spacing[1]<0.0) defSpacing[1] *= -1.0;
-
-        m_Resampler->SetDisplacementFieldSpacing(defSpacing);
         }
+      else
+        {
+        defSpacing[0]=10*spacing[0];
+        defSpacing[1]=10*spacing[1];
+        }
+      m_Resampler->SetDisplacementFieldSpacing(defSpacing);
       
       // Setup transform through projRef and Keywordlist
       m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());
