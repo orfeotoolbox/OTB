@@ -270,7 +270,7 @@ private:
       otbAppLogFATAL(<<"No field has been selected for data labelling!");
       }
     
-    std::vector<std::string> cFieldNames = GetChoiceNames("cfield");  
+    std::vector<std::string> cFieldNames = GetChoiceNames("field");  
     std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
     
     m_ReaderStat->SetFileName(this->GetParameterString("instats"));
