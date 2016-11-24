@@ -21,6 +21,10 @@ function(func_install_xdk_files)
   #The list of REQ_SHARE_DIR is made up from <mxe-target-dir>/share/
   #It may vary in future. I prefer not to glob on the share dir and
   #end up distributing man, info etc.. which ar irrelvant for windows
+
+  #TODO: cleaup this function. current
+  # code is bit of picking each .lib and .dll for now
+  # see opencv, itk, 
   foreach(REQ_SHARE_DIR
       aclocal
       Armadillo
@@ -67,17 +71,17 @@ function(func_install_xdk_files)
   
     ##install(FILES ${LIB_FILES} DESTINATION ${PKG_STAGE_DIR}/lib )
 
-    file(GLOB ITK_EXTRA_DLL_FILES_1 "${DEPENDENCIES_INSTALL_DIR}/bin/libITK*.dll")
-    install(FILES ${ITK_EXTRA_DLL_FILES_1} DESTINATION ${PKG_STAGE_DIR}/bin)
+    #file(GLOB ITK_EXTRA_DLL_FILES_1 "${DEPENDENCIES_INSTALL_DIR}/bin/libITK*.dll")
+    #install(FILES ${ITK_EXTRA_DLL_FILES_1} DESTINATION ${PKG_STAGE_DIR}/bin)
 
-    file(GLOB ITK_EXTRA_DLL_FILES_2 "${DEPENDENCIES_INSTALL_DIR}/bin/libitk*.dll")
-    install(FILES ${ITK_EXTRA_DLL_FILES_2} DESTINATION ${PKG_STAGE_DIR}/bin)
+    #file(GLOB ITK_EXTRA_DLL_FILES_2 "${DEPENDENCIES_INSTALL_DIR}/bin/libitk*.dll")
+    #install(FILES ${ITK_EXTRA_DLL_FILES_2} DESTINATION ${PKG_STAGE_DIR}/bin)
 
-    file(GLOB OPENCV_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/bin/libopencv*.dll")
-    install(FILES ${OPENCV_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
+    #file(GLOB OPENCV_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/bin/libopencv*.dll")
+    #install(FILES ${OPENCV_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
 
-    file(GLOB OPENCV_EXTRA_A_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/libopencv*.a")
-    install(FILES ${OPENCV_EXTRA_A_FILES} DESTINATION ${PKG_STAGE_DIR}/lib)
+    #file(GLOB OPENCV_EXTRA_A_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/libopencv*.a")
+    #install(FILES ${OPENCV_EXTRA_A_FILES} DESTINATION ${PKG_STAGE_DIR}/lib)
 
     #mxe installs qt in a separate directory under install prefix. So..
     set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}/qt")
@@ -181,30 +185,39 @@ function(func_install_support_files)
       "Cannot generate package without GDAL_DATA : ${GDAL_DATA} ${DEPENDENCIES_INSTALL_DIR}")
   endif()
 
-  install(DIRECTORY ${GDAL_DATA} DESTINATION ${PKG_SHARE_DEST_DIR})
 
+  # install(
+  #   DIRECTORY ${GDAL_DATA}
+  #   DESTINATION ${PKG_SHARE_DEST_DIR}
+  #   )
+
+  func_install_without_message("${GDAL_DATA}" "share" )
   ####################### install GeoTIFF data ########################
-  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/epsg_csv DESTINATION ${PKG_SHARE_DEST_DIR})
+  #install( DIRECTORY ${PKG_SHARE_SOURCE_DIR}/epsg_csv DESTINATION ${PKG_SHARE_DEST_DIR}  )
+
+  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/epsg_csv" "share" )
 
   ####################### install OSSIM data ##########################
-  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
+  #install( DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
+
+  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/ossim" "share" )
 
   ####################### install proj share ##########################
   if(EXISTS ${PKG_SHARE_SOURCE_DIR}/proj)
-    install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
+    #install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
+    func_install_without_message("${PKG_SHARE_SOURCE_DIR}/proj" "share" )
   endif()
+  
+  ####################### Install copyrights ##########################
+  #install license for windows package
+  #install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR} )
+  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/copyright" "share" )
+  install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
+
+  ####################### Install VERSION ##########################
 
   set(PKG_VERSION_FILE
     "${OTB_INSTALL_DIR}/share/doc/${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/VERSION")
-  
-  ####################### Install copyrights ##########################
-  if(NOT MINGW)
-    #install license for windows package
-    install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR})
-    install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
-  endif()
-
-  ####################### Install VERSION ##########################
   if(EXISTS ${PKG_VERSION_FILE} )
     install(FILES ${PKG_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
   endif()
