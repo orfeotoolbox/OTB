@@ -474,6 +474,11 @@ function(pkg_install_rule src_file)
 	)
       set(SKIP_INSTALL TRUE)
     endif()
+
+    if(is_gtk_lib)
+      set(SKIP_INSTALL TRUE)
+    endif()
+    
   endif()
 
   if(NOT SKIP_INSTALL)
