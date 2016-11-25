@@ -336,7 +336,5 @@ macro(otb_module_target _name)
 endmacro()
 
 macro(otb_module_requires_cxx11)
-  if(${otb-module}_ENABLED AND NOT ${OTB_HAS_CXX11})
-    message(FATAL_ERROR "Module ${otb-module} requires C++11 support. Consider adding --std=c++11 to your compiler flags or disabling it.")
-  endif()  
+  set(OTB_MODULE_${otb-module}_REQUIRES_CXX11 1)
 endmacro()
