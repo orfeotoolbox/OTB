@@ -89,6 +89,8 @@ void DoInit() ITK_OVERRIDE
   SetDocAuthors("OTB-Team");
   SetDocSeeAlso("OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html ");
 
+  AddDocTag(Tags::Learning);
+
   AddApplication("PolygonClassStatistics", "polystat","Polygon analysis");
   AddApplication("MultiImageSamplingRate", "rates", "Sampling rates");
   AddApplication("SampleSelection", "select", "Sample selection");
