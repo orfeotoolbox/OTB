@@ -23,6 +23,7 @@
 #include "otbRandomSampler.h"
 #include "otbGeometriesProjectionFilter.h"
 #include "otbGeometriesSet.h"
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
@@ -204,6 +205,8 @@ private:
     MandatoryOff("layer");
     SetDefaultParameterInt("layer",0);
 
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
+
     AddRAMParameter();
 
     AddRANDParameter();
@@ -226,6 +229,8 @@ private:
     m_RateCalculator->ClearRates();
     m_Periodic->GetFilter()->ClearOutputs();
     m_Random->GetFilter()->ClearOutputs();
+
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // Setup ram
     m_Periodic->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));

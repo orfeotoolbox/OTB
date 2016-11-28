@@ -4,7 +4,6 @@
 # stop generation of msvc packages for windows. 04-apr-2016. point OTB.
 
 ##### check if standalone project ######
-set(PACKAGE_OTB_SRC_DIR)
 set(OUT_OF_SOURCE_BUILD FALSE)
 if(NOT PROJECT_NAME)
   cmake_minimum_required(VERSION 2.6)
@@ -32,7 +31,7 @@ if(NOT PROJECT_NAME)
     mark_as_advanced(PYTHON_LIBRARY)
   endif()
 
- if(WIN32 AND NOT MSVC)
+ if(OTB_MINGW)
     set(OTB_BINARY_DIR "" CACHE PATH "OTB binary directory")
     set(OTB_INSTALL_DIR "" CACHE PATH "OTB install directory")
   else()
@@ -61,21 +60,21 @@ if(NOT GENERATE_PACKAGE AND NOT GENERATE_XDK)
   return()
 endif()
 
+set(LINUX FALSE)
+set(OTB_MINGW FALSE)
 if(WIN32 AND NOT MSVC)
-  if(NOT MXE_TARGET_DIR)
-    message(FATAL_ERROR "you must set MXE_TARGET_DIR")
+  set(OTB_MINGW TRUE)
+else()
+  if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+    set(LINUX TRUE)
   endif()
-endif()
-
-if(NOT PACKAGE_OTB_SRC_DIR)
-  message(FATAL_ERROR "you must set PACKAGE_OTB_SRC_DIR")
 endif()
 
 set(SUPERBUILD_SOURCE_DIR ${PACKAGE_OTB_SRC_DIR}/SuperBuild)
 
 include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
 include(${PACKAGE_OTB_SRC_DIR}/CMake/OTBCheckTargetSystemArch.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/PMacros.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/CreateCMakeProjects.cmake)
 
 if(WIN32)
   set(ZIP_EXE_NAMES 7z 7za)
@@ -85,19 +84,22 @@ if(WIN32)
   endif()
 endif()
 
-if(WIN32 AND NOT MSVC)
+if(OTB_MINGW)
   set(required_vars
-  PACKAGE_OTB_SRC_DIR
   OTB_BINARY_DIR
   OTB_INSTALL_DIR
+  MXE_TARGET_DIR
+  )
+else()
+    set(required_vars
+  SUPERBUILD_BINARY_DIR
+  SUPERBUILD_INSTALL_DIR
+  SUPERBUILD_SOURCE_DIR
   )
 endif()
 
 foreach(req
   ${required_vars}
-  SUPERBUILD_BINARY_DIR
-  SUPERBUILD_INSTALL_DIR
-  SUPERBUILD_SOURCE_DIR
   PACKAGE_OTB_SRC_DIR
   OTB_TARGET_SYSTEM_ARCH
   OTB_TARGET_SYSTEM_ARCH_IS_X64
@@ -109,6 +111,8 @@ foreach(req
 endforeach(req)
 
 message("\n${vars}\n")
+
+set(PKG_OTB_DEBUG OFF)
 
 set(EXTRA_CACHE_CONFIG)
 
@@ -122,7 +126,7 @@ if(APPLE)
   set(PACKAGE_PLATFORM_NAME "Darwin")
 elseif(WIN32)
   set(PACKAGE_PLATFORM_NAME "win")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+elseif(LINUX)
   set(PACKAGE_PLATFORM_NAME "Linux")
 endif()
 
@@ -131,13 +135,13 @@ if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
 set(PACKAGE_ARCH "64")
 endif()
 
-if(MINGW)
+if(OTB_MINGW)
   get_filename_component(MXE_MXEROOT ${MXE_TARGET_DIR} PATH)
   get_filename_component(MXE_MXEROOT ${MXE_MXEROOT} PATH)
   set(EXTRA_CACHE_CONFIG
     "set(CMAKE_CROSSCOMPILING TRUE)
      set(WIN32 TRUE)
-     set(MXE_ARCH \"${MXE_ARCH}\")
+     set(MINGW TRUE)
      set(MXE_MXEROOT \"${MXE_MXEROOT}\")"
     )
   set(CMAKE_INSTALL_PREFIX "${OTB_INSTALL_DIR}")  
@@ -145,7 +149,7 @@ endif()
 
 # get itk version from External_itk.cmake if not on mingw
 # because mxe has different version
-if(NOT MINGW)
+if(NOT OTB_MINGW)
   get_version(
     INPUT_FILE   "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
     MATCH_STRINGS "SB_ITK_VERSION_MAJOR" "SB_ITK_VERSION_MINOR"
@@ -165,10 +169,10 @@ get_version(
 set(PKG_OTB_VERSION_STRING
   ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
 
-if(MINGW)
+if(OTB_MINGW)
   set(OTB_BINARY_DIR              "${OTB_BINARY_DIR}")
   set(OTB_INSTALL_DIR             "${OTB_INSTALL_DIR}")
-  set(DEPENDENCIES_INSTALL_DIR    "${MXE_MXEROOT}/usr/${MXE_ARCH}-w64-mingw32.shared")
+  set(DEPENDENCIES_INSTALL_DIR    "${MXE_MXEROOT}/usr/${OTB_TARGET_SYSTEM_ARCH}-w64-mingw32.shared")
   set(QT_PLUGINS_DIR              "${DEPENDENCIES_INSTALL_DIR}/qt/plugins")
   set(QT_TRANSLATIONS_DIR         "${DEPENDENCIES_INSTALL_DIR}/qt/translations")
 else() #unixes

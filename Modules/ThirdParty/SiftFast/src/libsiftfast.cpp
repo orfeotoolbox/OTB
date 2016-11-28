@@ -28,7 +28,9 @@
 #include <map>
 #include <list>
 
+#ifndef __OpenBSD__
 #include <sys/timeb.h>    // ftime(), struct timeb
+#endif
 
 #ifndef _MSC_VER
 #include <sys/time.h>

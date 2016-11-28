@@ -18,7 +18,7 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
     if(IS_SIFTFAST_COMPILE)
         message(STATUS "Try to compile libsiftfast.cpp -- yes.")
     else()
-        message(STATUS "Try to compile libsiftfast.cpp -- no.")
+        message(STATUS "Try to compile libsiftfast.cpp -- no. OUTPUT_VARIABLE has ${OUTPUT}")
         try_compile(IS_SIFTFAST_COMPILE2
               ${CMAKE_CURRENT_BINARY_DIR}
               ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
