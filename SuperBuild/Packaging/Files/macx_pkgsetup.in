@@ -21,14 +21,26 @@ DYLD_LIBRARY_PATH=
 DYLD_FALLBACK_LIBRARY_PATH=
 
 echo "Configuring..."
-BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
-# #add rpath to LC_RPATH using install_name_tool
-for bin_file in $BINARY_FILES; do
-    #echo "adding rpath to $OUT_DIR/$bin_file"
-    if [ -f "$OUT_DIR/$bin_file" ]; then
-       $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$OUT_DIR/$bin_file"
-    fi
+# #BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
+# # #add rpath to LC_RPATH using install_name_tool
+# for bin_file in $BINARY_FILES; do
+#     #echo "adding rpath to $OUT_DIR/$bin_file"
+#     if [ -f "$OUT_DIR/$bin_file" ]; then
+#        $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$OUT_DIR/$bin_file"
+#     fi
+# done
+
+LIBRARY_FILES=$(find "$OUT_DIR/lib/otb/applications" "$OUT_DIR/lib" -maxdepth 1 -type f)
+EXE_FILES=$(find "$OUT_DIR/bin"  -type f -exec file {} \; | grep -i "Mach-O*.*executable"|cut -d ':' -f1)
+# run patchelf
+for lib_file in $LIBRARY_FILES $EXE_FILES; do
+    #echo "adding rpath to $OUT_DIR/$lib_file"
+    if [ -f "$lib_file" ]; then
+	#echo "$INSTALL_NAME_TOOL -add_rpath $OUT_DIR/lib $lib_file"
+	$INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$lib_file"
+   fi
 done
+
 
 LONG_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@
 SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@

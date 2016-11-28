@@ -32,6 +32,7 @@
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperProxyParameter.h"
 
 
 #include "otbWrapperAddProcessToWatchEvent.h"
@@ -97,9 +98,9 @@ ParameterGroup* Application::GetParameterList()
   return m_ParameterList;
 }
 
-Parameter* Application::GetParameterByKey(std::string name)
+Parameter* Application::GetParameterByKey(std::string name, bool follow)
 {
-  return GetParameterList()->GetParameterByKey(name);
+  return GetParameterList()->GetParameterByKey(name, follow);
 }
 
 void Application::SetParameterInt(std::string parameter, int value, bool hasUserValueFlag)
@@ -927,19 +928,22 @@ void Application::SetParameterOutputVectorData(std::string parameter, VectorData
 
 std::string Application::GetParameterName(std::string parameter)
 {
-  Parameter* param = GetParameterByKey(parameter);
+  // get the actual parameter, even if it is a proxy
+  Parameter* param = GetParameterByKey(parameter,false);
   return param->GetName();
 }
 
 std::string Application::GetParameterDescription(std::string parameter)
 {
-  Parameter* param = GetParameterByKey(parameter);
+  // get the actual parameter, even if it is a proxy
+  Parameter* param = GetParameterByKey(parameter,false);
   return param->GetDescription();
 }
 
 void Application::SetParameterDescription(std::string parameter, std::string desc)
 {
-  Parameter* param = GetParameterByKey(parameter);
+  // get the actual parameter, even if it is a proxy
+  Parameter* param = GetParameterByKey(parameter,false);
   param->SetDescription(desc);
 }
 
@@ -1622,7 +1626,6 @@ std::string Application::GetProgressDescription() const
 {
   return m_ProgressSourceDescription;
 }
-
 
 }
 }

@@ -145,6 +145,7 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
         }
       }
     }
+  ApplicationRegistry::CleanRegistry();
 
   if( !isOK )
     return EXIT_FAILURE;
