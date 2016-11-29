@@ -454,4 +454,11 @@ ColorDynamicsWidget
   QToolTip::showText(mapToGlobal(m_UI->gammaSlider->pos()),tr("Gamma: ") % QString::number(GetGamma()) );
 }
 
+void
+ColorDynamicsWidget
+::on_gammaResetButton_clicked()
+{
+  this->SetGamma(1.0);
+}
+
 } // end namespace 'mvd'

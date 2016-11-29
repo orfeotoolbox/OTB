@@ -3,5 +3,6 @@
     <file>../../../../Utilities/Data/Icons/execute.png</file>
     <file>../../../../Utilities/Data/Icons/locked.png</file>
     <file>../../../../Utilities/Data/Icons/unlocked.png</file>
+    <file>../../../../Utilities/Data/Icons/view-refresh.png</file>
   </qresource>
 </RCC>
