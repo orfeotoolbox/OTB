@@ -270,6 +270,11 @@ int Application::ExecuteAndWriteOutput()
           if(outputParam!=ITK_NULLPTR)
             {
             outputParam->InitializeWriters();
+            std::string checkReturn = outputParam->CheckFileName(true);
+            if (!checkReturn.empty())
+              {
+              otbAppLogWARNING("Check filename : "<<checkReturn);
+              }
             if (useRAM)
               {
               outputParam->SetRAMValue(ram);
