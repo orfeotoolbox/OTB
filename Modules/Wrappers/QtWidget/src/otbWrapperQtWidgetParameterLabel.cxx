@@ -28,7 +28,7 @@ QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param)
   QLabel *label = new QLabel;
 
   label->setText(param->GetName());
-  label->setToolTip(param->GetName());
+  label->setToolTip(param->GetKey());
 
   QVBoxLayout *labelLayout = new QVBoxLayout;
   labelLayout->setSpacing(0);
