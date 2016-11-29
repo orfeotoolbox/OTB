@@ -106,6 +106,9 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    FloatVectorImageListType* imgList = GetParameterImageList("il");
+    SetParameterOutputImage("outgroup.outputimage", imgList->GetNthElement(0));
+    SetParameterComplexOutputImage("cout", GetParameterComplexImage("cin"));
     //std::cout << "TestApplication::DoExecute" << std::endl;
   }
 };
