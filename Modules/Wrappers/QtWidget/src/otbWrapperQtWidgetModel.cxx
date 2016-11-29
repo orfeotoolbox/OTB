@@ -17,6 +17,9 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetModel.h"
 
+//Use to create command line from the application parameters
+#include "otbWrapperOutputProcessXMLParameter.h"
+
 namespace otb
 {
 
@@ -70,6 +73,14 @@ QtWidgetModel
   emit SetApplicationReady(false);
   m_IsRunning = true;
 
+  //Buld corresponding command line and display to the Log tab
+
+  //Build XML DOM from m_application
+
+  OutputProcessXMLParameter::Pointer outXMLParam = OutputProcessXMLParameter::New();
+
+  //outXMLParam->
+  
   // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
 
