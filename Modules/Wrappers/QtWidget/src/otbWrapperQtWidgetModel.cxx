@@ -79,8 +79,78 @@ QtWidgetModel
 
   OutputProcessXMLParameter::Pointer outXMLParam = OutputProcessXMLParameter::New();
 
-  //outXMLParam->
+  TiXmlElement* XMLAppElement = outXMLParam->ParseApplication(m_Application);
+ 
+  //Create command line from the XML dom
+  TiXmlElement * pName, *pParam;
+  std::ostringstream cmdLine;
+
   
+  if(XMLAppElement)
+    {
+    pName = XMLAppElement->FirstChildElement("name");
+
+    cmdLine << "otbcli_" << pName->FirstChild()->ValueStr();
+    cmdLine << " ";
+
+    std::cout << "App name " << pName->FirstChild()->ValueStr() << std::endl; 
+
+    //Parse application parameters
+    pParam = XMLAppElement->FirstChildElement("parameter");
+    
+    while(pParam)
+        {
+        //Get pareter key
+        cmdLine << "-";
+        cmdLine << pParam->FirstChildElement("key")->FirstChild()->ValueStr();
+        cmdLine << " ";
+
+        //Some parameters can have multiple values. Test it and handle this
+        //specific case
+        TiXmlElement * values = pParam->FirstChildElement("values");
+
+        if (values)
+          {
+          //Loop over value
+          TiXmlElement * pValue = pParam->FirstChildElement("value");
+          while(pValue)
+            {
+            cmdLine << pValue->FirstChild()->ValueStr();
+            cmdLine << " ";
+            
+            pValue = pValue->NextSiblingElement(); // iteration over multiple values 
+            }
+          }
+        else
+          {
+          //Get parameter value
+          cmdLine << pParam->FirstChildElement("value")->FirstChild()->ValueStr();
+          cmdLine << " ";
+
+          //In case of OutputImageparameter we need to report output pixel type
+          TiXmlElement * pPixType = pParam->FirstChildElement("pixtype");
+
+          if (pPixType)
+            {
+            cmdLine << pPixType->FirstChild()->ValueStr();
+            cmdLine << " ";
+            }
+          }
+        
+        pParam = pParam->NextSiblingElement(); // iteration over parameters
+        }
+
+    std::cout << cmdLine.str() << std::endl;
+
+    //Report the command line string to the app logger
+    m_Application->GetLogger()->Write(itk::LoggerBase::INFO, cmdLine.str());
+    }
+  else 
+    {
+    //itkExceptionMacro(<< "Could not load XML application descriptor");
+    std::cout << "ERROR" << std::endl;
+    }
+
   // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
 
