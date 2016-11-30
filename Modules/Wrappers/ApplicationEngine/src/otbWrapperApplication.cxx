@@ -228,6 +228,9 @@ int Application::Execute()
 
 int Application::ExecuteAndWriteOutput()
 {
+  m_Chrono.Reset();
+  m_Chrono.Start();
+
   int status = this->Execute();
 
   if (status == 0)
@@ -335,6 +338,7 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
 
+  m_Chrono.Stop();
   return status;
 }
 
@@ -1630,6 +1634,11 @@ itk::ProcessObject* Application::GetProgressSource() const
 std::string Application::GetProgressDescription() const
 {
   return m_ProgressSourceDescription;
+}
+
+double Application::GetLastExecutionTiming() const
+{
+  return m_Chrono.GetTotal();
 }
 
 }

@@ -99,10 +99,10 @@ QtWidgetModel
     SLOT( OnApplicationExecutionDone( int ) )
   );
 
-  taskAppli->Execute();
-
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
+
+  taskAppli->Execute();
 }
 
 void
@@ -112,6 +112,13 @@ QtWidgetModel
   // For the progressReport to close the Progress widget
   // and the GUI to update message
   emit SetProgressReportDone( status );
+
+  if (status >= 0)
+    {
+    std::ostringstream oss;
+    oss << "Execution took "<< m_Application->GetLastExecutionTiming() << " sec";
+    SendLogINFO(oss.str());
+    }
 
   // start timer
   m_Timer->start();
