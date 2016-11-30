@@ -90,6 +90,16 @@ EFFECT_NAMES[ EFFECT_COUNT ] =
   QT_TRANSLATE_NOOP( "mvd", "Spectral angle" ),
   QT_TRANSLATE_NOOP( "mvd", "Swipe (horizontal)" ),
   QT_TRANSLATE_NOOP( "mvd", "Swipe (vertical)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Lookup table (jet)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (jet)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Lookup table (hot)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (hot)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Lookup table (winter)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (winter)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Lookup table (summer)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (summer)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Lookup table (cool)" ),
+  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (cool)" )
 };
 
 bool
