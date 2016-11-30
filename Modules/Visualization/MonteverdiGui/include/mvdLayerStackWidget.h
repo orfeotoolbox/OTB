@@ -190,6 +190,9 @@ signals:
   void ApplyButtonClicked();
   /**
    */
+  void ResetEffectsButtonClicked();
+  /**
+   */
   void CopyLayerRequested( const AbstractLayerModel * );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/

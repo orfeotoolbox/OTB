@@ -220,6 +220,14 @@ LayerStackController
     this,
     SIGNAL( ApplyAllRequested() )
   );
+
+  QObject::connect(
+    widget,
+    SIGNAL( ResetEffectsButtonClicked() ),
+    // to:
+    model,
+    SLOT( ResetEffects() )
+  );
 }
 
 /*******************************************************************************/
@@ -350,6 +358,14 @@ LayerStackController
     // to:
     this,
     SIGNAL( ApplyAllRequested() )
+  );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( ResetEffectsButtonClicked() ),
+    // to:
+    model,
+    SLOT( ResetEffects() )
   );
 }
 

@@ -221,6 +221,7 @@ public slots:
   inline void SelectLast();
   inline void SelectPrevious();
   inline void SelectNext();
+  void ResetEffects();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

@@ -166,6 +166,14 @@ LayerStackWidget
     this,
     SIGNAL( ApplyButtonClicked() )
   );
+
+  QObject::connect(
+    m_UI->resetEffectsButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( ResetEffectsButtonClicked() )
+  );
 }
 
 /*******************************************************************************/
