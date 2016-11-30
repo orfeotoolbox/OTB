@@ -54,6 +54,7 @@ public slots:
 
 private slots:
   void UpdateMessageAfterExecuteClicked();
+  void UpdateMessageAfterExecution(int status);
   void UpdateMessageAfterApplicationReady(bool val);
 
 signals:
