@@ -225,8 +225,8 @@ LayerStackController
     widget,
     SIGNAL( ResetEffectsButtonClicked() ),
     // to:
-    model,
-    SLOT( ResetEffects() )
+    this,
+    SIGNAL( ResetEffectsRequested() )
   );
 }
 
@@ -364,8 +364,8 @@ LayerStackController
     widget,
     SIGNAL( ResetEffectsButtonClicked() ),
     // to:
-    model,
-    SLOT( ResetEffects() )
+    this,
+    SIGNAL( ResetEffectsRequested() )
   );
 }
 
