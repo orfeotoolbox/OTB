@@ -550,6 +550,18 @@ VectorImageSettings
 {
   m_IsGrayscaleActivated = activated;
 
+  Effect effect = GetEffect();
+
+  if(activated
+     && effect == EFFECT_SPECTRAL_ANGLE)
+    {
+    SetEffect(EFFECT_NORMAL);
+    }
+  else if(!activated && effect >= EFFECT_LUT_LOCAL_JET)
+    {
+    SetEffect(EFFECT_NORMAL);
+    }
+  
   SetModified();
 }
 

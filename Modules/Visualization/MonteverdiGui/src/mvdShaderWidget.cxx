@@ -40,8 +40,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
-#include "mvdImageSettings.h"
 #include "mvdGui.h"
+#include "mvdVectorImageSettings.h"
 
 namespace mvd
 {
@@ -118,17 +118,23 @@ void
 ShaderWidget
 ::SetGLSL140Enabled( bool isGLSLEnabled )
 {
+  SetEffectVisible(EFFECT_GRADIENT,isGLSLEnabled);
+}
+
+void ShaderWidget
+::SetEffectVisible(const Effect & effect, bool visible)
+{
   assert( qApp!=NULL );
 
   int index =
     m_UI->effectComboBox->findText(
-      qApp->translate( "mvd", EFFECT_NAMES[ EFFECT_GRADIENT ] )
+      qApp->translate( "mvd", EFFECT_NAMES[ effect ] )
     );
 
-  if( isGLSLEnabled )
+  if( visible )
     {
     if( index<0 )
-      m_UI->effectComboBox->addItem( tr( "mvd", EFFECT_NAMES[ EFFECT_GRADIENT ] ) );
+      m_UI->effectComboBox->addItem( qApp->translate( "mvd", EFFECT_NAMES[ effect ] ) );
     }
   else if( index>=0 )
     m_UI->effectComboBox->removeItem( index );
@@ -185,6 +191,14 @@ ShaderWidget
     );
     m_UI->valueLineEdit->setCursorPosition( 0 );
     }
+
+  VectorImageSettings * vis = dynamic_cast<VectorImageSettings*>(settings);
+
+  if(vis!=NULL)
+    {
+    GrayscaleActivated(vis->IsGrayscaleActivated());
+    }
+  
 }
 
 /*******************************************************************************/
@@ -273,6 +287,23 @@ ShaderWidget
     return;
 
   emit SettingsChanged();
+}
+
+
+void ShaderWidget
+::GrayscaleActivated(bool status)
+{  
+  SetEffectVisible(EFFECT_LUT_JET,status);
+  SetEffectVisible(EFFECT_LUT_LOCAL_JET,status);
+  SetEffectVisible(EFFECT_LUT_HOT,status);
+  SetEffectVisible(EFFECT_LUT_LOCAL_HOT,status);
+  SetEffectVisible(EFFECT_LUT_WINTER,status);
+  SetEffectVisible(EFFECT_LUT_LOCAL_WINTER,status);
+  SetEffectVisible(EFFECT_LUT_SUMMER,status);
+  SetEffectVisible(EFFECT_LUT_LOCAL_SUMMER,status);
+  SetEffectVisible(EFFECT_LUT_COOL,status);
+  SetEffectVisible(EFFECT_LUT_LOCAL_COOL,status);
+  SetEffectVisible(EFFECT_SPECTRAL_ANGLE,!status);
 }
 
 } // end namespace 'mvd'
