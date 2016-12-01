@@ -373,6 +373,7 @@ private:
         PeriodicSamplerType::SamplerParameterType param;
         param.Offset = 0;
         param.MaxJitter = this->GetParameterInt("sampler.periodic.jitter");
+        param.MaxBufferSize = 100000000UL;
 
         m_Periodic->SetInput(this->GetParameterImage("in"));
         m_Periodic->SetOGRData(reprojVector);
