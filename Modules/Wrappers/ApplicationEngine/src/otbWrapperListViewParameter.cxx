@@ -150,11 +150,13 @@ ListViewParameter::ClearChoices()
   m_ChoiceList.clear();
 }
 
+
 void
-ListViewParameter::SetSelectedItemsByNames()
+ListViewParameter::SetSelectedNames(std::vector<std::string> selectedNames)
 {
   std::vector<int> selectedItems;
   std::vector<std::string> names = this->GetChoiceNames();
+
 
   if(m_SingleSelection && m_SelectedNames.size() > 1)
     {
@@ -163,7 +165,7 @@ ListViewParameter::SetSelectedItemsByNames()
   
   for(unsigned int i=0; i<m_SelectedNames.size(); i++)
     {
-    const std::string selectedName = m_SelectedNames[i];
+    const std::string selectedName = selectedNames[i];
     unsigned int j(0);
       for(; j<names.size(); j++)
       {
@@ -193,7 +195,7 @@ ListViewParameter::SetSelectedItemsByNames()
 
 
 void
-ListViewParameter::SetSelectedItemsByKeys()
+ListViewParameter::SetSelectedKeys(std::vector<std::string> selectedKeys)
 {
   std::vector<int> selectedItems;
   std::vector<std::string> keys = this->GetChoiceKeys();
@@ -205,7 +207,7 @@ if(m_SingleSelection && m_SelectedKeys.size() > 1)
   
   for(unsigned int i=0; i<m_SelectedKeys.size(); i++)
     {
-    const std::string selectedKey = m_SelectedKeys[i];
+    const std::string selectedKey = selectedKeys[i];
     unsigned int j(0);
     std::ostringstream oss;
       for(; j<keys.size(); j++)

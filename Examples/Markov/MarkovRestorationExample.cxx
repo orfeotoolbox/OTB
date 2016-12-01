@@ -223,7 +223,16 @@ int main(int argc, char* argv[])
 
   writer->SetInput(rescaleFilter->GetOutput());
 
-  writer->Update();
+  try
+    {
+    writer->Update();
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
+    return -1;
+    }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

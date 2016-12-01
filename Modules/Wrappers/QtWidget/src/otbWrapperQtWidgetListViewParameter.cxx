@@ -105,6 +105,10 @@ void QtWidgetListViewParameter::SelectedItems()
       }
     }
   m_ListViewParam->SetSelectedItems(m_SelectedItems);
+
+  // make sure parameter is enabled
+  m_ListViewParam->SetActive(true);
+  m_ListViewParam->SetUserValue(true);
 }
 
 }

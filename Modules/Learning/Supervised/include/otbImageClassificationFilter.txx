@@ -260,8 +260,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 
   typename TargetListSampleType::ConstIterator labIt = labels->Begin();
   maskIt.GoToBegin();
-  for (outIt.GoToBegin(); labIt!=labels->End() && !outIt.IsAtEnd(); 
-       ++outIt)
+  for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
     double confidenceIndex = 0.0;
     TargetValueType labelValue(m_DefaultLabel);
@@ -270,7 +269,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       validPoint = maskIt.Get() > 0;
       ++maskIt;
       }
-    if (validPoint)
+    if (validPoint && labIt!=labels->End())
       {
       labelValue = labIt.GetMeasurementVector()[0];
 
@@ -280,6 +279,10 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
         }
        
       ++labIt;    
+      }
+    else
+      {
+      labelValue = m_DefaultLabel;
       }
     
     outIt.Set(labelValue);

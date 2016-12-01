@@ -203,7 +203,16 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->Update();
+  try
+    {
+    filter->Update();
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
+    return -1;
+    }
   // Software Guide : EndCodeSnippet
 
   writer->SetFileName(argv[2]);

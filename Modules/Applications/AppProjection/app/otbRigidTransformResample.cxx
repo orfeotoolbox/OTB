@@ -194,6 +194,7 @@ private:
                                                   double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
@@ -202,6 +203,7 @@ private:
                                                            double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
@@ -210,6 +212,7 @@ private:
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       }

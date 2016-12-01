@@ -22,6 +22,7 @@
 #include "otbStatisticsXMLFileWriter.h"
 #include "otbGeometriesProjectionFilter.h"
 #include "otbGeometriesSet.h"
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
@@ -109,7 +110,9 @@ private:
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
     MandatoryOff("layer");
     SetDefaultParameterInt("layer",0);
-    
+
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -164,6 +167,8 @@ private:
 
   std::vector<std::string> cFieldNames = GetChoiceNames("field");  
   std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
+
+  otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
   // Reproject geometries
   FloatVectorImageType::Pointer inputImg = this->GetParameterImage("in");

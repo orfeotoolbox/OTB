@@ -210,8 +210,8 @@ ComplexOutputImageParameter::GetWriter()
   // 0 : image
   // 1 : VectorImage
 
-  if ( dynamic_cast<FloatVectorImageType*>( m_Image.GetPointer()) ||
-       dynamic_cast<DoubleVectorImageType*>(m_Image.GetPointer()))
+  if ( dynamic_cast<ComplexFloatVectorImageType*>( m_Image.GetPointer()) ||
+       dynamic_cast<ComplexDoubleVectorImageType*>(m_Image.GetPointer()))
     {
     type = 1;
     }

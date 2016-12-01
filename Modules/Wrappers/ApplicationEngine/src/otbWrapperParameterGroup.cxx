@@ -36,6 +36,7 @@
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperProxyParameter.h"
 
 #include "otb_boost_string_header.h"
 
@@ -61,7 +62,11 @@ ParameterGroup::GetParametersKeys(bool recursive)
   for (pit = m_ParameterList.begin(); pit != m_ParameterList.end(); ++pit)
     {
     Parameter* param = *pit;
-    parameters.push_back( param->GetKey() );
+    std::string currentKey(param->GetKey());
+    parameters.push_back( currentKey );
+
+    // follow proxy parameters
+    param = this->ResolveParameter(param);
 
     if (recursive && dynamic_cast<ParameterGroup*>(param))
       {
@@ -70,7 +75,7 @@ ParameterGroup::GetParametersKeys(bool recursive)
       for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
-        parameters.push_back( std::string(paramAsGroup->GetKey()) + "."  + *it );
+        parameters.push_back( currentKey + "."  + *it );
         }
       }
     else if (recursive && dynamic_cast<ChoiceParameter*>(param))
@@ -81,7 +86,7 @@ ParameterGroup::GetParametersKeys(bool recursive)
       for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
-        parameters.push_back( std::string(paramAsChoice->GetKey()) + "."  + *it );
+        parameters.push_back( currentKey + "."  + *it );
         }
       }
     }
@@ -120,11 +125,15 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
       else
         {
           itkExceptionMacro(<<parentkey << " is not a choice");
+		  
         }
     }
   else
     {
-      itkExceptionMacro(<<"No choice parameter key given");
+		itkExceptionMacro(
+					 << "No choice parameter key given: paramKey = '"
+					 << paramKey
+					 << "'");
     }
 }
 
@@ -666,14 +675,79 @@ ParameterGroup::AddParameter(Parameter::Pointer p)
   m_ParameterList.push_back(p);
 }
 
-Parameter::Pointer
-ParameterGroup::GetParameterByIndex(unsigned int i)
+bool
+ParameterGroup::ReplaceParameter(std::string &key, Parameter::Pointer p)
 {
-  return m_ParameterList[i];
+  bool ret = true;
+  ParameterKey pName(key);
+  std::vector<std::string> splitName = pName.Split();
+  std::string lastkey = pName.GetLastElement();
+  std::string parentkey = pName.GetRoot();
+  ParameterGroup* parentGroup = this;
+  if( splitName.size() > 1 )
+    {
+    Parameter* parentParam = GetParameterByKey(parentkey);
+    parentGroup = dynamic_cast<ParameterGroup*>(parentParam);
+    if (parentGroup)
+      {
+      ret = parentGroup->ReplaceParameter(lastkey, p);
+      }
+    else
+      {
+      ret = false;
+      }
+    }
+  else
+    {
+    // find current parameter in the current group
+    Parameter::Pointer oldParam;
+    ParameterListType::iterator vit;
+    for (vit = m_ParameterList.begin(); vit != m_ParameterList.end(); ++vit)
+      {
+      if (lastkey.compare((*vit)->GetKey()) == 0)
+        {
+        oldParam = *vit;
+        break;
+        }
+      }
+    if (oldParam.IsNull())
+      {
+      // parameter to replace not found : return false
+      ret = false;
+      }
+    else
+      {
+      // parameter already exists : replace it
+      *vit = p;
+      p->SetKey(lastkey);
+      }
+    }
+  if (ret)
+    {
+    if( splitName.size() > 1 )
+      {
+      p->SetRoot(parentGroup);
+      parentGroup->AddChild(p);
+      }
+    }
+  // don't check type compatibility here, we may want to handle special cases
+  // at higher level
+  return ret;
 }
 
 Parameter::Pointer
-ParameterGroup::GetParameterByKey(std::string name)
+ParameterGroup::GetParameterByIndex(unsigned int i, bool follow)
+{
+  Parameter *param = m_ParameterList[i];
+  if (follow)
+    {
+    param = this->ResolveParameter(param);
+    }
+  return Parameter::Pointer(param);
+}
+
+Parameter::Pointer
+ParameterGroup::GetParameterByKey(std::string name, bool follow)
 {
   ParameterKey pName(name);
 
@@ -699,6 +773,13 @@ ParameterGroup::GetParameterByKey(std::string name)
   if (parentParam.IsNull())
     {
     itkExceptionMacro(<< "Could not find parameter " << name)
+    }
+
+  // follow proxy parameters
+  if (follow)
+    {
+    Parameter *rawParam = this->ResolveParameter(parentParam.GetPointer());
+    parentParam = rawParam;
     }
 
   // If the name contains a child, make a recursive call
@@ -772,6 +853,34 @@ unsigned int
 ParameterGroup::GetNumberOfParameters()
 {
   return m_ParameterList.size();
+}
+
+Parameter* ParameterGroup::ResolveParameter(Parameter *param)
+{
+  Parameter* ret = param;
+  if (ret == ITK_NULLPTR)
+    {
+    itkGenericExceptionMacro("Can't resolve NULL parameter!");
+    }
+  while (dynamic_cast<ProxyParameter*>(ret))
+    {
+    ProxyParameter* castParam = dynamic_cast<ProxyParameter*>(ret);
+    ProxyParameter::ProxyTargetType target = castParam->GetTarget();
+    ParameterGroup* targetGroup = dynamic_cast<ParameterGroup*>(target.first.GetPointer());
+    if (targetGroup)
+      {
+      ret = targetGroup->GetParameterByKey(target.second);
+      }
+    else
+      {
+      itkGenericExceptionMacro("Target group of a proxy parameter is not of type ParameterGroup");
+      }
+    if (ret == param)
+      {
+      itkGenericExceptionMacro("Cycle detected with proxy parameters!");
+      }
+    }
+  return ret;
 }
 
 }

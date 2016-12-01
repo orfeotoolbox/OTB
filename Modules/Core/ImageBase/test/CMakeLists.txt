@@ -650,23 +650,6 @@ otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res0 COMMAND otbIma
   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
   )
 
-# Only do the following test if we are using the OTB Openjpeg driver,
-# because gdal does not report jpeg2000 overview with size < 128
-# pixel, and will therefore interpolate.
-if(OTB_USE_OPENJPEG)
-
-# Read an area inside one tile at resolution 4 (jpeg2000 conformance file with
-# specific tile size at different resolution).
-otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res4 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4.tif
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
-  otbMultiChannelExtractROI
-  ${INPUTDATA}/jpeg2000_conf_p1_06.j2k?&resol=4
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
-  )
-
-endif()
-
 # Read an area inside one tile at resolution 0 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
 otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 COMMAND otbImageBaseTestDriver

@@ -19,6 +19,7 @@
 #define otbSharkUtils_h
 
 #include "otb_shark.h"
+#include "itkMacro.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push

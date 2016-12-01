@@ -20,9 +20,6 @@ otb_module(OTBImageIO
     OTBObjectList
     OTBStreaming
 
-  OPTIONAL_DEPENDS
-    OTBIOJPEG2000
-
   TEST_DEPENDS
     OTBStatistics
     OTBTestKernel
