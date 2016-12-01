@@ -405,6 +405,8 @@ LayerStackController
   widget->SetMoveEnabled( model->GetCount()>1 );
 
   widget->SetApplyEnabled( model->GetCount()>1 );
+
+  widget->SetResetEffectsEnabled( !model->IsEmpty() );
 }
 
 /*******************************************************************************/

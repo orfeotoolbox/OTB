@@ -412,6 +412,18 @@ LayerStackWidget
 }
 
 /*******************************************************************************/
+void
+LayerStackWidget
+::SetResetEffectsEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->reloadButton!=NULL );
+
+  m_UI->resetEffectsButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void

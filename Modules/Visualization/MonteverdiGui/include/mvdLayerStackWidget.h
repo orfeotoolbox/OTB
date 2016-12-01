@@ -131,6 +131,8 @@ public:
    */
   void SetReloadEnabled( bool );
 
+  void SetResetEffectsEnabled( bool );
+
   /**
    */
   void InstallEventFilter( QObject * filter );
