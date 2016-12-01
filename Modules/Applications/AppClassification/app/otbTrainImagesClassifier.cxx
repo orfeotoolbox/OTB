@@ -374,7 +374,8 @@ void DoExecute() ITK_OVERRIDE
 
   // ---------------------------------------------------------------------------
   // Select & extract samples
-  GetInternalApplication("select")->SetParameterString("sampler", "random");
+  GetInternalApplication("select")->SetParameterString("sampler", "periodic");
+  GetInternalApplication("select")->SetParameterInt("sampler.periodic.jitter",50);
   GetInternalApplication("select")->SetParameterString("strategy","byclass");
   GetInternalApplication("extraction")->SetParameterString("outfield", "prefix");
   GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name","value_");
