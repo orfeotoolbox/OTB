@@ -103,5 +103,12 @@ int main(int argc, char* argv[])
   mainWindow->show();
 
   // Start event processing loop
-  return qtApp.exec();
+  int ret = qtApp.exec();
+
+  // Clean resources
+  if (mainWindow) delete mainWindow;
+  app = ITK_NULLPTR;
+  ApplicationRegistry::CleanRegistry();
+
+  return ret;
 }
