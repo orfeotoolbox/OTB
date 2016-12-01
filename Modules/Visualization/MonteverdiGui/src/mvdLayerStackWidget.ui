@@ -181,8 +181,15 @@
      </item>
      <item>
       <widget class="QToolButton" name="resetEffectsButton">
+       <property name="toolTip">
+        <string>Reset all layer effects to Normal</string>
+       </property>
        <property name="text">
-        <string>R</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="mvdIcons.qrc">
+         <normaloff>:/Utilities/Data/Icons/edit-clear.png</normaloff>:/Utilities/Data/Icons/edit-clear.png</iconset>
        </property>
       </widget>
      </item>
@@ -226,6 +233,7 @@
  </widget>
  <resources>
   <include location="../../Application/Monteverdi/mvdMainWindow.qrc"/>
+  <include location="mvdIcons.qrc"/>
  </resources>
  <connections/>
 </ui>
