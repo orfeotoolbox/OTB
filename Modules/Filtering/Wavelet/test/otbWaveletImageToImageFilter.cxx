@@ -58,7 +58,7 @@ int otbWaveletImageToImageFilter(int argc, char * argv[])
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
   
-  itk::MultiThreader::SetGlobalMaximumNumberOfThreads( 1 );
+  //  itk::MultiThreader::SetGlobalMaximumNumberOfThreads( 1 );
 
   /* Reading */
   ReaderType::Pointer reader = ReaderType::New();
