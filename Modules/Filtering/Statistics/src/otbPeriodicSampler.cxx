@@ -46,7 +46,14 @@ PeriodicSampler::Reset(void)
       m_JitterValues[i] = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()
         ->GetUniformVariate(0.0,m_JitterSize);
       }
-    m_OffsetValue = m_JitterValues[0];
+    if (m_JitterValues.empty())
+      {
+      m_OffsetValue = 0.0;
+      }
+    else
+      {
+      m_OffsetValue = m_JitterValues[0];
+      }
     }
   else
     {
