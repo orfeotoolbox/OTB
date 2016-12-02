@@ -12,8 +12,6 @@ if(MSVC AND BUILD_SHARED_LIBS)
  list(APPEND MUPARSERX_FLAGS -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS:BOOL=ON)
 endif()
 
-message(INFO "SB_CMAKE_CACHE_ARGS= " ${SB_CMAKE_CACHE_ARGS})
-
 ExternalProject_Add(MUPARSERX
   PREFIX MUPARSERX
   URL "https://github.com/beltoforion/muparserx/archive/v4.0.7.zip"
