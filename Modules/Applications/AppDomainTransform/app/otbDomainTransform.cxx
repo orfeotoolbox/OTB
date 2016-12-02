@@ -150,11 +150,11 @@ namespace otb
 
 
 				AddParameter(ParameterType_Choice,
-							 "direction",
-							 "direction: forward/inverse");
+							 "dir",
+							 "dir: fwd/inv");
 				
-				AddChoice("direction.forward", "forward");
-				AddChoice("direction.inverse", "inverse");
+				AddChoice("dir.fwd", "fwd");
+				AddChoice("dir.inv", "inv");
 
 				AddParameter(ParameterType_OutputImage, "out", "Output Image");
 				SetParameterDescription("out", "Output image");
@@ -190,18 +190,22 @@ namespace otb
 			void DoExecute() ITK_OVERRIDE
 			{
 				
-				int direction = GetParameterInt("direction");
+				int dir = GetParameterInt("dir");
 
 				int mode = GetParameterInt("mode");
 
-				if( direction != 0 || direction != 1)
+				if( dir != 0 && dir != 1)
 				{
-					itkExceptionMacro( << "direction must be either 'fwd' or 'inv'");
+					itkExceptionMacro( << "-dir is '" 
+									   << dir << "'."
+									   << "It must be either 'fwd' or 'inv'");
 				}
 				
-				if( mode != 0 || mode != 1)
+				if( mode != 0 && mode != 1)
 				{
-					itkExceptionMacro( << "mode must be either 'fft' or 'wavelet'");
+					itkExceptionMacro( << "mode is '" 
+									   << mode << "'."
+									   << "It must must be either 'fft' or 'wavelet'");
 				}
 
 				
@@ -211,34 +215,34 @@ namespace otb
 					switch (wavelet_type)
 					{
 					case 0:
-						DoWaveletTransform<otb::Wavelet::HAAR> ( direction);
+						DoWaveletTransform<otb::Wavelet::HAAR> ( dir );
 						break;					
 					case 1:
-						DoWaveletTransform< otb::Wavelet::DB4 > (direction);
+						DoWaveletTransform< otb::Wavelet::DB4 > ( dir );
 						break;
 					case 2:
-						DoWaveletTransform<otb::Wavelet::DB4> (direction);
+						DoWaveletTransform<otb::Wavelet::DB4> ( dir );
 						break;
 					case 3:
-						DoWaveletTransform<otb::Wavelet::DB6> (direction);
+						DoWaveletTransform<otb::Wavelet::DB6> ( dir );
 						break;
 					case 4:
-						DoWaveletTransform<otb::Wavelet::DB8> (direction);
+						DoWaveletTransform<otb::Wavelet::DB8> ( dir );
 						break;
 					case 5:
-						DoWaveletTransform<otb::Wavelet::DB12> (direction);
+						DoWaveletTransform<otb::Wavelet::DB12> ( dir );
 						break;
 					case 6:
-						DoWaveletTransform<otb::Wavelet::DB20> (direction);
+						DoWaveletTransform<otb::Wavelet::DB20> ( dir );
 						break;
 					case 7:
-						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_2_4 > (direction);
+						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_2_4 > ( dir );
 						break;
 					case 8:
-						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_4_4> (direction);
+						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_4_4> ( dir );
 						break;
 					case 9:
-						DoWaveletTransform<otb::Wavelet::SYMLET8> (direction);
+						DoWaveletTransform<otb::Wavelet::SYMLET8> ( dir );
 						break;        					
 					default:
 						itkExceptionMacro( << "Invalid wavelet type: '" <<  wavelet_type << "'");
@@ -250,7 +254,7 @@ namespace otb
 				else
 				{
 					//forward fft
-					if (direction == 0 )
+					if (dir == 0 )
 					{
 
 						typedef otb::Image<TInputPixel>          TInputImage;
@@ -339,7 +343,7 @@ namespace otb
 
 
 			template<otb::Wavelet::Wavelet TWaveletOperator>
-			void DoWaveletTransform(const int direction,
+			void DoWaveletTransform(const int dir,
 									const std::string inkey = "in",
 									const std::string outkey = "out")
 			{
@@ -353,7 +357,7 @@ namespace otb
 				inImage->UpdateOutputInformation();
 
 
-				if( direction == 0)
+				if( dir == 0)
 				{
 		
 					typedef otb::WaveletImageFilter<
