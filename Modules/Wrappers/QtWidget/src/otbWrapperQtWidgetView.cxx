@@ -40,7 +40,7 @@ QtWidgetView::QtWidgetView(Application* app)
 
 QtWidgetView::~QtWidgetView()
 {
-
+  delete m_Model;
 }
 
 void QtWidgetView::CreateGui()
