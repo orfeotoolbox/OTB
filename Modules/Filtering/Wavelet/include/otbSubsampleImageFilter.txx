@@ -83,7 +83,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 {
   Superclass::CallCopyOutputRegionToInputRegion(destRegion, srcRegion);
 
-  if (static_cast<int>(DirectionOfTransformation) == Wavelet::INVERSE)
+  if (DirectionOfTransformation == Wavelet::INVERSE)
     {
     typename OutputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
     typename OutputImageRegionType::SizeType  srcSize = srcRegion.GetSize();
@@ -112,7 +112,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 {
   Superclass::CallCopyInputRegionToOutputRegion(destRegion, srcRegion);
 
-  if (static_cast<int>(DirectionOfTransformation) == Wavelet::INVERSE)
+  if (DirectionOfTransformation == Wavelet::INVERSE)
     {
     typename InputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
     typename InputImageRegionType::SizeType  srcSize = srcRegion.GetSize();
@@ -161,8 +161,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
   SubsampledImageRegionConstIterator<InputImageType> inputIter
     (this->GetInput(), inputRegionForThread);
 
-  if (static_cast<int>(itkGetStaticConstMacro(DirectionOfTransformation))
-        == static_cast<int>(Wavelet::FORWARD))
+  if (DirectionOfTransformation  == Wavelet::FORWARD)
     {
     inputIter.SetSubsampleFactor(GetSubsampleFactor());
     inputIter.GoToBegin();
