@@ -28,8 +28,8 @@ namespace otb {
 /** \class WaveletImageFilter
  * \brief
  *
- * \ingroup
- * \sa
+ * \ingroup OTBWavelet
+ * \sa WaveletInverseImageFilter
  */
 template < class TInputImage,
            class TOutputImage,
