@@ -14,7 +14,7 @@
   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
-  =========================================================================*/
+=========================================================================*/
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
@@ -118,16 +118,14 @@ namespace otb
 				AddDocTag(Tags::Filter);
 
 				AddParameter(ParameterType_InputImage, "in",  "Input Image");
-				SetParameterDescription("in", "The input image");
+				SetParameterDescription("in", "This will take an input image to be transformed image. For FFT inverse transform, it expects a complex image as two-band image in which first band represent real part and second band represent imaginary part.");
 
 				AddRAMParameter();
 
 				AddParameter(ParameterType_Choice, "mode", "mode");
-				SetParameterDescription("mode", "transform mode");
-				//#if defined(ITK_USE_FFTWF) || defined(ITK_USE_FFTWD)
+				SetParameterDescription("mode", "This parameter allows one to select between fft(fourier) and wavelet");
 				AddChoice("mode.fft", "FFT transform");
 				SetParameterDescription("mode.fft", "FFT transform");
-				//#endif
 				AddChoice("mode.wavelet", "wavelet");
 				SetParameterDescription("mode.wavelet", "Wavelet transform");
 				AddParameter(ParameterType_Choice,
@@ -151,13 +149,13 @@ namespace otb
 
 				AddParameter(ParameterType_Choice,
 							 "dir",
-							 "dir: fwd/inv");
+							 "dir: forward/inverse");
 				
 				AddChoice("dir.fwd", "fwd");
 				AddChoice("dir.inv", "inv");
 
 				AddParameter(ParameterType_OutputImage, "out", "Output Image");
-				SetParameterDescription("out", "Output image");
+				SetParameterDescription("out", "This parameter holds the output file name to which transformed image will be written. This has a slightly different behaviour depending on transform type. \n For Wavelet, output is a single band image for both forward and inverse transform. \n For FFT forward transform, output is two band image where first band represents real part and second band represents imaginary part of a complex image.");
 
 
 				SetDocExampleParameterValue("in", "input.tif");
