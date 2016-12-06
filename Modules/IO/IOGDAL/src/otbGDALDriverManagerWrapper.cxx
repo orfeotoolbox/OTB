@@ -53,6 +53,8 @@ GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
 GDALDatasetWrapper::Pointer
 GDALDriverManagerWrapper::Open( std::string filename ) const
 {
+   // Support chinese coding,Fix up the problem about the error happens when open the filename which contains chinese charactor.
+  CPLSetConfigOption("GDAL_FILENAME_IS_UTF8","NO");	
   GDALDatasetWrapper::Pointer datasetWrapper;
 
   if (boost::algorithm::starts_with(filename, "http://")
