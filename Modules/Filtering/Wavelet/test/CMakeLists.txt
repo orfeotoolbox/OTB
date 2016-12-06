@@ -15,7 +15,6 @@ otbWaveletFilterBank.cxx
 otbWaveletPacketTransformNew.cxx
 otbWaveletFilterBankNew.cxx
 otbWaveletOperatorNew.cxx
-otbWaveletImageToImageFilter.cxx
 )
 
 add_executable(otbWaveletTestDriver ${OTBWaveletTests})
@@ -573,11 +572,3 @@ otb_add_test(NAME msTuWaveletFilterBankNew COMMAND otbWaveletTestDriver
 otb_add_test(NAME msTuWaveletOperatorNew COMMAND otbWaveletTestDriver
   otbWaveletOperatorNew )
 
-otb_add_test(NAME msTvWaveletImageToImageFilter COMMAND otbWaveletTestDriver
-  --compare-image ${EPSILON_6}
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-  ${TEMP}/msTvWaveletImageToImageFilterOut.tif
-  otbWaveletImageToImageFilter
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-  ${TEMP}/msTvWaveletImageToImageFilterOut.tif
-  )

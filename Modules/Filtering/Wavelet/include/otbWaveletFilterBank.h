@@ -399,11 +399,6 @@ protected:
   WaveletFilterBank();
   ~WaveletFilterBank() ITK_OVERRIDE {}
 
-  void VerifyInputInformation() ITK_OVERRIDE
-  {
-
-  }
-
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy information from the input image if existing.

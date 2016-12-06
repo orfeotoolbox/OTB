@@ -27,6 +27,9 @@
 
 #include "itkPeriodicBoundaryCondition.h"
 
+// FIXME
+#define __myDebug__ 0
+
 namespace otb {
 
 /**
@@ -63,9 +66,11 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 
   if (GetSubsampleImageFactor() == 1) return;
 
+#if __myDebug__
   otbGenericMsgDebugMacro(<< " down sampling output regions by a factor of " << GetSubsampleImageFactor());
   otbGenericMsgDebugMacro(<< "initial region    " << this->GetInput()->GetLargestPossibleRegion().GetSize()[0]
                           << "," << this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
+#endif
 
   OutputImageRegionType newRegion;
   this->CallCopyInputRegionToOutputRegion(newRegion, this->GetInput()->GetLargestPossibleRegion());
@@ -75,8 +80,9 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     this->GetOutput(i)->SetRegions(newRegion);
     }
 
+#if __myDebug__
   otbGenericMsgDebugMacro(<< "new region output " << newRegion.GetSize()[0] << "," << newRegion.GetSize()[1]);
-
+#endif
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
@@ -636,18 +642,21 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       }
     }
 
+#if __myDebug__
   otbGenericMsgDebugMacro(<< " up sampling output regions by a factor of " << GetSubsampleImageFactor());
 
   otbGenericMsgDebugMacro(<< "initial region    "
                           << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0]
                           << "," << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[1]);
+#endif
 
   OutputImageRegionType newRegion;
   this->CallCopyInputRegionToOutputRegion(newRegion, this->GetInput(0)->GetLargestPossibleRegion());
   this->GetOutput()->SetRegions(newRegion);
 
+#if __myDebug__
   otbGenericMsgDebugMacro(<< "new region output " << newRegion.GetSize()[0] << "," << newRegion.GetSize()[1]);
-
+#endif
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
