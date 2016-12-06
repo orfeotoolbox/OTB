@@ -33,7 +33,7 @@ notify you about it. If everything works fine, you will be given information abo
 using python bindings.
 
 You must have python numpy bindings installed in your system. you can install it locally
-without admin rights with "pip --user install numpy". This is to give users to choose
+without admin rights with "pip install --user numpy". This is to give users to choose
 their own existing python installation rather than distributing one in OTB package
 
 Notes:
