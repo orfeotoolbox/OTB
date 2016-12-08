@@ -1,0 +1,51 @@
+Description: Fix build failure with GCC 6: no match for 'operator<<'.
+Author: Rashad M <rashadkm@gmail.com>
+Origin: https://trac.osgeo.org/ossim/attachment/ticket/2354/fix-ossim-trac-2354.diff
+Bug-Debian: https://bugs.debian.org/811851
+Bug: https://trac.osgeo.org/ossim/ticket/2354
+
+--- a/ossim/src/ossim/elevation/ossimElevManager.cpp
++++ b/ossim/src/ossim/elevation/ossimElevManager.cpp
+@@ -643,14 +643,26 @@ std::ostream& ossimElevManager::print(os
+          << "\nm_useGeoidIfNullFlag = "<<m_useGeoidIfNullFlag
+          << "\nm_currentDatabaseIdx = "<<m_currentDatabaseIdx
+          << "\nm_dbRoundRobin.size = "<<m_dbRoundRobin.size();
++
+    for (ossim_uint32 i=0; i<m_dbRoundRobin.size(); ++i)
+    {
+       out<<"\nm_dbRoundRobin["<<i<<"].size = "<<m_dbRoundRobin[i].size()<<endl;
+       for (ossim_uint32 j=0; j<m_dbRoundRobin[i].size(); ++j)
+-         out<<"m_dbRoundRobin["<<i<<"]["<<j<<"] = "<<m_dbRoundRobin[i][j]->print(out)<<endl;
++      {
++         out<<"m_dbRoundRobin["<<i<<"]["<<j<<"] = ";
++         // GP: We have to separate this line.  On MS it will not compile                                                                                            
++         // otherwise                                                                                                                                                
++         m_dbRoundRobin[i][j]->print(out);
++
++      }
++         out<<endl;
+    }
+-   cout<<"\n"<<ossimElevSource::print(cout);
++   out<<"\n";
++   ossimElevSource::print(out);
+    return out;
++
++
++
+ }
+ 
+ 
+--- a/ossim/src/ossim/elevation/ossimElevSource.cpp
++++ b/ossim/src/ossim/elevation/ossimElevSource.cpp
+@@ -269,8 +269,9 @@ std::ostream& ossimElevSource::print(std
+          << "\ntheMaxHeightAboveMSL = "<<theMaxHeightAboveMSL
+          << "\ntheNullHeightValue = "<<theNullHeightValue
+          << "\ntheSeaLevelValue = "<<theSeaLevelValue
+-         << "\ntheGroundRect = "<<theGroundRect
+-         << ossimSource::print(out);
++         << "\ntheGroundRect = "<<theGroundRect;
++         // GP: need this by itself.  MS errors out
++         ossimSource::print(out);
+    return out;
+ }
+ 

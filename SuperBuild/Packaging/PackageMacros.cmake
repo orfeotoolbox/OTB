@@ -75,12 +75,32 @@ function(search_library input_file pkg_searchdirs result)
 endfunction()
 
 macro(add_to_symlink_list src_file target_file)
+  #TODO: avoid code duplication here and later in install_rule
+
+  set(SKIP_INSTALL FALSE)
+  if(PKG_GENERATE_XDK)
+    get_filename_component(src_file_NAME ${src_file} NAME)
+    setif_value_in_list(is_gtk_lib "${src_file_NAME}" ALLOWED_SYSTEM_DLLS)
+    if ("${src_file_NAME}"
+	MATCHES
+	"libOTB|libotb|otbApp|otbapp_|otbTest|libMonteverdi|monteverdi|mapla|iceViewer"
+	)
+      set(SKIP_INSTALL TRUE)
+    endif()
+
+    if(is_gtk_lib)
+      set(SKIP_INSTALL TRUE)
+    endif()
+    
+  endif(PKG_GENERATE_XDK)
   # NOTE: $OUT_DIR is set actually in pkgsetup.in. So don't try
   # any pre-mature optimization on that variable names
+  if(NOT SKIP_INSTALL)
   file(APPEND 
     ${CMAKE_BINARY_DIR}/make_symlinks_temp
-    "ln -sf $OUT_DIR/lib/${src_file} $OUT_DIR/lib/${target_file}\n"
-  )
+    "if [ -f \"\$OUT_DIR/lib/${src_file}\" ]; then \n ln -sf \"$OUT_DIR/lib/${src_file}\" \"$OUT_DIR/lib/${target_file}\" \n fi;\n"
+    )
+  endif()
 endmacro()
 
 function(check_for_gtk_libs input_file result)
