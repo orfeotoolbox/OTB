@@ -26,6 +26,7 @@
 #include <itkForwardFFTImageFilter.h>
 #include <itkInverseFFTImageFilter.h>
 #include <itkUnaryFunctorImageFilter.h>
+#include <itkFFTShiftImageFilter.h>
 
 namespace otb
 {
@@ -126,6 +127,9 @@ namespace otb
 				SetParameterDescription("mode", "This parameter allows one to select between fft(fourier) and wavelet");
 				AddChoice("mode.fft", "FFT transform");
 				SetParameterDescription("mode.fft", "FFT transform");
+				AddParameter(ParameterType_Empty, "mode.fft.shift", "false");
+				SetParameterDescription("mode.fft.shift",
+										"shift transform of fft filter");
 				AddChoice("mode.wavelet", "wavelet");
 				SetParameterDescription("mode.wavelet", "Wavelet transform");
 				AddParameter(ParameterType_Choice,
@@ -251,6 +255,7 @@ namespace otb
 				// fft ttransform
 				else
 				{
+					bool shift = IsParameterEnabled( "mode.fft.shift");
 					//forward fft
 					if (dir == 0 )
 					{
@@ -261,8 +266,6 @@ namespace otb
 						//get input paramter as otb::Image<TInputPixel>
 						TInputImagePointer inImage = GetParameterImage<TInputImage>("in");
 						inImage->UpdateOutputInformation();
-
-
 						//typedef itk::::ForwardFFTImageFilter over otbImage< TInputPixel >
 						typedef itk::ForwardFFTImageFilter < TInputImage> FFTFilter;
 						FFTFilter::Pointer fwdFilter = FFTFilter::New();
@@ -285,7 +288,25 @@ namespace otb
 						UnaryFunctorImageFilter::Pointer unaryFunctorImageFilter
 							= UnaryFunctorImageFilter::New();
 						
+						if( shift)
+						{
+							typedef itk::FFTShiftImageFilter<
+								typename FFTFilter::OutputImageType,
+								typename FFTFilter::OutputImageType > FFTShiftFilterType;
+
+							FFTShiftFilterType::Pointer
+								fftShiftFilter = FFTShiftFilterType::New();
+
+							fftShiftFilter->SetInput( fwdFilter->GetOutput() );
+							unaryFunctorImageFilter->SetInput(fftShiftFilter->GetOutput() );
+						}
+						else
+						{
+							unaryFunctorImageFilter->SetInput(fwdFilter->GetOutput());
+						}
+
 						unaryFunctorImageFilter->SetInput(fwdFilter->GetOutput());
+
 						unaryFunctorImageFilter->Update();
 
 						//set output image
@@ -316,22 +337,44 @@ namespace otb
 							 ToComplexPixel
 							 <TInputImage::PixelType,
 							  TComplexImage::PixelType> > UnaryFunctorImageFilter;
-						
+
 						UnaryFunctorImageFilter::Pointer
-							unary_filter = UnaryFunctorImageFilter::New();
+							unaryFunctorImageFilter = UnaryFunctorImageFilter::New();
+
+
+						if( shift)
+						{
+							typedef itk::FFTShiftImageFilter<
+								TInputImage,
+								TInputImage > FFTShiftFilterType;
+
+							FFTShiftFilterType::Pointer
+								fftShiftFilter = FFTShiftFilterType::New();
+							fftShiftFilter->SetInput( inImage );
+
+						unaryFunctorImageFilter->SetInput(fftShiftFilter->GetOutput() );
 						
-						unary_filter->SetInput(inImage);
+						}
+						else
+						{
+						unaryFunctorImageFilter->SetInput(inImage);
+						}
+
+						unaryFunctorImageFilter->Update();
+
 						
 						//typedef itk::::InverseFFTImageFilter over TComplexImage
 						typedef itk::InverseFFTImageFilter
 							< TComplexImage,
 							  TOutputImage > FFTFilter;
 						FFTFilter::Pointer invFilter = FFTFilter::New();
-						invFilter->SetInput( unary_filter->GetOutput() );
+						invFilter->SetInput( unaryFunctorImageFilter->GetOutput() );
 						invFilter->Update();
 						
 						//set output image
-						SetParameterOutputImage<TOutputImage>( "out", invFilter->GetOutput() );						
+						SetParameterOutputImage<
+							TOutputImage >
+							( "out", invFilter->GetOutput() );
 					}
 
 				}
