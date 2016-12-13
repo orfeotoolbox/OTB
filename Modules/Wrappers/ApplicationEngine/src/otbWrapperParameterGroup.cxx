@@ -141,36 +141,26 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
 void
 ParameterGroup::ClearChoices(std::string paramKey)
 {
-  ParameterKey pKey( paramKey );
-  // Split the parameter name
-  std::vector<std::string> splitKey = pKey.Split();
 
-  std::string parentkey;
-  Parameter::Pointer parentParam;
+  Parameter * param  = GetParameterByKey(paramKey);
 
-  if (splitKey.size() > 1)
+  if(!param)
     {
-    parentkey = pKey.GetRoot();
-    parentParam = GetParameterByKey(parentkey);
+    itkExceptionMacro("Parameter "<<paramKey<<" not found");
+    }
+  
+   // param must be a choice, a listBox or this is an error
+  ListViewParameter* paramAsChoice = dynamic_cast<ListViewParameter*>(param);
+
+  if (paramAsChoice)
+    {
+    paramAsChoice->ClearChoices();
     }
   else
     {
-    parentParam = GetParameterByKey(splitKey[0]);
-    }
-
-   // parentParam must be a choice, a listBox or this is an error
-  ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
-
-  if (listBoxParentAsChoice)
-    {
-    listBoxParentAsChoice->ClearChoices();
-    }
-  else
-    {
-    itkExceptionMacro(<<parentkey << " is not a ListView");
+    itkExceptionMacro(<<paramKey << " is not a ListView");
     }
 }
-
 
 void ParameterGroup::AddOutXMLParameter()
 {
@@ -216,34 +206,25 @@ void ParameterGroup::AddInXMLParameter()
 std::vector<int>
 ParameterGroup::GetSelectedItems(std::string paramKey)
 {
+  Parameter * param  = GetParameterByKey(paramKey);
+
+  if(!param)
+    {
+    itkExceptionMacro("Parameter "<<paramKey<<" not found");
+    }
+  
+   // param must be a choice, a listBox or this is an error
+  ListViewParameter* paramAsChoice = dynamic_cast<ListViewParameter*>(param);
+  
   std::vector<int> selectedItems;
-  ParameterKey pKey( paramKey );
-  // Split the parameter name
-  std::vector<std::string> splitKey = pKey.Split();
 
-  std::string parentkey;
-  Parameter::Pointer parentParam;
-
-  if (splitKey.size() > 1)
+  if (paramAsChoice)
     {
-    parentkey = pKey.GetRoot();
-    parentParam = GetParameterByKey(parentkey);
+    selectedItems = paramAsChoice->GetSelectedItems();
     }
   else
     {
-    parentParam = GetParameterByKey(splitKey[0]);
-    }
-
-   // parentParam must be a choice, a listBox or this is an error
-  ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
-
-  if (listBoxParentAsChoice)
-    {
-    selectedItems = listBoxParentAsChoice->GetSelectedItems();
-    }
-  else
-    {
-    itkExceptionMacro(<<parentkey << " is not a ListView");
+    itkExceptionMacro(<<paramKey << " is not a ListView");
     }
 
   return selectedItems;

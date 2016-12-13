@@ -735,6 +735,20 @@ void Application::SetMaximumParameterFloatValue(std::string parameter, float val
 
 }
 
+void Application::SetListViewSingleSelectionMode(std::string parameter, bool status)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<ListViewParameter*>(param))
+    {
+    ListViewParameter* paramListView = dynamic_cast<ListViewParameter*>(param);
+    paramListView->SetSingleSelection(status);
+    }
+  else
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ListView");
+  
+}
+
 
 void Application::SetParameterString(std::string parameter, std::string value)
 {
