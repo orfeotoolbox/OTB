@@ -307,7 +307,6 @@ function(func_prepare_package)
 endfunction() #func_prepare_package
 
 function(func_process_deps input_file)
-  
   search_library(${input_file} PKG_SEARCHDIRS input_file_full_path)
   if(NOT input_file_full_path)
     message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
@@ -455,9 +454,11 @@ function(pkg_install_rule src_file)
     message(FATAL_ERROR "unreachable code")
   endif()
   
+  set(SKIP_INSTALL FALSE)
   setif_value_in_list(is_gtk_lib "${src_file_NAME}" ALLOWED_SYSTEM_DLLS)  
   if(is_gtk_lib)
     set(output_dir "lib/gtk")
+     set(SKIP_INSTALL TRUE)
   endif()
   
   #special case
@@ -465,19 +466,18 @@ function(pkg_install_rule src_file)
     set(output_dir "lib/otb/applications")
     set(file_type PROGRAMS)
   endif()
-  
-  set(SKIP_INSTALL FALSE)
+
   if(PKG_GENERATE_XDK)
     if ("${src_file_NAME}"
 	MATCHES
-	"libOTB|libotb|otbApp|otbapp_|otbTest|libMonteverdi|monteverdi|mapla|iceViewer"
+	"([Oo][Tt][Bb])|([Mm]onteverdi)|mapla|iceViewer"
 	)
       set(SKIP_INSTALL TRUE)
+        
+message("SKIP_INSTALL for ${src_file_NAME}")
     endif()
 
-    if(is_gtk_lib)
-      set(SKIP_INSTALL TRUE)
-    endif()
+
     
   endif()
 
