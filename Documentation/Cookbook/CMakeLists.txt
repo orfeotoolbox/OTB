@@ -18,16 +18,14 @@ else()
   return()
 endif()
 
-set(OTB_PYTHONPATH)
-if( EXISTS "${OTB_DIR}/CMakeCache.txt" )
-  set(OTB_INSTALL_PREFIX ${OTB_DIR})
-  set(OTB_PYTHONPATH "${OTB_INSTALL_PREFIX}/Modules/Wrappers/SWIG/src")
-elseif( EXISTS "${OTB_DIR}/UseOTB.cmake" )
-  get_filename_component(OTB_INSTALL_PREFIX ${OTB_DIR} PATH)
-  get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
-  get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
-  set(OTB_PYTHONPATH "${OTB_INSTALL_PREFIX}/lib/otb/python")
-endif()
+get_filename_component(OTB_INSTALL_PREFIX ${OTB_MODULES_DIR} PATH)
+get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
+get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
+get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
+
+message(STATUS "OTB_PYTHONPATH        = '${OTB_PYTHONPATH}'")
+message(STATUS "OTB_APPLICATION_PATH  = '${OTB_APPLICATION_PATH}'")
+message(STATUS "OTB_INSTALL_PREFIX    = '${OTB_INSTALL_PREFIX}'")
 
 #find Python
 find_package(PythonInterp REQUIRED)
@@ -137,11 +135,18 @@ add_custom_target(CookBookHTMLFromRST
   DEPENDS generate_otbapps_rst
   COMMENT "Building RST documentation in html")
 
-find_program(TAR_COMMAND
-  NAMES tar
-  PATHS /usr/bin
-)
+find_program(TAR_COMMAND NAMES tar)
 mark_as_advanced(TAR_COMMAND)
+
+find_program(PDFLATEX_COMMAND  NAMES pdflatex )
+mark_as_advanced(PDFLATEX_COMMAND)
+
+find_program(LATEX_COMMAND NAMES latex)
+mark_as_advanced(LATEX_COMMAND)
+
+if(NOT LATEX_COMMAND)
+  message(FATAL_ERROR "latex command not found. please add it to your path")
+endif()
 
 if(TAR_COMMAND)
   add_custom_target(CookBookArchive
@@ -154,12 +159,6 @@ if(TAR_COMMAND)
     COMMENT "Creating archive for html CookBook")
 endif()
 
-find_program(PDFLATEX_COMMAND
-  NAMES pdflatex
-  PATHS /usr/bin
-)
-mark_as_advanced(PDFLATEX_COMMAND)
-
 if(PDFLATEX_COMMAND)
   add_custom_target(CookBookPDFFromRST
     ALL
@@ -167,4 +166,5 @@ if(PDFLATEX_COMMAND)
     WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
     DEPENDS generate_otbapps_rst
     COMMENT "Building RST documentation in pdf")
+  
 endif()

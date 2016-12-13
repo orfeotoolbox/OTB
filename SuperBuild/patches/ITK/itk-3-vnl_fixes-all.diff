@@ -1,0 +1,14 @@
+diff -burN InsightToolkit-4.10.0.orig/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt InsightToolkit-4.10.0/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt
+--- InsightToolkit-4.10.0.orig/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt	2016-12-06 16:03:06.000000000 +0100
++++ InsightToolkit-4.10.0/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt	2016-12-06 16:03:44.000000000 +0100
+@@ -131,8 +131,10 @@
+   set(CORE_VIDEO_FOUND OFF CACHE INTERNAL "VXL core video libraries built")
+ endif ()
+ 
++if(BUILD_TESTING)
+ # common test executable
+ add_subdirectory(testlib)
++endif()
+ 
+ # Tests that check and output the vxl configuration
+ # NOTE: some external projects remove the tests directory (aka ITK)
