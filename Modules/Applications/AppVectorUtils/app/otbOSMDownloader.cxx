@@ -58,7 +58,9 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Conversion");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Meta);
+	AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output vector data");
     SetParameterDescription("out", "Generated output vector data path");

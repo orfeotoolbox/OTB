@@ -265,10 +265,10 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Meta);
     AddDocTag(Tags::Learning);
+	AddDocTag("Utilities");
 
     // Build lut map
 

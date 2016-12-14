@@ -58,7 +58,9 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics");
 
+	AddDocTag("Miscellaneous");
     AddDocTag("Statistics");
+	AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_Group, "ref", "Reference image properties");
     AddParameter(ParameterType_InputImage,  "ref.in",   "Reference image");

@@ -77,6 +77,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag(Tags::Vector);
     AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_Group,"io","Input and output data");
