@@ -48,6 +48,14 @@ if(NOT OTB_INSTALL_PREFIX)
   message(FATAL_ERROR "OTB_INSTALL_PREFIX empty")
 endif()
 
+
+macro(remove_and_make_directories)
+  foreach(dir in ${ARGV})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${dir})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${dir})
+  endforeach()
+endmacro()
+
 #find Python
 find_package(PythonInterp REQUIRED)
 
@@ -78,14 +86,14 @@ set(RST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set(LATEX_DIR       ${CMAKE_CURRENT_BINARY_DIR}/latex)
 set(HTML_DIR        ${CMAKE_CURRENT_BINARY_DIR}/html)
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${RST_BINARY_DIR})
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${RST_BINARY_DIR})
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${HTML_DIR})
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${HTML_DIR})
-
-execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${LATEX_DIR})
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${LATEX_DIR})
+remove_and_make_directories(
+  ${HTML_DIR}
+  ${RST_BINARY_DIR}
+  ${HTML_DIR}
+  ${LATEX_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}/_static
+  )
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh)
 
@@ -112,6 +120,7 @@ configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
 add_custom_target(generate_otbapps_rst
   ALL
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
+  ${RST_BINARY_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
   COMMENT "Auto-generating Application Reference Documentation in RST"
   )
