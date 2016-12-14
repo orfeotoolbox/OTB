@@ -290,6 +290,7 @@ namespace otb
 						
 						if( shift)
 						{
+							otbAppLogINFO( << "Applying Shift image filter" );
 							typedef itk::FFTShiftImageFilter<
 								typename FFTFilter::OutputImageType,
 								typename FFTFilter::OutputImageType > FFTShiftFilterType;
@@ -298,14 +299,13 @@ namespace otb
 								fftShiftFilter = FFTShiftFilterType::New();
 
 							fftShiftFilter->SetInput( fwdFilter->GetOutput() );
+							fftShiftFilter->Update();
 							unaryFunctorImageFilter->SetInput(fftShiftFilter->GetOutput() );
 						}
 						else
 						{
 							unaryFunctorImageFilter->SetInput(fwdFilter->GetOutput());
 						}
-
-						unaryFunctorImageFilter->SetInput(fwdFilter->GetOutput());
 
 						unaryFunctorImageFilter->Update();
 
@@ -352,7 +352,9 @@ namespace otb
 								fftShiftFilter = FFTShiftFilterType::New();
 							fftShiftFilter->SetInput( inImage );
 
-						unaryFunctorImageFilter->SetInput(fftShiftFilter->GetOutput() );
+							fftShiftFilter->Update();
+							
+							unaryFunctorImageFilter->SetInput(fftShiftFilter->GetOutput() );
 						
 						}
 						else
