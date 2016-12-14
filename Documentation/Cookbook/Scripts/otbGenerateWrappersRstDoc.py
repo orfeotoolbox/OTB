@@ -430,7 +430,11 @@ def RstHeading(text, delimiter):
 
 def ApplicationToRst(appname):
     output = ""
-    app = otbApplication.Registry.CreateApplication(appname)
+    app = None
+    try:
+        app = otbApplication.Registry.CreateApplication(appname)
+    except e:
+        print e
     # TODO: remove this when bug 440 is fixed
     app.Init()
     output += RstHeading(app.GetDocName(), '^')
@@ -496,56 +500,79 @@ def RstPageHeading(text):
 
 def GenerateRstForApplications():
     out = ""
-    blackList = ["TestApplication", "Example"]
+    blackList = ["TestApplication", "Example", "ApplicationExample"]
     appIndexFile = open('Applications.rst', 'w')
-    appNames = [app for app in otbApplication.Registry.GetAvailableApplications() if app not in blackList]
-    if not appNames:
-			print 'No OTB applications available. Please check ITK_AUTOLOAD_PATH env variable'
-			sys.exit(1)
-    sectionTags = ["Image Manipulation","Vector Data Manipulation", "Calibration","Geometry", "Image Filtering","Feature Extraction","Stereo","Learning","Segmentation"]
-    appIndexFile.write(RstPageHeading("Applications"))
+    allApps = None
+    try: 
+        allApps = otbApplication.Registry.GetAvailableApplications( )
+    except e:
+        print 'error in otbApplication.Registry.GetAvailableApplications()'
+        sys.exit(1)
 
+#    appNames = [app for app in otbApplication.Registry.GetAvailableApplications() if app not in blackList]
+    if not allApps:
+	print 'No OTB applications available. Please check OTB_APPLICATION_PATH env variable'
+	sys.exit(1)
+
+    sectionTags = ["Image Manipulation",
+                   "Vector Data Manipulation",
+                   "Calibration","Geometry", "Image Filtering","Feature Extraction",
+                   "Stereo","Learning","Segmentation", "Miscellaneous"]
+    
+    appIndexFile.write(RstPageHeading("Applications"))
     for tag in sectionTags:
-        directory= "Applications/" + tag
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        tag_ = tag.replace(' ', '_')
-        appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
+        #directory= "Applications/" + tag
+        # if not os.path.exists(directory):
+        #     os.makedirs(directory)
+        appIndexFile.write('\tApplications/' + tag.replace(' ', '_') + '.rst' + linesep)
         #chapterIndexFile = open('Applications/' + tag + '.rst', 'w')
         #chapterIndexFile.write(RstPageHeading(tag))
         #print linesep + RstHeading(tag, '=')
-        appsRemoved = []
-        for appName in appNames:
-            apptags = GetApplicationTags(appName)
 
-            if apptags.count(tag) > 0:
-                print "Generating " + appName + ".rst"
-                #chapterIndexFile.write("\t" + tag + '/' + appName + linesep)
-                appFile = open('Applications/app_'  + appName + '.rst', 'w')
-                out = ApplicationToRst(appName)
-                appFile.write(out)
-                appFile.close()
-                appsRemoved.append(appName)
-        for appName in appsRemoved:
-            appNames.remove(appName)
-        #chapterIndexFile.close()
 
-    misctag = "Miscellaneous" #should this be Utilities
-    if not os.path.exists("Applications/" + misctag):
-        os.makedirs("Applications/" + misctag)
+    # misctag = "Miscellaneous" #should this be Utilities
+    # if not os.path.exists("Applications/" + misctag):
+    #     os.makedirs("Applications/" + misctag)
 
-    appIndexFile.write('\tApplications/' + misctag + linesep)
+#    appIndexFile.write('\tApplications/' + misctag + linesep)
     appIndexFile.close()
-    #miscChapterIndexFile = open("Applications/" + misctag + '.rst', 'w')
-    #miscChapterIndexFile.write(RstPageHeading(misctag))
+        
+    #appsRemoved = []
+    
+    appNames = [app for app in allApps if app not in blackList]
+
+    print "All apps: %s" % (appNames,)
+
     for appName in appNames:
+        apptags = GetApplicationTags(appName)
+        
+        #        if apptags.count(tag) > 0:
         print "Generating " + appName + ".rst"
-        appFile = open("Applications/app_" +  appName + ".rst", 'w')
+        #chapterIndexFile.write("\t" + tag + '/' + appName + linesep)
+        appFile = open('Applications/app_'  + appName + '.rst', 'w')
         out = ApplicationToRst(appName)
         appFile.write(out)
         appFile.close()
-        #miscChapterIndexFile.write('\t' + misctag + '/' + appName + linesep)
-        out = ""
+        
+        #appsRemoved.append(appName)
+        # for appName in appsRemoved:
+        #     appNames.remove(appName)
+        #chapterIndexFile.close()
+
+    
+    #miscChapterIndexFile = open("Applications/" + misctag + '.rst', 'w')
+    #miscChapterIndexFile.write(RstPageHeading(misctag))
+    
+    # for appName in appNames:
+    #     print "Generating " + appName + ".rst"
+    #     appFile = open("Applications/app_" +  appName + ".rst", 'w')
+    #     out = ApplicationToRst(appName)
+    #     appFile.write(out)
+    #     appFile.close()
+    #     #miscChapterIndexFile.write('\t' + misctag + '/' + appName + linesep)
+    #     out = ""
+
+        
     return out
 
 
