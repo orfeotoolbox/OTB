@@ -120,6 +120,20 @@ endforeach()
 configure_file(${RST_SOURCES}/conf.py.in ${RST_GENERATED_SOURCE_DIR}/conf.py @ONLY)
 configure_file(${RST_SOURCES}/Makefile.in ${RST_GENERATED_SOURCE_DIR}/Makefile @ONLY)
 
+find_program(LATEX_COMMAND NAMES latex)
+mark_as_advanced(LATEX_COMMAND)
+
+find_program(TAR_COMMAND NAMES tar)
+mark_as_advanced(TAR_COMMAND)
+
+find_program(PDFLATEX_COMMAND  NAMES pdflatex )
+mark_as_advanced(PDFLATEX_COMMAND)
+
+foreach(cmd LATEX_COMMAND TAR_COMMAND PDFLATEX_COMMAND)
+  if(NOT ${cmd})
+    message(FATAL_ERROR "${cmd} not set. Cannot continue")
+  endif()
+endforeach()
 
 add_custom_target(generate_otbapps_rst
   ALL
@@ -135,36 +149,20 @@ add_custom_target(CookBookHTMLFromRST
   DEPENDS generate_otbapps_rst
   COMMENT "Building RST documentation in html")
 
-find_program(TAR_COMMAND NAMES tar)
-mark_as_advanced(TAR_COMMAND)
+add_custom_target(CookBookArchive
+  ALL
+  COMMAND ${TAR_COMMAND}
+  --transform "s/^html/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/"
+  -czf ${CMAKE_BINARY_DIR}/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz html
+  WORKING_DIRECTORY ${RST_BUILD_DIR}
+  DEPENDS CookBookHTMLFromRST
+  COMMENT "Creating archive for html CookBook")
 
-find_program(PDFLATEX_COMMAND  NAMES pdflatex )
-mark_as_advanced(PDFLATEX_COMMAND)
 
-find_program(LATEX_COMMAND NAMES latex)
-mark_as_advanced(LATEX_COMMAND)
+add_custom_target(CookBookPDFFromRST
+  ALL
+  COMMAND ${CMAKE_MAKE_PROGRAM} latexpdf
+  WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
+  DEPENDS generate_otbapps_rst
+  COMMENT "Building RST documentation in pdf")
 
-if(NOT LATEX_COMMAND)
-  message(FATAL_ERROR "latex command not found. please add it to your path")
-endif()
-
-if(TAR_COMMAND)
-  add_custom_target(CookBookArchive
-    ALL
-    COMMAND ${TAR_COMMAND}
-      --transform "s/^html/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/"
-      -czf ${CMAKE_BINARY_DIR}/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz html
-    WORKING_DIRECTORY ${RST_BUILD_DIR}
-    DEPENDS CookBookHTMLFromRST
-    COMMENT "Creating archive for html CookBook")
-endif()
-
-if(PDFLATEX_COMMAND)
-  add_custom_target(CookBookPDFFromRST
-    ALL
-    COMMAND ${CMAKE_MAKE_PROGRAM} latexpdf
-    WORKING_DIRECTORY ${RST_GENERATED_SOURCE_DIR}
-    DEPENDS generate_otbapps_rst
-    COMMENT "Building RST documentation in pdf")
-  
-endif()
