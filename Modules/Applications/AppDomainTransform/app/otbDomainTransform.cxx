@@ -150,6 +150,10 @@ namespace otb
 				SetParameterString("mode", "wavelet");
 				SetParameterString("mode.wavelet.form", "haar");
 
+        AddParameter(ParameterType_Int,"mode.wavelet.nlevels","Number of decomposition levels");
+        SetParameterDescription("mode.wavelet.nlevels","Number of decomposition levels");
+        SetDefaultParameterInt("mode.wavelet.nlevels",2);
+        SetMinimumParameterIntValue("mode.wavelet.nlevels",2);
 
 				AddParameter(ParameterType_Choice,
 							 "dir",
@@ -214,37 +218,38 @@ namespace otb
 				if ( mode == 1)
 				{
 					int wavelet_type = GetParameterInt("mode.wavelet.form");
+          unsigned int nlevels = GetParameterInt("mode.wavelet.nlevels");
 					switch (wavelet_type)
 					{
 					case 0:
-						DoWaveletTransform<otb::Wavelet::HAAR> ( dir );
+						DoWaveletTransform<otb::Wavelet::HAAR> ( dir, nlevels );
 						break;					
 					case 1:
-						DoWaveletTransform< otb::Wavelet::DB4 > ( dir );
+						DoWaveletTransform< otb::Wavelet::DB4 > ( dir, nlevels );
 						break;
 					case 2:
-						DoWaveletTransform<otb::Wavelet::DB4> ( dir );
+						DoWaveletTransform<otb::Wavelet::DB4> ( dir, nlevels );
 						break;
 					case 3:
-						DoWaveletTransform<otb::Wavelet::DB6> ( dir );
+						DoWaveletTransform<otb::Wavelet::DB6> ( dir, nlevels );
 						break;
 					case 4:
-						DoWaveletTransform<otb::Wavelet::DB8> ( dir );
+						DoWaveletTransform<otb::Wavelet::DB8> ( dir, nlevels );
 						break;
 					case 5:
-						DoWaveletTransform<otb::Wavelet::DB12> ( dir );
+						DoWaveletTransform<otb::Wavelet::DB12> ( dir, nlevels );
 						break;
 					case 6:
-						DoWaveletTransform<otb::Wavelet::DB20> ( dir );
+						DoWaveletTransform<otb::Wavelet::DB20> ( dir, nlevels );
 						break;
 					case 7:
-						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_2_4 > ( dir );
+						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_2_4 > ( dir, nlevels );
 						break;
 					case 8:
-						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_4_4> ( dir );
+						DoWaveletTransform<otb::Wavelet::SPLINE_BIORTHOGONAL_4_4> ( dir, nlevels );
 						break;
 					case 9:
-						DoWaveletTransform<otb::Wavelet::SYMLET8> ( dir );
+						DoWaveletTransform<otb::Wavelet::SYMLET8> ( dir, nlevels );
 						break;        					
 					default:
 						itkExceptionMacro( << "Invalid wavelet type: '" <<  wavelet_type << "'");
@@ -387,6 +392,7 @@ namespace otb
 
 			template<otb::Wavelet::Wavelet TWaveletOperator>
 			void DoWaveletTransform(const int dir,
+                              const unsigned int nlevels,
 									const std::string inkey = "in",
 									const std::string outkey = "out")
 			{
@@ -415,6 +421,7 @@ namespace otb
 						TWaveletImageFilter::New();
 					
 					waveletImageFilter->SetInput(inImage);
+          waveletImageFilter->SetNumberOfDecompositions(nlevels);
 					waveletImageFilter->Update();
 					SetParameterOutputImage<TOutputImage>(outkey, waveletImageFilter->GetOutput() );
 					
@@ -435,6 +442,7 @@ namespace otb
 						TWaveletImageFilter::New();
 					
 					waveletImageFilter->SetInput(inImage);
+          waveletImageFilter->SetNumberOfDecompositions(nlevels);
 					waveletImageFilter->Update();
 
 					SetParameterOutputImage<TOutputImage>( outkey, waveletImageFilter->GetOutput() );
