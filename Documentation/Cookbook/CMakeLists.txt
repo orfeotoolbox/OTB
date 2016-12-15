@@ -1,4 +1,3 @@
-
 set(OUT_OF_SOURCE_BUILD FALSE)
 
 if(NOT PROJECT_NAME)
@@ -90,6 +89,7 @@ set(HTML_DIR        ${CMAKE_CURRENT_BINARY_DIR}/html)
 remove_and_make_directories(
   ${HTML_DIR}
   ${RST_BINARY_DIR}
+  ${RST_BINARY_DIR}/Applications/
   ${HTML_DIR}
   ${LATEX_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/_static
@@ -118,7 +118,6 @@ configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
 # I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 add_custom_target(generate_otbapps_rst
-  ALL
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
   ${RST_BINARY_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
@@ -126,7 +125,6 @@ add_custom_target(generate_otbapps_rst
   )
 
 add_custom_target(CookBookHTML
-  ALL
   COMMAND ${SPHINX_BUILD}
   -b html
   ${RST_BINARY_DIR}
@@ -148,7 +146,6 @@ add_custom_target(CookBookArchive
   COMMENT "Creating archive for html CookBook")
 
  add_custom_target(CookBookTexFromRST
-   ALL
    COMMAND ${SPHINX_BUILD}
    -b latex
    ${RST_BINARY_DIR}
@@ -157,7 +154,7 @@ add_custom_target(CookBookArchive
    -v
    -c ${SPHINX_CONF_DIR}
    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-   DEPENDS generate_otbapps_rst
+   DEPENDS CookBookHTML
    COMMENT "Generating Tex files from rst"
    VERBATIM)
 
