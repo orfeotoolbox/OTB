@@ -16,7 +16,7 @@ if( MUPARSERX_INCLUDE_DIR )
 endif()
 
 find_path( MUPARSERX_INCLUDE_DIR mpParser.h
-           PATH_SUFFIXES mpParser )
+           PATH_SUFFIXES mpParser muparserx)
 
 if(EXISTS "${MUPARSERX_INCLUDE_DIR}/mpDefines.h")
   file(READ "${MUPARSERX_INCLUDE_DIR}/mpDefines.h" _mpDefines_h_CONTENTS)
