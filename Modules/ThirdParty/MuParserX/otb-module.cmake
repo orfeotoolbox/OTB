@@ -10,3 +10,5 @@ otb_module(OTBMuParserX
   )
 
 otb_module_activation_option("Enable MuParserX dependent modules" OFF)
+
+otb_module_requires_cxx11()

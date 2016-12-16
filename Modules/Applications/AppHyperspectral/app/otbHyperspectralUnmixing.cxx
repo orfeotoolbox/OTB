@@ -97,6 +97,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");

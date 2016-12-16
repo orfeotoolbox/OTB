@@ -63,8 +63,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::SAR);
     AddDocTag(Tags::Filter);
+	AddDocTag(Tags::SAR);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");

@@ -14,9 +14,10 @@ GIS/Image processing tools such as GDAL, GRASS GIS, OSSIM that can deal with num
 
 
 Below code reads an input image using python pillow (PIL) and convert it to numpy array. This numpy array is
-used an input to the application set *SetImageFromNumpyArray(...)* method.
-The application used in this example is `ExtractROI <../Applications/app_ExtractROI.html>`_. After extracting 
-a small area the output image is taken as numpy array with *GetImageFromNumpyArray(...)* method
+used an input to the application via *SetImageFromNumpyArray(...)* method.
+The application used in this example is ExtractROI. After extracting 
+a small area the output image is taken as numpy array with *GetImageFromNumpyArray(...)* method thus avoid wiriting
+output to a temporary file.
 
 ::
 

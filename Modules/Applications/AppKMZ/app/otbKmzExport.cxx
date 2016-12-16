@@ -53,6 +53,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Conversion");
 
+	AddDocTag("Miscellaneous");
     AddDocTag("KMZ");
     AddDocTag("Export");
 

@@ -2,33 +2,31 @@ INCLUDE_ONCE_MACRO(MUPARSERX)
 
 SETUP_SUPERBUILD(MUPARSERX)
 
-set(MUPARSERX_FLAGS)
-if(APPLE)
-  set(MUPARSERX_FLAGS "-DCMAKE_CXX_FLAGS:STRING=-std=c++0x")
-endif()
+package_require_cxx11(MUPARSERX)
 
-# We provide a zip archive of last muparserx release (3.0.5)
-# Archive was generated using commit sha on muparserx github page
-# Commands to create source archive:
-# wget https://github.com/beltoforion/muparserx/archive/2ace83b5411f1ab9940653c2bab0efa5140efb71.zip
-# mv 2ace83b5411f1ab9940653c2bab0efa5140efb71.zip muparserx_v3_0_5.zip
+#Don't build muparserx examples
+set(MUPARSERX_FLAGS)
+list(APPEND MUPARSERX_FLAGS -DBUILD_EXAMPLES:BOOL=OFF)
+
+if(MSVC AND BUILD_SHARED_LIBS)
+ list(APPEND MUPARSERX_FLAGS -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS:BOOL=ON)
+endif()
 
 ExternalProject_Add(MUPARSERX
   PREFIX MUPARSERX
-  URL "https://www.orfeo-toolbox.org/packages/muparserx_v3_0_5.zip"
-  URL_MD5 ad86b88c159ab68f4bfc99d71166e3c5
+  URL "https://github.com/beltoforion/muparserx/archive/v4.0.7.zip"
+  URL_MD5 67819fc478436ea8f647c804e6f2e1a2
   BINARY_DIR ${MUPARSERX_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS} ${MUPARSERX_FLAGS}
+  CMAKE_CACHE_ARGS
+  ${SB_CMAKE_CACHE_ARGS}
+  ${MUPARSERX_FLAGS}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   DEPENDS ${MUPARSERX_DEPENDENCIES}
-  PATCH_COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_SOURCE_DIR}/patches/MUPARSERX/CMakeLists.txt
-  ${MUPARSERX_SB_SRC}
-  UPDATE_COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_SOURCE_DIR}/patches/MUPARSERX/mpParserMessageProvider.cpp
-  ${MUPARSERX_SB_SRC}/parser/
   )
 
-SUPERBUILD_UPDATE_CMAKE_VARIABLES(MUPARSERX FALSE)
+#Patch mpParserMessageProvider.cpp. This patch is integrated upstream but not yet released (last release is 4.0.7)
+SUPERBUILD_PATCH_SOURCE(MUPARSERX)
+
+SUPERBUILD_UPDATE_CMAKE_VARIABLES(MUPARSERX FALSE muparserx muparserx)
