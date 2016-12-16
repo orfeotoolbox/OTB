@@ -21,7 +21,7 @@
 *.dox eol=lf
 *.html text diff=html
 *.css text diff=css
-*.cmake
+*.cmake text
 *.py text diff=python
 *.pl text
 *.md text
@@ -42,7 +42,6 @@
 #.gnu
 #.gnup
 #.tcl
-
 
 # Denote all files that are truly binary and should not be modified.
 *.png binary
