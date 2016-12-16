@@ -84,6 +84,8 @@ QtWidgetModel
   TiXmlElement * pName, *pParam;
   std::ostringstream cmdLine;
 
+  cmdLine << "";
+    
   if(XMLAppElement)
     {
     pName = XMLAppElement->FirstChildElement("name");
@@ -139,6 +141,9 @@ QtWidgetModel
       pParam = pParam->NextSiblingElement(); // iteration over parameters
       }
 
+    //Insert a new line character at the end of the command line
+    cmdLine << std::endl;
+    
     //Report the command line string to the application logger
     m_Application->GetLogger()->Write(itk::LoggerBase::INFO, cmdLine.str());
     }
