@@ -35,6 +35,7 @@
 *.cls text
 *.bib text
 *.supp eol=lf
+*.f text diff=fortran
 
 #TBD
 #.pri
