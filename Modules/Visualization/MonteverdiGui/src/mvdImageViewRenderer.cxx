@@ -789,6 +789,65 @@ ImageViewRenderer
 		shader->SetVerticalSlider( true );
 		break;
 
+        case EFFECT_LUT_JET:
+          shader->SetShaderType(otb::SHADER_LUT_JET);
+          break;
+          
+        case EFFECT_LUT_LOCAL_JET:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_JET);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          
+          break;
+          
+        case EFFECT_LUT_HOT:
+          shader->SetShaderType(otb::SHADER_LUT_HOT);
+          break;
+          
+        case EFFECT_LUT_LOCAL_HOT:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_HOT);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+
+        case EFFECT_LUT_SUMMER:
+          shader->SetShaderType(otb::SHADER_LUT_SUMMER);
+          break;
+          
+        case EFFECT_LUT_LOCAL_SUMMER:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_SUMMER);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+          
+        case EFFECT_LUT_WINTER:
+          shader->SetShaderType(otb::SHADER_LUT_WINTER);
+          break;
+          
+        case EFFECT_LUT_LOCAL_WINTER:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_WINTER);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+
+                  case EFFECT_LUT_COOL:
+          shader->SetShaderType(otb::SHADER_LUT_COOL);
+          break;
+          
+        case EFFECT_LUT_LOCAL_COOL:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_COOL);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+
+
+
+
+          
 	      default:
 		assert( false && "Unhandled mvd::Effect value!" );
 		break;

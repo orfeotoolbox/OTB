@@ -1,0 +1,20 @@
+diff --git a/parser/mpParserMessageProvider.cpp b/parser/mpParserMessageProvider.cpp
+index 22534e6..dbd4427 100644
+--- a/parser/mpParserMessageProvider.cpp
++++ b/parser/mpParserMessageProvider.cpp
+@@ -1,5 +1,4 @@
+-﻿#include "mpParserMessageProvider.h"
+-
++#include "mpParserMessageProvider.h"
+ #include <cassert>
+ #include "mpError.h"
+ 
+@@ -111,7 +110,7 @@ MUP_NAMESPACE_START
+ 
+   //-------------------------------------------------------------------------------------------------
+   //
+-  // class ParserMessageProviderGerman - German translations of Parser Messages 
++  // class ParserMessageProviderGerman - German translations of Parser Messages
+   //
+   //-------------------------------------------------------------------------------------------------
+ 

@@ -468,6 +468,36 @@ void IceViewer::DrawHud()
 	  case SHADER_GRADIENT:
 	    oss<<" gradient";
 	    break;
+    case SHADER_LUT_JET:
+      oss<<"Jet LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_JET:
+      oss<<"Local Jet LUT"<<std::endl;
+      break;
+    case SHADER_LUT_HOT:
+      oss<<"Hot LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_HOT:
+      oss<<"Local Hot LUT"<<std::endl;
+      break;
+    case SHADER_LUT_WINTER:
+      oss<<"Winter LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_WINTER:
+      oss<<"Local Winter LUT"<<std::endl;
+      break;
+    case SHADER_LUT_SUMMER:
+      oss<<"Summer LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_SUMMER:
+      oss<<"Local Summer LUT"<<std::endl;
+      break;
+    case SHADER_LUT_COOL:
+      oss<<"Cool LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_COOL:
+      oss<<"Local Cool LUT"<<std::endl;
+      break;
 	  }
 	}
 

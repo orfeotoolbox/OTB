@@ -76,8 +76,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Analysis);
     AddDocTag(Tags::Segmentation);
+	AddDocTag(Tags::Analysis);	
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The image to segment.");

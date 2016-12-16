@@ -76,8 +76,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbScalarImageToTexturesFilter, otbScalarImageToAdvancedTexturesFilter and otbScalarImageToHigherOrderTexturesFilter classes");
 
-AddDocTag("Textures");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Textures");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");
