@@ -89,6 +89,9 @@ QtWidgetModel
     pName = XMLAppElement->FirstChildElement("name");
 
     cmdLine << "otbcli_" << pName->FirstChild()->ValueStr();
+#ifdef _WIN32
+    cmdLine << ".bat";
+#endif
     cmdLine << " ";
 
     //Parse application parameters
