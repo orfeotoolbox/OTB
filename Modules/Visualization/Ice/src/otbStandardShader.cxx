@@ -85,7 +85,8 @@ std::string StandardShader::GetSource() const
     "uniform int shader_vertical_slider_flag;\n"                        \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
-    "gl_FragColor = pow( clamp( ( p+shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
+    "vec4 colors = pow( clamp( ( p+shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
+    "gl_FragColor = colors;\n"                                          \
     "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
     "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
     "gl_FragColor[3] = 0.;\n"                                           \
@@ -127,6 +128,141 @@ std::string StandardShader::GetSource() const
     "gl_FragColor[1] = tmp[1];\n"                                       \
     "gl_FragColor[2] = tmp[2];\n"                                       \
     "gl_FragColor[3] = alpha;\n"                                        \
+    "}\n"                                                               \
+    "}\n"                                                               \
+    "else if(shader_type == 7)\n"                                       \
+    "{\n"                                                               \
+    "float color = colors[0];\n"                                              \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = -abs( 3.95 * (color - 0.7460)) + 1.5;\n"              \
+    "mapped[1] = -abs( 3.95 * (color - 0.492)) + 1.5;\n"               \
+    "mapped[2] = -abs( 3.95 * (color - 0.2385)) + 1.5;\n"              \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+  "else if(shader_type == 8)\n"                                         \
+    "{\n"                                                               \
+    "if(dist < shader_radius)\n"                                        \
+    "{\n"                                                               \
+    "float color=clamp((p[0]-shader_current[0]+shader_localc_range)/(2.*shader_localc_range),0.0,1.0);\n" \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = -abs( 3.95 * (color - 0.7460)) + 1.5;\n"              \
+    "mapped[1] = -abs( 3.95 * (color - 0.492)) + 1.5;\n"               \
+    "mapped[2] = -abs( 3.95 * (color - 0.2385)) + 1.5;\n"              \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+    "}\n"                                                               \
+  "else if(shader_type == 9)\n"                                         \
+    "{\n"                                                               \
+    "float color = colors[0];\n"                                        \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = 63.0 / 26.0 * color - 1.0 / 13.0;\n"                   \
+    "mapped[1] = 63.0 / 26.0 * color - 11.0 / 13.0;\n"                  \
+    "mapped[2] = 4.5 * color - 3.5;\n"                                  \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+  "else if(shader_type == 10)\n"                                         \
+    "{\n"                                                               \
+    "if(dist < shader_radius)\n"                                        \
+    "{\n"                                                               \
+    "float color=clamp((p[0]-shader_current[0]+shader_localc_range)/(2.*shader_localc_range),0.0,1.0);\n" \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = 63.0 / 26.0 * color - 1.0 / 13.0;\n"                   \
+    "mapped[1] = 63.0 / 26.0 * color - 11.0 / 13.0;\n"                  \
+    "mapped[2] = 4.5 * color - 3.5;\n"                                  \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+    "}\n"                                                               \
+  "else if(shader_type == 11)\n"                                         \
+    "{\n"                                                               \
+    "float color = colors[0];\n"                                        \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = 0.0;\n"                                                \
+    "mapped[1] = color;\n"                                              \
+    "mapped[2] = 1.0 - 0.5 * color;\n"                                  \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+    "else if(shader_type == 12)\n"                                      \
+    "{\n"                                                               \
+    "if(dist < shader_radius)\n"                                        \
+    "{\n"                                                               \
+    "float color=clamp((p[0]-shader_current[0]+shader_localc_range)/(2.*shader_localc_range),0.0,1.0);\n" \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = 0.0;\n"                                                \
+    "mapped[1] = color;\n"                                              \
+    "mapped[2] = 1.0 - 0.5 * color;\n"                                  \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+    "}\n"                                                               \
+  "else if(shader_type == 13)\n"                                        \
+    "{\n"                                                               \
+    "float color = colors[0];\n"                                        \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = color;\n"                                              \
+    "mapped[1] = 0.5*color+0.5;\n"                                      \
+    "mapped[2] = 0.4;\n"                                                \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+    "else if(shader_type == 14)\n"                                      \
+    "{\n"                                                               \
+    "if(dist < shader_radius)\n"                                        \
+    "{\n"                                                               \
+    "float color=clamp((p[0]-shader_current[0]+shader_localc_range)/(2.*shader_localc_range),0.0,1.0);\n" \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = color;\n"                                              \
+    "mapped[1] = 0.5*color+0.5;\n"                                      \
+    "mapped[2] = 0.4;\n"                                                \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+    "}\n"                                                               \
+  "else if(shader_type == 15)\n"                                        \
+    "{\n"                                                               \
+    "float color = colors[0];\n"                                        \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = color;\n"                                              \
+    "mapped[1] = 1.0-color;\n"                                          \
+    "mapped[2] = 1.0;\n"                                                \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "}\n"                                                               \
+    "else if(shader_type == 16)\n"                                      \
+    "{\n"                                                               \
+    "if(dist < shader_radius)\n"                                        \
+    "{\n"                                                               \
+    "float color=clamp((p[0]-shader_current[0]+shader_localc_range)/(2.*shader_localc_range),0.0,1.0);\n" \
+    "vec3 mapped;\n"                                                    \
+    "mapped[0] = color;\n"                                              \
+    "mapped[1] = 1.0-color;\n"                                          \
+    "mapped[2] = 1.0;\n"                                                \
+    "mapped = clamp(mapped,0.0,1.0);\n"                                 \
+    "gl_FragColor[0] = mapped[0];\n"                                    \
+    "gl_FragColor[1] = mapped[1];\n"                                    \
+    "gl_FragColor[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "}\n";
   

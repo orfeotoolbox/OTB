@@ -30,6 +30,12 @@ namespace otb
 namespace Wrapper
 {
 
+/** Utility function to negate std::isalnum */
+bool IsNotAlphaNum(char c)
+  {
+  return !std::isalnum(c);
+  }
+
 class SampleSelection : public Application
 {
 public:
@@ -195,10 +201,9 @@ private:
     // Default strategy : smallest
     SetParameterString("strategy","smallest");
 
-    AddParameter(ParameterType_String, "field", "Field Name");
+    AddParameter(ParameterType_ListView, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
-    MandatoryOff("field");
-    SetParameterString("field", "class");
+    SetListViewSingleSelectionMode("field",true);
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
@@ -221,6 +226,32 @@ private:
 
   void DoUpdateParameters()
   {
+ if ( HasValue("vec") )
+      {
+      std::string vectorFile = GetParameterString("vec");
+      ogr::DataSource::Pointer ogrDS =
+        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
+      ogr::Feature feature = layer.ogr().GetNextFeature();
+
+      ClearChoices("field");
+      
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::transform(key.begin(), end, key.begin(), tolower);
+        
+        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+          {
+          std::string tmpKey="field."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
+        }
+      }
   }
 
   void DoExecute()
@@ -235,6 +266,17 @@ private:
     // Setup ram
     m_Periodic->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     m_Random->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+
+    // Get field name
+    std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
+    
+    if(selectedCFieldIdx.empty())
+      {
+      otbAppLogFATAL(<<"No field has been selected for data labelling!");
+      }
+    
+    std::vector<std::string> cFieldNames = GetChoiceNames("field");  
+    std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
     
     m_ReaderStat->SetFileName(this->GetParameterString("instats"));
     ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
@@ -378,7 +420,7 @@ private:
         m_Periodic->SetInput(this->GetParameterImage("in"));
         m_Periodic->SetOGRData(reprojVector);
         m_Periodic->SetOutputPositionContainerAndRates(outputSamples, rates);
-        m_Periodic->SetFieldName(this->GetParameterString("field"));
+        m_Periodic->SetFieldName(fieldName);
         m_Periodic->SetLayerIndex(this->GetParameterInt("layer"));
         m_Periodic->SetSamplerParameters(param);
         if (IsParameterEnabled("mask") && HasValue("mask"))
@@ -396,7 +438,7 @@ private:
         m_Random->SetInput(this->GetParameterImage("in"));
         m_Random->SetOGRData(reprojVector);
         m_Random->SetOutputPositionContainerAndRates(outputSamples, rates);
-        m_Random->SetFieldName(this->GetParameterString("field"));
+        m_Random->SetFieldName(fieldName);
         m_Random->SetLayerIndex(this->GetParameterInt("layer"));
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {

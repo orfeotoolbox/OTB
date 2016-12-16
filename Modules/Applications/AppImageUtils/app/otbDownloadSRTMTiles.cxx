@@ -103,8 +103,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
+	AddDocTag("Utilities");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
     SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");

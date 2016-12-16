@@ -50,6 +50,10 @@ public:
   /** RTTI support */
   itkTypeMacro(ListViewParameter, Parameter);
 
+  itkSetMacro(SingleSelection,bool);
+  itkGetMacro(SingleSelection,bool);
+  itkBooleanMacro(SingleSelection);
+  
   /** Add a value to the choice */
   void AddChoice( std::string choicekey, std::string choiceName );
 
@@ -164,6 +168,7 @@ protected:
   std::vector<int>                    m_SelectedItems;
   std::vector<std::string>            m_SelectedKeys;
   std::vector<std::string>            m_SelectedNames;
+  bool                                m_SingleSelection;
 
 private:
   ListViewParameter(const ListViewParameter &); //purposely not implemented

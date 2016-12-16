@@ -25,6 +25,17 @@ Contents of OTB-|release|-Darwin64 is briefly listed below:
 -  ``share`` : A folder containing common resources and copyright
    mentions.
 
+Python bindings
+---------------
+Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
+currently only Python 2.x is supported. If no compatible python is found, installation
+notify you about it. If everything works fine, you will be given information about
+using python bindings.
+
+You must have python numpy bindings installed in your system. you can install it locally
+without admin rights with "pip install --user numpy". This is to give users to choose
+their own existing python installation rather than distributing one in OTB package
+
 Notes:
 
 -  If you want to use the otbcli and otbgui launchers, you must access

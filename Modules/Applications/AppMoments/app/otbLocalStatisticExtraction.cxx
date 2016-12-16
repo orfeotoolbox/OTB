@@ -64,8 +64,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbRadiometricMomentsImageFunction class");
 
-AddDocTag("Statistics");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Statistics");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");

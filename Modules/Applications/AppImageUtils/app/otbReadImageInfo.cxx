@@ -57,8 +57,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
+    AddDocTag("Utilities");
     AddDocTag(Tags::Meta);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");

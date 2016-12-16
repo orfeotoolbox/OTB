@@ -89,8 +89,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation");
 
+	AddDocTag(Tags::Geometry);
     AddDocTag("Conversion");
-    AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
     SetParameterDescription("in","The input image to translate.");

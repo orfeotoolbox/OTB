@@ -333,9 +333,9 @@ model can’t be observed if the map projection is used. In order to
 perform an ortho-rectification on this type of product, the map
 projection has to be hidden from **Orfeo Toolbox** .
 
-You can see if a product is an “ortho-ready” product by using tools such
-as ``gdalinfo`` or `ReadImageInfo <../Applications/app_ReadImageInfo.html>`_, and check
-if the product verifies the 2 following conditions :
+You can see if a product is an “ortho-ready” product by using ``gdalinfo`` or
+OTB ReadImageInfo application.
+Check if your product verifies following two conditions :
 
 -  The product is in raw geometry : you should expect the presence of
    RPC coefficients and a non-empty OSSIM keywordlist.
