@@ -410,9 +410,9 @@ void DoExecute()
 
       // Check all needed fields are present :
       //   - check class field
-      cFieldIndex = feature.ogr().GetFieldIndex(GetParameterString("cfield").c_str());
+      cFieldIndex = feature.ogr().GetFieldIndex(selectedCFieldName.c_str());
       if (cFieldIndex < 0)
-        otbAppLogFATAL("The field name for class label ("<<GetParameterString("cfield")
+        otbAppLogFATAL("The field name for class label ("<<selectedCFieldName
           <<") has not been found in the input vector file! Choices are "<< availableFields);
       //   - check feature fields
       for (unsigned int i=0 ; i<nbFeatures ; i++)
