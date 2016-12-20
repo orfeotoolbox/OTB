@@ -147,7 +147,7 @@ void DoInit() ITK_OVERRIDE
   SetMaximumParameterFloatValue("sample.vtr",1.0);
   SetMinimumParameterFloatValue("sample.vtr",0.0);
 
-  ShareParameter("sample.vfn","training.cfield");
+  ShareParameter("sample.vfn","polystat.field");
 
   // hide sampling parameters
   //ShareParameter("sample.strategy","rates.strategy");
@@ -165,8 +165,10 @@ void DoInit() ITK_OVERRIDE
 
   Connect("extraction.in",    "select.in");
   Connect("extraction.vec",   "select.out");
-  Connect("extraction.field", "select.field");
-  Connect("extraction.layer", "select.layer");
+  Connect("extraction.field", "polystat.field");
+  Connect("extraction.layer", "polystat.layer");
+
+  Connect("training.cfield", "polystat.field");
 
   ShareParameter("ram","polystat.ram");
   Connect("select.ram", "polystat.ram");
@@ -198,6 +200,12 @@ void DoInit() ITK_OVERRIDE
 
 void DoUpdateParameters() ITK_OVERRIDE
 {
+  if ( HasValue("io.vd") )
+    {
+    std::vector<std::string> vectorFileList = GetParameterStringList("io.vd");
+    GetInternalApplication("polystat")->SetParameterString("vec",vectorFileList[0]);
+    UpdateInternalParameters("polystat");
+    }
 }
 
 void DoExecute() ITK_OVERRIDE
@@ -253,16 +261,16 @@ void DoExecute() ITK_OVERRIDE
       polyStatValidOutputs.push_back(outModel + "_statsValid_" + strIndex + ".xml");
       ratesTrainOutputs.push_back(outModel + "_ratesTrain_" + strIndex + ".csv");
       ratesValidOutputs.push_back(outModel + "_ratesValid_" + strIndex + ".csv");
-      sampleOutputs.push_back(outModel + "_samplesTrain_" + strIndex + ".sqlite");
+      sampleOutputs.push_back(outModel + "_samplesTrain_" + strIndex + ".shp");
       }
     else
       {
       polyStatTrainOutputs.push_back(outModel + "_stats_" + strIndex + ".xml");
       ratesTrainOutputs.push_back(outModel + "_rates_" + strIndex + ".csv");
-      sampleOutputs.push_back(outModel + "_samples_" + strIndex + ".sqlite");
+      sampleOutputs.push_back(outModel + "_samples_" + strIndex + ".shp");
       }
-    sampleTrainOutputs.push_back(outModel + "_samplesTrain_" + strIndex + ".sqlite");
-    sampleValidOutputs.push_back(outModel + "_samplesValid_" + strIndex + ".sqlite");
+    sampleTrainOutputs.push_back(outModel + "_samplesTrain_" + strIndex + ".shp");
+    sampleValidOutputs.push_back(outModel + "_samplesValid_" + strIndex + ".shp");
     }
 
   // ---------------------------------------------------------------------------
@@ -442,8 +450,9 @@ void DoExecute() ITK_OVERRIDE
       splitter->SetOGRData(source);
       splitter->SetOutputPositionContainerAndRates(destTrain, trainRates, 0);
       splitter->SetOutputPositionContainerAndRates(destValid, validRates, 1);
-      splitter->SetFieldName(this->GetParameterString("sample.vfn"));
+      splitter->SetFieldName(this->GetParameterStringList("sample.vfn")[0]);
       splitter->SetLayerIndex(0);
+      splitter->SetOriginFieldName(std::string(""));
       splitter->SetSamplerParameters(param);
       splitter->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
       AddProcess(splitter->GetStreamer(),"Split samples between training and validation...");
