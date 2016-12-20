@@ -31,6 +31,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 {
   this->SetNumberOfRequiredOutputs(2);
   m_OriginFieldName = std::string("originfid");
+  m_UseOriginField = true;
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>
@@ -51,7 +52,11 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 
   // Add an extra field for the original FID
   this->ClearAdditionalFields();
-  this->CreateAdditionalField(this->GetOriginFieldName(),OFTInteger,12);
+  m_UseOriginField = (this->GetOriginFieldName().size() > 0);
+  if (m_UseOriginField)
+    {
+    this->CreateAdditionalField(this->GetOriginFieldName(),OFTInteger,12);
+    }
 
   // compute label mapping
   this->ComputeClassPartition();
@@ -179,7 +184,10 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
       ogr::Layer outputLayer = this->GetInMemoryOutput(threadid,i);
       ogr::Feature feat(outputLayer.GetLayerDefn());
       feat.SetFrom(feature);
-      feat[this->GetOriginFieldName()].SetValue(static_cast<int>(feature.GetFID()));
+      if (m_UseOriginField)
+        {
+        feat[this->GetOriginFieldName()].SetValue(static_cast<int>(feature.GetFID()));
+        }
       feat.SetGeometry(&ogrTmpPoint);
       outputLayer.CreateFeature(feat);
       break;
