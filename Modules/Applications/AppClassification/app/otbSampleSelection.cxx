@@ -73,8 +73,6 @@ public:
 private:
   SampleSelection()
     {
-    m_Periodic = PeriodicSamplerType::New();
-    m_Random = RandomSamplerType::New();
     m_ReaderStat = XMLReaderType::New();
     m_RateCalculator = RateCalculatorType::New();
     }
@@ -258,14 +256,8 @@ private:
     {
     // Clear state
     m_RateCalculator->ClearRates();
-    m_Periodic->GetFilter()->ClearOutputs();
-    m_Random->GetFilter()->ClearOutputs();
 
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
-
-    // Setup ram
-    m_Periodic->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
-    m_Random->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
     // Get field name
     std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
@@ -416,37 +408,40 @@ private:
         param.Offset = 0;
         param.MaxJitter = this->GetParameterInt("sampler.periodic.jitter");
         param.MaxBufferSize = 100000000UL;
-
-        m_Periodic->SetInput(this->GetParameterImage("in"));
-        m_Periodic->SetOGRData(reprojVector);
-        m_Periodic->SetOutputPositionContainerAndRates(outputSamples, rates);
-        m_Periodic->SetFieldName(fieldName);
-        m_Periodic->SetLayerIndex(this->GetParameterInt("layer"));
-        m_Periodic->SetSamplerParameters(param);
+        PeriodicSamplerType::Pointer periodicFilt = PeriodicSamplerType::New();
+        periodicFilt->SetInput(this->GetParameterImage("in"));
+        periodicFilt->SetOGRData(reprojVector);
+        periodicFilt->SetOutputPositionContainerAndRates(outputSamples, rates);
+        periodicFilt->SetFieldName(fieldName);
+        periodicFilt->SetLayerIndex(this->GetParameterInt("layer"));
+        periodicFilt->SetSamplerParameters(param);
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {
-          m_Periodic->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+          periodicFilt->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
-        m_Periodic->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
-        AddProcess(m_Periodic->GetStreamer(),"Selecting positions with periodic sampler...");
-        m_Periodic->Update();
+        periodicFilt->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
+        AddProcess(periodicFilt->GetStreamer(),"Selecting positions with periodic sampler...");
+        periodicFilt->Update();
         }
       break;
       // random
       case 1:
         {
-        m_Random->SetInput(this->GetParameterImage("in"));
-        m_Random->SetOGRData(reprojVector);
-        m_Random->SetOutputPositionContainerAndRates(outputSamples, rates);
-        m_Random->SetFieldName(fieldName);
-        m_Random->SetLayerIndex(this->GetParameterInt("layer"));
+        RandomSamplerType::Pointer randomFilt = RandomSamplerType::New();
+        randomFilt->SetInput(this->GetParameterImage("in"));
+        randomFilt->SetOGRData(reprojVector);
+        randomFilt->SetOutputPositionContainerAndRates(outputSamples, rates);
+        randomFilt->SetFieldName(fieldName);
+        randomFilt->SetLayerIndex(this->GetParameterInt("layer"));
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {
-          m_Random->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+          randomFilt->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
-        m_Random->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
-        AddProcess(m_Random->GetStreamer(),"Selecting positions with random sampler...");
-        m_Random->Update();
+        randomFilt->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
+        AddProcess(randomFilt->GetStreamer(),"Selecting positions with random sampler...");
+        randomFilt->Update();
+
+        randomFilt = RandomSamplerType::New();
         }
       break;
       default:
@@ -456,10 +451,6 @@ private:
   }
 
   RateCalculatorType::Pointer m_RateCalculator;
-  
-  PeriodicSamplerType::Pointer m_Periodic;
-  RandomSamplerType::Pointer m_Random;
-  
   XMLReaderType::Pointer m_ReaderStat;
 };
 
