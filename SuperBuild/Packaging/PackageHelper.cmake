@@ -226,17 +226,14 @@ function(func_prepare_package)
   
   set(PKG_PEFILES "otbApplicationLauncherCommandLine${EXE_EXT}")
 
-  #set(EXE_FILES)
-  list(APPEND PKG_PEFILES "otbApplicationLauncherQt${EXE_EXT}")
-  list(APPEND PKG_PEFILES "iceViewer${EXE_EXT}")
-  list(APPEND PKG_PEFILES "otbTestDriver${EXE_EXT}")
-  list(APPEND PKG_PEFILES "monteverdi${EXE_EXT}")
-  list(APPEND PKG_PEFILES "mapla${EXE_EXT}")
-  
-  #itk
-  #list(APPEND EXE_FILES "itkTestDriver")
-      
-
+  foreach(exe_file
+      "otbApplicationLauncherQt" "iceViewer" "otbTestDriver" "monteverdi" "mapla")
+    if(EXISTS "${OTB_INSTALL_DIR}/bin/${exe_file}${EXE_EXT}")
+        list(APPEND PKG_PEFILES "${exe_file}${EXE_EXT}")
+    else()
+      message(STATUS "${exe_file}${EXE_EXT} not found in ${OTB_INSTALL_DIR}/bin. (skipping)")
+    endif()
+  endforeach()
   
   if(PKG_GENERATE_XDK)
     #Qt stuff
