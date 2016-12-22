@@ -291,11 +291,10 @@ before starting superbuild. http://doc.qt.io/qt-4.8/requirements-x11.html
 For a debian 8.1 systeme, I installed all Qt4 dependencies with below 'apt-get install'
 \texttt{apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev libgl1-mesa-dev}
 
-For Mac OSX and Windows, there is no additional package required because Qt uses
-Windowing system of that platform which is available on your system.
-
 You can also deactivate QT4 and skip this by passing \texttt{-DOTB\_USE\_QT4=OFF} to cmake.
 This will give you OTB install without monteverdi, mapla and gui application launchers.
+
+For Mac OSX you need to install XCode and Windows 7,8.1,10 requires MSVC 2015 or higher.
 
 You are now ready to compile OTB!
 Simply use the make command (other targets can be generated with CMake's \texttt{-G} option):
