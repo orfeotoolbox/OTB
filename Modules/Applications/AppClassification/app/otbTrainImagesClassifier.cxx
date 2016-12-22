@@ -56,6 +56,17 @@ bool RemoveFile(std::string &filePath)
   bool res = true;
   if(itksys::SystemTools::FileExists(filePath.c_str()))
     {
+    size_t posExt = filePath.rfind('.');
+    if (posExt != std::string::npos &&
+        filePath.compare(posExt,std::string::npos,".shp") == 0)
+      {
+      std::string shxPath = filePath.substr(0,posExt) + std::string(".shx");
+      std::string dbfPath = filePath.substr(0,posExt) + std::string(".dbf");
+      std::string prjPath = filePath.substr(0,posExt) + std::string(".prj");
+      RemoveFile(shxPath);
+      RemoveFile(dbfPath);
+      RemoveFile(prjPath);
+      }
     res = itksys::SystemTools::RemoveFile(filePath.c_str());
     if (!res)
       {
