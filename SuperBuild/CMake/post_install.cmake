@@ -12,12 +12,11 @@ foreach(cmake_file ${file_list})
       set(CODE_SNIPPET "${CODE_SNIPPET} \nget_filename_component(DEPS_INSTALL_DIR \"$${}{DEPS_INSTALL_DIR}\" PATH)" )
     endforeach()
     string(REPLACE "${MATCH}" "$${}{DEPS_INSTALL_DIR}" cmake_file_CONTENTS_NEW ${cmake_file_CONTENTS})
-    file(WRITE "${cmake_file}" 
-      "# This file is modified by OTB after installation.\n"
-      "# For example, see POST_INSTALL_* step in OTB/SuperBuild/CMake/External_itk.cmake \n"
-      "# BEGIN CODE BLOCK FROM OTB SUPERBUILD\n"
-      "${CODE_SNIPPET}\n"
-      "# END CODE BLOCK FROM OTB SUPERBUILD\n"
-      "${cmake_file_CONTENTS_NEW}\n")
+    file(WRITE "${cmake_file}"  "# This file is modified by OTB after installation.
+      \n# For example, see POST_INSTALL_* step in OTB/SuperBuild/CMake/External_itk.cmake
+      \n# BEGIN CODE BLOCK FROM OTB SUPERBUILD
+      \n${CODE_SNIPPET}
+      \n# END CODE BLOCK FROM OTB SUPERBUILD
+      \n${cmake_file_CONTENTS_NEW}")
   endif()
 endforeach() #foreach(cmake_file
