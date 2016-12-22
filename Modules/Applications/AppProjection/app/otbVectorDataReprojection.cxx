@@ -75,8 +75,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Vector);
+    AddDocTag(Tags::Geometry);	
     AddDocTag(Tags::Coordinates);
 
     // Set the parameters

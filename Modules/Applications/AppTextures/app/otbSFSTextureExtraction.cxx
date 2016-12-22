@@ -67,8 +67,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbSFSTexturesImageFilter class");
 
-AddDocTag("Textures");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Textures");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");

@@ -23,7 +23,7 @@
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
-
+#include "mvdImageSettings.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -114,6 +114,8 @@ public:
 // Public SLOTS.
 public slots:
 
+  void GrayscaleActivated(bool status);
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -137,6 +139,8 @@ protected:
 // Private methods.
 private:
 
+  void SetEffectVisible(const Effect & effect, bool visible);
+  
   /** */
   void virtual_SetSettings( ImageSettings * ) ITK_OVERRIDE;
 

@@ -300,6 +300,16 @@ public:
    */
   void SetMaximumParameterFloatValue(std::string parameter, float value);
 
+
+  /**
+   * Enable single selection mode for list view if status in true
+   * (default is false).
+   * 
+   * Can be called for types:
+   * \li ParameterType_ListView
+   */
+  void SetListViewSingleSelectionMode(std::string parameter, bool status);
+  
   /* Set a string value
    *
    * Can be called for types :

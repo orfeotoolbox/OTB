@@ -59,8 +59,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Coordinates);
     AddDocTag(Tags::Geometry);
+	AddDocTag(Tags::Coordinates);
 
     AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
     AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");

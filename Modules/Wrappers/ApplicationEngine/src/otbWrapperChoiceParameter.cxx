@@ -172,7 +172,10 @@ ChoiceParameter::SetValue(std::string choiceKey)
     ++i;
     }
 
-  itkExceptionMacro(<< "Cannot find " << choiceKey);
+  itkExceptionMacro(<< "Invalid parameter value '"
+					<< choiceKey << "'"
+					<< " given for parameter '-"
+					<<  this->GetKey() << "'");
 }
 
 unsigned int

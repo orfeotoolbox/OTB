@@ -901,7 +901,7 @@ otb_test_application(NAME apTvClSampleExtraction
                      APP SampleExtraction
                      OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
                              -vec ${INPUTDATA}/Classification/apTvClSampleSelectionOut.sqlite
-                             -field Class
+                             -field class
                              -out ${TEMP}/apTvClSampleExtractionOut.sqlite
                      VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/apTvClSampleExtractionOut.sqlite

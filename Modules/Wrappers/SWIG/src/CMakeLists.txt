@@ -28,7 +28,7 @@ if ( OTB_WRAP_PYTHON )
     include_directories(${NUMPY_INCLUDE_DIRS})
     list(APPEND CMAKE_SWIG_FLAGS  "-DOTB_SWIGNUMPY=1")
   endif()
-  set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
+  set(CMAKE_SWIG_OUTDIR ${CMAKE_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR})
   set(SWIG_MODULE_otbApplication_EXTRA_DEPS
        ${CMAKE_CURRENT_SOURCE_DIR}/Python.i
        ${CMAKE_CURRENT_SOURCE_DIR}/PyCommand.i
@@ -36,6 +36,7 @@ if ( OTB_WRAP_PYTHON )
        OTBApplicationEngine)
   SWIG_add_module( otbApplication python otbApplication.i otbApplicationPYTHON_wrap.cxx itkPyCommand.cxx )
   SWIG_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
+  set_target_properties(_otbApplication PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
   if(MSVC)
     set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
   else()
@@ -47,7 +48,9 @@ if ( OTB_WRAP_PYTHON )
       TARGET _otbApplication
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E echo "Byte-compiling otbApplication.py"
-      COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/CMake/PythonCompile.py otbApplication.py
+      COMMAND ${PYTHON_EXECUTABLE}
+      ${CMAKE_SOURCE_DIR}/CMake/PythonCompile.py
+      ${CMAKE_SWIG_OUTDIR}/otbApplication.py
       DEPENDS _otbApplication
     )
 
@@ -57,8 +60,8 @@ if ( OTB_WRAP_PYTHON )
            DESTINATION ${OTB_INSTALL_PYTHON_DIR}
            COMPONENT RuntimeLibraries )
 
-  install( FILES ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.py
-                 ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.pyc
+  install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.py
+                 ${CMAKE_SWIG_OUTDIR}/otbApplication.pyc
            DESTINATION ${OTB_INSTALL_PYTHON_DIR}
            COMPONENT RuntimeLibraries )
 
