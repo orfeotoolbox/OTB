@@ -178,15 +178,31 @@ CompositeApplication
     this->GetLogger()->Write( itk::LoggerBase::FATAL, std::string("\n") + m_Oss.str() );
     throw;
     }
-  otbAppLogINFO(<< "\n" << m_Oss.str());
-  m_Oss.str(std::string(""));
+  if(!m_Oss.str().empty())
+    {
+    otbAppLogINFO(<< "\n" << m_Oss.str());
+    m_Oss.str(std::string(""));
+    }
 }
 
 void
 CompositeApplication
 ::UpdateInternalParameters(std::string key)
 {
-  GetInternalApplication(key)->UpdateParameters();
+  try
+    {
+    GetInternalApplication(key)->UpdateParameters();
+    }
+  catch(...)
+    {
+    this->GetLogger()->Write( itk::LoggerBase::FATAL, std::string("\n") + m_Oss.str() );
+    throw;
+    }
+  if(!m_Oss.str().empty())
+    {
+    otbAppLogINFO(<< "\n" << m_Oss.str());
+    m_Oss.str(std::string(""));
+    }
 }
 
 } // end namespace Wrapper
