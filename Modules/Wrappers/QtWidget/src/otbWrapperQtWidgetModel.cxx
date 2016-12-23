@@ -90,7 +90,7 @@ QtWidgetModel
     {
     pName = XMLAppElement->FirstChildElement("name");
 
-    cmdLine << "otbcli_" << pName->FirstChild()->ValueStr();
+    cmdLine << "otbcli_" << pName->GetText();
 #ifdef _WIN32
     cmdLine << ".bat";
 #endif
@@ -103,7 +103,7 @@ QtWidgetModel
       {
       //Get pareter key
       cmdLine << "-";
-      cmdLine << pParam->FirstChildElement("key")->FirstChild()->ValueStr();
+      cmdLine << pParam->FirstChildElement("key")->GetText();
       cmdLine << " ";
 
       //Some parameters can have multiple values. Test it and handle this
@@ -113,10 +113,10 @@ QtWidgetModel
       if (values)
         {
         //Loop over value
-        TiXmlElement * pValue = pParam->FirstChildElement("value");
+        TiXmlElement * pValue = values->FirstChildElement("value");
         while(pValue)
           {
-          cmdLine << pValue->FirstChild()->ValueStr();
+          cmdLine << pValue->GetText();
           cmdLine << " ";
             
           pValue = pValue->NextSiblingElement(); // iteration over multiple values 
@@ -125,7 +125,7 @@ QtWidgetModel
       else
         {
         //Get parameter value
-        cmdLine << pParam->FirstChildElement("value")->FirstChild()->ValueStr();
+        cmdLine << pParam->FirstChildElement("value")->GetText();
         cmdLine << " ";
 
         //In case of OutputImageparameter we need to report output pixel type
@@ -133,7 +133,7 @@ QtWidgetModel
 
         if (pPixType)
           {
-          cmdLine << pPixType->FirstChild()->ValueStr();
+          cmdLine << pPixType->GetText();
           cmdLine << " ";
           }
         }
