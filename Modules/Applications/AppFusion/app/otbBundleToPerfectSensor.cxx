@@ -54,6 +54,7 @@ private:
     AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Pansharpening);
 
+    ClearApplications();
     AddApplication("Superimpose", "superimpose", "Reproject XS onto Pan");
     AddApplication("Pansharpening", "pansharp", "Fusion of XS and Pan");
 
