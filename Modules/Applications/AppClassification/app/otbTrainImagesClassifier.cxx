@@ -102,6 +102,7 @@ void DoInit() ITK_OVERRIDE
 
   AddDocTag(Tags::Learning);
 
+  ClearApplications();
   AddApplication("PolygonClassStatistics", "polystat","Polygon analysis");
   AddApplication("MultiImageSamplingRate", "rates", "Sampling rates");
   AddApplication("SampleSelection", "select", "Sample selection");
