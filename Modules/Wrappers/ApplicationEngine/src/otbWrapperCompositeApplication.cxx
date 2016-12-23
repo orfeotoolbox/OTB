@@ -169,7 +169,15 @@ CompositeApplication
 ::ExecuteInternal(std::string key)
 {
   otbAppLogINFO(<< GetInternalAppDescription(key) <<"...");
-  GetInternalApplication(key)->Execute();
+  try
+    {
+    GetInternalApplication(key)->Execute();
+    }
+  catch(...)
+    {
+    this->GetLogger()->Write( itk::LoggerBase::FATAL, std::string("\n") + m_Oss.str() );
+    throw;
+    }
   otbAppLogINFO(<< "\n" << m_Oss.str());
   m_Oss.str(std::string(""));
 }
