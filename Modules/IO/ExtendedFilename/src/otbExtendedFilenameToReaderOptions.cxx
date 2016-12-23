@@ -47,12 +47,16 @@ ExtendedFilenameToReaderOptions
   m_Options.skipRpcTag.first  = false;
   m_Options.skipRpcTag.second = false;
 
+  m_Options.bandRange.first = false;
+  m_Options.bandRange.second = "";
+
   m_Options.optionList.push_back("geom");
   m_Options.optionList.push_back("sdataidx");
   m_Options.optionList.push_back("resol");
   m_Options.optionList.push_back("skipcarto");
   m_Options.optionList.push_back("skipgeom");
   m_Options.optionList.push_back("skiprpctag");
+  m_Options.optionList.push_back("band");
 }
 
 void
@@ -121,6 +125,14 @@ ExtendedFilenameToReaderOptions
       {
       m_Options.skipRpcTag.second = true;
       }
+    }
+
+  if (!map["band"].empty())
+    {
+    m_Options.bandRange.first = true;
+    // Basic check on bandRange (using regex)
+    // TODO : 
+    m_Options.bandRange.second = map["band"];
     }
 
   //Option Checking
