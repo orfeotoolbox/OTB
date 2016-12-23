@@ -69,6 +69,13 @@ CompositeApplication
   return true;
 }
 
+void
+CompositeApplication
+::ClearApplications()
+{
+  m_AppContainer.clear();
+}
+
 bool
 CompositeApplication
 ::Connect(std::string fromKey, std::string toKey)
