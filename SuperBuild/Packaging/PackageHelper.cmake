@@ -52,20 +52,23 @@ macro(macro_super_package)
   include(GetPrerequisites)
 
   set(LOADER_PROGRAM_ARGS ${loader_program_args})
-  
-  set(DEST_LIB_DIR lib)
+
   set(DEST_BIN_DIR bin)
   set(DEST_APP_DIR lib/otb/applications)
+  
+  set(LIB_PREFIX lib)
+  set(DEST_LIB_DIR lib)
   set(EXE_EXT "")
   set(SCR_EXT ".sh")
   set(LIB_EXT ".so")
   set(PYMODULE_EXT ".so")
   if(WIN32)
+    set(LIB_PREFIX)
+    set(DEST_LIB_DIR bin)
     set(EXE_EXT ".exe")
     set(LIB_EXT ".dll")
     set(SCR_EXT ".bat")
     set(PYMODULE_EXT ".pyd")
-    set(DEST_LIB_DIR bin)
   elseif(APPLE)
     set(LIB_EXT ".dylib")
   endif()
@@ -242,25 +245,30 @@ function(func_prepare_package)
     list(APPEND PKG_PEFILES "qmake${EXE_EXT}")
     list(APPEND PKG_PEFILES "rcc${EXE_EXT}")
     list(APPEND PKG_PEFILES "uic${EXE_EXT}")
-    list(APPEND PKG_PEFILES "sharkVersion${EXE_EXT}")
     list(APPEND PKG_PEFILES "proj${EXE_EXT}")
     list(APPEND PKG_PEFILES "cs2cs${EXE_EXT}")
+
+    #shark is optional
+    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/sharkVersion${EXE_EXT}")
+      list(APPEND PKG_PEFILES "sharkVersion${EXE_EXT}")
+    endif()
     
     #RK: there is a bug in itk cmake files in install tree 
     #we workaround with below code
     #start hack
-     file(GLOB itk_lib_files  
-     "${DEPENDENCIES_INSTALL_DIR}/bin/itk*${LIB_EXT}"
-     "${DEPENDENCIES_INSTALL_DIR}/bin/ITK*${LIB_EXT}"
+     file(GLOB itk_all_lib_files  
+     "${DEPENDENCIES_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}itk*${LIB_EXT}*"
+     "${DEPENDENCIES_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}ITK*${LIB_EXT}*"
      )
-     foreach(itk_lib_file ${itk_lib_files})
-       if(NOT EXISTS "${itk_lib_file}")
-	 message(FATAL_ERROR "{itk_lib_file} does not exist")
-       endif()
+
+   foreach(itk_lib_file ${itk_all_lib_files})
+     func_is_file_a_symbolic_link("${itk_lib_file}" a_symlink itk_lib_file_target)
+     if(NOT a_symlink)
        list(APPEND PKG_PEFILES "${itk_lib_file}")
+     endif()
      endforeach()
      #end hack
-    
+
     file(GLOB otb_test_exe_list 
     "${DEPENDENCIES_INSTALL_DIR}/bin/gdal*${EXE_EXT}"    
     "${OTB_BINARY_DIR}/bin/*Test*${EXE_EXT}"
@@ -321,46 +329,48 @@ function(func_process_deps input_file)
   endif()
   
   message("Processing ${input_file_full_path}")
-     
-  is_file_executable("${input_file_full_path}" is_executable)
-  if(is_executable)
-    file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_BIN_DIR} "${input_file_full_path}\n")
-  else(is_executable) 
-    
-    if(UNIX)
-      # Deal with symlinks.
-      # For any valid symlinks, (see 'not_valid' below) 
-      # we append ln -s source target commands to a file
-      # That file is  executed during installation. 
-      get_filename_component(bn_we ${input_file_full_path} NAME_WE)
-      get_filename_component(bn_path ${input_file_full_path} PATH)
-      
-      file(GLOB sofiles "${bn_path}/${bn_we}*")
-      foreach(sofile ${sofiles})
-	get_filename_component(basename_of_sofile ${sofile} NAME)
-	get_filename_component(sofile_ext ${sofile} EXT)
-	set(not_valid FALSE)
-	if(  "${sofile_ext}" MATCHES ".la"
-            OR "${sofile_ext}" MATCHES ".prl"
-            OR "${sofile_ext}" MATCHES ".a"
-            OR  IS_DIRECTORY "${sofile}" )
-          set(not_valid TRUE)
-	endif()
-        
-	if(not_valid)
-          continue()
-	endif()
-        
-	func_is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
+ 
+  set(is_executable FALSE)
+  is_file_executable2("${input_file_full_path}" is_executable)
+  if(NOT is_executable)
+    pkg_install_rule(${input_file_full_path})
+    message("not is_executable ${input_file_full_path}")
+    return()
+  endif() #NOT is_executable
 
-	if(is_symlink)
-          add_to_symlink_list("${linked_to_file}" "${basename_of_sofile}")	
-	endif() # is_symlink
-	
-      endforeach()
+  if(UNIX)
+    # Deal with symlinks.
+    # For any valid symlinks, (see 'not_valid' below) 
+    # we append ln -s source target commands to a file
+    # That file is  executed during installation. 
+    get_filename_component(bn_we ${input_file_full_path} NAME_WE)
+    get_filename_component(bn_path ${input_file_full_path} PATH)
     
-    endif(UNIX)
-  endif(is_executable)
+    file(GLOB sofiles "${bn_path}/${bn_we}*")
+    foreach(sofile ${sofiles})
+      get_filename_component(basename_of_sofile ${sofile} NAME)
+      get_filename_component(sofile_ext ${sofile} EXT)
+      set(not_valid FALSE)
+      if(  "${sofile_ext}" MATCHES ".la"
+          OR "${sofile_ext}" MATCHES ".prl"
+          OR "${sofile_ext}" MATCHES ".a"
+          OR  IS_DIRECTORY "${sofile}" )
+        set(not_valid TRUE)
+      endif()
+      
+      if(not_valid)
+        continue()
+      endif()
+      
+      func_is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
+      
+      if(is_symlink)
+        add_to_symlink_list("${linked_to_file}" "${basename_of_sofile}")	
+      endif() # is_symlink
+      
+    endforeach()
+    
+  endif(UNIX)
   
   set(raw_items)
      
