@@ -21,18 +21,10 @@ DYLD_LIBRARY_PATH=
 DYLD_FALLBACK_LIBRARY_PATH=
 
 echo "Configuring..."
-# #BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
-# # #add rpath to LC_RPATH using install_name_tool
-# for bin_file in $BINARY_FILES; do
-#     #echo "adding rpath to $OUT_DIR/$bin_file"
-#     if [ -f "$OUT_DIR/$bin_file" ]; then
-#        $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$OUT_DIR/$bin_file"
-#     fi
-# done
 
-LIBRARY_FILES=$(find "$OUT_DIR/lib/otb/applications" "$OUT_DIR/lib" -maxdepth 1 -type f)
+LIBRARY_FILES=$(find "$OUT_DIR/lib" -maxdepth 1 -type f)
 EXE_FILES=$(find "$OUT_DIR/bin"  -type f -exec file {} \; | grep -i "Mach-O*.*executable"|cut -d ':' -f1)
-# run patchelf
+# run install_name_tool
 for lib_file in $LIBRARY_FILES $EXE_FILES; do
     #echo "adding rpath to $OUT_DIR/$lib_file"
     if [ -f "$lib_file" ]; then
@@ -47,6 +39,7 @@ SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@
 
 I_AM_XDK=@IS_XDK@
 
+
 # if [ "$I_AM_XDK" = true ] ; then
 
 #     sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
@@ -54,6 +47,15 @@ I_AM_XDK=@IS_XDK@
 #     sed -i "" "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
 # else
 if [ "$I_AM_XDK" = false ] ; then
+    OTB_APP_FILES=$(find "$OUT_DIR/lib/otb/applications" -maxdepth 1 -type f)
+    # run install_name_tool
+    for app_file in $OTB_APP_FILES; do
+	#echo "adding rpath to $app_file"
+	if [ -f "$app_file" ]; then
+	    $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$app_file"
+	fi
+    done
+    
     rm -fr "Mapla.app"
     rm -fr "Monteveridi.app"
     
