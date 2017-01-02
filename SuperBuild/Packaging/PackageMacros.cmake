@@ -143,7 +143,7 @@ function(is_file_executable2 file result_var)
   # If file name ends in .exe on Windows, *assume* executable:
   #
   if(WIN32 AND NOT UNIX)
-    if("${file_full_lower}" MATCHES "\\.exe$")
+    if("${file_full_lower}" MATCHES "(\\.exe|\\.dll)$")
       set(${result_var} 1 PARENT_SCOPE)
       return()
     endif()
