@@ -266,20 +266,23 @@ function(func_is_file_a_symbolic_link file result_var1 result_var2)
   get_filename_component(file_full "${file}" ABSOLUTE)
   string(TOLOWER "${file_full}" file_full_lower)
 
-  # If file name ends in .exe on Windows, *assume* executable.
-  # And If file name ends in .dll on Windows, *assume* libary.
+  # If file name ends in .exe on Windows, *assume* executable:
+  #
   if(WIN32 AND NOT UNIX)
-    if("${file_full_lower}" MATCHES "(\\.exe|\\.dll)$")
-      set(${result_var} 1 PARENT_SCOPE)
+    if("${file_full_lower}" MATCHES "\\.lnk$")
+      set(${result_var1} 1 PARENT_SCOPE)
+      #Assuming the file is linked to a file with same name without .lnk extension
+      get_filename_component(name_we_lnk "${file_full_lower}" NAME_WE)
+      set(${result_var2} "${name_we_lnk}" PARENT_SCOPE)
       return()
     endif()
-    
+
     # A clause could be added here that uses output or return value of dumpbin
     # to determine ${result_var}. In 99%+? practical cases, the exe name
     # match will be sufficient...
     #
   endif()
-  
+
   # Use the information returned from the Unix shell command "file" to
   # determine if ${file_full} should be considered an executable file...
   #
