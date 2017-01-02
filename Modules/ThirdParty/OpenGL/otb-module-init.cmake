@@ -46,16 +46,18 @@ else(APPLE)
   mark_as_advanced(OPENGL_LIBRARIES)
 endif(APPLE)
 
-if(NOT WIN32)
-  if(NOT OPENGL_INCLUDE_DIR)
+
+if(NOT OPENGL_INCLUDE_DIR)
+  if(NOT WIN32)
     message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_INCLUDE_DIR")
   endif()
-  
-  if(NOT OPENGL_gl_LIBRARY)
-    message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_gl_LIBRARY")
-  endif()
-  
-  if(NOT OPENGL_glu_LIBRARY)
-    message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_glu_LIBRARY")
-  endif()
 endif()
+
+if(NOT OPENGL_gl_LIBRARY)
+  message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_gl_LIBRARY")
+endif()
+
+if(NOT OPENGL_glu_LIBRARY)
+  message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_glu_LIBRARY")
+endif()
+
