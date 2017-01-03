@@ -323,6 +323,8 @@ private slots:
   /**
    */
   void on_gammaSlider_valueChanged( int gamma );
+
+  void on_gammaResetButton_clicked();
 };
 
 } // end namespace 'mvd'.

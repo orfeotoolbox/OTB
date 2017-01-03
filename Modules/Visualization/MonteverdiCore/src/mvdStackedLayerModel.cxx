@@ -41,6 +41,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractLayerModel.h"
 #include "mvdAlgorithm.h"
+#include "mvdVectorImageModel.h"
+#include "mvdCore.h"
 
 namespace mvd
 {

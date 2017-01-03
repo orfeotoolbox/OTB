@@ -18,6 +18,8 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbClampImageFilter.h"
 #include "otbClampVectorImageFilter.h"
+#include "otbImageIOFactory.h"
+#include "itksys/SystemTools.hxx"
 
 #ifdef OTB_USE_MPI
 
@@ -555,6 +557,47 @@ OutputImageParameter::HasValue() const
 {
   std::string filename(this->GetFileName());
   return !filename.empty();
+}
+
+std::string
+OutputImageParameter::CheckFileName(bool fixMissingExtension)
+{
+  std::string ret("");
+  // Check that there is an ImageIO capable of writing the file
+  otb::ExtendedFilenameToWriterOptions::Pointer filenameHelper =
+    otb::ExtendedFilenameToWriterOptions::New();
+  filenameHelper->SetExtendedFileName(this->GetFileName());
+  std::string simpleFilename = filenameHelper->GetSimpleFileName();
+  // TODO : check if simpleFilename is empty
+
+  otb::ImageIOBase::Pointer imageIO =
+    otb::ImageIOFactory::CreateImageIO(simpleFilename.c_str(),
+                                       otb::ImageIOFactory::WriteMode);
+  if(imageIO.IsNull())
+    {
+    // check for missing extension
+    std::string outExt = itksys::SystemTools::GetFilenameLastExtension(simpleFilename);
+    if (outExt.empty())
+      {
+      if (fixMissingExtension)
+        {
+        // try with .tif
+        std::string fullFileName(this->GetFileName());
+        std::string extendedPart = fullFileName.substr(simpleFilename.size());
+        this->SetFileName(simpleFilename+std::string(".tif")+extendedPart);
+        ret += std::string("no extension detected, using TIF as default.");
+        }
+      else
+        {
+        // TODO : call exception here?
+        }
+      }
+    else
+      {
+      // TODO : call exception here?
+      }
+    }
+  return ret;
 }
 
 }

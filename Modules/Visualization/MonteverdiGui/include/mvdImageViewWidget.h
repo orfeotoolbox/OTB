@@ -410,6 +410,7 @@ private slots:
   /**
    */
   void OnApplyAllRequested();
+  void OnResetEffectsRequested();
   /**
    */
   void OnSetReferenceRequested();

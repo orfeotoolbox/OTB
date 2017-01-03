@@ -32,7 +32,6 @@ QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model
 {
   m_Model = model;
   connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(show()) );
-  connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(close()) );
   connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(Init()) );
   connect(this, SIGNAL(AddNewProcessToReport()), this, SLOT(ReportProcess()) );
 
@@ -90,7 +89,7 @@ void QtWidgetSimpleProgressReport::ReportProcess()
 void QtWidgetSimpleProgressReport::Init()
 {
   m_Bar->setValue(0);
-  m_Label->setText("No process yet...");
+  m_Label->setText("No process");
 }
 
 }

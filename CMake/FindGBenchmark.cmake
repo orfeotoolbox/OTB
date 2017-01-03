@@ -4,10 +4,11 @@
 #  GBENCHMARK_LIBRARY      - gbenchmark library file
 #  GBENCHMARK_FOUND        - TRUE if gbenchmark is found
 
-if (GBENCHMARK_INCLUDE_DIR)
- #check cache
-  set(GBENCHMARK_FIND_QUIETLY TRUE)
-endif ()
+set(GBENCHMARK_FIND_QUIETLY TRUE)
+# if (GBENCHMARK_INCLUDE_DIR)
+#  #check cache
+#   set(GBENCHMARK_FIND_QUIETLY TRUE)
+# endif ()
 
 if (NOT GBENCHMARK_INCLUDE_DIR)
   find_path(GBENCHMARK_INCLUDE_DIR NAMES benchmark.h PATH_SUFFIXES benchmark)

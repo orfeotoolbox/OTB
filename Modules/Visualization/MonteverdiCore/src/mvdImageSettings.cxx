@@ -130,6 +130,31 @@ ImageSettings
       return m_Angle;
       break;
 
+    case EFFECT_LUT_LOCAL_JET:
+      // qDebug() << "Range:" << m_Range;
+      return m_Range;
+      break;
+
+    case EFFECT_LUT_LOCAL_HOT:
+      // qDebug() << "Range:" << m_Range;
+      return m_Range;
+      break;
+      
+    case EFFECT_LUT_LOCAL_WINTER:
+      // qDebug() << "Range:" << m_Range;
+      return m_Range;
+      break;
+      
+    case EFFECT_LUT_LOCAL_SUMMER:
+      // qDebug() << "Range:" << m_Range;
+      return m_Range;
+      break;
+      
+    case EFFECT_LUT_LOCAL_COOL:
+      // qDebug() << "Range:" << m_Range;
+      return m_Range;
+      break;
+
     default:
       break;
     }
@@ -152,6 +177,31 @@ ImageSettings
     case EFFECT_SPECTRAL_ANGLE :
       // qDebug() << "Angle = " << value;
       m_Angle = value;
+      break;
+
+    case EFFECT_LUT_LOCAL_JET:
+      // qDebug() << "Range = " << value;
+      m_Range = value;
+      break;
+
+    case EFFECT_LUT_LOCAL_HOT:
+      // qDebug() << "Range = " << value;
+      m_Range = value;
+      break;
+
+    case EFFECT_LUT_LOCAL_WINTER:
+      // qDebug() << "Range = " << value;
+      m_Range = value;
+      break;
+      
+    case EFFECT_LUT_LOCAL_SUMMER:
+      // qDebug() << "Range = " << value;
+      m_Range = value;
+      break;
+      
+    case EFFECT_LUT_LOCAL_COOL:
+      // qDebug() << "Range = " << value;
+      m_Range = value;
       break;
 
     default:

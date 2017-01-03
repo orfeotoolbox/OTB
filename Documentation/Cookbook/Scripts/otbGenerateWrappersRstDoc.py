@@ -430,7 +430,11 @@ def RstHeading(text, delimiter):
 
 def ApplicationToRst(appname):
     output = ""
-    app = otbApplication.Registry.CreateApplication(appname)
+    app = None
+    try:
+        app = otbApplication.Registry.CreateApplication(appname)
+    except e:
+        print e
     # TODO: remove this when bug 440 is fixed
     app.Init()
     output += RstHeading(app.GetDocName(), '^')
@@ -487,73 +491,107 @@ def GetApplicationTags(appname):
 
 import shutil
 
-def RstPageHeading(text):
+def RstPageHeading(text, maxdepth):
     output = RstHeading(text, "=") + linesep
     output += ".. toctree::" + linesep
-    output += "\t:maxdepth: 2" + linesep
+    output += "\t:maxdepth: " + maxdepth + linesep
     output += linesep + linesep
     return output
 
 def GenerateRstForApplications():
     out = ""
-    blackList = ["TestApplication", "Example"]
-    appIndexFile = open('Applications.rst', 'w')
-    appNames = [app for app in otbApplication.Registry.GetAvailableApplications() if app not in blackList]
-    if not appNames:
-			print 'No OTB applications available. Please check ITK_AUTOLOAD_PATH env variable'
-			sys.exit(1)
-    sectionTags = ["Image Manipulation","Vector Data Manipulation", "Calibration","Geometry", "Image Filtering","Feature Extraction","Stereo","Learning","Segmentation"]
-    appIndexFile.write(RstPageHeading("Applications"))
+    blackList = ["TestApplication", "Example", "ApplicationExample"]
+    allApps = None
+    try: 
+        allApps = otbApplication.Registry.GetAvailableApplications( )
+    except e:
+        print 'error in otbApplication.Registry.GetAvailableApplications()'
+        sys.exit(1)
 
-    for tag in sectionTags:
-        directory= "Applications/" + tag
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        tag_ = tag.replace(' ', '_')
-        appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
-        #chapterIndexFile = open('Applications/' + tag + '.rst', 'w')
-        #chapterIndexFile.write(RstPageHeading(tag))
-        #print linesep + RstHeading(tag, '=')
-        appsRemoved = []
-        for appName in appNames:
-            apptags = GetApplicationTags(appName)
+#    appNames = [app for app in otbApplication.Registry.GetAvailableApplications() if app not in blackList]
+    if not allApps:
+	print 'No OTB applications available. Please check OTB_APPLICATION_PATH env variable'
+	sys.exit(1)
 
-            if apptags.count(tag) > 0:
-                print "Generating " + appName + ".rst"
-                #chapterIndexFile.write("\t" + tag + '/' + appName + linesep)
-                appFile = open('Applications/app_'  + appName + '.rst', 'w')
-                out = ApplicationToRst(appName)
-                appFile.write(out)
-                appFile.close()
-                appsRemoved.append(appName)
-        for appName in appsRemoved:
-            appNames.remove(appName)
-        #chapterIndexFile.close()
+    # sectionTags = ["Image Manipulation",
+    #                "Vector Data Manipulation",
+    #                "Calibration","Geometry", "Image Filtering","Feature Extraction",
+    #                "Stereo","Learning","Segmentation", "Miscellaneous"]
+    # for tag in sectionTags:
+    #     #directory= "Applications/" + tag
+    #     # if not os.path.exists(directory):
+    #     #     os.makedirs(directory)
+    #     appIndexFile.write('\tApplications/' + tag.replace(' ', '_') + '.rst' + linese)
+    #     #chapterIndexFile = open('Applications/' + tag + '.rst', 'w')
+    #     #chapterIndexFile.write(RstPageHeading(tag))
+    #     #print linesep + RstHeading(tag, '=')
 
-    misctag = "Miscellaneous" #should this be Utilities
-    if not os.path.exists("Applications/" + misctag):
-        os.makedirs("Applications/" + misctag)
 
-    appIndexFile.write('\tApplications/' + misctag + linesep)
-    appIndexFile.close()
-    #miscChapterIndexFile = open("Applications/" + misctag + '.rst', 'w')
-    #miscChapterIndexFile.write(RstPageHeading(misctag))
+    #miscFile = open('Applications/Miscellaneous.rst', 'w')
+    # misctag = "Miscellaneous" #should this be Utilities
+    # if not os.path.exists("Applications/" + misctag):
+    #     os.makedirs("Applications/" + misctag)
+
+#    appIndexFile.write('\tApplications/' + misctag + linesep)
+
+        
+    writtenTags = []    
+    appNames = [app for app in allApps if app not in blackList]
+
+    print "All apps: %s" % (appNames,)
+
+    appIndexFile = open(RST_DIR + '/Applications.rst', 'w')    
+    appIndexFile.write(RstPageHeading("Applications", "2"))
     for appName in appNames:
-        print "Generating " + appName + ".rst"
-        appFile = open("Applications/app_" +  appName + ".rst", 'w')
+        tags = GetApplicationTags(appName)
+
+        if not tags:
+            print "No tags for application: "  +  appName
+            sys.exit(1)
+            
+        tag = tags[0]
+
+        tag_ = tag
+        if tag.find(' '):
+            tag_ = tag.replace(' ', '_')
+
+        if not tag_:
+            print 'empty tag found for ' + appName
+            
+        if not tag_ in writtenTags:
+            appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
+            writtenTags.append(tag_)
+            
+        tagFileName = RST_DIR + '/Applications/'  + tag_ + '.rst'
+        if os.path.isfile(tagFileName):
+            tagFile = open(tagFileName, 'a')
+            tagFile.write("\tapp_" + appName + linesep)
+            tagFile.close()
+        else:
+            tagFile = open(tagFileName, 'w')
+            tagFile.write( RstPageHeading(tag, "1") )
+            tagFile.write("\tapp_" + appName + linesep)
+            tagFile.close()
+        
+        print "Generating " + appName + ".rst" +  " on tag " + tag_
+        appFile = open(RST_DIR + '/Applications/app_'  + appName + '.rst', 'w')
         out = ApplicationToRst(appName)
         appFile.write(out)
         appFile.close()
-        #miscChapterIndexFile.write('\t' + misctag + '/' + appName + linesep)
-        out = ""
+
+    appIndexFile.close()
+    
     return out
 
 
 # Start parsing options
-parser = OptionParser(usage="Export application(s) to tex or pdf file.")
+parser = OptionParser(usage="Export application(s) to rst file.")
 parser.add_option("-a",dest="appname",help="Generate rst only for this application (eg: OrthoRectification)")
 parser.add_option("-m",dest="module",help="Generate rst only for this module (eg: Image Manipulation)")
+parser.add_option("-o",dest="rstdir",help="directory where rst files are generated")
 (options, args) = parser.parse_args()
+
+RST_DIR = options.rstdir
 
 if not options.appname is None:
     out = ApplicationToRst(options.appname)

@@ -55,6 +55,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag("Miscellaneous");
     AddDocTag("Utilities");
     AddDocTag("Coordinates");
     AddDocTag("Raster");

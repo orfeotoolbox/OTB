@@ -53,6 +53,26 @@ macro(macro_super_package)
 
   set(LOADER_PROGRAM_ARGS ${loader_program_args})
 
+  set(DEST_BIN_DIR bin)
+  set(DEST_APP_DIR lib/otb/applications)
+  
+  set(LIB_PREFIX lib)
+  set(DEST_LIB_DIR lib)
+  set(EXE_EXT "")
+  set(SCR_EXT ".sh")
+  set(LIB_EXT ".so")
+  set(PYMODULE_EXT ".so")
+  if(WIN32)
+    set(LIB_PREFIX)
+    set(DEST_LIB_DIR bin)
+    set(EXE_EXT ".exe")
+    set(LIB_EXT ".dll")
+    set(SCR_EXT ".bat")
+    set(PYMODULE_EXT ".pyd")
+  elseif(APPLE)
+    set(LIB_EXT ".dylib")
+  endif()
+
   # find_loader_and_args(LOADER_PROGRAM LOADER_PROGRAM_ARGS)
   
   find_python_soname(python_INSTALLED_SONAME)
@@ -109,19 +129,13 @@ macro(macro_super_package)
   list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
   list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb/python") #otbApplication.py
 
-  set(EXE_SEARCHDIRS ${OTB_INSTALL_DIR}/bin)
-  list(APPEND  EXE_SEARCHDIRS ${DEPENDENCIES_INSTALL_DIR}/bin)
+  if(PKG_GENERATE_XDK)
+   list(APPEND PKG_SEARCHDIRS ${OTB_BINARY_DIR}/bin)
+  endif()
 
   macro_empty_package_staging_directory()
 
   set(PKG_PEFILES)
-
-  set(QT_EXECUTABLES)
-  list(APPEND QT_EXECUTABLES "lrelease")
-  list(APPEND QT_EXECUTABLES "moc")
-  list(APPEND QT_EXECUTABLES "qmake")
-  list(APPEND QT_EXECUTABLES "rcc")
-  list(APPEND QT_EXECUTABLES "uic")
 
   func_prepare_package()
 
@@ -201,73 +215,75 @@ endmacro(macro_super_package)
 
 function(func_prepare_package)
 
-  set(DEST_LIB_DIR lib)
-  set(DEST_BIN_DIR bin)
-  set(DEST_APP_DIR lib/otb/applications)
-  set(EXE_EXT "")
-  set(SCR_EXT ".sh")
-  set(LIB_EXT ".so")
-  set(PYMODULE_EXT ".so")
-  if(WIN32)
-    set(EXE_EXT ".exe")
-    set(LIB_EXT ".dll")
-    set(SCR_EXT ".bat")
-    set(PYMODULE_EXT ".pyd")
-    set(DEST_LIB_DIR bin)
-  elseif(APPLE)
-    set(LIB_EXT ".dylib")
-  endif()
+
 
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks_temp  "")
 
   #This must exist in any OTB Installation. minimal or full
-  set(PKG_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
+  #set(PKG_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
   if(NOT EXISTS "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
     message(
       FATAL_ERROR
       "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found.")
   endif()
+  
+  set(PKG_PEFILES "otbApplicationLauncherCommandLine${EXE_EXT}")
 
-  set(EXE_FILES)
-  list(APPEND EXE_FILES "otbApplicationLauncherQt")
-  list(APPEND EXE_FILES "iceViewer")
-  list(APPEND EXE_FILES "otbTestDriver")
-
-  if(PKG_GENERATE_XDK)
-    #itk
-    list(APPEND EXE_FILES "itkTestDriver")
-    #Qt stuff
-    list(APPEND EXE_FILES ${QT_EXECUTABLES})
-  endif()
-
-  list(APPEND EXE_FILES "monteverdi")
-  list(APPEND EXE_FILES "mapla")
-
-  foreach(EXE_FILE ${EXE_FILES})
-    set(FOUND_${EXE_FILE} FALSE)
-    foreach(EXE_SEARCHDIR ${EXE_SEARCHDIRS})
-      if(NOT FOUND_${EXE_FILE})
-        if(EXISTS "${EXE_SEARCHDIR}/${EXE_FILE}${EXE_EXT}")
-          set(FOUND_${EXE_FILE} TRUE)
-          list(APPEND PKG_PEFILES "${EXE_SEARCHDIR}/${EXE_FILE}${EXE_EXT}")
-        endif()
-      endif() #(NOT FOUND_${EXE_FILE})
-    endforeach() #EXE_SEARCH_DIR
+  foreach(exe_file
+      "otbApplicationLauncherQt" "iceViewer" "otbTestDriver" "monteverdi" "mapla")
+    if(EXISTS "${OTB_INSTALL_DIR}/bin/${exe_file}${EXE_EXT}")
+        list(APPEND PKG_PEFILES "${exe_file}${EXE_EXT}")
+    else()
+      message(STATUS "${exe_file}${EXE_EXT} not found in ${OTB_INSTALL_DIR}/bin. (skipping)")
+    endif()
   endforeach()
+  
+  if(PKG_GENERATE_XDK)
+    #Qt stuff
+    list(APPEND PKG_PEFILES "lrelease${EXE_EXT}")
+    list(APPEND PKG_PEFILES "moc${EXE_EXT}")
+    list(APPEND PKG_PEFILES "qmake${EXE_EXT}")
+    list(APPEND PKG_PEFILES "rcc${EXE_EXT}")
+    list(APPEND PKG_PEFILES "uic${EXE_EXT}")
+    list(APPEND PKG_PEFILES "proj${EXE_EXT}")
+    list(APPEND PKG_PEFILES "cs2cs${EXE_EXT}")
+
+    #shark is optional
+    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/sharkVersion${EXE_EXT}")
+      list(APPEND PKG_PEFILES "sharkVersion${EXE_EXT}")
+    endif()
+    
+    #RK: there is a bug in itk cmake files in install tree 
+    #we workaround with below code
+    #start hack
+     file(GLOB itk_all_lib_files  
+     "${DEPENDENCIES_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}itk*${LIB_EXT}*"
+     "${DEPENDENCIES_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}ITK*${LIB_EXT}*"
+     )
+
+   foreach(itk_lib_file ${itk_all_lib_files})
+     func_is_file_a_symbolic_link("${itk_lib_file}" a_symlink itk_lib_file_target)
+     if(NOT a_symlink)
+       list(APPEND PKG_PEFILES "${itk_lib_file}")
+     endif()
+     endforeach()
+     #end hack
+
+    file(GLOB otb_test_exe_list 
+    "${DEPENDENCIES_INSTALL_DIR}/bin/gdal*${EXE_EXT}"    
+    "${OTB_BINARY_DIR}/bin/*Test*${EXE_EXT}"
+    )
+    foreach(otb_test_exe   ${otb_test_exe_list})
+      get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
+      list(APPEND PKG_PEFILES ${otb_test_exe_name})
+    endforeach()
+  endif()
 
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   if(MSVC AND NOT PKG_GENERATE_XDK)
     list(APPEND PKG_PEFILES "ucrtbase.dll")
   endif()
   
-  #loop again to report if anything is not found
-  foreach( EXE_FILE ${EXE_FILES} )
-    if(NOT FOUND_${EXE_FILE})
-      message(STATUS "'${OTB_INSTALL_DIR}/bin/${EXE_FILE}${EXE_EXT}'(not found. skipping)")
-    endif()
-  endforeach()
-
-
   file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
 
@@ -307,53 +323,54 @@ function(func_prepare_package)
 endfunction() #func_prepare_package
 
 function(func_process_deps input_file)
-  
   search_library(${input_file} PKG_SEARCHDIRS input_file_full_path)
   if(NOT input_file_full_path)
     message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
   endif()
   
   message("Processing ${input_file_full_path}")
-     
-  is_file_executable("${input_file_full_path}" is_executable)
-  if(is_executable)
-    file(APPEND ${CMAKE_BINARY_DIR}/install_to_${DEST_BIN_DIR} "${input_file_full_path}\n")
-  else(is_executable) 
-    
-    if(UNIX)
-      # Deal with symlinks.
-      # For any valid symlinks, (see 'not_valid' below) 
-      # we append ln -s source target commands to a file
-      # That file is  executed during installation. 
-      get_filename_component(bn_we ${input_file_full_path} NAME_WE)
-      get_filename_component(bn_path ${input_file_full_path} PATH)
-      
-      file(GLOB sofiles "${bn_path}/${bn_we}*")
-      foreach(sofile ${sofiles})
-	get_filename_component(basename_of_sofile ${sofile} NAME)
-	get_filename_component(sofile_ext ${sofile} EXT)
-	set(not_valid FALSE)
-	if(  "${sofile_ext}" MATCHES ".la"
-            OR "${sofile_ext}" MATCHES ".prl"
-            OR "${sofile_ext}" MATCHES ".a"
-            OR  IS_DIRECTORY "${sofile}" )
-          set(not_valid TRUE)
-	endif()
-        
-	if(not_valid)
-          continue()
-	endif()
-        
-	func_is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
+ 
+  set(is_executable FALSE)
+  is_file_executable2("${input_file_full_path}" is_executable)
+  if(NOT is_executable)
+    pkg_install_rule(${input_file_full_path})
+    message("not is_executable ${input_file_full_path}")
+    return()
+  endif() #NOT is_executable
 
-	if(is_symlink)
-          add_to_symlink_list("${linked_to_file}" "${basename_of_sofile}")	
-	endif() # is_symlink
-	
-      endforeach()
+  if(UNIX)
+    # Deal with symlinks.
+    # For any valid symlinks, (see 'not_valid' below) 
+    # we append ln -s source target commands to a file
+    # That file is  executed during installation. 
+    get_filename_component(bn_we ${input_file_full_path} NAME_WE)
+    get_filename_component(bn_path ${input_file_full_path} PATH)
     
-    endif(UNIX)
-  endif(is_executable)
+    file(GLOB sofiles "${bn_path}/${bn_we}*")
+    foreach(sofile ${sofiles})
+      get_filename_component(basename_of_sofile ${sofile} NAME)
+      get_filename_component(sofile_ext ${sofile} EXT)
+      set(not_valid FALSE)
+      if(  "${sofile_ext}" MATCHES ".la"
+          OR "${sofile_ext}" MATCHES ".prl"
+          OR "${sofile_ext}" MATCHES ".a"
+          OR  IS_DIRECTORY "${sofile}" )
+        set(not_valid TRUE)
+      endif()
+      
+      if(not_valid)
+        continue()
+      endif()
+      
+      func_is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
+      
+      if(is_symlink)
+        add_to_symlink_list("${linked_to_file}" "${basename_of_sofile}")	
+      endif() # is_symlink
+      
+    endforeach()
+    
+  endif(UNIX)
   
   set(raw_items)
      
@@ -455,9 +472,11 @@ function(pkg_install_rule src_file)
     message(FATAL_ERROR "unreachable code")
   endif()
   
+  set(SKIP_INSTALL FALSE)
   setif_value_in_list(is_gtk_lib "${src_file_NAME}" ALLOWED_SYSTEM_DLLS)  
   if(is_gtk_lib)
     set(output_dir "lib/gtk")
+     set(SKIP_INSTALL TRUE)
   endif()
   
   #special case
@@ -465,20 +484,17 @@ function(pkg_install_rule src_file)
     set(output_dir "lib/otb/applications")
     set(file_type PROGRAMS)
   endif()
-  
-  set(SKIP_INSTALL FALSE)
+
   if(PKG_GENERATE_XDK)
     if ("${src_file_NAME}"
 	MATCHES
-	"libOTB|libotb|otbApp|otbapp_|otbTest|libMonteverdi|monteverdi|mapla|iceViewer"
+	"([Oo][Tt][Bb])|([Mm]onteverdi)|mapla|iceViewer"
 	)
       set(SKIP_INSTALL TRUE)
+        
+      message("SKIP_INSTALL for ${src_file_NAME}")
     endif()
 
-    if(is_gtk_lib)
-      set(SKIP_INSTALL TRUE)
-    endif()
-    
   endif()
 
   if(NOT SKIP_INSTALL)

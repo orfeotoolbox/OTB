@@ -148,16 +148,16 @@ endmacro(SUPERBUILD_PATCH_SOURCE)
 
 macro(SUPERBUILD_UPDATE_CMAKE_VARIABLES PROJECT with_prefix)
 
-  if("${ARGV3}" STREQUAL "")
+  if("${ARGV2}" STREQUAL "")
     string(TOLOWER ${PROJECT} lib_file_we)
   else()
-    set(lib_file_we "${ARGV3}")
+    set(lib_file_we "${ARGV2}")
   endif()
 
-  if("${ARGV4}" STREQUAL "")
+  if("${ARGV3}" STREQUAL "")
     set(include_dir "include")
   else()
-    set(include_dir "include/${ARGV4}")
+    set(include_dir "include/${ARGV3}")
   endif()
 
   if(WIN32)

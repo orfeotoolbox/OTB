@@ -228,6 +228,9 @@ int Application::Execute()
 
 int Application::ExecuteAndWriteOutput()
 {
+  m_Chrono.Reset();
+  m_Chrono.Start();
+
   int status = this->Execute();
 
   if (status == 0)
@@ -270,6 +273,11 @@ int Application::ExecuteAndWriteOutput()
           if(outputParam!=ITK_NULLPTR)
             {
             outputParam->InitializeWriters();
+            std::string checkReturn = outputParam->CheckFileName(true);
+            if (!checkReturn.empty())
+              {
+              otbAppLogWARNING("Check filename : "<<checkReturn);
+              }
             if (useRAM)
               {
               outputParam->SetRAMValue(ram);
@@ -330,6 +338,7 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
 
+  m_Chrono.Stop();
   return status;
 }
 
@@ -733,6 +742,20 @@ void Application::SetMaximumParameterFloatValue(std::string parameter, float val
   else
     itkExceptionMacro(<<parameter << "parameter can't be casted to float");
 
+}
+
+void Application::SetListViewSingleSelectionMode(std::string parameter, bool status)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<ListViewParameter*>(param))
+    {
+    ListViewParameter* paramListView = dynamic_cast<ListViewParameter*>(param);
+    paramListView->SetSingleSelection(status);
+    }
+  else
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ListView");
+  
 }
 
 
@@ -1625,6 +1648,11 @@ itk::ProcessObject* Application::GetProgressSource() const
 std::string Application::GetProgressDescription() const
 {
   return m_ProgressSourceDescription;
+}
+
+double Application::GetLastExecutionTiming() const
+{
+  return m_Chrono.GetTotal();
 }
 
 }
