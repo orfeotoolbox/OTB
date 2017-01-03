@@ -26,7 +26,7 @@ otb_test_application(NAME apTvTestApplicationOutputXML_All
           -ingroup.integer 4
           -outgroup.outputimage ${TEMP}/foo.tif double
           -il ${INPUTDATA}/anaglyphInput1.tif ${INPUTDATA}/anaglyphInput2.tif
-          -cl choice2
+          -cl Choice2
           -cin ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif
           -cout ${TEMP}/fooCplx.tif
           -outxml ${TEMP}/apTvTestApplicationOutputXML_All.xml

@@ -87,8 +87,8 @@ private:
     MandatoryOff("il");
 
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
-    AddChoice("cl.choice1", "cl.choice1");
-    AddChoice("cl.choice2", "cl.choice2");
+    AddChoice("cl.choice1", "Choice1");
+    AddChoice("cl.choice2", "Choice2");
     MandatoryOff("cl");
 
     AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
