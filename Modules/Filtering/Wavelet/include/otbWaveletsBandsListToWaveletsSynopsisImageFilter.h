@@ -18,17 +18,21 @@
 #ifndef otbWaveletsBandsListToWaveletsSynopsisImageFilter_h
 #define otbWaveletsBandsListToWaveletsSynopsisImageFilter_h
 
+
 #include "otbImageListToImageFilter.h"
 
 namespace otb
 {
+  
 /** \class WaveletsBandsListToWaveletsSynopsisImageFilter
  *  \brief Converts a list of wavelets bands to the traditionnal multi-resolution wavelets view
  *
  *  The decimation ratio is taken into account.
  *
- * \ingroup Streamed, Threaded
+ * \ingroup OTBWavelet
+ * \sa WaveletsSynopsisImageToWaveletsBandsListFilter
  */
+
 template <class TImageList, class TImage>
 class ITK_EXPORT WaveletsBandsListToWaveletsSynopsisImageFilter
       : public ImageListToImageFilter<typename TImageList::ImageType, TImage>

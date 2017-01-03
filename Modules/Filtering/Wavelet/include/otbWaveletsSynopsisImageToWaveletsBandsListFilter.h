@@ -24,11 +24,14 @@
 
 namespace otb
 {
+
 /** \class WaveletsSynopsisImageToWaveletsBandsListFilter
  *  \brief This class convert the standard wavelets view to a list of bands.
  *
- * \ingroup Streamed
+ * \ingroup OTBWavelet
+ * \sa WaveletsBandsListToWaveletsSynopsisImageFilter
  */
+
 template <class TImage, class TImageList>
 class ITK_EXPORT WaveletsSynopsisImageToWaveletsBandsListFilter
       : public ImageToImageListFilter<TImage,typename TImageList::ImageType>
