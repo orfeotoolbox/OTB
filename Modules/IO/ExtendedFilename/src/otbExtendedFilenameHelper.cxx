@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbExtendedFilenameHelper.h"
 #include "otb_boost_string_header.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -66,7 +67,6 @@ ExtendedFilenameHelper
     }
 }
 
-
 ExtendedFilenameHelper::OptionMapType
 ExtendedFilenameHelper
 ::GetOptionMap(void) const
@@ -74,22 +74,121 @@ ExtendedFilenameHelper
   return this->m_OptionMap;
 }
 
+/*-------------------- GenericBandRange ----------------------*/
+
+ExtendedFilenameHelper::GenericBandRange
+::GenericBandRange(const int& a)
+  : std::pair<int,int>(a,a)
+  {
+  }
+
+ExtendedFilenameHelper::GenericBandRange
+::GenericBandRange(const std::pair<int,int>& a)
+  : std::pair<int,int>(a)
+  {
+    if (a.second>=0 && a.second < a.first)
+      {
+      throw std::range_error("Invalid range");
+      }
+  }
+
+ExtendedFilenameHelper::GenericBandRange
+::GenericBandRange(const int& a,const int& b)
+  : std::pair<int,int>(a,b)
+  {
+    if (b>=0 && b < a)
+      {
+      throw std::range_error("Invalid range");
+      }
+  }
+
 bool
-ExtendedFilenameHelper
-::ParseBandRange(std::string value, std::vector<GenericBandRange>& output)
-{
-  std::string::iterator begin = value.begin();
-  std::string::iterator end = value.end();
-
-  BandRangeParser<std::string::iterator> p;    // create instance of parser
-  std::vector<GenericBandRange > m;        // map to receive results
-  bool result = qi::parse(begin, end, p, m);
-
-  if (result)
+ExtendedFilenameHelper::GenericBandRange
+::SetString(const std::string& str, size_t start , size_t size)
+  {
+  assert(start < str.size());
+  bool ret = true;
+  if (size == 0)
     {
-    output = m;
+    first = 0;
+    second = 0;
+    return false;
     }
-  return result;
-}
+  size_t end = str.size();
+  if (size != std::string::npos && (start+size) <= str.size())
+    {
+    end = start + size;
+    }
+  size_t pos = str.find(':',start);
+  if (pos != std::string::npos && pos<end)
+    {
+    // range of values
+    if (pos > start)
+      {
+      try
+        {
+        first = boost::lexical_cast<int>(str.c_str()+start, pos-start);
+        }
+      catch(boost::bad_lexical_cast &)
+        {
+        ret = false;
+        }
+      }
+    else
+      {
+      first = 0;
+      }
+    if (end > pos + 1)
+      {
+      try
+        {
+        second = boost::lexical_cast<int>(str.c_str()+ pos + 1, end - pos - 1);
+        }
+      catch(boost::bad_lexical_cast &)
+        {
+        ret = false;
+        }
+      }
+    else
+      {
+      second = 0;
+      }
+    }
+  else
+    {
+    // single value
+    try
+      {
+      first = boost::lexical_cast<int>(str.c_str()+start, end-start);
+      second = first;
+      }
+    catch(boost::bad_lexical_cast &)
+      {
+      ret = false;
+      }
+    }
+  return ret;
+  }
+
+void
+ExtendedFilenameHelper::GenericBandRange
+::Print(std::ostream& os)
+  {
+  if (this->first)
+    {
+    os << this->first;
+    }
+  if (this->first != this->second)
+    {
+    if (this->first || this->second)
+      {
+      os << ":";
+      }
+    if (this->second)
+      {
+      os << this->second;
+      }
+    }
+  }
 
 } // end namespace otb

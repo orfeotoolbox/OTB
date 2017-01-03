@@ -24,37 +24,6 @@
 namespace otb
 {
 
-namespace internal
-{
-struct SingleBandRange
-{
-  int index;
-};
-
-}
-
-struct GenericBandRange
-  : std::pair<int,int>
-{
-  GenericBandRange()
-    {
-    }
-
-  GenericBandRange(internal::SingleBandRange a)
-    : std::pair<int,int>(a.index,a.index)
-    {
-    }
-
-  GenericBandRange(std::pair<int,int> a)
-    : std::pair<int,int>(a)
-    {
-      if (a.second>=0 && a.second < a.first)
-        {
-        throw std::range_error("Invalid range");
-        }
-    }
-};
-
 /** \class ExtendedFilenameHelper
  *  \brief Helper to handle extended filenames.
  *
@@ -83,7 +52,20 @@ public:
   itkGetStringMacro(ExtendedFileName);
   itkGetStringMacro(SimpleFileName);
 
-  static bool ParseBandRange(std::string value, std::vector<GenericBandRange> &output);
+  struct GenericBandRange : std::pair<int,int>
+  {
+    GenericBandRange() {}
+
+    GenericBandRange(const int& a);
+
+    GenericBandRange(const std::pair<int,int>& a);
+
+    GenericBandRange(const int& a,const int& b);
+
+    bool SetString(const std::string& str, size_t start=0 , size_t size=std::string::npos);
+
+    void Print(std::ostream& os);
+  };
 
 protected:
   ExtendedFilenameHelper() {}
