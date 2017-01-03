@@ -89,7 +89,7 @@ public:
   /* Test if band range extended filename is set */
   bool BandRangeIsSet () const;
   /* Use BandRange parser to get list of bands*/
-  std::vector<GenericBandRange> GetBandRange() const;
+  std::vector<ExtendedFilenameHelper::GenericBandRange> GetBandRange() const;
 
 protected:
   ExtendedFilenameToReaderOptions();

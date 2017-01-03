@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbExtendedFilenameToReaderOptions.h"
 #include "otb_boost_string_header.h"
+#include "itksys/RegularExpression.hxx"
 
 namespace otb
 {
@@ -129,10 +130,18 @@ ExtendedFilenameToReaderOptions
 
   if (!map["band"].empty())
     {
-    m_Options.bandRange.first = true;
     // Basic check on bandRange (using regex)
-    // TODO : 
-    m_Options.bandRange.second = map["band"];
+    itksys::RegularExpression reg;
+    reg.compile("^((\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)(,(\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)*$");
+    if (reg.find(map["band"]))
+      {
+      m_Options.bandRange.first = true;
+      m_Options.bandRange.second = map["band"];
+      }
+    else
+      {
+      itkWarningMacro("Unkwown value "<<map["band"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
+      }
     }
 
   //Option Checking
@@ -247,14 +256,28 @@ ExtendedFilenameToReaderOptions
 {
   return m_Options.bandRange.first;
 }
-std::vector<GenericBandRange>
+
+std::vector<ExtendedFilenameHelper::GenericBandRange>
 ExtendedFilenameToReaderOptions
 ::GetBandRange () const
 {
   //Parse string to return vector of band range
-  std::vector<otb::GenericBandRange> vBands;
-  m_FilenameHelper->ParseBandRange(m_Options.bandRange.second,vBands); 
-
+  std::vector<ExtendedFilenameHelper::GenericBandRange> vBands;
+  size_t start = 0;
+  size_t pos;
+  while (start != std::string::npos)
+    {
+    pos = m_Options.bandRange.second.find(',',start);
+    if (pos > start)
+      {
+      ExtendedFilenameHelper::GenericBandRange range;
+      size_t size = (pos == std::string::npos ? pos : pos - start);
+      bool ret = range.SetString(m_Options.bandRange.second, start, size);
+      if (ret) vBands.push_back(range);
+      }
+    if (pos != std::string::npos) pos++;
+    start = pos;
+    }
   return vBands;
 }
 
