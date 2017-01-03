@@ -19,6 +19,7 @@
 #define otbWrapperQtWidgetModel_h
 
 #include <QtGui>
+#include <QTimer>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
 #include "otbQtLogOutput.h"
@@ -162,6 +163,8 @@ private slots:
    */
   void OnApplicationExecutionDone( int status );
 
+  void TimerDone();
+
 private:
   QtWidgetModel(const QtWidgetModel&); //purposely not implemented
   void operator=(const QtWidgetModel&); //purposely not implemented
@@ -171,6 +174,8 @@ private:
   QtLogOutput::Pointer  m_LogOutput;
 
   bool m_IsRunning;
+
+  QTimer *m_Timer;
 };
 
 

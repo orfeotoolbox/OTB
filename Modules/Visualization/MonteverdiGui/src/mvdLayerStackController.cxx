@@ -220,6 +220,14 @@ LayerStackController
     this,
     SIGNAL( ApplyAllRequested() )
   );
+
+  QObject::connect(
+    widget,
+    SIGNAL( ResetEffectsButtonClicked() ),
+    // to:
+    this,
+    SIGNAL( ResetEffectsRequested() )
+  );
 }
 
 /*******************************************************************************/
@@ -351,6 +359,14 @@ LayerStackController
     this,
     SIGNAL( ApplyAllRequested() )
   );
+
+  QObject::disconnect(
+    widget,
+    SIGNAL( ResetEffectsButtonClicked() ),
+    // to:
+    this,
+    SIGNAL( ResetEffectsRequested() )
+  );
 }
 
 /*******************************************************************************/
@@ -389,6 +405,8 @@ LayerStackController
   widget->SetMoveEnabled( model->GetCount()>1 );
 
   widget->SetApplyEnabled( model->GetCount()>1 );
+
+  widget->SetResetEffectsEnabled( !model->IsEmpty() );
 }
 
 /*******************************************************************************/

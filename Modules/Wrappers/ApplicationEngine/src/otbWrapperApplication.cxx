@@ -228,6 +228,9 @@ int Application::Execute()
 
 int Application::ExecuteAndWriteOutput()
 {
+  m_Chrono.Reset();
+  m_Chrono.Start();
+
   int status = this->Execute();
 
   if (status == 0)
@@ -270,6 +273,11 @@ int Application::ExecuteAndWriteOutput()
           if(outputParam!=ITK_NULLPTR)
             {
             outputParam->InitializeWriters();
+            std::string checkReturn = outputParam->CheckFileName(true);
+            if (!checkReturn.empty())
+              {
+              otbAppLogWARNING("Check filename : "<<checkReturn);
+              }
             if (useRAM)
               {
               outputParam->SetRAMValue(ram);
@@ -330,6 +338,7 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
 
+  m_Chrono.Stop();
   return status;
 }
 
@@ -1639,6 +1648,11 @@ itk::ProcessObject* Application::GetProgressSource() const
 std::string Application::GetProgressDescription() const
 {
   return m_ProgressSourceDescription;
+}
+
+double Application::GetLastExecutionTiming() const
+{
+  return m_Chrono.GetTotal();
 }
 
 }
