@@ -49,5 +49,16 @@ int otbExtendedFilenameToReaderOptions(int itkNotUsed(argc), char* argv[])
   file << helper->SkipCartoIsSet() << std::endl;
   file << helper->GetSkipCarto() << std::endl;
 
+  file << helper->BandRangeIsSet() << std::endl;
+  file << "[";
+  std::vector<otb::ExtendedFilenameHelper::GenericBandRange> rangeList = helper->GetBandRange();
+  for (unsigned int i=0 ; i<rangeList.size(); i++)
+    {
+    if (i) file << ",";
+    rangeList[i].Print(file);
+    }
+  file << "]" << std::endl;
+
+  file.close();
   return EXIT_SUCCESS;
 }
