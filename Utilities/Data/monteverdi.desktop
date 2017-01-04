@@ -11,3 +11,4 @@ StartupNotify=false
 Icon=monteverdi
 Categories=Education;Science;ImageProcessing;Geography;Qt;
 MimeType=image/tiff;image/jpeg;image/jp2;application/x-esri-shape;
+Keywords=otb;orfeo;toolbox;osgeo;

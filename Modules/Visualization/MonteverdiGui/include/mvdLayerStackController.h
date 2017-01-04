@@ -107,6 +107,7 @@ signals:
   /**
    */
   void ApplyAllRequested();
+  void ResetEffectsRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

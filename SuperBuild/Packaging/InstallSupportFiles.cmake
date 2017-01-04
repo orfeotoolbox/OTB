@@ -47,45 +47,30 @@ function(func_install_xdk_files)
     endif()
   endforeach()
 
-  file(GLOB LIB_CMAKE_DIRS "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/*")
-  foreach(LIB_CMAKE_DIR ${LIB_CMAKE_DIRS})
-    get_filename_component(LIB_CMAKE_DIR_name_we ${LIB_CMAKE_DIR} NAME_WE)
-    if(NOT "${LIB_CMAKE_DIR_name_we}" MATCHES "OTB")
-      func_install_without_message("${LIB_CMAKE_DIR}" "lib/cmake")
-    endif()
+  file(GLOB ITK_CMAKE_DIRS "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/ITK*")
+  foreach(ITK_CMAKE_DIR ${ITK_CMAKE_DIRS})
+      func_install_without_message("${ITK_CMAKE_DIR}" "lib/cmake")
   endforeach()
 
   set(QT_REQ_DIRS)
   if(WIN32)
     #only affects windows due to regex on dll
+    #.lib are not taken when processing dependencies. 
+    # We just get .dlls which is enough for binary package
+    # For XDK, we need .lib files when building OTB using xdk
+    # For Linux. we get .so.X.Y.Z by finding the 'target'
+    # of any .so file. So there is no need for such a copy on
+    # Linux and OSX 
     if(MSVC)
       file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*.lib")
     else()
       file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*dll.*")
     endif()
-    #func_lisp(LIB_FILES )
 
     foreach(LIB_FILE ${LIB_FILES})
       pkg_install_rule(${LIB_FILE})
     endforeach()
-  
-    ##install(FILES ${LIB_FILES} DESTINATION ${PKG_STAGE_DIR}/lib )
-
-    #file(GLOB ITK_EXTRA_DLL_FILES_1 "${DEPENDENCIES_INSTALL_DIR}/bin/libITK*.dll")
-    #install(FILES ${ITK_EXTRA_DLL_FILES_1} DESTINATION ${PKG_STAGE_DIR}/bin)
-
-    file(GLOB ITK_EXTRA_DLL_FILES_2 "${DEPENDENCIES_INSTALL_DIR}/bin/itk*.dll")
-    install(FILES ${ITK_EXTRA_DLL_FILES_2} DESTINATION ${PKG_STAGE_DIR}/bin)
-
-    #file(GLOB OPENCV_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/bin/libopencv*.dll")
-    #install(FILES ${OPENCV_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
-
-    #file(GLOB OPENCV_EXTRA_A_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/libopencv*.a")
-    #install(FILES ${OPENCV_EXTRA_A_FILES} DESTINATION ${PKG_STAGE_DIR}/lib)
-
-    #mxe installs qt in a separate directory under install prefix. So..
-    set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}/qt")
-
+    
     #qt/bin is also a special case for mxe.
     file(GLOB QT_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/qt/bin/*.dll")
     install(FILES ${QT_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
@@ -94,15 +79,12 @@ function(func_install_xdk_files)
     list(APPEND QT_REQ_DIRS include)
     list(APPEND QT_REQ_DIRS imports)
 
+    #mxe installs qt in a separate directory under install prefix. So..
+    set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}/qt")
   else()
-    set(
-      QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}")
+    set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}")
 
   endif(WIN32)
-
-  if(NOT QT_EXECUTABLES)
-    message(FATAL_ERROR "QT_EXECUTABLES not set")
-  endif()
 
   list(APPEND QT_REQ_DIRS mkspecs)
   list(APPEND QT_REQ_DIRS plugins)

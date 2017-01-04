@@ -115,15 +115,25 @@ NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
       histoNeigh[label] += 1;
       }
     }
-  HistoAsVectorType histoNeighVec(histoNeigh.begin(), histoNeigh.end());
-  //Sort the 2 max elements to the beginning
-  std::nth_element(histoNeighVec.begin(), histoNeighVec.begin()+1,
-                   histoNeighVec.end(), CompareHistoFequencies());
   typename NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage,
                                                  TKernel>::HistoSummary result;
-  result.freqCenterLabel = histoNeigh[nit.GetCenterPixel()];
-  result.majorityLabel = histoNeighVec[0].first;
-  result.majorityUnique = (histoNeighVec[0].second != histoNeighVec[1].second);
+  assert(!histoNeigh.empty());
+  if (histoNeigh.size() == 1)
+    {
+    result.freqCenterLabel = histoNeigh.begin()->second;
+    result.majorityLabel = histoNeigh.begin()->first;
+    result.majorityUnique = true;
+    }
+  else
+    {
+    HistoAsVectorType histoNeighVec(histoNeigh.begin(), histoNeigh.end());
+    //Sort the 2 max elements to the beginning
+    std::nth_element(histoNeighVec.begin(), histoNeighVec.begin()+1,
+                     histoNeighVec.end(), CompareHistoFequencies());
+    result.freqCenterLabel = histoNeigh[nit.GetCenterPixel()];
+    result.majorityLabel = histoNeighVec[0].first;
+    result.majorityUnique = (histoNeighVec[0].second != histoNeighVec[1].second);
+    }
   return result;
 }
 
