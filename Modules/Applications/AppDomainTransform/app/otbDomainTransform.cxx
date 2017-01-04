@@ -107,12 +107,11 @@ namespace otb
       {
 	SetName("DomainTransform");
 	
-	const char * app_descr = "Domain Transform application for wavelet and fourier";
-	SetDescription(app_descr);
+	SetDescription("Domain Transform application for wavelet and fourier");
 
 	// Documentation
-	SetDocName(app_descr);
-	SetDocLongDescription("TODO");
+	SetDocName("DomainTransform");
+	SetDocLongDescription("Domain Transform application for wavelet and fourier");
 	SetDocLimitations("None");
 	SetDocAuthors("OTB-Team");
 	SetDocSeeAlso("otbWaveletImageFilter, otbWaveletInverseImageFilter, otbWaveletTransform");
