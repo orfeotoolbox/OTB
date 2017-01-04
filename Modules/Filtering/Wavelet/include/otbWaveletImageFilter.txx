@@ -31,6 +31,8 @@ WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
   m_WaveletTransform->SetSubsampleImageFactor(2);
 
   m_WaveletBandsListToWaveletsSynopsis = WaveletBandsListToWaveletsSynopsisImageFilterType::New();
+  // Force to use a unique thread otherwise there is a bug on Mac
+  //m_WaveletBandsListToWaveletsSynopsis->SetNumberOfThreads(1);
   m_WaveletBandsListToWaveletsSynopsis->SetInput( m_WaveletTransform->GetOutput() );
 }
 
