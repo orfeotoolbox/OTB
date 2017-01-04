@@ -75,7 +75,7 @@ SubsampledImageRegionConstIterator<TImage>
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
     {
     m_FirstUsableIndex[i] = startIndex[i];
-    m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
+    m_LastUsableIndex[i] = startIndex[i] + size[i];
     }
 }
 
@@ -92,7 +92,7 @@ SubsampledImageRegionConstIterator<TImage>
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
     {
     m_FirstUsableIndex[i] = startIndex[i];
-    m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
+    m_LastUsableIndex[i] = startIndex[i] + size[i];
     }
 
   m_SubSampledEndOffset = this->m_Image->ComputeOffset(m_LastUsableIndex) + 1;
@@ -123,12 +123,13 @@ SubsampledImageRegionConstIterator<TImage>
     {
     m_FirstUsableIndex[i] = startIndex[i];
     while (m_FirstUsableIndex[i]
-           != (m_SubsampleFactor[i] * (m_FirstUsableIndex[i] / m_SubsampleFactor[i])))
+	    != (m_SubsampleFactor[i] * (m_FirstUsableIndex[i] / m_SubsampleFactor[i])))
       {
       ++m_FirstUsableIndex[i];
       }
     m_LastUsableIndex[i] = startIndex[i]
-                           + static_cast<IndexValueType>(m_SubsampleFactor[i] * ((size[i] - 1) / m_SubsampleFactor[i]));
+      + m_SubsampleFactor[i]
+      * (size[i] / m_SubsampleFactor[i]);
     }
 
   m_SubSampledBeginOffset = this->m_Image->ComputeOffset(m_FirstUsableIndex);

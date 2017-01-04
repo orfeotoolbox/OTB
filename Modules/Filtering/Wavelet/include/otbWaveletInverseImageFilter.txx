@@ -28,7 +28,6 @@ WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
 ::WaveletInverseImageFilter() : m_NumberOfDecompositions(2)
 {
   m_SynopsisImageToWaveletsBandsList = WaveletsSynopsisImageToWaveletsBandsListFilterType::New();
-  //m_SynopsisImageToWaveletsBandsList->SetNumberOfThreads(1);
   m_SynopsisImageToWaveletsBandsList->SetDecimationRatio(2);
 
   m_WaveletTransform = WaveletInverseTransformFilterType::New();
