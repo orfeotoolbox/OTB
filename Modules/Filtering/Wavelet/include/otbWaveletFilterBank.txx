@@ -51,7 +51,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
 
-  //this->SetNumberOfThreads(1);
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
@@ -1170,7 +1169,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       typename FilterType::Pointer overSampledLowPass = FilterType::New();
       overSampledLowPass->SetInput(cropedLowPass);
       overSampledLowPass->SetSubsampleFactor(delta);
-	  overSampledLowPass->SetNumberOfThreads(1);
+      overSampledLowPass->SetNumberOfThreads(1);
       overSampledLowPass->Update();
 
       InputImagePointerType cropedHighPass = InputImageType::New();
@@ -1189,7 +1188,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       typename FilterType::Pointer overSampledHighPass = FilterType::New();
       overSampledHighPass->SetInput(cropedHighPass);
       overSampledHighPass->SetSubsampleFactor(delta);
-	  overSampledHighPass->SetNumberOfThreads(1);
+      overSampledHighPass->SetNumberOfThreads(1);
       overSampledHighPass->Update();
 
       InnerProductType innerProduct;
