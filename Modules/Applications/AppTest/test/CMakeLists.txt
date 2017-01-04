@@ -33,4 +33,5 @@ otb_test_application(NAME apTvTestApplicationOutputXML_All
   VALID --compare-ascii ${NOTOL}
     ${OTBAPP_BASELINE_FILES}/apTvTestApplicationOutputXML_All.xml
     ${TEMP}/apTvTestApplicationOutputXML_All.xml
+    --ignore-lines-with 7 letter.scale foo.txt world_boundaries foo.tif anaglyphInput1.tif anaglyphInput2.tif RADARSAT2_ALTONA_300_300_VV.tif
   )
