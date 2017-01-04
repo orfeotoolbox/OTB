@@ -266,7 +266,7 @@ namespace otb
 	      {
 
 		typedef otb::Image<TInputPixel>          TInputImage;
-		typedef typename TInputImage::Pointer TInputImagePointer;
+		typedef TInputImage::Pointer TInputImagePointer;
 
 		//get input paramter as otb::Image<TInputPixel>
 		TInputImagePointer inImage = GetParameterImage<TInputImage>("in");
@@ -322,7 +322,7 @@ namespace otb
 	    else
 	      {
 		typedef otb::VectorImage<TInputPixel>          TInputImage;
-		typedef typename TInputImage::Pointer TInputImagePointer;
+		typedef TInputImage::Pointer TInputImagePointer;
 						
 		TInputImagePointer inImage = GetParameterImage("in");
     
