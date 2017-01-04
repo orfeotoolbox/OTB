@@ -178,12 +178,13 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     this->CallCopyInputRegionToOutputRegion(InputImageDimension - 1 - direction,
                                             smallerRegion, largerRegion);
 
-    for (unsigned int i = 0; i < m_InternalImages[direction].size(); ++i)
+    const unsigned int d = InputImageDimension - 2 - direction;
+    for (unsigned int i = 0; i < m_InternalImages[d].size(); ++i)
       {
-      m_InternalImages[InputImageDimension - 2 - direction][i] = OutputImageType::New();
-      m_InternalImages[InputImageDimension - 2 - direction][i]->SetRegions(smallerRegion);
-      m_InternalImages[InputImageDimension - 2 - direction][i]->Allocate();
-      m_InternalImages[InputImageDimension - 2 - direction][i]->FillBuffer(0);
+      m_InternalImages[d][i] = OutputImageType::New();
+      m_InternalImages[d][i]->SetRegions(smallerRegion);
+      m_InternalImages[d][i]->Allocate();
+      m_InternalImages[d][i]->FillBuffer(0);
       }
 
     largerRegion = smallerRegion;
