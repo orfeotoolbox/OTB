@@ -542,7 +542,16 @@ MainWindow
     quicklookView,
     SLOT( OnApplyAllRequested() )
   );
+
+  QObject::connect(
+    controller,
+    SIGNAL( ResetEffectsRequested() ),
+    // to:
+    m_ImageView,
+    SLOT( OnResetEffectsRequested() )
+  );
   }
+
 }
 
 /*****************************************************************************/

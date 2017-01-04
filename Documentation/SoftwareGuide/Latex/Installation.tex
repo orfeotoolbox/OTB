@@ -251,24 +251,21 @@ Therefore this directory will be used even if you don't use make install target.
 In fact there is no make install target for the SuperBuild.
 
 By default, SuperBuild will not use any of libraries installed on
-system. All \texttt{USE\_SYSTEM\_\textit{XXX}} are are set to FALSE. This is our
+system. All \texttt{USE\_SYSTEM\_\textit{XXX}} are set to FALSE. This is our
 recommended way of using SuperBuild. You are however free to use a system
 library if you want!. You must be very much aware of dependencies of those
 libraries you use from system. For example, if libjpeg is not used from
-superbuild using \texttt{USE\_SYSTEM\_JPEG=TRUE} then you should not use zlib
-from superbuild because zlib is a dependency of libjpeg. Here SuperBuild will
-not automagically set \texttt{USE\_SYSTEM\_ZLIB=FALSE}.  You must do it
-yourself. The example of libjpeg - zlib dependency chain is so simple.  Imagine
-the same case for GDAL which depends on zlib, libjpeg, libtiff(with big tiff
+superbuild then you should not use zlib from superbuild because zlib is a dependency of libjpeg.
+Here SuperBuild will NOT set \texttt{USE\_SYSTEM\_ZLIB=FALSE}. One must re-run cmake
+with \texttt{-DUSE\_SYSTEM\_ZLIB=FALSE}.
+Above example of libjpeg-zlib dependency is so simple.  Imagine
+the case for GDAL which depends on zlib, libjpeg, libtiff(with big tiff
 support), geotiff, sqlite, curl, geos, libkml, openjpeg. This is one of the
-reasons we recommend to use SuperBuild exclusively or not.
+reasons we recommend to use SuperBuild exclusively.
 
 All dependencies are configured and built in a way that help us to get an
 efficient build OTB.  So we enable geotiff (with proj4 support), openjpeg, geos
 in GDAL build.
-
-It is also important to note that SuperBuild is tested daily on all three
-platforms. It simply works!
 
 (see table~\ref{tab:installation-cmake-variables}).
 
@@ -284,6 +281,20 @@ want to build) :
 \begin{center}
 \url{https://www.orfeo-toolbox.org/packages}
 \end{center}
+
+Qt library: Unlike other dependencies building Qt4 on all platform is not trivial task but
+OTB SuperBuild makes best effort to make it easier for you. So there is still
+some additional package installation, one has to do as a pre-requistie for SuperBuild
+On a GNU/Linux you must have Qt X11 dependencies installed.
+See Qt 4.8 documentation for list of packages that needs to be installed
+before starting superbuild. http://doc.qt.io/qt-4.8/requirements-x11.html
+For a debian 8.1 systeme, I installed all Qt4 dependencies with below 'apt-get install'
+\texttt{apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev libgl-dev libglu-dev}
+
+You can also deactivate QT4 and skip this by passing \texttt{-DOTB\_USE\_QT4=OFF} to cmake.
+This will give you OTB install without monteverdi, mapla and gui application launchers.
+
+For Mac OSX you need to install XCode and Windows 7,8.1,10 requires MSVC 2015 or higher.
 
 You are now ready to compile OTB!
 Simply use the make command (other targets can be generated with CMake's \texttt{-G} option):

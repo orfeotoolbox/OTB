@@ -158,6 +158,17 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QToolButton" name="gammaResetButton">
+        <property name="toolTip">
+         <string>Reset value to 1.</string>
+        </property>
+        <property name="icon">
+         <iconset resource="mvdIcons.qrc">
+          <normaloff>:/Utilities/Data/Icons/view-refresh.png</normaloff>:/Utilities/Data/Icons/view-refresh.png</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -307,23 +318,8 @@
   <tabstop>noDataLineEdit</tabstop>
   <tabstop>noDataButton</tabstop>
  </tabstops>
- <resources/>
- <connections>
-  <connection>
-   <sender>noDataCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>noDataLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>49</x>
-     <y>23</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>100</x>
-     <y>24</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <resources>
+  <include location="mvdIcons.qrc"/>
+ </resources>
+ <connections/>
 </ui>

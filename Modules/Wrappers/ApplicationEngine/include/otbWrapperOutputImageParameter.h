@@ -104,6 +104,8 @@ public:
 
   void InitializeWriters();
 
+  std::string CheckFileName(bool fixMissingExtension = false);
+
 protected:
   /** Constructor */
   OutputImageParameter();
