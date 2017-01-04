@@ -59,7 +59,7 @@ contain the following actions:
 \label{sec:appDoUpdateParameters}
 This method is called after every modification of a parameter value. With the command 
 line launcher, it is called each time a parameter is loaded. With the Qt launcher, it
-is called each time a parameter field is modified. It can be used to maintain consistency et relationship
+is called each time a parameter field is modified. It can be used to maintain consistency and relationship
 between parameters (e.g. in ExtractROI: when changing the input image, maybe the ROI size 
 has to be updated).
 
@@ -111,7 +111,7 @@ types of parameters:
   \item \code{ParameterType\_Choice} : parameter storing a list of choices (doesn't support
   multi-choice). It also allows to create specific sub-parameters for each available choice.
   \item \code{ParameterType\_ListView} : parameter storing a list of choices (support 
-  multi-choice).
+  multi-choice and single-choice).
   \item \code{ParameterType\_InputImage} : parameter storing an input image.
   \item \code{ParameterType\_InputImageList} : parameter storing a list of input image.
   \item \code{ParameterType\_ComplexInputImage} : parameter storing a complex input image.
@@ -154,7 +154,7 @@ This macro generates the lib \emph{otbapp\_XXX.so}, in (OTB\_BINARY\_DIR/lib/otb
 
 \section{Execute your application}
 
-their are different ways to launch applicatons :
+There are different ways to launch applicatons :
 
 \begin{description}
 \item[CommandLine :] The command line option is invoked using \emph{otbApplicationLauncherCommandLine} executable followed by the classname, the application dir and the application parameters.
