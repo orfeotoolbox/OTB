@@ -484,7 +484,7 @@ public:
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
 
 /**
-   * Add an image to an InputImageList parameter as an ImageBase
+   * Add an image to an InputImageList parameter as a filename string
    * pointer instead of reading from file. Useful to connect pipelines
    * between different application instances.
    * \in parameter The parameter key
@@ -495,7 +495,7 @@ public:
   void AddImageToParameterInputImageList(std::string parameter, const std::string & filename);
 
   /**
-   * Set the nth image of an InputImageList parameter as an ImageBase pointer
+   * Set the nth image of an InputImageList parameter as a filename string
    * instead of reading from file. Useful to connect pipelines
    * between different application instances.
    * \in parameter The parameter key
