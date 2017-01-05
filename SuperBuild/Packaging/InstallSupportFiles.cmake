@@ -21,6 +21,10 @@ function(func_install_xdk_files)
   #The list of REQ_SHARE_DIR is made up from <mxe-target-dir>/share/
   #It may vary in future. I prefer not to glob on the share dir and
   #end up distributing man, info etc.. which ar irrelvant for windows
+
+  #TODO: cleaup this function. current
+  # code is bit of picking each .lib and .dll for now
+  # see opencv, itk, 
   foreach(REQ_SHARE_DIR
       aclocal
       Armadillo
@@ -43,45 +47,30 @@ function(func_install_xdk_files)
     endif()
   endforeach()
 
-  file(GLOB LIB_CMAKE_DIRS "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/*")
-  foreach(LIB_CMAKE_DIR ${LIB_CMAKE_DIRS})
-    get_filename_component(LIB_CMAKE_DIR_name_we ${LIB_CMAKE_DIR} NAME_WE)
-    if(NOT "${LIB_CMAKE_DIR_name_we}" MATCHES "OTB")
-      func_install_without_message("${LIB_CMAKE_DIR}" "lib/cmake")
-    endif()
+  file(GLOB ITK_CMAKE_DIRS "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/ITK*")
+  foreach(ITK_CMAKE_DIR ${ITK_CMAKE_DIRS})
+      func_install_without_message("${ITK_CMAKE_DIR}" "lib/cmake")
   endforeach()
 
   set(QT_REQ_DIRS)
   if(WIN32)
     #only affects windows due to regex on dll
+    #.lib are not taken when processing dependencies. 
+    # We just get .dlls which is enough for binary package
+    # For XDK, we need .lib files when building OTB using xdk
+    # For Linux. we get .so.X.Y.Z by finding the 'target'
+    # of any .so file. So there is no need for such a copy on
+    # Linux and OSX 
     if(MSVC)
       file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*.lib")
     else()
       file(GLOB LIB_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/*dll.*")
     endif()
-    #func_lisp(LIB_FILES )
 
     foreach(LIB_FILE ${LIB_FILES})
       pkg_install_rule(${LIB_FILE})
     endforeach()
-  
-    ##install(FILES ${LIB_FILES} DESTINATION ${PKG_STAGE_DIR}/lib )
-
-    file(GLOB ITK_EXTRA_DLL_FILES_1 "${DEPENDENCIES_INSTALL_DIR}/bin/libITK*.dll")
-    install(FILES ${ITK_EXTRA_DLL_FILES_1} DESTINATION ${PKG_STAGE_DIR}/bin)
-
-    file(GLOB ITK_EXTRA_DLL_FILES_2 "${DEPENDENCIES_INSTALL_DIR}/bin/libitk*.dll")
-    install(FILES ${ITK_EXTRA_DLL_FILES_2} DESTINATION ${PKG_STAGE_DIR}/bin)
-
-    file(GLOB OPENCV_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/bin/libopencv*.dll")
-    install(FILES ${OPENCV_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
-
-    file(GLOB OPENCV_EXTRA_A_FILES "${DEPENDENCIES_INSTALL_DIR}/lib/libopencv*.a")
-    install(FILES ${OPENCV_EXTRA_A_FILES} DESTINATION ${PKG_STAGE_DIR}/lib)
-
-    #mxe installs qt in a separate directory under install prefix. So..
-    set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}/qt")
-
+    
     #qt/bin is also a special case for mxe.
     file(GLOB QT_EXTRA_DLL_FILES "${DEPENDENCIES_INSTALL_DIR}/qt/bin/*.dll")
     install(FILES ${QT_EXTRA_DLL_FILES} DESTINATION ${PKG_STAGE_DIR}/bin)
@@ -90,15 +79,12 @@ function(func_install_xdk_files)
     list(APPEND QT_REQ_DIRS include)
     list(APPEND QT_REQ_DIRS imports)
 
+    #mxe installs qt in a separate directory under install prefix. So..
+    set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}/qt")
   else()
-    set(
-      QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}")
+    set(QT_INSTALL_DIR "${DEPENDENCIES_INSTALL_DIR}")
 
   endif(WIN32)
-
-  if(NOT QT_EXECUTABLES)
-    message(FATAL_ERROR "QT_EXECUTABLES not set")
-  endif()
 
   list(APPEND QT_REQ_DIRS mkspecs)
   list(APPEND QT_REQ_DIRS plugins)
@@ -181,30 +167,39 @@ function(func_install_support_files)
       "Cannot generate package without GDAL_DATA : ${GDAL_DATA} ${DEPENDENCIES_INSTALL_DIR}")
   endif()
 
-  install(DIRECTORY ${GDAL_DATA} DESTINATION ${PKG_SHARE_DEST_DIR})
 
+  # install(
+  #   DIRECTORY ${GDAL_DATA}
+  #   DESTINATION ${PKG_SHARE_DEST_DIR}
+  #   )
+
+  func_install_without_message("${GDAL_DATA}" "share" )
   ####################### install GeoTIFF data ########################
-  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/epsg_csv DESTINATION ${PKG_SHARE_DEST_DIR})
+  #install( DIRECTORY ${PKG_SHARE_SOURCE_DIR}/epsg_csv DESTINATION ${PKG_SHARE_DEST_DIR}  )
+
+  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/epsg_csv" "share" )
 
   ####################### install OSSIM data ##########################
-  install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
+  #install( DIRECTORY ${PKG_SHARE_SOURCE_DIR}/ossim DESTINATION ${PKG_SHARE_DEST_DIR})
+
+  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/ossim" "share" )
 
   ####################### install proj share ##########################
   if(EXISTS ${PKG_SHARE_SOURCE_DIR}/proj)
-    install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
+    #install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/proj DESTINATION ${PKG_SHARE_DEST_DIR})
+    func_install_without_message("${PKG_SHARE_SOURCE_DIR}/proj" "share" )
   endif()
+  
+  ####################### Install copyrights ##########################
+  #install license for windows package
+  #install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR} )
+  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/copyright" "share" )
+  install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
+
+  ####################### Install VERSION ##########################
 
   set(PKG_VERSION_FILE
     "${OTB_INSTALL_DIR}/share/doc/${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/VERSION")
-  
-  ####################### Install copyrights ##########################
-  if(NOT MINGW)
-    #install license for windows package
-    install(DIRECTORY ${PKG_SHARE_SOURCE_DIR}/copyright DESTINATION ${PKG_SHARE_DEST_DIR})
-    install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
-  endif()
-
-  ####################### Install VERSION ##########################
   if(EXISTS ${PKG_VERSION_FILE} )
     install(FILES ${PKG_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
   endif()

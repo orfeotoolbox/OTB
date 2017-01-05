@@ -148,8 +148,12 @@ private:
   /** Internal samplers*/
   std::vector<SamplerMapType> m_Samplers;
 
-  /** Field name to store the FID of the geometry each sample comes from */
+  /** Field name to store the FID of the geometry each sample comes from.
+   *  When this name is empty, no FID is stored. */
   std::string m_OriginFieldName;
+
+  /** Flag to enable/disable origin FID in outputs */
+  bool m_UseOriginField;
 };
 
 /**

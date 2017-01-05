@@ -1,5 +1,5 @@
 #Contact: Adrien Lagrange <adrien.lagrange@irit.fr>
-otb_fetch_module(OTBFastFeaturesSelection
+otb_fetch_module(OTBFFSforGMM
   "This module implements a method to perform a fast forward feature selection using a Gaussian Mixture Model. 
 A more detailed description can be found on the project website:
 https://github.com/Laadr/otbFFSforGMM

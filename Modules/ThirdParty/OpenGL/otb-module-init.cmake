@@ -1,7 +1,18 @@
 #detection of OpenGL is apply is bit tricy as we deactivate
 #framework on OSX globally. see mantis #1193
 if(APPLE)
-  set(OPENGL_FOUND FALSE)
+  set( OPENGL_FOUND FALSE )
+  set( OPENGL_GLU_FOUND FALSE)
+
+  set( OPENGL_INCLUDE_DIR)
+  set( OPENGL_LIBRARIES)
+
+  find_path(
+    OPENGL_INCLUDE_DIR OpenGL/gl.h
+    PATHS "/System/Library/Frameworks/"
+    DOC "Include for OpenGL on OSX"
+    )
+
   find_library(
     OPENGL_gl_LIBRARY OpenGL
     PATHS "/System/Library/Frameworks/"
@@ -14,44 +25,39 @@ if(APPLE)
     DOC "AGL lib for OSX"
     )
 
-  find_path(
-    OPENGL_INCLUDE_DIR OpenGL/gl.h
-    PATHS "/System/Library/Frameworks/"
-    DOC "Include for OpenGL on OSX"
-    )
-
-  if(OPENGL_gl_LIBRARY)
-    set( OPENGL_LIBRARIES  ${OPENGL_gl_LIBRARY} ${OPENGL_LIBRARIES})
-    if(OPENGL_glu_LIBRARY)
-      set( OPENGL_GLU_FOUND "YES" )
-      set( OPENGL_LIBRARIES ${OPENGL_glu_LIBRARY} ${OPENGL_LIBRARIES} )
-    else()
-      set( OPENGL_GLU_FOUND "NO" )
-    endif()
-    # This deprecated setting is for backward compatibility with CMake1.4
-    set (OPENGL_LIBRARY ${OPENGL_LIBRARIES})
+  if( OPENGL_gl_LIBRARY )
+    set( OPENGL_LIBRARIES  ${OPENGL_gl_LIBRARY})
+    set( OPENGL_FOUND TRUE )
+  endif()
+  if( OPENGL_glu_LIBRARY )
+    set( OPENGL_GLU_FOUND TRUE)
+    set( OPENGL_LIBRARIES  ${OPENGL_LIBRARIES} ${OPENGL_glu_LIBRARY} )
   endif()
 
-  # This deprecated setting is for backward compatibility with CMake1.4
-  set(OPENGL_INCLUDE_PATH ${OPENGL_INCLUDE_DIR})
   mark_as_advanced(
     OPENGL_INCLUDE_DIR
-    OPENGL_LIBRARY
+    OPENGL_LIBRARIES
     OPENGL_glu_LIBRARY
     OPENGL_gl_LIBRARY
     )
-  if(NOT OPENGL_LIBRARY OR NOT OPENGL_INCLUDE_DIR)
-    message(FATAL_ERROR "Cannot find OpenGL. Set OPENGL_INCLUDE_DIR and OPENGL_LIBRARY")
-  else()
-    message(STATUS "Found OpenGL framework: ${OPENGL_INCLUDE_DIR}")
-  endif()
-
-  set(OPENGL_FOUND TRUE)
 else(APPLE)
   find_package(OpenGL REQUIRED)
   mark_as_advanced(OPENGL_INCLUDE_DIR)
-  mark_as_advanced(OPENGL_LIBRARY)
-  if(NOT OPENGL_FOUND)
-    message(FATAL_ERROR "Cannot find OpenGL. Set OPENGL_INCLUDE_DIR and OPENGL_LIBRARY")
-  endif()
+  mark_as_advanced(OPENGL_LIBRARIES)
 endif(APPLE)
+
+
+if(NOT OPENGL_INCLUDE_DIR)
+  if(NOT WIN32)
+    message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_INCLUDE_DIR")
+  endif()
+endif()
+
+if(NOT OPENGL_gl_LIBRARY)
+  message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_gl_LIBRARY")
+endif()
+
+if(NOT OPENGL_glu_LIBRARY)
+  message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_glu_LIBRARY")
+endif()
+

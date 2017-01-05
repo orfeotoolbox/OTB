@@ -66,7 +66,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    AddDocTag("Util");
+    AddDocTag("Miscellaneous");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     SetParameterDescription("il", "Image list to perform computation on.");
@@ -83,7 +83,7 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "verySmallFSATSW_r.tif verySmallFSATSW_nir.tif verySmallFSATSW.tif");
     SetDocExampleParameterValue("out", "apTvUtBandMathOutput.tif");
-    SetDocExampleParameterValue("exp", "\"cos(im1b1) > cos(im2b1) ? im3b1 : im3b2 \"");
+    SetDocExampleParameterValue("exp", "\"cos(im1b1) > cos(im2b1) ? im3b1 : im3b2\"");
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

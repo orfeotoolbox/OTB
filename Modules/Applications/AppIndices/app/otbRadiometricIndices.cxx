@@ -138,8 +138,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVegetationIndicesFunctor, otbWaterIndicesFunctor and otbSoilIndicesFunctor classes");
 
-    AddDocTag("Radiometric Indices");
     AddDocTag(Tags::FeatureExtraction);
+	AddDocTag("Radiometric Indices");
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image");

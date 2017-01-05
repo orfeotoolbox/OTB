@@ -70,8 +70,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otb class");
 
-AddDocTag("Edge");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Edge");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");

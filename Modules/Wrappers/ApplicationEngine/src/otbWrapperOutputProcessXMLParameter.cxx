@@ -130,8 +130,19 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 
   AddChildNodeTo(n_OTB, "version", version);
 
-  TiXmlElement *n_App;
-  n_App = AddChildNodeTo(n_OTB, "application");
+  // Parse application
+  TiXmlElement *n_App = ParseApplication(app);
+  n_OTB->LinkEndChild(n_App);
+
+  // Finally, write xml contents to file
+  doc.SaveFile( m_FileName.c_str() );
+}
+
+TiXmlElement*
+OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
+{
+  TiXmlElement * n_App = new TiXmlElement("application");
+
   AddChildNodeTo(n_App, "name", app->GetName());
   AddChildNodeTo(n_App, "descr", app->GetDescription());
 
@@ -315,10 +326,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
        }
       }
     }
-
-  // Finally, write xml contents to file
-  doc.SaveFile( m_FileName.c_str() );
-
+  return n_App;
 }
 
 } //end namespace wrapper

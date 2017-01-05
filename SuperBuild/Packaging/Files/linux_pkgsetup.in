@@ -14,8 +14,8 @@ PATCH_ELF_EXE="$OUT_DIR/patchelf"
 LD_LIBRARY_PATH=
 
 echo "Configuring..."
-#BINARY_FILES="@VAR_IN_PKGSETUP_CONFIGURE@"
-BINARY_FILES=$(find $OUT_DIR/lib $OUT_DIR/lib/otb/applications $OUT_DIR/bin -maxdepth 1 -type f -exec file {} \; | grep -i elf|cut -f1 -d':')
+#see next call below for otb applications
+BINARY_FILES=$(find $OUT_DIR/lib $OUT_DIR/bin -maxdepth 1 -type f -exec file {} \; | grep -i elf|cut -f1 -d':')
 
 # run patchelf
 for bin_file in $BINARY_FILES; do
@@ -27,11 +27,21 @@ done
 
 I_AM_XDK=@IS_XDK@
 
-if [ "$I_AM_XDK" = true ] ; then
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKConfig.cmake
-    sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
-else
+# if [ "$I_AM_XDK" = true ] ; then
+#     sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
+#     sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKConfig.cmake
+#     sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
+# else
+
+if [ "$I_AM_XDK" = false ] ; then
+OTB_APP_FILES=$(find $OUT_DIR/lib/otb/applications -maxdepth 1 -type f -exec file {} \; | grep -i elf|cut -f1 -d':')
+ # run patchelf
+for app_file in $OTB_APP_FILES; do
+    #echo "adding rpath to $app_file"
+    if [ -f "$app_file" ]; then
+        "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$app_file"
+    fi
+done
 
 cat > "$OUT_DIR/monteverdi.sh" << EOF
 #!/bin/sh

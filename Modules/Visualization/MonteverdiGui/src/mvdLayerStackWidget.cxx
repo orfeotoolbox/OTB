@@ -166,6 +166,14 @@ LayerStackWidget
     this,
     SIGNAL( ApplyButtonClicked() )
   );
+
+  QObject::connect(
+    m_UI->resetEffectsButton,
+    SIGNAL( clicked() ),
+    // to:
+    this,
+    SIGNAL( ResetEffectsButtonClicked() )
+  );
 }
 
 /*******************************************************************************/
@@ -401,6 +409,18 @@ LayerStackWidget
   assert( m_UI->reloadButton!=NULL );
 
   m_UI->reloadButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+void
+LayerStackWidget
+::SetResetEffectsEnabled( bool enabled )
+{
+  assert( m_UI!=NULL );
+
+  assert( m_UI->reloadButton!=NULL );
+
+  m_UI->resetEffectsButton->setEnabled( enabled );
 }
 
 /*******************************************************************************/

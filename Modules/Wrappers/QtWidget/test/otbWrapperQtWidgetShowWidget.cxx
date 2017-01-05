@@ -104,6 +104,8 @@ int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
     // clean main window
     if (mainWindow) delete mainWindow;
     }
+
+  ApplicationRegistry::CleanRegistry();
   
   if (result)
     {

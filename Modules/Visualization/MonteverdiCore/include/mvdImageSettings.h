@@ -347,7 +347,12 @@ ImageSettings
     m_Effect==EFFECT_GRADIENT ||
     m_Effect==EFFECT_LOCAL_CONTRAST ||
     m_Effect==EFFECT_LOCAL_TRANSLUCENCY ||
-    m_Effect==EFFECT_SPECTRAL_ANGLE;
+    m_Effect==EFFECT_SPECTRAL_ANGLE ||
+    m_Effect==EFFECT_LUT_LOCAL_JET ||
+    m_Effect==EFFECT_LUT_LOCAL_HOT ||
+    m_Effect==EFFECT_LUT_LOCAL_WINTER ||
+    m_Effect==EFFECT_LUT_LOCAL_SUMMER ||
+    m_Effect==EFFECT_LUT_LOCAL_COOL;
 }
 
 /*****************************************************************************/
@@ -358,7 +363,12 @@ ImageSettings
 {
   return
     m_Effect==EFFECT_LOCAL_CONTRAST ||
-    m_Effect==EFFECT_SPECTRAL_ANGLE;
+    m_Effect==EFFECT_SPECTRAL_ANGLE ||
+    m_Effect==EFFECT_LUT_LOCAL_JET ||
+    m_Effect==EFFECT_LUT_LOCAL_HOT ||
+    m_Effect==EFFECT_LUT_LOCAL_WINTER ||
+    m_Effect==EFFECT_LUT_LOCAL_SUMMER ||
+    m_Effect==EFFECT_LUT_LOCAL_COOL;
 }
 
 /*****************************************************************************/

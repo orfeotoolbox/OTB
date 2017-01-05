@@ -30,6 +30,11 @@ namespace otb
 {
 namespace Wrapper
 {
+/** Utility function to negate std::isalnum */
+bool IsNotAlphaNum(char c)
+  {
+  return !std::isalnum(c);
+  }
 
 class ComputeConfusionMatrix : public Application
 {
@@ -108,12 +113,10 @@ private:
   AddParameter(ParameterType_InputFilename,"ref.vector.in","Input reference vector data");
   SetParameterDescription("ref.vector.in", "Input vector data of the ground truth");
 
-  AddParameter(ParameterType_String,"ref.vector.field","Field name");
+  AddParameter(ParameterType_ListView,"ref.vector.field","Field name");
   SetParameterDescription("ref.vector.field","Field name containing the label values");
-  SetParameterString("ref.vector.field","Class");
-  MandatoryOff("ref.vector.field");
-  DisableParameter("ref.vector.field");
-
+  SetListViewSingleSelectionMode("ref.vector.field",true);
+  
   AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels");
   SetParameterDescription("nodatalabel", "Label for the NoData class. Such input pixels will be discarded from the "
       "ground truth and from the input classification map. By default, 'nodatalabel = 0'.");
@@ -134,7 +137,32 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    // Nothing to do here : all parameters are independent
+    if ( HasValue("ref.vector.in") )
+      {
+      std::string vectorFile = GetParameterString("ref.vector.in");
+      ogr::DataSource::Pointer ogrDS =
+        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer layer = ogrDS->GetLayer(0);
+      ogr::Feature feature = layer.ogr().GetNextFeature();
+      
+      ClearChoices("ref.vector.field");
+      
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::transform(key.begin(), end, key.begin(), tolower);
+        
+        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+          {
+          std::string tmpKey="ref.vector.field."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
+        }
+      }    
   }
 
   std::string LogConfusionMatrix(MapOfClassesType* mapOfClasses, ConfusionMatrixType* matrix)
@@ -228,8 +256,18 @@ private:
     else
       {
       ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
-      field = this->GetParameterString("ref.vector.field");
 
+    // Get field name
+    std::vector<int> selectedCFieldIdx = GetSelectedItems("ref.vector.field");
+    
+    if(selectedCFieldIdx.empty())
+      {
+      otbAppLogFATAL(<<"No field has been selected for data labelling!");
+      }
+      
+      std::vector<std::string> cFieldNames = GetChoiceNames("ref.vector.field");  
+      field = cFieldNames[selectedCFieldIdx.front()];
+      
       rasterizeReference->AddOGRDataSource(ogrRef);
       rasterizeReference->SetOutputParametersFromImage(input);
       rasterizeReference->SetBackgroundValue(nodata);
