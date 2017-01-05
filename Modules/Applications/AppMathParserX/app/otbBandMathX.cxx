@@ -141,7 +141,7 @@ private:
                       "Separating expressions by semi-colons (; ) will concatenate their results into a unique multiband output image. ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    AddDocTag("Util");
+    AddDocTag("Miscellaneous");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     SetParameterDescription("il", "Image list to perform computation on.");

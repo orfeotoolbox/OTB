@@ -97,8 +97,8 @@ private:
     SetDocSeeAlso(
                   "\"Kernel maximum autocorrelation factor and minimum noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011)");
 
-    AddDocTag(Tags::DimensionReduction);
     AddDocTag(Tags::Filter);
+	AddDocTag(Tags::DimensionReduction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The input image to apply dimensionality reduction.");

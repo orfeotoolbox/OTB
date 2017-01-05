@@ -31,7 +31,7 @@ entry points. The framework can be extended, but Orfeo Toolbox ships with the fo
    QGIS.
 
 The OTB Applications are now rich of more than 90 tools, which are
-listed in the the applications reference documentation, presented in
+listed in the applications reference documentation, presented in
 chapter [chap:apprefdoc], page.
 
 Running the applications
@@ -40,7 +40,7 @@ Running the applications
 Common framework
 ~~~~~~~~~~~~~~~~
 
-All standard applications shared the same implementation and expose
+All standard applications share the same implementation and expose
 automatically generated interfaces.
 Thus, the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
 ``otbgui_``. For instance, calling ``otbcli_Convert`` will launch the
@@ -149,8 +149,6 @@ The graphical interface for the applications provides a useful
 interactive user interface to set the parameters, choose files, and
 monitor the execution progress.
 
-This interface can be activated through the CMake option .
-
 This launcher needs the same two arguments as the command line launcher
 :
 
@@ -194,12 +192,12 @@ Using the Python interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The applications can also be accessed from Python, through a module
-named ``otbApplication``
+named ``otbApplication``.
 
-On Unix systems it is typically available in the ``/usr/lib/otb/python``
-directory. You may need to configure the environment variable
-``PYTHONPATH`` to include this directory so that the module becomes
-available from an Python shell.
+On Unix systems, it is typically available in the ``/usr/lib/otb/python``
+directory. Depending on how you installed OTB, you may need to configure the
+environment variable ``PYTHONPATH`` to include this directory so that the module
+becomes available from Python.
 
 On Windows, you can install the ``otb-python`` package, and the module
 will be available from an OSGeo4W shell automatically.

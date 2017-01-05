@@ -1,6 +1,7 @@
 include(CheckCXXSourceCompiles)
 
-unset(OTB_HAS_CXX11 CACHE)
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
+
 CHECK_CXX_SOURCE_COMPILES("
 #ifdef _MSC_VER
   #if _MSC_VER <= 1700
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
 "
 OTB_HAS_CXX11 )
 
-unset(OTB_CXX_HAS_UNIQUE_PTR CACHE)
+
 CHECK_CXX_SOURCE_COMPILES("
 #include <memory>
 struct Foo
@@ -38,7 +39,6 @@ int main(int argc, char *argv[])
 "
 OTB_CXX_HAS_UNIQUE_PTR )
 
-unset(OTB_CXX_HAS_OVERRIDE_SPECIFIER CACHE)
 CHECK_CXX_SOURCE_COMPILES("
 struct A
 {
@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
 "
 OTB_CXX_HAS_OVERRIDE_SPECIFIER )
 
-unset(OTB_CXX_HAS_NULLPTR CACHE)
 CHECK_CXX_SOURCE_COMPILES("
 #include <cstddef>
 int main(int argc, char *argv[])

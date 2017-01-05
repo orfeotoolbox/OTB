@@ -67,8 +67,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
-    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Multi);
     AddDocTag("Util");
 

@@ -61,6 +61,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Coordinates);
 
     AddParameter(ParameterType_Float,  "lat", "Latitude");

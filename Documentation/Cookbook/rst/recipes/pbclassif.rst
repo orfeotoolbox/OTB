@@ -457,12 +457,19 @@ roofs. Data is available in the OTB-Data
 and this image is produced with the commands inside this
 `file <http://hg.orfeo-toolbox.org/OTB-Applications/file/3ce975605013/Testing/Classification/CMakeLists.txt>`_ .
 
+.. |image_21| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image_22| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_fusion.jpg
+.. |image_23| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif.jpg
 
-.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_fusion.jpg
-.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif.jpg
+.. _Figure2:
 
-Figure 2: From left to right: Original image, result image with fusion (with monteverdi viewer) of original image and fancy classification and input image with fancy color classification from labeled image. 
+
++---------------------------+---------------------------+---------------------------+
+|        |image_21|         |         |image_22|        |          |image_23|       |
++---------------------------+---------------------------+---------------------------+
+
+Figure 2: From left to right: Original image, result image with fusion (with monteverdi viewer) of original image and fancy classification and input image with fancy color classification from labeled image.
+
 
 Fusion of classification maps
 -----------------------------
@@ -476,8 +483,7 @@ Classifications generates a single more robust and precise
 classification map which combines the information extracted from the
 input list of labeled images.
 
-The *FusionOfClassifications* application has the following input
-parameters :
+The *FusionOfClassifications* application has the following input parameters:
 
 -  ``-il`` list of input labeled classification images to fuse
 
@@ -516,30 +522,45 @@ The application can be used like this:
                                     -out            MVFusedClassificationMap.tif
 
 Let us consider 6 independent classification maps of the same input
-image (Cf. left image in `Figure 1`) generated from 6 different SVM models. 
-The `Figure 2` represents them after a color mapping by the same LUT. 
+image (Cf. left image in Figure2_) generated from 6 different SVM models. 
+The Figure3_ represents them after a color mapping by the same LUT. 
 Thus, 4 classes (water: blue, roads: gray,vegetation: green, 
 buildings with red roofs: red) are observable on each of them.
 
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C1_CM.png
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C2_CM.png
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C3_CM.png
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C4_CM.png
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C5_CM.png
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_C6_CM.png
+.. |image_31| image:: ../Art/MonteverdiImages/QB_1_ortho_C1_CM.png
+.. |image_32| image:: ../Art/MonteverdiImages/QB_1_ortho_C2_CM.png
+.. |image_33| image:: ../Art/MonteverdiImages/QB_1_ortho_C3_CM.png
+.. |image_34| image:: ../Art/MonteverdiImages/QB_1_ortho_C4_CM.png
+.. |image_35| image:: ../Art/MonteverdiImages/QB_1_ortho_C5_CM.png
+.. |image_36| image:: ../Art/MonteverdiImages/QB_1_ortho_C6_CM.png
+
+.. _Figure3:
+
++---------------------------+---------------------------+---------------------------+
+|        |image_31|         |         |image_32|        |          |image_33|       |
++---------------------------+---------------------------+---------------------------+
+|        |image_34|         |         |image_35|        |          |image_36|       |
++---------------------------+---------------------------+---------------------------+
 
 Figure 3: Six fancy colored classified images to be fused, generated from 6 different SVM models. 
 
+
 As an example of the *FusionOfClassifications* application by *majority
 voting*, the fusion of the six input classification maps represented in
-`Figure 3` leads to the classification map illustrated on the right in `Figure 4`.
+Figure3_ leads to the classification map illustrated on the right in Figure4_.
 Thus, it appears that this fusion highlights the more relevant classes among the six different
 input classifications. The white parts of the fused image correspond to
 the undecided class labels, i.e. to pixels for which there is not a
 unique majority voting.
 
-.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_MV_C123456_CM.png
+.. |image_41| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image_42| image:: ../Art/MonteverdiImages/QB_1_ortho_MV_C123456_CM.png
+
+.. _Figure4:
+
++------------------------------------------------+------------------------------------------------+
+|                   |image_41|                   |                   |image_42|                   |
++------------------------------------------------+------------------------------------------------+
 
 Figure 4: From left to right: Original image, and fancy colored classified image obtained by a majority voting fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white)
 
@@ -586,16 +607,23 @@ The application can be used like this:
                                     -out            DSFusedClassificationMap.tif
 
 As an example of the *FusionOfClassifications* application by *Dempster
-Shafer*, the fusion of the six input classification maps represented in
-`Figure 3` leads to the classification map illustrated on the right in `Figure 5`
-[fig:ClassificationMapFusionApplicationDS]. Thus, it appears that this
-fusion gives access to a more precise and robust classification map
+Shafer*, the fusion of the six input classification maps represented in Figure3_
+leads to the classification map illustrated on the right in Figure5_.
+Thus, it appears that this fusion gives access to a more precise and robust classification map
 based on the confidence level in each classifier.
 
-.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. figure:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
 
-Figure 5: From left to right: Original image, and fancy colored classified image obtained by a Dempster-Shafer fusion of the 6 classification maps represented in Fig. 4.13 (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white). 
+.. |image_51| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image_52| image:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
+
+.. _Figure5:
+
++------------------------------------------------+------------------------------------------------+
+|                   |image_51|                   |                   |image_52|                   |
++------------------------------------------------+------------------------------------------------+
+
+Figure 5: From left to right: Original image, and fancy colored classified image obtained by a Dempster-Shafer fusion of the 6 classification maps represented in Figure3_ (water: blue, roads: gray, vegetation: green, buildings with red roofs: red, undecided: white).
+
 
 Recommendations to properly use the fusion of classification maps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -701,15 +729,14 @@ Example
 ~~~~~~~
 
 Resulting from the application presented in section :ref:`fancy_classification_results`
-and illustrated in Fig. [fig:MeanShiftVectorImageFilter],
-the Fig.[fig:ClassificationMapRegularizationApplication] shows a regularization
+and illustrated in Figure2_, the Figure6_ shows a regularization
 of a classification map composed of 4 classes: water, roads, vegetation
 and buildings with red roofs. The radius of the ball shaped structuring
 element is equal to 3 pixels, which corresponds to a ball included in a
 7 x 7 pixels square. Pixels with more than one majority class keep their
 original labels.
 
-|image| |image| |image| [fig:ClassificationMapRegularizationApplication]
+
 
 Regression
 ----------
@@ -720,10 +747,17 @@ a class index) from an input predictor. The workflow is the same as
 classification. First, the regression model is trained, then it can be
 used to predict output values. The applications to do that are and .
 
-.. figure:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
-.. figure:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png
+.. |image_61| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
+.. |image_62| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
+.. |image_63| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png
 
+
+.. _Figure6:
+
++---------------------------+---------------------------+---------------------------+
+|        |image_61|         |         |image_62|        |          |image_63|       |
++---------------------------+---------------------------+---------------------------+
+	 
 Figure 6: From left to right: Original image, fancy colored classified image and regularized classification map with radius equal to 3 pixels. 
 
 The input data set for training must have the following structure :

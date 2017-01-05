@@ -85,8 +85,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag(Tags::Learning);
     AddDocTag(Tags::Segmentation);
-    AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputImage,  "in",   "InputImage");
     SetParameterDescription("in", "Input image to classify.");

@@ -61,6 +61,7 @@ void QtWidgetView::CreateGui()
 
   m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT(UpdateMessageAfterApplicationReady(bool)) );
+  connect( m_Model, SIGNAL(SetProgressReportDone(int)), this, SLOT(UpdateMessageAfterExecution(int)) );
   mainLayout->addWidget(m_Message);
 
   QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(m_Model);
@@ -86,10 +87,22 @@ void QtWidgetView::UpdateMessageAfterExecuteClicked()
   m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
 }
 
+void QtWidgetView::UpdateMessageAfterExecution(int status)
+{
+  if (status >= 0)
+    {
+    m_Message->setText("<center><font color=\"#00A000\">DONE</font></center>");
+    }
+  else
+    {
+    m_Message->setText("<center><font color=\"#FF0000\">FAILED !</font></center>");
+    }
+}
+
 void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
 {
   if(val == true)
-    m_Message->setText("<center><font color=\"#00FF00\">Ready to run</font></center>");
+    m_Message->setText("<center><font color=\"#00A000\">Ready to run</font></center>");
   else
     m_Message->setText("<center><font color=\"#FF0000\">Select parameters</font></center>");
 }

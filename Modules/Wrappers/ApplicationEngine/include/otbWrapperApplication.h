@@ -24,6 +24,7 @@
 #include "otbWrapperParameterGroup.h"
 
 #include "itkLogger.h"
+#include "itkTimeProbe.h"
 #include "otbWrapperMacros.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageListParameter.h"
@@ -299,6 +300,16 @@ public:
    */
   void SetMaximumParameterFloatValue(std::string parameter, float value);
 
+
+  /**
+   * Enable single selection mode for list view if status in true
+   * (default is false).
+   * 
+   * Can be called for types:
+   * \li ParameterType_ListView
+   */
+  void SetListViewSingleSelectionMode(std::string parameter, bool status);
+  
   /* Set a string value
    *
    * Can be called for types :
@@ -737,6 +748,8 @@ public:
      m_IsInXMLParsed = false;
    }
 
+  double GetLastExecutionTiming() const;
+
 protected:
   /** Constructor */
   Application();
@@ -897,6 +910,9 @@ private:
   std::string m_DocSeeAlso;
   /** Tags that define the application (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
+
+  /** Chrono to measure execution time */
+  itk::TimeProbe m_Chrono;
 
   //rashad:: controls adding of -xml parameter. set to true by default
   bool                              m_HaveInXML;

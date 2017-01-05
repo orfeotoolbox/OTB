@@ -34,6 +34,11 @@ namespace ogr
 namespace version_proxy
 {
 
+OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
+{
+  return type == OFTInteger64;
+}
+
 GDALDatasetType * Open(const char * filename, bool readOnly)
 {
   return (GDALDatasetType *)GDALOpenEx(filename, (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,NULL,NULL,NULL);

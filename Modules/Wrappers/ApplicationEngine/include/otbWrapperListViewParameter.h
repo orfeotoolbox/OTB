@@ -50,6 +50,10 @@ public:
   /** RTTI support */
   itkTypeMacro(ListViewParameter, Parameter);
 
+  itkSetMacro(SingleSelection,bool);
+  itkGetMacro(SingleSelection,bool);
+  itkBooleanMacro(SingleSelection);
+  
   /** Add a value to the choice */
   void AddChoice( std::string choicekey, std::string choiceName );
 
@@ -92,24 +96,10 @@ public:
 
   std::vector<int> GetSelectedItems()
   {
-    if( m_SelectedNames.size() != 0 )
-      {
-        this->SetSelectedItemsByNames();
-      }
-    else if( m_SelectedKeys.size() != 0 )
-      {
-        this->SetSelectedItemsByKeys();
-      }
-
     return m_SelectedItems;
   }
 
-  void SetSelectedNames(std::vector<std::string> selectedNames)
-  {
-    m_SelectedNames = selectedNames;
-    m_SelectedItems.clear();
-    m_SelectedKeys.clear();
-  }
+  void SetSelectedNames(std::vector<std::string> selectedNames);
 
   std::vector<std::string> GetSelectedNames()
     {
@@ -117,22 +107,21 @@ public:
     }
 
 
-  void SetSelectedKeys(std::vector<std::string> selectedKeys)
-  {
-    m_SelectedKeys = selectedKeys;
-    m_SelectedItems.clear();
-    m_SelectedNames.clear();
-  }
+  void SetSelectedKeys(std::vector<std::string> selectedKeys);
 
   std::vector<std::string> GetSelectedKeys()
     {
       return m_SelectedKeys;
     }
 
-  /** Set selected items using a lit of selected keys. */
-  void SetSelectedItemsByKeys();
-  /** Set selected items using a lit of selected names. */
-  void SetSelectedItemsByNames();
+  /** Set selected items using a lit of selected keys.
+   *  OBSOLETE : this method is not needed anymore and does nothing. */
+  void SetSelectedItemsByKeys(){}
+
+  /** Set selected items using a lit of selected names.
+   *  OBSOLETE : this method is not needed anymore and does nothing. */
+  void SetSelectedItemsByNames(){}
+
   void SetSelectedItems(std::vector<std::string> selectedItems)
   {
     std::vector<int> items;
@@ -140,14 +129,22 @@ public:
       {
         items.push_back( atoi( selectedItems[i].c_str() ) );
       }
-    m_SelectedItems = items;
-    m_SelectedNames.clear();
-    m_SelectedKeys.clear();
+    this->SetSelectedItems(items);
   }
 
   void SetSelectedItems(std::vector<int> selectedItems)
   {
     m_SelectedItems = selectedItems;
+    m_SelectedNames.clear();
+    m_SelectedKeys.clear();
+    // update selected names and keys
+    std::vector<std::string> names = this->GetChoiceNames();
+    std::vector<std::string> keys = this->GetChoiceKeys();
+    for (unsigned int i=0 ; i<m_SelectedItems.size() ; i++)
+      {
+      m_SelectedNames.push_back(names[m_SelectedItems[i]]);
+      m_SelectedKeys.push_back(keys[m_SelectedItems[i]]);
+      }
   }
 
 protected:
@@ -171,6 +168,7 @@ protected:
   std::vector<int>                    m_SelectedItems;
   std::vector<std::string>            m_SelectedKeys;
   std::vector<std::string>            m_SelectedNames;
+  bool                                m_SingleSelection;
 
 private:
   ListViewParameter(const ListViewParameter &); //purposely not implemented

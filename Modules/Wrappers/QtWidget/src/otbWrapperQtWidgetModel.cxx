@@ -40,6 +40,16 @@ QtWidgetModel
  // Attach log output to the Application logger
   m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
   m_Application->GetLogger()->AddLogOutput(m_LogOutput);
+
+  m_Timer = new QTimer(this);
+  m_Timer->setSingleShot(true);
+  m_Timer->setInterval(1000);
+  QObject::connect(
+    m_Timer,
+    SIGNAL( timeout() ),
+    this,
+    SLOT( TimerDone() )
+    );
 }
 
 QtWidgetModel::~QtWidgetModel()
@@ -89,26 +99,38 @@ QtWidgetModel
     SLOT( OnApplicationExecutionDone( int ) )
   );
 
-  taskAppli->Execute();
-
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
+
+  taskAppli->Execute();
 }
 
 void
 QtWidgetModel
 ::OnApplicationExecutionDone( int status )
 {
-  m_IsRunning = false;
+  // For the progressReport to close the Progress widget
+  // and the GUI to update message
+  emit SetProgressReportDone( status );
 
+  if (status >= 0)
+    {
+    std::ostringstream oss;
+    oss << "Execution took "<< m_Application->GetLastExecutionTiming() << " sec";
+    SendLogINFO(oss.str());
+    }
+
+  // start timer
+  m_Timer->start();
+}
+
+void
+QtWidgetModel
+::TimerDone()
+{
+  m_IsRunning = false;
   // Require GUI update.
   NotifyUpdate();
-
-  // For the view to activate the button "Execute"
-  emit SetApplicationReady( true );
-
-  // For the progressReport to close the Progress widget
-  emit SetProgressReportDone( status );
 }
 
 void
