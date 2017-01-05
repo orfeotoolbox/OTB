@@ -67,6 +67,8 @@ public:
 
   void Write(Application::Pointer application);
 
+  TiXmlElement* ParseApplication(Application::Pointer app);
+
 protected:
 
   OutputProcessXMLParameter();
