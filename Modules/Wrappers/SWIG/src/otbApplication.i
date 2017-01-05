@@ -209,7 +209,9 @@ public:
   ComplexInputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
   void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
   void AddImageToParameterInputImageList(std::string parameter,InputImageParameter::ImageBaseType * img);
-   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageParameter::ImageBaseType * img);
+  void AddImageToParameterInputImageList(std::string parameter,const std::string & filename);
+  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageParameter::ImageBaseType * img);
+  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, const std::string& filename);
   void ClearParameterInputImageList(std::string parameter);
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 

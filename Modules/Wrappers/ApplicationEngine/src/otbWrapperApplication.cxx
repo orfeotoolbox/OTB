@@ -1263,6 +1263,42 @@ void Application::SetNthParameterInputImageList(std::string parameter, const uns
 
 }
 
+void Application::AddImageToParameterInputImageList(std::string parameter, const std::string & filename)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+  
+  if(paramDown)
+    {
+    paramDown->AddFromFileName(filename);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+  
+}
+
+void Application::SetNthParameterInputImageList(std::string parameter, const unsigned int &id, const std::string & filename)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+
+  if(paramDown)
+    {
+    paramDown->SetNthFileName(id,filename);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+
+}
+
+
+
 void Application::ClearParameterInputImageList(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);

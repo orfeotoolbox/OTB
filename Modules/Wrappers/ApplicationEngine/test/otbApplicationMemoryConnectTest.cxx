@@ -64,6 +64,7 @@ int otbApplicationMemoryConnectTest(int argc, char * argv[])
   
   app4->AddImageToParameterInputImageList("il",app2->GetParameterOutputImage("out"));
   app4->AddImageToParameterInputImageList("il",app3->GetParameterOutputImage("out"));
+  app4->AddImageToParameterInputImageList("il",infname);
    
   app4->ExecuteAndWriteOutput();
 
