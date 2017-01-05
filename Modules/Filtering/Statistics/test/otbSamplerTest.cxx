@@ -72,6 +72,7 @@ int otbPeriodicSamplerTest(int, char *[])
   
   param.Offset = 0;
   param.MaxJitter = 10;
+  param.MaxBufferSize = 1000000UL;
   sampler->SetRate(0.2,50);
   sampler->SetParameters(param);
   std::string test2 = RunSampler<otb::PeriodicSampler>(sampler,50);

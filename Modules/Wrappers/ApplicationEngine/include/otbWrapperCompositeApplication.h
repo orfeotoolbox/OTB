@@ -85,6 +85,13 @@ protected:
   bool AddApplication(std::string appType, std::string key, std::string desc);
 
   /**
+   * Method to remove all internal applications. Application deriving from
+   * CompositeApplication should call this method at the begining of their
+   * DoInit().
+   */
+  void ClearApplications();
+
+  /**
    * Connect two existing parameters together. The first parameter will point to
    * the second parameter.
    */
