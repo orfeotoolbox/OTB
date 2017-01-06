@@ -283,6 +283,11 @@ function(func_is_file_a_symbolic_link file result_var1 result_var2)
     #
   endif()
 
+  #if we are not on a unix or unix-like platform, then we don't have any business here
+  if(NOT UNIX)
+    return()
+  endif()
+
   # Use the information returned from the Unix shell command "file" to
   # determine if ${file_full} should be considered an executable file...
   #
@@ -290,59 +295,52 @@ function(func_is_file_a_symbolic_link file result_var1 result_var2)
   # "text" then it is likely an executable suitable for prerequisite analysis
   # via the get_prerequisites macro.
   #
-  if(UNIX)
-    if(NOT file_cmd)
-      find_program(file_cmd "file")
-      mark_as_advanced(file_cmd)
-    endif()
-
-    if(file_cmd)
-      execute_process(COMMAND "${file_cmd}" "${file_full}"
-        RESULT_VARIABLE file_rv
-        OUTPUT_VARIABLE file_ov
-        ERROR_VARIABLE file_ev
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-      if(NOT file_rv STREQUAL "0")
-        message(FATAL_ERROR "${file_cmd} failed: ${file_rv}\n${file_ev}")
-      endif()
-
-      # Replace the name of the file in the output with a placeholder token
-      # (the string " _file_full_ ") so that just in case the path name of
-      # the file contains the word "text" or "executable" we are not fooled
-      # into thinking "the wrong thing" because the file name matches the
-      # other 'file' command output we are looking for...
-      #
-      string(REPLACE "${file_full}" " _file_full_ " file_ov "${file_ov}")
-      string(TOLOWER "${file_ov}" file_ov_lower)
-
-      #message(FATAL_ERROR "file_ov='${file_ov}'")
-      if("${file_ov_lower}" MATCHES "symbolic link")
-        set(${result_var1} 1 PARENT_SCOPE)
-        #Now find where the symlink is linked to.
-        #Do a regex replace
-        if(UNIX)
-          if(APPLE)
-            string(REGEX REPLACE "_file_full_*.*symbolic.link.to."
-              "" symlinked_to ${file_ov})
-          else(APPLE)
-            string(REGEX REPLACE "_file_full_*.*symbolic.link.to.."
-              "" symlinked_to ${file_ov})
-          endif(APPLE)
-        endif(UNIX)
-        #Take out last character which is a single quote
-        string(REPLACE "'" "" symlinked_to "${symlinked_to}")
-        #strip for our own sanity
-        string(STRIP ${symlinked_to} symlinked_to)
-        set(${result_var2} "${symlinked_to}" PARENT_SCOPE)
-        #message(FATAL_ERROR "${file_full} is symlinked_to ${symlinked_to}")
-        return()
-      endif()
-
-    else()
-      message(STATUS "warning: No 'file' command, skipping execute_process...")
-    endif()
+  if(NOT file_cmd)
+    find_program(file_cmd "file")
+    mark_as_advanced(file_cmd)
   endif()
+
+  if(file_cmd)
+    execute_process(COMMAND "${file_cmd}" "${file_full}"
+      RESULT_VARIABLE file_rv
+      OUTPUT_VARIABLE file_ov
+      ERROR_VARIABLE file_ev
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+    if(NOT file_rv STREQUAL "0")
+      message(FATAL_ERROR "${file_cmd} failed: ${file_rv}\n${file_ev}")
+    endif()
+
+    # Replace the name of the file in the output with a placeholder token
+    # (the string " _file_full_ ") so that just in case the path name of
+    # the file contains the word "text" or "executable" we are not fooled
+    # into thinking "the wrong thing" because the file name matches the
+    # other 'file' command output we are looking for...
+    #
+    string(REPLACE "${file_full}" " _file_full_ " file_ov "${file_ov}")
+    string(TOLOWER "${file_ov}" file_ov_lower)
+
+    #message(FATAL_ERROR "file_ov='${file_ov}'")
+    if("${file_ov_lower}" MATCHES "symbolic link")
+      set(${result_var1} 1 PARENT_SCOPE)
+      #Now find where the symlink is linked to.
+      #Do a regex replace
+      string(REGEX REPLACE "_file_full_*.*symbolic.link.to." "" symlinked_to ${file_ov})
+      #Take out last character which is a single quote
+      string(REPLACE "'" "" symlinked_to "${symlinked_to}")
+
+      #strip final output
+      string(STRIP ${symlinked_to} symlinked_to)
+      set(${result_var2} "${symlinked_to}" PARENT_SCOPE)
+
+      #message(FATAL_ERROR "${file_full} is symlinked_to ${symlinked_to}")
+      return()
+    endif()
+
+  else()
+    message(STATUS "warning: No 'file' command, skipping execute_process...")
+  endif()
+
 endfunction()
 
 macro(setif_value_in_list matched value list)

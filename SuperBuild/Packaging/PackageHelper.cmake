@@ -18,6 +18,9 @@ macro(macro_super_package)
     message(FATAL_ERROR "PATCHELF_PROGRAM not set")
   endif()
 
+  #setting this variable. prints a lot of debug information
+  #set( PKG_OTB_DEBUG 1)
+
   set(loader_program_PATHS)
   set(eol_char "E")
   if(MSVC)
@@ -312,13 +315,11 @@ function(func_prepare_package)
     endif()
     unset(${var_to_unset} CACHE)
   endforeach()
-  
- 
+
   foreach(infile ${PKG_PEFILES})
    get_filename_component(bn ${infile} NAME)
    func_process_deps(${bn})
   endforeach()
-
  
 endfunction() #func_prepare_package
 
@@ -327,9 +328,9 @@ function(func_process_deps input_file)
   if(NOT input_file_full_path)
     message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
   endif()
-  
+
   message("Processing ${input_file_full_path}")
- 
+
   set(is_executable FALSE)
   is_file_executable2("${input_file_full_path}" is_executable)
   if(NOT is_executable)
@@ -428,21 +429,28 @@ function(func_process_deps input_file)
     list(APPEND raw_items ${raw_item})
     
   endforeach()
-  
+
   if(PKG_OTB_DEBUG)
-    message(FATAL_ERROR "raw_items=${raw_items}")
+    string(REPLACE ";" "\n" raw_items_pretty_print "${raw_items}")
+    message(FATAL_ERROR "raw_items=${raw_items_pretty_print}")
   endif(PKG_OTB_DEBUG)
-   
+
   if(raw_items)
     list(REVERSE raw_items)
     foreach(item ${raw_items})      
       search_library(${item} PKG_SEARCHDIRS item_full_path)
       set(is_a_symlink FALSE)
       set(item_target_file)
+      if(PKG_OTB_DEBUG)
+	message("item0=${item_full_path}")
+      endif()
       func_is_file_a_symbolic_link("${item_full_path}" is_a_symlink item_target_file)      
       if(is_a_symlink)
 	set(${item}_RESOLVED TRUE CACHE INTERNAL "")
-	set(item ${item_target_file})     
+	set(item ${item_target_file})
+      endif()
+      if(PKG_OTB_DEBUG)
+	message("running func_process_deps on '${item}'")
       endif()
       func_process_deps(${item})
   endforeach()
