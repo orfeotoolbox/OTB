@@ -181,10 +181,6 @@ else()
   set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 endif()
 
-if(MSVC_VERSION LESS 1700)
-  message(WARNING "Your version of MSVC compiler is not supported by OTB!. You must upgrade MSVC to 1700 or higher.")
-endif()
-
 #-----------------------------------------------------------------------------
 # Option to activate deprecated classes
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
