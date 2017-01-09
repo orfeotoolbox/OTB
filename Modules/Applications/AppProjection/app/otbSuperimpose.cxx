@@ -107,6 +107,11 @@ private:
     DisableParameter("lms");
     MandatoryOff("lms");
 
+    AddParameter(ParameterType_Float, "fv", "Fill Value");
+    SetParameterDescription("fv","Fill value for area outside the reprojected image");
+    SetDefaultParameterFloat("fv", 0.);
+    MandatoryOff("fv");
+
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription("out","Output reprojected image.");
 
@@ -211,8 +216,8 @@ private:
     
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
+    defaultValue.Fill(GetParameterFloat("fv"));
 
-    
     if(GetParameterString("mode")=="default")
       {
       FloatVectorImageType::SpacingType defSpacing;

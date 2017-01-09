@@ -70,6 +70,9 @@ else()
   endif()
 endif()
 
+find_program(FILE_COMMAND "file")
+mark_as_advanced(FILE_COMMAND)
+
 set(SUPERBUILD_SOURCE_DIR ${PACKAGE_OTB_SRC_DIR}/SuperBuild)
 
 include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
@@ -112,7 +115,7 @@ endforeach(req)
 
 message("\n${vars}\n")
 
-set(PKG_OTB_DEBUG OFF)
+set(PKG_DEBUG OFF)
 
 set(EXTRA_CACHE_CONFIG)
 
