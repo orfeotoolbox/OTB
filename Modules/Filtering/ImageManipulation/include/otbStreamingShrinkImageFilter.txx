@@ -43,7 +43,7 @@ StreamingShrinkStreamingManager<TImage>::PrepareStreaming( itk::DataObject * inp
 {
   typedef otb::StreamingShrinkImageRegionSplitter TileSplitterType;
   TileSplitterType::Pointer splitter = TileSplitterType::New();
-  splitter->SetTileSizeAlignment(m_ShrinkFactor);
+  splitter->SetShrinkFactor(m_ShrinkFactor);
   this->m_Splitter = splitter;
 
   unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, 0);
@@ -125,6 +125,9 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
                                            inputSpacing = inputPtr->GetSpacing();
   const typename InputImageType::SizeType& inputSize
     = inputPtr->GetLargestPossibleRegion().GetSize();
+  const typename InputImageType::IndexType& inputIndex
+    = inputPtr->GetLargestPossibleRegion().GetIndex();
+  typename InputImageType::IndexType startIndex;
 
   typename OutputImageType::SpacingType shrunkOutputSpacing;
   typename OutputImageType::RegionType  shrunkOutputLargestPossibleRegion;
@@ -134,12 +137,14 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
 
   for (unsigned int i = 0; i < OutputImageType::ImageDimension; ++i)
     {
+    startIndex[i] = inputIndex[i] + (m_ShrinkFactor - 1) / 2;
+    if (m_ShrinkFactor > inputSize[i])
+      startIndex[i] = inputIndex[i] + (inputSize[i] - 1) / 2;
+    m_Offset[i] = startIndex[i] % m_ShrinkFactor;
     shrunkOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
     shrunkOutputSize[i] = inputSize[i] > m_ShrinkFactor ? inputSize[i] / m_ShrinkFactor : 1;
     
-    shrunkOutputOrigin[i] = inputPtr->GetOrigin()[i] + inputSpacing[i] *
-      (static_cast<double>(inputPtr->GetLargestPossibleRegion().GetIndex(i)) - 0.5)
-      + shrunkOutputSpacing[i] * 0.5;
+    shrunkOutputOrigin[i] = inputPtr->GetOrigin()[i] + inputSpacing[i] * startIndex[i];
 
     // we choose to output a region with a start index [0,0]
     // the origin is set accordingly
@@ -184,12 +189,12 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
     {
     const IndexType& inIndex = inIt.GetIndex();
     // TODO the pixel value should be taken near the centre of the cell, not at the corners
-    if (inIndex[0] % m_ShrinkFactor == 0
-        && inIndex[1] % m_ShrinkFactor == 0 )
+    if ((inIndex[0] - m_Offset[0]) % m_ShrinkFactor == 0
+        && (inIndex[1] - m_Offset[1]) % m_ShrinkFactor == 0 )
       {
       IndexType shrunkIndex;
-      shrunkIndex[0] = inIndex[0] / m_ShrinkFactor;
-      shrunkIndex[1] = inIndex[1] / m_ShrinkFactor;
+      shrunkIndex[0] = (inIndex[0] - m_Offset[0]) / m_ShrinkFactor;
+      shrunkIndex[1] = (inIndex[1] - m_Offset[1]) / m_ShrinkFactor;
       if (m_ShrunkOutput->GetLargestPossibleRegion().IsInside(shrunkIndex))
         m_ShrunkOutput->SetPixel(shrunkIndex, inIt.Get());
       }
