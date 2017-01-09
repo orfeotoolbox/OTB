@@ -88,6 +88,7 @@ public:
   /** Type to use for computations. */
   typedef itk::VariableSizeMatrix<PrecisionType>        MatrixType;
   typedef itk::VariableLengthVector<PrecisionType>      RealPixelType;
+  typedef itk::VariableLengthVector<unsigned long>      CountType;
 
   /** Type of DataObjects used for outputs */
   typedef itk::SimpleDataObjectDecorator<RealType>      RealObjectType;
@@ -95,6 +96,15 @@ public:
   typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
   typedef itk::SimpleDataObjectDecorator<RealPixelType> RealPixelObjectType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
+  typedef itk::SimpleDataObjectDecorator<CountType>     CountObjectType;
+
+  /** Return the number of relevant pixels **/
+  CountType GetNbRelevantPixels() const
+  {
+    return this->GetNbRelevantPixelsOutput()->Get();
+  }
+  CountObjectType* GetNbRelevantPixelsOutput();
+  const CountObjectType* GetNbRelevantPixelsOutput() const;
 
   /** Return the computed Min */
   PixelType GetMinimum() const
@@ -300,6 +310,8 @@ public:
   typedef typename StatFilterType::RealPixelObjectType RealPixelObjectType;
   typedef typename StatFilterType::MatrixType          MatrixType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
+  typedef typename StatFilterType::CountType           CountType;
+  typedef typename StatFilterType::CountObjectType     CountObjectType;
 
   typedef typename StatFilterType::InternalPixelType   InternalPixelType;
 
@@ -312,6 +324,21 @@ public:
   {
     return this->GetFilter()->GetInput();
   }
+
+  /** Return the number of relevant pixels **/
+  CountType GetNbRelevantPixels() const
+  {
+    return this->GetFilter()->GetNbRelevantPixelsOutput()->Get();
+  }
+  CountObjectType* GetNbRelevantPixelsOutput()
+  {
+    return this->GetFilter()->GetNbRelevantPixelsOutput();
+  }
+  const CountObjectType* GetNbRelevantPixelsOutput() const
+  {
+    return this->GetFilter()->GetNbRelevantPixelsOutput();
+  }
+
 
   /** Return the computed Minimum. */
   RealPixelType GetMinimum() const
@@ -383,7 +410,7 @@ public:
     return this->GetFilter()->GetCovarianceOutput();
   }
 
-  /** Return the computed Covariance. */
+  /** Return the computed Correlation. */
   MatrixType GetCorrelation() const
   {
     return this->GetFilter()->GetCorrelationOutput()->Get();
@@ -425,7 +452,7 @@ public:
     return this->GetFilter()->GetComponentCovarianceOutput();
   }
 
-  /** Return the computed Covariance. */
+  /** Return the computed Correlation. */
   RealType GetComponentCorrelation() const
   {
     return this->GetFilter()->GetComponentCorrelationOutput()->Get();
