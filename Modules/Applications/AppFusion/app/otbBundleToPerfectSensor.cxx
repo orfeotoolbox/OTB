@@ -66,6 +66,7 @@ private:
     ShareParameter("lms","superimpose.lms",
       "Spacing of the deformation field",
       "Spacing of the deformation field. Default is 10 times the PAN image spacing.");
+    ShareParameter("fv","superimpose.fv");
     ShareParameter("ram","superimpose.ram");
 
     Connect("pansharp.inp","superimpose.inr");
