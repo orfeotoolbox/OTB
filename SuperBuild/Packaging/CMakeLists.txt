@@ -112,7 +112,7 @@ endforeach(req)
 
 message("\n${vars}\n")
 
-set(PKG_OTB_DEBUG OFF)
+set(PKG_DEBUG OFF)
 
 set(EXTRA_CACHE_CONFIG)
 

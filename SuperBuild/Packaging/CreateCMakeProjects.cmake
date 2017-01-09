@@ -49,7 +49,7 @@ macro(macro_setup_cmake_project pkg)
    set(OTB_TARGET_SYSTEM_ARCH        ${OTB_TARGET_SYSTEM_ARCH})
    set(OTB_TARGET_SYSTEM_ARCH_IS_X64 ${OTB_TARGET_SYSTEM_ARCH_IS_X64})   
    set(OTB_WRAP_PYTHON               ${OTB_WRAP_PYTHON})
-   set(PKG_OTB_DEBUG                 ${PKG_OTB_DEBUG})
+   set(PKG_DEBUG                     ${PKG_DEBUG})
    ${EXTRA_CACHE_CONFIG}
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageMacros.cmake)
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake)

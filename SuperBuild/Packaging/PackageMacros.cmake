@@ -51,26 +51,23 @@ endmacro() #macro_empty_package_staging_directory
 
 function(search_library input_file pkg_searchdirs result)
   set(${result} "" PARENT_SCOPE)
-  set(found_lib FALSE) 
-  foreach(SEARCHDIR ${${pkg_searchdirs}})
-    if(EXISTS ${SEARCHDIR}/${input_file} )
-      set(${result} "${SEARCHDIR}/${input_file}" PARENT_SCOPE)
-      return()
-    endif()
-    
-    string(TOLOWER "${input_file}" input_file_lower )
-    if(EXISTS ${SEARCHDIR}/${input_file_lower})
-      set(${result} "${SEARCHDIR}/${input_file_lower}"  PARENT_SCOPE)
-      return()
-    endif()
-  endforeach() 
+  foreach(pkg_searchdir ${${pkg_searchdirs}})
 
-  if(NOT found_lib)
-    check_for_gtk_libs(${input_file} gtk_lib_full_path)  
-    if(gtk_lib_full_path)
-      set(${result} "${gtk_lib_full_path}" PARENT_SCOPE)
+    if(EXISTS ${pkg_searchdir}/${input_file} )
+      if(PKG_DEBUG)
+	message("searching for '${input_file}' in '${pkg_searchdir}'")
+      endif()
+      set(${result} "${pkg_searchdir}/${input_file}" PARENT_SCOPE)
+      return()
     endif()
-  endif()
+
+    #check for file with lowercase
+    string(TOLOWER "${input_file}" input_file_lower )
+    if(EXISTS ${pkg_searchdir}/${input_file_lower})
+      set(${result} "${pkg_searchdir}/${input_file_lower}"  PARENT_SCOPE)
+      return()
+    endif()
+  endforeach()
     
 endfunction()
 
@@ -102,34 +99,6 @@ macro(add_to_symlink_list src_file target_file)
     )
   endif()
 endmacro()
-
-function(check_for_gtk_libs input_file result)
-  # Take gtk libs from system. we should fix this to take from custom
-  # build location
-  set(GTK_LIBS_SEARCH_PATHS
-    /usr/lib64
-    /lib64
-     )
-  
-  set(${result} "" PARENT_SCOPE)
-  if(NOT LINUX)
-    return()
-  endif()
-
-
- setif_value_in_list(is_allowed "${input_file}" ALLOWED_SYSTEM_DLLS)   
-  if(NOT is_allowed)
-    return()
-  endif()
-  
-   foreach( search_path ${GTK_LIBS_SEARCH_PATHS})
-     if(EXISTS ${search_path}/${input_file} )
-       set(${result} ${search_path}/${input_file} PARENT_SCOPE)
-       endif()
-     endforeach()
- 
-endfunction()
-
 
 function(is_file_executable2 file result_var)
   #
