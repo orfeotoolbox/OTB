@@ -16,7 +16,6 @@ macro(macro_setup_cmake_project pkg)
   else()
     set(PKG_GENERATE_XDK OFF)
   endif()
-
  
   if(PKG_GENERATE_XDK)
     set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
@@ -50,6 +49,7 @@ macro(macro_setup_cmake_project pkg)
    set(OTB_TARGET_SYSTEM_ARCH_IS_X64 ${OTB_TARGET_SYSTEM_ARCH_IS_X64})   
    set(OTB_WRAP_PYTHON               ${OTB_WRAP_PYTHON})
    set(PKG_DEBUG                     ${PKG_DEBUG})
+   set(FILE_COMMAND                  \"${FILE_COMMAND}\")
    ${EXTRA_CACHE_CONFIG}
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageMacros.cmake)
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake)

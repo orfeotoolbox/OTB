@@ -14,10 +14,16 @@ macro(macro_super_package)
     message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
   endif()
 
-  if(LINUX AND NOT PATCHELF_PROGRAM)
-    message(FATAL_ERROR "PATCHELF_PROGRAM not set")
-  endif()
+  if(LINUX)
+    if(NOT FILE_COMMAND)
+      message(FATAL_ERROR "warning: No 'file' command, cannot continue...")
+    endif()
 
+    if(NOT PATCHELF_PROGRAM)
+      message(FATAL_ERROR "PATCHELF_PROGRAM not set")
+    endif()
+  endif(LINUX)
+  
   #setting this variable. prints a lot of debug information
   #set( PKG_DEBUG 1)
 
@@ -51,7 +57,7 @@ macro(macro_super_package)
   if(NOT LOADER_PROGRAM)
     message(FATAL_ERROR "${loader_program_names} not found in ${loader_program_PATHS}.")
   endif()
-  
+
   include(GetPrerequisites)
 
   set(LOADER_PROGRAM_ARGS ${loader_program_args})
