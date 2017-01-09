@@ -326,7 +326,11 @@ function(func_is_file_a_symbolic_link file result_var1 result_var2)
       #Now find where the symlink is linked to.
       #Do a regex replace
       string(REGEX REPLACE "_file_full_*.*symbolic.link.to." "" symlinked_to ${file_ov})
-      #Take out last character which is a single quote
+
+      #older version of file command output has  [`} character(remove it).
+      string(REPLACE "`" "" symlinked_to ${symlinked_to} )
+      
+      #older version of file command output has  {'} character(remove it).
       string(REPLACE "'" "" symlinked_to "${symlinked_to}")
 
       #strip final output
