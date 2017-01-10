@@ -15,12 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCoordinateToName_h
-#define __otbCoordinateToName_h
+#ifndef otbCoordinateToName_h
+#define otbCoordinateToName_h
 
 #include "itkPoint.h"
 #include "itkMultiThreader.h"
 #include "otbCurlHelperInterface.h"
+#include "OTBCartoExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 
-class ITK_EXPORT CoordinateToName : public itk::Object
+class OTBCarto_EXPORT CoordinateToName : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -114,8 +115,8 @@ public:
 
 protected:
   CoordinateToName();
-  virtual ~CoordinateToName() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~CoordinateToName() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   void ParseXMLGeonames(std::string& placeName, std::string& countryName) const;
 
   virtual void DoEvaluate();

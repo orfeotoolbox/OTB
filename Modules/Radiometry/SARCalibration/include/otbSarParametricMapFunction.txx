@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSarParametricMapFunction_txx
-#define __otbSarParametricMapFunction_txx
+#ifndef otbSarParametricMapFunction_txx
+#define otbSarParametricMapFunction_txx
 
 #include "otbSarParametricMapFunction.h"
 #include "itkNumericTraits.h"
@@ -131,6 +131,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
       itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
       std::string nbLinesValue = imageKeywordlist.GetMetadataByKey("number_lines");
       std::string nbSamplesValue = imageKeywordlist.GetMetadataByKey("number_samples");
+      // TODO: Don't use atof!
       m_ProductWidth = atof(nbSamplesValue.c_str());
       m_ProductHeight = atof(nbLinesValue.c_str());
       }

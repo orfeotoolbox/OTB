@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShapeAttributesLabelMapFilter_h
-#define __otbShapeAttributesLabelMapFilter_h
+#ifndef otbShapeAttributesLabelMapFilter_h
+#define otbShapeAttributesLabelMapFilter_h
 
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "otbImage.h"
@@ -63,6 +63,8 @@ public:
   typedef FlusserPathFunction<PolygonType> FlusserPathFunctionType;
   typedef SimplifyPathFunctor<PolygonType,
                               PolygonType> SimplifyPolygonFunctorType;
+
+  typedef unsigned int DimensionType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TLabelObject::ImageDimension);
@@ -185,8 +187,8 @@ private:
  * With respect to the original itk filter, this filter also compute
  * the Flusser moments for each LabelObject.
  *
- * The flag ReducedAttributesSet allows to compute only non-redundant
- * statistics and statistics usefull for classification (not spatially
+ * The flag ReducedAttributesSet allows computing only non-redundant
+ * statistics and statistics useful for classification (not spatially
  * dependent statitistics). Reduced set contains only Flusser moments,
  * physical size, elongation, Feret diameter (if activated),
  * perimeter (if activated) and roundness (if activated).
@@ -285,19 +287,19 @@ protected:
   ShapeAttributesLabelMapFilter(){}
 
   /** Destructor */
-  virtual ~ShapeAttributesLabelMapFilter(){}
+  ~ShapeAttributesLabelMapFilter() ITK_OVERRIDE{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
   /** Things to to before threaded data generation */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *){};
+  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE{};
 
 private:
   ShapeAttributesLabelMapFilter(const Self &); //purposely not implemented

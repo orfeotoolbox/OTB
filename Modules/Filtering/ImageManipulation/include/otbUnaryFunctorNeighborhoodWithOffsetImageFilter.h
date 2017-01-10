@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorNeighborhoodWithOffsetImageFilter_h
-#define __otbUnaryFunctorNeighborhoodWithOffsetImageFilter_h
+#ifndef otbUnaryFunctorNeighborhoodWithOffsetImageFilter_h
+#define otbUnaryFunctorNeighborhoodWithOffsetImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -130,9 +130,9 @@ protected:
   /**
    * Destructor
    */
-  virtual ~UnaryFunctorNeighborhoodWithOffsetImageFilter() {}
+  ~UnaryFunctorNeighborhoodWithOffsetImageFilter() ITK_OVERRIDE {}
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** UnaryFunctorNeighborhoodWithOffsetImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -144,12 +144,12 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Pad the input requested region by radius
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
   std::vector<FunctorType> m_FunctorList;
 
 private:

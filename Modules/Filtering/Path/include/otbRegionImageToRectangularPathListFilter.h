@@ -17,8 +17,8 @@
 =========================================================================*/
 
 // Adapted from otbImageToPathListAlignFilter.h
-#ifndef __otbRegionImageToRectangularPathListFilter_h
-#define __otbRegionImageToRectangularPathListFilter_h
+#ifndef otbRegionImageToRectangularPathListFilter_h
+#define otbRegionImageToRectangularPathListFilter_h
 
 #include "itkImageSource.h"
 #include "itkConceptChecking.h"
@@ -99,16 +99,16 @@ public:
 
 protected:
   RegionImageToRectangularPathListFilter();
-  virtual ~RegionImageToRectangularPathListFilter();
+  ~RegionImageToRectangularPathListFilter() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation(){}  // do nothing
-  virtual void GenerateData();
+  void GenerateOutputInformation() ITK_OVERRIDE{}  // do nothing
+  void GenerateData() ITK_OVERRIDE;
 
   double m_MinimumFit;
   double m_MinimumSize;
   int    m_CrossTermFormula;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   //jgc
   typedef Image<unsigned char, itkGetStaticConstMacro(NDimensions)> MarkerImageType;

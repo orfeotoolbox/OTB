@@ -744,12 +744,8 @@ void vect2scal::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, in
       // Get the argument from the argument input vector
       const mup::matrix_type a = a_pArg[0]->GetArray();
 
-
-      int nbrows = a.GetRows();
-      int nbcols = a.GetCols();
-      
-      assert(nbrows == 1);
-      assert(nbcols == 1);
+      assert(a.GetRows() == 1);
+      assert(a.GetCols() == 1);
 
       mup::float_type res;
 

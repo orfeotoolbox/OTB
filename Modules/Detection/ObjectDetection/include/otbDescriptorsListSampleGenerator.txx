@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDescriptorsListSampleGenerator_txx
-#define __otbDescriptorsListSampleGenerator_txx
+#ifndef otbDescriptorsListSampleGenerator_txx
+#define otbDescriptorsListSampleGenerator_txx
 
 #include "otbDescriptorsListSampleGenerator.h"
 
@@ -203,26 +203,22 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
   labelListSample->SetMeasurementVectorSize(m_ThreadLabelListSample[0]->GetMeasurementVectorSize());
 
   // Copy the first thread elements into lists
-  if( this->GetNumberOfThreads() > 1 )
+  ListSampleType* threadListSample = m_ThreadListSample[0];
+  LabelListSampleType* threadLabelListSample = m_ThreadLabelListSample[0];
+  SamplesPositionType& threadSamplesPosition = m_ThreadSamplesPosition[0];
+  for (unsigned int i = 0; i < threadListSample->Size(); ++i)
     {
-      ListSampleType* threadListSample = m_ThreadListSample[0];
-      LabelListSampleType* threadLabelListSample = m_ThreadLabelListSample[0];
-      SamplesPositionType& threadSamplesPosition = m_ThreadSamplesPosition[0];
-
-      for (unsigned int i = 0; i < threadListSample->Size(); ++i)
-      {
-        listSample->PushBack( threadListSample->GetMeasurementVector(i) );
-        labelListSample->PushBack( threadLabelListSample->GetMeasurementVector(i) );
-        samplesPosition.push_back( threadSamplesPosition[i] );
-      }
+    listSample->PushBack( threadListSample->GetMeasurementVector(i) );
+    labelListSample->PushBack( threadLabelListSample->GetMeasurementVector(i) );
+    samplesPosition.push_back( threadSamplesPosition[i] );
     }
 
   // Add the other thread element checking if the point dosn't already exist
   for (itk::ThreadIdType threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId )
     {
-    ListSampleType* threadListSample = m_ThreadListSample[threadId];
-    LabelListSampleType* threadLabelListSample = m_ThreadLabelListSample[threadId];
-    SamplesPositionType& threadSamplesPosition = m_ThreadSamplesPosition[threadId];
+    threadListSample = m_ThreadListSample[threadId];
+    threadLabelListSample = m_ThreadLabelListSample[threadId];
+    threadSamplesPosition = m_ThreadSamplesPosition[threadId];
 
     for (unsigned int i = 0; i < threadListSample->Size(); ++i)
       {

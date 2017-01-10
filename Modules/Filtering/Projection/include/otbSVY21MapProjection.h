@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVY21MapProjection_h
-#define __otbSVY21MapProjection_h
+#ifndef otbSVY21MapProjection_h
+#define otbSVY21MapProjection_h
 
 #include "otbTransMercatorMapProjection.h"
 
@@ -59,7 +59,7 @@ protected:
     this->SetParameter("FalseEasting", "28001.642");
     this->SetParameter("ScaleFactor", "1.00");
   }
-  virtual ~SVY21MapProjection() {}
+  ~SVY21MapProjection() ITK_OVERRIDE {}
 
 private:
   SVY21MapProjection(const Self &); //purposely not implemented

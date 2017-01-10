@@ -53,13 +53,13 @@ public:
   itkTypeMacro(RefineSensorModel, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RefineSensorModel");
     SetDescription("Perform least-square fit of a sensor model to a set of tie points");
 
     SetDocName("Refine Sensor Model");
-    SetDocLongDescription("This application reads a geom file containing a sensor model and a text file containing a list of ground control point, and performs a least-square fit of the sensor model adjustable parameters to these tie points. It produces an updated geom file as output, as well as an optional ground control points based statistics file and a vector file containing residues. The output geom file can then be used to ortho-rectify the data more accurately. Plaease note that for a proper use of the application, elevation must be correctly set (including DEM and geoid file). The map parameters allows to choose a map projection in which the accuracy will be estimated in meters.");
+    SetDocLongDescription("This application reads a geom file containing a sensor model and a text file containing a list of ground control point, and performs a least-square fit of the sensor model adjustable parameters to these tie points. It produces an updated geom file as output, as well as an optional ground control points based statistics file and a vector file containing residues. The output geom file can then be used to ortho-rectify the data more accurately. Plaease note that for a proper use of the application, elevation must be correctly set (including DEM and geoid file). The map parameters allows one to choose a map projection in which the accuracy will be estimated in meters.");
 
     AddDocTag(Tags::Geometry);
 
@@ -100,12 +100,12 @@ private:
     SetDocExampleParameterValue("map.epsg.code","32631");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     OGRMultiLineString mls;
 
@@ -194,7 +194,7 @@ private:
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
   rsTransform->SetOutputProjectionRef(MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map"));
-  rsTransform->InstanciateTransform();
+  rsTransform->InstantiateTransform();
 
   std::ofstream ofs;
   ofs<<std::fixed;
@@ -202,7 +202,7 @@ private:
   if(IsParameterEnabled("outstat"))
     {
     ofs.open(GetParameterString("outstat").c_str());
-    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
+    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat predicted_elev x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 
   for(TiePointsType::const_iterator it = tiepoints.begin();
@@ -319,7 +319,7 @@ private:
 if(IsParameterEnabled("outvector"))
   {
   // Create the datasource (for matches export)
-  otb::ogr::Layer layer(NULL, false);
+  otb::ogr::Layer layer(ITK_NULLPTR, false);
   otb::ogr::DataSource::Pointer ogrDS;
 
   ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

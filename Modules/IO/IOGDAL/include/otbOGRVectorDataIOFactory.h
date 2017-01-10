@@ -15,10 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRVectorDataIOFactory_h
-#define __otbOGRVectorDataIOFactory_h
+#ifndef otbOGRVectorDataIOFactory_h
+#define otbOGRVectorDataIOFactory_h
 
 #include "itkObjectFactoryBase.h"
+#include "OTBIOGDALExport.h"
 
 namespace otb
 {
@@ -27,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class ITK_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
+class OTBIOGDAL_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
@@ -37,8 +38,8 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
+  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
+  const char* GetDescription(void) const ITK_OVERRIDE;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -55,7 +56,7 @@ public:
 
 protected:
   OGRVectorDataIOFactory();
-  virtual ~OGRVectorDataIOFactory();
+  ~OGRVectorDataIOFactory() ITK_OVERRIDE;
 
 private:
   OGRVectorDataIOFactory(const Self &); //purposely not implemented

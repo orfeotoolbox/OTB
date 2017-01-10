@@ -22,9 +22,11 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "ossimTimeUtilities.h"
 
 //useful constants
 #include <otbMath.h>
+#include <iomanip>
 
 namespace otb
 {
@@ -32,70 +34,75 @@ namespace otb
 Sentinel1ImageMetadataInterface
 ::Sentinel1ImageMetadataInterface()
 {
-
 }
 
 bool
 Sentinel1ImageMetadataInterface::CanRead() const
 {
-  std::string sensorID = GetSensorID();
+  const std::string sensorID = GetSensorID();
 
-  if (sensorID.find("SENTINEL-1") != std::string::npos)
-    {
-    return true;
-    }
-  else
-    return false;
+  return sensorID.find("SENTINEL-1") != std::string::npos;
 }
 
 void
 Sentinel1ImageMetadataInterface
 ::CreateCalibrationLookupData(const short type)
-  {
-    bool sigmaLut = false;
-    bool betaLut = false;
-    bool gammaLut = false;
-    bool dnLut = false;
+{
+  bool sigmaLut = false;
+  bool betaLut = false;
+  bool gammaLut = false;
+  bool dnLut = false;
 
-    switch (type)
+  switch (type)
+    {
+  case SarCalibrationLookupData::BETA:
       {
-      case SarCalibrationLookupData::BETA:
-      {
+      otbMsgDevMacro("betaNought");
       betaLut = true;
       }
-      break;
+    break;
 
-      case SarCalibrationLookupData::GAMMA:
+  case SarCalibrationLookupData::GAMMA:
       {
+      otbMsgDevMacro("gamma");
       gammaLut = true;
       }
-      break;
+    break;
 
-      case SarCalibrationLookupData::DN:
+  case SarCalibrationLookupData::DN:
       {
+      otbMsgDevMacro("dn");
       dnLut = true;
       }
-      break;
+    break;
 
-      case SarCalibrationLookupData::SIGMA:
-      default:
-        sigmaLut = true;
-        break;
-      }
+  case SarCalibrationLookupData::SIGMA:
+  default:
+      otbMsgDevMacro("sigmaNought");
+    sigmaLut = true;
+    break;
+    }
 
-  const ImageKeywordlistType imageKeywordlist =  this->GetImageKeywordlist();
+  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
 
-  const double firstLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.startTime"), "calibration.startTime(double)");
+  // const double firstLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.startTime"), "calibration.startTime(double)");
 
-  const double lastLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.stopTime"), "calibration.stopTime(double)");
+  // const double lastLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.stopTime"), "calibration.stopTime(double)");
+  using namespace ossimplugins::time;
+  const ModifiedJulianDate firstLineTime = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.startTime"));
+  const ModifiedJulianDate lastLineTime  = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.stopTime"));
+  otbMsgDevMacro(<<"calibration.startTime: "<<std::setprecision(16) << firstLineTime);
+  otbMsgDevMacro(<<"calibration.stopTime : "<<std::setprecision(16) << lastLineTime);
 
-  const std::string bandPrefix = "Band[0]."; //make && use GetBandPrefix(subSwath, polarisation)
+  const std::string supportDataPrefix = "support_data."; //make && use GetBandPrefix(subSwath, polarisation)
 
-  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(bandPrefix + "number_lines"), bandPrefix + "number_lines(int)");
+  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(supportDataPrefix + "number_lines"), supportDataPrefix + "number_lines(int)");
+  otbMsgDevMacro(<<"numOfLines   : " << numOfLines);
 
   const int count = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"), "calibration.count");
 
   std::vector<Sentinel1CalibrationStruct> calibrationVectorList(count);
+  double lastMJD = 0; 
 
   for(int i = 0; i < count; i++)
     {
@@ -103,40 +110,57 @@ Sentinel1ImageMetadataInterface
 
     std::stringstream prefix;
     prefix << "calibration.calibrationVector[" << i << "].";
+    const std::string sPrefix = prefix.str();
 
-    calibrationVector.line = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(prefix.str() + "line"), prefix.str() + "line");
+    calibrationVector.line = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(sPrefix + "line"), sPrefix + "line");
 
-    calibrationVector.timeMJD =  Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey(prefix.str() + "azimuthTime"), prefix.str() + "azimuthTime");
+    // TODO: don't manipulate doubles, but ModifiedJulianDate for a better type
+    // safety
+    const std::string sAzimuth = imageKeywordlist.GetMetadataByKey(sPrefix + "azimuthTime");
+    calibrationVector.timeMJD =  toModifiedJulianDate(sAzimuth).as_day_frac();
+    calibrationVector.deltaMJD = calibrationVector.timeMJD - lastMJD;
+    lastMJD = calibrationVector.timeMJD;
 
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "pixel"), calibrationVector.pixels, prefix.str() + "pixel");
+    otbMsgDevMacro(<<sPrefix<<"line   : " << calibrationVector.line <<" ;\t"<<sPrefix<<"timeMJD: "<<std::setprecision(16) << calibrationVector.timeMJD << " (" << sAzimuth << ")");
 
-    if (sigmaLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "sigmaNought"), calibrationVector.vect, prefix.str() + "sigmaNought");
+    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "pixel"), calibrationVector.pixels, sPrefix + "pixel");
+
+    // prepare deltaPixels vector
+    int prev_pixels = 0;
+    calibrationVector.deltaPixels.resize(calibrationVector.pixels.size());
+    for (std::size_t p=0, N=calibrationVector.pixels.size(); p!=N ; ++p)
+    {
+        calibrationVector.deltaPixels[p] = (calibrationVector.pixels[p] - prev_pixels);
+        prev_pixels = calibrationVector.pixels[p];
+    }
+
+    if (sigmaLut)
+      {
+      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "sigmaNought"), calibrationVector.vect, sPrefix + "sigmaNought");
       }
 
-    if (betaLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "betaNought"), calibrationVector.vect, prefix.str() + "betaNought");
-    }
+    if (betaLut)
+      {
+      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "betaNought"), calibrationVector.vect, sPrefix + "betaNought");
+      }
 
-    if (gammaLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "gamma"), calibrationVector.vect, prefix.str() + "gamma");
-    }
+    if (gammaLut)
+      {
+      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "gamma"), calibrationVector.vect, sPrefix + "gamma");
+      }
 
-    if (dnLut) {
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(prefix.str() + "dn"), calibrationVector.vect, prefix.str() + "dn");
-    }
+    if (dnLut)
+      {
+      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "dn"), calibrationVector.vect, sPrefix + "dn");
+      }
 
     calibrationVectorList[i] = calibrationVector;
-
     }
 
-  Sentinel1CalibrationLookupData::Pointer sarLut;
-  sarLut = Sentinel1CalibrationLookupData::New();
-  sarLut->InitParameters(type, firstLineTime, lastLineTime, numOfLines, count, calibrationVectorList);
+  Sentinel1CalibrationLookupData::Pointer sarLut = Sentinel1CalibrationLookupData::New();
+  sarLut->InitParameters(type, firstLineTime.as_day_frac(), lastLineTime.as_day_frac(), numOfLines, count, calibrationVectorList);
   this->SetCalibrationLookupData(sarLut);
-
-
-  }
+}
 
 void
 Sentinel1ImageMetadataInterface
@@ -159,7 +183,6 @@ Sentinel1ImageMetadataInterface
     const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
     Utils::ConvertStringToVector(date_time_str, dateFields, key, "T:-.");
     }
-
 }
 
 int
@@ -256,7 +279,6 @@ Sentinel1ImageMetadataInterface::GetProductionYear() const
     itkExceptionMacro( << "Invalid production year" );
     }
   return value;
-
 }
 
 int

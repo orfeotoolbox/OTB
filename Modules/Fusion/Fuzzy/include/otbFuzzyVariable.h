@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFuzzyVariable_h
-#define __otbFuzzyVariable_h
+#ifndef otbFuzzyVariable_h
+#define otbFuzzyVariable_h
 
 #include "itkDataObject.h"
 #include "itkFixedArray.h"
@@ -104,9 +104,9 @@ protected:
   /** Constructor */
   FuzzyVariable();
   /** Destructor */
-  virtual ~FuzzyVariable() {}
+  ~FuzzyVariable() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** Map containing the membership functions */

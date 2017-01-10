@@ -1693,7 +1693,10 @@ namespace ossimplugins
       ossimString metadataProfile;
       if (  (nodeValue != "S6_SENSOR") 
             && (nodeValue != "S6_ORTHO") 
-            && (nodeValue != "S6_MOSAIC") ) 
+            && (nodeValue != "S6_MOSAIC")
+            && (nodeValue != "S7_SENSOR")
+            && (nodeValue != "S7_ORTHO")
+            && (nodeValue != "S7_MOSAIC") )
       {
          if (traceDebug())
          {
@@ -1717,7 +1720,7 @@ namespace ossimplugins
 
       if ((nodeValue == "PRODUCT")) 
          theMetadataSubProfile = OSSIM_Spot6_METADATA_SUBPROFILE_PRODUCT;
-      else if ( (nodeValue == "RPC") && (metadataProfile == "S6_SENSOR") ) 
+      else if ( (nodeValue == "RPC") && ((metadataProfile == "S6_SENSOR") || (metadataProfile == "S7_SENSOR")) )
          theMetadataSubProfile = OSSIM_Spot6_METADATA_SUBPROFILE_RPC;
       else
       {
@@ -2156,7 +2159,9 @@ namespace ossimplugins
       }
 
       if (nodeValue == "6")        
-         theSensorID = "SPOT 6";    
+         theSensorID = "SPOT 6";
+      else if (nodeValue == "7")
+         theSensorID = "SPOT 7";
       else
       {
          setErrorStatus();

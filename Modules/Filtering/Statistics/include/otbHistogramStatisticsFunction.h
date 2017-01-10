@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbHistogramStatisticsFunction_h
-#define __otbHistogramStatisticsFunction_h
+#ifndef otbHistogramStatisticsFunction_h
+#define otbHistogramStatisticsFunction_h
 
 #include "itkNumericTraits.h"
 #include "itkHistogramAlgorithmBase.h"
@@ -80,7 +80,7 @@ public:
   }
 
   /** Calculates the thresholds and save them */
-  void Compute()
+  void Compute() ITK_OVERRIDE
   {
     this->GenerateData();
   }
@@ -88,8 +88,8 @@ public:
 protected:
 
   HistogramStatisticsFunction();
-  virtual ~HistogramStatisticsFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~HistogramStatisticsFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Calculates the thresholds and save them */
   void GenerateData();

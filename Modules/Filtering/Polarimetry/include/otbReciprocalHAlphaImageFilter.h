@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalHAlphaImageFilter_h
-#define __ReciprocalHAlphaImageFilter_h
+#ifndef otbReciprocalHAlphaImageFilter_h
+#define otbReciprocalHAlphaImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 #include "otbMath.h"
@@ -49,9 +49,6 @@ namespace Functor {
  * - \f$ if p[i] < 0, p[i]=0 \f$
  * - \f$ if p[i] > 1, p[i]=1 \f$
  * - \f$ if \alpha_{i} > 90, \alpha_{i}=90 \f$
- *
- * \ingroup SARPolarimetry
- *
  *
  * \ingroup OTBPolarimetry
  */
@@ -87,7 +84,7 @@ public:
     vnlMat[2][1] = std::conj(ComplexType(Coherency[4]));
     vnlMat[2][2] = ComplexType(T2,  0.);
 
-    // Only compute the left symetry to respect the previous Hermitian Analisys code
+    // Only compute the left symmetry to respect the previous Hermitian Analisys code
     vnl_complex_eigensystem syst(vnlMat, false, true);
     const VNLMatrixType eigenVectors( syst.L );
     const VNLVectorType eigenValues(syst.W);
@@ -194,10 +191,9 @@ private:
  *
  * For more details, please refer to the class ReciprocalHAlphaFunctor.
  *
- * \ingroup SARPOlarimetry
+ * \ingroup OTBPolarimetry
  * \sa ReciprocalHAlphaFunctor
  *
- * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalHAlphaImageFilter :
@@ -221,7 +217,7 @@ public:
 
 protected:
    ReciprocalHAlphaImageFilter() {}
-  virtual ~ReciprocalHAlphaImageFilter() {}
+  ~ReciprocalHAlphaImageFilter() ITK_OVERRIDE {}
 
 private:
   ReciprocalHAlphaImageFilter(const Self&); //purposely not implemented

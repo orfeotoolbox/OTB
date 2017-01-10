@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateScalarValueImageFilter_h
-#define __otbConcatenateScalarValueImageFilter_h
+#ifndef otbConcatenateScalarValueImageFilter_h
+#define otbConcatenateScalarValueImageFilter_h
 
 #include "itkMacro.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -55,7 +55,7 @@ public:
     m_ScalarValue = p;
   }
 
-  bool operator !=(const ConcatenateScalarValueFunctor& other) const
+  bool operator !=(const ConcatenateScalarValueFunctor& itkNotUsed(other)) const
   {
     return false;
   }
@@ -138,11 +138,11 @@ public:
 protected:
   ConcatenateScalarValueImageFilter();
 
-  virtual ~ConcatenateScalarValueImageFilter() {}
+  ~ConcatenateScalarValueImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ConcatenateScalarValueImageFilter(const Self &); //purposely not implemented

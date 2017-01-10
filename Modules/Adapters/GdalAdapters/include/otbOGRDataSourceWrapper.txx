@@ -21,8 +21,10 @@
  * \internal this file is meant to be included by otbOGRDataSourceWrapper.h
  */
 
-#ifndef __otbOGRDataSourceWrapper_txx
-#define __otbOGRDataSourceWrapper_txx
+#ifndef otbOGRDataSourceWrapper_txx
+#define otbOGRDataSourceWrapper_txx
+
+#include "otbOGRDataSourceWrapper.h"
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
@@ -127,4 +129,4 @@ Value otb::ogr::DataSource::layer_iter<Value>::dereference() const
 }
 
 
-#endif // __otbOGRDataSourceWrapper_txx
+#endif // otbOGRDataSourceWrapper_txx

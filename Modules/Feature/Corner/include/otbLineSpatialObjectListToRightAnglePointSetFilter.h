@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSpatialObjectListToRightAnglePointSetFilter_h
-#define __otbLineSpatialObjectListToRightAnglePointSetFilter_h
+#ifndef otbLineSpatialObjectListToRightAnglePointSetFilter_h
+#define otbLineSpatialObjectListToRightAnglePointSetFilter_h
 
 #include "itkPointSet.h"
 #include "otbLineSpatialObjectListToPointSetFilter.h"
@@ -95,7 +95,7 @@ public:
 protected:
 
   /**
-   * Without the GenrateOutputInformation below it does not work
+   * Without the GenerateOutputInformation below it does not work
    * Because the ProcessObject class do a static_cast to allow memory and copy
    * the output (here a pointset). It works fine with images but with pointsets
    * no size is specified ...
@@ -103,7 +103,7 @@ protected:
    *
    */
 
-  virtual void GenerateOutputInformation(){}
+  void GenerateOutputInformation() ITK_OVERRIDE{}
 
   /**
    * Constructor.
@@ -112,15 +112,15 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~LineSpatialObjectListToRightAnglePointSetFilter(){}
+  ~LineSpatialObjectListToRightAnglePointSetFilter() ITK_OVERRIDE{}
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
-  virtual void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
   /**
    * Angle computation
    */

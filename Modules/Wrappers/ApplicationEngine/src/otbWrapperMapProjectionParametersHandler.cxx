@@ -41,7 +41,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
 
   oss << ".zone";
   app->AddParameter(ParameterType_Int, oss.str(), "Zone number");
-  app->SetParameterDescription(oss.str(),"The zone number ranges from 1 to 60 and allows to define the transverse mercator projection (along with the hemisphere)");
+  app->SetParameterDescription(oss.str(),"The zone number ranges from 1 to 60 and allows defining the transverse mercator projection (along with the hemisphere)");
   app->SetMinimumParameterIntValue(oss.str(), 1);
   app->SetDefaultParameterInt(oss.str(), 31);
 
@@ -99,7 +99,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   oss<<key<<".epsg";
   app->AddChoice(oss.str(),"EPSG Code");
   app->SetParameterDescription(oss.str(),
-                               "This code is a generic way of identifying map projections, and allows to specify a large amount of them. See www.spatialreference.org to find which EPSG code is associated to your projection;");
+                               "This code is a generic way of identifying map projections, and allows specifying a large amount of them. See www.spatialreference.org to find which EPSG code is associated to your projection;");
 
   oss <<".code";
   app->AddParameter(ParameterType_Int, oss.str(), "EPSG Code");
@@ -200,7 +200,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     * Helper method : Compute the UTM parameters relative to an image Origin
     * Note: The key of the image must be set to be able to get the image.
     *       The key must be totally if the InputImageParameter belongs
-    *       to a ParamaterGroup, ie set io.in
+    *       to a ParameterGroup, ie set io.in
     */
 void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointer app,
                                                    const std::string & imageKey,

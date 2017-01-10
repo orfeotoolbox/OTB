@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToImageFilter_txx
-#define __otbVectorDataToImageFilter_txx
+#ifndef otbVectorDataToImageFilter_txx
+#define otbVectorDataToImageFilter_txx
 
 #include <sstream>
 #include "otbVectorDataToImageFilter.h"

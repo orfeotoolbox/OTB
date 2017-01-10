@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetDensityFunction_h
-#define __otbPointSetDensityFunction_h
+#ifndef otbPointSetDensityFunction_h
+#define otbPointSetDensityFunction_h
 
 #include "otbPointSetFunction.h"
 
@@ -61,13 +61,13 @@ public:
   itkGetMacro(Radius, unsigned int);
 
   /** Evaluate Method */
-  virtual OutputType Evaluate(const InputType& input) const;
+  OutputType Evaluate(const InputType& input) const ITK_OVERRIDE;
 
 protected:
   PointSetDensityFunction() : m_Radius(1) {};
-  virtual ~PointSetDensityFunction() {}
+  ~PointSetDensityFunction() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PointSetDensityFunction(const Self &);  //purposely not implemented

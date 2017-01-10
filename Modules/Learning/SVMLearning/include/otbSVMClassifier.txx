@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMClassifier_txx
-#define __otbSVMClassifier_txx
+#ifndef otbSVMClassifier_txx
+#define otbSVMClassifier_txx
 
 #include "otbSVMClassifier.h"
 #include "otbMacro.h"

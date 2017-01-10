@@ -1,0 +1,44 @@
+---------------------
+Ice in a nuttshell
+----------------------
+
+ICE is a fast OpenGl rendering API for remote sensing images. This small piece
+of code decomposes into an OTB/OpenGl only library with an API for simple
+rendering of remote sensing images and a GLFW3 example of how to use the API.
+
+---------------------
+Installation
+----------------------
+
+Dependencies:
+
+- OTB (>= 4.0)
+- OpenGl
+- GLFW (>= 3.0)
+
+-------------------------
+Platform specific issues
+-------------------------
+
+OSX (10.9) Mavericks Requires:
+XQuartz (http://xquartz.macosforge.org/landing/) because it includes freeGLUT. Therefore
+in cmake, the following variables need to point to the correct places:
+GLUT_INCLUDE_DIR=/usr/X11R6/include
+GLUT_glut_LIBRARY=/usr/X11R6/lib/libglut.dylib
+
+----------------------
+Command Line Arguments
+----------------------
+ 
+Usage: ./otbIce img1 ... imgN
+
+Press F1 for help
+
+----------------------
+Acknowledgement
+----------------------
+
+The authors would like to thank Gabriele Facciolo (CMLA) and the
+authors of pvflip (https://github.com/gfacciol/pvflip/) for the seed
+discussion about float32 OpenGl textures and OpenGl Shading Language
+which greatly contributed to the dawn of Ice.

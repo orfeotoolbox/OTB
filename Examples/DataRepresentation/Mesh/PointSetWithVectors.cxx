@@ -25,7 +25,7 @@
 //  This example illustrates how a point set can be parameterized to manage a
 //  particular pixel type. It is quite common to associate vector values with
 //  points for producing geometric representations or storing
-//  multi-band informations.  The following code shows
+//  multi-band information. The following code shows
 //  how vector values can be used as pixel type on the PointSet class.  The
 //  \doxygen{itk}{Vector} class is used here as the pixel type. This class is
 //  appropriate for representing the relative position between two points. It

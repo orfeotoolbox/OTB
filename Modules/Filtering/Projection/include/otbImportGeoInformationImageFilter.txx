@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImportGeoInformationImageFilter_txx
-#define __otbImportGeoInformationImageFilter_txx
+#ifndef otbImportGeoInformationImageFilter_txx
+#define otbImportGeoInformationImageFilter_txx
 
 #include "otbImportGeoInformationImageFilter.h"
 #include "itkMetaDataObject.h"
@@ -83,6 +83,8 @@ ImportGeoInformationImageFilter<TImage, TSourceImage>
   outputPtr->CopyInformation(sourcePtr);
 
   outputPtr->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
+
+  outputPtr->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
 }
 
 // template <class TImage, class TSourceImage>

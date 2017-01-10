@@ -64,7 +64,7 @@ itkTypeMacro(HaralickTextureExtraction, otb::Application);
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
 SetName("HaralickTextureExtraction");
 SetDescription("Computes textures on every pixel of the input image selected channel");
@@ -76,8 +76,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbScalarImageToTexturesFilter, otbScalarImageToAdvancedTexturesFilter and otbScalarImageToHigherOrderTexturesFilter classes");
 
-AddDocTag("Textures");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Textures");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");
@@ -90,7 +90,7 @@ SetMinimumParameterIntValue("channel", 1);
 AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
-SetParameterDescription("parameters","This group of parameters allows to define texture parameters.");
+SetParameterDescription("parameters","This group of parameters allows one to define texture parameters.");
 
 AddParameter(ParameterType_Int,"parameters.xrad","X Radius");
 SetParameterDescription("parameters.xrad", "X Radius");
@@ -154,12 +154,12 @@ SetDocExampleParameterValue("texture", "simple");
 SetDocExampleParameterValue("out", "HaralickTextures.tif");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

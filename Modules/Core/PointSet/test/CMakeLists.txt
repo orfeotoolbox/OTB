@@ -40,7 +40,7 @@ otb_add_test(NAME bfTuImageToPointSetFilterTest COMMAND otbPointSetTestDriver
 otb_add_test(NAME bfTvTransformPointSetFilter COMMAND otbPointSetTestDriver
   otbTransformPointSetFilterTest)
 
-otb_add_test(NAME feTuThresholdImageToPointSet1 COMMAND otbPointSetTestDriver
+otb_add_test(NAME feTvThresholdImageToPointSet1 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To255.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
   otbThresholdImageToPointSetTest
@@ -48,7 +48,7 @@ otb_add_test(NAME feTuThresholdImageToPointSet1 COMMAND otbPointSetTestDriver
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
   0 255 )
 
-otb_add_test(NAME feTuThresholdImageToPointSet2 COMMAND otbPointSetTestDriver
+otb_add_test(NAME feTvThresholdImageToPointSet2 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To0.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
   otbThresholdImageToPointSetTest
@@ -56,7 +56,7 @@ otb_add_test(NAME feTuThresholdImageToPointSet2 COMMAND otbPointSetTestDriver
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
   0 0 )
 
-otb_add_test(NAME feTuThresholdImageToPointSet3 COMMAND otbPointSetTestDriver
+otb_add_test(NAME feTvThresholdImageToPointSet3 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_255To255.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
   otbThresholdImageToPointSetTest
@@ -64,7 +64,7 @@ otb_add_test(NAME feTuThresholdImageToPointSet3 COMMAND otbPointSetTestDriver
   ${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
   255 255 )
 
-otb_add_test(NAME feTuThresholdImageToPointSet4 COMMAND otbPointSetTestDriver
+otb_add_test(NAME feTvThresholdImageToPointSet4 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_1To200.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
   otbThresholdImageToPointSetTest

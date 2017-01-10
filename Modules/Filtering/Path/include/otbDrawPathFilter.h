@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDrawPathFilter_h
-#define __otbDrawPathFilter_h
+#ifndef otbDrawPathFilter_h
+#define otbDrawPathFilter_h
 
 #include "itkImageAndPathToImageFilter.h"
 
@@ -87,10 +87,10 @@ public:
 
 protected:
   DrawPathFilter();
-  virtual ~DrawPathFilter() {}
+  ~DrawPathFilter() ITK_OVERRIDE {}
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateData();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   DrawPathFilter(const Self &); //purposely not implemented

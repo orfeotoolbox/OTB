@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapWithClassLabelToClassLabelImageFilter_h
-#define __otbLabelMapWithClassLabelToClassLabelImageFilter_h
+#ifndef otbLabelMapWithClassLabelToClassLabelImageFilter_h
+#define otbLabelMapWithClassLabelToClassLabelImageFilter_h
 
 #include "itkLabelMapFilter.h"
 
@@ -72,11 +72,11 @@ public:
 
 protected:
   LabelMapWithClassLabelToClassLabelImageFilter();
-  ~LabelMapWithClassLabelToClassLabelImageFilter() {};
+  ~LabelMapWithClassLabelToClassLabelImageFilter() ITK_OVERRIDE {};
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
 
 private:
   LabelMapWithClassLabelToClassLabelImageFilter(const Self&); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataProjectionFilter_txx
-#define __otbVectorDataProjectionFilter_txx
+#ifndef otbVectorDataProjectionFilter_txx
+#define otbVectorDataProjectionFilter_txx
 
 #include "otbVectorDataProjectionFilter.h"
 #include "itkProgressReporter.h"
@@ -262,15 +262,15 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 }
 
 /**
- * Instanciate the transformation according to informations
+ * Instantiate the transformation according to information
  */
 template <class TInputVectorData, class TOutputVectorData>
 void
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::InstanciateTransform(void)
+::InstantiateTransform(void)
 {
 
-//   otbMsgDevMacro(<< "Information to instanciate transform (VectorDataProjectionFilter): ");
+//   otbMsgDevMacro(<< "Information to instantiate transform (VectorDataProjectionFilter): ");
 //   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
 //   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
 //   otbMsgDevMacro(<< " * Input keyword list: "
@@ -303,7 +303,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   m_Transform->SetOutputSpacing(m_OutputSpacing);
   m_Transform->SetOutputOrigin(m_OutputOrigin);
 
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
   // retrieve the output projection ref
   // if it is not specified and end up being geographic,
   // only the m_Transform will know
@@ -325,7 +325,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 }
 
 /**
-   * GenerateData Performs the coordinate convertion for each element in the tree
+   * GenerateData Performs the coordinate conversion for each element in the tree
  */
 template <class TInputVectorData, class TOutputVectorData>
 void
@@ -336,8 +336,8 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   InputVectorDataPointer  inputPtr = this->GetInput();
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
-  //Instanciate the transform
-  this->InstanciateTransform();
+  //Instantiate the transform
+  this->InstantiateTransform();
 
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
   OutputDataTreePointerType tree = outputPtr->GetDataTree();

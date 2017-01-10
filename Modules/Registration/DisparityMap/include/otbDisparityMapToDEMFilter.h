@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapToDEMFilter_h
-#define __otbDisparityMapToDEMFilter_h
+#ifndef otbDisparityMapToDEMFilter_h
+#define otbDisparityMapToDEMFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbGenericRSTransform.h"
@@ -75,7 +75,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(DisparityMapToDEMFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TDisparityImage         DisparityMapType;
   typedef TInputImage             SensorImageType;
   typedef TOutputDEMImage         DEMImageType;
@@ -88,7 +88,7 @@ public:
   typedef itk::ImageRegionSplitter<2>   SplitterType;
 
   // 3D RS transform
-  // TODO: Allow to tune precision (i.e. double or float)
+  // TODO: Allow tuning precision (i.e. double or float)
   typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
   //typedef typename RSTransformType::Pointer         RSTransformPointerType;
 
@@ -146,29 +146,29 @@ protected:
   DisparityMapToDEMFilter();
 
   /** Destructor */
-  virtual ~DisparityMapToDEMFilter();
+  ~DisparityMapToDEMFilter() ITK_OVERRIDE;
 
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
-  virtual void GenerateInputRequestedRegion();
+  /** Generate input requested region */
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Before threaded generate data */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** After threaded generate data : sum up temporary DEMs */
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-  virtual void VerifyInputInformation() {}
+  void VerifyInputInformation() ITK_OVERRIDE {}
 
 
 private:

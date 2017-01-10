@@ -15,19 +15,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileImageFilter_h
-#define __otbTileImageFilter_h
+#ifndef otbTileImageFilter_h
+#define otbTileImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
 namespace otb
 {
 /** \class TileImageFilter
- *  \brief This filter allows to make a spatial mosaic from a set of images
+ *  \brief This filter allows making a spatial mosaic from a set of images
  *
  *  This filter produces a spatial mosaic from a set of images. It
  *  supports both otb::Image and otb::VectorImage. The layout
- *  parameter allows to set up of the images will be patched together:
+ *  parameter allows setting up of the images will be patched together:
  *  it is a 2D array containing the number of images in the horizontal
  *  direction and vertical direction respectively.
  *
@@ -77,26 +77,26 @@ protected:
   TileImageFilter();
 
   /** Destructor */
-  virtual ~TileImageFilter();
+  ~TileImageFilter() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Generate input requested region method */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Generate input requested region method */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Override VerifyInputInformation() since this filter's inputs do
      * not need to occupy the same physical space.
      *
      * \sa ProcessObject::VerifyInputInformation
      */
-  virtual void VerifyInputInformation() {}
+  void VerifyInputInformation() ITK_OVERRIDE {}
 
 
 private:

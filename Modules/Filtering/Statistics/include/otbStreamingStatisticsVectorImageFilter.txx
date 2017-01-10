@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsVectorImageFilter_txx
-#define __otbStreamingStatisticsVectorImageFilter_txx
+#ifndef otbStreamingStatisticsVectorImageFilter_txx
+#define otbStreamingStatisticsVectorImageFilter_txx
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -35,7 +35,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
    m_EnableSecondOrderStats(true),
    m_UseUnbiasedEstimator(true),
    m_IgnoreInfiniteValues(true),
-   m_IgnoreUserDefinedValue(false)
+   m_IgnoreUserDefinedValue(false),
+   m_UserIgnoredValue(itk::NumericTraits<InternalPixelType>::Zero)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -506,7 +507,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     const PixelType& vectorValue = it.Get();
 
     float finiteProbe = 0.;
-    bool userProbe = true;
+    bool userProbe = m_IgnoreUserDefinedValue;
     for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
       {
       finiteProbe += (float)(vectorValue[j]);
@@ -519,7 +520,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       }
     else
       {
-      if (m_IgnoreUserDefinedValue && (userProbe))
+      if (userProbe)
         {
         m_IgnoredUserPixelCount[threadId] ++;
         }

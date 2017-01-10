@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFSamplerRandom_h
-#define __otbMRFSamplerRandom_h
+#ifndef otbMRFSamplerRandom_h
+#define otbMRFSamplerRandom_h
 
 #include "otbMRFSampler.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
@@ -63,7 +63,7 @@ public:
 
   itkTypeMacro(MRFSamplerRandom, MRFSampler);
 
-  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul)
+  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) ITK_OVERRIDE
   {
     this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
     this->m_EnergyBefore += this->m_Lambda
@@ -94,7 +94,7 @@ protected:
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
-  virtual ~MRFSamplerRandom() {}
+  ~MRFSamplerRandom() ITK_OVERRIDE {}
 
 private:
   RandomGeneratorType::Pointer m_Generator;

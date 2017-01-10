@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToSpecificDescriptionFilterBase_h
-#define __otbVectorDataToSpecificDescriptionFilterBase_h
+#ifndef otbVectorDataToSpecificDescriptionFilterBase_h
+#define otbVectorDataToSpecificDescriptionFilterBase_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 
@@ -73,9 +73,9 @@ protected:
   /** Constructor */
   VectorDataToSpecificDescriptionFilterBase();
   /** Destructor */
-  virtual ~VectorDataToSpecificDescriptionFilterBase() {}
+  ~VectorDataToSpecificDescriptionFilterBase() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VectorDataToSpecificDescriptionFilterBase(const Self &); //purposely not implemented

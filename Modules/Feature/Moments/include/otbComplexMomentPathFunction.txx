@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbComplexMomentPathFunction_txx
-#define __otbComplexMomentPathFunction_txx
+#ifndef otbComplexMomentPathFunction_txx
+#define otbComplexMomentPathFunction_txx
 
 #include "otbComplexMomentPathFunction.h"
 #include "itkImageRegionIterator.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBinaryFunctorNeighborhoodVectorImageFilter_h
-#define __otbBinaryFunctorNeighborhoodVectorImageFilter_h
+#ifndef otbBinaryFunctorNeighborhoodVectorImageFilter_h
+#define otbBinaryFunctorNeighborhoodVectorImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class BinaryFunctorNeighborhoodVectorImageFilter
- * \brief Implements neighborhood-wise generic operation of two images beeing vector images.
+ * \brief Implements neighborhood-wise generic operation of two images being vector images.
  *
  * This class is parameterized over the types of the two input images
  * and the type of the output image.  It is also parameterized by the
@@ -116,7 +116,7 @@ public:
 
 protected:
   BinaryFunctorNeighborhoodVectorImageFilter();
-  virtual ~BinaryFunctorNeighborhoodVectorImageFilter() {}
+  ~BinaryFunctorNeighborhoodVectorImageFilter() ITK_OVERRIDE {}
 
   /** BinaryFunctorNeighborhoodVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -128,14 +128,14 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Since the number of components per pixel depends on the radius range, one must reimplement
    * this method to set the proper number of component on the filter output.
    */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   RadiusSizeType m_Radius;
 

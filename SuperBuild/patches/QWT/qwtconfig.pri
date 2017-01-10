@@ -8,11 +8,11 @@ VER_PAT      = 3
 VERSION      = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
 
 unix {
-    INSTALLBASE    = @CMAKE_INSTALL_PREFIX@
+    INSTALLBASE    = @SB_INSTALL_PREFIX@
 }
 
 win32 {
-    INSTALLBASE    = @CMAKE_INSTALL_PREFIX@
+    INSTALLBASE    = @SB_INSTALL_PREFIX@
 }
 
 target.path    = $$INSTALLBASE/lib

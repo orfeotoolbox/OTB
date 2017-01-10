@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDecisionTreeMachineLearningModel_h
-#define __otbDecisionTreeMachineLearningModel_h
+#ifndef otbDecisionTreeMachineLearningModel_h
+#define otbDecisionTreeMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 
@@ -81,7 +81,7 @@ public:
   itkSetMacro(RegressionAccuracy, double);
 
   /** If true then surrogate splits will be built.
-   * These splits allow to work with missing data and compute variable importance correctly.
+   * These splits allow working with missing data and compute variable importance correctly.
    * Default is true
    * \see http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
    */
@@ -148,23 +148,21 @@ public:
   }
 
   /** Train the machine learning model */
-  virtual void Train();
-  /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+  void Train() ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="");
+  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="");
+  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &);
+  bool CanReadFile(const std::string &) ITK_OVERRIDE;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &);
+  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
 protected:
@@ -172,10 +170,13 @@ protected:
   DecisionTreeMachineLearningModel();
 
   /** Destructor */
-  virtual ~DecisionTreeMachineLearningModel();
+  ~DecisionTreeMachineLearningModel() ITK_OVERRIDE;
+
+  /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   DecisionTreeMachineLearningModel(const Self &); //purposely not implemented

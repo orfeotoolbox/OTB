@@ -37,14 +37,14 @@ otb_add_test(NAME maTeMarkovClassification3ExampleTest COMMAND ${OTB_TEST_DRIVER
     1.0 20 1.0 1
 )
 
-otb_add_test(NAME maTeMarkovRestaurationExampleTest COMMAND ${OTB_TEST_DRIVER}
+otb_add_test(NAME maTeMarkovRestorationExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON_8}
-    ${BASELINE}/MarkovRestauration.png
-    ${TEMP}/MarkovRestauration.png
-  Execute $<TARGET_FILE:MarkovRestaurationExample>
+    ${BASELINE}/MarkovRestoration.png
+    ${TEMP}/MarkovRestoration.png
+  Execute $<TARGET_FILE:MarkovRestorationExample>
     ${INPUTDATA}/QB_Suburb.png
     ${INPUTDATA}/QB_Suburb.png
-    ${TEMP}/MarkovRestauration.png
+    ${TEMP}/MarkovRestoration.png
     10.0
     30.0
     1.

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKeyPointSetsMatchingFilter_h
-#define __otbKeyPointSetsMatchingFilter_h
+#ifndef otbKeyPointSetsMatchingFilter_h
+#define otbKeyPointSetsMatchingFilter_h
 
 #include "otbObjectListSource.h"
 #include "otbLandmark.h"
@@ -32,7 +32,7 @@ namespace otb
  *   template parameters. It has to implement the Evaluate() method (see EuclideanDistanceMetric for more details).
  *
  *   By default, the algorithm tries to match points from pointset 1 to points from pointset 2. If back matching is activated,
- *   it will aslo try to match points from pointset 2 to points from pointset 2, and discard matches that do not appear both in
+ *   it will also try to match points from pointset 2 to points from pointset 2, and discard matches that do not appear both in
  *   forward and backward matching.
  *
  *   Matches are stored in a landmark object containing both matched points and point data. The landmark data will hold the distance value
@@ -99,12 +99,12 @@ protected:
   /// Constructor
   KeyPointSetsMatchingFilter();
   /// Destructor
-  virtual ~KeyPointSetsMatchingFilter() {}
+  ~KeyPointSetsMatchingFilter() ITK_OVERRIDE {}
   /// PrintSelf method
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /// Generate Data
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /**
    * Find the nearest neighbor of data1 in pointset.

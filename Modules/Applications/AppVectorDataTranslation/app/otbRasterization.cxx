@@ -57,13 +57,13 @@ public:
   typedef otb::OGRDataSourceToLabelImageFilter<FloatImageType> OGRDataSourceToMapFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
     {
     SetName("Rasterization");
     SetDescription("Rasterize a vector dataset.");
 
     SetDocName("Rasterization");
-    SetDocLongDescription("This application allows to reproject and rasterize a vector dataset. The grid of the rasterized output can be set by using a reference image, or by setting all parmeters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other parameters are computed automatically). The rasterized output can also be in a different projection reference system than the input dataset.\n There are two rasterize mode available in the application. The first is the binary mode: it allows to render all pixels belonging to a geometry of the input dataset in the foreground color, while rendering the other in background color. The second one allows to render pixels belonging to a geometry woth respect to an attribute of this geometry. The field of the attribute to render can be set by the user. In the second mode, the background value is still used for unassociated pixels.");
+    SetDocLongDescription("This application allows reprojecting and rasterize a vector dataset. The grid of the rasterized output can be set by using a reference image, or by setting all parmeters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other parameters are computed automatically). The rasterized output can also be in a different projection reference system than the input dataset.\n There are two rasterize mode available in the application. The first is the binary mode: it allows rendering all pixels belonging to a geometry of the input dataset in the foreground color, while rendering the other in background color. The second one allows rendering pixels belonging to a geometry woth respect to an attribute of this geometry. The field of the attribute to render can be set by the user. In the second mode, the background value is still used for unassociated pixels.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("For now, support of input dataset with multiple layers having different projection reference system is limited.");
@@ -73,7 +73,7 @@ private:
     AddParameter(ParameterType_InputVectorData,  "in",   "Input vector dataset");
     SetParameterDescription( "in", "The input vector dataset to be rasterized" );
 
-    AddParameter(ParameterType_OutputImage,  "out",   "Ouptut image");
+    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription( "out", "An output image containing the rasterized vector dataset" );
 
     AddParameter(ParameterType_InputImage,  "im",   "Input reference image");
@@ -139,13 +139,13 @@ private:
     SetDocExampleParameterValue("spy","1.");
     }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
     {
     // Nothing to do
     }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
     {
     otb::ogr::DataSource::Pointer ogrDS;
     UInt8ImageType::Pointer referenceImage;
@@ -263,7 +263,7 @@ private:
           RSTransformType::Pointer rsTransform = RSTransformType::New();
           rsTransform->SetInputProjectionRef(inputProjectionRef);
           rsTransform->SetOutputProjectionRef(outputProjectionRef);
-          rsTransform->InstanciateTransform();
+          rsTransform->InstantiateTransform();
 
           corner = rsTransform->TransformPoint(corner);
           }
@@ -293,7 +293,7 @@ private:
           RSTransformType::Pointer rsTransform = RSTransformType::New();
           rsTransform->SetInputProjectionRef(inputProjectionRef);
           rsTransform->SetOutputProjectionRef(outputProjectionRef);
-          rsTransform->InstanciateTransform();
+          rsTransform->InstantiateTransform();
 
           lrout = rsTransform->TransformPoint(lrout);
           }

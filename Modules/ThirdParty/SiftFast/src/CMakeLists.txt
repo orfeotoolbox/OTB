@@ -18,7 +18,7 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
     if(IS_SIFTFAST_COMPILE)
         message(STATUS "Try to compile libsiftfast.cpp -- yes.")
     else()
-        message(STATUS "Try to compile libsiftfast.cpp -- no.")
+        message(STATUS "Try to compile libsiftfast.cpp -- no. OUTPUT_VARIABLE has ${OUTPUT}")
         try_compile(IS_SIFTFAST_COMPILE2
               ${CMAKE_CURRENT_BINARY_DIR}
               ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
@@ -122,23 +122,28 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
 
   add_definitions(${SSE_FLAGS})
 elseif(MSVC)
-  check_cxx_source_runs("
-    #include <emmintrin.h>
-
-    int main()
-    {
-        __m128d a, b;
-        double vals[2] = {0};
-        a = _mm_loadu_pd(vals);
-        b = _mm_add_pd(a,a);
-        _mm_storeu_pd(vals,b);
-        return 0;
-     }"
-     HAS_SSE2_EXTENSIONS)
-  if( HAS_SSE2_EXTENSIONS )
-    message(STATUS "Using SSE2 extensions")
-    add_definitions( "/arch:SSE2 /fp:fast -D__SSE__ -D__SSE2__" )
-  endif()
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+      message(STATUS "Not using SSE2 extensions on x64")
+    else()
+      check_cxx_source_runs("
+       #include <emmintrin.h>
+       
+        int main()
+        {
+          __m128d a, b;
+          double vals[2] = {0};
+          a = _mm_loadu_pd(vals);
+          b = _mm_add_pd(a,a);
+          _mm_storeu_pd(vals,b);
+          return 0;
+        }"
+      HAS_SSE2_EXTENSIONS)
+     
+      if( HAS_SSE2_EXTENSIONS )
+        message(STATUS "Using SSE2 extensions")
+        add_definitions( "/arch:SSE2 /fp:fast -D__SSE__ -D__SSE2__" )
+      endif()
+    endif()
 endif()
 
 #set(Boost_ADDITIONAL_VERSIONS "1.40" "1.39" "1.38" "1.37.0" "1.37" "1.35.0" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33")

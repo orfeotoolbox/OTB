@@ -41,11 +41,11 @@ otb_add_test(NAME leTvSOM COMMAND otbSOMTestDriver
 otb_add_test(NAME leTvSOMImageClassificationFilter COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/leSOMPoupeesClassified.hdr
-  ${TEMP}/leSOMImageClassificationFilterOuptut.hdr
+  ${TEMP}/leSOMImageClassificationFilterOutput.hdr
   otbSOMImageClassificationFilter
   ${INPUTDATA}/poupees_sub.png
   ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/leSOMImageClassificationFilterOuptut.hdr
+  ${TEMP}/leSOMImageClassificationFilterOutput.hdr
   )
 
 otb_add_test(NAME leTvSOMActivationBuilder COMMAND otbSOMTestDriver
@@ -112,11 +112,11 @@ otb_add_test(NAME leTvSOMClassifier COMMAND otbSOMTestDriver
 
 otb_add_test(NAME leTvSOMbasedImageFilter COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/leSOMbasedImageFilterOuptut.hdr
-  ${TEMP}/leSOMbasedImageFilterOuptut.hdr
+  ${BASELINE}/leSOMbasedImageFilterOutput.hdr
+  ${TEMP}/leSOMbasedImageFilterOutput.hdr
   otbSOMbasedImageFilterTest
   ${INPUTDATA}/poupees_sub.png
   ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/leSOMbasedImageFilterOuptut.hdr
+  ${TEMP}/leSOMbasedImageFilterOutput.hdr
   )
 

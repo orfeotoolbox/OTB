@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeInformationImageFilter_h
-#define __otbChangeInformationImageFilter_h
+#ifndef otbChangeInformationImageFilter_h
+#define otbChangeInformationImageFilter_h
 
 #include "itkChangeInformationImageFilter.h"
 #include "otbMetaDataKey.h"
@@ -28,8 +28,8 @@ namespace otb
  * \class ChangeInformationImageFilter
  * \brief Filter to modify image metadata
  *
- * The base class is itk::ChangeInformationImageFilter that allows to
- * modifiy origin, spacing, direction and buffered region. This deriving
+ * The base class is itk::ChangeInformationImageFilter that allows
+ * modifying origin, spacing, direction and buffered region. This deriving
  * filter adds the support of MetaDataDictionary.
  *
  * \ingroup OTBImageManipulation
@@ -66,10 +66,10 @@ public:
 
 protected:
   ChangeInformationImageFilter() {}
-  virtual ~ChangeInformationImageFilter() {}
+  ~ChangeInformationImageFilter() ITK_OVERRIDE {}
 
   /** Apply changes to the output image metadata. */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ChangeInformationImageFilter(const Self &); //purposely not implemented

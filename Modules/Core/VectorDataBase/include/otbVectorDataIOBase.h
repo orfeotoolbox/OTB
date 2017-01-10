@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIOBase_h
-#define __otbVectorDataIOBase_h
+#ifndef otbVectorDataIOBase_h
+#define otbVectorDataIOBase_h
 
 #include <string>
 
@@ -24,6 +24,8 @@
 #include "itkIndent.h"
 #include "itkPoint.h"
 #include "itkDataObject.h"
+
+#include "OTBVectorDataBaseExport.h"
 
 namespace otb
 {
@@ -52,7 +54,7 @@ namespace otb
  *
  * \ingroup OTBVectorDataBase
  */
-class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
+class OTBVectorDataBase_EXPORT VectorDataIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */
@@ -117,7 +119,7 @@ public:
     return false;
   }
 
-  /*   /\** Read the spacing and dimentions of the VectorData. */
+  /*   /\** Read the spacing and dimensions of the VectorData. */
   /*    * Assumes SetFileName has been called with a valid file name. *\/ */
   /*   virtual void ReadVectorDataInformation() = 0; */
 
@@ -144,13 +146,13 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write(const itk::DataObject* data, char ** papszOptions = NULL) = 0;
+  virtual void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) = 0;
 
 protected:
   VectorDataIOBase();
-  virtual ~VectorDataIOBase();
+  ~VectorDataIOBase() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Big or Little Endian, and the type of the file. (May be ignored.) */
   ByteOrder m_ByteOrder;
@@ -172,4 +174,4 @@ private:
 
 } // end namespace otb
 
-#endif // __otbVectorDataIOBase_h
+#endif // otbVectorDataIOBase_h

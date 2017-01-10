@@ -45,7 +45,7 @@ public:
   itkTypeMacro(ReadImageInfo, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ReadImageInfo");
     SetDescription("Get information about the image");
@@ -57,8 +57,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
+    AddDocTag("Utilities");
     AddDocTag(Tags::Meta);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
@@ -70,10 +70,10 @@ private:
     MandatoryOff("keywordlist");
 
     AddParameter(ParameterType_OutputFilename, "outkwl", "Write the OSSIM keywordlist to a geom file");
-    SetParameterDescription("outkwl", "This option allows to extract the OSSIM keywordlist of the image into a geom file.");
+    SetParameterDescription("outkwl", "This option allows extracting the OSSIM keywordlist of the image into a geom file.");
     MandatoryOff("outkwl");
 
-    //Create output parameters to store image informations
+    //Create output parameters to store image information
     AddParameter(ParameterType_Int,"indexx","Start index X");
     SetParameterDescription("indexx","X start index");
     SetParameterRole("indexx", Role_Output);
@@ -127,8 +127,8 @@ private:
     SetParameterRole("time", Role_Output);
     EnableParameter("time");
 
-    AddParameter(ParameterType_Float,"ullat","Upper left lattitude");
-    SetParameterDescription("ullat", "Lattitude of the upper left corner.");
+    AddParameter(ParameterType_Float,"ullat","Upper left latitude");
+    SetParameterDescription("ullat", "Latitude of the upper left corner.");
     SetParameterRole("ullat", Role_Output);
     SetDefaultParameterFloat("ullat", 0);
 
@@ -137,8 +137,8 @@ private:
     SetParameterRole("ullon", Role_Output);
     SetDefaultParameterFloat("ullon", 0);
 
-    AddParameter(ParameterType_Float,"urlat","Upper right lattitude");
-    SetParameterDescription("urlat", "Lattitude of the upper right corner.");
+    AddParameter(ParameterType_Float,"urlat","Upper right latitude");
+    SetParameterDescription("urlat", "Latitude of the upper right corner.");
     SetParameterRole("urlat", Role_Output);
     SetDefaultParameterFloat("urlat", 0);
 
@@ -147,8 +147,8 @@ private:
     SetParameterRole("urlon", Role_Output);
     SetDefaultParameterFloat("urlon", 0);
 
-    AddParameter(ParameterType_Float,"lrlat","Lower right lattitude");
-    SetParameterDescription("lrlat", "Lattitude of the lower right corner.");
+    AddParameter(ParameterType_Float,"lrlat","Lower right latitude");
+    SetParameterDescription("lrlat", "Latitude of the lower right corner.");
     SetParameterRole("lrlat", Role_Output);
     SetDefaultParameterFloat("lrlat", 0);
 
@@ -157,8 +157,8 @@ private:
     SetParameterRole("lrlon", Role_Output);
     SetDefaultParameterFloat("lrlon", 0);
 
-    AddParameter(ParameterType_Float,"lllat","Lower left lattitude");
-    SetParameterDescription("lllat", "Lattitude of the lower left corner.");
+    AddParameter(ParameterType_Float,"lllat","Lower left latitude");
+    SetParameterDescription("lllat", "Latitude of the lower left corner.");
     SetParameterRole("lllat", Role_Output);
     SetDefaultParameterFloat("lllat", 0);
 
@@ -179,7 +179,7 @@ private:
     EnableParameter("country");
 
     AddParameter(ParameterType_Group, "rgb", "Default RGB Display");
-    SetParameterDescription("rgb","This group of parameters allows to access to the default rgb composition.");
+    SetParameterDescription("rgb","This group of parameters provide information about the default rgb composition.");
 
     AddParameter(ParameterType_Int, "rgb.r", "Red Band");
     SetParameterDescription("rgb.r","Red band Number");
@@ -207,7 +207,7 @@ private:
     EnableParameter("keyword");
 
     AddParameter(ParameterType_Group, "gcp", "Ground Control Points information");
-    SetParameterDescription("gcp","This group of parameters allows to access to the GCPs information.");
+    SetParameterDescription("gcp","This group of parameters provide information about all GCPs.");
     SetParameterRole("gcp", Role_Output);
 
     AddParameter(ParameterType_Int, "gcp.count", "GCPs Number");
@@ -245,19 +245,19 @@ private:
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     std::ostringstream ossOutput;
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
     ossOutput << std::endl << "Image general information:" << std::endl;
 
-    // Read informations
+    // Read information
     typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
     ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
 
@@ -275,7 +275,7 @@ private:
 
       if(ret)
         {
-    
+
         for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
           {
           ossOutput<<"\n\t\tBand "<<b+1<<": ";
@@ -283,7 +283,7 @@ private:
           if(noDataValueAvailable[b])
             ossOutput<<noDataValues[b];
           else
-            ossOutput<<"No";  
+            ossOutput<<"No";
           }
         }
       else
@@ -491,7 +491,7 @@ private:
       ossOutput << "\t" << GetParameterString("keyword") << std::endl;
       }
 
-    //Display image informations in the dedicated logger
+    //Display image information in the dedicated logger
     otbAppLogINFO( << ossOutput.str() );
 
     if(IsParameterEnabled("outkwl"))

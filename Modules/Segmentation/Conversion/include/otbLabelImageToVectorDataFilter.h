@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageToVectorDataFilter_h
-#define __otbLabelImageToVectorDataFilter_h
+#ifndef otbLabelImageToVectorDataFilter_h
+#define otbLabelImageToVectorDataFilter_h
 
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
@@ -101,12 +101,12 @@ public:
 
 protected:
   LabelImageToVectorDataFilter();
-  virtual ~LabelImageToVectorDataFilter() {}
+  ~LabelImageToVectorDataFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Generate Data method*/
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   LabelImageToVectorDataFilter(const Self &);  //purposely not implemented

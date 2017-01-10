@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWatershedSegmentationFilter_h
-#define __otbWatershedSegmentationFilter_h
+#ifndef otbWatershedSegmentationFilter_h
+#define otbWatershedSegmentationFilter_h
 
 #include "otbMacro.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -29,7 +29,7 @@ namespace otb {
 *   \brief Watershed composite filter allowing to set output type
 *
 *   This filter is a composite filter that encapsulates the
-*   itk::WatershedImageFilter and allows to set the type of the output
+*   itk::WatershedImageFilter and allows setting the type of the output
 *   image (which is not the case in the itk::WatershedImageFilter).
 *
 *   The composite filter internally casts the output from the
@@ -81,9 +81,9 @@ public:
 protected:
   WatershedSegmentationFilter();
 
-  virtual ~WatershedSegmentationFilter();
+  ~WatershedSegmentationFilter() ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   typename CastImageFilterType::Pointer m_CastFilter;

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRasterizeVectorDataFilter_h
-#define __otbRasterizeVectorDataFilter_h
+#ifndef otbRasterizeVectorDataFilter_h
+#define otbRasterizeVectorDataFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
@@ -46,7 +46,7 @@ namespace otb {
  *  The user can set an OutputPixelType as a burn vector via
  *  AddBurnValue(OutputImagePixelType burnValuesPix). To have a
  *  different color for each VectorData, use this method with
- *  differents burnValuesPix as many times as VectorDatas set.
+ *  different burnValuesPix as many times as VectorDatas set.
  *  Again, the color will be duplicated if only one burnValuesPix
  *  is set.
  *
@@ -133,20 +133,20 @@ public:
   }
 
 protected:
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   RasterizeVectorDataFilter();
-  virtual ~RasterizeVectorDataFilter()
+  ~RasterizeVectorDataFilter() ITK_OVERRIDE
   {
-    if (m_OGRDataSourcePointer != NULL)
+    if (m_OGRDataSourcePointer != ITK_NULLPTR)
       {
       ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }
   }
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   RasterizeVectorDataFilter(const Self&); //purposely not implemented

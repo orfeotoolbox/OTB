@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAngularProjectionImageFilter_txx
-#define __otbAngularProjectionImageFilter_txx
+#ifndef otbAngularProjectionImageFilter_txx
+#define otbAngularProjectionImageFilter_txx
 #include "otbAngularProjectionImageFilter.h"
 
 #include <vnl/vnl_math.h>
@@ -50,7 +50,7 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
 {
   if ( i >= this->GetNumberOfInputs() )
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   return static_cast<const InputImageType * >

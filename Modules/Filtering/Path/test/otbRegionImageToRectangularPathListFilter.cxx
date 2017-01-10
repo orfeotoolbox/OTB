@@ -62,7 +62,7 @@ int otbRegionImageToRectangularPathListFilter(int itkNotUsed(argc), char * argv[
   ListType::Iterator listIt = pathList->Begin();
 
   FILE *file = fopen(outputFilename, "w");
-  if (file == NULL)
+  if (file == ITK_NULLPTR)
     {
     fprintf(stderr, "Error, can't open file");
     exit(-1);

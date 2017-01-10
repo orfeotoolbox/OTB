@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBinaryImageToDensityImageFilter_txx
-#define __otbBinaryImageToDensityImageFilter_txx
+#ifndef otbBinaryImageToDensityImageFilter_txx
+#define otbBinaryImageToDensityImageFilter_txx
 
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "itkImageRegionIterator.h"

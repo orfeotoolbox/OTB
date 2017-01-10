@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBandsStatisticsAttributesLabelMapFilter_h
-#define __otbBandsStatisticsAttributesLabelMapFilter_h
+#ifndef otbBandsStatisticsAttributesLabelMapFilter_h
+#define otbBandsStatisticsAttributesLabelMapFilter_h
 
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
@@ -32,7 +32,7 @@ namespace Functor
 * StatisticsAttributesLabelObjectFunctor one each feature image
 * provided through AddFeature()
 *
-* As such, it allows to compute in one pass statistics related to
+* As such, it allows computing in one pass statistics related to
 * multiple features. It is used in the
 * BandsStatisticsAttributesLabelMapFilter.
 *
@@ -123,7 +123,7 @@ private:
  * The feature name is constructed as:
  * 'STATS' + '::' + 'Band' + band_index + '::' + statistic_name
  *
- * The ReducedAttributesSet flag allows to tell the internal
+ * The ReducedAttributesSet flag allows telling the internal
  * statistics filter to compute only the main attributes (mean, variance, skewness and kurtosis).
  *
  * \sa MultiStatsAttributesLabelObjectFunctor AttributesMapLabelObject
@@ -188,19 +188,19 @@ protected:
   /** Constructor */
   BandsStatisticsAttributesLabelMapFilter();
   /** Destructor */
-  ~BandsStatisticsAttributesLabelMapFilter() {}
+  ~BandsStatisticsAttributesLabelMapFilter() ITK_OVERRIDE {}
 
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *){};
+  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE{};
 
   /** Before threaded data generation */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   BandsStatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented

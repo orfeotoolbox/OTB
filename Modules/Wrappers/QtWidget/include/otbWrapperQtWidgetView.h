@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetView_h
-#define __otbWrapperQtWidgetView_h
+#ifndef otbWrapperQtWidgetView_h
+#define otbWrapperQtWidgetView_h
 
 #include <QtGui>
 #include <QObject>
@@ -34,12 +34,12 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetView : public QWidget
+class OTBQtWidget_EXPORT QtWidgetView : public QWidget
 {
   Q_OBJECT
 public:
   QtWidgetView(Application* app);
-  virtual ~QtWidgetView();
+  ~QtWidgetView() ITK_OVERRIDE;
 
   void CreateGui();
 
@@ -53,7 +53,8 @@ public slots:
   void UnhandledException(QString message);
 
 private slots:
-  void UpdateMessageAfterExcuteClicked();
+  void UpdateMessageAfterExecuteClicked();
+  void UpdateMessageAfterExecution(int status);
   void UpdateMessageAfterApplicationReady(bool val);
 
 signals:

@@ -24,14 +24,20 @@
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "gdal_priv.h"// GDALDataset
 #pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
+#include "gdal_priv.h" // GDALDataset
+#pragma warning ( pop )
 #else
 #include "gdal_priv.h" // GDALDataset
 #endif
+
 
 #include "otbOGRDataSourceWrapper.h"
 
@@ -98,14 +104,14 @@ otb::ogr::Layer::const_iterator otb::ogr::Layer::cbegin() const
   return const_iterator(*const_cast <Layer*>(this));
 }
 
-otb::ogr::Layer::iterator otb::ogr::Layer::start_at(size_t index)
+otb::ogr::Layer::iterator otb::ogr::Layer::start_at(GIntBig index)
 {
   assert(m_Layer && "OGRLayer not initialized");
   m_Layer->SetNextByIndex(index);
   return iterator(*this);
 }
 
-otb::ogr::Layer::const_iterator otb::ogr::Layer::cstart_at(size_t index) const
+otb::ogr::Layer::const_iterator otb::ogr::Layer::cstart_at(GIntBig index) const
 {
   assert(m_Layer && "OGRLayer not initialized");
   m_Layer->SetNextByIndex(index);
@@ -270,7 +276,7 @@ OGRSpatialReference const* otb::ogr::Layer::GetSpatialRef() const
 std::string otb::ogr::Layer::GetProjectionRef() const
 {
   assert(m_Layer && "OGRLayer not initialized");
-  char * wkt = 0;
+  char * wkt = ITK_NULLPTR;
   OGRSpatialReference const* srs = GetSpatialRef();
   if(srs)
     {
@@ -320,7 +326,7 @@ void otb::ogr::Layer::CreateField(
     }
 }
 
-void otb::ogr::Layer::DeleteField(size_t fieldIndex)
+void otb::ogr::Layer::DeleteField(int fieldIndex)
 {
   assert(m_Layer && "OGRLayer not initialized");
 
@@ -334,7 +340,7 @@ void otb::ogr::Layer::DeleteField(size_t fieldIndex)
   itkGenericExceptionMacro("OGRLayer::DeleteField is not supported by OGR v"
     << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
 #else
-  const OGRErr res = m_Layer->DeleteField(int(fieldIndex));
+  const OGRErr res = m_Layer->DeleteField(fieldIndex);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot delete the "<<fieldIndex << "th field in the layer <"

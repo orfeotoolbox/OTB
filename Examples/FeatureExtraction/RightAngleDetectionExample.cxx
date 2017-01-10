@@ -155,7 +155,7 @@ int main(int argc, char * argv[])
   // image. For this matter, we will use a
   // \doxygen{otb}{VectorDataToMapFilter}  which is templated over
   // the  input vector data type and the output image type, and a
-  // conbination of a \doxygen{itk}{binaryFunctorImageFilter}
+  // combination of a \doxygen{itk}{binaryFunctorImageFilter}
   // and the \doxygen{otb}{Functor}{UnaryFunctorImageFilter}.
   //
   // Software Guide : EndLatex

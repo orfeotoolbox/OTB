@@ -16,15 +16,25 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToMapFilter_h
-#define __otbVectorDataToMapFilter_h
+#ifndef otbVectorDataToMapFilter_h
+#define otbVectorDataToMapFilter_h
 
 #include "itkImageSource.h"
 #include "otbRGBAPixelConverter.h"
 #include "otbVectorDataExtractROI.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <mapnik/memory_datasource.hpp>
 #include <mapnik/map.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <mapnik/memory_datasource.hpp>
+#include <mapnik/map.hpp>
+#endif
+
 
 namespace otb
 {
@@ -43,7 +53,7 @@ namespace otb
    * The OSM style type provides styles to render a vector data the
    * OSM way. These styles must be specified usind the method
    * "AddStyle()".
-   * The Binary style type provides automaticaly a set of styles to
+   * The Binary style type provides automatically a set of styles to
    * render a vectro data as a binary mask (foreground pixel value
    * 255, background pixel value 0).
    *

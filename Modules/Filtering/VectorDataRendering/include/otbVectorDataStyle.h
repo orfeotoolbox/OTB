@@ -16,12 +16,21 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataStyle_h
-#define __otbVectorDataStyle_h
+#ifndef otbVectorDataStyle_h
+#define otbVectorDataStyle_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <mapnik/map.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <mapnik/map.hpp>
+#endif
 
 namespace otb
 {

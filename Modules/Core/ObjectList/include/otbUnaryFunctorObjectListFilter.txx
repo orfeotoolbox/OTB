@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorObjectListFilter_txx
-#define __otbUnaryFunctorObjectListFilter_txx
+#ifndef otbUnaryFunctorObjectListFilter_txx
+#define otbUnaryFunctorObjectListFilter_txx
 
 #include "otbUnaryFunctorObjectListFilter.h"
 #include "itkProgressReporter.h"

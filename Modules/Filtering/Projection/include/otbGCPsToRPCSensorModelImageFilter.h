@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGCPsToRPCSensorModelImageFilter_h
-#define __otbGCPsToRPCSensorModelImageFilter_h
+#ifndef otbGCPsToRPCSensorModelImageFilter_h
+#define otbGCPsToRPCSensorModelImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
@@ -33,7 +33,7 @@ namespace otb {
  * defined GCPs. Internally, it uses an ossimRpcSolver, which performs
  * the estimation using the well known least-square method.
  *
- * The UseImageGCPs flag allows to import GCPs from the image
+ * The UseImageGCPs flag allows importing GCPs from the image
  * metadata, if any.
  *
  * GCPs can be passed to the filter using one of the AddGCP method
@@ -55,7 +55,7 @@ namespace otb {
  * The RMS (root mean square) ground error is available through the
  * appropriate getter.
  *
- * Please note that GCPs are infered to be given in physical
+ * Please note that GCPs are inferred to be given in physical
  * coordinates. This is seamless in most cases.
  *
  * Please note that at least 16 GCPs are required to estimate a proper
@@ -167,17 +167,17 @@ protected:
   /** Constructor */
   GCPsToRPCSensorModelImageFilter();
   /** Destructor */
-  virtual ~GCPsToRPCSensorModelImageFilter();
+  ~GCPsToRPCSensorModelImageFilter() ITK_OVERRIDE;
 
   /** The PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Actual estimation of the sensor model takes place in the
    * GenerateOutputInformation() method */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Drive the model up-to-date flag */
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
   GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented

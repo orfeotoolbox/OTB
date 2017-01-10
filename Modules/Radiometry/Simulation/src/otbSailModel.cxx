@@ -18,7 +18,7 @@
 #include "itkNumericTraits.h"
 
 #include "otbSailModel.h"
-#include <boost/math/special_functions/expint.hpp>
+#include "otb_boost_expint_header.h"
 #include <boost/shared_ptr.hpp>
 #include "otbMath.h"
 
@@ -69,7 +69,7 @@ SailModel
    if(this->GetNumberOfInputs() != 2)
    {
       //exit
-      return 0;
+      return ITK_NULLPTR;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -89,7 +89,7 @@ SailModel
    if(this->GetNumberOfInputs() != 2)
    {
       //exit
-      return 0;
+      return ITK_NULLPTR;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -110,7 +110,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return 0;
+      return ITK_NULLPTR;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -123,7 +123,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return 0;
+      return ITK_NULLPTR;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -136,7 +136,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return 0;
+      return ITK_NULLPTR;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -149,7 +149,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return 0;
+      return ITK_NULLPTR;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(3));
 }
@@ -337,7 +337,7 @@ SailModel
       // Outputs for the case LAI = 0
       if (m_LAI<0)
       {
-         tss = 1;
+         //tss = 1;
          too = 1;
          tsstoo = 1;
          rdd = 0;
@@ -355,7 +355,7 @@ SailModel
          rdot = rsoil0;
          rsodt = 0;
          rsost = rsoil0;
-         rsot = rsoil0;
+         //rsot = rsoil0;
       }
 
       // Other cases (LAI > 0)
@@ -457,7 +457,7 @@ SailModel
 
       absh = (1-rddt-(1-rsoil0)*(tdd+(tdd*rdd*rsoil0)/dn));
       absv = (1-rsdt-(1-rsoil0)*(tss+(tss*rsoil0*rdd+tsd)/dn));
-      
+
       SpectralResponseType::PairType response;
       response.first=lambda/1000.0;
       response.second=resh;
@@ -508,7 +508,7 @@ SailModel
       x2 = excent/sqrt(1.+excent*excent*vcl_tan(tl2)*vcl_tan(tl2));
       if(excent==1)
       {
-         v = abs(cos(tl1)-cos(tl2));
+         v = vcl_abs(cos(tl1)-cos(tl2));
          temp.push_back( v );
          sum = sum + v;
       }
@@ -709,4 +709,3 @@ SailModel
 
 }
 } // end namespace otb
-

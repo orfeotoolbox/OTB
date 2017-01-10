@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtendedFilenameHelper_h
-#define __otbExtendedFilenameHelper_h
+#ifndef otbExtendedFilenameHelper_h
+#define otbExtendedFilenameHelper_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -46,15 +46,15 @@ public:
 
   typedef std::map< std::string, std::string > OptionMapType;
 
-  void SetExtendedFileName(const char * extFname);
-  OptionMapType GetOptionMap(void) const;
-
+  virtual void SetExtendedFileName(const char * extFname);
+  const OptionMapType & GetOptionMap(void) const;
+  
   itkGetStringMacro(ExtendedFileName);
   itkGetStringMacro(SimpleFileName);
 
 protected:
   ExtendedFilenameHelper() {}
-  virtual ~ExtendedFilenameHelper() {}
+  ~ExtendedFilenameHelper() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameHelper(const Self &);  //purposely not implemented
@@ -68,4 +68,4 @@ private:
 };
 } // end namespace otb
 
-#endif // __otbExtendedFilenameHelper_h
+#endif // otbExtendedFilenameHelper_h

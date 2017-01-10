@@ -27,7 +27,7 @@
 namespace otb {
 
 /**
- * Standart (useless) definition for unknown wavelet
+ * Standard (useless) definition for unknown wavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator>
 const char *
@@ -36,7 +36,7 @@ WaveletGenerator<TMotherWaveletOperator>
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
-  msg << " is unkown or has to be implemented...\n";
+  msg << " is unknown or has to be implemented...\n";
   throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
 
   return "Unknown";
@@ -45,22 +45,22 @@ WaveletGenerator<TMotherWaveletOperator>
 template <Wavelet::Wavelet TMotherWaveletOperator>
 void
 WaveletGenerator<TMotherWaveletOperator>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+::GetLowPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
-  msg << " is unkown or has to be implemented...\n";
+  msg << " is unknown or has to be implemented...\n";
   throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator>
 void
 WaveletGenerator<TMotherWaveletOperator>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+::GetHighPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
-  msg << " is unkown or has to be implemented (check the txx file)...\n";
+  msg << " is unknown or has to be implemented (check the txx file)...\n";
   throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
 }
 

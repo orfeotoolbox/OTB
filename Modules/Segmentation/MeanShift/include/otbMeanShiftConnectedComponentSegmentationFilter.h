@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanShiftConnectedComponentSegmentationFilter_h
-#define __otbMeanShiftConnectedComponentSegmentationFilter_h
+#ifndef otbMeanShiftConnectedComponentSegmentationFilter_h
+#define otbMeanShiftConnectedComponentSegmentationFilter_h
 
 #include "itkMacro.h"
 
@@ -127,10 +127,10 @@ public:
 protected:
   MeanShiftConnectedComponentSegmentationFilter();
 
-  virtual ~MeanShiftConnectedComponentSegmentationFilter();
+  ~MeanShiftConnectedComponentSegmentationFilter() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
-  virtual void GenerateData();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

@@ -76,10 +76,13 @@ set(OTBQtWidget_MOC_HDR
 QT4_WRAP_CPP(OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR})
 
 add_library(OTBQtWidget ${OTBQtWidget_SRC} ${OTBQtWidget_MOC_SRC})
-target_link_libraries(OTBQtWidget
+
+target_link_libraries( OTBQtWidget
   ${OTBApplicationEngine_LIBRARIES}
   ${OTBQt4_LIBRARIES}
+  ${OTBQtAdapters_LIBRARIES}
   )
+
 otb_module_target(OTBQtWidget)
 
 add_executable(otbApplicationLauncherQt otbApplicationLauncherQt.cxx)
@@ -89,9 +92,10 @@ target_link_libraries(otbApplicationLauncherQt
   ${OTBQt4_LIBRARIES}
   )
 otb_module_target(otbApplicationLauncherQt)
+set_linker_stack_size_flag(otbApplicationLauncherQt 10000000)
 
 # Where we will install the script in the build tree
-get_target_property(GUI_OUPUT_DIR otbApplicationLauncherQt RUNTIME_OUTPUT_DIRECTORY)
+get_target_property(GUI_OUTPUT_DIR otbApplicationLauncherQt RUNTIME_OUTPUT_DIRECTORY)
 
 # Generate a script in the build dir, next to the gui launcher
 # Need a two-step process since configure_file don't support permissions
@@ -103,11 +107,11 @@ configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.bat.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui.bat
                 @ONLY )
 file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui.bat
-     DESTINATION ${GUI_OUPUT_DIR}
+     DESTINATION ${GUI_OUTPUT_DIR}
      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # TODO : test if NO_INSTALL is set
-install(PROGRAMS ${GUI_OUPUT_DIR}/otbgui.bat
+install(PROGRAMS ${GUI_OUTPUT_DIR}/otbgui.bat
         DESTINATION ${OTBQtWidget_INSTALL_RUNTIME_DIR}
         COMPONENT Runtime)
 
@@ -116,11 +120,11 @@ configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui
                 @ONLY )
 file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbgui
-     DESTINATION ${GUI_OUPUT_DIR}
+     DESTINATION ${GUI_OUTPUT_DIR}
      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # TODO : test if NO_INSTALL is set
-install(PROGRAMS ${GUI_OUPUT_DIR}/otbgui
+install(PROGRAMS ${GUI_OUTPUT_DIR}/otbgui
         DESTINATION ${OTBQtWidget_INSTALL_RUNTIME_DIR}
         COMPONENT Runtime)
 

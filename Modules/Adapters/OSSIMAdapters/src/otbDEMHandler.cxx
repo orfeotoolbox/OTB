@@ -20,6 +20,11 @@
 
 #include <cassert>
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/elevation/ossimElevManager.h"
 #include "ossim/base/ossimGeoidManager.h"
 #include "ossim/base/ossimFilename.h"
@@ -27,19 +32,31 @@
 #include "ossim/base/ossimGeoidEgm96.h"
 #include "ossim/base/ossimRefPtr.h"
 #include <ossim/elevation/ossimImageElevationDatabase.h>
+#pragma GCC diagnostic pop
+#else
+#include "ossim/elevation/ossimElevManager.h"
+#include "ossim/base/ossimGeoidManager.h"
+#include "ossim/base/ossimFilename.h"
+#include "ossim/base/ossimDirectory.h"
+#include "ossim/base/ossimGeoidEgm96.h"
+#include "ossim/base/ossimRefPtr.h"
+#include <ossim/elevation/ossimImageElevationDatabase.h>
+#endif
+
+
 
 namespace otb
 {
 /** Initialize the singleton */
-DEMHandler::Pointer DEMHandler::m_Singleton = NULL;
+DEMHandler::Pointer DEMHandler::m_Singleton = ITK_NULLPTR;
 
 DEMHandler::Pointer DEMHandler::Instance()
 {
-  if(m_Singleton.GetPointer() == NULL)
+  if(m_Singleton.GetPointer() == ITK_NULLPTR)
     {
     m_Singleton = itk::ObjectFactory<Self>::Create();
 
-    if(m_Singleton.GetPointer() == NULL)
+    if(m_Singleton.GetPointer() == ITK_NULLPTR)
       {
       m_Singleton = new DEMHandler;
       }
@@ -132,14 +149,14 @@ bool
 DEMHandler
 ::OpenGeoidFile(const char* geoidFile)
 {
-  if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == 0)
+  if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == ITK_NULLPTR)
     {
     otbMsgDevMacro(<< "Opening geoid: " << geoidFile);
     ossimFilename           geoid(geoidFile);
     ossimRefPtr<ossimGeoid> geoidPtr = new ossimGeoidEgm96(geoid);
     if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
       {
-      // Ossim does not allow to retrieve the geoid file path
+      // Ossim does not allow retrieving the geoid file path
       // We therefore must keep it on our side
       m_GeoidFile = geoidFile;
       otbMsgDevMacro(<< "Geoid successfully opened");
@@ -227,7 +244,7 @@ void
 DEMHandler
 ::SetDefaultHeightAboveEllipsoid(double h)
 {
-  // Ossim does not allow to retrieve the default height above
+  // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   m_DefaultHeightAboveEllipsoid = h;
 
@@ -240,7 +257,7 @@ double
 DEMHandler
 ::GetDefaultHeightAboveEllipsoid() const
 {
-  // Ossim does not allow to retrieve the default height above
+  // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   return m_DefaultHeightAboveEllipsoid;
 }
@@ -269,7 +286,7 @@ std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 
 std::string DEMHandler::GetGeoidFile() const
 {
-  // Ossim does not allow to retrieve the geoid file path
+  // Ossim does not allow retrieving the geoid file path
   // We therefore must keep it on our side
   return m_GeoidFile;
 }

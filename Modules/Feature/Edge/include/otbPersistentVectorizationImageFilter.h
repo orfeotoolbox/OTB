@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentVectorizationImageFilter_h
-#define __otbPersistentVectorizationImageFilter_h
+#ifndef otbPersistentVectorizationImageFilter_h
+#define otbPersistentVectorizationImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 
@@ -33,11 +33,11 @@ namespace otb
 /** \class PersistentVectorizationImageFilter
  *  \brief Perform vectorization in a persistent way.
  *
- * This filter allows to vectorize input labeled image while it is streamed
- * through it. The GetPathList() method allows to get the vectorized boundaries,
- * while the GetOutput() method allows to get the input image itself.
+ * This filter allows vectorizing input labeled image while it is streamed
+ * through it. The GetPathList() method allows getting the vectorized boundaries,
+ * while the GetOutput() method allows getting the input image itself.
  *
- * The Reset() method allows to clear the result  path list.
+ * The Reset() method allows clearing the result path list.
  *
  * \sa PersistentImageFilter
  *
@@ -81,16 +81,16 @@ public:
   typedef otb::ImageToEdgePathFilter<ImageType, PathType> ImageToEdgePathFilterType;
   typedef typename ImageToEdgePathFilterType::Pointer     ImageToEdgePathFilterPointerType;
 
-  virtual void Reset(void);
-  virtual void Synthetize(void);
+  void Reset(void) ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
 
   itkGetObjectMacro(PathList, PathListType);
 
 protected:
   PersistentVectorizationImageFilter();
-  virtual ~PersistentVectorizationImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateData();
+  ~PersistentVectorizationImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   PersistentVectorizationImageFilter(const Self &); //purposely not implemented

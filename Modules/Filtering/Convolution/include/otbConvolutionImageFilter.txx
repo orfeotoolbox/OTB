@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConvolutionImageFilter_txx
-#define __otbConvolutionImageFilter_txx
+#ifndef otbConvolutionImageFilter_txx
+#define otbConvolutionImageFilter_txx
 #include "otbConvolutionImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"

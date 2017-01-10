@@ -40,7 +40,7 @@ QtWidgetView::QtWidgetView(Application* app)
 
 QtWidgetView::~QtWidgetView()
 {
-
+  delete m_Model;
 }
 
 void QtWidgetView::CreateGui()
@@ -61,6 +61,7 @@ void QtWidgetView::CreateGui()
 
   m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT(UpdateMessageAfterApplicationReady(bool)) );
+  connect( m_Model, SIGNAL(SetProgressReportDone(int)), this, SLOT(UpdateMessageAfterExecution(int)) );
   mainLayout->addWidget(m_Message);
 
   QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(m_Model);
@@ -81,15 +82,27 @@ void QtWidgetView::CreateGui()
   this->setLayout(finalLayout);
 }
 
-void QtWidgetView::UpdateMessageAfterExcuteClicked()
+void QtWidgetView::UpdateMessageAfterExecuteClicked()
 {
   m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
+}
+
+void QtWidgetView::UpdateMessageAfterExecution(int status)
+{
+  if (status >= 0)
+    {
+    m_Message->setText("<center><font color=\"#00A000\">DONE</font></center>");
+    }
+  else
+    {
+    m_Message->setText("<center><font color=\"#FF0000\">FAILED !</font></center>");
+    }
 }
 
 void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
 {
   if(val == true)
-    m_Message->setText("<center><font color=\"#00FF00\">Ready to run</font></center>");
+    m_Message->setText("<center><font color=\"#00A000\">Ready to run</font></center>");
   else
     m_Message->setText("<center><font color=\"#FF0000\">Select parameters</font></center>");
 }
@@ -123,7 +136,7 @@ QWidget* QtWidgetView::CreateFooter()
   m_ExecButton->setText(QObject::tr("Execute"));
   connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutputSlot() ) );
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), m_ExecButton, SLOT(setEnabled(bool)) );
-  connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterExcuteClicked() ) );
+  connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterExecuteClicked() ) );
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
@@ -147,7 +160,7 @@ QWidget* QtWidgetView::CreateDoc()
   QTextDocument * doc = new QTextDocument();
 
   std::string docContain;
-  ApplicationHtmlDocGenerator::GenerateDoc( m_Application, docContain);
+  ApplicationHtmlDocGenerator::GenerateDoc( m_Application, docContain, true);
 
   doc->setHtml(docContain.c_str());
 

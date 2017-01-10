@@ -18,9 +18,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToVariableDimensionHistogramGenerator_txx
-#define __otbListSampleToVariableDimensionHistogramGenerator_txx
+#ifndef otbListSampleToVariableDimensionHistogramGenerator_txx
+#define otbListSampleToVariableDimensionHistogramGenerator_txx
 
+#include "otbListSampleToVariableDimensionHistogramGenerator.h"
 #include "otbMacro.h"
 #include "itkStatisticsAlgorithm.h"
 
@@ -64,7 +65,7 @@ ListSampleToVariableDimensionHistogramGenerator<TListSample, THistogramMeasureme
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ListSampleType* >
     (this->itk::ProcessObject::GetInput(0) );

@@ -16,8 +16,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMMachineLearningModel_h
-#define __otbSVMMachineLearningModel_h
+#ifndef otbSVMMachineLearningModel_h
+#define otbSVMMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 #include "itkLightObject.h"
@@ -28,6 +28,14 @@ class CvSVM;
 
 namespace otb
 {
+/** 
+* \brief OpenCV implementation of SVM algorithm.
+* 
+* This machine learning model uses the OpenCV implementation of the
+* SVM algorithm. Since this implementation is buggy in the linear
+* case, we recommend users to use the LibSVM implementation instead,
+* through the otb::LibSVMMachineLearningModel.
+*/ 
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT SVMMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
@@ -52,23 +60,21 @@ public:
   itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
-  virtual void Train();
-  /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+  void Train() ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="");
+  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="");
+  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &);
+  bool CanReadFile(const std::string &) ITK_OVERRIDE;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &);
+  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
   //Setters/Getters to SVM model
@@ -126,10 +132,14 @@ protected:
   SVMMachineLearningModel();
 
   /** Destructor */
-  virtual ~SVMMachineLearningModel();
+  ~SVMMachineLearningModel() ITK_OVERRIDE;
 
+  /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+
+  
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SVMMachineLearningModel(const Self &); //purposely not implemented

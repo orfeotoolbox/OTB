@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultivariateAlterationDetectorImageFilter_h
-#define __otbMultivariateAlterationDetectorImageFilter_h
+#ifndef otbMultivariateAlterationDetectorImageFilter_h
+#define otbMultivariateAlterationDetectorImageFilter_h
 
 
 #include "otbStreamingStatisticsVectorImageFilter.h"
@@ -50,15 +50,15 @@ namespace otb
  * - Each change map is orthogonal to the others.
  *
  * This is a statistical method which can handle different modalities
- * and even differents bands and number of bands between images.
+ * and even different bands and number of bands between images.
  *
  * If numbers of bands in image 1 and 2 are equal, then change maps
  * are sorted by increasing correlation. If number of bands is
  * different, the change maps are sorted by decreasing correlation.
  *
- * The GetV1() and GetV2() methods allow to retrieve the linear
+ * The GetV1() and GetV2() methods allow retrieving the linear
  * combinations used to generate the Mad change maps as a vnl_matrix of
- * double, and the GetRho() method allows to retrieve the correlation
+ * double, and the GetRho() method allows retrieving the correlation
  * associated to each Mad change maps as a vnl_vector.
  *
  * This filter has been implemented from the Matlab code kindly made
@@ -152,11 +152,11 @@ public:
 
 protected:
   MultivariateAlterationDetectorImageFilter();
-  virtual ~MultivariateAlterationDetectorImageFilter() {}
+  ~MultivariateAlterationDetectorImageFilter() ITK_OVERRIDE {}
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   MultivariateAlterationDetectorImageFilter(const Self &); //purposely not implemented

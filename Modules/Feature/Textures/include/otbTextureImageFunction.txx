@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTextureImageFunction_txx
-#define __otbTextureImageFunction_txx
+#ifndef otbTextureImageFunction_txx
+#define otbTextureImageFunction_txx
 
 #include "otbTextureImageFunction.h"
 

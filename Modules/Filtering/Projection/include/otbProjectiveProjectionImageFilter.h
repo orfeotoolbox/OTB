@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProjectiveProjectionImageFilter_h
-#define __otbProjectiveProjectionImageFilter_h
+#ifndef otbProjectiveProjectionImageFilter_h
+#define otbProjectiveProjectionImageFilter_h
 
 #include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"
@@ -60,7 +60,7 @@ public:
     m_OutputSize = m_ProjectionDirection.Size();
   }
 
-  bool operator !=(const ProjectiveProjectionFunctor& other) const
+  bool operator !=(const ProjectiveProjectionFunctor& itkNotUsed(other)) const
   {
     return false;
   }
@@ -151,11 +151,11 @@ public:
 protected:
   ProjectiveProjectionImageFilter();
 
-  virtual ~ProjectiveProjectionImageFilter() {}
+  ~ProjectiveProjectionImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();

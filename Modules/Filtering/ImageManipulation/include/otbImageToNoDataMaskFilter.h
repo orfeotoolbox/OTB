@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToNoDataMaskFilter_h
-#define __otbImageToNoDataMaskFilter_h
+#ifndef otbImageToNoDataMaskFilter_h
+#define otbImageToNoDataMaskFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataObject.h"
@@ -130,15 +130,23 @@ protected:
   ImageToNoDataMaskFilter()
   {}
 
-  virtual ~ImageToNoDataMaskFilter()
+  ~ImageToNoDataMaskFilter() ITK_OVERRIDE
   {}
 
-  virtual void BeforeThreadedGenerateData()
+  void BeforeThreadedGenerateData() ITK_OVERRIDE
   {
     std::vector<bool> noDataValueAvailable;
     std::vector<double> noDataValues;
 
     ReadNoDataFlags(this->GetInput()->GetMetaDataDictionary(),noDataValueAvailable,noDataValues);
+
+    // don't pass empty containers to the functor
+    if (noDataValueAvailable.empty() || noDataValues.empty())
+      {
+      const TInputImage* input = this->GetInput();
+      noDataValueAvailable.assign(input->GetNumberOfComponentsPerPixel(),false);
+      noDataValues.assign(input->GetNumberOfComponentsPerPixel(),0.0);
+      }
     
     this->GetFunctor().m_Flags = noDataValueAvailable;
     this->GetFunctor().m_Values = noDataValues;

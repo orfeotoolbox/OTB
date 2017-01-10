@@ -15,11 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIntoImageProjectionFilter_txx
-#define __otbVectorDataIntoImageProjectionFilter_txx
+#ifndef otbVectorDataIntoImageProjectionFilter_txx
+#define otbVectorDataIntoImageProjectionFilter_txx
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
-#include "boost/algorithm/string.hpp"
+#include "otb_boost_string_header.h"
 
 namespace otb
 {
@@ -235,6 +235,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
     }
 
   this->GraftOutput(m_VdProjFilter->GetOutput());
+  this->UpdateProgress(1.0f);
 }
 
 

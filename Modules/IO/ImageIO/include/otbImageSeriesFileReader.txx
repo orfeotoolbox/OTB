@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReader_txx
-#define __otbImageSeriesFileReader_txx
+#ifndef otbImageSeriesFileReader_txx
+#define otbImageSeriesFileReader_txx
 #include "otbImageSeriesFileReader.h"
 
 namespace otb {
@@ -47,7 +47,7 @@ ImageSeriesFileReader<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 void
 ImageSeriesFileReader<TImage, TInternalImage>
-::GenerateData(DataObjectPointerArraySizeType idx)
+::GenerateData(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
   std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";
@@ -57,7 +57,7 @@ ImageSeriesFileReader<TImage, TInternalImage>
 }
 
 /* **********************************************************
- * Methods that are specific to instanciation with Image type
+ * Methods that are specific to instantiation with Image type
  * **********************************************************
  */
 
@@ -141,7 +141,7 @@ ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
 }
 
 /* *********************************************************************
- * Methods that are specific to instanciation with Image type for TImage
+ * Methods that are specific to instantiation with Image type for TImage
  * and VectorImage as TInternalImage
  * *********************************************************************
  */
@@ -223,7 +223,7 @@ ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 }
 
 /* ******************************************************************
- * Methods that are specific to instanciation with VectorImage types
+ * Methods that are specific to instantiation with VectorImage types
  * ******************************************************************
  */
 

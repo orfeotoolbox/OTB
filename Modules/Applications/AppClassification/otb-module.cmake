@@ -26,6 +26,7 @@ otb_module(OTBAppClassification
     OTBImageManipulation
     OTBObjectList
     OTBCommon
+    OTBSampling
 
   TEST_DEPENDS
     OTBTestKernel

@@ -86,7 +86,7 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
@@ -97,13 +97,14 @@ private:
     SetDocSeeAlso(
                   "\"Kernel maximum autocorrelation factor and minimum noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011)");
 
-    AddDocTag(Tags::DimensionReduction);
     AddDocTag(Tags::Filter);
+	AddDocTag(Tags::DimensionReduction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The input image to apply dimensionality reduction.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "output image. Components are ordered by decreasing eigenvalues.");
+    MandatoryOff("out");
     AddParameter(ParameterType_Group, "rescale", "Rescale Output.");
 
     MandatoryOff("rescale");
@@ -138,7 +139,7 @@ private:
     AddChoice("method.maf", "MAF");
     SetParameterDescription("method.maf", "Maximum Autocorrelation Factor.");
     AddChoice("method.ica", "ICA");
-    SetParameterDescription("method.ica", "Independant Component Analysis.");
+    SetParameterDescription("method.ica", "Independent Component Analysis.");
     AddParameter(ParameterType_Int, "method.ica.iter", "number of iterations ");
     SetMinimumParameterIntValue("method.ica.iter", 1);
     SetDefaultParameterInt("method.ica.iter", 20);
@@ -168,13 +169,15 @@ private:
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
     MandatoryOff("outmatrix");
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "FilterOutput.tif");
     SetDocExampleParameterValue("method", "pca");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
               if (HasValue("in"))
               {
@@ -222,7 +225,7 @@ private:
               }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     // Get Parameters
@@ -236,6 +239,7 @@ private:
       // PCA Algorithm
       case 0:
         {
+
         otbAppLogDEBUG( << "PCA Algorithm ");
         PCAForwardFilterType::Pointer filter = PCAForwardFilterType::New();
         m_ForwardFilter = filter;
@@ -245,18 +249,20 @@ private:
 
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
-        filter->SetUseNormalization(normalize);
-        m_ForwardFilter->Update();
-
+        filter->SetUseNormalization(normalize);        
+        m_ForwardFilter->GetOutput()->UpdateOutputInformation();
+        
         if (invTransform)
-          {
+          {  
           invFilter->SetInput(m_ForwardFilter->GetOutput());
           if (normalize)
             {
-            otbAppLogINFO( << "Normalization MeanValue :"<<filter->GetMeanValues()<<
-                "StdValue :" <<filter->GetStdDevValues() );
+            otbAppLogINFO( << "Normalization MeanValue:"<<filter->GetMeanValues() );
             invFilter->SetMeanValues(filter->GetMeanValues());
-            invFilter->SetStdDevValues(filter->GetStdDevValues());
+            // By default normalization by std dev is deactivated in
+            //forward filter, and GetStdDevValues() returns an empty
+            //vector, which confuses the invFilter.
+            //invFilter->SetStdDevValues(filter->GetStdDevValues());
             }
 
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
@@ -289,17 +295,22 @@ private:
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetUseNormalization(normalize);
         filter->GetNoiseImageFilter()->SetRadius(radius);
-        m_ForwardFilter->Update();
+
+        m_ForwardFilter->GetOutput()->UpdateOutputInformation();
+        
         if (invTransform)
           {
           otbAppLogDEBUG( << "Compute Inverse Transform");
           invFilter->SetInput(m_ForwardFilter->GetOutput());
+          otbAppLogINFO( << "Normalization MeanValue:"<<filter->GetMeanValues() );
           invFilter->SetMeanValues(filter->GetMeanValues());
           if (normalize)
             {
+            otbAppLogINFO( << "Normalization StdDevValue:"<<filter->GetStdDevValues() );
             invFilter->SetStdDevValues(filter->GetStdDevValues());
+            
             }
-
+          invFilter->SetUseNormalization(normalize);
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           m_TransformationMatrix = invFilter->GetTransformationMatrix();
           }
@@ -314,8 +325,6 @@ private:
         MAFForwardFilterType::Pointer filter = MAFForwardFilterType::New();
         m_ForwardFilter = filter;
         filter->SetInput(GetParameterFloatVectorImage("in"));
-        m_ForwardFilter->Update();
-
         otbAppLogINFO( << "V :"<<std::endl<<filter->GetV()<<"Auto-Correlation :"<<std::endl <<filter->GetAutoCorrelation() );
 
         break;
@@ -336,18 +345,18 @@ private:
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetNumberOfIterations(nbIterations);
         filter->SetMu(mu);
-        m_ForwardFilter->Update();
 
+        m_ForwardFilter->GetOutput()->UpdateOutputInformation();
+        
         if (invTransform)
           {
           otbAppLogDEBUG( << "Compute Inverse Transform");
           invFilter->SetInput(m_ForwardFilter->GetOutput());
+          otbAppLogINFO( << "Normalization MeanValue:"<<filter->GetMeanValues() );
+          invFilter->SetMeanValues(filter->GetMeanValues());
+          otbAppLogINFO( << "Normalization StdDevValue:"<<filter->GetStdDevValues() );
+          invFilter->SetStdDevValues(filter->GetStdDevValues());
 
-          if (normalize)
-            {
-            invFilter->SetMeanValues(filter->GetMeanValues());
-            invFilter->SetStdDevValues(filter->GetStdDevValues());
-            }
           invFilter->SetPCATransformationMatrix(filter->GetPCATransformationMatrix());
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           }
@@ -413,7 +422,8 @@ private:
 
       m_MinMaxFilter = MinMaxFilterType::New();
       m_MinMaxFilter->SetInput(m_ForwardFilter->GetOutput());
-      m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(50);
+      //m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(50);
+      m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
       AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
       m_MinMaxFilter->Update();

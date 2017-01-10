@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbAddCarvingPathFilter_txx
-#define __otbAddCarvingPathFilter_txx
+#ifndef otbAddCarvingPathFilter_txx
+#define otbAddCarvingPathFilter_txx
 
 #include "otbAddCarvingPathFilter.h"
 #include "itkMacro.h"

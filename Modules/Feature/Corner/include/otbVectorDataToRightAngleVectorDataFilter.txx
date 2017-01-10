@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToRightAngleVectorDataFilter_txx
-#define __otbVectorDataToRightAngleVectorDataFilter_txx
+#ifndef otbVectorDataToRightAngleVectorDataFilter_txx
+#define otbVectorDataToRightAngleVectorDataFilter_txx
 
 #include "otbVectorDataToRightAngleVectorDataFilter.h"
 #include "otbVectorData.h"

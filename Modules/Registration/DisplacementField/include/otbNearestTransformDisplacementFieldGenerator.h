@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNearestTransformDisplacementFieldGenerator_h
-#define __otbNearestTransformDisplacementFieldGenerator_h
+#ifndef otbNearestTransformDisplacementFieldGenerator_h
+#define otbNearestTransformDisplacementFieldGenerator_h
 
 #include "otbPointSetWithTransformToDisplacementFieldGenerator.h"
 
@@ -64,11 +64,11 @@ protected:
   /** Constructor */
   NearestTransformDisplacementFieldGenerator() {};
   /** Destructor */
-  virtual ~NearestTransformDisplacementFieldGenerator() {}
+  ~NearestTransformDisplacementFieldGenerator() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   NearestTransformDisplacementFieldGenerator(const Self &); //purposely not implemented

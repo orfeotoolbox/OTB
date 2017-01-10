@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEnvelopeSavitzkyGolayInterpolationFunctor_h
-#define __otbEnvelopeSavitzkyGolayInterpolationFunctor_h
+#ifndef otbEnvelopeSavitzkyGolayInterpolationFunctor_h
+#define otbEnvelopeSavitzkyGolayInterpolationFunctor_h
 
 #include "otbSavitzkyGolayInterpolationFunctor.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeConfidenceConnectedImageFilter_h
-#define __otbLabelizeConfidenceConnectedImageFilter_h
+#ifndef otbLabelizeConfidenceConnectedImageFilter_h
+#define otbLabelizeConfidenceConnectedImageFilter_h
 
 #include "itkConfidenceConnectedImageFilter.h"
 #include "otbLabelizeImageFilterBase.h"
@@ -92,13 +92,13 @@ public:
   /** Set replace value */
   itkSetMacro(ReplaceValue, OutputPixelType);
 
-  /** Set initial neigborhood radius */
+  /** Set initial neighborhood radius */
   const unsigned int& GetInitialNeighborhoodRadius()
   {
     return this->m_RegionGrowingFilter->GetInitialNeighborhoodRadius();
   }
 
-  /** Set initial neigborhood radius */
+  /** Set initial neighborhood radius */
   void SetInitialNeighborhoodRadius(const unsigned int initial)
   {
     this->m_RegionGrowingFilter->SetInitialNeighborhoodRadius(initial);
@@ -106,17 +106,17 @@ public:
 
 protected:
   LabelizeConfidenceConnectedImageFilter();
-  virtual ~LabelizeConfidenceConnectedImageFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LabelizeConfidenceConnectedImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Region growing */
-  virtual void RegionGrowing(const IndexType indexSeed);
+  void RegionGrowing(const IndexType indexSeed) ITK_OVERRIDE;
 
 private:
   LabelizeConfidenceConnectedImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Intial replace value*/
+  /** Initial replace value*/
   OutputPixelType m_ReplaceValue;
 
 }; // end class LabelizeconnectedThresholdImageFilter

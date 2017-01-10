@@ -15,10 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetModel_h
-#define __otbWrapperQtWidgetModel_h
+#ifndef otbWrapperQtWidgetModel_h
+#define otbWrapperQtWidgetModel_h
 
 #include <QtGui>
+#include <QTimer>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
 #include "otbQtLogOutput.h"
@@ -30,7 +31,7 @@ namespace otb
 namespace Wrapper
 {
 
-class ITK_ABI_EXPORT AppliThread : public QThread
+class OTBQtWidget_EXPORT AppliThread : public QThread
 {
  Q_OBJECT
 
@@ -40,7 +41,7 @@ class ITK_ABI_EXPORT AppliThread : public QThread
       m_Application = app;
     }
 
-  virtual ~AppliThread();
+  ~AppliThread() ITK_OVERRIDE;
 
   inline void Execute()
   {
@@ -65,7 +66,7 @@ signals:
   void ExceptionRaised( QString what );
 
 protected:
-  virtual void run();
+  void run() ITK_OVERRIDE;
 
 private:
   AppliThread(const AppliThread&); //purposely not implemented
@@ -80,13 +81,13 @@ private:
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetModel : public QObject
+class OTBQtWidget_EXPORT QtWidgetModel : public QObject
 {
   Q_OBJECT
 public:
   QtWidgetModel(Application* app);
 
-  virtual ~QtWidgetModel();
+  ~QtWidgetModel() ITK_OVERRIDE;
 
   Application* GetApplication()
   {
@@ -121,7 +122,7 @@ signals:
    * \brief Signal emitted when execution otb::Application has finished.
    *
    * \param status The result status of the otb::application (-1 when
-   * an exception has occured).
+   * an exception has occurred).
    */
   void SetProgressReportDone( int status =0 );
 
@@ -146,7 +147,7 @@ protected slots:
   void ExecuteAndWriteOutputSlot();
 
   /**
-   * \brief Slots called everytime one of the widget needs to be
+   * \brief Slots called every time one of the widget needs to be
    * updated (e.g. by specialized parameter widgets).
    *
    * This slot is protected so it can only be called via Qt
@@ -162,6 +163,8 @@ private slots:
    */
   void OnApplicationExecutionDone( int status );
 
+  void TimerDone();
+
 private:
   QtWidgetModel(const QtWidgetModel&); //purposely not implemented
   void operator=(const QtWidgetModel&); //purposely not implemented
@@ -169,6 +172,10 @@ private:
   Application::Pointer m_Application;
 
   QtLogOutput::Pointer  m_LogOutput;
+
+  bool m_IsRunning;
+
+  QTimer *m_Timer;
 };
 
 

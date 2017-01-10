@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRLayerStreamStitchingFilter_txx
-#define __otbOGRLayerStreamStitchingFilter_txx
+#ifndef otbOGRLayerStreamStitchingFilter_txx
+#define otbOGRLayerStreamStitchingFilter_txx
 
 #include "otbOGRLayerStreamStitchingFilter.h"
 #include "itkContinuousIndex.h"
@@ -31,7 +31,7 @@ namespace otb
 
 template<class TImage>
 OGRLayerStreamStitchingFilter<TImage>
-::OGRLayerStreamStitchingFilter() : m_Radius(2), m_OGRLayer(NULL, false)
+::OGRLayerStreamStitchingFilter() : m_Radius(2), m_OGRLayer(ITK_NULLPTR, false)
 {
    m_StreamSize.Fill(0);
 }
@@ -52,7 +52,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(0));
@@ -127,7 +127,13 @@ OGRLayerStreamStitchingFilter<TInputImage>
 
    for(unsigned int x=1; x<=nbColStream; x++)
    {
-      m_OGRLayer.ogr().StartTransaction();
+   OGRErr errStart = m_OGRLayer.ogr().StartTransaction();
+
+   if (errStart != OGRERR_NONE)
+     {
+     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+     }
+
       for(unsigned int y=1; y<=nbRowStream; y++)
       {
 
@@ -318,8 +324,22 @@ OGRLayerStreamStitchingFilter<TInputImage>
                try
                  {
                  #ifdef OTB_USE_GDAL_20
-                 fusionFeature[0].SetValue(field.GetValue<GIntBig>());
+                 // In this case, the feature id can be either
+                 // OFTInteger64 or OFTInteger
+                 switch(field.GetType())
+                   {
+                   case OFTInteger64:
+                   {
+                   fusionFeature[0].SetValue(field.GetValue<GIntBig>());
+                   break;
+                   }
+                   default:
+                   {
+                   fusionFeature[0].SetValue(field.GetValue<int>());
+                   }
+                   }
                  #else
+                 // Only OFTInteger supported in this case
                  fusionFeature[0].SetValue(field.GetValue<int>());
                  #endif
                  m_OGRLayer.CreateFeature(fusionFeature);
@@ -337,14 +357,28 @@ OGRLayerStreamStitchingFilter<TInputImage>
          progress.CompletedPixel();
 
       } //end for x
-      m_OGRLayer.ogr().CommitTransaction();
 
-
+      if(m_OGRLayer.ogr().TestCapability("Transactions"))
+        {
+      
+        OGRErr errCommitX = m_OGRLayer.ogr().CommitTransaction();
+        if (errCommitX != OGRERR_NONE)
+          {
+          itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+          }
+        }
    } //end for y
-   m_OGRLayer.ogr().CommitTransaction();
-
+      
+   if(m_OGRLayer.ogr().TestCapability("Transactions"))
+     {
+     const OGRErr errCommitY = m_OGRLayer.ogr().CommitTransaction();
+     
+     if (errCommitY != OGRERR_NONE)
+       {
+       itkWarningMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ". Gdal error code " << errCommitY << "." << std::endl);
+       }
+     }
 }
-
 template<class TImage>
 void
 OGRLayerStreamStitchingFilter<TImage>

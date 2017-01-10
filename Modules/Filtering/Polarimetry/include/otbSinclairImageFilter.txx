@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairImageFilter_txx
-#define __otbSinclairImageFilter_txx
+#ifndef otbSinclairImageFilter_txx
+#define otbSinclairImageFilter_txx
 
 #include "otbSinclairImageFilter.h"
 #include "otbMath.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeLabelImageFilter_h
-#define __otbChangeLabelImageFilter_h
+#ifndef otbChangeLabelImageFilter_h
+#define otbChangeLabelImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkConceptChecking.h"
@@ -162,11 +162,11 @@ public:
 
 protected:
   ChangeLabelImageFilter();
-  virtual ~ChangeLabelImageFilter() {}
+  ~ChangeLabelImageFilter() ITK_OVERRIDE {}
   /** Generate the output information missing */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ChangeLabelImageFilter(const Self &); //purposely not implemented

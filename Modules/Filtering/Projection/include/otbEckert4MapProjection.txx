@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbEckert4MapProjection_txx
-#define __otbEckert4MapProjection_txx
+#ifndef otbEckert4MapProjection_txx
+#define otbEckert4MapProjection_txx
 
 #include "otbEckert4MapProjection.h"
 #include "otbUtils.h"

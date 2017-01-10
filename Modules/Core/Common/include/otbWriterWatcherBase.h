@@ -18,12 +18,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterWatcherBase_h
-#define __otbWriterWatcherBase_h
+#ifndef otbWriterWatcherBase_h
+#define otbWriterWatcherBase_h
 
 #include "itkCommand.h"
 #include "itkProcessObject.h"
 #include "itkTimeProbe.h"
+
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -43,7 +45,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class /*ITK_EXPORT*/ WriterWatcherBase
+class OTBCommon_EXPORT WriterWatcherBase
 {
 public:
 

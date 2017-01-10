@@ -22,7 +22,7 @@
 #include <fstream>
 #include <map>
 
-// Include differents method for color mapping
+// Include different method for color mapping
 #include "otbChangeLabelImageFilter.h"
 #include "itkLabelToRGBImageFilter.h"
 #include "itkScalarToRGBColormapImageFilter.h"
@@ -79,7 +79,7 @@ class VectorMapping
 public:
   typedef typename TOutput::ValueType ValueType;
 
-  VectorMapping() {}
+  VectorMapping() : m_OutputSize(0) {}
   virtual ~VectorMapping() {}
 
   typedef std::map<TInput, TOutput, VectorLexicographicCompare<TInput> > ChangeMapType;
@@ -244,16 +244,16 @@ public:
     <FloatImageType, LabelImageType>                   CasterToLabelImageType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ColorMapping");
     SetDescription("Maps an input label image to 8-bits RGB using look-up tables.");
 
     SetDocName("Color Mapping");
-    SetDocLongDescription("This application allows to map a label image to a 8-bits RGB image (in both ways) using different methods.\n"
-                          " -The custom method allows to use a custom look-up table. The look-up table is loaded "
+    SetDocLongDescription("This application allows one to map a label image to a 8-bits RGB image (in both ways) using different methods.\n"
+                          " -The custom method allows one to use a custom look-up table. The look-up table is loaded "
                           "from a text file where each line describes an entry. The typical use of this method is to colorise a "
-                          "classification map.\n -The continuous method allows to map a range of values in a scalar input image "
+                          "classification map.\n -The continuous method allows mapping a range of values in a scalar input image "
                           "to a colored image using continuous look-up table, in order to enhance image interpretation. Several "
                           "look-up tables can been chosen with different color ranges.\n-The optimal method computes an optimal "
                           "look-up table. When processing a segmentation label image (label to color), the color difference between"
@@ -265,10 +265,10 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Meta);
     AddDocTag(Tags::Learning);
+	AddDocTag("Utilities");
 
     // Build lut map
 
@@ -292,8 +292,6 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output image filename");
     SetDefaultOutputPixelType("out",ImagePixelType_uint8);
-
-    AddRAMParameter();
 
     // --- OPERATION --- : Label to color / Color to label
     AddParameter(ParameterType_Choice, "op", "Operation");
@@ -353,7 +351,7 @@ private:
     // Optimal LUT
     AddChoice("method.optimal","Compute an optimized look-up table");
     SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighboring labels"
-                            " in a segmentation are mapped to highly contrasted colors.\n"
+                            " in a segmentation are mapped to highly contrasted colors. "
                             "[color to label] Searching all the colors present in the image to compute a continuous label list");
     AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
     SetParameterDescription("method.optimal.background","Value of the background label");
@@ -384,6 +382,7 @@ private:
     SetMinimumParameterIntValue("method.image.up", 0);
     SetMaximumParameterIntValue("method.image.up", 100);
 
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "ROI_QB_MUL_1_SVN_CLASS_MULTI.png");
@@ -392,7 +391,7 @@ private:
     SetDocExampleParameterValue("out", "Colorized_ROI_QB_MUL_1_SVN_CLASS_MULTI.tif");
  }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Make sure the operation color->label is not called with methods continuous or image.
     // These methods are not implemented for this operation yet.
@@ -406,7 +405,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     if(GetParameterInt("op")==0)
     {
@@ -577,10 +576,7 @@ private:
 
       // Generate
       histogramFilter->Update();
-      const HistogramListType * histogramList = histogramFilter->GetOutput(); //
-      // HistogramPointerType histoBand=histogramList->GetNelements(0);
-      //  std::cout<<histoBand->GetFrequency(0, 0)<<std::endl;
-
+      const HistogramListType * histogramList = histogramFilter->GetOutput();
 
       ImageMetadataInterfaceType::Pointer
           metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(supportImage->GetMetaDataDictionary());
@@ -614,6 +610,8 @@ private:
       m_StatisticsMapFromLabelImageFilter = StreamingStatisticsMapFromLabelImageFilterType::New();
       m_StatisticsMapFromLabelImageFilter->SetInput(GetParameterImage("method.image.in"));
       m_StatisticsMapFromLabelImageFilter->SetInputLabelImage(m_CasterToLabelImage->GetOutput());
+      m_StatisticsMapFromLabelImageFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+      AddProcess(m_StatisticsMapFromLabelImageFilter->GetStreamer(), "Computing statistics on labels...");
       m_StatisticsMapFromLabelImageFilter->Update();
 
       StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType
@@ -636,7 +634,7 @@ private:
         {
         LabelType clabel = mapIt->first;
         meanValue = mapIt->second; //meanValue.Size() is null if label is not present in label image
-        if (meanValue.Size()==0)
+        if (meanValue.Size() != supportImage->GetNumberOfComponentsPerPixel())
           {
           color.Fill(0.0);
           }
@@ -717,7 +715,7 @@ private:
       streamingManager->PrepareStreaming(input, largestRegion);
 
       unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
-     
+
       otbAppLogINFO("Number of divisions : "<<numberOfStreamDivisions);
 
       // iteration over stream divisions
@@ -774,22 +772,36 @@ private:
       if (!line.empty() && line[0] != '#')
         {
         // retrieve the label
-        std::string::size_type pos = line.find_first_of(" ", 0);
-        LabelType clabel = atoi(line.substr(0, pos).c_str());
-        ++pos;
+        std::string::size_type length;
+        std::string::size_type pos = line.find_first_not_of(" \t;,", 0);
+        if (pos == std::string::npos)
+          continue;
+        std::string::size_type nextpos = line.find_first_of(" \t;,", pos);
+        if (nextpos == std::string::npos)
+          continue;
+        length = nextpos - pos;
+        LabelType clabel = atoi(line.substr(pos, length).c_str());
         // Retrieve the color
         VectorPixelType color(3);
         color.Fill(0);
-        for (unsigned int i = 0; i < 3; ++i)
+        unsigned int i;
+        for (i = 0; i < 3; ++i)
           {
-          std::string::size_type nextpos = line.find_first_of(" ", pos);
-          int value = atoi(line.substr(pos, nextpos).c_str());
+          if (nextpos == std::string::npos)
+            break;
+          pos = line.find_first_not_of(" \t;,", nextpos);
+          if (pos == std::string::npos)
+            break;
+          nextpos = line.find_first_of(" \t;,", pos);
+          length = ( nextpos == std::string::npos ? std::string::npos : nextpos - pos );
+          int value = atoi(line.substr(pos, length).c_str());
           if (value < 0 || value > 255)
             otbAppLogWARNING("WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl);
           color[i] = static_cast<PixelType> (value);
-          pos = nextpos + 1;
-          nextpos = line.find_first_of(" ", pos);
           }
+        // test if 3 values have been parsed
+        if (i < 3)
+          continue;
         otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
         if(putLabelBeforeColor)
           {

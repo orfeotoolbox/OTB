@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiToMonoChannelExtractROI_h
-#define __otbMultiToMonoChannelExtractROI_h
+#ifndef otbMultiToMonoChannelExtractROI_h
+#define otbMultiToMonoChannelExtractROI_h
 
 #include "otbExtractROIBase.h"
 #include "otbImage.h"
@@ -31,7 +31,7 @@ namespace otb
  * \brief Extract a mono channel part of a multi-channel image.
  *
  * This filter extracts either all channels or only those specified by the user.
- * The SetChannel method allows to select the channels to process.
+ * The SetChannel method allows selecting the channels to process.
  * \note If nothing is specified, only the first channel is processed.
  * \note This class is templated over the pixel types of the input and output images.
  * The input image has to be an otb::VectorImage, whereas the output image has to be an otb::Image.
@@ -90,8 +90,8 @@ public:
 
 protected:
   MultiToMonoChannelExtractROI();
-  virtual ~MultiToMonoChannelExtractROI() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~MultiToMonoChannelExtractROI() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** ExtractImageFilter can produce an image which is a different
    * resolution than its input image.  As such, ExtractImageFilter
@@ -101,13 +101,13 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** ExtractImageFilter can be implemented as a multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   MultiToMonoChannelExtractROI(const Self &); //purposely not implemented

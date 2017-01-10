@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
-#define __otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
+#ifndef otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
+#define otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
 
 #include "otbGeodesicMorphologyIterativeDecompositionImageFilter.h"
 
@@ -214,7 +214,7 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "NumberOfIterations: " << m_NumberOfIterations << std::endl;
-  os << indent << "IntialValue: " << m_InitialValue << std::endl;
+  os << indent << "InitialValue: " << m_InitialValue << std::endl;
   os << indent << "Step: " << m_Step << std::endl;
 }
 } // End namespace otb

@@ -20,13 +20,13 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbExtractROI.h"
 #include "otbConnectedComponentMuParserFunctor.h"
-#include "otbBandMathImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkStatisticsImageFilter.h"
 #include "itkChangeLabelImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkScalarConnectedComponentImageFilter.h"
 #include "otbConcatenateVectorImageFilter.h"
+#include "otbAffineFunctor.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbImportGeoInformationImageFilter.h"
@@ -70,17 +70,24 @@ public:
   typedef otb::Functor::ConnectedComponentMuParserFunctor<ImageType::PixelType>  CCFunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<ImageType, LabelImageType, CCFunctorType, otb::Image<unsigned int> > CCFilterType;
   typedef itk::ScalarConnectedComponentImageFilter<LabelImageType, LabelImageType> ScalarCCFilterType;
-  typedef otb::BandMathImageFilter<LabelImageType> BandMathImageFilterType;
   typedef itk::StatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
   typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
   typedef otb::ImportGeoInformationImageFilter<LabelImageType,ImageType> ImportGeoInformationImageFilterType;
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
 
   typedef otb::ConcatenateVectorImageFilter <ImageType,ImageType,ImageType> ConcatenateType;
+  typedef otb::Functor::AffineFunctor<
+    LabelImagePixelType,
+    LabelImagePixelType,
+    LabelImagePixelType>                      AffineFunctorType;
+  typedef itk::UnaryFunctorImageFilter<
+    LabelImageType,
+    LabelImageType,
+    AffineFunctorType>                        LabelShiftFilterType;
 
   LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
 
-  virtual ~LSMSSegmentation(){}
+  ~LSMSSegmentation() ITK_OVERRIDE{}
 
 private:
   LabelImageReaderType::Pointer m_FinalReader;
@@ -204,13 +211,13 @@ private:
     return vrtfname;
   }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("LSMSSegmentation");
     SetDescription("Second step of the exact Large-Scale Mean-Shift segmentation workflow.");
 
     SetDocName("Exact Large-Scale Mean-Shift segmentation, step 2");
-    SetDocLongDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS). Filtered range image and spatial image should be created with the MeanShiftSmoothing application, with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account. This application will produce a labeled image where neighbor pixels whose range distance is below range radius (and optionally spatial distance below spatial radius) will be grouped together into the same cluster. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results. Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows to remove all temporary file as soon as they are not needed anymore (if cleanup is activated, tmpdir set and tmpdir does not exists before running the application, it will be removed as well during cleanup). The tmpdir option allows to define a directory where to write the temporary files. Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.");
+    SetDocLongDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS). Filtered range image and spatial image should be created with the MeanShiftSmoothing application, with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account. This application will produce a labeled image where neighbor pixels whose range distance is below range radius (and optionally spatial distance below spatial radius) will be grouped together into the same cluster. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results. Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows removing all temporary file as soon as they are not needed anymore (if cleanup is activated, tmpdir set and tmpdir does not exists before running the application, it will be removed as well during cleanup). The tmpdir option allows defining a directory where to write the temporary files. Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.");
     SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
     SetDocAuthors("David Youssefi");
     SetDocSeeAlso("MeanShiftSmoothing, LSMSSmallRegionsMerging, LSMSVectorization");
@@ -227,17 +234,17 @@ private:
     SetParameterDescription( "out", "The output image. The output image is the segmentation of the filtered image. It is recommended to set the pixel type to uint32." );
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
-    AddParameter(ParameterType_Float, "ranger", "Range radius");
-    SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
-    SetDefaultParameterFloat("ranger", 15);
-    SetMinimumParameterFloatValue("ranger", 0);
-    MandatoryOff("ranger");
-
     AddParameter(ParameterType_Float, "spatialr", "Spatial radius");
     SetParameterDescription("spatialr", "Spatial radius of the neighborhood.");
     SetDefaultParameterFloat("spatialr", 5);
     SetMinimumParameterFloatValue("spatialr", 0);
     MandatoryOff("spatialr");
+    
+    AddParameter(ParameterType_Float, "ranger", "Range radius");
+    SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
+    SetDefaultParameterFloat("ranger", 15);
+    SetMinimumParameterFloatValue("ranger", 0);
+    MandatoryOff("ranger");
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Region Size");
     SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is deleted.");
@@ -269,19 +276,19 @@ private:
     SetDocExampleParameterValue("in","smooth.tif");
     SetDocExampleParameterValue("inpos","position.tif");
     SetDocExampleParameterValue("out","segmentation.tif");
-    SetDocExampleParameterValue("ranger","15");
     SetDocExampleParameterValue("spatialr","5");
+    SetDocExampleParameterValue("ranger","15");
     SetDocExampleParameterValue("minsize","0");
     SetDocExampleParameterValue("tilesizex","256");
     SetDocExampleParameterValue("tilesizey","256");
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_FilesToRemoveAfterExecute.clear();
 
@@ -401,14 +408,12 @@ private:
         ccFilter->GetFunctor().SetExpression(expr.str());
         ccFilter->Update();
 
-        std::stringstream ssexpr;
-        ssexpr<<"label+"<<regionCount;
-
         //Shifting
-        BandMathImageFilterType::Pointer labelBandMath = BandMathImageFilterType::New();
-        labelBandMath->SetNthInput(0,ccFilter->GetOutput(),"label");
-        labelBandMath->SetExpression(ssexpr.str());
-        labelBandMath->Update();
+        LabelShiftFilterType::Pointer labelShiftFilter = LabelShiftFilterType::New();
+        labelShiftFilter->SetInput(ccFilter->GetOutput());
+        labelShiftFilter->GetFunctor().SetA(1);
+        labelShiftFilter->GetFunctor().SetB(regionCount);
+        labelShiftFilter->Update();
 
         //Maximum label calculation for the shifting
         StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
@@ -416,7 +421,7 @@ private:
         stats->Update();
         regionCount+=stats->GetMaximum();
 
-        std::string filename = WriteTile(labelBandMath->GetOutput(),row,column,"SEG");
+        std::string filename = WriteTile(labelShiftFilter->GetOutput(),row,column,"SEG");
         }
 
 
@@ -592,7 +597,7 @@ private:
         WriteTile(changeLabel->GetOutput(),row,column,"RELAB");
 
         // Remove previous tile (not needed anymore)
-        readerIn = 0; // release the input file
+        readerIn = ITK_NULLPTR; // release the input file
         RemoveFile(tileIn);
         }
       }
@@ -649,7 +654,7 @@ private:
           m_FilesToRemoveAfterExecute.push_back(tmpfile);
 
           // Clean previous tiles (not needed anymore)
-          readerIn = 0; // release the input file
+          readerIn = ITK_NULLPTR; // release the input file
           RemoveFile(tileIn);
           }
         }
@@ -678,10 +683,10 @@ private:
       SetParameterOutputImage("out",m_ImportGeoInformationFilter->GetOutput());
   }
 
-  void AfterExecuteAndWriteOutputs()
+  void AfterExecuteAndWriteOutputs() ITK_OVERRIDE
   {
     // Release input files
-    m_FinalReader = 0;
+    m_FinalReader = ITK_NULLPTR;
 
     if(IsParameterEnabled("cleanup"))
       {
@@ -708,5 +713,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::LSMSSegmentation)
-
-

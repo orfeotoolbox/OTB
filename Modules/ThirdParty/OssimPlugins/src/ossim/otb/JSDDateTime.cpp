@@ -65,7 +65,7 @@ JSDDateTime::JSDDateTime(MJDDateTime& rhs)
 {
   CivilDateTime referenceCiv;
 
-  /* Initialisation of the MJD reference day (01/01/2000, 0h00) */
+  /* Initialization of the MJD reference day (01/01/2000, 0h00) */
   referenceCiv.set_year(2000);
   referenceCiv.set_month(01);
   referenceCiv.set_day(01);

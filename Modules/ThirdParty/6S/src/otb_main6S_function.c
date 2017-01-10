@@ -3617,7 +3617,7 @@ rguments*/
  */
 /*                                                                      c 
 */
-/*       irapp   that input parameter allows to activate atmospheric    c 
+/*       irapp   that input parameter allows activating atmospheric     c 
 */
 /*               correction mode                                        c 
 */

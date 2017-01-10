@@ -33,4 +33,10 @@ void RegisterTests()
   REGISTER_TEST(otbSinclairToCovarianceMatrixFunctor);
   REGISTER_TEST(otbReciprocalCovarianceToCoherencyDegreeImageFilter);
   REGISTER_TEST(otbMuellerToPolarisationDegreeAndPowerImageFilterNew);
+  REGISTER_TEST(otbReciprocalBarnesDecompImageFilterNew);
+  REGISTER_TEST(otbReciprocalBarnesDecompImageFilter);
+  REGISTER_TEST(otbReciprocalHuynenDecompImageFilterNew);
+  REGISTER_TEST(otbReciprocalHuynenDecompImageFilter);
+  REGISTER_TEST(otbReciprocalPauliDecompImageFilterNew);
+  REGISTER_TEST(otbReciprocalPauliDecompImageFilter);
 }

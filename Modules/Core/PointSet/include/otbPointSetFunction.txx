@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetFunction_txx
-#define __otbPointSetFunction_txx
+#ifndef otbPointSetFunction_txx
+#define otbPointSetFunction_txx
 
 #include "otbPointSetFunction.h"
 

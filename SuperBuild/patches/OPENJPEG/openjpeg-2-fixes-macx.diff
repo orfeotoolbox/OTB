@@ -1,0 +1,39 @@
+diff -burN openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592.orig/CMakeLists.txt openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592/CMakeLists.txt
+--- openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592.orig/CMakeLists.txt	2016-07-01 12:37:01.000000000 +0200
++++ openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592/CMakeLists.txt	2016-07-01 12:37:20.000000000 +0200
+@@ -151,7 +151,7 @@
+ endif()
+ 
+ if (APPLE)
+-	list(APPEND OPENJPEG_LIBRARY_PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${OPENJPEG_INSTALL_LIB_DIR}")
++#	list(APPEND OPENJPEG_LIBRARY_PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${OPENJPEG_INSTALL_LIB_DIR}")
+ 	option(OPJ_USE_DSYMUTIL "Call dsymutil on binaries after build." OFF)
+ endif()
+ 
+diff -burN openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592.orig/thirdparty/CMakeLists.txt openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592/thirdparty/CMakeLists.txt
+--- openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592.orig/thirdparty/CMakeLists.txt	2016-07-01 12:37:01.000000000 +0200
++++ openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592/thirdparty/CMakeLists.txt	2016-07-01 12:38:10.000000000 +0200
+@@ -84,7 +84,7 @@
+ set(OPJ_HAVE_LCMS_H 0 PARENT_SCOPE)
+ set(OPJ_HAVE_LIBLCMS 0 PARENT_SCOPE)
+ 
+-if( BUILD_THIRDPARTY)
++if( BUILD_THIRDPARTY_LCMS )
+   # Try to build lcms2
+   message(STATUS "We will build LCMS2 lib from thirdparty")
+   add_subdirectory(liblcms2)
+@@ -92,7 +92,7 @@
+   set(LCMS_INCLUDE_DIRNAME ${OPENJPEG_SOURCE_DIR}/thirdparty/liblcms2/include PARENT_SCOPE) #
+   set(OPJ_HAVE_LCMS2_H 1 PARENT_SCOPE)
+   set(OPJ_HAVE_LIBLCMS2 1 PARENT_SCOPE)
+-else(BUILD_THIRDPARTY)
++else()
+   find_package(LCMS2)
+   if(LCMS2_FOUND)
+     message(STATUS "Your system seems to have a LCMS2 lib available, we will use it")
+@@ -115,4 +115,4 @@
+       message(STATUS "LCMS2 or LCMS lib not found, activate BUILD_THIRDPARTY if you want build it")
+     endif(LCMS_FOUND)
+   endif(LCMS2_FOUND)
+-endif(BUILD_THIRDPARTY)
++endif()

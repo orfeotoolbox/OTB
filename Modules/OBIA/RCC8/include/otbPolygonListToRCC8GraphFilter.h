@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonListToRCC8GraphFilter_h
-#define __otbPolygonListToRCC8GraphFilter_h
+#ifndef otbPolygonListToRCC8GraphFilter_h
+#define otbPolygonListToRCC8GraphFilter_h
 
 #include "otbRCC8GraphSource.h"
 #include "otbPolygonToPolygonRCC8Calculator.h"
@@ -75,7 +75,8 @@ public:
   typedef RCC8InEdgeIterator<OutputGraphType>  InEdgeIteratorType;
   typedef RCC8OutEdgeIterator<OutputGraphType> OutEdgeIteratorType;
 
-  typedef std::pair<unsigned int, unsigned int> EdgePairType;
+  typedef typename VertexIteratorType::VertexDescriptorType EdgePairElementType;
+  typedef std::pair<EdgePairElementType, EdgePairElementType> EdgePairType;
   typedef std::map<EdgePairType, RCC8ValueType> EdgeMapType;
   typedef std::vector<EdgeMapType>              EdgeMapVectorType;
 
@@ -98,7 +99,7 @@ public:
   }
 
   /**
-   * Get the number of occurences of the given value
+   * Get the number of occurrences of the given value
    * \return The value.
    */
   unsigned int GetRelationsCount(RCC8ValueType val);
@@ -119,9 +120,9 @@ protected:
   /** Constructor */
   PolygonListToRCC8GraphFilter();
   /** Destructor */
-  virtual ~PolygonListToRCC8GraphFilter();
+  ~PolygonListToRCC8GraphFilter() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Multi-threading implementation */
 
@@ -129,7 +130,7 @@ protected:
 
   virtual void AfterThreadedGenerateData();
 
-  /** startIndex and stopIndex represent the indeces of the vertex to
+  /** startIndex and stopIndex represent the indices of the vertex to
   examine in thread threadId */
   virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId);
 
@@ -147,7 +148,7 @@ protected:
   /** End Multi-threading implementation */
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Get the composition knowledge.
    * \param r1 First RCC8 relation value,

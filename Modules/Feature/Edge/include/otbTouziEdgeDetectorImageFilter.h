@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTouziEdgeDetectorImageFilter_h
-#define __otbTouziEdgeDetectorImageFilter_h
+#ifndef otbTouziEdgeDetectorImageFilter_h
+#define otbTouziEdgeDetectorImageFilter_h
 
 #include "otbImageToModulusAndDirectionImageFilter.h"
 #include "otbImage.h"
@@ -31,7 +31,7 @@ namespace otb
  * This class implements the Touzi's ratio edge detector used to detect
  * contours.
  *
- * We define a square region of size 2n+1 that we devided in two regions.
+ * We define a square region of size 2n+1 that we divided in two regions.
  *
  * The response of the edge detector between two regions 1 and 2 in
  * one direction \f$ \theta_{i} \f$ is:
@@ -97,26 +97,26 @@ public:
    * a treatment input area larger than the output one.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 protected:
   TouziEdgeDetectorImageFilter();
-  virtual ~TouziEdgeDetectorImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~TouziEdgeDetectorImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** TouziEdgeDetectorImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
    * that is called for each process thread. Image datas are automatically allocated
-   * throught the parent class calling the ThreadedGenerateData() method.
+   * through the parent class calling the ThreadedGenerateData() method.
    * ThreadedGenerateData() can only write the area of the image specified by the parameter "outputRegionForThread"
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   TouziEdgeDetectorImageFilter(const Self &); //purposely not implemented

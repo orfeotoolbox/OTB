@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericRSResampleImageFilter_txx
-#define __otbGenericRSResampleImageFilter_txx
+#ifndef otbGenericRSResampleImageFilter_txx
+#define otbGenericRSResampleImageFilter_txx
 
 #include "otbGenericRSResampleImageFilter.h"
 
@@ -45,7 +45,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_EstimateOutputRpcModel = false;
   m_RpcEstimationUpdated   = false;
 
-  // internal filters instanciation
+  // internal filters instantiation
   m_Resampler         = ResamplerType::New();
   m_InputRpcEstimator = InputRpcModelEstimatorType::New();
   m_OutputRpcEstimator= OutputRpcModelEstimatorType::New();
@@ -82,21 +82,6 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
-
-  // Get the Output MetaData Dictionary
-  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-
-  // Encapsulate the   metadata set by the user
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
-                                        this->GetOutputProjectionRef());
-
-  if (this->GetOutputKeywordList().GetSize() > 0)
-    {
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
-                                               this->GetOutputKeywordList());
-    }
-
   // Estimate the output rpc Model if needed
   if (m_EstimateOutputRpcModel)
     this->EstimateOutputRpcModel();
@@ -107,7 +92,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     this->EstimateInputRpcModel();
     }
 
-  // Instanciate the RS transform
+  // Instantiate the RS transform
   this->UpdateTransform();
 
   m_Resampler->SetInput(this->GetInput());
@@ -116,6 +101,16 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_Resampler->GraftOutput(this->GetOutput());
   m_Resampler->UpdateOutputInformation();
   this->GraftOutput(m_Resampler->GetOutput());
+
+  // Encapsulate output projRef and keywordlist
+  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
+                                        this->GetOutputProjectionRef());
+  if (this->GetOutputKeywordList().GetSize() > 0)
+    {
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
+                                               this->GetOutputKeywordList());
+    }
 }
 
 /**
@@ -126,9 +121,6 @@ void
 GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::EstimateOutputRpcModel()
 {
-  // Get the output dictionary
-  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-
   // Temp image : not allocated but with the same metadata than the
   // output
   typename OutputImageType::Pointer tempPtr = OutputImageType::New();
@@ -152,10 +144,6 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   // Encapsulate the estimated rpc model in the output
   if (m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
     {
-    // Fill the output dict
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                               MetaDataKey::OSSIMKeywordlistKey,
-                                               m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     // Fill the transform with the right kwl
     m_Transform->SetInputKeywordList( m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
     }
@@ -163,7 +151,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
 /**
   * Fill with the default dict of the input and the output
-  * and instanciate the transform
+  * and instantiate the transform
   */
 template <class TInputImage, class TOutputImage>
 void
@@ -176,7 +164,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
     m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
     }
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -212,7 +200,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
    m_InputRpcEstimator->SetInput(tempPtr);
    m_InputRpcEstimator->UpdateOutputInformation();
 
-   // No need to override the input kwl, just setup the
+   // No need to ITK_OVERRIDE the input kwl, just setup the
    // transform with the kwl estimated
    if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
      m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
@@ -274,7 +262,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   const InputImageType* input = this->GetInput();
 
   // Update the transform with input information
-  // Done here because the transform is not instanciated
+  // Done here because the transform is not instantiated
   // yet
   this->UpdateTransform();
 
@@ -307,12 +295,12 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     bool hem = (geoPoint[1]>1e-10)?true:false;
 
     // Build the output UTM projection ref
-    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
+    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(ITK_NULLPTR);
     OSRSetProjCS(oSRS, "UTM");
     OSRSetWellKnownGeogCS(oSRS, "WGS84");
     OSRSetUTM(oSRS, zone, hem);
 
-    char * utmRefC = NULL;
+    char * utmRefC = ITK_NULLPTR;
     OSRExportToWkt(oSRS, &utmRefC);
     projectionRef = utmRefC;
 

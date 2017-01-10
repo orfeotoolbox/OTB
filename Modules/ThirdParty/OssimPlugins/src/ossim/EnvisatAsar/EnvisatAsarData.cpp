@@ -57,12 +57,12 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 	data.ClearRecords();
 
 	// read the first record (MPH)
-	EnvisatAsarRecord* mph_record = factory.Instanciate("MPH");
+	EnvisatAsarRecord* mph_record = factory.Instantiate("MPH");
 	mph_record->Read(is);
 	data._records.push_back(mph_record);
 
 	// read the second record (sph) and update it with the mph (number of dsd)
-	EnvisatAsarRecord* sph_record = factory.Instanciate("SPH");
+	EnvisatAsarRecord* sph_record = factory.Instantiate("SPH");
 	((sph*)sph_record)->update_sph_from_mph(*((mph *)mph_record));
 	sph_record->Read(is);
 	data._records.push_back(sph_record);
@@ -70,7 +70,7 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 	std::vector<dsd> dsd_vector = ((sph*)sph_record)->get_dsd_vector();
 
 	// For each dsd, check if present in the file and in the record factory.
-	// If true, instanciate it and add to the EnvisatAsarRecord list.
+	// If true, instantiate it and add to the EnvisatAsarRecord list.
 	std::vector<dsd>::iterator it = dsd_vector.begin();
 	while(it != dsd_vector.end())
 	{
@@ -80,7 +80,7 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 		{
 			for (int i = 0; i<(it->get_num_dsr()); i++)
 			{
-				EnvisatAsarRecord* record = factory.Instanciate(str);
+				EnvisatAsarRecord* record = factory.Instantiate(str);
 				if (record != NULL)
 				{
 					is.seekg((std::streampos)(it->get_ds_offset())+ (std::streampos)(i*(it->get_dsr_size())));

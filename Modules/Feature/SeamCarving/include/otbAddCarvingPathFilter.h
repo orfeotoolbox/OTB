@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAddCarvingPathFilter_h
-#define __otbAddCarvingPathFilter_h
+#ifndef otbAddCarvingPathFilter_h
+#define otbAddCarvingPathFilter_h
 
 #include "itkImageAndPathToImageFilter.h"
 #include "itkImageSliceIteratorWithIndex.h"
@@ -111,15 +111,15 @@ public:
   itkSetMacro(Direction, unsigned int);
   itkGetConstMacro(Direction, unsigned int);
 
-  virtual void GenerateOutputInformation();
-  virtual void GenerateInputRequestedRegion();
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 protected:
   AddCarvingPathFilter();
-  virtual ~AddCarvingPathFilter() {}
+  ~AddCarvingPathFilter() ITK_OVERRIDE {}
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateData();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   AddCarvingPathFilter(const Self &); //purposely not implemented

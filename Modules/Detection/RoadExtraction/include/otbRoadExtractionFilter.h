@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRoadExtractionFilter_h
-#define __otbRoadExtractionFilter_h
+#ifndef otbRoadExtractionFilter_h
+#define otbRoadExtractionFilter_h
 
 
 #include "otbSpectralAngleDistanceImageFilter.h"
@@ -138,15 +138,15 @@ protected:
   /** Constructor */
   RoadExtractionFilter();
   /** Destructor */
-  ~RoadExtractionFilter() {}
+  ~RoadExtractionFilter() ITK_OVERRIDE {}
 
   /** Prepare main computation method */
   void BeforeGenerateData(void);
 
   /** Main computation method */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

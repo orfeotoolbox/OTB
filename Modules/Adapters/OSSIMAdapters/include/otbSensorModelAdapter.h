@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSensorModelAdapter_h
-#define __otbSensorModelAdapter_h
+#ifndef otbSensorModelAdapter_h
+#define otbSensorModelAdapter_h
 
 #include "otbDEMHandler.h"
 
@@ -32,7 +32,7 @@ class ImageKeywordlist;
  * \class SensorModelAdapter
  * \brief Wrapper class to group all dependencies to ossim for sensor models
  *
- * This class is NOT intented to be used outside of OTB. Use the
+ * This class is NOT intended to be used outside of OTB. Use the
  * InverseSensorModel and ForwardSensorModel. If you feel that you need to use
  * it directly, think again!
  *
@@ -44,11 +44,11 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class SensorModelAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT SensorModelAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef SensorModelAdapter          Self;
+  typedef SensorModelAdapter            Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -98,9 +98,9 @@ public:
   double Optimize();
 
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
-  bool IsValidSensorModel();
+  bool IsValidSensorModel() const;
 
-  /** Read geom file and instanciate sensor model */
+  /** Read geom file and instantiate sensor model */
   bool ReadGeomFile(const std::string & infile);
 
   /** Write geom file corresponding to sensor model */
@@ -108,7 +108,7 @@ public:
 
 protected:
   SensorModelAdapter();
-  virtual ~SensorModelAdapter();
+  ~SensorModelAdapter() ITK_OVERRIDE;
 
 private:
   SensorModelAdapter(const Self &); //purposely not implemented

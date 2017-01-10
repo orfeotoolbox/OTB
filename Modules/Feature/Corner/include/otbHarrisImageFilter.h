@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHarrisImageFilter_h
-#define __otbHarrisImageFilter_h
+#ifndef otbHarrisImageFilter_h
+#define otbHarrisImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkHessianRecursiveGaussianImageFilter.h"
@@ -101,11 +101,11 @@ public:
 
 protected:
   HarrisImageFilter();
-  virtual ~HarrisImageFilter() {}
+  ~HarrisImageFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   HarrisImageFilter(const Self&); //purposely not implemented

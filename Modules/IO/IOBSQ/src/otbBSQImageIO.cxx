@@ -54,7 +54,7 @@ BSQImageIO::BSQImageIO()
   // (consistency between ImageIO, see Mantis #942)
   m_Origin[0] = 0.5;
   m_Origin[1] = 0.5;
-  m_ChannelsFile = NULL;
+  m_ChannelsFile = ITK_NULLPTR;
   m_FlagWriteImageInformation = true;
 
   this->AddSupportedWriteExtension(".hd");
@@ -71,7 +71,7 @@ BSQImageIO::~BSQImageIO()
     {
     m_HeaderFile.close();
     }
-  if (m_ChannelsFile !=  NULL)
+  if (m_ChannelsFile !=  ITK_NULLPTR)
     {
     for (unsigned int numComponent = 0; numComponent < this->GetNumberOfComponents(); numComponent++)
       {
@@ -108,7 +108,7 @@ bool BSQImageIO::CanReadFile(const char* filename)
     otbMsgDevMacro(<< "BSQImageIO::CanReadFile() failed header open ! ");
     return false;
     }
-  //Read header informations
+  //Read header information
   bool lResult = InternalReadHeaderInformation(lFileName, header_file, false);
   header_file.close();
   return (lResult);
@@ -152,7 +152,7 @@ void BSQImageIO::Read(void* buffer)
   step = step * (unsigned long) (this->GetComponentSize());
 
   char * value = new char[numberOfBytesToBeRead];
-  if (value == NULL)
+  if (value == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "BSQImageIO::Read(): Bad alloc");
     return;
@@ -231,7 +231,7 @@ void BSQImageIO::ReadImageInformation()
     itkExceptionMacro(<< "BSQImageIO::ReadImageInformation() failed header open ! ");
     }
 
-  //Read header informations
+  //Read header information
   InternalReadHeaderInformation(m_FileName, m_HeaderFile, true);
 
   otbMsgDebugMacro(<< "Driver to read: BSQ");
@@ -303,7 +303,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       {
       itkExceptionMacro(
         << "BSQ : the value type '" << lStrCodePix <<
-        "' (second line) set in the header file is not reconized as correct value.");
+        "' (second line) set in the header file is not recognized as correct value.");
       }
     else
       {
@@ -375,7 +375,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
     }
   file >> m_Dimensions[0];
 
-  //Read "BITS PER PIXEL" informations
+  //Read "BITS PER PIXEL" information
   file >> lString;
   std::string lStrBitsPerPixels(lString);
   file >> lString;
@@ -397,7 +397,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   int lNbBitsPerPixels;
   file >> lNbBitsPerPixels;
 
-  //Read "SENSCODAGE" informations (optionnal)
+  //Read "SENSCODAGE" information (optional)
   file >> lString;
   if (lString.empty() == false)
     {
@@ -420,7 +420,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
           {
           itkExceptionMacro(
             << "BSQ : the value SENSCODAGE '" << lString <<
-            "' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");
+            "' set in the header file is not recognized as correct value. Possible values are INTEL or IEEE");
           }
         else
           {
@@ -528,7 +528,7 @@ void BSQImageIO::Write(const void* buffer)
   const char * p = static_cast<const char *>(buffer);
 
   char* value = new char[numberOfBytesToBeWrite];
-  if (value == NULL)
+  if (value == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Memory allocation error");
     return;
@@ -593,7 +593,7 @@ void BSQImageIO::WriteImageInformation()
   otbSetTypeBsqMacro(DOUBLE, "R8")
   else
     {
-    itkExceptionMacro(<< "BSQ format doesn't reconized (TYPE).");
+    itkExceptionMacro(<< "BSQ format doesn't recognized (TYPE).");
     }
 
   std::string lString;
@@ -616,11 +616,11 @@ void BSQImageIO::WriteImageInformation()
   m_HeaderFile <<  "COLUMNS" << std::endl;
   m_HeaderFile << m_Dimensions[0] << std::endl;
 
-  //Write "BITS PER PIXEL" informations
+  //Write "BITS PER PIXEL" information
   m_HeaderFile <<  "BITS PER PIXEL" << std::endl;
   m_HeaderFile << this->GetComponentSize() * 8 << std::endl;
 
-  //Write "SENSCODAGE" informations
+  //Write "SENSCODAGE" information
   m_HeaderFile <<  "SENSCODAGE" << std::endl;
   if (m_ByteOrder == LittleEndian)
     {

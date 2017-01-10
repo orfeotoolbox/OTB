@@ -46,7 +46,7 @@ void QtWidgetParameterBase::UpdateGUI()
   // Update the GUI
   this->DoUpdateGUI();
 
-  // Emit State of the Parameter to update this paramter checkbox
+  // Emit State of the Parameter to update this parameter checkbox
   if (!m_Param->GetMandatory())
     {
     bool state = m_Param->GetActive();
@@ -77,7 +77,7 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 // current widget
 void QtWidgetParameterBase::SetActivationState( bool value )
 {
-  //filter out EmptyParamter
+  //filter out EmptyParameter
   if(strcmp(m_Param->GetNameOfClass(), "EmptyParameter") == 0)
     {
     //only set user value if there is a change
@@ -99,5 +99,7 @@ void QtWidgetParameterBase::Reset(  )
   m_Param->SetAutomaticValue(false);
   this->UpdateGUI();
 }
+
 }
+
 }

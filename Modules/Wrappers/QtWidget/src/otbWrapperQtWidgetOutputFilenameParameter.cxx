@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -35,7 +37,12 @@ QtWidgetOutputFilenameParameter::~QtWidgetOutputFilenameParameter()
 void QtWidgetOutputFilenameParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( m_FilenameParam->GetValue().c_str() );
+  QString text(
+    QFile::decodeName(
+      m_FilenameParam->GetValue().c_str()
+    )
+  );
+
   if (text != m_Input->text())
     m_Input->setText(text);
 }
@@ -64,39 +71,36 @@ void QtWidgetOutputFilenameParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetOutputFilenameParameter::SelectFile()
+void
+QtWidgetOutputFilenameParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  switch(m_FilenameParam->GetRole())
-    {
-    case Role_Input:
-    {
-    //fileDialog.setFileMode(QFileDialog::ExistingFile);
-    // FIXME: parameter's role is not suitable to separate "input file" names from "output file" names
-    fileDialog.setFileMode(QFileDialog::AnyFile);
-    }
-    break;
-    case Role_Output:
-    {
-    fileDialog.setFileMode(QFileDialog::AnyFile);
-    }
-    break;
-    }
+  assert( m_Input!=NULL );
 
-  fileDialog.setNameFilter("File (*)");
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "All files (*)" ),
+      NULL )
+  );
 
-  if (fileDialog.exec())
-    {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+  if( filename.isEmpty() )
+    return;
+
+  SetFileName( filename );
+
+  m_Input->setText( filename  );
 }
+
 
 void QtWidgetOutputFilenameParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FilenameParam->SetValue(value.toAscii().constData());
+  m_FilenameParam->SetValue(
+    QFile::encodeName( value ).constData()
+  );
 
   // notify of value change
   QString key( m_FilenameParam->GetKey() );

@@ -73,13 +73,13 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ComputePolylineFeatureFromImage");
-    SetDescription("This application compute for each studied polyline, contained in the input VectorData, the choosen descriptors.");
+    SetDescription("This application compute for each studied polyline, contained in the input VectorData, the chosen descriptors.");
 
     SetDocName("Compute Polyline Feature From Image");
-    SetDocLongDescription("The first step in the classifier fusion based validation is to compute, for each studied polyline, the choosen descriptors. ");
+    SetDocLongDescription("The first step in the classifier fusion based validation is to compute, for each studied polyline, the chosen descriptors. ");
     SetDocLimitations("Since it does not rely on streaming process, take care of the size of input image before launching application.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -111,12 +111,12 @@ private:
     SetDocExampleParameterValue("out", "PolylineFeatureFromImage_LI_NONDVI_gt.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Vector Data into Image projection
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

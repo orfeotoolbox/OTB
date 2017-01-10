@@ -67,7 +67,13 @@ public:
 
 
 private:
-  void DoInit()
+  SOMClassification()
+    {
+    m_UseMask = false;
+    m_Classifier = ClassificationFilterType::New();
+    }
+
+  void DoInit() ITK_OVERRIDE
   {
     SetName("SOMClassification");
     SetDescription("SOM image classification.");
@@ -79,8 +85,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag(Tags::Learning);
     AddDocTag(Tags::Segmentation);
-    AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputImage,  "in",   "InputImage");
     SetParameterDescription("in", "Input image to classify.");
@@ -167,12 +173,12 @@ private:
     SetDocExampleParameterValue("iv", "0");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // initiating random number generation
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
@@ -367,7 +373,6 @@ private:
     /*******************************************/
     otbAppLogINFO("-- CLASSIFICATION --");
 
-    m_Classifier = ClassificationFilterType::New();
     m_Classifier->SetInput(input);
     m_Classifier->SetMap(m_SOMMap);
     if (m_UseMask) m_Classifier->SetInputMask(mask);

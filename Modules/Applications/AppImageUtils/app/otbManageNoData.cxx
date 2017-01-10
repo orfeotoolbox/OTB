@@ -55,19 +55,20 @@ public:
   typedef otb::ChangeInformationImageFilter<FloatVectorImageType> ChangeInfoFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ManageNoData");
     SetDescription("Manage No-Data");
     // Documentation
     SetDocName("No Data management");
-    SetDocLongDescription("This application has two modes. The first allows to build a mask of no-data pixels from the no-data flags read from the image file. The second allows to update the change the no-data value of an image (pixels value and metadata). This last mode also allows to replace NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
+    SetDocLongDescription("This application has two modes. The first allows building a mask of no-data pixels from the no-data flags read from the image file. The second allows updating the change the no-data value of an image (pixels value and metadata). This last mode also allows replacing NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("BanMath");
+    SetDocSeeAlso("BandMath");
+
+	AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
-    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
@@ -81,7 +82,7 @@ private:
     DisableParameter("usenan");
    
     AddParameter(ParameterType_Choice,"mode","No-data handling mode");
-    SetParameterDescription("mode","Allows to choose between different no-data handling options");
+    SetParameterDescription("mode","Allows choosing between different no-data handling options");
 
     AddChoice("mode.buildmask","Build a no-data Mask");
     
@@ -104,6 +105,9 @@ private:
     SetParameterDescription("mode.apply","Apply an external mask to an image using the no-data value of the input image");
     AddParameter(ParameterType_InputImage, "mode.apply.mask", "Mask image");
     SetParameterDescription("mode.apply.mask","Mask to be applied on input image (valid pixels have non null values)");
+    AddParameter(ParameterType_Float, "mode.apply.ndval", "Nodata value used");
+    SetParameterDescription("mode.apply.ndval","No Data value used according to the mask image");
+    SetDefaultParameterFloat("mode.apply.ndval", 0.0);
 
     SetParameterString("mode","buildmask");
 
@@ -116,13 +120,13 @@ private:
     SetDocExampleParameterValue("mode.buildmask.outv", "0");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
 
- void DoExecute()
+ void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType::Pointer inputPtr = this->GetParameterImage("in");
     
@@ -160,7 +164,7 @@ private:
       if (!ret)
         {
         flags.resize(nbBands,true);
-        values.resize(nbBands,0.0);
+        values.resize(nbBands,GetParameterFloat("mode.apply.ndval"));
         }
 
       m_V2L = VectorToListFilterType::New();

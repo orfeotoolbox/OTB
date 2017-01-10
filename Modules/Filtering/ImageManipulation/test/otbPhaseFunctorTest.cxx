@@ -21,6 +21,7 @@
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
+#include "otbMath.h"
 
 int otbPhaseFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
@@ -54,7 +55,7 @@ int otbPhaseFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       funct.SetChannelList(channels);
       output = funct.operator ()(vectorPixel);
       result = vcl_atan2(vectorPixel[j],vectorPixel[i]);
-      if( abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
+      if( vcl_abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
         {
           std::cout << "vectorPixelType Test VectorPixelType failed for channels " << i<< " and "
               << j << " !" << std::endl;
@@ -78,7 +79,7 @@ int otbPhaseFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       funct.SetChannelList(channels);
       output = funct.operator ()(rgbPixel);
       result = vcl_atan2(rgbPixel[j],rgbPixel[i]);
-      if( abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
+      if( vcl_abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
         {
           std::cout << "vectorPixelType Test RGBPixelType failed for channels " << i<< " and "
               << j << " !" << std::endl;
@@ -107,7 +108,7 @@ int otbPhaseFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       funct.SetChannelList(channels);
       output = funct.operator ()(rgbaPixel);
       result = vcl_atan2(rgbaPixel[j],rgbaPixel[i]);
-      if( abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
+      if( vcl_abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
         {
           std::cout << "vectorPixelType Test RGBAPixelType failed for channels " << i<< " and "
               << j << " !" << std::endl;

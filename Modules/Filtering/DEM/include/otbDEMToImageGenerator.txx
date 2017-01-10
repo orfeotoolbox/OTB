@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMToImageGenerator_txx
-#define __otbDEMToImageGenerator_txx
+#ifndef otbDEMToImageGenerator_txx
+#define otbDEMToImageGenerator_txx
 
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
@@ -36,6 +36,7 @@ DEMToImageGenerator<TDEMImage>
   m_OutputSize[1] = 1;
   m_OutputOrigin[0] = 0;
   m_OutputOrigin[1] = 0;
+  m_DefaultUnknownValue = itk::NumericTraits<PixelType>::ZeroValue();
   m_AboveEllipsoid = false;
 
   m_Transform         = GenericRSTransformType::New();
@@ -77,19 +78,19 @@ void DEMToImageGenerator<TDEMImage>
     }
 }
 
-// InstanciateTransform method
+// InstantiateTransform method
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
-::InstanciateTransform()
+::InstantiateTransform()
 {
-  m_Transform->InstanciateTransform();
+  m_Transform->InstantiateTransform();
 }
 
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
 ::BeforeThreadedGenerateData()
 {
-  InstanciateTransform();
+  InstantiateTransform();
   DEMImagePointerType DEMImage = this->GetOutput();
 
   // allocate the output buffer

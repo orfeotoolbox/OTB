@@ -36,7 +36,7 @@
 // OTB is using GDAL to support HDF. HDF4 and HDF5 supports in Gdal is
 // not activated by default. You need to download the HDF run-time
 // libraries and compile Gdal by adding the support of these formats. You can
-// find more informations here : \url{http://trac.osgeo.org/gdal/wiki/HDF}
+// find more information here : \url{http://trac.osgeo.org/gdal/wiki/HDF}
 //
 //
 // The first step toward the use of these filters is to include the proper header files.
@@ -55,7 +55,7 @@ int main(int itkNotUsed(argc), char * argv[])
 
 // Software Guide : BeginLatex
 //
-// We need now to declare the data types that we will be using and instanciate the
+// We need now to declare the data types that we will be using and instantiate the
 // reader (which is a \doxygen{otb}{PointSetFileReader}).
 //
 // Software Guide : EndLatex
@@ -87,10 +87,10 @@ int main(int itkNotUsed(argc), char * argv[])
 
 // Software Guide : BeginLatex
 //
-// You can access to subdatasets' informations available in the HDF file using
+// You can access to subdatasets' information available in the HDF file using
 // the \code{GetSubDatasetInfo} method of \doxygen{otb}{GDALImageIO}.
-// It allows to store HDF subdatasets names and descriptions in vector of string.
-// You can find below how to print the name and the decription
+// It allows storing HDF subdatasets names and descriptions in vector of string.
+// You can find below how to print the name and the description
 // of all the subdatasets.
 //
 // Software Guide : EndLatex

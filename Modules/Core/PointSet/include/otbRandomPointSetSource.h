@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbRandomPointSetSource_h
-#define __otbRandomPointSetSource_h
+#ifndef otbRandomPointSetSource_h
+#define otbRandomPointSetSource_h
 
 #include "otbPointSetSource.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
@@ -84,9 +84,9 @@ public:
 
 protected:
   RandomPointSetSource();
-  virtual ~RandomPointSetSource() {}
+  ~RandomPointSetSource() ITK_OVERRIDE {}
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   RandomPointSetSource(const Self &); //purposely not implemented

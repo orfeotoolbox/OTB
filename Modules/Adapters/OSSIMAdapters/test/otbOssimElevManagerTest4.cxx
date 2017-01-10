@@ -20,8 +20,18 @@
 #include <fstream>
 #include <sstream>
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/elevation/ossimElevManager.h"
 #include "ossim/base/ossimFilename.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/elevation/ossimElevManager.h"
+#include "ossim/base/ossimFilename.h"
+#endif
 
 int otbOssimElevManagerTest4(int argc, char* argv[])
 {

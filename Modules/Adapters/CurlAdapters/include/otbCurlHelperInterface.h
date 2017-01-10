@@ -15,12 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCurlHelperInterface_h
-#define __otbCurlHelperInterface_h
+#ifndef otbCurlHelperInterface_h
+#define otbCurlHelperInterface_h
 
 #include <iosfwd>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBCurlAdaptersExport.h"
 
 namespace otb
 {
@@ -34,7 +35,7 @@ namespace otb
  *
  * \ingroup OTBCurlAdapters
  */
-class ITK_EXPORT CurlHelperInterface : public itk::Object
+class OTBCurlAdapters_EXPORT CurlHelperInterface : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -62,7 +63,7 @@ public:
 
 protected:
   CurlHelperInterface() {}
-  virtual ~CurlHelperInterface() {}
+  ~CurlHelperInterface() ITK_OVERRIDE {}
 
 private:
   CurlHelperInterface(const Self &);  //purposely not implemented

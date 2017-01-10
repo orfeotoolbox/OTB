@@ -16,6 +16,7 @@ set(group_list
   Remote
   Segmentation
   ThirdParty
+  Visualization
   Wrappers
   )
 
@@ -34,7 +35,9 @@ set(Radiometry_documentation "This group contains algorithms related to the proc
 set(Registration_documentation "This group contains algorithms related to registration of images")
 set(Segmentation_documentation "This group contains algorithms related to image segmentaiton")
 set(ThirdParty_documentation "This group contains all Orfeo ToolBox third parties")
+set(Visualization_documentation "This group contains Ice (visualization framework) and IceViewer (visualization tool)")
 set(Wrappers_documentation "This group contains the application framework and the wrappers to use it")
+
 
 set(Remote_documentation "This group of modules is for OTB based code that have
 additional third-party dependencies not bundled with the toolkit,

@@ -16,7 +16,10 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetComplexOutputImageParameter.h"
-#include "otbWrapperTypes.h"
+
+
+#include <otbQtAdapters.h>
+#include <otbWrapperTypes.h>
 
 namespace otb
 {
@@ -36,7 +39,10 @@ QtWidgetComplexOutputImageParameter::~QtWidgetComplexOutputImageParameter()
 void QtWidgetComplexOutputImageParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( m_OutputImageParam->GetFileName() );
+  QString text(
+    QFile::decodeName( m_OutputImageParam->GetFileName() )
+  );
+
   if (text != m_Input->text())
     m_Input->setText(text);
 }
@@ -74,24 +80,36 @@ void QtWidgetComplexOutputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetComplexOutputImageParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
-  fileDialog.setNameFilter("Raster files (*)");
 
-  if (fileDialog.exec())
-    {
-    //this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+void
+QtWidgetComplexOutputImageParameter
+::SelectFile()
+{
+  assert( m_Input!=NULL );
+
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "Raster files (*)" ),
+      NULL
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  SetFileName( filename );
+
+  m_Input->setText( filename  );
 }
+
 
 void QtWidgetComplexOutputImageParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = value.toAscii().constData();
+  m_FileName = QFile::encodeName( value ).constData();
 
   m_OutputImageParam->SetFileName(m_FileName);
 

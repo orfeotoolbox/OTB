@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingInnerProductVectorImageFilter_txx
-#define __otbStreamingInnerProductVectorImageFilter_txx
+#ifndef otbStreamingInnerProductVectorImageFilter_txx
+#define otbStreamingInnerProductVectorImageFilter_txx
 #include "otbStreamingInnerProductVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

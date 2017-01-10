@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRelabelComponentImageFilter_txx
-#define __otbRelabelComponentImageFilter_txx
+#ifndef otbRelabelComponentImageFilter_txx
+#define otbRelabelComponentImageFilter_txx
 
 #include "otbRelabelComponentImageFilter.h"
 #include "itkImageRegionIterator.h"

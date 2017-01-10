@@ -1,0 +1,23 @@
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/mkspecs/macx-g++/qmake.conf qt-everywhere-opensource-src-4.8.7/mkspecs/macx-g++/qmake.conf
+--- qt-everywhere-opensource-src-4.8.7.orig/mkspecs/macx-g++/qmake.conf	2016-04-18 17:22:33.000000000 +0200
++++ qt-everywhere-opensource-src-4.8.7/mkspecs/macx-g++/qmake.conf	2016-04-18 17:24:36.000000000 +0200
+@@ -16,4 +16,7 @@
+ include(../common/mac.conf)
+ include(../common/gcc-base-macx.conf)
+ include(../common/g++-macx.conf)
++
++QMAKE_LFLAGS_SONAME     = -Wl,-install_name,@rpath/
++
+ load(qt_config)
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/qmake/generators/unix/unixmake2.cpp qt-everywhere-opensource-src-4.8.7/qmake/generators/unix/unixmake2.cpp
+--- qt-everywhere-opensource-src-4.8.7.orig/qmake/generators/unix/unixmake2.cpp	2016-04-18 17:22:33.000000000 +0200
++++ qt-everywhere-opensource-src-4.8.7/qmake/generators/unix/unixmake2.cpp	2016-04-18 17:23:46.000000000 +0200
+@@ -1180,7 +1180,7 @@
+                     QString instpath = Option::fixPathToTargetOS(project->first("target.path"));
+                     if(!instpath.endsWith(Option::dir_sep))
+                         instpath += Option::dir_sep;
+-                    soname.prepend(instpath);
++//                    soname.prepend(instpath);
+                 }
+                 project->values("QMAKE_LFLAGS_SONAME").first() += escapeFilePath(soname);
+             }

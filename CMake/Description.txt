@@ -1,0 +1,13 @@
+Remote sensing processing library developed by CNES ORFEO Toolbox (OTB) is
+  distributed as an open source library of image processing algorithms. OTB is
+  based on the medical image processing library ITK and offers particular
+  functionalities for remote sensing image processing in general and for high
+  spatial resolution images in particular. OTB is distributed under a free
+  software licence CeCILL (similar to GPL) to encourage contribution from users
+  and to promote reproducible research. The library is intensively tested on
+  several platforms as Linux, Unix and Windows. Most functionnalies are also
+  adapted to process huge images using streaming and multithreading as often as
+  possible.
+  .
+  This package provide the new version of the Monteverdi GUI application
+  developed in Qt around the OTB library.

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReduceSpectralResponseClassifierRAndNIR_h
-#define __otbReduceSpectralResponseClassifierRAndNIR_h
+#ifndef otbReduceSpectralResponseClassifierRAndNIR_h
+#define otbReduceSpectralResponseClassifierRAndNIR_h
 
 
 #include "otbReduceSpectralResponse.h"
@@ -106,7 +106,7 @@ namespace otb
 
 
           /** PrintSelf method */
-          void PrintSelf(std::ostream& os, itk::Indent indent) const;
+          void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
           /**
@@ -122,7 +122,7 @@ namespace otb
           /** Constructor from a ASCII file */
           //ReduceSpectralResponseClassifierRAndNIR( const std::string & filename );
           /** Destructor */
-          virtual ~ReduceSpectralResponseClassifierRAndNIR() {};
+          ~ReduceSpectralResponseClassifierRAndNIR() ITK_OVERRIDE {};
           /** PrintSelf method */
           //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

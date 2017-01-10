@@ -105,11 +105,11 @@ void Equation::Normalisation()
    */
   for (int i = 0 ; i < _trueDegree ; i++)
   {
-    float rr = abs(_coefficients[i]) ;
+    double rr = std::abs(_coefficients[i]) ;
     if (rr >= Epsilon)
     {
       rr = log10(rr) ;
-      e = ((int)rr) / ((int)(_trueDegree - i)) ;
+      e = static_cast<int>(rr) / static_cast<int>(_trueDegree - i) ;
       if (e > eMax)
         eMax = e ;
       if (e < eMin)

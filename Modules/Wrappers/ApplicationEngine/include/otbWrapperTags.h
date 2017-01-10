@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperTags_h
-#define __otbWrapperTags_h
+#ifndef otbWrapperTags_h
+#define otbWrapperTags_h
 
 #include <string>
 
@@ -51,4 +51,4 @@ static const std::string Vector="Vector Data Manipulation";
 } // end namespace Tags
 } // end namespace otb
 
-#endif // __otbWrapperTags_h_
+#endif // otbWrapperTags_h_

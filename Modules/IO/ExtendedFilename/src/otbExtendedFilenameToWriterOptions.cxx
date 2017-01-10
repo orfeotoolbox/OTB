@@ -16,32 +16,32 @@
 
 =========================================================================*/
 #include "otbExtendedFilenameToWriterOptions.h"
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 #include <itksys/RegularExpression.hxx>
-
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
+#include "otb_boost_tokenizer_header.h"
 
 namespace otb
 {
 
 ExtendedFilenameToWriterOptions
-::ExtendedFilenameToWriterOptions() : itk::Object()
+::ExtendedFilenameToWriterOptions() : ExtendedFilenameHelper()
 {
-  m_FilenameHelper = FNameHelperType::New();
-
   m_Options.simpleFileName.first  = false;
   m_Options.simpleFileName.second = "";
 
   m_Options.writeGEOMFile.first  = false;
   m_Options.writeGEOMFile.second = true;
 
+  m_Options.writeRPCTags.first = false;
+  m_Options.writeRPCTags.second = false;
+  
   m_Options.gdalCreationOptions.first = false;
   m_Options.streamingType.first       = false;
   m_Options.streamingSizeMode.first   = false;
   m_Options.streamingSizeValue.first  = false;
 
   m_Options.optionList.push_back("writegeom");
+  m_Options.optionList.push_back("writerpctags");
   m_Options.optionList.push_back("streaming:type");
   m_Options.optionList.push_back("streaming:sizemode");
   m_Options.optionList.push_back("streaming:sizevalue");
@@ -52,12 +52,12 @@ void
 ExtendedFilenameToWriterOptions
 ::SetExtendedFileName(const char *extFname)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extFname);
+  this->Superclass::SetExtendedFileName(extFname);
   // TODO: Rename map to a less confusing (with std::map) name
-  MapType map = this->m_FilenameHelper->GetOptionMap();
+  MapType map = this->GetOptionMap();
 
   m_Options.simpleFileName.first  = true;
-  m_Options.simpleFileName.second = this->m_FilenameHelper->GetSimpleFileName();
+  m_Options.simpleFileName.second = this->GetSimpleFileName();
 
   MapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )
@@ -87,6 +87,20 @@ ExtendedFilenameToWriterOptions
        }
      }
 
+  if (!map["writerpctags"].empty())
+     {
+     m_Options.writeRPCTags.first = true;
+     if (   map["writerpctags"] == "On"
+         || map["writerpctags"] == "on"
+         || map["writerpctags"] == "ON"
+         || map["writerpctags"] == "true"
+         || map["writerpctags"] == "True"
+         || map["writerpctags"] == "1"   )
+       {
+       m_Options.writeRPCTags.second = true;
+       }
+     }
+  
   if(!map["streaming:type"].empty())
     {
     if(map["streaming:type"] == "auto"
@@ -173,12 +187,6 @@ ExtendedFilenameToWriterOptions
 {
   return m_Options.simpleFileName.first;
 }
-const char*
-ExtendedFilenameToWriterOptions
-::GetSimpleFileName () const
-{
-  return m_Options.simpleFileName.second.c_str();
-}
 
 bool
 ExtendedFilenameToWriterOptions
@@ -186,11 +194,26 @@ ExtendedFilenameToWriterOptions
 {
   return m_Options.writeGEOMFile.first;
 }
+
+bool
+ExtendedFilenameToWriterOptions
+::WriteRPCTagsIsSet () const
+{
+  return m_Options.writeRPCTags.first;
+}
+
 bool
 ExtendedFilenameToWriterOptions
 ::GetWriteGEOMFile () const
 {
   return m_Options.writeGEOMFile.second;
+}
+
+bool
+ExtendedFilenameToWriterOptions
+::GetWriteRPCTags () const
+{
+  return m_Options.writeRPCTags.second;
 }
 
 bool

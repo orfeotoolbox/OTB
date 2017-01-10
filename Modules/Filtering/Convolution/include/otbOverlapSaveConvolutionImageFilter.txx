@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOverlapSaveConvolutionImageFilter_txx
-#define __otbOverlapSaveConvolutionImageFilter_txx
+#ifndef otbOverlapSaveConvolutionImageFilter_txx
+#define otbOverlapSaveConvolutionImageFilter_txx
 
 #include "itkConfigure.h"
 
@@ -186,6 +186,9 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
   unsigned int leftskip = static_cast<unsigned int>(std::max(0L, inputIndex[0] - pieceIndex[0]));
   unsigned int topskip =  pieceSize[0] * static_cast<unsigned int>(std::max(0L, inputIndex[1] - pieceIndex[1]));
 
+  // zero filling
+  memset(inputPiece,0,pieceNbOfPixel * sizeof(InputPixelType));
+
   // Filling the buffer with image values
   for (l = 0; l < inputSize[1]; ++l)
     {
@@ -204,6 +207,9 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
                                                                       resampledFilterPiece,
                                                                       filterPieceFFT,
                                                                       FFTW_MEASURE);
+
+  // zero filling
+  memset(resampledFilterPiece,0,pieceNbOfPixel * sizeof(InputPixelType));
 
   k = 0;
   // Filling the buffer with filter values
@@ -265,7 +271,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
     norm = 1.0;
     }
 
-  // Fill the ouptut image
+  // Fill the output image
   outputIt.GoToBegin();
   while (!outputIt.IsAtEnd())
     {

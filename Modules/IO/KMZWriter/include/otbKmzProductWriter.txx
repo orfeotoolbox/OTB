@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKmzProductWriter_txx
-#define __otbKmzProductWriter_txx
+#ifndef otbKmzProductWriter_txx
+#define otbKmzProductWriter_txx
 
 #include <string>
 
@@ -47,7 +47,7 @@ KmzProductWriter<TInputImage>
 {
   // Reset the boost::intrusive_ptr<KmzFile> :
   // TODO : when upgrading boost > 1.42 use method release().
-  m_KmzFile = NULL;
+  m_KmzFile = ITK_NULLPTR;
 }
 
 /**
@@ -84,7 +84,7 @@ KmzProductWriter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputImage * >
@@ -117,7 +117,7 @@ KmzProductWriter<TInputImage>
 
   if(emptyProjRef &&  emptyKWL)
     {
-    itkExceptionMacro(<<"The input image have empty keyword list, please use an image with metadata informations");
+    itkExceptionMacro(<<"The input image have empty keyword list, please use an image with metadata information");
     }
 
   // Continue processing
@@ -270,7 +270,7 @@ KmzProductWriter<TInputImage>
   // Build wgs ref to compute long/lat
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = NULL;
+  char * wgsRef = ITK_NULLPTR;
   oSRS.exportToWkt(&wgsRef);
 
   // Update image base information
@@ -446,7 +446,7 @@ KmzProductWriter<TInputImage>
         m_Transform->SetInputKeywordList(m_ResampleVectorImage->GetImageKeywordlist());
         m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
         m_Transform->SetOutputProjectionRef(wgsRef);
-        m_Transform->InstanciateTransform();
+        m_Transform->InstantiateTransform();
 
         InputPointType  inputPoint;
         OutputPointType outputPoint;
@@ -586,7 +586,7 @@ KmzProductWriter<TInputImage>
         this->AddFileToKMZ(jpg_absolute_path, jpg_in_kmz);
         this->AddFileToKMZ(kml_absolute_path, kml_in_kmz);
 
-        // Remove the unecessary files with stdio method :remove
+        // Remove the unnecessary files with stdio method :remove
         if (remove(kml_absolute_path.str().c_str())  ||  remove(jpg_absolute_path.str().c_str()))
           {
           itkExceptionMacro(

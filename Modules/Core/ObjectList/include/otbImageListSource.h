@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListSource_h
-#define __otbImageListSource_h
+#ifndef otbImageListSource_h
+#define otbImageListSource_h
 
 #include "itkProcessObject.h"
 #include "otbImageList.h"
@@ -55,16 +55,16 @@ public:
   typedef ImageList<OutputImageType>                 OutputImageListType;
   typedef typename OutputImageListType::Pointer      OutputImageListPointerType;
   typedef typename OutputImageListType::ConstPointer OutputImageListConstPointerType;
-  /** Overiding of the GetOutput() method */
+  /** Overriding of the GetOutput() method */
   virtual OutputImageListType * GetOutput(void);
 
 protected:
   /** Constructor */
   ImageListSource();
   /** Destructor */
-  virtual ~ImageListSource() {}
+  ~ImageListSource() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageListSource(const Self &); //purposely not implemented

@@ -16,16 +16,14 @@
 
 =========================================================================*/
 #include "otbExtendedFilenameToReaderOptions.h"
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 
 namespace otb
 {
 
 ExtendedFilenameToReaderOptions
-::ExtendedFilenameToReaderOptions() : itk::Object()
+::ExtendedFilenameToReaderOptions() : ExtendedFilenameHelper()
 {
-  m_FilenameHelper = FNameHelperType::New();
-
   m_Options.simpleFileName.first  = false;
   m_Options.simpleFileName.second = "";
 
@@ -43,7 +41,7 @@ ExtendedFilenameToReaderOptions
 
   m_Options.skipGeom.first  = false;
   m_Options.skipGeom.second = false;
-  
+
   m_Options.skipRpcTag.first  = false;
   m_Options.skipRpcTag.second = false;
 
@@ -59,11 +57,11 @@ void
 ExtendedFilenameToReaderOptions
 ::SetExtendedFileName(const char *extFname)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extFname);
-  MapType map = this->m_FilenameHelper->GetOptionMap();
+  Superclass::SetExtendedFileName(extFname);
+  MapType map = GetOptionMap();
 
   m_Options.simpleFileName.first  = true;
-  m_Options.simpleFileName.second = this->m_FilenameHelper->GetSimpleFileName();
+  m_Options.simpleFileName.second = this->GetSimpleFileName();
 
   if (!map["geom"].empty())
     {
@@ -122,7 +120,7 @@ ExtendedFilenameToReaderOptions
       m_Options.skipRpcTag.second = true;
       }
     }
-  
+
   //Option Checking
   MapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )
@@ -143,12 +141,6 @@ ExtendedFilenameToReaderOptions
 ::SimpleFileNameIsSet () const
 {
   return m_Options.simpleFileName.first;
-}
-const char*
-ExtendedFilenameToReaderOptions
-::GetSimpleFileName () const
-{
-  return m_Options.simpleFileName.second.c_str();
 }
 
 bool

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFourierMellinDescriptorsIFFactory_h
-#define __otbFourierMellinDescriptorsIFFactory_h
+#ifndef otbFourierMellinDescriptorsIFFactory_h
+#define otbFourierMellinDescriptorsIFFactory_h
 
 #include "itkLightObject.h"
 
@@ -78,8 +78,8 @@ public:
 
 protected:
   FourierMellinDescriptorsIFFactory(){}
-  ~FourierMellinDescriptorsIFFactory(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~FourierMellinDescriptorsIFFactory() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   FourierMellinDescriptorsIFFactory(const Self& ); //purposely not implemented

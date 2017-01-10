@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectDetectionClassifier_h
-#define __otbObjectDetectionClassifier_h
+#ifndef otbObjectDetectionClassifier_h
+#define otbObjectDetectionClassifier_h
 
 #include <vector>
 
@@ -120,7 +120,7 @@ public:
 
   typedef itk::Statistics::ListSample<DescriptorType>        ListSampleType;
 
-  void AddInput(itk::DataObject * dataObject)
+  void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
   {
     this->Superclass::AddInput(dataObject);
   }
@@ -156,29 +156,29 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
-  void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
 protected:
   PersistentObjectDetectionClassifier();
-  virtual ~PersistentObjectDetectionClassifier();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentObjectDetectionClassifier() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread,
-                             itk::ThreadIdType threadId);
+                             itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentObjectDetectionClassifier(const Self &); //purposely not implemented
@@ -311,7 +311,7 @@ public:
       return this->GetFilter()->GetOutputVectorData();
     }
 
-    void AddInput(itk::DataObject * dataObject)
+    void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
     {
       this->GetFilter()->AddInput(dataObject);
     }
@@ -369,7 +369,7 @@ public:
     ObjectDetectionClassifier();
 
     /** Destructor */
-    virtual ~ObjectDetectionClassifier();
+    ~ObjectDetectionClassifier() ITK_OVERRIDE;
 
   private:
     ObjectDetectionClassifier(const Self &); //purposely not implemented

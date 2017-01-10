@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8InEdgeIterator_h
-#define __otbRCC8InEdgeIterator_h
+#ifndef otbRCC8InEdgeIterator_h
+#define otbRCC8InEdgeIterator_h
 
 #include "otbRCC8Graph.h"
 
@@ -66,7 +66,7 @@ public:
   VertexPointerType GetSourceVertex(void);
   /**
    * Return the source vertex index of the current edge.
-   * \return The souce vertex index.
+   * \return The source vertex index.
    */
   VertexDescriptorType GetSourceIndex(void);
   /**

@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperCommandLineParser_h
-#define __otbWrapperCommandLineParser_h
+#ifndef otbWrapperCommandLineParser_h
+#define otbWrapperCommandLineParser_h
 
 #include "itkObjectFactory.h"
 
@@ -87,7 +87,7 @@ protected:
   CommandLineParser();
 
   /** Destructor */
-  virtual ~CommandLineParser();
+  ~CommandLineParser() ITK_OVERRIDE;
 
 private:
   CommandLineParser(const CommandLineParser &); //purposely not implemented
@@ -103,4 +103,4 @@ private:
 } // end namespace Wrapper
 } //end namespace otb
 
-#endif // __otbWrapperCommandLineParser_h_
+#endif // otbWrapperCommandLineParser_h_

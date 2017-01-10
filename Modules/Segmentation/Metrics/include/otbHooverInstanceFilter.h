@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbHooverInstanceFilter_h
-#define __otbHooverInstanceFilter_h
+#ifndef otbHooverInstanceFilter_h
+#define otbHooverInstanceFilter_h
 
 #include <set>
 #include "itkInPlaceLabelMapFilter.h"
@@ -129,16 +129,18 @@ public:
   itkGetMacro(MeanRM, AttributesValueType);
   itkGetMacro(MeanRN, AttributesValueType);
 
-  itkStaticConstMacro(ATTRIBUTE_CD, AttributeType, 100);
-  itkStaticConstMacro(ATTRIBUTE_OS, AttributeType, 101);
-  itkStaticConstMacro(ATTRIBUTE_US, AttributeType, 102);
-  itkStaticConstMacro(ATTRIBUTE_M,  AttributeType, 103);
-  itkStaticConstMacro(ATTRIBUTE_N,  AttributeType, 104);
-  itkStaticConstMacro(ATTRIBUTE_RC, AttributeType, 105);
-  itkStaticConstMacro(ATTRIBUTE_RF, AttributeType, 106);
-  itkStaticConstMacro(ATTRIBUTE_RA, AttributeType, 107);
-  itkStaticConstMacro(ATTRIBUTE_RM, AttributeType, 108);
-  itkStaticConstMacro(ATTRIBUTE_RN, AttributeType, 109);
+  enum AttributeTypes {
+    ATTRIBUTE_CD=100,
+    ATTRIBUTE_OS,
+    ATTRIBUTE_US,
+    ATTRIBUTE_M,
+    ATTRIBUTE_N,
+    ATTRIBUTE_RC,
+    ATTRIBUTE_RF,
+    ATTRIBUTE_RA,
+    ATTRIBUTE_RM,
+    ATTRIBUTE_RN
+  };
 
   static std::string GetNameFromAttribute( const AttributeType & a )
     {
@@ -205,30 +207,30 @@ public:
 
 protected:
   HooverInstanceFilter();
-  ~HooverInstanceFilter() {};
+  ~HooverInstanceFilter() ITK_OVERRIDE {};
 
   /** Re implement the allocate output method to handle the second output correctly */
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
   /** Re implement the release input method to handle the second input correctly */
-  virtual void ReleaseInputs();
+  void ReleaseInputs() ITK_OVERRIDE;
 
   /** Actions :
    *    - Fill cardinalities of GT regions
    */
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
 
   /** Actions:
    *    - Check matrix size
    *    - Init cardinalities lists
    *    - Fill cardinalities list for MS (GT is done by ThreadedProcessLabelObject)
    */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Actions :
    *    - Compute Hoover instances
    */
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
 private:
 

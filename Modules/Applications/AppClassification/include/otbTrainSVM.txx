@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainSVM_txx
-#define __otbTrainSVM_txx
+#ifndef otbTrainSVM_txx
+#define otbTrainSVM_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb
@@ -29,7 +29,7 @@ namespace Wrapper
   ::InitSVMParams()
   {
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
-    SetParameterDescription("classifier.svm", "This group of parameters allows to set SVM classifier parameters. "
+    SetParameterDescription("classifier.svm", "This group of parameters allows setting SVM classifier parameters. "
         "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/support_vector_machines.html}.");
     AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
     SetParameterDescription("classifier.svm.m", "Type of SVM formulation.");

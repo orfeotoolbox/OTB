@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGaborFilterGenerator_h
-#define __otbGaborFilterGenerator_h
+#ifndef otbGaborFilterGenerator_h
+#define otbGaborFilterGenerator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -31,7 +31,7 @@ namespace otb
 {
 
 /** \class GaborFilterGenerator
- * This class allows to generate gabor filter convolution mask. The mask is stored
+ * This class allows generating a gabor filter convolution mask. The mask is stored
  * in a linear buffer of type itk::Array returned by the GetFilter() method.
  *
  * When calling the GetFilter() method, if the filter has to be regenerated, it will be
@@ -42,7 +42,7 @@ namespace otb
  * known as the carrier, and a gaussian-shaped function, also knwown as the envelop.
  *
  * Please note that this helper class generates a filter whose coefficients are the real part
- * of a complex Gabor fucntion.
+ * of a complex Gabor function.
  *
  * The formula used to compute these coefficients is as follows:
  *
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(GaborFilterGenerator, Object);
 
-  // usefull typedefs
+  // useful typedefs
   typedef TPrecision                PrecisionType;
   typedef itk::Array<PrecisionType> ArrayType;
   typedef itk::Size<2>              RadiusType;
@@ -111,17 +111,17 @@ protected:
   /** constructor */
   GaborFilterGenerator();
   /** destructor */
-  virtual ~GaborFilterGenerator() {}
+  ~GaborFilterGenerator() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Generate the filter coefficients */
   void GenerateFilter();
 
   /** Reimplement the Modified() method
    *to set the NeedToGenerateFilter to true */
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
   GaborFilterGenerator(const Self&); //purposely not implemented
@@ -141,7 +141,7 @@ private:
   /** Output filter coefficient array */
   ArrayType m_Filter;
 
-  /** Wether we need to regenerate the filter */
+  /** Whether we need to regenerate the filter */
   mutable bool m_NeedToRegenerateFilter;
 
 };

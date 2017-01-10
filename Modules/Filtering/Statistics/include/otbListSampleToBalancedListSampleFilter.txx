@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToBalancedListSampleFilter_txx
-#define __otbListSampleToBalancedListSampleFilter_txx
+#ifndef otbListSampleToBalancedListSampleFilter_txx
+#define otbListSampleToBalancedListSampleFilter_txx
 
 #include "otbListSampleToBalancedListSampleFilter.h"
 #include "itkProgressReporter.h"
@@ -86,7 +86,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const  LabelSampleListType* >
@@ -218,7 +218,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
      // Retrieve the current label
      LabelMeasurementVectorType currentLabelMeasurement = labelIt.GetMeasurementVector();
 
-     // Build a temporary ListSample wiht the current
+     // Build a temporary ListSample with the current
      // measurement vector to generate noised versions of this
      // measurement vector
      InputSampleListPointer tempListSample = InputSampleListType::New();

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardMetaImageFunctionBuilder_h
-#define __otbStandardMetaImageFunctionBuilder_h
+#ifndef otbStandardMetaImageFunctionBuilder_h
+#define otbStandardMetaImageFunctionBuilder_h
 
 
 #include "itkVariableLengthVector.h"
@@ -35,7 +35,7 @@ namespace otb
 /** \class StandardMetaImageFunctionBuilder
  *  \brief Build a Standard MetaImageFunction
  *
- *  The StandardMetaImageFunctionBuilder class allows to call multiple
+ *  The StandardMetaImageFunctionBuilder class allows calling multiple
  *  ImageFunctions:
  *    - otbRadiometricMomentsImageFunction
  *    - otbFlusserMomentsImageFunction
@@ -167,8 +167,8 @@ public:
 
 protected:
   StandardMetaImageFunctionBuilder();
-  ~StandardMetaImageFunctionBuilder();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~StandardMetaImageFunctionBuilder() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StandardMetaImageFunctionBuilder(const Self& ); //purposely not implemented

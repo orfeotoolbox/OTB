@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMetadataCorrectionParameters_h
-#define __otbImageMetadataCorrectionParameters_h
+#ifndef otbImageMetadataCorrectionParameters_h
+#define otbImageMetadataCorrectionParameters_h
 
+#include "OTBOpticalCalibrationExport.h"
 #include "itkObject.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
@@ -39,7 +40,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT ImageMetadataCorrectionParameters : public itk::DataObject
+class OTBOpticalCalibration_EXPORT ImageMetadataCorrectionParameters : public itk::DataObject
 {
 public:
   /** Standard typedefs */
@@ -141,12 +142,12 @@ public:
   /** Constructor */
   ImageMetadataCorrectionParameters();
   /** Destructor */
-  ~ImageMetadataCorrectionParameters() {}
+  ~ImageMetadataCorrectionParameters() ITK_OVERRIDE {}
 
 protected:
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageMetadataCorrectionParameters(const Self &); //purposely not implemented

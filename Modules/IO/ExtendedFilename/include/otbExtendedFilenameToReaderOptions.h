@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtendedFilenameToReaderOptions_h
-#define __otbExtendedFilenameToReaderOptions_h
+#ifndef otbExtendedFilenameToReaderOptions_h
+#define otbExtendedFilenameToReaderOptions_h
 
 #include "otbExtendedFilenameHelper.h"
 
@@ -30,27 +30,27 @@ namespace otb
  * - &geom : to specify an external geom file
  * - &sdataidx : sub-dataset index for composite files
  * - &resol : resolution factor for jpeg200 files
- * - &skipcarto : switch to skip the cartographic informations
- * - &skipgeom  : switch to skip the geometric informations
+ * - &skipcarto : switch to skip the cartographic information
+ * - &skipgeom  : switch to skip the geometric information
  *
  *  \sa ImageFileReader
  *
  * \ingroup OTBExtendedFilename
  */
 
-class ITK_EXPORT ExtendedFilenameToReaderOptions : public itk::Object
+class ITK_EXPORT ExtendedFilenameToReaderOptions : public ExtendedFilenameHelper
 {
 public:
 /** Standard class typedefs. */
   typedef ExtendedFilenameToReaderOptions        Self;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  typedef itk::Object                            Superclass;
+  typedef ExtendedFilenameHelper                 Superclass;
 
-  itkTypeMacro(ExtendedFilenameToReaderOptions, itk::Object);
+  itkTypeMacro(ExtendedFilenameToReaderOptions, otb::ExtendedFilenameHelper);
   itkNewMacro(Self);
 
-  typedef ExtendedFilenameHelper                    FNameHelperType;
+  typedef Superclass                                FNameHelperType;
   typedef FNameHelperType::OptionMapType            MapType;
   typedef MapType::iterator                         MapIteratorType;
 
@@ -68,10 +68,9 @@ public:
   };
 
   /* Set Methods */
-  void SetExtendedFileName(const char * extFname);
+  void SetExtendedFileName(const char * extFname) ITK_OVERRIDE;
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
-  const char* GetSimpleFileName () const;
   bool ExtGEOMFileNameIsSet () const;
   const char* GetExtGEOMFileName () const;
   bool SubDatasetIndexIsSet () const;
@@ -87,16 +86,15 @@ public:
 
 protected:
   ExtendedFilenameToReaderOptions();
-  virtual ~ExtendedFilenameToReaderOptions() {}
+  ~ExtendedFilenameToReaderOptions() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameToReaderOptions(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  FNameHelperType::Pointer m_FilenameHelper;
   OptionType               m_Options;
 
 };
 } // end namespace otb
 
-#endif // __otbExtendedFilenameToReaderOptions_h
+#endif // otbExtendedFilenameToReaderOptions_h

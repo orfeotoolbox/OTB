@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbJoinHistogramMI_h
-#define __otbJoinHistogramMI_h
+#ifndef otbJoinHistogramMI_h
+#define otbJoinHistogramMI_h
 
 #include "itkHistogram.h"
 

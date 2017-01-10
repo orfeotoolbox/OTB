@@ -61,8 +61,15 @@ public:
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
   typedef ClassificationFilterType::ConfidenceImageType                                        ConfidenceImageType;
 
+protected:
+
+  ~ImageClassifier() ITK_OVERRIDE
+    {
+    MachineLearningModelFactoryType::CleanFactories();
+    }
+
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ImageClassifier");
     SetDescription("Performs a classification of the input image according to a model file.");
@@ -81,7 +88,7 @@ private:
     SetParameterDescription( "in", "The input image to classify.");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
-    SetParameterDescription( "mask", "The mask allows to restrict classification of the input image to the area where mask pixel values are greater than 0.");
+    SetParameterDescription( "mask", "The mask allows restricting classification of the input image to the area where mask pixel values are greater than 0.");
     MandatoryOff("mask");
 
     AddParameter(ParameterType_InputFilename, "model", "Model file");
@@ -105,7 +112,7 @@ private:
       "    * KNearestNeighbors : number of neighbors with the same label\n"
       "    * NeuralNetwork : difference between the two highest responses\n"
       "    * NormalBayes : (not supported)\n"
-      "    * RandomForest : proportion of decision trees that classified the sample to the second class (only works for 2-class models)\n"
+      "    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
       "    * SVM : distance to margin (only works for 2-class models)\n");
     SetDefaultOutputPixelType( "confmap", ImagePixelType_double);
     MandatoryOff("confmap");
@@ -119,12 +126,12 @@ private:
     SetDocExampleParameterValue("out", "clLabeledImageQB1.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Load input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

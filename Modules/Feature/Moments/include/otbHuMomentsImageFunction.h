@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHuMomentsImageFunction_h
-#define __otbHuMomentsImageFunction_h
+#ifndef otbHuMomentsImageFunction_h
+#define otbHuMomentsImageFunction_h
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
@@ -101,17 +101,17 @@ public:
                       InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
+  OutputType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
 
   /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PointType& point) const
+  OutputType Evaluate(const PointType& point) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  OutputType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& cindex) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -126,8 +126,8 @@ public:
 
 protected:
   HuMomentsImageFunction();
-  virtual ~HuMomentsImageFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~HuMomentsImageFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   HuMomentsImageFunction(const Self &);  //purposely not implemented

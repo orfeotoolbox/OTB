@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbHooverMatrixFilter_h
-#define __otbHooverMatrixFilter_h
+#ifndef otbHooverMatrixFilter_h
+#define otbHooverMatrixFilter_h
 
 #include "itkLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"
@@ -86,16 +86,16 @@ protected:
   /** Constructor */
   HooverMatrixFilter();
 
-  ~HooverMatrixFilter() {};
+  ~HooverMatrixFilter() ITK_OVERRIDE {};
 
   /** Action :  Resize the matrix
    */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Action : fill the line of the confusion matrix corresponding to
    * the given label object
    */
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
 
 private:
 

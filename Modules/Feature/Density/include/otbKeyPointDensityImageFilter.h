@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKeyPointDensityImageFilter_h
-#define __otbKeyPointDensityImageFilter_h
+#ifndef otbKeyPointDensityImageFilter_h
+#define otbKeyPointDensityImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbPointSetToDensityImageFilter.h"
@@ -98,16 +98,16 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~KeyPointDensityImageFilter();
+  ~KeyPointDensityImageFilter() ITK_OVERRIDE;
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
   //virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

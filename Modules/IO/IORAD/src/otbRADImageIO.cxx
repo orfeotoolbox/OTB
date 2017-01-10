@@ -61,7 +61,7 @@ RADImageIO::RADImageIO()
   // (consistency between ImageIO, see Mantis #942)
   m_Origin[0] = 0.5;
   m_Origin[1] = 0.5;
-  m_ChannelsFile = NULL;
+  m_ChannelsFile = ITK_NULLPTR;
   m_FlagWriteImageInformation = true;
 
   this->AddSupportedWriteExtension(".rad");
@@ -79,7 +79,7 @@ RADImageIO::~RADImageIO()
     {
     m_HeaderFile.close();
     }
-  if (m_ChannelsFile !=  NULL)
+  if (m_ChannelsFile !=  ITK_NULLPTR)
     {
     for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; ++numChannel)
       {
@@ -112,8 +112,8 @@ bool RADImageIO::CanReadFile(const char* filename)
     return false;
     }
 
-  //Read header informations
-  bool lResult = InternalReadHeaderInformation(lFileName, header_file, false);
+  //Read header information
+  bool lResult = InternalReadHeaderInformation(lFileName, header_file, true);
   header_file.close();
   return (lResult);
 }
@@ -158,7 +158,7 @@ void RADImageIO::Read(void* buffer)
   step = step * (unsigned long) (this->GetComponentSize());
 
   char * value = new char[numberOfBytesToBeRead];
-  if (value == NULL)
+  if (value == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "RADImageIO::Read(): Bad alloc");
     return;
@@ -220,7 +220,7 @@ void RADImageIO::Read(void* buffer)
     }
 
   delete[] value;
-  value = NULL;
+  value = ITK_NULLPTR;
 
 }
 
@@ -236,7 +236,7 @@ void RADImageIO::ReadImageInformation()
     itkExceptionMacro(<< "RADImageIO::ReadImageInformation() failed header open ! ");
     }
 
-  //Read header informations
+  //Read header information
   InternalReadHeaderInformation(m_FileName, m_HeaderFile, true);
 
   otbMsgDebugMacro(<< "Driver to read: RAD");
@@ -408,7 +408,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       {
       itkExceptionMacro(
         << "RAD : the value type '" << lStrCodePix <<
-        "' (second line) set in the header file is not reconized as correct value.");
+        "' (second line) set in the header file is not recognized as correct value.");
       }
     else
       {
@@ -416,7 +416,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       }
     }
 
-  // Read "SENSCODAGE" informations (optionnal)
+  // Read "SENSCODAGE" information (optional)
   file >> lString;
   if (lString.empty() == false)
     {
@@ -439,7 +439,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
           {
           itkExceptionMacro(
             << "RAD : the value SENSCODAGE '" << lString <<
-            "' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");
+            "' set in the header file is not recognized as correct value. Possible values are INTEL or IEEE");
           }
         else
           {
@@ -544,7 +544,7 @@ void RADImageIO::Write(const void* buffer)
   const char * p = static_cast<const char *>(buffer);
 
   char* value = new char[numberOfBytesToBeWrite];
-  if (value == NULL)
+  if (value == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "RADImageIO::Write : Bad Alloc");
     return;
@@ -704,7 +704,7 @@ void RADImageIO::WriteImageInformation()
     }
   m_HeaderFile << m_TypeRAD << std::endl;
 
-  //Write "SENSCODAGE" informations
+  //Write "SENSCODAGE" information
   m_HeaderFile <<  "SENSCODAGE "; // << std::endl;
   if (m_ByteOrder == LittleEndian)
     {

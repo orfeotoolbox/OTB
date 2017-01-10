@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMetadataInterfaceFactory_h
-#define __otbImageMetadataInterfaceFactory_h
+#ifndef otbImageMetadataInterfaceFactory_h
+#define otbImageMetadataInterfaceFactory_h
 
 #include "itkObject.h"
 #include "otbImageMetadataInterfaceBase.h"
@@ -28,7 +28,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT ImageMetadataInterfaceFactory : public itk::Object
+class OTBMetadata_EXPORT ImageMetadataInterfaceFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -58,7 +58,7 @@ public:
 
 protected:
   ImageMetadataInterfaceFactory();
-  ~ImageMetadataInterfaceFactory();
+  ~ImageMetadataInterfaceFactory() ITK_OVERRIDE;
 
 private:
   ImageMetadataInterfaceFactory(const Self &); //purposely not implemented

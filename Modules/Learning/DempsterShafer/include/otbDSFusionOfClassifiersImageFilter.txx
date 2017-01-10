@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDSFusionOfClassifiersImageFilter_txx
-#define __otbDSFusionOfClassifiersImageFilter_txx
+#ifndef otbDSFusionOfClassifiersImageFilter_txx
+#define otbDSFusionOfClassifiersImageFilter_txx
 
 #include "otbDSFusionOfClassifiersImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -59,7 +59,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -307,7 +307,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
   // Calculation of the four constants A, B, C and K
   MassType A = 0, B = 1, C = 1, K;
-  K = 0; //supress warning. not sure about default value ??
+  K = 0; //suppress warning. not sure about default value ??
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
     {
     classLabelk = itMapMOBClk->first;

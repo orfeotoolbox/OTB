@@ -21,6 +21,7 @@ otbWrapperApplicationDocTests.cxx
 otbWrapperApplicationHtmlDocGeneratorTest.cxx
 otbWrapperInputVectorDataParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
+otbApplicationMemoryConnectTest.cxx
 )
 
 add_executable(otbApplicationEngineTestDriver ${OTBApplicationEngineTests})
@@ -160,7 +161,7 @@ otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDrive
   "my description"
   )
 
-otb_add_test(NAME owTuDocExampleStructureTest COMMAND otbApplicationEngineTestDriver
+otb_add_test(NAME owTvDocExampleStructureTest COMMAND otbApplicationEngineTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE}/owTuDocExampleStructureTest.txt
   ${TEMP}/owTuDocExampleStructureTest.txt
@@ -172,3 +173,11 @@ otb_add_test(NAME owTuDocExampleStructureNew COMMAND otbApplicationEngineTestDri
   otbWrapperDocExampleStructureNew
   )
 
+otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineTestDriver otbApplicationMemoryConnectTest
+  $<TARGET_FILE_DIR:otbapp_Smoothing>
+  ${INPUTDATA}/poupees.tif
+  ${TEMP}/owTvApplicationMemoryConnectTestOutput.tif)
+
+otb_add_test(NAME owTvParameterGroup COMMAND otbApplicationEngineTestDriver
+  otbWrapperParameterList
+  )

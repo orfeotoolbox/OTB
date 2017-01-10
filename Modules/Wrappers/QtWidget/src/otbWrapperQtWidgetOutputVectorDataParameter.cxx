@@ -18,6 +18,8 @@
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperTypes.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -63,24 +65,34 @@ void QtWidgetOutputVectorDataParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetOutputVectorDataParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
-  fileDialog.setNameFilter("Vector data files (*)");
 
-  if (fileDialog.exec())
-    {
-    //this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+void
+QtWidgetOutputVectorDataParameter
+::SelectFile()
+{
+  assert( m_Input!=NULL );
+
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "Vector data files (*)" ),
+      NULL
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  m_Input->setText( filename );
 }
+
 
 void QtWidgetOutputVectorDataParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = value.toAscii().constData();
+  m_FileName = QFile::encodeName( value ).constData();
 
   m_OutputVectorDataParam->SetFileName(m_FileName);
 

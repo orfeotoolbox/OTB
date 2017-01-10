@@ -1,0 +1,20 @@
+language: cpp
+
+sudo: false
+dist: trusty
+
+compiler:
+- clang
+
+# addons:
+#   apt:
+#     packages:
+#     - libboost-all-dev
+
+cache: ccache
+
+branches:
+  only:
+    - nightly
+
+script: Utilities/Maintenance/TravisBuild.sh

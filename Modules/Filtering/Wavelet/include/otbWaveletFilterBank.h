@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletFilterBank_h
-#define __otbWaveletFilterBank_h
+#ifndef otbWaveletFilterBank_h
+#define otbWaveletFilterBank_h
 
 #include "itkProgressReporter.h"
 #include "itkImageToImageFilter.h"
@@ -68,7 +68,7 @@ namespace otb {
  *
  * And conversely in the inverse transformation.
  *
- * \todo: At present version, there is not consideration on meta data information that can be transmited
+ * \todo: At present version, there is not consideration on meta data information that can be transmitted
  * from the input(s) to the output(s)...
  *
  * The two choice (Wavelet::FORWARD/Wavelet::INVERSE) yield specific implementation of the templates (header redeclaration
@@ -144,7 +144,7 @@ private:
  *
  * And conversely in the inverse transformation.
  *
- * \todo: At present version, there is not consideration on meta data information that can be transmited
+ * \todo: At present version, there is not consideration on meta data information that can be transmitted
  * from the input(s) to the output(s)...
  *
  * \sa WaveletOperator
@@ -212,13 +212,13 @@ public:
 
 protected:
   WaveletFilterBank();
-  virtual ~WaveletFilterBank() {}
+  ~WaveletFilterBank() ITK_OVERRIDE {}
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
-    * Copy informations from the input image if existing.
+    * Copy information from the input image if existing.
     **/
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** The forward transformation needs a larger input requested
    * region than the output requested region (larger by subsampling
@@ -229,13 +229,13 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion()
-    throw (itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
   /** BeforeThreadedGenerateData.
    * It allocates also internal images
    */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Internal Data Allocation
    * If m_SubsampleImageFactor != 1, internal data with progressive region size
@@ -246,17 +246,17 @@ protected:
   /** AfterThreadedGenerateData.
    * It enforce memory destruction of internal images
    */
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   /** CallCopyOutputRegionToInputRegion
    * Since input and output image may be of different size when a
    * subsampling factor has tp be applied, Region estimation
    * functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
-  virtual void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
+  void CallCopyOutputRegionToInputRegion
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
+  void CallCopyInputRegionToOutputRegion
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) ITK_OVERRIDE;
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
@@ -270,7 +270,7 @@ protected:
                                                  const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Iterative call to the forward filter bank at each dimension. */
   virtual void ThreadedGenerateDataAtDimensionN(unsigned int idx, unsigned int direction,
@@ -329,7 +329,7 @@ private:
  *
  * And conversely in the inverse transformation.
  *
- * \todo: At present version, there is not consideration on meta data information that can be transmited
+ * \todo: At present version, there is not consideration on meta data information that can be transmitted
  * from the input(s) to the output(s)...
  *
  * \sa WaveletOperator
@@ -397,13 +397,13 @@ public:
 
 protected:
   WaveletFilterBank();
-  virtual ~WaveletFilterBank() {}
+  ~WaveletFilterBank() ITK_OVERRIDE {}
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
-    * Copy informations from the input image if existing.
+    * Copy information from the input image if existing.
     **/
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** The inverse transformation needs larger inputs requested
    * region than the output requested region (larger by subsampling
@@ -414,13 +414,13 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion()
-    throw (itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
   /** BeforeThreadedGenerateData
    * If SubsampleImageFactor neq 1, it is necessary to up sample input images in the Wavelet::INVERSE mode
    */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Internal Data Allocation
    * If m_SubsampleImageFactor != 1, internal data with progressive region size
@@ -431,17 +431,17 @@ protected:
   /** AfterThreadedGenerateData.
    * It enforce memory destruction of internal images
    */
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   /** CallCopyOutputRegionToInputRegion
    * Since input and output image may be of different size when a
    * subsampling factor has tp be applied, Region estimation
    * functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
-  virtual void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
+  void CallCopyOutputRegionToInputRegion
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
+  void CallCopyInputRegionToOutputRegion
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) ITK_OVERRIDE;
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
@@ -455,7 +455,7 @@ protected:
                                                  const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Iterative call to the forward filter bank at each dimension.

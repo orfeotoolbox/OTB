@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLambert3CartoSudProjection_h
-#define __otbLambert3CartoSudProjection_h
+#ifndef otbLambert3CartoSudProjection_h
+#define otbLambert3CartoSudProjection_h
 
 #include "otbLambertConformalConicMapProjection.h"
 

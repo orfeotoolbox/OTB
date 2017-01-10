@@ -6,8 +6,9 @@ generically related to this purpose. for instance, user can handle OGR data type
 solvers, re-project input vector data over input images, and so on.")
 
 otb_module(OTBProjection
+ENABLE_SHARED
   DEPENDS
-    OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBGDAL
     OTBGdalAdapters

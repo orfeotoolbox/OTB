@@ -11,7 +11,12 @@ include(${_OTBModuleMacros_DIR}/OTBApplicationMacros.cmake)
 # don't work. Set the option to off and hide it.
 if(APPLE AND CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION  VERSION_LESS "4.3")
   set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
+elseif(APPLE)
+  #RK:  compiler visibility nor woking on osx with appleclang xcode.
+  #gcc is a symlink to clang
+  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
 endif()
+
 include(GenerateExportHeader)
 
 if(OTB_CPPCHECK_TEST)
@@ -108,7 +113,7 @@ macro(otb_module_impl)
   add_custom_target(${otb-module}-all ALL SOURCES ${_srcs})
 
   otb_module_use(${OTB_MODULE_${otb-module}_DEPENDS})
-  
+
   foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
     if (${dep}_ENABLED)
       otb_module_use(${dep})
@@ -117,11 +122,11 @@ macro(otb_module_impl)
 
   if(NOT DEFINED ${otb-module}_LIBRARIES)
     set(${otb-module}_LIBRARIES "")
-    
+
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_DEPENDS)
       list(APPEND ${otb-module}_LIBRARIES "${${dep}_LIBRARIES}")
     endforeach()
-    
+
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
       if (${dep}_ENABLED)
         list(APPEND ${otb-module}_LIBRARIES "${${dep}_LIBRARIES}")
@@ -136,6 +141,20 @@ macro(otb_module_impl)
   if(EXISTS ${${otb-module}_SOURCE_DIR}/include)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
     install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT Development)
+  endif()
+
+  if(NOT OTB_SOURCE_DIR)
+    # When building a module outside the OTB source tree, find the export
+    # header.
+    list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_BINARY_DIR}/include)
+  else()
+    # if OTB_SOURCE_DIR is set all auto-generated export headers for a class
+    # goes into OTBCommon_BINARY_DIR/src.
+    # Hence it is required to include   ${OTBCommon_BINARY_DIR} to list of
+    # ${otb-module}_INCLUDE_DIRS. Not doing this will force developer to
+    # to include them explicitly for each module which can result in
+    # more problems. ( stephane albert)
+    list(APPEND ${otb-module}_INCLUDE_DIRS ${OTBCommon_BINARY_DIR})
   endif()
 
   if(${otb-module}_INCLUDE_DIRS)
@@ -170,11 +189,11 @@ macro(otb_module_impl)
   endif()
 
   if( OTB_MODULE_${otb-module}_ENABLE_SHARED )
-
-    # Need to use relative path to work around CMake ISSUE 12645 fixed
-    # in CMake 2.8.8, to support older versions
-    set(_export_header_file "${OTBCommon_BINARY_DIR}/${otb-module}Export.h")
-    file(RELATIVE_PATH _export_header_file ${CMAKE_CURRENT_BINARY_DIR} ${_export_header_file} )
+    if(OTB_SOURCE_DIR)
+      set(_export_header_file "${OTBCommon_BINARY_DIR}/${otb-module}Export.h")
+    else()
+      set(_export_header_file "${${otb-module}_BINARY_DIR}/include/${otb-module}Export.h")
+    endif()
 
     # Generate the export macro header for symbol visibility/Windows DLL declspec
     generate_export_header(${otb-module}
@@ -183,7 +202,7 @@ macro(otb_module_impl)
       NO_EXPORT_MACRO_NAME ${otb-module}_HIDDEN
       STATIC_DEFINE OTB_STATIC )
     install(FILES
-      ${OTBCommon_BINARY_DIR}/${otb-module}Export.h
+      ${_export_header_file}
       DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
       COMPONENT Development
       )
@@ -225,7 +244,7 @@ macro(otb_module_impl)
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}/Modules
     COMPONENT Development
     )
-  otb_module_doxygen( ${otb-module} )   # module name
+  otb_module_doxygen(${otb-module})   # module name
 endmacro()
 
 macro(otb_module_test)
@@ -265,8 +284,10 @@ endmacro()
 macro(otb_module_target_name _name)
   get_property(_target_type TARGET ${_name} PROPERTY TYPE)
   if (NOT ${_target_type} STREQUAL "EXECUTABLE")
-    set_property(TARGET ${_name} PROPERTY VERSION 1)
-    set_property(TARGET ${_name} PROPERTY SOVERSION 1)
+    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
+      set_property(TARGET ${_name} PROPERTY VERSION 1)
+      set_property(TARGET ${_name} PROPERTY SOVERSION 1)
+    endif()
     if("${_name}" MATCHES "^[Oo][Tt][Bb]")
       set(_otb "")
     else()
@@ -312,4 +333,8 @@ macro(otb_module_target _name)
   if(_install)
     otb_module_target_install(${_name})
   endif()
+endmacro()
+
+macro(otb_module_requires_cxx11)
+  set(OTB_MODULE_${otb-module}_REQUIRES_CXX11 1)
 endmacro()

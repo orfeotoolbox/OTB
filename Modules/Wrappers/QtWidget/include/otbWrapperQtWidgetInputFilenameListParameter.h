@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputFilenameListParameter_h
-#define __otbWrapperQtWidgetInputFilenameListParameter_h
+#ifndef otbWrapperQtWidgetInputFilenameListParameter_h
+#define otbWrapperQtWidgetInputFilenameListParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -33,12 +33,12 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetInputFilenameListParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetInputFilenameListParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
   QtWidgetInputFilenameListParameter(InputFilenameListParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputFilenameListParameter();
+  ~QtWidgetInputFilenameListParameter() ITK_OVERRIDE;
 
 
 signals:
@@ -51,7 +51,7 @@ protected slots:
   virtual void UpFile();
   virtual void DownFile();
   virtual void AddFile();
-  virtual void SupressFile();
+  virtual void SuppressFile();
   virtual void EraseFile();
   virtual void UpdateFilenameList();
 
@@ -59,9 +59,9 @@ private:
   QtWidgetInputFilenameListParameter(const QtWidgetInputFilenameListParameter&); //purposely not implemented
   void operator=(const QtWidgetInputFilenameListParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   void RecreateFilenameList();
   void UpdateFileList( std::map<unsigned int, unsigned int> idMap );

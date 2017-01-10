@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageSimulationMethod_txx
-#define __otbImageSimulationMethod_txx
+#ifndef otbImageSimulationMethod_txx
+#define otbImageSimulationMethod_txx
 
 #include "otbImageSimulationMethod.h"
 
@@ -27,7 +27,7 @@ template <class TInputVectorData, class TSpatialisation, class TSimulationStep1,
 ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
 ::ImageSimulationMethod()
 {
-  //instanciation
+  //instantiation
   m_Spatialisation = SpatialisationType::New();
   m_LabelMapToSimulatedImageFilter = LabelMapToSimulatedImageFilterType::New();
   m_LabelMapToLabelImageFilter = LabelMapToLabelImageFilterType::New();

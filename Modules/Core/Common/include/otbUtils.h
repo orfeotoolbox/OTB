@@ -15,10 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUtils_h
-#define __otbUtils_h
+#ifndef otbUtils_h
+#define otbUtils_h
 
 #include "itkMacro.h"
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -26,7 +27,7 @@ namespace otb
 /** \class Utils
  * \brief Utils operations.
  *
- * Some usefull utilities in use across the library
+ * Some useful utilities in use across the library
  *
  *
  * \ingroup OTBCommon
@@ -34,7 +35,7 @@ namespace otb
 namespace Utils
 {
   /** Check that the values for lon, lat are reasonable */
-  bool IsLonLatValid(double lon, double lat);
+  bool OTBCommon_EXPORT IsLonLatValid(double lon, double lat);
 
   template <class T>
     inline std::string ConvertToString (const T& v)

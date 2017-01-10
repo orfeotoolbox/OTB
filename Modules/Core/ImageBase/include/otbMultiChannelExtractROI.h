@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelExtractROI_h
-#define __otbMultiChannelExtractROI_h
+#ifndef otbMultiChannelExtractROI_h
+#define otbMultiChannelExtractROI_h
 
 #include "otbExtractROIBase.h"
 #include "otbVectorImage.h"
@@ -31,7 +31,7 @@ namespace otb
  * \brief Extract a spatial or spectral subset of a multi-channel image.
  *
  * It is possible to extract all the channels from the input image or only those specified by the user.
- * The SetChannel() method allows to select one channel.
+ * The SetChannel() method allows selecting one channel.
  * The SetFirstChannel() and SetLastChannel() methods allow the user to define a list of channels.
  *
  * \note If no channels are specified, then all channels from the input image are selected.
@@ -112,8 +112,8 @@ public:
 
 protected:
   MultiChannelExtractROI();
-  virtual ~MultiChannelExtractROI() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~MultiChannelExtractROI() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** MultiChannelExtractROI can produce an image which is a different
    * resolution than its input image.  As such, MultiChannelExtractROI
@@ -123,7 +123,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Reinitialize channels vector for multiple Update.*/
   void ChannelsReInitialization();
@@ -134,7 +134,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   MultiChannelExtractROI(const Self &); //purposely not implemented

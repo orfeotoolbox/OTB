@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -25,9 +27,9 @@ namespace Wrapper
 QtWidgetInputVectorDataParameter::QtWidgetInputVectorDataParameter(InputVectorDataParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
   m_InputVectorDataParam(param),
-  m_HLayout( NULL ),
-  m_Input( NULL ),
-  m_Button( NULL )
+  m_HLayout( ITK_NULLPTR ),
+  m_Input( ITK_NULLPTR ),
+  m_Button( ITK_NULLPTR )
 {
 }
 
@@ -38,9 +40,15 @@ QtWidgetInputVectorDataParameter::~QtWidgetInputVectorDataParameter()
 void QtWidgetInputVectorDataParameter::DoUpdateGUI()
 {
   //update lineedit
-  QString text( m_InputVectorDataParam->GetFileName().c_str() );
-  if (text != m_Input->text())
-    m_Input->setText(text);
+  if(m_InputVectorDataParam->HasUserValue())
+    {
+    QString text(
+      QFile::decodeName( m_InputVectorDataParam->GetFileName().c_str() )
+    );
+
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetInputVectorDataParameter::DoCreateWidget()
@@ -67,35 +75,52 @@ void QtWidgetInputVectorDataParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetInputVectorDataParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("Vector data files (*)");
 
-  if (fileDialog.exec())
+void
+QtWidgetInputVectorDataParameter
+::SelectFile()
+{
+  assert( m_Input!=NULL );
+
+  QString filename(
+    GetOpenFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "Vector data files (*)" ),
+      NULL,
+      QFileDialog::ReadOnly
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  if( !SetFileName( filename ) )
     {
-    if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )
-    {
-      m_Input->setText(fileDialog.selectedFiles().at(0));
+    std::ostringstream oss;
+
+    oss << "Invalid filename: '"
+	<< QFile::encodeName( filename ).constData()
+	<< "'";
+
+    assert( GetModel()!=NULL );
+
+    GetModel()->SendLogWARNING( oss.str() );
+
+    return;
     }
-    else
-      {
-      std::ostringstream oss;
-      oss << "The given file "
-          << fileDialog.selectedFiles().at(0).toAscii().constData()
-          << " is not valid.";
-      this->GetModel()->SendLogWARNING( oss.str() );
-      }
-    }
+
+  m_Input->setText( filename  );
 }
+
 
 bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
-  if(m_InputVectorDataParam->SetFromFileName(value.toAscii().constData()) == true)
+  if( m_InputVectorDataParam->SetFromFileName(
+	QFile::encodeName( value ).constData() ) == true )
     {
     // notify of value change
     QString key( m_InputVectorDataParam->GetKey() );

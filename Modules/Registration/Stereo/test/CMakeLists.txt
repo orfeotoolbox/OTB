@@ -272,21 +272,21 @@ otb_add_test(NAME dmTuAdhesionCorrectionFilterNew COMMAND otbStereoTestDriver
 otb_add_test(NAME dmTuStereoSensorModelToElevationFilterNew COMMAND otbStereoTestDriver
   otbStereoSensorModelToElevationMapFilterNew)
 
-otb_add_test(NAME dmTvStereoSensorModelToElevationFilter COMMAND otbStereoTestDriver
-  --compare-image ${EPSILON_10}
-  ${BASELINE}/feTvStereoSensorModelToElevationFilterOutput.tif
-  ${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
-  otbStereoSensorModelToElevationMapFilter
-  ${EXAMPLEDATA}/sensor_stereo_left.tif
-  ${EXAMPLEDATA}/sensor_stereo_right.tif
-  ${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
-  ${INPUTDATA}/DEM/srtm_directory/
-  ${INPUTDATA}/DEM/egm96.grd
-  -20
-  20
-  1
-  3
-  )
+#otb_add_test(NAME dmTvStereoSensorModelToElevationFilter COMMAND otbStereoTestDriver
+  #--compare-image ${EPSILON_10}
+  #${BASELINE}/feTvStereoSensorModelToElevationFilterOutput.tif
+  #${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
+  #otbStereoSensorModelToElevationMapFilter
+  #${EXAMPLEDATA}/sensor_stereo_left.tif
+  #${EXAMPLEDATA}/sensor_stereo_right.tif
+  #${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
+  #${INPUTDATA}/DEM/srtm_directory/
+  #${INPUTDATA}/DEM/egm96.grd
+  #-20
+  #20
+  #1
+  #3
+  #)
 
 otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbStereoTestDriver
   --compare-n-images ${EPSILON_10} 2

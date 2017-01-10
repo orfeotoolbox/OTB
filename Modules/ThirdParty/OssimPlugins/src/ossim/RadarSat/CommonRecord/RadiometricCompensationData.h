@@ -60,7 +60,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  RadarSatRecord* Instanciate()
+  RadarSatRecord* Instantiate()
   {
     return new RadiometricCompensationData();
   };

@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEdgeDensityImageFilter_txx
-#define __otbEdgeDensityImageFilter_txx
+#ifndef otbEdgeDensityImageFilter_txx
+#define otbEdgeDensityImageFilter_txx
 
 #include "otbEdgeDensityImageFilter.h"
 

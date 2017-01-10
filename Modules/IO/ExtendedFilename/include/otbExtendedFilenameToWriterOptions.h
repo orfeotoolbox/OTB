@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtendedFilenameToWriterOptions_h
-#define __otbExtendedFilenameToWriterOptions_h
+#ifndef otbExtendedFilenameToWriterOptions_h
+#define otbExtendedFilenameToWriterOptions_h
 
 #include "otbExtendedFilenameHelper.h"
 #include "otbGDALImageIO.h"
@@ -39,19 +39,19 @@ namespace otb
  * \ingroup OTBExtendedFilename
  */
 
-class ITK_EXPORT ExtendedFilenameToWriterOptions : public itk::Object
+class ITK_EXPORT ExtendedFilenameToWriterOptions : public ExtendedFilenameHelper
 {
 public:
 /** Standard class typedefs. */
   typedef ExtendedFilenameToWriterOptions        Self;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  typedef itk::Object                            Superclass;
+  typedef ExtendedFilenameHelper                 Superclass;
 
-  itkTypeMacro(ExtendedFilenameToWriterOptions, itk::Object);
+  itkTypeMacro(ExtendedFilenameToWriterOptions, otb::ExtendedFilenameHelper);
   itkNewMacro(Self);
 
-  typedef ExtendedFilenameHelper                    FNameHelperType;
+  typedef Superclass                                FNameHelperType;
   typedef FNameHelperType::OptionMapType            MapType;
   typedef MapType::iterator                         MapIteratorType;
 
@@ -63,6 +63,7 @@ public:
   {
     std::pair< bool, std::string  >              simpleFileName;
     std::pair< bool, bool  >                     writeGEOMFile;
+    std::pair< bool, bool  >                     writeRPCTags;
     std::pair< bool, GDALCOType >                gdalCreationOptions;
     std::pair<bool,  std::string>                streamingType;
     std::pair<bool,  std::string>                streamingSizeMode;
@@ -72,12 +73,13 @@ public:
   };
 
   /* Set Methods */
-  void SetExtendedFileName(const char * extFname);
+  void SetExtendedFileName(const char * extFname) ITK_OVERRIDE;
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
-  const char* GetSimpleFileName () const;
   bool WriteGEOMFileIsSet () const;
+  bool WriteRPCTagsIsSet() const;
   bool GetWriteGEOMFile () const;
+  bool GetWriteRPCTags() const;
   bool gdalCreationOptionsIsSet () const;
   GDALCOType GetgdalCreationOptions () const;
   bool StreamingTypeIsSet () const;
@@ -93,16 +95,15 @@ public:
 
 protected:
   ExtendedFilenameToWriterOptions();
-  virtual ~ExtendedFilenameToWriterOptions() {}
+  ~ExtendedFilenameToWriterOptions() ITK_OVERRIDE {}
 
 private:
   ExtendedFilenameToWriterOptions(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  FNameHelperType::Pointer m_FilenameHelper;
   OptionType               m_Options;
 
 };
 } // end namespace otb
 
-#endif // __otbExtendedFilenameToWriterOptions_h
+#endif // otbExtendedFilenameToWriterOptions_h

@@ -28,11 +28,11 @@ int otbSystemTest(int itkNotUsed(argc), char * argv[])
   const char *       inputDirName   = argv[2];
   std::ostringstream msg;
 
-  // Check instanciation test
-  otb::System * var(NULL);
+  // Check instantiation test
+  otb::System * var(ITK_NULLPTR);
   var = new otb::System();
   delete var;
-  var = NULL;
+  var = ITK_NULLPTR;
 
   if (itksys::SystemTools::FileExists(inputFileName, true) == false)
     {

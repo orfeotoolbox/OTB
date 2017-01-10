@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToDSValidatedVectorDataFilter_txx
-#define __otbVectorDataToDSValidatedVectorDataFilter_txx
+#ifndef otbVectorDataToDSValidatedVectorDataFilter_txx
+#define otbVectorDataToDSValidatedVectorDataFilter_txx
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
 #include <iostream>
@@ -28,6 +28,8 @@ namespace otb
 template <class TVectorData, class TPrecision>
   VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 ::VectorDataToDSValidatedVectorDataFilter() :
+  m_Bel(0.0),
+  m_Plau(0.0),
   m_CriterionFormula("((Belief + Plausibility)/2.)"),
   m_CriterionThreshold(0.5),
   m_CurrentID(0)

@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsMapFromLabelImageFilter_h
-#define __otbStreamingStatisticsMapFromLabelImageFilter_h
+#ifndef otbStreamingStatisticsMapFromLabelImageFilter_h
+#define otbStreamingStatisticsMapFromLabelImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"
@@ -109,31 +109,31 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
-  void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
   /** Due to heterogeneous input template GenerateInputRequestedRegion must be reimplemented using explicit cast **/
   /** This new implementation is inspired by the one of itk::ImageToImageFilter **/
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 protected:
   PersistentStreamingStatisticsMapFromLabelImageFilter();
-  virtual ~PersistentStreamingStatisticsMapFromLabelImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentStreamingStatisticsMapFromLabelImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** GenerateData. */
-  void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
 
 private:
   PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
@@ -153,7 +153,7 @@ private:
  *
  * This class streams the whole input image through the PersistentStreamingStatisticsMapFromLabelImageFilter.
  *
- * This way, it allows to compute the first order global statistics of this image.
+ * This way, it allows computing the first order global statistics of this image.
  * It calls the Reset() method of the PersistentStatisticsImageFilter before streaming
  * the image and the Synthetize() method of the PersistentStatisticsImageFilter
  * after having streamed the image to compute the statistics.
@@ -257,7 +257,7 @@ protected:
   /** Constructor */
   StreamingStatisticsMapFromLabelImageFilter() {}
   /** Destructor */
-  virtual ~StreamingStatisticsMapFromLabelImageFilter() {}
+  ~StreamingStatisticsMapFromLabelImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented

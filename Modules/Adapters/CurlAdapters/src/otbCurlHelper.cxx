@@ -91,7 +91,7 @@ protected:
       }
   }
 
-  virtual ~CurlResource()
+  ~CurlResource() ITK_OVERRIDE
   {
     curl_easy_cleanup(m_Curl);
   }
@@ -137,7 +137,7 @@ protected:
       }
   }
 
-  virtual ~CurlMultiResource()
+  ~CurlMultiResource() ITK_OVERRIDE
   {
     curl_multi_cleanup(m_Curl);
   }
@@ -175,7 +175,7 @@ public:
   {
     m_File = fopen(infname, "wb");
 
-    if (m_File == NULL)
+    if (m_File == ITK_NULLPTR)
       {
       itkExceptionMacro(<<" otbCurlHelper::FileResource : failed to open the file ."<< infname);
       }
@@ -184,7 +184,7 @@ public:
 protected:
   CurlFileDescriptorResource(){}
 
-  virtual ~CurlFileDescriptorResource()
+  ~CurlFileDescriptorResource() ITK_OVERRIDE
   {
     fclose(m_File);
   }
@@ -316,7 +316,6 @@ int CurlHelper::RetrieveFile(const std::ostringstream& urlStream, std::string fi
 int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename) const
 {
 #ifdef OTB_USE_CURL
-  otbMsgDevMacro(<< "Retrieving: " << urlString);
 
   CURLcode res = CURLE_OK;
 
@@ -326,12 +325,18 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
   output_file->OpenFile(filename.c_str());
 
   char url[256];
-  strcpy(url, urlString.c_str());
+  int len = static_cast<int>(urlString.size());
+  strncpy( url, urlString.c_str(), len + 1 );
+
+  otbMsgDevMacro(<< "Retrieving ( CurlHelper::RetrieveFile ): " << url );
 
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url));
 
   // Set timeout
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, m_Timeout));
+
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_FRESH_CONNECT, 1));
+  CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_NOSIGNAL, 1));
 
   // Use our writing static function to avoid file descriptor
   // pointer crash on windows
@@ -403,7 +408,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     // Add easy handle to multi handle
     CurlHandleError::ProcessCURLcode(curl_multi_add_handle(multiHandle->GetCurlMultiResource(), lEasyHandle->GetCurlResource()));
 
-    // Add hanle to vector
+    // Add handle to vector
     listCurlHandles.push_back(lEasyHandle);
     ++url;
     ++file;
@@ -480,6 +485,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
 
   return 0;
 #else
+  (void)maxConnect;
   //fallback on non curl multi
   otbMsgDevMacro(<< "Curl multi is not available, fallback on standard");
 

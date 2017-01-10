@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingLineSegmentDetector_h
-#define __otbStreamingLineSegmentDetector_h
+#ifndef otbStreamingLineSegmentDetector_h
+#define otbStreamingLineSegmentDetector_h
 
 #include <vector>
 
@@ -76,15 +76,15 @@ public:
 protected:
   PersistentStreamingLineSegmentDetector();
 
-  virtual ~PersistentStreamingLineSegmentDetector();
+  ~PersistentStreamingLineSegmentDetector() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 private:
   PersistentStreamingLineSegmentDetector(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OutputVectorDataPointerType ProcessTile();
+  OutputVectorDataPointerType ProcessTile() ITK_OVERRIDE;
 };
 
 template <class TImageType>

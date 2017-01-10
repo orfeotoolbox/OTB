@@ -36,7 +36,7 @@ otb_add_test(NAME prTeOrthoRectificationExampleXSTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeMapProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${NOTOL}
+  --compare-ascii ${EPSILON_7}
     ${BASELINE}/mapProjectionExample.txt
     ${TEMP}/mapProjectionExample.txt
   Execute $<TARGET_FILE:MapProjectionExample>

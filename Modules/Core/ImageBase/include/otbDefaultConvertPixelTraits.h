@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __otbDefaultConvertPixelTraits_h
-#define __otbDefaultConvertPixelTraits_h
+#ifndef otbDefaultConvertPixelTraits_h
+#define otbDefaultConvertPixelTraits_h
 
 #include "itkOffset.h"
 #include "itkVector.h"

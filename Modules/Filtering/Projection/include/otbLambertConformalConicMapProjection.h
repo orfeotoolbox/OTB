@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLambertConformalConicMapProjection_h
-#define __otbLambertConformalConicMapProjection_h
+#ifndef otbLambertConformalConicMapProjection_h
+#define otbLambertConformalConicMapProjection_h
 
 #include "otbGenericMapProjection.h"
 
@@ -61,7 +61,7 @@ public:
 
 protected:
   LambertConformalConicMapProjection();
-  virtual ~LambertConformalConicMapProjection() {};
+  ~LambertConformalConicMapProjection() ITK_OVERRIDE {};
 
 private:
   LambertConformalConicMapProjection(const Self &); //purposely not implemented

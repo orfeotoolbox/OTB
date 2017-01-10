@@ -30,7 +30,7 @@
 // and MapFile products.
 // Note that the \doxygen{otb}{KmzProductWriter} and the
 // \doxygen{otb}{MapFileProductWriter} can only process inputs with a
-// non empty geographical informations.
+// non empty geographical information.
 //
 // The first step toward the use of these filters is to include the
 // proper header files: the one for the rpc sensor estimation filter and
@@ -109,11 +109,11 @@ int main(int argc, char* argv[])
 //
 // Here, we set all the Ground Control Points associated to the image
 // indexes. This is the entry of the rpc sensor model
-// estimator. Everytime a GCP is added, the output image information
+// estimator. Every time a GCP is added, the output image information
 // or its keywordlist is updated. In general, a dozen of GCPs are
 // needed to estimate an accurate sensor model. The points are added
 // via the method AddGCP(PointType2D, PointType3D). The outpput image
-// obtained have the needed meta-data informations for the rest of the
+// obtained have the needed meta-data information for the rest of the
 // process.
 //
 // Software Guide : EndLatex
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginLatex
 //
-// Finally, we trigger the kmz writting by calling the \code{Update()}
+// Finally, we trigger the kmz writing by calling the \code{Update()}
 // method on the writer.
 //
 // Software Guide : EndLatex

@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbOGRVersionProxy.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "gdal_priv.h"
@@ -34,6 +34,11 @@ namespace ogr
 namespace version_proxy
 {
 
+OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
+{
+  return type == OFTInteger64;
+}
+
 GDALDatasetType * Open(const char * filename, bool readOnly)
 {
   return (GDALDatasetType *)GDALOpenEx(filename, (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,NULL,NULL,NULL);
@@ -43,7 +48,7 @@ void Close(GDALDatasetType * dataset)
 {
   GDALClose(dataset);
 }
-  
+
 GDALDatasetType * Create(GDALDriverType * driver, const char * name)
 {
   return driver->Create(name,0,0,0,GDT_Unknown,NULL);
@@ -87,7 +92,7 @@ std::string GetDriverClassName()
 namespace raii
 {
 // This class is used in the next function, so as to prevent any
-// ressource leak on char ** returned by dataset->GetFileList()
+// resource leak on char ** returned by dataset->GetFileList()
 class CharPPCapsule
 {
 public:
@@ -99,7 +104,7 @@ public:
   {
     return const_cast<const char **>(m_P);
   }
-  
+
   ~CharPPCapsule()
   {
     if(m_P)
@@ -114,11 +119,11 @@ private:
 std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset)
 {
   std::vector<std::string> ret;
-  
+
   raii::CharPPCapsule capsule(dataset->GetFileList());
 
   std::string files_str="";
-      
+
   if(capsule.P())
     {
     unsigned int i = 0;
@@ -126,7 +131,7 @@ std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset)
       {
       ret.push_back(std::string(capsule.P()[i]));
       ++i;
-      } 
+      }
     }
   return ret;
 }
@@ -141,9 +146,9 @@ bool SyncToDisk(GDALDatasetType * dataset)
 std::vector<std::string> GetAvailableDriversAsStringVector()
 {
   std::vector<std::string> ret;
-  
+
   int nbDrivers = GetGDALDriverManager()->GetDriverCount();
-  
+
   for(int i = 0; i < nbDrivers;++i)
     {
     ret.push_back(GDALGetDriverShortName(GetGDALDriverManager()->GetDriver(i)));

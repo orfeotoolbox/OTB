@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGradientBoostedTreeMachineLearningModel_h
-#define __otbGradientBoostedTreeMachineLearningModel_h
+#ifndef otbGradientBoostedTreeMachineLearningModel_h
+#define otbGradientBoostedTreeMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 
@@ -93,7 +93,7 @@ public:
   itkSetMacro(MaxDepth, int);
 
   /** If true then surrogate splits will be built.
-   * These splits allow to work with missing data and compute variable importance correctly.
+   * These splits allow working with missing data and compute variable importance correctly.
    * Default is false
    * \see http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html#cvgbtreesparams-cvgbtreesparams
    */
@@ -101,23 +101,21 @@ public:
   itkSetMacro(UseSurrogates, bool);
 
   /** Train the machine learning model */
-  virtual void Train();
-  /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+  void Train() ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="");
+  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="");
+  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &);
+  bool CanReadFile(const std::string &) ITK_OVERRIDE;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &);
+  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
 protected:
@@ -125,10 +123,14 @@ protected:
   GradientBoostedTreeMachineLearningModel();
 
   /** Destructor */
-  virtual ~GradientBoostedTreeMachineLearningModel();
+  ~GradientBoostedTreeMachineLearningModel() ITK_OVERRIDE;
 
+    /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+
+  
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   GradientBoostedTreeMachineLearningModel(const Self &); //purposely not implemented

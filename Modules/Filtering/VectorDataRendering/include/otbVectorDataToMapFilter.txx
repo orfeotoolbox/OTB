@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToMapFilter_txx
-#define __otbVectorDataToMapFilter_txx
+#ifndef otbVectorDataToMapFilter_txx
+#define otbVectorDataToMapFilter_txx
 
 #include <sstream>
 #include "otbVectorDataToMapFilter.h"

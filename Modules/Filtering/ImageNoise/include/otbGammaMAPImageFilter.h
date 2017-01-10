@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGammaMAPImageFilter_h
-#define __otbGammaMAPImageFilter_h
+#ifndef otbGammaMAPImageFilter_h
+#define otbGammaMAPImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -87,19 +87,19 @@ public:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 protected:
   GammaMAPImageFilter();
-  virtual ~GammaMAPImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~GammaMAPImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** GammaMAPImageFilter can be multithreaded.
    */
   
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   GammaMAPImageFilter(const Self &); //purposely not implemented

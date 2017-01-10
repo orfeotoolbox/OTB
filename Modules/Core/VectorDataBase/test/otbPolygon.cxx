@@ -37,7 +37,7 @@ int otbPolygon(int itkNotUsed(argc), char * argv[])
   // Reading vertices from command line
   int  cpt = 2;
   bool first = true;
-  while (argv[cpt] != NULL && argv[cpt + 1] != NULL)
+  while (argv[cpt] != ITK_NULLPTR && argv[cpt + 1] != ITK_NULLPTR)
     {
     if (argv[cpt][0] == 'n')
       {

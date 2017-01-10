@@ -46,12 +46,12 @@ public:
   GMSTDateTime(const GMSTDateTime& rhs);
 
   /**
-   * @brief Constructor with date initialisation
+   * @brief Constructor with date initialization
    */
   GMSTDateTime(double tsm, Ori_TSM_Green origine);
 
   /**
-   * @brief Constructor with date initialisation using a CivilDateTime
+   * @brief Constructor with date initialization using a CivilDateTime
    */
   GMSTDateTime(CivilDateTime& rhs);
 

@@ -55,7 +55,7 @@ itkTypeMacro(SFSTextureExtraction, otb::Application);
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
 SetName("SFSTextureExtraction");
 SetDescription("Computes Structural Feature Set textures on every pixel of the input image selected channel");
@@ -67,8 +67,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbSFSTexturesImageFilter class");
 
-AddDocTag("Textures");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Textures");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");
@@ -81,7 +81,7 @@ SetMinimumParameterIntValue("channel", 1);
 AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
-SetParameterDescription("parameters","This group of parameters allows to define SFS texture parameters.\
+SetParameterDescription("parameters","This group of parameters allows one to define SFS texture parameters.\
     The available texture features are SFS'Length, SFS'Width, SFS'PSI, SFS'W-Mean, SFS'Ratio and SFS'SD.\
     They are provided in this exact order in the output image.");
 
@@ -116,12 +116,12 @@ SetDocExampleParameterValue("parameters.spathre", "100");
 SetDocExampleParameterValue("out", "SFSTextures.tif");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

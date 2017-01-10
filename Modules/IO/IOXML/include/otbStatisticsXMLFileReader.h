@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileReader_h
-#define __otbStatisticsXMLFileReader_h
+#ifndef otbStatisticsXMLFileReader_h
+#define otbStatisticsXMLFileReader_h
 
 #include "itkProcessObject.h"
 
@@ -27,7 +27,7 @@ namespace otb {
  *
  * To get a specific statistic Measurement vector, use the method
  * GetStatisticVectorByName(name) which allow you to get the
- * Measurement vector for the statistic set as paramater.
+ * Measurement vector for the statistic set as parameter.
  *
  *
  *
@@ -58,7 +58,10 @@ public:
   typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
 
-  virtual void Modified() const
+  typedef std::map<std::string , std::string>           GenericMapType;
+  typedef std::map<std::string , GenericMapType>        GenericMapContainer;
+
+  void Modified() const ITK_OVERRIDE
     {
       m_IsUpdated = false;
     }
@@ -68,18 +71,29 @@ public:
   itkGetStringMacro(FileName);
 
   /** Get the number of Outputs*/
-  itkGetMacro(NumberOfOutputs, unsigned int);
+  unsigned int GetNumberOfOutputs();
+
+  /** Get the list of vector statistics names */
+  std::vector<std::string> GetStatisticVectorNames();
+
+  /** Get the list of map statistics names */
+  std::vector<std::string> GetStatisticMapNames();
 
   /** Method to get the MeasurementVector by name */
   MeasurementVectorType GetStatisticVectorByName(const char * statisticName);
 
+  /** Method to get a statistics map by name */
+  template <typename MapType>
+  MapType GetStatisticMapByName(const char * statisticName);
+
 protected:
 
+  /** Read into the file and extract information in vector and map containers */
   virtual void Read();
 
   StatisticsXMLFileReader();
-  virtual ~StatisticsXMLFileReader() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~StatisticsXMLFileReader() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StatisticsXMLFileReader(const Self&); //purposely not implemented
@@ -87,8 +101,8 @@ private:
 
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
-  unsigned int                m_NumberOfOutputs;
   mutable bool                m_IsUpdated;
+  GenericMapContainer         m_GenericMapContainer;
 
 }; // end of class StatisticsXMLFileReader
 

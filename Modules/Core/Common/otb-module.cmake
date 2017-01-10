@@ -1,6 +1,7 @@
 set(DOCUMENTATION "TO BE DOCUMENTED")
 
 otb_module(OTBCommon
+ENABLE_SHARED
   DEPENDS
     OTBBoost
     OTBITK

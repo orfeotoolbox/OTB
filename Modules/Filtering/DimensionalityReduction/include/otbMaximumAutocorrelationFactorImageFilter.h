@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMaximumAutocorrelationFactorImageFilter_h
-#define __otbMaximumAutocorrelationFactorImageFilter_h
+#ifndef otbMaximumAutocorrelationFactorImageFilter_h
+#define otbMaximumAutocorrelationFactorImageFilter_h
 
 
 #include "otbStreamingStatisticsVectorImageFilter.h"
@@ -45,9 +45,9 @@ namespace otb
  * variance. Though the inverse transform can be computed, this filter
  * only provides the forward transform for now.
  *
- * The GetV() method allows to retrieve the linear combinations used
+ * The GetV() method allows retrieving the linear combinations used
  * to generate new variates, and the GetAutoCorrelation() method
- * allows to retrieve the auto-correlation associated to each variate.
+ * allows retrieving the auto-correlation associated to each variate.
  *
  * This filter has been implemented from the Matlab code kindly made
  * available by the authors here:
@@ -131,11 +131,11 @@ public:
 
 protected:
   MaximumAutocorrelationFactorImageFilter();
-  virtual ~MaximumAutocorrelationFactorImageFilter() {}
+  ~MaximumAutocorrelationFactorImageFilter() ITK_OVERRIDE {}
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   MaximumAutocorrelationFactorImageFilter(const Self &); //purposely not implemented

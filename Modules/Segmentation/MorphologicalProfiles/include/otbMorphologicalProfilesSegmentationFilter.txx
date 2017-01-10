@@ -15,21 +15,22 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalProfilesSegmentationFilter_txx
-#define __otbMorphologicalProfilesSegmentationFilter_txx
+#ifndef otbMorphologicalProfilesSegmentationFilter_txx
+#define otbMorphologicalProfilesSegmentationFilter_txx
 
 #include "otbMorphologicalProfilesSegmentationFilter.h"
 
 namespace otb
 {
 
-template <class TInputImage,  class TOuputImage, class TInternalPrecision, class TStructuringElement>
-MorphologicalProfilesSegmentationFilter<TInputImage,TOuputImage,TInternalPrecision,TStructuringElement>
+template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
+MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
 ::MorphologicalProfilesSegmentationFilter()
 {
   m_ProfileSize = 5;
   m_ProfileStart = 1;
   m_ProfileStep = 1;
+  m_Sigma = 0.0;
 
   m_ClassificationFilter = MultiScaleClassificationFilterType::New();
   m_ConnectedComponentsFilter = ConnectedComponentsFilterType::New();
@@ -54,14 +55,14 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOuputImage,TInternalPrecisi
 
 }
 
-template <class TInputImage,  class TOuputImage, class TInternalPrecision, class TStructuringElement>
-MorphologicalProfilesSegmentationFilter<TInputImage,TOuputImage,TInternalPrecision,TStructuringElement>
+template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
+MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
 ::~MorphologicalProfilesSegmentationFilter()
 {}
 
-template <class TInputImage,  class TOuputImage, class TInternalPrecision, class TStructuringElement>
+template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
 void
-MorphologicalProfilesSegmentationFilter<TInputImage,TOuputImage,TInternalPrecision,TStructuringElement>
+MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
 ::GenerateData()
 {
   m_OpeningProfile->SetInput(this->GetInput());

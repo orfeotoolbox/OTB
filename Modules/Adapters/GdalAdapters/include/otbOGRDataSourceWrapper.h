@@ -16,16 +16,26 @@
 
 =========================================================================*/
 
-#ifndef __otbOGRDataSourceWrapper_h
-#define __otbOGRDataSourceWrapper_h
+#ifndef otbOGRDataSourceWrapper_h
+#define otbOGRDataSourceWrapper_h
 
 #include <string>
 
 // to implement copy_const
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/noncopyable.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/noncopyable.hpp>
+#endif
 
 #include "itkDataObject.h"
 #include "itkMacro.h" // itkNewMacro
@@ -44,7 +54,7 @@ namespace otb { namespace ogr {
  * \class DataSource
  * \brief Collection of geometric objects.
  *
- * This class is meant to supercede \c otb::VectorData class.  It provides
+ * This class is meant to supersede \c otb::VectorData class.  It provides
  * an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c GDALDataset.
  *
@@ -62,7 +72,9 @@ namespace otb { namespace ogr {
  *
  * \ingroup OTBGdalAdapters
  */
-class DataSource : public itk::DataObject , public boost::noncopyable
+ #include "OTBGdalAdaptersExport.h"
+ 
+class OTBGdalAdapters_EXPORT DataSource : public itk::DataObject , public boost::noncopyable
   {
 public:
   /**\name Standard ITK typedefs */
@@ -266,7 +278,7 @@ public:
    *  \return the extent of all layers
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
    */
-  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=0) const;
+  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=ITK_NULLPTR) const;
 
   /** Grafts data and information from one data source to another.
    * \deprecated \c OGRLayer has an embedded input iterator. As a consequence,
@@ -276,7 +288,7 @@ public:
    * meta information of another data source and use the same underlying \c
    * GDALDataset.
    */
-  virtual void Graft(const itk::DataObject *data);
+  void Graft(const itk::DataObject *data) ITK_OVERRIDE;
 
   /**
    * Resets current data source with the one in parameter.
@@ -313,7 +325,7 @@ public:
    */
   Layer CreateLayer(
     std::string        const& name,
-    OGRSpatialReference     * poSpatialRef = NULL,
+    OGRSpatialReference     * poSpatialRef = ITK_NULLPTR,
     OGRwkbGeometryType        eGType = wkbUnknown,
     std::vector<std::string> const& papszOptions = std::vector<std::string>());
 
@@ -353,7 +365,7 @@ public:
   Layer CopyLayer(
     Layer            & srcLayer,
     std::string const& newName,
-    char            ** papszOptions = NULL);
+    char            ** papszOptions = ITK_NULLPTR);
   //@}
 
   /**\name Layers access
@@ -422,13 +434,13 @@ public:
   Layer const GetLayerChecked(std::string const& name) const;
 
   /**
-   * Excecutes the statement..
+   * Executes the statement..
    * \param[in] statement  textual description of the SQL statement.
    * \param[in] poSpatialFilter  \c Geometry representing a spatial filter -- may be null.
    * \param[in] pszDialect  allows control of the statement dialect. If set to
    *                     NULL, the OGR SQL engine will be used, except for
    *                     RDBMS drivers that will use their dedicated SQL
-   *                     engine, unless OGRSQL is explicitely passed as the
+   *                     engine, unless OGRSQL is explicitly passed as the
    *                     dialect.
    * \return a new \c Layer that contains the matching \c Features. In case of
    * error, or no matching result sets, a \em null Layer will be returned.
@@ -456,7 +468,7 @@ public:
    * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
    */
   operator int boolean ::* () const {
-    return m_DataSource ? &boolean::i : 0;
+    return m_DataSource ? &boolean::i : ITK_NULLPTR;
     }
 
   /** Flushes all changes to disk.
@@ -500,12 +512,12 @@ protected:
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
-  virtual ~DataSource();
+  ~DataSource() ITK_OVERRIDE;
 
   static Pointer OpenDataSource(std::string const& datasourceName, Modes::type mode);
 
   /** Prints self into stream. */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /**
@@ -531,7 +543,7 @@ private:
 
   /** Get a string describing the dataset */
   std::string GetDatasetDescription() const;
-    
+
 private:
   ogr::version_proxy::GDALDatasetType *m_DataSource;
   Modes::type    m_OpenMode;
@@ -553,4 +565,4 @@ namespace boost { namespace foreach {
 #include "otbOGRDataSourceWrapper.txx"
 #endif
 
-#endif // __otbOGRDataSourceWrapper_h
+#endif // otbOGRDataSourceWrapper_h

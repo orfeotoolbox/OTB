@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbISRAUnmixingImageFilter_txx
-#define __otbISRAUnmixingImageFilter_txx
+#ifndef otbISRAUnmixingImageFilter_txx
+#define otbISRAUnmixingImageFilter_txx
 
 #include "otbISRAUnmixingImageFilter.h"
 #include <algorithm>
@@ -52,7 +52,7 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator != (const Self& other) const
+::operator != (const Self& itkNotUsed(other)) const
 {
   return true;
 }
@@ -60,7 +60,7 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator == (const Self& other) const
+::operator == (const Self& itkNotUsed(other)) const
 {
   return false;
 }

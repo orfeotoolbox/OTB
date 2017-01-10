@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardOneLineFilterWatcher_h
-#define __otbStandardOneLineFilterWatcher_h
+#ifndef otbStandardOneLineFilterWatcher_h
+#define otbStandardOneLineFilterWatcher_h
 
 #include "otbFilterWatcherBase.h"
 
@@ -48,7 +48,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class /*ITK_EXPORT*/ StandardOneLineFilterWatcher : public FilterWatcherBase
+class OTBCommon_EXPORT StandardOneLineFilterWatcher : public FilterWatcherBase
 {
 public:
 
@@ -76,13 +76,13 @@ public:
 protected:
 
   /** Callback method to show the ProgressEvent */
-  virtual void ShowProgress();
+  void ShowProgress() ITK_OVERRIDE;
 
   /** Callback method to show the StartEvent */
-  virtual void StartFilter();
+  void StartFilter() ITK_OVERRIDE;
 
   /** Callback method to show the EndEvent */
-  virtual void EndFilter();
+  void EndFilter() ITK_OVERRIDE;
 
 private:
 

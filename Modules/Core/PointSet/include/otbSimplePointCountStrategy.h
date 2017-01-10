@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSimplePointCountStrategy_h
-#define __otbSimplePointCountStrategy_h
+#ifndef otbSimplePointCountStrategy_h
+#define otbSimplePointCountStrategy_h
 
 #include "otbMath.h"
 

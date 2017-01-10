@@ -68,6 +68,8 @@ public:
 private:
 
   int m_Mode;
+  
+  DownloadSRTMTiles() : m_Mode(Mode_Download) {}
 
   bool SRTMTileExists(const std::string & url) const
   {
@@ -89,20 +91,20 @@ private:
       }
     return false;
   }
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DownloadSRTMTiles");
     SetDescription("Download or list SRTM tiles related to a set of images");
 
     // Documentation
     SetDocName("Download or list SRTM tiles related to a set of images");
-    SetDocLongDescription("This application allows to select the appropriate SRTM tiles that covers a list of images. It builds a list of the required tiles. Two modes are available: the first one download those tiles from the USGS SRTM3 website (http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/), the second one list those tiles in a local directory. In both cases, you need to indicate the directory in which directory  tiles will be download or the location of local SRTM files.");
+    SetDocLongDescription("This application allows selecting the appropriate SRTM tiles that covers a list of images. It builds a list of the required tiles. Two modes are available: the first one download those tiles from the USGS SRTM3 website (http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/), the second one list those tiles in a local directory. In both cases, you need to indicate the directory in which directory  tiles will be download or the location of local SRTM files.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
+	AddDocTag("Utilities");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
     SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");
@@ -130,13 +132,13 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     //Get the mode
@@ -165,7 +167,7 @@ private:
        rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
        rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
 
-       rsTransformToWGS84->InstanciateTransform();
+       rsTransformToWGS84->InstantiateTransform();
 
        const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
        const PointType origin=inImage->GetOrigin();

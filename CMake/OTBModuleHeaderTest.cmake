@@ -23,9 +23,11 @@ add_custom_target( OTBHeaderTests
 
 SET(BANNED_HEADERS)
 if(NOT OTB_USE_OPENCV)
-	SET(BANNED_HEADERS "${BANNED_HEADERS} otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h")
+	SET(BANNED_HEADERS "${BANNED_HEADERS} otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h otbOpenCVUtils.h otbCvRTreesWrapper.h")
 endif()
- 
+if(NOT OTB_USE_SHARK)
+  SET(BANNED_HEADERS "${BANNED_HEADERS} otbSharkRandomForestsMachineLearningModel.h otbSharkRandomForestsMachineLearningModel.txx otbSharkUtils.h otbRequiresSharkCheck.h otbSharkRandomForestsMachineLearningModelFactory.h")  
+endif()
 if(NOT OTB_USE_LIBSVM)
 	SET(BANNED_HEADERS "${BANNED_HEADERS} otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
 endif()
@@ -42,8 +44,8 @@ endif()
 
 
 macro( otb_module_headertest _name )
-  if( NOT ${_name}_THIRD_PARTY AND
-      EXISTS ${${_name}_SOURCE_DIR}/include
+  if( NOT ${_name}_THIRD_PARTY 
+      AND EXISTS ${${_name}_SOURCE_DIR}/include
       AND PYTHON_EXECUTABLE
       AND NOT (PYTHON_VERSION_STRING VERSION_LESS 2.6)
       AND NOT (${_name} STREQUAL OTBTestKernel)
@@ -99,7 +101,7 @@ macro( otb_module_headertest _name )
       get_filename_component( _test_name ${_header_test_src} NAME_WE )
       add_custom_command(
         OUTPUT ${_header_test_src}
-        COMMAND ${PYTHON_EXECUTABLE} ${OTB_SOURCE_DIR}/Utilities/Maintenance/BuildHeaderTest.py
+        COMMAND ${PYTHON_EXECUTABLE} ${OTB_CMAKE_DIR}/../Utilities/Maintenance/BuildHeaderTest.py
         ${_name}
         ${${_name}_SOURCE_DIR}
         ${${_name}_BINARY_DIR}

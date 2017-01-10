@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeodesicMorphologyLevelingFilter_h
-#define __otbGeodesicMorphologyLevelingFilter_h
+#ifndef otbGeodesicMorphologyLevelingFilter_h
+#define otbGeodesicMorphologyLevelingFilter_h
 
 #include "itkTernaryFunctorImageFilter.h"
 
@@ -114,7 +114,7 @@ public:
    * Set the original input image
    */
   using Superclass::SetInput;
-  void SetInput(const TInputImage * input)
+  void SetInput(const TInputImage * input) ITK_OVERRIDE
   {
     this->SetInput1(input);
   }
@@ -123,9 +123,9 @@ protected:
   /** Constructor */
   GeodesicMorphologyLevelingFilter() {};
   /** Destructor */
-  virtual ~GeodesicMorphologyLevelingFilter() {}
+  ~GeodesicMorphologyLevelingFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

@@ -1,0 +1,278 @@
+\chapter{How to write an application}
+\label{sec:writeAnApplication}
+
+This chapter presents the different steps to write your own application.
+It also contains a description of the framework surrounding the applications.
+
+\section{Application design}
+\label{sec:appDesign}
+The first logical step is to define the role of your application:
+\begin{itemize}
+  \item What is the function of your application ? Try to draw a box diagram to 
+  describe the design of your application. Note that you don't have to worry 
+  about opening and saving image (or vector data) files, this is handled by the 
+  framework.
+  \item What variables (or data objects) must be exposed outside the application ?
+  Try to make a list of the inputs, outputs and parameters of your application.
+\end{itemize}
+Then you should have a good vision of your application pipeline. Depending on the 
+different filters used, the application can be streamed and threaded. The threading
+capabilities can be different between the filters so there is no overall threading 
+parameter (by default, each filter has its own threading settings). 
+
+It is a different story for streaming. Since the image writers are handled within 
+the framework and outside the reach of the developer, the default behaviour is to 
+use streaming. If one of the filters doesn't support streaming, it will enlarge 
+the requested output region to the largest possible region and the entire image 
+will be processed at once. As a result, the developer doesn't have to handle  
+streaming nor threading. However, there is a way to choose the number of streaming 
+divisions (see section \ref{sec:appParam}).
+
+\section{Architecture of the class}
+\label{sec:appArchitecture}
+Every application derive from the class \doxygen{otb}{Wrapper::Application}. An 
+application can't be templated. It must contain the standard class typedefs and
+a call to the \code{OTB\_APPLICATION\_EXPORT} macro.
+
+You need also to define standard macros \doxygen{itk}{NewMacro} and
+\doxygen{itk}{TypeMacro}.
+ 
+It is also mandatory to implement three methods in a new application:
+\begin{itemize}
+  \item \code{DoInit()}
+  \item \code{DoUpdateParameters()}
+  \item \code{DoExecute()}
+\end{itemize}
+
+\subsection{DoInit()}
+\label{sec:appDoInit}
+This method is called once, when the application is instantiated. It should 
+contain the following actions:
+\begin{itemize}
+  \item Set the name and the description of the application
+  \item Fill the documentation and give an example
+  \item Declare all the parameters
+\end{itemize}
+
+
+\subsection{DoUpdateParameters()}
+\label{sec:appDoUpdateParameters}
+This method is called after every modification of a parameter value. With the command 
+line launcher, it is called each time a parameter is loaded. With the Qt launcher, it
+is called each time a parameter field is modified. It can be used to maintain consistency and relationship
+between parameters (e.g. in ExtractROI: when changing the input image, maybe the ROI size 
+has to be updated).
+
+\subsection{DoExecute()}
+\label{sec:appDoExecute}
+This method contains the real action of the application. This is where the pipeline 
+must be set up. The application framework provides different methods to get a value 
+or an object associated to a parameter:
+\begin{itemize}
+  \item \code{GetParameterInt(key)} : get the integer value of a parameter
+  \item \code{GetParameterFloat(key)} : get the float value of a parameter
+  \item \code{GetParameterString(key)} : get the string value of a parameter
+  \item \code{GetParameterImage(key)} : get a pointer to an image object, read from the
+  file name given in input
+  \item \dots
+\end{itemize}
+
+where \code{key} refers to parameter key, defined using \code{AddParameter()} method in \code{DoInit()} method.
+
+Similar methods exist for binding a data object to an output parameter:
+\begin{itemize}
+  \item \code{SetParameterOutputImage(key,data)} : link the image object to the given output parameter
+  \item \code{SetParameterComplexOutputImage(key,data)} : link the complex image object to the given output parameter
+  \item \code{SetParameterOutputVectorData(key,data)} : link the vector data object to the given
+  output parameter
+\end{itemize}
+
+If possible, no filter update should be called inside this function. The update will be 
+automatically called afterwards : for every image or vector data output, a writer is 
+created and updated.
+
+\subsection{Parameters selection}
+\label{sec:appParam}
+In the new application framework, every input, output or parameter derive from 
+\doxygen{otb}{Wrapper::Parameter}. The application engine supplies the following 
+types of parameters:
+\begin{itemize}
+  \item \code{ParameterType\_Empty} : parameter without value (can be used to represent 
+  a flag)
+  \item \code{ParameterType\_Int} : parameter storing an integer.
+  \item \code{ParameterType\_Radius} : parameter storing a radius.
+  \item \code{ParameterType\_Float} : parameter storing a float.
+  \item \code{ParameterType\_String} : parameter storing character string.
+  \item \code{ParameterType\_StringList} : parameter storing a list of character string.
+  \item \code{ParameterType\_InputFilename} : parameter storing an input file name.
+  \item \code{ParameterType\_InputFilenameList} : parameter storing a list of input file names.
+  \item \code{ParameterType\_Directory} : parameter storing a folder name.
+  \item \code{ParameterType\_Group} : parameter storing children parameters.
+  \item \code{ParameterType\_Choice} : parameter storing a list of choices (doesn't support
+  multi-choice). It also allows to create specific sub-parameters for each available choice.
+  \item \code{ParameterType\_ListView} : parameter storing a list of choices (support 
+  multi-choice and single-choice).
+  \item \code{ParameterType\_InputImage} : parameter storing an input image.
+  \item \code{ParameterType\_InputImageList} : parameter storing a list of input image.
+  \item \code{ParameterType\_ComplexInputImage} : parameter storing a complex input image.
+  \item \code{ParameterType\_InputVectorData} : parameter storing input vector data.
+  \item \code{ParameterType\_InputVectorDataList} : parameter storing a list of input vector data.
+  \item \code{ParameterType\_InputProcessXML} : parameter storing an input XML file name.
+  \item \code{ParameterType\_OutputFilename} : parameter storing an output file name.
+  \item \code{ParameterType\_OutputImage} : parameter storing an output image.
+  \item \code{ParameterType\_ComplexOutputImage} : parameter storing a complex output image.
+  \item \code{ParameterType\_OutputVectorData} : parameter storing an output vector data.
+  \item \code{ParameterType\_OutputProcessXML} : parameter storing an output XML file name.
+  \item \code{ParameterType\_RAM} : parameter storing the maximum amount of RAM to be used.
+\end{itemize}
+
+\subsection{Parameters description}
+
+Each created parameter has a unique key and several boolean flags to represent its state. These flags
+can be used to set a parameter optional or test if the user has modified the parameter value. The parameters
+are created in the \code{DoInit()} method, then the framework will set their value (either by parsing the 
+command line or reading the graphical user interface). The \code{DoExecute()} method is called when all 
+mandatory parameters have been given a value, which can be obtained with "Get" methods defined in 
+\doxygen{otb}{Wrapper::Application}. Parameters are set mandatory (or not) using \code{MandatoryOn(key)} method (\code{MandatoryOff(key)}).
+
+Some functions are specific to numeric parameters, such as \code{SetMinimumParameterIntValue(key,value)}
+or \code{SetMaximumParameterFloatValue(key,value)}. By default, numeric parameters are treated as inputs.
+If your application outputs a number, you can use a numeric parameter and change its role by calling 
+\code{SetParameterRole(key,Role\_Output)}.
+
+The input types \code{InputImage}, \code{InputImageList}, \code{ComplexInputImage}, \code{InputVectorData}
+and \code{InputVectorDataList} store the name of the files to load, but they also encapsulate the 
+readers needed to produce the input data.
+
+The output types \code{OutputImage}, \code{ComplexOutputImage} and \code{OutputVectorData} store the 
+name of the files to write, but they also encapsulate the corresponding writers.
+
+\section{Composite application}
+
+The application framework has been extended to allow the implementation of composite applications :
+applications that use other applications. The concept is simple : you have two applications A and B
+that you want to chain in order to build a third application C. Rather than writing C by copying
+the code of A and B, you would like to re-use applications A and B. This plain example will be
+re-used in this section for explanations.
+
+A dedicated class \doxygen{otb}{Wrapper::CompositeApplication} has been added to create such applications.
+If you derive this class to implement application C, you will be able to create a composite application.
+
+\subsection{Creating internal applications}
+
+Like with standard applications, you have to write a \code{DoInit()} function. In this function,
+you should first clean any internal application with the function \code{ClearApplications()}
+(the \code{DoInit()} function is called twice in some cases). Then you can
+instanciate the internal applications that you want to use (for instance A and B).
+The function \code{AddApplication()} will do that, based on :
+\begin{itemize}
+\item The application type (i.e. its official name, such as ExtractROI, BandMath, \dots)
+\item An identifier : like with parameter keys, you have to specify an identifier
+to refer to this internal application. Use the same naming conventions as parameters.
+\item A description : give a small description of the role of this internal application.
+\end{itemize}
+
+Using the function \code{GetInternalApplication()}, you can get a pointer to the
+internal application corresponding to a given identifier.
+
+In the example given in introduction, we assume that :
+\begin{itemize}
+\item An internal application of type A has been added with identifier \code{a}
+\item An internal application of type B has been added with identifier \code{b}
+\end{itemize}
+
+\subsection{Connecting parameters}
+
+Once you have internal applications, you may want to setup their parameters. There
+are typically 3 cases.
+
+You may want to expose a parameter of an internal application as a parameter of
+your composite application. Let say you want to expose parameter \code{io.in} from application
+\code{a} into your composite application C with the key \code{input}. You can call the function :
+
+\code{ShareParameter("input","a.io.in")}
+
+As a result, the parameters \code{input} in application C and \code{io.in} in application \code{a}
+will point to the same object. Under the two parameter keys, there is a unique value.
+These two parameters can be considered as synchronized.
+
+This leads to the second case : you may want to synchronize two parameters from internal
+applications. Let say you want to synchronize parameter \code{field} from application
+\code{a} with parameter \code{fname} from application \code{b}. You can call the function :
+
+\code{Connect("a.field","b.fname")}
+
+Note that the functions \code{ShareParameter()} and \code{Connect()} :
+\begin{itemize}
+\item Use the same syntax to access internal parameters ("application identifier"
+dot "parameter key").
+\item Shall be used in the DoInit() function, after the internal applications
+have been added.
+\end{itemize}
+
+In this synchronization, the two parameters should have the same type, or have a
+similar interface, such as input and output filenames that are both accessed using
+\code{GetParameterString()} and \code{SetParameterString()}.
+
+This type of connection is a transition to the third case : you may want to connect
+the output of an internal application to the input of an other internal application.
+Here the difficulty is that the two parameters to connect probably have different
+types. Let say you want to connect parameter \code{a.out} to parameter \code{b.in}.
+The "Connect()" function may work in favorable cases (see previous paragraph),
+but for images, you have two options :
+\begin{itemize}
+\item Explicitely copy the image pointer from the output image parameter in the input
+image parameter (with functions \code{SetParameterInputImage()} and
+\code{GetParameterOutputImage()}). It will connect the pipelines in applications
+A and B, to form an "in-memory" connexion. This has to be done between the calls
+to \code{DoExecute()} of application A and B.
+\item Use a temporary filename to store the output image \code{a.out} and read it
+with \code{b.in}. In this case, you have to manually call the writers of parameter
+\code{a.out}.
+\end{itemize}
+
+At the moment, the connexion of vector data parameters is not supported.
+
+\subsection{Orchestration}
+
+In the \code{DoUpdateParameters()} of your composite application, you can call
+the same function on an internal application with the function \code{UpdateInternalParameters()}.
+This is needed only if your internal applications have a specific behaviour during
+parameter update.
+
+In the \code{DoExecute()} of your composite application, you have to call \code{ExecuteInternal()}
+in order to launch each internal application. The order should be compatible with
+image parameter connexions. If you want to do "in-memory" connexions, you can to it between
+two calls to \code{ExecuteInternal()}.
+
+The application BundleToPerfectSensor is a simple example of composite applications.
+For a more complex example, you can check the application TrainImagesClassifier.
+
+\section{Compile your application}
+
+In order to compile your application you must call the macro \code{OTB\_CREATE\_APPLICATION} in the \emph{CMakelists.txt} file. 
+This macro generates the lib \emph{otbapp\_XXX.so}, in (OTB\_BINARY\_DIR/lib/otb/applications), where \emph{XXX} refers to the class name.
+
+\section{Execute your application}
+
+There are different ways to launch applicatons :
+
+\begin{description}
+\item[CommandLine :] The command line option is invoked using \emph{otbApplicationLauncherCommandLine} executable followed by the classname, the application dir and the application parameters.
+\item[QT :] Application can be encapsuled in Qt framework using \emph{otbApplicationLauncherQt} executable followed by the classname and the application dir.
+\item[Python :] A Python wrapper is also available.
+\end{description}
+
+
+\section{Testing your application}
+\label{sec:appTesting}
+It is possible to write application tests. They are quite similar to filters tests.
+The macro \code{OTB\_TEST\_APPLICATION} makes it easy to define a new test.
+
+
+\section{Application Example}
+\label{sec:ApplicationExample}
+\ifitkFullVersion
+\input{ApplicationExample.tex}
+\fi
+

@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbConfusionMatrixToMassOfBelief_txx
-#define __otbConfusionMatrixToMassOfBelief_txx
+#ifndef otbConfusionMatrixToMassOfBelief_txx
+#define otbConfusionMatrixToMassOfBelief_txx
 
 #include "otbConfusionMatrixToMassOfBelief.h"
 

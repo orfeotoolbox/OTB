@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeInformationImageFilter_txx
-#define __otbChangeInformationImageFilter_txx
+#ifndef otbChangeInformationImageFilter_txx
+#define otbChangeInformationImageFilter_txx
 
 #include "otbChangeInformationImageFilter.h"
 #include "itkMetaDataObject.h"
@@ -75,7 +75,7 @@ ChangeInformationImageFilter<TInputImage>
     // enable this key for metadata change
     m_ChangedKeys.insert(key);
     itk::MetaDataDictionary &dict = this->GetMetaDataDictionary();
-    if (value == NULL)
+    if (value == ITK_NULLPTR)
       {
       // Remove meta-data from dictionary
       this->RemoveKeyFromDictionary(dict,key);

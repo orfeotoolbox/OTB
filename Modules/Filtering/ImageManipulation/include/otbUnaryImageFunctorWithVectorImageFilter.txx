@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryImageFunctorWithVectorImageFilter_txx
-#define __otbUnaryImageFunctorWithVectorImageFilter_txx
+#ifndef otbUnaryImageFunctorWithVectorImageFilter_txx
+#define otbUnaryImageFunctorWithVectorImageFilter_txx
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -103,7 +103,7 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
     OutputPixelType outPixel;
     outPixel.SetSize(inputPtr->GetNumberOfComponentsPerPixel());
     outPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
-    // if the input pixel in null, the output is considered as null ( no sensor informations )
+    // if the input pixel in null, the output is considered as null ( no sensor information )
     if (inPixel != nullPixel)
       {
       for (unsigned int j = 0; j < inputPtr->GetNumberOfComponentsPerPixel(); ++j)

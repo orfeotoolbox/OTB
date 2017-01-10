@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
-#define __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
+#ifndef otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
+#define otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
 
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 #include "otbVectorDataTransformFilter.h"
@@ -56,7 +56,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput( this->GetInput() );
   extract->SetExtractionRegion( this->GetOutput()->GetRequestedRegion() );
-  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
+  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
 
   typename MaskImageType::Pointer mask;
   if (!m_MaskExpression.empty())

@@ -178,7 +178,7 @@ int main(int itkNotUsed(argc), char* argv[])
 // \subdoxygen{itk}{Statistics}{ListSample} as input and estimates the label of each
 // input sample using the model. Finally, the
 // \doxygen{otb}{ImageClassificationModel} inherits from the
-// \doxygen{itk}{ImageToImageFilter} and allows to classify pixels in the
+// \doxygen{itk}{ImageToImageFilter} and allows classifying pixels in the
 // input image by predicting their labels using a model.
 //
 // Software Guide : EndLatex

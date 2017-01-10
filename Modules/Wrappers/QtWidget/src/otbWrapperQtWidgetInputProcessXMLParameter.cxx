@@ -17,6 +17,10 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 
+
+#include <otbQtAdapters.h>
+
+
 namespace otb
 {
 namespace Wrapper
@@ -34,10 +38,16 @@ QtWidgetInputProcessXMLParameter::~QtWidgetInputProcessXMLParameter()
 
 void QtWidgetInputProcessXMLParameter::DoUpdateGUI()
 {
-  // Update the lineEdit
-  QString text( m_XMLParam->GetFileName() );
-  if (text != m_Input->text())
-    m_Input->setText(text);
+  if (m_XMLParam->HasUserValue())
+    {
+    // Update the lineEdit
+    QString text(
+      QFile::decodeName( m_XMLParam->GetFileName() )
+    );
+
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetInputProcessXMLParameter::DoCreateWidget()
@@ -64,36 +74,44 @@ void QtWidgetInputProcessXMLParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetInputProcessXMLParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
-  fileDialog.setNameFilter("XML File (*.xml)");
 
-  if (fileDialog.exec())
-    {
-    QString name = fileDialog.selectedFiles().at(0);
-    if( !name.isEmpty() )
-      {
-      this->SetFileName(name);
-      m_Input->setText(name);
-      }
-    }
+void
+QtWidgetInputProcessXMLParameter
+::SelectFile()
+{
+  assert( m_Input!=NULL );
+
+  QString filename(
+    GetOpenFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "XML File (*.xml)" ),
+      NULL,
+      QFileDialog::ReadOnly
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  SetFileName( filename );
+
+  m_Input->setText( filename  );
 }
+
 
 void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
   // load xml file name
-  m_XMLParam->SetValue(value.toAscii().constData());
-
-  // notify of value change
-  QString key( m_XMLParam->GetKey() );
-
-  emit ParameterChanged(key);
-
-  GetModel()->UpdateAllWidgets();
-
+  if( m_XMLParam->SetFileName(
+	QFile::encodeName( value ).constData() ) )
+    {
+    // notify of value change
+    QString key( m_XMLParam->GetKey() );
+    emit ParameterChanged(key);
+    GetModel()->UpdateAllWidgets();
+    }
 }
 
 }

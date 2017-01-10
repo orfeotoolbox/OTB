@@ -15,12 +15,23 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRVersionProxy_h
-#define __otbOGRVersionProxy_h
+#ifndef otbOGRVersionProxy_h
+#define otbOGRVersionProxy_h
 
 #include <string>
 #include <vector>
 #include "otbConfigure.h"
+#include "itkMacro.h"
+
+#if defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
+#include "ogr_core.h" // OGR enums
+#pragma warning ( pop )
+#else
+#include "ogr_core.h" // OGR enums
+#endif
+
 
 #ifdef OTB_USE_GDAL_20
 class GDALDataset;
@@ -30,12 +41,20 @@ class OGRDataSource;
 class OGRSFDriver;
 #endif
 
+#include "OTBGdalAdaptersExport.h"
+
 namespace otb
 {
 namespace ogr
 {
 namespace version_proxy
 {
+
+/**
+* With Gdal >= 2.0, this function will test equality between type and
+* OFTInteger64 enum. Otherwise, it returns false. 
+*/
+OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type);
 
 /** 
  * This namespace holds proxy functions hiding interface changes in gdal 2.0 
@@ -71,7 +90,8 @@ namespace version_proxy
    * \param filename Filename of the file to open
    * \param readOnly: If true, dataset is open in read-only mode.
    * \return NULL if file could not be open.
-   */ 
+   */
+  OTBGdalAdapters_EXPORT   
   GDALDatasetType * Open(const char * filename, bool readOnly = true);
 
   /**
@@ -83,6 +103,7 @@ namespace version_proxy
    * \param dataset Pointer to the dataset to close. Will not be
    * checked for null pointer.
    */
+  OTBGdalAdapters_EXPORT
   void Close(GDALDatasetType * dataset);
 
   /**
@@ -99,6 +120,7 @@ namespace version_proxy
    * 
    * \return NULL if dataset could not be created.
    */
+  OTBGdalAdapters_EXPORT
   GDALDatasetType * Create(GDALDriverType * driver, const char * name);
 
 
@@ -109,7 +131,8 @@ namespace version_proxy
    * and GDALDriver::Delete for gdal 2.x implementation.
    *
    * \param name Name of the dataset to destroy.
-   */ 
+   */
+  OTBGdalAdapters_EXPORT   
   bool Delete(const char * name);
 
   /**
@@ -124,9 +147,10 @@ namespace version_proxy
    * 
    * \return NULL if no driver could be retrieved.
    */
+  OTBGdalAdapters_EXPORT 
   GDALDriverType *  GetDriverByName(const char * name);
 
-
+  OTBGdalAdapters_EXPORT
   std::string GetDriverNameFromDataSource(const GDALDatasetType * ds);
 
   /**
@@ -140,18 +164,21 @@ namespace version_proxy
    *
    * \return True if sync went on without any error.
    */
-  bool SyncToDisk(GDALDatasetType * dataset);
+   OTBGdalAdapters_EXPORT
+   bool SyncToDisk(GDALDatasetType * dataset);
 
   /**
    * \return The name of the dataset class behind the implementation
    * (OGRDataSource for gdal 1.x and GdalDataset for gdal 2.x)
    */
+  OTBGdalAdapters_EXPORT
   std::string GetDatasetClassName();
 
   /**
    * \return The name of the driver class behind the implementation
    * (OGRSFDriver for gdal 1.x and GDALDriver for gdal 2.x)
    */
+  OTBGdalAdapters_EXPORT 
   std::string GetDriverClassName();
 
   /**
@@ -166,6 +193,8 @@ namespace version_proxy
    * 
    * \return A vector of string containing the list of files.
    */
+   
+  OTBGdalAdapters_EXPORT 
   std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset);
 
   /** 
@@ -177,6 +206,7 @@ namespace version_proxy
    *
    * \return A vector of string containing the list of available drivers.
    */  
+  OTBGdalAdapters_EXPORT
   std::vector<std::string> GetAvailableDriversAsStringVector();
 
 }

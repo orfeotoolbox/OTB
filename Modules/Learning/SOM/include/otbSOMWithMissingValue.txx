@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMWithMissingValue_txx
-#define __otbSOMWithMissingValue_txx
+#ifndef otbSOMWithMissingValue_txx
+#define otbSOMWithMissingValue_txx
 
 #include "otbSOMWithMissingValue.h"
 
@@ -70,7 +70,7 @@ SOMWithMissingValue<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbor
   NeighborhoodIteratorType it(radius, map, mapRegion);
 
   // Here, the periodic update is achieved 'by hand' since
-  // PeriodicBoundaryCondition does not allow to modifiy
+  // PeriodicBoundaryCondition does not allow modifying
   // VectorImage contents
   SizeType  mapSize = mapRegion.GetSize();
   IndexType positionToUpdate;
@@ -84,13 +84,13 @@ SOMWithMissingValue<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbor
 
     // The neighborhood is of elliptic shape
     double theDistance = itk::NumericTraits<double>::Zero;
-    for (int j = 0; j < MapType::ImageDimension; ++j)
+    for (unsigned int j = 0; j < MapType::ImageDimension; ++j)
       theDistance += pow(static_cast<double>(offset[j]), 2.0)
                      / pow(static_cast<double>(radius[j]), 2.0);
 
     if (theDistance <= 1.0)
       {
-      for (int j = 0; j < MapType::ImageDimension; ++j)
+      for (unsigned int j = 0; j < MapType::ImageDimension; ++j)
         {
         int pos = offset[j] + position[j];
         positionToUpdate[j] = (pos >= 0) ?

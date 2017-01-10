@@ -25,7 +25,7 @@
 //
 //
 //  We are going to use the \doxygen{itk}{GradientMagnitudeImageFilter}
-// to compute the gradient of the image. The begining of the file is
+// to compute the gradient of the image. The beginning of the file is
 // similar to the Pipeline.cxx.
 //
 // We include the required headers, without forgetting to add the header

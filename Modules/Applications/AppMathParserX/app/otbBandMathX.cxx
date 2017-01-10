@@ -21,6 +21,8 @@
 #include "otbObjectList.h"
 
 #include "otbBandMathXImageFilter.h"
+#include "otbMultiChannelExtractROI.h"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -43,12 +45,14 @@ public:
 
   itkTypeMacro(BandMathX, otb::Application);
 
-
-  typedef otb::BandMathXImageFilter<FloatVectorImageType>                             BandMathImageFilterType;
+  typedef otb::MultiChannelExtractROI
+    <FloatVectorImageType::InternalPixelType,
+     FloatVectorImageType::InternalPixelType> MultiChannelExtractorType;
+  typedef otb::BandMathXImageFilter<FloatVectorImageType>   BandMathImageFilterType;
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("BandMathX");
     SetDescription("This application performs mathematical operations on multiband images.\n"
@@ -83,8 +87,8 @@ private:
       "\n"
       "                   im1b1 + im2b1 \n"
       "                   im1b2 + im2b2       (2)\n"
-      "                         ...."
-      "\n\nNevertheless, the first expression is by far much pleaseant. We call this new functionnality the 'batch mode'\n"
+      "                   ..."
+      "\n\nNevertheless, the first expression is by far much pleaseant. We call this new functionality the 'batch mode'\n"
       "(performing the same operation in a band-to-band fashion).\n"
 
       "\n\n"
@@ -94,8 +98,8 @@ private:
       "- I is an number identifying the image input (remember, input #0 = im1, and so on)\n"
       "- J is an number identifying the band (remember, first band is indexed by 1)\n"
       "- KxP are two numbers that represent the size of the neighborhood (first one is related to the horizontal direction)\n"
-      "All neighborhood are centred, thus K and P must be odd numbers.\n"
-      "Many operators come with this new functionnality: dotpr, mean var median min max...\n"
+      "All neighborhood are centered, thus K and P must be odd numbers.\n"
+      "Many operators come with this new functionality: dotpr, mean var median min max...\n"
       "For instance, if im1 represents the pixel of 3 bands image:\n\n"
       "               im1 - mean(im1b1N5x5,im1b2N5x5,im1b3N5x5)       (3)\n"
       "\ncould represent a high pass filter (Note that by implying three neighborhoods, the operator mean returns a row vector of three components.\n"
@@ -108,7 +112,7 @@ private:
       "matrices (for instance cos, sin, ...). These new operators/ functions keep the original names to which we added the prefix 'v' for vector (vcos, vsin, ...).\n"
       "- mult, div and pow operators, that perform element-wise multiplication, division or exponentiation of vector/matrices (for instance im1 div im2)\n"
       "- mlt, dv and pw operators, that perform multiplication, division or exponentiation of vector/matrices by a scalar (for instance im1 dv 2.0)\n"
-      "- bands, which is a very usefull operator. It allows to select specific bands from an image, and/or to rearrange them in a new vector;\n"
+      "- bands, which is a very useful operator. It allows selecting specific bands from an image, and/or to rearrange them in a new vector;\n"
       "for instance bands(im1,{1,2,1,1}) produces a vector of 4 components made of band 1, band 2, band 1 and band 1 values from the first input.\n"
       "Note that curly brackets must be used in order to select the desired band indices.\n"
       "... and so on.\n"
@@ -126,7 +130,7 @@ private:
       "In the latter case, elements of a row must be separated by commas, and rows must be separated by semicolons.\n"
       "It is also possible to define expressions within the same txt file, with the pattern #E expr. For instance (two expressions; see also limitations section below):\n\n"
       "#E $dotpr(kernel1,im1b1N3x5); im2b1^expo$\n"
-      "\n- The 'outcontext' parameter allows to save user's constants and expressions (context).\n"
+      "\n- The 'outcontext' parameter allows saving user's constants and expressions (context).\n"
       "- Setting the output image can be done with the 'out' parameter (multi-outputs is not implemented yet).\n"
       "\n\n"
       "Finally, we strongly recommend that the reader takes a look at the cookbook, where additional information can be found (http://www.orfeo-toolbox.org/packages/OTBCookBook.pdf).\n"
@@ -137,7 +141,7 @@ private:
                       "Separating expressions by semi-colons (; ) will concatenate their results into a unique multiband output image. ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    AddDocTag("Util");
+    AddDocTag("Miscellaneous");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     SetParameterDescription("il", "Image list to perform computation on.");
@@ -150,7 +154,6 @@ private:
     AddParameter(ParameterType_String, "exp", "Expressions");
     SetParameterDescription("exp",
                             "Mathematical expression to apply.");
-    MandatoryOff("exp");
 
     AddParameter(ParameterType_InputFilename, "incontext", "Import context");
     SetParameterDescription("incontext",
@@ -168,12 +171,101 @@ private:
     SetDocExampleParameterValue("exp", "\"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)\"");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
-
+    // check if input context should be used
+    bool useContext = this->ContextCheck();
+    // Check if the expression is correctly set
+    if (HasValue("il") && HasValue("exp"))
+      {
+      this->LiveCheck(useContext);
+      }
   }
 
-  void DoExecute()
+  bool ContextCheck(void)
+    {
+    bool useContext = false;
+    if (IsParameterEnabled("incontext") && HasValue("incontext"))
+      {
+      std::string contextPath = GetParameterString("incontext");
+      // check that file exists
+      if (itksys::SystemTools::FileExists(contextPath.c_str(),true))
+        {
+        BandMathImageFilterType::Pointer dummyFilter =
+          BandMathImageFilterType::New();
+        dummyFilter->SetManyExpressions(false);
+        try
+          {
+          dummyFilter->ImportContext(contextPath);
+          useContext = true;
+          }
+        catch(itk::ExceptionObject& err)
+          {
+          //trick to prevent unreferenced local variable warning on MSVC
+          (void)err;
+          // silent catch
+          useContext = false;
+          }
+        if (useContext)
+          {
+          // only set the first expression, 'ManyExpression' is disabled.
+          this->SetParameterString("exp",dummyFilter->GetExpression(0));
+          }
+        }
+      }
+    return useContext;
+    }
+
+  void LiveCheck(bool useContext=false)
+    {
+    BandMathImageFilterType::Pointer dummyFilter =
+      BandMathImageFilterType::New();
+    dummyFilter->SetManyExpressions(false);
+
+    std::vector<MultiChannelExtractorType::Pointer> extractors;
+    FloatVectorImageListType::Pointer inList = GetParameterImageList("il");
+    for (unsigned int i = 0; i < inList->Size(); i++)
+      {
+      FloatVectorImageType::Pointer inImg = inList->GetNthElement(i);
+      FloatVectorImageType::RegionType  largestRegion = inImg->GetLargestPossibleRegion();
+      unsigned int nbChannels = inImg->GetNumberOfComponentsPerPixel();
+
+      MultiChannelExtractorType::Pointer extract = MultiChannelExtractorType::New();
+      extractors.push_back(extract);
+      extract->SetInput(inImg);
+      extract->SetStartX(largestRegion.GetIndex(0));
+      extract->SetStartY(largestRegion.GetIndex(1));
+      // Set extract size to 1 in case of global stats computation
+      extract->SetSizeX(1);
+      extract->SetSizeY(1);
+      for (unsigned int j=0 ; j<nbChannels ; ++j)
+        {
+        extract->SetChannel(j+1);
+        }
+      dummyFilter->SetNthInput(i,extract->GetOutput());
+      }
+    if (useContext)
+      {
+      dummyFilter->ImportContext(GetParameterString("incontext"));
+      }
+    else
+      {
+      dummyFilter->SetExpression(GetParameterString("exp"));
+      }
+    try
+      {
+      dummyFilter->UpdateOutputInformation();
+      SetParameterDescription("exp", "Valid expression");
+      }
+    catch(itk::ExceptionObject& err)
+      {
+      // Change the parameter description to be able to have the
+      // parser errors in the tooltip
+      SetParameterDescription("exp", err.GetDescription());
+      }
+    }
+
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");
@@ -201,30 +293,30 @@ private:
 
         otbAppLogINFO( << "Image #" << i + 1 << " has "
                        << currentImage->GetNumberOfComponentsPerPixel()
-                       << " components" << std::endl );
+                       << " components");
 
         m_Filter->SetNthInput(i,currentImage);
 
       }
 
-
-    if ( IsParameterEnabled("exp") )
-    {
-      std::string string = GetParameterString("exp");
-      otbAppLogINFO( << string << std::endl );
-      m_Filter->SetExpression(string);
-    }
-
-    if ( IsParameterEnabled("incontext") )
+    bool useContext = this->ContextCheck();
+    std::string expStr = GetParameterString("exp");
+    if (useContext)
+      {
+      otbAppLogINFO("Using input context : " << expStr );
       m_Filter->ImportContext(GetParameterString("incontext"));
+      }
+    else
+      {
+      otbAppLogINFO("Using expression : " << expStr );
+      m_Filter->SetExpression(expStr);
+      }
 
-    if ( IsParameterEnabled("outcontext") )
+    if ( IsParameterEnabled("outcontext") && HasValue("outcontext") )
       m_Filter->ExportContext(GetParameterString("outcontext"));
 
     // Set the output image
     SetParameterOutputImage("out", m_Filter->GetOutput());
-
-
   }
 
   BandMathImageFilterType::Pointer  m_Filter;
@@ -234,5 +326,3 @@ private:
 } // namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::BandMathX)
-
-

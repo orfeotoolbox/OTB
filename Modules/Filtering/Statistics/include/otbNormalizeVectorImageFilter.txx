@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeVectorImageFilter_txx
-#define __otbNormalizeVectorImageFilter_txx
+#ifndef otbNormalizeVectorImageFilter_txx
+#define otbNormalizeVectorImageFilter_txx
 #include "otbNormalizeVectorImageFilter.h"
 
 namespace otb
@@ -35,12 +35,22 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
 }
 
+
 template < class TInputImage, class TOutputImage >
 void
 NormalizeVectorImageFilter< TInputImage, TOutputImage >
-::BeforeThreadedGenerateData ()
+::GenerateOutputInformation()
 {
-  if ( !m_UseMean )
+  // Call superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  if( (m_UseMean && !m_IsGivenMean) || (m_UseStdDev && !m_IsGivenStdDev))
+    {
+    m_CovarianceEstimator->SetInput( const_cast<InputImageType*>( this->GetInput() ) );
+    m_CovarianceEstimator->Update();
+    }
+
+    if ( !m_UseMean )
   {
     typename TInputImage::PixelType vector ( this->GetInput()->GetNumberOfComponentsPerPixel() );
     vector.Fill( itk::NumericTraits< typename TInputImage::PixelType::ValueType >::Zero );
@@ -56,9 +66,6 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
 
   if ( !m_IsGivenMean )
   {
-    m_CovarianceEstimator->SetInput( const_cast<InputImageType*>( this->GetInput() ) );
-    m_CovarianceEstimator->Update();
-
     this->GetFunctor().SetMean( m_CovarianceEstimator->GetMean() );
 
     if ( !m_IsGivenStdDev && m_UseStdDev )
@@ -71,8 +78,9 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
       this->GetFunctor().SetStdDev( sigma );
     }
   }
+
 }
 
 } // end of namespace otb
 
-#endif // __otbNormalizeVectorImageFilter_txx
+#endif // otbNormalizeVectorImageFilter_txx

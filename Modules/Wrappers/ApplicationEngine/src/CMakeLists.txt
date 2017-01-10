@@ -27,6 +27,7 @@ set(OTBApplicationEngine_SRC
   otbWrapperChoiceParameter.cxx
   otbWrapperApplicationRegistry.cxx
   otbWrapperApplicationFactoryBase.cxx
+  otbWrapperCompositeApplication.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})
@@ -42,7 +43,10 @@ target_link_libraries(OTBApplicationEngine
   ${OTBImageBase_LIBRARIES}
   ${OTBBoost_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
-
+  ${OTBMPI_LIBRARIES}
+  ${OTBMPIConfig_LIBRARIES}
+  ${OTBMPITiffWriter_LIBRARIES}
+  ${OTBMPIVrtWriter_LIBRARIES}
   )
 
 otb_module_target(OTBApplicationEngine)

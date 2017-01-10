@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBoostDox_h
-#define __otbBoostDox_h
+#ifndef otbBoostDox_h
+#define otbBoostDox_h
 
 /**\defgroup boost Boost alike helpers
  * \ingroup  Thematic
@@ -27,4 +27,4 @@
 namespace boost { }
 //@}
 
-#endif // __otbBoostDox_h
+#endif // otbBoostDox_h

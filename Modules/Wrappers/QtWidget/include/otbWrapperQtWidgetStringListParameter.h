@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetStringListParameter_h
-#define __otbWrapperQtWidgetStringListParameter_h
+#ifndef otbWrapperQtWidgetStringListParameter_h
+#define otbWrapperQtWidgetStringListParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -33,12 +33,12 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetStringListParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetStringListParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
   QtWidgetStringListParameter(StringListParameter*, QtWidgetModel*);
-  virtual ~QtWidgetStringListParameter();
+  ~QtWidgetStringListParameter() ITK_OVERRIDE;
 
 signals:
   void Change();
@@ -46,16 +46,16 @@ signals:
 protected slots:
   void SetString( const QString& value );
   virtual void AddString();
-  virtual void SupressString();
+  virtual void SuppressString();
   virtual void UpdateStringList();
 
 private:
   QtWidgetStringListParameter(const QtWidgetStringListParameter&); //purposely not implemented
   void operator=(const QtWidgetStringListParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   StringListParameter::Pointer m_StringListParam;
 

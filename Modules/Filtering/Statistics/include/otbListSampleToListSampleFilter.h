@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToListSampleFilter_h
-#define __otbListSampleToListSampleFilter_h
+#ifndef otbListSampleToListSampleFilter_h
+#define otbListSampleToListSampleFilter_h
 
 #include "otbListSampleSource.h"
 
@@ -24,7 +24,7 @@ namespace otb {
 namespace Statistics {
 
 /** \class ListSampleToListSampleFilter
- *  \brief This class is a base class for fitlers using ListSample as
+ *  \brief This class is a base class for filters using ListSample as
  *  input and returning ListSample.
  *
  *
@@ -85,8 +85,8 @@ public:
 protected:
 
   ListSampleToListSampleFilter();
-  virtual ~ListSampleToListSampleFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ListSampleToListSampleFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ListSampleToListSampleFilter(const Self&); //purposely not implemented

@@ -1,5 +1,5 @@
-#ifndef __otbDifferenceImageFilter_h
-#define __otbDifferenceImageFilter_h
+#ifndef otbDifferenceImageFilter_h
+#define otbDifferenceImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkNumericTraits.h"
@@ -45,7 +45,8 @@ public:
   typedef typename OutputImageType::RegionType                   OutputImageRegionType;
   typedef typename itk::NumericTraits<OutputPixelType>::RealType RealType;
   typedef typename itk::NumericTraits<RealType>::AccumulateType  AccumulateType;
-  typedef typename RealType::RealValueType                       ScalarRealType;
+  typedef typename itk::NumericTraits<OutputPixelType>
+                      ::ScalarRealType                           ScalarRealType;
 
   /** Set the valid image input.  This will be input 0.  */
   virtual void SetValidInput(const InputImageType* validImage);
@@ -65,14 +66,14 @@ public:
 
   /** Get parameters of the difference image after execution.  */
   itkGetMacro(MeanDifference, RealType);
-  itkGetMacro(TotalDifference, RealType);
+  itkGetMacro(TotalDifference, AccumulateType);
   itkGetMacro(NumberOfPixelsWithDifferences, unsigned long);
 
 protected:
   DifferenceImageFilter();
-  virtual ~DifferenceImageFilter() {}
+  ~DifferenceImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** DifferenceImageFilter can be implemented as a multithreaded
    * filter.  Therefore, this implementation provides a
@@ -86,20 +87,20 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& threadRegion,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData();
-  void AfterThreadedGenerateData();
-  virtual void GenerateOutputInformation();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   ScalarRealType m_DifferenceThreshold;
   RealType       m_MeanDifference;
-  RealType       m_TotalDifference;
+  AccumulateType m_TotalDifference;
   unsigned long  m_NumberOfPixelsWithDifferences;
   int            m_ToleranceRadius;
 
-  std::vector<RealType>     m_ThreadDifferenceSum;
-  itk::Array<unsigned long> m_ThreadNumberOfPixels;
+  std::vector<AccumulateType> m_ThreadDifferenceSum;
+  itk::Array<unsigned long>   m_ThreadNumberOfPixels;
 
 private:
   DifferenceImageFilter(const Self &); //purposely not implemented

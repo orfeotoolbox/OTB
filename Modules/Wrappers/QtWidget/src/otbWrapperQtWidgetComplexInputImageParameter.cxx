@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetComplexInputImageParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -34,9 +36,18 @@ QtWidgetComplexInputImageParameter::~QtWidgetComplexInputImageParameter()
 
 void QtWidgetComplexInputImageParameter::DoUpdateGUI()
 {
-  QString text( m_ComplexInputImageParam->GetFileName().c_str() );
-  if (text != m_Input->text())
-    m_Input->setText(text);
+  //update lineedit if HasUserValue flag is set(from xml)
+  if(m_ComplexInputImageParam->HasUserValue())
+    {
+    QString text(
+      QFile::decodeName(
+        m_ComplexInputImageParam->GetFileName().c_str()
+      )
+    );
+
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetComplexInputImageParameter::DoCreateWidget()
@@ -63,28 +74,58 @@ void QtWidgetComplexInputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetComplexInputImageParameter::SelectFile()
+void
+QtWidgetComplexInputImageParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("Raster files (*)");
+  assert( m_Input!=NULL );
 
-  if (fileDialog.exec())
+  QString filename(
+    GetOpenFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "Raster files (*)" ),
+      NULL,
+      QFileDialog::ReadOnly
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  if( !SetFileName( filename ) )
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
+    std::ostringstream oss;
+
+    oss << "Invalid filename: '"
+	<< QFile::encodeName( filename ).constData()
+	<< "'";
+
+    assert( GetModel()!=NULL );
+
+    GetModel()->SendLogWARNING( oss.str() );
+
+    return;
     }
+
+  m_Input->setText( filename  );
 }
 
-void QtWidgetComplexInputImageParameter::SetFileName(const QString& value)
+bool QtWidgetComplexInputImageParameter::SetFileName(const QString& value)
 {
+  bool res = false;
   // save value
-  m_ComplexInputImageParam->SetFromFileName(value.toAscii().constData());
+  if( m_ComplexInputImageParam->SetFromFileName(
+    QFile::encodeName( value ).constData()) == true)
+    {
+    res = true;
+    // notify of value change
+    QString key( m_ComplexInputImageParam->GetKey() );
+    emit ParameterChanged(key);
+    }
 
-  // notify of value change
-  QString key( m_ComplexInputImageParam->GetKey() );
-  emit ParameterChanged(key);
+  return res;
 }
 
 }

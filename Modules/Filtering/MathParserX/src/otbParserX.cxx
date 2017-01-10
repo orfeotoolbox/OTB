@@ -40,6 +40,7 @@ public:
 
   /** Convenient type definitions */
   typedef mup::Value                                ValueType;
+  typedef mup::IValue                                IValueType;
   typedef mup::ParserError                          ExceptionType;
 
   /** Initialize user defined constants */
@@ -117,6 +118,19 @@ public:
     return result;
   }
 
+  const IValueType & EvalRef()
+    {
+    try
+      {
+      return m_MuParserX.Eval();
+      }
+    catch(ExceptionType &e)
+      {
+      ExceptionHandler(e);
+      }
+    return m_NullValue;
+    }
+
 
   /** Define a variable */
   void DefineVar(const std::string &sName, ValueType *fVar)
@@ -165,6 +179,14 @@ public:
   /** Return the list of expression variables (only make sense after having set up an expression) */
   const mup::var_maptype& GetExprVar() const
   {
+    try
+      {
+      return m_MuParserX.GetExprVar();
+      }
+    catch(ExceptionType &e)
+      {
+      ExceptionHandler(e);
+      }
     return m_MuParserX.GetExprVar();
   }
 
@@ -200,7 +222,7 @@ public:
   }*/
 
   /** Convert parser specific exception into itk exception */
-  virtual void ExceptionHandler(ExceptionType &e)
+  virtual void ExceptionHandler(ExceptionType &e) const
   {
     itkExceptionMacro(                                     << std::endl
           << "Message:     "   << e.GetMsg()   << std::endl
@@ -220,15 +242,16 @@ public:
 protected:
   ParserXImpl()
   {
+    m_NullValue = ValueType(0.0);
     InitFun();
     InitConst();
   }
 
-  virtual ~ParserXImpl()
+  ~ParserXImpl() ITK_OVERRIDE
   {
   }
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
@@ -239,6 +262,8 @@ private:
   void operator =(const Self &);    //purposely not implemented
 
   mup::ParserX m_MuParserX;
+
+  ValueType m_NullValue;
 
 
 }; // end class
@@ -267,6 +292,11 @@ void ParserX::SetExpr(const std::string & Expression)
 ParserX::ValueType ParserX::Eval()
 {
   return m_InternalParserX->Eval();
+}
+
+const ParserX::IValueType &  ParserX::EvalRef()
+{
+  return m_InternalParserX->EvalRef();
 }
 
 void ParserX::DefineVar(const std::string &sName, ValueType *fVar)

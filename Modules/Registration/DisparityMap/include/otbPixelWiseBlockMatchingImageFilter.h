@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPixelWiseBlockMatchingImageFilter_h
-#define __otbPixelWiseBlockMatchingImageFilter_h
+#ifndef otbPixelWiseBlockMatchingImageFilter_h
+#define otbPixelWiseBlockMatchingImageFilter_h
 
 
 #include "itkImageToImageFilter.h"
@@ -268,7 +268,7 @@ private:
  *  between the two input images (displacement is given in pixels, from left
  *  image to right image).
  *
- *  Masks are not mandatory. A mask allows to indicate pixels validity in
+ *  Masks are not mandatory. A mask allows indicating pixels validity in
  *  either left or right image. Left and right masks can be used independently.
  *  If masks are used, only pixels whose mask values are strictly positive
  *  will be considered for disparity matching. The other will exhibit a null
@@ -311,7 +311,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(PixelWiseBlockMatchingImageFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TInputImage                                       InputImageType;
   typedef TOutputMetricImage                                OutputMetricImageType;
   typedef TOutputDisparityImage                             OutputDisparityImageType;
@@ -415,10 +415,10 @@ public:
     return m_Functor;
   }
 
-  /** Set initial horizontal disparity field (optional, override m_InitHorizontalDisparity) */
+  /** Set initial horizontal disparity field (optional, ITK_OVERRIDE m_InitHorizontalDisparity) */
   void SetHorizontalDisparityInput( const TOutputDisparityImage * hfield);
 
-  /** Set initial vertical disparity field (optional, override m_InitVerticalDisparity) */
+  /** Set initial vertical disparity field (optional, ITK_OVERRIDE m_InitVerticalDisparity) */
   void SetVerticalDisparityInput( const TOutputDisparityImage * vfield);
 
   /** Get the initial disparity fields */
@@ -444,19 +444,19 @@ protected:
   PixelWiseBlockMatchingImageFilter();
 
   /** Destructor */
-  virtual ~PixelWiseBlockMatchingImageFilter();
+  ~PixelWiseBlockMatchingImageFilter() ITK_OVERRIDE;
 
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
-  virtual void GenerateInputRequestedRegion();
+  /** Generate input requested region */
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Before threaded generate data */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented

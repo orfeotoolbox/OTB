@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQtFileSelectionWidget_h
-#define __otbQtFileSelectionWidget_h
+#ifndef otbQtFileSelectionWidget_h
+#define otbQtFileSelectionWidget_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -25,6 +25,7 @@
 #include "otbWrapperQtWidgetParameterBase.h"
 #endif //tag=QT4-boost-compatibility
 
+#include "OTBQtWidgetExport.h"
 
 namespace otb
 {
@@ -36,12 +37,18 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtFileSelectionWidget : public QWidget
+class OTBQtWidget_EXPORT QtFileSelectionWidget : public QWidget
 {
   Q_OBJECT
 public:
+  enum IOMode
+  {
+    IO_MODE_INPUT = 0,
+    IO_MODE_OUTPUT = 1,
+  };
+
   QtFileSelectionWidget();
-  virtual ~QtFileSelectionWidget();
+  ~QtFileSelectionWidget() ITK_OVERRIDE;
 
   bool IsChecked()
   {
@@ -55,7 +62,7 @@ public:
 
   std::string GetFilename()
   {
-    return m_Input->text().toAscii().constData();
+    return QFile::encodeName( m_Input->text() ).constData();
   }
 
   void ClearFilename()
@@ -67,6 +74,9 @@ public:
   {
     return m_Input;
   }
+
+  void SetIOMode( IOMode );
+  IOMode GetIOMode() const;
 
 protected slots:
   void SelectFile();
@@ -81,9 +91,10 @@ private:
 
 
   QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
+  QLineEdit * m_Input;
   QPushButton * m_Button;
-  QCheckBox *   m_Checkbox;
+  QCheckBox * m_Checkbox;
+  IOMode m_IOMode;
 };
 
 

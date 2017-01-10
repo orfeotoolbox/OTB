@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbNeuralNetworkMachineLearningModelFactory_txx
+#define otbNeuralNetworkMachineLearningModelFactory_txx
+
 #include "otbNeuralNetworkMachineLearningModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -62,3 +65,5 @@ NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif

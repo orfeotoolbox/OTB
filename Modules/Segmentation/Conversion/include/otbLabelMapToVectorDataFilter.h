@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToVectorDataFilter_h
-#define __otbLabelMapToVectorDataFilter_h
+#ifndef otbLabelMapToVectorDataFilter_h
+#define otbLabelMapToVectorDataFilter_h
 
 #include "otbVectorDataSource.h"
 #include "itkLabelMap.h"
@@ -97,14 +97,14 @@ public:
   const InputLabelMapType * GetInput(void);
   const InputLabelMapType * GetInput(unsigned int idx);
 
-  /* Set the functor used to provide additionnal OGR fields */
+  /* Set the functor used to provide additional OGR fields */
   void SetFieldsFunctor(const FieldsFunctorType& functor)
   {
     m_FieldsFunctor = functor;
     this->Modified();
   }
 
-  /* Get the functor used to provide additionnal OGR fields */
+  /* Get the functor used to provide additional OGR fields */
   FieldsFunctorType& GetFieldsFunctor()
   {
     return m_FieldsFunctor;
@@ -112,9 +112,9 @@ public:
 
 protected:
   LabelMapToVectorDataFilter();
-  virtual ~LabelMapToVectorDataFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void GenerateData();
+  ~LabelMapToVectorDataFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   LabelMapToVectorDataFilter(const Self &); //purposely not implemented

@@ -90,7 +90,7 @@ public:
   /** Region typedef support.   */
   typedef ImageRegion< VImageDimension > RegionType;
 
-  /** How many pieces can the specifed region be split? A given region
+  /** How many pieces can the specified region be split? A given region
    * cannot always be divided into the requested number of pieces.  For
    * instance, if the numberOfPieces exceeds the number of pixels along
    * a certain dimensions, then some splits will not be possible. This

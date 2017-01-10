@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListToImageFilter_txx
-#define __otbImageListToImageFilter_txx
+#ifndef otbImageListToImageFilter_txx
+#define otbImageListToImageFilter_txx
 
 #include "otbImageListToImageFilter.h"
 
@@ -56,7 +56,7 @@ ImageListToImageFilter<TInputImage, TOutputImage>
   if (this->GetNumberOfInputs() < 1)
     {
     // exit
-    return 0;
+    return ITK_NULLPTR;
     }
   // else return the first input
   return static_cast<InputImageListType *>

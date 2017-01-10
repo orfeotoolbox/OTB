@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRandomForestsMachineLearningModel_h
-#define __otbRandomForestsMachineLearningModel_h
+#ifndef otbRandomForestsMachineLearningModel_h
+#define otbRandomForestsMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 
@@ -24,8 +24,9 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 #include "itkVariableSizeMatrix.h"
+#include "otbCvRTreesWrapper.h"
 
-class CvRTrees;
+class CvRTreesWrapper;
 
 namespace otb
 {
@@ -53,30 +54,28 @@ public:
 
 
   //opencv typedef
-  typedef CvRTrees RFType;
+  typedef CvRTreesWrapper RFType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(RandomForestsMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
-  virtual void Train();
-  /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+  void Train() ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="");
+  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="");
+  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &);
+  bool CanReadFile(const std::string &) ITK_OVERRIDE;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &);
+  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
   //Setters of RT parameters (documentation get from opencv doxygen 2.4)
@@ -120,6 +119,9 @@ public:
   itkGetMacro(TerminationCriteria, int);
   itkSetMacro(TerminationCriteria, int);
 
+  itkGetMacro(ComputeMargin, bool);
+  itkSetMacro(ComputeMargin, bool);
+
   /** Returns a matrix containing variable importance */
   VariableImportanceMatrixType GetVariableImportance();
   
@@ -130,10 +132,14 @@ protected:
   RandomForestsMachineLearningModel();
 
   /** Destructor */
-  virtual ~RandomForestsMachineLearningModel();
+  ~RandomForestsMachineLearningModel() ITK_OVERRIDE;
 
+  /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+
+  
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /* /\** Input list sample *\/ */
   /* typename InputListSampleType::Pointer m_InputListSample; */
@@ -145,7 +151,7 @@ private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  CvRTrees * m_RFModel;
+  CvRTreesWrapper * m_RFModel;
   /** The depth of the tree. A low value will likely underfit and conversely a
    * high value will likely overfit. The optimal value can be obtained using cross
    * validation or other suitable methods. */
@@ -189,7 +195,7 @@ private:
    * first category. */
   std::vector<float> m_Priors;
   /** If true then variable importance will be calculated and then it can be
-   * retrieved by CvRTrees::get_var_importance(). */
+   * retrieved by CvRTreesWrapper::get_var_importance(). */
   bool m_CalculateVariableImportance;
   /** The size of the randomly selected subset of features at each tree node and
    * that are used to find the best split(s). If you set it to 0 then the size will
@@ -205,6 +211,10 @@ private:
   float m_ForestAccuracy;
   /** The type of the termination criteria */
   int m_TerminationCriteria;
+  /** Whether to compute margin (difference in probability between the
+   * 2 most voted classes) instead of confidence (probability of the most
+   * voted class) in prediction*/
+  bool m_ComputeMargin;
 };
 } // end namespace otb
 

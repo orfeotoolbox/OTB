@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMPointSetModelEstimator_txx
-#define __otbSVMPointSetModelEstimator_txx
+#ifndef otbSVMPointSetModelEstimator_txx
+#define otbSVMPointSetModelEstimator_txx
 
 #include "otbSVMPointSetModelEstimator.h"
 #include "itkCommand.h"
@@ -74,7 +74,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TInputPointSet *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -86,7 +86,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TTrainingPointSet *>(this->itk::ProcessObject::GetInput(1));
 }

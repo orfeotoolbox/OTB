@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -35,7 +37,10 @@ QtWidgetOutputProcessXMLParameter::~QtWidgetOutputProcessXMLParameter()
 void QtWidgetOutputProcessXMLParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( m_XMLParam->GetFileName() );
+  QString text(
+    QFile::decodeName( m_XMLParam->GetFileName() )
+  );
+;
   if (text != m_Input->text())
     m_Input->setText(text);
 }
@@ -64,25 +69,35 @@ void QtWidgetOutputProcessXMLParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetOutputProcessXMLParameter::SelectFile()
+
+void
+QtWidgetOutputProcessXMLParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
+  assert( m_Input!=NULL );
 
-  fileDialog.setNameFilter("XML File (*.xml)");
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "XML File (*.xml)" ),
+      NULL )
+  );
 
-  if (fileDialog.exec())
-    {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+  if( filename.isEmpty() )
+    return;
+
+  m_Input->setText( filename );
 }
+
 
 void QtWidgetOutputProcessXMLParameter::SetFileName(const QString& value)
 {
   // save xml file name
-  m_XMLParam->SetValue(value.toAscii().constData());
+  m_XMLParam->SetValue(
+    QFile::encodeName( value ).constData()
+  );
 
   // notify of value change
   QString key( m_XMLParam->GetKey() );

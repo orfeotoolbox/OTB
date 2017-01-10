@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainBoost_txx
-#define __otbTrainBoost_txx
+#ifndef otbTrainBoost_txx
+#define otbTrainBoost_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb
@@ -29,7 +29,7 @@ namespace Wrapper
   ::InitBoostParams()
   {
     AddChoice("classifier.boost", "Boost classifier");
-    SetParameterDescription("classifier.boost", "This group of parameters allows to set Boost classifier parameters. "
+    SetParameterDescription("classifier.boost", "This group of parameters allows setting Boost classifier parameters. "
         "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/boosting.html}.");
     //BoostType
     AddParameter(ParameterType_Choice, "classifier.boost.t", "Boost Type");

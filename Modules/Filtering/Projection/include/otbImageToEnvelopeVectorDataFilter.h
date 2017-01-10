@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEnvelopeVectorDataFilter_h
-#define __otbImageToEnvelopeVectorDataFilter_h
+#ifndef otbImageToEnvelopeVectorDataFilter_h
+#define otbImageToEnvelopeVectorDataFilter_h
 
 #include "otbVectorDataSource.h"
 #include "otbGenericRSTransform.h"
@@ -93,13 +93,13 @@ public:
 
 protected:
   ImageToEnvelopeVectorDataFilter();
-  virtual ~ImageToEnvelopeVectorDataFilter() {}
+  ~ImageToEnvelopeVectorDataFilter() ITK_OVERRIDE {}
 
-  void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   void InstantiateTransform();
 

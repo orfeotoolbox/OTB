@@ -15,6 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbGDALDriverManagerWrapper_h
+#define otbGDALDriverManagerWrapper_h
+
+
 #include "itkLightObject.h"
 #include "itkProcessObject.h"
 #include "otbConfigure.h"
@@ -28,44 +32,13 @@ class GDALDriver;
 #include "gdal_priv.h"
 #include "gdal_alg.h"
 
+#include "otbGDALDatasetWrapper.h"
+// otb::GDALOverviewsBuilder moved to self header & body files.
+// Including its header file here for compile time compatibility.
+#include "otbGDALOverviewsBuilder.h"
+
 namespace otb
 {
-
-// only two states : the Pointer is Null or GetDataSet() returns a
-// valid dataset
-class GDALDatasetWrapper : public itk::LightObject
-{
-  friend class GDALDriverManagerWrapper;
-
-public:
-  typedef GDALDatasetWrapper      Self;
-  typedef itk::LightObject        Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(GDALImageIO, itk::LightObject);
-
-  /** Easy access to the internal GDALDataset object.
-   *  Don't close it, it will be automatic */
-  GDALDataset* GetDataSet() const;
-  
-  /** Test if the dataset corresponds to a Jpeg2000 file format
-   *  Return true if the dataset exists and has a JPEG2000 driver
-   *  Return false in all other cases */
-  bool IsJPEG2000() const;
-
-protected :
-  GDALDatasetWrapper();
-
-  ~GDALDatasetWrapper();
-
-
-private:
-  GDALDataset* m_Dataset;
-}; // end of GDALDatasetWrapper
 
 /** \class GDALDriverManagerWrapper
  *
@@ -115,61 +88,8 @@ private :
   ~GDALDriverManagerWrapper();
 }; // end of GDALDriverManagerWrapper
 
-typedef enum {NONE, NEAREST, GAUSS, CUBIC, AVERAGE, MODE, AVERAGE_MAGPHASE } GDALResamplingType;
-
-
-class GDALOverviewsBuilder : public itk::ProcessObject
-{
-public:
-  typedef GDALOverviewsBuilder            Self;
-  typedef ProcessObject                   Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
-  void SetResamplingMethod(GDALResamplingType resampMethod)
-  {
-    m_ResamplingMethod = resampMethod;
-  };
-
-  void SetNbOfResolutions(unsigned int nbResol)
-  {
-    m_NbOfResolutions = nbResol;
-  };
-
-  void SetResolutionFactor(unsigned int factor)
-  {
-    m_ResolutionFactor = factor;
-  }
-
-  void SetInputFileName(std::string str)
-  {
-    m_InputFileName = str;
-  };
-
-  void Update();
-
-protected:
-  GDALOverviewsBuilder();
-  virtual ~GDALOverviewsBuilder() {};
-
-  void PrintSelf(std::ostream& os,itk::Indent indent) const;
-
-private:
-
-  GDALOverviewsBuilder(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-  std::string m_InputFileName;
-  unsigned int m_NbOfResolutions;
-  unsigned int m_ResolutionFactor;
-  GDALResamplingType m_ResamplingMethod;
-
-  void GetGDALResamplingMethod(std::string &resamplingMethod);
-
-}; // end of GDALOverviewsBuilder
 
 } // end namespace otb
 
+
+#endif // otbGDALDriverManagerWrapper_h

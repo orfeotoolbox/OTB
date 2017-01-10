@@ -50,14 +50,14 @@ public:
   itkTypeMacro(LineSegmentDetection, otb::Wrapper::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("LineSegmentDetection");
     SetDescription("Detect line segments in raster");
 
     // Documentation
     SetDocName("Line segment detection");
-    SetDocLongDescription("This application detects locally straight contours in a image. It is based on Burns, Hanson, and Riseman method and use an a contrario validation approach (Desolneux, Moisan, and Morel). The algorithm was published by Rafael Gromponevon Gioi, Jérémie Jakubowicz, Jean-Michel Morel and Gregory Randall.\n The given approach computes gradient and level lines of the image and detects aligned points in line support region. The application allows to export the detected lines in a vector data.");
+    SetDocLongDescription("This application detects locally straight contours in a image. It is based on Burns, Hanson, and Riseman method and use an a contrario validation approach (Desolneux, Moisan, and Morel). The algorithm was published by Rafael Gromponevon Gioi, Jérémie Jakubowicz, Jean-Michel Morel and Gregory Randall.\n The given approach computes gradient and level lines of the image and detects aligned points in line support region. The application allows exporting the detected lines in a vector data.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("On Line demonstration of the LSD algorithm is available here: http://www.ipol.im/pub/algo/gjmr_line_segment_detector/\n");
@@ -77,16 +77,18 @@ private:
     SetParameterDescription("norescale","By default, the input image amplitude is rescaled between [0,255]. Turn on this parameter to skip rescaling");
     MandatoryOff("norescale");
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Suburb.png");
     SetDocExampleParameterValue("out", "LineSegmentDetection.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     typedef otb::VectorImageToAmplitudeImageFilter<FloatVectorImageType, FloatImageType>
       VectorImageToAmplitudeImageFilterType;
@@ -117,6 +119,7 @@ private:
     if ( !IsParameterEnabled("norescale") )
       {
       stats->SetInput(amplitudeConverter->GetOutput());
+      stats->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
       AddProcess(stats->GetStreamer(), "Image statistics");
       stats->Update();
@@ -133,6 +136,7 @@ private:
     LSDFilterType::Pointer lsd
       = LSDFilterType::New();
     lsd->GetFilter()->SetInput(image);
+    lsd->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
     AddProcess(lsd->GetStreamer(), "Running Line Segment Detector");
     lsd->Update();

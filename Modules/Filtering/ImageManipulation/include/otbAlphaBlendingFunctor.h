@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAlphaBlendingFunctor_h
-#define __otbAlphaBlendingFunctor_h
+#ifndef otbAlphaBlendingFunctor_h
+#define otbAlphaBlendingFunctor_h
 
 #include "itkRGBAPixel.h"
 namespace otb

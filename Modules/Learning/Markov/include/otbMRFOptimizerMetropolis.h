@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFOptimizerMetropolis_h
-#define __otbMRFOptimizerMetropolis_h
+#ifndef otbMRFOptimizerMetropolis_h
+#define otbMRFOptimizerMetropolis_h
 
 #include "otbMRFOptimizer.h"
 #include "otbMath.h"
@@ -69,7 +69,7 @@ public:
     this->Modified();
   }
 
-  inline bool Compute(double deltaEnergy)
+  inline bool Compute(double deltaEnergy) ITK_OVERRIDE
   {
     if (deltaEnergy < 0)
       {
@@ -109,7 +109,7 @@ protected:
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
-  virtual ~MRFOptimizerMetropolis() {}
+  ~MRFOptimizerMetropolis() ITK_OVERRIDE {}
   RandomGeneratorType::Pointer m_Generator;
 };
 

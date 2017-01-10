@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletFilterBank_txx
-#define __otbWaveletFilterBank_txx
+#ifndef otbWaveletFilterBank_txx
+#define otbWaveletFilterBank_txx
 #include "otbWaveletFilterBank.h"
 
 #include "otbSubsampleImageFilter.h"
@@ -133,6 +133,8 @@ void
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 ::BeforeThreadedGenerateData()
 {
+
+  unsigned int one = 1;
   if (m_SubsampleImageFactor > 1)
     {
     // Check the dimension
@@ -157,7 +159,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
       for (unsigned int i = 0; i < m_InternalImages.size(); ++i)
         {
         // the size is linked to the SubsampleImageFactor that is assume to be 2!!!
-        m_InternalImages[InputImageDimension - 2 - i].resize(1 << (i + 1));
+        m_InternalImages[InputImageDimension - 2 - i].resize( one << (i + 1));
         }
 
       OutputImageRegionType intermediateRegion;
@@ -378,7 +380,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     {
     std::ostringstream msg;
     msg << "Output number 1<<" << dir << " = " << (1 << dir) << " not allocated\n";
-    msg << "Number of excpected outputs " << this->GetNumberOfOutputs() << "\n";
+    msg << "Number of expected outputs " << this->GetNumberOfOutputs() << "\n";
     throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     }
 
@@ -708,6 +710,7 @@ void
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 ::BeforeThreadedGenerateData()
 {
+  unsigned int one = 1;
   if (InputImageDimension > 1)
     {
     // Internal images will be used only if m_SubsampleImageFactor != 1
@@ -715,7 +718,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
     for (unsigned int i = 0; i < m_InternalImages.size(); ++i)
       {
       // the size is linked to the SubsampleImageFactor that is assume to be 2!!!
-      m_InternalImages[i].resize(1 << (i + 1));
+      m_InternalImages[i].resize( one << (i + 1));
       }
 
     OutputImageRegionType intermediateRegion;
@@ -1175,6 +1178,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       typename FilterType::Pointer overSampledLowPass = FilterType::New();
       overSampledLowPass->SetInput(cropedLowPass);
       overSampledLowPass->SetSubsampleFactor(delta);
+	  overSampledLowPass->SetNumberOfThreads(1);
       overSampledLowPass->Update();
 
       InputImagePointerType cropedHighPass = InputImageType::New();
@@ -1193,6 +1197,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       typename FilterType::Pointer overSampledHighPass = FilterType::New();
       overSampledHighPass->SetInput(cropedHighPass);
       overSampledHighPass->SetSubsampleFactor(delta);
+	  overSampledHighPass->SetNumberOfThreads(1);
       overSampledHighPass->Update();
 
       InnerProductType innerProduct;

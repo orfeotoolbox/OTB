@@ -80,7 +80,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Next, we plug the input image into the complex moment fucntion
+  // Next, we plug the input image into the complex moment function
   // and we set its parameters.
   //
   //  Software Guide : EndLatex

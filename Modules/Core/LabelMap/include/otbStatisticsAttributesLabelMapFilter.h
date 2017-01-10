@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsAttributesLabelMapFilter_h
-#define __otbStatisticsAttributesLabelMapFilter_h
+#ifndef otbStatisticsAttributesLabelMapFilter_h
+#define otbStatisticsAttributesLabelMapFilter_h
 
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "itkMatrix.h"
@@ -113,8 +113,8 @@ private:
  * set. The key of the statistics features in the attributes map will
  * be "STATS::FeatureName::StatisticName".
  *
- * The flag ReducedAttributesSet allows to compute only non-redundant
- * statistics and statistics usefull for classification (not spatially
+ * The flag ReducedAttributesSet allows computing only non-redundant
+ * statistics and statistics useful for classification (not spatially
  * dependent statitistics). Reduced set contains only mean, variance,
  * skewness and kurtosis.
  *
@@ -194,13 +194,13 @@ protected:
   StatisticsAttributesLabelMapFilter();
 
   /** Destructor */
-  ~StatisticsAttributesLabelMapFilter();
+  ~StatisticsAttributesLabelMapFilter() ITK_OVERRIDE;
 
   /** Before threaded data generation */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented

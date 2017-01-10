@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserMomentsImageFunction_txx
-#define __otbFlusserMomentsImageFunction_txx
+#ifndef otbFlusserMomentsImageFunction_txx
+#define otbFlusserMomentsImageFunction_txx
 
 #include "otbFlusserMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -71,7 +71,7 @@ FlusserMomentsImageFunction<TInputImage, TCoordRep>
   // Define complex type
   typedef std::complex<ScalarRealType> ComplexType;
 
-  // Define and intialize cumulants for complex moments
+  // Define and initialize cumulants for complex moments
   ComplexType c11, c12, c21, c20, c30, c22, c31, c40;
   c11 = itk::NumericTraits<ComplexType>::Zero;
   c12 = itk::NumericTraits<ComplexType>::Zero;

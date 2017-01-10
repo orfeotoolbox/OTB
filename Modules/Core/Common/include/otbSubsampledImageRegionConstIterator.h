@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSubsampledImageRegionConstIterator_h
-#define __otbSubsampledImageRegionConstIterator_h
+#ifndef otbSubsampledImageRegionConstIterator_h
+#define otbSubsampledImageRegionConstIterator_h
 
 #include "itkImageRegionConstIterator.h"
 
@@ -71,7 +71,7 @@ public:
    * it needs to be redone here for this subclass to compile properly with gcc. */
   typedef typename Superclass::ImageType ImageType;
 
-  /** Offset typedef support. This explicit redefinition allows to Set/Get
+  /** Offset typedef support. This explicit redefinition allows Setting/Getting
    * the location of the iterator. */
   //typedef typename Superclass::OffsetType OffsetType;
   typedef unsigned long OffsetType;
@@ -164,7 +164,7 @@ public:
   /** Set the index.
    * It is moved to the next available (usable) index.
    * \sa GetIndex */
-  void SetIndex(const IndexType& ind);
+  void SetIndex(const IndexType& ind) ITK_OVERRIDE;
 
   /** Get the Index. */
   IndexType GetIndex() const

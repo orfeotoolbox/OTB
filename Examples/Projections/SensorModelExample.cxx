@@ -184,8 +184,8 @@ int main(int argc, char* argv[])
   spacing[1] = -0.00001;
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[3], NULL);         //longitude
-  origin[1] = strtod(argv[4], NULL);         //latitude
+  origin[0] = strtod(argv[3], ITK_NULLPTR);         //longitude
+  origin[1] = strtod(argv[4], ITK_NULLPTR);         //latitude
 
   ImageType::RegionType region;
 
@@ -359,7 +359,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // We use the sensor model to get the pixel coordinates in the input
-// image and we transform this coodinates to an index. Then we store
+// image and we transform this coordinates to an index. Then we store
 // the index in the array. Note that the \code{TransformPoint()}
 // method of the model has been overloaded so that it can be used with
 // a 3D point when the height of the ground point is known (DEM availability).
@@ -472,8 +472,8 @@ int main(int argc, char* argv[])
 
       outputImage->SetPixel(currentIndexBis, pixelValue);
       }
-    delete pixelIndexArray;
-    delete currentIndexArray;
+    delete[] pixelIndexArray;
+    delete[] currentIndexArray;
 
     }
 // Software Guide : EndCodeSnippet

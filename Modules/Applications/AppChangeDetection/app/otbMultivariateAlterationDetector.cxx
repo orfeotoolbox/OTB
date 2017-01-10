@@ -40,7 +40,7 @@ public:
   itkTypeMacro(MultivariateAlterationDetector, otb::Wrapper::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("MultivariateAlterationDetector");
     SetDescription("Multivariate Alteration Detector");
@@ -73,9 +73,9 @@ private:
                   " are sorted by increasing correlation. If number of bands is "
                   " different, the change maps are sorted by decreasing correlation. \n"
                   " \n"
-                  " The GetV1() and GetV2() methods allow to retrieve the linear "
+                  " The GetV1() and GetV2() methods allow retrieving the linear "
                   " combinations used to generate the Mad change maps as a vnl_matrix of "
-                  " double, and the GetRho() method allows to retrieve the correlation "
+                  " double, and the GetRho() method allows retrieving the correlation "
                   " associated to each Mad change maps as a vnl_vector. \n"
                   " \n"
                   " This filter has been implemented from the Matlab code kindly made "
@@ -104,11 +104,11 @@ private:
     SetDocExampleParameterValue("out", "detectedChangeImage.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     typedef otb::MultivariateAlterationDetectorImageFilter<
         FloatVectorImageType,

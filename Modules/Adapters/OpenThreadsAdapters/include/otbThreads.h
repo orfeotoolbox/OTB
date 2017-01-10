@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbThreads_h
-#define __otbThreads_h
+#ifndef otbThreads_h
+#define otbThreads_h
 
 namespace otb
 {
@@ -25,7 +25,7 @@ namespace otb
  * \brief Operation from open threads that are used in Monteverdi
  *
  * Implement the sleep operation from openthreads to remove Monteverdi
- * dependance to openthreads at compile time.
+ * dependence to openthreads at compile time.
  *
  *
  * \ingroup OTBOpenThreadsAdapters

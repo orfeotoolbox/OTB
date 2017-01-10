@@ -106,7 +106,7 @@ bool LUMImageIO::CanReadFile(const char* filename)
     return false;
     }
 
-  //Read header informations
+  //Read header information
   bool lResult = InternalReadHeaderInformation(header_file, false);
   header_file.close();
   return (lResult);
@@ -195,7 +195,7 @@ void LUMImageIO::ReadImageInformation()
     itkExceptionMacro(<< "LUMImageIO::ReadImageInformation() failed header open ! ");
     }
 
-  //Read header informations
+  //Read header information
   InternalReadHeaderInformation(m_File, true);
 
   otbMsgDebugMacro(<< "Driver to read: LUM");
@@ -218,6 +218,7 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
   char        TypeCode[5];
   file.seekg(8, std::ios::beg);
   file.read((char*) (TypeCode), 4);
+  TypeCode[4] = '\0';
   int lTaille = CaiGetTypeLum(TypeCode,
                               lStrTypeImage,
                               lNbBits,
@@ -226,7 +227,7 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
     {
     if (reportError == true)
       {
-      itkExceptionMacro(<< "LUM : bad read of header informations");
+      itkExceptionMacro(<< "LUM : bad read of header information");
       }
     else
       {
@@ -299,7 +300,7 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
   otbSwappFileOrderToSystemOrderMacro(int, &NbCol, 1);
   otbSwappFileOrderToSystemOrderMacro(int, &NbLig, 1);
 
-  //Initialization of image informations
+  //Initialization of image information
   m_Dimensions[0] = NbCol;
   m_Dimensions[1] = NbLig;
   this->SetNumberOfComponents(1);
@@ -411,7 +412,7 @@ void LUMImageIO::WriteImageInformation()
     m_File.write(value, headerLength);
     }
   delete[] value;
-  value = NULL;
+  value = ITK_NULLPTR;
   //Set m_TypeLum
   if (0) {}
   otbSetTypeLumMacro(CHAR,   "08BI", "08LI")
@@ -463,7 +464,7 @@ int LUMImageIO::CaiGetTypeLum(const char *          type_code,
   taille = -1;
   int nbbits = -1;
   ind = 0;
-  pch0 = NULL;
+  pch0 = ITK_NULLPTR;
 
   std::string str_type_code(type_code);
   while ((trouve == -1) && (ind < m_CaiLumTyp.size()))
@@ -498,17 +499,17 @@ int LUMImageIO::CaiGetTypeLum(const char *          type_code,
       pch0 = const_cast<char *>(strstr(type_code, "U"));
       if (taille == 1)
         {
-        if (pch0 == NULL) sprintf(cod_pix, "OCT");
+        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "OCT");
         else sprintf(cod_pix, "UOCT");
         }
       else if (taille == 2)
         {
-        if (pch0 == NULL) sprintf(cod_pix, "I2");
+        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "I2");
         else sprintf(cod_pix, "UI2");
         }
       else if (taille == 4)
         {
-        if (pch0 == NULL) sprintf(cod_pix, "I4");
+        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "I4");
         else sprintf(cod_pix, "UI4");
         }
       else taille = -1;

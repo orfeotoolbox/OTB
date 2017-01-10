@@ -458,7 +458,7 @@ VectorDataKeywordlist
       }
     case OFTString:
       {
-      if (field.second.String != NULL)
+      if (field.second.String != ITK_NULLPTR)
         {
         output << field.second.String;
         }
@@ -522,7 +522,7 @@ VectorDataKeywordlist
       }
     case OFTString:
       {
-      if (field.second.String != NULL)
+      if (field.second.String != ITK_NULLPTR)
         {
         CPLFree(outField.second.String);
         outField.second.String = CPLStrdup(field.second.String);

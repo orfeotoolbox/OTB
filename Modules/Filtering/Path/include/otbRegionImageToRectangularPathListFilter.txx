@@ -18,8 +18,8 @@
 
 // Adapted from otbImageToPathListAlignFilter.txx
 
-#ifndef __otbRegionImageToRectangularPathListFilter_txx
-#define __otbRegionImageToRectangularPathListFilter_txx
+#ifndef otbRegionImageToRectangularPathListFilter_txx
+#define otbRegionImageToRectangularPathListFilter_txx
 
 #include <iostream>
 #include <exception>

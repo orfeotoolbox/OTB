@@ -15,12 +15,31 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __otbOpenCVUtils_h
-#define __otbOpenCVUtils_h
+#ifndef otbOpenCVUtils_h
+#define otbOpenCVUtils_h
 
 #include <opencv2/core/core_c.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-align"
 #include <opencv2/core/core.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <opencv2/core/core.hpp>
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include <opencv2/ml/ml.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <opencv2/ml/ml.hpp>
+#endif
+
+#include "OTBSupervisedExport.h"
+
 #include "itkListSample.h"
 
 namespace otb
@@ -47,7 +66,7 @@ namespace otb
     unsigned int sampleIdx = 0;
 
     // Check for valid listSample
-    if(listSample != NULL && listSample->Size() > 0)
+    if(listSample != ITK_NULLPTR && listSample->Size() > 0)
       {
        // Retrieve samples count
        unsigned int sampleCount = listSample->Size();

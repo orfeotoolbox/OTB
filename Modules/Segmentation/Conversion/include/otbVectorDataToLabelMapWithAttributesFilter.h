@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToLabelMapWithAttributesFilter_h
-#define __otbVectorDataToLabelMapWithAttributesFilter_h
+#ifndef otbVectorDataToLabelMapWithAttributesFilter_h
+#define otbVectorDataToLabelMapWithAttributesFilter_h
 
 #include "itkLabelObject.h"
 #include "itkProgressReporter.h"
@@ -184,20 +184,20 @@ public:
 ; itkGetMacro(InitialLabel, LabelType)
 ;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 protected:
   VectorDataToLabelMapWithAttributesFilter();
-  virtual ~VectorDataToLabelMapWithAttributesFilter()
+  ~VectorDataToLabelMapWithAttributesFilter() ITK_OVERRIDE
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**
    * Standard pipeline method.
    */
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** VectorDataToLabelMapWithAttributesFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
@@ -221,7 +221,7 @@ private:
   /** Set to 0 by default.*/
   LabelType m_InitialLabel;
 
-  //TODO dont need this attributes now compute with VectorDataProperties
+  //TODO don't need this attributes now compute with VectorDataProperties
 
   SpacingType   m_Spacing;
   OriginType    m_Origin;

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingWarpImageFilter_txx
-#define __otbStreamingWarpImageFilter_txx
+#ifndef otbStreamingWarpImageFilter_txx
+#define otbStreamingWarpImageFilter_txx
 
 #include "otbStreamingWarpImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -154,7 +154,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
     ++defIt;
     }
 
-  // Convert physical bouding box to requested region
+  // Convert physical bounding box to requested region
   typename InputImageType::IndexType inputStartIndex, inputEndIndex;
   inputPtr->TransformPhysicalPointToIndex(inputStartPoint, inputStartIndex);
   inputPtr->TransformPhysicalPointToIndex(inputEndPoint, inputEndIndex);

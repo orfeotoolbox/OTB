@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToLabelMapWithAttributesFilter_txx
-#define __otbImageToLabelMapWithAttributesFilter_txx
+#ifndef otbImageToLabelMapWithAttributesFilter_txx
+#define otbImageToLabelMapWithAttributesFilter_txx
 
 #include "otbImageToLabelMapWithAttributesFilter.h"
 #include "itkProcessObject.h"
@@ -76,7 +76,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 {
     if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const  InputImageType* >
@@ -90,7 +90,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 {
     if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const  LabeledImageType* >

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolarimetricData_h
-#define __otbPolarimetricData_h
+#ifndef otbPolarimetricData_h
+#define otbPolarimetricData_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -39,7 +39,7 @@ typedef enum
   } ArchitectureType;
 
 /** \class PolarimetricData
-*  \brief This class allows to determine the type of architecture we get.
+*  \brief This class allows determining the type of architecture we get.
 *
 *  HH_HV_VH_VV (0), HH_HV_VV (1), HH_VH_VV (2), HH_HV(3), VH_VV (4), HH_VV (5).
 *
@@ -76,9 +76,9 @@ protected:
   /** Constructor */
   PolarimetricData();
   /** Destructor */
-  virtual ~PolarimetricData() {}
+  ~PolarimetricData() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PolarimetricData(const Self &); //purposely not implemented

@@ -17,7 +17,6 @@ otb_module(OTBAppSegmentation
     OTBGdalAdapters
     OTBApplicationEngine
     OTBImageBase
-    OTBMathParser
     OTBCommon
     OTBImageManipulation
     OTBMorphologicalProfiles

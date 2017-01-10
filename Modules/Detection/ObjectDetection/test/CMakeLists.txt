@@ -48,18 +48,18 @@ otb_add_test(NAME odTvDescriptorsListSampleGeneratorStreaming COMMAND otbObjectD
   5 # neighborhood radius
   )
 
-otb_add_test(NAME odTvDescriptorsSVMModelCreation COMMAND otbObjectDetectionTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
-  ${TEMP}/TvDescriptorsSVMModelCreation.svm
-  otbDescriptorsSVMModelCreation
-  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
-  ${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
-  ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
-  ${TEMP}/TvDescriptorsSVMModelCreation.svm
-  0 # streaming
-  5 # neighborhood radius
-  )
+#otb_add_test(NAME odTvDescriptorsSVMModelCreation COMMAND otbObjectDetectionTestDriver
+  #--compare-ascii ${NOTOL}
+  #${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
+  #${TEMP}/TvDescriptorsSVMModelCreation.svm
+  #otbDescriptorsSVMModelCreation
+  #${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
+  #${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
+  #${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
+  #${TEMP}/TvDescriptorsSVMModelCreation.svm
+  #0 # streaming
+  #5 # neighborhood radius
+  #)
 
 otb_add_test(NAME odTvDescriptorsListSampleGeneratorNoStreaming COMMAND otbObjectDetectionTestDriver
   --compare-ascii ${NOTOL}

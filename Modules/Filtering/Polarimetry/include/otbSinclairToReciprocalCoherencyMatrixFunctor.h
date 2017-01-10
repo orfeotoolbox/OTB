@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSinclairToReciprocalCoherencyMatrixFunctor_h
-#define __otbSinclairToReciprocalCoherencyMatrixFunctor_h
+#ifndef otbSinclairToReciprocalCoherencyMatrixFunctor_h
+#define otbSinclairToReciprocalCoherencyMatrixFunctor_h
 
 #include "itkMacro.h"
 #include "vcl_complex.h"

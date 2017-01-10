@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginLatex
 //
-// We can now declare the interators on the list that we get at the
+// We can now declare the iterators on the list that we get at the
 // output of the classifier as well as the iterator to fill the output image.
 //
 // Software Guide : EndLatex

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoveWrongDirectionFilter_h
-#define __otbRemoveWrongDirectionFilter_h
+#ifndef otbRemoveWrongDirectionFilter_h
+#define otbRemoveWrongDirectionFilter_h
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
@@ -63,7 +63,7 @@ public:
  *  we can assume that the direction of a road on our scalar product image is positive (greater
  *  than \f$ \pi/8 \f$).
  *  Therefore in the input modulus and direction images, pixels whose direction is lower than
- *  this threshold are supressed
+ *  this threshold are suppressed
  *  (in fact, their intensity is set to 0).
  *
  * \sa NeighborhoodScalarProductFilter
@@ -101,14 +101,14 @@ protected:
   /** Constructor */
   RemoveWrongDirectionFilter() {};
   /** Destructor */
-  virtual ~RemoveWrongDirectionFilter() {}
+  ~RemoveWrongDirectionFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
   /** Main computation method */
-  virtual void GenerateData(void)
+  void GenerateData(void) ITK_OVERRIDE
   {
     typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
     filter->SetInput1(this->GetInput());

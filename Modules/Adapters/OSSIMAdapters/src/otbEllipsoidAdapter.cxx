@@ -18,7 +18,18 @@
 
 #include "otbEllipsoidAdapter.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/base/ossimEllipsoid.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/base/ossimEllipsoid.h"
+#endif
+
+
 
 namespace otb
 {
@@ -30,7 +41,7 @@ EllipsoidAdapter::EllipsoidAdapter()
 
 EllipsoidAdapter::~EllipsoidAdapter()
 {
-  if (m_Ellipsoid != NULL)
+  if (m_Ellipsoid != ITK_NULLPTR)
     {
     delete m_Ellipsoid;
     }

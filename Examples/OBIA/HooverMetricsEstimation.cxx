@@ -30,8 +30,8 @@
 // The following example shows how to compare two segmentations, using Hoover
 // metrics. For instance, it can be used to compare a segmentation produced
 // by your algorithm against a partial ground truth segmentation. In this
-// example, the ground truth segmentation will be refered by the letters GT
-// whereas the machine segmentation will be refered by MS.
+// example, the ground truth segmentation will be referred by the letters GT
+// whereas the machine segmentation will be referred by MS.
 //
 // The estimation of Hoover metrics is done with two filters :
 // \doxygen{otb}{HooverMatrixFilter} and \doxygen{otb}{HooverInstanceFilter}.
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   // The filters \doxygen{otb}{HooverMatrixFilter} and \doxygen{otb}{HooverInstanceFilter}
   // are designed to handle \doxygen{itk}{LabelMap} images, made with \doxygen{otb}{AttributesMapLabelObject}.
-  // This type of label object allows to store generic attributes. Each region can store
+  // This type of label object allows storing generic attributes. Each region can store
   // a set of attributes: in this case, Hoover instances and metrics will be stored.
   // Software Guide : EndLatex
 

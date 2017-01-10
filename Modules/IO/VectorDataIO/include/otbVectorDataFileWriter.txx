@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataFileWriter_txx
-#define __otbVectorDataFileWriter_txx
+#ifndef otbVectorDataFileWriter_txx
+#define otbVectorDataFileWriter_txx
 
 #include "otbMacro.h"
 #include "otbVectorDataFileWriter.h"
@@ -34,7 +34,7 @@ template <class TInputVectorData>
 VectorDataFileWriter<TInputVectorData>
 ::VectorDataFileWriter() :
   m_FileName(""),
-  m_VectorDataIO(0),
+  m_VectorDataIO(ITK_NULLPTR),
   m_UserSpecifiedVectorDataIO(false),
   m_FactorySpecifiedVectorDataIO(false)
 {
@@ -67,7 +67,7 @@ VectorDataFileWriter<TInputVectorData>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<TInputVectorData*>
@@ -94,7 +94,7 @@ VectorDataFileWriter<TInputVectorData>
   itkDebugMacro(<< "Writing a vector data file");
 
   // Make sure input is available
-  if (input == 0)
+  if (input == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "No input to writer!");
     }

@@ -22,11 +22,12 @@
 
 int otbBSplinesInterpolateDisplacementFieldGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  const unsigned int Dimension = 2;
+  const unsigned int Dimension = 3;
   typedef double                                                                     PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                                     ImageType;
-  typedef ImageType::PointType                                                       PointType;
+  typedef otb::VectorImage<PixelType, 2>                                             ImageType;
+  typedef itk::FixedArray<double, Dimension>                                         PointType;
   typedef itk::PointSet<PointType, Dimension>                                        PointSetType;
+
   typedef otb::BSplinesInterpolateDisplacementFieldGenerator<PointSetType, ImageType> FilterType;
 
   // Instantiating object

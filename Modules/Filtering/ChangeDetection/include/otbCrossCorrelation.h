@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCrossCorrelation_h
-#define __otbCrossCorrelation_h
+#ifndef otbCrossCorrelation_h
+#define otbCrossCorrelation_h
 
 #include "itkMath.h"
 

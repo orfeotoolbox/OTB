@@ -75,7 +75,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Convert");
     SetDescription("Convert an image to a different format, eventually rescaling the data"
@@ -86,9 +86,10 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
+
+	AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
-    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
@@ -136,7 +137,7 @@ private:
     SetDocExampleParameterValue("type", "linear");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
@@ -199,6 +200,7 @@ private:
       otbAppLogDEBUG( << "Shrink starts..." );
 
       shrinkFilter->SetShrinkFactor(shrinkFactor);
+      shrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       AddProcess(shrinkFilter->GetStreamer(), "Computing shrink Image for min/max estimation...");
 
       if ( rescaleType == "log2")
@@ -210,14 +212,12 @@ private:
 
         shrinkFilter->SetInput(m_TransferLog->GetOutput());
         rescaler->SetInput(m_TransferLog->GetOutput());
-        shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
         shrinkFilter->Update();
         }
       else
         {
         shrinkFilter->SetInput(input);
         rescaler->SetInput(input);
-        shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
         shrinkFilter->Update();
         }
 
@@ -226,7 +226,7 @@ private:
         {
         maskShrinkFilter->SetShrinkFactor(shrinkFactor);
         maskShrinkFilter->SetInput(mask);
-        maskShrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
+        maskShrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
         maskShrinkFilter->Update();
         }
 
@@ -316,7 +316,7 @@ private:
   }
 
 
- void DoExecute()
+ void DoExecute() ITK_OVERRIDE
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {

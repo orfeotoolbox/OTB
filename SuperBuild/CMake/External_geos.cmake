@@ -1,45 +1,42 @@
-set(proj GEOS)
+INCLUDE_ONCE_MACRO(GEOS)
 
-if(NOT __EXTERNAL_${proj}__)
-set(__EXTERNAL_${proj}__ 1)
+SETUP_SUPERBUILD(GEOS)
 
-message(STATUS "Setup GEOS ...")
+if(MSVC)
+  set(GEOS_PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+	  ${CMAKE_SOURCE_DIR}/patches/GEOS/CMakeLists.txt
+	  ${CMAKE_SOURCE_DIR}/patches/GEOS/nmake.opt
+	  ${GEOS_SB_SRC})
+  set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND} -DGEOS_SB_SRC=${GEOS_SB_SRC})
 
-if(USE_SYSTEM_GEOS)
-  # TODO : FindGEOS.cmake
-  find_package ( GEOS )
-  message(STATUS "  Using GEOS system version")
 else()
-  SETUP_SUPERBUILD(PROJECT ${proj})
-  message(STATUS "  Using GEOS SuperBuild version")
-  
-  ExternalProject_Add(${proj}
-    PREFIX ${proj}
-    URL "http://download.osgeo.org/geos/geos-3.4.2.tar.bz2"
-    URL_MD5 fc5df2d926eb7e67f988a43a92683bae
-    SOURCE_DIR ${GEOS_SB_SRC}
-    BINARY_DIR ${GEOS_SB_BUILD_DIR}
-    INSTALL_DIR ${SB_INSTALL_PREFIX}
-      DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-    CMAKE_CACHE_ARGS
-      -DCMAKE_INSTALL_PREFIX:STRING=${SB_INSTALL_PREFIX}
-      -DCMAKE_BUILD_TYPE:STRING=Release
-      -DBUILD_SHARED_LIBS:BOOL=ON
-      -DBUILD_TESTING:BOOL=OFF
-      -DGEOS_ENABLE_TESTS:BOOL=OFF
-      CMAKE_COMMAND ${SB_CMAKE_COMMAND} )
+  set(GEOS_PATCH_COMMAND)
+  set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND})
 
-    ExternalProject_Add_Step(${proj} remove_static
-      COMMAND ${CMAKE_COMMAND} -E remove
-      ${SB_INSTALL_PREFIX}/lib/libgeos.a
-      DEPENDEES install)
-  
-  set(_SB_${proj}_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-  if(WIN32)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos.lib)
-  elseif(UNIX)
-    set(_SB_${proj}_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
-  endif()
-  
- endif()
+endif()
+
+ExternalProject_Add(GEOS
+   PREFIX GEOS
+   URL "http://download.osgeo.org/geos/geos-3.5.0.tar.bz2"
+   URL_MD5 136842690be7f504fba46b3c539438dd
+   SOURCE_DIR ${GEOS_SB_SRC}
+   BINARY_DIR ${GEOS_SB_SRC}
+   INSTALL_DIR ${SB_INSTALL_PREFIX}
+   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
+   CMAKE_CACHE_ARGS
+   ${SB_CMAKE_CACHE_ARGS}
+   -DGEOS_ENABLE_TESTS:BOOL=OFF
+   PATCH_COMMAND ${GEOS_PATCH_COMMAND}
+   CMAKE_COMMAND ${GEOS_CMAKE_COMMAND}
+   )
+
+if(NOT MSVC)
+  SUPERBUILD_PATCH_SOURCE(GEOS)
+endif()
+
+set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+if(WIN32)
+  set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos_i.lib )
+elseif(UNIX)
+  set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()

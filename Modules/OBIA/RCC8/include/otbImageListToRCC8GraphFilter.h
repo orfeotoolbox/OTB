@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageListToRCC8GraphFilter_h
-#define __otbImageListToRCC8GraphFilter_h
+#ifndef otbImageListToRCC8GraphFilter_h
+#define otbImageListToRCC8GraphFilter_h
 
 #include "otbRCC8GraphSource.h"
 #include "otbImageList.h"
@@ -61,7 +61,7 @@ public:
   typedef typename OutputGraphType::RCC8ValueType     RCC8ValueType;
   /** InputImage dimension constant */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  /** Overiding the SetInput() and GetInput() methods */
+  /** Overriding the SetInput() and GetInput() methods */
   using Superclass::SetInput;
   virtual void SetInput(const InputImageListType * imageList);
   virtual InputImageListType * GetInput(void);
@@ -70,9 +70,9 @@ protected:
   /** Constructor */
   ImageListToRCC8GraphFilter();
   /** Destructor */
-  virtual ~ImageListToRCC8GraphFilter() {}
+  ~ImageListToRCC8GraphFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageListToRCC8GraphFilter(const Self &); //purposely not implemented

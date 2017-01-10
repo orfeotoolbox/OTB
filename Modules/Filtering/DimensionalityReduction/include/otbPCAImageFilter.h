@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPCAImageFilter_h
-#define __otbPCAImageFilter_h
+#ifndef otbPCAImageFilter_h
+#define otbPCAImageFilter_h
 
 #include "otbMacro.h"
 #include "otbMatrixImageFilter.h"
@@ -158,7 +158,7 @@ public:
 
 protected:
   PCAImageFilter();
-  virtual ~PCAImageFilter() { }
+  ~PCAImageFilter() ITK_OVERRIDE { }
 
   /** GenerateOutputInformation
    * Propagate vector length info and modify if needed
@@ -168,19 +168,21 @@ protected:
    * (which may not be square) has to be given,
    * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
    */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** GenerateData
    * Through a filter of filter structure
    */
-  virtual void GenerateData ();
+  void GenerateData () ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Internal methods */
+  virtual void ForwardGenerateOutputInformation();
+  virtual void ReverseGenerateOutputInformation();
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
-
+  
   void GenerateTransformationMatrix();
 
   /** Internal attributes */
@@ -214,4 +216,4 @@ private:
 #include "otbPCAImageFilter.txx"
 #endif
 
-#endif // __otbPCAImageFilter_h
+#endif // otbPCAImageFilter_h

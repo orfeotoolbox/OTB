@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileReader_txx
-#define __otbImageFileReader_txx
+#ifndef otbImageFileReader_txx
+#define otbImageFileReader_txx
 
 #include "otbImageFileReader.h"
 #include "otbConfigure.h"
@@ -24,6 +24,7 @@
 #include "otbSystem.h"
 #include <itksys/SystemTools.hxx>
 #include <fstream>
+#include <string>
 
 #include "itkImageIOFactory.h"
 #include "itkPixelTraits.h"
@@ -39,6 +40,9 @@
 
 namespace otb
 {
+
+static const char DerivedSubdatasetPrefix[] = "DERIVED_SUBDATASET:";
+static const size_t DerivedSubdatasetPrefixLength = sizeof(DerivedSubdatasetPrefix);
 
 template<class T>
 bool PixelIsComplex(const std::complex<T>& /*dummy*/)
@@ -61,7 +65,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
    m_ExceptionMessage(""),
    m_ActualIORegion(),
    m_FilenameHelper(FNameHelperType::New()),
-   m_AdditionalNumber(0)
+   m_AdditionalNumber(0),
+   m_KeywordListUpToDate(false)
 {
 }
 
@@ -122,7 +127,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   // Test if the file exist and if it can be open.
   // An exception will be thrown otherwise.
-  this->TestFileExistanceAndReadability();
+  this->TestFileExistenceAndReadability();
 
   // Tell the ImageIO to read the file
   OutputImagePixelType *buffer =
@@ -259,31 +264,29 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Update FileName
   this->m_FileName = lFileName;
 
-  std::string lFileNameOssimKeywordlist = this->m_FileName;
-
   // Test if the file exists and if it can be opened.
   // An exception will be thrown otherwise.
   // We catch the exception because some ImageIO's may not actually
   // open a file. Still reports file error if no ImageIO is loaded.
-
+  
   try
     {
     m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
+    this->TestFileExistenceAndReadability();
     }
   catch (itk::ExceptionObject & err)
     {
     m_ExceptionMessage = err.GetDescription();
     }
-
+  
   if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
     {
     this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), otb::ImageIOFactory::ReadMode);
     }
-
+  
   if (this->m_ImageIO.IsNull())
     {
-    this->Print(std::cerr);
+    //this->Print(std::cerr);
     otb::ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << " Could not create IO object for file "
@@ -338,9 +341,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
     itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::ResolutionFactor, m_AdditionalNumber);
     }
-
-  // This value is used by JPEG2000ImageIO and not by the others ImageIO
-  itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes, 135000000);
 
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
@@ -421,25 +421,30 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   output->SetOrigin(origin);         // Set the image origin
   output->SetDirection(direction);   // Set the image direction cosines
 
-  // Update otb Keywordlist
-  ImageKeywordlist otb_kwl;
-  if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
+  if(!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
     {
-    otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
-    otbMsgDevMacro(<< "Loading internal kwl");
-    }
-  else
-    {
-    otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-    otbMsgDevMacro(<< "Loading external kwl");
-    }
-
-  // Don't add an empty ossim keyword list
-  if( otb_kwl.GetSize() != 0 )
-    {
+    
+    std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
+  
+    // Update otb Keywordlist
+    ImageKeywordlist otb_kwl;
+    if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
+      {
+      otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
+      otbMsgDevMacro(<< "Loading internal kwl");
+      }
+    else
+      {
+      otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
+      otbMsgDevMacro(<< "Loading external kwl");
+      }
+    
+    // Don't add an empty ossim keyword list
+    if(!otb_kwl.Empty())
+      {
       itk::EncapsulateMetaData<ImageKeywordlist>(dict,
                                                  MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    }
+      }
   /*else
     {
     //
@@ -480,6 +485,21 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     }*/
 
+    m_KeywordListUpToDate = true;
+    }
+  else
+    {
+    // Read back from existing dictionary
+    ImageKeywordlist otb_kwl;
+    itk::ExposeMetaData<ImageKeywordlist>(this->GetOutput()->GetMetaDataDictionary(),
+                                                 MetaDataKey::OSSIMKeywordlistKey,otb_kwl);
+    // And add to new one
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                                 MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+
+    }
+
+  
   // If Skip ProjectionRef is activated, remove ProjRef from dict
   if (m_FilenameHelper->GetSkipCarto())
     {
@@ -525,9 +545,30 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
+std::string
+ImageFileReader<TOutputImage, ConvertPixelTraits>
+::GetDerivedDatasetSourceFileName(const std::string & filename) const
+{
+  
+  const size_t dsds_pos = filename.find(DerivedSubdatasetPrefix);
+  
+  if(dsds_pos != std::string::npos)
+      {
+      // Derived subdataset from gdal
+      const size_t alg_pos = filename.find(":",dsds_pos+DerivedSubdatasetPrefixLength);
+      if (alg_pos != std::string::npos)
+        {
+        std::string sourceFilename = filename.substr(alg_pos+1,filename.size() - alg_pos);
+        return sourceFilename;
+        }
+      }
+  return filename;
+}
+
+template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::TestFileExistanceAndReadability()
+::TestFileExistenceAndReadability()
 {
   // Test if the file a server name : if so the test is skipped
   if (this->m_FileName.find(std::string("http://")) == 0 ||
@@ -536,13 +577,15 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     return;
     }
 
+  std::string fileToCheck = GetDerivedDatasetSourceFileName(m_FileName);
+  
   // Test if the file exists.
-  if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
+  if (!itksys::SystemTools::FileExists(fileToCheck.c_str()))
     {
     otb::ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << "The file doesn't exist. "
-        << std::endl << "Filename = " << this->m_FileName
+        << std::endl << "Filename = " << fileToCheck
         << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
@@ -551,16 +594,16 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   // Test if the file can be open for reading access.
   //Only if m_FileName specify a filename (not a dirname)
-  if (itksys::SystemTools::FileExists(this->m_FileName.c_str(), true) == true)
+  if (itksys::SystemTools::FileExists(fileToCheck.c_str(), true))
     {
     std::ifstream readTester;
-    readTester.open(this->m_FileName.c_str());
+    readTester.open(fileToCheck.c_str());
     if (readTester.fail())
       {
       readTester.close();
       std::ostringstream msg;
       msg << "The file couldn't be opened for reading. "
-          << std::endl << "Filename: " << this->m_FileName
+          << std::endl << "Filename: " << fileToCheck
           << std::endl;
       otb::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
       throw e;
@@ -619,7 +662,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       //Supprime l'extension
       GdalFileName = System::GetRootName(strFileName);
       }
-
     else
       {
       // Sinon le filename est le nom du fichier a ouvrir
@@ -627,6 +669,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     fic_trouve = true;
     }
+  
   otbMsgDevMacro(<< "lFileNameGdal : " << GdalFileName.c_str());
   otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
   return (fic_trouve);
@@ -643,13 +686,55 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetFileName(const char* extendedFileName)
+::SetFileName(const char* in)
 {
-  if (extendedFileName)
+  const std::string skip_geom_key = "skipgeom";
+  const std::string geom_key = "geom";
+  
+  if (in)
     {
-    this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-    this->m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-    this->Modified();
+    // First, see if the simple filename has changed
+    typename FNameHelperType::Pointer helper = FNameHelperType::New();
+    
+    helper->SetExtendedFileName(in);
+    std::string simpleFileName = helper->GetSimpleFileName();
+
+    if(simpleFileName == this->m_FileName)
+      {
+      // Then, see if the option map changed
+      const typename ExtendedFilenameHelper::OptionMapType & newMap = helper->GetOptionMap();
+      const typename ExtendedFilenameHelper::OptionMapType & oldMap = m_FilenameHelper->GetOptionMap();
+
+      // Both maps are not completely the same
+      if(oldMap.size() != newMap.size() || !std::equal(oldMap.begin(),oldMap.end(),newMap.begin()))
+        {
+        this->Modified();
+        
+        // Now check if keywordlist needs to be generated again
+        // Condition is: one of the old or new map has the skip_geom
+        // key and the other does not
+        // OR
+        // one of the old or new map has the geom key and the other
+        // does not
+        // OR
+        // both have the geom key but the geom value is different
+        if((oldMap.count(skip_geom_key) != newMap.count(skip_geom_key))
+           || (oldMap.count(geom_key) != newMap.count(geom_key))
+           || ((oldMap.count(geom_key) && newMap.count(geom_key))
+               && oldMap.find(geom_key)->second != newMap.find(geom_key)->second))
+          {
+          m_KeywordListUpToDate = false;
+          }
+        }
+      }
+    else
+      {
+      this->m_FileName = simpleFileName;
+      m_KeywordListUpToDate = false;
+      this->Modified();
+      }
+    
+    m_FilenameHelper = helper;
     }
 }
 

@@ -2,6 +2,7 @@ set(DOCUMENTATION "This module contains features to read and write images with
 GDAL.")
 
 otb_module(OTBIOGDAL
+ENABLE_SHARED
   DEPENDS
     OTBVectorDataBase
     OTBGdalAdapters
@@ -10,7 +11,7 @@ otb_module(OTBIOGDAL
     OTBCommon
     OTBTinyXML
     OTBGDAL
-    OTBBoost
+    OTBBoostAdapters
     OTBOSSIMAdapters
 
   TEST_DEPENDS

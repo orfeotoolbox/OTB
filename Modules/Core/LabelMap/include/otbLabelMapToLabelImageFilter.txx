@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToLabelImageFilter_txx
-#define __otbLabelMapToLabelImageFilter_txx
+#ifndef otbLabelMapToLabelImageFilter_txx
+#define otbLabelMapToLabelImageFilter_txx
 
 #include "otbLabelMapToLabelImageFilter.h"
 #include "itkNumericTraits.h"

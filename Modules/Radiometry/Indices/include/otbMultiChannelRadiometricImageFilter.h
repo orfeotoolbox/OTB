@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelRadiometricImageFilter_h
-#define __otbMultiChannelRadiometricImageFilter_h
+#ifndef otbMultiChannelRadiometricImageFilter_h
+#define otbMultiChannelRadiometricImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 

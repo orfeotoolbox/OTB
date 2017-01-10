@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometricMomentPathFunction_h
-#define __otbGeometricMomentPathFunction_h
+#ifndef otbGeometricMomentPathFunction_h
+#define otbGeometricMomentPathFunction_h
 
 #include "otbPathFunction.h"
 
@@ -60,8 +60,8 @@ public:
 
 protected:
   GeometricMomentPathFunction() {};
-  ~GeometricMomentPathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~GeometricMomentPathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

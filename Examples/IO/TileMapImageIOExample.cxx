@@ -235,7 +235,7 @@ int main(int argc, char* argv[])
   // \center
   // \includegraphics[width=0.45\textwidth]{openStreetMap-Toulouse.eps}
   // \includegraphics[width=0.45\textwidth]{openStreetMap-Singapore.eps}
-  // \itkcaption[Open street map]{Map created from open street map showing the OTB headquaters}
+  // \itkcaption[Open street map]{Map created from open street map showing the OTB headquarters}
   // \label{fig:TILEMAPIMAGEIOEXAMPLE}
   // \end{figure}
   //

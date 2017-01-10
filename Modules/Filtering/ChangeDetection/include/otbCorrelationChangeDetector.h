@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCorrelationChangeDetector_h
-#define __otbCorrelationChangeDetector_h
+#ifndef otbCorrelationChangeDetector_h
+#define otbCorrelationChangeDetector_h
 
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "otbCrossCorrelation.h"
@@ -80,7 +80,7 @@ public:
 
 protected:
   CorrelationChangeDetector() {}
-  virtual ~CorrelationChangeDetector() {}
+  ~CorrelationChangeDetector() ITK_OVERRIDE {}
 
 private:
   CorrelationChangeDetector(const Self &); //purposely not implemented

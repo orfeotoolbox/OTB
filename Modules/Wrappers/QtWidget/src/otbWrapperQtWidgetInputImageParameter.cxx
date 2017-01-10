@@ -16,7 +16,13 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetInputImageParameter.h"
+
+
 #include <stdexcept>
+
+
+#include <otbQtAdapters.h>
+
 
 namespace otb
 {
@@ -26,9 +32,9 @@ namespace Wrapper
 QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
   m_InputImageParam(param),
-  m_HLayout( NULL ),
-  m_Input( NULL ),
-  m_Button( NULL )
+  m_HLayout( ITK_NULLPTR ),
+  m_Input( ITK_NULLPTR ),
+  m_Button( ITK_NULLPTR )
 {
 }
 
@@ -41,7 +47,12 @@ void QtWidgetInputImageParameter::DoUpdateGUI()
   //update lineedit if HasUserValue flag is set(from xml)
   if(m_InputImageParam->HasUserValue())
     {
-    QString text( m_InputImageParam->GetFileName().c_str() );
+    QString text(
+      QFile::decodeName(
+	m_InputImageParam->GetFileName().c_str()
+      )
+    );
+
     if (text != m_Input->text())
       m_Input->setText(text);
     }
@@ -71,33 +82,50 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetInputImageParameter::SelectFile()
+void
+QtWidgetInputImageParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("Raster files (*)");
+  assert( m_Input!=NULL );
 
-  if (fileDialog.exec())
+  QString filename(
+    GetOpenFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "Raster files (*)" ),
+      NULL,
+      QFileDialog::ReadOnly
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  if( !SetFileName( filename ) )
     {
-    if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )
-      m_Input->setText(fileDialog.selectedFiles().at(0));
-    else
-      {
-      std::ostringstream oss;
-      oss << "The given file "
-          << fileDialog.selectedFiles().at(0).toAscii().constData()
-          << " is not valid.";
-      this->GetModel()->SendLogWARNING( oss.str() );
-      }
+    std::ostringstream oss;
+
+    oss << "Invalid filename: '"
+	<< QFile::encodeName( filename ).constData()
+	<< "'";
+
+    assert( GetModel()!=NULL );
+
+    GetModel()->SendLogWARNING( oss.str() );
+
+    return;
     }
+
+  m_Input->setText( filename  );
 }
 
 bool QtWidgetInputImageParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
-  if(m_InputImageParam->SetFromFileName(value.toAscii().constData()) == true)
+  if( m_InputImageParam->SetFromFileName(
+	QFile::encodeName( value ).constData() ) == true )
     {
     // notify of value change
     QString key( m_InputImageParam->GetKey() );

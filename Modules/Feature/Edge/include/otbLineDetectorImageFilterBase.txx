@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineDetectorImageFilterBase_txx
-#define __otbLineDetectorImageFilterBase_txx
+#ifndef otbLineDetectorImageFilterBase_txx
+#define otbLineDetectorImageFilterBase_txx
 
 #include "otbLineDetectorImageFilterBase.h"
 
@@ -290,11 +290,11 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       // Contains for the 4 directions the the pixels belonging to each zone
       //std::vector<double> PixelValues[NB_DIR][NB_ZONE];
       // ROMAIN
-      std::vector<double>** PixelValues = NULL;
+      std::vector<double>** PixelValues = ITK_NULLPTR;
       PixelValues = new std::vector<double>*[NB_DIR];
       for (unsigned int i = 0; i < NB_DIR; ++i)
         {
-        PixelValues[i] = NULL;
+        PixelValues[i] = ITK_NULLPTR;
         PixelValues[i] = new std::vector<double>[NB_ZONE];
         }
       //otbMsgDevMacro( << "\tCentre Xc/Yc="<<Xc<<" "<<Yc<<" Yc12/Yc13="<<Yc12<<" "<<Yc13);
@@ -377,10 +377,10 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       for (unsigned int i = 0; i < NB_DIR; ++i)
         {
         delete[] PixelValues[i];
-        PixelValues[i] = NULL;
+        PixelValues[i] = ITK_NULLPTR;
         }
       delete[] PixelValues;
-      PixelValues = NULL;
+      PixelValues = ITK_NULLPTR;
       }
 
     }

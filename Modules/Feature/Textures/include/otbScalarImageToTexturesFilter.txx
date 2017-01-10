@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __otbScalarImageToTexturesFilter_txx
-#define __otbScalarImageToTexturesFilter_txx
+#ifndef otbScalarImageToTexturesFilter_txx
+#define otbScalarImageToTexturesFilter_txx
 
 #include "otbScalarImageToTexturesFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -67,7 +67,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(0));
 }
@@ -80,7 +80,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(1));
 }
@@ -93,7 +93,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(2));
 }
@@ -106,7 +106,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(3));
 }
@@ -119,7 +119,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(4));
 }
@@ -132,7 +132,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 6)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(5));
 }
@@ -145,7 +145,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 7)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(6));
 }
@@ -158,7 +158,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 8)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<OutputImageType *>(this->GetOutput(7));
 }
@@ -333,7 +333,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     double marginalDevSquared = 0.;
     double pixelVariance = 0.;
 
-    //Create and Intialize marginalSums
+    //Create and Initialize marginalSums
     std::vector<double> marginalSums(m_NumberOfBinsPerAxis, 0);
 
     //get co-occurrence vector and totalfrequency
@@ -396,7 +396,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       pixelVarianceSquared = 1.;
       }
 
-    //Initalize texture variables;
+    //Initialize texture variables;
     PixelValueType energy      = itk::NumericTraits< PixelValueType >::Zero;
     PixelValueType entropy     = itk::NumericTraits< PixelValueType >::Zero;
     PixelValueType correlation = itk::NumericTraits< PixelValueType >::Zero;

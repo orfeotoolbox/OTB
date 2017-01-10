@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginLatex
   //
-  // As the Canny filter works with real values, we can instanciated the reader using
+  // As the Canny filter works with real values, we can instantiated the reader using
   // an image with pixels as double. This does not imply anything on the real image
   // coding format which will be cast into double.
   //

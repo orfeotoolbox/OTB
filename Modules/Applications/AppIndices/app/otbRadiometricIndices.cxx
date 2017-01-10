@@ -126,7 +126,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RadiometricIndices");
     SetDescription("Compute radiometric indices.");
@@ -138,8 +138,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVegetationIndicesFunctor, otbWaterIndicesFunctor and otbSoilIndicesFunctor classes");
 
-    AddDocTag("Radiometric Indices");
     AddDocTag(Tags::FeatureExtraction);
+	AddDocTag("Radiometric Indices");
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image");
@@ -433,7 +433,7 @@ private:
       }
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     //Nothing to do here
   }
@@ -483,7 +483,7 @@ private:
     otbAppLogINFO(<< m_Map[GetSelectedItems("list")[idx]].item << " added.");\
     }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
@@ -553,7 +553,6 @@ private:
           BI2FilterType::Pointer l_BI2Filter = BI2FilterType::New();
           std::ostringstream oss;
           oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan1;
-          std::cout << "flag" << std::endl;
           l_BI2Filter->GetFunctor().SetNIRIndex(this->GetParameterInt(oss.str()));
           oss.str("");
           oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan2;

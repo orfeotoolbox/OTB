@@ -91,7 +91,7 @@ bool MWImageIO::CanReadFile(const char* filename)
     return false;
     }
 
-  //Read header informations
+  //Read header information
   bool lResult = InternalReadHeaderInformation(header_file, false);
   header_file.close();
   return (lResult);
@@ -172,7 +172,7 @@ void MWImageIO::ReadImageInformation()
     itkExceptionMacro(<< "MWImageIO::ReadImageInformation() failed header open ! ");
     }
 
-  //Read header informations
+  //Read header information
   InternalReadHeaderInformation(m_File, true);
 
   otbMsgDebugMacro(<< "Driver to read: MW");
@@ -227,7 +227,7 @@ bool MWImageIO::InternalReadHeaderInformation(std::fstream& file, const bool rep
 
   SetComponentType(FLOAT);
 
-  //Initialization of image informations
+  //Initialization of image information
   m_Dimensions[0] = NbCol;
   m_Dimensions[1] = NbLig;
   this->SetNumberOfComponents(1);

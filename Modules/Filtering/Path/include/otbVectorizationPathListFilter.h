@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorizationPathListFilter_h
-#define __otbVectorizationPathListFilter_h
+#ifndef otbVectorizationPathListFilter_h
+#define otbVectorizationPathListFilter_h
 
 #include "otbPathListSource.h"
 #include "itkImageRegionIterator.h"
@@ -114,11 +114,11 @@ protected:
   /** Constructor */
   VectorizationPathListFilter();
   /** Destructor */
-  virtual ~VectorizationPathListFilter() {}
+  ~VectorizationPathListFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /**
    * Compute a vector of the 8  neighbors to explore from the direction and the type of search (forward or backward).
    * \param direction The direction

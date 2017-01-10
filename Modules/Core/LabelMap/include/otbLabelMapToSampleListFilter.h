@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToSampleListFilter_h
-#define __otbLabelMapToSampleListFilter_h
+#ifndef otbLabelMapToSampleListFilter_h
+#define otbLabelMapToSampleListFilter_h
 
 #include <algorithm>
 
@@ -31,7 +31,7 @@ namespace otb
  * learning and classification.
  *
  * The conversion from label object to measurement vector is made
- * through a functor. This allows to support any kind of LabelObject
+ * through a functor. This allows supporting any kind of LabelObject
  * via proper redefinition of the functor.
  *
  * \ingroup OTBLabelMap
@@ -93,15 +93,15 @@ public:
 
 protected:
   LabelMapToSampleListFilter();
-  virtual ~LabelMapToSampleListFilter();
+  ~LabelMapToSampleListFilter() ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Make Output */
-  virtual DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LabelMapToSampleListFilter(const Self&); //purposely not implemented

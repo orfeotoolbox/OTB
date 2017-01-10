@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonCompacityFunctor_h
-#define __otbPolygonCompacityFunctor_h
+#ifndef otbPolygonCompacityFunctor_h
+#define otbPolygonCompacityFunctor_h
 
 #include "otbMath.h"
 

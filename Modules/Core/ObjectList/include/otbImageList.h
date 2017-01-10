@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageList_h
-#define __otbImageList_h
+#ifndef otbImageList_h
+#define otbImageList_h
 
 #include "otbObjectList.h"
 
@@ -25,7 +25,7 @@ namespace otb
 /** \class ImageList
  *  \brief This class represent a list of images.
  *
- * It is derived from the otbObjectList class, which allows to manipulate an ITK/OTB
+ * It is derived from the otbObjectList class, which allows manipulating an ITK/OTB
  * object list with the appropriate formalism (iterators, accessors).
  * \sa ObjectList
  *
@@ -60,18 +60,18 @@ public:
   /**
    * Update images in the list.
    */
-  virtual void UpdateOutputInformation(void);
-  virtual void PropagateRequestedRegion(void)
-    throw (itk::InvalidRequestedRegionError);
-  virtual void UpdateOutputData(void);
+  void UpdateOutputInformation(void) ITK_OVERRIDE;
+  void PropagateRequestedRegion(void)
+    throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+  void UpdateOutputData(void) ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   ImageList() {};
   /** Destructor */
-  virtual ~ImageList() {}
+  ~ImageList() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

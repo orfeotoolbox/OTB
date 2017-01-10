@@ -238,7 +238,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginLatex
   //
   // Roads are not likely to have sharp turns. Therefore we set the max angle parameter,
-  // as well as the link angular threshold. The value is typicaly $\frac{\pi}{8}$.
+  // as well as the link angular threshold. The value is typically $\frac{\pi}{8}$.
   //
   // Software Guide : EndLatex
 

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPathListToHistogramGenerator_txx
-#define __otbPathListToHistogramGenerator_txx
+#ifndef otbPathListToHistogramGenerator_txx
+#define otbPathListToHistogramGenerator_txx
 
 #include "otbPathListToHistogramGenerator.h"
 
@@ -53,7 +53,7 @@ PathListToHistogramGenerator<TPath, TFunction>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const PathListType* >
     (this->itk::ProcessObject::GetInput(0) );

@@ -24,7 +24,7 @@
 
 // Software Guide : BeginLatex
 //
-// The \doxygen{otb}{VectorDataToMapFilter} allows to perform
+// The \doxygen{otb}{VectorDataToMapFilter} allows performing
 // rasterization of a given vector data as a binary mask. This example
 // will demonstrate how to use this filter to perform rasterization of
 // the SRTM water body masks available here:

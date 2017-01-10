@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBijectionCoherencyFilter_txx
-#define __otbBijectionCoherencyFilter_txx
+#ifndef otbBijectionCoherencyFilter_txx
+#define otbBijectionCoherencyFilter_txx
 
 #include "otbBijectionCoherencyFilter.h"
 
@@ -87,7 +87,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -99,7 +99,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -111,7 +111,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -123,7 +123,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -265,12 +265,18 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
       ul[1] = (buffered.GetIndex()[1]+buffered.GetSize()[1]-1);
 
     ur = ul;
-    ur[0] += 1;
     ll = ul;
-    ll[1] += 1;
     lr = ul;
-    lr[0] += 1;
-    lr[1] += 1;
+    if (ul[0] < static_cast<IndexValueType>(buffered.GetIndex()[0] + buffered.GetSize()[0]-1))
+      {
+      ur[0] += 1;
+      lr[0] += 1;
+      }
+    if (ul[1] < static_cast<IndexValueType>(buffered.GetIndex()[1] + buffered.GetSize()[1]-1))
+      {
+      ll[1] += 1;
+      lr[1] += 1;
+      }
 
     double rx = tmpIndex[0] - static_cast<double>(ul[0]);
     double ry = tmpIndex[1] - static_cast<double>(ul[1]);

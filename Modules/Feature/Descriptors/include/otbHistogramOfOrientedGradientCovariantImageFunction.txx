@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHistogramOfOrientedGradientCovariantImageFunction_txx
-#define __otbHistogramOfOrientedGradientCovariantImageFunction_txx
+#ifndef otbHistogramOfOrientedGradientCovariantImageFunction_txx
+#define otbHistogramOfOrientedGradientCovariantImageFunction_txx
 
 #include "otbHistogramOfOrientedGradientCovariantImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

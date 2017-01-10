@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8Graph_h
-#define __otbRCC8Graph_h
+#ifndef otbRCC8Graph_h
+#define otbRCC8Graph_h
 
 #include "otbRCC8Edge.h"
 
@@ -26,8 +26,7 @@
 #define BOOST_NO_0X_HDR_INITIALIZER_LIST
 #endif
 
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
+#include "otb_boost_graph_header.h"
 
 #include "otbImage.h"
 #include "otbImageList.h"
@@ -40,7 +39,7 @@ namespace otb
  * computed from a pyramidal segmentation.
  *
  * A batch of boost operation has been embedded in order to provide
- * basic functionnality such as adding a new edge, or retrieving the
+ * basic functionality such as adding a new edge, or retrieving the
  * number of vertices. A method is also provided to retrieve the boost
  * graph object, in case more advanced processing is required. One
  * should remember that if a peculiar operation is needed for some
@@ -125,12 +124,12 @@ protected:
   /** Constructor */
   RCC8Graph();
   /** Destructor */
-  ~RCC8Graph() {}
+  ~RCC8Graph() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Initialize a range of vertex.
-   * \param num The index of the last vertices to intialize.
+   * \param num The index of the last vertices to initialize.
    */
   void InitializeGraph(unsigned int num);
 

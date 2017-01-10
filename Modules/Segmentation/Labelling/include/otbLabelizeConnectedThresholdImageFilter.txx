@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeConnectedThresholdImageFilter_txx
-#define __otbLabelizeConnectedThresholdImageFilter_txx
+#ifndef otbLabelizeConnectedThresholdImageFilter_txx
+#define otbLabelizeConnectedThresholdImageFilter_txx
 
 #include "itkNumericTraits.h"
 

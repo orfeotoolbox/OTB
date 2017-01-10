@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToImageListFilter_h
-#define __otbImageToImageListFilter_h
+#ifndef otbImageToImageListFilter_h
+#define otbImageToImageListFilter_h
 
 #include "otbImageListSource.h"
 
@@ -59,7 +59,7 @@ public:
   typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
   /** InputImage dimension constant */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  /** Overiding the SetInput() and GetInput() methods */
+  /** Overriding the SetInput() and GetInput() methods */
   using Superclass::SetInput;
   virtual void SetInput(const InputImageType * image);
   InputImageType * GetInput(void);
@@ -68,9 +68,9 @@ protected:
   /** Constructor */
   ImageToImageListFilter();
   /** Destructor */
-  virtual ~ImageToImageListFilter() {}
+  ~ImageToImageListFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToImageListFilter(const Self &); //purposely not implemented

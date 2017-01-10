@@ -26,7 +26,7 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{ImageToPathListAlignFilter}.
-// This filter allows to extract meaninful alignments. Alignments
+// This filter allows extracting meaninful alignments. Alignments
 // (that is edges and lines) are detected using the {\em Gestalt}
 // approach proposed by Desolneux et al. \cite{desolneux}. In this
 // context, an event is

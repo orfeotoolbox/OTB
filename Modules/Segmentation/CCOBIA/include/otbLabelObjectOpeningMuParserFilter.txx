@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbLabelObjectOpeningMuParserFilter_txx
-#define __otbLabelObjectOpeningMuParserFilter_txx
+#ifndef otbLabelObjectOpeningMuParserFilter_txx
+#define otbLabelObjectOpeningMuParserFilter_txx
 
 #include "otbLabelObjectOpeningMuParserFilter.h"
 #include <iostream>

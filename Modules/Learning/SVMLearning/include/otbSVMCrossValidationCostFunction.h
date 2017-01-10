@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSVMCrossValidationCostFunction_h
-#define __otbSVMCrossValidationCostFunction_h
+#ifndef otbSVMCrossValidationCostFunction_h
+#define otbSVMCrossValidationCostFunction_h
 
 #include "otbSVMModel.h"
 #include "itkSingleValuedCostFunction.h"
@@ -27,7 +27,7 @@ namespace otb
 /** \class SVMCrossValidationCostFunction
  * \brief This function returns the cross validation accuracy of a SVM model.
  *
- * It allows to perform parameters selection to maximize the
+ * It allows performing parameters selection to maximize the
  * accuracy using ITK optimizers.
  *
  * Given an input SVM model, the number of parameters depends on the
@@ -84,19 +84,19 @@ public:
   itkGetMacro(DerivativeStep, ParametersValueType);
 
   /** \return The accuracy value corresponding the parameters */
-  virtual MeasureType GetValue(const ParametersType& parameters) const;
+  MeasureType GetValue(const ParametersType& parameters) const ITK_OVERRIDE;
 
   /** \return The accuracy derivative corresponding to the parameters */
-  virtual void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const;
+  void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const ITK_OVERRIDE;
 
   /** \return the number of parameters to optimize */
-  virtual unsigned int GetNumberOfParameters(void) const;
+  unsigned int GetNumberOfParameters(void) const ITK_OVERRIDE;
 
 protected:
   /// Constructor
   SVMCrossValidationCostFunction();
   /// Destructor
-  virtual ~SVMCrossValidationCostFunction();
+  ~SVMCrossValidationCostFunction() ITK_OVERRIDE;
 
   /** Update svm parameters struct according to the input parameters
     */

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericEffects_txx
-#define __otbAtmosphericEffects_txx
+#ifndef otbAtmosphericEffects_txx
+#define otbAtmosphericEffects_txx
 
 #include "otbAtmosphericEffects.h"
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
@@ -84,7 +84,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
     functionValues->SetMinSpectralValue(inter.first);
     functionValues->SetMaxSpectralValue(inter.second - step);
 
-  //TODO Is it the effecient method Problem in 6STraits
+  //TODO Is it the efficient method Problem in 6STraits
     functionValues->SetUserStep( step );
 
     m_DataAtmosphericCorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);

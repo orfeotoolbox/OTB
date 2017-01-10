@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalPyramidMRToMSConverter_txx
-#define __otbMorphologicalPyramidMRToMSConverter_txx
+#ifndef otbMorphologicalPyramidMRToMSConverter_txx
+#define otbMorphologicalPyramidMRToMSConverter_txx
 
 #include "otbMorphologicalPyramidMRToMSConverter.h"
 #include "otbMorphologicalPyramidResampler.h"
@@ -118,7 +118,7 @@ MRToMSConverter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 MRToMSConverter<TInputImage, TOutputImage>
-::SetInput(InputImageListType * imageList)
+::SetInput(const InputImageListType * imageList)
 {
   this->SetNthInput(2, const_cast<InputImageListType *>(imageList));
 }

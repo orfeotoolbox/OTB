@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingHistogramVectorImageFilter_h
-#define __otbStreamingHistogramVectorImageFilter_h
+#ifndef otbStreamingHistogramVectorImageFilter_h
+#define otbStreamingHistogramVectorImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -168,23 +168,23 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  virtual void AllocateOutputs();
-  virtual void GenerateOutputInformation();
-  virtual void Synthetize(void);
-  virtual void Reset(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
 
 protected:
   PersistentHistogramVectorImageFilter();
-  virtual ~PersistentHistogramVectorImageFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentHistogramVectorImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentHistogramVectorImageFilter(const Self &); //purposely not implemented
@@ -207,7 +207,7 @@ private:
 /** \class StreamingHistogramVectorImageFilter
  * \brief This class streams the whole input image through the PersistentHistogramVectorImageFilter.
  *
- * This way, it allows to compute the min/max of this image. It calls the
+ * This way, it allows computing the min/max of this image. It calls the
  * Reset() method of the PersistentHistogramVectorImageFilter before streaming the image and the
  * Synthetize() method of the PersistentHistogramVectorImageFilter after having streamed the image
  * to compute the statistics. The accessor on the results are wrapping the accessors of the
@@ -270,7 +270,7 @@ protected:
   /** Constructor */
   StreamingHistogramVectorImageFilter() {};
   /** Destructor */
-  virtual ~StreamingHistogramVectorImageFilter() {}
+  ~StreamingHistogramVectorImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingHistogramVectorImageFilter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProlateInterpolateImageFunction_h
-#define __otbProlateInterpolateImageFunction_h
+#ifndef otbProlateInterpolateImageFunction_h
+#define otbProlateInterpolateImageFunction_h
 
 #include "otbGenericInterpolateImageFunction.h"
 #include "itkSize.h"
@@ -310,8 +310,8 @@ public:
 
 protected:
   ProlateInterpolateImageFunction();
-  ~ProlateInterpolateImageFunction();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ProlateInterpolateImageFunction() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ProlateInterpolateImageFunction(const Self &); //purposely not implemented

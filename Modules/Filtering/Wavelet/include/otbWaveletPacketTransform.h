@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletPacketTransform_h
-#define __otbWaveletPacketTransform_h
+#ifndef otbWaveletPacketTransform_h
+#define otbWaveletPacketTransform_h
 
 #include "itkProgressAccumulator.h"
 
@@ -40,7 +40,7 @@ namespace otb {
  *
  * It yields a list of images on the Wavelet::FORWARD decomposition. Conversely,
  * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
- * Hence, the Forward vs Inverse transformation has been splitted into two classes
+ * Hence, the Forward vs Inverse transformation has been split into two classes
  * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
  * ImageToImageListFilter while the latter comes from a
  * ImageListToImageFilter. Thse two classes have specific declaration
@@ -94,7 +94,7 @@ private:
  *
  * It yields a list of images on the Wavelet::FORWARD decomposition. Conversely,
  * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
- * Hence, the Forward vs Inverse transformation has been splitted into two classes
+ * Hence, the Forward vs Inverse transformation has been split into two classes
  * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
  * ImageToImageListFilter while the latter comes from a
  * ImageListToImageFilter. Thse two classes have specific declaration
@@ -183,13 +183,13 @@ public:
 
 protected:
   WaveletPacketTransform();
-  virtual ~WaveletPacketTransform() {}
+  ~WaveletPacketTransform() ITK_OVERRIDE {}
 
   /** Generate data redefinition.
    * This class does not performs multi-threading directly. But it uses step by step the
    * GenerateData() of TFilter. If This one can thread, the transformation is threaded
    * (e.g. WaveletFilterBank) */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Performs (if any) the local decomposition (called recursively) */
   virtual void GenerateData(unsigned int depth, OutputImageType * outputPtr,
@@ -226,7 +226,7 @@ private:
  *
  * It yields a list of images on the Wavelet::FORWARD decomposition. Conversely,
  * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
- * Hence, the Forward vs Inverse transformation has been splitted into two classes
+ * Hence, the Forward vs Inverse transformation has been split into two classes
  * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
  * ImageToImageListFilter while the latter comes from a
  * ImageListToImageFilter. Thse two classes have specific declaration
@@ -234,7 +234,7 @@ private:
  *
  * This is the specific declaration of the Inverse transformation.
  *
- * In this specialization, the Cost template class is not usefull and then
+ * In this specialization, the Cost template class is not useful and then
  * declared to as FullyDecomposedWaveletPacketCost.
  *
  * \sa FullyDecomposedWaveletPacketCost
@@ -321,19 +321,19 @@ public:
 
 protected:
   WaveletPacketTransform();
-  virtual ~WaveletPacketTransform() {}
+  ~WaveletPacketTransform() ITK_OVERRIDE {}
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
-    * Copy informations from the input image if existing.
+    * Copy information from the input image if existing.
     **/
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Generate data redefinition.
    * This class does not performs multi-threading directly. But it uses step by step the
    * GenerateData() of TFilter. If This one can thread, the transformation is threaded
    * (e.g. WaveletFilterBank) */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Performs (if any) the local decomposition (called recursively) */
   virtual unsigned int SetInputFilters(unsigned int& ruleID, InputImageIterator& inputIter,

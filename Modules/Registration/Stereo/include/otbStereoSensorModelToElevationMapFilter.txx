@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereoSensorModelToElevationMapFilter_txx
-#define __otbStereoSensorModelToElevationMapFilter_txx
+#ifndef otbStereoSensorModelToElevationMapFilter_txx
+#define otbStereoSensorModelToElevationMapFilter_txx
 
 #include "otbStereoSensorModelToElevationMapFilter.h"
 
@@ -84,7 +84,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 {
   if(this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -96,7 +96,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 {
   if(this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -108,7 +108,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 {
   if(this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputHeight *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -161,7 +161,7 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   transform->SetInputKeywordList(masterPtr->GetImageKeywordlist());
   transform->SetOutputKeywordList(slavePtr->GetImageKeywordlist());
 
-  transform->InstanciateTransform();
+  transform->InstantiateTransform();
 
   typename GenericRSTransformType::ParametersType params(1);
 
@@ -282,9 +282,9 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 
   typename GenericRSTransformType::Pointer rsTransform = GenericRSTransformType::New();
   rsTransform->SetInputKeywordList(outputPtr->GetImageKeywordlist());
-  rsTransform->InstanciateTransform();
+  rsTransform->InstantiateTransform();
 
-  // Fill ouptut
+  // Fill output
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputPtr->GetBufferedRegion());
 
   for(outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
@@ -305,7 +305,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   m_MasterToSlave = GenericRSTransform3DType::New();
   m_MasterToSlave->SetInputKeywordList(masterPtr->GetImageKeywordlist());
   m_MasterToSlave->SetOutputKeywordList(slavePtr->GetImageKeywordlist());
-  m_MasterToSlave->InstanciateTransform();
+  m_MasterToSlave->InstantiateTransform();
 
 }
 
@@ -337,7 +337,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 
   //   typename GenericRSTransformType::Pointer gcpTransform = GenericRSTransformType::New();
   //   gcpTransform->SetInputProjectionRef(this->GetInput()->GetGCPProjection());
-  //   gcpTransform->InstanciateTransform();
+  //   gcpTransform->InstantiateTransform();
 
   //   groundPointWGS84 = gcpTransform->TransformPoint(groundPoint);
 
@@ -357,7 +357,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 
   //   typename GenericRSTransformType::Pointer gcpTransform = GenericRSTransformType::New();
   //   gcpTransform->SetInputProjectionRef(this->GetInput()->GetGCPProjection());
-  //   gcpTransform->InstanciateTransform();
+  //   gcpTransform->InstantiateTransform();
 
   //   groundPointWGS84 = gcpTransform->TransformPoint(groundPoint);
 
@@ -402,7 +402,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
     typename GenericRSTransform3DType::InputPointType in3DPoint, out3DPoint;
     typename InputImageType::IndexType index;
 
-    // Retrieve intial height
+    // Retrieve initial height
     double initHeight = outputIt.Get();
     double optimalHeight = initHeight;
     double optimalCorrelation = 0;

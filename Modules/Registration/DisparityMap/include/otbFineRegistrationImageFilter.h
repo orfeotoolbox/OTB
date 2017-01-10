@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFineRegistrationImageFilter_h
-#define __otbFineRegistrationImageFilter_h
+#ifndef otbFineRegistrationImageFilter_h
+#define otbFineRegistrationImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkInterpolateImageFunction.h"
@@ -36,11 +36,11 @@ namespace otb
  * is defined by SetSearchRadius() method.
  *
  * To do so, it optimizes a metric set using the SetMetric() method, which accepts any itk metric
- * deriving from the itk::ImageToImageMetric. The MinimizeOn()/MinimizeOff() flag allow to search for
+ * deriving from the itk::ImageToImageMetric. The MinimizeOn()/MinimizeOff() flag allows searching for
  * minimum or maximum depending on the metric (default is On).
  *
- * Once a coarse (pixel wise) offset has been found, this match is further refined using dichotomic search
- * until sub-pixel accuracy given by the SetSubPixelAccuracy() is reached.
+ * Once a coarse (pixel wise) offset has been found, this match is further refined using golden section search search
+ * until convergence accuracy (given by the SetConvergenceAccuracy()) is reached, or when the max number of iteration () is reached.
  *
  * The filter proposes two outputs: GetOutput() return the image of the metric optimum at each location, and
  * the GetOutputDisplacementField() method returns the corresponding offset.
@@ -58,7 +58,7 @@ namespace otb
  * grid step to value higher than 1 (grid step is expressed in terms of number of fixed image pixels).
  * Default value is 1.
  *
- * The FineRegistrationImageFilter allows to use the full range of itk::ImageToImageMetric provided by itk.
+ * The FineRegistrationImageFilter allows using the full range of itk::ImageToImageMetric provided by itk.
  *
  * \example DisparityMap/FineRegistrationImageFilterExample.cxx
  *
@@ -132,9 +132,17 @@ public:
   itkSetMacro(SearchRadius, SizeType);
   itkGetMacro(SearchRadius, SizeType);
 
+  /** Set/Get convergence accuracy */
+  itkSetMacro(ConvergenceAccuracy, double);
+  itkGetMacro(ConvergenceAccuracy, double);
+  
   /** Set/Get subpixel accuracy */
   itkSetMacro(SubPixelAccuracy, double);
   itkGetMacro(SubPixelAccuracy, double);
+  
+  /** Set/Get max number of iterations */
+  itkSetMacro(MaxIter, int);
+  itkGetMacro(MaxIter, int);
 
   /** True if metric should be minimized. False otherwise */
   itkSetMacro(Minimize, bool);
@@ -178,20 +186,27 @@ protected:
   /** Constructor */
   FineRegistrationImageFilter();
   /** Destructor */
-  virtual ~FineRegistrationImageFilter() {};
+  ~FineRegistrationImageFilter() ITK_OVERRIDE {};
 
   /** Threaded generate data */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Generate the input requested regions  */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Generate output information */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 private:
   FineRegistrationImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+  
+  inline double callMetric(double val1,double val2,double &oldRes,bool &flag);
+  inline void updateOptParams(double potBestVal,double parx,double pary,                             //inputs
+                              double &bestVal, typename TranslationType::ParametersType& optParams); //outputs
+  inline void updatePoints(double& gn, double& in1, double& in2, double &in3,      //inputs
+                           double& out1, double& out2, double& out3, double& out4); //outputs
+  inline void updateMinimize(double& a, double& b);
 
   /** The radius for correlation */
   SizeType                      m_Radius;
@@ -206,7 +221,11 @@ private:
   bool                          m_UseSpacing;
 
   /** Search step */
+  double                        m_ConvergenceAccuracy;
   double                        m_SubPixelAccuracy;
+  
+  /** Max number of iterations */
+  int                           m_MaxIter;
 
   /** The interpolator */
   InterpolatorPointerType       m_Interpolator;

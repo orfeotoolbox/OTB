@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCompacityPathFunction_h
-#define __otbCompacityPathFunction_h
+#ifndef otbCompacityPathFunction_h
+#define otbCompacityPathFunction_h
 
 #include "otbPathFunction.h"
 #include "itkVectorContainer.h"
@@ -67,13 +67,13 @@ public:
   typedef double RealType;
 
   /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PathType& path) const;
+  OutputType Evaluate(const PathType& path) const ITK_OVERRIDE;
   virtual OutputType Evaluate() const;
 
 protected:
   CompacityPathFunction() {};
-  virtual ~CompacityPathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~CompacityPathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   CompacityPathFunction(const Self &);  //purposely not implemented

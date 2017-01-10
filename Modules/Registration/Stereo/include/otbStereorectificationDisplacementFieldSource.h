@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereorectificationDisplacementFieldSource_h
-#define __otbStereorectificationDisplacementFieldSource_h
+#ifndef otbStereorectificationDisplacementFieldSource_h
+#define otbStereorectificationDisplacementFieldSource_h
 
 #include "itkImageSource.h"
 #include "otbGenericRSTransform.h"
@@ -43,8 +43,8 @@ namespace otb
  *  pairs so that the displacement related to the elevation only
  *  occurs in the horizontal direction (i.e. epipolar lines are
  *  horizontal). This operation is useful for mainly two reasons: it
- *  allows to search for disparities in one direction only, and it
- *  allows to derives anaglyph for 3D viewing with 3D glasses.
+ *  allows searching for disparities in one direction only, and it
+ *  allows deriving anaglyph for 3D viewing with 3D glasses.
  *
  *  This filter allows you to compute the deformation fields up to the
  *  sensor model precision needed to warp a pair of stereo images into
@@ -66,17 +66,17 @@ namespace otb
  *  hypothesis on which the epipolar geometry is built. It means that
  *  any pair of pixels in the stereo pair whose elevation is exactly
  *  equal to the average elevation will have a null disparity (no
- *  displacement). The SetElevationOffset() method allows to tune the
+ *  displacement). The SetElevationOffset() method allows tuning the
  *  elevation offset which is only used for local epipolar lines
  *  estimation. The default value of 50 meters should do.
  *
- *  Additionnaly, the SetScale() method allows to derive deformation
+ *  Additionnaly, the SetScale() method allows deriving deformation
  *  fields and images size at a coarser (scale > 1) or finer (scale <
- *  1) resolution. The SetGridStep() allows to tune the step of the
+ *  1) resolution. The SetGridStep() allows tuning the step of the
  *  resampling grid. Please keep in mind that the whole grid is loaded
  *  into memory, and that the epipolar lines direction may only vary
  *  smoothly. When working with large images, a coarse grid-step will
- *  generally be accurate enough and will preserve the memory ressources.
+ *  generally be accurate enough and will preserve the memory resources.
  *
  *  \sa StreamingWarpImageFilter
  *  \sa StereoSensorModelToElevationMapFilter
@@ -107,7 +107,7 @@ public:
   typedef typename OutputImageType::RegionType      RegionType;
 
   // 3D RS transform
-  // TODO: Allow to tune precision (i.e. double or float)
+  // TODO: Allow tuning precision (i.e. double or float)
   typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
   typedef typename RSTransformType::Pointer         RSTransformPointerType;
 
@@ -163,19 +163,19 @@ protected:
   StereorectificationDisplacementFieldSource( void );
 
   /** Destructor */
-  ~StereorectificationDisplacementFieldSource( void ) {};
+  ~StereorectificationDisplacementFieldSource( void ) ITK_OVERRIDE {};
 
   /** Generate output images information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Enlarge output requested region (no streaming) */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output));
+  void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output)) ITK_OVERRIDE;
 
   /** Compute the deformation field */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  virtual void PrintSelf( std::ostream& os, itk::Indent indent ) const;
+  void PrintSelf( std::ostream& os, itk::Indent indent ) const ITK_OVERRIDE;
 
 private:
   StereorectificationDisplacementFieldSource( const Self& ); // purposely

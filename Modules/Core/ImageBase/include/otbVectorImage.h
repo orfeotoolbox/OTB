@@ -15,10 +15,17 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImage_h
-#define __otbVectorImage_h
+#ifndef otbVectorImage_h
+#define otbVectorImage_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkVectorImage.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkVectorImage.h"
+#endif
 #include "otbImageMetadataInterfaceBase.h"
 
 namespace otb
@@ -59,7 +66,7 @@ public:
   typedef typename Superclass::ValueType ValueType;
 
   /** Internal Pixel representation. Used to maintain a uniform API
-   * with Image Adaptors and allow to keep a particular internal
+   * with Image Adaptors and allow keeping a particular internal
    * representation of data while showing a different external
    * representation. */
   typedef typename Superclass::InternalPixelType InternalPixelType;
@@ -147,9 +154,9 @@ public:
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   /// Copy metadata from a DataObject
-  virtual void CopyInformation(const itk::DataObject *);
+  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Return the Pixel Accessor object */
 //   AccessorType GetPixelAccessor( void )
@@ -177,7 +184,7 @@ public:
 
 protected:
   VectorImage();
-  virtual ~VectorImage() {}
+  ~VectorImage() ITK_OVERRIDE {}
 
 private:
   VectorImage(const Self &); //purposely not implemented

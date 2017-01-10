@@ -1,0 +1,17 @@
+#/bin/sh
+
+SGROOT='${SoftwareGuide_SOURCE_DIR}'
+TEXINPUTS=$TEXINPUTS:$SGROOT/../Latex:$SGROOT:$SGROOT/Latex:$SGROOT/Art:$SGROOT/Examples:$SGROOT/Art
+export TEXINPUTS
+
+FAQTEX=${SoftwareGuide_SOURCE_DIR}/Latex/OTB-FAQ.tex
+
+#latex2rtf -o ${SoftwareGuide_BINARY_DIR}/Latex/OTB-FAQ-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.rtf $FAQTEX
+
+FAQHTMLDIR=${SoftwareGuide_BINARY_DIR}/OTB-FAQ-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
+mkdir -p $FAQHTMLDIR
+latex2html -dir $FAQHTMLDIR -split 0 -local_icons -info "" $FAQTEX
+pdflatex -halt-on-error $FAQTEX
+mv OTB-FAQ.pdf OTB-FAQ-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.pdf
+
+

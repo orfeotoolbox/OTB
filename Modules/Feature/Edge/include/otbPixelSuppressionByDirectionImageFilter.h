@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPixelSuppressionByDirectionImageFilter_h
-#define __otbPixelSuppressionByDirectionImageFilter_h
+#ifndef otbPixelSuppressionByDirectionImageFilter_h
+#define otbPixelSuppressionByDirectionImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -31,7 +31,7 @@ namespace otb
  *
  * This class implements an image filter which detects isolated pixels
  * that have little chance of belonging to a raod and performs a pixel
- * supression. For each pixel kept with direction \f$ \theta_{i} \f$, we look
+ * suppression. For each pixel kept with direction \f$ \theta_{i} \f$, we look
  * for other pixels with a direction close to \f$ \theta_i \f$ in an angular
  * beam around it. If none is found, the pixel is suppressed.
  *
@@ -99,16 +99,16 @@ public:
   void SetInputImageDirection(const InputImageType *image);
   const InputImageType * GetInputImageDirection(void);
 
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 protected:
   PixelSuppressionByDirectionImageFilter();
-  virtual ~PixelSuppressionByDirectionImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PixelSuppressionByDirectionImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PixelSuppressionByDirectionImageFilter(const Self &); //purposely not implemented

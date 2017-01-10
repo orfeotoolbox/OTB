@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __otbWrapperApplication_h
-#define __otbWrapperApplication_h
+#ifndef otbWrapperApplication_h
+#define otbWrapperApplication_h
 
 #include <string>
 #include "otbWrapperTypes.h"
@@ -24,13 +24,16 @@
 #include "otbWrapperParameterGroup.h"
 
 #include "itkLogger.h"
+#include "itkTimeProbe.h"
 #include "otbWrapperMacros.h"
 #include "otbWrapperInputImageParameter.h"
+#include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -44,7 +47,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT Application: public itk::Object
+class OTBApplicationEngine_EXPORT Application: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -122,9 +125,9 @@ public:
   ParameterGroup* GetParameterList();
 
   /* Get the internal application parameter specified
-   *
+   * if the follow flag is on, the function returns the target of proxy parameters
    * WARNING: this method may disappear from the API */
-  Parameter* GetParameterByKey(std::string parameter);
+  Parameter* GetParameterByKey(std::string parameter, bool follow=true);
 
   /* Get the internal application parameter specified
    *
@@ -297,6 +300,16 @@ public:
    */
   void SetMaximumParameterFloatValue(std::string parameter, float value);
 
+
+  /**
+   * Enable single selection mode for list view if status in true
+   * (default is false).
+   * 
+   * Can be called for types:
+   * \li ParameterType_ListView
+   */
+  void SetListViewSingleSelectionMode(std::string parameter, bool status);
+  
   /* Set a string value
    *
    * Can be called for types :
@@ -402,6 +415,93 @@ public:
    */
   std::vector<std::string> GetParameterStringList(std::string parameter);
 
+
+  /** 
+   * Set the input image parameter as an ImageBase * instead
+   * of filename. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \in inputImage ImageBase pointer to use as input
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageParameter
+   */
+  void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
+
+  /**
+   * Get the output image parameter as an ImageBase * instead
+   * of writing to disk. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \return The ImageBase * to the output image
+   * \throw itk::Exception if parameter is not found or not an
+   * OutputImageParameter
+   */
+  OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
+
+  /** 
+   * Set the input complex image parameter as an ImageBase * instead
+   * of filename. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \in inputImage ImageBase pointer to use as input
+   * \throw itk::Exception if parameter is not found or not an
+   * ComplexInputImageParameter
+   */
+  void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
+
+  /**
+   * Get the complex output image parameter as an ImageBase * instead
+   * of writing to disk. Useful to connect pipelines between different
+   * application instances.
+   * \in parameter The parameter key
+   * \return The ImageBase * pointer to the output image
+   * \throw itk::Exception if parameter is not found or not an
+   * ComplexOutputImageParameter
+   */
+  ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
+
+  /**
+   * Add an image to an InputImageList parameter as an ImageBase
+   * pointer instead of reading from file. Useful to connect pipelines
+   * between different application instances.
+   * \in parameter The parameter key
+   * \in img The ImageBase * of the image to add
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
+  void AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img);
+
+  /**
+   * Set the nth image of an InputImageList parameter as an ImageBase pointer
+   * instead of reading from file. Useful to connect pipelines
+   * between different application instances.
+   * \in parameter The parameter key
+   * \in id Position at which to set the ImageBase pointer
+   * \in img The ImageBase * of the image to add
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter or if id is out of bounds
+   */ 
+  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
+
+  /**
+   * Clear all images from an InputImageList parameter.
+   *
+   * \in parameter The parameter key
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
+  void ClearParameterInputImageList(std::string parameter);
+
+  /**
+   * Get the number of images in an InputImageList parameter.
+   * \in parameter The parameter key
+   * \return The number of images
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
+  unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
+
+  
   /* Get an image value
    *
    * Can be called for types :
@@ -648,12 +748,14 @@ public:
      m_IsInXMLParsed = false;
    }
 
+  double GetLastExecutionTiming() const;
+
 protected:
   /** Constructor */
   Application();
 
   /** Destructor */
-  virtual ~Application();
+  ~Application() ITK_OVERRIDE;
 
   /* Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);
@@ -809,6 +911,9 @@ private:
   /** Tags that define the application (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
 
+  /** Chrono to measure execution time */
+  itk::TimeProbe m_Chrono;
+
   //rashad:: controls adding of -xml parameter. set to true by default
   bool                              m_HaveInXML;
   bool                              m_HaveOutXML;
@@ -833,4 +938,4 @@ private:
 //#include "otbWrapperApplication.txx"
 //#endif
 
-#endif // __otbWrapperApplication_h_
+#endif // otbWrapperApplication_h_

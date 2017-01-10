@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
   const unsigned int spatialRadius          = atoi(argv[7]);
   const double       rangeRadius            = atof(argv[8]);
   const unsigned int minRegionSize          = atoi(argv[9]);
-  const double       scale                  = atoi(argv[10]);
+  /* const double       scale                  = atoi(argv[10]); */
 
   const unsigned int Dimension = 2;
 

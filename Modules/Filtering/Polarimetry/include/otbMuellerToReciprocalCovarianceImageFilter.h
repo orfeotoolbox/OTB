@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __MuellerToReciprocalCovarianceImageFilter_h
-#define __MuellerToReciprocalCovarianceImageFilter_h
+#ifndef otbMuellerToReciprocalCovarianceImageFilter_h
+#define otbMuellerToReciprocalCovarianceImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -155,7 +155,7 @@ public:
 
 protected:
    MuellerToReciprocalCovarianceImageFilter() {}
-  virtual ~MuellerToReciprocalCovarianceImageFilter() {}
+  ~MuellerToReciprocalCovarianceImageFilter() ITK_OVERRIDE {}
 
 private:
   MuellerToReciprocalCovarianceImageFilter(const Self&); // purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeLabelImageFilter_txx
-#define __otbChangeLabelImageFilter_txx
+#ifndef otbChangeLabelImageFilter_txx
+#define otbChangeLabelImageFilter_txx
 
 #include "otbChangeLabelImageFilter.h"
 
@@ -29,6 +29,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::ChangeLabelImageFilter()
+  : m_NumberOfComponentsPerPixel(0)
 {
 }
 

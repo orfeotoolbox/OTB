@@ -38,14 +38,14 @@ int otbWrapperParameterKey(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   otb::Wrapper::ParameterKey pKey1(theKey);
   if( pKey1.GetKey() != theKey )
     {
-      std::cout<<"Error in construtor method. Waiting for \""<<theKey<<"\" receiving "<<pKey1.GetKey()<<"."<<std::endl;
+      std::cout<<"Error in constructor method. Waiting for \""<<theKey<<"\" receiving "<<pKey1.GetKey()<<"."<<std::endl;
       return EXIT_FAILURE;
     }
 
   otb::Wrapper::ParameterKey pKey2(theKey);
   if( pKey2.GetKey() != theKey )
     {
-      std::cout<<"Error in construtor method. Waiting for \""<<theKey<<"\" receiving "<<pKey2.GetKey()<<"."<<std::endl;
+      std::cout<<"Error in constructor method. Waiting for \""<<theKey<<"\" receiving "<<pKey2.GetKey()<<"."<<std::endl;
       return EXIT_FAILURE;
     }
 

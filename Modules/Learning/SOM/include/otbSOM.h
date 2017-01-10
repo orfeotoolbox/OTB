@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOM_h
-#define __otbSOM_h
+#ifndef otbSOM_h
+#define otbSOM_h
 
 #include "itkImageToImageFilter.h"
 #include "itkEuclideanDistanceMetric.h"
@@ -44,7 +44,7 @@ namespace otb
  * which parameter is the current iteration. It returns a beta value of type double.
  *
  * The SOMMap produced as output can be either initialized with a constant custom value or randomly
- * generated following a normal law. The seed for the random intialization can be modified.
+ * generated following a normal law. The seed for the random initialization can be modified.
  *
  * \sa SOMMap
  * \sa SOMActivationBuilder
@@ -68,7 +68,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(SOM, ImageSource);
 
   typedef TListSample                      ListSampleType;
@@ -123,13 +123,13 @@ protected:
   /** Constructor */
   SOM();
   /** Destructor */
-  virtual ~SOM();
+  ~SOM() ITK_OVERRIDE;
   /** Output information redefinition */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Output allocation redefinition */
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /**
    * Update the output map with a new sample.
    * \param sample The new sample to learn,
@@ -142,7 +142,7 @@ protected:
    */
   virtual void Step(unsigned int currentIteration);
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SOM(const Self &); // purposely not implemented
@@ -157,9 +157,9 @@ private:
   double m_BetaEnd;
   /** Initial neighborhood size */
   SizeType m_NeighborhoodSizeInit;
-  /** Minimum intial neuron weights */
+  /** Minimum initial neuron weights */
   ValueType m_MinWeight;
-  /** Maximum intial neuron weights */
+  /** Maximum initial neuron weights */
   ValueType m_MaxWeight;
   /** Random initialization bool */
   bool m_RandomInit;

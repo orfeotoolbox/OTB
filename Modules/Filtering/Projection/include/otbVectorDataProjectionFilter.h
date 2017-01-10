@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataProjectionFilter_h
-#define __otbVectorDataProjectionFilter_h
+#ifndef otbVectorDataProjectionFilter_h
+#define otbVectorDataProjectionFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbGenericRSTransform.h"
@@ -47,7 +47,7 @@ namespace otb
   * system of the image (origin on the top left). The value need to be provided by the
   * SetInputSpacing, SetInputOrigin, SetOutputSpacing and SetOutputOrigin methods.
   *
-  * The two transforms derived from itk::Transform and will be instanciated as
+  * The two transforms derived from itk::Transform and will be instantiated as
   * otb::GenericMapProjection or otb::InverseSensorModel or otb::ForwardSensorModel
   * (according to the available information).
   *
@@ -172,17 +172,25 @@ public:
 
 protected:
   VectorDataProjectionFilter();
-  virtual ~VectorDataProjectionFilter() {}
+  ~VectorDataProjectionFilter() ITK_OVERRIDE {}
 
-  virtual OutputPointType ProcessPoint(InputPointType point) const;
-  virtual OutputLinePointerType ProcessLine(InputLinePointerType line) const;
-  virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const;
-  virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const;
+  OutputPointType ProcessPoint(InputPointType point) const ITK_OVERRIDE;
+  OutputLinePointerType ProcessLine(InputLinePointerType line) const ITK_OVERRIDE;
+  OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const ITK_OVERRIDE;
+  OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const ITK_OVERRIDE;
 
-  virtual void InstanciateTransform(void);
+  virtual void InstantiateTransform(void);
 
-  virtual void GenerateOutputInformation(void);
-  virtual void GenerateData(void);
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void InstanciateTransform()
+  {
+    otbWarningMacro(
+      << "InstanciateTransform has been deprecated.  Please use InstanciateTransform() instead");
+    this->InstantiateTransform();
+  }
+
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   VectorDataProjectionFilter(const Self &); //purposely not implemented

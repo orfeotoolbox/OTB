@@ -16,15 +16,25 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToImageFilter_h
-#define __otbVectorDataToImageFilter_h
+#ifndef otbVectorDataToImageFilter_h
+#define otbVectorDataToImageFilter_h
 
 #include "itkImageSource.h"
 #include "otbRGBAPixelConverter.h"
 #include "otbVectorDataExtractROI.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <mapnik/memory_datasource.hpp>
 #include <mapnik/map.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <mapnik/memory_datasource.hpp>
+#include <mapnik/map.hpp>
+#endif
+
 
 namespace otb
 {

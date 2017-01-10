@@ -15,30 +15,36 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPipelineMemoryPrintCalculator_h
-#define __otbPipelineMemoryPrintCalculator_h
+#ifndef otbPipelineMemoryPrintCalculator_h
+#define otbPipelineMemoryPrintCalculator_h
 
 #include "itkProcessObject.h"
+#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
 #include "itksys/FundamentalType.h"
+#else
+#include "itk_kwiml.h"
+#endif
 #include <set>
+
+#include "OTBStreamingExport.h"
 
 namespace otb
 {
 /** \class PipelineMemoryPrintCalculator
  *  \brief Estimate pipeline memory usage and optimal stream divisions
  *
- *  This class allows to estimate the memory usage of a given pipeline
+ *  This class allows estimating the memory usage of a given pipeline
  *  by tracing back pipeline from a given data (in general, this
  *  data should be set to the data to write) and
  *  examining each filter to determine its memory footprint. To do so,
  *  it performs a dry run of the requested region pipeline
  *  negotiation.
  *
- *  The SetDataToWrite() method allows to set the data candidate for
+ *  The SetDataToWrite() method allows setting the data candidate for
  *  writing, and for which memory usage estimation should be
  *  performed.
  *
- *  Additionally, this class allows to compute the optimal number of
+ *  Additionally, this class allows computing the optimal number of
  *  stream division to write the data. To do so, the available memory
  *  can be set via the SetAvailableMemory() method, and an optional
  *  bias correction factor can be applied to weight the estimate
@@ -55,12 +61,12 @@ namespace otb
  *  within composite filter (because there is no way to trace back to
  *  these internal filters). Therefore, memory usage can be highly
  *  biased depending on the filters in the upstream pipeline. The bias
- *  correction factor parameters allows to compensate this bias to the first
+ *  correction factor parameters allows compensating this bias to the first
  *  order.
  *
  * \ingroup OTBStreaming
  */
-class ITK_EXPORT PipelineMemoryPrintCalculator :
+class OTBStreaming_EXPORT PipelineMemoryPrintCalculator :
   public itk::Object
 {
 public:
@@ -75,7 +81,11 @@ public:
   typedef ProcessObjectType::Pointer          ProcessObjectPointerType;
   typedef itk::DataObject                     DataObjectType;
   typedef DataObjectType::Pointer             DataObjectPointerType;
+#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
   typedef ::itksysFundamentalType_UInt64      MemoryPrintType;
+#else
+  typedef KWIML_INT_uint64_t                  MemoryPrintType;
+#endif
   typedef std::set<const ProcessObjectType *> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */
@@ -88,7 +98,7 @@ public:
   itkGetMacro(MemoryPrint, MemoryPrintType);
 
   /** Set/Get the bias correction factor which will weight the
-   * estimated memory print (allows to compensate bias between
+   * estimated memory print (allows compensating bias between
    * estimated and real memory print, default is 1., i.e. no correction) */
   itkSetMacro(BiasCorrectionFactor, double);
   itkGetMacro(BiasCorrectionFactor, double);
@@ -115,10 +125,10 @@ protected:
   PipelineMemoryPrintCalculator();
 
   /** Destructor */
-  virtual ~PipelineMemoryPrintCalculator();
+  ~PipelineMemoryPrintCalculator() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Recursive method to evaluate memory print in bytes */
   MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType * process);

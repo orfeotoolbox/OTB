@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingWarpImageFilter_h
-#define __otbStreamingWarpImageFilter_h
+#ifndef otbStreamingWarpImageFilter_h
+#define otbStreamingWarpImageFilter_h
 
 #include "otbWarpImageFilter.h"
 #include "otbStreamingTraits.h"
@@ -84,22 +84,22 @@ protected:
   /** Constructor */
   StreamingWarpImageFilter();
   /** Destructor */
-  virtual ~StreamingWarpImageFilter() {}
+  ~StreamingWarpImageFilter() ITK_OVERRIDE {}
   /** PrintSelf */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * This filters requires only a part of the input and of the displacement field to
    * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
    */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /**
    * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
    */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId );
+                            itk::ThreadIdType threadId ) ITK_OVERRIDE;
 
 private:
   StreamingWarpImageFilter(const Self &); //purposely not implemented

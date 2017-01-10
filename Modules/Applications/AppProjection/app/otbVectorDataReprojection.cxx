@@ -57,17 +57,17 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("VectorDataReprojection");
     std::ostringstream oss;
-    oss << "This application allows to reproject a vector data using support image projection reference"
+    oss << "Reproject a vector data using support image projection reference"
         ", or a user specified map projection" << std::endl;
     SetDescription(oss.str());
     // Documentation
     SetDocName("Vector Data reprojection");
     oss.str("");
-    oss <<" This application allows to reproject a vector data using support image projection reference"
+    oss <<" This application allows reprojecting a vector data using support image projection reference"
         ", or a user given map projection." << std::endl;
     oss <<" If given, image keywordlist can be added to reprojected vectordata.";
     SetDocLongDescription(oss.str());
@@ -75,8 +75,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Vector);
+    AddDocTag(Tags::Geometry);	
     AddDocTag(Tags::Coordinates);
 
     // Set the parameters
@@ -112,12 +112,12 @@ private:
     SetDocExampleParameterValue("out.vd","reprojected_vd.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
 
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     GetLogger()->Debug("Entering DoExecute\n");
 
@@ -131,7 +131,7 @@ private:
 
     m_InputGeomSet = InputGeometriesType::New(OGRDSin);
 
-    // Filter instanciation
+    // Filter instantiation
     m_GeometriesProjFilter = ProjectionFilterType::New();
     m_GeometriesProjFilter->SetInput(m_InputGeomSet);
 

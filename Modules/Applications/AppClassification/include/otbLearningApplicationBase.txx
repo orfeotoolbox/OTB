@@ -14,10 +14,12 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbLearningApplicationBase_txx
-#define __otbLearningApplicationBase_txx
+#ifndef otbLearningApplicationBase_txx
+#define otbLearningApplicationBase_txx
 
 #include "otbLearningApplicationBase.h"
+// only need this filter as a dummy process object
+#include "otbRGBAPixelConverter.h"
 
 namespace otb
 {
@@ -28,7 +30,14 @@ template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
 ::LearningApplicationBase() : m_RegressionFlag(false)
 {
-} 
+}
+
+template <class TInputValue, class TOutputValue>
+LearningApplicationBase<TInputValue,TOutputValue>
+::~LearningApplicationBase()
+{
+  ModelFactoryType::CleanFactories();
+}
 
 template <class TInputValue, class TOutputValue>
 void
@@ -47,7 +56,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
 #endif
 
 #ifdef OTB_USE_OPENCV
-  InitSVMParams();
+  // OpenCV SVM implementation is buggy with linear kernel
+  // Users should use the libSVM implementation instead.
+  // InitSVMParams();
   if (!m_RegressionFlag)
     {
     InitBoostParams();  // Regression not supported
@@ -62,6 +73,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
   InitRandomForestsParams();
   InitKNNParams();
 #endif
+
+#ifdef OTB_USE_SHARK
+  InitSharkRandomForestsParams();
+#endif
+  
 }
 
 template <class TInputValue, class TOutputValue>
@@ -71,6 +87,13 @@ LearningApplicationBase<TInputValue,TOutputValue>
            typename TargetListSampleType::Pointer predictedList,
            std::string modelPath)
 {
+  // Setup fake reporter
+  RGBAPixelConverter<int,int>::Pointer dummyFilter =
+    RGBAPixelConverter<int,int>::New();
+  dummyFilter->SetProgress(0.0f);
+  this->AddProcess(dummyFilter,"Classify...");
+  dummyFilter->InvokeEvent(itk::StartEvent());
+
   // load a machine learning model from file and predict the input sample list
   ModelPointerType model = ModelFactoryType::CreateMachineLearningModel(modelPath,
                                                                         ModelFactoryType::ReadMode);
@@ -85,6 +108,10 @@ LearningApplicationBase<TInputValue,TOutputValue>
   model->SetInputListSample(validationListSample);
   model->SetTargetListSample(predictedList);
   model->PredictAll();
+
+  // update reporter
+  dummyFilter->UpdateProgress(1.0f);
+  dummyFilter->InvokeEvent(itk::EndEvent());
 }
 
 template <class TInputValue, class TOutputValue>
@@ -94,6 +121,13 @@ LearningApplicationBase<TInputValue,TOutputValue>
         typename TargetListSampleType::Pointer trainingLabeledListSample,
         std::string modelPath)
 {
+  // Setup fake reporter
+  RGBAPixelConverter<int,int>::Pointer dummyFilter =
+    RGBAPixelConverter<int,int>::New();
+  dummyFilter->SetProgress(0.0f);
+  this->AddProcess(dummyFilter,"Training model...");
+  dummyFilter->InvokeEvent(itk::StartEvent());
+
   // get the name of the chosen machine learning model
   const std::string modelName = GetParameterString("classifier");
   // call specific train function
@@ -105,14 +139,25 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
     #endif
     }
-  else if (modelName == "svm")
+  if(modelName == "sharkrf")
     {
-	#ifdef OTB_USE_OPENCV
-    TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
+    #ifdef OTB_USE_SHARK
+    TrainSharkRandomForests(trainingListSample,trainingLabeledListSample,modelPath);
     #else
-    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif
     }
+  
+  // OpenCV SVM implementation is buggy with linear kernel
+  // Users should use the libSVM implementation instead.
+  // else if (modelName == "svm")
+  //  {
+	//  #ifdef OTB_USE_OPENCV
+  //   TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
+  //  #else
+  //   otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+  //  #endif
+  //  }
   else if (modelName == "boost")
     {
 	#ifdef OTB_USE_OPENCV
@@ -169,6 +214,10 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif
     }
+
+  // update reporter
+  dummyFilter->UpdateProgress(1.0f);
+  dummyFilter->InvokeEvent(itk::EndEvent());
 }
 
 }

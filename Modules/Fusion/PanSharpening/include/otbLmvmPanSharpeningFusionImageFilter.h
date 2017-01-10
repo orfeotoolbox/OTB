@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLmvmPanSharpeningFusionImageFilter_h
-#define __otbLmvmPanSharpeningFusionImageFilter_h
+#ifndef otbLmvmPanSharpeningFusionImageFilter_h
+#define otbLmvmPanSharpeningFusionImageFilter_h
 
 #include "otbConvolutionImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -109,13 +109,13 @@ protected:
   LmvmPanSharpeningFusionImageFilter();
 
   /** Destructor */
-  virtual ~LmvmPanSharpeningFusionImageFilter() {};
+  ~LmvmPanSharpeningFusionImageFilter() ITK_OVERRIDE {};
 
   /** Call to generate data, wiring composite internal minipipeline */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LmvmPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented

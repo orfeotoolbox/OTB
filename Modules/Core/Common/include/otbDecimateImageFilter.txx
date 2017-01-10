@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbDecimateImageFilter_txx
-#define __otbDecimateImageFilter_txx
+#ifndef otbDecimateImageFilter_txx
+#define otbDecimateImageFilter_txx
 
 #include "otbDecimateImageFilter.h"
 
@@ -113,7 +113,7 @@ template <class TInputImage, class TOutputImage>
 void
 DecimateImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+                       itk::ThreadIdType itkNotUsed(threadId))
 {
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);

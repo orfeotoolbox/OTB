@@ -53,7 +53,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ClassificationMapRegularization");
     SetDescription("Filters the input labeled image using Majority Voting in a ball shaped neighbordhood.");
@@ -71,7 +71,7 @@ private:
 
     /** GROUP IO CLASSIFICATION */
     AddParameter(ParameterType_Group,"io","Input and output images");
-    SetParameterDescription("io","This group of parameters allows to set input and output images for classification map regularization by Majority Voting.");
+    SetParameterDescription("io","This group of parameters allows setting input and output images for classification map regularization by Majority Voting.");
 
     AddParameter(ParameterType_InputImage, "io.in",  "Input classification image");
     SetParameterDescription( "io.in", "The input labeled image to regularize.");
@@ -82,7 +82,7 @@ private:
 
 
     AddParameter(ParameterType_Group,"ip","Regularization parameters");
-    SetParameterDescription("ip","This group allows to set parameters for classification map regularization by Majority Voting.");
+    SetParameterDescription("ip","This group allows setting parameters for classification map regularization by Majority Voting.");
 
     AddParameter(ParameterType_Int, "ip.radius", "Structuring element radius (in pixels)");
     SetParameterDescription("ip.radius", "The radius of the ball shaped structuring element (expressed in pixels). By default, 'ip.radius = 1 pixel'.");
@@ -99,6 +99,13 @@ private:
     SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class. By default, 'ip.undecidedlabel = 0'.");
     SetDefaultParameterInt("ip.undecidedlabel", 0.0);
 
+    AddParameter(ParameterType_Empty, "ip.onlyisolatedpixels", "Process isolated pixels only");
+    SetParameterDescription("ip.onlyisolatedpixels", "Only pixels whose label is unique in the neighbordhood will be processed. By default, 'ip.onlyisolatedpixels = false'.");
+
+    AddParameter(ParameterType_Int, "ip.isolatedthreshold", "Threshold for isolated pixels");
+    SetParameterDescription("ip.isolatedthreshold", "Maximum number of neighbours with the same label as the center pixel to consider that it is an isolated pixel. By default, 'ip.isolatedthreshold = 1'.");       
+    SetDefaultParameterInt("ip.isolatedthreshold", 1);
+
 
     AddRAMParameter();
 
@@ -107,16 +114,17 @@ private:
     SetDocExampleParameterValue("io.out", "clLabeledImageQB123_1_CMR_r2_nodl_10_undl_7.tif");
     SetDocExampleParameterValue("ip.radius", "2");
     SetDocExampleParameterValue("ip.suvbool", "true");
+    SetDocExampleParameterValue("ip.onlyisolatedpixels", "true");
     SetDocExampleParameterValue("ip.nodatalabel", "10");
     SetDocExampleParameterValue("ip.undecidedlabel", "7");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Majority Voting
     m_NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
@@ -147,6 +155,17 @@ private:
     else
       {
       m_NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
+      }
+
+    // Process isolated pixels only
+    if (IsParameterEnabled("ip.onlyisolatedpixels"))
+      {
+      m_NeighMajVotingFilter->SetOnlyIsolatedPixels(true);
+      m_NeighMajVotingFilter->SetIsolatedThreshold(GetParameterInt("ip.isolatedthreshold"));
+      }
+    else
+      {
+      m_NeighMajVotingFilter->SetOnlyIsolatedPixels(false);
       }
 
     /** REGULARIZATION OF CLASSIFICATION */

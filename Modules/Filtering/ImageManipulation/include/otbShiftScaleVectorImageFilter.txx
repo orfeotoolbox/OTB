@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShiftScaleVectorImageFilter_txx
-#define __otbShiftScaleVectorImageFilter_txx
+#ifndef otbShiftScaleVectorImageFilter_txx
+#define otbShiftScaleVectorImageFilter_txx
 
 #include "otbShiftScaleVectorImageFilter.h"
 

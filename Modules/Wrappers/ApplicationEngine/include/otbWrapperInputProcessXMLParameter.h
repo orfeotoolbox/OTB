@@ -1,5 +1,5 @@
-#ifndef __otbWrapperInputProcessXMLParameter_h
-#define __otbWrapperInputProcessXMLParameter_h
+#ifndef otbWrapperInputProcessXMLParameter_h
+#define otbWrapperInputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
 #include <sstream>
@@ -14,7 +14,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT InputProcessXMLParameter
+class OTBApplicationEngine_EXPORT InputProcessXMLParameter
   : public Parameter
 {
 public:
@@ -32,7 +32,7 @@ public:
 
   itkGetStringMacro(FileName);
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     if(m_FileName.empty())
       return false;
@@ -43,19 +43,10 @@ public:
   // Get Value
   //TODO otbGetObjectMemberMacro(StringParam, Value , std::string);
 
-  void SetFileName(std::string value)
-  {
-    this->SetValue(value);
-  }
+  bool SetFileName(std::string value);
 
   // Set Value
-  virtual void SetValue(const std::string value)
-    {
-    itkDebugMacro("setting member m_FileName to " << value);
-    this->m_FileName = value;
-    SetActive(true);
-    this->Modified();
-    }
+  virtual void SetValue(const std::string value);
 
   ImagePixelType GetPixelTypeFromString(std::string pixTypeAsString);
 
@@ -75,7 +66,7 @@ protected:
   InputProcessXMLParameter();
 
   /** Destructor */
-  virtual ~InputProcessXMLParameter();
+  ~InputProcessXMLParameter() ITK_OVERRIDE;
 
 private:
 

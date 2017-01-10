@@ -28,7 +28,7 @@
 
 // OTB provides stdint.h via msinttypes
 //#if (!defined(_MSC_VER)) || (_MSC_VER == 1600)
-#include <stdint.h>  // For fixed-size interger typedefs in this file.
+#include <stdint.h>  // For fixed-size integer typedefs in this file.
 //#endif
 
 // A macro to disallow the evil copy constructor and assignment operator.

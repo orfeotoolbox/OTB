@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDataNode_txx
-#define __otbDataNode_txx
+#ifndef otbDataNode_txx
+#define otbDataNode_txx
 
 #include "otbDataNode.h"
 #include "otbMetaDataKey.h"
@@ -602,7 +602,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
     default: break;
     }
 
-  return NULL;
+  return ITK_NULLPTR;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>

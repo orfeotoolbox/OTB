@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorWithIndexImageFilter_h
-#define __otbUnaryFunctorWithIndexImageFilter_h
+#ifndef otbUnaryFunctorWithIndexImageFilter_h
+#define otbUnaryFunctorWithIndexImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -108,7 +108,7 @@ protected:
   /**
    * Destructor
    */
-  virtual ~UnaryFunctorWithIndexImageFilter() {}
+  ~UnaryFunctorWithIndexImageFilter() ITK_OVERRIDE {}
 
   /** UnaryFunctorWithIndexImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -120,12 +120,12 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Pad the input requested region by radius
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 private:
   UnaryFunctorWithIndexImageFilter(const Self &); //purposely not implemented

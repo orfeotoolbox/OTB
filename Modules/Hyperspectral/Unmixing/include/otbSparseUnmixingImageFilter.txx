@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseUnmixingImageFilter_txx
-#define __otbSparseUnmixingImageFilter_txx
+#ifndef otbSparseUnmixingImageFilter_txx
+#define otbSparseUnmixingImageFilter_txx
 
 #include "otbSparseUnmixingImageFilter.h"
 
@@ -75,7 +75,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 {
   if ( i >= this->GetNumberOfInputs() )
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   return static_cast<const InputImageType * >

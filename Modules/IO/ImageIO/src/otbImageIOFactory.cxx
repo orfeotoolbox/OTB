@@ -31,10 +31,6 @@
 #include "otbRADImageIOFactory.h"
 #include "otbMWImageIOFactory.h"
 
-#ifdef OTB_USE_OPENJPEG
-#include "otbJPEG2000ImageIOFactory.h"
-#endif
-
 #include "otbTileMapImageIOFactory.h"
 
 namespace otb
@@ -82,7 +78,7 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
 
       }
     }
-  return 0;
+  return ITK_NULLPTR;
 }
 
 void
@@ -100,9 +96,6 @@ ImageIOFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(RADImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(BSQImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(LUMImageIOFactory::New());
-#ifdef OTB_USE_OPENJPEG
-      itk::ObjectFactoryBase::RegisterFactory(JPEG2000ImageIOFactory::New());
-#endif
       itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(MWImageIOFactory::New());

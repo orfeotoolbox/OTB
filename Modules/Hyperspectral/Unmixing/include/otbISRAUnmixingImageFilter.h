@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbISRAUnmixingImageFilter_h
-#define __otbISRAUnmixingImageFilter_h
+#ifndef otbISRAUnmixingImageFilter_h
+#define otbISRAUnmixingImageFilter_h
 
 #include "itkNumericTraits.h"
 #include "otbUnaryFunctorImageFilter.h"
@@ -95,7 +95,7 @@ private:
  *
  * This filter takes as input a multiband image and a matrix.
  * If the matrix is called \f$A\f$, it solves, for each pixel \f$p\f$, the system
- * \f$A \cdot x = p\f$ in the least square sense, with additionnal constraints on the solution
+ * \f$A \cdot x = p\f$ in the least square sense, with additional constraints on the solution
  * \f$\hat{x}\f$ ensuring positivity (each component is positive) and additivity (the sum of
  * all components is 1).
  *
@@ -168,9 +168,9 @@ public:
 protected:
   ISRAUnmixingImageFilter();
 
-  virtual ~ISRAUnmixingImageFilter();
+  ~ISRAUnmixingImageFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ISRAUnmixingImageFilter(const Self &); //purposely not implemented

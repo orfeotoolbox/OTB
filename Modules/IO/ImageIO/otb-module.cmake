@@ -3,7 +3,7 @@ writing of remote sensing images.")
 
 otb_module(OTBImageIO
   DEPENDS
-    OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBExtendedFilename
     OTBIOBSQ
@@ -19,9 +19,6 @@ otb_module(OTBImageIO
     OTBOSSIMAdapters
     OTBObjectList
     OTBStreaming
-
-  OPTIONAL_DEPENDS
-    OTBIOJPEG2000
 
   TEST_DEPENDS
     OTBStatistics

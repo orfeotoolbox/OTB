@@ -25,11 +25,11 @@
 #include "otbCompositeTransform.h"
 #include "itkScalableAffineTransform.h"
 #include "itkTranslationTransform.h"
-#include "itkIdentityTransform.h"
 #include "itkScaleTransform.h"
 #include "itkCenteredRigid2DTransform.h"
 
 #include "otbStreamingResampleImageFilter.h"
+#include "otbGridResampleImageFilter.h"
 
 namespace otb
 {
@@ -64,8 +64,7 @@ public:
 
   typedef itk::TranslationTransform<double, FloatVectorImageType::ImageDimension> TransformType;
   typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double>    ResampleFilterType;
-
-  typedef itk::IdentityTransform<double, FloatVectorImageType::ImageDimension>      IdentityTransformType;
+  typedef otb::GridResampleImageFilter<FloatVectorImageType,FloatVectorImageType> GridResampleFilterType;
 
   typedef itk::ScalableAffineTransform<double, FloatVectorImageType::ImageDimension> ScalableTransformType;
   typedef ScalableTransformType::OutputVectorType                         OutputVectorType;
@@ -78,7 +77,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
@@ -90,8 +89,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation");
 
+	AddDocTag(Tags::Geometry);
     AddDocTag("Conversion");
-    AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
     SetParameterDescription("in","The input image to translate.");
@@ -100,7 +99,7 @@ private:
 
     //Transform
     AddParameter(ParameterType_Group,"transform","Transform parameters");
-    SetParameterDescription("transform","This group of parameters allows to set the transformation to apply.");
+    SetParameterDescription("transform","This group of parameters allows setting the transformation to apply.");
 
     AddParameter(ParameterType_Choice, "transform.type", "Type of transformation");
     SetParameterDescription("transform.type","Type of transformation. Available transformations are spatial scaling, translation and rotation with scaling factor");
@@ -148,20 +147,20 @@ private:
 
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
-    SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
+    SetParameterDescription("interpolator","This group of parameters allows one to define how the input image will be interpolated during resampling.");
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
     SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
     AddChoice("interpolator.bco",    "Bicubic interpolation");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
     SetParameterString("interpolator","bco");
 
     // RAM available
     AddRAMParameter("ram");
-    SetParameterDescription("ram","This allows to set the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
+    SetParameterDescription("ram","This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_toulouse_sub.tif");
@@ -172,17 +171,19 @@ private:
     SetDocExampleParameterValue("transform.type.rotation.scaley", "2.");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* inputImage = GetParameterImage("in");
 
     m_Resampler = ResampleFilterType::New();
+    m_GridResampler = GridResampleFilterType::New();
     m_Resampler->SetInput(inputImage);
+    m_GridResampler->SetInput(inputImage);
 
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
@@ -193,6 +194,7 @@ private:
                                                   double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
@@ -201,6 +203,7 @@ private:
                                                            double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
@@ -209,6 +212,7 @@ private:
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       }
@@ -218,9 +222,7 @@ private:
       {
       case Transform_Identity:
       {
-      IdentityTransformType::Pointer transform = IdentityTransformType::New();
-
-      m_Resampler->SetOutputParametersFromImage( inputImage );
+      m_GridResampler->SetOutputParametersFromImage( inputImage );
       // Scale Transform
       OutputVectorType scale;
       scale[0] = 1.0 / GetParameterFloat("transform.type.id.scalex");
@@ -232,24 +234,26 @@ private:
       OutputSpacing[0] = spacing[0] * scale[0];
       OutputSpacing[1] = spacing[1] * scale[1];
 
-      m_Resampler->SetOutputSpacing(OutputSpacing);
+      m_GridResampler->SetOutputSpacing(OutputSpacing);
 
       FloatVectorImageType::PointType origin = inputImage->GetOrigin();
       FloatVectorImageType::PointType outputOrigin;
       outputOrigin[0] = origin[0] + 0.5 * spacing[0] * (scale[0] - 1.0);
       outputOrigin[1] = origin[1] + 0.5 * spacing[1] * (scale[1] - 1.0);
 
-      m_Resampler->SetOutputOrigin(outputOrigin);
-
-      m_Resampler->SetTransform(transform);
+      m_GridResampler->SetOutputOrigin(outputOrigin);
 
       // Evaluate size
       ResampleFilterType::SizeType recomputedSize;
       recomputedSize[0] = inputImage->GetLargestPossibleRegion().GetSize()[0] / scale[0];
       recomputedSize[1] = inputImage->GetLargestPossibleRegion().GetSize()[1] / scale[1];
 
-      m_Resampler->SetOutputSize(recomputedSize);
+      m_GridResampler->SetOutputSize(recomputedSize);
       otbAppLogINFO( << "Output image size : " << recomputedSize );
+
+      // Output Image
+      SetParameterOutputImage("out", m_GridResampler->GetOutput());
+
       }
       break;
 
@@ -293,6 +297,8 @@ private:
       otbAppLogINFO( << "Output image size : " << recomputedSize );
       m_Resampler->SetTransform(transform);
 
+          // Output Image
+      SetParameterOutputImage("out", m_Resampler->GetOutput());
       }
       break;
 
@@ -423,6 +429,9 @@ private:
       recomputedSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(size[1]/OutputSpacing[1])));
       m_Resampler->SetOutputSize( recomputedSize );
       otbAppLogINFO( << "Output image size : " << recomputedSize );
+
+      // Output Image
+      SetParameterOutputImage("out", m_Resampler->GetOutput());
       }
       break;
       }
@@ -430,13 +439,15 @@ private:
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, inputImage->GetNumberOfComponentsPerPixel());
     m_Resampler->SetEdgePaddingValue(defaultValue);
+    m_GridResampler->SetEdgePaddingValue(defaultValue);
 
     m_Resampler->UpdateOutputInformation();
-    // Output Image
-    SetParameterOutputImage("out", m_Resampler->GetOutput());
+    m_GridResampler->UpdateOutputInformation();
   }
 
   ResampleFilterType::Pointer m_Resampler;
+  GridResampleFilterType::Pointer m_GridResampler;
+  
 }; //class
 
 

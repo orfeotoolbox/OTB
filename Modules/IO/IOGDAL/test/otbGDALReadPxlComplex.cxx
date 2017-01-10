@@ -17,8 +17,11 @@
 =========================================================================*/
 
 #include "gdal_priv.h"
+#include "ogr_core.h"
 #include <iostream>
 #include <complex>
+
+#include "itkMacro.h"
 
 // Do all comparison in double precision
 const double Epsilon = 1.E-6;
@@ -38,7 +41,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   // Get Input parameters
   if (argc != 6)
     {
-    std::cout << "Invalid Parameters: " << argv[0] << "<filenameIn> <posX> <posY> <sizeX> <sizeY><ouput filename>" << std::endl;
+    std::cout << "Invalid Parameters: " << argv[0] << "<filenameIn> <posX> <posY> <sizeX> <sizeY><output filename>" << std::endl;
     return EXIT_FAILURE;
     }
   int posX = (int)atoi(argv[2]);
@@ -53,10 +56,10 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   GDALAllRegister();
 
   poDataset = (GDALDataset *) GDALOpen( argv[1], GA_ReadOnly );
-  if( poDataset == NULL )
-     return EXIT_FAILURE;
+  if( poDataset == ITK_NULLPTR )
+    return EXIT_FAILURE;
 
-  // Get some informations from file
+  // Get some information from file
   int nbBand = poDataset->GetRasterCount();
 
   GDALDataType pxlTypeInFile = poDataset->GetRasterBand(1)->GetRasterDataType();
@@ -72,7 +75,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   std::cout << "**** METHOD 1 : Use RasterIO to read all selected data in file ****" << std::endl;
   std::streamoff nbBytes = static_cast<std::streamoff>(nbBand) * static_cast<std::streamoff>(nbPixelToRead) * static_cast<std::streamoff>(bytePerPixel);
   std::cout << "nbBytes of the buffer = " << nbBytes << " = " \
-      << nbBand << " x " << nbPixelToRead << " x " << bytePerPixel<< std::endl;
+            << nbBand << " x " << nbPixelToRead << " x " << bytePerPixel<< std::endl;
 
   char * loadBuffer = new char[static_cast<unsigned int>(nbBytes)];
 
@@ -85,7 +88,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
                                        loadBuffer, // pData
                                        sizeX, sizeY,
                                        pxlTypeInFile,
-                                       nbBand, NULL,
+                                       nbBand, ITK_NULLPTR,
                                        pixelOffset, lineOffset, bandOffset);
   // Check if gdal call succeed
   if (lCrGdal == CE_Failure)
@@ -132,9 +135,15 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
     {
     poBand = poDataset->GetRasterBand( itBand +1 );
 
-    poBand->RasterIO( GF_Read, posX, posY, sizeX, sizeY,
-                      &(pPixelValue[itBand*nbPixelToRead]), sizeX, sizeY, poBand->GetRasterDataType(),
-                      0, 0 );
+    OGRErr errRasterIO = poBand->RasterIO( GF_Read, posX, posY, sizeX, sizeY,
+                                           &(pPixelValue[itBand*nbPixelToRead]), sizeX, sizeY, poBand->GetRasterDataType(),
+                                           0, 0 );
+
+    if (errRasterIO != OGRERR_NONE)
+      {
+      std::cerr << "Unable to read image data." << std::endl;
+      return EXIT_FAILURE;
+      }
 
     for (unsigned int itPxl = 0; itPxl < (unsigned int) nbPixelToRead; itPxl++)
       {

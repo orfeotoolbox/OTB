@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeVectorImageFilter_h
-#define __otbNormalizeVectorImageFilter_h
+#ifndef otbNormalizeVectorImageFilter_h
+#define otbNormalizeVectorImageFilter_h
 
 #include <vnl/vnl_math.h>
 
@@ -134,7 +134,7 @@ class ITK_EXPORT NormalizeVectorImageFilter
               typename TOutputImage::PixelType > >
 {
 public:
-  /** Standart class typedefs */
+  /** Standard class typedefs */
   typedef NormalizeVectorImageFilter Self;
   typedef UnaryFunctorVectorImageFilter< TInputImage, TOutputImage,
             Functor::NormalizeVectorImageFunctor<
@@ -193,9 +193,10 @@ public:
 
 protected:
   NormalizeVectorImageFilter ();
-  virtual ~NormalizeVectorImageFilter() { }
+  ~NormalizeVectorImageFilter() ITK_OVERRIDE { }
 
-  void BeforeThreadedGenerateData();
+  void GenerateOutputInformation() ITK_OVERRIDE;
+
 
 private:
   NormalizeVectorImageFilter ( const Self & );
@@ -217,5 +218,5 @@ private:
 #include "otbNormalizeVectorImageFilter.txx"
 #endif
 
-#endif // __otbNormalizeVectorImageFilter_h
+#endif // otbNormalizeVectorImageFilter_h
 

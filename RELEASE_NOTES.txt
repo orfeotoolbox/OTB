@@ -1,4 +1,223 @@
-OTB-v.5.2.0 - Changes since version 5.0.0 (2015/11/02)
+OTB-v.5.8.0 - Changes since version 5.6.1 (November 8th, 2016)
+--------------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for Changes-35: FineRegistration, performances increased
+  * Request for Changes-51: Move Monteverdi into OTB
+  * Request for Changes-52: Faster BandMathX
+  * Request for changes-53: Connect applications in memory
+  * Request for Changes-54: Get OTB ready for gdal derived subdatasets
+  * Request for Changes-55: Monteverdi: Mouse-wheel zoom without CTRL
+  * Request for Changes-56: Spot7 metadata support
+  * Request for Changes-57: Migrate Cookbook to RST
+  * Request for Changes-58: Sampling on multiple images
+  * Request for Changes-59: Build support for msvc 2015 with OTB xdk
+  * Request for Changes-60: Shorter Release Process
+  * Request for Changes-61: Use codespell to fix common misspellings in source code
+  * Request for Changes-62: Enhance text comparison in dashboard
+  * Request for Changes-63: Refactor threading mechanism in sampling filters
+  * Request for Changes-64: Missing RAM for persistent filters in application
+  * Request for Changes-65: Add Shark Random forests implementation
+  * Request for Changes-67: ClassificationMapRegularization option for isolated pixels only
+  * Request for Changes-68: New sampling strategies in classification framework
+
+* Bugfixes :
+
+  * Monteverdi
+    * 0001298: Monteverdi crash with this image
+    * 0001305: SuperBuild falling at BOOST build step
+    * 0001283: GDAL overviews dialog pops under OTB-applications dock
+    * 0001284: GDAL overviews default min-size = 4096 px
+    * 0001282: Status-bar is not always disable at startup
+    * 0001278: Add force OpenGL 1.x compatibility option
+    * 0001267: Monteverdi: unclear "gdal overview" minimum size parameter
+    * 0001274: SuperBuild GLUT compilation problem
+    * 0001277: Missing icon(s) in color-dynamics widget
+    * 0001275: Monteverdi: Histogram view problem with binary image
+    * 0001300: monteverdi $input_filename crash with relative path
+    * 0001303: Memory issue in Monteverdi with images with subdatasets (HDF4)
+    * 0001299: Monteverdi shortcuts list needs some updates
+    * 0001291: Word "Échiquier" is not displayed properly in layer stack (effect column)
+
+  * OTB-Packaging
+    * 0001290: Unable to run OTB applications from Mapla.app on Mac OS X
+    * 0001297: No translation files in Windows standalone package (branch release-5.8)
+
+  * Orfeo Toolbox (OTB)
+    * 0001308: Typo in otbenv.profile and otbenv.cmd
+    * 0001286: Sentinel-1 sensor metadata are not retrieved properly if application is run inside the SAFE directory
+    * 0001287: Using S1 images in monteverdi is slow
+    * 0001268: Patch for spelling error in 5.6.1
+    * 0001306: SuperBuild falling at TIFF build step (GLUT_Xmu_LIBRARY NOTFOUND)
+
+  * OTB-applications
+    * 0001301: Mapla application does not provide translation files
+
+OTB-v.5.6.1 - Changes since version 5.6.0 (August 26th, 2016)
+-------------------------------------------------------------
+
+* Bugfixes :
+  * 0001262: OTB 5.7 vector sampler bug
+  * 0001259: Patch for various spelling errors in 5.6.0
+  * 0001258: Patch to only use OTB_GIT_STATUS_MESSAGE in message function if set.
+  * 0001266: Fix covariance computation with high float values
+
+OTB-v.5.6.0 - Changes since version 5.4.0 (July 28th, 2016)
+------------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for Changes-49: Improve classification on vectors
+  * Request for Changes-48: Add geometric correction to S1 Sensor Model 
+  * Request for Changes-47: Improve the CompareImages app
+  * Request for Changes-46: Sample extractor
+  * Request for Changes-45: CMake uninstall target
+  * Request for Changes-43: Update SuperBuild cmake script and thirdparty versions
+  * Request for Changes-42: Generator for completion scripts
+  * Request for Changes-40: clang modernize
+  * Request for Changes-41: Provide a summary after cmake configuration 
+  * Request for Changes-38: update gdal to 2.x version in superbuild
+  * Request for Changes-37: Enhance ManageNodata application
+  * Request for Changes-36: Samples selection filter
+  * Request for Changes-26: MPI Image File Writer
+
+* Bugfixes:
+  * MANTIS-1255: Remaining log when opening Sentinel1 product in Monteverdi
+  * MANTIS-1254: Checking/Unchecking parameters re-enable execute button on running application
+  * MANTIS-1252: msvc warning C4838 la conversion de 'double' en 'const float' requiert une conversion restrictive
+  * MANTIS-1251: OTB Superbuild does not forward compiler versions to external projects anymore
+  * MANTIS-1249: ioTvMultiChannelROI_*_JPEG2000_2_TIF_res5 are failing when using gdal openjpeg driver
+  * MANTIS-1247: Patch for various spelling errors
+  * MANTIS-1246: Inputs do not occupy the same physical space!
+  * MANTIS-1243: apTvCl*RegressionTest_monovar failing due to error in opencv
+  * MANTIS-1242: otbMapProjectionAdapter.cxx WARNING: Impossible to create the projection from Wkt: ossimUtmProjection
+  * MANTIS-1241: dl_close appears on apTvClTrainMethodANNImagesClassifierQB1
+  * MANTIS-1240: [ComputeImagesStatistics] Filename extension in uppercase are not supported
+  * MANTIS-1238: Train regression with ANN crashes
+  * MANTIS-1237: Inconsistent parameter order in OTB application
+  * MANTIS-1234: more tests are failing in superbuild
+  * MANTIS-1233: Exception in example Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
+  * MANTIS-1227: set all USE_SYSTEM_* to FALSE by default
+  * MANTIS-1225: internal openjpeg driver and confusing OTB_USE_OPENJPEG
+  * MANTIS-1223: Possible error in function "template <typename T> T InverseValue(const T & value)" defined in otbMath.h
+  * MANTIS-1220: show last git commit message during cmake configure
+  * MANTIS-1218: Segmentation fails - error message not understandable
+  * MANTIS-1217: Degree symbol badly displayed in OTB applications
+  * MANTIS-1215: OTB-FAQ page not found contribute.html (404)
+  * MANTIS-1214: incorrect install instruction for Mac OSX in OTBCookBook 5.4
+  * MANTIS-1213: incorrect years calculated in cookbook
+  * MANTIS-1212: OTB windows package contains two copies of otbapp_* dll
+  * MANTIS-1211: Patch for various spelling errors
+  * MANTIS-1210: make fails at downloading 'LIBSVM'
+  * MANTIS-1209: superbuild: fix qt build on osx
+  * MANTIS-1208: Need to click in image view to force computation of quantiles (shortcut 'Q')
+  * MANTIS-1207: OTB_SB_CMAKE_COMMAND uses in External_otb.cmake but not set
+
+OTB-v.5.4.0 - Changes since version 5.2.1 (2016/05/04)
+------------------------------------------
+* Core
+  * Ice is now a regular OTB module (RFC 23)
+  * Masked iterator decorator (RFC 22)
+  * Filter to analyse polygons for available samples (part of new sampling framework, RFC 29)
+  * Faster resampling filter for rigid scaling and translation operations (RFC 30)
+  * Modified behavior of reading/writing of TIFF RPC tags (RFC 31)
+  * Allow a module to be built outside the OTB source tree (RFC 32)
+  * Dashboard cleaning, part 1 (RFC 33)
+  * Enhancement of SARDecompositions : Barnes, Huynen, Pauli decompositions (RFC 34)
+  
+* Monteverdi
+  * Take screenshot of current display (RFC 20)
+  * Allow subdatasets import (RFC 21)
+  * Disable GLSL shader if OpenGL version is lower than 2.0 (RFC 25)
+  * Allow generation of gdal overviews when importing images (RFC 24)
+
+* Documentation:
+  * Merge software guide into main OTB repository (RFC 17)
+  * Remove random contributor list generation (RFC 28)
+   
+* SuperBuild:
+  * Add Monteverdi and its dependencies (glfw, GLEW, glut)
+
+* Bug fixed
+
+  * Monteverdi2
+    * 0001179: Using the Upper Bound mode for resolution lookup in preferences result in wrong resolution used
+    * 0001197: Clicking on minimap to navigate result in monteverdi crashing
+    * 0001178: Zoom to full resolution does not zoom to 1 image pixel = 1 screen pixel for georeferenced data
+    * 0001203: Clicking on 1:1 button several time result in strange cycling behaviour
+    * 0001205: Gamma slider effect inverted between full and quicklook view
+    * 0001202: Wrong aspect ratio at loading
+    * 0001148: OTB-applications not loaded
+    * 0001196: OTB-application Quit button closes widget but not window when using Mapla
+    * 0001147: With Monteverdi develop branch of today : opening large images with overview file leads to eating all available memory
+    * 0001138: Numeric value editing hell
+    * 0001136: Unable to open sensor products (with RPC) in Monteverdi
+    * 0001159: TrainImageClassifier sample.vtr parameter is sometime ignored
+    * 0001173: KDE grabs drag event before monteverdi, making image navigation impossible
+    * 0001144: Unable to keep unconstrained dynamic mode
+    * 0001156: Linux standalone package doesn't work on Fedora 22
+    * 0001157: monteverdi crashes when trying to move the view without any images
+    * 0001153: Superimpose app in PHR mode reports wrong origin/spacing/keywordlist
+    * 0001154: Exception raised when opening LUM or LUM+HDR
+    * 0001152: maximum number of class in KMean application limited to 255
+    * 0001140: Lost pixel position information in layer stack
+
+  * OTB-Packaging
+    * 0001141: muparser 2.2.4 is missing in superbuild archive 5.2.1
+    * 0001171: Crash in OGR : libproj-0.dll not found
+    * 0001150: Can't "easily" deactivate LIBKML from OTB Superbuild
+
+  * Orfeo Toolbox (OTB)
+    * 0001206: Cannot maximize monteverdi window in standalone package
+    * 0001177: SuperBuild fails at MVD configure step (release-5.4 branch)
+    * 0001194: freeglut required x11 extension on osx
+    * 0001188: deactivate openldap, openssl, libssh2 when building superbuild curl.
+    * 0001190: use same compiler for all builds in the superbuild
+    * 0001184: superbuild libtiff is using libjbig from system without warning
+    * 0001185: minimal build of GDAL in superbuild
+    * 0001187: superbuild cannot find Qt4 during OTB configure on osx
+    * 0001193: deactivate finding osx framework for library
+    * 0001163: Windows MinGW packages do not contain the libsvm classifier
+    * 0001164: Monteverdi crashes when opening a tif without projection information
+    * 0001167: GUI applications visual response after clicking the "Execute" button is slow and confusing
+    * 0001158: Missing field in RefineSensorModel statistics file
+    * 0001166: otbgui_MeanShiftSmoothing problem with Mode Search parameter
+    * 0001169: add libsvm package to mxe and enable OTB_USE_LIBSVM
+    * 0001143: Patch for various spelling errors
+    * 0001151: GDAL_SB_EXTRA_OPTIONS can not take multiple options
+    * 0001142: Fails to build with ITK 4.9.0 (itksys/FundamentalType.h: No such file or directory)
+
+  * OTB-lib
+    * 0001145: Ice doesn't clamp rendered values to the specified minimum of the range
+    * 0001139: OGRLayerStreamStitchingFilter CommitTransaction fail is some cases
+    * 0001137: GDALImageIO does not support SENTINEL2 sub-datasets
+
+  * OTB-applications
+    * 0001149: ReadImageInfo application crash with Sentinel1 (SLC SM product)
+    * 0001162: Unable to perform Sentinel-1 SAR calibration on extract
+    * 0001183: Unable to edit image path in Qt GUI wrapper with complex image
+    * 0001182: Crash when editing InputImageParameter Qt widget
+    * 0001161: Inconsistency of SAR calibration applications denomination
+
+
+OTB-v.5.2.1 - Changes since version 5.2.0 (2016/01/19)
+------------------------------------------
+* Bugs fixed:
+  * Mantis-1124: fix the use of Update_command and reorder the patch commands properly
+  * Fix some Coverity reports
+
+* Superbuild:
+  * Update OSSIM to latest stable and improve version checking during CMake configuration
+
+* Monteverdi:
+  * Mantis-1096: QuicklookView
+  * Mantis-1125: Use OTB_APPLICATION_PATH in startup files
+
+* Other:
+  * Apply spelling patch from DebianGIS
+  * Find only required itk components. Patch proposed by Debian.
+  * Fix mxe gcc dir and list of system dlls exceptions
+
+OTB-v.5.2.0 - Changes since version 5.0.0 (2015/12/22)
 ------------------------------------------
 * Library (the corresponding requests for changes are mentioned):
 
@@ -25,15 +244,29 @@ OTB-v.5.2.0 - Changes since version 5.0.0 (2015/11/02)
 
   * SuperBuild
     * Provide a script to build the all-in-one SuperBuild archive (RFC-5)
+    * Upgrade dependencies versions in SuperBuild (RFC-19)
     * New dependency : Freetype 2.6
-    * ITK 4.7.1 -> 4.8
+    * ITK 4.7.1 -> 4.8.1
     * JPEG v9a -> turbo 1.4.1
     * OpenThreads 3.2 -> 3.4
     * Ossim r23092 -> r23537
+    * GeoTIFF 1.4.0 -> 1.4.1
+    * muParser 2.2.3 -> 2.2.5
+    * OpenCV 2.4.10 -> 2.4.11
+    * OpenSSL 1.0.1e -> 1.0.1p
+    * Qt 4.8.6 -> 4.8.7
+    * Swig 3.0.5 -> 3.0.7
+    * TIFF 4.0.3 -> 4.0.6
 
 * Bug fixed:
 
   * Monteverdi2
+    * 0001120: Unwanted zoom-to-extent when loading second image
+    * 0001103: OutputProcessXMLParameter pre-initialization used even if disabled.
+    * 0001111: Geoid-file <arning message needs restart displayed when not needed.
+    * 0001118: Crash when restoring UI layout if quicklook view is visible at startup.
+    * 0001104: Crash as soon as I open an image
+    * 0001100: Crash when trying to Apply same parameters (dynamic, effects, color map...) on images with different number of bands
     * 0001072: I18nCoreApplication::ElevationSetup() exceptions not displayed
     * 0001070: otb::DEMHandler not updated properly when resetting DEM-directory and/or Geoid-file.
 
@@ -41,21 +274,38 @@ OTB-v.5.2.0 - Changes since version 5.0.0 (2015/11/02)
     * 0001049: Last Monteverdi2 and Mapla release Win package crash when we try to import JP2 file
 
   * Orfeo Toolbox (OTB)
-    * 0001084: Deactivate all 3rd part components in OpenCV configuration
+    * 0001051: CMake warnings when preparing SuperBuild configuration
+    * 0001068: crash in otbcli_LSMSSegmentation
+    * 0001080: there are some characters can not be recognized, which make compile errors
+    * 0001088: Fedora 22 copr repo for OTB
+    * 0001092: ITK (4.7.1) provided by SuperBuild do not compile with GCC version > 5
+    * 0001090: SuperBuild Openthread download link broken
     * 0001081: GDAL RPC tags export prevent correct export of wkt in ortho-rectified image
+    * 0001056: ComputeImagesStatistics applications produces incorrect std
+    * 0001093: CMake with Ninja generator configure fails when OTB_USE_QT4=ON
+    * 0001084: Deactivate all 3rd part components in OpenCV configuration
     * 0001077: Superbuild: Broken open scene graph archive link
     * 0001069: Unable to install gdal python bindings in custom install directory with OTB Superbuild
-    * 0001065: Buiild OTB Examples based on available modules in OTB installation
+    * 0001065: Build OTB Examples based on available modules in OTB installation
     * 0001075: prTeEstimateRPCSensorModelExampleTest  always failing in examples
     * 0001074: Missing ITCopyright.txt in OTB sources
     * 0001066: missing file(Capitole-Shadows) from OTB-Data
     * 0001055: SuperBuild builds ogr2ogr without sqlite driver
 
   * OTB-lib
+    * 0001082: ImageFileReader<> crashes after ApplicationRegistry::RefreshApplicationFactories() is called
+    * 0001098: Exception raised when typing in input process XML parameter
+    * 0001097: Cannot manually type in input vector data line-edit.
     * 0001085: Add a ::GetInput() accessor  to QtWidgetOutputImage/FilenameParameter
     * 0001083: Extended filename parameters not updated when calling ImageFileReader<>::SetFileName() several times
     * 0001078: Exception thrown (OTB-Ice) when opening image without projection info
     * 0001071: Add otb::DEMHandler ::ClearDEMDirectory() and ::ClearGeoidFile() interface.
+
+  * OTB-applications
+    * 0001119: Band Math X cannot manage large neighborhood (>=25x25 pixels)
+    * 0001112: File not found if filename contains accents when using GUI
+    * 0001059: Input and output image parameters require absolute path
+    * 0001076: Application ComputeImagesStatistics gives wrong standard deviation
 
 
 OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
@@ -73,8 +323,8 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
 
   * Remove deprecated code
      * MeanShiftVectorImageFilter  and MeanShiftImageFilter classes
-     * CommandLineLauncher(const char * exp) and Load( const std::string & exp ) methods in CommandLineLauncher class  
-       
+     * CommandLineLauncher(const char * exp) and Load( const std::string & exp ) methods in CommandLineLauncher class
+
   * ThirdParties
     * No more internal versions of most third parties (except 6S, siftfast, ossimplugins)
       * Removed openjpeg sources from OTB source
@@ -87,10 +337,10 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
 
   * Superbuild
     * A separate superbuild project has been added in the Superbuild repository
-    * It allows to build all OTB dependencies from source, and then OTB (thus replaces the removed internal versions)
+    * This download, configure and build all OTB dependencies from source and then build OTB. It replaces the removed internal versions.
     * Sources are checked out at configuration time or can be downloaded beforehand
-    * Allow to build a complete OTB with a handful of prerequisites (gcc, cmake, curl)
-  
+    * Allow building a complete OTB with a handful of prerequisites (gcc, cmake, curl)
+
   * Doxygen
     * Classes are now organized by modules
     * Direct link to official ITK doxygen
@@ -138,7 +388,7 @@ OTB-v.5.0.0 - Changes since version 4.4.0 (2015/05/28)
     * 0001037: file and vector outputs need explicit relative paths
     * 0001036: TileFusion application crashes with SPOT-7 tiled images
     * 0000728: Inconsistent polygon number in concatenate vector data output
-    * 0001031: Wrong projection for ouput vector of segmentation application
+    * 0001031: Wrong projection for output vector of segmentation application
 
 
 OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
@@ -147,59 +397,59 @@ OTB-v.4.4.0 - Changes since version 4.2.1 (2015/02/13)
 * Library:
 
   * Core:
-    * Add a BandMathXImageFilter, otbParserX, otbParserXPlugins filters based on MuParserX  
-    * Correct a lot of issues related to Coverity scan 
+    * Add a BandMathXImageFilter, otbParserX, otbParserXPlugins filters based on MuParserX
+    * Correct a lot of issues related to Coverity scan
     * Giving access to probability estimates mode in libSVMMachineLearningModel and RandomForestsMachineLearningModel
     * Clean and update the header include into OTB
     * Enhance p to xs registration formula
     * Reduce Curl dependencies
     * Remove 6S dependency for VarSol computation
-    * Clean and udpate the Mapnik adapters code into OTB
+    * Clean and update the Mapnik adapters code into OTB
     * Add an option to limit the number of samples by class into otbListSampleGenerator
     * Fix BCO interpolation about coefficients normalization
     * Fix missing boost namespace
-    * Fix Production date issue in IkonosImageMetadataInterface 
+    * Fix Production date issue in IkonosImageMetadataInterface
     * Mark ancillary methods as deprecated otbWrapperCommandLineLauncher
-    * Add regression mode to Random Forests 
+    * Add regression mode to Random Forests
     * Add absorptances and fcover to SAIL code
     * Remove MeanShiftKernel file, duplicates of SVMKernel file, and not used anywhere
-    
+
   * CMake:
     * Improve compatibility with cmake 3.0
-     
+
   * Testing:
     * Avoid multiple declaration of same function over different compilation units
     * Add test to use SVM machine learning class in regression mode
     * Remove obsolete and not compiled anymore tests
     * Rewrite add_test declaration to have exe name on the first line. will help modularisation script
     * Use a single cmake var for referencing large inputs
-    
+
   * Documentation:
     * Enhance Doxygen Documentation
-   
+
 * Applications:
   * New:
     * New BandMathX application with awesome mathematical functions
-    * New applications for learning/classification of geometries in a shapefile: 
+    * New applications for learning/classification of geometries in a shapefile:
         * ComputeOGRLayersFeaturesStatistics
         * TrainOGRLayersClassifier
-        * OGRLayerClassifier 
+        * OGRLayerClassifier
   * Updated applications:
-    * Smoothing: add conductance parameter for anidifusion which was added recently in ITK filter 
-    * Smoothing: keep the time step independant from the image spacing
+    * Smoothing: add conductance parameter for anidifusion which was added recently in ITK filter
+    * Smoothing: keep the time step independent from the image spacing
     * HomologousPoint: proper computation of the opposite region
     * Rasterization: fix computation of output image extent
     * GridBasedImageResampling: fix the wrong channel number otbGridBasedImageResampling.
     * ColorMapping: clamp before cast to uchar
     * OpticalCalibration: the toc computation is no more marked as experimental
-    * OpticalCalibration: add an internal test to check if RSR file is correclty set
+    * OpticalCalibration: add an internal test to check if RSR file is correctly set
     * BundleToPerfectSensor and SuperImpose: Allowing to force default mode with Pleiades images
     * SuperImpose: fix a bug in PHR mode detection logic
     * TrainImagesClassifier: add option to limit the min number of samples to the smallest class
     * MeanShiftSmoothing: add missing ram parameter
     * StereoRectificationGridGenerator: add warning message about image sizes when enabling inverse transformation estimations.
-    
-* Bugs fixed:    
+
+* Bugs fixed:
   * OTB-lib:
     * 0001003: logical bug in IkonosImageMetadataInterface ::GetPhysicalGain(),resolved,fixed,"In IkonosImageMetadataInterface::GetPhysicalGain()
     * 0001005: build error with otbUtilitiesTests
@@ -229,10 +479,10 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/09/04)
       GDAL and OSSIM. OTB uses pixel centered convention, whereas GDAL and
       OSSIM use corner pixel convention. More details on JIRA #647 and Mantis
       #942
-    * Major performance improvment of Haralick Texture computation (6 to 10 times
+    * Major performance improvement of Haralick Texture computation (6 to 10 times
       faster)
     * Add new texture feature (dissimilarity) in ScalarImageToAdvancedTexturesFilter
-    * Improvments of Simulation code in order to be able to use the solar
+    * Improvements of Simulation code in order to be able to use the solar
       irradiance information when working with spectral responses for simulations.
     * Support Jpeg2000 images through GDAL drivers (can use OpenJpeg, Kakadu, ECW)
     * Reading/Writing RPC coefficients in GeoTIFF tags
@@ -335,7 +585,7 @@ OTB-v.4.0.0 - Changes since version 3.20 (2014/03/13)
     * Correct multibaseline support
     * Move test related to amplitude and phase functor from visualization to basic filters
 
-  * CMake: 
+  * CMake:
     * Use modern CMake style: no block-end arguments and all CMake command to lower case format
 
   * ThirdParties:
@@ -355,7 +605,7 @@ OTB-v.4.0.0 - Changes since version 3.20 (2014/03/13)
     * Convert : Adding gamma correction method the convert application
     * HomologousPointsExtraction : add mode.geobins.binsizey and mode.geobins.binstepy to allow for anisotropic geobins mode
     * HomologousPointsExtraction : new mode.geobins.margin parameter to only search inside image center.
-    
+
   * Core framework:
     * Improve the support of XML parameters input/output file
     * Improve the input VectorData/Image/Filename parameter to give access to m_Input attribute
@@ -450,13 +700,13 @@ OTB-v.3.20 - Changes since version 3.18.1 (2013/11/13)
     * 0000770: Output parameter does not appear anymore in the command line helper
     * 0000798: All the OTB app parameters are not all saved into the xml output file
     * 0000779: [OTB]otbTrainImagesClassifier generates an output *.CSV confusion matrix with a wrong header
-    * 0000809: LSMS Vectorization application didn't support ouput file with "-" special character
+    * 0000809: LSMS Vectorization application didn't support output file with "-" special character
     * 0000807: otbKmzExport application generate weird kmz if the tilesize parameter is equal to zero
     * 0000808: otbDownloadSRTMTiles application seems to be broken
     * 0000803: otbApplicationLauncherCommandLine -inxml parameter does not retrieve pixel type for output image parameter
     * 0000794: Tiling mechanism didn't work into Large Scale MeanShift  application
     * 0000760: ClassificationMapRegularization output pixel values are always on 8 bits
-    * 0000809: LSMS Vectorization application didn't support ouput file with "-" special character
+    * 0000809: LSMS Vectorization application didn't support output file with "-" special character
     * 0000803: otbApplicationLauncherCommandLine -inxml parameter does not retrieve pixel type for output image parameter
     * 0000736: Error setting the index in RadiometricIndices application via python
     * 0000800: Watershed mode of segmentation application produce an image without CRS even if the input image has one
@@ -499,19 +749,19 @@ OTB-v.3.18.1 - Changes since version 3.18.0 (2013/07/22)
 
   * Examples
     * Update HelloWorld example CMakeLists
- 
+
   * Applications
     * Updated applications
       * Update Stereo application documentation example with new parameters
       * Add a log message about color mapping method used by application
     * Core Framework
-      * Intialize properly QtWidgetChoiceParameter
-    * Increase minimun cmake version to 2.8.3 wwhen build applications  
+      * Initialize properly QtWidgetChoiceParameter
+    * Increase minimum cmake version to 2.8.3 wwhen build applications
 
 OTB-v.3.18 - Changes since version 3.16 (2013/07/05)
 --------------------------------------------------------
 
-Among the classical improvements and bug fixes to exisiting functionnalities, this release provides 
+Among the classical improvements and bug fixes to existing functionnalities, this release provides
 the following main functionnalities :
  * Huge improvements in Stereo framework, to compute DEM from stereo pairs :
    check the StereoFramework application !
@@ -520,7 +770,7 @@ the following main functionnalities :
  * A classifiers fusion framework based on Dempster Shafer theory : check the FusionOfClassifications application !
 
 The full list of improvements comes here :
- 
+
 * Library
   * Core and Third Parties
     * Expose Curl timeout as parameter
@@ -529,7 +779,7 @@ The full list of improvements comes here :
     * Removal of old deprecated methods in all OTB classes
     * Fix mangling of internal OpenJPEG
     * Simpler and more automatic configuration and build on Windows based on OSGeo4W
-  
+
   * Basic filters
     * Add NoData value and flag for StreamingMinMaxVectorImageFilter
     * StreamingStatisticsImageFilter & StreamingStatisticsVectorImageFilter : support for skipping Nan and for a background value
@@ -539,10 +789,10 @@ The full list of improvements comes here :
       * DisparityMapTo3DFilter : convert disparity map in epipolar geometry to 3D image in epipolar geometry
       * MultiDisparityMapTo3DFilter : convert several disparity maps in sensor geometry to a 3D image in sensor geometry
       * LineOfSightOptimizer : algorithm to fuse several elevation values by line of sight optimisation
-      * BijectionCoherencyFilter : from 2 disparity maps, compute coherency left-right and right-left, and ouput a mask of coherent disparities
+      * BijectionCoherencyFilter : from 2 disparity maps, compute coherency left-right and right-left, and output a mask of coherent disparities
       * Multi3DToDEMFilter : fuse several 3D images to produce an elevation map
       * DisparityTranslateFilter : filter to translate epipolar disparities into sensor disparities
-    * PixelWiseBlockMatchingImageFilter : fix initialisation of metric and disparities
+    * PixelWiseBlockMatchingImageFilter : fix initialization of metric and disparities
     * PixelWiseBlockMatchingImageFilter : supports a shift on the subsampled grid
     * SubPixelDisparityImageFilter : supports a subsampled grid (with shift)
     * PixelWiseBlockMatchingImageFilter & SubPixelDisparityImageFilter : subsampled disparities are now consistent with the dispmap index spaces
@@ -550,7 +800,7 @@ The full list of improvements comes here :
   * IO
     * GDALImageIO : support reading overviews. "image.tif?&resol=3" is now supported as file name
     * Extended file names now supports the "box" key for writing only a subset of the image
-    
+
   * Learning
     * Generic framework of classification filters, integrating OpenCV classifiers and libSVM
       * New classes
@@ -561,31 +811,31 @@ The full list of improvements comes here :
             BoostMachineLearningModel DecisionTreeMachineLearningModel GradientBoostedTreeMachineLearningModel
             KNearestNeighborsMachineLearningModel NeuralNetworkMachineLearningModel
             NormalBayesMachineLearningModel RandomForestsMachineLearningModel SVMMachineLearningModel
-        
+
     * ConfusionMatrixCalculator : add correspondence between class label and indices
     * ConfusionMatrixMeasurements : add new class for computation of precision, recall and F-score
-    
+
   * Fuzzy
     * New Dempster Shafer based fusion of classifiers framework
       * Theory explained in http://wiki.orfeo-toolbox.org/index.php/Information_fusion_framework
       * New classes : DSFusionOfClassifiersImageFilter, ConfusionMatrixToMassOfBelief
-      
+
   * Segmentation
     * Fix some numerical instabilities in mean shift segmentation filter
-  
+
   * Radiometry
     * Fix spectral sensitivity reading of Pleiades images
     * Add PHR 1B averaged solar irradiance provided by CNES
-    
-  
+
+
   * Applications
     * New applications
       * Added new SRTM tiles downloader (DownloadSRTMTiles)
       * Added new PLY file generator (GeneratePlyFile)
-      * TrainImageClassifier and ImageClassifier : made TrainSVMImageClassifier & ImageSVMClassifier 
+      * TrainImageClassifier and ImageClassifier : made TrainSVMImageClassifier & ImageSVMClassifier
         more generic and expose OpenCV classifiers.
         Check the migration guide at : http://wiki.orfeo-toolbox.org/index.php/Classification_OTB_applications
-      
+
     * Updated applications
       * StereoFramework :
         * Handles several images in input by stereo couples
@@ -610,9 +860,9 @@ The full list of improvements comes here :
     * Core Framework
       * Manage UTF8 paths in GUI
       * Fix a crash in string list parameter widget in GUI
-       
+
 * Monteverdi
-      
+
 * Bug Fixes
   * OTB-lib
     * 0000707: Memory leaks in ApplicationWrappers
@@ -651,7 +901,7 @@ The full list of improvements comes here :
     * 0000668: Precision loss when loading/saving/reloading
     * 0000666: upper quantile is not set to 0.0 on integer image type, when using min/max button
     * 0000656: Import Windows does not close
-    * 0000659: At first startup, 'mvd2' dir is not created but Monteverdi2 shoudl create it
+    * 0000659: At first startup, 'mvd2' dir is not created but Monteverdi2 should create it
     * 0000660: Wrong display settings saved
     * 0000657: Radiometry values hide WGS84 coordinates in status bar
     * 0000654: When minimzing the window, all widgets are closed
@@ -683,7 +933,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
       * Made methods stick to what OSSIM does
     * Refactored RpcProjectionAdapter into RpcSolverAdapter
     * Updated ossim to r21971
-   
+
   * IO
     * Added support for GDAL driver creation options in GDALImageIO
     * Added support for external geom files in ImageFileReader
@@ -692,16 +942,16 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
       * Added support for extended filenames in ImageFileReader
       * Added support for extended filenames in ImageFileWriter
     * Refactored StreamingImageFileWriter and ImageFileWriter
-      * ImageFileWriter is now the only class to use 
+      * ImageFileWriter is now the only class to use
       * StreamingImageFileWriter is a deprecated subclass provided for backward compatibility
       * Fixed a bug when the largest possible region could be asked in some cases
-       
+
   * Projections
-    * Refactored the GCPsToSensorModel filter 
+    * Refactored the GCPsToSensorModel filter
 
   * BasicFilters
     * Simplified computation of coefficients in Frost and Lee filters
-      
+
   * Fusion
     * Added the LMVM fusion algorithm (kindly contributed by A. Tzotsos)
 
@@ -712,19 +962,19 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
   * Learning
     * Improved ListSample generation
       * Added support for interior rings
-      * Fixed support for class mininum size
+      * Fixed support for class minimum size
     * Added a filter for classification map regularization by majority voting
 
   * Segmentation
     * Added segmentation algorithm based on multiscale morphological structures classification
 
   * OBIA
-    * Added a filter to compute mean radiometric values for each segment of a labeled image 
+    * Added a filter to compute mean radiometric values for each segment of a labeled image
 
   * Visualization
     * Added a method to change RegionGlComponent color in ImageView
     * Moved layer description in a single place
-    
+
   * Applications
     * Framework
       * Modified the elevation parameters handling to be consistent with refactoring
@@ -744,14 +994,14 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
       * Added new tile fusion application (TileFusion)
       * Added new end-to-end stereo pair to Digital Surface Model application (StereoFramework)
 
-    * Miscellanous
+    * Miscellaneous
       * Added an optional clamp in OpticalCalibration application output
       * Added segmentation algorithm based on multiscale morphological structures classification in Segmentation application
       * Added an optional output to the ReadImageInfo application to write the keyword list to a geom file
       * Added support for large image in image mode of ColorMapping application
       * Added support for histogram clamping settings and mask input in Convert application
       * Added support for UTM zone and hemisphere estimation by default in OrthoRectification application
-      
+
 * Monteverdi
   * Refactored to fit the new elevation configuration method
   * Added Support for extended filenames
@@ -787,7 +1037,7 @@ OTB-v.3.14.1 - Changes since version 3.14.0 (2012/10/02)
   * Improve Pleiades support :
     * TOA optical calibration available
     * Improve support of mega tiles products
-  
+
 
 * Monteverdi
   * Support of MacOSX 10.8
@@ -881,7 +1131,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * Add BlockMatchingImageFilter class for fast 2D block-matching
     * Add NCCBlockMatching functor
     * Add LPBlockMatching functor
-    * Adding an optionnal geoid file, and the possibility to use height
+    * Adding an optional geoid file, and the possibility to use height
       above ellispoid in DEMToImageGenerator
     * Add SubPixelDisparityImageFilter class to interpolate disparities
     * Add DisparityMapMedianFilter class
@@ -936,7 +1186,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
       by libkml)
     * GenericRSTransform can now be optimized using a set of tie-points,
       calling ossim internal sensor model refining implementation
-    * PackedWidgetManager & SplittedWidgetManager : add method to set the
+    * PackedWidgetManager & SplitWidgetManager : add method to set the
       label of each group
     * HistogramActionHandler : limit moves of asymptots with min/max of
       histogram
@@ -967,10 +1217,10 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * Add image origin to ReadImageInfoApplication
     * Use now InputFilenameParameter and OutputFilenameParameter instead
       of FilenameParameter
-    * Use InputFilename and OuputFilename instead of Filename
+    * Use InputFilename and OutputFilename instead of Filename
     * New option in SVMClassifier application: sample.edg (non mandatory)
       to manage special cases with small samples
-    * In KMeansClassification, Changing the random intialisation method
+    * In KMeansClassification, Changing the random initialization method
       since it can generate centroids that are too far from the image
       distribution and will never move
     * Add AddRANDParameter option in order to set mersenne twister seed
@@ -1017,7 +1267,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
 
 * Bug fixes :
   * OTB-lib
-    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes 
+    * 0000532: OTB_SHOW_ALL_MSG_DEBUG option changes
                apTvClTrainSVMImagesClassifierQB456 test results
     * 0000568: Unable to compile OTB with a local version of the
                FFTW library
@@ -1058,7 +1308,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
                are located in a directory with spaces in its name
 
   * OTB-Packaging
-    * 0000545: Issues with Monteverdi 1.10 binary 
+    * 0000545: Issues with Monteverdi 1.10 binary
                applications on Mac OSX 10.6  (SL)
     * 0000525: Python not found during ubuntu package build
     * 0000526: Fix input of bfTvPolygonizationRasterization_WGS84
@@ -1599,7 +1849,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
     * 0000341: weird french warning in ms dos command window with
       monteverdi 1.7 exe
     * 0000313: Unable to perform orthofusion of WV2 PAN+XS (4 bands)
-    * 0000239: Trouble in pixel descrition in Monteverdi viewer
+    * 0000239: Trouble in pixel description in Monteverdi viewer
     * 0000336: Viewer Histogram settings not applied after channel
       order changes
     * 0000304: Advanced save dataset module with scaling on results in
@@ -1652,7 +1902,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
     a DEM tiles directory, with optional hillshading
   * New ColorMapping module: apply a colormap to a mono band image
   * Viewer module: add multi input support, with slideshow or transparency
-    mode, add more rendering functions, add splitted/packed layout option
+    mode, add more rendering functions, add split/packed layout option
   * Vectorization module: new semi-automatic mode based on segmentation
     results proposals
 
@@ -1708,7 +1958,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 
 * System
   * Internal liblas updated to 1.6.0b2 + OTB patches (root CMakeList.txt)
-  * Internal libsvm updated to 3.0 + OTB patches (additionnal kernels)
+  * Internal libsvm updated to 3.0 + OTB patches (additional kernels)
   * Internal ITK: removed compilation of medical image formats library
     and associated ImageIO
   * Internal ITK: removed dependency on libtiff, libjpeg, libpng and zlib,
@@ -1986,7 +2236,7 @@ OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
 OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 --------------------------------------------------------
 
-    - Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or
+    - Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows generating or
       not only examples testing
     - Added OTB_USE_JPEG2000 : experimental support for jpeg2000
       files.
@@ -2017,7 +2267,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
     - Added an orthofusion application (otbOrthoFusionAppli)
 
 *Markov:
-      Added full Markov framework for segmentation, restauration
+      Added full Markov framework for segmentation, restoration
       and filtering
       Added related classes:
     - otb::MarkovRandomFieldFilter
@@ -2037,7 +2287,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
     - MarkovClassification1Example
     - MarkovClassification2Example
     - MarkovRegularizationExample
-    - MarkovRestaurationExample
+    - MarkovRestorationExample
 
 *Projections
       Added Lambert 93 cartographic projection with
@@ -2323,7 +2573,7 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
     - Added a new tiling streaming mode.
 
-    - Added the otb::ImageGeometryHandler, which allows to handle
+    - Added the otb::ImageGeometryHandler, which allows handling
       seamlessly
       the image geometry information.
 
@@ -2383,7 +2633,7 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
     - Added the otb::BayesianFusionImageFilter, a pan-sharpening
       filter which
-      algoritm has been kindly contributed by Julien Radoux.
+      algorithm has been kindly contributed by Julien Radoux.
 
 
 *Documentation:
@@ -2407,16 +2657,16 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
 *Applications:
 
-    - Added the otbImageViewerManager application which allows to
-      open multiple images,
+    - Added the otbImageViewerManager application which allows
+      opening multiple images,
       configure viewers and link displays.
 
     - Added the otbRoadExtraction which demonstrates the road
       extraction algorithm
       implemented in the FeatureExtraction module.
 
-    - Added the otbOrthoRectifAppli application which allows to
-      ortho rectify images in
+    - Added the otbOrthoRectifAppli application which allows
+      ortho rectifying images in
       command line using the brand new Projections module of the Orfeo
       ToolBox. Old rigid
       orthoo rectification application has been moved to

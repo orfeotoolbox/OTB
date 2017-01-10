@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWatershedSegmentationFilter_txx
-#define __otbWatershedSegmentationFilter_txx
+#ifndef otbWatershedSegmentationFilter_txx
+#define otbWatershedSegmentationFilter_txx
 
 #include "otbWatershedSegmentationFilter.h"
 
@@ -49,7 +49,7 @@ WatershedSegmentationFilter<TInputImage, TOutputLabelImage>
   this->GraftOutput(m_CastFilter->GetOutput());
 
   // Since WatershedFilterType outputs an itk::Image,
-  // we loose the additionnal metadata of OTB like ProjectionRef.
+  // we loose the additional metadata of OTB like ProjectionRef.
   // Import them before exiting
   this->GetOutput()->CopyInformation( this->GetInput() );
 }

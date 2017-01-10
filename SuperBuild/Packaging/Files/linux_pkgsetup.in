@@ -1,0 +1,210 @@
+#!/bin/sh
+
+DIRNAME_0=$(dirname "$0")
+cd  "$DIRNAME_0"
+
+# NOTE: $OUT_DIR is also used in make_sylinks script (see below)
+# Avoid any pre-mature optimization on variable names here.
+
+OUT_DIR=$(pwd)
+
+PATCH_ELF_EXE="$OUT_DIR/patchelf"
+
+# No no interference with LD_LIBRARY_PATH
+LD_LIBRARY_PATH=
+
+echo "Configuring..."
+#see next call below for otb applications
+BINARY_FILES=$(find $OUT_DIR/lib $OUT_DIR/bin -maxdepth 1 -type f -exec file {} \; | grep -i elf|cut -f1 -d':')
+
+# run patchelf
+for bin_file in $BINARY_FILES; do
+    #echo "adding rpath to $bin_file"
+    if [ -f "$bin_file" ]; then
+        "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$bin_file"
+    fi
+done
+
+I_AM_XDK=@IS_XDK@
+
+# if [ "$I_AM_XDK" = true ] ; then
+#     sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/Modules/ITKZLIB.cmake
+#     sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKConfig.cmake
+#     sed -i "s,@DEPENDENCIES_INSTALL_DIR@,$OUT_DIR,g" lib/cmake/ITK-@PKG_ITK_SB_VERSION@/ITKTargets-release.cmake
+# else
+
+if [ "$I_AM_XDK" = false ] ; then
+OTB_APP_FILES=$(find $OUT_DIR/lib/otb/applications -maxdepth 1 -type f -exec file {} \; | grep -i elf|cut -f1 -d':')
+ # run patchelf
+for app_file in $OTB_APP_FILES; do
+    #echo "adding rpath to $app_file"
+    if [ -f "$app_file" ]; then
+        "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$app_file"
+    fi
+done
+
+cat > "$OUT_DIR/monteverdi.sh" << EOF
+#!/bin/sh
+
+. $OUT_DIR/otbenv.profile
+
+$OUT_DIR/bin/monteverdi "\$@"
+EOF
+
+chmod +x "$OUT_DIR/monteverdi.sh"
+
+cat > "$OUT_DIR/mapla.sh" << EOF
+#!/bin/sh
+
+. $OUT_DIR/otbenv.profile
+
+$OUT_DIR/bin/mapla "\$@"
+EOF
+
+chmod +x "$OUT_DIR/mapla.sh"
+
+cat > "$OUT_DIR/otbenv.profile" << EOF
+#!/bin/sh
+
+# The below environment variables only affect current shell
+# So if you run again from a terminal. you need to run the script again
+# see how this is sourced in monteverdi.sh and mapla.sh
+
+# unset any existing LD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
+
+# if OTB_USE_SYSTEM_GTK is not set or is set to zero,
+# we must include <OUT_DIR>/lib/gtk because glib files are
+# installed there. 
+
+# OTB_USE_SYSTEM_GTK is not set by default
+if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" = "0" ]; then
+  LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
+  export LD_LIBRARY_PATH
+fi
+
+# check and set OTB_APPLICATION_PATH
+if [ -z "\$OTB_APPLICATION_PATH" ] || [ "\$OTB_APPLICATION_PATH" = "" ]; then
+    OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+else
+    OTB_APPLICATION_PATH=\$(readlink -f "\$OTB_APPLICATION_PATH")
+    if ! [ "\$OTB_APPLICATION_PATH" = "$OUT_DIR/lib/otb/applications" ]; then 
+	OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications:\$OTB_APPLICATION_PATH
+    fi
+fi
+
+# Add bin direcotory to system PATH
+PATH=$OUT_DIR/bin:\$PATH
+
+# export PYTHONPATH to import otbApplication.py
+PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
+
+# set numeric locale to C
+LC_NUMERIC=C
+
+# set GDAL_DATA variable used by otb application
+GDAL_DATA=$OUT_DIR/share/gdal
+
+# set GEOTIFF_CSV variable used by otb application
+GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+
+# export variables
+export LC_NUMERIC
+export GDAL_DATA
+export GEOTIFF_CSV
+export OTB_APPLICATION_PATH
+export PATH
+export PYTHONPATH
+
+EOF
+
+
+chmod +x "$OUT_DIR/otbenv.profile"
+
+fi
+
+#echo "Creating symbolic links..."
+. ./make_symlinks
+
+
+cat > "$OUT_DIR/bin/qt.conf" << EOF
+[Paths]
+Translations=$OUT_DIR/lib/qt4/translations
+Plugins=$OUT_DIR/lib/qt4/plugins
+EOF
+
+WITH_PYTHON=@WITH_PYTHON@
+
+if [ "$WITH_PYTHON" = true ] ; then
+
+if [ ! -f "$OTB_PYTHON_EXE" ] ; then
+    OTB_PYTHON_EXE=$(which python)
+fi
+
+python_INSTALLED_SONAME=@python_INSTALLED_SONAME@
+
+python_major_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[0])")
+python_minor_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[1])")
+python_patch_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[2])")
+python_version="$python_major_version.$python_minor_version.$python_patch_version"
+
+python_check_failed() {
+    printf %s\\n "*****Error occured during installation******"
+    printf %s\\n "OTB python bindings requires python2.6 or python2.7 but current detected python version is $python_version"
+    printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
+    printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
+    printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python2.7 ./OTB-X.Y-Linux64.run"
+    exit 1;
+}
+if [ "$python_major_version" -gt 2 ]; then
+python_check_failed
+fi
+
+if [ "$python_minor_version" -lt 5 ]; then
+python_check_failed
+fi
+
+python_INSTSONAME=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));")
+
+python_lib_dirs="/usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu"
+found_python_lib="0"
+python_lib_file_path=""
+for list_of_dir in $python_lib_dirs
+do
+    if [ -f "$list_of_dir/$python_INSTSONAME" ]; then
+        python_lib_file_path="$list_of_dir/$python_INSTSONAME"
+        found_python_lib="1"
+        break
+    fi
+done
+
+if [ "$found_python_lib" -eq "1" ]; then
+    printf %s\\n "OTB python bindings will be configured for $OTB_PYTHON_EXE ( version: $python_version )"
+    printf %s\\n "Found python library: $python_lib_file_path"
+    ln -sf "$python_lib_file_path" "$OUT_DIR/lib/$python_INSTALLED_SONAME"
+    "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$OUT_DIR/lib/python/_otbApplication.so"
+    printf %s\\n "To use OTB python bindings:"
+    printf %s\\n "'export PYTHONPATH=$OUT_DIR/lib/python'"
+    printf %s\\n "To test OTB python bindings:"
+    printf %s\\n "$OTB_PYTHON_EXE -c 'import otbApplication'"
+else
+    printf %s\\n "*****Error occured during installation******"
+    printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
+    printf %s\\n "$python_INSTSONAME cannot be found in any of search directories."
+    printf %s\\n "We had searched following directories $python_lib_dirs"
+    printf %s\\n "If you don't have python-dev package installed, install it and make a symlink"
+    printf %s\\n "If you don't have python headers and so installed on a custom location, then make a symlink"
+    printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME $OUT_DIR/lib/$python_INSTALLED_SONAME"
+fi
+
+fi; 
+
+# PKG_OTB_VERSION_STRING=@PKG_OTB_VERSION_STRING@
+sed -i "s,|release|,@PKG_OTB_VERSION_STRING@,g" "$OUT_DIR/README"
+
+rm -fr "$OUT_DIR/tools"
+
+rm -f  "$OUT_DIR/pkgsetup"
+
+rm -f  "$OUT_DIR/make_symlinks"
+

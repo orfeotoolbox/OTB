@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGISConnectionImplementation_h
-#define __otbGISConnectionImplementation_h
+#ifndef otbGISConnectionImplementation_h
+#define otbGISConnectionImplementation_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -69,7 +69,7 @@ public:
 
   virtual void ConnectToDB(){}
 
-  virtual void PerformTransaction(const TransactorType& theTransaction) const {}
+  virtual void PerformTransaction(const TransactorType& itkNotUsed(theTransaction)) const {}
 
 protected:
   /** Constructor */

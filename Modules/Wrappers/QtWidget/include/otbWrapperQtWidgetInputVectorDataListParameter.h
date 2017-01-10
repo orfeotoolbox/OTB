@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputVectorDataListParameter_h
-#define __otbWrapperQtWidgetInputVectorDataListParameter_h
+#ifndef otbWrapperQtWidgetInputVectorDataListParameter_h
+#define otbWrapperQtWidgetInputVectorDataListParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -34,12 +34,12 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetInputVectorDataListParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
   QtWidgetInputVectorDataListParameter(InputVectorDataListParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputVectorDataListParameter();
+  ~QtWidgetInputVectorDataListParameter() ITK_OVERRIDE;
 
 
 signals:
@@ -52,7 +52,7 @@ protected slots:
   virtual void UpFile();
   virtual void DownFile();
   virtual void AddFile();
-  virtual void SupressFile();
+  virtual void SuppressFile();
   virtual void EraseFile();
   virtual void UpdateVectorDataList();
 
@@ -60,9 +60,9 @@ private:
   QtWidgetInputVectorDataListParameter(const QtWidgetInputVectorDataListParameter&); //purposely not implemented
   void operator=(const QtWidgetInputVectorDataListParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  virtual void DoUpdateGUI();
+  void DoUpdateGUI() ITK_OVERRIDE;
 
   void RecreateVectorDataList();
   void UpdateFileList( std::map<unsigned int, unsigned int> idMap );

@@ -16,14 +16,15 @@
 
 =========================================================================*/
 
-#ifndef __otbOSMDataToVectorDataGenerator_h
-#define __otbOSMDataToVectorDataGenerator_h
+#ifndef otbOSMDataToVectorDataGenerator_h
+#define otbOSMDataToVectorDataGenerator_h
 
 // store the nodes (points) coordinates
 #include <map>
 #include <string>
 #include <fstream>
 
+#include "OTBCartoExport.h"
 #include "otbVectorData.h"
 #include "otbVectorDataSource.h"
 
@@ -71,7 +72,7 @@ namespace otb {
  *
  * \ingroup OTBCarto
  */
-class  ITK_EXPORT OSMDataToVectorDataGenerator :
+class OTBCarto_EXPORT OSMDataToVectorDataGenerator :
     public VectorDataSource< otb::VectorData<> >
 {
 public:
@@ -161,8 +162,8 @@ public:
   const VectorDataType* GetVectorDataByName(const std::string& key, const std::string& value);
 
 protected:
-  /** Generate Data method : lauch the process */
-  virtual void GenerateData();
+  /** Generate Data method : launch the process */
+  void GenerateData() ITK_OVERRIDE;
 
   /**
     * Parse the xml file get from OSM to compose the requested vector
@@ -182,7 +183,7 @@ protected:
 
 
   OSMDataToVectorDataGenerator();
-  virtual ~OSMDataToVectorDataGenerator();
+  ~OSMDataToVectorDataGenerator() ITK_OVERRIDE;
 
 private:
   OSMDataToVectorDataGenerator(const Self&); //purposely not implemented

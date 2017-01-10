@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSVMSampleListModelEstimator_txx
-#define __otbSVMSampleListModelEstimator_txx
+#ifndef otbSVMSampleListModelEstimator_txx
+#define otbSVMSampleListModelEstimator_txx
 
 #include "otbSVMSampleListModelEstimator.h"
 #include "itkCommand.h"
@@ -79,7 +79,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputSampleListType* >
@@ -98,7 +98,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TrainingSampleListType* >

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSpatialObjectListToRightAnglePointSetFilter_txx
-#define __otbLineSpatialObjectListToRightAnglePointSetFilter_txx
+#ifndef otbLineSpatialObjectListToRightAnglePointSetFilter_txx
+#define otbLineSpatialObjectListToRightAnglePointSetFilter_txx
 
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "itkLineIterator.h"
@@ -81,7 +81,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   /** Get The input Lines*/
   typename InputLinesListType::Pointer inputLinesList = const_cast<InputLinesListType *>(this->GetInput());
 
-  /** Instancition of Cheking availability Matrix*/
+  /** Instancition of Checking availability Matrix*/
   unsigned int numberOfLines = inputLinesList->size();
   checkMatrixType              segmentsUsedMatrix(numberOfLines, numberOfLines);
   segmentsUsedMatrix.Fill(0);

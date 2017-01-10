@@ -33,7 +33,7 @@ const double PipelineMemoryPrintCalculator::MegabyteToByte = vcl_pow(2.0, 20);
 PipelineMemoryPrintCalculator
 ::PipelineMemoryPrintCalculator()
   : m_MemoryPrint(0),
-    m_DataToWrite(NULL),
+    m_DataToWrite(ITK_NULLPTR),
     m_BiasCorrectionFactor(1.),
     m_VisitedProcessObjects()
 {}

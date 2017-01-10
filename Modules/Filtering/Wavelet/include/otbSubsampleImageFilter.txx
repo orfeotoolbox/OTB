@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSubsampleImageFilter_txx
-#define __otbSubsampleImageFilter_txx
+#ifndef otbSubsampleImageFilter_txx
+#define otbSubsampleImageFilter_txx
 #include "otbSubsampleImageFilter.h"
 
 #include "otbMacro.h"

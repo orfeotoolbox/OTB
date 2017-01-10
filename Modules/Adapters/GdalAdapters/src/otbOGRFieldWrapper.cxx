@@ -19,11 +19,16 @@
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"
 #pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
+#include "ogr_feature.h"
+#pragma warning ( pop )
 #else
 #include "ogr_feature.h"
 #endif
@@ -43,32 +48,32 @@ BOOST_STATIC_ASSERT(!(boost::is_same<
 
 BOOST_STATIC_ASSERT(!(boost::is_same< int, float >::value));
 BOOST_STATIC_ASSERT(!(boost::is_same<
-    int_<OFTReal  >::type,
-    int_<OFTString>::type
+    mpl::int_<OFTReal  >::type,
+    mpl::int_<OFTString>::type
     >::value
 ));
 BOOST_STATIC_ASSERT(!(boost::is_same<
-    at<FieldType_Map,  float>,
-    void_
+    mpl::at<FieldType_Map,  float>,
+    mpl::void_
     >::value
 ));
 BOOST_STATIC_ASSERT(!(boost::is_same<
-    at<FieldType_Map,  double>,
-    int_<OFTReal>
+    mpl::at<FieldType_Map,  double>,
+    mpl::int_<OFTReal>
     >::value
 ));
 BOOST_STATIC_ASSERT(!(boost::is_same<
-    at<FieldType_Map,  double >::type,
-    at<FieldType_Map,  int >::type
+    mpl::at<FieldType_Map,  double >::type,
+    mpl::at<FieldType_Map,  int >::type
     >::value
 ));
 BOOST_STATIC_ASSERT((
-    at<FieldType_Map,  double>::type::value !=
-    at<FieldType_Map,  int   >::type::value
+    mpl::at<FieldType_Map,  double>::type::value !=
+    mpl::at<FieldType_Map,  int   >::type::value
 ));
 BOOST_STATIC_ASSERT(!(boost::is_same<
-    at<FieldGetters_Map, int_<OFTReal> >,
-    at<FieldGetters_Map, int_<OFTString> >
+    mpl::at<FieldGetters_Map, mpl::int_<OFTReal> >,
+    mpl::at<FieldGetters_Map, mpl::int_<OFTString> >
     >::value
 ));
 
@@ -114,7 +119,7 @@ std::ostream & otb::ogr::operator<<(std::ostream & os, otb::ogr::FieldDefn const
 /*=================================[ Field ]=================================*/
 /*===========================================================================*/
 
-otb::ogr::Field::Field(otb::ogr::Feature & feature, size_t index)
+otb::ogr::Field::Field(otb::ogr::Feature & feature, int index)
 : m_Definition(*feature.ogr().GetFieldDefnRef(index))
 , m_Feature(feature.sptr())
 , m_index(index)

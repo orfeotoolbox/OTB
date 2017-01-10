@@ -47,7 +47,7 @@ public:
   typedef otb::GenericRSTransform<>        TransformType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConvertCartoToGeoPoint");
     SetDescription("Convert cartographic coordinates to geographic one.");
@@ -59,8 +59,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Coordinates);
     AddDocTag(Tags::Geometry);
+	AddDocTag(Tags::Coordinates);
 
     AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
     AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");
@@ -88,22 +88,22 @@ private:
     SetDocExampleParameterValue("mapproj.utm.zone", "31");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the projectionRef
     std::string inputProjRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "mapproj");
 
-    // Instanciate a GenericRSTranform
+    // Instantiate a GenericRSTransform
     // Input : coordiante system picked up by the user
-    // Output : WGS84 correponding to epsg code 4326
+    // Output : WGS84 corresponding to epsg code 4326
     TransformType::Pointer  transform = TransformType::New();
     transform->SetInputProjectionRef(inputProjRef);
     transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-    transform->InstanciateTransform();
+    transform->InstantiateTransform();
 
     TransformType::InputPointType   cartoPoint;
     TransformType::OutputPointType  geoPoint;

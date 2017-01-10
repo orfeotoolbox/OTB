@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalPyramidResampler_txx
-#define __otbMorphologicalPyramidResampler_txx
+#ifndef otbMorphologicalPyramidResampler_txx
+#define otbMorphologicalPyramidResampler_txx
 #include "otbMorphologicalPyramidResampler.h"
 #include "itkResampleImageFilter.h"
 #include "itkScalableAffineTransform.h"
@@ -34,7 +34,7 @@ template <class TInputImage, class TOutputImage>
 Resampler<TInputImage, TOutputImage>
 ::Resampler()
 {
-  for (int i = 0; i < InputImageType::ImageDimension; ++i)
+  for (unsigned int i = 0; i < InputImageType::ImageDimension; ++i)
     {
     m_Size[i] = 0;
     }

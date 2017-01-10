@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMHandler_h
-#define __otbDEMHandler_h
+#ifndef otbDEMHandler_h
+#define otbDEMHandler_h
 
 #include <iostream>
 #include <cstdio>
@@ -25,6 +25,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkPoint.h"
+
+#include "OTBOSSIMAdaptersExport.h"
 
 class ossimElevManager;
 
@@ -46,13 +48,13 @@ namespace otb
  * configured by this class and this will ensure consistency
  * throughout the library.
  *
- * The class allows to configure a directory containing DEM tiles
+ * The class allows configuring a directory containing DEM tiles
  * (DTED or SRTM supported) using the OpenDEMDirectory() method. The
- * OpenGeoidFile() method allows to input a geoid file as well. Last,
+ * OpenGeoidFile() method allows inputting a geoid file as well. Last,
  * a default height above ellipsoid can be set using the
  * SetDefaultHeightAboveEllipsoid() method.
  *
- * The class allows to retrieve either height above ellipsoid or
+ * The class allows retrieving either height above ellipsoid or
  * height above Mean Sea Level (MSL).
  *
  * Here is the complete description of both methods output depending
@@ -83,7 +85,7 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  */
 
-class ITK_EXPORT DEMHandler : public itk::Object
+class OTBOSSIMAdapters_EXPORT DEMHandler : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -104,7 +106,7 @@ public:
   virtual void OpenDEMDirectory(const char* DEMDirectory);
   virtual void OpenDEMDirectory(const std::string& DEMDirectory);
 
-  /** return true if the directoty contain DEM */
+  /** return true if the directory contain DEM */
   virtual bool IsValidDEMDirectory(const char* DEMDirectory);
 
   /**
@@ -165,15 +167,15 @@ public:
 
 protected:
   DEMHandler();
-  virtual ~DEMHandler() {}
+  ~DEMHandler() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  // Ossim does not allow to retrieve the geoid file path
+  // Ossim does not allow retrieving the geoid file path
   // We therefore must keep it on our side
   std::string m_GeoidFile;
 
-  // Ossim does not allow to retrieve the default height above
+  // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   double m_DefaultHeightAboveEllipsoid;
 

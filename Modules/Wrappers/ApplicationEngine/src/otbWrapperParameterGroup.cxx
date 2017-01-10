@@ -36,8 +36,9 @@
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperProxyParameter.h"
 
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 
 namespace otb
 {
@@ -61,7 +62,11 @@ ParameterGroup::GetParametersKeys(bool recursive)
   for (pit = m_ParameterList.begin(); pit != m_ParameterList.end(); ++pit)
     {
     Parameter* param = *pit;
-    parameters.push_back( param->GetKey() );
+    std::string currentKey(param->GetKey());
+    parameters.push_back( currentKey );
+
+    // follow proxy parameters
+    param = this->ResolveParameter(param);
 
     if (recursive && dynamic_cast<ParameterGroup*>(param))
       {
@@ -70,7 +75,7 @@ ParameterGroup::GetParametersKeys(bool recursive)
       for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
-        parameters.push_back( std::string(paramAsGroup->GetKey()) + "."  + *it );
+        parameters.push_back( currentKey + "."  + *it );
         }
       }
     else if (recursive && dynamic_cast<ChoiceParameter*>(param))
@@ -81,7 +86,7 @@ ParameterGroup::GetParametersKeys(bool recursive)
       for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
-        parameters.push_back( std::string(paramAsChoice->GetKey()) + "."  + *it );
+        parameters.push_back( currentKey + "."  + *it );
         }
       }
     }
@@ -95,9 +100,9 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
 {
   ParameterKey pKey( paramKey );
   // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
+  std::vector<std::string> splitKey = pKey.Split();
 
-  if( splittedKey.size() > 1 )
+  if( splitKey.size() > 1 )
     {
       // Get the last subkey
       std::string lastkey = pKey.GetLastElement();
@@ -120,11 +125,15 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
       else
         {
           itkExceptionMacro(<<parentkey << " is not a choice");
+		  
         }
     }
   else
     {
-      itkExceptionMacro(<<"No choice parameter key given");
+		itkExceptionMacro(
+					 << "No choice parameter key given: paramKey = '"
+					 << paramKey
+					 << "'");
     }
 }
 
@@ -132,36 +141,26 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
 void
 ParameterGroup::ClearChoices(std::string paramKey)
 {
-  ParameterKey pKey( paramKey );
-  // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
 
-  std::string parentkey;
-  Parameter::Pointer parentParam;
+  Parameter * param  = GetParameterByKey(paramKey);
 
-  if (splittedKey.size() > 1)
+  if(!param)
     {
-    parentkey = pKey.GetRoot();
-    parentParam = GetParameterByKey(parentkey);
+    itkExceptionMacro("Parameter "<<paramKey<<" not found");
+    }
+  
+   // param must be a choice, a listBox or this is an error
+  ListViewParameter* paramAsChoice = dynamic_cast<ListViewParameter*>(param);
+
+  if (paramAsChoice)
+    {
+    paramAsChoice->ClearChoices();
     }
   else
     {
-    parentParam = GetParameterByKey(splittedKey[0]);
-    }
-
-   // parentParam must be a choice, a listBox or this is an error
-  ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
-
-  if (listBoxParentAsChoice)
-    {
-    listBoxParentAsChoice->ClearChoices();
-    }
-  else
-    {
-    itkExceptionMacro(<<parentkey << " is not a ListView");
+    itkExceptionMacro(<<paramKey << " is not a ListView");
     }
 }
-
 
 void ParameterGroup::AddOutXMLParameter()
 {
@@ -173,7 +172,7 @@ const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
   tmpParam->SetActive(false);
   AddParameter(tmpParam);
 
-  tmpParam = NULL;
+  tmpParam = ITK_NULLPTR;
   /*
   AddParameter(ParameterType_OutputProcessXML,  key,   descr);
   SetParameterDescription(key, descr);
@@ -193,7 +192,7 @@ void ParameterGroup::AddInXMLParameter()
   tmpParam->SetActive(false);
   AddParameter(tmpParam);
 
-  tmpParam = NULL;
+  tmpParam = ITK_NULLPTR;
   /*
   AddParameter(ParameterType_InputProcessXML,  key,   descr);
   SetParameterDescription(key, descr);
@@ -207,34 +206,25 @@ void ParameterGroup::AddInXMLParameter()
 std::vector<int>
 ParameterGroup::GetSelectedItems(std::string paramKey)
 {
+  Parameter * param  = GetParameterByKey(paramKey);
+
+  if(!param)
+    {
+    itkExceptionMacro("Parameter "<<paramKey<<" not found");
+    }
+  
+   // param must be a choice, a listBox or this is an error
+  ListViewParameter* paramAsChoice = dynamic_cast<ListViewParameter*>(param);
+  
   std::vector<int> selectedItems;
-  ParameterKey pKey( paramKey );
-  // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
 
-  std::string parentkey;
-  Parameter::Pointer parentParam;
-
-  if (splittedKey.size() > 1)
+  if (paramAsChoice)
     {
-    parentkey = pKey.GetRoot();
-    parentParam = GetParameterByKey(parentkey);
+    selectedItems = paramAsChoice->GetSelectedItems();
     }
   else
     {
-    parentParam = GetParameterByKey(splittedKey[0]);
-    }
-
-   // parentParam must be a choice, a listBox or this is an error
-  ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
-
-  if (listBoxParentAsChoice)
-    {
-    selectedItems = listBoxParentAsChoice->GetSelectedItems();
-    }
-  else
-    {
-    itkExceptionMacro(<<parentkey << " is not a ListView");
+    itkExceptionMacro(<<paramKey << " is not a ListView");
     }
 
   return selectedItems;
@@ -487,7 +477,7 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
 {
   ParameterKey pKey(paramKey);
   // Split the parameter name
-  std::vector<std::string> splittedKey = pKey.Split();
+  std::vector<std::string> splitKey = pKey.Split();
 
   // Get the last subkey
   std::string lastkey = pKey.GetLastElement();
@@ -496,7 +486,7 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
   std::string parentkey;
   Parameter::Pointer parentParam;
 
-  if (splittedKey.size() > 1)
+  if (splitKey.size() > 1)
     {
     parentkey = pKey.GetRoot();
     parentParam = GetParameterByKey(parentkey);
@@ -642,11 +632,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
     newParam->SetKey(lastkey);
     newParam->SetName(paramName);
 
-    // If splittedKey is greater than 1, that means that the parameter
+    // If splitKey is greater than 1, that means that the parameter
     // is not a root, and have a parent(s):
     // - Add the parent as root of this param
     // - Add the param as a child of its parents
-    if (splittedKey.size() > 1)
+    if (splitKey.size() > 1)
       {
       newParam->SetRoot(parentParam);
       parentParam->AddChild(newParam);
@@ -666,19 +656,84 @@ ParameterGroup::AddParameter(Parameter::Pointer p)
   m_ParameterList.push_back(p);
 }
 
-Parameter::Pointer
-ParameterGroup::GetParameterByIndex(unsigned int i)
+bool
+ParameterGroup::ReplaceParameter(std::string &key, Parameter::Pointer p)
 {
-  return m_ParameterList[i];
+  bool ret = true;
+  ParameterKey pName(key);
+  std::vector<std::string> splitName = pName.Split();
+  std::string lastkey = pName.GetLastElement();
+  std::string parentkey = pName.GetRoot();
+  ParameterGroup* parentGroup = this;
+  if( splitName.size() > 1 )
+    {
+    Parameter* parentParam = GetParameterByKey(parentkey);
+    parentGroup = dynamic_cast<ParameterGroup*>(parentParam);
+    if (parentGroup)
+      {
+      ret = parentGroup->ReplaceParameter(lastkey, p);
+      }
+    else
+      {
+      ret = false;
+      }
+    }
+  else
+    {
+    // find current parameter in the current group
+    Parameter::Pointer oldParam;
+    ParameterListType::iterator vit;
+    for (vit = m_ParameterList.begin(); vit != m_ParameterList.end(); ++vit)
+      {
+      if (lastkey.compare((*vit)->GetKey()) == 0)
+        {
+        oldParam = *vit;
+        break;
+        }
+      }
+    if (oldParam.IsNull())
+      {
+      // parameter to replace not found : return false
+      ret = false;
+      }
+    else
+      {
+      // parameter already exists : replace it
+      *vit = p;
+      p->SetKey(lastkey);
+      }
+    }
+  if (ret)
+    {
+    if( splitName.size() > 1 )
+      {
+      p->SetRoot(parentGroup);
+      parentGroup->AddChild(p);
+      }
+    }
+  // don't check type compatibility here, we may want to handle special cases
+  // at higher level
+  return ret;
 }
 
 Parameter::Pointer
-ParameterGroup::GetParameterByKey(std::string name)
+ParameterGroup::GetParameterByIndex(unsigned int i, bool follow)
+{
+  Parameter *param = m_ParameterList[i];
+  if (follow)
+    {
+    param = this->ResolveParameter(param);
+    }
+  return Parameter::Pointer(param);
+}
+
+Parameter::Pointer
+ParameterGroup::GetParameterByKey(std::string name, bool follow)
 {
   ParameterKey pName(name);
 
  // Split the parameter name
-  std::vector<std::string> splittedName = pName.Split();
+  std::vector<std::string> splitName = pName.Split();
 
   // Get the first parameter key
   std::string parentName = pName.GetFirstElement();
@@ -701,8 +756,15 @@ ParameterGroup::GetParameterByKey(std::string name)
     itkExceptionMacro(<< "Could not find parameter " << name)
     }
 
+  // follow proxy parameters
+  if (follow)
+    {
+    Parameter *rawParam = this->ResolveParameter(parentParam.GetPointer());
+    parentParam = rawParam;
+    }
+
   // If the name contains a child, make a recursive call
-  if (splittedName.size() > 1)
+  if (splitName.size() > 1)
     {
     // Handle ParameterGroup case
     ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
@@ -710,12 +772,12 @@ ParameterGroup::GetParameterByKey(std::string name)
       {
       // Remove the parent from the param name
       std::ostringstream childNameOss;
-      std::vector<std::string>::const_iterator vvit = splittedName.begin() + 1;
-      while(vvit != splittedName.end())
+      std::vector<std::string>::const_iterator vvit = splitName.begin() + 1;
+      while(vvit != splitName.end())
         {
         childNameOss << *vvit;
         ++vvit;
-        if (vvit != splittedName.end())
+        if (vvit != splitName.end())
           {
           childNameOss << ".";
           }
@@ -729,29 +791,29 @@ ParameterGroup::GetParameterByKey(std::string name)
     ChoiceParameter* parentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
     if (parentAsChoice)
       {
-      // Check that splittedName[1] is one of the choice
+      // Check that splitName[1] is one of the choice
       ParameterGroup::Pointer associatedParam;
 
-      // will throw if splittedName[1] is not a choice key
-      associatedParam = parentAsChoice->GetChoiceParameterGroupByKey(splittedName[1]);
+      // will throw if splitName[1] is not a choice key
+      associatedParam = parentAsChoice->GetChoiceParameterGroupByKey(splitName[1]);
 
-      if (splittedName.size() > 2)
+      if (splitName.size() > 2)
         {
         if (associatedParam.IsNull())
           {
-          itkExceptionMacro(<< "Choice " << splittedName[1] << "in "
-                            << splittedName[0] << "  has no key named "
-                            << splittedName[2]);
+          itkExceptionMacro(<< "Choice " << splitName[1] << "in "
+                            << splitName[0] << "  has no key named "
+                            << splitName[2]);
           }
 
         // Remove the parent and the choice value from the param name
         std::ostringstream childNameOss;
-        std::vector<std::string>::const_iterator vvvit = splittedName.begin() + 2;
-        while(vvvit != splittedName.end())
+        std::vector<std::string>::const_iterator vvvit = splitName.begin() + 2;
+        while(vvvit != splitName.end())
           {
           childNameOss << *vvvit;
           ++vvvit;
-          if (vvvit != splittedName.end())
+          if (vvvit != splitName.end())
             {
             childNameOss << ".";
             }
@@ -772,6 +834,34 @@ unsigned int
 ParameterGroup::GetNumberOfParameters()
 {
   return m_ParameterList.size();
+}
+
+Parameter* ParameterGroup::ResolveParameter(Parameter *param)
+{
+  Parameter* ret = param;
+  if (ret == ITK_NULLPTR)
+    {
+    itkGenericExceptionMacro("Can't resolve NULL parameter!");
+    }
+  while (dynamic_cast<ProxyParameter*>(ret))
+    {
+    ProxyParameter* castParam = dynamic_cast<ProxyParameter*>(ret);
+    ProxyParameter::ProxyTargetType target = castParam->GetTarget();
+    ParameterGroup* targetGroup = dynamic_cast<ParameterGroup*>(target.first.GetPointer());
+    if (targetGroup)
+      {
+      ret = targetGroup->GetParameterByKey(target.second);
+      }
+    else
+      {
+      itkGenericExceptionMacro("Target group of a proxy parameter is not of type ParameterGroup");
+      }
+    if (ret == param)
+      {
+      itkGenericExceptionMacro("Cycle detected with proxy parameters!");
+      }
+    }
+  return ret;
 }
 
 }

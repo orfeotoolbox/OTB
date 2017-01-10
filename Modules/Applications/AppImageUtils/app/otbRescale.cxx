@@ -46,7 +46,7 @@ public:
   typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType> RescaleImageFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Rescale");
     SetDescription("Rescale the image between two given values.");
@@ -84,12 +84,12 @@ private:
     SetDocExampleParameterValue("outmax", "255");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
@@ -97,7 +97,7 @@ private:
 
     m_MinMaxFilter = MinMaxFilterType::New();
     m_MinMaxFilter->SetInput( inImage );
-    m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
+    m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
     AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
     m_MinMaxFilter->Update();

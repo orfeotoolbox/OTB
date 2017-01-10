@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mvd::VideoColorToolBox</class>
+ <widget class="QToolBox" name="mvd::VideoColorToolBox">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>152</width>
+    <height>133</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Video color</string>
+  </property>
+  <property name="locale">
+   <locale language="C" country="AnyCountry"/>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::NoFrame</enum>
+  </property>
+  <property name="currentIndex">
+   <number>0</number>
+  </property>
+  <widget class="mvd::ColorSetupWidget" name="videoColorSetupPage">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>152</width>
+     <height>79</height>
+    </rect>
+   </property>
+   <attribute name="label">
+    <string>Video color setup</string>
+   </attribute>
+  </widget>
+  <widget class="mvd::ColorDynamicsWidget" name="videoColorDynamicsPage">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>152</width>
+     <height>79</height>
+    </rect>
+   </property>
+   <attribute name="label">
+    <string>Video color dynamics</string>
+   </attribute>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>mvd::ColorSetupWidget</class>
+   <extends>QWidget</extends>
+   <header>mvdColorSetupWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>mvd::ColorDynamicsWidget</class>
+   <extends>QWidget</extends>
+   <header>mvdColorDynamicsWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

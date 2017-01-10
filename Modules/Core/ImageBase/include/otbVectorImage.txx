@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImage_txx
-#define __otbVectorImage_txx
+#ifndef otbVectorImage_txx
+#define otbVectorImage_txx
 
 
 #include "otbVectorImage.h"

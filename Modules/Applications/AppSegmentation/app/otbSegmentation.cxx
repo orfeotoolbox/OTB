@@ -131,24 +131,24 @@ public:
   itkTypeMacro(Segmentation, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Segmentation");
     SetDescription("Performs segmentation of an image, and output either a raster or a vector file. In vector mode, large input datasets are supported.");
 
     // Documentation
     SetDocName("Segmentation");
-    SetDocLongDescription("This application allows to perform various segmentation algorithms on a multispectral image."
+    SetDocLongDescription("This application allows one to perform various segmentation algorithms on a multispectral image."
                           "Available segmentation algorithms are two different versions of Mean-Shift segmentation algorithm (one being multi-threaded),"
                           " simple pixel based connected components according to a user-defined criterion, and watershed from the gradient of the intensity"
                           " (norm of spectral bands vector). The application has two different modes that affects the nature of its output.\n\nIn raster mode,"
                           " the output of the application is a classical image of unique labels identifying the segmented regions. The labeled output can be passed to the"
                           " ColorMapping application to render regions with contrasted colours. Please note that this mode loads the whole input image into memory, and as such"
-                          " can not handle large images. \n\nTo segment large data, one can use the vector mode. In this case, the output of the application is a"
+                          " can not handle large images. \n\n To segment large data, one can use the vector mode. In this case, the output of the application is a"
                           " vector file or database. The input image is split into tiles (whose size can be set using the tilesize parameter), and each tile is loaded, segmented"
                           " with the chosen algorithm, vectorized, and written into the output file or database. This piece-wise behavior ensure that memory will never get overloaded,"
-                          " and that images of any size can be processed. There are few more options in the vector mode. The simplify option allows to simplify the geometry"
-                          " (i.e. remove nodes in polygons) according to a user-defined tolerance. The stitch option allows to application to try to stitch together polygons corresponding"
+                          " and that images of any size can be processed. There are few more options in the vector mode. The simplify option allows simplifying the geometry"
+                          " (i.e. remove nodes in polygons) according to a user-defined tolerance. The stitch option tries to stitch together the polygons corresponding"
                           " to segmented region that may have been split by the tiling scheme. ");
 
     SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images."
@@ -223,7 +223,7 @@ private:
     SetParameterDescription("mode", "Choice of processing mode, either raster or large-scale.");
 
     AddChoice("mode.vector", "Tile-based large-scale segmentation with vector output");
-    SetParameterDescription("mode.vector","In this mode, the application will output a vector file or database, and process the input image piecewise. This allows to perform segmentation of very large images.");
+    SetParameterDescription("mode.vector","In this mode, the application will output a vector file or database, and process the input image piecewise. This allows performing segmentation of very large images.");
 
     AddChoice("mode.raster", "Standard segmentation with labeled raster output");
     SetParameterDescription("mode.raster","In this mode, the application will output a standard labeled raster. This mode can not handle large data.");
@@ -258,9 +258,9 @@ private:
     SetParameterDescription("mode.vector.out", "The output vector file or database (name can be anything understood by OGR)");
 
     AddParameter(ParameterType_Choice,"mode.vector.outmode","Writing mode for the output vector file");
-    SetParameterDescription("mode.vector.outmode","This allows to set the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.");
+    SetParameterDescription("mode.vector.outmode","This allows one to set the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.");
 
-    AddChoice("mode.vector.outmode.ulco","Update output vector file, only allow to create new layers");
+    AddChoice("mode.vector.outmode.ulco","Update output vector file, only allow creating new layers");
     SetParameterDescription("mode.vector.outmode.ulco","The output vector file is opened in update mode if existing. If the output layer already exists, the application stops, leaving it untouched.");
 
     AddChoice("mode.vector.outmode.ovw","Overwrite output vector file if existing.");
@@ -298,7 +298,7 @@ private:
 
     AddParameter(ParameterType_Float, "mode.vector.simplify", "Simplify polygons");
     SetParameterDescription("mode.vector.simplify",
-                            "Simplify polygons according to a given tolerance (in pixel). This option allows to reduce the size of the output file or database.");
+                            "Simplify polygons according to a given tolerance (in pixel). This option allows reducing the size of the output file or database.");
     SetDefaultParameterFloat("mode.vector.simplify",0.1);
     MandatoryOff("mode.vector.simplify");
     DisableParameter("mode.vector.simplify");
@@ -340,7 +340,7 @@ private:
     SetDocExampleParameterValue("filter", "meanshift",1);
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
@@ -441,7 +441,7 @@ private:
     return streamingVectorizedFilter->GetStreamSize();
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Switch on segmentation mode
     const std::string segModeType = GetParameterString("mode");
@@ -449,7 +449,7 @@ private:
     const std::string segType = GetParameterString("filter");
 
     otb::ogr::DataSource::Pointer ogrDS;
-    otb::ogr::Layer layer(NULL, false);
+    otb::ogr::Layer layer(ITK_NULLPTR, false);
 
     std::string projRef = GetParameterFloatVectorImage("in")->GetProjectionRef();
 
@@ -686,7 +686,7 @@ private:
 
            std::string repack("REPACK ");
            repack = repack + shpLayerName;
-           ogrDS->ExecuteSQL(repack, NULL, NULL);
+           ogrDS->ExecuteSQL(repack, ITK_NULLPTR, ITK_NULLPTR);
          }
        }
       }

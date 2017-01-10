@@ -59,7 +59,7 @@ private:
     m_DispToElev = DisparityToElevationFilterType::New();
   }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DisparityMapToElevationMap");
     SetDescription("Projects a disparity map into a regular elevation map");
@@ -76,7 +76,7 @@ private:
     AddDocTag(Tags::Stereo);
 
     AddParameter(ParameterType_Group,"io","Input and output data");
-    SetParameterDescription("io","This group of parameters allows to set the input and output images and grids.");
+    SetParameterDescription("io","This group of parameters allows one to set input images, output images and grids.");
 
     AddParameter(ParameterType_InputImage,"io.in","Input disparity map");
     SetParameterDescription("io.in","The input disparity map (horizontal disparity in first band, vertical in second)");
@@ -125,12 +125,12 @@ private:
     SetDocExampleParameterValue("io.out","dem.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType::Pointer inputDisp     = this->GetParameterImage("io.in");
     FloatVectorImageType::Pointer sensorLeft    = this->GetParameterImage("io.left");

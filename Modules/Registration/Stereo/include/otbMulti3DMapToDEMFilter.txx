@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMulti3DMapToDEMFilter_txx
-#define __otbMulti3DMapToDEMFilter_txx
+#ifndef otbMulti3DMapToDEMFilter_txx
+#define otbMulti3DMapToDEMFilter_txx
 
 #include "otbMulti3DMapToDEMFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -104,7 +104,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Get3DMapInput(unsi
 {
   if ((2 * (index + 1)) > this->GetNumberOfInputs())
     {
-    return NULL;
+    return ITK_NULLPTR;
     }
   return static_cast<const T3DImage *> (this->itk::ProcessObject::GetInput(2 * index));
 }
@@ -115,7 +115,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetMaskInput(unsig
 {
   if ((2 * (index + 1)) > this->GetNumberOfInputs())
     {
-    return NULL;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *> (this->itk::ProcessObject::GetInput(2 * index + 1));
 }
@@ -137,7 +137,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetDEMOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputDEMImage *> (this->itk::ProcessObject::GetOutput(0));
 }
@@ -187,7 +187,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
      {
      mapToGroundTransform->SetOutputProjectionRef(m_ProjectionRef);
      }*/
-    mapToGroundTransform->InstanciateTransform();
+    mapToGroundTransform->InstantiateTransform();
 
     typename InputMapType::SizeType inputSize = imgPtr->GetLargestPossibleRegion().GetSize();
 
@@ -405,33 +405,49 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     groundToSensorTransform->SetOutputKeywordList(imgPtr->GetImageKeywordlist());
     groundToSensorTransform->SetOutputOrigin(imgPtr->GetOrigin());
     groundToSensorTransform->SetOutputSpacing(imgPtr->GetSpacing());
-    groundToSensorTransform->InstanciateTransform();
+    groundToSensorTransform->InstantiateTransform();
 
     typename T3DImage::RegionType mapRegion = imgPtr->GetLargestPossibleRegion();
 
     itk::ContinuousIndex<double, 2> mapContiIndex;
-    IndexType maxMapIndex;
-    IndexType minMapIndex;
+    long int maxMapIndex[2] = { 0, 0 };
+    long int minMapIndex[2] = { 0, 0 };
     maxMapIndex[0] = static_cast<long int> (mapRegion.GetIndex(0) + mapRegion.GetSize(0));
     maxMapIndex[1] = static_cast<long int> (mapRegion.GetIndex(1) + mapRegion.GetSize(1));
     minMapIndex[0] = static_cast<long int> (mapRegion.GetIndex(0));
     minMapIndex[1] = static_cast<long int> (mapRegion.GetIndex(1));
 
-    IndexType minMapRequestedIndex;
+    long int minMapRequestedIndex[2] = { 0, 0 };
     minMapRequestedIndex[0]= maxMapIndex[0]+1;
     minMapRequestedIndex[1]= maxMapIndex[1]+1;
-    IndexType maxMapRequestedIndex;
+
+    long int maxMapRequestedIndex[2] = { 0, 0 };
     maxMapRequestedIndex[0]= 0;
     maxMapRequestedIndex[1]= 0;
 
     for (unsigned int i = 0; i < 8; i++)
       {
-      TDPointType tmpSensor = groundToSensorTransform->TransformPoint(corners[i]);
+      TDPointType tmpSensor = groundToSensorTransform->TransformPoint( corners[i] );
 
-      minMapRequestedIndex[0] = std::min(minMapRequestedIndex[0], static_cast<long int> (tmpSensor[0] - m_Margin[0]));
-      minMapRequestedIndex[1] = std::min(minMapRequestedIndex[1], static_cast<long int> (tmpSensor[1] - m_Margin[1]));
-      maxMapRequestedIndex[0] = std::max(maxMapRequestedIndex[0], static_cast<long int> (tmpSensor[0] + m_Margin[0]));
-      maxMapRequestedIndex[1] = std::max(maxMapRequestedIndex[1], static_cast<long int> (tmpSensor[1] + m_Margin[1]));
+      minMapRequestedIndex[0] = std::min(
+        minMapRequestedIndex[0],
+        static_cast<long int> ( tmpSensor[0] - m_Margin[0] )
+        );
+
+      minMapRequestedIndex[1] = std::min(
+        minMapRequestedIndex[1],
+        static_cast<long int> ( tmpSensor[1] - m_Margin[1] )
+        );
+
+      maxMapRequestedIndex[0] = std::max(
+        maxMapRequestedIndex[0],
+        static_cast<long int> ( tmpSensor[0] + m_Margin[0] )
+        );
+
+      maxMapRequestedIndex[1] = std::max(
+        maxMapRequestedIndex[1],
+        static_cast<long int> ( tmpSensor[1] + m_Margin[1] )
+        );
 
       minMapRequestedIndex[0] = std::max(minMapRequestedIndex[0], minMapIndex[0]);
       minMapRequestedIndex[1] = std::max(minMapRequestedIndex[1], minMapIndex[1]);
@@ -459,6 +475,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
       }
 
     imgPtr->SetRequestedRegion(requestedRegion);
+    
     TMaskImage *mskPtr = const_cast<TMaskImage *> (this->GetMaskInput(k));
     if (mskPtr)
       {
@@ -478,7 +495,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
   const TOutputDEMImage * outputDEM = this->GetDEMOutput();
 
   //create splits
-  // for each map we check if the input region can be splitted into threadNb
+  // for each map we check if the input region can be split into threadNb
   m_NumberOfSplit.resize(this->GetNumberOf3DMaps());
 
   unsigned int maximumRegionsNumber = 1;
@@ -498,7 +515,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
                                                                                         this->GetNumberOfThreads());
       }
     m_NumberOfSplit[k] = regionsNumber;
-    otbMsgDevMacro( "map " << k << " will be splitted into " << regionsNumber << " regions" );
+    otbMsgDevMacro( "map " << k << " will be split into " << regionsNumber << " regions" );
     if (maximumRegionsNumber < regionsNumber) maximumRegionsNumber = regionsNumber;
 
     }
@@ -532,7 +549,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
     m_GroundTransform = RSTransform2DType::New();
     m_GroundTransform->SetInputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
     m_GroundTransform->SetOutputProjectionRef(m_ProjectionRef);
-    m_GroundTransform->InstanciateTransform();
+    m_GroundTransform->InstantiateTransform();
     }
 
 }
@@ -548,25 +565,27 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
   typename OutputImageType::PointType pointRefStep;
   typename OutputImageType::RegionType requestedRegion = outputPtr->GetRequestedRegion();
 
-  typename TOutputDEMImage::SpacingType step = outputPtr->GetSpacing();
+//  typename TOutputDEMImage::SpacingType step = outputPtr->GetSpacing();
 
   //convert requested region to Long/Lat
 
-  typename TOutputDEMImage::SizeType size = requestedRegion.GetSize();
+//  typename TOutputDEMImage::SizeType size = requestedRegion.GetSize();
 
   typename TOutputDEMImage::IndexType index = requestedRegion.GetIndex();
   outputPtr->TransformIndexToPhysicalPoint(index, pointRef);
+  /*
   InputInternalPixelType regionLong1 = pointRef[0];
   InputInternalPixelType regionLat1 = pointRef[1];
   InputInternalPixelType regionLong2 = pointRef[0] + size[0] * step[0];
   InputInternalPixelType regionLat2 = pointRef[1] + size[1] * step[1];
   InputInternalPixelType minLong = std::min(regionLong1, regionLong2);
-  // InputInternalPixelType minLat = std::min(regionLat1, regionLat2);
-  // InputInternalPixelType maxLong = std::max(regionLong1, regionLong2);
-  // InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
+  InputInternalPixelType minLat = std::min(regionLat1, regionLat2);
+  InputInternalPixelType maxLong = std::max(regionLong1, regionLong2);
+  InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
+  */
 
-  TOutputDEMImage * tmpDEM = NULL;
-  AccumulatorImageType *tmpAcc = NULL;
+  TOutputDEMImage * tmpDEM = ITK_NULLPTR;
+  AccumulatorImageType *tmpAcc = ITK_NULLPTR;
   typename TOutputDEMImage::RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
   typename T3DImage::RegionType splitRegion;
@@ -724,7 +743,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
       else
         {
         splitRegion = requestedRegion;
-        otbMsgDevMacro( "map " << k << " will not be splitted " );
+        otbMsgDevMacro( "map " << k << " will not be split " );
         }
       }
     }

@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToReflectanceImageFilter_h
-#define __otbImageToReflectanceImageFilter_h
+#ifndef otbImageToReflectanceImageFilter_h
+#define otbImageToReflectanceImageFilter_h
 
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
@@ -116,7 +116,7 @@ private:
  *
  *  Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel.
  *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set or the user can
- *  give the day and the mounth of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient.
+ *  give the day and the month of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient.
  *  To note that in the case, 6S gives the square of the distances ratio.
  *
  *
@@ -230,9 +230,9 @@ public:
   itkSetClampMacro(Day, int, 1, 31);
   /** Get the acquisition day. */
   itkGetConstReferenceMacro(Day, int);
-  /** Set the acquisition mounth. */
+  /** Set the acquisition month. */
   itkSetClampMacro(Month, int, 1, 12);
-  /** Set the  acquisition mounth. */
+  /** Set the  acquisition month. */
   itkGetConstReferenceMacro(Month, int);
 
 protected:
@@ -251,10 +251,10 @@ protected:
     };
 
   /** Destructor */
-  virtual ~ImageToReflectanceImageFilter() {}
+  ~ImageToReflectanceImageFilter() ITK_OVERRIDE {}
 
   /** Update the functor list and input parameters */
-  virtual void BeforeThreadedGenerateData(void)
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
   {
 
     OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
@@ -320,7 +320,7 @@ protected:
           }
         else
           {
-          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
           }
         }
       else

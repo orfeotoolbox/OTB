@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSegmentDetector_txx
-#define __otbLineSegmentDetector_txx
+#ifndef otbLineSegmentDetector_txx
+#define otbLineSegmentDetector_txx
 
 #include "otbLineSegmentDetector.h"
 #include "itkImageRegionIterator.h"
@@ -77,7 +77,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(0));
@@ -182,7 +182,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   SizeType       size = modulusImage->GetRequestedRegion().GetSize();
   InputIndexType id = modulusImage->GetRequestedRegion().GetIndex();
 
-  // Don't take in carre the boudary of the image.
+  // Don't take in carre the boundary of the image.
   // Special cases for streamed call
   if (modulusImage->GetRequestedRegion().GetIndex()[0] == 0)
     {
@@ -392,7 +392,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   if (nfa_rect > 0.) return nfa_rect;
 
-  /*Try to improve the precison of the oriented */
+  /*Try to improve the precision of the oriented */
   CopyRectangle(r, rec);
   for (n = 0; n < 5; ++n)
     {

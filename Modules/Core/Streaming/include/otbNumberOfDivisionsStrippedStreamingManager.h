@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbNumberOfDivisionsStrippedStreamingManager_h
-#define __otbNumberOfDivisionsStrippedStreamingManager_h
+#ifndef otbNumberOfDivisionsStrippedStreamingManager_h
+#define otbNumberOfDivisionsStrippedStreamingManager_h
 
 #include "otbStreamingManager.h"
 #include "itkImageRegionSplitterSlowDimension.h"
@@ -65,11 +65,11 @@ public:
   itkGetMacro(NumberOfDivisions, unsigned int);
 
   /** Actually computes the stream divisions given a DataObject and its region to write */
-  virtual void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region);
+  void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region) ITK_OVERRIDE;
 
 protected:
   NumberOfDivisionsStrippedStreamingManager();
-  virtual ~NumberOfDivisionsStrippedStreamingManager();
+  ~NumberOfDivisionsStrippedStreamingManager() ITK_OVERRIDE;
 
   /** The splitter type used to generate the different strips */
   typedef itk::ImageRegionSplitterSlowDimension SplitterType;

@@ -2282,7 +2282,7 @@ C_otb_adaptation End: inhomo=0 idirec=0 igroun=0 ro=0
  
 c**********************************************************************c
 c                                                                      c
-c       irapp   that input parameter allows to activate atmospheric    c
+c       irapp   that input parameter allows activating atmospheric     c
 c               correction mode                                        c
 c                                                                      c
 c		-1: No atmospheric Correction is performed             c

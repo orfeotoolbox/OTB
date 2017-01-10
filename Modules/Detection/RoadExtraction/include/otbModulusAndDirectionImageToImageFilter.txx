@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbModulusAndDirectionImageToImageFilter_txx
-#define __otbModulusAndDirectionImageToImageFilter_txx
+#ifndef otbModulusAndDirectionImageToImageFilter_txx
+#define otbModulusAndDirectionImageToImageFilter_txx
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "itkProcessObject.h"
@@ -67,7 +67,7 @@ GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputImage *>
@@ -83,7 +83,7 @@ GetInputDirection(void)
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputImageDirection *>

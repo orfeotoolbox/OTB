@@ -1,5 +1,5 @@
-#ifndef __otbWrapperOutputProcessXMLParameter_h
-#define __otbWrapperOutputProcessXMLParameter_h
+#ifndef otbWrapperOutputProcessXMLParameter_h
+#define otbWrapperOutputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
 
@@ -13,7 +13,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT OutputProcessXMLParameter
+class OTBApplicationEngine_EXPORT OutputProcessXMLParameter
   : public Parameter
 {
 public:
@@ -46,7 +46,7 @@ public:
     this->Modified();
     }
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     if(m_FileName.empty())
       return false;
@@ -54,7 +54,7 @@ public:
       return true;
   }
 
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_FileName = "";
   }
@@ -67,12 +67,14 @@ public:
 
   void Write(Application::Pointer application);
 
+  TiXmlElement* ParseApplication(Application::Pointer app);
+
 protected:
 
   OutputProcessXMLParameter();
 
   /** Destructor */
-  virtual ~OutputProcessXMLParameter();
+  ~OutputProcessXMLParameter() ITK_OVERRIDE;
 
 private:
 

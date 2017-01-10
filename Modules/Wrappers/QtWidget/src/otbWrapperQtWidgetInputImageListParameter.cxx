@@ -51,7 +51,9 @@ void QtWidgetInputImageListParameter::DoUpdateGUI()
     std::vector<std::string>::iterator it;
     for (it = fileList.begin(); it != fileList.end(); ++it)
       {
-      m_FileSelectionList[i++]->GetInput()->setText( QString::fromAscii(it->c_str()) );
+      m_FileSelectionList[i++]->GetInput()->setText(
+	QFile::decodeName( it->c_str() )
+      );
       }
     }
 }
@@ -87,12 +89,12 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   connect(addButton, SIGNAL(clicked()), this, SLOT(AddFile()));
   addSupLayout->addWidget(addButton);
 
-  // Supress file button
+  // Suppress file button
   QPushButton * supButton = new QPushButton;
   supButton->setText("-");
   supButton->setFixedWidth(buttonSize);
-  supButton->setToolTip("Supress the selected file...");
-  connect(supButton, SIGNAL(clicked()), this, SLOT(SupressFile()));
+  supButton->setToolTip("Suppress the selected file...");
+  connect(supButton, SIGNAL(clicked()), this, SLOT(SuppressFile()));
   addSupLayout->addWidget(supButton);
   buttonLayout->addLayout(addSupLayout);
 
@@ -125,6 +127,7 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   fileLayout->setSpacing(0);
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   fileLayout->addWidget(fileSelection);
   m_InputImageListParam->AddNullElement();
@@ -308,6 +311,7 @@ QtWidgetInputImageListParameter::AddFile()
     }
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
@@ -330,7 +334,7 @@ QtWidgetInputImageListParameter::AddFile()
 }
 
 void
-QtWidgetInputImageListParameter::SupressFile()
+QtWidgetInputImageListParameter::SuppressFile()
 {
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
@@ -362,6 +366,7 @@ QtWidgetInputImageListParameter::EraseFile()
   m_FileLayout = new QVBoxLayout();
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);

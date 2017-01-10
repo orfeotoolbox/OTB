@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDataNodeFunctionBase_h
-#define __otbDataNodeFunctionBase_h
+#ifndef otbDataNodeFunctionBase_h
+#define otbDataNodeFunctionBase_h
 
 #include "itkFunctionBase.h"
 
@@ -29,7 +29,7 @@ namespace otb
   * the abstract method Evaluate() maps a DataNode from the input space to a element
   * in the output space.
   *
-  * Subclasses must override Evaluate().
+  * Subclasses must ITK_OVERRIDE Evaluate().
   *
   * This class is template over the input DataNode type and
   * the output (range) type.
@@ -63,11 +63,11 @@ public:
   typedef TOutput    OutputType;
 
   /** Evaluate at the specified input position */
-  virtual OutputType Evaluate( const DataNodeType& node ) const = 0;
+  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE = 0;
 
 protected:
   DataNodeFunctionBase(){};
-  ~DataNodeFunctionBase(){};
+  ~DataNodeFunctionBase() ITK_OVERRIDE{};
 
 private:
   DataNodeFunctionBase(const Self& ); //purposely not implemented

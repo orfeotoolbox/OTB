@@ -31,6 +31,9 @@ otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbSinclairToCovarianceMatrixFunctor.cxx
 otbReciprocalCovarianceToCoherencyDegreeImageFilter.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
+otbReciprocalBarnesDecomp.cxx
+otbReciprocalHuynenDecomp.cxx
+otbReciprocalPauliDecomp.cxx
 )
 
 add_executable(otbPolarimetryTestDriver ${OTBPolarimetryTests})
@@ -69,6 +72,38 @@ otb_add_test(NAME saTvReciprocalHAlphaImageFilter COMMAND otbPolarimetryTestDriv
   5
   ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
   )
+  
+otb_add_test(NAME saTvReciprocalBarnesDecompImageFilter COMMAND otbPolarimetryTestDriver
+  --compare-image ${EPSILON_7}   ${BASELINE}/saTvReciprocalBarnesDecompImageFilter.tif
+  ${TEMP}/saTvReciprocalBarnesDecompImageFilter.tif
+  otbReciprocalBarnesDecompImageFilter
+  ${INPUTDATA}/RSAT_imagery_HH.tif
+  ${INPUTDATA}/RSAT_imagery_HV.tif
+  ${INPUTDATA}/RSAT_imagery_VV.tif
+  5
+  ${TEMP}/saTvReciprocalBarnesDecompImageFilter.tif
+  )
+  
+otb_add_test(NAME saTvReciprocalHuynenDecompImageFilter COMMAND otbPolarimetryTestDriver
+  --compare-image ${EPSILON_7}   ${BASELINE}/saTvReciprocalHuynenDecompImageFilter.tif
+  ${TEMP}/saTvReciprocalHuynenDecompImageFilter.tif
+  otbReciprocalHuynenDecompImageFilter
+  ${INPUTDATA}/RSAT_imagery_HH.tif
+  ${INPUTDATA}/RSAT_imagery_HV.tif
+  ${INPUTDATA}/RSAT_imagery_VV.tif
+  5
+  ${TEMP}/saTvReciprocalHuynenDecompImageFilter.tif
+  )
+  
+otb_add_test(NAME saTvReciprocalPauliDecompImageFilter COMMAND otbPolarimetryTestDriver
+  --compare-image ${EPSILON_7}   ${BASELINE}/saTvReciprocalPauliDecompImageFilter.tif
+  ${TEMP}/saTvReciprocalPauliDecompImageFilter.tif
+  otbReciprocalPauliDecompImageFilter
+  ${INPUTDATA}/RSAT_imagery_HH.tif
+  ${INPUTDATA}/RSAT_imagery_HV.tif
+  ${INPUTDATA}/RSAT_imagery_VV.tif
+  ${TEMP}/saTvReciprocalPauliDecompImageFilter.tif
+  )
 
 otb_add_test(NAME saTuReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew COMMAND otbPolarimetryTestDriver
   otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew
@@ -84,6 +119,18 @@ otb_add_test(NAME saTvReciprocalCovarianceToReciprocalCoherencyImageFilter COMMA
 
 otb_add_test(NAME saTuReciprocalHAlphaImageFilterNew COMMAND otbPolarimetryTestDriver
   otbReciprocalHAlphaImageFilterNew
+  )
+  
+otb_add_test(NAME saTuReciprocalBarnesDecompImageFilterNew COMMAND otbPolarimetryTestDriver
+  otbReciprocalBarnesDecompImageFilterNew
+  )
+  
+otb_add_test(NAME saTuReciprocalHuynenDecompImageFilterNew COMMAND otbPolarimetryTestDriver
+  otbReciprocalHuynenDecompImageFilterNew
+  )
+  
+otb_add_test(NAME saTuReciprocalPauliDecompImageFilterNew COMMAND otbPolarimetryTestDriver
+  otbReciprocalPauliDecompImageFilterNew
   )
 
 otb_add_test(NAME saTuSinclairToCoherencyMatrixFunctor COMMAND otbPolarimetryTestDriver

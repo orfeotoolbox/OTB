@@ -15,16 +15,24 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRFieldWrapper_h
-#define __otbOGRFieldWrapper_h
+#ifndef otbOGRFieldWrapper_h
+#define otbOGRFieldWrapper_h
 
 #include <string>
 #include <boost/shared_ptr.hpp>
 class OGRFieldDefn;
 class OGRFeature;
+#if defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
 #include "ogr_core.h" // OGR enums
+#pragma warning ( pop )
+#else
+#include "ogr_core.h" // OGR enums
+#endif
 #include "itkIndent.h"
 
+#include "OTBGdalAdaptersExport.h"
 
 namespace otb { namespace ogr {
 
@@ -35,14 +43,14 @@ namespace otb { namespace ogr {
  * \class FieldDefn
  * \brief Encapsulation of \c OGRFieldDefn: field definition.
  * \invariant <tt>m_Definition != 0</tt>
- * \invariant \c m_Definition lifetime is of the responsability of the owning \c
+ * \invariant \c m_Definition lifetime is of the responsibility of the owning \c
  * \c OGRFeatureDefn.
  * \sa OGRFieldDefn
  * \since OTB v 3.14.0
  *
  * \ingroup OTBGdalAdapters
  */
-class FieldDefn
+class OTBGdalAdapters_EXPORT FieldDefn
   {
 public:
   FieldDefn(OGRFieldDefn& definition) : m_Definition(&definition){ }
@@ -66,6 +74,7 @@ bool operator==(FieldDefn const& lhs, FieldDefn const& rhs)
     &&   lhs.GetType() == rhs.GetType();
   }
 
+OTBGdalAdapters_EXPORT
 std::ostream & operator<<(std::ostream & os, FieldDefn const& defn);
 
 /*===========================================================================*/
@@ -92,7 +101,7 @@ class Feature;
  *
  * \ingroup OTBGdalAdapters
  */
-class Field
+class OTBGdalAdapters_EXPORT Field
 {
 public:
   /**
@@ -101,7 +110,7 @@ public:
    * \param[in] index  Index of the field in the \c Feature.
    * \throw None
    */
-  Field(Feature & feature, size_t index);
+  Field(Feature & feature, int index);
   /// %Field definition accessor.
   FieldDefn const& GetDefinition() const
     { return m_Definition; }
@@ -167,6 +176,7 @@ public:
 
   /** \copydoc Field::ogr() const */
   OGRField & ogr();
+
 private:
   /**\name Unchecked definitions
    * All the definitions that follow do the real work. However, they are not the
@@ -201,13 +211,15 @@ private:
    * All the fields decoding is at the wrong place (\c OGRFeature instead of
    * \c OGRField) => need for an index.
    */
-  size_t                          m_index;
+
+  int        m_index;
 };
 
-} } // end namespace otb::ogr
+}
+} // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbOGRFieldWrapper.txx"
 #endif
 
-#endif // __otbOGRFieldWrapper_h
+#endif // otbOGRFieldWrapper_h

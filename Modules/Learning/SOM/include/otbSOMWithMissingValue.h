@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMWithMissingValue_h
-#define __otbSOMWithMissingValue_h
+#ifndef otbSOMWithMissingValue_h
+#define otbSOMWithMissingValue_h
 
 #include "otbPeriodicSOM.h"
 
@@ -72,41 +72,41 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(SOMWithMissingValue, PeriodicSOM);
 
 protected:
   /** Constructor */
   SOMWithMissingValue ();
   /** Destructor */
-  virtual ~SOMWithMissingValue();
+  ~SOMWithMissingValue() ITK_OVERRIDE;
   /** Output information redefinition */
-  virtual void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation ();
   }
   /** Output allocation redefinition */
-  virtual void AllocateOutputs()
+  void AllocateOutputs() ITK_OVERRIDE
   {
     Superclass::AllocateOutputs();
   }
   /** Main computation method */
-  virtual void GenerateData(void)
+  void GenerateData(void) ITK_OVERRIDE
   {
     Superclass::GenerateData();
   }
   /**
    * Update the output map with a new sample, depending on the availability of the data
    */
-  virtual void UpdateMap(const NeuronType& sample, double beta, SizeType& radius);
+  void UpdateMap(const NeuronType& sample, double beta, SizeType& radius) ITK_OVERRIDE;
 
   /** Step one iteration. */
-  virtual void Step(unsigned int currentIteration)
+  void Step(unsigned int currentIteration) ITK_OVERRIDE
   {
     Superclass::Step(currentIteration);
   }
   /** PrintSelf method */
-void PrintSelf(std::ostream& os, itk::Indent indent) const;
+void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

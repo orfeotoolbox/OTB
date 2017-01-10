@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKNearestNeighborsMachineLearningModelFactory_h
-#define __otbKNearestNeighborsMachineLearningModelFactory_h
+#ifndef otbKNearestNeighborsMachineLearningModelFactory_h
+#define otbKNearestNeighborsMachineLearningModelFactory_h
 
 #include "otbRequiresOpenCVCheck.h"
 
@@ -41,8 +41,8 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
+  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
+  const char* GetDescription(void) const ITK_OVERRIDE;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -59,7 +59,7 @@ public:
 
 protected:
   KNearestNeighborsMachineLearningModelFactory();
-  virtual ~KNearestNeighborsMachineLearningModelFactory();
+  ~KNearestNeighborsMachineLearningModelFactory() ITK_OVERRIDE;
 
 private:
   KNearestNeighborsMachineLearningModelFactory(const Self &); //purposely not implemented

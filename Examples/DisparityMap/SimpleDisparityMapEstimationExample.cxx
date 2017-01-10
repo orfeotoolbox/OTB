@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // Then we define the metric we will use to evaluate the local registration between the fixed and
-  // the moving image. In this example we choosed the \doxygen{itk}{NormalizedCorrelationImageToImageMetric}.
+  // the moving image. In this example we chose the \doxygen{itk}{NormalizedCorrelationImageToImageMetric}.
   //
   // Software Guide : EndLatex
 
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // Disparity map estimation implies evaluation of the moving image at non-grid position. Therefore, an
-  // interpolator is needed. In this example we choosed the \doxygen{itk}{WindowedSincInterpolateImageFunction}.
+  // interpolator is needed. In this example we chose the \doxygen{itk}{WindowedSincInterpolateImageFunction}.
   //
   // Software Guide : EndLatex
 
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // To perform local registration, an optimizer is needed. In this example we choosed the
+  // To perform local registration, an optimizer is needed. In this example we chose the
   // \doxygen{itk}{GradientDescentOptimizer}.
   //
   // Software Guide : EndLatex
@@ -345,7 +345,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // The disparity map estimation filter is instanciated.
+  // The disparity map estimation filter is instantiated.
   //
   // Software Guide : EndLatex
 
@@ -379,7 +379,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // The local registration process can lead to wrong deformation values and transform parameters. To Select only
-  // points in point set for which the registration process was succesful, one can set a threshold on the final metric
+  // points in point set for which the registration process was successful, one can set a threshold on the final metric
   // value : points for which the absolute final metric value is below this threshold will be discarded. This
   // threshold can be set with the \code{SetMetricThreshold()} method.
   //

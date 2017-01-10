@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNAPCAImageFilter_h
-#define __otbNAPCAImageFilter_h
+#ifndef otbNAPCAImageFilter_h
+#define otbNAPCAImageFilter_h
 
 #include "otbMNFImageFilter.h"
 
@@ -86,10 +86,10 @@ public:
 
 protected:
   NAPCAImageFilter() { }
-  virtual ~NAPCAImageFilter () { }
+  ~NAPCAImageFilter () ITK_OVERRIDE { }
 
   /** Specific functionality of NAPCA */
-  virtual void GenerateTransformationMatrix();
+  void GenerateTransformationMatrix() ITK_OVERRIDE;
 }; // end of class
 
 } // end of namespace otb

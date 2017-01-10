@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8VertexBase_h
-#define __otbRCC8VertexBase_h
+#ifndef otbRCC8VertexBase_h
+#define otbRCC8VertexBase_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -79,9 +79,9 @@ protected:
   /** Constructor */
   RCC8VertexBase();
   /** Desctructor */
-  virtual ~RCC8VertexBase() {}
+  ~RCC8VertexBase() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The segmentation level */

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __is_contiguous_h
-#define __is_contiguous_h
+#ifndef is_contiguous_h
+#define is_contiguous_h
 
 /**\ingroup boost
  * \file    is_contiguous.h
@@ -38,9 +38,12 @@
 #include <boost/detail/container_fwd.hpp>
  
 // forward declarations
-namespace std {
-template <typename T, std::size_t N>                                class array;
-} // std namespace
+
+// Comment the forward declaration of std::array as it causes compilation errors
+// on MSVC 10 when the header boost/lexical_cast.hpp is also included
+//namespace std {
+//template <typename T, std::size_t N>                                class array;
+//} // std namespace
 
 namespace boost {
 template <typename T, std::size_t N>                                 class array;

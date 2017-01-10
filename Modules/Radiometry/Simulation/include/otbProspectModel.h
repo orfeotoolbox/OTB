@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProspectModel_h
-#define __otbProspectModel_h
+#ifndef otbProspectModel_h
+#define otbProspectModel_h
 
-
+#include "OTBSimulationExport.h"
 #include "otbLeafParameters.h"
 
 #include "otbDataSpecP5B.h"
@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 
-class ITK_EXPORT ProspectModel : public SimulationStep1Base
+class OTBSimulation_EXPORT ProspectModel : public SimulationStep1Base
 {
    public:
       /** Standard class typedefs */
@@ -63,21 +63,21 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       LeafParametersType * GetInput();
 
       /** GenerateData */
-      virtual void GenerateData();
+      void GenerateData() ITK_OVERRIDE;
 
       /** Get Output reflectance/transmittance*/
-      virtual SpectralResponseType * GetReflectance();
-      virtual SpectralResponseType * GetTransmittance();
+      SpectralResponseType * GetReflectance() ITK_OVERRIDE;
+      SpectralResponseType * GetTransmittance() ITK_OVERRIDE;
 
    protected:
       /** Constructor */
       ProspectModel();
       /** Destructor */
-      ~ProspectModel();
+      ~ProspectModel() ITK_OVERRIDE;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType);
+      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
       using Superclass::MakeOutput;
 
       /** Compute Transmission of isotropic radiation across an interface between two dielectrics*/

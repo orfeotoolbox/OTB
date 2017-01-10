@@ -18,10 +18,18 @@
 #ifndef _otbConfigurationManager_h
 #define _otbConfigurationManager_h
 
+#include "itkVersion.h"
+
+#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
 #include "itksys/FundamentalType.h"
+#else
+#include "itk_kwiml.h"
+#endif
 
 #include <string>
 #include <boost/cstdint.hpp>
+
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -35,13 +43,17 @@ namespace otb
  * Please refer to each static method documentation for available
  * configuration values and related environment variables.
  */
-class ConfigurationManager
+class OTBCommon_EXPORT ConfigurationManager
 {
 public:
+#if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
   typedef ::itksysFundamentalType_UInt64 RAMValueType;
+#else
+  typedef KWIML_INT_uint64_t RAMValueType;
+#endif
 
   /**
-   * DEMDirectory is a directory were DEM tiles are stored. 
+   * DEMDirectory is a directory were DEM tiles are stored.
    *
    * If environment variable OTB_DEM_DIRECTORY is defined,
    * returns it contents as a string
@@ -64,7 +76,7 @@ public:
    *
    * If environment variable OTB_MAX_RAM_HINT is defined and could be
    * converted to int, return its content as a 64 bits unsigned int.
-   * Else, returns default value, which is 128 Mb 
+   * Else, returns default value, which is 128 Mb
    *
    */
   static RAMValueType GetMaxRAMHint();

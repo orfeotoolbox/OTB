@@ -43,7 +43,7 @@ public:
   itkTypeMacro(PixelValue, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("PixelValue");
     SetDescription("Get the value of a pixel.");
@@ -55,6 +55,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag("Miscellaneous");
     AddDocTag("Utilities");
     AddDocTag("Coordinates");
     AddDocTag("Raster");
@@ -85,7 +86,7 @@ private:
     SetDocExampleParameterValue("cl", "Channel1");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if ( HasValue("in") )
       {
@@ -108,7 +109,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     std::ostringstream ossOutput;
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
@@ -148,7 +149,7 @@ private:
 
     SetParameterString("value", oss.str());
 
-    //Display image informations in the dedicated logger
+    //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );
   }
 

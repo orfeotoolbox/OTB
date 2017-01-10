@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbDrawPathListFilter_txx
-#define __otbDrawPathListFilter_txx
+#ifndef otbDrawPathListFilter_txx
+#define otbDrawPathListFilter_txx
 
 #include "otbDrawPathListFilter.h"
 
@@ -56,7 +56,7 @@ DrawPathListFilter<TInputImage, TInputPath, TOutputImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const InputPathListType *>(this->ProcessObjectType::GetInput(1));
 }

@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletGenerator_h
-#define __otbWaveletGenerator_h
+#ifndef otbWaveletGenerator_h
+#define otbWaveletGenerator_h
 
 #include <vector>
 #include "itkLightObject.h"
@@ -47,7 +47,7 @@ enum Wavelet {
 /** \class WaveletGenerator
  * \brief Wavelet coefficient definition
  *
- * The wavelet coefficent definitions mainly come from
+ * The wavelet coefficient definitions mainly come from
  * "Ten Lecture on Wavelets", of Ingrid Daubechies,
  * Society for Industrial and Applied Mathematics, 1992.
  *
@@ -98,7 +98,7 @@ public:
 
 protected:
   WaveletGenerator() {}
-  ~WaveletGenerator() {}
+  ~WaveletGenerator() ITK_OVERRIDE {}
 
 private:
   WaveletGenerator(const Self &);  // not implemented

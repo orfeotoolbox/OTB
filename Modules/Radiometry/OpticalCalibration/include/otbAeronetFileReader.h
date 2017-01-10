@@ -15,11 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAeronetFileReader_h
-#define __otbAeronetFileReader_h
+#ifndef otbAeronetFileReader_h
+#define otbAeronetFileReader_h
 
 #include <string>
 #include <vector>
+
+#include "OTBOpticalCalibrationExport.h"
 
 #include "itkProcessObject.h"
 
@@ -33,7 +35,7 @@ class AeronetData;
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT AeronetFileReaderException
+class OTBOpticalCalibration_EXPORT AeronetFileReaderException
   : public itk::ExceptionObject
 {
 public:
@@ -72,7 +74,7 @@ public:
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT AeronetFileReader : public itk::ProcessObject
+class OTBOpticalCalibration_EXPORT AeronetFileReader : public itk::ProcessObject
 {
 public:
   /** Standards typedef */
@@ -82,10 +84,10 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through the object factory */
   itkNewMacro(Self);
-  /** Runtime type informations */
+  /** Runtime type information */
   itkTypeMacro(AeronetFileReader, itk::ProcessObject);
 
-  /** Overiding of the GetOutput() method */
+  /** Overriding of the GetOutput() method */
   virtual AeronetData * GetOutput(void);
 
   /** Set the filename  */
@@ -121,12 +123,12 @@ protected:
   /** Constructor */
   AeronetFileReader();
   /** Destructor */
-  virtual ~AeronetFileReader();
+  ~AeronetFileReader() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

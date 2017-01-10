@@ -218,15 +218,15 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
     std::cout << "Testing radius = " << radius << " and default offsets" << std::endl;
 
     ImageType::Pointer inputImage = ReadInputImage(infname);
-    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, 0);
+    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, ITK_NULLPTR);
 
-    if ( ValidateAt(inputImage, results, nbBins, radius, 0, 7, 11) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 7, 11) == EXIT_FAILURE )
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, 0, 5, 5) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 5, 5) == EXIT_FAILURE )
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, 0, 7, 11) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 7, 11) == EXIT_FAILURE )
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, 0, 10, 5) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 10, 5) == EXIT_FAILURE )
       return EXIT_FAILURE;
   }
 

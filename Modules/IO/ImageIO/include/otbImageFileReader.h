@@ -15,10 +15,17 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileReader_h
-#define __otbImageFileReader_h
+#ifndef otbImageFileReader_h
+#define otbImageFileReader_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkImageSource.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkImageSource.h"
+#endif
 #include "otbImageIOBase.h"
 #include "itkExceptionObject.h"
 #include "itkImageRegion.h"
@@ -66,7 +73,7 @@ public:
  * It interfaces with an ImageIO class to read in the data and
  * supports streaming (partial reading) if the source dataset does so.
  *
- * ImageFileReader supports extended filenames, which allow to control
+ * ImageFileReader supports extended filenames, which allow controlling
  * how the source dataset is read. See
  * http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for more
  * information.
@@ -113,17 +120,17 @@ public:
   typedef ExtendedFilenameToReaderOptions            FNameHelperType;
 
   /** Prepare image allocation at the first call of the pipeline processing */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Does the real work. */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Give the reader a chance to indicate that it will produce more
    * output than it was requested to produce. ImageFileReader cannot
    * currently read a portion of an image (since the ImageIO objects
    * cannot read a portion of an image), so the ImageFileReader must
    * enlarge the RequestedRegion to the size of the image on disk. */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
+  void EnlargeOutputRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
 
   /** Set/Get the ImageIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular ImageIO can
@@ -141,20 +148,20 @@ public:
   /** Get the resolution information from the file */
   bool GetResolutionsInfo( std::vector<unsigned int>& res,
                           std::vector<std::string>& desc);
-  
+
   /** Get the number of overviews available into the file specified
    * Returns: overview count, zero if none. */
-  unsigned int GetOverviewsCount(); 
-  
-  
-  /** Get description about overviews available into the file specified 
+  unsigned int GetOverviewsCount();
+
+
+  /** Get description about overviews available into the file specified
    * Returns: overview info, empty if none.*/
   std::vector<std::string> GetOverviewsInfo();
 
 protected:
   ImageFileReader();
-  virtual ~ImageFileReader();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageFileReader() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Convert a block of pixels from one type to another. */
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);
@@ -165,13 +172,16 @@ private:
       ImageIO classes for actually reading the file. If the file
       doesn't exist or it is not readable, and exception with an
       appropriate message will be thrown. */
-  void TestFileExistanceAndReadability();
+  void TestFileExistenceAndReadability();
 
   /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
     */
   bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
 
+  // Retrieve the real source file name if derived dataset */
+  std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
+  
   ImageFileReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
@@ -192,6 +202,8 @@ private:
   FNameHelperType::Pointer m_FilenameHelper;
 
   unsigned int m_AdditionalNumber;
+
+  bool m_KeywordListUpToDate;
 };
 
 } //namespace otb
@@ -200,4 +212,4 @@ private:
 #include "otbImageFileReader.txx"
 #endif
 
-#endif // __otbImageFileReader_h
+#endif // otbImageFileReader_h

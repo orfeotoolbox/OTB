@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShiftScaleImageFilter_h
-#define __otbShiftScaleImageFilter_h
+#ifndef otbShiftScaleImageFilter_h
+#define otbShiftScaleImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVariableLengthVector.h"
@@ -142,6 +142,14 @@ private:
 /** \class ShiftScaleVectorImageFilter
  *  \brief This filter performs a shift and scaling of a vector image on a per band basis.
  *
+ *  For each band, the following formula is applied :
+ *
+ *  \f[ output = \frac{input - shift}{scale} \f]
+ *
+ *  Beware that the behaviour differs from itk::ShiftScaleImageFilter
+ *  (which add shift instead of subtracting it).
+ *
+ *  \sa VectorShiftScale
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded
  *
@@ -186,16 +194,16 @@ public:
 
 protected:
   ShiftScaleVectorImageFilter() {}
-  virtual ~ShiftScaleVectorImageFilter() {}
+  ~ShiftScaleVectorImageFilter() ITK_OVERRIDE {}
 
   /** Process to execute before entering the multithreaded section */
-  void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
 
   /** Generate output information */
-  void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 private:
   ShiftScaleVectorImageFilter(const Self&); //purposely not implemented

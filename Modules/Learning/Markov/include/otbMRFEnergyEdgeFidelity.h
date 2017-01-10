@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFEnergyEdgeFidelity_h
-#define __otbMRFEnergyEdgeFidelity_h
+#ifndef otbMRFEnergyEdgeFidelity_h
+#define otbMRFEnergyEdgeFidelity_h
 
 #include "otbMRFEnergy.h"
 
@@ -60,7 +60,7 @@ public:
 
   itkTypeMacro(MRFEnergyEdgeFidelity, MRFEnergy);
 
-  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2)
+  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) ITK_OVERRIDE
   {
     double val1 = static_cast<double>(value1);
     double val2 = static_cast<double>(value2);
@@ -71,7 +71,7 @@ public:
 protected:
   // The constructor and destructor.
   MRFEnergyEdgeFidelity() {};
-  virtual ~MRFEnergyEdgeFidelity() {}
+  ~MRFEnergyEdgeFidelity() ITK_OVERRIDE {}
 };
 }
 

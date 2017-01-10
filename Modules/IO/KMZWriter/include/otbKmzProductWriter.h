@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKmzProductWriter_h
-#define __otbKmzProductWriter_h
+#ifndef otbKmzProductWriter_h
+#define otbKmzProductWriter_h
 
 #include <fstream>
 
@@ -34,7 +34,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkCastImageFilter.h"
 
-// Possiblity to includes vectordatas necessary includes
+// Possibility to includes vectordatas necessary includes
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 
@@ -44,7 +44,7 @@ namespace otb
 
 /** \class KmzProductWriter
  * \brief This class generate a Kmz from one or several input
- * images. The inputs must have a non empty metadata informations.
+ * images. The inputs must have a non empty metadata information.
  *
  * This class writes kmz files, supported by Google Earth. The input
  * must have metadata (a non empty keywordlist)
@@ -133,7 +133,7 @@ public:
   itkSetStringMacro(Path);
 
   /** Update Method */
-  virtual void Update()
+  void Update() ITK_OVERRIDE
   {
     this->Write();
   }
@@ -164,8 +164,8 @@ public:
 
 protected:
   KmzProductWriter();
-  virtual ~KmzProductWriter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~KmzProductWriter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /**Method for Tiling the input image*/
   virtual void Tiling();

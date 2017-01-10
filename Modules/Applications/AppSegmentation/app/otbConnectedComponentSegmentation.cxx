@@ -66,18 +66,18 @@ public:
         <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConnectedComponentSegmentation");
     SetDescription("Connected component segmentation and object based image filtering of the input image according to user-defined criterions.");
     SetDocName("Connected Component Segmentation");
-    SetDocLongDescription("This application allows to perform a masking, connected components segmentation and object based image filtering. First and optionally, a mask can be built based on user-defined criterions to select pixels of the image which will be segmented. Then a connected component segmentation is performed with a user defined criterion to decide whether two neighbouring pixels belong to the same segment or not. After this segmentation step, an object based image filtering is applied using another user-defined criterion reasoning on segment properties, like shape or radiometric attributes. " "Criterions are mathematical expressions analysed by the MuParser library (http://muparser.sourceforge.net/). For instance, expression \"((b1>80) and intensity>95)\" will merge two neighbouring pixel in a single segment if their intensity is more than 95 and their value in the first image band is more than 80. See parameters documentation for a list of available attributes. The output of the object based image filtering is vectorized and can be written in shapefile or KML format. If the input image is in raw geometry, resulting polygons will be transformed to WGS84 using sensor modelling before writing, to ensure consistency with GIS softwares. For this purpose, a Digital Elevation Model can be provided to the application. The whole processing is done on a per-tile basis for large images, so this application can handle images of arbitrary size.");
+    SetDocLongDescription("This application allows one to perform a masking, connected components segmentation and object based image filtering. First and optionally, a mask can be built based on user-defined criterions to select pixels of the image which will be segmented. Then a connected component segmentation is performed with a user defined criterion to decide whether two neighbouring pixels belong to the same segment or not. After this segmentation step, an object based image filtering is applied using another user-defined criterion reasoning on segment properties, like shape or radiometric attributes. " "Criterions are mathematical expressions analysed by the MuParser library (http://muparser.sourceforge.net/). For instance, expression \"((b1>80) and intensity>95)\" will merge two neighbouring pixel in a single segment if their intensity is more than 95 and their value in the first image band is more than 80. See parameters documentation for a list of available attributes. The output of the object based image filtering is vectorized and can be written in shapefile or KML format. If the input image is in raw geometry, resulting polygons will be transformed to WGS84 using sensor modelling before writing, to ensure consistency with GIS software. For this purpose, a Digital Elevation Model can be provided to the application. The whole processing is done on a per-tile basis for large images, so this application can handle images of arbitrary size.");
     SetDocLimitations("Due to the tiling scheme in case of large images, some segments can be arbitrarily split across multiple tiles.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Analysis);
     AddDocTag(Tags::Segmentation);
+	AddDocTag(Tags::Analysis);	
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The image to segment.");
@@ -108,6 +108,8 @@ private:
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
+    AddRAMParameter();
+
    // Doc example parameter settings
    SetDocExampleParameterValue("in", "ROI_QB_MUL_4.tif");
    SetDocExampleParameterValue("mask", "\"((b1>80)*intensity>95)\"");
@@ -117,12 +119,12 @@ private:
    SetDocExampleParameterValue("out", "ConnectedComponentSegmentation.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     InputVectorImageType::Pointer inputImage = GetParameterImage("in");
 
@@ -139,7 +141,8 @@ private:
     if (IsParameterEnabled("obia") && HasValue("obia"))
       m_Connected->GetFilter()->SetOBIAExpression(GetParameterString("obia"));
 
-    AddProcess(m_Connected,"Computing segmentation");
+    m_Connected->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(m_Connected->GetStreamer(),"Computing segmentation");
     m_Connected->Update();
 
     /*

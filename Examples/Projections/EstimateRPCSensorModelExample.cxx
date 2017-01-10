@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
   // set from the command line parameters and they are stored in:
   // \begin{itemize}
   // \item \doxygen{otb}{Point3DType} : Store the sensor point (3D ground point)
-  // \item \doxygen{otb}{Point2DType} : Pixel assotiated in the image (2D physical coordinates)
+  // \item \doxygen{otb}{Point2DType} : Pixel associated in the image (2D physical coordinates)
 
   // Here we do not use DEM or MeanElevation. It is also possible to give a 2D
   // ground point and use the DEM or MeanElevation to get

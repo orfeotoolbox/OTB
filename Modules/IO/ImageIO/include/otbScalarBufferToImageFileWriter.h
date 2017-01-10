@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbScalarBufferToImageFileWriter_h
-#define __otbScalarBufferToImageFileWriter_h
+#ifndef otbScalarBufferToImageFileWriter_h
+#define otbScalarBufferToImageFileWriter_h
 
 
 #include "otbVectorImage.h"
@@ -88,17 +88,17 @@ public:
        m_Buffer = pBuff;
   }
 
-   virtual void GenerateData();
+   void GenerateData() ITK_OVERRIDE;
 
-   virtual void Update()
+   void Update() ITK_OVERRIDE
    {
      this->GenerateData();
    }
 
 protected:
   ScalarBufferToImageFileWriter();
-  virtual ~ScalarBufferToImageFileWriter() { /* don't call ClearBuffer, user's care */}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ScalarBufferToImageFileWriter() ITK_OVERRIDE { /* don't call ClearBuffer, user's care */}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

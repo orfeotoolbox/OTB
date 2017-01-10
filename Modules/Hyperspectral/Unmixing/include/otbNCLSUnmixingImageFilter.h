@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNCLSUnmixingImageFilter_h
-#define __otbNCLSUnmixingImageFilter_h
+#ifndef otbNCLSUnmixingImageFilter_h
+#define otbNCLSUnmixingImageFilter_h
 
 #include "itkMacro.h"
 #include "itkNumericTraits.h"
@@ -98,7 +98,7 @@ private:
  *
  * This filter takes as input a multiband image and a matrix.
  * If the matrix is called \f$A\f$, it solves, for each pixel \f$p\f$, the system
- * \f$A \cdot x = p\f$ in the least square sense, with additionnal constraints on the solution
+ * \f$A \cdot x = p\f$ in the least square sense, with additional constraints on the solution
  * \f$\hat{x}\f$ ensuring positivity (each component is positive) and additivity (the sum of
  * all components is 1).
  *
@@ -171,9 +171,9 @@ public:
 protected:
   NCLSUnmixingImageFilter();
 
-  virtual ~NCLSUnmixingImageFilter();
+  ~NCLSUnmixingImageFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   NCLSUnmixingImageFilter(const Self &); //purposely not implemented

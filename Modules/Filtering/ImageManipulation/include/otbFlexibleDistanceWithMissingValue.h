@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbFlexibleDistanceWithMissingValue_h
-#define __otbFlexibleDistanceWithMissingValue_h
+#ifndef otbFlexibleDistanceWithMissingValue_h
+#define otbFlexibleDistanceWithMissingValue_h
 
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 
@@ -71,10 +71,10 @@ public:
   typedef typename TVector::ValueType ValueType;
 
   /** Gets the distance between the origin and x */
-  double Evaluate(const TVector& x) const;
+  double Evaluate(const TVector& x) const ITK_OVERRIDE;
 
   /** Gets the distance between x1 and x2 */
-  double Evaluate(const TVector& x1, const TVector& x2) const;
+  double Evaluate(const TVector& x1, const TVector& x2) const ITK_OVERRIDE;
 
   /** Gets the cooridnate distance between a and b. NOTE: a and b
   * should be type of component */
@@ -89,7 +89,7 @@ public:
 
   /** Set the value of the parameter a and b.
    * Those parameters are defined as static component in order to call it far
-   * away from the instanciation of the class (through the SOM training for instance) */
+   * away from the instantiation of the class (through the SOM training for instance) */
   static double Alpha;
   static double Beta;
   static void SetAlphaBeta(double a, double b);
@@ -99,10 +99,10 @@ public:
 
 protected:
   FlexibleDistanceWithMissingValue() {}
-  virtual ~FlexibleDistanceWithMissingValue() {}
+  ~FlexibleDistanceWithMissingValue() ITK_OVERRIDE {}
 };  // end of class
 
-/** Static variable instanciation */
+/** Static variable instantiation */
 template<class TVector>
 double FlexibleDistanceWithMissingValue<TVector>::Alpha = 1.0;
 

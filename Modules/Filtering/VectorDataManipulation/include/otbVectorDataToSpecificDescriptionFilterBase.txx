@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToSpecificDescriptionFilterBase_txx
-#define __otbVectorDataToSpecificDescriptionFilterBase_txx
+#ifndef otbVectorDataToSpecificDescriptionFilterBase_txx
+#define otbVectorDataToSpecificDescriptionFilterBase_txx
 
 #include "otbVectorDataToSpecificDescriptionFilterBase.h"
 
@@ -51,7 +51,7 @@ VectorDataToSpecificDescriptionFilterBase<TVectorData>
 {
   if (this->GetNumberOfInputs() < idx+2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const DataObject *>

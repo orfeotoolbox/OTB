@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMRFSampler_h
-#define __otbMRFSampler_h
+#ifndef otbMRFSampler_h
+#define otbMRFSampler_h
 
 #include "otbMRFEnergy.h"
 #include "itkNeighborhoodIterator.h"
@@ -108,7 +108,7 @@ protected:
     m_EnergyRegularization = EnergyRegularizationType::New();
     m_EnergyFidelity =  EnergyFidelityType::New();
     };
-  virtual ~MRFSampler() {}
+  ~MRFSampler() ITK_OVERRIDE {}
 
 };
 

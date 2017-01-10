@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSobelVectorImageFilter_h
-#define __otbSobelVectorImageFilter_h
+#ifndef otbSobelVectorImageFilter_h
+#define otbSobelVectorImageFilter_h
 
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
 
@@ -76,7 +76,7 @@ class ITK_EXPORT SobelVectorImageFilter
               typename TOutputImage::PixelType > >
 {
 public:
-  /** Standart class typedefs */
+  /** Standard class typedefs */
   typedef SobelVectorImageFilter Self;
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
             Functor::SobelOperator<
@@ -97,7 +97,7 @@ protected:
     typename Superclass::RadiusType radius = {{1, 1}};
     this->SetRadius( radius );
   }
-  virtual ~SobelVectorImageFilter() { }
+  ~SobelVectorImageFilter() ITK_OVERRIDE { }
 
 private:
   SobelVectorImageFilter( const Self & ); // Not implemented
@@ -107,4 +107,4 @@ private:
 } // end of namespace otb
 
 
-#endif // __otbSobelVectorImageFilter_h
+#endif // otbSobelVectorImageFilter_h

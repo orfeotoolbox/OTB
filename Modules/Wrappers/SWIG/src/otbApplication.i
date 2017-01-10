@@ -29,7 +29,7 @@
 #define SWIG_FILE_WITH_INIT
 %}
 
-// Langage specific extension
+// Language specific extension
 %include "Python.i"
 %include "Java.i"
 %include "Ruby.i"
@@ -203,7 +203,18 @@ public:
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
+  
+  InputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
+  void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
+  ComplexInputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
+  void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
+  void AddImageToParameterInputImageList(std::string parameter,InputImageParameter::ImageBaseType * img);
+   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageParameter::ImageBaseType * img);
+  void ClearParameterInputImageList(std::string parameter);
+  unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
+
+  
   itkProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;
@@ -434,13 +445,13 @@ class ApplicationProxy(object):
       self.__dict__["application"].SetParameterString(groupkey, value)
 
   def __str__(self):
-      return self.__dict__["application"].GetParameterAsString(self.groupkey)
+    return self.__dict__["application"].GetParameterAsString(self.groupkey)
 
   def __eq__(self, other):
     if not type(other) == type(self):
-			return (self.__str__() == other)
+      return (self.__str__() == other)
     else:
-			return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
+      return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
 
   def __ne__(self, other):
     return not self.__eq__(other)
@@ -450,10 +461,9 @@ class ApplicationProxy(object):
 
   def __setattr__(self,attr,value):
     if attr not in self.__dict__:
-        return self.__dict__["application"].SetParameterValue( self.groupkey + "." + attr.lower(), value )
+      return self.__dict__["application"].SetParameterValue( self.groupkey + "." + attr.lower(), value )
     else:
-        return dict.__setattr__(self, attr, value)
-
+      return dict.__setattr__(self, attr, value)
 
 }
 #endif
@@ -461,39 +471,40 @@ class ApplicationProxy(object):
 #if SWIGPYTHON
 /*Maybe TODO: change use a dict to  GetParameterTypeAsString */
 
-%extend Application {
-  %pythoncode {
+%extend Application
+{
+  %pythoncode
+    {
 
 		def __str__(self):
 			s  = self.GetDocName()
 
 		def GetParameterTypeAsString(self, parameter_type):
 			return {
-			ParameterType_InputProcessXML : 'ParameterType_InputProcessXML',
-      ParameterType_String : 'ParameterType_String',
-      ParameterType_InputFilename : 'ParameterType_InputFilename',
-      ParameterType_OutputImage : 'ParameterType_OutputImage',
-      ParameterType_OutputVectorData : 'ParameterType_OutputVectorData',
-      ParameterType_OutputProcessXML : 'ParameterType_OutputProcessXML',
-      ParameterType_OutputFilename : 'ParameterType_OutputFilename',
-      ParameterType_Directory : 'ParameterType_Directory',
-      ParameterType_InputImage : 'ParameterType_InputImage',
-      ParameterType_ComplexInputImage : 'ParameterType_ComplexInputImage',
-      ParameterType_InputVectorData : 'ParameterType_InputVectorData',
-      ParameterType_InputImageList : 'ParameterType_InputImageList',
-      ParameterType_InputVectorDataList : 'ParameterType_InputImageList',
-      ParameterType_InputFilenameList : 'ParameterType_InputFilenameList',
-      ParameterType_StringList : 'ParameterType_StringList',
-      ParameterType_ListView : 'ParameterType_ListView',
-      ParameterType_Int : 'ParameterType_Int',
-      ParameterType_Radius : 'ParameterType_Radius',
-      ParameterType_RAM : 'ParameterType_RAM',
-      ParameterType_Float : 'ParameterType_Float',
-      ParameterType_Empty : 'ParameterType_Empty',
-      ParameterType_Choice : 'ParameterType_Choice',
-      ParameterType_Group : 'ParameterType_Group',
-      }.get(parameter_type, 'ParameterType_UNKNOWN')
-
+				ParameterType_InputProcessXML : 'ParameterType_InputProcessXML',
+				ParameterType_String : 'ParameterType_String',
+				ParameterType_InputFilename : 'ParameterType_InputFilename',
+				ParameterType_OutputImage : 'ParameterType_OutputImage',
+				ParameterType_OutputVectorData : 'ParameterType_OutputVectorData',
+				ParameterType_OutputProcessXML : 'ParameterType_OutputProcessXML',
+				ParameterType_OutputFilename : 'ParameterType_OutputFilename',
+				ParameterType_Directory : 'ParameterType_Directory',
+				ParameterType_InputImage : 'ParameterType_InputImage',
+				ParameterType_ComplexInputImage : 'ParameterType_ComplexInputImage',
+				ParameterType_InputVectorData : 'ParameterType_InputVectorData',
+				ParameterType_InputImageList : 'ParameterType_InputImageList',
+				ParameterType_InputVectorDataList : 'ParameterType_InputImageList',
+				ParameterType_InputFilenameList : 'ParameterType_InputFilenameList',
+				ParameterType_StringList : 'ParameterType_StringList',
+				ParameterType_ListView : 'ParameterType_ListView',
+				ParameterType_Int : 'ParameterType_Int',
+				ParameterType_Radius : 'ParameterType_Radius',
+				ParameterType_RAM : 'ParameterType_RAM',
+				ParameterType_Float : 'ParameterType_Float',
+				ParameterType_Empty : 'ParameterType_Empty',
+				ParameterType_Choice : 'ParameterType_Choice',
+				ParameterType_Group : 'ParameterType_Group',
+			}.get(parameter_type, 'ParameterType_UNKNOWN')
 
 		def __str__(self):
 			s  = self.GetDocName()
@@ -502,56 +513,56 @@ class ApplicationProxy(object):
 			return s
 
 		def SetParameterValue(self, paramKey, value):
-		  paramType = self.GetParameterType(paramKey)
-		  if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
-    									 ParameterType_String, ParameterType_InputFilename,
-    									 ParameterType_OutputImage, ParameterType_OutputVectorData,
-    									 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-    									 ParameterType_Directory, ParameterType_InputImage,
-    									 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-		    return self.SetParameterString(paramKey, value)
-		  elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-    										 ParameterType_InputFilenameList, ParameterType_StringList,
-    										 ParameterType_ListView]:
-		    return self.setParameterStringList(paramKey, value)
-		  elif paramType in [ParameterType_Int, ParameterType_Radius]:
-		    return self.SetParameterInt(paramKey, value)
-		  elif paramType in [ParameterType_Float]:
-		    return self.SetParameterFloat(paramKey, value)
-		  elif paramType in [ParameterType_Empty]:
-		    return self.EnableParameter(paramKey)
-		  elif paramType in [ParameterType_Group]:
-		    return ApplicationProxy(self, paramKey)
-		  elif paramType in [ParameterType_Choice]:
-		    return ApplicationProxy(self, paramKey, value)
-		  else:
-		    print "Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey)
-		  return
+			paramType = self.GetParameterType(paramKey)
+			if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
+											 ParameterType_String, ParameterType_InputFilename,
+											 ParameterType_OutputImage, ParameterType_OutputVectorData,
+											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+											 ParameterType_Directory, ParameterType_InputImage,
+											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+			  return self.SetParameterString(paramKey, value)
+			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+												 ParameterType_InputFilenameList, ParameterType_StringList,
+												 ParameterType_ListView]:
+			  return self.setParameterStringList(paramKey, value)
+			elif paramType in [ParameterType_Int, ParameterType_Radius]:
+			  return self.SetParameterInt(paramKey, value)
+			elif paramType in [ParameterType_Float]:
+			  return self.SetParameterFloat(paramKey, value)
+			elif paramType in [ParameterType_Empty]:
+			  return self.EnableParameter(paramKey)
+			elif paramType in [ParameterType_Group]:
+			  return ApplicationProxy(self, paramKey)
+			elif paramType in [ParameterType_Choice]:
+			  return ApplicationProxy(self, paramKey, value)
+			else:
+			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
+			return
 
 		def GetParameterValue(self, paramKey):
-		  paramType = self.GetParameterType(paramKey)
-		  if paramType in [ParameterType_InputProcessXML,
-    									 ParameterType_String, ParameterType_InputFilename,
-    									 ParameterType_OutputImage, ParameterType_OutputVectorData,
-    									 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-    									 ParameterType_Directory, ParameterType_InputImage,
-    									 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-		    return self.GetParameterString(paramKey)
-		  elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-    										 ParameterType_InputFilenameList, ParameterType_StringList,
-    										 ParameterType_ListView]:
-		    return self.GetParameterStringList(paramKey)
-		  elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
-		    return self.GetParameterInt(paramKey)
-		  elif paramType in [ParameterType_Float]:
-		    return self.GetParameterFloat(paramKey)
-		  elif paramType in [ParameterType_Empty]:
-		    return self.IsParameterEnabled(paramKey)
-		  elif paramType in [ParameterType_Group, ParameterType_Choice]:
-		    return ApplicationProxy(self, paramKey)
-		  else:
-		    print "Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey)
-		  return None
+			paramType = self.GetParameterType(paramKey)
+			if paramType in [ParameterType_InputProcessXML,
+											 ParameterType_String, ParameterType_InputFilename,
+											 ParameterType_OutputImage, ParameterType_OutputVectorData,
+											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+											 ParameterType_Directory, ParameterType_InputImage,
+											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+			  return self.GetParameterString(paramKey)
+			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+												 ParameterType_InputFilenameList, ParameterType_StringList,
+												 ParameterType_ListView]:
+			  return self.GetParameterStringList(paramKey)
+			elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+			  return self.GetParameterInt(paramKey)
+			elif paramType in [ParameterType_Float]:
+			  return self.GetParameterFloat(paramKey)
+			elif paramType in [ParameterType_Empty]:
+			  return self.IsParameterEnabled(paramKey)
+			elif paramType in [ParameterType_Group, ParameterType_Choice]:
+			  return ApplicationProxy(self, paramKey)
+			else:
+			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
+			return None
 
 		def __getattr__(self,attr):
 		  """
@@ -576,7 +587,7 @@ class ApplicationProxy(object):
 		  keep hide the SetParameter** calls within this method so that it seems like
 		  an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
 		  here 'in' and 'out' are    parameters in the 'otb application' with instance App
-		  Ofcourse, we dont blindly accept any attributes as python, we check them against
+		  Ofcourse, we don't blindly accept any attributes as python, we check them against
 		  list of existing parameters for application with 'self.GetParametersKeys(True)'
 		  """
 		  if attr is not None:
@@ -585,14 +596,19 @@ class ApplicationProxy(object):
 		      self.SetParameterValue(attr.lower(), value)
 		    else:
 		      raise AttributeError
-      }
+
+    }
 }
+
 #endif
 
-#if OTB_SWIGNUMPY
-%extend Application {
-  %pythoncode {
 
+#if OTB_SWIGNUMPY
+
+%extend Application
+{
+  %pythoncode
+    {
     def SetImageFromNumpyArray(self, paramKey, npArray):
       """
       This method takes a numpy array and set ImageIOBase of
@@ -601,9 +617,9 @@ class ApplicationProxy(object):
       """
       if len(npArray.shape) == 3:
          raise ValueError( "(len(npArray.shape) == 3)\n"
-													"Input array given is of 3 dimension.\n"
-													"SetImageFromNumpyArray create ImageIO from otbImage and thus demands a 2d array.\n"
-													"you can either provide an 2d numpy array or use SetVectorImageFromNumpyArray depending on your application.\n")
+                           "Input array given is of 3 dimension.\n"
+                           "SetImageFromNumpyArray create ImageIO from otbImage and thus demands a 2d array.\n"
+                           "you can either provide an 2d numpy array or use SetVectorImageFromNumpyArray depending on your application.\n")
 
       dt = npArray.dtype.name
       if dt == 'int8':
@@ -636,9 +652,9 @@ class ApplicationProxy(object):
       """
       if len(npArray.shape) < 3:
         raise ValueError( "(len(npArray.shape) < 3)\n"
-													"Input array given is not of 3 dimension.\n"
-													"SetVectorImageFromNumpyArray create ImageIO from otbVectorImage and thus demands an array of shape 3.\n"
-													"you can either provide an 3d numpy array or use SetImageFromNumpyArray depending on your application.\n")
+                        "Input array given is not of 3 dimension.\n"
+                        "SetVectorImageFromNumpyArray create ImageIO from otbVectorImage and thus demands an array of shape 3.\n"
+                        "you can either provide an 3d numpy array or use SetImageFromNumpyArray depending on your application.\n")
 
       dt = npArray.dtype.name
       if dt == 'int8':
@@ -685,8 +701,8 @@ class ApplicationProxy(object):
       elif dt == 'double':
         return self.GetVectorImageAsDoubleNumpyArray_(paramKey)
       else:
-        print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
-        print "int8, int16, int32, uint8, uint16, uint32, float, double"
+        print ("Unknown datatype '" + dt + "'. Using float instead. Available types are:")
+        print ("int8, int16, int32, uint8, uint16, uint32, float, double")
         return self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
     def GetImageAsNumpyArray(self, paramKey, dt='float'):
@@ -714,8 +730,8 @@ class ApplicationProxy(object):
         numpy_vector_image = self.GetVectorImageAsDoubleNumpyArray_(paramKey)
 
       else:
-        print "Unknown datatype '" + dt + "'. Using float instead. Available types are:"
-        print "int8, int16, int32, uint8, uint16, uint32, float, double"
+        print ("Unknown datatype '" + dt + "'. Using float instead. Available types are:")
+        print ("int8, int16, int32, uint8, uint16, uint32, float, double")
         numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
       if len(numpy_vector_image.shape) > 2:
@@ -727,11 +743,11 @@ class ApplicationProxy(object):
       numpy_vector_image = numpy_vector_image[:,:,1]
       return numpy_vector_image
 
+
     }
 }
 
 #endif /* OTB_SWIGNUMPY */
-
 
 class Registry : public itkObject
 {

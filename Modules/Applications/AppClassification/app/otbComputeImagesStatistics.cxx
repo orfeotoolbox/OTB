@@ -42,7 +42,7 @@ public:
   itkTypeMacro(ComputeImagesStatistics, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ComputeImagesStatistics");
     SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
@@ -66,17 +66,19 @@ private:
     SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse." );
     MandatoryOff("out");
 
+    AddRAMParameter();
+
    // Doc example parameter settings
    SetDocExampleParameterValue("il", "QB_1_ortho.tif");
    SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     //Statistics estimator
     typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVImageFilterType;
@@ -128,6 +130,7 @@ private:
       processName << "Processing Image (" << imageId+1 << "/" << imageList->Size() << ")";
       AddProcess(statsEstimator->GetStreamer(), processName.str().c_str());
       statsEstimator->SetInput(image);
+      statsEstimator->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       if( HasValue( "bv" )==true )
         {
         statsEstimator->SetIgnoreUserDefinedValue(true);
@@ -140,7 +143,7 @@ private:
         variance[itBand] += (size[0] * size[1] - 1) * (statsEstimator->GetCovariance())(itBand, itBand);
         }
       //Increment nbSamples
-      nbSamples += size[0] * size[1] * nbBands;
+      nbSamples += size[0] * size[1];
       }
 
     //Divide by the number of input images to get the mean over all layers

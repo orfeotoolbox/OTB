@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetDirectoryParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -35,7 +37,12 @@ QtWidgetDirectoryParameter::~QtWidgetDirectoryParameter()
 void QtWidgetDirectoryParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text( m_DirectoryParam->GetValue().c_str() );
+  QString text(
+    QFile::decodeName(
+      m_DirectoryParam->GetValue().c_str()
+    )
+  );
+
   m_Input->setText(text);
 }
 
@@ -63,24 +70,34 @@ void QtWidgetDirectoryParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetDirectoryParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::Directory);
-  fileDialog.setNameFilter("Select a Directory");
 
-  if (fileDialog.exec())
-    {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+void
+QtWidgetDirectoryParameter
+::SelectFile()
+{
+  assert( m_Input!=NULL );
+
+  QString dir(
+    GetExistingDirectory(
+      this,
+      QString(),
+      m_Input->text()
+    )
+  );
+
+  if( dir.isEmpty() )
+    return;
+
+  m_Input->setText( dir );
 }
+
 
 void QtWidgetDirectoryParameter::SetFileName(const QString& value)
 {
   // save value
-  m_DirectoryParam->SetValue(value.toAscii().constData());
+  m_DirectoryParam->SetValue(
+    QFile::encodeName( value ).constData()
+  );
 
   // notify of value change
   QString key( m_DirectoryParam->GetKey() );

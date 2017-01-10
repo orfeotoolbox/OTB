@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShiftScaleSampleListFilter_h
-#define __otbShiftScaleSampleListFilter_h
+#ifndef otbShiftScaleSampleListFilter_h
+#define otbShiftScaleSampleListFilter_h
 
 #include "otbListSampleToListSampleFilter.h"
 
@@ -30,6 +30,9 @@ namespace Statistics {
  *  For each component of the sample, the following formula is applied :
  *
  *  \f[ output = \frac{input - shift}{scale} \f]
+ *
+ *  Beware that the behaviour differs from itk::ShiftScaleImageFilter
+ *  (which add shift instead of subtracting it).
  *
  * Standard casting is applied between input and output type.
  *
@@ -81,11 +84,11 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   virtual void GenerateData();
+   void GenerateData() ITK_OVERRIDE;
 
   ShiftScaleSampleListFilter();
-  virtual ~ShiftScaleSampleListFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ShiftScaleSampleListFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ShiftScaleSampleListFilter(const Self&); //purposely not implemented

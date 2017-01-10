@@ -6,7 +6,6 @@ set(OTBOSSIMAdapters_SRC
   otbPlatformPositionAdapter.cxx
   otbDEMConvertAdapter.cxx
   otbRPCSolverAdapter.cxx
-  otbRPCProjectionAdapter.cxx
   otbDateTimeAdapter.cxx
   otbMapProjectionAdapter.cxx
   otbFilterFunctionValues.cxx
@@ -15,7 +14,7 @@ set(OTBOSSIMAdapters_SRC
   )
 
 add_library(OTBOSSIMAdapters ${OTBOSSIMAdapters_SRC})
-target_link_libraries(OTBOSSIMAdapters 
+target_link_libraries(OTBOSSIMAdapters
   ${OTBGDAL_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBOssim_LIBRARIES}

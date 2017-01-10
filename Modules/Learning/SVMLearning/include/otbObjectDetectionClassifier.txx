@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectDetectionClassifier_txx
-#define __otbObjectDetectionClassifier_txx
+#ifndef otbObjectDetectionClassifier_txx
+#define otbObjectDetectionClassifier_txx
 
 #include "otbObjectDetectionClassifier.h"
 

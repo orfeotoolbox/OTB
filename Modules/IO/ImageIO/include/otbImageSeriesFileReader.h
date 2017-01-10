@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReader_h
-#define __otbImageSeriesFileReader_h
+#ifndef otbImageSeriesFileReader_h
+#define otbImageSeriesFileReader_h
 
 #include "otbImageSeriesFileReaderBase.h"
 
@@ -49,7 +49,7 @@ class ITK_EXPORT ImageSeriesFileReader
   : public ImageSeriesFileReaderBase<TImage, TInternalImage>
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                             Self;
   typedef ImageSeriesFileReaderBase<TImage, TInternalImage> Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
@@ -57,7 +57,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;
@@ -110,7 +110,7 @@ protected:
   /** TestBandSelection
    * Tests the coherency of the Meta File (especifically band selection) with the image types
    */
-  virtual void TestBandSelection(std::vector<unsigned int>& bands) {}
+  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -124,7 +124,7 @@ protected:
   /** AllocateListOfComponents
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 
@@ -162,7 +162,7 @@ class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2
   : public ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2> >
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                                                  Self;
   typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2> > Superclass;
   typedef itk::SmartPointer<Self>                                                Pointer;
@@ -170,7 +170,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;
@@ -231,7 +231,7 @@ protected:
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 
@@ -268,7 +268,7 @@ class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPi
   : public ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                                                        Self;
   typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> > Superclass;
   typedef itk::SmartPointer<Self>                                                      Pointer;
@@ -276,7 +276,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;
@@ -337,7 +337,7 @@ protected:
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 
@@ -375,7 +375,7 @@ class ITK_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInte
   : public ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReader                                                              Self;
   typedef ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> > Superclass;
   typedef itk::SmartPointer<Self>                                                            Pointer;
@@ -383,7 +383,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReader, ImageSeriesFileReaderBase);
 
   typedef typename Superclass::OutputImageType        OutputImageType;
@@ -426,12 +426,12 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  virtual ~ImageSeriesFileReader () {}
+  ~ImageSeriesFileReader () ITK_OVERRIDE {}
 
   /**
    * Tests the coherency of the Meta File (especifically band selection) with the image types
    */
-  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)){}
+  void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) ITK_OVERRIDE{}
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -439,18 +439,18 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  virtual void GenerateData(DataObjectPointerArraySizeType idx);
+  void GenerateData(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::GenerateData;
 
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
-  virtual void AllocateListOfComponents(void);
+  void AllocateListOfComponents(void) ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     return Superclass::PrintSelf(os, indent);
   }

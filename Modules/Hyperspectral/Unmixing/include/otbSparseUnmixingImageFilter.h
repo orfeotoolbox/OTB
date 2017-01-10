@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseUnmixingImageFilter_h
-#define __otbSparseUnmixingImageFilter_h
+#ifndef otbSparseUnmixingImageFilter_h
+#define otbSparseUnmixingImageFilter_h
 
 #include "itkListSample.h"
 #include "itkHistogram.h"
@@ -38,7 +38,7 @@ namespace otb {
  * signals (Through multiscale wavelet transforms) by means of line detection
  * in the scatterplot.
  *
- * It is implemeted as a multi-filter that performs wavelet decomposition of the N
+ * It is implemented as a multi-filter that performs wavelet decomposition of the N
  * images, Sample list construction of the scatter plot sample, histogram estimation
  * of the phase and source detection...
  *
@@ -159,9 +159,9 @@ public:
 
 protected:
   SparseUnmixingImageFilter();
-  virtual ~SparseUnmixingImageFilter() { }
+  ~SparseUnmixingImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   virtual void GenerateNumberOfComponentsRequired ();
 private:
   SparseUnmixingImageFilter(const Self &); //purposely not implemented

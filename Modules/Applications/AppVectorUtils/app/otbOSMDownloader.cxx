@@ -47,18 +47,20 @@ public:
   typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("OSMDownloader");
     SetDescription("Generate a vector data from OSM on the input image extend");
     // Documentation
     SetDocName("Open Street Map layers importations applications");
-    SetDocLongDescription("Generate a vector data from Open Street Map data. A DEM could be use. By default, the entire layer is downloaded, an image can be use as support for the OSM data. The application can provide also available classes in layers . This application required an Internet access. Informations about the OSM project : http://www.openstreetmap.fr/");
+    SetDocLongDescription("Generate a vector data from Open Street Map data. A DEM could be use. By default, the entire layer is downloaded, an image can be use as support for the OSM data. The application can provide also available classes in layers . This application required an Internet access. Information about the OSM project : http://www.openstreetmap.fr/");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Convertion");
+    SetDocSeeAlso("Conversion");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Meta);
+	AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output vector data");
     SetParameterDescription("out", "Generated output vector data path");
@@ -91,7 +93,7 @@ private:
   }
 
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // CASE:  when the -print option is not required and the User
     // does not set the option OSMKey or the option Output or does not
@@ -108,7 +110,7 @@ private:
       }
   }
 
- void DoExecute()
+ void DoExecute() ITK_OVERRIDE
   {
     typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType>
       EnvelopeFilterType;

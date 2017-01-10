@@ -15,14 +15,15 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperParameterKey_h
-#define __otbWrapperParameterKey_h
+#ifndef otbWrapperParameterKey_h
+#define otbWrapperParameterKey_h
 
 #include <string>
 #include <vector>
 #include <ostream>
 #include <itksys/RegularExpression.hxx>
 #include "itkMacro.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -37,7 +38,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT ParameterKey
+class OTBApplicationEngine_EXPORT ParameterKey
 {
 public:
 
@@ -102,7 +103,9 @@ last() : return "tata"
         }
       else
         {
-          itkGenericExceptionMacro( "Invalid key "<<val<<". Must be in lowercase, containing alphanumerical characters or \".\"");
+            itkGenericExceptionMacro( "Invalid key '"
+                                      << val <<
+                                      "'. Must be in lowercase, containing alphanumerical characters or \".\"");
         }
     }
 
@@ -117,4 +120,4 @@ private:
 } // end namespace Wrapper
 } //end namespace otb
 
-#endif // __otbWrapperParameterKey_h_
+#endif // otbWrapperParameterKey_h_

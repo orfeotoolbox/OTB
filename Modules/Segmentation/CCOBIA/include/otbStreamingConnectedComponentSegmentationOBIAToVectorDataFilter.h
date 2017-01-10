@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_h
-#define __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_h
+#ifndef otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_h
+#define otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_h
 
 #include "otbPersistentImageToVectorDataFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -178,9 +178,9 @@ public:
 protected:
   PersistentConnectedComponentSegmentationOBIAToVectorDataFilter();
 
-  virtual ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter();
+  ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 private:
 
   ObjectSizeType m_MinimumObjectSize;
@@ -196,7 +196,7 @@ private:
   bool m_ComputeFeretDiameter;
   bool m_ComputePerimeter;
 
-  virtual VectorDataPointerType ProcessTile();
+  VectorDataPointerType ProcessTile() ITK_OVERRIDE;
 };
 
 /** \class StreamingConnectedComponentSegmentationOBIAToVectorDataFilter

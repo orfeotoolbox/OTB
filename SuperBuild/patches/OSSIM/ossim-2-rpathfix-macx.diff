@@ -1,0 +1,14 @@
+diff -burN ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake
+--- ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake	2016-04-19 12:30:00.000000000 +0200
++++ ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/OssimUtilities.cmake	2016-04-20 09:15:13.000000000 +0200
+@@ -275,9 +275,7 @@
+                              INSTALL_NAME_DIR @rpath/Frameworks)
+         ELSE(BUILD_OSSIM_FRAMEWORKS)
+           SET_TARGET_PROPERTIES(${LINK_NAME} PROPERTIES 
+-                             FRAMEWORK FALSE
+-                             BUILD_WITH_INSTALL_RPATH ON 
+-                             INSTALL_NAME_DIR @rpath/lib)
++                             FRAMEWORK FALSE)
+         ENDIF(BUILD_OSSIM_FRAMEWORKS)
+       ELSE(BUILD_SHARED_LIBRARY)
+           SET_TARGET_PROPERTIES(${LINK_NAME} PROPERTIES 

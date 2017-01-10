@@ -18,9 +18,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGaborFilterGenerator_txx
-#define __otbGaborFilterGenerator_txx
+#ifndef otbGaborFilterGenerator_txx
+#define otbGaborFilterGenerator_txx
 
+#include "otbGaborFilterGenerator.h"
 #include "otbMath.h"
 
 namespace otb

@@ -44,10 +44,22 @@
 
 #include "otbInverseSensorModel.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
 #include "ossim/base/ossimKeywordlist.h"
 #include "ossim/base/ossimGpt.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/imaging/ossimImageHandlerRegistry.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/base/ossimKeywordlist.h"
+#include "ossim/base/ossimGpt.h"
+#include "ossim/projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/imaging/ossimImageHandlerRegistry.h"
+#endif
 
 int otbCreateProjectionWithOTB(int argc, char* argv[])
 {
@@ -75,10 +87,10 @@ int otbCreateProjectionWithOTB(int argc, char* argv[])
 
   ossimGpt          ossimGPoint(0, 0);
   ossimDpt          ossimDPoint;
-  ossimProjection * model = NULL;
+  ossimProjection * model = ITK_NULLPTR;
   otbGenericMsgDebugMacro(<< "Creating projection...");
   model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-  if (model == NULL)
+  if (model == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "Invalid Model * == NULL !");
     }

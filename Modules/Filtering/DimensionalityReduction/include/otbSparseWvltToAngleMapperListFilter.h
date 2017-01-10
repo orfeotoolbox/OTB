@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseWvltToAngleMapperListFilter_h
-#define __otbSparseWvltToAngleMapperListFilter_h
+#ifndef otbSparseWvltToAngleMapperListFilter_h
+#define otbSparseWvltToAngleMapperListFilter_h
 
 #include "otbMath.h"
 #include "otbImageList.h"
@@ -33,7 +33,7 @@ namespace otb {
  *
  * This class performs a kind of scatter plot of wavelet coeff of N images and yields
  * the angle values (through a generalized spherical coordinate representation)) of
- * the most significant coeff (up to a threashold).
+ * the most significant coeff (up to a threshold).
  *
  * \ingroup Threaded
  *
@@ -105,16 +105,16 @@ public:
 
 protected:
   SparseWvltToAngleMapperListFilter();
-  virtual ~SparseWvltToAngleMapperListFilter() { }
+  ~SparseWvltToAngleMapperListFilter() ITK_OVERRIDE { }
 
   /** Standard itk::ProcessObject subclass method. */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** This method causes the filter to generate its output. */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /* Internal functions */
   virtual bool IsToGenerate ( const ImageConstIteratorVectorType & ) const;

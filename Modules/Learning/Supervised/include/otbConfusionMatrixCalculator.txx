@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConfusionMatrixCalculator_txx
-#define __otbConfusionMatrixCalculator_txx
+#ifndef otbConfusionMatrixCalculator_txx
+#define otbConfusionMatrixCalculator_txx
 
+#include "otbConfusionMatrixCalculator.h"
 
 namespace otb
 {
@@ -30,7 +31,11 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   m_TrueNegativeValue(0.0),
   m_FalsePositiveValue(0.0),
   m_TruePositiveValue(0.0),
-  m_NumberOfClasses(0)
+  m_Precision(0.0),
+  m_Recall(0.0),
+  m_FScore(0.0),
+  m_NumberOfClasses(0),
+  m_NumberOfSamples(0)
 
 {
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);

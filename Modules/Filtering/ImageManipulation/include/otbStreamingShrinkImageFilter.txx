@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingShrinkImageFilter_txx
-#define __otbStreamingShrinkImageFilter_txx
+#ifndef otbStreamingShrinkImageFilter_txx
+#define otbStreamingShrinkImageFilter_txx
 
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -28,6 +28,7 @@ namespace otb
 
 template <class TImage>
 StreamingShrinkStreamingManager<TImage>::StreamingShrinkStreamingManager()
+ : m_ShrinkFactor(10)
 {
 }
 
@@ -42,7 +43,7 @@ StreamingShrinkStreamingManager<TImage>::PrepareStreaming( itk::DataObject * inp
 {
   typedef otb::StreamingShrinkImageRegionSplitter TileSplitterType;
   TileSplitterType::Pointer splitter = TileSplitterType::New();
-  splitter->SetTileSizeAlignment(m_ShrinkFactor);
+  splitter->SetShrinkFactor(m_ShrinkFactor);
   this->m_Splitter = splitter;
 
   unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, 0);
@@ -117,42 +118,47 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   InputImageType* inputPtr = const_cast<InputImageType*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
-  m_ShrinkedOutput = OutputImageType::New();
-  m_ShrinkedOutput->CopyInformation(inputPtr);
+  m_ShrunkOutput = OutputImageType::New();
+  m_ShrunkOutput->CopyInformation(inputPtr);
 
   const typename InputImageType::SpacingType&
                                            inputSpacing = inputPtr->GetSpacing();
   const typename InputImageType::SizeType& inputSize
     = inputPtr->GetLargestPossibleRegion().GetSize();
+  const typename InputImageType::IndexType& inputIndex
+    = inputPtr->GetLargestPossibleRegion().GetIndex();
+  typename InputImageType::IndexType startIndex;
 
-  typename OutputImageType::SpacingType shrinkedOutputSpacing;
-  typename OutputImageType::RegionType  shrinkedOutputLargestPossibleRegion;
-  typename OutputImageType::SizeType    shrinkedOutputSize;
-  typename OutputImageType::IndexType   shrinkedOutputStartIndex;
-  typename OutputImageType::PointType   shrinkedOutputOrigin;
+  typename OutputImageType::SpacingType shrunkOutputSpacing;
+  typename OutputImageType::RegionType  shrunkOutputLargestPossibleRegion;
+  typename OutputImageType::SizeType    shrunkOutputSize;
+  typename OutputImageType::IndexType   shrunkOutputStartIndex;
+  typename OutputImageType::PointType   shrunkOutputOrigin;
 
   for (unsigned int i = 0; i < OutputImageType::ImageDimension; ++i)
     {
-    shrinkedOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
-    shrinkedOutputSize[i] = inputSize[i] > m_ShrinkFactor ? inputSize[i] / m_ShrinkFactor : 1;
+    startIndex[i] = inputIndex[i] + (m_ShrinkFactor - 1) / 2;
+    if (m_ShrinkFactor > inputSize[i])
+      startIndex[i] = inputIndex[i] + (inputSize[i] - 1) / 2;
+    m_Offset[i] = startIndex[i] % m_ShrinkFactor;
+    shrunkOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
+    shrunkOutputSize[i] = inputSize[i] > m_ShrinkFactor ? inputSize[i] / m_ShrinkFactor : 1;
     
-    shrinkedOutputOrigin[i] = inputPtr->GetOrigin()[i] + inputSpacing[i] *
-      (static_cast<double>(inputPtr->GetLargestPossibleRegion().GetIndex(i)) - 0.5)
-      + shrinkedOutputSpacing[i] * 0.5;
+    shrunkOutputOrigin[i] = inputPtr->GetOrigin()[i] + inputSpacing[i] * startIndex[i];
 
     // we choose to output a region with a start index [0,0]
     // the origin is set accordingly
-    shrinkedOutputStartIndex[i] = 0;
+    shrunkOutputStartIndex[i] = 0;
     }
 
-  m_ShrinkedOutput->SetSpacing(shrinkedOutputSpacing);
-  m_ShrinkedOutput->SetOrigin(shrinkedOutputOrigin);
+  m_ShrunkOutput->SetSpacing(shrunkOutputSpacing);
+  m_ShrunkOutput->SetOrigin(shrunkOutputOrigin);
 
-  shrinkedOutputLargestPossibleRegion.SetSize(shrinkedOutputSize);
-  shrinkedOutputLargestPossibleRegion.SetIndex(shrinkedOutputStartIndex);
+  shrunkOutputLargestPossibleRegion.SetSize(shrunkOutputSize);
+  shrunkOutputLargestPossibleRegion.SetIndex(shrunkOutputStartIndex);
 
-  m_ShrinkedOutput->SetRegions(shrinkedOutputLargestPossibleRegion);
-  m_ShrinkedOutput->Allocate();
+  m_ShrunkOutput->SetRegions(shrunkOutputLargestPossibleRegion);
+  m_ShrunkOutput->Allocate();
 }
 
 template<class TInputImage, class TOutputImage>
@@ -183,14 +189,14 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
     {
     const IndexType& inIndex = inIt.GetIndex();
     // TODO the pixel value should be taken near the centre of the cell, not at the corners
-    if (inIndex[0] % m_ShrinkFactor == 0
-        && inIndex[1] % m_ShrinkFactor == 0 )
+    if ((inIndex[0] - m_Offset[0]) % m_ShrinkFactor == 0
+        && (inIndex[1] - m_Offset[1]) % m_ShrinkFactor == 0 )
       {
-      IndexType shrinkedIndex;
-      shrinkedIndex[0] = inIndex[0] / m_ShrinkFactor;
-      shrinkedIndex[1] = inIndex[1] / m_ShrinkFactor;
-      if (m_ShrinkedOutput->GetLargestPossibleRegion().IsInside(shrinkedIndex))
-        m_ShrinkedOutput->SetPixel(shrinkedIndex, inIt.Get());
+      IndexType shrunkIndex;
+      shrunkIndex[0] = (inIndex[0] - m_Offset[0]) / m_ShrinkFactor;
+      shrunkIndex[1] = (inIndex[1] - m_Offset[1]) / m_ShrinkFactor;
+      if (m_ShrunkOutput->GetLargestPossibleRegion().IsInside(shrunkIndex))
+        m_ShrunkOutput->SetPixel(shrunkIndex, inIt.Get());
       }
     }
 }

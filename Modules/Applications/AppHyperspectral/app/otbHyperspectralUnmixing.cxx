@@ -18,7 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
 #include "otbNCLSUnmixingImageFilter.h"
@@ -30,9 +29,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
-typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> StreamingStatisticsVectorImageFilterType;
-
 typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
 typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             NCLSUnmixingFilterType;
@@ -89,18 +85,19 @@ public:
   itkTypeMacro(HyperspectralUnmixing, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("HyperspectralUnmixing");
     SetDescription("Estimate abundance maps from an hyperspectral image and a set of endmembers.");
 
     // Documentation
     SetDocName("Hyperspectral data unmixing");
-    SetDocLongDescription("The application applies a linear unmixing algorithm to an hyperspectral data cube. This method supposes that the mixture between materials in the scene is macroscopic and simulates a linear mixing model of spectra.\nThe Linear Mixing Model (LMM) acknowledges that reflectance spectrum associated with each pixel is a linear combination of pure materials in the recovery area, commonly known as endmembers. Endmembers can be estimated using the VertexComponentAnalysis application.\nThe application allows to estimate the abundance maps with several algorithms : Unconstrained Least Square (ucls), Fully Constrained Least Square (fcls), Image Space Reconstruction Algorithm (isra) and Non-negative constrained Least Square (ncls) and Minimum Dispertion Constrained Non Negative Matrix Factorization (MDMDNMF).\n");
+    SetDocLongDescription("The application applies a linear unmixing algorithm to an hyperspectral data cube. This method supposes that the mixture between materials in the scene is macroscopic and simulates a linear mixing model of spectra.\nThe Linear Mixing Model (LMM) acknowledges that reflectance spectrum associated with each pixel is a linear combination of pure materials in the recovery area, commonly known as endmembers. Endmembers can be estimated using the VertexComponentAnalysis application.\nThe application allows one to estimate the abundance maps with several algorithms : Unconstrained Least Square (ucls), Fully Constrained Least Square (fcls), Image Space Reconstruction Algorithm (isra) and Non-negative constrained Least Square (ncls) and Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF).\n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
@@ -128,7 +125,7 @@ private:
     SetParameterDescription("ua.isra", "Image Space Reconstruction Algorithm");
 
     AddChoice("ua.mdmdnmf", "MDMDNMF");
-    SetParameterDescription("ua.mdmdnmf", "Minimum Dispertion Constrained Non Negative Matrix Factorization");
+    SetParameterDescription("ua.mdmdnmf", "Minimum Dispersion Constrained Non Negative Matrix Factorization");
     SetParameterString("ua", "ucls");
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
@@ -137,12 +134,12 @@ private:
     SetDocExampleParameterValue("ua", "ucls");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_ProcessObjects.clear();
 
@@ -152,14 +149,14 @@ private:
     /*
      * Transform Endmembers image to matrix representation
      */
-    std::cout << "Endmembers extracted" << std::endl;
-    std::cout << "Converting endmembers to matrix" << std::endl;
+    otbAppLogINFO("Endmembers extracted");
+    otbAppLogINFO("Converting endmembers to matrix");
     VectorImageToMatrixImageFilterType::Pointer endMember2Matrix = VectorImageToMatrixImageFilterType::New();
     endMember2Matrix->SetInput(endmembersImage);
     endMember2Matrix->Update();
 
     MatrixType endMembersMatrix = endMember2Matrix->GetMatrix();
-    std::cout << "Endmembers matrix : " << endMembersMatrix << std::endl;
+    otbAppLogINFO("Endmembers matrix : " << endMembersMatrix);
 
     /*
      * Unmix
@@ -170,7 +167,7 @@ private:
     {
     case UnMixingMethod_UCLS:
       {
-      std::cout << "UCLS Unmixing" << std::endl;
+      otbAppLogINFO("UCLS Unmixing");
 
       UCLSUnmixingFilterType::Pointer unmixer =
           UCLSUnmixingFilterType::New();
@@ -186,7 +183,7 @@ private:
       break;
     case UnMixingMethod_ISRA:
       {
-      std::cout << "ISRA Unmixing" << std::endl;
+      otbAppLogINFO("ISRA Unmixing");
 
       ISRAUnmixingFilterType::Pointer unmixer =
           ISRAUnmixingFilterType::New();
@@ -200,7 +197,7 @@ private:
       break;
     case UnMixingMethod_NCLS:
       {
-      std::cout << "NCLS Unmixing" << std::endl;
+      otbAppLogINFO("NCLS Unmixing");
 
       NCLSUnmixingFilterType::Pointer unmixer =
           NCLSUnmixingFilterType::New();
@@ -215,7 +212,7 @@ private:
       /*
     case UnMixingMethod_FCLS:
       {
-      std::cout << "FCLS Unmixing" << std::endl;
+      otbAppLogINFO("FCLS Unmixing");
 
       FCLSUnmixingFilterType::Pointer unmixer =
           FCLSUnmixingFilterType::New();
@@ -230,7 +227,7 @@ private:
       */
     case UnMixingMethod_MDMDNMF:
       {
-      std::cout << "MDMD-NMF Unmixing" << std::endl;
+      otbAppLogINFO("MDMD-NMF Unmixing");
 
       MDMDNMFUnmixingFilterType::Pointer unmixer =
           MDMDNMFUnmixingFilterType::New();

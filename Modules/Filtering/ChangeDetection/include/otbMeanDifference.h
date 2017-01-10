@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanDifference_h
-#define __otbMeanDifference_h
+#ifndef otbMeanDifference_h
+#define otbMeanDifference_h
 
 namespace otb
 {

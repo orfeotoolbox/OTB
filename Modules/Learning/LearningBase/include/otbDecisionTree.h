@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDecisionTree_h
-#define __otbDecisionTree_h
+#ifndef otbDecisionTree_h
+#define otbDecisionTree_h
 
 #include <map>
 #include "itkObjectFactory.h"
@@ -68,7 +68,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(DecisionTree, DataObject);
 
   typedef typename std::pair< AttributeValueType, DecisionTreeTestType > KeyType;
@@ -97,11 +97,11 @@ protected:
   /** Constructor */
   DecisionTree();
   /** Destructor */
-  virtual ~DecisionTree();
+  ~DecisionTree() ITK_OVERRIDE;
   /** Output information redefinition */
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   DecisionTree(const Self &); // purposely not implemented

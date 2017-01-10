@@ -18,13 +18,13 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVirtualDimensionality_txx
-#define __otbVirtualDimensionality_txx
+#ifndef otbVirtualDimensionality_txx
+#define otbVirtualDimensionality_txx
 
 #include "otbVirtualDimensionality.h"
 
 #include <vcl_algorithm.h>
-#include <boost/math/distributions/normal.hpp>
+#include "otb_boost_math_normal_header.h"
 
 namespace otb
 {

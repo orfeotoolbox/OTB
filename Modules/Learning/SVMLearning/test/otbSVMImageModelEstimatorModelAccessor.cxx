@@ -82,13 +82,13 @@ int otbSVMImageModelEstimatorModelAccessor(int itkNotUsed(argc), char* argv[])
 
   f << " - GetSupportVectors() [nb support vector][]" << std::endl;
   svm_node ** SVs = ptrModel->GetSupportVectors();
-  if (SVs == NULL)
+  if (SVs == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "SVs NULL");
     }
   for (unsigned int i = 0; i < nbSupportVector; ++i)
     {
-    if (SVs[i] == NULL) itkGenericExceptionMacro(<< "SVs " << i << " NULL");
+    if (SVs[i] == ITK_NULLPTR) itkGenericExceptionMacro(<< "SVs " << i << " NULL");
     f << std::endl;
     f << "  SV[" << i << "]:";
     const svm_node *p = SVs[i];
@@ -115,7 +115,7 @@ int otbSVMImageModelEstimatorModelAccessor(int itkNotUsed(argc), char* argv[])
   f << " - GetRho() [nr_class*(nr_class-1)/2]" << std::endl;
   unsigned int taille = nbClass * (nbClass - 1) / 2;
   double *     rhos = ptrModel->GetRho();
-  if (rhos == NULL)
+  if (rhos == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "rhos NULL");
     }
@@ -128,13 +128,13 @@ int otbSVMImageModelEstimatorModelAccessor(int itkNotUsed(argc), char* argv[])
   f << std::endl;
   f << " - GetAlpha() [nb class-1][nb support vector]" << std::endl;
   double ** alphas = ptrModel->GetAlpha();
-  if (alphas == NULL)
+  if (alphas == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "alphas NULL");
     }
   for (unsigned int i = 0; i < nbClass - 1; ++i)
     {
-    if (alphas[i] == NULL) itkGenericExceptionMacro(<< "alphas " << i << " NULL");
+    if (alphas[i] == ITK_NULLPTR) itkGenericExceptionMacro(<< "alphas " << i << " NULL");
     f << "     ";
     for (unsigned int j = 0; j < nbSupportVector; ++j)
       {

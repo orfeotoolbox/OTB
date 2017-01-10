@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShiftScaleSampleListFilter_txx
-#define __otbShiftScaleSampleListFilter_txx
+#ifndef otbShiftScaleSampleListFilter_txx
+#define otbShiftScaleSampleListFilter_txx
 
 #include "otbShiftScaleSampleListFilter.h"
 #include "itkProgressReporter.h"

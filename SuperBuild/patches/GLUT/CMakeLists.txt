@@ -10,42 +10,56 @@ option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
 if(BUILD_SHARED_LIBS)
     add_definitions(-DFREEGLUT_EXPORTS)
 else()
-    add_definitions(-DFREEGLUT_STATIC)	
+    add_definitions(-DFREEGLUT_STATIC)
 endif()
 
- add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+include (CheckIncludeFiles)
+# usage: CHECK_INCLUDE_FILES (<header> <RESULT_VARIABLE> )
+check_include_files ("fcntl.h" HAVE_FCNTL_H)
 
-set(FREEGLUT_SRCS ${FREEGLUT_SRC_DIR}/freeglut_callbacks.c 
-${FREEGLUT_SRC_DIR}/freeglut_cursor.c 
-${FREEGLUT_SRC_DIR}/freeglut_display.c 
-${FREEGLUT_SRC_DIR}/freeglut_ext.c 
-${FREEGLUT_SRC_DIR}/freeglut_font.c 
-${FREEGLUT_SRC_DIR}/freeglut_font_data.c 
-${FREEGLUT_SRC_DIR}/freeglut_gamemode.c 
-${FREEGLUT_SRC_DIR}/freeglut_geometry.c 
-${FREEGLUT_SRC_DIR}/freeglut_glutfont_definitions.c 
-${FREEGLUT_SRC_DIR}/freeglut_init.c 
-${FREEGLUT_SRC_DIR}/freeglut_input_devices.c 
-${FREEGLUT_SRC_DIR}/freeglut_joystick.c 
-${FREEGLUT_SRC_DIR}/freeglut_main.c 
-${FREEGLUT_SRC_DIR}/freeglut_menu.c 
-${FREEGLUT_SRC_DIR}/freeglut_misc.c 
-${FREEGLUT_SRC_DIR}/freeglut_overlay.c 
-${FREEGLUT_SRC_DIR}/freeglut_spaceball.c 
-${FREEGLUT_SRC_DIR}/freeglut_state.c 
-${FREEGLUT_SRC_DIR}/freeglut_stroke_mono_roman.c 
-${FREEGLUT_SRC_DIR}/freeglut_stroke_roman.c 
-${FREEGLUT_SRC_DIR}/freeglut_structure.c 
-${FREEGLUT_SRC_DIR}/freeglut_teapot.c 
-${FREEGLUT_SRC_DIR}/freeglut_videoresize.c 
-${FREEGLUT_SRC_DIR}/freeglut_window.c)
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
 
-set(FREEGLUT_INCLUDES 
-${FREEGLUT_INC_DIR}/GL/glut.h
-${FREEGLUT_INC_DIR}/GL/freeglut.h
-${FREEGLUT_INC_DIR}/GL/freeglut_ext.h
-${FREEGLUT_INC_DIR}/GL/freeglut_std.h
-)
+find_package(OpenGL REQUIRED)
+
+mark_as_advanced(OPENGL_INCLUDE_DIR)
+mark_as_advanced(OPENGL_LIBRARY)
+
+include_directories(${OPENGL_INCLUDE_DIR})
+
+set(FREEGLUT_SRCS
+  ${FREEGLUT_SRC_DIR}/freeglut_callbacks.c
+  ${FREEGLUT_SRC_DIR}/freeglut_cursor.c
+  ${FREEGLUT_SRC_DIR}/freeglut_display.c
+  ${FREEGLUT_SRC_DIR}/freeglut_ext.c
+  ${FREEGLUT_SRC_DIR}/freeglut_font.c
+  ${FREEGLUT_SRC_DIR}/freeglut_font_data.c
+  ${FREEGLUT_SRC_DIR}/freeglut_gamemode.c
+  ${FREEGLUT_SRC_DIR}/freeglut_geometry.c
+  ${FREEGLUT_SRC_DIR}/freeglut_glutfont_definitions.c
+  ${FREEGLUT_SRC_DIR}/freeglut_init.c
+  ${FREEGLUT_SRC_DIR}/freeglut_input_devices.c
+  ${FREEGLUT_SRC_DIR}/freeglut_joystick.c
+  ${FREEGLUT_SRC_DIR}/freeglut_main.c
+  ${FREEGLUT_SRC_DIR}/freeglut_menu.c
+  ${FREEGLUT_SRC_DIR}/freeglut_misc.c
+  ${FREEGLUT_SRC_DIR}/freeglut_overlay.c
+  ${FREEGLUT_SRC_DIR}/freeglut_spaceball.c
+  ${FREEGLUT_SRC_DIR}/freeglut_state.c
+  ${FREEGLUT_SRC_DIR}/freeglut_stroke_mono_roman.c
+  ${FREEGLUT_SRC_DIR}/freeglut_stroke_roman.c
+  ${FREEGLUT_SRC_DIR}/freeglut_structure.c
+  ${FREEGLUT_SRC_DIR}/freeglut_teapot.c
+  ${FREEGLUT_SRC_DIR}/freeglut_videoresize.c
+  ${FREEGLUT_SRC_DIR}/freeglut_window.c)
+
+set(FREEGLUT_INCLUDES
+  ${FREEGLUT_INC_DIR}/GL/glut.h
+  ${FREEGLUT_INC_DIR}/GL/freeglut.h
+  ${FREEGLUT_INC_DIR}/GL/freeglut_ext.h
+  ${FREEGLUT_INC_DIR}/GL/freeglut_std.h
+  )
 
 include_directories(${FREEGLUT_INC_DIR})
 
@@ -57,8 +71,6 @@ install(TARGETS freeglut
   ARCHIVE DESTINATION lib COMPONENT Development)
 
 
-install(FILES ${FREEGLUT_INCLUDES}  
+install(FILES ${FREEGLUT_INCLUDES}
     DESTINATION include/GL/
     COMPONENT Development)
-
-

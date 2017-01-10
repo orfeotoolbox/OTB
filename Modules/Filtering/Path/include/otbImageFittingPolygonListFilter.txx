@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFittingPolygonListFilter_txx
-#define __otbImageFittingPolygonListFilter_txx
+#ifndef otbImageFittingPolygonListFilter_txx
+#define otbImageFittingPolygonListFilter_txx
 
 #include "otbImageFittingPolygonListFilter.h"
 #include "otbPolyLineImageConstIterator.h"
@@ -53,13 +53,13 @@ ImageFittingPolygonListFilter<TPath, TImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
 //FIXME
-//There is an issue here with integer and continous indexes
+//There is an issue here with integer and continuous indexes
 //maybe we should use the itk::LineConstIterator
 template <class TPath, class TImage>
 void

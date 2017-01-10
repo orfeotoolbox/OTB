@@ -40,7 +40,7 @@
 // However, the \doxygen{itk}{Vector} is a fixed size array and it
 // assumes that the number of channels of the image is known at
 // compile time. Therefore, we prefer to use the
-// \doxygen{otb}{VectorImage} class which allows to choose the number
+// \doxygen{otb}{VectorImage} class which allows choosing the number
 // of channels of the image at runtime. The pixels will be of type
 // \doxygen{itk}{VariableLengthVector}.
 //
@@ -91,7 +91,7 @@ int main(int, char *[])
   image->SetRegions(region);
 
   // Software Guide : BeginLatex
-  // Since the pixel dimensionality is choosen at runtime, one has to
+  // Since the pixel dimensionality is chosen at runtime, one has to
   // pass this parameter to the image before memory allocation.
   // Software Guide : EndLatex
 

@@ -15,10 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAttributesMapLabelObject_h
-#define __otbAttributesMapLabelObject_h
+#ifndef otbAttributesMapLabelObject_h
+#define otbAttributesMapLabelObject_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkShapeLabelObject.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkShapeLabelObject.h"
+#endif
+
 #include "otbPolygon.h"
 #include <map>
 
@@ -29,7 +37,7 @@ namespace Functor
 {
 
 /** \class AttributesMapLabelObjectAccessor
- *  \brief Allows to acces a given field of an AttributesMapLabelObject
+ *  \brief Allows accessing a given field of an AttributesMapLabelObject
  *
  * The name of the attribute to retrieve can be set by using the
  * SetAttributeName method.
@@ -80,9 +88,9 @@ private:
 
 
 /** \class AttributesMapMeasurementFunctor
-*   \brief This class allows to build a measurement vector from an AttributesMapLabelObject
+*   \brief This class allows building a measurement vector from an AttributesMapLabelObject
 *
-*    It Allows to select only a subset of the available attributes.
+*    It Allows selecting only a subset of the available attributes.
  *
  * \ingroup OTBLabelMap
 */
@@ -148,7 +156,7 @@ private:
  *  store pairs of key, value (of type TAttributesValue) in an internal
  *  map container.
  *
- * As such it allows to store any custom attributes as necessary.
+ * As such it allows storing any custom attributes as necessary.
  *
  * \sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *
@@ -266,7 +274,7 @@ public:
 
     // copy the data of the current type if possible
     const Self * src = dynamic_cast<const Self *>(lo);
-    if (src == NULL)
+    if (src == ITK_NULLPTR)
       {
       return;
       }
@@ -295,10 +303,10 @@ protected:
   /** Constructor */
   AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New()) {}
   /** Destructor */
-  virtual ~AttributesMapLabelObject() {}
+  ~AttributesMapLabelObject() ITK_OVERRIDE {}
 
   /** The printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Attributes: " << std::endl;

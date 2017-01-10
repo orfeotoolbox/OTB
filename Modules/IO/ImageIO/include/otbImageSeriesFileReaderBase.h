@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReaderBase_h
-#define __otbImageSeriesFileReaderBase_h
+#ifndef otbImageSeriesFileReaderBase_h
+#define otbImageSeriesFileReaderBase_h
 
 #include <iostream>
 #include <fstream>
@@ -63,7 +63,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase
   : public ImageListSource<TImage>
 {
 public:
-  /** Standart typedefs */
+  /** Standard typedefs */
   typedef ImageSeriesFileReaderBase     Self;
   typedef ImageListSource<TImage>       Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -71,7 +71,7 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
+  /** Runtime information macro */
   itkTypeMacro(ImageSeriesFileReaderBase, ImageListSource);
 
   typedef TImage                                      OutputImageType;
@@ -131,7 +131,7 @@ public:
   {
     return m_ListOfFileNames.size();
   }
-  virtual OutputImageListType * GetOutput(void);
+  OutputImageListType * GetOutput(void) ITK_OVERRIDE;
   virtual OutputImageType *     GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Performs selective file extraction */
@@ -139,14 +139,14 @@ public:
   virtual OutputImageType * GenerateOutput(DataObjectPointerArraySizeType idx);
 
   /** Synchronization */
-  void Update()
+  void Update() ITK_OVERRIDE
   {
     this->GenerateData();
   }
 
 protected:
   ImageSeriesFileReaderBase();
-  virtual ~ImageSeriesFileReaderBase () {}
+  ~ImageSeriesFileReaderBase () ITK_OVERRIDE {}
 
   enum FileType { kFileName = 0, kImageFileName, kAnyFileName };
   /**
@@ -154,10 +154,10 @@ protected:
    * If the filename to test is an imageFileName, the file name may be modified in
    * order to add the appropriated path
    */
-  virtual void TestFileExistanceAndReadability(std::string& file, FileType fileType);
+  virtual void TestFileExistenceAndReadability(std::string& file, FileType fileType);
   virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -174,12 +174,12 @@ protected:
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
    * This allows specific (or global) initialization in the GenerateData methods,
-   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents(void);
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   std::string                m_FileName;
   OutputImageListPointerType m_OutputList;

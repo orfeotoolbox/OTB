@@ -17,6 +17,9 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetModel.h"
 
+//Use to create command line from the application parameters
+#include "otbWrapperOutputProcessXMLParameter.h"
+
 namespace otb
 {
 
@@ -26,7 +29,8 @@ namespace Wrapper
 QtWidgetModel
 ::QtWidgetModel(Application* app) :
   m_Application(app),
-  m_LogOutput()
+  m_LogOutput(),
+  m_IsRunning(false)
 {
   // Init only if not already done
   if(!m_Application->IsInitialized())
@@ -36,9 +40,19 @@ QtWidgetModel
 
   m_LogOutput = QtLogOutput::New();
 
- // Attach log output to the Application logger
+  // Attach log output to the Application logger
   m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
   m_Application->GetLogger()->AddLogOutput(m_LogOutput);
+
+  m_Timer = new QTimer(this);
+  m_Timer->setSingleShot(true);
+  m_Timer->setInterval(1000);
+  QObject::connect(
+    m_Timer,
+    SIGNAL( timeout() ),
+    this,
+    SLOT( TimerDone() )
+    );
 }
 
 QtWidgetModel::~QtWidgetModel()
@@ -54,8 +68,11 @@ QtWidgetModel
   emit UpdateGui();
 
   // Notify all
-  bool applicationStatus = m_Application->IsApplicationReady();
-  emit SetApplicationReady(applicationStatus);
+  if (!m_IsRunning)
+    {
+    bool applicationStatus = m_Application->IsApplicationReady();
+    emit SetApplicationReady(applicationStatus);
+    }
 }
 
 void
@@ -64,6 +81,82 @@ QtWidgetModel
 {
   // Deactivate the Execute button while processing
   emit SetApplicationReady(false);
+  m_IsRunning = true;
+
+  //Buld corresponding command line and display to the Log tab
+
+  //Build XML DOM from m_application
+  OutputProcessXMLParameter::Pointer outXMLParam = OutputProcessXMLParameter::New();
+
+  TiXmlElement* XMLAppElement = outXMLParam->ParseApplication(m_Application);
+ 
+  //Create command line from the XML document
+  TiXmlElement * pName, *pParam;
+  std::ostringstream cmdLine;
+
+  cmdLine << "";
+    
+  if(XMLAppElement)
+    {
+    pName = XMLAppElement->FirstChildElement("name");
+
+    cmdLine << "otbcli_" << pName->GetText();
+#ifdef _WIN32
+    cmdLine << ".bat";
+#endif
+    cmdLine << " ";
+
+    //Parse application parameters
+    pParam = XMLAppElement->FirstChildElement("parameter");
+    
+    while(pParam)
+      {
+      //Get pareter key
+      cmdLine << "-";
+      cmdLine << pParam->FirstChildElement("key")->GetText();
+      cmdLine << " ";
+
+      //Some parameters can have multiple values. Test it and handle this
+      //specific case
+      TiXmlElement * values = pParam->FirstChildElement("values");
+
+      if (values)
+        {
+        //Loop over value
+        TiXmlElement * pValue = values->FirstChildElement("value");
+        while(pValue)
+          {
+          cmdLine << pValue->GetText();
+          cmdLine << " ";
+            
+          pValue = pValue->NextSiblingElement(); // iteration over multiple values 
+          }
+        }
+      else
+        {
+        //Get parameter value
+        cmdLine << pParam->FirstChildElement("value")->GetText();
+        cmdLine << " ";
+
+        //In case of OutputImageparameter we need to report output pixel type
+        TiXmlElement * pPixType = pParam->FirstChildElement("pixtype");
+
+        if (pPixType)
+          {
+          cmdLine << pPixType->GetText();
+          cmdLine << " ";
+          }
+        }
+        
+      pParam = pParam->NextSiblingElement(); // iteration over parameters
+      }
+
+    //Insert a new line character at the end of the command line
+    cmdLine << std::endl;
+    
+    //Report the command line string to the application logger
+    m_Application->GetLogger()->Write(itk::LoggerBase::INFO, cmdLine.str());
+    }
 
   // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
@@ -84,24 +177,38 @@ QtWidgetModel
     SLOT( OnApplicationExecutionDone( int ) )
   );
 
-  taskAppli->Execute();
-
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
+
+  taskAppli->Execute();
 }
 
 void
 QtWidgetModel
 ::OnApplicationExecutionDone( int status )
 {
+  // For the progressReport to close the Progress widget
+  // and the GUI to update message
+  emit SetProgressReportDone( status );
+
+  if (status >= 0)
+    {
+    std::ostringstream oss;
+    oss << "Execution took "<< m_Application->GetLastExecutionTiming() << " sec";
+    SendLogINFO(oss.str());
+    }
+
+  // start timer
+  m_Timer->start();
+}
+
+void
+QtWidgetModel
+::TimerDone()
+{
+  m_IsRunning = false;
   // Require GUI update.
   NotifyUpdate();
-
-  // For the view to activate the button "Execute"
-  emit SetApplicationReady( true );
-
-  // For the progressReport to close the Progress widget
-  emit SetProgressReportDone( status );
 }
 
 void

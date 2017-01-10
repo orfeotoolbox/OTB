@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMollweidMapProjection_txx
-#define __otbMollweidMapProjection_txx
+#ifndef otbMollweidMapProjection_txx
+#define otbMollweidMapProjection_txx
 
 #include "otbMollweidMapProjection.h"
 #include "otbUtils.h"

@@ -15,12 +15,21 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserX_h
-#define __otbParserX_h
+#ifndef otbParserX_h
+#define otbParserX_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++11-extensions"
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #include "mpParser.h"
+#pragma GCC diagnostic pop
+#else
+#include "mpParser.h"
+#endif
 
 namespace otb
 {
@@ -55,12 +64,16 @@ public:
   /** Convenient type definitions */
   typedef ParserX                                   ParserXType;
   typedef mup::Value                                ValueType;
+  typedef mup::IValue                               IValueType;
 
   /** Set the expression to be parsed */
   virtual void SetExpr(const std::string & Expression);
 
   /** Trigger the parsing */
   ValueType Eval();
+
+  /** Trigger the parsing but return a const ref */
+  const IValueType & EvalRef();
 
   /** Define a variable */
   void DefineVar(const std::string &sName, ValueType *fVar);
@@ -76,7 +89,7 @@ public:
 
   /** Return the list of variables */
   const mup::var_maptype& GetVar() const;
- 
+
   /** Return the list of expression variables (only make sense after having set up an expression) */
   const mup::var_maptype& GetExprVar() const;
 
@@ -85,8 +98,8 @@ public:
 
 protected:
   ParserX();
-  virtual ~ParserX();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ParserX() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

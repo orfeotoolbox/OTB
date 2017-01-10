@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKNearestNeighborsMachineLearningModel_txx
-#define __otbKNearestNeighborsMachineLearningModel_txx
+#ifndef otbKNearestNeighborsMachineLearningModel_txx
+#define otbKNearestNeighborsMachineLearningModel_txx
 
 #include <boost/lexical_cast.hpp>
 #include "otbKNearestNeighborsMachineLearningModel.h"
@@ -85,7 +85,7 @@ template <class TInputValue, class TTargetValue>
 typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::TargetSampleType
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Predict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -93,10 +93,10 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 
   float result;
   cv::Mat nearest(1,m_K,CV_32FC1);
-  result = m_KNearestModel->find_nearest(sample, m_K,0,0,&nearest,0);
+  result = m_KNearestModel->find_nearest(sample, m_K,ITK_NULLPTR,ITK_NULLPTR,&nearest,ITK_NULLPTR);
 
   // compute quality if asked (only happens in classification mode)
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     assert(!this->m_RegressionMode);
     unsigned int accuracy = 0;

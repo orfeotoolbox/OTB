@@ -27,7 +27,7 @@
 #endif
 
 #ifdef _MSC_VER
-// warning convertion int -> bool
+// warning conversion int -> bool
 #pragma warning ( disable : 4800 )
 #endif
 /*===========================================================================*/

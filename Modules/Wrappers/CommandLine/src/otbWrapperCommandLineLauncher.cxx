@@ -54,7 +54,7 @@ namespace Wrapper
 CommandLineLauncher::CommandLineLauncher() :
   /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0)
 {
-  m_Application = NULL;
+  m_Application = ITK_NULLPTR;
   m_Parser = CommandLineParser::New();
   m_LogOutput = itk::StdStreamLogOutput::New();
   m_LogOutput->SetStream(std::cout);
@@ -67,13 +67,15 @@ CommandLineLauncher::CommandLineLauncher() :
 CommandLineLauncher::CommandLineLauncher(const char *) /*:
   m_Expression(exp)*/
 {
-  m_Application = NULL;
+  m_Application = ITK_NULLPTR;
   m_Parser = CommandLineParser::New();
 }
 
 CommandLineLauncher::~CommandLineLauncher()
 {
   this->DeleteWatcherList();
+  m_Application = ITK_NULLPTR;
+  ApplicationRegistry::CleanRegistry();
 }
 
 void CommandLineLauncher::DeleteWatcherList()
@@ -81,7 +83,7 @@ void CommandLineLauncher::DeleteWatcherList()
   for (unsigned int i = 0; i < m_WatcherList.size(); i++)
     {
     delete m_WatcherList[i];
-    m_WatcherList[i] = NULL;
+    m_WatcherList[i] = ITK_NULLPTR;
     }
   m_WatcherList.clear();
 }
@@ -96,8 +98,6 @@ bool CommandLineLauncher::Load(const std::vector<std::string> &vexp)
 
 bool CommandLineLauncher::Load()
 {
-  // Add a space to clarify output logs
-  std::cerr << std::endl;
   if (m_VExpression.empty())
     {
     itkExceptionMacro("No expression specified...");
@@ -384,13 +384,13 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression));
 
-    // if param is a Group, dont do anything, ParamGroup dont have values
+    // if param is a Group, don't do anything, ParamGroup don't have values
     if (type != ParameterType_Group)
       {
       // Get the attribute relative to this key as vector
       values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
 
-      // If the param does not exists in the cli, dont try to set a
+      // If the param does not exists in the cli, don't try to set a
       // value on it, an exception will be thrown later in this function
       if (paramExists)
         {
@@ -494,7 +494,17 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                   else
                     if (type == ParameterType_ListView)
                       {
-                      dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
+                      
+                      ListViewParameter * tmpLV = dynamic_cast<ListViewParameter *>(param.GetPointer());
+
+                      if(tmpLV->GetSingleSelection() && values.size() > 1)
+                        {
+                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey
+                                  << "\", invalid number of values " << values.size() << std::endl;
+                        return INVALIDNUMBEROFVALUE;
+                        }
+                      
+                      tmpLV->SetSelectedNames(values);
                       }
                     else
                       if(values.size() != 1)
@@ -551,7 +561,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             }
         // Update the flag UserValue
         param->SetUserValue(true);
-        // Call the DoUpdateParameter to update dependant params
+        // Call the DoUpdateParameter to update dependent params
         m_Application->UpdateParameters();
         }
       }
@@ -570,7 +580,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     // it must be set if :
     //  - The param is root
     //  - The param is not root and belonging to a Mandatory Group
-    //    wich is activated
+    //    which is activated
     bool mustBeSet = false;
     const bool hasValue = m_Application->HasValue(paramKey);
 
@@ -750,13 +760,21 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     return "";
     }
 
+  bool singleSelectionForListView = false;
+
+  if(type == ParameterType_ListView)
+    {
+    ListViewParameter * tmp = static_cast<ListViewParameter *>(param.GetPointer());
+    singleSelectionForListView = tmp->GetSingleSelection();
+    }
+
   std::ostringstream oss;
 
   // When a parameter is mandatory :
   // it must be set if :
   //  - The param is root
   //  - The param is not root and belonging to a Mandatory Group
-  //    wich is activated
+  //    which is activated
   bool isMissing = false;
   if (!m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression))
     {
@@ -822,7 +840,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     }
   else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML ||
            type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
-           type == ParameterType_String || type == ParameterType_Choice )
+           type == ParameterType_String || type == ParameterType_Choice || (type == ParameterType_ListView && singleSelectionForListView))
     {
     oss << "<string>        ";
     }
@@ -830,7 +848,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<string> [pixel]";
     }
-  else if (type == ParameterType_Choice || type == ParameterType_ListView || type == ParameterType_InputImageList ||
+  else if (type == ParameterType_Choice || (type == ParameterType_ListView && !singleSelectionForListView) || type == ParameterType_InputImageList ||
            type == ParameterType_InputVectorDataList || type == ParameterType_InputFilenameList ||
            type == ParameterType_StringList )
     {

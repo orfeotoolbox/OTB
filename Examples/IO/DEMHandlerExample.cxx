@@ -27,8 +27,8 @@
 // OTB relies on OSSIM for elevation handling. Since release 3.16, there is a
 // single configuration class \doxygen{otb}{DEMHandler} to manage elevation (in
 // image projections or localization functions for example).  This configuration
-// is managed by the a proper instanciation and parameters setting of this
-// class.  These instanciations must be done before any call to geometric
+// is managed by the a proper instantiation and parameters setting of this
+// class.  These instantiations must be done before any call to geometric
 // filters or functionalities. Ossim internal accesses to elevation are also
 // configured by this class and this will ensure consistency throughout the
 // library.
@@ -68,9 +68,9 @@ if(argc!=8)
 
 // Software Guide : BeginLatex
 //
-// It allows to configure a directory containing DEM tiles (DTED or SRTM
+// It allows configuring a directory containing DEM tiles (DTED or SRTM
 // supported) using the \code{OpenDEMDirectory()} method. The \code{OpenGeoidFile()} method
-// allows to input a geoid file as well. Last, a default height above ellipsoid
+// allows inputting a geoid file as well. Last, a default height above ellipsoid
 // can be set using the \code{SetDefaultHeightAboveEllipsoid()} method.
 //
 // Software Guide : EndLatex

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHessianToScalarImageFilter_h
-#define __otbHessianToScalarImageFilter_h
+#ifndef otbHessianToScalarImageFilter_h
+#define otbHessianToScalarImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 
@@ -104,7 +104,7 @@ public:
   }
 protected:
   HessianToScalarImageFilter() {}
-  virtual ~HessianToScalarImageFilter() {}
+  ~HessianToScalarImageFilter() ITK_OVERRIDE {}
 
 private:
   HessianToScalarImageFilter(const Self &); //purposely not implemented

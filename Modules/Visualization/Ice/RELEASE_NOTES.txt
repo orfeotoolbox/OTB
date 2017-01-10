@@ -1,0 +1,16 @@
+Ice v.0.4.0 - Changes since version 0.3.0 (2015/12/22)
+------------------------------------------
+* Features;
+  * Split otb::GlImageActor::GetPixelFromView() in two methods
+  * Added new otb::GlImageView::ZoomTo*() methods
+  * Various code optimizations
+  * Various fixes of coverity detected issues
+  * Adding optimization user entry points in otb::GlImageActor:
+    * Choice of resolution look-up algorithm
+    * Allow for tile size tuning
+    * Add a software rendering mode (based on OTB filters, disabled by default)
+
+
+* Bug fixed:
+  * Fixed bug in resolution reading, that prevented the last overview to be read
+  * 0001078: Fixed initialization of transforms in otb::GlImageActor (

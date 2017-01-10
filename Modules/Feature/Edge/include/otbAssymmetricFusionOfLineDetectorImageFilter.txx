@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAssymmetricFusionOfLineDetectorImageFilter_txx
-#define __otbAssymmetricFusionOfLineDetectorImageFilter_txx
+#ifndef otbAssymmetricFusionOfLineDetectorImageFilter_txx
+#define otbAssymmetricFusionOfLineDetectorImageFilter_txx
 
 #include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeastSquareAffineTransformEstimator_h
-#define __otbLeastSquareAffineTransformEstimator_h
+#ifndef otbLeastSquareAffineTransformEstimator_h
+#define otbLeastSquareAffineTransformEstimator_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -30,16 +30,16 @@ namespace otb {
  * \brief This class provide the affine transform LSQR estimation
  *
  * This class uses the classical least square optimisation to estimate
- * an affine transfrom from a set of tie points.
+ * an affine transform from a set of tie points.
  *
  * This implementation supports points of any dimension.
  *
  * Tie points can be added through the AddTiePoints() method.
  *
- * The ClearTiePoints() method allows to remove all the tie points
+ * The ClearTiePoints() method allows removing all the tie points
  * that has been previously set.
  *
- * Once all the tie points have been feeded into the estimator, the
+ * Once all the tie points have been fed into the estimator, the
  * Compute() method will perform the optimization.
  *
  * Matrix of the estimated affine transform can be retrieved using the
@@ -48,8 +48,8 @@ namespace otb {
  * Offset of the estimated affine transform can be retrieved using the
  * GetOffset() method.
  *
- * Alternatively, the GetAffineTransfrom() methods return a pointer to
- * a fully set-up forward affine transfrom (\sa AffineTransform).
+ * Alternatively, the GetAffineTransform() methods return a pointer to
+ * a fully set-up forward affine transform (\sa AffineTransform).
  *
  * Estimation errors are available per dimension using the
  * GetRMSError() (root mean square location error) or
@@ -106,7 +106,7 @@ public:
   /** Get the affine transform offset */
   itkGetConstReferenceMacro(Offset, VectorType);
 
-  /** Get the estimated affine transfrom */
+  /** Get the estimated affine transform */
   itkGetObjectMacro(AffineTransform, AffineTransformType);
 
   /** Get the RMS error */
@@ -135,10 +135,10 @@ protected:
   /** Constructor */
   LeastSquareAffineTransformEstimator();
   /** Destructor */
-  virtual ~LeastSquareAffineTransformEstimator();
+  ~LeastSquareAffineTransformEstimator() ITK_OVERRIDE;
 
   /** The PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LeastSquareAffineTransformEstimator (const Self &);   // purposely not implemented
@@ -159,7 +159,7 @@ private:
   /** Affine transform offset */
   VectorType m_Offset;
 
-  /** Affine transfrom */
+  /** Affine transform */
   AffineTransformPointerType m_AffineTransform;
 
 }; // end of class

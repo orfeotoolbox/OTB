@@ -70,7 +70,15 @@ void QtWidgetListViewParameter::DoCreateWidget()
 {
   m_ListView = new QListWidget();
   m_ListView->setToolTip(m_ListViewParam->GetDescription());
-  m_ListView->setSelectionMode(QAbstractItemView::MultiSelection);
+
+  if(m_ListViewParam->GetSingleSelection())
+    {
+    m_ListView->setSelectionMode(QAbstractItemView::SingleSelection);
+    }
+  else
+    {
+    m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
 
   connect( m_ListView, SIGNAL(itemSelectionChanged()), this, SLOT(SelectedItems()) );
 
@@ -97,6 +105,10 @@ void QtWidgetListViewParameter::SelectedItems()
       }
     }
   m_ListViewParam->SetSelectedItems(m_SelectedItems);
+
+  // make sure parameter is enabled
+  m_ListViewParam->SetActive(true);
+  m_ListViewParam->SetUserValue(true);
 }
 
 }

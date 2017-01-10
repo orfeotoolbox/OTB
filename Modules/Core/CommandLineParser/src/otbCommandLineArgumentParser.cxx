@@ -280,7 +280,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
       bool goOnFlag(true);
       while (goOnFlag == true)
         {
-        if (argv[i + 1] != NULL)
+        if (argv[i + 1] != ITK_NULLPTR)
           {
           std::string strArgv = std::string(argv[i + 1]);
           if (strArgv[0] == '-' )

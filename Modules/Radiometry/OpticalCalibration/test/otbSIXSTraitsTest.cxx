@@ -20,7 +20,7 @@
 
 int otbSIXSTraitsTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
-  otb::SIXSTraits *var(NULL);
+  otb::SIXSTraits *var(ITK_NULLPTR);
   var = new otb::SIXSTraits();
   delete var;
   return EXIT_SUCCESS;

@@ -45,15 +45,15 @@ Execute $<TARGET_FILE:LAIAndPROSAILToSensorResponse>
 
 endif()
 
-otb_add_test(NAME siTvLAIFromNDVIImageTransfromExampleTest  COMMAND ${OTB_TEST_DRIVER}
+otb_add_test(NAME siTvLAIFromNDVIImageTransformExampleTest  COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON_8}
     ${OTB_DATA_ROOT}/Baseline/OTB/Images/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
-    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
+    ${TEMP}/siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW.tif
   Execute $<TARGET_FILE:LAIFromNDVIImageTransform>
     ${INPUTDATA}/verySmallFSATSW.tif
-    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
+    ${TEMP}/siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW.tif
     ${TEMP}/verySmallFSATSW_visu.png
-    ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png
+    ${TEMP}/siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW_visu.png
     1  # red
     4  # nir
 )

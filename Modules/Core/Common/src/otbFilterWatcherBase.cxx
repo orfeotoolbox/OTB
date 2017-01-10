@@ -26,7 +26,7 @@ namespace otb
 FilterWatcherBase
 ::FilterWatcherBase()
 : m_Comment("Not watching an object"),
-  m_Process(0),
+  m_Process(ITK_NULLPTR),
   m_StartTag(0),
   m_EndTag(0),
   m_ProgressTag(0),

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaralickTexturesImageFunction_txx
-#define __otbHaralickTexturesImageFunction_txx
+#ifndef otbHaralickTexturesImageFunction_txx
+#define otbHaralickTexturesImageFunction_txx
 
 #include "otbHaralickTexturesImageFunction.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -135,7 +135,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
   double marginalDevSquared = 0.;
   double pixelVariance = 0.;
 
-  //Create and Intialize marginalSums
+  //Create and Initialize marginalSums
   std::vector<double> marginalSums(m_NumberOfBinsPerAxis, 0);
 
   //get co-occurrence vector and totalfrequency

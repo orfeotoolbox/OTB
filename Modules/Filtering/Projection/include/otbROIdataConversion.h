@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbROIdataConversion_h
-#define __otbROIdataConversion_h
+#ifndef otbROIdataConversion_h
+#define otbROIdataConversion_h
 
 #include <vector>
 #include "otbImage.h"
@@ -79,16 +79,16 @@ public:
 
 protected:
   ROIdataConversion();
-  virtual ~ROIdataConversion() {}
-  virtual void GenerateOutputInformation();
-  virtual void GenerateInputRequestedRegion();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~ROIdataConversion() ITK_OVERRIDE {}
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
 
   /** Performs its job! */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Count the number for sample in the training area */
   SizeValueType GetNumberOfSample();

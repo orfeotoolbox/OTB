@@ -15,11 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperDocExampleStructure_cxx
-#define __otbWrapperDocExampleStructure_cxx
-
 #include "otbWrapperDocExampleStructure.h"
-
 
 namespace otb
 {
@@ -145,7 +141,7 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
 
   res = oss.str();
 
-  // Supress last added space
+  // Suppress last added space
   res.erase( res.size()-1, 1);
 
   return res.c_str();
@@ -227,5 +223,3 @@ DocExampleStructure::GenerateHtmlExample()
 
 } // End namespace Wrapper
 } // End namespace otb
-
-#endif

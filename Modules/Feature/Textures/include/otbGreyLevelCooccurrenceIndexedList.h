@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __otbGreyLevelCooccurrenceIndexedList_h
-#define __otbGreyLevelCooccurrenceIndexedList_h
+#ifndef otbGreyLevelCooccurrenceIndexedList_h
+#define otbGreyLevelCooccurrenceIndexedList_h
 
 #include "itkNumericTraits.h"
 #include "itkObjectFactory.h"
@@ -39,7 +39,7 @@ namespace otb
 * as a lookup array with size as [nbbins x nbbins]. The lookup array stores
 * position CooccurrencePairType in the VectorType. It ensures us that all elements
 * in Vector are unqiue in terms of the index value in the pair. For any given
-* pixel index, -1 value indicates zero existance of the index in the
+* pixel index, -1 value indicates zero existence of the index in the
 * VectorType. This avoid searching all elements in VectorType for each pixel
 * index added during neighborhood iterator. It is also used to decide wheather
 * to update the frequency of pair or to insert a new element in the vector.
@@ -118,7 +118,7 @@ public:
   VectorType GetVector();
 
   /** Initialize the lowerbound and upper bound vecotor, Fill m_LookupArray with
-    * -1 and set m_TotalFreqency to zero */
+    * -1 and set m_TotalFrequency to zero */
   void Initialize(const unsigned int nbins, const PixelValueType min,
                   const PixelValueType max, const bool symmetry = true);
 
@@ -135,11 +135,11 @@ public:
 
 protected:
   GreyLevelCooccurrenceIndexedList();
-  ~GreyLevelCooccurrenceIndexedList() { }
+  ~GreyLevelCooccurrenceIndexedList() ITK_OVERRIDE { }
 
   /** create a cooccurrence pair with given index and frequency = 1
     * value. Next occurrence of same index is checked via m_LookupArray and the
-    * correspoding frequency value is incremented. If m_Symmetry is true the
+    * corresponding frequency value is incremented. If m_Symmetry is true the
     * co-occurrence pair is added again with index values swapped */
   void AddPairToVector(IndexType index);
 
@@ -152,7 +152,7 @@ protected:
   /** Get index of the pixelPair combination and save the result in index **/
   bool GetIndex(const PixelPairType & pixelPair, IndexType & index) const;
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const;
+  void PrintSelf(std::ostream & os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
 

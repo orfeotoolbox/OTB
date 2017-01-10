@@ -87,7 +87,7 @@
 // \footnote{Before version 4.2, this class was storing all correction
 // parameters} \doxygen{otb}{AtmosphericCorrectionParameters}.
 // \item The acquisition correction parameters : sensor related information
-// about the way the image was taken, usualy available with the image
+// about the way the image was taken, usually available with the image
 // metadata (for instance : solar angles, spectral
 // sensitivity, ...). They are stored in the class
 // \doxygen{otb}{ImageMetadataCorrectionParameters}.
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
 // These {\em containers} will be given to the static function \texttt{Compute}
 // from \doxygen{otb}{RadiometryCorrectionParametersToAtmosphericRadiativeTerms}
 // class, which will call a 6S routine that will compute the needed
-// radiometric informations and store them in a
+// radiometric information and store them in a
 // \doxygen{otb}{AtmosphericRadiativeTerms} class instance.
 // For this,
 // \doxygen{otb}{RadiometryCorrectionParametersToAtmosphericRadiativeTerms},
@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // The \doxygen{otb}{ImageMetadataCorrectionParameters} class stores
-  // several parameters that are generaly present in the image metadata :
+  // several parameters that are generally present in the image metadata :
   // \begin{itemize}
   // \item The zenithal and azimutal solar angles that describe the solar incidence
   // configuration (in degrees);
@@ -461,7 +461,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // Once those parameters are loaded, they are used by the 6S library
-  // to compute the needed radiometric informations. The
+  // to compute the needed radiometric information. The
   // RadiometryCorrectionParametersToAtmosphericRadiativeTerms class
   // provides a static function to perform this step\footnote{Before version
   // 4.2, it was done with the filter
@@ -548,7 +548,7 @@ int main(int argc, char *argv[])
 // Next (and last step) is the neighborhood correction.
 // For this, the SurfaceAdjacencyEffectCorrectionSchemeFilter class is used.
 // The previous surface reflectance inversion is performed under the assumption of a
-// homogeneous ground environment. The following step allows to correct the adjacency
+// homogeneous ground environment. The following step allows correcting the adjacency
 // effect on the radiometry of pixels. The method is based on the decomposition of
 // the observed signal as the summation of the own contribution of the target pixel and
 // of the contributions of neighbored pixels moderated by their distance to the target pixel.
@@ -624,7 +624,7 @@ int main(int argc, char *argv[])
 //  Software Guide : BeginLatex
 //
 // At this step, each filter of the chain is instancied and every one has its
-// input paramters set. A name can be given to the output image, each filter
+// input parameters set. A name can be given to the output image, each filter
 //  can be linked to the next one and create the final processing chain.
 //
 //  Software Guide : EndLatex

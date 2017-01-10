@@ -102,15 +102,14 @@ public:
 
   ArrayType GetUniqueValues() const
   {
+    ArrayType uniqueValues;
     if( !m_Image )
       {
-       itkExceptionMacro(<<"GetUniqueValues(): Null input image pointer.");
+      return uniqueValues;
       }
 
     itk::ImageRegionConstIterator< ImageType > it( m_Image,
                                               m_Image->GetRequestedRegion() );
-
-    ArrayType uniqueValues;
 
     uniqueValues.push_back(it.Get());
     ++it;
@@ -131,12 +130,12 @@ public:
 protected:
   ImageUniqueValuesCalculator()
     {
-    m_Image = NULL;
+    m_Image = ITK_NULLPTR;
     }
-  virtual ~ImageUniqueValuesCalculator()
+  ~ImageUniqueValuesCalculator() ITK_OVERRIDE
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Image: " << m_Image.GetPointer() << std::endl;
@@ -420,7 +419,7 @@ protected:
 // Software Guide : BeginLatex
 //
 // \code{TernaryFunctorImageFilterWithNBands} class is defined here.
-// This class inherits form \doxygen{itk::TernaryFunctorImageFilter} with additionnal nuber of band parameters.
+// This class inherits form \doxygen{itk::TernaryFunctorImageFilter} with additional nuber of band parameters.
 // It's implementation is done to process Label, LAI, and mask image with Simulation functor.
 // Software Guide : EndLatex
 
@@ -450,9 +449,9 @@ public:
 
 protected:
   TernaryFunctorImageFilterWithNBands() {}
-  virtual ~TernaryFunctorImageFilterWithNBands() {}
+  ~TernaryFunctorImageFilterWithNBands() ITK_OVERRIDE {}
 
-  void GenerateOutputInformation()
+  void GenerateOutputInformation() ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel( m_NumberOfOutputBands );
@@ -470,7 +469,7 @@ private:
 
 int main(int argc, char *argv[])
 {
-  char *cmifname = NULL;
+  char *cmifname = ITK_NULLPTR;
   if (argc != 10)
     {
     if (argc == 11) // cloud mask filename optional parameter
@@ -592,7 +591,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginLatex
   //
-  // Acquisition parameters are loaded using text file. A detailled definition of acquisition parameters can
+  // Acquisition parameters are loaded using text file. A detailed definition of acquisition parameters can
   // be found in class \doxygen{SailModel}.
   //
   // Software Guide : EndLatex
@@ -642,7 +641,7 @@ int main(int argc, char *argv[])
   // Label parameters are loaded using text file.
   // Two type of object characteristic can be found. If label corresponds to vegetation class,
   // then leaf parameters are loaded.
-  // A detailled definition of leaf parameters can be found in class \doxygen{otb}{LeafParameters} class.
+  // A detailed definition of leaf parameters can be found in class \doxygen{otb}{LeafParameters} class.
   // Otherwise object reflectance is generated from $400$ to $2400nm$ using \href{http://speclib.jpl.nasa.gov/}{Aster database}.
   // Software Guide : EndLatex
 
@@ -758,6 +757,11 @@ int main(int argc, char *argv[])
 
   UniqueCalculatorType::ArrayType uniqueVals =
       uniqueCalculator->GetUniqueValues();
+  if (uniqueVals.empty())
+    {
+    std::cerr << "No label value found!"<< std::endl;
+    return EXIT_FAILURE;
+    }
   std::cout << "Labels are " << std::endl;
   UniqueCalculatorType::ArrayType::const_iterator uvIt = uniqueVals.begin();
 
@@ -800,7 +804,7 @@ int main(int argc, char *argv[])
   miReader->UpdateOutputInformation();
   MaskImageType::Pointer maskImage = miReader->GetOutput();
 
-  if (cmifname != NULL)
+  if (cmifname != ITK_NULLPTR)
     {
 
     MaskReaderType::Pointer cmiReader = MaskReaderType::New();

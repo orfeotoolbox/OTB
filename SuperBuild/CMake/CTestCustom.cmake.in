@@ -1,0 +1,31 @@
+set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1000000)
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 300)
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
+
+set(CTEST_CUSTOM_WARNING_EXCEPTION
+  ${CTEST_CUSTOM_WARNING_EXCEPTION}
+  ".*SuperBuild.GEOS.*"
+  ".*SuperBuild.JPEG.*warning"
+  ".*SuperBuild.TIFF.*warning.*"
+  ".*SuperBuild.GEOTIFF.*warning.*"
+  "ranlib:.*file:.*has no symbols"
+  "libtool:.*file:.*has no symbols"
+  "libtool:.install:.warning:.relinking.*"
+  "make.*jobserver.unavailable.*"
+  "configure:.WARNING:.*"
+  ".*SuperBuild.OSSIM.src.OSSIM.*"
+  ".*SuperBuild.LIBKML.src.LIBKML.*"
+  ".bin.bash:.*config.rpath:.*directory.*"
+  ".*the.curl.cmake.build.system.is.poorly.maintained.*"
+  ".*config.status:.WARNING:.*GDALmake.opt.in.*"
+  "SuperBuild.OPENCV.src.OPENCV.modules"
+  ".*gdal_priv.h.*[Ww]arning.*"
+  ".*cpl_string.h.*[Ww]arning.*"
+  ".*ogr_feature.h.*[Ww]arning.*"
+  ".*cpl_serv.h.*[Ww]arning.*"
+  )
+
+# We disable all compiler warnings on superbuild. They are too numerous and pretty much useless
+# when they show up on the dashboard. If you want to track them do, just run the build
+# manually.
+set (CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 0)

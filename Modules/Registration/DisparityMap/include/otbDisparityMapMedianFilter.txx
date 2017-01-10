@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapMedianFilter_txx
-#define __otbDisparityMapMedianFilter_txx
+#ifndef otbDisparityMapMedianFilter_txx
+#define otbDisparityMapMedianFilter_txx
 
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
 #else
@@ -61,7 +61,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMask *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -73,7 +73,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -86,7 +86,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputImage *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -98,7 +98,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   if (this->GetNumberOfOutputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(3));
 }
@@ -316,7 +316,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
     }
 
   //Remove incoherences between disparity and median//
-  // creation of the auxilliary image that store positions of incoherences between the median and the input disparity map
+  // creation of the auxiliary image that store positions of incoherences between the median and the input disparity map
   MaskImagePointerType image_aux = MaskImageType::New();
   image_aux->SetRegions(input->GetRequestedRegion());
   image_aux->Allocate();

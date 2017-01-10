@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // Now we need to
-// instanciate the map projection, set the {\em zone} and {\em hemisphere}
+// instantiate the map projection, set the {\em zone} and {\em hemisphere}
 // parameters and pass this projection to the orthorectification filter.
 //
 // Software Guide : EndLatex
@@ -152,8 +152,8 @@ int main(int argc, char* argv[])
   orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[5], NULL);
-  origin[1] = strtod(argv[6], NULL);
+  origin[0] = strtod(argv[5], ITK_NULLPTR);
+  origin[1] = strtod(argv[6], ITK_NULLPTR);
   orthoRectifFilter->SetOutputOrigin(origin);
 // Software Guide : EndCodeSnippet
 

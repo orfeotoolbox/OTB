@@ -270,7 +270,7 @@ int compareDatasetInfoGDAL(DatasetInfoGDAL *create, DatasetInfoGDAL *WR, std::os
          (create->m_GeoTransfoParam[4] == WR->m_GeoTransfoParam[4]) &&
          ( (create->m_GeoTransfoParam[5] == WR->m_GeoTransfoParam[5]) || (create->m_GeoTransfoParam[5] == -WR->m_GeoTransfoParam[5]) )  )
       {
-      os << "Same GeoTranform" <<std::endl;
+      os << "Same GeoTransform" <<std::endl;
       }
     else
       {
@@ -462,7 +462,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   GDALAllRegister();
   poDriver = GetGDALDriverManager()->GetDriverByName(pszFormat);
 
-  if( poDriver == NULL )
+  if( poDriver == ITK_NULLPTR )
     {
     std::cout << "impossible to get the driver" <<std::endl;
     return false;
@@ -481,14 +481,14 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     }
 
   GDALDataset *poDstDS;
-  char **papszOptions = NULL;
+  char **papszOptions = ITK_NULLPTR;
 
   // Create dataset
   poDstDS = poDriver->Create( filename.c_str(), 128, 128, 1, GDT_Byte,
                               papszOptions );
 
   OGRSpatialReference oSRS_GCP;
-  char *pszSRS_WKT_GCP = NULL;
+  char *pszSRS_WKT_GCP = ITK_NULLPTR;
   oSRS_GCP.SetWellKnownGeogCS( "WGS84" );
   oSRS_GCP.exportToWkt( &pszSRS_WKT_GCP );
 
@@ -522,7 +522,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
 
   // Set ProjectionRef
   OGRSpatialReference oSRS_ProjRef;
-  char *pszSRS_WKT_ProjRef = NULL;
+  char *pszSRS_WKT_ProjRef = ITK_NULLPTR;
   if (setProjectionRef || setProjectionRef_UTM)
   {
     oSRS_ProjRef.SetWellKnownGeogCS( "WGS84" );
@@ -560,11 +560,16 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     }
 
   poBand = poDstDS->GetRasterBand(1);
-  poBand->RasterIO( GF_Write, 0, 0, 128, 128,
-                    abyRaster, 128, 128, GDT_Byte, 0, 0 );
+  const OGRErr errRasterIO = poBand->RasterIO( GF_Write, 0, 0, 128, 128,
+                                               abyRaster, 128, 128, GDT_Byte, 0, 0 );
 
+  if (errRasterIO != OGRERR_NONE)
+    {
+    std::cerr << "Unable to write image data." << std::endl;
+    return false;
+    }
 
-  // Get some informations from dataset
+  // Get some information from dataset
   infoDatasetCreate->m_Name = "Create";
   infoDatasetCreate->m_ProjRef = static_cast<std::string>(poDstDS->GetProjectionRef());
 
@@ -590,10 +595,10 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   GDALDataset  *poDataset;
 
   poDataset = (GDALDataset *) GDALOpen( filename.c_str(), GA_ReadOnly );
-  if( poDataset == NULL )
+  if( poDataset == ITK_NULLPTR )
      return false;
 
-  // Get some informations from file
+  // Get some information from file
   infoDatasetWR->m_Name = "WR";
   infoDatasetWR->m_ProjRef = static_cast<std::string>(poDataset->GetProjectionRef());
 

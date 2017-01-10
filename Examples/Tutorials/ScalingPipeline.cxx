@@ -28,7 +28,7 @@
 // the result for proper display.
 //
 // We include the required header including the header
-// for the \doxygen{itk}{CannyEdgeImageFilter} and the
+// for the \doxygen{itk}{CannyEdgeDetectionImageFilter} and the
 // \doxygen{itk}{RescaleIntensityImageFilter}.
 //
 //  Software Guide : EndLatex
@@ -70,7 +70,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  We declare the reader with the image template using the pixel type
-  // double. It is worth noticing that this instanciation does not imply
+  // double. It is worth noticing that this instantiation does not imply
   // anything about the type of the input image. The original image can be
   // anything, the reader will just convert the result to double.
   //

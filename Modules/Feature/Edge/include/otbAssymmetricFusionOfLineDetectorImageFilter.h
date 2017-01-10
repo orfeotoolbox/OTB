@@ -15,14 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAssymmetricFusionOfLineDetectorImageFilter_h
-#define __otbAssymmetricFusionOfLineDetectorImageFilter_h
+#ifndef otbAssymmetricFusionOfLineDetectorImageFilter_h
+#define otbAssymmetricFusionOfLineDetectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
 #include "otbLineRatioDetectorImageFilter.h"
 #include "otbLineCorrelationDetectorImageFilter.h"
 #include "otbAssociativeSymmetricalSumImageFilter.h"
+
+#include "vcl_deprecated_header.h"
 
 namespace otb
 {
@@ -78,7 +80,7 @@ public:
 
 protected:
   AssymmetricFusionOfLineDetectorImageFilter();
-  virtual ~AssymmetricFusionOfLineDetectorImageFilter() {}
+  ~AssymmetricFusionOfLineDetectorImageFilter() ITK_OVERRIDE {}
 
   typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
       InterpolatorType>        LineRatioType;
@@ -87,9 +89,9 @@ protected:
   typedef otb::AssociativeSymmetricalSumImageFilter<InputImageType1, InputImageType2,
       OutputImageType> AssSymSumType;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   AssymmetricFusionOfLineDetectorImageFilter(const Self &); //purposely not implemented

@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbLearningApplicationBase_h
-#define __otbLearningApplicationBase_h
+#ifndef otbLearningApplicationBase_h
+#define otbLearningApplicationBase_h
 
 #include "otbConfigure.h"
 
@@ -31,18 +31,24 @@
 #include "otbMachineLearningModelFactory.h"
 
 #ifdef OTB_USE_OPENCV
-# include "otbKNearestNeighborsMachineLearningModel.h"
-# include "otbRandomForestsMachineLearningModel.h"
-# include "otbSVMMachineLearningModel.h"
-# include "otbBoostMachineLearningModel.h"
-# include "otbDecisionTreeMachineLearningModel.h"
-# include "otbGradientBoostedTreeMachineLearningModel.h"
-# include "otbNormalBayesMachineLearningModel.h"
-# include "otbNeuralNetworkMachineLearningModel.h"
+#include "otbKNearestNeighborsMachineLearningModel.h"
+#include "otbRandomForestsMachineLearningModel.h"
+// OpenCV SVM implementation is buggy with linear kernel
+// Users should use the libSVM implementation instead.
+//#include "otbSVMMachineLearningModel.h"
+#include "otbBoostMachineLearningModel.h"
+#include "otbDecisionTreeMachineLearningModel.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
+#include "otbNormalBayesMachineLearningModel.h"
+#include "otbNeuralNetworkMachineLearningModel.h"
 #endif
 
 #ifdef OTB_USE_LIBSVM 
 #include "otbLibSVMMachineLearningModel.h"
+#endif
+
+#ifdef OTB_USE_SHARK
+#include "otbSharkRandomForestsMachineLearningModel.h"
 #endif
 
 namespace otb
@@ -60,11 +66,12 @@ namespace Wrapper
  * methods. The classes derived from LearningApplicationBase only need these
  * 3 methods to handle the machine learning model.
  *
- * There are multiple machine learning models in OTB, some imported from OpenCV,
- * and one imported from LibSVM. They all have different parameters. The
- * purpose of this class is to handle the creation of all parameters related to
- * machine learning models (in DoInit() ), and to dispatch the calls to
- * specific train functions in function Train().
+ * There are multiple machine learning models in OTB, some imported
+ * from OpenCV and one imported from LibSVM. They all have
+ * different parameters. The purpose of this class is to handle the
+ * creation of all parameters related to machine learning models (in
+ * DoInit() ), and to dispatch the calls to specific train functions
+ * in function Train().
  *
  * This class is templated over scalar types for input and output values.
  * Typically, the input value type will be either float of double. The choice
@@ -116,7 +123,9 @@ public:
 #ifdef OTB_USE_OPENCV
   typedef otb::RandomForestsMachineLearningModel<InputValueType, OutputValueType> RandomForestType;
   typedef otb::KNearestNeighborsMachineLearningModel<InputValueType, OutputValueType> KNNType;
-  typedef otb::SVMMachineLearningModel<InputValueType, OutputValueType> SVMType;
+  // OpenCV SVM implementation is buggy with linear kernel
+  // Users should use the libSVM implementation instead.
+  // typedef otb::SVMMachineLearningModel<InputValueType, OutputValueType> SVMType;
   typedef otb::BoostMachineLearningModel<InputValueType, OutputValueType> BoostType;
   typedef otb::DecisionTreeMachineLearningModel<InputValueType, OutputValueType> DecisionTreeType;
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, OutputValueType> GradientBoostedTreeType;
@@ -127,9 +136,15 @@ public:
 #ifdef OTB_USE_LIBSVM 
   typedef otb::LibSVMMachineLearningModel<InputValueType, OutputValueType> LibSVMType;
 #endif
- 
+
+#ifdef OTB_USE_SHARK
+  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
+#endif
+  
 protected:
   LearningApplicationBase();
+
+  ~LearningApplicationBase() ITK_OVERRIDE;
 
   /** Generic method to train and save the machine learning model. This method
    * uses specific train methods depending on the chosen model.*/
@@ -163,7 +178,9 @@ private:
 
 #ifdef OTB_USE_OPENCV
   void InitBoostParams();
-  void InitSVMParams();
+  // OpenCV SVM implementation is buggy with linear kernel
+  // Users should use the libSVM implementation instead.
+  // void InitSVMParams();
   void InitDecisionTreeParams();
   void InitGradientBoostedTreeParams();
   void InitNeuralNetworkParams();
@@ -174,9 +191,11 @@ private:
   void TrainBoost(typename ListSampleType::Pointer trainingListSample,
                   typename TargetListSampleType::Pointer trainingLabeledListSample,
                   std::string modelPath);
-  void TrainSVM(typename ListSampleType::Pointer trainingListSample,
-                typename TargetListSampleType::Pointer trainingLabeledListSample,
-                std::string modelPath);
+  // OpenCV SVM implementation is buggy with linear kernel
+  // Users should use the libSVM implementation instead.
+  // void TrainSVM(typename ListSampleType::Pointer trainingListSample,
+  //              typename TargetListSampleType::Pointer trainingLabeledListSample,
+  //              std::string modelPath);
   void TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
                          typename TargetListSampleType::Pointer trainingLabeledListSample,
                          std::string modelPath);
@@ -196,6 +215,13 @@ private:
                 typename TargetListSampleType::Pointer trainingLabeledListSample,
                 std::string modelPath);
 #endif
+
+#ifdef OTB_USE_SHARK
+  void InitSharkRandomForestsParams();
+  void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
+                               typename TargetListSampleType::Pointer trainingLabeledListSample,
+                               std::string modelPath);
+#endif
   //@}
 };
 
@@ -212,10 +238,15 @@ private:
 #include "otbTrainNeuralNetwork.txx"
 #include "otbTrainNormalBayes.txx"
 #include "otbTrainRandomForests.txx"
-#include "otbTrainSVM.txx"
+// OpenCV SVM implementation is buggy with linear kernel
+// Users should use the libSVM implementation instead.
+//#include "otbTrainSVM.txx"
 #endif
 #ifdef OTB_USE_LIBSVM
 #include "otbTrainLibSVM.txx"
+#endif
+#ifdef OTB_USE_SHARK
+#include "otbTrainSharkRandomForests.txx"
 #endif
 #endif
 

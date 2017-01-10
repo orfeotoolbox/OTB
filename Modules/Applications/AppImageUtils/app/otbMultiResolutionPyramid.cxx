@@ -55,7 +55,7 @@ public:
                                  FloatVectorImageType>              ShrinkFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("MultiResolutionPyramid");
     SetDescription("Build a multi-resolution pyramid of the image.");
@@ -67,8 +67,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
-    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Multi);
     AddDocTag("Util");
 
@@ -95,7 +95,7 @@ private:
     // Boolean Fast scheme
     AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
     std::ostringstream desc;
-    desc<<"If used, this option allows to speed-up computation by iteratively"
+    desc<<"If used, this option allows one to speed-up computation by iteratively"
         <<" subsampling previous level of pyramid instead of processing the full input.";
     SetParameterDescription("fast", desc.str());
     MandatoryOff("fast");
@@ -109,14 +109,14 @@ private:
     SetDocExampleParameterValue("fast", "false");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
 
     // Reinitialize the internal process used
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Initializing the process
     m_SmoothingFilter =  SmoothingVectorImageFilterType::New();
@@ -166,7 +166,7 @@ private:
         }
       else
         {
-        std::cout <<"fast scheme enabled : not implemented for the moment " << std::endl;
+        otbAppLogWARNING("fast scheme enabled : not implemented for the moment ");
         }
 
       // Create an output parameter to write the current output image

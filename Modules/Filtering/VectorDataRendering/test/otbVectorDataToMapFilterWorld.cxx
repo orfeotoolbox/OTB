@@ -49,15 +49,21 @@ int otbVectorDataToMapFilterWorld(int argc, char * argv [])
   //Reproject the vector data in the proper projection
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
 
+  std::string outputProjRef("GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", "
+    "SPHEROID[\"WGS_1984\", 6378137, 298.257223563]], PRIMEM[\"Greenwich\", 0],"
+    " UNIT[\"Degree\", 0.017453292519943295]]");
+
   VectorDataFileReaderType::Pointer reader0 = VectorDataFileReaderType::New();
   reader0->SetFileName(argv[1]);
   ProjectionFilterType::Pointer projection0 = ProjectionFilterType::New();
   projection0->SetInput(reader0->GetOutput());
+  projection0->SetOutputProjectionRef(outputProjRef);
 
   VectorDataFileReaderType::Pointer reader1 = VectorDataFileReaderType::New();
   reader1->SetFileName(argv[2]);
   ProjectionFilterType::Pointer projection1 = ProjectionFilterType::New();
   projection1->SetInput(reader1->GetOutput());
+  projection1->SetOutputProjectionRef(outputProjRef);
 
   //Convert the vector data into an image
   typedef itk::RGBAPixel<unsigned char> PixelType;

@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPrintableImageFilter_h
-#define __otbPrintableImageFilter_h
+#ifndef otbPrintableImageFilter_h
+#define otbPrintableImageFilter_h
 
 #include "otbImage.h"
 #include "itkImageToImageFilter.h"
@@ -160,7 +160,7 @@ public:
                itk::ImageToImageFilter);
 
   /** Display */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   void SetChannel(unsigned int channel);
   const ChannelsType GetChannels(void) const;
@@ -191,7 +191,7 @@ public:
   {
     return m_ChannelList;
   }
-  /* Set the selected channle index (order is important) */
+  /* Set the selected channel index (order is important) */
   void SetChannelList(ChannelsType chList)
   {
     if (chList.size() != 3)
@@ -231,14 +231,14 @@ public:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 protected:
 
   PrintableImageFilter();
 
   void BeforeGenerateData();
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 
@@ -249,7 +249,7 @@ private:
   typename ChannelExtractorType::Pointer m_Extractor;
   // Foreground mask value
   FunctorFilterPointerType m_MaskFilter;
-  // Objects (of the mask) will be displayer with the choosen color.
+  // Objects (of the mask) will be displayer with the chosen color.
   OutputPixelType m_ObjectColor;
   // Use mask
   bool m_UseMask;

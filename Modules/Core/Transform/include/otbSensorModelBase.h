@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSensorModelBase_h
-#define __otbSensorModelBase_h
+#ifndef otbSensorModelBase_h
+#define otbSensorModelBase_h
 
 #include <iostream>
 
@@ -32,7 +32,7 @@ namespace otb
 /** \class SensorModelBase
  *  \brief Base class for the sensor model projection classes.
  *
- *  This class allows to transform a geographic point in (lat, long) to a point
+ *  This class allows transforming a geographic point in (lat, long) to a point
  *  in the sensor geometry.  (lat, lon) -> (i, j) ou (lat, lon, h) -> (i, j)
  *
  * \ingroup Projection
@@ -89,10 +89,10 @@ public:
 
 protected:
   SensorModelBase();
-  virtual ~SensorModelBase();
+  ~SensorModelBase() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** ImageKeywordlist */
   ImageKeywordlist m_ImageKeywordlist;

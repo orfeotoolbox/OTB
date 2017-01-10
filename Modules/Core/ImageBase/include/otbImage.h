@@ -15,10 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImage_h
-#define __otbImage_h
+#ifndef otbImage_h
+#define otbImage_h
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkImage.h"
+#pragma GCC diagnostic pop
+#else
+#include "itkImage.h"
+#endif
+
 #include "otbImageMetadataInterfaceBase.h"
 
 namespace otb
@@ -59,7 +67,7 @@ public:
   typedef typename Superclass::ValueType ValueType;
 
   /** Internal Pixel representation. Used to maintain a uniform API
-   * with Image Adaptors and allow to keep a particular internal
+   * with Image Adaptors and allow keeping a particular internal
    * representation of data while showing a different external
    * representation. */
   typedef typename Superclass::InternalPixelType InternalPixelType;
@@ -176,14 +184,14 @@ public:
 
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 /// Copy metadata from a DataObject
-  virtual void CopyInformation(const itk::DataObject *);
+  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
 
 protected:
   Image();
-  virtual ~Image() {}
+  ~Image() ITK_OVERRIDE {}
 
 private:
   Image(const Self &); //purposely not implemented

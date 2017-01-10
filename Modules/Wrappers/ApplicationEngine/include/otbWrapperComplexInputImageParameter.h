@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperComplexInputImageParameter_h
-#define __otbWrapperComplexInputImageParameter_h
+#ifndef otbWrapperComplexInputImageParameter_h
+#define otbWrapperComplexInputImageParameter_h
 
 #include "otbImageFileReader.h"
 #include "itkImageBase.h"
@@ -32,7 +32,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT ComplexInputImageParameter : public Parameter
+class OTBApplicationEngine_EXPORT ComplexInputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -87,9 +87,9 @@ public:
   template <class TComplexInputImage, class TOutputImage>
     TOutputImage* CastVectorImageFromImage();
 
-  bool HasValue() const;
+  bool HasValue() const ITK_OVERRIDE;
 
-  void ClearValue();
+  void ClearValue() ITK_OVERRIDE;
 
 
 protected:
@@ -97,7 +97,7 @@ protected:
   ComplexInputImageParameter();
 
   /** Destructor */
-  virtual ~ComplexInputImageParameter();
+  ~ComplexInputImageParameter() ITK_OVERRIDE;
 
   ImageBaseType::Pointer m_Image;
   std::string m_FileName;

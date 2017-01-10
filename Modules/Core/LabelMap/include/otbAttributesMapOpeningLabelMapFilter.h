@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAttributesMapOpeningLabelMapFilter_h
-#define __otbAttributesMapOpeningLabelMapFilter_h
+#ifndef otbAttributesMapOpeningLabelMapFilter_h
+#define otbAttributesMapOpeningLabelMapFilter_h
 
 #include "otbAttributesMapLabelObject.h"
 #include "itkAttributeOpeningLabelMapFilter.h"
@@ -28,7 +28,7 @@ namespace otb
  * \brief Attributes opening for AttributesMapLabelObject
  *
  * This class extends the itk::AttributeOpeningLabelMapFilter to
- * handle AttributesMapLabelObject. Thus it allows to perform openings
+ * handle AttributesMapLabelObject. Thus it allows performing openings
  * for any kind of attributes in the attributes map.
  *
  * \sa AttributeLabelObject, AttributeOpeningLabelMapFilter
@@ -68,16 +68,16 @@ public:
 
   AttributeAccessorType & GetAccessor();
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 
 protected:
   /** Constructor */
   AttributesMapOpeningLabelMapFilter();
   /** Destructor */
-  ~AttributesMapOpeningLabelMapFilter();
+  ~AttributesMapOpeningLabelMapFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:
@@ -94,4 +94,4 @@ private:
 #include "otbAttributesMapOpeningLabelMapFilter.txx"
 #endif
 
-#endif // __otbAttributesMapOpeningLabelMapFilter_h
+#endif // otbAttributesMapOpeningLabelMapFilter_h

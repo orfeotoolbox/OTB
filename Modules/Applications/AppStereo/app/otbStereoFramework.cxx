@@ -27,11 +27,11 @@
 #include "otbDEMToImageGenerator.h"
 
 #include "otbVarianceImageFilter.h"
-#include "otbBandMathImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
+#include "otbImageToNoDataMaskFilter.h"
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVectorCastImageFilter.h"
@@ -39,7 +39,6 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbStreamingMinMaxImageFilter.h"
-#include "otbStreamingStatisticsImageFilter.h"
 #include "otbExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -183,9 +182,6 @@ public:
   typedef otb::StreamingMinMaxImageFilter
     <FloatImageType>                          MinMaxFilterType;
 
-  typedef otb::StreamingStatisticsImageFilter
-    <FloatImageType>                          StatisticsFilterType;
-
   typedef otb::ExtractROI
     <FloatPixelType,FloatPixelType>           ExtractFilterType;
 
@@ -239,6 +235,8 @@ public:
         FloatImageType>                             BijectionFilterType;
 
     typedef itk::ImageToImageFilter<FloatImageType,FloatImageType>  FilterType;
+
+    typedef otb::ImageToNoDataMaskFilter<FloatImageType,FloatImageType> NoDataMaskFilterType;
 private:
 
   StereoFramework()
@@ -310,16 +308,16 @@ private:
   }
 
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("StereoFramework");
     SetDescription("Compute the ground elevation based on one or multiple stereo pair(s)");
 
     SetDocName("Stereo Framework");
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
-                          "between one or mulitple stereo pair in sensor geometry. The output is projected in "
+                          "between one or multiple stereo pair in sensor geometry. The output is projected in "
                           "desired geographic or cartographic map projection (UTM by default). The pipeline is made of the following steps:\n"
-                          "for each sensor pair :\n"
+                          "for each sensor pair :\n\n"
                           "\t- compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
                           "\t- resample the stereo pair into epipolar geometry using BCO interpolation\n"
                           "\t- create masks for each epipolar image : remove black borders and resample"
@@ -329,7 +327,7 @@ private:
                           "\t- apply an optional median filter\n"
                           "\t- filter disparities based on the correlation score  and exploration bounds\n"
                           "\t- translate disparities in sensor geometry\n"
-                          "\t  convert disparity to 3D Map.\n"
+                          "\t  convert disparity to 3D Map.\n\n"
                           "Then fuse all 3D maps to produce DSM.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
@@ -337,9 +335,9 @@ private:
 
     AddDocTag(Tags::Stereo);
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "input", "Input parameters");
-    SetParameterDescription("input","This group of parameters allows to parametrize input data.");
+    SetParameterDescription("input","This group of parameters allows one to parametrize input data.");
 
     AddParameter(ParameterType_InputImageList,  "input.il",   "Input images list");
     SetParameterDescription("input.il", "The list of images.");
@@ -358,9 +356,9 @@ private:
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "output", "Output parameters");
-    SetParameterDescription("output","This group of parameters allows to choose the DSM resolution, nodata value, and projection parameters.");
+    SetParameterDescription("output","This group of parameters allows one to choose the DSM resolution, nodata value, and projection parameters.");
 
     // // Build the Output Map Projection
     // for custom map projection
@@ -378,7 +376,7 @@ private:
 
     // UserDefined values
     AddParameter(ParameterType_Choice, "output.fusionmethod", "Method to fuse measures in each DSM cell");
-    SetParameterDescription("output.fusionmethod","This parameter allows to choose the method used to fuse elevation measurements in each output DSM cell");
+    SetParameterDescription("output.fusionmethod","This parameter allows one to choose the method used to fuse elevation measurements in each output DSM cell");
     AddChoice("output.fusionmethod.max", "The cell is filled with the maximum measured elevation values");
     AddChoice("output.fusionmethod.min", "The cell is filled with the minimum measured elevation values");
     AddChoice("output.fusionmethod.mean","The cell is filled with the mean of measured elevation values");
@@ -415,9 +413,9 @@ private:
     AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
-    SetParameterDescription("stereorect","This group of parameters allows to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
+    SetParameterDescription("stereorect","This group of parameters allows one to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
 
     AddParameter(ParameterType_Int,"stereorect.fwdgridstep","Step of the displacement grid (in pixels)");
     SetParameterDescription("stereorect.fwdgridstep","Stereo-rectification displacement grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
@@ -425,13 +423,13 @@ private:
     MandatoryOff("stereorect.fwdgridstep");
 
     AddParameter(ParameterType_Int, "stereorect.invgridssrate", "Sub-sampling rate for epipolar grid inversion");
-    SetParameterDescription("stereorect.invgridssrate","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows to first sub-sample the field to invert.");
+    SetParameterDescription("stereorect.invgridssrate","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows one to first sub-sample the field to invert.");
     SetDefaultParameterInt("stereorect.invgridssrate",10);
     SetMinimumParameterIntValue("stereorect.invgridssrate",1);
     MandatoryOff("stereorect.invgridssrate");
 
     AddParameter(ParameterType_Group,"bm","Block matching parameters");
-    SetParameterDescription("bm","This group of parameters allow to tune the block-matching behavior");
+    SetParameterDescription("bm","This group of parameters allow tuning the block-matching behavior");
 
     AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
     //SetDefaultParameterInt("bm.metric",3);
@@ -504,7 +502,7 @@ private:
     DisableParameter("mask.right");
 
     AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
-    SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
+    SetParameterDescription("mask.variancet","This parameter allows one to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
     MandatoryOff("mask.variancet");
     SetDefaultParameterFloat("mask.variancet",50.);
     //DisableParameter("mask.variancet");
@@ -523,7 +521,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if( HasValue("input.il") )
       {
@@ -589,7 +587,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Setup the DSM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
@@ -897,9 +895,9 @@ private:
         }
 
       // Compute disparities
-      FilterType* blockMatcherFilterPointer = NULL;
-      FilterType* invBlockMatcherFilterPointer = NULL;
-      FilterType* subPixelFilterPointer = NULL;
+      FilterType* blockMatcherFilterPointer = ITK_NULLPTR;
+      FilterType* invBlockMatcherFilterPointer = ITK_NULLPTR;
+      FilterType* subPixelFilterPointer = ITK_NULLPTR;
       BijectionFilterType::Pointer bijectFilter;
 
       // pointer
@@ -1113,9 +1111,10 @@ private:
 
       m_Filters.push_back(disparityTranslateFilter.GetPointer());
 
-      BandMathFilterType::Pointer dispTranslateMaskFilter = BandMathFilterType::New();
-      dispTranslateMaskFilter->SetNthInput(0, disparityTranslateFilter->GetHorizontalDisparityMapOutput(), "hdisp");
-      dispTranslateMaskFilter->SetExpression("hdisp!=-32768");
+      NoDataMaskFilterType::Pointer dispTranslateMaskFilter = NoDataMaskFilterType::New();
+      dispTranslateMaskFilter->SetInput(disparityTranslateFilter->GetHorizontalDisparityMapOutput());
+      dispTranslateMaskFilter->SetInsideValue(1);
+      dispTranslateMaskFilter->SetOutsideValue(0);
       m_Filters.push_back(dispTranslateMaskFilter.GetPointer());
 
       FloatImageType::Pointer hDispOutput2 = disparityTranslateFilter->GetHorizontalDisparityMapOutput();

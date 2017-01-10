@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMarkovRandomFieldFilter_txx
-#define __otbMarkovRandomFieldFilter_txx
+#ifndef otbMarkovRandomFieldFilter_txx
+#define otbMarkovRandomFieldFilter_txx
 #include "otbMarkovRandomFieldFilter.h"
 
 namespace otb
@@ -79,7 +79,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TrainingImageType *>
            (this->itk::ProcessObject::GetInput(1));
@@ -318,7 +318,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
        - 2 * m_InputImageNeighborhoodRadius[i]);
     }
 
-  srand((unsigned) time(0));
+  srand((unsigned) time(ITK_NULLPTR));
 
   if (!m_EnergyRegularization)
     {

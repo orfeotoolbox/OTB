@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMetaImageFunction_h
-#define __otbMetaImageFunction_h
+#ifndef otbMetaImageFunction_h
+#define otbMetaImageFunction_h
 
 #include "itkFunctionBase.h"
 #include "itkPoint.h"
@@ -29,7 +29,7 @@ namespace otb
 /** \class MetaImageFunction
  *  \brief Concatenate results from multiple ImageFunction
  *
- *  The MetaImageFunction class allows to call multiple ImageFunction at the same location
+ *  The MetaImageFunction class allows calling multiple ImageFunction at the same location
  *  and to concatenate their result into a single VariableLengthVector.
  *
  *  In the case of ImageFunction which do not produce VariableLengthVector, one can wrap these
@@ -72,7 +72,7 @@ public:
   typedef std::vector<FunctionPointerType>            FunctionContainerType;
 
   /** Evaluate the function at the given location */
-  OutputType Evaluate(const PointType & point) const;
+  OutputType Evaluate(const PointType & point) const ITK_OVERRIDE;
 
   /** Add a new function to the functions vector */
   void AddFunction(FunctionType * function);
@@ -97,10 +97,10 @@ protected:
   MetaImageFunction();
 
   /** Destructor */
-  ~MetaImageFunction();
+  ~MetaImageFunction() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   MetaImageFunction(const Self& ); //purposely not implemented

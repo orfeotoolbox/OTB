@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBinaryFunctorNeighborhoodImageFilter_h
-#define __otbBinaryFunctorNeighborhoodImageFilter_h
+#ifndef otbBinaryFunctorNeighborhoodImageFilter_h
+#define otbBinaryFunctorNeighborhoodImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -127,7 +127,7 @@ public:
 
 protected:
   BinaryFunctorNeighborhoodImageFilter();
-  virtual ~BinaryFunctorNeighborhoodImageFilter() {}
+  ~BinaryFunctorNeighborhoodImageFilter() ITK_OVERRIDE {}
 
   /** BinaryFunctorNeighborhoodImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -139,13 +139,13 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /**
    * Pad the inputs requested regions by radius
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   RadiusSizeType m_Radius;
 

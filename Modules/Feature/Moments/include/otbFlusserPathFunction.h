@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserPathFunction_h
-#define __otbFlusserPathFunction_h
+#ifndef otbFlusserPathFunction_h
+#define otbFlusserPathFunction_h
 
 #include "otbRealMomentPathFunction.h"
 
@@ -90,7 +90,7 @@ public:
   typedef typename Superclass::PrecisionType PrecisionType;
 
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate(const PathType& path) const;
+  RealType Evaluate(const PathType& path) const ITK_OVERRIDE;
   virtual RealType Evaluate() const;
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
@@ -99,8 +99,8 @@ public:
 
 protected:
   FlusserPathFunction();
-  virtual ~FlusserPathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~FlusserPathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   FlusserPathFunction(const Self &);  //purposely not implemented

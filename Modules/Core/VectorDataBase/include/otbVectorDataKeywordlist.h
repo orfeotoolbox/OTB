@@ -15,13 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataKeywordlist_h
-#define __otbVectorDataKeywordlist_h
+#ifndef otbVectorDataKeywordlist_h
+#define otbVectorDataKeywordlist_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 #include <vector>
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "ogr_feature.h"
@@ -46,8 +46,9 @@ namespace otb
  *
  * \ingroup OTBVectorDataBase
  */
+#include "OTBVectorDataBaseExport.h"
 
-class VectorDataKeywordlist
+class OTBVectorDataBase_EXPORT VectorDataKeywordlist
 {
 public:
   /** Smart pointer typedef support. */
@@ -162,7 +163,7 @@ private:
   FieldListType m_FieldList;
 
 };
-
+OTBVectorDataBase_EXPORT
 extern std::ostream & operator <<(std::ostream& os, const VectorDataKeywordlist& kwl);
 
 }

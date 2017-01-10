@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalOpeningProfileFilter_h
-#define __otbMorphologicalOpeningProfileFilter_h
+#ifndef otbMorphologicalOpeningProfileFilter_h
+#define otbMorphologicalOpeningProfileFilter_h
 
 #include "otbImageToProfileFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -35,10 +35,10 @@ namespace otb
  * NO. 2, February 2001, p. 309-320.
  * \par
  *
- * The opening profile is a set of images beeing the result of a geodesic morphological
+ * The opening profile is a set of images being the result of a geodesic morphological
  * opening by reconstruction with an increasing range of structuring element sizes.
  *
- * For more informations on profiles please refer to the documentation of the otb::ImageToProfileFilter
+ * For more information on profiles please refer to the documentation of the otb::ImageToProfileFilter
  * class.
  *
  * \sa ImageToProfileFilter
@@ -74,7 +74,7 @@ public:
 
 protected:
   /** Set the profile parameter */
-  virtual void SetProfileParameter(ParameterType param)
+  void SetProfileParameter(ParameterType param) ITK_OVERRIDE
   {
     StructuringElementType se;
     se.SetRadius(param);
@@ -84,9 +84,9 @@ protected:
   /** Constructor */
   MorphologicalOpeningProfileFilter() {};
   /** Destructor */
-  virtual ~MorphologicalOpeningProfileFilter() {}
+  ~MorphologicalOpeningProfileFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

@@ -35,6 +35,11 @@ typedef otb::GeographicalDistance<Point2DType> GeoDistanceType;
 
 int otbRPCSolverAdapterTest(int argc, char* argv[])
 {
+  if (argc < 7)
+    {
+    std::cout << "Usage: test_driver input grid_size geo_tol img_tol dem_dir geoid" << std::endl;
+    return EXIT_FAILURE;
+    }
   // This test takes a sensor model (possibly a rpc one), use it to
   // generate gcps and estimate a rpc model. It then checks the
   // precision of both forward and inverse transform
@@ -44,6 +49,12 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   const double imgTol = atof(argv[4]);
   const std::string demdir = argv[5];
   const std::string geoid = argv[6];
+
+  if (gridSize == 0)
+    {
+    std::cerr << "Grid size is null!" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   std::cout<<"GeoTol: "<<geoTol<<" meters"<<std::endl;
   std::cout<<"ImgTol: "<<imgTol<<" pixels"<<std::endl;
@@ -61,7 +72,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
   RSTranformType::Pointer fwd2dTransform = RSTranformType::New();
   fwd2dTransform->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-  fwd2dTransform->InstanciateTransform();
+  fwd2dTransform->InstantiateTransform();
 
   ImageType::SizeType  size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
@@ -119,10 +130,10 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   // Build forward and inverse rpc transform
   RSTranform3dType::Pointer rpcFwdTransform = RSTranform3dType::New();
   rpcFwdTransform->SetInputKeywordList(rpcKwl);
-  rpcFwdTransform->InstanciateTransform();
+  rpcFwdTransform->InstantiateTransform();
   RSTranformType::Pointer rpcInvTransform = RSTranformType::New();
   rpcInvTransform->SetOutputKeywordList(rpcKwl);
-  rpcInvTransform->InstanciateTransform();
+  rpcInvTransform->InstantiateTransform();
 
   EuclideanDistanceMetricType::Pointer euclideanDistanceMetric = EuclideanDistanceMetricType::New();
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();

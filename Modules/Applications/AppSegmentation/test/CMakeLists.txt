@@ -23,19 +23,20 @@ set(raster_comparison --compare-image ${NOTOL})
 set(vector_ref_path ${BASELINE_FILES})
 set(raster_ref_path ${BASELINE})
 
-set(fitlerList "Meanshift" "CC" "Watershed")
+set(filterList "Meanshift" "CC" "Watershed")
 
 # Loop on modes
 foreach(mode "Raster" "Vector")
 string(TOLOWER ${mode} lmode)
 
 # Loop on filters
-foreach(filter ${fitlerList})
+foreach(filter ${filterList})
 string(TOLOWER ${filter} lfilter)
 
 # Derive output file name
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
+if(NOT (${filter} STREQUAL "Meanshift" AND ${mode} STREQUAL "Raster"))
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
                      OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
@@ -49,6 +50,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                               ${${lmode}_ref_path}/${OUTFILE}
                               ${TEMP}/${OUTFILE}
                      )
+endif()
 
 endforeach()
 endforeach()

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbProfileToProfileDerivativeFilter_txx
-#define __otbProfileToProfileDerivativeFilter_txx
+#ifndef otbProfileToProfileDerivativeFilter_txx
+#define otbProfileToProfileDerivativeFilter_txx
 
 #include "otbProfileToProfileDerivativeFilter.h"
 

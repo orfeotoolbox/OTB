@@ -70,7 +70,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Pansharpening");
     SetDescription("Perform P+XS pansharpening");
@@ -134,12 +134,12 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* panchroV = GetParameterImage("inp");
     if ( panchroV->GetNumberOfComponentsPerPixel() != 1 )

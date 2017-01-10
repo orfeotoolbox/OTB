@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbSpectralResponse_txx
-#define __otbSpectralResponse_txx
+#ifndef otbSpectralResponse_txx
+#define otbSpectralResponse_txx
 
 #include "itkNumericTraits.h"
 
@@ -49,7 +49,7 @@ void SpectralResponse<TPrecision, TValuePrecision>::Load(const std::string & fil
     }
 
   int NumLigne = 26; // Go to the line 27
-  //Ignore first 26th lines which are metadatas informations
+  //Ignore first 26th lines which are metadatas information
   for (int i = 0; i < NumLigne; ++i)
     fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 

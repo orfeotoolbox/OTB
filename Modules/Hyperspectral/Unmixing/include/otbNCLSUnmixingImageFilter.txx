@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNCLSUnmixingImageFilter_txx
-#define __otbNCLSUnmixingImageFilter_txx
+#ifndef otbNCLSUnmixingImageFilter_txx
+#define otbNCLSUnmixingImageFilter_txx
 
 #include "otbNCLSUnmixingImageFilter.h"
 #include <algorithm>
@@ -52,7 +52,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator != (const Self& other) const
+::operator != (const Self& itkNotUsed(other)) const
 {
   return true;
 }
@@ -60,7 +60,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator == (const Self& other) const
+::operator == (const Self& itkNotUsed(other)) const
 {
   return false;
 }

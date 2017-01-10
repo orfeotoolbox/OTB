@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMulti3DMapToDEMFilter_h
-#define __otbMulti3DMapToDEMFilter_h
+#ifndef otbMulti3DMapToDEMFilter_h
+#define otbMulti3DMapToDEMFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbImageToGenericRSOutputParameters.h"
@@ -93,7 +93,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(Multi3DMapToDEMFilter, ImageToImageFilter);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef T3DImage                InputMapType;
   typedef TOutputDEMImage         OutputImageType;
   typedef TMaskImage              MaskImageType;
@@ -111,7 +111,7 @@ public:
   typedef typename InputMapType::PixelType             MapPixelType;
   typedef typename InputMapType::InternalPixelType   InputInternalPixelType;
   // 3D RS transform
-  // TODO: Allow to tune precision (i.e. double or float)
+  // TODO: Allow tuning precision (i.e. double or float)
   typedef double                  PrecisionType;
   typedef otb::GenericRSTransform
     <PrecisionType,3,3>           RSTransformType;
@@ -229,29 +229,29 @@ protected:
   Multi3DMapToDEMFilter();
 
   /** Destructor */
-  virtual ~Multi3DMapToDEMFilter();
+  ~Multi3DMapToDEMFilter() ITK_OVERRIDE;
 
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  /** Generate input requrested region */
-  virtual void GenerateInputRequestedRegion();
+  /** Generate input requested region */
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** Before threaded generate data */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** After threaded generate data */
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-  virtual void VerifyInputInformation() {}
+  void VerifyInputInformation() ITK_OVERRIDE {}
 
 
 private:

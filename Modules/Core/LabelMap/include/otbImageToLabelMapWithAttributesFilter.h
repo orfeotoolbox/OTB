@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToLabelMapWithAttributesFilter_h
-#define __otbImageToLabelMapWithAttributesFilter_h
+#ifndef otbImageToLabelMapWithAttributesFilter_h
+#define otbImageToLabelMapWithAttributesFilter_h
 
 #include "itkShapeLabelMapFilter.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
@@ -72,21 +72,21 @@ public:
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
 
   using Superclass::SetInput;
-  virtual void SetInput( const InputImageType *image);
+  void SetInput( const InputImageType *image) ITK_OVERRIDE;
   virtual void SetLabeledImage( const LabeledImageType * image);
   const InputImageType * GetInput(void);
   const LabeledImageType * GetLabeledImage();
   virtual LabelMapType* GetOutput();
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   ImageToLabelMapWithAttributesFilter();
   /** Destructor */
-  virtual ~ImageToLabelMapWithAttributesFilter(){};
+  ~ImageToLabelMapWithAttributesFilter() ITK_OVERRIDE{};
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 
 private:

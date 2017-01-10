@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImageToIntensityImageFilter_txx
-#define __otbVectorImageToIntensityImageFilter_txx
+#ifndef otbVectorImageToIntensityImageFilter_txx
+#define otbVectorImageToIntensityImageFilter_txx
 
 #include "otbVectorImageToIntensityImageFilter.h"
 #include "itkImageRegionIterator.h"

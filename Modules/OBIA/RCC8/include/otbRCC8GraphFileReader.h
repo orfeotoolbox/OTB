@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphFileReader_h
-#define __otbRCC8GraphFileReader_h
+#ifndef otbRCC8GraphFileReader_h
+#define otbRCC8GraphFileReader_h
 
 #include "otbRCC8GraphSource.h"
 #include "itkMacro.h"
@@ -71,7 +71,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through the object factory */
   itkNewMacro(Self);
-  /** Runtime type informations */
+  /** Runtime type information */
   itkTypeMacro(RCC8GraphFileReader, RCC8GraphSource);
   /** Output related typedefs */
   typedef TOutputGraph                                OutputGraphType;
@@ -89,22 +89,22 @@ protected:
   /** Constructor */
   RCC8GraphFileReader();
   /** Destructor */
-  virtual ~RCC8GraphFileReader();
+  ~RCC8GraphFileReader() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /**
-   * Parse edge informations from a given line.
+   * Parse edge information from a given line.
    * \param line The line to parse.
    */
   void ParseEdge(const std::string& line);
   /**
-   * Parse vertex informations from a given line.
+   * Parse vertex information from a given line.
    * \param line The line to parse.
    */
   void  ParseVertex(const std::string& line);
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** File name */

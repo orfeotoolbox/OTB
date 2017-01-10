@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToSURFKeyPointSetFilter_txx
-#define __otbImageToSURFKeyPointSetFilter_txx
+#ifndef otbImageToSURFKeyPointSetFilter_txx
+#define otbImageToSURFKeyPointSetFilter_txx
 
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "itkCenteredRigid2DTransform.h"
@@ -551,7 +551,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
     if (dist < 6 * S)
       {
-      // Haar Wavelets responses accumulated in an histogram with Pi/3 precison
+      // Haar Wavelets responses accumulated in an histogram with Pi/3 precision
       if ((col > pas && col < Largeur - pas) && (raw > pas && raw < Largeur - pas))
         {
 

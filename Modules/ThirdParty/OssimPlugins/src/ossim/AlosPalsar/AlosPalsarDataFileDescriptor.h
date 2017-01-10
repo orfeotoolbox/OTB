@@ -61,7 +61,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosPalsarRecord* Instanciate()
+  AlosPalsarRecord* Instantiate()
   {
     return new AlosPalsarDataFileDescriptor();
   };

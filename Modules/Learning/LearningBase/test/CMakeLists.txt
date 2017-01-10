@@ -28,11 +28,11 @@ otb_add_test(NAME leTvDecisionTreeWithRealValues COMMAND otbLearningBaseTestDriv
 
 otb_add_test(NAME leTvKMeansImageClassificationFilter COMMAND otbLearningBaseTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/leKMeansImageClassificationFilterOuptut.hdr
-  ${TEMP}/leKMeansImageClassificationFilterOuptut.hdr
+  ${BASELINE}/leKMeansImageClassificationFilterOutput.hdr
+  ${TEMP}/leKMeansImageClassificationFilterOutput.hdr
   otbKMeansImageClassificationFilter
   ${INPUTDATA}/poupees_sub.png
-  ${TEMP}/leKMeansImageClassificationFilterOuptut.hdr
+  ${TEMP}/leKMeansImageClassificationFilterOutput.hdr
   2
   0 0 0 0
   255 255 255 255

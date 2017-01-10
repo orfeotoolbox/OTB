@@ -19,7 +19,7 @@
 #include "itksys/SystemTools.hxx"
 #include "otbWrapperTypes.h"
 #include "otbWrapperInputImageParameterMacros.h"
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 
 namespace otb
 {
@@ -43,7 +43,7 @@ InputImageParameter::~InputImageParameter()
 bool
 InputImageParameter::SetFromFileName(const std::string& filename)
 {
-  // First clear previous file choosen
+  // First clear previous file chosen
   this->ClearValue();
 
   // No file existence is done here :
@@ -53,10 +53,10 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   if (!filename.empty())
     {
     FloatVectorReaderType::Pointer reader = FloatVectorReaderType::New();
-    reader->SetFileName(filename);
 
     try
       {
+      reader->SetFileName(filename);
       reader->UpdateOutputInformation();
       }
     catch(itk::ExceptionObject & /*err*/)
@@ -104,9 +104,9 @@ InputImageParameter::HasValue() const
 void
 InputImageParameter::ClearValue()
 {
- m_Image  = NULL;
- m_Reader = NULL;
- m_Caster = NULL;
+ m_Image  = ITK_NULLPTR;
+ m_Reader = ITK_NULLPTR;
+ m_Caster = ITK_NULLPTR;
  m_FileName = "";
  m_PreviousFileName="";
  m_UseFilename = true;
@@ -114,4 +114,3 @@ InputImageParameter::ClearValue()
 
 }
 }
-

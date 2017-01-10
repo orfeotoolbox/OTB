@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToLabelMapFilter_txx
-#define __otbVectorDataToLabelMapFilter_txx
+#ifndef otbVectorDataToLabelMapFilter_txx
+#define otbVectorDataToLabelMapFilter_txx
 
+#include "otbVectorDataToLabelMapFilter.h"
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkNumericTraits.h"
 

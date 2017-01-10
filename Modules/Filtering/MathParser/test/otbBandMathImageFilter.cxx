@@ -138,22 +138,17 @@ int otbBandMathImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
     error = (result - expected) * (result - expected) / (result + expected);
     if ( error > 1E-9 )
       {
-      itkGenericExceptionMacro(  <<std::endl
+      std::cout
          << "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl
          << "Pixel_1 =  "       << it1.Get()
          << "     Pixel_2 =  "  << it2.Get()
          << "     Pixel_3 =  "  << it3.Get()
          << "     Result =  "   << it.Get()
-         << "     Expected =  " << expected     << std::endl );
+         << "     Expected =  " << expected << std::endl;
       FAIL_FLAG++;
+      break;
       }
-  }
-  if(!FAIL_FLAG)
-    std::cout << "[PASSED]" << std::endl;
-  else
-    std::cout << "[FAILLED]" << std::endl;
-  FAIL_FLAG = 0;
-
+    }
 
 
   /** Edge Effect Handling */
@@ -166,14 +161,23 @@ int otbBandMathImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
   it1.GoToBegin(); it2.GoToBegin(); it.GoToBegin();
   for(i=1; i<=50; ++i , ++it1, ++it2, ++it){}
   if(vnl_math_isnan(it.Get()))
-    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan\n";
+    std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan\n" << std::endl;
   else
-    itkGenericExceptionMacro(
+    {
+    std::cout
              << "\nError > Bad Edge Effect Handling -> Test Failled\n"
              << "Pixel_1 =  "     << it1.Get()  << "     Pixel_2 =  "  << it2.Get()
-             << "     Result =  " << it.Get()   << "     Expected =  nan\n" );
-  std::cout << std::endl;
+             << "     Result =  " << it.Get()   << "     Expected =  nan\n" << std::endl;
+    FAIL_FLAG++;
+    }
 
+  if (FAIL_FLAG)
+    {
+    std::cout << "[FAILLED]" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  std::cout << "[PASSED]" << std::endl;
   return EXIT_SUCCESS;
 }
 

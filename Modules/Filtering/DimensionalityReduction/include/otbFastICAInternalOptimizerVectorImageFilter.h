@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFastICAInternalOptimizerVectorImageFilter_h
-#define __otbFastICAInternalOptimizerVectorImageFilter_h
+#ifndef otbFastICAInternalOptimizerVectorImageFilter_h
+#define otbFastICAInternalOptimizerVectorImageFilter_h
 
 #include "otbMacro.h"
 #include "otbMatrixImageFilter.h"
@@ -93,12 +93,12 @@ public:
 
 protected:
   FastICAInternalOptimizerVectorImageFilter();
-  virtual ~FastICAInternalOptimizerVectorImageFilter() { }
+  ~FastICAInternalOptimizerVectorImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateOutputInformation();
-  virtual void BeforeThreadedGenerateData ();
-  virtual void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType );
-  virtual void AfterThreadedGenerateData();
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData () ITK_OVERRIDE;
+  void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType ) ITK_OVERRIDE;
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
   unsigned int m_CurrentBandForLoop;
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBinaryImageMinimalBoundingRegionCalculator_txx
-#define __otbBinaryImageMinimalBoundingRegionCalculator_txx
+#ifndef otbBinaryImageMinimalBoundingRegionCalculator_txx
+#define otbBinaryImageMinimalBoundingRegionCalculator_txx
 
 #include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 #include "itkImageSliceConstIteratorWithIndex.h"
@@ -124,7 +124,7 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
   typename InputImageType::SizeType  size;
   typename InputImageType::IndexType index;
 
-  for (int i = 0; i < InputImageType::ImageDimension; ++i)
+  for (unsigned int i = 0; i < InputImageType::ImageDimension; ++i)
     {
     size[i] = max[i] - min[i] + 1;
     index[i] = min[i];

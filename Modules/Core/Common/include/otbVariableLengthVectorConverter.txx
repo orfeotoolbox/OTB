@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVariableLengthVectorConverter_txx
-#define __otbVariableLengthVectorConverter_txx
+#ifndef otbVariableLengthVectorConverter_txx
+#define otbVariableLengthVectorConverter_txx
 
 #include "otbVariableLengthVectorConverter.h"
 #include <complex>

@@ -3,10 +3,13 @@ files.")
 
 otb_module(OTBIOXML 
   DEPENDS
+    OTBBoostAdapters
     OTBITK
     OTBTinyXML
-  
-  
+
+  TEST_DEPENDS
+    OTBTestKernel
+
   DESCRIPTION
     "${DOCUMENTATION}"
   )

@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeAttributesLabelMapFilter_txx
-#define __otbNormalizeAttributesLabelMapFilter_txx
+#ifndef otbNormalizeAttributesLabelMapFilter_txx
+#define otbNormalizeAttributesLabelMapFilter_txx
 
 #include "otbNormalizeAttributesLabelMapFilter.h"
 

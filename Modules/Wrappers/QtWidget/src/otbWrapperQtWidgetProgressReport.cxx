@@ -96,7 +96,7 @@ void QtWidgetProgressReport::RemoveLayout()
 {
   // Remove the children of the layout (progress bar widgets)
   QLayoutItem *child;
-  while ((child = this->layout()->takeAt(0)) != 0)
+  while ((child = this->layout()->takeAt(0)) != ITK_NULLPTR)
     {
     delete child->widget();
     delete child;

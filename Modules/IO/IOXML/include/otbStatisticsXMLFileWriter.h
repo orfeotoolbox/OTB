@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileWriter_h
-#define __otbStatisticsXMLFileWriter_h
+#ifndef otbStatisticsXMLFileWriter_h
+#define otbStatisticsXMLFileWriter_h
 
 #include "itkProcessObject.h"
 #include <utility>
@@ -60,9 +60,19 @@ public:
   /** Convenient typedef */
   typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
+  
+  typedef std::map<std::string , std::string>           GenericMapType;
+  typedef std::map<std::string , GenericMapType>        GenericMapContainer;
 
   /** Method to set/get the input list sample */
   void AddInput(const char * name,  const MeasurementVectorType& inputVector );
+  
+  /** Method to add a map statistic with a given type */
+  template <typename MapType>
+  void AddInputMap(const char * name, const MapType& map );
+
+  /** Remove previously added inputs (vectors and maps) */
+  void CleanInputs();
 
   /** Trigger the processing */
   void Update()
@@ -79,8 +89,8 @@ protected:
   virtual void GenerateData();
 
   StatisticsXMLFileWriter();
-  virtual ~StatisticsXMLFileWriter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~StatisticsXMLFileWriter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StatisticsXMLFileWriter(const Self&); //purposely not implemented
@@ -88,7 +98,7 @@ private:
 
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
-
+  GenericMapContainer         m_GenericMapContainer;
 
 }; // end of class StatisticsXMLFileWriter
 

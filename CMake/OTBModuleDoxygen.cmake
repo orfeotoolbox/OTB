@@ -34,12 +34,13 @@ macro( otb_module_doxygen _name )
   set( _content "${_content} \\enddot \n" )
   set( _content "${_content} */\n" )
 
-  configure_file(
-    "${OTB_SOURCE_DIR}/Utilities/Doxygen/Module.dox.in"
-    "${OTB_BINARY_DIR}/Utilities/Doxygen/Modules/${_name}.dox"
-    @ONLY
+  if(ITK_SOURCE_DIR)
+    configure_file(
+      "${OTB_SOURCE_DIR}/Utilities/Doxygen/Module.dox.in"
+      "${OTB_BINARY_DIR}/Utilities/Doxygen/Modules/${_name}.dox"
+      @ONLY
     )
-
+  endif()
   if(NOT ${_name}_THIRD_PARTY AND EXISTS ${${_name}_SOURCE_DIR}/include)
     if(PYTHON_EXECUTABLE)
       otb_add_test(NAME ${_name}InDoxygenGroup COMMAND ${PYTHON_EXECUTABLE} "${OTB_SOURCE_DIR}/Utilities/Doxygen/mcdoc.py" check ${_name} ${${_name}_SOURCE_DIR}/include)
