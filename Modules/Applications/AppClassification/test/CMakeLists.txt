@@ -141,6 +141,7 @@ foreach(classifier ${classifierList})
                                 -classifier ${lclassifier}
                                 ${${lclassifier}_parameters}
                                 -io.out ${TEMP}/${OUTMODELFILE}
+                                -sample.vfn Class
                                 -rand 121212
 
                        VALID    ${valid}
@@ -162,6 +163,7 @@ foreach(classifier ${classifierList})
                                 ${${lclassifier}_parameters}
                                 -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
                                 -rand 121212
+                                -sample.vfn Class
                                 -outxml ${TEMP}/cl${classifier}_OutXML1.xml
 
                        VALID ${valid}
@@ -181,7 +183,7 @@ foreach(classifier ${classifierList})
                                 -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
                                 -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
                                 -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
-
+                                -sample.vfn Class
                        VALID    ${valid}
                        )
 
@@ -647,6 +649,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                               -sample.mv 100
                               -sample.mt 100
                               -sample.vtr 0.5
+                              -sample.vfn Class
                               -classifier.libsvm.opt true
                               -rand 121212
                               -io.out ${TEMP}/clsvmModelQB1_allOpt_InXML.svm
@@ -659,6 +662,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                       OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
                               -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
+                              -sample.vfn Class
                               -classifier libsvm
                               -classifier.libsvm.opt true
                               -io.out ${TEMP}/clsvmModelQB1_OutXML.svm
@@ -677,6 +681,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
                                       ${INPUTDATA}/Classification/VectorData_QB2.shp
                                       ${INPUTDATA}/Classification/VectorData_QB3.shp
                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+                               -sample.vfn Class
                                -classifier libsvm
                                -classifier.libsvm.opt true
                                -io.out ${TEMP}/clsvmModelQB123.svm
@@ -693,6 +698,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                               -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
                               -classifier libsvm
                               -classifier.libsvm.opt true
+                              -sample.vfn Class
                               -io.out ${TEMP}/clsvmModelQB1.svm
                               -rand 121212
                       VALID   ${ascii_comparison}
@@ -708,6 +714,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
                                       ${INPUTDATA}/Classification/VectorData_QB5.shp
                                       ${INPUTDATA}/Classification/VectorData_QB6.shp
                                -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+                               -sample.vfn Class
                                -classifier libsvm
                                -classifier.libsvm.opt true
                                -io.out ${TEMP}/clsvmModelQB456.svm
@@ -727,6 +734,7 @@ otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                               -sample.mv 100
                               -sample.mt 100
                               -sample.vtr 0.5
+                              -sample.vfn Class
                               -classifier.libsvm.opt true
                               -rand 121212
                               -io.out ${TEMP}/clsvmModelQB1_allOpt.svm

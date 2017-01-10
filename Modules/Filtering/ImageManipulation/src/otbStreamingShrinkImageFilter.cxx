@@ -27,23 +27,24 @@ StreamingShrinkImageRegionSplitter
   unsigned int theoricalNbPixelPerTile = region.GetNumberOfPixels() / requestedNumber;
   unsigned int theoricalTileDimension = static_cast<unsigned int> (vcl_sqrt(static_cast<double>(theoricalNbPixelPerTile)) );
 
-  // Take the previous multiple of m_TileSizeAlignment (eventually generate more splits than requested)
-  m_TileDimension = theoricalTileDimension / m_TileSizeAlignment * m_TileSizeAlignment;
+  // Take the previous multiple of m_ShrinkFactor (eventually generate more splits than requested)
+  m_TileDimension = theoricalTileDimension / m_ShrinkFactor * m_ShrinkFactor;
 
-  // Minimal tile size is m_TileSizeAlignment * m_TileSizeAlignment
-  if (m_TileDimension < m_TileSizeAlignment)
+  // Minimal tile size is m_ShrinkFactor * m_ShrinkFactor
+  if (m_TileDimension < m_ShrinkFactor)
     {
-    otbMsgDevMacro(<< "Using the minimal tile size : " << m_TileSizeAlignment << " * " << m_TileSizeAlignment);
-    m_TileDimension = m_TileSizeAlignment;
+    otbMsgDevMacro(<< "Using the minimal tile size : " << m_ShrinkFactor << " * " << m_ShrinkFactor);
+    m_TileDimension = m_ShrinkFactor;
     }
 
-  // Use the computed tile size, and generate (m_TileDimension * 1) tiles
   const SizeType&  regionSize = region.GetSize();
-  m_SplitsPerDimension[0] = (regionSize[0] + m_TileDimension - 1) / m_TileDimension;
-  m_SplitsPerDimension[1] = regionSize[1] / m_TileSizeAlignment;
+  // Compute the alignment of the sampling grid
+  m_TileSizeAlignment = (m_ShrinkFactor - 1) / 2;
+  if (m_ShrinkFactor > regionSize[1]) m_TileSizeAlignment = (regionSize[1] - 1)/2;
 
-  if (m_SplitsPerDimension[1] == 0)
-    m_SplitsPerDimension[1] = 1;
+  // Use the computed tile size, and generate (m_TileDimension * 1) tiles
+  m_SplitsPerDimension[0] = (regionSize[0] + m_TileDimension - 1) / m_TileDimension;
+  m_SplitsPerDimension[1] = (regionSize[1] - m_TileSizeAlignment - 1) / m_ShrinkFactor + 1;
 
   unsigned int numPieces = 1;
   for (unsigned int j = 0; j < ImageDimension; ++j)
@@ -82,7 +83,7 @@ StreamingShrinkImageRegionSplitter
 
   // Transform the split index to the actual coordinates
   splitRegion.SetIndex(0, region.GetIndex(0) + m_TileDimension * splitIndex[0]);
-  splitRegion.SetIndex(1, region.GetIndex(1) + m_TileSizeAlignment * splitIndex[1]);
+  splitRegion.SetIndex(1, region.GetIndex(1) + m_ShrinkFactor * splitIndex[1] + m_TileSizeAlignment);
 
   splitRegion.SetSize(0, m_TileDimension);
   splitRegion.SetSize(1, 1);
@@ -98,6 +99,7 @@ StreamingShrinkImageRegionSplitter
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "ShrinkFactor       : " << m_ShrinkFactor << std::endl;
   os << indent << "SplitsPerDimension : " << m_SplitsPerDimension << std::endl;
   os << indent << "TileDimension      : " << m_TileDimension << std::endl;
   os << indent << "TileSizeAlignment  : " << m_TileSizeAlignment << std::endl;

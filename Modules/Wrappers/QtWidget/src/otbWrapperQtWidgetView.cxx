@@ -160,7 +160,7 @@ QWidget* QtWidgetView::CreateDoc()
   QTextDocument * doc = new QTextDocument();
 
   std::string docContain;
-  ApplicationHtmlDocGenerator::GenerateDoc( m_Application, docContain);
+  ApplicationHtmlDocGenerator::GenerateDoc( m_Application, docContain, true);
 
   doc->setHtml(docContain.c_str());
 
