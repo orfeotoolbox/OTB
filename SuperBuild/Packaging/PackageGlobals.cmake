@@ -101,6 +101,15 @@ else() #case for unixes
   endif()
 endif(WIN32)
 
+# Take gtk libs from system. we should fix this to take from custom
+# build location
+set(PKG_GTK_SEARCHDIRS
+  /usr/lib64
+  /lib64
+  /lib/x86_64-linux-gnu/
+  /usr/lib/x86_64-linux-gnu/
+  )
+
 #superbuild cannot manage build of gtk2+ just for qt gtkstyle.
 # -gtkstyle option is deactivated by default in build of QT4
 # So the list of requirements on building OTB with superbuild stays same.
@@ -117,4 +126,5 @@ set(ALLOWED_SYSTEM_DLLS
   libgobject-2.0.so.0
   libXrender.so.1
   libfontconfig.so.1
+  libpcre.so.3
   )

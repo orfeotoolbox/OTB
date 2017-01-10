@@ -14,9 +14,18 @@ macro(macro_super_package)
     message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
   endif()
 
-  if(LINUX AND NOT PATCHELF_PROGRAM)
-    message(FATAL_ERROR "PATCHELF_PROGRAM not set")
-  endif()
+  if(LINUX)
+    if(NOT FILE_COMMAND)
+      message(FATAL_ERROR "warning: No 'file' command, cannot continue...")
+    endif()
+
+    if(NOT PATCHELF_PROGRAM)
+      message(FATAL_ERROR "PATCHELF_PROGRAM not set")
+    endif()
+  endif(LINUX)
+  
+  #setting this variable. prints a lot of debug information
+  #set( PKG_DEBUG 1)
 
   set(loader_program_PATHS)
   set(eol_char "E")
@@ -48,7 +57,7 @@ macro(macro_super_package)
   if(NOT LOADER_PROGRAM)
     message(FATAL_ERROR "${loader_program_names} not found in ${loader_program_PATHS}.")
   endif()
-  
+
   include(GetPrerequisites)
 
   set(LOADER_PROGRAM_ARGS ${loader_program_args})
@@ -307,29 +316,40 @@ function(func_prepare_package)
   unset(matched_vars CACHE)
   get_vars_ending_with("_USED|_RESOLVED" matched_vars)
   foreach (var_to_unset IN LISTS matched_vars)
-    if(PKG_OTB_DEBUG)
+    if(PKG_DEBUG)
       message("unset ${var_to_unset} from cache")
     endif()
     unset(${var_to_unset} CACHE)
   endforeach()
-  
- 
+
   foreach(infile ${PKG_PEFILES})
    get_filename_component(bn ${infile} NAME)
    func_process_deps(${bn})
   endforeach()
-
  
 endfunction() #func_prepare_package
 
 function(func_process_deps input_file)
+
   search_library(${input_file} PKG_SEARCHDIRS input_file_full_path)
   if(NOT input_file_full_path)
-    message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
-  endif()
-  
+    if(LINUX)
+      setif_value_in_list(is_gtk_lib "${input_file}" ALLOWED_SYSTEM_DLLS)
+      if(is_gtk_lib)
+	search_library(${input_file} PKG_GTK_SEARCHDIRS input_file_full_path)
+	if( NOT input_file_full_path)
+	  message(FATAL_ERROR "${input_file} not found. searched in ${PKG_GTK_SEARCHDIRS}")
+	endif()
+      endif()
+      if( NOT input_file_full_path)
+	message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
+	endif()
+    endif(LINUX)
+
+  endif() #if(NOT input_file_full_path)
+
   message("Processing ${input_file_full_path}")
- 
+
   set(is_executable FALSE)
   is_file_executable2("${input_file_full_path}" is_executable)
   if(NOT is_executable)
@@ -421,28 +441,35 @@ function(func_process_deps input_file)
       continue()        
     endif()
    
-    if(PKG_OTB_DEBUG)
+    if(PKG_DEBUG)
       message("${raw_item} is not resolved, used. ${raw_item}_RESOLVED | ${raw_item}_USED")
     endif()
     
     list(APPEND raw_items ${raw_item})
     
   endforeach()
-  
-  if(PKG_OTB_DEBUG)
-    message(FATAL_ERROR "raw_items=${raw_items}")
-  endif(PKG_OTB_DEBUG)
-   
+
+  if(PKG_DEBUG)
+    string(REPLACE ";" "\n" raw_items_pretty_print "${raw_items}")
+    message(FATAL_ERROR "raw_items=${raw_items_pretty_print}")
+  endif(PKG_DEBUG)
+
   if(raw_items)
     list(REVERSE raw_items)
     foreach(item ${raw_items})      
       search_library(${item} PKG_SEARCHDIRS item_full_path)
       set(is_a_symlink FALSE)
       set(item_target_file)
+      if(PKG_DEBUG)
+	message("item0=${item_full_path}")
+      endif()
       func_is_file_a_symbolic_link("${item_full_path}" is_a_symlink item_target_file)      
       if(is_a_symlink)
 	set(${item}_RESOLVED TRUE CACHE INTERNAL "")
-	set(item ${item_target_file})     
+	set(item ${item_target_file})
+      endif()
+      if(PKG_DEBUG)
+	message("running func_process_deps on '${item}'")
       endif()
       func_process_deps(${item})
   endforeach()

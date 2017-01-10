@@ -24,6 +24,7 @@
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wc++11-extensions"
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #include "mpParser.h"
 #pragma GCC diagnostic pop
 #else
