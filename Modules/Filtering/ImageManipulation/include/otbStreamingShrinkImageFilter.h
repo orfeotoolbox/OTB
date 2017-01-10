@@ -78,7 +78,6 @@ public:
                               const RegionType& region) ITK_OVERRIDE;
 
   itkGetMacro(TileSizeAlignment, unsigned int);
-  itkSetMacro(TileSizeAlignment, unsigned int);
 
   itkGetMacro(TileDimension, unsigned int);
 
@@ -246,6 +245,9 @@ private:
 
   /** The shrink factor */
   unsigned int m_ShrinkFactor;
+
+  /** The offset to get the cell center */
+  IndexType m_Offset;
 }; // end of class PersistentStatisticsVectorImageFilter
 
 
