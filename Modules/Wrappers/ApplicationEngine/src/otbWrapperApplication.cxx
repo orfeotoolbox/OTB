@@ -1263,7 +1263,7 @@ void Application::SetNthParameterInputImageList(std::string parameter, const uns
 
 }
 
-void Application::AddImageToParameterInputImageList(std::string parameter, const std::string & filename)
+void Application::AddParameterStringList(std::string parameter, const std::string & str)
 {
   Parameter* param = GetParameterByKey(parameter);
   
@@ -1271,7 +1271,7 @@ void Application::AddImageToParameterInputImageList(std::string parameter, const
   
   if(paramDown)
     {
-    paramDown->AddFromFileName(filename);
+    paramDown->AddFromFileName(str);
     }
   else
     {
@@ -1280,7 +1280,7 @@ void Application::AddImageToParameterInputImageList(std::string parameter, const
   
 }
 
-void Application::SetNthParameterInputImageList(std::string parameter, const unsigned int &id, const std::string & filename)
+void Application::SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string & str)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1288,7 +1288,7 @@ void Application::SetNthParameterInputImageList(std::string parameter, const uns
 
   if(paramDown)
     {
-    paramDown->SetNthFileName(id,filename);
+    paramDown->SetNthFileName(id,str);
     }
   else
     {

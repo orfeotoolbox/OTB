@@ -484,27 +484,31 @@ public:
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
 
 /**
-   * Add an image to an InputImageList parameter as a filename string
-   * pointer instead of reading from file. Useful to connect pipelines
-   * between different application instances.
+   * Add a value to a parameter list as a string
+   *
+   * Can be called for parameter types:
+   * \li ParameterType_InputImageList
+   * 
    * \in parameter The parameter key
-   * \in img The image path
+   * \in str The string
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
    */ 
-  void AddImageToParameterInputImageList(std::string parameter, const std::string & filename);
+  void AddParameterStringList(std::string parameter, const std::string & str);
 
   /**
-   * Set the nth image of an InputImageList parameter as a filename string
-   * instead of reading from file. Useful to connect pipelines
-   * between different application instances.
+   * Set the nth value of a parameter list as a string.
+   *
+   * Can be called for parameter types:
+   * \li ParameterType_InputImageList
+   *  
    * \in parameter The parameter key
    * \in id Position at which to set the ImageBase pointer
-   * \in img The image path
+   * \in str The string
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter or if id is out of bounds
    */ 
-  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, const std::string& filename);
+  void SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string& str);
   
 
   /**

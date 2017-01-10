@@ -21,7 +21,7 @@ def test(otb, argv):
 
 	app4.AddImageToParameterInputImageList("il",app2.GetParameterOutputImage("out"));
 	app4.AddImageToParameterInputImageList("il",app3.GetParameterOutputImage("out"));
-        app4.AddImageToParameterInputImageList("il",argv[1])
+        app4.AddParameterStringList("il",argv[1])
 
 	app4.OUT = argv[2]
 	app4.ExecuteAndWriteOutput()
