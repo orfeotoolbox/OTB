@@ -756,8 +756,9 @@ ParameterGroup::GetParameterByKey(std::string name, bool follow)
     itkExceptionMacro(<< "Could not find parameter " << name)
     }
 
-  // follow proxy parameters
-  if (follow)
+  // follow proxy parameters (resolve intermediate group parameter because
+  // we need to get to the requested parameter)
+  if (follow || splitName.size() > 1)
     {
     Parameter *rawParam = this->ResolveParameter(parentParam.GetPointer());
     parentParam = rawParam;
