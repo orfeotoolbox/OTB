@@ -1299,7 +1299,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * 0000555: monteverdi -in does not work with JP2 images
     * 0000560: Monteverdi compilation error
     * 0000527: While saving dataset with rescaling option,
-               the channels n° > 3 are incorrect
+               the channels nb > 3 are incorrect
 
   * OTB-applications
     * 0000518: Missing GDAL dependencies
