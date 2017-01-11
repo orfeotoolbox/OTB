@@ -166,6 +166,18 @@ public:
   /** Get the input image maximum */
   itkGetMacro(InputImageMaximum, InputPixelType);
 
+  /** Set the sub-sampling factor */
+  itkSetMacro(SubsampleFactor, SizeType);
+
+  /** Get the sub-sampling factor */
+  itkGetMacro(SubsampleFactor, SizeType);
+
+  /** Set the sub-sampling offset */
+  itkSetMacro(SubsampleOffset, IndexType);
+
+  /** Get the sub-sampling offset */
+  itkGetMacro(SubsampleOffset, IndexType);
+
   /** Get the energy output image */
   OutputImageType * GetEnergyOutput();
 
@@ -230,6 +242,11 @@ private:
   //TODO: should we use constexpr? only c++11 and problem for msvc
   inline double GetPixelValueTolerance() const {return 0.0001; }
 
+  /** Sub-sampling factor */
+  SizeType m_SubsampleFactor;
+
+  /** Sub-sampling offset */
+  IndexType m_SubsampleOffset;
 };
 } // End namespace otb
 
