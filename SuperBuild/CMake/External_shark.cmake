@@ -10,6 +10,14 @@ package_require_cxx11(SHARK)
 ADD_SUPERBUILD_CMAKE_VAR(SHARK Boost_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(SHARK BOOST_LIBRARYDIR)
 
+#shark master branch has a fix to avoid explicit link with libs
+#but tag 3.3 which we use still need a fix.
+if(UNIX)
+  set(SHARK_SB_CONFIG_USER "" CACHE STRING "Extra options to be passed to shark cmake configure cache")
+  mark_as_advanced(SHARK_SB_CONFIG_USER)
+  list(APPEND SHARK_SB_CONFIG "${SHARK_SB_CONFIG_USER}")
+endif()
+
 ExternalProject_Add(SHARK
   PREFIX SHARK
   URL "https://github.com/Shark-ML/Shark/archive/349f29bd71c370e0f88f7fc9aa66fa5c4768fcb0.zip"
