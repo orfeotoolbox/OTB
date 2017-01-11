@@ -173,10 +173,10 @@ public:
   itkGetMacro(SubsampleFactor, SizeType);
 
   /** Set the sub-sampling offset */
-  itkSetMacro(SubsampleOffset, IndexType);
+  itkSetMacro(SubsampleOffset, OffsetType);
 
   /** Get the sub-sampling offset */
-  itkGetMacro(SubsampleOffset, IndexType);
+  itkGetMacro(SubsampleOffset, OffsetType);
 
   /** Get the energy output image */
   OutputImageType * GetEnergyOutput();
@@ -207,6 +207,8 @@ protected:
   ScalarImageToTexturesFilter();
   /** Destructor */
   ~ScalarImageToTexturesFilter() ITK_OVERRIDE;
+  /** Generate the output informations */
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Generate the input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Before Parallel textures extraction */
@@ -246,7 +248,7 @@ private:
   SizeType m_SubsampleFactor;
 
   /** Sub-sampling offset */
-  IndexType m_SubsampleOffset;
+  OffsetType m_SubsampleOffset;
 };
 } // End namespace otb
 
