@@ -28,37 +28,12 @@
 #include <itkUnaryFunctorImageFilter.h>
 #include <itkFFTShiftImageFilter.h>
 
+#include "otbComplexToVectorImageCastFilter.h"
+
 namespace otb
 {
 namespace Wrapper
 {
-
-template< class TInput, class TOutput>
-class FromComplexPixel
-{
-public:
-  FromComplexPixel ( ) {  };
-
-  ~FromComplexPixel( ) {  };
-
-  bool operator!=( const FromComplexPixel & ) const
-    {
-    return false;
-    }
-  bool operator==( const FromComplexPixel & other ) const
-    {
-    return !(*this != other);
-    }
-  inline TOutput operator( )( const TInput & A ) const
-    {
-    TOutput out;
-    out.SetSize(2);
-    out[0] = A.real();
-    out[1] = A.imag();
-    return out;
-    }
-};
-
 template< class TInput, class TOutput>
 class ToComplexPixel
 {
@@ -77,8 +52,8 @@ public:
     }
   inline TOutput operator( )( const TInput & A ) const
     {
-    TOutput out(A[0], A[1]);
-    return out;
+      return TOutput( static_cast<typename TOutput::value_type> ( A[0] ),
+		      static_cast<typename TOutput::value_type> ( A[1] ) );
     }
 };
 
@@ -91,8 +66,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
 
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef float TInputPixel;
-  typedef float TOutputPixel;
+  typedef float InputPixelType;
+  typedef float OutputPixelType;
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -108,7 +83,7 @@ private:
     // Documentation
     SetDocName("DomainTransform");
     SetDocLongDescription("Domain Transform application for wavelet and fourier");
-    SetDocLimitations("None");
+    SetDocLimitations("This application is not streamed, check your system resources when processing large images");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbWaveletImageFilter, otbWaveletInverseImageFilter, otbWaveletTransform");
     AddDocTag(Tags::Filter);
@@ -171,20 +146,7 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
     {
-    // wavelet and fourier are mutually exclusive parameters.
-    // check it here
-#if 0
-    if (HasUserValue("mode.wavelet.form") &&
-        GetParameterString("mode") == "fft")
-      {
-      std::stringstream oss;
-      oss << std::endl
-        << this->GetNameOfClass() << "::DoUpdateParameters() "
-        << "Cannot use 'mode.wavelet.form' and '-mode fft' at same time"
-        << std::endl;
-      throw std::runtime_error( oss.str() );
-      }
-#endif
+
     }
 
   void DoExecute() ITK_OVERRIDE
@@ -273,37 +235,32 @@ private:
       {
       // fft ttransform
       bool shift = IsParameterEnabled( "mode.fft.shift");
-
+      typedef otb::Image< std::complex<OutputPixelType> >          ComplexOutputImageType;
+      
       if (dir == 0 )
         {
         //forward fft
-        typedef otb::Image<TInputPixel>          TInputImage;
+        typedef otb::Image<InputPixelType>          TInputImage;
         typedef TInputImage::Pointer TInputImagePointer;
 
-        //get input paramter as otb::Image<TInputPixel>
+        //get input paramter as otb::Image<InputPixelType>
         TInputImagePointer inImage = GetParameterImage<TInputImage>("in");
-        inImage->UpdateOutputInformation();
-        //typedef itk::::ForwardFFTImageFilter over otbImage< TInputPixel >
-        typedef itk::ForwardFFTImageFilter < TInputImage> FFTFilter;
+
+        //typedef itk::::ForwardFFTImageFilter over otbImage< InputPixelType >
+
+        typedef itk::ForwardFFTImageFilter < TInputImage, ComplexOutputImageType > FFTFilter;
         FFTFilter::Pointer fwdFilter = FFTFilter::New();
         fwdFilter->SetInput( inImage );
 
+	
         //typedef VectorImage for output of UnaryFunctorImageFilter
-        typedef otb::VectorImage<TOutputPixel>          TOutputImage;
+        typedef otb::VectorImage<OutputPixelType>          TOutputImage;
 
-        //UnaryFunctorImageFilter for Complex to VectorImage
-        typedef itk::UnaryFunctorImageFilter<
-          typename FFTFilter::OutputImageType,
-          TOutputImage,
-          FromComplexPixel<
-            typename FFTFilter::OutputImageType::PixelType,
-            TOutputImage::PixelType> > UnaryFunctorImageFilter;
-
-        //convert complex pixel to variable length vector
-        //with unaryfunctor image filter
-        UnaryFunctorImageFilter::Pointer unaryFunctorImageFilter
-          = UnaryFunctorImageFilter::New();
-
+	typedef otb::ComplexToVectorImageCastFilter<
+	  ComplexOutputImageType,
+	  TOutputImage > ComplexToVectorImageCastFilter;
+	ComplexToVectorImageCastFilter::Pointer unaryFunctorImageFilter = ComplexToVectorImageCastFilter::New();
+	
         if( shift)
           {
           otbAppLogINFO( << "Applying Shift image filter" );
@@ -332,20 +289,18 @@ private:
       else
         {
         //inverse fft
-        typedef otb::VectorImage<TInputPixel>          TInputImage;
+        typedef otb::VectorImage<InputPixelType>          TInputImage;
         typedef TInputImage::Pointer TInputImagePointer;
 
         TInputImagePointer inImage = GetParameterImage("in");
 
-        inImage->UpdateOutputInformation();
-
         // typedef TComplexImage for InverseFFTImageFilter input
-        // This a image type of std::complex<TInputPixel>
+        // This a image type of std::complex<InputPixelType>
         typedef otb::Image<
-          std::complex<TInputPixel>, 2 > TComplexImage;
+          std::complex<InputPixelType>, 2 > TComplexImage;
         //typedef TOutputImage for InverseFFTImageFilter output
-        typedef otb::Image< TOutputPixel >  TOutputImage;
-
+        typedef otb::Image< OutputPixelType >  TOutputImage;
+	
         // a unary functor to convert vectorimage to complex image
         typedef itk::UnaryFunctorImageFilter
           <TInputImage,
@@ -398,13 +353,11 @@ private:
                           const std::string inkey = "in",
                           const std::string outkey = "out")
     {
-    typedef otb::Image< TInputPixel >  TInputImage;
-    typedef otb::Image< TOutputPixel >  TOutputImage;
+    typedef otb::Image< InputPixelType >  TInputImage;
+    typedef otb::Image< OutputPixelType >  TOutputImage;
     typedef typename TInputImage::Pointer TInputImagePointer;
 
     TInputImagePointer inImage = GetParameterImage<TInputImage>(inkey);
-
-    inImage->UpdateOutputInformation();
 
     if( dir == 0)
       {
