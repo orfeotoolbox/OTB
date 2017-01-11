@@ -94,9 +94,9 @@ Sentinel1ImageMetadataInterface
   otbMsgDevMacro(<<"calibration.startTime: "<<std::setprecision(16) << firstLineTime);
   otbMsgDevMacro(<<"calibration.stopTime : "<<std::setprecision(16) << lastLineTime);
 
-  const std::string supportDataPrefix = "support_data."; //make && use GetBandPrefix(subSwath, polarisation)
+  //const std::string supportDataPrefix = "support_data."; //make && use GetBandPrefix(subSwath, polarisation)
 
-  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(supportDataPrefix + "number_lines"), supportDataPrefix + "number_lines(int)");
+  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("number_lines"), "number_lines(int)");
   otbMsgDevMacro(<<"numOfLines   : " << numOfLines);
 
   const int count = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"), "calibration.count");
