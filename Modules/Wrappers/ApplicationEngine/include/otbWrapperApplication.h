@@ -483,6 +483,34 @@ public:
    */ 
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
 
+/**
+   * Add a value to a parameter list as a string
+   *
+   * Can be called for parameter types:
+   * \li ParameterType_InputImageList
+   * 
+   * \in parameter The parameter key
+   * \in str The string
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
+  void AddParameterStringList(std::string parameter, const std::string & str);
+
+  /**
+   * Set the nth value of a parameter list as a string.
+   *
+   * Can be called for parameter types:
+   * \li ParameterType_InputImageList
+   *  
+   * \in parameter The parameter key
+   * \in id Position at which to set the ImageBase pointer
+   * \in str The string
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter or if id is out of bounds
+   */ 
+  void SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string& str);
+  
+
   /**
    * Clear all images from an InputImageList parameter.
    *
