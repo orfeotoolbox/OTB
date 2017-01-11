@@ -27,9 +27,13 @@ namespace otb {
 
 /** \class WaveletInverseImageFilter
  * \brief
- *
+ * This filter performs wavelet inverse transform. 
+ * It takes three template arguments: Input, Output and WaveletOperator
+ * This filter is not streamed.
  * \ingroup OTBWavelet
  * \sa WaveletImageFilter
+ * \sa WaveletsSynopsisImageToWaveletsBandsListFilter
+ * \sa WaveletGenerator
  */
 template < class TInputImage,
            class TOutputImage,
