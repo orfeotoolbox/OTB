@@ -32,7 +32,9 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   m_NumberOfBinsPerAxis(8),
   m_InputImageMinimum(0),
   m_InputImageMaximum(255),
-  m_FastCalculations(false)
+  m_FastCalculations(false),
+  m_SubsampleFactor(),
+  m_SubsampleOffset()
 {
   // There are 11 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(10);
@@ -71,6 +73,8 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     }
   this->SetOffsets( offsets );
 
+  this->m_SubsampleFactor.Fill(1);
+  this->m_SubsampleOffset.Fill(0);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -234,6 +238,38 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
+::GenerateOutputInformation()
+{
+  // First, call superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  // Compute output size, origin & spacing
+  InputRegionType inputRegion = this->GetInput()->GetLargestPossibleRegion();
+  OutputRegionType outputRegion;
+  outputRegion.SetIndex(0,0);
+  outputRegion.SetIndex(1,0);
+  outputRegion.SetSize(0, 1 + (inputRegion.GetSize(0) - 1 - m_SubsampleOffset[0]) / m_SubsampleFactor[0]);
+  outputRegion.SetSize(1, 1 + (inputRegion.GetSize(1) - 1 - m_SubsampleOffset[1]) / m_SubsampleFactor[1]);
+
+  typename OutputImageType::SpacingType outSpacing = this->GetInput()->GetSpacing();
+  outSpacing[0] *= m_SubsampleFactor[0];
+  outSpacing[1] *= m_SubsampleFactor[1];
+
+  typename OutputImageType::PointType outOrigin;
+  this->GetInput()->TransformIndexToPhysicalPoint(inputRegion.GetIndex()+m_SubsampleOffset,outOrigin);
+
+  for (unsigned int i=0 ; i<this->GetNumberOfOutputs() ; i++)
+    {
+    OutputImagePointerType outputPtr = this->GetOutput(i);
+    outputPtr->SetLargestPossibleRegion(outputRegion);
+    outputPtr->SetOrigin(outOrigin);
+    outputPtr->SetSpacing(outSpacing);
+    }
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // First, call superclass implementation
@@ -252,7 +288,17 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   // We use only the first output since requested regions for all outputs are enforced to be equal
   // by the default GenerateOutputRequestedRegiont() implementation
   OutputRegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
-  InputRegionType inputRequestedRegion = outputRequestedRegion;
+  typename OutputRegionType::IndexType outputIndex = outputRequestedRegion.GetIndex();
+  typename OutputRegionType::SizeType  outputSize   = outputRequestedRegion.GetSize();
+  InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
+
+  // Convert index and size to full grid
+  outputIndex[0] = outputIndex[0] * m_SubsampleFactor[0] + m_SubsampleOffset[0] + inputLargest.GetIndex(0);
+  outputIndex[1] = outputIndex[1] * m_SubsampleFactor[1] + m_SubsampleOffset[1] + inputLargest.GetIndex(1);
+  outputSize[0] = 1 + (outputSize[0] - 1) * m_SubsampleFactor[0];
+  outputSize[1] = 1 + (outputSize[1] - 1) * m_SubsampleFactor[1];
+  
+  InputRegionType inputRequestedRegion(outputIndex,outputSize);
 
   // Apply the radius
   inputRequestedRegion.PadByRadius(m_Radius);
@@ -297,6 +343,8 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   inputPtr->TransformIndexToPhysicalPoint( outputImagesIterators[0].GetIndex() + m_Radius, bottomRightPoint );
   double maxDistance = topLeftPoint.EuclideanDistanceTo(bottomRightPoint);
 
+  InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
+
   // Set-up progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -304,12 +352,17 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   while ( !outputImagesIterators[0].IsAtEnd() )
     {
     // Compute the region on which run-length matrix will be estimated
-    typename InputRegionType::IndexType inputIndex = outputImagesIterators[0].GetIndex() - m_Radius;
+    typename InputRegionType::IndexType inputIndex;
     typename InputRegionType::SizeType  inputSize;
 
-    // First, apply offset
+    // Convert index to full grid
+    typename OutputImageType::IndexType outIndex;
+
     for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
       {
+      outIndex[dim] = outputImagesIterators[0].GetIndex()[dim] * m_SubsampleFactor[dim]
+        + m_SubsampleOffset[dim] + inputLargest.GetIndex(dim);
+      inputIndex[dim] = outIndex[dim] - m_Radius[dim];
       inputSize[dim] = 2 * m_Radius[dim] + 1;
       }
 
