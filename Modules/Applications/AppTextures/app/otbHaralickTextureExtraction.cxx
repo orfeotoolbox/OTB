@@ -88,7 +88,8 @@ SetDefaultParameterInt("channel", 1);
 SetMinimumParameterIntValue("channel", 1);
 
 AddParameter(ParameterType_Int, "step", "Computation step");
-SetParameterDescription("step", "Step (in pixels) to compute output texture values");
+SetParameterDescription("step", "Step (in pixels) to compute output texture values."
+  " The first computed pixel position is shifted by (step-1)/2 in both directions.");
 SetDefaultParameterInt("step", 1);
 SetMinimumParameterIntValue("step", 1);
 MandatoryOff("step");
