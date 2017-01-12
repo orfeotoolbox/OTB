@@ -320,6 +320,7 @@ otb_test_application(NAME apTvPrSuperimpose
                              -inm ${INPUTDATA}/QB_Toulouse_Ortho_XS_ROI_170x230.tif
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
                              -out ${TEMP}/apTvPrSuperimpose.tif int16
+                             -lms 4.0
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrSuperimpose.tif
                         ${TEMP}/apTvPrSuperimpose.tif)
