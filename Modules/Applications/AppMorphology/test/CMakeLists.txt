@@ -28,3 +28,31 @@ otb_test_application(NAME  apTvFEGrayScaleMorphologicalOperation
                    			 ${BASELINE}/apTvFEGrayScaleMorphologicalOperation.tif
                  		     ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif)
 
+
+#----------- MorphologicalMultiScaleDecomposition TESTS ----------------
+otb_test_application(NAME  apTvFEMorphologicalMultiScaleDecomposition
+					 APP  MorphologicalMultiScaleDecomposition
+					 OPTIONS -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+							 -channel 1
+							 -radius 4
+		 					 -structype ball
+							 -out ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_1.tif
+					 VALID   --compare-image ${NOTOL}
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_1.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_1.tif)
+
+
+#----------- Iterative MorphologicalMultiScaleDecomposition TESTS ----------------
+otb_test_application(NAME  apTvFEMorphologicalMultiScaleDecompositionIteratif
+					 APP  MorphologicalMultiScaleDecomposition
+					 OPTIONS -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+							 -channel 1
+							 -levels 2
+		                     -structype ball
+							 -step 3
+							 -radius 2
+							 -out ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif
+					 VALID   --compare-image ${NOTOL}
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif)
+
