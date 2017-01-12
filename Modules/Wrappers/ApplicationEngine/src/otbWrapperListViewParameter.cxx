@@ -111,7 +111,9 @@ ListViewParameter::GetNbChoices( void )
 void
 ListViewParameter::SetValue(unsigned int v)
 {
+  std::vector<int> selectedItems(1,v);
   m_CurrentChoice = v;
+  this->SetSelectedItems(selectedItems);
   SetActive(true);
   // Call Modified();
   this->Modified();
