@@ -195,8 +195,8 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
     filter->GetOutput()->UpdateOutputData();
 
     outputPtr->SetNthElement(i, filter->GetOutput());
-    concOutputPtr->SetNthElement(i, filter->GetConvexMap());
-    convOutputPtr->SetNthElement(i, filter->GetConcaveMap());
+    concOutputPtr->SetNthElement(i, filter->GetConcaveMap());
+    convOutputPtr->SetNthElement(i, filter->GetConvexMap());
 
     current = filter->GetOutput();
 
