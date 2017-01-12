@@ -287,15 +287,6 @@ void DoExecute()
   std::vector<int> featureFieldIndex(nbFeatures, -1);
   int cFieldIndex = -1;
 
-  // List of available fields
-  std::ostringstream oss;
-  for (unsigned int i=0 ; i<fieldNames.size() ; i++)
-    {
-    if (i) oss << ", ";
-    oss << fieldNames[i];
-    }
-  std::string availableFields(oss.str());
-
   // Statistics for shift/scale
   MeasurementType meanMeasurementVector;
   MeasurementType stddevMeasurementVector;
@@ -339,14 +330,14 @@ void DoExecute()
     cFieldIndex = feature.ogr().GetFieldIndex(selectedCFieldName.c_str());
     if (cFieldIndex < 0)
       otbAppLogFATAL("The field name for class label ("<<selectedCFieldName
-        <<") has not been found in the input vector file! Choices are "<< availableFields);
+        <<") has not been found in the input vector file "<<vectorFileList[k]);
     //   - check feature fields
     for (unsigned int i=0 ; i<nbFeatures ; i++)
       {
       featureFieldIndex[i] = feature.ogr().GetFieldIndex(selectedNames[i].c_str());
       if (featureFieldIndex[i] < 0)
         otbAppLogFATAL("The field name for feature "<<selectedNames[i]
-        <<" has not been found in the input vector file! Choices are "<< availableFields);
+        <<" has not been found in the input vector file "<<vectorFileList[k]);
       }
 
     while(goesOn)
@@ -413,14 +404,14 @@ void DoExecute()
       cFieldIndex = feature.ogr().GetFieldIndex(selectedCFieldName.c_str());
       if (cFieldIndex < 0)
         otbAppLogFATAL("The field name for class label ("<<selectedCFieldName
-          <<") has not been found in the input vector file! Choices are "<< availableFields);
+          <<") has not been found in the validation vector file "<<validFileList[k]);
       //   - check feature fields
       for (unsigned int i=0 ; i<nbFeatures ; i++)
         {
         featureFieldIndex[i] = feature.ogr().GetFieldIndex(selectedNames[i].c_str());
         if (featureFieldIndex[i] < 0)
           otbAppLogFATAL("The field name for feature "<<selectedNames[i]
-          <<" has not been found in the input vector file! Choices are "<< availableFields);
+          <<" has not been found in the validation vector file "<<validFileList[k]);
         }
 
       while(goesOn)
