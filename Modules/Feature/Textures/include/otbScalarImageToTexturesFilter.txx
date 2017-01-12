@@ -177,8 +177,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   Superclass::GenerateOutputInformation();
 
   // Compute output size, origin & spacing
-  OutputImagePointerType outputPtr = this->GetOutput();
-
   InputRegionType inputRegion = this->GetInput()->GetLargestPossibleRegion();
   OutputRegionType outputRegion;
   outputRegion.SetIndex(0,0);
@@ -193,9 +191,13 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   typename OutputImageType::PointType outOrigin;
   this->GetInput()->TransformIndexToPhysicalPoint(inputRegion.GetIndex()+m_SubsampleOffset,outOrigin);
 
-  outputPtr->SetLargestPossibleRegion(outputRegion);
-  outputPtr->SetOrigin(outOrigin);
-  outputPtr->SetSpacing(outSpacing);
+  for (unsigned int i=0 ; i<this->GetNumberOfOutputs() ; i++)
+    {
+    OutputImagePointerType outputPtr = this->GetOutput(i);
+    outputPtr->SetLargestPossibleRegion(outputRegion);
+    outputPtr->SetOrigin(outOrigin);
+    outputPtr->SetSpacing(outSpacing);
+    }
 }
 
 template <class TInputImage, class TOutputImage>
