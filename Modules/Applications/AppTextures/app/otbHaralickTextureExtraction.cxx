@@ -87,6 +87,12 @@ SetParameterDescription("channel", "The selected channel index");
 SetDefaultParameterInt("channel", 1);
 SetMinimumParameterIntValue("channel", 1);
 
+AddParameter(ParameterType_Int, "step", "Computation step");
+SetParameterDescription("step", "Step (in pixels) to compute output texture values");
+SetDefaultParameterInt("step", 1);
+SetMinimumParameterIntValue("step", 1);
+MandatoryOff("step");
+
 AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
@@ -180,6 +186,12 @@ void DoExecute() ITK_OVERRIDE
   offset[0] = GetParameterInt("parameters.xoff");
   offset[1] = GetParameterInt("parameters.yoff");
 
+  RadiusType stepping;
+  stepping.Fill(GetParameterInt("step"));
+
+  OffsetType stepOffset;
+  stepOffset.Fill((GetParameterInt("step") - 1) / 2);
+
   m_ExtractorFilter = ExtractorFilterType::New();
   m_ExtractorFilter->SetInput(inImage);
   m_ExtractorFilter->SetStartX(inImage->GetLargestPossibleRegion().GetIndex(0));
@@ -214,6 +226,8 @@ void DoExecute() ITK_OVERRIDE
     m_HarTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
     m_HarTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
     m_HarTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_HarTexFilter->SetSubsampleFactor(stepping);
+    m_HarTexFilter->SetSubsampleOffset(stepOffset);
     m_HarTexFilter->UpdateOutputInformation();
     m_HarImageList->PushBack(m_HarTexFilter->GetEnergyOutput());
     m_HarImageList->PushBack(m_HarTexFilter->GetEntropyOutput());
@@ -235,6 +249,8 @@ void DoExecute() ITK_OVERRIDE
     m_AdvTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
     m_AdvTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
     m_AdvTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_AdvTexFilter->SetSubsampleFactor(stepping);
+    m_AdvTexFilter->SetSubsampleOffset(stepOffset);
     m_AdvImageList->PushBack(m_AdvTexFilter->GetMeanOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetVarianceOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetDissimilarityOutput());
@@ -257,6 +273,8 @@ void DoExecute() ITK_OVERRIDE
     m_HigTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
     m_HigTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
     m_HigTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_HigTexFilter->SetSubsampleFactor(stepping);
+    m_HigTexFilter->SetSubsampleOffset(stepOffset);
     m_HigImageList->PushBack(m_HigTexFilter->GetShortRunEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetLongRunEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetGreyLevelNonuniformityOutput());
