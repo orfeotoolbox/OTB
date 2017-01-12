@@ -200,7 +200,6 @@ void DoInit() ITK_OVERRIDE
   SetDocExampleParameterValue("sample.mv", "100");
   SetDocExampleParameterValue("sample.mt", "100");
   SetDocExampleParameterValue("sample.vtr", "0.5");
-  SetDocExampleParameterValue("sample.edg", "false");
   SetDocExampleParameterValue("sample.vfn", "Class");
   SetDocExampleParameterValue("classifier", "libsvm");
   SetDocExampleParameterValue("classifier.libsvm.k", "linear");
