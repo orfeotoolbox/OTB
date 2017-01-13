@@ -16,12 +16,17 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 
-#otb_create_application(
-#  NAME           MorphologicalClassification
-#  SOURCES        otbMorphologicalClassification.cxx
-#  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+otb_create_application(
+  NAME           MorphologicalProfilesClassification
+  SOURCES        otbMorphologicalProfilesClassification.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-        NAME           MorphologicalMultiScaleDecomposition
-        SOURCES        otbMorphologicalMultiScaleDecomposition.cxx
-        LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+  NAME           MorphologicalProfilesAnalysis
+  SOURCES        otbMorphologicalProfilesAnalysis.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           MorphologicalMultiScaleDecomposition
+  SOURCES        otbMorphologicalMultiScaleDecomposition.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
