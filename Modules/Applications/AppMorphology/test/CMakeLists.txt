@@ -56,3 +56,61 @@ otb_test_application(NAME  apTvFEMorphologicalMultiScaleDecompositionIteratif
 							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif
 							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif)
 
+
+#----------- MorphologicalProfilesClassification TESTS ----------------
+otb_test_application(NAME  apTvFEMorphologicalProfilesClassification
+		             APP  MorphologicalProfilesClassification
+		             OPTIONS -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+			                 -channel 1
+		                     -structype ball
+		                     -radius 5
+							 -sigma 0.5
+		                     -out ${TEMP}/apTvFEMorphologicalProfilesClassification.tif
+		             VALID   --compare-image ${NOTOL}
+							 ${BASELINE}/apTvFEMorphologicalProfilesClassification.tif
+					         ${TEMP}/apTvFEMorphologicalProfilesClassification.tif)
+
+
+
+#----------- Opening MorphologicalProfilesAnalysis TESTS ----------------
+otb_test_application(NAME  apTvFEMorphologicalProfilesAnalysisOpening
+					 APP  MorphologicalProfilesAnalysis
+					 OPTIONS -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+		                     -channel 1
+		                     -structype ball
+		                     -profile closing
+		                     -size 4
+		                     -radius 1
+		                     -step 1
+							 -out ${TEMP}/apTvFEMorphologicalProfilesOpeningAnalysis.tif)
+
+#----------- Closing MorphologicalProfilesAnalysis TESTS ----------------
+otb_test_application(NAME  apTvFEMorphologicalProfilesAnalysisClosing
+					 APP  MorphologicalProfilesAnalysis
+					 OPTIONS -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+					         -channel 1
+					         -structype ball
+					         -profile closing
+					         -size 4
+					         -radius 1
+					         -step 1
+					         -out ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif
+					 VALID   --compare-image ${NOTOL}
+					         ${BASELINE}/apTvFEMorphologicalProfilesClosingAnalysis.tif
+					         ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif)
+
+#----------- Classfication MorphologicalProfilesAnalysis TESTS ----------------
+otb_test_application(NAME  apTvFEMorphologicalProfilesAnalysisClassification
+					 APP  MorphologicalProfilesAnalysis
+					 OPTIONS -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+						     -channel 1
+						     -structype ball
+						     -profile classification
+						     -size 5
+						     -radius 1
+						     -step 1
+							 -profile.classification.sigma 1
+						     -out ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif
+					 VALID   --compare-image ${NOTOL}
+							 ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
+					 		 ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif)
