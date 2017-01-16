@@ -609,6 +609,25 @@ namespace ossimplugins
          }
       }
 
+      // Now, we will look for next burst and see if it is a better
+      // candidate
+      std::vector<BurstRecordType>::const_iterator nextBurst = currentBurst+1;
+
+      if(nextBurst!=itend)
+        {
+        if(azimuthTime >= nextBurst->azimuthStartTime
+           && azimuthTime<=nextBurst->azimuthStopTime)
+          {         
+          const time::Duration distToCurrentBurstEnd = currentBurst->azimuthStopTime - azimuthTime;
+          const time::Duration  distToNextBurstBegin = azimuthTime - nextBurst->azimuthStartTime;
+
+          if(distToNextBurstBegin > distToCurrentBurstEnd)
+            {
+            currentBurst = nextBurst;
+            }
+          }
+        }
+      
       // If no burst is found, we will use the first (resp. last burst to
       // extrapolate line
       if(it == itend)
@@ -635,7 +654,9 @@ namespace ossimplugins
 
       // Eq 22 p 27
       line = (timeSinceStart/theAzimuthTimeInterval) + currentBurst->startLine;
-      // std::clog << "line = " << line << " <- " << timeSinceStart << "/" << theAzimuthTimeInterval << "+" << currentBurst->startLine << "\n";
+      // std::clog << "line = " << line << " <- " << timeSinceStart <<
+      // "/" << theAzimuthTimeInterval << "+" <<
+      // currentBurst->startLine << "\n";
    }
 
    void ossimSarSensorModel::lineToAzimuthTime(const double & line, TimeType & azimuthTime) const
@@ -1145,6 +1166,17 @@ namespace ossimplugins
          // that required them
          theBurstRecords.clear();
          get(kwl, theBurstRecords);
+
+         // Ensure that burst records are sorted
+         struct less_than_burst_record
+         {
+           inline bool operator() (const BurstRecordType& b1, const BurstRecordType& b2)
+           {
+             return (b1.azimuthStartTime < b2.azimuthStartTime);
+           }
+         };
+         std::sort(theBurstRecords.begin(),theBurstRecords.end(),less_than_burst_record());
+         
          if (isGRD())
          {
             get(kwl, SR_PREFIX, keySr0, theSlantRangeToGroundRangeRecords);
