@@ -124,7 +124,14 @@ set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 
 # Make up part of output package file
+set(NAME_SUFFIX "" CACHE STRING "extra suffix for package name")
+
 set(PACKAGE_NAME OTB)
+
+if(NAME_SUFFIX)
+  set(PACKAGE_NAME OTB${NAME_SUFFIX})
+endif()
+
 if(APPLE)
   set(PACKAGE_PLATFORM_NAME "Darwin")
 elseif(WIN32)
