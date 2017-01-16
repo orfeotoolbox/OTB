@@ -75,6 +75,22 @@ public:
   itkTypeMacro(Self, otb::Application);
 
 private:
+  DomainTransform() {}
+
+  ~DomainTransform() ITK_OVERRIDE
+    {
+    // This is a trick to make sure fftw will cleanup its threads when application
+    // shared lib is released.
+    #if defined(ITK_USE_FFTWF)
+      fftwf_cleanup_threads();
+      fftwf_cleanup();
+    #endif
+    #if defined(ITK_USE_FFTWD)
+      fftw_cleanup_threads();
+      fftw_cleanup();
+    #endif
+    }
+
   void DoInit() ITK_OVERRIDE
     {
     SetName("DomainTransform");
