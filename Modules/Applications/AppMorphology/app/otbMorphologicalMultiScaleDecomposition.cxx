@@ -53,8 +53,8 @@ public:
   typedef FloatVectorImageType::InternalPixelType InputPixelType;
   typedef float OutputPixelType;
 
-  typedef otb::Image<InputPixelType, 2>         InputImageType;
-  typedef otb::VectorImage<OutputPixelType, 2>  TOutputVectorImage;
+  typedef otb::Image<InputPixelType, 2> InputImageType;
+  typedef otb::VectorImage<OutputPixelType, 2> TOutputVectorImage;
 
   typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, InputPixelType>
           ExtractorFilterType;
@@ -72,24 +72,46 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName( "MorphologicalMultiScaleDecomposition" );
-    SetDescription( "Performs morphological operations on an input image channel" );
+    SetDescription( "Perform a geodesic morphology based image analysis on an input image channel" );
 
     // Documentation
     SetDocName( "Morphological Multi Scale Decomposition" );
-    SetDocLongDescription("This application performs on a mono band image" );
+    SetDocLongDescription(
+            "This application recursively apply geodesic decomposition. \n"
+                    "\n"
+                    "This algorithm is derived from the following publication:\n"
+                    "\n"
+                    "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach "
+                    "for the morphological segmentation of high resolution satellite imagery.\n"
+                    "IEEE Transactions on geoscience and remote sensing, vol. 39, NO. 2, "
+                    "February 2001, p. 309-320.\n"
+                    "\n"
+                    "It provides a geodesic decomposition of the input image, with the "
+                    "following scheme. Let :math:`f_0` denote the input image, :math:`\\stackrel{\\smile}{\\mu}_{N}(f)` denote the convex membership function, :math:`\\stackrel{\\frown}{\\mu}_{N}(f)` denote the concave membership function and :math:`\\psi_{N}(f)` denote the leveling function, for a given radius :math:`N` as defined in the documentation\n"
+                    "of the GeodesicMorphologyDecompositionImageFilter. Let :math:`[N_{1},\\ldots, N_{n}]` denote a range of increasing radius (or scales). The iterative decomposition is defined as follows:\n"
+                    "\n"
+                    "[ f\\_n = `\\psi`\\_N\\_n(f\\_n-1) ]\n"
+                    "\n"
+                    "[ :math:`\\stackrel{\\frown}{f}_n` = :math:`\\stackrel{\\frown}{\\mu}_N_N(f_n)` ]\n"
+                    "\n"
+                    "[ :math:`\\stackrel{\\smile}{f}_n` = :math:`\\stackrel{\\smile}{\\mu}_N_N(f_n)` ]\n"
+                    "\n"
+                    "The :math:`\\stackrel{\\frown}{f}_{n}` and :math:`\\stackrel{\\frown}{f}_{n}` are membership function for the convex\n"
+                    "(resp. concave) objects whose size is comprised between :math:`N_{n-1}` and :math:`N_n`\n"
+                    "\n"
+                    "Output is a :math:`3 \\times N` multi-band image, ordered as (leveling_iteration_1, convex_iteration_1, concave_iteration_1, leveling_iteration_2, ...)" );
+
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbGeodesicMorphologyDecompositionImageFilter class" );
-
 
     AddDocTag( "MorphologicalMultiScaleDecomposition" );
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image to be classified." );
 
-    // TODO comment
     AddParameter( ParameterType_OutputImage, "out", "Output Image" );
-    SetParameterDescription( "out", "TODO" );
+    SetParameterDescription( "out", "The output image with N * 3 bands" );
 
     AddParameter( ParameterType_Int, "channel", "Selected Channel" );
     SetParameterDescription( "channel", "The selected channel index for input image" );
@@ -104,35 +126,29 @@ private:
     AddChoice( "structype.ball", "Ball" );
     AddChoice( "structype.cross", "Cross" );
 
-    AddParameter( ParameterType_Int, "radius", "Radius of the kernel" );
-    SetParameterDescription( "radius", "Radius of the kernel" );
+    AddParameter( ParameterType_Int, "radius", "Initial radius" );
+    SetParameterDescription( "radius", "Initial radius of the structuring element (in pixels)" );
     SetDefaultParameterInt( "radius", 5 );
     SetMinimumParameterIntValue( "radius", 1 );
 
-    AddParameter( ParameterType_Int, "channel", "Selected Channel" );
-    SetParameterDescription( "channel", "The selected channel index for input image" );
-    SetDefaultParameterInt( "channel", 1 );
-    SetMinimumParameterIntValue( "channel", 1 );
-
-    AddParameter( ParameterType_Int, "step", "Selected Step" );
-    SetParameterDescription( "step", "Increment radius by this step for each iteration" );
+    AddParameter( ParameterType_Int, "step", "Radius step." );
+    SetParameterDescription( "step", "Radius step along the profile (in pixels)" );
     SetDefaultParameterInt( "step", 1 );
     SetMinimumParameterIntValue( "step", 1 );
 
-    AddParameter( ParameterType_Int, "levels", "Number of levels use for multiscale" );
-    SetParameterDescription( "levels", "Number of levels use for multiscale" );
+    AddParameter( ParameterType_Int, "levels", "Number of levels use for multi scale" );
+    SetParameterDescription( "levels", "Number of levels use for multi scale" );
     SetDefaultParameterInt( "levels", 1 );
     SetMinimumParameterIntValue( "levels", 1 );
 
-
-    // TODO Doc example parameter settings
-    /*
-    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
-    SetDocExampleParameterValue("out", "opened.tif");
+    SetDocExampleParameterValue("in", "ROI_IKO_PAN_LesHalles.tif");
+    SetDocExampleParameterValue("structype", "ball");
     SetDocExampleParameterValue("channel", "1");
-     SetDocExampleParameterValue("channel.leveling", "1");
-    SetDocExampleParameterValue("sigma", "5");
-     */
+    SetDocExampleParameterValue("radius", "2");
+    SetDocExampleParameterValue("levels", "2");
+    SetDocExampleParameterValue("step", "3");
+    SetDocExampleParameterValue("out", "output.tif");
+
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -167,19 +183,17 @@ private:
     unsigned int step = static_cast<unsigned int>(GetParameterInt( "step" ));
 
 
-    if(GetParameterString("structype") == "ball")
+    if ( GetParameterString( "structype" ) == "ball" )
       {
-      performDecomposition<BallStructuringElementType>(numberOfLevels, step, initValue);
-      }
-    else // Cross
+      performDecomposition<BallStructuringElementType>( numberOfLevels, step, initValue );
+      } else // Cross
       {
-      performDecomposition<CrossStructuringElementType>(numberOfLevels, step, initValue);
+      performDecomposition<CrossStructuringElementType>( numberOfLevels, step, initValue );
       }
   }
 
   template<typename StructuringElement>
-  void performDecomposition(unsigned int numberOfLevels, unsigned int step, unsigned int initValue)
-  {
+  void performDecomposition(unsigned int numberOfLevels, unsigned int step, unsigned int initValue) {
 
     typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType, StructuringElement> TDecompositionImageFilter;
     typedef typename TDecompositionImageFilter::OutputImageListType TImageList;
@@ -206,9 +220,9 @@ private:
             && (itConcaveMap != decompositionImageFilter->GetConcaveOutput()->End())
             )
       {
-      imageList->PushBack(itAnalyse.Get());
-      imageList->PushBack(itConvexMap.Get());
-      imageList->PushBack(itConcaveMap.Get());
+      imageList->PushBack( itAnalyse.Get() );
+      imageList->PushBack( itConvexMap.Get() );
+      imageList->PushBack( itConcaveMap.Get() );
 
       ++itAnalyse;
       ++itConvexMap;
@@ -216,9 +230,9 @@ private:
       }
 
     typename TListToVectorImageFilter::Pointer listToVectorImageFilter = TListToVectorImageFilter::New();
-    listToVectorImageFilter->SetInput(imageList);
+    listToVectorImageFilter->SetInput( imageList );
     listToVectorImageFilter->Update();
-    SetParameterOutputImage("out", listToVectorImageFilter->GetOutput());
+    SetParameterOutputImage( "out", listToVectorImageFilter->GetOutput() );
   }
 
   ExtractorFilterType::Pointer m_ExtractorFilter;

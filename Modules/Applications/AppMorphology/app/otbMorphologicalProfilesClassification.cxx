@@ -73,11 +73,28 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName( "MorphologicalProfilesClassification" );
-    SetDescription( "Performs morphological concave or convex classification on an input image channel" );
+    SetDescription( "Performs morphological convex, concave and flat classification on an input image channel" );
 
     // Documentation
-    SetDocName( "Morphological Multi Scale Decomposition" );
-    SetDocLongDescription( "This application performs on a mono band image" );
+    SetDocName( "Morphological Profiles Classification" );
+    SetDocLongDescription( "This algorithm is based on the following publication:\n"
+                                   "\n"
+                                   "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach\n"
+                                   "for the morphological segmentation of high resolution satellite imagery.\n"
+                                   "IEEE Transactions on geoscience and remote sensing, vol. 39, NO. 2,\n"
+                                   "February 2001, p. 309-320.\n"
+                                   "\n"
+                                   "This application perform the following decision rule to classify a pixel\n"
+                                   "between the three classes Convex, Concave and Flat. Let :math:`f` denote\n"
+                                   "the input image and :math:`\\psi_{N}(f)` the geodesic leveling of\n"
+                                   ":math:`f` with a structuring element of size :math:`N`. One can derive\n"
+                                   "the following decision rule to classify :math:`f` into Convex (label\n"
+                                   ":math:`\\stackrel{\\smile}{k}`), Concave (label\n"
+                                   ":math:`\\stackrel{rown}{k}`) and Flat (label :math:`\\bar{k}`): \n"
+                                   "\n"
+                                   ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} &:& f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} &:& \\psi_{N}(f)-f>\\sigma\\\\ \\bar{k}&:&\\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
+                                   "\n\n"
+                                   "This output is a 3 band image." );
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbConvexOrConcaveClassificationFilter class" );
@@ -101,11 +118,12 @@ private:
     // Strucring Element (Ball | Cross)
     AddParameter( ParameterType_Choice, "structype", "Structuring Element Type" );
     SetParameterDescription( "structype", "Choice of the structuring element type" );
-    AddChoice( "structype.ball", "Ball" );
     AddChoice( "structype.cross", "Cross" );
+    AddChoice( "structype.ball", "Ball" );
 
-    AddParameter( ParameterType_Int, "radius", "Radius of the kernel" );
-    SetParameterDescription( "radius", "Radius of the kernel" );
+
+    AddParameter( ParameterType_Int, "radius", "Radius" );
+    SetParameterDescription( "radius", "Radius of the structuring element (in pixels)" );
     SetDefaultParameterInt( "radius", 5 );
     SetMinimumParameterIntValue( "radius", 1 );
 
@@ -114,15 +132,13 @@ private:
     SetDefaultParameterFloat( "sigma", 0.5 );
     SetMinimumParameterFloatValue( "sigma", 0 );
 
+    SetDocExampleParameterValue( "in", "ROI_IKO_PAN_LesHalles.tif" );
+    SetDocExampleParameterValue( "channel", "1" );
+    SetDocExampleParameterValue( "structype", "ball" );
+    SetDocExampleParameterValue( "radius", "5" );
+    SetDocExampleParameterValue( "sigma", "0.5" );
+    SetDocExampleParameterValue( "out", "output.tif" );
 
-    // TODO Doc example parameter settings
-    /*
-    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
-    SetDocExampleParameterValue("out", "opened.tif");
-    SetDocExampleParameterValue("channel", "1");
-     SetDocExampleParameterValue("channel.leveling", "1");
-    SetDocExampleParameterValue("sigma", "5");
-     */
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -165,8 +181,7 @@ private:
     if ( GetParameterString( "structype" ) == "ball" )
       {
       performClassification<BallStructuringElementType>( radius );
-      }
-    else // Cross
+      } else // Cross
       {
       performClassification<CrossStructuringElementType>( radius );
       }
@@ -184,7 +199,7 @@ private:
     decompositionImageFilter->SetInput( m_ExtractorFilter->GetOutput() );
 
     typename TStructuringElement::RadiusType radius;
-    radius.Fill(radius_size);
+    radius.Fill( radius_size );
     decompositionImageFilter->SetRadius( radius );
     decompositionImageFilter->Update();
 
