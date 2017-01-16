@@ -35,6 +35,14 @@ if(UNIX)
   else() #Linux
     if(QT4_SB_ENABLE_GTK)
       message(STATUS "QT4_SB_ENABLE_GTK is activated. QT4 build includes  gtk+ and libfreetype, libpng (dependencies of gtk+ package)")
+      if( NOT USE_SYSTEM_PNG OR
+	  NOT USE_SYSTEM_EXPAT OR
+	  NOT USE_SYSTEM_FREETYPE )
+	message(FATAL_ERROR "cannot use libpng, expat and freetype from superbuild when QT4_SB_ENABLE_GTK is ON. 
+ eactivate gtk+ theme support in Qt build with 'cmake -DQT4_SB_ENABLE_GTK=OFF' 
+OR use system libraries for png, expat and freetype with
+'cmake -DUSE_SYSTEM_PNG=ON -DUSE_SYSTEM_EXPAT USE_SYSTEM_FREETYPE=ON'")
+      endif()
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
     else()
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle")
@@ -62,6 +70,10 @@ else()
   file(TO_NATIVE_PATH ${QT4_SB_SRC}/configure QT4_CONFIGURE_SCRIPT)
   set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.sh)
   set(QT4_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.sh.in)
+endif()
+
+if(EXISTS "${QT4_CONFIGURE_COMMAND}")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove -f "${QT4_CONFIGURE_COMMAND}")
 endif()
 
 configure_file(${QT4_CONFIGURE_COMMAND_IN} ${QT4_CONFIGURE_COMMAND} @ONLY )
