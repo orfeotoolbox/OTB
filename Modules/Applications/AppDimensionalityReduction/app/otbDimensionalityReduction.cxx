@@ -168,6 +168,8 @@ private:
     AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output (text format)");
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
     MandatoryOff("outmatrix");
+    DisableParameter("outmatrix");
+    
 
     AddRAMParameter();
 
