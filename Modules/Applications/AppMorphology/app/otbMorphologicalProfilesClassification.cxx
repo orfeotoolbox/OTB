@@ -118,8 +118,9 @@ private:
     // Strucring Element (Ball | Cross)
     AddParameter( ParameterType_Choice, "structype", "Structuring Element Type" );
     SetParameterDescription( "structype", "Choice of the structuring element type" );
-    AddChoice( "structype.cross", "Cross" );
     AddChoice( "structype.ball", "Ball" );
+    AddChoice( "structype.cross", "Cross" );
+
 
 
     AddParameter( ParameterType_Int, "radius", "Radius" );

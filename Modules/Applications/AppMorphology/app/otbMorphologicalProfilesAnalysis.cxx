@@ -145,7 +145,7 @@ private:
     SetMinimumParameterIntValue( "step", 1 );
 
 
-    AddParameter( ParameterType_Choice, "profile", "Classification" );
+    AddParameter( ParameterType_Choice, "profile", "Profile" );
     SetParameterDescription( "profile", "" );
     AddChoice( "profile.opening", "opening" );
     AddChoice( "profile.closing", "closing" );
@@ -155,8 +155,8 @@ private:
     AddChoice( "profile.closingcharacteristics", "closingcharacteristics" );
     AddChoice( "profile.classification", "classification" );
 
-    AddParameter( ParameterType_Float, "profile.classification.sigma", "Sigma" );
-    SetParameterDescription( "profile.classification.sigma", "Sigma" );
+    AddParameter( ParameterType_Float, "profile.classification.sigma", "Sigma value for leveling tolerance" );
+    SetParameterDescription( "profile.classification.sigma", "Sigma value for leveling tolerance" );
     SetDefaultParameterFloat( "profile.classification.sigma", 1 );
     SetMinimumParameterFloatValue( "profile.classification.sigma", 0 );
 
