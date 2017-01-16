@@ -39,6 +39,8 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 , m_NumberOfBinsPerAxis(8)
 , m_InputImageMinimum(0)
 , m_InputImageMaximum(255)
+, m_SubsampleFactor()
+, m_SubsampleOffset()
 {
   // There are 8 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(8);
@@ -52,6 +54,9 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   this->SetNthOutput(5, OutputImageType::New());
   this->SetNthOutput(6, OutputImageType::New());
   this->SetNthOutput(7, OutputImageType::New());
+
+  this->m_SubsampleFactor.Fill(1);
+  this->m_SubsampleOffset.Fill(0);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -166,6 +171,38 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToTexturesFilter<TInputImage, TOutputImage>
+::GenerateOutputInformation()
+{
+  // First, call superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  // Compute output size, origin & spacing
+  InputRegionType inputRegion = this->GetInput()->GetLargestPossibleRegion();
+  OutputRegionType outputRegion;
+  outputRegion.SetIndex(0,0);
+  outputRegion.SetIndex(1,0);
+  outputRegion.SetSize(0, 1 + (inputRegion.GetSize(0) - 1 - m_SubsampleOffset[0]) / m_SubsampleFactor[0]);
+  outputRegion.SetSize(1, 1 + (inputRegion.GetSize(1) - 1 - m_SubsampleOffset[1]) / m_SubsampleFactor[1]);
+
+  typename OutputImageType::SpacingType outSpacing = this->GetInput()->GetSpacing();
+  outSpacing[0] *= m_SubsampleFactor[0];
+  outSpacing[1] *= m_SubsampleFactor[1];
+
+  typename OutputImageType::PointType outOrigin;
+  this->GetInput()->TransformIndexToPhysicalPoint(inputRegion.GetIndex()+m_SubsampleOffset,outOrigin);
+
+  for (unsigned int i=0 ; i<this->GetNumberOfOutputs() ; i++)
+    {
+    OutputImagePointerType outputPtr = this->GetOutput(i);
+    outputPtr->SetLargestPossibleRegion(outputRegion);
+    outputPtr->SetOrigin(outOrigin);
+    outputPtr->SetSpacing(outSpacing);
+    }
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // First, call superclass implementation
@@ -189,6 +226,13 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   typename OutputRegionType::SizeType  outputSize   = outputRequestedRegion.GetSize();
   typename InputRegionType::IndexType  inputIndex;
   typename InputRegionType::SizeType   inputSize;
+  InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
+
+  // Convert index and size to full grid
+  outputIndex[0] = outputIndex[0] * m_SubsampleFactor[0] + m_SubsampleOffset[0] + inputLargest.GetIndex(0);
+  outputIndex[1] = outputIndex[1] * m_SubsampleFactor[1] + m_SubsampleOffset[1] + inputLargest.GetIndex(1);
+  outputSize[0] = 1 + (outputSize[0] - 1) * m_SubsampleFactor[0];
+  outputSize[1] = 1 + (outputSize[1] - 1) * m_SubsampleFactor[1];
 
   // First, apply offset
   for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
@@ -278,6 +322,8 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 
   const double log2 = vcl_log(2.0);
 
+  InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
+
   // Set-up progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -295,11 +341,15 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     typename InputRegionType::IndexType inputIndex;
     typename InputRegionType::SizeType inputSize;
 
+    // Convert index to full grid
+    typename OutputImageType::IndexType outIndex;
+
     // First, create an window for neighborhood iterator based on m_Radius
     // For example, if xradius and yradius is 2. window size is 5x5 (2 * radius + 1).
     for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
       {
-      inputIndex[dim] = energyIt.GetIndex()[dim] - m_Radius[dim];
+      outIndex[dim] = energyIt.GetIndex()[dim] * m_SubsampleFactor[dim] + m_SubsampleOffset[dim] + inputLargest.GetIndex(dim);
+      inputIndex[dim] = outIndex[dim] - m_Radius[dim];
       inputSize[dim] = 2 * m_Radius[dim] + 1;
       }
 
