@@ -11,7 +11,7 @@ SETUP_SUPERBUILD(QT4)
 # endif()
 
 
-option(QT4_SB_ENABLE_GTK "Enable GTK+ style with qt using -gtkstlye. Default is OFF" OFF)
+set(QT4_SB_ENABLE_GTK OFF CACHE INTERNAL "Enable GTK+ style with qt using -gtkstlye. Default is OFF")
 
 if(NOT DEFINED git_protocol)
   set(git_protocol "git")
@@ -34,15 +34,8 @@ if(UNIX)
     set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
   else() #Linux
     if(QT4_SB_ENABLE_GTK)
-      message(STATUS "QT4_SB_ENABLE_GTK is activated. QT4 build includes  gtk+ and libfreetype, libpng (dependencies of gtk+ package)")
-      if( NOT USE_SYSTEM_PNG OR
-	  NOT USE_SYSTEM_EXPAT OR
-	  NOT USE_SYSTEM_FREETYPE )
-	message(FATAL_ERROR "cannot use libpng, expat and freetype from superbuild when QT4_SB_ENABLE_GTK is ON. 
- eactivate gtk+ theme support in Qt build with 'cmake -DQT4_SB_ENABLE_GTK=OFF' 
-OR use system libraries for png, expat and freetype with
-'cmake -DUSE_SYSTEM_PNG=ON -DUSE_SYSTEM_EXPAT USE_SYSTEM_FREETYPE=ON'")
-      endif()
+      message(WARNING "QT4_SB_ENABLE_GTK support is experimental")
+
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
     else()
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle")
