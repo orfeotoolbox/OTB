@@ -244,6 +244,11 @@ public:
    void optimizeTimeOffsetsFromGcps();
 
    /**
+    * Produce deburst coordinates and update metadata
+    */
+   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines);
+
+   /**
     * Returns pointer to a new instance, copy of this.
     */
    virtual ossimObject* dup() const;
