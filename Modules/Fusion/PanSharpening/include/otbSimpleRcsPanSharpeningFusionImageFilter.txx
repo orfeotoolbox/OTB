@@ -32,6 +32,7 @@ SimpleRcsPanSharpeningFusionImageFilter
 {
   // Fix number of required inputs
   this->SetNumberOfRequiredInputs(2);
+  this->m_UseNoData = false;
 
   // Instantiate convolution filter
   m_ConvolutionFilter = ConvolutionFilterType::New();
@@ -42,15 +43,6 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_Filter.SetSize(7 * 7);
   m_Filter.Fill(1);
 
-  // Instantiate fusion filter
-  m_FusionFilter = FusionFilterType::New();
-  m_FusionFilter->SetInput2(m_ConvolutionFilter->GetOutput());
-
-  // Set-up progress reporting
-  m_ProgressAccumulator = itk::ProgressAccumulator::New();
-  m_ProgressAccumulator->SetMiniPipelineFilter(this);
-  m_ProgressAccumulator->RegisterInternalFilter(m_ConvolutionFilter, 0.9);
-  m_ProgressAccumulator->RegisterInternalFilter(m_FusionFilter, 0.1);
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
@@ -127,18 +119,80 @@ SimpleRcsPanSharpeningFusionImageFilter
     itkExceptionMacro(<< "SimpleRcsPanSharpeningFusionImageFilter: Wrong Pan/Xs size");
     }
 
-  //Process the fusion
+  // Set-up progress reporting
+  m_ProgressAccumulator = itk::ProgressAccumulator::New();
+  m_ProgressAccumulator->SetMiniPipelineFilter(this);
+  m_ProgressAccumulator->RegisterInternalFilter(m_ConvolutionFilter, 0.9);
+
   m_ConvolutionFilter->SetInput(this->GetPanInput());
   m_ConvolutionFilter->SetRadius(this->m_Radius);
   m_ConvolutionFilter->SetFilter(this->m_Filter);
 
-  m_FusionFilter->SetInput1(this->GetXsInput());
-  m_FusionFilter->SetInput3(this->GetPanInput());
+  // Write no-data flags for Pan image
+  std::vector<bool> noDataValuesPanAvailable;
+  double tmpNoDataValuePan;
+  typename TPanImageType::InternalPixelType noDataValuePan;
+  bool retPan = itk::ExposeMetaData<std::vector<bool>>( this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, noDataValuesPanAvailable );
+  itk::ExposeMetaData<double>( this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuePan );
+  noDataValuePan = static_cast<typename TPanImageType::InternalPixelType>( tmpNoDataValuePan );
+  bool noDataValuePanAvailable = noDataValuesPanAvailable[0];
+  noDataValuePanAvailable &= retPan;
 
-  // Wire composite filter
-  m_FusionFilter->GraftOutput(this->GetOutput());
-  m_FusionFilter->Update();
-  this->GraftOutput(m_FusionFilter->GetOutput());
+  // Write no-data flags for Xs image
+  std::vector<bool> noDataValuesXsAvailable;
+  std::vector<double> tmpNoDataValuesXs;
+  std::vector<typename TXsImageType::InternalPixelType> noDataValuesXs;
+  bool retXs = itk::ExposeMetaData<std::vector<bool> >( this->GetXsInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, noDataValuesXsAvailable );
+  itk::ExposeMetaData<std::vector<double> >( this->GetXsInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuesXs );
+
+  // Check if noData is needed and update noDataValuesAvailable with return function value
+  if(retPan || retXs)
+    {
+    m_UseNoData = noDataValuePanAvailable;
+    for ( unsigned int i = 0; i < noDataValuesXsAvailable.size(); ++i )
+      {
+      noDataValuesXs.push_back(static_cast<typename TXsImageType::InternalPixelType>(tmpNoDataValuesXs[i]));
+      m_UseNoData |= (noDataValuesXsAvailable[i] = (noDataValuesXsAvailable[i] && retXs));
+      }
+    }
+
+
+  // Instantiate fusion filter
+  if ( m_UseNoData )
+    {
+    m_NoDataFusionFilter = NoDataFusionFilterType::New();
+    m_ProgressAccumulator->RegisterInternalFilter( m_NoDataFusionFilter, 0.1 );
+
+    m_NoDataFusionFilter->SetInput2( m_ConvolutionFilter->GetOutput() );
+    m_NoDataFusionFilter->GetFunctor().SetNoDataValuesXsAvailable( noDataValuesXsAvailable );
+    m_NoDataFusionFilter->GetFunctor().SetNoDataValuePanAvailable( noDataValuePanAvailable );
+    m_NoDataFusionFilter->GetFunctor().SetNoDataValuePan( noDataValuePan );
+    m_NoDataFusionFilter->GetFunctor().SetNoDataValuesXs( noDataValuesXs );
+
+    m_NoDataFusionFilter->SetInput1( this->GetXsInput() );
+    m_NoDataFusionFilter->SetInput2( m_ConvolutionFilter->GetOutput() );
+    m_NoDataFusionFilter->SetInput3( this->GetPanInput() );
+
+    // Wire composite filter
+    m_NoDataFusionFilter->GraftOutput( this->GetOutput() );
+    m_NoDataFusionFilter->Update();
+    this->GraftOutput( m_NoDataFusionFilter->GetOutput() );
+    }
+  else
+    {
+    m_FusionFilter = FusionFilterType::New();
+    m_ProgressAccumulator->RegisterInternalFilter( m_FusionFilter, 0.1 );
+
+    m_FusionFilter->SetInput1( this->GetXsInput() );
+    m_FusionFilter->SetInput2( m_ConvolutionFilter->GetOutput() );
+    m_FusionFilter->SetInput3( this->GetPanInput() );
+
+    // Wire composite filter
+    m_FusionFilter->GraftOutput( this->GetOutput() );
+    m_FusionFilter->Update();
+    this->GraftOutput( m_FusionFilter->GetOutput() );
+    }
+
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
