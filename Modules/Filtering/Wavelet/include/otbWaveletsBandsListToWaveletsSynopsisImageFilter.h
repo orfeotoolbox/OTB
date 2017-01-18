@@ -25,7 +25,7 @@ namespace otb
 {
   
 /** \class WaveletsBandsListToWaveletsSynopsisImageFilter
- *  \brief Converts a list of wavelets bands to the traditionnal multi-resolution wavelets view
+ *  \brief Converts a list of wavelets bands to the traditional multi-resolution wavelets view
  *
  *  The decimation ratio is taken into account.
  *

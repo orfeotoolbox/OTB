@@ -149,7 +149,7 @@ python_patch_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[2])
 python_version="$python_major_version.$python_minor_version.$python_patch_version"
 
 python_check_failed() {
-    printf %s\\n "*****Error occured during installation******"
+    printf %s\\n "*****Error occurred during installation******"
     printf %s\\n "OTB python bindings requires python2.6 or python2.7 but current detected python version is $python_version"
     printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
@@ -188,7 +188,7 @@ if [ "$found_python_lib" -eq "1" ]; then
     printf %s\\n "To test OTB python bindings:"
     printf %s\\n "$OTB_PYTHON_EXE -c 'import otbApplication'"
 else
-    printf %s\\n "*****Error occured during installation******"
+    printf %s\\n "*****Error occurred during installation******"
     printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
     printf %s\\n "$python_INSTSONAME cannot be found in any of search directories."
     printf %s\\n "We had searched following directories $python_lib_dirs"

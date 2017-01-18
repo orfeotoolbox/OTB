@@ -259,7 +259,7 @@ private:
         typedef otb::Image<InputPixelType>          TInputImage;
         typedef TInputImage::Pointer TInputImagePointer;
 
-        //get input paramter as otb::Image<InputPixelType>
+        //get input parameter as otb::Image<InputPixelType>
         TInputImagePointer inImage = GetParameterImage<TInputImage>("in");
 
         //typedef itk::::ForwardFFTImageFilter over otbImage< InputPixelType >

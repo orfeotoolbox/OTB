@@ -105,7 +105,7 @@ macro(macro_super_package)
 	    "UniversalCRTSdkDir variable not set. call vcvarsall.bat <arch> first before starting build.")
 	endif()
 	
-	#addtional msvc redist dll from VCINSTALLDIR
+	#additional msvc redist dll from VCINSTALLDIR
 	if(DEFINED ENV{VCINSTALLDIR})
           file(TO_CMAKE_PATH "$ENV{VCINSTALLDIR}" PKG_VCINSTALLDIR)
           list(
