@@ -57,6 +57,8 @@ QtWidgetModel
 
 QtWidgetModel::~QtWidgetModel()
 {
+  if (m_Timer)
+    delete m_Timer;
 }
 
 void
