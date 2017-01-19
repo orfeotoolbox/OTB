@@ -227,14 +227,18 @@ function(func_install_otb_support_files)
   set(PKG_SHARE_SOURCE_DIR ${DEPENDENCIES_INSTALL_DIR}/share)
 
   #For Unixes we make them in the *pkgsetup.in
-  ##################### install environment source ##########################
+  ##################### install environment setup file ##########################
   if(WIN32)
-    foreach(ENV_SOURCE_FILE
-        "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.cmd"
-        "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile")
-      if(EXISTS ${ENV_SOURCE_FILE})
-        install(FILES ${ENV_SOURCE_FILE} DESTINATION ${PKG_STAGE_DIR})
-      endif()
+    install(
+      FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.cmd
+      DESTINATION ${PKG_STAGE_DIR}
+      )
+
+    install(
+      FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile
+      DESTINATION ${PKG_STAGE_DIR}
+      RENAME otbenv.sh)
+    )
     endforeach()
 
     #we need startup files for mapla monteverdi in the root directory
