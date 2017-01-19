@@ -1,4 +1,12 @@
+#check variables are set
+foreach(var P_DIRS P_MATCH P_REPLACE)
+  if(NOT ${var})
+    message(FATAL_ERROR "${var} not set")
+  endif()
+endforeach()
+
 string(REPLACE "|" ";" P_DIRS ${P_DIRS})
+
 
 foreach( p_dir ${P_DIRS} )
 set(file_list)
