@@ -235,10 +235,9 @@ function(func_install_otb_support_files)
       )
 
     install(
-      FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile
+      FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.bash
       DESTINATION ${PKG_STAGE_DIR}
-      RENAME otbenv.sh
-    )
+      )
     
     #we need startup files for mapla monteverdi in the root directory
     #For Unixes, we make them inside pkgsetup script!
@@ -293,6 +292,7 @@ function(func_install_monteverdi_support_files)
   # we find this value by parsing ConfigureMonteverdi.h
   set(ConfigureMonteverdi_H "${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h")
   if(NOT EXISTS "${ConfigureMonteverdi_H}")
+    #maybe deactivate monteverdi?
     message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
   endif()
 
