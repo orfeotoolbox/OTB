@@ -110,8 +110,8 @@ private:
    * This functor applies the
    *  \f[ \frac{XS}{\mathrm{Filtered}(PAN)}PAN  \f]
    * operation. It is intended for internal use only.
- *
- * \ingroup OTBPanSharpening
+   *
+   * \ingroup OTBPanSharpening
    */
   class FusionFunctor
   {
@@ -142,6 +142,83 @@ private:
     }
   };
 
+
+  /** \class NoDataFusionFunctor
+   * This functor applies the following operation if there is no data :
+   *  \f[ \frac{XS}{\mathrm{Filtered}(PAN)}PAN  \f]
+   * It is intended for internal use only.
+   *
+   * \ingroup OTBPanSharpening
+   */
+  class NoDataFusionFunctor
+  {
+  public:
+    // Implement the fusion as a three arguments operator
+    typename TOutputImageType::PixelType operator()(const typename TXsImageType::PixelType& xsPixel,
+                                                    const TInternalPrecision& smoothPanchroPixel,
+                                                    const typename TPanImageType::PixelType& sharpPanchroPixel) const
+    {
+      // Build output pixel
+      typename TOutputImageType::PixelType output(xsPixel.Size());
+
+      // Check for no data Pan value
+      if( m_NoDataValuePanAvailable && sharpPanchroPixel == m_NoDataValuePan )
+        {
+        for ( unsigned int i = 0; i < xsPixel.Size(); ++i )
+          {
+          output[i] = static_cast<typename TOutputImageType::InternalPixelType>( m_NoDataValuesXs[i] );
+          }
+        return output;
+        }
+
+      TInternalPrecision scale = 1.;
+
+      if(vcl_abs(smoothPanchroPixel) > 1e-10)
+        {
+        scale = sharpPanchroPixel/smoothPanchroPixel;
+        }
+
+      // Perform fusion for each band with appropriate casting
+      for(unsigned int i = 0; i < xsPixel.Size(); ++i)
+        {
+        output[i] = ( m_NoDataValuesXsAvailable[i] && (xsPixel[i] == m_NoDataValuesXs[i]) ) ?
+                    static_cast<typename TOutputImageType::InternalPixelType>( xsPixel[i] ) :
+                    static_cast<typename TOutputImageType::InternalPixelType>( xsPixel[i] * scale );
+        }
+      // Returns the output pixel
+      return output;
+    }
+
+    void SetNoDataValuePanAvailable(bool noDataAvailable) {
+      m_NoDataValuePanAvailable = noDataAvailable;
+    }
+
+    void SetNoDataValuePan(typename TPanImageType::PixelType  noDataValue) {
+      m_NoDataValuePan = noDataValue;
+    }
+
+    void SetNoDataValuesXsAvailable(std::vector<bool> noDataValuesAvailable) {
+      m_NoDataValuesXsAvailable = noDataValuesAvailable;
+    }
+
+    void SetNoDataValuesXs(std::vector<typename TXsImageType::InternalPixelType> noDataValues) {
+      m_NoDataValuesXs = noDataValues;
+    }
+
+
+  private:
+    /** No data flags and values for APN image */
+    bool m_NoDataValuePanAvailable;
+    typename TPanImageType::InternalPixelType m_NoDataValuePan;
+
+    /** No data flags and values for XS image */
+    std::vector<bool> m_NoDataValuesXsAvailable;
+    std::vector<typename TXsImageType::InternalPixelType> m_NoDataValuesXs;
+
+
+  };
+
+
   /**
    *  Typedef of the TernaryFunctorImageFilter applying the fusion functor to
    *  p, p_smooth and xs.
@@ -152,6 +229,16 @@ private:
                                          TOutputImageType,
                                          FusionFunctor>     FusionFilterType;
 
+  /**
+   *  Typedef of the TernaryFunctorImageFilter applying the no data fusion functor to
+   *  p, p_smooth and xs.
+   */
+  typedef itk::TernaryFunctorImageFilter<TXsImageType,
+                                         InternalImageType,
+                                         TPanImageType,
+                                         TOutputImageType,
+                                         NoDataFusionFunctor>     NoDataFusionFilterType;
+
   /** Typedef of the convolution filter performing smoothing */
   typedef otb::ConvolutionImageFilter
       <TPanImageType,
@@ -160,10 +247,16 @@ private:
        TInternalPrecision>                                  ConvolutionFilterType;
 
   /** Pointer to the internal convolution filter */
-  typename ConvolutionFilterType::Pointer m_ConvolutionFilter;
+  typename ConvolutionFilterType::Pointer  m_ConvolutionFilter;
 
   /** Pointer to the fusion filter */
-  typename FusionFilterType::Pointer      m_FusionFilter;
+  typename FusionFilterType::Pointer       m_FusionFilter;
+
+  /** Pointer to the fusion filter */
+  typename NoDataFusionFilterType::Pointer m_NoDataFusionFilter;
+
+  /** Boolean used for no data */
+  bool m_UseNoData;
 
   /** Radius used for the smoothing filter */
   RadiusType m_Radius;
