@@ -58,12 +58,16 @@ macro(macro_setup_cmake_project pkg)
    macro_super_package(STAGE_DIR \"${archive_name}\")"
   )
 
+set(README_FILE_SUFFIX)
+if(PKG_GENERATE_XDK)
+  set(README_FILE_SUFFIX "_xdk")
+endif()
 if(APPLE)
-  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Macx.txt)
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Macx${README_FILE_SUFFIX}.txt)
 elseif(LINUX) #not osx
-  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Linux.txt)
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Linux${README_FILE_SUFFIX}.txt)
 elseif(WIN32) #windows
-  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows.txt)
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows${README_FILE_SUFFIX}.txt)
 endif()
 
 configure_file(

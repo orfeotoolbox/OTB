@@ -121,6 +121,43 @@ EOF
 
 chmod +x "$OUT_DIR/otbenv.profile"
 
+else
+
+cat > "$OUT_DIR/xdkenv.profile" << EOF
+#!/bin/sh
+
+# The below environment variables only affect current shell
+# So if you run again from a terminal. you need to run the script again
+
+# unset any existing LD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
+
+# Add bin direcotory to system PATH
+PATH=$OUT_DIR/bin:\$PATH
+
+# set numeric locale to C
+LC_NUMERIC=C
+
+# set GDAL_DATA variable used by otb application
+GDAL_DATA=$OUT_DIR/share/gdal
+
+# set GEOTIFF_CSV variable used by otb application
+GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+
+CMAKE_PREFIX_PATH=$OUT_DIR
+
+# export variables
+export LC_NUMERIC
+export GDAL_DATA
+export GEOTIFF_CSV
+export CMAKE_PREFIX_PATH
+export PATH
+
+EOF
+
+
+chmod +x "$OUT_DIR/xdkenv.profile"
+
 fi
 
 #echo "Creating symbolic links..."
