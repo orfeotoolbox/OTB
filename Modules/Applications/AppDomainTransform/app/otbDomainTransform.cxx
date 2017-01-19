@@ -281,8 +281,8 @@ private:
           {
           otbAppLogINFO( << "Applying Shift image filter" );
           typedef itk::FFTShiftImageFilter<
-            typename FFTFilter::OutputImageType,
-            typename FFTFilter::OutputImageType > FFTShiftFilterType;
+            FFTFilter::OutputImageType,
+            FFTFilter::OutputImageType > FFTShiftFilterType;
 
           FFTShiftFilterType::Pointer
             fftShiftFilter = FFTShiftFilterType::New();
