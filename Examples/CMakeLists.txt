@@ -10,15 +10,10 @@ endif()
 
 #check if this is a standalone build?
 
-find_package(OTB REQUIRED)
-message(STATUS "[Examples] Found OTB: ${OTB_USE_FILE}")
-
 if(PROJECT_NAME STREQUAL "OTBExamples")
   if(BUILD_TESTING)
     include(CTest)
   endif()
-
-  include(${OTB_USE_FILE})
 
   # dashboard build. Why do I need to see the deprecated warnings on dashboard!
   # It just fades the actual warnings and most importantly very annoying.
@@ -139,6 +134,10 @@ else()
   #Examples that require large input cannot be enabled when building as standalone
   include(${CMAKE_CURRENT_SOURCE_DIR}/../CMake/OTBManageLargeInputPaths.cmake)
 endif()
+
+find_package(OTB REQUIRED)
+include(${OTB_USE_FILE})
+message(STATUS "Found OTB: ${OTB_USE_FILE}")
 
 set(OTB_TEST_DRIVER otbTestDriver)
 
