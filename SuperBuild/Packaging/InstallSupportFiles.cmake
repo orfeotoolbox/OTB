@@ -239,8 +239,7 @@ function(func_install_otb_support_files)
       DESTINATION ${PKG_STAGE_DIR}
       RENAME otbenv.sh
     )
-    endforeach()
-
+    
     #we need startup files for mapla monteverdi in the root directory
     #For Unixes, we make them inside pkgsetup script!
     foreach(exe_file mapla monteverdi)
