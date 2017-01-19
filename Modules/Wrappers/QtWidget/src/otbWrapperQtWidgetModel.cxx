@@ -177,6 +177,13 @@ QtWidgetModel
     SLOT( OnApplicationExecutionDone( int ) )
   );
 
+  QObject::connect(
+    taskAppli,
+    SIGNAL( finished() ),
+    taskAppli,
+    SLOT( deleteLater() )
+  );
+
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
 
