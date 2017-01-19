@@ -237,7 +237,7 @@ function(func_install_otb_support_files)
     install(
       FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile
       DESTINATION ${PKG_STAGE_DIR}
-      RENAME otbenv.sh)
+      RENAME otbenv.sh
     )
     endforeach()
 
