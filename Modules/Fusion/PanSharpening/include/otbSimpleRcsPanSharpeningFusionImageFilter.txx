@@ -128,34 +128,43 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_ConvolutionFilter->SetRadius(this->m_Radius);
   m_ConvolutionFilter->SetFilter(this->m_Filter);
 
+  typedef typename TPanImageType::InternalPixelType  PanPixelType;
+  typedef typename TXsImageType::InternalPixelType   XsPixelType;
+
   // Write no-data flags for Pan image
-  std::vector<bool> noDataValuesPanAvailable;
-  double tmpNoDataValuePan;
-  typename TPanImageType::InternalPixelType noDataValuePan;
-  bool retPan = itk::ExposeMetaData<std::vector<bool>>( this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, noDataValuesPanAvailable );
-  itk::ExposeMetaData<double>( this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuePan );
-  noDataValuePan = static_cast<typename TPanImageType::InternalPixelType>( tmpNoDataValuePan );
-  bool noDataValuePanAvailable = noDataValuesPanAvailable[0];
-  noDataValuePanAvailable &= retPan;
+  std::vector<bool> tmpNoDataValuePanAvailable;
+  std::vector<double> tmpNoDataValuePan;
+  bool noDataValuePanAvailable = false;
+  PanPixelType noDataValuePan = 0;
+
+  bool retPan = itk::ExposeMetaData<std::vector<bool> >( this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, tmpNoDataValuePanAvailable );
+  retPan &= itk::ExposeMetaData<std::vector<double> >( this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuePan );
+
+  if(retPan && tmpNoDataValuePanAvailable.size() > 0 && tmpNoDataValuePan.size() > 0)
+    {
+    noDataValuePanAvailable = tmpNoDataValuePanAvailable[0] && retPan;
+    noDataValuePan = static_cast<PanPixelType>( tmpNoDataValuePan[0] );
+    }
+
 
   // Write no-data flags for Xs image
   std::vector<bool> noDataValuesXsAvailable;
   std::vector<double> tmpNoDataValuesXs;
-  std::vector<typename TXsImageType::InternalPixelType> noDataValuesXs;
+  std::vector<XsPixelType> noDataValuesXs;
+
   bool retXs = itk::ExposeMetaData<std::vector<bool> >( this->GetXsInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, noDataValuesXsAvailable );
-  itk::ExposeMetaData<std::vector<double> >( this->GetXsInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuesXs );
+  retXs &= itk::ExposeMetaData<std::vector<double> >( this->GetXsInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuesXs );
 
   // Check if noData is needed and update noDataValuesAvailable with return function value
-  if(retPan || retXs)
+  if ( retPan || retXs )
     {
     m_UseNoData = noDataValuePanAvailable;
-    for ( unsigned int i = 0; i < noDataValuesXsAvailable.size(); ++i )
+    for ( unsigned int i = 0; i < tmpNoDataValuesXs.size() && i < noDataValuesXsAvailable.size(); ++i )
       {
-      noDataValuesXs.push_back(static_cast<typename TXsImageType::InternalPixelType>(tmpNoDataValuesXs[i]));
+      noDataValuesXs.push_back( static_cast<XsPixelType>(tmpNoDataValuesXs[i]) );
       m_UseNoData |= (noDataValuesXsAvailable[i] = (noDataValuesXsAvailable[i] && retXs));
       }
     }
-
 
   // Instantiate fusion filter
   if ( m_UseNoData )
