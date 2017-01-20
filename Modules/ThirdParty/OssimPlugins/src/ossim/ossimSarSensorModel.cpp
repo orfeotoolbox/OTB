@@ -1245,36 +1245,78 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   // Now move GCPs
   for(std::vector<GCPRecordType>::iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
       {
-      std::vector<std::pair<unsigned long,unsigned long>>::const_iterator vit = lines.begin();
-      std::vector<std::pair<unsigned long,unsigned long>>::const_iterator nit = vit+1;
-      
-      unsigned long lineOffset = vit->first;
-      
       GCPRecordType currentGCP = *gcpIt;
+      unsigned long newLine=0;
       
-      bool burstFound = false;
-      
-      
-      while(!burstFound && nit != lines.end())
+      bool deburstOk = imageLineToDeburstLine(lines,currentGCP.imPt.y,newLine);
+
+      if(deburstOk)
         {
-        if(gcpIt->imPt.y>=vit->first && gcpIt->imPt.y<=vit->second)
-          {
-          burstFound = true;
-          currentGCP.imPt.y-=lineOffset;
-          deburstGCPs.push_back(currentGCP);
-          }
-        
-        lineOffset+=nit->first - vit->second-1;
-        ++vit;
-        ++nit;
+        currentGCP.imPt.y = newLine;
+        deburstGCPs.push_back(currentGCP);
         }
+        
       }
 
   theGCPRecords.swap(deburstGCPs);
 
-  
   return true;
 }
+
+bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & imageLine, unsigned long & deburstLine)
+{
+  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator vit = lines.begin();
+  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator nit = vit+1;
+  
+  unsigned long lineOffset = vit->first;
+
+  // if(imageLine < lineOffset)
+  //   {
+  //   deburstLine = lineOffset;
+  //   return true;
+  //   }
+  
+  bool burstFound = false;
+
+  deburstLine = imageLine;
+  
+  while(!burstFound && nit != lines.end())
+    {
+    if(deburstLine>=vit->first && deburstLine<=vit->second)
+      {
+      burstFound = true;
+      deburstLine-=lineOffset;
+      return true;
+      }
+    lineOffset+=nit->first - vit->second-1;
+    ++vit;
+    ++nit;
+    }
+  return false;
+}
+
+void ossimSarSensorModel::deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & deburstLine, unsigned long & imageLine)
+{
+  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator vit = lines.begin();
+  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator nit = vit+1;
+  
+  unsigned long lineOffset = vit->first;
+
+  imageLine = deburstLine;
+  
+  while(nit != lines.end())
+    {
+    if(imageLine+lineOffset>=vit->first && imageLine+lineOffset<=vit->second)
+      break;
+
+    lineOffset+=nit->first - vit->second-1;
+    ++vit;
+    ++nit;
+    }
+  imageLine+=lineOffset;
+}
+
+
 }
 
 

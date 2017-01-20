@@ -248,6 +248,10 @@ public:
     */
    bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines);
 
+   static bool imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & imageLine, unsigned long & deburstLine);
+
+   static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & deburstLine, unsigned long & imageLine);
+   
    /**
     * Returns pointer to a new instance, copy of this.
     */

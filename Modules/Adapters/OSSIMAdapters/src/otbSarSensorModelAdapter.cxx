@@ -29,9 +29,11 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include "ossim/ossimSarSensorModel.h"
+#include "ossim/ossimPluginProjectionFactory.h"
 #pragma GCC diagnostic pop
 #else
 #include "ossim/ossimSarSensorModel.h"
+#include "ossim/ossimPluginProjectionFactory.h"
 #endif
 
 
@@ -51,20 +53,24 @@ SarSensorModelAdapter::~SarSensorModelAdapter()
 
 bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
 {
-  InternalModelPointer model = new ossimplugins::ossimSarSensorModel();
+  // InternalModelPointer model = new ossimplugins::ossimSarSensorModel();
 
    ossimKeywordlist geom;
    image_kwl.convertToOSSIMKeywordlist(geom);
-  
-   bool success = model->loadState(geom);
 
-   if(success)
+   if(m_SensorModel != ITK_NULLPTR)
      {
-     m_SensorModel = model;
+     delete m_SensorModel;
+     }
+   
+   m_SensorModel =  dynamic_cast<ossimplugins::ossimSarSensorModel* >(ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom));
+
+   if(m_SensorModel != ITK_NULLPTR)
+     {
+
      return true;
      }
 
-   delete model;
    return false;
 }
 
@@ -85,9 +91,7 @@ bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
     return success;
     }
 
-  return false;
-
-  
+  return false;  
 }
 
 bool SarSensorModelAdapter::IsValidSensorModel() const
@@ -104,5 +108,18 @@ bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigne
   
   return false;
 }
+
+bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & imageLine, unsigned long & deburstLine)
+{
+  return ossimplugins::ossimSarSensorModel::imageLineToDeburstLine(lines,imageLine,deburstLine);
+}
+
+void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & deburstLine, unsigned long & imageLine)
+{
+  ossimplugins::ossimSarSensorModel::deburstLineToImageLine(lines,deburstLine,imageLine);
+}
+
+
+
 
 } // namespace otb
