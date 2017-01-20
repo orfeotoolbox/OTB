@@ -137,6 +137,47 @@ namespace ossimplugins
       kwl.addList(theManifestKwl, true);
       kwl.addList(theProductKwl,  true);
 
+      // Rewrite burst records since model could have been debursted
+      kwl.removeKeysThatMatch(BURST_PREFIX+"*");
+      
+      add(kwl,BURST_NUMBER_KEY.c_str(),(unsigned int)theBurstRecords.size());
+
+      unsigned int burstId(0);
+      char burstPrefix[1024];
+      
+      for(std::vector<BurstRecordType>::const_iterator burstIt = theBurstRecords.begin();
+          burstIt!=theBurstRecords.end();++burstIt)
+        {
+        s_printf(burstPrefix, "%s[%d].", BURST_PREFIX.c_str(), burstId);
+        add(kwl,burstPrefix+keyStartLine,(ossim_uint32)burstIt->startLine);
+        add(kwl,burstPrefix+keyEndLine,(ossim_uint32)burstIt->endLine);
+        add(kwl,burstPrefix+keyAzimuthStartTime,burstIt->azimuthStartTime);
+        add(kwl,burstPrefix+keyAzimuthStopTime,burstIt->azimuthStopTime);
+        ++burstId;
+        }
+
+      // Rewrite GCPs for same reason
+      kwl.removeKeysThatMatch(GCP_PREFIX+"*");
+
+      add(kwl,GCP_NUMBER_KEY.c_str(),(unsigned int)theGCPRecords.size());
+
+      unsigned int gcpId(0);
+      char gcpPrefix[1024];
+
+      for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin();
+          gcpIt!=theGCPRecords.end();++gcpIt)
+        {
+        s_printf(gcpPrefix, "%s[%d].", GCP_PREFIX.c_str(), gcpId);
+        add(kwl,gcpPrefix+keyImPtX,gcpIt->imPt.x);
+        add(kwl,gcpPrefix+keyImPtY,gcpIt->imPt.y);
+        add(kwl,gcpPrefix+keyWorldPtLat,gcpIt->worldPt.lat);
+        add(kwl,gcpPrefix+keyWorldPtLon,gcpIt->worldPt.lon);
+        add(kwl,gcpPrefix+keyWorldPtHgt,gcpIt->worldPt.height());
+        add(kwl,gcpPrefix+keyAzimuthTime,gcpIt->azimuthTime);
+        add(kwl,gcpPrefix+keySlantRangeTime,gcpIt->slantRangeTime);
+        ++gcpId;
+        }
+      
       return ossimSarSensorModel::saveState(kwl, prefix);
    }
 
