@@ -55,6 +55,14 @@ otb_test_application(NAME apTvRaOpticalCalibration_Spot5
                              ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
                              ${TEMP}/apTvRaOpticalCalibration_Spot5.img )
 
+otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor_WithoutRSR
+					 APP  OpticalCalibration
+					 OPTIONS -in ${EXAMPLEDATA}/Romania_Extract.tif
+					 -out ${TEMP}/apTvRaOpticalCalibration_Spot4_UnknownSensor_WithoutRSR.tif
+					 -level toc
+					 -acqui.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases2.txt
+					 -acqui.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations2.txt)
+
 otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor
                      APP  OpticalCalibration
                      OPTIONS 
@@ -82,6 +90,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor
                      VALID   --compare-image ${EPSILON_6}
                              ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry/Example_RomaniaAtmosphericCorrectionSequencement.tif
                              ${TEMP}/apTvRaOpticalCalibration_Spot4_UnknownSensor_test.tif )
+
 
 otb_test_application(NAME apTvRaOpticalCalibration_Reverse_UnknownSensor
                      APP  OpticalCalibration
