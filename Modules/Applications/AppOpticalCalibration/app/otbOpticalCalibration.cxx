@@ -823,12 +823,14 @@ private:
           {
           otbAppLogWARNING("No relative spectral response found, using "
                            "default response (constant between 0.3 and 1.0µm)");
-          AcquiCorrectionParametersType::WavelengthSpectralBandVectorType spectralDummy;
+          AcquiCorrectionParametersType::WavelengthSpectralBandVectorType spectralDummy =
+                  AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
           spectralDummy->Clear();
           for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
             {
               spectralDummy->PushBack(FilterFunctionValues::New());
             }
+          m_paramAcqui->SetWavelengthSpectralBand(spectralDummy);
           }
 
         // Aeronet file
