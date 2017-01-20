@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-typedef otb::Image<float>                     ImageType;
+typedef otb::Image<unsigned short>            ImageType;
 typedef otb::ImageFileReader<ImageType>       ReaderType;
 typedef otb::ImageFileWriter<ImageType>       WriterType;
 typedef otb::SarDeburstImageFilter<ImageType> DeburstFilterType;
