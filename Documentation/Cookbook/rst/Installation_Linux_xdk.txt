@@ -1,3 +1,15 @@
+Synopsis
+--------
+
+This archive provides a development kit for the ORFEO ToolBox library which
+allows to easily compile OTB and facilitate the creation of programs based on
+OTB.
+
+It contains shared libraries of OTB dependencies and helper scripts for the
+configuration and the compilation of the library.
+
+Note that OTB sources are not included in the archive (see instructions below).
+
 Prerequisites
 -------------
 
