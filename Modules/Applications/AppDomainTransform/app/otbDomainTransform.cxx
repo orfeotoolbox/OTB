@@ -134,8 +134,8 @@ private:
     AddChoice("mode.wavelet.form.sym8", "SYMLET8");
 
     //Default value
-    SetParameterString("mode", "wavelet");
-    SetParameterString("mode.wavelet.form", "haar");
+    SetParameterString("mode", "wavelet", false);
+    SetParameterString("mode.wavelet.form", "haar", false);
 
     AddParameter(ParameterType_Int,"mode.wavelet.nlevels","Number of decomposition levels");
     SetParameterDescription("mode.wavelet.nlevels","Number of decomposition levels");

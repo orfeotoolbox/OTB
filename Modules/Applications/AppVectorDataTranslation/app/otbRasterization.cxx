@@ -129,7 +129,7 @@ private:
 
     AddParameter(ParameterType_String,"mode.attribute.field","The attribute field to burn");
     SetParameterDescription("mode.attribute.field","Name of the attribute field to burn");
-    SetParameterString("mode.attribute.field","DN");
+    SetParameterString("mode.attribute.field","DN", false);
 
     AddRAMParameter();
 
