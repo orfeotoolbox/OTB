@@ -873,13 +873,13 @@ GlImageActor
 #else
   index[ 0 ] =
     static_cast< IndexType::IndexValueType >(
-      ( physical[ 0 ] - m_Origin[ 0 ] ) / 
+      ( physical[ 0 ] + 0.5 * m_Spacing[0] - m_Origin[ 0 ] ) / 
       m_Spacing[ 0 ]
     );
 
   index[ 1 ] =
     static_cast< IndexType::IndexValueType >(
-      ( physical[ 1 ]-  m_Origin[ 1 ] ) /
+      ( physical[ 1 ] + 0.5 * m_Spacing[1] -  m_Origin[ 1 ] ) /
       m_Spacing[ 1 ]
     );
 
