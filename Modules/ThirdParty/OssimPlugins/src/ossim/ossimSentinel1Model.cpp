@@ -155,28 +155,6 @@ namespace ossimplugins
         add(kwl,burstPrefix+keyAzimuthStopTime,burstIt->azimuthStopTime);
         ++burstId;
         }
-
-      // Rewrite GCPs for same reason
-      kwl.removeKeysThatMatch(GCP_PREFIX+"*");
-
-      add(kwl,GCP_NUMBER_KEY.c_str(),(unsigned int)theGCPRecords.size());
-
-      unsigned int gcpId(0);
-      char gcpPrefix[1024];
-
-      for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin();
-          gcpIt!=theGCPRecords.end();++gcpIt)
-        {
-        s_printf(gcpPrefix, "%s[%d].", GCP_PREFIX.c_str(), gcpId);
-        add(kwl,gcpPrefix+keyImPtX,gcpIt->imPt.x);
-        add(kwl,gcpPrefix+keyImPtY,gcpIt->imPt.y);
-        add(kwl,gcpPrefix+keyWorldPtLat,gcpIt->worldPt.lat);
-        add(kwl,gcpPrefix+keyWorldPtLon,gcpIt->worldPt.lon);
-        add(kwl,gcpPrefix+keyWorldPtHgt,gcpIt->worldPt.height());
-        add(kwl,gcpPrefix+keyAzimuthTime,gcpIt->azimuthTime);
-        add(kwl,gcpPrefix+keySlantRangeTime,gcpIt->slantRangeTime);
-        ++gcpId;
-        }
       
       return ossimSarSensorModel::saveState(kwl, prefix);
    }
