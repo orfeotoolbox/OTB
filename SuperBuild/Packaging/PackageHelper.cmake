@@ -224,8 +224,6 @@ endmacro(macro_super_package)
 
 function(func_prepare_package)
 
-
-
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks_temp  "")
 
   #This must exist in any OTB Installation. minimal or full
@@ -351,8 +349,9 @@ function(func_process_deps input_file)
   message("Processing ${input_file_full_path}")
 
   set(is_executable FALSE)
-  is_file_executable2("${input_file_full_path}" is_executable)
+  is_file_executable2(input_file_full_path is_executable)
   if(NOT is_executable)
+    #copy back to input_file_full_path
     pkg_install_rule(${input_file_full_path})
     message("not is_executable ${input_file_full_path}")
     return()
@@ -500,11 +499,15 @@ function(pkg_install_rule src_file)
   endif()
   
   set(SKIP_INSTALL FALSE)
-  setif_value_in_list(is_gtk_lib "${src_file_NAME}" ALLOWED_SYSTEM_DLLS)  
+
+  setif_value_in_list(is_gtk_lib "${src_file_NAME}" GTK_LIB_LIST_1)
   if(is_gtk_lib)
-    set(output_dir "lib/gtk")
-     set(SKIP_INSTALL TRUE)
-  endif()
+    if(PKG_GENERATE_XDK)
+      set(SKIP_INSTALL TRUE)
+    else()
+      set(output_dir "lib/gtk")
+    endif() #if(PKG_GENERATE_XDK)
+  endif() #if(is_gtk_lib)
   
   #special case
   if("${src_file_NAME}" MATCHES "^otbapp_")

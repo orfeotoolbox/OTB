@@ -86,7 +86,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "9")
+set(OTB_VERSION_MINOR "11")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -133,6 +133,9 @@ endif()
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 endif()
+
+#convert path to native for reconfiguring otbcli.bat.in
+file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)
 
 # Override CMake's built-in add_* commands: assign LABELS to tests and targets
 # automatically. Depends on the CMake variable otb-module being set to the

@@ -27,9 +27,6 @@
 
 #include "itkPeriodicBoundaryCondition.h"
 
-// FIXME
-#define __myDebug__ 0
-
 namespace otb {
 
 /**
@@ -54,7 +51,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
 
-  //this->SetNumberOfThreads(1);
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
@@ -66,11 +62,9 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 
   if (GetSubsampleImageFactor() == 1) return;
 
-#if __myDebug__
   otbGenericMsgDebugMacro(<< " down sampling output regions by a factor of " << GetSubsampleImageFactor());
   otbGenericMsgDebugMacro(<< "initial region    " << this->GetInput()->GetLargestPossibleRegion().GetSize()[0]
                           << "," << this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
-#endif
 
   OutputImageRegionType newRegion;
   this->CallCopyInputRegionToOutputRegion(newRegion, this->GetInput()->GetLargestPossibleRegion());
@@ -80,9 +74,8 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     this->GetOutput(i)->SetRegions(newRegion);
     }
 
-#if __myDebug__
   otbGenericMsgDebugMacro(<< "new region output " << newRegion.GetSize()[0] << "," << newRegion.GetSize()[1]);
-#endif
+
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
@@ -185,12 +178,13 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     this->CallCopyInputRegionToOutputRegion(InputImageDimension - 1 - direction,
                                             smallerRegion, largerRegion);
 
-    for (unsigned int i = 0; i < m_InternalImages[direction].size(); ++i)
+    const unsigned int d = InputImageDimension - 2 - direction;
+    for (unsigned int i = 0; i < m_InternalImages[d].size(); ++i)
       {
-      m_InternalImages[InputImageDimension - 2 - direction][i] = OutputImageType::New();
-      m_InternalImages[InputImageDimension - 2 - direction][i]->SetRegions(smallerRegion);
-      m_InternalImages[InputImageDimension - 2 - direction][i]->Allocate();
-      m_InternalImages[InputImageDimension - 2 - direction][i]->FillBuffer(0);
+      m_InternalImages[d][i] = OutputImageType::New();
+      m_InternalImages[d][i]->SetRegions(smallerRegion);
+      m_InternalImages[d][i]->Allocate();
+      m_InternalImages[d][i]->FillBuffer(0);
       }
 
     largerRegion = smallerRegion;
@@ -642,21 +636,18 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       }
     }
 
-#if __myDebug__
   otbGenericMsgDebugMacro(<< " up sampling output regions by a factor of " << GetSubsampleImageFactor());
 
   otbGenericMsgDebugMacro(<< "initial region    "
                           << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0]
                           << "," << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[1]);
-#endif
 
   OutputImageRegionType newRegion;
   this->CallCopyInputRegionToOutputRegion(newRegion, this->GetInput(0)->GetLargestPossibleRegion());
   this->GetOutput()->SetRegions(newRegion);
 
-#if __myDebug__
   otbGenericMsgDebugMacro(<< "new region output " << newRegion.GetSize()[0] << "," << newRegion.GetSize()[1]);
-#endif
+
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
@@ -1178,7 +1169,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       typename FilterType::Pointer overSampledLowPass = FilterType::New();
       overSampledLowPass->SetInput(cropedLowPass);
       overSampledLowPass->SetSubsampleFactor(delta);
-	  overSampledLowPass->SetNumberOfThreads(1);
+      overSampledLowPass->SetNumberOfThreads(1);
       overSampledLowPass->Update();
 
       InputImagePointerType cropedHighPass = InputImageType::New();
@@ -1197,7 +1188,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
       typename FilterType::Pointer overSampledHighPass = FilterType::New();
       overSampledHighPass->SetInput(cropedHighPass);
       overSampledHighPass->SetSubsampleFactor(delta);
-	  overSampledHighPass->SetNumberOfThreads(1);
+      overSampledHighPass->SetNumberOfThreads(1);
       overSampledHighPass->Update();
 
       InnerProductType innerProduct;
