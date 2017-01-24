@@ -23,8 +23,21 @@
 
 namespace otb
 {
-/** \class SarDeburstImageFilter
- *  \brief TODO
+/** \class SarDeburstImageFilter 
+ * \brief Performs a deburst operation by removing redundant lines
+ * 
+ * This filter performs a deburst operation by removing redundant
+ * lines between burst. This operation is useful when dealing with
+ * Sentinel1 IW SLC products, where each subswath is composed of
+ * several overlapping burst separated by black lines. Lines to remove
+ * are computed by SAR sensor model in OSSIM plugins. The output image
+ * is smaller in azimuth direction than the input line, because of
+ * removed lines. Note that the output sensor model is updated
+ * accordingly. This deburst filter is the perfect preprocessing step
+ * to orthorectify S1 IW SLC product with OTB without suffering from
+ * artifacts caused by bursts separation.
+ * 
+ * Note that currently only Sentinel1 IW SLC products are supported.
  */
 
 template <class TImage> class ITK_EXPORT SarDeburstImageFilter :

@@ -44,14 +44,14 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("SARDeburst");
-    SetDescription("TODO \n");
+    SetDescription("This application performs a deburst operation by removing redundant lines. \n");
 
     // Documentation
     SetDocName("SAR Deburst");
-    SetDocLongDescription("TODO \n");
-    SetDocLimitations("None");
+    SetDocLongDescription("This application performs a deburst operation by removing redundant lines between burst. This operation is useful when dealing with Sentinel1 IW SLC products, where each subswath is composed of several overlapping burst separated by black lines. Lines to remove are computed by SAR sensor model in OSSIM plugins. The output image is smaller in azimuth direction than the input line, because of removed lines. Note that the output sensor model is updated accordingly. This deburst filter is the perfect preprocessing step to orthorectify S1 IW SLC product with OTB without suffering from artifacts caused by bursts separation.\n");
+    SetDocLimitations("Only Sentinel1 IW SLC products are supported for now.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("OrthoRectification");
 
     AddDocTag(Tags::Calibration);
     AddDocTag(Tags::SAR);
@@ -66,9 +66,7 @@ private:
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
-  {
-
-  }
+  {}
 
   void DoExecute() ITK_OVERRIDE
   {
