@@ -1247,15 +1247,19 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
       {
       GCPRecordType currentGCP = *gcpIt;
       unsigned long newLine=0;
+
+      unsigned long gcpLine = std::floor(currentGCP.imPt.y+0.5);
+
+      // Be careful about fractional part of GCPs
+      double fractional = currentGCP.imPt.y - gcpLine;
       
-      bool deburstOk = imageLineToDeburstLine(lines,currentGCP.imPt.y,newLine);
+      bool deburstOk = imageLineToDeburstLine(lines,gcpLine,newLine);
 
       if(deburstOk)
         {
-        currentGCP.imPt.y = newLine;
+        currentGCP.imPt.y = newLine+fractional;
         deburstGCPs.push_back(currentGCP);
-        }
-        
+        }        
       }
 
   theGCPRecords.swap(deburstGCPs);
@@ -1269,12 +1273,6 @@ bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<uns
   std::vector<std::pair<unsigned long,unsigned long>>::const_iterator nit = vit+1;
   
   unsigned long lineOffset = vit->first;
-
-  // if(imageLine < lineOffset)
-  //   {
-  //   deburstLine = lineOffset;
-  //   return true;
-  //   }
   
   bool burstFound = false;
 
@@ -1282,7 +1280,7 @@ bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<uns
   
   while(!burstFound && nit != lines.end())
     {
-    if(deburstLine>=vit->first && deburstLine<=vit->second)
+    if(imageLine>=vit->first && imageLine<=vit->second)
       {
       burstFound = true;
       deburstLine-=lineOffset;
