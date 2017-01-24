@@ -234,14 +234,18 @@ ImportImagesDialog
 
 	if( builder->GetOverviewsCount()>0 )
 	  builder->SetBypassEnabled( true );
-	else
+	else if (count>1)
 	  {
 	  flags |= Qt::ItemIsEnabled;
 
-	  builder->SetBypassEnabled( count<=1 );
+	  builder->SetBypassEnabled( false );
 
 	  ++ m_EffectiveCount;
 	  }
+  else
+    {
+    builder->SetBypassEnabled(true);
+    }
 
 	builder->SetResolutionFactor( 2 );
 	builder->SetNbResolutions( count );
