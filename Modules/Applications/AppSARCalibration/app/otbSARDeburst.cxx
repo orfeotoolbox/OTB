@@ -63,6 +63,11 @@ private:
     SetParameterDescription("out", "Output deburst image");
 
     AddRAMParameter();
+
+    SetDocExampleParameterValue("in","s1_iw_slc.tif");
+    SetDocExampleParameterValue("out","s1_iw_slc_deburst.tif");
+    
+    
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
