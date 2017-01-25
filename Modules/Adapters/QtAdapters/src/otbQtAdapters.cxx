@@ -66,13 +66,18 @@ GetExistingDirectory( QWidget * p,
 		      const QString& dir,
 		      QFileDialog::Options options )
 {
+  QString dialogCaption(caption.isEmpty()
+    ? QObject::tr( "Select directory..." )
+    : caption);
+  QString dialogDir(dir.isEmpty()
+    ? RecentDirectory
+    : dir);
+
   QString path(
     QFileDialog::getExistingDirectory(
       p,
-      caption.isEmpty()
-      ? QObject::tr( "Select directory..." )
-      : caption,
-      dir.isEmpty() ? RecentDirectory : dir,
+      dialogCaption,
+      dialogDir,
       options
     )
   );
@@ -95,13 +100,18 @@ GetOpenFileName( QWidget * p,
 		 QString* selectedFilter,
 		 QFileDialog::Options options )
 {
+  QString dialogCaption(caption.isEmpty()
+    ? QObject::tr( "Open file..." )
+    : caption);
+  QString dialogDir(dir.isEmpty()
+    ? RecentDirectory
+    : dir);
+
   QString filename(
     QFileDialog::getOpenFileName(
       p,
-      caption.isEmpty()
-      ? QObject::tr( "Open file..." )
-      : caption,
-      dir.isEmpty() ? RecentDirectory : dir,
+      dialogCaption,
+      dialogDir,
       filter,
       selectedFilter,
       options
@@ -124,13 +134,18 @@ GetOpenFileNames( QWidget * p,
 		  QString * selectedFilter,
 		  QFileDialog::Options options )
 {
+  QString dialogCaption(caption.isEmpty()
+    ? QObject::tr( "Open file..." )
+    : caption);
+  QString dialogDir(dir.isEmpty()
+    ? RecentDirectory
+    : dir);
+
   QStringList filenames(
     QFileDialog::getOpenFileNames(
       p,
-      caption.isEmpty()
-      ? QObject::tr( "Open file..." )
-      : caption,
-      dir.isEmpty() ? RecentDirectory : dir,
+      dialogCaption,
+      dialogDir,
       filter,
       selectedFilter,
       options
@@ -153,13 +168,18 @@ GetSaveFileName( QWidget * p,
 		 QString * selectedFilter,
 		 QFileDialog::Options options )
 {
+  QString dialogCaption(caption.isEmpty()
+    ? QObject::tr( "Save file..." )
+    : caption);
+  QString dialogDir(dir.isEmpty()
+    ? RecentDirectory
+    : dir);
+
   QString filename(
     QFileDialog::getSaveFileName(
       p,
-      caption.isEmpty()
-      ? QObject::tr( "Save file..." )
-      : caption,
-      dir.isEmpty() ? RecentDirectory : dir,
+      dialogCaption,
+      dialogDir,
       filter,
       selectedFilter,
       options
