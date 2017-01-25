@@ -99,7 +99,7 @@ private:
                     "The :math:`\\stackrel{\\frown}{f}_{n}` and :math:`\\stackrel{\\frown}{f}_{n}` are membership function for the convex\n"
                     "(resp. concave) objects whose size is comprised between :math:`N_{n-1}` and :math:`N_n`\n"
                     "\n"
-                    "Output is a :math:`3 \\times N` multi-band image, ordered as (leveling_iteration_1, convex_iteration_1, concave_iteration_1, leveling_iteration_2, ...)" );
+                    "Output convex, concave and leveling images with N bands, where N is the number of levels." );
 
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
@@ -110,8 +110,12 @@ private:
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image to be classified." );
 
-    AddParameter( ParameterType_OutputImage, "out", "Output Image" );
-    SetParameterDescription( "out", "The output image with N * 3 bands" );
+    AddParameter( ParameterType_OutputImage, "outconvex", "Output Convex Image" );
+    SetParameterDescription( "outconvex", "The output convex image with N bands" );
+    AddParameter( ParameterType_OutputImage, "outconcave", "Output Concave Image" );
+    SetParameterDescription( "outconcave", "The output concave concave with N bands" );
+    AddParameter( ParameterType_OutputImage, "outleveling", "Output Image" );
+    SetParameterDescription( "outleveling", "The output leveling image with N bands" );
 
     AddParameter( ParameterType_Int, "channel", "Selected Channel" );
     SetParameterDescription( "channel", "The selected channel index for input image" );
@@ -147,7 +151,10 @@ private:
     SetDocExampleParameterValue("radius", "2");
     SetDocExampleParameterValue("levels", "2");
     SetDocExampleParameterValue("step", "3");
-    SetDocExampleParameterValue("out", "output.tif");
+    SetDocExampleParameterValue("outconvex", "convex.tif");
+    SetDocExampleParameterValue("outconcave", "concave.tif");
+    SetDocExampleParameterValue("outleveling", "leveling.tif");
+
 
   }
 
@@ -197,7 +204,6 @@ private:
 
     typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType, StructuringElement> TDecompositionImageFilter;
     typedef typename TDecompositionImageFilter::OutputImageListType TImageList;
-    typedef typename TImageList::Iterator TImageListIterator;
     typedef otb::ImageListToVectorImageFilter<TImageList, TOutputVectorImage> TListToVectorImageFilter;
 
     typename TDecompositionImageFilter::Pointer decompositionImageFilter;
@@ -208,31 +214,21 @@ private:
     decompositionImageFilter->SetStep( step );
     decompositionImageFilter->Update();
 
-    // Retrieving iterators on the results images
-    TImageListIterator itAnalyse = decompositionImageFilter->GetOutput()->Begin();
-    TImageListIterator itConvexMap = decompositionImageFilter->GetConvexOutput()->Begin();
-    TImageListIterator itConcaveMap = decompositionImageFilter->GetConcaveOutput()->Begin();
-    typename TImageList::Pointer imageList = TImageList::New();
+    typename TListToVectorImageFilter::Pointer levelingListToVectorImageFilter = TListToVectorImageFilter::New();
+    typename TListToVectorImageFilter::Pointer concaveListToVectorImageFilter = TListToVectorImageFilter::New();
+    typename TListToVectorImageFilter::Pointer convexListToVectorImageFilter = TListToVectorImageFilter::New();
 
-    // Compose the results images
-    while ( (itAnalyse != decompositionImageFilter->GetOutput()->End())
-            && (itConvexMap != decompositionImageFilter->GetConvexOutput()->End())
-            && (itConcaveMap != decompositionImageFilter->GetConcaveOutput()->End())
-            )
-      {
-      imageList->PushBack( itAnalyse.Get() );
-      imageList->PushBack( itConvexMap.Get() );
-      imageList->PushBack( itConcaveMap.Get() );
+    levelingListToVectorImageFilter->SetInput( decompositionImageFilter->GetOutput() );
+    levelingListToVectorImageFilter->Update();
+    SetParameterOutputImage( "outleveling", levelingListToVectorImageFilter->GetOutput() );
 
-      ++itAnalyse;
-      ++itConvexMap;
-      ++itConcaveMap;
-      }
+    concaveListToVectorImageFilter->SetInput( decompositionImageFilter->GetConcaveOutput() );
+    concaveListToVectorImageFilter->Update();
+    SetParameterOutputImage( "outconcave", concaveListToVectorImageFilter->GetOutput() );
 
-    typename TListToVectorImageFilter::Pointer listToVectorImageFilter = TListToVectorImageFilter::New();
-    listToVectorImageFilter->SetInput( imageList );
-    listToVectorImageFilter->Update();
-    SetParameterOutputImage( "out", listToVectorImageFilter->GetOutput() );
+    convexListToVectorImageFilter->SetInput( decompositionImageFilter->GetConvexOutput() );
+    convexListToVectorImageFilter->Update();
+    SetParameterOutputImage( "outconvex", convexListToVectorImageFilter->GetOutput() );
   }
 
   ExtractorFilterType::Pointer m_ExtractorFilter;

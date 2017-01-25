@@ -17,8 +17,8 @@ otb_create_application(
 
 
 otb_create_application(
-  NAME           MorphologicalProfilesClassification
-  SOURCES        otbMorphologicalProfilesClassification.cxx
+  NAME           MorphologicalClassification
+  SOURCES otbMorphologicalClassification.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(

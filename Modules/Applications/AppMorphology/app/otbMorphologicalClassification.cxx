@@ -41,10 +41,10 @@
 namespace otb {
 namespace Wrapper {
 
-class MorphologicalProfilesClassification : public Application {
+class MorphologicalClassification : public Application {
 public:
 /** Standard class typedefs. */
-  typedef MorphologicalProfilesClassification Self;
+  typedef MorphologicalClassification Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -66,17 +66,17 @@ public:
 /** Standard macro */
   itkNewMacro( Self );
 
-  itkTypeMacro( MorphologicalProfilesClassification, otb::Application );
+  itkTypeMacro( MorphologicalClassification, otb::Application );
 
 private:
 
   void DoInit() ITK_OVERRIDE
   {
-    SetName( "MorphologicalProfilesClassification" );
+    SetName( "MorphologicalClassification" );
     SetDescription( "Performs morphological convex, concave and flat classification on an input image channel" );
 
     // Documentation
-    SetDocName( "Morphological Profiles Classification" );
+    SetDocName( "Morphological Classification" );
     SetDocLongDescription( "This algorithm is based on the following publication:\n"
                                    "\n"
                                    "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach\n"
@@ -94,12 +94,12 @@ private:
                                    "\n"
                                    ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} &:& f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} &:& \\psi_{N}(f)-f>\\sigma\\\\ \\bar{k}&:&\\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
                                    "\n\n"
-                                   "This output is a 3 band image." );
+                                   "This output is a labeled image (0 : Flat, 1 : Convex, 2 : Concave)" );
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbConvexOrConcaveClassificationFilter class" );
 
-    AddDocTag( "MorphologicalProfilesClassification" );
+    AddDocTag( "MorphologicalClassification" );
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image to be classified." );
@@ -215,5 +215,5 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT( otb::Wrapper::MorphologicalProfilesClassification )
+OTB_APPLICATION_EXPORT( otb::Wrapper::MorphologicalClassification )
 

@@ -149,8 +149,8 @@ private:
     SetParameterDescription( "profile", "" );
     AddChoice( "profile.opening", "opening" );
     AddChoice( "profile.closing", "closing" );
-    AddChoice( "profile.derivatedopening", "derivatedopening" );
-    AddChoice( "profile.derivatedclosing", "derivatedclosing" );
+    AddChoice( "profile.derivativeopening", "derivativeopening" );
+    AddChoice( "profile.derivativeclosing", "derivativeclosing" );
     AddChoice( "profile.openingcharacteristics", "openingcharacteristics" );
     AddChoice( "profile.closingcharacteristics", "closingcharacteristics" );
     AddChoice( "profile.classification", "classification" );
@@ -246,17 +246,17 @@ private:
     bool closing = profile == "closing";
     bool characOpening = profile == "openingcharacteristics";
     bool characClosing = profile == "closingcharacteristics";
-    bool derivatedOpening = profile == "derivatedopening";
-    bool derivatedClosing = profile == "derivatedclosing";
+    bool derivativeOpening = profile == "derivativeopening";
+    bool derivativeClosing = profile == "derivativeclosing";
 
-    bool doOpening = classify || opening || derivatedOpening || characOpening;
-    bool doClosing = classify || closing || derivatedClosing || characClosing;
+    bool doOpening = classify || opening || derivativeOpening || characOpening;
+    bool doClosing = classify || closing || derivativeClosing || characClosing;
 
     if ( doOpening )
       {
       performOperations<OpeningProfileFilterType, DerivativeFilterType, MultiScaleCharacteristicsFilterType>(
               oprofileFilter, oderivativeFilter, omsCharFilter,
-              opening, derivatedOpening, characOpening,
+              opening, derivativeOpening, characOpening,
               profileSize, step, initValue );
       if ( !classify )
         return;
@@ -266,7 +266,7 @@ private:
       {
       performOperations<ClosingProfileFilterType, DerivativeFilterType, MultiScaleCharacteristicsFilterType>(
               cprofileFilter, cderivativeFilter, cmsCharFilter,
-              closing, derivatedClosing, characClosing,
+              closing, derivativeClosing, characClosing,
               profileSize, step, initValue );
       if ( !classify )
         return;
@@ -289,7 +289,7 @@ private:
   performOperations(typename TProfileFilter::Pointer &profileFilter,
                     typename TDerivativeFilter::Pointer &derivativeFilter,
                     typename TCharacteristicsFilter::Pointer &msCharFilter,
-                    bool profile, bool derivated, bool characteristics,
+                    bool profile, bool derivative, bool characteristics,
                     unsigned int profileSize, unsigned short initValue, unsigned short step) {
 
     typedef ImageList<InputImageType> TImageList;
@@ -313,7 +313,7 @@ private:
     derivativeFilter = TDerivativeFilter::New();
     derivativeFilter->SetInput( profileFilter->GetOutput() );
 
-    if ( derivated )
+    if ( derivative )
       {
       TListToVectorImageFilter::Pointer listToVectorImageFilter = TListToVectorImageFilter::New();
       listToVectorImageFilter->SetInput( derivativeFilter->GetOutput() );
