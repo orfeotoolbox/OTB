@@ -36,10 +36,16 @@ otb_test_application(NAME  apTvFEMorphologicalMultiScaleDecomposition
 							 -channel 1
 							 -radius 4
 		 					 -structype ball
-							 -out ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_1.tif
-					 VALID   --compare-image ${NOTOL}
-							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_1.tif
-							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_1.tif)
+							 -outleveling ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_levelingIteration_1.tif
+							 -outconcave ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_concaveIteration_1.tif
+							 -outconvex ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_convexIteration_1.tif
+					 VALID   --compare-n-images ${NOTOL} 3
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_levelingIteration_1.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_levelingIteration_1.tif
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_concaveIteration_1.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_concaveIteration_1.tif
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_convexIteration_1.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_convexIteration_1.tif)
 
 
 #----------- Iterative MorphologicalMultiScaleDecomposition TESTS ----------------
@@ -51,15 +57,21 @@ otb_test_application(NAME  apTvFEMorphologicalMultiScaleDecompositionIteratif
 		                     -structype ball
 							 -step 3
 							 -radius 2
-							 -out ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif
-					 VALID   --compare-image ${NOTOL}
-							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif
-							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_Iteration_2.tif)
+							 -outleveling ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_levelingIteration_2.tif
+							 -outconcave ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_concaveIteration_2.tif
+							 -outconvex ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_convexIteration_2.tif
+					 VALID   --compare-n-images ${NOTOL} 3
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_levelingIteration_2.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_levelingIteration_2.tif
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_concaveIteration_2.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_concaveIteration_2.tif
+							 ${BASELINE}/apTvFEMorphologicalMultiScaleDecomposition_convexIteration_2.tif
+							 ${TEMP}/apTvFEMorphologicalMultiScaleDecomposition_convexIteration_2.tif)
 
 
-#----------- MorphologicalProfilesClassification TESTS ----------------
-otb_test_application(NAME  apTvFEMorphologicalProfilesClassification
-		             APP  MorphologicalProfilesClassification
+#----------- MorphologicalClassification TESTS ----------------
+otb_test_application(NAME  apTvFEMorphologicalClassification
+		             APP  MorphologicalClassification
 		             OPTIONS -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 			                 -channel 1
 		                     -structype ball
