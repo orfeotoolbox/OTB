@@ -38,6 +38,8 @@ namespace otb
  * artifacts caused by bursts separation.
  * 
  * Note that currently only Sentinel1 IW SLC products are supported.
+ * 
+ * \ingroup OTBSAR
  */
 
 template <class TImage> class ITK_EXPORT SarDeburstImageFilter :
