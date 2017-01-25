@@ -183,10 +183,10 @@ bool CropRegionOfInterest()
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
           {
-            SetParameterInt("rsx",region.GetSize(0), false);
-            SetParameterInt("rsy",region.GetSize(1), false);
-            SetParameterInt("rox",region.GetIndex(0), false);
-            SetParameterInt("roy",region.GetIndex(1), false);
+            SetParameterInt( "rsx", region.GetSize(0), HasUserValue("rsx") );
+            SetParameterInt( "rsy", region.GetSize(1), HasUserValue("rsy") );
+            SetParameterInt( "rox", region.GetIndex(0), HasUserValue("rox") );
+            SetParameterInt( "roy", region.GetIndex(1), HasUserValue("roy") );
             return true;
           }
       }
