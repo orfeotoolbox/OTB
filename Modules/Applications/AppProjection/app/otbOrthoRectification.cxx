@@ -692,11 +692,16 @@ private:
 
       otbAppLogINFO("Using a deformation grid with a physical spacing of " << GetParameterFloat("opt.gridspacing"));
 
+      if ( GetParameterFloat( "opt.gridspacing" ) == 0 )
+        {
+        otbAppLogFATAL( "opt.gridspacing must be different from 0 " );
+        }
+
       // Predict size of deformation grid
-      ResampleFilterType::SizeType deformationGridSize;
-      deformationGridSize[0] = static_cast<ResampleFilterType::SizeType::SizeValueType>(vcl_abs(
+      ResampleFilterType::SpacingType deformationGridSize;
+      deformationGridSize[0] = static_cast<ResampleFilterType::SpacingType::ValueType >(vcl_abs(
           GetParameterInt("outputs.sizex") * GetParameterFloat("outputs.spacingx") / GetParameterFloat("opt.gridspacing") ));
-      deformationGridSize[1] = static_cast<ResampleFilterType::SizeType::SizeValueType>(vcl_abs(
+      deformationGridSize[1] = static_cast<ResampleFilterType::SpacingType::ValueType>(vcl_abs(
           GetParameterInt("outputs.sizey") * GetParameterFloat("outputs.spacingy") / GetParameterFloat("opt.gridspacing") ));
       otbAppLogINFO("Using a deformation grid of size " << deformationGridSize);
 
