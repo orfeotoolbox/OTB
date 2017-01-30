@@ -69,7 +69,7 @@ endif()
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
 option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
-
+ 
 #get version of OTB from source_dir/CMakeLists.txt
 get_version(
   INPUT_FILE   "${CMAKE_SOURCE_DIR}/../CMakeLists.txt"
@@ -173,6 +173,12 @@ if(BUILD_SHARED_LIBS)
 else()
   list(APPEND SB_CONFIGURE_ARGS "--enable-static=yes")
   list(APPEND SB_CONFIGURE_ARGS "--enable-shared=no")
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+  list(APPEND SB_CONFIGURE_ARGS "--enable-debug=yes")
+else()
+  list(APPEND SB_CONFIGURE_ARGS "--enable-debug=no")
 endif()
 
 if(UNIX)
