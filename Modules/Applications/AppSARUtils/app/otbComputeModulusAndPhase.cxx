@@ -44,18 +44,18 @@ public:
 
   //typedefs for the application
   typedef otb::BandMathImageFilter<FloatImageType>       BandMathType;
-  typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType; 
-  typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;    
-            
+  typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
+  typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
+
 
 private:
   void DoInit()
   {
     SetName("ComputeModulusAndPhase");
-    SetDescription("This application computes the modulus and the phase of a complex SAR data.");
+    SetDescription("This application computes the modulus and the phase of a complex SAR image.");
 
     SetDocName("Compute Modulus And Phase");
-    SetDocLongDescription("This application computes the modulus and the phase of a complex SAR data. This complex SAR data could be provided as a monoband complex pixel type image or a 2 bands real pixel type image or two monobands (first one real part and second one imaginary part) real pixel type images.");
+    SetDocLongDescription("This application computes the modulus and the phase of a complex SAR image. This complex SAR image can be provided as either: a monoband image with complex pixels, a 2 bands image with real and imaginary channels, or 2 monoband images (first one real part and second one imaginary part)");
     SetDocLimitations("None");
     SetDocAuthors("Alexia Mondot (alexia.mondot@c-s.fr) and Mickael Savinaud (mickael.savinaud@c-s.fr)");
     SetDocSeeAlso(" ");
@@ -88,7 +88,7 @@ private:
     // Outputs
     AddParameter(ParameterType_OutputImage, "mod", "Modulus");
     SetParameterDescription("mod", "Modulus of the input: sqrt(real*real + imag*imag).");
-    
+
     AddParameter(ParameterType_OutputImage, "pha", "Phase");
     SetParameterDescription("pha", "Phase of the input: atan2(imag, real).");
 
@@ -113,17 +113,17 @@ private:
 
       MandatoryOff("nbinput.two.re");
       DisableParameter("nbinput.two.re");
-      
+
       MandatoryOff("nbinput.two.im");
       DisableParameter("nbinput.two.im");
-      
+
       EnableParameter("nbinput.one.in");
       }
     else
       {
       MandatoryOff("nbinput.one.in");
       DisableParameter("nbinput.one.in");
-      
+
       MandatoryOn("nbinput.two.re");
       MandatoryOn("nbinput.two.im");
 
@@ -135,12 +135,12 @@ private:
   // DoExecute() contains the application core.
   void DoExecute()
   {
- 
+
     m_modulus2 = BandMathType::New();
     m_phase2 = BandMathType::New();
 
     m_modulus1 = ModulusFilterType::New();
-    m_phase1 = PhaseFilterType::New(); 
+    m_phase1 = PhaseFilterType::New();
 
     const std::string numberOfInputs = GetParameterString("nbinput");
 
@@ -150,18 +150,18 @@ private:
       ComplexFloatImageType::Pointer inImage = this->GetParameterComplexFloatImage("nbinput.one.in");
 
       m_modulus1->SetInput(inImage);
-      m_phase1->SetInput(inImage); 
-      
+      m_phase1->SetInput(inImage);
+
       SetParameterOutputImage("mod", m_modulus1->GetOutput() );
       SetParameterOutputImage("pha", m_phase1->GetOutput());
-     
+
       }
     else if (numberOfInputs == "two")
       {
 
       // Get the input image re
       FloatImageType::Pointer inImageRe = this->GetParameterFloatImage("nbinput.two.re");
-   
+
       // Get the input image im
       FloatImageType::Pointer inImageIm = this->GetParameterFloatImage("nbinput.two.im");
 
@@ -177,7 +177,7 @@ private:
       SetParameterOutputImage("pha", m_phase2->GetOutput());
       }
   }
-  
+
 BandMathType::Pointer m_modulus2;
 BandMathType::Pointer m_phase2;
 ModulusFilterType::Pointer m_modulus1;
