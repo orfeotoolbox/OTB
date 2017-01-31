@@ -194,23 +194,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="deleteAllButton">
-       <property name="toolTip">
-        <string>Delete all layers</string>
-       </property>
-       <property name="locale">
-        <locale language="C" country="AnyCountry"/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/icons/action_LayerDeleteAll_Icon</normaloff>:/icons/action_LayerDeleteAll_Icon</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QToolButton" name="deleteButton">
        <property name="toolTip">
         <string>Delete selected layer</string>
@@ -224,6 +207,23 @@
        <property name="icon">
         <iconset>
          <normaloff>:/icons/action_LayerDelete_Icon</normaloff>:/icons/action_LayerDelete_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="deleteAllButton">
+       <property name="toolTip">
+        <string>Delete all layers</string>
+       </property>
+       <property name="locale">
+        <locale language="C" country="AnyCountry"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/icons/action_LayerDeleteAll_Icon</normaloff>:/icons/action_LayerDeleteAll_Icon</iconset>
        </property>
       </widget>
      </item>
