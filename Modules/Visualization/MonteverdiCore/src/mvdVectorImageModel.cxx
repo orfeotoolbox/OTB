@@ -212,7 +212,7 @@ VectorImageModel
   // TODO: this choice should be done by the user during the import of the file
   bool forceToCacheOvw = true;
 
-  qWarning() << tr( "The ImageIO used to read this file supports overviews." );
+  qDebug() << tr( "The ImageIO used to read this file supports overviews." );
 
   if( nbOfAvailableOvw>0 )
     {
@@ -223,7 +223,7 @@ VectorImageModel
   // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
 
   // The current file don't have overviews available
-  qWarning() << tr( "The file doesn't have overviews." );
+  qDebug() << tr( "The file doesn't have overviews." );
 
   if( !forceToCacheOvw )
     {
