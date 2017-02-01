@@ -47,7 +47,6 @@ endif()
 set(LINUX_SYSTEM_DLLS
   libm.so
   libc.so
-  libstdc*
   libgcc_s.so
   librt.so
   libdl.so
@@ -134,6 +133,8 @@ set(GTK_LIB_LIST_2
   libpng12.so.0
   libexpat.so.1
   libfontconfig.so.1
+  libstdc\\+\\+.so.6
   )
+# libstdc++ is not actually part of GTK but we want to include it anyway in linux package
 
 set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})
