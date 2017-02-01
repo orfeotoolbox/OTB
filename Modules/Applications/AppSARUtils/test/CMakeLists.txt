@@ -2,9 +2,7 @@ otb_module_test()
 #----------- ComputeModulusAndPhase TESTS ----------------
 otb_test_application(NAME apTvUtComputeModulusAndPhase_2inputs
                      APP  ComputeModulusAndPhase
-                     OPTIONS -nbinput two
-                             -nbinput.two.re ${INPUTDATA}/monobandFloat.tif
-                             -nbinput.two.im ${INPUTDATA}/monobandFloat2.tif
+                     OPTIONS -il ${INPUTDATA}/monobandFloat.tif ${INPUTDATA}/monobandFloat2.tif
                              -mod ${TEMP}/apTvUtMod2inputs.tif
                              -pha ${TEMP}/apTvUtPha2inputs.tif
                      VALID   --compare-n-images ${NOTOL} 2
@@ -16,8 +14,7 @@ otb_test_application(NAME apTvUtComputeModulusAndPhase_2inputs
 
 otb_test_application(NAME apTvUtComputeModulusAndPhase_1inputComplex
                      APP  ComputeModulusAndPhase
-                     OPTIONS -nbinput one
-                             -nbinput.one.in ${INPUTDATA}/monobandComplexFloat.tif
+                     OPTIONS -il ${INPUTDATA}/monobandComplexFloat.tif
                              -mod ${TEMP}/apTvUtMod1inputComplex.tif
                              -pha ${TEMP}/apTvUtPha1inputComplex.tif
                      VALID   --compare-n-images ${NOTOL} 2
@@ -29,8 +26,7 @@ otb_test_application(NAME apTvUtComputeModulusAndPhase_1inputComplex
 
 otb_test_application(NAME apTvUtComputeModulusAndPhase_1input2bands
                      APP  ComputeModulusAndPhase
-                     OPTIONS -nbinput one
-                             -nbinput.one.in ${INPUTDATA}/multibandFloat_2bands.tif
+                     OPTIONS -il ${INPUTDATA}/multibandFloat_2bands.tif
                              -mod ${TEMP}/apTvUtMod1input2bands.tif
                              -pha ${TEMP}/apTvUtPha1input2bands.tif
                      VALID   --compare-n-images ${NOTOL} 2

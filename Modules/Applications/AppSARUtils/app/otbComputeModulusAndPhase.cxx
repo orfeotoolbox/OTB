@@ -46,6 +46,8 @@ public:
   typedef otb::BandMathImageFilter<FloatImageType>       BandMathType;
   typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
+  typedef otb::ImageFileReader<ComplexFloatImageType> ComplexReaderType;
+  typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
 
 
 private:
@@ -61,29 +63,12 @@ private:
     SetDocSeeAlso(" ");
     AddDocTag(Tags::SAR);
 
-
-    // Choice of number of entries
-    AddParameter(ParameterType_Choice, "nbinput", "Number Of inputs");
-    SetParameterDescription(
-        "nbinput",
-        "Choice about the number of input files used to store the real and imaginary part of the SAR image");
-
-    AddChoice("nbinput.one", "One input");
-    SetParameterDescription("nbinput.one", "One input: one band (complex pixel type) SAR image or two bands (real complex type) SAR image.");
-
-    AddChoice("nbinput.two", "Two inputs");
-    SetParameterDescription("nbinput.two", "Two inputs: the first one is considered as real part and the second one as the imaginary part of the SAR image.");
-
-    // Inputs
-    // Real part of a complex image
-    AddParameter(ParameterType_InputImage, "nbinput.two.re", "Real part input");
-    SetParameterDescription("nbinput.two.re", "Image file with real part of the SAR data.");
-    // Imaginary part of a complex image
-    AddParameter(ParameterType_InputImage, "nbinput.two.im", "Imaginary part input");
-    SetParameterDescription("nbinput.two.im", "Image file with imaginary part of the SAR data.");
-    // Complex image
-    AddParameter(ParameterType_ComplexInputImage, "nbinput.one.in", "Input image");
-    SetParameterDescription("nbinput.one.in", "Image file with SAR data.");
+    // Input images
+    // We will need to manually create our otb::ImageFileReader here because its
+    // argument type depends on the number of inputs, so the "il" parameter is a
+    // StringList, not a ImageList
+    AddParameter(ParameterType_InputFilenameList, "il", "Input image list");
+    SetParameterDescription("il", "Input image list (one complex monoband, one real dualband or two monoband images)");
 
     // Outputs
     AddParameter(ParameterType_OutputImage, "mod", "Modulus");
@@ -95,7 +80,7 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("nbinput.one.in", "monobandComplexFloat.tif");
+    SetDocExampleParameterValue("il", "monobandComplexFloat.tif");
     SetDocExampleParameterValue("mod", "modulus.tif");
     SetDocExampleParameterValue("pha", "phase.tif");
   }
@@ -103,67 +88,47 @@ private:
   // DoUpdateParameters() is called as soon as a parameter value change.
   void DoUpdateParameters()
   {
-    // If one entry is choosen, disabled the re and im part
-    // else disable complex
-    const std::string numberOfInputs = GetParameterString("nbinput");
-
-    if (numberOfInputs == "one")
-      {
-      MandatoryOn("nbinput.one.in");
-
-      MandatoryOff("nbinput.two.re");
-      DisableParameter("nbinput.two.re");
-
-      MandatoryOff("nbinput.two.im");
-      DisableParameter("nbinput.two.im");
-
-      EnableParameter("nbinput.one.in");
-      }
-    else
-      {
-      MandatoryOff("nbinput.one.in");
-      DisableParameter("nbinput.one.in");
-
-      MandatoryOn("nbinput.two.re");
-      MandatoryOn("nbinput.two.im");
-
-      EnableParameter("nbinput.two.re");
-      EnableParameter("nbinput.two.im");
-      }
   }
 
   // DoExecute() contains the application core.
   void DoExecute()
   {
+    m_modulus1 = ModulusFilterType::New();
+    m_phase1 = PhaseFilterType::New();
 
     m_modulus2 = BandMathType::New();
     m_phase2 = BandMathType::New();
 
-    m_modulus1 = ModulusFilterType::New();
-    m_phase1 = PhaseFilterType::New();
+    std::vector<std::string> inList = GetParameterStringList("il");
+    const size_t numberOfInputs = inList.size();
 
-    const std::string numberOfInputs = GetParameterString("nbinput");
-
-    if (numberOfInputs == "one")
-      {
+    if (numberOfInputs == 1)
+    {
       // Get the input image
-      ComplexFloatImageType::Pointer inImage = this->GetParameterComplexFloatImage("nbinput.one.in");
+      m_complex_reader = ComplexReaderType::New();
+      m_complex_reader->SetFileName(inList[0]);
 
-      m_modulus1->SetInput(inImage);
-      m_phase1->SetInput(inImage);
+      m_modulus1->SetInput(m_complex_reader->GetOutput());
+      m_phase1->SetInput(m_complex_reader->GetOutput());
 
       SetParameterOutputImage("mod", m_modulus1->GetOutput() );
       SetParameterOutputImage("pha", m_phase1->GetOutput());
+    }
+    else if (numberOfInputs == 2)
+    {
+      // Get the input image
+      m_float_reader0 = FloatReaderType::New();
+      m_float_reader1 = FloatReaderType::New();
 
-      }
-    else if (numberOfInputs == "two")
-      {
+      m_float_reader0->SetFileName(inList[0]);
+      m_float_reader1->SetFileName(inList[1]);
 
-      // Get the input image re
-      FloatImageType::Pointer inImageRe = this->GetParameterFloatImage("nbinput.two.re");
+      m_float_reader0->GenerateOutputInformation();
+      m_float_reader1->GenerateOutputInformation();
 
-      // Get the input image im
-      FloatImageType::Pointer inImageIm = this->GetParameterFloatImage("nbinput.two.im");
+      // Get the input images real and imag
+      FloatImageType::Pointer inImageRe = m_float_reader0->GetOutput();
+      FloatImageType::Pointer inImageIm = m_float_reader1->GetOutput();
 
       m_modulus2->SetNthInput(0, inImageRe,"real");
       m_modulus2->SetNthInput(1, inImageIm,"imag");
@@ -175,8 +140,16 @@ private:
 
       SetParameterOutputImage("mod", m_modulus2->GetOutput() );
       SetParameterOutputImage("pha", m_phase2->GetOutput());
-      }
+    }
+    else
+    {
+        // TODO throw error
+    }
   }
+
+ComplexReaderType::Pointer m_complex_reader;
+FloatReaderType::Pointer m_float_reader0;
+FloatReaderType::Pointer m_float_reader1;
 
 BandMathType::Pointer m_modulus2;
 BandMathType::Pointer m_phase2;
