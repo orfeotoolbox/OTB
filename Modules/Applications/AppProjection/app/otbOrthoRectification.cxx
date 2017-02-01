@@ -235,6 +235,11 @@ private:
   {
     if (HasValue("io.in"))
       {
+
+      // Clear and reset the DEM Handler
+      otb::DEMHandler::Instance()->ClearDEMs();
+      otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+
       // input image
       FloatVectorImageType::Pointer inImage = GetParameterImage("io.in");
 
@@ -644,9 +649,6 @@ private:
       }
       break;
       }
-
-    // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // If activated, generate RPC model
     if(IsParameterEnabled("opt.rpc"))
