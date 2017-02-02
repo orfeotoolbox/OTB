@@ -55,6 +55,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
   for (unsigned int i = 0; i < nbParams; ++i)
     {
     Parameter* param = m_ParamList->GetParameterByIndex(i);
+    Parameter* rawParam = m_ParamList->GetParameterByIndex(i,false);
 
     if (param != ITK_NULLPTR)
       {
@@ -70,7 +71,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
       if (paramAsGroup == ITK_NULLPTR && paramAsChoice == ITK_NULLPTR && !paramIsXML)
         {
         // Label (col 1)
-        QWidget* label = new QtWidgetParameterLabel( param );
+        QWidget* label = new QtWidgetParameterLabel( rawParam );
         gridLayout->addWidget(label, i, 1);
 
         // Parameter Widget (col 2)
@@ -149,7 +150,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
           }
         connect(group, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
 
-        group->setTitle(param->GetName());
+        group->setTitle(rawParam->GetName());
         gridLayout->addWidget(group, i, 0, 1, -1);
 
         m_WidgetList.push_back(specificWidget);
