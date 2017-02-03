@@ -92,7 +92,7 @@ private:
     }
 
   void DoInit() ITK_OVERRIDE
-    {
+  {
     SetName("DomainTransform");
     SetDescription("Domain Transform application for wavelet and fourier");
 
@@ -104,25 +104,35 @@ private:
     SetDocSeeAlso("otbWaveletImageFilter, otbWaveletInverseImageFilter, otbWaveletTransform");
     AddDocTag(Tags::Filter);
 
+    // Parameters
     AddParameter(ParameterType_InputImage, "in",  "Input Image");
     SetParameterDescription("in", "This will take an input image to be transformed"
       " image. For FFT inverse transform, it expects a complex image as two-band"
       " image in which first band represent real part and second band represent"
       " imaginary part.");
 
-    AddRAMParameter();
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out", "This parameter holds the output file name to"
+      " which transformed image will be written. This has a slightly different"
+      " behaviour depending on transform type. \n For Wavelet, output is a"
+      " single band image for both forward and inverse transform. \n For FFT"
+      " forward transform, output is two band image where first band represents"
+      " real part and second band represents imaginary part of a complex image.");
 
-    AddParameter(ParameterType_Choice, "mode", "mode");
+    AddParameter(ParameterType_Choice, "mode", "Mode");
     SetParameterDescription("mode", "This parameter allows one to select between"
       " fft(fourier) and wavelet");
+
     AddChoice("mode.fft", "FFT transform");
     SetParameterDescription("mode.fft", "FFT transform");
-    AddParameter(ParameterType_Empty, "mode.fft.shift", "false");
-    SetParameterDescription("mode.fft.shift", "Shift transform of fft filter");
-    AddChoice("mode.wavelet", "wavelet");
-    SetParameterDescription("mode.wavelet", "Wavelet transform");
-    AddParameter(ParameterType_Choice, "mode.wavelet.form", "Select wavelet form");
 
+    AddParameter(ParameterType_Empty, "mode.fft.shift", "Shift fft transform");
+    SetParameterDescription("mode.fft.shift", "Shift transform of fft filter");
+
+    AddChoice("mode.wavelet", "Wavelet");
+    SetParameterDescription("mode.wavelet", "Wavelet transform");
+
+    AddParameter(ParameterType_Choice, "mode.wavelet.form", "Select wavelet form");
     AddChoice("mode.wavelet.form.haar", "HAAR");
     AddChoice("mode.wavelet.form.db4", "DAUBECHIES4");
     AddChoice("mode.wavelet.form.db6", "DAUBECHIES6");
@@ -133,32 +143,25 @@ private:
     AddChoice("mode.wavelet.form.sb44", "SPLINE_BIORTHOGONAL_4_4");
     AddChoice("mode.wavelet.form.sym8", "SYMLET8");
 
-    //Default value
+    // Default values for mode
     SetParameterString("mode", "wavelet", false);
     SetParameterString("mode.wavelet.form", "haar", false);
+
+    AddParameter(ParameterType_Choice,"direction", "Direction");
+    AddChoice("direction.forward", "Forward");
+    AddChoice("direction.inverse", "Inverse");
 
     AddParameter(ParameterType_Int,"mode.wavelet.nlevels","Number of decomposition levels");
     SetParameterDescription("mode.wavelet.nlevels","Number of decomposition levels");
     SetDefaultParameterInt("mode.wavelet.nlevels",2);
     SetMinimumParameterIntValue("mode.wavelet.nlevels",2);
 
-    AddParameter(ParameterType_Choice,"dir", "Direction");
-
-    AddChoice("dir.fwd", "Forward");
-    AddChoice("dir.inv", "Inverse");
-
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out", "This parameter holds the output file name to"
-      " which transformed image will be written. This has a slightly different"
-      " behaviour depending on transform type. \n For Wavelet, output is a"
-      " single band image for both forward and inverse transform. \n For FFT"
-      " forward transform, output is two band image where first band represents"
-      " real part and second band represents imaginary part of a complex image.");
+    AddRAMParameter();
 
     SetDocExampleParameterValue("in", "input.tif");
     SetDocExampleParameterValue("mode.wavelet.form", "haar");
     SetDocExampleParameterValue("out", "output_wavelet_haar.tif");
-    }
+  }
 
   void DoUpdateParameters() ITK_OVERRIDE
     {
@@ -167,14 +170,14 @@ private:
 
   void DoExecute() ITK_OVERRIDE
     {
-    int dir = GetParameterInt("dir");
+    int dir = GetParameterInt("direction");
     int mode = GetParameterInt("mode");
 
     if( dir != 0 && dir != 1)
       {
       itkExceptionMacro(<< "-dir is '"
          << dir << "'."
-         << "It must be either 'fwd' or 'inv'");
+         << "It must be either 'forward' or 'inverse'");
       }
 
     if( mode != 0 && mode != 1)
@@ -252,7 +255,7 @@ private:
       // fft ttransform
       bool shift = IsParameterEnabled( "mode.fft.shift");
       typedef otb::Image< std::complex<OutputPixelType> >          ComplexOutputImageType;
-      
+
       if (dir == 0 )
         {
         //forward fft
@@ -268,7 +271,7 @@ private:
         FFTFilter::Pointer fwdFilter = FFTFilter::New();
         fwdFilter->SetInput( inImage );
 
-	
+
         //typedef VectorImage for output of UnaryFunctorImageFilter
         typedef otb::VectorImage<OutputPixelType>          TOutputImage;
 
@@ -276,7 +279,7 @@ private:
 	  ComplexOutputImageType,
 	  TOutputImage > ComplexToVectorImageCastFilter;
 	ComplexToVectorImageCastFilter::Pointer unaryFunctorImageFilter = ComplexToVectorImageCastFilter::New();
-	
+
         if( shift)
           {
           otbAppLogINFO( << "Applying Shift image filter" );
@@ -316,7 +319,7 @@ private:
           std::complex<InputPixelType>, 2 > TComplexImage;
         //typedef TOutputImage for InverseFFTImageFilter output
         typedef otb::Image< OutputPixelType >  TOutputImage;
-	
+
         // a unary functor to convert vectorimage to complex image
         typedef itk::UnaryFunctorImageFilter
           <TInputImage,
