@@ -53,10 +53,6 @@ GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
 GDALDatasetWrapper::Pointer
 GDALDriverManagerWrapper::Open( std::string filename ) const
 {
-  // This GDAL config option is there to handle UTF-8 filenames on Windows
-  // It fixes mantis bug 1318 where images with filenames like 你好.tif could not be read on Windows
-  CPLSetConfigOption("GDAL_FILENAME_IS_UTF8","NO");
-
   GDALDatasetWrapper::Pointer datasetWrapper;
 
   if (boost::algorithm::starts_with(filename, "http://")
