@@ -79,17 +79,27 @@ private:
 
   ~DomainTransform() ITK_OVERRIDE
     {
+      // Clean up all threads allocated threads.
+      CleanupFFTThreads();
+    }
+
+  void CleanupFFTThreads()
+  {
+    std::cout << "Start cleanup threads" << std::endl;
     // This is a trick to make sure fftw will cleanup its threads when application
     // shared lib is released.
     #if defined(ITK_USE_FFTWF)
+      std::cout << "ITK_USE_FFTWF" << std::endl;
       fftwf_cleanup_threads();
       fftwf_cleanup();
     #endif
     #if defined(ITK_USE_FFTWD)
+      std::cout << "ITK_USE_FFTWD" << std::endl;
       fftw_cleanup_threads();
       fftw_cleanup();
     #endif
-    }
+    std::cout << "End cleanup threads" << std::endl;
+  }
 
   void DoInit() ITK_OVERRIDE
     {
@@ -252,9 +262,10 @@ private:
       // fft ttransform
       bool shift = IsParameterEnabled( "mode.fft.shift");
       typedef otb::Image< std::complex<OutputPixelType> >          ComplexOutputImageType;
-      
+
       if (dir == 0 )
         {
+        otbAppLogINFO( << "Forward FFT" );
         //forward fft
         typedef otb::Image<InputPixelType>          TInputImage;
         typedef TInputImage::Pointer TInputImagePointer;
@@ -268,7 +279,7 @@ private:
         FFTFilter::Pointer fwdFilter = FFTFilter::New();
         fwdFilter->SetInput( inImage );
 
-	
+
         //typedef VectorImage for output of UnaryFunctorImageFilter
         typedef otb::VectorImage<OutputPixelType>          TOutputImage;
 
@@ -276,7 +287,7 @@ private:
 	  ComplexOutputImageType,
 	  TOutputImage > ComplexToVectorImageCastFilter;
 	ComplexToVectorImageCastFilter::Pointer unaryFunctorImageFilter = ComplexToVectorImageCastFilter::New();
-	
+
         if( shift)
           {
           otbAppLogINFO( << "Applying Shift image filter" );
@@ -304,6 +315,7 @@ private:
         }
       else
         {
+        otbAppLogINFO( << "Inverse FFT" );
         //inverse fft
         typedef otb::VectorImage<InputPixelType>          TInputImage;
         typedef TInputImage::Pointer TInputImagePointer;
@@ -316,7 +328,7 @@ private:
           std::complex<InputPixelType>, 2 > TComplexImage;
         //typedef TOutputImage for InverseFFTImageFilter output
         typedef otb::Image< OutputPixelType >  TOutputImage;
-	
+
         // a unary functor to convert vectorimage to complex image
         typedef itk::UnaryFunctorImageFilter
           <TInputImage,
@@ -330,6 +342,7 @@ private:
 
         if( shift)
           {
+          otbAppLogINFO( << "Applying Shift image filter" );
           typedef itk::FFTShiftImageFilter<
             TInputImage,
             TInputImage > FFTShiftFilterType;

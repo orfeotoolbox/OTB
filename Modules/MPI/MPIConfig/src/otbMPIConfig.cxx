@@ -77,7 +77,7 @@ MPIConfig::Pointer MPIConfig::Instance()
 
 /** CreateInitialize MPI environment */
 MPIConfig::MPIConfig()
-  :  m_MyRank(-1),
+  :  m_MyRank(0),
      m_NbProcs(0),
      m_abortOnException(true),
      m_initialized(false)
@@ -95,12 +95,18 @@ MPIConfig::~MPIConfig()
      }
      else
      {
+       std::cout << "Start Finalize MPI" << std::endl;
+       std::flush(std::cout);
        int finalized;
        OTB_MPI_CHECK_RESULT(MPI_Finalized,(&finalized));
        if (!finalized)
        {
+         std::cout << "Start 2nd End Finalize MPI" << std::endl;
          OTB_MPI_CHECK_RESULT(MPI_Finalize,());
+         std::cout << "End 2nd  Finalize MPI" << std::endl;
        }
+       std::cout << "End Finalize MPI" << std::endl;
+       std::flush(std::cout);
      }
    }
 }
