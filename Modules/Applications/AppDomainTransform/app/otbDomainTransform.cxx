@@ -27,6 +27,7 @@
 #include <itkInverseFFTImageFilter.h>
 #include <itkUnaryFunctorImageFilter.h>
 #include <itkFFTShiftImageFilter.h>
+#include <itkFFTWGlobalConfiguration.h>
 
 #include "otbComplexToVectorImageCastFilter.h"
 
@@ -79,11 +80,9 @@ private:
 
   ~DomainTransform() ITK_OVERRIDE
     {
-      // Clean up all threads allocated threads.
-      CleanupFFTThreads();
     }
 
-  void CleanupFFTThreads()
+  void CleanupFFTWThreads()
   {
     std::cout << "Start cleanup threads" << std::endl;
     // This is a trick to make sure fftw will cleanup its threads when application
@@ -374,6 +373,9 @@ private:
         SetParameterOutputImage<TOutputImage>("out", invFilter->GetOutput());
         }
       }
+
+      // at the end, cleanup FFTW Threads
+      CleanupFFTWThreads();
     }
 
   template<otb::Wavelet::Wavelet TWaveletOperator>

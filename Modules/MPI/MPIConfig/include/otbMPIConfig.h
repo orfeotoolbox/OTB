@@ -53,6 +53,9 @@ public:
   /** Initialize MPI Processus */
   void Init(int& argc, char** &argv, bool abortOnException = true);
 
+  /** Shuts down the MPI environment. */
+  void terminate();
+
   /** Abort all MPI processus. */
   void abort(int errCode);
 
@@ -85,6 +88,8 @@ private:
   bool m_abortOnException;
   // Boolean to test if the MPI environment is initialized
   bool m_initialized;
+  // Boolean to test if the MPI environment is terminated
+  bool m_terminated;
 
   static Pointer m_Singleton;
 };
