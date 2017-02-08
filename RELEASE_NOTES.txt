@@ -18,6 +18,7 @@ OTB-v.5.10.0 - Changes since version 5.8.0 (February 8th, 2017)
 * Bugfixes :
 
   * Monteverdi
+    * 0001351: Broken 5.10 standalone package on Linux (missing libstdc++)
     * 0001334: On Windows standalone package, selection and drag&drop is broken on Monteverdi layer stack
     * 0001338: Monteverdi does not correctly free memory
     * 0001345: Wrong behavior of minimum image size for overviews in preference dialog
