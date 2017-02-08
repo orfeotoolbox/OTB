@@ -102,7 +102,7 @@ MPIConfig::~MPIConfig()
        if (!finalized)
        {
          std::cout << "Start 2nd End Finalize MPI" << std::endl;
-         OTB_MPI_CHECK_RESULT(MPI_Finalize,());
+         //OTB_MPI_CHECK_RESULT(MPI_Finalize,());
          std::cout << "End 2nd  Finalize MPI" << std::endl;
        }
        std::cout << "End Finalize MPI" << std::endl;
