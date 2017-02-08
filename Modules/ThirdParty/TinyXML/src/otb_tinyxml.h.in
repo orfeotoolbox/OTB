@@ -23,9 +23,6 @@
 #endif
 
 #include "tinyxml.h"
-#ifdef DEBUG
-#undef DEBUG
-#endif
 
 #endif
 
