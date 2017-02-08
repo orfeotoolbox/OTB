@@ -73,12 +73,12 @@ cat > "$OUT_DIR/otbenv.profile" << EOF
 # unset any existing LD_LIBRARY_PATH
 unset LD_LIBRARY_PATH
 
-# if OTB_USE_SYSTEM_GTK is not set or is set to zero,
+# if OTB_USE_LOCAL_GTK is not set or is set to one,
 # we must include <OUT_DIR>/lib/gtk because glib files are
 # installed there. 
 
-# OTB_USE_SYSTEM_GTK is not set by default
-if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" = "0" ]; then
+# OTB_USE_LOCAL_GTK is not set by default
+if [ -z "\$OTB_USE_LOCAL_GTK" ] || [ "\$OTB_USE_LOCAL_GTK" = "1" ]; then
   LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
   export LD_LIBRARY_PATH
 fi
