@@ -1102,8 +1102,8 @@ MainWindow
   quicklookView->SetPickingEnabled( false );
   quicklookView->SetPickingDefaultStatus( false );
 
-  quicklookView->setMinimumSize(  64,  64 );
-  quicklookView->setMaximumSize( 512, 512 );
+  quicklookView->setMinimumSize(  32,  32 );
+  quicklookView->setMaximumSize( 1024, 1024 );
   quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
 
   return quicklookView;
