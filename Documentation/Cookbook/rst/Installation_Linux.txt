@@ -94,9 +94,9 @@ Q: Monteverdi and Mapla applications look different from my other applications.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a the
-system gtk theme. If you can't install GTK on your system you can use
+system gtk theme. If you can't install GTK on your system you can use the
 distributed with the OTB package. Note that using system GTK is the preferred
-way with the OTB standalone package. Using the distributed version of GTK do not
+way with the OTB standalone package as the distributed version of GTK do not
 work on recent Linux distributions. 
 
 To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
