@@ -42,8 +42,7 @@ if (UNIX AND NOT APPLE)
   # -------------------------
   # Install freedesktop entry
 
-  configure_file(${OTBMonteverdiGUI_DATA_DIR}/monteverdi.desktop.in ${CMAKE_BINARY_DIR}/monteverdi.desktop)
-  install(FILES ${CMAKE_BINARY_DIR}/monteverdi.desktop
+  install(FILES ${OTBMonteverdiGUI_DATA_DIR}/monteverdi.desktop
     DESTINATION share/applications)
 
 endif()

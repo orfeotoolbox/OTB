@@ -4,8 +4,8 @@ Name=Monteverdi
 Name[fr_FR]=Monteverdi
 GenericName=Image processing
 Comment=Remote sensing image processing application based on OrfeoToolbox
-TryExec=@CMAKE_INSTALL_PREFIX@/bin/monteverdi
-Exec=env OTB_APPLICATION_PATH=@CMAKE_INSTALL_PREFIX@/@OTB_INSTALL_APP_DIR@ @CMAKE_INSTALL_PREFIX@/bin/monteverdi %F
+TryExec=/usr/bin/monteverdi
+Exec=/usr/bin/monteverdi %F
 Terminal=false
 StartupNotify=false
 Icon=monteverdi
