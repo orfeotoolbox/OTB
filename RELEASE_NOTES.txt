@@ -1,4 +1,4 @@
-OTB-v.5.10.0 - Changes since version 5.8.0 (February 8th, 2017)
+OTB-v.5.10.0 - Changes since version 5.8.0 (February 13th, 2017)
 ---------------------------------------------------------------
 
 * Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
@@ -23,8 +23,13 @@ OTB-v.5.10.0 - Changes since version 5.8.0 (February 8th, 2017)
     * 0001338: Monteverdi does not correctly free memory
     * 0001345: Wrong behavior of minimum image size for overviews in preference dialog
     * 0001320: Pixel picking in Monteverdi is half-pixel shifted
+    * 0001309: Monteverdi 5.8: cannot drag and drop filename to OTB app
 
   * OTB-Packaging
+    * 0001361: _dl_close error message in Linux standalone package when closing the application
+    * 0001357: segfault when loading OTB applications in linux standalone package
+    * 0001356: Linux package requires OTB_USE_SYSTEM_GTK=1 on CentOS 7
+    * 0001355: Patch to set OTB_APPLICATION_PATH environment variable in monteverdi desktop file
     * 0001335: On Windows standalone package, TOC calibration crashes monteverdi
     * 0001326: OTB python bindings does not work
     * 0001336: setup.sh is missing in Windows standalone packages
