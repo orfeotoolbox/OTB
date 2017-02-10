@@ -80,74 +80,91 @@ MPIConfig::MPIConfig()
   :  m_MyRank(0),
      m_NbProcs(0),
      m_abortOnException(true),
-     m_initialized(false)
+     m_initialized(false),
+     m_terminated(false)
 {
 }
 
 /** Shuts down the MPI environment. */
 MPIConfig::~MPIConfig()
 {
-   if (m_initialized)
-   {
-     if (std::uncaught_exception() && m_abortOnException)
-     {
-       abort(EXIT_FAILURE);
-     }
-     else
-     {
-       std::cout << "Start Finalize MPI" << std::endl;
-       std::flush(std::cout);
-       int finalized;
-       OTB_MPI_CHECK_RESULT(MPI_Finalized,(&finalized));
-       if (!finalized)
-       {
-         std::cout << "Start 2nd End Finalize MPI" << std::endl;
-         //OTB_MPI_CHECK_RESULT(MPI_Finalize,());
-         std::cout << "End 2nd  Finalize MPI" << std::endl;
-       }
-       std::cout << "End Finalize MPI" << std::endl;
-       std::flush(std::cout);
-     }
-   }
+  terminate();
 }
 
 /** Initialize MPI environment */
-void MPIConfig::Init(int& argc, char** &argv, bool abortOnException) {
-   // Abort on exception
-   m_abortOnException = abortOnException;
-   // Initialize
-   int initialized;
-   OTB_MPI_CHECK_RESULT(MPI_Initialized,(&initialized));
-   m_initialized = (initialized == 1);
-   if (!m_initialized) {
-     OTB_MPI_CHECK_RESULT(MPI_Init, (&argc, &argv));
-     m_initialized = true;
-   }
-   // Get MPI rank
-   int irank = 0;
-   OTB_MPI_CHECK_RESULT(MPI_Comm_rank, (MPI_COMM_WORLD , &irank));
+void MPIConfig::Init(int &argc, char **&argv, bool abortOnException) {
+  if( !m_terminated )
+    {
+    std::cout << "MPI Initialization : " << this << std::endl;
+    std::flush(std::cout);
+    // Abort on exception
+    m_abortOnException = abortOnException;
+    // Initialize
+    int initialized;
+    OTB_MPI_CHECK_RESULT( MPI_Initialized, ( &initialized ));
+    m_initialized = ( initialized == 1 );
+    if( !m_initialized )
+      {
+      OTB_MPI_CHECK_RESULT( MPI_Init, ( &argc, &argv ));
+      m_initialized = true;
+      }
+    // Get MPI rank
+    int irank = 0;
+    OTB_MPI_CHECK_RESULT( MPI_Comm_rank, ( MPI_COMM_WORLD, &irank ));
 
-   if(irank<0)
-     {
-     logError("Negative MPI rank");
-     abort(EXIT_FAILURE);
-     }
+    if( irank < 0 )
+      {
+      logError( "Negative MPI rank" );
+      abort( EXIT_FAILURE );
+      }
 
-   m_MyRank = static_cast<unsigned int>(irank);
+    m_MyRank = static_cast<unsigned int>(irank);
 
-   // Get MPI NbProocs
+    // Get MPI NbProocs
 
-   int inbprocs=0;
+    int inbprocs = 0;
 
-   OTB_MPI_CHECK_RESULT(MPI_Comm_size, (MPI_COMM_WORLD , &inbprocs));
+    OTB_MPI_CHECK_RESULT( MPI_Comm_size, ( MPI_COMM_WORLD, &inbprocs ));
 
-   if(inbprocs<1)
-     {
-     logError("Negative or null number of processes");
-     abort(EXIT_FAILURE);
-     }
+    if( inbprocs < 1 )
+      {
+      logError( "Negative or null number of processes" );
+      abort( EXIT_FAILURE );
+      }
 
-   m_NbProcs = static_cast<unsigned int>(inbprocs);
+    m_NbProcs = static_cast<unsigned int>(inbprocs);
+    }
+}
+
+/** Shuts down the MPI environment. */
+void MPIConfig::terminate()
+{
+  if( m_initialized && !m_terminated )
+    {
+    std::cout << "Terminate : " << this << std::endl;
+    std::flush(std::cout);
+    if( std::uncaught_exception() && m_abortOnException )
+      {
+      std::cout << "Abord" << std::endl;
+      abort( EXIT_FAILURE );
+      }
+    else
+      {
+      std::cout << "Start Finalize MPI" << std::endl;
+      std::flush( std::cout );
+      int finalized;
+      OTB_MPI_CHECK_RESULT( MPI_Finalized, ( &finalized ));
+      if( !finalized )
+        {
+        std::cout << "Start 2nd End Finalize MPI" << std::endl;
+        OTB_MPI_CHECK_RESULT( MPI_Finalize, ( ));
+        std::cout << "End 2nd  Finalize MPI" << std::endl;
+        }
+      std::cout << "End Finalize MPI" << std::endl;
+      std::flush( std::cout );
+      }
+      m_terminated = true;
+    }
 }
 
 void MPIConfig::abort(int errCode)
