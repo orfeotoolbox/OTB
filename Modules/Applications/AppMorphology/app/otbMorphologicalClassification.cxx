@@ -16,8 +16,6 @@
 
 =========================================================================*/
 
-
-#include <geos_c.h>
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
@@ -50,15 +48,15 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef FloatVectorImageType::InternalPixelType InputPixelType;
-  typedef unsigned char OutputPixelType;
+  typedef otb::Image<InputPixelType, 2> FloatImageType;
 
-  typedef otb::Image<InputPixelType, 2> InputImageType;
-  typedef otb::Image<OutputPixelType, 2> OutputImageType;
+  typedef unsigned short LabeledPixelType;
+  typedef otb::Image<LabeledPixelType, 2> LabeledImageType;
 
   typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, InputPixelType>
           ExtractorFilterType;
 
-  typedef otb::ConvexOrConcaveClassificationFilter<InputImageType, OutputImageType> ClassificationFilterType;
+  typedef otb::ConvexOrConcaveClassificationFilter<FloatImageType, LabeledImageType> ClassificationFilterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, 2> BallStructuringElementType;
   typedef itk::BinaryCrossStructuringElement<InputPixelType, 2> CrossStructuringElementType;
@@ -95,7 +93,7 @@ private:
                                    ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} &:& f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} &:& \\psi_{N}(f)-f>\\sigma\\\\ \\bar{k}&:&\\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
                                    "\n\n"
                                    "This output is a labeled image (0 : Flat, 1 : Convex, 2 : Concave)" );
-    SetDocLimitations( "None" );
+    SetDocLimitations( "Generation of the morphological classification is not streamable, pay attention to this fact when setting the radius size of the structuring element." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbConvexOrConcaveClassificationFilter class" );
 
@@ -115,13 +113,11 @@ private:
 
     AddRAMParameter();
 
-    // Strucring Element (Ball | Cross)
+    // Structuring Element (Ball | Cross)
     AddParameter( ParameterType_Choice, "structype", "Structuring Element Type" );
     SetParameterDescription( "structype", "Choice of the structuring element type" );
     AddChoice( "structype.ball", "Ball" );
     AddChoice( "structype.cross", "Cross" );
-
-
 
     AddParameter( ParameterType_Int, "radius", "Radius" );
     SetParameterDescription( "radius", "Radius of the structuring element (in pixels)" );
@@ -150,7 +146,7 @@ private:
   void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage( "in" );
-    inImage->UpdateOutputInformation();
+
     int nBComp = inImage->GetNumberOfComponentsPerPixel();
     int selectedChannel = GetParameterInt( "channel" );
 
@@ -166,7 +162,6 @@ private:
     m_ExtractorFilter->SetSizeX( inImage->GetLargestPossibleRegion().GetSize( 0 ) );
     m_ExtractorFilter->SetSizeY( inImage->GetLargestPossibleRegion().GetSize( 1 ) );
     m_ExtractorFilter->SetChannel( static_cast<unsigned int>(selectedChannel) );
-    m_ExtractorFilter->UpdateOutputInformation();
 
     unsigned int sigma = static_cast<unsigned int>(GetParameterInt( "sigma" ));
     unsigned int radius = static_cast<unsigned int>(GetParameterInt( "radius" ));
@@ -178,7 +173,6 @@ private:
     m_ClassificationFilter->SetConvexLabel( 1 );
     m_ClassificationFilter->SetConcaveLabel( 2 );
 
-
     if ( GetParameterString( "structype" ) == "ball" )
       {
       performClassification<BallStructuringElementType>( radius );
@@ -187,13 +181,14 @@ private:
       performClassification<CrossStructuringElementType>( radius );
       }
 
+    SetParameterOutputImage( "out", m_ClassificationFilter->GetOutput() );
 
   }
 
   template<typename TStructuringElement>
   void performClassification(unsigned int radius_size) {
 
-    typedef otb::GeodesicMorphologyDecompositionImageFilter<InputImageType, InputImageType, TStructuringElement> TDecompositionImageFilter;
+    typedef otb::GeodesicMorphologyDecompositionImageFilter<FloatImageType, FloatImageType, TStructuringElement> TDecompositionImageFilter;
 
     typename TDecompositionImageFilter::Pointer decompositionImageFilter;
     decompositionImageFilter = TDecompositionImageFilter::New();
@@ -202,10 +197,10 @@ private:
     typename TStructuringElement::RadiusType radius;
     radius.Fill( radius_size );
     decompositionImageFilter->SetRadius( radius );
+    AddProcess(decompositionImageFilter, "Image Decomposition");
     decompositionImageFilter->Update();
 
     m_ClassificationFilter->SetInputLeveling( decompositionImageFilter->GetOutput() );
-    SetParameterOutputImage( "out", m_ClassificationFilter->GetOutput() );
   }
 
   ExtractorFilterType::Pointer m_ExtractorFilter;

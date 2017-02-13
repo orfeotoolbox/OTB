@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-#include <geos_c.h>
 #include <itkComposeImageFilter.h>
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
@@ -39,10 +38,13 @@
 #include "otbMorphologicalProfilesSegmentationFilter.h"
 #include "otbGeodesicMorphologyIterativeDecompositionImageFilter.h"
 
-namespace otb {
-namespace Wrapper {
+namespace otb
+{
+namespace Wrapper
+{
 
-class MorphologicalProfilesAnalysis : public Application {
+class MorphologicalProfilesAnalysis : public Application
+{
 public:
 /** Standard class typedefs. */
   typedef MorphologicalProfilesAnalysis Self;
@@ -51,16 +53,11 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef FloatVectorImageType::InternalPixelType InputPixelType;
-  typedef float OutputPixelType;
+
   typedef unsigned short LabeledPixelType;
-
-  typedef otb::Image<InputPixelType, 2> InputImageType;
-  typedef otb::Image<OutputPixelType, 2> OutputImageType;
   typedef otb::Image<LabeledPixelType, 2> LabeledImageType;
-  typedef otb::VectorImage<OutputPixelType, 2> TOutputVectorImage;
 
-  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, InputPixelType>
-          ExtractorFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<InputPixelType, InputPixelType> ExtractorFilterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, 2> BallStructuringElementType;
   typedef itk::BinaryCrossStructuringElement<InputPixelType, 2> CrossStructuringElementType;
@@ -104,7 +101,7 @@ private:
                                    "- A :math:`N` multi band image for the opening/closing normal or derivative profiles.\n"
                                    "- A mono band image for the opening/closing characteristics.\n"
                                    "- A labeled image for the classification\n" );
-    SetDocLimitations( "None" );
+    SetDocLimitations( "Generation of the morphological profile is not streamable, pay attention to this fact when setting the radius initial size and step of the structuring element." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbMorphologicalOpeningProfileFilter, otbMorphologicalClosingProfileFilter, otbProfileToProfileDerivativeFilter, otbProfileDerivativeToMultiScaleCharacteristicsFilter, otbMultiScaleConvexOrConcaveClassificationFilter, classes" );
 
@@ -123,7 +120,7 @@ private:
 
     AddRAMParameter();
 
-    // Strucring Element (Ball | Cross)
+    // Structuring Element (Ball | Cross)
     AddParameter( ParameterType_Choice, "structype", "Structuring Element Type" );
     SetParameterDescription( "structype", "Choice of the structuring element type" );
     AddChoice( "structype.ball", "Ball" );
@@ -179,17 +176,15 @@ private:
   void DoExecute() ITK_OVERRIDE
   {
 
-
     FloatVectorImageType::Pointer inImage = GetParameterImage( "in" );
-    inImage->UpdateOutputInformation();
+
     int nBComp = inImage->GetNumberOfComponentsPerPixel();
     int selectedChannel = GetParameterInt( "channel" );
 
-    if ( selectedChannel > nBComp )
+    if( selectedChannel > nBComp )
       {
       itkExceptionMacro( << "The specified channel index for input image is invalid." );
       }
-
 
     m_ExtractorFilter = ExtractorFilterType::New();
     m_ExtractorFilter->SetInput( inImage );
@@ -198,7 +193,6 @@ private:
     m_ExtractorFilter->SetSizeX( inImage->GetLargestPossibleRegion().GetSize( 0 ) );
     m_ExtractorFilter->SetSizeY( inImage->GetLargestPossibleRegion().GetSize( 1 ) );
     m_ExtractorFilter->SetChannel( static_cast<unsigned int>(GetParameterInt( "channel" )) );
-    m_ExtractorFilter->UpdateOutputInformation();
 
     unsigned int profileSize = static_cast<unsigned int>(GetParameterInt( "size" ));
     unsigned short initValue = static_cast<unsigned short>(GetParameterInt( "radius" ));
@@ -210,7 +204,8 @@ private:
     if ( GetParameterString( "structype" ) == "ball" )
       {
       performProfileAnalysis<BallStructuringElementType>( profile, profileSize, initValue, step, sigma );
-      } else // Cross
+      }
+    else // Cross
       {
       performProfileAnalysis<CrossStructuringElementType>( profile, profileSize, initValue, step, sigma );
       }
@@ -221,16 +216,12 @@ private:
   performProfileAnalysis(std::string profile, unsigned int profileSize, unsigned short initValue,
                          unsigned short step, float sigma) {
 
-    typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType>
-            OpeningProfileFilterType;
-    typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType>
-            ClosingProfileFilterType;
-    typedef otb::ProfileToProfileDerivativeFilter<InputImageType, InputImageType> DerivativeFilterType;
+    typedef otb::MorphologicalOpeningProfileFilter<FloatImageType, FloatImageType, StructuringElementType> OpeningProfileFilterType;
+    typedef otb::MorphologicalClosingProfileFilter<FloatImageType, FloatImageType, StructuringElementType> ClosingProfileFilterType;
+    typedef otb::ProfileToProfileDerivativeFilter<FloatImageType, FloatImageType> DerivativeFilterType;
 
-    typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType, LabeledImageType>
-            MultiScaleClassificationFilterType;
-    typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType>
-            MultiScaleCharacteristicsFilterType;
+    typedef otb::MultiScaleConvexOrConcaveClassificationFilter<FloatImageType, LabeledImageType> MultiScaleClassificationFilterType;
+    typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<FloatImageType, FloatImageType, LabeledImageType> MultiScaleCharacteristicsFilterType;
 
     // Instantiation
     typename OpeningProfileFilterType::Pointer oprofileFilter;
@@ -279,6 +270,7 @@ private:
     classificationFilter->SetClosingProfileCharacteristics( cmsCharFilter->GetOutputCharacteristics() );
     classificationFilter->SetSigma( sigma );
     classificationFilter->SetLabelSeparator( static_cast<unsigned short>(initValue + profileSize * step) );
+    AddProcess(classificationFilter, "Classification");
     classificationFilter->Update();
     SetParameterOutputImage( "out", classificationFilter->GetOutput() );
   }
@@ -292,8 +284,8 @@ private:
                     bool profile, bool derivative, bool characteristics,
                     unsigned int profileSize, unsigned short initValue, unsigned short step) {
 
-    typedef ImageList<InputImageType> TImageList;
-    typedef otb::ImageListToVectorImageFilter<TImageList, TOutputVectorImage> TListToVectorImageFilter;
+    typedef ImageList<FloatImageType> TImageList;
+    typedef otb::ImageListToVectorImageFilter<TImageList, FloatVectorImageType> TListToVectorImageFilter;
 
     profileFilter = TProfileFilter::New();
     profileFilter->SetInput( m_ExtractorFilter->GetOutput() );
@@ -305,6 +297,7 @@ private:
       {
       TListToVectorImageFilter::Pointer listToVectorImageFilter = TListToVectorImageFilter::New();
       listToVectorImageFilter->SetInput( profileFilter->GetOutput() );
+      AddProcess(listToVectorImageFilter, "Profile");
       listToVectorImageFilter->Update();
       SetParameterOutputImage( "out", listToVectorImageFilter->GetOutput() );
       return;
@@ -317,6 +310,7 @@ private:
       {
       TListToVectorImageFilter::Pointer listToVectorImageFilter = TListToVectorImageFilter::New();
       listToVectorImageFilter->SetInput( derivativeFilter->GetOutput() );
+      AddProcess(listToVectorImageFilter, "Derivative");
       listToVectorImageFilter->Update();
       SetParameterOutputImage( "out", listToVectorImageFilter->GetOutput() );
       return;
@@ -329,6 +323,7 @@ private:
 
     if ( characteristics )
       {
+      AddProcess(msCharFilter, "Characteristics");
       msCharFilter->Update();
       SetParameterOutputImage( "out", msCharFilter->GetOutputCharacteristics() );
       }

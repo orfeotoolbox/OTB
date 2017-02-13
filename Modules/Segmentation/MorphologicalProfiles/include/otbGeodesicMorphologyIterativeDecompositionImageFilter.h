@@ -146,6 +146,8 @@ private:
   unsigned int m_InitialValue;
   /** The number of iterations */
   unsigned int m_NumberOfIterations;
+  /** Progress accumulator to report internal filter progress */
+  itk::ProgressAccumulator::Pointer m_Progress;
 
 };
 } // End namespace otb

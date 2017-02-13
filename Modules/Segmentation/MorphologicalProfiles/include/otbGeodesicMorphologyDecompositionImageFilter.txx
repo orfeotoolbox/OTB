@@ -36,11 +36,23 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuri
 
   m_Radius.Fill(1);
 
+  // Create a process accumulator for tracking the progress of minipipeline
+  m_Progress = itk::ProgressAccumulator::New();
+  m_Progress->SetMiniPipelineFilter(this);
+
   m_OpeningFilter  = OpeningFilterType::New();
   m_ClosingFilter  = ClosingFilterType::New();
   m_LevelingFilter = LevelingFilterType::New();
   m_ConvexFilter   = ConvexFilterType::New();
   m_ConcaveFilter  = ConcaveFilterType::New();
+
+  // Register Internal Filter for progress
+  m_Progress->RegisterInternalFilter(m_OpeningFilter, 0.2);
+  m_Progress->RegisterInternalFilter(m_ClosingFilter, 0.2);
+  m_Progress->RegisterInternalFilter(m_LevelingFilter, 0.2);
+  m_Progress->RegisterInternalFilter(m_ConvexFilter, 0.2);
+  m_Progress->RegisterInternalFilter(m_ConcaveFilter, 0.2);
+
 
   m_FullyConnected = true;
   m_PreserveIntensities = true;

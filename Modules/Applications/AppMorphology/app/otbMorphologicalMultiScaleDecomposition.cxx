@@ -16,9 +16,7 @@
 
 =========================================================================*/
 
-
-#include <geos_c.h>
-#include <itkComposeImageFilter.h>
+#include "itkComposeImageFilter.h"
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -50,17 +48,13 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef FloatVectorImageType::InternalPixelType InputPixelType;
-  typedef float OutputPixelType;
+  typedef FloatVectorImageType::InternalPixelType InputVectorPixelType;
 
-  typedef otb::Image<InputPixelType, 2> InputImageType;
-  typedef otb::VectorImage<OutputPixelType, 2> TOutputVectorImage;
-
-  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, InputPixelType>
+  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, InputVectorPixelType>
           ExtractorFilterType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType, 2> BallStructuringElementType;
-  typedef itk::BinaryCrossStructuringElement<InputPixelType, 2> CrossStructuringElementType;
+  typedef itk::BinaryBallStructuringElement<InputVectorPixelType, 2> BallStructuringElementType;
+  typedef itk::BinaryCrossStructuringElement<InputVectorPixelType, 2> CrossStructuringElementType;
 
 /** Standard macro */
   itkNewMacro( Self );
@@ -101,7 +95,7 @@ private:
                     "\n"
                     "Output convex, concave and leveling images with N bands, where N is the number of levels." );
 
-    SetDocLimitations( "None" );
+    SetDocLimitations( "Generation of the multi scale decomposition is not streamable, pay attention to this fact when setting the number of iterating levels." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbGeodesicMorphologyDecompositionImageFilter class" );
 
@@ -166,7 +160,6 @@ private:
   void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage( "in" );
-    inImage->UpdateOutputInformation();
     int nBComp = inImage->GetNumberOfComponentsPerPixel();
     int selectedChannel = GetParameterInt( "channel" );
 
@@ -182,8 +175,6 @@ private:
     m_ExtractorFilter->SetSizeX( inImage->GetLargestPossibleRegion().GetSize( 0 ) );
     m_ExtractorFilter->SetSizeY( inImage->GetLargestPossibleRegion().GetSize( 1 ) );
     m_ExtractorFilter->SetChannel( static_cast<unsigned int>(GetParameterInt( "channel" )) );
-    m_ExtractorFilter->UpdateOutputInformation();
-
 
     unsigned int numberOfLevels = static_cast<unsigned int>(GetParameterInt( "levels" ));
     unsigned int initValue = static_cast<unsigned int>(GetParameterInt( "radius" ));
@@ -202,9 +193,9 @@ private:
   template<typename StructuringElement>
   void performDecomposition(unsigned int numberOfLevels, unsigned int step, unsigned int initValue) {
 
-    typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType, StructuringElement> TDecompositionImageFilter;
+    typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<FloatImageType, StructuringElement> TDecompositionImageFilter;
     typedef typename TDecompositionImageFilter::OutputImageListType TImageList;
-    typedef otb::ImageListToVectorImageFilter<TImageList, TOutputVectorImage> TListToVectorImageFilter;
+    typedef otb::ImageListToVectorImageFilter<TImageList, FloatVectorImageType> TListToVectorImageFilter;
 
     typename TDecompositionImageFilter::Pointer decompositionImageFilter;
     decompositionImageFilter = TDecompositionImageFilter::New();
@@ -212,6 +203,7 @@ private:
     decompositionImageFilter->SetNumberOfIterations( numberOfLevels );
     decompositionImageFilter->SetInitialValue( initValue );
     decompositionImageFilter->SetStep( step );
+    AddProcess(decompositionImageFilter, "Image Decomposition");
     decompositionImageFilter->Update();
 
     typename TListToVectorImageFilter::Pointer levelingListToVectorImageFilter = TListToVectorImageFilter::New();

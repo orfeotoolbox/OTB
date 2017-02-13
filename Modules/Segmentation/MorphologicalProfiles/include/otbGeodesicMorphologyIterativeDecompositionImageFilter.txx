@@ -32,6 +32,10 @@ template <class TImage, class TStructuringElement>
 GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
 ::GeodesicMorphologyIterativeDecompositionImageFilter()
 {
+  // Create a process accumulator for tracking the progress of minipipeline
+  m_Progress = itk::ProgressAccumulator::New();
+  m_Progress->SetMiniPipelineFilter(this);
+
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(3);
   m_NumberOfIterations  = 2;
@@ -185,6 +189,10 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
   while (i < m_NumberOfIterations)
     {
     filter = DecompositionFilterType::New();
+
+    // Register Internal Filter for progress
+    m_Progress->RegisterInternalFilter(filter, 1./m_NumberOfIterations);
+
     typename StructuringElementType::RadiusType radius;
     radius.Fill(m_InitialValue + i * m_Step);
     filter->SetRadius(radius);
