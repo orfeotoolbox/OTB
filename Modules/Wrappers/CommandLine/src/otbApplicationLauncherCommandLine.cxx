@@ -303,13 +303,19 @@ int main(int argc, char* argv[])
   LauncherType::Pointer launcher = LauncherType::New();
 
   //if (launcher->Load(exp) == true)
-  bool sucess = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
+    if (launcher->Load(vexp) == true)
+    {
+    if (launcher->ExecuteAndWriteOutput() == false)
+      {
+      return EXIT_FAILURE;
+      }
+    }
+  else
+    {
+    return EXIT_FAILURE;
+    }
 
-  // shutdown MPI after application finished
-  #ifdef OTB_USE_MPI
-  otb::MPIConfig::Instance()->terminate();
-  #endif
-  return sucess ? EXIT_SUCCESS : EXIT_FAILURE;
+  return EXIT_SUCCESS;
 }
 
 const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)

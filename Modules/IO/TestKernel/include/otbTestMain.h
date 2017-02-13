@@ -424,7 +424,6 @@ int main(int ac, char* av[])
     std::cout << "-------------  End control baseline tests    -------------" << std::endl;
 
 #ifdef OTB_USE_MPI
-      otb::MPIConfig::Instance()->terminate();
     }
 #endif
     return result;
