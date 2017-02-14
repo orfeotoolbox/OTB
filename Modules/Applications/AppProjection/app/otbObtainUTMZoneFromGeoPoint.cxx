@@ -61,6 +61,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Coordinates);
 
     AddParameter(ParameterType_Float,  "lat", "Latitude");
@@ -88,7 +89,7 @@ private:
   {
     int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
                                                   GetParameterFloat("lat"));
-    SetParameterInt("utm", utmZone);
+    SetParameterInt("utm",utmZone, false);
   }
 
 };

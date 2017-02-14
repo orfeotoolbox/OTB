@@ -789,6 +789,65 @@ ImageViewRenderer
 		shader->SetVerticalSlider( true );
 		break;
 
+        case EFFECT_LUT_JET:
+          shader->SetShaderType(otb::SHADER_LUT_JET);
+          break;
+          
+        case EFFECT_LUT_LOCAL_JET:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_JET);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          
+          break;
+          
+        case EFFECT_LUT_HOT:
+          shader->SetShaderType(otb::SHADER_LUT_HOT);
+          break;
+          
+        case EFFECT_LUT_LOCAL_HOT:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_HOT);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+
+        case EFFECT_LUT_SUMMER:
+          shader->SetShaderType(otb::SHADER_LUT_SUMMER);
+          break;
+          
+        case EFFECT_LUT_LOCAL_SUMMER:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_SUMMER);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+          
+        case EFFECT_LUT_WINTER:
+          shader->SetShaderType(otb::SHADER_LUT_WINTER);
+          break;
+          
+        case EFFECT_LUT_LOCAL_WINTER:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_WINTER);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+
+                  case EFFECT_LUT_COOL:
+          shader->SetShaderType(otb::SHADER_LUT_COOL);
+          break;
+          
+        case EFFECT_LUT_LOCAL_COOL:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_COOL);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+
+          break;
+
+
+
+
+          
 	      default:
 		assert( false && "Unhandled mvd::Effect value!" );
 		break;
@@ -806,6 +865,34 @@ ImageViewRenderer
     }
 
   m_GlView->SetRenderingOrder( stackedLayerModel->GetKeys(), false );
+}
+
+
+/*******************************************************************************/
+void
+ImageViewRenderer
+::virtual_ClearScene( bool keepViewport )
+{
+  // qDebug() << this << "::virtual_ClearScene()";
+
+  // Remove all actors.
+  m_GlView->ClearActors();
+
+  // Clear reference actor.
+  m_ReferencePair.second = otb::GlActor::Pointer();
+
+  // Nothing more if keep viewport is enabled.
+  if( keepViewport )
+    return;
+
+  // Clear reference layer.
+  m_ReferencePair.first = NULL;
+
+  //
+  // MANTIS-1244: image-view not reset when layer-stack is cleared.
+  // {
+  emit ResetViewport();
+  // }
 }
 
 /*******************************************************************************/
@@ -826,30 +913,23 @@ ImageViewRenderer
 
 
   if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
-    {
-    m_GlView->ClearActors();
+    ClearScene();
 
-    //
-    // MANTIS-1244: image-view not reset when layer-stack is cleared.
-    // {
-    emit ResetViewport();
-    // }
-    }
   else
     {
       {
       otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
       for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
-           it!=keys.end();
-           ++it )
-        if( !stackedLayerModel->Contains( *it ) )
-          {
-          // qDebug()
+	   it!=keys.end();
+	   ++it )
+	if( !stackedLayerModel->Contains( *it ) )
+	  {
+	  // qDebug()
 	  //   << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
 
-          m_GlView->RemoveActor( *it );
-          }
+	  m_GlView->RemoveActor( *it );
+	  }
       }
 
 
@@ -903,8 +983,6 @@ ImageViewRenderer
           );
 
           m_GlView->AddActor( glImageActor, it->first );
-
-          // glImageActor->SetVisible( vectorImageModel->IsVisible() );
 
           // qDebug() <<
 	  //   QString( "Added image-actor '%1' from file '%2'" )

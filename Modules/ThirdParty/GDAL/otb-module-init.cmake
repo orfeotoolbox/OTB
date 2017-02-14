@@ -8,7 +8,7 @@ if(NOT GDAL_FOUND)
 endif()
 
 #Check if GDAL is compatible with OTB using a bunch of cmake try_run and try_compile. (Default value is ON.)
-set(GDAL_CONFIG_CHECKING ON CACHE BOOL "Tests to check gdal config." FORCE)
+set(GDAL_CONFIG_CHECKING ON CACHE BOOL "Tests to check gdal config.")
 mark_as_advanced(GDAL_CONFIG_CHECKING)
 
 if(NOT GDAL_CONFIG_CHECKING)
@@ -23,6 +23,13 @@ if(NOT EXISTS ${TEMP})
   FILE(MAKE_DIRECTORY ${TEMP})
 endif()
 
+set(GDAL_CONFIG_CHECKING OFF CACHE BOOL "Tests to check gdal config." FORCE)
+
+macro(error_message m)
+  message("Setting GDAL_CONFIG_CHECKING to ON. (all GDAL tests will run again)")
+  set(GDAL_CONFIG_CHECKING ON CACHE BOOL "Tests to check gdal config." FORCE)
+  message(FATAL_ERROR "${m}")
+endmacro(error_message)
 
 #------------------- Helper Macro ---------------------
 macro(gdal_try_run msg_type var source_file)
@@ -37,7 +44,7 @@ ARGS ${ARGN}
 )
 
 if(NOT COMPILE_${var})
-  message(FATAL_ERROR "Compiling Test ${var} - Failed \n
+  error_message("Compiling Test ${var} - Failed \n
 COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
 endif()
 if(RUN_${var})
@@ -47,7 +54,7 @@ if(RUN_${var})
   if("${msg_type}" STREQUAL "STATUS")
     message(${msg_type} "Performing Test ${var} - Failed")
   else()
-    message(${msg_type} "Performing Test ${var} - Failed \n
+    error_message("Performing Test ${var} - Failed \n
             Exit status: '${RUN_${var}}' \n
             RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
   endif()
@@ -75,7 +82,7 @@ if(EXISTS "${TEMP}/gdalVersion.txt")
   endif()
   set(GDAL_VERSION_STRING "${_GDAL_VERSION_STRING}" CACHE INTERNAL "" FORCE)
 else()
-  message(FATAL_ERROR "${TEMP}/gdalVersion.txt does not exist. Cannot continue.")
+  error_message( "${TEMP}/gdalVersion.txt does not exist. Cannot continue.")
 endif()
 
 #check OGR
@@ -86,7 +93,7 @@ CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRAR
 OUTPUT_VARIABLE COMPILE_OUTPUT_GDAL_HAS_OGR
 )
 if(NOT COMPILE_GDAL_HAS_OGR)
- message(FATAL_ERROR "Performing Test COMPILE_GDAL_HAS_OGR - Failed\n COMPILE_OUTPUT:${COMPILE_OUTPUT_GDAL_HAS_OGR}\n")
+ error_message("Performing Test COMPILE_GDAL_HAS_OGR - Failed\n COMPILE_OUTPUT:${COMPILE_OUTPUT_GDAL_HAS_OGR}\n")
   else()
  message(STATUS "Performing Test COMPILE_GDAL_HAS_OGR - Success")
 endif()
@@ -143,8 +150,13 @@ gdal_try_run(STATUS GDAL_HAS_HDF4 gdalFormatsTest.c HDF4)
 
 #------------------- TESTS (END)---------------------
 
+set(RUN_GDAL_SYMBOLS_TEST TRUE)
+if("${CMAKE_SYSTEM_NAME}" MATCHES "OpenBSD")
+  set(RUN_GDAL_SYMBOLS_TEST FALSE)
+endif()
+
 #FOR UNIX SYSTEMS ONLY
-if(UNIX)
+if(RUN_GDAL_SYMBOLS_TEST)
   # Prepare bash script
   configure_file(${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalTest.sh.in ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh @ONLY)
   execute_process(COMMAND chmod u+x ${CMAKE_CURRENT_BINARY_DIR}/gdalTest.sh)

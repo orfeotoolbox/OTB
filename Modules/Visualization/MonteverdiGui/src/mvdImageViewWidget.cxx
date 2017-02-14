@@ -335,8 +335,10 @@ ImageViewWidget
 ::Initialize( AbstractImageViewManipulator* manipulator,
 	      AbstractImageViewRenderer* renderer )
 {
+#if OTB_DEBUG
   // Test OpenGL.
   ListGlVersions();
+#endif
 
   // Accept drops
   setAcceptDrops( true );
@@ -1369,6 +1371,28 @@ ImageViewWidget
 
     emit ModelUpdated();
     }
+}
+
+void ImageViewWidget
+::OnResetEffectsRequested()
+{
+    StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
+
+    for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
+         it!=layerStack->End();
+         ++it )
+    {
+        if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
+        {
+            VectorImageModel * imageModel =
+                qobject_cast< VectorImageModel * >( it->second );
+
+            VectorImageSettings & settings = imageModel->GetSettings();
+            settings.SetEffect( EFFECT_NORMAL );
+        }
+    }
+
+  emit ModelUpdated();
 }
 
 /******************************************************************************/

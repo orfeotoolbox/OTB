@@ -1,0 +1,12 @@
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/mkspecs/common/linux.conf qt-everywhere-opensource-src-4.8.7/mkspecs/common/linux.conf
+--- qt-everywhere-opensource-src-4.8.7.orig/mkspecs/common/linux.conf	2016-12-07 11:19:59.964124979 +0100
++++ qt-everywhere-opensource-src-4.8.7/mkspecs/common/linux.conf	2016-12-07 11:22:29.116132748 +0100
+@@ -1,7 +1,7 @@
+ #
+ # qmake configuration for common linux
+ #
+-
++QMAKE_CXXFLAGS += -w -std=c++98
+ QMAKE_CFLAGS_THREAD	+= -D_REENTRANT
+ QMAKE_CXXFLAGS_THREAD	+= $$QMAKE_CFLAGS_THREAD
+ 

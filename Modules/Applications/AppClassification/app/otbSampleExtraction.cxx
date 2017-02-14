@@ -24,6 +24,11 @@ namespace otb
 {
 namespace Wrapper
 {
+/** Utility function to negate std::isalnum */
+bool IsNotAlphaNum(char c)
+  {
+  return !std::isalnum(c);
+  }
 
 class SampleExtraction : public Application
 {
@@ -81,7 +86,7 @@ private:
     AddParameter(ParameterType_String, "outfield.prefix.name", "Output field prefix");
     SetParameterDescription("outfield.prefix.name","Prefix used to form the field names that"
       "will contain the extracted values.");
-    SetParameterString("outfield.prefix.name", "value_");
+    SetParameterString("outfield.prefix.name", "value_", false);
 
     AddChoice("outfield.list","Use the given name list");
     SetParameterDescription("outfield.list","Use the given name list");
@@ -89,12 +94,10 @@ private:
     AddParameter(ParameterType_StringList, "outfield.list.names", "Output field names");
     SetParameterDescription("outfield.list.names","Full list of output field names.");
 
-    AddParameter(ParameterType_String, "field", "Field Name");
-    SetParameterDescription("field","Name of the field carrying the class"
-      "name in the input vectors. This field is copied to output.");
-    MandatoryOff("field");
-    SetParameterString("field", "class");
-
+    AddParameter(ParameterType_ListView, "field", "Field Name");
+    SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
+    SetListViewSingleSelectionMode("field",true);
+    
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
     MandatoryOff("layer");
@@ -113,7 +116,32 @@ private:
 
   void DoUpdateParameters()
   {
-    // Nothing to do
+    if ( HasValue("vec") )
+      {
+      std::string vectorFile = GetParameterString("vec");
+      ogr::DataSource::Pointer ogrDS =
+        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
+      ogr::Feature feature = layer.ogr().GetNextFeature();
+
+      ClearChoices("field");
+      
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::transform(key.begin(), end, key.begin(), tolower);
+        
+        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+          {
+          std::string tmpKey="field."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
+        }
+      }
   }
 
   void DoExecute()
@@ -134,6 +162,17 @@ private:
       output = vectors;
       }
 
+    // Retrieve the field name
+    std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
+
+    if(selectedCFieldIdx.empty())
+      {
+      otbAppLogFATAL(<<"No field has been selected for data labelling!");
+      }
+
+  std::vector<std::string> cFieldNames = GetChoiceNames("field");  
+  std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
+    
     std::vector<std::string> nameList;
     std::string namePrefix("");
     if (this->GetParameterString("outfield").compare("prefix") == 0)
@@ -155,7 +194,7 @@ private:
     filter->SetLayerIndex(this->GetParameterInt("layer"));
     filter->SetSamplePositions(vectors);
     filter->SetOutputSamples(output);
-    filter->SetClassFieldName(this->GetParameterString("field"));
+    filter->SetClassFieldName(fieldName);
     filter->SetOutputFieldPrefix(namePrefix);
     filter->SetOutputFieldNames(nameList);
     filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));

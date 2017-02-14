@@ -41,6 +41,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractLayerModel.h"
 #include "mvdAlgorithm.h"
+#include "mvdVectorImageModel.h"
+#include "mvdCore.h"
 
 namespace mvd
 {
@@ -251,7 +253,7 @@ StackedLayerModel
     ? m_Current
     : ( m_Current>0
         ? m_Current - 1
-        : StackedLayerModel::NIL_INDEX );
+        : GetCount()>1 ? 0 : StackedLayerModel::NIL_INDEX );
 
   //
   // Emit signals.
@@ -285,7 +287,7 @@ StackedLayerModel
       ? m_Reference
       : ( m_Reference > 0
 	  ? m_Reference - 1
-	  : StackedLayerModel::NIL_INDEX ),
+          : GetCount() > 0 ? 0 : StackedLayerModel::NIL_INDEX ),
       true
     );
 

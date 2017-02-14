@@ -97,6 +97,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
@@ -125,7 +126,7 @@ private:
 
     AddChoice("ua.mdmdnmf", "MDMDNMF");
     SetParameterDescription("ua.mdmdnmf", "Minimum Dispersion Constrained Non Negative Matrix Factorization");
-    SetParameterString("ua", "ucls");
+    SetParameterString("ua", "ucls", false);
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("ie", "cupriteEndmembers.tif");

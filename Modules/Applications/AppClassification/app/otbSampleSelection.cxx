@@ -23,11 +23,18 @@
 #include "otbRandomSampler.h"
 #include "otbGeometriesProjectionFilter.h"
 #include "otbGeometriesSet.h"
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
 namespace Wrapper
 {
+
+/** Utility function to negate std::isalnum */
+bool IsNotAlphaNum(char c)
+  {
+  return !std::isalnum(c);
+  }
 
 class SampleSelection : public Application
 {
@@ -66,8 +73,6 @@ public:
 private:
   SampleSelection()
     {
-    m_Periodic = PeriodicSamplerType::New();
-    m_Random = RandomSamplerType::New();
     m_ReaderStat = XMLReaderType::New();
     m_RateCalculator = RateCalculatorType::New();
     }
@@ -192,17 +197,18 @@ private:
     SetParameterDescription("strategy.all","Take all samples");
 
     // Default strategy : smallest
-    SetParameterString("strategy","smallest");
+    SetParameterString("strategy","smallest", false);
 
-    AddParameter(ParameterType_String, "field", "Field Name");
+    AddParameter(ParameterType_ListView, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
-    MandatoryOff("field");
-    SetParameterString("field", "class");
+    SetListViewSingleSelectionMode("field",true);
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
     MandatoryOff("layer");
     SetDefaultParameterInt("layer",0);
+
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddRAMParameter();
 
@@ -218,18 +224,51 @@ private:
 
   void DoUpdateParameters()
   {
+ if ( HasValue("vec") )
+      {
+      std::string vectorFile = GetParameterString("vec");
+      ogr::DataSource::Pointer ogrDS =
+        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
+      ogr::Feature feature = layer.ogr().GetNextFeature();
+
+      ClearChoices("field");
+      
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::transform(key.begin(), end, key.begin(), tolower);
+        
+        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+          {
+          std::string tmpKey="field."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
+        }
+      }
   }
 
   void DoExecute()
     {
     // Clear state
     m_RateCalculator->ClearRates();
-    m_Periodic->GetFilter()->ClearOutputs();
-    m_Random->GetFilter()->ClearOutputs();
 
-    // Setup ram
-    m_Periodic->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
-    m_Random->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+
+    // Get field name
+    std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
+    
+    if(selectedCFieldIdx.empty())
+      {
+      otbAppLogFATAL(<<"No field has been selected for data labelling!");
+      }
+    
+    std::vector<std::string> cFieldNames = GetChoiceNames("field");  
+    std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
     
     m_ReaderStat->SetFileName(this->GetParameterString("instats"));
     ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
@@ -368,37 +407,41 @@ private:
         PeriodicSamplerType::SamplerParameterType param;
         param.Offset = 0;
         param.MaxJitter = this->GetParameterInt("sampler.periodic.jitter");
-
-        m_Periodic->SetInput(this->GetParameterImage("in"));
-        m_Periodic->SetOGRData(reprojVector);
-        m_Periodic->SetOutputPositionContainerAndRates(outputSamples, rates);
-        m_Periodic->SetFieldName(this->GetParameterString("field"));
-        m_Periodic->SetLayerIndex(this->GetParameterInt("layer"));
-        m_Periodic->SetSamplerParameters(param);
+        param.MaxBufferSize = 100000000UL;
+        PeriodicSamplerType::Pointer periodicFilt = PeriodicSamplerType::New();
+        periodicFilt->SetInput(this->GetParameterImage("in"));
+        periodicFilt->SetOGRData(reprojVector);
+        periodicFilt->SetOutputPositionContainerAndRates(outputSamples, rates);
+        periodicFilt->SetFieldName(fieldName);
+        periodicFilt->SetLayerIndex(this->GetParameterInt("layer"));
+        periodicFilt->SetSamplerParameters(param);
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {
-          m_Periodic->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+          periodicFilt->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
-        m_Periodic->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
-        AddProcess(m_Periodic->GetStreamer(),"Selecting positions with periodic sampler...");
-        m_Periodic->Update();
+        periodicFilt->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
+        AddProcess(periodicFilt->GetStreamer(),"Selecting positions with periodic sampler...");
+        periodicFilt->Update();
         }
       break;
       // random
       case 1:
         {
-        m_Random->SetInput(this->GetParameterImage("in"));
-        m_Random->SetOGRData(reprojVector);
-        m_Random->SetOutputPositionContainerAndRates(outputSamples, rates);
-        m_Random->SetFieldName(this->GetParameterString("field"));
-        m_Random->SetLayerIndex(this->GetParameterInt("layer"));
+        RandomSamplerType::Pointer randomFilt = RandomSamplerType::New();
+        randomFilt->SetInput(this->GetParameterImage("in"));
+        randomFilt->SetOGRData(reprojVector);
+        randomFilt->SetOutputPositionContainerAndRates(outputSamples, rates);
+        randomFilt->SetFieldName(fieldName);
+        randomFilt->SetLayerIndex(this->GetParameterInt("layer"));
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {
-          m_Random->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+          randomFilt->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
           }
-        m_Random->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
-        AddProcess(m_Random->GetStreamer(),"Selecting positions with random sampler...");
-        m_Random->Update();
+        randomFilt->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
+        AddProcess(randomFilt->GetStreamer(),"Selecting positions with random sampler...");
+        randomFilt->Update();
+
+        randomFilt = RandomSamplerType::New();
         }
       break;
       default:
@@ -408,10 +451,6 @@ private:
   }
 
   RateCalculatorType::Pointer m_RateCalculator;
-  
-  PeriodicSamplerType::Pointer m_Periodic;
-  RandomSamplerType::Pointer m_Random;
-  
   XMLReaderType::Pointer m_ReaderStat;
 };
 

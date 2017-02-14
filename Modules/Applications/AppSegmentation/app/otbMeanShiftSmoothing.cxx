@@ -101,7 +101,7 @@ private:
 
     AddParameter(ParameterType_Empty, "modesearch", "Mode search.");
     SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number");
-    EnableParameter("modesearch");
+    DisableParameter("modesearch");
 
 
     // Doc example parameter settings

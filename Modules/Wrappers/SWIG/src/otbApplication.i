@@ -181,16 +181,11 @@ public:
 
   bool IsApplicationReady();
 
-  void SetParameterInt(std::string parameter, int value);
-  void SetParameterFloat(std::string parameter, float value);
-  void SetParameterString(std::string parameter, std::string value);
-  void SetParameterStringList(std::string parameter, std::vector<std::string> value);
-
-  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag);
-  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag);
-  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag);
-  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag);
-  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag);
+  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag = true);
+  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
+  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
+  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
+  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
   void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
   void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
@@ -209,7 +204,9 @@ public:
   ComplexInputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
   void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
   void AddImageToParameterInputImageList(std::string parameter,InputImageParameter::ImageBaseType * img);
-   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageParameter::ImageBaseType * img);
+  void AddParameterStringList(std::string parameter,const std::string & str);
+  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageParameter::ImageBaseType * img);
+  void SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string& str);
   void ClearParameterInputImageList(std::string parameter);
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
@@ -413,6 +410,7 @@ private:
   Application(const Application &);
   void operator =(const Application&);
 };
+
 
 DECLARE_REF_COUNT_CLASS( Application )
 

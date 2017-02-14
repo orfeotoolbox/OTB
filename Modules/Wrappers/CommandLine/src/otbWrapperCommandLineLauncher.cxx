@@ -494,7 +494,17 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                   else
                     if (type == ParameterType_ListView)
                       {
-                      dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
+                      
+                      ListViewParameter * tmpLV = dynamic_cast<ListViewParameter *>(param.GetPointer());
+
+                      if(tmpLV->GetSingleSelection() && values.size() > 1)
+                        {
+                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey
+                                  << "\", invalid number of values " << values.size() << std::endl;
+                        return INVALIDNUMBEROFVALUE;
+                        }
+                      
+                      tmpLV->SetSelectedNames(values);
                       }
                     else
                       if(values.size() != 1)
@@ -750,6 +760,14 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     return "";
     }
 
+  bool singleSelectionForListView = false;
+
+  if(type == ParameterType_ListView)
+    {
+    ListViewParameter * tmp = static_cast<ListViewParameter *>(param.GetPointer());
+    singleSelectionForListView = tmp->GetSingleSelection();
+    }
+
   std::ostringstream oss;
 
   // When a parameter is mandatory :
@@ -822,7 +840,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     }
   else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML ||
            type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
-           type == ParameterType_String || type == ParameterType_Choice )
+           type == ParameterType_String || type == ParameterType_Choice || (type == ParameterType_ListView && singleSelectionForListView))
     {
     oss << "<string>        ";
     }
@@ -830,7 +848,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<string> [pixel]";
     }
-  else if (type == ParameterType_Choice || type == ParameterType_ListView || type == ParameterType_InputImageList ||
+  else if (type == ParameterType_Choice || (type == ParameterType_ListView && !singleSelectionForListView) || type == ParameterType_InputImageList ||
            type == ParameterType_InputVectorDataList || type == ParameterType_InputFilenameList ||
            type == ParameterType_StringList )
     {
@@ -840,7 +858,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     itkExceptionMacro("Not handled parameter type.");
 
 
-  oss<< " " << param->GetName() << " ";
+  oss<< " " << m_Application->GetParameterName(paramKey) << " ";
 
   if (type == ParameterType_OutputImage)
     {

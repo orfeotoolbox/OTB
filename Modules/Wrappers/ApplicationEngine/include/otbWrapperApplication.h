@@ -24,6 +24,7 @@
 #include "otbWrapperParameterGroup.h"
 
 #include "itkLogger.h"
+#include "itkTimeProbe.h"
 #include "otbWrapperMacros.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageListParameter.h"
@@ -124,9 +125,9 @@ public:
   ParameterGroup* GetParameterList();
 
   /* Get the internal application parameter specified
-   *
+   * if the follow flag is on, the function returns the target of proxy parameters
    * WARNING: this method may disappear from the API */
-  Parameter* GetParameterByKey(std::string parameter);
+  Parameter* GetParameterByKey(std::string parameter, bool follow=true);
 
   /* Get the internal application parameter specified
    *
@@ -171,10 +172,6 @@ public:
    * or a value set externally by user */
   bool HasValue(std::string paramKey) const;
 
-  /* Activate or deactivate the bool parameter
-   */
-  void SetParameterEmpty(std::string paramKey, bool active);
-
   /* Get active flag of parameter with key paramKey
    */
   bool GetParameterEmpty(std::string paramKey);
@@ -203,13 +200,6 @@ public:
    */
   /* Set the Parameter value and Update the UserFlag. used by xml parameter
    */
-  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag);
-  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag);
-  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag);
-  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag);
-  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag);
-
-  bool IsApplicationReady();
 
   /* Set an integer value
    *
@@ -219,14 +209,48 @@ public:
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
-  void SetParameterInt(std::string parameter, int value);
+  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag = true);
 
   /* Set a floating value
    *
    * Can be called for types :
    * \li ParameterType_Float
    */
-  void SetParameterFloat(std::string parameter, float value);
+  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
+
+  /* Set a string value
+   *
+   * Can be called for types :
+   * \li ParameterType_InputImageListParameter
+   * \li ParameterType_InputVectorDataListParameter
+   * \li ParameterType_InputFilenameListParameter
+   * \li ParameterType_StringList
+   */
+  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
+
+  /* Set a string value
+   *
+   * Can be called for types :
+   * \li ParameterType_String
+   * \li ParameterType_InputFilename
+   * \li ParameterType_OutputFilename
+   * \li ParameterType_Directory
+   * \li ParameterType_Choice
+   * \li ParameterType_Float
+   * \li ParameterType_Int
+   * \li ParameterType_Radius
+   * \li ParameterType_InputImageParameter
+   * \li ParameterType_InputComplexImageParameter
+   * \li ParameterType_InputVectorDataParameter
+   * \li ParameterType_OutputImageParameter
+   * \li ParameterType_OutputVectorDataParameter
+   */
+  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
+
+  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
+
+  bool IsApplicationReady();
+
 
   /* Set an default integer value, must used in the
    * DoInit when setting a value by default
@@ -299,34 +323,15 @@ public:
    */
   void SetMaximumParameterFloatValue(std::string parameter, float value);
 
-  /* Set a string value
-   *
-   * Can be called for types :
-   * \li ParameterType_String
-   * \li ParameterType_InputFilename
-   * \li ParameterType_OutputFilename
-   * \li ParameterType_Directory
-   * \li ParameterType_Choice
-   * \li ParameterType_Float
-   * \li ParameterType_Int
-   * \li ParameterType_Radius
-   * \li ParameterType_InputImageParameter
-   * \li ParameterType_InputComplexImageParameter
-   * \li ParameterType_InputVectorDataParameter
-   * \li ParameterType_OutputImageParameter
-   * \li ParameterType_OutputVectorDataParameter
-   */
-  void SetParameterString(std::string parameter, std::string value);
 
-  /* Set a string value
-   *
-   * Can be called for types :
-   * \li ParameterType_InputImageListParameter
-   * \li ParameterType_InputVectorDataListParameter
-   * \li ParameterType_InputFilenameListParameter
-   * \li ParameterType_StringList
+  /**
+   * Enable single selection mode for list view if status in true
+   * (default is false).
+   * 
+   * Can be called for types:
+   * \li ParameterType_ListView
    */
-  void SetParameterStringList(std::string parameter, std::vector<std::string> value);
+  void SetListViewSingleSelectionMode(std::string parameter, bool status);
 
   /* Set an output image value
    *
@@ -471,6 +476,34 @@ public:
    * InputImageList parameter or if id is out of bounds
    */ 
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
+
+/**
+   * Add a value to a parameter list as a string
+   *
+   * Can be called for parameter types:
+   * \li ParameterType_InputImageList
+   * 
+   * \in parameter The parameter key
+   * \in str The string
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter
+   */ 
+  void AddParameterStringList(std::string parameter, const std::string & str);
+
+  /**
+   * Set the nth value of a parameter list as a string.
+   *
+   * Can be called for parameter types:
+   * \li ParameterType_InputImageList
+   *  
+   * \in parameter The parameter key
+   * \in id Position at which to set the ImageBase pointer
+   * \in str The string
+   * \throw itk::Exception if parameter is not found or not an
+   * InputImageList parameter or if id is out of bounds
+   */ 
+  void SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string& str);
+  
 
   /**
    * Clear all images from an InputImageList parameter.
@@ -737,6 +770,8 @@ public:
      m_IsInXMLParsed = false;
    }
 
+  double GetLastExecutionTiming() const;
+
 protected:
   /** Constructor */
   Application();
@@ -897,6 +932,9 @@ private:
   std::string m_DocSeeAlso;
   /** Tags that define the application (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
+
+  /** Chrono to measure execution time */
+  itk::TimeProbe m_Chrono;
 
   //rashad:: controls adding of -xml parameter. set to true by default
   bool                              m_HaveInXML;

@@ -1,3 +1,61 @@
+OTB-v.5.10.0 - Changes since version 5.8.0 (February 14th, 2017)
+---------------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for Changes-69: Force Monteverdi no-GLSL option (adopted, merged)
+  * Request for Changes-70: Composite application framework (adopted, merged)
+  * Request for Changes-71: Enhance class field selection in training applications (adopted, merged)
+  * Request for Changes-72: Remove JPEG2000ImageIO (adopted, merged)
+  * Request for Changes-73: Compatibility with muparserx 4.0.7 (last stable release) (adopted, merged)
+  * Request for Changes-74: Translate the application GUI to the corresponding command line (adopted, merged)
+  * Request for Changes-75: Monteverdi/App November code sprint (adopted, merged)
+  * Request for Changes-76: Single band color-mapping in Monteverdi (adopted, merged)
+  * Request for Changes-77: New application for wavelet and fft domain transform (adopted, merged)
+  * Request for Changes-78: Refactor TrainImagesClassifier (adopted, merged)
+  * Request for Changes-79: BundleToPerfectSensor implemented as composite application (adopted, merged)
+  * Request for Changes-80: Compute sub-sampled Haralick textures (adopted, merged)
+
+* Bugfixes :
+
+  * Monteverdi
+    * 0001351: Broken 5.10 standalone package on Linux (missing libstdc++)
+    * 0001334: On Windows standalone package, selection and drag&drop is broken on Monteverdi layer stack
+    * 0001338: Monteverdi does not correctly free memory
+    * 0001345: Wrong behavior of minimum image size for overviews in preference dialog
+    * 0001320: Pixel picking in Monteverdi is half-pixel shifted
+    * 0001309: Monteverdi 5.8: cannot drag and drop filename to OTB app
+
+  * OTB-Packaging
+    * 0001361: _dl_close error message in Linux standalone package when closing the application
+    * 0001357: segfault when loading OTB applications in linux standalone package
+    * 0001356: Linux package requires OTB_USE_SYSTEM_GTK=1 on CentOS 7
+    * 0001355: Patch to set OTB_APPLICATION_PATH environment variable in monteverdi desktop file
+    * 0001335: On Windows standalone package, TOC calibration crashes monteverdi
+    * 0001326: OTB python bindings does not work
+    * 0001336: setup.sh is missing in Windows standalone packages
+    * 0001337: On windows standalone package otbcli.bat misses the GDAL_DATA environment variable
+    * 0001325: libsvm URL in superbuild does not exists anymore
+
+  * OTB-applications
+    * 0001341: Rescale application does not exactly rescale image
+    * 0001339: ExtractROI application yields wrong size through python bindings
+    * 0001321: Unable to apply radiometric calibration to  S1A SLC product
+    * 0001316: Application parameter of type ListView are not export in XML
+
+  * Orfeo Toolbox (OTB)
+    * 0001317: cmake c and cxx flags are not written in OTBConfig.cmake or UseOTB.cmake
+    * 0001323: Install monteverdi icons along with the application.
+    * 0001342: Download of libsvm is failing when (super)building
+    * 0001331: TrainVectorClassifier: misleading error message
+    * 0001330: Superbuild crashes with invalid libSVM source link
+    * 0001327: Quicklook application introduces a shift
+    * 0001328: OTB 5.8 : superImpose introduce "NODATA"
+    * 0001319: OTB 5.8 vector Sampler
+    * 0001324: Add Keywords to desktop entry file.
+
+  * Documentation
+    * 0001313: Some latex fragments are not rendered in RST cookbook
+
 OTB-v.5.8.0 - Changes since version 5.6.1 (November 8th, 2016)
 --------------------------------------------------------------
 
@@ -1299,7 +1357,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * 0000555: monteverdi -in does not work with JP2 images
     * 0000560: Monteverdi compilation error
     * 0000527: While saving dataset with rescaling option,
-               the channels n° > 3 are incorrect
+               the channels nb > 3 are incorrect
 
   * OTB-applications
     * 0000518: Missing GDAL dependencies

@@ -213,6 +213,46 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <source>512</source>
         <translation>512</translation>
     </message>
+    <message>
+        <source>Lookup table (jet)</source>
+        <translation>Table de couleur (jet)</translation>
+    </message>
+    <message>
+        <source>Local lookup table (jet)</source>
+        <translation>Table de couleur locale (jet)</translation>
+    </message>
+    <message>
+        <source>Lookup table (hot)</source>
+        <translation>Table de couleur (hot)</translation>
+    </message>
+    <message>
+        <source>Local lookup table (hot)</source>
+        <translation>Table de couleur locale (hot)</translation>
+    </message>
+    <message>
+        <source>Lookup table (winter)</source>
+        <translation>Table de couleur (winter)</translation>
+    </message>
+    <message>
+        <source>Local lookup table (winter)</source>
+        <translation>Table de couleur locale (winter)</translation>
+    </message>
+    <message>
+        <source>Lookup table (summer)</source>
+        <translation>Table de couleur (summer)</translation>
+    </message>
+    <message>
+        <source>Local lookup table (summer)</source>
+        <translation>Table de couleur locale (summer)</translation>
+    </message>
+    <message>
+        <source>Lookup table (cool)</source>
+        <translation>Table de couleur (cool)</translation>
+    </message>
+    <message>
+        <source>Local lookup table (cool)</source>
+        <translation>Table de couleur locale (cool)</translation>
+    </message>
 </context>
 <context>
     <name>mvd::AboutDialog</name>
@@ -621,6 +661,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <source>Gamma: </source>
         <translation>Gamma : </translation>
     </message>
+    <message>
+        <source>Reset value to 1.</source>
+        <translation>Réinitialiser à 1.</translation>
+    </message>
 </context>
 <context>
     <name>mvd::ColorSetupController</name>
@@ -1027,7 +1071,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Zero relevant pixels found when computing histogram (probably because of no-data settings)</source>
-        <translation>Aucun pixel utilisable lors du calcul d'histogramme (probablement à cause des réglages no-data)</translation>
+        <translation>Aucun pixel utilisable lors du calcul d&apos;histogramme (probablement à cause des réglages no-data)</translation>
     </message>
 </context>
 <context>
@@ -1262,7 +1306,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Cannot access settings file.</source>
-        <translation>Impossible d'accéder au fichiers des paramètres</translation>
+        <translation>Impossible d&apos;accéder au fichiers des paramètres</translation>
     </message>
     <message>
         <source>Bad settings file format.</source>
@@ -3614,11 +3658,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>I</source>
-        <translation>I</translation>
+        <translation type="obsolete">I</translation>
     </message>
     <message>
         <source>J</source>
-        <translation>J</translation>
+        <translation type="obsolete">J</translation>
     </message>
     <message>
         <source>Red</source>
@@ -3639,6 +3683,14 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Y</source>
         <translation>Y</translation>
+    </message>
+    <message>
+        <source>Column</source>
+        <translation>Colonne</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>Ligne</translation>
     </message>
 </context>
 <context>
@@ -3687,6 +3739,10 @@ p, li { white-space: pre-wrap; }
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Reset all layer effects to Normal</source>
+        <translation>Réinitialiser tous les effets à Normal</translation>
     </message>
 </context>
 <context>
@@ -4079,6 +4135,14 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     <message>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
+    </message>
+    <message>
+        <source>OpenGL texture</source>
+        <translation>Texture OpenGL</translation>
+    </message>
+    <message>
+        <source>Use OpenGL Shading Language (GLSL)</source>
+        <translation>Utiliser OpenGL Shading Language (GLSL)</translation>
     </message>
 </context>
 <context>
@@ -4637,7 +4701,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>mvd</source>
-        <translation>mvd</translation>
+        <translation type="obsolete">mvd</translation>
     </message>
     <message>
         <source>Rendering effects have been disabled because OpenGL Shading Language minimal requirements have not been met while running on this system.</source>
@@ -4753,11 +4817,11 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Read tag &apos;%1&apos; does not match expected tag &apos;%2&apos;.</source>
-        <translation>L'étiquette lue &apos;%1&apos; ne correspond pas à l'étiquette attendue &apos;%2&apos;.</translation>
+        <translation>L&apos;étiquette lue &apos;%1&apos; ne correspond pas à l&apos;étiquette attendue &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Invalid tag name &apos;%1&apos;.</source>
-        <translation>Nom d'étiquette invalide &apos;%1&apos;.</translation>
+        <translation>Nom d&apos;étiquette invalide &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Array dimension (%1) does not match expected dimension (%2).</source>
@@ -4765,31 +4829,31 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Histogram sample count (%1) does not match written sample count (%2).</source>
-        <translation>Le nombre d'échantillons dans l'histrogramme (%1) ne correspond pas au nombre d'échantillons écrits (%2).</translation>
+        <translation>Le nombre d&apos;échantillons dans l&apos;histrogramme (%1) ne correspond pas au nombre d&apos;échantillons écrits (%2).</translation>
     </message>
     <message>
         <source>Histogram mins dimension (%1) does not match expected dimension (%2).</source>
-        <translation>La taille des minima d'histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
+        <translation>La taille des minima d&apos;histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
     </message>
     <message>
         <source>Histogram maxs dimension (%1) does not match expected dimension (%2).</source>
-        <translation>La taille des maxima d'histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
+        <translation>La taille des maxima d&apos;histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
     </message>
     <message>
         <source>Histogram dimension (%1) does not match expected dimension (%2).</source>
-        <translation>La taille de l'histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
+        <translation>La taille de l&apos;histogramme (%1) ne correspond pas à la taille attendue (%2).</translation>
     </message>
     <message>
         <source>Histogram bin count (%1) does not match expected bin count (%2).</source>
-        <translation>Le nombre de barres dans l'histogramme (%1) ne correspond pas à la valeur attendue (%2).</translation>
+        <translation>Le nombre de barres dans l&apos;histogramme (%1) ne correspond pas à la valeur attendue (%2).</translation>
     </message>
     <message>
         <source>Histogram sample count (%1) does not match expected sample count (%2).</source>
-        <translation>Le nombre d'échantillons dans l'histogramme (%1) ne correspond pas à la valeur attendue (%2).</translation>
+        <translation>Le nombre d&apos;échantillons dans l&apos;histogramme (%1) ne correspond pas à la valeur attendue (%2).</translation>
     </message>
     <message>
         <source>Read sample count (histogram) (%1) does not match written sample count (%2).</source>
-        <translation>Le nombre d'échantillons lus (histrogramme) (%1) ne correspond pas au nombre d'échantillons écrits (%2).</translation>
+        <translation>Le nombre d&apos;échantillons lus (histrogramme) (%1) ne correspond pas au nombre d&apos;échantillons écrits (%2).</translation>
     </message>
 </context>
 <context>

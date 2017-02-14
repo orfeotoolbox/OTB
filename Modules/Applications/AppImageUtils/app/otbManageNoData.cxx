@@ -64,10 +64,11 @@ private:
     SetDocLongDescription("This application has two modes. The first allows building a mask of no-data pixels from the no-data flags read from the image file. The second allows updating the change the no-data value of an image (pixels value and metadata). This last mode also allows replacing NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("BanMath");
+    SetDocSeeAlso("BandMath");
+
+	AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
-    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
@@ -108,7 +109,7 @@ private:
     SetParameterDescription("mode.apply.ndval","No Data value used according to the mask image");
     SetDefaultParameterFloat("mode.apply.ndval", 0.0);
 
-    SetParameterString("mode","buildmask");
+    SetParameterString("mode","buildmask", false);
 
     AddRAMParameter();
 

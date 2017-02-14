@@ -18,6 +18,12 @@ if(MSVC)
 
 else()
 
+  if(APPLE)
+    set(PROJ_SB_ENV_CONFIGURE_CMD ${SB_ENV_CONFIGURE_CMD} LDFLAGS=-headerpad_max_install_names)
+  else()
+    set(PROJ_SB_ENV_CONFIGURE_CMD ${SB_ENV_CONFIGURE_CMD})
+  endif()
+
   ExternalProject_Add(PROJ
     PREFIX PROJ
     URL "http://download.osgeo.org/proj/proj-4.8.0.tar.gz"

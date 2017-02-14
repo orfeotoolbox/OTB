@@ -51,6 +51,9 @@ public:
 
     /** Maximum jitter to introduce (0 means no jitter) */
     unsigned long MaxJitter;
+
+    /** Maximum buffer size for internal jitter values */
+    unsigned long MaxBufferSize;
     
     bool operator!=(const struct Parameter  & param) const;
     } ParameterType; 
@@ -109,6 +112,9 @@ private:
   /** Internal current offset value
    *  (either fixed, or reset each time a sample is taken)*/
   double m_OffsetValue;
+
+  /** jitter offsets computed up to MaxBufferSize */
+  std::vector<double> m_JitterValues;
 };
 
 } // namespace otb

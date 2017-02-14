@@ -31,7 +31,6 @@ ChoiceParameter::~ChoiceParameter()
 {
 }
 
-
 void
 ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
 {
@@ -41,7 +40,8 @@ ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
   choice.m_AssociatedParameter = ParameterGroup::New();
   choice.m_AssociatedParameter->SetName(choiceName);
   choice.m_AssociatedParameter->SetRoot(this);
-
+  choice.m_AssociatedParameter->SetKey(choicekey);
+  
   m_ChoiceList.push_back(choice);
 
   // check if the new choice matches the m_CurrentChoice : if so the group should be active.
@@ -117,7 +117,7 @@ ChoiceParameter::GetChoiceParameterGroupByKey( std::string choiceKey )
       }
     }
 
-  itkExceptionMacro(<< "Cannot find " << choiceKey);
+  itkExceptionMacro(<< "Cannot find choice key: '" << choiceKey  << "'");
 }
 
 unsigned int
@@ -173,7 +173,10 @@ ChoiceParameter::SetValue(std::string choiceKey)
     ++i;
     }
 
-  itkExceptionMacro(<< "Cannot find " << choiceKey);
+  itkExceptionMacro(<< "Invalid parameter value '"
+					<< choiceKey << "'"
+					<< " given for parameter '-"
+					<<  this->GetKey() << "'");
 }
 
 unsigned int

@@ -32,6 +32,7 @@
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperProxyParameter.h"
 
 
 #include "otbWrapperAddProcessToWatchEvent.h"
@@ -97,37 +98,192 @@ ParameterGroup* Application::GetParameterList()
   return m_ParameterList;
 }
 
-Parameter* Application::GetParameterByKey(std::string name)
+Parameter* Application::GetParameterByKey(std::string name, bool follow)
 {
-  return GetParameterList()->GetParameterByKey(name);
+  return GetParameterList()->GetParameterByKey(name, follow);
 }
 
 void Application::SetParameterInt(std::string parameter, int value, bool hasUserValueFlag)
 {
-  this->SetParameterInt(parameter, value);
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<IntParameter*>(param))
+    {
+    IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
+    paramInt->SetValue(value);
+    }
+  else if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
+    paramFloat->SetValue(static_cast<float>(value));
+    }
+  else if (dynamic_cast<RadiusParameter*>(param))
+    {
+    RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
+    paramRadius->SetValue(static_cast<unsigned int>(value));
+    }
+  else if (dynamic_cast<ChoiceParameter*>(param))
+    {
+    ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
+    paramChoice->SetValue(value);
+    }
+
   this->SetParameterUserValue(parameter, hasUserValueFlag);
 }
 void Application::SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag)
 {
-  this->SetParameterFloat(parameter, value);
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
+    paramFloat->SetValue(value);
+    }
+
   this->SetParameterUserValue(parameter, hasUserValueFlag);
 }
 
 void Application::SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag)
 {
-  this->SetParameterString(parameter, value);
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<ChoiceParameter*>(param))
+    {
+    ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<ListViewParameter*>(param))
+    {
+    ListViewParameter* paramDown = dynamic_cast<ListViewParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<StringParameter*>(param))
+    {
+    StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<InputFilenameParameter*>(param))
+    {
+    InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<OutputFilenameParameter*>(param))
+    {
+    OutputFilenameParameter* paramDown = dynamic_cast<OutputFilenameParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<DirectoryParameter*>(param))
+    {
+    DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramDown = dynamic_cast<FloatParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<RadiusParameter*>(param))
+    {
+    RadiusParameter* paramDown = dynamic_cast<RadiusParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<IntParameter*>(param))
+    {
+    IntParameter* paramDown = dynamic_cast<IntParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<InputImageParameter*>(param))
+    {
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    if ( !paramDown->SetFromFileName(value) )
+    otbAppLogCRITICAL( <<"Invalid image filename " << value <<".");
+
+    }
+  else if (dynamic_cast<ComplexInputImageParameter*>(param))
+    {
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
+    paramDown->SetFromFileName(value);
+    }
+  else if (dynamic_cast<InputVectorDataParameter*>(param))
+    {
+    InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
+    if ( !paramDown->SetFromFileName(value) )
+    otbAppLogCRITICAL( <<"Invalid vector data filename " << value <<".");
+    }
+  else if (dynamic_cast<OutputImageParameter*>(param))
+    {
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+    paramDown->SetFileName(value);
+    }
+  else if (dynamic_cast<ComplexOutputImageParameter*>(param))
+    {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+    paramDown->SetFileName(value);
+    }
+  else if (dynamic_cast<OutputVectorDataParameter*>(param))
+    {
+    OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
+    paramDown->SetFileName(value);
+    }
+  else if (dynamic_cast<RAMParameter*>(param))
+    {
+    RAMParameter* paramDown = dynamic_cast<RAMParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<OutputProcessXMLParameter*>(param))
+    {
+    OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<InputProcessXMLParameter*>(param))
+    {
+    InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
+    if ( !paramDown->SetFileName(value) )
+    otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
+    }
+
   this->SetParameterUserValue(parameter, hasUserValueFlag);
 }
 
 void Application::SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag)
 {
-  this->SetParameterStringList(parameter, values);
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputImageListParameter*>(param))
+    {
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    if( !paramDown->SetListFromFileName(values) )
+    otbAppLogCRITICAL( <<"At least one image filename is invalid.");
+    }
+  else if (dynamic_cast<InputVectorDataListParameter*>(param))
+    {
+    InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
+    if( !paramDown->SetListFromFileName(values)  )
+    otbAppLogCRITICAL( <<"At least one vector data filename is invalid..");
+    }
+  else if (dynamic_cast<InputFilenameListParameter*>(param))
+    {
+    InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
+    if( !paramDown->SetListFromFileName(values)  )
+    otbAppLogCRITICAL( <<"At least one filename is invalid..");
+    }
+  else if (dynamic_cast<StringListParameter*>(param))
+    {
+    StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
+    paramDown->SetValue(values);
+    }
+  else if(dynamic_cast<ListViewParameter *>(param))
+    {
+    ListViewParameter * paramDown = dynamic_cast<ListViewParameter *>(param);
+    paramDown->SetSelectedNames(values);
+    }
+
   this->SetParameterUserValue(parameter, hasUserValueFlag);
 }
 
 void Application::SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag)
 {
-  this->SetParameterEmpty(parameter, value);
+  GetParameterByKey(parameter)->SetActive(value);
   this->SetParameterUserValue(parameter, hasUserValueFlag);
 }
 
@@ -227,6 +383,9 @@ int Application::Execute()
 
 int Application::ExecuteAndWriteOutput()
 {
+  m_Chrono.Reset();
+  m_Chrono.Start();
+
   int status = this->Execute();
 
   if (status == 0)
@@ -269,6 +428,11 @@ int Application::ExecuteAndWriteOutput()
           if(outputParam!=ITK_NULLPTR)
             {
             outputParam->InitializeWriters();
+            std::string checkReturn = outputParam->CheckFileName(true);
+            if (!checkReturn.empty())
+              {
+              otbAppLogWARNING("Check filename : "<<checkReturn);
+              }
             if (useRAM)
               {
               outputParam->SetRAMValue(ram);
@@ -329,6 +493,7 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
 
+  m_Chrono.Stop();
   return status;
 }
 
@@ -417,11 +582,6 @@ UserLevel Application::GetParameterUserLevel(std::string paramKey) const
 Role Application::GetParameterRole(std::string paramKey) const
 {
   return GetParameterByKey(paramKey)->GetRole();
-}
-
-void Application::SetParameterEmpty(std::string paramKey, bool active)
-{
-  GetParameterByKey(paramKey)->SetActive(active);
 }
 
 bool Application::GetParameterEmpty(std::string paramKey)
@@ -578,42 +738,6 @@ std::vector<std::string> Application::GetChoiceNames(std::string name)
   itkExceptionMacro(<< name << " is not a choice parameter");
 }
 
-void Application::SetParameterInt(std::string parameter, int value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<IntParameter*>(param))
-    {
-    IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
-    paramInt->SetValue(value);
-    }
-  else if (dynamic_cast<FloatParameter*>(param))
-    {
-    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
-    paramFloat->SetValue(static_cast<float>(value));
-    }
-  else if (dynamic_cast<RadiusParameter*>(param))
-    {
-    RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
-    paramRadius->SetValue(static_cast<unsigned int>(value));
-    }
-  else if (dynamic_cast<ChoiceParameter*>(param))
-    {
-    ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
-    paramChoice->SetValue(value);
-    }
-}
-
-void Application::SetParameterFloat(std::string parameter, float value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<FloatParameter*>(param))
-    {
-    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
-    paramFloat->SetValue(value);
-    }
-}
 
 void Application::SetDefaultParameterInt(std::string parameter, int value)
 {
@@ -734,140 +858,20 @@ void Application::SetMaximumParameterFloatValue(std::string parameter, float val
 
 }
 
-
-void Application::SetParameterString(std::string parameter, std::string value)
+void Application::SetListViewSingleSelectionMode(std::string parameter, bool status)
 {
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<ChoiceParameter*>(param))
+  if (dynamic_cast<ListViewParameter*>(param))
     {
-    ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
-    paramDown->SetValue(value);
+    ListViewParameter* paramListView = dynamic_cast<ListViewParameter*>(param);
+    paramListView->SetSingleSelection(status);
     }
-  else if (dynamic_cast<ListViewParameter*>(param))
-    {
-    ListViewParameter* paramDown = dynamic_cast<ListViewParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if (dynamic_cast<StringParameter*>(param))
-    {
-    StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if (dynamic_cast<InputFilenameParameter*>(param))
-    {
-    InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if (dynamic_cast<OutputFilenameParameter*>(param))
-    {
-    OutputFilenameParameter* paramDown = dynamic_cast<OutputFilenameParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if (dynamic_cast<DirectoryParameter*>(param))
-    {
-    DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
-    paramDown->SetValue(value);
-    }
- else if (dynamic_cast<FloatParameter*>(param))
-    {
-    FloatParameter* paramDown = dynamic_cast<FloatParameter*>(param);
-    paramDown->SetValue(value);
-    }
- else if (dynamic_cast<RadiusParameter*>(param))
-    {
-    RadiusParameter* paramDown = dynamic_cast<RadiusParameter*>(param);
-    paramDown->SetValue(value);
-    }
- else if (dynamic_cast<IntParameter*>(param))
-    {
-    IntParameter* paramDown = dynamic_cast<IntParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if (dynamic_cast<InputImageParameter*>(param))
-    {
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    if ( !paramDown->SetFromFileName(value) )
-      otbAppLogCRITICAL( <<"Invalid image filename " << value <<".");
-
-    }
-  else if (dynamic_cast<ComplexInputImageParameter*>(param))
-    {
-    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-    paramDown->SetFromFileName(value);
-    }
-  else if (dynamic_cast<InputVectorDataParameter*>(param))
-    {
-    InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-    if ( !paramDown->SetFromFileName(value) )
-      otbAppLogCRITICAL( <<"Invalid vector data filename " << value <<".");
-    }
-  else if (dynamic_cast<OutputImageParameter*>(param))
-    {
-    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
-    paramDown->SetFileName(value);
-    }
-  else if (dynamic_cast<ComplexOutputImageParameter*>(param))
-    {
-    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-    paramDown->SetFileName(value);
-    }
-  else if (dynamic_cast<OutputVectorDataParameter*>(param))
-    {
-    OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
-    paramDown->SetFileName(value);
-    }
-  else if (dynamic_cast<RAMParameter*>(param))
-    {
-    RAMParameter* paramDown = dynamic_cast<RAMParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if (dynamic_cast<OutputProcessXMLParameter*>(param))
-    {
-    OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if (dynamic_cast<InputProcessXMLParameter*>(param))
-    {
-    InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
-    if ( !paramDown->SetFileName(value) )
-      otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
-    }
+  else
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ListView");
+  
 }
 
-void Application::SetParameterStringList(std::string parameter, std::vector<std::string> value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<InputImageListParameter*>(param))
-    {
-    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
-    if( !paramDown->SetListFromFileName(value) )
-    otbAppLogCRITICAL( <<"At least one image filename is invalid.");
-    }
-  else if (dynamic_cast<InputVectorDataListParameter*>(param))
-     {
-     InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-     if( !paramDown->SetListFromFileName(value)  )
-       otbAppLogCRITICAL( <<"At least one vector data filename is invalid..");
-     }
-  else if (dynamic_cast<InputFilenameListParameter*>(param))
-     {
-     InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
-     if( !paramDown->SetListFromFileName(value)  )
-       otbAppLogCRITICAL( <<"At least one filename is invalid..");
-     }
-  else if (dynamic_cast<StringListParameter*>(param))
-    {
-    StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
-    paramDown->SetValue(value);
-    }
-  else if(dynamic_cast<ListViewParameter *>(param))
-    {
-    ListViewParameter * paramDown = dynamic_cast<ListViewParameter *>(param);
-    paramDown->SetSelectedNames(value);
-    }
-}
 
 void Application::SetParameterOutputImage(std::string parameter, FloatVectorImageType* value)
 {
@@ -927,19 +931,22 @@ void Application::SetParameterOutputVectorData(std::string parameter, VectorData
 
 std::string Application::GetParameterName(std::string parameter)
 {
-  Parameter* param = GetParameterByKey(parameter);
+  // get the actual parameter, even if it is a proxy
+  Parameter* param = GetParameterByKey(parameter,false);
   return param->GetName();
 }
 
 std::string Application::GetParameterDescription(std::string parameter)
 {
-  Parameter* param = GetParameterByKey(parameter);
+  // get the actual parameter, even if it is a proxy
+  Parameter* param = GetParameterByKey(parameter,false);
   return param->GetDescription();
 }
 
 void Application::SetParameterDescription(std::string parameter, std::string desc)
 {
-  Parameter* param = GetParameterByKey(parameter);
+  // get the actual parameter, even if it is a proxy
+  Parameter* param = GetParameterByKey(parameter,false);
   param->SetDescription(desc);
 }
 
@@ -1235,6 +1242,42 @@ void Application::SetNthParameterInputImageList(std::string parameter, const uns
     }
 
 }
+
+void Application::AddParameterStringList(std::string parameter, const std::string & str)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+  
+  if(paramDown)
+    {
+    paramDown->AddFromFileName(str);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+  
+}
+
+void Application::SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string & str)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter *>(param);
+
+  if(paramDown)
+    {
+    paramDown->SetNthFileName(id,str);
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    }
+
+}
+
+
 
 void Application::ClearParameterInputImageList(std::string parameter)
 {
@@ -1623,6 +1666,10 @@ std::string Application::GetProgressDescription() const
   return m_ProgressSourceDescription;
 }
 
+double Application::GetLastExecutionTiming() const
+{
+  return m_Chrono.GetTotal();
+}
 
 }
 }

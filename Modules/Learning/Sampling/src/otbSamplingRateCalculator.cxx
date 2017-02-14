@@ -50,15 +50,23 @@ SamplingRateCalculator
   MapRateType::iterator it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
-    if (smallestNbofSamples > it->second.Tot)
+    if (it->second.Tot)
       {
-      smallestNbofSamples = it->second.Tot;
+      if (smallestNbofSamples > it->second.Tot)
+        {
+        smallestNbofSamples = it->second.Tot;
+        }
+      }
+    else
+      {
+      otbWarningMacro("Ignoring empty class " << it->first);
       }
     }
-  // Check if there is an empty class
-  if (smallestNbofSamples == 0UL)
+  // Check if there is at least one non-empty class
+  if (smallestNbofSamples == itk::NumericTraits<unsigned long>::max())
     {
-    otbWarningMacro("There is an empty class, sample size is set to zero!");
+    otbWarningMacro("There are only empty classes, sample size is set to zero!");
+    smallestNbofSamples = 0UL;
     }
   this->SetNbOfSamplesAllClasses( smallestNbofSamples );
 }
@@ -70,7 +78,15 @@ SamplingRateCalculator
   MapRateType::iterator it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
-    it->second.Required = dRequiredNbSamples;
+    if (it->second.Tot)
+      {
+      it->second.Required = dRequiredNbSamples;
+      }
+    else
+      {
+      // ignore empty classes
+      it->second.Required = 0UL;
+      }
     this->UpdateRate(it->first);
     }
 }
@@ -137,7 +153,7 @@ void SamplingRateCalculator
   // Then compute number of samples for each class
   for (it = m_RatesByClass.begin(); it != m_RatesByClass.end() ; ++it)
     {
-    double ratio = it->second.Tot / static_cast<double>(totalNumberOfSamplesAvailable);
+    double ratio = totalNumberOfSamplesAvailable != 0 ? it->second.Tot / static_cast<double>(totalNumberOfSamplesAvailable): 0;
 
     it->second.Required = static_cast<unsigned long>(0.5+ratio*value);
     this->UpdateRate(it->first);

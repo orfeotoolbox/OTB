@@ -49,6 +49,18 @@ The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize your environment
 with ``source otbenv.profile``.
 
+Python bindings
+---------------
+Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
+currently only Python 2.x is supported. If no compatible python is found, installation
+notify you about it. If everything works fine, you will be given information about
+using python bindings.
+
+You must have python numpy bindings installed in your system. you can install it locally
+without admin rights with "pip install --user numpy". This is to give users to choose
+their own existing python installation rather than distributing one in OTB package
+
+
 Notes:
 
 - You must use monteverdi and mapla through ``mapla.sh`` and ``monteverdi.sh`` helper scripts in extracted directory.
@@ -81,17 +93,17 @@ A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk
 Q: Monteverdi and Mapla applications look different from my other applications.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a default gtk theme (plastic)
-which is distributed with the OTB package!.  We do this to be on safe side, like when a user does
-not have gtk libraries installed when using our package.
+A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a the
+system gtk theme. If you can't install GTK on your system you can use the
+distributed with the OTB package. Note that using system GTK is the preferred
+way with the OTB standalone package as the distributed version of GTK do not
+work on recent Linux distributions. 
 
-gtk libraries in the package is  the reason why you are getting a default "plastic" look & feel that
-makes it look different from other GUI applications.
-To get same look and feel, you can "force"  Monteverdi and Mapla to use system GTK.
+To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
 
 ::
 
-   export OTB_USE_SYSTEM_GTK=1
+   export OTB_USE_LOCAL_GTK=1
 
 And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-|release|-Linux64
-To get back default behaviour, unset OTB_USE_SYSTEM_GTK=1 or set OTB_USE_SYSTEM_GTK=0
+To get back default behaviour, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0

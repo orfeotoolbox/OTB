@@ -4,8 +4,8 @@ SETUP_SUPERBUILD(LIBSVM)
 
 ExternalProject_Add(LIBSVM
   PREFIX LIBSVM
-  URL "http://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-3.20.tar.gz"
-  URL_MD5 5f088e5f89da1c65b642300c9c5ea772
+  URL "https://github.com/cjlin1/libsvm/archive/v322.tar.gz"
+  URL_MD5 d9617d29efad013573f63ca9a517f490
   BINARY_DIR ${LIBSVM_SB_BUILD_DIR}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

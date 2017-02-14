@@ -16,25 +16,14 @@
 
  =========================================================================*/
 #include "otbWrapperApplicationFactory.h"
+#include "otbWrapperCompositeApplication.h"
 
-#include "otbMultiToMonoChannelExtractROI.h"
-#include "otbGenericRSResampleImageFilter.h"
-#include "otbGridResampleImageFilter.h"
-#include "otbImportGeoInformationImageFilter.h"
-#include "otbBCOInterpolateImageFunction.h"
-#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
-#include "itkFixedArray.h"
-
-// Elevation handler
-#include "otbWrapperElevationParametersHandler.h"
-
-#include "otbPleiadesPToXSAffineTransformCalculator.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-class BundleToPerfectSensor : public Application
+class BundleToPerfectSensor : public CompositeApplication
 {
 public:
   /** Standard class typedefs. */
@@ -46,7 +35,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(BundleToPerfectSensor, otb::Application);
+  itkTypeMacro(BundleToPerfectSensor, otb::Wrapper::CompositeApplication);
 
 private:
 
@@ -65,38 +54,27 @@ private:
     AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Pansharpening);
 
-    AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
-    SetParameterDescription("inp"," Input panchromatic image.");
-    AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
-    SetParameterDescription("inxs"," Input XS image.");
+    ClearApplications();
+    AddApplication("Superimpose", "superimpose", "Reproject XS onto Pan");
+    AddApplication("Pansharpening", "pansharp", "Fusion of XS and Pan");
 
-    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
-    SetParameterDescription("out"," Output image.");
+    ShareParameter("inp","superimpose.inr","Input PAN Image","Input panchromatic image.");
+    ShareParameter("inxs","superimpose.inm","Input XS Image","Input XS image.");
+    ShareParameter("out","pansharp.out");
+    ShareParameter("elev","superimpose.elev");
+    ShareParameter("mode","superimpose.mode");
+    ShareParameter("lms","superimpose.lms",
+      "Spacing of the deformation field",
+      "Spacing of the deformation field. Default is 10 times the PAN image spacing.");
+    ShareParameter("fv","superimpose.fv");
+    ShareParameter("ram","superimpose.ram");
 
-    // Elevation
-    ElevationParametersHandler::AddElevationParameters(this, "elev");
+    Connect("pansharp.inp","superimpose.inr");
+    Connect("pansharp.ram","superimpose.ram");
 
-    // Superposition mode
-    AddParameter(ParameterType_Choice,"mode", "Mode");
-    SetParameterDescription("mode", "Superimposition mode");
+    GetInternalApplication("superimpose")->SetParameterString("interpolator","bco", false);
+    GetInternalApplication("pansharp")->SetParameterString("method","rcs", false);
     
-    AddChoice("mode.default", "Default mode");
-    SetParameterDescription("mode.default", "Default superimposition mode : "
-      "uses any projection reference or sensor model found in the images");
-    
-    AddChoice("mode.phr", "Pleiades mode");
-    SetParameterDescription("mode.phr", "Pleiades superimposition mode, "
-      "designed for the case of a P+XS bundle in SENSOR geometry. It uses"
-      " a simple transform on the XS image : a scaling and a residual "
-      "translation.");
-    
-    AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
-    SetParameterDescription("lms"," Spacing of the deformation field. Default is 10 times the PAN image spacing.");
-
-    AddRAMParameter();
-
-    MandatoryOff("lms");
-
     // Doc example parameter settings
     SetDocExampleParameterValue("inp", "QB_Toulouse_Ortho_PAN.tif");
     SetDocExampleParameterValue("inxs", "QB_Toulouse_Ortho_XS.tif");
@@ -106,149 +84,18 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    if(!HasUserValue("mode") && HasValue("inp") && HasValue("inxs") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inp"),GetParameterImage("inxs")))
-      {
-      otbAppLogWARNING("Forcing PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
-      SetParameterString("mode","phr");
-      }
+    UpdateInternalParameters("superimpose");
   }
 
   void DoExecute() ITK_OVERRIDE
   {
-    FloatVectorImageType* panchroV = GetParameterImage("inp");
-    FloatVectorImageType* xs = GetParameterImage("inxs");
+    ExecuteInternal("superimpose");
 
-    if ( panchroV->GetNumberOfComponentsPerPixel() != 1 )
-      {
-      itkExceptionMacro(<< "The panchromatic image must be a single channel image")
-      }
+    GetInternalApplication("pansharp")->SetParameterInputImage("inxs",
+      GetInternalApplication("superimpose")->GetParameterOutputImage("out"));
 
-    // Transform the PAN image to otb::Image
-    typedef otb::Image<FloatVectorImageType::InternalPixelType> InternalImageType;
-    typedef otb::MultiToMonoChannelExtractROI<float,float> ExtractFilterType;
-
-    ExtractFilterType::Pointer channelSelect = ExtractFilterType::New();
-    m_Ref.push_back(channelSelect.GetPointer());
-    channelSelect->SetChannel(1);
-    channelSelect->SetInput(panchroV);
-    channelSelect->UpdateOutputInformation();
-    InternalImageType::Pointer panchro = channelSelect->GetOutput();
-
-    typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
-    typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
-    typedef otb::GridResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  BasicResamplerType;
-    typedef otb::ImportGeoInformationImageFilter<FloatVectorImageType,InternalImageType> ImportGeoInformationFilterType;
-    typedef otb::SimpleRcsPanSharpeningFusionImageFilter<InternalImageType, FloatVectorImageType, FloatVectorImageType> FusionFilterType;
-
-    // Resample filter
-    ResamplerType::Pointer    resampler = ResamplerType::New();
-    m_Ref.push_back(resampler.GetPointer());
-    
-    BasicResamplerType::Pointer basicResampler = BasicResamplerType::New();
-    m_Ref.push_back(basicResampler.GetPointer());
-
-    ImportGeoInformationFilterType::Pointer geoImport = ImportGeoInformationFilterType::New();
-    m_Ref.push_back(geoImport.GetPointer());
-
-    InterpolatorType::Pointer interpolator = InterpolatorType::New();
-    resampler->SetInterpolator(interpolator);
-    basicResampler->SetInterpolator(interpolator);
-
-    // Fusion filter
-    FusionFilterType::Pointer  fusionFilter = FusionFilterType::New();
-    m_Ref.push_back(fusionFilter.GetPointer());
-    fusionFilter->SetPanInput(panchro);
-    
-    // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
-
-    // Set up output image information
-    FloatVectorImageType::SpacingType spacing = panchro->GetSpacing();
-    FloatVectorImageType::IndexType   start = panchro->GetLargestPossibleRegion().GetIndex();
-    FloatVectorImageType::SizeType    size = panchro->GetLargestPossibleRegion().GetSize();
-    FloatVectorImageType::PointType   origin = panchro->GetOrigin();
-
-    FloatVectorImageType::PixelType defaultValue;
-    itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, xs->GetNumberOfComponentsPerPixel());
-
-    if(GetParameterString("mode") == "default")
-      {
-      otbAppLogINFO("Using the default mode");
-      if(IsParameterEnabled("lms") && HasValue("lms"))
-        {
-        double defScalarSpacing = GetParameterFloat("lms");
-        otbAppLogINFO(<< "Generating coarse deformation field (spacing="<<defScalarSpacing<<")" << std::endl);
-        FloatVectorImageType::SpacingType defSpacing;
-        
-        defSpacing[0] = defScalarSpacing;
-        defSpacing[1] = defScalarSpacing;
-        
-        resampler->SetDisplacementFieldSpacing(defSpacing);
-        }
-      else
-        {
-        FloatVectorImageType::SpacingType defSpacing;
-        defSpacing[0]=10*spacing[0];
-        defSpacing[1]=10*spacing[1];
-        resampler->SetDisplacementFieldSpacing(defSpacing);
-        }
-      
-      resampler->SetInput(xs);
-      resampler->SetOutputOrigin(origin);
-      resampler->SetOutputSpacing(spacing);
-      resampler->SetOutputSize(size);
-      resampler->SetOutputStartIndex(start);
-      resampler->SetOutputKeywordList(panchro->GetImageKeywordlist());
-      resampler->SetOutputProjectionRef(panchro->GetProjectionRef());
-      resampler->SetEdgePaddingValue(defaultValue);
-      fusionFilter->SetXsInput(resampler->GetOutput());
-      }
-    else if(GetParameterString("mode")=="phr")
-      {
-      otbAppLogINFO("Using the PHR mode");
-      
-      otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset
-        = otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(GetParameterImage("inp"),
-                                                                     GetParameterImage("inxs"));
-
-      origin+=offset;
-      origin[0]=origin[0]/4;
-      origin[1]=origin[1]/4;
-      
-      basicResampler->SetOutputOrigin(origin);
-      basicResampler->SetInput(xs);
-      basicResampler->SetOutputOrigin(origin);
-
-      FloatVectorImageType::SpacingType xsSpacing = GetParameterImage("inxs")->GetSpacing();
-      xsSpacing*=0.25;
-      
-      basicResampler->SetOutputSpacing(xsSpacing);
-      basicResampler->SetOutputSize(size);
-      basicResampler->SetOutputStartIndex(start);
-      basicResampler->SetEdgePaddingValue(defaultValue);
-
-      geoImport->SetInput(basicResampler->GetOutput());
-      geoImport->SetSource(panchro);
-
-      fusionFilter->SetXsInput(geoImport->GetOutput());
-
-      // Set the profRef & Keywordlist from Pan into the resampled XS image
-      basicResampler->UpdateOutputInformation();
-      itk::MetaDataDictionary& dict = basicResampler->GetOutput()->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
-                                            panchro->GetProjectionRef());
-      itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
-                                                 panchro->GetImageKeywordlist());
-      }
-    else
-      {
-      otbAppLogWARNING("Unknown mode");
-      }
-    
-    SetParameterOutputImage("out", fusionFilter->GetOutput());
+    ExecuteInternal("pansharp");
   }
-
-  std::vector<itk::ProcessObject::Pointer> m_Ref;
 
 };
 

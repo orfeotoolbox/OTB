@@ -131,6 +131,8 @@ public:
    */
   void SetReloadEnabled( bool );
 
+  void SetResetEffectsEnabled( bool );
+
   /**
    */
   void InstallEventFilter( QObject * filter );
@@ -188,6 +190,9 @@ signals:
   /**
    */
   void ApplyButtonClicked();
+  /**
+   */
+  void ResetEffectsButtonClicked();
   /**
    */
   void CopyLayerRequested( const AbstractLayerModel * );

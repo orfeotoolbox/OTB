@@ -1,4 +1,0 @@
-project(OTBIOJPEG2000)
-
-set(OTBIOJPEG2000_LIBRARIES OTBIOJPEG2000)
-otb_module_impl()

@@ -29,6 +29,9 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wcast-align"
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
 #include "shark/Algorithms/Trainers/RFTrainer.h"
 #if defined(__GNUC__) || defined(__clang__)

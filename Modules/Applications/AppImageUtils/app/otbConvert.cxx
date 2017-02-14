@@ -86,9 +86,10 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
+
+	AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
-    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
@@ -98,7 +99,7 @@ private:
     AddChoice("type.none", "None");
     AddChoice("type.linear", "Linear");
     AddChoice("type.log2", "Log2");
-    SetParameterString("type", "none");
+    SetParameterString("type", "none", false);
 
     AddParameter(ParameterType_Float,"type.linear.gamma","Gamma correction factor");
     SetParameterDescription("type.linear.gamma","Gamma correction factor");

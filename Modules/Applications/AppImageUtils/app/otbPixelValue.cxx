@@ -55,6 +55,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+	AddDocTag("Miscellaneous");
     AddDocTag("Utilities");
     AddDocTag("Coordinates");
     AddDocTag("Raster");
@@ -146,7 +147,7 @@ private:
     std::ostringstream oss;
     oss << extractor->GetOutput()->GetPixel(id)<<std::endl;
 
-    SetParameterString("value", oss.str());
+    SetParameterString("value", oss.str(), false);
 
     //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );

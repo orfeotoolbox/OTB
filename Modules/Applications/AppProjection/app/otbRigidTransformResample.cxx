@@ -89,8 +89,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation");
 
+	AddDocTag(Tags::Geometry);
     AddDocTag("Conversion");
-    AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
     SetParameterDescription("in","The input image to translate.");
@@ -156,7 +156,7 @@ private:
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
     SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
-    SetParameterString("interpolator","bco");
+    SetParameterString("interpolator","bco", false);
 
     // RAM available
     AddRAMParameter("ram");
@@ -194,6 +194,7 @@ private:
                                                   double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
@@ -202,6 +203,7 @@ private:
                                                            double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
@@ -210,6 +212,7 @@ private:
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       }

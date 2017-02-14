@@ -319,7 +319,6 @@ GlView
   if( actor.IsNull() )
     return false;
 
-
   //
   // Reference actor does not implement geo-interface.
   const otb::GeoInterface * geo =
@@ -328,7 +327,8 @@ GlView
   if( geo==ITK_NULLPTR )
     return false;
 
-
+  const otb::GeoInterface::Spacing2 nativeReferenceSpacing = geo->GetSpacing();
+  
   //
   // Compute transform origin.
   if( !geo->TransformFromViewport( center, vcenter, true ) )
@@ -390,13 +390,12 @@ GlView
   spacing[ 0 ] = vcl_sqrt( x[ 0 ] * x[ 0 ] + x[ 1 ] * x[ 1 ] ) / norm;
   spacing[ 1 ] = vcl_sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
 
-  // Sign of x-spacing is done by sign( x . (1, 0) ) which is sign( x[ 0 ] )
-  // Sign of y-spacing is done by sign( y . (0, 1) ) which is sign[ y[ 1 ] )
-
-  if( x[ 0 ]<0.0 )
+  // New spacing signs should match signs of the reference image spacing
+  
+  if( nativeReferenceSpacing[0]<0.0 )
     spacing[ 0 ] = -spacing[ 0 ];
 
-  if( y[ 1 ]<0.0 )
+  if( nativeReferenceSpacing[1]<0.0 )
     spacing[ 1 ] = -spacing[ 1 ];
 
   //

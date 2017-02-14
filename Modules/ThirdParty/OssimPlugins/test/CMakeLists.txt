@@ -7,21 +7,21 @@ otb_module_test()
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   #this test is failing on osx due to a bug in AppleClang stdc++ (Luc Hermitte)
  if(NOT APPLE)
-   add_executable(ossimStringUtilitiesTest ossimStringUtilitiesTest.cpp)
-   target_link_libraries(ossimStringUtilitiesTest
+   add_executable(OTBossimStringUtilitiesTest ossimStringUtilitiesTest.cpp)
+   target_link_libraries(OTBossimStringUtilitiesTest
      otbossimplugins
      ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-   otb_module_target_label(ossimStringUtilitiesTest)
-   otb_add_test(NAME ossimStringUtilitiesTest COMMAND ossimStringUtilitiesTest )
+   otb_module_target_label(OTBossimStringUtilitiesTest)
+   otb_add_test(NAME TuossimStringUtilitiesTest COMMAND OTBossimStringUtilitiesTest )
  endif()
 
-  add_executable(ossimTimeUtilitiesTest ossimTimeUtilitiesTest.cpp)
-  target_link_libraries(ossimTimeUtilitiesTest
+  add_executable(OTBossimTimeUtilitiesTest ossimTimeUtilitiesTest.cpp)
+  target_link_libraries(OTBossimTimeUtilitiesTest
     # ${OTBOssim_LIBRARIES}
     otbossimplugins
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-  otb_module_target_label(ossimTimeUtilitiesTest)
-  otb_add_test(NAME ossimTimeUtilitiesTest COMMAND ossimTimeUtilitiesTest )
+  otb_module_target_label(OTBossimTimeUtilitiesTest)
+  otb_add_test(NAME TuossimTimeUtilitiesTest COMMAND OTBossimTimeUtilitiesTest )
 else()
    message(STATUS "Boost unit test framework not found, ossimStringUtilitiesTest and ossimTimeUtilitiesTest will be skipped.")
 endif()
@@ -30,42 +30,42 @@ endif()
 # (requires google.benchmark)
 find_package(GBenchmark)
 if (GBENCHMARK_FOUND)
-   add_executable(ossimTimeUtilitiesBench ossimTimeUtilitiesBench.cpp)
-   include_directories(${GBENCHMARK_INCLUDE_DIRS})
-   target_link_libraries(ossimTimeUtilitiesBench
-      otbossimplugins
-      ${GBENCHMARK_LIBRARIES})
-   otb_module_target_label(ossimTimeUtilitiesBench)
-else()
-   message(STATUS "Google.benchmark not found, ossimTimeUtilitiesBench will be skipped.")
+  add_executable(OTBossimTimeUtilitiesBench ossimTimeUtilitiesBench.cpp)
+  include_directories(${GBENCHMARK_INCLUDE_DIRS})
+  target_link_libraries(OTBossimTimeUtilitiesBench
+    otbossimplugins
+    ${GBENCHMARK_LIBRARIES})
+  otb_module_target_label(OTBossimTimeUtilitiesBench)
+# else()
+# Even if GBenchmark is found, test is not launched because it is not added to ctest
 endif()
 
 
 #===== Domain tests
 #Test executables
-add_executable(ossimSarSensorModelTest ossimSarSensorModelTest.cpp)
-target_link_libraries(ossimSarSensorModelTest otbossimplugins)
-otb_module_target_label(ossimSarSensorModelTest)
+add_executable(OTBossimSarSensorModelTest ossimSarSensorModelTest.cpp)
+target_link_libraries(OTBossimSarSensorModelTest otbossimplugins)
+otb_module_target_label(OTBossimSarSensorModelTest)
 
 # S1
-add_executable(ossimSentinel1ModelTest ossimSentinel1ModelTest.cpp)
-target_link_libraries(ossimSentinel1ModelTest otbossimplugins)
-otb_module_target_label(ossimSentinel1ModelTest)
+add_executable(OTBossimSentinel1ModelTest ossimSentinel1ModelTest.cpp)
+target_link_libraries(OTBossimSentinel1ModelTest otbossimplugins)
+otb_module_target_label(OTBossimSentinel1ModelTest)
 
 # TSX (old)
-add_executable(ossimTerraSarXSarSensorModelTest ossimTerraSarXSarSensorModelTest.cpp)
-target_link_libraries(ossimTerraSarXSarSensorModelTest otbossimplugins)
-otb_module_target_label(ossimTerraSarXSarSensorModelTest)
+add_executable(OTBossimTerraSarXSarSensorModelTest ossimTerraSarXSarSensorModelTest.cpp)
+target_link_libraries(OTBossimTerraSarXSarSensorModelTest otbossimplugins)
+otb_module_target_label(OTBossimTerraSarXSarSensorModelTest)
 
-otb_add_test(NAME ossimSarSensorModelTest COMMAND ossimSarSensorModelTest )
+otb_add_test(NAME TuossimSarSensorModelTest COMMAND OTBossimSarSensorModelTest )
 
 #S1 tests
 file(GLOB s1_files ${INPUTDATA}/ossimPlugins/s1/*.xml)
 #Loop over all S1 annotation files
 foreach(entry ${s1_files})
   get_filename_component(name ${entry} NAME_WE)
-  otb_add_test( NAME s1_inverse_${name} COMMAND ossimSentinel1ModelTest 1 ${entry})
-  otb_add_test( NAME s1_forward_${name} COMMAND ossimSentinel1ModelTest 0 ${entry})
+  otb_add_test( NAME s1_inverse_${name} COMMAND OTBossimSentinel1ModelTest 1 ${entry})
+  otb_add_test( NAME s1_forward_${name} COMMAND OTBossimSentinel1ModelTest 0 ${entry})
 endforeach()
 
 # #TSX tests
