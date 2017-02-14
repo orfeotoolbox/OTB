@@ -86,7 +86,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "5")
-set(OTB_VERSION_MINOR "11")
+set(OTB_VERSION_MINOR "10")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -312,7 +312,12 @@ if(OTB_WRAP_PYTHON)
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"${OTB_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
-
+if(OTB_HAS_CXX11)
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
+     "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(OTB_REQUIRED_CXX_FLAGS " -std=c++11")
+  endif()
+endif()
 set(OTB_CONFIG_APPLICATION_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
 set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/OTBTargets.cmake")

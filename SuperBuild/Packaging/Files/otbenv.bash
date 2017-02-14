@@ -1,17 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-DIRNAME_0=$(dirname "$0")
-cd  "$DIRNAME_0"
-
-CURRENT_DIR=$(pwd)
+CURRENT_DIR=$(cd -P -- "$(dirname -- "$BASH_SOURCE")" && printf '%s\n' "$(pwd -P)")
 
 unset LD_LIBRARY_PATH
 
-PATH=$PATH:$CURRENT_DIR/bin
+PATH=$CURRENT_DIR/bin:$PATH
 GDAL_DATA=$CURRENT_DIR/share/gdal
 GEOTIFF_CSV=$CURRENT_DIR/share/epsg_csv
 
 export PATH
 export GDAL_DATA
 export GEOTIFF_CSV
-

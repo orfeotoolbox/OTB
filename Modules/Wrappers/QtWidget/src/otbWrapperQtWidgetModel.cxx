@@ -57,6 +57,8 @@ QtWidgetModel
 
 QtWidgetModel::~QtWidgetModel()
 {
+  if (m_Timer)
+    delete m_Timer;
 }
 
 void
@@ -175,6 +177,13 @@ QtWidgetModel
     // to:
     this,
     SLOT( OnApplicationExecutionDone( int ) )
+  );
+
+  QObject::connect(
+    taskAppli,
+    SIGNAL( finished() ),
+    taskAppli,
+    SLOT( deleteLater() )
   );
 
   // Tell the Progress Reporter to begin

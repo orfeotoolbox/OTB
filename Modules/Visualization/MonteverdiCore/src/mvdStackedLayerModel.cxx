@@ -253,7 +253,7 @@ StackedLayerModel
     ? m_Current
     : ( m_Current>0
         ? m_Current - 1
-        : GetCount()>0 ? 0 : StackedLayerModel::NIL_INDEX );
+        : GetCount()>1 ? 0 : StackedLayerModel::NIL_INDEX );
 
   //
   // Emit signals.

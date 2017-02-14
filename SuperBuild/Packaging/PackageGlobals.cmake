@@ -68,7 +68,9 @@ set(LINUX_SYSTEM_DLLS
   libICE.so*
   libXrandr.so*
   libpython*
-  libexpat.so.0
+  libexpat.so.*
+  libfontconfig.so*
+  libfreetype.so*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
@@ -129,11 +131,8 @@ set(GTK_LIB_LIST_1
   libffi.so.6
   )
 set(GTK_LIB_LIST_2
-  libfreetype.so.6
   libz.so.1
   libpng12.so.0
-  libexpat.so.1
-  libfontconfig.so.1
   )
 
 set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})

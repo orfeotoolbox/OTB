@@ -47,10 +47,47 @@ function(func_install_xdk_files)
     endif()
   endforeach()
 
-  file(GLOB ITK_CMAKE_DIRS "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/ITK*")
-  foreach(ITK_CMAKE_DIR ${ITK_CMAKE_DIRS})
-      func_install_without_message("${ITK_CMAKE_DIR}" "lib/cmake")
-  endforeach()
+  set(ITK_CMAKE_DIR "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/ITK-${PKG_ITK_SB_VERSION}")
+  message("COPY ${DEPENDENCIES_INSTALL_DIR}/lib/cmake/ITK-${PKG_ITK_SB_VERSION} to ${CMAKE_CURRENT_BINARY_DIR}/_tmp/ to patch")
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/_tmp/
+    COMMAND ${CMAKE_COMMAND}
+    -E copy_directory
+    ${ITK_CMAKE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}
+    )
+
+  #reset ITK_CMAKE_DIR
+  set(ITK_CMAKE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}")
+
+  set(DIR_LIST "${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}|${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}/Modules")
+
+  #SUPERBUILD_INSTALL_DIR
+  execute_process(
+    COMMAND ${CMAKE_COMMAND}
+    -DP_DIRS=${DIR_LIST}
+    -DP_MATCH=${CMAKE_INSTALL_PREFIX}
+    -DP_REPLACE=ITK_INSTALL_PREFIX
+    -P ${PACKAGE_OTB_SRC_DIR}/SuperBuild/CMake/post_install.cmake
+    RESULT_VARIABLE patch_itk_cmake_rv
+    )
+
+  file(STRINGS  "${SUPERBUILD_BINARY_DIR}/ITK/build/CMakeCache.txt"
+    MATCH_FOUND REGEX "ITK_USE_SYSTEM_ZLIB:BOOL=ON")
+  if(MATCH_FOUND)
+    find_package(ZLIB QUIET)
+    get_filename_component(ZLIB_PREFIX ${ZLIB_LIBRARY} PATH)
+    execute_process(
+      COMMAND ${CMAKE_COMMAND}
+      -DP_DIRS=${DIR_LIST}
+      -DP_MATCH=${ZLIB_PREFIX}
+      -DP_REPLACE=ITK_INSTALL_PREFIX
+      -P ${PACKAGE_OTB_SRC_DIR}/SuperBuild/CMake/post_install.cmake
+      )
+
+  endif()
+
+  func_install_without_message("${ITK_CMAKE_DIR}" "lib/cmake")
 
   set(QT_REQ_DIRS)
   if(WIN32)
@@ -227,16 +264,18 @@ function(func_install_otb_support_files)
   set(PKG_SHARE_SOURCE_DIR ${DEPENDENCIES_INSTALL_DIR}/share)
 
   #For Unixes we make them in the *pkgsetup.in
-  ##################### install environment source ##########################
+  ##################### install environment setup file ##########################
   if(WIN32)
-    foreach(ENV_SOURCE_FILE
-        "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.cmd"
-        "${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile")
-      if(EXISTS ${ENV_SOURCE_FILE})
-        install(FILES ${ENV_SOURCE_FILE} DESTINATION ${PKG_STAGE_DIR})
-      endif()
-    endforeach()
+    install(
+      FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.cmd
+      DESTINATION ${PKG_STAGE_DIR}
+      )
 
+    install(
+      FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.bash
+      DESTINATION ${PKG_STAGE_DIR}
+      )
+    
     #we need startup files for mapla monteverdi in the root directory
     #For Unixes, we make them inside pkgsetup script!
     foreach(exe_file mapla monteverdi)
@@ -290,6 +329,7 @@ function(func_install_monteverdi_support_files)
   # we find this value by parsing ConfigureMonteverdi.h
   set(ConfigureMonteverdi_H "${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h")
   if(NOT EXISTS "${ConfigureMonteverdi_H}")
+    #maybe deactivate monteverdi?
     message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
   endif()
 

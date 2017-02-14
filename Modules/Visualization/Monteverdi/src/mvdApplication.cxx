@@ -34,11 +34,16 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdMainWindow.h"
 #include "mvdStackedLayerModel.h"
 
 //
 #ifdef OTB_USE_QT4
 #  include "mvdOTBApplicationsModel.h"
+#endif
+
+#if USE_OTB_APPS
+#include "otbWrapperApplicationRegistry.h"
 #endif
 
 //
@@ -76,6 +81,9 @@ Application
 Application
 ::~Application()
 {
+#if USE_OTB_APPS
+  otb::Wrapper::ApplicationRegistry::CleanRegistry();
+#endif
 }
 
 /*******************************************************************************/

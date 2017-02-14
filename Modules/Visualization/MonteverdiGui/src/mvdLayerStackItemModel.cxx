@@ -683,7 +683,8 @@ LayerStackItemModel
   // qDebug()
   //   << this << "::index(" << row << "," << column << "," << parent << ")";
 
-  assert( m_StackedLayerModel!=NULL );
+  if (m_StackedLayerModel == NULL)
+    return QModelIndex();
 
   // qDebug()
   //   << "index:" << row << "," << column << "," << m_StackedLayerModel->At( row );
