@@ -177,7 +177,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (this->m_ImageIO->GetComponentTypeInfo()
       == typeid(typename ConvertOutputPixelTraits::ComponentType)
       && (this->m_ImageIO->GetNumberOfComponents()
-          == ConvertIOPixelTraits::GetNumberOfComponents()))
+          == ConvertIOPixelTraits::GetNumberOfComponents())
+      && !m_FilenameHelper->BandRangeIsSet())
     {
     // Have the ImageIO read directly into the allocated buffer
     this->m_ImageIO->Read(buffer);
@@ -511,13 +512,40 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   region.SetSize(dimSize);
   region.SetIndex(start);
 
+  // detect number of output components
+  unsigned int nbOutputComponents = this->m_ImageIO->GetNumberOfComponents();
+  if (m_FilenameHelper->BandRangeIsSet())
+    {
+    bool ret = m_FilenameHelper->ResolveBandRange(nbOutputComponents, m_BandList);
+    if (ret == false || m_BandList.size() == 0)
+      {
+      // invalid range
+      itkGenericExceptionMacro("The given band range is either empty or invalid for a "
+        <<nbOutputComponents <<" bands input image!");
+      }
+    nbOutputComponents = m_BandList.size()
+    }
+
 // THOMAS : ajout
 // If a VectorImage, this requires us to set the
 // VectorLength before allocate
   if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
     {
     typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
-    AccessorFunctorType::SetVectorLength(output, this->m_ImageIO->GetNumberOfComponents());
+    AccessorFunctorType::SetVectorLength(output, nbOutputComponents);
+    }
+  else
+    {
+    if (m_FilenameHelper->BandRangeIsSet())
+      {
+      // Check that there are enough output components
+      typedef otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
+      if (ConvertIOPixelTraits::GetNumberOfComponents() < nbOutputComponents)
+        {
+        itkGenericExceptionMacro("The image type can't store "
+          <<nbOutputComponents <<" components!");
+        }
+      }
     }
 
   output->SetLargestPossibleRegion(region);

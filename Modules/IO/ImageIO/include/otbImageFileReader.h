@@ -199,6 +199,8 @@ private:
   FNameHelperType::Pointer m_FilenameHelper;
 
   unsigned int m_AdditionalNumber;
+
+  std::vector<unsigned int> m_BandList;
 };
 
 } //namespace otb
