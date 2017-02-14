@@ -49,6 +49,7 @@
 
 #ifdef OTB_USE_SHARK
 #include "otbSharkRandomForestsMachineLearningModel.h"
+#include "otbSharkKMeansMachineLearningModel.h"
 #endif
 
 namespace otb
@@ -139,6 +140,7 @@ public:
 
 #ifdef OTB_USE_SHARK
   typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
+  typedef otb::SharkKMeansMachineLearningModel<InputValueType, OutputValueType> SharkKMeansType;
 #endif
   
 protected:
@@ -221,6 +223,10 @@ private:
   void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
                                typename TargetListSampleType::Pointer trainingLabeledListSample,
                                std::string modelPath);
+  void InitSharkKMeansParams();
+  void TrainSharkKMeans(typename ListSampleType::Pointer trainingListSample,
+                        typename TargetListSampleType::Pointer trainingLabeledListSample,
+                        std::string modelPath);
 #endif
   //@}
 };
@@ -247,6 +253,7 @@ private:
 #endif
 #ifdef OTB_USE_SHARK
 #include "otbTrainSharkRandomForests.txx"
+#include "otbTrainSharkKMeans.txx"
 #endif
 #endif
 
