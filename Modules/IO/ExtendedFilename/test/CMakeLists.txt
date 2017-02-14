@@ -51,6 +51,16 @@ otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_NoOptions COMMAND otbExten
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_NoOptions.txt
   )
 
+otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_BandList COMMAND otbExtendedFilenameTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE}/ioTvExtendedFilenameToReaderOptions_BandList.txt
+  ${TEMP}/ioTvExtendedFilenameToReaderOptions_BandList.txt
+  otbExtendedFilenameToReaderOptions
+  /home/data/filename.tif?band=3,5:,-3,2:-2
+  ${TEMP}/ioTvExtendedFilenameToReaderOptions_BandList.txt
+  6
+  )
+
 otb_add_test(NAME ioTvExtendedFilenameToWriterOptions_FullOptions COMMAND otbExtendedFilenameTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
