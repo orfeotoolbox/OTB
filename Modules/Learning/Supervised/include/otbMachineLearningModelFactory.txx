@@ -37,6 +37,7 @@
 
 #ifdef OTB_USE_SHARK
 #include "otbSharkRandomForestsMachineLearningModelFactory.h"
+#include "otbSharkKMeansMachineLearningModelFactory.h"
 #endif
 
 #include "itkMutexLockHolder.h"
@@ -104,6 +105,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 
 #ifdef OTB_USE_SHARK
   RegisterFactory(SharkRandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SharkKMeansMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 #endif
   
 #ifdef OTB_USE_OPENCV
@@ -158,6 +160,14 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
     if (sharkRFFactory)
       {
       itk::ObjectFactoryBase::UnRegisterFactory(sharkRFFactory);
+      continue;
+      }
+
+    SharkKMeansMachineLearningModelFactory<TInputValue,TOutputValue> *sharkKMeansFactory =
+            dynamic_cast<SharkKMeansMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (sharkKMeansFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(sharkKMeansFactory);
       continue;
       }
 #endif

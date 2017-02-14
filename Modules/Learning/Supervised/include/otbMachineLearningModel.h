@@ -57,6 +57,7 @@ namespace otb
  * \sa NormalBayesMachineLearningModel
  * \sa NeuralNetworkMachineLearningModel
  * \sa SharkRandomForestsMachineLearningModel
+ * \sa SharkKMeansMachineLearningModel
  * \sa ImageClassificationFilter
  *
  *
@@ -90,7 +91,7 @@ public:
   //@}
 
   /**\name Confidence value typedef */
-  typedef TConfidenceValue                              ConfidenceValueType;
+  typedef TConfidenceValue                                  ConfidenceValueType;
   typedef itk::FixedArray<ConfidenceValueType,1>            ConfidenceSampleType;
   typedef itk::Statistics::ListSample<ConfidenceSampleType> ConfidenceListSampleType;
 
