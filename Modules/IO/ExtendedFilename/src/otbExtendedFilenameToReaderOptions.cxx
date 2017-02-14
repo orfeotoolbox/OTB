@@ -281,4 +281,36 @@ ExtendedFilenameToReaderOptions
   return vBands;
 }
 
+bool
+ExtendedFilenameToReaderOptions
+::ResolveBandRange(const unsigned int &nbBands, std::vector<unsigned int> &output) const
+{
+  output.clear();
+  std::vector<ExtendedFilenameHelper::GenericBandRange> bandRangeList =
+    this->GetBandRange();
+  for (unsigned int i=0 ; i<bandRangeList.size() ; i++)
+    {
+    int a = bandRangeList[i].first;
+    int b = bandRangeList[i].second;
+    if (a<0) a+= nbBands+1;
+    if (b<0) b+= nbBands+1;
+    if (a==0) a=1;
+    if (b==0) b=nbBands;
+
+    if (1<=a && a<=b && b<=nbBands)
+      {
+      for (unsigned int k=a ; k <= (unsigned int)b ; k++)
+        {
+        output.push_back(k);
+        }
+      }
+    else
+      {
+      // Invalid range wrt. the given number of bands
+      return false;
+      }
+    }
+  return true;
+}
+
 } // end namespace otb

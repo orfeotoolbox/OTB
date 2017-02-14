@@ -91,6 +91,8 @@ public:
   /* Use BandRange parser to get list of bands*/
   std::vector<ExtendedFilenameHelper::GenericBandRange> GetBandRange() const;
 
+  bool ResolveBandRange(const unsigned int &nbBands, std::vector<unsigned int> &output) const;
+
 protected:
   ExtendedFilenameToReaderOptions();
   virtual ~ExtendedFilenameToReaderOptions() {}
