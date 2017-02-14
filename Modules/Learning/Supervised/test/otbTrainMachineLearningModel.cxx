@@ -1286,4 +1286,85 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
    return EXIT_SUCCESS;
 }
 
+
+#include "otbSharkKMeansMachineLearningModel.h"
+
+int otbSharkKMeansMachineLearningModelNew(int itkNotUsed( argc ), char *itkNotUsed( argv )[])
+{
+  typedef otb::SharkKMeansMachineLearningModel<InputValueType, TargetValueType> SharkRFType;
+  SharkRFType::Pointer classifier = SharkRFType::New();
+  return EXIT_SUCCESS;
+}
+
+int otbSharkKMeansMachineLearningModelTrain(int argc, char *argv[])
+{
+  if( argc != 3 )
+    {
+    std::cout << "Wrong number of arguments " << std::endl;
+    std::cout << "Usage : sample file, output file " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  typedef otb::SharkKMeansMachineLearningModel<InputValueType, TargetValueType> KMeansType;
+  InputListSampleType::Pointer samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+
+  if( !SharkReadDataFile( argv[1], samples, labels ) )
+    {
+    std::cout << "Failed to read samples file " << argv[1] << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  KMeansType::Pointer classifier = KMeansType::New();
+  classifier->SetInputListSample( samples );
+  classifier->SetTargetListSample( labels );
+  classifier->SetRegressionMode( false );
+  classifier->SetK( 3 );
+  classifier->SetMaximumNumberOfIterations( 0 );
+  std::cout << "Train\n";
+  classifier->Train();
+  std::cout << "Save\n";
+  classifier->Save( argv[2] );
+
+  return EXIT_SUCCESS;
+}
+
+
+int otbSharkKMeansMachineLearningModelPredict(int argc, char *argv[])
+{
+  if( argc != 3 )
+    {
+    std::cout << "Wrong number of arguments " << std::endl;
+    std::cout << "Usage : sample file, input model file " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
+  typedef otb::SharkKMeansMachineLearningModel<InputValueType, TargetValueType> KMeansType;
+  InputListSampleType::Pointer samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+
+  if( !SharkReadDataFile( argv[1], samples, labels ) )
+    {
+    std::cout << "Failed to read samples file " << argv[1] << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  KMeansType::Pointer classifier = KMeansType::New();
+  std::cout << "Load\n";
+  classifier->Load( argv[2] );
+  auto start = std::chrono::system_clock::now();
+  classifier->SetInputListSample( samples );
+  classifier->SetTargetListSample( labels );
+  std::cout << "Predict loaded\n";
+  classifier->PredictBatch( samples, NULL );
+  using TimeT = std::chrono::milliseconds;
+  auto duration = std::chrono::duration_cast<TimeT>( std::chrono::system_clock::now() - start );
+  auto elapsed = duration.count();
+  std::cout << "PredictAll took " << elapsed << " ms\n";
+
+  return EXIT_SUCCESS;
+}
+
+
 #endif

@@ -76,6 +76,7 @@ set(bayes_output_format ".bayes")
 set(rf_output_format ".rf")
 set(knn_output_format ".knn")
 set(sharkrf_output_format ".txt")
+set(sharkkm_output_format ".txt")
 
 # Training algorithms parameters
 set(libsvm_parameters "-classifier.libsvm.opt" "true" "-classifier.libsvm.prob" "true")
@@ -88,6 +89,8 @@ set(bayes_parameters "")
 set(rf_parameters "")
 set(knn_parameters "")
 set(sharkrf_parameters "")
+set(sharkkm_parameters "")
+
 
 # Validation depending on mode
 set(ascii_comparison --compare-ascii ${EPSILON_6})
@@ -108,6 +111,7 @@ if(OTB_USE_OPENCV)
 endif()
 if(OTB_USE_SHARK)
   list(APPEND classifierList "SHARKRF")
+  list(APPEND classifierList "SHARKKM")
 endif()
 
 set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
@@ -115,6 +119,7 @@ set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 # This is a black list for classifier that can not have a baseline
 # because they are using randomness and seed can not be set
 set(classifier_without_baseline "SHARKRF")
+set(classifier_without_baseline "SHARKKM")
 
 # Loop on classifiers
 foreach(classifier ${classifierList})
