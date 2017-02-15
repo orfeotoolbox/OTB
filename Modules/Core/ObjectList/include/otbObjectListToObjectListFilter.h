@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectListToObjectListFilter_h
-#define __otbObjectListToObjectListFilter_h
+#ifndef otbObjectListToObjectListFilter_h
+#define otbObjectListToObjectListFilter_h
 
 #include "otbObjectListSource.h"
 
@@ -74,11 +74,11 @@ protected:
   /** Constructor */
   ObjectListToObjectListFilter();
   /** Destructor */
-  virtual ~ObjectListToObjectListFilter() {}
+  ~ObjectListToObjectListFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Multi-threading implementation */
 

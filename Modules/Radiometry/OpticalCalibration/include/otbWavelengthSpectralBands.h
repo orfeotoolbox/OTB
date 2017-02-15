@@ -15,11 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWavelengthSpectralBands_h
-#define __otbWavelengthSpectralBands_h
+#ifndef otbWavelengthSpectralBands_h
+#define otbWavelengthSpectralBands_h
 
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
+#include "OTBOpticalCalibrationExport.h"
 
 namespace otb
 {
@@ -30,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT WavelengthSpectralBands : public itk::DataObject
+class OTBOpticalCalibration_EXPORT WavelengthSpectralBands : public itk::DataObject
 {
 public:
   /** Standard typedefs */
@@ -59,10 +60,10 @@ protected:
   /** Constructor */
   WavelengthSpectralBands();
   /** Destructor */
-  ~WavelengthSpectralBands() {}
+  ~WavelengthSpectralBands() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   WavelengthSpectralBands(const Self &); //purposely not implemented

@@ -77,7 +77,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
@@ -89,8 +89,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation");
 
+	AddDocTag(Tags::Geometry);
     AddDocTag("Conversion");
-    AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
     SetParameterDescription("in","The input image to translate.");
@@ -154,9 +154,9 @@ private:
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
     AddChoice("interpolator.bco",    "Bicubic interpolation");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
-    SetParameterString("interpolator","bco");
+    SetParameterString("interpolator","bco", false);
 
     // RAM available
     AddRAMParameter("ram");
@@ -171,12 +171,12 @@ private:
     SetDocExampleParameterValue("transform.type.rotation.scaley", "2.");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     FloatVectorImageType* inputImage = GetParameterImage("in");
 
@@ -194,6 +194,7 @@ private:
                                                   double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
@@ -202,6 +203,7 @@ private:
                                                            double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
@@ -210,6 +212,7 @@ private:
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_Resampler->SetInterpolator(interpolator);
+      m_GridResampler->SetInterpolator(interpolator);
       }
       break;
       }

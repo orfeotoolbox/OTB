@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbComplexMomentsImageFunction_h
-#define __otbComplexMomentsImageFunction_h
+#ifndef otbComplexMomentsImageFunction_h
+#define otbComplexMomentsImageFunction_h
 
 #include "itkImageFunction.h"
 
@@ -89,17 +89,17 @@ public:
                       InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
+  OutputType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
 
   /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate(const PointType& point) const
+  OutputType Evaluate(const PointType& point) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  OutputType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& cindex) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -119,8 +119,8 @@ public:
 
 protected:
   ComplexMomentsImageFunction();
-  virtual ~ComplexMomentsImageFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ComplexMomentsImageFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ComplexMomentsImageFunction(const Self &);  //purposely not implemented

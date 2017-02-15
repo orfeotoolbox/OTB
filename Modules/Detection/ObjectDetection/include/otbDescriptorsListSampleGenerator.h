@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDescriptorsListSampleGenerator_h
-#define __otbDescriptorsListSampleGenerator_h
+#ifndef otbDescriptorsListSampleGenerator_h
+#define otbDescriptorsListSampleGenerator_h
 
 #include <vector>
 
@@ -148,31 +148,31 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  void AllocateOutputs();
-  void GenerateOutputInformation();
-  void Reset(void);
-  void Synthetize(void);
+  void AllocateOutputs() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void Reset(void) ITK_OVERRIDE;
+  void Synthetize(void) ITK_OVERRIDE;
 
-  void AddInput(itk::DataObject * dataObject)
+  void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
   {
     Superclass::AddInput(dataObject);
   }
 
 protected:
   PersistentDescriptorsListSampleGenerator();
-  virtual ~PersistentDescriptorsListSampleGenerator();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PersistentDescriptorsListSampleGenerator() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread,
-                             itk::ThreadIdType threadId);
+                             itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentDescriptorsListSampleGenerator(const Self &); //purposely not implemented
@@ -300,7 +300,7 @@ public:
       return this->GetFilter()->GetInput();
     }
 
-    void AddInput(itk::DataObject * dataObject)
+    void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
       {
         this->GetFilter()->AddInput(dataObject);
       }
@@ -360,7 +360,7 @@ public:
     DescriptorsListSampleGenerator();
 
     /** Destructor */
-    virtual ~DescriptorsListSampleGenerator();
+    ~DescriptorsListSampleGenerator() ITK_OVERRIDE;
 
   private:
     DescriptorsListSampleGenerator(const Self &); //purposely not implemented

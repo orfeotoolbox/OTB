@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanFunctor_h
-#define __otbMeanFunctor_h
+#ifndef otbMeanFunctor_h
+#define otbMeanFunctor_h
 
 namespace otb
 {

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImaginaryImageToComplexImageFilter_h
-#define __otbImaginaryImageToComplexImageFilter_h
+#ifndef otbImaginaryImageToComplexImageFilter_h
+#define otbImaginaryImageToComplexImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"
@@ -89,7 +89,7 @@ public:
 
 protected:
   ImaginaryImageToComplexImageFilter() {}
-  virtual ~ImaginaryImageToComplexImageFilter() {}
+  ~ImaginaryImageToComplexImageFilter() ITK_OVERRIDE {}
 
 private:
   ImaginaryImageToComplexImageFilter(const Self&); //purposely not implemented

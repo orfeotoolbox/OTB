@@ -58,6 +58,9 @@ macro(otb_module_check otb-module _needed_by stack)
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_DEPENDS)
       otb_module_check(${dep} ${otb-module} "${otb-module};${stack}")
     endforeach()
+    foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
+      otb_module_check(${dep} ${otb-module} "${otb-module};${stack}")
+    endforeach()
     set(check_finished_${otb-module} 1)
   endif()
 endmacro()
@@ -166,6 +169,11 @@ set(OTB_MODULES_ENABLED "")
 set(OTB_MODULES_DISABLED "")
 foreach(otb-module ${OTB_MODULES_ALL})
   if(${otb-module}_ENABLED)
+    # check cxx11 requirement after all enable/disable macros have been passed
+    if(OTB_MODULE_${otb-module}_REQUIRES_CXX11 AND NOT OTB_HAS_CXX11)
+      message(FATAL_ERROR "Module ${otb-module} requires C++11 support. Consider adding --std=c++11 to your compiler flags or disabling it.")
+    endif()
+
     list(APPEND OTB_MODULES_ENABLED ${otb-module})
 
     # We will sort modules according to their dependency graph,

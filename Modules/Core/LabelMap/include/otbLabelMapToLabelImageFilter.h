@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToLabelImageFilter_h
-#define __otbLabelMapToLabelImageFilter_h
+#ifndef otbLabelMapToLabelImageFilter_h
+#define otbLabelMapToLabelImageFilter_h
 
 #include "itkLabelMapToLabelImageFilter.h"
 
@@ -26,7 +26,7 @@ namespace otb {
  *
  * LabelMapToBinaryImageFilter to a label image.
  *
- * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * This implementation was taken from the Insight Journal paper:
  * http://hdl.handle.net/1926/584  or

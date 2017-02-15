@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbConfusionMatrixMeasurements_h
-#define __otbConfusionMatrixMeasurements_h
+#ifndef otbConfusionMatrixMeasurements_h
+#define otbConfusionMatrixMeasurements_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -140,7 +140,7 @@ public:
 
 protected:
   ConfusionMatrixMeasurements();
-  virtual ~ConfusionMatrixMeasurements() {}
+  ~ConfusionMatrixMeasurements() ITK_OVERRIDE {}
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 

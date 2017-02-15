@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQtLogOutput_h
-#define __otbQtLogOutput_h
+#ifndef otbQtLogOutput_h
+#define otbQtLogOutput_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -24,6 +24,8 @@
 #endif //tag=QT4-boost-compatibility
 //#include "itkObjectFactory.h"
 //#include "itkProcessObject.h"
+
+#include "OTBQtWidgetExport.h"
 
 namespace otb
 {
@@ -36,7 +38,7 @@ namespace otb
  *
  */
 
-class ITK_ABI_EXPORT QtLogOutput : public QObject, public itk::LogOutput
+class OTBQtWidget_EXPORT QtLogOutput : public QObject, public itk::LogOutput
 {
 Q_OBJECT
 public:
@@ -50,16 +52,16 @@ public:
   itkNewMacro(QtLogOutput);
 
   /** flush a buffer */
-  virtual void Flush();
+  void Flush() ITK_OVERRIDE;
 
   /** Write to multiple outputs */
-  virtual void Write(double timestamp);
+  void Write(double timestamp) ITK_OVERRIDE;
 
   /** Write to a buffer */
-  virtual void Write(std::string const &content);
+  void Write(std::string const &content) ITK_OVERRIDE;
 
   /** Write to a buffer */
-  virtual void Write(std::string const &content, double timestamp);
+  void Write(std::string const &content, double timestamp) ITK_OVERRIDE;
 
 signals:
   void NewContentLog(QString);
@@ -69,9 +71,9 @@ protected:
   QtLogOutput();
 
   /** Destructor */
-  virtual ~QtLogOutput();
+  ~QtLogOutput() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream &os, itk::Indent indent) const;
+  void PrintSelf(std::ostream &os, itk::Indent indent) const ITK_OVERRIDE;
 };
 
 }

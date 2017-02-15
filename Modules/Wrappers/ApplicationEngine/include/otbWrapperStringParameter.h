@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperStringParameter_h
-#define __otbWrapperStringParameter_h
+#ifndef otbWrapperStringParameter_h
+#define otbWrapperStringParameter_h
 
 #include <string>
 #include "otbWrapperParameter.h"
@@ -31,7 +31,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT StringParameter
+class OTBApplicationEngine_EXPORT StringParameter
   : public Parameter
 {
 public:
@@ -60,12 +60,12 @@ public:
     return m_Value;
   }
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return !m_Value.empty();
   }
 
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_Value = "";
   }
@@ -76,7 +76,7 @@ protected:
   {}
 
   /** Destructor */
-  virtual ~StringParameter()
+  ~StringParameter() ITK_OVERRIDE
   {}
 
   std::string  m_Value;

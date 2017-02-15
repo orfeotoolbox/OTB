@@ -55,7 +55,6 @@ void GlView::Initialize(unsigned int sx, unsigned int sy)
   this->ClearActors();
 
   this->Resize(sx,sy);
- 
 }
 
 void GlView::Resize(unsigned int sx, unsigned int sy)
@@ -461,7 +460,7 @@ GlView
       }
 
   delete[] glBuffer;
-  glBuffer = NULL;
+  glBuffer = ITK_NULLPTR;
 
   //
   // Setup import RGBA-image filter.

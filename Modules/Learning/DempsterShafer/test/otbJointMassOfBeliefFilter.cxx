@@ -120,7 +120,7 @@ int otbJointMassOfBeliefFilterLimit(int itkNotUsed(argc), char* itkNotUsed(argv)
   MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
   JointMassOfBeliefFilterType::Pointer jointMassFilter = JointMassOfBeliefFilterType::New();
 
-  // Exemple from
+  // Example from
   // http://www.sandia.gov/epistemic/Reports/SAND2002-0835.pdf
   // page 27
 

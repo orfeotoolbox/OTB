@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainBoost_txx
-#define __otbTrainBoost_txx
+#ifndef otbTrainBoost_txx
+#define otbTrainBoost_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb
@@ -39,22 +39,22 @@ namespace Wrapper
     AddChoice("classifier.boost.t.logit", "LogitBoost (technique producing good regression fits)");
     AddChoice("classifier.boost.t.gentle", "Gentle AdaBoost (technique setting less weight on outlier data points "
                                                "and, for that reason, being often good with regression data)");
-    SetParameterString("classifier.boost.t", "real");
+    SetParameterString("classifier.boost.t", "real", false);
     SetParameterDescription("classifier.boost.t", "Type of Boosting algorithm.");
     //Do not expose SplitCriteria
     //WeakCount
     AddParameter(ParameterType_Int, "classifier.boost.w", "Weak count");
-    SetParameterInt("classifier.boost.w", 100);
+    SetParameterInt("classifier.boost.w",100, false);
     SetParameterDescription("classifier.boost.w","The number of weak classifiers.");
     //WeightTrimRate
     AddParameter(ParameterType_Float, "classifier.boost.r", "Weight Trim Rate");
-    SetParameterFloat("classifier.boost.r", 0.95);
+    SetParameterFloat("classifier.boost.r",0.95, false);
     SetParameterDescription("classifier.boost.r","A threshold between 0 and 1 used to save computational time. "
                             "Samples with summary weight <= (1 - weight_trim_rate) do not participate in the next iteration of training. "
                             "Set this parameter to 0 to turn off this functionality.");
     //MaxDepth : Not sure that this parameter has to be exposed.
     AddParameter(ParameterType_Int, "classifier.boost.m", "Maximum depth of the tree");
-    SetParameterInt("classifier.boost.m", 1);
+    SetParameterInt("classifier.boost.m",1, false);
     SetParameterDescription("classifier.boost.m","Maximum depth of the tree.");
   }
 

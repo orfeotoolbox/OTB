@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorizationPathListFilter_txx
-#define __otbVectorizationPathListFilter_txx
+#ifndef otbVectorizationPathListFilter_txx
+#define otbVectorizationPathListFilter_txx
 
 #include "otbVectorizationPathListFilter.h"
 #include "otbMacro.h"
@@ -52,7 +52,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputModulus*>(this->itk::ProcessObject::GetInput(0));
 }
@@ -73,7 +73,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputDirection *>(this->itk::ProcessObject::GetInput(1));
 }

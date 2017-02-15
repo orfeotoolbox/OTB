@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImageToIntensityImageFilter_h
-#define __otbVectorImageToIntensityImageFilter_h
+#ifndef otbVectorImageToIntensityImageFilter_h
+#define otbVectorImageToIntensityImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -32,7 +32,7 @@ namespace otb
  * with \f$b\f$ being the spectral band and \f$p\f$
  * the current pixel.
  *
- * Since the spectral mean deals with multi-bands image, the InputImage pixels are suposed to
+ * Since the spectral mean deals with multi-bands image, the InputImage pixels are supposed to
  * support the [] operator, and the input image to support the GetNumberOfComponentsPerPixel() method.
  *
  * \sa VectorImage
@@ -76,9 +76,9 @@ protected:
   /** Constructor */
   VectorImageToIntensityImageFilter();
   /** Destructor */
-  virtual ~VectorImageToIntensityImageFilter() {}
+  ~VectorImageToIntensityImageFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** VectorImageToIntensityImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -90,7 +90,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   VectorImageToIntensityImageFilter(const Self &); //purposely not implemented

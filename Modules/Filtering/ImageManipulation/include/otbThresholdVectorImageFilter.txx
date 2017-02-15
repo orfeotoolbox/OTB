@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbThresholdVectorImageFilter_txx
-#define __otbThresholdVectorImageFilter_txx
+#ifndef otbThresholdVectorImageFilter_txx
+#define otbThresholdVectorImageFilter_txx
 
 #include "otbThresholdVectorImageFilter.h"
 #include "itkImageRegionIterator.h"

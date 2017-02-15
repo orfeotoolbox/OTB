@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMDMDNMFImageFilter_txx
-#define __otbMDMDNMFImageFilter_txx
+#ifndef otbMDMDNMFImageFilter_txx
+#define otbMDMDNMFImageFilter_txx
 
 #include "otbMDMDNMFImageFilter.h"
 
@@ -538,7 +538,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 
   //---   Putting the rows of in the bands of the output vector image   ---//
   //TODO
-  // Could be impoved choosing an imageList for the abundance maps
+  // Could be improved choosing an imageList for the abundance maps
   // and a vector list for the endmember spectra (columns of A).
 
   itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr, outputPtr->GetRequestedRegion());

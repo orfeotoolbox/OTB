@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToProfileFilter_h
-#define __otbImageToProfileFilter_h
+#ifndef otbImageToProfileFilter_h
+#define otbImageToProfileFilter_h
 
 #include "otbImageToImageListFilter.h"
 
@@ -31,7 +31,7 @@ namespace otb
  *  \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots, n_{N}\} \}
  *  \f]
  *
- * with \f$ \{n_{1},\ldots, n_{N}\} \f$ beeing a range of parameter. This class is a base class templated
+ * with \f$ \{n_{1},\ldots, n_{N}\} \f$ being a range of parameter. This class is a base class templated
  * by the type of the filter \f$ \phi \f$. The SetProfileParameter() is a virtual method meant to be
  * rewritten so that the filter can be correctly set up in sub-classes.
  *
@@ -88,17 +88,17 @@ protected:
   /** Get the pointer to the filter */
   itkGetObjectMacro(Filter, FilterType);
   /** GenerateData method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** GenerateOutputInformation method */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
   /** Generate input requested region */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
   /** Constructor */
   ImageToProfileFilter();
   /** Destructor */
-  virtual ~ImageToProfileFilter() {}
+  ~ImageToProfileFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageToProfileFilter(const Self &); //purposely not implemented

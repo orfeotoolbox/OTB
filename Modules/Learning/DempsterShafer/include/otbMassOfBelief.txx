@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMassOfBelief_txx
-#define __otbMassOfBelief_txx
+#ifndef otbMassOfBelief_txx
+#define otbMassOfBelief_txx
 
 #include "otbMassOfBelief.h"
 

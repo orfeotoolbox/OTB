@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperApplicationHtmlDocGenerator_h
-#define __otbWrapperApplicationHtmlDocGenerator_h
+#ifndef otbWrapperApplicationHtmlDocGenerator_h
+#define otbWrapperApplicationHtmlDocGenerator_h
 
 #include "otbWrapperApplication.h"
 
@@ -31,7 +31,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT ApplicationHtmlDocGenerator
+class OTBApplicationEngine_EXPORT ApplicationHtmlDocGenerator
 {
 public:
  /** Standard class typedef */

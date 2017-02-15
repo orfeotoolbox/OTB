@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataSourceToLabelImageFilter_h
-#define __otbOGRDataSourceToLabelImageFilter_h
+#ifndef otbOGRDataSourceToLabelImageFilter_h
+#define otbOGRDataSourceToLabelImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbMacro.h"
@@ -137,14 +137,14 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
 protected:
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   OGRDataSourceToLabelImageFilter();
-  virtual ~OGRDataSourceToLabelImageFilter() {}
+  ~OGRDataSourceToLabelImageFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   OGRDataSourceToLabelImageFilter(const Self&); //purposely not implemented

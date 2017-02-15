@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapWithClassLabelToLabeledSampleListFilter_h
-#define __otbLabelMapWithClassLabelToLabeledSampleListFilter_h
+#ifndef otbLabelMapWithClassLabelToLabeledSampleListFilter_h
+#define otbLabelMapWithClassLabelToLabeledSampleListFilter_h
 
 #include "otbLabelMapToSampleListFilter.h"
 
@@ -97,14 +97,14 @@ public:
 
 protected:
   LabelMapWithClassLabelToLabeledSampleListFilter();
-  virtual ~LabelMapWithClassLabelToLabeledSampleListFilter();
+  ~LabelMapWithClassLabelToLabeledSampleListFilter() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Make Output */
-  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
 private:

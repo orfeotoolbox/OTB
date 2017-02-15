@@ -40,7 +40,7 @@ public:
   itkTypeMacro(MultivariateAlterationDetector, otb::Wrapper::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("MultivariateAlterationDetector");
     SetDescription("Multivariate Alteration Detector");
@@ -104,11 +104,11 @@ private:
     SetDocExampleParameterValue("out", "detectedChangeImage.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     typedef otb::MultivariateAlterationDetectorImageFilter<
         FloatVectorImageType,

@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbCvRTreesWrapper.h"
 #include <algorithm>
-
+#include <functional>
 
 namespace otb
 {

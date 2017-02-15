@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericCorrectionParameters_h
-#define __otbAtmosphericCorrectionParameters_h
+#ifndef otbAtmosphericCorrectionParameters_h
+#define otbAtmosphericCorrectionParameters_h
 
+#include "OTBOpticalCalibrationExport.h"
 #include "itkObject.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
@@ -39,7 +40,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT AtmosphericCorrectionParameters : public itk::DataObject
+class OTBOpticalCalibration_EXPORT AtmosphericCorrectionParameters : public itk::DataObject
 {
 public:
   /** Standard typedefs */
@@ -133,12 +134,12 @@ public:
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */
-  ~AtmosphericCorrectionParameters() {}
+  ~AtmosphericCorrectionParameters() ITK_OVERRIDE {}
 
 protected:
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   AtmosphericCorrectionParameters(const Self &); //purposely not implemented

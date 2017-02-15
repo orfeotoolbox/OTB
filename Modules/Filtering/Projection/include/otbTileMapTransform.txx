@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTileMapTransform_txx
-#define __otbTileMapTransform_txx
+#ifndef otbTileMapTransform_txx
+#define otbTileMapTransform_txx
 
 #include "otbTileMapTransform.h"
 #include "otbMacro.h"

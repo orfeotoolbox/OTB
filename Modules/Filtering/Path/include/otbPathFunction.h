@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPathFunction_h
-#define __otbPathFunction_h
+#ifndef otbPathFunction_h
+#define otbPathFunction_h
 
 #include "itkFunctionBase.h"
 
@@ -77,8 +77,8 @@ public:
 
 protected:
   PathFunction();
-  virtual ~PathFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PathFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   InputPathConstPointer m_Path;
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultivariateAlterationDetectorImageFilter_h
-#define __otbMultivariateAlterationDetectorImageFilter_h
+#ifndef otbMultivariateAlterationDetectorImageFilter_h
+#define otbMultivariateAlterationDetectorImageFilter_h
 
 
 #include "otbStreamingStatisticsVectorImageFilter.h"
@@ -152,11 +152,11 @@ public:
 
 protected:
   MultivariateAlterationDetectorImageFilter();
-  virtual ~MultivariateAlterationDetectorImageFilter() {}
+  ~MultivariateAlterationDetectorImageFilter() ITK_OVERRIDE {}
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   MultivariateAlterationDetectorImageFilter(const Self &); //purposely not implemented

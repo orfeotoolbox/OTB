@@ -39,7 +39,6 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbStreamingMinMaxImageFilter.h"
-#include "otbStreamingStatisticsImageFilter.h"
 #include "otbExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -183,9 +182,6 @@ public:
   typedef otb::StreamingMinMaxImageFilter
     <FloatImageType>                          MinMaxFilterType;
 
-  typedef otb::StreamingStatisticsImageFilter
-    <FloatImageType>                          StatisticsFilterType;
-
   typedef otb::ExtractROI
     <FloatPixelType,FloatPixelType>           ExtractFilterType;
 
@@ -312,7 +308,7 @@ private:
   }
 
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("StereoFramework");
     SetDescription("Compute the ground elevation based on one or multiple stereo pair(s)");
@@ -321,7 +317,7 @@ private:
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
                           "between one or multiple stereo pair in sensor geometry. The output is projected in "
                           "desired geographic or cartographic map projection (UTM by default). The pipeline is made of the following steps:\n"
-                          "for each sensor pair :\n"
+                          "for each sensor pair :\n\n"
                           "\t- compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
                           "\t- resample the stereo pair into epipolar geometry using BCO interpolation\n"
                           "\t- create masks for each epipolar image : remove black borders and resample"
@@ -331,7 +327,7 @@ private:
                           "\t- apply an optional median filter\n"
                           "\t- filter disparities based on the correlation score  and exploration bounds\n"
                           "\t- translate disparities in sensor geometry\n"
-                          "\t  convert disparity to 3D Map.\n"
+                          "\t  convert disparity to 3D Map.\n\n"
                           "Then fuse all 3D maps to produce DSM.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
@@ -339,7 +335,7 @@ private:
 
     AddDocTag(Tags::Stereo);
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "input", "Input parameters");
     SetParameterDescription("input","This group of parameters allows one to parametrize input data.");
 
@@ -350,7 +346,7 @@ private:
     SetParameterDescription("input.co","List of index of couples im image list. Couples must be separated by a comma. (index start at 0). for example : 0 1,1 2 will process a first couple composed of the first and the second image in image list, then the first and the third image\n. note that images are handled by pairs."
         " if left empty couples are created from input index i.e. a first couple will be composed of the first and second image, a second couple with third and fourth image etc. (in this case image list must be even).");
     MandatoryOff("input.co");
-    SetParameterString("input.co","");
+    SetParameterString("input.co","", false);
     DisableParameter("input.co");
 
     AddParameter(ParameterType_Int,  "input.channel",   "Image channel used for the block matching");
@@ -360,14 +356,14 @@ private:
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "output", "Output parameters");
     SetParameterDescription("output","This group of parameters allows one to choose the DSM resolution, nodata value, and projection parameters.");
 
     // // Build the Output Map Projection
     // for custom map projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
-    SetParameterString("map","wgs");
+    SetParameterString("map","wgs", false);
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
     SetParameterDescription("output.res","Spatial sampling distance of the output elevation : the cell size (in m)");
@@ -417,7 +413,7 @@ private:
     AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
-    // Add the output paramters in a group
+    // Add the output parameters in a group
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
     SetParameterDescription("stereorect","This group of parameters allows one to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
 
@@ -525,7 +521,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if( HasValue("input.il") )
       {
@@ -591,7 +587,7 @@ private:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Setup the DSM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
@@ -899,9 +895,9 @@ private:
         }
 
       // Compute disparities
-      FilterType* blockMatcherFilterPointer = NULL;
-      FilterType* invBlockMatcherFilterPointer = NULL;
-      FilterType* subPixelFilterPointer = NULL;
+      FilterType* blockMatcherFilterPointer = ITK_NULLPTR;
+      FilterType* invBlockMatcherFilterPointer = ITK_NULLPTR;
+      FilterType* subPixelFilterPointer = ITK_NULLPTR;
       BijectionFilterType::Pointer bijectFilter;
 
       // pointer

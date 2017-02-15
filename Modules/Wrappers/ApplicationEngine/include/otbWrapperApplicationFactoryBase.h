@@ -15,9 +15,10 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbWrapperApplicationFactoryBase_h
-#define __otbWrapperApplicationFactoryBase_h
+#ifndef otbWrapperApplicationFactoryBase_h
+#define otbWrapperApplicationFactoryBase_h
 
+#include "OTBApplicationEngineExport.h"
 #include "itkObjectFactoryBase.h"
 #include "otbWrapperApplication.h"
 
@@ -26,7 +27,7 @@ namespace otb
 namespace Wrapper
 {
 
-class ITK_ABI_EXPORT ApplicationFactoryBase : public itk::ObjectFactoryBase
+class OTBApplicationEngine_EXPORT ApplicationFactoryBase : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
@@ -44,7 +45,7 @@ public:
 protected:
   ApplicationFactoryBase(){}
 
-  virtual ~ApplicationFactoryBase(){}
+  ~ApplicationFactoryBase() ITK_OVERRIDE{}
 
 private:
   ApplicationFactoryBase(const Self &); //purposely not implemented

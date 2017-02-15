@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetComplexInputImageParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -72,39 +74,42 @@ void QtWidgetComplexInputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetComplexInputImageParameter::SelectFile()
+void
+QtWidgetComplexInputImageParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("Raster files (*)");
-
   assert( m_Input!=NULL );
 
-  if( !m_Input->text().isEmpty() )
-    {
-    QFileInfo finfo( m_Input->text() );
+  QString filename(
+    GetOpenFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "Raster files (*)" ),
+      NULL,
+      QFileDialog::ReadOnly
+    )
+  );
 
-    fileDialog.setDirectory(
-      finfo.isDir()
-      ? finfo.absoluteFilePath()
-      : finfo.absoluteDir()
-      );
+  if( filename.isEmpty() )
+    return;
+
+  if( !SetFileName( filename ) )
+    {
+    std::ostringstream oss;
+
+    oss << "Invalid filename: '"
+	<< QFile::encodeName( filename ).constData()
+	<< "'";
+
+    assert( GetModel()!=NULL );
+
+    GetModel()->SendLogWARNING( oss.str() );
+
+    return;
     }
 
-  if (fileDialog.exec())
-    {
-    if ( this->SetFileName( fileDialog.selectedFiles().at(0) ) == true )
-      m_Input->setText(fileDialog.selectedFiles().at(0));
-    else
-      {
-      std::ostringstream oss;
-      oss << "The given file "
-          << QFile::encodeName(	fileDialog.selectedFiles().at( 0 ) ).constData()
-          << " is not valid.";
-      this->GetModel()->SendLogWARNING( oss.str() );
-      }
-    }
+  m_Input->setText( filename  );
 }
 
 bool QtWidgetComplexInputImageParameter::SetFileName(const QString& value)

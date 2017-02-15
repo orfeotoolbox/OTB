@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbDataSpecP5B_h
-#define __otbDataSpecP5B_h
+#ifndef otbDataSpecP5B_h
+#define otbDataSpecP5B_h
 
 namespace otb
 {
@@ -62,4 +62,4 @@ extern const DataSpec DataSpecP5B[2101];
 
 }
 
-#endif /* __otbDataSpecP5B_h */
+#endif /* otbDataSpecP5B_h */

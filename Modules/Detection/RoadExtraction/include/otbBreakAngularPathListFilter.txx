@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBreakAngularPathListFilter_txx
-#define __otbBreakAngularPathListFilter_txx
+#ifndef otbBreakAngularPathListFilter_txx
+#define otbBreakAngularPathListFilter_txx
 
 #include "otbBreakAngularPathListFilter.h"
 #include "otbMath.h"

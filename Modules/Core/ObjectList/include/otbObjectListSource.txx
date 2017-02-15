@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectListSource_txx
-#define __otbObjectListSource_txx
+#ifndef otbObjectListSource_txx
+#define otbObjectListSource_txx
 
 #include "otbObjectListSource.h"
 #include "itkProgressReporter.h"
@@ -62,7 +62,7 @@ ObjectListSource<TOutputList>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<TOutputList*>
@@ -142,7 +142,7 @@ void
 ObjectListSource<TOutputList>
 ::GenerateData(void)
 {
-  itkExceptionMacro("subclass should override this method!!!");
+  itkExceptionMacro("subclass should ITK_OVERRIDE this method!!!");
 }
 
 /**

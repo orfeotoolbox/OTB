@@ -64,7 +64,7 @@ itkTypeMacro(HaralickTextureExtraction, otb::Application);
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
 SetName("HaralickTextureExtraction");
 SetDescription("Computes textures on every pixel of the input image selected channel");
@@ -76,8 +76,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbScalarImageToTexturesFilter, otbScalarImageToAdvancedTexturesFilter and otbScalarImageToHigherOrderTexturesFilter classes");
 
-AddDocTag("Textures");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Textures");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");
@@ -86,6 +86,13 @@ AddParameter(ParameterType_Int,  "channel",  "Selected Channel");
 SetParameterDescription("channel", "The selected channel index");
 SetDefaultParameterInt("channel", 1);
 SetMinimumParameterIntValue("channel", 1);
+
+AddParameter(ParameterType_Int, "step", "Computation step");
+SetParameterDescription("step", "Step (in pixels) to compute output texture values."
+  " The first computed pixel position is shifted by (step-1)/2 in both directions.");
+SetDefaultParameterInt("step", 1);
+SetMinimumParameterIntValue("step", 1);
+MandatoryOff("step");
 
 AddRAMParameter();
 
@@ -154,12 +161,12 @@ SetDocExampleParameterValue("texture", "simple");
 SetDocExampleParameterValue("out", "HaralickTextures.tif");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();
@@ -179,6 +186,12 @@ void DoExecute()
   OffsetType offset;
   offset[0] = GetParameterInt("parameters.xoff");
   offset[1] = GetParameterInt("parameters.yoff");
+
+  RadiusType stepping;
+  stepping.Fill(GetParameterInt("step"));
+
+  OffsetType stepOffset;
+  stepOffset.Fill((GetParameterInt("step") - 1) / 2);
 
   m_ExtractorFilter = ExtractorFilterType::New();
   m_ExtractorFilter->SetInput(inImage);
@@ -214,6 +227,8 @@ void DoExecute()
     m_HarTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
     m_HarTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
     m_HarTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_HarTexFilter->SetSubsampleFactor(stepping);
+    m_HarTexFilter->SetSubsampleOffset(stepOffset);
     m_HarTexFilter->UpdateOutputInformation();
     m_HarImageList->PushBack(m_HarTexFilter->GetEnergyOutput());
     m_HarImageList->PushBack(m_HarTexFilter->GetEntropyOutput());
@@ -235,6 +250,8 @@ void DoExecute()
     m_AdvTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
     m_AdvTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
     m_AdvTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_AdvTexFilter->SetSubsampleFactor(stepping);
+    m_AdvTexFilter->SetSubsampleOffset(stepOffset);
     m_AdvImageList->PushBack(m_AdvTexFilter->GetMeanOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetVarianceOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetDissimilarityOutput());
@@ -257,6 +274,8 @@ void DoExecute()
     m_HigTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
     m_HigTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
     m_HigTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_HigTexFilter->SetSubsampleFactor(stepping);
+    m_HigTexFilter->SetSubsampleOffset(stepOffset);
     m_HigImageList->PushBack(m_HigTexFilter->GetShortRunEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetLongRunEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetGreyLevelNonuniformityOutput());

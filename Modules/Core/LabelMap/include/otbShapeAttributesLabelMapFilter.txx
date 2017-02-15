@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShapeAttributesLabelMapFilter_txx
-#define __otbShapeAttributesLabelMapFilter_txx
+#ifndef otbShapeAttributesLabelMapFilter_txx
+#define otbShapeAttributesLabelMapFilter_txx
 
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "itkProgressReporter.h"
@@ -46,7 +46,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   m_ComputeFlusser(true),
   m_ComputePolygon(true),
   m_ReducedAttributeSet(true),
-  m_LabelImage(NULL)
+  m_LabelImage(ITK_NULLPTR)
 {}
 
 /** The comparator (!=) */
@@ -317,7 +317,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     // first, the dimension 0
     if (idx[0] == borderMin[0])
       {
-      // the begining of the line
+      // the beginning of the line
       physicalSizeOnBorder += sizePerPixelPerDimension[0];
       }
     if (idx[0] + (long) length - 1 == borderMax[0])
@@ -377,10 +377,10 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     // the other ones
     for (DimensionType i = 1; i < LabelObjectType::ImageDimension; ++i)
       {
-      // do this one here to avoid the double assigment in the following loop
+      // do this one here to avoid the double assignment in the following loop
       // when i == j
       centralMoments[i][i] += length * physicalPosition[i] * physicalPosition[i];
-      // central moments are symetrics, so avoid to compute them 2 times
+      // central moments are symmetrics, so avoid to compute them 2 times
       for (DimensionType j = i + 1; j < LabelObjectType::ImageDimension; ++j)
         {
         // note that we won't use that code if the image dimension is less than 3

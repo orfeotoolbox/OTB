@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRealMomentsImageFunction_txx
-#define __otbRealMomentsImageFunction_txx
+#ifndef otbRealMomentsImageFunction_txx
+#define otbRealMomentsImageFunction_txx
 
 #include "otbRealMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

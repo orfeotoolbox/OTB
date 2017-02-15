@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 //
 // Here, we set all the Ground Control Points associated to the image
 // indexes. This is the entry of the rpc sensor model
-// estimator. Everytime a GCP is added, the output image information
+// estimator. Every time a GCP is added, the output image information
 // or its keywordlist is updated. In general, a dozen of GCPs are
 // needed to estimate an accurate sensor model. The points are added
 // via the method AddGCP(PointType2D, PointType3D). The outpput image
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginLatex
 //
-// Finally, we trigger the kmz writting by calling the \code{Update()}
+// Finally, we trigger the kmz writing by calling the \code{Update()}
 // method on the writer.
 //
 // Software Guide : EndLatex

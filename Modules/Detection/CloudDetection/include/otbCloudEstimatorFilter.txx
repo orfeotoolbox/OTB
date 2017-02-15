@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCloudEstimatorFilter_txx
-#define __otbCloudEstimatorFilter_txx
+#ifndef otbCloudEstimatorFilter_txx
+#define otbCloudEstimatorFilter_txx
 
 #include "otbCloudEstimatorFilter.h"
 

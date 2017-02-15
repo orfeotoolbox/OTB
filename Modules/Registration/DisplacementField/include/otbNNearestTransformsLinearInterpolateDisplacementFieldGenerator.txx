@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_txx
-#define __otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_txx
+#ifndef otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_txx
+#define otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_txx
 
 #define EPSILON 1e-15
 

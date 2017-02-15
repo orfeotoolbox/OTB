@@ -18,6 +18,19 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbClampImageFilter.h"
 #include "otbClampVectorImageFilter.h"
+#include "otbImageIOFactory.h"
+#include "itksys/SystemTools.hxx"
+
+#ifdef OTB_USE_MPI
+
+#include "otbMPIConfig.h"
+#include "otbMPIVrtWriter.h"
+
+#ifdef OTB_USE_SPTW
+#include "otbSimpleParallelTiffWriter.h"
+#endif
+
+#endif
 
 namespace otb
 {
@@ -105,27 +118,117 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-#define otbClampAndWriteImageMacro(InputImageType, OutputImageType, writer)         \
-  {                                                                                 \
-    typedef otb::ClampImageFilter<InputImageType, OutputImageType> ClampFilterType; \
-    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         \
-    clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );   \
-    writer->SetFileName( this->GetFileName() );                                     \
-    writer->SetInput(clampFilter->GetOutput());                                     \
-    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                            \
-    writer->Update();                                                               \
-  }
+template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput> * writer, const std::string & filename, const unsigned int & ramValue)
+{
+  typedef otb::ClampImageFilter<TInput, TOutput> ClampFilterType; 
+  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
+  clampFilter->SetInput( dynamic_cast<TInput*>(in));
+  
+  bool useStandardWriter = true;
 
-#define otbClampAndWriteVectorImageMacro(InputImageType, OutputImageType, writer)         \
-  {                                                                                       \
-    typedef otb::ClampVectorImageFilter<InputImageType, OutputImageType> ClampFilterType; \
-    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();               \
-    clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );         \
-    writer->SetFileName(this->GetFileName() );                                            \
-    writer->SetInput(clampFilter->GetOutput());                                           \
-    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                                  \
-    writer->Update();                                                                     \
-  }
+  #ifdef OTB_USE_MPI
+
+  otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+
+  if (mpiConfig->GetNbProcs() > 1)
+    {
+    useStandardWriter = false;
+
+    // Get file extension
+    std::string extension = itksys::SystemTools::GetFilenameExtension(filename);
+
+    if(extension == ".vrt")
+      {
+      // Use the WriteMPI function
+      WriteMPI(clampFilter->GetOutput(),filename,ramValue);      
+      }
+    #ifdef OTB_USE_SPTW
+    else if (extension == ".tif")
+      {
+      // Use simple parallel tiff writer
+      typedef otb::SimpleParallelTiffWriter<TOutput> SPTWriterType;
+
+      typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
+      sptWriter->SetFileName(filename);
+      sptWriter->SetInput(clampFilter->GetOutput());
+      sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->Update();
+      }
+    
+    #endif
+    else
+      {
+      itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
+      }
+  
+    }
+  
+  #endif
+  
+  if(useStandardWriter)
+    {
+    
+    writer->SetFileName( filename );                                     
+    writer->SetInput(clampFilter->GetOutput());                                     
+    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->Update();
+    }
+}
+
+template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput > * writer, const std::string & filename, const unsigned int & ramValue)
+{
+  typedef otb::ClampVectorImageFilter<TInput, TOutput> ClampFilterType; 
+  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
+  clampFilter->SetInput( dynamic_cast<TInput*>(in));
+  
+  bool useStandardWriter = true;
+  
+#ifdef OTB_USE_MPI
+  
+  otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
+  
+  if (mpiConfig->GetNbProcs() > 1)
+    {
+    useStandardWriter = false;
+    
+    // Get file extension
+    std::string extension = itksys::SystemTools::GetFilenameExtension(filename);
+    
+    if(extension == ".vrt")
+      {
+      // Use the WriteMPI function
+      WriteMPI(clampFilter->GetOutput(),filename,ramValue);      
+      }
+    #ifdef OTB_USE_SPTW
+    else if (extension == ".tif")
+      {
+      // Use simple parallel tiff writer
+      typedef otb::SimpleParallelTiffWriter<TOutput> SPTWriterType;
+      
+      typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
+      sptWriter->SetFileName(filename);
+      sptWriter->SetInput(clampFilter->GetOutput());
+      sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->Update();
+      }
+    
+    #endif
+    else
+      {
+      itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
+      }
+    }
+  #endif
+  
+  if(useStandardWriter)
+    {
+    
+    writer->SetFileName( filename );                                     
+    writer->SetInput(clampFilter->GetOutput());                                     
+    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->Update();
+    }
+}
 
 
 template <class TInputImageType>
@@ -136,37 +239,37 @@ OutputImageParameter::SwitchImageWrite()
     {
     case ImagePixelType_uint8:
     {
-    otbClampAndWriteImageMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
+    ClampAndWriteImage<TInputImageType,UInt8ImageType>(m_Image,m_UInt8Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbClampAndWriteImageMacro(TInputImageType, Int16ImageType, m_Int16Writer);
+    ClampAndWriteImage<TInputImageType,Int16ImageType>(m_Image,m_Int16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbClampAndWriteImageMacro(TInputImageType, UInt16ImageType, m_UInt16Writer);
+    ClampAndWriteImage<TInputImageType,UInt16ImageType>(m_Image,m_UInt16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbClampAndWriteImageMacro(TInputImageType, Int32ImageType, m_Int32Writer);
+    ClampAndWriteImage<TInputImageType,Int32ImageType>(m_Image,m_Int32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbClampAndWriteImageMacro(TInputImageType, UInt32ImageType, m_UInt32Writer);
+    ClampAndWriteImage<TInputImageType,UInt32ImageType>(m_Image,m_UInt32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_float:
     {
-    otbClampAndWriteImageMacro(TInputImageType, FloatImageType, m_FloatWriter);
+    ClampAndWriteImage<TInputImageType,FloatImageType>(m_Image,m_FloatWriter,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_double:
     {
-    otbClampAndWriteImageMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
+    ClampAndWriteImage<TInputImageType,DoubleImageType>(m_Image,m_DoubleWriter,m_FileName,m_RAMValue);
     break;
     }
     }
@@ -181,37 +284,37 @@ OutputImageParameter::SwitchVectorImageWrite()
     {
     case ImagePixelType_uint8:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt8VectorImageType, m_VectorUInt8Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,UInt8VectorImageType>(m_Image,m_VectorUInt8Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int16VectorImageType, m_VectorInt16Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,Int16VectorImageType>(m_Image,m_VectorInt16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt16VectorImageType, m_VectorUInt16Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,UInt16VectorImageType>(m_Image,m_VectorUInt16Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int32VectorImageType, m_VectorInt32Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,Int32VectorImageType>(m_Image,m_VectorInt32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt32VectorImageType, m_VectorUInt32Writer);
+    ClampAndWriteVectorImage<TInputVectorImageType,UInt32VectorImageType>(m_Image,m_VectorUInt32Writer,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_float:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, FloatVectorImageType, m_VectorFloatWriter);
+    ClampAndWriteVectorImage<TInputVectorImageType,FloatVectorImageType>(m_Image,m_VectorFloatWriter,m_FileName,m_RAMValue);
     break;
     }
     case ImagePixelType_double:
     {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, DoubleVectorImageType, m_VectorDoubleWriter);
+    ClampAndWriteVectorImage<TInputVectorImageType,DoubleVectorImageType>(m_Image,m_VectorDoubleWriter,m_FileName,m_RAMValue);
     break;
     }
     }
@@ -332,7 +435,7 @@ OutputImageParameter::GetWriter()
   // 1 : VectorImage
   // 2 : RGBAImage
   // 3 : RGBImage
-  itk::ProcessObject* writer = 0;
+  itk::ProcessObject* writer = ITK_NULLPTR;
   if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer())
@@ -428,7 +531,7 @@ OutputImageParameter::GetWriter()
       break;
       }
     }
-  if (0 == writer)
+  if (ITK_NULLPTR == writer)
     {
     itkExceptionMacro("Unknown Writer type.");
     }
@@ -454,6 +557,47 @@ OutputImageParameter::HasValue() const
 {
   std::string filename(this->GetFileName());
   return !filename.empty();
+}
+
+std::string
+OutputImageParameter::CheckFileName(bool fixMissingExtension)
+{
+  std::string ret("");
+  // Check that there is an ImageIO capable of writing the file
+  otb::ExtendedFilenameToWriterOptions::Pointer filenameHelper =
+    otb::ExtendedFilenameToWriterOptions::New();
+  filenameHelper->SetExtendedFileName(this->GetFileName());
+  std::string simpleFilename = filenameHelper->GetSimpleFileName();
+  // TODO : check if simpleFilename is empty
+
+  otb::ImageIOBase::Pointer imageIO =
+    otb::ImageIOFactory::CreateImageIO(simpleFilename.c_str(),
+                                       otb::ImageIOFactory::WriteMode);
+  if(imageIO.IsNull())
+    {
+    // check for missing extension
+    std::string outExt = itksys::SystemTools::GetFilenameLastExtension(simpleFilename);
+    if (outExt.empty())
+      {
+      if (fixMissingExtension)
+        {
+        // try with .tif
+        std::string fullFileName(this->GetFileName());
+        std::string extendedPart = fullFileName.substr(simpleFilename.size());
+        this->SetFileName(simpleFilename+std::string(".tif")+extendedPart);
+        ret += std::string("no extension detected, using TIF as default.");
+        }
+      else
+        {
+        // TODO : call exception here?
+        }
+      }
+    else
+      {
+      // TODO : call exception here?
+      }
+    }
+  return ret;
 }
 
 }

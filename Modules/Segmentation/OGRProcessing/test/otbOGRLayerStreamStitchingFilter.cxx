@@ -85,7 +85,7 @@ int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
   //REPACK the layer to remove features marked as deleted in the Shapefile.
   std::string sql("REPACK ");
   sql = sql + layerName;
-  ogrDS->ExecuteSQL(sql , NULL, NULL);
+  ogrDS->ExecuteSQL(sql , ITK_NULLPTR, ITK_NULLPTR);
 
   return EXIT_SUCCESS;
 }

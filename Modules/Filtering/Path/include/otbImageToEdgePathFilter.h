@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEdgePathFilter_h
-#define __otbImageToEdgePathFilter_h
+#ifndef otbImageToEdgePathFilter_h
+#define otbImageToEdgePathFilter_h
 
 #include "otbImageToPathFilter.h"
 
@@ -35,7 +35,7 @@ namespace otb
  *
  * The edge computation is divided into two steps.
  *
- * First, a linear search is perfomed to detect a first pixel belonging to the edge of
+ * First, a linear search is performed to detect a first pixel belonging to the edge of
  * the object.
  *
  * From that pixel and until the algorithm comes back to this position, the neighborhood
@@ -45,7 +45,7 @@ namespace otb
  * opposite directions, thus producing an edge with a null surface and twice the length of the
  * object as perimeter.
  *
- * This leads to consistant result for geometric descriptors (for instance compacity).
+ * This leads to consistent result for geometric descriptors (for instance compacity).
  * \sa ImageToPathFilter
  *
  * \ingroup OTBPath
@@ -75,6 +75,7 @@ public:
   typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
 
   typedef typename InputImageType::PixelType PixelType;
+  typedef typename InputImageType::SizeType SizeType;
 
   /** Set and Get foreground value */
   itkSetMacro(ForegroundValue, PixelType);
@@ -82,10 +83,10 @@ public:
 
 protected:
   ImageToEdgePathFilter();
-  virtual ~ImageToEdgePathFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateOutputInformation() {}  //does nothing
-  virtual void GenerateData();
+  ~ImageToEdgePathFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  //does nothing
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   ImageToEdgePathFilter(const Self &); // purposely not implemented

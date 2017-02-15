@@ -18,16 +18,15 @@
 #ifndef otb_GlActor_h
 #define otb_GlActor_h
 
+#include <itkObject.h>
 
 #include "otbViewSettings.h"
-
-#include "itkObject.h"
-
+#include "OTBIceExport.h"
 
 namespace otb
 {
 
-class GlActor 
+class OTBIce_EXPORT GlActor 
   : public itk::Object
 {
 public:
@@ -70,7 +69,7 @@ public:
 protected:
   GlActor();
 
-  virtual ~GlActor();
+  ~GlActor() ITK_OVERRIDE;
 
 private:
   // prevent implementation

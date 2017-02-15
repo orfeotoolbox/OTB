@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSiftFastImageFilter_h
-#define __otbSiftFastImageFilter_h
+#ifndef otbSiftFastImageFilter_h
+#define otbSiftFastImageFilter_h
 
 #include "otbImageToPointSetFilter.h"
 #include "otbImage.h"
@@ -88,16 +88,16 @@ public:
 
 protected:
   /** Actually process the input */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** Constructor */
   SiftFastImageFilter();
 
   /** Destructor */
-  virtual ~SiftFastImageFilter() {}
+  ~SiftFastImageFilter() ITK_OVERRIDE {}
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The number of scales */

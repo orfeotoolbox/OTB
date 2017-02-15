@@ -121,10 +121,10 @@ private:
   std::string m_inImageName;
   bool m_currentEnabledStateOfFluxParam;
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("OpticalCalibration");
-    SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6. For other sensors the application also allows providing calibration parameters manually.");
+    SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6, Spot7. For other sensors the application also allows providing calibration parameters manually.");
     // Documentation
     SetDocName("Optical calibration");
     SetDocLongDescription("The application allows converting pixel values from DN (for Digital Numbers) to reflectance. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illuminations.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illuminations, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported. Note that computing TOC reflectivity will internally compute first TOA and then TOC reflectance. \n"
@@ -152,8 +152,8 @@ private:
 "- pi is the famous mathematical constant (3.14159...) \n"
 "- d is the earth-sun distance (in astronomical units) and depends on the acquisition's day and month \n"
 "- ESUN(b) is the mean TOA solar irradiance (or solar illumination) in W/m2/micrometers\n"
-"- θ is the solar zenith angle in degrees. \n"
-"Note that the application asks for the solar elevation angle, and will perfom the conversion to the zenith angle itself (ze. angle = 90° - el. angle).\n"
+"- θ is the solar zenith angle in degrees.\n\n"
+"Note that the application asks for the solar elevation angle, and will perform the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units : degrees).\n"
 "Note also that ESUN(b) not only depends on the band b, but also on the spectral sensitivity of the sensor in this particular band. "
 "In other words, the influence of spectral sensitivities is included within the ESUN different values.\n"
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
@@ -164,17 +164,17 @@ private:
 "by taking into account the original formula that the metadata files assumes.\n\n"
 
 "Below, we give two examples of txt files containing information about gains/biases and solar illuminations :\n\n"
-"- gainbias.txt :\n"
+"- gainbias.txt :\n\n"
 "# Gain values for each band. Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
 "10.4416 : 9.529 : 8.5175 : 14.0063\n"
 "# Bias values for each band.\n"
 "0.0 : 0.0 : 0.0 : 0.0\n\n"
-"- solarillumination.txt : \n"
+"- solarillumination.txt : \n\n"
 "# Solar illumination values in watt/m2/micron ('micron' means actually 'for each band').\n"
 "# Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
 "1540.494123 : 1826.087443 : 1982.671954 : 1094.747446\n\n"
 
-"Finally, the 'Logs' tab provides usefull messages that can help the user in knowing the process different status." );
+"Finally, the 'Logs' tab provides useful messages that can help the user in knowing the process different status." );
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -194,7 +194,7 @@ private:
     AddChoice("level.toa",     "Image to Top Of Atmosphere reflectance");
     AddChoice("level.toatoim",     "TOA reflectance to Image");
     AddChoice("level.toc",     "Image to Top Of Canopy reflectance (atmospheric corrections)");
-    SetParameterString("level", "toa");
+    SetParameterString("level", "toa", false);
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Flag to use milli-reflectance instead of reflectance.\n"
@@ -247,13 +247,13 @@ private:
     AddParameter(ParameterType_Group,"acqui.sun","Sun angles");
     SetParameterDescription("acqui.sun","This group contains the sun angles");
     //Sun elevation angle
-    AddParameter(ParameterType_Float, "acqui.sun.elev",   "Sun elevation angle (°)");
+    AddParameter(ParameterType_Float, "acqui.sun.elev", "Sun elevation angle (deg)");
     SetParameterDescription("acqui.sun.elev", "Sun elevation angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.sun.elev", 0.);
     SetMaximumParameterFloatValue("acqui.sun.elev", 120.);
     SetDefaultParameterFloat("acqui.sun.elev",90.0);
     //Sun azimuth angle
-    AddParameter(ParameterType_Float, "acqui.sun.azim",   "Sun azimuth angle (°)");
+    AddParameter(ParameterType_Float, "acqui.sun.azim", "Sun azimuth angle (deg)");
     SetParameterDescription("acqui.sun.azim", "Sun azimuth angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.sun.azim", 0.);
     SetMaximumParameterFloatValue("acqui.sun.azim", 360.);
@@ -262,13 +262,13 @@ private:
     AddParameter(ParameterType_Group,"acqui.view","Viewing angles");
     SetParameterDescription("acqui.view","This group contains the sensor viewing angles");
     //Viewing elevation angle
-    AddParameter(ParameterType_Float, "acqui.view.elev",   "Viewing elevation angle (°)");
+    AddParameter(ParameterType_Float, "acqui.view.elev",   "Viewing elevation angle (deg)");
     SetParameterDescription("acqui.view.elev", "Viewing elevation angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.view.elev", 0.);
     SetMaximumParameterFloatValue("acqui.view.elev", 120.);
     SetDefaultParameterFloat("acqui.view.elev",90.0);
     //Viewing azimuth angle
-    AddParameter(ParameterType_Float, "acqui.view.azim",   "Viewing azimuth angle (°)");
+    AddParameter(ParameterType_Float, "acqui.view.azim",   "Viewing azimuth angle (deg)");
     SetParameterDescription("acqui.view.azim", "Viewing azimuth angle (in degrees)");
     SetMinimumParameterFloatValue("acqui.view.azim", 0.);
     SetMaximumParameterFloatValue("acqui.view.azim", 360.);
@@ -354,7 +354,7 @@ private:
     m_currentEnabledStateOfFluxParam=false;
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     std::ostringstream ossOutput;
     //ossOutput << std::endl << "--DoUpdateParameters--" << std::endl;
@@ -376,7 +376,7 @@ private:
       {
         ossOutput << std::endl << "File: " << m_inImageName << std::endl;
 
-        //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
+        //Check if valid metadata information are available to compute ImageToLuminance and LuminanceToReflectance
         FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
         itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
         OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
@@ -424,21 +424,21 @@ private:
              ossOutput << "Acquisition Minute already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.minute", lImageMetadataInterface->GetMinute());
+             SetParameterInt("acqui.minute",lImageMetadataInterface->GetMinute(), false);
            }
 
            if (HasUserValue("acqui.hour"))
              ossOutput << "Acquisition Hour already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.hour", lImageMetadataInterface->GetHour());
+             SetParameterInt("acqui.hour",lImageMetadataInterface->GetHour(), false);
            }
 
            if (HasUserValue("acqui.day"))
              ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.day", lImageMetadataInterface->GetDay());
+             SetParameterInt("acqui.day",lImageMetadataInterface->GetDay(), false);
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.day");
            }
@@ -447,7 +447,7 @@ private:
              ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.month", lImageMetadataInterface->GetMonth());
+             SetParameterInt("acqui.month",lImageMetadataInterface->GetMonth(), false);
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.month");
            }
@@ -456,28 +456,28 @@ private:
              ossOutput << "Acquisition Year already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.year", lImageMetadataInterface->GetYear());
+             SetParameterInt("acqui.year",lImageMetadataInterface->GetYear(), false);
            }
 
            if (HasUserValue("acqui.sun.elev"))
              ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.elev", lImageMetadataInterface->GetSunElevation());
+             SetParameterFloat("acqui.sun.elev",lImageMetadataInterface->GetSunElevation(), false);
 
            if (HasUserValue("acqui.sun.azim"))
              ossOutput << "Acquisition Sun Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.azim", lImageMetadataInterface->GetSunAzimuth());
+             SetParameterFloat("acqui.sun.azim",lImageMetadataInterface->GetSunAzimuth(), false);
 
            if (HasUserValue("acqui.view.elev"))
              ossOutput << "Acquisition Viewing Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.elev", lImageMetadataInterface->GetSatElevation());
+             SetParameterFloat("acqui.view.elev",lImageMetadataInterface->GetSatElevation(), false);
 
            if (HasUserValue("acqui.view.azim"))
              ossOutput << "Acquisition Viewing Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.azim", lImageMetadataInterface->GetSatAzimuth());
+             SetParameterFloat("acqui.view.azim",lImageMetadataInterface->GetSatAzimuth(), false);
 
            // Set default value so that they are stored somewhere even if
            // they are overloaded by user values
@@ -558,16 +558,16 @@ private:
 
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
-    //Main filters instanciations
+    //Main filters instantiations
     m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
     m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
     m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
     m_ReflectanceToLuminanceFilter          = ReflectanceToLuminanceImageFilterType::New();
     m_LuminanceToImageFilter                = LuminanceToImageImageFilterType::New();
 
-    //Other instanciations
+    //Other instantiations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
     //m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();
@@ -812,20 +812,25 @@ private:
         }
         else if (IMIName != IMIOptDfltName)
         {
-          if (lImageMetadataInterface->GetSpectralSensitivity()->Size() > 0)
-            m_paramAcqui->SetWavelengthSpectralBand(lImageMetadataInterface->GetSpectralSensitivity());
+          //Avoid to call GetSpectralSensitivity() multiple times
+          OpticalImageMetadataInterface::WavelengthSpectralBandVectorType spectralSensitivity = lImageMetadataInterface->GetSpectralSensitivity();
+          
+          if (spectralSensitivity->Size() > 0)
+            m_paramAcqui->SetWavelengthSpectralBand(spectralSensitivity);
         }
         // Check that m_paramAcqui contains a real spectral profile.
         if (m_paramAcqui->GetWavelengthSpectralBand()->Size() == 0)
           {
           otbAppLogWARNING("No relative spectral response found, using "
                            "default response (constant between 0.3 and 1.0µm)");
-          AcquiCorrectionParametersType::WavelengthSpectralBandVectorType spectralDummy;
+          AcquiCorrectionParametersType::WavelengthSpectralBandVectorType spectralDummy =
+                  AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
           spectralDummy->Clear();
           for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
             {
               spectralDummy->PushBack(FilterFunctionValues::New());
             }
+          m_paramAcqui->SetWavelengthSpectralBand(spectralDummy);
           }
 
         // Aeronet file

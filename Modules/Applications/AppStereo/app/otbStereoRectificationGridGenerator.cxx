@@ -75,7 +75,7 @@ private:
 
   StereoRectificationGridGenerator()
   {
-    // Instanciate deformation field source
+    // Instantiate deformation field source
     m_DisplacementFieldSource = DisplacementFieldSourceType::New();
     m_LeftInvertDisplacementFieldFilter = InverseDisplacementFieldFilterType::New();
     m_RightInvertDisplacementFieldFilter = InverseDisplacementFieldFilterType::New();
@@ -96,7 +96,7 @@ private:
     m_StatisticsFilter            = StatisticsFilterType::New();
   }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("StereoRectificationGridGenerator");
     SetDescription("Generates two deformation fields to stereo-rectify (i.e. resample in epipolar geometry) a pair of stereo images up to the sensor model precision");
@@ -198,12 +198,12 @@ private:
     SetDocExampleParameterValue("epi.elevation.default","400");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_DisplacementFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
     m_DisplacementFieldSource->SetRightImage(GetParameterImage("io.inright"));
@@ -239,7 +239,8 @@ private:
       m_DEMToImageGenerator->AboveEllipsoidOn();
 
       m_StatisticsFilter->SetInput(m_DEMToImageGenerator->GetOutput());
-      AddProcess(m_StatisticsFilter,"Computing DEM statistics ...");
+      m_StatisticsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+      AddProcess(m_StatisticsFilter->GetStreamer(),"Computing DEM statistics ...");
       m_StatisticsFilter->Update();
 
       otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());

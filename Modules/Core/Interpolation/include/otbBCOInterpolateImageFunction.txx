@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBCOInterpolateImageFunction_txx
-#define __otbBCOInterpolateImageFunction_txx
+#ifndef otbBCOInterpolateImageFunction_txx
+#define otbBCOInterpolateImageFunction_txx
 
 #include "otbBCOInterpolateImageFunction.h"
 
@@ -142,8 +142,6 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
   IndexType baseIndex;
   IndexType neighIndex;
 
-  std::vector<RealType> lineRes(this->m_WinSize, 0.);
-
   RealType value = itk::NumericTraits<RealType>::Zero;
 
   CoefContainerType BCOCoefX = this->EvaluateCoef(index[0]);
@@ -157,6 +155,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
 
   for(unsigned int i = 0; i < this->m_WinSize; ++i )
     {
+    RealType lineRes = 0.;
     for(unsigned int j = 0; j < this->m_WinSize; ++j )
       {
       // get neighbor index
@@ -179,9 +178,9 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
         {
         neighIndex[1] = this->m_StartIndex[1];
         }
-      lineRes[i] += static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * BCOCoefY[j];
+      lineRes += static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * BCOCoefY[j];
       }
-    value += lineRes[i]*BCOCoefX[i];
+    value += lineRes*BCOCoefX[i];
     }
 
 
@@ -211,14 +210,9 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
   IndexType neighIndex;
 
 
-    
-  std::vector< std::vector<ScalarRealType> >  lineRes ( this->m_WinSize, std::vector<ScalarRealType>( componentNumber, itk::NumericTraits<ScalarRealType>::Zero) );
-  std::vector< ScalarRealType > value(componentNumber,itk::NumericTraits<ScalarRealType>::Zero);
-
-
-  OutputType output;
-
-  output.SetSize(componentNumber);
+  std::vector<ScalarRealType> lineRes(componentNumber);
+  OutputType output(componentNumber);
+  output.Fill(itk::NumericTraits<ScalarRealType>::Zero);
 
   CoefContainerType BCOCoefX = this->EvaluateCoef(index[0]);
   CoefContainerType BCOCoefY = this->EvaluateCoef(index[1]);
@@ -231,6 +225,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
 
   for(unsigned int i = 0; i < this->m_WinSize; ++i )
     {
+    std::fill(lineRes.begin(), lineRes.end(), itk::NumericTraits<ScalarRealType>::Zero);
     for(unsigned int j = 0; j < this->m_WinSize; ++j )
       {
       // get neighbor index
@@ -256,18 +251,13 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
       const InputPixelType & pixel = this->GetInputImage()->GetPixel( neighIndex );
       for( unsigned int k = 0; k<componentNumber; ++k)
         {
-        lineRes[i][k] += pixel.GetElement(k) * BCOCoefY[j];
+        lineRes[k] += pixel.GetElement(k) * BCOCoefY[j];
         }
       }
     for( unsigned int k = 0; k<componentNumber; ++k)
       {
-      value[k] += lineRes[i][k]*BCOCoefX[i];
+      output[k] += lineRes[k]*BCOCoefX[i];
       }
-    }
-
-  for( unsigned int k = 0; k<componentNumber; ++k)
-    {
-    output.SetElement(k, value[k]);
     }
 
   return ( output );

@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef otbLibSVMMachineLearningModelFactory_txx
+#define otbLibSVMMachineLearningModelFactory_txx
+
 #include "otbLibSVMMachineLearningModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -62,3 +65,5 @@ LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
+
+#endif

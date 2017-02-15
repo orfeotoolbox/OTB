@@ -48,12 +48,12 @@ typedef itk::AmoebaOptimizer         OptimizerType;
 typedef   const OptimizerType   *    OptimizerPointer;
 
 
-void Execute(itk::Object *caller, const itk::EventObject & event)
+void Execute(itk::Object *caller, const itk::EventObject & event) ITK_OVERRIDE
 {
   Execute( (const itk::Object *)caller, event);
 }
 
-void Execute(const itk::Object * object, const itk::EventObject & event)
+void Execute(const itk::Object * object, const itk::EventObject & event) ITK_OVERRIDE
 {
   OptimizerPointer optimizer =
       dynamic_cast< OptimizerPointer >( object );
@@ -112,7 +112,7 @@ public:
   itkTypeMacro(DSFuzzyModelEstimation, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DSFuzzyModelEstimation");
     SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
@@ -140,12 +140,12 @@ private:
     AddParameter(ParameterType_String, "cri", "Criterion");
     SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
     MandatoryOff("cri");
-    SetParameterString("cri","((Belief + Plausibility)/2.)");
+    SetParameterString("cri","((Belief + Plausibility)/2.)", false);
 
     AddParameter(ParameterType_Float,"wgt","Weighting");
     SetParameterDescription("wgt","Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)");
     MandatoryOff("wgt");
-    SetParameterFloat("wgt", 0.5);
+    SetParameterFloat("wgt",0.5, false);
 
     AddParameter(ParameterType_InputFilename,"initmod","initialization model");
     SetParameterDescription("initmod","Initialization model (xml file) to be used. If the xml initialization model is set, the descriptor list is not used (specified using the option -desclist)");
@@ -154,12 +154,12 @@ private:
     AddParameter(ParameterType_StringList, "desclist","Descriptor list");
     SetParameterDescription("desclist","List of the descriptors to be used in the model (must be specified to perform an automatic initialization)");
     MandatoryOff("desclist");
-    SetParameterString("desclist","");
+    SetParameterString("desclist","", false);
 
     AddParameter(ParameterType_Int,"maxnbit","Maximum number of iterations");
     MandatoryOff("maxnbit");
     SetParameterDescription("maxnbit","Maximum number of optimizer iteration (default 200)");
-    SetParameterInt("maxnbit", 200);
+    SetParameterInt("maxnbit",200, false);
 
     AddParameter(ParameterType_Empty,"optobs","Optimizer Observer");
     SetParameterDescription("optobs","Activate the optimizer observer");
@@ -179,7 +179,7 @@ private:
     SetDocExampleParameterValue("out", "DSFuzzyModelEstimation.xml");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
 
@@ -189,7 +189,7 @@ private:
 
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     //Instantiate
@@ -414,7 +414,7 @@ private:
       {
       // An error has occurred in the optimization.
       // Update the parameters
-      otbAppLogFATAL("ERROR: Exception Catched : "<< err.GetDescription() << std::endl
+      otbAppLogFATAL("ERROR: Exception Caught : "<< err.GetDescription() << std::endl
         << "numberOfIterations : " << m_Optimizer->GetOptimizer()->get_num_evaluations() << std::endl
         << "Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
       }

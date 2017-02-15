@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPerBandVectorImageFilter_h
-#define __otbPerBandVectorImageFilter_h
+#ifndef otbPerBandVectorImageFilter_h
+#define otbPerBandVectorImageFilter_h
 
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToImageListApplyFilter.h"
@@ -91,18 +91,18 @@ public:
   itkSetMacro(OutputIndex, unsigned int);
   itkGetMacro(OutputIndex, unsigned int);
 
-  virtual void GenerateInputRequestedRegion(void);
-  virtual void GenerateOutputInformation(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 protected:
   /** Main computation method */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** Constructor */
   PerBandVectorImageFilter();
   /** Destructor */
-  virtual ~PerBandVectorImageFilter() {}
+  ~PerBandVectorImageFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PerBandVectorImageFilter(const Self &); //purposely not implemented

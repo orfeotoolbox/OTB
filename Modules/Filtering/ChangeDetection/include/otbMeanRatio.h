@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanRatio_h
-#define __otbMeanRatio_h
+#ifndef otbMeanRatio_h
+#define otbMeanRatio_h
 
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 

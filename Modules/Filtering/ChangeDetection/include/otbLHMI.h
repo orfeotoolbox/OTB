@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLHMI_h
-#define __otbLHMI_h
+#ifndef otbLHMI_h
+#define otbLHMI_h
 
 #include <vector>
 #include "itkHistogram.h"

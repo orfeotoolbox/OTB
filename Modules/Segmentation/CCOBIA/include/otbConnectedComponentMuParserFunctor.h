@@ -19,8 +19,8 @@
 
  =========================================================================*/
 
-#ifndef __otbConnectedComponentMuParserFunctor_h
-#define __otbConnectedComponentMuParserFunctor_h
+#ifndef otbConnectedComponentMuParserFunctor_h
+#define otbConnectedComponentMuParserFunctor_h
 
 #include "otbParser.h"
 #include "otbMacro.h"

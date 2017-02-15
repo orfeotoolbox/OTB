@@ -1,0 +1,12 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+#cmakedefine HAVE_STD_SNPRINTF
+#cmakedefine HAVE_MSC_SNPRINTF

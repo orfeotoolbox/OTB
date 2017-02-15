@@ -114,7 +114,7 @@ CHECK_JPEG_YCBCR_SUBSAMPLING = 1
 # with no debugging information.
 # NOTE: /EHsc option required if you want to build the C++ stream API
 #
-OPTFLAGS =	/Ox /MD /EHsc /W3 /D_CRT_SECURE_NO_DEPRECATE
+OPTFLAGS =	/Ox /MD /EHsc /W3 /D_CRT_SECURE_NO_DEPRECATE -DHAVE_SNPRINTF
 #OPTFLAGS = 	/Zi 
 
 #

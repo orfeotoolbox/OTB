@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMeanShiftSmoothingImageFilter_txx
-#define __otbMeanShiftSmoothingImageFilter_txx
+#ifndef otbMeanShiftSmoothingImageFilter_txx
+#define otbMeanShiftSmoothingImageFilter_txx
 
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -38,7 +38,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       , m_NumberOfComponentsPerPixel(0)
       // , m_JointImage(0)
       // , m_ModeTable(0)
-      , m_ModeSearch(true)
+      , m_ModeSearch(false)
       , m_ThreadIdNumberOfBits(0)
 #if 0
       , m_BucketOptimization(false)
@@ -241,7 +241,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   // m_JointImage is the input data expressed in the joint spatial-range
   // domain, i.e. spatial coordinates are concatenated to the range values.
   // Moreover, pixel components in this image are normalized by their respective
-  // (spatial or range) bandwith.
+  // (spatial or range) bandwidth.
   typedef Meanshift::SpatialRangeJointDomainTransform<InputImageType, RealVectorImageType> FunctionType;
   typedef otb::UnaryFunctorWithIndexWithOutputSizeImageFilter<InputImageType, RealVectorImageType, FunctionType>
       JointImageFunctorType;
@@ -612,7 +612,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     bool hasConverged = false;
 
     // get input pixel in the joint spatial-range domain (with components
-    // normalized by bandwith)
+    // normalized by bandwidth)
     const RealVector &jointPixelVal = jointIt.Get(); // Pixel in the joint spatial-range domain
     for (unsigned int comp = 0; comp < jointDimension; comp++)
       jointPixel[comp] = jointPixelVal[comp];

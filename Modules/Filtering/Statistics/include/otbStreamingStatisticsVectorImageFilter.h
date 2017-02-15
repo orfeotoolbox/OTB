@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsVectorImageFilter_h
-#define __otbStreamingStatisticsVectorImageFilter_h
+#ifndef otbStreamingStatisticsVectorImageFilter_h
+#define otbStreamingStatisticsVectorImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -88,6 +88,7 @@ public:
   /** Type to use for computations. */
   typedef itk::VariableSizeMatrix<PrecisionType>        MatrixType;
   typedef itk::VariableLengthVector<PrecisionType>      RealPixelType;
+  typedef itk::VariableLengthVector<unsigned long>      CountType;
 
   /** Type of DataObjects used for outputs */
   typedef itk::SimpleDataObjectDecorator<RealType>      RealObjectType;
@@ -95,6 +96,15 @@ public:
   typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
   typedef itk::SimpleDataObjectDecorator<RealPixelType> RealPixelObjectType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
+  typedef itk::SimpleDataObjectDecorator<CountType>     CountObjectType;
+
+  /** Return the number of relevant pixels **/
+  CountType GetNbRelevantPixels() const
+  {
+    return this->GetNbRelevantPixelsOutput()->Get();
+  }
+  CountObjectType* GetNbRelevantPixelsOutput();
+  const CountObjectType* GetNbRelevantPixelsOutput() const;
 
   /** Return the computed Min */
   PixelType GetMinimum() const
@@ -174,12 +184,12 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
-  virtual void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
-  virtual void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
   itkSetMacro(EnableMinMax, bool);
   itkGetMacro(EnableMinMax, bool);
@@ -205,19 +215,19 @@ public:
 protected:
   PersistentStreamingStatisticsVectorImageFilter();
 
-  virtual ~PersistentStreamingStatisticsVectorImageFilter() {}
+  ~PersistentStreamingStatisticsVectorImageFilter() ITK_OVERRIDE {}
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   PersistentStreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented
@@ -300,6 +310,8 @@ public:
   typedef typename StatFilterType::RealPixelObjectType RealPixelObjectType;
   typedef typename StatFilterType::MatrixType          MatrixType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
+  typedef typename StatFilterType::CountType           CountType;
+  typedef typename StatFilterType::CountObjectType     CountObjectType;
 
   typedef typename StatFilterType::InternalPixelType   InternalPixelType;
 
@@ -312,6 +324,21 @@ public:
   {
     return this->GetFilter()->GetInput();
   }
+
+  /** Return the number of relevant pixels **/
+  CountType GetNbRelevantPixels() const
+  {
+    return this->GetFilter()->GetNbRelevantPixelsOutput()->Get();
+  }
+  CountObjectType* GetNbRelevantPixelsOutput()
+  {
+    return this->GetFilter()->GetNbRelevantPixelsOutput();
+  }
+  const CountObjectType* GetNbRelevantPixelsOutput() const
+  {
+    return this->GetFilter()->GetNbRelevantPixelsOutput();
+  }
+
 
   /** Return the computed Minimum. */
   RealPixelType GetMinimum() const
@@ -383,7 +410,7 @@ public:
     return this->GetFilter()->GetCovarianceOutput();
   }
 
-  /** Return the computed Covariance. */
+  /** Return the computed Correlation. */
   MatrixType GetCorrelation() const
   {
     return this->GetFilter()->GetCorrelationOutput()->Get();
@@ -425,7 +452,7 @@ public:
     return this->GetFilter()->GetComponentCovarianceOutput();
   }
 
-  /** Return the computed Covariance. */
+  /** Return the computed Correlation. */
   RealType GetComponentCorrelation() const
   {
     return this->GetFilter()->GetComponentCorrelationOutput()->Get();
@@ -465,7 +492,7 @@ protected:
   StreamingStatisticsVectorImageFilter() {}
 
   /** Destructor */
-  virtual ~StreamingStatisticsVectorImageFilter() {}
+  ~StreamingStatisticsVectorImageFilter() ITK_OVERRIDE {}
 
 private:
   StreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented

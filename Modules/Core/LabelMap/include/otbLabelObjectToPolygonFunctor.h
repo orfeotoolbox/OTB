@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelObjectToPolygonFunctor_h
-#define __otbLabelObjectToPolygonFunctor_h
+#ifndef otbLabelObjectToPolygonFunctor_h
+#define otbLabelObjectToPolygonFunctor_h
 
 #include <vector>
 
@@ -117,7 +117,7 @@ public:
   }
 
   /** Constructor */
-  LabelObjectToPolygonFunctor() : m_Polygon(NULL),
+  LabelObjectToPolygonFunctor() : m_Polygon(ITK_NULLPTR),
     m_CurrentState(UP_LEFT),
     m_PositionFlag(LEFT_END),
     m_StartingPoint(),

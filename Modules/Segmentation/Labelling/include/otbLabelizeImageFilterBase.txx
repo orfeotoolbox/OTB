@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeImageFilterBase_txx
-#define __otbLabelizeImageFilterBase_txx
+#ifndef otbLabelizeImageFilterBase_txx
+#define otbLabelizeImageFilterBase_txx
 
 #include "otbLabelizeImageFilterBase.h"
 

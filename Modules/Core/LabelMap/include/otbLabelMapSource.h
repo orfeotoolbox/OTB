@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelMapSource_h
-#define __otbLabelMapSource_h
+#ifndef otbLabelMapSource_h
+#define otbLabelMapSource_h
 
 
 #include "itkProcessObject.h"
@@ -61,9 +61,9 @@ public:
 
 protected:
   LabelMapSource();
-  ~LabelMapSource();
+  ~LabelMapSource() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Ensure that the output vector data are cleared before processing */
   virtual void  AllocateOutputs();
@@ -80,4 +80,4 @@ private:
 #include "otbLabelMapSource.txx"
 #endif
 
-#endif // __otbLabelMapSource_h
+#endif // otbLabelMapSource_h

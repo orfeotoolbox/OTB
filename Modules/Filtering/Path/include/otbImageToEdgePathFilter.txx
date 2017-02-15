@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToEdgePathFilter_txx
-#define __otbImageToEdgePathFilter_txx
+#ifndef otbImageToEdgePathFilter_txx
+#define otbImageToEdgePathFilter_txx
 
 #include "otbImageToEdgePathFilter.h"
 #include "otbMacro.h"
@@ -63,7 +63,9 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   typename PadFilterType::Pointer pad = PadFilterType::New();
   pad->SetInput(inputImage);
   pad->SetConstant(initPadConstant);
-  long unsigned int padSize[2] = {1, 1};
+  SizeType padSize;
+  padSize[ 0 ] = 1;
+  padSize[ 1 ] = 1;
   pad->SetPadUpperBound(padSize);
   pad->SetPadLowerBound(padSize);
   pad->Update();
@@ -141,7 +143,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
     int move = nextStart;
     // edgeFound indicate that the edge has been found.
     bool EdgeFound = false;
-    // LastWasPositive indicate wether the previous pixel belong to the object or not
+    // LastWasPositive indicate whether the previous pixel belong to the object or not
     bool LastWasPositive(false);
     // While unexplored pixels remain and no edge was found
     while ((move < nextStart + 8) && (!EdgeFound))

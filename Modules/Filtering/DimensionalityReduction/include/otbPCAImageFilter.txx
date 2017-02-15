@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPCAImageFilter_txx
-#define __otbPCAImageFilter_txx
+#ifndef otbPCAImageFilter_txx
+#define otbPCAImageFilter_txx
 #include "otbPCAImageFilter.h"
 
 #include "itkMacro.h"
@@ -478,6 +478,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
 } // end of namespace otb
 
-#endif // __otbPCAImageFilter_txx
+#endif // otbPCAImageFilter_txx
 
 

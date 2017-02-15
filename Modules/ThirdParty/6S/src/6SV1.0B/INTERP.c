@@ -65,6 +65,7 @@ Extern struct {
 	    arinf, drinf, dtinf, uainf, atinf, dtotc, wlinf, dasup, urinf, 
 	    utinf, drsup, dtsup, utotc, uasup, arsup, atsup, aasup, ursup, 
 	    utsup, ruaer0, alphaa, alphac, alphar, depolar1, depolar2;
+    doublereal rwl, rwl_1;
 
 /*<       include "paramdef.inc" >*/
 /*<       real test1,test2,test3 >*/
@@ -210,6 +211,11 @@ Extern struct {
     coef = log(sixs_disc__1.wldis[lsup - 1] / sixs_disc__1.wldis[linf - 1]);
 /*<       wlinf=wldis(linf) >*/
     wlinf = sixs_disc__1.wldis[linf - 1];
+
+    // coefficients for logarithmic interpolation
+    rwl = log( *wl / sixs_disc__1.wldis[linf - 1]) / coef;
+    rwl_1 = 1. - rwl;
+
 /* Here we spectrally interpolate phase functions and Stokes' */
 /* parameters I, Q and U (all divided by cos(teta_sun)), both */
 /* for Rayleigh, Aerosol, and a mixture Rayleigh+aerosol */
@@ -230,12 +236,9 @@ Extern struct {
 	goto L2240;
     }
 /*<           alphaa=alog(phase(lsup)/phase(linf))/coef >*/
-    alphaa = log(sixs_aer__1.phase[lsup - 1] / sixs_aer__1.phase[linf - 1]) / 
-	    coef;
 /*<           betaa=phase(linf)/(wlinf**(alphaa)) >*/
-    betaa = sixs_aer__1.phase[linf - 1] / pow_dd(&wlinf, &alphaa);
 /*<           phaa=betaa*(wl**alphaa) >*/
-    *phaa = betaa * pow_dd(wl, &alphaa);
+    *phaa = pow_dd(sixs_aer__1.phase + linf - 1, &rwl_1) * pow_dd(sixs_aer__1.phase + lsup - 1, &rwl);
 /*<  2240     continue >*/
 L2240:
 /*<           phar=depolar1*.75*(1.+xmud*xmud)+depolar2 >*/
@@ -249,23 +252,16 @@ L2240:
 /*     s       *(wl-wldis(linf))/(wldis(lsup)-wldis(linf)) */
 /*          else */
 /*<              alphar=alog(roatm(1,lsup)/roatm(1,linf))/ coef >*/
-    alphar = log(sixs_disc__1.roatm[lsup * 3 - 3] / sixs_disc__1.roatm[linf * 
-	    3 - 3]) / coef;
 /*<              betar=roatm(1,linf)/(wlinf**(alphar)) >*/
-    betar = sixs_disc__1.roatm[linf * 3 - 3] / pow_dd(&wlinf, &alphar);
 /*<  	    rorayl=betar*(wl**alphar) >*/
-    *rorayl = betar * pow_dd(wl, &alphar);
+    *rorayl = pow_dd(sixs_disc__1.roatm + linf * 3 - 3, &rwl_1) * pow_dd(sixs_disc__1.roatm + lsup * 3 - 3, &rwl);
 /*< 	    do ifi=1,nfi >*/
     i__1 = *nfi;
     for (ifi = 1; ifi <= i__1; ++ifi) {
 /*< 	    alphar=alog(roatm_fi(1,lsup,ifi)/roatm_fi(1,linf,ifi))/ coef >*/
-	alphar = log(roatm_fi__[(lsup + ifi * 20) * 3 + 1] / roatm_fi__[(linf 
-		+ ifi * 20) * 3 + 1]) / coef;
 /*<             betar=roatm_fi(1,linf,ifi)/(wlinf**(alphar)) >*/
-	betar = roatm_fi__[(linf + ifi * 20) * 3 + 1] / pow_dd(&wlinf, &
-		alphar);
 /*< 	    rorayl_fi(ifi)=betar*(wl**alphar) >*/
-	rorayl_fi__[ifi] = betar * pow_dd(wl, &alphar);
+      rorayl_fi__[ifi] = pow_dd(roatm_fi__ + (linf + ifi * 20) * 3 + 1, &rwl_1) * pow_dd(roatm_fi__ + (lsup + ifi * 20) * 3 + 1, &rwl);
 /*<             enddo >*/
     }
 /*          endif */
@@ -282,23 +278,16 @@ L2240:
 /*            enddo */
 /*          else */
 /*<             alphac=alog(roatm(2,lsup)/roatm(2,linf))/coef >*/
-    alphac = log(sixs_disc__1.roatm[lsup * 3 - 2] / sixs_disc__1.roatm[linf * 
-	    3 - 2]) / coef;
 /*<             betac=roatm(2,linf)/(wlinf**(alphac)) >*/
-    betac = sixs_disc__1.roatm[linf * 3 - 2] / pow_dd(&wlinf, &alphac);
 /*< 	    romix=betac*(wl**alphac) >*/
-    *romix = betac * pow_dd(wl, &alphac);
+    *romix = pow_dd(sixs_disc__1.roatm + linf * 3 - 2, &rwl_1) * pow_dd(sixs_disc__1.roatm + lsup * 3 - 2, &rwl);
 /*<      	    do ifi=1,nfi >*/
     i__1 = *nfi;
     for (ifi = 1; ifi <= i__1; ++ifi) {
 /*<             alphac=alog(roatm_fi(2,lsup,ifi)/roatm_fi(2,linf,ifi))/coef >*/
-	alphac = log(roatm_fi__[(lsup + ifi * 20) * 3 + 2] / roatm_fi__[(linf 
-		+ ifi * 20) * 3 + 2]) / coef;
 /*<             betac=roatm_fi(2,linf,ifi)/(wlinf**(alphac)) >*/
-	betac = roatm_fi__[(linf + ifi * 20) * 3 + 2] / pow_dd(&wlinf, &
-		alphac);
 /*< 	    romix_fi(ifi)=betac*(wl**alphac) >*/
-	romix_fi__[ifi] = betac * pow_dd(wl, &alphac);
+      romix_fi__[ifi] = pow_dd(roatm_fi__ + (linf + ifi * 20) * 3 + 2, &rwl_1) * pow_dd(roatm_fi__ + (lsup + ifi * 20) * 3 + 2, &rwl);
 /*< 	    enddo >*/
     }
 /*          endif */
@@ -311,12 +300,9 @@ L2240:
 /*     s       *(wl-wldis(linf))/(wldis(lsup)-wldis(linf)) */
 /*          else */
 /*<             alphaa=alog(roatm(3,lsup)/roatm(3,linf))/coef >*/
-    alphaa = log(sixs_disc__1.roatm[lsup * 3 - 1] / sixs_disc__1.roatm[linf * 
-	    3 - 1]) / coef;
 /*<             betaa=roatm(3,linf)/(wlinf**(alphaa)) >*/
-    betaa = sixs_disc__1.roatm[linf * 3 - 1] / pow_dd(&wlinf, &alphaa);
 /*<             roaero=betaa*(wl**alphaa) >*/
-    *roaero = betaa * pow_dd(wl, &alphaa);
+    *roaero = pow_dd(sixs_disc__1.roatm + linf * 3 - 1, &rwl_1) * pow_dd(sixs_disc__1.roatm + lsup * 3 - 1 , &rwl);
 /*          endif */
 /* Look up table update */
 /*<         coefl=(wl-wldis(linf))/(wldis(lsup)-wldis(linf)) >*/
@@ -331,13 +317,9 @@ L2240:
 /* 	if ((roluts(lsup,i,j).gt.0.001).and.(roluts(linf,i,j).gt.0.001
 )) then */
 /*<            alphac=alog(roluts(lsup,i,j)/roluts(linf,i,j))/coef >*/
-	    alphac = log(roluts[lsup + (i__ + j * 25) * 20] / roluts[linf + (
-		    i__ + j * 25) * 20]) / coef;
 /*<            betac=roluts(linf,i,j)/(wlinf**(alphac)) >*/
-	    betac = roluts[linf + (i__ + j * 25) * 20] / pow_dd(&wlinf, &
-		    alphac);
 /*< 	   rolut(i,j)=betac*(wl**alphac) >*/
-	    rolut[i__ + j * 25] = betac * pow_dd(wl, &alphac);
+      rolut[i__ + j * 25] = pow_dd(roluts + linf + (i__ + j * 25) * 20, &rwl_1) * pow_dd(roluts + lsup + (i__ + j * 25) * 20, &rwl);
 /* 	   else */
 /* 	   rolut(i,j)=roluts(linf,i,j) */
 /*     &      +(roluts(lsup,i,j)-roluts(linf,i,j))*coefl */
@@ -346,13 +328,9 @@ L2240:
 	    if (rolutsq[lsup + (i__ + j * 25) * 20] > .001 && rolutsq[linf + (
 		    i__ + j * 25) * 20] > .001) {
 /*<            alphac=alog(rolutsq(lsup,i,j)/rolutsq(linf,i,j))/coef >*/
-		alphac = log(rolutsq[lsup + (i__ + j * 25) * 20] / rolutsq[
-			linf + (i__ + j * 25) * 20]) / coef;
 /*<            betac=rolutsq(linf,i,j)/(wlinf**(alphac)) >*/
-		betac = rolutsq[linf + (i__ + j * 25) * 20] / pow_dd(&wlinf, &
-			alphac);
 /*< 	   rolutq(i,j)=betac*(wl**alphac) >*/
-		rolutq[i__ + j * 25] = betac * pow_dd(wl, &alphac);
+        rolutq[i__ + j * 25] = pow_dd(rolutsq + linf + (i__ + j * 25) * 20, &rwl_1) * pow_dd(rolutsq + lsup + (i__ + j * 25) * 20 , &rwl);
 /*< 	   else >*/
 	    } else {
 /*< 	  >*/
@@ -365,13 +343,9 @@ L2240:
 	    if (rolutsu[lsup + (i__ + j * 25) * 20] > .001 && rolutsu[linf + (
 		    i__ + j * 25) * 20] > .001) {
 /*<            alphac=alog(rolutsu(lsup,i,j)/rolutsu(linf,i,j))/coef >*/
-		alphac = log(rolutsu[lsup + (i__ + j * 25) * 20] / rolutsu[
-			linf + (i__ + j * 25) * 20]) / coef;
 /*<            betac=rolutsu(linf,i,j)/(wlinf**(alphac)) >*/
-		betac = rolutsu[linf + (i__ + j * 25) * 20] / pow_dd(&wlinf, &
-			alphac);
 /*< 	   rolutu(i,j)=betac*(wl**alphac) >*/
-		rolutu[i__ + j * 25] = betac * pow_dd(wl, &alphac);
+    rolutu[i__ + j * 25] = pow_dd(rolutsu + linf + (i__ + j * 25) * 20, &rwl_1) * pow_dd(rolutsu + lsup + (i__ + j * 25) * 20, &rwl);
 /*< 	   else >*/
 	    } else {
 /*< 	  >*/
@@ -396,12 +370,9 @@ L2234:
     if (sixs_aer__1.qhase[lsup - 1] > .001 && sixs_aer__1.qhase[linf - 1] > 
 	    .001) {
 /*<         alphaa=alog(qhase(lsup)/qhase(linf))/coef >*/
-	alphaa = log(sixs_aer__1.qhase[lsup - 1] / sixs_aer__1.qhase[linf - 1]
-		) / coef;
 /*<         betaa=qhase(linf)/(wlinf**(alphaa)) >*/
-	betaa = sixs_aer__1.qhase[linf - 1] / pow_dd(&wlinf, &alphaa);
 /*<         qhaa=betaa*(wl**alphaa) >*/
-	*qhaa = betaa * pow_dd(wl, &alphaa);
+	*qhaa = pow_dd(sixs_aer__1.qhase + linf - 1, &rwl_1) * pow_dd(sixs_aer__1.qhase + lsup - 1, &rwl);
 /*< 	else >*/
     } else {
 /*< 	qhaa=qhase(linf)+(qhase(lsup)-qhase(linf))*coefl >*/
@@ -434,12 +405,9 @@ L3240:
 /*<         else >*/
     } else {
 /*<           alphar=alog(rqatm(1,lsup)/rqatm(1,linf))/ coef >*/
-	alphar = log(sixs_disc__1.rqatm[lsup * 3 - 3] / sixs_disc__1.rqatm[
-		linf * 3 - 3]) / coef;
 /*<           betar=rqatm(1,linf)/(wlinf**(alphar)) >*/
-	betar = sixs_disc__1.rqatm[linf * 3 - 3] / pow_dd(&wlinf, &alphar);
 /*< 	  rqrayl=betar*(wl**alphar) >*/
-	*rqrayl = betar * pow_dd(wl, &alphar);
+	*rqrayl = pow_dd(sixs_disc__1.rqatm + linf * 3 - 3, &rwl_1) * pow_dd(sixs_disc__1.rqatm + lsup * 3 - 3, &rwl);
 /*< 	endif >*/
     }
 /*       write(6,*)'Q ',qhar,rqrayl,betar,alphar,rqatm(1,lsup), */
@@ -461,12 +429,9 @@ L3240:
 /*< 	else >*/
     } else {
 /*<           alphac=alog(rqatm(2,lsup)/rqatm(2,linf))/coef >*/
-	alphac = log(sixs_disc__1.rqatm[lsup * 3 - 2] / sixs_disc__1.rqatm[
-		linf * 3 - 2]) / coef;
 /*<           betac=rqatm(2,linf)/(wlinf**(alphac)) >*/
-	betac = sixs_disc__1.rqatm[linf * 3 - 2] / pow_dd(&wlinf, &alphac);
 /*<           rqmix=betac*(wl**alphac) >*/
-	*rqmix = betac * pow_dd(wl, &alphac);
+	*rqmix = pow_dd(sixs_disc__1.rqatm + linf * 3 - 2, &rwl_1) * pow_dd(sixs_disc__1.rqatm + lsup * 3 - 2, &rwl);
 /*<         endif >*/
     }
 /*<         if(iaer.eq.0) goto 3234 >*/
@@ -491,12 +456,9 @@ L3240:
 /*< 	else >*/
     } else {
 /*<           alphaa=alog(rqatm(3,lsup)/rqatm(3,linf))/coef >*/
-	alphaa = log(sixs_disc__1.rqatm[lsup * 3 - 1] / sixs_disc__1.rqatm[
-		linf * 3 - 1]) / coef;
 /*<           betaa=rqatm(3,linf)/(wlinf**(alphaa)) >*/
-	betaa = sixs_disc__1.rqatm[linf * 3 - 1] / pow_dd(&wlinf, &alphaa);
 /*<           rqaero=betaa*(wl**alphaa) >*/
-	*rqaero = betaa * pow_dd(wl, &alphaa);
+	*rqaero = pow_dd(sixs_disc__1.rqatm + linf * 3 - 1, &rwl_1) * pow_dd(sixs_disc__1.rqatm + lsup * 3 - 1, &rwl);
 /*< 	endif >*/
     }
 /*        write(6,*) "rqaero ",rqaero */
@@ -511,12 +473,9 @@ L3234:
     if (sixs_aer__1.uhase[lsup - 1] > .001 && sixs_aer__1.uhase[linf - 1] > 
 	    .001) {
 /*<         alphaa=alog(uhase(lsup)/uhase(linf))/coef >*/
-	alphaa = log(sixs_aer__1.uhase[lsup - 1] / sixs_aer__1.uhase[linf - 1]
-		) / coef;
 /*<         betaa=uhase(linf)/(wlinf**(alphaa)) >*/
-	betaa = sixs_aer__1.uhase[linf - 1] / pow_dd(&wlinf, &alphaa);
 /*<         uhaa=betaa*(wl**alphaa) >*/
-	*uhaa = betaa * pow_dd(wl, &alphaa);
+	*uhaa = pow_dd(sixs_aer__1.uhase + linf - 1, &rwl_1) * pow_dd(sixs_aer__1.uhase + lsup - 1, &rwl);
 /*< 	else >*/
     } else {
 /*< 	uhaa=uhase(linf)+(uhase(lsup)-uhase(linf))*coefl >*/
@@ -549,12 +508,9 @@ L4242:
 /*<         else >*/
     } else {
 /*<           alphar=alog(ruatm(1,lsup)/ruatm(1,linf))/ coef >*/
-	alphar = log(sixs_disc__1.ruatm[lsup * 3 - 3] / sixs_disc__1.ruatm[
-		linf * 3 - 3]) / coef;
 /*<           betar=ruatm(1,linf)/(wlinf**(alphar)) >*/
-	betar = sixs_disc__1.ruatm[linf * 3 - 3] / pow_dd(&wlinf, &alphar);
 /*< 	  rurayl=betar*(wl**alphar) >*/
-	*rurayl = betar * pow_dd(wl, &alphar);
+	*rurayl = pow_dd(sixs_disc__1.ruatm + linf * 3 - 3, &rwl_1) * pow_dd(sixs_disc__1.ruatm + lsup * 3 - 3, &rwl);
 /*< 	endif >*/
     }
 /*       write(6,*)'U ',uhar,rurayl,betar,alphar,ruatm(1,lsup), */
@@ -576,12 +532,9 @@ L4242:
 /*< 	else >*/
     } else {
 /*<           alphac=alog(ruatm(2,lsup)/ruatm(2,linf))/coef >*/
-	alphac = log(sixs_disc__1.ruatm[lsup * 3 - 2] / sixs_disc__1.ruatm[
-		linf * 3 - 2]) / coef;
 /*<           betac=ruatm(2,linf)/(wlinf**(alphac)) >*/
-	betac = sixs_disc__1.ruatm[linf * 3 - 2] / pow_dd(&wlinf, &alphac);
 /*<           rumix=betac*(wl**alphac) >*/
-	*rumix = betac * pow_dd(wl, &alphac);
+	*rumix = pow_dd(sixs_disc__1.ruatm + linf * 3 - 2, &rwl_1) * pow_dd(sixs_disc__1.ruatm + lsup * 3 - 2, &rwl);
 /*<         endif >*/
     }
 /*<         if(iaer.eq.0) goto 4234 >*/
@@ -605,12 +558,9 @@ L4242:
 /*< 	else >*/
     } else {
 /*<           alphaa=alog(ruatm(3,lsup)/ruatm(3,linf))/coef >*/
-	alphaa = log(sixs_disc__1.ruatm[lsup * 3 - 1] / sixs_disc__1.ruatm[
-		linf * 3 - 1]) / coef;
 /*<           betaa=ruatm(3,linf)/(wlinf**(alphaa)) >*/
-	betaa = sixs_disc__1.ruatm[linf * 3 - 1] / pow_dd(&wlinf, &alphaa);
 /*<           ruaero=betaa*(wl**alphaa) >*/
-	*ruaero = betaa * pow_dd(wl, &alphaa);
+	*ruaero = pow_dd(sixs_disc__1.ruatm + linf * 3 - 1, &rwl_1) * pow_dd(sixs_disc__1.ruatm + lsup * 3 - 1, &rwl);
 /*<         endif >*/
     }
 /*<  4234  	continue >*/
@@ -618,21 +568,15 @@ L4234:
 
 
 /*<       alphar=alog(trayl(lsup)/trayl(linf))/coef >*/
-    alphar = log(sixs_disc__1.trayl[lsup - 1] / sixs_disc__1.trayl[linf - 1]) 
-	    / coef;
 /*<       betar=trayl(linf)/(wlinf**(alphar)) >*/
-    betar = sixs_disc__1.trayl[linf - 1] / pow_dd(&wlinf, &alphar);
 /*<       tray=betar*(wl**alphar) >*/
-    *tray = betar * pow_dd(wl, &alphar);
+    *tray = pow_dd(sixs_disc__1.trayl + linf - 1, &rwl_1) * pow_dd(sixs_disc__1.trayl + lsup - 1, &rwl);
 /*<       if (idatmp.ne.0.) then >*/
     if ((doublereal) (*idatmp) != 0.) {
 /*<         alphar=alog(traypl(lsup)/traypl(linf))/coef >*/
-	alphar = log(sixs_disc__1.traypl[lsup - 1] / sixs_disc__1.traypl[linf 
-		- 1]) / coef;
 /*<         betar=traypl(linf)/(wlinf**(alphar)) >*/
-	betar = sixs_disc__1.traypl[linf - 1] / pow_dd(&wlinf, &alphar);
 /*<         trayp=betar*(wl**alphar) >*/
-	*trayp = betar * pow_dd(wl, &alphar);
+  *trayp = pow_dd(sixs_disc__1.traypl + linf - 1, &rwl_1) * pow_dd(sixs_disc__1.traypl + lsup - 1, &rwl);
 /*<       else >*/
     } else {
 /*<         trayp=0. >*/
@@ -645,22 +589,17 @@ L4234:
 	goto L1235;
     }
 /*<       alphaa=alog(ext(lsup)*ome(lsup)/(ext(linf)*ome(linf)))/coef >*/
-    alphaa = log(sixs_aer__1.ext[lsup - 1] * sixs_aer__1.ome[lsup - 1] / (
-	    sixs_aer__1.ext[linf - 1] * sixs_aer__1.ome[linf - 1])) / coef;
+    alphaa = sixs_aer__1.ext[linf - 1] * sixs_aer__1.ome[linf - 1];
 /*<       betaa=ext(linf)*ome(linf)/(wlinf**(alphaa)) >*/
-    betaa = sixs_aer__1.ext[linf - 1] * sixs_aer__1.ome[linf - 1] / pow_dd(&
-	    wlinf, &alphaa);
+    betaa = sixs_aer__1.ext[lsup - 1] * sixs_aer__1.ome[lsup - 1];
 /*<       tsca=taer55*betaa*(wl**alphaa)/ext(8) >*/
-    *tsca = *taer55 * betaa * pow_dd(wl, &alphaa) / sixs_aer__1.ext[7];
+    *tsca = *taer55 * pow_dd(&alphaa, &rwl_1) * pow_dd(&betaa, &rwl) / sixs_aer__1.ext[7];
 /*<       alphaa=alog(ext(lsup)/ext(linf))/coef >*/
-    alphaa = log(sixs_aer__1.ext[lsup - 1] / sixs_aer__1.ext[linf - 1]) / 
-	    coef;
 /*<       betaa=ext(linf)/(wlinf**(alphaa)) >*/
-    betaa = sixs_aer__1.ext[linf - 1] / pow_dd(&wlinf, &alphaa);
 /*<       taerp=taer55p*betaa*(wl**alphaa)/ext(8) >*/
-    *taerp = *taer55p * betaa * pow_dd(wl, &alphaa) / sixs_aer__1.ext[7];
+    *taerp = *taer55p * pow_dd(sixs_aer__1.ext + linf - 1, &rwl_1) * pow_dd(sixs_aer__1.ext + lsup - 1, &rwl) / sixs_aer__1.ext[7];
 /*<       taer=taer55*betaa*(wl**alphaa)/ext(8) >*/
-    *taer = *taer55 * betaa * pow_dd(wl, &alphaa) / sixs_aer__1.ext[7];
+    *taer = *taer55 * pow_dd(sixs_aer__1.ext + linf - 1, &rwl_1) * pow_dd(sixs_aer__1.ext + lsup - 1, &rwl) / sixs_aer__1.ext[7];
 
 /*<  1235 drinf=dtdif(1,linf)+dtdir(1,linf) >*/
 L1235:
@@ -670,11 +609,9 @@ L1235:
     drsup = sixs_disc__1.dtdif[lsup * 3 - 3] + sixs_disc__1.dtdir[lsup * 3 - 
 	    3];
 /*<       alphar=alog(drsup/drinf)/coef >*/
-    alphar = log(drsup / drinf) / coef;
 /*<       betar=drinf/(wlinf**(alphar)) >*/
-    betar = drinf / pow_dd(&wlinf, &alphar);
 /*<       dtotr=betar*(wl**alphar) >*/
-    *dtotr = betar * pow_dd(wl, &alphar);
+    *dtotr = pow_dd(&drinf , &rwl_1) * pow_dd(&drsup, &rwl);
 /*<       dtinf=dtdif(2,linf)+dtdir(2,linf) >*/
     dtinf = sixs_disc__1.dtdif[linf * 3 - 2] + sixs_disc__1.dtdir[linf * 3 - 
 	    2];
@@ -682,11 +619,11 @@ L1235:
     dtsup = sixs_disc__1.dtdif[lsup * 3 - 2] + sixs_disc__1.dtdir[lsup * 3 - 
 	    2];
 /*<       alphac=alog((dtsup*drinf)/(dtinf*drsup))/coef >*/
-    alphac = log(dtsup * drinf / (dtinf * drsup)) / coef;
+    alphac = dtinf / drinf;
 /*<       betac=(dtinf/drinf)/(wlinf**(alphac)) >*/
-    betac = dtinf / drinf / pow_dd(&wlinf, &alphac);
+    betac = dtsup / drsup;
 /*<       dtotc=betac*(wl**alphac) >*/
-    dtotc = betac * pow_dd(wl, &alphac);
+    dtotc = pow_dd(&alphac , &rwl_1) * pow_dd(&betac , &rwl);
 /*<       dainf=dtdif(3,linf)+dtdir(3,linf) >*/
     dainf = sixs_disc__1.dtdif[linf * 3 - 1] + sixs_disc__1.dtdir[linf * 3 - 
 	    1];
@@ -698,11 +635,9 @@ L1235:
 	goto L1236;
     }
 /*<       alphaa=alog(dasup/dainf)/coef >*/
-    alphaa = log(dasup / dainf) / coef;
 /*<       betaa=dainf/(wlinf**(alphaa)) >*/
-    betaa = dainf / pow_dd(&wlinf, &alphaa);
 /*<       dtota=betaa*(wl**alphaa) >*/
-    *dtota = betaa * pow_dd(wl, &alphaa);
+    *dtota = pow_dd(&dainf, &rwl_1) * pow_dd(&dasup, &rwl);
 /*<  1236 dtott=dtotc*dtotr >*/
 L1236:
     *dtott = dtotc * *dtotr;
@@ -713,11 +648,9 @@ L1236:
     ursup = sixs_disc__1.utdif[lsup * 3 - 3] + sixs_disc__1.utdir[lsup * 3 - 
 	    3];
 /*<       alphar=alog(ursup/urinf)/ coef >*/
-    alphar = log(ursup / urinf) / coef;
 /*<       betar=urinf/(wlinf**(alphar)) >*/
-    betar = urinf / pow_dd(&wlinf, &alphar);
 /*<       utotr=betar*(wl**alphar) >*/
-    *utotr = betar * pow_dd(wl, &alphar);
+    *utotr = pow_dd(&urinf, &rwl_1) * pow_dd(&ursup, &rwl);
 /*<       utinf=utdif(2,linf)+utdir(2,linf) >*/
     utinf = sixs_disc__1.utdif[linf * 3 - 2] + sixs_disc__1.utdir[linf * 3 - 
 	    2];
@@ -725,11 +658,11 @@ L1236:
     utsup = sixs_disc__1.utdif[lsup * 3 - 2] + sixs_disc__1.utdir[lsup * 3 - 
 	    2];
 /*<       alphac=alog((utsup*urinf)/(utinf*ursup))/ coef >*/
-    alphac = log(utsup * urinf / (utinf * ursup)) / coef;
+    alphac = utinf / urinf;
 /*<       betac=(utinf/urinf)/(wlinf**(alphac)) >*/
-    betac = utinf / urinf / pow_dd(&wlinf, &alphac);
+    betac = utsup / ursup;
 /*<       utotc=betac*(wl**alphac) >*/
-    utotc = betac * pow_dd(wl, &alphac);
+    utotc = pow_dd(&alphac, &rwl_1) * pow_dd(&betac, &rwl);
 /*<       uainf=utdif(3,linf)+utdir(3,linf) >*/
     uainf = sixs_disc__1.utdif[linf * 3 - 1] + sixs_disc__1.utdir[linf * 3 - 
 	    1];
@@ -741,11 +674,9 @@ L1236:
 	goto L1237;
     }
 /*<       alphaa=alog(uasup/uainf)/ coef >*/
-    alphaa = log(uasup / uainf) / coef;
 /*<       betaa=uainf/(wlinf**(alphaa)) >*/
-    betaa = uainf / pow_dd(&wlinf, &alphaa);
 /*<       utota=betaa*(wl**alphaa) >*/
-    *utota = betaa * pow_dd(wl, &alphaa);
+    *utota = pow_dd(&uainf, &rwl_1) * pow_dd(&uasup, &rwl);
 /*<  1237 utott=utotc*utotr >*/
 L1237:
     *utott = utotc * *utotr;
@@ -754,21 +685,17 @@ L1237:
 /*<       arsup=sphal(1,lsup) >*/
     arsup = sixs_disc__1.sphal[lsup * 3 - 3];
 /*<       alphar=alog(arsup/arinf)/ coef >*/
-    alphar = log(arsup / arinf) / coef;
 /*<       betar=arinf/(wlinf**(alphar)) >*/
-    betar = arinf / pow_dd(&wlinf, &alphar);
 /*<       asray=betar*(wl**alphar) >*/
-    *asray = betar * pow_dd(wl, &alphar);
+    *asray = pow_dd(&arinf, &rwl_1) * pow_dd(&arsup, &rwl);
 /*<       atinf=sphal(2,linf) >*/
     atinf = sixs_disc__1.sphal[linf * 3 - 2];
 /*<       atsup=sphal(2,lsup) >*/
     atsup = sixs_disc__1.sphal[lsup * 3 - 2];
 /*<       alphac=alog(atsup/atinf)/coef >*/
-    alphac = log(atsup / atinf) / coef;
 /*<       betac=atinf/(wlinf**(alphac)) >*/
-    betac = atinf / pow_dd(&wlinf, &alphac);
 /*<       astot=betac*(wl**alphac) >*/
-    *astot = betac * pow_dd(wl, &alphac);
+    *astot = pow_dd(&atinf, &rwl_1) * pow_dd(&atsup, &rwl);
 /*<       aainf=sphal(3,linf) >*/
     aainf = sixs_disc__1.sphal[linf * 3 - 1];
 /*<       aasup=sphal(3,lsup) >*/
@@ -778,11 +705,9 @@ L1237:
 	goto L1239;
     }
 /*<       alphaa=alog(aasup/aainf)/coef >*/
-    alphaa = log(aasup / aainf) / coef;
 /*<       betaa=aainf/(wlinf**(alphaa)) >*/
-    betaa = aainf / pow_dd(&wlinf, &alphaa);
 /*<       asaer=betaa*(wl**alphaa) >*/
-    *asaer = betaa * pow_dd(wl, &alphaa);
+    *asaer = pow_dd(&aainf, &rwl_1) * pow_dd(&aasup, &rwl);
 /*<  1239 return >*/
 L1239:
     return 0;

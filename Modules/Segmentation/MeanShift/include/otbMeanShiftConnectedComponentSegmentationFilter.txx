@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanShiftConnectedComponentSegmentationFilter_txx
-#define __otbMeanShiftConnectedComponentSegmentationFilter_txx
+#ifndef otbMeanShiftConnectedComponentSegmentationFilter_txx
+#define otbMeanShiftConnectedComponentSegmentationFilter_txx
 
 #include "otbMeanShiftConnectedComponentSegmentationFilter.h"
 #include "itkExtractImageFilter.h"
@@ -56,7 +56,7 @@ MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput(this->GetInput());
   extract->SetExtractionRegion(this->GetOutput()->GetRequestedRegion());
-  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
+  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
 
   // meanshift filtering
 

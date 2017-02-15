@@ -54,13 +54,19 @@ public:
   itkTypeMacro(GenerateRPCSensorModel, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("GenerateRPCSensorModel");
     SetDescription("Generate a RPC sensor model from a list of Ground Control Points.");
 
     SetDocName("Generate a RPC sensor model");
-    SetDocLongDescription("This application generates a RPC sensor model from a list of Ground Control Points. At least 20 points are required for estimation wihtout elevation support, and 40 points for estimation with elevation support. Elevation support will be automatically deactivated if an insufficient amount of points is provided. The application can optionnaly output a file containing accuracy statistics for each point, and a vector file containing segments represening points residues. The map projection parameter allows defining a map projection in which the accuracy is evaluated.");
+    SetDocLongDescription( "This application generates a RPC sensor model from a list of Ground Control Points. "
+                                   "At least 20 points are required for estimation without elevation support, "
+                                   "and 40 points for estimation with elevation support. "
+                                   "Elevation support will be automatically deactivated if an insufficient amount of points is provided. "
+                                   "The application can optionally output a file containing accuracy statistics for each point,"
+                                   " and a vector file containing segments representing points residues. "
+                                   "The map projection parameter allows defining a map projection in which the accuracy is evaluated." );
 
     AddDocTag(Tags::Geometry);
 
@@ -72,7 +78,7 @@ private:
     SetParameterDescription("outgeom","Geom file containing the generated RPC sensor model");
 
     AddParameter(ParameterType_InputFilename,"inpoints","Input file containing tie points");
-    SetParameterDescription("inpoints","Input file containing tie points. Points are stored in following format: col row lon lat. Line beginning with # are ignored.");
+    SetParameterDescription("inpoints","Input file containing tie points. Points are stored in following format: col row lon lat. Spaced by a space or tab character. Line beginning with # are ignored.");
 
     AddParameter(ParameterType_OutputFilename,"outstat","Output file containing output precision statistics");
     SetParameterDescription("outstat","Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) overall_error(meters)");
@@ -97,12 +103,12 @@ private:
     SetDocExampleParameterValue("map.epsg.code","32631");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     OGRMultiLineString mls;
 
@@ -125,20 +131,8 @@ private:
     // Avoid commented lines or too short ones
     if (!line.empty() && line[0] != '#')
       {
-      // retrieve the x component
-      std::string::size_type pos = 0;
-      std::string::size_type nextpos = line.find_first_of("\t", pos);
-      x = atof(line.substr(pos, nextpos).c_str());
-      pos = nextpos + 1;
-      nextpos = line.find_first_of("\t", pos);
-      y = atof(line.substr(pos, nextpos).c_str());
-      pos = nextpos + 1;
-      nextpos = line.find_first_of("\t", pos);
-      lon = atof(line.substr(pos, nextpos).c_str());
-      pos = nextpos + 1;
-      nextpos = line.find_first_of("\t", pos);
-      lat = atof(line.substr(pos, nextpos).c_str());
-
+      std::istringstream iss(line);
+      iss >> x >> y >> lon >> lat;
       z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon,lat);
 
       otbAppLogINFO("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
@@ -179,7 +173,7 @@ private:
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
   rsTransform->SetOutputProjectionRef(MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map"));
-  rsTransform->InstanciateTransform();
+  rsTransform->InstantiateTransform();
 
   std::ofstream ofs;
   ofs<<std::fixed;
@@ -261,7 +255,7 @@ private:
 if(IsParameterEnabled("outvector"))
   {
   // Create the datasource (for matches export)
-  otb::ogr::Layer layer(NULL, false);
+  otb::ogr::Layer layer(ITK_NULLPTR, false);
   otb::ogr::DataSource::Pointer ogrDS;
 
   ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

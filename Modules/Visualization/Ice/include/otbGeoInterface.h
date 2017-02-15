@@ -18,10 +18,10 @@
 #ifndef otb_GeoInterface_h
 #define otb_GeoInterface_h
 
+#include <itkFloatTypes.h>
+#include <itkPoint.h>
 
-#include "itkFloatTypes.h"
-#include "itkPoint.h"
-
+#include "OTBIceExport.h"
 
 namespace otb
 {
@@ -44,7 +44,7 @@ class ImageKeywordlist;
  * otb::GeoInterface::Point2d. Derived otb::GlActor classes must
  * implement double-prevision methods.
  */
-class GeoInterface
+class OTBIce_EXPORT GeoInterface
 {
 public:
   /**

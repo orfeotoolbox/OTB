@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStereorectificationDisplacementFieldSource_h
-#define __otbStereorectificationDisplacementFieldSource_h
+#ifndef otbStereorectificationDisplacementFieldSource_h
+#define otbStereorectificationDisplacementFieldSource_h
 
 #include "itkImageSource.h"
 #include "otbGenericRSTransform.h"
@@ -76,7 +76,7 @@ namespace otb
  *  resampling grid. Please keep in mind that the whole grid is loaded
  *  into memory, and that the epipolar lines direction may only vary
  *  smoothly. When working with large images, a coarse grid-step will
- *  generally be accurate enough and will preserve the memory ressources.
+ *  generally be accurate enough and will preserve the memory resources.
  *
  *  \sa StreamingWarpImageFilter
  *  \sa StereoSensorModelToElevationMapFilter
@@ -163,19 +163,19 @@ protected:
   StereorectificationDisplacementFieldSource( void );
 
   /** Destructor */
-  ~StereorectificationDisplacementFieldSource( void ) {};
+  ~StereorectificationDisplacementFieldSource( void ) ITK_OVERRIDE {};
 
   /** Generate output images information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   /** Enlarge output requested region (no streaming) */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output));
+  void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output)) ITK_OVERRIDE;
 
   /** Compute the deformation field */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  virtual void PrintSelf( std::ostream& os, itk::Indent indent ) const;
+  void PrintSelf( std::ostream& os, itk::Indent indent ) const ITK_OVERRIDE;
 
 private:
   StereorectificationDisplacementFieldSource( const Self& ); // purposely

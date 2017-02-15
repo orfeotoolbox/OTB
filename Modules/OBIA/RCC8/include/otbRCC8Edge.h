@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8Edge_h
-#define __otbRCC8Edge_h
+#ifndef otbRCC8Edge_h
+#define otbRCC8Edge_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -53,9 +53,9 @@ protected:
   /** Constructor */
   RCC8Edge();
   /** Desctructor */
-  ~RCC8Edge() {}
+  ~RCC8Edge() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** The RCC8 value */

@@ -15,6 +15,9 @@ otb_module(OTBTestKernel
     OTBOSSIMAdapters
     OTBImageManipulation
 
+    OPTIONAL_DEPENDS
+    OTBMPIConfig
+
   DESCRIPTION
     "${DOCUMENTATION}"
 )

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8InEdgeIterator_txx
-#define __otbRCC8InEdgeIterator_txx
+#ifndef otbRCC8InEdgeIterator_txx
+#define otbRCC8InEdgeIterator_txx
 
 #include "otbRCC8InEdgeIterator.h"
 
@@ -79,7 +79,7 @@ RCC8InEdgeIterator<TGraph>
 }
 /**
  * Return the source vertex index of the current edge.
- * \return The souce vertex index.
+ * \return The source vertex index.
  */
 template <class TGraph>
 typename RCC8InEdgeIterator<TGraph>

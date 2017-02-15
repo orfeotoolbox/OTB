@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLocalHistogramIFFactory_txx
-#define __otbLocalHistogramIFFactory_txx
+#ifndef otbLocalHistogramIFFactory_txx
+#define otbLocalHistogramIFFactory_txx
 
 #include "otbLocalHistogramIFFactory.h"
 

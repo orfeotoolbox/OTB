@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeographicalDistance_h
-#define __otbGeographicalDistance_h
+#ifndef otbGeographicalDistance_h
+#define otbGeographicalDistance_h
 
 #include "itkNumericTraits.h"
 #include "itkDistanceMetric.h"
@@ -29,7 +29,7 @@ namespace otb
  * \class GeographicalDistance
  * \brief Compute the metric distance between two geographical points
  *
- * Vector lenght must be at least two, otherwise the Evaluate method
+ * Vector length must be at least two, otherwise the Evaluate method
  * will throw an exception.
  *
  * First dimension is assumed to be the longitude, and second
@@ -62,15 +62,15 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Usefull typedefs */
+  /** Useful typedefs */
   typedef TVector                                  VectorType;
 
   /** Gets the distance between the origin point and x. This function
    *  work with SetOrigin() function */
-  virtual double Evaluate(const VectorType & x) const;
+  double Evaluate(const VectorType & x) const ITK_OVERRIDE;
 
   /* Gets the distance between x and y points */
-  virtual double Evaluate(const VectorType & x, const VectorType & y) const;
+  double Evaluate(const VectorType & x, const VectorType & y) const ITK_OVERRIDE;
 
   /** Set the earth radius */
   itkSetMacro(EarthRadius, double);
@@ -83,10 +83,10 @@ protected:
   GeographicalDistance();
 
   /** Destructor */
-  virtual ~GeographicalDistance(){}
+  ~GeographicalDistance() ITK_OVERRIDE{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   GeographicalDistance(const Self &);  //purposely not implemented

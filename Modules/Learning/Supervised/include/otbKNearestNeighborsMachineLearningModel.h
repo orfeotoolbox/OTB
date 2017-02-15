@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKNearestNeighborsMachineLearningModel_h
-#define __otbKNearestNeighborsMachineLearningModel_h
+#ifndef otbKNearestNeighborsMachineLearningModel_h
+#define otbKNearestNeighborsMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
 
@@ -60,7 +60,7 @@ public:
 
   /** Decision rule once the KNN are found :
    *  [for classification]
-   *   - KNN_VOTING : output value with maximum occurences (for classification)
+   *   - KNN_VOTING : output value with maximum occurrences (for classification)
    *  [for regression]
    *   - KNN_MEAN : output mean value of neighbors
    *   - KNN_MEDIAN : output median value of neighbors
@@ -72,23 +72,21 @@ public:
   itkSetMacro(DecisionRule, int);
 
   /** Train the machine learning model */
-  virtual void Train();
-  /** Predict values using the model */
-  virtual TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality=NULL) const;
+  void Train() ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="");
+  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="");
+  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &);
+  bool CanReadFile(const std::string &) ITK_OVERRIDE;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &);
+  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
 protected:
@@ -96,10 +94,14 @@ protected:
   KNearestNeighborsMachineLearningModel();
 
   /** Destructor */
-  virtual ~KNearestNeighborsMachineLearningModel();
+  ~KNearestNeighborsMachineLearningModel() ITK_OVERRIDE;
 
+  /** Predict values using the model */
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+
+  
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   KNearestNeighborsMachineLearningModel(const Self &); //purposely not implemented

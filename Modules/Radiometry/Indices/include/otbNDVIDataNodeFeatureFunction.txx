@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNDVIDataNodeFeatureFunction_txx
-#define __otbNDVIDataNodeFeatureFunction_txx
+#ifndef otbNDVIDataNodeFeatureFunction_txx
+#define otbNDVIDataNodeFeatureFunction_txx
 
 #include "otbNDVIDataNodeFeatureFunction.h"
 

@@ -42,6 +42,32 @@ int otbImageClassificationFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv
   return EXIT_SUCCESS;
 }
 
+int otbImageClassificationFilterLoadModel(int itkNotUsed(argc), char * argv[])
+{
+  const char * infname = argv[1];
+  const char * modelfname = argv[2];
+
+  // Instantiating object
+  ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
+
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(infname);
+
+  ModelType::Pointer model;
+
+  model = MachineLearningModelFactoryType::CreateMachineLearningModel(modelfname,
+                                                                      MachineLearningModelFactoryType::ReadMode);
+
+  if (model.IsNull())
+    {
+    std::cerr << "Unable to create a model from " << modelfname << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  model->Load(modelfname);
+  return EXIT_SUCCESS;
+}
+
 int otbImageClassificationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];

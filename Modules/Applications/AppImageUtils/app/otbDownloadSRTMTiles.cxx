@@ -91,7 +91,7 @@ private:
       }
     return false;
   }
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DownloadSRTMTiles");
     SetDescription("Download or list SRTM tiles related to a set of images");
@@ -103,8 +103,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
+	AddDocTag("Utilities");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
     SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");
@@ -132,13 +132,13 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     //Get the mode
@@ -167,7 +167,7 @@ private:
        rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
        rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
 
-       rsTransformToWGS84->InstanciateTransform();
+       rsTransformToWGS84->InstantiateTransform();
 
        const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
        const PointType origin=inImage->GetOrigin();

@@ -31,7 +31,7 @@
 // The \doxygen{otb}{LabelMapToVectorDataFilter} converts an \doxygen{itk}{LabelMap} to an
 // \doxygen{otb}{VectorData} where all the pixels get the attribute
 // value of the label object they belong to.
-// It uses the class \doxygen{otb}{LabelObjectToPolygonFunctor} wich
+// It uses the class \doxygen{otb}{LabelObjectToPolygonFunctor} which
 // follows a finite state machine described in \cite{Francis2000}.
 //
 //  Only polygon conversion is available yet.

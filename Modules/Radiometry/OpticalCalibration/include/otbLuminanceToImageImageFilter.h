@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLuminanceToImageImageFilter_h
-#define __otbLuminanceToImageImageFilter_h
+#ifndef otbLuminanceToImageImageFilter_h
+#define otbLuminanceToImageImageFilter_h
 
 #include "otb_6S.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
@@ -36,7 +36,7 @@ namespace Functor
 {
 /**
    * \class LuminanceToImageImageFunctor
-   * \brief Substract beta to the Input and multiply by alpha.
+   * \brief Subtract beta to the Input and multiply by alpha.
    *
    * \sa LuminanceToImageImageFilter
    * \ingroup Functor
@@ -172,10 +172,10 @@ protected:
     };
 
   /** Destructor */
-  virtual ~LuminanceToImageImageFilter() {}
+  ~LuminanceToImageImageFilter() ITK_OVERRIDE {}
 
   /** Update the functor list and input parameters */
-  virtual void BeforeThreadedGenerateData(void)
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
   {
     OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());

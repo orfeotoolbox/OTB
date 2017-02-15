@@ -75,7 +75,7 @@ assert_NaN( T val )
  * All parameters related to scene description (origin, spacing, angle
  * ...) are stored and managed by the ViewSettings class.
  */
-class GlView 
+class OTBIce_EXPORT GlView 
   : public itk::Object
 {
 public:
@@ -96,7 +96,7 @@ public:
   itkNewMacro(Self);
 
   /**
-   * The Intialize method will reset the OpenGl viewport to the given
+   * The Initialize method will reset the OpenGl viewport to the given
    * size, clear view settings and remove any existing actor.
    * \param sx Width of the viewport
    * \param sy Height of the viewport
@@ -104,7 +104,7 @@ public:
   void Initialize(unsigned int sx, unsigned int sy);
 
   /**
-   * This method allows to add a new actor (deriving from GlActor) to
+   * This method allows adding a new actor (deriving from GlActor) to
    * the GlView. The actor can be identified by an optional key. If
    * not provided, and the default value is used, the method will
    * generate a key to identify the actor. In both case, the key is
@@ -132,7 +132,7 @@ public:
   void ClearActors();
 
   /**
-   * This method allows to retrieve a pointer to the actor identified
+   * This method allows retrieving a pointer to the actor identified
    * by the given key.
    * \param key The key identifying the actor to retrieve
    * \return A pointer to the retrieved actor. This pointer will be
@@ -141,7 +141,7 @@ public:
   ActorType::Pointer GetActor(const std::string & key) const;
 
   /**
-   * Tells wether an otb::GlActor is contained given its storage key.
+   * Tells whether an otb::GlActor is contained given its storage key.
    *
    * @param key otb::GlActor storage key.
    *
@@ -236,7 +236,7 @@ public:
   /**
    */
   template< typename P >
-  bool GetExtent( P & origin, P & extent, bool isOverlay =false ) const;
+  size_t GetExtent( P & origin, P & extent, bool isOverlay =false ) const;
 
   /**
    */
@@ -277,7 +277,7 @@ public:
 protected:
   GlView();
 
-  virtual ~GlView();
+  ~GlView() ITK_OVERRIDE;
 
 private:
   // prevent implementation
@@ -319,16 +319,16 @@ GlView
   if( actor.IsNull() )
     return false;
 
-
   //
   // Reference actor does not implement geo-interface.
   const otb::GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
-
+  const otb::GeoInterface::Spacing2 nativeReferenceSpacing = geo->GetSpacing();
+  
   //
   // Compute transform origin.
   if( !geo->TransformFromViewport( center, vcenter, true ) )
@@ -390,13 +390,12 @@ GlView
   spacing[ 0 ] = vcl_sqrt( x[ 0 ] * x[ 0 ] + x[ 1 ] * x[ 1 ] ) / norm;
   spacing[ 1 ] = vcl_sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
 
-  // Sign of x-spacing is done by sign( x . (1, 0) ) which is sign( x[ 0 ] )
-  // Sign of y-spacing is done by sign( y . (0, 1) ) which is sign[ y[ 1 ] )
-
-  if( x[ 0 ]<0.0 )
+  // New spacing signs should match signs of the reference image spacing
+  
+  if( nativeReferenceSpacing[0]<0.0 )
     spacing[ 0 ] = -spacing[ 0 ];
 
-  if( y[ 1 ]<0.0 )
+  if( nativeReferenceSpacing[1]<0.0 )
     spacing[ 1 ] = -spacing[ 1 ];
 
   //
@@ -416,7 +415,7 @@ GlView
 
 
 template< typename P >
-bool
+size_t
 GlView
 ::GetExtent( P & origin, P & extent, bool isOverlay ) const
 {
@@ -425,7 +424,7 @@ GlView
     origin.Fill( 0 );
     extent.Fill( 0 );
 
-    return false;
+    return 0;
     }
 
 
@@ -434,6 +433,8 @@ GlView
 
   extent[ 0 ] = -std::numeric_limits< typename P::ValueType >::infinity();
   extent[ 1 ] = -std::numeric_limits< typename P::ValueType >::infinity();
+
+  size_t count = 0;
 
   for( ActorMapType::const_iterator it( m_Actors.begin() );
        it!=m_Actors.end();
@@ -476,10 +477,18 @@ GlView
 
       if( e[ 1 ]>extent[ 1 ] )
 	extent[ 1 ] = e[ 1 ];
+
+      ++ count;
       }
     }
 
-  return true;
+  if( count==0 )
+    {
+    origin.Fill( 0 );
+    extent.Fill( 0 );
+    }
+
+  return count;
 }
 
 
@@ -495,7 +504,7 @@ GlView
   e.Fill( 0 );
 
   // Get origin and extent of all layers in viewport system.
-  if( !GetExtent( o, e ) )
+  if( GetExtent( o, e )==0 )
     return false;
 
   // std::cout << "origin: [ " << o[ 0 ] << ", " << o[ 1 ] << " ]" << std::endl;
@@ -544,9 +553,9 @@ GlView
   // std::cout
   //   << std::hex << this << std::dec
   //   << "::ZoomToRegion( "
-  //   << "[ " << origin[ 0 ] << ", " << origin[ 1 ] << "], "
-  //   << "[ " << extent[ 0 ] << ", " << extent[ 1 ] << "], "
-  //   << "[ " << native[ 0 ] << ", " << native[ 1 ] << "] )"
+  //   << "[" << origin[ 0 ] << ", " << origin[ 1 ] << "], "
+  //   << "[" << extent[ 0 ] << ", " << extent[ 1 ] << "], "
+  //   << "[" << native[ 0 ] << ", " << native[ 1 ] << "] )"
   //   << std::endl;
 
   // Compute center point.
@@ -619,7 +628,7 @@ GlView
   const GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==NULL )
+  if( geo==ITK_NULLPTR )
     return false;
 
   // Get viewport current center and spacing.
@@ -658,7 +667,7 @@ GlView
 
   // Apply extent vector length to view spacing.
   //
-  // MANTIS-1178: Lenght of vector e must be divided by native
+  // MANTIS-1178: Length of vector e must be divided by native
   // spacing.
   //
   // MANTIS-1203: absolute value of native spacing should be
@@ -682,7 +691,7 @@ GlView
 
   // Apply extent vector length to view spacing.
   //
-  // MANTIS-1178: Lenght of vector e must be divided by native
+  // MANTIS-1178: Length of vector e must be divided by native
   // spacing.
   //
   // MANTIS-1203: absolute value of native spacing should be

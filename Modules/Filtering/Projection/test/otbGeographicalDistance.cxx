@@ -62,25 +62,25 @@ int otbGeographicalDistance(int itkNotUsed(argc), char * argv[])
   std::cerr.precision(5);
   if(vcl_abs(distEvaluate1 - expectedDistance) > tolerance)
     {
-    std::cerr<<"Evaluate("<<a<<") with origin "<<o<<" is innacurate: expected "<< expectedDistance<<", found "<<distEvaluate1<<std::endl;
+    std::cerr<<"Evaluate("<<a<<") with origin "<<o<<" is inaccurate: expected "<< expectedDistance<<", found "<<distEvaluate1<<std::endl;
     failFlag = true;
     }
 
   if(vcl_abs(distEvaluate2 - expectedDistance) > tolerance)
     {
-    std::cerr<<"Evaluate("<<a<<", "<<b<<") is innacurate: expected "<< expectedDistance<<", found "<<distEvaluate2<<std::endl;
+    std::cerr<<"Evaluate("<<a<<", "<<b<<") is inaccurate: expected "<< expectedDistance<<", found "<<distEvaluate2<<std::endl;
     failFlag = true;
     }
 
   if(distEvaluate2Null > tolerance)
     {
-    std::cerr<<"Evaluate("<<a<<", "<<a<<") is innacurate: expected 0., found "<<distEvaluate2Null<<std::endl;
+    std::cerr<<"Evaluate("<<a<<", "<<a<<") is inaccurate: expected 0., found "<<distEvaluate2Null<<std::endl;
     failFlag = true;
     }
 
     if(distEvaluate1Null > tolerance)
     {
-    std::cerr<<"Evaluate("<<b<<") with origin "<<o<< " is innacurate: expected 0., found "<<distEvaluate2Null<<std::endl;
+    std::cerr<<"Evaluate("<<b<<") with origin "<<o<< " is inaccurate: expected 0., found "<<distEvaluate2Null<<std::endl;
     failFlag = true;
     }
 

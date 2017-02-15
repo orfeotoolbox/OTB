@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDrawLineSpatialObjectListFilter_txx
-#define __otbDrawLineSpatialObjectListFilter_txx
+#ifndef otbDrawLineSpatialObjectListFilter_txx
+#define otbDrawLineSpatialObjectListFilter_txx
 
 #include "otbDrawLineSpatialObjectListFilter.h"
 

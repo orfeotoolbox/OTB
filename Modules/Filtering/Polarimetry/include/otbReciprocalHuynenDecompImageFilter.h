@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalHuynenDecompImageFilter_h
-#define __ReciprocalHuynenDecompImageFilter_h
+#ifndef otbReciprocalHuynenDecompImageFilter_h
+#define otbReciprocalHuynenDecompImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -119,7 +119,7 @@ public:
 
 protected:
    ReciprocalHuynenDecompImageFilter() {}
-  virtual ~ReciprocalHuynenDecompImageFilter() {}
+  ~ReciprocalHuynenDecompImageFilter() ITK_OVERRIDE {}
 
 private:
   ReciprocalHuynenDecompImageFilter(const Self&); //purposely not implemented

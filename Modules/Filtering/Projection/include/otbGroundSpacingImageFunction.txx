@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbGroundSpacingImageFunction_txx
-#define __otbGroundSpacingImageFunction_txx
+#ifndef otbGroundSpacingImageFunction_txx
+#define otbGroundSpacingImageFunction_txx
 
 #include "otbMath.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -133,7 +133,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   transform->SetInputOrigin(this->GetInputImage()->GetOrigin());
   transform->SetInputSpacing(this->GetInputImage()->GetSpacing());
 
-  transform->InstanciateTransform();
+  transform->InstantiateTransform();
   return transform->TransformPoint(inputPoint);
 }
 

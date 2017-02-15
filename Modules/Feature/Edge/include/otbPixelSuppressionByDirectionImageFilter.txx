@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPixelSuppressionByDirectionImageFilter_txx
-#define __otbPixelSuppressionByDirectionImageFilter_txx
+#ifndef otbPixelSuppressionByDirectionImageFilter_txx
+#define otbPixelSuppressionByDirectionImageFilter_txx
 
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 
@@ -69,7 +69,7 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputImage *>
@@ -84,7 +84,7 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputImage *>

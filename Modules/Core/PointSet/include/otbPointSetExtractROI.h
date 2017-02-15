@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetExtractROI_h
-#define __otbPointSetExtractROI_h
+#ifndef otbPointSetExtractROI_h
+#define otbPointSetExtractROI_h
 
 #include "otbPointSetToPointSetFilter.h"
 #include "itkTransform.h"
@@ -75,11 +75,11 @@ public:
 
 protected:
   PointSetExtractROI();
-  virtual ~PointSetExtractROI() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PointSetExtractROI() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Generate Requested Data */
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   PointSetExtractROI(const PointSetExtractROI &); //purposely not implemented

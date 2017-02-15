@@ -15,11 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEllipsoidAdapter_h
-#define __otbEllipsoidAdapter_h
+#ifndef otbEllipsoidAdapter_h
+#define otbEllipsoidAdapter_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+
+#include "OTBOSSIMAdaptersExport.h"
 
 class ossimEllipsoid;
 
@@ -37,7 +39,7 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  **/
 
-class EllipsoidAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT EllipsoidAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -52,17 +54,17 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(EllipsoidAdapter, itk::Object);
 
-  /** Convert a XYZ coordinate into a lon, lat, heigh on the ellipsoid */
+  /** Convert a XYZ coordinate into a lon, lat, height on the ellipsoid */
   void XYZToLonLatHeight(double x, double y, double z,
                          double& lon, double& lat, double& h) const;
 
-  /** Convert a lon, lat, heigh on the ellipsoid into a XYZ geocentric system*/
+  /** Convert a lon, lat, height on the ellipsoid into a XYZ geocentric system*/
   void LonLatHeightToXYZ(double lon, double lat, double h,
                          double& x, double& y, double& z) const;
 
 protected:
   EllipsoidAdapter();
-  virtual ~EllipsoidAdapter();
+  ~EllipsoidAdapter() ITK_OVERRIDE;
 
 private:
   EllipsoidAdapter(const Self &); //purposely not implemented

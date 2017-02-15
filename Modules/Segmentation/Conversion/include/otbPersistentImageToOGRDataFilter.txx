@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToOGRDataFilter_txx
-#define __otbPersistentImageToOGRDataFilter_txx
+#ifndef otbPersistentImageToOGRDataFilter_txx
+#define otbPersistentImageToOGRDataFilter_txx
 
 #include "otbPersistentImageToOGRDataFilter.h"
 #include "itkTimeProbe.h"
@@ -33,7 +33,11 @@ namespace otb
 
 template<class TImage>
 PersistentImageToOGRDataFilter<TImage>
-::PersistentImageToOGRDataFilter() : m_FieldName("DN"), m_LayerName("Layer"), m_GeometryType(wkbMultiPolygon)
+::PersistentImageToOGRDataFilter()
+  : m_FieldName("DN")
+  , m_LayerName("Layer")
+  , m_GeometryType(wkbMultiPolygon)
+  , m_FieldType(OFTInteger)
 {
    this->SetNumberOfRequiredInputs(2);
    this->SetNumberOfRequiredInputs(2);
@@ -89,6 +93,13 @@ PersistentImageToOGRDataFilter<TImage>
   this->Modified();
 }
 
+template<class TImage>
+const std::vector<std::string>&
+PersistentImageToOGRDataFilter<TImage>
+::GetOGRLayerCreationOptions(void)
+{
+  return m_OGRLayerCreationOptions;
+}
 
 template<class TImage>
 void
@@ -117,7 +128,6 @@ void
 PersistentImageToOGRDataFilter<TImage>
 ::Initialize()
 {
-
    std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
    bool projectionInformationAvailable = !projectionRefWkt.empty();
    OGRSpatialReference * oSRS = NULL;
@@ -126,26 +136,10 @@ PersistentImageToOGRDataFilter<TImage>
       oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
    }
 
-
    OGRDataSourcePointerType ogrDS = this->GetOGRDataSource();
-
-   ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, m_OGRLayerCreationOptions);
-   OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
-
-   //Handle the case of shapefile. A shapefile is a layer and not a datasource.
-   //The layer name in a shapefile is the shapefile's name.
-   //This is not the case for a database as sqlite or PG.
-   if (ogrDS->GetLayersCount() == 1)
-   {
-      ogrDS->GetLayer(0).CreateField(field, true);
-   }
-   else
-   {
-      ogrDS->GetLayer(m_LayerName).CreateField(field, true);
-   }
-
-   //CSLDestroy( options );
-
+   OGRLayerType outLayer = ogrDS->CreateLayer(m_LayerName, oSRS ,m_GeometryType, m_OGRLayerCreationOptions);
+   OGRFieldDefn field(m_FieldName.c_str(),m_FieldType);
+   outLayer.CreateField(field, true);
 }
 
 

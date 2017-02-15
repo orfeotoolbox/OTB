@@ -42,7 +42,7 @@ public:
   itkTypeMacro(ComputeImagesStatistics, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ComputeImagesStatistics");
     SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
@@ -66,17 +66,19 @@ private:
     SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse." );
     MandatoryOff("out");
 
+    AddRAMParameter();
+
    // Doc example parameter settings
    SetDocExampleParameterValue("il", "QB_1_ortho.tif");
    SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     //Statistics estimator
     typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVImageFilterType;
@@ -84,42 +86,37 @@ private:
     // Samples
     typedef double ValueType;
     typedef itk::VariableLengthVector<ValueType> MeasurementType;
+    typedef itk::VariableSizeMatrix<ValueType> MatrixValueType;
 
-    unsigned int nbSamples = 0;
     unsigned int nbBands = 0;
 
-    // Build a Measurement Vector of mean
-    MeasurementType mean;
-
-    // Build a MeasurementVector of variance
-    MeasurementType variance;
-
     FloatVectorImageListType* imageList = GetParameterImageList("il");
+    FloatVectorImageListType::InternalContainerSizeType nbImages = imageList->Size();
+
+    // Initialization, all image have same size and number of band/component
+    FloatVectorImageType* firstImage = imageList->GetNthElement(0);
+    nbBands = firstImage->GetNumberOfComponentsPerPixel();
+
+    // Build a Measurement Vector of mean
+    MatrixValueType mean(nbBands, static_cast<unsigned int>(nbImages));
+    mean.Fill(itk::NumericTraits<MatrixValueType::ValueType>::Zero);
+
+    // Build a Measurement Matrix of variance
+    MatrixValueType variance(nbBands, static_cast<unsigned int>(nbImages));
+    variance.Fill(itk::NumericTraits<MatrixValueType::ValueType>::Zero);
+
+    // Build a Measurement Matrix of nbSamples
+    MatrixValueType nbSamples(nbBands, static_cast<unsigned int>(nbImages));
+    nbSamples.Fill(itk::NumericTraits<MatrixValueType::ValueType>::Zero);
 
     //Iterate over all input images
-    for (unsigned int imageId = 0; imageId < imageList->Size(); ++imageId)
+    for (unsigned int imageId = 0; imageId < nbImages; ++imageId)
       {
       FloatVectorImageType* image = imageList->GetNthElement(imageId);
-
-      if (nbBands == 0)
-        {
-        nbBands = image->GetNumberOfComponentsPerPixel();
-        }
-      else if (nbBands != image->GetNumberOfComponentsPerPixel())
+      if (nbBands != image->GetNumberOfComponentsPerPixel())
         {
         itkExceptionMacro(<< "The image #" << imageId + 1 << " has " << image->GetNumberOfComponentsPerPixel()
             << " bands, while the image #1 has " << nbBands );
-        }
-
-      FloatVectorImageType::SizeType size = image->GetLargestPossibleRegion().GetSize();
-
-      //Set the measurement vectors size if it's the first iteration
-      if (imageId == 0)
-        {
-        mean.SetSize(nbBands);
-        mean.Fill(0.);
-        variance.SetSize(nbBands);
-        variance.Fill(0.);
         }
 
       // Compute Statistics of each VectorImage
@@ -128,41 +125,89 @@ private:
       processName << "Processing Image (" << imageId+1 << "/" << imageList->Size() << ")";
       AddProcess(statsEstimator->GetStreamer(), processName.str().c_str());
       statsEstimator->SetInput(image);
-      if( HasValue( "bv" )==true )
+      statsEstimator->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+
+      if( HasValue( "bv" ) )
         {
         statsEstimator->SetIgnoreUserDefinedValue(true);
         statsEstimator->SetUserIgnoredValue(GetParameterFloat("bv"));
         }
       statsEstimator->Update();
-      mean += statsEstimator->GetMean();
-      for (unsigned int itBand = 0; itBand < nbBands; itBand++)
+
+      MeasurementType nbRelevantPixels = statsEstimator->GetNbRelevantPixels();
+      MeasurementType meanPerBand = statsEstimator->GetMean();
+
+      for(unsigned int itBand = 0; itBand < nbBands; itBand++)
         {
-        variance[itBand] += (size[0] * size[1] - 1) * (statsEstimator->GetCovariance())(itBand, itBand);
+        mean(itBand, imageId) = meanPerBand[itBand];
+        variance(itBand, imageId) = (statsEstimator->GetCovariance())( itBand, itBand );
+        nbSamples(itBand, imageId) = nbRelevantPixels[itBand];
         }
-      //Increment nbSamples
-      nbSamples += size[0] * size[1];
       }
 
-    //Divide by the number of input images to get the mean over all layers
-    mean /= imageList->Size();
-    //Apply the pooled variance formula
-    variance /= (nbSamples - imageList->Size());
+    // Compute total mean and pooled variation for each band of the image list
+    MeasurementType totalSamplesPerBand;
+    totalSamplesPerBand.SetSize(nbBands);
+    totalSamplesPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
+
+    MeasurementType totalMeanPerBand;
+    totalMeanPerBand.SetSize(nbBands);
+    totalMeanPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
+
+    MeasurementType totalVariancePerBand;
+    totalVariancePerBand.SetSize(nbBands);
+    totalVariancePerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
+
+    for (unsigned int imageId = 0; imageId < nbImages; ++imageId)
+      {
+      for(unsigned int itBand = 0; itBand < nbBands; itBand++)
+        {
+        MeasurementType::ValueType nbSample = nbSamples(itBand, imageId);
+        totalSamplesPerBand[itBand] += nbSample;
+        totalMeanPerBand[itBand] += mean(itBand, imageId) * nbSample;
+        totalVariancePerBand[itBand] += variance(itBand, imageId) * (nbSample  - 1);
+        }
+      }
+
+    // Check 0 division
+    for(unsigned int itBand = 0; itBand < nbBands; itBand++)
+      {
+      MeasurementType::ValueType nbSample = totalSamplesPerBand[itBand];
+
+      if ( nbSample > nbImages )
+        {
+        totalVariancePerBand[itBand] /= (nbSample - nbImages);
+        }
+      else
+        {
+        totalVariancePerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
+        }
+
+      if ( nbSample != 0 )
+        {
+        totalMeanPerBand[itBand] /= nbSample;
+        }
+      else
+        {
+        totalMeanPerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
+        }
+      }
 
     MeasurementType stddev;
     stddev.SetSize(nbBands);
-    stddev.Fill(0.);
-    for (unsigned int i = 0; i < variance.GetSize(); ++i)
+    stddev.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
+    for (unsigned int i = 0; i < totalVariancePerBand.GetSize(); ++i)
       {
-      stddev[i] = vcl_sqrt(variance[i]);
+      stddev[i] = vcl_sqrt(totalVariancePerBand[i]);
       }
 
-    if( HasValue( "out" )==true )
+    if( HasValue( "out" ) )
       {
       // Write the Statistics via the statistic writer
       typedef otb::StatisticsXMLFileWriter<MeasurementType> StatisticsWriter;
       StatisticsWriter::Pointer writer = StatisticsWriter::New();
       writer->SetFileName(GetParameterString("out"));
-      writer->AddInput("mean", mean);
+      writer->AddInput("mean", totalMeanPerBand);
       writer->AddInput("stddev", stddev);
       writer->Update();
       }

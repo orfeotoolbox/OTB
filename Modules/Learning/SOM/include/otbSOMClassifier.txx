@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMClassifier_txx
-#define __otbSOMClassifier_txx
+#ifndef otbSOMClassifier_txx
+#define otbSOMClassifier_txx
 
 #include "otbSOMClassifier.h"
 #include "otbMacro.h"

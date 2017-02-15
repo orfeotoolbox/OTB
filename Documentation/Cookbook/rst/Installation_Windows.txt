@@ -1,0 +1,41 @@
+Windows binary packages are available for Windows 7 or higher. They can
+be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_ .
+
+Pick the correct version (32 bit or 64 bit) depending on your system.
+
+Extract the archive and use one of the launchers, they contain all applications
+and their launchers (both command line and graphical launchers are provided):
+
+-  ``monteverdi.bat`` : A launcher script for Monteverdi
+
+-  ``mapla.bat`` : A launcher script for Mapla
+
+-  ``otbenv.bat`` : A script to initialize the environment for OTB
+   executables
+
+-  ``bin`` : A folder containing application launchers (otbcli.bat,
+   otbgui.bat) and the DLLs.
+
+-  ``lib`` : A folder containing application DLLs.
+
+The applications can be launched from the Mapla launcher. If you want to
+use the otbcli and otbgui launchers, you can initialize a command prompt
+with ``otbenv.bat``.
+
+Python bindings
+---------------
+Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
+currently only Python 2.x is supported. If no compatible python is found, installation
+notify you about it. If everything works fine, you will be given information about
+using python bindings.
+
+You must have python numpy bindings installed in your system. you can install it locally
+without admin rights with "pip install --user numpy". This is to give users to choose
+their own existing python installation rather than distributing one in OTB package
+
+Notes:
+~~~~~~
+- You must have "Visual C++ Redistributable for Visual Studio 2015" installed for using this package.
+  It can be downloaded freely from `microsoft <https://www.microsoft.com/en-us/download/details.aspx?id=48145>`_
+    
+

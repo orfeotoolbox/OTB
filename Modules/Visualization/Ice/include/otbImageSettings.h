@@ -78,7 +78,7 @@ public:
 protected:
   ImageSettings();
 
-  virtual ~ImageSettings();
+  ~ImageSettings() ITK_OVERRIDE;
 
 
 private:

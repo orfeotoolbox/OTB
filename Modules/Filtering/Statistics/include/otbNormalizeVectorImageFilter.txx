@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeVectorImageFilter_txx
-#define __otbNormalizeVectorImageFilter_txx
+#ifndef otbNormalizeVectorImageFilter_txx
+#define otbNormalizeVectorImageFilter_txx
 #include "otbNormalizeVectorImageFilter.h"
 
 namespace otb
@@ -83,4 +83,4 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
 
 } // end of namespace otb
 
-#endif // __otbNormalizeVectorImageFilter_txx
+#endif // otbNormalizeVectorImageFilter_txx

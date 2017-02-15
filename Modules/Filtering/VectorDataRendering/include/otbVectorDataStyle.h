@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataStyle_h
-#define __otbVectorDataStyle_h
+#ifndef otbVectorDataStyle_h
+#define otbVectorDataStyle_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"

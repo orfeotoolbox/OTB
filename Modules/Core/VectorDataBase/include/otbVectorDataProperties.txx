@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataProperties_txx
-#define __otbVectorDataProperties_txx
+#ifndef otbVectorDataProperties_txx
+#define otbVectorDataProperties_txx
 
 #include "otbVectorDataProperties.h"
 #include <algorithm>
@@ -71,7 +71,7 @@ void
 VectorDataProperties<TVectorData>
 ::ComputeBoundingRegion()
 {
-  /** Initialize the bouding region to null*/
+  /** Initialize the bounding region to null*/
   IndexType index;
   SizeType  size;
   index.Fill(itk::NumericTraits<Type>::ZeroValue());

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectList_h
-#define __otbObjectList_h
+#ifndef otbObjectList_h
+#define otbObjectList_h
 
 #include <vector>
 #include "itkDataObject.h"
@@ -584,9 +584,9 @@ protected:
   /** Constructor */
   ObjectList();
   /** Destructor */
-  ~ObjectList() {}
+  ~ObjectList() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ObjectList(const Self &); //purposely not implemented

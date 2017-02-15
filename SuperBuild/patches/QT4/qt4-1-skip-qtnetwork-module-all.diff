@@ -1,0 +1,32 @@
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro	2016-07-06 10:15:46.000000000 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro	2016-07-06 14:09:07.000000000 +0200
+@@ -1,5 +1,4 @@
+ TEMPLATE = subdirs
+-SUBDIRS += trace
+ !wince*:contains(QT_CONFIG, opengl):SUBDIRS += opengl
+ contains(QT_CONFIG, openvg):contains(QT_CONFIG, egl) {
+     SUBDIRS += openvg
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro	2016-07-06 10:15:46.000000000 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro	2016-07-06 12:58:14.000000000 +0200
+@@ -1,6 +1,6 @@
+ TEMPLATE = subdirs
+ 
+-SUBDIRS	*= sqldrivers script bearer
++SUBDIRS	*= sqldrivers
+ unix:!symbian {
+         contains(QT_CONFIG,iconv)|contains(QT_CONFIG,gnu-libiconv)|contains(QT_CONFIG,sun-libiconv):SUBDIRS *= codecs
+ } else {
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/src.pro qt-everywhere-opensource-src-4.8.7/src/src.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/src.pro	2016-07-06 10:15:47.000000000 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/src.pro	2016-07-06 10:18:44.000000000 +0200
+@@ -4,7 +4,7 @@
+ unset(SRC_SUBDIRS)
+ win32:SRC_SUBDIRS += src_winmain
+ symbian:SRC_SUBDIRS += src_s60main
+-SRC_SUBDIRS += src_corelib src_xml src_network src_sql src_testlib
++SRC_SUBDIRS += src_corelib src_xml src_sql
+ nacl: SRC_SUBDIRS -= src_network src_testlib
+ !symbian:contains(QT_CONFIG, dbus):SRC_SUBDIRS += src_dbus
+ !contains(QT_CONFIG, no-gui): SRC_SUBDIRS += src_gui

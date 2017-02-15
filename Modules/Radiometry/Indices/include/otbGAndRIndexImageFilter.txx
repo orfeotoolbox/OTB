@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGAndRIndexImageFilter_txx
-#define __otbGAndRIndexImageFilter_txx
+#ifndef otbGAndRIndexImageFilter_txx
+#define otbGAndRIndexImageFilter_txx
 
 #include "otbGAndRIndexImageFilter.h"
 #include "itkImageRegionIterator.h"

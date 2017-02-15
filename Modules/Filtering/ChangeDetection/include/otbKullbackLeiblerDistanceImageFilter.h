@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKullbackLeiblerDistanceImageFilter_h
-#define __otbKullbackLeiblerDistanceImageFilter_h
+#ifndef otbKullbackLeiblerDistanceImageFilter_h
+#define otbKullbackLeiblerDistanceImageFilter_h
 
 #include "itkVariableLengthVector.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
@@ -67,7 +67,7 @@ public:
 
 protected:
 
-  /** Moment estimation from intial neighborhood */
+  /** Moment estimation from initial neighborhood */
   void  MakeSumAndMoments(const TInput& input);
   /** Moment estimation from raw data */
   void  MakeSumAndMoments(const itk::Image<typename TInput::ImageType::PixelType, 1> * input);
@@ -168,7 +168,7 @@ public:
 
 protected:
   KullbackLeiblerDistanceImageFilter() {}
-  virtual ~KullbackLeiblerDistanceImageFilter() {}
+  ~KullbackLeiblerDistanceImageFilter() ITK_OVERRIDE {}
 
 private:
   KullbackLeiblerDistanceImageFilter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToVectorDataFilter_txx
-#define __otbVectorDataToVectorDataFilter_txx
+#ifndef otbVectorDataToVectorDataFilter_txx
+#define otbVectorDataToVectorDataFilter_txx
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkProgressReporter.h"
@@ -53,7 +53,7 @@ VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TInputVectorData *>

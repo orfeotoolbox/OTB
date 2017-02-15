@@ -15,12 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAeronetData_h
-#define __otbAeronetData_h
+#ifndef otbAeronetData_h
+#define otbAeronetData_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
+#include "OTBOpticalCalibrationExport.h"
 
 namespace otb
 {
@@ -33,7 +34,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-class ITK_EXPORT AeronetData :  public itk::DataObject
+class OTBOpticalCalibration_EXPORT AeronetData :  public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
@@ -83,9 +84,9 @@ protected:
   /** Constructor */
   AeronetData();
   /** Destructor */
-  ~AeronetData() {}
+  ~AeronetData() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** Angstrom coefficient */

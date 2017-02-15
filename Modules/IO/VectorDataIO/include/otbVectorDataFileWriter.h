@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataFileWriter_h
-#define __otbVectorDataFileWriter_h
+#ifndef otbVectorDataFileWriter_h
+#define otbVectorDataFileWriter_h
 
 #include "itkProcessObject.h"
 #include "itkMacro.h"
@@ -90,9 +90,9 @@ public:
   /** Does the real work. */
   virtual void Write();
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  virtual void Update()
+  void Update() ITK_OVERRIDE
   {
     this->Write();
   }
@@ -103,9 +103,9 @@ public:
 
 protected:
   VectorDataFileWriter();
-  virtual ~VectorDataFileWriter();
+  ~VectorDataFileWriter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   std::string m_FileName; // The file to be read
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;
@@ -124,4 +124,4 @@ private:
 #include "otbVectorDataFileWriter.txx"
 #endif
 
-#endif // __otbVectorDataFileWriter_h
+#endif // otbVectorDataFileWriter_h

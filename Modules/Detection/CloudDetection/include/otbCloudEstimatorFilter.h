@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCloudEstimatorFilter_h
-#define __otbCloudEstimatorFilter_h
+#ifndef otbCloudEstimatorFilter_h
+#define otbCloudEstimatorFilter_h
 
 #include "otbSpectralAngleFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -70,11 +70,11 @@ public:
 protected:
   CloudEstimatorFilter();
 
-  virtual ~CloudEstimatorFilter() {}
+  ~CloudEstimatorFilter() ITK_OVERRIDE {}
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   CloudEstimatorFilter(const Self &); //purposely not implemented

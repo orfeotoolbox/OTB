@@ -679,7 +679,12 @@ void NonOptGlImageActor::UpdateResolution()
   m_CurrentResolution = closest;
 
   std::ostringstream extFilename;
-  extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
+  extFilename<<m_FileName;
+  if ( m_FileName.find('?') == std::string::npos )
+    {
+    extFilename << '?';
+    }
+  extFilename<<"&resol="<<m_CurrentResolution;
 
   // std::cout<<"Extfname = "<<extFilename.str()<<std::endl;
 
@@ -713,8 +718,8 @@ void NonOptGlImageActor::UpdateTransforms()
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
     m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
     }
-  m_ViewportToImageTransform->InstanciateTransform();
-  m_ImageToViewportTransform->InstanciateTransform();
+  m_ViewportToImageTransform->InstantiateTransform();
+  m_ImageToViewportTransform->InstantiateTransform();
 }
 
 

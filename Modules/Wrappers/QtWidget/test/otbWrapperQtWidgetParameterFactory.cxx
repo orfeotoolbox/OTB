@@ -51,19 +51,19 @@ protected:
   {
   }
 
-  virtual ~StubApplication()
+  ~StubApplication() ITK_OVERRIDE
   {
   }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
   }
 };

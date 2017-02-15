@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPersistentImageToVectorDataFilter_h
-#define __otbPersistentImageToVectorDataFilter_h
+#ifndef otbPersistentImageToVectorDataFilter_h
+#define otbPersistentImageToVectorDataFilter_h
 
 #include "otbPersistentImageFilter.h"
 #include "itkExtractImageFilter.h"
@@ -85,11 +85,11 @@ public:
 
   OutputVectorDataType* GetOutputVectorData() const;
 
-  void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  virtual void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
-  virtual void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
   /** Specify the name of the output shapefile to write. */
   itkSetStringMacro(FileName);
@@ -97,11 +97,11 @@ public:
 
 protected:
   PersistentImageToVectorDataFilter();
-  virtual ~PersistentImageToVectorDataFilter() {}
+  ~PersistentImageToVectorDataFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   ExtractImageFilterPointerType          m_ExtractFilter;
 

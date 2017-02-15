@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelsPolarimetricSynthesisFilter_txx
-#define __otbMultiChannelsPolarimetricSynthesisFilter_txx
+#ifndef otbMultiChannelsPolarimetricSynthesisFilter_txx
+#define otbMultiChannelsPolarimetricSynthesisFilter_txx
 
 #include <complex>
 

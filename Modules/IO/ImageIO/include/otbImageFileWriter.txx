@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFileWriter_txx
-#define __otbImageFileWriter_txx
+#ifndef otbImageFileWriter_txx
+#define otbImageFileWriter_txx
 
 #include "otbImageFileWriter.h"
 #include "itkImageFileWriter.h"
@@ -43,6 +43,8 @@
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 
 #include "otb_boost_tokenizer_header.h"
+
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -256,7 +258,7 @@ ImageFileWriter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
@@ -492,22 +494,17 @@ ImageFileWriter<TInputImage>
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
-    typedef boost::tokenizer<boost::char_separator<char> > Tokenizer;
-
-    boost::char_separator<char> sep(":");
-    Tokenizer tokens(m_FilenameHelper->GetBox(), sep);
-
-    Tokenizer::iterator it = tokens.begin();
-    typename InputImageRegionType::IndexType start;
+ 	std::vector<int> boxVector;
+ 	Utils::ConvertStringToVector( 
+ 	m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+ 	
+ 	typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
 
-    start[0] = atoi(it->c_str());  // first index on X
-    ++it;
-    start[1] = atoi(it->c_str());  // first index on Y
-    ++it;
-    size[0]  = atoi(it->c_str());  // size along X
-    ++it;
-    size[1]  = atoi(it->c_str());  // size along Y
+    start[0] = boxVector[0];  // first index on X
+    start[1] = boxVector[1];  // first index on Y
+    size[0]  = boxVector[2];  // size along X
+    size[1]  = boxVector[3];  // size along Y
 
     inputRegion.SetSize(size);
 
@@ -734,7 +731,7 @@ ImageFileWriter<TInputImage>
     Convert(m_ImageIO->GetIORegion(), ioRegion, m_ShiftOutputIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
 
-  // before this test, bad stuff would happend when they don't match
+  // before this test, bad stuff would happened when they don't match
   if (bufferedRegion != ioRegion)
     {
     if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion)
@@ -803,7 +800,7 @@ ImageFileWriter<TInputImage>
 {
   this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
   m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-  m_ImageIO = NULL;
+  m_ImageIO = ITK_NULLPTR;
   this->Modified();
 }
 

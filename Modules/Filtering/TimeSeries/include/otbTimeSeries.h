@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTimeSeries_h
-#define __otbTimeSeries_h
+#ifndef otbTimeSeries_h
+#define otbTimeSeries_h
 
 #include "itkFixedArray.h"
 #include <vcl_cmath.h>

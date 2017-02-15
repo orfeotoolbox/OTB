@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGenericMapProjection_h
-#define __otbGenericMapProjection_h
+#ifndef otbGenericMapProjection_h
+#define otbGenericMapProjection_h
 
 #include <iostream>
 #include <sstream>
@@ -90,14 +90,22 @@ public:
   /** Return the Wkt representation of the projection*/
   virtual std::string GetWkt();
 
-  /** Instanciate the projection according to the Wkt specification*/
+  /** Instantiate the projection according to the Wkt specification*/
   virtual void SetWkt(const std::string& projectionRefWkt);
 
   virtual void PrintMap() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
 
-  virtual bool InstanciateProjection();
+  virtual bool InstantiateProjection();
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  virtual bool InstanciateProjection()
+  {
+    otbWarningMacro(
+      << "InstanciateProjection has been deprecated.  Please use InstantiateProjection() instead");
+    return this->InstantiateProjection();
+  }
 
   const MapProjectionAdapter* GetMapProjection() const;
 
@@ -108,9 +116,9 @@ public:
 
 protected:
   GenericMapProjection();
-  virtual ~GenericMapProjection();
+  ~GenericMapProjection() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   MapProjectionAdapter::Pointer m_MapProjection;
 

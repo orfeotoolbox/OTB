@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEdgeDensityImageFilter_h
-#define __otbEdgeDensityImageFilter_h
+#ifndef otbEdgeDensityImageFilter_h
+#define otbEdgeDensityImageFilter_h
 
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "itkProcessObject.h"
@@ -103,15 +103,15 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~EdgeDensityImageFilter();
+  ~EdgeDensityImageFilter() ITK_OVERRIDE;
   /**
    * Standard PrintSelf method.
    */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /**
    * Main computation method.
    */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

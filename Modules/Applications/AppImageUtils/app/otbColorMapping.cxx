@@ -244,7 +244,7 @@ public:
     <FloatImageType, LabelImageType>                   CasterToLabelImageType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ColorMapping");
     SetDescription("Maps an input label image to 8-bits RGB using look-up tables.");
@@ -265,10 +265,10 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
 
-    AddDocTag("Utilities");
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Meta);
     AddDocTag(Tags::Learning);
+	AddDocTag("Utilities");
 
     // Build lut map
 
@@ -292,8 +292,6 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output image filename");
     SetDefaultOutputPixelType("out",ImagePixelType_uint8);
-
-    AddRAMParameter();
 
     // --- OPERATION --- : Label to color / Color to label
     AddParameter(ParameterType_Choice, "op", "Operation");
@@ -344,20 +342,20 @@ private:
 
     AddParameter(ParameterType_Float,"method.continuous.min","Mapping range lower value");
     SetParameterDescription("method.continuous.min","Set the lower input value of the mapping range.");
-    SetParameterFloat("method.continuous.min", 0.);
+    SetParameterFloat("method.continuous.min",0., false);
 
     AddParameter(ParameterType_Float,"method.continuous.max","Mapping range higher value");
     SetParameterDescription("method.continuous.max","Set the higher input value of the mapping range.");
-    SetParameterFloat("method.continuous.max", 255.);
+    SetParameterFloat("method.continuous.max",255., false);
 
     // Optimal LUT
     AddChoice("method.optimal","Compute an optimized look-up table");
     SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighboring labels"
-                            " in a segmentation are mapped to highly contrasted colors.\n"
+                            " in a segmentation are mapped to highly contrasted colors. "
                             "[color to label] Searching all the colors present in the image to compute a continuous label list");
     AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
     SetParameterDescription("method.optimal.background","Value of the background label");
-    SetParameterInt("method.optimal.background", 0);
+    SetParameterInt("method.optimal.background",0, false);
     SetMinimumParameterIntValue("method.optimal.background", 0);
     SetMaximumParameterIntValue("method.optimal.background", 255);
 
@@ -369,21 +367,22 @@ private:
     AddParameter(ParameterType_Float, "method.image.nodatavalue", "NoData value");
     SetParameterDescription("method.image.nodatavalue","NoData value for each channel of the support image, which will not be handled in the LUT estimation. If NOT checked, ALL the pixel values of the support image will be handled in the LUT estimation.");
     MandatoryOff("method.image.nodatavalue");
-    SetParameterFloat("method.image.nodatavalue", 0);
+    SetParameterFloat("method.image.nodatavalue",0, false);
     DisableParameter("method.image.nodatavalue");
     AddParameter(ParameterType_Int, "method.image.low", "lower quantile");
     SetParameterDescription("method.image.low","lower quantile for image normalization");
     MandatoryOff("method.image.low");
-    SetParameterInt("method.image.low", 2);
+    SetParameterInt("method.image.low",2, false);
     SetMinimumParameterIntValue("method.image.low", 0);
     SetMaximumParameterIntValue("method.image.low", 100);
     AddParameter(ParameterType_Int, "method.image.up", "upper quantile");
     SetParameterDescription("method.image.up","upper quantile for image normalization");
     MandatoryOff("method.image.up");
-    SetParameterInt("method.image.up", 2);
+    SetParameterInt("method.image.up",2, false);
     SetMinimumParameterIntValue("method.image.up", 0);
     SetMaximumParameterIntValue("method.image.up", 100);
 
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "ROI_QB_MUL_1_SVN_CLASS_MULTI.png");
@@ -392,7 +391,7 @@ private:
     SetDocExampleParameterValue("out", "Colorized_ROI_QB_MUL_1_SVN_CLASS_MULTI.tif");
  }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Make sure the operation color->label is not called with methods continuous or image.
     // These methods are not implemented for this operation yet.
@@ -401,12 +400,12 @@ private:
       if (GetParameterInt("method")==1 || GetParameterInt("method")==3)
         {
         otbAppLogWARNING("Override method : use optimal");
-        SetParameterInt("method", 2);
+        SetParameterInt("method",2, false);
         }
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     if(GetParameterInt("op")==0)
     {
@@ -611,6 +610,8 @@ private:
       m_StatisticsMapFromLabelImageFilter = StreamingStatisticsMapFromLabelImageFilterType::New();
       m_StatisticsMapFromLabelImageFilter->SetInput(GetParameterImage("method.image.in"));
       m_StatisticsMapFromLabelImageFilter->SetInputLabelImage(m_CasterToLabelImage->GetOutput());
+      m_StatisticsMapFromLabelImageFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+      AddProcess(m_StatisticsMapFromLabelImageFilter->GetStreamer(), "Computing statistics on labels...");
       m_StatisticsMapFromLabelImageFilter->Update();
 
       StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType

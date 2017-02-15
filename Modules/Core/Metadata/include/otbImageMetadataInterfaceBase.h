@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMetadataInterfaceBase_h
-#define __otbImageMetadataInterfaceBase_h
+#ifndef otbImageMetadataInterfaceBase_h
+#define otbImageMetadataInterfaceBase_h
 
 #include <string>
 
@@ -24,6 +24,8 @@
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
+
+#include "OTBMetadataExport.h"
 
 namespace otb
 {
@@ -35,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBMetadata
  */
-class ITK_EXPORT ImageMetadataInterfaceBase : public itk::Object
+class OTBMetadata_EXPORT ImageMetadataInterfaceBase : public itk::Object
 {
 public:
 
@@ -136,10 +138,16 @@ public:
 
   /** Get the ImageKeywordlist */
   ImageKeywordlistType GetImageKeywordlist();
+
   const ImageKeywordlistType GetImageKeywordlist() const;
 
+  /** This method is less performant and has extra copy.
+  Please use bool GetSensorID(std::string& ) **/
+  std::string const GetSensorID() const;
+
   /** Get the sensor ID from the ossim metadata */
-  std::string GetSensorID() const;
+  bool GetSensorID(std::string & sensorId) const;
+
   //otbMetadataGetMacro(SensorID, std::string);
 
   /** Get the number of bands from the ossim metadata */
@@ -203,9 +211,9 @@ public:
 
 protected:
   ImageMetadataInterfaceBase();
-  virtual ~ImageMetadataInterfaceBase() {}
+  ~ImageMetadataInterfaceBase() ITK_OVERRIDE {}
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   MetaDataDictionaryType m_MetaDataDictionary;
 

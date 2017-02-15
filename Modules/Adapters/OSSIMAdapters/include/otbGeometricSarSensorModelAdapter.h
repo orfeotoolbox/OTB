@@ -15,13 +15,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGeometricSarSensorModelAdapter_h
-#define __otbGeometricSarSensorModelAdapter_h
+#ifndef otbGeometricSarSensorModelAdapter_h
+#define otbGeometricSarSensorModelAdapter_h
 
 #include <vector>
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+
+#include "OTBOSSIMAdaptersExport.h"
 
 namespace ossimplugins
 {
@@ -47,7 +49,7 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class GeometricSarSensorModelAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT GeometricSarSensorModelAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -73,7 +75,7 @@ public:
 
 protected:
   GeometricSarSensorModelAdapter();
-  virtual ~GeometricSarSensorModelAdapter();
+  ~GeometricSarSensorModelAdapter() ITK_OVERRIDE;
 
 private:
   GeometricSarSensorModelAdapter(const Self &); //purposely not implemented

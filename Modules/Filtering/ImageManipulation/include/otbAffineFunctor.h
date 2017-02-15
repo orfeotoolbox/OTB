@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbAffineFunctor_h
-#define __otbAffineFunctor_h
+#ifndef otbAffineFunctor_h
+#define otbAffineFunctor_h
 
 namespace otb
 {

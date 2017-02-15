@@ -73,7 +73,7 @@ itkTypeMacro(BinaryMorphologicalOperation, otb::Application);
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
 SetName("BinaryMorphologicalOperation");
 SetDescription("Performs morphological operations on an input image channel");
@@ -85,8 +85,8 @@ SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("itkBinaryDilateImageFilter, itkBinaryErodeImageFilter, itkBinaryMorphologicalOpeningImageFilter and itkBinaryMorphologicalClosingImageFilter classes");
 
-AddDocTag("MorphologicalOperations");
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("MorphologicalOperations");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to be filtered.");
@@ -156,12 +156,12 @@ SetDocExampleParameterValue("structype.ball.yradius", "5");
 SetDocExampleParameterValue("filter", "erode");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

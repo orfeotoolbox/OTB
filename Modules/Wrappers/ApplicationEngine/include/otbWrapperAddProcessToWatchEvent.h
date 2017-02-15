@@ -15,11 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperAddProcessToWatchEvent_h
-#define __otbWrapperAddProcessToWatchEvent_h
+#ifndef otbWrapperAddProcessToWatchEvent_h
+#define otbWrapperAddProcessToWatchEvent_h
 
 #include "itkEventObject.h"
 #include "itkProcessObject.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
@@ -33,7 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT AddProcessToWatchEvent: public itk::EventObject
+class OTBApplicationEngine_EXPORT AddProcessToWatchEvent: public itk::EventObject
 {
 public:
 
@@ -42,7 +43,7 @@ public:
 
   AddProcessToWatchEvent(){}
   AddProcessToWatchEvent(const Self& s) :itk::EventObject(s){};
-  virtual ~AddProcessToWatchEvent() {}
+  ~AddProcessToWatchEvent() ITK_OVERRIDE {}
 
   /** Set/Get the process to watch */
   virtual void SetProcess(itk::ProcessObject * process)
@@ -66,16 +67,16 @@ public:
   }
 
   /** Virtual pure method to implement */
-  virtual itk::EventObject* MakeObject() const
+  itk::EventObject* MakeObject() const ITK_OVERRIDE
   {
     return new Self;
   }
 
-  virtual const char* GetEventName() const
+  const char* GetEventName() const ITK_OVERRIDE
   {
     return "AddProcess";
   }
-  virtual bool CheckEvent(const itk::EventObject* e) const
+  bool CheckEvent(const itk::EventObject* e) const ITK_OVERRIDE
   {
     return dynamic_cast<const Self*>(e);
   }

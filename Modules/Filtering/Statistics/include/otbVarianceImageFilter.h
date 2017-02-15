@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVarianceImageFilter_h
-#define __otbVarianceImageFilter_h
+#ifndef otbVarianceImageFilter_h
+#define otbVarianceImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -89,8 +89,8 @@ public:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError);
+  void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -101,8 +101,8 @@ public:
 
 protected:
   VarianceImageFilter();
-  virtual ~VarianceImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~VarianceImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** VarianceImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -115,7 +115,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   VarianceImageFilter(const Self &); //purposely not implemented

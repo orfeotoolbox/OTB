@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEigenvalueLikelihoodMaximisation_txx
-#define __otbEigenvalueLikelihoodMaximisation_txx
+#ifndef otbEigenvalueLikelihoodMaximisation_txx
+#define otbEigenvalueLikelihoodMaximisation_txx
 
 #include "otbEigenvalueLikelihoodMaximisation.h"
 

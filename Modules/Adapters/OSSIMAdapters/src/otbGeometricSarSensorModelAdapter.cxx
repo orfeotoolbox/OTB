@@ -42,16 +42,16 @@
 namespace otb {
 
 GeometricSarSensorModelAdapter::GeometricSarSensorModelAdapter():
-  m_SensorModel(NULL)
+  m_SensorModel(ITK_NULLPTR)
 {
 }
 
 GeometricSarSensorModelAdapter::~GeometricSarSensorModelAdapter()
 {
-  if (m_SensorModel != NULL)
+  if (m_SensorModel != ITK_NULLPTR)
     {
     delete m_SensorModel;
-    m_SensorModel = NULL;
+    m_SensorModel = ITK_NULLPTR;
     }
 }
 

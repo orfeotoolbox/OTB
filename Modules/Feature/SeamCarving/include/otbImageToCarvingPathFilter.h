@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToCarvingPathFilter_h
-#define __otbImageToCarvingPathFilter_h
+#ifndef otbImageToCarvingPathFilter_h
+#define otbImageToCarvingPathFilter_h
 
 #include "otbImageToPathFilter.h"
 #include "itkImageSliceConstIteratorWithIndex.h"
@@ -90,10 +90,10 @@ public:
 
 protected:
   ImageToCarvingPathFilter();
-  virtual ~ImageToCarvingPathFilter() {}
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateOutputInformation() {}  //does nothing
-  virtual void GenerateData();
+  ~ImageToCarvingPathFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  //does nothing
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   ImageToCarvingPathFilter(const Self &); // purposely not implemented

@@ -539,15 +539,15 @@ double
 TerraSarImageMetadataInterface
 ::ConvertStringTimeUTCToJulianDay(const std::string& value) const
 {
-  std::vector<std::string> splittedDate;
-  boost::split(splittedDate, value, boost::is_any_of("-T:Z"));
+  std::vector<std::string> splitDate;
+  boost::split(splitDate, value, boost::is_any_of("-T:Z"));
 
-  int year = atoi(splittedDate[0].c_str());
-  int month = atoi(splittedDate[1].c_str());
-  int day = atoi(splittedDate[2].c_str());
-  int hour = atoi(splittedDate[3].c_str());
-  int minu = atoi(splittedDate[4].c_str());
-  double sec = atof(splittedDate[5].c_str());
+  int year = atoi(splitDate[0].c_str());
+  int month = atoi(splitDate[1].c_str());
+  int day = atoi(splitDate[2].c_str());
+  int hour = atoi(splitDate[3].c_str());
+  int minu = atoi(splitDate[4].c_str());
+  double sec = atof(splitDate[5].c_str());
 
   // Conversion to julian day
   // according to http://en.wikipedia.org/wiki/Julian_day

@@ -124,8 +124,8 @@ int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
   multiFilter->SetOutputSpacing(spacing);
 
   VectorImageType::PointType origin;
-  origin[0] = strtod(argv[argc-7], NULL);
-  origin[1] = strtod(argv[argc-6], NULL);
+  origin[0] = strtod(argv[argc-7], ITK_NULLPTR);
+  origin[1] = strtod(argv[argc-6], ITK_NULLPTR);
   multiFilter->SetOutputOrigin(origin);
 
   std::string projectionRef=otb::GeoInformationConversion::ToWKT( atoi(argv[argc-1]));
@@ -380,8 +380,8 @@ spacing[1] = atof(argv[argc-1]);
 multiFilter->SetOutputSpacing(spacing);
 
 VectorImageType::PointType origin;
-origin[0] = strtod(argv[argc-6], NULL);
-origin[1] = strtod(argv[argc-5], NULL);
+origin[0] = strtod(argv[argc-6], ITK_NULLPTR);
+origin[1] = strtod(argv[argc-5], ITK_NULLPTR);
 multiFilter->SetOutputOrigin(origin);
 
 

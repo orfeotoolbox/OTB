@@ -39,7 +39,7 @@ public:
   MJDDateTime(const MJDDateTime& rhs);
 
   /**
-   * @brief Constructor with date initialisation
+   * @brief Constructor with date initialization
    */
   MJDDateTime(long day, unsigned long  second, unsigned long  microsecond);
 

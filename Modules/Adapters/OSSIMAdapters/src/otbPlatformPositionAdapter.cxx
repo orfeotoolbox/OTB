@@ -30,16 +30,16 @@
 namespace otb {
 
 PlatformPositionAdapter::PlatformPositionAdapter():
-  m_SensorModel(NULL)
+  m_SensorModel(ITK_NULLPTR)
 {
 }
 
 PlatformPositionAdapter::~PlatformPositionAdapter()
 {
-  if (m_SensorModel != NULL)
+  if (m_SensorModel != ITK_NULLPTR)
     {
     delete m_SensorModel;
-    m_SensorModel = NULL;
+    m_SensorModel = ITK_NULLPTR;
     }
 }
 

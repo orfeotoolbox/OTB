@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKullbackLeiblerProfileImageFilter_txx
-#define __otbKullbackLeiblerProfileImageFilter_txx
+#ifndef otbKullbackLeiblerProfileImageFilter_txx
+#define otbKullbackLeiblerProfileImageFilter_txx
 
 #include <vector>
 

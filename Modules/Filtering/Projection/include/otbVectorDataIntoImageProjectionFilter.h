@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIntoImageProjectionFilter_h
-#define __otbVectorDataIntoImageProjectionFilter_h
+#ifndef otbVectorDataIntoImageProjectionFilter_h
+#define otbVectorDataIntoImageProjectionFilter_h
 
 
 #include "otbImage.h"
@@ -102,9 +102,9 @@ public:
 protected:
   VectorDataIntoImageProjectionFilter();
 
-  virtual ~VectorDataIntoImageProjectionFilter() {}
+  ~VectorDataIntoImageProjectionFilter() ITK_OVERRIDE {}
 
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   // Projection filter
   typedef VectorDataProjectionFilter<InputVectorDataType, InputVectorDataType>

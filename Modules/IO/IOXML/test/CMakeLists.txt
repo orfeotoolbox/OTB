@@ -17,5 +17,5 @@ otb_add_test(NAME ioTvStatisticsXMLReaderWriter COMMAND otbIOXMLTestDriver
   ${TEMP}/ioTvStatisticsXMLReaderWriterOut3.xml
   otbStatisticsXMLFileWriteAndRead
   ${TEMP}/ioTvStatisticsXMLReaderWriterOut1.xml
-  ${TEMP}/ioTvStatisticsXMLReaderWriterOut2.xml
+  ${TEMP}/ioTvStatisticsXMLReaderWriterOut2.XML
   ${TEMP}/ioTvStatisticsXMLReaderWriterOut3.xml)

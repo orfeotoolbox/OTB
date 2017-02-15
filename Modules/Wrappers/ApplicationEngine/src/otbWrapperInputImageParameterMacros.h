@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputImageParameterMacros__h
-#define __otbWrapperInputImageParameterMacros__h
+#ifndef otbWrapperInputImageParameterMacros__h
+#define otbWrapperInputImageParameterMacros__h
 
 #define otbGetImageMacro(image)                       \
   image##Type *                                       \

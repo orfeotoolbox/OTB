@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperParameterGroup_h
-#define __otbWrapperParameterGroup_h
+#ifndef otbWrapperParameterGroup_h
+#define otbWrapperParameterGroup_h
 
 #include "itkObject.h"
 #include "otbWrapperParameter.h"
@@ -32,7 +32,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT ParameterGroup
+class OTBApplicationEngine_EXPORT ParameterGroup
   : public Parameter
 {
 public:
@@ -47,10 +47,14 @@ public:
 
   void AddParameter(Parameter::Pointer p);
 
+  /** Method to substitute a parameter in a group. 
+   *  The function returns true on success, false on failure */
+  bool ReplaceParameter(std::string &key, Parameter::Pointer p);
+
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
 
-  /** Remove choices made in ListViewParamter widget*/
+  /** Remove choices made in ListViewParameter widget*/
   void ClearChoices(std::string paramKey);
 
   /** Get the choices made in a ListView Parameter widget*/
@@ -61,9 +65,9 @@ public:
    * or the path to a choice value */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
-  Parameter::Pointer GetParameterByIndex(unsigned int i);
+  Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow=true);
 
-  Parameter::Pointer GetParameterByKey(std::string name);
+  Parameter::Pointer GetParameterByKey(std::string name, bool follow=true);
 
   /** rashad: Add xml parameters eg: -inxml -outxml */
   void AddInXMLParameter();
@@ -88,14 +92,18 @@ public:
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
   // Always has value
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return true;
   }
 
+  /** Resolve potential proxy parameters by following their targets until
+   *  a non-proxy parameter. It will detect cycles and report an error */
+  static Parameter* ResolveParameter(Parameter *param);
+
 protected:
   ParameterGroup();
-  virtual ~ParameterGroup();
+  ~ParameterGroup() ITK_OVERRIDE;
 
   typedef std::vector<Parameter::Pointer> ParameterListType;
   ParameterListType m_ParameterList;

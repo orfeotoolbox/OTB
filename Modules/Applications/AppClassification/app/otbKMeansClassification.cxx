@@ -164,7 +164,7 @@ public:
   itkTypeMacro(KMeansClassification, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
@@ -175,8 +175,9 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Learning);
+	AddDocTag(Tags::Segmentation);
+	
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image to classify.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
@@ -218,7 +219,7 @@ private:
     SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // test of input image //
     if (HasValue("in"))
@@ -244,14 +245,14 @@ private:
         {
         otbAppLogWARNING("The available RAM is too small to process this sample size of " << GetParameterInt("ts") <<
             " pixels. The sample size will be reduced to " << maxPixNb << " pixels." << std::endl);
-        this->SetParameterInt("ts", maxPixNb);
+        this->SetParameterInt("ts",maxPixNb, false);
         }
 
       this->SetMaximumParameterIntValue("ts", maxPixNb);
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

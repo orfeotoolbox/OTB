@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNDVIDataNodeFeatureFunction_h
-#define __otbNDVIDataNodeFeatureFunction_h
+#ifndef otbNDVIDataNodeFeatureFunction_h
+#define otbNDVIDataNodeFeatureFunction_h
 
 #include "otbDataNodeImageFunction.h"
 
@@ -85,7 +85,7 @@ public:
 
   typedef std::vector<PrecisionType>                  OutputType;
 
-  virtual OutputType Evaluate( const DataNodeType& node ) const;
+  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
 
   /** Set/Get methods */
   itkGetConstMacro(NDVIThreshold, PrecisionType);
@@ -114,8 +114,8 @@ public:
 
 protected:
   NDVIDataNodeFeatureFunction();
-  ~NDVIDataNodeFeatureFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~NDVIDataNodeFeatureFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   NDVIDataNodeFeatureFunction(const Self&); //purposely not implemented

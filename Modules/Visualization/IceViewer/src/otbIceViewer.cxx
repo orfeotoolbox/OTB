@@ -38,7 +38,7 @@ GlVectorActor::ColorType BuildColor(double r, double g, double b)
 }
 
 IceViewer::IceViewer()
-  : m_Window(NULL),
+  : m_Window(ITK_NULLPTR),
     m_View(),
     m_FastRendering(false),
     m_SelectedActor(""),
@@ -71,7 +71,7 @@ IceViewer::IceViewer()
 
 IceViewer::~IceViewer()
 {
-  if(m_Window != NULL)
+  if(m_Window != ITK_NULLPTR)
     {
     glfwDestroyWindow(m_Window);
     }
@@ -88,8 +88,8 @@ void IceViewer::AddImage(const std::string & fname, const std::string & key, con
   
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
 
-  const char * glVersion = NULL;
-  const char * glslVersion = NULL;
+  const char * glVersion = ITK_NULLPTR;
+  const char * glslVersion = ITK_NULLPTR;
 
   if( GlVersionChecker::CheckGLCapabilities( glVersion,
 					     glslVersion ) )
@@ -220,25 +220,25 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
   // Initialize glfw
   if(!glfwInit())
     {
-    itkExceptionMacro(<<"Could not initalize glfw!");
+    itkExceptionMacro(<<"Could not initialize glfw!");
     }
 
   // Initialize glut (ugly workaround)
   int fake_argc = 1;
   char fake_name[] = "fake";
-  char * fake_argv[] = {fake_name,NULL};
+  char * fake_argv[] = {fake_name,ITK_NULLPTR};
   glutInit(&fake_argc,fake_argv);
 
   // Set glfw errors callback
   glfwSetErrorCallback(error_callback);
   
   // Create the window
-  if(m_Window != NULL)
+  if(m_Window != ITK_NULLPTR)
     {
     glfwDestroyWindow(m_Window);
     }
   
-  m_Window = glfwCreateWindow(w, h,name.c_str(), NULL, NULL);
+  m_Window = glfwCreateWindow(w, h,name.c_str(), ITK_NULLPTR, ITK_NULLPTR);
   if (!m_Window)
     {
     itkExceptionMacro(<<"Could not create glfw window.");
@@ -468,6 +468,36 @@ void IceViewer::DrawHud()
 	  case SHADER_GRADIENT:
 	    oss<<" gradient";
 	    break;
+    case SHADER_LUT_JET:
+      oss<<"Jet LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_JET:
+      oss<<"Local Jet LUT"<<std::endl;
+      break;
+    case SHADER_LUT_HOT:
+      oss<<"Hot LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_HOT:
+      oss<<"Local Hot LUT"<<std::endl;
+      break;
+    case SHADER_LUT_WINTER:
+      oss<<"Winter LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_WINTER:
+      oss<<"Local Winter LUT"<<std::endl;
+      break;
+    case SHADER_LUT_SUMMER:
+      oss<<"Summer LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_SUMMER:
+      oss<<"Local Summer LUT"<<std::endl;
+      break;
+    case SHADER_LUT_COOL:
+      oss<<"Cool LUT"<<std::endl;
+      break;
+    case SHADER_LUT_LOCAL_COOL:
+      oss<<"Local Cool LUT"<<std::endl;
+      break;
 	  }
 	}
 
@@ -602,7 +632,7 @@ void IceViewer::DrawHelp()
   oss<<"- Highlight selected image by holding backspace"<<std::endl;
   oss<<"- Zoom to full extent of selected dataset with W"<<std::endl;
   oss<<"- Zoom to full resolution fo selected images with Q (images only, as full resolution has no meaning for vectors)"<<std::endl;
-  oss<<"- Set rotation angle to perspective view with Y to accomodate heavy off-nadir viewing angle images"<<std::endl;
+  oss<<"- Set rotation angle to perspective view with Y to accommodate heavy off-nadir viewing angle images"<<std::endl;
   oss<<"- Set rotation angle to north up view with J"<<std::endl;
   oss<<"- Reset rotation angle with I"<<std::endl;
   oss<<"- Note that all images are reprojected in the first loaded dataset geometry (highligthed with * *). To change reference geometry to selected dataset, press P key."<<std::endl;
@@ -631,7 +661,7 @@ void IceViewer::DrawHelp()
   oss<<"Vector controls:"<<std::endl;
   oss<<"- Enable/disable fill polygon mode with F key"<<std::endl;
   oss<<"- Enable/disable solid border mode with S key"<<std::endl;
-  oss<<"- Tune alpha (transparancy) value with LEFT CTRL + mouse wheel"<<std::endl;
+  oss<<"- Tune alpha (transparency) value with LEFT CTRL + mouse wheel"<<std::endl;
   oss<<"- Tune line width with RIGHT SHIFT + mouse wheel"<<std::endl;
   oss<<"- Rotate vector color with LEFT ALT + mouse wheel"<<std::endl;
   oss<<"- Enable/disable optimized rendering for large vector (simplification of geometries, geometries smaller than 100 * viewport pixel sizes are not rendered)."<<std::endl<<"  Optimized rendering is only active if there are more feature to render than pixels in in the viewport."<<std::endl;

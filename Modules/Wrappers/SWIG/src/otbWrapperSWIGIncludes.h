@@ -18,8 +18,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperSWIGIncludes_h
-#define __otbWrapperSWIGIncludes_h
+#ifndef otbWrapperSWIGIncludes_h
+#define otbWrapperSWIGIncludes_h
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
@@ -33,4 +33,7 @@ typedef otb::Wrapper::DocExampleStructure                DocExampleStructure;
 typedef otb::Wrapper::Parameter                          Parameter;
 typedef otb::Wrapper::OutputImageParameter               OutputImageParameter;
 typedef otb::Wrapper::InputImageParameter                InputImageParameter;
+typedef otb::Wrapper::ComplexOutputImageParameter        ComplexOutputImageParameter;
+typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParameter;
+
 #endif

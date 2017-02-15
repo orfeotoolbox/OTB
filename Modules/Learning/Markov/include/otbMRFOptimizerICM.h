@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFOptimizerICM_h
-#define __otbMRFOptimizerICM_h
+#ifndef otbMRFOptimizerICM_h
+#define otbMRFOptimizerICM_h
 
 #include "otbMRFOptimizer.h"
 
@@ -49,7 +49,7 @@ public:
 
   itkTypeMacro(MRFOptimizerICM, MRFOptimizer);
 
-  inline bool Compute(double deltaEnergy)
+  inline bool Compute(double deltaEnergy) ITK_OVERRIDE
   {
     if (deltaEnergy < 0)
       {
@@ -63,7 +63,7 @@ public:
 
 protected:
   MRFOptimizerICM() {}
-  virtual ~MRFOptimizerICM() {}
+  ~MRFOptimizerICM() ITK_OVERRIDE {}
 
 };
 

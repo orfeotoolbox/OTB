@@ -47,7 +47,7 @@ public:
   typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("OSMDownloader");
     SetDescription("Generate a vector data from OSM on the input image extend");
@@ -58,7 +58,9 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Conversion");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Meta);
+	AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output vector data");
     SetParameterDescription("out", "Generated output vector data path");
@@ -91,7 +93,7 @@ private:
   }
 
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // CASE:  when the -print option is not required and the User
     // does not set the option OSMKey or the option Output or does not
@@ -108,7 +110,7 @@ private:
       }
   }
 
- void DoExecute()
+ void DoExecute() ITK_OVERRIDE
   {
     typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType>
       EnvelopeFilterType;

@@ -27,7 +27,7 @@ int otbKullbackLeiblerProfileImageFilter(int argc, char * argv[])
   if (argc != 6)
     {
     std::cerr <<
-    "Detection de changements par mesure de Kullback-Leibler, optimisee par un developpement de Edgeworth\n";
+    "Detection de changements par mesure de Kullback-Leibler, optimisee par un development de Edgeworth\n";
     std::cerr << argv[0] << " imgAv imgAp imgResu winSizeMin winSizeMax\n";
     return 1;
     }

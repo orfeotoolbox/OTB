@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFourierMellinDescriptorsIFFactory_txx
-#define __otbFourierMellinDescriptorsIFFactory_txx
+#ifndef otbFourierMellinDescriptorsIFFactory_txx
+#define otbFourierMellinDescriptorsIFFactory_txx
 
 #include "otbFourierMellinDescriptorsIFFactory.h"
 

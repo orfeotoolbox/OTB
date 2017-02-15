@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSimulationStep2Base_h
-#define __otbSimulationStep2Base_h
+#ifndef otbSimulationStep2Base_h
+#define otbSimulationStep2Base_h
 
 #include "itkProcessObject.h"
 #include "otbSpectralResponse.h"
@@ -67,7 +67,7 @@ protected:
   {
   }
 ;
-  virtual ~SimulationStep2Base()
+  ~SimulationStep2Base() ITK_OVERRIDE
   {
   }
 

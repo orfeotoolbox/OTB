@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFuzzyDescriptorsModelManager_h
-#define __otbFuzzyDescriptorsModelManager_h
+#ifndef otbFuzzyDescriptorsModelManager_h
+#define otbFuzzyDescriptorsModelManager_h
 
 #include <vector>
 #include <utility>
@@ -30,7 +30,7 @@ namespace otb {
  *
  * To get a specific statistic Measurement vector, use the method
  * GetStatisticVectorByName(name) which allow you to get the
- * Measurement vector for the statistic set as paramater.
+ * Measurement vector for the statistic set as parameter.
  *
  *
  *

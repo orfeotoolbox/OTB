@@ -9,7 +9,7 @@ echo 'Usage: '$0' <download_directory> <archive_output_directory>'
 exit 1
 fi
 
-WGET="wget -nv -q --show-progress --progress=bar"
+WGET="wget -nv -q"
 
 SB_CMAKE_DIR_REL=$(dirname $0)/../../SuperBuild/CMake
 SB_CMAKE_DIR=$(readlink -f ${SB_CMAKE_DIR_REL})

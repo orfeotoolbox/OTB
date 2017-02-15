@@ -16,9 +16,10 @@
 
 =========================================================================*/
 
-#ifndef __otbRGBAPixelConverter_txx
-#define __otbRGBAPixelConverter_txx
+#ifndef otbRGBAPixelConverter_txx
+#define otbRGBAPixelConverter_txx
 
+#include "otbRGBAPixelConverter.h"
 
 namespace otb
 {

@@ -15,10 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDriversInit_h
-#define __otbOGRDriversInit_h
+#ifndef otbOGRDriversInit_h
+#define otbOGRDriversInit_h
 
 #include <boost/noncopyable.hpp>
+
+#include "OTBGdalAdaptersExport.h"
 
 namespace otb { namespace ogr {
   /**\ingroup Geometry
@@ -37,7 +39,7 @@ namespace otb { namespace ogr {
    * VC++)
    * - Non-copyable
    */
-  class Drivers : private boost::noncopyable
+  class OTBGdalAdapters_EXPORT Drivers : private boost::noncopyable
   {
   /** \name Singleton related functions */
   //@{
@@ -57,4 +59,4 @@ private:
 
 } } // end namespace otb::ogr
 
-#endif // __otbOGRDriversInit_h
+#endif // otbOGRDriversInit_h

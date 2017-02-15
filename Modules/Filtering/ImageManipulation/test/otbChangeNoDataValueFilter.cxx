@@ -52,7 +52,7 @@ int otbChangeNoDataValueFilter(int itkNotUsed(argc),char * itkNotUsed(argv) [])
       it.Set(-10.);
     }
 
-  // Instanciate filter
+  // Instantiate filter
   typedef otb::ChangeNoDataValueFilter<ImageType,ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
 

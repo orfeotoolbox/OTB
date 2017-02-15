@@ -15,19 +15,23 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRIOHelper_h
-#define __otbOGRIOHelper_h
+#ifndef otbOGRIOHelper_h
+#define otbOGRIOHelper_h
 
 #include <vector>
 
 #include "otbVectorData.h"
 #include "otbOGRVersionProxy.h"
 
+#include "OTBIOGDALExport.h"
+
+
 class GDALDataset;
 class OGRGeometryCollection;
 class OGRLayer;
 class OGRSpatialReference;
 class OGRGeometry;
+
 
 namespace otb
 {
@@ -38,7 +42,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class OGRIOHelper: public itk::Object
+class OTBIOGDAL_EXPORT OGRIOHelper: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -52,6 +56,9 @@ public:
   typedef VectorData<>                                    VectorDataType;
   typedef VectorDataType::DataTreeType           DataTreeType;
   typedef DataTreeType::TreeNodeType             InternalTreeNodeType;
+
+  typedef VectorDataType::DataNodeType           DataNodeType;
+  typedef DataNodeType::Pointer                  DataNodePointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,16 +82,19 @@ public:
                                                         OGRLayer* ogrCurrentLayer,
                                                         OGRSpatialReference * oSRS);
 
+  void ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+  void ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+  void ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
 protected:
   OGRIOHelper();
-  ~OGRIOHelper();
+  ~OGRIOHelper() ITK_OVERRIDE;
 
 private:
   OGRIOHelper(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  typedef VectorDataType::DataNodeType           DataNodeType;
-  typedef DataNodeType::Pointer                  DataNodePointerType;
 
   typedef DataNodeType::PointType                PointType;
 
@@ -97,12 +107,6 @@ private:
   typedef PolygonType::Pointer                   PolygonPointerType;
   typedef DataNodeType::PolygonListType          PolygonListType;
   typedef PolygonListType::Pointer               PolygonListPointerType;
-
-  void ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
-
-  void ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
-
-  void ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
 
 }; // end class OGRIOHelper
 

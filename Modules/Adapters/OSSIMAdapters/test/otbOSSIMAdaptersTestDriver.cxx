@@ -2,7 +2,7 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbTestImageKeywordlist);
-  REGISTER_TEST(otbOssimJpegFileRessourceLeakTest);
+  REGISTER_TEST(otbOssimJpegFileResourceLeakTest);
   REGISTER_TEST(otbMapProjectionAdapterTest);
   REGISTER_TEST(otbOssimElevManagerTest2);
   REGISTER_TEST(otbOssimElevManagerTest4);

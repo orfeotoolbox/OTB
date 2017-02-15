@@ -39,7 +39,7 @@ int otbLikelihoodPathListFilter(int itkNotUsed(argc), char * argv[])
   int cpt = 3;
   ListPoints.clear();
 
-  while (argv[cpt] != NULL)
+  while (argv[cpt] != ITK_NULLPTR)
     {
     if (argv[cpt][0] == '|')
       {

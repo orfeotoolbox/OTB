@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMClassifier_h
-#define __otbSOMClassifier_h
+#ifndef otbSOMClassifier_h
+#define otbSOMClassifier_h
 
 #include "itkProcessObject.h"
 #include "itkMembershipSample.h"
@@ -85,11 +85,11 @@ protected:
   /** Constructor */
   SOMClassifier();
   /** Destructor */
-  virtual ~SOMClassifier() {}
+  ~SOMClassifier() ITK_OVERRIDE {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Starts the classification process */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   /// The input sample

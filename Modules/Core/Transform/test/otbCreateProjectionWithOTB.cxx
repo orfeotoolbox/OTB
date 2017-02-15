@@ -87,10 +87,10 @@ int otbCreateProjectionWithOTB(int argc, char* argv[])
 
   ossimGpt          ossimGPoint(0, 0);
   ossimDpt          ossimDPoint;
-  ossimProjection * model = NULL;
+  ossimProjection * model = ITK_NULLPTR;
   otbGenericMsgDebugMacro(<< "Creating projection...");
   model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-  if (model == NULL)
+  if (model == ITK_NULLPTR)
     {
     itkGenericExceptionMacro(<< "Invalid Model * == NULL !");
     }

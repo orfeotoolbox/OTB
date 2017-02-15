@@ -18,9 +18,10 @@
 
 =========================================================================*/
 
-#ifndef __otbFlexibleDistanceWithMissingValue_txx
-#define __otbFlexibleDistanceWithMissingValue_txx
+#ifndef otbFlexibleDistanceWithMissingValue_txx
+#define otbFlexibleDistanceWithMissingValue_txx
 
+#include "otbFlexibleDistanceWithMissingValue.h"
 #include "itkNumericTraits.h"
 
 namespace otb {

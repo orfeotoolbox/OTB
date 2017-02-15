@@ -16,16 +16,18 @@
 
 =========================================================================*/
 
-#ifndef __otbDEMConvertAdapter_h
-#define __otbDEMConvertAdapter_h
+#ifndef otbDEMConvertAdapter_h
+#define otbDEMConvertAdapter_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+#include "OTBOSSIMAdaptersExport.h"
+
 namespace otb
 {
 
-class DEMConvertAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT DEMConvertAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -44,7 +46,7 @@ public:
 
 protected:
   DEMConvertAdapter();
-  virtual ~DEMConvertAdapter();
+  ~DEMConvertAdapter() ITK_OVERRIDE;
 
 private:
   DEMConvertAdapter(const Self &); //purposely not implemented

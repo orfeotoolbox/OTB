@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataExtractROI_txx
-#define __otbVectorDataExtractROI_txx
+#ifndef otbVectorDataExtractROI_txx
+#define otbVectorDataExtractROI_txx
 
 #include "otbVectorDataExtractROI.h"
 
@@ -249,7 +249,7 @@ VectorDataExtractROI<TVectorData>
 {
   // Get the VertexList
   // -2 cause we don't want the last point
-  // wich is the same as the first one (closed Ring)
+  // which is the same as the first one (closed Ring)
   for (unsigned int i = 0; i<polygon->GetVertexList()->Size() - 2; ++i )
     {
     // Get the components of the polygon 2 by 2
@@ -343,7 +343,7 @@ VectorDataExtractROI<TVectorData>
 template <class TVectorData>
 bool
 VectorDataExtractROI<TVectorData>
-::IsSegementIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD)
+::IsSegmentIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD)
 {
 
   PointType vertexA, vertexB, vertexC, vertexD;
@@ -456,7 +456,7 @@ VectorDataExtractROI<TVectorData>
   genericTransform->SetOutputDictionary(inputDict);
   genericTransform->SetOutputOrigin(this->GetInput()->GetOrigin());
   genericTransform->SetOutputSpacing(this->GetInput()->GetSpacing());
-  genericTransform->InstanciateTransform();
+  genericTransform->InstantiateTransform();
 
   otbMsgDevMacro(<< genericTransform);
 

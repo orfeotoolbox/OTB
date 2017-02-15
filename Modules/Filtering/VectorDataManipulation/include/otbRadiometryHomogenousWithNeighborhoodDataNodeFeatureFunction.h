@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_h
-#define __otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_h
+#ifndef otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_h
+#define otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_h
 
 #include "otbDataNodeImageFunction.h"
 
@@ -105,7 +105,7 @@ public:
   typedef std::vector<PrecisionType>                  OutputType;
 
   /* Compute the descriptor value along this DataNode */
- virtual OutputType Evaluate( const DataNodeType& node ) const;
+ OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
 
   /* Get the radius used to define the area around a line segment.
    * A radius of 0 means that the area is reduced to a line joining
@@ -135,8 +135,8 @@ public:
 
 protected:
   RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction();
-  ~RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(const Self&); //purposely not implemented

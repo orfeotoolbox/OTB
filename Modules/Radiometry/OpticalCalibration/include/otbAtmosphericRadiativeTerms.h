@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericRadiativeTerms_h
-#define __otbAtmosphericRadiativeTerms_h
+#ifndef otbAtmosphericRadiativeTerms_h
+#define otbAtmosphericRadiativeTerms_h
 
+#include "OTBOpticalCalibrationExport.h"
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
@@ -37,7 +38,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
+class OTBOpticalCalibration_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
 {
 public:
   /** Standard typedefs */
@@ -115,9 +116,9 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel();
   /** Destructor */
-  ~AtmosphericRadiativeTermsSingleChannel() {}
+  ~AtmosphericRadiativeTermsSingleChannel() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   AtmosphericRadiativeTermsSingleChannel(const Self &); //purposely not implemented
@@ -164,7 +165,7 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 
-class ITK_EXPORT AtmosphericRadiativeTerms : public itk::DataObject
+class OTBOpticalCalibration_EXPORT AtmosphericRadiativeTerms : public itk::DataObject
 {
 public:
   /** Standard typedefs */
@@ -262,9 +263,9 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTerms();
   /** Destructor */
-  ~AtmosphericRadiativeTerms() {}
+  ~AtmosphericRadiativeTerms() ITK_OVERRIDE {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   AtmosphericRadiativeTerms(const Self &); //purposely not implemented

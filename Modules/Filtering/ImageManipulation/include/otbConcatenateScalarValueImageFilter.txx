@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateScalarValueImageFilter_txx
-#define __otbConcatenateScalarValueImageFilter_txx
+#ifndef otbConcatenateScalarValueImageFilter_txx
+#define otbConcatenateScalarValueImageFilter_txx
 
 #include "otbConcatenateScalarValueImageFilter.h"
 

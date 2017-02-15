@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelObjectFieldsFunctor_h
-#define __otbLabelObjectFieldsFunctor_h
+#ifndef otbLabelObjectFieldsFunctor_h
+#define otbLabelObjectFieldsFunctor_h
 
 #include "itkLabelObject.h"
 #include <map>
@@ -28,7 +28,7 @@ namespace Functor
 {
 
 /** \class LabelObjectFieldsFunctor
- *  \brief Returns additionnal OGR fields to be saved in VectorData
+ *  \brief Returns additional OGR fields to be saved in VectorData
  *
  * \sa LabelObjectWithClassLabelFieldsFunctor
  *

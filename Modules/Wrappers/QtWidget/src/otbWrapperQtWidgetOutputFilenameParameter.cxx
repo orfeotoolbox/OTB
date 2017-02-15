@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 
+#include <otbQtAdapters.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -69,49 +71,29 @@ void QtWidgetOutputFilenameParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetOutputFilenameParameter::SelectFile()
+void
+QtWidgetOutputFilenameParameter
+::SelectFile()
 {
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  switch(m_FilenameParam->GetRole())
-    {
-    case Role_Input:
-    {
-    //fileDialog.setFileMode(QFileDialog::ExistingFile);
-    // FIXME: parameter's role is not suitable to separate "input file" names from "output file" names
-    fileDialog.setFileMode(QFileDialog::AnyFile);
-    }
-    break;
-    case Role_Output:
-    {
-    fileDialog.setFileMode(QFileDialog::AnyFile);
-    }
-    break;
-    }
-
-  fileDialog.setNameFilter("File (*)");
-
-
   assert( m_Input!=NULL );
 
-  if( !m_Input->text().isEmpty() )
-    {
-    QFileInfo finfo( m_Input->text() );
+  QString filename(
+    GetSaveFileName(
+      this,
+      QString(),
+      m_Input->text(),
+      tr( "All files (*)" ),
+      NULL )
+  );
 
-    fileDialog.setDirectory(
-      finfo.isDir()
-      ? finfo.absoluteFilePath()
-      : finfo.absoluteDir()
-    );
-    }
+  if( filename.isEmpty() )
+    return;
 
-  if (fileDialog.exec())
-    {
-    this->SetFileName( fileDialog.selectedFiles().at( 0 ) );
+  SetFileName( filename );
 
-    m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
+  m_Input->setText( filename  );
 }
+
 
 void QtWidgetOutputFilenameParameter::SetFileName(const QString& value)
 {

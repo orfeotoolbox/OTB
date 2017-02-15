@@ -76,7 +76,7 @@ public:
 protected :
   GDALDatasetWrapper();
 
-  virtual ~GDALDatasetWrapper();
+  ~GDALDatasetWrapper() ITK_OVERRIDE;
 
 
 private:

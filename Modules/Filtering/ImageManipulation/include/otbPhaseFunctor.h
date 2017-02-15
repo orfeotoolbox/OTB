@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPhaseFunctor_h
-#define __otbPhaseFunctor_h
+#ifndef otbPhaseFunctor_h
+#define otbPhaseFunctor_h
 
 #include "otbChannelSelectorFunctor.h"
 
@@ -67,17 +67,17 @@ public:
   }
 
   /** Destructor */
-  virtual ~PhaseFunctor() {}
+  ~PhaseFunctor() ITK_OVERRIDE {}
 
   const char *GetDescription() const
   {return "Phase"; }
 
-  virtual unsigned int GetOutputSize() const
+  unsigned int GetOutputSize() const ITK_OVERRIDE
   {
     return 1;
   }
 
-  virtual OutputPixelType operator ()(const VectorPixelType& inPixel) const
+  OutputPixelType operator ()(const VectorPixelType& inPixel) const ITK_OVERRIDE
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -88,13 +88,13 @@ public:
     return outPixel;
   }
 
-  virtual OutputPixelType operator ()(ScalarType /*inPixel*/) const
+  OutputPixelType operator ()(ScalarType /*inPixel*/) const ITK_OVERRIDE
   {
     //FIXME we don't handle the std::complex<> yet
     itkExceptionMacro(<< "Can't compute amplitude from a scalar value");
   }
 
-  virtual OutputPixelType operator ()(const RGBPixelType& inPixel) const
+  OutputPixelType operator ()(const RGBPixelType& inPixel) const ITK_OVERRIDE
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -106,7 +106,7 @@ public:
     return outPixel;
   }
 
-  virtual OutputPixelType operator ()(const RGBAPixelType& inPixel) const
+  OutputPixelType operator ()(const RGBAPixelType& inPixel) const ITK_OVERRIDE
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);

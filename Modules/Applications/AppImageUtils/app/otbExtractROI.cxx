@@ -55,7 +55,7 @@ public:
                                       FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
@@ -116,7 +116,7 @@ private:
     SetDocExampleParameterValue("out", "ExtractROI.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Update the sizes only if the user has not defined a size
     if ( HasValue("in") )
@@ -126,14 +126,14 @@ private:
 
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
         {
-        SetParameterInt("sizex", largestRegion.GetSize()[0]);
-        SetParameterInt("sizey", largestRegion.GetSize()[1]);
+        SetParameterInt("sizex",largestRegion.GetSize()[0], false);
+        SetParameterInt("sizey",largestRegion.GetSize()[1], false);
         }
 
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
       ListViewParameter *clParam = dynamic_cast<ListViewParameter*>(GetParameterByKey("cl"));
       // Update the values of the channels to be selected if nbComponents is changed
-      if (clParam != NULL && clParam->GetNbChoices() != nbComponents)
+      if (clParam != ITK_NULLPTR && clParam->GetNbChoices() != nbComponents)
         {
 
         ClearChoices("cl");
@@ -164,8 +164,8 @@ private:
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
-        SetParameterInt("startx", 0);
-        SetParameterInt("starty", 0);
+        SetParameterInt("startx",0, false);
+        SetParameterInt("starty",0, false);
         this->CropRegionOfInterest();
         }
       }
@@ -209,17 +209,17 @@ private:
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
           {
-            SetParameterInt("sizex", region.GetSize(0));
-            SetParameterInt("sizey", region.GetSize(1));
-            SetParameterInt("startx", region.GetIndex(0));
-            SetParameterInt("starty", region.GetIndex(1));
+            SetParameterInt("sizex",region.GetSize(0), HasUserValue("sizex"));
+            SetParameterInt("sizey",region.GetSize(1), HasUserValue("sizey"));
+            SetParameterInt("startx",region.GetIndex(0), HasUserValue("startx"));
+            SetParameterInt("starty",region.GetIndex(1), HasUserValue("starty"));
             return true;
           }
       }
     return false;
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
@@ -238,7 +238,7 @@ private:
       rsTransform->SetInputProjectionRef(referencePtr->GetProjectionRef());
       rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
       rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
-      rsTransform->InstanciateTransform();
+      rsTransform->InstantiateTransform();
 
       FloatVectorImageType::IndexType uli_ref,uri_ref,lli_ref,lri_ref;
 

@@ -7,6 +7,7 @@ the vector elements available. retrieve Longitude and Latitude coordinates from 
 place name. And so on.")
 
 otb_module(OTBCarto
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBCurlAdapters

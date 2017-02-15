@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalPyramidSynthesisFilter_h
-#define __otbMorphologicalPyramidSynthesisFilter_h
+#ifndef otbMorphologicalPyramidSynthesisFilter_h
+#define otbMorphologicalPyramidSynthesisFilter_h
 
 #include "otbImageToImageListFilter.h"
 
@@ -30,7 +30,7 @@ namespace otb
  * Once a morphological pyramidal decompisition has been made, it is
  * possible to rebuild without any loss of information the original
  * image at full resolution. The MorphologicalPyramidsynthesisFilter
- * provides such a functionality. At each iteration, it perfoms the
+ * provides such a functionality. At each iteration, it performs the
  * up-sampling of the current image using the
  * otb::morphologicalPyramid::Resampler filter, the addition of
  * the details lost in down-sampling, and the addition of the details
@@ -125,12 +125,12 @@ protected:
   /** Constructor */
   MorphologicalPyramidSynthesisFilter();
   /** Destructor */
-  virtual ~MorphologicalPyramidSynthesisFilter();
-  virtual void GenerateOutputInformation() {}  // does nothing
+  ~MorphologicalPyramidSynthesisFilter() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE {}  // does nothing
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 };
 } // End namespace otb
 

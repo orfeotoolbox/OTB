@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalPauliDecompImageFilter_h
-#define __ReciprocalPauliDecompImageFilter_h
+#ifndef otbReciprocalPauliDecompImageFilter_h
+#define otbReciprocalPauliDecompImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -110,7 +110,7 @@ public:
 
 protected:
    ReciprocalPauliDecompImageFilter() {this->SetNumberOfThreads(1);}
-  virtual ~ReciprocalPauliDecompImageFilter() {}
+  ~ReciprocalPauliDecompImageFilter() ITK_OVERRIDE {}
 
 private:
   ReciprocalPauliDecompImageFilter(const Self&); //purposely not implemented

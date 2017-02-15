@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFillGapsFilter_h
-#define __otbFillGapsFilter_h
+#ifndef otbFillGapsFilter_h
+#define otbFillGapsFilter_h
 
 
 #include "itkProcessObject.h"
@@ -68,11 +68,11 @@ public:
 protected:
   FillGapsFilter();
 
-  virtual ~FillGapsFilter() {}
+  ~FillGapsFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   FillGapsFilter(const Self &); //purposely not implemented

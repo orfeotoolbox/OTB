@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygon_h
-#define __otbPolygon_h
+#ifndef otbPolygon_h
+#define otbPolygon_h
 
 #include "otbPolyLineParametricPathWithValue.h"
 
@@ -64,14 +64,14 @@ public:
   itkGetMacro(Epsilon, double);
 
   /**
-   * Check wether point is strictly inside the polygon.
+   * Check whether point is strictly inside the polygon.
    * \param point The point to check.
    * \return True if the point is inside the polygon.
    */
   bool IsInside(VertexType point) const;
 
   /**
-   * Check wether point is strictly on the edge of the polygon.
+   * Check whether point is strictly on the edge of the polygon.
    * \param point The point to check.
    * \return True if the point is on the edge of the polygon.
    */
@@ -94,7 +94,7 @@ public:
   unsigned int NbTouching(VertexType a, VertexType b) const;
 
   /**
-   * Check wether two segments [a1a2] and [b1b2] are strictly crossing.
+   * Check whether two segments [a1a2] and [b1b2] are strictly crossing.
    * \param a1 First point of the first segment,
    * \param a1 Second point of the first segment,
    * \param a1 First point of the second segment,
@@ -104,7 +104,7 @@ public:
   bool IsCrossing(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
 
   /**
-   * Check wether two segments[a1a2] and [b1b2] are touching without crossing.
+   * Check whether two segments[a1a2] and [b1b2] are touching without crossing.
    * \param a1 First point of the first segment,
    * \param a1 Second point of the first segment,
    * \param a1 First point of the second segment,
@@ -133,9 +133,9 @@ public:
   * Return the polygon length (perimeter).
   * \return The length.
   */
-  virtual double GetLength() const;
+  double GetLength() const ITK_OVERRIDE;
 
-  void  AddVertex(const ContinuousIndexType& vertex);
+  void  AddVertex(const ContinuousIndexType& vertex) ITK_OVERRIDE;
 
 protected:
   /** Constructor */
@@ -147,13 +147,13 @@ protected:
     };
 
   /** Destructor */
-  virtual ~Polygon() {}
+  ~Polygon() ITK_OVERRIDE {}
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   virtual void ComputeArea() const;
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
   Polygon(const Self &); //purposely not implemented

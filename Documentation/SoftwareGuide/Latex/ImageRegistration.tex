@@ -574,8 +574,8 @@ describe the main characteristics of such transforms.
 %% Please read the ITK Software Guide http://www.itk.org/ItkSoftwareGuide.pdf  for
 %% a description of the use of the CenteredTransformInitializer class.
 %% \item Optimzer steps too large. If you optimizer takes steps that are too
-%% large, it risks to become unstable and to send the images too far appart.  You
-%% may want to start the optimizer with a maximum step lenght of 1.0, and only
+%% large, it risks to become unstable and to send the images too far apart.  You
+%% may want to start the optimizer with a maximum step length of 1.0, and only
 %% increase it once you have managed to fine tune all other registration
 %% parameters.
 
@@ -636,7 +636,7 @@ describe the main characteristics of such transforms.
 
 %%     Once you identify the anatomical structures in the
 %%     histogram, then rerun that same program with less
-%%     and less number of bins, until you reach the minimun
+%%     and less number of bins, until you reach the minimum
 %%     number of bins for which all the tissues that are important
 %%     for your application, are still distinctly differentiated in the
 %%     histogram.  At that point, take that number of bins and
@@ -709,7 +709,7 @@ describe the main characteristics of such transforms.
 %% Just keep in mind that what the optimizer will do is to
 %% "jump" in a paramteric space of 6 dimension, and that the
 %% component of the jump on every dimension will be proporitional
-%% to 1/scaling factor * OptimizerStepLenght.     Since you put
+%% to 1/scaling factor * OptimizerStepLength.     Since you put
 %% the optimizer Step Length to 0.1, then the optimizer will start
 %% by exploring the rotations at jumps of about 5degrees, which
 %% is a conservative rotation for most medical applications.

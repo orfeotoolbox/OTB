@@ -15,13 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRDataToClassStatisticsFilter_h
-#define __otbOGRDataToClassStatisticsFilter_h
+#ifndef otbOGRDataToClassStatisticsFilter_h
+#define otbOGRDataToClassStatisticsFilter_h
 
-#include "otbPersistentImageFilter.h"
+#include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-#include "otbOGRDataSourceWrapper.h"
-#include "otbPolygonClassStatisticsAccumulator.h"
 #include "itkSimpleDataObjectDecorator.h"
 
 namespace otb
@@ -36,12 +34,14 @@ namespace otb
  */
 template<class TInputImage, class TMaskImage>
 class ITK_EXPORT PersistentOGRDataToClassStatisticsFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentSamplingFilterBase<TInputImage, TMaskImage>
 {
 public:
   /** Standard Self typedef */
   typedef PersistentOGRDataToClassStatisticsFilter        Self;
-  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef PersistentSamplingFilterBase<
+    TInputImage,
+    TMaskImage>                                           Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -50,16 +50,9 @@ public:
   typedef typename InputImageType::RegionType             RegionType;
   typedef typename InputImageType::PointType              PointType;
 
-  typedef TMaskImage                                      MaskImageType;
-  typedef typename MaskImageType::Pointer                 MaskImagePointer;
-
-  typedef otb::ogr::DataSource                            OGRDataType;
-  typedef otb::ogr::DataSource::Pointer                   OGRDataPointer;
-
-  typedef otb::PolygonClassStatisticsAccumulator::ClassCountMapType   ClassCountMapType;
-  typedef otb::PolygonClassStatisticsAccumulator::PolygonSizeMapType  PolygonSizeMapType;
-
   /** Wrap output type as DataObject */
+  typedef std::map<std::string, unsigned long>      ClassCountMapType;
+  typedef std::map<unsigned long, unsigned long>    PolygonSizeMapType;
   typedef itk::SimpleDataObjectDecorator<ClassCountMapType>  ClassCountObjectType;
   typedef itk::SimpleDataObjectDecorator<PolygonSizeMapType> PolygonSizeObjectType;
 
@@ -69,70 +62,57 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentOGRDataToClassStatisticsFilter, PersistentImageFilter);
+  itkTypeMacro(PersistentOGRDataToClassStatisticsFilter, PersistentSamplingFilterBase);
 
-  void SetOGRData(const otb::ogr::DataSource* vector);
-  const otb::ogr::DataSource* GetOGRData();
-
-  void SetMask(const TMaskImage* mask);
-  const TMaskImage* GetMask();
-
-  void Synthetize(void);
+  void Synthetize(void) ITK_OVERRIDE;
 
   /** Reset method called before starting the streaming*/
-  void Reset(void);
+  void Reset(void) ITK_OVERRIDE;
 
-  // TODO : prevent loading of data into output
-
-  itkSetMacro(FieldName, std::string);
-  itkGetMacro(FieldName, std::string);
-  
-  itkSetMacro(LayerIndex, int);
-  itkGetMacro(LayerIndex, int);
-
-  // TODO: store the class count map as output #2
+  /** the class count map is stored as output #2 */
   const ClassCountObjectType* GetClassCountOutput() const;
   ClassCountObjectType* GetClassCountOutput();
 
-  // TODO: store the polygon size map as output #3
+  /** the polygon size map is stored as output #3 */
   const PolygonSizeObjectType* GetPolygonSizeOutput() const;
   PolygonSizeObjectType* GetPolygonSizeOutput();
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  virtual itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
   using Superclass::MakeOutput;
 
 protected:
   /** Constructor */
   PersistentOGRDataToClassStatisticsFilter();
   /** Destructor */
-  virtual ~PersistentOGRDataToClassStatisticsFilter() {}
+  ~PersistentOGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
 
-  virtual void GenerateOutputInformation();
+  /** Implement generic method called at each candidate position */
+  void ProcessSample(const ogr::Feature& feature,
+                     typename TInputImage::IndexType& imgIndex,
+                     typename TInputImage::PointType& imgPoint,
+                     itk::ThreadIdType& threadid) ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion();
-
-  //virtual void BeforeThreadedGenerateData();
-
-  //virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,
-  //                                  itk::ThreadIdType threadId);
-  virtual void GenerateData();
+  /** Prepare temporary variables for the current feature */
+  void PrepareFeature(const ogr::Feature& feature,
+                      itk::ThreadIdType& threadid) ITK_OVERRIDE;
 
 private:
   PersistentOGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  void ApplyPolygonsSpatialFilter();
+  /** Number of pixels in all the polygons (per thread) */
+  std::vector<unsigned long> m_NbPixelsThread;
+  /** Number of pixels in each classes (per thread) */
+  std::vector<ClassCountMapType> m_ElmtsInClassThread;
+  /** Number of pixels in each polygons (per thread) */
+  std::vector<PolygonSizeMapType> m_PolygonThread;
+  /** Class name of the current feature (per thread) */
+  std::vector<std::string> m_CurrentClass;
+  /** FID of the current feature (per thread) */
+  std::vector<unsigned long> m_CurrentFID;
 
-  RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
-
-  std::string m_FieldName;
-
-  PolygonClassStatisticsAccumulator::Pointer m_TemporaryStats;
-
-  // Layer to use in the shape file, default to 0
-  int m_LayerIndex;
 };
 
 /**
@@ -200,7 +180,7 @@ protected:
   /** Constructor */
   OGRDataToClassStatisticsFilter() {}
   /** Destructor */
-  virtual ~OGRDataToClassStatisticsFilter() {}
+  ~OGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
 
 private:
   OGRDataToClassStatisticsFilter(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNormalizeInnerProductPCAImageFilter_txx
-#define __otbNormalizeInnerProductPCAImageFilter_txx
+#ifndef otbNormalizeInnerProductPCAImageFilter_txx
+#define otbNormalizeInnerProductPCAImageFilter_txx
 
 #include "otbNormalizeInnerProductPCAImageFilter.h"
 #include "itkImageRegionIterator.h"

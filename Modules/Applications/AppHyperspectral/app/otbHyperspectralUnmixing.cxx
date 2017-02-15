@@ -18,7 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
 #include "otbNCLSUnmixingImageFilter.h"
@@ -30,9 +29,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
-typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> StreamingStatisticsVectorImageFilterType;
-
 typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
 typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             NCLSUnmixingFilterType;
@@ -89,7 +85,7 @@ public:
   itkTypeMacro(HyperspectralUnmixing, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("HyperspectralUnmixing");
     SetDescription("Estimate abundance maps from an hyperspectral image and a set of endmembers.");
@@ -101,6 +97,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis");
 
+	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
@@ -129,7 +126,7 @@ private:
 
     AddChoice("ua.mdmdnmf", "MDMDNMF");
     SetParameterDescription("ua.mdmdnmf", "Minimum Dispersion Constrained Non Negative Matrix Factorization");
-    SetParameterString("ua", "ucls");
+    SetParameterString("ua", "ucls", false);
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("ie", "cupriteEndmembers.tif");
@@ -137,12 +134,12 @@ private:
     SetDocExampleParameterValue("ua", "ucls");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_ProcessObjects.clear();
 

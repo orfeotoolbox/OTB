@@ -43,7 +43,7 @@ int otbPolygonizationRasterizationTest(int itkNotUsed(argc), char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  // Instanciate  a LabelImageToVectorData filter
+  // Instantiate  a LabelImageToVectorData filter
   LabelImageToVDFilterType::Pointer polygonize = LabelImageToVDFilterType::New();
   polygonize->SetInput(reader->GetOutput());
   polygonize->Update();

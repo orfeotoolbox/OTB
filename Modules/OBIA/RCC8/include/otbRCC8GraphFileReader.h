@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRCC8GraphFileReader_h
-#define __otbRCC8GraphFileReader_h
+#ifndef otbRCC8GraphFileReader_h
+#define otbRCC8GraphFileReader_h
 
 #include "otbRCC8GraphSource.h"
 #include "itkMacro.h"
@@ -89,9 +89,9 @@ protected:
   /** Constructor */
   RCC8GraphFileReader();
   /** Destructor */
-  virtual ~RCC8GraphFileReader();
+  ~RCC8GraphFileReader() ITK_OVERRIDE;
   /** Main computation method */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /**
    * Parse edge information from a given line.
    * \param line The line to parse.
@@ -104,7 +104,7 @@ protected:
   void  ParseVertex(const std::string& line);
 
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   /** File name */

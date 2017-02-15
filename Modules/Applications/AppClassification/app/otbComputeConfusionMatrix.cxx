@@ -30,6 +30,11 @@ namespace otb
 {
 namespace Wrapper
 {
+/** Utility function to negate std::isalnum */
+bool IsNotAlphaNum(char c)
+  {
+  return !std::isalnum(c);
+  }
 
 class ComputeConfusionMatrix : public Application
 {
@@ -71,7 +76,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
   SetName("ComputeConfusionMatrix");
   SetDescription("Computes the confusion matrix of a classification");
@@ -108,12 +113,10 @@ private:
   AddParameter(ParameterType_InputFilename,"ref.vector.in","Input reference vector data");
   SetParameterDescription("ref.vector.in", "Input vector data of the ground truth");
 
-  AddParameter(ParameterType_String,"ref.vector.field","Field name");
+  AddParameter(ParameterType_ListView,"ref.vector.field","Field name");
   SetParameterDescription("ref.vector.field","Field name containing the label values");
-  SetParameterString("ref.vector.field","Class");
-  MandatoryOff("ref.vector.field");
-  DisableParameter("ref.vector.field");
-
+  SetListViewSingleSelectionMode("ref.vector.field",true);
+  
   AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels");
   SetParameterDescription("nodatalabel", "Label for the NoData class. Such input pixels will be discarded from the "
       "ground truth and from the input classification map. By default, 'nodatalabel = 0'.");
@@ -132,9 +135,34 @@ private:
   SetDocExampleParameterValue("nodatalabel","255");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
-    // Nothing to do here : all parameters are independent
+    if ( HasValue("ref.vector.in") )
+      {
+      std::string vectorFile = GetParameterString("ref.vector.in");
+      ogr::DataSource::Pointer ogrDS =
+        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer layer = ogrDS->GetLayer(0);
+      ogr::Feature feature = layer.ogr().GetNextFeature();
+      
+      ClearChoices("ref.vector.field");
+      
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::transform(key.begin(), end, key.begin(), tolower);
+        
+        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+          {
+          std::string tmpKey="ref.vector.field."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
+        }
+      }    
   }
 
   std::string LogConfusionMatrix(MapOfClassesType* mapOfClasses, ConfusionMatrixType* matrix)
@@ -209,7 +237,7 @@ private:
     }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     Int32ImageType* input = this->GetParameterInt32Image("in");
 
@@ -228,8 +256,18 @@ private:
     else
       {
       ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
-      field = this->GetParameterString("ref.vector.field");
 
+    // Get field name
+    std::vector<int> selectedCFieldIdx = GetSelectedItems("ref.vector.field");
+    
+    if(selectedCFieldIdx.empty())
+      {
+      otbAppLogFATAL(<<"No field has been selected for data labelling!");
+      }
+      
+      std::vector<std::string> cFieldNames = GetChoiceNames("ref.vector.field");  
+      field = cFieldNames[selectedCFieldIdx.front()];
+      
       rasterizeReference->AddOGRDataSource(ogrRef);
       rasterizeReference->SetOutputParametersFromImage(input);
       rasterizeReference->SetBackgroundValue(nodata);
@@ -288,27 +326,17 @@ private:
         if ((labelRef != nodata) && (labelProd != nodata))
           {
           // If the current labels have not been added to their respective mapOfClasses yet
-          if (mapOfClassesRef.count(labelRef) == 0)
+          if (mapOfClassesRef.insert(MapOfClassesType::value_type(labelRef, itLabelRef)).second)
             {
-            mapOfClassesRef[labelRef] = itLabelRef;
             ++itLabelRef;
             }
-          if (mapOfClassesProd.count(labelProd) == 0)
+          if (mapOfClassesProd.insert(MapOfClassesType::value_type(labelProd, itLabelProd)).second)
             {
-            mapOfClassesProd[labelProd] = itLabelProd;
             ++itLabelProd;
             }
 
           // Filling of m_Matrix
-          if (m_Matrix[labelRef][labelProd] == 0)
-            {
-            m_Matrix[labelRef][labelProd] = 1;
-            }
-          else
-            {
-            m_Matrix[labelRef][labelProd]++;
-            }
-
+          m_Matrix[labelRef][labelProd]++;
           } // END if ((labelRef != nodata) && (labelProd != nodata))
         ++itRef;
         ++itInput;
@@ -325,9 +353,11 @@ private:
 
     // Filling ossHeaderRefLabels for the output file
     ossHeaderRefLabels << commentRefStr;
+
+    MapOfClassesType::iterator itMapOfClassesRefEnd = mapOfClassesRef.end();
     itMapOfClassesRef = mapOfClassesRef.begin();
     int indexLabelRef = 0;
-    while (itMapOfClassesRef != mapOfClassesRef.end())
+    while (itMapOfClassesRef != itMapOfClassesRefEnd)
       {
       // labels labelRef of mapOfClassesRef are already sorted
       labelRef = itMapOfClassesRef->first;
@@ -338,7 +368,7 @@ private:
 
       ossHeaderRefLabels << labelRef;
       ++itMapOfClassesRef;
-      if (itMapOfClassesRef != mapOfClassesRef.end())
+      if (itMapOfClassesRef != itMapOfClassesRefEnd)
         {
         ossHeaderRefLabels << separatorChar;
         }
@@ -352,9 +382,10 @@ private:
 
     // Filling ossHeaderProdLabels for the output file
     ossHeaderProdLabels << commentProdStr;
+    MapOfClassesType::iterator itMapOfClassesProdEnd = mapOfClassesProd.end();
     itMapOfClassesProd = mapOfClassesProd.begin();
     int indexLabelProd = 0;
-    while (itMapOfClassesProd != mapOfClassesProd.end())
+    while (itMapOfClassesProd != itMapOfClassesProdEnd)
       {
       // labels labelProd of mapOfClassesProd are already sorted
       labelProd = itMapOfClassesProd->first;
@@ -365,7 +396,7 @@ private:
 
       ossHeaderProdLabels << labelProd;
       ++itMapOfClassesProd;
-      if (itMapOfClassesProd != mapOfClassesProd.end())
+      if (itMapOfClassesProd != itMapOfClassesProdEnd)
         {
         ossHeaderProdLabels << separatorChar;
         }
@@ -402,13 +433,13 @@ private:
     // Initialization of m_MatrixLOG
     m_MatrixLOG.SetSize(nbClassesRef, nbClassesRef);
     m_MatrixLOG.Fill(0);
-    for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != mapOfClassesRef.end(); ++itMapOfClassesRef)
+    for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != itMapOfClassesRefEnd; ++itMapOfClassesRef)
       {
       // labels labelRef of mapOfClassesRef are already sorted
       labelRef = itMapOfClassesRef->first;
 
       indexLabelProd = 0;
-      for (itMapOfClassesProd = mapOfClassesProd.begin(); itMapOfClassesProd != mapOfClassesProd.end(); ++itMapOfClassesProd)
+      for (itMapOfClassesProd = mapOfClassesProd.begin(); itMapOfClassesProd != itMapOfClassesProdEnd; ++itMapOfClassesProd)
         {
         // labels labelProd of mapOfClassesProd are already sorted
         labelProd = itMapOfClassesProd->first;
@@ -458,7 +489,7 @@ private:
     confMatMeasurements->SetConfusionMatrix(m_MatrixLOG);
     confMatMeasurements->Compute();
 
-    for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != mapOfClassesRef.end(); ++itMapOfClassesRef)
+    for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != itMapOfClassesRefEnd; ++itMapOfClassesRef)
       {
       labelRef = itMapOfClassesRef->first;
       indexLabelRef = itMapOfClassesRef->second;

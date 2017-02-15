@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSparseWvltToAngleMapperListFilter_txx
-#define __otbSparseWvltToAngleMapperListFilter_txx
+#ifndef otbSparseWvltToAngleMapperListFilter_txx
+#define otbSparseWvltToAngleMapperListFilter_txx
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
 #include <vnl/vnl_math.h>
@@ -55,7 +55,7 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
 {
   if ( i >= this->GetNumberOfInputs() )
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   return static_cast<const InputImageListType * >

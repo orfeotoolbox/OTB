@@ -15,14 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetFactory_h
-#define __otbWrapperQtWidgetFactory_h
+#ifndef otbWrapperQtWidgetFactory_h
+#define otbWrapperQtWidgetFactory_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #endif //tag=QT4-boost-compatibility
+
+#include "OTBQtWidgetExport.h"
 
 namespace otb
 {
@@ -39,7 +41,7 @@ class QtWidgetParameterBase;
  * \ingroup OTBQtWidget
  *
  */
-class ITK_ABI_EXPORT QtWidgetParameterFactory : public itk::Object
+class OTBQtWidget_EXPORT QtWidgetParameterFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -59,7 +61,7 @@ public:
 
 protected:
   QtWidgetParameterFactory();
-  virtual ~QtWidgetParameterFactory();
+  ~QtWidgetParameterFactory() ITK_OVERRIDE;
 
 private:
   QtWidgetParameterFactory(const Self&); //purposely not implemented

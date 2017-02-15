@@ -1,0 +1,50 @@
+if(NOT EXISTS "@CMAKE_BINARY_DIR@/install_manifest.txt")
+  message(FATAL_ERROR "Cannot find install manifest: @CMAKE_BINARY_DIR@/install_manifest.txt")
+  return()
+endif()
+
+file(READ "@CMAKE_BINARY_DIR@/install_manifest.txt" files)
+string(REGEX REPLACE "\n" ";" files "${files}")
+foreach(file ${files})
+  message(STATUS "Uninstalling $ENV{DESTDIR}${file}")
+  if(IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")
+    execute_process(COMMAND
+      "@CMAKE_COMMAND@" -E remove "$ENV{DESTDIR}${file}"
+      OUTPUT_VARIABLE out_var
+      RESULT_VARIABLE res_var
+      )
+    if(NOT "${res_var}" STREQUAL 0)
+      message(FATAL_ERROR "Problem when removing $ENV{DESTDIR}${file}")
+    endif()
+  else()
+    message(STATUS "File $ENV{DESTDIR}${file} does not exist.")
+  endif()
+endforeach(file)
+
+set(otb_dir_name "OTB-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@")
+
+set(installed_dirs)
+# include/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/include/${otb_dir_name}")
+# lib/{otb,python} directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/lib/otb")
+# lib/cmake/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/lib/cmake/${otb_dir_name}")
+# share/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/share/${otb_dir_name}")
+# share/doc/OTB-X.Y directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/share/doc/${otb_dir_name}")
+
+foreach(installed_dir ${installed_dirs})
+  message(STATUS "Uninstalling ${installed_dir}")
+  if(EXISTS "${installed_dir}" AND IS_DIRECTORY "${installed_dir}")
+    execute_process(COMMAND
+      "@CMAKE_COMMAND@" -E remove_directory "${installed_dir}"
+      OUTPUT_VARIABLE out_rmdir
+      RESULT_VARIABLE res_rmdir
+      )
+    if(NOT "${res_rmdir}" STREQUAL 0)
+      message(FATAL_ERROR "Problem when removing ${installed_dir}")
+    endif()
+  endif()
+endforeach()

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLogPolarTransform_h
-#define __otbLogPolarTransform_h
+#ifndef otbLogPolarTransform_h
+#define otbLogPolarTransform_h
 
 #include "otbTransform.h"
 
@@ -81,53 +81,53 @@ public:
    * Set the transform parameters through the standard interface.
    * \param parameters The parameters of the transform.
    */
-  void SetParameters(const ParametersType& parameters);
+  void SetParameters(const ParametersType& parameters) ITK_OVERRIDE;
   /**
    * Get the transform parameters through the standard interface.
    * \return The parameters of the transform.
    */
-  virtual ParametersType& GetParameters(void) const;
+  ParametersType& GetParameters(void) const ITK_OVERRIDE;
 
   /**
    * Set the Fixed Parameters
    * \param param The fixed parameters of the transform.
    */
-  virtual void SetFixedParameters( const ParametersType & param)
+  void SetFixedParameters( const ParametersType & param) ITK_OVERRIDE
     { this->m_FixedParameters = param; }
 
   /**
    * Get the Fixed Parameters
    * \return The Fixed parameters of the transform.
    */
-  virtual const ParametersType& GetFixedParameters(void) const{return this->m_FixedParameters; }
+  const ParametersType& GetFixedParameters(void) const ITK_OVERRIDE{return this->m_FixedParameters; }
   /**
    * Transform a point.
    * \param point The point to transform.
    * \return The transformed point.
    */
-  OutputPointType TransformPoint(const InputPointType& point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
   /**
    * Transform a vector representing a point.
    * \param vector The point to transform.
    * \return The transformed point.
    */
   using Superclass::TransformVector;
-  OutputVectorType TransformVector(const InputVectorType& vector) const;
+  OutputVectorType TransformVector(const InputVectorType& vector) const ITK_OVERRIDE;
 
   /**
    * Transform a vnl vector representing a point.
    * \param vector The point to transform.
    * \return The transformed point.
    */
-  OutputVnlVectorType TransformVector(const InputVnlVectorType& vector) const;
+  OutputVnlVectorType TransformVector(const InputVnlVectorType& vector) const ITK_OVERRIDE;
 
 protected:
   /** Constructor */
   LogPolarTransform();
   /** Destructor */
-  virtual ~LogPolarTransform();
+  ~LogPolarTransform() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LogPolarTransform(const Self &); // purposely not implemented

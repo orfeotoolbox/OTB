@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToGenericRSOutputParameters_h
-#define __otbImageToGenericRSOutputParameters_h
+#ifndef otbImageToGenericRSOutputParameters_h
+#define otbImageToGenericRSOutputParameters_h
 
 #include "itkObject.h"
 #include "otbGenericRSTransform.h"
@@ -160,7 +160,7 @@ public:
 
 protected:
   ImageToGenericRSOutputParameters();
-  virtual ~ImageToGenericRSOutputParameters() {}
+  ~ImageToGenericRSOutputParameters() ITK_OVERRIDE {}
 
 private:
   ImageToGenericRSOutputParameters(const Self&); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWindowedSincInterpolateImageHammingFunction_h
-#define __otbWindowedSincInterpolateImageHammingFunction_h
+#ifndef otbWindowedSincInterpolateImageHammingFunction_h
+#define otbWindowedSincInterpolateImageHammingFunction_h
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 #include "vnl/vnl_math.h"
@@ -125,8 +125,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageHammingFunction() {};
-  ~WindowedSincInterpolateImageHammingFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~WindowedSincInterpolateImageHammingFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

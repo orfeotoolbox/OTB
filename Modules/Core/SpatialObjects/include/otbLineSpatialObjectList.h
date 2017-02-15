@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineSpatialObjectList_h
-#define __otbLineSpatialObjectList_h
+#ifndef otbLineSpatialObjectList_h
+#define otbLineSpatialObjectList_h
 
 
 #include "itkDataObject.h"
@@ -55,7 +55,7 @@ public:
 
 protected:
   LineSpatialObjectList() {};
-  ~LineSpatialObjectList() {}
+  ~LineSpatialObjectList() ITK_OVERRIDE {}
 
 private:
   LineSpatialObjectList(const Self &); //purposely not implemented

@@ -65,11 +65,11 @@ int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, bo
   kwlist.convertToOSSIMKeywordlist(ossimKwlist);
   
   ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
-  if (ossimSensorModel == NULL)
+  if (ossimSensorModel == ITK_NULLPTR)
   {
       ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
   }
-  if (ossimSensorModel == NULL) // Model validity
+  if (ossimSensorModel == ITK_NULLPTR) // Model validity
   {
 	std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
     return EXIT_FAILURE;
@@ -164,7 +164,7 @@ int otbSensorModel(int argc, char* argv[])
   bool checkNeededKw = atoi(argv[9]);
 
   // -------------------
-  // Some instanciations  
+  // Some instantiations  
   // -------------------
   otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
     
@@ -216,7 +216,7 @@ int otbSensorModel(int argc, char* argv[])
   // Build wgs ref
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = NULL;
+  char * wgsRef = ITK_NULLPTR;
   oSRS.exportToWkt(&wgsRef);
 
   typedef otb::GenericRSTransform<>       GRSTransformType;
@@ -231,7 +231,7 @@ int otbSensorModel(int argc, char* argv[])
   img2wgs->SetInputProjectionRef("");
   img2wgs->SetOutputProjectionRef(wgsRef);
   img2wgs->SetInputKeywordList(kwlist);
-  img2wgs->InstanciateTransform();
+  img2wgs->InstantiateTransform();
 
 
   // Instantiate WGS->Image transform
@@ -244,18 +244,18 @@ int otbSensorModel(int argc, char* argv[])
   wgs2img->SetInputProjectionRef("");
   wgs2img->SetOutputProjectionRef(wgsRef);
   wgs2img->SetOutputKeywordList(kwlist);
-  wgs2img->InstanciateTransform();
+  wgs2img->InstantiateTransform();
 
   // ossim classes
   ossimKeywordlist ossimKwlist;
   kwlist.convertToOSSIMKeywordlist(ossimKwlist);
   
   ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
-  if (ossimSensorModel == NULL)
+  if (ossimSensorModel == ITK_NULLPTR)
   {
       ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
   }
-  if (ossimSensorModel == NULL) // Model validity
+  if (ossimSensorModel == ITK_NULLPTR) // Model validity
   {
 	std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
     return EXIT_FAILURE;
@@ -283,7 +283,7 @@ int otbSensorModel(int argc, char* argv[])
   GeographicalDistanceType::Pointer geoDistance = GeographicalDistanceType::New();
   
   //--------------------------	
-  // Some instanciations (end)
+  // Some instantiations (end)
   //--------------------------
 	
 	

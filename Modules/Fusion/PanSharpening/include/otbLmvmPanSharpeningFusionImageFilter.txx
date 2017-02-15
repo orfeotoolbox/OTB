@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLmvmPanSharpeningFusionImageFilter_txx
-#define __otbLmvmPanSharpeningFusionImageFilter_txx
+#ifndef otbLmvmPanSharpeningFusionImageFilter_txx
+#define otbLmvmPanSharpeningFusionImageFilter_txx
 
 #include "otbLmvmPanSharpeningFusionImageFilter.h"
 
@@ -86,7 +86,7 @@ LmvmPanSharpeningFusionImageFilter
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TPanImageType *>
@@ -115,7 +115,7 @@ LmvmPanSharpeningFusionImageFilter
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const TXsImageType *>

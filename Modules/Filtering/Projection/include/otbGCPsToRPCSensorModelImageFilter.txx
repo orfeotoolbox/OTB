@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGCPsToRPCSensorModelImageFilter_txx
-#define __otbGCPsToRPCSensorModelImageFilter_txx
+#ifndef otbGCPsToRPCSensorModelImageFilter_txx
+#define otbGCPsToRPCSensorModelImageFilter_txx
 
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 
@@ -129,7 +129,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   groundPointWithElevation[0] = groundPoint[0];
   groundPointWithElevation[1] = groundPoint[1];
 
-  // Check wether we are using a DEM or not
+  // Check whether we are using a DEM or not
   if (m_UseDEM)
     {
     // If so, use it to get the elevation
@@ -243,7 +243,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
   rsTransform->SetInputKeywordList(m_Keywordlist);
-  rsTransform->InstanciateTransform();
+  rsTransform->InstantiateTransform();
 
   ContinuousIndexType   idFix, idOut;
   Continuous3DIndexType idOut3D, idTrans3D;

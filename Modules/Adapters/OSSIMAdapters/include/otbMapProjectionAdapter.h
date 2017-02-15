@@ -15,14 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapProjectionAdapter_h
-#define __otbMapProjectionAdapter_h
+#ifndef otbMapProjectionAdapter_h
+#define otbMapProjectionAdapter_h
 
 #include <string>
 #include <map>
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+
+#include "OTBOSSIMAdaptersExport.h"
+
+#include "otbMacro.h"
 
 class ossimProjection;
 
@@ -33,7 +37,7 @@ namespace otb
  * \class MapProjectionAdapter
  * \brief Wrapper class to group all dependencies to ossim for map projection
  *
- * This class is NOT intented to be used outside of OTB. Use the
+ * This class is NOT intended to be used outside of OTB. Use the
  * GenericMapProjection. If you feel that you need to use it directly,
  * think again!
  *
@@ -44,7 +48,7 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  **/
 
-class MapProjectionAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT MapProjectionAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -71,7 +75,15 @@ public:
   void SetParameter(const std::string& key, const std::string& value);
   std::string GetParameter(const std::string& key) const;
 
-  bool InstanciateProjection();
+  bool InstantiateProjection();
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  bool InstanciateProjection()
+  {
+    otbWarningMacro(
+      << "InstanciateProjection has been deprecated.  Please use InstanciateProjection() instead");
+    return this->InstantiateProjection();
+  }
 
   void InverseTransform(double x, double y, double z,
                         double& lon, double& lat, double& h);
@@ -82,7 +94,7 @@ public:
 
 protected:
   MapProjectionAdapter();
-  virtual ~MapProjectionAdapter();
+  ~MapProjectionAdapter() ITK_OVERRIDE;
 
 private:
   MapProjectionAdapter(const Self &); //purposely not implemented
@@ -103,10 +115,10 @@ private:
   bool m_ReinstanciateProjection;
 };
 
-// Some usefull free functions related to ossim
+// Some useful free functions related to ossim
 namespace Utils
 {
-int GetZoneFromGeoPoint(double lon, double lat);
+int OTBOSSIMAdapters_EXPORT GetZoneFromGeoPoint(double lon, double lat);
 }
 
 

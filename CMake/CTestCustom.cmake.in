@@ -89,4 +89,5 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*boost.move.unique_ptr.hpp:.*"
   ".*include.mpValue.h.*[Ww]arning.*\\[-Wc\\+\\+11-extensions\\]"
   ".*itksys.SharedForward.h.*warning.*itksys_shared_forward_to_real.*"
+  ".*include.mpi_portable_platform.h.*warning.*invalid.suffix.on.literal.*"
   )

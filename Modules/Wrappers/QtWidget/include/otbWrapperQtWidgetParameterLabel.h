@@ -15,13 +15,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetParameterLabel_h
-#define __otbWrapperQtWidgetParameterLabel_h
+#ifndef otbWrapperQtWidgetParameterLabel_h
+#define otbWrapperQtWidgetParameterLabel_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperParameter.h"
 #endif //tag=QT4-boost-compatibility
+
+#include "OTBQtWidgetExport.h"
 
 namespace otb
 {
@@ -33,12 +35,12 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class ITK_ABI_EXPORT QtWidgetParameterLabel : public QWidget
+class OTBQtWidget_EXPORT QtWidgetParameterLabel : public QWidget
 {
   Q_OBJECT
 public:
   QtWidgetParameterLabel(Parameter*);
-  virtual ~QtWidgetParameterLabel();
+  ~QtWidgetParameterLabel() ITK_OVERRIDE;
 
 private:
   QtWidgetParameterLabel(const QtWidgetParameterLabel&); //purposely not implemented

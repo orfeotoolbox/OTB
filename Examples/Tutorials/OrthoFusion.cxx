@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   // We declare the projection (here we chose the UTM projection, other choices
-  // are possible) and retrieve the paremeters from the command line:
+  // are possible) and retrieve the parameters from the command line:
   // \begin{itemize}
   // \item the UTM zone
   // \item the hemisphere
@@ -139,8 +139,8 @@ int main(int argc, char* argv[])
   spacing[1] = atof(argv[11]);
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[6], NULL);
-  origin[1] = strtod(argv[7], NULL);
+  origin[0] = strtod(argv[6], ITK_NULLPTR);
+  origin[1] = strtod(argv[7], ITK_NULLPTR);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

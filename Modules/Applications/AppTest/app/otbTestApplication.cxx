@@ -38,7 +38,7 @@ public:
   itkTypeMacro(TestApplication, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
@@ -87,8 +87,8 @@ private:
     MandatoryOff("il");
 
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
-    AddChoice("cl.choice1", "cl.choice1");
-    AddChoice("cl.choice2", "cl.choice2");
+    AddChoice("cl.choice1", "Choice1");
+    AddChoice("cl.choice2", "Choice2");
     MandatoryOff("cl");
 
     AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
@@ -99,13 +99,16 @@ private:
     SetDocExampleParameterValue("filename", "myFilename.foo");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     //std::cout << "TestApplication::DoUpdateParameters" << std::endl;
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
+    FloatVectorImageListType* imgList = GetParameterImageList("il");
+    SetParameterOutputImage("outgroup.outputimage", imgList->GetNthElement(0));
+    SetParameterComplexOutputImage("cout", GetParameterComplexImage("cin"));
     //std::cout << "TestApplication::DoExecute" << std::endl;
   }
 };

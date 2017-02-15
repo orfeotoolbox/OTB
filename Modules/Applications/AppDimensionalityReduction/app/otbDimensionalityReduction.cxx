@@ -86,7 +86,7 @@ public:
 ;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
@@ -97,8 +97,8 @@ private:
     SetDocSeeAlso(
                   "\"Kernel maximum autocorrelation factor and minimum noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011)");
 
-    AddDocTag(Tags::DimensionReduction);
     AddDocTag(Tags::Filter);
+	AddDocTag(Tags::DimensionReduction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The input image to apply dimensionality reduction.");
@@ -168,6 +168,10 @@ private:
     AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output (text format)");
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
     MandatoryOff("outmatrix");
+    DisableParameter("outmatrix");
+    
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
@@ -175,7 +179,7 @@ private:
     SetDocExampleParameterValue("method", "pca");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
               if (HasValue("in"))
               {
@@ -187,7 +191,7 @@ private:
                      unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
                      if (nbComp > nbComponents)
                      {
-                            SetParameterInt("nbcomp", nbComponents);
+                            SetParameterInt("nbcomp",nbComponents, false);
                             otbAppLogINFO( << "number of selected components can't exceed image dimension : "<<nbComponents );
                      }
 
@@ -197,14 +201,14 @@ private:
                      if (this->GetParameterString("outinv").size()!= 0)
                      {
                             otbAppLogWARNING(<<"This application only provides the forward transform for the MAF method.");
-                            this->SetParameterString("outinv", "");
+                            this->SetParameterString("outinv", "", false);
                      }
                      this->DisableParameter("outinv");
 
                      if (this->GetParameterString("outmatrix").size()!= 0)
                      {
                             otbAppLogWARNING(<<"No transformation matrix available for MAF method.");
-                            this->SetParameterString("outmatrix", "");
+                            this->SetParameterString("outmatrix", "", false);
                      }
                      this->DisableParameter("outmatrix");
 
@@ -216,14 +220,14 @@ private:
                      unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
                      if ((nbComp != 0) && (nbComp != nbComponents))
                      {
-                            SetParameterInt("nbcomp", nbComponents);
+                            SetParameterInt("nbcomp",nbComponents, false);
                             otbAppLogINFO( << "all components are kept when using MAF filter method.");
                      }
 
               }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     // Get Parameters
@@ -420,7 +424,8 @@ private:
 
       m_MinMaxFilter = MinMaxFilterType::New();
       m_MinMaxFilter->SetInput(m_ForwardFilter->GetOutput());
-      m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(50);
+      //m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(50);
+      m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
       AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
       m_MinMaxFilter->Update();

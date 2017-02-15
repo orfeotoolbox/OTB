@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFlusserMomentsIFFactory_txx
-#define __otbFlusserMomentsIFFactory_txx
+#ifndef otbFlusserMomentsIFFactory_txx
+#define otbFlusserMomentsIFFactory_txx
 
 #include "otbFlusserMomentsIFFactory.h"
 

@@ -138,7 +138,7 @@ otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWith
 
 #Radarsat2
 otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_RADARSAT2 COMMAND  otbSARCalibrationTestDriver
-  --compare-image ${EPSILON_12}
+  --compare-image ${EPSILON_6}
   ${BASELINE}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_RADARSAT2_HV.tif
   ${TEMP}/raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_RADARSAT2_HV.tif
   otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise

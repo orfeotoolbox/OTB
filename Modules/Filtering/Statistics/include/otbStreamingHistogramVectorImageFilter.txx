@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingHistogramVectorImageFilter_txx
-#define __otbStreamingHistogramVectorImageFilter_txx
+#ifndef otbStreamingHistogramVectorImageFilter_txx
+#define otbStreamingHistogramVectorImageFilter_txx
 #include "otbStreamingHistogramVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -271,14 +271,14 @@ PersistentHistogramVectorImageFilter<TInputImage>
 
     PixelType vectorValue = it.Get();
 
-       bool skipSampleNoData=false;
-       if(m_NoDataFlag)
+    bool skipSampleNoData=false;
+    if(m_NoDataFlag)
       {
       unsigned int itComp=0;
-         while( itComp < vectorValue.GetSize() )
-           {
-           if (vectorValue[itComp]==m_NoDataValue)
-                {
+      while( itComp < vectorValue.GetSize() )
+	{
+	if (vectorValue[itComp]==m_NoDataValue)
+	  {
           skipSampleNoData=true;
           itComp++;
           }
@@ -287,7 +287,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
           skipSampleNoData=false;
           break;
           }
-           }
+	}
       }
 
     if( !skipSampleNoData )

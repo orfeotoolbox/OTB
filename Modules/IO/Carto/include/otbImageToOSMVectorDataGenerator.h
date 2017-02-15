@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageToOSMVectorDataGenerator_h
-#define __otbImageToOSMVectorDataGenerator_h
+#ifndef otbImageToOSMVectorDataGenerator_h
+#define otbImageToOSMVectorDataGenerator_h
 
 #include "otbOSMDataToVectorDataGenerator.h"
 
@@ -37,7 +37,7 @@ namespace otb {
  * \ingroup OTBCarto
  */
 template < class TImage>
-class  ITK_EXPORT ImageToOSMVectorDataGenerator :
+class ImageToOSMVectorDataGenerator :
     public OSMDataToVectorDataGenerator
 {
 public:
@@ -78,13 +78,13 @@ public:
   const ImageType* GetInput() const;
 
 protected:
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   // Method to compute the extent of the image
   void EstimateImageExtent();
 
   ImageToOSMVectorDataGenerator();
-  virtual ~ImageToOSMVectorDataGenerator() {}
+  ~ImageToOSMVectorDataGenerator() ITK_OVERRIDE {}
 
 private:
   ImageToOSMVectorDataGenerator(const Self&); //purposely not implemented

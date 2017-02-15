@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainDecisionTree_txx
-#define __otbTrainDecisionTree_txx
+#ifndef otbTrainDecisionTree_txx
+#define otbTrainDecisionTree_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb
@@ -34,7 +34,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                           "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/decision_trees.html}.");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
-  SetParameterInt("classifier.dt.max", 65535);
+  SetParameterInt("classifier.dt.max",65535, false);
   SetParameterDescription(
       "classifier.dt.max", "The training algorithm attempts to split each node while its depth is smaller than the maximum "
       "possible depth of the tree. The actual depth may be smaller if the other termination criteria are met, and/or "
@@ -42,13 +42,13 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //MinSampleCount
   AddParameter(ParameterType_Int, "classifier.dt.min", "Minimum number of samples in each node");
-  SetParameterInt("classifier.dt.min", 10);
+  SetParameterInt("classifier.dt.min",10, false);
   SetParameterDescription("classifier.dt.min", "If the number of samples in a node is smaller than this parameter, "
                           "then this node will not be split.");
 
   //RegressionAccuracy
   AddParameter(ParameterType_Float, "classifier.dt.ra", "Termination criteria for regression tree");
-  SetParameterFloat("classifier.dt.ra", 0.01);
+  SetParameterFloat("classifier.dt.ra",0.01, false);
   SetParameterDescription("classifier.dt.min", "If all absolute differences between an estimated value in a node "
                           "and the values of the train samples in this node are smaller than this regression accuracy parameter, "
                           "then the node will not be split.");
@@ -60,14 +60,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //MaxCategories
   AddParameter(ParameterType_Int, "classifier.dt.cat",
                "Cluster possible values of a categorical variable into K <= cat clusters to find a suboptimal split");
-  SetParameterInt("classifier.dt.cat", 10);
+  SetParameterInt("classifier.dt.cat",10, false);
   SetParameterDescription(
       "classifier.dt.cat",
       "Cluster possible values of a categorical variable into K <= cat clusters to find a suboptimal split.");
 
   //CVFolds
   AddParameter(ParameterType_Int, "classifier.dt.f", "K-fold cross-validations");
-  SetParameterInt("classifier.dt.f", 10);
+  SetParameterInt("classifier.dt.f",10, false);
   SetParameterDescription(
       "classifier.dt.f", "If cv_folds > 1, then it prunes a tree with K-fold cross-validation where K is equal to cv_folds.");
 

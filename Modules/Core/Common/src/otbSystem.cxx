@@ -124,9 +124,9 @@ std::vector<std::string> System::Readdir(const std::string& pszPath)
 
   if (pszPath.empty() == true) path = ".";
 
-  if ((hDir = opendir(path.c_str())) != NULL)
+  if ((hDir = opendir(path.c_str())) != ITK_NULLPTR)
     {
-    while ((psDirEntry = readdir(hDir)) != NULL)
+    while ((psDirEntry = readdir(hDir)) != ITK_NULLPTR)
       {
       listFileFind.push_back(psDirEntry->d_name);
       }
@@ -181,7 +181,7 @@ bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned
  * it will return filelocation/file.*** in file
  * and 10 in addNum additional
  */
-bool System::ParseFileNameForAdditonalInfo(const std::string& id, std::string& file, unsigned int& addNum)
+bool System::ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum)
 {
   std::size_t pos = id.rfind(":");
   if (pos == std::string::npos) return false;

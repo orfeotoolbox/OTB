@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiplyByScalarImageFilter_h
-#define __otbMultiplyByScalarImageFilter_h
+#ifndef otbMultiplyByScalarImageFilter_h
+#define otbMultiplyByScalarImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 
@@ -98,7 +98,7 @@ public:
   }
 protected:
   MultiplyByScalarImageFilter() {}
-  virtual ~MultiplyByScalarImageFilter() {}
+  ~MultiplyByScalarImageFilter() ITK_OVERRIDE {}
 
 private:
   MultiplyByScalarImageFilter(const Self &); //purposely not implemented

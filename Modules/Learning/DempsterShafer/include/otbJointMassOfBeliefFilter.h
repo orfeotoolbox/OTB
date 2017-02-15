@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbJointMassOfBeliefFilter_h
-#define __otbJointMassOfBeliefFilter_h
+#ifndef otbJointMassOfBeliefFilter_h
+#define otbJointMassOfBeliefFilter_h
 
 #include "itkProcessObject.h"
 
@@ -68,11 +68,11 @@ public:
 
   /** Remove the last input */
   using Superclass::PopBackInput;
-  virtual void PopBackInput();
+  void PopBackInput() ITK_OVERRIDE;
 
   /** Remove the first input */
   using Superclass::PopFrontInput;
-  virtual void PopFrontInput();
+  void PopFrontInput() ITK_OVERRIDE;
 
   /** Get the idx th input */
   const MassFunctionType * GetInput(unsigned int idx);
@@ -85,13 +85,13 @@ protected:
   JointMassOfBeliefFilter();
 
   /** Destructor */
-  ~JointMassOfBeliefFilter() {}
+  ~JointMassOfBeliefFilter() ITK_OVERRIDE {}
 
   /** GenerateData */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   JointMassOfBeliefFilter(const Self&); //purposely not implemented

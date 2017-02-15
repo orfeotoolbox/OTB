@@ -19,8 +19,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMaskMuParserFilter_h
-#define __otbMaskMuParserFilter_h
+#ifndef otbMaskMuParserFilter_h
+#define otbMaskMuParserFilter_h
 
 
 #include "itkProgressReporter.h"
@@ -119,12 +119,12 @@ public:
 
 protected:
   MaskMuParserFilter();
-  virtual ~MaskMuParserFilter();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~MaskMuParserFilter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void BeforeThreadedGenerateData();
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId);
-  void AfterThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void AfterThreadedGenerateData() ITK_OVERRIDE;
 
 private:
   MaskMuParserFilter(const Self&); //purposely not implemented

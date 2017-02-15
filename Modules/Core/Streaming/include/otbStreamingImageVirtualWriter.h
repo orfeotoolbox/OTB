@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageVirtualWriter_h
-#define __otbStreamingImageVirtualWriter_h
+#ifndef otbStreamingImageVirtualWriter_h
+#define otbStreamingImageVirtualWriter_h
 
 #include "itkMacro.h"
 #include "itkImageToImageFilter.h"
@@ -137,18 +137,18 @@ public:
 
   /** Override Update() from ProcessObject
    *  This filter does not produce an output */
-  virtual void Update();
+  void Update() ITK_OVERRIDE;
 
 protected:
   StreamingImageVirtualWriter();
 
-  virtual ~StreamingImageVirtualWriter();
+  ~StreamingImageVirtualWriter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
 private:
   StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToRoadDescriptionFilter_h
-#define __otbVectorDataToRoadDescriptionFilter_h
+#ifndef otbVectorDataToRoadDescriptionFilter_h
+#define otbVectorDataToRoadDescriptionFilter_h
 
 #include "otbVectorDataToSpecificDescriptionFilterBase.h"
 #include "otbVectorData.h"
@@ -113,11 +113,11 @@ protected:
   /** Constructor */
   VectorDataToRoadDescriptionFilter();
   /** Destructor */
-  virtual ~VectorDataToRoadDescriptionFilter() {}
+  ~VectorDataToRoadDescriptionFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   /** Triggers the Computation of the Descriptors */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
 private:
   VectorDataToRoadDescriptionFilter(const Self &); //purposely not implemented

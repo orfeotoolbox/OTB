@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParser_h
-#define __otbParser_h
+#ifndef otbParser_h
+#define otbParser_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
@@ -86,8 +86,8 @@ public:
 
 protected:
   Parser();
-  virtual ~Parser();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~Parser() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

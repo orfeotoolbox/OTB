@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageFunctionAdaptor_h
-#define __otbImageFunctionAdaptor_h
+#ifndef otbImageFunctionAdaptor_h
+#define otbImageFunctionAdaptor_h
 
 #include "itkImageFunction.h"
 
@@ -85,17 +85,17 @@ class ITK_EXPORT ImageFunctionAdaptor :
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   // Evalulate the function at specified index //
-  virtual OutputType EvaluateAtIndex(const IndexType& index) const;
+  OutputType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
 
   // Evaluate the function at non-integer positions //
-  virtual OutputType Evaluate(const PointType& point) const
+  OutputType Evaluate(const PointType& point) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  virtual OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const
+  OutputType EvaluateAtContinuousIndex(
+    const ContinuousIndexType& cindex) const ITK_OVERRIDE
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -108,8 +108,8 @@ class ITK_EXPORT ImageFunctionAdaptor :
 
 protected:
   ImageFunctionAdaptor();
-  virtual ~ImageFunctionAdaptor() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageFunctionAdaptor() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageFunctionAdaptor(const Self &);  //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardMetaImageFunctionBuilder_txx
-#define __otbStandardMetaImageFunctionBuilder_txx
+#ifndef otbStandardMetaImageFunctionBuilder_txx
+#define otbStandardMetaImageFunctionBuilder_txx
 
 #include "otbStandardMetaImageFunctionBuilder.h"
 

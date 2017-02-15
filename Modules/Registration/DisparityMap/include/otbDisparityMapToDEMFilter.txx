@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapToDEMFilter_txx
-#define __otbDisparityMapToDEMFilter_txx
+#ifndef otbDisparityMapToDEMFilter_txx
+#define otbDisparityMapToDEMFilter_txx
 
 #include "otbDisparityMapToDEMFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -131,7 +131,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -144,7 +144,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -157,7 +157,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -170,7 +170,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -183,7 +183,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -196,7 +196,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<6)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(5));
 }
@@ -209,7 +209,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<7)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(6));
 }
@@ -235,7 +235,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfOutputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<TOutputDEMImage *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -255,11 +255,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer leftToGroundTransform = RSTransform2DType::New();
   leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());
-  leftToGroundTransform->InstanciateTransform();
+  leftToGroundTransform->InstantiateTransform();
 
   RSTransform2DType::Pointer rightToGroundTransform = RSTransform2DType::New();
   rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());
-  rightToGroundTransform->InstanciateTransform();
+  rightToGroundTransform->InstantiateTransform();
 
   // left image
   typename SensorImageType::SizeType inputSize = leftImgPtr->GetLargestPossibleRegion().GetSize();
@@ -382,7 +382,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 
   RSTransformType::Pointer groundToLeftTransform = RSTransformType::New();
   groundToLeftTransform->SetOutputKeywordList(leftSensor->GetImageKeywordlist());
-  groundToLeftTransform->InstanciateTransform();
+  groundToLeftTransform->InstantiateTransform();
 
   // For the disparity maps and mask
   // Iterate over OutputRequestedRegion corners for elevation min and max
@@ -638,8 +638,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   m_LeftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());
   m_RightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
 
-  m_LeftToGroundTransform->InstanciateTransform();
-  m_RightToGroundTransform->InstanciateTransform();
+  m_LeftToGroundTransform->InstantiateTransform();
+  m_RightToGroundTransform->InstantiateTransform();
 
   // ensure empty regions are not processed
   if (requestedRegion.GetSize(0) == 0 && requestedRegion.GetSize(1) == 0)
@@ -688,7 +688,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 
   typename TEpipolarGridImage::RegionType gridRegion = leftGrid->GetLargestPossibleRegion();
 
-  TOutputDEMImage * tmpDEM = NULL;
+  TOutputDEMImage * tmpDEM = ITK_NULLPTR;
   typename TOutputDEMImage::RegionType outputRequestedRegion = outputDEM->GetRequestedRegion();
 
   typename TDisparityImage::RegionType disparityRegion;

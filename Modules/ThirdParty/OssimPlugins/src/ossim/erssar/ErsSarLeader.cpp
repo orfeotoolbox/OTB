@@ -74,7 +74,7 @@ std::istream& operator>>(std::istream& is, ErsSarLeader& data)
     }
     else
     {
-      ErsSarRecord* record = factory.Instanciate(header.get_rec_seq());
+      ErsSarRecord* record = factory.Instantiate(header.get_rec_seq());
       if (record != NULL)
       {
         record->Read(is);

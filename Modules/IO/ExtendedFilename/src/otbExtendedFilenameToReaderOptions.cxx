@@ -23,10 +23,8 @@ namespace otb
 {
 
 ExtendedFilenameToReaderOptions
-::ExtendedFilenameToReaderOptions() : itk::Object()
+::ExtendedFilenameToReaderOptions() : ExtendedFilenameHelper()
 {
-  m_FilenameHelper = FNameHelperType::New();
-
   m_Options.simpleFileName.first  = false;
   m_Options.simpleFileName.second = "";
 
@@ -64,11 +62,11 @@ void
 ExtendedFilenameToReaderOptions
 ::SetExtendedFileName(const char *extFname)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extFname);
-  MapType map = this->m_FilenameHelper->GetOptionMap();
+  Superclass::SetExtendedFileName(extFname);
+  MapType map = GetOptionMap();
 
   m_Options.simpleFileName.first  = true;
-  m_Options.simpleFileName.second = this->m_FilenameHelper->GetSimpleFileName();
+  m_Options.simpleFileName.second = this->GetSimpleFileName();
 
   if (!map["geom"].empty())
     {
@@ -164,12 +162,6 @@ ExtendedFilenameToReaderOptions
 ::SimpleFileNameIsSet () const
 {
   return m_Options.simpleFileName.first;
-}
-const char*
-ExtendedFilenameToReaderOptions
-::GetSimpleFileName () const
-{
-  return m_Options.simpleFileName.second.c_str();
 }
 
 bool

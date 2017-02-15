@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStatisticsXMLFileWriter_h
-#define __otbStatisticsXMLFileWriter_h
+#ifndef otbStatisticsXMLFileWriter_h
+#define otbStatisticsXMLFileWriter_h
 
 #include "itkProcessObject.h"
 #include <utility>
@@ -89,8 +89,8 @@ protected:
   virtual void GenerateData();
 
   StatisticsXMLFileWriter();
-  virtual ~StatisticsXMLFileWriter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~StatisticsXMLFileWriter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StatisticsXMLFileWriter(const Self&); //purposely not implemented

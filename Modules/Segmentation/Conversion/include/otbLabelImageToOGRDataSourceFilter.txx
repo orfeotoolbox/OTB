@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelImageToOGRDataSourceFilter_txx
-#define __otbLabelImageToOGRDataSourceFilter_txx
+#ifndef otbLabelImageToOGRDataSourceFilter_txx
+#define otbLabelImageToOGRDataSourceFilter_txx
 
 #include "otbLabelImageToOGRDataSourceFilter.h"
 #include "otbGdalDataTypeBridge.h"
@@ -78,7 +78,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(0));
@@ -100,7 +100,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(1));
@@ -155,8 +155,8 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     nbBands = this->GetInput()->GetNumberOfComponentsPerPixel();
     bytePerPixel = sizeof(InputPixelType);
 
-    // buffer casted in unsigned long cause under Win32 the adress
-    // don't begin with 0x, the adress in not interpreted as
+    // buffer casted in unsigned long cause under Win32 the address
+    // don't begin with 0x, the address in not interpreted as
     // hexadecimal but alpha numeric value, then the conversion to
     // integer make us pointing to an non allowed memory block => Crash.
     std::ostringstream stream;
@@ -204,14 +204,14 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     //Create the output layer for GDALPolygonize().
     ogr::DataSource::Pointer ogrDS = ogr::DataSource::New();
 
-    OGRLayerType outputLayer = ogrDS->CreateLayer("layer",NULL,wkbPolygon);
+    OGRLayerType outputLayer = ogrDS->CreateLayer("layer",ITK_NULLPTR,wkbPolygon);
 
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
     outputLayer.CreateField(field, true);
 
     //Call GDALPolygonize()
     char ** options;
-    options = NULL;
+    options = ITK_NULLPTR;
     char * option[1];
     if (m_Use8Connected == true)
     {
@@ -227,8 +227,8 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       size = this->GetInputMask()->GetLargestPossibleRegion().GetSize();
       nbBands = this->GetInputMask()->GetNumberOfComponentsPerPixel();
       bytePerPixel = sizeof(InputPixelType);
-      // buffer casted in unsigned long cause under Win32 the adress
-      // don't begin with 0x, the adress in not interpreted as
+      // buffer casted in unsigned long cause under Win32 the address
+      // don't begin with 0x, the address in not interpreted as
       // hexadecimal but alpha numeric value, then the conversion to
       // integer make us pointing to an non allowed memory block => Crash.
       std::ostringstream maskstream;
@@ -271,12 +271,12 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       }
       maskDataset->SetGeoTransform(geoTransform);
 
-      GDALPolygonize(dataset->GetRasterBand(1), maskDataset->GetRasterBand(1), &outputLayer.ogr(), 0, options, NULL, NULL);
+      GDALPolygonize(dataset->GetRasterBand(1), maskDataset->GetRasterBand(1), &outputLayer.ogr(), 0, options, ITK_NULLPTR, ITK_NULLPTR);
       GDALClose(maskDataset);
     }
     else
     {
-      GDALPolygonize(dataset->GetRasterBand(1), NULL, &outputLayer.ogr(), 0, options, NULL, NULL);
+      GDALPolygonize(dataset->GetRasterBand(1), ITK_NULLPTR, &outputLayer.ogr(), 0, options, ITK_NULLPTR, ITK_NULLPTR);
     }
 
     this->SetNthOutput(0,ogrDS);

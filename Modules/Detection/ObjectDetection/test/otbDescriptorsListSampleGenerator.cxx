@@ -39,7 +39,7 @@ typedef double     CoordRepType;
 typedef otb::Image<PixelType, Dimension>                               ImageType;
 typedef otb::VectorData<>                                              VectorDataType;
 typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType>  FunctionType;
-typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType> AdapatedFunctionType;
+typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType> AdaptedFunctionType;
 
 typedef itk::VariableLengthVector<FunctionPrecisionType> SampleType;
 typedef itk::Statistics::ListSample<SampleType>          ListSampleType;
@@ -140,7 +140,7 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
   //imageReader->Update();
   //vectorDataReader->Update();
 
-  AdapatedFunctionType::Pointer descriptorsFunction = AdapatedFunctionType::New();
+  AdaptedFunctionType::Pointer descriptorsFunction = AdaptedFunctionType::New();
   descriptorsFunction->SetInputImage(imageReader->GetOutput());
   descriptorsFunction->GetInternalImageFunction()->SetNeighborhoodRadius(5);
 
@@ -214,7 +214,7 @@ int otbDescriptorsSVMModelCreation(int argc, char* argv[])
   //imageReader->Update();
   //vectorDataReader->Update();
 
-  AdapatedFunctionType::Pointer descriptorsFunction = AdapatedFunctionType::New();
+  AdaptedFunctionType::Pointer descriptorsFunction = AdaptedFunctionType::New();
   descriptorsFunction->SetInputImage(imageReader->GetOutput());
   descriptorsFunction->GetInternalImageFunction()->SetNeighborhoodRadius(neighborhood);
 

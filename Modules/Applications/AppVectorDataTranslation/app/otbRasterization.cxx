@@ -57,7 +57,7 @@ public:
   typedef otb::OGRDataSourceToLabelImageFilter<FloatImageType> OGRDataSourceToMapFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
     {
     SetName("Rasterization");
     SetDescription("Rasterize a vector dataset.");
@@ -129,7 +129,7 @@ private:
 
     AddParameter(ParameterType_String,"mode.attribute.field","The attribute field to burn");
     SetParameterDescription("mode.attribute.field","Name of the attribute field to burn");
-    SetParameterString("mode.attribute.field","DN");
+    SetParameterString("mode.attribute.field","DN", false);
 
     AddRAMParameter();
 
@@ -139,13 +139,13 @@ private:
     SetDocExampleParameterValue("spy","1.");
     }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
     {
     // Nothing to do
     }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
     {
     otb::ogr::DataSource::Pointer ogrDS;
     UInt8ImageType::Pointer referenceImage;
@@ -263,7 +263,7 @@ private:
           RSTransformType::Pointer rsTransform = RSTransformType::New();
           rsTransform->SetInputProjectionRef(inputProjectionRef);
           rsTransform->SetOutputProjectionRef(outputProjectionRef);
-          rsTransform->InstanciateTransform();
+          rsTransform->InstantiateTransform();
 
           corner = rsTransform->TransformPoint(corner);
           }
@@ -293,7 +293,7 @@ private:
           RSTransformType::Pointer rsTransform = RSTransformType::New();
           rsTransform->SetInputProjectionRef(inputProjectionRef);
           rsTransform->SetOutputProjectionRef(outputProjectionRef);
-          rsTransform->InstanciateTransform();
+          rsTransform->InstantiateTransform();
 
           lrout = rsTransform->TransformPoint(lrout);
           }

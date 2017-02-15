@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapProjectionDeprecated_h
-#define __otbMapProjectionDeprecated_h
+#ifndef otbMapProjectionDeprecated_h
+#define otbMapProjectionDeprecated_h
 
 #include "otbGenericMapProjection.h"
 
@@ -87,7 +87,7 @@ public:
 
 protected:
   MapProjectionDeprecated();
-  virtual ~MapProjectionDeprecated() {};
+  ~MapProjectionDeprecated() ITK_OVERRIDE {};
 
 private:
   MapProjectionDeprecated(const Self &); //purposely not implemented

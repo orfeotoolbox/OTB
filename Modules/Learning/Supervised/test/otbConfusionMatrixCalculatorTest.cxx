@@ -57,7 +57,7 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   RListLabelType::Pointer refLabels = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
-  // Set the measurement vector size for the list sample lables
+  // Set the measurement vector size for the list sample labels
   refLabels->SetMeasurementVectorSize(1);
   prodLabels->SetMeasurementVectorSize(1);
 
@@ -108,7 +108,7 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
   RListLabelType::Pointer refLabels = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
-  // Set the measurement vector size for the list sample lables
+  // Set the measurement vector size for the list sample labels
   refLabels->SetMeasurementVectorSize(1);
   prodLabels->SetMeasurementVectorSize(1);
 
@@ -167,7 +167,7 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
   RListLabelType::Pointer refLabels = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
-  // Set the measurement vector size for the list sample lables
+  // Set the measurement vector size for the list sample labels
   refLabels->SetMeasurementVectorSize(1);
   prodLabels->SetMeasurementVectorSize(1);
 

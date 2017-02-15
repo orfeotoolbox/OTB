@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMeanShiftSegmentationFilter_h
-#define __otbMeanShiftSegmentationFilter_h
+#ifndef otbMeanShiftSegmentationFilter_h
+#define otbMeanShiftSegmentationFilter_h
 
 #include "itkMacro.h"
 
@@ -170,11 +170,11 @@ public:
 protected:
   MeanShiftSegmentationFilter();
 
-  virtual ~MeanShiftSegmentationFilter();
+  ~MeanShiftSegmentationFilter() ITK_OVERRIDE;
 
 //  virtual void GenerateOutputInformation(void);
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
 

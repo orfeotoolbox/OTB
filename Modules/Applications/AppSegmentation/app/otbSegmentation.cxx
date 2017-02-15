@@ -131,7 +131,7 @@ public:
   itkTypeMacro(Segmentation, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Segmentation");
     SetDescription("Performs segmentation of an image, and output either a raster or a vector file. In vector mode, large input datasets are supported.");
@@ -144,7 +144,7 @@ private:
                           " (norm of spectral bands vector). The application has two different modes that affects the nature of its output.\n\nIn raster mode,"
                           " the output of the application is a classical image of unique labels identifying the segmented regions. The labeled output can be passed to the"
                           " ColorMapping application to render regions with contrasted colours. Please note that this mode loads the whole input image into memory, and as such"
-                          " can not handle large images. \n\nTo segment large data, one can use the vector mode. In this case, the output of the application is a"
+                          " can not handle large images. \n\n To segment large data, one can use the vector mode. In this case, the output of the application is a"
                           " vector file or database. The input image is split into tiles (whose size can be set using the tilesize parameter), and each tile is loaded, segmented"
                           " with the chosen algorithm, vectorized, and written into the output file or database. This piece-wise behavior ensure that memory will never get overloaded,"
                           " and that images of any size can be processed. There are few more options in the vector mode. The simplify option allows simplifying the geometry"
@@ -305,11 +305,11 @@ private:
 
     AddParameter(ParameterType_String, "mode.vector.layername", "Layer name");
     SetParameterDescription("mode.vector.layername", "Name of the layer in the vector file or database (default is Layer).");
-    SetParameterString("mode.vector.layername", "layer");
+    SetParameterString("mode.vector.layername", "layer", false);
 
     AddParameter(ParameterType_String, "mode.vector.fieldname", "Geometry index field name");
     SetParameterDescription("mode.vector.fieldname", "Name of the field holding the geometry index in the output vector file or database.");
-    SetParameterString("mode.vector.fieldname", "DN");
+    SetParameterString("mode.vector.fieldname", "DN", false);
 
     AddParameter(ParameterType_Int, "mode.vector.tilesize", "Tiles size");
     SetParameterDescription("mode.vector.tilesize",
@@ -340,7 +340,7 @@ private:
     SetDocExampleParameterValue("filter", "meanshift",1);
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
@@ -441,7 +441,7 @@ private:
     return streamingVectorizedFilter->GetStreamSize();
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Switch on segmentation mode
     const std::string segModeType = GetParameterString("mode");
@@ -449,7 +449,7 @@ private:
     const std::string segType = GetParameterString("filter");
 
     otb::ogr::DataSource::Pointer ogrDS;
-    otb::ogr::Layer layer(NULL, false);
+    otb::ogr::Layer layer(ITK_NULLPTR, false);
 
     std::string projRef = GetParameterFloatVectorImage("in")->GetProjectionRef();
 
@@ -686,7 +686,7 @@ private:
 
            std::string repack("REPACK ");
            repack = repack + shpLayerName;
-           ogrDS->ExecuteSQL(repack, NULL, NULL);
+           ogrDS->ExecuteSQL(repack, ITK_NULLPTR, ITK_NULLPTR);
          }
        }
       }

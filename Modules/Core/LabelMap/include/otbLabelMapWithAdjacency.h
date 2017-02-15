@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapWithAdjacency_h
-#define __otbLabelMapWithAdjacency_h
+#ifndef otbLabelMapWithAdjacency_h
+#define otbLabelMapWithAdjacency_h
 
 #include "itkLabelMap.h"
 #include "otbMergeLabelObjectFunctor.h"
@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class LabelMapWithAdjacency
-*   \brief This class is a LabelMap with additionnal adjacency information.
+*   \brief This class is a LabelMap with additional adjacency information.
 *
 *   The adjacency information is stored as a map of set of labels, in
 *   order to avoid duplicated neighbors.
@@ -160,7 +160,7 @@ public:
     MergeFunctorType mergeFunctor;
     typename LabelObjectType::Pointer loOut = mergeFunctor(lo1, lo2);
 
-    // Move every occurence of label2 to label1 in adjacency map
+    // Move every occurrence of label2 to label1 in adjacency map
     for(typename AdjacentLabelsContainerType::iterator it = m_AdjacencyMap[label2].begin();
         it != m_AdjacencyMap[label2].end(); ++it)
       {
@@ -215,16 +215,16 @@ protected:
   /** Constructor */
   LabelMapWithAdjacency(){}
   /** Destructor */
-  virtual ~LabelMapWithAdjacency(){}
+  ~LabelMapWithAdjacency() ITK_OVERRIDE{}
   /** Printself */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
 
   /** Re-implement CopyInformation to pass the adjancency graph
    * through */
-  virtual void CopyInformation(const itk::DataObject * data)
+  void CopyInformation(const itk::DataObject * data) ITK_OVERRIDE
   {
     // Call superclass implementation
     Superclass::CopyInformation(data);

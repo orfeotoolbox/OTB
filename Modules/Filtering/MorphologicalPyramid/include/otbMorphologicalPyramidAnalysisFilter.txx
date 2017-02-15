@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMorphologicalPyramidAnalysisFilter_txx
-#define __otbMorphologicalPyramidAnalysisFilter_txx
+#ifndef otbMorphologicalPyramidAnalysisFilter_txx
+#define otbMorphologicalPyramidAnalysisFilter_txx
 
 #include "otbMorphologicalPyramidAnalysisFilter.h"
 
@@ -228,7 +228,7 @@ MorphologicalPyramidAnalysisFilter<TInputImage, TOutputImage, TMorphoFilter>
 
     otbMsgDevMacro(
       << "MorphologicalPyramidAnalysisFilter: DownSampling OK " << currentImage->GetLargestPossibleRegion().GetSize());
-    // New current image is appeneded to the output list
+    // New current image is appended to the output list
     OutputImageList->PushBack(currentImage);
 
     // Image upsampling

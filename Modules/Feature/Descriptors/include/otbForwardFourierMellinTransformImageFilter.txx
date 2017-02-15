@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbForwardFourierMellinTransformImageFilter_txx
-#define __otbForwardFourierMellinTransformImageFilter_txx
+#ifndef otbForwardFourierMellinTransformImageFilter_txx
+#define otbForwardFourierMellinTransformImageFilter_txx
 
 #include "otbForwardFourierMellinTransformImageFilter.h"
 #include "itkImageDuplicator.h"

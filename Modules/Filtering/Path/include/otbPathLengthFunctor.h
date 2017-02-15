@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPathLengthFunctor_h
-#define __otbPathLengthFunctor_h
+#ifndef otbPathLengthFunctor_h
+#define otbPathLengthFunctor_h
 
 #include "otbMath.h"
 

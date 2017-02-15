@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbMorphologicalPyramidMRToMSConverter_h
-#define __otbMorphologicalPyramidMRToMSConverter_h
+#ifndef otbMorphologicalPyramidMRToMSConverter_h
+#define otbMorphologicalPyramidMRToMSConverter_h
 
 #include "otbImageListToImageListFilter.h"
 
@@ -68,7 +68,7 @@ public:
    * \param imageList The analysed image at each level of the pyramid.
    */
   using Superclass::SetInput;
-  void SetInput(const InputImageListType * imageList);
+  void SetInput(const InputImageListType * imageList) ITK_OVERRIDE;
   /**
    * Set The SupFilter details
    * \param imageList The brighter details extracted from the filtering operation.
@@ -93,7 +93,7 @@ public:
    * Get the input list.
    * \return The list of the analysed image at each pyramid level.
    */
-  InputImageListType* GetInput(void);
+  InputImageListType* GetInput(void) ITK_OVERRIDE;
   /**
    * Get The SupFilter details
    * \return The brighter details extracted from the filtering operation.
@@ -119,7 +119,7 @@ public:
    * \return The analysed image at each pyramid level
    * resampled at full resolution.
    */
-  OutputImageListType* GetOutput(void);
+  OutputImageListType* GetOutput(void) ITK_OVERRIDE;
   /**
    * Get The SupFilter details at full resolution.
    * \return The brighter details extracted from the filtering operation
@@ -149,12 +149,12 @@ protected:
   /** Constructor */
   MRToMSConverter();
   /** Destructor */
-  ~MRToMSConverter() {}
+  ~MRToMSConverter() ITK_OVERRIDE {}
 
   /** Main computation method */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   MRToMSConverter(const Self &); // purposely not implemented

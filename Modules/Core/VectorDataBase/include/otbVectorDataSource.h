@@ -16,10 +16,10 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataSource_h
-#define __otbVectorDataSource_h
+#ifndef otbVectorDataSource_h
+#define otbVectorDataSource_h
 
-
+#include "OTBVectorDataBaseExport.h"
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 
@@ -36,7 +36,7 @@ namespace otb
  */
 
 template <class TOutputVectorData>
-class ITK_EXPORT VectorDataSource : public itk::ProcessObject
+class ITK_ABI_EXPORT VectorDataSource : public itk::ProcessObject
 {
 public:
 
@@ -80,9 +80,9 @@ public:
 
 protected:
   VectorDataSource();
-  virtual ~VectorDataSource();
+  ~VectorDataSource() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Ensure that the output vector data are cleared before processing */
   virtual void  AllocateOutputs();
@@ -99,4 +99,4 @@ private:
 #include "otbVectorDataSource.txx"
 #endif
 
-#endif // __otbVectorDataSource_h
+#endif // otbVectorDataSource_h

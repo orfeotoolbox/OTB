@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbNumberOfLinesStrippedStreamingManager_h
-#define __otbNumberOfLinesStrippedStreamingManager_h
+#ifndef otbNumberOfLinesStrippedStreamingManager_h
+#define otbNumberOfLinesStrippedStreamingManager_h
 
 #include "otbStreamingManager.h"
 #include "itkImageRegionSplitter.h"
@@ -66,11 +66,11 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  virtual void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region);
+  void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region) ITK_OVERRIDE;
 
 protected:
   NumberOfLinesStrippedStreamingManager();
-  virtual ~NumberOfLinesStrippedStreamingManager();
+  ~NumberOfLinesStrippedStreamingManager() ITK_OVERRIDE;
 
   /** The splitter type used to generate the different strips */
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;

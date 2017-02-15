@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginLatex
   //
-  // Finaly we define a Reader on the input image and a mask reader.
+  // Finally we define a Reader on the input image and a mask reader.
   // All pixels in the mask with a value of 0 will not be considered suitable for vectorization.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
@@ -125,9 +125,9 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginLatex
   //
-  // The instanciation of the DataSource is slightly different as usual.
+  // The instantiation of the DataSource is slightly different as usual.
   // In fact the \code{New()} method on a \doxygen{otb}{ogr}{DataSource} can be called with or without parameters.
-  // Without parameters, the \code{New()} method instanciate a "Memory" DataSource, which means all the data are stored in memory.
+  // Without parameters, the \code{New()} method instantiate a "Memory" DataSource, which means all the data are stored in memory.
   // This is not useful in case of large scale segmentation as it will result in millions of polygons kept in memory ...
   // However the \code{New()} method can also take a filename (\code{std::String}) parameter. Then either the file already exists
   // and the corresponding ogr driver is used to open the file, or it doesn't exists and then it is created.
@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
   // Polygons that have the largest intersection over a tile are fusioned. Each polygon can be fusioned
   // only once per tile border (row and column).
   // Let's look at the code for fusioning.
-  // As usual we declared and instanciate the \doxygen{otb}{OGRLayerStreamStitchingFilter}.
+  // As usual we declared and instantiate the \doxygen{otb}{OGRLayerStreamStitchingFilter}.
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   typedef otb::OGRLayerStreamStitchingFilter<ImageType>   FusionFilterType;

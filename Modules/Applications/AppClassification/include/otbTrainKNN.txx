@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainKNN_txx
-#define __otbTrainKNN_txx
+#ifndef otbTrainKNN_txx
+#define otbTrainKNN_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb
@@ -34,7 +34,7 @@ namespace Wrapper
 
     //K parameter
     AddParameter(ParameterType_Int, "classifier.knn.k", "Number of Neighbors");
-    SetParameterInt("classifier.knn.k", 32);
+    SetParameterInt("classifier.knn.k",32, false);
     SetParameterDescription("classifier.knn.k","The number of neighbors to use.");
 
     if (this->m_RegressionFlag)

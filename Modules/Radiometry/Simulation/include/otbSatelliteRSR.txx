@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbSatelliteRSR_txx
-#define __otbSatelliteRSR_txx
+#ifndef otbSatelliteRSR_txx
+#define otbSatelliteRSR_txx
 
 #include "otbSatelliteRSR.h"
 

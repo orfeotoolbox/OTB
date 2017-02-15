@@ -1,0 +1,74 @@
+diff -burN ossim-1.8.20-3.orig/ossim/src/ossim/base/ossimDate.cpp ossim-1.8.20-3/ossim/src/ossim/base/ossimDate.cpp
+--- ossim-1.8.20-3.orig/ossim/src/ossim/base/ossimDate.cpp	2016-07-15 16:36:31.613857588 +0200
++++ ossim-1.8.20-3/ossim/src/ossim/base/ossimDate.cpp	2016-07-15 16:37:08.789859387 +0200
+@@ -239,6 +239,15 @@
+ #if ( defined(__APPLE__) || defined(__FreeBSD__)  || defined(__OpenBSD__) )
+    //gmt.tm_sec -= tm_gmtoff; // Seconds east of UTC
+    m_timezoneOffset = tm_gmtoff;
++#elif (defined(_WIN32))
++   long timezoneOffset=0;
++   _get_timezone(&timezoneOffset);
++   //m_timezoneOffset = timezone; // Seconds west of UTC
++   if ( tm_isdst )
++   {
++      timezoneOffset -= 3600; // Subtract an hour.
++   }
++m_timezoneOffset = -timezoneOffset;
+ #else
+    m_timezoneOffset = timezone; // Seconds west of UTC
+    if ( tm_isdst )
+@@ -676,6 +685,15 @@
+ 
+ #if ( defined(__APPLE__) || defined(__FreeBSD__)  || defined(__OpenBSD__) )
+    gmt.tm_sec -= tm_gmtoff; // Seconds east of UTC
++#elif (defined(_WIN32))
++   long timezoneOffset=0;
++   _get_timezone(&timezoneOffset);
++   //m_timezoneOffset = timezone; // Seconds west of UTC
++   if ( tm_isdst )
++   {
++      timezoneOffset -= 3600; // Subtract an hour.
++   }
++gmt.tm_sec = -timezoneOffset;
+ #else
+    gmt.tm_sec += timezone; // Seconds west of UTC
+    if ( tm_isdst )
+diff -burN ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevManager.cpp ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevManager.cpp
+--- ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevManager.cpp	2016-07-15 16:36:31.645857590 +0200
++++ ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevManager.cpp	2016-07-15 16:37:09.705859432 +0200
+@@ -647,10 +647,18 @@
+    {
+       out<<"\nm_dbRoundRobin["<<i<<"].size = "<<m_dbRoundRobin[i].size()<<endl;
+       for (ossim_uint32 j=0; j<m_dbRoundRobin[i].size(); ++j)
+-         out<<"m_dbRoundRobin["<<i<<"]["<<j<<"] = "<<m_dbRoundRobin[i][j]->print(out)<<endl;
++      {
++         out<<"m_dbRoundRobin["<<i<<"]["<<j<<"] = ";
++         // GP: We have to separate this line.  On MS it will not compile
++         // otherwise
++         m_dbRoundRobin[i][j]->print(out);
++
++      }
++         out<<endl;
+    }
+-   cout<<"\n"<<ossimElevSource::print(cout);
+-   return out;
++   out<<"\n";
++   ossimElevSource::print(out);
++return out;
+ }
+ 
+ 
+diff -burN ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevSource.cpp ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevSource.cpp
+--- ossim-1.8.20-3.orig/ossim/src/ossim/elevation/ossimElevSource.cpp	2016-07-15 16:36:31.645857590 +0200
++++ ossim-1.8.20-3/ossim/src/ossim/elevation/ossimElevSource.cpp	2016-07-15 16:37:09.709859432 +0200
+@@ -269,8 +269,8 @@
+          << "\ntheMaxHeightAboveMSL = "<<theMaxHeightAboveMSL
+          << "\ntheNullHeightValue = "<<theNullHeightValue
+          << "\ntheSeaLevelValue = "<<theSeaLevelValue
+-         << "\ntheGroundRect = "<<theGroundRect
+-         << ossimSource::print(out);
++         << "\ntheGroundRect = "<<theGroundRect;
++        ossimSource::print(out);
+    return out;
+ }
+ 

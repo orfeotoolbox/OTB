@@ -18,16 +18,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFilterWatcherBase_h
-#define __otbFilterWatcherBase_h
+#ifndef otbFilterWatcherBase_h
+#define otbFilterWatcherBase_h
 
 #include "itkCommand.h"
 #include "itkProcessObject.h"
 #include "itkTimeProbe.h"
 
-namespace otb
-{
+#include "OTBCommonExport.h"
 
+namespace otb
+
+{
 /** \class FilterWatcherBase
  *  \brief This class is an abstract class
  *         Provides an interface to progress task mechanic
@@ -40,7 +42,7 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class /*ITK_EXPORT*/ FilterWatcherBase
+class OTBCommon_EXPORT FilterWatcherBase
 {
 public:
 

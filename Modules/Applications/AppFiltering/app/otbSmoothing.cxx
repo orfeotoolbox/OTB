@@ -52,7 +52,7 @@ public:
   itkTypeMacro(Smoothing, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Smoothing");
     SetDescription("Apply a smoothing filter to an image");
@@ -103,7 +103,7 @@ private:
     SetDefaultParameterInt("type.anidif.nbiter",     10);
     SetDefaultParameterInt("type.anidif.conductance",     1.);
 
-    SetParameterString("type", "anidif");
+    SetParameterString("type", "anidif", false);
 
     // Doc example parameter settings
     SetExampleComment("Image smoothing using a mean filter.", 0);
@@ -120,12 +120,12 @@ private:
     SetDocExampleParameterValue("type.anidif.conductance", "1.5", exId);
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

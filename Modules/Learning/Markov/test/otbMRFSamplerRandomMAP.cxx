@@ -87,7 +87,7 @@ int otbMRFSamplerRandomMAP(int itkNotUsed(argc), char * argv[])
   file << "Compute( Compute( const InputImageNeighborhoodIterator, const LabelledImageNeighborhoodIterator) " <<
   object->Compute(iterIn, iterLab) << std::endl;
 
-  // All values (exept m_Value) are null : SingleValue return 0...
+  // All values (except m_Value) are null : SingleValue return 0...
   file << "m_EnergyBefore: " << object->GetEnergyBefore() << std::endl;
   file << "m_EnergyAfter: " << object->GetEnergyAfter() << std::endl;
   file << "m_Value: " << object->GetValue() << std::endl;

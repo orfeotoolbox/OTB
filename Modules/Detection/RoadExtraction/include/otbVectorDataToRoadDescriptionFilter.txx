@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToRoadDescriptionFilter_txx
-#define __otbVectorDataToRoadDescriptionFilter_txx
+#ifndef otbVectorDataToRoadDescriptionFilter_txx
+#define otbVectorDataToRoadDescriptionFilter_txx
 
 #include "otbVectorDataToRoadDescriptionFilter.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDSFusionOfClassifiersImageFilter_h
-#define __otbDSFusionOfClassifiersImageFilter_h
+#ifndef otbDSFusionOfClassifiersImageFilter_h
+#define otbDSFusionOfClassifiersImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
@@ -137,16 +137,16 @@ protected:
   /** Constructor */
   DSFusionOfClassifiersImageFilter();
   /** Destructor */
-  virtual ~DSFusionOfClassifiersImageFilter() {}
+  ~DSFusionOfClassifiersImageFilter() ITK_OVERRIDE {}
 
   /** Generate output information */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
   /** Before threaded generate data */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   DSFusionOfClassifiersImageFilter(const Self &); //purposely not implemented

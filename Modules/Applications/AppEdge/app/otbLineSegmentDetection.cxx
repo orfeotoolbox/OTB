@@ -50,7 +50,7 @@ public:
   itkTypeMacro(LineSegmentDetection, otb::Wrapper::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("LineSegmentDetection");
     SetDescription("Detect line segments in raster");
@@ -77,16 +77,18 @@ private:
     SetParameterDescription("norescale","By default, the input image amplitude is rescaled between [0,255]. Turn on this parameter to skip rescaling");
     MandatoryOff("norescale");
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Suburb.png");
     SetDocExampleParameterValue("out", "LineSegmentDetection.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     typedef otb::VectorImageToAmplitudeImageFilter<FloatVectorImageType, FloatImageType>
       VectorImageToAmplitudeImageFilterType;
@@ -117,6 +119,7 @@ private:
     if ( !IsParameterEnabled("norescale") )
       {
       stats->SetInput(amplitudeConverter->GetOutput());
+      stats->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
       AddProcess(stats->GetStreamer(), "Image statistics");
       stats->Update();
@@ -133,6 +136,7 @@ private:
     LSDFilterType::Pointer lsd
       = LSDFilterType::New();
     lsd->GetFilter()->SetInput(image);
+    lsd->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
     AddProcess(lsd->GetStreamer(), "Running Line Segment Detector");
     lsd->Update();

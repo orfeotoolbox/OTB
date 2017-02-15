@@ -29,7 +29,7 @@ GDALDriverManagerWrapper::GDALDriverManagerWrapper()
 {
     GDALAllRegister();
 
-    GDALDriver* driver = 0;
+    GDALDriver* driver = ITK_NULLPTR;
 
     // Ignore incompatible Jpeg2000 drivers (Jasper)
     driver = GetGDALDriverManager()->GetDriverByName( "JPEG2000" );
@@ -63,8 +63,8 @@ GDALDriverManagerWrapper::Open( std::string filename ) const
     }
 
   // test if a driver can identify the dataset
-  GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), NULL);
-  if(identifyDriverH == NULL)
+  GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), ITK_NULLPTR);
+  if(identifyDriverH == ITK_NULLPTR)
     {
     // don't try to open it and exit
     return datasetWrapper;
@@ -83,7 +83,7 @@ GDALDriverManagerWrapper::Open( std::string filename ) const
 
   GDALDatasetH dataset = GDALOpen(filename.c_str(), GA_ReadOnly);
 
-  if (dataset != NULL)
+  if (dataset != ITK_NULLPTR)
     {
     datasetWrapper = GDALDatasetWrapper::New();
     datasetWrapper->m_Dataset = static_cast<GDALDataset*>(dataset);
@@ -100,14 +100,14 @@ GDALDriverManagerWrapper::Create( std::string driverShortName, std::string filen
   GDALDatasetWrapper::Pointer datasetWrapper;
 
   GDALDriver*  driver = GetDriverByName( driverShortName );
-  if(driver != NULL)
+  if(driver != ITK_NULLPTR)
     {
     GDALDataset* dataset = driver->Create(filename.c_str(),
                                           nXSize, nYSize,
                                           nBands, eType,
                                           papszOptions );
 
-    if (dataset != NULL)
+    if (dataset != ITK_NULLPTR)
       {
       datasetWrapper = GDALDatasetWrapper::New();
       datasetWrapper->m_Dataset = dataset;

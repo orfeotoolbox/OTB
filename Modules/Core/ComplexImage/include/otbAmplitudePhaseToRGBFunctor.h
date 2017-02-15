@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbAmplitudePhaseToRGBFunctor_h
-#define __otbAmplitudePhaseToRGBFunctor_h
+#ifndef otbAmplitudePhaseToRGBFunctor_h
+#define otbAmplitudePhaseToRGBFunctor_h
 
 #include "otbScalarToRainbowRGBPixelFunctor.h"
 #include "otbMath.h"

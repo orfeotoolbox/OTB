@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEckert4MapProjection_h
-#define __otbEckert4MapProjection_h
+#ifndef otbEckert4MapProjection_h
+#define otbEckert4MapProjection_h
 
 #include "otbGenericMapProjection.h"
 
@@ -58,7 +58,7 @@ public:
 
 protected:
   Eckert4MapProjection();
-  virtual ~Eckert4MapProjection();
+  ~Eckert4MapProjection() ITK_OVERRIDE;
 
 private:
   Eckert4MapProjection(const Self &); //purposely not implemented

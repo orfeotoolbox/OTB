@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDataNodeImageFunction_txx
-#define __otbDataNodeImageFunction_txx
+#ifndef otbDataNodeImageFunction_txx
+#define otbDataNodeImageFunction_txx
 
 #include "otbDataNodeImageFunction.h"
 
@@ -30,7 +30,7 @@ template <class TImage, class TOutput, class TCoordRep, class TPrecision>
 DataNodeImageFunction<TImage, TOutput, TCoordRep, TPrecision>
 ::DataNodeImageFunction()
 {
-  m_Image = NULL;
+  m_Image = ITK_NULLPTR;
   m_StartIndex.Fill(0);
   m_EndIndex.Fill(0);
   m_StartContinuousIndex.Fill(0.0f);

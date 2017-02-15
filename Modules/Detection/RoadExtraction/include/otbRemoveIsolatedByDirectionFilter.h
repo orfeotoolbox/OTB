@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoveIsolatedByDirectionFilter_h
-#define __otbRemoveIsolatedByDirectionFilter_h
+#ifndef otbRemoveIsolatedByDirectionFilter_h
+#define otbRemoveIsolatedByDirectionFilter_h
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
@@ -106,14 +106,14 @@ protected:
   /** Constructor */
   RemoveIsolatedByDirectionFilter() {};
   /** Destructor */
-  virtual ~RemoveIsolatedByDirectionFilter() {}
+  ~RemoveIsolatedByDirectionFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
   /** Main computation method */
-  virtual void GenerateData(void)
+  void GenerateData(void) ITK_OVERRIDE
   {
     typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
     filter->SetInput1(this->GetInput());

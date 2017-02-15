@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConcatenateVectorImageFilter_h
-#define __otbConcatenateVectorImageFilter_h
+#ifndef otbConcatenateVectorImageFilter_h
+#define otbConcatenateVectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
@@ -92,13 +92,13 @@ protected:
   /** Constructor. */
   ConcatenateVectorImageFilter();
   /** Destructor. */
-  virtual ~ConcatenateVectorImageFilter();
-  virtual void GenerateOutputInformation();
-  virtual void BeforeThreadedGenerateData();
+  ~ConcatenateVectorImageFilter() ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   /** Main computation method. */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ConcatenateVectorImageFilter(const Self &); //purposely not implemented

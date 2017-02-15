@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageKeywordlist_h
-#define __otbImageKeywordlist_h
+#ifndef otbImageKeywordlist_h
+#define otbImageKeywordlist_h
 
 #include <iostream>
 #include <map>
@@ -25,6 +25,8 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+
+#include "OTBOSSIMAdaptersExport.h"
 
 //forward declaration
 class ossimKeywordlist;
@@ -71,7 +73,7 @@ namespace internal
  *
  * \ingroup OTBOSSIMAdapters
  */
-class ITK_EXPORT ImageKeywordlist
+class OTBOSSIMAdapters_EXPORT ImageKeywordlist
 {
 public:
   /** Standard class typedefs. */
@@ -95,7 +97,12 @@ public:
   {
     m_Keywordlist.clear();
   }
- 
+
+  KeywordlistMapSizeType Empty() const
+  {
+    return m_Keywordlist.empty();
+  }
+
   KeywordlistMapSizeType GetSize(void) const
   {
     return m_Keywordlist.size();
@@ -113,7 +120,7 @@ public:
   virtual void AddKey(const std::string& key, const std::string& value);
 
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
-  
+
   /** try to convert the image keywordlist into a GDALRpcInfo structure
    *  return true if successful, false otherwise */
   virtual bool convertToGDALRPC(GDALRPCInfo &rpc) const;
@@ -146,12 +153,20 @@ private:
 
 };
 
+OTBOSSIMAdapters_EXPORT
 std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 
 // Free function to handle the keywordlist <-> files
+OTBOSSIMAdapters_EXPORT
 ImageKeywordlist ReadGeometryFromImage(const std::string& filename, bool checkRpcTag=true);
+
+OTBOSSIMAdapters_EXPORT
 ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
+
+OTBOSSIMAdapters_EXPORT
 ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
+
+OTBOSSIMAdapters_EXPORT
 void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
 inline
@@ -164,4 +179,4 @@ ImageKeywordlist
 
 } //namespace otb
 
-#endif // __otbImageKeywordlist_h
+#endif // otbImageKeywordlist_h

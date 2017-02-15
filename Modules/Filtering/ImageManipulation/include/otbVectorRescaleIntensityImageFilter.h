@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorRescaleIntensityImageFilter_h
-#define __otbVectorRescaleIntensityImageFilter_h
+#ifndef otbVectorRescaleIntensityImageFilter_h
+#define otbVectorRescaleIntensityImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVariableLengthVector.h"
@@ -198,9 +198,14 @@ private:
  *
  * This filter rescales each band to match the [OutputMinimum, OutputMaximum] range.
  * In order to avoid odd values to alter the intensity extent, one can set a clamp percentage.
+ * The clamp percentage is set to 0.01 by default.
  *
  * Values lower than the first quantile of this percentage are set to the OutputMinimum.
  * Values upper than the last quantile of this percentage are set to the OutputMaximum.
+ *
+ * This filter differ from itk::VectorRescaleIntensityImageFilter.
+ * Instead of setting only the OutputMaximumMagnitude, you can set the minimum and maximum values for the input and output images.
+ * There is also the possibilty to set a Gamma value and change the clamp percentage.
  *
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded
@@ -254,20 +259,20 @@ public:
   itkGetConstReferenceMacro(Gamma,double);
 
   /** Process to execute before entering the multithreaded section */
-  void BeforeThreadedGenerateData(void);
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
 
   /** Generate output information */
-  void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Print internal ivars */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 protected:
   VectorRescaleIntensityImageFilter();
-  virtual ~VectorRescaleIntensityImageFilter() {}
+  ~VectorRescaleIntensityImageFilter() ITK_OVERRIDE {}
 
 private:
   VectorRescaleIntensityImageFilter(const Self &); //purposely not implemented

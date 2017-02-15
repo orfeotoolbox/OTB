@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMRFSamplerRandomMAP_h
-#define __otbMRFSamplerRandomMAP_h
+#ifndef otbMRFSamplerRandomMAP_h
+#define otbMRFSamplerRandomMAP_h
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbMRFSampler.h"
@@ -69,20 +69,20 @@ public:
 
   itkTypeMacro(MRFSamplerRandomMAP, MRFSampler);
 
-  void SetNumberOfClasses(const unsigned int nClasses)
+  void SetNumberOfClasses(const unsigned int nClasses) ITK_OVERRIDE
   {
     if ((nClasses != this->m_NumberOfClasses) || (m_EnergiesInvalid == true))
       {
       this->m_NumberOfClasses = nClasses;
-      if (m_Energy != NULL) free(m_Energy);
-      if (m_RepartitionFunction != NULL) free(m_RepartitionFunction);
+      if (m_Energy != ITK_NULLPTR) free(m_Energy);
+      if (m_RepartitionFunction != ITK_NULLPTR) free(m_RepartitionFunction);
       m_Energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
       m_RepartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
       this->Modified();
       }
   }
 
-  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul)
+  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) ITK_OVERRIDE
   {
     if (this->m_NumberOfClasses == 0)
       {
@@ -156,17 +156,17 @@ public:
 protected:
   // The constructor and destructor.
   MRFSamplerRandomMAP() :
-    m_RepartitionFunction(NULL),
-    m_Energy(NULL),
+    m_RepartitionFunction(ITK_NULLPTR),
+    m_Energy(ITK_NULLPTR),
     m_EnergiesInvalid(true)
     {
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
-  virtual ~MRFSamplerRandomMAP()
+  ~MRFSamplerRandomMAP() ITK_OVERRIDE
     {
-    if (m_Energy != NULL) free(m_Energy);
-    if (m_RepartitionFunction != NULL) free(m_RepartitionFunction);
+    if (m_Energy != ITK_NULLPTR) free(m_Energy);
+    if (m_RepartitionFunction != ITK_NULLPTR) free(m_RepartitionFunction);
     }
 
 private:

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingStatisticsVectorImageFilter_txx
-#define __otbStreamingStatisticsVectorImageFilter_txx
+#ifndef otbStreamingStatisticsVectorImageFilter_txx
+#define otbStreamingStatisticsVectorImageFilter_txx
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -35,14 +35,15 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
    m_EnableSecondOrderStats(true),
    m_UseUnbiasedEstimator(true),
    m_IgnoreInfiniteValues(true),
-   m_IgnoreUserDefinedValue(false)
+   m_IgnoreUserDefinedValue(false),
+   m_UserIgnoredValue(itk::NumericTraits<InternalPixelType>::Zero)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
 
   // allocate the data objects for the outputs which are
   // just decorators around vector/matrix types
-  for (unsigned int i = 1; i < 10; ++i)
+  for (unsigned int i = 1; i < 11; ++i)
     {
     this->itk::ProcessObject::SetNthOutput(i, this->MakeOutput(i).GetPointer());
     }
@@ -82,12 +83,32 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       // component mean, component covariance, component correlation
       return static_cast<itk::DataObject*>(RealObjectType::New().GetPointer());
       break;
+    case 10:
+      // relevant pixel
+      return static_cast<itk::DataObject*>(CountObjectType::New().GetPointer());
     default:
       // might as well make an image
       return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
       break;
     }
 }
+
+template<class TInputImage, class TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::CountObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
+::GetNbRelevantPixelsOutput()
+{
+  return static_cast<CountObjectType*>(this->itk::ProcessObject::GetOutput(10));
+}
+
+template<class TInputImage, class TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::CountObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
+::GetNbRelevantPixelsOutput() const
+{
+  return static_cast<const CountObjectType*>(this->itk::ProcessObject::GetOutput(10));
+}
+
 
 template<class TInputImage, class TPrecision>
 typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
@@ -418,10 +439,15 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     );
     }
 
-  unsigned int nbRelevantPixels =
+  unsigned int nbRelevantPixel =
     nbPixels - (ignoredInfinitePixelCount + ignoredUserPixelCount);
 
-  if( nbRelevantPixels==0 )
+  CountType nbRelevantPixels(numberOfComponent);
+  nbRelevantPixels.Fill(nbRelevantPixel);
+
+  this->GetNbRelevantPixelsOutput()->Set(nbRelevantPixels);
+
+  if( nbRelevantPixel==0 )
     {
     itkExceptionMacro(
       "Statistics cannot be calculated with zero relevant pixels."
@@ -437,15 +463,15 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 
   if (m_EnableFirstOrderStats)
     {
-    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
+    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbRelevantPixel * numberOfComponent));
 
-    this->GetMeanOutput()->Set(streamFirstOrderAccumulator / nbRelevantPixels);
+    this->GetMeanOutput()->Set(streamFirstOrderAccumulator / nbRelevantPixel);
     this->GetSumOutput()->Set(streamFirstOrderAccumulator);
     }
 
   if (m_EnableSecondOrderStats)
     {
-    MatrixType cor = streamSecondOrderAccumulator / nbRelevantPixels;
+    MatrixType cor = streamSecondOrderAccumulator / nbRelevantPixel;
     this->GetCorrelationOutput()->Set(cor);
 
     const RealPixelType& mean = this->GetMeanOutput()->Get();
@@ -453,18 +479,18 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     double regul = 1.0;
     double regulComponent = 1.0;
 
-    if( m_UseUnbiasedEstimator && nbRelevantPixels>1 )
+    if( m_UseUnbiasedEstimator && nbRelevantPixel>1 )
       {
       regul =
-       static_cast< double >( nbRelevantPixels ) /
-       ( static_cast< double >( nbRelevantPixels ) - 1.0 );
+       static_cast< double >( nbRelevantPixel ) /
+       ( static_cast< double >( nbRelevantPixel ) - 1.0 );
       }
-    
-    if( m_UseUnbiasedEstimator && (nbRelevantPixels * numberOfComponent) > 1 )
+
+    if( m_UseUnbiasedEstimator && (nbRelevantPixel * numberOfComponent) > 1 )
       {
       regulComponent =
-        static_cast< double >(nbRelevantPixels * numberOfComponent) /
-       ( static_cast< double >(nbRelevantPixels * numberOfComponent) - 1.0 );
+        static_cast< double >(nbRelevantPixel * numberOfComponent) /
+       ( static_cast< double >(nbRelevantPixel * numberOfComponent) - 1.0 );
       }
 
     MatrixType cov  = cor;
@@ -477,8 +503,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       }
     this->GetCovarianceOutput()->Set(cov);
 
-    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
-    this->GetComponentCorrelationOutput()->Set(streamSecondOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
+    this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbRelevantPixel * numberOfComponent));
+    this->GetComponentCorrelationOutput()->Set(streamSecondOrderComponentAccumulator / (nbRelevantPixel * numberOfComponent));
     this->GetComponentCovarianceOutput()->Set(
         regulComponent * (this->GetComponentCorrelation()
            - (this->GetComponentMean() * this->GetComponentMean())));
@@ -506,7 +532,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     const PixelType& vectorValue = it.Get();
 
     float finiteProbe = 0.;
-    bool userProbe = true;
+    bool userProbe = m_IgnoreUserDefinedValue;
     for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
       {
       finiteProbe += (float)(vectorValue[j]);
@@ -519,7 +545,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
       }
     else
       {
-      if (m_IgnoreUserDefinedValue && (userProbe))
+      if (userProbe)
         {
         m_IgnoredUserPixelCount[threadId] ++;
         }
@@ -585,6 +611,7 @@ PersistentStreamingStatisticsVectorImageFilter<TImage, TPrecision>
   os << indent << "Mean: "        << this->GetMeanOutput()->Get()        << std::endl;
   os << indent << "Covariance: "  << this->GetCovarianceOutput()->Get()  << std::endl;
   os << indent << "Correlation: " << this->GetCorrelationOutput()->Get() << std::endl;
+  os << indent << "Relevant pixel: "        << this->GetNbRelevantPixelsOutput()->Get()     << std::endl;
   os << indent << "Component Mean: "        << this->GetComponentMeanOutput()->Get()        << std::endl;
   os << indent << "Component Covariance: "  << this->GetComponentCovarianceOutput()->Get()  << std::endl;
   os << indent << "Component Correlation: " << this->GetComponentCorrelationOutput()->Get() << std::endl;

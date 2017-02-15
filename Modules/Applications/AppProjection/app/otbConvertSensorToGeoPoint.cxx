@@ -46,7 +46,7 @@ public:
 
 private:
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConvertSensorToGeoPoint");
     SetDescription("Sensor to geographic coordinates conversion.");
@@ -96,16 +96,16 @@ private:
     SetDocExampleParameterValue("input.idy","200");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get input Image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
-    // Instanciate a ForwardSensor Model
+    // Instantiate a ForwardSensor Model
     ModelType::Pointer model = ModelType::New();
     model->SetImageGeometry(inImage->GetImageKeywordlist());
     if ( model->IsValidSensorModel() == false )
@@ -125,8 +125,8 @@ private:
     outputPoint = model->TransformPoint(point);
 
     // Set the value computed
-    SetParameterFloat("output.idx", outputPoint[0]);
-    SetParameterFloat("output.idy", outputPoint[1]);
+    SetParameterFloat("output.idx",outputPoint[0], false);
+    SetParameterFloat("output.idy",outputPoint[1], false);
 
     // Set the town and the neaerest city
     CoordinateToName::Pointer coord2name = CoordinateToName::New();
@@ -134,8 +134,8 @@ private:
     coord2name->SetLat(outputPoint[1]);
     coord2name->Evaluate();
 
-    SetParameterString("output.town", coord2name->GetPlaceName());
-    SetParameterString("output.country", coord2name->GetCountryName());
+    SetParameterString("output.town", coord2name->GetPlaceName(), false);
+    SetParameterString("output.country", coord2name->GetCountryName(), false);
   }
 
 };

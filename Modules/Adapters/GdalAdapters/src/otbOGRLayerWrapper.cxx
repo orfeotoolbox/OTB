@@ -29,9 +29,15 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "gdal_priv.h"// GDALDataset
 #pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning ( push )
+#pragma warning ( disable: 4251 )
+#include "gdal_priv.h" // GDALDataset
+#pragma warning ( pop )
 #else
 #include "gdal_priv.h" // GDALDataset
 #endif
+
 
 #include "otbOGRDataSourceWrapper.h"
 
@@ -270,7 +276,7 @@ OGRSpatialReference const* otb::ogr::Layer::GetSpatialRef() const
 std::string otb::ogr::Layer::GetProjectionRef() const
 {
   assert(m_Layer && "OGRLayer not initialized");
-  char * wkt = 0;
+  char * wkt = ITK_NULLPTR;
   OGRSpatialReference const* srs = GetSpatialRef();
   if(srs)
     {

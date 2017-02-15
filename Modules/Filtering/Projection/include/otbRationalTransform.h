@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRationalTransform_h
-#define __otbRationalTransform_h
+#ifndef otbRationalTransform_h
+#define otbRationalTransform_h
 
 #include "otbTransform.h"
 #include "itkMacro.h"
@@ -81,7 +81,7 @@ public:
   void SetNumeratorDegree(unsigned int value)
   {
     this->m_NumeratorDegree = value;
-    this->InitalizeParameters();
+    this->InitializeParameters();
   }
 
   /** Get the numerator degree */
@@ -91,14 +91,14 @@ public:
   void SetDenominatorDegree(unsigned int value)
   {
     this->m_DenominatorDegree = value;
-    this->InitalizeParameters();
+    this->InitializeParameters();
   }
 
   /** Get the denominator degree */
   itkGetConstMacro(DenominatorDegree, unsigned int);
 
   /** The transform point method */
-  virtual OutputPointType TransformPoint(const InputPointType& point) const
+  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE
   {
     // Check for consistency
     if(this->GetNumberOfParameters() != this->m_Parameters.size())
@@ -145,13 +145,13 @@ public:
   }
 
   /** Get the number of parameters */
-  virtual NumberOfParametersType GetNumberOfParameters() const
+  NumberOfParametersType GetNumberOfParameters() const ITK_OVERRIDE
   {
     return (static_cast <NumberOfParametersType> ( (m_NumeratorDegree +1 + m_DenominatorDegree+1)*SpaceDimension ));
   }
 
   // Set parameter method
-  virtual void SetParameters(const typename Superclass::ParametersType & params)
+  void SetParameters(const typename Superclass::ParametersType & params) ITK_OVERRIDE
   {
     // Check for the appropriate size
     if(params.Size() != this->GetNumberOfParameters())
@@ -164,7 +164,7 @@ public:
   }
 
   /** Initialize Parameters size  */
-  void InitalizeParameters()
+  void InitializeParameters()
   {
     this->m_Parameters.SetSize(this->GetNumberOfParameters());
     this->m_Parameters.Fill(0);
@@ -180,13 +180,13 @@ public:
 protected:
   RationalTransform() : Superclass(16), m_NumeratorDegree(3), m_DenominatorDegree(3)
     {
-    this->InitalizeParameters();
+    this->InitializeParameters();
     }
 
 
-  virtual ~RationalTransform() {}
+  ~RationalTransform() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Numerator Degree : " << m_NumeratorDegree << std::endl;

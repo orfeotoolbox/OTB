@@ -130,8 +130,19 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 
   AddChildNodeTo(n_OTB, "version", version);
 
-  TiXmlElement *n_App;
-  n_App = AddChildNodeTo(n_OTB, "application");
+  // Parse application
+  TiXmlElement *n_App = ParseApplication(app);
+  n_OTB->LinkEndChild(n_App);
+
+  // Finally, write xml contents to file
+  doc.SaveFile( m_FileName.c_str() );
+}
+
+TiXmlElement*
+OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
+{
+  TiXmlElement * n_App = new TiXmlElement("application");
+
   AddChildNodeTo(n_App, "name", app->GetName());
   AddChildNodeTo(n_App, "descr", app->GetDescription());
 
@@ -167,7 +178,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       ParameterType type = app->GetParameterType(key);
       std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
 
-      // if param is a Group, dont do anything, ParamGroup dont have values
+      // if param is a Group, don't do anything, ParamGroup don't have values
       if (type != ParameterType_Group)
       {
        bool paramExists = app->HasUserValue(key) && app->IsParameterEnabled(key);
@@ -181,9 +192,9 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          {
            EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
 
-           if(eParam!=NULL)
+           if(eParam!=ITK_NULLPTR)
              {
-             //Dont use app->HasUserValue which returns false always because of
+             //Don't use app->HasUserValue which returns false always because of
              //EmptyParameter::HasValue() is false for EmptyParameter
              if(eParam->HasUserValue())
                {
@@ -211,7 +222,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
           {
            OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
            
-           if(imgParam!=NULL)
+           if(imgParam!=ITK_NULLPTR)
              {
              value = imgParam->GetFileName();
              ImagePixelType pixType = imgParam->GetPixelType();
@@ -252,7 +263,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
            }
          else if (typeAsString == "Empty")
            {
-           //Nothing to do. copy emtpyValue
+           //Nothing to do. copy emptyValue
            value = emptyValue;
            }
 
@@ -315,10 +326,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
        }
       }
     }
-
-  // Finally, write xml contents to file
-  doc.SaveFile( m_FileName.c_str() );
-
+  return n_App;
 }
 
 } //end namespace wrapper

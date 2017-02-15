@@ -74,7 +74,7 @@ VectorDataIOFactory
 
       }
     }
-  return 0;
+  return ITK_NULLPTR;
 }
 
 void

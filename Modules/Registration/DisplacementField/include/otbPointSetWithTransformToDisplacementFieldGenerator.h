@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetWithTransformToDisplacementFieldGenerator_h
-#define __otbPointSetWithTransformToDisplacementFieldGenerator_h
+#ifndef otbPointSetWithTransformToDisplacementFieldGenerator_h
+#define otbPointSetWithTransformToDisplacementFieldGenerator_h
 
 #include "otbPointSetToDisplacementFieldGenerator.h"
 #include "itkTransform.h"
@@ -73,7 +73,7 @@ public:
   typedef typename TransformType::Pointer        TransformPointerType;
   typedef typename TransformType::ParametersType ParametersType;
 
-  /** Set/Get the Transfrom. */
+  /** Set/Get the Transform. */
   itkSetObjectMacro(Transform, TransformType);
   itkGetObjectMacro(Transform, TransformType);
 
@@ -81,9 +81,9 @@ protected:
   /** Constructor */
   PointSetWithTransformToDisplacementFieldGenerator();
   /** Destructor */
-  virtual ~PointSetWithTransformToDisplacementFieldGenerator() {}
+  ~PointSetWithTransformToDisplacementFieldGenerator() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PointSetWithTransformToDisplacementFieldGenerator(const Self &); //purposely not implemented

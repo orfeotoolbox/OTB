@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReliefColormapFunctor_h
-#define __otbReliefColormapFunctor_h
+#ifndef otbReliefColormapFunctor_h
+#define otbReliefColormapFunctor_h
 
 #include "itkColormapFunction.h"
 
@@ -55,11 +55,11 @@ public:
   typedef typename Superclass::ScalarType   ScalarType;
   typedef typename Superclass::RealType     RealType;
 
-  virtual RGBPixelType operator ()(const TScalar&) const;
+  RGBPixelType operator ()(const TScalar&) const ITK_OVERRIDE;
 
 protected:
   ReliefColormapFunctor(){};
-  ~ReliefColormapFunctor() {}
+  ~ReliefColormapFunctor() ITK_OVERRIDE {}
 
 private:
   ReliefColormapFunctor(const Self &); //purposely not implemented

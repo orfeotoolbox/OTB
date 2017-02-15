@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPleiadesPToXSAffineTransformCalculator__cxx
-#define __otbPleiadesPToXSAffineTransformCalculator__cxx
-
 #include "otbPleiadesPToXSAffineTransformCalculator.h"
 #include "otbPleiadesImageMetadataInterface.h"
 #include "otbDateTimeAdapter.h"
@@ -199,7 +196,3 @@ PleiadesPToXSAffineTransformCalculator
 }
 
 } // End namespace otb
-
-#endif
-
-

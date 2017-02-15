@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImage_h
-#define __otbImage_h
+#ifndef otbImage_h
+#define otbImage_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -184,14 +184,14 @@ public:
 
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 /// Copy metadata from a DataObject
-  virtual void CopyInformation(const itk::DataObject *);
+  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
 
 protected:
   Image();
-  virtual ~Image() {}
+  ~Image() ITK_OVERRIDE {}
 
 private:
   Image(const Self &); //purposely not implemented

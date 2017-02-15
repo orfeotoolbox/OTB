@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMToImageGenerator_h
-#define __otbDEMToImageGenerator_h
+#ifndef otbDEMToImageGenerator_h
+#define otbDEMToImageGenerator_h
 
 #include <iostream>
 #include <stdio.h>
@@ -105,7 +105,15 @@ public:
   itkGetMacro(AboveEllipsoid,bool);
   itkBooleanMacro(AboveEllipsoid);
 
-  void InstanciateTransform();
+  void InstantiateTransform();
+
+  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
+  void InstanciateTransform()
+  {
+    otbWarningMacro(
+      << "InstanciateTransform has been deprecated.  Please use InstanciateTransform() instead");
+    this->InstantiateTransform();
+  }
 
   /**
    * Set/Get input & output projections.
@@ -168,18 +176,18 @@ public:
     this->SetOutputProjectionRef(image->GetProjectionRef());
     this->SetOutputKeywordList(image->GetImageKeywordlist());
 
-    InstanciateTransform();
+    InstantiateTransform();
     }
 
 protected:
   DEMToImageGenerator();
-  virtual ~DEMToImageGenerator(){}
+  ~DEMToImageGenerator() ITK_OVERRIDE{}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void BeforeThreadedGenerateData();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
-  virtual void GenerateOutputInformation();
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
   DEMHandlerType::Pointer m_DEMHandler;
   PointType               m_OutputOrigin;

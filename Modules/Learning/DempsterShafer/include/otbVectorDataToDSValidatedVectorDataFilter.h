@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToDSValidatedVectorDataFilter_h
-#define __otbVectorDataToDSValidatedVectorDataFilter_h
+#ifndef otbVectorDataToDSValidatedVectorDataFilter_h
+#define otbVectorDataToDSValidatedVectorDataFilter_h
 
 #include "otbMassOfBelief.h"
 
@@ -53,11 +53,11 @@ namespace otb
   * Fe(i), Fe(j) and Fe(k) being descriptors.
   *
   * The criterion can be set through SetCriterionFormula() as a
-  * string refering to "Belief" and "Plausibility" from the
+  * string referring to "Belief" and "Plausibility" from the
   * Dempster-Shafer theory. By default the criterion is:
   * "((Belief + Plausibility)/2) >= 0.5"
   *
-  * The concidered features will be the intersection between
+  * The considered features will be the intersection between
   * the features embedded in this filter and the features embedded
   * in the input vector data. For now, the filter uses "NONDVI" and
   * "ROADSA" features.
@@ -158,13 +158,13 @@ public:
 
 protected:
   /** Triggers the Computation */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
   /** Constructor */
   VectorDataToDSValidatedVectorDataFilter();
   /** Destructor */
-  virtual ~VectorDataToDSValidatedVectorDataFilter() {}
+  ~VectorDataToDSValidatedVectorDataFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   std::string GetNextID()
     {

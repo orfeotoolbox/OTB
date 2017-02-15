@@ -19,8 +19,8 @@
 
  =========================================================================*/
 
-#ifndef __otbLabelObjectOpeningMuParserFilter_h
-#define __otbLabelObjectOpeningMuParserFilter_h
+#ifndef otbLabelObjectOpeningMuParserFilter_h
+#define otbLabelObjectOpeningMuParserFilter_h
 
 #include "itkProgressReporter.h"
 #include <iostream>
@@ -110,18 +110,18 @@ public:
   /** return list of Mu Parser functions**/
   Parser::FunctionMapType GetFunList() const;
 
-  virtual void AllocateOutputs();
+  void AllocateOutputs() ITK_OVERRIDE;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *) {}
+  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE {}
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 protected:
   LabelObjectOpeningMuParserFilter();
-  virtual ~LabelObjectOpeningMuParserFilter();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~LabelObjectOpeningMuParserFilter() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   LabelObjectOpeningMuParserFilter(const Self&); //purposely not implemented

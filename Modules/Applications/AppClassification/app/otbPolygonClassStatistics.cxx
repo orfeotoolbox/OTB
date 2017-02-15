@@ -20,11 +20,20 @@
 
 #include "otbOGRDataToClassStatisticsFilter.h"
 #include "otbStatisticsXMLFileWriter.h"
+#include "otbGeometriesProjectionFilter.h"
+#include "otbGeometriesSet.h"
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
 namespace Wrapper
 {
+
+/** Utility function to negate std::isalnum */
+bool IsNotAlphaNum(char c)
+  {
+  return !std::isalnum(c);
+  }
 
 class PolygonClassStatistics : public Application
 {
@@ -45,13 +54,17 @@ public:
   
   typedef otb::StatisticsXMLFileWriter<FloatVectorImageType::PixelType> StatWriterType;
 
+  typedef otb::GeometriesSet GeometriesType;
+
+  typedef otb::GeometriesProjectionFilter ProjectionFilterType;
+
 private:
   PolygonClassStatistics()
     {
    
     }
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("PolygonClassStatistics");
     SetDescription("Computes statistics on a training polygon set.");
@@ -89,16 +102,17 @@ private:
     AddParameter(ParameterType_OutputFilename, "out", "Output Statistics");
     SetParameterDescription("out","Output file to store statistics (XML format)");
 
-    AddParameter(ParameterType_String, "field", "Field Name");
+    AddParameter(ParameterType_ListView, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
-    MandatoryOff("field");
-    SetParameterString("field", "class");
+    SetListViewSingleSelectionMode("field",true);
     
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
     MandatoryOff("layer");
     SetDefaultParameterInt("layer",0);
-    
+
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -108,16 +122,90 @@ private:
     SetDocExampleParameterValue("out","polygonStat.xml");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
-    // Nothing to do
+     if ( HasValue("vec") )
+      {
+      std::string vectorFile = GetParameterString("vec");
+      ogr::DataSource::Pointer ogrDS =
+        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
+      ogr::Feature feature = layer.ogr().GetNextFeature();
+
+      ClearChoices("field");
+      
+      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+        {
+        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
+        key = item;
+        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::transform(key.begin(), end, key.begin(), tolower);
+        
+        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+          {
+          std::string tmpKey="field."+key.substr(0, end - key.begin());
+          AddChoice(tmpKey,item);
+          }
+        }
+      }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
   otb::ogr::DataSource::Pointer vectors = 
     otb::ogr::DataSource::New(this->GetParameterString("vec"));
-  std::string fieldName = this->GetParameterString("field");
+
+  // Retrieve the field name
+  std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
+
+  if(selectedCFieldIdx.empty())
+    {
+    otbAppLogFATAL(<<"No field has been selected for data labelling!");
+    }
+
+  std::vector<std::string> cFieldNames = GetChoiceNames("field");  
+  std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
+
+  otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+
+  // Reproject geometries
+  FloatVectorImageType::Pointer inputImg = this->GetParameterImage("in");
+  std::string imageProjectionRef = inputImg->GetProjectionRef();
+  FloatVectorImageType::ImageKeywordlistType imageKwl =
+    inputImg->GetImageKeywordlist();
+  std::string vectorProjectionRef =
+    vectors->GetLayer(GetParameterInt("layer")).GetProjectionRef();
+
+  otb::ogr::DataSource::Pointer reprojVector = vectors;
+  GeometriesType::Pointer inputGeomSet;
+  ProjectionFilterType::Pointer geometriesProjFilter;
+  GeometriesType::Pointer outputGeomSet;
+  bool doReproj = true;
+  // don't reproject for these cases
+  if (vectorProjectionRef.empty() ||
+      (imageProjectionRef == vectorProjectionRef) ||
+      (imageProjectionRef.empty() && imageKwl.GetSize() == 0))
+    doReproj = false;
+
+  if (doReproj)
+    {
+    inputGeomSet = GeometriesType::New(vectors);
+    reprojVector = otb::ogr::DataSource::New();
+    outputGeomSet = GeometriesType::New(reprojVector);
+    // Filter instantiation
+    geometriesProjFilter = ProjectionFilterType::New();
+    geometriesProjFilter->SetInput(inputGeomSet);
+    if (imageProjectionRef.empty())
+      {
+      geometriesProjFilter->SetOutputKeywordList(inputImg->GetImageKeywordlist()); // nec qd capteur
+      }
+    geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
+    geometriesProjFilter->SetOutput(outputGeomSet);
+    otbAppLogINFO("Reprojecting input vectors...");
+    geometriesProjFilter->Update();
+    }
 
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(this->GetParameterImage("in"));
@@ -125,9 +213,12 @@ private:
     {
     filter->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
     }
-  filter->SetOGRData(vectors);
+  filter->SetOGRData(reprojVector);
   filter->SetFieldName(fieldName);
   filter->SetLayerIndex(this->GetParameterInt("layer"));
+  filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+
+  AddProcess(filter->GetStreamer(),"Analyse polygons...");
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();

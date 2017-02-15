@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPipelineMemoryPrintCalculator_h
-#define __otbPipelineMemoryPrintCalculator_h
+#ifndef otbPipelineMemoryPrintCalculator_h
+#define otbPipelineMemoryPrintCalculator_h
 
 #include "itkProcessObject.h"
 #if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
@@ -25,6 +25,8 @@
 #include "itk_kwiml.h"
 #endif
 #include <set>
+
+#include "OTBStreamingExport.h"
 
 namespace otb
 {
@@ -64,7 +66,7 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-class ITK_EXPORT PipelineMemoryPrintCalculator :
+class OTBStreaming_EXPORT PipelineMemoryPrintCalculator :
   public itk::Object
 {
 public:
@@ -123,10 +125,10 @@ protected:
   PipelineMemoryPrintCalculator();
 
   /** Destructor */
-  virtual ~PipelineMemoryPrintCalculator();
+  ~PipelineMemoryPrintCalculator() ITK_OVERRIDE;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Recursive method to evaluate memory print in bytes */
   MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType * process);

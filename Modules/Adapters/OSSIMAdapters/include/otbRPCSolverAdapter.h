@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRPCSolverAdapter_h
-#define __otbRPCSolverAdapter_h
+#ifndef otbRPCSolverAdapter_h
+#define otbRPCSolverAdapter_h
 
 #include <vector>
 
@@ -26,6 +26,7 @@
 #include "itkPoint.h"
 #include "itkSize.h"
 
+#include "OTBOSSIMAdaptersExport.h"
 
 class ossimRpcSolver;
 
@@ -43,7 +44,7 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class RPCSolverAdapter
+class OTBOSSIMAdapters_EXPORT RPCSolverAdapter
 {
 public:
   /** Standard class typedefs. */

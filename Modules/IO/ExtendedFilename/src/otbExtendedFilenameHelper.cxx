@@ -26,7 +26,7 @@ void
 ExtendedFilenameHelper
 ::SetExtendedFileName(const char *extFname)
 {
-  if (extFname == NULL)
+  if (extFname == ITK_NULLPTR)
   {
     itkGenericExceptionMacro( << "Filename is NULL" );
   }
@@ -67,7 +67,7 @@ ExtendedFilenameHelper
     }
 }
 
-ExtendedFilenameHelper::OptionMapType
+const ExtendedFilenameHelper::OptionMapType &
 ExtendedFilenameHelper
 ::GetOptionMap(void) const
 {

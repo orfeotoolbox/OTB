@@ -21,3 +21,5 @@
 % Define command for the standard comment introducing classes with similar functionalities
 \newcommand{\relatedClasses}{
 \textbf{The following classes provide similar functionality:}}
+
+\newcommand{\otbversion}{@OTB_VERSION_STRING_FULL@}

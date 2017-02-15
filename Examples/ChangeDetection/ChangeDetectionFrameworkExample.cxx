@@ -138,7 +138,7 @@ public:
 
 protected:
   MyChangeDetectorImageFilter() {}
-  virtual ~MyChangeDetectorImageFilter() {}
+  ~MyChangeDetectorImageFilter() ITK_OVERRIDE {}
 
 private:
   MyChangeDetectorImageFilter(const Self &); //purposely not implemented

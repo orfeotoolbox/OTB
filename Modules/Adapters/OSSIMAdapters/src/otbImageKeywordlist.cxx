@@ -47,6 +47,8 @@
 #endif
 
 #include "otbSensorModelAdapter.h"
+#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace otb
 {
@@ -84,15 +86,7 @@ void
 ImageKeywordlist::
 SetKeywordlist(const ossimKeywordlist& kwl)
 {
-  m_Keywordlist.clear();
-  for (ossimKeywordlist::KeywordMap::const_iterator it = kwl.getMap().begin();
-       it != kwl.getMap().end();
-       ++it)
-    {
-    std::string first(it->first);
-    std::string second(it->second);
-    m_Keywordlist[first] = second;
-    }
+  m_Keywordlist = kwl.getMap();
 }
 
 const std::string&
@@ -118,7 +112,6 @@ HasKey(const std::string& key) const
 {
   KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
-
   return (it != m_Keywordlist.end());
 }
 
@@ -140,14 +133,7 @@ void
 ImageKeywordlist::
 convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
 {
-  ossimKeywordlist::KeywordMap ossimMap;
-  for(KeywordlistMap::const_iterator it = m_Keywordlist.begin();
-      it != m_Keywordlist.end();
-      ++it)
-    {
-    ossimMap[it->first] = it->second;
-    }
-  kwl.getMap() = ossimMap;
+  kwl.getMap() = m_Keywordlist;
 }
 
 bool
@@ -242,12 +228,13 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   /****************************************************/
   /* First try : test the OSSIM plugins factory       */
   /****************************************************/
+  {
   /** Before, the pluginfactory was tested if the ossim one returned false.
-      But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
-      thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
-      because the default include factory contains ossimQuickbirdTiffTileSource. */
-  ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()
-                                 ->createProjection(ossimFilename(filename.c_str()), 0);
+    But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
+    thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
+    because the default include factory contains ossimQuickbirdTiffTileSource. */
+  boost::scoped_ptr<ossimProjection> projection(ossimplugins::ossimPluginProjectionFactory::instance()
+        ->createProjection(ossimFilename(filename.c_str()), 0));
 
   if (projection)
     {
@@ -255,20 +242,16 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
     hasMetaData = projection->saveState(geom_kwl);
     otb_kwl.SetKeywordlist(geom_kwl);
-
-    // Free memory
-    delete projection;
-    projection = 0;
-
     }
+  }
 
   /***********************************************/
   /* Second try : the OSSIM projection factory   */
   /***********************************************/
   if (!hasMetaData)
     {
-    ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
-                                 ->open(ossimFilename(filename.c_str()));
+    boost::scoped_ptr<ossimImageHandler> handler(ossimImageHandlerRegistry::instance()
+                                 ->open(ossimFilename(filename.c_str())));
     if (handler)
       {
       otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
@@ -279,26 +262,25 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
       if (geom.valid())
         {
-        projection = geom->getProjection();
+        ossimProjection const* projection = geom->getProjection();
         if (projection)
           {
           hasMetaData = projection->saveState(geom_kwl);
-          }
-        }
 
-      // if the handler has found a sensor model, copy the tags found
-      if (hasMetaData && dynamic_cast<ossimSensorModel*>(projection))
-        {
-        otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
-        otb_kwl.SetKeywordlist(geom_kwl);
-        }
-      else
-        {
-        hasMetaData = false;
-        }
-      // Free memory
-      delete handler;
-      }
+          // if the handler has found a sensor model, copy the tags found
+          if (hasMetaData && dynamic_cast<ossimSensorModel const*>(projection))
+            {
+            otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
+            otb_kwl.SetKeywordlist(geom_kwl);
+            // geom_kwl.print(std::cout);
+            }
+          else
+            {
+            hasMetaData = false;
+            }
+          } // projection
+        } // geom.valid
+      } // handler
     }
 
   /**********************************************************/
@@ -433,15 +415,15 @@ ReadGeometryFromRPCTag(const std::string& filename)
 
   //  try to use GeoTiff RPC tag if present.
   // Warning : RPC in subdatasets are not supported
-  GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), NULL);
-  if(identifyDriverH == NULL)
+  GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), ITK_NULLPTR);
+  if(identifyDriverH == ITK_NULLPTR)
     {
     // If no driver has identified the dataset, don't try to open it and exit
     return otb_kwl;
     }
 
   GDALDatasetH datasetH = GDALOpen(filename.c_str(), GA_ReadOnly);
-  if (datasetH != NULL)
+  if (datasetH != ITK_NULLPTR)
     {
     GDALDataset* dataset = static_cast<GDALDataset*>(datasetH);
     GDALRPCInfo rpcStruct;

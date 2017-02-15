@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnConstrainedLeastSquareImageFilter_h
-#define __otbUnConstrainedLeastSquareImageFilter_h
+#ifndef otbUnConstrainedLeastSquareImageFilter_h
+#define otbUnConstrainedLeastSquareImageFilter_h
 
 #include "itkMacro.h"
 #include "otbUnaryFunctorImageFilter.h"
@@ -171,9 +171,9 @@ public:
 protected:
   UnConstrainedLeastSquareImageFilter();
 
-  virtual ~UnConstrainedLeastSquareImageFilter() {}
+  ~UnConstrainedLeastSquareImageFilter() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   UnConstrainedLeastSquareImageFilter(const Self &); //purposely not implemented

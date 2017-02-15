@@ -31,7 +31,7 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
                           const RegionType& region)
 {
   m_ItImage = TIteratorType(image,region);
-  if (mask == NULL)
+  if (mask == ITK_NULLPTR)
     {
     m_UseMask = false;
     }
@@ -218,7 +218,7 @@ MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
 ::ComputeMaskedBegin()
 {
   // We must search for the first index where the image is not masked
-  // Start searching at the begining
+  // Start searching at the beginning
   m_ItMask.GoToBegin();
   m_ItImage.GoToBegin();
 

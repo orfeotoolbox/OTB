@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelsPolarimetricSynthesisFilter_h
-#define __otbMultiChannelsPolarimetricSynthesisFilter_h
+#ifndef otbMultiChannelsPolarimetricSynthesisFilter_h
+#define otbMultiChannelsPolarimetricSynthesisFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "otbPolarimetricSynthesisFunctor.h"
@@ -152,7 +152,7 @@ protected:
   /** Constructor */
   MultiChannelsPolarimetricSynthesisFilter();
   /** Destructor */
-  virtual ~MultiChannelsPolarimetricSynthesisFilter() {}
+  ~MultiChannelsPolarimetricSynthesisFilter() ITK_OVERRIDE {}
 
   /** MultiChannelsPolarimetricSynthesisFilter can produce an image
    * which is a synthesis of channels HH, HV, VH and VV.
@@ -164,9 +164,9 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
 
   /** MultiChannelsPolarimetricSynthesisFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -179,7 +179,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) ITK_OVERRIDE;
 
   /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();
@@ -187,7 +187,7 @@ protected:
   /** Verify and force the inputs, if only  2 or 3 channels are present */
   void VerifyAndForceInputs();
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   MultiChannelsPolarimetricSynthesisFilter(const Self &); //purposely not implemented

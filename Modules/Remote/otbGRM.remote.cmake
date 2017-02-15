@@ -12,5 +12,5 @@ A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/lassallep/grm
 "
   GIT_REPOSITORY http://tully.ups-tlse.fr/lassallep/grm.git
-  GIT_TAG 7762ef1f84154fcbaecba476ab9e0aba1bcd736c
+  GIT_TAG a08d2309bc8d4f4ceaf1dba8bda33aa1e21fc4aa
 )

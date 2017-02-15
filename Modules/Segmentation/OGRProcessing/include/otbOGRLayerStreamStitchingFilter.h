@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRLayerStreamStitchingFilter_h
-#define __otbOGRLayerStreamStitchingFilter_h
+#ifndef otbOGRLayerStreamStitchingFilter_h
+#define otbOGRLayerStreamStitchingFilter_h
 
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
@@ -103,11 +103,11 @@ public:
   itkGetMacro(StreamSize, SizeType);
 
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 protected:
   OGRLayerStreamStitchingFilter();
-  virtual ~OGRLayerStreamStitchingFilter() {}
+  ~OGRLayerStreamStitchingFilter() ITK_OVERRIDE {}
 
   struct FusionStruct
   {

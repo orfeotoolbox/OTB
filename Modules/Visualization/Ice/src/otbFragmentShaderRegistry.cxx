@@ -56,7 +56,7 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
   
   const char * source_cstr = source.c_str();
   
-  glShaderSource(shader, 1, &source_cstr,NULL);
+  glShaderSource(shader, 1, &source_cstr,ITK_NULLPTR);
   glCompileShader(shader);
 
   GLint compiled;
@@ -75,7 +75,7 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
     
     delete [] logs;
     // For safety!
-    logs = NULL;
+    logs = ITK_NULLPTR;
     
     // Shader must be destroyed here!
     glDeleteShader( shader );

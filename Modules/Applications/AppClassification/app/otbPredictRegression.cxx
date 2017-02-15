@@ -102,8 +102,15 @@ public:
   typedef ClassificationFilterType::LabelType                                                  LabelType;
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
 
+protected:
+
+  ~PredictRegression() ITK_OVERRIDE
+    {
+    MachineLearningModelFactoryType::CleanFactories();
+    }
+
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("PredictRegression");
     SetDescription("Performs a prediction of the input image according to a regression model file.");
@@ -170,12 +177,12 @@ private:
     SetDocExampleParameterValue("out", "clLabeledImageQB1.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Load input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

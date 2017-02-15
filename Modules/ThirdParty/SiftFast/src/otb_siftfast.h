@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_siftfast_h
+#ifndef otb_siftfast_h
 
 #include "otbsiftfast/siftfast.h"
 

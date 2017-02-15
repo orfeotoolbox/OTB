@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSubsampledImageRegionConstIterator_txx
-#define __otbSubsampledImageRegionConstIterator_txx
+#ifndef otbSubsampledImageRegionConstIterator_txx
+#define otbSubsampledImageRegionConstIterator_txx
 
 #include "otbSubsampledImageRegionConstIterator.h"
 

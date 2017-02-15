@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRandomForestsMachineLearningModel_txx
-#define __otbRandomForestsMachineLearningModel_txx
+#ifndef otbRandomForestsMachineLearningModel_txx
+#define otbRandomForestsMachineLearningModel_txx
 
 #include <fstream>
 #include "itkMacro.h"
@@ -79,7 +79,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //Define random forests paramneters
   //FIXME do this in the constructor?
 
-  float * priors = m_Priors.empty() ? 0 : &m_Priors.front();
+  float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
 
   CvRTParams params = CvRTParams(m_MaxDepth,                    // max depth
                                  m_MinSampleCount,              // min sample count
@@ -111,7 +111,7 @@ template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & value, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -124,7 +124,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != NULL)
+  if (quality != ITK_NULLPTR)
     {
     if(m_ComputeMargin)
       (*quality) = m_RFModel->predict_margin(sample);
@@ -141,7 +141,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_RFModel->save(filename.c_str(), 0);
+    m_RFModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_RFModel->save(filename.c_str(), name.c_str());
 }
@@ -152,7 +152,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_RFModel->load(filename.c_str(), 0);
+    m_RFModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_RFModel->load(filename.c_str(), name.c_str());
 }
@@ -204,9 +204,9 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 {
   cv::Mat cvMat = m_RFModel->getVarImportance();
   VariableImportanceMatrixType itkMat(cvMat.rows,cvMat.cols);
-  for(unsigned int i =0; i<cvMat.rows; i++)
+  for(int i =0; i<cvMat.rows; i++)
     {
-    for(unsigned int j =0; j<cvMat.cols; j++)
+    for(int j =0; j<cvMat.cols; j++)
       {
       itkMat(i,j)=cvMat.at<float>(i,j);
       }

@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMergeLabelObjectFunctor_h
-#define __otbMergeLabelObjectFunctor_h
+#ifndef otbMergeLabelObjectFunctor_h
+#define otbMergeLabelObjectFunctor_h
 
 #include <algorithm>
 

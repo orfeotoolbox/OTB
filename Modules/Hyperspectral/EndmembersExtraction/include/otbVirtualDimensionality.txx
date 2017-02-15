@@ -18,8 +18,8 @@ for details.
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVirtualDimensionality_txx
-#define __otbVirtualDimensionality_txx
+#ifndef otbVirtualDimensionality_txx
+#define otbVirtualDimensionality_txx
 
 #include "otbVirtualDimensionality.h"
 

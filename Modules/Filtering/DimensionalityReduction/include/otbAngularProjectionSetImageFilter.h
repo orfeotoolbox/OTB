@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAngularProjectionSetImageFilter_h
-#define __otbAngularProjectionSetImageFilter_h
+#ifndef otbAngularProjectionSetImageFilter_h
+#define otbAngularProjectionSetImageFilter_h
 
 #include "otbAngularProjectionImageFilter.h"
 #include "otbImageToImageListFilter.h"
@@ -123,9 +123,9 @@ public:
 
 protected:
   AngularProjectionSetImageFilter();
-  virtual ~AngularProjectionSetImageFilter() { }
+  ~AngularProjectionSetImageFilter() ITK_OVERRIDE { }
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   AngularProjectionSetImageFilter(const Self&); // not implemented

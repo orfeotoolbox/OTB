@@ -59,7 +59,7 @@ int main(int argc, char * argv[])
     if (argc != 9)
       {
       std::cerr <<
-      "Detection de changements par mesure de Kullback-Leibler, optimisee par un developpement de Edgeworth\n";
+      "Change detection based on Kullback-Leibler distance betweenlocal pdf through an Edgeworth approximation\n";
       std::cerr << argv[0] <<
       " imgAv imgAp imgResu winSizeMin winSizeMax outRedIndex outGreenIndex outBlueIndex\n";
       return 1;

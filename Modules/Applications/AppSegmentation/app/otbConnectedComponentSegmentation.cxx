@@ -66,7 +66,7 @@ public:
         <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("ConnectedComponentSegmentation");
     SetDescription("Connected component segmentation and object based image filtering of the input image according to user-defined criterions.");
@@ -76,8 +76,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Analysis);
     AddDocTag(Tags::Segmentation);
+	AddDocTag(Tags::Analysis);	
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The image to segment.");
@@ -108,6 +108,8 @@ private:
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
+    AddRAMParameter();
+
    // Doc example parameter settings
    SetDocExampleParameterValue("in", "ROI_QB_MUL_4.tif");
    SetDocExampleParameterValue("mask", "\"((b1>80)*intensity>95)\"");
@@ -117,12 +119,12 @@ private:
    SetDocExampleParameterValue("out", "ConnectedComponentSegmentation.shp");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     InputVectorImageType::Pointer inputImage = GetParameterImage("in");
 
@@ -139,7 +141,8 @@ private:
     if (IsParameterEnabled("obia") && HasValue("obia"))
       m_Connected->GetFilter()->SetOBIAExpression(GetParameterString("obia"));
 
-    AddProcess(m_Connected,"Computing segmentation");
+    m_Connected->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(m_Connected->GetStreamer(),"Computing segmentation");
     m_Connected->Update();
 
     /*

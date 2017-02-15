@@ -41,16 +41,16 @@ public:
   JulianDate(const JulianDate& rhs);
 
   /**
-   * @brief Constructor with date initialisation using a CivilDateTime
+   * @brief Constructor with date initialization using a CivilDateTime
    */
   JulianDate(CivilDateTime& rhs);
 
   /**
-   * @brief Constructor with date initialisation using a JSDDateTime
+   * @brief Constructor with date initialization using a JSDDateTime
    */
   JulianDate(JSDDateTime& rhs);
   /**
-   * @brief Constructor with date initialisation
+   * @brief Constructor with date initialization
    */
   JulianDate(double julianDate);
   /**

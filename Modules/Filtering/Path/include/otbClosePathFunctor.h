@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbClosePathFunctor_h
-#define __otbClosePathFunctor_h
+#ifndef otbClosePathFunctor_h
+#define otbClosePathFunctor_h
 
 #include "otbMath.h"
 
@@ -26,7 +26,7 @@ namespace otb
 /** \class ClosePathFunctor
 *    \brief This filter close the input path, making the last point equal to the first one.
 *
-* This filter may be useful when a truely closed polygon is needed (to draw it for example)
+* This filter may be useful when a truly closed polygon is needed (to draw it for example)
 *
 * \sa UnaryFunctorObjectListFilter
 *

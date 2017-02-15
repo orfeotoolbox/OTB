@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaralickTexturesIFFactory_h
-#define __otbHaralickTexturesIFFactory_h
+#ifndef otbHaralickTexturesIFFactory_h
+#define otbHaralickTexturesIFFactory_h
 
 #include "itkLightObject.h"
 
@@ -80,8 +80,8 @@ public:
 
 protected:
   HaralickTexturesIFFactory(){}
-  ~HaralickTexturesIFFactory(){}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~HaralickTexturesIFFactory() ITK_OVERRIDE{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   HaralickTexturesIFFactory(const Self& ); //purposely not implemented

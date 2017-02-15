@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingResampleImageFilter_txx
-#define __otbStreamingResampleImageFilter_txx
+#ifndef otbStreamingResampleImageFilter_txx
+#define otbStreamingResampleImageFilter_txx
 
+#include "otbStreamingResampleImageFilter.h"
 #include "itkProgressAccumulator.h"
 
 namespace otb
@@ -27,11 +28,11 @@ template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionTyp
 StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 ::StreamingResampleImageFilter()
 {
-  // internal filters instanciation
+  // internal filters instantiation
   m_DisplacementFilter = DisplacementFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
 
-  // Initialize the displacement field spacing to zero : inconsistant
+  // Initialize the displacement field spacing to zero : inconsistent
   // value
   this->SetDisplacementFieldSpacing(itk::NumericTraits<SpacingType>::ZeroValue());
 

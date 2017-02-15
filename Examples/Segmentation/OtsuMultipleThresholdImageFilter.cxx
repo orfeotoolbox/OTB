@@ -155,7 +155,7 @@ int main(int argc, char * argv[])
   CalculatorType::OutputType::const_iterator itNum = thresholdVector.begin();
   // Software Guide : EndCodeSnippet
 
-  //Threshold into seperate segments and write out as binary images
+  //Threshold into separate segments and write out as binary images
   double lowerThreshold = 0;
   double upperThreshold;
 

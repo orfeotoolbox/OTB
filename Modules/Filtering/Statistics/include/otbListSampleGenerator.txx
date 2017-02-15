@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleGenerator_txx
-#define __otbListSampleGenerator_txx
+#ifndef otbListSampleGenerator_txx
+#define otbListSampleGenerator_txx
 
 #include "otbListSampleGenerator.h"
 
@@ -97,7 +97,7 @@ ListSampleGenerator<TImage, TVectorData>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const ImageType *>(this->ProcessObject::GetInput(0));
@@ -121,7 +121,7 @@ ListSampleGenerator<TImage, TVectorData>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const VectorDataType *>(this->ProcessObject::GetInput(1));

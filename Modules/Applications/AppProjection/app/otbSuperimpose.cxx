@@ -78,7 +78,7 @@ public:
      FloatVectorImageType>                                        BasicResamplerType;
   
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Superimpose");
     SetDescription("Using available image metadata, project one image onto another one");
@@ -104,7 +104,13 @@ private:
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     SetParameterDescription("lms","Generate a coarser deformation field with the given spacing");
     SetDefaultParameterFloat("lms", 4.);
+    DisableParameter("lms");
     MandatoryOff("lms");
+
+    AddParameter(ParameterType_Float, "fv", "Fill Value");
+    SetParameterDescription("fv","Fill value for area outside the reprojected image");
+    SetDefaultParameterFloat("fv", 0.);
+    MandatoryOff("fv");
 
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription("out","Output reprojected image.");
@@ -131,7 +137,7 @@ private:
     SetParameterDescription("interpolator.bco", "Bicubic interpolation leads to very good image quality but is slow.");
 
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows controling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
 
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
@@ -148,17 +154,17 @@ private:
     SetDocExampleParameterValue("out", "SuperimposedXS_to_PAN.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if(!HasUserValue("mode") && HasValue("inr") && HasValue("inm") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"),GetParameterImage("inm")))
       {
       otbAppLogWARNING("Forcing PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
-      SetParameterString("mode","phr");
+      SetParameterString("mode","phr", false);
       }
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the inputs
     FloatVectorImageType* refImage = GetParameterImage("inr");
@@ -202,7 +208,7 @@ private:
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
-    // Set up output image informations
+    // Set up output image information
     FloatVectorImageType::SpacingType spacing = refImage->GetSpacing();
     FloatVectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
     FloatVectorImageType::SizeType    size    = refImage->GetLargestPossibleRegion().GetSize();
@@ -210,24 +216,28 @@ private:
     
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
+    defaultValue.Fill(GetParameterFloat("fv"));
 
-    
     if(GetParameterString("mode")=="default")
       {
+      FloatVectorImageType::SpacingType defSpacing;
       if(IsParameterEnabled("lms"))
         {
         float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
         otbAppLogDEBUG("Generating coarse deformation field (spacing="<<defScalarSpacing<<")");
-        FloatVectorImageType::SpacingType defSpacing;
 
         defSpacing[0] = defScalarSpacing;
         defSpacing[1] = defScalarSpacing;
 
         if (spacing[0]<0.0) defSpacing[0] *= -1.0;
         if (spacing[1]<0.0) defSpacing[1] *= -1.0;
-
-        m_Resampler->SetDisplacementFieldSpacing(defSpacing);
         }
+      else
+        {
+        defSpacing[0]=10*spacing[0];
+        defSpacing[1]=10*spacing[1];
+        }
+      m_Resampler->SetDisplacementFieldSpacing(defSpacing);
       
       // Setup transform through projRef and Keywordlist
       m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());

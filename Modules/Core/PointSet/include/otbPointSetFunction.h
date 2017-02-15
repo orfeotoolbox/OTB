@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetFunction_h
-#define __otbPointSetFunction_h
+#ifndef otbPointSetFunction_h
+#define otbPointSetFunction_h
 
 #include "itkSpatialFunction.h"
 #include "itkProcessObject.h"
@@ -68,9 +68,9 @@ public:
 
 protected:
   PointSetFunction();
-  ~PointSetFunction() {}
+  ~PointSetFunction() ITK_OVERRIDE {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   PointSetFunction(const Self &);  //purposely not implemented

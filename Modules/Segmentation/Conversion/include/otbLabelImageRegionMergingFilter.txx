@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbLabelImageRegionMergingFilter_txx
-#define __otbLabelImageRegionMergingFilter_txx
+#ifndef otbLabelImageRegionMergingFilter_txx
+#define otbLabelImageRegionMergingFilter_txx
 
 #include "otbLabelImageRegionMergingFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -90,7 +90,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-      return 0;
+      return ITK_NULLPTR;
     }
   return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -114,7 +114,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-      return 0;
+      return ITK_NULLPTR;
     }
   return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
 }

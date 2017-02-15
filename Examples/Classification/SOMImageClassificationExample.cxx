@@ -57,7 +57,7 @@ int main(int itkNotUsed(argc), char * argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// Our classifier will be genric enough to be able to process images
+// Our classifier will be generic enough to be able to process images
 // with any number of bands. We read the images as
 // \doxygen{otb}{VectorImage}s. The labeled image will be a scalar image.
 //

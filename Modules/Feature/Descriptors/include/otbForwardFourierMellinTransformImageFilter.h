@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbForwardFourierMellinTransformImageFilter_h
-#define __otbForwardFourierMellinTransformImageFilter_h
+#ifndef otbForwardFourierMellinTransformImageFilter_h
+#define otbForwardFourierMellinTransformImageFilter_h
 
 #include "otbImage.h"
 #include "itkForwardFFTImageFilter.h"
@@ -126,15 +126,15 @@ public:
 
 protected:
   ForwardFourierMellinTransformImageFilter();
-  virtual ~ForwardFourierMellinTransformImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ForwardFourierMellinTransformImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
 
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Main Computation Method */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   ForwardFourierMellinTransformImageFilter(const Self &);  //purposely not implemented

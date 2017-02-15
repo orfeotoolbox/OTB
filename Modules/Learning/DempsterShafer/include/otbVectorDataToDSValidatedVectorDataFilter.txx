@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToDSValidatedVectorDataFilter_txx
-#define __otbVectorDataToDSValidatedVectorDataFilter_txx
+#ifndef otbVectorDataToDSValidatedVectorDataFilter_txx
+#define otbVectorDataToDSValidatedVectorDataFilter_txx
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
 #include <iostream>

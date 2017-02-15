@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageRegionSquareTileSplitter_h
-#define __otbImageRegionSquareTileSplitter_h
+#ifndef otbImageRegionSquareTileSplitter_h
+#define otbImageRegionSquareTileSplitter_h
 
 #include "itkRegion.h"
 #include "itkImageRegionSplitter.h"
@@ -109,14 +109,14 @@ public:
    *  instance, if the numberOfPieces exceeds the number of pixels along
    *  a certain dimensions, then some splits will not be possible.
    */
-  virtual unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber);
+  unsigned int GetNumberOfSplits(const RegionType& region,
+                                         unsigned int requestedNumber) ITK_OVERRIDE;
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
-  virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region);
+  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
+                              const RegionType& region) ITK_OVERRIDE;
 
   itkGetMacro(TileSizeAlignment, unsigned int);
   itkSetMacro(TileSizeAlignment, unsigned int);
@@ -125,8 +125,8 @@ public:
 
 protected:
   ImageRegionSquareTileSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(16) {}
-  virtual ~ImageRegionSquareTileSplitter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ImageRegionSquareTileSplitter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter &); //purposely not implemented

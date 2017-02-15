@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNonMaxRemovalByDirectionFilter_h
-#define __otbNonMaxRemovalByDirectionFilter_h
+#ifndef otbNonMaxRemovalByDirectionFilter_h
+#define otbNonMaxRemovalByDirectionFilter_h
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
@@ -133,14 +133,14 @@ protected:
   /** Constructor */
   NonMaxRemovalByDirectionFilter() {};
   /** Destructor */
-  virtual ~NonMaxRemovalByDirectionFilter() {}
+  ~NonMaxRemovalByDirectionFilter() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }
   /** Main computation method */
-  virtual void GenerateData(void)
+  void GenerateData(void) ITK_OVERRIDE
   {
     typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
     filter->SetInput1(this->GetInput());

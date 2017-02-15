@@ -95,7 +95,7 @@ protected:
 
 private:
 
-void DoInit()
+void DoInit() ITK_OVERRIDE
 {
   SetName("TrainRegression");
   SetDescription(
@@ -159,7 +159,7 @@ void DoInit()
   AddParameter(ParameterType_Float, "sample.vtr", "Training and validation sample ratio");
   SetParameterDescription("sample.vtr",
                           "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) (default = 0.5).");
-  SetParameterFloat("sample.vtr", 0.5);
+  SetParameterFloat("sample.vtr",0.5, false);
 
   Superclass::DoInit();
 
@@ -172,7 +172,7 @@ void DoInit()
   SetDocExampleParameterValue("classifier", "libsvm");
 }
 
-void DoUpdateParameters()
+void DoUpdateParameters() ITK_OVERRIDE
 {
   if (HasValue("io.csv") && IsParameterEnabled("io.csv"))
     {
@@ -253,7 +253,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
   ifs.close();
 }
 
-void DoExecute()
+void DoExecute() ITK_OVERRIDE
 {
   GetLogger()->Debug("Entering DoExecute\n");
   //Create training and validation for list samples and label list samples

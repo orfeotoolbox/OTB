@@ -34,7 +34,7 @@ typedef otb::PixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatIma
 
 int otbPixelWiseBlockMatchingImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  // Instanciation
+  // Instantiation
   PixelWiseBlockMatchingImageFilterType::Pointer bmFilter = PixelWiseBlockMatchingImageFilterType::New();
 
   return EXIT_SUCCESS;

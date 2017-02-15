@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorImage_h
-#define __otbVectorImage_h
+#ifndef otbVectorImage_h
+#define otbVectorImage_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -154,9 +154,9 @@ public:
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   /// Copy metadata from a DataObject
-  virtual void CopyInformation(const itk::DataObject *);
+  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Return the Pixel Accessor object */
 //   AccessorType GetPixelAccessor( void )
@@ -184,7 +184,7 @@ public:
 
 protected:
   VectorImage();
-  virtual ~VectorImage() {}
+  ~VectorImage() ITK_OVERRIDE {}
 
 private:
   VectorImage(const Self &); //purposely not implemented

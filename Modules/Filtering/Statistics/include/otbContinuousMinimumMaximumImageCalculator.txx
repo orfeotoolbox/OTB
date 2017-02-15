@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbContinuousMinimumMaximumImageCalculator_txx
-#define __otbContinuousMinimumMaximumImageCalculator_txx
+#ifndef otbContinuousMinimumMaximumImageCalculator_txx
+#define otbContinuousMinimumMaximumImageCalculator_txx
 
 #include "otbContinuousMinimumMaximumImageCalculator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRemoveTortuousPathListFilter_h
-#define __otbRemoveTortuousPathListFilter_h
+#ifndef otbRemoveTortuousPathListFilter_h
+#define otbRemoveTortuousPathListFilter_h
 
 #include "otbUnaryFunctorObjectListBooleanFilter.h"
 #include "otbPathMeanDistanceFunctor.h"
@@ -34,7 +34,7 @@ namespace otb
    * the PathMeanDistanceFunctor.
    *
    *<b>Recent API changes:</b>
-   * Now part of the UnaryFunctorObjectListBooleanFilter hierachy, replace call to SetMeanDistanceThreshold()
+   * Now part of the UnaryFunctorObjectListBooleanFilter hierarchy, replace call to SetMeanDistanceThreshold()
    * by GetFunctor().SetThreshold().
    *
    * The inequality is now a strict one.

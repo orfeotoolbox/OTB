@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperStringListParameter_h
-#define __otbWrapperStringListParameter_h
+#ifndef otbWrapperStringListParameter_h
+#define otbWrapperStringListParameter_h
 
 #include <string>
 #include "otbWrapperParameter.h"
@@ -31,7 +31,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class ITK_ABI_EXPORT StringListParameter
+class OTBApplicationEngine_EXPORT StringListParameter
   : public Parameter
 {
 public:
@@ -100,12 +100,12 @@ public:
     m_Value[i] = value;
   }
 
-  bool HasValue() const
+  bool HasValue() const ITK_OVERRIDE
   {
     return !m_Value.empty();
   }
 
-  void ClearValue()
+  void ClearValue() ITK_OVERRIDE
   {
     m_Value.clear();
   }
@@ -126,7 +126,7 @@ protected:
   }
 
   /** Destructor */
-  virtual ~StringListParameter()
+  ~StringListParameter() ITK_OVERRIDE
   {
   }
 

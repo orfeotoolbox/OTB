@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVCAImageFilter_h
-#define __otbVCAImageFilter_h
+#ifndef otbVCAImageFilter_h
+#define otbVCAImageFilter_h
 
 #include "otbImage.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -103,12 +103,12 @@ public:
   itkGetMacro( NumberOfEndmembers, unsigned int );
   itkSetMacro( NumberOfEndmembers, unsigned int );
 
-  virtual void Update()
+  void Update() ITK_OVERRIDE
   {
     this->GenerateData();
   }
 
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output))
+  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)) ITK_OVERRIDE
   {
     this->GetOutput()
       ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
@@ -117,13 +117,13 @@ public:
 protected:
   VCAImageFilter();
 
-  virtual ~VCAImageFilter();
+  ~VCAImageFilter() ITK_OVERRIDE;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
-  virtual void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   VCAImageFilter(const Self &); //purposely not implemented
@@ -136,4 +136,4 @@ private:
 
 #include "otbVcaImageFilter.txx"
 
-#endif /* __otbVCAImageFilter_h */
+#endif /* otbVCAImageFilter_h */

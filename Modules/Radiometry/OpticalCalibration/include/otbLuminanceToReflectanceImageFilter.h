@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLuminanceToReflectanceImageFilter_h
-#define __otbLuminanceToReflectanceImageFilter_h
+#ifndef otbLuminanceToReflectanceImageFilter_h
+#define otbLuminanceToReflectanceImageFilter_h
 
 #include "otbVarSol.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
@@ -208,9 +208,9 @@ public:
   /** Give the day. */
   itkGetConstReferenceMacro(Day, int);
 
-  /** Set the mounth. */
+  /** Set the month. */
   itkSetClampMacro(Month, int, 1, 12);
-  /** Give the mounth. */
+  /** Give the month. */
   itkGetConstReferenceMacro(Month, int);
 
   /** Set the flux normalization coefficient. */
@@ -247,10 +247,10 @@ protected:
     };
 
   /** Destructor */
-  virtual ~LuminanceToReflectanceImageFilter() {}
+  ~LuminanceToReflectanceImageFilter() ITK_OVERRIDE {}
 
   /** Update the functor list and input parameters */
-  virtual void BeforeThreadedGenerateData(void)
+  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
   {
     OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());
@@ -301,7 +301,7 @@ protected:
           }
         else
           {
-          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
           }
         }
       else
@@ -326,7 +326,7 @@ private:
   double m_FluxNormalizationCoefficient;
   /** Acquisition day. */
   int m_Day;
-  /** Acquisition mounth. */
+  /** Acquisition month. */
   int m_Month;
   /** Solar illumination value. */
   VectorType m_SolarIllumination;

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMapnikAdapter_h
-#define __otbMapnikAdapter_h
+#ifndef otbMapnikAdapter_h
+#define otbMapnikAdapter_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWindowedSincInterpolateImageLanczosFunction_h
-#define __otbWindowedSincInterpolateImageLanczosFunction_h
+#ifndef otbWindowedSincInterpolateImageLanczosFunction_h
+#define otbWindowedSincInterpolateImageLanczosFunction_h
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 #include "vnl/vnl_math.h"
@@ -135,8 +135,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageLanczosFunction() {};
-  ~WindowedSincInterpolateImageLanczosFunction() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  ~WindowedSincInterpolateImageLanczosFunction() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
   }

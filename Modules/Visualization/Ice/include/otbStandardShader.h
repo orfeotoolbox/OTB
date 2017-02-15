@@ -18,9 +18,7 @@
 #ifndef otb_StandardShader_h
 #define otb_StandardShader_h
 
-
-#include "itkObjectFactory.h"
-
+#include <itkObjectFactory.h>
 #include "otbFragmentShader.h"
 #include "otbImageSettings.h"
 
@@ -35,11 +33,21 @@ typedef enum
   SHADER_ALPHA_GRID,
   SHADER_ALPHA_SLIDER,
   SHADER_SPECTRAL_ANGLE,
-  SHADER_GRADIENT
+  SHADER_GRADIENT,
+  SHADER_LUT_JET,
+  SHADER_LUT_LOCAL_JET,
+  SHADER_LUT_HOT,
+  SHADER_LUT_LOCAL_HOT,
+  SHADER_LUT_WINTER,
+  SHADER_LUT_LOCAL_WINTER,
+  SHADER_LUT_SUMMER,
+  SHADER_LUT_LOCAL_SUMMER,
+  SHADER_LUT_COOL,
+  SHADER_LUT_LOCAL_COOL
 } ShaderType;
 
 
-class StandardShader 
+class OTBIce_EXPORT StandardShader
   : public FragmentShader
 {
 public:
@@ -68,28 +76,28 @@ public:
 
   itkSetMacro(ChessboardSize,double);
   itkGetConstReferenceMacro(ChessboardSize,double);
-  
+
   itkSetMacro(SliderPosition,double);
   itkGetConstReferenceMacro(SliderPosition,double);
-  
+
   itkSetMacro(VerticalSlider,bool);
   itkGetMacro(VerticalSlider,bool);
 
   itkSetMacro(Center,PointType);
   itkGetConstReferenceMacro(Center,PointType);
 
-  virtual void SetupShader();
+  void SetupShader() ITK_OVERRIDE;
 
   itkNewMacro(Self);
 
 protected:
   StandardShader();
 
-  virtual ~StandardShader();
+  ~StandardShader() ITK_OVERRIDE;
 
-  virtual std::string GetSource() const;
+  std::string GetSource() const ITK_OVERRIDE;
 
-  virtual std::string GetName() const;
+  std::string GetName() const ITK_OVERRIDE;
 
 private:
   // prevent implementation

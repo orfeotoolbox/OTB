@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSimulationMethod_h
-#define __otbImageSimulationMethod_h
+#ifndef otbImageSimulationMethod_h
+#define otbImageSimulationMethod_h
 
 
 #include "itkImageSource.h"
@@ -163,13 +163,13 @@ public:
 
 protected:
   ImageSimulationMethod();
-  virtual ~ImageSimulationMethod()
+  ~ImageSimulationMethod() ITK_OVERRIDE
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   //    virtual void GenerateData();
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() ITK_OVERRIDE;
 
 private:
   ImageSimulationMethod(const Self &); //purposely not implemented

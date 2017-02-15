@@ -15,10 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMachineLearningModelFactoryBase_h
-#define __otbMachineLearningModelFactoryBase_h
+#ifndef otbMachineLearningModelFactoryBase_h
+#define otbMachineLearningModelFactoryBase_h
 
 #include "itkMutexLock.h"
+#include "OTBSupervisedExport.h"
 
 namespace otb
 {
@@ -31,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBSupervised
  */
-class ITK_EXPORT MachineLearningModelFactoryBase : public itk::Object
+class OTBSupervised_EXPORT MachineLearningModelFactoryBase : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -45,7 +46,7 @@ public:
 
 protected:
   MachineLearningModelFactoryBase();
-  virtual ~MachineLearningModelFactoryBase();
+  ~MachineLearningModelFactoryBase() ITK_OVERRIDE;
 
   static itk::SimpleMutexLock mutex;
 

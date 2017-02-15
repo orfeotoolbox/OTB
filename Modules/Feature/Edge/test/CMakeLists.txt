@@ -5,7 +5,7 @@ otbEdgeTestDriver.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbEdgeDetectorImageFilter.cxx
 otbHorizontalSobelVectorImageFilter.cxx
-otbAssymmetricFusionOfLineDetector.cxx
+otbAsymmetricFusionOfLineDetector.cxx
 otbLocalHoughDraw.cxx
 otbAssociativeSymmetricalSum.cxx
 otbPersistentVectorizationFilterNew.cxx
@@ -23,7 +23,7 @@ otbEdgeDensityImageFilterNew.cxx
 otbLocalHough.cxx
 otbExtractSegments.cxx
 otbExtractSegmentsNew.cxx
-otbAssymmetricFusionOfLineDetectorNew.cxx
+otbAsymmetricFusionOfLineDetectorNew.cxx
 otbLineRatioDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
 otbTouziEdgeDetectorNew.cxx
@@ -70,12 +70,12 @@ otb_add_test(NAME bfTvHorizontalSobelVectorImageFilter COMMAND otbEdgeTestDriver
 otb_add_test(NAME bfTuHorizontalSobelVectorImageFilterNew COMMAND otbEdgeTestDriver
   otbHorizontalSobelVectorImageFilterNewTest)
 
-otb_add_test(NAME feTvAssymmetricFusionOfLineDetector COMMAND otbEdgeTestDriver
-  --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreAssymmetricFusion_amst_2_3.hdr
-  ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
-  otbAssymmetricFusionOfLineDetector
+otb_add_test(NAME feTvAsymmetricFusionOfLineDetector COMMAND otbEdgeTestDriver
+  --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreAsymmetricFusion_amst_2_3.hdr
+  ${TEMP}/feFiltreAsymmetricFusion_amst_2_3.hdr
+  otbAsymmetricFusionOfLineDetector
   ${INPUTDATA}/amst.png
-  ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
+  ${TEMP}/feFiltreAsymmetricFusion_amst_2_3.hdr
   2 3)
 
 
@@ -210,8 +210,8 @@ otb_add_test(NAME feTvExtractSegments COMMAND otbEdgeTestDriver
 otb_add_test(NAME feTuExtractSegmentsNew COMMAND otbEdgeTestDriver
   otbExtractSegmentsNew)
 
-otb_add_test(NAME feTuAssymmetricFusionOfLineDetectorNew COMMAND otbEdgeTestDriver
-  otbAssymmetricFusionOfLineDetectorNew)
+otb_add_test(NAME feTuAsymmetricFusionOfLineDetectorNew COMMAND otbEdgeTestDriver
+  otbAsymmetricFusionOfLineDetectorNew)
 
 otb_add_test(NAME feTvLineRatio COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreLineRatio_amst_2_3.hdr

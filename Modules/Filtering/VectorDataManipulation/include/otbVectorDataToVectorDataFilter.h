@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToVectorDataFilter_h
-#define __otbVectorDataToVectorDataFilter_h
+#ifndef otbVectorDataToVectorDataFilter_h
+#define otbVectorDataToVectorDataFilter_h
 
 #include "otbVectorDataSource.h"
 
@@ -91,7 +91,7 @@ protected:
   /** Constructor */
   VectorDataToVectorDataFilter();
   /** Destructor */
-  virtual ~VectorDataToVectorDataFilter() {}
+  ~VectorDataToVectorDataFilter() ITK_OVERRIDE {}
 
   virtual OutputPointType ProcessPoint(InputPointType itkNotUsed(point)) const
   {
@@ -110,14 +110,14 @@ protected:
     itkExceptionMacro( << "Subclass should reimplement this method");
   }
 
-  virtual void GenerateOutputInformation(void);
-  virtual void GenerateData(void);
+  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateData(void) ITK_OVERRIDE;
 
   /** Go through the vector data tree and process the nodes */
   virtual void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const;
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   VectorDataToVectorDataFilter(const Self &); //purposely not implemented

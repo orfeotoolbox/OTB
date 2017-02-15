@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleSource_txx
-#define __otbListSampleSource_txx
+#ifndef otbListSampleSource_txx
+#define otbListSampleSource_txx
 
 #include "otbListSampleSource.h"
 

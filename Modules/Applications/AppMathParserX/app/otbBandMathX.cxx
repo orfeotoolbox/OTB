@@ -52,7 +52,7 @@ public:
 
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("BandMathX");
     SetDescription("This application performs mathematical operations on multiband images.\n"
@@ -87,8 +87,8 @@ private:
       "\n"
       "                   im1b1 + im2b1 \n"
       "                   im1b2 + im2b2       (2)\n"
-      "                         ...."
-      "\n\nNevertheless, the first expression is by far much pleaseant. We call this new functionnality the 'batch mode'\n"
+      "                   ..."
+      "\n\nNevertheless, the first expression is by far much pleaseant. We call this new functionality the 'batch mode'\n"
       "(performing the same operation in a band-to-band fashion).\n"
 
       "\n\n"
@@ -98,8 +98,8 @@ private:
       "- I is an number identifying the image input (remember, input #0 = im1, and so on)\n"
       "- J is an number identifying the band (remember, first band is indexed by 1)\n"
       "- KxP are two numbers that represent the size of the neighborhood (first one is related to the horizontal direction)\n"
-      "All neighborhood are centred, thus K and P must be odd numbers.\n"
-      "Many operators come with this new functionnality: dotpr, mean var median min max...\n"
+      "All neighborhood are centered, thus K and P must be odd numbers.\n"
+      "Many operators come with this new functionality: dotpr, mean var median min max...\n"
       "For instance, if im1 represents the pixel of 3 bands image:\n\n"
       "               im1 - mean(im1b1N5x5,im1b2N5x5,im1b3N5x5)       (3)\n"
       "\ncould represent a high pass filter (Note that by implying three neighborhoods, the operator mean returns a row vector of three components.\n"
@@ -112,7 +112,7 @@ private:
       "matrices (for instance cos, sin, ...). These new operators/ functions keep the original names to which we added the prefix 'v' for vector (vcos, vsin, ...).\n"
       "- mult, div and pow operators, that perform element-wise multiplication, division or exponentiation of vector/matrices (for instance im1 div im2)\n"
       "- mlt, dv and pw operators, that perform multiplication, division or exponentiation of vector/matrices by a scalar (for instance im1 dv 2.0)\n"
-      "- bands, which is a very usefull operator. It allows selecting specific bands from an image, and/or to rearrange them in a new vector;\n"
+      "- bands, which is a very useful operator. It allows selecting specific bands from an image, and/or to rearrange them in a new vector;\n"
       "for instance bands(im1,{1,2,1,1}) produces a vector of 4 components made of band 1, band 2, band 1 and band 1 values from the first input.\n"
       "Note that curly brackets must be used in order to select the desired band indices.\n"
       "... and so on.\n"
@@ -141,7 +141,7 @@ private:
                       "Separating expressions by semi-colons (; ) will concatenate their results into a unique multiband output image. ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    AddDocTag("Util");
+    AddDocTag("Miscellaneous");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     SetParameterDescription("il", "Image list to perform computation on.");
@@ -171,7 +171,7 @@ private:
     SetDocExampleParameterValue("exp", "\"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)\"");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // check if input context should be used
     bool useContext = this->ContextCheck();
@@ -209,7 +209,7 @@ private:
         if (useContext)
           {
           // only set the first expression, 'ManyExpression' is disabled.
-          this->SetParameterString("exp",dummyFilter->GetExpression(0));
+          this->SetParameterString("exp",dummyFilter->GetExpression(0), false);
           }
         }
       }
@@ -265,7 +265,7 @@ private:
       }
     }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");

@@ -14,8 +14,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbTrainLibSVM_txx
-#define __otbTrainLibSVM_txx
+#ifndef otbTrainLibSVM_txx
+#define otbTrainLibSVM_txx
 #include "otbLearningApplicationBase.h"
 
 namespace otb
@@ -35,7 +35,7 @@ namespace Wrapper
     AddChoice("classifier.libsvm.k.rbf", "Gaussian radial basis function");
     AddChoice("classifier.libsvm.k.poly", "Polynomial");
     AddChoice("classifier.libsvm.k.sigmoid", "Sigmoid");
-    SetParameterString("classifier.libsvm.k", "linear");
+    SetParameterString("classifier.libsvm.k", "linear", false);
     SetParameterDescription("classifier.libsvm.k", "SVM Kernel Type.");
     AddParameter(ParameterType_Choice, "classifier.libsvm.m", "SVM Model Type");
     SetParameterDescription("classifier.libsvm.m", "Type of SVM formulation.");
@@ -43,17 +43,17 @@ namespace Wrapper
       {
       AddChoice("classifier.libsvm.m.epssvr", "Epsilon Support Vector Regression");
       AddChoice("classifier.libsvm.m.nusvr", "Nu Support Vector Regression");
-      SetParameterString("classifier.libsvm.m", "epssvr");
+      SetParameterString("classifier.libsvm.m", "epssvr", false);
       }
     else
       {
       AddChoice("classifier.libsvm.m.csvc", "C support vector classification");
       AddChoice("classifier.libsvm.m.nusvc", "Nu support vector classification");
       AddChoice("classifier.libsvm.m.oneclass", "Distribution estimation (One Class SVM)");
-      SetParameterString("classifier.libsvm.m", "csvc");
+      SetParameterString("classifier.libsvm.m", "csvc", false);
       }
     AddParameter(ParameterType_Float, "classifier.libsvm.c", "Cost parameter C");
-    SetParameterFloat("classifier.libsvm.c", 1.0);
+    SetParameterFloat("classifier.libsvm.c",1.0, false);
     SetParameterDescription(
         "classifier.libsvm.c",
         "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
@@ -67,9 +67,9 @@ namespace Wrapper
     if (this->m_RegressionFlag)
       {
       AddParameter(ParameterType_Float, "classifier.libsvm.eps", "Epsilon");
-      SetParameterFloat("classifier.libsvm.eps", 1e-3);
+      SetParameterFloat("classifier.libsvm.eps",1e-3, false);
       AddParameter(ParameterType_Float, "classifier.libsvm.nu", "Nu");
-      SetParameterFloat("classifier.libsvm.nu", 0.5);
+      SetParameterFloat("classifier.libsvm.nu",0.5, false);
       }
   }
 

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataToImageFilter_h
-#define __otbVectorDataToImageFilter_h
+#ifndef otbVectorDataToImageFilter_h
+#define otbVectorDataToImageFilter_h
 
 #include "itkImageSource.h"
 #include "otbRGBAPixelConverter.h"

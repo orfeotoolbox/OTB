@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __otbScalarImageToTexturesFilter_h
-#define __otbScalarImageToTexturesFilter_h
+#ifndef otbScalarImageToTexturesFilter_h
+#define otbScalarImageToTexturesFilter_h
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"
@@ -166,6 +166,18 @@ public:
   /** Get the input image maximum */
   itkGetMacro(InputImageMaximum, InputPixelType);
 
+  /** Set the sub-sampling factor */
+  itkSetMacro(SubsampleFactor, SizeType);
+
+  /** Get the sub-sampling factor */
+  itkGetMacro(SubsampleFactor, SizeType);
+
+  /** Set the sub-sampling offset */
+  itkSetMacro(SubsampleOffset, OffsetType);
+
+  /** Get the sub-sampling offset */
+  itkGetMacro(SubsampleOffset, OffsetType);
+
   /** Get the energy output image */
   OutputImageType * GetEnergyOutput();
 
@@ -194,13 +206,15 @@ protected:
   /** Constructor */
   ScalarImageToTexturesFilter();
   /** Destructor */
-  ~ScalarImageToTexturesFilter();
+  ~ScalarImageToTexturesFilter() ITK_OVERRIDE;
+  /** Generate the output informations */
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Generate the input requested region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Before Parallel textures extraction */
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() ITK_OVERRIDE;
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   ScalarImageToTexturesFilter(const Self&); //purposely not implemented
@@ -215,7 +229,7 @@ private:
   /** Offset for co-occurence */
   OffsetType m_Offset;
 
-  /** Radius of the neighborhood iterator which is minumum of m_Radius */
+  /** Radius of the neighborhood iterator which is minimum of m_Radius */
   SizeType m_NeighborhoodRadius;
 
   /** Number of bins per axis */
@@ -230,6 +244,11 @@ private:
   //TODO: should we use constexpr? only c++11 and problem for msvc
   inline double GetPixelValueTolerance() const {return 0.0001; }
 
+  /** Sub-sampling factor */
+  SizeType m_SubsampleFactor;
+
+  /** Sub-sampling offset */
+  OffsetType m_SubsampleOffset;
 };
 } // End namespace otb
 

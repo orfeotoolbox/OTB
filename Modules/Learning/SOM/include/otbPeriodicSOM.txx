@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbPeriodicSOM_txx
-#define __otbPeriodicSOM_txx
+#ifndef otbPeriodicSOM_txx
+#define otbPeriodicSOM_txx
 
 #include "itkNumericTraits.h"
 #include "itkNeighborhoodIterator.h"

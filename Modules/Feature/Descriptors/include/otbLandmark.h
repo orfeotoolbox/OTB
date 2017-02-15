@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLandmark_h
-#define __otbLandmark_h
+#ifndef otbLandmark_h
+#define otbLandmark_h
 
 #include "itkDataObject.h"
 #include "otbMacro.h"
@@ -69,9 +69,9 @@ protected:
   /// Constructor
   Landmark() {}
   /// Destructor
-  virtual ~Landmark() {}
+  ~Landmark() ITK_OVERRIDE {}
   /// PrintSelf method
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Landmark: P1= " << m_Point1 << " P2= " << m_Point2 << std::endl;

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbListSampleToListSample_txx
-#define __otbListSampleToListSample_txx
+#ifndef otbListSampleToListSample_txx
+#define otbListSampleToListSample_txx
 
 #include "otbListSampleToListSampleFilter.h"
 #include "itkProgressReporter.h"
@@ -49,7 +49,7 @@ ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   return static_cast<const InputSampleListType * >

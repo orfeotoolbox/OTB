@@ -46,7 +46,7 @@ It is also mandatory to implement three methods in a new application:
 
 \subsection{DoInit()}
 \label{sec:appDoInit}
-This method is called once, when the application is instanciated. It should 
+This method is called once, when the application is instantiated. It should 
 contain the following actions:
 \begin{itemize}
   \item Set the name and the description of the application
@@ -59,7 +59,7 @@ contain the following actions:
 \label{sec:appDoUpdateParameters}
 This method is called after every modification of a parameter value. With the command 
 line launcher, it is called each time a parameter is loaded. With the Qt launcher, it
-is called each time a parameter field is modified. It can be used to maintain consistency et relationship
+is called each time a parameter field is modified. It can be used to maintain consistency and relationship
 between parameters (e.g. in ExtractROI: when changing the input image, maybe the ROI size 
 has to be updated).
 
@@ -111,7 +111,7 @@ types of parameters:
   \item \code{ParameterType\_Choice} : parameter storing a list of choices (doesn't support
   multi-choice). It also allows to create specific sub-parameters for each available choice.
   \item \code{ParameterType\_ListView} : parameter storing a list of choices (support 
-  multi-choice).
+  multi-choice and single-choice).
   \item \code{ParameterType\_InputImage} : parameter storing an input image.
   \item \code{ParameterType\_InputImageList} : parameter storing a list of input image.
   \item \code{ParameterType\_ComplexInputImage} : parameter storing a complex input image.
@@ -147,14 +147,115 @@ readers needed to produce the input data.
 The output types \code{OutputImage}, \code{ComplexOutputImage} and \code{OutputVectorData} store the 
 name of the files to write, but they also encapsulate the corresponding writers.
 
+\section{Composite application}
+
+The application framework has been extended to allow the implementation of composite applications :
+applications that use other applications. The concept is simple : you have two applications A and B
+that you want to chain in order to build a third application C. Rather than writing C by copying
+the code of A and B, you would like to re-use applications A and B. This plain example will be
+re-used in this section for explanations.
+
+A dedicated class \doxygen{otb}{Wrapper::CompositeApplication} has been added to create such applications.
+If you derive this class to implement application C, you will be able to create a composite application.
+
+\subsection{Creating internal applications}
+
+Like with standard applications, you have to write a \code{DoInit()} function. In this function,
+you should first clean any internal application with the function \code{ClearApplications()}
+(the \code{DoInit()} function is called twice in some cases). Then you can
+instanciate the internal applications that you want to use (for instance A and B).
+The function \code{AddApplication()} will do that, based on :
+\begin{itemize}
+\item The application type (i.e. its official name, such as ExtractROI, BandMath, \dots)
+\item An identifier : like with parameter keys, you have to specify an identifier
+to refer to this internal application. Use the same naming conventions as parameters.
+\item A description : give a small description of the role of this internal application.
+\end{itemize}
+
+Using the function \code{GetInternalApplication()}, you can get a pointer to the
+internal application corresponding to a given identifier.
+
+In the example given in introduction, we assume that :
+\begin{itemize}
+\item An internal application of type A has been added with identifier \code{a}
+\item An internal application of type B has been added with identifier \code{b}
+\end{itemize}
+
+\subsection{Connecting parameters}
+
+Once you have internal applications, you may want to setup their parameters. There
+are typically 3 cases.
+
+You may want to expose a parameter of an internal application as a parameter of
+your composite application. Let say you want to expose parameter \code{io.in} from application
+\code{a} into your composite application C with the key \code{input}. You can call the function :
+
+\code{ShareParameter("input","a.io.in")}
+
+As a result, the parameters \code{input} in application C and \code{io.in} in application \code{a}
+will point to the same object. Under the two parameter keys, there is a unique value.
+These two parameters can be considered as synchronized.
+
+This leads to the second case : you may want to synchronize two parameters from internal
+applications. Let say you want to synchronize parameter \code{field} from application
+\code{a} with parameter \code{fname} from application \code{b}. You can call the function :
+
+\code{Connect("a.field","b.fname")}
+
+Note that the functions \code{ShareParameter()} and \code{Connect()} :
+\begin{itemize}
+\item Use the same syntax to access internal parameters ("application identifier"
+dot "parameter key").
+\item Shall be used in the DoInit() function, after the internal applications
+have been added.
+\end{itemize}
+
+In this synchronization, the two parameters should have the same type, or have a
+similar interface, such as input and output filenames that are both accessed using
+\code{GetParameterString()} and \code{SetParameterString()}.
+
+This type of connection is a transition to the third case : you may want to connect
+the output of an internal application to the input of an other internal application.
+Here the difficulty is that the two parameters to connect probably have different
+types. Let say you want to connect parameter \code{a.out} to parameter \code{b.in}.
+The "Connect()" function may work in favorable cases (see previous paragraph),
+but for images, you have two options :
+\begin{itemize}
+\item Explicitely copy the image pointer from the output image parameter in the input
+image parameter (with functions \code{SetParameterInputImage()} and
+\code{GetParameterOutputImage()}). It will connect the pipelines in applications
+A and B, to form an "in-memory" connexion. This has to be done between the calls
+to \code{DoExecute()} of application A and B.
+\item Use a temporary filename to store the output image \code{a.out} and read it
+with \code{b.in}. In this case, you have to manually call the writers of parameter
+\code{a.out}.
+\end{itemize}
+
+At the moment, the connexion of vector data parameters is not supported.
+
+\subsection{Orchestration}
+
+In the \code{DoUpdateParameters()} of your composite application, you can call
+the same function on an internal application with the function \code{UpdateInternalParameters()}.
+This is needed only if your internal applications have a specific behaviour during
+parameter update.
+
+In the \code{DoExecute()} of your composite application, you have to call \code{ExecuteInternal()}
+in order to launch each internal application. The order should be compatible with
+image parameter connexions. If you want to do "in-memory" connexions, you can to it between
+two calls to \code{ExecuteInternal()}.
+
+The application BundleToPerfectSensor is a simple example of composite applications.
+For a more complex example, you can check the application TrainImagesClassifier.
+
 \section{Compile your application}
 
 In order to compile your application you must call the macro \code{OTB\_CREATE\_APPLICATION} in the \emph{CMakelists.txt} file. 
-This macro generates the lib \emph{otbapp\_XXX.so}, in (OTB\_BINARY\_DIR), where \emph{XXX} refers to the class name. Don't forget to enable application building (see. \ref{sec:ConfiguringOTBwithVTK} section).
+This macro generates the lib \emph{otbapp\_XXX.so}, in (OTB\_BINARY\_DIR/lib/otb/applications), where \emph{XXX} refers to the class name.
 
 \section{Execute your application}
 
-their are different ways to launch applicatons :
+There are different ways to launch applicatons :
 
 \begin{description}
 \item[CommandLine :] The command line option is invoked using \emph{otbApplicationLauncherCommandLine} executable followed by the classname, the application dir and the application parameters.

@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbScalarImageToPanTexTextureFilter_h
-#define __otbScalarImageToPanTexTextureFilter_h
+#ifndef otbScalarImageToPanTexTextureFilter_h
+#define otbScalarImageToPanTexTextureFilter_h
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"
@@ -111,11 +111,11 @@ protected:
   /** Constructor */
   ScalarImageToPanTexTextureFilter();
   /** Destructor */
-  ~ScalarImageToPanTexTextureFilter();
+  ~ScalarImageToPanTexTextureFilter() ITK_OVERRIDE;
   /** Generate the input requested region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   ScalarImageToPanTexTextureFilter(const Self&); //purposely not implemented

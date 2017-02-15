@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
-#ifndef __otbRequiresOpenCVCheck_h
-#define __otbRequiresOpenCVCheck_h
+#ifndef otbRequiresOpenCVCheck_h
+#define otbRequiresOpenCVCheck_h
 
 #include "otbConfigure.h"
 #ifndef OTB_USE_OPENCV

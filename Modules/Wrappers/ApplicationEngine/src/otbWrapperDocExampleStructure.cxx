@@ -15,11 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperDocExampleStructure_cxx
-#define __otbWrapperDocExampleStructure_cxx
-
 #include "otbWrapperDocExampleStructure.h"
-
 
 namespace otb
 {
@@ -227,5 +223,3 @@ DocExampleStructure::GenerateHtmlExample()
 
 } // End namespace Wrapper
 } // End namespace otb
-
-#endif

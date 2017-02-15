@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExhaustiveExponentialOptimizer_h
-#define __otbExhaustiveExponentialOptimizer_h
+#ifndef otbExhaustiveExponentialOptimizer_h
+#define otbExhaustiveExponentialOptimizer_h
 
 #include "itkSingleValuedNonLinearOptimizer.h"
 
@@ -58,7 +58,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ExhaustiveExponentialOptimizer,           SingleValuedNonLinearOptimizer);
 
-  virtual void    StartOptimization(void);
+  void    StartOptimization(void) ITK_OVERRIDE;
 
   void StartWalking(void);
   void ResumeWalking(void);
@@ -80,8 +80,8 @@ public:
 
 protected:
   ExhaustiveExponentialOptimizer();
-  virtual ~ExhaustiveExponentialOptimizer() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ExhaustiveExponentialOptimizer() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Advance to the next grid position. */
   void AdvanceOneStep(void);

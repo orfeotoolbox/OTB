@@ -57,7 +57,7 @@ int otbScalarBufferToImageFileWriterTest(int itkNotUsed(argc), char* argv[])
   filter->Update();
 
   delete[] tab;
-  tab = NULL;
+  tab = ITK_NULLPTR;
 
   return EXIT_SUCCESS;
 }

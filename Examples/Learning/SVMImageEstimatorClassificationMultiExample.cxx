@@ -116,7 +116,7 @@ int main(int itkNotUsed(argc), char *argv[])
 //  Software Guide : BeginLatex
 //
 //  We read the images. It is worth to note that, in order to ensure
-//  the pipeline coherence, the output of the objects which preceed the
+//  the pipeline coherence, the output of the objects which precede the
 //  model estimator in the pipeline, must be up to date, so we call
 //  the corresponding \code{Update} methods.
 //
@@ -306,7 +306,7 @@ int main(int itkNotUsed(argc), char *argv[])
 
 // Software Guide : BeginLatex
 //
-// We can now declare the interators on the list that we get at the
+// We can now declare the iterators on the list that we get at the
 // output of the classifier as well as the iterator to fill the output image.
 //
 // Software Guide : EndLatex

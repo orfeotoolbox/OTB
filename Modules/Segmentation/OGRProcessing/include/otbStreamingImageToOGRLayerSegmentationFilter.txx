@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingImageToOGRLayerSegmentationFilter_txx
-#define __otbStreamingImageToOGRLayerSegmentationFilter_txx
+#ifndef otbStreamingImageToOGRLayerSegmentationFilter_txx
+#define otbStreamingImageToOGRLayerSegmentationFilter_txx
 
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 
@@ -85,7 +85,7 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
   extract->SetExtractionRegion( this->GetInput()->GetRequestedRegion() );
   extract->Update();
 
-  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
+  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
   extract->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
 
   const unsigned int labelImageIndex = LabeledOutputAccessor<SegmentationFilterType>::LabeledOutputIndex;
@@ -112,7 +112,7 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
      maskExtract->SetInput( this->GetInputMask() );
      maskExtract->SetExtractionRegion( this->GetInput()->GetRequestedRegion() );
      maskExtract->Update();
-     // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
+     // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
      maskExtract->GetOutput()->SetMetaDataDictionary(this->GetInputMask()->GetMetaDataDictionary());
 
      labelImageToOGRDataFilter->SetInputMask(maskExtract->GetOutput());

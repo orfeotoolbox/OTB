@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLambert93Projection_h
-#define __otbLambert93Projection_h
+#ifndef otbLambert93Projection_h
+#define otbLambert93Projection_h
 
 #include "otbLambertConformalConicMapProjection.h"
 
@@ -57,7 +57,7 @@ protected:
     this->SetParameter("StandardParallel2", "49");
   }
 
-  virtual ~Lambert93Projection() {}
+  ~Lambert93Projection() ITK_OVERRIDE {}
 
 private:
   Lambert93Projection(const Self &); //purposely not implemented

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDisparityMapTo3DFilter_txx
-#define __otbDisparityMapTo3DFilter_txx
+#ifndef otbDisparityMapTo3DFilter_txx
+#define otbDisparityMapTo3DFilter_txx
 
 #include "otbDisparityMapTo3DFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -103,7 +103,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<1)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -116,7 +116,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -129,7 +129,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -142,7 +142,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<4)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -155,7 +155,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<5)
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -226,7 +226,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   // Check that the keywordlists are not empty
   if (m_LeftKeywordList.GetSize() == 0 || m_RightKeywordList.GetSize() == 0)
     {
-    itkExceptionMacro(<<"At least one of the image keywordlist is empty : can't instanciate corresponding projection");
+    itkExceptionMacro(<<"At least one of the image keywordlist is empty : can't instantiate corresponding projection");
     }
 }
 
@@ -236,15 +236,15 @@ void
 DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImage>
 ::BeforeThreadedGenerateData()
 {
-  // Instanciate transforms
+  // Instantiate transforms
   m_LeftToGroundTransform = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
 
   m_LeftToGroundTransform->SetInputKeywordList(m_LeftKeywordList);
   m_RightToGroundTransform->SetInputKeywordList(m_RightKeywordList);
 
-  m_LeftToGroundTransform->InstanciateTransform();
-  m_RightToGroundTransform->InstanciateTransform();
+  m_LeftToGroundTransform->InstantiateTransform();
+  m_RightToGroundTransform->InstantiateTransform();
 }
 
 template <class TDisparityImage, class TOutputImage,

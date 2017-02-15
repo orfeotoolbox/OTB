@@ -28,7 +28,6 @@ namespace otb
 SarImageMetadataInterface
 ::SarImageMetadataInterface()
 {
-
 }
 
 const std::string
@@ -104,13 +103,9 @@ bool
 SarImageMetadataInterface
 ::HasCalibrationLookupDataFlag() const
 {
-  const ImageKeywordlist imageKeywordlist = this->GetImageKeywordlist();
+  const ImageKeywordlist & imageKeywordlist = this->GetImageKeywordlist();
   /* checking if the key exist is more than enough */
-  if (imageKeywordlist.HasKey("support_data.calibration_lookup_flag"))
-    {
-    return true;
-    }
-  return false;
+  return imageKeywordlist.HasKey("support_data.calibration_lookup_flag");
 }
 
 SarImageMetadataInterface::RealType

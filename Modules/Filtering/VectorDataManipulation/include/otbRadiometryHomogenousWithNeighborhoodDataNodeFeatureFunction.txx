@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
-#define __otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
+#ifndef otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
+#define otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
 
 #include "otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.h"
 
@@ -145,7 +145,7 @@ typename RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction<TImage, TCo
     ++it2;
     }
 
-  // in FEATURE_POLYGON case, first point appears twice (fisrt vertex and last vertew, thus we create a line of 1 point...)
+  // in FEATURE_POLYGON case, first point appears twice (first vertex and last vertew, thus we create a line of 1 point...)
   if (node.GetNodeType() == FEATURE_POLYGON)
     {
     splitedLineIdCentral.pop_back();

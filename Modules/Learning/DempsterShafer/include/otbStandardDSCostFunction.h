@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStandardDSCostFunction_h
-#define __otbStandardDSCostFunction_h
+#ifndef otbStandardDSCostFunction_h
+#define otbStandardDSCostFunction_h
 
 #include "itkSingleValuedCostFunction.h"
 
@@ -92,14 +92,14 @@ public:
 
   /** This method returns the value of the cost function corresponding
     * to the specified parameters.    */
-  virtual MeasureType GetValue( const ParametersType & parameters ) const;
+  MeasureType GetValue( const ParametersType & parameters ) const ITK_OVERRIDE;
 
   /** This method returns the derivative of the cost function corresponding
     * to the specified parameters.   */
-  virtual void GetDerivative( const ParametersType & parameters,
-                               DerivativeType & derivative ) const;
+  void GetDerivative( const ParametersType & parameters,
+                               DerivativeType & derivative ) const ITK_OVERRIDE;
 
-  virtual unsigned int GetNumberOfParameters(void) const;
+  unsigned int GetNumberOfParameters(void) const ITK_OVERRIDE;
 
   itkSetMacro(Weight, double);
   itkGetConstMacro(Weight, double);
@@ -148,9 +148,9 @@ protected:
   /** Constructor */
   StandardDSCostFunction();
   /** Destructor */
-  virtual ~StandardDSCostFunction() {}
+  ~StandardDSCostFunction() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   StandardDSCostFunction(const Self &); //purposely not implemented

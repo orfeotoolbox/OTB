@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolyLineParametricPathWithValue_h
-#define __otbPolyLineParametricPathWithValue_h
+#ifndef otbPolyLineParametricPathWithValue_h
+#define otbPolyLineParametricPathWithValue_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -114,13 +114,13 @@ protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
   /** Destructor */
-  virtual ~PolyLineParametricPathWithValue() {}
+  ~PolyLineParametricPathWithValue() ITK_OVERRIDE {}
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   virtual void ComputeLength() const;
   virtual void ComputeBoundingRegion() const;
-  virtual void Modified() const;
+  void Modified() const ITK_OVERRIDE;
 
 private:
   PolyLineParametricPathWithValue(const Self &); //purposely not implemented

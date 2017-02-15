@@ -55,7 +55,7 @@ public:
   itkTypeMacro(VectorDataDSValidation, otb::Application);
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("VectorDataDSValidation");
     SetDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
@@ -84,12 +84,12 @@ private:
     AddParameter(ParameterType_String, "cri", "Criterion");
     SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
     MandatoryOff("cri");
-    SetParameterString("cri", "((Belief + Plausibility)/2.)");
+    SetParameterString("cri", "((Belief + Plausibility)/2.)", false);
 
     AddParameter(ParameterType_Float, "thd", "Criterion threshold");
     SetParameterDescription("thd", "Criterion threshold (default 0.5)");
     MandatoryOff("thd");
-    SetParameterFloat("thd", 0.5);
+    SetParameterFloat("thd",0.5, false);
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
     SetParameterDescription("out", "Output VectorData containing only the validated samples");
@@ -102,7 +102,7 @@ private:
 
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Nothing to do here : all parameters are independent
 
@@ -112,7 +112,7 @@ private:
 
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
 
     //Read the vector data

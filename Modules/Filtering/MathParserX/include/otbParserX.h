@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserX_h
-#define __otbParserX_h
+#ifndef otbParserX_h
+#define otbParserX_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
@@ -24,8 +24,15 @@
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wc++11-extensions"
+
+/* Apple's 3.6.0 based clang doesn't support -Winconsistent-missing-override */
+#if !defined(__apple_build_version__) ||  __apple_build_version__ >= 7000053
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+
 #include "mpParser.h"
-#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
+
 #else
 #include "mpParser.h"
 #endif
@@ -63,12 +70,16 @@ public:
   /** Convenient type definitions */
   typedef ParserX                                   ParserXType;
   typedef mup::Value                                ValueType;
+  typedef mup::IValue                               IValueType;
 
   /** Set the expression to be parsed */
   virtual void SetExpr(const std::string & Expression);
 
   /** Trigger the parsing */
   ValueType Eval();
+
+  /** Trigger the parsing but return a const ref */
+  const IValueType & EvalRef();
 
   /** Define a variable */
   void DefineVar(const std::string &sName, ValueType *fVar);
@@ -93,8 +104,8 @@ public:
 
 protected:
   ParserX();
-  virtual ~ParserX();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~ParserX() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
 private:

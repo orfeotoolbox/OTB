@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTransformPointSetFilter_txx
-#define __otbTransformPointSetFilter_txx
+#ifndef otbTransformPointSetFilter_txx
+#define otbTransformPointSetFilter_txx
 
 #include "otbTransformPointSetFilter.h"
 #include "itkMacro.h"

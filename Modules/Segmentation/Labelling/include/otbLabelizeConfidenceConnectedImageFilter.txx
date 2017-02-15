@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelizeConfidenceConnectedImageFilter_txx
-#define __otbLabelizeConfidenceConnectedImageFilter_txx
+#ifndef otbLabelizeConfidenceConnectedImageFilter_txx
+#define otbLabelizeConfidenceConnectedImageFilter_txx
 
 #include "itkNumericTraits.h"
 

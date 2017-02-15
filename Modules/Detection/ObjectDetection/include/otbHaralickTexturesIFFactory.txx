@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaralickTexturesIFFactory_txx
-#define __otbHaralickTexturesIFFactory_txx
+#ifndef otbHaralickTexturesIFFactory_txx
+#define otbHaralickTexturesIFFactory_txx
 
 #include "otbHaralickTexturesIFFactory.h"
 

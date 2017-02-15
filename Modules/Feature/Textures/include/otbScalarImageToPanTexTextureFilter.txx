@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbScalarImageToPanTexTextureFilter_txx
-#define __otbScalarImageToPanTexTextureFilter_txx
+#ifndef otbScalarImageToPanTexTextureFilter_txx
+#define otbScalarImageToPanTexTextureFilter_txx
 
 #include "otbScalarImageToPanTexTextureFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -165,7 +165,7 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 
 
       SizeType neighborhoodRadius;
-      /** calulate minimum offset and set it as neigborhood radius **/
+      /** calculate minimum offset and set it as neighborhood radius **/
       unsigned int minRadius = 0;
       for ( unsigned int i = 0; i < currentOffset.GetOffsetDimension(); i++ )
         {

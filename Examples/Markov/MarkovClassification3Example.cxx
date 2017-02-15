@@ -125,7 +125,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   //  An MRFSamplerRandomMAP, which derives from the
-  //  MRFSampler, is instanciated. The sampler is in charge of
+  //  MRFSampler, is instantiated. The sampler is in charge of
   // proposing a modification for a given site. The
   // MRFSamplerRandomMAP, randomly pick one possible value
   // according to the MAP probability.
@@ -139,7 +139,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   //  An MRFOptimizerMetropolis, which derives from the
-  // MRFOptimizer, is instanciated. The optimizer is in charge
+  // MRFOptimizer, is instantiated. The optimizer is in charge
   // of accepting or rejecting the value proposed by the sampler. The
   // MRFSamplerRandomMAP, accept the proposal according to the
   // variation of energy it causes and a temperature parameter.
@@ -306,7 +306,7 @@ int main(int argc, char* argv[] )
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.44\textwidth]{MarkovRandomField3_color_value.eps}
-  // \itkcaption[MRF restauration]{Result of applying
+  // \itkcaption[MRF restoration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
   // image for classification into four classes using the Fisher-distribution as
   // likehood term. From left to right : original image,

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbExtractSegmentsImageFilter_txx
-#define __otbExtractSegmentsImageFilter_txx
+#ifndef otbExtractSegmentsImageFilter_txx
+#define otbExtractSegmentsImageFilter_txx
 
 #include "otbExtractSegmentsImageFilter.h"
 

@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbSatelliteRSR_h
-#define __otbSatelliteRSR_h
+#ifndef otbSatelliteRSR_h
+#define otbSatelliteRSR_h
 
 #include <vector>
 #include <utility>
@@ -124,7 +124,7 @@ public:
   inline ValuePrecisionType operator()(const PrecisionType & lambda, const unsigned int numBand);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** get vector of RSR */
   RSRVectorType & GetRSR()
@@ -144,7 +144,7 @@ protected:
   /** Constructor from a ASCII file */
   //SatelliteRSR( const std::string & filename );
   /** Destructor */
-  virtual ~SatelliteRSR()
+  ~SatelliteRSR() ITK_OVERRIDE
   {
   }
 ;

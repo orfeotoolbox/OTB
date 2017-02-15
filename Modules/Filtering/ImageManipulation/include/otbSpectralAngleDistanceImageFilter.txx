@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpectralAngleDistanceImageFilter_txx
-#define __otbSpectralAngleDistanceImageFilter_txx
+#ifndef otbSpectralAngleDistanceImageFilter_txx
+#define otbSpectralAngleDistanceImageFilter_txx
 
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "itkImageRegionIterator.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRFeatureWrapper_h
-#define __otbOGRFeatureWrapper_h
+#ifndef otbOGRFeatureWrapper_h
+#define otbOGRFeatureWrapper_h
 
 // #include <iosfwd> // std::ostream&
 #if defined(__GNUC__) || defined(__clang__)
@@ -37,6 +37,8 @@ class OGRFeatureDefn;
 namespace otb {
 namespace ogr {
 class Feature;
+
+OTBGdalAdapters_EXPORT
 bool operator==(Feature const& lhs, Feature const& rhs);
 
 /**\ingroup gGeometry
@@ -61,7 +63,7 @@ bool operator==(Feature const& lhs, Feature const& rhs);
  *
  * \ingroup OTBGdalAdapters
  */
-class Feature
+class OTBGdalAdapters_EXPORT Feature
   {
 public:
   /**\name Construction, copy and destruction */
@@ -365,4 +367,4 @@ private:
 #include "otbOGRFeatureWrapper.txx"
 #endif
 
-#endif // __otbOGRFeatureWrapper_h
+#endif // otbOGRFeatureWrapper_h

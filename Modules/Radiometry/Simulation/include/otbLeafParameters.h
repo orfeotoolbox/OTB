@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLeafParameters_h
-#define __otbLeafParameters_h
+#ifndef otbLeafParameters_h
+#define otbLeafParameters_h
 
 
 #include "itkDataObject.h"
 #include "itkMacro.h"
 #include "itkObjectFactory.h"
-
+#include "OTBSimulationExport.h"
 
 namespace otb
 {
@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 
-class ITK_EXPORT LeafParameters : public itk::DataObject
+class OTBSimulation_EXPORT LeafParameters : public itk::DataObject
 {
    public:
       /** Standard class typedefs */
@@ -75,9 +75,9 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
       /** Constructor */
       LeafParameters();
       /** Destructor */
-      ~LeafParameters();
+      ~LeafParameters() ITK_OVERRIDE;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
    private:
       LeafParameters(const Self&); //purposely not implemented

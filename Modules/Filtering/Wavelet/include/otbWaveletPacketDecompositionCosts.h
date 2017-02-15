@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletPacketDecompositionCosts_h
-#define __otbWaveletPacketDecompositionCosts_h
+#ifndef otbWaveletPacketDecompositionCosts_h
+#define otbWaveletPacketDecompositionCosts_h
 
 #include "itkObject.h"
 #include "itkMacro.h"
@@ -56,7 +56,7 @@ public:
 
   typedef TImage ImageType;
 
-  /** Acces to the data */
+  /** Access to the data */
   static unsigned int NumberOfAllowedDecompositions;
 
   /** Evaluate the cost */
@@ -67,7 +67,7 @@ public:
 
 protected:
   FullyDecomposedWaveletPacketCost () {}
-  virtual ~FullyDecomposedWaveletPacketCost() {}
+  ~FullyDecomposedWaveletPacketCost() ITK_OVERRIDE {}
 
 private:
   FullyDecomposedWaveletPacketCost (const Self &);   // not implemented

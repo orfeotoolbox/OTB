@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataToRandomLineGenerator_h
-#define __otbVectorDataToRandomLineGenerator_h
+#ifndef otbVectorDataToRandomLineGenerator_h
+#define otbVectorDataToRandomLineGenerator_h
 
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
@@ -94,11 +94,11 @@ public:
 
 protected:
   VectorDataToRandomLineGenerator();
-  virtual ~VectorDataToRandomLineGenerator() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~VectorDataToRandomLineGenerator() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Triggers the Computation of the sample list */
-  void GenerateData(void);
+  void GenerateData(void) ITK_OVERRIDE;
 
   PointVectorType RandomPointsGenerator(DataNodeType * node);
 

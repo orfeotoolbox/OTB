@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbScalarImageToHigherOrderTexturesFilter_h
-#define __otbScalarImageToHigherOrderTexturesFilter_h
+#ifndef otbScalarImageToHigherOrderTexturesFilter_h
+#define otbScalarImageToHigherOrderTexturesFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkScalarImageToRunLengthFeaturesFilter.h"
@@ -148,6 +148,18 @@ public:
   itkSetMacro(FastCalculations, bool);
   itkBooleanMacro(FastCalculations);
 
+  /** Set the sub-sampling factor */
+  itkSetMacro(SubsampleFactor, SizeType);
+
+  /** Get the sub-sampling factor */
+  itkGetMacro(SubsampleFactor, SizeType);
+
+  /** Set the sub-sampling offset */
+  itkSetMacro(SubsampleOffset, OffsetType);
+
+  /** Get the sub-sampling offset */
+  itkGetMacro(SubsampleOffset, OffsetType);
+
   /** Get the Short Run Emphasis output image */
   OutputImageType * GetShortRunEmphasisOutput();
 
@@ -185,11 +197,13 @@ protected:
   /** Constructor */
   ScalarImageToHigherOrderTexturesFilter();
   /** Destructor */
-  ~ScalarImageToHigherOrderTexturesFilter();
+  ~ScalarImageToHigherOrderTexturesFilter() ITK_OVERRIDE;
+  /** Generate the output informations */
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Generate the input requested region */
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
   ScalarImageToHigherOrderTexturesFilter(const Self&); //purposely not implemented
@@ -215,6 +229,12 @@ private:
 
   /** Fast calculation */
   bool m_FastCalculations;
+
+  /** Sub-sampling factor */
+  SizeType m_SubsampleFactor;
+
+  /** Sub-sampling offset */
+  OffsetType m_SubsampleOffset;
 };
 } // End namespace otb
 

@@ -30,7 +30,7 @@ class OSSIM_PLUGINS_DLL RefPoint
 {
 public:
    /**
-    * @brief Constuctor
+    * @brief Constructor
     */
    RefPoint();
    /**

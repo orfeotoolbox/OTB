@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbModelComponentBase_txx
-#define __otbModelComponentBase_txx
+#ifndef otbModelComponentBase_txx
+#define otbModelComponentBase_txx
 
 #include <iostream>
 
@@ -34,9 +34,9 @@ template<class TSample>
 ModelComponentBase<TSample>
 ::ModelComponentBase()
 {
-  m_Sample = 0;
-  m_PdfFunction = 0;
-  m_CdfFunction = 0;
+  m_Sample = ITK_NULLPTR;
+  m_PdfFunction = ITK_NULLPTR;
+  m_CdfFunction = ITK_NULLPTR;
   m_SampleModified = 0;
 }
 
@@ -48,7 +48,7 @@ ModelComponentBase<TSample>
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Sample: ";
-  if (m_Sample != 0)
+  if (m_Sample != ITK_NULLPTR)
     {
     os << m_Sample << std::endl;
     }
@@ -58,7 +58,7 @@ ModelComponentBase<TSample>
     }
 
   os << indent << "Membership Function for pdf: ";
-  if (m_PdfFunction != 0)
+  if (m_PdfFunction != ITK_NULLPTR)
     {
     os << m_PdfFunction << std::endl;
     }
@@ -68,7 +68,7 @@ ModelComponentBase<TSample>
     }
 
   os << indent << "Membership Function for cdf: ";
-  if (m_CdfFunction != 0)
+  if (m_CdfFunction != ITK_NULLPTR)
     {
     os << m_CdfFunction << std::endl;
     }
@@ -186,7 +186,7 @@ void
 ModelComponentBase<TSample>
 ::GenerateData()
 {
-  /** subclasses should override this function to perform
+  /** subclasses should ITK_OVERRIDE this function to perform
    *  parameter estimation. But it allows switching m_SampleModified
    *  when necessary.
    */

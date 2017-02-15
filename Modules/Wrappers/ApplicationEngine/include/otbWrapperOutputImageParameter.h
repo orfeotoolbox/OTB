@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperOutputImageParameter_h
-#define __otbWrapperOutputImageParameter_h
+#ifndef otbWrapperOutputImageParameter_h
+#define otbWrapperOutputImageParameter_h
 
 //#include "otbVectorImage.h"
 #include "itkImageBase.h"
@@ -33,7 +33,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 
-class ITK_ABI_EXPORT OutputImageParameter : public Parameter
+class OTBApplicationEngine_EXPORT OutputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -75,7 +75,7 @@ public:
   itkGetMacro(RAMValue, unsigned int);
 
   /** Implement the reset method (replace pixel type by default type) */
-  virtual void Reset()
+  void Reset() ITK_OVERRIDE
   {
     m_PixelType = m_DefaultPixelType;
   }
@@ -84,7 +84,7 @@ public:
   static std::string ConvertPixelTypeToString(ImagePixelType type);
 
   /** Return true if a filename is set */
-  bool HasValue() const;
+  bool HasValue() const ITK_OVERRIDE;
 
   void SetFileName (const char* filename)
   {
@@ -104,11 +104,13 @@ public:
 
   void InitializeWriters();
 
+  std::string CheckFileName(bool fixMissingExtension = false);
+
 protected:
   /** Constructor */
   OutputImageParameter();
   /** Destructor */
-  virtual ~OutputImageParameter();
+  ~OutputImageParameter() ITK_OVERRIDE;
 
   template <class TInputImageType>
     void SwitchImageWrite();

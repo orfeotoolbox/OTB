@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKuanImageFilter_txx
-#define __otbKuanImageFilter_txx
+#ifndef otbKuanImageFilter_txx
+#define otbKuanImageFilter_txx
 
 #include "otbKuanImageFilter.h"
 

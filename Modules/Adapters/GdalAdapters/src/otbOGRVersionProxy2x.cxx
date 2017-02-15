@@ -34,6 +34,11 @@ namespace ogr
 namespace version_proxy
 {
 
+OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
+{
+  return type == OFTInteger64;
+}
+
 GDALDatasetType * Open(const char * filename, bool readOnly)
 {
   return (GDALDatasetType *)GDALOpenEx(filename, (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,NULL,NULL,NULL);
@@ -87,7 +92,7 @@ std::string GetDriverClassName()
 namespace raii
 {
 // This class is used in the next function, so as to prevent any
-// ressource leak on char ** returned by dataset->GetFileList()
+// resource leak on char ** returned by dataset->GetFileList()
 class CharPPCapsule
 {
 public:

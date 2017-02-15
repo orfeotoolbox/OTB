@@ -50,7 +50,7 @@ public:
         <ExtractROIFilterType::OutputImageType, ExtractROIFilterType::OutputImageType> ShrinkImageFilterType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
@@ -116,7 +116,7 @@ private:
     SetDocExampleParameterValue("out", "quicklookImage.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     // Update the sizes only if the user does not defined a size
     if ( HasValue("in") )
@@ -141,8 +141,8 @@ private:
 
       if (!HasUserValue("rsx")  && !HasUserValue("rsy") )
         {
-        SetParameterInt("rsx", largestRegion.GetSize()[0]);
-        SetParameterInt("rsy", largestRegion.GetSize()[1]);
+        SetParameterInt("rsx",largestRegion.GetSize()[0], false);
+        SetParameterInt("rsy",largestRegion.GetSize()[1], false);
         }
 
       // Put the limit of the index and the size relative the image
@@ -163,8 +163,8 @@ private:
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
-        SetParameterInt("rox", 0);
-        SetParameterInt("roy", 0);
+        SetParameterInt("rox",0, false);
+        SetParameterInt("roy",0, false);
         this->CropRegionOfInterest();
         }
       }
@@ -183,17 +183,17 @@ bool CropRegionOfInterest()
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
           {
-            SetParameterInt("rsx", region.GetSize(0));
-            SetParameterInt("rsy", region.GetSize(1));
-            SetParameterInt("rox", region.GetIndex(0));
-            SetParameterInt("roy", region.GetIndex(1));
+            SetParameterInt( "rsx", region.GetSize(0), HasUserValue("rsx") );
+            SetParameterInt( "rsy", region.GetSize(1), HasUserValue("rsy") );
+            SetParameterInt( "rox", region.GetIndex(0), HasUserValue("rox") );
+            SetParameterInt( "roy", region.GetIndex(1), HasUserValue("roy") );
             return true;
           }
       }
     return false;
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     InputImageType::Pointer inImage = GetParameterImage("in");
 

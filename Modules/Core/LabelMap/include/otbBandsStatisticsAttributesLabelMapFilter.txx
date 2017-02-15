@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBandsStatisticsAttributesLabelMapFilter_txx
-#define __otbBandsStatisticsAttributesLabelMapFilter_txx
+#ifndef otbBandsStatisticsAttributesLabelMapFilter_txx
+#define otbBandsStatisticsAttributesLabelMapFilter_txx
 
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "itkUnaryFunctorImageFilter.h"

@@ -49,14 +49,14 @@ typedef otb::ObjectDetectionClassifier
              CoordRepType > ObjectDetectionClassifierType;
 
 typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType>   FunctionType;
-typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType>  AdapatedFunctionType;
+typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType>  AdaptedFunctionType;
 
 typedef otb::ImageFileReader<ImageType>           ImageReaderType;
 
 typedef ObjectDetectionClassifierType::SVMModelType SVMModelType;
 typedef ObjectDetectionClassifierType::SVMModelPointerType SVMModelPointerType;
 
-typedef otb::StatisticsXMLFileReader<AdapatedFunctionType::OutputType> StatisticsXMLFileReaderType;
+typedef otb::StatisticsXMLFileReader<AdaptedFunctionType::OutputType> StatisticsXMLFileReaderType;
 
 
 struct ComparePoint
@@ -117,7 +117,7 @@ int otbObjectDetectionClassifier(int argc, char* argv[])
   SVMModelPointerType svmModel = SVMModelType::New();
   svmModel->LoadModel(inputSVMModel);
 
-  AdapatedFunctionType::Pointer descriptorsFunction = AdapatedFunctionType::New();
+  AdaptedFunctionType::Pointer descriptorsFunction = AdaptedFunctionType::New();
   descriptorsFunction->SetInputImage(imageReader->GetOutput());
   descriptorsFunction->GetInternalImageFunction()->SetNeighborhoodRadius(neighborhood);
 

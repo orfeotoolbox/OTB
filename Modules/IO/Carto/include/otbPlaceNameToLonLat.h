@@ -15,10 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPlaceNameToLonLat_h
-#define __otbPlaceNameToLonLat_h
+#ifndef otbPlaceNameToLonLat_h
+#define otbPlaceNameToLonLat_h
 
 #include "otbCurlHelperInterface.h"
+#include "OTBCartoExport.h"
 
 namespace otb
 {
@@ -31,7 +32,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 
-class ITK_EXPORT PlaceNameToLonLat : public itk::Object
+class OTBCarto_EXPORT PlaceNameToLonLat : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -57,8 +58,8 @@ public:
 
 protected:
   PlaceNameToLonLat();
-  virtual ~PlaceNameToLonLat() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~PlaceNameToLonLat() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   void RetrieveXML(const std::ostringstream& urlStream);
   void ParseXMLYahoo();
   void ParseXMLGoogle();

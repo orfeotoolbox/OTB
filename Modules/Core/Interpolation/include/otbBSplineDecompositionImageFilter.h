@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBSplineDecompositionImageFilter_h
-#define __otbBSplineDecompositionImageFilter_h
+#ifndef otbBSplineDecompositionImageFilter_h
+#define otbBSplineDecompositionImageFilter_h
 
 #include <vector>
 
@@ -74,10 +74,10 @@ public:
 
 protected:
   BSplineDecompositionImageFilter();
-  virtual ~BSplineDecompositionImageFilter() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  ~BSplineDecompositionImageFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
   /** These are needed by the smoothing spline routine. */
   std::vector<double> m_Scratch;             // temp storage for processing of Coefficients

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWaterIndicesFunctor_h
-#define __otbWaterIndicesFunctor_h
+#ifndef otbWaterIndicesFunctor_h
+#define otbWaterIndicesFunctor_h
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
@@ -123,15 +123,15 @@ class WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "WaterIndexFunctor";
   }
 
   WaterIndexFunctor() {}
-  virtual ~WaterIndexFunctor() {}
+  ~WaterIndexFunctor() ITK_OVERRIDE {}
 protected:
-  inline TOutput Evaluate(const TInput1& id1, const TInput2& id2) const
+  inline TOutput Evaluate(const TInput1& id1, const TInput2& id2) const ITK_OVERRIDE
   {
     double dindex1 = static_cast<double>(id1);
     double dindex2 = static_cast<double>(id2);
@@ -199,7 +199,7 @@ class NDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "NDWI";
   }
@@ -208,7 +208,7 @@ public:
   /// Constructor
   NDWI() {}
   /// Desctructor
-  virtual ~NDWI() {}
+  ~NDWI() ITK_OVERRIDE {}
   WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
@@ -260,7 +260,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& nir, const TInput2& mir) const
+  inline TOutput Evaluate(const TInput1& nir, const TInput2& mir) const ITK_OVERRIDE
   {
     return (static_cast<TOutput>(GetWIFunctor() (nir, mir)));
   }
@@ -284,7 +284,7 @@ class NDWI2 : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const ITK_OVERRIDE
   {
     return "NDWI2";
   }
@@ -293,7 +293,7 @@ public:
   /// Constructor
   NDWI2() {}
   /// Desctructor
-  virtual ~NDWI2() {}
+  ~NDWI2() ITK_OVERRIDE {}
   WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
@@ -345,7 +345,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& g, const TInput2& nir) const
+  inline TOutput Evaluate(const TInput1& g, const TInput2& nir) const ITK_OVERRIDE
   {
     return (static_cast<TOutput>(GetWIFunctor() (g, nir)));
   }
@@ -647,7 +647,7 @@ public:
     reference[0] = 136.0; reference[1] = 132.0; reference[2] = 47.0; reference[3] = 24.0;
     this->SetReferenceWaterPixel(reference);
   }
-  virtual ~WaterSqrtSpectralAngleFunctor() {}
+  ~WaterSqrtSpectralAngleFunctor() ITK_OVERRIDE {}
 
   /** Set Reference Pixel */
   void SetReferenceWaterPixel(InputVectorPixelType ref)
@@ -739,7 +739,7 @@ public:
   }
 
 protected:
-  inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const
+  inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const ITK_OVERRIDE
   {
     return static_cast<TOutputPixel>(Superclass::Evaluate(inPix));
   }

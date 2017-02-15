@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __is_contiguous_h
-#define __is_contiguous_h
+#ifndef is_contiguous_h
+#define is_contiguous_h
 
 /**\ingroup boost
  * \file    is_contiguous.h

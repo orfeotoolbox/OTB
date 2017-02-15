@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageToHessianDeterminantImageFilter_txx
-#define __otbImageToHessianDeterminantImageFilter_txx
+#ifndef otbImageToHessianDeterminantImageFilter_txx
+#define otbImageToHessianDeterminantImageFilter_txx
 
 #include "otbImageToHessianDeterminantImageFilter.h"
 
@@ -29,7 +29,7 @@ template <class TInputImage, class TOutputImage, class TPrecision>
 ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 ::ImageToHessianDeterminantImageFilter()
 {
-  // Filter intialization
+  // Filter initialization
   m_HessianFilter = ImageToHessianImageFilterType::New();
   m_DeterminantFilter = DeterminantFilterType::New();
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOpeningClosingMorphologicalFilter_h
-#define __otbOpeningClosingMorphologicalFilter_h
+#ifndef otbOpeningClosingMorphologicalFilter_h
+#define otbOpeningClosingMorphologicalFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -76,15 +76,15 @@ protected:
   /** Constructor */
   OpeningClosingMorphologicalFilter();
   /** Destructor */
-  ~OpeningClosingMorphologicalFilter() {}
+  ~OpeningClosingMorphologicalFilter() ITK_OVERRIDE {}
 
   /* void GenerateInputRequestedRegion(); */
   /*   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)); */
 
   /** Main computation method */
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   OpeningClosingMorphologicalFilter(const Self &); //purposely not implemented
