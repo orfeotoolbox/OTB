@@ -297,11 +297,11 @@ ExtendedFilenameToReaderOptions
     if (a==0) a=1;
     if (b==0) b=nbBands;
 
-    if (1<=a && a<=b && b<=nbBands)
+    if (1<=a && a<=b && b<=(int)nbBands)
       {
       for (unsigned int k=a ; k <= (unsigned int)b ; k++)
         {
-        output.push_back(k);
+        output.push_back((int)k -1);
         }
       }
     else
