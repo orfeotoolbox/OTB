@@ -73,12 +73,12 @@ cat > "$OUT_DIR/otbenv.profile" << EOF
 # unset any existing LD_LIBRARY_PATH
 unset LD_LIBRARY_PATH
 
-# if OTB_USE_SYSTEM_GTK is not set or is set to zero,
+# if OTB_USE_LOCAL_GTK is set to one,
 # we must include <OUT_DIR>/lib/gtk because glib files are
 # installed there. 
 
-# OTB_USE_SYSTEM_GTK is not set by default
-if [ -z "\$OTB_USE_SYSTEM_GTK" ] || [ "\$OTB_USE_SYSTEM_GTK" = "0" ]; then
+# OTB_USE_LOCAL_GTK is not set by default (use GTK system)
+if [ "\$OTB_USE_LOCAL_GTK" = "1" ]; then
   LD_LIBRARY_PATH=$OUT_DIR/lib/gtk
   export LD_LIBRARY_PATH
 fi
@@ -121,6 +121,43 @@ EOF
 
 chmod +x "$OUT_DIR/otbenv.profile"
 
+else
+
+cat > "$OUT_DIR/xdkenv.profile" << EOF
+#!/bin/sh
+
+# The below environment variables only affect current shell
+# So if you run again from a terminal. you need to run the script again
+
+# unset any existing LD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
+
+# Add bin direcotory to system PATH
+PATH=$OUT_DIR/bin:\$PATH
+
+# set numeric locale to C
+LC_NUMERIC=C
+
+# set GDAL_DATA variable used by otb application
+GDAL_DATA=$OUT_DIR/share/gdal
+
+# set GEOTIFF_CSV variable used by otb application
+GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+
+CMAKE_PREFIX_PATH=$OUT_DIR
+
+# export variables
+export LC_NUMERIC
+export GDAL_DATA
+export GEOTIFF_CSV
+export CMAKE_PREFIX_PATH
+export PATH
+
+EOF
+
+
+chmod +x "$OUT_DIR/xdkenv.profile"
+
 fi
 
 #echo "Creating symbolic links..."
@@ -149,7 +186,7 @@ python_patch_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[2])
 python_version="$python_major_version.$python_minor_version.$python_patch_version"
 
 python_check_failed() {
-    printf %s\\n "*****Error occured during installation******"
+    printf %s\\n "*****Error occurred during installation******"
     printf %s\\n "OTB python bindings requires python2.6 or python2.7 but current detected python version is $python_version"
     printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
@@ -188,7 +225,7 @@ if [ "$found_python_lib" -eq "1" ]; then
     printf %s\\n "To test OTB python bindings:"
     printf %s\\n "$OTB_PYTHON_EXE -c 'import otbApplication'"
 else
-    printf %s\\n "*****Error occured during installation******"
+    printf %s\\n "*****Error occurred during installation******"
     printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
     printf %s\\n "$python_INSTSONAME cannot be found in any of search directories."
     printf %s\\n "We had searched following directories $python_lib_dirs"

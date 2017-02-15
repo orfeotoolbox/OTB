@@ -30,6 +30,7 @@ macro(macro_setup_cmake_project pkg)
    include(CMakeDetermineSystem)
    set(CMAKE_BUILD_TYPE              Release)
    set(PACKAGE_OTB_SRC_DIR           \"${PACKAGE_OTB_SRC_DIR}\")
+   set(SUPERBUILD_BINARY_DIR         \"${SUPERBUILD_BINARY_DIR}\")
    set(OTB_BINARY_DIR                \"${OTB_BINARY_DIR}\")
    set(OTB_INSTALL_DIR               \"${OTB_INSTALL_DIR}\")
    set(QT_PLUGINS_DIR                \"${QT_PLUGINS_DIR}\")
@@ -58,12 +59,16 @@ macro(macro_setup_cmake_project pkg)
    macro_super_package(STAGE_DIR \"${archive_name}\")"
   )
 
+set(README_FILE_SUFFIX)
+if(PKG_GENERATE_XDK)
+  set(README_FILE_SUFFIX "_xdk")
+endif()
 if(APPLE)
-  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Macx.txt)
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Macx${README_FILE_SUFFIX}.txt)
 elseif(LINUX) #not osx
-  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Linux.txt)
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Linux${README_FILE_SUFFIX}.txt)
 elseif(WIN32) #windows
-  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows.txt)
+  set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows${README_FILE_SUFFIX}.txt)
 endif()
 
 configure_file(

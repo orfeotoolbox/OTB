@@ -235,20 +235,6 @@ namespace ossimplugins
             return false;
          }
       }
-      else
-      {
-         /* Keep this notify as WARN. code should not reach here.
-         If manifest.safe is not found then we are not loading a valid S1 dataset.
-         If the input is tiff or annotation xml, then also there must exists a
-         manifest.safe. However, we are forced to read only annotaion xml and
-         make ossimSentinel1Model out of it for the sake of
-         "ossimSentinel1ModelTest". This is not a very good idea to allow
-         reading a fake dataset.  So user must be warned!
-         */
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE
-            << " manifest.safe not found. but checking if xml file is valid" << "\n";
-      }
 
       // -----[ Read product file
       ossimFilename xmlFileName = file;
@@ -259,6 +245,12 @@ namespace ossimplugins
          const ossimFilename fileNameWihtoutExtension = file.fileNoExtension();
          const ossimFilename path = file.path().path();
          xmlFileName = ossimFilename(path+"/annotation/"+fileNameWihtoutExtension+".xml");
+
+         if (!xmlFileName.exists() && safeFile.empty())
+         {
+            // this is just a plain tiff file without safe nor xml
+            return false;
+         }
       }
 
       if ( !xmlFileName.exists() || !this->readProduct(xmlFileName) )
@@ -278,6 +270,23 @@ namespace ossimplugins
             << MODULE
             << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
          return false;
+      }
+      else
+      {
+         if ( safeFile.empty() )
+         {
+           /* Keep this notify as WARN. code should not reach here.
+           If manifest.safe is not found then we are not loading a valid S1 dataset.
+           If the input is tiff or annotation xml, then also there must exists a
+           manifest.safe. However, we are forced to read only annotaion xml and
+           make ossimSentinel1Model out of it for the sake of
+           "ossimSentinel1ModelTest". This is not a very good idea to allow
+           reading a fake dataset.  So user must be warned!
+           */
+           ossimNotify(ossimNotifyLevel_WARN)
+              << MODULE
+              << " manifest.safe not found, but xml file is valid" << "\n";
+         }
       }
 
       if ( !this->initImageSize( theImageSize ) )

@@ -27,6 +27,7 @@
 
 #include "itksys/SystemTools.hxx"
 
+
 namespace otb
 {
 namespace Wrapper
@@ -141,6 +142,10 @@ QWidget* QtWidgetView::CreateFooter()
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
   connect( m_QuitButton, SIGNAL(clicked()), this, SLOT(CloseSlot()) );
+
+  // Add Ctrl-Q shortcut to quit
+  m_QuitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
+  connect( m_QuitShortcut, SIGNAL(activated()), this, SLOT(CloseSlot()) );
 
   // Put the buttons on the right
   footerLayout->addStretch();

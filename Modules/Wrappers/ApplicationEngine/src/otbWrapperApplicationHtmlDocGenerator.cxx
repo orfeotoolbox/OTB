@@ -186,7 +186,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
     for( unsigned int i=0; i<nbOfParam; i++ )
       {
       const std::string key(appKeyList[i]);
-      Parameter::Pointer param =  app->GetParameterByKey( key );
+      Parameter::Pointer param =  app->GetParameterByKey(key, false);
       if( app->GetParameterType(key) ==  ParameterType_Group)
         {
         oss << "<li>";
@@ -235,7 +235,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
     const std::string fullKey(std::string(key).append(".").append(appKeyList[i]));
-    Parameter::Pointer param =  app->GetParameterByKey( fullKey );
+    Parameter::Pointer param =  app->GetParameterByKey( fullKey, false);
     if( app->GetParameterType(fullKey) ==  ParameterType_Group)
       {
       oss<<"<li>";

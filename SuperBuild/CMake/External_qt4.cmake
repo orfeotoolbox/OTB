@@ -11,7 +11,7 @@ SETUP_SUPERBUILD(QT4)
 # endif()
 
 
-option(QT4_SB_ENABLE_GTK "Enable GTK+ style with qt using -gtkstlye. Default is OFF" OFF)
+set(QT4_SB_ENABLE_GTK OFF CACHE INTERNAL "Enable GTK+ style with qt using -gtkstlye. Default is OFF")
 
 if(NOT DEFINED git_protocol)
   set(git_protocol "git")
@@ -34,7 +34,8 @@ if(UNIX)
     set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
   else() #Linux
     if(QT4_SB_ENABLE_GTK)
-      message(STATUS "QT4_SB_ENABLE_GTK is activated. QT4 build includes  gtk+ and libfreetype, libpng (dependencies of gtk+ package)")
+      message(WARNING "QT4_SB_ENABLE_GTK support is experimental")
+
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
     else()
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle")
@@ -62,6 +63,10 @@ else()
   file(TO_NATIVE_PATH ${QT4_SB_SRC}/configure QT4_CONFIGURE_SCRIPT)
   set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.sh)
   set(QT4_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.sh.in)
+endif()
+
+if(EXISTS "${QT4_CONFIGURE_COMMAND}")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove -f "${QT4_CONFIGURE_COMMAND}")
 endif()
 
 configure_file(${QT4_CONFIGURE_COMMAND_IN} ${QT4_CONFIGURE_COMMAND} @ONLY )

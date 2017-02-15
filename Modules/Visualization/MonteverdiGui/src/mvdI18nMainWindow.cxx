@@ -181,14 +181,23 @@ I18nMainWindow
 ::BuildGDALOverviews( const QStringList & filenames )
 {
   ImportImagesDialog * importDialog = new ImportImagesDialog( filenames, this );
+  // The import dialog should be deleted before leaving this function
 
   if( importDialog->GetEffectiveCount()<1 )
+    {
+    delete importDialog;
+    importDialog = NULL;
     return true;
+    }
 
   int result = importDialog->exec();
 
   if( result== QDialog::Rejected )
+    {
+    delete importDialog;
+    importDialog = NULL;
     return false;
+    }
 
   if( result==QDialog::Accepted )
     {
@@ -205,6 +214,11 @@ I18nMainWindow
     Import( builder );
     }
 
+  if (importDialog)
+    {
+    delete importDialog;
+    importDialog = NULL;
+    }
   return true;
 }
 

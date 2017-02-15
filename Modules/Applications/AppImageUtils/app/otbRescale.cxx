@@ -52,8 +52,9 @@ private:
     SetDescription("Rescale the image between two given values.");
 
     SetDocName("Rescale Image");
-    SetDocLongDescription("This application scales the given image pixel intensity between two given values. "
-      "By default min (resp. max) value is set to 0 (resp. 255).");
+    SetDocLongDescription("This application scales the given image pixel intensity between two given values.\n"
+                                  "By default min (resp. max) value is set to 0 (resp. 255).\n"
+                                  "Input minimum and maximum values is automatically computed for all image bands.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -109,6 +110,7 @@ private:
 
     m_RescaleFilter = RescaleImageFilterType::New();
     m_RescaleFilter->SetInput( inImage );
+    m_RescaleFilter->SetAutomaticInputMinMaxComputation(false);
     m_RescaleFilter->SetInputMinimum( m_MinMaxFilter->GetMinimum() );
     m_RescaleFilter->SetInputMaximum( m_MinMaxFilter->GetMaximum() );
 

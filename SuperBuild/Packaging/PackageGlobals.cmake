@@ -68,7 +68,9 @@ set(LINUX_SYSTEM_DLLS
   libICE.so*
   libXrandr.so*
   libpython*
-  libexpat.so.0
+  libexpat.so.*
+  libfontconfig.so*
+  libfreetype.so*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
@@ -119,12 +121,18 @@ set(PKG_GTK_SEARCHDIRS
 # OTB package manager 'this script' will pick them up and put
 # into the binary package. Below cmake variable controls the list of
 #libraries coming from /usr/lib a.k.a system.
-set(ALLOWED_SYSTEM_DLLS
-  libfreetype.so.6.*
+
+set(GTK_LIB_LIST_1
   libgthread-2.0.so.0
   libglib-2.0.so.0
   libgobject-2.0.so.0
   libXrender.so.1
-  libfontconfig.so.1
   libpcre.so.3
+  libffi.so.6
   )
+set(GTK_LIB_LIST_2
+  libz.so.1
+  libpng12.so.0
+  )
+
+set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})

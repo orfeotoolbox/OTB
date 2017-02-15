@@ -164,6 +164,18 @@ public:
   /** Get the input image maximum */
   itkGetMacro(InputImageMaximum, InputPixelType);
 
+  /** Set the sub-sampling factor */
+  itkSetMacro(SubsampleFactor, SizeType);
+
+  /** Get the sub-sampling factor */
+  itkGetMacro(SubsampleFactor, SizeType);
+
+  /** Set the sub-sampling offset */
+  itkSetMacro(SubsampleOffset, OffsetType);
+
+  /** Get the sub-sampling offset */
+  itkGetMacro(SubsampleOffset, OffsetType);
+
   /** Get the mean output image */
   OutputImageType * GetMeanOutput();
 
@@ -199,6 +211,8 @@ protected:
   ScalarImageToAdvancedTexturesFilter();
   /** Destructor */
   ~ScalarImageToAdvancedTexturesFilter() ITK_OVERRIDE;
+  /** Generate the output informations */
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Generate the input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Before Parallel textures extraction */
@@ -231,6 +245,11 @@ private:
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
 
+  /** Sub-sampling factor */
+  SizeType m_SubsampleFactor;
+
+  /** Sub-sampling offset */
+  OffsetType m_SubsampleOffset;
 };
 } // End namespace otb
 

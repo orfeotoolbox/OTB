@@ -300,6 +300,11 @@ QtWidgetView
     SLOT( close() )
   );
 
+  // Add Ctrl-Q shortcut to quit
+  m_QuitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
+  connect( m_QuitShortcut, SIGNAL(activated()), this, SLOT(close()) );
+
+
   // Put the buttons on the right
   footerLayout->addStretch();
   footerLayout->addWidget(m_ExecButton);

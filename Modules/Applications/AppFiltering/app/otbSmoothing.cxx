@@ -103,7 +103,7 @@ private:
     SetDefaultParameterInt("type.anidif.nbiter",     10);
     SetDefaultParameterInt("type.anidif.conductance",     1.);
 
-    SetParameterString("type", "anidif");
+    SetParameterString("type", "anidif", false);
 
     // Doc example parameter settings
     SetExampleComment("Image smoothing using a mean filter.", 0);

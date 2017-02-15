@@ -55,7 +55,7 @@ function(search_library input_file pkg_searchdirs result)
 
     if(EXISTS ${pkg_searchdir}/${input_file} )
       if(PKG_DEBUG)
-	message("searching for '${input_file}' in '${pkg_searchdir}'")
+        message("Found '${pkg_searchdir}/${input_file}' (return)")
       endif()
       set(${result} "${pkg_searchdir}/${input_file}" PARENT_SCOPE)
       return()
@@ -71,44 +71,51 @@ function(search_library input_file pkg_searchdirs result)
 
 endfunction()
 
-macro(add_to_symlink_list src_file target_file)
+macro(add_to_symlink_list src_file_name link_file_name)
   #TODO: avoid code duplication here and later in install_rule
 
   set(SKIP_INSTALL FALSE)
+
+  get_filename_component(src_file_name_NAME ${src_file_name} NAME)
+  
   if(PKG_GENERATE_XDK)
-    get_filename_component(src_file_NAME ${src_file} NAME)
-    setif_value_in_list(is_gtk_lib "${src_file_NAME}" ALLOWED_SYSTEM_DLLS)
-    if ("${src_file_NAME}"
+    if ("${src_file_name_NAME}"
 	MATCHES
 	"libOTB|libotb|otbApp|otbapp_|otbTest|libMonteverdi|monteverdi|mapla|iceViewer"
 	)
       set(SKIP_INSTALL TRUE)
     endif()
-
-    if(is_gtk_lib)
-      set(SKIP_INSTALL TRUE)
-    endif()
-    
   endif(PKG_GENERATE_XDK)
+  
+  setif_value_in_list(is_gtk_lib "${src_file_name_NAME}" GTK_LIB_LIST_1)
+  if(is_gtk_lib AND PKG_GENERATE_XDK)
+    set(SKIP_INSTALL TRUE)
+  endif()
+
+
   # NOTE: $OUT_DIR is set actually in pkgsetup.in. So don't try
   # any pre-mature optimization on that variable names
   if(NOT SKIP_INSTALL)
+
+    set(lib_dir "lib")
+    if(is_gtk_lib)
+      set(lib_dir "lib/gtk")
+    endif()
     file(APPEND
       ${CMAKE_BINARY_DIR}/make_symlinks_temp
-      "ln -sf \"$OUT_DIR/lib/${src_file}\" \"$OUT_DIR/lib/${target_file}\" \n"
+      "ln -sf \"$OUT_DIR/${lib_dir}/${src_file_name}\" \"$OUT_DIR/${lib_dir}/${link_file_name}\" \n"
       )
   endif()
 endmacro()
 
-function(is_file_executable2 file result_var)
+function(is_file_executable2 file_var result_var)
   #
   # A file is not executable until proven otherwise:
   #
   set(${result_var} 0 PARENT_SCOPE)
 
-  get_filename_component(file_full "${file}" ABSOLUTE)
+  get_filename_component(file_full "${${file_var}}" ABSOLUTE)
   string(TOLOWER "${file_full}" file_full_lower)
-
   # If file name ends in .exe on Windows, *assume* executable:
   #
   if(WIN32 AND NOT UNIX)
@@ -125,9 +132,15 @@ function(is_file_executable2 file result_var)
 
   func_is_file_a_symbolic_link("${file_full}" is_a_symlink file_full_target)
   if(is_a_symlink)
-    message("resolving '${file_full}' to  '${file_full_target}")
+    message("Resolving '${file_full}' to '${file_full_target}")
     get_filename_component(file_full_path "${file_full}" PATH)
     set(file_full "${file_full_path}/${file_full_target}")
+    if( EXISTS "${file_full}")
+      set(${file_var} "${file_full}" PARENT_SCOPE)
+    else()
+      message(FATAL_ERROR "${file_full} does not exists. Cannot continue")
+    endif()
+
     string(TOLOWER "${file_full}" file_full_lower)
   endif()
 
@@ -149,6 +162,7 @@ function(is_file_executable2 file result_var)
 
   if(NOT EXISTS "${file_full}")
     message(FATAL_ERROR "err. '${file_full}' does not exists or is not absolute path")
+    set(${file_var} "" PARENT_SCOPE)
   endif()
 
   execute_process(COMMAND "${FILE_COMMAND}" "${file_full}"

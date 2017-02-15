@@ -321,5 +321,22 @@
  <resources>
   <include location="mvdIcons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>noDataCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>noDataLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>23</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>100</x>
+     <y>24</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

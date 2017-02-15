@@ -155,7 +155,7 @@ void DoInit() ITK_OVERRIDE
   SetParameterDescription("sample.vtr",
     "Ratio between training and validation samples (0.0 = all training, 1.0 = "
     "all validation) (default = 0.5).");
-  SetParameterFloat("sample.vtr", 0.5);
+  SetParameterFloat("sample.vtr",0.5, false);
   SetMaximumParameterFloatValue("sample.vtr",1.0);
   SetMinimumParameterFloatValue("sample.vtr",0.0);
 
@@ -214,7 +214,7 @@ void DoUpdateParameters() ITK_OVERRIDE
   if ( HasValue("io.vd") )
     {
     std::vector<std::string> vectorFileList = GetParameterStringList("io.vd");
-    GetInternalApplication("polystat")->SetParameterString("vec",vectorFileList[0]);
+    GetInternalApplication("polystat")->SetParameterString("vec",vectorFileList[0], false);
     UpdateInternalParameters("polystat");
     }
 }
@@ -289,21 +289,21 @@ void DoExecute() ITK_OVERRIDE
   for (unsigned int i=0 ; i<nbInputs ; i++)
     {
     GetInternalApplication("polystat")->SetParameterInputImage("in",imageList->GetNthElement(i));
-    GetInternalApplication("polystat")->SetParameterString("vec",vectorFileList[i]);
-    GetInternalApplication("polystat")->SetParameterString("out",polyStatTrainOutputs[i]);
+    GetInternalApplication("polystat")->SetParameterString("vec",vectorFileList[i], false);
+    GetInternalApplication("polystat")->SetParameterString("out",polyStatTrainOutputs[i], false);
     ExecuteInternal("polystat");
     // analyse polygons given for validation
     if (dedicatedValidation)
       {
-      GetInternalApplication("polystat")->SetParameterString("vec",validationVectorFileList[i]);
-      GetInternalApplication("polystat")->SetParameterString("out",polyStatValidOutputs[i]);
+      GetInternalApplication("polystat")->SetParameterString("vec",validationVectorFileList[i], false);
+      GetInternalApplication("polystat")->SetParameterString("out",polyStatValidOutputs[i], false);
       ExecuteInternal("polystat");
       }
     }
 
   // ---------------------------------------------------------------------------
   // Compute sampling rates
-  GetInternalApplication("rates")->SetParameterString("mim","proportional");
+  GetInternalApplication("rates")->SetParameterString("mim","proportional", false);
   double vtr = GetParameterFloat("sample.vtr");
   long mt = GetParameterInt("sample.mt");
   long mv = GetParameterInt("sample.mv");
@@ -348,44 +348,44 @@ void DoExecute() ITK_OVERRIDE
     }
 
   // Sampling rates for training
-  GetInternalApplication("rates")->SetParameterStringList("il",polyStatTrainOutputs);
-  GetInternalApplication("rates")->SetParameterString("out",rateTrainOut);
+  GetInternalApplication("rates")->SetParameterStringList("il",polyStatTrainOutputs, false);
+  GetInternalApplication("rates")->SetParameterString("out",rateTrainOut, false);
   if (GetParameterInt("sample.bm") != 0)
     {
-    GetInternalApplication("rates")->SetParameterString("strategy","smallest");
+    GetInternalApplication("rates")->SetParameterString("strategy","smallest", false);
     }
   else
     {
     if (fmt > -1)
       {
-      GetInternalApplication("rates")->SetParameterString("strategy","constant");
+      GetInternalApplication("rates")->SetParameterString("strategy","constant", false);
       GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb",fmt);
       }
     else
       {
-      GetInternalApplication("rates")->SetParameterString("strategy","all");
+      GetInternalApplication("rates")->SetParameterString("strategy","all", false);
       }
     }
   ExecuteInternal("rates");
   // Sampling rates for validation
   if (dedicatedValidation)
     {
-    GetInternalApplication("rates")->SetParameterStringList("il",polyStatValidOutputs);
-    GetInternalApplication("rates")->SetParameterString("out",rateValidOut);
+    GetInternalApplication("rates")->SetParameterStringList("il",polyStatValidOutputs, false);
+    GetInternalApplication("rates")->SetParameterString("out",rateValidOut, false);
     if (GetParameterInt("sample.bm") != 0)
       {
-      GetInternalApplication("rates")->SetParameterString("strategy","smallest");
+      GetInternalApplication("rates")->SetParameterString("strategy","smallest", false);
       }
     else
       {
       if (fmv > -1)
         {
-        GetInternalApplication("rates")->SetParameterString("strategy","constant");
+        GetInternalApplication("rates")->SetParameterString("strategy","constant", false);
         GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb",fmv);
         }
       else
         {
-        GetInternalApplication("rates")->SetParameterString("strategy","all");
+        GetInternalApplication("rates")->SetParameterString("strategy","all", false);
         }
       }
     ExecuteInternal("rates");
@@ -393,18 +393,18 @@ void DoExecute() ITK_OVERRIDE
 
   // ---------------------------------------------------------------------------
   // Select & extract samples
-  GetInternalApplication("select")->SetParameterString("sampler", "periodic");
+  GetInternalApplication("select")->SetParameterString("sampler", "periodic", false);
   GetInternalApplication("select")->SetParameterInt("sampler.periodic.jitter",50);
-  GetInternalApplication("select")->SetParameterString("strategy","byclass");
-  GetInternalApplication("extraction")->SetParameterString("outfield", "prefix");
-  GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name","value_");
+  GetInternalApplication("select")->SetParameterString("strategy","byclass", false);
+  GetInternalApplication("extraction")->SetParameterString("outfield", "prefix", false);
+  GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name","value_", false);
   for (unsigned int i=0 ; i<nbInputs ; i++)
     {
     GetInternalApplication("select")->SetParameterInputImage("in",imageList->GetNthElement(i));
-    GetInternalApplication("select")->SetParameterString("vec",vectorFileList[i]);
-    GetInternalApplication("select")->SetParameterString("out",sampleOutputs[i]);
-    GetInternalApplication("select")->SetParameterString("instats",polyStatTrainOutputs[i]);
-    GetInternalApplication("select")->SetParameterString("strategy.byclass.in",ratesTrainOutputs[i]);
+    GetInternalApplication("select")->SetParameterString("vec",vectorFileList[i], false);
+    GetInternalApplication("select")->SetParameterString("out",sampleOutputs[i], false);
+    GetInternalApplication("select")->SetParameterString("instats",polyStatTrainOutputs[i], false);
+    GetInternalApplication("select")->SetParameterString("strategy.byclass.in",ratesTrainOutputs[i], false);
     // select sample positions
     ExecuteInternal("select");
     // extract sample descriptors
@@ -412,10 +412,10 @@ void DoExecute() ITK_OVERRIDE
 
     if (dedicatedValidation)
       {
-      GetInternalApplication("select")->SetParameterString("vec",validationVectorFileList[i]);
-      GetInternalApplication("select")->SetParameterString("out",sampleValidOutputs[i]);
-      GetInternalApplication("select")->SetParameterString("instats",polyStatValidOutputs[i]);
-      GetInternalApplication("select")->SetParameterString("strategy.byclass.in",ratesValidOutputs[i]);
+      GetInternalApplication("select")->SetParameterString("vec",validationVectorFileList[i], false);
+      GetInternalApplication("select")->SetParameterString("out",sampleValidOutputs[i], false);
+      GetInternalApplication("select")->SetParameterString("instats",polyStatValidOutputs[i], false);
+      GetInternalApplication("select")->SetParameterString("strategy.byclass.in",ratesValidOutputs[i], false);
       // select sample positions
       ExecuteInternal("select");
       // extract sample descriptors
@@ -473,8 +473,8 @@ void DoExecute() ITK_OVERRIDE
 
   // ---------------------------------------------------------------------------
   // Train model
-  GetInternalApplication("training")->SetParameterStringList("io.vd",sampleTrainOutputs);
-  GetInternalApplication("training")->SetParameterStringList("valid.vd",sampleValidOutputs);
+  GetInternalApplication("training")->SetParameterStringList("io.vd",sampleTrainOutputs, false);
+  GetInternalApplication("training")->SetParameterStringList("valid.vd",sampleValidOutputs, false);
   UpdateInternalParameters("training");
   // set field names
   FloatVectorImageType::Pointer image = imageList->GetNthElement(0);
@@ -486,7 +486,7 @@ void DoExecute() ITK_OVERRIDE
     oss << i;
     selectedNames.push_back("value_"+oss.str());
     }
-  GetInternalApplication("training")->SetParameterStringList("feat",selectedNames);
+  GetInternalApplication("training")->SetParameterStringList("feat",selectedNames, false);
   ExecuteInternal("training");
 
   // cleanup

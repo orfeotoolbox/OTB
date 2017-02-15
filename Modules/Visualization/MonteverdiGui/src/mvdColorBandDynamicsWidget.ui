@@ -343,7 +343,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>:/icons/Data/Icons/execute.png</normaloff>:/icons/Data/Icons/execute.png</iconset>
+          <normaloff>:/icons/Utilities/Data/Icons/execute.png</normaloff>:/icons/Utilities/Data/Icons/execute.png</iconset>
      </property>
      <property name="iconSize">
       <size>

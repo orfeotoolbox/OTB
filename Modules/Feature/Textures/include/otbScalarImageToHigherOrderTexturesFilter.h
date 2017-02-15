@@ -148,6 +148,18 @@ public:
   itkSetMacro(FastCalculations, bool);
   itkBooleanMacro(FastCalculations);
 
+  /** Set the sub-sampling factor */
+  itkSetMacro(SubsampleFactor, SizeType);
+
+  /** Get the sub-sampling factor */
+  itkGetMacro(SubsampleFactor, SizeType);
+
+  /** Set the sub-sampling offset */
+  itkSetMacro(SubsampleOffset, OffsetType);
+
+  /** Get the sub-sampling offset */
+  itkGetMacro(SubsampleOffset, OffsetType);
+
   /** Get the Short Run Emphasis output image */
   OutputImageType * GetShortRunEmphasisOutput();
 
@@ -186,6 +198,8 @@ protected:
   ScalarImageToHigherOrderTexturesFilter();
   /** Destructor */
   ~ScalarImageToHigherOrderTexturesFilter() ITK_OVERRIDE;
+  /** Generate the output informations */
+  void GenerateOutputInformation() ITK_OVERRIDE;
   /** Generate the input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
   /** Parallel textures extraction */
@@ -215,6 +229,12 @@ private:
 
   /** Fast calculation */
   bool m_FastCalculations;
+
+  /** Sub-sampling factor */
+  SizeType m_SubsampleFactor;
+
+  /** Sub-sampling offset */
+  OffsetType m_SubsampleOffset;
 };
 } // End namespace otb
 

@@ -33,6 +33,7 @@
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
 #include <QtGui>
+#include <QShortcut>
 
 //
 // System includes (sorted by alphabetic order)
@@ -199,6 +200,7 @@ private:
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
+  QShortcut* m_QuitShortcut;
   QLabel* m_Message;
 
   bool m_IsClosable : 1;
