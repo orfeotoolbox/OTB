@@ -190,18 +190,25 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     // regardless of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
 
-    // Adapt the image size with the region
-    std::streamoff nbBytes = (this->m_ImageIO->GetComponentSize() * this->m_ImageIO->GetNumberOfComponents())
-                             * static_cast<std::streamoff>(region.GetNumberOfPixels());
+    // Adapt the image size with the region and take into account a potential
+    // remapping of the components. m_BandList is empty if no band range is set
+    std::streamoff nbBytes =
+      ( this->m_ImageIO->GetComponentSize()
+      * std::max(this->m_ImageIO->GetNumberOfComponents(),(unsigned int) m_BandList.size()))
+      * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
 
-    otbMsgDevMacro(<< "size of Buffer to GDALImageIO::read = " << nbBytes << " = \n"
+    otbMsgDevMacro(<< "buffer size for ImageIO::read = " << nbBytes << " = \n"
         << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
-        << "Nb of Component (" << this->m_ImageIO->GetNumberOfComponents() << ") x " \
-        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" );
+        << "Nb of Component ( max(" << this->m_ImageIO->GetNumberOfComponents() \
+        << " , "<<m_BandList.size() << ") ) x " \
+        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")");
 
     this->m_ImageIO->Read(loadBuffer);
+
+    if (m_FilenameHelper->BandRangeIsSet())
+      this->DoMapBuffer(loadBuffer, region.GetNumberOfPixels());
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
 
@@ -513,17 +520,18 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   region.SetIndex(start);
 
   // detect number of output components
-  unsigned int nbOutputComponents = this->m_ImageIO->GetNumberOfComponents();
+  m_IOComponents = this->m_ImageIO->GetNumberOfComponents();
+  m_BandList.clear();
   if (m_FilenameHelper->BandRangeIsSet())
     {
-    bool ret = m_FilenameHelper->ResolveBandRange(nbOutputComponents, m_BandList);
+    bool ret = m_FilenameHelper->ResolveBandRange(m_IOComponents, m_BandList);
     if (ret == false || m_BandList.size() == 0)
       {
       // invalid range
       itkGenericExceptionMacro("The given band range is either empty or invalid for a "
-        <<nbOutputComponents <<" bands input image!");
+        <<m_IOComponents <<" bands input image!");
       }
-    nbOutputComponents = m_BandList.size()
+    m_IOComponents = m_BandList.size();
     }
 
 // THOMAS : ajout
@@ -532,20 +540,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
     {
     typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
-    AccessorFunctorType::SetVectorLength(output, nbOutputComponents);
-    }
-  else
-    {
-    if (m_FilenameHelper->BandRangeIsSet())
-      {
-      // Check that there are enough output components
-      typedef otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
-      if (ConvertIOPixelTraits::GetNumberOfComponents() < nbOutputComponents)
-        {
-        itkGenericExceptionMacro("The image type can't store "
-          <<nbOutputComponents <<" components!");
-        }
-      }
+    AccessorFunctorType::SetVectorLength(output, m_IOComponents);
     }
 
   output->SetLargestPossibleRegion(region);
@@ -748,7 +743,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       >                                                 \
       ::ConvertVectorImage(                             \
        static_cast<type*>(inputData),                  \
-       m_ImageIO->GetNumberOfComponents(),             \
+       m_IOComponents,             \
        outputData,                                     \
        numberOfPixels);              \
      } \
@@ -761,7 +756,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       >                                                 \
       ::Convert(                                        \
         static_cast<type*>(inputData),                  \
-        m_ImageIO->GetNumberOfComponents(),             \
+        m_IOComponents,             \
         outputData,                                     \
         numberOfPixels);              \
       } \
@@ -783,7 +778,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         >                                                 \
         ::ConvertComplexVectorImageToVectorImageComplex(                             \
          static_cast<type*>(inputData),                \
-         m_ImageIO->GetNumberOfComponents(),             \
+         m_IOComponents,             \
          outputData,                                     \
          numberOfPixels); \
        }\
@@ -796,7 +791,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         >                                                  \
         ::ConvertComplexVectorImageToVectorImage(                             \
          static_cast<type*>(inputData),                \
-         m_ImageIO->GetNumberOfComponents(),             \
+         m_IOComponents,             \
          outputData,                                     \
          numberOfPixels);              \
        }\
@@ -810,7 +805,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       >                                                 \
       ::ConvertComplexToGray(                                        \
        static_cast<type*>(inputData),                  \
-       m_ImageIO->GetNumberOfComponents(),             \
+       m_IOComponents,             \
        outputData,                                     \
        numberOfPixels);              \
      } \
@@ -859,6 +854,53 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
 #undef OTB_CONVERT_BUFFER_IF_BLOCK
 #undef OTB_CONVERT_CBUFFER_IF_BLOCK
+}
+
+template <class TOutputImage, class ConvertPixelTraits>
+void
+ImageFileReader<TOutputImage, ConvertPixelTraits>
+::DoMapBuffer(void* buffer, size_t numberOfPixels)
+{
+  size_t componentSize = this->m_ImageIO->GetComponentSize();
+  size_t inPixelSize = componentSize * this->m_ImageIO->GetNumberOfComponents();
+  size_t outPixelSize = componentSize * m_BandList.size();
+  char* inPos = static_cast<char*>(buffer);
+  char* outPos = static_cast<char*>(buffer);
+  bool workBackward = (outPixelSize > inPixelSize);
+  char *pixBuffer = new char[outPixelSize];
+
+  if (workBackward)
+    {
+    inPos = inPos + numberOfPixels*inPixelSize;
+    outPos = outPos + numberOfPixels*outPixelSize;
+    for (size_t n=0 ; n<numberOfPixels ; n++)
+      {
+      inPos -= inPixelSize;
+      outPos -= outPixelSize;
+      for (unsigned int i=0 ; i < m_BandList.size() ; i++)
+        {
+        memcpy(pixBuffer + i*componentSize, inPos + m_BandList[i]*componentSize, componentSize);
+        }
+      // copy pixBuffer to output
+      memcpy(outPos, pixBuffer, outPixelSize);
+      }
+    }
+  else
+    {
+    for (size_t n=0 ; n<numberOfPixels ; n++)
+      {
+      for (unsigned int i=0 ; i < m_BandList.size() ; i++)
+        {
+        memcpy(pixBuffer + i*componentSize, inPos + m_BandList[i]*componentSize, componentSize);
+        }
+      // copy pixBuffer to output
+      memcpy(outPos, pixBuffer, outPixelSize);
+      inPos += inPixelSize;
+      outPos += outPixelSize;
+      }
+    }
+
+  delete pixBuffer;
 }
 
 } //namespace otb
