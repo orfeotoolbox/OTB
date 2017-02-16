@@ -29,7 +29,10 @@ namespace otb
  *
  * \ingroup OTBSupervised
  */
-class OTBSupervised_EXPORT CvRTreesWrapper : public CvRTrees
+class OTBSupervised_EXPORT CvRTreesWrapper
+#ifndef OTB_OPENCV_3
+  : public CvRTrees
+#endif
 {
 public:
   typedef std::vector<unsigned int> VotesVectorType;
@@ -57,6 +60,11 @@ public:
   float predict_margin(const cv::Mat& sample,
                           const cv::Mat& missing =
                           cv::Mat()) const;
+
+private:
+#ifdef OTB_OPENCV_3
+  cv::Ptr<cv::ml::RTrees> m_RTrees;
+#endif
 };
 
 }

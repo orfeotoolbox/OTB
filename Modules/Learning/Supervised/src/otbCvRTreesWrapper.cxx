@@ -22,7 +22,12 @@
 namespace otb
 {
 
-CvRTreesWrapper::CvRTreesWrapper(){}
+CvRTreesWrapper::CvRTreesWrapper()
+{
+#ifdef OTB_OPENCV_3
+  m_RTrees = cv::ml::RTrees::create();
+#endif
+}
 
 CvRTreesWrapper::~CvRTreesWrapper(){}
 
@@ -30,6 +35,9 @@ void CvRTreesWrapper::get_votes(const cv::Mat& sample,
                                 const cv::Mat& missing,
                                 CvRTreesWrapper::VotesVectorType& vote_count) const
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   vote_count.resize(nclasses);
   for( int k = 0; k < ntrees; k++ )
     {
@@ -38,11 +46,16 @@ void CvRTreesWrapper::get_votes(const cv::Mat& sample,
     CV_Assert( 0 <= class_idx && class_idx < nclasses );
     ++vote_count[class_idx];
     }
+#endif
 }
 
 float CvRTreesWrapper::predict_margin(const cv::Mat& sample, 
                                       const cv::Mat& missing) const
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+  return 0.;
+#else
   // Sanity check (division by ntrees later on)
   if(ntrees == 0)
     {
@@ -55,11 +68,16 @@ float CvRTreesWrapper::predict_margin(const cv::Mat& sample,
                    classVotes.end(), std::greater<unsigned int>());
   float margin = static_cast<float>(classVotes[0]-classVotes[1])/ntrees;
   return margin;
+#endif
 }
 
 float CvRTreesWrapper::predict_confidence(const cv::Mat& sample, 
                                   const cv::Mat& missing) const
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+  return 0.;
+#else
   // Sanity check (division by ntrees later on)
   if(ntrees == 0)
     {
@@ -71,6 +89,7 @@ float CvRTreesWrapper::predict_confidence(const cv::Mat& sample,
                                               classVotes.end()));
   float confidence = static_cast<float>(max_votes)/ntrees;
   return confidence;
+#endif
 }
 
 }
