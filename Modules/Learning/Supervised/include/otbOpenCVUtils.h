@@ -38,6 +38,8 @@
 #include <opencv2/ml/ml.hpp>
 #endif
 
+#include "otb_opencv_api.h"
+
 #include "OTBSupervisedExport.h"
 
 #include "itkListSample.h"
