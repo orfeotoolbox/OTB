@@ -30,7 +30,11 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::DecisionTreeMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+ m_DTreeModel(cv::Ptr<cv::ml::DTrees>((cv::ml::DTrees::create()).get(), dont_delete_me).get()),
+#else
  m_DTreeModel (new CvDTree),
+#endif
  m_MaxDepth(INT_MAX),
  m_MinSampleCount(10),
  m_RegressionAccuracy(0.01),
@@ -64,6 +68,9 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
 
   CvDTreeParams params = CvDTreeParams(m_MaxDepth, m_MinSampleCount, m_RegressionAccuracy,
@@ -77,6 +84,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
   m_DTreeModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params);
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -85,14 +93,16 @@ typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //convert listsample to Mat
   cv::Mat sample;
 
   otb::SampleToMat<InputSampleType>(input,sample);
 
   double result = m_DTreeModel->predict(sample, cv::Mat(), false)->value;
-
-  TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
 
@@ -103,7 +113,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
       itkExceptionMacro("Confidence index not available for this classifier !");
       }
     }
-
+#endif
   return target;
 }
 
@@ -112,10 +122,14 @@ void
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_DTreeModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_DTreeModel->save(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -123,10 +137,14 @@ void
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_DTreeModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_DTreeModel->load(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>

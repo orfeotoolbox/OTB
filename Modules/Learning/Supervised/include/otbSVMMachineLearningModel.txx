@@ -29,9 +29,15 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::SVMMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+ m_SVMModel(cv::Ptr<cv::ml::SVM>((cv::ml::SVM::create()).get(), dont_delete_me).get()),
+ m_SVMType(cv::ml::SVM::C_SVC),
+ m_KernelType(cv::ml::SVM::RBF),
+#else
  m_SVMModel (new CvSVM),
  m_SVMType(CvSVM::C_SVC),
  m_KernelType(CvSVM::RBF),
+#endif
  m_Degree(0),
  m_Gamma(1),
  m_Coef0(0),
@@ -67,6 +73,9 @@ void
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Train()
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   // Check that the SVM type is compatible with the chosen mode (classif/regression)
   if ( bool(m_SVMType == CvSVM::NU_SVR || m_SVMType == CvSVM::EPS_SVR) != this->m_RegressionMode)
     {
@@ -111,7 +120,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   m_OutputC = m_SVMModel->get_params().C;
   m_OutputNu = m_SVMModel->get_params().nu;
   m_OutputP = m_SVMModel->get_params().p;
-
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -120,6 +129,10 @@ typename SVMMachineLearningModel<TInputValue,TOutputValue>
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //convert listsample to Mat
   cv::Mat sample;
 
@@ -127,15 +140,13 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   double result = m_SVMModel->predict(sample,false);
 
-  TargetSampleType target;
-
   target[0] = static_cast<TOutputValue>(result);
 
   if (quality != ITK_NULLPTR)
     {
     (*quality) = m_SVMModel->predict(sample,true);
     }
-
+#endif
   return target;
 }
 
@@ -144,10 +155,14 @@ void
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_SVMModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_SVMModel->save(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -155,10 +170,14 @@ void
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_SVMModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_SVMModel->load(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>

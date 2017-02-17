@@ -59,7 +59,12 @@ float
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::GetTrainError()
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+  return 0.;
+#else
   return m_RFModel->get_train_error();
+#endif
 }
 
 /** Train the machine learning model */
@@ -78,7 +83,9 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //std::cout << "priors " << m_Priors[0] << std::endl;
   //Define random forests paramneters
   //FIXME do this in the constructor?
-
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
 
   CvRTParams params = CvRTParams(m_MaxDepth,                    // max depth
@@ -105,6 +112,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   //train the RT model
   m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
                    cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -113,6 +121,10 @@ typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //convert listsample to Mat
   cv::Mat sample;
 
@@ -120,7 +132,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   double result = m_RFModel->predict(sample);
 
-  TargetSampleType target;
+  
 
   target[0] = static_cast<TOutputValue>(result);
 
@@ -131,7 +143,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     else
       (*quality) = m_RFModel->predict_confidence(sample);
     }
-
+#endif
   return target[0];
 }
 
@@ -140,10 +152,14 @@ void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_RFModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_RFModel->save(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -151,10 +167,14 @@ void
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_RFModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_RFModel->load(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -202,6 +222,10 @@ typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::GetVariableImportance()
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+  return VariableImportanceMatrixType();
+#else
   cv::Mat cvMat = m_RFModel->getVarImportance();
   VariableImportanceMatrixType itkMat(cvMat.rows,cvMat.cols);
   for(int i =0; i<cvMat.rows; i++)
@@ -212,6 +236,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
       }
     }
   return itkMat;
+#endif
 }
 
 

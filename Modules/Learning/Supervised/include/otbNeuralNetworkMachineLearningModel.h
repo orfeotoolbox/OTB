@@ -206,10 +206,13 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   void CreateNetwork();
-  CvANN_MLP_TrainParams SetNetworkParameters();
   void SetupNetworkAndTrain(cv::Mat& labels);
-
+#ifdef OTB_OPENCV_3
+  cv::ml::ANN_MLP* m_ANNModel;
+#else
+  CvANN_MLP_TrainParams SetNetworkParameters();
   CvANN_MLP * m_ANNModel;
+#endif
   int m_TrainMethod;
   int m_ActivateFunction;
   std::vector<unsigned int> m_LayerSizes;

@@ -24,8 +24,15 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-
+#ifdef OTB_OPENCV_3
+namespace cv {
+namespace ml {
+class Boost;
+}
+}
+#else
 class CvBoost;
+#endif
 
 namespace otb
 {
@@ -128,7 +135,11 @@ private:
   BoostMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+#ifdef OTB_OPENCV_3
+  cv::ml::Boost* m_BoostModel;
+#else
   CvBoost * m_BoostModel;
+#endif
   int m_BoostType;
   int m_WeakCount;
   double m_WeightTrimRate;

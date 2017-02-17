@@ -30,11 +30,20 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 BoostMachineLearningModel<TInputValue,TOutputValue>
 ::BoostMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+ m_BoostModel(cv::Ptr<cv::ml::Boost>((cv::ml::Boost::create()).get(), dont_delete_me).get()),
+ m_BoostType(cv::ml::Boost::REAL),
+#else
  m_BoostModel (new CvBoost),
  m_BoostType(CvBoost::REAL),
+#endif
  m_WeakCount(100),
  m_WeightTrimRate(0.95),
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
  m_SplitCrit(CvBoost::DEFAULT),
+#endif
  m_MaxDepth(1)
 {
   this->m_ConfidenceIndex = true;
@@ -61,6 +70,15 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
+#ifdef OTB_OPENCV_3
+  m_BoostModel->setBoostType(m_BoostType);
+  m_BoostModel->setWeakCount(m_WeakCount);
+  m_BoostModel->setWeightTrimRate(m_WeightTrimRate);
+  m_BoostModel->setMaxDepth(m_MaxDepth);
+  m_BoostModel->setUseSurrogates(false);
+  m_BoostModel->setPriors(cv::Mat());
+  m_BoostModel->train(samples, cv::ml::ROW_SAMPLE,labels);
+#else
   CvBoostParams params = CvBoostParams(m_BoostType, m_WeakCount, m_WeightTrimRate, m_MaxDepth, false, ITK_NULLPTR);
   params.split_criteria = m_SplitCrit;
 
@@ -71,6 +89,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
   m_BoostModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params);
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -79,6 +98,11 @@ typename BoostMachineLearningModel<TInputValue,TOutputValue>
 BoostMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+  TargetSampleType target;
+  return target;
+#else
   //convert listsample to Mat
   cv::Mat sample;
 
@@ -99,6 +123,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
     }
 
   return target;
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -106,10 +131,14 @@ void
 BoostMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_BoostModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_BoostModel->save(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -117,10 +146,14 @@ void
 BoostMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
       m_BoostModel->load(filename.c_str(), ITK_NULLPTR);
   else
       m_BoostModel->load(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>

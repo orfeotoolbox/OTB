@@ -29,7 +29,11 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::NormalBayesMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+  m_NormalBayesModel(cv::Ptr<cv::ml::NormalBayesClassifier>((cv::ml::NormalBayesClassifier::create()).get(), dont_delete_me).get())
+#else
  m_NormalBayesModel (new CvNormalBayesClassifier)
+#endif 
 {
 }
 
@@ -53,8 +57,11 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
-
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   m_NormalBayesModel->train(samples,labels,cv::Mat(),cv::Mat(),false);
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -63,6 +70,10 @@ typename NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //convert listsample to Mat
   cv::Mat sample;
 
@@ -71,8 +82,6 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat missing  = cv::Mat(1,input.Size(), CV_8U );
   missing.setTo(0);
   double result = m_NormalBayesModel->predict(sample);
-
-  TargetSampleType target;
 
   target[0] = static_cast<TOutputValue>(result);
 
@@ -83,7 +92,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
       itkExceptionMacro("Confidence index not available for this classifier !");
       }
     }
-
+#endif
   return target;
 }
 
@@ -92,10 +101,14 @@ void
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_NormalBayesModel->save(filename.c_str(), ITK_NULLPTR);
   else
     m_NormalBayesModel->save(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -103,10 +116,14 @@ void
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   if (name == "")
     m_NormalBayesModel->load(filename.c_str(), ITK_NULLPTR);
   else
     m_NormalBayesModel->load(filename.c_str(), name.c_str());
+#endif
 }
 
 template <class TInputValue, class TOutputValue>

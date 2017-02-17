@@ -32,7 +32,11 @@ namespace otb
 template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::KNearestNeighborsMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+ m_KNearestModel(cv::Ptr<cv::ml::KNearest>((cv::ml::KNearest::create()).get(), dont_delete_me).get()),
+#else
  m_KNearestModel (new CvKNearest),
+#endif
  m_K(32),
  m_DecisionRule(KNN_VOTING)
 {
@@ -61,6 +65,9 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), labels);
 
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   // update decision rule if needed
   if (this->m_RegressionMode)
     {
@@ -79,6 +86,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 
   //train the KNN model
   m_KNearestModel->train(samples, labels, cv::Mat(), this->m_RegressionMode, m_K, false);
+#endif
 }
 
 template <class TInputValue, class TTargetValue>
@@ -87,6 +95,10 @@ typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //convert listsample to Mat
   cv::Mat sample;
   otb::SampleToMat<InputSampleType>(input, sample);
@@ -127,9 +139,8 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
     result = *median;
     }
 
-  TargetSampleType target;
-
   target[0] = static_cast<TTargetValue>(result);
+#endif
   return target;
 }
 
@@ -138,6 +149,9 @@ void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Save(const std::string & filename, const std::string & itkNotUsed(name))
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
   //We need to save the K parameter, IsRegression flag, DecisionRule and the samples.
 
@@ -169,6 +183,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
     ofs <<"\n";
   }
   ofs.close();
+#endif
 }
 
 template <class TInputValue, class TTargetValue>
@@ -176,6 +191,9 @@ void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
   std::ifstream ifs(filename.c_str());
   if(!ifs)
@@ -246,6 +264,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   this->SetInputListSample(samples);
   this->SetTargetListSample(labels);
   this->Train();
+#endif
 }
 
 template <class TInputValue, class TTargetValue>

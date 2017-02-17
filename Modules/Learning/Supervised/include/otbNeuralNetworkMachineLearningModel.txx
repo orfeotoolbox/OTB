@@ -28,9 +28,14 @@ namespace otb
 
 template<class TInputValue, class TOutputValue>
 NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+  m_ANNModel(cv::Ptr<cv::ml::ANN_MLP>((cv::ml::ANN_MLP::create()).get(), dont_delete_me).get()),
+  // TODO
+#else
   m_ANNModel (new CvANN_MLP),
   m_TrainMethod(CvANN_MLP_TrainParams::RPROP),
   m_ActivateFunction(CvANN_MLP::SIGMOID_SYM),
+#endif
   m_Alpha(1.),
   m_Beta(1.),
   m_BackPropDWScale(0.1),
@@ -48,7 +53,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
 
 template<class TInputValue, class TOutputValue>
 NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMachineLearningModel()
-{
+{ 
   delete m_ANNModel;
   cvReleaseMat(&m_CvMatOfLabels);
 }
@@ -138,6 +143,9 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CreateNetwork()
 {
+#ifdef OTB_OPENCV_3
+  // TODO ?
+#else
   //Create the neural network
   const unsigned int nbLayers = m_LayerSizes.size();
 
@@ -151,8 +159,10 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CreateNetwork
     }
 
   m_ANNModel->create(layers, m_ActivateFunction, m_Alpha, m_Beta);
+#endif
 }
 
+#ifndef OTB_OPENCV_3
 template<class TInputValue, class TOutputValue>
 CvANN_MLP_TrainParams NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetNetworkParameters()
 {
@@ -166,10 +176,14 @@ CvANN_MLP_TrainParams NeuralNetworkMachineLearningModel<TInputValue, TOutputValu
   params.term_crit = term_crit;
   return params;
 }
+#endif
 
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkAndTrain(cv::Mat& labels)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
@@ -177,6 +191,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkA
   CvANN_MLP_TrainParams params = this->SetNetworkParameters();
   //train the Neural network model
   m_ANNModel->train(samples, labels, cv::Mat(), cv::Mat(), params);
+#endif
 }
 
 /** Train the machine learning model for classification*/
@@ -202,6 +217,10 @@ template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
   TInputValue, TOutputValue>::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   //convert listsample to Mat
   cv::Mat sample;
 
@@ -210,7 +229,6 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
   cv::Mat response; //(1, 1, CV_32FC1);
   m_ANNModel->predict(sample, response);
 
-  TargetSampleType target;
   float currentResponse = 0;
   float maxResponse = response.at<float> (0, 0);
 
@@ -248,7 +266,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
     {
     (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
-
+#endif
   return target;
 }
 
@@ -256,6 +274,9 @@ template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string & filename,
                                                                         const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   const char* lname = "my_nn";
   if ( !name.empty() )
     lname = name.c_str();
@@ -272,12 +293,16 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
     cvWrite(fs, "class_labels", m_CvMatOfLabels);
 
   cvReleaseFileStorage(&fs);
+#endif
 }
 
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string & filename,
                                                                         const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  // TODO
+#else
   const char* lname = ITK_NULLPTR;
   if ( !name.empty() )
     lname = name.c_str();
@@ -304,6 +329,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
 
   fs.release();
+#endif
 }
 
 template<class TInputValue, class TOutputValue>
