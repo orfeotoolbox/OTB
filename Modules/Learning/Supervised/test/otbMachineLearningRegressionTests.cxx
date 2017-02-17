@@ -490,7 +490,7 @@ int otbDecisionTreeRegressionTests(int itkNotUsed(argc),
   return status;
 }
 
-
+#ifndef OTB_OPENCV_3
 MachineLearningModelRegressionType::Pointer getGradientBoostedTreeRegressionModel()
 {
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueRegressionType,
@@ -551,6 +551,7 @@ int otbGradientBoostedTreeRegressionTests(int itkNotUsed(argc),
     }
   return status;
 }
+#endif
 
 
 MachineLearningModelRegressionType::Pointer getKNearestNeighborsRegressionModel()

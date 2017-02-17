@@ -952,7 +952,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
     }
 }
 
-
+#ifndef OTB_OPENCV_3
 int otbGradientBoostedTreeMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType,TargetValueType> GBTreeType;
@@ -1034,6 +1034,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 }
+#endif // if not OpenCV 3
 #endif
 
 #ifdef OTB_USE_SHARK
