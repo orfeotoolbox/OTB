@@ -24,6 +24,7 @@
 #include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "itkVersion.h"
 
+#ifndef OTB_OPENCV_3
 namespace otb
 {
 
@@ -65,5 +66,5 @@ GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>
 }
 
 } // end namespace otb
-
+#endif
 #endif

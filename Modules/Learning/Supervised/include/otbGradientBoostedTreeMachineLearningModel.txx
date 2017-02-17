@@ -24,6 +24,7 @@
 #include <fstream>
 #include "itkMacro.h"
 
+#ifndef OTB_OPENCV_3
 namespace otb
 {
 
@@ -174,4 +175,5 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 
 } //end namespace otb
 
+#endif
 #endif

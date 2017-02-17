@@ -23,6 +23,8 @@
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 
+#ifndef OTB_OPENCV_3
+
 namespace otb
 {
 /** \class GradientBoostedTreeMachineLearningModelFactory
@@ -73,4 +75,5 @@ private:
 #include "otbGradientBoostedTreeMachineLearningModelFactory.txx"
 #endif
 
+#endif
 #endif

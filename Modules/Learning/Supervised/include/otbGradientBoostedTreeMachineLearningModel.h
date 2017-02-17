@@ -24,6 +24,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
+#ifndef OTB_OPENCV_3
 
 class CvGBTrees;
 
@@ -153,4 +154,5 @@ private:
 #include "otbGradientBoostedTreeMachineLearningModel.txx"
 #endif
 
+#endif
 #endif
