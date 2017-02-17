@@ -22,14 +22,21 @@
 namespace otb
 {
 
+void dont_delete_me(void *){}
+
 CvRTreesWrapper::CvRTreesWrapper()
 {
 #ifdef OTB_OPENCV_3
-  m_RTrees = cv::ml::RTrees::create();
+  m_RTrees = cv::Ptr<cv::ml::RTrees>((cv::ml::RTrees::create()).get(), dont_delete_me).get();
 #endif
 }
 
-CvRTreesWrapper::~CvRTreesWrapper(){}
+CvRTreesWrapper::~CvRTreesWrapper()
+{
+#ifdef OTB_OPENCV_3
+  delete m_RTrees;
+#endif
+}
 
 void CvRTreesWrapper::get_votes(const cv::Mat& sample, 
                                 const cv::Mat& missing,

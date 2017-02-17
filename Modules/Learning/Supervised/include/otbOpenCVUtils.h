@@ -44,6 +44,24 @@
 
 #include "itkListSample.h"
 
+#ifdef OTB_OPENCV_3
+
+#define CV_TYPE_NAME_ML_SVM         "opencv-ml-svm"
+#define CV_TYPE_NAME_ML_RTREES      "opencv-ml-random-trees"
+#define CV_TYPE_NAME_ML_BOOSTING    "opencv-ml-boost-tree"
+#define CV_TYPE_NAME_ML_ANN_MLP     "opencv-ml-ann-mlp"
+#define CV_TYPE_NAME_ML_NBAYES      "opencv-ml-bayesian"
+#define CV_TYPE_NAME_ML_TREE        "opencv-ml-tree"
+
+#define CvSVM cv::ml::SVM
+#define CvANN_MLP_TrainParams cv::ml::ANN_MLP
+#define CvANN_MLP cv::ml::ANN_MLP
+namespace otb
+{
+void OTBSupervised_EXPORT dont_delete_me(void *);
+}
+#endif
+
 namespace otb
 {
   template <class T> void SampleToMat(const T & sample, cv::Mat& output)
