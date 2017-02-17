@@ -77,6 +77,11 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
+  NAME           TrainImagesClustering
+  SOURCES        otbTrainImagesClustering.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
   NAME           TrainRegression
   SOURCES        otbTrainRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
