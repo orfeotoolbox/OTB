@@ -16,18 +16,15 @@
  =========================================================================*/
 #include "otbTrainVectorBase.h"
 
-// Validation
-#include "otbConfusionMatrixCalculator.h"
-
 namespace otb
 {
 namespace Wrapper
 {
 
-class TrainVectorClassifier : public TrainVectorBase
+class TrainVectorClustering : public TrainVectorBase
 {
 public:
-  typedef TrainVectorClassifier Self;
+  typedef TrainVectorClustering Self;
   typedef TrainVectorBase Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -39,10 +36,31 @@ public:
   typedef Superclass::ListSampleType ListSampleType;
   typedef Superclass::TargetListSampleType TargetListSampleType;
 
+protected :
+  TrainVectorClustering() : TrainVectorBase()
+  {
+    m_ClassifierCategory = Unsupervised;
+  }
+
 private:
   void DoTrainInit()
   {
-    // Nothing to do here
+    SetName( "TrainVectorClustering" );
+    SetDescription( "Train a classifier based on labeled or unlabeled geometries and a list of features to consider." );
+
+    SetDocName( "Train Vector Clustering" );
+    SetDocLongDescription( "This application trains a classifier based on "
+                                   "labeled or unlabeled geometries and a list of features to consider for classification." );
+    SetDocLimitations( " " );
+    SetDocAuthors( "OTB Team" );
+    SetDocSeeAlso( " " );
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue( "io.vd", "vectorData.shp" );
+    SetDocExampleParameterValue( "io.stats", "meanVar.xml" );
+    SetDocExampleParameterValue( "io.out", "svmModel.svm" );
+    SetDocExampleParameterValue( "feat", "perimeter  area  width" );
+
   }
 
   void DoTrainUpdateParameters()
@@ -50,7 +68,12 @@ private:
     // Nothing to do here
   }
 
-  void DoTrainExecute()
+  void DoBeforeTrainExecute()
+  {
+    // Nothing to do here
+  }
+
+  void DoAfterTrainExecute()
   {
     // Nothing to do here
   }

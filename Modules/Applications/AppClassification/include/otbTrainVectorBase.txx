@@ -56,7 +56,10 @@ void TrainVectorBase::DoInit()
   MandatoryOff( "layer" );
   SetDefaultParameterInt( "layer", 0 );
 
-  //Can be in both Supervised and Unsupervised ?
+  AddParameter(ParameterType_ListView,  "feat", "Field names for training features.");
+  SetParameterDescription("feat","List of field names in the input vector data to be used as features for training.");
+
+  // Add validation data used to compute confusion matrix or contingence table
   AddParameter( ParameterType_Group, "valid", "Validation data" );
   SetParameterDescription( "valid", "This group of parameters defines validation data." );
 
@@ -70,13 +73,12 @@ void TrainVectorBase::DoInit()
   MandatoryOff( "valid.layer" );
   SetDefaultParameterInt( "valid.layer", 0 );
 
-  AddParameter(ParameterType_ListView,  "feat", "Field names for training features.");
-  SetParameterDescription("feat","List of field names in the input vector data to be used as features for training.");
-
+  // Add class field if we used validation
   AddParameter(ParameterType_ListView,"cfield","Field containing the class id for supervision");
   SetParameterDescription("cfield","Field containing the class id for supervision. "
           "Only geometries with this field available will be taken into account.");
   SetListViewSingleSelectionMode("cfield",true);
+
 
   // Add parameters for the classifier choice
   Superclass::DoInit();
@@ -92,7 +94,7 @@ void TrainVectorBase::DoUpdateParameters()
     {
     std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
     ogr::DataSource::Pointer ogrDS = ogr::DataSource::New( vectorFileList[0], ogr::DataSource::Modes::Read );
-    ogr::Layer layer = ogrDS->GetLayer( this->GetParameterInt( "layer" ) );
+    ogr::Layer layer = ogrDS->GetLayer( static_cast<size_t>( this->GetParameterInt( "layer" ) ) );
     ogr::Feature feature = layer.ogr().GetNextFeature();
 
     ClearChoices( "feat" );
@@ -109,12 +111,12 @@ void TrainVectorBase::DoUpdateParameters()
 
       if( fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64( fieldType ) || fieldType == OFTReal )
         {
-        std::string tmpKey = "feat." + key.substr( 0, end - key.begin() );
+        std::string tmpKey = "feat." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
         AddChoice( tmpKey, item );
         }
       if( fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64( fieldType ) )
         {
-        std::string tmpKey = "cfield." + key.substr( 0, end - key.begin() );
+        std::string tmpKey = "cfield." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
         AddChoice( tmpKey, item );
         }
       }
@@ -125,12 +127,9 @@ void TrainVectorBase::DoUpdateParameters()
 
 void TrainVectorBase::DoExecute()
 {
-  typedef int LabelPixelType;
-  typedef itk::FixedArray<LabelPixelType, 1> LabelSampleType;
-  typedef itk::Statistics::ListSample<LabelSampleType> LabelListSampleType;
+  DoBeforeTrainExecute();
 
-  FeaturesInfo featuresInfo( GetChoiceNames( "feat" ), GetChoiceNames( "cfield" ), GetSelectedItems( "feat" ),
-                             GetSelectedItems( "cfield" ) );
+  featuresInfo.SetFieldNames( GetChoiceNames( "feat" ), GetSelectedItems( "feat" ));
 
   // Check input parameters
   if( featuresInfo.m_SelectedIdx.empty() )
@@ -138,64 +137,34 @@ void TrainVectorBase::DoExecute()
     otbAppLogFATAL( << "No features have been selected to train the classifier on!" );
     }
 
-  // Todo only Log warning and set CFieldName to 0, 1, 2, 3... (default behavior)
-  if( featuresInfo.m_SelectedCFieldIdx.empty() )
-    {
-    otbAppLogFATAL( << "No field has been selected for data labelling!" );
-    }
-
   StatisticsMeasurement measurement = ComputeStatistics( featuresInfo.m_NbFeatures );
-  ExtractSamples(measurement, featuresInfo);
+  ExtractAllSamples( measurement );
 
   this->Train( trainingListSamples.listSample, trainingListSamples.labeledListSample, GetParameterString( "io.out" ) );
 
   predictedList = TargetListSampleType::New();
   this->Classify( classificationListSamples.listSample, predictedList, GetParameterString( "io.out" ) );
 
-  DoTrainExecute();
+  DoAfterTrainExecute();
 }
 
 
-void TrainVectorBase::ExtractSamples(const StatisticsMeasurement &measurement, FeaturesInfo &featuresInfo)
+void TrainVectorBase::ExtractAllSamples(const StatisticsMeasurement &measurement)
 {
-  trainingListSamples = ExtractTrainingListSamples(measurement, featuresInfo);
-  validationListSamples = ExtractValidationListSamples(measurement, featuresInfo);
-  classificationListSamples = ExtractClassificationListSamples(measurement, featuresInfo);
-}
-
-TrainVectorBase::ListSamples
-TrainVectorBase::ExtractTrainingListSamples(const StatisticsMeasurement &measurement, FeaturesInfo &featuresInfo)
-{
-  return ExtractListSamples( "io.vd", "layer", measurement, featuresInfo );
+  trainingListSamples = ExtractTrainingListSamples(measurement);
+  classificationListSamples = ExtractClassificationListSamples(measurement);
 }
 
 TrainVectorBase::ListSamples
-TrainVectorBase::ExtractValidationListSamples(const StatisticsMeasurement &measurement, FeaturesInfo &featuresInfo)
+TrainVectorBase::ExtractTrainingListSamples(const StatisticsMeasurement &measurement)
 {
-  return ExtractListSamples( "valid.vd", "valid.layer", measurement, featuresInfo );
+  return ExtractListSamples( "io.vd", "layer", measurement);
 }
 
-
 TrainVectorBase::ListSamples
-TrainVectorBase::ExtractClassificationListSamples(const StatisticsMeasurement &measurement, FeaturesInfo &featuresInfo)
+TrainVectorBase::ExtractClassificationListSamples(const StatisticsMeasurement &itkNotUsed(measurement))
 {
-  ListSamples performanceSample;
-
-  //Test the input validation set size
-  if( validationListSamples.labeledListSample->Size() != 0 )
-    {
-    performanceSample.listSample = validationListSamples.listSample;
-    performanceSample.labeledListSample = validationListSamples.labeledListSample;
-    }
-  else
-    {
-    otbAppLogWARNING(
-            "The validation set is empty. The performance estimation is done using the input training set in this case." );
-    performanceSample.listSample = trainingListSamples.listSample;
-    performanceSample.labeledListSample = trainingListSamples.labeledListSample;
-    }
-
-  return performanceSample;
+  return trainingListSamples;
 }
 
 
@@ -224,7 +193,7 @@ TrainVectorBase::ComputeStatistics(unsigned int nbFeatures)
 
 TrainVectorBase::ListSamples
 TrainVectorBase::ExtractListSamples(std::string parameterName, std::string parameterLayer,
-                                    const StatisticsMeasurement &measurement, FeaturesInfo &featuresInfo)
+                                    const StatisticsMeasurement &measurement)
 {
   ListSamples listSamples;
   if( HasValue( parameterName ) && IsParameterEnabled( parameterName ) )
@@ -249,12 +218,15 @@ TrainVectorBase::ExtractListSamples(std::string parameterName, std::string param
         }
 
       // Check all needed fields are present :
-      //   - check class field
+      //   - check class field if we use supervised classification or if class field name is not empty
       int cFieldIndex = feature.ogr().GetFieldIndex( featuresInfo.m_SelectedCFieldName.c_str() );
-      if( cFieldIndex < 0 )
+      if( cFieldIndex < 0 && !featuresInfo.m_SelectedCFieldName.empty())
+        {
         otbAppLogFATAL( "The field name for class label (" << featuresInfo.m_SelectedCFieldName
                                                            << ") has not been found in the vector file "
                                                            << validFileList[k] );
+        }
+
       //   - check feature fields
       std::vector<int> featureFieldIndex( featuresInfo.m_NbFeatures, -1 );
       for( unsigned int i = 0; i < featuresInfo.m_NbFeatures; i++ )
@@ -266,18 +238,22 @@ TrainVectorBase::ExtractListSamples(std::string parameterName, std::string param
                                                         << validFileList[k] );
         }
 
+
       while( goesOn )
         {
-        if( feature.ogr().IsFieldSet( cFieldIndex ) )
-          {
-          MeasurementType mv;
-          mv.SetSize( featuresInfo.m_NbFeatures );
-          for( unsigned int idx = 0; idx < featuresInfo.m_NbFeatures; ++idx )
-            mv[idx] = feature.ogr().GetFieldAsDouble( featureFieldIndex[idx] );
+        // Retrieve all the features for each field in the ogr layer.
+        MeasurementType mv;
+        mv.SetSize( featuresInfo.m_NbFeatures );
+        for( unsigned int idx = 0; idx < featuresInfo.m_NbFeatures; ++idx )
+          mv[idx] = feature.ogr().GetFieldAsDouble( featureFieldIndex[idx] );
 
-          input->PushBack( mv );
+        input->PushBack( mv );
+
+        if( feature.ogr().IsFieldSet( cFieldIndex ) )
           target->PushBack( feature.ogr().GetFieldAsInteger( cFieldIndex ) );
-          }
+        else
+          target->PushBack( 0 );
+
         feature = layer.ogr().GetNextFeature();
         goesOn = feature.addr() != 0;
         }

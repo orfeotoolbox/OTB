@@ -45,6 +45,11 @@ public:
   typedef ConfusionMatrixCalculatorType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
 
+protected :
+  TrainVectorClassifier() : TrainVectorBase()
+  {
+    m_ClassifierCategory = Supervised;
+  }
 
 private:
   void DoTrainInit()
@@ -78,11 +83,44 @@ private:
     // Nothing to do here
   }
 
-  void DoTrainExecute()
+  void DoBeforeTrainExecute()
+  {
+    // Enforce the need of class field name in supervised mode
+    featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+
+    if( featuresInfo.m_SelectedCFieldIdx.empty() && m_ClassifierCategory == Supervised )
+      {
+      otbAppLogFATAL( << "No field has been selected for data labelling!" );
+      }
+  }
+
+  void DoAfterTrainExecute()
   {
     ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionmatrix( predictedList,
                                                                                  classificationListSamples.labeledListSample );
     WriteConfusionMatrix( confMatCalc );
+  }
+
+
+  ListSamples ExtractClassificationListSamples(const StatisticsMeasurement &measurement)
+  {
+    ListSamples performanceSample;
+    ListSamples validationListSamples = ExtractListSamples( "valid.vd", "valid.layer", measurement );
+    //Test the input validation set size
+    if( validationListSamples.labeledListSample->Size() != 0 )
+      {
+      performanceSample.listSample = validationListSamples.listSample;
+      performanceSample.labeledListSample = validationListSamples.labeledListSample;
+      }
+    else
+      {
+      otbAppLogWARNING(
+              "The validation set is empty. The performance estimation is done using the input training set in this case." );
+      performanceSample.listSample = trainingListSamples.listSample;
+      performanceSample.labeledListSample = trainingListSamples.labeledListSample;
+      }
+
+    return performanceSample;
   }
 
 
@@ -284,7 +322,6 @@ private:
 
     otbAppLogINFO( "Confusion matrix (rows = reference labels, columns = produced labels):\n" << os.str() );
   }
-
 
 };
 }
