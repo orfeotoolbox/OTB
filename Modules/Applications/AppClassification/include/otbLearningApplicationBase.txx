@@ -28,7 +28,7 @@ namespace Wrapper
 
 template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
-::LearningApplicationBase() : m_RegressionFlag(false)
+::LearningApplicationBase() : m_RegressionFlag(false), m_ClassifierCategory(Supervised)
 {
 }
 
@@ -50,8 +50,25 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Choice, "classifier", "Classifier to use for the training");
   SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
+  switch(m_ClassifierCategory)
+    {
+    case Unsupervised:
+      InitUnsupervisedClassifierParams();
+      break;
+    case Supervised:
+    default :
+      InitSupervisedClassifierParams();
+    }
+}
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitSupervisedClassifierParams()
+{
+
   //Group LibSVM
-#ifdef OTB_USE_LIBSVM 
+#ifdef OTB_USE_LIBSVM
   InitLibSVMParams();
 #endif
 
@@ -78,7 +95,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
   InitSharkRandomForestsParams();
   InitSharkKMeansParams();
 #endif
-  
+}
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitUnsupervisedClassifierParams()
+{
+
 }
 
 template <class TInputValue, class TOutputValue>

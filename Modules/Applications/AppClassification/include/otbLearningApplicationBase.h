@@ -160,15 +160,31 @@ protected:
                 std::string modelPath);
 
   /** Init method that creates all the parameters for machine learning models */
-  void DoInit();
+  void DoInit() ITK_OVERRIDE;
 
   /** Flag to switch between classification and regression mode.
    * False by default, child classes may change it in their constructor */
   bool m_RegressionFlag;
 
-private:
+  /** enum use to selected classifier category */
+  enum ClassifierCategory {
+    Supervised,
+    Unsupervised
+  };
 
+  /** Enum to switch between unsupervised or supervised classification.
+   * Supervised by default, child classes may change it in their constructor */
+  ClassifierCategory m_ClassifierCategory;
+
+private:
   /** Specific Init and Train methods for each machine learning model */
+
+  /** Init Parameters for Supervised Classifier */
+  void InitSupervisedClassifierParams();
+
+  /** Init Parameters for Unsupervised Classifier */
+  void InitUnsupervisedClassifierParams();
+
   //@{
 #ifdef OTB_USE_LIBSVM 
   void InitLibSVMParams();
