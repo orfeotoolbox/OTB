@@ -292,10 +292,10 @@ private:
 
     m_InstanceFilter->Update();
 
-    SetParameterFloat("rc", m_InstanceFilter->GetMeanRC());
-    SetParameterFloat("rf", m_InstanceFilter->GetMeanRF());
-    SetParameterFloat("ra", m_InstanceFilter->GetMeanRA());
-    SetParameterFloat("rm", m_InstanceFilter->GetMeanRM());
+    SetParameterFloat("rc",m_InstanceFilter->GetMeanRC(), false);
+    SetParameterFloat("rf",m_InstanceFilter->GetMeanRF(), false);
+    SetParameterFloat("ra",m_InstanceFilter->GetMeanRA(), false);
+    SetParameterFloat("rm",m_InstanceFilter->GetMeanRM(), false);
   }
 
   ImageToLabelMapFilterType::Pointer m_GTFilter;

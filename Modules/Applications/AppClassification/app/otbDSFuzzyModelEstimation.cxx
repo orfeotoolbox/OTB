@@ -140,12 +140,12 @@ private:
     AddParameter(ParameterType_String, "cri", "Criterion");
     SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
     MandatoryOff("cri");
-    SetParameterString("cri","((Belief + Plausibility)/2.)");
+    SetParameterString("cri","((Belief + Plausibility)/2.)", false);
 
     AddParameter(ParameterType_Float,"wgt","Weighting");
     SetParameterDescription("wgt","Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)");
     MandatoryOff("wgt");
-    SetParameterFloat("wgt", 0.5);
+    SetParameterFloat("wgt",0.5, false);
 
     AddParameter(ParameterType_InputFilename,"initmod","initialization model");
     SetParameterDescription("initmod","Initialization model (xml file) to be used. If the xml initialization model is set, the descriptor list is not used (specified using the option -desclist)");
@@ -154,12 +154,12 @@ private:
     AddParameter(ParameterType_StringList, "desclist","Descriptor list");
     SetParameterDescription("desclist","List of the descriptors to be used in the model (must be specified to perform an automatic initialization)");
     MandatoryOff("desclist");
-    SetParameterString("desclist","");
+    SetParameterString("desclist","", false);
 
     AddParameter(ParameterType_Int,"maxnbit","Maximum number of iterations");
     MandatoryOff("maxnbit");
     SetParameterDescription("maxnbit","Maximum number of optimizer iteration (default 200)");
-    SetParameterInt("maxnbit", 200);
+    SetParameterInt("maxnbit",200, false);
 
     AddParameter(ParameterType_Empty,"optobs","Optimizer Observer");
     SetParameterDescription("optobs","Activate the optimizer observer");

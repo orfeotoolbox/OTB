@@ -335,8 +335,10 @@ ImageViewWidget
 ::Initialize( AbstractImageViewManipulator* manipulator,
 	      AbstractImageViewRenderer* renderer )
 {
+#if OTB_DEBUG
   // Test OpenGL.
   ListGlVersions();
+#endif
 
   // Accept drops
   setAcceptDrops( true );

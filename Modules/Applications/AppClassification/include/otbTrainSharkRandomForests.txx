@@ -38,7 +38,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //MaxNumberOfTrees
   AddParameter(ParameterType_Int, "classifier.sharkrf.nbtrees",
                "Maximum number of trees in the forest");
-  SetParameterInt("classifier.sharkrf.nbtrees", 100);
+  SetParameterInt("classifier.sharkrf.nbtrees",100, false);
   SetParameterDescription(
     "classifier.sharkrf.nbtrees",
     "The maximum number of trees in the forest. Typically, the more trees you have, the better the accuracy. "
@@ -48,7 +48,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   
   //NodeSize
   AddParameter(ParameterType_Int, "classifier.sharkrf.nodesize", "Min size of the node for a split");
-  SetParameterInt("classifier.sharkrf.nodesize", 25);
+  SetParameterInt("classifier.sharkrf.nodesize",25, false);
   SetParameterDescription(
     "classifier.sharkrf.nodesize",
     "If the number of samples in a node is smaller than this parameter, "
@@ -56,7 +56,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //MTry
   AddParameter(ParameterType_Int, "classifier.sharkrf.mtry", "Number of features tested at each node");
-  SetParameterInt("classifier.sharkrf.mtry", 0);
+  SetParameterInt("classifier.sharkrf.mtry",0, false);
   SetParameterDescription(
     "classifier.sharkrf.mtry",
     "The number of features (variables) which will be tested at each node in "
@@ -66,7 +66,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //OOB Ratio
   AddParameter(ParameterType_Float, "classifier.sharkrf.oobr", "Out of bound ratio");
-  SetParameterFloat("classifier.sharkrf.oobr", 0.66);
+  SetParameterFloat("classifier.sharkrf.oobr",0.66, false);
   SetParameterDescription("classifier.sharkrf.oobr", 
                           "Set the fraction of the original training dataset to use as the out of bag sample." 
                           "A good default value is 0.66. ");

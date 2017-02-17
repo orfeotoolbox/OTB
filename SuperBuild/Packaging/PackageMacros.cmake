@@ -55,7 +55,7 @@ function(search_library input_file pkg_searchdirs result)
 
     if(EXISTS ${pkg_searchdir}/${input_file} )
       if(PKG_DEBUG)
-	message("searching for '${input_file}' in '${pkg_searchdir}'")
+        message("Found '${pkg_searchdir}/${input_file}' (return)")
       endif()
       set(${result} "${pkg_searchdir}/${input_file}" PARENT_SCOPE)
       return()
@@ -115,9 +115,7 @@ function(is_file_executable2 file_var result_var)
   set(${result_var} 0 PARENT_SCOPE)
 
   get_filename_component(file_full "${${file_var}}" ABSOLUTE)
-  set(${file_var} "${file_full}" PARENT_SCOPE)
   string(TOLOWER "${file_full}" file_full_lower)
-
   # If file name ends in .exe on Windows, *assume* executable:
   #
   if(WIN32 AND NOT UNIX)
@@ -137,7 +135,12 @@ function(is_file_executable2 file_var result_var)
     message("Resolving '${file_full}' to '${file_full_target}")
     get_filename_component(file_full_path "${file_full}" PATH)
     set(file_full "${file_full_path}/${file_full_target}")
-    set(${file_var} "${file_full}" PARENT_SCOPE)
+    if( EXISTS "${file_full}")
+      set(${file_var} "${file_full}" PARENT_SCOPE)
+    else()
+      message(FATAL_ERROR "${file_full} does not exists. Cannot continue")
+    endif()
+
     string(TOLOWER "${file_full}" file_full_lower)
   endif()
 

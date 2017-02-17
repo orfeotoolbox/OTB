@@ -220,10 +220,10 @@ private:
     otbAppLogINFO( << "PSNR: " << m_CompareFilter->GetPSNR() );
     otbAppLogINFO( << "Number of Pixel different: " << m_CompareFilter->GetDiffCount() );
 
-    SetParameterFloat( "mse", m_CompareFilter->GetMSE() );
-    SetParameterFloat( "mae", m_CompareFilter->GetMAE() );
-    SetParameterFloat( "psnr", m_CompareFilter->GetPSNR() );
-    SetParameterFloat( "count", m_CompareFilter->GetDiffCount() );
+    SetParameterFloat( "mse",m_CompareFilter->GetMSE() , false);
+    SetParameterFloat( "mae",m_CompareFilter->GetMAE() , false);
+    SetParameterFloat( "psnr",m_CompareFilter->GetPSNR() , false);
+    SetParameterFloat( "count",m_CompareFilter->GetDiffCount() , false);
   }
 
 

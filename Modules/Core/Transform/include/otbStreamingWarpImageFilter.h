@@ -105,7 +105,7 @@ private:
   StreamingWarpImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  // Assesment of the maximum displacement for streaming
+  // Assessment of the maximum displacement for streaming
   DisplacementValueType m_MaximumDisplacement;
 };
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -47,10 +47,13 @@
    </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
+     <property name="margin">
+      <number>9</number>
+     </property>
      <property name="spacing">
       <number>3</number>
      </property>
-     <item row="4" column="0">
+     <item row="3" column="0">
       <layout class="QHBoxLayout" name="wHorizontalLayout">
        <property name="spacing">
         <number>1</number>
@@ -95,7 +98,7 @@
        </item>
       </layout>
      </item>
-     <item row="4" column="1">
+     <item row="3" column="1">
       <widget class="QComboBox" name="wComboBox">
        <property name="enabled">
         <bool>false</bool>
@@ -123,23 +126,7 @@
        </item>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="fileComponentLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Image bands&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
+     <item row="0" column="0">
       <layout class="QHBoxLayout" name="rHorizontalLayout">
        <property name="spacing">
         <number>1</number>
@@ -178,7 +165,7 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="1">
+     <item row="0" column="1">
       <widget class="QComboBox" name="rComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
@@ -203,7 +190,7 @@
        </item>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="1" column="0">
       <layout class="QHBoxLayout" name="gHorizontalLayout">
        <property name="spacing">
         <number>1</number>
@@ -242,7 +229,7 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="1">
+     <item row="1" column="1">
       <widget class="QComboBox" name="gComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
@@ -267,7 +254,7 @@
        </item>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="2" column="0">
       <layout class="QHBoxLayout" name="bHorizontalLayout">
        <property name="spacing">
         <number>1</number>
@@ -306,7 +293,7 @@
        </item>
       </layout>
      </item>
-     <item row="3" column="1">
+     <item row="2" column="1">
       <widget class="QComboBox" name="bComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
@@ -331,7 +318,7 @@
        </item>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item row="3" column="2">
       <widget class="QCheckBox" name="wCheckBox">
        <property name="toolTip">
         <string>Enable/disable gray-scale mode.</string>

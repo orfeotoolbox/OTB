@@ -38,7 +38,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Choice, "classifier.ann.t", "Train Method Type");
   AddChoice("classifier.ann.t.reg", "RPROP algorithm");
   AddChoice("classifier.ann.t.back", "Back-propagation algorithm");
-  SetParameterString("classifier.ann.t", "reg");
+  SetParameterString("classifier.ann.t", "reg", false);
   SetParameterDescription("classifier.ann.t", "Type of training method for the multilayer perceptron (MLP) neural network.");
 
   //LayerSizes
@@ -56,25 +56,25 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddChoice("classifier.ann.f.ident", "Identity function");
   AddChoice("classifier.ann.f.sig", "Symmetrical Sigmoid function");
   AddChoice("classifier.ann.f.gau", "Gaussian function (Not completely supported)");
-  SetParameterString("classifier.ann.f", "sig");
+  SetParameterString("classifier.ann.f", "sig", false);
   SetParameterDescription("classifier.ann.f", "Neuron activation function.");
 
   //Alpha
   AddParameter(ParameterType_Float, "classifier.ann.a", "Alpha parameter of the activation function");
-  SetParameterFloat("classifier.ann.a", 1.);
+  SetParameterFloat("classifier.ann.a",1., false);
   SetParameterDescription("classifier.ann.a",
                           "Alpha parameter of the activation function (used only with sigmoid and gaussian functions).");
 
   //Beta
   AddParameter(ParameterType_Float, "classifier.ann.b", "Beta parameter of the activation function");
-  SetParameterFloat("classifier.ann.b", 1.);
+  SetParameterFloat("classifier.ann.b",1., false);
   SetParameterDescription("classifier.ann.b",
                           "Beta parameter of the activation function (used only with sigmoid and gaussian functions).");
 
   //BackPropDWScale
   AddParameter(ParameterType_Float, "classifier.ann.bpdw",
                "Strength of the weight gradient term in the BACKPROP method");
-  SetParameterFloat("classifier.ann.bpdw", 0.1);
+  SetParameterFloat("classifier.ann.bpdw",0.1, false);
   SetParameterDescription(
       "classifier.ann.bpdw",
       "Strength of the weight gradient term in the BACKPROP method. The recommended value is about 0.1.");
@@ -82,7 +82,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //BackPropMomentScale
   AddParameter(ParameterType_Float, "classifier.ann.bpms",
                "Strength of the momentum term (the difference between weights on the 2 previous iterations)");
-  SetParameterFloat("classifier.ann.bpms", 0.1);
+  SetParameterFloat("classifier.ann.bpms",0.1, false);
   SetParameterDescription(
       "classifier.ann.bpms",
       "Strength of the momentum term (the difference between weights on the 2 previous iterations). "
@@ -92,12 +92,12 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //RegPropDW0
   AddParameter(ParameterType_Float, "classifier.ann.rdw",
                "Initial value Delta_0 of update-values Delta_{ij} in RPROP method");
-  SetParameterFloat("classifier.ann.rdw", 0.1);
+  SetParameterFloat("classifier.ann.rdw",0.1, false);
   SetParameterDescription("classifier.ann.rdw", "Initial value Delta_0 of update-values Delta_{ij} in RPROP method (default = 0.1).");
 
   //RegPropDWMin
   AddParameter(ParameterType_Float, "classifier.ann.rdwm", "Update-values lower limit Delta_{min} in RPROP method");
-  SetParameterFloat("classifier.ann.rdwm", 1e-7);
+  SetParameterFloat("classifier.ann.rdwm",1e-7, false);
   SetParameterDescription(
       "classifier.ann.rdwm",
       "Update-values lower limit Delta_{min} in RPROP method. It must be positive (default = 1e-7).");
@@ -107,18 +107,18 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddChoice("classifier.ann.term.iter", "Maximum number of iterations");
   AddChoice("classifier.ann.term.eps", "Epsilon");
   AddChoice("classifier.ann.term.all", "Max. iterations + Epsilon");
-  SetParameterString("classifier.ann.term", "all");
+  SetParameterString("classifier.ann.term", "all", false);
   SetParameterDescription("classifier.ann.term", "Termination criteria.");
 
   //Epsilon
   AddParameter(ParameterType_Float, "classifier.ann.eps", "Epsilon value used in the Termination criteria");
-  SetParameterFloat("classifier.ann.eps", 0.01);
+  SetParameterFloat("classifier.ann.eps",0.01, false);
   SetParameterDescription("classifier.ann.eps", "Epsilon value used in the Termination criteria.");
 
   //MaxIter
   AddParameter(ParameterType_Int, "classifier.ann.iter",
                "Maximum number of iterations used in the Termination criteria");
-  SetParameterInt("classifier.ann.iter", 1000);
+  SetParameterInt("classifier.ann.iter",1000, false);
   SetParameterDescription("classifier.ann.iter", "Maximum number of iterations used in the Termination criteria.");
 
 }

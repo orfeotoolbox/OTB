@@ -7,7 +7,7 @@
     <file alias="action_LayerProjection_Icon">../../../../Utilities/Data/Icons/projection_24x24.png</file>
     <file alias="action_LayerUp_Icon">../../../../Utilities/Data/Icons/layer-up_24x24.png</file>
     <file alias="action_LayerBottom_Icon">../../../../Utilities/Data/Icons/layer-bottom_24x24.png</file>
-    <file alias="action_LayerDelete_Icon">../../../../Utilities/Data/Icons/layer-delete_24x24.png</file>
+    <file alias="action_LayerDelete_Icon">../../../../Utilities/Data/Icons/layer-delete.png</file>
     <file alias="action_LayerDown_Icon">../../../../Utilities/Data/Icons/layer-down_24x24.png</file>
     <file alias="action_LayerTop_Icon">../../../../Utilities/Data/Icons/layer-top_24x24.png</file>
     <file alias="action_ZoomFull_Icon">../../../../Utilities/Data/Icons/zoom-1to1.png</file>

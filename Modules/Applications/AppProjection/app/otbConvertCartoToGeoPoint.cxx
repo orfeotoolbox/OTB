@@ -117,8 +117,8 @@ private:
     otbAppLogINFO( << std::setprecision(10) << "Geographic   Point (Long, Lat) : (" << geoPoint[0] << ", " <<  geoPoint[1] << ")" );
 
 
-    SetParameterFloat( "long", geoPoint[0] );
-    SetParameterFloat( "lat", geoPoint[1] );
+    SetParameterFloat( "long",geoPoint[0] , false);
+    SetParameterFloat( "lat",geoPoint[1] , false);
   }
 };
 
