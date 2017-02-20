@@ -93,7 +93,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
 #ifdef OTB_USE_SHARK
   InitSharkRandomForestsParams();
-  InitSharkKMeansParams();
 #endif
 }
 
@@ -102,7 +101,9 @@ void
 LearningApplicationBase<TInputValue,TOutputValue>
 ::InitUnsupervisedClassifierParams()
 {
-
+#ifdef OTB_USE_SHARK
+  InitSharkKMeansParams();
+#endif
 }
 
 template <class TInputValue, class TOutputValue>

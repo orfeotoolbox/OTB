@@ -935,6 +935,24 @@ if(OTB_USE_OPENCV)
     ${TEMP}/apTvClTrainVectorClassifierModel.rf)
 endif()
 
+#----------- TrainVectorClustering TESTS ----------------
+if(OTB_USE_SHARK)
+  otb_test_application(NAME apTvClTrainVectorClustering
+    APP  TrainVectorClustering
+    OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+    -feat value_0 value_1 value_2 value_3
+    -classifier sharkkm
+    -io.out ${TEMP}/apTvClTrainVectorClusteringModel.txt)
+
+  otb_test_application(NAME apTvClTrainVectorClusteringWithClass
+    APP  TrainVectorClustering
+    OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+    -feat value_0 value_1 value_2 value_3
+    -cfield class
+    -classifier sharkkm
+    -io.out ${TEMP}/apTvClTrainVectorClusteringModelWithClass.txt)
+endif()
+
 #------------ MultiImageSamplingRate TESTS ----------------
 otb_test_application(
   NAME apTvClMultiImageSamplingRate

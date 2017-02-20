@@ -249,7 +249,7 @@ TrainVectorBase::ExtractListSamples(std::string parameterName, std::string param
 
         input->PushBack( mv );
 
-        if( feature.ogr().IsFieldSet( cFieldIndex ) )
+        if( feature.ogr().IsFieldSet( cFieldIndex ) && cFieldIndex != -1 )
           target->PushBack( feature.ogr().GetFieldAsInteger( cFieldIndex ) );
         else
           target->PushBack( 0 );
@@ -258,6 +258,8 @@ TrainVectorBase::ExtractListSamples(std::string parameterName, std::string param
         goesOn = feature.addr() != 0;
         }
       }
+
+
 
     ShiftScaleFilterType::Pointer shiftScaleFilter = ShiftScaleFilterType::New();
     shiftScaleFilter->SetInput( input );

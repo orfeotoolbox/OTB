@@ -110,7 +110,7 @@ public:
 
   // Machine Learning models
   typedef otb::MachineLearningModelFactory<
-            InputValueType, OutputValueType>             ModelFactoryType;
+            InputValueType, OutputValueType>                         ModelFactoryType;
   typedef typename ModelFactoryType::MachineLearningModelTypePointer ModelPointerType;
   typedef typename ModelFactoryType::MachineLearningModelType        ModelType;
   
