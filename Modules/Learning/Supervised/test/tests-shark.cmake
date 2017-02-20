@@ -60,30 +60,3 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSupervi
   ${INPUTDATA}/Classification/QB_1_ortho_mask.tif
   )
 
-
-
-# kMeans Shark related tests
-
-otb_add_test(NAME leTvSharkKMeansMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbSharkKMeansMachineLearningModelNew
-  )
-
-otb_add_test(NAME leTvSharkKMeansMachineLearningModel COMMAND otbSupervisedTestDriver
-  otbSharkKMeansMachineLearningModelTrain
-  ${INPUTDATA}/letter.scale
-  ${TEMP}/shark_km_model.txt
-  )
-
-otb_add_test(NAME leTvSharkKMeansMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
-  otbSharkKMeansMachineLearningModelPredict
-  ${INPUTDATA}/letter.scale
-  ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_KMeansmodel.txt
-  )
-
-otb_add_test(NAME leTvSharkKMeansMachineLearningModelCanReadFail COMMAND otbSupervisedTestDriver
-  otbSharkKMeansMachineLearningModelPredict
-  ${INPUTDATA}/letter.scale
-  ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
-  )
-
-set_property(TEST leTvSharkKMeansMachineLearningModelCanReadFail PROPERTY WILL_FAIL true)

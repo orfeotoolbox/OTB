@@ -9,6 +9,7 @@ ENABLE_SHARED
     OTBCommon
     OTBITK
     OTBImageBase
+    OTBLearningBase
 
   OPTIONAL_DEPENDS
     OTBOpenCV
@@ -19,6 +20,7 @@ ENABLE_SHARED
     OTBTestKernel
     OTBImageIO
     OTBImageBase
+    OTBLearningBase
     OTBBoost
 
   DESCRIPTION

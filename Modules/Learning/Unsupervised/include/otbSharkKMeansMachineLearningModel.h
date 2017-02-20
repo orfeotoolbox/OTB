@@ -18,9 +18,7 @@
 #ifndef otbSharkKMeansMachineLearningModel_h
 #define otbSharkKMeansMachineLearningModel_h
 
-#include <shark/Models/Clustering/HardClusteringModel.h>
-#include <shark/Models/Clustering/SoftClusteringModel.h>
-#include "otb_shark.h"
+
 
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
@@ -36,6 +34,9 @@
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
 
+#include "otb_shark.h"
+#include "shark/Models/Clustering/HardClusteringModel.h"
+#include "shark/Models/Clustering/SoftClusteringModel.h"
 #include "shark/Models/Clustering/Centroids.h"
 #include "shark/Models/Clustering/ClusteringModel.h"
 #include "shark/Algorithms/KMeans.h"
@@ -57,7 +58,7 @@ using namespace shark;
  *  For more information, see
  *  http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html
  *
- *  \ingroup OTBSupervised
+ *  \ingroup OTBUnsupervised
  */
 namespace otb
 {

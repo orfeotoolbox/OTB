@@ -26,7 +26,7 @@ namespace otb
 /** \class SharkKMeansMachineLearningModelFactory
  * \brief Creation of an instance of a SharkKMeansMachineLearningModel object using the object factory
  *
- * \ingroup OTBSupervised
+ * \ingroup OTBUnsupervised
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT SharkKMeansMachineLearningModelFactory : public itk::ObjectFactoryBase

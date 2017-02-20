@@ -12,6 +12,7 @@ otb_module(OTBAppClassification
     OTBVectorDataIO
     OTBSOM
     OTBSupervised
+    OTBUnsupervised
     OTBApplicationEngine
     OTBIndices
     OTBMathParser
