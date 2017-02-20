@@ -10,6 +10,7 @@ ENABLE_SHARED
     OTBITK
     OTBImageBase
     OTBLearningBase
+    OTBUnsupervised
 
   OPTIONAL_DEPENDS
     OTBOpenCV
@@ -22,6 +23,7 @@ ENABLE_SHARED
     OTBImageBase
     OTBLearningBase
     OTBBoost
+    OTBUnsupervised
 
   DESCRIPTION
     "${DOCUMENTATION}"

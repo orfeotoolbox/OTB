@@ -7,7 +7,6 @@ otb_module(OTBUnsupervised
   OTBITK
   OTBImageBase
   OTBLearningBase
-  OTBSupervised
 
   OPTIONAL_DEPENDS
   OTBShark
@@ -17,7 +16,6 @@ otb_module(OTBUnsupervised
   OTBImageIO
   OTBImageBase
   OTBLearningBase
-  OTBSupervised
 
   DESCRIPTION
   "${DOCUMENTATION}"

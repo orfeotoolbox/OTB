@@ -6,6 +6,9 @@ otb_module(OTBLearningBase
     OTBCommon
     OTBITK
 
+  OPTIONAL_DEPENDS
+    OTBShark
+
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
