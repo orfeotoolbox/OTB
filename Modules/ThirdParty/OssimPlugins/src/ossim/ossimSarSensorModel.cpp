@@ -1274,15 +1274,12 @@ bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<uns
   
   unsigned long lineOffset = vit->first;
   
-  bool burstFound = false;
-
   deburstLine = imageLine;
   
   while(!burstFound && nit != lines.end())
     {
     if(imageLine>=vit->first && imageLine<=vit->second)
       {
-      burstFound = true;
       deburstLine-=lineOffset;
       return true;
       }
