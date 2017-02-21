@@ -47,7 +47,6 @@ SarSensorModelAdapter::SarSensorModelAdapter():
 
 SarSensorModelAdapter::~SarSensorModelAdapter()
 {
-  if(m_SensorModel != ITK_NULLPTR)
     delete m_SensorModel;
 }
 
