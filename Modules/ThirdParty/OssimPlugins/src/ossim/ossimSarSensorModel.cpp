@@ -1276,7 +1276,7 @@ bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<uns
   
   deburstLine = imageLine;
   
-  while(!burstFound && nit != lines.end())
+  while(nit != lines.end())
     {
     if(imageLine>=vit->first && imageLine<=vit->second)
       {
