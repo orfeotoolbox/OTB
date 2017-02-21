@@ -75,9 +75,9 @@ public:
   /** Deburst metadata if possible and return lines to keep in image file */
   bool Deburst(std::vector<std::pair<unsigned long, unsigned long>> & lines);
 
-  static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & imageLine, unsigned long & deburstLine);
+  static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
 
-  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & deburstLine, unsigned long & imageLine);
+  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
 
   
 protected:

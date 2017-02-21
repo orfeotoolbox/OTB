@@ -109,12 +109,12 @@ bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigne
   return false;
 }
 
-bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & imageLine, unsigned long & deburstLine)
+bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {
   return ossimplugins::ossimSarSensorModel::imageLineToDeburstLine(lines,imageLine,deburstLine);
 }
 
-void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & deburstLine, unsigned long & imageLine)
+void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine)
 {
   ossimplugins::ossimSarSensorModel::deburstLineToImageLine(lines,deburstLine,imageLine);
 }

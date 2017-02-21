@@ -264,7 +264,7 @@ public:
     * \param deburstLine The output deburst line
     * \return True if imageLine is within a preserved range, false otherwise
     */
-   static bool imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & imageLine, unsigned long & deburstLine);
+   static bool imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
 
    /** 
     * This is a helper function to convert deburst line to input image
@@ -273,7 +273,7 @@ public:
     * \param imageLine The input deburst line
     * \param deburstLine The output original image line
     */
-   static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, const unsigned long & deburstLine, unsigned long & imageLine);
+   static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
    
    /**
     * Returns pointer to a new instance, copy of this.
