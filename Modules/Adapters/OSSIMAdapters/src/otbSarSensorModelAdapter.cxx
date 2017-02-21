@@ -46,9 +46,7 @@ SarSensorModelAdapter::SarSensorModelAdapter():
 }
 
 SarSensorModelAdapter::~SarSensorModelAdapter()
-{
-    delete m_SensorModel;
-}
+{}
 
 bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
 {
@@ -57,19 +55,15 @@ bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
    ossimKeywordlist geom;
    image_kwl.convertToOSSIMKeywordlist(geom);
 
-   if(m_SensorModel != ITK_NULLPTR)
-     {
-     delete m_SensorModel;
-     }
    
-   m_SensorModel =  dynamic_cast<ossimplugins::ossimSarSensorModel* >(ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom));
+   m_SensorModel.reset(dynamic_cast<ossimplugins::ossimSarSensorModel* >(ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom)));
 
    return IsValidSensorModel();
 }
 
 bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
 {
-  if(m_SensorModel != ITK_NULLPTR)
+  if(m_SensorModel.get() != ITK_NULLPTR)
     {
     ossimKeywordlist geom;
 
@@ -89,12 +83,12 @@ bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
 
 bool SarSensorModelAdapter::IsValidSensorModel() const
 {
-  return m_SensorModel != ITK_NULLPTR;
+  return m_SensorModel.get() != ITK_NULLPTR;
 }
 
 bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long>> & lines)
 {
-  if(m_SensorModel != ITK_NULLPTR)
+  if(m_SensorModel.get() != ITK_NULLPTR)
     {
     return m_SensorModel->deburst(lines);
     }

@@ -18,6 +18,8 @@
 #ifndef otbSarSensorModelAdapter_h
 #define otbSarSensorModelAdapter_h
 
+#include <memory>
+
 #include "otbDEMHandler.h"
 
 namespace ossimplugins
@@ -55,7 +57,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef ossimplugins::ossimSarSensorModel* InternalModelPointer;
+  typedef std::auto_ptr<ossimplugins::ossimSarSensorModel> InternalModelPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
