@@ -985,7 +985,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     }
 
-  delete pixBuffer;
+  delete[] pixBuffer;
 }
 
 } //namespace otb
