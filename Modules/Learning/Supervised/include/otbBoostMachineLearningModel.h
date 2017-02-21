@@ -25,11 +25,7 @@
 #include "otbMachineLearningModel.h"
 
 #ifdef OTB_OPENCV_3
-namespace cv {
-namespace ml {
-class Boost;
-}
-}
+#include "otbOpenCVUtils.h"
 #else
 class CvBoost;
 #endif
@@ -136,7 +132,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
 #ifdef OTB_OPENCV_3
-  cv::ml::Boost* m_BoostModel;
+  cv::Ptr<cv::ml::Boost> m_BoostModel;
 #else
   CvBoost * m_BoostModel;
 #endif
