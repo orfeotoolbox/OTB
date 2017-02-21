@@ -39,7 +39,7 @@ namespace otb
  * 
  * Note that currently only Sentinel1 IW SLC products are supported.
  * 
- * \ingroup OTBSAR
+ * \ingroup OTBSARCalibration
  */
 
 template <class TImage> class ITK_EXPORT SarDeburstImageFilter :

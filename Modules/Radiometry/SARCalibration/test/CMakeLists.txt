@@ -22,6 +22,7 @@ otbSarRadiometricCalibrationFunctionWithoutNoise.cxx
 otbTerraSarBrightnessImageComplexFilterTest.cxx
 otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest.cxx
 otbSarBrightnessToImageFilterTest.cxx
+otbSarDeburstFilterTest.cxx
 )
 
 add_executable(otbSARCalibrationTestDriver ${OTBSARCalibrationTests})
@@ -272,3 +273,11 @@ otb_add_test(NAME raTvSarBrightnessToImageFilter COMMAND  otbSARCalibrationTestD
   ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
   1000 1000 250 250 # Extract
   )
+
+otb_add_test(NAME saTvSarDeburstImageFilterTest COMMAND otbSARCalibrationTestDriver
+  --compare-image ${NOTOL}
+  ${BASELINE}/saTvSarDeburstImageFilterTestOutput.tif
+  ${TEMP}/saTvSarDeburstImageFilterTestOutput.tif
+  otbSarDeburstFilterTest
+  ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.tif
+  ${TEMP}/saTvSarDeburstImageFilterTestOutput.tif)

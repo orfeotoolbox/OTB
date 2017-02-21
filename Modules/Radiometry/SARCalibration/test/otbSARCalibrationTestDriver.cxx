@@ -21,4 +21,5 @@ void RegisterTests()
   REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest);
   REGISTER_TEST(otbSarBrightnessToImageFilterTest);
+  REGISTER_TEST(otbSarDeburstFilterTest);
 }
