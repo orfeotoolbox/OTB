@@ -150,7 +150,7 @@ name of the files to write, but they also encapsulate the corresponding writers.
 \section{Composite application}
 
 The application framework has been extended to allow the implementation of composite applications :
-applications that use other applications. The concept is simple : you have two applications A and B
+\textbf{applications that use other applications}. The concept is simple : you have two applications A and B
 that you want to chain in order to build a third application C. Rather than writing C by copying
 the code of A and B, you would like to re-use applications A and B. This plain example will be
 re-used in this section for explanations.
@@ -231,7 +231,7 @@ with \code{b.in}. In this case, you have to manually call the writers of paramet
 \code{a.out}.
 \end{itemize}
 
-At the moment, the connexion of vector data parameters is not supported.
+At the moment, the in-memory connexion of vector data parameters is not supported.
 
 \subsection{Orchestration}
 
@@ -242,8 +242,17 @@ parameter update.
 
 In the \code{DoExecute()} of your composite application, you have to call \code{ExecuteInternal()}
 in order to launch each internal application. The order should be compatible with
-image parameter connexions. If you want to do "in-memory" connexions, you can to it between
-two calls to \code{ExecuteInternal()}.
+image parameter connexions. If you want to do "in-memory" connexions, you can do it between
+two calls to \code{ExecuteInternal()}, for instance :
+
+\small
+\begin{lstlisting}
+ExecuteInternal("a");
+GetInternalApplication("b")->SetParameterInputImage("in",
+  GetInternalApplication("a")->GetParameterOutputImage("out"));
+ExecuteInternal("b");
+\end{lstlisting}
+\normalsize
 
 The application BundleToPerfectSensor is a simple example of composite applications.
 For a more complex example, you can check the application TrainImagesClassifier.
