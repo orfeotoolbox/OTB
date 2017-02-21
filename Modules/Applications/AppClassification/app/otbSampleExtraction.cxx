@@ -86,7 +86,7 @@ private:
     AddParameter(ParameterType_String, "outfield.prefix.name", "Output field prefix");
     SetParameterDescription("outfield.prefix.name","Prefix used to form the field names that"
       "will contain the extracted values.");
-    SetParameterString("outfield.prefix.name", "value_");
+    SetParameterString("outfield.prefix.name", "value_", false);
 
     AddChoice("outfield.list","Use the given name list");
     SetParameterDescription("outfield.list","Use the given name list");

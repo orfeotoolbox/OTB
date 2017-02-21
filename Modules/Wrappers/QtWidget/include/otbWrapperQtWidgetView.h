@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include <QObject>
+#include <QShortcut>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperQtWidgetModel.h"
 #endif //tag=QT4-boost-compatibility
@@ -80,6 +81,7 @@ private:
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
+  QShortcut* m_QuitShortcut;
   QLabel* m_Message;
 };
 

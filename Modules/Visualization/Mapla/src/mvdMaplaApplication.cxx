@@ -31,6 +31,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbWrapperApplicationRegistry.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -74,6 +75,7 @@ MaplaApplication
 MaplaApplication
 ::~MaplaApplication()
 {
+  otb::Wrapper::ApplicationRegistry::CleanRegistry();
 }
 
 /*******************************************************************************/

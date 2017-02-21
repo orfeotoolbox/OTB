@@ -26,7 +26,7 @@ find_path( SHARK_INCLUDE_DIR shark/Core/Shark.h
   PATH_SUFFIXES include include/shark shark)
 
 find_library( SHARK_LIBRARY
-  NAMES shark
+  NAMES shark shark_debug
   PATHS "${SHARK_SEARCH_PATH}"
   PATH_SUFFIXES lib
   )

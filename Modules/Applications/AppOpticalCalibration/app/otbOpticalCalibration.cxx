@@ -194,7 +194,7 @@ private:
     AddChoice("level.toa",     "Image to Top Of Atmosphere reflectance");
     AddChoice("level.toatoim",     "TOA reflectance to Image");
     AddChoice("level.toc",     "Image to Top Of Canopy reflectance (atmospheric corrections)");
-    SetParameterString("level", "toa");
+    SetParameterString("level", "toa", false);
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Flag to use milli-reflectance instead of reflectance.\n"
@@ -424,21 +424,21 @@ private:
              ossOutput << "Acquisition Minute already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.minute", lImageMetadataInterface->GetMinute());
+             SetParameterInt("acqui.minute",lImageMetadataInterface->GetMinute(), false);
            }
 
            if (HasUserValue("acqui.hour"))
              ossOutput << "Acquisition Hour already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.hour", lImageMetadataInterface->GetHour());
+             SetParameterInt("acqui.hour",lImageMetadataInterface->GetHour(), false);
            }
 
            if (HasUserValue("acqui.day"))
              ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.day", lImageMetadataInterface->GetDay());
+             SetParameterInt("acqui.day",lImageMetadataInterface->GetDay(), false);
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.day");
            }
@@ -447,7 +447,7 @@ private:
              ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.month", lImageMetadataInterface->GetMonth());
+             SetParameterInt("acqui.month",lImageMetadataInterface->GetMonth(), false);
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.month");
            }
@@ -456,28 +456,28 @@ private:
              ossOutput << "Acquisition Year already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.year", lImageMetadataInterface->GetYear());
+             SetParameterInt("acqui.year",lImageMetadataInterface->GetYear(), false);
            }
 
            if (HasUserValue("acqui.sun.elev"))
              ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.elev", lImageMetadataInterface->GetSunElevation());
+             SetParameterFloat("acqui.sun.elev",lImageMetadataInterface->GetSunElevation(), false);
 
            if (HasUserValue("acqui.sun.azim"))
              ossOutput << "Acquisition Sun Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.azim", lImageMetadataInterface->GetSunAzimuth());
+             SetParameterFloat("acqui.sun.azim",lImageMetadataInterface->GetSunAzimuth(), false);
 
            if (HasUserValue("acqui.view.elev"))
              ossOutput << "Acquisition Viewing Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.elev", lImageMetadataInterface->GetSatElevation());
+             SetParameterFloat("acqui.view.elev",lImageMetadataInterface->GetSatElevation(), false);
 
            if (HasUserValue("acqui.view.azim"))
              ossOutput << "Acquisition Viewing Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.azim", lImageMetadataInterface->GetSatAzimuth());
+             SetParameterFloat("acqui.view.azim",lImageMetadataInterface->GetSatAzimuth(), false);
 
            // Set default value so that they are stored somewhere even if
            // they are overloaded by user values
@@ -823,12 +823,14 @@ private:
           {
           otbAppLogWARNING("No relative spectral response found, using "
                            "default response (constant between 0.3 and 1.0µm)");
-          AcquiCorrectionParametersType::WavelengthSpectralBandVectorType spectralDummy;
+          AcquiCorrectionParametersType::WavelengthSpectralBandVectorType spectralDummy =
+                  AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
           spectralDummy->Clear();
           for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
             {
               spectralDummy->PushBack(FilterFunctionValues::New());
             }
+          m_paramAcqui->SetWavelengthSpectralBand(spectralDummy);
           }
 
         // Aeronet file

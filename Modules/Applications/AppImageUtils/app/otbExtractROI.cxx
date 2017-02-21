@@ -126,8 +126,8 @@ private:
 
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
         {
-        SetParameterInt("sizex", largestRegion.GetSize()[0]);
-        SetParameterInt("sizey", largestRegion.GetSize()[1]);
+        SetParameterInt("sizex",largestRegion.GetSize()[0], false);
+        SetParameterInt("sizey",largestRegion.GetSize()[1], false);
         }
 
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
@@ -164,8 +164,8 @@ private:
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
-        SetParameterInt("startx", 0);
-        SetParameterInt("starty", 0);
+        SetParameterInt("startx",0, false);
+        SetParameterInt("starty",0, false);
         this->CropRegionOfInterest();
         }
       }
@@ -209,10 +209,10 @@ private:
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
           {
-            SetParameterInt("sizex", region.GetSize(0));
-            SetParameterInt("sizey", region.GetSize(1));
-            SetParameterInt("startx", region.GetIndex(0));
-            SetParameterInt("starty", region.GetIndex(1));
+            SetParameterInt("sizex",region.GetSize(0), HasUserValue("sizex"));
+            SetParameterInt("sizey",region.GetSize(1), HasUserValue("sizey"));
+            SetParameterInt("startx",region.GetIndex(0), HasUserValue("startx"));
+            SetParameterInt("starty",region.GetIndex(1), HasUserValue("starty"));
             return true;
           }
       }

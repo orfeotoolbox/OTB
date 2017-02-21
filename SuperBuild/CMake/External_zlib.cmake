@@ -27,6 +27,8 @@ if(MSVC)
     DEPENDEES install)
 endif()
 
+SUPERBUILD_PATCH_SOURCE(ZLIB)
+
 set(_SB_ZLIB_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
   set(_SB_ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/zdll.lib)

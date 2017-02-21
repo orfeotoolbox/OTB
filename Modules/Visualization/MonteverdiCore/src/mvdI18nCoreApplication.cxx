@@ -562,34 +562,33 @@ I18nCoreApplication
 
   // QTextCodec::setCodecForCStrings( QTextCodec::codecForName("System") );
 
-  qWarning()
+  qDebug()
     << "Codec for C-strings:"
     << ( QTextCodec::codecForCStrings()!=NULL
 	 ? QTextCodec::codecForCStrings()->name()
 	 : "none" );
 
-  qWarning()
+  qDebug()
     << "Codec for Locale:"
     << ( QTextCodec::codecForLocale()!=NULL
 	 ? QTextCodec::codecForLocale()->name()
 	 : "none" );
 
-  qWarning()
+  qDebug()
     << "Codec for Tr:"
     << ( QTextCodec::codecForTr()!=NULL
 	 ? QTextCodec::codecForTr()->name()
 	 : "none" );
-
 
   //
   // 1. default UI language is english (no translation).
   QLocale sys_lc( QLocale::system() );
 
   // Trace system locale.
-  qWarning()
+  qDebug()
     << "Language:" << QLocale::languageToString( sys_lc.language() );
 
-  qWarning()
+  qDebug()
     << "Country:" << QLocale::countryToString( sys_lc.country() );
 
   // Check system locale.

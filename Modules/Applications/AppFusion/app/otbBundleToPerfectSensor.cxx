@@ -72,8 +72,8 @@ private:
     Connect("pansharp.inp","superimpose.inr");
     Connect("pansharp.ram","superimpose.ram");
 
-    GetInternalApplication("superimpose")->SetParameterString("interpolator","bco");
-    GetInternalApplication("pansharp")->SetParameterString("method","rcs");
+    GetInternalApplication("superimpose")->SetParameterString("interpolator","bco", false);
+    GetInternalApplication("pansharp")->SetParameterString("method","rcs", false);
     
     // Doc example parameter settings
     SetDocExampleParameterValue("inp", "QB_Toulouse_Ortho_PAN.tif");

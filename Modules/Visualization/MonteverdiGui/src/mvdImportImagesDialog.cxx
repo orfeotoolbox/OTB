@@ -222,28 +222,39 @@ ImportImagesDialog
 	      I18nCoreApplication::SETTINGS_KEY_OVERVIEWS_SIZE
 	    )
 	  );
+    unsigned int threshold =
+      value.isValid() ? value.toInt() : OVERVIEWS_SIZE_DEFAULT;
 
-	  count =
-	    builder->CountResolutions(
-	      2,
-	      value.isValid()
-	      ? value.toInt()
-	      : OVERVIEWS_SIZE_DEFAULT
-	    );
+    otb::GDALOverviewsBuilder::SizeVector ovrSizes;
+    builder->SetResolutionFactor(2);
+    // Count all resolution with minimum size 1 (the high requested count is
+    // clamped by the builder)
+    builder->ListResolutions(ovrSizes, 2, 9999);
+    // Count the number of levels with a least 1 size larger than the default size
+    for (unsigned int k=0 ; k<ovrSizes.size() ; k++)
+      {
+      if (std::max(ovrSizes[k][0],ovrSizes[k][1]) >= threshold)
+        count++;
+      else
+        break;
+      }
 	}
 
 	if( builder->GetOverviewsCount()>0 )
 	  builder->SetBypassEnabled( true );
-	else
+	else if (count>1)
 	  {
 	  flags |= Qt::ItemIsEnabled;
 
-	  builder->SetBypassEnabled( count<=1 );
+	  builder->SetBypassEnabled( false );
 
 	  ++ m_EffectiveCount;
 	  }
+  else
+    {
+    builder->SetBypassEnabled(true);
+    }
 
-	builder->SetResolutionFactor( 2 );
 	builder->SetNbResolutions( count );
 	builder->SetResamplingMethod( otb::GDAL_RESAMPLING_AVERAGE );
 	builder->SetCompressionMethod( otb::GDAL_COMPRESSION_NONE );

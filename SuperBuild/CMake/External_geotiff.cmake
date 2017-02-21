@@ -36,11 +36,8 @@ if(UNIX)
     CONFIGURE_COMMAND
     ${SB_ENV_CONFIGURE_CMD}
     ${GEOTIFF_SB_SRC}/configure
-    --prefix=${SB_INSTALL_PREFIX}
-    --enable-static=no
+    ${SB_CONFIGURE_ARGS}
     ${GEOTIFF_SB_CONFIG}
-    BUILD_COMMAND $(MAKE)
-    INSTALL_COMMAND $(MAKE) install
     LOG_BUILD 1
     LOG_INSTALL 1
     )

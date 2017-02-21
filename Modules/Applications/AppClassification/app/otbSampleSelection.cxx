@@ -197,7 +197,7 @@ private:
     SetParameterDescription("strategy.all","Take all samples");
 
     // Default strategy : smallest
-    SetParameterString("strategy","smallest");
+    SetParameterString("strategy","smallest", false);
 
     AddParameter(ParameterType_ListView, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");

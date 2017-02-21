@@ -87,6 +87,22 @@ LayerStackWidget
 
   InstallEventFilter( this );
 
+  // Width of the columns in the layer stack:
+  // Header section sizes are user adjustable but are not saved after a restart
+  // So we set it to a guess value here
+  // The unit is pixel, Qt's default is 100
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_PROJ, 75);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_RESOLUTION, 40);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_NAME, 200);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_EFFECT, 90);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_I, 60);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_J, 60);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_R, 90);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_G, 90);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_B, 90);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_X, 90);
+  m_UI->treeView->header()->resizeSection(LayerStackItemModel::COLUMN_Y, 90);
+
   QObject::connect(
     m_UI->treeView->selectionModel(),
     SIGNAL( currentRowChanged( const QModelIndex &,  const QModelIndex & ) ),

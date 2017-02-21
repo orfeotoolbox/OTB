@@ -78,7 +78,7 @@ private:
 
     AddParameter(ParameterType_String,"cfield","Field containing the predicted class.");
     SetParameterDescription("cfield","Field containing the predicted class");
-    SetParameterString("cfield","predicted");
+    SetParameterString("cfield","predicted", false);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("inshp", "vectorData.shp");
