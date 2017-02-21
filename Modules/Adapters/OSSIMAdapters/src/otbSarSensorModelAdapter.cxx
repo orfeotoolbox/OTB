@@ -64,13 +64,7 @@ bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
    
    m_SensorModel =  dynamic_cast<ossimplugins::ossimSarSensorModel* >(ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom));
 
-   if(m_SensorModel != ITK_NULLPTR)
-     {
-
-     return true;
-     }
-
-   return false;
+   return IsValidSensorModel();
 }
 
 bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
