@@ -25,11 +25,7 @@
 #include "otbMachineLearningModel.h"
 
 #ifdef OTB_OPENCV_3
-namespace cv {
-namespace ml {
-class SVM;
-}
-}
+#include "otbOpenCVUtils.h"
 #else
 class CvSVM;
 #endif
@@ -153,7 +149,7 @@ private:
   SVMMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 #ifdef OTB_OPENCV_3
-  cv::ml::SVM *m_SVMModel;
+  cv::Ptr<cv::ml::SVM> m_SVMModel;
 #else
   CvSVM * m_SVMModel;
 #endif

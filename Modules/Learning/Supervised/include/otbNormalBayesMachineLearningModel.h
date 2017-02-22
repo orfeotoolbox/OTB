@@ -25,11 +25,7 @@
 #include "otbMachineLearningModel.h"
 
 #ifdef OTB_OPENCV_3
-namespace cv {
-namespace ml {
-class NormalBayesClassifier;
-}
-}
+#include "otbOpenCVUtils.h"
 #else
 class CvNormalBayesClassifier;
 #endif
@@ -95,7 +91,7 @@ private:
   NormalBayesMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 #ifdef OTB_OPENCV_3
-  cv::ml::NormalBayesClassifier* m_NormalBayesModel;
+  cv::Ptr<cv::ml::NormalBayesClassifier> m_NormalBayesModel;
 #else
   CvNormalBayesClassifier * m_NormalBayesModel;
 #endif

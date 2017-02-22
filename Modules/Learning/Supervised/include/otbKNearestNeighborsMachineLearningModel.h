@@ -25,11 +25,7 @@
 #include "otbMachineLearningModel.h"
 
 #ifdef OTB_OPENCV_3
-namespace cv {
-namespace ml {
-class KNearest;
-}
-}
+#include "otbOpenCVUtils.h"
 #else
 class CvKNearest;
 #endif
@@ -116,7 +112,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
 #ifdef OTB_OPENCV_3
-  cv::ml::KNearest* m_KNearestModel;
+  cv::Ptr<cv::ml::KNearest> m_KNearestModel;
 #else
   CvKNearest * m_KNearestModel;
 #endif

@@ -25,11 +25,7 @@
 #include "otbMachineLearningModel.h"
 
 #ifdef OTB_OPENCV_3
-namespace cv {
-namespace ml {
-class DTrees;
-}
-}
+#include "otbOpenCVUtils.h"
 #else
 class CvDTree;
 #endif
@@ -190,7 +186,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
 #ifdef OTB_OPENCV_3
-  cv::ml::DTrees* m_DTreeModel;
+  cv::Ptr<cv::ml::DTrees> m_DTreeModel;
 #else
   CvDTree * m_DTreeModel;
 #endif

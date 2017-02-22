@@ -151,7 +151,11 @@ private:
   RandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+#ifdef OTB_OPENCV_3
+  cv::Ptr<CvRTreesWrapper> m_RFModel;
+#else
   CvRTreesWrapper * m_RFModel;
+#endif
   /** The depth of the tree. A low value will likely underfit and conversely a
    * high value will likely overfit. The optimal value can be obtained using cross
    * validation or other suitable methods. */

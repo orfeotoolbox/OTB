@@ -33,7 +33,7 @@ template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::KNearestNeighborsMachineLearningModel() :
 #ifdef OTB_OPENCV_3
- m_KNearestModel(cv::Ptr<cv::ml::KNearest>((cv::ml::KNearest::create()).get(), dont_delete_me).get()),
+ m_KNearestModel(cv::ml::KNearest::create()),
 #else
  m_KNearestModel (new CvKNearest),
 #endif
@@ -49,7 +49,9 @@ template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::~KNearestNeighborsMachineLearningModel()
 {
+#ifndef OTB_OPENCV_3
   delete m_KNearestModel;
+#endif
 }
 
 /** Train the machine learning model */
@@ -65,9 +67,6 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), labels);
 
-#ifdef OTB_OPENCV_3
-  // TODO
-#else
   // update decision rule if needed
   if (this->m_RegressionMode)
     {
@@ -84,6 +83,17 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
       }
     }
 
+#ifdef OTB_OPENCV_3
+  m_KNearestModel->setDefaultK(m_K);
+  // would be nice to expose KDTree mode ( maybe in a different classifier)
+  m_KNearestModel->setAlgorithmType(cv::ml::KNearest::BRUTE_FORCE);
+  m_KNearestModel->setIsClassifier(!this->m_RegressionMode);
+  // setEmax() ?
+  m_KNearestModel->train(cv::ml::TrainData::create(
+    samples,
+    cv::ml::ROW_SAMPLE,
+    labels));
+#else
   //train the KNN model
   m_KNearestModel->train(samples, labels, cv::Mat(), this->m_RegressionMode, m_K, false);
 #endif
@@ -96,17 +106,18 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
-#ifdef OTB_OPENCV_3
-  // TODO
-#else
+
   //convert listsample to Mat
   cv::Mat sample;
   otb::SampleToMat<InputSampleType>(input, sample);
 
   float result;
   cv::Mat nearest(1,m_K,CV_32FC1);
+#ifdef OTB_OPENCV_3
+  result = m_KNearestModel->findNearest(sample, m_K, cv::noArray(), nearest, cv::noArray());
+#else
   result = m_KNearestModel->find_nearest(sample, m_K,ITK_NULLPTR,ITK_NULLPTR,&nearest,ITK_NULLPTR);
-
+#endif
   // compute quality if asked (only happens in classification mode)
   if (quality != ITK_NULLPTR)
     {
@@ -140,7 +151,6 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
     }
 
   target[0] = static_cast<TTargetValue>(result);
-#endif
   return target;
 }
 
@@ -150,7 +160,10 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Save(const std::string & filename, const std::string & itkNotUsed(name))
 {
 #ifdef OTB_OPENCV_3
-  // TODO
+  cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  m_KNearestModel->write(fs);
+  fs << "DecisionRule" << m_DecisionRule;
+  fs.release();
 #else
   //there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
   //We need to save the K parameter, IsRegression flag, DecisionRule and the samples.
@@ -191,15 +204,36 @@ void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
-#ifdef OTB_OPENCV_3
-  // TODO
-#else
-  //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
   std::ifstream ifs(filename.c_str());
   if(!ifs)
   {
     itkExceptionMacro(<<"Could not read file "<<filename);
   }
+#ifdef OTB_OPENCV_3
+  // try to load with the 3.x syntax
+  bool isKNNv3 = false;
+  while (!ifs.eof())
+  {
+    std::string line;
+    std::getline(ifs, line);
+    if (line.find(m_KNearestModel->getDefaultName()) != std::string::npos)
+    {
+      isKNNv3 = true;
+      break;
+    }
+  }
+  ifs.seekg(0);
+  if (isKNNv3)
+    {
+    ifs.close();
+    cv::FileStorage fs(filename, cv::FileStorage::READ);
+    m_KNearestModel->read(fs.getFirstTopLevelNode());
+    m_DecisionRule = (int)(fs.getFirstTopLevelNode()["DecisionRule"]);
+    return;
+    }
+#endif
+  //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
+  
   //first line is the K parameter of this algorithm.
   std::string line;
   std::getline(ifs, line);
@@ -264,7 +298,6 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   this->SetInputListSample(samples);
   this->SetTargetListSample(labels);
   this->Train();
-#endif
 }
 
 template <class TInputValue, class TTargetValue>

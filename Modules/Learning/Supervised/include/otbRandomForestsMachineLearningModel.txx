@@ -29,7 +29,11 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::RandomForestsMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+  m_RFModel(CvRTreesWrapper::create()),
+#else
   m_RFModel (new CvRTreesWrapper),
+#endif
   m_MaxDepth(5),
   m_MinSampleCount(10),
   m_RegressionAccuracy(0.01),
@@ -39,7 +43,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   m_MaxNumberOfVariables(0),
   m_MaxNumberOfTrees(100),
   m_ForestAccuracy(0.01),
-  m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS),
+  m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS), // identic for v3 ?
   m_ComputeMargin(false)
 {
   this->m_ConfidenceIndex = true;
@@ -51,7 +55,9 @@ template <class TInputValue, class TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::~RandomForestsMachineLearningModel()
 {
+#ifndef OTB_OPENCV_3
   delete m_RFModel;
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -61,7 +67,31 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 {
 #ifdef OTB_OPENCV_3
   // TODO
-  return 0.;
+  cv::Mat samples;
+  otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
+
+  cv::Mat labels;
+  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
+
+  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
+  var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
+
+  if(this->m_RegressionMode)
+    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_NUMERICAL;
+  else
+    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
+
+  return m_RFModel->calcError(
+    cv::ml::TrainData::create(
+      samples,
+      cv::ml::ROW_SAMPLE,
+      labels,
+      cv::noArray(),
+      cv::noArray(),
+      cv::noArray(),
+      var_type),
+    false,
+    cv::noArray());
 #else
   return m_RFModel->get_train_error();
 #endif
@@ -79,12 +109,40 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
+
+  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
+  var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
+
+  if(this->m_RegressionMode)
+    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_NUMERICAL;
+  else
+    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
+
   //Mat var_type = Mat(ATTRIBUTES_PER_SAMPLE + 1, 1, CV_8U );
   //std::cout << "priors " << m_Priors[0] << std::endl;
   //Define random forests paramneters
   //FIXME do this in the constructor?
 #ifdef OTB_OPENCV_3
-  // TODO
+  m_RFModel->setMaxDepth(m_MaxDepth);
+  m_RFModel->setMinSampleCount(m_MinSampleCount);
+  m_RFModel->setRegressionAccuracy(m_RegressionAccuracy);
+  m_RFModel->setUseSurrogates(m_ComputeSurrogateSplit);
+  m_RFModel->setMaxCategories(m_MaxNumberOfCategories);
+  m_RFModel->setPriors(cv::Mat(m_Priors) ); // TODO
+  m_RFModel->setCalculateVarImportance(m_CalculateVariableImportance);
+  m_RFModel->setActiveVarCount(m_MaxNumberOfVariables);
+  m_RFModel->setTermCriteria( cv::TermCriteria(
+    m_TerminationCriteria,
+    m_MaxNumberOfTrees,
+    m_ForestAccuracy) );
+  m_RFModel->train(cv::ml::TrainData::create(
+    samples,
+    cv::ml::ROW_SAMPLE,
+    labels,
+    cv::noArray(),
+    cv::noArray(),
+    cv::noArray(),
+    var_type));
 #else
   float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
 
@@ -100,15 +158,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
                                  m_ForestAccuracy,              // forest accuracy
                                  m_TerminationCriteria          // termination criteria
     );
-
-  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
-  var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
-
-  if(this->m_RegressionMode)
-    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_NUMERICAL;
-  else
-    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
-
   //train the RT model
   m_RFModel->train(samples, CV_ROW_SAMPLE, labels,
                    cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
@@ -122,17 +171,12 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
-#ifdef OTB_OPENCV_3
-  // TODO
-#else
   //convert listsample to Mat
   cv::Mat sample;
 
   otb::SampleToMat<InputSampleType>(value,sample);
 
   double result = m_RFModel->predict(sample);
-
-  
 
   target[0] = static_cast<TOutputValue>(result);
 
@@ -143,7 +187,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     else
       (*quality) = m_RFModel->predict_confidence(sample);
     }
-#endif
   return target[0];
 }
 
@@ -153,7 +196,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  // TODO
+  m_RFModel->save(filename);
 #else
   if (name == "")
     m_RFModel->save(filename.c_str(), ITK_NULLPTR);
@@ -168,7 +211,8 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  // TODO
+  cv::FileStorage fs(filename, cv::FileStorage::READ);
+  m_RFModel->read(fs.getFirstTopLevelNode());
 #else
   if (name == "")
     m_RFModel->load(filename.c_str(), ITK_NULLPTR);
@@ -198,7 +242,11 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     std::getline(ifs, line);
 
     //if (line.find(m_RFModel->getName()) != std::string::npos)
-    if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos)
+    if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos
+#ifdef OTB_OPENCV_3
+        || line.find(m_RFModel->getDefaultName()) != std::string::npos
+#endif
+        )
       {
       //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_RTREES<<" model"<<std::endl;
       return true;
@@ -222,10 +270,6 @@ typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::GetVariableImportance()
 {
-#ifdef OTB_OPENCV_3
-  // TODO
-  return VariableImportanceMatrixType();
-#else
   cv::Mat cvMat = m_RFModel->getVarImportance();
   VariableImportanceMatrixType itkMat(cvMat.rows,cvMat.cols);
   for(int i =0; i<cvMat.rows; i++)
@@ -236,7 +280,6 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
       }
     }
   return itkMat;
-#endif
 }
 
 

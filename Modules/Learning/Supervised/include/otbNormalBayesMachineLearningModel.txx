@@ -30,7 +30,7 @@ template <class TInputValue, class TOutputValue>
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::NormalBayesMachineLearningModel() :
 #ifdef OTB_OPENCV_3
-  m_NormalBayesModel(cv::Ptr<cv::ml::NormalBayesClassifier>((cv::ml::NormalBayesClassifier::create()).get(), dont_delete_me).get())
+  m_NormalBayesModel(cv::ml::NormalBayesClassifier::create())
 #else
  m_NormalBayesModel (new CvNormalBayesClassifier)
 #endif 
@@ -42,7 +42,9 @@ template <class TInputValue, class TOutputValue>
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::~NormalBayesMachineLearningModel()
 {
+#ifndef OTB_OPENCV_3
   delete m_NormalBayesModel;
+#endif
 }
 
 /** Train the machine learning model */
@@ -58,7 +60,10 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat labels;
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 #ifdef OTB_OPENCV_3
-  // TODO
+  m_NormalBayesModel->train(cv::ml::TrainData::create(
+    samples,
+    cv::ml::ROW_SAMPLE,
+    labels));
 #else
   m_NormalBayesModel->train(samples,labels,cv::Mat(),cv::Mat(),false);
 #endif
@@ -71,9 +76,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
-#ifdef OTB_OPENCV_3
-  // TODO
-#else
+
   //convert listsample to Mat
   cv::Mat sample;
 
@@ -92,7 +95,6 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
       itkExceptionMacro("Confidence index not available for this classifier !");
       }
     }
-#endif
   return target;
 }
 
@@ -102,7 +104,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  // TODO
+  m_NormalBayesModel->save(filename);
 #else
   if (name == "")
     m_NormalBayesModel->save(filename.c_str(), ITK_NULLPTR);
@@ -117,7 +119,8 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  // TODO
+  cv::FileStorage fs(filename, cv::FileStorage::READ);
+  m_NormalBayesModel->read(fs.getFirstTopLevelNode());
 #else
   if (name == "")
     m_NormalBayesModel->load(filename.c_str(), ITK_NULLPTR);
