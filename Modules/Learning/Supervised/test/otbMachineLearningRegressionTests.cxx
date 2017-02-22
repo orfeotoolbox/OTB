@@ -648,7 +648,7 @@ int otbRandomForestsRegressionTests(int itkNotUsed(argc),
   std::cout << "Testing regression on a bilinear function" << std::endl;
   BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
   // increase number of training samples for bilinear function
-  param.count = 1000;
+  param.count = 1500;
   regression = getRandomForestsRegressionModel();
   ret = testRegression(bfsg,regression,param);
   if (ret == EXIT_FAILURE)
