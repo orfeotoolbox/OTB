@@ -123,7 +123,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
     {
     (*quality) = static_cast<ConfidenceValueType>(
 #ifdef OTB_OPENCV_3
-      m_BoostModel->predict(sample,cv::noArray(), cv::ml::RAW_OUTPUT)
+      m_BoostModel->predict(sample,cv::noArray(), cv::ml::StatModel::RAW_OUTPUT)
 #else
       m_BoostModel->predict(sample,missing,cv::Range::all(),false,true)
 #endif
