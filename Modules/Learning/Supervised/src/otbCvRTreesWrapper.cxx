@@ -22,8 +22,6 @@
 namespace otb
 {
 
-void dont_delete_me(void *){}
-
 CvRTreesWrapper::CvRTreesWrapper()
 {
 #ifdef OTB_OPENCV_3

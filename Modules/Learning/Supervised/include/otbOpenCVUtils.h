@@ -59,10 +59,6 @@
 
 #define CV_VAR_NUMERICAL cv::ml::VAR_NUMERICAL
 #define CV_VAR_CATEGORICAL cv::ml::VAR_CATEGORICAL
-namespace otb
-{
-void OTBSupervised_EXPORT dont_delete_me(void *);
-}
 #endif
 
 namespace otb
