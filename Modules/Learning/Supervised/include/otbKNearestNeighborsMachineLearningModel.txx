@@ -157,14 +157,17 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 template <class TInputValue, class TTargetValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Save(const std::string & filename, const std::string & itkNotUsed(name))
+::Save(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_KNearestModel->getDefaultName() : cv::String(name)) << "{";
   m_KNearestModel->write(fs);
   fs << "DecisionRule" << m_DecisionRule;
+  fs << "}";
   fs.release();
 #else
+  (void) name;
   //there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
   //We need to save the K parameter, IsRegression flag, DecisionRule and the samples.
 
