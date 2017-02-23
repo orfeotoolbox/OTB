@@ -157,8 +157,8 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CreateNetwork
     }
 
 #ifdef OTB_OPENCV_3
-  m_ANNModel->setActivationFunction(m_ActivateFunction, m_Alpha, m_Beta);
   m_ANNModel->setLayerSizes(layers);
+  m_ANNModel->setActivationFunction(m_ActivateFunction, m_Alpha, m_Beta);
 #else
   m_ANNModel->create(layers, m_ActivateFunction, m_Alpha, m_Beta);
 #endif
@@ -188,6 +188,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkA
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
   this->CreateNetwork();
 #ifdef OTB_OPENCV_3
+  int flags = (this->m_RegressionMode ? 0 : cv::ml::ANN_MLP::NO_OUTPUT_SCALE);
   m_ANNModel->setTrainMethod(m_TrainMethod);
   m_ANNModel->setBackpropMomentumScale(m_BackPropMomentScale);
   m_ANNModel->setBackpropWeightScale(m_BackPropDWScale);
@@ -200,7 +201,8 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkA
   m_ANNModel->train(cv::ml::TrainData::create(
     samples,
     cv::ml::ROW_SAMPLE,
-    labels));
+    labels),
+    flags);
 #else
   CvANN_MLP_TrainParams params = this->SetNetworkParameters();
   //train the Neural network model
@@ -286,12 +288,14 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_ANNModel->getDefaultName() : cv::String(name)) << "{";
   m_ANNModel->write(fs);
   if (m_CvMatOfLabels != ITK_NULLPTR)
     {
     std::string labelsName("class_labels");
     fs.writeObj(labelsName,m_CvMatOfLabels);
     }
+  fs << "}";
   fs.release();
 #else
   const char* lname = "my_nn";
@@ -319,8 +323,9 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
-  m_ANNModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
-  // TODO : detect if class_labels have been stored
+  cv::FileNode model_node(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
+  m_ANNModel->read(model_node);
+  m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
   fs.release();
 #else
   const char* lname = ITK_NULLPTR;
