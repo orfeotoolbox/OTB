@@ -115,7 +115,7 @@ public:
       ComputePolygonStatistics(imageList, validationVectorFileList, fileNames.polyStatValidOutputs);
       ComputeSamplingRate(fileNames.polyStatValidOutputs, fileNames.rateValidOut, rates.fmv);
       }
-    SelectAndExtractValidationSamples(fileNames, imageList, validationVectorFileList, dedicatedValidation);
+    SelectAndExtractValidationSamples(fileNames, imageList, validationVectorFileList);
 
 
     // Then train the model with extracted samples

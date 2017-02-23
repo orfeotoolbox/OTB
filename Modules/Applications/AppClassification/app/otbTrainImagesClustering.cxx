@@ -34,6 +34,14 @@ public:
     InitSampling();
     InitClassification( false );
 
+    AddParameter( ParameterType_Float, "sample.percent", "Percentage of samples extract in images for "
+            "training and validation when only images are provided." );
+    SetParameterDescription( "sample.percent", "Percentage of samples extract in images for "
+            "training and validation when only images are provided. This parameter is disable when vector data are provided" );
+    SetDefaultParameterFloat( "sample.percent", 100.0 );
+    SetMinimumParameterFloatValue( "sample.percent", 0.0 );
+    SetMaximumParameterFloatValue( "sample.percent", 100.0 );
+
     // Doc example parameter settings
     SetDocExampleParameterValue( "io.il", "QB_1_ortho.tif" );
     SetDocExampleParameterValue( "io.vd", "VectorData_QB1.shp" );
@@ -51,7 +59,12 @@ public:
   {
     if( HasValue( "io.vd" ) )
       {
+      MandatoryOff( "sample.percent" );
       UpdatePolygonClassStatisticsParameters();
+      }
+    else
+      {
+      MandatoryOn( "sample.percent" );
       }
   }
 
@@ -60,12 +73,12 @@ public:
     TrainFileNamesHandler fileNames;
     FloatVectorImageListType *imageList = GetParameterImageList( "io.il" );
     bool HasInputVector = IsParameterEnabled( "io.vd" ) && HasValue( "io.vd" );
-    std::vector<std::string> vectorFileList = GetVectorFileList( GetParameterString( "io.out" ), fileNames );
+    std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
 
 
     unsigned long nbInputs = imageList->Size();
 
-    if( nbInputs > vectorFileList.size() )
+    if( !vectorFileList.empty() && nbInputs > vectorFileList.size() )
       {
       otbAppLogFATAL( "Missing input vector data files to match number of images (" << nbInputs << ")." );
       }
@@ -90,28 +103,29 @@ public:
     SamplingRates rates = ComputeFinalMaximumSamplingRates( dedicatedValidation );
 
     if( HasInputVector )
-    {
+      {
       // Select and Extract samples for training with computed statistics and rates
       ComputePolygonStatistics( imageList, vectorFileList, fileNames.polyStatTrainOutputs );
       ComputeSamplingRate( fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt );
       SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::CLASS );
-    }
+      }
     else
-    {
+      {
       SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::GEOMETRIC );
-    }
+      }
 
     // Select and Extract samples for validation with computed statistics and rates
     // Validation samples could be empty if sample.vrt == 0 and if no dedicated validation are provided
-    if( dedicatedValidation ) {
-      ComputePolygonStatistics(imageList, validationVectorFileList, fileNames.polyStatValidOutputs);
-      ComputeSamplingRate(fileNames.polyStatValidOutputs, fileNames.rateValidOut, rates.fmv);
+    if( dedicatedValidation )
+      {
+      ComputePolygonStatistics( imageList, validationVectorFileList, fileNames.polyStatValidOutputs );
+      ComputeSamplingRate( fileNames.polyStatValidOutputs, fileNames.rateValidOut, rates.fmv );
       }
-    SelectAndExtractValidationSamples(fileNames, imageList, validationVectorFileList, dedicatedValidation);
+    SelectAndExtractValidationSamples( fileNames, imageList, validationVectorFileList );
 
 
     // Then train the model with extracted samples
-    TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs);
+    TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs );
 
     // cleanup
     if( IsParameterEnabled( "cleanup" ) )
@@ -128,63 +142,6 @@ private :
     std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
     GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0], false );
     UpdateInternalParameters( "polystat" );
-  }
-
-
-  /**
-   * Retrieve input vector data if provided otherwise generate a default vector shape file for each image.
-   * \param output vector file path
-   * \param fileNames
-   * \return list of input vector data file names
-   */
-  std::vector<std::string> GetVectorFileList(std::string output, TrainFileNamesHandler &fileNames)
-  {
-    std::vector<std::string> vectorFileList;
-    bool HasInputVector = IsParameterEnabled( "io.vd" ) && HasValue( "io.vd" );
-
-    // Retrieve provided input vector data if available.
-    if( !HasInputVector )
-      {
-      FloatVectorImageListType *imageList = GetParameterImageList( "io.il" );
-      unsigned int nbInputs = static_cast<unsigned int>(imageList->Size());
-
-      for( unsigned int i = 0; i < nbInputs; ++i )
-        {
-        std::string name = output + "_vector_" + std::to_string( i ) + ".shp";
-        GenerateVectorDataFile( imageList->GetNthElement( i ), name );
-        fileNames.tmpVectorFileList.push_back( name );
-        }
-      vectorFileList = fileNames.tmpVectorFileList;
-      SetParameterStringList( "io.vd", vectorFileList, false );
-      UpdatePolygonClassStatisticsParameters();
-      GetInternalApplication( "polystat" )->SetParameterString( "field", "fid" );
-      }
-    else
-      {
-      vectorFileList = GetParameterStringList( "io.vd" );
-      }
-
-    return vectorFileList;
-  }
-
-
-
-  void GenerateVectorDataFile(const FloatVectorImageListType::ObjectPointerType &floatVectorImage, std::string name)
-  {
-    typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType> ImageToEnvelopeFilterType;
-    typedef ImageToEnvelopeFilterType::OutputVectorDataType OutputVectorData;
-    typedef otb::VectorDataFileWriter<OutputVectorData> VectorDataWriter;
-
-    ImageToEnvelopeFilterType::Pointer imageToEnvelopeVectorData = ImageToEnvelopeFilterType::New();
-    imageToEnvelopeVectorData->SetInput( floatVectorImage );
-    imageToEnvelopeVectorData->SetOutputProjectionRef( floatVectorImage->GetProjectionRef().c_str() );
-    OutputVectorData::Pointer vectorData = imageToEnvelopeVectorData->GetOutput();
-
-    // write temporary generated vector file to disk.
-    VectorDataWriter::Pointer vectorDataFileWriter = VectorDataWriter::New();
-    vectorDataFileWriter->SetInput( vectorData );
-    vectorDataFileWriter->SetFileName( name.c_str() );
-    vectorDataFileWriter->Write();
   }
 
 };

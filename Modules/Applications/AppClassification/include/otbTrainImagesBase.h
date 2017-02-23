@@ -327,7 +327,6 @@ protected:
                                std::string statisticsFileName, std::string ratesFileName, SamplingStrategy strategy)
   {
     GetInternalApplication( "select" )->SetParameterInputImage( "in", image );
-    GetInternalApplication( "select" )->SetParameterString( "vec", vectorFileName, false );
     GetInternalApplication( "select" )->SetParameterString( "out", sampleFileName, false );
 
     GetInternalApplication( "extraction" )->SetParameterString( "outfield", "prefix", false );
@@ -338,10 +337,12 @@ protected:
       {
       case GEOMETRIC:
         GetInternalApplication( "select" )->SetParameterString( "sampler", "random", false );
-        GetInternalApplication( "select" )->SetParameterString( "strategy", "all", false );
+        GetInternalApplication( "select" )->SetParameterString( "strategy", "percent", false );
+        GetInternalApplication( "select" )->SetParameterFloat("strategy.percent.p", GetParameterFloat("sample.percent"), false);
         break;
       case CLASS:
       default:
+        GetInternalApplication( "select" )->SetParameterString( "vec", vectorFileName, false );
         GetInternalApplication( "select" )->SetParameterString( "instats", statisticsFileName, false );
         GetInternalApplication( "select" )->SetParameterString( "sampler", "periodic", false );
         GetInternalApplication( "select" )->SetParameterInt( "sampler.periodic.jitter", 50 );
@@ -365,19 +366,19 @@ protected:
 
     for( unsigned int i = 0; i < imageList->Size(); ++i )
       {
-      SelectAndExtractSamples( imageList->GetNthElement( i ), vectorFileNames[i], fileNames.sampleOutputs[i],
+      std::string vectorFileName = vectorFileNames.empty() ? "" : vectorFileNames[i];
+      SelectAndExtractSamples( imageList->GetNthElement( i ), vectorFileName, fileNames.sampleOutputs[i],
                                fileNames.polyStatTrainOutputs[i], fileNames.ratesTrainOutputs[i], strategy );
       }
   }
 
 
   void SelectAndExtractValidationSamples(const TrainFileNamesHandler &fileNames, FloatVectorImageListType *imageList,
-                                         const std::vector<std::string> &validationVectorFileList,
-                                         bool dedicatedValidation)
+                                         const std::vector<std::string> &validationVectorFileList)
   {
     // In dedicated validation mode the by class sampling strategy and statistics are used.
     // Otherwise simply split training to validation samples corresponding to sample.vtr percentage.
-    if( dedicatedValidation )
+    if( !validationVectorFileList.empty() )
       {
       for( unsigned int i = 0; i < imageList->Size(); ++i )
         {
