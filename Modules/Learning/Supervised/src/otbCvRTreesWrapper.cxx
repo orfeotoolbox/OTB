@@ -40,6 +40,9 @@ void CvRTreesWrapper::get_votes(const cv::Mat& sample,
                                 CvRTreesWrapper::VotesVectorType& vote_count) const
 {
 #ifdef OTB_OPENCV_3
+  (void) sample;
+  (void) missing;
+  (void) vote_count;
   // TODO
 #else
   vote_count.resize(nclasses);
@@ -57,6 +60,8 @@ float CvRTreesWrapper::predict_margin(const cv::Mat& sample,
                                       const cv::Mat& missing) const
 {
 #ifdef OTB_OPENCV_3
+  (void) sample;
+  (void) missing;
   // TODO
   return 0.;
 #else
@@ -79,6 +84,8 @@ float CvRTreesWrapper::predict_confidence(const cv::Mat& sample,
                                   const cv::Mat& missing) const
 {
 #ifdef OTB_OPENCV_3
+  (void) sample;
+  (void) missing;
   // TODO
   return 0.;
 #else
