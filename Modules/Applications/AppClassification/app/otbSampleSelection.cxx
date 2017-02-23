@@ -15,6 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
+#include "otbImageToEnvelopeVectorDataFilter.h"
+#include "otbVectorDataFileWriter.h"
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbSamplingRateCalculator.h"
@@ -77,6 +79,11 @@ private:
     m_RateCalculator = RateCalculatorType::New();
     }
 
+  ~SampleSelection()
+  {
+    RemoveFile( m_DefaultVectorDataFileName );
+  }
+
   void DoInit()
   {
     SetName("SampleSelection");
@@ -85,8 +92,8 @@ private:
     // Documentation
     SetDocName("Sample Selection");
     SetDocLongDescription("The application selects a set of samples from geometries "
-      "intended for training (they should have a field giving the associated "
-      "class). \n\nFirst of all, the geometries must be analyzed by the PolygonClassStatistics application "
+      "intended for training. If no geometries are provided only one class is used for the entire image. "
+      "\n\nFirst of all, provided geometries must be analyzed by the PolygonClassStatistics application "
       "to compute statistics about the geometries, which are summarized in an xml file. "
       "\nThen, this xml file must be given as input to this application (parameter instats).\n\n"
       "The input support image and the input training vectors shall be given in "
@@ -133,12 +140,14 @@ private:
 
     AddParameter(ParameterType_InputFilename, "vec", "Input vectors");
     SetParameterDescription("vec","Input geometries to analyse");
+    MandatoryOff("vec");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output vectors");
     SetParameterDescription("out","Output resampled geometries");
 
     AddParameter(ParameterType_InputFilename, "instats", "Input Statistics");
     SetParameterDescription("instats","Input file storing statistics (XML format)");
+    MandatoryOff("instats");
 
     AddParameter(ParameterType_OutputFilename, "outrates", "Output rates");
     SetParameterDescription("outrates","Output rates (CSV formatted)");
@@ -202,6 +211,7 @@ private:
     AddParameter(ParameterType_ListView, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
     SetListViewSingleSelectionMode("field",true);
+    MandatoryOff("field");
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
@@ -226,6 +236,8 @@ private:
   {
  if ( HasValue("vec") )
       {
+      MandatoryOn("instats");
+      MandatoryOn("field");
       std::string vectorFile = GetParameterString("vec");
       ogr::DataSource::Pointer ogrDS =
         ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
@@ -250,7 +262,14 @@ private:
           }
         }
       }
+ else
+   {
+   MandatoryOff( "vec" );
+   MandatoryOff( "field" );
+   MandatoryOff( "instats" );
+   }
   }
+
 
   void DoExecute()
     {
@@ -259,19 +278,35 @@ private:
 
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
-    // Get field name
-    std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
-    
-    if(selectedCFieldIdx.empty())
-      {
-      otbAppLogFATAL(<<"No field has been selected for data labelling!");
-      }
-    
-    std::vector<std::string> cFieldNames = GetChoiceNames("field");  
-    std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
-    
-    m_ReaderStat->SetFileName(this->GetParameterString("instats"));
-    ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
+      ClassCountMapType classCount;
+      std::string fieldName;
+
+      if(HasValue("vec"))
+        {
+        // Get field name
+        std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
+
+        if(selectedCFieldIdx.empty())
+          {
+          otbAppLogFATAL(<<"No field has been selected for data labelling!");
+          }
+
+        std::vector<std::string> cFieldNames = GetChoiceNames("field");
+        fieldName = cFieldNames[selectedCFieldIdx.front()];
+
+        m_ReaderStat->SetFileName(this->GetParameterString("instats"));
+        classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
+
+        }
+      else
+        {
+        // In case of image only sample selection use all pixels and first
+        m_DefaultVectorDataFileName = GetParameterString( "out" ) + "TmpVectorData.shp";
+        FloatVectorImageType::Pointer image = GetParameterImage("in");
+        fieldName = GenerateVectorDataFile(image, m_DefaultVectorDataFileName);
+        classCount["0"] = image->GetLargestPossibleRegion().GetNumberOfPixels();
+        }
+
     m_RateCalculator->SetClassCount(classCount);
     
     switch (this->GetParameterInt("strategy"))
@@ -355,8 +390,8 @@ private:
       }
 
     // Open input geometries
-    otb::ogr::DataSource::Pointer vectors =
-      otb::ogr::DataSource::New(this->GetParameterString("vec"));
+    std::string vectorDataFileName = HasValue( "vec" ) ? this->GetParameterString( "vec" ) : m_DefaultVectorDataFileName;
+    otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New( vectorDataFileName );
 
     // Reproject geometries
     FloatVectorImageType::Pointer inputImg = this->GetParameterImage("in");
@@ -452,6 +487,56 @@ private:
 
   RateCalculatorType::Pointer m_RateCalculator;
   XMLReaderType::Pointer m_ReaderStat;
+  std::string m_DefaultVectorDataFileName;
+
+  /**
+   * Write on the disk an vector data corresponding to the input image envelope
+   * \param floatVectorImage
+   * \param name output file name
+   * \return the default class name of the layer
+   */
+  std::string GenerateVectorDataFile(const FloatVectorImageType::Pointer &floatVectorImage, std::string name)
+  {
+    typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType> ImageToEnvelopeFilterType;
+    typedef ImageToEnvelopeFilterType::OutputVectorDataType OutputVectorData;
+    typedef otb::VectorDataFileWriter<OutputVectorData> VectorDataWriter;
+
+    ImageToEnvelopeFilterType::Pointer imageToEnvelopeVectorData = ImageToEnvelopeFilterType::New();
+    imageToEnvelopeVectorData->SetInput( floatVectorImage );
+    imageToEnvelopeVectorData->SetOutputProjectionRef( floatVectorImage->GetProjectionRef().c_str() );
+    OutputVectorData::Pointer vectorData = imageToEnvelopeVectorData->GetOutput();
+
+    // write temporary generated vector file to disk.
+    VectorDataWriter::Pointer vectorDataFileWriter = VectorDataWriter::New();
+    vectorDataFileWriter->SetInput( vectorData );
+    vectorDataFileWriter->SetFileName( name.c_str() );
+    vectorDataFileWriter->Write();
+    return "FID";
+  }
+
+  bool RemoveFile(std::string &filePath)
+  {
+    bool res = true;
+    if( itksys::SystemTools::FileExists( filePath.c_str() ) )
+      {
+      size_t posExt = filePath.rfind( '.' );
+      if( posExt != std::string::npos && filePath.compare( posExt, std::string::npos, ".shp" ) == 0 )
+        {
+        std::string shxPath = filePath.substr( 0, posExt ) + std::string( ".shx" );
+        std::string dbfPath = filePath.substr( 0, posExt ) + std::string( ".dbf" );
+        std::string prjPath = filePath.substr( 0, posExt ) + std::string( ".prj" );
+        RemoveFile( shxPath );
+        RemoveFile( dbfPath );
+        RemoveFile( prjPath );
+        }
+      res = itksys::SystemTools::RemoveFile( filePath.c_str() );
+      if( !res )
+        {
+        //otbAppLogINFO( <<"Unable to remove file  "<<filePath );
+        }
+      }
+    return res;
+  }
 };
 
 } // end of namespace Wrapper
