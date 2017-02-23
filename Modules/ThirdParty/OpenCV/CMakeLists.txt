@@ -1,10 +1,5 @@
 project(OTBOpenCV)
 
-if(OpenCV_VERSION_MAJOR EQUAL 3)
-set(OTB_OPENCV_3 1)
-else()
-unset(OTB_OPENCV_3)
-endif()
 configure_file( src/otb_opencv_api.h.in src/otb_opencv_api.h )
 
 set(OTBOpenCV_SYSTEM_INCLUDE_DIRS ${OPENCV_INCLUDE_DIRS})
