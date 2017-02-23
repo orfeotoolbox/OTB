@@ -123,11 +123,13 @@ otb_add_test(NAME leTvDecisionTreeMachineLearningModelCanRead COMMAND otbSupervi
   )
 set_property(TEST leTvDecisionTreeMachineLearningModelCanRead APPEND PROPERTY DEPENDS leTvDecisionTreeMachineLearningModel)
 
+if(NOT OTB_OPENCV_3)
 otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbGradientBoostedTreeMachineLearningModelCanRead
   ${TEMP}/gbt_model.txt
   )
 set_property(TEST leTvGradientBoostedTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvGradientBoostedTreeMachineLearningModel)
+endif()
 
 otb_add_test(NAME leTvNormalBayesMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbNormalBayesMachineLearningModelCanRead
