@@ -107,6 +107,8 @@ public:
 
   virtual void 	read (const cv::FileNode &fn);
 
+  virtual void write (cv::FileStorage &fs) const;
+
   virtual void 	save (const cv::String &filename) const;
 
   virtual bool train(cv::InputArray samples, int layout, cv::InputArray responses);

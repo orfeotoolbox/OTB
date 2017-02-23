@@ -163,6 +163,11 @@ void CvRTreesWrapper::read (const cv::FileNode &fn)
   m_Impl->read(fn);
 }
 
+void CvRTreesWrapper::write (cv::FileStorage &fs) const
+{
+  m_Impl->write(fs);
+}
+
 void CvRTreesWrapper::save (const cv::String &filename) const
 {
   m_Impl->save(filename);
