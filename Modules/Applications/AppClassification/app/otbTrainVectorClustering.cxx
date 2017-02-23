@@ -57,9 +57,8 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue( "io.vd", "vectorData.shp" );
-    SetDocExampleParameterValue( "io.stats", "meanVar.xml" );
-    SetDocExampleParameterValue( "io.out", "svmModel.svm" );
-    SetDocExampleParameterValue( "feat", "perimeter  area  width" );
+    SetDocExampleParameterValue( "io.out", "kmeansModel.txt" );
+    SetDocExampleParameterValue( "feat", "perimeter width area" );
 
   }
 
