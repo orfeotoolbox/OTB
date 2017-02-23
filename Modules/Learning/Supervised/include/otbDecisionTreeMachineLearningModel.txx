@@ -32,21 +32,26 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::DecisionTreeMachineLearningModel() :
 #ifdef OTB_OPENCV_3
  m_DTreeModel(cv::ml::DTrees::create()),
+ m_MaxDepth(10),
+ m_MinSampleCount(10),
+ m_RegressionAccuracy(0.01),
+ m_UseSurrogates(false),
+ m_MaxCategories(10),
+ m_CVFolds(0),
 #else
  m_DTreeModel (new CvDTree),
-#endif
  m_MaxDepth(INT_MAX),
  m_MinSampleCount(10),
  m_RegressionAccuracy(0.01),
  m_UseSurrogates(true),
  m_MaxCategories(10),
  m_CVFolds(10),
+#endif
  m_Use1seRule(true),
  m_TruncatePrunedTree(true)
 {
   this->m_IsRegressionSupported = true;
 }
-
 
 template <class TInputValue, class TOutputValue>
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
@@ -142,7 +147,11 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  m_DTreeModel->save(filename);
+  cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_DTreeModel->getDefaultName() : cv::String(name)) << "{";
+  m_DTreeModel->write(fs);
+  fs << "}";
+  fs.release();
 #else
   if (name == "")
     m_DTreeModel->save(filename.c_str(), ITK_NULLPTR);
@@ -158,7 +167,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
-  m_DTreeModel->read(fs.getFirstTopLevelNode());
+  m_DTreeModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
     m_DTreeModel->load(filename.c_str(), ITK_NULLPTR);
