@@ -140,7 +140,11 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  m_BoostModel->save(filename);
+  cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_BoostModel->getDefaultName() : cv::String(name)) << "{";
+  m_BoostModel->write(fs);
+  fs << "}";
+  fs.release();
 #else
   if (name == "")
     m_BoostModel->save(filename.c_str(), ITK_NULLPTR);
@@ -156,7 +160,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
-  m_BoostModel->read(fs.getFirstTopLevelNode());
+  m_BoostModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
       m_BoostModel->load(filename.c_str(), ITK_NULLPTR);
