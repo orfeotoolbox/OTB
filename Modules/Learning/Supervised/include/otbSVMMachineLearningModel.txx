@@ -89,7 +89,12 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
 
 #ifdef OTB_OPENCV_3
-  // TODO
+  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
+  var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
+
+  if (!this->m_RegressionMode) //Classification
+    var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
+
   m_SVMModel->setType(m_SVMType);
   m_SVMModel->setKernel(m_KernelType);
   m_SVMModel->setDegree(m_Degree);
@@ -105,14 +110,22 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
     m_SVMModel->train(cv::ml::TrainData::create(
       samples,
       cv::ml::ROW_SAMPLE,
-      labels));
+      labels,
+      cv::noArray(),
+      cv::noArray(),
+      cv::noArray(),
+      var_type));
     }
   else
     {
     m_SVMModel->trainAuto(cv::ml::TrainData::create(
       samples,
       cv::ml::ROW_SAMPLE,
-      labels));
+      labels,
+      cv::noArray(),
+      cv::noArray(),
+      cv::noArray(),
+      var_type));
     }
 
   m_OutputDegree = m_SVMModel->getDegree();
@@ -191,7 +204,11 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  m_SVMModel->save(filename);
+  cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_SVMModel->getDefaultName() : cv::String(name)) << "{";
+  m_SVMModel->write(fs);
+  fs << "}";
+  fs.release();
 #else
   if (name == "")
     m_SVMModel->save(filename.c_str(), ITK_NULLPTR);
@@ -207,7 +224,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
-  m_SVMModel->read(fs.getFirstTopLevelNode());
+  m_SVMModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
     m_SVMModel->load(filename.c_str(), ITK_NULLPTR);
