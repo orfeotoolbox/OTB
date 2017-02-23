@@ -196,7 +196,11 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
 #ifdef OTB_OPENCV_3
-  m_RFModel->save(filename);
+  cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_RFModel->getDefaultName() : cv::String(name)) << "{";
+  m_RFModel->write(fs);
+  fs << "}";
+  fs.release();
 #else
   if (name == "")
     m_RFModel->save(filename.c_str(), ITK_NULLPTR);
@@ -212,7 +216,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
-  m_RFModel->read(fs.getFirstTopLevelNode());
+  m_RFModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
     m_RFModel->load(filename.c_str(), ITK_NULLPTR);
