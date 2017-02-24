@@ -57,6 +57,7 @@ protected:
   };
 
   struct SamplingRates;
+
   class TrainFileNamesHandler;
 
   void InitIO()
@@ -324,13 +325,11 @@ protected:
    * \param strategy
    */
   void SelectAndExtractSamples(FloatVectorImageType *image, std::string vectorFileName, std::string sampleFileName,
-                               std::string statisticsFileName, std::string ratesFileName, SamplingStrategy strategy)
+                               std::string statisticsFileName, std::string ratesFileName, SamplingStrategy strategy,
+                               std::string selectedField = "")
   {
     GetInternalApplication( "select" )->SetParameterInputImage( "in", image );
     GetInternalApplication( "select" )->SetParameterString( "out", sampleFileName, false );
-
-    GetInternalApplication( "extraction" )->SetParameterString( "outfield", "prefix", false );
-    GetInternalApplication( "extraction" )->SetParameterString( "outfield.prefix.name", "value_", false );
 
     // Change the selection strategy based on selected sampling strategy
     switch( strategy )
@@ -338,7 +337,8 @@ protected:
       case GEOMETRIC:
         GetInternalApplication( "select" )->SetParameterString( "sampler", "random", false );
         GetInternalApplication( "select" )->SetParameterString( "strategy", "percent", false );
-        GetInternalApplication( "select" )->SetParameterFloat("strategy.percent.p", GetParameterFloat("sample.percent"), false);
+        GetInternalApplication( "select" )->SetParameterFloat( "strategy.percent.p",
+                                                               GetParameterFloat( "sample.percent" ), false );
         break;
       case CLASS:
       default:
@@ -353,6 +353,15 @@ protected:
 
     // select sample positions
     ExecuteInternal( "select" );
+
+    GetInternalApplication( "extraction" )->SetParameterString( "vec", sampleFileName, false );
+    UpdateInternalParameters( "extraction" );
+    if( !selectedField.empty() )
+      GetInternalApplication( "extraction" )->SetParameterString( "field", selectedField, false );
+
+    GetInternalApplication( "extraction" )->SetParameterString( "outfield", "prefix", false );
+    GetInternalApplication( "extraction" )->SetParameterString( "outfield.prefix.name", "value_", false );
+
     // extract sample descriptors
     ExecuteInternal( "extraction" );
   }
@@ -361,20 +370,22 @@ protected:
    * Select and extract samples with the SampleSelection and SampleExtraction application.
    */
   void SelectAndExtractTrainSamples(const TrainFileNamesHandler &fileNames, FloatVectorImageListType *imageList,
-                                    std::vector<std::string> vectorFileNames, SamplingStrategy strategy)
+                                    std::vector<std::string> vectorFileNames, SamplingStrategy strategy,
+                                    std::string selectedFieldName = "")
   {
 
     for( unsigned int i = 0; i < imageList->Size(); ++i )
       {
       std::string vectorFileName = vectorFileNames.empty() ? "" : vectorFileNames[i];
       SelectAndExtractSamples( imageList->GetNthElement( i ), vectorFileName, fileNames.sampleOutputs[i],
-                               fileNames.polyStatTrainOutputs[i], fileNames.ratesTrainOutputs[i], strategy );
+                               fileNames.polyStatTrainOutputs[i], fileNames.ratesTrainOutputs[i], strategy,
+                               selectedFieldName );
       }
   }
 
 
   void SelectAndExtractValidationSamples(const TrainFileNamesHandler &fileNames, FloatVectorImageListType *imageList,
-                                         const std::vector<std::string> &validationVectorFileList)
+                                         const std::vector<std::string> &validationVectorFileList = std::vector<std::string>())
   {
     // In dedicated validation mode the by class sampling strategy and statistics are used.
     // Otherwise simply split training to validation samples corresponding to sample.vtr percentage.

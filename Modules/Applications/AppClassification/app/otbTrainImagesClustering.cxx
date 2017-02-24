@@ -38,9 +38,9 @@ public:
             "training and validation when only images are provided." );
     SetParameterDescription( "sample.percent", "Percentage of samples extract in images for "
             "training and validation when only images are provided. This parameter is disable when vector data are provided" );
-    SetDefaultParameterFloat( "sample.percent", 100.0 );
+    SetDefaultParameterFloat( "sample.percent", 1.0 );
     SetMinimumParameterFloatValue( "sample.percent", 0.0 );
-    SetMaximumParameterFloatValue( "sample.percent", 100.0 );
+    SetMaximumParameterFloatValue( "sample.percent", 1.0 );
 
     // Doc example parameter settings
     SetDocExampleParameterValue( "io.il", "QB_1_ortho.tif" );
@@ -111,18 +111,28 @@ public:
       }
     else
       {
-      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::GEOMETRIC );
+      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::GEOMETRIC, "fid" );
       }
 
-    // Select and Extract samples for validation with computed statistics and rates
+    // Select and Extract samples for validation with computed statistics and rates.
     // Validation samples could be empty if sample.vrt == 0 and if no dedicated validation are provided
+    // If no dedicated validation is provided the training is split corresponding to the sample.vtr parameter
+    // In this case if no vector data have been provided, the training rates and statistics are computed
+    // on the selection and extraction training result.
     if( dedicatedValidation )
       {
       ComputePolygonStatistics( imageList, validationVectorFileList, fileNames.polyStatValidOutputs );
       ComputeSamplingRate( fileNames.polyStatValidOutputs, fileNames.rateValidOut, rates.fmv );
       }
-    SelectAndExtractValidationSamples( fileNames, imageList, validationVectorFileList );
+    else if(!HasInputVector)
+      {
+      ComputePolygonStatistics( imageList, fileNames.sampleOutputs, fileNames.polyStatTrainOutputs );
+      ComputeSamplingRate( fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt );
+      }
 
+
+    // Extract or split validation vector data.
+    SelectAndExtractValidationSamples( fileNames, imageList, validationVectorFileList );
 
     // Then train the model with extracted samples
     TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs );
