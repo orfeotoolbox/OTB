@@ -147,17 +147,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif
     }
-  
-  // OpenCV SVM implementation is buggy with linear kernel
-  // Users should use the libSVM implementation instead.
-  // else if (modelName == "svm")
-  //  {
-	//  #ifdef OTB_USE_OPENCV
-  //   TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
-  //  #else
-  //   otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-  //  #endif
-  //  }
+  else if (modelName == "svm")
+    {
+    #ifdef OTB_USE_OPENCV
+    TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
+    #else
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
+    }
   else if (modelName == "boost")
     {
 	#ifdef OTB_USE_OPENCV

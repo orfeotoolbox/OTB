@@ -30,27 +30,6 @@
 //Estimator
 #include "otbMachineLearningModelFactory.h"
 
-#ifdef OTB_USE_OPENCV
-#include "otbKNearestNeighborsMachineLearningModel.h"
-#include "otbRandomForestsMachineLearningModel.h"
-// OpenCV SVM implementation is buggy with linear kernel
-// Users should use the libSVM implementation instead.
-//#include "otbSVMMachineLearningModel.h"
-#include "otbBoostMachineLearningModel.h"
-#include "otbDecisionTreeMachineLearningModel.h"
-#include "otbGradientBoostedTreeMachineLearningModel.h"
-#include "otbNormalBayesMachineLearningModel.h"
-#include "otbNeuralNetworkMachineLearningModel.h"
-#endif
-
-#ifdef OTB_USE_LIBSVM 
-#include "otbLibSVMMachineLearningModel.h"
-#endif
-
-#ifdef OTB_USE_SHARK
-#include "otbSharkRandomForestsMachineLearningModel.h"
-#endif
-
 namespace otb
 {
 namespace Wrapper
@@ -120,27 +99,6 @@ public:
   typedef typename ModelType::TargetListSampleType  TargetListSampleType;
   typedef typename ModelType::TargetValueType       TargetValueType;
   
-#ifdef OTB_USE_OPENCV
-  typedef otb::RandomForestsMachineLearningModel<InputValueType, OutputValueType> RandomForestType;
-  typedef otb::KNearestNeighborsMachineLearningModel<InputValueType, OutputValueType> KNNType;
-  // OpenCV SVM implementation is buggy with linear kernel
-  // Users should use the libSVM implementation instead.
-  // typedef otb::SVMMachineLearningModel<InputValueType, OutputValueType> SVMType;
-  typedef otb::BoostMachineLearningModel<InputValueType, OutputValueType> BoostType;
-  typedef otb::DecisionTreeMachineLearningModel<InputValueType, OutputValueType> DecisionTreeType;
-  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, OutputValueType> GradientBoostedTreeType;
-  typedef otb::NeuralNetworkMachineLearningModel<InputValueType, OutputValueType> NeuralNetworkType;
-  typedef otb::NormalBayesMachineLearningModel<InputValueType, OutputValueType> NormalBayesType;
-#endif
-
-#ifdef OTB_USE_LIBSVM 
-  typedef otb::LibSVMMachineLearningModel<InputValueType, OutputValueType> LibSVMType;
-#endif
-
-#ifdef OTB_USE_SHARK
-  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
-#endif
-  
 protected:
   LearningApplicationBase();
 
@@ -178,9 +136,7 @@ private:
 
 #ifdef OTB_USE_OPENCV
   void InitBoostParams();
-  // OpenCV SVM implementation is buggy with linear kernel
-  // Users should use the libSVM implementation instead.
-  // void InitSVMParams();
+  void InitSVMParams();
   void InitDecisionTreeParams();
   void InitGradientBoostedTreeParams();
   void InitNeuralNetworkParams();
@@ -191,11 +147,9 @@ private:
   void TrainBoost(typename ListSampleType::Pointer trainingListSample,
                   typename TargetListSampleType::Pointer trainingLabeledListSample,
                   std::string modelPath);
-  // OpenCV SVM implementation is buggy with linear kernel
-  // Users should use the libSVM implementation instead.
-  // void TrainSVM(typename ListSampleType::Pointer trainingListSample,
-  //              typename TargetListSampleType::Pointer trainingLabeledListSample,
-  //              std::string modelPath);
+  void TrainSVM(typename ListSampleType::Pointer trainingListSample,
+                typename TargetListSampleType::Pointer trainingLabeledListSample,
+                std::string modelPath);
   void TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
                          typename TargetListSampleType::Pointer trainingLabeledListSample,
                          std::string modelPath);
@@ -238,9 +192,7 @@ private:
 #include "otbTrainNeuralNetwork.txx"
 #include "otbTrainNormalBayes.txx"
 #include "otbTrainRandomForests.txx"
-// OpenCV SVM implementation is buggy with linear kernel
-// Users should use the libSVM implementation instead.
-//#include "otbTrainSVM.txx"
+#include "otbTrainSVM.txx"
 #endif
 #ifdef OTB_USE_LIBSVM
 #include "otbTrainLibSVM.txx"
