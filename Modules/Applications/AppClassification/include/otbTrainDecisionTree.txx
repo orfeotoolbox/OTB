@@ -34,7 +34,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
                           "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/decision_trees.html}.");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
+#ifdef OTB_OPENCV_3
+  SetParameterInt("classifier.dt.max",10, false);
+#else
   SetParameterInt("classifier.dt.max",65535, false);
+#endif
   SetParameterDescription(
       "classifier.dt.max", "The training algorithm attempts to split each node while its depth is smaller than the maximum "
       "possible depth of the tree. The actual depth may be smaller if the other termination criteria are met, and/or "
