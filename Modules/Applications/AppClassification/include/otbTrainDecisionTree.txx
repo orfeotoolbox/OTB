@@ -17,6 +17,7 @@
 #ifndef otbTrainDecisionTree_txx
 #define otbTrainDecisionTree_txx
 #include "otbLearningApplicationBase.h"
+#include "otbDecisionTreeMachineLearningModel.h"
 
 namespace otb
 {
@@ -96,6 +97,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                     typename TargetListSampleType::Pointer trainingLabeledListSample,
                     std::string modelPath)
 {
+  typedef otb::DecisionTreeMachineLearningModel<InputValueType, OutputValueType> DecisionTreeType;
   typename DecisionTreeType::Pointer classifier = DecisionTreeType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);

@@ -17,6 +17,7 @@
 #ifndef otbTrainNormalBayes_txx
 #define otbTrainNormalBayes_txx
 #include "otbLearningApplicationBase.h"
+#include "otbNormalBayesMachineLearningModel.h"
 
 namespace otb
 {
@@ -41,6 +42,7 @@ namespace Wrapper
                      typename TargetListSampleType::Pointer trainingLabeledListSample,
                      std::string modelPath)
   {
+    typedef otb::NormalBayesMachineLearningModel<InputValueType, OutputValueType> NormalBayesType;
     typename NormalBayesType::Pointer classifier = NormalBayesType::New();
     classifier->SetRegressionMode(this->m_RegressionFlag);
     classifier->SetInputListSample(trainingListSample);

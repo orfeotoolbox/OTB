@@ -17,6 +17,7 @@
 #ifndef otbTrainBoost_txx
 #define otbTrainBoost_txx
 #include "otbLearningApplicationBase.h"
+#include "otbBoostMachineLearningModel.h"
 
 namespace otb
 {
@@ -65,6 +66,7 @@ namespace Wrapper
                typename TargetListSampleType::Pointer trainingLabeledListSample,
                std::string modelPath)
   {
+    typedef otb::BoostMachineLearningModel<InputValueType, OutputValueType> BoostType;
     typename BoostType::Pointer boostClassifier = BoostType::New();
     boostClassifier->SetRegressionMode(this->m_RegressionFlag);
     boostClassifier->SetInputListSample(trainingListSample);

@@ -17,6 +17,7 @@
 #ifndef otbTrainSVM_txx
 #define otbTrainSVM_txx
 #include "otbLearningApplicationBase.h"
+#include "otbSVMMachineLearningModel.h"
 
 namespace otb
 {
@@ -110,6 +111,7 @@ namespace Wrapper
              typename TargetListSampleType::Pointer trainingLabeledListSample,
              std::string modelPath)
   {
+    typedef otb::SVMMachineLearningModel<InputValueType, OutputValueType> SVMType;
     typename SVMType::Pointer SVMClassifier = SVMType::New();
     SVMClassifier->SetRegressionMode(this->m_RegressionFlag);
     SVMClassifier->SetInputListSample(trainingListSample);

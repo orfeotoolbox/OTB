@@ -17,6 +17,7 @@
 #ifndef otbTrainKNN_txx
 #define otbTrainKNN_txx
 #include "otbLearningApplicationBase.h"
+#include "otbKNearestNeighborsMachineLearningModel.h"
 
 namespace otb
 {
@@ -58,6 +59,7 @@ namespace Wrapper
              typename TargetListSampleType::Pointer trainingLabeledListSample,
              std::string modelPath)
   {
+    typedef otb::KNearestNeighborsMachineLearningModel<InputValueType, OutputValueType> KNNType;
     typename KNNType::Pointer knnClassifier = KNNType::New();
     knnClassifier->SetRegressionMode(this->m_RegressionFlag);
     knnClassifier->SetInputListSample(trainingListSample);

@@ -17,6 +17,7 @@
 #ifndef otbTrainGradientBoostedTree_txx
 #define otbTrainGradientBoostedTree_txx
 #include "otbLearningApplicationBase.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
 
 namespace otb
 {
@@ -92,6 +93,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   (void) trainingLabeledListSample;
   (void) modelPath;
 #else
+  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, OutputValueType> GradientBoostedTreeType;
   typename GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);

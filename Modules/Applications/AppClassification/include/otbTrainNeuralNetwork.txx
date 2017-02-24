@@ -18,6 +18,7 @@
 #define otbTrainNeuralNetwork_txx
 #include <boost/lexical_cast.hpp>
 #include "otbLearningApplicationBase.h"
+#include "otbNeuralNetworkMachineLearningModel.h"
 
 namespace otb
 {
@@ -130,6 +131,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                      typename TargetListSampleType::Pointer trainingLabeledListSample,
                      std::string modelPath)
 {
+  typedef otb::NeuralNetworkMachineLearningModel<InputValueType, OutputValueType> NeuralNetworkType;
   typename NeuralNetworkType::Pointer classifier = NeuralNetworkType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
