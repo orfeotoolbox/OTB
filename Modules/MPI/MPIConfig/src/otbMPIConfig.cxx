@@ -95,8 +95,6 @@ MPIConfig::~MPIConfig()
 void MPIConfig::Init(int &argc, char **&argv, bool abortOnException) {
   if( !m_terminated )
     {
-    std::cout << "MPI Initialization : " << this << std::endl;
-    std::flush(std::cout);
     // Abort on exception
     m_abortOnException = abortOnException;
     // Initialize
@@ -141,27 +139,18 @@ void MPIConfig::terminate()
 {
   if( m_initialized && !m_terminated )
     {
-    std::cout << "Terminate : " << this << std::endl;
-    std::flush(std::cout);
     if( std::uncaught_exception() && m_abortOnException )
       {
-      std::cout << "Abord" << std::endl;
       abort( EXIT_FAILURE );
       }
     else
       {
-      std::cout << "Start Finalize MPI" << std::endl;
-      std::flush( std::cout );
       int finalized;
       OTB_MPI_CHECK_RESULT( MPI_Finalized, ( &finalized ));
       if( !finalized )
         {
-        std::cout << "Start 2nd End Finalize MPI" << std::endl;
         OTB_MPI_CHECK_RESULT( MPI_Finalize, ( ));
-        std::cout << "End 2nd  Finalize MPI" << std::endl;
         }
-      std::cout << "End Finalize MPI" << std::endl;
-      std::flush( std::cout );
       }
       m_terminated = true;
     }

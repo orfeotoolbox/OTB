@@ -84,20 +84,16 @@ private:
 
   void CleanupFFTWThreads()
   {
-    std::cout << "Start cleanup threads" << std::endl;
     // This is a trick to make sure fftw will cleanup its threads when application
     // shared lib is released.
     #if defined(ITK_USE_FFTWF)
-      std::cout << "ITK_USE_FFTWF" << std::endl;
       fftwf_cleanup_threads();
       fftwf_cleanup();
     #endif
     #if defined(ITK_USE_FFTWD)
-      std::cout << "ITK_USE_FFTWD" << std::endl;
       fftw_cleanup_threads();
       fftw_cleanup();
     #endif
-    std::cout << "End cleanup threads" << std::endl;
   }
 
   void DoInit() ITK_OVERRIDE
