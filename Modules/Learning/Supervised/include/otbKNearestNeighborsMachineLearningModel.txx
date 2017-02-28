@@ -225,15 +225,15 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
       break;
     }
   }
-  ifs.seekg(0);
+  ifs.close();
   if (isKNNv3)
     {
-    ifs.close();
     cv::FileStorage fs(filename, cv::FileStorage::READ);
     m_KNearestModel->read(fs.getFirstTopLevelNode());
     m_DecisionRule = (int)(fs.getFirstTopLevelNode()["DecisionRule"]);
     return;
     }
+  ifs.open(filename.c_str());
 #endif
   //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
   
