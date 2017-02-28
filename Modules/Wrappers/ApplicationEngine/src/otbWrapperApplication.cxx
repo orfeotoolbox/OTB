@@ -378,6 +378,35 @@ int Application::Execute()
 
   this->DoExecute();
 
+  // Update output information on every output image parameter
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+       it != paramList.end();
+       ++it)
+    {
+    std::string key = *it;
+    if (GetParameterType(key) == ParameterType_OutputImage
+        && IsParameterEnabled(key) )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+
+      if(outputParam!=ITK_NULLPTR)
+        {
+        outputParam->GetImage()->UpdateOutputInformation();
+        }
+      }
+    else if (GetParameterType(key) == ParameterType_ComplexOutputImage
+             && IsParameterEnabled(key))
+      {
+      Parameter* param = GetParameterByKey(key);
+      ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
+      
+      if(outputParam!=ITK_NULLPTR)
+        {
+        outputParam->GetImage()->UpdateOutputInformation();          
+        }
+      }
+    }
   return 0;
 }
 
