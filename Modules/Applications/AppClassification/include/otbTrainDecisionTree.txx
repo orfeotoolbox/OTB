@@ -36,7 +36,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
 #ifdef OTB_OPENCV_3
-  SetParameterInt("classifier.dt.max",10, false);
+  SetParameterInt("classifier.dt.max",25, false);
 #else
   SetParameterInt("classifier.dt.max",65535, false);
 #endif
@@ -72,7 +72,12 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //CVFolds
   AddParameter(ParameterType_Int, "classifier.dt.f", "K-fold cross-validations");
+#ifdef OTB_OPENCV_3
+  // disable cross validation by default (crash in opencv 3.2)
+  SetParameterInt("classifier.dt.f",0, false);
+#else
   SetParameterInt("classifier.dt.f",10, false);
+#endif
   SetParameterDescription(
       "classifier.dt.f", "If cv_folds > 1, then it prunes a tree with K-fold cross-validation where K is equal to cv_folds.");
 
