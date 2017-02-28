@@ -36,7 +36,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
 #ifdef OTB_OPENCV_3
-  SetParameterInt("classifier.dt.max",25, false);
+  SetParameterInt("classifier.dt.max",10, false);
 #else
   SetParameterInt("classifier.dt.max",65535, false);
 #endif
