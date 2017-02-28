@@ -1269,8 +1269,8 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
 
 bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {
-  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator vit = lines.begin();
-  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator nit = vit+1;
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator vit = lines.begin();
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator nit = vit+1;
   
   unsigned long lineOffset = vit->first;
   
@@ -1292,8 +1292,8 @@ bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<uns
 
 void ossimSarSensorModel::deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine)
 {
-  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator vit = lines.begin();
-  std::vector<std::pair<unsigned long,unsigned long>>::const_iterator nit = vit+1;
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator vit = lines.begin();
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator nit = vit+1;
   
   unsigned long lineOffset = vit->first;
 
