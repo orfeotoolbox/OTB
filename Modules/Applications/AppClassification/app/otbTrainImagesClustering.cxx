@@ -22,10 +22,19 @@ public:
 
     // Documentation
     SetDocName( "Train a classifier from multiple images" );
-    SetDocLongDescription( "TODO" );
+    SetDocLongDescription(
+            "This application performs a classifier training from multiple pairs of input images and optional training vector data. "
+                    "Samples are composed of pixel values in each band optionally centered and reduced using an XML statistics file produced by "
+                    "the ComputeImagesStatistics application.\n If provided the training vector data must contain polygons with a positive integer field "
+                    "representing the class label. The name of this field can be set using the \"Class label field\" parameter. Training and validation "
+                    "sample lists could be built such that each class is equally represented in both lists if input training vector data is provided."
+                    "Otherwise a percent of the number of available pixel in the image is used. One parameter allows controlling the ratio "
+                    "between the number of samples in training and validation sets. Two parameters allow managing the size of the training and "
+                    "validation sets per class and per image.\n Several classifier parameters can be set depending on the chosen classifier. "
+                    "\n This application is based on Shark Machine Learning " );
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
-    SetDocSeeAlso( "OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html " );
+    SetDocSeeAlso( "otbTrainImagesClassifier" );
 
     AddDocTag( Tags::Learning );
 

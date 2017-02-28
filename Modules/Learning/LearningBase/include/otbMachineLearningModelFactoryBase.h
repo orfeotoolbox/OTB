@@ -29,7 +29,7 @@ namespace otb
  * This class intends to hold the static attributes that can not be
  * part of a template class (ld error).
  *
- *
+ * \ingroup OTBLearningBase
  */
 class OTBSupervised_EXPORT MachineLearningModelFactoryBase : public itk::Object
 {
