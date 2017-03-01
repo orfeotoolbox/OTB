@@ -54,6 +54,7 @@ otbComplexImageManipulationTest.cxx
 otbImageFileWriterTest.cxx
 otbImageIOFactoryNew.cxx
 otbCompareWritingComplexImage.cxx
+otbImageFileReaderOptBandTest.cxx
 )
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
@@ -1302,3 +1303,21 @@ otb_add_test(NAME  ioTvImageFileReaderPNG2ENVI COMMAND otbImageIOTestDriver
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
+
+otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${INPUTDATA}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+  otbImageFileReaderOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?band=2:4
+  ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+  4
+  )
+
+otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandReorgTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${INPUTDATA}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+  otbImageFileReaderOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?band=2,:,-3,2:-1
+  ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+  4
+  )
