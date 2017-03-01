@@ -122,9 +122,6 @@ private:
       m_float_reader0->SetFileName(inList[0]);
       m_float_reader1->SetFileName(inList[1]);
 
-      m_float_reader0->GenerateOutputInformation();
-      m_float_reader1->GenerateOutputInformation();
-
       // Combine the two images into one complex image
       m_compose = ComposeImageFilterType::New();
       m_compose->SetInput1(m_float_reader0->GetOutput());
