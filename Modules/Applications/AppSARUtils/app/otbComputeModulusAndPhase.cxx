@@ -69,18 +69,18 @@ private:
     SetParameterDescription("il", "Input image list (one complex monoband, one real dualband or two monoband images)");
 
     // Outputs
-    AddParameter(ParameterType_OutputImage, "mod", "Modulus");
-    SetParameterDescription("mod", "Modulus of the input: sqrt(real*real + imag*imag).");
+    AddParameter(ParameterType_OutputImage, "modulus", "Modulus");
+    SetParameterDescription("modulus", "Modulus of the input: sqrt(real*real + imag*imag).");
 
-    AddParameter(ParameterType_OutputImage, "pha", "Phase");
-    SetParameterDescription("pha", "Phase of the input: atan2(imag, real).");
+    AddParameter(ParameterType_OutputImage, "phase", "Phase");
+    SetParameterDescription("phase", "Phase of the input: atan2(imag, real).");
 
     AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "monobandComplexFloat.tif");
-    SetDocExampleParameterValue("mod", "modulus.tif");
-    SetDocExampleParameterValue("pha", "phase.tif");
+    SetDocExampleParameterValue("modulus", "modulus.tif");
+    SetDocExampleParameterValue("phase", "phase.tif");
   }
 
   // DoUpdateParameters() is called as soon as a parameter value change.
@@ -106,8 +106,8 @@ private:
       m_modulus1->SetInput(m_complex_reader->GetOutput());
       m_phase1->SetInput(m_complex_reader->GetOutput());
 
-      SetParameterOutputImage("mod", m_modulus1->GetOutput() );
-      SetParameterOutputImage("pha", m_phase1->GetOutput());
+      SetParameterOutputImage("modulus", m_modulus1->GetOutput() );
+      SetParameterOutputImage("phase", m_phase1->GetOutput());
     }
     else if (numberOfInputs == 2)
     {
@@ -129,8 +129,8 @@ private:
       m_modulus1->SetInput(m_compose->GetOutput());
       m_phase1->SetInput(m_compose->GetOutput());
 
-      SetParameterOutputImage("mod", m_modulus1->GetOutput() );
-      SetParameterOutputImage("pha", m_phase1->GetOutput());
+      SetParameterOutputImage("modulus", m_modulus1->GetOutput() );
+      SetParameterOutputImage("phase", m_phase1->GetOutput());
     }
     else
     {
