@@ -86,7 +86,7 @@ bool SarSensorModelAdapter::IsValidSensorModel() const
   return m_SensorModel.get() != ITK_NULLPTR;
 }
 
-bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long>> & lines)
+bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines)
 {
   if(m_SensorModel.get() != ITK_NULLPTR)
     {

@@ -75,7 +75,7 @@ public:
   bool IsValidSensorModel() const;
 
   /** Deburst metadata if possible and return lines to keep in image file */
-  bool Deburst(std::vector<std::pair<unsigned long, unsigned long>> & lines);
+  bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines);
 
   static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
 
