@@ -134,7 +134,7 @@ private:
     }
     else
     {
-        // TODO throw error
+        throw std::runtime_error("Two many input images for ComputeModulusAndPhase.");
     }
   }
 
