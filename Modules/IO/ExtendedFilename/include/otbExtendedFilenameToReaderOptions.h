@@ -32,8 +32,8 @@ namespace otb
  * - &resol : resolution factor for jpeg200 files
  * - &skipcarto : switch to skip the cartographic information
  * - &skipgeom  : switch to skip the geometric information
- * - &band : select a band composition different from the input image,
- *           syntax is band=r1,r2,r3,...,rn  where each ri is a band range
+ * - &bands : select a band composition different from the input image,
+ *           syntax is bands=r1,r2,r3,...,rn  where each ri is a band range
  *           that can be :
  *             - a single index (1-based) : '2' means 2nd band, '-1' means last band
  *             - a range of bands : '3:' means 3rd band until the last one

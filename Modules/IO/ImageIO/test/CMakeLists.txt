@@ -1308,7 +1308,7 @@ otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandTest COMMAND otbImageIOTestD
   --compare-image ${EPSILON_9} ${INPUTDATA}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
                                ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
   otbImageFileReaderOptBandTest
-  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?band=2:4
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2:4
   ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
   4
   )
@@ -1317,7 +1317,7 @@ otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandReorgTest COMMAND otbImageIO
   --compare-image ${EPSILON_9} ${INPUTDATA}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
                                ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
   otbImageFileReaderOptBandTest
-  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?band=2,:,-3,2:-1
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2,:,-3,2:-1
   ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
   4
   )

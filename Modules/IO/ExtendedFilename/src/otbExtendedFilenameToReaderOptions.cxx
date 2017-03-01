@@ -55,7 +55,7 @@ ExtendedFilenameToReaderOptions
   m_Options.optionList.push_back("skipcarto");
   m_Options.optionList.push_back("skipgeom");
   m_Options.optionList.push_back("skiprpctag");
-  m_Options.optionList.push_back("band");
+  m_Options.optionList.push_back("bands");
 }
 
 void
@@ -126,19 +126,19 @@ ExtendedFilenameToReaderOptions
       }
     }
 
-  if (!map["band"].empty())
+  if (!map["bands"].empty())
     {
     // Basic check on bandRange (using regex)
     itksys::RegularExpression reg;
     reg.compile("^((\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)(,(\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)*$");
-    if (reg.find(map["band"]))
+    if (reg.find(map["bands"]))
       {
       m_Options.bandRange.first = true;
-      m_Options.bandRange.second = map["band"];
+      m_Options.bandRange.second = map["bands"];
       }
     else
       {
-      itkWarningMacro("Unkwown value "<<map["band"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
+      itkWarningMacro("Unkwown value "<<map["bands"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
       }
     }
 
