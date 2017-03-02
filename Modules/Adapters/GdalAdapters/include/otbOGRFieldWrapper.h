@@ -166,6 +166,9 @@ public:
    */
   void Assign(Field const& f);
 
+  /** \copydoc Field::ogr() const */
+  OGRField & ogr();
+  
   /** Access to the raw underlying OGR data.
    * This function provides an abstraction leak in case deeper control on the
    * underlying \c OGRFeature is required.
@@ -173,9 +176,6 @@ public:
    * obtained this way.
    */
   OGRField & ogr() const;
-
-  /** \copydoc Field::ogr() const */
-  OGRField & ogr();
 
 private:
   /**\name Unchecked definitions

@@ -466,18 +466,18 @@ void otb::ogr::Field::Assign(Field const& f)
 }
 
 inline
-OGRField & otb::ogr::Field::ogr() const
-{
-  return const_cast <Field*>(this)->ogr();
-}
-
-inline
 OGRField & otb::ogr::Field::ogr()
 {
   CheckInvariants();
   OGRField * f = m_Feature->GetRawFieldRef(m_index);
   assert(f && "The field obtained shall not be null");
   return *f;
+}
+
+inline
+OGRField & otb::ogr::Field::ogr() const
+{
+  return const_cast <Field*>(this)->ogr();
 }
 
 #endif // otbOGRFieldWrapper_txx
