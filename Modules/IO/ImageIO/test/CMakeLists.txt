@@ -1314,7 +1314,7 @@ otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandTest COMMAND otbImageIOTestD
   )
 
 otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandReorgTest COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9} ${BASELINE}}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+  --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
                                ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
   otbImageFileReaderOptBandTest
   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2,:,-3,2:-1
