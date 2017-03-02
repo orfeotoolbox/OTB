@@ -28,9 +28,12 @@ EXE_FILES=$(find "$OUT_DIR/bin"  -type f -exec file {} \; | grep -i "Mach-O*.*ex
 for lib_file in $LIBRARY_FILES $EXE_FILES; do
     #echo "adding rpath to $OUT_DIR/$lib_file"
     if [ -f "$lib_file" ]; then
-	#echo "$INSTALL_NAME_TOOL -add_rpath $OUT_DIR/lib $lib_file"
-	$INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$lib_file"
-   fi
+      lib_file_original_rpaths=$(otool -l "$lib_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
+      for original_rpath in $lib_file_original_rpaths; do
+        $INSTALL_NAME_TOOL "-delete_rpath" "$original_rpath" "$lib_file"
+      done
+      $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$lib_file"
+    fi
 done
 
 
@@ -50,10 +53,10 @@ if [ "$I_AM_XDK" = false ] ; then
     OTB_APP_FILES=$(find "$OUT_DIR/lib/otb/applications" -maxdepth 1 -type f)
     # run install_name_tool
     for app_file in $OTB_APP_FILES; do
-	#echo "adding rpath to $app_file"
-	if [ -f "$app_file" ]; then
-	    $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$app_file"
-	fi
+      #echo "adding rpath to $app_file"
+      if [ -f "$app_file" ]; then
+        $INSTALL_NAME_TOOL "-rpath" "@ORIGINAL_RPATH_TO_REPLACE@" "$OUT_DIR/lib" "$app_file"
+      fi
     done
     
     rm -fr "Mapla.app"
