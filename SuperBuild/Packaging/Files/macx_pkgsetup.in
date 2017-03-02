@@ -58,7 +58,10 @@ if [ "$I_AM_XDK" = false ] ; then
         $INSTALL_NAME_TOOL "-rpath" "@ORIGINAL_RPATH_TO_REPLACE@" "$OUT_DIR/lib" "$app_file"
       fi
     done
-    
+    if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ]; then
+      $INSTALL_NAME_TOOL "-rpath" "@ORIGINAL_RPATH_TO_REPLACE@" "$OUT_DIR/lib" "$OUT_DIR/lib/python/_otbApplication.so"
+    fi
+
     rm -fr "Mapla.app"
     rm -fr "Monteveridi.app"
     
