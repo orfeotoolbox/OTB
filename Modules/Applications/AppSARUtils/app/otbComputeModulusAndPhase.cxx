@@ -17,9 +17,9 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbBandMathImageFilter.h"
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
+#include "itkComposeImageFilter.h"
 #include <itkMacro.h>
 
 namespace otb
@@ -43,12 +43,11 @@ public:
   itkTypeMacro(ComputeModulusAndPhase, otb::Application);
 
   //typedefs for the application
-  typedef otb::BandMathImageFilter<FloatImageType>       BandMathType;
   typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
   typedef otb::ImageFileReader<ComplexFloatImageType> ComplexReaderType;
   typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
-
+  typedef itk::ComposeImageFilter<FloatImageType,ComplexFloatImageType> ComposeImageFilterType;
 
 private:
   void DoInit()
@@ -57,8 +56,7 @@ private:
     SetDescription("This application computes the modulus and the phase of a complex SAR image.");
 
     SetDocName("Compute Modulus And Phase");
-    SetDocLongDescription("This application computes the modulus and the phase of a complex SAR image. This complex SAR image can be provided as either: a monoband image with complex pixels, a 2 bands image with real and imaginary channels, or 2 monoband images (first one real part and second one imaginary part)");
-    SetDocLimitations("None");
+    SetDocLongDescription("This application computes the modulus and the phase of a complex SAR image. This complex SAR image can be provided as either: a monoband image with complex pixels, a 2 bands image with real and imaginary channels, or 2 monoband images (first one real part and second one imaginary part)"); SetDocLimitations("None");
     SetDocAuthors("Alexia Mondot (alexia.mondot@c-s.fr) and Mickael Savinaud (mickael.savinaud@c-s.fr)");
     SetDocSeeAlso(" ");
     AddDocTag(Tags::SAR);
@@ -96,9 +94,6 @@ private:
     m_modulus1 = ModulusFilterType::New();
     m_phase1 = PhaseFilterType::New();
 
-    m_modulus2 = BandMathType::New();
-    m_phase2 = BandMathType::New();
-
     std::vector<std::string> inList = GetParameterStringList("il");
     const size_t numberOfInputs = inList.size();
 
@@ -126,20 +121,16 @@ private:
       m_float_reader0->GenerateOutputInformation();
       m_float_reader1->GenerateOutputInformation();
 
-      // Get the input images real and imag
-      FloatImageType::Pointer inImageRe = m_float_reader0->GetOutput();
-      FloatImageType::Pointer inImageIm = m_float_reader1->GetOutput();
+      // Combine the two images into one complex image
+      m_compose = ComposeImageFilterType::New();
+      m_compose->SetInput1(m_float_reader0->GetOutput());
+      m_compose->SetInput2(m_float_reader1->GetOutput());
 
-      m_modulus2->SetNthInput(0, inImageRe,"real");
-      m_modulus2->SetNthInput(1, inImageIm,"imag");
-      m_modulus2->SetExpression("sqrt(real * real + imag * imag)");
+      m_modulus1->SetInput(m_compose->GetOutput());
+      m_phase1->SetInput(m_compose->GetOutput());
 
-      m_phase2->SetNthInput(0, inImageRe,"real");
-      m_phase2->SetNthInput(1, inImageIm,"imag");
-      m_phase2->SetExpression("atan2( imag , real )");
-
-      SetParameterOutputImage("mod", m_modulus2->GetOutput() );
-      SetParameterOutputImage("pha", m_phase2->GetOutput());
+      SetParameterOutputImage("mod", m_modulus1->GetOutput() );
+      SetParameterOutputImage("pha", m_phase1->GetOutput());
     }
     else
     {
@@ -151,10 +142,9 @@ ComplexReaderType::Pointer m_complex_reader;
 FloatReaderType::Pointer m_float_reader0;
 FloatReaderType::Pointer m_float_reader1;
 
-BandMathType::Pointer m_modulus2;
-BandMathType::Pointer m_phase2;
 ModulusFilterType::Pointer m_modulus1;
 PhaseFilterType::Pointer m_phase1;
+ComposeImageFilterType::Pointer m_compose;
 }
 
 ;} // namespace Wrapper
