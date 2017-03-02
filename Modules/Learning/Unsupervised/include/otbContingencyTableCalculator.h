@@ -1,0 +1,96 @@
+/*=========================================================================
+
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
+
+
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
+
+
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#ifndef otbContingencyTableCalculator_h
+#define otbContingencyTableCalculator_h
+
+#include "itkObject.h"
+#include "itkObjectFactory.h"
+#include "otbContingencyTable.h"
+#include <map>
+
+namespace otb
+{
+/**
+ * \brief ContingencyTableCalculator provide facilities to compute ContingencyTable with different structure type
+ * The size of the label list should be the same for both list.
+ * \tparam TRefListLabel data structure type which contain the reference labels
+ * \tparam TProdListLabel data structure type which contain the produced labels
+ * \tparam TClassLabel the label data type
+ *
+ * \ingroup OTBUnsupervised
+ */
+template<class TClassLabel>
+class ITK_EXPORT ContingencyTableCalculator : public itk::Object
+{
+public:
+  /** Standard class typedefs */
+  typedef ContingencyTableCalculator    Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer <Self>      Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ContingencyTableCalculator, itk::Object);
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  typedef ContingencyTable<TClassLabel> ContingencyTableType;
+
+  typedef typename std::map<TClassLabel, unsigned long> CountMapType;
+  typedef typename std::map<TClassLabel, CountMapType > MapOfClassesType;
+
+  /** Populate the confusion Matrix for a image iteration */
+  template<class TRefIterator, class TProdIterator>
+  void Compute(TRefIterator itRef, TProdIterator itProd);
+
+  /** Populate the confusion Matrix with input which provide GetMeasurementVector()[0] access */
+  template<class TRefIterator, class TProdIterator>
+  void Compute(TRefIterator refBegin, TRefIterator refEnd, TProdIterator prodBegin, TProdIterator prodEnd);
+
+  itkGetConstMacro(NumberOfRefClasses, unsigned long);
+  itkGetConstMacro(NumberOfProdClasses, unsigned long);
+  itkGetConstMacro(NumberOfSamples, unsigned long);
+
+  void Clear();
+  ContingencyTableType GetContingencyTable();
+
+protected:
+  ContingencyTableCalculator();
+  ~ContingencyTableCalculator() ITK_OVERRIDE {}
+  //void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+
+private:
+  ContingencyTableCalculator(const Self &); //purposely not implemented
+  void operator=(const Self &); //purposely not implemented
+
+  MapOfClassesType m_LabelCount;
+  unsigned long m_NumberOfRefClasses;
+  unsigned long m_NumberOfProdClasses;
+  unsigned long m_NumberOfSamples;
+
+
+};
+}
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbContingencyTableCalculator.txx"
+#endif
+
+#endif //otbContingencyTableCalculator_h
