@@ -94,7 +94,7 @@ int main(int argc, char * argv[])
          : sensor->autovalidateForwardModelFromGCPs()
          ;
       
-      std::vector<std::pair<unsigned long, unsigned long>> deburstLines;
+      std::vector<std::pair<unsigned long, unsigned long> > deburstLines;
 
       std::cout<<"Trying to deburst data ..."<<std::endl;
       bool deburstOk = sensor->deburst(deburstLines);
