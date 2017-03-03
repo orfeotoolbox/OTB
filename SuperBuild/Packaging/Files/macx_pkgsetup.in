@@ -150,12 +150,21 @@ PATH=$OUT_DIR/bin:\$PATH
 PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
 GDAL_DATA=$OUT_DIR/share/gdal
 GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+if [ -z "\$OTB_APPLICATION_PATH" ] || [ "\$OTB_APPLICATION_PATH" = "" ]; then
+    OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+else
+    OTB_APPLICATION_PATH=\$(readlink -f "\$OTB_APPLICATION_PATH")
+    if ! [ "\$OTB_APPLICATION_PATH" = "$OUT_DIR/lib/otb/applications" ]; then
+      OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications:\$OTB_APPLICATION_PATH
+    fi
+fi
 
 export LC_NUMERIC=C
 export PATH
 export GDAL_DATA
 export GEOTIFF_CSV
 export PYTHONPATH
+export OTB_APPLICATION_PATH
 EOF
 
 chmod +x "$OUT_DIR/otbenv.profile"
