@@ -46,8 +46,8 @@ int otbSharkKMeansMachineLearningModelCanRead(int argc, char *argv[])
     return EXIT_FAILURE;
     }
   std::string filename( argv[1] );
-  typedef otb::SharkKMeansMachineLearningModel<InputValueType, TargetValueType> RFType;
-  RFType::Pointer classifier = RFType::New();
+  typedef otb::SharkKMeansMachineLearningModel<InputValueType, TargetValueType> KMType;
+  KMType::Pointer classifier = KMType::New();
   bool lCanRead = classifier->CanReadFile( filename );
   if( !lCanRead )
     {

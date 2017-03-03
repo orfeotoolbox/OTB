@@ -6,5 +6,6 @@ void RegisterTests()
   REGISTER_TEST(otbSharkKMeansMachineLearningModelNew);
   REGISTER_TEST(otbSharkKMeansMachineLearningModelTrain);
   REGISTER_TEST(otbSharkKMeansMachineLearningModelPredict);
+  REGISTER_TEST(otbSharkUnsupervisedImageClassificationFilter);
 #endif
 }

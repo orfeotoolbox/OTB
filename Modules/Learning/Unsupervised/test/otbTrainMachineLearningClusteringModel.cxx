@@ -154,6 +154,11 @@ int otbSharkKMeansMachineLearningModelPredict(int argc, char *argv[])
 
   KMeansType::Pointer classifier = KMeansType::New();
   std::cout << "Load\n";
+  if(!classifier->CanReadFile(argv[2]))
+    {
+    std::cerr << "Unable to read model file : " << argv[2] << std::endl;
+    return EXIT_FAILURE;
+    }
   classifier->Load( argv[2] );
   auto start = std::chrono::system_clock::now();
   classifier->SetInputListSample( samples );
