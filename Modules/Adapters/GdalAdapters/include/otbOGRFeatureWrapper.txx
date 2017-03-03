@@ -43,6 +43,12 @@ using boost::interprocess::move;
 /*================================[ Feature ]================================*/
 /*===========================================================================*/
 inline
+void otb::ogr::Feature::CheckInvariants() const
+{
+  assert(m_Feature && "OGRFeature can't be null");
+}
+
+inline
 otb::ogr::Feature otb::ogr::Feature::Clone() const
 {
   CheckInvariants();
@@ -197,13 +203,6 @@ void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
 {
   CheckInvariants();
   UncheckedPrintSelf(os, indent);
-}
-
-
-inline
-void otb::ogr::Feature::CheckInvariants() const
-{
-  assert(m_Feature && "OGRFeature can't be null");
 }
 
 #endif // otbOGRFeatureWrapper_txx
