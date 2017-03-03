@@ -17,9 +17,11 @@
 =========================================================================*/
 #ifndef otbSharkKMeansMachineLearningModel_txx
 #define otbSharkKMeansMachineLearningModel_txx
+
 #include <fstream>
 #include "itkMacro.h"
 #include "otbSharkKMeansMachineLearningModel.h"
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -27,15 +29,18 @@
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #endif
-#include <shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h> //normalize
-#include <shark/Algorithms/KMeans.h> //k-means algorithm
-#include <shark/Models/Clustering/HardClusteringModel.h>
-#include <shark/Models/Clustering/SoftClusteringModel.h>
-#include <shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h>
+
+#include "otbSharkUtils.h"
+#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h" //normalize
+#include "shark/Algorithms/KMeans.h" //k-means algorithm
+#include "shark/Models/Clustering/HardClusteringModel.h"
+#include "shark/Models/Clustering/SoftClusteringModel.h"
+#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h"
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
-#include "otbSharkUtils.h"
+
 
 
 namespace otb
@@ -189,7 +194,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   std::string name;
   ia >> name;
   if(name != m_ClusteringModel->name())
-    throw new boost::archive::archive_exception(boost::archive::archive_exception::input_stream_error);
+    m_CanRead = false;
   m_ClusteringModel->load( ia, 1 );
 }
 
@@ -200,13 +205,14 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 {
   try
     {
+    m_CanRead = true;
     this->Load( file );
     }
   catch( ... )
     {
     return false;
     }
-  return true;
+  return m_CanRead;
 }
 
 template<class TInputValue, class TOutputValue>

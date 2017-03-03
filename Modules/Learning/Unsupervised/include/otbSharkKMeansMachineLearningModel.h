@@ -34,7 +34,6 @@
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
 
-#include "otb_shark.h"
 #include "shark/Models/Clustering/HardClusteringModel.h"
 #include "shark/Models/Clustering/SoftClusteringModel.h"
 #include "shark/Models/Clustering/Centroids.h"
@@ -108,18 +107,14 @@ public:
   //@}
 
   /** Get the maximum number of iteration for the kMeans algorithm.*/
-  itkGetMacro( MaximumNumberOfIterations, unsigned
-          int );
+  itkGetMacro( MaximumNumberOfIterations, unsigned );
   /** Set the maximum number of iteration for the kMeans algorithm.*/
-  itkSetMacro( MaximumNumberOfIterations, unsigned
-          int );
+  itkSetMacro( MaximumNumberOfIterations, unsigned );
 
   /** Get the number of class for the kMeans algorithm.*/
-  itkGetMacro( K, unsigned
-          int );
+  itkGetMacro( K, unsigned );
   /** Set the number of class for the kMeans algorithm.*/
-  itkSetMacro( K, unsigned
-          int );
+  itkSetMacro( K, unsigned );
 
   /** If true, normalized input data sample list */
   itkGetMacro( Normalized, bool );
@@ -154,6 +149,7 @@ private:
   bool m_Normalized;
   unsigned int m_K;
   unsigned int m_MaximumNumberOfIterations;
+  bool m_CanRead;
 
 
   /** Centroids results form kMeans */
