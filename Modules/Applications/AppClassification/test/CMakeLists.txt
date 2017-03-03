@@ -527,6 +527,18 @@ otb_test_application(NAME apTvComputeConfusionMatrixExtraProducedLabelsR
   ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
   ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv)
 
+#----------- ComputeContingencyTable TESTS ----------------
+
+otb_test_application(NAME apTvComputeContingencyTableExtraProducedLabelsR
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref raster
+  -ref.raster.in ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+  -format contingencytable
+  -out ${TEMP}/apTvComputeContingencyTableExtraProdLabelsROut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeContingencyTableExtraProdLabelsROut.csv
+  ${TEMP}/apTvComputeContingencyTableExtraProdLabelsROut.csv)
 
 #----------- FusionOfClassifications TESTS ----------------
 otb_test_application(NAME apTvFusionOfClassificationsDSPrecision6Inputs
