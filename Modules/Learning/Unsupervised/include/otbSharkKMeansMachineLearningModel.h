@@ -18,8 +18,6 @@
 #ifndef otbSharkKMeansMachineLearningModel_h
 #define otbSharkKMeansMachineLearningModel_h
 
-
-
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
@@ -71,15 +69,16 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType InputValueType;
-  typedef typename Superclass::InputSampleType InputSampleType;
-  typedef typename Superclass::InputListSampleType InputListSampleType;
-  typedef typename Superclass::TargetValueType TargetValueType;
-  typedef typename Superclass::TargetSampleType TargetSampleType;
-  typedef typename Superclass::TargetListSampleType TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType ConfidenceValueType;
-  typedef typename Superclass::ConfidenceSampleType ConfidenceSampleType;
-  typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
+  typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
+  typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
+
 
   typedef HardClusteringModel<RealVector> ClusteringModelType;
   typedef ClusteringModelType::OutputType ClusteringOutputType;
@@ -153,7 +152,7 @@ private:
 
 
   /** Centroids results form kMeans */
-  Centroids centroids;
+  Centroids m_Centroids;
 
 
   /** shark Model could be SoftClusteringModel or HardClusteringModel */
