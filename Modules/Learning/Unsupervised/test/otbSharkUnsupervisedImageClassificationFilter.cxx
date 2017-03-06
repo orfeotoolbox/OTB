@@ -51,15 +51,15 @@ void generateSamples(unsigned int num_classes, unsigned int num_samples,
                      LocalInputListSampleType * samples,
                      LocalTargetListSampleType * labels)
 {
-  std::default_random_engine generator;
+  std::default_random_engine randomEngine;
   std::uniform_int_distribution<int> label_distribution(1,num_classes);
   std::uniform_int_distribution<int> feat_distribution(0,256);
   for(size_t scount=0; scount<num_samples; ++scount)
     {
-    LabeledPixelType label = label_distribution(generator);
+    LabeledPixelType label = label_distribution(randomEngine);
     LocalInputSampleType sample(num_features);
     for(unsigned int i=0; i<num_features; ++i)
-      sample[i]= feat_distribution(generator);
+      sample[i]= feat_distribution(randomEngine);
     samples->SetMeasurementVectorSize(num_features);
     samples->PushBack(sample);
     labels->PushBack(label);

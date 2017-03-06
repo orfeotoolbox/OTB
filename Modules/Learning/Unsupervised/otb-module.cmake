@@ -17,6 +17,7 @@ otb_module(OTBUnsupervised
   OTBImageBase
   OTBLearningBase
   OTBSupervised
+  OTBShark
 
   DESCRIPTION
   "${DOCUMENTATION}"
