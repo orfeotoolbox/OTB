@@ -42,8 +42,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-using namespace shark;
-
 /** \class SharkKMeansMachineLearningModel
  *  \brief Shark version of Random Forests algorithm
  *
@@ -64,10 +62,10 @@ class ITK_EXPORT SharkKMeansMachineLearningModel : public MachineLearningModel<T
 {
 public:
   /** Standard class typedefs. */
-  typedef SharkKMeansMachineLearningModel Self;
+  typedef SharkKMeansMachineLearningModel                 Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   typedef typename Superclass::InputValueType             InputValueType;
   typedef typename Superclass::InputSampleType            InputSampleType;
@@ -80,8 +78,8 @@ public:
   typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
 
 
-  typedef HardClusteringModel<RealVector> ClusteringModelType;
-  typedef ClusteringModelType::OutputType ClusteringOutputType;
+  typedef shark::HardClusteringModel<shark::RealVector>   ClusteringModelType;
+  typedef ClusteringModelType::OutputType                 ClusteringOutputType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro( Self );
@@ -152,7 +150,7 @@ private:
 
 
   /** Centroids results form kMeans */
-  Centroids m_Centroids;
+  shark::Centroids m_Centroids;
 
 
   /** shark Model could be SoftClusteringModel or HardClusteringModel */

@@ -225,19 +225,19 @@ foreach(classifier ${classifierList})
 endforeach()
 
 
-#----------- TrainImagesClustering TESTS ----------------
+#----------- TrainImagesUnsupervised TESTS ----------------
 
 set(sharkkm_output_format ".txt")
 set(sharkkm_parameters "")
 
 if(OTB_USE_SHARK)
-  list(APPEND clusteringList "SHARKKM")
+  list(APPEND UnsupervisedList "SHARKKM")
 endif()
 
 list(APPEND classifier_without_baseline "SHARKKM")
 
 # Loop on classifiers
-foreach(classifier ${clusteringList})
+foreach(classifier ${UnsupervisedList})
   string(TOLOWER ${classifier} lclassifier)
 
   # Derive output file name
@@ -254,7 +254,7 @@ foreach(classifier ${clusteringList})
 
   otb_test_application(
     NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
-    APP      TrainImagesClustering
+    APP      TrainImagesUnsupervised
     OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
     -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
@@ -275,7 +275,7 @@ foreach(classifier ${clusteringList})
 
   otb_test_application(
     NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
-    APP      TrainImagesClustering
+    APP      TrainImagesUnsupervised
     OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
     -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
@@ -297,7 +297,7 @@ foreach(classifier ${clusteringList})
 
   otb_test_application(
     NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
-    APP      TrainImagesClustering
+    APP      TrainImagesUnsupervised
     OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
     -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
     -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
@@ -1051,17 +1051,17 @@ if(OTB_USE_OPENCV)
     ${TEMP}/apTvClTrainVectorClassifierModel.rf)
 endif()
 
-#----------- TrainVectorClustering TESTS ----------------
+#----------- TrainVectorUnsupervised TESTS ----------------
 if(OTB_USE_SHARK)
-  otb_test_application(NAME apTvClTrainVectorClustering
-    APP  TrainVectorClustering
+  otb_test_application(NAME apTvClTrainVectorUnsupervised
+    APP  TrainVectorUnsupervised
     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
     -feat value_0 value_1 value_2 value_3
     -classifier sharkkm
     -io.out ${TEMP}/apTvClTrainVectorClusteringModel.txt)
 
-  otb_test_application(NAME apTvClTrainVectorClusteringWithClass
-    APP  TrainVectorClustering
+  otb_test_application(NAME apTvClTrainVectorUnsupervisedWithClass
+    APP  TrainVectorUnsupervised
     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
     -feat value_0 value_1 value_2 value_3
     -cfield class

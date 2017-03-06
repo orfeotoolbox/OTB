@@ -5,10 +5,10 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainImagesClustering : public TrainImagesBase
+class TrainImagesUnsupervised : public TrainImagesBase
 {
 public:
-  typedef TrainImagesClustering         Self;
+  typedef TrainImagesUnsupervised       Self;
   typedef TrainImagesBase               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -17,7 +17,7 @@ public:
 
   void DoInit() ITK_OVERRIDE
   {
-    SetName( "TrainImagesClustering" );
+    SetName( "TrainImagesUnsupervised" );
     SetDescription( "Train a classifier from multiple pairs of images and optional input training vector data." );
 
     // Documentation
@@ -168,4 +168,4 @@ private :
 }
 }
 
-OTB_APPLICATION_EXPORT( otb::Wrapper::TrainImagesClustering )
+OTB_APPLICATION_EXPORT( otb::Wrapper::TrainImagesUnsupervised )

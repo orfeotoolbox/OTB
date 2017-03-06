@@ -21,10 +21,10 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainVectorClustering : public TrainVectorBase
+class TrainVectorUnsupervised : public TrainVectorBase
 {
 public:
-  typedef TrainVectorClustering Self;
+  typedef TrainVectorUnsupervised Self;
   typedef TrainVectorBase Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -37,7 +37,7 @@ public:
   typedef Superclass::TargetListSampleType TargetListSampleType;
 
 protected :
-  TrainVectorClustering() : TrainVectorBase()
+  TrainVectorUnsupervised() : TrainVectorBase()
   {
     m_ClassifierCategory = Unsupervised;
   }
@@ -45,10 +45,10 @@ protected :
 private:
   void DoTrainInit()
   {
-    SetName( "TrainVectorClustering" );
+    SetName( "TrainVectorUnsupervised" );
     SetDescription( "Train a classifier based on labeled or unlabeled geometries and a list of features to consider." );
 
-    SetDocName( "Train Vector Clustering" );
+    SetDocName( "Train Vector Unsupervised" );
     SetDocLongDescription( "This application trains a classifier based on "
                                    "labeled or unlabeled geometries and a list of features to consider for classification." );
     SetDocLimitations( " " );
@@ -83,4 +83,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT( otb::Wrapper::TrainVectorClustering )
+OTB_APPLICATION_EXPORT( otb::Wrapper::TrainVectorUnsupervised )

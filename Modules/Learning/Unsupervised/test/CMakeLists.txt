@@ -1,8 +1,8 @@
 otb_module_test()
 set(OTBUnsupervisedTests
   otbUnsupervisedTestDriver.cxx
-  otbMachineLearningClusteringModelCanRead.cxx
-  otbTrainMachineLearningClusteringModel.cxx
+  otbMachineLearningUnsupervisedModelCanRead.cxx
+  otbTrainMachineLearningUnsupervisedModel.cxx
   )
 
 # Tests Declaration

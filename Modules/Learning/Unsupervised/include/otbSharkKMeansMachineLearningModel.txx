@@ -68,16 +68,16 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::Train()
 {
   // Parse input data and convert to Shark Data
-  std::vector<RealVector> vector_data;
-  Shark::ListSampleToSharkVector( this->GetInputListSample(), vector_data );
-  Data<RealVector> data = createDataFromRange( vector_data );
+  std::vector<shark::RealVector> vector_data;
+  otb::Shark::ListSampleToSharkVector( this->GetInputListSample(), vector_data );
+  shark::Data<shark::RealVector> data = shark::createDataFromRange( vector_data );
 
   // Normalized input value if necessary
   if( m_Normalized )
     data = NormalizeData( data );
 
   // Use a Hard Clustering Model for classification
-  kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
+  shark::kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
   m_ClusteringModel = boost::shared_ptr<ClusteringModelType>(new ClusteringModelType( &m_Centroids ));
 }
 
@@ -99,7 +99,7 @@ typename SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::DoPredict(const InputSampleType &value, ConfidenceValueType *quality) const
 {
-  RealVector data( value.Size());
+  shark::RealVector data( value.Size());
   for( size_t i = 0; i < value.Size(); i++ )
     {
     data.push_back( value[i] );
@@ -143,11 +143,11 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
     }
 
   // Convert input list of features to shark data format
-  std::vector<RealVector> features;
-  Shark::ListSampleRangeToSharkVector( input, features, startIndex, size );
-  Data<RealVector> inputSamples = shark::createDataFromRange( features );
+  std::vector<shark::RealVector> features;
+  otb::Shark::ListSampleRangeToSharkVector( input, features, startIndex, size );
+  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 
-  Data<ClusteringOutputType> clusters;
+  shark::Data<ClusteringOutputType> clusters;
   try
     {
      clusters = ( *m_ClusteringModel )( inputSamples );
@@ -175,7 +175,6 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
       quality->SetMeasurementVector( qid, static_cast<ConfidenceValueType>(1.) );
       }
     }
-
 }
 
 

@@ -51,8 +51,8 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           TrainVectorClustering
-  SOURCES        otbTrainVectorClustering.cxx
+  NAME           TrainVectorUnsupervised
+  SOURCES        otbTrainVectorUnsupervised.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -81,8 +81,8 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           TrainImagesClustering
-  SOURCES        otbTrainImagesClustering.cxx
+  NAME           TrainImagesUnsupervised
+  SOURCES        otbTrainImagesUnsupervised.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
