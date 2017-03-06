@@ -28,7 +28,12 @@ namespace otb
 namespace Wrapper
 {
 
-//  ComputeModulusAndPhase class is derived from Application class.
+/** \class ComputeModulusAndPhase
+ *  \brief ComputeModulusAndPhase is an application that
+ *         computes modulus and phase from a complex SAR image.
+ *
+ * \ingroup AppSARUtils
+ */
 class ComputeModulusAndPhase: public Application
 {
 public:
@@ -40,7 +45,7 @@ public:
 
   /** Standard macro */
   itkNewMacro (Self);
-  itkTypeMacro(ComputeModulusAndPhase, otb::Application);
+  itkTypeMacro(ComputeModulusAndPhase, otb::Wrapper::Application);
 
   //typedefs for the application
   typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
@@ -98,8 +103,8 @@ private:
   // DoExecute() contains the application core.
   void DoExecute()
   {
-    m_modulus = ModulusFilterType::New();
-    m_phase = PhaseFilterType::New();
+    m_Modulus = ModulusFilterType::New();
+    m_Phase = PhaseFilterType::New();
 
     std::vector<std::string> inList = GetParameterStringList("il");
     const size_t numberOfInputs = inList.size();
@@ -107,45 +112,45 @@ private:
     if (numberOfInputs == 1)
     {
       // Get the input image
-      m_complex_reader = ComplexReaderType::New();
-      m_complex_reader->SetFileName(inList[0]);
+      m_ComplexReader = ComplexReaderType::New();
+      m_ComplexReader->SetFileName(inList[0]);
 
-      m_modulus->SetInput(m_complex_reader->GetOutput());
-      m_phase->SetInput(m_complex_reader->GetOutput());
+      m_Modulus->SetInput(m_ComplexReader->GetOutput());
+      m_Phase->SetInput(m_ComplexReader->GetOutput());
     }
     else if (numberOfInputs == 2)
     {
       // Get the input image
-      m_float_reader0 = FloatReaderType::New();
-      m_float_reader1 = FloatReaderType::New();
+      m_FloatReader0 = FloatReaderType::New();
+      m_FloatReader1 = FloatReaderType::New();
 
-      m_float_reader0->SetFileName(inList[0]);
-      m_float_reader1->SetFileName(inList[1]);
+      m_FloatReader0->SetFileName(inList[0]);
+      m_FloatReader1->SetFileName(inList[1]);
 
       // Combine the two images into one complex image
-      m_compose = ComposeImageFilterType::New();
-      m_compose->SetInput1(m_float_reader0->GetOutput());
-      m_compose->SetInput2(m_float_reader1->GetOutput());
+      m_Compose = ComposeImageFilterType::New();
+      m_Compose->SetInput1(m_FloatReader0->GetOutput());
+      m_Compose->SetInput2(m_FloatReader1->GetOutput());
 
-      m_modulus->SetInput(m_compose->GetOutput());
-      m_phase->SetInput(m_compose->GetOutput());
+      m_Modulus->SetInput(m_Compose->GetOutput());
+      m_Phase->SetInput(m_Compose->GetOutput());
     }
     else
     {
-        throw std::runtime_error("Two many input images for ComputeModulusAndPhase.");
+        otbAppLogFATAL("Too many input images for ComputeModulusAndPhase.");
     }
 
-    SetParameterOutputImage("modulus", m_modulus->GetOutput() );
-    SetParameterOutputImage("phase", m_phase->GetOutput());
+    SetParameterOutputImage("modulus", m_Modulus->GetOutput() );
+    SetParameterOutputImage("phase", m_Phase->GetOutput());
   }
 
-  ComplexReaderType::Pointer m_complex_reader;
-  FloatReaderType::Pointer m_float_reader0;
-  FloatReaderType::Pointer m_float_reader1;
+  ComplexReaderType::Pointer m_ComplexReader;
+  FloatReaderType::Pointer m_FloatReader0;
+  FloatReaderType::Pointer m_FloatReader1;
 
-  ModulusFilterType::Pointer m_modulus;
-  PhaseFilterType::Pointer m_phase;
-  ComposeImageFilterType::Pointer m_compose;
+  ModulusFilterType::Pointer m_Modulus;
+  PhaseFilterType::Pointer m_Phase;
+  ComposeImageFilterType::Pointer m_Compose;
 };
 
 } // namespace Wrapper
