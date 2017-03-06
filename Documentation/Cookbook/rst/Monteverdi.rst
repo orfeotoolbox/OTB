@@ -12,22 +12,19 @@ Monteverdi is a satellite image viewer. Its main features are:
 - **Powerful**: Access to all processing application from OTB. Orthorectification,
   optical calibration, classification, SAR processing, and much more!
 
-GUI : what does it look like ?
-------------------------------
-
 .. image:: Art/MonteverdiImages/gui.png
 
-This is Monteverdi’s main window where the different functionalities are reachable:
+This is Monteverdi’s main window where the different functionalities are:
 
 #. Main menu
 
 #. Top toolbar
 
-#. Image displaying
+#. Image View
 
-#. Right side dock
+#. Widgets
 
-#. Stack layer
+#. Layer stack
 
 Main menu
 ~~~~~~~~~
@@ -92,9 +89,9 @@ In the image displaying part:
 -  CTRL+Mouse drag = Quick scroll view (rending is done after releasing
    CTRL key)
 
--  CTRL+Mouse wheel = Zoom in out
+-  Mouse wheel = Zoom
 
--  + or - = Zoom in out
+-  + or - = Zoom
 
 In the layer stack part:
 

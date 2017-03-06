@@ -448,8 +448,3 @@ OGRwkbGeometryType otb::ogr::Layer::GetGeomType() const
 #endif
 }
 
-bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs)
-{
-  const bool equal = lhs.m_Layer.get() == rhs.m_Layer.get();
-  return equal;
-}

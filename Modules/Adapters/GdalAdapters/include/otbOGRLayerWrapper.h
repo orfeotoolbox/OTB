@@ -506,7 +506,11 @@ public:
    */
   OGRwkbGeometryType GetGeomType() const;
 
-  friend bool otb::ogr::operator==(Layer const& lhs, Layer const& rhs);
+  friend bool operator==(Layer const& lhs, Layer const& rhs)
+  {
+    const bool equal = lhs.m_Layer.get() == rhs.m_Layer.get();
+    return equal;
+  }
 
 private:
   /**

@@ -86,7 +86,7 @@ protected:
 
   /**
    * Method to remove all internal applications. Application deriving from
-   * CompositeApplication should call this method at the begining of their
+   * CompositeApplication should call this method at the beginning of their
    * DoInit().
    */
   void ClearApplications();

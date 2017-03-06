@@ -198,9 +198,14 @@ private:
  *
  * This filter rescales each band to match the [OutputMinimum, OutputMaximum] range.
  * In order to avoid odd values to alter the intensity extent, one can set a clamp percentage.
+ * The clamp percentage is set to 0.01 by default.
  *
  * Values lower than the first quantile of this percentage are set to the OutputMinimum.
  * Values upper than the last quantile of this percentage are set to the OutputMaximum.
+ *
+ * This filter differ from itk::VectorRescaleIntensityImageFilter.
+ * Instead of setting only the OutputMaximumMagnitude, you can set the minimum and maximum values for the input and output images.
+ * There is also the possibilty to set a Gamma value and change the clamp percentage.
  *
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded

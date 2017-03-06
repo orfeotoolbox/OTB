@@ -11,6 +11,7 @@ set(OTBOSSIMAdapters_SRC
   otbFilterFunctionValues.cxx
   otbMetaDataKey.cxx
   otbEllipsoidAdapter.cxx
+  otbSarSensorModelAdapter.cxx
   )
 
 add_library(OTBOSSIMAdapters ${OTBOSSIMAdapters_SRC})

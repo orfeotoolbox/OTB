@@ -305,11 +305,11 @@ private:
 
     AddParameter(ParameterType_String, "mode.vector.layername", "Layer name");
     SetParameterDescription("mode.vector.layername", "Name of the layer in the vector file or database (default is Layer).");
-    SetParameterString("mode.vector.layername", "layer");
+    SetParameterString("mode.vector.layername", "layer", false);
 
     AddParameter(ParameterType_String, "mode.vector.fieldname", "Geometry index field name");
     SetParameterDescription("mode.vector.fieldname", "Name of the field holding the geometry index in the output vector file or database.");
-    SetParameterString("mode.vector.fieldname", "DN");
+    SetParameterString("mode.vector.fieldname", "DN", false);
 
     AddParameter(ParameterType_Int, "mode.vector.tilesize", "Tiles size");
     SetParameterDescription("mode.vector.tilesize",

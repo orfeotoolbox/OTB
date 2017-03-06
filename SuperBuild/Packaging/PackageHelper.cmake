@@ -105,7 +105,7 @@ macro(macro_super_package)
 	    "UniversalCRTSdkDir variable not set. call vcvarsall.bat <arch> first before starting build.")
 	endif()
 	
-	#addtional msvc redist dll from VCINSTALLDIR
+	#additional msvc redist dll from VCINSTALLDIR
 	if(DEFINED ENV{VCINSTALLDIR})
           file(TO_CMAKE_PATH "$ENV{VCINSTALLDIR}" PKG_VCINSTALLDIR)
           list(
@@ -184,7 +184,11 @@ macro(macro_super_package)
       file(APPEND ${CMAKE_BINARY_DIR}/make_symlinks
         "${make_symlink_cmd}\n")
     endforeach()
-    
+
+    if(APPLE)
+      set(ORIGINAL_RPATH_TO_REPLACE ${DEPENDENCIES_INSTALL_DIR}/lib)
+    endif()
+
     configure_file(${PACKAGE_SUPPORT_FILES_DIR}/${PKGSETUP_IN_FILENAME}
       ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
     
@@ -329,7 +333,9 @@ endfunction() #func_prepare_package
 
 function(func_process_deps input_file)
 
+  set(input_file_full_path)
   search_library(${input_file} PKG_SEARCHDIRS input_file_full_path)
+
   if(NOT input_file_full_path)
     if(LINUX)
       setif_value_in_list(is_gtk_lib "${input_file}" ALLOWED_SYSTEM_DLLS)
@@ -346,10 +352,13 @@ function(func_process_deps input_file)
 
   endif() #if(NOT input_file_full_path)
 
-  message("Processing ${input_file_full_path}")
+  if(NOT PKG_DEBUG)
+    message("Processing ${input_file_full_path}")
+  endif()
 
   set(is_executable FALSE)
   is_file_executable2(input_file_full_path is_executable)
+
   if(NOT is_executable)
     #copy back to input_file_full_path
     pkg_install_rule(${input_file_full_path})
@@ -376,23 +385,23 @@ function(func_process_deps input_file)
           OR  IS_DIRECTORY "${sofile}" )
         set(not_valid TRUE)
       endif()
-      
+
       if(not_valid)
         continue()
       endif()
-      
+
       func_is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
-      
+
       if(is_symlink)
         add_to_symlink_list("${linked_to_file}" "${basename_of_sofile}")	
       endif() # is_symlink
-      
+
     endforeach()
-    
+
   endif(UNIX)
-  
+
   set(raw_items)
-     
+
   execute_process(
     COMMAND ${LOADER_PROGRAM} ${LOADER_PROGRAM_ARGS} "${input_file_full_path}"
     RESULT_VARIABLE loader_rv
@@ -410,10 +419,15 @@ function(func_process_deps input_file)
   get_filename_component(bn_name ${input_file_full_path} NAME)
   set(${bn_name}_USED TRUE CACHE INTERNAL "")
 
+  if(PKG_DEBUG)
+    message("Processing ${input_file} started. Set ${bn_name}_USED=${${bn_name}_USED}")
+  endif()
+
   foreach(candidate ${candidates})
     if(NOT candidate)
       continue()
     endif()
+
     if(NOT "${candidate}" MATCHES "${loader_program_regex}")
       continue()
     endif()
@@ -423,25 +437,25 @@ function(func_process_deps input_file)
     if(NOT raw_item)
       continue()
     endif()  
-      
+
     string(STRIP ${raw_item} raw_item)
     set(is_system FALSE)
     setif_value_in_list(is_system "${raw_item}" SYSTEM_DLLS)
 
     if(APPLE AND NOT is_system)
       if("${raw_item}" MATCHES "@rpath")
-	string(REGEX REPLACE "@rpath." "" raw_item "${raw_item}")
+        string(REGEX REPLACE "@rpath." "" raw_item "${raw_item}")
       else()
-	message(FATAL_ERROR "'${raw_item}' does not have @rpath")
+        message(FATAL_ERROR "'${raw_item}' does not have @rpath")
       endif()
     endif()
-    
-    if(is_system  OR ${raw_item}_RESOLVED OR ${raw_item}_USED)
-      continue()        
+
+    if(PKG_DEBUG AND ${raw_item}_RESOLVED)
+      message("${raw_item} is already resolved [${raw_item}_RESOLVED=${${raw_item}_RESOLVED}]")
     endif()
-   
-    if(PKG_DEBUG)
-      message("${raw_item} is not resolved, used. ${raw_item}_RESOLVED | ${raw_item}_USED")
+
+    if(is_system OR ${raw_item}_RESOLVED OR ${raw_item}_USED)
+      continue()
     endif()
     
     list(APPEND raw_items ${raw_item})
@@ -450,7 +464,7 @@ function(func_process_deps input_file)
 
   if(PKG_DEBUG)
     string(REPLACE ";" "\n" raw_items_pretty_print "${raw_items}")
-    message(FATAL_ERROR "raw_items=${raw_items_pretty_print}")
+    # message(FATAL_ERROR "raw_items=${raw_items_pretty_print}")
   endif(PKG_DEBUG)
 
   if(raw_items)
@@ -459,25 +473,25 @@ function(func_process_deps input_file)
       search_library(${item} PKG_SEARCHDIRS item_full_path)
       set(is_a_symlink FALSE)
       set(item_target_file)
-      if(PKG_DEBUG)
-	message("item0=${item_full_path}")
-      endif()
       func_is_file_a_symbolic_link("${item_full_path}" is_a_symlink item_target_file)      
       if(is_a_symlink)
-	set(${item}_RESOLVED TRUE CACHE INTERNAL "")
-	set(item ${item_target_file})
+        set(${item}_RESOLVED TRUE CACHE INTERNAL "")
+        set(item ${item_target_file})
       endif()
       if(PKG_DEBUG)
-	message("running func_process_deps on '${item}'")
+        message("${bn_name} depends on '${item}'. So we now process '${item}'") # [ ${item}_USED=${${item}_USED} ${item}_RESOLVED=${${item}_RESOLVED}]")
       endif()
       func_process_deps(${item})
-  endforeach()
-endif()
+    endforeach()
+  endif()
 
-set(${bn_name}_RESOLVED TRUE CACHE INTERNAL "")
+  set(${bn_name}_RESOLVED TRUE CACHE INTERNAL "")
+   if(PKG_DEBUG)
+     message("All dependencies of ${bn_name} are processed. Install file and set ${bn_name}_RESOLVED=${${bn_name}_RESOLVED}")
+   endif()
 
-pkg_install_rule(${input_file_full_path})
-
+   #Install the file with pkg_install_rule. This function has specific rules to decide wheather install file or not
+   pkg_install_rule(${input_file_full_path})
 
 endfunction() #function(func_process_deps infile)
 

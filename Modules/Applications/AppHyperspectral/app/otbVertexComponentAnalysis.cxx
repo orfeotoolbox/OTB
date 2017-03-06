@@ -65,7 +65,7 @@ private:
 
     AddParameter(ParameterType_Int, "ne", "Number of endmembers");
     SetParameterDescription("ne","The number of endmembers to extract from the data cube");
-    SetParameterInt("ne", 1);
+    SetParameterInt("ne",1, false);
     MandatoryOn("ne");
 
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");

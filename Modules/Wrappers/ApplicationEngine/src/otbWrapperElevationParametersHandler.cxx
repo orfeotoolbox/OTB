@@ -107,10 +107,20 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
   // Set DEM directory if available
   if(IsDEMUsed(app,key))
     {
-    oss.str("");
-    oss<<"Elevation management: using DEM directory ("<<GetDEMDirectory(app,key)<<")"<<std::endl;
-    otb::DEMHandler::Instance()->OpenDEMDirectory(GetDEMDirectory(app,key));
-    app->GetLogger()->Info(oss.str());
+    std::string demDirectory = GetDEMDirectory(app,key);
+    if(otb::DEMHandler::Instance()->IsValidDEMDirectory(demDirectory.c_str()))
+      {
+      oss.str( "" );
+      oss << "Elevation management: using DEM directory (" << demDirectory << ")" << std::endl;
+      otb::DEMHandler::Instance()->OpenDEMDirectory( demDirectory );
+      app->GetLogger()->Info( oss.str() );
+      }
+    else
+      {
+      oss.str( "" );
+      oss << "DEM directory : " << demDirectory << " is not a valid DEM directory";
+      app->GetLogger()->Warning( oss.str() );
+      }
     }
 }
 
@@ -161,10 +171,10 @@ ElevationParametersHandler::IsGeoidUsed(const Application::Pointer app, const st
 bool
 ElevationParametersHandler::IsDEMUsed(const Application::Pointer app, const std::string& key)
 {
-  std::ostringstream geoidKey;
-  geoidKey<< key<<".dem";
+  std::ostringstream demKey;
+  demKey<< key<<".dem";
 
-  return app->IsParameterEnabled(geoidKey.str()) && app->HasValue(geoidKey.str());
+  return app->IsParameterEnabled(demKey.str()) && app->HasValue(demKey.str());
 }
 
 

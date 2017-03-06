@@ -346,7 +346,7 @@ private:
     SetParameterDescription("input.co","List of index of couples im image list. Couples must be separated by a comma. (index start at 0). for example : 0 1,1 2 will process a first couple composed of the first and the second image in image list, then the first and the third image\n. note that images are handled by pairs."
         " if left empty couples are created from input index i.e. a first couple will be composed of the first and second image, a second couple with third and fourth image etc. (in this case image list must be even).");
     MandatoryOff("input.co");
-    SetParameterString("input.co","");
+    SetParameterString("input.co","", false);
     DisableParameter("input.co");
 
     AddParameter(ParameterType_Int,  "input.channel",   "Image channel used for the block matching");
@@ -363,7 +363,7 @@ private:
     // // Build the Output Map Projection
     // for custom map projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
-    SetParameterString("map","wgs");
+    SetParameterString("map","wgs", false);
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
     SetParameterDescription("output.res","Spatial sampling distance of the output elevation : the cell size (in m)");

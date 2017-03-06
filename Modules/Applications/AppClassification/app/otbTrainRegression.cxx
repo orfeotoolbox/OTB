@@ -159,7 +159,7 @@ void DoInit() ITK_OVERRIDE
   AddParameter(ParameterType_Float, "sample.vtr", "Training and validation sample ratio");
   SetParameterDescription("sample.vtr",
                           "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) (default = 0.5).");
-  SetParameterFloat("sample.vtr", 0.5);
+  SetParameterFloat("sample.vtr",0.5, false);
 
   Superclass::DoInit();
 

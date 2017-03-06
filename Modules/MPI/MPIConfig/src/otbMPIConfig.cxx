@@ -77,7 +77,7 @@ MPIConfig::Pointer MPIConfig::Instance()
 
 /** CreateInitialize MPI environment */
 MPIConfig::MPIConfig()
-  :  m_MyRank(0),
+  :  m_MyRank(-1),
      m_NbProcs(0),
      m_abortOnException(true),
      m_initialized(false),

@@ -172,10 +172,6 @@ public:
    * or a value set externally by user */
   bool HasValue(std::string paramKey) const;
 
-  /* Activate or deactivate the bool parameter
-   */
-  void SetParameterEmpty(std::string paramKey, bool active);
-
   /* Get active flag of parameter with key paramKey
    */
   bool GetParameterEmpty(std::string paramKey);
@@ -204,13 +200,6 @@ public:
    */
   /* Set the Parameter value and Update the UserFlag. used by xml parameter
    */
-  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag);
-  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag);
-  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag);
-  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag);
-  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag);
-
-  bool IsApplicationReady();
 
   /* Set an integer value
    *
@@ -220,14 +209,48 @@ public:
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
-  void SetParameterInt(std::string parameter, int value);
+  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag = true);
 
   /* Set a floating value
    *
    * Can be called for types :
    * \li ParameterType_Float
    */
-  void SetParameterFloat(std::string parameter, float value);
+  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
+
+  /* Set a string value
+   *
+   * Can be called for types :
+   * \li ParameterType_InputImageListParameter
+   * \li ParameterType_InputVectorDataListParameter
+   * \li ParameterType_InputFilenameListParameter
+   * \li ParameterType_StringList
+   */
+  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
+
+  /* Set a string value
+   *
+   * Can be called for types :
+   * \li ParameterType_String
+   * \li ParameterType_InputFilename
+   * \li ParameterType_OutputFilename
+   * \li ParameterType_Directory
+   * \li ParameterType_Choice
+   * \li ParameterType_Float
+   * \li ParameterType_Int
+   * \li ParameterType_Radius
+   * \li ParameterType_InputImageParameter
+   * \li ParameterType_InputComplexImageParameter
+   * \li ParameterType_InputVectorDataParameter
+   * \li ParameterType_OutputImageParameter
+   * \li ParameterType_OutputVectorDataParameter
+   */
+  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
+
+  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
+
+  bool IsApplicationReady();
+
 
   /* Set an default integer value, must used in the
    * DoInit when setting a value by default
@@ -309,35 +332,6 @@ public:
    * \li ParameterType_ListView
    */
   void SetListViewSingleSelectionMode(std::string parameter, bool status);
-  
-  /* Set a string value
-   *
-   * Can be called for types :
-   * \li ParameterType_String
-   * \li ParameterType_InputFilename
-   * \li ParameterType_OutputFilename
-   * \li ParameterType_Directory
-   * \li ParameterType_Choice
-   * \li ParameterType_Float
-   * \li ParameterType_Int
-   * \li ParameterType_Radius
-   * \li ParameterType_InputImageParameter
-   * \li ParameterType_InputComplexImageParameter
-   * \li ParameterType_InputVectorDataParameter
-   * \li ParameterType_OutputImageParameter
-   * \li ParameterType_OutputVectorDataParameter
-   */
-  void SetParameterString(std::string parameter, std::string value);
-
-  /* Set a string value
-   *
-   * Can be called for types :
-   * \li ParameterType_InputImageListParameter
-   * \li ParameterType_InputVectorDataListParameter
-   * \li ParameterType_InputFilenameListParameter
-   * \li ParameterType_StringList
-   */
-  void SetParameterStringList(std::string parameter, std::vector<std::string> value);
 
   /* Set an output image value
    *

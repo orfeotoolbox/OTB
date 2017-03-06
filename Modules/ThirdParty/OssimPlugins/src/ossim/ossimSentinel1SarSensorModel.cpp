@@ -203,6 +203,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
                     if(!end_found && *sIt=="-1")
                     {
                         end_found = true;
+                        --last_valid;
                     }
                     else
                     {

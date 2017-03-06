@@ -858,7 +858,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     itkExceptionMacro("Not handled parameter type.");
 
 
-  oss<< " " << param->GetName() << " ";
+  oss<< " " << m_Application->GetParameterName(paramKey) << " ";
 
   if (type == ParameterType_OutputImage)
     {

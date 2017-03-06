@@ -191,7 +191,7 @@ private:
                      unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
                      if (nbComp > nbComponents)
                      {
-                            SetParameterInt("nbcomp", nbComponents);
+                            SetParameterInt("nbcomp",nbComponents, false);
                             otbAppLogINFO( << "number of selected components can't exceed image dimension : "<<nbComponents );
                      }
 
@@ -201,14 +201,14 @@ private:
                      if (this->GetParameterString("outinv").size()!= 0)
                      {
                             otbAppLogWARNING(<<"This application only provides the forward transform for the MAF method.");
-                            this->SetParameterString("outinv", "");
+                            this->SetParameterString("outinv", "", false);
                      }
                      this->DisableParameter("outinv");
 
                      if (this->GetParameterString("outmatrix").size()!= 0)
                      {
                             otbAppLogWARNING(<<"No transformation matrix available for MAF method.");
-                            this->SetParameterString("outmatrix", "");
+                            this->SetParameterString("outmatrix", "", false);
                      }
                      this->DisableParameter("outmatrix");
 
@@ -220,7 +220,7 @@ private:
                      unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
                      if ((nbComp != 0) && (nbComp != nbComponents))
                      {
-                            SetParameterInt("nbcomp", nbComponents);
+                            SetParameterInt("nbcomp",nbComponents, false);
                             otbAppLogINFO( << "all components are kept when using MAF filter method.");
                      }
 

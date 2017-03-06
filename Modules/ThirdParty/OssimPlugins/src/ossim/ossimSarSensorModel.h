@@ -244,6 +244,38 @@ public:
    void optimizeTimeOffsetsFromGcps();
 
    /**
+    * This method will perform a deburst operation, and return the
+    * a vector of lines range of lines to keep in the image file.
+    * Note that the deburst operation has no effect if theBurstRecords
+    * contains a single burst. Otherwise it will merge burst together
+    * into a single burst, and update GCPs accordingly.
+    * \return true if the deburst operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param lines A container for the lines ranges to keep in the
+    * deburst image.
+    */
+   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines);
+
+   /**
+    * This is a helper function to convert image line to deburst image
+    * line.
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input image line
+    * \param deburstLine The output deburst line
+    * \return True if imageLine is within a preserved range, false otherwise
+    */
+   static bool imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
+
+   /** 
+    * This is a helper function to convert deburst line to input image
+    * line
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input deburst line
+    * \param deburstLine The output original image line
+    */
+   static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
+   
+   /**
     * Returns pointer to a new instance, copy of this.
     */
    virtual ossimObject* dup() const;

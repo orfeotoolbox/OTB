@@ -72,6 +72,14 @@ add_executable( monteverdi
   ${Monteverdi_App_WIN32_RC_FILE}
   ${OTBMonteverdi_RESOURCES_RCC}
   )
+
+# set monterverdi stack size to 10Mbytes on windows platform because
+# the default size with visual compiler it is 1Mbyte
+# which is to lower for us (thanks to 6S code).
+if (WIN32)
+  set_linker_stack_size_flag( monteverdi 10000000 )
+endif()
+
 target_link_libraries( monteverdi
   OTBMonteverdi
   )

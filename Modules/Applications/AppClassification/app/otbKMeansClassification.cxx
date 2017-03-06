@@ -245,7 +245,7 @@ private:
         {
         otbAppLogWARNING("The available RAM is too small to process this sample size of " << GetParameterInt("ts") <<
             " pixels. The sample size will be reduced to " << maxPixNb << " pixels." << std::endl);
-        this->SetParameterInt("ts", maxPixNb);
+        this->SetParameterInt("ts",maxPixNb, false);
         }
 
       this->SetMaximumParameterIntValue("ts", maxPixNb);
