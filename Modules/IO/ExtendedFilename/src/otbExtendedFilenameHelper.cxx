@@ -191,4 +191,60 @@ ExtendedFilenameHelper::GenericBandRange
     }
   }
 
+std::vector<ExtendedFilenameHelper::GenericBandRange>
+ExtendedFilenameHelper
+::GetBandRange(const std::string &optRangeSecond) const
+{
+  //Parse string to return vector of band range
+  std::vector<ExtendedFilenameHelper::GenericBandRange> vBands;
+  size_t start = 0;
+  size_t pos;
+  while (start != std::string::npos)
+    {
+    pos = optRangeSecond.find(',',start);
+    if (pos > start)
+      {
+      ExtendedFilenameHelper::GenericBandRange range;
+      size_t size = (pos == std::string::npos ? pos : pos - start);
+      bool ret = range.SetString(optRangeSecond, start, size);
+      if (ret) vBands.push_back(range);
+      }
+    if (pos != std::string::npos) pos++;
+    start = pos;
+    }
+  return vBands;
+}
+
+bool
+ExtendedFilenameHelper
+::ResolveBandRange(const unsigned int &nbBands, std::vector<unsigned int> &output, const std::string &optRangeSecond) const
+{
+  output.clear();
+  std::vector<ExtendedFilenameHelper::GenericBandRange> bandRangeList =
+    this->GetBandRange(optRangeSecond);
+  for (unsigned int i=0 ; i<bandRangeList.size() ; i++)
+    {
+    int a = bandRangeList[i].first;
+    int b = bandRangeList[i].second;
+    if (a<0) a+= nbBands+1;
+    if (b<0) b+= nbBands+1;
+    if (a==0) a=1;
+    if (b==0) b=nbBands;
+
+    if (1<=a && a<=b && b<=(int)nbBands)
+      {
+      for (unsigned int k=a ; k <= (unsigned int)b ; k++)
+        {
+        output.push_back((int)k -1);
+        }
+      }
+    else
+      {
+      // Invalid range wrt. the given number of bands
+      return false;
+      }
+    }
+  return true;
+}
+
 } // end namespace otb
