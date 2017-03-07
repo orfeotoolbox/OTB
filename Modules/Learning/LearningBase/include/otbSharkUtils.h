@@ -18,7 +18,6 @@
 #ifndef otbSharkUtils_h
 #define otbSharkUtils_h
 
-#ifdef OTB_USE_SHARK
 #include "itkMacro.h"
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -122,7 +121,6 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
   
 }
 }
-#endif //OTB_USE_SHARK
 
 #endif
 
