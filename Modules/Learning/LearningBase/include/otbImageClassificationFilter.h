@@ -34,7 +34,7 @@ namespace otb
  * \ingroup Streamed
  * \ingroup Threaded
  *
- * \ingroup OTBSupervised
+ * \ingroup OTBLearningBase
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
 class ITK_EXPORT ImageClassificationFilter
@@ -87,7 +87,7 @@ public:
   itkSetMacro(BatchMode, bool);
   itkGetMacro(BatchMode, bool);
   itkBooleanMacro(BatchMode);
-  
+
   /**
    * If set, only pixels within the mask will be classified.
    * All pixels with a value greater than 0 in the mask, will be classified.
