@@ -5,6 +5,8 @@ otb_module(OTBLearningBase
   DEPENDS
     OTBCommon
     OTBITK
+    OTBImageIO
+    OTBImageBase
 
   OPTIONAL_DEPENDS
     OTBShark
