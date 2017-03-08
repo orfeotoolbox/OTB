@@ -1,7 +1,6 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkQtProgressBar.cxx
   Language:  C++
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
