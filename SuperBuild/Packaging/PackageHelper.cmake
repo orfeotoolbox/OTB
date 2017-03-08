@@ -184,7 +184,11 @@ macro(macro_super_package)
       file(APPEND ${CMAKE_BINARY_DIR}/make_symlinks
         "${make_symlink_cmd}\n")
     endforeach()
-    
+
+    if(APPLE)
+      set(ORIGINAL_RPATH_TO_REPLACE ${DEPENDENCIES_INSTALL_DIR}/lib)
+    endif()
+
     configure_file(${PACKAGE_SUPPORT_FILES_DIR}/${PKGSETUP_IN_FILENAME}
       ${CMAKE_BINARY_DIR}/pkgsetup @ONLY)
     
