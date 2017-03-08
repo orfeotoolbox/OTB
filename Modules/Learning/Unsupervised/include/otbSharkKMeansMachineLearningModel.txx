@@ -30,6 +30,7 @@
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #endif
 
+#include "otb_shark.h"
 #include "otbSharkUtils.h"
 #include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h" //normalize
 #include "shark/Algorithms/KMeans.h" //k-means algorithm
@@ -188,9 +189,8 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
     {
     itkExceptionMacro( << "Error opening " << filename.c_str());
     }
+  ofs << "#" << m_ClusteringModel->name() << std::endl;
   shark::TextOutArchive oa( ofs );
-  std::string name = m_ClusteringModel->name();
-  oa << name;
   m_ClusteringModel->save( oa, 1 );
 }
 
@@ -203,6 +203,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   std::ifstream ifs( filename.c_str());
   if(ifs.good())
     {
+    // Check if first line contains model name
     std::string line;
     std::getline(ifs, line);
     m_CanRead = line.find(m_ClusteringModel->name()) != std::string::npos;
@@ -211,12 +212,8 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   if(!m_CanRead)
     return;
 
-  // Go to the start of the file
-  ifs.seekg(0, std::ios::beg);
   shark::TextInArchive ia( ifs );
-  std::string name;
-  ia & name;
-  m_ClusteringModel->load( ia, 1 );
+  m_ClusteringModel->load( ia, 0 );
   ifs.close();
 }
 
