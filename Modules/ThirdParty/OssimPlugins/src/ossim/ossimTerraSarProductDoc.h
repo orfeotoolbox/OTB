@@ -10,7 +10,6 @@
 // file.
 // 
 //----------------------------------------------------------------------------
-// $Id$
 #ifndef ossimTerraSarProductDoc_HEADER
 #define ossimTerraSarProductDoc_HEADER 1
 

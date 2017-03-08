@@ -1,10 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkRelabelComponentImageFilter.h, v $
   Language:  C++
-  Date:      $Date: 2009-04-27 22:58:48 $
-  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

@@ -8,7 +8,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <AlosPalsar/AlosPalsarRecordFactory.h>
 #include <ossim/base/ossimTrace.h>

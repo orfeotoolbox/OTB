@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #ifndef ossimRadarSat2RPCModel_H
 #define ossimRadarSat2RPCModel_H 1

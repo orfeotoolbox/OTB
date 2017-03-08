@@ -1,8 +1,6 @@
 /*=========================================================================
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
 
 
   TODO: Add copyright notice for Remi Cresson (IRSTEA)

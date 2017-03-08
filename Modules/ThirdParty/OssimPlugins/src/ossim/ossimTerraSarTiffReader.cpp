@@ -7,7 +7,6 @@
 // Description: Image handelr for TerraSar-X data that is TIFF based.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <ossimTerraSarTiffReader.h>
 #include <ossimTerraSarProductDoc.h>

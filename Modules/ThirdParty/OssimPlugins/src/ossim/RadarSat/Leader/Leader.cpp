@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <RadarSat/Leader/Leader.h>
 #include <RadarSat/Leader/LeaderFactory.h>

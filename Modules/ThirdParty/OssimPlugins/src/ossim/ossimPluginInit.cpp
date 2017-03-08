@@ -6,7 +6,6 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id$
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossimPluginConstants.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>

@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 // 
 //----------------------------------------------------------------------------
-// $Id$
 
 #ifndef ossimTerraSarModel_H
 #define ossimTerraSarModel_H

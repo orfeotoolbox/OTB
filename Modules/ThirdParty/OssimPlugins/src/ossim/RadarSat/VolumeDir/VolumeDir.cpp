@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <RadarSat/VolumeDir/VolumeDir.h>
 #include <RadarSat/VolumeDir/VolumeDirFactory.h>

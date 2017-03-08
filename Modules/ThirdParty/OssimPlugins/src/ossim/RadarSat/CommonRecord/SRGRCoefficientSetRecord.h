@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #ifndef SRGRCoefficientSetRecord_h
 #define SRGRCoefficientSetRecord_h

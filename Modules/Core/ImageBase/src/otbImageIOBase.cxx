@@ -1,10 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: otbImageIOBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2010-06-14 18:55:23 $
-  Version:   $Revision: 1.90 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

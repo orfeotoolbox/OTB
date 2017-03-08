@@ -22,7 +22,6 @@
 // Contains declaration of class ossimSpot6Model.
 //
 //*****************************************************************************
-// FIXME $Id: ossimSpot5Model.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimSpot6Model_HEADER
 #define ossimSpot6Model_HEADER
 

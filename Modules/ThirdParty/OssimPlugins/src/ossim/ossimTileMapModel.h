@@ -9,7 +9,6 @@
 //              Initial coding.
 //
 //*****************************************************************************
-//  $Id: ossimTileMapModel.h 10384 2007-01-26 20:32:12Z gpotts $
 
 #ifndef ossimTileMapModel_HEADER
 #define ossimTileMapModel_HEADER

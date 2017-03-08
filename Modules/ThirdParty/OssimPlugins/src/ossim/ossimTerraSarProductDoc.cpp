@@ -8,7 +8,6 @@
 // file.
 // 
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <ossimTerraSarProductDoc.h>
 #include <ossimPluginCommon.h>

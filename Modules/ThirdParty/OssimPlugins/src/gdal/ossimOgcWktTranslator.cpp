@@ -15,7 +15,6 @@
 // accomplish the translation. 
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 20724 2012-04-13 21:00:52Z dburken $
 
 #include <cstdio>
 #include <gdal.h>

@@ -8,7 +8,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <AlosPalsar/AlosPalsarRecord.h>
 #include <memory.h>

@@ -8,7 +8,6 @@
 //
 // Description: Image handler factory for ossim plugins plugin.
 //----------------------------------------------------------------------------
-// $Id$
 #ifndef ossimPluginReaderFactory_HEADER
 #define ossimPluginReaderFactory_HEADER 1
 

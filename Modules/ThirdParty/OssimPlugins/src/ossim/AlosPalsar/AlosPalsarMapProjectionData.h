@@ -8,7 +8,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #ifndef AlosPalsarMapProjectionData_h
 #define AlosPalsarMapProjectionData_h

@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 //***
 // Note to programmer: To add a new model, search this file for "ADD_MODEL"

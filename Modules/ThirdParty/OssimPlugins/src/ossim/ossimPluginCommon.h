@@ -9,7 +9,6 @@
 // Description: Common code for this plugin.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #ifndef ossimPluginCommon_HEADER
 #define ossimPluginCommon_HEADER 1

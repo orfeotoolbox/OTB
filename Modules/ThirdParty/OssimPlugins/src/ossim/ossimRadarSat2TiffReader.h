@@ -9,7 +9,6 @@
 // Description: Image handelr for RadarSAT-2 data that is TIFF based.
 //
 //----------------------------------------------------------------------------
-// $Id$
 #ifndef ossimRadarSat2TiffReader_HEADER
 #define ossimRadarSat2TiffReader_HEADER 1
 

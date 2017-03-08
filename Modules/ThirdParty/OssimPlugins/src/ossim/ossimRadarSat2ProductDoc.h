@@ -8,7 +8,6 @@
 // file.
 //
 //----------------------------------------------------------------------------
-// $Id$
 #ifndef ossimRadarSat2ProductDoc_HEADER
 #define ossimRadarSat2ProductDoc_HEADER 1
 

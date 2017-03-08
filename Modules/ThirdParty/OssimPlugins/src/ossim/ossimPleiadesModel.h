@@ -22,7 +22,6 @@
 // Contains declaration of class ossimPleiadesModel.
 //
 //*****************************************************************************
-// FIXME $Id: ossimSpot5Model.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimPleiadesModel_HEADER
 #define ossimPleiadesModel_HEADER
 

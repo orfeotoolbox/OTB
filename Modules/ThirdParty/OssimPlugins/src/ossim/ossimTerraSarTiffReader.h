@@ -9,7 +9,6 @@
 // Description: Image handelr for TerraSar-X data that is TIFF based.
 //
 //----------------------------------------------------------------------------
-// $Id$
 #ifndef ossimTerraSarTiffReader_HEADER
 #define ossimTerraSarTiffReader_HEADER 1
 

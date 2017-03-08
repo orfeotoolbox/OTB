@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <otb/SensorParams.h>
 #include <ossim/base/ossimKeywordlist.h>

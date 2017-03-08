@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 //
 // Typical results are:
 //     Run on (8 X 1998 MHz CPU s)

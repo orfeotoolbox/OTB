@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 #include "ossimStringUtilities.h"
 #include "ossimplugins-config.h"
 #if defined(HAVE_STD_SNPRINTF)

@@ -7,7 +7,6 @@
 // Description: Image handelr for RadarSAT-2 data that is TIFF based.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <cstdlib>
 

@@ -7,7 +7,6 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #ifndef RadarSat2NoiseLevel_h
 #define RadarSat2NoiseLevel_h

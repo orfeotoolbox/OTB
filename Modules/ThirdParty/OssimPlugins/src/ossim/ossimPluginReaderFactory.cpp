@@ -9,7 +9,6 @@
 // Description: Image handler factory for ossim plugins plugin.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <ossimPluginReaderFactory.h>
 #include <ossimRadarSat2TiffReader.h>

@@ -8,7 +8,6 @@
 // file.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <ossimRadarSat2ProductDoc.h>
 #include <ossimPluginCommon.h>

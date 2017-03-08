@@ -9,7 +9,6 @@
 //
 // Description: Constants file for ossim plugins.
 //
-// $Id: ossimPluginConstants.h 7530 2005-05-23 17:21:24Z dburken $
 //----------------------------------------------------------------------------
 #ifndef ossimPluginConstants_HEADER
 #define ossimPluginConstants_HEADER

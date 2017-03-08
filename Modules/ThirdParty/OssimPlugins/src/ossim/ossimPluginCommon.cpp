@@ -9,7 +9,6 @@
 // Description: Common code for this plugin.
 //
 //----------------------------------------------------------------------------
-// $Id$
 
 #include <cstdlib>
 
