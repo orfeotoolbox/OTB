@@ -10,7 +10,6 @@ otb_module(OTBImageIO
     OTBIOGDAL
     OTBIOLUM
     OTBIOMSTAR
-    OTBIOMW
     OTBIOONERA
     OTBIORAD
     OTBIOTileMap
