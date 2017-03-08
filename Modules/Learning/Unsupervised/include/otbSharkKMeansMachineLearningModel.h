@@ -32,6 +32,7 @@
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
 
+#include "otb_shark.h"
 #include "shark/Models/Clustering/HardClusteringModel.h"
 #include "shark/Models/Clustering/SoftClusteringModel.h"
 #include "shark/Models/Clustering/Centroids.h"

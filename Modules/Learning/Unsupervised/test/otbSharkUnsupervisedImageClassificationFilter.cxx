@@ -19,9 +19,11 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageClassificationFilter.h"
+#include "otbSharkKMeansMachineLearningModelFactory.h"
+
+#include <random>
 #include <chrono>
 
-#include "otbSharkKMeansMachineLearningModelFactory.h"
 
 const unsigned int Dimension = 2;
 typedef float PixelType;
