@@ -474,7 +474,8 @@ void DoExecute() ITK_OVERRIDE
   // ---------------------------------------------------------------------------
   // Train model
   GetInternalApplication("training")->SetParameterStringList("io.vd",sampleTrainOutputs, false);
-  GetInternalApplication("training")->SetParameterStringList("valid.vd",sampleValidOutputs, false);
+  if( vtr!=0.0 && !sampleValidOutputs.empty() )
+    GetInternalApplication("training")->SetParameterStringList("valid.vd",sampleValidOutputs, false);
   UpdateInternalParameters("training");
   // set field names
   FloatVectorImageType::Pointer image = imageList->GetNthElement(0);
