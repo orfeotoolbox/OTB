@@ -59,7 +59,7 @@ void TrainVectorBase::DoInit()
   AddParameter(ParameterType_ListView,  "feat", "Field names for training features.");
   SetParameterDescription("feat","List of field names in the input vector data to be used as features for training.");
 
-  // Add validation data used to compute confusion matrix or contingence table
+  // Add validation data used to compute confusion matrix or contingency table
   AddParameter( ParameterType_Group, "valid", "Validation data" );
   SetParameterDescription( "valid", "This group of parameters defines validation data." );
 
@@ -74,10 +74,24 @@ void TrainVectorBase::DoInit()
   SetDefaultParameterInt( "valid.layer", 0 );
 
   // Add class field if we used validation
-  AddParameter(ParameterType_ListView,"cfield","Field containing the class id for supervision");
-  SetParameterDescription("cfield","Field containing the class id for supervision. "
-          "Only geometries with this field available will be taken into account.");
-  SetListViewSingleSelectionMode("cfield",true);
+  AddParameter( ParameterType_ListView, "cfield", "Field containing the class id for supervision" );
+  SetParameterDescription( "cfield", "Field containing the class id for supervision. "
+          "Only geometries with this field available will be taken into account." );
+  SetListViewSingleSelectionMode( "cfield", true );
+
+  // Add a new parameter to compute confusion matrix / contingency table
+  AddParameter( ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix or contingency tablre" );
+  SetParameterDescription( "io.confmatout", "Output file containing the confusion matrix or contingency table (.csv format)."
+          "The contingency table is ouput when we unsupervised algorithms is used otherwise the confusion matrix is output." );
+  MandatoryOff( "io.confmatout" );
+
+
+  // Doc example parameter settings
+  SetDocExampleParameterValue( "io.vd", "vectorData.shp" );
+  SetDocExampleParameterValue( "io.stats", "meanVar.xml" );
+  SetDocExampleParameterValue( "io.out", "svmModel.svm" );
+  SetDocExampleParameterValue( "feat", "perimeter  area  width" );
+  SetDocExampleParameterValue( "cfield", "predicted" );
 
 
   // Add parameters for the classifier choice
@@ -90,6 +104,9 @@ void TrainVectorBase::DoInit()
 
 void TrainVectorBase::DoUpdateParameters()
 {
+  LearningApplicationBase::DoUpdateParameters();
+
+  // if vector data is present and updated then reload fields
   if( HasValue( "io.vd" ) )
     {
     std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
@@ -162,9 +179,32 @@ TrainVectorBase::ExtractTrainingListSamples(const StatisticsMeasurement &measure
 }
 
 TrainVectorBase::ListSamples
-TrainVectorBase::ExtractClassificationListSamples(const StatisticsMeasurement &itkNotUsed(measurement))
+TrainVectorBase::ExtractClassificationListSamples(const StatisticsMeasurement &measurement)
 {
-  return trainingListSamples;
+  if(GetClassifierCategory() == Supervised)
+    {
+    ListSamples tmpListSamples;
+    ListSamples validationListSamples = ExtractListSamples( "valid.vd", "valid.layer", measurement );
+    //Test the input validation set size
+    if( validationListSamples.labeledListSample->Size() != 0 )
+      {
+      tmpListSamples.listSample = validationListSamples.listSample;
+      tmpListSamples.labeledListSample = validationListSamples.labeledListSample;
+      }
+    else
+      {
+      otbAppLogWARNING(
+              "The validation set is empty. The performance estimation is done using the input training set in this case." );
+      tmpListSamples.listSample = trainingListSamples.listSample;
+      tmpListSamples.labeledListSample = trainingListSamples.labeledListSample;
+      }
+
+    return tmpListSamples;
+    }
+  else
+    {
+    return trainingListSamples;
+    }
 }
 
 

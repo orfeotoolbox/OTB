@@ -142,7 +142,30 @@ public:
   typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
   typedef otb::SharkKMeansMachineLearningModel<InputValueType, OutputValueType> SharkKMeansType;
 #endif
-  
+
+  itkGetConstReferenceMacro(SupervisedClassifier, std::vector<std::string>);
+  itkGetConstReferenceMacro(UnsupervisedClassifier, std::vector<std::string>);
+
+
+  enum ClassifierCategory{
+    Supervised,
+    Unsupervised
+  };
+
+  /**
+   * Retrieve the classifier category (supervisde or unsupervised)
+   * based on the select algorithm from the classifier choice
+   * @return ClassifierCategory the classifier category
+   */
+  inline ClassifierCategory GetClassifierCategory()
+  {
+    std::cout << GetParameterString("classifier") << std::endl;
+    bool foundUnsupervised =
+            std::find(m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
+                      GetParameterString("classifier")) != m_UnsupervisedClassifier.end();
+    return foundUnsupervised ? Unsupervised : Supervised;
+  }
+
 protected:
   LearningApplicationBase();
 
@@ -162,28 +185,24 @@ protected:
   /** Init method that creates all the parameters for machine learning models */
   void DoInit() ITK_OVERRIDE;
 
+  /** Init method that creates all the parameters for machine learning models */
+  void DoUpdateParameters() ITK_OVERRIDE;
+
   /** Flag to switch between classification and regression mode.
    * False by default, child classes may change it in their constructor */
   bool m_RegressionFlag;
 
-  /** enum use to selected classifier category */
-  enum ClassifierCategory {
-    Supervised,
-    Unsupervised
-  };
-
-  /** Enum to switch between unsupervised or supervised classification.
-   * Supervised by default, child classes may change it in their constructor */
-  ClassifierCategory m_ClassifierCategory;
 
 private:
   /** Specific Init and Train methods for each machine learning model */
 
   /** Init Parameters for Supervised Classifier */
   void InitSupervisedClassifierParams();
+  std::vector<std::string> m_SupervisedClassifier;
 
   /** Init Parameters for Unsupervised Classifier */
   void InitUnsupervisedClassifierParams();
+  std::vector<std::string> m_UnsupervisedClassifier;
 
   //@{
 #ifdef OTB_USE_LIBSVM 

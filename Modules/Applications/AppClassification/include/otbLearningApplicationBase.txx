@@ -28,7 +28,8 @@ namespace Wrapper
 
 template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
-::LearningApplicationBase() : m_RegressionFlag(false), m_ClassifierCategory(Supervised)
+::LearningApplicationBase() : m_RegressionFlag(false)
+
 {
 }
 
@@ -50,16 +51,35 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Choice, "classifier", "Classifier to use for the training");
   SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
-  switch(m_ClassifierCategory)
-    {
-    case Unsupervised:
-      InitUnsupervisedClassifierParams();
-      break;
-    case Supervised:
-    default :
-      InitSupervisedClassifierParams();
-    }
+  AddParameter(ParameterType_Choice, "category", "Type of classifier use for the training (supervised or unsupervised");
+  SetParameterDescription("category", "Choice of the classifier type to use for the training, "
+          "choice is supervised or unsupervised.");
+
+  InitSupervisedClassifierParams();
+  m_SupervisedClassifier = GetChoiceKeys("classifier");
+
+  InitUnsupervisedClassifierParams();
+  std::vector<std::string> allClassifier = GetChoiceKeys("classifier");
+  m_UnsupervisedClassifier.assign(allClassifier.begin() + m_SupervisedClassifier.size(), allClassifier.end());
 }
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::DoUpdateParameters()
+{
+  /*
+  // if the classifier category is changed, reload the corresponding classifier
+  if( HasValue( "category" ) )
+    {
+    //ClearChoices( "classifier" );
+    if( GetParameterString( "category" ) == "supervised" )
+      InitSupervisedClassifierParams();
+    else
+      InitUnsupervisedClassifierParams();
+    }
+    */
+};
 
 template <class TInputValue, class TOutputValue>
 void

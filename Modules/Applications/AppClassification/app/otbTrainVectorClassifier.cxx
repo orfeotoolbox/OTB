@@ -45,37 +45,10 @@ public:
   typedef ConfusionMatrixCalculatorType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
 
-protected :
-  TrainVectorClassifier() : TrainVectorBase()
-  {
-    m_ClassifierCategory = Supervised;
-  }
-
 private:
   void DoTrainInit()
   {
-    SetName( "TrainVectorClassifier" );
-    SetDescription( "Train a classifier based on labeled geometries and a list of features to consider." );
-
-    SetDocName( "Train Vector Classifier" );
-    SetDocLongDescription( "This application trains a classifier based on "
-                                   "labeled geometries and a list of features to consider for classification." );
-    SetDocLimitations( " " );
-    SetDocAuthors( "OTB Team" );
-    SetDocSeeAlso( " " );
-
-    // Add a new parameter to compute confusion matrix
-    AddParameter( ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix" );
-    SetParameterDescription( "io.confmatout", "Output file containing the confusion matrix (.csv format)." );
-    MandatoryOff( "io.confmatout" );
-
-    // Doc example parameter settings
-    SetDocExampleParameterValue( "io.vd", "vectorData.shp" );
-    SetDocExampleParameterValue( "io.stats", "meanVar.xml" );
-    SetDocExampleParameterValue( "io.out", "svmModel.svm" );
-    SetDocExampleParameterValue( "feat", "perimeter  area  width" );
-    SetDocExampleParameterValue( "cfield", "predicted" );
-
+    // Nothing to do here
   }
 
   void DoTrainUpdateParameters()
@@ -86,42 +59,28 @@ private:
   void DoBeforeTrainExecute()
   {
     // Enforce the need of class field name in supervised mode
-    featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
-
-    if( featuresInfo.m_SelectedCFieldIdx.empty() && m_ClassifierCategory == Supervised )
+    if (GetClassifierCategory() == Supervised)
       {
-      otbAppLogFATAL( << "No field has been selected for data labelling!" );
+      featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+
+      if( featuresInfo.m_SelectedCFieldIdx.empty() && GetParameterString( "category" ) == "supervised" )
+        {
+        otbAppLogFATAL( << "No field has been selected for data labelling!" );
+        }
       }
   }
 
   void DoAfterTrainExecute()
   {
-    ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionmatrix( predictedList,
-                                                                                 classificationListSamples.labeledListSample );
-    WriteConfusionMatrix( confMatCalc );
+
+    if (GetClassifierCategory() == Supervised)
+      {
+      ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionmatrix( predictedList,
+                                                                                   classificationListSamples.labeledListSample );
+      WriteConfusionMatrix( confMatCalc );
+      }
   }
 
-
-  ListSamples ExtractClassificationListSamples(const StatisticsMeasurement &measurement)
-  {
-    ListSamples performanceSample;
-    ListSamples validationListSamples = ExtractListSamples( "valid.vd", "valid.layer", measurement );
-    //Test the input validation set size
-    if( validationListSamples.labeledListSample->Size() != 0 )
-      {
-      performanceSample.listSample = validationListSamples.listSample;
-      performanceSample.labeledListSample = validationListSamples.labeledListSample;
-      }
-    else
-      {
-      otbAppLogWARNING(
-              "The validation set is empty. The performance estimation is done using the input training set in this case." );
-      performanceSample.listSample = trainingListSamples.listSample;
-      performanceSample.labeledListSample = trainingListSamples.labeledListSample;
-      }
-
-    return performanceSample;
-  }
 
 
   ConfusionMatrixCalculatorType::Pointer
