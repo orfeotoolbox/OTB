@@ -1,10 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: BinaryMaskMedianFilter.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/07/25 14:12:35 $
-  Version:   $Revision: 1.1 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

@@ -1,0 +1,380 @@
+Orfeo Toolbox (OTB) Copyright 2005-2017 Centre National d'Etudes Spatiales (CNES)
+
+This software is distributed under the Apache Software License (ASL) v2.0, see
+LICENSE file or http://www.apache.org/licenses/LICENSE-2.0 for details.
+
+
+This software includes code from the Insight Segmentation and Registration
+Toolkit (ITK) project.
+  Copyright 1999-2017, Insight Software Consortium
+  https://itk.org/
+  Starting from version 4.0, ITK is released under Apache Software License
+  (ASL) v2.0:
+  https://itk.org/ITK/project/license.html
+
+
+This software includes code that been developed by CS Systemes d'Information
+(CS SI) during internships and self-financed studies.
+  Copyright 2005-2017, CS Systemes d'Information
+  This code was contributed under Apache Software License (ASL) v2.0:
+  http://www.apache.org/licenses/LICENSE-2.0
+
+
+This software includes code that have been developed by Emmanuel Christophe
+between October 6th, 2008 and October 5th, 2010 and that is under copyright
+from Centre for Remote Imaging, Sensing and Processing (CRISP) of the National
+University of Singapore (NUS).
+  Copyright (c) 2008-2010, Centre for Remote Imaging, Sensing and Processing
+  This code was contributed under Apache Software License (ASL) v2.0:
+  http://www.apache.org/licenses/LICENSE-2.0
+
+
+This software includes code that been developed by Grégoire Mercier that is
+under copyright from Institut Mines Telecom / Telecom Bretagne.
+  Copyright (c) 2007-2012, Institut Mines Telecom / Telecom Bretagne
+  This code was contributed under Apache Software License (ASL) v2.0:
+  http://www.apache.org/licenses/LICENSE-2.0
+
+
+This software includes code from the VXL project.
+  Copyright 2000-2013, VXL Contributors
+  http://vxl.sourceforge.net/
+  VXL is released under BSD 3-Clause license:
+  https://sourceforge.net/p/vxl/git/ci/master/tree/core/vxl_copyright.h
+
+
+This software includes code from the Boost project.
+  Copyright 2000-2016, Boost Contributors
+  http://www.boost.org/
+  Boost is released under Boost Software License (BSL) v2.0:
+  http://www.boost.org/LICENSE_1_0.txt
+
+
+This software includes code from the GDAL project.
+  Copyright (c) 2000-2016, Frank Warmerdam
+  http://www.gdal.org/
+  GDAL is released under X11/MIT License:
+  https://trac.osgeo.org/gdal/wiki/FAQGeneral#WhatlicensedoesGDALOGRuse
+
+
+This software includes code from the GeoTIFF project.
+  Copyright (c) 1999-2016, Frank Warmerdam
+  Copyright (c) 1995, Niles D. Ritter
+  http://trac.osgeo.org/geotiff
+  GeoTIFF is released under "X style" License:
+  https://trac.osgeo.org/geotiff/browser/trunk/libgeotiff/LICENSE
+
+
+This software includes code from the OpenThreads library, an OpenSceneGraph
+sub-project.
+  Copyright (c) 2002-2008, The Open Thread Group
+  http://www.openscenegraph.org/
+  OpenThreads is released under OpenSceneGraph Public License (OSGPL) 0.0,
+  i.e. the wxWindows library license:
+  https://github.com/openscenegraph/OpenSceneGraph/blob/master/LICENSE.txt
+
+
+This software includes code from the OSSIM project.
+  Copyright (c) 2015-2016, OSSIM Contributors
+  http://www.ossim.org/
+  OSSIM is released under MIT license:
+  https://github.com/ossimlabs/ossim/blob/dev/LICENSE.txt
+
+
+This software includes code contributed by the CNES to the "OSSIM Plugins"
+project under MIT license. These plugins are derivated from several
+third-party works now released under the same MIT license. All the related
+copyrights are listed below:
+  Copyright (C) 2005-2016, Centre National d'Etudes Spatiales (CNES)
+  Copyright (C) 2008-2010, Centre for Remote Imaging, Sensing and Processing (CRISP)
+  Copyright (C) 2010-2016, David A. Horner
+  Copyright (C) 2010-2016, David Burken
+  Copyright (C) 2010-2016, Frank Warmerdam
+  Copyright (C) 2010-2016, Garrett Potts
+  Copyright (C) 2010-2016, John Stastny
+  https://github.com/ossimlabs/ossim-plugins
+  These OSSIM plugins source code is embedded in Modules/ThirdParty/OssimPlugins
+  directory.
+  These OSSIM plugins are released under MIT license:
+  https://github.com/ossimlabs/ossim-plugins/blob/dev/LICENSE
+
+
+This software includes code from the TinyXML project.
+  Copyright (c) 2001-2010, Lee Thomason
+  http://www.grinninglizard.com/tinyxml
+  TinyXML is released under zlib/libpng license:
+  http://tinyxml.cvs.sourceforge.net/viewvc/tinyxml/tinyxml/readme.txt
+
+
+
+The following utilities, used by the OTB libraries, are optional. The OTB
+libraries may be built without them, but some modules will be disabled:
+
+
+This software includes code from the 6S project.
+  Public domain
+  http://6s.ltdri.org/
+  The 6S source code is embedded in Modules/ThirdParty/6S/src directory.
+  According to Eric F. Vermote - the main author of 6S - this source code is
+  in the public domain in virtue of United States copyright law because it was
+  developed on authority of the NASA.
+
+
+This software includes code from the Curl project.
+  Copyright (c) 1996-2016, Daniel Stenberg and many contributors
+  https://curl.haxx.se/
+  Curl and libcurl are licensed under a X11/MIT derivate license:
+  https://curl.haxx.se/docs/copyright.html
+
+
+This software includes code from the LibSVM project.
+  Copyright (c) 2000-2014, Chih-Chung Chang and Chih-Jen Lin
+  http://www.csie.ntu.edu.tw/~cjlin/libsvm
+  LibSVM is released under BSD 3-Clause license:
+  https://github.com/cjlin1/libsvm/blob/master/COPYRIGHT
+
+
+This software includes code from the libkml project.
+  Copyright (c) 2008-2010, Google Inc.
+  https://github.com/google/libkml
+  libkml is released under BSD 3-Clause license:
+  https://github.com/google/libkml/blob/master/LICENSE
+
+
+This software includes code from the Mapnik project.
+  Copyright (c) 2015, Artem Pavlenko
+  http://mapnik.org/
+  Mapnik is released under GNU LGPL v2.1 license:
+  http://mapnik.org/pages/license.html
+
+
+This software includes code from the MuParser project.
+  Copyright (c) 2011-2016, Ingo Berg
+  https://github.com/beltoforion/muparser
+  MuParser is released under MIT license:
+  https://github.com/beltoforion/muparser/blob/master/License.txt
+
+
+This software includes code from the MuParserX project.
+  Copyright (c) 2012-2016, Ingo Berg
+  https://github.com/beltoforion/muparserx
+  MuParserX is released under BSD 2-Clause license:
+  https://github.com/beltoforion/muparserx/blob/master/License.txt
+
+
+This software includes code from the Open Source Computer Vision (OpenCV)
+library.
+  Copyright (c) 2000-2016, Intel Corporation
+  Copyright (c) 2009-2011, Willow Garage Inc.
+  Copyright (c) 2009-2016, NVIDIA Corporation
+  Copyright (c) 2010-2013, Advanced Micro Devices, Inc.
+  Copyright (c) 2015-2016, OpenCV Foundation
+  Copyright (c) 2015-2016, Itseez Inc.
+  http://opencv.org/
+  OpenCV is released under BSD 3-Clause license:
+  https://github.com/opencv/opencv/blob/master/LICENSE
+
+
+This software includes code from the Qt project.
+  Copyright (c) 2015, The Qt Company Ltd.
+  https://www.qt.io/
+  Qt 4 is released under GNU LGPL v2.1 license:
+  http://doc.qt.io/qt-4.8/lgpl.html
+
+
+This software includes code from the SiftFast project.
+  Copyright (c) 2008-2010, zerofrog(@gmail.com)
+  http://libsift.sourceforge.net
+  The SiftFast source code is embedded in Modules/ThirdParty/SiftFast/src
+  directory.
+  SiftFast is released under the GNU LGPL 3.0 license:
+  https://sourceforge.net/p/libsift/code/HEAD/tree/trunk/LICENSE
+
+
+This software includes code from the Mesa 3D project.
+  Copyright (c) 1999-2017 Brian Paul and many other contributors
+  https://www.mesa3d.org/
+  FreeGLUT is released under MIT License:
+  https://www.mesa3d.org/license.html
+
+
+This software includes code from the FreeGLUT project.
+  Copyright (c) 1999-2000 Pawel W. Olszta
+  http://freeglut.sourceforge.net/
+  FreeGLUT is released under X11/MIT derivate License:
+  https://sourceforge.net/p/freeglut/code/HEAD/tree/trunk/freeglut/freeglut/COPYING
+
+
+This software includes code from the GLFW project.
+  Copyright (c) 2002-2006, Marcus Geelnard
+  Copyright (c) 2006-2016, Camilla Berglund
+  http://www.glfw.org/
+  GLFW is released under zlib/libpng license:
+  http://www.glfw.org/license.html
+
+
+This software includes code from the GLEW project.
+  http://glew.sourceforge.net/
+  The GLEW source code is licensed under the BSD 3-Clause license.
+  https://github.com/nigels-com/glew/blob/master/LICENSE.txt
+
+
+This software includes code from the Open MPI project.
+  Copyright (c) 2004-2010, The Trustees of Indiana University and Indiana
+                           University Research and Technology Corporation
+  Copyright (c) 2004-2010, The University of Tennessee and The University of
+                           Tennessee Research Foundation
+  Copyright (c) 2004-2010, High Performance Computing Center Stuttgart,
+                           University of Stuttgart
+  Copyright (c) 2004-2008, The Regents of the University of California
+  Copyright (c) 2006-2010, Los Alamos National Security, LLC
+  Copyright (c) 2006-2010, Cisco Systems, Inc.
+  Copyright (c) 2006-2010, Voltaire, Inc.
+  Copyright (c) 2006-2011, Sandia National Laboratories
+  Copyright (c) 2006-2010, Sun Microsystems, Inc.
+  Copyright (c) 2006-2010, The University of Houston
+  Copyright (c) 2006-2009, Myricom, Inc.
+  Copyright (c) 2007-2008, UT-Battelle, LLC
+  Copyright (c) 2007-2010, IBM Corporation
+  Copyright (c) 1998-2005, Forschungszentrum Juelich, Juelich Supercomputing
+                           Centre, Federal Republic of Germany
+  Copyright (c) 2005-2008, ZIH, TU Dresden, Federal Republic of Germany
+  Copyright (c) 2007,      Evergrid, Inc.
+  Copyright (c) 2008,      Chelsio, Inc.
+  Copyright (c) 2008-2009, Institut National de Recherche en Informatique
+  Copyright (c) 2007,      Lawrence Livermore National Security, LLC
+  Copyright (c) 2007-2009, Mellanox Technologies
+  Copyright (c) 2006-2010, QLogic Corporation
+  Copyright (c) 2008-2010, Oak Ridge National Labs
+  Copyright (c) 2006-2010, Oracle and/or its affiliates
+  Copyright (c) 2009,      Bull SAS
+  Copyright (c) 2010,      ARM ltd
+  Copyright (c) 2010-2011, Alex Brick
+  Copyright (c) 2012,      The University of Wisconsin-La Crosse
+  Copyright (c) 2013-2016, Intel, Inc.
+  Copyright (c) 2011-2014, NVIDIA Corporation
+  https://www.open-mpi.org/
+  Open MPI is released under BSD 3-Clause license:
+  https://www.open-mpi.org/community/license.php
+
+
+This software includes code from the Simple Parallel TIFF Writer (SPTW)
+project.
+  Public domain
+  https://github.com/kornholi/sptw
+  SPTW is put in the public domain by its author, David Matthew Mattli
+  https://github.com/kornholi/sptw/blob/master/LICENSE
+
+
+This software includes code from the Shark Machine Learning project.
+  Copyright (c) 1995-2017 Shark Development Team
+  http://image.diku.dk/shark/
+  The Shark library is released under the GNU LGPL v3.0 license:
+  http://image.diku.dk/shark/#section-credit
+
+
+This software includes code from the Qwt project.
+  Copyright (c) 1997 Josef Wilgen
+  Copyright (c) 2002 Uwe Rathmann
+  http://qwt.sourceforge.net/
+  The Qwt project is released under the Qwt v1.0 license:
+  http://qwt.sourceforge.net/qwtlicense.html
+
+
+
+The third party files mentioned below are included in the OTB repository. They
+are used for building or testing OTB but their code is not included in OTB
+binaries:
+
+
+* CMake/CppcheckTargets.cmake
+    Copyright (c) 2009-2010 Iowa State University, Ryan Pavlik <rpavlik@iastate.edu>
+    Copyright (c) 2011 Harvard Medical School, Arnaud Gelas <arnaud_gelas@hms.harvard.edu>
+    Boost Software License (BSL), v1.0
+    http://www.boost.org/LICENSE_1_0.txt
+
+
+* CMake/FindGLEW.cmake
+    Copyright (c) 2012-2013 Jakob Progsch
+    ZLib license
+    https://opensource.org/licenses/Zlib
+
+
+* CMake/FindKWStyle.cmake
+    Copyright 2008-2013 Kitware, Inc.
+    Copyright 2013 Brian Helba
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* CMake/FindLibSVM.cmake
+    Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* CMake/Findcppcheck.cmake
+    Copyright (c) 2009-2010 Iowa State University, Ryan Pavlik <rpavlik@iastate.edu>
+    Boost Software License (BSL), v1.0
+    http://www.boost.org/LICENSE_1_0.txt
+
+
+* CMake/FindOpenThreads.cmake
+    Copyright 2007-2009 Kitware, Inc.
+    Copyright 2009-2016 Centre National d'Etudes Spatiales (CNES)
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* CMake/OTB_CheckCCompilerFlag.cmake
+    Copyright 2006-2010 Kitware, Inc.
+    Copyright 2006 Alexander Neundorf <neundorf@kde.org>
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* CMake/TopologicalSort.cmake
+    Copyright 2010 Kitware, Inc.
+    Copyright 2007 Douglas Gregor <doug.gregor@gmail.com>
+    Copyright 2007 Troy Straszheim
+    Boost Software License (BSL), v1.0
+    http://www.boost.org/LICENSE_1_0.txt
+
+
+* CMake/UseJava.cmake
+    Copyright 2010-2011 Andreas schneider <asn@redhat.com>
+    Copyright 2010 Ben Boeckel <ben.boeckel@kitware.com>
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* CMake/UseJavaClassFilelist.cmake
+* CMake/UseJavaSymlinks.cmake
+    Copyright 2010-2011 Andreas schneider <asn@redhat.com>
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* CMake/UseSWIGLocal.cmake
+    Copyright 2004-2009 Kitware, Inc.
+    Copyright 2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* Modules/Adapters/OSSIMAdapters/test/otbPlatformPositionAdapter.cxx
+    Copyright 2011 Emmanuel Christophe
+    Apache Software License (ASL) v2.0
+    http://www.apache.org/licenses/LICENSE-2.0
+
+
+* Modules/Wrappers/SWIG/src/numpy.i
+    Copyright (c) 2005-2015, NumPy Developers
+    BSD 3-Clause license
+    https://opensource.org/licenses/BSD-3-Clause
+
+
+* Utilities/Maintenance/fix_typos.sh
+    Copyright (c) 2016, Even Rouault <even.rouault@spatialys.com>
+    MIT license
+    https://opensource.org/licenses/MIT

@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 otb_module_test()
 
 set(OTBImageIOTests
@@ -541,33 +561,12 @@ otb_add_test(NAME ioTvMultiResolutionReadingInfo COMMAND otbImageIOTestDriver
   ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
   )
 
-otb_add_test(NAME ioTvImageFileReaderMW2TIFMW COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFMW.tif
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFMW.tif )
-
 otb_add_test(NAME ioTvImageFileReaderPCI2TIF COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/ioImageFileReaderPCI2TIF.tif
   otbImageFileReaderTestFloat
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.pix
   ${TEMP}/ioImageFileReaderPCI2TIF.tif )
-
-otb_add_test(NAME ioTvImageFileReaderTIF2MW COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderTIF2MW.mw
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-  ${TEMP}/ioImageFileReaderTIF2MW.mw )
-
-otb_add_test(NAME ioTvImageFileReaderMW2TIFIMG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN_nogeoinfo.tif
-  ${TEMP}/ioImageFileReaderMW2TIFIMG.tif
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFIMG.tif )
 
 otb_add_test(NAME ioTvImageFileReaderTIF2PCI COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
