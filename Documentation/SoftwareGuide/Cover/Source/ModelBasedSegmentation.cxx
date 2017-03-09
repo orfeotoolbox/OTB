@@ -1,10 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: ModelBasedSegmentation.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/05/24 14:27:47 $
-  Version:   $Revision: 1.8 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

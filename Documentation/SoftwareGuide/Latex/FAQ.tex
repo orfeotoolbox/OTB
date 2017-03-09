@@ -95,27 +95,29 @@ needed for the evolution of OTB.
 
 \section{License}
 \subsection{Which is the OTB license?}
-OTB is distributed under a CeCILL free software license:\\
-\url{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html} which 
-is recognized by the Free Software Foundation. It can be considered 
-similar to the GNU GPL license. 
+OTB is distributed under the permissive open source license Apache v2.0 - aka
+Apache Software License (ASL) v2.0:\\
+\url{http://www.apache.org/licenses/LICENSE-2.0}
 
 \subsection{Am I forced to distribute my code based on OTB?}
 No. The license gives you the option to distribute your application if
 you want to. You do not have to exercise this option in the license.
 
-\subsection{Am I forced to contribute my code based on OTB into the official repo?}
-No. The CeCILL license impose only to distribute the source of the application to your users.
+\subsection{Am I forced to contribute my code based on OTB into the official
+  repo?}
+No.
 
-\subsection{If I wanted to distribute an application using OTB what license would I need to use?}
-The CeCILL license or the GNU GPL license.
+\subsection{If I wanted to distribute an application using OTB what license
+  would I need to use?}
+The license of your choice. The OTB license only requires you to include
+a copy of the Apache license and to provide a clear attribution to the OTB
+project in any distribution including a piece of OTB software.
 
 \subsection{I am a commercial user. Is there any restriction on the
   use of OTB?}
-OTB can be used internally ("in-house") without restriction, but only
-redistributed in other software that is under the CeCILL license. 
-Moreover you need to distribute the source of your application to your
-users and only them.
+No. The OTB license only requires you to include a copy of the Apache license
+and to provide a clear attribution to the OTB project in any distribution
+including a piece of OTB software.
 
 \section{Getting OTB}
 
@@ -125,12 +127,12 @@ Anybody can download the OTB at no cost.
 \subsection{Where can I download the OTB?}
 Go to \url{http://www.orfeo-toolbox.org}
  and follow the "download OTB" link. You will have access to the OTB
-source code, to the Software User's Guide and to the Cookbook of the last release. 
+source code, to the Software User's Guide and to the Cookbook of the last release.
 Binary packages are also provided for the current version.
 OTB and Monteverdi are also integrated in OSGeo-Live since version 4.5.
-You can find more information about the project at \url{http://live.osgeo.org/}. 
-Moreover you can found the last release of Monteverdi and OTB applications through 
-the OSGeo4W installer. 
+You can find more information about the project at \url{http://live.osgeo.org/}.
+Moreover you can found the last release of Monteverdi and OTB applications through
+the OSGeo4W installer.
 
 \subsection{How to get the latest bleeding-edge version?}\label{sec:FAQGit}
 You can get the current development version, as our repository is public, using Git (available at \url{http://git-scm.com}). Be aware that, even if the golden rule is {\em what is committed will compile}, this is not always the case. Changes are usually more than ten per day.
@@ -184,7 +186,7 @@ You can use the 32 or 64 bit installer, since OSGeo4W provides all the necessary
 Please follow carefully the procedure provided in the Software Guide.
 
 Typically, when using the dependencies provided by OSGeo4W, compile OTB in Release or RelWithDebInfo mode.
- 
+
 \section{Using OTB}
 
 \subsection{Where to start ?}
@@ -192,7 +194,7 @@ Typically, when using the dependencies provided by OSGeo4W, compile OTB in Relea
 OTB presents a large set of features and it is not always easy to start using it.
 After the installation, you can proceed to the tutorials (in the Software Guide).
 This should give you a quick overview of the possibilities of OTB and will teach
-you how to build your own programs. You can also found some information in the OTB Cookbook in which we provide some recipes about remote sensing with OTB. 
+you how to build your own programs. You can also found some information in the OTB Cookbook in which we provide some recipes about remote sensing with OTB.
 
 
 \subsection{What is the image size limitation of OTB ?}
@@ -205,7 +207,7 @@ For the streaming to work, all the filters in the pipeline must be streaming
 capable (this is the case for most of the filters in OTB). The output image
 format also need to be streamable (not PNG or JPEG, but TIFF or ENVI formats, for instance).
 
-The class \doxygen{otb}{ImageFileWriter} manage the steaming process following two strategies: by tile or by strip. Different size configuration for these two strategies are available into the interface. The default mode use the information about how the file is streamed on the disk and will try to minimize the memory consumption along the pipeline. More information can be found into the documentation of the class. 
+The class \doxygen{otb}{ImageFileWriter} manage the steaming process following two strategies: by tile or by strip. Different size configuration for these two strategies are available into the interface. The default mode use the information about how the file is streamed on the disk and will try to minimize the memory consumption along the pipeline. More information can be found into the documentation of the class.
 
 
 \section{Getting help}
@@ -223,7 +225,7 @@ point for any new OTB user. The code source for these examples is
 distributed with the toolbox. Another information source is the
 on-line API documentation which is available at \url{http://www.orfeo-toolbox.org/doxygen}.
 
-You can also find some information about how to use Monteverdi and the OTB-Applications into the Cookbook at \url{http://www.orfeo-toolbox.org/CookBook/}. 
+You can also find some information about how to use Monteverdi and the OTB-Applications into the Cookbook at \url{http://www.orfeo-toolbox.org/CookBook/}.
 
 \section{Contributing to OTB}\label{sec:contributing}
 
@@ -343,7 +345,7 @@ change detector, a new feature extractor, etc.
 A bugfix version is released when significant bugs are identified and fixed.
 
 \subsection{When will the next version of OTB be available?}
-We plan to release two major new OTB version once a year. You can find some information into the roadmap section of the \href{http://wiki.orfeo-toolbox.org/index.php/Main_Page}{wiki} 
+We plan to release two major new OTB version once a year. You can find some information into the roadmap section of the \href{http://wiki.orfeo-toolbox.org/index.php/Main_Page}{wiki}
 
 \subsection{What features will the OTB include and when?}
 There is no detailed plan about the availability of OTB new features,

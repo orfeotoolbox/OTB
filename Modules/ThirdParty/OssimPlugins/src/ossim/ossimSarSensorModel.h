@@ -1,13 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// "Copyright Centre National d'Etudes Spatiales"
-//
-// License:  LGPL-2
-//
-// See LICENSE.txt file in the top level directory for more details.
-//
-//----------------------------------------------------------------------------
-// $Id$
+/*
+ * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is licensed under MIT license:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 
 #ifndef ossimSarSensorModel_HEADER
 #define ossimSarSensorModel_HEADER
@@ -243,6 +257,38 @@ public:
 
    void optimizeTimeOffsetsFromGcps();
 
+   /**
+    * This method will perform a deburst operation, and return the
+    * a vector of lines range of lines to keep in the image file.
+    * Note that the deburst operation has no effect if theBurstRecords
+    * contains a single burst. Otherwise it will merge burst together
+    * into a single burst, and update GCPs accordingly.
+    * \return true if the deburst operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param lines A container for the lines ranges to keep in the
+    * deburst image.
+    */
+   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines);
+
+   /**
+    * This is a helper function to convert image line to deburst image
+    * line.
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input image line
+    * \param deburstLine The output deburst line
+    * \return True if imageLine is within a preserved range, false otherwise
+    */
+   static bool imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
+
+   /** 
+    * This is a helper function to convert deburst line to input image
+    * line
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input deburst line
+    * \param deburstLine The output original image line
+    */
+   static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
+   
    /**
     * Returns pointer to a new instance, copy of this.
     */

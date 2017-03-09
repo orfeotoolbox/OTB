@@ -62,7 +62,7 @@ FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_D
 FIND_PATH(OTB_DATA_LARGEINPUT_ROOT OTBData.readme PATHS $ENV{OTB_DATA_LARGEINPUT_ROOT})
 
 IF( NOT OTB_DATA_LARGEINPUT_ROOT )
-  MESSAGE(FATAL_ERROR "Large input directory is not set")
+  MESSAGE(FATAL_ERROR "Large input directory is not set and is mandatory to build the Software Guide.")
 ENDIF( NOT OTB_DATA_LARGEINPUT_ROOT )
 
 # OTB_DATA_PATHS is searched recursively.. you need not enter sub-directories

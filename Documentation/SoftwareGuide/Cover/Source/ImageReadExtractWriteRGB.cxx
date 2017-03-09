@@ -1,10 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: ImageReadExtractWriteRGB.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/07/22 22:42:34 $
-  Version:   $Revision: 1.1 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
