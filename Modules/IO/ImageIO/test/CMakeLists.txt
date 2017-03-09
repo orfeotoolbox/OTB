@@ -561,33 +561,12 @@ otb_add_test(NAME ioTvMultiResolutionReadingInfo COMMAND otbImageIOTestDriver
   ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
   )
 
-otb_add_test(NAME ioTvImageFileReaderMW2TIFMW COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFMW.tif
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFMW.tif )
-
 otb_add_test(NAME ioTvImageFileReaderPCI2TIF COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/ioImageFileReaderPCI2TIF.tif
   otbImageFileReaderTestFloat
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.pix
   ${TEMP}/ioImageFileReaderPCI2TIF.tif )
-
-otb_add_test(NAME ioTvImageFileReaderTIF2MW COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderTIF2MW.mw
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-  ${TEMP}/ioImageFileReaderTIF2MW.mw )
-
-otb_add_test(NAME ioTvImageFileReaderMW2TIFIMG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN_nogeoinfo.tif
-  ${TEMP}/ioImageFileReaderMW2TIFIMG.tif
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFIMG.tif )
 
 otb_add_test(NAME ioTvImageFileReaderTIF2PCI COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
