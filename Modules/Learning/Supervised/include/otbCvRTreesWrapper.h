@@ -125,10 +125,10 @@ public:
 #undef OTB_CV_WRAP_PROPERTY
 #undef OTB_CV_WRAP_PROPERTY_REF
 #undef OTB_CV_WRAP_CSTREF_GET
-#endif
 
 private:
   cv::Ptr<cv::ml::RTrees> m_Impl;
+#endif // OTB_OPENCV_3
 };
 
 }
