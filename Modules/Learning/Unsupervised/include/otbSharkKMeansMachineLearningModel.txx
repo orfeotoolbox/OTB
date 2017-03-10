@@ -49,7 +49,7 @@ namespace otb
 template<class TInputValue, class TOutputValue>
 SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::SharkKMeansMachineLearningModel() :
-        m_Normalized( true ), m_K(2), m_MaximumNumberOfIterations( 0 )
+        m_Normalized( false ), m_K(2), m_MaximumNumberOfIterations( 10 )
 {
   // Default set HardClusteringModel
   m_ClusteringModel = boost::shared_ptr<ClusteringModelType>(new ClusteringModelType( &m_Centroids ));

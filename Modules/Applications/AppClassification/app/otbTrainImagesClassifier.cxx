@@ -68,19 +68,9 @@ public:
   {
     if( HasValue( "io.vd" ) && IsParameterEnabled( "io.vd" ))
       {
-      DisableParameter("sample.percent");
-      EnableParameter("sample.mv");
-      EnableParameter("sample.mt");
-      EnableParameter("sample.vfn");
       UpdatePolygonClassStatisticsParameters();
       }
-    else
-      {
-      EnableParameter("sample.percent");
-      DisableParameter("sample.mv");
-      DisableParameter("sample.mt");
-      DisableParameter("sample.vfn");
-      }
+
 
     // Change mandatory of input vector depending on supervised and unsupervised mode.
     if( HasValue( "classifier" ) )

@@ -34,10 +34,10 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
   //MaxNumberOfIterations
   AddParameter( ParameterType_Int, "classifier.sharkkm.nbmaxiter",
                 "Maximum number of iteration for the kmeans algorithm." );
-  SetParameterInt( "classifier.sharkkm.nbmaxiter", 0 );
+  SetParameterInt( "classifier.sharkkm.nbmaxiter", 10 );
   SetMinimumParameterIntValue( "classifier.sharkkm.nbmaxiter", 0 );
   SetParameterDescription( "classifier.sharkkm.nbmaxiter",
-                           "The maximum number of iteration for the kmeans algorithm. Default set to unlimited." );
+                           "The maximum number of iteration for the kmeans algorithm. 0=unlimited" );
 
   //MaxNumberOfIterations
   AddParameter( ParameterType_Int, "classifier.sharkkm.k", "The number of class used for the kmeans algorithm." );

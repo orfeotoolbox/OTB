@@ -34,6 +34,7 @@ void TrainImagesBase::InitIO()
   SetParameterDescription( "io.il", "A list of input images." );
   AddParameter( ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List" );
   SetParameterDescription( "io.vd", "A list of vector data to select the training samples." );
+  MandatoryOff( "io.vd" );
 
   AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
   EnableParameter( "cleanup" );
