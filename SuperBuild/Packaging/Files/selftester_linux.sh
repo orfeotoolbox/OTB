@@ -2,7 +2,7 @@
 
 # Setup test environment
 DIRNAME_0=$(dirname "$0")
-DIRNAME=$(readlink -f "$DIRNAME_0/..")
+DIRNAME=$(readlink "$DIRNAME_0/..")
 cd "$DIRNAME" || exit
 
 # define convenient functions
@@ -14,7 +14,7 @@ ps_children () {
 # nb_report_lines( ) : get number of lines in report
 nb_report_lines () {
   report_lines="$(wc -l selftest_report.log)"
-  echo "$report_lines" | cut -d ' ' -f 1
+  echo $report_lines | cut -d ' ' -f 1
 }
 
 # echo_and_report ( string ) : echo and print to report
@@ -31,9 +31,10 @@ REF_SIZE=0
 REF_SIZE=$(nb_report_lines)
 
 # Check 1 : check binaries
-OTB_LIBRARIES="$(ls lib/lib*.so*) $(ls lib/otb/applications/otbapp_*.so) lib/python/_otbApplication.so"
+OTB_SO_LIBRARIES=$(find lib -name '*.so*')
+OTB_DY_LIBRARIES=$(find lib -name '*.dylib')
 OTB_EXE="bin/mapla bin/monteverdi bin/otbApplicationLauncherQt bin/otbApplicationLauncherCommandLine"
-for name in $OTB_LIBRARIES $OTB_EXE ; do
+for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
   F_OUTPUT=$(file "$name")
   if echo "$F_OUTPUT" | grep -q 'cannot open'; then
     echo_and_report "$F_OUTPUT"
@@ -67,8 +68,8 @@ fi
 REF_SIZE=$REPORT_SIZE
 
 # Check 2 : OTB applications and Python wrapping
-OTB_APP_COUNT=$(ls lib/otb/applications/otbapp_*.so | wc -w)
-OTB_APPS=$(ls lib/otb/applications/otbapp_*.so | cut -d '_' -f 2 | cut -d '.' -f 1)
+OTB_APP_COUNT=$(find lib/otb/applications -name 'otbapp_*.*' | wc -w)
+OTB_APPS=$(find lib/otb/applications -name 'otbapp_*.*' | cut -d '_' -f 2 | cut -d '.' -f 1)
 if [ "$OTB_APP_COUNT" -le 90 ]; then
   echo "WARNING: Only $OTB_APP_COUNT applications found ! Expected at least 90"
 fi
@@ -92,17 +93,16 @@ for app in $OTB_APPS; do
     echo "" >tmp.log
     "bin/otbgui_$app" >tmp.log 2>&1 &
     GUI_PID=$!
-    sleep 1s
+    sleep 5s
     # Check process tree
     CHILD_PROC=$(ps_children $GUI_PID | grep "bin/otbgui $app")
     if [ -n "$CHILD_PROC" ]; then
       CHILD_PID=$(echo "$CHILD_PROC" | cut -d ' ' -f 1)
-      NEXT_CHILD_PROC="$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')"
+      NEXT_CHILD_PROC=$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')
       if [ -n "$NEXT_CHILD_PROC" ]; then
         NEXT_CHILD_PID=$(echo "$NEXT_CHILD_PROC" | cut -d ' ' -f 1)
-        kill -9 $GUI_PID
-        kill -9 "$CHILD_PID"
         kill -9 "$NEXT_CHILD_PID"
+        wait "$NEXT_CHILD_PID" 2>/dev/null
       else
         echo_and_report "ERROR: otbApplicationLauncherQt $app failed to launch"
         tee -a selftest_report.log < tmp.log
@@ -143,6 +143,7 @@ if pgrep monteverdi | grep -q $MVD_PID; then
     tee -a selftest_report.log < tmp.log
   fi
   kill -9 $MVD_PID
+  wait $MVD_PID 2>/dev/null
 else
   echo_and_report "ERROR: failed to launch monteverdi"
   tee -a selftest_report.log < tmp.log
@@ -159,6 +160,7 @@ if pgrep mapla | grep -q $MAPLA_PID; then
     tee -a selftest_report.log < tmp.log
   fi
   kill -9 $MAPLA_PID
+  wait $MAPLA_PID 2>/dev/null
 else
   echo_and_report "ERROR: failed to launch mapla"
   tee -a selftest_report.log < tmp.log
