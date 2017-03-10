@@ -1264,6 +1264,53 @@ ImageIOBase
   return axis;
 }
 
+void
+ImageIOBase
+::DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList)
+{
+  std::cout << "bandList =" << bandList[0] << std::endl;
+  size_t componentSize = this->GetComponentSize();
+  size_t inPixelSize = componentSize * this->GetNumberOfComponents();
+  size_t outPixelSize = componentSize * bandList.size();
+  char* inPos = static_cast<char*>(buffer);
+  char* outPos = static_cast<char*>(buffer);
+  bool workBackward = (outPixelSize > inPixelSize);
+  char *pixBuffer = new char[outPixelSize];
+
+  if (workBackward)
+    {
+    inPos = inPos + numberOfPixels*inPixelSize;
+    outPos = outPos + numberOfPixels*outPixelSize;
+    for (size_t n=0 ; n<numberOfPixels ; n++)
+      {
+      inPos -= inPixelSize;
+      outPos -= outPixelSize;
+      for (unsigned int i=0 ; i < bandList.size() ; i++)
+        {
+        memcpy(pixBuffer + i*componentSize, inPos + bandList[i]*componentSize, componentSize);
+        }
+      // copy pixBuffer to output
+      memcpy(outPos, pixBuffer, outPixelSize);
+      }
+    }
+  else
+    {
+    for (size_t n=0 ; n<numberOfPixels ; n++)
+      {
+      for (unsigned int i=0 ; i < bandList.size() ; i++)
+        {
+        memcpy(pixBuffer + i*componentSize, inPos + bandList[i]*componentSize, componentSize);
+        }
+      // copy pixBuffer to output
+      memcpy(outPos, pixBuffer, outPixelSize);
+      inPos += inPixelSize;
+      outPos += outPixelSize;
+      }
+    }
+
+  delete[] pixBuffer;
+}
+
 void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

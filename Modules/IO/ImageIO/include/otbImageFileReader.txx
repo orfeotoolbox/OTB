@@ -213,7 +213,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     this->m_ImageIO->Read(loadBuffer);
 
     if (m_FilenameHelper->BandRangeIsSet())
-      this->DoMapBuffer(loadBuffer, region.GetNumberOfPixels());
+      this->m_ImageIO->DoMapBuffer(loadBuffer, region.GetNumberOfPixels(), this->m_BandList);
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
 
@@ -941,52 +941,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 #undef OTB_CONVERT_CBUFFER_IF_BLOCK
 }
 
-template <class TOutputImage, class ConvertPixelTraits>
-void
-ImageFileReader<TOutputImage, ConvertPixelTraits>
-::DoMapBuffer(void* buffer, size_t numberOfPixels)
-{
-  size_t componentSize = this->m_ImageIO->GetComponentSize();
-  size_t inPixelSize = componentSize * this->m_ImageIO->GetNumberOfComponents();
-  size_t outPixelSize = componentSize * m_BandList.size();
-  char* inPos = static_cast<char*>(buffer);
-  char* outPos = static_cast<char*>(buffer);
-  bool workBackward = (outPixelSize > inPixelSize);
-  char *pixBuffer = new char[outPixelSize];
-
-  if (workBackward)
-    {
-    inPos = inPos + numberOfPixels*inPixelSize;
-    outPos = outPos + numberOfPixels*outPixelSize;
-    for (size_t n=0 ; n<numberOfPixels ; n++)
-      {
-      inPos -= inPixelSize;
-      outPos -= outPixelSize;
-      for (unsigned int i=0 ; i < m_BandList.size() ; i++)
-        {
-        memcpy(pixBuffer + i*componentSize, inPos + m_BandList[i]*componentSize, componentSize);
-        }
-      // copy pixBuffer to output
-      memcpy(outPos, pixBuffer, outPixelSize);
-      }
-    }
-  else
-    {
-    for (size_t n=0 ; n<numberOfPixels ; n++)
-      {
-      for (unsigned int i=0 ; i < m_BandList.size() ; i++)
-        {
-        memcpy(pixBuffer + i*componentSize, inPos + m_BandList[i]*componentSize, componentSize);
-        }
-      // copy pixBuffer to output
-      memcpy(outPos, pixBuffer, outPixelSize);
-      inPos += inPixelSize;
-      outPos += outPixelSize;
-      }
-    }
-
-  delete[] pixBuffer;
-}
 
 } //namespace otb
 

@@ -166,11 +166,6 @@ protected:
   /** Convert a block of pixels from one type to another. */
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);
 
-  /** Remap band order in an input buffer using band mapping m_BandList
-   *  This operation is done in-place. The buffer size should enough to
-   *  contain extracted bands before and after mapping. */
-  void DoMapBuffer(void* buffer, size_t numberOfPixels);
-
 private:
   /** Test whether the given filename exist and it is readable,
       this is intended to be called before attempting to use
