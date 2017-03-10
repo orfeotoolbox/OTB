@@ -3,7 +3,7 @@
 # Setup test environment
 DIRNAME_0=$(dirname "$0")
 DIRNAME=$(readlink -f "$DIRNAME_0/..")
-cd "$DIRNAME"
+cd "$DIRNAME" || exit
 
 # define convenient functions
 # ps_children( parentPID ) : get PIDs of children processes
@@ -13,13 +13,13 @@ ps_children () {
 
 # nb_report_lines( ) : get number of lines in report
 nb_report_lines () {
-  local res="$(wc -l selftest_report.log)"
-  echo $res | cut -d ' ' -f 1
+  report_lines="$(wc -l selftest_report.log)"
+  echo "$report_lines" | cut -d ' ' -f 1
 }
 
 # echo_and_report ( string ) : echo and print to report
 echo_and_report () {
-  echo $1 | tee -a selftest_report.log
+  echo "$1" | tee -a selftest_report.log
 }
 
 # -------------------------------------------------------------------------
@@ -34,32 +34,42 @@ REF_SIZE=$(nb_report_lines)
 OTB_LIBRARIES="$(ls lib/lib*.so*) $(ls lib/otb/applications/otbapp_*.so) lib/python/_otbApplication.so"
 OTB_EXE="bin/mapla bin/monteverdi bin/otbApplicationLauncherQt bin/otbApplicationLauncherCommandLine"
 for name in $OTB_LIBRARIES $OTB_EXE ; do
-  F_OUTPUT=$(file $name)
-  if [ -n "$(echo $F_OUTPUT | grep 'cannot open')" ]; then
+  F_OUTPUT=$(file "$name")
+  if echo "$F_OUTPUT" | grep -q 'cannot open'; then
     echo_and_report "$F_OUTPUT"
-  elif [ -n "$(echo $F_OUTPUT | grep ': broken symbolic link')" ]; then
+  elif echo "$F_OUTPUT" | grep -q ': broken symbolic link'; then
     echo_and_report "$F_OUTPUT"
-  elif [ -n "$(echo $F_OUTPUT | grep -e ': ELF .*shared object' -e ': ELF .*executable')" ]; then
-    LDD_ERRORS=$(ldd $name | grep -e '=> not found' -e 'not a dynamic executable')
+  elif echo "$F_OUTPUT" | grep -q -i -e ': ELF .*shared object' -e ': ELF .*executable'; then
+    LDD_ERRORS=$(ldd "$name" | grep -i -e '=> not found' -e 'not a dynamic executable')
     if [ -n "$LDD_ERRORS" ]; then
       echo_and_report "ldd $name"
       echo_and_report "$LDD_ERRORS"
     fi
+  elif echo "$F_OUTPUT" | grep -q -i -e ': Mach-O .*shared library' -e ': Mach-O .*bundle' -e ': Mach-O .*executable'; then
+    DL_ERRORS=$(dltest "$name" | grep -i 'ERROR')
+    if [ -n "$DL_ERRORS" ]; then
+      echo_and_report "dltest $name"
+      echo_and_report "$DL_ERRORS"
+    fi
+  elif echo "$F_OUTPUT" | grep -q ': symbolic link'; then
+    :
+  else
+    echo_and_report "Unkown file type : $F_OUTPUT"
   fi
 done
 
 REPORT_SIZE=$(nb_report_lines)
-if [ $REPORT_SIZE -ne $REF_SIZE ]; then
+if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
   echo "Check 1/3 : FAIL"
-  exit 1
+else
+  echo "Check 1/3 : PASS"
 fi
-echo "Check 1/3 : PASS"
 REF_SIZE=$REPORT_SIZE
 
 # Check 2 : OTB applications and Python wrapping
 OTB_APP_COUNT=$(ls lib/otb/applications/otbapp_*.so | wc -w)
 OTB_APPS=$(ls lib/otb/applications/otbapp_*.so | cut -d '_' -f 2 | cut -d '.' -f 1)
-if [ $OTB_APP_COUNT -le 90 ]; then
+if [ "$OTB_APP_COUNT" -le 90 ]; then
   echo "WARNING: Only $OTB_APP_COUNT applications found ! Expected at least 90"
 fi
 app_index=0
@@ -67,9 +77,9 @@ for app in $OTB_APPS; do
   if [ ! -f "bin/otbcli_$app" ]; then
     echo_and_report "ERROR: missing cli launcher for application $app"
   else
-    CLI_OUTPUT=$(bin/otbcli_$app -help 2>&1)
-    CLI_FILTER=$(echo $CLI_OUTPUT | grep -E "^This is the $app application, version.* Parameters:( (MISSING )?-[0-9a-z]+ .*)+ Examples:.*otbcli_$app.*")
-    CLI_FILTER2=$(echo $CLI_FILTER | grep -v 'FATAL')
+    CLI_OUTPUT=$("bin/otbcli_$app" -help 2>&1)
+    CLI_FILTER=$(echo "${CLI_OUTPUT}"| tr '\n' ' ' | grep -E "^This is the $app application, version.* Parameters:( +(MISSING )?-[0-9a-z]+ .*)+ Examples:.*otbcli_$app.*")
+    CLI_FILTER2=$(echo "$CLI_FILTER" | grep -v 'FATAL')
     if [ -z "$CLI_FILTER2" ]; then
       echo_and_report "ERROR: bin/otbcli_$app"
       echo_and_report "$CLI_OUTPUT"
@@ -80,26 +90,26 @@ for app in $OTB_APPS; do
     echo_and_report "ERROR: missing gui launcher for application $app"
   elif [ $app_index -lt 2 ]; then
     echo "" >tmp.log
-    bin/otbgui_$app 2>&1 >tmp.log &
+    "bin/otbgui_$app" >tmp.log 2>&1 &
     GUI_PID=$!
     sleep 1s
     # Check process tree
     CHILD_PROC=$(ps_children $GUI_PID | grep "bin/otbgui $app")
     if [ -n "$CHILD_PROC" ]; then
-      CHILD_PID=$(echo $CHILD_PROC | cut -d ' ' -f 1)
-      NEXT_CHILD_PROC="$(ps_children $CHILD_PID | grep 'otbApplicationLauncherQt')"
+      CHILD_PID=$(echo "$CHILD_PROC" | cut -d ' ' -f 1)
+      NEXT_CHILD_PROC="$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')"
       if [ -n "$NEXT_CHILD_PROC" ]; then
-        NEXT_CHILD_PID=$(echo $NEXT_CHILD_PROC | cut -d ' ' -f 1)
+        NEXT_CHILD_PID=$(echo "$NEXT_CHILD_PROC" | cut -d ' ' -f 1)
         kill -9 $GUI_PID
-        kill -9 $CHILD_PID
-        kill -9 $NEXT_CHILD_PID
+        kill -9 "$CHILD_PID"
+        kill -9 "$NEXT_CHILD_PID"
       else
         echo_and_report "ERROR: otbApplicationLauncherQt $app failed to launch"
-        cat tmp.log | tee -a selftest_report.log
+        tee -a selftest_report.log < tmp.log
       fi
     else
       echo_and_report "ERROR: bin/otbgui_$app failed to launch"
-      cat tmp.log | tee -a selftest_report.log
+      tee -a selftest_report.log < tmp.log
     fi
   fi
   app_index=$(( app_index + 1 ))
@@ -113,7 +123,7 @@ if [ -n "$PY_OUTPUT" ]; then
 fi
 
 REPORT_SIZE=$(nb_report_lines)
-if [ $REPORT_SIZE -ne $REF_SIZE ]; then
+if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
   echo "Check 2/3 : FAIL"
 else
   echo "Check 2/3 : PASS"
@@ -123,41 +133,39 @@ REF_SIZE=$REPORT_SIZE
 # Check 3 : OTB binaries monteverdi & mapla
 # Monteverdi
 echo "" >tmp.log
-bin/monteverdi 2>&1 >tmp.log &
+bin/monteverdi >tmp.log 2>&1 &
 MVD_PID=$!
 sleep 5s
-MVD_PROC=$(ps -o pid -o command -p $MVD_PID | grep -v 'PID *COMMAND' | grep "monteverdi")
-if [ -n "$MVD_PROC" ]; then
+if pgrep monteverdi | grep -q $MVD_PID; then
   MVD_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
   if [ -n "$MVD_LOG" ]; then
     echo_and_report "ERROR: launching monteverdi"
-    cat tmp.log | tee -a selftest_report.log
+    tee -a selftest_report.log < tmp.log
   fi
   kill -9 $MVD_PID
 else
   echo_and_report "ERROR: failed to launch monteverdi"
-  cat tmp.log | tee -a selftest_report.log
+  tee -a selftest_report.log < tmp.log
 fi
 # Mapla
 echo "" >tmp.log
-bin/mapla 2>&1 >tmp.log &
+bin/mapla >tmp.log 2>&1 &
 MAPLA_PID=$!
 sleep 5s
-MAPLA_PROC=$(ps -o pid -o command -p $MAPLA_PID | grep -v 'PID *COMMAND' | grep "mapla")
-if [ -n "$MAPLA_PROC" ]; then
+if pgrep mapla | grep -q $MAPLA_PID; then
   MAPLA_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
   if [ -n "$MAPLA_LOG" ]; then
     echo_and_report "ERROR: launching mapla"
-    cat tmp.log | tee -a selftest_report.log
+    tee -a selftest_report.log < tmp.log
   fi
   kill -9 $MAPLA_PID
 else
   echo_and_report "ERROR: failed to launch mapla"
-  cat tmp.log | tee -a selftest_report.log
+  tee -a selftest_report.log < tmp.log
 fi
 
 REPORT_SIZE=$(nb_report_lines)
-if [ $REPORT_SIZE -ne $REF_SIZE ]; then
+if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
   echo "Check 3/3 : FAIL"
 else
   echo "Check 3/3 : PASS"
@@ -165,7 +173,7 @@ fi
 
 # clean any background process
 ps_children $$ >tmp.log
-for pid in $(cat tmp.log | cut -d ' ' -f 1); do
-  kill -9 $pid
+for pid in $(cut -d ' ' -f 1 < tmp.log); do
+  kill -9 "$pid"
 done
 rm -f tmp.log
