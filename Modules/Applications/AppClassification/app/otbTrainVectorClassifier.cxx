@@ -63,7 +63,7 @@ private:
       {
       featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 
-      if( featuresInfo.m_SelectedCFieldIdx.empty() && GetParameterString( "category" ) == "supervised" )
+      if( featuresInfo.m_SelectedCFieldIdx.empty() )
         {
         otbAppLogFATAL( << "No field has been selected for data labelling!" );
         }
@@ -75,16 +75,20 @@ private:
 
     if (GetClassifierCategory() == Supervised)
       {
-      ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionmatrix( predictedList,
+      ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( predictedList,
                                                                                    classificationListSamples.labeledListSample );
       WriteConfusionMatrix( confMatCalc );
+      }
+    else
+      {
+      // TODO Compute Contingency Table
       }
   }
 
 
 
   ConfusionMatrixCalculatorType::Pointer
-  ComputeConfusionmatrix(const TargetListSampleType::Pointer &predictedListSample,
+  ComputeConfusionMatrix(const TargetListSampleType::Pointer &predictedListSample,
                          const TargetListSampleType::Pointer &performanceLabeledListSample)
   {
     ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
