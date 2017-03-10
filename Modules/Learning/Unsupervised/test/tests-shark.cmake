@@ -32,11 +32,9 @@ set_property(TEST leTvSharkKMeansMachineLearningModelCanReadFail PROPERTY WILL_F
 
 
 otb_add_test(NAME leTvImageClassificationFilterSharkKMeans COMMAND  otbUnsupervisedTestDriver
-  --compare-n-images ${NOTOL} 2
+  --compare-n-images ${NOTOL} 1
   ${BASELINE}/leSharkUnsupervisedImageClassificationFilterOutput.tif
   ${TEMP}/leSharkUnsupervisedImageClassificationFilterOutput.tif
-  ${BASELINE}/leSharkUnsupervisedImageClassificationFilterConfidence.tif
-  ${TEMP}/leSharkUnsupervisedImageClassificationFilterConfidence.tif
   otbSharkUnsupervisedImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkUnsupervisedImageClassificationFilterOutput.tif
@@ -47,11 +45,9 @@ otb_add_test(NAME leTvImageClassificationFilterSharkKMeans COMMAND  otbUnsupervi
 
 
 otb_add_test(NAME leTvImageClassificationFilterSharkKMeansMask COMMAND  otbUnsupervisedTestDriver
-  --compare-n-images ${NOTOL} 2
+  --compare-n-images ${NOTOL} 1
   ${BASELINE}/leSharkUnsupervisedImageClassificationFilterWithMaskOutput.tif
   ${TEMP}/leSharkUnsupervisedImageClassificationFilterWithMaskOutput.tif
-  ${BASELINE}/leSharkUnsupervisedImageClassificationFilterWithMaskConfidence.tif
-  ${TEMP}/leSharkUnsupervisedImageClassificationFilterWithMaskConfidence.tif
   otbSharkUnsupervisedImageClassificationFilter
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkUnsupervisedImageClassificationFilterWithMaskOutput.tif
