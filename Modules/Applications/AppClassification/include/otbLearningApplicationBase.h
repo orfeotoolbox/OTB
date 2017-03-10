@@ -154,17 +154,10 @@ public:
 
   /**
    * Retrieve the classifier category (supervisde or unsupervised)
-   * based on the select algorithm from the classifier choice
+   * based on the select algorithm from the classifier choice.
    * @return ClassifierCategory the classifier category
    */
-  inline ClassifierCategory GetClassifierCategory()
-  {
-    std::cout << GetParameterString("classifier") << std::endl;
-    bool foundUnsupervised =
-            std::find(m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
-                      GetParameterString("classifier")) != m_UnsupervisedClassifier.end();
-    return foundUnsupervised ? Unsupervised : Supervised;
-  }
+  ClassifierCategory GetClassifierCategory();
 
 protected:
   LearningApplicationBase();

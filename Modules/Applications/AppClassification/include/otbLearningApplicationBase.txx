@@ -64,21 +64,21 @@ LearningApplicationBase<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
+typename LearningApplicationBase<TInputValue,TOutputValue>::ClassifierCategory
+LearningApplicationBase<TInputValue,TOutputValue>
+::GetClassifierCategory()
+{
+  bool foundUnsupervised =
+          std::find(m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
+                    GetParameterString("classifier")) != m_UnsupervisedClassifier.end();
+  return foundUnsupervised ? Unsupervised : Supervised;
+}
+
+template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
 ::DoUpdateParameters()
 {
-  /*
-  // if the classifier category is changed, reload the corresponding classifier
-  if( HasValue( "category" ) )
-    {
-    //ClearChoices( "classifier" );
-    if( GetParameterString( "category" ) == "supervised" )
-      InitSupervisedClassifierParams();
-    else
-      InitUnsupervisedClassifierParams();
-    }
-    */
 };
 
 template <class TInputValue, class TOutputValue>
