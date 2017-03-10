@@ -227,9 +227,11 @@ ExternalProject_Add(OTB
 
 ExternalProject_Add_Step(
   OTB install_copyright
-  COMMAND ${CMAKE_COMMAND}
-  -E copy_directory
-  ${OTB_SB_SRC}/Copyright ${CMAKE_INSTALL_PREFIX}/share/copyright
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${OTB_SB_SRC}/LICENSE ${CMAKE_INSTALL_PREFIX}/share/copyright/LICENSE
+
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${OTB_SB_SRC}/NOTICE ${CMAKE_INSTALL_PREFIX}/share/copyright/NOTICE
   
   COMMAND ${CMAKE_COMMAND}
   -E copy_directory
