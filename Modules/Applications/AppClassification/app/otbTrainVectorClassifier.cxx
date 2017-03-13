@@ -18,6 +18,7 @@
 
 // Validation
 #include "otbConfusionMatrixCalculator.h"
+#include "otbContingencyTableCalculator.h"
 
 namespace otb
 {
@@ -81,10 +82,26 @@ private:
       }
     else
       {
-      // TODO Compute Contingency Table
+      WriteContingencyTable();
       }
   }
 
+
+  void WriteContingencyTable()
+  {
+    // Compute contingency table
+    typedef ContingencyTableCalculator<ClassLabelType> ContigencyTableCalcutaltorType;
+    ContigencyTableCalcutaltorType::Pointer contingencyTableCalculator = ContigencyTableCalcutaltorType::New();
+    contingencyTableCalculator->Compute(predictedList->Begin(), predictedList->End(),
+                                        classificationListSamples.labeledListSample->Begin(),
+                                        classificationListSamples.labeledListSample->End());
+    ContingencyTable<ClassLabelType> contingencyTable = contingencyTableCalculator->GetContingencyTable();
+
+    // Write contingency table
+    std::ofstream outFile;
+    outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
+    outFile << contingencyTable.to_csv();
+  }
 
 
   ConfusionMatrixCalculatorType::Pointer
