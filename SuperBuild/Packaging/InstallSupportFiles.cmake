@@ -299,6 +299,17 @@ function(func_install_otb_support_files)
   ##################### install cli and gui scripts #######################
   install(PROGRAMS ${PKG_APP_SCRIPTS}  DESTINATION ${PKG_STAGE_BIN_DIR})
 
+  ########################## selftest script ##############################
+  if(WIN32)
+    set(PACKAGE_SELFTEST_SCRIPT selftester.bat)
+  else()
+    set(PACKAGE_SELFTEST_SCRIPT selftester.sh)
+  endif()
+  install(
+    FILES ${PACKAGE_SUPPORT_FILES_DIR}/${PACKAGE_SELFTEST_SCRIPT}
+    DESTINATION ${PKG_STAGE_BIN_DIR}
+    )
+
 
 endfunction()
 
