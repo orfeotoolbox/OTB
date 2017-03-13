@@ -1,15 +1,10 @@
 otb_module_test()
 set(OTBUnsupervisedTests
   otbUnsupervisedTestDriver.cxx
-  otbMachineLearningClusteringModelCanRead.cxx
-  otbTrainMachineLearningClusteringModel.cxx
+  otbMachineLearningUnsupervisedModelCanRead.cxx
+  otbTrainMachineLearningUnsupervisedModel.cxx
   otbContingencyTableCalculatorTest.cxx
   )
-
-
-add_executable(otbUnsupervisedTestDriver ${OTBUnsupervisedTests})
-target_link_libraries(otbUnsupervisedTestDriver ${OTBUnsupervised-Test_LIBRARIES})
-otb_module_target_label(otbUnsupervisedTestDriver)
 
 # Tests Declaration
 
@@ -27,5 +22,10 @@ otb_add_test(NAME leTvContingencyTableCalculatorUpdateWithBaseline COMMAND otbUn
 
 
 if(OTB_USE_SHARK)
+  set(OTBUnsupervisedTests ${OTBUnsupervisedTests} otbSharkUnsupervisedImageClassificationFilter.cxx)
   include(tests-shark.cmake)
 endif()
+
+add_executable(otbUnsupervisedTestDriver ${OTBUnsupervisedTests})
+target_link_libraries(otbUnsupervisedTestDriver ${OTBUnsupervised-Test_LIBRARIES})
+otb_module_target_label(otbUnsupervisedTestDriver)

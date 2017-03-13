@@ -1,24 +1,24 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #ifndef otbSharkKMeansMachineLearningModel_h
 #define otbSharkKMeansMachineLearningModel_h
-
-
 
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
@@ -45,8 +45,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-using namespace shark;
-
 /** \class SharkKMeansMachineLearningModel
  *  \brief Shark version of Random Forests algorithm
  *
@@ -67,23 +65,24 @@ class ITK_EXPORT SharkKMeansMachineLearningModel : public MachineLearningModel<T
 {
 public:
   /** Standard class typedefs. */
-  typedef SharkKMeansMachineLearningModel Self;
+  typedef SharkKMeansMachineLearningModel                 Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  typedef typename Superclass::InputValueType InputValueType;
-  typedef typename Superclass::InputSampleType InputSampleType;
-  typedef typename Superclass::InputListSampleType InputListSampleType;
-  typedef typename Superclass::TargetValueType TargetValueType;
-  typedef typename Superclass::TargetSampleType TargetSampleType;
-  typedef typename Superclass::TargetListSampleType TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType ConfidenceValueType;
-  typedef typename Superclass::ConfidenceSampleType ConfidenceSampleType;
-  typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
+  typedef typename Superclass::InputValueType             InputValueType;
+  typedef typename Superclass::InputSampleType            InputSampleType;
+  typedef typename Superclass::InputListSampleType        InputListSampleType;
+  typedef typename Superclass::TargetValueType            TargetValueType;
+  typedef typename Superclass::TargetSampleType           TargetSampleType;
+  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
+  typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
+  typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
 
-  typedef HardClusteringModel<RealVector> ClusteringModelType;
-  typedef ClusteringModelType::OutputType ClusteringOutputType;
+
+  typedef shark::HardClusteringModel<shark::RealVector>   ClusteringModelType;
+  typedef ClusteringModelType::OutputType                 ClusteringOutputType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro( Self );
@@ -108,18 +107,14 @@ public:
   //@}
 
   /** Get the maximum number of iteration for the kMeans algorithm.*/
-  itkGetMacro( MaximumNumberOfIterations, unsigned
-          int );
+  itkGetMacro( MaximumNumberOfIterations, unsigned );
   /** Set the maximum number of iteration for the kMeans algorithm.*/
-  itkSetMacro( MaximumNumberOfIterations, unsigned
-          int );
+  itkSetMacro( MaximumNumberOfIterations, unsigned );
 
   /** Get the number of class for the kMeans algorithm.*/
-  itkGetMacro( K, unsigned
-          int );
+  itkGetMacro( K, unsigned );
   /** Set the number of class for the kMeans algorithm.*/
-  itkSetMacro( K, unsigned
-          int );
+  itkSetMacro( K, unsigned );
 
   /** If true, normalized input data sample list */
   itkGetMacro( Normalized, bool );
@@ -154,10 +149,11 @@ private:
   bool m_Normalized;
   unsigned int m_K;
   unsigned int m_MaximumNumberOfIterations;
+  bool m_CanRead;
 
 
   /** Centroids results form kMeans */
-  Centroids centroids;
+  shark::Centroids m_Centroids;
 
 
   /** shark Model could be SoftClusteringModel or HardClusteringModel */

@@ -76,6 +76,7 @@ set(bayes_output_format ".bayes")
 set(rf_output_format ".rf")
 set(knn_output_format ".knn")
 set(sharkrf_output_format ".txt")
+set(sharkkm_output_format ".txt")
 
 # Training algorithms parameters
 set(libsvm_parameters "-classifier.libsvm.opt" "true" "-classifier.libsvm.prob" "true")
@@ -88,7 +89,7 @@ set(bayes_parameters "")
 set(rf_parameters "")
 set(knn_parameters "")
 set(sharkrf_parameters "")
-
+set(sharkkm_parameters "")
 
 # Validation depending on mode
 set(ascii_comparison --compare-ascii ${EPSILON_6})
@@ -108,7 +109,7 @@ if(OTB_USE_OPENCV)
   list(APPEND classifierList "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
 endif()
 if(OTB_USE_SHARK)
-  list(APPEND classifierList "SHARKRF")
+  list(APPEND classifierList "SHARKRF" "SHARKKM")
 endif()
 
 set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
@@ -223,124 +224,6 @@ foreach(classifier ${classifierList})
   endif()
 
 endforeach()
-
-
-#----------- TrainImagesClustering TESTS ----------------
-
-set(sharkkm_output_format ".txt")
-set(sharkkm_parameters "")
-
-if(OTB_USE_SHARK)
-  list(APPEND clusteringList "SHARKKM")
-endif()
-
-list(APPEND classifier_without_baseline "SHARKKM")
-
-# Loop on classifiers
-foreach(classifier ${clusteringList})
-  string(TOLOWER ${classifier} lclassifier)
-
-  # Derive output file name
-  set(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
-  set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
-  set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
-
-  list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
-  if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
-  else()
-    set(valid "")
-  endif()
-
-  otb_test_application(
-    NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
-    APP      TrainImagesClustering
-    OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-    -classifier ${lclassifier}
-    ${${lclassifier}_parameters}
-    -io.out ${TEMP}/${OUTMODELFILE}
-    -sample.vfn Class
-    -rand 121212
-
-    VALID    ${valid}
-  )
-
-  if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML1_${OUTMODELFILE})
-  else()
-    set(valid "")
-  endif()
-
-  otb_test_application(
-    NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
-    APP      TrainImagesClustering
-    OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-    -classifier ${lclassifier}
-    ${${lclassifier}_parameters}
-    -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
-    -rand 121212
-    -sample.vfn Class
-    -outxml ${TEMP}/cl${classifier}_OutXML1.xml
-
-    VALID ${valid}
-  )
-
-  if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML2_${OUTMODELFILE})
-  else()
-    set(valid "")
-  endif()
-
-  otb_test_application(
-    NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
-    APP      TrainImagesClustering
-    OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
-    -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-    -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
-    -sample.vfn Class
-    VALID    ${valid}
-  )
-
-  list(FIND classifier_with_confmap ${classifier} _classifier_has_confmap)
-  if(${_classifier_has_confmap} EQUAL -1)
-    otb_test_application(
-      NAME     apTvClMethod${classifier}ImageClassifierQB1
-      APP      ImageClassifier
-      OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-      -model ${INPUTDATA}/Classification/${OUTMODELFILE}
-      -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-      -out ${TEMP}/${OUTRASTER} ${raster_output_option}
-
-      VALID    ${raster_comparison}
-      ${raster_ref_path}/${OUTRASTER}
-      ${TEMP}/${OUTRASTER}
-    )
-  else()
-    otb_test_application(
-      NAME     apTvClMethod${classifier}ImageClassifierQB1
-      APP      ImageClassifier
-      OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-      -model ${INPUTDATA}/Classification/${OUTMODELFILE}
-      -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-      -out ${TEMP}/${OUTRASTER} ${raster_output_option}
-      -confmap ${TEMP}/${OUTCONFMAP}
-
-      VALID    ${raster_comparison_two}
-      ${raster_ref_path}/${OUTRASTER}
-      ${TEMP}/${OUTRASTER}
-      ${raster_ref_path}/${OUTCONFMAP}
-      ${TEMP}/${OUTCONFMAP}
-    )
-  endif()
-
-endforeach()
-
 
 #----------- LIBSVM Classifier TESTS ----------------
 
@@ -1063,17 +946,17 @@ if(OTB_USE_OPENCV)
     ${TEMP}/apTvClTrainVectorClassifierModel.rf)
 endif()
 
-#----------- TrainVectorClustering TESTS ----------------
+#----------- TrainVectorClassifier unsupervised TESTS ----------------
 if(OTB_USE_SHARK)
-  otb_test_application(NAME apTvClTrainVectorClustering
-    APP  TrainVectorClustering
+  otb_test_application(NAME apTvClTrainVectorUnsupervised
+    APP  TrainVectorClassifier
     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
     -feat value_0 value_1 value_2 value_3
     -classifier sharkkm
     -io.out ${TEMP}/apTvClTrainVectorClusteringModel.txt)
 
-  otb_test_application(NAME apTvClTrainVectorClusteringWithClass
-    APP  TrainVectorClustering
+  otb_test_application(NAME apTvClTrainVectorUnsupervisedWithClass
+    APP  TrainVectorClassifier
     OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
     -feat value_0 value_1 value_2 value_3
     -cfield class

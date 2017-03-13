@@ -51,11 +51,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           TrainVectorClustering
-  SOURCES        otbTrainVectorClustering.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
   NAME           ComputeConfusionMatrix
   SOURCES        otbComputeConfusionMatrix.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
@@ -78,11 +73,6 @@ otb_create_application(
 otb_create_application(
   NAME           TrainImagesClassifier
   SOURCES        otbTrainImagesClassifier.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           TrainImagesClustering
-  SOURCES        otbTrainImagesClustering.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(

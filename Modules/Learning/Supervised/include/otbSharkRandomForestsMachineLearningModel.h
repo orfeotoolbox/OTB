@@ -18,8 +18,6 @@
 #ifndef otbSharkRandomForestsMachineLearningModel_h
 #define otbSharkRandomForestsMachineLearningModel_h
 
-#include "otb_shark.h"
-
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
@@ -33,6 +31,7 @@
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
+#include "otb_shark.h"
 #include "shark/Algorithms/Trainers/RFTrainer.h"
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop

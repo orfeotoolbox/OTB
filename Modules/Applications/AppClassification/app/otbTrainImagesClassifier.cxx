@@ -44,43 +44,133 @@ public:
     ClearApplications();
     InitIO();
     InitSampling();
-    InitClassification( true );
+    InitClassification();
 
+    AddDocTag( Tags::Learning );
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("io.il", "QB_1_ortho.tif");
-    SetDocExampleParameterValue("io.vd", "VectorData_QB1.shp");
-    SetDocExampleParameterValue("io.imstat", "EstimateImageStatisticsQB1.xml");
-    SetDocExampleParameterValue("sample.mv", "100");
-    SetDocExampleParameterValue("sample.mt", "100");
-    SetDocExampleParameterValue("sample.vtr", "0.5");
-    SetDocExampleParameterValue("sample.vfn", "Class");
-    SetDocExampleParameterValue("classifier", "libsvm");
-    SetDocExampleParameterValue("classifier.libsvm.k", "linear");
-    SetDocExampleParameterValue("classifier.libsvm.c", "1");
-    SetDocExampleParameterValue("classifier.libsvm.opt", "false");
-    SetDocExampleParameterValue("io.out", "svmModelQB1.txt");
-    SetDocExampleParameterValue("io.confmatout", "svmConfusionMatrixQB1.csv");
+    SetDocExampleParameterValue( "io.il", "QB_1_ortho.tif" );
+    SetDocExampleParameterValue( "io.vd", "VectorData_QB1.shp" );
+    SetDocExampleParameterValue( "io.imstat", "EstimateImageStatisticsQB1.xml" );
+    SetDocExampleParameterValue( "sample.mv", "100" );
+    SetDocExampleParameterValue( "sample.mt", "100" );
+    SetDocExampleParameterValue( "sample.vtr", "0.5" );
+    SetDocExampleParameterValue( "sample.vfn", "Class" );
+    SetDocExampleParameterValue( "classifier", "libsvm" );
+    SetDocExampleParameterValue( "classifier.libsvm.k", "linear" );
+    SetDocExampleParameterValue( "classifier.libsvm.c", "1" );
+    SetDocExampleParameterValue( "classifier.libsvm.opt", "false" );
+    SetDocExampleParameterValue( "io.out", "svmModelQB1.txt" );
+    SetDocExampleParameterValue( "io.confmatout", "svmConfusionMatrixQB1.csv" );
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    if( HasValue( "io.vd" ) )
+    if( HasValue( "io.vd" ) && IsParameterEnabled( "io.vd" ))
       {
-      std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
-      GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0], false );
-      UpdateInternalParameters( "polystat" );
+      UpdatePolygonClassStatisticsParameters();
+      }
+
+
+    // Change mandatory of input vector depending on supervised and unsupervised mode.
+    if( HasValue( "classifier" ) )
+      {
+      UpdateInternalParameters( "training" );
+      switch( trainVectorBase->GetClassifierCategory() )
+        {
+        case TrainVectorBase::Unsupervised:
+          MandatoryOff( "io.vd" );
+          break;
+        default:
+        case TrainVectorBase::Supervised:
+          MandatoryOn( "io.vd" );
+          break;
+        }
+      }
+
+  }
+
+  /**
+   * Select and Extract samples for validation with computed statistics and rates.
+   * Validation samples could be empty if sample.vrt == 0 and if no dedicated validation are provided.
+   * If no dedicated validation is provided the training is split corresponding to the sample.vtr parameter,
+   * in this case if no vector data have been provided, the training rates and statistics are computed
+   * on the selection and extraction training result.
+   * fileNames.sampleOutputs contains training data and after an ExtractValidationData training data will
+   * be split to fileNames.sampleTrainOutputs.
+   * \param imageList
+   * \param fileNames
+   * \param validationVectorFileList
+   * \param rates
+   * \param HasInputVector
+   */
+  void ExtractValidationData(FloatVectorImageListType *imageList, TrainFileNamesHandler& fileNames,
+                             std::vector<std::string> validationVectorFileList,
+                             const SamplingRates& rates, bool HasInputVector )
+  {
+    if( !validationVectorFileList.empty() ) // Compute class statistics and sampling rate of validation data if provided.
+      {
+      ComputePolygonStatistics( imageList, validationVectorFileList, fileNames.polyStatValidOutputs );
+      ComputeSamplingRate( fileNames.polyStatValidOutputs, fileNames.rateValidOut, rates.fmv );
+      SelectAndExtractValidationSamples( fileNames, imageList, validationVectorFileList );
+      if( HasInputVector ) // if input vector is provided the sampleTrainOutputs is the previously extracted sampleOutputs
+        fileNames.sampleTrainOutputs = fileNames.sampleOutputs;
+      }
+    else if(GetParameterFloat("sample.vtr") != 0.0)// Split training data to validation
+      {
+      if( !HasInputVector ) // Compute one class statistics and sampling rate for the generated vector.
+        ComputePolygonStatistics( imageList, fileNames.sampleOutputs, fileNames.polyStatTrainOutputs );
+        ComputeSamplingRate( fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt );
+      SplitTrainingToValidationSamples( fileNames, imageList );
+      }
+    else // nothing to do, except update fileNames
+      {
+      fileNames.sampleTrainOutputs = fileNames.sampleOutputs;
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  /**
+   * Extract Training data depending if input vector is provided
+   * \param imageList list of the image
+   * \param fileNames handler that contain filenames
+   * \param vectorFileList input vector file list (if provided
+   * \param rates
+   */
+  void ExtractTrainData(FloatVectorImageListType *imageList, const TrainFileNamesHandler& fileNames,
+                        std::vector<std::string> vectorFileList,
+                        const SamplingRates& rates)
+  {
+    if( !vectorFileList.empty() ) // Select and Extract samples for training with computed statistics and rates
+      {
+      ComputePolygonStatistics( imageList, vectorFileList, fileNames.polyStatTrainOutputs );
+      ComputeSamplingRate( fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt );
+      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::CLASS );
+      }
+    else // Select training samples base on geometric sampling if no input vector is provided
+      {
+      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::GEOMETRIC, "fid" );
+      }
+  }
+
+
+  void DoExecute()
   {
     TrainFileNamesHandler fileNames;
+    std::vector<std::string> vectorFileList;
     FloatVectorImageListType *imageList = GetParameterImageList( "io.il" );
-    std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
+    bool HasInputVector = IsParameterEnabled( "io.vd" ) && HasValue( "io.vd" );
+    if(HasInputVector)
+      vectorFileList = GetParameterStringList( "io.vd" );
+
+
     unsigned long nbInputs = imageList->Size();
 
-    if( nbInputs > vectorFileList.size() )
+    if( !HasInputVector && trainVectorBase->GetClassifierCategory() == TrainVectorBase::Supervised )
+      {
+      otbAppLogFATAL( "Missing input vector data files" );
+      }
+
+    if( !vectorFileList.empty() && nbInputs > vectorFileList.size() )
       {
       otbAppLogFATAL( "Missing input vector data files to match number of images (" << nbInputs << ")." );
       }
@@ -104,22 +194,11 @@ public:
     // Compute final maximum sampling rates for both training and validation samples
     SamplingRates rates = ComputeFinalMaximumSamplingRates( dedicatedValidation );
 
-    // Select and Extract samples for training with computed statistics and rates
-    ComputePolygonStatistics(imageList, vectorFileList, fileNames.polyStatTrainOutputs);
-    ComputeSamplingRate(fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt);
-    SelectAndExtractTrainSamples(fileNames, imageList, vectorFileList, SamplingStrategy::CLASS);
-
-    // Select and Extract samples for validation with computed statistics and rates
-    // Validation samples could be empty if sample.vrt == 0 and if no dedicated validation are provided
-    if( dedicatedValidation ) {
-      ComputePolygonStatistics(imageList, validationVectorFileList, fileNames.polyStatValidOutputs);
-      ComputeSamplingRate(fileNames.polyStatValidOutputs, fileNames.rateValidOut, rates.fmv);
-      }
-    SelectAndExtractValidationSamples(fileNames, imageList, validationVectorFileList);
-
+    ExtractTrainData(imageList, fileNames, vectorFileList, rates);
+    ExtractValidationData(imageList, fileNames, validationVectorFileList, rates, HasInputVector);
 
     // Then train the model with extracted samples
-    TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs);
+    TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs );
 
     // cleanup
     if( IsParameterEnabled( "cleanup" ) )
@@ -127,6 +206,15 @@ public:
       otbAppLogINFO( <<"Final clean-up ..." );
       fileNames.clear();
       }
+  }
+
+private :
+
+  void UpdatePolygonClassStatisticsParameters()
+  {
+    std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
+    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0], false );
+    UpdateInternalParameters( "polystat" );
   }
 
 };
