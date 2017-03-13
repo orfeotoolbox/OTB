@@ -199,9 +199,7 @@ macro(macro_super_package)
     if(LINUX)
       list(APPEND program_list "${PATCHELF_PROGRAM}")
     endif()
-      
   endif()
-
 
   foreach(prog ${program_list})
     install(
@@ -209,6 +207,11 @@ macro(macro_super_package)
       DESTINATION ${PKG_STAGE_DIR})
   endforeach()
 
+  ############# otb_loader executable ################
+  add_executable(otb_loader ${PACKAGE_SUPPORT_FILES_DIR}/otb_loader.cxx)
+  target_link_libraries(otb_loader ${CMAKE_DL_LIBS})
+  install(TARGETS otb_loader
+          RUNTIME DESTINATION ${PKG_STAGE_DIR}/bin COMPONENT Runtime)
 
   # We need qt.conf on windows. for macx and linux we write it
   # after extracting package
