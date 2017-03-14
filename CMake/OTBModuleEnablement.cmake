@@ -41,6 +41,14 @@ foreach(f ${meta})
     set(${otb-module-test}_TESTS_FOR ${otb-module})
   endif()
 
+  # Exclude remote modules from default modules so that they are
+  # enabled/disabled using their variable Module_XXXX
+  get_filename_component(_group ${${otb-module}_BASE} PATH)
+  get_filename_component(_group ${_group} NAME)
+  if("${_group}" STREQUAL "Remote")
+    set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 1)
+  endif()
+
   # Reject bad dependencies.
   string(REGEX MATCHALL ";(OTBDeprecated|OTBReview|OTBIntegratedTest);"
     _bad_deps ";${OTB_MODULE_${otb-module}_DEPENDS};${OTB_MODULE_${otb-module-test}_DEPENDS};")
