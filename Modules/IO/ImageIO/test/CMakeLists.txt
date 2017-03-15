@@ -55,6 +55,7 @@ otbImageFileWriterTest.cxx
 otbImageIOFactoryNew.cxx
 otbCompareWritingComplexImage.cxx
 otbImageFileReaderOptBandTest.cxx
+otbImageFileWriterOptBandTest.cxx
 )
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
@@ -1319,5 +1320,23 @@ otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandReorgTest COMMAND otbImageIO
   otbImageFileReaderOptBandTest
   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2,:,-3,2:-1
   ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+  4
+  )
+
+otb_add_test(NAME ioTvImageIOToWriterOptions_OptBandTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBand2to4.tif
+  otbImageFileWriterOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBand2to4.tif?bands=2:4
+  4
+  )
+
+otb_add_test(NAME ioTvImageIOToWriterOptions_OptBandReorgTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif
+  otbImageFileWriterOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif?bands=2,:,-3,2:-1
   4
   )
