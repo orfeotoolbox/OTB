@@ -258,6 +258,15 @@ private:
   bool          m_IsObserving;
   unsigned long m_ObserverID;
   InputIndexType m_ShiftOutputIndex;
+
+  /** Mapping between origin components and output components (before any
+   * conversion) */
+  std::vector<unsigned int> m_BandList;
+
+  /** Store the number of components to be exported to the output image
+   *  This variable can be the number of components in m_ImageIO or the
+   *  number of components in the m_BandList (if used) */
+  unsigned int m_IOComponents;
 };
 
 } // end namespace otb
