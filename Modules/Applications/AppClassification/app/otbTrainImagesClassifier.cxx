@@ -106,7 +106,7 @@ public:
    */
   void ExtractValidationData(FloatVectorImageListType *imageList, TrainFileNamesHandler& fileNames,
                              std::vector<std::string> validationVectorFileList,
-                             const SamplingRates& rates, bool HasInputVector )
+                             const SamplingRates& rates, bool itkNotUsed(HasInputVector) )
   {
     if( !validationVectorFileList.empty() ) // Compute class statistics and sampling rate of validation data if provided.
       {
