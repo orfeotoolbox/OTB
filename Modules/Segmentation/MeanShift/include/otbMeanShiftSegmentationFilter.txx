@@ -34,6 +34,8 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
    this->SetNumberOfRequiredOutputs(2);
    this->SetNthOutput(0,TOutputLabelImage::New());
    this->SetNthOutput(1,TOutputClusteredImage::New());
+   // default set MeanShiftFilter mode search to true because Merging and Pruning use LabelOutput
+   m_MeanShiftFilter->SetModeSearch(true);
 }
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
