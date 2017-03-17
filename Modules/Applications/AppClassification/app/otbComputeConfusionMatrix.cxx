@@ -376,7 +376,7 @@ private:
     writeContingencyTable(contingencyTable);
   }
 
-  void DoExecuteConfusionMatrix(const StreamingInitializationData& sid) ITK_OVERRIDE
+  void DoExecuteConfusionMatrix(const StreamingInitializationData& sid)
   {
 
     // Extraction of the Class Labels from the Reference image/rasterized vector data + filling of m_Matrix

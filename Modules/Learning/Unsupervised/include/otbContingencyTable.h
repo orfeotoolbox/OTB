@@ -24,6 +24,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <itkVariableSizeMatrix.h>
 
 namespace otb
 {
@@ -34,6 +35,8 @@ public:
   typedef itk::VariableSizeMatrix<unsigned long> MatrixType;
   typedef std::vector<TClassLabel> LabelList;
 
+  MatrixType matrix;
+
   ContingencyTable(LabelList referenceLabels, LabelList producedLabels) : refLabels( referenceLabels ),
                                                                           prodLabels( producedLabels )
   {
@@ -42,8 +45,6 @@ public:
     matrix.SetSize( rows, cols );
     matrix.Fill( 0 );
   }
-
-  MatrixType matrix;
 
   friend std::ostream &operator<<(std::ostream &o, const ContingencyTable<TClassLabel> &contingencyTable)
   {
