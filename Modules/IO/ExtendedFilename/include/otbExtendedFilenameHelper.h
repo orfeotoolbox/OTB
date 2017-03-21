@@ -56,11 +56,11 @@ public:
   {
     GenericBandRange() {}
 
-    GenericBandRange(const int& a);
+    GenericBandRange(int a);
 
     GenericBandRange(const std::pair<int,int>& a);
 
-    GenericBandRange(const int& a,const int& b);
+    GenericBandRange(int a,int b);
 
     bool SetString(const std::string& str, size_t start=0 , size_t size=std::string::npos);
 

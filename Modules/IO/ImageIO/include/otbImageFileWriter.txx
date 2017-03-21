@@ -714,7 +714,7 @@ ImageFileWriter<TInputImage>
       {
       // get band range
       bool retBandRange = m_FilenameHelper->ResolveBandRange(m_IOComponents, this->m_BandList);
-      if (retBandRange == false || m_BandList.size() == 0)
+      if (retBandRange == false || m_BandList.empty())
         {
         // invalid range
         itkGenericExceptionMacro("The given band range is either empty or invalid for a " << m_IOComponents <<" bands input image!");
@@ -758,7 +758,7 @@ ImageFileWriter<TInputImage>
       cacheImage->CopyInformation(input);
 
       // set number of components at the band range size
-      if (m_BandList.size() != 0 || m_FilenameHelper->BandRangeIsSet())
+      if ((!m_BandList.empty()) || m_FilenameHelper->BandRangeIsSet())
         {
         cacheImage->SetNumberOfComponentsPerPixel(m_BandList.size());
         }
@@ -767,7 +767,7 @@ ImageFileWriter<TInputImage>
       cacheImage->Allocate();
 
       // set number of components at the initial size
-      if (m_BandList.size() != 0 || m_FilenameHelper->BandRangeIsSet())
+      if ((!m_BandList.empty()) || m_FilenameHelper->BandRangeIsSet())
         {
         cacheImage->SetNumberOfComponentsPerPixel(m_IOComponents);
         }
@@ -802,7 +802,7 @@ ImageFileWriter<TInputImage>
       }
     }
 
-  if (m_FilenameHelper->BandRangeIsSet() && (m_BandList.size() != 0))
+  if (m_FilenameHelper->BandRangeIsSet() && (!m_BandList.empty()))
   {
     // Adapt the image size with the region and take into account a potential
     // remapping of the components. m_BandList is empty if no band range is set
