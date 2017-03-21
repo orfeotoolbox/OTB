@@ -437,7 +437,7 @@ def ApplicationToRst(appname):
         print e
     # TODO: remove this when bug 440 is fixed
     app.Init()
-    output += RstHeading(app.GetDocName(), '^')
+    output += RstHeading(app.GetName() + ' - ' + app.GetDocName(), '^')
     output += app.GetDescription() + linesep * 2
     output += RstHeading("Detailed description", '-')
     output += app.GetDocLongDescription() + linesep * 2
