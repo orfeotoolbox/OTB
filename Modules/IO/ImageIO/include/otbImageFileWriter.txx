@@ -709,7 +709,7 @@ ImageFileWriter<TInputImage>
     m_ImageIO->SetNumberOfComponents(AccessorFunctorType::GetVectorLength(input));
 
     m_IOComponents = m_ImageIO->GetNumberOfComponents();
-
+    m_BandList.clear();
     if (m_FilenameHelper->BandRangeIsSet())
       {
       // get band range
@@ -758,7 +758,7 @@ ImageFileWriter<TInputImage>
       cacheImage->CopyInformation(input);
 
       // set number of components at the band range size
-      if ((!m_BandList.empty()) || m_FilenameHelper->BandRangeIsSet())
+      if (m_FilenameHelper->BandRangeIsSet() && (m_IOComponents < m_BandList.size()))
         {
         cacheImage->SetNumberOfComponentsPerPixel(m_BandList.size());
         }
@@ -767,7 +767,7 @@ ImageFileWriter<TInputImage>
       cacheImage->Allocate();
 
       // set number of components at the initial size
-      if ((!m_BandList.empty()) || m_FilenameHelper->BandRangeIsSet())
+      if (m_FilenameHelper->BandRangeIsSet() && (m_IOComponents < m_BandList.size()))
         {
         cacheImage->SetNumberOfComponentsPerPixel(m_IOComponents);
         }
