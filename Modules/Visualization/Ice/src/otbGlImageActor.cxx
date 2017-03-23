@@ -470,7 +470,7 @@ void GlImageActor::Render()
       }
   
     // Reset color before rendering
-    glColor3d(1.0f,1.0f,1.0f);
+    glColor4d(1.0f,1.0f,1.0f, m_ImageSettings->GetAlpha());
   
     glBegin (GL_QUADS);
     glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
