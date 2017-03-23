@@ -544,7 +544,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   m_BandList.clear();
   if (m_FilenameHelper->BandRangeIsSet())
     {
-    bool ret = m_FilenameHelper->ResolveBandRange(m_IOComponents, m_BandList);
+    bool ret = m_FilenameHelper->ResolveBandRange(m_FilenameHelper->GetBandRange(), m_IOComponents, m_BandList);
     if (ret == false || m_BandList.size() == 0)
       {
       // invalid range

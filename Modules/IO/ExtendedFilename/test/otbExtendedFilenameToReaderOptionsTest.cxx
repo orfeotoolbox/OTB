@@ -51,7 +51,8 @@ int otbExtendedFilenameToReaderOptions(int argc, char* argv[])
 
   file << helper->BandRangeIsSet() << std::endl;
   file << "[";
-  std::vector<otb::ExtendedFilenameHelper::GenericBandRange> rangeList = helper->GetBandRange();
+
+  std::vector<otb::ExtendedFilenameHelper::GenericBandRange> rangeList = helper->GetGenericBandRange(helper->GetBandRange());
   for (unsigned int i=0 ; i<rangeList.size(); i++)
     {
     if (i) file << ",";
@@ -63,7 +64,7 @@ int otbExtendedFilenameToReaderOptions(int argc, char* argv[])
     {
     unsigned int nbBands = atoi(argv[3]);
     std::vector<unsigned int> bandList;
-    bool ret = helper->ResolveBandRange(nbBands,bandList);
+    bool ret = helper->ResolveBandRange(helper->GetBandRange(), nbBands,bandList);
     if (ret)
       {
       file << "BandList = [";

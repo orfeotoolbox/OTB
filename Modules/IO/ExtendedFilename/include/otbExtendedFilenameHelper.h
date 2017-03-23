@@ -69,12 +69,12 @@ public:
 
   /**  Decode the string into a list of GenericBandRange, band indexes are
    *  1-based. */
-  std::vector<ExtendedFilenameHelper::GenericBandRange> GetBandRange(const std::string &optRangeSecond) const;
+  std::vector<ExtendedFilenameHelper::GenericBandRange> GetGenericBandRange(const std::string &bandRange) const;
 
   /** Resolve the list of band ranges into real band indexes, according to
    *  a total number of bands in the image. Note that the output indexes are
    *  zero-based (0 is the first component) */
-  bool ResolveBandRange(const unsigned int &nbBands, std::vector<unsigned int> &output, const std::string &optRangeSecond) const;
+  bool ResolveBandRange(const std::string &bandRange, const unsigned int &nbBands, std::vector<unsigned int> &output) const;
 
 protected:
   ExtendedFilenameHelper() {}

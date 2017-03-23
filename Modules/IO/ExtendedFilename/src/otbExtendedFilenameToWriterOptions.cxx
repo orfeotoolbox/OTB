@@ -313,18 +313,11 @@ ExtendedFilenameToWriterOptions
   return m_Options.bandRange.first;
 }
 
-std::vector<ExtendedFilenameHelper::GenericBandRange>
+std::string
 ExtendedFilenameToWriterOptions
 ::GetBandRange () const
 {
-  return Superclass::GetBandRange(m_Options.bandRange.second);
-}
-
-bool
-ExtendedFilenameToWriterOptions
-::ResolveBandRange(const unsigned int &nbBands, std::vector<unsigned int> &output) const
-{
-    return Superclass::ResolveBandRange(nbBands, output, m_Options.bandRange.second);
+  return m_Options.bandRange.second;
 }
 
 } // end namespace otb

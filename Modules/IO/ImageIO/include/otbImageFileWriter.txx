@@ -713,7 +713,7 @@ ImageFileWriter<TInputImage>
     if (m_FilenameHelper->BandRangeIsSet())
       {
       // get band range
-      bool retBandRange = m_FilenameHelper->ResolveBandRange(m_IOComponents, this->m_BandList);
+      bool retBandRange = m_FilenameHelper->ResolveBandRange(m_FilenameHelper->GetBandRange(), m_IOComponents, m_BandList);
       if (retBandRange == false || m_BandList.empty())
         {
         // invalid range

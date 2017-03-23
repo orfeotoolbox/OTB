@@ -40,7 +40,7 @@ int otbImageFileWriterOptBandTest(int itkNotUsed(argc), char* argv[])
   helper->SetExtendedFileName(outputFilename);
   unsigned int nbBands = atoi(argv[3]);
   std::vector<unsigned int> bandList;
-  bool ret = helper->ResolveBandRange(nbBands,bandList);
+  bool ret = helper->ResolveBandRange(helper->GetBandRange(),nbBands,bandList);
   if (ret)
     {
     std::cout << "BandList = [";
