@@ -199,18 +199,22 @@ ExtendedFilenameHelper
   std::vector<ExtendedFilenameHelper::GenericBandRange> vBands;
   size_t start = 0;
   size_t pos;
-  while (start != std::string::npos)
+  if (!bandRange.empty())
     {
-    pos = bandRange.find(',',start);
-    if (pos > start)
+    while (start != std::string::npos)
       {
-      ExtendedFilenameHelper::GenericBandRange range;
-      size_t size = (pos == std::string::npos ? pos : pos - start);
-      bool ret = range.SetString(bandRange, start, size);
-      if (ret) vBands.push_back(range);
+      pos = bandRange.find(',',start);
+      if (pos > start)
+        {
+        ExtendedFilenameHelper::GenericBandRange range;
+        size_t size = (pos == std::string::npos ? pos : pos - start);
+
+        bool ret = range.SetString(bandRange, start, size);
+        if (ret) vBands.push_back(range);
+        }
+      if (pos != std::string::npos) pos++;
+      start = pos;
       }
-    if (pos != std::string::npos) pos++;
-    start = pos;
     }
   return vBands;
 }
