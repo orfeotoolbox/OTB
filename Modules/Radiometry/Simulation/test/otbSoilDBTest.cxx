@@ -20,14 +20,66 @@
 
 
 #include "otbMacro.h"
-
 #include "otbSoilDataBase.h"
-
 #include <iostream>
 
 int otbSoilDataBaseParseFile(int argc, char * argv[])
 {
+  if(argc < 5)
+    {
+    std::cout << "Usage: " << argv[0] << " soil_file wlmin wlmax wlstep wltest1 soilindextest1 refltest1 [wltest2 soilindextest2 refltest2 ...]" << '\n';
+    return EXIT_FAILURE;
+    }
+  std::string sfn(argv[1]);
+
+  otb::SoilDataBase sdb(sfn, 1000);
+  auto db = sdb.GetDB();
 
 
-  return EXIT_FAILURE;
+  // auto wlmin = static_cast<unsigned int>(std::stoi(argv[2]));
+  // auto wlmax = static_cast<unsigned int>(std::stoi(argv[3]));
+  // auto wlstep = static_cast<unsigned int>(std::stoi(argv[4]));
+  // for(unsigned int wl=wlmin; wl<=wlmax; wl+=wlstep)
+  //   {
+  //   std::cout << wl << " ";
+  //   for(size_t i=0; i<db.size(); ++i)
+  //     {
+  //     std::cout << db[i][wl] << " ";
+  //     }
+  //   std::cout << '\n';
+  //   }
+
+  for(unsigned int i=5; i<static_cast<unsigned int>(argc); i+=3)
+    {
+    auto wltest = std::stoi(argv[i]);
+    auto sindex = std::stoi(argv[i+1]);
+    auto refltest = std::stod(argv[i+2]);
+    auto read_refl = db[sindex][wltest];
+    std::cout << refltest << " " << read_refl << "\n";
+    if(fabs(refltest-read_refl)>10e-5)
+        return EXIT_FAILURE;
+
+    read_refl = sdb.GetReflectance(sindex, wltest);
+    if(fabs(refltest-read_refl)>10e-5)
+      return EXIT_FAILURE;
+
+    }
+
+  for(unsigned int i=5; i<static_cast<unsigned int>(argc); i+=3)
+    {
+    auto wltest = std::stoi(argv[i]);
+    auto sindex = std::stoi(argv[i+1]);
+    auto refltest = std::stod(argv[i+2]);
+    auto read_refl = db[sindex][wltest];
+
+    read_refl = sdb.GetReflectance(sindex, wltest+1);
+    if(fabs(refltest-read_refl)>10e-2)
+      {
+      std::cout << refltest << " " << read_refl << '\n';
+      return EXIT_FAILURE;
+      }
+
+    }
+
+  return EXIT_SUCCESS;
 }

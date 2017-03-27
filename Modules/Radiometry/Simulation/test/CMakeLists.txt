@@ -57,7 +57,7 @@ otbSoilDBTest.cxx
 )
 
 add_executable(otbSimulationTestDriver ${OTBSimulationTests})
-target_link_libraries(otbSimulationTestDriver ${OTBSimulation-Test_LIBRARIES})
+target_link_libraries(otbSimulationTestDriver ${OTBSimulation-Test_LIBRARIES} )
 otb_module_target_label(otbSimulationTestDriver)
 
 # Tests Declaration
@@ -320,4 +320,21 @@ otb_add_test(NAME raTuFilterFunctionValuesTest COMMAND otbSimulationTestDriver
   0.2 0.5 0.3 0.9 0.8 # vector
   )
 
-otb_add_test(NAME siTvSoilDataParseFile COMMAND otbSimulationTestDriver otbSoilDataBaseParseFile)
+otb_add_test(NAME siTvSoilDataParseFile COMMAND otbSimulationTestDriver otbSoilDataBaseParseFile
+  ${INPUTDATA}/Radiometry/Soils/sols_avignon_1990.txt
+  400 # wlmin
+  2450# wlmax
+  10  # wlstep
+  400 # wltest
+  0   # soil index test
+  1.0200000e-001 # refl test
+  460
+  2
+  6.2000000e-002
+  2440
+  134
+  6.8700000e-001
+  2450
+  133
+  6.0800000e-001
+  )
