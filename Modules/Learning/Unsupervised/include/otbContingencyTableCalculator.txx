@@ -26,6 +26,7 @@
 #include "itkListSample.h"
 
 #include <set>
+#include <iterator>
 
 namespace otb
 {
