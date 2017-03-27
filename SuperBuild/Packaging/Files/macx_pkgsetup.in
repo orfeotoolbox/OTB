@@ -233,7 +233,7 @@ GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
 if [ -z "\$OTB_APPLICATION_PATH" ] || [ "\$OTB_APPLICATION_PATH" = "" ]; then
     OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 else
-    OTB_APPLICATION_PATH=\$(readlink -f "\$OTB_APPLICATION_PATH")
+    OTB_APPLICATION_PATH=\$(cd "\$OTB_APPLICATION_PATH" 2>/dev/null && pwd -P)
     if ! [ "\$OTB_APPLICATION_PATH" = "$OUT_DIR/lib/otb/applications" ]; then
       OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications:\$OTB_APPLICATION_PATH
     fi

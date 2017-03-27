@@ -41,6 +41,14 @@ foreach(f ${meta})
     set(${otb-module-test}_TESTS_FOR ${otb-module})
   endif()
 
+  # Exclude remote modules from default modules so that they are
+  # enabled/disabled using their variable Module_XXXX
+  get_filename_component(_group ${${otb-module}_BASE} PATH)
+  get_filename_component(_group ${_group} NAME)
+  if("${_group}" STREQUAL "Remote")
+    set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 1)
+  endif()
+
   # Reject bad dependencies.
   string(REGEX MATCHALL ";(OTBDeprecated|OTBReview|OTBIntegratedTest);"
     _bad_deps ";${OTB_MODULE_${otb-module}_DEPENDS};${OTB_MODULE_${otb-module-test}_DEPENDS};")
@@ -152,6 +160,9 @@ macro(otb_module_enable otb-module _needed_by)
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_DEPENDS)
       otb_module_enable(${dep} ${otb-module})
     endforeach()
+    foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
+      otb_module_enable(${dep} ${otb-module})
+    endforeach()
     if(${otb-module}_TESTED_BY AND (OTB_BUILD_DEFAULT_MODULES OR OTB_BUILD_ALL_MODULES_FOR_TESTS OR Module_${otb-module}))
       otb_module_enable(${${otb-module}_TESTED_BY} "")
     endif()
@@ -191,7 +202,7 @@ foreach(otb-module ${OTB_MODULES_ALL})
   if(${otb-module}_ENABLED)
     # check cxx11 requirement after all enable/disable macros have been passed
     if(OTB_MODULE_${otb-module}_REQUIRES_CXX11 AND NOT OTB_HAS_CXX11)
-      message(FATAL_ERROR "Module ${otb-module} requires C++11 support. Consider adding --std=c++11 to your compiler flags or disabling it.")
+      message(FATAL_ERROR "Module ${otb-module} requires C++11 support. Consider adding -std=c++11 to your compiler flags or disabling it.")
     endif()
 
     list(APPEND OTB_MODULES_ENABLED ${otb-module})

@@ -419,7 +419,8 @@ private:
  * and spectral value, with respect to its neighbors, until convergence to a
  * local mode. The map of the distance traveled by pixels is obtained by
  * GetSpatialOutput(). A map of detected local modes is also available in
- * GetLabelOutput() and can be seen as a first segmentation of the input image,
+ * GetLabelOutput() if mode search is set to true (default set to false)
+ * and can be seen as a first segmentation of the input image,
  * although usually highly oversegmented.
  * Finally, GetIterationOutput() will return the number of algorithm iterations
  * for each pixel.
