@@ -53,6 +53,7 @@ otbSailReflVTest.cxx
 otbSatelliteRSRNew.cxx
 otbSailReflHTest.cxx
 otbFilterFunctionValues.cxx
+otbSoilDBTest.cxx
 )
 
 add_executable(otbSimulationTestDriver ${OTBSimulationTests})
@@ -318,3 +319,5 @@ otb_add_test(NAME raTuFilterFunctionValuesTest COMMAND otbSimulationTestDriver
   0.05            # user step
   0.2 0.5 0.3 0.9 0.8 # vector
   )
+
+otb_add_test(NAME siTvSoilDataParseFile COMMAND otbSimulationTestDriver otbSoilDataBaseParseFile)

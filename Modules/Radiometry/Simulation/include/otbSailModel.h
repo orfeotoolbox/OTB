@@ -25,6 +25,8 @@
 #include "otbSpectralResponse.h"
 #include "otbDataSpecP5B.h"
 #include "otbSimulationStep2Base.h"
+#include "otbSoilDataBase.h"
+#include <string>
 
 namespace otb
 {
@@ -100,6 +102,18 @@ class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
       itkSetMacro(PSI, double);
       itkGetMacro(PSI, double);
 
+      /** Use an external soil file */
+      itkSetMacro(UseSoilFile, bool);
+      itkGetMacro(UseSoilFile, bool);
+
+      /** External soil file name */
+      itkSetMacro(SoilFileName, std::string);
+      itkGetMacro(SoilFileName, std::string);
+
+      /** Index of the soil in the external soil file */
+      itkSetMacro(SoilIndex, size_t);
+      itkGetMacro(SoilIndex, size_t);
+
       /** Get the computed fcover */
       itkGetMacro(FCoverView, double);
 
@@ -139,7 +153,7 @@ class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
       /** Volscatt */
       void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result);
 
-   private:
+private:
       SailModel(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
@@ -152,6 +166,10 @@ class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
       double m_TTO; //observer zenith angle
       double m_PSI; //azimuth
       double m_FCoverView; //fCover in the viewing direction
+      bool m_UseSoilFile; //use a soil file instead of DataSpecP5B
+      std::string m_SoilFileName; //the soil file to use
+      size_t m_SoilIndex; //which soil in the soil file
+      soildata::SoilDataBase m_SoilDataBase;
 };
 
 }// end namespace otb
