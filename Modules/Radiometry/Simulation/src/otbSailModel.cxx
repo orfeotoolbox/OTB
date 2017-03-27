@@ -36,10 +36,10 @@ SailModel
 ::SailModel() : m_LAI(2), m_Angl(50), m_PSoil(1), m_Skyl(70), m_HSpot(0.2),
                 m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0)
 {
-   this->ProcessObject::SetNumberOfRequiredInputs(2);
-   this->ProcessObject::SetNumberOfRequiredOutputs(4);
+  this->ProcessObject::SetNumberOfRequiredInputs(2);
+  this->ProcessObject::SetNumberOfRequiredOutputs(4);
 
-   SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
+  SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
    this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
 
    SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
@@ -319,7 +319,14 @@ SailModel
       // Soil Reflectance Properties
       //rsoil1 = dry soil
       //rsoil2 = wet soil
-      rsoil0 = m_PSoil*Rsoil1+(1-m_PSoil)*Rsoil2;
+      if(!m_UseSoilFile)
+        {
+        rsoil0 = m_PSoil*Rsoil1+(1-m_PSoil)*Rsoil2;
+        }
+      else
+        {
+        rsoil0 = m_SoilDataBase->GetReflectance(m_SoilIndex, lambda)*m_PSoil;
+        }
 
       // Here rho and tau come in
       sigb = ddb*rho+ddf*tau;
@@ -339,94 +346,94 @@ SailModel
       // Here the LAI comes in
       // Outputs for the case LAI = 0
       if (m_LAI<0)
-      {
-         //tss = 1;
-         too = 1;
-         tsstoo = 1;
-         rdd = 0;
-         tdd = 1;
-         rsd = 0;
-         tsd = 0;
-         rdo = 0;
-         tdo = 0;
-         //rso = 0;
-         rsos = 0;
-         rsod = 0;
+          {
+          //tss = 1;
+          too = 1;
+          tsstoo = 1;
+          rdd = 0;
+          tdd = 1;
+          rsd = 0;
+          tsd = 0;
+          rdo = 0;
+          tdo = 0;
+          //rso = 0;
+          rsos = 0;
+          rsod = 0;
 
-         rddt = rsoil0;
-         rsdt = rsoil0;
-         rdot = rsoil0;
-         rsodt = 0;
-         rsost = rsoil0;
-         //rsot = rsoil0;
-      }
+          rddt = rsoil0;
+          rsdt = rsoil0;
+          rdot = rsoil0;
+          rsodt = 0;
+          rsost = rsoil0;
+          //rsot = rsoil0;
+          }
 
-      // Other cases (LAI > 0)
-      e1 = exp(-m*m_LAI);
-      e2 = e1*e1;
-      rinf = (att-m)/sigb;
-      rinf2 = rinf*rinf;
-      re = rinf*e1;
-      denom = 1.-rinf2*e2;
+        // Other cases (LAI > 0)
+        e1 = exp(-m*m_LAI);
+        e2 = e1*e1;
+        rinf = (att-m)/sigb;
+        rinf2 = rinf*rinf;
+        re = rinf*e1;
+        denom = 1.-rinf2*e2;
 
-      J1ks=Jfunc1(ks, m, m_LAI);
-      J2ks=Jfunc2(ks, m, m_LAI);
-      J1ko=Jfunc1(ko, m, m_LAI);
-      J2ko=Jfunc2(ko, m, m_LAI);
+        J1ks=Jfunc1(ks, m, m_LAI);
+        J2ks=Jfunc2(ks, m, m_LAI);
+        J1ko=Jfunc1(ko, m, m_LAI);
+        J2ko=Jfunc2(ko, m, m_LAI);
 
-      Ps = (sf+sb*rinf)*J1ks;
-      Qs = (sf*rinf+sb)*J2ks;
-      Pv = (vf+vb*rinf)*J1ko;
-      Qv = (vf*rinf+vb)*J2ko;
+        Ps = (sf+sb*rinf)*J1ks;
+        Qs = (sf*rinf+sb)*J2ks;
+        Pv = (vf+vb*rinf)*J1ko;
+        Qv = (vf*rinf+vb)*J2ko;
 
-      rdd = rinf*(1.-e2)/denom;
-      tdd = (1.-rinf2)*e1/denom;
-      tsd = (Ps-re*Qs)/denom;
-      rsd = (Qs-re*Ps)/denom;
-      tdo = (Pv-re*Qv)/denom;
-      rdo = (Qv-re*Pv)/denom;
+        rdd = rinf*(1.-e2)/denom;
+        tdd = (1.-rinf2)*e1/denom;
+        tsd = (Ps-re*Qs)/denom;
+        rsd = (Qs-re*Ps)/denom;
+        tdo = (Pv-re*Qv)/denom;
+        rdo = (Qv-re*Pv)/denom;
 
-      tss = exp(-ks*m_LAI);
-      too = exp(-ko*m_LAI);
-      z = Jfunc3(ks, ko, m_LAI);
-      g1 = (z-J1ks*too)/(ko+m);
-      g2 = (z-J1ko*tss)/(ks+m);
+        tss = exp(-ks*m_LAI);
+        too = exp(-ko*m_LAI);
+        z = Jfunc3(ks, ko, m_LAI);
+        g1 = (z-J1ks*too)/(ko+m);
+        g2 = (z-J1ko*tss)/(ks+m);
 
-      Tv1 = (vf*rinf+vb)*g1;
-      Tv2 = (vf+vb*rinf)*g2;
-      T1 = Tv1*(sf+sb*rinf);
-      T2 = Tv2*(sf*rinf+sb);
-      T3 = (rdo*Qs+tdo*Ps)*rinf;
+        Tv1 = (vf*rinf+vb)*g1;
+        Tv2 = (vf+vb*rinf)*g2;
+        T1 = Tv1*(sf+sb*rinf);
+        T2 = Tv2*(sf*rinf+sb);
+        T3 = (rdo*Qs+tdo*Ps)*rinf;
 
-      // Multiple scattering contribution to bidirectional canopy reflectance
-      rsod = (T1+T2-T3)/(1.-rinf2);
+        // Multiple scattering contribution to bidirectional canopy reflectance
+        rsod = (T1+T2-T3)/(1.-rinf2);
 
-      // Treatment of the hotspot-effect
-      alf=1e6;
-      // Apply correction 2/(K+k) suggested by F.-M. Bron
-      if (m_HSpot>0) alf=(dso/m_HSpot)*2./(ks+ko);
-      if (alf>200) alf=200;
-      if (alf==0)
-      {
-         // The pure hotspot - no shadow
-         tsstoo = tss;
-         sumint = (1-tss)/(ks*m_LAI);
-      }
-      else
-      {
-         // Outside the hotspot
-         fhot=m_LAI*vcl_sqrt(ko*ks);
-         // Integrate by exponential Simpson method in 20 steps
-         // the steps are arranged according to equal partitioning
-         // of the slope of the joint probability function
-         x1=0;
-         y1=0;
-         f1=1;
-         fint=(1.-exp(-alf))*0.05;
-         sumint=0;
+        // Treatment of the hotspot-effect
+        alf=1e6;
+        // Apply correction 2/(K+k) suggested by F.-M. Bron
+        if (m_HSpot>0) alf=(dso/m_HSpot)*2./(ks+ko);
+        if (alf>200) alf=200;
+        if (alf==0)
+          {
+          // The pure hotspot - no shadow
+          tsstoo = tss;
+          sumint = (1-tss)/(ks*m_LAI);
+          }
+        else
+          {
+          // Outside the hotspot
+          fhot=m_LAI*vcl_sqrt(ko*ks);
+          // Integrate by exponential Simpson method in 20 steps
+          // the steps are arranged according to equal partitioning
+          // of the slope of the joint probability function
+          x1=0;
+          y1=0;
+          f1=1;
+          fint=(1.-exp(-alf))*0.05;
+          sumint=0;
 
-         for(unsigned int j=1; j<=20; ++j)
-         {
+          for(unsigned int j=1; j<=20; ++j)
+            {
             if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
             else x2 = 1;
             y2 = -(ko+ks)*m_LAI*x2+fhot*(1.-exp(-alf*x2))/alf;
@@ -435,13 +442,13 @@ SailModel
             x1=x2;
             y1=y2;
             f1=f2;
-         }
-         tsstoo=f1;
-      }
+            }
+          tsstoo=f1;
+          }
 
-      // Bidirectional reflectance
-      // Single scattering contribution
-      rsos = w*m_LAI*sumint;
+        // Bidirectional reflectance
+        // Single scattering contribution
+        rsos = w*m_LAI*sumint;
       // Total canopy contribution
       // rso=rsos+rsod;
       //Interaction with the soil
@@ -710,5 +717,13 @@ SailModel
 {
    Superclass::PrintSelf(os, indent);
 
+}
+
+void SailModel::UseExternalSoilFile(std::string SoilFileName, size_t SoilIndex, double WlFactor)
+{
+  m_UseSoilFile = true;
+  m_SoilFileName = SoilFileName;
+  m_SoilIndex = SoilIndex;
+  m_SoilDataBase = std::make_unique<SoilDataBase>(SoilFileName, WlFactor);
 }
 } // end namespace otb
