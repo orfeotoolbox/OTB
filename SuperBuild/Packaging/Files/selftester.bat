@@ -122,7 +122,7 @@ if not exist bin\otbgui_%app%.bat (
 )
 if %app_count% geq 2 goto :check_application_end
 type NUL > tmp.log
-start /b bin\otbgui_%app%.bat ^> tmp.log ^2^>^&^1
+start "otbgui application" /b bin\otbgui_%app%.bat ^> tmp.log ^2^>^&^1
 timeout 5 >nul
 call :get_child_pid %CURRENT_PID% cmd.exe
 set first_child=0
@@ -154,7 +154,7 @@ set appName=%1
 set delay=5
 if not -%2-==-- set delay=%2
 type NUL > tmp.log
-start /b bin\%appName%.exe > tmp.log 2>&1
+start "Desktop app" /b bin\%appName%.exe > tmp.log 2>&1
 timeout %delay% >nul
 call :get_child_pid %CURRENT_PID% %appName%.exe
 if %child_pid% gtr 1 (
