@@ -25,3 +25,12 @@ otb_test_application(NAME apTvRaSarRadiometricCalibration_RADARSAT2
   VALID   --compare-image ${EPSILON_5}
   ${BASELINE}/raTvSarRadiometricCalibration_RADARSAT2.tif
   ${TEMP}/apTvRaSarRadiometricCalibration_RADARSAT2.tif )
+
+otb_test_application(NAME apTvRaSarDeburst_SENTINEL1
+  APP  SARDeburst
+  OPTIONS -in ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.tif
+  -out ${TEMP}/apTvRaSarDeburst_SENTINEL1_output.tif uint16
+  VALID --compare-image ${NOTOL}
+  # Same baseline as filter test
+  ${BASELINE}/saTvSarDeburstImageFilterTestOutput.tif
+  ${TEMP}/apTvRaSarDeburst_SENTINEL1_output.tif)

@@ -88,10 +88,27 @@ int main(int argc, char * argv[])
          sensor->print(std::clog);
       }
 
-      const bool validate = inverse == inv
+      
+      bool validate = inverse == inv
          ? sensor->autovalidateInverseModelFromGCPs()
          : sensor->autovalidateForwardModelFromGCPs()
          ;
+      
+      std::vector<std::pair<unsigned long, unsigned long> > deburstLines;
+
+      std::cout<<"Trying to deburst data ..."<<std::endl;
+      bool deburstOk = sensor->deburst(deburstLines);
+      std::cout<<"Deburst succeed: "<<(deburstOk?"yes":"no")<<std::endl;
+
+      if(deburstOk)
+        {
+
+        std::cout<<"Validation with deburst model"<<std::endl;
+        
+        validate = validate && (inverse == inv
+                                ? sensor->autovalidateInverseModelFromGCPs()
+                                : sensor->autovalidateForwardModelFromGCPs());
+        }
 
       std::cout << "Validate: " << validate << "\n";
       return validate ? EXIT_SUCCESS : EXIT_FAILURE;

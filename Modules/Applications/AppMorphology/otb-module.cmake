@@ -6,6 +6,7 @@ otb_module(OTBAppMorphology
     OTBObjectList
     OTBITK
     OTBApplicationEngine
+    OTBMorphologicalProfiles
 
   TEST_DEPENDS
     OTBTestKernel

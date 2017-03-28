@@ -241,6 +241,13 @@ function(is_file_executable2 file_var result_var)
       return()
     endif()
 
+    # detect shared libraries on Mac OSX
+    # where "file" gives "Mach-O 64-bit x86_64 bundle"
+    if("${file_ov}" MATCHES "mach-o.*bundle")
+      set(${result_var} 1 PARENT_SCOPE)
+      return()
+    endif()
+
   endif(APPLE)
 
 endfunction()

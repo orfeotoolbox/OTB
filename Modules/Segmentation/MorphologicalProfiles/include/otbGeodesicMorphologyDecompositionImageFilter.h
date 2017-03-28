@@ -174,6 +174,8 @@ private:
   bool m_PreserveIntensities;
   /** Use fully connected morphological operators */
   bool m_FullyConnected;
+  /** Progress accumulator to report internal filter progress */
+  itk::ProgressAccumulator::Pointer m_Progress;
 
 };
 } // End namespace otb
