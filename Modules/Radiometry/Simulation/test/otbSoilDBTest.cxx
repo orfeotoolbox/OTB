@@ -35,20 +35,6 @@ int otbSoilDataBaseParseFile(int argc, char * argv[])
   otb::SoilDataBase sdb(sfn, 1000);
   auto db = sdb.GetDB();
 
-
-  // auto wlmin = static_cast<unsigned int>(std::stoi(argv[2]));
-  // auto wlmax = static_cast<unsigned int>(std::stoi(argv[3]));
-  // auto wlstep = static_cast<unsigned int>(std::stoi(argv[4]));
-  // for(unsigned int wl=wlmin; wl<=wlmax; wl+=wlstep)
-  //   {
-  //   std::cout << wl << " ";
-  //   for(size_t i=0; i<db.size(); ++i)
-  //     {
-  //     std::cout << db[i][wl] << " ";
-  //     }
-  //   std::cout << '\n';
-  //   }
-
   for(unsigned int i=5; i<static_cast<unsigned int>(argc); i+=3)
     {
     auto wltest = std::stoi(argv[i]);
