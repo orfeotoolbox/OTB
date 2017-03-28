@@ -34,22 +34,22 @@ namespace otb
 /** Constructor */
 SailModel
 ::SailModel() : m_LAI(2), m_Angl(50), m_PSoil(1), m_Skyl(70), m_HSpot(0.2),
-                m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0)
+                m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0), m_UseSoilFile(false)
 {
   this->ProcessObject::SetNumberOfRequiredInputs(2);
   this->ProcessObject::SetNumberOfRequiredOutputs(4);
 
   SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
+  this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
 
-   SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(1, hRefl.GetPointer());
+  SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(1, hRefl.GetPointer());
 
-   SpectralResponseType::Pointer vAbs = static_cast<SpectralResponseType *>(this->MakeOutput(2).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(2, vAbs.GetPointer());
+  SpectralResponseType::Pointer vAbs = static_cast<SpectralResponseType *>(this->MakeOutput(2).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(2, vAbs.GetPointer());
 
-   SpectralResponseType::Pointer hAbs = static_cast<SpectralResponseType *>(this->MakeOutput(3).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(3, hAbs.GetPointer());
+  SpectralResponseType::Pointer hAbs = static_cast<SpectralResponseType *>(this->MakeOutput(3).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(3, hAbs.GetPointer());
 }
 
 /** Destructor */
@@ -62,112 +62,112 @@ void
 SailModel
 ::SetReflectance(const SpectralResponseType * object)
 {
-   this->itk::ProcessObject::SetNthInput(0, const_cast<SpectralResponseType *>(object));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<SpectralResponseType *>(object));
 }
 
 SailModel::SpectralResponseType *
 SailModel
 ::GetReflectance()
-{
-   if(this->GetNumberOfInputs() != 2)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(0));
-}
+                  {
+                    if(this->GetNumberOfInputs() != 2)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(0));
+                  }
 
 /** Set/Get input transmittance */
-void
-SailModel
-::SetTransmittance(const SpectralResponseType * object)
-{
-   this->itk::ProcessObject::SetNthInput(1, const_cast<SpectralResponseType *>(object));
-}
+                  void
+                  SailModel
+                  ::SetTransmittance(const SpectralResponseType * object)
+                  {
+                    this->itk::ProcessObject::SetNthInput(1, const_cast<SpectralResponseType *>(object));
+                  }
 
-SailModel::SpectralResponseType *
-SailModel
-::GetTransmittance()
-{
-   if(this->GetNumberOfInputs() != 2)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(1));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetTransmittance()
+                  {
+                    if(this->GetNumberOfInputs() != 2)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(1));
+                  }
 
 /** Make output */
-SailModel::DataObjectPointer
-SailModel
-::MakeOutput(DataObjectPointerArraySizeType)
-{
-   return static_cast<itk::DataObject*>(SpectralResponseType::New().GetPointer());
-}
+                  SailModel::DataObjectPointer
+                  SailModel
+                  ::MakeOutput(DataObjectPointerArraySizeType)
+                  {
+                    return static_cast<itk::DataObject*>(SpectralResponseType::New().GetPointer());
+                  }
 
 /** Get output viewing reflectance */
-SailModel::SpectralResponseType *
-SailModel
-::GetViewingReflectance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetViewingReflectance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
+                  }
 
 /** Get output hemispherical reflectance */
-SailModel::SpectralResponseType *
-SailModel
-::GetHemisphericalReflectance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetHemisphericalReflectance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
+                  }
 
 /** Get output viewing absorptance */
-SailModel::SpectralResponseType *
-SailModel
-::GetViewingAbsorptance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(2));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetViewingAbsorptance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(2));
+                  }
 
 /** Get output hemispherical absorptance */
-SailModel::SpectralResponseType *
-SailModel
-::GetHemisphericalAbsorptance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(3));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetHemisphericalAbsorptance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(3));
+                  }
 
 
 /** Set Parameters */
-void
-SailModel
-::SetInput(const ParametersType & params)
-{
+                  void
+                  SailModel
+                  ::SetInput(const ParametersType & params)
+                  {
 
-   if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI, Angl, PSoil, Skyl, HSpot, TTS, TTO, PSI" );
-   this->SetParameters(params);
-   m_LAI=params[0];
-   m_Angl=params[1];
+                    if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI, Angl, PSoil, Skyl, HSpot, TTS, TTO, PSI" );
+                    this->SetParameters(params);
+                    m_LAI=params[0];
+                    m_Angl=params[1];
    m_PSoil=params[2];
    m_Skyl=params[3];
    m_HSpot=params[4];
