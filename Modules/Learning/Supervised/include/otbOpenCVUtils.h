@@ -41,9 +41,28 @@
 #include <opencv2/ml/ml.hpp>
 #endif
 
+#include "otb_opencv_api.h"
+
 #include "OTBSupervisedExport.h"
 
 #include "itkListSample.h"
+
+#ifdef OTB_OPENCV_3
+#define CV_TYPE_NAME_ML_SVM         "opencv-ml-svm"
+#define CV_TYPE_NAME_ML_RTREES      "opencv-ml-random-trees"
+#define CV_TYPE_NAME_ML_BOOSTING    "opencv-ml-boost-tree"
+#define CV_TYPE_NAME_ML_ANN_MLP     "opencv-ml-ann-mlp"
+#define CV_TYPE_NAME_ML_NBAYES      "opencv-ml-bayesian"
+#define CV_TYPE_NAME_ML_TREE        "opencv-ml-tree"
+
+#define CvSVM cv::ml::SVM
+#define CvANN_MLP_TrainParams cv::ml::ANN_MLP
+#define CvANN_MLP cv::ml::ANN_MLP
+#define CvBoost cv::ml::Boost
+
+#define CV_VAR_NUMERICAL cv::ml::VAR_NUMERICAL
+#define CV_VAR_CATEGORICAL cv::ml::VAR_CATEGORICAL
+#endif
 
 namespace otb
 {

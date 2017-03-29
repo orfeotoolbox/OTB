@@ -59,8 +59,23 @@ if ( opencv_INCLUDE_DIR )
   if(NOT OpenCV_VERSION)
     file(READ "${opencv_INCLUDE_DIR}/opencv2/core/version.hpp" _header_content)
 
-    string(REGEX MATCH  ".*# *define +CV_VERSION_EPOCH +([0-9]+).*" matched ${_header_content})
-    if( matched)
+    # detect the type of version file (2.3.x , 2.4.x or 3.x)
+    string(REGEX MATCH  ".*# *define +CV_VERSION_EPOCH +([0-9]+).*" has_epoch ${_header_content})
+    string(REGEX MATCH  ".*# *define +CV_MAJOR_VERSION +([0-9]+).*" has_old_major ${_header_content})
+    string(REGEX MATCH  ".*# *define +CV_MINOR_VERSION +([0-9]+).*" has_old_minor ${_header_content})
+    string(REGEX MATCH  ".*# *define +CV_SUBMINOR_VERSION +([0-9]+).*" has_old_subminor ${_header_content})
+
+    if(has_old_major AND has_old_minor AND has_old_subminor)
+      #for opencv 2.3.x
+      string(REGEX REPLACE ".*# *define +CV_MAJOR_VERSION +([0-9]+).*" "\\1"
+        OpenCV_VERSION_MAJOR ${_header_content})
+      string(REGEX REPLACE ".*# *define +CV_MINOR_VERSION +([0-9]+).*" "\\1"
+        OpenCV_VERSION_MINOR ${_header_content})
+      string(REGEX REPLACE ".*# *define +CV_SUBMINOR_VERSION +([0-9]+).*" "\\1"
+        OpenCV_VERSION_PATCH ${_header_content})
+      set(OpenCV_VERSION_TWEAK)
+    elseif(has_epoch)
+      # for opencv 2.4.x
       string(REGEX REPLACE ".*# *define +CV_VERSION_EPOCH +([0-9]+).*" "\\1"
         OpenCV_VERSION_MAJOR ${_header_content})
       string(REGEX REPLACE ".*# *define +CV_VERSION_MAJOR +([0-9]+).*" "\\1"
@@ -70,12 +85,11 @@ if ( opencv_INCLUDE_DIR )
       string(REGEX REPLACE ".*# *define +CV_VERSION_REVISION +([0-9]+).*" "\\1"
         OpenCV_VERSION_TWEAK ${_header_content})
     else()
-      #for opencv 2.3.x
-      string(REGEX REPLACE ".*# *define +CV_MAJOR_VERSION +([0-9]+).*" "\\1"
+      string(REGEX REPLACE ".*# *define +CV_VERSION_MAJOR +([0-9]+).*" "\\1"
         OpenCV_VERSION_MAJOR ${_header_content})
-      string(REGEX REPLACE ".*# *define +CV_MINOR_VERSION +([0-9]+).*" "\\1"
+      string(REGEX REPLACE ".*# *define +CV_VERSION_MINOR +([0-9]+).*" "\\1"
         OpenCV_VERSION_MINOR ${_header_content})
-      string(REGEX REPLACE ".*# *define +CV_SUBMINOR_VERSION +([0-9]+).*" "\\1"
+      string(REGEX REPLACE ".*# *define +CV_VERSION_REVISION +([0-9]+).*" "\\1"
         OpenCV_VERSION_PATCH ${_header_content})
       set(OpenCV_VERSION_TWEAK)
     endif()

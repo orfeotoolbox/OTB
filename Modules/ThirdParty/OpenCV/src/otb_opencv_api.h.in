@@ -17,15 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef otb_opencv_api_h
+#define otb_opencv_api_h
 
-#ifndef otbRequiresOpenCVCheck_h
-#define otbRequiresOpenCVCheck_h
-
-#include "otbConfigure.h"
-#ifndef OTB_USE_OPENCV
-#  error "You need to enable OpenCV to compile this file"
-#endif
-
-#include "otb_opencv_api.h"
+#cmakedefine OTB_OPENCV_3
 
 #endif

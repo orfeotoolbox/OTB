@@ -225,7 +225,7 @@ int testRegression(SampleGeneratorType& sg, RegressionType& rgrsn, RegressionTes
 
   rmse = sqrt( rmse / static_cast<double>(param.count) );
   std::cout << "RMSE = "<< rmse << std::endl;
-  if(rmse > param.eps)
+  if(rmse > param.eps || vnl_math_isnan(rmse))
     {
     std::cout << "Failed : RMSE above expected precision !" << std::endl;
     return EXIT_FAILURE;
@@ -317,9 +317,8 @@ MachineLearningModelRegressionType::Pointer getNeuralNetworkRegressionModel(unsi
   regression->SetBackPropDWScale(0.1);
   regression->SetBackPropMomentScale(0.1);
   regression->SetRegPropDW0(0.1);
-  regression->SetRegPropDWMin(1e-7);
   regression->SetTermCriteriaType(CV_TERMCRIT_EPS);
-  regression->SetEpsilon(1e-5);
+  regression->SetEpsilon(1e-6);
   regression->SetMaxIter(1e4);
   return regression.GetPointer();
 }
@@ -334,7 +333,7 @@ int otbNeuralNetworkRegressionTests(int itkNotUsed(argc),
   RegressionTestParam param;
   param.vMin = -0.5;
   param.vMax = 0.5;
-  param.count = 20000;
+  param.count = 2000;
   param.eps = otb_epsilon_01;
 
   std::cout << "Testing regression on a linear monovariate function" << std::endl;
@@ -493,7 +492,7 @@ int otbDecisionTreeRegressionTests(int itkNotUsed(argc),
   return status;
 }
 
-
+#ifndef OTB_OPENCV_3
 MachineLearningModelRegressionType::Pointer getGradientBoostedTreeRegressionModel()
 {
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueRegressionType,
@@ -554,6 +553,7 @@ int otbGradientBoostedTreeRegressionTests(int itkNotUsed(argc),
     }
   return status;
 }
+#endif
 
 
 MachineLearningModelRegressionType::Pointer getKNearestNeighborsRegressionModel()
@@ -650,7 +650,7 @@ int otbRandomForestsRegressionTests(int itkNotUsed(argc),
   std::cout << "Testing regression on a bilinear function" << std::endl;
   BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
   // increase number of training samples for bilinear function
-  param.count = 1000;
+  param.count = 1500;
   regression = getRandomForestsRegressionModel();
   ret = testRegression(bfsg,regression,param);
   if (ret == EXIT_FAILURE)
