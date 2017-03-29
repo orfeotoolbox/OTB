@@ -26,7 +26,7 @@ Extract XDK
     chmod +x OTB-|release|-xdk-Linux64.run
     ./OTB-|release|-xdk-Linux64.run
 
-**You now will have a directory named **OTB-|release|-xdk-Linux64** in **/opt**
+**You now will have a directory named OTB-|release|-xdk-Linux64 in \'/opt\'**
 
 Setup environment
 -----------------
@@ -55,12 +55,21 @@ Download, Configure and build OTB
 
     mkdir -p /opt/OTB/build && cd /opt/OTB
     git clone --depth=1 --branch=develop https://git@git.orfeo-toolbox.org/git/otb.git source
-    cd build && cmake ../source
+    cd build && cmake ../source 
     make -j2
 
 
 Notes
 ~~~~~
 
-By default, all OTB\_USE\_\* variables in OTB are set to FALSE except for 6S and SiftFast. You can check/activate them in your cmake-gui/ccmake.
+* By default, all OTB\_USE\_\* variables in OTB are set to FALSE except for 6S and SiftFast. You can check/activate them in your cmake-gui/ccmake.
+
+* If you need to activate Qt4 modules (Monteverdi, Ice, QtWidget, ApplicationEngine ..), you must set *QT_BINARY_DIR*.
+
+::
+
+    cd /opt/OTB/build && cmake -DOTB_USE_QT4=TRUE -DQT_BINARY_DIR=$CMAKE_PREFIX_PATH/bin
+
+This is because Qt tools ( moc, rcc, et al) are reported as not found by cmake due to incorrect path in "qmake -query"
+
 

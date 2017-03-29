@@ -1,13 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// "Copyright Centre National d'Etudes Spatiales"
-//
-// License:  LGPL-2
-//
-// See LICENSE.txt file in the top level directory for more details.
-//
-//----------------------------------------------------------------------------
-// $Id$
+/*
+ * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is licensed under MIT license:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 
 #if defined(__GNUC__) || defined(__clang__)
 # pragma GCC diagnostic push
@@ -88,10 +102,27 @@ int main(int argc, char * argv[])
          sensor->print(std::clog);
       }
 
-      const bool validate = inverse == inv
+      
+      bool validate = inverse == inv
          ? sensor->autovalidateInverseModelFromGCPs()
          : sensor->autovalidateForwardModelFromGCPs()
          ;
+      
+      std::vector<std::pair<unsigned long, unsigned long> > deburstLines;
+
+      std::cout<<"Trying to deburst data ..."<<std::endl;
+      bool deburstOk = sensor->deburst(deburstLines);
+      std::cout<<"Deburst succeed: "<<(deburstOk?"yes":"no")<<std::endl;
+
+      if(deburstOk)
+        {
+
+        std::cout<<"Validation with deburst model"<<std::endl;
+        
+        validate = validate && (inverse == inv
+                                ? sensor->autovalidateInverseModelFromGCPs()
+                                : sensor->autovalidateForwardModelFromGCPs());
+        }
 
       std::cout << "Validate: " << validate << "\n";
       return validate ? EXIT_SUCCESS : EXIT_FAILURE;

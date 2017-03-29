@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 # This script sorts out the module dependencies, provides user options for customizing
 # the list of modules to be built, and enables modules accordingly.
 
@@ -19,6 +39,14 @@ foreach(f ${meta})
     set(${otb-module-test}_IS_TEST 1)
     set(${otb-module}_TESTED_BY ${otb-module-test})
     set(${otb-module-test}_TESTS_FOR ${otb-module})
+  endif()
+
+  # Exclude remote modules from default modules so that they are
+  # enabled/disabled using their variable Module_XXXX
+  get_filename_component(_group ${${otb-module}_BASE} PATH)
+  get_filename_component(_group ${_group} NAME)
+  if("${_group}" STREQUAL "Remote")
+    set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 1)
   endif()
 
   # Reject bad dependencies.
@@ -132,6 +160,9 @@ macro(otb_module_enable otb-module _needed_by)
     foreach(dep IN LISTS OTB_MODULE_${otb-module}_DEPENDS)
       otb_module_enable(${dep} ${otb-module})
     endforeach()
+    foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
+      otb_module_enable(${dep} ${otb-module})
+    endforeach()
     if(${otb-module}_TESTED_BY AND (OTB_BUILD_DEFAULT_MODULES OR OTB_BUILD_ALL_MODULES_FOR_TESTS OR Module_${otb-module}))
       otb_module_enable(${${otb-module}_TESTED_BY} "")
     endif()
@@ -171,7 +202,7 @@ foreach(otb-module ${OTB_MODULES_ALL})
   if(${otb-module}_ENABLED)
     # check cxx11 requirement after all enable/disable macros have been passed
     if(OTB_MODULE_${otb-module}_REQUIRES_CXX11 AND NOT OTB_HAS_CXX11)
-      message(FATAL_ERROR "Module ${otb-module} requires C++11 support. Consider adding --std=c++11 to your compiler flags or disabling it.")
+      message(FATAL_ERROR "Module ${otb-module} requires C++11 support. Consider adding -std=c++11 to your compiler flags or disabling it.")
     endif()
 
     list(APPEND OTB_MODULES_ENABLED ${otb-module})

@@ -1,4 +1,24 @@
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 
 DIRNAME_0=$(dirname "$0")
 cd  "$DIRNAME_0"
@@ -28,9 +48,12 @@ EXE_FILES=$(find "$OUT_DIR/bin"  -type f -exec file {} \; | grep -i "Mach-O*.*ex
 for lib_file in $LIBRARY_FILES $EXE_FILES; do
     #echo "adding rpath to $OUT_DIR/$lib_file"
     if [ -f "$lib_file" ]; then
-	#echo "$INSTALL_NAME_TOOL -add_rpath $OUT_DIR/lib $lib_file"
-	$INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$lib_file"
-   fi
+      lib_file_original_rpaths=$(otool -l "$lib_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
+      for original_rpath in $lib_file_original_rpaths; do
+        $INSTALL_NAME_TOOL "-delete_rpath" "$original_rpath" "$lib_file"
+      done
+      $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$lib_file"
+    fi
 done
 
 
@@ -50,12 +73,15 @@ if [ "$I_AM_XDK" = false ] ; then
     OTB_APP_FILES=$(find "$OUT_DIR/lib/otb/applications" -maxdepth 1 -type f)
     # run install_name_tool
     for app_file in $OTB_APP_FILES; do
-	#echo "adding rpath to $app_file"
-	if [ -f "$app_file" ]; then
-	    $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$app_file"
-	fi
+      #echo "adding rpath to $app_file"
+      if [ -f "$app_file" ]; then
+        $INSTALL_NAME_TOOL "-rpath" "@ORIGINAL_RPATH_TO_REPLACE@" "$OUT_DIR/lib" "$app_file"
+      fi
     done
-    
+    if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ]; then
+      $INSTALL_NAME_TOOL "-rpath" "@ORIGINAL_RPATH_TO_REPLACE@" "$OUT_DIR/lib" "$OUT_DIR/lib/python/_otbApplication.so"
+    fi
+
     rm -fr "Mapla.app"
     rm -fr "Monteveridi.app"
     
@@ -86,7 +112,27 @@ if [ "$I_AM_XDK" = false ] ; then
 EOF
 
     cat > "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla" << EOF
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
@@ -97,7 +143,27 @@ EOF
     chmod +x "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
 
     cat > "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi" << EOF
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 export LC_NUMERIC=C
 export OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
 export GDAL_DATA=$OUT_DIR/share/gdal
@@ -139,17 +205,46 @@ EOF
     sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" "Monteverdi.app/Contents/Info.plist"
 
 cat > "$OUT_DIR/otbenv.profile" << EOF
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 PATH=$OUT_DIR/bin:\$PATH
 PYTHONPATH=$OUT_DIR/lib/python:\$PYTHONPATH
 GDAL_DATA=$OUT_DIR/share/gdal
 GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+if [ -z "\$OTB_APPLICATION_PATH" ] || [ "\$OTB_APPLICATION_PATH" = "" ]; then
+    OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications
+else
+    OTB_APPLICATION_PATH=\$(cd "\$OTB_APPLICATION_PATH" 2>/dev/null && pwd -P)
+    if ! [ "\$OTB_APPLICATION_PATH" = "$OUT_DIR/lib/otb/applications" ]; then
+      OTB_APPLICATION_PATH=$OUT_DIR/lib/otb/applications:\$OTB_APPLICATION_PATH
+    fi
+fi
 
 export LC_NUMERIC=C
 export PATH
 export GDAL_DATA
 export GEOTIFF_CSV
 export PYTHONPATH
+export OTB_APPLICATION_PATH
 EOF
 
 chmod +x "$OUT_DIR/otbenv.profile"

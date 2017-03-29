@@ -1,13 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// "Copyright Centre National d'Etudes Spatiales"
-//
-// License:  LGPL-2
-//
-// See LICENSE.txt file in the top level directory for more details.
-//
-//----------------------------------------------------------------------------
-// $Id$
+/*
+ * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is licensed under MIT license:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 
 #include "ossimSarSensorModel.h"
 #include "ossimKeyWordListUtilities.h"
@@ -821,7 +835,7 @@ namespace ossimplugins
 
    bool ossimSarSensorModel::autovalidateInverseModelFromGCPs(const double & xtol, const double & ytol, const double azTimeTol, const double & rangeTimeTol) const
    {
-      // std::clog << "ossimSarSensorModel::autovalidateInverseModelFromGCPs()\n";
+      std::clog << "ossimSarSensorModel::autovalidateInverseModelFromGCPs()\n";
       if(theGCPRecords.empty())
       {
          return false;
@@ -831,7 +845,7 @@ namespace ossimplugins
 
       unsigned int gcpId = 1;
 
-      // std::clog << theGCPRecords.size() << " GCPS\n";
+      std::clog << theGCPRecords.size() << " GCPS\n";
       for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt,++gcpId)
       {
          ossimDpt estimatedImPt;
@@ -1172,7 +1186,150 @@ namespace ossimplugins
       }
       return false;
    }
+
+bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned long> >& lines)
+{
+  if(theBurstRecords.empty())
+    return false;
+  
+  // First, clear lines record
+  lines.clear();
+
+  // Check the single burst record case
+  if(theBurstRecords.size() == 1)
+    {
+    lines.push_back(std::make_pair(theBurstRecords.front().startLine,theBurstRecords.front().endLine));
+    return false;
+    }
+
+  // TODO: Ensure bursts are sorted
+  
+  // Process each burst
+  std::vector<BurstRecordType>::const_iterator it = theBurstRecords.begin();
+  // Correct since we have at least 2 bursts records
+  std::vector<BurstRecordType>::const_iterator next = it+1;
+  std::vector<BurstRecordType>::const_iterator itend = theBurstRecords.end();
+
+  unsigned long currentStart  = it->startLine;  
+  TimeType deburstAzimuthStartTime = it->azimuthStartTime;
+
+  unsigned long deburstEndLine = 0;
+  
+  for(; next!= itend ;++it,++next)
+    {
+    DurationType timeOverlapEnd = (it->azimuthStopTime - next->azimuthStartTime);
+
+    unsigned long overlapLength = timeOverlapEnd/theAzimuthTimeInterval;
+
+    unsigned long halfLineOverlapEnd = overlapLength/2;
+    TimeType endTimeInNextBurst = it->azimuthStopTime-(halfLineOverlapEnd-1)*theAzimuthTimeInterval;
+    
+    unsigned long halfLineOverlapBegin = std::floor(0.5+(endTimeInNextBurst-next->azimuthStartTime)/theAzimuthTimeInterval);
+      
+    unsigned long currentStop = it->endLine-halfLineOverlapEnd;
+
+    deburstEndLine+=currentStop-currentStart;
+    
+    lines.push_back(std::make_pair(currentStart,currentStop));
+
+    currentStart = next->startLine+halfLineOverlapBegin;    
+    }
+
+  TimeType deburstAzimuthStopTime = it->azimuthStopTime;
+  deburstEndLine+=it->endLine-currentStart;
+
+  lines.push_back(std::make_pair(currentStart,it->endLine));
+  
+  // Now, update other metadata accordingly
+
+  // Clear the previous burst records
+  theBurstRecords.clear();
+
+  // Create the single burst
+  BurstRecordType deburstBurst;
+  deburstBurst.startLine = 0;
+  deburstBurst.azimuthStartTime = deburstAzimuthStartTime;
+  deburstBurst.endLine = deburstEndLine;
+  deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
+  
+  theBurstRecords.push_back(deburstBurst);
+
+  std::vector<GCPRecordType> deburstGCPs;
+  
+  // Now move GCPs
+  for(std::vector<GCPRecordType>::iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+      {
+      GCPRecordType currentGCP = *gcpIt;
+      unsigned long newLine=0;
+
+      unsigned long gcpLine = std::floor(currentGCP.imPt.y+0.5);
+
+      // Be careful about fractional part of GCPs
+      double fractional = currentGCP.imPt.y - gcpLine;
+      
+      bool deburstOk = imageLineToDeburstLine(lines,gcpLine,newLine);
+
+      if(deburstOk)
+        {
+        currentGCP.imPt.y = newLine+fractional;
+        deburstGCPs.push_back(currentGCP);
+        }        
+      }
+
+  theGCPRecords.swap(deburstGCPs);
+
+  return true;
 }
+
+bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
+{
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator vit = lines.begin();
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator nit = vit+1;
+  
+  unsigned long lineOffset = vit->first;
+  
+  deburstLine = imageLine;
+  
+  while(nit != lines.end())
+    {
+    if(imageLine>=vit->first && imageLine<=vit->second)
+      {
+      deburstLine-=lineOffset;
+      return true;
+      }
+    lineOffset+=nit->first - vit->second-1;
+    ++vit;
+    ++nit;
+    }
+  return false;
+}
+
+void ossimSarSensorModel::deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine)
+{
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator vit = lines.begin();
+  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator nit = vit+1;
+  
+  unsigned long lineOffset = vit->first;
+
+  imageLine = deburstLine;
+  
+  while(nit != lines.end())
+    {
+    if(imageLine+lineOffset>=vit->first && imageLine+lineOffset<=vit->second)
+      break;
+
+    lineOffset+=nit->first - vit->second-1;
+    ++vit;
+    ++nit;
+    }
+  imageLine+=lineOffset;
+}
+
+
+}
+
+
+
 
 namespace ossimplugins {
    template <typename T> inline

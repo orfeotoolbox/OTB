@@ -364,7 +364,7 @@ Here is a Python code sample connecting several applications together:
 
 .. code-block:: python
    
-                import otbApplications as otb
+                import otbApplication as otb
                 
                 app1 = otb.Registry.CreateApplication("Smoothing")
                 app2 = otb.Registry.CreateApplication("Smoothing")
