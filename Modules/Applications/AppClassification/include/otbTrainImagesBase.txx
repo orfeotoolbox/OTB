@@ -37,7 +37,7 @@ void TrainImagesBase::InitIO()
   SetParameterDescription( "io.il", "A list of input images." );
   AddParameter( ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List" );
   SetParameterDescription( "io.vd", "A list of vector data to select the training samples." );
-  MandatoryOff( "io.vd" );
+  MandatoryOn( "io.vd" );
 
   AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
   EnableParameter( "cleanup" );
@@ -83,12 +83,12 @@ void TrainImagesBase::InitSampling()
   SetMaximumParameterFloatValue( "sample.vtr", 1.0 );
   SetMinimumParameterFloatValue( "sample.vtr", 0.0 );
 
-  AddParameter( ParameterType_Float, "sample.percent", "Percentage of sample extract from images" );
-  SetParameterDescription( "sample.percent", "Percentage of sample extract from images for "
-          "training and validation when only images are provided." );
-  SetDefaultParameterFloat( "sample.percent", 1.0 );
-  SetMinimumParameterFloatValue( "sample.percent", 0.0 );
-  SetMaximumParameterFloatValue( "sample.percent", 1.0 );
+//  AddParameter( ParameterType_Float, "sample.percent", "Percentage of sample extract from images" );
+//  SetParameterDescription( "sample.percent", "Percentage of sample extract from images for "
+//          "training and validation when only images are provided." );
+//  SetDefaultParameterFloat( "sample.percent", 1.0 );
+//  SetMinimumParameterFloatValue( "sample.percent", 0.0 );
+//  SetMaximumParameterFloatValue( "sample.percent", 1.0 );
 
   ShareSamplingParameters();
   ConnectSamplingParameters();
@@ -123,7 +123,6 @@ void TrainImagesBase::ConnectSamplingParameters()
 void TrainImagesBase::InitClassification()
 {
   AddApplication( "TrainVectorClassifier", "training", "Model training" );
-  trainVectorBase = dynamic_cast<TrainVectorBase*>(GetInternalApplication("training"));
 
   AddParameter( ParameterType_InputVectorDataList, "io.valid", "Validation Vector Data List" );
   SetParameterDescription( "io.valid", "A list of vector data to select the training samples." );
@@ -274,12 +273,12 @@ void TrainImagesBase::SelectAndExtractSamples(FloatVectorImageType *image, std::
   // Change the selection strategy based on selected sampling strategy
   switch( strategy )
     {
-    case GEOMETRIC:
-      GetInternalApplication( "select" )->SetParameterString( "sampler", "random", false );
-      GetInternalApplication( "select" )->SetParameterString( "strategy", "percent", false );
-      GetInternalApplication( "select" )->SetParameterFloat( "strategy.percent.p",
-                                                             GetParameterFloat( "sample.percent" ), false );
-      break;
+//    case GEOMETRIC:
+//      GetInternalApplication( "select" )->SetParameterString( "sampler", "random", false );
+//      GetInternalApplication( "select" )->SetParameterString( "strategy", "percent", false );
+//      GetInternalApplication( "select" )->SetParameterFloat( "strategy.percent.p",
+//                                                             GetParameterFloat( "sample.percent" ), false );
+//      break;
     case CLASS:
     default:
       GetInternalApplication( "select" )->SetParameterString( "vec", vectorFileName, false );

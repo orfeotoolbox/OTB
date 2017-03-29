@@ -20,7 +20,6 @@
 #ifndef otbTrainImagesBase_h
 #define otbTrainImagesBase_h
 
-#include "otbTrainVectorBase.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbWrapperCompositeApplication.h"
 #include "otbWrapperApplicationFactory.h"
@@ -183,9 +182,6 @@ private:
 
 
 protected:
-
-  /** Base use for training, this allow to know if the choosed classifier is supervised or unsupervised */
-  TrainVectorBase* trainVectorBase;
 
   struct SamplingRates
   {

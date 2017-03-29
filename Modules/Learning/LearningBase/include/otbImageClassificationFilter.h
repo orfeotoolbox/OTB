@@ -17,6 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef otbImageClassificationFilter_h
 #define otbImageClassificationFilter_h
 

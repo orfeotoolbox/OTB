@@ -25,6 +25,7 @@
 
 #=============================================================================
 # Copyright 2007-2009 Kitware, Inc.
+# Copyright 2009-2017 Centre National d'Etudes Spatiales (CNES)
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
@@ -32,14 +33,6 @@
 # This software is distributed WITHOUT ANY WARRANTY; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the License for more information.
-#=============================================================================
-# Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-# See OTBCopyright.txt for details.
-#
-#
-#     This software is distributed WITHOUT ANY WARRANTY; without even
-#     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-#     PURPOSE.  See the above copyright notices for more information.
 #=============================================================================
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
@@ -90,7 +83,7 @@ if(EXISTS "${OPENTHREADS_INCLUDE_DIR}/OpenThreads/Version")
   string(REGEX REPLACE ".*# *define +OPENTHREADS_MAJOR_VERSION +([0-9]+).*" "\\1" OPENTHREADS_VERSION_MAJOR "${_openthreads_version_CONTENTS}")
   string(REGEX REPLACE ".*# *define +OPENTHREADS_MINOR_VERSION +([0-9]+).*" "\\1" OPENTHREADS_VERSION_MINOR "${_openthreads_version_CONTENTS}")
   string(REGEX REPLACE ".*# *define +OPENTHREADS_PATCH_VERSION +([0-9]+).*" "\\1" OPENTHREADS_VERSION_PATCH "${_openthreads_version_CONTENTS}")
-  
+
   set(OPENTHREADS_VERSION "${OPENTHREADS_VERSION_MAJOR}.${OPENTHREADS_VERSION_MINOR}.${OPENTHREADS_VERSION_PATCH}")
   math(EXPR OPENTHREADS_VERSION_NUMBER
     "((${OPENTHREADS_VERSION_MAJOR})*100+${OPENTHREADS_VERSION_MINOR})*100+${OPENTHREADS_VERSION_PATCH}")
