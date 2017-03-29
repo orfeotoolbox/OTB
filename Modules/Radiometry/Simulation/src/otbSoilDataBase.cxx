@@ -43,10 +43,10 @@ const typename SoilDataBase::SoilDataVector& SoilDataBase::GetDB() const
 
 double SoilDataBase::GetReflectance(size_t SoilIndex, WavelenghtType wl) const
 {
-  if(SoilIndex<1 || SoilIndex > m_SoilDataVector.size()-1)
+  if(SoilIndex<1 || SoilIndex > m_SoilDataVector.size())
     {
     std::stringstream  errmessg;
-    errmessg << "Soil index must be > 0 and <= " << m_SoilDataVector.size()+1 <<'\n';
+    errmessg << "Soil index must be > 0 and <= " << m_SoilDataVector.size() <<'\n';
     throw std::range_error( errmessg.str() );
     }
   // wl not in the set of measured ones
