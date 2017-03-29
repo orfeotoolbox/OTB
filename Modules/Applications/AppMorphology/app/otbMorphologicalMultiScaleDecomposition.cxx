@@ -102,7 +102,8 @@ private:
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbGeodesicMorphologyDecompositionImageFilter class" );
 
-    AddDocTag( "MorphologicalMultiScaleDecomposition" );
+    AddDocTag(Tags::FeatureExtraction);
+    AddDocTag("Morphology");
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image to be classified." );

@@ -108,7 +108,8 @@ private:
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbMorphologicalOpeningProfileFilter, otbMorphologicalClosingProfileFilter, otbProfileToProfileDerivativeFilter, otbProfileDerivativeToMultiScaleCharacteristicsFilter, otbMultiScaleConvexOrConcaveClassificationFilter, classes" );
 
-    AddDocTag( "MorphologicalProfilesAnalysis" );
+    AddDocTag(Tags::FeatureExtraction);
+    AddDocTag("Morphology");
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image." );
