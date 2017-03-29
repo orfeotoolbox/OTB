@@ -123,7 +123,6 @@ void TrainImagesBase::ConnectSamplingParameters()
 void TrainImagesBase::InitClassification()
 {
   AddApplication( "TrainVectorClassifier", "training", "Model training" );
-  trainVectorBase = dynamic_cast<TrainVectorBase*>(GetInternalApplication("training"));
 
   AddParameter( ParameterType_InputVectorDataList, "io.valid", "Validation Vector Data List" );
   SetParameterDescription( "io.valid", "A list of vector data to select the training samples." );

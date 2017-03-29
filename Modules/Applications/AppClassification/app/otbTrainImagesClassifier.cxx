@@ -90,24 +90,6 @@ public:
       {
       UpdatePolygonClassStatisticsParameters();
       }
-
-
-    // Change mandatory of input vector depending on supervised and unsupervised mode.
-//    if( HasValue( "classifier" ) )
-//      {
-//      UpdateInternalParameters( "training" );
-//      switch( trainVectorBase->GetClassifierCategory() )
-//        {
-//        case TrainVectorBase::Unsupervised:
-//          MandatoryOff( "io.vd" );
-//          break;
-//        default:
-//        case TrainVectorBase::Supervised:
-//          MandatoryOn( "io.vd" );
-//          break;
-//        }
-//      }
-
   }
 
   /**
@@ -185,7 +167,7 @@ public:
 
     unsigned long nbInputs = imageList->Size();
 
-    if( !HasInputVector ) // && trainVectorBase->GetClassifierCategory() == TrainVectorBase::Supervised )
+    if( !HasInputVector )
       {
       otbAppLogFATAL( "Missing input vector data files" );
       }
