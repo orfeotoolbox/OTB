@@ -362,8 +362,10 @@ void DoExecute() ITK_OVERRIDE
     {
     if (fmt > -1)
       {
+      std::ostringstream oss;
+      oss << fmt;
       GetInternalApplication("rates")->SetParameterString("strategy","constant", false);
-      GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb",fmt);
+      GetInternalApplication("rates")->SetParameterString("strategy.constant.nb",oss.str());
       }
     else
       {
@@ -384,8 +386,10 @@ void DoExecute() ITK_OVERRIDE
       {
       if (fmv > -1)
         {
+        std::ostringstream oss;
+        oss << fmv;
         GetInternalApplication("rates")->SetParameterString("strategy","constant", false);
-        GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb",fmv);
+        GetInternalApplication("rates")->SetParameterString("strategy.constant.nb",oss.str());
         }
       else
         {
