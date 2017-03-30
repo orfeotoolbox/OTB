@@ -5,7 +5,7 @@ otb_test_application(NAME apTvUtComputeModulusAndPhase_2inputs
                      OPTIONS -il ${INPUTDATA}/monobandFloat.tif ${INPUTDATA}/monobandFloat2.tif
                              -modulus ${TEMP}/apTvUtMod2inputs.tif
                              -phase ${TEMP}/apTvUtPha2inputs.tif
-                     VALID   --compare-n-images ${NOTOL} 2
+                     VALID   --compare-n-images ${EPSILON_6} 2
                              ${BASELINE}/Mod_monobandFloat.tif
                              ${TEMP}/apTvUtMod2inputs.tif
                              ${BASELINE}/Pha_monobandFloat.tif
@@ -17,7 +17,7 @@ otb_test_application(NAME apTvUtComputeModulusAndPhase_1inputComplex
                      OPTIONS -il ${INPUTDATA}/monobandComplexFloat.tif
                              -modulus ${TEMP}/apTvUtMod1inputComplex.tif
                              -phase ${TEMP}/apTvUtPha1inputComplex.tif
-                     VALID   --compare-n-images ${NOTOL} 2
+                     VALID   --compare-n-images ${EPSILON_6} 2
                              ${BASELINE}/Mod_monobandComplexFloat.tif
                              ${TEMP}/apTvUtMod1inputComplex.tif
                              ${BASELINE}/Pha_monobandComplexFloat.tif
@@ -29,7 +29,7 @@ otb_test_application(NAME apTvUtComputeModulusAndPhase_1input2bands
                      OPTIONS -il ${INPUTDATA}/multibandFloat_2bands.tif
                              -modulus ${TEMP}/apTvUtMod1input2bands.tif
                              -phase ${TEMP}/apTvUtPha1input2bands.tif
-                     VALID   --compare-n-images ${NOTOL} 2
+                     VALID   --compare-n-images ${EPSILON_6} 2
                              ${BASELINE}/Mod_multibandFloat_2bands.tif
                              ${TEMP}/apTvUtMod1input2bands.tif
                              ${BASELINE}/Pha_multibandFloat_2bands.tif
