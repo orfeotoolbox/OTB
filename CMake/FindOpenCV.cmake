@@ -30,6 +30,8 @@ if(OpenCV_DIR)
       opencv_INCLUDE_DIR
       opencv/cv.h
       PATHS "${OPENCV_SEARCH_PATH}"
+      #no additional paths are added to the search if OpenCV_DIR
+      NO_DEFAULT_PATH
       PATH_SUFFIXES "include"
       DOC "The directory where opencv/cv.h is installed")
   endif()
@@ -52,7 +54,7 @@ endif()
 set(opencv_core_NAMES opencv_core)
 set(opencv_ml_NAMES opencv_ml)
 
-if ( opencv_INCLUDE_DIR )
+if (opencv_INCLUDE_DIR)
 
   set(OPENCV_INCLUDE_DIRS "${opencv_INCLUDE_DIR}")
 
