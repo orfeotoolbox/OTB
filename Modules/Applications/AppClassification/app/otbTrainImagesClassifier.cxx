@@ -336,17 +336,20 @@ void DoExecute() ITK_OVERRIDE
       // only fmt will be used for both training and validation samples
       // So we try to compute the total number of samples given input
       // parameters mt, mv and vtr.
-      if (mt > -1 && mv > -1)
-        {
-        fmt = mt + mv;
-        }
-      if (mt > -1 && mv <= -1 && vtr < 0.99999)
+      if (mt > -1 && vtr < 0.99999)
         {
         fmt = static_cast<long>((double) mt / (1.0 - vtr));
         }
-      if (mt <= -1 && mv > -1 && vtr > 0.00001)
+      if (mv > -1 && vtr > 0.00001)
         {
-        fmt = static_cast<long>((double) mv / vtr);
+        if (fmt > -1 )
+          {
+          fmt = std::min(fmt, static_cast<long>((double) mv / vtr));
+          }
+        else
+          {
+          fmt = static_cast<long>((double) mv / vtr);
+          }
         }
       }
     }
