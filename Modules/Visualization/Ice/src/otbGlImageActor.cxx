@@ -1273,7 +1273,7 @@ GlImageActor
                        const Point2d & in,
                        bool isPhysical ) const
 {
-  out = ViewportToImageTransform( in, isPhysical );
+  out = ImageToViewportTransform( in, isPhysical );
 
   return true;
 }
