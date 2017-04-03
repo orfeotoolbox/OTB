@@ -244,6 +244,7 @@ ExtendedFilenameHelper
     else
       {
       // Invalid range wrt. the given number of bands
+      itkExceptionMacro("Invalid band number.");
       return false;
       }
     }

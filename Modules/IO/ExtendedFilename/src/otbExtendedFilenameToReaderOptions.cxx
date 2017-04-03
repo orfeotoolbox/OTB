@@ -138,7 +138,7 @@ ExtendedFilenameToReaderOptions
       }
     else
       {
-      itkWarningMacro("Unkwown value "<<map["bands"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
+      itkExceptionMacro("Unkwown value "<<map["bands"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
       }
     }
 
