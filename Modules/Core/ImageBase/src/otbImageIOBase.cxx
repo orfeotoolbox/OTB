@@ -1268,7 +1268,6 @@ void
 ImageIOBase
 ::DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList)
 {
-  std::cout << "bandList =" << bandList[0] << std::endl;
   size_t componentSize = this->GetComponentSize();
   size_t inPixelSize = componentSize * this->GetNumberOfComponents();
   size_t outPixelSize = componentSize * bandList.size();
