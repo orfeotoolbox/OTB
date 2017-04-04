@@ -710,6 +710,19 @@ ImageFileWriter<TInputImage>
 
     typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
     m_ImageIO->SetNumberOfComponents(AccessorFunctorType::GetVectorLength(input));
+
+    m_IOComponents = m_ImageIO->GetNumberOfComponents();
+    m_BandList.clear();
+    if (m_FilenameHelper->BandRangeIsSet())
+      {
+      // get band range
+      bool retBandRange = m_FilenameHelper->ResolveBandRange(m_FilenameHelper->GetBandRange(), m_IOComponents, m_BandList);
+      if (retBandRange == false || m_BandList.empty())
+        {
+        // invalid range
+        itkGenericExceptionMacro("The given band range is either empty or invalid for a " << m_IOComponents <<" bands input image!");
+        }
+      }
     }
   else
     {
@@ -734,8 +747,10 @@ ImageFileWriter<TInputImage>
     Convert(m_ImageIO->GetIORegion(), ioRegion, m_ShiftOutputIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
 
-  // before this test, bad stuff would happened when they don't match
-  if (bufferedRegion != ioRegion)
+  // before this test, bad stuff would happened when they don't match.
+  // In case of the buffer has not enough components, adapt the region.
+  if ((bufferedRegion != ioRegion) || (m_FilenameHelper->BandRangeIsSet()
+    && (m_IOComponents < m_BandList.size())))
     {
     if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion)
       {
@@ -744,8 +759,21 @@ ImageFileWriter<TInputImage>
 
       cacheImage = InputImageType::New();
       cacheImage->CopyInformation(input);
+
+      // set number of components at the band range size
+      if (m_FilenameHelper->BandRangeIsSet() && (m_IOComponents < m_BandList.size()))
+        {
+        cacheImage->SetNumberOfComponentsPerPixel(m_BandList.size());
+        }
+
       cacheImage->SetBufferedRegion(ioRegion);
       cacheImage->Allocate();
+
+      // set number of components at the initial size
+      if (m_FilenameHelper->BandRangeIsSet() && (m_IOComponents < m_BandList.size()))
+        {
+        cacheImage->SetNumberOfComponentsPerPixel(m_IOComponents);
+        }
 
       typedef itk::ImageRegionConstIterator<TInputImage> ConstIteratorType;
       typedef itk::ImageRegionIterator<TInputImage>      IteratorType;
@@ -776,6 +804,14 @@ ImageFileWriter<TInputImage>
       throw e;
       }
     }
+
+  if (m_FilenameHelper->BandRangeIsSet() && (!m_BandList.empty()))
+  {
+    // Adapt the image size with the region and take into account a potential
+    // remapping of the components. m_BandList is empty if no band range is set
+    m_ImageIO->DoMapBuffer(const_cast< void* >(dataPtr), bufferedRegion.GetNumberOfPixels(), this->m_BandList);
+    m_ImageIO->SetNumberOfComponents(m_BandList.size());
+  }
 
   m_ImageIO->Write(dataPtr);
 
