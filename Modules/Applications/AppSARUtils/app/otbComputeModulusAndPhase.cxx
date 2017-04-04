@@ -20,10 +20,10 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
+#include <otbMultiToMonoChannelExtractROI.h>
 
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
-#include "itkComposeImageFilter.h"
 #include <itkMacro.h>
 
 namespace otb
@@ -52,11 +52,9 @@ public:
   itkTypeMacro(ComputeModulusAndPhase, otb::Wrapper::Application);
 
   //typedefs for the application
+  typedef otb::MultiToMonoChannelExtractROI<typename ComplexFloatVectorImageType::InternalPixelType, typename ComplexFloatImageType::PixelType> ExtractFilterType;
   typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
-  typedef otb::ImageFileReader<ComplexFloatImageType> ComplexReaderType;
-  typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
-  typedef itk::ComposeImageFilter<FloatImageType,ComplexFloatImageType> ComposeImageFilterType;
 
 private:
   void DoInit()
@@ -66,11 +64,9 @@ private:
 
     SetDocName("Compute Modulus And Phase");
     SetDocLongDescription(
-            "This application computes the modulus and the phase of a "
-            "complex SAR image. This complex SAR image can be provided as either: "
-            "a monoband image with complex pixels, a 2-bands image with real and "
-            "imaginary channels, or 2 monoband images (first one real part and "
-            "second one imaginary part)"
+      "This application computes the modulus and the phase of a "
+      "complex SAR image. The input shoud be a single band image with "
+      "complex pixels."
     );
     SetDocLimitations("None");
     SetDocAuthors("Alexia Mondot (alexia.mondot@c-s.fr) and Mickael Savinaud (mickael.savinaud@c-s.fr)");
@@ -78,11 +74,8 @@ private:
     AddDocTag(Tags::SAR);
 
     // Input images
-    // We will need to manually create our otb::ImageFileReader here because its
-    // argument type depends on the number of inputs, so the "il" parameter is a
-    // StringList, not a ImageList
-    AddParameter(ParameterType_InputFilenameList, "il", "Input image list");
-    SetParameterDescription("il", "Input image list (one complex monoband, one real dualband or two monoband images)");
+    AddParameter(ParameterType_ComplexInputImage,  "in",   "Input Image");
+    SetParameterDescription("in", "Input image (complex single band)");
 
     // Outputs
     AddParameter(ParameterType_OutputImage, "modulus", "Modulus");
@@ -94,7 +87,7 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("il", "monobandComplexFloat.tif");
+    SetDocExampleParameterValue("in", "monobandComplexFloat.tif");
     SetDocExampleParameterValue("modulus", "modulus.tif");
     SetDocExampleParameterValue("phase", "phase.tif");
   }
@@ -110,51 +103,28 @@ private:
     m_Modulus = ModulusFilterType::New();
     m_Phase = PhaseFilterType::New();
 
-    std::vector<std::string> inList = GetParameterStringList("il");
-    const size_t numberOfInputs = inList.size();
+    ComplexFloatVectorImageType::Pointer inImage = GetParameterComplexImage("in");
 
-    if (numberOfInputs == 1)
+    if (inImage->GetNumberOfComponentsPerPixel() != 1)
     {
-      // Get the input image
-      m_ComplexReader = ComplexReaderType::New();
-      m_ComplexReader->SetFileName(inList[0]);
-
-      m_Modulus->SetInput(m_ComplexReader->GetOutput());
-      m_Phase->SetInput(m_ComplexReader->GetOutput());
+        otbAppLogFATAL("Input must be a single band complex image.");
     }
-    else if (numberOfInputs == 2)
-    {
-      // Get the input image
-      m_FloatReader0 = FloatReaderType::New();
-      m_FloatReader1 = FloatReaderType::New();
 
-      m_FloatReader0->SetFileName(inList[0]);
-      m_FloatReader1->SetFileName(inList[1]);
+    // Get first band
+    m_Extract = ExtractFilterType::New();
+    m_Extract->SetInput(inImage);
 
-      // Combine the two images into one complex image
-      m_Compose = ComposeImageFilterType::New();
-      m_Compose->SetInput1(m_FloatReader0->GetOutput());
-      m_Compose->SetInput2(m_FloatReader1->GetOutput());
-
-      m_Modulus->SetInput(m_Compose->GetOutput());
-      m_Phase->SetInput(m_Compose->GetOutput());
-    }
-    else
-    {
-        otbAppLogFATAL("Too many input images for ComputeModulusAndPhase.");
-    }
+    // Compute modulus and phase
+    m_Modulus->SetInput(m_Extract->GetOutput());
+    m_Phase->SetInput(m_Extract->GetOutput());
 
     SetParameterOutputImage("modulus", m_Modulus->GetOutput() );
     SetParameterOutputImage("phase", m_Phase->GetOutput());
   }
 
-  ComplexReaderType::Pointer m_ComplexReader;
-  FloatReaderType::Pointer m_FloatReader0;
-  FloatReaderType::Pointer m_FloatReader1;
-
+  ExtractFilterType::Pointer m_Extract;
   ModulusFilterType::Pointer m_Modulus;
   PhaseFilterType::Pointer m_Phase;
-  ComposeImageFilterType::Pointer m_Compose;
 };
 
 } // namespace Wrapper
