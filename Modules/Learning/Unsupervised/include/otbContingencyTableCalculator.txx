@@ -65,14 +65,19 @@ template<class TClassLabel>
 template<class TRefIterator, class TProdIterator>
 void
 ContingencyTableCalculator<TClassLabel>
-::Compute(TRefIterator itRef, TProdIterator itProd)
+::Compute(TRefIterator itRef, TProdIterator itProd, bool refHasNoData, typename TRefIterator::InternalPixelType refNoData,
+                 bool prodHasNoData, typename TProdIterator::InternalPixelType prodNoData)
 {
   while( !itRef.IsAtEnd() && !itProd.IsAtEnd() )
     {
-    ++m_LabelCount[itRef.Get()][itProd.Get()];
-    ++itRef;
+    if((!prodHasNoData || itProd.Get()!=prodNoData)
+       &&(!refHasNoData || itRef.Get()!=refNoData))
+      {
+      ++m_LabelCount[itRef.Get()][itProd.Get()];
+      ++m_NumberOfSamples;
+      }
+      ++itRef;
     ++itProd;
-    ++m_NumberOfSamples;
     }
 }
 

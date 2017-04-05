@@ -91,7 +91,10 @@ private:
 
   struct StreamingInitializationData
   {
-    int nodata;
+    bool refhasnodata;
+    bool prodhasnodata;
+    int  prodnodata;
+    int  refnodata;
     unsigned long numberOfStreamDivisions;
   };
 
@@ -143,12 +146,17 @@ private:
   SetParameterDescription("ref.vector.field","Field name containing the label values");
   SetListViewSingleSelectionMode("ref.vector.field",true);
   
-  AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels");
-  SetParameterDescription("nodatalabel", "Label for the NoData class. Such input pixels will be discarded from the "
-      "ground truth and from the input classification map. By default, 'nodatalabel = 0'.");
-  SetDefaultParameterInt("nodatalabel",0);
-  MandatoryOff("nodatalabel");
-  DisableParameter("nodatalabel");
+  AddParameter(ParameterType_Int,"refnodatalabel","Value for nodata pixels in ref");
+  SetDefaultParameterInt("refnodatalabel",0);
+  SetParameterDescription("refnodatalabel","Label to be treated as no data in ref. Please note that this value is always used in vector mode, to generate default values. Please set it to a value that does not correspond to a class label.");
+  MandatoryOff("refnodatalabel");
+  DisableParameter("refnodatalabel");
+  AddParameter(ParameterType_Int,"prodnodatalabel","Value for nodata pixels in input image");
+  SetParameterDescription("prodnodatalabel","Label to be treated as no data in input image");
+  SetDefaultParameterInt("prodnodatalabel",0);
+  
+  MandatoryOff("prodnodatalabel");
+  DisableParameter("prodnodatalabel");
 
   AddRAMParameter();
 
@@ -158,7 +166,7 @@ private:
   SetDocExampleParameterValue("ref", "vector");
   SetDocExampleParameterValue("ref.vector.in","VectorData_QB1_bis.shp");
   SetDocExampleParameterValue("ref.vector.field","Class");
-  SetDocExampleParameterValue("nodatalabel","255");
+  SetDocExampleParameterValue("refnodatalabel","255");
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -193,7 +201,7 @@ private:
 
   void LogContingencyTable(const ContingencyTableType& contingencyTable)
   {
-    otbAppLogINFO("Contingency table : :\n" << contingencyTable);
+    otbAppLogINFO("Contingency table: reference labels (rows) vs. produced labels (cols)\n" << contingencyTable);
   }
 
   void writeContingencyTable(const ContingencyTableType& contingencyTable)
@@ -286,14 +294,22 @@ private:
     std::string field;
 
     rasterizeReference = RasterizeFilterType::New();
-    sid.nodata = this->GetParameterInt("nodatalabel");
+    sid.refnodata = this->GetParameterInt("refnodatalabel");
+    sid.refhasnodata = this->IsParameterEnabled("refnodatalabel");
+    sid.prodnodata = this->GetParameterInt("prodnodatalabel");
+    sid.prodhasnodata = this->IsParameterEnabled("prodnodatalabel");
 
+
+    
     if (GetParameterString("ref") == "raster")
       {
       reference = this->GetParameterInt32Image("ref.raster.in");
       }
     else
       {
+      // Force nodata to true since it will be generated during rasterization
+      sid.refhasnodata = true;
+      
       ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
 
       // Get field name
@@ -309,7 +325,7 @@ private:
 
       rasterizeReference->AddOGRDataSource(ogrRef);
       rasterizeReference->SetOutputParametersFromImage(input);
-      rasterizeReference->SetBackgroundValue(sid.nodata);
+      rasterizeReference->SetBackgroundValue(sid.refnodata);
       rasterizeReference->SetBurnAttribute(field.c_str());
 
       reference = rasterizeReference->GetOutput();
@@ -371,7 +387,7 @@ private:
       ImageIteratorType itRef( reference, streamRegion );
       itRef.GoToBegin();
 
-      calculator->Compute( itRef, itInput );
+      calculator->Compute( itRef, itInput,sid.refhasnodata,sid.refnodata,sid.prodhasnodata,sid.prodnodata);
       }
 
     ContingencyTableType contingencyTable = calculator->GetContingencyTable();
@@ -412,7 +428,7 @@ private:
         labelProd = static_cast<ClassLabelType> (itInput.Get());
 
         // Extraction of the reference/produced class labels
-        if ((labelRef != sid.nodata) && (labelProd != sid.nodata))
+        if ((!sid.refhasnodata || labelRef != sid.refnodata) && (!sid.prodhasnodata || labelProd != sid.prodnodata))
           {
           // If the current labels have not been added to their respective mapOfClasses yet
           if (mapOfClassesRef.insert(MapOfClassesType::value_type(labelRef, itLabelRef)).second)
