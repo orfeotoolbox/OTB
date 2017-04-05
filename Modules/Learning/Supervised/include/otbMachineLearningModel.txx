@@ -64,21 +64,6 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 }
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
-void
-MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::PredictAll()
-{
-  itkWarningMacro("MachineLearningModel::PredictAll() has been DEPRECATED. Use MachineLearningModel::PredictBatch() instead.");
-  
-  typename TargetListSampleType::Pointer targets = this->GetTargetListSample();
-  targets->Clear();
-  
-  typename TargetListSampleType::Pointer tmpTargets = this->PredictBatch(this->GetInputListSample());
-  
-  targets->Graft(tmpTargets);
-}
-
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
 typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::TargetSampleType
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>

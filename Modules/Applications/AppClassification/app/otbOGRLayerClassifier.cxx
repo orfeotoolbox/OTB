@@ -192,10 +192,8 @@ private:
 
     typedef otb::LibSVMMachineLearningModel<ValueType,LabelPixelType> LibSVMType;
     LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
-    libSVMClassifier->SetInputListSample(trainingListSample);
-    libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
     libSVMClassifier->Load(modelfile);
-    libSVMClassifier->PredictAll();
+    trainingLabeledListSample = libSVMClassifier->PredictBatch(trainingListSample);
 
     otb::ogr::DataSource::Pointer source2 = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
     otb::ogr::Layer layer2 = source2->GetLayer(0);

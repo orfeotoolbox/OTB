@@ -126,9 +126,6 @@ public:
      */
   typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
   
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  void PredictAll();
-
   /**\name Classification model file manipulation */
   //@{
   /** Save the model to file */
@@ -161,7 +158,7 @@ public:
   //@{
   /** Set the target labels (to be used before training) */
   itkSetObjectMacro(TargetListSample,TargetListSampleType);
-  /** Get the target labels (to be used after PredictAll) */
+  /** Get the target labels */
   itkGetObjectMacro(TargetListSample,TargetListSampleType);
   //@}
 

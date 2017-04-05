@@ -109,9 +109,8 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   model->Load(modelPath);
   model->SetRegressionMode(this->m_RegressionFlag);
-  model->SetInputListSample(validationListSample);
-  model->SetTargetListSample(predictedList);
-  model->PredictAll();
+
+  predictedList = model->PredictBatch(validationListSample, NULL);
 
   // update reporter
   dummyFilter->UpdateProgress(1.0f);
