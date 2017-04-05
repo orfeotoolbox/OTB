@@ -118,12 +118,6 @@ protected:
   /** Constructor */
   CommandLineLauncher();
 
-  /** \deprecated
-   * Constructor with exp argument is deprecated because class
-   * CommandLineLauncher does not have expression attribute anymore. Use instead the
-   * default constructor. It is included for backwards compatibility. */
-  CommandLineLauncher(const char * exp);
-
   /** Destructor */
   ~CommandLineLauncher() ITK_OVERRIDE;
 
