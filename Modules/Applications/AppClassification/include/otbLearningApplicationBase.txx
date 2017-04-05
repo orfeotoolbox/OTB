@@ -55,10 +55,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Choice, "classifier", "Classifier to use for the training");
   SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
-  AddParameter(ParameterType_Choice, "category", "Type of classifier use for the training (supervised or unsupervised");
-  SetParameterDescription("category", "Choice of the classifier type to use for the training, "
-          "choice is supervised or unsupervised.");
-
   InitSupervisedClassifierParams();
   m_SupervisedClassifier = GetChoiceKeys("classifier");
 
