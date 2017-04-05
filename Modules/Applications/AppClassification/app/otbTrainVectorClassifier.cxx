@@ -83,25 +83,34 @@ private:
       }
     else
       {
-      WriteContingencyTable();
+      ContingencyTable<ClassLabelType> table = ComputeContingencyTable(predictedList,classificationListSamples.labeledListSample);
+      
+      WriteContingencyTable(table);
       }
   }
 
-
-  void WriteContingencyTable()
+  ContingencyTable<ClassLabelType> ComputeContingencyTable(const TargetListSampleType::Pointer &predictedListSample,
+                                                           const TargetListSampleType::Pointer &performanceLabeledListSample)
   {
-    // Compute contingency table
     typedef ContingencyTableCalculator<ClassLabelType> ContigencyTableCalcutaltorType;
-    ContigencyTableCalcutaltorType::Pointer contingencyTableCalculator = ContigencyTableCalcutaltorType::New();
-    contingencyTableCalculator->Compute(predictedList->Begin(), predictedList->End(),
-                                        classificationListSamples.labeledListSample->Begin(),
-                                        classificationListSamples.labeledListSample->End());
-    ContingencyTable<ClassLabelType> contingencyTable = contingencyTableCalculator->GetContingencyTable();
 
-    // Write contingency table
-    std::ofstream outFile;
-    outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
-    outFile << contingencyTable.to_csv();
+    ContigencyTableCalcutaltorType::Pointer contingencyTableCalculator = ContigencyTableCalcutaltorType::New();
+    contingencyTableCalculator->Compute(performanceLabeledListSample->Begin(),
+                                        performanceLabeledListSample->End(),predictedListSample->Begin(), predictedListSample->End());
+    
+    return contingencyTableCalculator->GetContingencyTable();
+  }
+  
+
+  void WriteContingencyTable(const ContingencyTable<ClassLabelType> & table)
+  {
+    if(IsParameterEnabled("io.confmatout"))
+      {
+      // Write contingency table
+      std::ofstream outFile;
+      outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
+      outFile << table.to_csv();
+      }
   }
 
 
