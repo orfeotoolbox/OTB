@@ -171,13 +171,6 @@ public:
   OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
 
   virtual void  InstantiateTransform();
-
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  void  InstanciateTransform()
-  {
-    otbWarningMacro(<< "InstanciateTransform has been deprecated.  Please use InstantiateTransform instead");
-    this->InstantiateTransform();
-  }
   
   // Get inverse methods
   bool GetInverse(Self * inverseTransform) const;
