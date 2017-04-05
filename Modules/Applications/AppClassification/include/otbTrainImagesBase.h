@@ -35,7 +35,7 @@ namespace Wrapper
 {
 
 /** \class TrainImagesBase
- * \brief Base class for the TrainImagesBaseClassifier and Clustering
+ * \brief Base class for the TrainImagesClassifier
  *
  * This class intends to hold common input/output parameters and
  * composite application connection for both supervised and unsupervised

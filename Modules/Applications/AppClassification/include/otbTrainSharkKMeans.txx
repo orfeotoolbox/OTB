@@ -35,11 +35,11 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
                                    "See complete documentation here "
                                    "\\url{http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html}.\n " );
   //MaxNumberOfIterations
-  AddParameter( ParameterType_Int, "classifier.sharkkm.nbmaxiter",
+  AddParameter( ParameterType_Int, "classifier.sharkkm.maxiter",
                 "Maximum number of iteration for the kmeans algorithm." );
-  SetParameterInt( "classifier.sharkkm.nbmaxiter", 10 );
-  SetMinimumParameterIntValue( "classifier.sharkkm.nbmaxiter", 0 );
-  SetParameterDescription( "classifier.sharkkm.nbmaxiter",
+  SetParameterInt( "classifier.sharkkm.maxiter", 10 );
+  SetMinimumParameterIntValue( "classifier.sharkkm.maxiter", 0 );
+  SetParameterDescription( "classifier.sharkkm.maxiter",
                            "The maximum number of iteration for the kmeans algorithm. 0=unlimited" );
 
   //MaxNumberOfIterations
@@ -55,7 +55,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(
         typename ListSampleType::Pointer trainingListSample,
         typename TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath)
 {
-  unsigned int nbMaxIter = static_cast<unsigned int>(abs( GetParameterInt( "classifier.sharkkm.nbmaxiter" ) ));
+  unsigned int nbMaxIter = static_cast<unsigned int>(abs( GetParameterInt( "classifier.sharkkm.maxiter" ) ));
   unsigned int k = static_cast<unsigned int>(abs( GetParameterInt( "classifier.sharkkm.k" ) ));
 
   typename SharkKMeansType::Pointer classifier = SharkKMeansType::New();

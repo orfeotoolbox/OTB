@@ -49,44 +49,42 @@ public:
   typedef ConfusionMatrixCalculatorType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
 
-private:
-  void DoTrainInit()
+protected:
+  void DoInit()
   {
-    // Nothing to do here
+    TrainVectorBase::DoInit();
   }
 
-  void DoTrainUpdateParameters()
+  void DoUpdateParameters()
   {
-    // Nothing to do here
+    TrainVectorBase::DoUpdateParameters();
   }
 
-  void DoBeforeTrainExecute()
+  void DoExecute()
   {
     // Enforce the need of class field name in supervised mode
     if (GetClassifierCategory() == Supervised)
       {
-      featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+      m_featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 
-      if( featuresInfo.m_SelectedCFieldIdx.empty() )
+      if( m_featuresInfo.m_SelectedCFieldIdx.empty() )
         {
         otbAppLogFATAL( << "No field has been selected for data labelling!" );
         }
       }
-  }
 
-  void DoAfterTrainExecute()
-  {
+      TrainVectorBase::DoExecute();
 
-    if (GetClassifierCategory() == Supervised)
-      {
-      ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( predictedList,
-                                                                                   classificationListSamples.labeledListSample );
-      WriteConfusionMatrix( confMatCalc );
-      }
-    else
-      {
-      // TODO Compute Contingency Table
-      }
+      if (GetClassifierCategory() == Supervised)
+        {
+        ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_predictedList,
+                                                                                     m_classificationSamplesWithLabel.labeledListSample );
+        WriteConfusionMatrix( confMatCalc );
+        }
+      else
+        {
+        // TODO Compute Contingency Table
+        }
   }
 
 
