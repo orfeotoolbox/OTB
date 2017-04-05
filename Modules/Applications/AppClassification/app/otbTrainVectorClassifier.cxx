@@ -66,7 +66,7 @@ private:
     // Enforce the need of class field name in supervised mode
     featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
     
-    if( featuresInfo.m_SelectedCFieldIdx.empty() )
+    if( featuresInfo.m_SelectedCFieldIdx.empty() && GetClassifierCategory() == Supervised)
       {
       otbAppLogFATAL( << "No field has been selected for data labelling!" );
       }
@@ -83,9 +83,11 @@ private:
       }
     else
       {
-      ContingencyTable<ClassLabelType> table = ComputeContingencyTable(predictedList,classificationListSamples.labeledListSample);
-      
-      WriteContingencyTable(table);
+      if(!featuresInfo.m_SelectedCFieldIdx.empty())
+        {
+        ContingencyTable<ClassLabelType> table = ComputeContingencyTable(predictedList,classificationListSamples.labeledListSample);
+        WriteContingencyTable(table);
+        }
       }
   }
 
