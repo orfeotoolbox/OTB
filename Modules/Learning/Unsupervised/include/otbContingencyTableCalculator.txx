@@ -85,7 +85,7 @@ ContingencyTableCalculator<TClassLabel>
 template<class TClassLabel>
 typename ContingencyTableCalculator<TClassLabel>::ContingencyTableType
 ContingencyTableCalculator<TClassLabel>
-::GetContingencyTable()
+::BuildContingencyTable()
 {
   std::set<TClassLabel> refLabels;
   std::set<TClassLabel> prodLabels;

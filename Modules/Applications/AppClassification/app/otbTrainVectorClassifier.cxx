@@ -102,9 +102,9 @@ private:
 
     otbAppLogINFO( "Training performances:" );
 
-    otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"<<contingencyTableCalculator->GetContingencyTable());
+    otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"<<contingencyTableCalculator->BuildContingencyTable());
     
-    return contingencyTableCalculator->GetContingencyTable();
+    return contingencyTableCalculator->BuildContingencyTable();
   }
   
 

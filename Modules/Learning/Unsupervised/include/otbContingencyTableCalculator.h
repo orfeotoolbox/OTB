@@ -72,7 +72,7 @@ public:
   itkGetConstMacro(NumberOfSamples, unsigned long);
 
   void Clear();
-  ContingencyTableType GetContingencyTable();
+  ContingencyTableType BuildContingencyTable();
 
 protected:
   ContingencyTableCalculator();

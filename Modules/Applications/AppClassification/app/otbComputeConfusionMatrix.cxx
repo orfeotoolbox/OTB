@@ -390,7 +390,7 @@ private:
       calculator->Compute( itRef, itInput,sid.refhasnodata,sid.refnodata,sid.prodhasnodata,sid.prodnodata);
       }
 
-    ContingencyTableType contingencyTable = calculator->GetContingencyTable();
+    ContingencyTableType contingencyTable = calculator->BuildContingencyTable();
     LogContingencyTable(contingencyTable);
     writeContingencyTable(contingencyTable);
   }

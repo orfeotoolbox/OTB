@@ -126,7 +126,7 @@ int otbContingencyTableCalculatorCompute(int argc, char* argv[])
     }
 
   calculator->Compute( refLabels->Begin(), refLabels->End(), prodLabels->Begin(), prodLabels->End() );
-  ContingencyTableType confmat = calculator->GetContingencyTable();
+  ContingencyTableType confmat = calculator->BuildContingencyTable();
 
 
   if( static_cast<int>(calculator->GetNumberOfRefClasses()) != nbRefClasses )
@@ -216,7 +216,7 @@ int otbContingencyTableCalculatorComputeWithBaseline(int itkNotUsed(argc), char*
     }
 
   calculator->Compute( refLabels->Begin(), refLabels->End(), prodLabels->Begin(), prodLabels->End() );
-  CalculatorType::ContingencyTableType confmat = calculator->GetContingencyTable();
+  CalculatorType::ContingencyTableType confmat = calculator->BuildContingencyTable();
 
   std::cout << std::endl;
   std::cout << "contingency Table" << std::endl << confmat << std::endl;
