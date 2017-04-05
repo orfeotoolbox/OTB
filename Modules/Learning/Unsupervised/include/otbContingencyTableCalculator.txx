@@ -71,7 +71,7 @@ ContingencyTableCalculator<TClassLabel>
     {
     ++m_LabelCount[itRef.Get()][itProd.Get()];
     ++itRef;
-    ++itRef;
+    ++itProd;
     ++m_NumberOfSamples;
     }
 }
