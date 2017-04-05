@@ -102,7 +102,7 @@ void TrainVectorBase::DoInit()
 
   AddRANDParameter();
 
-  DoTrainInit();
+  DoInit();
 }
 
 void TrainVectorBase::DoUpdateParameters()
@@ -142,79 +142,75 @@ void TrainVectorBase::DoUpdateParameters()
       }
     }
 
-  DoTrainUpdateParameters();
+  DoUpdateParameters();
 }
 
 void TrainVectorBase::DoExecute()
 {
-  DoBeforeTrainExecute();
-
-  featuresInfo.SetFieldNames( GetChoiceNames( "feat" ), GetSelectedItems( "feat" ));
+  m_featuresInfo.SetFieldNames( GetChoiceNames( "feat" ), GetSelectedItems( "feat" ));
 
   // Check input parameters
-  if( featuresInfo.m_SelectedIdx.empty() )
+  if( m_featuresInfo.m_SelectedIdx.empty() )
     {
     otbAppLogFATAL( << "No features have been selected to train the classifier on!" );
     }
 
-  StatisticsMeasurement measurement = ComputeStatistics( featuresInfo.m_NbFeatures );
+  ShiftScaleParameters measurement = ComputeStatistics( m_featuresInfo.m_NbFeatures );
   ExtractAllSamples( measurement );
 
-  this->Train( trainingListSamples.listSample, trainingListSamples.labeledListSample, GetParameterString( "io.out" ) );
+  this->Train( m_trainingSamplesWithLabel.listSample, m_trainingSamplesWithLabel.labeledListSample, GetParameterString( "io.out" ) );
 
-  predictedList = TargetListSampleType::New();
-  this->Classify( classificationListSamples.listSample, predictedList, GetParameterString( "io.out" ) );
-
-  DoAfterTrainExecute();
+  m_predictedList = TargetListSampleType::New();
+  this->Classify( m_classificationSamplesWithLabel.listSample, m_predictedList, GetParameterString( "io.out" ) );
 }
 
 
-void TrainVectorBase::ExtractAllSamples(const StatisticsMeasurement &measurement)
+void TrainVectorBase::ExtractAllSamples(const ShiftScaleParameters &measurement)
 {
-  trainingListSamples = ExtractTrainingListSamples(measurement);
-  classificationListSamples = ExtractClassificationListSamples(measurement);
+  m_trainingSamplesWithLabel = ExtractTrainingSamplesWithLabel(measurement);
+  m_classificationSamplesWithLabel = ExtractClassificationSamplesWithLabel(measurement);
 }
 
-TrainVectorBase::ListSamples
-TrainVectorBase::ExtractTrainingListSamples(const StatisticsMeasurement &measurement)
+TrainVectorBase::SamplesWithLabel
+TrainVectorBase::ExtractTrainingSamplesWithLabel(const ShiftScaleParameters &measurement)
 {
-  return ExtractListSamples( "io.vd", "layer", measurement);
+  return ExtractSamplesWithLabel( "io.vd", "layer", measurement);
 }
 
-TrainVectorBase::ListSamples
-TrainVectorBase::ExtractClassificationListSamples(const StatisticsMeasurement &measurement)
+TrainVectorBase::SamplesWithLabel
+TrainVectorBase::ExtractClassificationSamplesWithLabel(const ShiftScaleParameters &measurement)
 {
   if(GetClassifierCategory() == Supervised)
     {
-    ListSamples tmpListSamples;
-    ListSamples validationListSamples = ExtractListSamples( "valid.vd", "valid.layer", measurement );
+    SamplesWithLabel tmpSamplesWithLabel;
+    SamplesWithLabel validationSamplesWithLabel = ExtractSamplesWithLabel( "valid.vd", "valid.layer", measurement );
     //Test the input validation set size
-    if( validationListSamples.labeledListSample->Size() != 0 )
+    if( validationSamplesWithLabel.labeledListSample->Size() != 0 )
       {
-      tmpListSamples.listSample = validationListSamples.listSample;
-      tmpListSamples.labeledListSample = validationListSamples.labeledListSample;
+      tmpSamplesWithLabel.listSample = validationSamplesWithLabel.listSample;
+      tmpSamplesWithLabel.labeledListSample = validationSamplesWithLabel.labeledListSample;
       }
     else
       {
       otbAppLogWARNING(
               "The validation set is empty. The performance estimation is done using the input training set in this case." );
-      tmpListSamples.listSample = trainingListSamples.listSample;
-      tmpListSamples.labeledListSample = trainingListSamples.labeledListSample;
+      tmpSamplesWithLabel.listSample = m_trainingSamplesWithLabel.listSample;
+      tmpSamplesWithLabel.labeledListSample = m_trainingSamplesWithLabel.labeledListSample;
       }
 
-    return tmpListSamples;
+    return tmpSamplesWithLabel;
     }
   else
     {
-    return trainingListSamples;
+    return m_trainingSamplesWithLabel;
     }
 }
 
 
-TrainVectorBase::StatisticsMeasurement
+TrainVectorBase::ShiftScaleParameters
 TrainVectorBase::ComputeStatistics(unsigned int nbFeatures)
 {
-  StatisticsMeasurement measurement = StatisticsMeasurement();
+  ShiftScaleParameters measurement = ShiftScaleParameters();
   if( HasValue( "io.stats" ) && IsParameterEnabled( "io.stats" ) )
     {
     StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
@@ -234,51 +230,51 @@ TrainVectorBase::ComputeStatistics(unsigned int nbFeatures)
 }
 
 
-TrainVectorBase::ListSamples
-TrainVectorBase::ExtractListSamples(std::string parameterName, std::string parameterLayer,
-                                    const StatisticsMeasurement &measurement)
+TrainVectorBase::SamplesWithLabel
+TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string parameterLayer,
+                                    const ShiftScaleParameters &measurement)
 {
-  ListSamples listSamples;
+  SamplesWithLabel samplesWithLabel;
   if( HasValue( parameterName ) && IsParameterEnabled( parameterName ) )
     {
     ListSampleType::Pointer input = ListSampleType::New();
     TargetListSampleType::Pointer target = TargetListSampleType::New();
-    input->SetMeasurementVectorSize( featuresInfo.m_NbFeatures );
+    input->SetMeasurementVectorSize( m_featuresInfo.m_NbFeatures );
 
-    std::vector<std::string> validFileList = this->GetParameterStringList( parameterName );
-    for( unsigned int k = 0; k < validFileList.size(); k++ )
+    std::vector<std::string> fileList = this->GetParameterStringList( parameterName );
+    for( unsigned int k = 0; k < fileList.size(); k++ )
       {
-      otbAppLogINFO( "Reading validation vector file " << k + 1 << "/" << validFileList.size() );
-      ogr::DataSource::Pointer source = ogr::DataSource::New( validFileList[k], ogr::DataSource::Modes::Read );
+      otbAppLogINFO( "Reading vector file " << k + 1 << "/" << fileList.size() );
+      ogr::DataSource::Pointer source = ogr::DataSource::New( fileList[k], ogr::DataSource::Modes::Read );
       ogr::Layer layer = source->GetLayer( static_cast<size_t>(this->GetParameterInt( parameterLayer )) );
       ogr::Feature feature = layer.ogr().GetNextFeature();
       bool goesOn = feature.addr() != 0;
       if( !goesOn )
         {
-        otbAppLogWARNING( "The layer " << GetParameterInt( parameterLayer ) << " of " << validFileList[k]
+        otbAppLogWARNING( "The layer " << GetParameterInt( parameterLayer ) << " of " << fileList[k]
                                        << " is empty, input is skipped." );
         continue;
         }
 
       // Check all needed fields are present :
       //   - check class field if we use supervised classification or if class field name is not empty
-      int cFieldIndex = feature.ogr().GetFieldIndex( featuresInfo.m_SelectedCFieldName.c_str() );
-      if( cFieldIndex < 0 && !featuresInfo.m_SelectedCFieldName.empty())
+      int cFieldIndex = feature.ogr().GetFieldIndex( m_featuresInfo.m_SelectedCFieldName.c_str() );
+      if( cFieldIndex < 0 && !m_featuresInfo.m_SelectedCFieldName.empty())
         {
-        otbAppLogFATAL( "The field name for class label (" << featuresInfo.m_SelectedCFieldName
+        otbAppLogFATAL( "The field name for class label (" << m_featuresInfo.m_SelectedCFieldName
                                                            << ") has not been found in the vector file "
-                                                           << validFileList[k] );
+                                                           << fileList[k] );
         }
 
       //   - check feature fields
-      std::vector<int> featureFieldIndex( featuresInfo.m_NbFeatures, -1 );
-      for( unsigned int i = 0; i < featuresInfo.m_NbFeatures; i++ )
+      std::vector<int> featureFieldIndex( m_featuresInfo.m_NbFeatures, -1 );
+      for( unsigned int i = 0; i < m_featuresInfo.m_NbFeatures; i++ )
         {
-        featureFieldIndex[i] = feature.ogr().GetFieldIndex( featuresInfo.m_SelectedNames[i].c_str() );
+        featureFieldIndex[i] = feature.ogr().GetFieldIndex( m_featuresInfo.m_SelectedNames[i].c_str() );
         if( featureFieldIndex[i] < 0 )
-          otbAppLogFATAL( "The field name for feature " << featuresInfo.m_SelectedNames[i]
+          otbAppLogFATAL( "The field name for feature " << m_featuresInfo.m_SelectedNames[i]
                                                         << " has not been found in the vector file "
-                                                        << validFileList[k] );
+                                                        << fileList[k] );
         }
 
 
@@ -286,8 +282,8 @@ TrainVectorBase::ExtractListSamples(std::string parameterName, std::string param
         {
         // Retrieve all the features for each field in the ogr layer.
         MeasurementType mv;
-        mv.SetSize( featuresInfo.m_NbFeatures );
-        for( unsigned int idx = 0; idx < featuresInfo.m_NbFeatures; ++idx )
+        mv.SetSize( m_featuresInfo.m_NbFeatures );
+        for( unsigned int idx = 0; idx < m_featuresInfo.m_NbFeatures; ++idx )
           mv[idx] = feature.ogr().GetFieldAsDouble( featureFieldIndex[idx] );
 
         input->PushBack( mv );
@@ -310,11 +306,12 @@ TrainVectorBase::ExtractListSamples(std::string parameterName, std::string param
     shiftScaleFilter->SetScales( measurement.stddevMeasurementVector );
     shiftScaleFilter->Update();
 
-    listSamples.listSample = shiftScaleFilter->GetOutput();
-    listSamples.labeledListSample = target;
+    samplesWithLabel.listSample = shiftScaleFilter->GetOutput();
+    samplesWithLabel.labeledListSample = target;
+    samplesWithLabel.listSample->DisconnectPipeline();
     }
 
-  return listSamples;
+  return samplesWithLabel;
 }
 
 
@@ -322,5 +319,3 @@ TrainVectorBase::ExtractListSamples(std::string parameterName, std::string param
 }
 
 #endif
-
-

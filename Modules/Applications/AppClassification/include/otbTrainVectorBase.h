@@ -74,7 +74,7 @@ public:
 protected:
 
   /** Class used to store statistics Measurment (mean/stddev) */
-  class StatisticsMeasurement
+  class ShiftScaleParameters
   {
   public:
     MeasurementType meanMeasurementVector;
@@ -82,12 +82,12 @@ protected:
   };
 
   /** Class used to store a list of sample and the corresponding label */
-  class ListSamples
+  class SamplesWithLabel
   {
   public:
     ListSampleType::Pointer listSample;
     TargetListSampleType::Pointer labeledListSample;
-    ListSamples()
+    SamplesWithLabel()
     {
       listSample = ListSampleType::New();
       labeledListSample = TargetListSampleType::New();
@@ -137,7 +137,7 @@ protected:
    * \param measurement statics measurement (mean/stddev)
    * \param featuresInfo information about the features
    */
-  virtual void ExtractAllSamples(const StatisticsMeasurement &measurement);
+  virtual void ExtractAllSamples(const ShiftScaleParameters &measurement);
 
   /**
   * Extract the training sample list
@@ -145,7 +145,7 @@ protected:
   * \param featuresInfo information about the features
   * \return sample list used for training
   */
-  virtual ListSamples ExtractTrainingListSamples(const StatisticsMeasurement &measurement);
+  virtual SamplesWithLabel ExtractTrainingSamplesWithLabel(const ShiftScaleParameters &measurement);
 
   /**
    * Extract classification the sample list
@@ -153,7 +153,7 @@ protected:
    * \param featuresInfo information about the features
    * \return sample list used for classification
    */
-  virtual ListSamples ExtractClassificationListSamples(const StatisticsMeasurement &measurement);
+  virtual SamplesWithLabel ExtractClassificationSamplesWithLabel(const ShiftScaleParameters &measurement);
 
 
   /** Extract samples from input file for corresponding field name
@@ -164,8 +164,8 @@ protected:
    * \param nbFeatures the number of features.
    * \return the list of samples and their corresponding labels.
    */
-  ListSamples
-  ExtractListSamples(std::string parameterName, std::string parameterLayer, const StatisticsMeasurement &measurement);
+  SamplesWithLabel
+  ExtractSamplesWithLabel(std::string parameterName, std::string parameterLayer, const ShiftScaleParameters &measurement);
 
 
   /**
@@ -173,18 +173,12 @@ protected:
    * Otherwise mean is set to 0 and standard deviation to 1 for each Features.
    * \param nbFeatures
    */
-  StatisticsMeasurement ComputeStatistics(unsigned int nbFeatures);
+  ShiftScaleParameters ComputeStatistics(unsigned int nbFeatures);
 
-  ListSamples trainingListSamples;
-  ListSamples classificationListSamples;
-  TargetListSampleType::Pointer predictedList;
-  FeaturesInfo featuresInfo;
-
-private:
-  virtual void DoTrainInit() = 0;
-  virtual void DoBeforeTrainExecute() = 0;
-  virtual void DoAfterTrainExecute() = 0;
-  virtual void DoTrainUpdateParameters() = 0;
+  SamplesWithLabel m_trainingSamplesWithLabel;
+  SamplesWithLabel m_classificationSamplesWithLabel;
+  TargetListSampleType::Pointer m_predictedList;
+  FeaturesInfo m_featuresInfo;
 
   void DoInit() ITK_OVERRIDE;
   void DoUpdateParameters() ITK_OVERRIDE;
@@ -200,4 +194,3 @@ private:
 #endif
 
 #endif
-

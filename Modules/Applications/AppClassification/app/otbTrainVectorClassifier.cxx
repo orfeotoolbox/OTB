@@ -50,42 +50,40 @@ public:
   typedef ConfusionMatrixCalculatorType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
 
-private:
-  void DoTrainInit()
+protected:
+  void DoInit()
   {
-    // Nothing to do here
+    TrainVectorBase::DoInit();
   }
 
-  void DoTrainUpdateParameters()
+  void DoUpdateParameters()
   {
-    // Nothing to do here
+    TrainVectorBase::DoUpdateParameters();
   }
 
-  void DoBeforeTrainExecute()
+  void DoExecute()
   {
     // Enforce the need of class field name in supervised mode
-    featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+    m_featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
     
-    if( featuresInfo.m_SelectedCFieldIdx.empty() && GetClassifierCategory() == Supervised)
+    if( m_featuresInfo.m_SelectedCFieldIdx.empty() && GetClassifierCategory() == Supervised)
       {
       otbAppLogFATAL( << "No field has been selected for data labelling!" );
       }
-  }
 
-  void DoAfterTrainExecute()
-  {
+    TrainVectorBase::DoExecute();
 
-    if (GetClassifierCategory() == Supervised)
-      {
-      ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( predictedList,
-                                                                                   classificationListSamples.labeledListSample );
-      WriteConfusionMatrix( confMatCalc );
-      }
-    else
-      {
-      if(!featuresInfo.m_SelectedCFieldIdx.empty())
+      if (GetClassifierCategory() == Supervised)
         {
-        ContingencyTable<ClassLabelType> table = ComputeContingencyTable(predictedList,classificationListSamples.labeledListSample);
+        ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_predictedList,
+                                                                                     m_classificationSamplesWithLabel.labeledListSample );
+        WriteConfusionMatrix( confMatCalc );
+        }
+      else
+        {
+      if(!m_featuresInfo.m_SelectedCFieldIdx.empty())
+        {
+        ContingencyTable<ClassLabelType> table = ComputeContingencyTable(m_predictedList,m_classificationSamplesWithLabel.labeledListSample);
         WriteContingencyTable(table);
         }
       }

@@ -15,7 +15,6 @@ otb_module(OTBUnsupervised
   OTBTestKernel
   OTBImageIO
   OTBImageBase
-  OTBLearningBase
 
   DESCRIPTION
   "${DOCUMENTATION}"
