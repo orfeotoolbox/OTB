@@ -134,8 +134,8 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     {
     case Map_Utm:
     {
-    typedef UtmInverseProjection  UtmProjectionType;
-    UtmProjectionType::Pointer    utmProjection = UtmProjectionType::New();
+    otb::UtmInverseProjection::Pointer utmProjection =
+     otb::UtmInverseProjection::New();
 
     // Set the zone
     utmProjection->SetZone(app->GetParameterInt(zoneKey.str()));
@@ -152,15 +152,15 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     break;
     case Map_Lambert2:
     {
-    typedef Lambert2EtenduForwardProjection Lambert2ProjectionType;
-    Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
+    otb::Lambert2EtenduForwardProjection::Pointer lambert2Projection =
+      otb::Lambert2EtenduForwardProjection::New();
     return lambert2Projection->GetWkt();
     }
     break;
     case Map_Lambert93:
     {
-    typedef otb::Lambert93InverseProjection Lambert93ProjectionType;
-    Lambert93ProjectionType::Pointer lambert93Projection = Lambert93ProjectionType::New();
+    otb::Lambert93InverseProjection::Pointer lambert93Projection =
+      otb::Lambert93InverseProjection::New();
     return lambert93Projection->GetWkt();
     }
     break;
