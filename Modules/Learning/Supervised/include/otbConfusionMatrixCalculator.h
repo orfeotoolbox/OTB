@@ -91,12 +91,6 @@ public:
   /** Type for the measurement */
   typedef itk::VariableLengthVector<double>                                     MeasurementType;
 
-
-  /**
-   * \deprecated in OTB 3.16, please use void Compute(void) instead.
-   */
-  itkLegacyMacro( virtual void Update() );
-
   /** Computes m_ConfusionMatrix and then the measurements over it. */
   void Compute(void);
 
