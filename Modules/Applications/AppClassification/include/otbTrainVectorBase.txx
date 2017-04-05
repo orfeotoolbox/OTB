@@ -308,6 +308,7 @@ TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string 
 
     samplesWithLabel.listSample = shiftScaleFilter->GetOutput();
     samplesWithLabel.labeledListSample = target;
+    samplesWithLabel.listSample->DisconnectPipeline();
     }
 
   return samplesWithLabel;
