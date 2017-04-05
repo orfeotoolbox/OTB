@@ -360,19 +360,6 @@ if(OTB_USE_LIBSVM)
 
 endif()
 
-#----------- TrainOGRLayersClassifier TESTS ----------------
-otb_test_application(NAME apTvClTrainOGRLayersClassifier
-                     APP  TrainOGRLayersClassifier
-                     OPTIONS -inshp ${INPUTDATA}/Classification/apTvClLabeledVector.shp
-                             -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
-                             -instats ${TEMP}/apTvClComputeOGRLayersFeaturesStatistics.xml
-                             -outsvm ${TEMP}/apTvClModel.svm
-                     VALID   --compare-ascii ${NOTOL}
-                             ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
-                             ${TEMP}/apTvClModel.svm)
-
-set_tests_properties(apTvClTrainOGRLayersClassifier PROPERTIES DEPENDS apTvClComputeOGRLayersFeaturesStatistics)
-
 #----------- ComputeConfusionMatrix TESTS ----------------
 otb_test_application(NAME apTvComputeConfusionMatrixV
                      APP  ComputeConfusionMatrix

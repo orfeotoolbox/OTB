@@ -61,11 +61,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           TrainOGRLayersClassifier
-  SOURCES        otbTrainOGRLayersClassifier.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
   NAME           TrainVectorClassifier
   SOURCES        otbTrainVectorClassifier.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
