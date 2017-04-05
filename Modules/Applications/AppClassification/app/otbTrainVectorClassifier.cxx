@@ -99,6 +99,10 @@ private:
     ContigencyTableCalcutaltorType::Pointer contingencyTableCalculator = ContigencyTableCalcutaltorType::New();
     contingencyTableCalculator->Compute(performanceLabeledListSample->Begin(),
                                         performanceLabeledListSample->End(),predictedListSample->Begin(), predictedListSample->End());
+
+    otbAppLogINFO( "Training performances:" );
+
+    otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"<<contingencyTableCalculator->GetContingencyTable());
     
     return contingencyTableCalculator->GetContingencyTable();
   }
@@ -128,7 +132,7 @@ private:
     confMatCalc->SetProducedLabels( predictedListSample );
     confMatCalc->Compute();
 
-    otbAppLogINFO( "training performances" );
+    otbAppLogINFO( "Training performances:" );
     LogConfusionMatrix( confMatCalc );
 
     for( unsigned int itClasses = 0; itClasses < confMatCalc->GetNumberOfClasses(); itClasses++ )
