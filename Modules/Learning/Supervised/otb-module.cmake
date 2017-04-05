@@ -36,14 +36,12 @@ ENABLE_SHARED
     OTBOpenCV
     OTBSVMLearning
     OTBShark
-    
+
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
     OTBImageBase
-    OTBLearningBase
     OTBBoost
-    OTBUnsupervised
 
   DESCRIPTION
     "${DOCUMENTATION}"
