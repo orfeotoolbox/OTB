@@ -81,7 +81,7 @@ public:
         }
       }
 
-    int width = static_cast<int>(maxWidth);
+    int width = static_cast<int>(maxWidth)+1;
 
     // Write the first line of the matrix (produced labels)
     o << std::setfill(' ') << std::setw( width ) << "labels";
