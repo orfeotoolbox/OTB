@@ -64,14 +64,11 @@ private:
   void DoBeforeTrainExecute()
   {
     // Enforce the need of class field name in supervised mode
-    if (GetClassifierCategory() == Supervised)
+    featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+    
+    if( featuresInfo.m_SelectedCFieldIdx.empty() )
       {
-      featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
-
-      if( featuresInfo.m_SelectedCFieldIdx.empty() )
-        {
-        otbAppLogFATAL( << "No field has been selected for data labelling!" );
-        }
+      otbAppLogFATAL( << "No field has been selected for data labelling!" );
       }
   }
 
