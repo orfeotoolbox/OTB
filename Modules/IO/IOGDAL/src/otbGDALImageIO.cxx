@@ -1197,6 +1197,21 @@ void GDALImageIO::InternalReadImageInformation()
   /* Color Table                                                          */
   /* -------------------------------------------------------------------- */
 
+  // Mantis: 1049 : OTB does not handle tif with NBITS=1 properly
+  // When a palette is available and pixel type is Byte, the image is
+  // automatically read as a color image (using the palette). Perhaps this
+  // behaviour should be restricted.  Comment color table interpretation in
+  // gdalimageio
+  
+  // FIXME: Better support of color table in OTB
+  // - disable palette conversion in GDALImageIO (the comments in this part of
+  //   the code are rather careful)
+  // - GDALImageIO should report the palette to ImageFileReader (as a metadata ?
+  // a kind of LUT ?).
+  // - ImageFileReader should use a kind of adapter filter to convert the mono
+  // image into color.
+
+  /*
   for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
     {
     GDALColorTableH hTable;
@@ -1238,8 +1253,10 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetNumberOfComponents(m_NbBands);
     this->SetPixelType(VECTOR);
     }
+  */
+  // End of comments related to color table interpretation
 
-
+  
   // Read no data value if present
   std::vector<bool> isNoDataAvailable(dataset->GetRasterCount(),false);
   std::vector<double> noDataValues(dataset->GetRasterCount(),0);
