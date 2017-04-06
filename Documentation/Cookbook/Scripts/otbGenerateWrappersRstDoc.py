@@ -149,10 +149,10 @@ def FindLengthOfLargestColumnText(app,paramlist):
         else:
             if colLength[0] < len(param):
                 colLength[0] = len(param)
-            lenpdescr = len(app.GetParameterName(param))
+            lenpdescr = len(GenerateParameterType(app, param))
             if colLength[2] < lenpdescr:
                 colLength[2] = lenpdescr
-        lenptype = len(GenerateParameterType(app,param))
+        lenptype = len(app.GetParameterName(param))
         if colLength[1] < lenptype:
             colLength[1] = lenptype
     return colLength
@@ -181,14 +181,14 @@ def MakeText(text, size):
 def GenerateParametersTable(app,paramlist):
     colLength = FindLengthOfLargestColumnText(app, paramlist)
     output = linesep + ".. [#] Table: Parameters table for " + ConvertString(app.GetDocName()) + "." + linesep + linesep
-    headerlist = ["Parameter Key", "Parameter Type", "Parameter Description"]
+    headerlist = ["Parameter Key", "Parameter Name", "Parameter Type"]
     for i in xrange(len(headerlist)):
         colLength[i] = len(headerlist[i]) if colLength[i] < len(headerlist[i]) else colLength[i]
     output += RstTableHeading(headerlist, colLength)
     for param in paramlist:
         output += MakeText(param, colLength[0])
-        output += MakeText(GenerateParameterType(app,param), colLength[1])
-        output += MakeText(GenerateParameterType(app,param), colLength[2])
+        output += MakeText(app.GetParameterName(param), colLength[1])
+        output += MakeText(GenerateParameterType(app, param), colLength[2])
         output += '|' + linesep
         output += RstTableHeaderLine(headerlist, colLength, '-')
         if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
