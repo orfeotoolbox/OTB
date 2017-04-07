@@ -212,6 +212,19 @@ public:
     return static_cast<int>(m_Parameters.cache_size);
   }
 
+  itkSetMacro(CVFolders, unsigned int);
+  itkGetMacro(CVFolders, unsigned int);
+
+  itkGetMacro(InitialCrossValidationAccuracy, double);
+
+  itkGetMacro(FinalCrossValidationAccuracy, double);
+
+  itkSetMacro(CoarseOptimizationNumberOfSteps, unsigned int);
+  itkGetMacro(CoarseOptimizationNumberOfSteps, unsigned int);
+
+  itkSetMacro(FineOptimizationNumberOfSteps, unsigned int);
+  itkGetMacro(FineOptimizationNumberOfSteps, unsigned int);
+
 protected:
   /** Constructor */
   LibSVMMachineLearningModel();
@@ -237,7 +250,7 @@ private:
 
   void DeleteModel(void);
 
-  double CrossValidation(unsigned int nbFolders);
+  double CrossValidation(void);
 
   void OptimizeParameters(void);
 
@@ -252,6 +265,21 @@ private:
 
   /** Do parameters optimization, default : false */
   bool m_ParameterOptimization;
+
+  /** Number of Cross Validation folders*/
+  unsigned int m_CVFolders;
+
+  /** Initial cross validation accuracy */
+  double m_InitialCrossValidationAccuracy;
+
+  /** Final cross validationa accuracy */
+  double m_FinalCrossValidationAccuracy;
+
+  /** Number of steps for the coarse search */
+  unsigned int m_CoarseOptimizationNumberOfSteps;
+
+  /** Number of steps for the fine search */
+  unsigned int m_FineOptimizationNumberOfSteps;
 
   /** Temporary array to store cross-validation results */
   std::vector<double> m_TmpTarget;

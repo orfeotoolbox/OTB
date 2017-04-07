@@ -23,6 +23,8 @@
 
 #include <fstream>
 #include "otbLibSVMMachineLearningModel.h"
+#include "otbSVMCrossValidationCostFunction.h"
+#include "otbExhaustiveExponentialOptimizer.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -46,6 +48,11 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   this->SetCacheSize(40); // MB
   this->m_ParameterOptimization = false;
   this->m_IsRegressionSupported = true;
+  this->SetCVFolders(5);
+  this->m_InitialCrossValidationAccuracy = 0.;
+  this->m_FinalCrossValidationAccuracy = 0.;
+  this->m_CoarseOptimizationNumberOfSteps = 5;
+  this->m_FineOptimizationNumberOfSteps = 5;
 
   this->m_Parameters.nr_weight = 0;
   this->m_Parameters.weight_label = ITK_NULLPTR;
@@ -375,7 +382,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 double
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::CrossValidation(unsigned int nbFolders)
+::CrossValidation(void)
 {
   double accuracy = 0.0;
   // Get the length of the problem
@@ -384,7 +391,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     return accuracy;
 
   // Do cross validation
-  svm_cross_validation(&m_Problem, &m_Parameters, nbFolders, &m_TmpTarget[0]);
+  svm_cross_validation(&m_Problem, &m_Parameters, m_CVFolders, &m_TmpTarget[0]);
 
   // Evaluate accuracy
   double total_correct = 0.;
@@ -406,12 +413,9 @@ void
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::OptimizeParameters()
 {
-  typedef SVMCrossValidationCostFunction<SVMModelType> CrossValidationFunctionType;
-
+  typedef SVMCrossValidationCostFunction<this> CrossValidationFunctionType;
   typename CrossValidationFunctionType::Pointer crossValidationFunction = CrossValidationFunctionType::New();
-
-  crossValidationFunction->SetModel(this->GetModel());
-  crossValidationFunction->SetNumberOfCrossValidationFolders(m_NumberOfCrossValidationFolders);
+  crossValidationFunction->SetModel(this);
 
   typename CrossValidationFunctionType::ParametersType initialParameters, coarseBestParameters, fineBestParameters;
 
