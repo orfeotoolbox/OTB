@@ -69,7 +69,8 @@ ImageFileWriter<TInputImage>
     m_WriteGeomFile(false),
     m_FilenameHelper(),
     m_IsObserving(true),
-    m_ObserverID(0)
+    m_ObserverID(0),
+    m_IOComponents(0)
 {
   //Init output index shift
   m_ShiftOutputIndex.Fill(0);

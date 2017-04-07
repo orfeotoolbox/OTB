@@ -1281,6 +1281,8 @@ ImageIOBase
   bool workBackward = (outPixelSize > inPixelSize);
   char *pixBuffer = new char[outPixelSize];
 
+  memset(pixBuffer, 0, outPixelSize);
+
   if (workBackward)
     {
     inPos = inPos + numberOfPixels*inPixelSize;

@@ -69,7 +69,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
    m_ActualIORegion(),
    m_FilenameHelper(FNameHelperType::New()),
    m_AdditionalNumber(0),
-   m_KeywordListUpToDate(false)
+   m_KeywordListUpToDate(false),
+   m_IOComponents(0)
 {
 }
 
