@@ -25,10 +25,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-// SVM estimator
-#include "otbSVMSampleListModelEstimator.h"
-// Validation
-#include "otbSVMClassifier.h"
+#include "svm.h"
 
 namespace otb
 {
@@ -50,13 +47,6 @@ public:
   typedef typename Superclass::TargetSampleType           TargetSampleType;
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-
-  // LibSVM related typedefs
-  typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<InputSampleType> MeasurementVectorFunctorType;
-  typedef otb::SVMSampleListModelEstimator<InputListSampleType, TargetListSampleType, MeasurementVectorFunctorType>
-      SVMEstimatorType;
-
-  typedef otb::SVMClassifier<InputSampleType, TargetValueType> ClassifierType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
@@ -80,41 +70,147 @@ public:
   bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
-  //Setters/Getters to SVM model
-  otbGetObjectMemberMacro(SVMestimator, SVMType, int);
-  otbSetObjectMemberMacro(SVMestimator, SVMType, int);
-
-  otbGetObjectMemberMacro(SVMestimator, KernelType, int);
-  otbSetObjectMemberMacro(SVMestimator, KernelType, int);
-
-  otbGetObjectMemberMacro(SVMestimator, C, double);
-  otbSetObjectMemberMacro(SVMestimator, C, double);
-
-  // TODO : we should harmonize this parameter name : ParameterOptimization -> ParametersOptimization
-  bool GetParameterOptimization()
-    {
-    return this->m_SVMestimator->GetParametersOptimization();
+#define otbSetSVMParameterMacro(name, alias, type) \
+  void Set##name (const type _arg)                                \
+    {                                                             \
+    itkDebugMacro("setting " #name " to " << _arg); \
+    if ( this->m_Parameters.alias != _arg )                      \
+      {                                                           \
+      this->m_Parameters.alias = _arg;                           \
+      this->Modified();                                           \
+      }                                                           \
     }
-  void SetParameterOptimization(bool value)
+
+  /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
+  otbSetSVMParameterMacro(SVMType, svm_type, int)
+
+  /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
+  int GetSVMType(void) const
     {
-    this->m_SVMestimator->SetParametersOptimization(value);
+    return m_Parameters.svm_type;
+    }
+
+  /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
+  linear: u'*v
+  polynomial: (gamma*u'*v + coef0)^degree
+  radial basis function: exp(-gamma*|u-v|^2)
+  sigmoid: tanh(gamma*u'*v + coef0)*/
+  otbSetSVMParameterMacro(KernelType, kernel_type, int)
+
+  /** Get the kernel type */
+  int GetKernelType(void) const
+    {
+    return m_Parameters.kernel_type;
+    }
+
+  /** Set the degree of the polynomial kernel */
+  otbSetSVMParameterMacro(PolynomialKernelDegree,degree,int)
+
+  /** Get the degree of the polynomial kernel */
+  int GetPolynomialKernelDegree(void) const
+    {
+    return m_Parameters.degree;
+    }
+
+  /** Set the gamma parameter for poly/rbf/sigmoid kernels */
+  otbSetSVMParameterMacro(KernelGamma,gamma,double)
+
+  /** Get the gamma parameter for poly/rbf/sigmoid kernels */
+  double GetKernelGamma(void) const
+    {
+    return m_Parameters.gamma;
+    }
+
+  /** Set the coef0 parameter for poly/sigmoid kernels */
+  otbSetSVMParameterMacro(KernelCoef0,coef0,double)
+
+  /** Get the coef0 parameter for poly/sigmoid kernels */
+  double GetKernelCoef0(void) const
+  {
+    return m_Parameters.coef0;
+  }
+
+  /** Set the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
+  otbSetSVMParameterMacro(C,C,double)
+
+  /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
+  double GetC(void) const
+    {
+    return m_Parameters.C;
+    }
+
+  itkSetMacro(ParameterOptimization, bool);
+  itkGetMacro(ParameterOptimization, bool);
+
+  /** Do probability estimates */
+  void DoProbabilityEstimates(bool prob)
+    {
+    m_Parameters.probability = static_cast<int>(prob);
+    }
+
+  /** Get Do probability estimates boolean */
+  bool GetDoProbabilityEstimates(void) const
+    {
+    return static_cast<bool>(m_Parameters.probability);
+    }
+
+  /** Test if the model has probabilities */
+  bool HasProbabilities(void) const;
+
+  /** Set the tolerance for the stopping criterion for the training*/
+  otbSetSVMParameterMacro(Epsilon,eps,double)
+
+  /** Get the tolerance for the stopping criterion for the training*/
+  double GetEpsilon(void) const
+  {
+    return m_Parameters.eps;
+  }
+
+  /** Set the value of p for EPSILON_SVR */
+  otbSetSVMParameterMacro(P,p,double)
+
+  /** Get the value of p for EPSILON_SVR */
+  double GetP(void) const
+  {
+    return m_Parameters.p;
+  }
+
+  /** Set the Nu parameter for the training */
+  otbSetSVMParameterMacro(Nu,nu,double)
+
+  /** Set the Nu parameter for the training */
+  double GetNu(void) const
+  {
+    return m_Parameters.nu;
+  }
+
+#undef otbSetSVMParameterMacro
+
+  /** Use the shrinking heuristics for the training */
+  void DoShrinking(bool s)
+  {
+    m_Parameters.shrinking = static_cast<int>(s);
     this->Modified();
-    }
+  }
 
-  otbGetObjectMemberMacro(SVMestimator, DoProbabilityEstimates, bool);
-  void SetDoProbabilityEstimates(bool value)
-    {
-    this->m_SVMestimator->DoProbabilityEstimates(value);
-    }
+  /** Get Use the shrinking heuristics for the training boolea */
+  bool GetDoShrinking(void) const
+  {
+    return static_cast<bool>(m_Parameters.shrinking);
+  }
 
-  otbGetObjectMemberMacro(SVMestimator, Epsilon, double);
-  otbSetObjectMemberMacro(SVMestimator, Epsilon, double);
+  /** Set the cache size in MB for the training */
+  void SetCacheSize(int cSize)
+  {
+    m_Parameters.cache_size = static_cast<double>(cSize);
+    this->Modified();
+  }
 
-  otbGetObjectMemberMacro(SVMestimator, P, double);
-  otbSetObjectMemberMacro(SVMestimator, P, double);
-
-  otbGetObjectMemberMacro(SVMestimator, Nu, double);
-  otbSetObjectMemberMacro(SVMestimator, Nu, double);
+  /** Get the cache size in MB for the training */
+  int GetCacheSize(void) const
+  {
+    return static_cast<int>(m_Parameters.cache_size);
+  }
 
 protected:
   /** Constructor */
@@ -133,7 +229,33 @@ private:
   LibSVMMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  typename SVMEstimatorType::Pointer m_SVMestimator;
+  void BuildProblem(void);
+
+  void ConsistencyCheck(void);
+
+  void DeleteProblem(void);
+
+  void DeleteModel(void);
+
+  double CrossValidation(unsigned int nbFolders);
+
+  void OptimizeParameters(void);
+
+  /** Container to hold the SVM model itself */
+  struct svm_model* m_Model;
+
+  /** Structure that stores training vectors */
+  struct svm_problem m_Problem;
+
+  /** Container of the SVM parameters */
+  struct svm_parameter m_Parameters;
+
+  /** Do parameters optimization, default : false */
+  bool m_ParameterOptimization;
+
+  /** Temporary array to store cross-validation results */
+  std::vector<double> m_TmpTarget;
+
 };
 } // end namespace otb
 

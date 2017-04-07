@@ -32,9 +32,9 @@ ENABLE_SHARED
 
   OPTIONAL_DEPENDS
     OTBOpenCV
-    OTBSVMLearning
+    OTBLibSVM
     OTBShark
-    
+
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO

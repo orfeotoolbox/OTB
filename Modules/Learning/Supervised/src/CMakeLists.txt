@@ -29,7 +29,7 @@ endif()
 add_library(OTBSupervised ${OTBSupervised_SRC})
 target_link_libraries(OTBSupervised
   ${OTBCommon_LIBRARIES}
-  ${OTBSVMLearning_LIBRARIES}
+  ${OTBLibSVM_LIBRARIES}
   ${OTBOpenCV_LIBRARIES}
   ${OTBShark_LIBRARIES}
   )
