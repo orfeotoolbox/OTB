@@ -48,7 +48,7 @@ namespace otb
  *
  * \ingroup ClassificationFilters
  *
- * \ingroup OTBSVMLearning
+ * \ingroup OTBSupervised
  */
 template <class TModel>
 class ITK_EXPORT SVMCrossValidationCostFunction
@@ -78,10 +78,6 @@ public:
   itkSetObjectMacro(Model, SVMModelType);
   itkGetObjectMacro(Model, SVMModelType);
 
-  /** Set/Get the number of cross validation folders */
-  itkSetMacro(NumberOfCrossValidationFolders, unsigned int);
-  itkGetMacro(NumberOfCrossValidationFolders, unsigned int);
-
   /** Set/Get the derivative step */
   itkSetMacro(DerivativeStep, ParametersValueType);
   itkGetMacro(DerivativeStep, ParametersValueType);
@@ -103,7 +99,7 @@ protected:
 
   /** Update svm parameters struct according to the input parameters
     */
-  virtual void UpdateParameters(struct svm_parameter& svm_parameters, const ParametersType& parameters) const;
+  void UpdateParameters(const ParametersType& parameters) const;
 
 private:
   SVMCrossValidationCostFunction(const Self &); //purposely not implemented
@@ -111,9 +107,6 @@ private:
 
   /**Pointer to the SVM model to optimize */
   SVMModelPointer m_Model;
-
-  /** Number of cross validation folders */
-  unsigned int m_NumberOfCrossValidationFolders;
 
   /** Step used to compute the derivatives */
   ParametersValueType m_DerivativeStep;
