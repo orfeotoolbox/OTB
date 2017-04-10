@@ -22,6 +22,7 @@
 #define otbTrainSharkRandomForests_txx
 
 #include "otbLearningApplicationBase.h"
+#include "otbSharkRandomForestsMachineLearningModel.h"
 
 namespace otb
 {
@@ -83,6 +84,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                           typename TargetListSampleType::Pointer trainingLabeledListSample,
                           std::string modelPath)
 {
+  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
   typename SharkRandomForestType::Pointer classifier = SharkRandomForestType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);

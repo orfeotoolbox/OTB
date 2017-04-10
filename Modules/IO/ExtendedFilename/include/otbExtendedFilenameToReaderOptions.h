@@ -35,6 +35,13 @@ namespace otb
  * - &resol : resolution factor for jpeg200 files
  * - &skipcarto : switch to skip the cartographic information
  * - &skipgeom  : switch to skip the geometric information
+ * - &bands : select a band composition different from the input image,
+ *           syntax is bands=r1,r2,r3,...,rn  where each ri is a band range
+ *           that can be :
+ *             - a single index (1-based) : '2' means 2nd band, '-1' means last band
+ *             - a range of bands : '3:' means 3rd band until the last one
+ *                 ':-2' means the first bands until the second to last
+ *                 '2:4' means bands 2,3 and 4
  *
  *  \sa ImageFileReader
  *
@@ -67,6 +74,7 @@ public:
     std::pair< bool, bool         >  skipCarto;
     std::pair< bool, bool         >  skipGeom;
     std::pair< bool, bool         >  skipRpcTag;
+    std::pair< bool, std::string  >  bandRange;
     std::vector<std::string>         optionList;
   };
 
@@ -86,6 +94,10 @@ public:
   bool GetSkipGeom () const;
   bool SkipRpcTagIsSet () const;
   bool GetSkipRpcTag () const;
+  std::string GetBandRange () const;
+
+  /** Test if band range extended filename is set */
+  bool BandRangeIsSet () const;
 
 protected:
   ExtendedFilenameToReaderOptions();

@@ -33,7 +33,6 @@ namespace Wrapper
 template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
 ::LearningApplicationBase() : m_RegressionFlag(false)
-
 {
 }
 
@@ -73,13 +72,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
                     GetParameterString("classifier")) != m_UnsupervisedClassifier.end();
   return foundUnsupervised ? Unsupervised : Supervised;
 }
-
-template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::DoUpdateParameters()
-{
-};
 
 template <class TInputValue, class TOutputValue>
 void
@@ -193,7 +185,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif
     }
-  if(modelName == "sharkkm")
+  else if(modelName == "sharkkm")
     {
     #ifdef OTB_USE_SHARK
     TrainSharkKMeans( trainingListSample, trainingLabeledListSample, modelPath );
@@ -201,18 +193,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif
     }
-
-  
-  // OpenCV SVM implementation is buggy with linear kernel
-  // Users should use the libSVM implementation instead.
-  // else if (modelName == "svm")
-  //  {
-	//  #ifdef OTB_USE_OPENCV
-  //   TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
-  //  #else
-  //   otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-  //  #endif
-  //  }
+  else if (modelName == "svm")
+    {
+    #ifdef OTB_USE_OPENCV
+    TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
+    #else
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
+    }
   else if (modelName == "boost")
     {
 	#ifdef OTB_USE_OPENCV

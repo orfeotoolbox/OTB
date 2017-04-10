@@ -26,7 +26,11 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
+#ifdef OTB_OPENCV_3
+#include "otbOpenCVUtils.h"
+#else
 class CvSVM;
+#endif
 
 namespace otb
 {
@@ -146,8 +150,11 @@ protected:
 private:
   SVMMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
+#ifdef OTB_OPENCV_3
+  cv::Ptr<cv::ml::SVM> m_SVMModel;
+#else
   CvSVM * m_SVMModel;
+#endif
   int m_SVMType;
   int m_KernelType;
   double m_Degree;

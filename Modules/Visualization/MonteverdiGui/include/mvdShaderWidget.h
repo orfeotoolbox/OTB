@@ -146,6 +146,14 @@ private:
   /** */
   void virtual_SetSettings( ImageSettings * ) ITK_OVERRIDE;
 
+  /**
+   * Set the ComboBox effects item for the corresponding image settings.
+   * This will append or remove effects (lut) depending if settings
+   * correspond to grayscale image or not.
+   * \param imageSettings Settings of the current image.
+   */
+  void UpdateComboBoxEffectItems(ImageSettings *imageSettings) ;
+
 //
 // Private attributes.
 private:

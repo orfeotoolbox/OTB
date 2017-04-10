@@ -303,7 +303,6 @@ public:
   virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
                                         bool isVectorImage) = 0;
   
-
   /*-------- This part of the interfaces deals with reading data ----- */
 
   /** Determine the file type. Returns true if this ImageIO can read the
@@ -421,6 +420,12 @@ public:
    */
   const ArrayOfExtensionsType & GetSupportedWriteExtensions() const;
 
+  /** Remap band order in an input buffer using band mapping bandList
+   *  This operation is done in-place. The buffer size should enough to
+   *  contain extracted bands before and after mapping. bandList mapping
+   * between origin components and output components (before any
+   * conversion)*/
+  void DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList);
 
 protected:
   ImageIOBase();

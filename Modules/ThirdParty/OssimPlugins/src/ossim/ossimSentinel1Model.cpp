@@ -298,11 +298,13 @@ namespace ossimplugins
          All these cases should not go slient on error message. It must be FATAL errors.
 
          */
-
-         ossimNotify(ossimNotifyLevel_FATAL)
-            << MODULE
-            << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
-         return false;
+      if(traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+          << MODULE
+          << " !xmlFileName.exists() || !this->readProduct(xmlFileName) fails \n";
+        }
+        return false;
       }
       else
       {

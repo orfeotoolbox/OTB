@@ -89,7 +89,7 @@ SetDocAuthors("OTB-Team");
 SetDocSeeAlso("itkBinaryDilateImageFilter, itkBinaryErodeImageFilter, itkBinaryMorphologicalOpeningImageFilter and itkBinaryMorphologicalClosingImageFilter classes");
 
 AddDocTag(Tags::FeatureExtraction);
-AddDocTag("MorphologicalOperations");
+AddDocTag("Morphology");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to be filtered.");

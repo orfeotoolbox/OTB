@@ -23,7 +23,6 @@
 
 #include <fstream>
 #include "otbNeuralNetworkMachineLearningModel.h"
-#include "otbOpenCVUtils.h"
 #include "itkMacro.h" // itkExceptionMacro
 
 namespace otb
@@ -31,7 +30,12 @@ namespace otb
 
 template<class TInputValue, class TOutputValue>
 NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+  m_ANNModel(cv::ml::ANN_MLP::create()),
+  // TODO
+#else
   m_ANNModel (new CvANN_MLP),
+#endif
   m_TrainMethod(CvANN_MLP_TrainParams::RPROP),
   m_ActivateFunction(CvANN_MLP::SIGMOID_SYM),
   m_Alpha(1.),
@@ -52,7 +56,9 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
 template<class TInputValue, class TOutputValue>
 NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMachineLearningModel()
 {
+#ifndef OTB_OPENCV_3
   delete m_ANNModel;
+#endif
   cvReleaseMat(&m_CvMatOfLabels);
 }
 
@@ -153,9 +159,15 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CreateNetwork
     layers.row(i) = m_LayerSizes[i];
     }
 
+#ifdef OTB_OPENCV_3
+  m_ANNModel->setLayerSizes(layers);
+  m_ANNModel->setActivationFunction(m_ActivateFunction, m_Alpha, m_Beta);
+#else
   m_ANNModel->create(layers, m_ActivateFunction, m_Alpha, m_Beta);
+#endif
 }
 
+#ifndef OTB_OPENCV_3
 template<class TInputValue, class TOutputValue>
 CvANN_MLP_TrainParams NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetNetworkParameters()
 {
@@ -169,6 +181,7 @@ CvANN_MLP_TrainParams NeuralNetworkMachineLearningModel<TInputValue, TOutputValu
   params.term_crit = term_crit;
   return params;
 }
+#endif
 
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkAndTrain(cv::Mat& labels)
@@ -177,9 +190,27 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkA
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
   this->CreateNetwork();
+#ifdef OTB_OPENCV_3
+  int flags = (this->m_RegressionMode ? 0 : cv::ml::ANN_MLP::NO_OUTPUT_SCALE);
+  m_ANNModel->setTrainMethod(m_TrainMethod);
+  m_ANNModel->setBackpropMomentumScale(m_BackPropMomentScale);
+  m_ANNModel->setBackpropWeightScale(m_BackPropDWScale);
+  m_ANNModel->setRpropDW0(m_RegPropDW0);
+  //m_ANNModel->setRpropDWMax( );
+  m_ANNModel->setRpropDWMin(m_RegPropDWMin);
+  //m_ANNModel->setRpropDWMinus( );
+  //m_ANNModel->setRpropDWPlus( );
+  m_ANNModel->setTermCriteria(cv::TermCriteria(m_TermCriteriaType,m_MaxIter,m_Epsilon));
+  m_ANNModel->train(cv::ml::TrainData::create(
+    samples,
+    cv::ml::ROW_SAMPLE,
+    labels),
+    flags);
+#else
   CvANN_MLP_TrainParams params = this->SetNetworkParameters();
   //train the Neural network model
   m_ANNModel->train(samples, labels, cv::Mat(), cv::Mat(), params);
+#endif
 }
 
 /** Train the machine learning model for classification*/
@@ -205,6 +236,7 @@ template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
   TInputValue, TOutputValue>::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
   //convert listsample to Mat
   cv::Mat sample;
 
@@ -213,7 +245,6 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
   cv::Mat response; //(1, 1, CV_32FC1);
   m_ANNModel->predict(sample, response);
 
-  TargetSampleType target;
   float currentResponse = 0;
   float maxResponse = response.at<float> (0, 0);
 
@@ -251,7 +282,6 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
     {
     (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
-
   return target;
 }
 
@@ -259,6 +289,18 @@ template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string & filename,
                                                                         const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_ANNModel->getDefaultName() : cv::String(name)) << "{";
+  m_ANNModel->write(fs);
+  if (m_CvMatOfLabels != ITK_NULLPTR)
+    {
+    std::string labelsName("class_labels");
+    fs.writeObj(labelsName,m_CvMatOfLabels);
+    }
+  fs << "}";
+  fs.release();
+#else
   const char* lname = "my_nn";
   if ( !name.empty() )
     lname = name.c_str();
@@ -275,12 +317,20 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
     cvWrite(fs, "class_labels", m_CvMatOfLabels);
 
   cvReleaseFileStorage(&fs);
+#endif
 }
 
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string & filename,
                                                                         const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  cv::FileStorage fs(filename, cv::FileStorage::READ);
+  cv::FileNode model_node(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
+  m_ANNModel->read(model_node);
+  m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
+  fs.release();
+#else
   const char* lname = ITK_NULLPTR;
   if ( !name.empty() )
     lname = name.c_str();
@@ -307,6 +357,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
 
   fs.release();
+#endif
 }
 
 template<class TInputValue, class TOutputValue>
@@ -326,7 +377,11 @@ bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(c
     std::string line;
     std::getline(ifs, line);
 
-    if (line.find(CV_TYPE_NAME_ML_ANN_MLP) != std::string::npos)
+    if (line.find(CV_TYPE_NAME_ML_ANN_MLP) != std::string::npos
+#ifdef OTB_OPENCV_3
+        || line.find(m_ANNModel->getDefaultName()) != std::string::npos
+#endif
+        )
       {
       //std::cout << "Reading a " << CV_TYPE_NAME_ML_ANN_MLP << " model" << std::endl;
       return true;

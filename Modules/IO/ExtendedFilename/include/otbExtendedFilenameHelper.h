@@ -55,6 +55,30 @@ public:
   itkGetStringMacro(ExtendedFileName);
   itkGetStringMacro(SimpleFileName);
 
+  struct GenericBandRange : std::pair<int,int>
+  {
+    GenericBandRange() {}
+
+    GenericBandRange(int a);
+
+    GenericBandRange(const std::pair<int,int>& a);
+
+    GenericBandRange(int a,int b);
+
+    bool SetString(const std::string& str, size_t start=0 , size_t size=std::string::npos);
+
+    void Print(std::ostream& os);
+  };
+
+  /**  Decode the string into a list of GenericBandRange, band indexes are
+   *  1-based. */
+  std::vector<ExtendedFilenameHelper::GenericBandRange> GetGenericBandRange(const std::string &bandRange) const;
+
+  /** Resolve the list of band ranges into real band indexes, according to
+   *  a total number of bands in the image. Note that the output indexes are
+   *  zero-based (0 is the first component) */
+  bool ResolveBandRange(const std::string &bandRange, const unsigned int &nbBands, std::vector<unsigned int> &output) const;
+
 protected:
   ExtendedFilenameHelper() {}
   ~ExtendedFilenameHelper() ITK_OVERRIDE {}

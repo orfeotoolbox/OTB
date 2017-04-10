@@ -21,6 +21,7 @@
 #define otbTrainSharkKMeans_txx
 
 #include "otbLearningApplicationBase.h"
+#include "otbSharkKMeansMachineLearningModel.h"
 
 namespace otb
 {
@@ -58,6 +59,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(
   unsigned int nbMaxIter = static_cast<unsigned int>(abs( GetParameterInt( "classifier.sharkkm.maxiter" ) ));
   unsigned int k = static_cast<unsigned int>(abs( GetParameterInt( "classifier.sharkkm.k" ) ));
 
+  typedef otb::SharkKMeansMachineLearningModel<InputValueType, OutputValueType> SharkKMeansType;
   typename SharkKMeansType::Pointer classifier = SharkKMeansType::New();
   classifier->SetRegressionMode( this->m_RegressionFlag );
   classifier->SetInputListSample( trainingListSample );

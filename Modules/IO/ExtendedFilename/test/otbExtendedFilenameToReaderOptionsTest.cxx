@@ -24,7 +24,7 @@
 
 typedef otb::ExtendedFilenameToReaderOptions FilenameHelperType;
 
-int otbExtendedFilenameToReaderOptions(int itkNotUsed(argc), char* argv[])
+int otbExtendedFilenameToReaderOptions(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputExtendedFilename  = argv[1];
@@ -52,5 +52,38 @@ int otbExtendedFilenameToReaderOptions(int itkNotUsed(argc), char* argv[])
   file << helper->SkipCartoIsSet() << std::endl;
   file << helper->GetSkipCarto() << std::endl;
 
+  file << helper->BandRangeIsSet() << std::endl;
+  file << "[";
+
+  std::vector<otb::ExtendedFilenameHelper::GenericBandRange> rangeList = helper->GetGenericBandRange(helper->GetBandRange());
+  for (unsigned int i=0 ; i<rangeList.size(); i++)
+    {
+    if (i) file << ",";
+    rangeList[i].Print(file);
+    }
+  file << "]" << std::endl;
+
+  if (argc >= 4)
+    {
+    unsigned int nbBands = atoi(argv[3]);
+    std::vector<unsigned int> bandList;
+    bool ret = helper->ResolveBandRange(helper->GetBandRange(), nbBands,bandList);
+    if (ret)
+      {
+      file << "BandList = [";
+      for (unsigned int k=0 ; k<bandList.size() ; k++)
+        {
+        if (k) file << ",";
+        file << bandList[k];
+        }
+      file << "]" << std::endl;
+      }
+    else
+      {
+      std::cout << "Invalid band range for a "<<nbBands<<" bands image"<< std::endl;
+      }
+    }
+
+  file.close();
   return EXIT_SUCCESS;
 }

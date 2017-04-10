@@ -105,8 +105,6 @@ void TrainVectorBase::DoInit()
 
 void TrainVectorBase::DoUpdateParameters()
 {
-  Superclass::DoUpdateParameters();
-
   // if vector data is present and updated then reload fields
   if( HasValue( "io.vd" ) )
     {
