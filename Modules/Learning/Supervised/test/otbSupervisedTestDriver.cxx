@@ -20,6 +20,10 @@
 
 #include "otbTestMain.h"
 
+#ifdef OTB_USE_OPENCV
+#include "otb_opencv_api.h"
+#endif
+
 void RegisterTests()
 {
   REGISTER_TEST(otbConfusionMatrixCalculatorNew);
@@ -42,7 +46,9 @@ void RegisterTests()
   REGISTER_TEST(otbNeuralNetworkMachineLearningModelCanRead);
   REGISTER_TEST(otbNormalBayesMachineLearningModelCanRead);
   REGISTER_TEST(otbDecisionTreeMachineLearningModelCanRead);
+  #ifndef OTB_OPENCV_3
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
+  #endif
   REGISTER_TEST(otbKNNMachineLearningModelCanRead);
   #endif
   
@@ -68,12 +74,14 @@ void RegisterTests()
   REGISTER_TEST(otbNormalBayesMachineLearningModel);
   REGISTER_TEST(otbDecisionTreeMachineLearningModelNew);
   REGISTER_TEST(otbDecisionTreeMachineLearningModel);
+  #ifndef OTB_OPENCV_3
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelNew);
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModel);
+  REGISTER_TEST(otbGradientBoostedTreeRegressionTests);
+  #endif
   REGISTER_TEST(otbNeuralNetworkRegressionTests);
   REGISTER_TEST(otbSVMRegressionTests);
   REGISTER_TEST(otbDecisionTreeRegressionTests);
-  REGISTER_TEST(otbGradientBoostedTreeRegressionTests);
   REGISTER_TEST(otbKNearestNeighborsRegressionTests);
   REGISTER_TEST(otbRandomForestsRegressionTests);
 #endif  

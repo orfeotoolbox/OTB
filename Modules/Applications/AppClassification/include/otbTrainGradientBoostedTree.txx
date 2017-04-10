@@ -21,6 +21,7 @@
 #ifndef otbTrainGradientBoostedTree_txx
 #define otbTrainGradientBoostedTree_txx
 #include "otbLearningApplicationBase.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
 
 namespace otb
 {
@@ -32,6 +33,8 @@ void
 LearningApplicationBase<TInputValue,TOutputValue>
 ::InitGradientBoostedTreeParams()
 {
+// disable GBTree model with OpenCV 3 (not implemented)
+#ifndef OTB_OPENCV_3
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
   SetParameterDescription(
       "classifier.gbt",
@@ -79,7 +82,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //UseSurrogates : don't need to be exposed !
   //AddParameter(ParameterType_Empty, "classifier.gbt.sur", "Surrogate splits will be built");
   //SetParameterDescription("classifier.gbt.sur","These splits allow working with missing data and compute variable importance correctly.");
-
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -89,6 +92,12 @@ LearningApplicationBase<TInputValue,TOutputValue>
                            typename TargetListSampleType::Pointer trainingLabeledListSample,
                            std::string modelPath)
 {
+#ifdef OTB_OPENCV_3
+  (void) trainingListSample;
+  (void) trainingLabeledListSample;
+  (void) modelPath;
+#else
+  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, OutputValueType> GradientBoostedTreeType;
   typename GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
@@ -123,6 +132,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   classifier->Train();
   classifier->Save(modelPath);
+#endif
 }
 
 } //end namespace wrapper

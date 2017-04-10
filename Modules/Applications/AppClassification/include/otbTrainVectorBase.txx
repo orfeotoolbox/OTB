@@ -101,14 +101,10 @@ void TrainVectorBase::DoInit()
   Superclass::DoInit();
 
   AddRANDParameter();
-
-  DoInit();
 }
 
 void TrainVectorBase::DoUpdateParameters()
 {
-  LearningApplicationBase::DoUpdateParameters();
-
   // if vector data is present and updated then reload fields
   if( HasValue( "io.vd" ) )
     {
@@ -141,34 +137,32 @@ void TrainVectorBase::DoUpdateParameters()
         }
       }
     }
-
-  DoUpdateParameters();
 }
 
 void TrainVectorBase::DoExecute()
 {
-  m_featuresInfo.SetFieldNames( GetChoiceNames( "feat" ), GetSelectedItems( "feat" ));
+  m_FeaturesInfo.SetFieldNames( GetChoiceNames( "feat" ), GetSelectedItems( "feat" ));
 
   // Check input parameters
-  if( m_featuresInfo.m_SelectedIdx.empty() )
+  if( m_FeaturesInfo.m_SelectedIdx.empty() )
     {
     otbAppLogFATAL( << "No features have been selected to train the classifier on!" );
     }
 
-  ShiftScaleParameters measurement = ComputeStatistics( m_featuresInfo.m_NbFeatures );
+  ShiftScaleParameters measurement = ComputeStatistics( m_FeaturesInfo.m_NbFeatures );
   ExtractAllSamples( measurement );
 
-  this->Train( m_trainingSamplesWithLabel.listSample, m_trainingSamplesWithLabel.labeledListSample, GetParameterString( "io.out" ) );
+  this->Train( m_TrainingSamplesWithLabel.listSample, m_TrainingSamplesWithLabel.labeledListSample, GetParameterString( "io.out" ) );
 
-  m_predictedList = TargetListSampleType::New();
-  this->Classify( m_classificationSamplesWithLabel.listSample, m_predictedList, GetParameterString( "io.out" ) );
+  m_PredictedList = TargetListSampleType::New();
+  this->Classify( m_ClassificationSamplesWithLabel.listSample, m_PredictedList, GetParameterString( "io.out" ) );
 }
 
 
 void TrainVectorBase::ExtractAllSamples(const ShiftScaleParameters &measurement)
 {
-  m_trainingSamplesWithLabel = ExtractTrainingSamplesWithLabel(measurement);
-  m_classificationSamplesWithLabel = ExtractClassificationSamplesWithLabel(measurement);
+  m_TrainingSamplesWithLabel = ExtractTrainingSamplesWithLabel(measurement);
+  m_ClassificationSamplesWithLabel = ExtractClassificationSamplesWithLabel(measurement);
 }
 
 TrainVectorBase::SamplesWithLabel
@@ -194,15 +188,15 @@ TrainVectorBase::ExtractClassificationSamplesWithLabel(const ShiftScaleParameter
       {
       otbAppLogWARNING(
               "The validation set is empty. The performance estimation is done using the input training set in this case." );
-      tmpSamplesWithLabel.listSample = m_trainingSamplesWithLabel.listSample;
-      tmpSamplesWithLabel.labeledListSample = m_trainingSamplesWithLabel.labeledListSample;
+      tmpSamplesWithLabel.listSample = m_TrainingSamplesWithLabel.listSample;
+      tmpSamplesWithLabel.labeledListSample = m_TrainingSamplesWithLabel.labeledListSample;
       }
 
     return tmpSamplesWithLabel;
     }
   else
     {
-    return m_trainingSamplesWithLabel;
+    return m_TrainingSamplesWithLabel;
     }
 }
 
@@ -239,7 +233,7 @@ TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string 
     {
     ListSampleType::Pointer input = ListSampleType::New();
     TargetListSampleType::Pointer target = TargetListSampleType::New();
-    input->SetMeasurementVectorSize( m_featuresInfo.m_NbFeatures );
+    input->SetMeasurementVectorSize( m_FeaturesInfo.m_NbFeatures );
 
     std::vector<std::string> fileList = this->GetParameterStringList( parameterName );
     for( unsigned int k = 0; k < fileList.size(); k++ )
@@ -258,21 +252,21 @@ TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string 
 
       // Check all needed fields are present :
       //   - check class field if we use supervised classification or if class field name is not empty
-      int cFieldIndex = feature.ogr().GetFieldIndex( m_featuresInfo.m_SelectedCFieldName.c_str() );
-      if( cFieldIndex < 0 && !m_featuresInfo.m_SelectedCFieldName.empty())
+      int cFieldIndex = feature.ogr().GetFieldIndex( m_FeaturesInfo.m_SelectedCFieldName.c_str() );
+      if( cFieldIndex < 0 && !m_FeaturesInfo.m_SelectedCFieldName.empty())
         {
-        otbAppLogFATAL( "The field name for class label (" << m_featuresInfo.m_SelectedCFieldName
+        otbAppLogFATAL( "The field name for class label (" << m_FeaturesInfo.m_SelectedCFieldName
                                                            << ") has not been found in the vector file "
                                                            << fileList[k] );
         }
 
       //   - check feature fields
-      std::vector<int> featureFieldIndex( m_featuresInfo.m_NbFeatures, -1 );
-      for( unsigned int i = 0; i < m_featuresInfo.m_NbFeatures; i++ )
+      std::vector<int> featureFieldIndex( m_FeaturesInfo.m_NbFeatures, -1 );
+      for( unsigned int i = 0; i < m_FeaturesInfo.m_NbFeatures; i++ )
         {
-        featureFieldIndex[i] = feature.ogr().GetFieldIndex( m_featuresInfo.m_SelectedNames[i].c_str() );
+        featureFieldIndex[i] = feature.ogr().GetFieldIndex( m_FeaturesInfo.m_SelectedNames[i].c_str() );
         if( featureFieldIndex[i] < 0 )
-          otbAppLogFATAL( "The field name for feature " << m_featuresInfo.m_SelectedNames[i]
+          otbAppLogFATAL( "The field name for feature " << m_FeaturesInfo.m_SelectedNames[i]
                                                         << " has not been found in the vector file "
                                                         << fileList[k] );
         }
@@ -282,8 +276,8 @@ TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string 
         {
         // Retrieve all the features for each field in the ogr layer.
         MeasurementType mv;
-        mv.SetSize( m_featuresInfo.m_NbFeatures );
-        for( unsigned int idx = 0; idx < m_featuresInfo.m_NbFeatures; ++idx )
+        mv.SetSize( m_FeaturesInfo.m_NbFeatures );
+        for( unsigned int idx = 0; idx < m_FeaturesInfo.m_NbFeatures; ++idx )
           mv[idx] = feature.ogr().GetFieldAsDouble( featureFieldIndex[idx] );
 
         input->PushBack( mv );

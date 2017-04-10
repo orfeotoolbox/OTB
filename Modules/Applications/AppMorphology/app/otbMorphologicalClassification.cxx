@@ -91,16 +91,17 @@ private:
                                    ":math:`f` with a structuring element of size :math:`N`. One can derive\n"
                                    "the following decision rule to classify :math:`f` into Convex (label\n"
                                    ":math:`\\stackrel{\\smile}{k}`), Concave (label\n"
-                                   ":math:`\\stackrel{rown}{k}`) and Flat (label :math:`\\bar{k}`): \n"
+                                   ":math:`\\stackrel{\\frown}{k}`) and Flat (label :math:`\\bar{k}`): \n"
                                    "\n"
-                                   ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} &:& f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} &:& \\psi_{N}(f)-f>\\sigma\\\\ \\bar{k}&:&\\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
+                                   ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} & : f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} & : \\psi_{N}(f)-f>\\sigma \\\\ \\bar{k} & : \\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
                                    "\n\n"
                                    "This output is a labeled image (0 : Flat, 1 : Convex, 2 : Concave)" );
     SetDocLimitations( "Generation of the morphological classification is not streamable, pay attention to this fact when setting the radius size of the structuring element." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbConvexOrConcaveClassificationFilter class" );
 
-    AddDocTag( "MorphologicalClassification" );
+    AddDocTag(Tags::FeatureExtraction);
+    AddDocTag("Morphology");
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image to be classified." );

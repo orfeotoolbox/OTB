@@ -27,8 +27,11 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-
+#ifdef OTB_OPENCV_3
+#include "otbOpenCVUtils.h"
+#else
 class CvNormalBayesClassifier;
+#endif
 
 namespace otb
 {
@@ -90,8 +93,11 @@ protected:
 private:
   NormalBayesMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
+#ifdef OTB_OPENCV_3
+  cv::Ptr<cv::ml::NormalBayesClassifier> m_NormalBayesModel;
+#else
   CvNormalBayesClassifier * m_NormalBayesModel;
+#endif
 };
 } // end namespace otb
 

@@ -22,6 +22,8 @@ include(CheckCXXSourceCompiles)
 
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
 
+unset(OTB_HAS_CXX11 CACHE)
+
 CHECK_CXX_SOURCE_COMPILES("
 #ifdef _MSC_VER
   #if _MSC_VER <= 1700

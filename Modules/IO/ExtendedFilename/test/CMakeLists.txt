@@ -58,7 +58,7 @@ otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_FullOptions COMMAND otbExt
   ${BASELINE}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   otbExtendedFilenameToReaderOptions
-  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On
+  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On&bands=-23,:3,45:,-6:-6,234:-5
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   )
 
@@ -69,6 +69,16 @@ otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_NoOptions COMMAND otbExten
   otbExtendedFilenameToReaderOptions
   /home/data/filename.tif
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_NoOptions.txt
+  )
+
+otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_BandList COMMAND otbExtendedFilenameTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE}/ioTvExtendedFilenameToReaderOptions_BandList.txt
+  ${TEMP}/ioTvExtendedFilenameToReaderOptions_BandList.txt
+  otbExtendedFilenameToReaderOptions
+  /home/data/filename.tif?bands=3,5:,-3,2:-2
+  ${TEMP}/ioTvExtendedFilenameToReaderOptions_BandList.txt
+  6
   )
 
 otb_add_test(NAME ioTvExtendedFilenameToWriterOptions_FullOptions COMMAND otbExtendedFilenameTestDriver

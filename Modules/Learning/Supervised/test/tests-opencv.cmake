@@ -42,10 +42,11 @@ otb_add_test(NAME leTvSVMMachineLearningModelReg COMMAND otbSupervisedTestDriver
 otb_add_test(NAME leTvDecisionTreeMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbDecisionTreeRegressionTests
   )
-
+if(NOT OTB_OPENCV_3)
 otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbGradientBoostedTreeRegressionTests
   )
+endif()
 
 otb_add_test(NAME leTvKNearestNeighborsMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbKNearestNeighborsRegressionTests
@@ -86,20 +87,21 @@ otb_add_test(NAME leTvNormalBayesMachineLearningModel COMMAND otbSupervisedTestD
   ${TEMP}/normalbayes_model.txt
   )
 
+if(NOT OTB_OPENCV_3)
 otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModel COMMAND otbSupervisedTestDriver
   otbGradientBoostedTreeMachineLearningModel
   ${INPUTDATA}/letter.scale
   ${TEMP}/gbt_model.txt
   )
+otb_add_test(NAME leTuGradientBoostedTreeMachineLearningModelNew COMMAND otbSupervisedTestDriver
+  otbGradientBoostedTreeMachineLearningModelNew)
+endif()
 
 otb_add_test(NAME leTvRandomForestsMachineLearningModel COMMAND otbSupervisedTestDriver
   otbRandomForestsMachineLearningModel
   ${INPUTDATA}/letter.scale
   ${TEMP}/rf_model.txt
   )
-
-otb_add_test(NAME leTuGradientBoostedTreeMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbGradientBoostedTreeMachineLearningModelNew)
 
 otb_add_test(NAME leTuANNMachineLearningModelNew COMMAND otbSupervisedTestDriver
   otbANNMachineLearningModelNew)
@@ -141,11 +143,13 @@ otb_add_test(NAME leTvDecisionTreeMachineLearningModelCanRead COMMAND otbSupervi
   )
 set_property(TEST leTvDecisionTreeMachineLearningModelCanRead APPEND PROPERTY DEPENDS leTvDecisionTreeMachineLearningModel)
 
+if(NOT OTB_OPENCV_3)
 otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbGradientBoostedTreeMachineLearningModelCanRead
   ${TEMP}/gbt_model.txt
   )
 set_property(TEST leTvGradientBoostedTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvGradientBoostedTreeMachineLearningModel)
+endif()
 
 otb_add_test(NAME leTvNormalBayesMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbNormalBayesMachineLearningModelCanRead

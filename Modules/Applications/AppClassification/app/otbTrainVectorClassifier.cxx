@@ -53,39 +53,36 @@ public:
 protected:
   void DoInit()
   {
-    TrainVectorBase::DoInit();
+    Superclass::DoInit();
   }
 
   void DoUpdateParameters()
   {
-    TrainVectorBase::DoUpdateParameters();
+    Superclass::DoUpdateParameters();
   }
 
   void DoExecute()
   {
-    // Enforce the need of class field name in supervised mode
-    m_featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
-    
-    if( m_featuresInfo.m_SelectedCFieldIdx.empty() && GetClassifierCategory() == Supervised)
+    m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+
+    if( m_FeaturesInfo.m_SelectedCFieldIdx.empty() )
       {
       otbAppLogFATAL( << "No field has been selected for data labelling!" );
       }
 
-    TrainVectorBase::DoExecute();
+    Superclass::DoExecute();
 
-      if (GetClassifierCategory() == Supervised)
-        {
-        ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_predictedList,
-                                                                                     m_classificationSamplesWithLabel.labeledListSample );
-        WriteConfusionMatrix( confMatCalc );
-        }
-      else
-        {
-      if(!m_featuresInfo.m_SelectedCFieldIdx.empty())
-        {
-        ContingencyTable<ClassLabelType> table = ComputeContingencyTable(m_predictedList,m_classificationSamplesWithLabel.labeledListSample);
-        WriteContingencyTable(table);
-        }
+    if (GetClassifierCategory() == Supervised)
+      {
+      ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_PredictedList,
+                                                                                   m_ClassificationSamplesWithLabel.labeledListSample );
+      WriteConfusionMatrix( confMatCalc );
+      }
+    else
+      {
+      ContingencyTable<ClassLabelType> table = ComputeContingencyTable( m_PredictedList,
+                                                                        m_ClassificationSamplesWithLabel.labeledListSample );
+      WriteContingencyTable( table );
       }
   }
 
@@ -101,10 +98,10 @@ protected:
     otbAppLogINFO( "Training performances:" );
 
     otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"<<contingencyTableCalculator->BuildContingencyTable());
-    
+
     return contingencyTableCalculator->BuildContingencyTable();
   }
-  
+
 
   void WriteContingencyTable(const ContingencyTable<ClassLabelType> & table)
   {

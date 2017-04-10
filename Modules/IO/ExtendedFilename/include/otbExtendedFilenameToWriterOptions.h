@@ -72,6 +72,7 @@ public:
     std::pair<bool,  std::string>                streamingSizeMode;
     std::pair<bool,  double>                     streamingSizeValue;
     std::pair<bool,  std::string>                box;
+    std::pair< bool, std::string>                bandRange;
     std::vector<std::string>                     optionList;
   };
 
@@ -91,10 +92,13 @@ public:
   std::string GetStreamingSizeMode() const;
   bool StreamingSizeValueIsSet() const;
   double GetStreamingSizeValue() const;
+  std::string GetBandRange () const;
 
   bool BoxIsSet() const;
   std::string GetBox() const;
 
+  /** Test if band range extended filename is set */
+  bool BandRangeIsSet () const;
 
 protected:
   ExtendedFilenameToWriterOptions();

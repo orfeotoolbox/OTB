@@ -27,7 +27,11 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
+#ifdef OTB_OPENCV_3
+#include "otbOpenCVUtils.h"
+#else
 class CvKNearest;
+#endif
 
 namespace otb
 {
@@ -110,7 +114,11 @@ private:
   KNearestNeighborsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+#ifdef OTB_OPENCV_3
+  cv::Ptr<cv::ml::KNearest> m_KNearestModel;
+#else
   CvKNearest * m_KNearestModel;
+#endif
   int m_K;
 
   int m_DecisionRule;

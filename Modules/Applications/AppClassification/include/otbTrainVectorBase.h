@@ -175,10 +175,10 @@ protected:
    */
   ShiftScaleParameters ComputeStatistics(unsigned int nbFeatures);
 
-  SamplesWithLabel m_trainingSamplesWithLabel;
-  SamplesWithLabel m_classificationSamplesWithLabel;
-  TargetListSampleType::Pointer m_predictedList;
-  FeaturesInfo m_featuresInfo;
+  SamplesWithLabel m_TrainingSamplesWithLabel;
+  SamplesWithLabel m_ClassificationSamplesWithLabel;
+  TargetListSampleType::Pointer m_PredictedList;
+  FeaturesInfo m_FeaturesInfo;
 
   void DoInit() ITK_OVERRIDE;
   void DoUpdateParameters() ITK_OVERRIDE;
