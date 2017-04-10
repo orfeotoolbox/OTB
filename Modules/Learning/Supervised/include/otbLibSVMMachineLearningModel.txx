@@ -380,6 +380,38 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
+unsigned int
+LibSVMMachineLearningModel<TInputValue,TOutputValue>
+::GetNumberOfKernelParameters()
+{
+  unsigned int nb = 1;
+  switch(this->GetKernelType())
+    {
+    case LINEAR:
+      // C
+      nb = 1;
+      break;
+    case POLY:
+      // C, gamma and coef0
+      nb = 3;
+      break;
+    case RBF:
+      // C and gamma
+      nb = 2;
+      break;
+    case SIGMOID:
+      // C, gamma and coef0
+      nb = 3;
+      break;
+    default:
+      // C
+      nb = 1;
+      break;
+    }
+  return nb;
+}
+
+template <class TInputValue, class TOutputValue>
 double
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::CrossValidation(void)
@@ -397,7 +429,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   double total_correct = 0.;
   for (int i = 0; i < length; ++i)
     {
-    if (target[i] == m_Problem.y[i])
+    if (m_TmpTarget[i] == m_Problem.y[i])
       {
       ++total_correct;
       }
@@ -413,57 +445,25 @@ void
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::OptimizeParameters()
 {
-  typedef SVMCrossValidationCostFunction<this> CrossValidationFunctionType;
+  typedef SVMCrossValidationCostFunction<LibSVMMachineLearningModel<TInputValue,TOutputValue> > CrossValidationFunctionType;
   typename CrossValidationFunctionType::Pointer crossValidationFunction = CrossValidationFunctionType::New();
   crossValidationFunction->SetModel(this);
 
   typename CrossValidationFunctionType::ParametersType initialParameters, coarseBestParameters, fineBestParameters;
 
-  switch (this->GetKernelType())
-    {
-    case LINEAR:
-      // C
-      initialParameters.SetSize(1);
-      initialParameters[0] = this->GetC();
-      break;
-
-    case POLY:
-      // C, gamma and coef0
-      initialParameters.SetSize(3);
-      initialParameters[0] = this->GetC();
-      initialParameters[1] = this->GetKernelGamma();
-      initialParameters[2] = this->GetKernelCoef0();
-      break;
-
-    case RBF:
-      // C and gamma
-      initialParameters.SetSize(2);
-      initialParameters[0] = this->GetC();
-      initialParameters[1] = this->GetKernelGamma();
-      break;
-
-    case SIGMOID:
-      // C, gamma and coef0
-      initialParameters.SetSize(3);
-      initialParameters[0] = this->GetC();
-      initialParameters[1] = this->GetKernelGamma();
-      initialParameters[2] = this->GetKernelCoef0();
-      break;
-
-    default:
-      // Only C
-      initialParameters.SetSize(1);
-      initialParameters[0] = this->GetC();
-      break;
-    }
+  unsigned int nbParams = this->GetNumberOfKernelParameters();
+  initialParameters.SetSize(nbParams);
+  initialParameters[0] = this->GetC();
+  if (nbParams > 1) initialParameters[1] = this->GetKernelGamma();
+  if (nbParams > 2) initialParameters[2] = this->GetKernelCoef0();
 
   m_InitialCrossValidationAccuracy = crossValidationFunction->GetValue(initialParameters);
   m_FinalCrossValidationAccuracy = m_InitialCrossValidationAccuracy;
 
   otbMsgDebugMacro(<< "Initial accuracy : " << m_InitialCrossValidationAccuracy
-                   << ", Parameters Optimization" << m_ParametersOptimization);
+                   << ", Parameters Optimization" << m_ParameterOptimization);
 
-  if (m_ParametersOptimization)
+  if (m_ParameterOptimization)
     {
     otbMsgDebugMacro(<< "Model parameters optimization");
     typename ExhaustiveExponentialOptimizer::Pointer coarseOptimizer = ExhaustiveExponentialOptimizer::New();
@@ -503,38 +503,9 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
     m_FinalCrossValidationAccuracy = fineOptimizer->GetMaximumMetricValue();
 
-    switch (this->GetKernelType())
-      {
-      case LINEAR:
-        // C
-        this->SetC(fineBestParameters[0]);
-        break;
-
-      case POLY:
-        // C, gamma and coef0
-        this->SetC(fineBestParameters[0]);
-        this->SetKernelGamma(fineBestParameters[1]);
-        this->SetKernelCoef0(fineBestParameters[2]);
-        break;
-
-      case RBF:
-        // C and gamma
-        this->SetC(fineBestParameters[0]);
-        this->SetKernelGamma(fineBestParameters[1]);
-        break;
-
-      case SIGMOID:
-        // C, gamma and coef0
-        this->SetC(fineBestParameters[0]);
-        this->SetKernelGamma(fineBestParameters[1]);
-        this->SetKernelCoef0(fineBestParameters[2]);
-        break;
-
-      default:
-        // Only C
-        this->SetC(fineBestParameters[0]);
-        break;
-      }
+    this->SetC(fineBestParameters[0]);
+    if (nbParams > 1) this->SetKernelGamma(fineBestParameters[1]);
+    if (nbParams > 2) this->SetKernelCoef0(fineBestParameters[2]);
     }
 }
 

@@ -225,6 +225,10 @@ public:
   itkSetMacro(FineOptimizationNumberOfSteps, unsigned int);
   itkGetMacro(FineOptimizationNumberOfSteps, unsigned int);
 
+  unsigned int GetNumberOfKernelParameters();
+
+  double CrossValidation(void);
+
 protected:
   /** Constructor */
   LibSVMMachineLearningModel();
@@ -249,8 +253,6 @@ private:
   void DeleteProblem(void);
 
   void DeleteModel(void);
-
-  double CrossValidation(void);
 
   void OptimizeParameters(void);
 

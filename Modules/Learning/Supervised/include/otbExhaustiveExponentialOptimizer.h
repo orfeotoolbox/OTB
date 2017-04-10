@@ -42,9 +42,9 @@ namespace otb
  *
  * \ingroup Numerics Optimizers
  *
- * \ingroup OTBSVMLearning
+ * \ingroup OTBSupervised
  */
-class ITK_EXPORT ExhaustiveExponentialOptimizer :
+class ITK_ABI_EXPORT ExhaustiveExponentialOptimizer :
   public itk::SingleValuedNonLinearOptimizer
 {
 public:
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExhaustiveExponentialOptimizer,           SingleValuedNonLinearOptimizer);
+  itkTypeMacro(ExhaustiveExponentialOptimizer,itk::SingleValuedNonLinearOptimizer);
 
   void    StartOptimization(void) ITK_OVERRIDE;
 

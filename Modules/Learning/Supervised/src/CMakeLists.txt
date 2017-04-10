@@ -20,6 +20,7 @@
 
 set(OTBSupervised_SRC
   otbMachineLearningModelFactoryBase.cxx
+  otbExhaustiveExponentialOptimizer.cxx
   )
 
 if(OTB_USE_OPENCV)

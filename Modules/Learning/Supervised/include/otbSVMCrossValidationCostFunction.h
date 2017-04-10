@@ -21,7 +21,6 @@
 #ifndef otbSVMCrossValidationCostFunction_h
 #define otbSVMCrossValidationCostFunction_h
 
-#include "otbSVMModel.h"
 #include "itkSingleValuedCostFunction.h"
 
 namespace otb

@@ -22,6 +22,7 @@
 #define otbSVMCrossValidationCostFunction_txx
 
 #include "otbSVMCrossValidationCostFunction.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -95,67 +96,18 @@ SVMCrossValidationCostFunction<TModel>
     {
     itkExceptionMacro(<< "Model is null, can not evaluate number of parameters.");
     }
-
-  switch (m_Model->GetKernelType())
-    {
-    case LINEAR:
-      // C
-      return 1;
-
-    case POLY:
-      // C, gamma and coef0
-      return 3;
-
-    case RBF:
-      // C and gamma
-      return 2;
-
-    case SIGMOID:
-      // C, gamma and coef0
-      return 3;
-
-    default:
-      // C
-      return 1;
-    }
+  return m_Model->GetNumberOfKernelParameters();
 }
 
 template<class TModel>
 void
 SVMCrossValidationCostFunction<TModel>
-::UpdateParameters(struct svm_parameter& svm_parameters, const ParametersType& parameters) const
+::UpdateParameters(const ParametersType& parameters) const
 {
-  switch (m_Model->GetKernelType())
-    {
-    case LINEAR:
-      // C
-      m_Model->SetC(parameters[0]);
-      break;
-
-    case POLY:
-      // C, gamma and coef0
-      m_Model->SetC(parameters[0]);
-      m_Model->SetKernelGamma(parameters[1]);
-      m_Model->SetKernelCoef0(parameters[2]);
-      break;
-
-    case RBF:
-      // C and gamma
-      m_Model->SetC(parameters[0]);
-      m_Model->SetKernelGamma(parameters[1]);
-      break;
-
-    case SIGMOID:
-      // C, gamma and coef0
-      m_Model->SetC(parameters[0]);
-      m_Model->SetKernelGamma(parameters[1]);
-      m_Model->SetKernelCoef0(parameters[2]);
-      break;
-
-    default:
-      m_Model->SetC(parameters[0]);
-      break;
-    }
+  unsigned int nbParams = m_Model->GetNumberOfKernelParameters();
+  m_Model->SetC(parameters[0]);
+  if (nbParams > 1) m_Model->SetKernelGamma(parameters[1]);
+  if (nbParams > 2) m_Model->SetKernelCoef0(parameters[2]);
 }
 
 } // namespace otb
