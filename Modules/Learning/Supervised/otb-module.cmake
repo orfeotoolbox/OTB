@@ -29,6 +29,7 @@ ENABLE_SHARED
     OTBCommon
     OTBITK
     OTBImageBase
+    OTBLabelMap
 
   OPTIONAL_DEPENDS
     OTBOpenCV
