@@ -19,7 +19,10 @@
  */
 
 #include "otbTestMain.h"
+
+#ifdef OTB_USE_OPENCV
 #include "otb_opencv_api.h"
+#endif
 
 void RegisterTests()
 {
