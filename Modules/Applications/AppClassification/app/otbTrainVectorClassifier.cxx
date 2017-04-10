@@ -65,9 +65,9 @@ protected:
     // Enforce the need of class field name in supervised mode
     if (GetClassifierCategory() == Supervised)
       {
-      m_featuresInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+      m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 
-      if( m_featuresInfo.m_SelectedCFieldIdx.empty() )
+      if( m_FeaturesInfo.m_SelectedCFieldIdx.empty() )
         {
         otbAppLogFATAL( << "No field has been selected for data labelling!" );
         }
@@ -77,8 +77,8 @@ protected:
 
       if (GetClassifierCategory() == Supervised)
         {
-        ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_predictedList,
-                                                                                     m_classificationSamplesWithLabel.labeledListSample );
+        ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_PredictedList,
+                                                                                     m_ClassificationSamplesWithLabel.labeledListSample );
         WriteConfusionMatrix( confMatCalc );
         }
       else
