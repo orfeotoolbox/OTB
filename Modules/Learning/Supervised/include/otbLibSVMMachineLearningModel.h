@@ -48,6 +48,17 @@ public:
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
 
+  /** enum to choose the way confidence is computed
+   *   CM_INDEX : compute the difference between highest and second highest probability
+   *   CM_PROBA : returns probabilities for all classes
+   *      The given pointer needs to store 'nbClass' values
+   *      This mode requires that ConfidenceValueType is double
+   *   CM_HYPER : returns hyperplanes distances*
+   *      The given pointer needs to store 'nbClass * (nbClass-1) / 2'  values
+   *      This mode requires that ConfidenceValueType is double
+   */
+  typedef enum {CM_INDEX,CM_PROBA,CM_HYPER} ConfidenceMode;
+
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
@@ -225,6 +236,17 @@ public:
   itkSetMacro(FineOptimizationNumberOfSteps, unsigned int);
   itkGetMacro(FineOptimizationNumberOfSteps, unsigned int);
 
+  void SetConfidenceMode(unsigned int mode)
+    {
+    if (mode != m_ConfidenceMode)
+      {
+      m_ConfidenceMode = mode;
+      this->m_ConfidenceIndex = this->HasProbabilities();
+      this->Modified();
+      }
+    }
+  itkGetMacro(ConfidenceMode, unsigned int);
+
   unsigned int GetNumberOfKernelParameters();
 
   double CrossValidation(void);
@@ -282,6 +304,9 @@ private:
 
   /** Number of steps for the fine search */
   unsigned int m_FineOptimizationNumberOfSteps;
+
+  /** Output mode for confidence index (see enum ) */
+  ConfidenceMode m_ConfidenceMode;
 
   /** Temporary array to store cross-validation results */
   std::vector<double> m_TmpTarget;
