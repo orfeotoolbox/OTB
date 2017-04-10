@@ -52,12 +52,12 @@ public:
 protected:
   void DoInit()
   {
-    TrainVectorBase::DoInit();
+    Superclass::DoInit();
   }
 
   void DoUpdateParameters()
   {
-    TrainVectorBase::DoUpdateParameters();
+    Superclass::DoUpdateParameters();
   }
 
   void DoExecute()
@@ -73,7 +73,7 @@ protected:
         }
       }
 
-      TrainVectorBase::DoExecute();
+      Superclass::DoExecute();
 
       if (GetClassifierCategory() == Supervised)
         {

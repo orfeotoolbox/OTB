@@ -101,13 +101,11 @@ void TrainVectorBase::DoInit()
   Superclass::DoInit();
 
   AddRANDParameter();
-
-  DoInit();
 }
 
 void TrainVectorBase::DoUpdateParameters()
 {
-  LearningApplicationBase::DoUpdateParameters();
+  Superclass::DoUpdateParameters();
 
   // if vector data is present and updated then reload fields
   if( HasValue( "io.vd" ) )
@@ -141,8 +139,6 @@ void TrainVectorBase::DoUpdateParameters()
         }
       }
     }
-
-  DoUpdateParameters();
 }
 
 void TrainVectorBase::DoExecute()
