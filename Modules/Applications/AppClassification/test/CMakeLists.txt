@@ -783,6 +783,21 @@ otb_test_application(NAME apTvClassificationMapRegularization
 
 #----------- OGRLayerClassifier TESTS ----------------
 
+#----------- VectorClassifier TESTS ----------------
+if(OTB_USE_OPENCV)
+  otb_test_application(NAME apTvClSVMVectorClassifier
+    APP  VectorClassifier
+    OPTIONS -in ${INPUTDATA}/Classification/apTvClLabeledVector.shp
+            -instat ${OTBAPP_BASELINE_FILES}/apTvClComputeOGRLayersFeaturesStatistics.xml
+            -model ${OTBAPP_BASELINE_FILES}/apTvClModel.svm
+            -out ${TEMP}/apTvClSVMLabeledVector.shp
+            -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
+            -cfield class
+    VALID   --compare-ogr 0.0
+            ${OTBAPP_BASELINE_FILES}/apTvClSVMLabeledVector.shp
+            ${TEMP}/apTvClSVMLabeledVector.shp)
+endif()
+
 #----------- ComputeImagesStatistics TESTS ----------------
 otb_test_application(NAME apTvClComputeImagesStatisticsQB1
                      APP  ComputeImagesStatistics
