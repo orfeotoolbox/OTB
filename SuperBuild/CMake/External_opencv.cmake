@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 INCLUDE_ONCE_MACRO(OPENCV)
 
 SETUP_SUPERBUILD(OPENCV)
@@ -14,8 +34,8 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENCV PNG_LIBRARY)
 
 ExternalProject_Add(OPENCV
   PREFIX OPENCV
-  URL "http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/2.4.11/opencv-2.4.11.zip"
-  URL_MD5 32f498451bff1817a60e1aabc2939575
+  URL "https://github.com/opencv/opencv/archive/2.4.13.2.tar.gz"
+  URL_MD5 fe52791ce523681a67036def4c25261b
   BINARY_DIR ${OPENCV_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

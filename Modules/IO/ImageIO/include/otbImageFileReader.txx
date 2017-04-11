@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef otbImageFileReader_txx
 #define otbImageFileReader_txx
 
@@ -66,7 +69,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
    m_ActualIORegion(),
    m_FilenameHelper(FNameHelperType::New()),
    m_AdditionalNumber(0),
-   m_KeywordListUpToDate(false)
+   m_KeywordListUpToDate(false),
+   m_IOComponents(0)
 {
 }
 
@@ -182,7 +186,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   if (this->m_ImageIO->GetComponentTypeInfo()
       == typeid(typename ConvertOutputPixelTraits::ComponentType)
       && (this->m_ImageIO->GetNumberOfComponents()
-          == ConvertIOPixelTraits::GetNumberOfComponents()))
+          == ConvertIOPixelTraits::GetNumberOfComponents())
+      && !m_FilenameHelper->BandRangeIsSet())
     {
     // Have the ImageIO read directly into the allocated buffer
     this->m_ImageIO->Read(buffer);
@@ -194,18 +199,25 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     // regardless of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
 
-    // Adapt the image size with the region
-    std::streamoff nbBytes = (this->m_ImageIO->GetComponentSize() * this->m_ImageIO->GetNumberOfComponents())
-                             * static_cast<std::streamoff>(region.GetNumberOfPixels());
+    // Adapt the image size with the region and take into account a potential
+    // remapping of the components. m_BandList is empty if no band range is set
+    std::streamoff nbBytes =
+      ( this->m_ImageIO->GetComponentSize()
+      * std::max(this->m_ImageIO->GetNumberOfComponents(),(unsigned int) m_BandList.size()))
+      * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
 
-    otbMsgDevMacro(<< "size of Buffer to GDALImageIO::read = " << nbBytes << " = \n"
+    otbMsgDevMacro(<< "buffer size for ImageIO::read = " << nbBytes << " = \n"
         << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
-        << "Nb of Component (" << this->m_ImageIO->GetNumberOfComponents() << ") x " \
-        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")" );
+        << "Nb of Component ( max(" << this->m_ImageIO->GetNumberOfComponents() \
+        << " , "<<m_BandList.size() << ") ) x " \
+        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")");
 
     this->m_ImageIO->Read(loadBuffer);
+
+    if (m_FilenameHelper->BandRangeIsSet())
+      this->m_ImageIO->DoMapBuffer(loadBuffer, region.GetNumberOfPixels(), this->m_BandList);
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
 
@@ -531,13 +543,28 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   region.SetSize(dimSize);
   region.SetIndex(start);
 
+  // detect number of output components
+  m_IOComponents = this->m_ImageIO->GetNumberOfComponents();
+  m_BandList.clear();
+  if (m_FilenameHelper->BandRangeIsSet())
+    {
+    bool ret = m_FilenameHelper->ResolveBandRange(m_FilenameHelper->GetBandRange(), m_IOComponents, m_BandList);
+    if (ret == false || m_BandList.size() == 0)
+      {
+      // invalid range
+      itkGenericExceptionMacro("The given band range is either empty or invalid for a "
+        <<m_IOComponents <<" bands input image!");
+      }
+    m_IOComponents = m_BandList.size();
+    }
+
 // THOMAS : ajout
 // If a VectorImage, this requires us to set the
 // VectorLength before allocate
   if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
     {
     typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
-    AccessorFunctorType::SetVectorLength(output, this->m_ImageIO->GetNumberOfComponents());
+    AccessorFunctorType::SetVectorLength(output, m_IOComponents);
     }
 
   output->SetLargestPossibleRegion(region);
@@ -805,7 +832,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       >                                                 \
       ::ConvertVectorImage(                             \
        static_cast<type*>(inputData),                  \
-       m_ImageIO->GetNumberOfComponents(),             \
+       m_IOComponents,             \
        outputData,                                     \
        numberOfPixels);              \
      } \
@@ -818,7 +845,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       >                                                 \
       ::Convert(                                        \
         static_cast<type*>(inputData),                  \
-        m_ImageIO->GetNumberOfComponents(),             \
+        m_IOComponents,             \
         outputData,                                     \
         numberOfPixels);              \
       } \
@@ -840,7 +867,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         >                                                 \
         ::ConvertComplexVectorImageToVectorImageComplex(                             \
          static_cast<type*>(inputData),                \
-         m_ImageIO->GetNumberOfComponents(),             \
+         m_IOComponents,             \
          outputData,                                     \
          numberOfPixels); \
        }\
@@ -853,7 +880,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         >                                                  \
         ::ConvertComplexVectorImageToVectorImage(                             \
          static_cast<type*>(inputData),                \
-         m_ImageIO->GetNumberOfComponents(),             \
+         m_IOComponents,             \
          outputData,                                     \
          numberOfPixels);              \
        }\
@@ -867,7 +894,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       >                                                 \
       ::ConvertComplexToGray(                                        \
        static_cast<type*>(inputData),                  \
-       m_ImageIO->GetNumberOfComponents(),             \
+       m_IOComponents,             \
        outputData,                                     \
        numberOfPixels);              \
      } \
@@ -917,6 +944,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 #undef OTB_CONVERT_BUFFER_IF_BLOCK
 #undef OTB_CONVERT_CBUFFER_IF_BLOCK
 }
+
 
 } //namespace otb
 

@@ -1,19 +1,23 @@
-/*=========================================================================
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
- =========================================================================*/
 #include "otbWrapperCompositeApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -332,17 +336,20 @@ void DoExecute() ITK_OVERRIDE
       // only fmt will be used for both training and validation samples
       // So we try to compute the total number of samples given input
       // parameters mt, mv and vtr.
-      if (mt > -1 && mv > -1)
-        {
-        fmt = mt + mv;
-        }
-      if (mt > -1 && mv <= -1 && vtr < 0.99999)
+      if (mt > -1 && vtr < 0.99999)
         {
         fmt = static_cast<long>((double) mt / (1.0 - vtr));
         }
-      if (mt <= -1 && mv > -1 && vtr > 0.00001)
+      if (mv > -1 && vtr > 0.00001)
         {
-        fmt = static_cast<long>((double) mv / vtr);
+        if (fmt > -1 )
+          {
+          fmt = std::min(fmt, static_cast<long>((double) mv / vtr));
+          }
+        else
+          {
+          fmt = static_cast<long>((double) mv / vtr);
+          }
         }
       }
     }
@@ -358,8 +365,10 @@ void DoExecute() ITK_OVERRIDE
     {
     if (fmt > -1)
       {
+      std::ostringstream oss;
+      oss << fmt;
       GetInternalApplication("rates")->SetParameterString("strategy","constant", false);
-      GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb",fmt);
+      GetInternalApplication("rates")->SetParameterString("strategy.constant.nb",oss.str());
       }
     else
       {
@@ -380,8 +389,10 @@ void DoExecute() ITK_OVERRIDE
       {
       if (fmv > -1)
         {
+        std::ostringstream oss;
+        oss << fmv;
         GetInternalApplication("rates")->SetParameterString("strategy","constant", false);
-        GetInternalApplication("rates")->SetParameterInt("strategy.constant.nb",fmv);
+        GetInternalApplication("rates")->SetParameterString("strategy.constant.nb",oss.str());
         }
       else
         {
@@ -474,7 +485,8 @@ void DoExecute() ITK_OVERRIDE
   // ---------------------------------------------------------------------------
   // Train model
   GetInternalApplication("training")->SetParameterStringList("io.vd",sampleTrainOutputs, false);
-  GetInternalApplication("training")->SetParameterStringList("valid.vd",sampleValidOutputs, false);
+  if( vtr!=0.0 && !sampleValidOutputs.empty() )
+    GetInternalApplication("training")->SetParameterStringList("valid.vd",sampleValidOutputs, false);
   UpdateInternalParameters("training");
   // set field names
   FloatVectorImageType::Pointer image = imageList->GetNthElement(0);

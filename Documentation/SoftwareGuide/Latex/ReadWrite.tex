@@ -253,6 +253,26 @@ IMPORTANT: Note that you'll probably need to "quote" the filename.
   \item Select the JPEG2000 sub-resolution image to read
   \item 0 by default
   \end{itemize}
+\item \begin{verbatim}&bands=r1,r2,...,rn\end{verbatim}
+\begin{itemize}
+    \item Select a subset of bands from the input image
+    \item The syntax is inspired by Python indexing syntax with
+      bands=r1,r2,r3,...,rn  where each ri is a band range that can be :
+      \begin{itemize}
+      \item a single index (1-based) :
+        \begin{itemize}
+          \item $'2'$ means 2nd band
+          \item $'-1'$ means last band
+          \end{itemize}
+        \item or a range of bands :
+          \begin{itemize}
+            \item $'3:'$ means 3rd band until the last one
+            \item $':-2'$ means the first bands until the second to last
+            \item $'2:4'$ means bands 2,3 and 4
+          \end{itemize}
+      \end{itemize}
+    \item empty by default (all bands are read from the input image) 
+\end{itemize}
 \item \begin{verbatim}&skipcarto=<(bool)true>\end{verbatim}
   \begin{itemize}
   \item Skip the cartographic information
@@ -339,8 +359,8 @@ IMPORTANT: Note that you'll probably need to "quote" the filename.
     \item The region must be set with 4 unsigned integers (the separator used is
       the colon ':'). Values are:
       \begin{itemize}
-        \item startx: first index on X
-        \item starty: first index on Y
+        \item startx: first index on X (starting with 0)
+        \item starty: first index on Y (starting with 0)
         \item sizex: size along X
         \item sizey: size along Y 
       \end{itemize}
@@ -348,6 +368,26 @@ IMPORTANT: Note that you'll probably need to "quote" the filename.
     definition in C++. A region is defined by two classes: the itk::Index and
     itk::Size classes. The origin of the region within the image with which it
     is associated is defined by Index 
+\end{itemize}
+\item \begin{verbatim}&bands=r1,r2,...,rn\end{verbatim}
+\begin{itemize}
+    \item Select a subset of bands from the output image
+    \item The syntax is inspired by Python indexing syntax with
+      bands=r1,r2,r3,...,rn  where each ri is a band range that can be :
+      \begin{itemize}
+      \item a single index (1-based) :
+        \begin{itemize}
+          \item $'2'$ means 2nd band
+          \item $'-1'$ means last band
+          \end{itemize}
+        \item or a range of bands :
+          \begin{itemize}
+            \item $'3:'$ means 3rd band until the last one
+            \item $':-2'$ means the first bands until the second to last
+            \item $'2:4'$ means bands 2,3 and 4
+          \end{itemize}
+      \end{itemize}
+    \item empty by default (all bands are write from the output image)
 \end{itemize}
 
 \end{itemize}

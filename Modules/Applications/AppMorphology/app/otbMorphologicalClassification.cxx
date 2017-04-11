@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"
 #include "otbWrapperApplication.h"
@@ -88,16 +91,17 @@ private:
                                    ":math:`f` with a structuring element of size :math:`N`. One can derive\n"
                                    "the following decision rule to classify :math:`f` into Convex (label\n"
                                    ":math:`\\stackrel{\\smile}{k}`), Concave (label\n"
-                                   ":math:`\\stackrel{rown}{k}`) and Flat (label :math:`\\bar{k}`): \n"
+                                   ":math:`\\stackrel{\\frown}{k}`) and Flat (label :math:`\\bar{k}`): \n"
                                    "\n"
-                                   ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} &:& f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} &:& \\psi_{N}(f)-f>\\sigma\\\\ \\bar{k}&:&\\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
+                                   ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} & : f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} & : \\psi_{N}(f)-f>\\sigma \\\\ \\bar{k} & : \\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
                                    "\n\n"
                                    "This output is a labeled image (0 : Flat, 1 : Convex, 2 : Concave)" );
     SetDocLimitations( "Generation of the morphological classification is not streamable, pay attention to this fact when setting the radius size of the structuring element." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbConvexOrConcaveClassificationFilter class" );
 
-    AddDocTag( "MorphologicalClassification" );
+    AddDocTag(Tags::FeatureExtraction);
+    AddDocTag("Morphology");
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image to be classified." );

@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 otb_module_test()
 
 set(OTBImageIOTests
@@ -54,6 +74,8 @@ otbComplexImageManipulationTest.cxx
 otbImageFileWriterTest.cxx
 otbImageIOFactoryNew.cxx
 otbCompareWritingComplexImage.cxx
+otbImageFileReaderOptBandTest.cxx
+otbImageFileWriterOptBandTest.cxx
 )
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
@@ -541,33 +563,12 @@ otb_add_test(NAME ioTvMultiResolutionReadingInfo COMMAND otbImageIOTestDriver
   ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
   )
 
-otb_add_test(NAME ioTvImageFileReaderMW2TIFMW COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFMW.tif
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFMW.tif )
-
 otb_add_test(NAME ioTvImageFileReaderPCI2TIF COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/ioImageFileReaderPCI2TIF.tif
   otbImageFileReaderTestFloat
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.pix
   ${TEMP}/ioImageFileReaderPCI2TIF.tif )
-
-otb_add_test(NAME ioTvImageFileReaderTIF2MW COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderTIF2MW.mw
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-  ${TEMP}/ioImageFileReaderTIF2MW.mw )
-
-otb_add_test(NAME ioTvImageFileReaderMW2TIFIMG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN_nogeoinfo.tif
-  ${TEMP}/ioImageFileReaderMW2TIFIMG.tif
-  otbImageFileReaderTestFloat
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
-  ${TEMP}/ioImageFileReaderMW2TIFIMG.tif )
 
 otb_add_test(NAME ioTvImageFileReaderTIF2PCI COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -1302,3 +1303,39 @@ otb_add_test(NAME  ioTvImageFileReaderPNG2ENVI COMMAND otbImageIOTestDriver
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
+
+otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+  otbImageFileReaderOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2:4
+  ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+  4
+  )
+
+otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandReorgTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+  otbImageFileReaderOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2,:,-3,2:-1
+  ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+  4
+  )
+
+otb_add_test(NAME ioTvImageIOToWriterOptions_OptBandTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBand2to4.tif
+  otbImageFileWriterOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBand2to4.tif?bands=2:4
+  4
+  )
+
+otb_add_test(NAME ioTvImageIOToWriterOptions_OptBandReorgTest COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
+                               ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif
+  otbImageFileWriterOptBandTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif?bands=2,:,-3,2:-1
+  4
+  )

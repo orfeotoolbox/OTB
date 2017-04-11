@@ -1,44 +1,28 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef otbNeuralNetworkMachineLearningModel_h
 #define otbNeuralNetworkMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
-
-#include <opencv2/core/core_c.h>
-
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-align"
-#include <opencv2/core/core.hpp>
-#pragma GCC diagnostic pop
-#else
-#include <opencv2/core/core.hpp>
-#endif
-
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#include <opencv2/ml/ml.hpp>
-#pragma GCC diagnostic pop
-#else
-#include <opencv2/ml/ml.hpp>
-#endif
+#include "otbOpenCVUtils.h"
 
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
@@ -206,10 +190,13 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   void CreateNetwork();
-  CvANN_MLP_TrainParams SetNetworkParameters();
   void SetupNetworkAndTrain(cv::Mat& labels);
-
+#ifdef OTB_OPENCV_3
+  cv::Ptr<cv::ml::ANN_MLP> m_ANNModel;
+#else
+  CvANN_MLP_TrainParams SetNetworkParameters();
   CvANN_MLP * m_ANNModel;
+#endif
   int m_TrainMethod;
   int m_ActivateFunction;
   std::vector<unsigned int> m_LayerSizes;

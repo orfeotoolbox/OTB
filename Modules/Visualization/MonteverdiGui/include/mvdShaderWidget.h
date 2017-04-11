@@ -1,21 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   Monteverdi
-  Language:  C++
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See Copyright.txt for details.
-
-  Monteverdi is distributed under the CeCILL licence version 2. See
-  Licence_CeCILL_V2-en.txt or
-  http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
-
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef mvdShaderWidget_h
 #define mvdShaderWidget_h
 
@@ -143,6 +145,14 @@ private:
   
   /** */
   void virtual_SetSettings( ImageSettings * ) ITK_OVERRIDE;
+
+  /**
+   * Set the ComboBox effects item for the corresponding image settings.
+   * This will append or remove effects (lut) depending if settings
+   * correspond to grayscale image or not.
+   * \param imageSettings Settings of the current image.
+   */
+  void UpdateComboBoxEffectItems(ImageSettings *imageSettings) ;
 
 //
 // Private attributes.
