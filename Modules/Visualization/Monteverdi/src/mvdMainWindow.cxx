@@ -2512,8 +2512,8 @@ MainWindow
 
     text =
       tr( "(%1 %2 ; %3 %4 ; %5)" )
-      .arg( wgs84[ 0 ]>=0.0 ? "N" : "S" ).arg( fabs( wgs84[ 1 ] ) )
-      .arg( wgs84[ 1 ]>=0.0 ? "E" : "W" ).arg( fabs( wgs84[ 0 ] ) )
+      .arg( wgs84[ 1 ]>=0.0 ? "N" : "S" ).arg( fabs( wgs84[ 1 ] ) )
+      .arg( wgs84[ 0 ]>=0.0 ? "E" : "W" ).arg( fabs( wgs84[ 0 ] ) )
       .arg( alt );
     }
 
