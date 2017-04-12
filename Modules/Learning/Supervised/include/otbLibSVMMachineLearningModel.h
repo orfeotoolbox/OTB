@@ -251,6 +251,19 @@ public:
 
   double CrossValidation(void);
 
+  /** Return number of support vectors */
+  unsigned int GetNumberOfSupportVectors(void) const
+  {
+    if (m_Model) return m_Model->l;
+    return 0;
+  }
+
+  unsigned int GetNumberOfClasses(void) const
+    {
+    if (m_Model) return m_Model->nr_class;
+    return 0;
+    }
+
 protected:
   /** Constructor */
   LibSVMMachineLearningModel();

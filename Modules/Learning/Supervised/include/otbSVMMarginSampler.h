@@ -69,7 +69,6 @@ public:
   /** Type definitions for the SVM Model. */
   typedef TModel                                     SVMModelType;
   typedef typename SVMModelType::Pointer             SVMModelPointer;
-  typedef typename SVMModelType::DistancesVectorType DistancesVectorType;
 
   itkSetMacro(NumberOfCandidates, unsigned int);
   itkGetMacro(NumberOfCandidates, unsigned int);
@@ -95,8 +94,6 @@ protected:
   virtual void DoMarginSampling();
 
 private:
-  /** Output pointer (MembershipSample) */
-  //typename OutputType::Pointer m_Output;
 
   SVMModelPointer m_Model;
 
