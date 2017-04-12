@@ -96,6 +96,7 @@ private:
     SetDocLongDescription("This application performs a vector data classification based on a model file produced by the TrainVectorClassifier application.");
     SetDocLimitations("Only shapefiles are supported for now. SQLite format is not supported.");
     SetDocSeeAlso("TrainVectorClassifier");
+    AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputVectorData, "in", "Name of the input vector data");
     SetParameterDescription("in","The input vector data to classify.");
