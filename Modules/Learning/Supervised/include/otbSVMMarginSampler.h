@@ -31,7 +31,7 @@ namespace otb
  *  \brief Implement one iteration of active learning by margin
  *  \ingroup ActiveLearningFilters
  *
- * \ingroup OTBSVMLearning
+ * \ingroup OTBSupervised
  */
 
 template< class TSample, class TModel >
