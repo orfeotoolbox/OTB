@@ -32,6 +32,7 @@
 #include "otbImageFunctionAdaptor.h"
 #include "otbStatisticsXMLFileReader.h"
 #include "itkPreOrderTreeIterator.h"
+#include "otbLibSVMMachineLearningModel.h"
 
 const unsigned int Dimension = 2;
 typedef int        LabelType;
@@ -56,8 +57,8 @@ typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType>  AdaptedF
 
 typedef otb::ImageFileReader<ImageType>           ImageReaderType;
 
-typedef ObjectDetectionClassifierType::SVMModelType SVMModelType;
-typedef ObjectDetectionClassifierType::SVMModelPointerType SVMModelPointerType;
+typedef otb::LibSVMMachineLearningModel<PixelType,LabelType> SVMModelType;
+typedef SVMModelType::Pointer SVMModelPointerType;
 
 typedef otb::StatisticsXMLFileReader<AdaptedFunctionType::OutputType> StatisticsXMLFileReaderType;
 
@@ -118,7 +119,7 @@ int otbObjectDetectionClassifier(int argc, char* argv[])
 
 
   SVMModelPointerType svmModel = SVMModelType::New();
-  svmModel->LoadModel(inputSVMModel);
+  svmModel->Load(inputSVMModel);
 
   AdaptedFunctionType::Pointer descriptorsFunction = AdaptedFunctionType::New();
   descriptorsFunction->SetInputImage(imageReader->GetOutput());
@@ -127,7 +128,7 @@ int otbObjectDetectionClassifier(int argc, char* argv[])
   ObjectDetectionClassifierType::Pointer classifier = ObjectDetectionClassifierType::New();
   classifier->SetInputImage(imageReader->GetOutput());
   classifier->SetNeighborhoodRadius(neighborhood);
-  classifier->SetSVMModel(svmModel);
+  classifier->SetModel(svmModel);
   classifier->SetDescriptorsFunction(descriptorsFunction);
   classifier->SetNoClassLabel(0);
   classifier->SetClassKey("Class");

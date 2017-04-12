@@ -25,14 +25,13 @@
 
 #include "itkListSample.h"
 #include "otbSVMMarginSampler.h"
-#include "otbSVMModel.h"
+#include "otbLibSVMMachineLearningModel.h"
 
 int otbSVMMarginSamplerNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef itk::VariableLengthVector<double>                 SampleType;
   typedef itk::Statistics::ListSample<SampleType>           SampleListType;
-  typedef otb::SVMModel<SampleListType::MeasurementType,
-    unsigned int>                                           SVMModelType;
+  typedef otb::LibSVMMachineLearningModel<double,unsigned int> SVMModelType;
   typedef otb::SVMMarginSampler<SampleListType,SVMModelType>     MarginSamplerType;
 
   MarginSamplerType::Pointer  marginSampler = MarginSamplerType::New();

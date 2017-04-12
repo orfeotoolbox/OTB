@@ -31,34 +31,32 @@ void RegisterTests()
   REGISTER_TEST(otbConfusionMatrixMeasurementsNew);
   REGISTER_TEST(otbConfusionMatrixMeasurementsTest);
   REGISTER_TEST(otbConfusionMatrixConcatenateTest);
+  REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
+  REGISTER_TEST(otbExhaustiveExponentialOptimizerTest);
   
   #ifdef OTB_USE_LIBSVM
   REGISTER_TEST(otbLibSVMMachineLearningModelCanRead);
+  REGISTER_TEST(otbLibSVMMachineLearningModelNew);
+  REGISTER_TEST(otbLibSVMMachineLearningModel);
+  REGISTER_TEST(otbLibSVMRegressionTests);
+  REGISTER_TEST(otbLabelMapClassifierNew);
+  REGISTER_TEST(otbLabelMapClassifier);
+  REGISTER_TEST(otbSVMCrossValidationCostFunctionNew);
+  REGISTER_TEST(otbSVMMarginSamplerNew);
   #endif
   
   #ifdef OTB_USE_OPENCV
+  // can read tests
   REGISTER_TEST(otbSVMMachineLearningModelCanRead);
   REGISTER_TEST(otbRandomForestsMachineLearningModelCanRead);
   REGISTER_TEST(otbBoostMachineLearningModelCanRead);
   REGISTER_TEST(otbNeuralNetworkMachineLearningModelCanRead);
   REGISTER_TEST(otbNormalBayesMachineLearningModelCanRead);
   REGISTER_TEST(otbDecisionTreeMachineLearningModelCanRead);
-  #ifndef OTB_OPENCV_3
-  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
-  #endif
   REGISTER_TEST(otbKNNMachineLearningModelCanRead);
-  #endif
-  
-  #ifdef OTB_USE_LIBSVM
-  REGISTER_TEST(otbLibSVMMachineLearningModelNew);
-  REGISTER_TEST(otbLibSVMMachineLearningModel);
-  REGISTER_TEST(otbLibSVMRegressionTests);
-  #endif
-  
-  #ifdef OTB_USE_OPENCV
+  // training tests
   REGISTER_TEST(otbSVMMachineLearningModelNew);
   REGISTER_TEST(otbSVMMachineLearningModel);
-  REGISTER_TEST(otbSVMMachineLearningRegressionModel);
   REGISTER_TEST(otbKNearestNeighborsMachineLearningModelNew);
   REGISTER_TEST(otbKNearestNeighborsMachineLearningModel);
   REGISTER_TEST(otbRandomForestsMachineLearningModelNew);
@@ -71,17 +69,20 @@ void RegisterTests()
   REGISTER_TEST(otbNormalBayesMachineLearningModel);
   REGISTER_TEST(otbDecisionTreeMachineLearningModelNew);
   REGISTER_TEST(otbDecisionTreeMachineLearningModel);
+  // regression tests
+  REGISTER_TEST(otbNeuralNetworkRegressionTests);
+  REGISTER_TEST(otbSVMRegressionTests);
+  REGISTER_TEST(otbSVMMachineLearningRegressionModel);
+  REGISTER_TEST(otbDecisionTreeRegressionTests);
+  REGISTER_TEST(otbKNearestNeighborsRegressionTests);
+  REGISTER_TEST(otbRandomForestsRegressionTests);
   #ifndef OTB_OPENCV_3
+  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelNew);
   REGISTER_TEST(otbGradientBoostedTreeMachineLearningModel);
   REGISTER_TEST(otbGradientBoostedTreeRegressionTests);
   #endif
-  REGISTER_TEST(otbNeuralNetworkRegressionTests);
-  REGISTER_TEST(otbSVMRegressionTests);
-  REGISTER_TEST(otbDecisionTreeRegressionTests);
-  REGISTER_TEST(otbKNearestNeighborsRegressionTests);
-  REGISTER_TEST(otbRandomForestsRegressionTests);
-#endif  
+#endif
 
 #ifdef OTB_USE_SHARK
   REGISTER_TEST(otbSharkRFMachineLearningModelNew);

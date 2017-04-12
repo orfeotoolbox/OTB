@@ -25,6 +25,7 @@
 #include "otbImage.h"
 #include <iostream>
 
+#include "otbLibSVMMachineLearningModel.h"
 #include "otbSVMCrossValidationCostFunction.h"
 
 int otbSVMCrossValidationCostFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
@@ -32,7 +33,7 @@ int otbSVMCrossValidationCostFunctionNew(int itkNotUsed(argc), char * itkNotUsed
   typedef unsigned char InputPixelType;
   typedef unsigned char LabelPixelType;
 
-  typedef otb::SVMModel<InputPixelType, LabelPixelType>  ModelType;
+  typedef otb::LibSVMMachineLearningModel<InputPixelType,LabelPixelType> ModelType;
   typedef otb::SVMCrossValidationCostFunction<ModelType> FunctionType;
 
   FunctionType::Pointer function = FunctionType::New();
