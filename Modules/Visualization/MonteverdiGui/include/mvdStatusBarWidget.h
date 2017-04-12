@@ -161,6 +161,11 @@ private:
    */
   Ui::StatusBarWidget * m_UI;
 
+  /**
+   * \brief Change the scale when scaleLineEdit is pressed or editing is finished with change.
+   */
+  void ChangeScale();
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -175,6 +180,9 @@ private slots:
   /**
    */
   void on_pixelIndexLineEdit_returnPressed();
+  /**
+   */
+  void on_scaleLineEdit_returnPressed();
 };
 
 } // end namespace 'mvd'
