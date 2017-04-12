@@ -89,13 +89,13 @@ SVMMarginSampler< TSample, TModel >
   while (iter != end && iterO != endO)
   {
     int i = 0;
-    typename SVMModelType::InputSampleType     modelMeasurement;
+    typename SVMModelType::InputSampleType     modelMeasurement(numberOfComponentsPerSample);
 
     measurements = iter.GetMeasurementVector();
     // otbMsgDevMacro(  << "Loop on components " << svm_type );
     for (i=0; i<numberOfComponentsPerSample; ++i)
     {
-    modelMeasurement.PushBack(measurements[i]);
+    modelMeasurement[i] = measurements[i];
     }
 
     // Get distances to the hyperplanes

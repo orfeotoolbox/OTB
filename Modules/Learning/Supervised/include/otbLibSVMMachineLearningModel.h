@@ -238,9 +238,9 @@ public:
 
   void SetConfidenceMode(unsigned int mode)
     {
-    if (mode != m_ConfidenceMode)
+    if (m_ConfidenceMode != static_cast<ConfidenceMode>(mode) )
       {
-      m_ConfidenceMode = mode;
+      m_ConfidenceMode = static_cast<ConfidenceMode>(mode);
       this->m_ConfidenceIndex = this->HasProbabilities();
       this->Modified();
       }

@@ -36,8 +36,7 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
     m_NoClassLabel(0),
     m_GridStep(10)
 {
-  // Need 2 inputs : a vector image, and a SVMModel
-  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredInputs(1);
 
   // Have 2 outputs : the image created by Superclass, a vector data with points
   this->SetNumberOfRequiredOutputs(3);
@@ -86,7 +85,11 @@ void
 PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::SetModel(ModelType* model)
 {
-  this->SetNthInput(1, model);
+  if (model != m_Model)
+    {
+    m_Model = model;
+    this->Modified();
+    }
 }
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
@@ -94,11 +97,7 @@ const typename PersistentObjectDetectionClassifier<TInputImage, TOutputVectorDat
 PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::GetModel(void) const
 {
-  if(this->GetNumberOfInputs()<2)
-    {
-    return ITK_NULLPTR;
-    }
-  return static_cast<const ModelType*>(this->itk::ProcessObject::GetInput(1));
+  return m_Model;
 }
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>

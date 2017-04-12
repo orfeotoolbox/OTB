@@ -237,6 +237,9 @@ private:
   /** Step of the detection grid */
   unsigned int m_GridStep;
 
+  /** classification model */
+  ModelPointerType m_Model;
+
 };
 
 
