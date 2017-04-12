@@ -65,7 +65,7 @@ protected:
   {
     m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 
-    if( m_FeaturesInfo.m_SelectedCFieldIdx.empty() )
+    if( m_FeaturesInfo.m_SelectedCFieldIdx.empty() && GetClassifierCategory() == Supervised )
       {
       otbAppLogFATAL( << "No field has been selected for data labelling!" );
       }
