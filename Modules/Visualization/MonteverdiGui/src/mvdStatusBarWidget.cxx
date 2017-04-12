@@ -217,7 +217,24 @@ StatusBarWidget
 /*****************************************************************************/
 void
 StatusBarWidget
+::on_scaleLineEdit_returnPressed()
+{
+  ChangeScale();
+}
+
+void
+StatusBarWidget
 ::on_scaleLineEdit_editingFinished()
+{
+  if(m_UI->scaleLineEdit->isModified())
+    {
+      ChangeScale();
+    }
+}
+
+void
+StatusBarWidget
+::ChangeScale()
 {
   //
   // Cancel if scale text is empty.
