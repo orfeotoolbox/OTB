@@ -37,6 +37,10 @@ bool IsLonLatValid(double lon, double lat)
   return true;
 }
 
+void PrintNothing(const char * /* s */)
+{
+}
+
 }
 
 }

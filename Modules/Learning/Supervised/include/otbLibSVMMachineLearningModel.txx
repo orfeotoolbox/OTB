@@ -26,6 +26,7 @@
 #include "otbSVMCrossValidationCostFunction.h"
 #include "otbExhaustiveExponentialOptimizer.h"
 #include "otbMacro.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -65,6 +66,9 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   this->m_Problem.l = 0;
   this->m_Problem.y = ITK_NULLPTR;
   this->m_Problem.x = ITK_NULLPTR;
+#ifndef OTB_SHOW_ALL_MSG_DEBUG
+  svm_set_print_string_function(&otb::Utils::PrintNothing);
+#endif
 }
 
 template <class TInputValue, class TOutputValue>

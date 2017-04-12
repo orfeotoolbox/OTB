@@ -48,6 +48,9 @@ namespace Utils
     return s.str();
   }
 
+  /** Function that prints nothing (usefull to disable libsvm logs)*/
+  void OTBCommon_EXPORT PrintNothing(const char *s);
+
 }
 
 } // namespace otb
