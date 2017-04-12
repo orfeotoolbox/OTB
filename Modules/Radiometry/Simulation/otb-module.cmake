@@ -47,7 +47,7 @@ ENABLE_SHARED
     OTBTestKernel
     OTBLearningBase
     OTBSupervised
-    OTBSVMLearning
+    OTBLibSVM
     OTBVectorDataIO
 
   DESCRIPTION

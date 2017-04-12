@@ -24,8 +24,7 @@
 #include "otbSatelliteRSR.h"
 #include "otbReduceSpectralResponse.h"
 
-#include "otbSVMSampleListModelEstimator.h"
-#include "otbSVMClassifier.h"
+#include "otbLibSVMMachineLearningModel.h"
 #include "otbConfusionMatrixCalculator.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
@@ -66,14 +65,12 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   typedef itk::VariableLengthVector<double> SampleType;
   typedef itk::Statistics::ListSample<SampleType> SampleListType;
-  typedef itk::FixedArray<unsigned long, 1> TrainingSampleType;
-  typedef itk::Statistics::ListSample<TrainingSampleType> TrainingSampleListType;
+  typedef itk::FixedArray<unsigned long, 1> TargetSampleType;
+  typedef itk::Statistics::ListSample<TargetSampleType> TargetSampleListType;
 
-  typedef otb::SVMSampleListModelEstimator<SampleListType, TrainingSampleListType> SVMModelEstimatorType;
-  typedef otb::SVMClassifier<SampleListType, unsigned long> SVMClassifierType;
-  typedef SVMClassifierType::OutputType ClassifierOutputType;
+  typedef otb::LibSVMMachineLearningModel<double, unsigned long> SVMType;
 
-  typedef otb::ConfusionMatrixCalculator<TrainingSampleListType, TrainingSampleListType> ConfusionMatrixCalculatorType;
+  typedef otb::ConfusionMatrixCalculator<TargetSampleListType, TargetSampleListType> ConfusionMatrixCalculatorType;
 
   if (argc != 20)
     {
@@ -223,7 +220,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   //compute spectral response for all training files
   SampleListType::Pointer sampleList = SampleListType::New();
-  TrainingSampleListType::Pointer trainingList = TrainingSampleListType::New();
+  TargetSampleListType::Pointer trainingList = TargetSampleListType::New();
 
   for (unsigned int i = 0; i < trainingFiles.size(); ++i)
     {
@@ -246,7 +243,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMModelEstimator
       SampleType sample;
-      TrainingSampleType trainingSample;
+      TargetSampleType trainingSample;
       sample.SetSize(atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size());
       std::cout << "corrected response : [";
       for (unsigned int j = 0; j < atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size(); ++j)
@@ -262,16 +259,16 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
     }
 
   //SVM model estimator
-  SVMModelEstimatorType::Pointer estimator = SVMModelEstimatorType::New();
-  estimator->SetInputSampleList(sampleList);
-  estimator->SetTrainingSampleList(trainingList);
-  estimator->DoProbabilityEstimates(true);
-  estimator->Update();
-  estimator->GetModel()->SaveModel("model.txt");
+  SVMType::Pointer classifier = SVMType::New();
+  classifier->SetInputListSample(sampleList);
+  classifier->SetTargetListSample(trainingList);
+  classifier->DoProbabilityEstimates(true);
+  classifier->Train();
+  classifier->Save("model.txt");
 
   //compute spectral response for testing files
   sampleList->Clear(); //clear the sample list to re use it for testing samples
-  TrainingSampleListType::Pointer groundTruthClassList = TrainingSampleListType::New();
+  TargetSampleListType::Pointer groundTruthClassList = TargetSampleListType::New();
   for (unsigned int i = 0; i < testingFiles.size(); ++i)
     {
       SpectralResponsePointerType spectralResponse = SpectralResponseType::New();
@@ -293,7 +290,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMClassifier
       SampleType sample;
-      TrainingSampleType gtClass;
+      TargetSampleType gtClass;
       sample.SetSize(atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size());
       for (unsigned int j = 0; j < atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size(); ++j)
         {
@@ -305,21 +302,8 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
     }
 
   //SVM Classifier
-  SVMClassifierType::Pointer classifier = SVMClassifierType::New();
-  classifier->SetModel(estimator->GetModel());
-  classifier->SetInput(sampleList);
-  classifier->SetNumberOfClasses(dirSR.size());
-  classifier->Update();
+  TargetSampleListType::Pointer classifierListLabel = classifier->PredictBatch(sampleList);
 
-  ClassifierOutputType::ConstIterator it = classifier->GetOutput()->Begin();
-
-  TrainingSampleListType::Pointer classifierListLabel = TrainingSampleListType::New();
-  while (it != classifier->GetOutput()->End())
-    {
-      std::cout << "class : " << it.GetClassLabel() << std::endl;
-      classifierListLabel->PushBack(it.GetClassLabel());
-      ++it;
-    }
   for (unsigned int i = 0; i < testingFiles.size(); ++i)
     {
       std::cout << "ground truth class : " << testingGTClasses[i] << std::endl;

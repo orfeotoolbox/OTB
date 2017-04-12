@@ -29,8 +29,8 @@
 #include "otbSpatialisationFilter.h"
 #include "otbImageSimulationMethod.h"
 #include "otbAttributesMapLabelObject.h"
-#include "otbSVMImageModelEstimator.h"
-#include "otbSVMImageClassificationFilter.h"
+#include "otbLibSVMMachineLearningModel.h"
+#include "otbImageClassificationFilter.h"
 #include "otbImageFileReader.h"
 
 int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
@@ -62,17 +62,16 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
     SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
 
-
-   typedef otb::SVMImageModelEstimator<OutputImageType, LabelImageType>                    SVMEstimatorType;
-   typedef otb::SVMImageClassificationFilter<OutputImageType, LabelImageType>             SVMClassificationFilterType;
+   typedef otb::LibSVMMachineLearningModel<double, unsigned short> SVMType;
+   typedef otb::ImageClassificationFilter<OutputImageType,LabelImageType> ClassificationFilterType;
 
    /** Instantiation of pointer objects*/
    ImageWriterType::Pointer writer = ImageWriterType::New();
    LabelImageWriterType::Pointer labelWriter = LabelImageWriterType::New();
    ImageSimulationMethodType::Pointer imageSimulation = ImageSimulationMethodType::New();
    SpatialisationFilterType::Pointer spatialisationFilter = SpatialisationFilterType::New();
-   SVMEstimatorType::Pointer      svmEstimator   = SVMEstimatorType::New();
-   SVMClassificationFilterType::Pointer classifier = SVMClassificationFilterType::New();
+   SVMType::Pointer model = SVMType::New();
+   ClassificationFilterType::Pointer classifier = ClassificationFilterType::New();
 
 
    SpatialisationFilterType::SizeType objectSize;
@@ -132,15 +131,48 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
 //    imageSimulation->SetVariance();
    imageSimulation->UpdateData();
 
+    
+   //~ svmEstimator->SetInputImage(imageSimulation->GetOutputReflectanceImage());
+   //~ svmEstimator->SetTrainingImage(imageSimulation->GetOutputLabelImage());
+   //~ svmEstimator->SetParametersOptimization(false);
+   //~ svmEstimator->DoProbabilityEstimates(true);
+   //~ svmEstimator->Update();
 
-   svmEstimator->SetInputImage(imageSimulation->GetOutputReflectanceImage());
-   svmEstimator->SetTrainingImage(imageSimulation->GetOutputLabelImage());
-   svmEstimator->SetParametersOptimization(false);
-   svmEstimator->DoProbabilityEstimates(true);
-   svmEstimator->Update();
+   OutputImageType::Pointer outReflectance = imageSimulation->GetOutputReflectanceImage();
+   LabelImageType::Pointer outLabels = imageSimulation->GetOutputLabelImage();
 
+  typedef SVMType::InputListSampleType InputListSampleType;
+  typedef SVMType::TargetListSampleType TargetListSampleType;
+  InputListSampleType::Pointer inputSamples = InputListSampleType::New();
+  TargetListSampleType::Pointer trainSamples = TargetListSampleType::New();
+  inputSamples->SetMeasurementVectorSize(nbBands);
+  trainSamples->SetMeasurementVectorSize(1);
+  itk::ImageRegionConstIterator<OutputImageType> itIn(outReflectance,outReflectance->GetLargestPossibleRegion() );
+  itk::ImageRegionConstIterator<LabelImageType> itLabel(outLabels, outLabels->GetLargestPossibleRegion());
+  itIn.GoToBegin();
+  itLabel.GoToBegin();
+  while (!itIn.IsAtEnd())
+    {
+    SVMType::InputSampleType sample;
+    SVMType::TargetSampleType target;
+    sample.SetSize(nbBands);
+    for (unsigned int i=0 ; i<nbBands ; i++)
+      {
+      sample[i] = itIn.Get()[i];
+      }
+    target[0] = itLabel.Value();
+    inputSamples->PushBack(sample);
+    trainSamples->PushBack(target);
+    ++itIn;
+    ++itLabel;
+    }
 
-   classifier->SetModel(svmEstimator->GetModel());
+  model->SetInputListSample(inputSamples);
+  model->SetTargetListSample(trainSamples);
+  model->DoProbabilityEstimates(true);
+  model->Train();
+  
+   classifier->SetModel(model);
    classifier->SetInput(imageSimulation->GetOutput());
 
    //Write the result to an image file
