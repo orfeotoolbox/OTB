@@ -206,7 +206,7 @@ private:
  *
  * This filter differ from itk::VectorRescaleIntensityImageFilter.
  * Instead of setting only the OutputMaximumMagnitude, you can set the minimum and maximum values for the input and output images.
- * There is also the possibilty to set a Gamma value and change the clamp percentage.
+ * There is also the possibility to set a Gamma value and change the clamp percentage.
  *
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded
