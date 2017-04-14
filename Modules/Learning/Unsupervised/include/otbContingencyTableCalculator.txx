@@ -32,7 +32,7 @@ namespace otb
 {
 template<class TClassLabel>
 ContingencyTableCalculator<TClassLabel>::ContingencyTableCalculator()
-: m_NumberOfRefClasses(0), m_NumberOfProdClasses(0), m_NumberOfSamples(0)
+        : m_NumberOfRefClasses(0), m_NumberOfProdClasses(0), m_NumberOfSamples(0)
 {}
 
 template<class TClassLabel>
@@ -52,13 +52,13 @@ void
 ContingencyTableCalculator<TClassLabel>
 ::Compute(TRefIterator refBegin, TRefIterator refEnd, TProdIterator prodBegin, TProdIterator prodEnd)
 {
-    while( refBegin != refEnd && prodBegin != prodEnd )
-      {
-      ++m_LabelCount[refBegin.GetMeasurementVector()[0]][prodBegin.GetMeasurementVector()[0]];
-      ++refBegin;
-      ++prodBegin;
-      ++m_NumberOfSamples;
-      }
+  while( refBegin != refEnd && prodBegin != prodEnd )
+    {
+    ++m_LabelCount[refBegin.GetMeasurementVector()[0]][prodBegin.GetMeasurementVector()[0]];
+    ++refBegin;
+    ++prodBegin;
+    ++m_NumberOfSamples;
+    }
 }
 
 template<class TClassLabel>
@@ -66,7 +66,7 @@ template<class TRefIterator, class TProdIterator>
 void
 ContingencyTableCalculator<TClassLabel>
 ::Compute(TRefIterator itRef, TProdIterator itProd, bool refHasNoData, typename TRefIterator::InternalPixelType refNoData,
-                 bool prodHasNoData, typename TProdIterator::InternalPixelType prodNoData)
+          bool prodHasNoData, typename TProdIterator::InternalPixelType prodNoData)
 {
   while( !itRef.IsAtEnd() && !itProd.IsAtEnd() )
     {
@@ -76,7 +76,7 @@ ContingencyTableCalculator<TClassLabel>
       ++m_LabelCount[itRef.Get()][itProd.Get()];
       ++m_NumberOfSamples;
       }
-      ++itRef;
+    ++itRef;
     ++itProd;
     }
 }
@@ -93,12 +93,12 @@ ContingencyTableCalculator<TClassLabel>
   // Retrieve all labels needed to iterate over all labelCount
   for(typename MapOfClassesType::const_iterator refIt = m_LabelCount.begin(); refIt != m_LabelCount.end(); ++refIt)
     {
-      refLabels.insert(refIt->first);
-      CountMapType cmt = refIt->second;
-      for(typename CountMapType::const_iterator prodIt = cmt.begin(); prodIt != cmt.end(); ++prodIt)
-        {
-        prodLabels.insert(prodIt->first);
-        }
+    refLabels.insert(refIt->first);
+    CountMapType cmt = refIt->second;
+    for(typename CountMapType::const_iterator prodIt = cmt.begin(); prodIt != cmt.end(); ++prodIt)
+      {
+      prodLabels.insert(prodIt->first);
+      }
     }
 
   m_NumberOfRefClasses = refLabels.size();

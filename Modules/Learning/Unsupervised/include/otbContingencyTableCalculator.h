@@ -61,8 +61,8 @@ public:
 
   /** Populate the confusion Matrix for a image iteration */
   template<class TRefIterator, class TProdIterator>
-    void Compute(TRefIterator itRef, TProdIterator itProd, bool refHasNoData = false, typename TRefIterator::InternalPixelType refNoData = 0,
-                 bool prodHasNoData = false, typename TProdIterator::InternalPixelType prodNoData = 0);
+  void Compute(TRefIterator itRef, TProdIterator itProd, bool refHasNoData = false, typename TRefIterator::InternalPixelType refNoData = 0,
+               bool prodHasNoData = false, typename TProdIterator::InternalPixelType prodNoData = 0);
 
   /** Populate the confusion Matrix with input which provide GetMeasurementVector()[0] access */
   template<class TRefIterator, class TProdIterator>
