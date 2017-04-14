@@ -159,8 +159,6 @@ private:
       std::vector<std::string> options;
 
       ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-      std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
-      layername = layername.substr(0,layername.size()-4);
       layer = ogrDS->GetLayer(0);
 
       otb::ogr::Feature feature = layer.ogr().GetNextFeature();
@@ -255,8 +253,7 @@ private:
     m_Model->Load(GetParameterString("model"));
     otbAppLogINFO("Model loaded");
 
-    ListSampleType::Pointer listSample;
-    listSample = trainingShiftScaleFilter->GetOutput();
+    ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
 
     typename ConfidenceListSampleType::Pointer quality;
 
