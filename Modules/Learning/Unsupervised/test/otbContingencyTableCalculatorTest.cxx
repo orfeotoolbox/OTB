@@ -93,7 +93,8 @@ int otbContingencyTableCalculatorCompute(int argc, char* argv[])
   typedef itk::FixedArray<ClassLabelType, 1>              RLabelType;
   typedef itk::Statistics::ListSample<RLabelType>         RListLabelType;
   typedef otb::ContingencyTableCalculator<ClassLabelType> CalculatorType;
-  typedef CalculatorType::ContingencyTableType          ContingencyTableType;
+  typedef CalculatorType::ContingencyTableType            ContingencyTableType;
+  typedef ContingencyTableType::Pointer                   ContingencyTablePointerType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
@@ -126,7 +127,7 @@ int otbContingencyTableCalculatorCompute(int argc, char* argv[])
     }
 
   calculator->Compute( refLabels->Begin(), refLabels->End(), prodLabels->Begin(), prodLabels->End() );
-  ContingencyTableType confmat = calculator->BuildContingencyTable();
+  ContingencyTablePointerType contingencyTable = calculator->BuildContingencyTable();
 
 
   if( static_cast<int>(calculator->GetNumberOfRefClasses()) != nbRefClasses )
@@ -148,7 +149,7 @@ int otbContingencyTableCalculatorCompute(int argc, char* argv[])
     }
 
 
-  std::cout << "contingency table" << std::endl  << confmat << std::endl;
+  std::cout << "contingency table" << std::endl  << (*contingencyTable.GetPointer()) << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -216,10 +217,10 @@ int otbContingencyTableCalculatorComputeWithBaseline(int itkNotUsed(argc), char*
     }
 
   calculator->Compute( refLabels->Begin(), refLabels->End(), prodLabels->Begin(), prodLabels->End() );
-  CalculatorType::ContingencyTableType confmat = calculator->BuildContingencyTable();
+  CalculatorType::ContingencyTablePointerType contingencyTable = calculator->BuildContingencyTable();
 
   std::cout << std::endl;
-  std::cout << "contingency Table" << std::endl << confmat << std::endl;
+  std::cout << "contingency Table" << std::endl << (*contingencyTable.GetPointer()) << std::endl;
   unsigned int nbRefClasses = 5;
   unsigned int nbProdClasses = 7;
 

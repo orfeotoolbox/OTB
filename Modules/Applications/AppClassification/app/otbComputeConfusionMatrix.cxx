@@ -80,6 +80,7 @@ public:
   typedef ConfusionMatrixMeasurementsType::MeasurementType                      MeasurementType;
 
   typedef ContingencyTable<ClassLabelType>  ContingencyTableType;
+  typedef ContingencyTableType::Pointer     ContingencyTablePointerType;
 
 
 private:
@@ -207,16 +208,16 @@ private:
       }    
   }
 
-  void LogContingencyTable(const ContingencyTableType& contingencyTable)
+  void LogContingencyTable(const ContingencyTablePointerType& contingencyTable)
   {
-    otbAppLogINFO("Contingency table: reference labels (rows) vs. produced labels (cols)\n" << contingencyTable);
+    otbAppLogINFO("Contingency table: reference labels (rows) vs. produced labels (cols)\n" << (*contingencyTable.GetPointer()));
   }
 
-  void m_WriteContingencyTable(const ContingencyTableType& contingencyTable)
+  void m_WriteContingencyTable(const ContingencyTablePointerType& contingencyTable)
   {
     std::ofstream outFile;
     outFile.open( this->GetParameterString( "out" ).c_str() );
-    outFile << contingencyTable.to_csv();
+    outFile << contingencyTable->to_csv();
     outFile.close();
   }
 
@@ -397,7 +398,7 @@ private:
       calculator->Compute( itRef, itInput,sid.refhasnodata,sid.refnodata,sid.prodhasnodata,sid.prodnodata);
       }
 
-    ContingencyTableType contingencyTable = calculator->BuildContingencyTable();
+    ContingencyTablePointerType contingencyTable = calculator->BuildContingencyTable();
     LogContingencyTable(contingencyTable);
     m_WriteContingencyTable(contingencyTable);
   }

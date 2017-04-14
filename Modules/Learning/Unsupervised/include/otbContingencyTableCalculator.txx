@@ -83,7 +83,7 @@ ContingencyTableCalculator<TClassLabel>
 
 
 template<class TClassLabel>
-typename ContingencyTableCalculator<TClassLabel>::ContingencyTableType
+typename ContingencyTableCalculator<TClassLabel>::ContingencyTablePointerType
 ContingencyTableCalculator<TClassLabel>
 ::BuildContingencyTable()
 {
@@ -113,11 +113,12 @@ ContingencyTableCalculator<TClassLabel>
   std::copy(refLabels.begin(), refLabels.end(), std::back_inserter(referenceLabels));
   std::copy(prodLabels.begin(), prodLabels.end(), std::back_inserter(producedLabels));
 
-  ContingencyTableType contingencyTable(referenceLabels, producedLabels);
+  ContingencyTablePointerType contingencyTable = ContingencyTableType::New();
+  contingencyTable->SetLabels(referenceLabels, producedLabels);
 
   for( unsigned int i = 0; i < rows; ++i )
     for( unsigned int j = 0; j < cols; ++j )
-      contingencyTable.matrix(i,j) = m_LabelCount[referenceLabels[i]][producedLabels[j]];
+      contingencyTable->matrix(i,j) = m_LabelCount[referenceLabels[i]][producedLabels[j]];
 
 
   return contingencyTable;

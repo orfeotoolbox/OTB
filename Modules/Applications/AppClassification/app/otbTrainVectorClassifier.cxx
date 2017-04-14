@@ -49,6 +49,9 @@ public:
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
   typedef ConfusionMatrixCalculatorType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
+  
+  typedef ContingencyTable<ClassLabelType> ContingencyTableType;
+  typedef ContingencyTableType::Pointer    ContingencyTablePointerType;
 
 protected:
   void DoInit()
@@ -80,14 +83,14 @@ protected:
       }
     else
       {
-      ContingencyTable<ClassLabelType> table = ComputeContingencyTable( m_PredictedList,
-                                                                        m_ClassificationSamplesWithLabel.labeledListSample );
+      ContingencyTablePointerType table = ComputeContingencyTable( m_PredictedList,
+                                                                   m_ClassificationSamplesWithLabel.labeledListSample );
       WriteContingencyTable( table );
       }
   }
 
-  ContingencyTable<ClassLabelType> ComputeContingencyTable(const TargetListSampleType::Pointer &predictedListSample,
-                                                           const TargetListSampleType::Pointer &performanceLabeledListSample)
+  ContingencyTablePointerType ComputeContingencyTable(const TargetListSampleType::Pointer &predictedListSample,
+                                                      const TargetListSampleType::Pointer &performanceLabeledListSample)
   {
     typedef ContingencyTableCalculator<ClassLabelType> ContigencyTableCalcutaltorType;
 
@@ -103,14 +106,14 @@ protected:
   }
 
 
-  void WriteContingencyTable(const ContingencyTable<ClassLabelType> & table)
+  void WriteContingencyTable(const ContingencyTablePointerType& table)
   {
     if(IsParameterEnabled("io.confmatout"))
       {
       // Write contingency table
       std::ofstream outFile;
       outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
-      outFile << table.to_csv();
+      outFile << table->to_csv();
       }
   }
 

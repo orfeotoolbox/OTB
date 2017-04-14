@@ -24,24 +24,39 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <itkObject.h>
+#include <itkObjectFactory.h>
 #include <itkVariableSizeMatrix.h>
 
 namespace otb
 {
 template<class TClassLabel>
-class ContingencyTable
+class ContingencyTable : public itk::Object
 {
 public:
+  /** Standard class typedefs */
+  typedef ContingencyTable              Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ContingencyTableCalculator, itk::Object);
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
   typedef itk::VariableSizeMatrix<unsigned long> MatrixType;
-  typedef std::vector<TClassLabel> LabelList;
+  typedef std::vector<TClassLabel>               LabelList;
 
   MatrixType matrix;
 
-  ContingencyTable(LabelList referenceLabels, LabelList producedLabels) : refLabels( referenceLabels ),
-                                                                          prodLabels( producedLabels )
+  void SetLabels(LabelList referenceLabels, LabelList producedLabels)
   {
-    unsigned int rows = static_cast<unsigned int>(refLabels.size());
-    unsigned int cols = static_cast<unsigned int>(prodLabels.size());
+    m_RefLabels = referenceLabels;
+    m_ProdLabels = producedLabels;
+    unsigned int rows = static_cast<unsigned int>(m_RefLabels.size());
+    unsigned int cols = static_cast<unsigned int>(m_ProdLabels.size());
     matrix.SetSize( rows, cols );
     matrix.Fill( 0 );
   }
@@ -51,19 +66,19 @@ public:
 
     // Retrieve the maximal width from the matrix and the labels
     size_t maxWidth = 6;
-    for( size_t i = 0; i << contingencyTable.prodLabels.size(); ++i )
+    for( size_t i = 0; i << contingencyTable.m_ProdLabels.size(); ++i )
       {
       std::ostringstream oss;
-      oss << contingencyTable.prodLabels[i];
+      oss << contingencyTable.m_ProdLabels[i];
       size_t length = oss.str().length();
       if( length > maxWidth )
         maxWidth = length;
       }
 
-    for( size_t i = 0; i << contingencyTable.refLabels.size(); ++i )
+    for( size_t i = 0; i << contingencyTable.m_RefLabels.size(); ++i )
       {
       std::ostringstream oss;
-      oss << contingencyTable.refLabels[i];
+      oss << contingencyTable.m_RefLabels[i];
       size_t length = oss.str().length();
       if( length > maxWidth )
         maxWidth = length;
@@ -85,16 +100,16 @@ public:
 
     // Write the first line of the matrix (produced labels)
     o << std::setfill(' ') << std::setw( width ) << "labels";
-    for( size_t i = 0; i < contingencyTable.prodLabels.size(); ++i )
+    for( size_t i = 0; i < contingencyTable.m_ProdLabels.size(); ++i )
       {
-      o << std::setfill(' ') << std::setw( width ) << contingencyTable.prodLabels[i];
+      o << std::setfill(' ') << std::setw( width ) << contingencyTable.m_ProdLabels[i];
       }
     o << std::endl;
 
     // For each line write the reference label, then the count value
     for( unsigned int i = 0; i < contingencyTable.matrix.Rows(); ++i )
       {
-      o << std::setfill(' ') << std::setw( width ) << contingencyTable.refLabels[i];
+      o << std::setfill(' ') << std::setw( width ) << contingencyTable.m_RefLabels[i];
       for( unsigned int j = 0; j < contingencyTable.matrix.Cols(); ++j )
         {
         o << std::setfill(' ') << std::setw( width ) << contingencyTable.matrix( i, j );
@@ -111,16 +126,16 @@ public:
 
     std::ostringstream oss;
     oss << "labels";
-    for( size_t i = 0; i < prodLabels.size(); ++i )
+    for( size_t i = 0; i < m_ProdLabels.size(); ++i )
       {
-      oss << separator << prodLabels[i];
+      oss << separator << m_ProdLabels[i];
       }
     oss << std::endl;
 
     // For each line write the reference label, then the count value
     for( unsigned int i = 0; i < matrix.Rows(); ++i )
       {
-      oss << refLabels[i];
+      oss << m_RefLabels[i];
       for( unsigned int j = 0; j < matrix.Cols(); ++j )
         {
         oss << separator << matrix( i, j );
@@ -132,9 +147,23 @@ public:
     return oss.str();
   }
 
+protected:
+  ContingencyTable()
+  {
+    SetLabels(LabelList{}, LabelList{});
+  }
+  ~ContingencyTable() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent itkNotUsed(indent)) const ITK_OVERRIDE
+  {
+    os << *this;
+  }
+
 private:
-  LabelList refLabels;
-  LabelList prodLabels;
+  ContingencyTable(const Self &); //purposely not implemented
+  void operator=(const Self &); //purposely not implemented
+
+  LabelList m_RefLabels;
+  LabelList m_ProdLabels;
 
 
 };

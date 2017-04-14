@@ -53,7 +53,8 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef ContingencyTable<TClassLabel> ContingencyTableType;
+  typedef ContingencyTable<TClassLabel>          ContingencyTableType;
+  typedef typename ContingencyTableType::Pointer ContingencyTablePointerType;
 
   typedef typename std::map<TClassLabel, unsigned long> CountMapType;
   typedef typename std::map<TClassLabel, CountMapType > MapOfClassesType;
@@ -72,7 +73,7 @@ public:
   itkGetConstMacro(NumberOfSamples, unsigned long);
 
   void Clear();
-  ContingencyTableType BuildContingencyTable();
+  ContingencyTablePointerType BuildContingencyTable();
 
 protected:
   ContingencyTableCalculator();
