@@ -51,7 +51,7 @@ public:
 
   MatrixType matrix;
 
-  void SetLabels(LabelList referenceLabels, LabelList producedLabels)
+  void SetLabels(const LabelList &referenceLabels, const LabelList &producedLabels)
   {
     m_RefLabels = referenceLabels;
     m_ProdLabels = producedLabels;

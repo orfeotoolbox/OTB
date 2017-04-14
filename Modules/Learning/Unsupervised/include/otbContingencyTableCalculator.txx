@@ -107,11 +107,8 @@ ContingencyTableCalculator<TClassLabel>
   unsigned int rows = static_cast<unsigned int>(m_NumberOfRefClasses);
   unsigned int cols = static_cast<unsigned int>(m_NumberOfProdClasses);
 
-  std::vector<TClassLabel> referenceLabels;
-  std::vector<TClassLabel> producedLabels;
-
-  std::copy(refLabels.begin(), refLabels.end(), std::back_inserter(referenceLabels));
-  std::copy(prodLabels.begin(), prodLabels.end(), std::back_inserter(producedLabels));
+  std::vector<TClassLabel> referenceLabels(refLabels.begin(), refLabels.end());
+  std::vector<TClassLabel> producedLabels(prodLabels.begin(), prodLabels.end());
 
   ContingencyTablePointerType contingencyTable = ContingencyTableType::New();
   contingencyTable->SetLabels(referenceLabels, producedLabels);
