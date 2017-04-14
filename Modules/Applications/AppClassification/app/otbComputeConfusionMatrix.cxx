@@ -83,11 +83,11 @@ public:
 
 
 private:
-  Int32ImageType* input;
-  Int32ImageType::Pointer reference;
-  RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager;
-  otb::ogr::DataSource::Pointer ogrRef;
-  RasterizeFilterType::Pointer rasterizeReference = RasterizeFilterType::New();
+  Int32ImageType* m_Input;
+  Int32ImageType::Pointer m_Reference;
+  RAMDrivenAdaptativeStreamingManagerType::Pointer m_StreamingManager;
+  otb::ogr::DataSource::Pointer m_OgrRef;
+  RasterizeFilterType::Pointer m_RasterizeReference;
 
   struct StreamingInitializationData
   {
@@ -146,17 +146,25 @@ private:
   SetParameterDescription("ref.vector.field","Field name containing the label values");
   SetListViewSingleSelectionMode("ref.vector.field",true);
   
-  AddParameter(ParameterType_Int,"refnodatalabel","Value for nodata pixels in ref");
-  SetDefaultParameterInt("refnodatalabel",0);
-  SetParameterDescription("refnodatalabel","Label to be treated as no data in ref. Please note that this value is always used in vector mode, to generate default values. Please set it to a value that does not correspond to a class label.");
-  MandatoryOff("refnodatalabel");
-  DisableParameter("refnodatalabel");
-  AddParameter(ParameterType_Int,"prodnodatalabel","Value for nodata pixels in input image");
-  SetParameterDescription("prodnodatalabel","Label to be treated as no data in input image");
-  SetDefaultParameterInt("prodnodatalabel",0);
+  AddParameter(ParameterType_Int,"ref.raster.nodata","Value for nodata pixels in ref raster");
+  SetDefaultParameterInt("ref.raster.nodata",0);
+  SetParameterDescription("ref.raster.nodata","Label to be treated as no data in ref raster.");
+  MandatoryOff("ref.raster.nodata");
+  DisableParameter("ref.raster.nodata");
+
+  AddParameter(ParameterType_Int,"ref.vector.nodata","Value for nodata pixels in ref vector");
+  SetDefaultParameterInt("ref.vector.nodata",0);
+  SetParameterDescription("ref.vector.nodata","Label to be treated as no data in ref vector. Please note that this value is always used in vector mode, to generate default values. Please set it to a value that does not correspond to a class label.");
+  MandatoryOff("ref.vector.nodata");
+  DisableParameter("ref.vector.nodata");
+
+
+  AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels in input image");
+  SetParameterDescription("nodatalabel","Label to be treated as no data in input image");
+  SetDefaultParameterInt("nodatalabel",0);
   
-  MandatoryOff("prodnodatalabel");
-  DisableParameter("prodnodatalabel");
+  MandatoryOff("nodatalabel");
+  DisableParameter("nodatalabel");
 
   AddRAMParameter();
 
@@ -166,7 +174,7 @@ private:
   SetDocExampleParameterValue("ref", "vector");
   SetDocExampleParameterValue("ref.vector.in","VectorData_QB1_bis.shp");
   SetDocExampleParameterValue("ref.vector.field","Class");
-  SetDocExampleParameterValue("refnodatalabel","255");
+  SetDocExampleParameterValue("ref.vector.nodata","255");
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -204,7 +212,7 @@ private:
     otbAppLogINFO("Contingency table: reference labels (rows) vs. produced labels (cols)\n" << contingencyTable);
   }
 
-  void writeContingencyTable(const ContingencyTableType& contingencyTable)
+  void m_WriteContingencyTable(const ContingencyTableType& contingencyTable)
   {
     std::ofstream outFile;
     outFile.open( this->GetParameterString( "out" ).c_str() );
@@ -289,28 +297,26 @@ private:
 
     StreamingInitializationData sid;
 
-    input = this->GetParameterInt32Image("in");
+    m_Input = this->GetParameterInt32Image("in");
 
     std::string field;
 
-    rasterizeReference = RasterizeFilterType::New();
-    sid.refnodata = this->GetParameterInt("refnodatalabel");
-    sid.refhasnodata = this->IsParameterEnabled("refnodatalabel");
-    sid.prodnodata = this->GetParameterInt("prodnodatalabel");
-    sid.prodhasnodata = this->IsParameterEnabled("prodnodatalabel");
+    sid.prodnodata = this->GetParameterInt("nodatalabel");
+    sid.prodhasnodata = this->IsParameterEnabled("nodatalabel");
 
-
-    
     if (GetParameterString("ref") == "raster")
       {
-      reference = this->GetParameterInt32Image("ref.raster.in");
+      sid.refnodata = this->GetParameterInt("ref.raster.nodata");
+      sid.refhasnodata = this->IsParameterEnabled("ref.raster.nodata");
+      m_Reference = this->GetParameterInt32Image("ref.raster.in");
       }
     else
       {
       // Force nodata to true since it will be generated during rasterization
       sid.refhasnodata = true;
+      sid.refnodata = this->GetParameterInt("ref.vector.nodata");
       
-      ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
+      m_OgrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
 
       // Get field name
       std::vector<int> selectedCFieldIdx = GetSelectedItems("ref.vector.field");
@@ -323,27 +329,28 @@ private:
       std::vector<std::string> cFieldNames = GetChoiceNames("ref.vector.field");
       field = cFieldNames[selectedCFieldIdx.front()];
 
-      rasterizeReference->AddOGRDataSource(ogrRef);
-      rasterizeReference->SetOutputParametersFromImage(input);
-      rasterizeReference->SetBackgroundValue(sid.refnodata);
-      rasterizeReference->SetBurnAttribute(field.c_str());
+      m_RasterizeReference = RasterizeFilterType::New();
+      m_RasterizeReference->AddOGRDataSource(m_OgrRef);
+      m_RasterizeReference->SetOutputParametersFromImage(m_Input);
+      m_RasterizeReference->SetBackgroundValue(sid.refnodata);
+      m_RasterizeReference->SetBurnAttribute(field.c_str());
 
-      reference = rasterizeReference->GetOutput();
-      reference->UpdateOutputInformation();
+      m_Reference = m_RasterizeReference->GetOutput();
+      m_Reference->UpdateOutputInformation();
       }
 
     // Prepare local streaming
 
 
-    streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+    m_StreamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
     int availableRAM = GetParameterInt("ram");
-    streamingManager->SetAvailableRAMInMB( static_cast<unsigned int>( availableRAM ) );
+    m_StreamingManager->SetAvailableRAMInMB( static_cast<unsigned int>( availableRAM ) );
     float bias = 2.0; // empiric value;
-    streamingManager->SetBias(bias);
+    m_StreamingManager->SetBias(bias);
 
-    streamingManager->PrepareStreaming(input, input->GetLargestPossibleRegion());
+    m_StreamingManager->PrepareStreaming(m_Input, m_Input->GetLargestPossibleRegion());
 
-    sid.numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
+    sid.numberOfStreamDivisions = m_StreamingManager->GetNumberOfSplits();
 
     otbAppLogINFO("Number of stream divisions : "<<sid.numberOfStreamDivisions);
 
@@ -371,20 +378,20 @@ private:
 
     for (unsigned int index = 0; index < sid.numberOfStreamDivisions; index++)
       {
-      RegionType streamRegion = streamingManager->GetSplit( index );
+      RegionType streamRegion = m_StreamingManager->GetSplit( index );
 
-      input->SetRequestedRegion( streamRegion );
-      input->PropagateRequestedRegion();
-      input->UpdateOutputData();
+      m_Input->SetRequestedRegion( streamRegion );
+      m_Input->PropagateRequestedRegion();
+      m_Input->UpdateOutputData();
 
-      reference->SetRequestedRegion( streamRegion );
-      reference->PropagateRequestedRegion();
-      reference->UpdateOutputData();
+      m_Reference->SetRequestedRegion( streamRegion );
+      m_Reference->PropagateRequestedRegion();
+      m_Reference->UpdateOutputData();
 
-      ImageIteratorType itInput( input, streamRegion );
+      ImageIteratorType itInput( m_Input, streamRegion );
       itInput.GoToBegin();
 
-      ImageIteratorType itRef( reference, streamRegion );
+      ImageIteratorType itRef( m_Reference, streamRegion );
       itRef.GoToBegin();
 
       calculator->Compute( itRef, itInput,sid.refhasnodata,sid.refnodata,sid.prodhasnodata,sid.prodnodata);
@@ -392,7 +399,7 @@ private:
 
     ContingencyTableType contingencyTable = calculator->BuildContingencyTable();
     LogContingencyTable(contingencyTable);
-    writeContingencyTable(contingencyTable);
+    m_WriteContingencyTable(contingencyTable);
   }
 
   void DoExecuteConfusionMatrix(const StreamingInitializationData& sid)
@@ -406,20 +413,20 @@ private:
 
     for (unsigned int index = 0; index < sid.numberOfStreamDivisions; index++)
       {
-      RegionType streamRegion = streamingManager->GetSplit(index);
+      RegionType streamRegion = m_StreamingManager->GetSplit(index);
 
-      input->SetRequestedRegion(streamRegion);
-      input->PropagateRequestedRegion();
-      input->UpdateOutputData();
+      m_Input->SetRequestedRegion(streamRegion);
+      m_Input->PropagateRequestedRegion();
+      m_Input->UpdateOutputData();
 
-      reference->SetRequestedRegion(streamRegion);
-      reference->PropagateRequestedRegion();
-      reference->UpdateOutputData();
+      m_Reference->SetRequestedRegion(streamRegion);
+      m_Reference->PropagateRequestedRegion();
+      m_Reference->UpdateOutputData();
 
-      ImageIteratorType itInput(input, streamRegion);
+      ImageIteratorType itInput(m_Input, streamRegion);
       itInput.GoToBegin();
 
-      ImageIteratorType itRef(reference, streamRegion);
+      ImageIteratorType itRef(m_Reference, streamRegion);
       itRef.GoToBegin();
 
       while (!itRef.IsAtEnd())
