@@ -29,16 +29,6 @@ namespace Wrapper
 
 void TrainVectorBase::DoInit()
 {
-  SetName( "TrainVectorClassifier" );
-  SetDescription( "Train a classifier based on labeled geometries and a list of features to consider." );
-
-  SetDocName( "Train Vector Classifier" );
-  SetDocLongDescription( "This application trains a classifier based on "
-                                 "labeled geometries and a list of features to consider for classification." );
-  SetDocLimitations( " " );
-  SetDocAuthors( "OTB Team" );
-  SetDocSeeAlso( " " );
-
   // Common Parameters for all Learning Application
   AddParameter( ParameterType_Group, "io", "Input and output data" );
   SetParameterDescription( "io", "This group of parameters allows setting input and output data." );
@@ -149,7 +139,7 @@ void TrainVectorBase::DoExecute()
     otbAppLogFATAL( << "No features have been selected to train the classifier on!" );
     }
 
-  ShiftScaleParameters measurement = ComputeStatistics( m_FeaturesInfo.m_NbFeatures );
+  ShiftScaleParameters measurement = GetStatistics( m_FeaturesInfo.m_NbFeatures );
   ExtractAllSamples( measurement );
 
   this->Train( m_TrainingSamplesWithLabel.listSample, m_TrainingSamplesWithLabel.labeledListSample, GetParameterString( "io.out" ) );
@@ -202,7 +192,7 @@ TrainVectorBase::ExtractClassificationSamplesWithLabel(const ShiftScaleParameter
 
 
 TrainVectorBase::ShiftScaleParameters
-TrainVectorBase::ComputeStatistics(unsigned int nbFeatures)
+TrainVectorBase::GetStatistics(unsigned int nbFeatures)
 {
   ShiftScaleParameters measurement = ShiftScaleParameters();
   if( HasValue( "io.stats" ) && IsParameterEnabled( "io.stats" ) )
