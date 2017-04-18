@@ -33,23 +33,8 @@ add_executable(SOMExample SOMExample.cxx)
 target_link_libraries(SOMExample ${OTB_LIBRARIES})
 
 if(OTBLibSVM_LOADED)
-add_executable(SVMImageClassificationExample SVMImageClassificationExample.cxx)
-target_link_libraries(SVMImageClassificationExample ${OTB_LIBRARIES})
-
 add_executable(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClassificationMultiExample.cxx)
 target_link_libraries(SVMImageEstimatorClassificationMultiExample ${OTB_LIBRARIES})
-
-add_executable(SVMImageModelEstimatorExample SVMImageModelEstimatorExample.cxx)
-target_link_libraries(SVMImageModelEstimatorExample ${OTB_LIBRARIES})
-
-add_executable(SVMPointSetClassificationExample SVMPointSetClassificationExample.cxx)
-target_link_libraries(SVMPointSetClassificationExample ${OTB_LIBRARIES})
-
-add_executable(SVMPointSetExample SVMPointSetExample.cxx)
-target_link_libraries(SVMPointSetExample ${OTB_LIBRARIES})
-
-add_executable(SVMPointSetModelEstimatorExample SVMPointSetModelEstimatorExample.cxx)
-target_link_libraries(SVMPointSetModelEstimatorExample ${OTB_LIBRARIES})
 endif()
 
 if(OTBOpenCV_LOADED)
