@@ -262,7 +262,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   SVMType::Pointer classifier = SVMType::New();
   classifier->SetInputListSample(sampleList);
   classifier->SetTargetListSample(trainingList);
-  classifier->DoProbabilityEstimates(true);
+  classifier->SetDoProbabilityEstimates(true);
   classifier->Train();
   classifier->Save("model.txt");
 

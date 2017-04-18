@@ -180,7 +180,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   model->SetC(1);
   model->SetEpsilon(0.001);
   model->SetP(0.1);
-  model->DoProbabilityEstimates(true);
+  model->SetDoProbabilityEstimates(true);
 
   model->Train();
   model->Save("model.txt");

@@ -154,7 +154,7 @@ public:
   itkGetMacro(ParameterOptimization, bool);
 
   /** Do probability estimates */
-  void DoProbabilityEstimates(bool prob)
+  void SetDoProbabilityEstimates(bool prob)
     {
     m_Parameters.probability = static_cast<int>(prob);
     }

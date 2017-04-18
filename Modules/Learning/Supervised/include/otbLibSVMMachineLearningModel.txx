@@ -44,7 +44,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   this->SetC(1.0);
   this->SetEpsilon(1e-3);
   this->SetP(0.1);
-  this->DoProbabilityEstimates(false);
+  this->SetDoProbabilityEstimates(false);
   this->DoShrinking(true);
   this->SetCacheSize(40); // MB
   this->m_ParameterOptimization = false;
@@ -355,7 +355,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   if (this->GetSVMType() == ONE_CLASS && this->GetDoProbabilityEstimates())
     {
     otbMsgDebugMacro(<< "Disabling SVM probability estimates for ONE_CLASS SVM type.");
-    this->DoProbabilityEstimates(false);
+    this->SetDoProbabilityEstimates(false);
     }
 
   const char* error_msg = svm_check_parameter(&m_Problem, &m_Parameters);
