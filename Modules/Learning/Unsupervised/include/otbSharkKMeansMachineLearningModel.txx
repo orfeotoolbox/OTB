@@ -54,7 +54,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
         m_Normalized( false ), m_K(2), m_MaximumNumberOfIterations( 10 )
 {
   // Default set HardClusteringModel
-  m_ClusteringModel = boost::shared_ptr<ClusteringModelType>(new ClusteringModelType( &m_Centroids ));
+  m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
 }
 
 
@@ -81,7 +81,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 
   // Use a Hard Clustering Model for classification
   shark::kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
-  m_ClusteringModel = boost::shared_ptr<ClusteringModelType>(new ClusteringModelType( &m_Centroids ));
+  m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
 }
 
 template<class TInputValue, class TOutputValue>
@@ -153,7 +153,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   shark::Data<ClusteringOutputType> clusters;
   try
     {
-     clusters = ( *m_ClusteringModel )( inputSamples );
+    clusters = ( *m_ClusteringModel )( inputSamples );
     }
   catch( ... )
     {

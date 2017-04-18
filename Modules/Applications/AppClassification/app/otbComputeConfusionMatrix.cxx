@@ -217,7 +217,7 @@ private:
   {
     std::ofstream outFile;
     outFile.open( this->GetParameterString( "out" ).c_str() );
-    outFile << contingencyTable->ToCsv();
+    outFile << contingencyTable->ToCSV();
     outFile.close();
   }
 

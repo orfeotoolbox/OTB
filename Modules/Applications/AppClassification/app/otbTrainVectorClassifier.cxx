@@ -113,7 +113,7 @@ protected:
       // Write contingency table
       std::ofstream outFile;
       outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
-      outFile << table->ToCsv();
+      outFile << table->ToCSV();
       }
   }
 

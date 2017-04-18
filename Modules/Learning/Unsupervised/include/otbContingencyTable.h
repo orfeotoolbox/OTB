@@ -105,7 +105,7 @@ public:
     return o;
   }
 
-  std::string ToCsv() const
+  std::string ToCSV() const
   {
     const char separator = ',';
 
