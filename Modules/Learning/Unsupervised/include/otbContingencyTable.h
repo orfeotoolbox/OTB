@@ -144,8 +144,8 @@ protected:
   }
 
 private:
-  ContingencyTable(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  ContingencyTable(const Self &) ITK_DELETE_FUNCTION; //purposely not implemented
+  void operator=(const Self &) ITK_DELETE_FUNCTION; //purposely not implemented
 
   static size_t GetLabelsMaximumLength(const LabelList& labels, size_t maxWidth)
   {

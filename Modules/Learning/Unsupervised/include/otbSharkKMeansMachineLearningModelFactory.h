@@ -62,8 +62,8 @@ protected:
   virtual ~SharkKMeansMachineLearningModelFactory();
 
 private:
-  SharkKMeansMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SharkKMeansMachineLearningModelFactory(const Self &) ITK_DELETE_FUNCTION; //purposely not implemented
+  void operator =(const Self&) ITK_DELETE_FUNCTION; //purposely not implemented
 
 };
 

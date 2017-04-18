@@ -142,8 +142,8 @@ protected:
   void PrintSelf(std::ostream &os, itk::Indent indent) const;
 
 private:
-  SharkKMeansMachineLearningModel(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  SharkKMeansMachineLearningModel(const Self &) ITK_DELETE_FUNCTION; //purposely not implemented
+  void operator=(const Self &) ITK_DELETE_FUNCTION; //purposely not implemented
 
   // Parameters set by the user
   bool m_Normalized;
