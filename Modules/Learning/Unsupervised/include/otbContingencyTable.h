@@ -66,23 +66,8 @@ public:
 
     // Retrieve the maximal width from the matrix and the labels
     size_t maxWidth = 6;
-    for( size_t i = 0; i << contingencyTable.m_ProdLabels.size(); ++i )
-      {
-      std::ostringstream oss;
-      oss << contingencyTable.m_ProdLabels[i];
-      size_t length = oss.str().length();
-      if( length > maxWidth )
-        maxWidth = length;
-      }
-
-    for( size_t i = 0; i << contingencyTable.m_RefLabels.size(); ++i )
-      {
-      std::ostringstream oss;
-      oss << contingencyTable.m_RefLabels[i];
-      size_t length = oss.str().length();
-      if( length > maxWidth )
-        maxWidth = length;
-      }
+    maxWidth = GetLabelsMaximumLength(contingencyTable.m_ProdLabels, maxWidth);
+    maxWidth = GetLabelsMaximumLength(contingencyTable.m_RefLabels, maxWidth);
 
     for( unsigned int i = 0; i < contingencyTable.matrix.Rows(); ++i )
       {
@@ -120,7 +105,7 @@ public:
     return o;
   }
 
-  std::string to_csv() const
+  std::string ToCsv() const
   {
     const char separator = ',';
 
@@ -161,6 +146,20 @@ protected:
 private:
   ContingencyTable(const Self &); //purposely not implemented
   void operator=(const Self &); //purposely not implemented
+
+  static size_t GetLabelsMaximumLength(const LabelList& labels, size_t maxWidth)
+  {
+    size_t tmpMaxWidth = maxWidth;
+    for( size_t i = 0; i < labels.size(); ++i )
+      {
+      std::ostringstream oss;
+      oss << labels[i];
+      size_t length = oss.str().length();
+      if( length > tmpMaxWidth )
+        tmpMaxWidth = length;
+      }
+    return tmpMaxWidth;
+  }
 
   LabelList m_RefLabels;
   LabelList m_ProdLabels;
