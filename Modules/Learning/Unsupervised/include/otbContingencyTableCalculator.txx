@@ -22,6 +22,7 @@
 #define otbContingencyTableCalculator_txx
 
 #include "otbContingencyTableCalculator.h"
+#include "itkMacro.h"
 #include "itkVariableLengthVector.h"
 #include "itkListSample.h"
 
@@ -59,6 +60,9 @@ ContingencyTableCalculator<TClassLabel>
     ++prodBegin;
     ++m_NumberOfSamples;
     }
+
+  if( refBegin != refEnd || prodBegin != prodEnd )
+    itkExceptionMacro(<< "The references and produced labels did not end simultaneously.");
 }
 
 template<class TClassLabel>
@@ -79,6 +83,10 @@ ContingencyTableCalculator<TClassLabel>
     ++itRef;
     ++itProd;
     }
+
+  if( !itRef.IsAtEnd() || !itProd.IsAtEnd() )
+    itkExceptionMacro(<< "The references and produced labels did not end simultaneously.");
+
 }
 
 
