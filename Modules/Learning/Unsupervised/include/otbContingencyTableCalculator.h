@@ -87,8 +87,8 @@ protected:
   //void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
-  ContingencyTableCalculator(const Self &) ITK_DELETE_FUNCTION; //purposely not implemented
-  void operator=(const Self &) ITK_DELETE_FUNCTION; //purposely not implemented
+  ContingencyTableCalculator(const Self &); //purposely not implemented
+  void operator=(const Self &); //purposely not implemented
 
   MapOfClassesType m_LabelCount;
   unsigned long m_NumberOfRefClasses;
