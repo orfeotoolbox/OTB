@@ -110,6 +110,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
   TargetSampleType target;
+  target.Fill(0);
 
   // Get type and number of classes
   int svm_type = svm_get_svm_type(m_Model);
@@ -119,7 +120,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   struct svm_node * x = new struct svm_node[input.Size() + 1];
 
   // Fill the node
-  for (int i = 0 ; i < input.Size() ; i++)
+  for (unsigned int i = 0 ; i < input.Size() ; i++)
     {
     x[i].index = i + 1;
     x[i].value = input[i];
@@ -140,7 +141,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
       if (svm_type == C_SVC || svm_type == NU_SVC)
         {
         // Eventually allocate space for probabilities
-        int nr_class = svm_get_nr_class(m_Model);
+        unsigned int nr_class = svm_get_nr_class(m_Model);
         double *prob_estimates = new double[nr_class];
         // predict
         target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
@@ -443,7 +444,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 {
   double accuracy = 0.0;
   // Get the length of the problem
-  int length = m_Problem.l;
+  unsigned int length = m_Problem.l;
   if (length == 0 || m_TmpTarget.size() < length )
     return accuracy;
 
@@ -452,7 +453,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
   // Evaluate accuracy
   double total_correct = 0.;
-  for (int i = 0; i < length; ++i)
+  for (unsigned int i = 0; i < length; ++i)
     {
     if (m_TmpTarget[i] == m_Problem.y[i])
       {
