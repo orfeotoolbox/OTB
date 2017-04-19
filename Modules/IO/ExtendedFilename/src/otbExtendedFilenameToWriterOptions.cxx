@@ -43,12 +43,16 @@ ExtendedFilenameToWriterOptions
   m_Options.streamingSizeMode.first   = false;
   m_Options.streamingSizeValue.first  = false;
 
+  m_Options.bandRange.first = false;
+  m_Options.bandRange.second = "";
+
   m_Options.optionList.push_back("writegeom");
   m_Options.optionList.push_back("writerpctags");
   m_Options.optionList.push_back("streaming:type");
   m_Options.optionList.push_back("streaming:sizemode");
   m_Options.optionList.push_back("streaming:sizevalue");
   m_Options.optionList.push_back("box");
+  m_Options.optionList.push_back("bands");
 }
 
 void
@@ -155,6 +159,22 @@ ExtendedFilenameToWriterOptions
     else
       {
       itkWarningMacro("Unkwown value "<<map["box"]<<" for image region to write. Must be 'xmin ymin sizex sizey', with whitespace as separator");
+      }
+    }
+
+  if (!map["bands"].empty())
+    {
+    // Basic check on bandRange (using regex)
+    itksys::RegularExpression reg;
+    reg.compile("^((\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)(,(\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)*$");
+    if (reg.find(map["bands"]))
+      {
+      m_Options.bandRange.first = true;
+      m_Options.bandRange.second = map["bands"];
+      }
+    else
+      {
+      itkWarningMacro("Unkwown value "<<map["bands"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
       }
     }
 
@@ -289,5 +309,18 @@ ExtendedFilenameToWriterOptions
   return m_Options.box.second;
 }
 
+bool
+ExtendedFilenameToWriterOptions
+::BandRangeIsSet () const
+{
+  return m_Options.bandRange.first;
+}
+
+std::string
+ExtendedFilenameToWriterOptions
+::GetBandRange () const
+{
+  return m_Options.bandRange.second;
+}
 
 } // end namespace otb

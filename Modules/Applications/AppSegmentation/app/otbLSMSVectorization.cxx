@@ -100,7 +100,7 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in","avions.tif");
+    SetDocExampleParameterValue("in","maur_rgb.png");
     SetDocExampleParameterValue("inseg","merged.tif");
     SetDocExampleParameterValue("out","vector.shp");
     SetDocExampleParameterValue("tilesizex","256");

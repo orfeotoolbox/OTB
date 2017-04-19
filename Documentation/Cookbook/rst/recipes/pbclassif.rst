@@ -4,10 +4,10 @@ Classification
 Pixel based classification
 --------------------------
 
-Orfeo ToolBox ships with a set of application to perform supervised
-pixel-based image classification. This framework allows to learn from
-multiple images, and using several machine learning method such as
-SVM, Bayes, KNN, Random Forests, Artificial Neural Network, and
+Orfeo ToolBox ships with a set of application to perform supervised or
+unsupervised pixel-based image classification. This framework allows
+to learn from multiple images, and using several machine learning method
+such as SVM, Bayes, KNN, Random Forests, Artificial Neural Network, and
 others...(see application help of ``TrainImagesClassifier`` and
 ``TrainVectorClassifier`` for further details about all the available
 classifiers). Here is an overview of the complete workflow:
@@ -347,8 +347,9 @@ using the ``TrainVectorClassifier`` application.
                                 -feat band_0 band_1 band_2 band_3 band_4 band_5 band_6
 
 The ``-classifier`` parameter allows to choose which machine learning
-model algorithm to train. Please refer to the
-``TrainVectorClassifier`` application reference documentation.
+model algorithm to train. You have the possibility to do the unsupervised
+classification,for it, you must to choose the Shark kmeans classifier.
+Please refer to the ``TrainVectorClassifier`` application reference documentation.
 
 In case of multiple samples files, you can add them to the ``-io.vd``
 parameter (see  `Working with several images`_ section).
@@ -408,6 +409,11 @@ compute the confusion matrix and precision, recall and F-score of each
 class too, based on the
 `ConfusionMatrixCalculator <http://www.orfeo-toolbox.org/doxygen-current/classotb_1_1ConfusionMatrixCalculator.html>`_ 
 class.
+
+If you have made an unsupervised classification, it must be specified
+to the ``ConputeConfusionMatrix`` application. In this case, a contingency table
+have to be create rather than a confusion matrix. For further details,
+see ``format`` parameter in the application help of *ConputeConfusionMatrix*.
 
 ::
 

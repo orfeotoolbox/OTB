@@ -145,9 +145,9 @@ the *MeanShiftSmoothing* application:
 
 ::
 
-    otbcli_MeanShiftSmoothing -in input_image 
+    otbcli_MeanShiftSmoothing -in input_image.tif
                               -fout filtered_range.tif 
-                              -foutpos filtered_spat.tif 
+                              -foutpos filtered_spatial.tif
                               -ranger 30 
                               -spatialr 5 
                               -maxiter 10 
@@ -173,7 +173,7 @@ so, the *LSMSSegmentation* will process them by tiles whose dimensions
 are defined by the *tilesizex* and *tilesizey* parameters, and by
 writing intermediate images to disk, thus keeping the memory consumption
 very low throughout the process. The segmentation will group together
-adjacent pixels whose range distance is below the *ranger* parameter and
+neighboring pixels whose range distance is below the *ranger* parameter and
 (optionally) spatial distance is below the *spatialr* parameter.
 
 ::
@@ -250,7 +250,7 @@ projection, so does the output GIS file).
 
 ::
 
-    otbcli_LSMSVectorization -in input_image 
+    otbcli_LSMSVectorization -in input_image.tif
                              -inseg segmentation_merged.tif 
                              -out segmentation_merged.shp 
                              -tilesizex 256 
