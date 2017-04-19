@@ -21,6 +21,7 @@
 #define otbSharkKMeansMachineLearningModel_txx
 
 #include <fstream>
+#include "boost/make_shared.hpp"
 #include "itkMacro.h"
 #include "otbSharkKMeansMachineLearningModel.h"
 

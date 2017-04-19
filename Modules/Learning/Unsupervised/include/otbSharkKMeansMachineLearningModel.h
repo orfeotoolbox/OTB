@@ -20,6 +20,7 @@
 #ifndef otbSharkKMeansMachineLearningModel_h
 #define otbSharkKMeansMachineLearningModel_h
 
+#include "boost/shared_ptr.hpp"
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
