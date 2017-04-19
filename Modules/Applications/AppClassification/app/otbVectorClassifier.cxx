@@ -153,29 +153,27 @@ private:
       std::string shapefile = GetParameterString("in");
 
       otb::ogr::DataSource::Pointer ogrDS;
-      otb::ogr::Layer layer(ITK_NULLPTR, false);
 
       OGRSpatialReference oSRS("");
       std::vector<std::string> options;
 
       ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-      layer = ogrDS->GetLayer(0);
-
-      otb::ogr::Feature feature = layer.ogr().GetNextFeature();
+      otb::ogr::Layer layer = ogrDS->GetLayer(0);
+      OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
 
       ClearChoices("feat");
 
-      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
+      for(int iField=0; iField< layerDefn.GetFieldCount(); iField++)
       {
-        std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
-        key = item;
-        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
-        std::transform(key.begin(), end, key.begin(), tolower);
+        std::string item = layerDefn.GetFieldDefn(iField)->GetNameRef();
+        std::string key(item);
+        key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
+        std::transform(key.begin(), key.end(), key.begin(), tolower);
 
-        OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
+        OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
         if(fieldType == OFTInteger ||  ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
           {
-          std::string tmpKey="feat."+key.substr(0, end - key.begin());
+          std::string tmpKey="feat."+key;
           AddChoice(tmpKey,item);
           }
       }
@@ -186,32 +184,27 @@ private:
   {
     clock_t tic = clock();
 
-    std::string shapefile = GetParameterString("in").c_str();
+    std::string shapefile = GetParameterString("in");
 
     otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
     otb::ogr::Layer layer = source->GetLayer(0);
-    bool goesOn = true;
-    otb::ogr::Feature feature = layer.ogr().GetNextFeature();
 
     ListSampleType::Pointer input = ListSampleType::New();
-    LabelListSampleType::Pointer target = LabelListSampleType::New();
 
     const int nbFeatures = GetSelectedItems("feat").size();
     input->SetMeasurementVectorSize(nbFeatures);
 
-    if(feature.addr())
-      while(goesOn)
+    otb::ogr::Layer::const_iterator it = layer.cbegin();
+    otb::ogr::Layer::const_iterator itEnd = layer.cend();
+    for( ; it!=itEnd ; ++it)
       {
-        MeasurementType mv;
-        mv.SetSize(nbFeatures);
-
-        for(int idx=0; idx < nbFeatures; ++idx)
+      MeasurementType mv;
+      mv.SetSize(nbFeatures);
+      for(int idx=0; idx < nbFeatures; ++idx)
         {
-          mv[idx] = feature.ogr().GetFieldAsDouble(GetSelectedItems("feat")[idx]);
+        mv[idx] = (*it)[GetSelectedItems("feat")[idx]].GetValue<double>();
         }
-        input->PushBack(mv);
-        feature = layer.ogr().GetNextFeature();
-        goesOn = feature.addr() != ITK_NULLPTR;
+      input->PushBack(mv);
       }
 
     // Statistics for shift/scale
@@ -265,6 +258,7 @@ private:
       otbAppLogWARNING("Confidence map requested but the classifier doesn't support it!");
       }
 
+    LabelListSampleType::Pointer target;
     if (computeConfidenceMap)
       {
       quality = ConfidenceListSampleType::New();
@@ -275,24 +269,40 @@ private:
       target = m_Model->PredictBatch(listSample);
       }
 
-    LabelListSampleType::Pointer labelListSample = target;
-
     ogr::DataSource::Pointer output;
-    otb::ogr::Layer outLayer(ITK_NULLPTR, false);
-
+    ogr::DataSource::Pointer buffer = ogr::DataSource::New();
+    bool updateMode = false;
     if (IsParameterEnabled("out") && HasValue("out"))
       {
-      // Copy input layer
+      // Create new OGRDataSource
       output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
-      outLayer = output->CopyLayer(layer, GetParameterString("out").c_str());
+      otb::ogr::Layer newLayer = output->CreateLayer(
+        GetParameterString("out"),
+        const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
+        layer.GetGeomType());
+      // Copy existing fields
+      OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
+      for (int k=0 ; k<inLayerDefn.GetFieldCount() ; k++)
+        {
+        OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
+        newLayer.CreateField(fieldDefn);
+        }
       }
     else
       {
       // Update mode
+      updateMode = true;
       otbAppLogINFO("Update input vector data.");
+      // fill temporary buffer for the transfer
+      otb::ogr::Layer inputLayer = layer;
+      layer = buffer->CopyLayer(inputLayer, std::string("Buffer"));
+      // close input data source
+      source->Clear();
+      // Re-open input data source in update mode
       output = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-      outLayer = output->GetLayer(0);
       }
+
+    otb::ogr::Layer outLayer = output->GetLayer(0);
 
     OGRErr errStart = outLayer.ogr().StartTransaction();
     if (errStart != OGRERR_NONE)
@@ -300,67 +310,63 @@ private:
       itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
       }
 
-    // First get list of current fields
-    OGRFeatureDefn &layerDefn = outLayer.GetLayerDefn();
-    std::map<std::string, OGRFieldType> currentFields;
-    for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
-      {
-      OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
-      std::string currentName(fieldDefn.GetNameRef());
-      currentFields[currentName] = fieldDefn.GetType();
-      }
-
     // Add the field of prediction in the output layer if field not exist
-    OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), OFTInteger);
-    ogr::FieldDefn predictedFieldDef(predictedField);
-    //test if field is already present
-    if (currentFields.count(predictedFieldDef.GetName()))
-    {
-      // test the field type
-      if (currentFields[predictedFieldDef.GetName()] != predictedFieldDef.GetType())
-        itkExceptionMacro("Field name "<< predictedFieldDef.GetName() << " already exists with a different type!");
-    }
+    OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
+    int idx = layerDefn.GetFieldIndex(GetParameterString("cfield").c_str());
+    if (idx >= 0)
+      {
+      if (layerDefn.GetFieldDefn(idx)->GetType() != OFTInteger)
+        itkExceptionMacro("Field name "<< GetParameterString("cfield") << " already exists with a different type!");
+      }
     else
-    {
+      {
+      OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), OFTInteger);
+      ogr::FieldDefn predictedFieldDef(predictedField);
       outLayer.CreateField(predictedFieldDef);
-    }
+      }
 
     // Add confidence field in the output layer
+    std::string confFieldName("confidence");
     if (computeConfidenceMap)
-     {
-      OGRFieldDefn confidenceField("confidence", OFTReal);
-      confidenceField.SetWidth(confidenceField.GetWidth());
-      confidenceField.SetPrecision(confidenceField.GetPrecision());
-      ogr::FieldDefn confFieldDefn(confidenceField);
-      //test if field is already present
-      if (currentFields.count(confFieldDefn.GetName()))
       {
-        // test the field type
-        if (currentFields[confFieldDefn.GetName()] != confFieldDefn.GetType())
-          itkExceptionMacro("Field name "<< confFieldDefn.GetName() << " already exists with a different type!");
-      }
+      idx = layerDefn.GetFieldIndex(confFieldName.c_str());
+      if (idx >= 0)
+        {
+        if (layerDefn.GetFieldDefn(idx)->GetType() != OFTReal)
+          itkExceptionMacro("Field name "<< confFieldName << " already exists with a different type!");
+        }
       else
-      {
+        {
+        OGRFieldDefn confidenceField(confFieldName.c_str(), OFTReal);
+        confidenceField.SetWidth(confidenceField.GetWidth());
+        confidenceField.SetPrecision(confidenceField.GetPrecision());
+        ogr::FieldDefn confFieldDefn(confidenceField);
         outLayer.CreateField(confFieldDefn);
+        }
       }
-     }
 
-    bool goesOn2 = true;
+    // Fill output layer
     unsigned int count=0;
-    outLayer.ogr().ResetReading();
-    otb::ogr::Feature feature2 = outLayer.ogr().GetNextFeature();
     std::string classfieldname = GetParameterString("cfield");
-
-    if(feature2.addr())
-      while(goesOn2)
-       {
-        feature2.ogr().SetField(classfieldname.c_str(),(int)labelListSample->GetMeasurementVector(count)[0]);
-        if (computeConfidenceMap) feature2.ogr().SetField("confidence",(int)quality->GetMeasurementVector(count)[0]);
-        outLayer.SetFeature(feature2);
-        feature2 = outLayer.ogr().GetNextFeature();
-        goesOn2 = feature2.addr() != ITK_NULLPTR;
-        count++;
-       }
+    it = layer.cbegin();
+    itEnd = layer.cend();
+    for( ; it!=itEnd ; ++it, ++count)
+      {
+      ogr::Feature dstFeature(outLayer.GetLayerDefn());
+      dstFeature.SetFrom( *it , TRUE);
+      dstFeature.SetFID(it->GetFID());
+      dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+      if (computeConfidenceMap)
+        dstFeature[confFieldName].SetValue<double>(quality->GetMeasurementVector(count)[0]);
+      if (updateMode)
+        {
+        outLayer.SetFeature(dstFeature);
+        }
+      else
+        {
+        outLayer.CreateFeature(dstFeature);
+        }
+      }
 
     if(outLayer.ogr().TestCapability("Transactions"))
       {
