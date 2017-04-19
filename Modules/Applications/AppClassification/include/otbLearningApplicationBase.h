@@ -115,9 +115,9 @@ protected:
              std::string modelPath);
 
   /** Generic method to load a model file and use it to classify a sample list*/
-  void Classify(typename ListSampleType::Pointer validationListSample,
-                typename TargetListSampleType::Pointer predictedList,
-                std::string modelPath);
+  typename TargetListSampleType::Pointer Classify(
+    typename ListSampleType::Pointer validationListSample,
+    std::string modelPath);
 
   /** Init method that creates all the parameters for machine learning models */
   void DoInit();

@@ -446,7 +446,6 @@ void DoExecute()
     }
  
   //Test the input validation set size
-  TargetListSampleType::Pointer predictedList = TargetListSampleType::New();
   ListSampleType::Pointer performanceListSample;
   TargetListSampleType::Pointer performanceLabeledListSample;
   if(validationLabeledListSample->Size() != 0)
@@ -461,7 +460,8 @@ void DoExecute()
     performanceLabeledListSample = trainingLabeledListSample;
     }
 
-  this->Classify(performanceListSample, predictedList, GetParameterString("io.out"));
+  TargetListSampleType::Pointer predictedList =
+    this->Classify(performanceListSample, GetParameterString("io.out"));
 
   ConfusionMatrixCalculatorType::Pointer confMatCalc = ConfusionMatrixCalculatorType::New();
 
