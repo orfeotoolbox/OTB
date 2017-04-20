@@ -178,7 +178,7 @@ template <class TInputImage, class TOutputImage>
 TOutputImage*
 InputImageParameter::CastImage()
 {
-  itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TInputImage).name()<<" not authorized.");
+  itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TOutputImage).name()<<" not authorized.");
 }
 
 
