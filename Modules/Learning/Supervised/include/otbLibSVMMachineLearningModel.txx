@@ -183,7 +183,19 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     }
   else
     {
-    target[0] = static_cast<TargetValueType>(svm_predict(m_Model, x));
+    // default case : if the model has probabilities, we call svm_predict_probabilities()
+    // which gives different results than svm_predict()
+    if (svm_check_probability_model(m_Model))
+      {
+      unsigned int nr_class = svm_get_nr_class(m_Model);
+      double *prob_estimates = new double[nr_class];
+      target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
+      delete[] prob_estimates;
+      }
+    else
+      {
+      target[0] = static_cast<TargetValueType>(svm_predict(m_Model, x));
+      }
     }
 
   // Free allocated memory
