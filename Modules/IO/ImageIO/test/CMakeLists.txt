@@ -790,7 +790,7 @@ set_property(TEST ioTvImageFileReaderFloatHDR2LUM PROPERTY DEPENDS ioTvImageFile
 otb_add_test(NAME ioTvCheckNbBandsPNGIndexee COMMAND otbImageIOTestDriver
   otbPNGIndexedNbBandsTest
   ${INPUTDATA}/sbuv_indexee.png
-  4 )
+  1 )
 
 otb_add_test(NAME ioTvImageFileReaderENVI2PNG COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}   ${INPUTDATA}/cthead1.png
