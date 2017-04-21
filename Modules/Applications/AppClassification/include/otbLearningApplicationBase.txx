@@ -54,8 +54,33 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Choice, "classifier", "Classifier to use for the training");
   SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
+  InitSupervisedClassifierParams();
+  m_SupervisedClassifier = GetChoiceKeys("classifier");
+
+  InitUnsupervisedClassifierParams();
+  std::vector<std::string> allClassifier = GetChoiceKeys("classifier");
+  m_UnsupervisedClassifier.assign(allClassifier.begin() + m_SupervisedClassifier.size(), allClassifier.end());
+}
+
+template <class TInputValue, class TOutputValue>
+typename LearningApplicationBase<TInputValue,TOutputValue>::ClassifierCategory
+LearningApplicationBase<TInputValue,TOutputValue>
+::GetClassifierCategory()
+{
+  bool foundUnsupervised =
+          std::find(m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
+                    GetParameterString("classifier")) != m_UnsupervisedClassifier.end();
+  return foundUnsupervised ? Unsupervised : Supervised;
+}
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitSupervisedClassifierParams()
+{
+
   //Group LibSVM
-#ifdef OTB_USE_LIBSVM 
+#ifdef OTB_USE_LIBSVM
   InitLibSVMParams();
 #endif
 
@@ -81,7 +106,16 @@ LearningApplicationBase<TInputValue,TOutputValue>
 #ifdef OTB_USE_SHARK
   InitSharkRandomForestsParams();
 #endif
-  
+}
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitUnsupervisedClassifierParams()
+{
+#ifdef OTB_USE_SHARK
+  InitSharkKMeansParams();
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -147,6 +181,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
     {
     #ifdef OTB_USE_SHARK
     TrainSharkRandomForests(trainingListSample,trainingLabeledListSample,modelPath);
+    #else
+    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+    #endif
+    }
+  else if(modelName == "sharkkm")
+    {
+    #ifdef OTB_USE_SHARK
+    TrainSharkKMeans( trainingListSample, trainingLabeledListSample, modelPath );
     #else
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif

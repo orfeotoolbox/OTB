@@ -102,7 +102,22 @@ public:
   typedef typename ModelType::TargetSampleType      TargetSampleType;
   typedef typename ModelType::TargetListSampleType  TargetListSampleType;
   typedef typename ModelType::TargetValueType       TargetValueType;
-  
+
+  itkGetConstReferenceMacro(SupervisedClassifier, std::vector<std::string>);
+  itkGetConstReferenceMacro(UnsupervisedClassifier, std::vector<std::string>);
+
+  enum ClassifierCategory{
+    Supervised,
+    Unsupervised
+  };
+
+  /**
+   * Retrieve the classifier category (supervisde or unsupervised)
+   * based on the select algorithm from the classifier choice.
+   * @return ClassifierCategory the classifier category
+   */
+  ClassifierCategory GetClassifierCategory();
+
 protected:
   LearningApplicationBase();
 
@@ -120,15 +135,23 @@ protected:
                 std::string modelPath);
 
   /** Init method that creates all the parameters for machine learning models */
-  void DoInit();
+  void DoInit() ITK_OVERRIDE;
 
   /** Flag to switch between classification and regression mode.
    * False by default, child classes may change it in their constructor */
   bool m_RegressionFlag;
 
 private:
-
   /** Specific Init and Train methods for each machine learning model */
+
+  /** Init Parameters for Supervised Classifier */
+  void InitSupervisedClassifierParams();
+  std::vector<std::string> m_SupervisedClassifier;
+
+  /** Init Parameters for Unsupervised Classifier */
+  void InitUnsupervisedClassifierParams();
+  std::vector<std::string> m_UnsupervisedClassifier;
+
   //@{
 #ifdef OTB_USE_LIBSVM 
   void InitLibSVMParams();
@@ -179,6 +202,10 @@ private:
   void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
                                typename TargetListSampleType::Pointer trainingLabeledListSample,
                                std::string modelPath);
+  void InitSharkKMeansParams();
+  void TrainSharkKMeans(typename ListSampleType::Pointer trainingListSample,
+                        typename TargetListSampleType::Pointer trainingLabeledListSample,
+                        std::string modelPath);
 #endif
   //@}
 };
@@ -203,6 +230,7 @@ private:
 #endif
 #ifdef OTB_USE_SHARK
 #include "otbTrainSharkRandomForests.txx"
+#include "otbTrainSharkKMeans.txx"
 #endif
 #endif
 

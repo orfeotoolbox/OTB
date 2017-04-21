@@ -70,7 +70,6 @@ otb_create_application(
   SOURCES        otbTrainVectorClassifier.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-
 otb_create_application(
   NAME           ComputeConfusionMatrix
   SOURCES        otbComputeConfusionMatrix.cxx

@@ -322,4 +322,5 @@ int otbSharkRFMachineLearningModelCanRead(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
+
 #endif

@@ -60,10 +60,11 @@ namespace otb
  * \sa NormalBayesMachineLearningModel
  * \sa NeuralNetworkMachineLearningModel
  * \sa SharkRandomForestsMachineLearningModel
+ * \sa SharkKMeansMachineLearningModel
  * \sa ImageClassificationFilter
  *
  *
- * \ingroup OTBSupervised
+ * \ingroup OTBLearningBase
  */
 template <class TInputValue, class TTargetValue, class TConfidenceValue = double >
 class ITK_EXPORT MachineLearningModel
@@ -93,7 +94,7 @@ public:
   //@}
 
   /**\name Confidence value typedef */
-  typedef TConfidenceValue                              ConfidenceValueType;
+  typedef TConfidenceValue                                  ConfidenceValueType;
   typedef itk::FixedArray<ConfidenceValueType,1>            ConfidenceSampleType;
   typedef itk::Statistics::ListSample<ConfidenceSampleType> ConfidenceListSampleType;
 

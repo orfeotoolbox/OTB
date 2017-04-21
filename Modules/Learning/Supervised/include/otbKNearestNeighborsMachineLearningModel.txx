@@ -243,11 +243,21 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   //first line is the K parameter of this algorithm.
   std::string line;
   std::getline(ifs, line);
+  std::istringstream iss(line);
+  if( line.find( "K" ) == std::string::npos )
+    {
+    itkExceptionMacro( <<"Could not read file "<<filename );
+    }
   std::string::size_type pos = line.find_first_of("=", 0);
   std::string::size_type nextpos = line.find_first_of(" \n\r", pos+1);
   this->SetK(boost::lexical_cast<int>(line.substr(pos+1, nextpos-pos-1)));
+
   //second line is the IsRegression parameter
   std::getline(ifs, line);
+  if( line.find( "IsRegression" ) == std::string::npos )
+    {
+    itkExceptionMacro( <<"Could not read file "<<filename );
+    }
   pos = line.find_first_of("=", 0);
   nextpos = line.find_first_of(" \n\r", pos+1);
   this->SetRegressionMode(boost::lexical_cast<bool>(line.substr(pos+1, nextpos-pos-1)));

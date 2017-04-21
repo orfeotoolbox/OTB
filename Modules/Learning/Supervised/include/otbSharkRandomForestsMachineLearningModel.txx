@@ -198,6 +198,8 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
+  // Add comment with model file name
+  ofs << "#" << m_RFModel.name() << std::endl;
   shark::TextOutArchive oa(ofs);
   m_RFModel.save(oa,0);
 }
@@ -208,8 +210,25 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
   std::ifstream ifs(filename.c_str());
-  shark::TextInArchive ia(ifs);
-  m_RFModel.load(ia,0);
+  if( ifs.good() )
+    {
+    // Check if the first line is a comment and verify the name of the model in this case.
+    std::string line;
+    getline( ifs, line );
+    if( line.at( 0 ) == '#' )
+      {
+      if( line.find( m_RFModel.name() ) == std::string::npos )
+        itkExceptionMacro( "The model file : " + filename + " cannot be read." );
+      }
+    else
+      {
+      // rewind if first line is not a comment
+      ifs.clear();
+      ifs.seekg( 0, std::ios::beg );
+      }
+    shark::TextInArchive ia( ifs );
+    m_RFModel.load( ia, 0 );
+    }
 }
 
 template <class TInputValue, class TOutputValue>

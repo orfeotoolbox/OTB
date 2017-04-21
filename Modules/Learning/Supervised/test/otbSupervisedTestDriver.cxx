@@ -92,7 +92,7 @@ void RegisterTests()
   REGISTER_TEST(otbSharkRFMachineLearningModelCanRead);
   REGISTER_TEST(otbSharkImageClassificationFilter);
 #endif
-  
+
   REGISTER_TEST(otbImageClassificationFilterNew);
   REGISTER_TEST(otbImageClassificationFilter);
 }

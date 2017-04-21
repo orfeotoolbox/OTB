@@ -17,9 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef otbSharkRandomForestsMachineLearningModel_h
-#define otbSharkRandomForestsMachineLearningModel_h
+#ifndef otbSharkKMeansMachineLearningModel_h
+#define otbSharkKMeansMachineLearningModel_h
 
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
@@ -34,36 +33,39 @@
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
+
 #include "otb_shark.h"
-#include "shark/Algorithms/Trainers/RFTrainer.h"
+#include "shark/Models/Clustering/HardClusteringModel.h"
+#include "shark/Models/Clustering/SoftClusteringModel.h"
+#include "shark/Models/Clustering/Centroids.h"
+#include "shark/Models/Clustering/ClusteringModel.h"
+#include "shark/Algorithms/KMeans.h"
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 
-
-/** \class SharkRandomForestsMachineLearningModel
+/** \class SharkKMeansMachineLearningModel
  *  \brief Shark version of Random Forests algorithm
  *
  *  This is a specialization of MachineLearningModel class allowing to
  *  use Shark implementation of the Random Forests algorithm.
  *
  *  It is noteworthy that training step is parallel.
- * 
+ *
  *  For more information, see
- *  http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html
- * 
- *  \ingroup OTBSupervised
+ *  http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html
+ *
+ *  \ingroup OTBUnsupervised
  */
-
 namespace otb
 {
-template <class TInputValue, class TTargetValue>
-class ITK_EXPORT SharkRandomForestsMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+template<class TInputValue, class TTargetValue>
+class ITK_EXPORT SharkKMeansMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef SharkRandomForestsMachineLearningModel               Self;
+  typedef SharkKMeansMachineLearningModel                 Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -77,19 +79,23 @@ public:
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
   typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
   typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
-  
+
+
+  typedef shark::HardClusteringModel<shark::RealVector>   ClusteringModelType;
+  typedef ClusteringModelType::OutputType                 ClusteringOutputType;
+
   /** Run-time type information (and related methods). */
-  itkNewMacro(Self);
-  itkTypeMacro(SharkRandomForestsMachineLearningModel, MachineLearningModel);
+  itkNewMacro( Self );
+  itkTypeMacro( SharkKMeansMachineLearningModel, MachineLearningModel );
 
   /** Train the machine learning model */
   virtual void Train() ITK_OVERRIDE;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  virtual void Save(const std::string &filename, const std::string &name = "") ITK_OVERRIDE;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  virtual void Load(const std::string &filename, const std::string &name = "") ITK_OVERRIDE;
 
   /**\name Classification model file compatibility tests */
   //@{
@@ -100,78 +106,66 @@ public:
   virtual bool CanWriteFile(const std::string &) ITK_OVERRIDE;
   //@}
 
-  /** From Shark doc: Get the number of trees to grow.*/
-  itkGetMacro(NumberOfTrees,unsigned int);
-  /** From Shark doc: Set the number of trees to grow.*/
-  itkSetMacro(NumberOfTrees,unsigned int);
+  /** Get the maximum number of iteration for the kMeans algorithm.*/
+  itkGetMacro( MaximumNumberOfIterations, unsigned );
+  /** Set the maximum number of iteration for the kMeans algorithm.*/
+  itkSetMacro( MaximumNumberOfIterations, unsigned );
 
-  /** From Shark doc: Get the number of random attributes to investigate at each node.*/
-  itkGetMacro(MTry, unsigned int);
-  /** From Shark doc: Set the number of random attributes to investigate at each node.*/
-  itkSetMacro(MTry, unsigned int);
+  /** Get the number of class for the kMeans algorithm.*/
+  itkGetMacro( K, unsigned );
+  /** Set the number of class for the kMeans algorithm.*/
+  itkSetMacro( K, unsigned );
 
-  /** From Shark doc: Controls when a node is considered pure. If set
-* to 1, a node is pure when it only consists of a single node.
-*/
-  itkGetMacro(NodeSize, unsigned int);
-    /** From Shark doc: Controls when a node is considered pure. If
-* set to 1, a node is pure when it only consists of a single node.
- */
-  itkSetMacro(NodeSize, unsigned int);
-
-  /** From Shark doc: Get the fraction of the original training
-* dataset to use as the out of bag sample. The default value is
-* 0.66.*/
-  itkGetMacro(OobRatio, float);
-
-  /** From Shark doc: Set the fraction of the original training
-* dataset to use as the out of bag sample. The default value is 0.66.
-*/
-  itkSetMacro(OobRatio, float);
-
-  /** If true, margin confidence value will be computed */
-  itkGetMacro(ComputeMargin, bool);
-  /** If true, margin confidence value will be computed */
-  itkSetMacro(ComputeMargin, bool);
+  /** If true, normalized input data sample list */
+  itkGetMacro( Normalized, bool );
+  itkSetMacro( Normalized, bool );
 
 protected:
   /** Constructor */
-  SharkRandomForestsMachineLearningModel();
+  SharkKMeansMachineLearningModel();
 
   /** Destructor */
-  virtual ~SharkRandomForestsMachineLearningModel();
+  virtual ~SharkKMeansMachineLearningModel();
 
   /** Predict values using the model */
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+  virtual TargetSampleType
+  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = ITK_NULLPTR) const ITK_OVERRIDE;
 
-  
-  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
-  
+
+  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
+                              TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
+
+  template<typename DataType>
+  DataType NormalizeData(const DataType &data) const;
+
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream &os, itk::Indent indent) const;
 
 private:
-  SharkRandomForestsMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SharkKMeansMachineLearningModel(const Self &); //purposely not implemented
+  void operator=(const Self &); //purposely not implemented
 
-  shark::RFClassifier m_RFModel;
-  shark::RFTrainer m_RFTrainer;
+  // Parameters set by the user
+  bool m_Normalized;
+  unsigned int m_K;
+  unsigned int m_MaximumNumberOfIterations;
+  bool m_CanRead;
 
-  unsigned int m_NumberOfTrees;
-  unsigned int m_MTry;
-  unsigned int m_NodeSize;
-  float m_OobRatio;
-  bool m_ComputeMargin;
 
-  /** Confidence list sample */
-  ConfidenceValueType ComputeConfidence(shark::RealVector & probas, 
-                                        bool computeMargin) const;
+  /** Centroids results form kMeans */
+  shark::Centroids m_Centroids;
+
+
+  /** shark Model could be SoftClusteringModel or HardClusteringModel */
+  boost::shared_ptr<ClusteringModelType> m_ClusteringModel;
 
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSharkRandomForestsMachineLearningModel.txx"
+
+#include "otbSharkKMeansMachineLearningModel.txx"
+
 #endif
 
 #endif

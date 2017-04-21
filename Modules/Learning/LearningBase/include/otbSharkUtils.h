@@ -21,14 +21,16 @@
 #ifndef otbSharkUtils_h
 #define otbSharkUtils_h
 
-#include "otb_shark.h"
 #include "itkMacro.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wsign-compare"
 #endif
-#include <shark/Data/Dataset.h>
+#include "otb_shark.h"
+#include "shark/Data/Dataset.h"
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
