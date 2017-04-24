@@ -235,7 +235,7 @@ image.
   class required)
 
   - *Mode = proportional:* For each image :math:`i` and each class :math:`c`,
-    :math:`N_i( c ) = \frac{M * T_i( c )}{sum_k( T_k(c)}`
+    :math:`N_i( c ) = \frac{M * T_i(c)}{sum_k(T_k(c))}`
   - *Mode = equal:* For each image :math:`i` and each class :math:`c`,
     :math:`N_i( c ) = \frac{M}{L}`
   - *Mode = custom:* For each image :math:`i` and each class :math:`c`,
