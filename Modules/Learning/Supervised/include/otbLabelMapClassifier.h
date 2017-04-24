@@ -18,32 +18,32 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapSVMClassifier_h
-#define otbLabelMapSVMClassifier_h
+#ifndef otbLabelMapClassifier_h
+#define otbLabelMapClassifier_h
 
 #include "itkInPlaceLabelMapFilter.h"
-#include "otbSVMModel.h"
+#include "otbMachineLearningModel.h"
 #include "itkListSample.h"
 #include "otbAttributesMapLabelObject.h"
 
 namespace otb {
 
-/** \class LabelMapSVMClassifier
+/** \class LabelMapClassifier
  * \brief Classify each LabelObject of the input LabelMap in place
  *
  * \sa otb::AttributesMapLabelObject
  * \sa otb::SVMModel
  * \sa itk::InPlaceLabelMapFilter
  *
- * \ingroup OTBSVMLearning
+ * \ingroup OTBSupervised
  */
 template<class TInputLabelMap>
-class ITK_EXPORT LabelMapSVMClassifier :
+class ITK_EXPORT LabelMapClassifier :
     public itk::InPlaceLabelMapFilter<TInputLabelMap>
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapSVMClassifier                      Self;
+  typedef LabelMapClassifier                      Self;
   typedef itk::InPlaceLabelMapFilter<TInputLabelMap> Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
@@ -56,27 +56,26 @@ public:
 
   typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
   typedef typename LabelObjectType::ClassLabelType          ClassLabelType;
-  typedef std::vector<AttributesValueType>                  MeasurementVectorType;
-
-  typedef Functor::AttributesMapMeasurementFunctor
-      <LabelObjectType, MeasurementVectorType>              MeasurementFunctorType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputLabelMap::ImageDimension);
 
-  /** Type definitions for the SVM Model. */
-  typedef SVMModel<AttributesValueType, ClassLabelType>   SVMModelType;
-  typedef typename SVMModelType::Pointer                  SVMModelPointer;
+  /** Type definitions for the learning model. */
+  typedef MachineLearningModel<AttributesValueType, ClassLabelType> ModelType;
+  typedef typename ModelType::Pointer ModelPointer;
+  typedef typename ModelType::InputSampleType MeasurementVectorType;
+  typedef Functor::AttributesMapMeasurementFunctor
+      <LabelObjectType, MeasurementVectorType>   MeasurementFunctorType;
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapSVMClassifier,
+  itkTypeMacro(LabelMapClassifier,
                itk::InPlaceLabelMapFilter);
 
-  itkSetObjectMacro(Model, SVMModelType);
+  itkSetObjectMacro(Model, ModelType);
 
   void SetMeasurementFunctor(const MeasurementFunctorType& functor)
   {
@@ -89,8 +88,8 @@ public:
   }
 
 protected:
-  LabelMapSVMClassifier();
-  ~LabelMapSVMClassifier() ITK_OVERRIDE {};
+  LabelMapClassifier();
+  ~LabelMapClassifier() ITK_OVERRIDE {};
 
   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
 
@@ -98,11 +97,11 @@ protected:
 
 
 private:
-  LabelMapSVMClassifier(const Self&); //purposely not implemented
+  LabelMapClassifier(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** The SVM model used for classification */
-  SVMModelPointer m_Model;
+  /** The learning model used for classification */
+  ModelPointer m_Model;
 
   /** The functor used to build the measurement vector */
   MeasurementFunctorType m_MeasurementFunctor;
@@ -112,7 +111,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapSVMClassifier.txx"
+#include "otbLabelMapClassifier.txx"
 #endif
 
 #endif

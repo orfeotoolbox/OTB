@@ -21,8 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbMapProjections.h"
-#include "otbUtils.h"
+#include "otbMapProjectionAdapter.h"
 
 namespace otb
 {

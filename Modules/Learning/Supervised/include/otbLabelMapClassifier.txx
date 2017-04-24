@@ -18,27 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapSVMClassifier_txx
-#define otbLabelMapSVMClassifier_txx
+#ifndef otbLabelMapClassifier_txx
+#define otbLabelMapClassifier_txx
 
-#include "otbLabelMapSVMClassifier.h"
+#include "otbLabelMapClassifier.h"
 
 
 namespace otb {
 
 template <class TInputImage>
-LabelMapSVMClassifier<TInputImage>
-::LabelMapSVMClassifier()
+LabelMapClassifier<TInputImage>
+::LabelMapClassifier()
 {
-  // Force to single-threaded (SVMModel is not thread-safe)
+  // Force to single-threaded in case the learning model is not thread safe
   // This way, we benefit of the LabelMapFilter design and only need
   // to implement ThreadedProcessLabelObject
-  this->SetNumberOfThreads(1);
+  this->SetNumberOfThreads(1); // TODO : check if still needed
 }
 
 template<class TInputImage>
 void
-LabelMapSVMClassifier<TInputImage>
+LabelMapClassifier<TInputImage>
 ::ReleaseInputs( )
 {
   // by pass itk::InPlaceLabelMapFilter::ReleaseInputs() implementation,
@@ -48,10 +48,10 @@ LabelMapSVMClassifier<TInputImage>
 
 template<class TInputImage>
 void
-LabelMapSVMClassifier<TInputImage>
+LabelMapClassifier<TInputImage>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
-  ClassLabelType classLabel = m_Model->EvaluateLabel(m_MeasurementFunctor(labelObject));
+  ClassLabelType classLabel = (m_Model->Predict(m_MeasurementFunctor(labelObject)))[0];
   labelObject->SetClassLabel(classLabel);
 }
 

@@ -44,6 +44,8 @@ void
 StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 ::GenerateInputRequestedRegion()
  {
+  Superclass::GenerateInputRequestedRegion();
+
   // Get the input and displacement field pointers
   InputImageType         *       inputPtr
   = const_cast<InputImageType *>(this->GetInput());
@@ -228,6 +230,11 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
     noDataValue.resize(this->GetOutput()->GetNumberOfComponentsPerPixel(),0.0);
     }
   PixelType edgePadding = this->GetEdgePaddingValue();
+  if (itk::NumericTraits<PixelType>::GetLength(edgePadding) != this->GetOutput()->GetNumberOfComponentsPerPixel())
+    {
+    itk::NumericTraits<PixelType>::SetLength(edgePadding,this->GetOutput()->GetNumberOfComponentsPerPixel());
+    this->SetEdgePaddingValue(edgePadding);
+    }
   for (unsigned int i=0; i<noDataValueAvailable.size() ; ++i)
     {
     if (!noDataValueAvailable[i])

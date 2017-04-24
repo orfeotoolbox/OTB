@@ -45,3 +45,18 @@ set_property(TEST leTvLibSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvLib
 otb_add_test(NAME leTvLibSVMMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbLibSVMRegressionTests
   )
+
+#otb_add_test(NAME obTvLabelMapSVMClassifier COMMAND otbSupervisedTestDriver
+  #otbLabelMapClassifier
+  #${INPUTDATA}/maur.tif
+  #${INPUTDATA}/maur_labelled.tif
+  #${TEMP}/obTvLabelMapSVMClassifierLabeledOutput.tif)
+
+otb_add_test(NAME obTuLabelMapSVMClassifierNew COMMAND otbSupervisedTestDriver
+  otbLabelMapClassifierNew)
+
+otb_add_test(NAME leTuSVMCrossValidationCostFunctionNew COMMAND otbSupervisedTestDriver
+  otbSVMCrossValidationCostFunctionNew)
+
+otb_add_test(NAME leTuSVMMarginSamplerNew COMMAND otbSupervisedTestDriver
+  otbSVMMarginSamplerNew)

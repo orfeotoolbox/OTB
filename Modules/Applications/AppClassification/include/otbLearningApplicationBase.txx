@@ -128,10 +128,10 @@ LearningApplicationBase<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
+typename LearningApplicationBase<TInputValue,TOutputValue>
+::TargetListSampleType::Pointer
 LearningApplicationBase<TInputValue,TOutputValue>
 ::Classify(typename ListSampleType::Pointer validationListSample,
-           typename TargetListSampleType::Pointer predictedList,
            std::string modelPath)
 {
   // Setup fake reporter
@@ -152,13 +152,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   model->Load(modelPath);
   model->SetRegressionMode(this->m_RegressionFlag);
-  model->SetInputListSample(validationListSample);
-  model->SetTargetListSample(predictedList);
-  model->PredictAll();
+
+  typename TargetListSampleType::Pointer predictedList = model->PredictBatch(validationListSample, NULL);
 
   // update reporter
   dummyFilter->UpdateProgress(1.0f);
   dummyFilter->InvokeEvent(itk::EndEvent());
+
+  return predictedList;
 }
 
 template <class TInputValue, class TOutputValue>

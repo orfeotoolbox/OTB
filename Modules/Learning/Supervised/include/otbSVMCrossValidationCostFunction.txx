@@ -22,12 +22,13 @@
 #define otbSVMCrossValidationCostFunction_txx
 
 #include "otbSVMCrossValidationCostFunction.h"
+#include "otbMacro.h"
 
 namespace otb
 {
 template<class TModel>
 SVMCrossValidationCostFunction<TModel>
-::SVMCrossValidationCostFunction() : m_Model(), m_NumberOfCrossValidationFolders(10), m_DerivativeStep(0.001)
+::SVMCrossValidationCostFunction() : m_Model(), m_DerivativeStep(0.001)
 {}
 template<class TModel>
 SVMCrossValidationCostFunction<TModel>
@@ -52,9 +53,9 @@ SVMCrossValidationCostFunction<TModel>
     }
 
   // Updates vm_parameters according to current parameters
-  this->UpdateParameters(m_Model->GetParameters(), parameters);
+  this->UpdateParameters(parameters);
 
-  return m_Model->CrossValidation(m_NumberOfCrossValidationFolders);
+  return m_Model->CrossValidation();
 }
 
 template<class TModel>
@@ -95,67 +96,18 @@ SVMCrossValidationCostFunction<TModel>
     {
     itkExceptionMacro(<< "Model is null, can not evaluate number of parameters.");
     }
-
-  switch (m_Model->GetKernelType())
-    {
-    case LINEAR:
-      // C
-      return 1;
-
-    case POLY:
-      // C, gamma and coef0
-      return 3;
-
-    case RBF:
-      // C and gamma
-      return 2;
-
-    case SIGMOID:
-      // C, gamma and coef0
-      return 3;
-
-    default:
-      // C
-      return 1;
-    }
+  return m_Model->GetNumberOfKernelParameters();
 }
 
 template<class TModel>
 void
 SVMCrossValidationCostFunction<TModel>
-::UpdateParameters(struct svm_parameter& svm_parameters, const ParametersType& parameters) const
+::UpdateParameters(const ParametersType& parameters) const
 {
-  switch (m_Model->GetKernelType())
-    {
-    case LINEAR:
-      // C
-      svm_parameters.C = parameters[0];
-      break;
-
-    case POLY:
-      // C, gamma and coef0
-      svm_parameters.C = parameters[0];
-      svm_parameters.gamma = parameters[1];
-      svm_parameters.coef0 = parameters[2];
-      break;
-
-    case RBF:
-      // C and gamma
-      svm_parameters.C = parameters[0];
-      svm_parameters.gamma = parameters[1];
-      break;
-
-    case SIGMOID:
-      // C, gamma and coef0
-      svm_parameters.C = parameters[0];
-      svm_parameters.gamma = parameters[1];
-      svm_parameters.coef0 = parameters[2];
-      break;
-
-    default:
-      svm_parameters.C = parameters[0];
-      break;
-    }
+  unsigned int nbParams = m_Model->GetNumberOfKernelParameters();
+  m_Model->SetC(parameters[0]);
+  if (nbParams > 1) m_Model->SetKernelGamma(parameters[1]);
+  if (nbParams > 2) m_Model->SetKernelCoef0(parameters[2]);
 }
 
 } // namespace otb

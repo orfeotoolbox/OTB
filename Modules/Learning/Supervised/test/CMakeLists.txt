@@ -27,6 +27,11 @@ otbMachineLearningModelCanRead.cxx
 otbTrainMachineLearningModel.cxx
 otbImageClassificationFilter.cxx
 otbMachineLearningRegressionTests.cxx
+otbExhaustiveExponentialOptimizerNew.cxx
+otbExhaustiveExponentialOptimizerTest.cxx
+otbLabelMapClassifier.cxx
+otbSVMCrossValidationCostFunctionNew.cxx
+otbSVMMarginSampler.cxx
 )
 
 if(OTB_USE_SHARK)
@@ -69,6 +74,16 @@ otb_add_test(NAME leTvConfusionMatrixConcatenateTest COMMAND otbSupervisedTestDr
   ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
   ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
   ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
+
+otb_add_test(NAME leTuExhaustiveExponentialOptimizerNew COMMAND otbSupervisedTestDriver
+  otbExhaustiveExponentialOptimizerNew)
+
+otb_add_test(NAME leTvExhaustiveExponentialOptimizerTest COMMAND otbSupervisedTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/leTvExhaustiveExponentialOptimizerOutput.txt
+  ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt
+  otbExhaustiveExponentialOptimizerTest
+  ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt)
 
 if(OTB_USE_LIBSVM)
   include(tests-libsvm.cmake)

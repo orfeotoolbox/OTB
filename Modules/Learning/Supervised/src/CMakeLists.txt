@@ -20,6 +20,7 @@
 
 set(OTBSupervised_SRC
   otbMachineLearningModelFactoryBase.cxx
+  otbExhaustiveExponentialOptimizer.cxx
   )
 
 if(OTB_USE_OPENCV)
@@ -29,7 +30,7 @@ endif()
 add_library(OTBSupervised ${OTBSupervised_SRC})
 target_link_libraries(OTBSupervised
   ${OTBCommon_LIBRARIES}
-  ${OTBSVMLearning_LIBRARIES}
+  ${OTBLibSVM_LIBRARIES}
   ${OTBOpenCV_LIBRARIES}
   ${OTBShark_LIBRARIES}
   )

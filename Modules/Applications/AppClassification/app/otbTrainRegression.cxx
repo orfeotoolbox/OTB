@@ -506,8 +506,6 @@ void DoExecute() ITK_OVERRIDE
   // Performances estimation
   //--------------------------
   ListSampleType::Pointer performanceListSample;
-  TargetListSampleType::Pointer predictedList = TargetListSampleType::New();
-  predictedList->SetMeasurementVectorSize(1);
   TargetListSampleType::Pointer performanceLabeledListSample;
 
   //Test the input validation set size
@@ -523,7 +521,8 @@ void DoExecute() ITK_OVERRIDE
     performanceLabeledListSample = trainingLabeledListSample;
     }
 
-  this->Classify(performanceListSample, predictedList, GetParameterString("io.out"));
+  TargetListSampleType::Pointer predictedList =
+    this->Classify(performanceListSample, GetParameterString("io.out"));
 
   otbAppLogINFO("Training performances");
   double mse=0.0;

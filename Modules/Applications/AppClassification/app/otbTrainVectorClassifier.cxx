@@ -56,6 +56,16 @@ public:
 protected:
   void DoInit()
   {
+    SetName( "TrainVectorClassifier" );
+    SetDescription( "Train a classifier based on labeled geometries and a list of features to consider." );
+
+    SetDocName( "Train Vector Classifier" );
+    SetDocLongDescription( "This application trains a classifier based on "
+                                   "labeled geometries and a list of features to consider for classification." );
+    SetDocLimitations( " " );
+    SetDocAuthors( "OTB Team" );
+    SetDocSeeAlso( " " );
+
     Superclass::DoInit();
   }
 

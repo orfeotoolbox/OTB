@@ -170,14 +170,6 @@ private:
    */
   virtual void                     DoFinalizeInitialization() {}
   //@}
-
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  void DoFinalizeInitialisation()
-  {
-    otbWarningMacro(
-      << "DoFinalizeInitialisation has been deprecated.  Please use DoFinalizeInitialization() instead");
-    this->DoFinalizeInitialization();
-  }
   
   friend struct otb::internal::ProcessVisitor;
   };

@@ -21,14 +21,14 @@
 #ifndef otbStreamingWarpImageFilter_h
 #define otbStreamingWarpImageFilter_h
 
-#include "otbWarpImageFilter.h"
+#include "itkWarpImageFilter.h"
 #include "otbStreamingTraits.h"
 
 namespace otb
 {
 
 /** \class StreamingWarpImageFilter
- * \brief This class acts like the otb::WarpImageFilter, but it does not request the largest possible region of the image to warp.
+ * \brief This class acts like the itk::WarpImageFilter, but it does not request the largest possible region of the image to warp.
  *
  * Instead, the user should assess the maximum displacement in the displacement field and set it via the SetMaximumDisplacement() method.
  *
@@ -50,12 +50,12 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TDisplacementField>
 class ITK_EXPORT StreamingWarpImageFilter
-  :  public otb::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
+  :  public itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
   typedef StreamingWarpImageFilter                                            Self;
-  typedef otb::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField> Superclass;
+  typedef itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField> Superclass;
   typedef itk::SmartPointer<Self>                                             Pointer;
   typedef itk::SmartPointer<const Self>                                       ConstPointer;
 

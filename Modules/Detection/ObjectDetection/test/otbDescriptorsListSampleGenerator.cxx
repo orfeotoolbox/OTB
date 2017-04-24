@@ -17,9 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 #include <iterator>
 
 #include "otbImage.h"
@@ -31,7 +28,7 @@
 
 #include "otbStatisticsXMLFileReader.h"
 #include "otbShiftScaleSampleListFilter.h"
-#include "otbSVMSampleListModelEstimator.h"
+#include "otbLibSVMMachineLearningModel.h"
 
 const unsigned int Dimension = 2;
 typedef int        LabelType;
@@ -60,17 +57,10 @@ typedef otb::DescriptorsListSampleGenerator
 typedef otb::ImageFileReader<ImageType>           ImageReaderType;
 typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
 
-typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<SampleType>
-                                                        MeasurementVectorFunctorType;
-
 typedef otb::StatisticsXMLFileReader<SampleType>   StatisticsReader;
 typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType> ShiftScaleListSampleFilterType;
 
-typedef otb::SVMSampleListModelEstimator<
-  ListSampleType,
-  LabelListSampleType,
-  MeasurementVectorFunctorType>                         SVMEstimatorType;
-
+typedef otb::LibSVMMachineLearningModel<FunctionPrecisionType, LabelType> SVMType;
 
 typedef FunctionType::PointType PointType;
 typedef DescriptorsListSampleGeneratorType::SamplesPositionType SamplesPositionType;
@@ -243,11 +233,11 @@ int otbDescriptorsSVMModelCreation(int argc, char* argv[])
   shiftscaleFilter->SetScales(varianceMeasurentVector);
   shiftscaleFilter->Update();
 
-  SVMEstimatorType::Pointer svmEstimator = SVMEstimatorType::New();
-  svmEstimator->SetInputSampleList(shiftscaleFilter->GetOutput());
-  svmEstimator->SetTrainingSampleList(descriptorsGenerator->GetLabelListSample());
-  svmEstimator->Update();
-  svmEstimator->GetModel()->SaveModel(outputFileName);
+  SVMType::Pointer svmEstimator = SVMType::New();
+  svmEstimator->SetInputListSample(shiftscaleFilter->GetOutput());
+  svmEstimator->SetTargetListSample(descriptorsGenerator->GetLabelListSample());
+  svmEstimator->Train();
+  svmEstimator->Save(outputFileName);
 
   return EXIT_SUCCESS;
 }

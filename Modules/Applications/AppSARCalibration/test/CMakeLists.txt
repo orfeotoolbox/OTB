@@ -19,8 +19,8 @@
 #
 
 otb_module_test()
-#----------- SarRadiometricCalibration TESTS ----------------
-otb_test_application(NAME apTvRaSarRadiometricCalibration_SENTINEL1
+#----------- SARCalibration TESTS ----------------
+otb_test_application(NAME apTvRaSARCalibration_SENTINEL1
   APP  SARCalibration
   OPTIONS -in ${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_1200_1100_300_300.tiff?&geom=${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_1200_1100_300_300.geom
   -out ${TEMP}/apTvRaSarRadiometricCalibration_SENTINEL1.tif
@@ -29,7 +29,7 @@ otb_test_application(NAME apTvRaSarRadiometricCalibration_SENTINEL1
   ${TEMP}/apTvRaSarRadiometricCalibration_SENTINEL1.tif )
 
 if(OTB_DATA_USE_LARGEINPUT)
-  otb_test_application(NAME apTvRaSarRadiometricCalibration_SENTINEL1_PRODUCT_INPUT
+  otb_test_application(NAME apTvRaSARCalibration_SENTINEL1_PRODUCT_INPUT
     APP  SARCalibration
     OPTIONS -in  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
     -out "${TEMP}/apTvRaSarRadiometricCalibration_SENTINEL1_PRODUCT_INPUT.tif?box=1200:1100:256:256"
@@ -38,7 +38,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     ${TEMP}/apTvRaSarRadiometricCalibration_SENTINEL1_PRODUCT_INPUT.tif )
 endif()
 
-otb_test_application(NAME apTvRaSarRadiometricCalibration_RADARSAT2
+otb_test_application(NAME apTvRaSARCalibration_RADARSAT2
   APP  SARCalibration
   OPTIONS -in ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.geom
   -out ${TEMP}/apTvRaSarRadiometricCalibration_RADARSAT2.tif

@@ -80,14 +80,6 @@ public:
 
   bool InstantiateProjection();
 
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  bool InstanciateProjection()
-  {
-    otbWarningMacro(
-      << "InstanciateProjection has been deprecated.  Please use InstanciateProjection() instead");
-    return this->InstantiateProjection();
-  }
-
   void InverseTransform(double x, double y, double z,
                         double& lon, double& lat, double& h);
   void ForwardTransform(double lon, double lat, double h,

@@ -36,8 +36,7 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
     m_NoClassLabel(0),
     m_GridStep(10)
 {
-  // Need 2 inputs : a vector image, and a SVMModel
-  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredInputs(1);
 
   // Have 2 outputs : the image created by Superclass, a vector data with points
   this->SetNumberOfRequiredOutputs(3);
@@ -84,9 +83,21 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 void
 PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
-::SetSVMModel(SVMModelType* model)
+::SetModel(ModelType* model)
 {
-  this->SetNthInput(1, model);
+  if (model != m_Model)
+    {
+    m_Model = model;
+    this->Modified();
+    }
+}
+
+template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
+const typename PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>::ModelType*
+PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
+::GetModel(void) const
+{
+  return m_Model;
 }
 
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
@@ -245,7 +256,7 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
                        itk::ThreadIdType threadId)
 {
   InputImageType* input = static_cast<InputImageType*>(this->itk::ProcessObject::GetInput(0));
-  SVMModelType*   model = static_cast<SVMModelType*>(this->itk::ProcessObject::GetInput(1));
+  const ModelType*   model = this->GetModel();
 
   typedef typename RegionType::IndexType      IndexType;
   IndexType begin = outputRegionForThread.GetIndex();
@@ -266,12 +277,12 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
           input->TransformIndexToPhysicalPoint(current, point);
 
           DescriptorType descriptor = m_DescriptorsFunction->Evaluate(point);
-          SVMModelMeasurementType modelMeasurement(descriptor.GetSize());
+          ModelMeasurementType modelMeasurement(descriptor.GetSize());
           for (unsigned int i = 0; i < descriptor.GetSize(); ++i)
             {
             modelMeasurement[i] = (descriptor[i] - m_Shifts[i]) * m_InvertedScales[i];
             }
-          LabelType label = model->EvaluateLabel(modelMeasurement);
+          LabelType label = (model->Predict(modelMeasurement))[0];
 
           if (label != m_NoClassLabel)
             {

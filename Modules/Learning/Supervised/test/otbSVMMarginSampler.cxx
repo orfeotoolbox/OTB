@@ -19,30 +19,24 @@
  */
 
 
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
 
+#include "itkListSample.h"
+#include "otbSVMMarginSampler.h"
+#include "otbLibSVMMachineLearningModel.h"
 
-#include "itkMacro.h"
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include <iostream>
-
-#include "otbSVMImageModelEstimator.h"
-
-int otbSVMImageModelEstimatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbSVMMarginSamplerNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  typedef double InputPixelType;
-  const unsigned int Dimension = 2;
+  typedef itk::VariableLengthVector<double>                 SampleType;
+  typedef itk::Statistics::ListSample<SampleType>           SampleListType;
+  typedef otb::LibSVMMachineLearningModel<double,unsigned int> SVMModelType;
+  typedef otb::SVMMarginSampler<SampleListType,SVMModelType>     MarginSamplerType;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  MarginSamplerType::Pointer  marginSampler = MarginSamplerType::New();
 
-  typedef otb::Image<InputPixelType,  Dimension> TrainingImageType;
-
-  typedef otb::SVMImageModelEstimator<InputImageType,
-      TrainingImageType>   EstimatorType;
-
-  EstimatorType::Pointer svmModel = EstimatorType::New();
-
-  std::cout << svmModel << std::endl;
+  std::cout << marginSampler << std::endl;
 
   return EXIT_SUCCESS;
 }

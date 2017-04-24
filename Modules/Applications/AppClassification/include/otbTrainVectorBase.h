@@ -173,7 +173,7 @@ protected:
    * Otherwise mean is set to 0 and standard deviation to 1 for each Features.
    * \param nbFeatures
    */
-  ShiftScaleParameters ComputeStatistics(unsigned int nbFeatures);
+  ShiftScaleParameters GetStatistics(unsigned int nbFeatures);
 
   SamplesWithLabel m_TrainingSamplesWithLabel;
   SamplesWithLabel m_ClassificationSamplesWithLabel;

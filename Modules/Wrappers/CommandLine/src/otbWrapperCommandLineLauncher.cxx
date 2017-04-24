@@ -67,13 +67,6 @@ CommandLineLauncher::CommandLineLauncher() :
   m_AddProcessCommand->SetCallbackFunction(this, &CommandLineLauncher::LinkWatchers);
 }
 
-CommandLineLauncher::CommandLineLauncher(const char *) /*:
-  m_Expression(exp)*/
-{
-  m_Application = ITK_NULLPTR;
-  m_Parser = CommandLineParser::New();
-}
-
 CommandLineLauncher::~CommandLineLauncher()
 {
   this->DeleteWatcherList();

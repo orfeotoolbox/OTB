@@ -102,14 +102,6 @@ public:
 
   virtual bool InstantiateProjection();
 
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  virtual bool InstanciateProjection()
-  {
-    otbWarningMacro(
-      << "InstanciateProjection has been deprecated.  Please use InstantiateProjection() instead");
-    return this->InstantiateProjection();
-  }
-
   const MapProjectionAdapter* GetMapProjection() const;
 
   virtual bool IsProjectionDefined() const;

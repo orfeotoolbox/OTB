@@ -29,9 +29,10 @@
 #include "otbSpatialisationFilter.h"
 #include "otbImageSimulationMethod.h"
 #include "otbAttributesMapLabelObject.h"
-#include "otbSVMImageModelEstimator.h"
-#include "otbSVMImageClassificationFilter.h"
+#include "otbLibSVMMachineLearningModel.h"
+#include "otbImageClassificationFilter.h"
 #include "otbImageFileReader.h"
+#include "itkImageToListSampleAdaptor.h"
 
 int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
 {
@@ -62,17 +63,16 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
     SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
 
-
-   typedef otb::SVMImageModelEstimator<OutputImageType, LabelImageType>                    SVMEstimatorType;
-   typedef otb::SVMImageClassificationFilter<OutputImageType, LabelImageType>             SVMClassificationFilterType;
+   typedef otb::LibSVMMachineLearningModel<double, unsigned short> SVMType;
+   typedef otb::ImageClassificationFilter<OutputImageType,LabelImageType> ClassificationFilterType;
 
    /** Instantiation of pointer objects*/
    ImageWriterType::Pointer writer = ImageWriterType::New();
    LabelImageWriterType::Pointer labelWriter = LabelImageWriterType::New();
    ImageSimulationMethodType::Pointer imageSimulation = ImageSimulationMethodType::New();
    SpatialisationFilterType::Pointer spatialisationFilter = SpatialisationFilterType::New();
-   SVMEstimatorType::Pointer      svmEstimator   = SVMEstimatorType::New();
-   SVMClassificationFilterType::Pointer classifier = SVMClassificationFilterType::New();
+   SVMType::Pointer model = SVMType::New();
+   ClassificationFilterType::Pointer classifier = ClassificationFilterType::New();
 
 
    SpatialisationFilterType::SizeType objectSize;
@@ -132,15 +132,28 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
 //    imageSimulation->SetVariance();
    imageSimulation->UpdateData();
 
+    
+   //~ svmEstimator->SetInputImage(imageSimulation->GetOutputReflectanceImage());
+   //~ svmEstimator->SetTrainingImage(imageSimulation->GetOutputLabelImage());
+   //~ svmEstimator->SetParametersOptimization(false);
+   //~ svmEstimator->DoProbabilityEstimates(true);
+   //~ svmEstimator->Update();
 
-   svmEstimator->SetInputImage(imageSimulation->GetOutputReflectanceImage());
-   svmEstimator->SetTrainingImage(imageSimulation->GetOutputLabelImage());
-   svmEstimator->SetParametersOptimization(false);
-   svmEstimator->DoProbabilityEstimates(true);
-   svmEstimator->Update();
+  typedef itk::Statistics::ImageToListSampleAdaptor<OutputImageType> ListSampleAdaptorType;
+  typedef itk::Statistics::ImageToListSampleAdaptor<LabelImageType> TargetListSampleAdaptorType;
 
+  ListSampleAdaptorType::Pointer listSample = ListSampleAdaptorType::New();
+  listSample->SetImage(imageSimulation->GetOutputReflectanceImage());
 
-   classifier->SetModel(svmEstimator->GetModel());
+  TargetListSampleAdaptorType::Pointer targetListSample = TargetListSampleAdaptorType::New();
+  targetListSample->SetImage(imageSimulation->GetOutputLabelImage());
+
+  model->SetInputListSample(listSample);
+  model->SetTargetListSample(targetListSample);
+  model->SetDoProbabilityEstimates(true);
+  model->Train();
+  
+   classifier->SetModel(model);
    classifier->SetInput(imageSimulation->GetOutput());
 
    //Write the result to an image file
