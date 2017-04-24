@@ -23,6 +23,7 @@ set(DOCUMENTATION "Image utils and handling application.")
 otb_module(OTBAppImageUtils
   DEPENDS
     OTBApplicationEngine
+    OTBBoostAdapters
     OTBCarto
     OTBColorMap
     OTBCommon
