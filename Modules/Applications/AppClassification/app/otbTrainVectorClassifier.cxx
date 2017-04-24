@@ -22,6 +22,7 @@
 
 // Validation
 #include "otbConfusionMatrixCalculator.h"
+#include "otbContingencyTableCalculator.h"
 
 namespace otb
 {
@@ -48,6 +49,9 @@ public:
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
   typedef ConfusionMatrixCalculatorType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
+  
+  typedef ContingencyTable<ClassLabelType> ContingencyTableType;
+  typedef ContingencyTableType::Pointer    ContingencyTablePointerType;
 
 protected:
   void DoInit()
@@ -72,31 +76,56 @@ protected:
 
   void DoExecute()
   {
-    // Enforce the need of class field name in supervised mode
-    if (GetClassifierCategory() == Supervised)
-      {
-      m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
+    m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 
-      if( m_FeaturesInfo.m_SelectedCFieldIdx.empty() )
-        {
-        otbAppLogFATAL( << "No field has been selected for data labelling!" );
-        }
+    if( m_FeaturesInfo.m_SelectedCFieldIdx.empty() && GetClassifierCategory() == Supervised )
+      {
+      otbAppLogFATAL( << "No field has been selected for data labelling!" );
       }
 
-      Superclass::DoExecute();
+    Superclass::DoExecute();
 
-      if (GetClassifierCategory() == Supervised)
-        {
-        ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_PredictedList,
-                                                                                     m_ClassificationSamplesWithLabel.labeledListSample );
-        WriteConfusionMatrix( confMatCalc );
-        }
-      else
-        {
-        // TODO Compute Contingency Table
-        }
+    if (GetClassifierCategory() == Supervised)
+      {
+      ConfusionMatrixCalculatorType::Pointer confMatCalc = ComputeConfusionMatrix( m_PredictedList,
+                                                                                   m_ClassificationSamplesWithLabel.labeledListSample );
+      WriteConfusionMatrix( confMatCalc );
+      }
+    else
+      {
+      ContingencyTablePointerType table = ComputeContingencyTable( m_PredictedList,
+                                                                   m_ClassificationSamplesWithLabel.labeledListSample );
+      WriteContingencyTable( table );
+      }
   }
 
+  ContingencyTablePointerType ComputeContingencyTable(const TargetListSampleType::Pointer &predictedListSample,
+                                                      const TargetListSampleType::Pointer &performanceLabeledListSample)
+  {
+    typedef ContingencyTableCalculator<ClassLabelType> ContigencyTableCalcutaltorType;
+
+    ContigencyTableCalcutaltorType::Pointer contingencyTableCalculator = ContigencyTableCalcutaltorType::New();
+    contingencyTableCalculator->Compute(performanceLabeledListSample->Begin(),
+                                        performanceLabeledListSample->End(),predictedListSample->Begin(), predictedListSample->End());
+
+    otbAppLogINFO( "Training performances:" );
+
+    otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"<<contingencyTableCalculator->BuildContingencyTable());
+
+    return contingencyTableCalculator->BuildContingencyTable();
+  }
+
+
+  void WriteContingencyTable(const ContingencyTablePointerType& table)
+  {
+    if(IsParameterEnabled("io.confmatout"))
+      {
+      // Write contingency table
+      std::ofstream outFile;
+      outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
+      outFile << table->ToCSV();
+      }
+  }
 
 
   ConfusionMatrixCalculatorType::Pointer
@@ -111,7 +140,7 @@ protected:
     confMatCalc->SetProducedLabels( predictedListSample );
     confMatCalc->Compute();
 
-    otbAppLogINFO( "training performances" );
+    otbAppLogINFO( "Training performances:" );
     LogConfusionMatrix( confMatCalc );
 
     for( unsigned int itClasses = 0; itClasses < confMatCalc->GetNumberOfClasses(); itClasses++ )

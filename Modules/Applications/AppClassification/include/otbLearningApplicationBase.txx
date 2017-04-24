@@ -33,6 +33,7 @@ namespace Wrapper
 template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
 ::LearningApplicationBase() : m_RegressionFlag(false)
+
 {
 }
 
@@ -59,7 +60,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   InitUnsupervisedClassifierParams();
   std::vector<std::string> allClassifier = GetChoiceKeys("classifier");
-  m_UnsupervisedClassifier.assign(allClassifier.begin() + m_SupervisedClassifier.size(), allClassifier.end());
+  // Check for empty unsupervised classifier
+  if( allClassifier.size() > m_UnsupervisedClassifier.size() )
+    m_UnsupervisedClassifier.assign( allClassifier.begin() + m_SupervisedClassifier.size(), allClassifier.end() );
 }
 
 template <class TInputValue, class TOutputValue>
@@ -67,10 +70,16 @@ typename LearningApplicationBase<TInputValue,TOutputValue>::ClassifierCategory
 LearningApplicationBase<TInputValue,TOutputValue>
 ::GetClassifierCategory()
 {
-  bool foundUnsupervised =
-          std::find(m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
-                    GetParameterString("classifier")) != m_UnsupervisedClassifier.end();
-  return foundUnsupervised ? Unsupervised : Supervised;
+  if( m_UnsupervisedClassifier.empty() )
+    {
+    return Supervised;
+    }
+  else
+    {
+    bool foundUnsupervised = std::find( m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
+                                        GetParameterString( "classifier" ) ) != m_UnsupervisedClassifier.end();
+    return foundUnsupervised ? Unsupervised : Supervised;
+    }
 }
 
 template <class TInputValue, class TOutputValue>

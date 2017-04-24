@@ -392,6 +392,7 @@ otb_test_application(NAME apTvComputeConfusionMatrixExtraReferenceLabelsR
   OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
   -ref raster
   -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref.raster.nodata 255
   -nodatalabel 255
   -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv
   VALID   --compare-ascii ${NOTOL}
@@ -403,6 +404,7 @@ otb_test_application(NAME apTvComputeConfusionMatrixR
   OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
   -ref raster
   -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref.raster.nodata 255
   -nodatalabel 255
   -out ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.csv
   VALID   --compare-ascii ${NOTOL}
@@ -414,12 +416,27 @@ otb_test_application(NAME apTvComputeConfusionMatrixExtraProducedLabelsR
   OPTIONS -in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
   -ref raster
   -ref.raster.in ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+  -ref.raster.nodata 255
   -nodatalabel 255
   -out ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
   ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv)
 
+#----------- ComputeContingencyTable TESTS ----------------
+
+otb_test_application(NAME apTvComputeContingencyTableExtraProducedLabelsR
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref raster
+  -ref.raster.in ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+  -ref.raster.nodata 255
+  -nodatalabel 255
+  -format contingencytable
+  -out ${TEMP}/apTvComputeContingencyTableExtraProdLabelsROut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeContingencyTableExtraProdLabelsROut.csv
+  ${TEMP}/apTvComputeContingencyTableExtraProdLabelsROut.csv)
 
 #----------- FusionOfClassifications TESTS ----------------
 otb_test_application(NAME apTvFusionOfClassificationsDSPrecision6Inputs

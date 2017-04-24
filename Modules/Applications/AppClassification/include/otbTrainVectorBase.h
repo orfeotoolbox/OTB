@@ -125,7 +125,7 @@ protected:
     {
       m_SelectedCFieldIdx = selectedCFieldIdx;
       // Handle only one class field name, if several are provided only the first one is used.
-      m_SelectedCFieldName = cFieldNames[selectedCFieldIdx.front()];
+      m_SelectedCFieldName = selectedCFieldIdx.empty() ? cFieldNames.front() : cFieldNames[selectedCFieldIdx.front()];
     }
   };
 
