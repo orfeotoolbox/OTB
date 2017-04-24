@@ -22,26 +22,7 @@
 #define otbNeuralNetworkMachineLearningModel_h
 
 #include "otbRequiresOpenCVCheck.h"
-
-#include <opencv2/core/core_c.h>
-
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-align"
-#include <opencv2/core/core.hpp>
-#pragma GCC diagnostic pop
-#else
-#include <opencv2/core/core.hpp>
-#endif
-
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#include <opencv2/ml/ml.hpp>
-#pragma GCC diagnostic pop
-#else
-#include <opencv2/ml/ml.hpp>
-#endif
+#include "otbOpenCVUtils.h"
 
 #include "itkLightObject.h"
 #include "itkFixedArray.h"
@@ -209,10 +190,13 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   void CreateNetwork();
-  CvANN_MLP_TrainParams SetNetworkParameters();
   void SetupNetworkAndTrain(cv::Mat& labels);
-
+#ifdef OTB_OPENCV_3
+  cv::Ptr<cv::ml::ANN_MLP> m_ANNModel;
+#else
+  CvANN_MLP_TrainParams SetNetworkParameters();
   CvANN_MLP * m_ANNModel;
+#endif
   int m_TrainMethod;
   int m_ActivateFunction;
   std::vector<unsigned int> m_LayerSizes;

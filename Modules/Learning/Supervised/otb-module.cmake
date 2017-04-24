@@ -29,12 +29,15 @@ ENABLE_SHARED
     OTBCommon
     OTBITK
     OTBImageBase
+    OTBLabelMap
+    OTBLearningBase
+    OTBUnsupervised
 
   OPTIONAL_DEPENDS
     OTBOpenCV
-    OTBSVMLearning
+    OTBLibSVM
     OTBShark
-    
+
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO

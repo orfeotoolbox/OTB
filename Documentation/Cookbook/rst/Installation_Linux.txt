@@ -11,6 +11,11 @@ double-click on the file, or with the command line :
    chmod +x OTB-|release|-Linux64.run
    ./OTB-|release|-Linux64.run
 
+The self-extractible archive only needs common tools found on most Linux
+distributions ("sed", "grep", "find", "cat", "printf", "ln", ...). However, be
+aware that it requires tools such as "which" and "file" (they are not always
+present, for instance when building a container).
+
 Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
 archive is extracted, the directory structure is made of:
@@ -33,7 +38,15 @@ archive is extracted, the directory structure is made of:
 
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
-distributions. The graphical executable (otbgui launchers, Monteverdi
+distributions. There is a small caveat for "expat" though. The binaries depend
+on "libexpat.so", which can be supplied by most package managers (apt, yum, ...).
+If not already present, look for one of the following packages :
+
+::
+
+    libexpat-dev   libexpat1-dev
+
+The graphical executable (otbgui launchers, Monteverdi
 and Mapla) use the X11 libraries, which are widely used in a lot of
 distributions :
 

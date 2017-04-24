@@ -87,22 +87,23 @@ private:
                     "following scheme. Let :math:`f_0` denote the input image, :math:`\\stackrel{\\smile}{\\mu}_{N}(f)` denote the convex membership function, :math:`\\stackrel{\\frown}{\\mu}_{N}(f)` denote the concave membership function and :math:`\\psi_{N}(f)` denote the leveling function, for a given radius :math:`N` as defined in the documentation\n"
                     "of the GeodesicMorphologyDecompositionImageFilter. Let :math:`[N_{1},\\ldots, N_{n}]` denote a range of increasing radius (or scales). The iterative decomposition is defined as follows:\n"
                     "\n"
-                    "[ f\\_n = `\\psi`\\_N\\_n(f\\_n-1) ]\n"
+                    ":math:`f_i` = :math:`\\psi_{N_i}(f_{i-1})` \n"
                     "\n"
-                    "[ :math:`\\stackrel{\\frown}{f}_n` = :math:`\\stackrel{\\frown}{\\mu}_N_N(f_n)` ]\n"
+                    ":math:`\\stackrel{\\frown}{f}_i` = :math:`\\stackrel{\\frown}{\\mu}_{N_i}(f_i)` \n"
                     "\n"
-                    "[ :math:`\\stackrel{\\smile}{f}_n` = :math:`\\stackrel{\\smile}{\\mu}_N_N(f_n)` ]\n"
+                    ":math:`\\stackrel{\\smile}{f}_i` = :math:`\\stackrel{\\smile}{\\mu}_{N_i}(f_i)` \n"
                     "\n"
-                    "The :math:`\\stackrel{\\frown}{f}_{n}` and :math:`\\stackrel{\\frown}{f}_{n}` are membership function for the convex\n"
-                    "(resp. concave) objects whose size is comprised between :math:`N_{n-1}` and :math:`N_n`\n"
+                    "The :math:`\\stackrel{\\smile}{f}_{i}` and :math:`\\stackrel{\\frown}{f}_{i}` are membership function for the convex\n"
+                    "(resp. concave) objects whose size is comprised between :math:`N_{i-1}` and :math:`N_i`\n"
                     "\n"
-                    "Output convex, concave and leveling images with N bands, where N is the number of levels." );
+                    "Output convex, concave and leveling images with B bands, where n is the number of levels." );
 
     SetDocLimitations( "Generation of the multi scale decomposition is not streamable, pay attention to this fact when setting the number of iterating levels." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbGeodesicMorphologyDecompositionImageFilter class" );
 
-    AddDocTag( "MorphologicalMultiScaleDecomposition" );
+    AddDocTag(Tags::FeatureExtraction);
+    AddDocTag("Morphology");
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image to be classified." );

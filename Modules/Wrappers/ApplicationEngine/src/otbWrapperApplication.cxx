@@ -1015,19 +1015,26 @@ std::string Application::GetParameterString(std::string parameter)
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<ChoiceParameter*>(param))
-    {
+  {
     ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
-    std::string choiceKey = paramDown->GetChoiceKey( paramDown->GetValue() );
-    size_t lastPointPos = choiceKey.find_last_of('.');
-    if(lastPointPos != std::string::npos)
+    if (paramDown->HasValue())
+    {
+      std::string choiceKey = paramDown->GetChoiceKey( paramDown->GetValue() );
+      size_t lastPointPos = choiceKey.find_last_of('.');
+      if(lastPointPos != std::string::npos)
       {
-      ret = choiceKey.substr(lastPointPos);
-        }
-    else
+        ret = choiceKey.substr(lastPointPos);
+      }
+      else
       {
-      ret = choiceKey;
+        ret = choiceKey;
       }
     }
+    else
+    {
+        ret = "";
+    }
+  }
   else if (dynamic_cast<ListViewParameter*>(param))
     {
     ListViewParameter* paramDown = dynamic_cast<ListViewParameter*>(param);

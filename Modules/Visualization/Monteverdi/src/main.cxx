@@ -111,7 +111,7 @@ main( int argc, char* argv[] )
 	  QCoreApplication::translate(
 	    PROJECT_NAME,
 	    "Usage: %1 [-h|--help] [-a|--applications] [<filename>...]\n"
-	    "  -1, --no-glsl      force OpenGL 1.x compatible rendering."
+	    "  -n, --no-glsl      force OpenGL 1.x compatible rendering."
 	    "  -a, --applications load OTB-applications from OTB_APPLICATIONS_PATH."
 	    "  -h, --help         display this help message.\n"
 	  )
@@ -130,7 +130,7 @@ main( int argc, char* argv[] )
       it = args.erase( it );
       }
 
-    else if(it->compare( "-1" )==0 ||
+    else if(it->compare( "-n" )==0 ||
 	    it->compare( "--no-glsl" )==0 )
       {
       flags.forceNoGLSL = true;

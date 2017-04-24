@@ -21,6 +21,7 @@
 #ifndef otbTrainRandomForests_txx
 #define otbTrainRandomForests_txx
 #include "otbLearningApplicationBase.h"
+#include "otbRandomForestsMachineLearningModel.h"
 
 namespace otb
 {
@@ -110,6 +111,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                      typename TargetListSampleType::Pointer trainingLabeledListSample,
                      std::string modelPath)
 {
+  typedef otb::RandomForestsMachineLearningModel<InputValueType, OutputValueType> RandomForestType;
   typename RandomForestType::Pointer classifier = RandomForestType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);

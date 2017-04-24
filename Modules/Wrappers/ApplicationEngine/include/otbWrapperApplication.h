@@ -243,7 +243,7 @@ public:
    * \li ParameterType_Int
    * \li ParameterType_Radius
    * \li ParameterType_InputImageParameter
-   * \li ParameterType_InputComplexImageParameter
+   * \li ParameterType_ComplexInputImageParameter
    * \li ParameterType_InputVectorDataParameter
    * \li ParameterType_OutputImageParameter
    * \li ParameterType_OutputVectorDataParameter
@@ -396,7 +396,7 @@ public:
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
    * \li ParameterType_InputImage
-   * \li ParameterType_InputComplexImage
+   * \li ParameterType_ComplexInputImage
    * \li ParameterType_InputVectorData
    * \li ParameterType_OutputImage
    * \li ParameterType_OutputVectorData
@@ -601,7 +601,7 @@ public:
   /* Get a complex image value
    *
    * Can be called for types :
-   * \li ParameterType_InputComplexImage
+   * \li ParameterType_ComplexInputImage
    */
   ComplexFloatVectorImageType* GetParameterComplexImage(std::string parameter);
 
@@ -633,7 +633,7 @@ public:
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
    * \li ParameterType_InputImage
-   * \li ParameterType_InputComplexImage
+   * \li ParameterType_ComplexInputImage
    * \li ParameterType_InputVectorData
    * \li ParameterType_OutputImage
    * \li ParameterType_OutputVectorData

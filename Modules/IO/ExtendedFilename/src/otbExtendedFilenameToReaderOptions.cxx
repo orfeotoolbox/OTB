@@ -20,6 +20,7 @@
 
 #include "otbExtendedFilenameToReaderOptions.h"
 #include "otb_boost_string_header.h"
+#include "itksys/RegularExpression.hxx"
 
 namespace otb
 {
@@ -48,12 +49,16 @@ ExtendedFilenameToReaderOptions
   m_Options.skipRpcTag.first  = false;
   m_Options.skipRpcTag.second = false;
 
+  m_Options.bandRange.first = false;
+  m_Options.bandRange.second = "";
+
   m_Options.optionList.push_back("geom");
   m_Options.optionList.push_back("sdataidx");
   m_Options.optionList.push_back("resol");
   m_Options.optionList.push_back("skipcarto");
   m_Options.optionList.push_back("skipgeom");
   m_Options.optionList.push_back("skiprpctag");
+  m_Options.optionList.push_back("bands");
 }
 
 void
@@ -121,6 +126,22 @@ ExtendedFilenameToReaderOptions
         || map["skiprpctag"] == "1"   )
       {
       m_Options.skipRpcTag.second = true;
+      }
+    }
+
+  if (!map["bands"].empty())
+    {
+    // Basic check on bandRange (using regex)
+    itksys::RegularExpression reg;
+    reg.compile("^((\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)(,(\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)*$");
+    if (reg.find(map["bands"]))
+      {
+      m_Options.bandRange.first = true;
+      m_Options.bandRange.second = map["bands"];
+      }
+    else
+      {
+      itkExceptionMacro("Unkwown value "<<map["bands"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
       }
     }
 
@@ -222,6 +243,20 @@ ExtendedFilenameToReaderOptions
 ::GetSkipRpcTag () const
 {
   return m_Options.skipRpcTag.second;
+}
+
+bool
+ExtendedFilenameToReaderOptions
+::BandRangeIsSet () const
+{
+  return m_Options.bandRange.first;
+}
+
+std::string
+ExtendedFilenameToReaderOptions
+::GetBandRange () const
+{
+  return m_Options.bandRange.second;
 }
 
 } // end namespace otb

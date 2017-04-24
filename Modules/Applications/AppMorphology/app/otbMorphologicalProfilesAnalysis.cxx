@@ -98,7 +98,7 @@ private:
                                    ":math:`L_1, L_2` two labels associated, and :math:`\\sigma` a tolerance\n"
                                    "value, the following decision rule is applied:\n"
                                    "\n"
-                                   ":math:`L = \\begin{cases}  L_{1} &:& x_{1}>x_{2} \\quad and \\quad x_{1}>\\sigma\\\\ L_{2} &:& x_{2}>x_{1} \\quad and \\quad x_{2}>\\sigma\\\\ 0   &:& otherwise. \\end{cases}`"
+                                   ":math:`L = \\begin{cases}  L_{1} & : x_{1}>x_{2} \\quad and \\quad x_{1}>\\sigma \\\\ L_{2} & : x_{2}>x_{1} \\quad and \\quad x_{2}>\\sigma \\\\ 0   & : otherwise. \\end{cases}` \n"
                                    "\n"
                                    "The output image can be :"
                                    "- A :math:`N` multi band image for the opening/closing normal or derivative profiles.\n"
@@ -108,7 +108,8 @@ private:
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbMorphologicalOpeningProfileFilter, otbMorphologicalClosingProfileFilter, otbProfileToProfileDerivativeFilter, otbProfileDerivativeToMultiScaleCharacteristicsFilter, otbMultiScaleConvexOrConcaveClassificationFilter, classes" );
 
-    AddDocTag( "MorphologicalProfilesAnalysis" );
+    AddDocTag(Tags::FeatureExtraction);
+    AddDocTag("Morphology");
 
     AddParameter( ParameterType_InputImage, "in", "Input Image" );
     SetParameterDescription( "in", "The input image." );

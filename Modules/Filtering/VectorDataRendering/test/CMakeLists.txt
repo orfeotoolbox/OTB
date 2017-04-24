@@ -26,7 +26,6 @@ otbVectorDataToMapFilterWorld.cxx
 otbVectorDataToMapFilter.cxx
 otbVectorDataToMapFilterNew.cxx
 otbVectorDataToMapFilterNoFonts.cxx
-otbVectorDataToImageFilter.cxx
 otbVectorDataToMapFilterSensorModel.cxx
 )
 
@@ -80,25 +79,6 @@ otb_add_test(NAME coTvVectorDataToMapFilterNoFonts COMMAND otbVectorDataRenderin
   otbVectorDataToMapFilterNoFonts
   LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
   ${TEMP}/coTvVectorDataToMapFilterNoFonts.png
-  )
-
-otb_add_test(NAME coTvVectorDataToImageFilter COMMAND otbVectorDataRenderingTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/coTvVectorDataToMapFilter.png
-  ${TEMP}/coTvVectorDataToImageFilter.png
-  otbVectorDataToImageFilter
-  LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
-  ${TEMP}/coTvVectorDataToImageFilter.png
-  ${INPUTDATA}/DejaVuSans.ttf # font
-  )
-
-otb_add_test(NAME coTvVectorDataToImageFilterBinary COMMAND otbVectorDataRenderingTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/coTvVectorDataToMapFilterBinary.png
-  ${TEMP}/coTvVectorDataToImageFilterBinary.png
-  otbVectorDataToImageFilterBinary
-  LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
-  ${TEMP}/coTvVectorDataToImageFilterBinary.png
   )
 
 otb_add_test(NAME coTvVectorDataToMapFilterSensorModel COMMAND otbVectorDataRenderingTestDriver

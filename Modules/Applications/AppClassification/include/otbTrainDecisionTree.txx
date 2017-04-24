@@ -21,6 +21,7 @@
 #ifndef otbTrainDecisionTree_txx
 #define otbTrainDecisionTree_txx
 #include "otbLearningApplicationBase.h"
+#include "otbDecisionTreeMachineLearningModel.h"
 
 namespace otb
 {
@@ -38,7 +39,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
                           "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/decision_trees.html}.");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
+#ifdef OTB_OPENCV_3
+  SetParameterInt("classifier.dt.max",10, false);
+#else
   SetParameterInt("classifier.dt.max",65535, false);
+#endif
   SetParameterDescription(
       "classifier.dt.max", "The training algorithm attempts to split each node while its depth is smaller than the maximum "
       "possible depth of the tree. The actual depth may be smaller if the other termination criteria are met, and/or "
@@ -71,7 +76,12 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //CVFolds
   AddParameter(ParameterType_Int, "classifier.dt.f", "K-fold cross-validations");
+#ifdef OTB_OPENCV_3
+  // disable cross validation by default (crash in opencv 3.2)
+  SetParameterInt("classifier.dt.f",0, false);
+#else
   SetParameterInt("classifier.dt.f",10, false);
+#endif
   SetParameterDescription(
       "classifier.dt.f", "If cv_folds > 1, then it prunes a tree with K-fold cross-validation where K is equal to cv_folds.");
 
@@ -96,6 +106,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
                     typename TargetListSampleType::Pointer trainingLabeledListSample,
                     std::string modelPath)
 {
+  typedef otb::DecisionTreeMachineLearningModel<InputValueType, OutputValueType> DecisionTreeType;
   typename DecisionTreeType::Pointer classifier = DecisionTreeType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);

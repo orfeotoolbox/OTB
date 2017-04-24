@@ -90,13 +90,14 @@ public:
 
   bool HasValue() const ITK_OVERRIDE
   {
-    // a choice parameter always has a value
-    return true;
+    return !m_ChoiceList.empty();
   }
 
   void ClearValue() ITK_OVERRIDE
   {
-    // nothing to do : a choice parameter always has a value
+    // Same as constructor init value
+    // Note that this may be invalid if HasValue() == false
+    m_CurrentChoice = 0;
   }
 
 protected:

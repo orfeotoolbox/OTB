@@ -25,6 +25,7 @@
 #include "otbConfigure.h"
 
 #ifdef OTB_USE_OPENCV
+#include "otb_opencv_api.h"
 #include "otbKNearestNeighborsMachineLearningModelFactory.h"
 #include "otbRandomForestsMachineLearningModelFactory.h"
 #include "otbSVMMachineLearningModelFactory.h"
@@ -32,7 +33,9 @@
 #include "otbNeuralNetworkMachineLearningModelFactory.h"
 #include "otbNormalBayesMachineLearningModelFactory.h"
 #include "otbDecisionTreeMachineLearningModelFactory.h"
+#ifndef OTB_OPENCV_3
 #include "otbGradientBoostedTreeMachineLearningModelFactory.h"
+#endif
 #endif
 #ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModelFactory.h"
@@ -40,6 +43,7 @@
 
 #ifdef OTB_USE_SHARK
 #include "otbSharkRandomForestsMachineLearningModelFactory.h"
+#include "otbSharkKMeansMachineLearningModelFactory.h"
 #endif
 
 #include "itkMutexLockHolder.h"
@@ -107,6 +111,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 
 #ifdef OTB_USE_SHARK
   RegisterFactory(SharkRandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SharkKMeansMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 #endif
   
 #ifdef OTB_USE_OPENCV
@@ -116,7 +121,9 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   RegisterFactory(NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+#ifndef OTB_OPENCV_3
   RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+#endif
   RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 #endif  
 }
@@ -161,6 +168,14 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
     if (sharkRFFactory)
       {
       itk::ObjectFactoryBase::UnRegisterFactory(sharkRFFactory);
+      continue;
+      }
+
+    SharkKMeansMachineLearningModelFactory<TInputValue,TOutputValue> *sharkKMeansFactory =
+            dynamic_cast<SharkKMeansMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (sharkKMeansFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(sharkKMeansFactory);
       continue;
       }
 #endif
@@ -214,6 +229,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(dtFactory);
       continue;
       }
+#ifndef OTB_OPENCV_3
     // Gradient Boosted tree
     GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue> *gbtFactory =
       dynamic_cast<GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
@@ -222,6 +238,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(gbtFactory);
       continue;
       }
+#endif
     // KNN
     KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue> *knnFactory =
       dynamic_cast<KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);

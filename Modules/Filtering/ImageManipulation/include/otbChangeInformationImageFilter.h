@@ -78,11 +78,6 @@ private:
   ChangeInformationImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Removes a field from a metadata dictionary
-   *  After ITK 4.6, an Erase() method has been added to
-   *  itk::MetaDataDictionary, so this function could be tagged as deprecated */
-  bool RemoveKeyFromDictionary(itk::MetaDataDictionary & dict, const std::string & key);
-
   /** List of metadata keys to change */
   std::set<std::string> m_ChangedKeys;
 

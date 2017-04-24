@@ -102,7 +102,7 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   origin[1]=0.5+outputOriginLine;
   outputPtr->SetOrigin(origin);
   
-  // Update line records to accomodate actual input image region
+  // Update line records to accommodate actual input image region
   LinesRecordVectorType filteredRecords;
   
   for(LinesRecordVectorType::const_iterator it  = m_LinesRecord.begin();

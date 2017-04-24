@@ -236,7 +236,7 @@ int otbDecisionTreeMachineLearningModelCanRead(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-
+#ifndef OTB_OPENCV_3
 int otbGradientBoostedTreeMachineLearningModelCanRead(int argc, char* argv[])
 {
   if (argc != 2)
@@ -263,7 +263,7 @@ int otbGradientBoostedTreeMachineLearningModelCanRead(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-
+#endif
 int otbKNNMachineLearningModelCanRead(int argc, char* argv[])
 {
   if (argc != 2)
@@ -321,5 +321,6 @@ int otbSharkRFMachineLearningModelCanRead(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
 
 #endif

@@ -46,6 +46,10 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   typedef itk::Vector<PixelType, 2>                   DisplacementValueType;
   typedef otb::Image<DisplacementValueType, Dimension> DisplacementFieldType;
 
+  // Change default output origin
+  ImageType::PointType origin;
+  origin.Fill(0.5);
+
   // Warper
   typedef otb::StreamingWarpImageFilter<ImageType, ImageType, DisplacementFieldType> ImageWarperType;
 
@@ -70,6 +74,7 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   warper->SetMaximumDisplacement(maxDisplacement);
   warper->SetInput(reader->GetOutput());
   warper->SetDisplacementField(displacementReader->GetOutput());
+  warper->SetOutputOrigin(origin);
 
   // Writing
   writer->SetInput(warper->GetOutput());

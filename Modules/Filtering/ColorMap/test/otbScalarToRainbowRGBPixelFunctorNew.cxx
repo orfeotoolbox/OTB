@@ -39,8 +39,8 @@ int otbScalarToRainbowRGBPixelFunctorNew(int itkNotUsed(argc), char * itkNotUsed
   typedef itk::UnaryFunctorImageFilter<ImageType,
       RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
-  colormapper->GetFunctor().SetMaximum(150);
-  colormapper->GetFunctor().SetMinimum(70);
+  colormapper->GetFunctor().SetMaximumInputValue(150);
+  colormapper->GetFunctor().SetMinimumInputValue(70);
 
   std::cout << colormapper << std::endl;
 

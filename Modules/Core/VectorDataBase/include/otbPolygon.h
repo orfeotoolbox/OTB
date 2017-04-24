@@ -123,16 +123,6 @@ public:
   virtual double GetArea() const;
 
   /**
-   * Return the polygon area.
-   * \return The area.
-   * \deprecated
-   */
-  virtual double GetSurface() const
-  {
-    return this->GetArea();
-  }
-
-  /**
   * Return the polygon length (perimeter).
   * \return The length.
   */

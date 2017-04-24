@@ -54,20 +54,8 @@ EXCLUDED_FILES="$EXCLUDED_FILES,*/Utilities/Maintenance/fix_typos.sh,*/fix_typos
 #This list should be updated after each release when deprecated classes/methods are removed
 # use with --words-white-list=$WORDS_WHITE_LIST
 
-#for deprecated class AssymmetricFusionOfLineDetectorImageFilter
-WORDS_WHITE_LIST="Assymmetric"
-#for deprecated method InstanciateProjection in multiple classes
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Instanciate"
-#for deprecated method DoFinalizeInitialisation in otbGeometriesToGeometriesFilter.h
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Initialisation"
-#for deprecated method getSubstraction
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Substraction"
-#for deprecated method ParseFileNameForAdditonalInfo
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Additonal"
 # for "Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France" in LabelMapToLabelImageFilter
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Developement"
-# for deprecated method GetShrinkedOutput in otbStreamingShrinkImageFilter
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,Shrinked"
+WORDS_WHITE_LIST="Developement"
 # for dum variable in prosail
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,dum"
 # for pary variable

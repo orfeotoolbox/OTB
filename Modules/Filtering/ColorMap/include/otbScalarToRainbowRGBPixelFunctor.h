@@ -156,20 +156,6 @@ public:
 
   RGBPixelType operator ()(const TScalar&) const ITK_OVERRIDE;
 
-  /** Set the input maximum to be mapped to red
-   * \deprecated use SetMaximumInputValue() */
-  void SetMaximum(ScalarType max)
-  {
-    this->SetMaximumInputValue(max);
-  }
-
-  /** Set the input minimum to be mapped to blue
-   * \deprecated use SetMinimumInputValue() */
-  void SetMinimum(ScalarType min)
-  {
-    this->SetMinimumInputValue(min);
-  }
-
 protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;
 

@@ -232,10 +232,6 @@ private:
   /** Step of the elevation exploration. */
   double  m_ElevationStep;
 
-  /** If set to true, the local elevation is extracted from a DEM +
-  geoid. If set to false, average elevation is used. Default is false. */
-  bool m_UseDEM;
-
   /** Threshold of the correlation to keep estimated height. */
   double m_CorrelationThreshold;
 

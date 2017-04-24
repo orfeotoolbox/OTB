@@ -202,13 +202,6 @@ public:
   {
     return m_ShrunkOutput;
   }
-
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  OutputImageType * GetShrinkedOutput()
-  {
-    otbWarningMacro(<< "GetShrinkedOutput has been deprecated.  Please use GetShrunkOutput instead");
-    return GetShrunkOutput();
-  }
   
   void Synthetize(void) ITK_OVERRIDE;
 

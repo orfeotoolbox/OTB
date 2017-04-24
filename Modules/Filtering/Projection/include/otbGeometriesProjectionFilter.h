@@ -214,14 +214,6 @@ private:
    * the last moment from \c DoProcessLayer().
    */
   void DoFinalizeInitialization() ITK_OVERRIDE;
-
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  void DoFinalizeInitialisation()
-  {
-    otbWarningMacro(
-      << "DoFinalizeInitialisation has been deprecated.  Please use DoFinalizeInitialization() instead");
-    this->DoFinalizeInitialization();
-  }
   
   /**
    * Hook used to define the fields of the new layer.
