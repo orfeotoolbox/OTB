@@ -32,7 +32,7 @@
 #include "itkFunctionBase.h"
 
 #include "otbVectorData.h"
-#include "otbSVMModel.h"
+#include "otbMachineLearningModel.h"
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
@@ -54,7 +54,7 @@ public:
  *  plus the ThreadedGenerateData function implementing the image function evaluation
  *
  *
- * \ingroup OTBSVMLearning
+ * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
 class ITK_EXPORT PersistentObjectDetectionClassifier :
@@ -117,9 +117,9 @@ public:
 
   /** TLabel output */
   typedef TLabel                                             LabelType;
-  typedef SVMModel<DescriptorPrecision, LabelType>           SVMModelType;
-  typedef typename SVMModelType::Pointer                     SVMModelPointerType;
-  typedef typename SVMModelType::MeasurementType             SVMModelMeasurementType;
+  typedef MachineLearningModel<DescriptorPrecision, LabelType> ModelType;
+  typedef typename ModelType::Pointer                     ModelPointerType;
+  typedef typename ModelType::InputSampleType             ModelMeasurementType;
 
   typedef itk::Statistics::ListSample<DescriptorType>        ListSampleType;
 
@@ -128,8 +128,10 @@ public:
     this->Superclass::AddInput(dataObject);
   }
 
-  /** SVM model used for classification */
-  void SetSVMModel(SVMModelType * model);
+  /** learning model used for classification */
+  void SetModel(ModelType * model);
+
+  const ModelType* GetModel(void) const;
 
   VectorDataType* GetOutputVectorData(void);
 
@@ -235,13 +237,16 @@ private:
   /** Step of the detection grid */
   unsigned int m_GridStep;
 
+  /** classification model */
+  ModelPointerType m_Model;
+
 };
 
 
 /** \class ObjectDetectionClassifier
- *  \brief This class detects object in an image, given a SVM model and a local descriptors function
+ *  \brief This class detects object in an image, given a ML model and a local descriptors function
  *
- *  Given an image (by SetInputImage()), a SVM model (by SetSVMModel) and an local descriptors ImageFunction
+ *  Given an image (by SetInputImage()), a ML model (by SetModel) and an local descriptors ImageFunction
  *  (set by SetDescriptorsFunction()), this class computes the local descriptors on a regular grid
  *  over the image, and evaluates the class label of the corresponding sample.
  *  It outputs a vector data with the points for which the descriptors are not classified as "negative",
@@ -249,7 +254,7 @@ private:
  *
  *  This class is streaming capable and multithreaded
  *
- * \ingroup OTBSVMLearning
+ * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionPrecision = double, class TCoordRep = double>
 class ITK_EXPORT ObjectDetectionClassifier :
@@ -299,8 +304,8 @@ public:
 
     typedef typename Superclass::FilterType                           PersistentFilterType;
 
-    typedef typename PersistentFilterType::SVMModelType                        SVMModelType;
-    typedef typename PersistentFilterType::SVMModelPointerType                 SVMModelPointerType;
+    typedef typename PersistentFilterType::ModelType                  ModelType;
+    typedef typename PersistentFilterType::ModelPointerType           ModelPointerType;
 
     /** Input image to extract feature */
     void SetInputImage(InputImageType* input)
@@ -332,15 +337,15 @@ public:
     }
 
     /** The function to evaluate */
-    void SetSVMModel(SVMModelType* model)
+    void SetModel(ModelType* model)
     {
-      this->GetFilter()->SetSVMModel(model);
+      this->GetFilter()->SetModel(model);
     }
 
-    /** The function to evaluate */
-    SVMModelType* GetSVMModel()
+    /** The classification model */
+    const ModelType* GetModel()
     {
-      return this->GetFilter()->GetSVMModel();
+      return this->GetFilter()->GetModel();
     }
 
     otbSetObjectMemberMacro(Filter, NeighborhoodRadius, unsigned int);

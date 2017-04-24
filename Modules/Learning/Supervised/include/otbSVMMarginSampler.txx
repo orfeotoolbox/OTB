@@ -78,28 +78,32 @@ SVMMarginSampler< TSample, TModel >
   typename OutputType::ConstIterator endO  = output->End();
   typename TSample::MeasurementVectorType measurements;
 
+  m_Model->SetConfidenceMode(TModel::CM_HYPER);
 
   int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size();
+
+  int nbClass = static_cast<int>(m_Model->GetNumberOfClasses());
+  std::vector<double> hdistances(nbClass * (nbClass - 1) / 2);
 
   otbMsgDevMacro(  << "Starting iterations " );
   while (iter != end && iterO != endO)
   {
     int i = 0;
-    typename SVMModelType::MeasurementType     modelMeasurement;
+    typename SVMModelType::InputSampleType     modelMeasurement(numberOfComponentsPerSample);
 
     measurements = iter.GetMeasurementVector();
     // otbMsgDevMacro(  << "Loop on components " << svm_type );
     for (i=0; i<numberOfComponentsPerSample; ++i)
     {
-    modelMeasurement.push_back(measurements[i]);
+    modelMeasurement[i] = measurements[i];
     }
 
     // Get distances to the hyperplanes
-    DistancesVectorType hdistances = m_Model->EvaluateHyperplanesDistances(modelMeasurement);
+    m_Model->Predict(modelMeasurement, &(hdistances[0]));
     double minDistance = vcl_abs(hdistances[0]);
 
     // Compute th min distances
-    for(unsigned int j = 1; j<hdistances.Size(); ++j)
+    for(unsigned int j = 1; j<hdistances.size(); ++j)
       {
       if(vcl_abs(hdistances[j])<minDistance)
         {
@@ -128,8 +132,6 @@ SVMMarginSampler< TSample, TModel >
     otbMsgDevMacro( "Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")" )
     m_MarginSamples.push_back(idDistVector[i].first);
     }
-
-  // m_Output->AddInstance(static_cast<unsigned int>(classLabel), iterO.GetInstanceIdentifier());
 
 }
 

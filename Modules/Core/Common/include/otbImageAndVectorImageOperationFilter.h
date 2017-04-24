@@ -176,14 +176,6 @@ public:
   itkGetMacro(UseDivision, bool);
   itkGetMacro(UseSubtraction, bool);
 
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED.  */
-  virtual bool GetUseSubstraction()
-  {
-    otbWarningMacro(
-      << "GetUseSubstraction has been deprecated.  Please use GetUseSubtraction() instead");
-    return GetUseSubtraction();
-  }
-
   void UseAddition()
   {
     m_UseAddition = true;

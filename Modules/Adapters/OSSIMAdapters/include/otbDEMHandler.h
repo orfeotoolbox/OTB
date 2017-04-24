@@ -41,9 +41,8 @@ namespace otb
  *
  * This class is the single configuration and access point for
  * elevation handling in images projections and localization
- * functions. Since this class is a singleton, the New() method is
- * deprecated and will be removed in future release. Please use the
- * DEMHandler::Instance() method instead.
+ * functions. Since this class is a singleton, there is no New() method. The
+ * DEMHandler::Instance() method should be used instead.
  *
  * Please be aware that a proper instantiation and parameter setting
  * of this class is advised before any call to geometric filters or

@@ -51,7 +51,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToGeo);
   REGISTER_TEST(otbROIdataConversion);
-  REGISTER_TEST(otbProjectionBaseNew);
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToGeo);
   REGISTER_TEST(otbPhysicalToRPCSensorModelImageFilter);
   REGISTER_TEST(otbGeometriesProjectionFilterFromGeoToMap);

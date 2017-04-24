@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
   estimator->SetTrainingSampleList(trainingLabels);
 
   estimator->SetKernelType(kernel);
-  estimator->DoProbabilityEstimates(probEstimate);
+  estimator->SetDoProbabilityEstimates(probEstimate);
 //  estimator->SetParametersOptimization(true);
   estimator->Update();
 

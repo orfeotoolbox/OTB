@@ -30,13 +30,14 @@ otb_module(OTBObjectDetection
     OTBObjectList
     OTBStatistics
     OTBStreaming
+    OTBSupervised
     OTBTextures
     OTBVectorDataBase
 
   TEST_DEPENDS
     OTBIOXML
     OTBImageIO
-    OTBSVMLearning
+    OTBLibSVM
     OTBTestKernel
     OTBVectorDataIO
 

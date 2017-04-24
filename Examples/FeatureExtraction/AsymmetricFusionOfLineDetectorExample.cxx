@@ -35,7 +35,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
+#include "otbAsymmetricFusionOfLineDetectorImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -85,7 +85,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::AssymmetricFusionOfLineDetectorImageFilter<InternalImageType,
+  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InternalImageType,
       InternalImageType>
   FilterType;
   // Software Guide : EndCodeSnippet

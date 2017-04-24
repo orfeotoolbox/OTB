@@ -31,8 +31,8 @@
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
-#include "otbSVMSampleListModelEstimator.h"
-#include "otbLabelMapSVMClassifier.h"
+#include "otbLibSVMMachineLearningModel.h"
+#include "otbLabelMapClassifier.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 
 const unsigned int Dimension = 2;
@@ -60,12 +60,9 @@ typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
 typedef itk::Statistics::ListSample<TrainingVectorType>        TrainingListSampleType;
 typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType, ListSampleType, TrainingListSampleType>
                                                                ListSampleFilterType;
+typedef otb::LibSVMMachineLearningModel<double,LabelType> SVMType;
 
-typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<VectorType> MeasurementVectorFunctorType;
-typedef otb::SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType,
-  MeasurementVectorFunctorType>                                                  SVMEstimatorType;
-
-typedef otb::LabelMapSVMClassifier<LabelMapType>                                ClassifierType;
+typedef otb::LabelMapClassifier<LabelMapType>                                ClassifierType;
 typedef otb::LabelMapWithClassLabelToClassLabelImageFilter
           <LabelMapType, LabeledImageType>                                       ClassifImageGeneratorType;
 
@@ -78,13 +75,13 @@ LabelObjectType::Pointer makeTrainingSample(LabelMapType* labelMap, LabelType la
   return newLabelObject;
 }
 
-int otbLabelMapSVMClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbLabelMapClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   ClassifierType::Pointer classifier = ClassifierType::New();
   return EXIT_SUCCESS;
 }
 
-int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
+int otbLabelMapClassifier(int itkNotUsed(argc), char * argv[])
 {
   const char * infname  = argv[1];
   const char * lfname   = argv[2];
@@ -98,7 +95,7 @@ int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
   BandsStatisticsFilterType::Pointer radiometricFilter   = BandsStatisticsFilterType::New();
   LabelMapType::Pointer              trainingLabelMap    = LabelMapType::New();
   ListSampleFilterType::Pointer      labelMap2SampleList = ListSampleFilterType::New();
-  SVMEstimatorType::Pointer          svmEstim            = SVMEstimatorType::New();
+  SVMType::Pointer                   model               = SVMType::New();
   ClassifierType::Pointer            classifier          = ClassifierType::New();
   ClassifImageGeneratorType::Pointer imGenerator         = ClassifImageGeneratorType::New();
   LabeledWriterType::Pointer         writer              = LabeledWriterType::New();
@@ -153,14 +150,13 @@ int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
   labelMap2SampleList->Update();
 
   // Estimate SVM model
-  svmEstim->SetInputSampleList(labelMap2SampleList->GetOutputSampleList());
-  svmEstim->SetTrainingSampleList(labelMap2SampleList->GetOutputTrainingSampleList());
-  svmEstim->Modified();
-  svmEstim->Update();
+  model->SetInputListSample(const_cast<SVMType::InputListSampleType*>(labelMap2SampleList->GetOutputSampleList()));
+  model->SetTargetListSample(const_cast<SVMType::TargetListSampleType*>(labelMap2SampleList->GetOutputTrainingSampleList()));
+  model->Train();
 
   // Classify using the whole LabelMap with estimated model
   classifier->SetInput(labelMap);
-  classifier->SetModel(svmEstim->GetModel());
+  classifier->SetModel(model);
 
   for (attrIt = attributes.begin(); attrIt != attributes.end(); ++attrIt)
     {

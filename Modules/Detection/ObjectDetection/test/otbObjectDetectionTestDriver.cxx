@@ -29,4 +29,6 @@ void RegisterTests()
   REGISTER_TEST(otbDescriptorsListSampleGeneratorNew);
   REGISTER_TEST(otbDescriptorsListSampleGenerator);
   REGISTER_TEST(otbDescriptorsSVMModelCreation);
+  REGISTER_TEST(otbObjectDetectionClassifierNew);
+  REGISTER_TEST(otbObjectDetectionClassifier);
 }

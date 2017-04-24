@@ -21,24 +21,24 @@
 
 
 
-#include "itkPointSetToListSampleAdaptor.h"
-#include "itkSubsample.h"
-#include "otbSVMClassifier.h"
+#include "itkMacro.h"
+#include "otbImage.h"
+#include <iostream>
 
-int otbSVMClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+#include "otbLibSVMMachineLearningModel.h"
+#include "otbSVMCrossValidationCostFunction.h"
+
+int otbSVMCrossValidationCostFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  typedef double                           InputPixelType;
-  typedef int                              LabelPixelType;
-  typedef itk::PointSet<InputPixelType, 2> PointSetType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char LabelPixelType;
 
-  typedef itk::Statistics::PointSetToListSampleAdaptor<PointSetType>
-  DataSampleType;
+  typedef otb::LibSVMMachineLearningModel<InputPixelType,LabelPixelType> ModelType;
+  typedef otb::SVMCrossValidationCostFunction<ModelType> FunctionType;
 
-  typedef otb::SVMClassifier<DataSampleType, LabelPixelType> ClassifierType;
+  FunctionType::Pointer function = FunctionType::New();
 
-  ClassifierType::Pointer classifier = ClassifierType::New();
-
-  std::cout << classifier << std::endl;
+  std::cout << function << std::endl;
 
   return EXIT_SUCCESS;
 }

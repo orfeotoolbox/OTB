@@ -87,9 +87,9 @@ int otbMapProjection(int itkNotUsed(argc), char* argv[])
   file << lLambert93->TransformPoint(point2);
   file << std::endl << std::endl;
 
-
-
-  otb::MercatorForwardProjection::Pointer lMercatorProjection2 = otb::MercatorForwardProjection::New();
+  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> MercatorForwardProjection;
+  MercatorForwardProjection::Pointer lMercatorProjection2 = MercatorForwardProjection::New();
+  lMercatorProjection2->SetWkt(std::string("Mercator"));
   point2 = lMercatorProjection2->TransformPoint(point);
   file << lMercatorProjection2->GetWkt() << std::endl << std::endl;
   file << "Forward projection: " << std::endl;
@@ -97,8 +97,9 @@ int otbMapProjection(int itkNotUsed(argc), char* argv[])
   file << point2;
   file << std::endl << std::endl;
 
-
-  otb::MercatorInverseProjection::Pointer lMercatorProjection = otb::MercatorInverseProjection::New();
+  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> MercatorInverseProjection;
+  MercatorInverseProjection::Pointer lMercatorProjection = MercatorInverseProjection::New();
+  lMercatorProjection->SetWkt(std::string("Mercator"));
   file << lMercatorProjection->GetWkt() << std::endl << std::endl;
   file << "Inverse projection: " << std::endl;
   file << point2 << " -> ";

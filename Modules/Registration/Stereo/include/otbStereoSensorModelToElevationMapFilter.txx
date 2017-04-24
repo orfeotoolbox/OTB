@@ -54,9 +54,6 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   m_CorrelationThreshold = 0.7;
   m_VarianceThreshold = 4;
   m_SubtractInitialElevation = false;
-
-  // DEM handling (deprecated)
-  m_UseDEM = false;
 }
 
 template <class TInputImage, class TOutputHeight>

@@ -55,7 +55,7 @@ private:
     SetDocLongDescription("Compute statistics (mean and standard deviation) of the features in a set of OGR Layers, and write them in an XML file. This XML file can then be used by the training application.");
     SetDocLimitations("Experimental. For now only shapefiles are supported.");
     SetDocAuthors("David Youssefi during internship at CNES");
-    SetDocSeeAlso("OGRLayerClassifier,TrainOGRLayersClassifier");
+    SetDocSeeAlso("OGRLayerClassifier,TrainVectorClassifier");
     AddDocTag(Tags::Segmentation);
 
     AddParameter(ParameterType_InputVectorData, "inshp", "Vector Data");

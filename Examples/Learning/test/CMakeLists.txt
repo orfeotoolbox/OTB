@@ -21,19 +21,7 @@
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Learning)
 set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
-# ------- SVMImageClassificationExampleTest----------
-
 if(OTBLibSVM_LOADED)
-otb_add_test(NAME leTeSVMImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png
-    ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
-  Execute $<TARGET_FILE:SVMImageClassificationExample>
-    ${INPUTDATA}/ROI_QB_MUL_1.png
-    ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
-    ${OTB_DATA_ROOT}/Examples/svm_image_model.svm
-)
-
 # ------- SVMImageEstimatorClassificationMultiExampleTest----------
 
 otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${OTB_TEST_DRIVER}
@@ -45,19 +33,6 @@ otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${
     ${INPUTDATA}/ROI_mask_multi.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.png
-)
-
-# ------- SVMImageModelEstimatorExampleTest----------
-
-otb_add_test(NAME leTeSVMImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${EPSILON_3}
-    ${BASELINE}/svm_image_model.svn
-    ${TEMP}/svm_image_model.svn
-  --ignore-lines-with 2 probA probB
-  Execute $<TARGET_FILE:SVMImageModelEstimatorExample>
-    ${INPUTDATA}/ROI_QB_MUL_1.png
-    ${INPUTDATA}/ROI_mask.png
-    ${TEMP}/svm_image_model.svn
 )
 
 endif()

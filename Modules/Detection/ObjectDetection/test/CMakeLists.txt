@@ -25,6 +25,7 @@ otbObjectDetectionTestDriver.cxx
 otbLabeledSampleLocalizationGenerator.cxx
 otbStandardMetaImageFunctionBuilder.cxx
 otbDescriptorsListSampleGenerator.cxx
+otbObjectDetectionClassifier.cxx
 )
 
 add_executable(otbObjectDetectionTestDriver ${OTBObjectDetectionTests})
@@ -97,3 +98,32 @@ otb_add_test(NAME odTuDescriptorsListSampleGeneratorNew COMMAND otbObjectDetecti
   otbDescriptorsListSampleGeneratorNew
   )
 
+otb_add_test(NAME odTuObjectDetectionClassifierNew COMMAND otbObjectDetectionTestDriver
+  otbObjectDetectionClassifierNew
+  )
+
+otb_add_test(NAME odTvObjectDetectionClassifierStreaming COMMAND otbObjectDetectionTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.txt
+  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.txt
+  otbObjectDetectionClassifier
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
+  ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
+  ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
+  ${TEMP}/TvObjectDetectionClassifierOutputStreaming.txt
+  50 # streaming
+  5 # neighborhood radius
+  )
+
+otb_add_test(NAME odTvObjectDetectionClassifier COMMAND otbObjectDetectionTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.txt
+  ${TEMP}/TvObjectDetectionClassifierOutput.txt
+  otbObjectDetectionClassifier
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_extract_amplitude.tif
+  ${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
+  ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
+  ${TEMP}/TvObjectDetectionClassifierOutput.txt
+  0 # streaming
+  5 # neighborhood radius
+  )

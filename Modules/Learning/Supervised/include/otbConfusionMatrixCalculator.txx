@@ -48,21 +48,6 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
   m_ProducedLabels = ProdListLabelType::New();
 }
 
-
-#if !defined(ITK_LEGACY_REMOVE)
-template <class TRefListLabel, class TProdListLabel>
-void
-ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
-::Update()
-{
-  itkWarningMacro("otb::ConfusionMatrixCalculator::Update() is DEPRECATED. "
-                  "Use otb::ConfusionMatrixCalculator::Compute() instead.");
-
-  this->Compute();
-}
-#endif
-
-
 template <class TRefListLabel, class TProdListLabel>
 void
 ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>

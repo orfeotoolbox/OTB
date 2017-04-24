@@ -44,7 +44,6 @@ otbOrthoRectificationFilterNew.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbGeometriesProjectionFilterFromMapToGeo.cxx
 otbROIdataConversion.cxx
-otbProjectionBaseNew.cxx
 otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGeometriesProjectionFilterFromGeoToMap.cxx
@@ -535,8 +534,6 @@ otb_add_test(NAME leTvROIdataConversion COMMAND otbProjectionTestDriver
   ${INPUTDATA}/ImageLine.bsq.hdr
   ${TEMP}/leTvROIdataConversion.txt
   )
-
-otb_add_test(NAME prTuProjectionBaseNew COMMAND otbProjectionTestDriver  otbProjectionBaseNew )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToGeo COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}

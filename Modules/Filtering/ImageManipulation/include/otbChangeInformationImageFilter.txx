@@ -81,7 +81,7 @@ ChangeInformationImageFilter<TInputImage>
     if (value == ITK_NULLPTR)
       {
       // Remove meta-data from dictionary
-      this->RemoveKeyFromDictionary(dict,key);
+      dict.Erase(key);
       }
     else
       {
@@ -113,39 +113,9 @@ ChangeInformationImageFilter<TInputImage>
     else
       {
       // Remove metadata from output dictionary
-      this->RemoveKeyFromDictionary(outputDict,*it);
+      outputDict.Erase(*it);
       }
     }
-}
-
-template< typename TInputImage >
-bool
-ChangeInformationImageFilter<TInputImage>
-::RemoveKeyFromDictionary(itk::MetaDataDictionary & dict, const std::string & key)
-{
-  std::vector<std::string> keyList = dict.GetKeys();
-  std::vector<std::string>::iterator pos = keyList.begin();
-  while (pos != keyList.end())
-    {
-    if (key.compare(*pos) == 0)
-      {
-      break;
-      }
-    ++pos;
-    }
-  if (pos != keyList.end())
-    {
-    itk::MetaDataDictionary copyDict;
-    keyList.erase(pos);
-    pos = keyList.begin();
-    for ( ; pos != keyList.end();++pos)
-      {
-      copyDict.Set(*pos, const_cast<itk::MetaDataObjectBase*>(dict.Get(*pos)));
-      }
-    dict = copyDict;
-    return true;
-    }
-  return false;
 }
 
 } // End of namespace OTB
