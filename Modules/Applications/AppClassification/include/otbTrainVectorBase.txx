@@ -144,8 +144,8 @@ void TrainVectorBase::DoExecute()
 
   this->Train( m_TrainingSamplesWithLabel.listSample, m_TrainingSamplesWithLabel.labeledListSample, GetParameterString( "io.out" ) );
 
-  m_PredictedList = TargetListSampleType::New();
-  this->Classify( m_ClassificationSamplesWithLabel.listSample, m_PredictedList, GetParameterString( "io.out" ) );
+  m_PredictedList =
+    this->Classify( m_ClassificationSamplesWithLabel.listSample, GetParameterString( "io.out" ) );
 }
 
 
