@@ -58,13 +58,13 @@ private:
     SetDocSeeAlso("OGRLayerClassifier,TrainOGRLayersClassifier");
     AddDocTag(Tags::Segmentation);
 
-    AddParameter(ParameterType_InputVectorData, "inshp", "Name of the input shapefile");
+    AddParameter(ParameterType_InputVectorData, "inshp", "Vector Data");
     SetParameterDescription("inshp","Name of the input shapefile");
 
-    AddParameter(ParameterType_OutputFilename, "outstats", "XML file containing mean and variance of each feature.");
+    AddParameter(ParameterType_OutputFilename, "outstats", "Output XML file");
     SetParameterDescription("outstats", "XML file containing mean and variance of each feature.");
 
-    AddParameter(ParameterType_ListView,  "feat", "List of features to consider for statistics.");
+    AddParameter(ParameterType_ListView,  "feat", "Feature");
     SetParameterDescription("feat","List of features to consider for statistics.");
 
     // Doc example parameter settings
