@@ -159,6 +159,10 @@ StatusBarWidget
   assert( m_UI->pixelIndexLineEdit!=NULL );
 
   m_UI->pixelRadiometryLabel->setText( text );
+
+  // mantis-1385 hide scaleLineEdit
+  m_UI->label_4->hide();
+  m_UI->scaleLineEdit->hide();
 }
 
 /*****************************************************************************/

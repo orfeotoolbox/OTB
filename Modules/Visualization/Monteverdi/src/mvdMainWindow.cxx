@@ -85,6 +85,7 @@
 #include "mvdQuicklookViewRenderer.h"
 #include "mvdShaderWidget.h"
 #include "mvdStatusBarWidget.h"
+#include "mvdProjectionBarWidget.h"
 //
 #include "mvdApplication.h"
 #include "mvdPreferencesDialog.h"
@@ -106,6 +107,7 @@ namespace mvd
 /* CONSTANTS                                                                 */
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
+#define REFERENCE_PROJECTION_ZOOM_LINE_EDIT "ProjZoomLineEdit"
 
 #define FORCE_NO_GLSL ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
 
@@ -140,6 +142,7 @@ MainWindow
 #endif // USE_TABBED_VIEW
   m_StatusBarWidget( NULL ),
   m_ShaderWidget( NULL ),
+  m_ProjectionBarWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL ),
   m_KeymapDialog( NULL ),
   m_GLSL140( -2 ),
@@ -309,6 +312,8 @@ MainWindow
 
   InitializeStatusBarWidgets();
 
+  InitializeProjectionBarWidget();
+
   InitializeRenderToolBar();
   InitializeShaderToolBar();
 
@@ -411,6 +416,8 @@ MainWindow
   ConnectImageViews();
 
   ConnectStatusBar();
+
+  ConnectProjectionBarWidget();
 
   //
   // When everything is connected, install event-filter.
@@ -622,6 +629,35 @@ MainWindow
     this,
     SLOT( OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & ) )
   );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::ConnectProjectionBarWidget()
+{
+  assert( m_ProjectionBarWidget!=NULL );
+  assert( m_ImageView!=NULL );
+
+/*
+  QObject::connect(
+          m_ImageView,
+          SIGNAL( ScaleChanged( double, double ) ),
+          // to:
+          m_ProjectionBarWidget,
+          SLOT( SetProjectionScale( double, double ) )
+  );
+
+  QObject::connect(
+          m_ProjectionBarWidget,
+          SIGNAL( ProjectionScaleChanged( double ) ),
+          // to:
+          m_ImageView->GetManipulator(),
+          SLOT( ZoomTo( double ) )
+  );
+  */
+
+
 }
 
 /*****************************************************************************/
@@ -990,7 +1026,6 @@ MainWindow
 {
   m_UI->m_RenderToolBar->addSeparator();
 
-  {
   m_UI->m_RenderToolBar->addWidget(
     new QLabel( tr( "Proj" ) )
   );
@@ -1002,7 +1037,7 @@ MainWindow
 
   assert( comboBox!=NULL );
 
-  comboBox->setObjectName( "referenceLayerComboBox" );
+  comboBox->setObjectName( REFERENCE_LAYER_COMBOBOX_NAME );
   comboBox->setMinimumSize(
     QSize(
 #ifdef OTB_DEBUG
@@ -1015,7 +1050,7 @@ MainWindow
   );
 
   m_UI->m_RenderToolBar->addWidget( comboBox );
-  }
+  m_UI->m_RenderToolBar->addWidget( m_ProjectionBarWidget );
 }
 
 /*****************************************************************************/
@@ -1034,6 +1069,15 @@ MainWindow
 
   m_UI->m_ShaderToolBar->addWidget( m_ShaderWidget );
   }
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::InitializeProjectionBarWidget()
+{
+  assert( m_ProjectionBarWidget==NULL );
+  m_ProjectionBarWidget = new ProjectionBarWidget( m_UI->m_ShaderToolBar );
 }
 
 /*****************************************************************************/

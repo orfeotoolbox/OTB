@@ -87,6 +87,7 @@ class KeymapDialog;
 class LayerStackWidget;
 class ShaderWidget;
 class StatusBarWidget;
+class ProjectionBarWidget;
 
 namespace Ui
 {
@@ -281,6 +282,10 @@ private:
 
   /**
    */
+  void InitializeProjectionBarWidget();
+
+  /**
+   */
   void InitializeStatusBarWidgets();
 
   /**
@@ -315,6 +320,10 @@ private:
   /**
    */
   void ConnectStatusBar();
+
+  /**
+   */
+  void ConnectProjectionBarWidget();
 
 #if USE_PIXEL_DESCRIPTION
 
@@ -425,6 +434,10 @@ private:
   /**
    */
   KeymapDialog * m_KeymapDialog;
+
+  /**
+   */
+  ProjectionBarWidget * m_ProjectionBarWidget;
 
   /**
    */
