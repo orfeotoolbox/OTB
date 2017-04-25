@@ -2352,8 +2352,11 @@ ImageViewWidget
 
     assert( m_Manipulator!=NULL );
 
+    // Update the Manipulator reference projection.
+    // Then all view manipulation will use this projection reference.
     m_Manipulator->SetWkt( image->GetProjectionRef() );
     m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
     }
   else
     {
