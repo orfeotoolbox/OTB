@@ -107,7 +107,6 @@ namespace mvd
 /* CONSTANTS                                                                 */
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
-#define REFERENCE_PROJECTION_ZOOM_LINE_EDIT "ProjZoomLineEdit"
 
 #define FORCE_NO_GLSL ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
 
@@ -142,9 +141,9 @@ MainWindow
 #endif // USE_TABBED_VIEW
   m_StatusBarWidget( NULL ),
   m_ShaderWidget( NULL ),
-  m_ProjectionBarWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL ),
   m_KeymapDialog( NULL ),
+  m_ProjectionBarWidget( NULL ),
   m_GLSL140( -2 ),
   m_isGLSLAvailable( false ),
   m_ForceNoGLSL( false )
@@ -639,23 +638,21 @@ MainWindow
   assert( m_ProjectionBarWidget!=NULL );
   assert( m_ImageView!=NULL );
 
-/*
   QObject::connect(
-          m_ImageView,
-          SIGNAL( ScaleChanged( double, double ) ),
-          // to:
-          m_ProjectionBarWidget,
-          SLOT( SetProjectionScale( double, double ) )
+    m_ImageView,
+    SIGNAL( ScaleChanged( double, double ) ),
+    // to:
+    m_ProjectionBarWidget,
+    SLOT( SetProjectionScale( double, double ) )
   );
 
   QObject::connect(
-          m_ProjectionBarWidget,
-          SIGNAL( ProjectionScaleChanged( double ) ),
-          // to:
-          m_ImageView->GetManipulator(),
-          SLOT( ZoomTo( double ) )
+    m_ProjectionBarWidget,
+    SIGNAL( ProjectionScaleChanged( double ) ),
+    // to:
+    m_ImageView->GetManipulator(),
+    SLOT( ZoomTo( double ) )
   );
-  */
 
 
 }

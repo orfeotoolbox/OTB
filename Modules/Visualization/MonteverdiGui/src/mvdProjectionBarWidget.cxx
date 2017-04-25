@@ -37,6 +37,19 @@ ProjectionBarWidget::~ProjectionBarWidget()
   m_UI = NULL;
 }
 
+void ProjectionBarWidget::SetProjectionScale(double scale_x, double scale_y)
+{
+  QString text = "1:1";
+
+  if( scale_x>1.0 )
+    text = QString( "%1:1" ).arg( scale_x );
+
+  else if( scale_x<1.0 )
+    text = QString( "1:%1" ).arg( 1.0 / scale_x );
+
+  m_UI->projectionScaleLineEdit->setText(text);
+}
+
 void ProjectionBarWidget::on_projectionScaleLineEdit_returnPressed()
 {
   ChangeScale();

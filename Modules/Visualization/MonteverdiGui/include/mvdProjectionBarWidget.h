@@ -84,6 +84,9 @@ public:
   /** \brief Destructor. */
   ~ProjectionBarWidget() ITK_OVERRIDE;
 
+public slots:
+  void SetProjectionScale(double scale_x, double scale_y);
+
 private:
 
   /**
