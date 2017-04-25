@@ -43,7 +43,7 @@ namespace otb
  * Environment
  * The specific absorption coefficient corresponding to brown pigment is
  * provided by Frederic Baret (EMMAH, INRA Avignon, baret@avignon.inra.fr)
- * and used with his autorization.
+ * and used with his authorization.
  */
 
 struct DataSpec

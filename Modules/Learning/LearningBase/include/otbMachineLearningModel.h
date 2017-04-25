@@ -38,7 +38,7 @@ namespace otb
  * The main generic virtual methods specifically implemented in each classifier
  * derived from the MachineLearningModel class are two learning-related methods:
  * Train() and Save(), and three classification-related methods: Load(),
- * DoPredict() and optionnaly DoPredictBatch().
+ * DoPredict() and optionally DoPredictBatch().
  *
  * Thus, each classifier derived from the MachineLearningModel class
  * computes its corresponding model with Train() and exports it with

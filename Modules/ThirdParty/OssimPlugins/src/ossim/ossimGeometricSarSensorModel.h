@@ -244,7 +244,7 @@ protected:
    mutable SarSensor* _sarSensor;
 
    /**
-    * @brief True iff the product is ground range
+    * @brief True if the product is ground range
     */
    bool _isProductGeoreferenced ;
 

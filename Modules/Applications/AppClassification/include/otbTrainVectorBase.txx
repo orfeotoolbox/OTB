@@ -75,7 +75,7 @@ void TrainVectorBase::DoInit()
   // Add a new parameter to compute confusion matrix / contingency table
   AddParameter( ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix or contingency table" );
   SetParameterDescription( "io.confmatout", "Output file containing the confusion matrix or contingency table (.csv format)."
-          "The contingency table is ouput when we unsupervised algorithms is used otherwise the confusion matrix is output." );
+          "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output." );
   MandatoryOff( "io.confmatout" );
 
 

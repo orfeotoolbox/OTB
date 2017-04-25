@@ -71,7 +71,7 @@ namespace otb
  *  has been associated. This method returns a LabelSetOfSetType,
  *  which is a std::set<std::set<TLabel> >.
  *
- *  The mass function can be optionnaly initialized from a given
+ *  The mass function can be optionally initialized from a given
  *  universe set by building the power-set and associating a null mass
  *  with every elements of this power-set. This allows ensuring that
  *  two mass functions will share the exact same universe and
