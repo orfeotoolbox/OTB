@@ -1,0 +1,14 @@
+diff -burN opencv-2.4.13.2.orig/CMakeLists.txt opencv-2.4.13.2/CMakeLists.txt
+--- opencv-2.4.13.2.orig/CMakeLists.txt	2017-04-25 14:05:11.148414719 +0200
++++ opencv-2.4.13.2/CMakeLists.txt	2017-04-25 14:06:05.944787632 +0200
+@@ -290,7 +290,9 @@
+ 
+ if(WIN32)
+   if(DEFINED OpenCV_RUNTIME AND DEFINED OpenCV_ARCH)
+-    set(OpenCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
++    #OTB PATCH [BEGIN]
++    set(OpenCV_INSTALL_BINARIES_PREFIX "") # "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
++    #OTB PATCH [END]
+   else()
+     message(STATUS "Can't detect runtime and/or arch")
+     set(OpenCV_INSTALL_BINARIES_PREFIX "")
