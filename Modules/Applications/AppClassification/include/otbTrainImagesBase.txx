@@ -335,7 +335,7 @@ void TrainImagesBase::SelectAndExtractValidationSamples(const TrainFileNamesHand
     {
     SelectAndExtractSamples( imageList->GetNthElement( i ), validationVectorFileList[i],
                              fileNames.sampleValidOutputs[i], fileNames.polyStatValidOutputs[i],
-                             fileNames.ratesValidOutputs[i], SamplingStrategy::CLASS );
+                             fileNames.ratesValidOutputs[i], Self::CLASS );
     }
 }
 

@@ -146,7 +146,7 @@ public:
 //      {
       ComputePolygonStatistics( imageList, vectorFileList, fileNames.polyStatTrainOutputs );
       ComputeSamplingRate( fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt );
-      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::CLASS );
+      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, Superclass::CLASS );
 //      }
 //    else // Select training samples base on geometric sampling if no input vector is provided
 //      {
