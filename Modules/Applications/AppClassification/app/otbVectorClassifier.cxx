@@ -89,12 +89,13 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("VectorClassifier");
-    SetDescription("Performs a classification of the input vector data according to a model file.");
+    SetDescription("Performs a classification of the input vector data according to a model file."
+      "Features of the vector data output will contain the class labels decided by the classifier (maximal class label = 65535).");
 
     SetDocName("Vector Classification");
     SetDocAuthors("OTB-Team");
     SetDocLongDescription("This application performs a vector data classification based on a model file produced by the TrainVectorClassifier application.");
-    SetDocLimitations("Only shapefiles are supported for now. SQLite format is not supported.");
+    SetDocLimitations("Shapefiles are supported. But the SQLite format is only supported in update mode.");
     SetDocSeeAlso("TrainVectorClassifier");
     AddDocTag(Tags::Learning);
 
