@@ -359,10 +359,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification3Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRestorationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRegularizationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetClassificationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/SupervisedImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/MajorityVotingFusionOfClassificationMapsExample.cxx
