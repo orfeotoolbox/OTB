@@ -50,6 +50,7 @@ set( OTBMonteverdiGUI_SRCS
   mvdMultiResolutionPyramidWidget.cxx
   #mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
+  mvdProjectionBarWidget.cxx
   mvdQuicklookViewManipulator.cxx
   mvdQuicklookViewRenderer.cxx
   mvdSearchableTreeWidget.cxx
@@ -103,6 +104,7 @@ set( OTBMonteverdiGUI_HEADERS_MOC
   ../include/mvdMultiResolutionPyramidWidget.h
   #mvdMyWidget.h
   ../include/mvdPixelDescriptionWidget.h
+  ../include/mvdProjectionBarWidget.h
   ../include/mvdQuicklookViewManipulator.h
   ../include/mvdQuicklookViewRenderer.h
   ../include/mvdSearchableTreeWidget.h
@@ -132,6 +134,7 @@ set( OTBMonteverdiGUI_FORMS
   mvdMultiResolutionPyramidWidget.ui
   #mvdMyWidget.ui
   mvdPixelDescriptionWidget.ui
+  mvdProjectionBarWidget.ui
   mvdSearchableTreeWidget.ui
   mvdShaderWidget.ui
   mvdStatusBarWidget.ui
