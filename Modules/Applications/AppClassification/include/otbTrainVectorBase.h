@@ -95,7 +95,7 @@ protected:
   };
 
   /**
-   * Features information class used to store informations
+   * Features information class used to store information
    * about the field and class name/id of an input vector
    */
   class FeaturesInfo

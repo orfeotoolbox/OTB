@@ -135,7 +135,7 @@ public:
 protected:
   ContingencyTable()
   {
-    SetLabels(LabelList{}, LabelList{});
+    SetLabels(LabelList(), LabelList());
   }
   ~ContingencyTable() ITK_OVERRIDE {}
   void PrintSelf(std::ostream& os, itk::Indent itkNotUsed(indent)) const ITK_OVERRIDE
