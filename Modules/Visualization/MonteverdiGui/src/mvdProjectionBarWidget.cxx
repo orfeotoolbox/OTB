@@ -37,7 +37,7 @@ ProjectionBarWidget::~ProjectionBarWidget()
   m_UI = NULL;
 }
 
-void ProjectionBarWidget::SetProjectionScale(double scale_x, double scale_y)
+void ProjectionBarWidget::SetProjectionScale(double scale_x, double )
 {
   QString text = "1:1";
 
