@@ -1587,7 +1587,8 @@ ImageViewWidget
   //
   // Apply dynamics to current layer.
   AbstractLayerModel * layer = layerStack->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -1689,7 +1690,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -1778,7 +1780,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2012,6 +2015,9 @@ ImageViewWidget
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
+  if( !stackedLayerModel->HasCurrent() )
+    return;
+
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
   assert( layer!=NULL );
 
@@ -2071,7 +2077,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2283,7 +2290,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
