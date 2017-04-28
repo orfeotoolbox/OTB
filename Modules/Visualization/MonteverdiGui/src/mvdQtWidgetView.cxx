@@ -151,6 +151,7 @@ QtWidgetView
   setObjectName( QtWidgetView::OBJECT_NAME );
 
   m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
+  m_QuitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
 
   QObject::connect(
     m_Model, SIGNAL( SetProgressReportBegin() ),
@@ -303,7 +304,6 @@ QtWidgetView
   );
 
   // Add Ctrl-Q shortcut to quit
-  m_QuitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
   connect( m_QuitShortcut, SIGNAL(activated()), this, SLOT(close()) );
 
 

@@ -84,7 +84,7 @@ public:
 
 
 private:
-  Int32ImageType* m_Input;
+  Int32ImageType* m_Input = ITK_SP_NULLPTR;
   Int32ImageType::Pointer m_Reference;
   RAMDrivenAdaptativeStreamingManagerType::Pointer m_StreamingManager;
   otb::ogr::DataSource::Pointer m_OgrRef;
