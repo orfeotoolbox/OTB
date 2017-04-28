@@ -13,6 +13,7 @@ private:
 	{
 		SetName("CbDimensionalityReductionTrainer");
 		SetDescription("Trainer for the dimensionality reduction algorithms used in the cbDimensionalityReduction application.");
+		AddRAMParameter();
 	}
 	
 	void DoUpdateParameters()
@@ -20,7 +21,8 @@ private:
 	}
 	
 	void DoExecute()
-	{
+	{	
+		std::cout << "Appli !" << std::endl;
 		int ThisDoesNothing = 0;
 	}
 
