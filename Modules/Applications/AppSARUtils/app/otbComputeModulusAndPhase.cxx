@@ -52,7 +52,7 @@ public:
   itkTypeMacro(ComputeModulusAndPhase, otb::Wrapper::Application);
 
   //typedefs for the application
-  typedef otb::MultiToMonoChannelExtractROI<typename ComplexFloatVectorImageType::InternalPixelType, typename ComplexFloatImageType::PixelType> ExtractFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<ComplexFloatVectorImageType::InternalPixelType, ComplexFloatImageType::PixelType> ExtractFilterType;
   typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
 

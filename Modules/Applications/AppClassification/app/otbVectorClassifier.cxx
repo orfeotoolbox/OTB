@@ -249,7 +249,7 @@ private:
 
     ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
 
-    typename ConfidenceListSampleType::Pointer quality;
+    ConfidenceListSampleType::Pointer quality;
 
     bool computeConfidenceMap(IsParameterEnabled("confmap") && m_Model->HasConfidenceIndex() 
                               && !m_Model->GetRegressionMode());
