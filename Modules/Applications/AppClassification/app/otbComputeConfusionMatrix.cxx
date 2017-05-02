@@ -31,6 +31,8 @@
 #include "otbContingencyTableCalculator.h"
 #include "otbContingencyTable.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -84,7 +86,7 @@ public:
 
 
 private:
-  Int32ImageType* m_Input = ITK_SP_NULLPTR;
+  Int32ImageType* m_Input = ITK_NULLPTR;
   Int32ImageType::Pointer m_Reference;
   RAMDrivenAdaptativeStreamingManagerType::Pointer m_StreamingManager;
   otb::ogr::DataSource::Pointer m_OgrRef;
