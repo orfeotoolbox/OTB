@@ -1,3 +1,40 @@
+OTB-v.6.0.0 - Changes since version 5.10.0 (May 2th, 2017)
+----------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for Changes-81: New applications for morphological profiles (adopted, merged)
+  * Request for Changes-82: Sentinel1 IW SLC deburst filter (adopted, merged)
+  * Request for Changes-83: New Modulus and Phase application (adopted, merged)
+  * Request for Changes-84: Change license to Apache v2.0 (adopted, merged)
+  * Request for Changes-85: Add Unsupervised classification applications (adopted, merged)
+  * Request for Changes-86: Add extended filename for band selection (adopted, merged)
+  * Request for Changes-87: Support OpenCV 3 (adopted, merged)
+  * Request for Changes-88: Contingency Table (adopted, merged)
+  * Request for Changes-89: Remove deprecated code for 6.0 (adopted, merged)
+  * Request for Changes-90: Add vector classification application (adopted, merged)
+
+* Bugfixes :
+
+* Monteverdi2
+    * 0001377: Pixel coordinates input
+    * 0001378: Incorrect effect combo-box selection when selecting another layer.
+    * 0001384: Northing/Easting seems inverted on UTM17/18
+
+  * Orfeo Toolbox (OTB)
+    * 0001389: otbcli_ColorMapping doesn't accept higher input values than 2^16 (UInt16 coding)
+    * 0001386: Don't add test InDoxygenGroup for application build in external remote module
+    * 0001362: OTB 5.8 Applis TrainRegression TrainVectorClassifier TrainImagesClassifier Segmentation fault
+    * 0001372: Shortname of option to deactivate glsl with monteverdi is confusing
+    * 0001366: OTB 5.10 : can't use extract ROI using bindings python
+    * 0001367: Monteverdi from the OTB standalone package for Mac OS X fails to run
+    * 0001365: Python wrapper OTB-5.8.0: @rpath problem on MacOSX El Captain 10.11
+    * 0001364: Crash of Mapla.app v5.10.0 on MacOSX  El Captain 10.11.5
+    * 0001368: OTB 5.11 TrainImagesClassifier (FATAL) Error "Input Sample List is empty"
+    * 0001374: Alpha paramater seems not works in opengl mode
+
+  * OTB-applications
+    * 0001369: otbgui_Segmentation.bat won't produce correct results
+
 OTB-v.5.10.0 - Changes since version 5.8.0 (February 14th, 2017)
 ---------------------------------------------------------------
 
