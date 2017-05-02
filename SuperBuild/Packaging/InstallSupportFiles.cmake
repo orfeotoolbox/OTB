@@ -119,6 +119,13 @@ function(func_install_xdk_files)
 
   endforeach()
 
+  if(MSVC)
+    install(FILES
+      "${PACKAGE_SUPPORT_FILES_DIR}/OTB Project.zip"
+      "${PACKAGE_SUPPORT_FILES_DIR}/start_devenv.bat"
+      DESTINATION "${PKG_STAGE_DIR}" )
+  endif()
+
 endfunction() #func_install_xdk_files
 
 function(func_install_support_files)
