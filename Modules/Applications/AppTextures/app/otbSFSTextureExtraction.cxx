@@ -117,6 +117,8 @@ SetDocExampleParameterValue("channel", "1");
 SetDocExampleParameterValue("parameters.spethre", "50.0");
 SetDocExampleParameterValue("parameters.spathre", "100");
 SetDocExampleParameterValue("out", "SFSTextures.tif");
+
+otbAppDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

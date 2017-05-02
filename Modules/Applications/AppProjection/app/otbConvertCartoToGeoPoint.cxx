@@ -89,6 +89,8 @@ private:
     SetDocExampleParameterValue("mapproj", "utm");
     SetDocExampleParameterValue("mapproj.utm.northhem", "true");
     SetDocExampleParameterValue("mapproj.utm.zone", "31");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -72,6 +72,8 @@ private:
     SetDocExampleParameterValue("out", "VectorDataSetField.shp");
     SetDocExampleParameterValue("fn", "Info");
     SetDocExampleParameterValue("fv", "Sample polygon");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -220,6 +220,8 @@ private:
     SetDocExampleParameterValue("maxit", "1000");
     SetDocExampleParameterValue("ct", "0.0001");
     SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

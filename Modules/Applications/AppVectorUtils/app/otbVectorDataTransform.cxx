@@ -107,6 +107,8 @@ private:
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("out", "VectorDataTransform.shp");
     SetDocExampleParameterValue("transform.ro", "5");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

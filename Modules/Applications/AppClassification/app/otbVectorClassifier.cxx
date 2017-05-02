@@ -145,6 +145,8 @@ private:
     SetDocExampleParameterValue("out", "svmModel.svm");
     SetDocExampleParameterValue("feat", "perimeter  area  width");
     SetDocExampleParameterValue("cfield", "predicted");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

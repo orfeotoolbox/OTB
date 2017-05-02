@@ -83,6 +83,7 @@ private:
     SetDocExampleParameterValue("inxs", "QB_Toulouse_Ortho_XS.tif");
     SetDocExampleParameterValue("out", "BundleToPerfectSensor.png uchar");
 
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -110,6 +110,8 @@ private:
     SetDocExampleParameterValue("sfactor", "2");
     SetDocExampleParameterValue("vfactor", "0.6");
     SetDocExampleParameterValue("fast", "false");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

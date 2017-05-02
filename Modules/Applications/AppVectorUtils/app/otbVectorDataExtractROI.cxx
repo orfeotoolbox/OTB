@@ -102,6 +102,8 @@ private:
     SetDocExampleParameterValue("io.in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("io.vd", "qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("io.out", "apTvUtVectorDataExtractROIApplicationTest.shp");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

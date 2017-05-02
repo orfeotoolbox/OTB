@@ -72,6 +72,7 @@ private:
     SetDocExampleParameterValue("outstats", "results.xml");
     SetDocExampleParameterValue("feat", "perimeter");
 
+  otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

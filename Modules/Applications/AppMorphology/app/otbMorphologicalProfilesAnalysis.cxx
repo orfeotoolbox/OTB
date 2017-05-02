@@ -170,6 +170,8 @@ private:
     SetDocExampleParameterValue( "step", "1" );
     SetDocExampleParameterValue( "profile.classification.sigma", "1" );
     SetDocExampleParameterValue( "out", "output.tif" );
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -87,6 +87,8 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "RSAT_imagery_HH.tif");
     SetDocExampleParameterValue("out", "SarRadiometricCalibration.tif" );
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

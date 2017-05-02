@@ -178,6 +178,8 @@ private:
   SetDocExampleParameterValue("ref.vector.in","VectorData_QB1_bis.shp");
   SetDocExampleParameterValue("ref.vector.field","Class");
   SetDocExampleParameterValue("ref.vector.nodata","255");
+
+  otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -69,8 +69,8 @@ private:
 
     SetDocExampleParameterValue("in","s1_iw_slc.tif");
     SetDocExampleParameterValue("out","s1_iw_slc_deburst.tif");
-    
-    
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

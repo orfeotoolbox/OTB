@@ -87,6 +87,8 @@ private:
     SetDocExampleParameterValue("coordx", "50");
     SetDocExampleParameterValue("coordy", "100");
     SetDocExampleParameterValue("cl", "Channel1");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

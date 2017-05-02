@@ -157,6 +157,8 @@ SetDocExampleParameterValue("channel", "1");
 SetDocExampleParameterValue("structype.ball.xradius", "5");
 SetDocExampleParameterValue("structype.ball.yradius", "5");
 SetDocExampleParameterValue("filter", "erode");
+
+otbAppDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

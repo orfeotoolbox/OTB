@@ -105,6 +105,8 @@ private:
     SetDocExampleParameterValue("in1", "Spot5-Gloucester-before.tif");
     SetDocExampleParameterValue("in2", "Spot5-Gloucester-after.tif");
     SetDocExampleParameterValue("out", "detectedChangeImage.tif");
+
+  otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -150,6 +150,8 @@ private:
     SetDocExampleParameterValue("psir","-25.");
     SetDocExampleParameterValue("khir", "10.");
     SetDocExampleParameterValue("out", "newbasis.tif");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

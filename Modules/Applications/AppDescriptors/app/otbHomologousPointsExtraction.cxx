@@ -198,6 +198,8 @@ private:
     SetDocExampleParameterValue("in2","sensor_stereo_right.tif");
     SetDocExampleParameterValue("mode","full");
     SetDocExampleParameterValue("out","homologous.txt");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

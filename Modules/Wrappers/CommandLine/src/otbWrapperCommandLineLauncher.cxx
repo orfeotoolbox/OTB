@@ -691,12 +691,14 @@ void CommandLineLauncher::DisplayHelp()
 
   std::cerr << m_Application->GetDescription() << std::endl;
   std::cerr<<std::endl;
-  std::string link = "http://www.orfeo-toolbox.org/Applications/";
-  link.append(m_Application->GetName());
-  link.append(".html");
 
-  std::cerr << "Complete documentation: " << link << std::endl;
-  std::cerr<<std::endl;
+  std::string link = m_Application->GetDocLink();
+  if (!link.empty())
+  {
+    std::cerr << "Complete documentation: " << link << std::endl;
+    std::cerr<<std::endl;
+  }
+
   std::cerr << "Parameters: " << std::endl;
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);

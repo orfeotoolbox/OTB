@@ -155,6 +155,8 @@ private:
     SetDocExampleParameterValue("inr", "QB_Toulouse_Ortho_PAN.tif");
     SetDocExampleParameterValue("inm", "QB_Toulouse_Ortho_XS.tif");
     SetDocExampleParameterValue("out", "SuperimposedXS_to_PAN.tif");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

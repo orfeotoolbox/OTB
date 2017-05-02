@@ -123,6 +123,8 @@ private:
     SetDocExampleParameterValue("vec", "variousVectors.sqlite");
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("out","polygonStat.xml");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

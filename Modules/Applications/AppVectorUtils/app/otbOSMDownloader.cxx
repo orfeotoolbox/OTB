@@ -93,6 +93,8 @@ private:
     SetDocExampleParameterValue("support", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("key", "highway");
     SetDocExampleParameterValue("out", "apTvUtOSMDownloader.shp");
+
+    otbAppDocLink();
   }
 
 

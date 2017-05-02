@@ -322,6 +322,8 @@ private:
     SetDocExampleParameterValue("bm.maxhd","10");
     SetDocExampleParameterValue("mask.variancet","10");
     SetDocExampleParameterValue("io.out","MyDisparity.tif");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

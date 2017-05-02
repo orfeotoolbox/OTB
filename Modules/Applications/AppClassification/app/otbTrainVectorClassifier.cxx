@@ -66,6 +66,8 @@ protected:
     SetDocAuthors( "OTB Team" );
     SetDocSeeAlso( " " );
 
+    otbAppDocLink();
+
     Superclass::DoInit();
   }
 

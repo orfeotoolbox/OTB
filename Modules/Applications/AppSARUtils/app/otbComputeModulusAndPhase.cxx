@@ -90,6 +90,8 @@ private:
     SetDocExampleParameterValue("in", "monobandComplexFloat.tif");
     SetDocExampleParameterValue("modulus", "modulus.tif");
     SetDocExampleParameterValue("phase", "phase.tif");
+
+    otbAppDocLink();
   }
 
   // DoUpdateParameters() is called as soon as a parameter value change.

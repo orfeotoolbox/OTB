@@ -97,6 +97,8 @@ private:
     SetDocExampleParameterValue("in","QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("input.idx","200");
     SetDocExampleParameterValue("input.idy","200");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -61,6 +61,7 @@ Application::Application()
     m_DocLimitations(""),
     m_DocSeeAlso(""),
     m_DocTags(),
+    m_Doclink(""),
     m_HaveInXML(true),
     m_HaveOutXML(true),
     m_IsInXMLParsed(false)

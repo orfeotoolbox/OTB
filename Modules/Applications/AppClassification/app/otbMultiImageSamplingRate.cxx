@@ -182,6 +182,8 @@ private:
     SetDocExampleParameterValue("out", "rates.csv");
     SetDocExampleParameterValue("strategy", "smallest");
     SetDocExampleParameterValue("mim","proportional");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters()

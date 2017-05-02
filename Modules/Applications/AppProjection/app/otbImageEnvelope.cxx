@@ -85,6 +85,8 @@ private:
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("out", "ImageEnvelope.shp");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

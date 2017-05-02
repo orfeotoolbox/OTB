@@ -140,6 +140,8 @@ private:
     SetDocExampleParameterValue("out", "rasterImage.tif");
     SetDocExampleParameterValue("spx","1.");
     SetDocExampleParameterValue("spy","1.");
+
+    otbAppDocLink();
     }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -122,6 +122,8 @@ SetParameterDescription("out", "Output image containing the edge features.");
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("channel", "1");
 SetDocExampleParameterValue("out", "Edges.tif");
+
+otbAppDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

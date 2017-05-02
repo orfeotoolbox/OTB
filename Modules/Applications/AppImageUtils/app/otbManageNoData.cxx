@@ -121,6 +121,8 @@ private:
     SetDocExampleParameterValue("out", "QB_Toulouse_Ortho_XS_nodatamask.tif uint8");
     SetDocExampleParameterValue("mode.buildmask.inv", "255");
     SetDocExampleParameterValue("mode.buildmask.outv", "0");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

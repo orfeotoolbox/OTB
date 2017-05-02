@@ -775,6 +775,20 @@ public:
 
   double GetLastExecutionTiming() const;
 
+  /** documentation link */
+  void SetDocLink(const std::string & link)
+  {
+    if (!m_Doclink.compare(link) == 0) {
+      m_Doclink = link;
+      this->Modified();
+    }
+  }
+
+  const std::string& GetDocLink() const
+  {
+    return m_Doclink;
+  }
+
 protected:
   /** Constructor */
   Application();
@@ -935,6 +949,8 @@ private:
   std::string m_DocSeeAlso;
   /** Tags that define the application (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
+  /** Doc link application */
+  std::string m_Doclink;
 
   /** Chrono to measure execution time */
   itk::TimeProbe m_Chrono;
@@ -962,5 +978,14 @@ private:
 //#ifndef OTB_MANUAL_INSTANTIATION
 //#include "otbWrapperApplication.txx"
 //#endif
+
+// doc link application macro
+#define otbAppDocLink() \
+  { \
+  std::string link = "http://www.orfeo-toolbox.org/Applications/"; \
+  link.append(Application::GetName()); \
+  link.append(".html"); \
+  Application::SetDocLink(link); \
+  }
 
 #endif // otbWrapperApplication_h_

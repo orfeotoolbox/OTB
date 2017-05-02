@@ -180,6 +180,8 @@ private:
     SetDocExampleParameterValue("maxnbit", "4");
     SetDocExampleParameterValue("optobs", "true");
     SetDocExampleParameterValue("out", "DSFuzzyModelEstimation.xml");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

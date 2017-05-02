@@ -352,6 +352,8 @@ private:
 	SetDocExampleParameterValue("invv", "VV.tif");
 	SetDocExampleParameterValue("conv", "msinclairtocoherency"); 
     SetDocExampleParameterValue("outc", "mcoherency.tif");
+
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

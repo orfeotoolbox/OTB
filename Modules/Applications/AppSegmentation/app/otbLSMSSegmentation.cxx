@@ -285,6 +285,7 @@ private:
     SetDocExampleParameterValue("tilesizex","256");
     SetDocExampleParameterValue("tilesizey","256");
 
+    otbAppDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
