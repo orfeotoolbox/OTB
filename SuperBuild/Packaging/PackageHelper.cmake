@@ -83,8 +83,9 @@ macro(macro_super_package)
   endif()
 
   # find_loader_and_args(LOADER_PROGRAM LOADER_PROGRAM_ARGS)
-  
-  find_python_soname(python_INSTALLED_SONAME)
+  if(NOT PKG_GENERATE_XDK)
+    find_python_soname(python_INSTALLED_SONAME)
+  endif()
 
   set(PKG_SEARCHDIRS)
   if(WIN32)
@@ -209,10 +210,9 @@ macro(macro_super_package)
       DESTINATION ${PKG_STAGE_DIR})
   endforeach()
 
-
   # We need qt.conf on windows. for macx and linux we write it
   # after extracting package
-  if(WIN32 AND NOT PKG_GENERATE_XDK)
+  if(WIN32)
     install(FILES
       ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
       DESTINATION ${PKG_STAGE_DIR}/bin
@@ -221,7 +221,8 @@ macro(macro_super_package)
 
   install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/README
-    DESTINATION ${PKG_STAGE_DIR})
+    DESTINATION ${PKG_STAGE_DIR}
+    )
 
 endmacro(macro_super_package)
 
@@ -288,7 +289,7 @@ function(func_prepare_package)
       get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
       list(APPEND PKG_PEFILES ${otb_test_exe_name})
     endforeach()
-  endif()
+  endif(PKG_GENERATE_XDK)
 
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   if(MSVC AND NOT PKG_GENERATE_XDK)
@@ -298,19 +299,17 @@ function(func_prepare_package)
   file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
 
-  if(NOT PKG_GENERATE_XDK)
-    if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
-      install(
-	DIRECTORY
-	${OTB_INSTALL_DIR}/lib/otb/python
-	DESTINATION ${PKG_STAGE_DIR}/lib
-	)
-    else()
-      if(OTB_WRAP_PYTHON)
-	message(FATAL_ERROR "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
-      endif()
-    endif()   
-  endif()#  if(NOT PKG_GENERATE_XDK)
+  if(WITH_PYTHON)
+   if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+     install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python
+       DESTINATION ${PKG_STAGE_DIR}/lib
+       )
+   else()
+     message(FATAL_ERROR
+       "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
+   endif()
+
+  endif(WITH_PYTHON)
 
 
   func_install_support_files()
@@ -528,24 +527,24 @@ function(pkg_install_rule src_file)
     set(output_dir "lib/otb/applications")
     set(file_type PROGRAMS)
   endif()
-
-  if(PKG_GENERATE_XDK)
-    if ("${src_file_NAME}"
-	MATCHES
-	"([Oo][Tt][Bb])|([Mm]onteverdi)|mapla|iceViewer"
-	)
-      set(SKIP_INSTALL TRUE)
-        
-      message("SKIP_INSTALL for ${src_file_NAME}")
-    endif()
-
+  
+  string(TOLOWER "${src_file_NAME}" src_file_NAME_LOWER)
+  #avoid test executables
+  if ("${src_file_NAME_LOWER}" MATCHES "(otb|mvd)*.*test*.*${EXE_EXT}$")
+    set(SKIP_INSTALL TRUE)
+    message("SKIP_INSTALL for ${src_file_NAME}")
   endif()
 
+  #oh:! a special case
+  if("${src_file_NAME_LOWER}" MATCHES "otbtestdriver")
+    set(SKIP_INSTALL FALSE)
+  endif()
+  
   if(NOT SKIP_INSTALL)
-    install(${file_type}
-      "${src_file}"
+    install(${file_type} "${src_file}"
       DESTINATION
-      "${PKG_STAGE_DIR}/${output_dir}")
+      "${PKG_STAGE_DIR}/${output_dir}"
+      )
   endif()
   
 endfunction()   
