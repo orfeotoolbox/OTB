@@ -5,9 +5,7 @@
 #include <iostream>
 
 #include "otbImage.h"
-//#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbVectorImage.h"
 
 
 #include <shark/Models/Autoencoder.h>//normal autoencoder model
@@ -16,6 +14,7 @@
 #include <shark/Models/Normalizer.h>
 
 #include "encode_filter.h"
+//#include "dummy_filter.h"
 
 namespace otb
 {
@@ -25,11 +24,18 @@ namespace Wrapper
 class CbDimensionalityReduction : public otb::Wrapper::Application
 {
 public:
-	typedef CbDimensionalityReduction Self;
+	/** Standard class typedefs. */
+	typedef CbDimensionalityReduction Self;	
+	typedef Application Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
+	typedef itk::SmartPointer<const Self> ConstPointer;
+	
+
+	/** Standard macro */
 	itkNewMacro(Self);
-	itkTypeMacro(CbDimensionalityReduction, otb::Wrapper::Application);
+	itkTypeMacro(CbDimensionalityReduction, otb::Application);
 private:
+
 	void DoInit()
 	{
 		SetName("CbDimensionalityReduction");
@@ -56,32 +62,33 @@ private:
 	
 	void DoExecute()
 	{	
-		typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
-	
-		using image_type = otb::VectorImage<double, 2>;
+		typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
+		using image_type = FloatVectorImageType;
 		using FilterType = EncodeFilter<image_type, AutoencoderType, shark::Normalizer<shark::RealVector>> ;
+		using DummyFilterType = DummyFilter<image_type> ;
 		
 		std::cout << "Appli !" << std::endl;
 		FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 		std::string encoderPath = GetParameterString("model");
 		std::string normalizerPath = GetParameterString("normalizer");
 		
-		//inImage->UpdateOutputInformation();
-		
-		using ReaderType = otb::ImageFileReader<image_type>;
-	
-		ReaderType::Pointer reader = ReaderType::New();
-		reader->SetFileName("/mnt/data/home/vincenta/features_2014/SL_MultiTempGapF_Brightness_NDVI_NDWI__.tif");
-	
 		FilterType::Pointer filter = FilterType::New();
 		filter->SetAutoencoderModel(encoderPath);
 		filter->SetNormalizerModel(normalizerPath);
-		filter->SetInput(reader->GetOutput());
-		//filter->SetInput(inImage);
-		
-		filter->UpdateOutputInformation();
-		
+		filter->SetInput(inImage);
+		filter->Update();
 		SetParameterOutputImage("out", filter->GetOutput());
+
+/*
+		DummyFilterType::Pointer dummy_filter = DummyFilterType::New(); // this filter simply copies the input image (do not need shark library)
+		dummy_filter->SetInput(GetParameterFloatVectorImage("in"));
+		dummy_filter->Update();
+		dummy_filter->UpdateOutputInformation();
+		SetParameterOutputImage("out", dummy_filter->GetOutput());
+
+*/
+		
+		//SetParameterOutputImage("out", inImage); // copy input image
 
 	}
 
