@@ -103,7 +103,7 @@ private:
     SetDocExampleParameterValue("descmod", "DSFuzzyModel.xml");
     SetDocExampleParameterValue("out", "VectorDataDSValidation.shp");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

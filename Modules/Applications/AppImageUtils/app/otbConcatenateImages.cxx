@@ -86,7 +86,7 @@ private:
     SetDocExampleParameterValue("il", "GomaAvant.png GomaApres.png");
     SetDocExampleParameterValue("out", "otbConcatenateImages.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -233,7 +233,7 @@ private:
     SetDocExampleParameterValue("mrx", "3");
     SetDocExampleParameterValue("mry", "3");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

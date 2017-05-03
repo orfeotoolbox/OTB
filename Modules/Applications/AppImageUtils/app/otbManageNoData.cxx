@@ -122,7 +122,7 @@ private:
     SetDocExampleParameterValue("mode.buildmask.inv", "255");
     SetDocExampleParameterValue("mode.buildmask.outv", "0");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

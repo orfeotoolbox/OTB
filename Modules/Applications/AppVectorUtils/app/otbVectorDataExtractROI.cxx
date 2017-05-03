@@ -103,7 +103,7 @@ private:
     SetDocExampleParameterValue("io.vd", "qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("io.out", "apTvUtVectorDataExtractROIApplicationTest.shp");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

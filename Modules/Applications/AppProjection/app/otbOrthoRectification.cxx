@@ -233,7 +233,7 @@ private:
     SetDocExampleParameterValue("io.in", "QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("io.out","QB_Toulouse_ortho.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -122,7 +122,7 @@ private:
     SetDocExampleParameterValue("ip.nodatalabel", "10");
     SetDocExampleParameterValue("ip.undecidedlabel", "7");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

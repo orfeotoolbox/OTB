@@ -342,7 +342,7 @@ private:
     SetDocExampleParameterValue("mode.raster.out", "SegmentationRaster.tif uint16",1);
     SetDocExampleParameterValue("filter", "meanshift",1);
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

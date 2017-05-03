@@ -224,7 +224,7 @@ private:
     SetDocExampleParameterValue("instats","apTvClPolygonClassStatisticsOut.xml");
     SetDocExampleParameterValue("out","resampledVectors.sqlite");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters()

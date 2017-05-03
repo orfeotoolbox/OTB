@@ -175,7 +175,7 @@ void DoInit() ITK_OVERRIDE
   SetDocExampleParameterValue("io.imstat", "training_statistics.xml");
   SetDocExampleParameterValue("classifier", "libsvm");
 
-  otbAppDocLink();
+  SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

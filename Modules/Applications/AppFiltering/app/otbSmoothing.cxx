@@ -122,7 +122,7 @@ private:
     SetDocExampleParameterValue("type.anidif.nbiter", "5", exId);
     SetDocExampleParameterValue("type.anidif.conductance", "1.5", exId);
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

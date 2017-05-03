@@ -158,7 +158,7 @@ SetDocExampleParameterValue("structype.ball.xradius", "5");
 SetDocExampleParameterValue("structype.ball.yradius", "5");
 SetDocExampleParameterValue("filter", "erode");
 
-otbAppDocLink();
+SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

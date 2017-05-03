@@ -127,7 +127,7 @@ private:
     SetDocExampleParameterValue("io.rgrid","grid_epi_right.tif");
     SetDocExampleParameterValue("io.out","dem.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

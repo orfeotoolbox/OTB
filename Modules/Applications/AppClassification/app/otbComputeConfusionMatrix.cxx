@@ -179,7 +179,7 @@ private:
   SetDocExampleParameterValue("ref.vector.field","Class");
   SetDocExampleParameterValue("ref.vector.nodata","255");
 
-  otbAppDocLink();
+  SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -151,7 +151,7 @@ private:
     SetDocExampleParameterValue("khir", "10.");
     SetDocExampleParameterValue("out", "newbasis.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

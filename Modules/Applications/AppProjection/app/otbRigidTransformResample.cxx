@@ -173,7 +173,7 @@ private:
     SetDocExampleParameterValue("transform.type.rotation.scalex", "2.");
     SetDocExampleParameterValue("transform.type.rotation.scaley", "2.");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

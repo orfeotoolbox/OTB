@@ -98,7 +98,7 @@ private:
     SetDocExampleParameterValue("input.idx","200");
     SetDocExampleParameterValue("input.idy","200");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

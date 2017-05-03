@@ -146,7 +146,7 @@ private:
     SetDocExampleParameterValue("feat", "perimeter  area  width");
     SetDocExampleParameterValue("cfield", "predicted");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -171,7 +171,7 @@ private:
     SetDocExampleParameterValue( "profile.classification.sigma", "1" );
     SetDocExampleParameterValue( "out", "output.tif" );
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

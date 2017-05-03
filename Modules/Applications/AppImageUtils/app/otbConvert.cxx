@@ -139,7 +139,7 @@ private:
     SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png uint8");
     SetDocExampleParameterValue("type", "linear");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

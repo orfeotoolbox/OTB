@@ -199,7 +199,7 @@ private:
     SetDocExampleParameterValue("mode","full");
     SetDocExampleParameterValue("out","homologous.txt");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

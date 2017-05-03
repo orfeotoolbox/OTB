@@ -72,7 +72,7 @@ private:
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_Elev.tif");
     SetDocExampleParameterValue("out", "outputDEM");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

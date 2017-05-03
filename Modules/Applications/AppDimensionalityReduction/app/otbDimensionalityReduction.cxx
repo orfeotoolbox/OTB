@@ -181,7 +181,7 @@ private:
     SetDocExampleParameterValue("out", "FilterOutput.tif");
     SetDocExampleParameterValue("method", "pca");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

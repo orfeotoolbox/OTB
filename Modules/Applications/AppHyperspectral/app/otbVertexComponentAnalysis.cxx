@@ -81,7 +81,7 @@ private:
     SetDocExampleParameterValue("ne", "5");
     SetDocExampleParameterValue("outendm", "VertexComponentAnalysis.tif double");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

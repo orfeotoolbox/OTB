@@ -83,7 +83,7 @@ public:
     SetDocExampleParameterValue( "io.out", "svmModelQB1.txt" );
     SetDocExampleParameterValue( "io.confmatout", "svmConfusionMatrixQB1.csv" );
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

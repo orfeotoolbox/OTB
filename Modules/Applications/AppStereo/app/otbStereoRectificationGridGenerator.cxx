@@ -200,7 +200,7 @@ private:
     SetDocExampleParameterValue("io.outright","wv2_xs_right_epi_field.tif");
     SetDocExampleParameterValue("epi.elevation.default","400");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

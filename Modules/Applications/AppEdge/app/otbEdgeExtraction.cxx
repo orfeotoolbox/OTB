@@ -123,7 +123,7 @@ SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("channel", "1");
 SetDocExampleParameterValue("out", "Edges.tif");
 
-otbAppDocLink();
+SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

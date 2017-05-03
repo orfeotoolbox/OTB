@@ -121,7 +121,7 @@ private:
    SetDocExampleParameterValue("obia", "\"SHAPE_Elongation>8\"");
    SetDocExampleParameterValue("out", "ConnectedComponentSegmentation.shp");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

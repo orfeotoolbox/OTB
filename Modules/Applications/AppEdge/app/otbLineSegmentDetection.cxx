@@ -86,7 +86,7 @@ private:
     SetDocExampleParameterValue("in", "QB_Suburb.png");
     SetDocExampleParameterValue("out", "LineSegmentDetection.shp");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

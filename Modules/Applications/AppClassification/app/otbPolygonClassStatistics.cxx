@@ -124,7 +124,7 @@ private:
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("out","polygonStat.xml");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

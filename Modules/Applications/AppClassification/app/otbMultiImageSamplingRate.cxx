@@ -183,7 +183,7 @@ private:
     SetDocExampleParameterValue("strategy", "smallest");
     SetDocExampleParameterValue("mim","proportional");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters()

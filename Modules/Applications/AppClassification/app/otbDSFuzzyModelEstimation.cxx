@@ -181,7 +181,7 @@ private:
     SetDocExampleParameterValue("optobs", "true");
     SetDocExampleParameterValue("out", "DSFuzzyModelEstimation.xml");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

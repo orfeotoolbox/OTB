@@ -199,7 +199,7 @@ private:
     SetDocExampleParameterValue("inms", "maur_labelled.tif");
     SetDocExampleParameterValue("outgt", "maur_colored_GT.tif uint8");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

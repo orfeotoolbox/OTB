@@ -157,7 +157,7 @@ private:
 	SetDocExampleParameterValue("decomp", "haa");
     SetDocExampleParameterValue("out", "HaA.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

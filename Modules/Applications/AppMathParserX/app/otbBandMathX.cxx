@@ -173,7 +173,7 @@ private:
     SetDocExampleParameterValue("out", "apTvUtBandMathOutput.tif");
     SetDocExampleParameterValue("exp", "\"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)\"");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

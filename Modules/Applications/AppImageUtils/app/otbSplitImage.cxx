@@ -75,7 +75,7 @@ private:
     SetDocExampleParameterValue("in", "VegetationIndex.hd");
     SetDocExampleParameterValue("out", "splitImage.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

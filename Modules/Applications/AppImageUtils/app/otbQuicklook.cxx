@@ -118,7 +118,7 @@ private:
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("out", "quicklookImage.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

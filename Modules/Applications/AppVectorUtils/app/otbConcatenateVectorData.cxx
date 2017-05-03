@@ -71,7 +71,7 @@ private:
     SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");
     SetDocExampleParameterValue("out", "ConcatenatedVectorData.shp");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
 

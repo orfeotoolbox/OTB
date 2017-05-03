@@ -140,7 +140,7 @@ private:
     SetDocExampleParameterValue( "sigma", "0.5" );
     SetDocExampleParameterValue( "out", "output.tif" );
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

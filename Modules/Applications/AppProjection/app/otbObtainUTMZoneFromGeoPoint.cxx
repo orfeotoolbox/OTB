@@ -81,7 +81,7 @@ private:
     SetDocExampleParameterValue("lat","10.0");
     SetDocExampleParameterValue("lon","124.0");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

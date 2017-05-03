@@ -94,7 +94,7 @@ private:
     SetDocExampleParameterValue("key", "highway");
     SetDocExampleParameterValue("out", "apTvUtOSMDownloader.shp");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
 

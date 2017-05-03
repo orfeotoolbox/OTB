@@ -108,7 +108,7 @@ private:
     SetDocExampleParameterValue("out", "VectorDataTransform.shp");
     SetDocExampleParameterValue("transform.ro", "5");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

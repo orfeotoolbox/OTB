@@ -89,7 +89,7 @@ private:
     SetDocExampleParameterValue("out","out.ply");
     SetDocExampleParameterValue("incolor","image_color.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

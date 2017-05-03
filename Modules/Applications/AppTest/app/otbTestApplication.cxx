@@ -101,7 +101,7 @@ private:
     SetDocExampleParameterValue("boolean", "true");
     SetDocExampleParameterValue("filename", "myFilename.foo");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

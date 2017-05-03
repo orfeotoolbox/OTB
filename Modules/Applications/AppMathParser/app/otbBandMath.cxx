@@ -88,7 +88,7 @@ private:
     SetDocExampleParameterValue("out", "apTvUtBandMathOutput.tif");
     SetDocExampleParameterValue("exp", "\"cos(im1b1) > cos(im2b1) ? im3b1 : im3b2\"");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

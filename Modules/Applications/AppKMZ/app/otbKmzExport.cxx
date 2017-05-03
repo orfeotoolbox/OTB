@@ -87,7 +87,7 @@ private:
     SetDocExampleParameterValue("out", "otbKmzExport.kmz");
     SetDocExampleParameterValue("logo", "otb_big.png");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
 

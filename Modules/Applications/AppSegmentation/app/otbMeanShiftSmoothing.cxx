@@ -116,7 +116,7 @@ private:
     SetDocExampleParameterValue("thres", "0.1");
     SetDocExampleParameterValue("maxiter", "100");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

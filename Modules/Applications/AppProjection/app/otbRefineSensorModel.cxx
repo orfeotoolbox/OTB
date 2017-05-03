@@ -102,7 +102,7 @@ private:
     SetDocExampleParameterValue("map","epsg");
     SetDocExampleParameterValue("map.epsg.code","32631");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

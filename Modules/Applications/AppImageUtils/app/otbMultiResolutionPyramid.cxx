@@ -111,7 +111,7 @@ private:
     SetDocExampleParameterValue("vfactor", "0.6");
     SetDocExampleParameterValue("fast", "false");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

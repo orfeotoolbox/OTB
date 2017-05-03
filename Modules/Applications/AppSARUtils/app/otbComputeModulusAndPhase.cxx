@@ -91,7 +91,7 @@ private:
     SetDocExampleParameterValue("modulus", "modulus.tif");
     SetDocExampleParameterValue("phase", "phase.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   // DoUpdateParameters() is called as soon as a parameter value change.

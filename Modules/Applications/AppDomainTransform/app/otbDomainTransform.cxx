@@ -170,7 +170,7 @@ private:
     SetDocExampleParameterValue("mode.wavelet.form", "haar");
     SetDocExampleParameterValue("out", "output_wavelet_haar.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

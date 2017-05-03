@@ -91,7 +91,7 @@ private:
     SetDocExampleParameterValue("feat", "perimeter");
     SetDocExampleParameterValue("cfield", "predicted");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

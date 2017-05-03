@@ -394,7 +394,7 @@ private:
     SetDocExampleParameterValue("method.custom.lut", "ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt");
     SetDocExampleParameterValue("out", "Colorized_ROI_QB_MUL_1_SVN_CLASS_MULTI.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
  }
 
   void DoUpdateParameters() ITK_OVERRIDE

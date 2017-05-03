@@ -116,7 +116,7 @@ private:
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("out","sample_values.sqlite");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters()

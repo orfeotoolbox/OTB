@@ -221,7 +221,7 @@ private:
     SetDocExampleParameterValue("ct", "0.0001");
     SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -136,7 +136,7 @@ private:
     SetDocExampleParameterValue("out", "HyperspectralUnmixing.tif double");
     SetDocExampleParameterValue("ua", "ucls");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

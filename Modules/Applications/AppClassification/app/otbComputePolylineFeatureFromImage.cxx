@@ -113,7 +113,7 @@ private:
     SetDocExampleParameterValue("field", "NONDVI");
     SetDocExampleParameterValue("out", "PolylineFeatureFromImage_LI_NONDVI_gt.shp");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

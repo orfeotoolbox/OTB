@@ -179,7 +179,7 @@ private:
     SetDocExampleParameterValue("model", "clsvmModelQB1.svm");
     SetDocExampleParameterValue("out", "clLabeledImageQB1.tif");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

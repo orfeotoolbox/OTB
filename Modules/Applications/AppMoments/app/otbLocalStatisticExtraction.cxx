@@ -94,7 +94,7 @@ SetDocExampleParameterValue("channel", "1");
 SetDocExampleParameterValue("radius", "3");
 SetDocExampleParameterValue("out", "Statistics.tif");
 
-otbAppDocLink();
+SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

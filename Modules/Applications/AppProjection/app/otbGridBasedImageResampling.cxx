@@ -185,7 +185,7 @@ private:
     SetDocExampleParameterValue("out.sizey","256");
     SetDocExampleParameterValue("grid.type","def");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
  void DoUpdateParameters() ITK_OVERRIDE

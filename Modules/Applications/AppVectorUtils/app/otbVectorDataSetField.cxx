@@ -73,7 +73,7 @@ private:
     SetDocExampleParameterValue("fn", "Info");
     SetDocExampleParameterValue("fv", "Sample polygon");
 
-    otbAppDocLink();
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

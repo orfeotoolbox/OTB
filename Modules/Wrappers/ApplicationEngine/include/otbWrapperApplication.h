@@ -789,6 +789,14 @@ public:
     return m_Doclink;
   }
 
+  inline void SetOfficialDocLink()
+  {
+    std::string link = "http://www.orfeo-toolbox.org/Applications/";
+    link.append(this->GetName());
+    link.append(".html");
+    this->SetDocLink(link);
+  }
+
 protected:
   /** Constructor */
   Application();
@@ -979,13 +987,5 @@ private:
 //#include "otbWrapperApplication.txx"
 //#endif
 
-// doc link application macro
-#define otbAppDocLink() \
-  { \
-  std::string link = "http://www.orfeo-toolbox.org/Applications/"; \
-  link.append(Application::GetName()); \
-  link.append(".html"); \
-  Application::SetDocLink(link); \
-  }
 
 #endif // otbWrapperApplication_h_
