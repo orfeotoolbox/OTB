@@ -260,9 +260,24 @@ function(func_prepare_package)
     list(APPEND PKG_PEFILES "proj${EXE_EXT}")
     list(APPEND PKG_PEFILES "cs2cs${EXE_EXT}")
 
+    
+    #RK: to hell with cmake targets files.
+    file(GLOB ALL_EXTRA_FILES
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*boost*${LIB_EXT}*
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*glut*${LIB_EXT}*
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*QtXml*${LIB_EXT}*
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*kml*${LIB_EXT}*
+      )
+    foreach(EXTRA_FILE ${ALL_EXTRA_FILES})
+      get_filename_component(EXTRA_FILE_name ${EXTRA_FILE} NAME)
+      list(APPEND PKG_PEFILES "${EXTRA_FILE_name}")
+    endforeach()  
+
     #shark is optional
-    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/sharkVersion${EXE_EXT}")
-      list(APPEND PKG_PEFILES "sharkVersion${EXE_EXT}")
+    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/SharkVersion${EXE_EXT}")
+      list(APPEND PKG_PEFILES "SharkVersion${EXE_EXT}")
+    else()
+      message("${DEPENDENCIES_INSTALL_DIR}/bin/SharkVersion${EXE_EXT} (not found. skipping)")
     endif()
     
     #RK: there is a bug in itk cmake files in install tree 
@@ -522,24 +537,29 @@ function(pkg_install_rule src_file)
     endif() #if(PKG_GENERATE_XDK)
   endif() #if(is_gtk_lib)
   
+
+  set(SKIP_INSTALL FALSE)
+  string(TOLOWER "${src_file_NAME}" src_file_NAME_LOWER)
+  #avoid test executables
+
+  #oh:! a special case
+
+
+  if ("${src_file_NAME_LOWER}" MATCHES "(otb|mvd)*.*test*.*${EXE_EXT}")
+    if (NOT "${src_file_NAME_LOWER}" MATCHES "\\${LIB_EXT}" AND
+	NOT "${src_file_NAME_LOWER}" MATCHES "otbtestdriver" )
+      set(SKIP_INSTALL TRUE)
+      message("SKIP_INSTALL for ${src_file_NAME}")
+    endif()
+  endif()
+
   #special case
   if("${src_file_NAME}" MATCHES "^otbapp_")
     set(output_dir "lib/otb/applications")
     set(file_type PROGRAMS)
-  endif()
-  
-  string(TOLOWER "${src_file_NAME}" src_file_NAME_LOWER)
-  #avoid test executables
-  if ("${src_file_NAME_LOWER}" MATCHES "(otb|mvd)*.*test*.*${EXE_EXT}$")
-    set(SKIP_INSTALL TRUE)
-    message("SKIP_INSTALL for ${src_file_NAME}")
-  endif()
-
-  #oh:! a special case
-  if("${src_file_NAME_LOWER}" MATCHES "otbtestdriver")
     set(SKIP_INSTALL FALSE)
   endif()
-  
+
   if(NOT SKIP_INSTALL)
     install(${file_type} "${src_file}"
       DESTINATION

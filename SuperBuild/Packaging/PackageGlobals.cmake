@@ -56,6 +56,9 @@ set(LINUX_SYSTEM_DLLS
   libgomp.so*
   ld-linux-x86-64.so*
   libX11.so*
+  libXi.so*  #GLUT
+  libXcursor.so* #GLFW
+  libXinerama.so*  #GLFW
   libXext.so*
   libXau.so*
   libXdmcp.so*

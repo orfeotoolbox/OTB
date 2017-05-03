@@ -376,6 +376,13 @@ function(func_install_monteverdi_support_files)
       DESTINATION ${PKG_STAGE_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME}
       )
   endforeach()
-  
+
+  if(UNIX)
+    file(GLOB DOT_A_FILES ${OTB_INSTALL_DIR}/lib/lib*.a )
+    foreach(DOT_A_FILE ${DOT_A_FILES})
+      install(FILES "${DOT_A_FILE}" DESTINATION ${PKG_STAGE_DIR}/lib)
+    endforeach()
+  endif()
+
 endfunction()
 
