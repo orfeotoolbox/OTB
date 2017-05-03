@@ -102,29 +102,16 @@ void GlROIActor::ProcessViewSettings()
 
   UpdateTransforms();
 
-  assert( GetSettings()!=NULL );
+  assert( GetSettings() != NULL );
 
-  if( GetGeometryChanged() ||
-      GetSettings()->GetGeometryChanged() )
+  if( GetGeometryChanged() || GetSettings()->GetGeometryChanged() )
     {
-    // std::cout << "otb::GlRoiActor@" << std::hex << this << " -> ROI" << std::endl;
-
-    PointType ur;
-    PointType ll;
-
-    ur = m_UL;
-    ur[ 0 ] = m_LR[ 0 ];
-
-    ll = m_LR;
-    ll[ 0 ] = m_UL[ 0 ];
-
-    assert( !m_ImageToViewportTransform.IsNull() );
-    assert( !m_ViewportToImageTransform.IsNull() );
-
-    m_VpUL = m_ImageToViewportTransform->TransformPoint( m_UL );
-    m_VpUR = m_ImageToViewportTransform->TransformPoint( ur );
-    m_VpLL = m_ImageToViewportTransform->TransformPoint( ll );
-    m_VpLR = m_ImageToViewportTransform->TransformPoint( m_LR );
+    m_VpUL = m_UL;
+    m_VpUR = m_UL;
+    m_VpUR[0] = m_LR[0];
+    m_VpLL = m_LR;
+    m_VpLL[0] = m_UL[0];
+    m_VpLR = m_LR;
     }
 }
 
