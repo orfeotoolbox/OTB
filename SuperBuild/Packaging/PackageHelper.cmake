@@ -274,10 +274,11 @@ function(func_prepare_package)
     endforeach()  
 
     #shark is optional
-    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/SharkVersion${EXE_EXT}")
-      list(APPEND PKG_PEFILES "SharkVersion${EXE_EXT}")
+    set(SHARK_VERSION_FILE "SharkVersion${EXE_EXT}")
+    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/${SHARK_VERSION_FILE}")
+      list(APPEND PKG_PEFILES "${SHARK_VERSION_FILE}")
     else()
-      message("${DEPENDENCIES_INSTALL_DIR}/bin/SharkVersion${EXE_EXT} (not found. skipping)")
+      message("${DEPENDENCIES_INSTALL_DIR}/bin/${SHARK_VERSION_FILE} (not found. skipping)")
     endif()
     
     #RK: there is a bug in itk cmake files in install tree 

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIRNAME_0=$(dirname "$0")
-cd  "$DIRNAME_0"
+cd  "$DIRNAME_0" || exit 1
 
 # NOTE: $OUT_DIR is also used in make_sylinks script (see below)
 # Avoid any pre-mature optimization on variable names here.
@@ -17,17 +17,23 @@ if [ -z "$INSTALL_NAME_TOOL" ]; then
 fi
 
 # no interference with DYLD_LIBRARY_PATH and DYLD_FALLBACK_LIBRARY_PATH
-DYLD_LIBRARY_PATH=
-DYLD_FALLBACK_LIBRARY_PATH=
+unset DYLD_LIBRARY_PATH
+unset DYLD_FALLBACK_LIBRARY_PATH
 
 echo "Configuring..."
-
 LIBRARY_FILES=$(find "$OUT_DIR/lib" -maxdepth 1 -type f)
 EXE_FILES=$(find "$OUT_DIR/bin"  -type f -exec file {} \; | grep -i "Mach-O*.*executable"|cut -d ':' -f1)
 # run install_name_tool
 for lib_file in $LIBRARY_FILES $EXE_FILES; do
     #echo "adding rpath to $OUT_DIR/$lib_file"
+
     if [ -f "$lib_file" ]; then
+	lib_file_TYPE=$(file "$lib_file" |cut -d ':' -f2)
+	
+	match_type="ar archive"
+	if test "${lib_file_TYPE#*$match_type}" != "$lib_file_TYPE" ; then
+	    continue;
+	fi
       lib_file_original_rpaths=$(otool -l "$lib_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
       for original_rpath in $lib_file_original_rpaths; do
         $INSTALL_NAME_TOOL "-delete_rpath" "$original_rpath" "$lib_file"
@@ -170,6 +176,68 @@ EOF
 chmod +x "$OUT_DIR/otbenv.profile"
 
 fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if [ "$I_AM_XDK" = true ] ; then
+cat > "$OUT_DIR/xdkenv.profile" << EOF
+#!/bin/sh
+
+# The below environment variables only affect current shell
+# So if you run again from a terminal. you need to run the script again
+
+# unset any existing LD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
+
+# Add bin direcotory to system PATH
+PATH=$OUT_DIR/bin:\$PATH
+
+# set numeric locale to C
+LC_NUMERIC=C
+
+# set GDAL_DATA variable used by otb application
+GDAL_DATA=$OUT_DIR/share/gdal
+
+# set GEOTIFF_CSV variable used by otb application
+GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
+
+CMAKE_PREFIX_PATH=$OUT_DIR
+
+# export variables
+export LC_NUMERIC
+export GDAL_DATA
+export GEOTIFF_CSV
+export CMAKE_PREFIX_PATH
+export PATH
+
+EOF
+
+chmod +x "$OUT_DIR/xdkenv.profile"
+
+fi
+
+
+cat > "$OUT_DIR/bin/qt.conf" << EOF
+[Paths]
+Translations=$OUT_DIR/lib/qt4/translations
+Plugins=$OUT_DIR/lib/qt4/plugins
+EOF
+
+
+
 
 
 # echo "Creating symbolic links..."
