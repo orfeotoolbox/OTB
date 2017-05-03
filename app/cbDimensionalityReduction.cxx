@@ -1,20 +1,17 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-#include "otbWrapperChoiceParameter.h"
 
 #include <iostream>
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-
 #include <shark/Models/Autoencoder.h>//normal autoencoder model
-
 #include <shark/Models/TiedAutoencoder.h>//autoencoder with tied weights
 #include <shark/Models/Normalizer.h>
-
 #include "encode_filter.h"
-//#include "dummy_filter.h"
+
+#include "dummy_filter.h"
 
 namespace otb
 {
@@ -30,6 +27,11 @@ public:
 	typedef itk::SmartPointer<Self> Pointer;
 	typedef itk::SmartPointer<const Self> ConstPointer;
 	
+
+	using image_type = FloatVectorImageType;
+		
+	typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
+	using FilterType = EncodeFilter<image_type, AutoencoderType, shark::Normalizer<shark::RealVector>> ;
 
 	/** Standard macro */
 	itkNewMacro(Self);
@@ -62,36 +64,33 @@ private:
 	
 	void DoExecute()
 	{	
-		typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
-		using image_type = FloatVectorImageType;
-		using FilterType = EncodeFilter<image_type, AutoencoderType, shark::Normalizer<shark::RealVector>> ;
-		using DummyFilterType = DummyFilter<image_type> ;
 		
-		std::cout << "Appli !" << std::endl;
+		std::cout << "Appli" << std::endl;
 		FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 		std::string encoderPath = GetParameterString("model");
 		std::string normalizerPath = GetParameterString("normalizer");
 		
-		FilterType::Pointer filter = FilterType::New();
+		filter = FilterType::New();
 		filter->SetAutoencoderModel(encoderPath);
 		filter->SetNormalizerModel(normalizerPath);
 		filter->SetInput(inImage);
-		filter->Update();
+		//filter->Update();
 		SetParameterOutputImage("out", filter->GetOutput());
-
 /*
+
+		using DummyFilterType = DummyFilter<image_type> ;
 		DummyFilterType::Pointer dummy_filter = DummyFilterType::New(); // this filter simply copies the input image (do not need shark library)
 		dummy_filter->SetInput(GetParameterFloatVectorImage("in"));
 		dummy_filter->Update();
-		dummy_filter->UpdateOutputInformation();
 		SetParameterOutputImage("out", dummy_filter->GetOutput());
-
 */
+
 		
 		//SetParameterOutputImage("out", inImage); // copy input image
 
 	}
 
+	FilterType::Pointer filter;
 };
 }
 }

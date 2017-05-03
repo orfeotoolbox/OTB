@@ -6,6 +6,7 @@ otb_module(CbDimensionalityReduction
 		OTBITK
 		OTBShark	
 		OTBBoost
+		OTBSupervised
 	DESCRIPTION 
 		"${DOCUMENTATION}"
 )
