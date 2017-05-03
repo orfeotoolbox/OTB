@@ -1,2 +1,61 @@
-README.md
+Synopsis
+--------
+
+This archive provides a development kit for the ORFEO ToolBox library which
+allows to easily compile OTB and facilitate the creation of programs based on
+OTB.
+
+It contains shared libraries of OTB dependencies and helper scripts for the
+configuration and the compilation of the library.
+
+Note that OTB sources are not included in the archive (see instructions below).
+
+Prerequisites
+-------------
+
+-  cmake (>= 3.2)
+-  AppleClang (>= 6.0)
+-  Xcode (>= 6.1.1)
+-  git
+
+Extract XDK
+-----------
+
+::
+
+    cd /opt (You can use another a directory of your own choice)
+    chmod +x OTB-|release|-xdk-Darwin64.run
+    ./OTB-|release|-xdk-Darwin64.run
+
+**You now will have a directory named **OTB-|release|-xdk-Darwin64** in **/opt**
+
+Setup environment
+-----------------
+There is a helper script in package called **xdkenv.profile**. This script export
+required environments to configure and build OTB.
+
+::
+
+    cd /opt/OTB-|release|-xdk-Darwin64
+    . ./xdkenv.profile
+
+Test environment setup by checking value of CMAKE_PREFIX_PATH
+
+::
+
+    echo $CMAKE_PREFIX_PATH
+
+The above command will output:
+ /opt/OTB-|release|-xdk-Darwin64
+ 
+
+Configure and build your OTB Project
+---------------------------------
+
+::
+
+    mkdir -p /opt/otbproject/build && cd /opt/otbproject/build
+    cmake /opt/ex1_HelloWorld -DCMAKE_CXX_FLAGS='-std=c++11'
+    make
+
 

@@ -48,19 +48,13 @@ The above command will output:
  /opt/OTB-|release|-xdk-Linux64
  
 
-Download, Configure and build OTB
+
+Configure and build your OTB Project
 ---------------------------------
 
 ::
 
-    mkdir -p /opt/OTB/build && cd /opt/OTB
-    git clone --depth=1 --branch=develop https://git@git.orfeo-toolbox.org/git/otb.git source
-    cd build && cmake ../source
-    make -j2
-
-
-Notes
-~~~~~
-
-By default, all OTB\_USE\_\* variables in OTB are set to FALSE except for 6S and SiftFast. You can check/activate them in your cmake-gui/ccmake.
+    mkdir -p /opt/otbproject/build && cd /opt/otbproject/build
+    cmake /opt/ex1_HelloWorld -DCMAKE_CXX_FLAGS='-std=c++11'
+    make
 
