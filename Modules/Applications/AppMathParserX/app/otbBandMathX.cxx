@@ -136,7 +136,7 @@ private:
       "\n- The 'outcontext' parameter allows saving user's constants and expressions (context).\n"
       "- Setting the output image can be done with the 'out' parameter (multi-outputs is not implemented yet).\n"
       "\n\n"
-      "Finally, we strongly recommend that the reader takes a look at the cookbook, where additional information can be found (http://www.orfeo-toolbox.org/packages/OTBCookBook.pdf).\n"
+      "Finally, we strongly recommend that the reader takes a look at the cookbook, where additional information can be found (http://www.orfeo-toolbox.org/CookBook).\n"
 
 );
 
