@@ -37,6 +37,7 @@ void EncodeFilter<TImage, AutoencoderModel, NormalizerModel>::SetAutoencoderMode
 	boost::archive::polymorphic_text_iarchive ia(ifs);
 	m_net.read(ia);
 	ifs.close();
+	m_hidden_neuron = m_net.numberOfHiddenNeurons();
 }
 
 
@@ -101,15 +102,13 @@ this->SetNumberOfThreads(1);
 }
 
 
-/*template< class TImage, class AutoencoderModel, class NormalizerModel>
-void EncodeFilter<TImage, AutoencoderModel, NormalizerModel>::GenerateData()*/
+
 template< class TImage, class AutoencoderModel, class NormalizerModel>
 void EncodeFilter<TImage, AutoencoderModel, NormalizerModel>::ThreadedGenerateData(const typename TImage::RegionType &outputRegionForThread, unsigned int threadId)
 {
 	//Data_with_info info;
 	typename TImage::ConstPointer input = this->GetInput();
 	typename TImage::Pointer output = this->GetOutput();
- 	
 	// Image to vector
 	const unsigned int img_bands = input->GetNumberOfComponentsPerPixel();
 	
@@ -149,11 +148,12 @@ void EncodeFilter<TImage, AutoencoderModel, NormalizerModel>::ThreadedGenerateDa
 		for(unsigned int a = 0; a < numHidden; ++a){
 			pixelValue[a]=vect_out[a];
 		}
-
+		
 		imageIteratorOut.Set(pixelValue);
 		++imageIteratorOut;
 		++vect_it;
 	}
+	
 }
 	 
 

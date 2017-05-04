@@ -99,7 +99,18 @@ private:
 	
 		AddParameter(ParameterType_StringList, "feat", "Field names to be calculated."); //
 		SetParameterDescription("feat","List of field names in the input vector data used as features for training."); //
+		
+		AddParameter(ParameterType_Int, "k","target dimension");
+		SetParameterDescription("k", "Dimension of the output feature vectors");
 
+		/*
+		AddParameter(ParameterType_InputFilename, "model", "Dimensionality Reduction model file");
+		SetParameterDescription("model", "A model file (produced by cbDimensionalityReduction application.");
+
+		AddParameter(ParameterType_InputFilename, "normalizer", "normalizer model file");
+		SetParameterDescription("normalizer", "A model file (produced by cbDimensionalityReduction application.");
+*/
+		
 /*
 		AddParameter(ParameterType_InputVectorData, "val", "Name of the input validation vector data");
 		SetParameterDescription("val","The vector data used for validation.");
@@ -141,9 +152,9 @@ private:
 		otb::Shark::ListSampleToSharkVector<ListSampleType>( input, features);
 		shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 		
-		std::size_t numHidden= 5;   // stoi convert string to int
-		std::size_t iterations = 10;
-		double regularisation = 0; // stod convert string to double
+		std::size_t numHidden= GetParameterInt("k");   
+		std::size_t iterations = 100;
+		double regularisation = 0; 
 		
 
 		shark::Normalizer<shark::RealVector> normalizer = trainNormalizer(inputSamples);
