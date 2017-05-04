@@ -10,6 +10,7 @@ OUT_DIR=$(pwd)
 
 PATCH_ELF_EXE="$OUT_DIR/patchelf"
 
+#do not move below 3 lines. it must be before  "unset LD_LIBRARY_PATH" code
 sed -i -E  "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/setup_python.sh"
 chmod +x $OUT_DIR/setup_python.sh
 ./setup_python.sh
