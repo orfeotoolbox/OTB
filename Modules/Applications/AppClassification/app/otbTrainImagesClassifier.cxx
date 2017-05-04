@@ -82,6 +82,8 @@ public:
     SetDocExampleParameterValue( "classifier.libsvm.opt", "false" );
     SetDocExampleParameterValue( "io.out", "svmModelQB1.txt" );
     SetDocExampleParameterValue( "io.confmatout", "svmConfusionMatrixQB1.csv" );
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

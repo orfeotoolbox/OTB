@@ -341,6 +341,8 @@ private:
     SetDocExampleParameterValue("mode","raster",1);
     SetDocExampleParameterValue("mode.raster.out", "SegmentationRaster.tif uint16",1);
     SetDocExampleParameterValue("filter", "meanshift",1);
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -223,6 +223,8 @@ private:
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("instats","apTvClPolygonClassStatisticsOut.xml");
     SetDocExampleParameterValue("out","resampledVectors.sqlite");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters()

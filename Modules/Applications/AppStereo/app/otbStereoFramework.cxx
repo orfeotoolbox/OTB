@@ -521,7 +521,7 @@ private:
     SetDocExampleParameterValue("output.res","2.5");
     SetDocExampleParameterValue("output.out","dem.tif");
 
-
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

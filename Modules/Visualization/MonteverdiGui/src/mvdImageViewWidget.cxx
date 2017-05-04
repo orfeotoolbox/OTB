@@ -1587,7 +1587,8 @@ ImageViewWidget
   //
   // Apply dynamics to current layer.
   AbstractLayerModel * layer = layerStack->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -1689,7 +1690,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -1778,7 +1780,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2012,6 +2015,9 @@ ImageViewWidget
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
+  if( !stackedLayerModel->HasCurrent() )
+    return;
+
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
   assert( layer!=NULL );
 
@@ -2071,7 +2077,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2283,7 +2290,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2352,8 +2360,11 @@ ImageViewWidget
 
     assert( m_Manipulator!=NULL );
 
+    // Update the Manipulator reference projection.
+    // Then all view manipulation will use this projection reference.
     m_Manipulator->SetWkt( image->GetProjectionRef() );
     m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
     }
   else
     {

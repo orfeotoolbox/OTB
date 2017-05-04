@@ -180,6 +180,8 @@ private:
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "FilterOutput.tif");
     SetDocExampleParameterValue("method", "pca");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

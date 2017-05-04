@@ -121,6 +121,7 @@ private:
     SetDocExampleParameterValue("tilesizex","256");
     SetDocExampleParameterValue("tilesizey","256");
 
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -76,6 +76,8 @@ private:
     SetDocExampleParameterValue("cols","2");
     SetDocExampleParameterValue("rows","2");
     SetDocExampleParameterValue("out", "EntireImage.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

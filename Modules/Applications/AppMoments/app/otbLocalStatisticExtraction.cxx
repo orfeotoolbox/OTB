@@ -93,6 +93,8 @@ SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("channel", "1");
 SetDocExampleParameterValue("radius", "3");
 SetDocExampleParameterValue("out", "Statistics.tif");
+
+SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

@@ -105,6 +105,8 @@ private:
     SetDocExampleParameterValue("out","vector.shp");
     SetDocExampleParameterValue("tilesizex","256");
     SetDocExampleParameterValue("tilesizey","256");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

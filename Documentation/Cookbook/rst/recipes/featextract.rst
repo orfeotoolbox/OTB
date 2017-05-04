@@ -6,7 +6,8 @@ refers to techniques aiming at extracting added value information from
 images. These extracted items named *features* can be local statistical
 moments, edges, radiometric indices, morphological and textural
 properties. For example, such features can be used as input data for
-other image processing methods like *Segmentation* and *Classification*.
+other image processing methods like *Segmentation* and
+`Classification <https://www.orfeo-toolbox.org/CookBook/recipes/pbclassif.html#feature-classification>`_ .
 
 Local statistics extraction
 ---------------------------

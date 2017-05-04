@@ -31,6 +31,8 @@
 #include "otbContingencyTableCalculator.h"
 #include "otbContingencyTable.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -84,7 +86,7 @@ public:
 
 
 private:
-  Int32ImageType* m_Input;
+  Int32ImageType* m_Input = ITK_NULLPTR;
   Int32ImageType::Pointer m_Reference;
   RAMDrivenAdaptativeStreamingManagerType::Pointer m_StreamingManager;
   otb::ogr::DataSource::Pointer m_OgrRef;
@@ -176,6 +178,8 @@ private:
   SetDocExampleParameterValue("ref.vector.in","VectorData_QB1_bis.shp");
   SetDocExampleParameterValue("ref.vector.field","Class");
   SetDocExampleParameterValue("ref.vector.nodata","255");
+
+  SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

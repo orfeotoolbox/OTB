@@ -170,6 +170,8 @@ private:
     SetDocExampleParameterValue( "step", "1" );
     SetDocExampleParameterValue( "profile.classification.sigma", "1" );
     SetDocExampleParameterValue( "out", "output.tif" );
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -228,13 +230,13 @@ private:
     typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<FloatImageType, FloatImageType, LabeledImageType> MultiScaleCharacteristicsFilterType;
 
     // Instantiation
-    typename OpeningProfileFilterType::Pointer oprofileFilter;
-    typename ClosingProfileFilterType::Pointer cprofileFilter;
-    typename DerivativeFilterType::Pointer oderivativeFilter;
-    typename DerivativeFilterType::Pointer cderivativeFilter;
-    typename MultiScaleCharacteristicsFilterType::Pointer omsCharFilter;
-    typename MultiScaleCharacteristicsFilterType::Pointer cmsCharFilter;
-    typename MultiScaleClassificationFilterType::Pointer classificationFilter;
+    typename OpeningProfileFilterType::Pointer oprofileFilter = OpeningProfileFilterType::New();
+    typename ClosingProfileFilterType::Pointer cprofileFilter = ClosingProfileFilterType::New();
+    typename DerivativeFilterType::Pointer oderivativeFilter = DerivativeFilterType::New();
+    typename DerivativeFilterType::Pointer cderivativeFilter = DerivativeFilterType::New();
+    typename MultiScaleCharacteristicsFilterType::Pointer omsCharFilter = MultiScaleCharacteristicsFilterType::New();
+    typename MultiScaleCharacteristicsFilterType::Pointer cmsCharFilter = MultiScaleCharacteristicsFilterType::New();
+    typename MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();
 
     bool classify = profile == "classification";
     bool opening = profile == "opening";
@@ -291,7 +293,6 @@ private:
     typedef ImageList<FloatImageType> TImageList;
     typedef otb::ImageListToVectorImageFilter<TImageList, FloatVectorImageType> TListToVectorImageFilter;
 
-    profileFilter = TProfileFilter::New();
     profileFilter->SetInput( m_ExtractorFilter->GetOutput() );
     profileFilter->SetProfileSize( profileSize );
     profileFilter->SetInitialValue( initValue );
@@ -307,7 +308,6 @@ private:
       return;
       }
 
-    derivativeFilter = TDerivativeFilter::New();
     derivativeFilter->SetInput( profileFilter->GetOutput() );
 
     if ( derivative )
@@ -320,7 +320,6 @@ private:
       return;
       }
 
-    msCharFilter = TCharacteristicsFilter::New();
     msCharFilter->SetInput( derivativeFilter->GetOutput() );
     msCharFilter->SetInitialValue( initValue );
     msCharFilter->SetStep( step );

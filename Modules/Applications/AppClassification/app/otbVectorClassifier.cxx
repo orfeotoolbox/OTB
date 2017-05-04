@@ -145,6 +145,8 @@ private:
     SetDocExampleParameterValue("out", "svmModel.svm");
     SetDocExampleParameterValue("feat", "perimeter  area  width");
     SetDocExampleParameterValue("cfield", "predicted");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -249,7 +251,7 @@ private:
 
     ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
 
-    typename ConfidenceListSampleType::Pointer quality;
+    ConfidenceListSampleType::Pointer quality;
 
     bool computeConfidenceMap(IsParameterEnabled("confmap") && m_Model->HasConfidenceIndex() 
                               && !m_Model->GetRegressionMode());

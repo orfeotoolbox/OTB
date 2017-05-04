@@ -127,6 +127,8 @@ private:
     SetDocExampleParameterValue("imstat", "EstimateImageStatisticsQB1.xml");
     SetDocExampleParameterValue("model", "clsvmModelQB1.svm");
     SetDocExampleParameterValue("out", "clLabeledImageQB1.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
