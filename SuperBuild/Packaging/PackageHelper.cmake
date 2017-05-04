@@ -82,11 +82,6 @@ macro(macro_super_package)
     set(LIB_EXT ".dylib")
   endif()
 
-  # find_loader_and_args(LOADER_PROGRAM LOADER_PROGRAM_ARGS)
-  if(NOT PKG_GENERATE_XDK)
-    find_python_soname(python_INSTALLED_SONAME)
-  endif()
-
   set(PKG_SEARCHDIRS)
   if(WIN32)
     if(MSVC)
@@ -150,29 +145,48 @@ macro(macro_super_package)
   func_prepare_package()
 
   set(program_list)
-  set(WITH_PYTHON "false")
+
+  # find_loader_and_args(LOADER_PROGRAM LOADER_PROGRAM_ARGS)
+  # if(PKG_GENERATE_XDK)
+  #   set(CODE_FOR_PYTHON_SETUP_SH "echo \"Python bindings not installed with XDK\" \nexit 0;")
+  # else()
+     
   if(OTB_WRAP_PYTHON)
-    set(WITH_PYTHON "true")
+    find_python_soname(python_INSTALLED_SONAME)
+    set(CODE_FOR_PYTHON_SETUP_SH "python_INSTALLED_SONAME=${python_INSTALLED_SONAME}")
+  else()
+    set(CODE_FOR_PYTHON_SETUP_SH "echo \"Python bindings not installed\"\nexit 0;")
+  endif()
+
+ 
+  if(UNIX)
+    install(FILES  ${PACKAGE_SUPPORT_FILES_DIR}/monteverdi.sh
+      DESTINATION ${PKG_STAGE_DIR})
+    
+    install(FILES ${PACKAGE_SUPPORT_FILES_DIR}/mapla.sh
+      DESTINATION ${PKG_STAGE_DIR})
+    
+    install(FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile
+      DESTINATION ${PKG_STAGE_DIR})
+    
   endif()
   
-  set(IS_XDK "false")
-
   if(LINUX)
     set(PKGSETUP_IN_FILENAME linux_pkgsetup.in)
+    configure_file(
+      ${PACKAGE_SUPPORT_FILES_DIR}/setup_python.sh.in
+      ${CMAKE_BINARY_DIR}/setup_python.sh @ONLY )
+
+    install(FILES ${CMAKE_BINARY_DIR}/setup_python.sh
+      DESTINATION ${PKG_STAGE_DIR})
+    
   elseif(APPLE)
     set(PKGSETUP_IN_FILENAME macx_pkgsetup.in)
   endif()
 
   if(PKG_GENERATE_XDK)
-    set(IS_XDK "true")
-    set(WITH_PYTHON "false")
-    message(STATUS "OTB_WRAP_PYTHON is set. But this will not be included in XDK")
-    if("${PKG_ITK_SB_VERSION}" STREQUAL "")
-      message(FATAL_ERROR "PKG_ITK_SB_VERSION not set. This is required for XDK")
-    endif()
-
     func_install_xdk_files()
-  endif() #PKG_GENERATE_XDK
+  endif()
     
   ############# install package configure script ################
   #if(UNIX AND NOT WIN32)
@@ -202,7 +216,6 @@ macro(macro_super_package)
     endif()
       
   endif()
-
 
   foreach(prog ${program_list})
     install(
@@ -259,7 +272,6 @@ function(func_prepare_package)
     list(APPEND PKG_PEFILES "uic${EXE_EXT}")
     list(APPEND PKG_PEFILES "proj${EXE_EXT}")
     list(APPEND PKG_PEFILES "cs2cs${EXE_EXT}")
-
     
     #RK: to hell with cmake targets files.
     file(GLOB ALL_EXTRA_FILES
@@ -315,7 +327,7 @@ function(func_prepare_package)
   file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
 
-  if(WITH_PYTHON)
+  if(OTB_WRAP_PYTHON)
    if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
      install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python
        DESTINATION ${PKG_STAGE_DIR}/lib
@@ -325,9 +337,9 @@ function(func_prepare_package)
        "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
    endif()
 
-  endif(WITH_PYTHON)
+  endif(OTB_WRAP_PYTHON)
 
-
+  
   func_install_support_files()
 
   unset(matched_vars CACHE)

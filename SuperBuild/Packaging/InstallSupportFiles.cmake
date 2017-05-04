@@ -102,7 +102,7 @@ function(func_install_xdk_files)
     endif()
   endforeach()
 
-  # #install ${DEPENDENCIES_INSTALL_DIR}/include directory. Attention to OTB includes
+  #install ${DEPENDENCIES_INSTALL_DIR}/include directory. Attention to OTB includes
   file(GLOB ALL_IN_INCLUDE_DIR "${DEPENDENCIES_INSTALL_DIR}/include/*")
   foreach(INCLUDE_DIR_ITEM ${ALL_IN_INCLUDE_DIR})
     get_filename_component(INCLUDE_DIR_ITEM_name ${INCLUDE_DIR_ITEM} NAME)
