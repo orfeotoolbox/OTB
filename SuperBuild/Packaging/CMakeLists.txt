@@ -25,11 +25,6 @@ if(NOT PROJECT_NAME)
   endif()
   
   option(OTB_WRAP_PYTHON "enable python wrapping" ON)
-  if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
-    find_package ( PythonInterp REQUIRED )
-    mark_as_advanced(PYTHON_INCLUDE_DIR)
-    mark_as_advanced(PYTHON_LIBRARY)
-  endif()
 
  if(OTB_MINGW)
     set(OTB_BINARY_DIR "" CACHE PATH "OTB binary directory")
@@ -58,6 +53,12 @@ endif()
 if(NOT GENERATE_PACKAGE AND NOT GENERATE_XDK)
   #well. we don't have any businees here. Let's move on..
   return()
+endif()
+
+if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
+  find_package ( PythonInterp REQUIRED )
+  mark_as_advanced(PYTHON_INCLUDE_DIR)
+  mark_as_advanced(PYTHON_LIBRARY)
 endif()
 
 set(LINUX FALSE)
@@ -99,6 +100,12 @@ else()
   SUPERBUILD_INSTALL_DIR
   SUPERBUILD_SOURCE_DIR
   )
+endif()
+
+if(OTB_WRAP_PYTHON)
+  set(required_vars
+    ${required_vars} PYTHON_EXECUTABLE
+    )
 endif()
 
 foreach(req
@@ -193,7 +200,10 @@ else() #unixes
   set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
 endif()
 
-macro_setup_cmake_project(OTB)
+if(GENERATE_PACKAGE)
+  macro_setup_cmake_project(OTB)
+endif()
+
 if(GENERATE_XDK)
   macro_setup_cmake_project(XDK)
 endif()

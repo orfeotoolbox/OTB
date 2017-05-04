@@ -131,7 +131,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
   endif()
 
   if(DOT_DIFF_FILES)
-    message(STATUS "  Custom patches required for ${project}")
+    message(STATUS "Custom patches required for ${project}")
     ExternalProject_Add_Step(${project} ${project}_custom_patch
       COMMAND
       ${CMAKE_COMMAND}

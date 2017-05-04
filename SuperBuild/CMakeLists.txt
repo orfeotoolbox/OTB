@@ -299,27 +299,26 @@ endforeach()
 
 include(External_otb)
 
-
-if(UNIX OR MSVC)
-  add_subdirectory(Packaging)
-endif()
-
 if(FROM_SYSTEM_LIST)
   list(SORT FROM_SYSTEM_LIST)
   foreach( item ${FROM_SYSTEM_LIST})
-    message(STATUS "  Using system version of ${item}")
+    message(STATUS "Using system version of ${item}")
   endforeach()
 endif()
 
 if(FROM_SUPERBUILD_LIST)
   list(SORT FROM_SUPERBUILD_LIST)
   foreach( item ${FROM_SUPERBUILD_LIST})
-    message(STATUS "  Using SuperBuild version of ${item}")
+    message(STATUS "Using SuperBuild version of ${item}")
   endforeach()
 endif()
 
-message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
-message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
+if(GENERATE_PACKAGE OR GENERATE_XDK)
+  add_subdirectory(Packaging)
+else()
+  message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
+  message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")  
+endif()
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
