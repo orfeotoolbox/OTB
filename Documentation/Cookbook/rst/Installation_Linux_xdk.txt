@@ -15,10 +15,10 @@ Prerequisites
 
 -  cmake (>= 3.2)
 -  gcc (>= 4.9)
--  git
+-  git (optional)
 
-Extract XDK
------------
+Extract Package
+---------------
 
 ::
 
@@ -30,13 +30,13 @@ Extract XDK
 
 Setup environment
 -----------------
-There is a helper script in package called **xdkenv.profile**. This script export
-required environments to configure and build OTB.
+There is a helper script in package called **otbenv.profile**. This script export
+required environment variables to use OTB and build your projects using OTB library.
 
 ::
 
     cd /opt/OTB-|release|-xdk-Linux64
-    . ./xdkenv.profile
+    . ./otbenv.profile
 
 Test environment setup by checking value of CMAKE_PREFIX_PATH
 
@@ -54,7 +54,7 @@ Configure and build your OTB Project
 
 ::
 
-    mkdir -p /opt/otbproject/build && cd /opt/otbproject/build
-    cmake /opt/ex1_HelloWorld -DCMAKE_CXX_FLAGS='-std=c++11'
+    mkdir -p ~/ex1_HelloWorld/build && cd ~/ex1_HelloWorld/build
+    cmake ~/ex1_HelloWorld/src -DCMAKE_CXX_FLAGS='-std=c++11'
     make
 
