@@ -71,10 +71,17 @@ elseif(WIN32) #windows
   set(README_FILE ${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst/Installation_Windows${README_FILE_SUFFIX}.txt)
 endif()
 
-configure_file(
-  "${README_FILE}"
-  ${PACKAGE_PROJECT_DIR}/src/README
+file(READ "${README_FILE}" README_FILE_AS_RST)
+
+string(REPLACE
+  "|release|"
+  "${PKG_OTB_VERSION_STRING}"
+  README_FILE_AS_RST
+  ${README_FILE_AS_RST}
   )
+
+file(WRITE ${PACKAGE_PROJECT_DIR}/src/README
+  "${README_FILE_AS_RST}" )
 
 macro_create_targets_for_package(${pkg})
 

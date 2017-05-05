@@ -45,10 +45,6 @@ if [ "$found_python_lib" -eq "1" ]; then
     printf %s\\n "OTB python bindings will be configured for $OTB_PYTHON_EXE ( version: $python_version )"
     printf %s\\n "Found python library: $python_lib_file_path"
     ln -sf "$python_lib_file_path" "OUT_DIR/lib/$python_INSTALLED_SONAME"
-    printf %s\\n "To use OTB python bindings, first source otbenv.profile"
-    printf %s\\n "'. OUT_DIR/otbenv.profile'"
-    printf %s\\n "To test OTB python bindings:"
-    printf %s\\n "$OTB_PYTHON_EXE -c 'import otbApplication'"
 else
     printf %s\\n "*****Error occurred during installation******"
     printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
