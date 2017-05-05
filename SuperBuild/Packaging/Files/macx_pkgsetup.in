@@ -57,11 +57,11 @@ fi
 rm -fr "Mapla.app"
 rm -fr "Monteveridi.app"
 
-cp -r template.app Mapla.app
-cp -r template.app Monteverdi.app
+cp -r "$OUT_DIR/template.app" "$OUT_DIR/Mapla.app"
+cp -r "$OUT_DIR/template.app" "$OUT_DIR/Monteverdi.app"
 
-mv mapla.sh Mapla.app/Contents/MacOS/Mapla
-mv monteverdi.sh Monteverdi.app/Contents/MacOS/Monteverdi
+mv "$OUT_DIR/mapla.sh" "Mapla.app/Contents/MacOS/Mapla"
+mv "$OUT_DIR/monteverdi.sh" "Monteverdi.app/Contents/MacOS/Monteverdi"
 
 rm -fr "template.app"
 
@@ -75,91 +75,34 @@ EOF
 LONG_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@
 SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@
 
-cp "$OUT_DIR/Monteverdi.icns" "Monteverdi.app/Contents/Resources/"
-cp "$OUT_DIR/Monteverdi.icns" "Mapla.app/Contents/Resources/"
 
+cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Mapla.app/Contents/Resources/qt.conf"
+cp "$OUT_DIR/Monteverdi.icns" "Mapla.app/Contents/Resources/"
 sed -i "" "s,STARTUP_FILE,Mapla,g" "Mapla.app/Contents/Info.plist"
 sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" "Mapla.app/Contents/Info.plist"
 sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" "Mapla.app/Contents/Info.plist"
-sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
+chmod +x "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
 
+cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Monteverdi.app/Contents/Resources/qt.conf"
+cp "$OUT_DIR/Monteverdi.icns" "Monteverdi.app/Contents/Resources/"
 sed -i "" "s,STARTUP_FILE,Monteverdi,g" "Monteverdi.app/Contents/Info.plist"
 sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" "Monteverdi.app/Contents/Info.plist"
 sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" "Monteverdi.app/Contents/Info.plist"
-sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
-
-cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Mapla.app/Contents/Resources/qt.conf"
-cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Monteverdi.app/Contents/Resources/qt.conf"
-
-chmod +x "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
 chmod +x "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
 
-sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/otbenv.profile"
+
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/otbenv.profile"
 chmod +x "$OUT_DIR/otbenv.profile"
 
-#fi
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if [ "$I_AM_XDK" = true ] ; then
-cat > "$OUT_DIR/xdkenv.profile" << EOF
-#!/bin/sh
-
-# The below environment variables only affect current shell
-# So if you run again from a terminal. you need to run the script again
-
-# unset any existing LD_LIBRARY_PATH
-unset LD_LIBRARY_PATH
-
-# Add bin direcotory to system PATH
-PATH=$OUT_DIR/bin:\$PATH
-
-# set numeric locale to C
-LC_NUMERIC=C
-
-# set GDAL_DATA variable used by otb application
-GDAL_DATA=$OUT_DIR/share/gdal
-
-# set GEOTIFF_CSV variable used by otb application
-GEOTIFF_CSV=$OUT_DIR/share/epsg_csv
-
-CMAKE_PREFIX_PATH=$OUT_DIR
-
-# export variables
-export LC_NUMERIC
-export GDAL_DATA
-export GEOTIFF_CSV
-export CMAKE_PREFIX_PATH
-export PATH
-
-EOF
-
-chmod +x "$OUT_DIR/xdkenv.profile"
-
-fi
-
-
-cat > "$OUT_DIR/bin/qt.conf" << EOF
-[Paths]
-Translations=$OUT_DIR/lib/qt4/translations
-Plugins=$OUT_DIR/lib/qt4/plugins
-EOF
-
-
-
+printf %s\\n ""
+printf %s\\n "You MUST source 'otbenv.profile' file to use OTB. see next line:"
+printf %s\\n ". $OUT_DIR/otbenv.profile"
+printf %s\\n "The changes to environment variables from otbenv.profile only affect current session."
+printf %s\\n "You can also copy above line to  ~/.profile to keep those changes permanently!"
+printf %s\\n "More documentation can be found in $OUT_DIR/README"
 
 
 # echo "Creating symbolic links..."
@@ -167,5 +110,6 @@ EOF
 rm -f "$OUT_DIR/make_symlinks"
 
 rm -f "$OUT_DIR/Monteverdi.icns"
+rm -f "$OUT_DIR/pkgsetup"
 
 open "$OUT_DIR"

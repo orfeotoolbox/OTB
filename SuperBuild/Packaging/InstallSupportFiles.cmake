@@ -296,37 +296,14 @@ function(func_install_monteverdi_support_files)
   #which is <prefix>/share/qt4/translations.
   #set(PKG_xxOTB_Ixxx18N_DIR "${PKG_STAGE_DIR}/${PKG_OTB_INSTALL_DATA_DIR}/i18n")
   # we find this value by parsing ConfigureMonteverdi.h
-  set(ConfigureMonteverdi_H "${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h")
-  if(NOT EXISTS "${ConfigureMonteverdi_H}")
-    #maybe deactivate monteverdi?
-    message(FATAL_ERROR "${ConfigureMonteverdi_H} does not exists. Cannot continue")
-  endif()
-
-  file(
-    STRINGS "${ConfigureMonteverdi_H}"
-    ConfigureMonteverdi_H_CONTENTS
-    REGEX "^#define.Monteverdi_INSTALL_DATA_DIR")
-
-  string(REGEX REPLACE
-    "^#define.Monteverdi_INSTALL_DATA_DIR" ""
-    ConfigureMonteverdi_H_CONTENTS
-    ${ConfigureMonteverdi_H_CONTENTS} )
-
-  if(NOT ConfigureMonteverdi_H_CONTENTS)
-    message(FATAL_ERROR "Parse error in ${ConfigureMonteverdi_H}. Cannot continue")
-  endif()
-
-  string(
-    REGEX REPLACE "\"" ""
-    PKG_OTB_INSTALL_DATA_DIR
-    "${ConfigureMonteverdi_H_CONTENTS}")
-
-  if(NOT PKG_OTB_INSTALL_DATA_DIR)
-    message(FATAL_ERROR "parse error in ${ConfigureMonteverdi_H_CONTENTS}. Cannot continue")
-  endif()
   
-  string(STRIP "${PKG_OTB_INSTALL_DATA_DIR}" PKG_OTB_INSTALL_DATA_DIR)
-
+  set(PKG_OTB_INSTALL_DATA_DIR)
+  read_define_from(
+    "${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h"
+    "Monteverdi_INSTALL_DATA_DIR"
+    PKG_OTB_INSTALL_DATA_DIR
+    )
+  
   set(PKG_OTB_TRANSLATIONS_DIRNAME "${PKG_OTB_INSTALL_DATA_DIR}/i18n")
 
   # Just check if required variables are defined.

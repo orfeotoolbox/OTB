@@ -392,3 +392,41 @@ function(func_patch_cmake_files_for)
   func_install_without_message("${PATCH_DIR_TEMP}" "lib/cmake")
 
 endfunction()
+
+
+function(read_define_from input_file match_string output_variable)
+    
+    set(${output_variable} "" PARENT_SCOPE)
+    set(${result_variable} "" PARENT_SCOPE)
+
+  if(NOT EXISTS "${input_file}")
+    #maybe deactivate monteverdi?
+    message(FATAL_ERROR "${input_file} does not exists. Cannot continue")
+  endif()
+
+  set(input_file_CONTENTS)
+  file(
+    STRINGS "${input_file}"
+    input_file_CONTENTS
+    REGEX "^#define.${match_string}")
+
+  string(REGEX REPLACE "^#define.${match_string}" ""
+    input_file_CONTENTS
+    ${input_file_CONTENTS} )
+
+  if(NOT input_file_CONTENTS)
+    message(FATAL_ERROR "${match_string}: Parse error in ${input_file}. Cannot continue")
+  endif()
+
+  string(REGEX REPLACE "\"" ""
+    result_variable
+    "${input_file_CONTENTS}")
+
+  if(NOT result_variable)
+    message(FATAL_ERROR "${match_string}: parse error in ${input_file_CONTENTS}. Cannot continue")
+  endif()
+
+  string(STRIP "${result_variable}" result_variable)
+  set(${output_variable} ${result_variable} PARENT_SCOPE)
+  
+endfunction()

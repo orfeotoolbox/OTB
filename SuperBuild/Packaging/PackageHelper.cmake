@@ -168,7 +168,17 @@ macro(macro_super_package)
     
     install(FILES ${PACKAGE_SUPPORT_FILES_DIR}/otbenv.profile
       DESTINATION ${PKG_STAGE_DIR})
-    
+
+      #TODO: function below read ConfigureMonteverdi_H file
+  set(ConfigureMonteverdi_H "${OTB_BINARY_DIR}/Modules/Visualization/MonteverdiCore/ConfigureMonteverdi.h")
+  set(Monteverdi_VERSION_MAJOR)
+  set(Monteverdi_VERSION_MINOR)
+  set(Monteverdi_VERSION_PATCH)
+  read_define_from("${ConfigureMonteverdi_H}" "Monteverdi_VERSION_MAJOR"  Monteverdi_VERSION_MAJOR)
+  read_define_from("${ConfigureMonteverdi_H}" "Monteverdi_VERSION_MINOR"  Monteverdi_VERSION_MINOR)
+  read_define_from("${ConfigureMonteverdi_H}" "Monteverdi_VERSION_PATCH"  Monteverdi_VERSION_PATCH)
+
+
   endif()
   
   if(LINUX)
@@ -182,6 +192,12 @@ macro(macro_super_package)
     
   elseif(APPLE)
     set(PKGSETUP_IN_FILENAME macx_pkgsetup.in)
+
+    install(DIRECTORY
+      ${PACKAGE_SUPPORT_FILES_DIR}/template.app
+      DESTINATION ${PKG_STAGE_DIR}
+      )
+
   endif()
 
   if(PKG_GENERATE_XDK)
@@ -359,7 +375,6 @@ function(func_prepare_package)
 endfunction() #func_prepare_package
 
 function(func_process_deps input_file)
-
   set(input_file_full_path)
   search_library(${input_file} PKG_SEARCHDIRS input_file_full_path)
 
@@ -372,13 +387,14 @@ function(func_process_deps input_file)
 	  message(FATAL_ERROR "${input_file} not found. searched in ${PKG_GTK_SEARCHDIRS}")
 	endif()
       endif()
-      if( NOT input_file_full_path)
-	message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
-	endif()
     endif(LINUX)
 
   endif() #if(NOT input_file_full_path)
 
+  if( NOT input_file_full_path)
+    message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
+    return()
+  endif()
   if(NOT PKG_DEBUG)
     message("Processing ${input_file_full_path}")
   endif()
