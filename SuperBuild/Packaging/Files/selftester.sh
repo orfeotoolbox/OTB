@@ -79,7 +79,7 @@ for app in $OTB_APPS; do
     echo_and_report "ERROR: missing cli launcher for application $app"
   else
     CLI_OUTPUT=$("bin/otbcli_$app" -help 2>&1)
-    CLI_FILTER=$(echo "${CLI_OUTPUT}"| tr '\n' ' ' | grep -E "^This is the $app application, version.* Parameters:( +(MISSING )?-[0-9a-z]+ .*)+ Examples:.*otbcli_$app.*")
+    CLI_FILTER=$(echo "${CLI_OUTPUT}"| tr '\n' ' ' | grep -E "^This is the $app application, version .* Parameters: .* Examples:.*")
     CLI_FILTER2=$(echo "$CLI_FILTER" | grep -v 'FATAL')
     if [ -z "$CLI_FILTER2" ]; then
       echo_and_report "ERROR: bin/otbcli_$app"
