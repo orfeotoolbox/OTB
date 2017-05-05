@@ -34,7 +34,7 @@ archive is extracted, the directory structure is made of:
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
 distributions. The graphical executable (otbgui launchers, Monteverdi
-and Mapla) use the X11 libraries, which are widely used in a lot of
+and Mapla) use the X11 libraries, which are available in almost all linux
 distributions :
 
 ::
@@ -47,7 +47,7 @@ in your system.
 
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize your environment
-with ``source otbenv.profile``.
+with ``. ./otbenv.profile``.
 
 Python bindings
 ---------------
