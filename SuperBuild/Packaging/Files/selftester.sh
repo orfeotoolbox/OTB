@@ -41,15 +41,15 @@ for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
   elif echo "$F_OUTPUT" | grep -q ': broken symbolic link'; then
     echo_and_report "$F_OUTPUT"
   elif echo "$F_OUTPUT" | grep -q -i -e ': ELF .*shared object' -e ': ELF .*executable'; then
-    LDD_ERRORS=$(bin/otb_loader "$name")
+    LDD_ERRORS=$(ldd "$name" | grep -i -e '=> not found' -e 'not a dynamic executable')
     if [ -n "$LDD_ERRORS" ]; then
-      echo_and_report "otb_loader $name"
+      echo_and_report "ldd $name"
       echo_and_report "$LDD_ERRORS"
     fi
   elif echo "$F_OUTPUT" | grep -q -i -e ': Mach-O .*shared library' -e ': Mach-O .*bundle' -e ': Mach-O .*executable'; then
-    DL_ERRORS=$(bin/otb_loader "$name")
+    DL_ERRORS=$(dltest "$name" | grep -i 'ERROR')
     if [ -n "$DL_ERRORS" ]; then
-      echo_and_report "otb_loader $name"
+      echo_and_report "dltest $name"
       echo_and_report "$DL_ERRORS"
     fi
   elif echo "$F_OUTPUT" | grep -q ': symbolic link'; then
