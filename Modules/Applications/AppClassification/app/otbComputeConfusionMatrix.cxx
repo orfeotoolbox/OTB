@@ -84,13 +84,14 @@ public:
   typedef ContingencyTable<ClassLabelType>  ContingencyTableType;
   typedef ContingencyTableType::Pointer     ContingencyTablePointerType;
 
+protected:
+
+  ComputeConfusionMatrix()
+    {
+    m_Input = ITK_NULLPTR;
+    }
 
 private:
-  Int32ImageType* m_Input = ITK_NULLPTR;
-  Int32ImageType::Pointer m_Reference;
-  RAMDrivenAdaptativeStreamingManagerType::Pointer m_StreamingManager;
-  otb::ogr::DataSource::Pointer m_OgrRef;
-  RasterizeFilterType::Pointer m_RasterizeReference;
 
   struct StreamingInitializationData
   {
@@ -321,7 +322,7 @@ private:
       sid.refhasnodata = true;
       sid.refnodata = this->GetParameterInt("ref.vector.nodata");
       
-      m_OgrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
+      otb::ogr::DataSource::Pointer ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
 
       // Get field name
       std::vector<int> selectedCFieldIdx = GetSelectedItems("ref.vector.field");
@@ -335,7 +336,7 @@ private:
       field = cFieldNames[selectedCFieldIdx.front()];
 
       m_RasterizeReference = RasterizeFilterType::New();
-      m_RasterizeReference->AddOGRDataSource(m_OgrRef);
+      m_RasterizeReference->AddOGRDataSource(ogrRef);
       m_RasterizeReference->SetOutputParametersFromImage(m_Input);
       m_RasterizeReference->SetBackgroundValue(sid.refnodata);
       m_RasterizeReference->SetBurnAttribute(field.c_str());
@@ -627,6 +628,10 @@ private:
 
   ConfusionMatrixType m_MatrixLOG;
   OutputConfusionMatrixType m_Matrix;
+  Int32ImageType* m_Input;
+  Int32ImageType::Pointer m_Reference;
+  RAMDrivenAdaptativeStreamingManagerType::Pointer m_StreamingManager;
+  RasterizeFilterType::Pointer m_RasterizeReference;
 };
 
 }
