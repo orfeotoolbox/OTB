@@ -14,7 +14,7 @@ Prerequisites
 -------------
 
 -  cmake (>= 3.2)
--  gcc (>= 4.9)
+-  gcc (>= 4.9.4)
 -  git (optional)
 
 Extract Package
