@@ -156,6 +156,8 @@ private:
 	SetDocExampleParameterValue("invv", "VV.tif");
 	SetDocExampleParameterValue("decomp", "haa");
     SetDocExampleParameterValue("out", "HaA.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

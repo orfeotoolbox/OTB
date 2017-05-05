@@ -126,6 +126,8 @@ private:
     SetDocExampleParameterValue("io.lgrid","grid_epi_left.tif");
     SetDocExampleParameterValue("io.rgrid","grid_epi_right.tif");
     SetDocExampleParameterValue("io.out","dem.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

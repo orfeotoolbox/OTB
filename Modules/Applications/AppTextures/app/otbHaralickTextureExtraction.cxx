@@ -162,6 +162,8 @@ SetDocExampleParameterValue("parameters.xrad", "3");
 SetDocExampleParameterValue("parameters.yrad", "3");
 SetDocExampleParameterValue("texture", "simple");
 SetDocExampleParameterValue("out", "HaralickTextures.tif");
+
+SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE

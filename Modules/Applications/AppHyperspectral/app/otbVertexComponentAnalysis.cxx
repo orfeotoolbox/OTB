@@ -80,6 +80,8 @@ private:
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("ne", "5");
     SetDocExampleParameterValue("outendm", "VertexComponentAnalysis.tif double");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

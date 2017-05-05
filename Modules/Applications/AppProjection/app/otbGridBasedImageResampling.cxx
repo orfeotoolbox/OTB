@@ -184,6 +184,8 @@ private:
     SetDocExampleParameterValue("out.sizex","256");
     SetDocExampleParameterValue("out.sizey","256");
     SetDocExampleParameterValue("grid.type","def");
+
+    SetOfficialDocLink();
   }
 
  void DoUpdateParameters() ITK_OVERRIDE

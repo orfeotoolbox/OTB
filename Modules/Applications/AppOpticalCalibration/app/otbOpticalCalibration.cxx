@@ -353,6 +353,8 @@ private:
     SetDocExampleParameterValue("level", "toa");
     SetDocExampleParameterValue("out", "OpticalCalibration.tif");
 
+    SetOfficialDocLink();
+
     m_inImageName = "";
     m_currentEnabledStateOfFluxParam=false;
   }

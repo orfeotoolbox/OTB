@@ -74,6 +74,8 @@ private:
    // Doc example parameter settings
    SetDocExampleParameterValue("il", "QB_1_ortho.tif");
    SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
+
+   SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

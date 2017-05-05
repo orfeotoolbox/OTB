@@ -130,6 +130,8 @@ private:
     SetDocExampleParameterValue("roi.starty", "30");
     SetDocExampleParameterValue("roi.sizex", "150");
     SetDocExampleParameterValue("roi.sizey", "200");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

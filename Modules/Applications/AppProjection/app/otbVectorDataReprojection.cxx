@@ -113,6 +113,8 @@ private:
     SetDocExampleParameterValue("out.proj", "image");
     SetDocExampleParameterValue("out.proj.image.in", "ROI_QB_MUL_1.tif");
     SetDocExampleParameterValue("out.vd","reprojected_vd.shp");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

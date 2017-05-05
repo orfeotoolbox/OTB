@@ -121,6 +121,8 @@ private:
     SetDocExampleParameterValue("ip.onlyisolatedpixels", "true");
     SetDocExampleParameterValue("ip.nodatalabel", "10");
     SetDocExampleParameterValue("ip.undecidedlabel", "7");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

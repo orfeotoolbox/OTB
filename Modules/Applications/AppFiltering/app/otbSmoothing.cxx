@@ -121,6 +121,8 @@ private:
     SetDocExampleParameterValue("type.anidif.timestep", "0.1", exId);
     SetDocExampleParameterValue("type.anidif.nbiter", "5", exId);
     SetDocExampleParameterValue("type.anidif.conductance", "1.5", exId);
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

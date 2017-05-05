@@ -101,6 +101,8 @@ private:
     SetDocExampleParameterValue("inpoints","points.txt");
     SetDocExampleParameterValue("map","epsg");
     SetDocExampleParameterValue("map.epsg.code","32631");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -115,6 +115,8 @@ private:
     SetDocExampleParameterValue("outfield.prefix.name","band_");
     SetDocExampleParameterValue("field", "label");
     SetDocExampleParameterValue("out","sample_values.sqlite");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters()

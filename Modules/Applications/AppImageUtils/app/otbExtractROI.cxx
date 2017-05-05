@@ -117,6 +117,8 @@ private:
     SetDocExampleParameterValue("sizex", "150");
     SetDocExampleParameterValue("sizey", "150");
     SetDocExampleParameterValue("out", "ExtractROI.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

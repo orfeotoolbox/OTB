@@ -88,6 +88,8 @@ private:
     SetDocExampleParameterValue("indem","image_dem.tif");
     SetDocExampleParameterValue("out","out.ply");
     SetDocExampleParameterValue("incolor","image_color.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

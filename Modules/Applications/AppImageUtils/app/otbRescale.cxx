@@ -86,6 +86,8 @@ private:
     SetDocExampleParameterValue("out", "rescaledImage.png uchar");
     SetDocExampleParameterValue("outmin", "0");
     SetDocExampleParameterValue("outmax", "255");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

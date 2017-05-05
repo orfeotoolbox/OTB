@@ -124,6 +124,8 @@ private:
     SetDocExampleParameterValue("filter","lee");
     SetDocExampleParameterValue("filter.lee.rad", "5");
     SetDocExampleParameterValue("out", "despeckle.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

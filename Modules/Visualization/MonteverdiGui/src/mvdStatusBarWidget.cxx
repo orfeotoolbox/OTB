@@ -70,6 +70,9 @@ StatusBarWidget
   m_UI( new mvd::Ui::StatusBarWidget() )
 {
   m_UI->setupUi( this );
+  // mantis-1385 hide scaleLineEdit
+  m_UI->label_4->hide();
+  m_UI->scaleLineEdit->hide();
 }
 
 /*****************************************************************************/
