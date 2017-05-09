@@ -1,21 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   Monteverdi
-  Language:  C++
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See Copyright.txt for details.
-
-  Monteverdi is distributed under the CeCILL licence version 2. See
-  Licence_CeCILL_V2-en.txt or
-  http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
-
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #include "mvdShaderWidget.h"
 #include "ui_mvdShaderWidget.h"
 
@@ -81,7 +83,7 @@ ShaderWidget
   m_UI->valueLineEdit->setValidator(
     new QDoubleValidator( m_UI->valueLineEdit )
   );
-} 
+}
 
 /*******************************************************************************/
 ShaderWidget
@@ -126,18 +128,18 @@ void ShaderWidget
 {
   assert( qApp!=NULL );
 
-  int index =
-    m_UI->effectComboBox->findText(
-      qApp->translate( "mvd", EFFECT_NAMES[ effect ] )
-    );
+  QString effectName = qApp->translate( "mvd", EFFECT_NAMES[ effect ] );
+  int index = m_UI->effectComboBox->findText(effectName);
 
   if( visible )
     {
     if( index<0 )
-      m_UI->effectComboBox->addItem( qApp->translate( "mvd", EFFECT_NAMES[ effect ] ) );
+      m_UI->effectComboBox->addItem( effectName );
     }
   else if( index>=0 )
+    {
     m_UI->effectComboBox->removeItem( index );
+    }
 }
 
 /*******************************************************************************/
@@ -157,67 +159,45 @@ ShaderWidget
     {
     assert( qApp!=NULL );
 
-    for( int i=0; i<m_UI->effectComboBox->count(); ++i )
-      if( m_UI->effectComboBox->itemText( i )
-	  .compare(
-	    qApp->translate( "mvd",
-			     EFFECT_NAMES[ settings->GetEffect() ] ) )==0 )
-        {
-        m_UI->effectComboBox->setCurrentIndex( i );
+    const char *imageEffect = EFFECT_NAMES[settings->GetEffect()];
+    QString tradEffect = qApp->translate( "mvd", imageEffect );
 
+    // Add or remove items from the comboBox
+    UpdateComboBoxEffectItems(settings);
+
+    for( int i = 0; i < m_UI->effectComboBox->count(); ++i )
+      {
+      QString comboBoxEffect = m_UI->effectComboBox->itemText( i );
+      if( QString::compare( comboBoxEffect, tradEffect ) == 0 )
+        {
+        // This change will emit currentIndexChanged SIGNAL
+        // and then call on_effectComboBox_currentIndexChanged
+        QString oldText = m_UI->effectComboBox->currentText();
+        if(m_UI->effectComboBox->currentIndex() != i)
+          {
+          m_UI->effectComboBox->setCurrentIndex( i );
+          }
         break;
         }
-
-    m_UI->sizeSpinBox->setValue( settings->GetSize() );
-
-    char const * const text = settings->GetValueName();
-
-    if( text==NULL )
-      {
-      m_UI->valueLabel->setVisible( false );
-      m_UI->valueLabel->setText( QString() );
       }
-    else
-      {
-      m_UI->valueLabel->setVisible( true );
-      m_UI->valueLabel->setText( QString( text ).append( ":" ) );
-      }
-
-    m_UI->valueLineEdit->setVisible( text!=NULL );
-    m_UI->valueLineEdit->setText(
-      settings->HasValue()
-      ? QString::number( settings->GetValue(), 'g', std::numeric_limits< double >::digits10 ) // ToQString( settings->GetValue() )
-      : QString()
-    );
-    m_UI->valueLineEdit->setCursorPosition( 0 );
     }
-
-  VectorImageSettings * vis = dynamic_cast<VectorImageSettings*>(settings);
-
-  if(vis!=NULL)
-    {
-    GrayscaleActivated(vis->IsGrayscaleActivated());
-    }
-  
-}
+  }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-ShaderWidget
-::on_effectComboBox_currentIndexChanged( const QString & text )
+void ShaderWidget::on_effectComboBox_currentIndexChanged(const QString &text)
 {
   if( !HasSettings() )
     return;
 
-  assert( qApp!=NULL );
+  assert( qApp != NULL );
 
-  for( int i=0; i<EFFECT_COUNT; ++i )
-    if( QString::compare( text, qApp->translate( "mvd", EFFECT_NAMES[ i ] ) )==0 )
+  for( int i = 0; i < EFFECT_COUNT; ++i )
+    if( QString::compare( text, qApp->translate( "mvd", EFFECT_NAMES[i] ) ) == 0 )
       {
-      ImageSettings * settings = GetSettings();
-      assert( settings!=NULL );
+      ImageSettings *settings = GetSettings();
+      assert( settings != NULL );
 
       settings->SetEffect( static_cast< Effect >( i ) );
 
@@ -226,29 +206,25 @@ ShaderWidget
 
       m_UI->sizeSpinBox->setValue( settings->GetSize() );
 
-      char const * const textName = settings->GetValueName();
+      char const *const textName = settings->GetValueName();
 
-      if( textName==NULL )
-	{
-	m_UI->valueLabel->setVisible( false );
-	m_UI->valueLabel->setText( QString() );
-	}
+      if( textName == NULL )
+        {
+        m_UI->valueLabel->setVisible( false );
+        m_UI->valueLabel->setText( QString() );
+        }
       else
-	{
-	m_UI->valueLabel->setVisible( true );
-	m_UI->valueLabel->setText( QString( textName ).append( ":" ) );
-	}
+        {
+        m_UI->valueLabel->setVisible( true );
+        m_UI->valueLabel->setText( QString( textName ).append( ":" ) );
+        }
 
-      m_UI->valueLineEdit->setVisible( textName!=NULL );
-      m_UI->valueLineEdit->setText(
-	settings->HasValue()
-	? ToQString( settings->GetValue() )
-	: QString()
-      );
+      m_UI->valueLineEdit->setVisible( textName != NULL );
+      m_UI->valueLineEdit->setText( settings->HasValue() ? ToQString( settings->GetValue() ) : QString() );
 
       emit SettingsChanged();
 
-      return;
+      break;
       }
 }
 
@@ -292,7 +268,7 @@ ShaderWidget
 
 void ShaderWidget
 ::GrayscaleActivated(bool status)
-{  
+{
   SetEffectVisible(EFFECT_LUT_JET,status);
   SetEffectVisible(EFFECT_LUT_LOCAL_JET,status);
   SetEffectVisible(EFFECT_LUT_HOT,status);
@@ -304,6 +280,23 @@ void ShaderWidget
   SetEffectVisible(EFFECT_LUT_COOL,status);
   SetEffectVisible(EFFECT_LUT_LOCAL_COOL,status);
   SetEffectVisible(EFFECT_SPECTRAL_ANGLE,!status);
+}
+
+
+void ShaderWidget::UpdateComboBoxEffectItems(ImageSettings *imageSettings)
+{
+  if( imageSettings != NULL )
+    {
+    VectorImageSettings *vis = dynamic_cast<VectorImageSettings *>(imageSettings);
+    if( vis != NULL )
+      {
+      // Add Gray shader effect to the ComboBox if the image is grayscale.
+      // Update items in the comboBox but do not fire signal each time an item is removed.
+      bool oldState = m_UI->effectComboBox->blockSignals( true );
+      GrayscaleActivated( vis->IsGrayscaleActivated() );
+      m_UI->effectComboBox->blockSignals( oldState );
+      }
+    }
 }
 
 } // end namespace 'mvd'

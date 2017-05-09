@@ -1,19 +1,27 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Learning)
 set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
-# ------- SVMImageClassificationExampleTest----------
-
 if(OTBLibSVM_LOADED)
-otb_add_test(NAME leTeSVMImageClassificationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png
-    ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
-  Execute $<TARGET_FILE:SVMImageClassificationExample>
-    ${INPUTDATA}/ROI_QB_MUL_1.png
-    ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
-    ${OTB_DATA_ROOT}/Examples/svm_image_model.svm
-)
-
 # ------- SVMImageEstimatorClassificationMultiExampleTest----------
 
 otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${OTB_TEST_DRIVER}
@@ -25,19 +33,6 @@ otb_add_test(NAME leTeSVMImageEstimatorClassificationMultiExampleTest COMMAND ${
     ${INPUTDATA}/ROI_mask_multi.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
     ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.png
-)
-
-# ------- SVMImageModelEstimatorExampleTest----------
-
-otb_add_test(NAME leTeSVMImageModelEstimatorExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${EPSILON_3}
-    ${BASELINE}/svm_image_model.svn
-    ${TEMP}/svm_image_model.svn
-  --ignore-lines-with 2 probA probB
-  Execute $<TARGET_FILE:SVMImageModelEstimatorExample>
-    ${INPUTDATA}/ROI_QB_MUL_1.png
-    ${INPUTDATA}/ROI_mask.png
-    ${TEMP}/svm_image_model.svn
 )
 
 endif()

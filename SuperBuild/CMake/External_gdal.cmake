@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 INCLUDE_ONCE_MACRO(GDAL)
 
 SETUP_SUPERBUILD(GDAL)
@@ -20,12 +40,12 @@ set(GDAL_CONFIGURE_COMMAND)
 set(GDAL_BUILD_COMMAND)
 set(GDAL_INSTALL_COMMAND)
 
+
 if(UNIX)
   set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
   mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
   #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
   separate_arguments(GDAL_SB_EXTRA_OPTIONS)
-
   #we don't do any framework build on osx. So let's be sure on case of gdal
   if(APPLE)
     list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
@@ -42,9 +62,7 @@ if(UNIX)
   endif()
 
   set(GDAL_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${GDAL_SB_SRC}/configure"
-    --prefix=${SB_INSTALL_PREFIX}
-    --enable-static=no
-    --enable-shared=yes
+    ${SB_CONFIGURE_ARGS}
     --with-cfitsio=no
     --with-dods-root=no
     --with-dwgdirect=no

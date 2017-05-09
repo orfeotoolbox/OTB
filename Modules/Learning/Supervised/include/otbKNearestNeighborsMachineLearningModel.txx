@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef otbKNearestNeighborsMachineLearningModel_txx
 #define otbKNearestNeighborsMachineLearningModel_txx
 
@@ -32,7 +35,11 @@ namespace otb
 template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::KNearestNeighborsMachineLearningModel() :
+#ifdef OTB_OPENCV_3
+ m_KNearestModel(cv::ml::KNearest::create()),
+#else
  m_KNearestModel (new CvKNearest),
+#endif
  m_K(32),
  m_DecisionRule(KNN_VOTING)
 {
@@ -45,7 +52,9 @@ template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::~KNearestNeighborsMachineLearningModel()
 {
+#ifndef OTB_OPENCV_3
   delete m_KNearestModel;
+#endif
 }
 
 /** Train the machine learning model */
@@ -77,8 +86,20 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
       }
     }
 
+#ifdef OTB_OPENCV_3
+  m_KNearestModel->setDefaultK(m_K);
+  // would be nice to expose KDTree mode ( maybe in a different classifier)
+  m_KNearestModel->setAlgorithmType(cv::ml::KNearest::BRUTE_FORCE);
+  m_KNearestModel->setIsClassifier(!this->m_RegressionMode);
+  // setEmax() ?
+  m_KNearestModel->train(cv::ml::TrainData::create(
+    samples,
+    cv::ml::ROW_SAMPLE,
+    labels));
+#else
   //train the KNN model
   m_KNearestModel->train(samples, labels, cv::Mat(), this->m_RegressionMode, m_K, false);
+#endif
 }
 
 template <class TInputValue, class TTargetValue>
@@ -87,14 +108,19 @@ typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
 {
+  TargetSampleType target;
+
   //convert listsample to Mat
   cv::Mat sample;
   otb::SampleToMat<InputSampleType>(input, sample);
 
   float result;
   cv::Mat nearest(1,m_K,CV_32FC1);
+#ifdef OTB_OPENCV_3
+  result = m_KNearestModel->findNearest(sample, m_K, cv::noArray(), nearest, cv::noArray());
+#else
   result = m_KNearestModel->find_nearest(sample, m_K,ITK_NULLPTR,ITK_NULLPTR,&nearest,ITK_NULLPTR);
-
+#endif
   // compute quality if asked (only happens in classification mode)
   if (quality != ITK_NULLPTR)
     {
@@ -127,8 +153,6 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
     result = *median;
     }
 
-  TargetSampleType target;
-
   target[0] = static_cast<TTargetValue>(result);
   return target;
 }
@@ -136,8 +160,17 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 template <class TInputValue, class TTargetValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Save(const std::string & filename, const std::string & itkNotUsed(name))
+::Save(const std::string & filename, const std::string & name)
 {
+#ifdef OTB_OPENCV_3
+  cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+  fs << (name.empty() ? m_KNearestModel->getDefaultName() : cv::String(name)) << "{";
+  m_KNearestModel->write(fs);
+  fs << "DecisionRule" << m_DecisionRule;
+  fs << "}";
+  fs.release();
+#else
+  (void) name;
   //there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
   //We need to save the K parameter, IsRegression flag, DecisionRule and the samples.
 
@@ -169,6 +202,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
     ofs <<"\n";
   }
   ofs.close();
+#endif
 }
 
 template <class TInputValue, class TTargetValue>
@@ -176,20 +210,54 @@ void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
-  //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
   std::ifstream ifs(filename.c_str());
   if(!ifs)
   {
     itkExceptionMacro(<<"Could not read file "<<filename);
   }
+#ifdef OTB_OPENCV_3
+  // try to load with the 3.x syntax
+  bool isKNNv3 = false;
+  while (!ifs.eof())
+  {
+    std::string line;
+    std::getline(ifs, line);
+    if (line.find(m_KNearestModel->getDefaultName()) != std::string::npos)
+    {
+      isKNNv3 = true;
+      break;
+    }
+  }
+  ifs.close();
+  if (isKNNv3)
+    {
+    cv::FileStorage fs(filename, cv::FileStorage::READ);
+    m_KNearestModel->read(fs.getFirstTopLevelNode());
+    m_DecisionRule = (int)(fs.getFirstTopLevelNode()["DecisionRule"]);
+    return;
+    }
+  ifs.open(filename.c_str());
+#endif
+  //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
+  
   //first line is the K parameter of this algorithm.
   std::string line;
   std::getline(ifs, line);
+  std::istringstream iss(line);
+  if( line.find( "K" ) == std::string::npos )
+    {
+    itkExceptionMacro( <<"Could not read file "<<filename );
+    }
   std::string::size_type pos = line.find_first_of("=", 0);
   std::string::size_type nextpos = line.find_first_of(" \n\r", pos+1);
   this->SetK(boost::lexical_cast<int>(line.substr(pos+1, nextpos-pos-1)));
+
   //second line is the IsRegression parameter
   std::getline(ifs, line);
+  if( line.find( "IsRegression" ) == std::string::npos )
+    {
+    itkExceptionMacro( <<"Could not read file "<<filename );
+    }
   pos = line.find_first_of("=", 0);
   nextpos = line.find_first_of(" \n\r", pos+1);
   this->SetRegressionMode(boost::lexical_cast<bool>(line.substr(pos+1, nextpos-pos-1)));

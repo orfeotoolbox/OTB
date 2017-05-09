@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
-
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
- =========================================================================*/
 
 #include <fstream>
 #include <string>
@@ -201,7 +204,6 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
   typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if (!ReadDataFile(argv[1], samples, labels))
     {
@@ -214,8 +216,7 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -232,13 +233,10 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
   classifier->Save(argv[2]);
 
   //Load Model to new LibSVM
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   SVMType::Pointer classifierLoad = SVMType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -295,7 +293,6 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
 
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!ReadDataFile(argv[1],samples,labels))
     {
@@ -308,8 +305,7 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   classifier->Save(argv[2]);
 
@@ -326,13 +322,10 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
 
   //Load Model to new SVM
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   SVMType::Pointer classifierLoad = SVMType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -370,7 +363,6 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
 
   InputListSampleRegressionType::Pointer samples = InputListSampleRegressionType::New();
   TargetListSampleRegressionType::Pointer labels = TargetListSampleRegressionType::New();
-  TargetListSampleRegressionType::Pointer predicted = TargetListSampleRegressionType::New();
 
   if(!ReadDataRegressionFile(argv[1],samples,labels))
     {
@@ -412,9 +404,7 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   samplesT->SetMeasurementVectorSize(itk::NumericTraits<InputSampleRegressionType>::GetLength(sample));
   samplesT->PushBack(sample);
 
-  classifier->SetInputListSample(samplesT);
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleRegressionType::Pointer predicted = classifier->PredictBatch(samplesT, NULL);
 
   const float age = 15;
 
@@ -448,7 +438,6 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
   typedef otb::KNearestNeighborsMachineLearningModel<InputValueType,TargetValueType> KNearestNeighborsType;
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!ReadDataFile(argv[1],samples,labels))
     {
@@ -463,8 +452,7 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
   //write the model
   classifier->Save(argv[2]);
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -480,13 +468,10 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
 
 
   //Load Model to new KNN
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   KNearestNeighborsType::Pointer classifierLoad = KNearestNeighborsType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -530,7 +515,6 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
   typedef otb::RandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!ReadDataFile(argv[1],samples,labels))
     {
@@ -555,8 +539,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
   classifier->Train();
   classifier->Save(argv[2]);
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -571,13 +554,10 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
 
   //Load Model to new RF
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   RandomForestType::Pointer classifierLoad = RandomForestType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -622,7 +602,6 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
 
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!ReadDataFile(argv[1],samples,labels))
     {
@@ -644,8 +623,7 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   classifier->Save(argv[2]);
 
@@ -662,13 +640,10 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
 
   //Load Model to new Boost model
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   BoostType::Pointer classifierLoad = BoostType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -713,7 +688,6 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   typedef otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType> ANNType;
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if (!ReadDataFile(argv[1], samples, labels))
     {
@@ -739,8 +713,7 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   classifier->SetEpsilon(0.01); */
   classifier->Train();
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -757,13 +730,10 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   classifier->Save(argv[2]);
 
   //Load Model to new ANN
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   ANNType::Pointer classifierLoad = ANNType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -808,7 +778,6 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
 
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!ReadDataFile(argv[1],samples,labels))
     {
@@ -821,8 +790,7 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   classifier->Save(argv[2]);
 
@@ -839,13 +807,10 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
 
   //Load Model to new Normal Bayes
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   NormalBayesType::Pointer classifierLoad = NormalBayesType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -890,7 +855,6 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
 
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!ReadDataFile(argv[1],samples,labels))
     {
@@ -903,8 +867,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   classifier->Save(argv[2]);
 
@@ -921,13 +884,10 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
 
   //Load Model to new Decision Tree
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   DecisionTreeType::Pointer classifierLoad = DecisionTreeType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -952,7 +912,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
     }
 }
 
-
+#ifndef OTB_OPENCV_3
 int otbGradientBoostedTreeMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType,TargetValueType> GBTreeType;
@@ -973,7 +933,6 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
 
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!ReadDataFile(argv[1],samples,labels))
     {
@@ -986,8 +945,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   classifier->Save(argv[2]);
 
@@ -1004,13 +962,10 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
 
   //Load Model to new GBT
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   GBTreeType::Pointer classifierLoad = GBTreeType::New();
 
   classifierLoad->Load(argv[2]);
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -1034,6 +989,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 }
+#endif // if not OpenCV 3
 #endif
 
 #ifdef OTB_USE_SHARK
@@ -1192,7 +1148,6 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   typedef otb::SharkRandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
-  TargetListSampleType::Pointer predicted = TargetListSampleType::New();
 
   if(!SharkReadDataFile(argv[1],samples,labels))
     {
@@ -1212,11 +1167,10 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   std::cout << "Train\n";
   classifier->Train();
   std::cout << "Save\n";
-  classifier->Save(argv[2]); 
-  
+  classifier->Save(argv[2]);
+
   std::cout << "Predict\n";
-  classifier->SetTargetListSample(predicted);
-  classifier->PredictAll();
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -1229,7 +1183,7 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   const float kappaIdx = cmCalculator->GetKappaIndex();
   std::cout<<"Kappa: "<<kappaIdx<<std::endl;
   std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-  
+
   // //Predict single samples. Written for benchmarking purposes, but
   // too long for regression testing
   // std::cout << "Predict single samples\n";
@@ -1240,27 +1194,24 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   //   {
   //   classifier->Predict(sIt.GetMeasurementVector())[0];
   //   }
-  // auto duration = std::chrono::duration_cast< TimeT> 
+  // auto duration = std::chrono::duration_cast< TimeT>
   //   (std::chrono::system_clock::now() - start);
   // auto elapsed = duration.count();
   // std::cout << "Predict took " << elapsed << " ms\n";
   //  std::cout << "Single sample OA = " << oa << '\n';
 //Load Model to new RF
-  TargetListSampleType::Pointer predictedLoad = TargetListSampleType::New();
   RandomForestType::Pointer classifierLoad = RandomForestType::New();
 
   std::cout << "Load\n";
   classifierLoad->Load(argv[2]);
   auto start = std::chrono::system_clock::now();
-  classifierLoad->SetInputListSample(samples);
-  classifierLoad->SetTargetListSample(predictedLoad);
   std::cout << "Predict loaded\n";
-  classifierLoad->PredictAll();
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
   using TimeT = std::chrono::milliseconds;
-  auto duration = std::chrono::duration_cast< TimeT> 
+  auto duration = std::chrono::duration_cast< TimeT>
     (std::chrono::system_clock::now() - start);
   auto elapsed = duration.count();
-  std::cout << "PredictAll took " << elapsed << " ms\n";
+  std::cout << "PredictBatch took " << elapsed << " ms\n";
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
    cmCalculatorLoad->SetProducedLabels(predictedLoad);
@@ -1282,8 +1233,9 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
      {
      return EXIT_FAILURE;
      }
-  
+
    return EXIT_SUCCESS;
 }
+
 
 #endif

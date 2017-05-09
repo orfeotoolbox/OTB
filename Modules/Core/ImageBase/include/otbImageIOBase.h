@@ -1,19 +1,24 @@
-/*=========================================================================
+/*
+ * Copyright (C) 1999-2011 Insight Software Consortium
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: otbImageIOBase.h,v $
-  Language:  C++
-  Date:      $Date: 2009-11-29 15:51:11 $
-  Version:   $Revision: 1.56 $
-
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef otbImageIOBase_h
 #define otbImageIOBase_h
 
@@ -298,7 +303,6 @@ public:
   virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
                                         bool isVectorImage) = 0;
   
-
   /*-------- This part of the interfaces deals with reading data ----- */
 
   /** Determine the file type. Returns true if this ImageIO can read the
@@ -416,6 +420,12 @@ public:
    */
   const ArrayOfExtensionsType & GetSupportedWriteExtensions() const;
 
+  /** Remap band order in an input buffer using band mapping bandList
+   *  This operation is done in-place. The buffer size should enough to
+   *  contain extracted bands before and after mapping. bandList mapping
+   * between origin components and output components (before any
+   * conversion)*/
+  void DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList);
 
 protected:
   ImageIOBase();

@@ -52,6 +52,9 @@ contain the following actions:
   \item Set the name and the description of the application
   \item Fill the documentation and give an example
   \item Declare all the parameters
+  \item Define the documentation link:
+    \item for contrib application use SetDocLink("\textit{docLink}") function defined in \doxygen{otb}{Wrapper::Application}
+    \item for official application use SetOfficialDocLink() function defined in \doxygen{otb}{Wrapper::Application}
 \end{itemize}
 
 
@@ -150,7 +153,7 @@ name of the files to write, but they also encapsulate the corresponding writers.
 \section{Composite application}
 
 The application framework has been extended to allow the implementation of composite applications :
-applications that use other applications. The concept is simple : you have two applications A and B
+\textbf{applications that use other applications}. The concept is simple : you have two applications A and B
 that you want to chain in order to build a third application C. Rather than writing C by copying
 the code of A and B, you would like to re-use applications A and B. This plain example will be
 re-used in this section for explanations.
@@ -163,7 +166,7 @@ If you derive this class to implement application C, you will be able to create 
 Like with standard applications, you have to write a \code{DoInit()} function. In this function,
 you should first clean any internal application with the function \code{ClearApplications()}
 (the \code{DoInit()} function is called twice in some cases). Then you can
-instanciate the internal applications that you want to use (for instance A and B).
+instantiate the internal applications that you want to use (for instance A and B).
 The function \code{AddApplication()} will do that, based on :
 \begin{itemize}
 \item The application type (i.e. its official name, such as ExtractROI, BandMath, \dots)
@@ -221,7 +224,7 @@ types. Let say you want to connect parameter \code{a.out} to parameter \code{b.i
 The "Connect()" function may work in favorable cases (see previous paragraph),
 but for images, you have two options :
 \begin{itemize}
-\item Explicitely copy the image pointer from the output image parameter in the input
+\item Explicitly copy the image pointer from the output image parameter in the input
 image parameter (with functions \code{SetParameterInputImage()} and
 \code{GetParameterOutputImage()}). It will connect the pipelines in applications
 A and B, to form an "in-memory" connexion. This has to be done between the calls
@@ -231,7 +234,7 @@ with \code{b.in}. In this case, you have to manually call the writers of paramet
 \code{a.out}.
 \end{itemize}
 
-At the moment, the connexion of vector data parameters is not supported.
+At the moment, the in-memory connexion of vector data parameters is not supported.
 
 \subsection{Orchestration}
 
@@ -242,8 +245,17 @@ parameter update.
 
 In the \code{DoExecute()} of your composite application, you have to call \code{ExecuteInternal()}
 in order to launch each internal application. The order should be compatible with
-image parameter connexions. If you want to do "in-memory" connexions, you can to it between
-two calls to \code{ExecuteInternal()}.
+image parameter connexions. If you want to do "in-memory" connexions, you can do it between
+two calls to \code{ExecuteInternal()}, for instance :
+
+\small
+\begin{lstlisting}
+ExecuteInternal("a");
+GetInternalApplication("b")->SetParameterInputImage("in",
+  GetInternalApplication("a")->GetParameterOutputImage("out"));
+ExecuteInternal("b");
+\end{lstlisting}
+\normalsize
 
 The application BundleToPerfectSensor is a simple example of composite applications.
 For a more complex example, you can check the application TrainImagesClassifier.

@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef otbChangeInformationImageFilter_txx
 #define otbChangeInformationImageFilter_txx
 
@@ -78,7 +81,7 @@ ChangeInformationImageFilter<TInputImage>
     if (value == ITK_NULLPTR)
       {
       // Remove meta-data from dictionary
-      this->RemoveKeyFromDictionary(dict,key);
+      dict.Erase(key);
       }
     else
       {
@@ -110,39 +113,9 @@ ChangeInformationImageFilter<TInputImage>
     else
       {
       // Remove metadata from output dictionary
-      this->RemoveKeyFromDictionary(outputDict,*it);
+      outputDict.Erase(*it);
       }
     }
-}
-
-template< typename TInputImage >
-bool
-ChangeInformationImageFilter<TInputImage>
-::RemoveKeyFromDictionary(itk::MetaDataDictionary & dict, const std::string & key)
-{
-  std::vector<std::string> keyList = dict.GetKeys();
-  std::vector<std::string>::iterator pos = keyList.begin();
-  while (pos != keyList.end())
-    {
-    if (key.compare(*pos) == 0)
-      {
-      break;
-      }
-    ++pos;
-    }
-  if (pos != keyList.end())
-    {
-    itk::MetaDataDictionary copyDict;
-    keyList.erase(pos);
-    pos = keyList.begin();
-    for ( ; pos != keyList.end();++pos)
-      {
-      copyDict.Set(*pos, const_cast<itk::MetaDataObjectBase*>(dict.Get(*pos)));
-      }
-    dict = copyDict;
-    return true;
-    }
-  return false;
 }
 
 } // End of namespace OTB

@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef otbImageFileWriter_txx
 #define otbImageFileWriter_txx
 
@@ -66,7 +69,8 @@ ImageFileWriter<TInputImage>
     m_WriteGeomFile(false),
     m_FilenameHelper(),
     m_IsObserving(true),
-    m_ObserverID(0)
+    m_ObserverID(0),
+    m_IOComponents(0)
 {
   //Init output index shift
   m_ShiftOutputIndex.Fill(0);
@@ -707,6 +711,19 @@ ImageFileWriter<TInputImage>
 
     typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
     m_ImageIO->SetNumberOfComponents(AccessorFunctorType::GetVectorLength(input));
+
+    m_IOComponents = m_ImageIO->GetNumberOfComponents();
+    m_BandList.clear();
+    if (m_FilenameHelper->BandRangeIsSet())
+      {
+      // get band range
+      bool retBandRange = m_FilenameHelper->ResolveBandRange(m_FilenameHelper->GetBandRange(), m_IOComponents, m_BandList);
+      if (retBandRange == false || m_BandList.empty())
+        {
+        // invalid range
+        itkGenericExceptionMacro("The given band range is either empty or invalid for a " << m_IOComponents <<" bands input image!");
+        }
+      }
     }
   else
     {
@@ -731,8 +748,10 @@ ImageFileWriter<TInputImage>
     Convert(m_ImageIO->GetIORegion(), ioRegion, m_ShiftOutputIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
 
-  // before this test, bad stuff would happened when they don't match
-  if (bufferedRegion != ioRegion)
+  // before this test, bad stuff would happened when they don't match.
+  // In case of the buffer has not enough components, adapt the region.
+  if ((bufferedRegion != ioRegion) || (m_FilenameHelper->BandRangeIsSet()
+    && (m_IOComponents < m_BandList.size())))
     {
     if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion)
       {
@@ -741,8 +760,21 @@ ImageFileWriter<TInputImage>
 
       cacheImage = InputImageType::New();
       cacheImage->CopyInformation(input);
+
+      // set number of components at the band range size
+      if (m_FilenameHelper->BandRangeIsSet() && (m_IOComponents < m_BandList.size()))
+        {
+        cacheImage->SetNumberOfComponentsPerPixel(m_BandList.size());
+        }
+
       cacheImage->SetBufferedRegion(ioRegion);
       cacheImage->Allocate();
+
+      // set number of components at the initial size
+      if (m_FilenameHelper->BandRangeIsSet() && (m_IOComponents < m_BandList.size()))
+        {
+        cacheImage->SetNumberOfComponentsPerPixel(m_IOComponents);
+        }
 
       typedef itk::ImageRegionConstIterator<TInputImage> ConstIteratorType;
       typedef itk::ImageRegionIterator<TInputImage>      IteratorType;
@@ -773,6 +805,14 @@ ImageFileWriter<TInputImage>
       throw e;
       }
     }
+
+  if (m_FilenameHelper->BandRangeIsSet() && (!m_BandList.empty()))
+  {
+    // Adapt the image size with the region and take into account a potential
+    // remapping of the components. m_BandList is empty if no band range is set
+    m_ImageIO->DoMapBuffer(const_cast< void* >(dataPtr), bufferedRegion.GetNumberOfPixels(), this->m_BandList);
+    m_ImageIO->SetNumberOfComponents(m_BandList.size());
+  }
 
   m_ImageIO->Write(dataPtr);
 

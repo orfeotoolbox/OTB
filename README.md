@@ -17,7 +17,7 @@ It is community driven, extensible and heavily documented.  Orfeo ToolBox is
 not a black box!
 
 [![Travis Build Status](https://travis-ci.org/orfeotoolbox/OTB.png?branch=develop)](https://travis-ci.org/orfeotoolbox/OTB)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeo-toolbox) 
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeo-toolbox)
 
 ### Resources
 * [OTB's website](https://www.orfeo-toolbox.org/)
@@ -44,4 +44,3 @@ Please see the license and the Copyright directory for legal issues on the use o
 
 ### Issues
 Please report any issue you might encouter to [our bugtracker](http://bugs.orfeo-toolbox.org).
-

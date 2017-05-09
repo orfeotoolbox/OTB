@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 cmake_minimum_required(VERSION 2.8.11)
 
 project(OTB-SuperBuild)
@@ -69,7 +89,7 @@ endif()
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
 option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
-
+ 
 #get version of OTB from source_dir/CMakeLists.txt
 get_version(
   INPUT_FILE   "${CMAKE_SOURCE_DIR}/../CMakeLists.txt"
@@ -173,6 +193,12 @@ if(BUILD_SHARED_LIBS)
 else()
   list(APPEND SB_CONFIGURE_ARGS "--enable-static=yes")
   list(APPEND SB_CONFIGURE_ARGS "--enable-shared=no")
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+  list(APPEND SB_CONFIGURE_ARGS "--enable-debug=yes")
+else()
+  list(APPEND SB_CONFIGURE_ARGS "--enable-debug=no")
 endif()
 
 if(UNIX)

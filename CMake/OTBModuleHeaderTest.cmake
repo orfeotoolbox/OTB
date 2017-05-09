@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 # This checks HeaderTest's in each module.  A HeaderTest can be found in the
 # module 'test' directory in a file otb<module_name>HeaderTest.cxx.  This
 # contains a null main(), but includes all the classes in the module.  The
@@ -26,7 +46,7 @@ if(NOT OTB_USE_OPENCV)
 	SET(BANNED_HEADERS "${BANNED_HEADERS} otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h otbOpenCVUtils.h otbCvRTreesWrapper.h")
 endif()
 if(NOT OTB_USE_SHARK)
-  SET(BANNED_HEADERS "${BANNED_HEADERS} otbSharkRandomForestsMachineLearningModel.h otbSharkRandomForestsMachineLearningModel.txx otbSharkUtils.h otbRequiresSharkCheck.h otbSharkRandomForestsMachineLearningModelFactory.h")  
+  SET(BANNED_HEADERS "${BANNED_HEADERS} otbSharkRandomForestsMachineLearningModel.h otbSharkRandomForestsMachineLearningModel.txx otbSharkUtils.h otbRequiresSharkCheck.h otbSharkRandomForestsMachineLearningModelFactory.h  otbSharkKMeansMachineLearningModel.h otbSharkKMeansMachineLearningModel.txx otbSharkKMeansMachineLearningModelFactory.h otbSharkKMeansMachineLearningModelFactory.txx")
 endif()
 if(NOT OTB_USE_LIBSVM)
 	SET(BANNED_HEADERS "${BANNED_HEADERS} otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")
@@ -44,7 +64,7 @@ endif()
 
 
 macro( otb_module_headertest _name )
-  if( NOT ${_name}_THIRD_PARTY 
+  if( NOT ${_name}_THIRD_PARTY
       AND EXISTS ${${_name}_SOURCE_DIR}/include
       AND PYTHON_EXECUTABLE
       AND NOT (PYTHON_VERSION_STRING VERSION_LESS 2.6)

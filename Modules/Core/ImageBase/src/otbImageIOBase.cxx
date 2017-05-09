@@ -1,19 +1,24 @@
-/*=========================================================================
+/*
+ * Copyright (C) 1999-2011 Insight Software Consortium
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: otbImageIOBase.cxx,v $
-  Language:  C++
-  Date:      $Date: 2010-06-14 18:55:23 $
-  Version:   $Revision: 1.90 $
-
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -1262,6 +1267,54 @@ ImageIOBase
   axis[k] = 1.0;
 
   return axis;
+}
+
+void
+ImageIOBase
+::DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList)
+{
+  size_t componentSize = this->GetComponentSize();
+  size_t inPixelSize = componentSize * this->GetNumberOfComponents();
+  size_t outPixelSize = componentSize * bandList.size();
+  char* inPos = static_cast<char*>(buffer);
+  char* outPos = static_cast<char*>(buffer);
+  bool workBackward = (outPixelSize > inPixelSize);
+  char *pixBuffer = new char[outPixelSize];
+
+  memset(pixBuffer, 0, outPixelSize);
+
+  if (workBackward)
+    {
+    inPos = inPos + numberOfPixels*inPixelSize;
+    outPos = outPos + numberOfPixels*outPixelSize;
+    for (size_t n=0 ; n<numberOfPixels ; n++)
+      {
+      inPos -= inPixelSize;
+      outPos -= outPixelSize;
+      for (unsigned int i=0 ; i < bandList.size() ; i++)
+        {
+        memcpy(pixBuffer + i*componentSize, inPos + bandList[i]*componentSize, componentSize);
+        }
+      // copy pixBuffer to output
+      memcpy(outPos, pixBuffer, outPixelSize);
+      }
+    }
+  else
+    {
+    for (size_t n=0 ; n<numberOfPixels ; n++)
+      {
+      for (unsigned int i=0 ; i < bandList.size() ; i++)
+        {
+        memcpy(pixBuffer + i*componentSize, inPos + bandList[i]*componentSize, componentSize);
+        }
+      // copy pixBuffer to output
+      memcpy(outPos, pixBuffer, outPixelSize);
+      inPos += inPixelSize;
+      outPos += outPixelSize;
+      }
+    }
+
+  delete[] pixBuffer;
 }
 
 void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const

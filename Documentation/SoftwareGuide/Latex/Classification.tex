@@ -233,11 +233,11 @@ own framework.
 \subsection{Generic machine learning framework}
 \label{sec:MLGenericFramework}
 
-The OTB supervised classification is implemented as a generic Machine Learning 
+The OTB supervised classification is implemented as a generic Machine Learning
 framework, supporting several possible machine learning libraries as backends.
-As of now both libSVM (the machine learning library historically integrated in OTB)
-and the machine learning methods of OpenCV library (\cite{opencv_library}) are
-available.
+As of now libSVM (the machine learning library historically integrated in OTB),
+machine learning methods of OpenCV library (\cite{opencv_library}) and also
+Shark machine learning library (\cite{shark_library}) are available.
 
 The current list of classifiers available through the same generic interface within the OTB is:
 
@@ -380,22 +380,8 @@ class which is most often selected by the whole set of SVM.
 \label{ssec:LearningFromImages}
 \input{TrainMachineLearningModelFromImagesExample.tex}
 
-
-%\subsection{Learning With PointSets}
-%\label{sec:LearningWithPointSets}
-%\input{SVMPointSetModelEstimatorExample}
-
-%\subsection{PointSet Classification}
-%\label{sec:PointSetClassification}
-%\input{SVMPointSetClassificationExample}
-
-%\subsection{Learning With Images}
-%\label{sec:LearningWithImages}
-%\input{SVMImageModelEstimatorExample}
-
 %\subsection{Image Classification}
 %\label{sec:ImageClassification}
-%\input{SVMImageClassificationExample}
 %\input{SVMImageEstimatorClassificationMultiExample}
 
 

@@ -1,19 +1,23 @@
-/*=========================================================================
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
- =========================================================================*/
 #include "otbLearningApplicationBase.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -170,6 +174,8 @@ void DoInit() ITK_OVERRIDE
   SetDocExampleParameterValue("io.out", "regression_model.txt");
   SetDocExampleParameterValue("io.imstat", "training_statistics.xml");
   SetDocExampleParameterValue("classifier", "libsvm");
+
+  SetOfficialDocLink();
 }
 
 void DoUpdateParameters() ITK_OVERRIDE
@@ -502,8 +508,6 @@ void DoExecute() ITK_OVERRIDE
   // Performances estimation
   //--------------------------
   ListSampleType::Pointer performanceListSample;
-  TargetListSampleType::Pointer predictedList = TargetListSampleType::New();
-  predictedList->SetMeasurementVectorSize(1);
   TargetListSampleType::Pointer performanceLabeledListSample;
 
   //Test the input validation set size
@@ -519,7 +523,8 @@ void DoExecute() ITK_OVERRIDE
     performanceLabeledListSample = trainingLabeledListSample;
     }
 
-  this->Classify(performanceListSample, predictedList, GetParameterString("io.out"));
+  TargetListSampleType::Pointer predictedList =
+    this->Classify(performanceListSample, GetParameterString("io.out"));
 
   otbAppLogINFO("Training performances");
   double mse=0.0;

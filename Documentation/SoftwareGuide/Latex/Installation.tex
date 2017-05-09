@@ -84,7 +84,7 @@ See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \hline
 \textbf{ITK} & \url{http://www.itk.org} & yes & 4.6.0 \\
 \hline
-\textbf{GDAL} & \url{http://www.gdal.org} & yes & 1.10 \\
+\textbf{GDAL} & \url{http://www.gdal.org} & yes & 1.10 (2.x also supported) \\
 \hline
 \textbf{OSSIM} & \url{http://www.ossim.org} & yes & 1.8.20-3 \\
 \hline
@@ -120,7 +120,7 @@ See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \hline
 \textbf{MuParserX} & \url{http://muparserx.beltoforion.de} & no  & 4.0.7 \\
 \hline
-\textbf{OpenCV} & \url{http://opencv.org} & no  & 2 \\
+\textbf{OpenCV} & \url{http://opencv.org} & no  & 2 (3.x also supported) \\
 \hline
 \textbf{OPENGL} & \url{https://www.opengl.org/} & no  & - \\
 \hline
@@ -132,7 +132,7 @@ See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \hline
 \textbf{SiftFast} & \url{http://libsift.sourceforge.net} & no  & - \\
 \hline
-\textbf{SPTW} & \url{https://github.com/kornholi/sptw.git} & no  & - \\
+\textbf{SPTW} & \url{https://github.com/remicres/sptw.git} & no  & - \\
 \hline
 
 \end{tabular}
@@ -245,10 +245,12 @@ A pre-load script can also be used with the \texttt{-C} options (see
 Another option is to set variables manually with \texttt{cmake-gui}
 or \texttt{ccmake}.
 
-Please note that the \texttt{CMAKE\_INSTALL\_PREFIX} variable is important
-because the SuperBuild will install some targets during the compilation step.
-Therefore this directory will be used even if you don't use make install target.
-In fact there is no make install target for the SuperBuild.
+Please note that the \texttt{CMAKE\_INSTALL\_PREFIX} variable is
+important because the SuperBuild will install some targets during the
+compilation step.  Therefore this directory will be used even if you
+don't use make install target.  In fact there is no make install
+target for the SuperBuild. Also note that if not specified to cmake, a
+default install dir will be used, located in \texttt{../superbuild\_install}.
 
 By default, SuperBuild will not use any of libraries installed on
 system. All \texttt{USE\_SYSTEM\_\textit{XXX}} are set to FALSE. This is our
@@ -303,20 +305,28 @@ $ cd ~/OTB/build
 $ make
 \end{verbatim}
 
-Applications will be located in the \texttt{bin/} directory, for example:
+Applications will be located in the \texttt{bin/} directory
+in CMAKE\_INSTALL\_PREFIX
+directory, which in our case is \texttt{~/OTB/install/bin/}. For example:
 \begin{verbatim}
-./OTB/build/bin/otbcli_ExtractROI
+~/OTB/install/bin/otbcli_ExtractROI
 \end{verbatim}
 will launch the command line version of the \textbf{ExtractROI} application,
 while:
 \begin{verbatim}
-./OTB/build/bin/otbgui_ExtractROI
+./OTB/install/bin/otbgui_ExtractROI
 \end{verbatim}
 will launch the graphical version.
 
-We recommend adding OTB build directory to your PATH for easy access:
+To be able to use your OTB build from everywhere, we recommend the following.
+First, add \texttt{bin/} directory to your PATH for easy access:
 \begin{verbatim}
-export PATH=$PATH:~/OTB/build/OTB/build/bin
+export PATH=$PATH:~/OTB/install/bin
+\end{verbatim}
+
+Second, add the \texttt{lib/} directory to your LD\_LIBRARY\_PATH:
+\begin{verbatim}
+export LD_LIBRARY_PATH=~/OTB/install/lib:$LD_LIBRARY_PATH
 \end{verbatim}
 
 Monteverdi is integrated as an OTB module since release 5.8 and it is compiled
@@ -326,7 +336,7 @@ activated).
 To use OTB applications from within Monteverdi you will need to define the
 OTB\_APPLICATION\_PATH environment variable.
 \begin{verbatim}
-export OTB_APPLICATION_PATH=~/OTB/build/OTB/build/lib/otb/applications
+export OTB_APPLICATION_PATH=~/OTB/install/lib/otb/applications
 monteverdi
 \end{verbatim}
 

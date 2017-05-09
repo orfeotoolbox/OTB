@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 otb_module_test()
 set(OTBSupervisedTests
 otbSupervisedTestDriver.cxx
@@ -7,6 +27,11 @@ otbMachineLearningModelCanRead.cxx
 otbTrainMachineLearningModel.cxx
 otbImageClassificationFilter.cxx
 otbMachineLearningRegressionTests.cxx
+otbExhaustiveExponentialOptimizerNew.cxx
+otbExhaustiveExponentialOptimizerTest.cxx
+otbLabelMapClassifier.cxx
+otbSVMCrossValidationCostFunctionNew.cxx
+otbSVMMarginSampler.cxx
 )
 
 if(OTB_USE_SHARK)
@@ -49,6 +74,16 @@ otb_add_test(NAME leTvConfusionMatrixConcatenateTest COMMAND otbSupervisedTestDr
   ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
   ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
   ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
+
+otb_add_test(NAME leTuExhaustiveExponentialOptimizerNew COMMAND otbSupervisedTestDriver
+  otbExhaustiveExponentialOptimizerNew)
+
+otb_add_test(NAME leTvExhaustiveExponentialOptimizerTest COMMAND otbSupervisedTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/leTvExhaustiveExponentialOptimizerOutput.txt
+  ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt
+  otbExhaustiveExponentialOptimizerTest
+  ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt)
 
 if(OTB_USE_LIBSVM)
   include(tests-libsvm.cmake)

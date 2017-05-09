@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 
 
 //  Software Guide : BeginCommandLineArgs
@@ -49,15 +52,16 @@
 #include <iostream>
 
 //  Software Guide : BeginCodeSnippet
-#include "otbSVMImageModelEstimator.h"
-#include "itkImageToListSampleAdaptor.h"
-#include "otbSVMClassifier.h"
+#include "otbLibSVMMachineLearningModel.h"
+#include "itkImageToListSampleFilter.h"
+#include "otbImageClassificationFilter.h"
 //  Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
+#include "itkBinaryThresholdImageFilter.h"
 
 #include "otbImageFileReader.h"
 
@@ -89,13 +93,13 @@ int main(int itkNotUsed(argc), char *argv[])
 
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{otb}{SVMImageModelEstimator} class is templated over
-//  the input (features) and the training (labels) images.
+//  The \doxygen{otb}{LibSVMMachineLearningModel} class is templated over
+//  the input (features) and the training (labels) values.
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-  typedef otb::SVMImageModelEstimator<InputImageType,
-      TrainingImageType>   EstimatorType;
+  typedef otb::LibSVMMachineLearningModel<InputPixelType,
+      InputPixelType>   ModelType;
 
 //  Software Guide : EndCodeSnippet
 
@@ -125,107 +129,67 @@ int main(int itkNotUsed(argc), char *argv[])
   inputReader->SetFileName(inputImageFileName);
   trainingReader->SetFileName(trainingImageFileName);
 
-  inputReader->Update();
-  trainingReader->Update();
+  //~ inputReader->Update();
+  //~ trainingReader->Update();
 
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
-//  We can now instantiate the model estimator and set its parameters.
+//  The input data is contained in images. Only label values greater than 0
+//  shall be used, so we create two iterators to fill the input and target
+//  ListSamples.
 //
 // Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet
-  EstimatorType::Pointer svmEstimator = EstimatorType::New();
 
-  svmEstimator->SetInputImage(inputReader->GetOutput());
-  svmEstimator->SetTrainingImage(trainingReader->GetOutput());
+//  Software Guide : BeginCodeSnippet
+
+  typedef itk::BinaryThresholdImageFilter<TrainingImageType,TrainingImageType> ThresholdFilterType;
+  ThresholdFilterType::Pointer thresholder = ThresholdFilterType::New();
+  thresholder->SetInput(trainingReader->GetOutput());
+  thresholder->SetLowerThreshold(1);
+  thresholder->SetOutsideValue(0);
+  thresholder->SetInsideValue(1);
+
+  typedef itk::Statistics::ImageToListSampleFilter<InputImageType,TrainingImageType> ImageToListSample;
+  typedef itk::Statistics::ImageToListSampleFilter<TrainingImageType,TrainingImageType> ImageToTargetListSample;
+
+  ImageToListSample::Pointer imToList = ImageToListSample::New();
+  imToList->SetInput(inputReader->GetOutput());
+  imToList->SetMaskImage(thresholder->GetOutput());
+  imToList->SetMaskValue(1);
+  imToList->Update();
+
+  ImageToTargetListSample::Pointer imToTargetList = ImageToTargetListSample::New();
+  imToTargetList->SetInput(trainingReader->GetOutput());
+  imToTargetList->SetMaskImage(thresholder->GetOutput());
+  imToTargetList->SetMaskValue(1);
+  imToTargetList->Update();
 
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
-//  The model estimation procedure is triggered by calling the
-//  estimator's \code{Update} method.
+//  We can now instantiate the model and set its parameters.
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-  svmEstimator->Update();
+  ModelType::Pointer svmModel = ModelType::New();
+  svmModel->SetInputListSample(const_cast<ModelType::InputListSampleType*>(imToList->GetOutput()));
+  svmModel->SetTargetListSample(const_cast<ModelType::TargetListSampleType*>(imToTargetList->GetOutput()));
 
 //  Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
+//  Software Guide : BeginLatex
 //
-//  We can now proceed to the image classification. We start by
-//  declaring the type of the image to be classified. ITK's
-//  classification framework needs the type of the pixel to be of
-//  fixed type, so we declare the following types.
+//  The model training procedure is triggered by calling the
+//  model's \code{Train} method.
 //
 // Software Guide : EndLatex
+//  Software Guide : BeginCodeSnippet
+  svmModel->Train();
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::Image<itk::FixedArray<InputPixelType, 3>,
-      Dimension>          ClassifyImageType;
-
-  typedef otb::ImageFileReader<ClassifyImageType> ClassifyReaderType;
-// Software Guide : EndCodeSnippet
-
-// Software Guide : BeginLatex
-//
-// We can now read the image by calling the \code{Update} method of the reader.
-//
-// Software Guide : EndLatex
-
-// Software Guide : BeginCodeSnippet
-  ClassifyReaderType::Pointer cReader = ClassifyReaderType::New();
-
-  cReader->SetFileName(inputImageFileName);
-
-  cReader->Update();
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// The image has now to be transformed to a sample which
-// is compatible with the classification framework. We will use a
-// \doxygen{itk}{Statistics::ImageToListSampleAdaptor} for this
-// task. This class is templated over the image type used for
-// storing the measures.
-//
-// Software Guide : EndLatex
-
-// Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::ImageToListSampleAdaptor<ClassifyImageType> SampleType;
-  SampleType::Pointer sample = SampleType::New();
-// Software Guide : EndCodeSnippet
-
-// Software Guide : BeginLatex
-//
-// After instantiation, we can set the image as an imput of our
-// sample adaptor.
-//
-// Software Guide : EndLatex
-
-// Software Guide : BeginCodeSnippet
-  sample->SetImage(cReader->GetOutput());
-// Software Guide : EndCodeSnippet
-
-// Software Guide : BeginLatex
-//
-// Now, we need to declare the SVM model which is to be used by the
-// classifier. The SVM model is templated over the type of value used
-// for the measures and the type of pixel used for the labels. The
-// model is obtained from the model estimator by calling the
-// \code{GetModel} method.
-//
-// Software Guide : EndLatex
-
-// Software Guide : BeginCodeSnippet
-  typedef InputPixelType LabelPixelType;
-
-  typedef otb::SVMModel<InputPixelType, LabelPixelType> ModelType;
-
-  ModelType::Pointer model = svmEstimator->GetModel();
-// Software Guide : EndCodeSnippet
+//  Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -236,7 +200,7 @@ int main(int itkNotUsed(argc), char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::SVMClassifier<SampleType, LabelPixelType> ClassifierType;
+  typedef otb::ImageClassificationFilter<InputImageType, TrainingImageType> ClassifierType;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
 // Software Guide : EndCodeSnippet
@@ -250,11 +214,8 @@ int main(int itkNotUsed(argc), char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  int numberOfClasses = model->GetNumberOfClasses();
-  classifier->SetNumberOfClasses(numberOfClasses);
-  classifier->SetModel(model);
-  classifier->SetInput(sample.GetPointer());
-  classifier->Update();
+  classifier->SetModel(svmModel);
+  classifier->SetInput(inputReader->GetOutput());
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -269,10 +230,7 @@ int main(int itkNotUsed(argc), char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef ClassifierType::ClassLabelType         OutputPixelType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  OutputImageType::Pointer outputImage = OutputImageType::New();
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -283,25 +241,7 @@ int main(int itkNotUsed(argc), char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Index<Dimension>       myIndexType;
-  typedef itk::Size<Dimension>        mySizeType;
-  typedef itk::ImageRegion<Dimension> myRegionType;
 
-  mySizeType size;
-  size[0] = cReader->GetOutput()->GetRequestedRegion().GetSize()[0];
-  size[1] = cReader->GetOutput()->GetRequestedRegion().GetSize()[1];
-
-  myIndexType start;
-  start[0] = 0;
-  start[1] = 0;
-
-  myRegionType region;
-  region.SetIndex(start);
-  region.SetSize(size);
-
-  outputImage->SetRegions(region);
-  outputImage->Allocate();
-  std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -312,18 +252,7 @@ int main(int itkNotUsed(argc), char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  ClassifierType::OutputType* membershipSample =
-    classifier->GetOutput();
-  ClassifierType::OutputType::ConstIterator m_iter =
-    membershipSample->Begin();
-  ClassifierType::OutputType::ConstIterator m_last =
-    membershipSample->End();
 
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-  OutputIteratorType outIt(outputImage,
-                           outputImage->GetBufferedRegion());
-
-  outIt.GoToBegin();
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -334,21 +263,15 @@ int main(int itkNotUsed(argc), char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  while (m_iter != m_last && !outIt.IsAtEnd())
-    {
-    outIt.Set(m_iter.GetClassLabel());
-    ++m_iter;
-    ++outIt;
-    }
-  std::cout << "---" << std::endl;
+
 // Software Guide : EndCodeSnippet
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<TrainingImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName(outputImageFileName);
-  writer->SetInput(outputImage);
+  writer->SetInput(classifier->GetOutput());
 
   writer->Update();
 
@@ -369,12 +292,12 @@ int main(int itkNotUsed(argc), char *argv[])
   typedef otb::Image<RGBPixelType, 2>  RGBImageType;
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
   ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<OutputImageType,
+  typedef itk::UnaryFunctorImageFilter<TrainingImageType,
       RGBImageType,
       ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
-  colormapper->SetInput(outputImage);
+  colormapper->SetInput(classifier->GetOutput());
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

@@ -192,7 +192,12 @@ Using the Python interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The applications can also be accessed from Python, through a module
-named ``otbApplication``.
+named ``otbApplication``. However, there are technical requirements to use it.
+If you use OTB through standalone packages, you should use the supplied
+environment script ``otbenv`` to properly setup variables such as
+``PYTHONPATH`` and ``OTB_APPLICATION_PATH`` (on Unix systems, don't forget to
+source the script). In other cases, you should set these variables depending on
+your configuration.
 
 On Unix systems, it is typically available in the ``/usr/lib/otb/python``
 directory. Depending on how you installed OTB, you may need to configure the
@@ -202,14 +207,6 @@ becomes available from Python.
 On Windows, you can install the ``otb-python`` package, and the module
 will be available from an OSGeo4W shell automatically.
 
-In this module, two main classes can be manipulated :
-
--  ``Registry``, which provides access to the list of available
-   applications, and can create applications
-
--  ``Application``, the base class for all applications. This allows to
-   interact with an application instance created by the ``Registry``
-
 As for the command line and GUI launchers, the path to the application
 modules needs to be properly set with the ``OTB_APPLICATION_PATH``
 environment variable. The standard location on Unix systems is
@@ -217,6 +214,14 @@ environment variable. The standard location on Unix systems is
 available in the ``otb-bin`` OSGeo4W package, and the environment is
 configured automatically so you don’t need to tweak
 ``OTB_APPLICATION_PATH``.
+
+In the ``otbApplication`` module, two main classes can be manipulated :
+
+-  ``Registry``, which provides access to the list of available
+   applications, and can create applications
+
+-  ``Application``, the base class for all applications. This allows to
+   interact with an application instance created by the ``Registry``
 
 Here is one example of how to use Python to run the ``Smoothing``
 application, changing the algorithm at each iteration.
@@ -364,7 +369,7 @@ Here is a Python code sample connecting several applications together:
 
 .. code-block:: python
    
-                import otbApplications as otb
+                import otbApplication as otb
                 
                 app1 = otb.Registry.CreateApplication("Smoothing")
                 app2 = otb.Registry.CreateApplication("Smoothing")

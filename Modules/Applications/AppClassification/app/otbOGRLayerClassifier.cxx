@@ -1,19 +1,23 @@
-/*=========================================================================
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
- =========================================================================*/
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -60,7 +64,7 @@ private:
     SetDocLongDescription("This application will apply a trained machine learning model on the selected feature to get a classification of each geometry contained in an OGR layer. The list of feature must match the list used for training. The predicted label is written in the user defined field for each geometry.");
     SetDocLimitations("Experimental. Only shapefiles are supported for now.");
     SetDocAuthors("David Youssefi during internship at CNES");
-    SetDocSeeAlso("ComputeOGRLayersFeaturesStatistics,TrainOGRLayersClassifier");
+    SetDocSeeAlso("ComputeOGRLayersFeaturesStatistics");
     AddDocTag(Tags::Segmentation);
   
     AddParameter(ParameterType_InputVectorData, "inshp", "Name of the input shapefile");
@@ -87,6 +91,7 @@ private:
     SetDocExampleParameterValue("feat", "perimeter");
     SetDocExampleParameterValue("cfield", "predicted");
 
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -188,10 +193,8 @@ private:
 
     typedef otb::LibSVMMachineLearningModel<ValueType,LabelPixelType> LibSVMType;
     LibSVMType::Pointer libSVMClassifier = LibSVMType::New();
-    libSVMClassifier->SetInputListSample(trainingListSample);
-    libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
     libSVMClassifier->Load(modelfile);
-    libSVMClassifier->PredictAll();
+    trainingLabeledListSample = libSVMClassifier->PredictBatch(trainingListSample);
 
     otb::ogr::DataSource::Pointer source2 = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
     otb::ogr::Layer layer2 = source2->GetLayer(0);

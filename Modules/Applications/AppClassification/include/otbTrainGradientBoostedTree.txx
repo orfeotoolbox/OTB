@@ -1,22 +1,27 @@
-/*=========================================================================
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
- =========================================================================*/
 #ifndef otbTrainGradientBoostedTree_txx
 #define otbTrainGradientBoostedTree_txx
 #include "otbLearningApplicationBase.h"
+#include "otbGradientBoostedTreeMachineLearningModel.h"
 
 namespace otb
 {
@@ -28,6 +33,8 @@ void
 LearningApplicationBase<TInputValue,TOutputValue>
 ::InitGradientBoostedTreeParams()
 {
+// disable GBTree model with OpenCV 3 (not implemented)
+#ifndef OTB_OPENCV_3
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
   SetParameterDescription(
       "classifier.gbt",
@@ -75,7 +82,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //UseSurrogates : don't need to be exposed !
   //AddParameter(ParameterType_Empty, "classifier.gbt.sur", "Surrogate splits will be built");
   //SetParameterDescription("classifier.gbt.sur","These splits allow working with missing data and compute variable importance correctly.");
-
+#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -85,6 +92,12 @@ LearningApplicationBase<TInputValue,TOutputValue>
                            typename TargetListSampleType::Pointer trainingLabeledListSample,
                            std::string modelPath)
 {
+#ifdef OTB_OPENCV_3
+  (void) trainingListSample;
+  (void) trainingLabeledListSample;
+  (void) modelPath;
+#else
+  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, OutputValueType> GradientBoostedTreeType;
   typename GradientBoostedTreeType::Pointer classifier = GradientBoostedTreeType::New();
   classifier->SetRegressionMode(this->m_RegressionFlag);
   classifier->SetInputListSample(trainingListSample);
@@ -119,6 +132,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   classifier->Train();
   classifier->Save(modelPath);
+#endif
 }
 
 } //end namespace wrapper

@@ -265,10 +265,6 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <translation></translation>
     </message>
     <message>
-        <source>&lt;br /&gt;&lt;p&gt;Copyright (c) Centre National d&apos;Etudes Spatiales. All rights reserved.&lt;/p&gt;&lt;p&gt;See Copyright.txt for details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Monteverdi is distributed under the CeCILL licence version 2. See&lt;/p&gt;&lt;p&gt;Licence_CeCILL_V2-en.txt or&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&quot;&gt;http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt&lt;/a&gt; for more details.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;This software is distributed WITHOUT ANY WARRANTY; without even&lt;/p&gt;&lt;p&gt;the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR&lt;/p&gt;&lt;p&gt;PURPOSE.  See the above copyright notices for more information&lt;/a&gt;.&lt;/p&gt;&lt;br /&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>&amp;Close</source>
         <translation>&amp;Fermer</translation>
     </message>
@@ -280,6 +276,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <message>
         <source>OTB version M.m.pl (codename)</source>
         <translation>Version OTB M.m.pl (nom_de_code)</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Copyright (C) 2005-2017 Centre National d&apos;Etudes Spatiales (CNES)&lt;/p&gt;&lt;p&gt;Monteverdi is part of Orfeo Toolbox&lt;/p&gt;&lt;a href=&quot;https://www.orfeo-toolbox.org/&quot;&gt;https://www.orfeo-toolbox.org/&lt;/a&gt;&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  You may obtain a copy of the License at&lt;/p&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;&lt;p&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.&lt;/p&gt;</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -686,7 +686,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message utf8="true">
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Image bands&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Bandes&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Bandes&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;color:#000000;background-color:#FF4444&quot;&gt;&amp;nbsp;&lt;b&gt;R&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
@@ -4622,6 +4622,26 @@ Merci d&apos;en sélectionner un autre.</translation>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ProjectionBarWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulaire</translation>
+    </message>
+    <message>
+        <source>Zoom Level</source>
+        <comment>projection</comment>
+        <translation>Niveau de zoom</translation>
+    </message>
+    <message>
+        <source>Current zoom-level of view, relative to reference layer (projection and spacing).</source>
+        <translation>Niveau de zoom courant de la vue, relativement à la couche de référence (projection et espacement).</translation>
+    </message>
+    <message>
+        <source>1:1</source>
+        <translation>1:1</translation>
     </message>
 </context>
 <context>

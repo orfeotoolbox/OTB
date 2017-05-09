@@ -1,27 +1,29 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 
 
 #include "otbSatelliteRSR.h"
 #include "otbReduceSpectralResponse.h"
 
-#include "otbSVMSampleListModelEstimator.h"
-#include "otbSVMClassifier.h"
+#include "otbLibSVMMachineLearningModel.h"
 #include "otbConfusionMatrixCalculator.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
@@ -44,9 +46,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   typedef itk::FixedArray<unsigned long, 1> TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType> TrainingSampleListType;
 
-  typedef otb::SVMSampleListModelEstimator<SampleListType, TrainingSampleListType> SVMModelEstimatorType;
-  typedef otb::SVMClassifier<SampleListType, unsigned long> SVMClassifierType;
-  typedef SVMClassifierType::OutputType ClassifierOutputType;
+  typedef otb::LibSVMMachineLearningModel<double, unsigned long> SVMType;
 
   typedef otb::ConfusionMatrixCalculator<TrainingSampleListType, TrainingSampleListType> ConfusionMatrixCalculatorType;
 
@@ -171,19 +171,19 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
     }
 
   //SVM model estimator
-  SVMModelEstimatorType::Pointer estimator = SVMModelEstimatorType::New();
-  estimator->SetInputSampleList(sampleList);
-  estimator->SetTrainingSampleList(trainingList);
-  estimator->SetNu(0.5);
-  estimator->SetKernelGamma(1);
-  estimator->SetKernelCoef0(1);
-  estimator->SetC(1);
-  estimator->SetEpsilon(0.001);
-  estimator->SetP(0.1);
-  estimator->DoProbabilityEstimates(true);
+  SVMType::Pointer model = SVMType::New();
+  model->SetInputListSample(sampleList);
+  model->SetTargetListSample(trainingList);
+  model->SetNu(0.5);
+  model->SetKernelGamma(1);
+  model->SetKernelCoef0(1);
+  model->SetC(1);
+  model->SetEpsilon(0.001);
+  model->SetP(0.1);
+  model->SetDoProbabilityEstimates(true);
 
-  estimator->Update();
-  estimator->GetModel()->SaveModel("model.txt");
+  model->Train();
+  model->Save("model.txt");
 
   //compute spectral response for testing files
   sampleList->Clear(); //clear the sample list to re use it for testing samples
@@ -216,19 +216,13 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
     }
 
   //SVM Classifier
-  SVMClassifierType::Pointer classifier = SVMClassifierType::New();
-  classifier->SetModel(estimator->GetModel());
-  classifier->SetInput(sampleList);
-  classifier->SetNumberOfClasses(dirSR.size());
-  classifier->Update();
+  TrainingSampleListType::Pointer classifierListLabel =
+    model->PredictBatch(sampleList);
 
-  ClassifierOutputType::ConstIterator it = classifier->GetOutput()->Begin();
-
-  TrainingSampleListType::Pointer classifierListLabel = TrainingSampleListType::New();
-  while (it != classifier->GetOutput()->End())
+  TrainingSampleListType::ConstIterator it = classifierListLabel->Begin();
+  while (it != classifierListLabel->End())
     {
-      std::cout << "class : " << it.GetClassLabel() << std::endl;
-    classifierListLabel->PushBack(it.GetClassLabel());
+    std::cout << "class : " << it.GetMeasurementVector()[0] << std::endl;
     ++it;
     }
   for (unsigned int i = 0; i < testingFiles.size(); ++i)

@@ -1,21 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   Monteverdi
-  Language:  C++
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See Copyright.txt for details.
-
-  Monteverdi is distributed under the CeCILL licence version 2. See
-  Licence_CeCILL_V2-en.txt or
-  http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt for more details.
-
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 
 #include "mvdImageViewWidget.h"
 
@@ -1585,7 +1587,8 @@ ImageViewWidget
   //
   // Apply dynamics to current layer.
   AbstractLayerModel * layer = layerStack->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -1687,7 +1690,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -1776,7 +1780,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2010,6 +2015,9 @@ ImageViewWidget
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
+  if( !stackedLayerModel->HasCurrent() )
+    return;
+
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
   assert( layer!=NULL );
 
@@ -2069,7 +2077,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2281,7 +2290,8 @@ ImageViewWidget
   assert( stackedLayerModel!=NULL );
 
   AbstractLayerModel * layer = stackedLayerModel->GetCurrent();
-  assert( layer!=NULL );
+  if( layer==NULL )
+    return;
 
   if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
@@ -2350,8 +2360,11 @@ ImageViewWidget
 
     assert( m_Manipulator!=NULL );
 
+    // Update the Manipulator reference projection.
+    // Then all view manipulation will use this projection reference.
     m_Manipulator->SetWkt( image->GetProjectionRef() );
     m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
     }
   else
     {

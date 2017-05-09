@@ -1,19 +1,23 @@
-/*=========================================================================
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
- =========================================================================*/
 #ifndef otbLearningApplicationBase_txx
 #define otbLearningApplicationBase_txx
 
@@ -29,6 +33,7 @@ namespace Wrapper
 template <class TInputValue, class TOutputValue>
 LearningApplicationBase<TInputValue,TOutputValue>
 ::LearningApplicationBase() : m_RegressionFlag(false)
+
 {
 }
 
@@ -50,8 +55,41 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Choice, "classifier", "Classifier to use for the training");
   SetParameterDescription("classifier", "Choice of the classifier to use for the training.");
 
+  InitSupervisedClassifierParams();
+  m_SupervisedClassifier = GetChoiceKeys("classifier");
+
+  InitUnsupervisedClassifierParams();
+  std::vector<std::string> allClassifier = GetChoiceKeys("classifier");
+  // Check for empty unsupervised classifier
+  if( allClassifier.size() > m_UnsupervisedClassifier.size() )
+    m_UnsupervisedClassifier.assign( allClassifier.begin() + m_SupervisedClassifier.size(), allClassifier.end() );
+}
+
+template <class TInputValue, class TOutputValue>
+typename LearningApplicationBase<TInputValue,TOutputValue>::ClassifierCategory
+LearningApplicationBase<TInputValue,TOutputValue>
+::GetClassifierCategory()
+{
+  if( m_UnsupervisedClassifier.empty() )
+    {
+    return Supervised;
+    }
+  else
+    {
+    bool foundUnsupervised = std::find( m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
+                                        GetParameterString( "classifier" ) ) != m_UnsupervisedClassifier.end();
+    return foundUnsupervised ? Unsupervised : Supervised;
+    }
+}
+
+template <class TInputValue, class TOutputValue>
+void
+LearningApplicationBase<TInputValue,TOutputValue>
+::InitSupervisedClassifierParams()
+{
+
   //Group LibSVM
-#ifdef OTB_USE_LIBSVM 
+#ifdef OTB_USE_LIBSVM
   InitLibSVMParams();
 #endif
 
@@ -77,14 +115,23 @@ LearningApplicationBase<TInputValue,TOutputValue>
 #ifdef OTB_USE_SHARK
   InitSharkRandomForestsParams();
 #endif
-  
 }
 
 template <class TInputValue, class TOutputValue>
 void
 LearningApplicationBase<TInputValue,TOutputValue>
+::InitUnsupervisedClassifierParams()
+{
+#ifdef OTB_USE_SHARK
+  InitSharkKMeansParams();
+#endif
+}
+
+template <class TInputValue, class TOutputValue>
+typename LearningApplicationBase<TInputValue,TOutputValue>
+::TargetListSampleType::Pointer
+LearningApplicationBase<TInputValue,TOutputValue>
 ::Classify(typename ListSampleType::Pointer validationListSample,
-           typename TargetListSampleType::Pointer predictedList,
            std::string modelPath)
 {
   // Setup fake reporter
@@ -105,13 +152,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   model->Load(modelPath);
   model->SetRegressionMode(this->m_RegressionFlag);
-  model->SetInputListSample(validationListSample);
-  model->SetTargetListSample(predictedList);
-  model->PredictAll();
+
+  typename TargetListSampleType::Pointer predictedList = model->PredictBatch(validationListSample, NULL);
 
   // update reporter
   dummyFilter->UpdateProgress(1.0f);
   dummyFilter->InvokeEvent(itk::EndEvent());
+
+  return predictedList;
 }
 
 template <class TInputValue, class TOutputValue>
@@ -147,17 +195,22 @@ LearningApplicationBase<TInputValue,TOutputValue>
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif
     }
-  
-  // OpenCV SVM implementation is buggy with linear kernel
-  // Users should use the libSVM implementation instead.
-  // else if (modelName == "svm")
-  //  {
-	//  #ifdef OTB_USE_OPENCV
-  //   TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
-  //  #else
-  //   otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-  //  #endif
-  //  }
+  else if(modelName == "sharkkm")
+    {
+    #ifdef OTB_USE_SHARK
+    TrainSharkKMeans( trainingListSample, trainingLabeledListSample, modelPath );
+    #else
+    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+    #endif
+    }
+  else if (modelName == "svm")
+    {
+    #ifdef OTB_USE_OPENCV
+    TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
+    #else
+    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
+    #endif
+    }
   else if (modelName == "boost")
     {
 	#ifdef OTB_USE_OPENCV

@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
 #define otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
 
@@ -32,6 +35,10 @@ template <class TImage, class TStructuringElement>
 GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
 ::GeodesicMorphologyIterativeDecompositionImageFilter()
 {
+  // Create a process accumulator for tracking the progress of minipipeline
+  m_Progress = itk::ProgressAccumulator::New();
+  m_Progress->SetMiniPipelineFilter(this);
+
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(3);
   m_NumberOfIterations  = 2;
@@ -185,6 +192,10 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
   while (i < m_NumberOfIterations)
     {
     filter = DecompositionFilterType::New();
+
+    // Register Internal Filter for progress
+    m_Progress->RegisterInternalFilter(filter, 1./m_NumberOfIterations);
+
     typename StructuringElementType::RadiusType radius;
     radius.Fill(m_InitialValue + i * m_Step);
     filter->SetRadius(radius);
@@ -195,8 +206,8 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
     filter->GetOutput()->UpdateOutputData();
 
     outputPtr->SetNthElement(i, filter->GetOutput());
-    concOutputPtr->SetNthElement(i, filter->GetConvexMap());
-    convOutputPtr->SetNthElement(i, filter->GetConcaveMap());
+    concOutputPtr->SetNthElement(i, filter->GetConcaveMap());
+    convOutputPtr->SetNthElement(i, filter->GetConvexMap());
 
     current = filter->GetOutput();
 

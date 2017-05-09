@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #include "otbWrapperMapProjectionParametersHandler.h"
 
 // Needed for methods relative to projections
@@ -131,8 +134,8 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     {
     case Map_Utm:
     {
-    typedef UtmInverseProjection  UtmProjectionType;
-    UtmProjectionType::Pointer    utmProjection = UtmProjectionType::New();
+    otb::UtmInverseProjection::Pointer utmProjection =
+     otb::UtmInverseProjection::New();
 
     // Set the zone
     utmProjection->SetZone(app->GetParameterInt(zoneKey.str()));
@@ -149,15 +152,15 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     break;
     case Map_Lambert2:
     {
-    typedef Lambert2EtenduForwardProjection Lambert2ProjectionType;
-    Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
+    otb::Lambert2EtenduForwardProjection::Pointer lambert2Projection =
+      otb::Lambert2EtenduForwardProjection::New();
     return lambert2Projection->GetWkt();
     }
     break;
     case Map_Lambert93:
     {
-    typedef otb::Lambert93InverseProjection Lambert93ProjectionType;
-    Lambert93ProjectionType::Pointer lambert93Projection = Lambert93ProjectionType::New();
+    otb::Lambert93InverseProjection::Pointer lambert93Projection =
+      otb::Lambert93InverseProjection::New();
     return lambert93Projection->GetWkt();
     }
     break;

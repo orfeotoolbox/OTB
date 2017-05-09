@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 
 //Warning !! the SVM model estimator do not converge in this test !!
 
@@ -26,9 +29,10 @@
 #include "otbSpatialisationFilter.h"
 #include "otbImageSimulationMethod.h"
 #include "otbAttributesMapLabelObject.h"
-#include "otbSVMImageModelEstimator.h"
-#include "otbSVMImageClassificationFilter.h"
+#include "otbLibSVMMachineLearningModel.h"
+#include "otbImageClassificationFilter.h"
 #include "otbImageFileReader.h"
+#include "itkImageToListSampleAdaptor.h"
 
 int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
 {
@@ -59,17 +63,16 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
     SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
 
-
-   typedef otb::SVMImageModelEstimator<OutputImageType, LabelImageType>                    SVMEstimatorType;
-   typedef otb::SVMImageClassificationFilter<OutputImageType, LabelImageType>             SVMClassificationFilterType;
+   typedef otb::LibSVMMachineLearningModel<double, unsigned short> SVMType;
+   typedef otb::ImageClassificationFilter<OutputImageType,LabelImageType> ClassificationFilterType;
 
    /** Instantiation of pointer objects*/
    ImageWriterType::Pointer writer = ImageWriterType::New();
    LabelImageWriterType::Pointer labelWriter = LabelImageWriterType::New();
    ImageSimulationMethodType::Pointer imageSimulation = ImageSimulationMethodType::New();
    SpatialisationFilterType::Pointer spatialisationFilter = SpatialisationFilterType::New();
-   SVMEstimatorType::Pointer      svmEstimator   = SVMEstimatorType::New();
-   SVMClassificationFilterType::Pointer classifier = SVMClassificationFilterType::New();
+   SVMType::Pointer model = SVMType::New();
+   ClassificationFilterType::Pointer classifier = ClassificationFilterType::New();
 
 
    SpatialisationFilterType::SizeType objectSize;
@@ -129,15 +132,28 @@ int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
 //    imageSimulation->SetVariance();
    imageSimulation->UpdateData();
 
+    
+   //~ svmEstimator->SetInputImage(imageSimulation->GetOutputReflectanceImage());
+   //~ svmEstimator->SetTrainingImage(imageSimulation->GetOutputLabelImage());
+   //~ svmEstimator->SetParametersOptimization(false);
+   //~ svmEstimator->DoProbabilityEstimates(true);
+   //~ svmEstimator->Update();
 
-   svmEstimator->SetInputImage(imageSimulation->GetOutputReflectanceImage());
-   svmEstimator->SetTrainingImage(imageSimulation->GetOutputLabelImage());
-   svmEstimator->SetParametersOptimization(false);
-   svmEstimator->DoProbabilityEstimates(true);
-   svmEstimator->Update();
+  typedef itk::Statistics::ImageToListSampleAdaptor<OutputImageType> ListSampleAdaptorType;
+  typedef itk::Statistics::ImageToListSampleAdaptor<LabelImageType> TargetListSampleAdaptorType;
 
+  ListSampleAdaptorType::Pointer listSample = ListSampleAdaptorType::New();
+  listSample->SetImage(imageSimulation->GetOutputReflectanceImage());
 
-   classifier->SetModel(svmEstimator->GetModel());
+  TargetListSampleAdaptorType::Pointer targetListSample = TargetListSampleAdaptorType::New();
+  targetListSample->SetImage(imageSimulation->GetOutputLabelImage());
+
+  model->SetInputListSample(listSample);
+  model->SetTargetListSample(targetListSample);
+  model->SetDoProbabilityEstimates(true);
+  model->Train();
+  
+   classifier->SetModel(model);
    classifier->SetInput(imageSimulation->GetOutput());
 
    //Write the result to an image file

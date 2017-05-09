@@ -1,22 +1,26 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #include "otbExtendedFilenameToReaderOptions.h"
 #include "otb_boost_string_header.h"
+#include "itksys/RegularExpression.hxx"
 
 namespace otb
 {
@@ -45,12 +49,16 @@ ExtendedFilenameToReaderOptions
   m_Options.skipRpcTag.first  = false;
   m_Options.skipRpcTag.second = false;
 
+  m_Options.bandRange.first = false;
+  m_Options.bandRange.second = "";
+
   m_Options.optionList.push_back("geom");
   m_Options.optionList.push_back("sdataidx");
   m_Options.optionList.push_back("resol");
   m_Options.optionList.push_back("skipcarto");
   m_Options.optionList.push_back("skipgeom");
   m_Options.optionList.push_back("skiprpctag");
+  m_Options.optionList.push_back("bands");
 }
 
 void
@@ -118,6 +126,22 @@ ExtendedFilenameToReaderOptions
         || map["skiprpctag"] == "1"   )
       {
       m_Options.skipRpcTag.second = true;
+      }
+    }
+
+  if (!map["bands"].empty())
+    {
+    // Basic check on bandRange (using regex)
+    itksys::RegularExpression reg;
+    reg.compile("^((\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)(,(\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)*$");
+    if (reg.find(map["bands"]))
+      {
+      m_Options.bandRange.first = true;
+      m_Options.bandRange.second = map["bands"];
+      }
+    else
+      {
+      itkExceptionMacro("Unkwown value "<<map["bands"]<<" for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
       }
     }
 
@@ -219,6 +243,20 @@ ExtendedFilenameToReaderOptions
 ::GetSkipRpcTag () const
 {
   return m_Options.skipRpcTag.second;
+}
+
+bool
+ExtendedFilenameToReaderOptions
+::BandRangeIsSet () const
+{
+  return m_Options.bandRange.first;
+}
+
+std::string
+ExtendedFilenameToReaderOptions
+::GetBandRange () const
+{
+  return m_Options.bandRange.second;
 }
 
 } // end namespace otb

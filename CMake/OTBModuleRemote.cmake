@@ -1,13 +1,38 @@
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 # Function to fetch remote modules.
 
 # Helper to perform the initial git clone and checkout.
 function(_git_clone git_executable git_repository git_tag module_dir)
-  execute_process(
-    COMMAND "${git_executable}" clone "${git_repository}" "${module_dir}"
-    RESULT_VARIABLE error_code
-    OUTPUT_QUIET
-    ERROR_QUIET
-    )
+  set(retryCount 0)
+  set(error_code 1)
+  while(error_code AND (retryCount LESS 3))
+    execute_process(
+      COMMAND "${git_executable}" clone "${git_repository}" "${module_dir}"
+      RESULT_VARIABLE error_code
+      OUTPUT_QUIET
+      ERROR_QUIET
+      )
+    math(EXPR retryCount "${retryCount}+1")
+  endwhile()
   if(error_code)
     message(FATAL_ERROR "Failed to clone repository: '${git_repository}'")
   endif()

@@ -1,22 +1,22 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
-
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #include <iterator>
 
 #include "otbImage.h"
@@ -28,7 +28,7 @@
 
 #include "otbStatisticsXMLFileReader.h"
 #include "otbShiftScaleSampleListFilter.h"
-#include "otbSVMSampleListModelEstimator.h"
+#include "otbLibSVMMachineLearningModel.h"
 
 const unsigned int Dimension = 2;
 typedef int        LabelType;
@@ -57,17 +57,10 @@ typedef otb::DescriptorsListSampleGenerator
 typedef otb::ImageFileReader<ImageType>           ImageReaderType;
 typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
 
-typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<SampleType>
-                                                        MeasurementVectorFunctorType;
-
 typedef otb::StatisticsXMLFileReader<SampleType>   StatisticsReader;
 typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType> ShiftScaleListSampleFilterType;
 
-typedef otb::SVMSampleListModelEstimator<
-  ListSampleType,
-  LabelListSampleType,
-  MeasurementVectorFunctorType>                         SVMEstimatorType;
-
+typedef otb::LibSVMMachineLearningModel<FunctionPrecisionType, LabelType> SVMType;
 
 typedef FunctionType::PointType PointType;
 typedef DescriptorsListSampleGeneratorType::SamplesPositionType SamplesPositionType;
@@ -240,11 +233,11 @@ int otbDescriptorsSVMModelCreation(int argc, char* argv[])
   shiftscaleFilter->SetScales(varianceMeasurentVector);
   shiftscaleFilter->Update();
 
-  SVMEstimatorType::Pointer svmEstimator = SVMEstimatorType::New();
-  svmEstimator->SetInputSampleList(shiftscaleFilter->GetOutput());
-  svmEstimator->SetTrainingSampleList(descriptorsGenerator->GetLabelListSample());
-  svmEstimator->Update();
-  svmEstimator->GetModel()->SaveModel(outputFileName);
+  SVMType::Pointer svmEstimator = SVMType::New();
+  svmEstimator->SetInputListSample(shiftscaleFilter->GetOutput());
+  svmEstimator->SetTargetListSample(descriptorsGenerator->GetLabelListSample());
+  svmEstimator->Train();
+  svmEstimator->Save(outputFileName);
 
   return EXIT_SUCCESS;
 }

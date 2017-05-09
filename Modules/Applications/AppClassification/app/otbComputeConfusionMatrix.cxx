@@ -1,20 +1,23 @@
-/*=========================================================================
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
-
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
@@ -25,6 +28,10 @@
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 
 #include "otbConfusionMatrixMeasurements.h"
+#include "otbContingencyTableCalculator.h"
+#include "otbContingencyTable.h"
+
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -74,8 +81,28 @@ public:
   typedef ConfusionMatrixMeasurementsType::MapOfClassesType                     MapOfClassesType;
   typedef ConfusionMatrixMeasurementsType::MeasurementType                      MeasurementType;
 
+  typedef ContingencyTable<ClassLabelType>  ContingencyTableType;
+  typedef ContingencyTableType::Pointer     ContingencyTablePointerType;
+
+protected:
+
+  ComputeConfusionMatrix()
+    {
+    m_Input = ITK_NULLPTR;
+    }
 
 private:
+
+  struct StreamingInitializationData
+  {
+    bool refhasnodata;
+    bool prodhasnodata;
+    int  prodnodata;
+    int  refnodata;
+    unsigned long numberOfStreamDivisions;
+  };
+
+
   void DoInit() ITK_OVERRIDE
   {
   SetName("ComputeConfusionMatrix");
@@ -100,6 +127,12 @@ private:
   AddParameter(ParameterType_OutputFilename, "out", "Matrix output");
   SetParameterDescription("out", "Filename to store the output matrix (csv format)");
 
+  AddParameter(ParameterType_Choice,"format","set the output format to contingency table or confusion matrix");
+  SetParameterDescription("format","Choice of the output format as a contingency table for unsupervised algorithms"
+          "or confusion matrix for supervised ones.");
+  AddChoice("format.confusionmatrix","Choice of a confusion matrix as output.");
+  AddChoice("format.contingencytable","Choice of a contingency table as output.");
+
   AddParameter(ParameterType_Choice,"ref","Ground truth");
   SetParameterDescription("ref","Choice of ground truth format");
 
@@ -117,10 +150,23 @@ private:
   SetParameterDescription("ref.vector.field","Field name containing the label values");
   SetListViewSingleSelectionMode("ref.vector.field",true);
   
-  AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels");
-  SetParameterDescription("nodatalabel", "Label for the NoData class. Such input pixels will be discarded from the "
-      "ground truth and from the input classification map. By default, 'nodatalabel = 0'.");
+  AddParameter(ParameterType_Int,"ref.raster.nodata","Value for nodata pixels in ref raster");
+  SetDefaultParameterInt("ref.raster.nodata",0);
+  SetParameterDescription("ref.raster.nodata","Label to be treated as no data in ref raster.");
+  MandatoryOff("ref.raster.nodata");
+  DisableParameter("ref.raster.nodata");
+
+  AddParameter(ParameterType_Int,"ref.vector.nodata","Value for nodata pixels in ref vector");
+  SetDefaultParameterInt("ref.vector.nodata",0);
+  SetParameterDescription("ref.vector.nodata","Label to be treated as no data in ref vector. Please note that this value is always used in vector mode, to generate default values. Please set it to a value that does not correspond to a class label.");
+  MandatoryOff("ref.vector.nodata");
+  DisableParameter("ref.vector.nodata");
+
+
+  AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels in input image");
+  SetParameterDescription("nodatalabel","Label to be treated as no data in input image");
   SetDefaultParameterInt("nodatalabel",0);
+  
   MandatoryOff("nodatalabel");
   DisableParameter("nodatalabel");
 
@@ -132,7 +178,9 @@ private:
   SetDocExampleParameterValue("ref", "vector");
   SetDocExampleParameterValue("ref.vector.in","VectorData_QB1_bis.shp");
   SetDocExampleParameterValue("ref.vector.field","Class");
-  SetDocExampleParameterValue("nodatalabel","255");
+  SetDocExampleParameterValue("ref.vector.nodata","255");
+
+  SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -163,6 +211,19 @@ private:
           }
         }
       }    
+  }
+
+  void LogContingencyTable(const ContingencyTablePointerType& contingencyTable)
+  {
+    otbAppLogINFO("Contingency table: reference labels (rows) vs. produced labels (cols)\n" << (*contingencyTable.GetPointer()));
+  }
+
+  void m_WriteContingencyTable(const ContingencyTablePointerType& contingencyTable)
+  {
+    std::ofstream outFile;
+    outFile.open( this->GetParameterString( "out" ).c_str() );
+    outFile << contingencyTable->ToCSV();
+    outFile.close();
   }
 
   std::string LogConfusionMatrix(MapOfClassesType* mapOfClasses, ConfusionMatrixType* matrix)
@@ -237,61 +298,118 @@ private:
     }
 
 
-  void DoExecute() ITK_OVERRIDE
+  StreamingInitializationData InitStreamingData()
   {
-    Int32ImageType* input = this->GetParameterInt32Image("in");
+
+    StreamingInitializationData sid;
+
+    m_Input = this->GetParameterInt32Image("in");
 
     std::string field;
-    int nodata = this->GetParameterInt("nodatalabel");
 
-
-    Int32ImageType::Pointer reference;
-    otb::ogr::DataSource::Pointer ogrRef;
-    RasterizeFilterType::Pointer rasterizeReference = RasterizeFilterType::New();
+    sid.prodnodata = this->GetParameterInt("nodatalabel");
+    sid.prodhasnodata = this->IsParameterEnabled("nodatalabel");
 
     if (GetParameterString("ref") == "raster")
       {
-      reference = this->GetParameterInt32Image("ref.raster.in");
+      sid.refnodata = this->GetParameterInt("ref.raster.nodata");
+      sid.refhasnodata = this->IsParameterEnabled("ref.raster.nodata");
+      m_Reference = this->GetParameterInt32Image("ref.raster.in");
       }
     else
       {
-      ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
-
-    // Get field name
-    std::vector<int> selectedCFieldIdx = GetSelectedItems("ref.vector.field");
-    
-    if(selectedCFieldIdx.empty())
-      {
-      otbAppLogFATAL(<<"No field has been selected for data labelling!");
-      }
+      // Force nodata to true since it will be generated during rasterization
+      sid.refhasnodata = true;
+      sid.refnodata = this->GetParameterInt("ref.vector.nodata");
       
-      std::vector<std::string> cFieldNames = GetChoiceNames("ref.vector.field");  
+      otb::ogr::DataSource::Pointer ogrRef = otb::ogr::DataSource::New(GetParameterString("ref.vector.in"), otb::ogr::DataSource::Modes::Read);
+
+      // Get field name
+      std::vector<int> selectedCFieldIdx = GetSelectedItems("ref.vector.field");
+
+      if(selectedCFieldIdx.empty())
+        {
+        otbAppLogFATAL(<<"No field has been selected for data labelling!");
+        }
+
+      std::vector<std::string> cFieldNames = GetChoiceNames("ref.vector.field");
       field = cFieldNames[selectedCFieldIdx.front()];
-      
-      rasterizeReference->AddOGRDataSource(ogrRef);
-      rasterizeReference->SetOutputParametersFromImage(input);
-      rasterizeReference->SetBackgroundValue(nodata);
-      rasterizeReference->SetBurnAttribute(field.c_str());
 
-      reference = rasterizeReference->GetOutput();
-      reference->UpdateOutputInformation();
+      m_RasterizeReference = RasterizeFilterType::New();
+      m_RasterizeReference->AddOGRDataSource(ogrRef);
+      m_RasterizeReference->SetOutputParametersFromImage(m_Input);
+      m_RasterizeReference->SetBackgroundValue(sid.refnodata);
+      m_RasterizeReference->SetBurnAttribute(field.c_str());
+
+      m_Reference = m_RasterizeReference->GetOutput();
+      m_Reference->UpdateOutputInformation();
       }
 
     // Prepare local streaming
-    
-    RAMDrivenAdaptativeStreamingManagerType::Pointer
-      streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+
+
+    m_StreamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
     int availableRAM = GetParameterInt("ram");
-    streamingManager->SetAvailableRAMInMB(availableRAM);
+    m_StreamingManager->SetAvailableRAMInMB( static_cast<unsigned int>( availableRAM ) );
     float bias = 2.0; // empiric value;
-    streamingManager->SetBias(bias);
-    
-    streamingManager->PrepareStreaming(input, input->GetLargestPossibleRegion());
+    m_StreamingManager->SetBias(bias);
 
-    unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
+    m_StreamingManager->PrepareStreaming(m_Input, m_Input->GetLargestPossibleRegion());
 
-    otbAppLogINFO("Number of stream divisions : "<<numberOfStreamDivisions);
+    sid.numberOfStreamDivisions = m_StreamingManager->GetNumberOfSplits();
 
+    otbAppLogINFO("Number of stream divisions : "<<sid.numberOfStreamDivisions);
+
+    return sid;
+  }
+
+  void DoExecute() ITK_OVERRIDE
+  {
+    StreamingInitializationData sid = InitStreamingData();
+
+    if(GetParameterString("format") == "contingencytable")
+      {
+      DoExecuteContingencyTable( sid );
+      }
+    else
+      {
+      DoExecuteConfusionMatrix( sid );
+      }
+  }
+
+  void DoExecuteContingencyTable(const StreamingInitializationData& sid)
+  {
+    typedef ContingencyTableCalculator<ClassLabelType> ContingencyTableCalculatorType;
+    ContingencyTableCalculatorType::Pointer calculator = ContingencyTableCalculatorType::New();
+
+    for (unsigned int index = 0; index < sid.numberOfStreamDivisions; index++)
+      {
+      RegionType streamRegion = m_StreamingManager->GetSplit( index );
+
+      m_Input->SetRequestedRegion( streamRegion );
+      m_Input->PropagateRequestedRegion();
+      m_Input->UpdateOutputData();
+
+      m_Reference->SetRequestedRegion( streamRegion );
+      m_Reference->PropagateRequestedRegion();
+      m_Reference->UpdateOutputData();
+
+      ImageIteratorType itInput( m_Input, streamRegion );
+      itInput.GoToBegin();
+
+      ImageIteratorType itRef( m_Reference, streamRegion );
+      itRef.GoToBegin();
+
+      calculator->Compute( itRef, itInput,sid.refhasnodata,sid.refnodata,sid.prodhasnodata,sid.prodnodata);
+      }
+
+    ContingencyTablePointerType contingencyTable = calculator->BuildContingencyTable();
+    LogContingencyTable(contingencyTable);
+    m_WriteContingencyTable(contingencyTable);
+  }
+
+  void DoExecuteConfusionMatrix(const StreamingInitializationData& sid)
+  {
 
     // Extraction of the Class Labels from the Reference image/rasterized vector data + filling of m_Matrix
     MapOfClassesType  mapOfClassesRef, mapOfClassesProd;
@@ -299,22 +417,22 @@ private:
     ClassLabelType labelRef = 0, labelProd = 0;
     int itLabelRef = 0, itLabelProd = 0;
 
-    for (unsigned int index = 0; index < numberOfStreamDivisions; index++)
+    for (unsigned int index = 0; index < sid.numberOfStreamDivisions; index++)
       {
-      RegionType streamRegion = streamingManager->GetSplit(index);
+      RegionType streamRegion = m_StreamingManager->GetSplit(index);
 
-      input->SetRequestedRegion(streamRegion);
-      input->PropagateRequestedRegion();
-      input->UpdateOutputData();
+      m_Input->SetRequestedRegion(streamRegion);
+      m_Input->PropagateRequestedRegion();
+      m_Input->UpdateOutputData();
 
-      reference->SetRequestedRegion(streamRegion);
-      reference->PropagateRequestedRegion();
-      reference->UpdateOutputData();
+      m_Reference->SetRequestedRegion(streamRegion);
+      m_Reference->PropagateRequestedRegion();
+      m_Reference->UpdateOutputData();
 
-      ImageIteratorType itInput(input, streamRegion);
+      ImageIteratorType itInput(m_Input, streamRegion);
       itInput.GoToBegin();
 
-      ImageIteratorType itRef(reference, streamRegion);
+      ImageIteratorType itRef(m_Reference, streamRegion);
       itRef.GoToBegin();
 
       while (!itRef.IsAtEnd())
@@ -323,7 +441,7 @@ private:
         labelProd = static_cast<ClassLabelType> (itInput.Get());
 
         // Extraction of the reference/produced class labels
-        if ((labelRef != nodata) && (labelProd != nodata))
+        if ((!sid.refhasnodata || labelRef != sid.refnodata) && (!sid.prodhasnodata || labelProd != sid.prodnodata))
           {
           // If the current labels have not been added to their respective mapOfClasses yet
           if (mapOfClassesRef.insert(MapOfClassesType::value_type(labelRef, itLabelRef)).second)
@@ -422,8 +540,8 @@ private:
 
 
     // Initialization of the Confusion Matrix for the application LOG and for measurements
-    int nbClassesRef = mapOfClassesRef.size();
-    int nbClassesProd = mapOfClassesProd.size();
+    int nbClassesRef = static_cast<int>(mapOfClassesRef.size());
+    int nbClassesProd = static_cast<int>(mapOfClassesProd.size());
 
     // Formatting m_MatrixLOG from m_Matrix in order to make m_MatrixLOG a square matrix
     // from the reference labels in mapOfClassesRef
@@ -510,6 +628,10 @@ private:
 
   ConfusionMatrixType m_MatrixLOG;
   OutputConfusionMatrixType m_Matrix;
+  Int32ImageType* m_Input;
+  Int32ImageType::Pointer m_Reference;
+  RAMDrivenAdaptativeStreamingManagerType::Pointer m_StreamingManager;
+  RasterizeFilterType::Pointer m_RasterizeReference;
 };
 
 }
