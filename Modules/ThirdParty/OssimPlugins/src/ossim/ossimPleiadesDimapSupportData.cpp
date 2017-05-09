@@ -2027,7 +2027,8 @@ namespace ossimplugins
       ossimString attribute = "version";
       ossimString value;
       xml_nodes[0]->getAttributeValue(value, attribute);
-      if (value != "2.0")
+      ossimString majorvalue = value.substr(0, value.find("."));
+      if (majorvalue != "2")
       {
          setErrorStatus();
          if (traceDebug())
