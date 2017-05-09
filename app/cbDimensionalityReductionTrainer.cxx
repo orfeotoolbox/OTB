@@ -6,10 +6,10 @@
 
 #include "itkVariableLengthVector.h"
 
-#include "AutoencoderModel.h"
+//#include "AutoencoderModel.h"
 
 #include "otbSharkUtils.h"
-
+#include "otbMachineLearningModel.h"
 //include train function
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
 #include <shark/Algorithms/GradientDescent/Rprop.h>// the RProp optimization algorithm
@@ -25,6 +25,9 @@
 
 #include <shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h>
 
+#include "otbMachineLearningModelFactory.h"
+
+#include "cbLearningApplicationBaseDR.h"
 
 template<class AutoencoderModel>
 AutoencoderModel trainAutoencoderModel(
@@ -73,27 +76,36 @@ namespace otb
 {
 namespace Wrapper
 {
-class CbDimensionalityReductionTrainer : public otb::Wrapper::Application
+class CbDimensionalityReductionTrainer : public cbLearningApplicationBaseDR<float,float>
 {
 public:
 	typedef CbDimensionalityReductionTrainer Self;
+	typedef cbLearningApplicationBaseDR<float, float> Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
+	typedef itk::SmartPointer<const Self> ConstPointer;
+	
 	itkNewMacro(Self);
 	itkTypeMacro(CbDimensionalityReductionTrainer, otb::Application);
 
 
-	typedef double ValueType;
+	typedef float ValueType;
 	typedef itk::VariableLengthVector<ValueType> InputSampleType;
 	typedef itk::Statistics::ListSample<InputSampleType> ListSampleType;
 	
 	typedef itk::VariableLengthVector<ValueType> MeasurementType;
-
+	  
+	typedef otb::MachineLearningModelFactory<ValueType, ValueType>  ModelFactoryType;
+		
+	typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
+	typedef AutoencoderModel<ValueType,AutoencoderType> AutoencoderModelType;
+typedef RandomForestsMachineLearningModel<ValueType,int> rfModelType;
 
 private:
 	void DoInit()
 	{
 		SetName("CbDimensionalityReductionTrainer");
 		SetDescription("Trainer for the dimensionality reduction algorithms used in the cbDimensionalityReduction application.");
+		/*
 		AddParameter(ParameterType_InputVectorData, "train", "Name of the input training vector data");
 		SetParameterDescription("train","The vector data used for training.");
 	
@@ -102,6 +114,22 @@ private:
 		
 		AddParameter(ParameterType_Int, "k","target dimension");
 		SetParameterDescription("k", "Dimension of the output feature vectors");
+*/
+		AddParameter(ParameterType_Group, "io", "Input and output data");
+		SetParameterDescription("io", "This group of parameters allows setting input and output data.");
+
+		AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector Data");
+		SetParameterDescription("io.vd", "Input geometries used for training (note : all geometries from the layer will be used)");
+
+		AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
+		SetParameterDescription("io.out", "Output file containing the model estimated (.txt format).");
+
+
+		AddParameter(ParameterType_StringList, "feat", "Field names to be calculated."); //
+		SetParameterDescription("feat","List of field names in the input vector data used as features for training."); //
+		
+		Superclass::DoInit();
+
 
 		/*
 		AddParameter(ParameterType_InputFilename, "model", "Dimensionality Reduction model file");
@@ -127,7 +155,7 @@ private:
 
 		std::cout << "Appli !" << std::endl;
 
-		std::string shapefile = GetParameterString("train");
+		std::string shapefile = GetParameterString("io.vd");
 
 		otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
 		otb::ogr::Layer layer = source->GetLayer(0);
@@ -147,6 +175,7 @@ private:
 			}
 			input->PushBack(mv);
 		}
+		/*
 		std::cout << input << std::endl;
 		std::vector<shark::RealVector> features;
 		otb::Shark::ListSampleToSharkVector<ListSampleType>( input, features);
@@ -162,13 +191,12 @@ private:
 	
 		std::cout << "normalizer trained and training set normalized" << std::endl;
 
-		typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
 		AutoencoderType net = trainAutoencoderModel<AutoencoderType>(inputSamples,numHidden,iterations,regularisation);
-		std::cout << "autoencoder trained !!" << std::endl;
+		std::cout << "autoencoder trained !!!!" << std::endl;
 
 		// save the model to the file "net.model"
 		std::ofstream ofs("net.model");
-		boost::archive::polymorphic_text_oarchive oa(ofs);
+		shark::TextOutArchive oa(ofs);
 		net.write(oa);
 		ofs.close();
 	
@@ -177,8 +205,26 @@ private:
 		boost::archive::polymorphic_text_oarchive onorm(norm_ofs);
 		normalizer.write(onorm);
 		norm_ofs.close();
-	
+	*/
+
+		std::cout << "Using a Machine learning model" << std::endl;
+		/*
+		AutoencoderModelType::Pointer dimredTrainer = AutoencoderModelType::New();
+		dimredTrainer->SetNumberOfHiddenNeurons(5);
+		dimredTrainer->SetNumberOfIterations(50);
+		dimredTrainer->SetRegularization(0.1);
+		dimredTrainer->SetInputListSample(input);
+		dimredTrainer->Train();
+		dimredTrainer->Save("net.model");
+		std::cout << "ok" << std::endl;
+		*/
+		this->Train(input,GetParameterString("io.out"));
+		
 	}
+
+
+	
+
 
 };
 

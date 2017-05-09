@@ -11,7 +11,6 @@
 #include <shark/Models/Normalizer.h>
 #include "encode_filter.h"
 
-#include "dummy_filter.h"
 #include "otbMultiChannelExtractROI.h"
 
 namespace otb
@@ -77,8 +76,8 @@ private:
 		filter_dim_reduc->SetNormalizerModel(normalizerPath);
 		filter_dim_reduc->SetInput(inImage);
 		
-		//SetParameterOutputImage("out", filter_dim_reduc->GetOutput());
-
+		SetParameterOutputImage("out", filter_dim_reduc->GetOutput());
+/*
 		m_ExtractROIFilter = ExtractROIFilterType::New();
 		m_ExtractROIFilter->SetInput(filter_dim_reduc->GetOutput());
 		for (unsigned int idx = 1; idx <= filter_dim_reduc->GetDimension(); ++idx)
@@ -87,7 +86,7 @@ private:
 		}
 
 		SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
-
+*/
 		//SetParameterOutputImage("out", inImage); // copy input image
 
 	}

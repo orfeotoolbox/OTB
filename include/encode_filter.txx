@@ -101,7 +101,12 @@ this->SetNumberOfThreads(1);
 #endif
 }
 
-
+template< class TImage, class AutoencoderModel, class NormalizerModel>
+void EncodeFilter<TImage, AutoencoderModel, NormalizerModel>::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+    this->GetOutput()->SetNumberOfComponentsPerPixel( m_hidden_neuron );
+}
 
 template< class TImage, class AutoencoderModel, class NormalizerModel>
 void EncodeFilter<TImage, AutoencoderModel, NormalizerModel>::ThreadedGenerateData(const typename TImage::RegionType &outputRegionForThread, unsigned int threadId)
@@ -153,7 +158,7 @@ void EncodeFilter<TImage, AutoencoderModel, NormalizerModel>::ThreadedGenerateDa
 		++imageIteratorOut;
 		++vect_it;
 	}
-	
+		
 }
 	 
 

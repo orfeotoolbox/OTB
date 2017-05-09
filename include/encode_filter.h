@@ -34,7 +34,7 @@ class ITK_EXPORT EncodeFilter:public itk::ImageToImageFilter< TImage, TImage >
 		NormalizerModel GetNormalizerModel();
  		
 	/** Does the real work. */
-
+		virtual void GenerateOutputInformation();
 		virtual void BeforeThreadedGenerateData();
 	  	void ThreadedGenerateData(const typename TImage::RegionType &outputRegionForThread, unsigned int threadId) ITK_OVERRIDE;
 	 
