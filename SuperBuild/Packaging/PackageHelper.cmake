@@ -103,8 +103,9 @@ macro(macro_super_package)
   endif()
 
   # find_loader_and_args(LOADER_PROGRAM LOADER_PROGRAM_ARGS)
-  
-  find_python_soname(python_INSTALLED_SONAME)
+  if(NOT PKG_GENERATE_XDK)
+    find_python_soname(python_INSTALLED_SONAME)
+  endif()
 
   set(PKG_SEARCHDIRS)
   if(WIN32)
@@ -235,7 +236,7 @@ macro(macro_super_package)
 
   # We need qt.conf on windows. for macx and linux we write it
   # after extracting package
-  if(WIN32 AND NOT PKG_GENERATE_XDK)
+  if(WIN32)
     install(FILES
       ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
       DESTINATION ${PKG_STAGE_DIR}/bin
@@ -244,7 +245,8 @@ macro(macro_super_package)
 
   install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/README
-    DESTINATION ${PKG_STAGE_DIR})
+    DESTINATION ${PKG_STAGE_DIR}
+    )
 
 endmacro(macro_super_package)
 
@@ -282,9 +284,25 @@ function(func_prepare_package)
     list(APPEND PKG_PEFILES "proj${EXE_EXT}")
     list(APPEND PKG_PEFILES "cs2cs${EXE_EXT}")
 
+    
+    #RK: to hell with cmake targets files.
+    file(GLOB ALL_EXTRA_FILES
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*boost*${LIB_EXT}*
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*glut*${LIB_EXT}*
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*QtXml*${LIB_EXT}*
+      ${DEPENDENCIES_INSTALL_DIR}/lib/*kml*${LIB_EXT}*
+      )
+    foreach(EXTRA_FILE ${ALL_EXTRA_FILES})
+      get_filename_component(EXTRA_FILE_name ${EXTRA_FILE} NAME)
+      list(APPEND PKG_PEFILES "${EXTRA_FILE_name}")
+    endforeach()  
+
     #shark is optional
-    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/sharkVersion${EXE_EXT}")
-      list(APPEND PKG_PEFILES "sharkVersion${EXE_EXT}")
+    set(SHARK_VERSION_FILE "SharkVersion${EXE_EXT}")
+    if(EXISTS "${DEPENDENCIES_INSTALL_DIR}/bin/${SHARK_VERSION_FILE}")
+      list(APPEND PKG_PEFILES "${SHARK_VERSION_FILE}")
+    else()
+      message("${DEPENDENCIES_INSTALL_DIR}/bin/${SHARK_VERSION_FILE} (not found. skipping)")
     endif()
     
     #RK: there is a bug in itk cmake files in install tree 
@@ -311,7 +329,7 @@ function(func_prepare_package)
       get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
       list(APPEND PKG_PEFILES ${otb_test_exe_name})
     endforeach()
-  endif()
+  endif(PKG_GENERATE_XDK)
 
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   if(MSVC AND NOT PKG_GENERATE_XDK)
@@ -321,19 +339,17 @@ function(func_prepare_package)
   file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
   list(APPEND PKG_PEFILES ${OTB_APPS_LIST})
 
-  if(NOT PKG_GENERATE_XDK)
-    if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
-      install(
-	DIRECTORY
-	${OTB_INSTALL_DIR}/lib/otb/python
-	DESTINATION ${PKG_STAGE_DIR}/lib
-	)
-    else()
-      if(OTB_WRAP_PYTHON)
-	message(FATAL_ERROR "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
-      endif()
-    endif()   
-  endif()#  if(NOT PKG_GENERATE_XDK)
+  if(WITH_PYTHON)
+   if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+     install(DIRECTORY ${OTB_INSTALL_DIR}/lib/otb/python
+       DESTINATION ${PKG_STAGE_DIR}/lib
+       )
+   else()
+     message(FATAL_ERROR
+       "OTB_WRAP_PYTHON is set , but cannot find _otbApplication${PYMODULE_EXT}")
+   endif()
+
+  endif(WITH_PYTHON)
 
 
   func_install_support_files()
@@ -546,29 +562,34 @@ function(pkg_install_rule src_file)
     endif() #if(PKG_GENERATE_XDK)
   endif() #if(is_gtk_lib)
   
+
+  set(SKIP_INSTALL FALSE)
+  string(TOLOWER "${src_file_NAME}" src_file_NAME_LOWER)
+  #avoid test executables
+
+  #oh:! a special case
+
+
+  if ("${src_file_NAME_LOWER}" MATCHES "(otb|mvd)*.*test*.*${EXE_EXT}")
+    if (NOT "${src_file_NAME_LOWER}" MATCHES "\\${LIB_EXT}" AND
+	NOT "${src_file_NAME_LOWER}" MATCHES "otbtestdriver" )
+      set(SKIP_INSTALL TRUE)
+      message("SKIP_INSTALL for ${src_file_NAME}")
+    endif()
+  endif()
+
   #special case
   if("${src_file_NAME}" MATCHES "^otbapp_")
     set(output_dir "lib/otb/applications")
     set(file_type PROGRAMS)
-  endif()
-
-  if(PKG_GENERATE_XDK)
-    if ("${src_file_NAME}"
-	MATCHES
-	"([Oo][Tt][Bb])|([Mm]onteverdi)|mapla|iceViewer"
-	)
-      set(SKIP_INSTALL TRUE)
-        
-      message("SKIP_INSTALL for ${src_file_NAME}")
-    endif()
-
+    set(SKIP_INSTALL FALSE)
   endif()
 
   if(NOT SKIP_INSTALL)
-    install(${file_type}
-      "${src_file}"
+    install(${file_type} "${src_file}"
       DESTINATION
-      "${PKG_STAGE_DIR}/${output_dir}")
+      "${PKG_STAGE_DIR}/${output_dir}"
+      )
   endif()
   
 endfunction()   

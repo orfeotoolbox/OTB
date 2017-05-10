@@ -377,3 +377,38 @@ function (get_vars_ending_with suffix result)
   string (REGEX MATCHALL "(^|;)[A-Za-z0-9_\\.\\-]*(${suffix})" _matchedVars "${all_cmake_vars}")
   set(${result} ${_matchedVars} PARENT_SCOPE)
 endfunction()
+
+function(func_patch_cmake_files_for)
+  cmake_parse_arguments(PATCH  "" "NAME;VERSION;MATCH_STRING;REPLACE_VAR" "" ${ARGN} )
+  if(NOT DEPENDENCIES_INSTALL_DIR)
+    message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR not set")
+  endif()
+
+  set(PATCH_DIR_NAME ${PATCH_NAME}-${PATCH_VERSION})
+  set(PATCH_DIR "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/${PATCH_DIR_NAME}")
+  set(PATCH_DIR_TEMP ${CMAKE_CURRENT_BINARY_DIR}/_TEMP/${PATCH_DIR_NAME})
+
+  ##message("COPY ${PATCH_DIR} to ${PATCH_DIR_TEMP} for patching")
+
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${PATCH_DIR_TEMP}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${PATCH_DIR}" "${PATCH_DIR_TEMP}"
+    )
+
+  set(DIR_LIST "${PATCH_DIR_TEMP}|${PATCH_DIR_TEMP}/Modules")
+
+  execute_process(COMMAND ${CMAKE_COMMAND}
+    -DP_DIRS=${DIR_LIST}
+    -DP_MATCH=${PATCH_MATCH_STRING}
+    -DP_REPLACE=${PATCH_REPLACE_VAR}
+    -P ${PACKAGE_OTB_SRC_DIR}/SuperBuild/CMake/post_install.cmake
+    RESULT_VARIABLE patch_${PATCH_NAME}_cmake_rv
+    )
+
+  if(patch_${PATCH_NAME}_cmake_rv)
+    message(FATAL_ERROR "    execute_process() failed.")
+  endif()
+
+  func_install_without_message("${PATCH_DIR_TEMP}" "lib/cmake")
+
+endfunction()

@@ -67,47 +67,17 @@ function(func_install_xdk_files)
     endif()
   endforeach()
 
-  set(ITK_CMAKE_DIR "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/ITK-${PKG_ITK_SB_VERSION}")
-  message("COPY ${DEPENDENCIES_INSTALL_DIR}/lib/cmake/ITK-${PKG_ITK_SB_VERSION} to ${CMAKE_CURRENT_BINARY_DIR}/_tmp/ to patch")
-  execute_process(
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/_tmp/
-    COMMAND ${CMAKE_COMMAND}
-    -E copy_directory
-    ${ITK_CMAKE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}
-    )
+ func_patch_cmake_files_for(NAME "ITK"
+   VERSION "${PKG_ITK_SB_VERSION}"
+   MATCH_STRING  "${CMAKE_INSTALL_PREFIX}"
+   REPLACE_VAR "ITK_INSTALL_PREFIX"
+   )
 
-  #reset ITK_CMAKE_DIR
-  set(ITK_CMAKE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}")
-
-  set(DIR_LIST "${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}|${CMAKE_CURRENT_BINARY_DIR}/_tmp/ITK-${PKG_ITK_SB_VERSION}/Modules")
-
-  #SUPERBUILD_INSTALL_DIR
-  execute_process(
-    COMMAND ${CMAKE_COMMAND}
-    -DP_DIRS=${DIR_LIST}
-    -DP_MATCH=${CMAKE_INSTALL_PREFIX}
-    -DP_REPLACE=ITK_INSTALL_PREFIX
-    -P ${PACKAGE_OTB_SRC_DIR}/SuperBuild/CMake/post_install.cmake
-    RESULT_VARIABLE patch_itk_cmake_rv
-    )
-
-  file(STRINGS  "${SUPERBUILD_BINARY_DIR}/ITK/build/CMakeCache.txt"
-    MATCH_FOUND REGEX "ITK_USE_SYSTEM_ZLIB:BOOL=ON")
-  if(MATCH_FOUND)
-    find_package(ZLIB QUIET)
-    get_filename_component(ZLIB_PREFIX ${ZLIB_LIBRARY} PATH)
-    execute_process(
-      COMMAND ${CMAKE_COMMAND}
-      -DP_DIRS=${DIR_LIST}
-      -DP_MATCH=${ZLIB_PREFIX}
-      -DP_REPLACE=ITK_INSTALL_PREFIX
-      -P ${PACKAGE_OTB_SRC_DIR}/SuperBuild/CMake/post_install.cmake
-      )
-
-  endif()
-
-  func_install_without_message("${ITK_CMAKE_DIR}" "lib/cmake")
+  func_patch_cmake_files_for(NAME "OTB"
+    VERSION "${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}"
+    MATCH_STRING  "${CMAKE_INSTALL_PREFIX}"
+    REPLACE_VAR "OTB_INSTALL_PREFIX"
+  )
 
   set(QT_REQ_DIRS)
   if(WIN32)
@@ -156,24 +126,25 @@ function(func_install_xdk_files)
   file(GLOB ALL_IN_INCLUDE_DIR "${DEPENDENCIES_INSTALL_DIR}/include/*")
   foreach(INCLUDE_DIR_ITEM ${ALL_IN_INCLUDE_DIR})
     get_filename_component(INCLUDE_DIR_ITEM_name ${INCLUDE_DIR_ITEM} NAME)
-    get_filename_component(INCLUDE_DIR_ITEM_name_we ${INCLUDE_DIR_ITEM} NAME_WE)
-    if(NOT "${INCLUDE_DIR_ITEM_name_we}" MATCHES "OTB|otb")
-      if( IS_DIRECTORY ${INCLUDE_DIR_ITEM})
-        install(CODE
-          "message(STATUS \"Installing: ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}/include/${INCLUDE_DIR_ITEM_name}/\")" )
-        install(
-          DIRECTORY   "${INCLUDE_DIR_ITEM}"
-          DESTINATION "${PKG_STAGE_DIR}/include/"
-          MESSAGE_NEVER
-          )
+    if( IS_DIRECTORY ${INCLUDE_DIR_ITEM})
+      install(CODE
+        "message(STATUS \"Installing: ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}/include/${INCLUDE_DIR_ITEM_name}/\")" )
+      install(DIRECTORY   "${INCLUDE_DIR_ITEM}"
+        DESTINATION "${PKG_STAGE_DIR}/include/"
+        MESSAGE_NEVER)
       else()
-        install(
-          FILES   "${INCLUDE_DIR_ITEM}"
-          DESTINATION "${PKG_STAGE_DIR}/include/"
-          )
+        install(FILES   "${INCLUDE_DIR_ITEM}"
+          DESTINATION "${PKG_STAGE_DIR}/include/" )
       endif() #if( IS_DIRECTORY
-    endif() #if (NOT
+
   endforeach()
+
+  if(MSVC)
+    install(FILES
+      "${PACKAGE_SUPPORT_FILES_DIR}/OTB Project.zip"
+      "${PACKAGE_SUPPORT_FILES_DIR}/start_devenv.bat"
+      DESTINATION "${PKG_STAGE_DIR}" )
+  endif()
 
 endfunction() #func_install_xdk_files
 
@@ -208,15 +179,13 @@ function(func_install_support_files)
 
   # one for debugging..
   # install(CODE "message(\"CMake/PackageHelper.cmake:install_supoport_files(${outdir})\n${vars}\n\")")
-  if(NOT PKG_GENERATE_XDK)
-    func_install_otb_support_files()
 
-    #check if monteverdi executable is built?
-    if(EXISTS "${OTB_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
-      func_install_monteverdi_support_files()
-    endif()
-
-  endif() #NOT PKG_GENERATE_XDK
+  func_install_otb_support_files()
+    
+  # check if monteverdi executable is built?
+  if(EXISTS "${OTB_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
+    func_install_monteverdi_support_files()
+  endif()
 
   ####################### install GDAL data ############################
   if(NOT EXISTS "${GDAL_DATA}/epsg.wkt")
@@ -438,5 +407,13 @@ function(func_install_monteverdi_support_files)
       DESTINATION ${PKG_STAGE_DIR}/${PKG_OTB_TRANSLATIONS_DIRNAME}
       )
   endforeach()
-  
+
+  if(UNIX)
+    file(GLOB DOT_A_FILES ${OTB_INSTALL_DIR}/lib/lib*.a )
+    foreach(DOT_A_FILE ${DOT_A_FILES})
+      install(FILES "${DOT_A_FILE}" DESTINATION ${PKG_STAGE_DIR}/lib)
+    endforeach()
+  endif()
+
 endfunction()
+
