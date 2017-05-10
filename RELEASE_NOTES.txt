@@ -30,7 +30,7 @@ OTB-v.6.0.0 - Changes since version 5.11.0 (May 2th, 2017)
     * 0001365: Python wrapper OTB-5.8.0: @rpath problem on MacOSX El Captain 10.11
     * 0001364: Crash of Mapla.app v5.10.0 on MacOSX  El Captain 10.11.5
     * 0001368: OTB 5.11 TrainImagesClassifier (FATAL) Error "Input Sample List is empty"
-    * 0001374: Alpha paramater seems not works in opengl mode
+    * 0001374: Alpha parameter seems not works in opengl mode
 
   * OTB-applications
     * 0001369: otbgui_Segmentation.bat won't produce correct results

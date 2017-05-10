@@ -144,6 +144,6 @@ int otbStreamingHistogramVectorImageFilterTest(int itkNotUsed(argc), char * itkN
       return EXIT_FAILURE;
       }
     }
-  //FIXME: whe should test also here the support of no data value
+  //FIXME: Here we should also test the support of no data value
   return EXIT_SUCCESS;
 }
