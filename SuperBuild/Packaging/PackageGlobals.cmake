@@ -45,13 +45,6 @@ set(WINDOWS_SYSTEM_DLLS
   python...dll
   )
 
-if(MINGW)
-  set(WINDOWS_SYSTEM_DLLS
-    ${WINDOWS_SYSTEM_DLLS}
-    msvcrt.dll
-    )
-endif()
-
 if(PKG_GENERATE_XDK)
   set(WINDOWS_SYSTEM_DLLS
     ${WINDOWS_SYSTEM_DLLS}

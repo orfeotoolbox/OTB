@@ -18,11 +18,6 @@
 # limitations under the License.
 #
 
-# cpack has a built-in target called 'package'. In our case we create two standalone installers with
-# and uses a custom target named packages.
-
-# stop generation of msvc packages for windows. 04-apr-2016. point OTB.
-
 ##### check if standalone project ######
 set(OUT_OF_SOURCE_BUILD FALSE)
 if(NOT PROJECT_NAME)
@@ -31,10 +26,9 @@ if(NOT PROJECT_NAME)
   project(OTBPackaging)
 
   option(GENERATE_PACKAGE "Generate OTB package" ON)
-  option(GENERATE_XDK "Generate XDK for OTB development" OFF)
   
   set(OUT_OF_SOURCE_BUILD TRUE)
-  
+
   if(BUILD_TESTING)
     include(CTest)
   endif()
@@ -65,7 +59,7 @@ else() #if(NOT PROJECT_NAME)
   
 endif()
 
-if(NOT GENERATE_PACKAGE AND NOT GENERATE_XDK)
+if(NOT GENERATE_PACKAGE)
   #well. we don't have any businees here. Let's move on..
   return()
 endif()
@@ -121,8 +115,6 @@ message("\n${vars}\n")
 
 set(PKG_DEBUG OFF)
 
-set(EXTRA_CACHE_CONFIG)
-
 set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
 
 set(PACKAGE_LONG_NAME OrfeoToolBox)
@@ -175,10 +167,5 @@ set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
 set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
 
 
-if(GENERATE_PACKAGE)
-  macro_setup_cmake_project(OTB)
-endif()
-
-if(GENERATE_XDK)
-  macro_setup_cmake_project(XDK)
-endif()
+#create cmake project and custom targets. c.f CreateCMakeProjects.cmake
+CreateCMakeProjects()
