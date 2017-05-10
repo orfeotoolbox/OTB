@@ -49,9 +49,8 @@ else() #if(NOT PROJECT_NAME)
   # SUPERBUILD_BINARY_DIR is only set in Packaging/CMakeLists.txt and not available
   # in the parent scope like others. So we need to set it as CMAKE_BINARY_DIR
   # if doing packages from source tree.
-  set( SUPERBUILD_BINARY_DIR   ${CMAKE_BINARY_DIR}     )
-  set( SUPERBUILD_INSTALL_DIR  ${SB_INSTALL_PREFIX}    )
-  set( OTB_INSTALL_DIR         ${CMAKE_INSTALL_PREFIX} )
+  set( SUPERBUILD_BINARY_DIR   ${CMAKE_BINARY_DIR}  )
+  set( SUPERBUILD_INSTALL_DIR  ${SB_INSTALL_PREFIX} )
   
   if(NOT PACKAGE_OTB_SRC_DIR)
     get_filename_component(PACKAGE_OTB_SRC_DIR ${OTB-SuperBuild_SOURCE_DIR} PATH)
@@ -64,25 +63,24 @@ if(NOT GENERATE_PACKAGE)
   return()
 endif()
 
+
+#set(OTB_INSTALL_DIR           "${SUPERBUILD_INSTALL_DIR}")
+#set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
+set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
+set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
+set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
+set(SUPERBUILD_SOURCE_DIR     "${PACKAGE_OTB_SRC_DIR}/SuperBuild")
+
+
 if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
   find_package ( PythonInterp REQUIRED )
   mark_as_advanced(PYTHON_INCLUDE_DIR)
   mark_as_advanced(PYTHON_LIBRARY)
 endif()
 
-set(LINUX FALSE)
-if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
-  set(LINUX TRUE)
-endif()
 
 find_program(FILE_COMMAND "file")
 mark_as_advanced(FILE_COMMAND)
-
-set(SUPERBUILD_SOURCE_DIR ${PACKAGE_OTB_SRC_DIR}/SuperBuild)
-
-include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
-include(${PACKAGE_OTB_SRC_DIR}/CMake/OTBCheckTargetSystemArch.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/CreateCMakeProjects.cmake)
 
 if(WIN32)
   set(ZIP_EXE_NAMES 7z 7za)
@@ -91,6 +89,16 @@ if(WIN32)
     message(FATAL_ERROR "Cannot find 7z executable. searched names ${ZIP_EXE_NAMES}. Please add it to your path")
   endif()
 endif()
+
+set(LINUX FALSE)
+if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+  set(LINUX TRUE)
+endif()
+
+include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
+include(${PACKAGE_OTB_SRC_DIR}/CMake/OTBCheckTargetSystemArch.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/CreateCMakeProjects.cmake)
+
 
 if(OTB_WRAP_PYTHON)
   set(required_vars PYTHON_EXECUTABLE)
@@ -160,11 +168,6 @@ get_version(
 
 set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
 
-set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
-set(OTB_INSTALL_DIR           "${SUPERBUILD_INSTALL_DIR}")
-set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
-set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
-set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
 
 
 #create cmake project and custom targets. c.f CreateCMakeProjects.cmake

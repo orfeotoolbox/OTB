@@ -46,11 +46,10 @@ function(CreateCMakeProjects)
    set(CMAKE_BUILD_TYPE              Release)
    set(PACKAGE_OTB_SRC_DIR           \"${PACKAGE_OTB_SRC_DIR}\")
    set(SUPERBUILD_BINARY_DIR         \"${SUPERBUILD_BINARY_DIR}\")
+   set(SUPERBUILD_INSTALL_DIR         \"${SUPERBUILD_INSTALL_DIR}\")
    set(OTB_BINARY_DIR                \"${OTB_BINARY_DIR}\")
-   set(OTB_INSTALL_DIR               \"${OTB_INSTALL_DIR}\")
    set(QT_PLUGINS_DIR                \"${QT_PLUGINS_DIR}\")
    set(QT_TRANSLATIONS_DIR           \"${QT_TRANSLATIONS_DIR}\")
-   set(DEPENDENCIES_INSTALL_DIR      \"${DEPENDENCIES_INSTALL_DIR}\")
    set(PACKAGE_SUPPORT_FILES_DIR     \"${PACKAGE_OTB_SRC_DIR}/SuperBuild/Packaging/Files\")
    set(CMAKE_INSTALL_PREFIX          \"${CMAKE_INSTALL_PREFIX}\")
    set(PKG_ITK_SB_VERSION            \"${PKG_ITK_SB_VERSION}\")
@@ -98,9 +97,7 @@ else(OUT_OF_SOURCE_BUILD)
     )      
 endif(OUT_OF_SOURCE_BUILD)
 
-
 add_dependencies(PACKAGE-check PACKAGE-TOOLS)
-
 
 #configure
 add_custom_target(PACKAGE-configure

@@ -30,10 +30,6 @@ macro(macro_super_package)
     message(FATAL_ERROR "PKG_STAGE_DIR is empty. Just can't continue.")
   endif()
 
-  if(NOT DEPENDENCIES_INSTALL_DIR)
-    message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR is not set of empty")
-  endif()
-
   if(LINUX)    
     if(NOT PATCHELF_PROGRAM)
       message(FATAL_ERROR "PATCHELF_PROGRAM not set")
@@ -94,65 +90,55 @@ macro(macro_super_package)
   endif()
 
   # find_loader_and_args(LOADER_PROGRAM LOADER_PROGRAM_ARGS)
-  if(NOT PKG_GENERATE_XDK)
-    find_python_soname(python_INSTALLED_SONAME)
-  endif()
+  find_python_soname(python_INSTALLED_SONAME)
 
   set(PKG_SEARCHDIRS)
-  if(WIN32)
-    if(MSVC)
-      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #all other dlls
-      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #Qt & Qwt dlls
 
-      if(NOT PKG_GENERATE_XDK)
-	if(DEFINED ENV{UniversalCRTSdkDir})
-          file(TO_CMAKE_PATH "$ENV{UniversalCRTSdkDir}" UCRT_SDK_DIR)
-          list(
-            APPEND
-            PKG_SEARCHDIRS
-            "${UCRT_SDK_DIR}/Redist/ucrt/DLLs/${OTB_TARGET_SYSTEM_ARCH}"
-            ) #ucrt dlls
-	else()
-          message(FATAL_ERROR
-	    "UniversalCRTSdkDir variable not set. call vcvarsall.bat <arch> first before starting build.")
-	endif()
-	
-	#additional msvc redist dll from VCINSTALLDIR
-	if(DEFINED ENV{VCINSTALLDIR})
-          file(TO_CMAKE_PATH "$ENV{VCINSTALLDIR}" PKG_VCINSTALLDIR)
-          list(
-            APPEND
-            PKG_SEARCHDIRS
-            "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.CRT"
-            "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.OPENMP"
-            )
-	else()
-          message(FATAL_ERROR
-	    "VCINSTALLDIR variable not set. call vcvarsall.bat <arch> first before starting build.")
-	endif()
-      endif() #NOT PKG_GENERATE_XDK
-    else()
-      file(GLOB MXE_GCC_LIB_DIR "${DEPENDENCIES_INSTALL_DIR}/bin/gcc*")
-      list(APPEND PKG_SEARCHDIRS ${MXE_GCC_LIB_DIR})
-      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/bin") #Qt
-      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/qt/lib") #Qwt
-      list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #mxe dlls
+  if(MSVC)
+    if(DEFINED ENV{UniversalCRTSdkDir})
+      message(FATAL_ERROR "UniversalCRTSdkDir variable not set. Cannot continue")
     endif()
-  else() #unixes
-    list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") #so
-    list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #superbuild .so /.dylib
+    if(NOT DEFINED ENV{VCINSTALLDIR})
+      message(FATAL_ERROR  "VCINSTALLDIR variable not set. Cannot continue.")
+    endif()
   endif()
+  
+  
+
+  if(MSVC)
+    
+    file(TO_CMAKE_PATH "$ENV{UniversalCRTSdkDir}" UCRT_SDK_DIR)
+    list(APPEND PKG_SEARCHDIRS "${UCRT_SDK_DIR}/Redist/ucrt/DLLs/${OTB_TARGET_SYSTEM_ARCH}") #ucrt dlls
+    
+    #additional msvc redist dll from VCINSTALLDIR
+    file(TO_CMAKE_PATH "$ENV{VCINSTALLDIR}" PKG_VCINSTALLDIR)
+    list(APPEND PKG_SEARCHDIRS 
+      "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.CRT"
+      "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.OPENMP"
+      )
+  endif()
+  
+
+  list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/lib") #superbuild .so /.dylib
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib") 
+
 
   #common for all platforms.
   set(OTB_APPLICATIONS_DIR "${OTB_INSTALL_DIR}/lib/otb/applications")
-  list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin") #superbuild, mxe binaries
-  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin") #otbApplicationLauncherCommandLine..
-  list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}") #otb apps
-  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb/python") #otbApplication.py
 
-  if(PKG_GENERATE_XDK)
-   list(APPEND PKG_SEARCHDIRS ${OTB_BINARY_DIR}/bin)
-  endif()
+  #TODO
+  #superbuild binaries. same as OTB_INSTALL_DIR 
+  list(APPEND PKG_SEARCHDIRS "${DEPENDENCIES_INSTALL_DIR}/bin")
+  
+   #otbApplicationLauncherCommandLine and other executables
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/bin")
+   #All otb apps
+  list(APPEND PKG_SEARCHDIRS "${OTB_APPLICATIONS_DIR}")
+   #_otbApplication.so
+  list(APPEND PKG_SEARCHDIRS "${OTB_INSTALL_DIR}/lib/otb/python")
+
+  #for otbtest executables. 
+  list(APPEND PKG_SEARCHDIRS ${OTB_BINARY_DIR}/bin)
 
   macro_empty_package_staging_directory()
 
@@ -161,12 +147,12 @@ macro(macro_super_package)
   func_prepare_package()
 
   set(program_list)
-  set(WITH_PYTHON "false")
-  if(OTB_WRAP_PYTHON)
-    set(WITH_PYTHON "true")
-  endif()
+  # set(WITH_PYTHON "false")
+  # if(OTB_WRAP_PYTHON)
+  #   set(WITH_PYTHON "true")
+  # endif()
   
-  set(IS_XDK "false")
+  # set(IS_XDK "false")
 
   if(LINUX)
     set(PKGSETUP_IN_FILENAME linux_pkgsetup.in)
