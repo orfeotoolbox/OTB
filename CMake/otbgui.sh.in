@@ -16,21 +16,19 @@ else
   OTB_GUI_LAUNCHER=otbApplicationLauncherQt
 fi
 
-# use the default install tree path for applications
-if [ -d "$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@" ]
-then
-  OTB_APPLICATION_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$OTB_APPLICATION_PATH
-fi
-
-# export it to make it available to otbApplicationLauncherCommandLine environment
-export OTB_APPLICATION_PATH
-
 # avoid numerical issues caused by locale
 export LC_NUMERIC=C
 
 # Export GDAL_DATA, EPSG_CSV
 if [ -f "$CURRENT_SCRIPT_DIR/../otbenv.profile" ]; then
     . "$CURRENT_SCRIPT_DIR/../otbenv.profile"
+else
+    # use the default install tree path for applications
+    if [ -d "$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@" ]; then
+	OTB_APPLICATION_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$OTB_APPLICATION_PATH
+    fi
+    # export it to make it available to otbApplicationLauncherCommandLine environment
+    export OTB_APPLICATION_PATH
 fi
 
 # start the application
