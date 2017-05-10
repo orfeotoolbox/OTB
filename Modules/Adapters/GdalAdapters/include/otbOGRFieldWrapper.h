@@ -175,7 +175,7 @@ public:
   /** Access to the raw underlying OGR data.
    * This function provides an abstraction leak in case deeper control on the
    * underlying \c OGRFeature is required.
-   * \warning You must under no circonstance try to delete the \c OGRField
+   * \warning You must under no circumstance try to delete the \c OGRField
    * obtained this way.
    */
   OGRField & ogr() const;

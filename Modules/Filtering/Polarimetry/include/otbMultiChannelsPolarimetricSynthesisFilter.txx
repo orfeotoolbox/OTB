@@ -191,7 +191,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
         }
       break;
 
-    // With 3 channels : HH HV VV ou HH VH VV
+    // With 3 channels : HH HV VV or HH VH VV
     case HH_HV_VV:
       while (!inputIt.IsAtEnd())
         {

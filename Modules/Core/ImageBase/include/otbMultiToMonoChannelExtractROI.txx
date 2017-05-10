@@ -101,7 +101,7 @@ MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
 
-  // Parcours des canaux a traiter
+  // Go through channels to process
   const unsigned int channelIn(m_Channel - 1);
 
   while (!outIt.IsAtEnd())

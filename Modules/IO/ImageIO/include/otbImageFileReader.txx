@@ -359,9 +359,9 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   //
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
   this->m_ImageIO->ReadImageInformation();
-  // Initialization du nombre de Composante par pixel
-// THOMAS ceci n'est pas dans ITK !!
-//  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents());
+  // Initialize the number of component per pixel
+  // THOMAS: This is not in ITK!
+  // output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents());
 
   SizeType                             dimSize;
   double                               spacing[TOutputImage::ImageDimension];
@@ -659,7 +659,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   std::string str_FileName;
   bool fic_trouve(false);
 
-  // Si c'est un repertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
+  // If it's a directory, look at the content to see if it's RADARSAT, ERS
   std::vector<std::string> listFileFind;
   listFileFind = System::Readdir(filename);
   if (listFileFind.empty() == false)
@@ -686,12 +686,11 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     std::string extension = itksys::SystemTools::GetFilenameLastExtension(strFileName);
     if ((extension == ".HDR") || (extension == ".hdr"))
       {
-      //Supprime l'extension
       GdalFileName = System::GetRootName(strFileName);
       }
     else
       {
-      // Sinon le filename est le nom du fichier a ouvrir
+      // Else, the filename is the name of the file to open
       GdalFileName = std::string(filename);
       }
     fic_trouve = true;

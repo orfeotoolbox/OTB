@@ -2127,7 +2127,7 @@ namespace ossimplugins
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
-      // Fetch the mission index (1A ou 1B) ?
+      // Fetch the mission index (1A or 1B) ?
       // and generate theSensorID
       //---
       xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION";
@@ -2148,7 +2148,7 @@ namespace ossimplugins
       }
 
       //---
-      // Fetch the mission index (1A ou 1B) ?
+      // Fetch the mission index (1A or 1B) ?
       // and generate theSensorID
       //---
       xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION_INDEX"; //DIMAPv2

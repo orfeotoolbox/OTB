@@ -81,7 +81,7 @@ public:
   typedef typename OutputImageType::SizeType  OutputImageSizeType;
   typedef typename InputImageType::SizeType   InputImageSizeType;
 
-  /** Selectionne le canal a traiter */
+  /** Select the channel to process */
   itkSetMacro(Channel, unsigned int);
   itkGetConstMacro(Channel, unsigned int);
 

@@ -142,7 +142,7 @@ public:
    * underlying \c OGRFeature is required.
    * \invariant The underlying \c OGRFeature must be valid, i.e.
    * <tt>m_DataSource != 0</tt>, an assertion is fired otherwise.
-   * \warning You must under no circonstance try to delete the \c OGRFeature
+   * \warning You must under no circumstance try to delete the \c OGRFeature
    * obtained this way.
    */
   OGRFeature & ogr() const;

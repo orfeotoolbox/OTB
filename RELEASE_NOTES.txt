@@ -2339,7 +2339,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 *Common:
 
       Extraction ROI Classes :
-    - Lifting of the otbExtractionBase classe
+    - Lifting of the otbExtractionBase class
     - Correction of the SetExtractionRegion method
 
 *BasicFilters:
