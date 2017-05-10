@@ -46,15 +46,10 @@ if(NOT PROJECT_NAME)
   
   option(OTB_WRAP_PYTHON "enable python wrapping" ON)
 
- if(OTB_MINGW)
-    set(OTB_BINARY_DIR "" CACHE PATH "OTB binary directory")
-    set(OTB_INSTALL_DIR "" CACHE PATH "OTB install directory")
-  else()
-    set(SUPERBUILD_BINARY_DIR "" CACHE PATH "path to superbuild binary directory")
-    set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
-    set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
-  endif()
-  
+  set(SUPERBUILD_BINARY_DIR "" CACHE PATH "path to superbuild binary directory")
+  set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
+  set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
+
 else() #if(NOT PROJECT_NAME)
 
   # SUPERBUILD_BINARY_DIR is only set in Packaging/CMakeLists.txt and not available
@@ -82,13 +77,8 @@ if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
 endif()
 
 set(LINUX FALSE)
-set(OTB_MINGW FALSE)
-if(WIN32 AND NOT MSVC)
-  set(OTB_MINGW TRUE)
-else()
-  if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
-    set(LINUX TRUE)
-  endif()
+if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+  set(LINUX TRUE)
 endif()
 
 find_program(FILE_COMMAND "file")
@@ -108,32 +98,19 @@ if(WIN32)
   endif()
 endif()
 
-if(OTB_MINGW)
-  set(required_vars
-  OTB_BINARY_DIR
-  OTB_INSTALL_DIR
-  MXE_TARGET_DIR
-  )
-else()
-    set(required_vars
-  SUPERBUILD_BINARY_DIR
-  SUPERBUILD_INSTALL_DIR
-  SUPERBUILD_SOURCE_DIR
-  )
-endif()
-
 if(OTB_WRAP_PYTHON)
-  set(required_vars
-    ${required_vars} PYTHON_EXECUTABLE
-    )
+  set(required_vars PYTHON_EXECUTABLE)
 endif()
 
 foreach(req
-  ${required_vars}
-  PACKAGE_OTB_SRC_DIR
-  OTB_TARGET_SYSTEM_ARCH
-  OTB_TARGET_SYSTEM_ARCH_IS_X64
- )
+    ${required_vars}
+    SUPERBUILD_BINARY_DIR
+    SUPERBUILD_INSTALL_DIR
+    SUPERBUILD_SOURCE_DIR
+    PACKAGE_OTB_SRC_DIR
+    OTB_TARGET_SYSTEM_ARCH
+    OTB_TARGET_SYSTEM_ARCH_IS_X64
+    )
   if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
     message(FATAL_ERROR "you must set ${req}")
   endif()
@@ -172,28 +149,14 @@ if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
 set(PACKAGE_ARCH "64")
 endif()
 
-if(OTB_MINGW)
-  get_filename_component(MXE_MXEROOT ${MXE_TARGET_DIR} PATH)
-  get_filename_component(MXE_MXEROOT ${MXE_MXEROOT} PATH)
-  set(EXTRA_CACHE_CONFIG
-    "set(CMAKE_CROSSCOMPILING TRUE)
-     set(WIN32 TRUE)
-     set(MINGW TRUE)
-     set(MXE_MXEROOT \"${MXE_MXEROOT}\")"
-    )
-  set(CMAKE_INSTALL_PREFIX "${OTB_INSTALL_DIR}")  
-endif()
 
 # get itk version from External_itk.cmake if not on mingw
 # because mxe has different version
-if(NOT OTB_MINGW)
-  get_version(
-    INPUT_FILE   "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
-    MATCH_STRINGS "SB_ITK_VERSION_MAJOR" "SB_ITK_VERSION_MINOR"
-    PREFIX PKG
-    )
-endif()
-
+get_version(
+  INPUT_FILE   "${SUPERBUILD_SOURCE_DIR}/CMake/External_itk.cmake"
+  MATCH_STRINGS "SB_ITK_VERSION_MAJOR" "SB_ITK_VERSION_MINOR"
+  PREFIX PKG
+  )
 set(PKG_ITK_SB_VERSION "${PKG_SB_ITK_VERSION_MAJOR}.${PKG_SB_ITK_VERSION_MINOR}")
 
 #get version of OTB from source_dir/CMakeLists.txt
@@ -203,22 +166,14 @@ get_version(
   PREFIX PKG
   )
 
-set(PKG_OTB_VERSION_STRING
-  ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
+set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
 
-if(OTB_MINGW)
-  set(OTB_BINARY_DIR              "${OTB_BINARY_DIR}")
-  set(OTB_INSTALL_DIR             "${OTB_INSTALL_DIR}")
-  set(DEPENDENCIES_INSTALL_DIR    "${MXE_MXEROOT}/usr/${OTB_TARGET_SYSTEM_ARCH}-w64-mingw32.shared")
-  set(QT_PLUGINS_DIR              "${DEPENDENCIES_INSTALL_DIR}/qt/plugins")
-  set(QT_TRANSLATIONS_DIR         "${DEPENDENCIES_INSTALL_DIR}/qt/translations")
-else() #unixes
-  set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
-  set(OTB_INSTALL_DIR           "${SUPERBUILD_INSTALL_DIR}")
-  set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
-  set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
-  set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
-endif()
+set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
+set(OTB_INSTALL_DIR           "${SUPERBUILD_INSTALL_DIR}")
+set(DEPENDENCIES_INSTALL_DIR  "${SUPERBUILD_INSTALL_DIR}")
+set(QT_PLUGINS_DIR            "${SUPERBUILD_INSTALL_DIR}/plugins")
+set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
+
 
 if(GENERATE_PACKAGE)
   macro_setup_cmake_project(OTB)
