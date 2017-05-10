@@ -170,7 +170,7 @@ public:
     SHV,       // 40 -shadow area with vegetation; possible confusions
                // with non forested wetland
     SHB,       // 41 -shadow with barren land; includes also lava rock;
-               // possible confusions with buil up areas, especially
+               // possible confusions with built up areas, especially
                // asphalt roads
     SHCL,      // 42 -clouds in shadow areas
     TWASHSN,   // 43 -snow in shadow areas

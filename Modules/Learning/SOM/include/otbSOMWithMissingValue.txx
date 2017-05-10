@@ -77,7 +77,7 @@ SOMWithMissingValue<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbor
   SizeType  mapSize = mapRegion.GetSize();
   IndexType positionToUpdate;
 
-  // Iterate over the neighborhood ot the winner neuron
+  // Iterate over the neighborhood of the winner neuron
   it.SetLocation(position);
 
   for (unsigned int i = 0; i < it.Size(); ++i)
