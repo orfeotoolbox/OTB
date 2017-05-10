@@ -415,5 +415,20 @@ function(func_install_monteverdi_support_files)
     endforeach()
   endif()
 
+
+    # We need qt.conf on windows. for macx and linux we write it
+  # after extracting package
+  if(WIN32)
+    install(FILES
+      ${PACKAGE_SUPPORT_FILES_DIR}/qt.conf
+      DESTINATION ${PKG_STAGE_DIR}/bin
+      )
+  endif()
+
+  install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/README
+    DESTINATION ${PKG_STAGE_DIR}
+    )
+
 endfunction()
 
