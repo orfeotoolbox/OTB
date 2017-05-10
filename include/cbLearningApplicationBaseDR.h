@@ -117,7 +117,7 @@ private:
 #ifdef OTB_USE_SHARK
   void InitAutoencoderParams();
   template <class autoencoderchoice>
-  void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath){
+  void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);/*{
  // typename AutoencoderModelType::Pointer dimredTrainer = AutoencoderModelType::New();
   typename autoencoderchoice::Pointer dimredTrainer = autoencoderchoice::New();
 		dimredTrainer->SetNumberOfHiddenNeurons(GetParameterInt("model.autoencoder.nbneuron"));
@@ -126,7 +126,7 @@ private:
 		dimredTrainer->SetInputListSample(trainingListSample);
 		dimredTrainer->Train();
 		dimredTrainer->Save(modelPath);
-}; // !!!!!!!!!!!!!!!!! How to declare this method body in the .txx ? (double template...) 
+}; // !!!!!!!!!!!!!!!!! How to declare this method body in the .txx ? (double template...) */
 #endif
   //@}
 };

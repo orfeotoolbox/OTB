@@ -44,13 +44,13 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   SetParameterDescription("model.autoencoder.normalizer", 
                          "Strength of the L2 normalization used during training");
 }
-/*
+
 template <class TInputValue, class TOutputValue>
+template <typename autoencoderchoice>
 void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
-::template < autoencoderchoice> TrainAutoencoder(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
+::TrainAutoencoder(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
- // typename AutoencoderModelType::Pointer dimredTrainer = AutoencoderModelType::New();
-  autoencoderchoice::Pointer dimredTrainer = autoencoderchoice::New();
+		typename autoencoderchoice::Pointer dimredTrainer = autoencoderchoice::New();
 		dimredTrainer->SetNumberOfHiddenNeurons(GetParameterInt("model.autoencoder.nbneuron"));
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
 		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.normalizer"));
@@ -58,7 +58,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->Train();
 		dimredTrainer->Save(modelPath);
 }
-*/
+
 } //end namespace wrapper
 } //end namespace otb
 

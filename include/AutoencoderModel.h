@@ -51,10 +51,14 @@ public:
 	 
 
 protected:
-	AutoencoderModel(){};	
-private:
+	AutoencoderModel();	
+	//~AutoencoderModel() ITK_OVERRIDE;
+ 
 	virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
-
+	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
+  
+private:
+	
 	AutoencoderType m_net;
 	unsigned int m_NumberOfHiddenNeurons;
 	unsigned int m_NumberOfIterations;

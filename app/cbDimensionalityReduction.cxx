@@ -93,7 +93,7 @@ private:
 
 	FilterType::Pointer filter_dim_reduc;
 	ExtractROIFilterType::Pointer m_ExtractROIFilter;
-
+	//d
 };
 }
 }

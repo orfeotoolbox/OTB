@@ -14,6 +14,15 @@
 namespace otb
 {
 
+
+template <class TInputValue, class AutoencoderType>
+AutoencoderModel<TInputValue,AutoencoderType>::AutoencoderModel()
+{
+	//this->m_IsRegressionSupported = true;
+}
+
+
+
 template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 {
