@@ -52,7 +52,7 @@ public:
 
 protected:
 	AutoencoderModel();	
-	//~AutoencoderModel() ITK_OVERRIDE;
+	~AutoencoderModel() ITK_OVERRIDE;
  
 	virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
 	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;

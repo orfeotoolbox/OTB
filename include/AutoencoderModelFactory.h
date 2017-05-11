@@ -3,6 +3,7 @@
 
 
 #include "itkObjectFactoryBase.h"
+#include "itkImageIOBase.h"
 
 namespace otb
 {
@@ -30,8 +31,8 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    Pointer RFFactory = AutoencoderModelFactory::New();
-    itk::ObjectFactoryBase::RegisterFactory(RFFactory);
+    Pointer AEFactory = AutoencoderModelFactory::New();
+    itk::ObjectFactoryBase::RegisterFactory(AEFactory);
   }
 
 protected:
@@ -44,6 +45,10 @@ private:
 
 };
 } //namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "AutoencoderModelFactory.txx"
+#endif
 
 #endif
 

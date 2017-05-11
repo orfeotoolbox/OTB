@@ -25,6 +25,7 @@
 #include "AutoencoderModel.h"
 #include "itkVersion.h"
 
+#include <shark/Models/Autoencoder.h>//normal autoencoder model
 namespace otb
 {
 template <class TInputValue, class TOutputValue>

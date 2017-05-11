@@ -79,10 +79,6 @@ public:
 	  
 	typedef otb::MachineLearningModelFactory<ValueType, ValueType>  ModelFactoryType;
 		
-	typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
-	typedef AutoencoderModel<ValueType,AutoencoderType> AutoencoderModelType;
-typedef RandomForestsMachineLearningModel<ValueType,int> rfModelType;
-
 private:
 	void DoInit()
 	{
@@ -182,7 +178,6 @@ private:
 	
 	
 		this->Train(trainingListSample,GetParameterString("io.out"));
-		// d
 	}
 
 
