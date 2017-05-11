@@ -85,15 +85,4 @@ ExternalProject_Add(MAKESELF
   INSTALL_COMMAND ""
   DEPENDS PATCHELF
   )
-
-
-
-############# otb_loader executable ################
-add_executable(otb_loader ${PACKAGE_SUPPORT_FILES_DIR}/otb_loader.cxx)
-
-target_link_libraries(otb_loader ${CMAKE_DL_LIBS})
-
-install(TARGETS otb_loader DESTINATION ${PKG_STAGE_DIR}/bin)
-
-
-add_custom_target(PACKAGE-TOOLS DEPENDS MAKESELF otb_loader)
+  add_custom_target(PACKAGE-TOOLS DEPENDS MAKESELF)

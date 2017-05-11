@@ -28,7 +28,7 @@ function(process_file_recurse input_file)
 
   if(NOT is_executable)
     #copy back to input_file_full_path
-    pkg_install_rule(${input_file_full_path})
+    install_rule(${input_file_full_path})
     message("not is_executable ${input_file_full_path}")
     return()
   endif() #NOT is_executable
@@ -48,7 +48,6 @@ function(process_file_recurse input_file)
       set(not_valid FALSE)
       if(  "${sofile_ext}" MATCHES ".la"
           OR "${sofile_ext}" MATCHES ".prl"
-          OR "${sofile_ext}" MATCHES ".a"
           OR  IS_DIRECTORY "${sofile}" )
         set(not_valid TRUE)
       endif()
@@ -148,7 +147,7 @@ function(process_file_recurse input_file)
       if(PKG_DEBUG)
         message("${bn_name} depends on '${item}'. So we now process '${item}'") # [ ${item}_USED=${${item}_USED} ${item}_RESOLVED=${${item}_RESOLVED}]")
       endif()
-      func_process_deps(${item})
+      process_file_recurse(${item})
     endforeach()
   endif()
 
@@ -157,7 +156,8 @@ function(process_file_recurse input_file)
      message("All dependencies of ${bn_name} are processed. Install file and set ${bn_name}_RESOLVED=${${bn_name}_RESOLVED}")
    endif()
 
-   #Install the file with pkg_install_rule. This function has specific rules to decide wheather install file or not
-   pkg_install_rule(${input_file_full_path})
+   #Install the file with install_rule().
+   #This function has specific "rules" to decide wheather and where to install file
+   install_rule(${input_file_full_path})
 
-endfunction() #function(func_process_deps infile)
+endfunction() #function(process_file_recurse infile)

@@ -2,11 +2,10 @@ function(prepare_file_list PKG_PEFILES)
 
   set(PKG_PEFILES)
   #This must exist in any OTB Installation. minimal or full
-  #set(PKG_PEFILES "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
-  if(NOT EXISTS "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
+  if(NOT EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
     message(
       FATAL_ERROR
-      "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found."
+      "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found."
       )
     
     return()
@@ -15,29 +14,29 @@ function(prepare_file_list PKG_PEFILES)
   set(PKG_PEFILES "otbApplicationLauncherCommandLine${EXE_EXT}")
 
   set(HAVE_QT4 FALSE)
-  if(EXISTS "${OTB_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
+  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
     set(HAVE_QT4 TRUE)
     list(APPEND PKG_PEFILES "otbApplicationLauncherQt${EXE_EXT}")
   endif()
 
   set(HAVE_MVD FALSE)
-  if(EXISTS "${OTB_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
+  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
     set(HAVE_MVD TRUE)
     list(APPEND PKG_PEFILES "monteverdi${EXE_EXT}")
     list(APPEND PKG_PEFILES "mapla${EXE_EXT}")
   endif()
   
   set(HAVE_PYTHON FALSE)
-  if(EXISTS "${OTB_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
     list(APPEND PKG_PEFILES "_otbApplication${PYMODULE_EXT}")
     set(HAVE_PYTHON TRUE)
   endif()
     
   foreach(exe_file "iceViewer" "otbTestDriver" "SharkVersion")
-    if(EXISTS "${OTB_INSTALL_DIR}/bin/${exe_file}${EXE_EXT}")
+    if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/${exe_file}${EXE_EXT}")
         list(APPEND PKG_PEFILES "${exe_file}${EXE_EXT}")
     else()
-      message(STATUS "${exe_file}${EXE_EXT} not found in ${OTB_INSTALL_DIR}/bin. (skipping)")
+      message(STATUS "${exe_file}${EXE_EXT} not found in ${SUPERBUILD_INSTALL_DIR}/bin. (skipping)")
     endif()
   endforeach()
 
@@ -54,10 +53,10 @@ function(prepare_file_list PKG_PEFILES)
   
   #RK: to hell with cmake targets files.
   file(GLOB ALL_EXTRA_FILES
-    ${DEPENDENCIES_INSTALL_DIR}/lib/*boost*${LIB_EXT}*
-    ${DEPENDENCIES_INSTALL_DIR}/lib/*glut*${LIB_EXT}*
-    ${DEPENDENCIES_INSTALL_DIR}/lib/*QtXml*${LIB_EXT}*
-    ${DEPENDENCIES_INSTALL_DIR}/lib/*kml*${LIB_EXT}*
+    ${SUPERBUILD_INSTALL_DIR}/lib/*boost*${LIB_EXT}*
+    ${SUPERBUILD_INSTALL_DIR}/lib/*glut*${LIB_EXT}*
+    ${SUPERBUILD_INSTALL_DIR}/lib/*QtXml*${LIB_EXT}*
+    ${SUPERBUILD_INSTALL_DIR}/lib/*kml*${LIB_EXT}*
       )
     foreach(EXTRA_FILE ${ALL_EXTRA_FILES})
       get_filename_component(EXTRA_FILE_name ${EXTRA_FILE} NAME)
@@ -68,8 +67,8 @@ function(prepare_file_list PKG_PEFILES)
     #we workaround with below code
     #start hack
      file(GLOB itk_all_lib_files  
-     "${DEPENDENCIES_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}itk*${LIB_EXT}*"
-     "${DEPENDENCIES_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}ITK*${LIB_EXT}*"
+     "${SUPERBUILD_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}itk*${LIB_EXT}*"
+     "${SUPERBUILD_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}ITK*${LIB_EXT}*"
      )
 
    foreach(itk_lib_file ${itk_all_lib_files})
@@ -81,7 +80,7 @@ function(prepare_file_list PKG_PEFILES)
      #end hack
 
     file(GLOB otb_test_exe_list 
-    "${DEPENDENCIES_INSTALL_DIR}/bin/gdal*${EXE_EXT}"    
+    "${SUPERBUILD_INSTALL_DIR}/bin/gdal*${EXE_EXT}"    
     "${OTB_BINARY_DIR}/bin/*Test*${EXE_EXT}"
     )
     foreach(otb_test_exe   ${otb_test_exe_list})
@@ -99,4 +98,4 @@ function(prepare_file_list PKG_PEFILES)
 
 
     set(PKG_PEFILES ${PKG_PEFILES} PARENT_SCOPE)
-endmacro()
+endfunction()

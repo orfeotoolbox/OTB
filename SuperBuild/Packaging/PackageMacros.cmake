@@ -380,12 +380,9 @@ endfunction()
 
 function(func_patch_cmake_files_for)
   cmake_parse_arguments(PATCH  "" "NAME;VERSION;MATCH_STRING;REPLACE_VAR" "" ${ARGN} )
-  if(NOT DEPENDENCIES_INSTALL_DIR)
-    message(FATAL_ERROR "DEPENDENCIES_INSTALL_DIR not set")
-  endif()
 
   set(PATCH_DIR_NAME ${PATCH_NAME}-${PATCH_VERSION})
-  set(PATCH_DIR "${DEPENDENCIES_INSTALL_DIR}/lib/cmake/${PATCH_DIR_NAME}")
+  set(PATCH_DIR "${SUPERBUILD_INSTALL_DIR}/lib/cmake/${PATCH_DIR_NAME}")
   set(PATCH_DIR_TEMP ${CMAKE_CURRENT_BINARY_DIR}/_TEMP/${PATCH_DIR_NAME})
 
   ##message("COPY ${PATCH_DIR} to ${PATCH_DIR_TEMP} for patching")

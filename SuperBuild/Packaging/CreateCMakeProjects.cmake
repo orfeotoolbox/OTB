@@ -68,6 +68,13 @@ function(CreateCMakeProjects)
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageHelper.cmake)
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/InstallSupportFiles.cmake)
    include(${SUPERBUILD_SOURCE_DIR}/Packaging/PackageGlobals.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/prepare_file_list.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/process_file_recurse.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/install_share_dirs.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/install_include_dirs.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/install_script_files.cmake)
+   include(${SUPERBUILD_SOURCE_DIR}/Packaging/install_translation_files.cmake)
+include(${SUPERBUILD_SOURCE_DIR}/Packaging/install_rule.cmake)
    macro_super_package(STAGE_DIR \"${archive_name}\")"
   )
 
@@ -131,7 +138,7 @@ if(WIN32)
     COMMENT "Creating ${PACKAGE_OUTPUT_FILE}"
     )
 else()
-  add_custom_target(PACKAGE
+  add_custom_target(PACKAGE-OTB
     COMMAND ${MAKESELF_SCRIPT}
     "--quiet"
     "--target"
