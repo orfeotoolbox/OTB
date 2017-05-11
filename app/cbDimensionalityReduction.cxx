@@ -28,6 +28,9 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbMachineLearningModelFactory.h"
 
+
+//#include "DimensionalityReductionModelFactory.h" // new branch
+
 namespace otb
 {
 namespace Functor
@@ -202,7 +205,7 @@ private:
     m_Model->Load(GetParameterString("model"));
     m_Model->SetRegressionMode(true);
     otbAppLogINFO("Model loaded");
-
+	
     // Classify
     m_ClassificationFilter = ClassificationFilterType::New();
     m_ClassificationFilter->SetModel(m_Model);
@@ -265,7 +268,7 @@ private:
       }
 
     SetParameterOutputImage<FloatImageType>("out", outputImage);
-
+	
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;
