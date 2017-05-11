@@ -2,18 +2,20 @@
 #define AutoencoderModelFactory_h
 
 
+#include <shark/Models/TiedAutoencoder.h>
+#include <shark/Models/Autoencoder.h>
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 
 namespace otb
 {
 	
-template <class TInputValue, class TTargetValue>
-class ITK_EXPORT AutoencoderModelFactory : public itk::ObjectFactoryBase
+template <class TInputValue, class TTargetValue, class AutoencoderType>
+class ITK_EXPORT AutoencoderModelFactoryBase : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef AutoencoderModelFactory             Self;
+  typedef AutoencoderModelFactoryBase   Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -26,25 +28,38 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AutoencoderModelFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(AutoencoderModelFactoryBase, itk::ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    Pointer AEFactory = AutoencoderModelFactory::New();
+    Pointer AEFactory = AutoencoderModelFactoryBase::New();
     itk::ObjectFactoryBase::RegisterFactory(AEFactory);
   }
 
 protected:
-  AutoencoderModelFactory();
-  ~AutoencoderModelFactory() ITK_OVERRIDE;
+  AutoencoderModelFactoryBase();
+  ~AutoencoderModelFactoryBase() ITK_OVERRIDE;
 
 private:
-  AutoencoderModelFactory(const Self &); //purposely not implemented
+  AutoencoderModelFactoryBase(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
 };
+
+
+
+
+template <class TInputValue, class TTargetValue>
+class ITK_EXPORT AutoencoderModelFactory : public AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron>>  {};
+
+
+template <class TInputValue, class TTargetValue>
+class ITK_EXPORT TiedAutoencoderModelFactory : public AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  {};
+
+
 } //namespace otb
+
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "AutoencoderModelFactory.txx"

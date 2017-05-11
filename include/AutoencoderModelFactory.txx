@@ -25,11 +25,10 @@
 #include "AutoencoderModel.h"
 #include "itkVersion.h"
 
-#include <shark/Models/Autoencoder.h>//normal autoencoder model
 namespace otb
 {
-template <class TInputValue, class TOutputValue>
-AutoencoderModelFactory<TInputValue,TOutputValue>::AutoencoderModelFactory()
+template <class TInputValue, class TOutputValue, class AutoencoderType>
+AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::AutoencoderModelFactoryBase()
 {
 
   std::string classOverride = std::string("otbMachineLearningModel");
@@ -40,22 +39,22 @@ AutoencoderModelFactory<TInputValue,TOutputValue>::AutoencoderModelFactory()
                          "Shark RF ML Model",
                          1,
                       //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
-						itk::CreateObjectFunction<AutoencoderModel<TInputValue,shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> > >::New());
+						itk::CreateObjectFunction<AutoencoderModel<TInputValue,AutoencoderType > >::New());
 }
 
-template <class TInputValue, class TOutputValue>
-AutoencoderModelFactory<TInputValue,TOutputValue>::~AutoencoderModelFactory()
+template <class TInputValue, class TOutputValue, class AutoencoderType>
+AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::~AutoencoderModelFactoryBase()
 {
 }
 
-template <class TInputValue, class TOutputValue>
-const char* AutoencoderModelFactory<TInputValue,TOutputValue>::GetITKSourceVersion(void) const
+template <class TInputValue, class TOutputValue, class AutoencoderType>
+const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-template <class TInputValue, class TOutputValue>
-const char* AutoencoderModelFactory<TInputValue,TOutputValue>::GetDescription() const
+template <class TInputValue, class TOutputValue, class AutoencoderType>
+const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::GetDescription() const
 {
   return "Autoencoder model factory";
 }
