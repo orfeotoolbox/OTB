@@ -21,7 +21,7 @@
 ##### check if standalone project ######
 set(OUT_OF_SOURCE_BUILD FALSE)
 if(NOT PROJECT_NAME)
-  cmake_minimum_required(VERSION 2.6)
+  cmake_minimum_required(VERSION 3.4)
   include(CMakeParseArguments)
   project(OTBPackaging)
 
@@ -46,6 +46,7 @@ if(NOT PROJECT_NAME)
 
 else() #if(NOT PROJECT_NAME)
 
+  cmake_minimum_required(VERSION 3.4)
   # SUPERBUILD_BINARY_DIR is only set in Packaging/CMakeLists.txt and not available
   # in the parent scope like others. So we need to set it as CMAKE_BINARY_DIR
   # if doing packages from source tree.
