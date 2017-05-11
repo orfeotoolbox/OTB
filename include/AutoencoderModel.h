@@ -1,19 +1,19 @@
 #ifndef AutoencoderModel_h
 #define AutoencoderModel_h
 
-#include "otbMachineLearningModel.h"
+#include "DimensionalityReductionModel.h"
 
 
 namespace otb
 {
 template <class TInputValue, class AutoencoderType>
-class ITK_EXPORT AutoencoderModel: public  MachineLearningModel<TInputValue,TInputValue>   
+class ITK_EXPORT AutoencoderModel: public  DimensionalityReductionModel<TInputValue,TInputValue>   
 {
 
 public:
 	
 	typedef AutoencoderModel Self;
-	typedef MachineLearningModel<TInputValue,TInputValue> Superclass;
+	typedef DimensionalityReductionModel<TInputValue,TInputValue> Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
 	typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -28,7 +28,7 @@ public:
 	typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
 
 	itkNewMacro(Self);
-	itkTypeMacro(AutoencoderModel, MachineLearningModel);
+	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
 
 	itkGetMacro(NumberOfHiddenNeurons,unsigned int);

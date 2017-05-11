@@ -31,12 +31,12 @@ template <class TInputValue, class TOutputValue, class AutoencoderType>
 AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::AutoencoderModelFactoryBase()
 {
 
-  std::string classOverride = std::string("otbMachineLearningModel");
+  std::string classOverride = std::string("DimensionalityReductionModel");
   std::string subclass = std::string("AutoencoderModel");
 
   this->RegisterOverride(classOverride.c_str(),
                          subclass.c_str(),
-                         "Shark RF ML Model",
+                         "Shark AE ML Model",
                          1,
                       //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
 						itk::CreateObjectFunction<AutoencoderModel<TInputValue,AutoencoderType > >::New());
