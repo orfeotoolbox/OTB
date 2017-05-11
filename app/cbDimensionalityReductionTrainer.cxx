@@ -9,37 +9,12 @@
 #include "otbShiftScaleSampleListFilter.h"
 #include "otbStatisticsXMLFileReader.h"
 
-//#include "AutoencoderModel.h"
-
 #include "otbSharkUtils.h"
-#include "otbMachineLearningModel.h"
-//include train function
-#include <shark/ObjectiveFunctions/ErrorFunction.h>
-#include <shark/Algorithms/GradientDescent/Rprop.h>// the RProp optimization algorithm
-#include <shark/ObjectiveFunctions/Loss/SquaredLoss.h> // squared loss used for regression
-#include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
 
 #include <fstream> // write the model file
 
-
-#include <shark/Models/Autoencoder.h>//normal autoencoder model
-#include <shark/Models/TiedAutoencoder.h>//autoencoder with tied weights
-#include <shark/Models/Normalizer.h>
-
-#include <shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h>
-
 #include "otbMachineLearningModelFactory.h"
-
 #include "cbLearningApplicationBaseDR.h"
-
-shark::Normalizer<shark::RealVector> trainNormalizer(const shark::UnlabeledData<shark::RealVector>& data)
-{	
-	bool removeMean = true;
-	shark::Normalizer<shark::RealVector> normalizer;
-	shark::NormalizeComponentsUnitVariance<shark::RealVector> normalizingTrainer(removeMean);
-	normalizingTrainer.train(normalizer, data);
-	return normalizer;
-}
 
 
 namespace otb
@@ -68,15 +43,7 @@ public:
 	typedef otb::StatisticsXMLFileReader<SampleType> StatisticsReader;
 
 	typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
-
-
-
-	//typedef float ValueType;
-	//typedef itk::VariableLengthVector<ValueType> InputSampleType;
-	//typedef itk::Statistics::ListSample<InputSampleType> ListSampleType;
 	
-	//typedef itk::VariableLengthVector<ValueType> MeasurementType;
-	  
 	typedef otb::MachineLearningModelFactory<ValueType, ValueType>  ModelFactoryType;
 		
 private:
@@ -103,19 +70,6 @@ private:
 		
 		Superclass::DoInit();
 
-
-		/*
-		AddParameter(ParameterType_InputFilename, "model", "Dimensionality Reduction model file");
-		SetParameterDescription("model", "A model file (produced by cbDimensionalityReduction application.");
-
-		AddParameter(ParameterType_InputFilename, "normalizer", "normalizer model file");
-		SetParameterDescription("normalizer", "A model file (produced by cbDimensionalityReduction application.");
-*/
-		
-/*
-		AddParameter(ParameterType_InputVectorData, "val", "Name of the input validation vector data");
-		SetParameterDescription("val","The vector data used for validation.");
-*/
 		AddRAMParameter();
 	}
 	
@@ -149,7 +103,6 @@ private:
 			input->PushBack(mv);
 		}
 		
-// Statistics for shift/scale
 		MeasurementType meanMeasurementVector;
 		MeasurementType stddevMeasurementVector;
 		if (HasValue("io.stats") && IsParameterEnabled("io.stats"))
