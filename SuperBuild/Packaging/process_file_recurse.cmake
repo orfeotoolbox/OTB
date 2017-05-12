@@ -23,48 +23,8 @@ function(process_file_recurse input_file)
     message("Processing ${input_file_full_path}")
   endif()
 
-  set(is_executable FALSE)
-  is_file_executable2(input_file_full_path is_executable)
 
-  if(NOT is_executable)
-    #copy back to input_file_full_path
-    install_rule(${input_file_full_path})
-    message("not is_executable ${input_file_full_path}")
-    return()
-  endif() #NOT is_executable
-
-  if(UNIX)
-    # Deal with symlinks.
-    # For any valid symlinks, (see 'not_valid' below) 
-    # we append ln -s source target commands to a file
-    # That file is  executed during installation. 
-    get_filename_component(bn_we ${input_file_full_path} NAME_WE)
-    get_filename_component(bn_path ${input_file_full_path} PATH)
-    
-    file(GLOB sofiles "${bn_path}/${bn_we}*")
-    foreach(sofile ${sofiles})
-      get_filename_component(basename_of_sofile ${sofile} NAME)
-      get_filename_component(sofile_ext ${sofile} EXT)
-      set(not_valid FALSE)
-      if(  "${sofile_ext}" MATCHES ".la"
-          OR "${sofile_ext}" MATCHES ".prl"
-          OR  IS_DIRECTORY "${sofile}" )
-        set(not_valid TRUE)
-      endif()
-
-      if(not_valid)
-        continue()
-      endif()
-
-      func_is_file_a_symbolic_link("${sofile}" is_symlink linked_to_file)
-
-      if(is_symlink)
-        add_to_symlink_list("${linked_to_file}" "${basename_of_sofile}")	
-      endif() # is_symlink
-
-    endforeach()
-
-  endif(UNIX)
+  install_rule(${input_file_full_path})
 
   set(raw_items)
 

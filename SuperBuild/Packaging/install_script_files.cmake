@@ -12,6 +12,7 @@ function(install_script_files)
     #we need startup files for mapla monteverdi in the root directory
     #For Unixes, we make them inside pkgsetup script!
     if(HAVE_MVD)
+      message(FATAL_ERROR "HAVE_MVD is set")
       install(
         PROGRAMS ${PACKAGE_SUPPORT_FILES_DIR}/mapla.bat
 	PROGRAMS ${PACKAGE_SUPPORT_FILES_DIR}/monteverdi.bat

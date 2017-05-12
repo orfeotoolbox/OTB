@@ -13,23 +13,17 @@ function(prepare_file_list PKG_PEFILES)
 
   set(PKG_PEFILES "otbApplicationLauncherCommandLine${EXE_EXT}")
 
-  set(HAVE_QT4 FALSE)
-  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
-    set(HAVE_QT4 TRUE)
+  if(HAVE_QT4)
     list(APPEND PKG_PEFILES "otbApplicationLauncherQt${EXE_EXT}")
   endif()
 
-  set(HAVE_MVD FALSE)
-  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
-    set(HAVE_MVD TRUE)
+  if(HAVE_MVD)
     list(APPEND PKG_PEFILES "monteverdi${EXE_EXT}")
     list(APPEND PKG_PEFILES "mapla${EXE_EXT}")
   endif()
   
-  set(HAVE_PYTHON FALSE)
-  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+  if(HAVE_PYTHON)
     list(APPEND PKG_PEFILES "_otbApplication${PYMODULE_EXT}")
-    set(HAVE_PYTHON TRUE)
   endif()
     
   foreach(exe_file "iceViewer" "otbTestDriver" "SharkVersion")
@@ -76,17 +70,22 @@ function(prepare_file_list PKG_PEFILES)
      if(NOT a_symlink)
        list(APPEND PKG_PEFILES "${itk_lib_file}")
      endif()
-     endforeach()
-     #end hack
+   endforeach()
+   #end hack
+   
+   file(GLOB otb_test_exe_list 
+     "${SUPERBUILD_INSTALL_DIR}/bin/gdal*${EXE_EXT}"
+     "${OTB_BINARY_DIR}/bin/*[T|t]est*${EXE_EXT}"
+     )
+   
+   list(REMOVE_ITEM otb_test_exe_list "${SUPERBUILD_INSTALL_DIR}/bin/gdal-config")
+   list(REMOVE_ITEM otb_test_exe_list "${OTB_BINARY_DIR}/bin/otbcli_TestApplication")
+   list(REMOVE_ITEM otb_test_exe_list "${OTB_BINARY_DIR}/bin/otbgui_TestApplication")
 
-    file(GLOB otb_test_exe_list 
-    "${SUPERBUILD_INSTALL_DIR}/bin/gdal*${EXE_EXT}"    
-    "${OTB_BINARY_DIR}/bin/*Test*${EXE_EXT}"
-    )
-    foreach(otb_test_exe   ${otb_test_exe_list})
-      get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
-      list(APPEND PKG_PEFILES ${otb_test_exe_name})
-    endforeach()
+   foreach(otb_test_exe   ${otb_test_exe_list})
+     get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
+     list(APPEND PKG_PEFILES ${otb_test_exe_name})
+   endforeach()
 
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   if(MSVC)
