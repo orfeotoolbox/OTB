@@ -31,7 +31,7 @@ public:
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
 	unsigned int GetDimension() {return m_Dimension;}; 
-	itkGetMacro(Dimension,unsigned int);
+	//itkGetMacro(Dimension,unsigned int);
 	
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
@@ -51,9 +51,9 @@ protected:
 	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
   
 private:
-	LinearModel<> m_encoder
-	LinearModel<> m_decoder
-	PCA m_pca;
+	shark::LinearModel<> m_encoder;
+	shark::LinearModel<> m_decoder;
+	shark::PCA m_pca;
 	unsigned int m_Dimension;
 
 };

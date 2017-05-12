@@ -52,7 +52,7 @@ bool PCAModel<TInputValue>::CanReadFile(const std::string & filename)
 	try
 	{
 		this->Load(filename);
-		m_net.name();
+		m_encoder.name();
 	}
 	catch(...)
 	{
@@ -72,9 +72,9 @@ template <class TInputValue>
 void PCAModel<TInputValue>::Save(const std::string & filename, const std::string & name)
 {
 	std::ofstream ofs(filename);
-	ofs << m_net.name() << std::endl; //first line
+	ofs << m_encoder.name() << std::endl; //first line
 	boost::archive::polymorphic_text_oarchive oa(ofs);
-	m_net.write(oa);
+	m_encoder.write(oa);
 	ofs.close();
 }
 
@@ -82,17 +82,17 @@ template <class TInputValue>
 void PCAModel<TInputValue>::Load(const std::string & filename, const std::string & name)
 {
 	std::ifstream ifs(filename);
-	char autoencoder[256];
-	ifs.getline(autoencoder,256); 
-	std::string autoencoderstr(autoencoder);
+	char encoder[256];
+	ifs.getline(encoder,256); 
+	std::string encoderstr(encoder);
 	
-	if (autoencoderstr != m_net.name()){
+	if (autoencoderstr != m_encoder.name()){
 		itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
 	boost::archive::polymorphic_text_iarchive ia(ifs);
 	m_net.read(ia);
 	ifs.close();
-	m_NumberOfHiddenNeurons = m_net.numberOfHiddenNeurons();
+	m_Dimension = m_encoder.outputSize();
 	//this->m_Size = m_NumberOfHiddenNeurons;
 }
 
@@ -108,14 +108,18 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueT
     }
     shark::Data<shark::RealVector> data;
     data.element(0)=samples;
-    data = m_net.encode(data);
+    data = m_encoder(data);
     
     TargetSampleType target;
     
     //target.SetSize(m_NumberOfHiddenNeurons);
+	
 	for(unsigned int a = 0; a < m_NumberOfHiddenNeurons; ++a){
-		//target[a]=data.element(0)[a];
-		target=data.element(0)[a];
+		target[a]=p[a];
+		
+			//target.SetElement(a,p[a]);
+			
+			
 	}
 	return target;
 }
@@ -130,7 +134,7 @@ void PCAModel<TInputValue>
 	Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
 	shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
 	TargetSampleType target;
-	data = m_net.encode(data);
+	data = m_encoder(data);
 	unsigned int id = startIndex;
 	target.SetSize(m_NumberOfHiddenNeurons);
 	for(const auto& p : data.elements()){

@@ -16,6 +16,7 @@
 
 #ifdef OTB_USE_SHARK
 #include "AutoencoderModel.h"
+#include "PCAModel.h"
 #endif
 
 namespace otb

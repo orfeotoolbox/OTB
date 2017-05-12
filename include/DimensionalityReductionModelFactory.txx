@@ -24,6 +24,7 @@
 
 #ifdef OTB_USE_SHARK
 #include "AutoencoderModelFactory.h"
+#include "PCAModelFactory.h"
 #endif
 
 #include "itkMutexLockHolder.h"
@@ -87,6 +88,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   
 
 #ifdef OTB_USE_SHARK
+  RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(AutoencoderModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
 #endif
@@ -135,6 +137,14 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
     if (taeFactory)
       {
       itk::ObjectFactoryBase::UnRegisterFactory(taeFactory);
+      continue;
+      }
+      
+    PCAModelFactory<TInputValue,TOutputValue> *pcaFactory =
+      dynamic_cast<PCAModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (pcaFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(pcaFactory);
       continue;
       }
 #endif
