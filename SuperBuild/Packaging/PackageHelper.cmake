@@ -94,10 +94,27 @@ macro(macro_super_package)
     endif()
   endforeach(req)
 
+  set(HAVE_QT4 FALSE CACHE INTERNAL "HAVE_QT4")
+  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
+    set(HAVE_QT4 TRUE)
+  endif()
+
+  set(HAVE_MVD FALSE  CACHE INTERNAL "HAVE_MVD")
+  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
+    set(HAVE_MVD TRUE)
+  endif()
+
+  set(HAVE_PYTHON FALSE CACHE INTERNAL "HAVE_PYTHON")
+  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
+    set(HAVE_PYTHON TRUE)
+  endif()
 
   # find_loader_and_args(LOADER_PROGRAM LOADER_PROGRAM_ARGS)
-  find_python_soname(python_INSTALLED_SONAME)
-
+  
+  if(HAVE_PYTHON)
+    find_python_soname(python_INSTALLED_SONAME)
+  endif()
+  
   set(PKG_SEARCHDIRS)
 
   if(MSVC)
@@ -159,12 +176,10 @@ macro(macro_super_package)
   endif()
 
 
-############# otb_loader executable ################
-add_executable(otb_loader ${PACKAGE_SUPPORT_FILES_DIR}/otb_loader.cxx)
-target_link_libraries(otb_loader ${CMAKE_DL_LIBS})
-install(TARGETS otb_loader DESTINATION ${PKG_STAGE_DIR}/bin)
-
-
+  ############# otb_loader executable ################
+  add_executable(otb_loader ${PACKAGE_SUPPORT_FILES_DIR}/otb_loader.cxx)
+  target_link_libraries(otb_loader ${CMAKE_DL_LIBS})
+  install(TARGETS otb_loader DESTINATION ${PKG_STAGE_DIR}/bin)
 
 
   set(PKG_PEFILES)
@@ -203,14 +218,20 @@ install(TARGETS otb_loader DESTINATION ${PKG_STAGE_DIR}/bin)
 
  func_install_xdk_files()
 
-   # check if monteverdi executable is built?
-  if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
+  if(HAVE_MVD)
     func_install_monteverdi_support_files()
   endif()
 
-  install_script_files() 
-
-
+  install_script_files()
+  
+  if(WIN32)
+    install( PROGRAMS "${SUPERBUILD_INSTALL_DIR}/bin/otbcli.bat" DESTINATION ${PKG_STAGE_DIR}/bin)
+    install( PROGRAMS "${SUPERBUILD_INSTALL_DIR}/bin/otbgui.bat" DESTINATION ${PKG_STAGE_DIR}/bin)
+  else()
+    install( PROGRAMS "${SUPERBUILD_INSTALL_DIR}/bin/otbcli" DESTINATION ${PKG_STAGE_DIR}/bin)
+    install( PROGRAMS "${SUPERBUILD_INSTALL_DIR}/bin/otbgui" DESTINATION ${PKG_STAGE_DIR}/bin)
+  endif()
+  
    if(MSVC)
     install(FILES
       "${PACKAGE_SUPPORT_FILES_DIR}/OTB Project.zip"
@@ -248,6 +269,7 @@ install(TARGETS otb_loader DESTINATION ${PKG_STAGE_DIR}/bin)
     endif()
   endif()
 
+  
   foreach(prog ${program_list})
     install( PROGRAMS ${prog} DESTINATION ${PKG_STAGE_DIR})
   endforeach()
