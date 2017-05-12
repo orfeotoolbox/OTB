@@ -23,10 +23,10 @@
 #include "otbStandardWriterWatcher.h"
 #include "otbStatisticsXMLFileReader.h"
 #include "otbShiftScaleVectorImageFilter.h"
-#include "otbImageClassificationFilter.h"
+#include "ImageDimensionalityReductionFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbImageToVectorImageCastFilter.h"
-#include "otbMachineLearningModelFactory.h"
+#include "DimensionalityReductionModelFactory.h"
 
 namespace otb
 {
@@ -94,19 +94,19 @@ public:
       FloatImageType,
       FloatImageType,
       otb::Functor::AffineFunctor<float,float> >                                               OutputRescalerType;
-  typedef otb::ImageClassificationFilter<FloatVectorImageType, FloatImageType, MaskImageType>  ClassificationFilterType;
-  typedef ClassificationFilterType::Pointer                                                    ClassificationFilterPointerType;
-  typedef ClassificationFilterType::ModelType                                                  ModelType;
+  typedef otb::ImageDimensionalityReductionFilter<FloatVectorImageType, FloatVectorImageType, MaskImageType>  DimensionalityReductionFilterType;
+  typedef DimensionalityReductionFilterType::Pointer                                                    DimensionalityReductionFilterPointerType;
+  typedef DimensionalityReductionFilterType::ModelType                                                  ModelType;
   typedef ModelType::Pointer                                                                   ModelPointerType;
-  typedef ClassificationFilterType::ValueType                                                  ValueType;
-  typedef ClassificationFilterType::LabelType                                                  LabelType;
-  typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
+  typedef DimensionalityReductionFilterType::ValueType                                                  ValueType;
+  typedef DimensionalityReductionFilterType::LabelType                                                  LabelType;
+  typedef otb::DimensionalityReductionModelFactory<ValueType, LabelType>                               DimensionalityReductionModelFactoryType;
 
 protected:
 
   ~CbDimensionalityReduction() ITK_OVERRIDE
     {
-    MachineLearningModelFactoryType::CleanFactories();
+    DimensionalityReductionModelFactoryType::CleanFactories();
     }
 
 private:
@@ -191,8 +191,8 @@ private:
 
     // Load svm model
     otbAppLogINFO("Loading model");
-    m_Model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("model"),
-                                                                          MachineLearningModelFactoryType::ReadMode);
+    m_Model = DimensionalityReductionModelFactoryType::CreateDimensionalityReductionModel(GetParameterString("model"),
+                                                                          DimensionalityReductionModelFactoryType::ReadMode);
 
     if (m_Model.IsNull())
       {
@@ -204,10 +204,10 @@ private:
     otbAppLogINFO("Model loaded");
 
     // Classify
-    m_ClassificationFilter = ClassificationFilterType::New();
+    m_ClassificationFilter = DimensionalityReductionFilterType::New();
     m_ClassificationFilter->SetModel(m_Model);
     
-    FloatImageType::Pointer outputImage = m_ClassificationFilter->GetOutput();
+    FloatVectorImageType::Pointer outputImage = m_ClassificationFilter->GetOutput();
 
     // Normalize input image if asked
     if(IsParameterEnabled("imstat")  )
@@ -224,7 +224,7 @@ private:
       stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
       otbAppLogINFO( "mean used: " << meanMeasurementVector );
       otbAppLogINFO( "standard deviation used: " << stddevMeasurementVector );
-      if (meanMeasurementVector.Size() == nbFeatures + 1)
+      /*if (meanMeasurementVector.Size() == nbFeatures + 1)
         {
         double outMean = meanMeasurementVector[nbFeatures];
         double outStdDev = stddevMeasurementVector[nbFeatures];
@@ -236,7 +236,7 @@ private:
         m_OutRescaler->GetFunctor().SetB(outMean);
         outputImage = m_OutRescaler->GetOutput();
         }
-      else if (meanMeasurementVector.Size() != nbFeatures)
+      else*/ if (meanMeasurementVector.Size() != nbFeatures)
         {
         otbAppLogFATAL("Wrong number of components in statistics file : "<<meanMeasurementVector.Size());
         }
@@ -264,11 +264,11 @@ private:
       m_ClassificationFilter->SetInputMask(inMask);
       }
 
-    SetParameterOutputImage<FloatImageType>("out", outputImage);
+    SetParameterOutputImage<FloatVectorImageType>("out", outputImage);
 
   }
 
-  ClassificationFilterType::Pointer m_ClassificationFilter;
+  DimensionalityReductionFilterType::Pointer m_ClassificationFilter;
   ModelPointerType m_Model;
   RescalerType::Pointer m_Rescaler;
   OutputRescalerType::Pointer m_OutRescaler;

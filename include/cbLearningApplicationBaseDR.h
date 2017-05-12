@@ -12,7 +12,7 @@
 #include "itkVariableLengthVector.h"
 
 //Estimator
-#include "otbMachineLearningModelFactory.h"
+#include "DimensionalityReductionModelFactory.h"
 
 #ifdef OTB_USE_SHARK
 #include "AutoencoderModel.h"
@@ -75,10 +75,10 @@ public:
 	typedef typename SampleImageType::PixelType     PixelType;
 
 	  // Machine Learning models
-	typedef otb::MachineLearningModelFactory<
+	typedef otb::DimensionalityReductionModelFactory<
 				InputValueType, OutputValueType>             ModelFactoryType;
-	typedef typename ModelFactoryType::MachineLearningModelTypePointer ModelPointerType;
-	typedef typename ModelFactoryType::MachineLearningModelType        ModelType;
+	typedef typename ModelFactoryType::DimensionalityReductionModelTypePointer ModelPointerType;
+	typedef typename ModelFactoryType::DimensionalityReductionModelType        ModelType;
 	  
 	typedef typename ModelType::InputSampleType     SampleType;
 	typedef typename ModelType::InputListSampleType ListSampleType;

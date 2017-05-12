@@ -201,7 +201,13 @@ protected:
 
   /** Is DoPredictBatch multi-threaded ? */
   bool m_IsDoPredictBatchMultiThreaded;
-
+  
+  
+  /** Size of the output after dimensionality reduction */
+  //unsigned int m_Size;
+  
+  
+  
 private:
   /**  Actual implementation of BatchPredicition
     *  Default implementation will call DoPredict iteratively 

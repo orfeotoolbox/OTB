@@ -13,7 +13,7 @@
 
 #include <fstream> // write the model file
 
-#include "otbMachineLearningModelFactory.h"
+#include "DimensionalityReductionModelFactory.h"
 #include "cbLearningApplicationBaseDR.h"
 
 
@@ -44,7 +44,7 @@ public:
 
 	typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 	
-	typedef otb::MachineLearningModelFactory<ValueType, ValueType>  ModelFactoryType;
+	typedef otb::DimensionalityReductionModelFactory<ValueType, ValueType>  ModelFactoryType;
 		
 private:
 	void DoInit()

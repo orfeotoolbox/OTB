@@ -111,6 +111,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Load(const std::string & fil
 	m_net.read(ia);
 	ifs.close();
 	m_NumberOfHiddenNeurons = m_net.numberOfHiddenNeurons();
+	//this->m_Size = m_NumberOfHiddenNeurons;
 }
 
 
@@ -154,7 +155,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>
 			//target[a]=p[a];
 			target=p[a];
 		}
-		//std::cout << p << std::endl;
+		std::cout << p << std::endl;
 		targets->SetMeasurementVector(id,target);
 		++id;
     }
