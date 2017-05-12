@@ -143,22 +143,29 @@ template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>
 ::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
+	
 	std::vector<shark::RealVector> features;
 	Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
 	shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
 	TargetSampleType target;
 	data = m_net.encode(data);
 	unsigned int id = startIndex;
+	target.SetSize(m_NumberOfHiddenNeurons);
 	for(const auto& p : data.elements()){
 		
 		for(unsigned int a = 0; a < m_NumberOfHiddenNeurons; ++a){
-			//target[a]=p[a];
-			target=p[a];
+			target[a]=p[a];
+		
+			//target.SetElement(a,p[a]);
+			
+			
 		}
-		std::cout << p << std::endl;
+		//std::cout << p << std::endl;
 		targets->SetMeasurementVector(id,target);
 		++id;
+		
     }
+
 }
 
 

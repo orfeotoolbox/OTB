@@ -33,9 +33,8 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 {
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
-  LabelType empty_vect;
-  empty_vect.SetSize(1);
-  m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue(empty_vect);
+
+  //m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
 
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TOutputImage::New());
@@ -100,7 +99,7 @@ template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 ::ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
-{
+{/*
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
@@ -113,7 +112,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
-  typedef itk::ImageRegionIterator<InputImageType>     OutputIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
   typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
 
   InputIteratorType inIt(inputPtr, outputRegionForThread);
@@ -173,15 +172,25 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
       ++confidenceIt;
       }
     progress.CompletedPixel();
-    }
+    }*/
 
 }
+
+template <class TInputImage, class TOutputImage, class TMaskImage>
+void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::GenerateOutputInformation()
+{
+	Superclass::GenerateOutputInformation();
+    this->GetOutput()->SetNumberOfComponentsPerPixel( m_Model->GetDimension() );
+}
+
+
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 ::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
+
   bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() 
                             && !m_Model->GetRegressionMode());
   // Get the input pointers
@@ -189,7 +198,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
   ConfidenceImagePointerType confidencePtr = this->GetOutputConfidence();
-    
+  
   // Progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -201,13 +210,6 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
-
-  MaskIteratorType maskIt;
-  if (inputMaskPtr)
-    {
-    maskIt = MaskIteratorType(inputMaskPtr, outputRegionForThread);
-    maskIt.GoToBegin();
-    }
 
   // typedef typename ModelType::InputValueType       InputValueType;
   typedef typename ModelType::InputSampleType      InputSampleType;
@@ -224,24 +226,17 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   samples->SetMeasurementVectorSize(num_features);
   InputSampleType sample(num_features);
   // Fill the samples
-  bool validPoint = true;
+  
   for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
     {
-    // Check pixel validity
-    if (inputMaskPtr)
-      {
-      validPoint = maskIt.Get() > 0;
-      ++maskIt;
-      }
-    if(validPoint)
-      {
-      typename InputImageType::PixelType pix = inIt.Get();
-      for(size_t feat=0; feat<num_features; ++feat)
+    
+     typename InputImageType::PixelType pix = inIt.Get();
+     for(size_t feat=0; feat<num_features; ++feat)
         {
         sample[feat]=pix[feat];
         }
       samples->PushBack(sample);
-      }
+      
     }
   //Make the batch prediction
   typename TargetListSampleType::Pointer labels;
@@ -250,8 +245,8 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
     confidences = ConfidenceListSampleType::New();
 
   // This call is threadsafe
-  labels = m_Model->PredictBatch(samples,confidences);
-
+  //labels = m_Model->PredictBatch(samples,confidences);
+  labels = m_Model->PredictBatch(samples);
   // Set the output values
   ConfidenceMapIteratorType confidenceIt;
   if (computeConfidenceMap)
@@ -259,36 +254,25 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
     confidenceIt = ConfidenceMapIteratorType(confidencePtr,outputRegionForThread);
     confidenceIt.GoToBegin();
     }
-
+	
   typename TargetListSampleType::ConstIterator labIt = labels->Begin();
-  maskIt.GoToBegin();
+ 
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
     double confidenceIndex = 0.0;
-    TargetValueType labelValue(m_DefaultLabel);
-    if (inputMaskPtr)
-      {
-      validPoint = maskIt.Get() > 0;
-      ++maskIt;
-      }
-    if (validPoint && labIt!=labels->End())
-      {
-      labelValue = labIt.GetMeasurementVector()[0];
-
-       if(computeConfidenceMap)
-        {
-        confidenceIndex = confidences->GetMeasurementVector(labIt.GetInstanceIdentifier())[0];
-        }
-       
-      ++labIt;    
-      }
-    else
-      {
-      labelValue = m_DefaultLabel;
-      }
+     
+	itk::VariableLengthVector<TargetValueType> labelValue;
     
-    outIt.Set(labelValue);
+    labelValue = labIt.GetMeasurementVector();
 
+    if(computeConfidenceMap)
+    {
+       confidenceIndex = confidences->GetMeasurementVector(labIt.GetInstanceIdentifier())[0];
+    }
+       
+    ++labIt;    
+   
+    outIt.Set(labelValue);
     if(computeConfidenceMap)
       {
       confidenceIt.Set(confidenceIndex);

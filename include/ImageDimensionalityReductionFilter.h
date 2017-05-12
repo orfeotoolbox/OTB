@@ -112,7 +112,10 @@ protected:
   /** Destructor */
   ~ImageDimensionalityReductionFilter() ITK_OVERRIDE {}
 
-  /** Threaded generate data */
+  /** Generate output information */
+  virtual void GenerateOutputInformation();
+
+  /** Threaded generate data */  
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
   void ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   void BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);

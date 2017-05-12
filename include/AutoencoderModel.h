@@ -30,7 +30,7 @@ public:
 	itkNewMacro(Self);
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
-
+	unsigned int GetDimension() {return m_NumberOfHiddenNeurons;};
 	itkGetMacro(NumberOfHiddenNeurons,unsigned int);
 	itkSetMacro(NumberOfHiddenNeurons,unsigned int);
 

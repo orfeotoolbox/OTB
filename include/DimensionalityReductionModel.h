@@ -126,6 +126,9 @@ public:
   /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
   void PredictAll();
 
+  /** Get the size of the output after dimensionality reduction */
+  virtual unsigned int GetDimension() = 0;
+
   /**\name Classification model file manipulation */
   //@{
   /** Save the model to file */
@@ -203,8 +206,6 @@ protected:
   bool m_IsDoPredictBatchMultiThreaded;
   
   
-  /** Size of the output after dimensionality reduction */
-  //unsigned int m_Size;
   
   
   
