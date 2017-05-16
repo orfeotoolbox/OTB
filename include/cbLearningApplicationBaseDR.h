@@ -14,6 +14,8 @@
 //Estimator
 #include "DimensionalityReductionModelFactory.h"
 
+#include "SOMModel.h"
+
 #ifdef OTB_USE_SHARK
 #include "AutoencoderModel.h"
 #include "PCAModel.h"
@@ -75,7 +77,6 @@ public:
 	typedef otb::VectorImage<InputValueType>        SampleImageType;
 	typedef typename SampleImageType::PixelType     PixelType;
 
-	  // Machine Learning models
 	typedef otb::DimensionalityReductionModelFactory<
 				InputValueType, OutputValueType>             ModelFactoryType;
 	typedef typename ModelFactoryType::DimensionalityReductionModelTypePointer ModelPointerType;
@@ -84,6 +85,11 @@ public:
 	typedef typename ModelType::InputSampleType     SampleType;
 	typedef typename ModelType::InputListSampleType ListSampleType;
 	  
+	// Dimensionality reduction models
+	
+	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> MapType;
+	typedef otb::SOM<ListSampleType, MapType> EstimatorType;
+	typedef otb::SOMModel<InputValueType> SOMModelType;
 
 #ifdef OTB_USE_SHARK
 	typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
@@ -120,9 +126,11 @@ private:
 #ifdef OTB_USE_SHARK
   void InitAutoencoderParams();
   void InitPCAParams();
+  void InitSOMParams();
   template <class autoencoderchoice>
   void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  void TrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
 #endif
   //@}
 };
@@ -132,6 +140,7 @@ private:
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "cbLearningApplicationBaseDR.txx"
+#include "cbTrainSOM.txx"
 #ifdef OTB_USE_SHARK
 #include "cbTrainAutoencoder.txx"
 #include "cbTrainPCA.txx"

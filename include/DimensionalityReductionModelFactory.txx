@@ -32,6 +32,15 @@
 
 namespace otb
 {
+	
+template <class TInputValue, class TTargetValue>
+using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron>>  ;
+
+
+template <class TInputValue, class TTargetValue>
+using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  ;
+
+
 template <class TInputValue, class TOutputValue>
 typename DimensionalityReductionModel<TInputValue,TOutputValue>::Pointer
 DimensionalityReductionModelFactory<TInputValue,TOutputValue>
@@ -88,6 +97,13 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   
 
 #ifdef OTB_USE_SHARK
+
+  
+ // using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron>>  {};
+ 
+ 
+  //using TiedAutoencoderModelFactory = public AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  {};
+
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(AutoencoderModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());

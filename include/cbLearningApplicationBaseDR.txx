@@ -48,7 +48,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   AddParameter(ParameterType_Choice, "model", "moddel to use for the training");
   SetParameterDescription("model", "Choice of the dimensionality reduction model to use for the training.");
 
-
+  InitSOMParams();
 #ifdef OTB_USE_SHARK
   InitAutoencoderParams();
   InitPCAParams();
@@ -98,7 +98,11 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   // get the name of the chosen machine learning model
   const std::string modelName = GetParameterString("model");
   // call specific train function
-
+ 
+ if(modelName == "som")
+    {
+    TrainSOM(trainingListSample,modelPath);
+    }
   if(modelName == "autoencoder")
     {
     #ifdef OTB_USE_SHARK

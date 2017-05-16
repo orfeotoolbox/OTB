@@ -38,7 +38,6 @@ void PCAModel<TInputValue>::Train()
 	Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
 	
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
-	//m_pca.train(m_encoder,inputSamples);
 	m_pca.setData(inputSamples);
 	m_pca.encoder(m_encoder, m_Dimension);
 	m_pca.decoder(m_decoder, m_Dimension);

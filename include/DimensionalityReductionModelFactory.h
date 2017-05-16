@@ -50,6 +50,7 @@ public:
   /** Mode in which the files is intended to be used */
   typedef enum { ReadMode, WriteMode } FileModeType;
 
+
   /** Create the appropriate MachineLearningModel depending on the particulars of the file. */
   static DimensionalityReductionModelTypePointer CreateDimensionalityReductionModel(const std::string& path, FileModeType mode);
 

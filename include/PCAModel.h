@@ -28,7 +28,7 @@ public:
 	typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
 
 	itkNewMacro(Self);
-	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
+	itkTypeMacro(PCAModel, DimensionalityReductionModel);
 
 	unsigned int GetDimension() {return m_Dimension;}; 
 	itkSetMacro(Dimension,unsigned int);

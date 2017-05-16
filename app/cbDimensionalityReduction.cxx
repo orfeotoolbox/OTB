@@ -28,7 +28,6 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "DimensionalityReductionModelFactory.h"
 
-
 namespace otb
 {
 namespace Functor
@@ -273,7 +272,6 @@ private:
   ModelPointerType m_Model;
   RescalerType::Pointer m_Rescaler;
   OutputRescalerType::Pointer m_OutRescaler;
-
 };
 
 
