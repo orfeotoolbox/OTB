@@ -448,20 +448,7 @@ ImageFileWriter<TInputImage>
     {
     itk::ImageFileWriterException e(__FILE__, __LINE__);
     std::ostringstream msg;
-    msg << " Could not create IO object for file "
-        << m_FileName.c_str() << std::endl;
-    msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects =
-      itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
-    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
-         i != allobjects.end(); ++i)
-      {
-      otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
-      if(io)
-        msg << "    " << io->GetNameOfClass() << std::endl;
-      }
-    msg << "  You probably failed to set a file suffix, or" << std::endl;
-    msg << "    set the suffix to an unsupported type." << std::endl;
+    msg << "Cannot write file " << m_FileName.c_str() << " (probably unsupported or incorrect filename extension).";
     e.SetDescription(msg.str().c_str());
     e.SetLocation(ITK_LOCATION);
     throw e;

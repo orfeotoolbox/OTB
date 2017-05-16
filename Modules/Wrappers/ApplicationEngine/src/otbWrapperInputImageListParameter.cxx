@@ -202,19 +202,10 @@ void
 InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 {
   // Check input availability
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  try
-    {
-    for(unsigned int i=0; i<imList->Size(); i++)
-      {
-      imList->GetNthElement( i )->UpdateOutputInformation();
-      }
-    }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
+  for(unsigned int i = 0; i < imList->Size(); i++)
+  {
+    imList->GetNthElement(i)->UpdateOutputInformation();
+  }
 
   // Clear previous values
   this->ClearValue();
@@ -223,13 +214,13 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
     {
     // Try to build a new ParameterInputImage
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-    
+
     tmpInputImageParameter->SetImage(imList->GetNthElement(i));
-    
+
     m_InputImageParameterVector.push_back(tmpInputImageParameter);
     m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
     }
-  
+
   SetActive(true);
   this->Modified();
 }
@@ -237,21 +228,16 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
 {
   if(m_ImageList->Size()<i)
-    {
+  {
     itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
-    }
-  try
-    {
-    img->UpdateOutputInformation();
-    }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
-  
+  }
+
+  // Check input availability
+  img->UpdateOutputInformation();
+
   // Try to build a new ParameterInputImage
   InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-  
+
   tmpInputImageParameter->SetImage(img);
 
   m_InputImageParameterVector[i] = tmpInputImageParameter;
@@ -263,21 +249,12 @@ void
 InputImageListParameter::AddImage(ImageBaseType* image)
 {
   // Check input availability
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  try
-    {
-    image->UpdateOutputInformation();
-    }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
+  image->UpdateOutputInformation();
 
   InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-  
+
   tmpInputImageParameter->SetImage(image);
-  
+
   m_InputImageParameterVector.push_back(tmpInputImageParameter);
   m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
 

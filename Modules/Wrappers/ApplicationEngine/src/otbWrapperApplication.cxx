@@ -53,7 +53,7 @@ namespace Wrapper
 Application::Application()
   : m_Name(""),
     m_Description(""),
-    m_Logger(itk::Logger::New()),
+    m_Logger(otb::Logger::New()),
     m_ProgressSourceDescription(""),
     m_DocName(""),
     m_DocLongDescription(""),
@@ -68,7 +68,12 @@ Application::Application()
 {
   // Don't call Init from the constructor, since it calls a virtual method !
   m_Logger->SetName("Application.logger");
+#if OTB_DEBUG
   m_Logger->SetPriorityLevel(itk::LoggerBase::DEBUG);
+#else
+  m_Logger->SetPriorityLevel(itk::LoggerBase::INFO);
+#endif
+
   m_Logger->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
 }
 
@@ -199,9 +204,7 @@ void Application::SetParameterString(std::string parameter, std::string value, b
   else if (dynamic_cast<InputImageParameter*>(param))
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    if ( !paramDown->SetFromFileName(value) )
-    otbAppLogCRITICAL( <<"Invalid image filename " << value <<".");
-
+    paramDown->SetFromFileName(value);
     }
   else if (dynamic_cast<ComplexInputImageParameter*>(param))
     {

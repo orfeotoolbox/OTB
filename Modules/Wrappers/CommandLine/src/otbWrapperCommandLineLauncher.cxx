@@ -49,6 +49,8 @@
 #include <string>
 #include <iostream>
 
+using std::string;
+
 namespace otb
 {
 namespace Wrapper
@@ -96,18 +98,19 @@ bool CommandLineLauncher::Load()
 {
   if (m_VExpression.empty())
     {
-    itkExceptionMacro("No expression specified...");
+    std::cerr << "ERROR: No expression specified." << std::endl;
+    return false;
     }
 
   if (this->CheckParametersPrefix() == false)
     {
-    std::cerr << "ERROR: Parameter keys have to set using \"-\", not \"--\"" << std::endl;
+    std::cerr << "ERROR: Parameter keys have to set using \"-\", not \"--\"." << std::endl;
     return false;
     }
 
   if (this->CheckUnicity() == false)
     {
-    std::cerr << "ERROR: At least one key is not unique in the expression..." << std::endl;
+    std::cerr << "ERROR: At least one key is not unique in the expression." << std::endl;
     return false;
     }
 
@@ -116,7 +119,7 @@ bool CommandLineLauncher::Load()
     if (m_Parser->GetPathsAsString(m_VExpression).size() != 0)
       {
       std::cerr << "ERROR: At least one specified path within \"" << m_Parser->GetPathsAsString(m_VExpression)
-                << "\" is invalid or doesn't exist..." << std::endl;
+                << "\" is invalid or doesn't exist." << std::endl;
       return false;
       }
     }
@@ -145,31 +148,54 @@ bool CommandLineLauncher::Execute()
 bool CommandLineLauncher::ExecuteAndWriteOutput()
 {
   try
-    {
+  {
     if (this->BeforeExecute() == false)
-      {
+    {
       return false;
-      }
+    }
 
     if( m_Application->ExecuteAndWriteOutput() == 0 )
-      {
+    {
       this->DisplayOutputParameters();
-      }
+    }
     else
+    {
       return false;
     }
+  }
+  catch(otb::ApplicationException& err)
+  {
+      // These are thrown with otbAppLogFATAL, a macro which logs a user
+      // friendly error message before throwing. So log exception details only
+      // in debug.
+      m_Application->GetLogger()->Debug("Caught otb::ApplicationException during application execution:\n");
+      m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+      return false;
+  }
+  catch(otb::ImageFileReaderException& err)
+  {
+      m_Application->GetLogger()->Debug("Caught otb::ImageFileReaderException during application execution:\n");
+      m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+      m_Application->GetLogger()->Fatal(string("Cannot open file ") + err.m_Filename + string(". ") + err.GetDescription() + string("\n"));
+      return false;
+  }
+  catch(itk::ExceptionObject& err)
+  {
+    m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application execution:\n");
+    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+    m_Application->GetLogger()->Fatal(string(err.GetDescription()) + "\n");
+    return false;
+  }
   catch(std::exception& err)
-    {
-    std::ostringstream message;
-    message << "The following error occurred during application execution : " << err.what() << std::endl;
-    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() );
+  {
+    m_Application->GetLogger()->Fatal(std::string("Caught std::exception during application execution: ") + err.what() + "\n");
     return false;
-    }
+  }
   catch(...)
-    {
-    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, "An unknown exception has been raised during application execution" );
+  {
+    m_Application->GetLogger()->Fatal("Caught unknown exception during application execution.\n");
     return false;
-    }
+  }
 
   return true;
 }
@@ -177,10 +203,10 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
 bool CommandLineLauncher::BeforeExecute()
 {
   if (m_Application.IsNull())
-    {
-    std::cerr << "ERROR: No loaded application..." << std::endl;
+  {
+    std::cerr << "ERROR: No loaded application." << std::endl;
     return false;
-    }
+  }
 
   // Check if there's keys in the expression if the application takes
   // at least 1 mandatory parameter
@@ -189,7 +215,7 @@ bool CommandLineLauncher::BeforeExecute()
 
   if( appKeyList.size()!=0 && keyList.size()==0 )
     {
-    std::cerr << "ERROR: Waiting for at least one parameter..." << std::endl;
+    std::cerr << "ERROR: Waiting for at least one parameter." << std::endl;
     this->DisplayHelp();
     return false;
     }
@@ -218,64 +244,21 @@ bool CommandLineLauncher::BeforeExecute()
   std::string unknownKey;
   if (this->CheckKeyValidity(unknownKey) == false)
     {
-    std::cerr << "ERROR: option -"<<unknownKey<<" does not exist in the application." << std::endl;
-    this->DisplayHelp();
-    return false;
-    }
-  try
-    {
-    if (this->LoadParameters() != OKPARAM)
-      {
-      std::cerr << "ERROR: Troubles loading parameter, please check your line argument..." << std::endl;
-      // Force to reload the application, the LoadParameters can change wrong values
-      this->LoadApplication();
-      m_Application->Init();
-      this->DisplayHelp();
-
-      return false;
-      }
-    }
-  catch (itk::ExceptionObject& err)
-    {
-    std::cerr << "ERROR: Troubles in parameter setting, please check your line argument..." << std::endl;
-    std::cerr << err.GetDescription() << std::endl;
-    // Force to reload the application, the LoadParameters can change wrong values
-    this->LoadApplication();
-    m_Application->Init();
-    this->DisplayHelp();
-
+    std::cerr << "ERROR: Parameter -" << unknownKey <<" does not exist in the application." << std::endl;
     return false;
     }
 
-  // Check for the progress report
-  if (m_Parser->IsAttributExists("-progress", m_VExpression) == true)
-    {
-    std::vector<std::string> val;
-    val = m_Parser->GetAttribut("-progress", m_VExpression);
-    if (val.size() != 1)
-      {
-      std::cerr << "ERROR: Invalid progress argument, must be unique value..." << std::endl;
-      return false;
-      }
-    if (val[0] == "1" || val[0] == "true")
-      {
-      m_ReportProgress = true;
-      }
-    else
-      if (val[0] == "0" || val[0] == "false")
-        {
-        m_ReportProgress = false;
-        }
-      else
-        {
-        std::cerr << "ERROR: Invalid progress argument, must be 0, 1, false or true..." << std::endl;
-        // Force to reload the application, the LoadParameters can change wrong values
-        this->LoadApplication();
-        this->DisplayHelp();
+  ParamResultType result = this->LoadParameters();
 
-        return false;
-        }
-    }
+  if (result == MISSINGMANDATORYPARAMETER)
+  {
+    this->DisplayHelp();
+    return false;
+  }
+  else if (result != OKPARAM)
+  {
+    return false;
+  }
 
   return true;
 }
@@ -307,7 +290,7 @@ void CommandLineLauncher::LoadApplication()
   //if (m_Parser->GetModuleName(moduleName, m_Expression) != CommandLineParser::OK)
   if (m_Parser->GetModuleName(moduleName, m_VExpression) != CommandLineParser::OK)
     {
-    std::cerr << "ERROR: LoadApplication, no module found..." << std::endl;
+    std::cerr << "ERROR: LoadApplication, no module found." << std::endl;
     return;
     }
 
@@ -338,6 +321,7 @@ void CommandLineLauncher::LoadApplication()
     {
     // Attach log output to the Application logger
     m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
+    m_Application->GetLogger()->SetHumanReadableFormat("%Y-%m-%d %H:%M:%S");
     m_Application->GetLogger()->AddLogOutput(m_LogOutput);
 
     // Add an observer to the AddedProcess event
@@ -367,6 +351,25 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     m_Application->UpdateParameters();
     }
 
+  // Check for the progress report parameter
+  if (m_Parser->IsAttributExists("-progress", m_VExpression) == true)
+  {
+    std::vector<std::string> val = m_Parser->GetAttribut("-progress", m_VExpression);
+    if (val.size() == 1 && (val[0] == "1" || val[0] == "true"))
+    {
+      m_ReportProgress = true;
+    }
+    else if (val.size() == 1 && (val[0] == "0" || val[0] == "false"))
+    {
+      m_ReportProgress = false;
+    }
+    else
+    {
+      std::cerr << "ERROR: Invalid value for parameter -progress. It must be 0, 1, false or true." << std::endl;
+      return WRONGPARAMETERVALUE;
+    }
+  }
+
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   // Loop over each parameter key declared in the application
   // FIRST PASS : set parameter values
@@ -393,8 +396,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         // Check if there is a value associated to the attribute
         if ( values.empty() )
           {
-          std::cerr << "ERROR: No value associated to the parameter : \"" << paramKey
-                    << "\", invalid number of values " << values.size() << std::endl;
+          std::cerr << "ERROR: No value associated to parameter -" << paramKey << "." << std::endl;
           return INVALIDNUMBEROFVALUE;
           }
 
@@ -449,16 +451,16 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                       else if (values[1] == "double")
                         outPixType = ImagePixelType_double;
                       else
-                        {
+                      {
+                        std::cerr << "ERROR: Invalid output type for parameter -" << paramKey << ": " << values[1] << "." << std::endl;
                         return WRONGPARAMETERVALUE;
-                        }
+                      }
                       dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
                       }
                     else
-                      if (values.size() != 1 && values.size() != 2)
+                      if (values.size() > 2)
                         {
-                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey
-                                  << "\", invalid number of values " << values.size() << std::endl;
+                        std::cerr << "ERROR: Too many values for parameter -" << paramKey << " (expected 2 or less, got " << values.size() << ")." << std::endl;
                         return INVALIDNUMBEROFVALUE;
                         }
                     }
@@ -474,9 +476,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                       else if (values[1] == "cdouble")
                         outPixType = ComplexImagePixelType_double;
                       else
-                        {
+                      {
+                        std::cerr << "ERROR: Invalid output type for parameter -" << paramKey << ": " << values[1] << "." << std::endl;
                         return WRONGPARAMETERVALUE;
-                        }
+                      }
                       dynamic_cast<ComplexOutputImageParameter *> (param.GetPointer())->SetComplexPixelType(outPixType);
                       }
                     else
@@ -551,7 +554,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 }
              else
               {
-              std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
+              std::cerr << "ERROR: Wrong value for parameter -" << paramKey << "." << std::endl;
               return WRONGPARAMETERVALUE;
               }
             }
@@ -614,27 +617,26 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
       }
 
     if( mustBeSet )
-      {
+    {
       if (!paramExists)
-        {
+      {
         // If key doesn't exist and parameter hasn't default value set...
         if (!hasValue)
-          {
-          std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << "  " << m_Application->HasValue(paramKey)
-                    << std::endl;
-          return MISSINGMANDATORYPARAMETER;
-          }
-        }
-      else
         {
-        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
-        if (values.size() == 0 && !m_Application->HasValue(paramKey))
-          {
-          std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << std::endl;
-          return MISSINGPARAMETERVALUE;
-          }
+          std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
+          return MISSINGMANDATORYPARAMETER;
         }
       }
+      else
+      {
+        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
+        if (values.size() == 0 && !m_Application->HasValue(paramKey))
+        {
+          std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
+          return MISSINGPARAMETERVALUE;
+        }
+      }
+    }
     // Check if non mandatory parameter have values
     else
       {
@@ -643,7 +645,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
         if (values.size() == 0)
           {
-          std::cerr << "ERROR: Missing non-mandatory parameter: " << paramKey << std::endl;
+          std::cerr << "ERROR: Missing non-mandatory parameter -" << paramKey << "." << std::endl;
           return MISSINGPARAMETERVALUE;
           }
         }

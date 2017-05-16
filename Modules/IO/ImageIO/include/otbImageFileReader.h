@@ -54,19 +54,14 @@ public:
 
   /** Constructor. */
   ImageFileReaderException(const char *file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
+                           const std::string& desc = "",
+                           const std::string& filename = "") :
+    ExceptionObject(file, line, desc),
+    m_Filename(filename)
   {
   }
 
-  /** Constructor. */
-  ImageFileReaderException(const std::string &file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-  {
-  }
+  std::string m_Filename;
 };
 
 /** \class ImageFileReader

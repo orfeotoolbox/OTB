@@ -43,36 +43,19 @@ InputFilenameListParameter::SetListFromFileName(const std::vector<std::string> &
   // First clear previous file chosen
   this->ClearValue();
 
-  bool isOk = true;
   for(unsigned int i=0; i<filenames.size(); i++)
     {
     std::string filename = filenames[i];
-    // TODO : when the logger will be available, redirect the exception
-    // in the logger (like what is done in MsgReporter)
     // File existence checked by the reader
     if (!filename.empty())
       {
       StringParameter::Pointer strParameter = StringParameter::New();
       strParameter->SetValue(filename);
-      try
-        {
-        strParameter->HasValue();
-        }
-      catch(itk::ExceptionObject & /*err*/)
-        {
-        this->ClearValue();
-        isOk = false;
-        break;
-        }
+      strParameter->HasValue();
 
       // everything went fine, store the object reference
       m_FilenameList->PushBack(strParameter);
       }
-    }
-
-  if( !isOk )
-    {
-    return false;
     }
 
   SetActive(true);
@@ -92,22 +75,12 @@ InputFilenameListParameter::AddNullElement()
 bool
 InputFilenameListParameter::AddFromFileName(const std::string & filename)
 {
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
   // File existence checked by the reader
   if (!filename.empty())
     {
     StringParameter::Pointer strParameter = StringParameter::New();
     strParameter->SetValue(filename);
-    try
-      {
-      strParameter->HasValue();
-      }
-    catch(itk::ExceptionObject & /*err*/)
-      {
-      this->ClearValue();
-      return false;
-      }
+    strParameter->HasValue();
 
     // everything went fine, store the object references
     m_FilenameList->PushBack(strParameter);
@@ -127,22 +100,12 @@ InputFilenameListParameter::SetNthFileName( const unsigned int id, const std::st
     itkExceptionMacro(<< "No file "<<id<<". Only "<<m_FilenameList->Size()<<" filenames available.");
     }
 
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
   // File existence checked by the reader
   if (!filename.empty())
     {
     StringParameter::Pointer strParameter = StringParameter::New();
     strParameter->SetValue(filename);
-    try
-      {
-      strParameter->HasValue();
-      }
-    catch(itk::ExceptionObject &)
-      {
-      this->ClearValue();
-      return false;
-      }
+    strParameter->HasValue();
 
     m_FilenameList->SetNthElement(id, strParameter);
 

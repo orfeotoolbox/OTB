@@ -65,7 +65,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
    m_UserSpecifiedImageIO(false),
    m_FileName(""),
    m_UseStreaming(true),
-   m_ExceptionMessage(""),
    m_ActualIORegion(),
    m_FilenameHelper(FNameHelperType::New()),
    m_AdditionalNumber(0),
@@ -242,8 +241,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     else
       {
-      throw otb::ImageFileReaderException(__FILE__, __LINE__,
-                                          "Invalid output object type");
+      throw otb::ImageFileReaderException(__FILE__, __LINE__, "Invalid output object type");
       }
     }
 }
@@ -259,11 +257,10 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   itkDebugMacro(<< "Reading file for GenerateOutputInformation()" << this->m_FileName);
 
   // Check to see if we can read the file given the name or prefix
-  //
   if (this->m_FileName == "")
-    {
-    throw otb::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified");
-    }
+  {
+    throw otb::ImageFileReaderException(__FILE__, __LINE__, "Filename must be specified.");
+  }
 
   // Find real image file name
   // !!!!  Update FileName
@@ -271,56 +268,25 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   bool        found = GetGdalReadImageFileName(this->m_FileName, lFileName);
   if (found == false)
     {
-    otbMsgDebugMacro(<< "Filename was NOT unknown. May be recognized by a Image factory ! ");
+    otbMsgDebugMacro(<< "Filename was NOT unknown. May be recognized by a Image factory!");
     }
   // Update FileName
   this->m_FileName = lFileName;
 
   // Test if the file exists and if it can be opened.
   // An exception will be thrown otherwise.
-  // We catch the exception because some ImageIO's may not actually
-  // open a file. Still reports file error if no ImageIO is loaded.
-  
-  try
-    {
-    m_ExceptionMessage = "";
-    this->TestFileExistenceAndReadability();
-    }
-  catch (itk::ExceptionObject & err)
-    {
-    m_ExceptionMessage = err.GetDescription();
-    }
-  
-  if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
-    {
-    this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), otb::ImageIOFactory::ReadMode);
-    }
-  
-  if (this->m_ImageIO.IsNull())
-    {
-    //this->Print(std::cerr);
-    otb::ImageFileReaderException e(__FILE__, __LINE__);
-    std::ostringstream msg;
-    msg << " Could not create IO object for file "
-        << this->m_FileName.c_str() << std::endl;
-    msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects =
-      itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
-    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
-         i != allobjects.end(); ++i)
-      {
-      otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
-      // IO should never be null, but we would better check for it
-      if(io)
-        msg << "    " << io->GetNameOfClass() << std::endl;
-      }
-    msg << "  You probably failed to set a file suffix, or" << std::endl;
-    msg << "    set the suffix to an unsupported type." << std::endl;
-    e.SetDescription(msg.str().c_str());
-    throw e;
-    return;
-    }
+  this->TestFileExistenceAndReadability();
 
+  if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
+  {
+    this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), otb::ImageIOFactory::ReadMode);
+  }
+
+  // Throw error if the image wasn't loaded
+  if (this->m_ImageIO.IsNull())
+  {
+    throw otb::ImageFileReaderException(__FILE__, __LINE__, "Cannot read image (probably unsupported or incorrect filename extension).", this->m_FileName);
+  }
 
   // Get the ImageIO MetaData Dictionary
   itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
@@ -331,7 +297,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   bool lVectorImage = false;
   if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
     lVectorImage= true;
-  
+
   this->m_ImageIO->SetOutputImagePixelType(PixelIsComplex(dummy),lVectorImage);
 
   // Pass the dataset number (used for hdf files for example)
@@ -435,9 +401,9 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   if(!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
     {
-    
+
     std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
-  
+
     // Update otb Keywordlist
     ImageKeywordlist otb_kwl;
     if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
@@ -450,7 +416,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
       otbMsgDevMacro(<< "Loading external kwl");
       }
-    
+
     // Don't add an empty ossim keyword list
     if(!otb_kwl.Empty())
       {
@@ -511,7 +477,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
     }
 
-  
+
   // If Skip ProjectionRef is activated, remove ProjRef from dict
   if (m_FilenameHelper->GetSkipCarto())
     {
@@ -576,9 +542,9 @@ std::string
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetDerivedDatasetSourceFileName(const std::string & filename) const
 {
-  
+
   const size_t dsds_pos = filename.find(DerivedSubdatasetPrefix);
-  
+
   if(dsds_pos != std::string::npos)
       {
       // Derived subdataset from gdal
@@ -605,40 +571,26 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
 
   std::string fileToCheck = GetDerivedDatasetSourceFileName(m_FileName);
-  
+
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(fileToCheck.c_str()))
-    {
-    otb::ImageFileReaderException e(__FILE__, __LINE__);
-    std::ostringstream msg;
-    msg << "The file doesn't exist. "
-        << std::endl << "Filename = " << fileToCheck
-        << std::endl;
-    e.SetDescription(msg.str().c_str());
-    throw e;
-    return;
-    }
+  {
+    throw otb::ImageFileReaderException (__FILE__, __LINE__, "The file does not exist.", fileToCheck);
+  }
 
   // Test if the file can be open for reading access.
   //Only if m_FileName specify a filename (not a dirname)
   if (itksys::SystemTools::FileExists(fileToCheck.c_str(), true))
-    {
+  {
     std::ifstream readTester;
     readTester.open(fileToCheck.c_str());
     if (readTester.fail())
-      {
+    {
       readTester.close();
-      std::ostringstream msg;
-      msg << "The file couldn't be opened for reading. "
-          << std::endl << "Filename: " << fileToCheck
-          << std::endl;
-      otb::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
-      throw e;
-      return;
-
-      }
-    readTester.close();
+      throw otb::ImageFileReaderException(__FILE__, __LINE__, "The file cannot be opened for reading.", fileToCheck);
     }
+    readTester.close();
+  }
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
@@ -695,7 +647,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     fic_trouve = true;
     }
-  
+
   otbMsgDevMacro(<< "lFileNameGdal : " << GdalFileName.c_str());
   otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
   return (fic_trouve);
@@ -716,12 +668,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 {
   const std::string skip_geom_key = "skipgeom";
   const std::string geom_key = "geom";
-  
+
   if (in)
     {
     // First, see if the simple filename has changed
     typename FNameHelperType::Pointer helper = FNameHelperType::New();
-    
+
     helper->SetExtendedFileName(in);
     std::string simpleFileName = helper->GetSimpleFileName();
 
@@ -735,7 +687,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       if(oldMap.size() != newMap.size() || !std::equal(oldMap.begin(),oldMap.end(),newMap.begin()))
         {
         this->Modified();
-        
+
         // Now check if keywordlist needs to be generated again
         // Condition is: one of the old or new map has the skip_geom
         // key and the other does not
@@ -759,7 +711,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       m_KeywordListUpToDate = false;
       this->Modified();
       }
-    
+
     m_FilenameHelper = helper;
     }
 }
@@ -781,15 +733,15 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   return this->m_ImageIO->GetOverviewsCount();
  }
- 
- 
+
+
 template <class TOutputImage, class ConvertPixelTraits>
 std::vector<std::string>
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GetOverviewsInfo()
  {
   this->UpdateOutputInformation();
-  
+
   return this->m_ImageIO->GetOverviewsInfo();
  }
 

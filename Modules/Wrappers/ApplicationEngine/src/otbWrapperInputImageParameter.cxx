@@ -53,27 +53,10 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   //  - Done in the reader
   //  - allow appending additional information to the filename
   // myfile.tif:2 for example, or myfile.tif:nocarto
-  if (!filename.empty())
-    {
-    FloatVectorReaderType::Pointer reader = FloatVectorReaderType::New();
-
-    try
-      {
-      reader->SetFileName(filename);
-      reader->UpdateOutputInformation();
-      }
-    catch(itk::ExceptionObject & /*err*/)
-      {
-      return false;
-      }
-
-    // the specified filename is valid => store the value
-    m_FileName = filename;
-    m_UseFilename = true;
-    SetActive(true);
-    return true;
-    }
-  return false;
+  m_FileName = filename;
+  m_UseFilename = true;
+  SetActive(true);
+  return true;
 }
 
 
