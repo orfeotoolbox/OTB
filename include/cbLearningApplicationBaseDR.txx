@@ -51,6 +51,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 
 #ifdef OTB_USE_SHARK
   InitAutoencoderParams();
+  InitPCAParams();
 #endif
   
 }
@@ -110,6 +111,15 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     {
     #ifdef OTB_USE_SHARK
     TrainAutoencoder<TiedAutoencoderModelType>(trainingListSample,modelPath);
+    #else
+    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+    #endif
+    }
+    
+  if(modelName == "pca")
+    {
+    #ifdef OTB_USE_SHARK
+    TrainPCA(trainingListSample,modelPath);
     #else
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif

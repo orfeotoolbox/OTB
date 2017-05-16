@@ -28,7 +28,6 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "DimensionalityReductionModelFactory.h"
 
-#include "PCAModel.h"
 
 namespace otb
 {

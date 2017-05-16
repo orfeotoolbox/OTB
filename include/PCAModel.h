@@ -31,7 +31,7 @@ public:
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
 	unsigned int GetDimension() {return m_Dimension;}; 
-	//itkGetMacro(Dimension,unsigned int);
+	itkSetMacro(Dimension,unsigned int);
 	
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);

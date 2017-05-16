@@ -1,6 +1,6 @@
 
-#ifndef AutoencoderModel_txx
-#define AutoencoderModel_txx
+#ifndef PCAModel_txx
+#define PCAModel_txx
 
 #include <fstream>
 #include <shark/Data/Dataset.h>
@@ -24,7 +24,7 @@ PCAModel<TInputValue>::PCAModel()
 
 
 template <class TInputValue>
-PCAModel<TInputValue,AutoencoderType>::~PCAModel()
+PCAModel<TInputValue>::~PCAModel()
 {
 }
 
@@ -38,10 +38,10 @@ void PCAModel<TInputValue>::Train()
 	Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
 	
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
-	
-	m_pca(inputSamples);
-	pca.encoder(m_encoder, m_Dimension);
-	pca.decoder(m_decoder, m_Dimension);
+	//m_pca.train(m_encoder,inputSamples);
+	m_pca.setData(inputSamples);
+	m_pca.encoder(m_encoder, m_Dimension);
+	m_pca.decoder(m_decoder, m_Dimension);
 	
 }
 
@@ -72,7 +72,8 @@ template <class TInputValue>
 void PCAModel<TInputValue>::Save(const std::string & filename, const std::string & name)
 {
 	std::ofstream ofs(filename);
-	ofs << m_encoder.name() << std::endl; //first line
+	//ofs << m_encoder.name() << std::endl; //first line
+	ofs << "pca" << std::endl; //first line
 	boost::archive::polymorphic_text_oarchive oa(ofs);
 	m_encoder.write(oa);
 	ofs.close();
@@ -86,11 +87,12 @@ void PCAModel<TInputValue>::Load(const std::string & filename, const std::string
 	ifs.getline(encoder,256); 
 	std::string encoderstr(encoder);
 	
-	if (autoencoderstr != m_encoder.name()){
+	//if (encoderstr != m_encoder.name()){
+	if (encoderstr != "pca"){
 		itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
 	boost::archive::polymorphic_text_iarchive ia(ifs);
-	m_net.read(ia);
+	m_encoder.read(ia);
 	ifs.close();
 	m_Dimension = m_encoder.outputSize();
 	//this->m_Size = m_NumberOfHiddenNeurons;
@@ -104,22 +106,20 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueT
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
     {
-		samples.push_back(value[i]);
+		samples[i]=value[i];
     }
-    shark::Data<shark::RealVector> data;
-    data.element(0)=samples;
-    data = m_encoder(data);
     
+    std::vector<shark::RealVector> features;
+    features.push_back(samples);
+   
+    shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
+     
+	data = m_encoder(data);
     TargetSampleType target;
-    
-    //target.SetSize(m_NumberOfHiddenNeurons);
+    target.SetSize(m_Dimension);
 	
-	for(unsigned int a = 0; a < m_NumberOfHiddenNeurons; ++a){
-		target[a]=p[a];
-		
-			//target.SetElement(a,p[a]);
-			
-			
+	for(unsigned int a = 0; a < m_Dimension; ++a){
+		target[a]=data.element(0)[a];
 	}
 	return target;
 }
@@ -136,11 +136,12 @@ void PCAModel<TInputValue>
 	TargetSampleType target;
 	data = m_encoder(data);
 	unsigned int id = startIndex;
-	target.SetSize(m_NumberOfHiddenNeurons);
+	target.SetSize(m_Dimension);
 	for(const auto& p : data.elements()){
 		
-		for(unsigned int a = 0; a < m_NumberOfHiddenNeurons; ++a){
+		for(unsigned int a = 0; a < m_Dimension; ++a){
 			target[a]=p[a];
+			//target[a]=1;
 		
 			//target.SetElement(a,p[a]);
 			

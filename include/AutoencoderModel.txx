@@ -122,18 +122,20 @@ AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType &
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
     {
-		samples.push_back(value[i]);
+		samples[i]=value[i];
     }
-    shark::Data<shark::RealVector> data;
-    data.element(0)=samples;
+    
+    std::vector<shark::RealVector> features;
+    features.push_back(samples);
+   
+    shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
+     
     data = m_net.encode(data);
-    
     TargetSampleType target;
-    
-    //target.SetSize(m_NumberOfHiddenNeurons);
+    target.SetSize(m_NumberOfHiddenNeurons);
+	
 	for(unsigned int a = 0; a < m_NumberOfHiddenNeurons; ++a){
-		//target[a]=data.element(0)[a];
-		target=data.element(0)[a];
+		target[a]=data.element(0)[a];
 	}
 	return target;
 }
@@ -143,7 +145,7 @@ template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>
 ::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
-	
+	std::cout << "BATCH" << std::endl;
 	std::vector<shark::RealVector> features;
 	Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
 	shark::Data<shark::RealVector> data = shark::createDataFromRange(features);

@@ -15,15 +15,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef AutoencoderModelFactory_txx
-#define AutoencoderModelFactory_txx
+#ifndef PCAFactory_txx
+#define PCAFactory_txx
 
 
-#include "AutoencoderModelFactory.h"
+#include "PCAModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
-#include "AutoencoderModel.h"
-#include <shark/Algorithms/Trainers/PCA.h>
+#include "PCAModel.h"
+//#include <shark/Algorithms/Trainers/PCA.h>
 #include "itkVersion.h"
 
 namespace otb
@@ -40,7 +40,7 @@ PCAModelFactory<TInputValue,TOutputValue>::PCAModelFactory()
                          "Shark PCA ML Model",
                          1,
                       //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
-						itk::CreateObjectFunction<PCAModel<TInputValue,shark::LinearModel<> > >::New());
+						itk::CreateObjectFunction<PCAModel<TInputValue>>::New());
 }
 
 template <class TInputValue, class TOutputValue>

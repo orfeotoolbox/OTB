@@ -91,6 +91,8 @@ public:
 	
 	typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron> TiedAutoencoderType;
 	typedef otb::AutoencoderModel<InputValueType, TiedAutoencoderType> TiedAutoencoderModelType;
+	
+	typedef otb::PCAModel<InputValueType> PCAModelType;
 #endif
   
 protected:
@@ -117,8 +119,10 @@ private:
 
 #ifdef OTB_USE_SHARK
   void InitAutoencoderParams();
+  void InitPCAParams();
   template <class autoencoderchoice>
   void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
 #endif
   //@}
 };
@@ -130,6 +134,7 @@ private:
 #include "cbLearningApplicationBaseDR.txx"
 #ifdef OTB_USE_SHARK
 #include "cbTrainAutoencoder.txx"
+#include "cbTrainPCA.txx"
 #endif
 #endif
 

@@ -40,7 +40,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   this->SetNthOutput(0,TOutputImage::New());
   this->SetNthOutput(1,ConfidenceImageType::New());
   m_UseConfidenceMap = false;
-  m_BatchMode = true;
+  m_BatchMode = false;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
@@ -99,7 +99,7 @@ template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 ::ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
-{/*
+{
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
@@ -118,61 +118,14 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
 
-  // Eventually iterate on masks
-  MaskIteratorType maskIt;
-  if (inputMaskPtr)
-    {
-    maskIt = MaskIteratorType(inputMaskPtr, outputRegionForThread);
-    maskIt.GoToBegin();
-    }
-
-  // setup iterator for confidence map
-  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() && !m_Model->GetRegressionMode());
-  ConfidenceMapIteratorType confidenceIt;
-  if (computeConfidenceMap)
-    {
-    confidenceIt = ConfidenceMapIteratorType(confidencePtr,outputRegionForThread);
-    confidenceIt.GoToBegin();
-    }
-
-  bool validPoint = true;
-  double confidenceIndex = 0.0;
-
   // Walk the part of the image
   for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd() && !outIt.IsAtEnd(); ++inIt, ++outIt)
     {
-    // Check pixel validity
-    if (inputMaskPtr)
-      {
-      validPoint = maskIt.Get() > 0;
-      ++maskIt;
-      }
-    // If point is valid
-    if (validPoint)
-      {
-      // Classifify
-      if (computeConfidenceMap)
-        {
-        outIt.Set(m_Model->Predict(inIt.Get(),&confidenceIndex)[0]);
-        }
-      else
-        {
-        outIt.Set(m_Model->Predict(inIt.Get())[0]);
-        }
-      }
-    else
-      {
-      // else, set default value
-      outIt.Set(m_DefaultLabel);
-      confidenceIndex = 0.0;
-      }
-    if (computeConfidenceMap)
-      {
-      confidenceIt.Set(confidenceIndex);
-      ++confidenceIt;
-      }
+	// Classifify
+
+	outIt.Set(m_Model->Predict(inIt.Get()));
     progress.CompletedPixel();
-    }*/
+    }
 
 }
 
