@@ -1,5 +1,5 @@
-#ifndef PCAModelFactory_h
-#define PCAModelFactory_h
+#ifndef SOMModelFactory_h
+#define SOMModelFactory_h
 
 
 #include "itkObjectFactoryBase.h"
@@ -9,11 +9,11 @@ namespace otb
 {
 	
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT PCAModelFactory : public itk::ObjectFactoryBase
+class ITK_EXPORT SOMModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef PCAModelFactory   Self;
+  typedef SOMModelFactory   Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -26,21 +26,21 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PCAModelFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(SOMModelFactory, itk::ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    Pointer PCAFactory = PCAModelFactory::New();
-    itk::ObjectFactoryBase::RegisterFactory(PCAFactory);
+    Pointer SOMFactory = SOMModelFactory::New();
+    itk::ObjectFactoryBase::RegisterFactory(SOMFactory);
   }
 
 protected:
-  PCAModelFactory();
-  ~PCAModelFactory() ITK_OVERRIDE;
+  SOMModelFactory();
+  ~SOMModelFactory() ITK_OVERRIDE;
 
 private:
-  PCAModelFactory(const Self &); //purposely not implemented
+  SOMModelFactory(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
 };
@@ -51,7 +51,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "PCAModelFactory.txx"
+#include "SOMModelFactory.txx"
 #endif
 
 #endif

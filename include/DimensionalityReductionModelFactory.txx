@@ -21,6 +21,7 @@
 #include "DimensionalityReductionModelFactory.h"
 #include "otbConfigure.h"
 
+#include "SOMModelFactory.h"
 
 #ifdef OTB_USE_SHARK
 #include "AutoencoderModelFactory.h"
@@ -95,15 +96,12 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 {
   itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
   
-
-#ifdef OTB_USE_SHARK
-
   
- // using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron>>  {};
- 
- 
-  //using TiedAutoencoderModelFactory = public AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  {};
 
+
+  RegisterFactory(SOMModelFactory<TInputValue,TOutputValue>::New());
+  
+#ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(AutoencoderModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
@@ -136,7 +134,14 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   for (itFac = factories.begin(); itFac != factories.end() ; ++itFac)
     {
 
-
+	// SOM
+    SOMModelFactory<TInputValue,TOutputValue> *somFactory =
+      dynamic_cast<SOMModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (somFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(somFactory);
+      continue;
+      }
 #ifdef OTB_USE_SHARK
 	
 	// Autoencoder
@@ -155,7 +160,8 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(taeFactory);
       continue;
       }
-      
+    
+    // PCA  
     PCAModelFactory<TInputValue,TOutputValue> *pcaFactory =
       dynamic_cast<PCAModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (pcaFactory)

@@ -20,7 +20,14 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
                           "This group of parameters allows setting SOM parameters. "
                           );
   
-  
+	AddParameter(ParameterType_StringList ,  "model.som.s",   "Size");
+    SetParameterDescription("model.som.s", "Size of the SOM map");
+    MandatoryOff("model.som.s");
+    
+	AddParameter(ParameterType_StringList ,  "model.som.n",   "Size Neighborhood");
+    SetParameterDescription("model.som.n", "Size of the initial neighborhood in the SOM map");
+    MandatoryOff("model.som.n");
+    
     AddParameter(ParameterType_Int,  "model.som.sx",   "SizeX");
     SetParameterDescription("model.som.sx", "X size of the SOM map");
     MandatoryOff("model.som.sx");
@@ -52,7 +59,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     AddParameter(ParameterType_Float,  "model.som.iv",   "InitialValue");
     SetParameterDescription("model.som.iv", "Maximum initial neuron weight");
     MandatoryOff("model.som.iv");
-    
+    ;
     SetDefaultParameterInt("model.som.sx", 32);
     SetDefaultParameterInt("model.som.sy", 32);
     SetDefaultParameterInt("model.som.nx", 10);
@@ -70,20 +77,28 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 ::TrainSOM(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
 		
+		//std::cout << std::stoi(s[0]) << std::endl;
 		typename SOMModelType::Pointer dimredTrainer = SOMModelType::New();
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.som.ni"));
 		dimredTrainer->SetBetaInit(GetParameterFloat("model.som.bi"));
 		dimredTrainer->SetBetaEnd(GetParameterFloat("model.som.bf"));
 		dimredTrainer->SetMaxWeight(GetParameterFloat("model.som.iv"));
+		std::cout << "0" << std::endl;
 		typename EstimatorType::SizeType size;
-        size[0]=GetParameterInt("model.som.sx");
-        size[1]=GetParameterInt("model.som.sy");
+		std::vector<std::basic_string<char>> s= GetParameterStringList("model.som.s");
+		for (int i=0; i<3; i++){ // This will be templated later (the 3)
+			size[i]=std::stoi(s[i]);
+		}
+		
         dimredTrainer->SetMapSize(size);
+        std::cout << "1" << std::endl;
         typename EstimatorType::SizeType radius;
-        radius[0] = GetParameterInt("model.som.nx");
-        radius[1] = GetParameterInt("model.som.ny");
+		std::vector<std::basic_string<char>> n= GetParameterStringList("model.som.n");
+		for (int i=0; i<3; i++){ // This will be templated later (the 3)
+			radius[i]=std::stoi(n[i]);
+		}
+		std::cout << "2" << std::endl;
         dimredTrainer->SetNeighborhoodSizeInit(radius);
-        std::cout << trainingListSample << std::endl;
         dimredTrainer->SetListSample(trainingListSample);
 		dimredTrainer->Train();
 		dimredTrainer->Save(modelPath);

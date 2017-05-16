@@ -87,7 +87,7 @@ public:
 	  
 	// Dimensionality reduction models
 	
-	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> MapType;
+	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> MapType;
 	typedef otb::SOM<ListSampleType, MapType> EstimatorType;
 	typedef otb::SOMModel<InputValueType> SOMModelType;
 

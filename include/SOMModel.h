@@ -37,7 +37,7 @@ public:
 	typedef typename Superclass::ConfidenceSampleType ConfidenceSampleType;
 	typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
 
-	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> MapType;
+	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> MapType;
 	typedef typename MapType::SizeType       SizeType;
 	
 	typedef otb::SOM<InputListSampleType, MapType> EstimatorType;

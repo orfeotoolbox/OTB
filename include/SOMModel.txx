@@ -14,6 +14,7 @@ namespace otb
 template <class TInputValue>
 SOMModel<TInputValue>::SOMModel()
 {
+	this->m_IsRegressionSupported = true;
 }
 
 
@@ -37,13 +38,6 @@ void SOMModel<TInputValue>::Train()
     estimator->SetBetaEnd(m_BetaEnd);
     estimator->SetMaxWeight(m_MaxWeight);
     //AddProcess(estimator,"Learning");
-    std::cout << "list = " << m_ListSample << std::endl;
-    std::cout << "size = " << m_MapSize << std::endl;
-    std::cout << "neigsize = " << m_NeighborhoodSizeInit << std::endl;
-    std::cout << "n iter = " << m_NumberOfIterations << std::endl;
-    std::cout << "bi = " << m_BetaInit << std::endl;
-    std::cout << "be = " << m_BetaEnd << std::endl;
-    std::cout << "mw = " << m_MaxWeight << std::endl;
     
     estimator->Update();
 	
@@ -54,6 +48,14 @@ void SOMModel<TInputValue>::Train()
 template <class TInputValue>
 bool SOMModel<TInputValue>::CanReadFile(const std::string & filename)
 {
+	try
+	{
+		this->Load(filename);
+	}
+	catch(...)
+	{
+	return false;
+	}
 	return true;
 }
 
@@ -86,7 +88,7 @@ void SOMModel<TInputValue>::Load(const std::string & filename, const std::string
 	auto reader = otb::ImageFileReader<MapType>::New();
 	reader->SetFileName(filename);
 	reader->Update();
-	std::cout <<  reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("MachineLearningModelType") << '\n';
+	//std::cout <<  reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("MachineLearningModelType") << '\n';
 	m_SOMMap = reader->GetOutput();
 }
 
@@ -94,7 +96,19 @@ void SOMModel<TInputValue>::Load(const std::string & filename, const std::string
 template <class TInputValue>
 typename SOMModel<TInputValue>::TargetSampleType
 SOMModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
-{  
+{ 
+	unsigned int dimension =MapType::ImageDimension;
+    TargetSampleType target;
+    target.SetSize(dimension);
+	
+    auto winner =m_SOMMap->GetWinner(value);
+    
+    
+    for (int i=0; i< dimension ;i++) {
+		target[i] = winner.GetElement(i); 
+	}
+	
+	return target;
 }
 
 } // namespace otb
