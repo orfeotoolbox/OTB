@@ -128,9 +128,9 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   output->SetBufferedRegion(output->GetRequestedRegion());
   output->Allocate();
 
-  // Test if the file exist and if it can be open.
-  // An exception will be thrown otherwise.
-  this->TestFileExistenceAndReadability();
+  // Raise an exception if the file could not be opened
+  // i.e. if this->m_ImageIO is Null
+  this->TestValidImageIO();
 
   // Tell the ImageIO to read the file
   OutputImagePixelType *buffer =
@@ -273,20 +273,14 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Update FileName
   this->m_FileName = lFileName;
 
-  // Test if the file exists and if it can be opened.
-  // An exception will be thrown otherwise.
-  this->TestFileExistenceAndReadability();
-
   if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
   {
     this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), otb::ImageIOFactory::ReadMode);
   }
 
-  // Throw error if the image wasn't loaded
-  if (this->m_ImageIO.IsNull())
-  {
-    throw otb::ImageFileReaderException(__FILE__, __LINE__, "Cannot read image (probably unsupported or incorrect filename extension).", this->m_FileName);
-  }
+  // Raise an exception if the file could not be opened
+  // i.e. if this->m_ImageIO is Null
+  this->TestValidImageIO();
 
   // Get the ImageIO MetaData Dictionary
   itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
@@ -561,35 +555,21 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::TestFileExistenceAndReadability()
+::TestValidImageIO()
 {
-  // Test if the file a server name : if so the test is skipped
-  if (this->m_FileName.find(std::string("http://")) == 0 ||
-      this->m_FileName.find(std::string("https://")) == 0)
-    {
-    return;
-    }
-
-  std::string fileToCheck = GetDerivedDatasetSourceFileName(m_FileName);
-
-  // Test if the file exists.
-  if (!itksys::SystemTools::FileExists(fileToCheck.c_str()))
+  if (this->m_ImageIO.IsNull())
   {
-    throw otb::ImageFileReaderException (__FILE__, __LINE__, "The file does not exist.", fileToCheck);
-  }
+    std::string fileToCheck = GetDerivedDatasetSourceFileName(m_FileName);
 
-  // Test if the file can be open for reading access.
-  //Only if m_FileName specify a filename (not a dirname)
-  if (itksys::SystemTools::FileExists(fileToCheck.c_str(), true))
-  {
-    std::ifstream readTester;
-    readTester.open(fileToCheck.c_str());
-    if (readTester.fail())
+    // Test if the file exists.
+    if (!itksys::SystemTools::FileExists(fileToCheck.c_str()))
     {
-      readTester.close();
-      throw otb::ImageFileReaderException(__FILE__, __LINE__, "The file cannot be opened for reading.", fileToCheck);
+      throw otb::ImageFileReaderException (__FILE__, __LINE__, "The file does not exist.", fileToCheck);
     }
-    readTester.close();
+    else
+    {
+      throw otb::ImageFileReaderException(__FILE__, __LINE__, "Cannot read image (probably unsupported or incorrect filename extension).", this->m_FileName);
+    }
   }
 }
 
