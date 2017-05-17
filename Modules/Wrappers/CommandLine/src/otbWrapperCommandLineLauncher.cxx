@@ -104,13 +104,13 @@ bool CommandLineLauncher::Load()
 
   if (this->CheckParametersPrefix() == false)
     {
-    std::cerr << "ERROR: Parameter keys have to set using \"-\", not \"--\"." << std::endl;
+    std::cerr << "ERROR: Parameters are set using \"-\", not \"--\"." << std::endl;
     return false;
     }
 
   if (this->CheckUnicity() == false)
     {
-    std::cerr << "ERROR: At least one key is not unique in the expression." << std::endl;
+    std::cerr << "ERROR: At least one parameter is not unique in the expression." << std::endl;
     return false;
     }
 

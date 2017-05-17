@@ -438,7 +438,7 @@ int Application::ExecuteAndWriteOutput()
             std::string checkReturn = outputParam->CheckFileName(true);
             if (!checkReturn.empty())
               {
-              otbAppLogWARNING("Check filename : "<<checkReturn);
+              otbAppLogWARNING("Check filename: "<<checkReturn);
               }
             if (useRAM)
               {
