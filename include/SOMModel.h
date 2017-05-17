@@ -15,7 +15,7 @@
 
 namespace otb
 {
-template <class TInputValue>
+template <class TInputValue, unsigned int MapDimension>>
 class ITK_EXPORT SOMModel: public  DimensionalityReductionModel<TInputValue,TInputValue>   
 {
 
@@ -33,9 +33,6 @@ public:
 	typedef typename Superclass::TargetValueType TargetValueType;
 	typedef typename Superclass::TargetSampleType TargetSampleType;
 	typedef typename Superclass::TargetListSampleType TargetListSampleType;
-	typedef typename Superclass::ConfidenceValueType ConfidenceValueType;
-	typedef typename Superclass::ConfidenceSampleType ConfidenceSampleType;
-	typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
 
 	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> MapType;
 	typedef typename MapType::SizeType       SizeType;
@@ -85,7 +82,7 @@ protected:
 	SOMModel();	
 	~SOMModel() ITK_OVERRIDE;
  
-	virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+	virtual TargetSampleType DoPredict(const InputSampleType& input) const ITK_OVERRIDE;
 	
 private:
 	typename MapType::Pointer m_SOMMap;

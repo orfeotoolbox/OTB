@@ -23,10 +23,7 @@ public:
 	typedef typename Superclass::TargetValueType TargetValueType;
 	typedef typename Superclass::TargetSampleType TargetSampleType;
 	typedef typename Superclass::TargetListSampleType TargetListSampleType;
-	typedef typename Superclass::ConfidenceValueType ConfidenceValueType;
-	typedef typename Superclass::ConfidenceSampleType ConfidenceSampleType;
-	typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
-
+	
 	itkNewMacro(Self);
 	itkTypeMacro(PCAModel, DimensionalityReductionModel);
 
@@ -47,8 +44,8 @@ protected:
 	PCAModel();	
 	~PCAModel() ITK_OVERRIDE;
  
-	virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
-	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
+	virtual TargetSampleType DoPredict(const InputSampleType& input) const ITK_OVERRIDE;
+	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *) const ITK_OVERRIDE;
   
 private:
 	shark::LinearModel<> m_encoder;

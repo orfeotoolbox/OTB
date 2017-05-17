@@ -144,8 +144,6 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 ::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
 
-  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() 
-                            && !m_Model->GetRegressionMode());
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
@@ -172,8 +170,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   typedef typename ModelType::TargetListSampleType TargetListSampleType;
   // typedef typename ModelType::ConfidenceValueType      ConfidenceValueType;
   // typedef typename ModelType::ConfidenceSampleType     ConfidenceSampleType;
-  typedef typename ModelType::ConfidenceListSampleType ConfidenceListSampleType;
-
+  
   typename InputListSampleType::Pointer samples = InputListSampleType::New();
   unsigned int num_features = inputPtr->GetNumberOfComponentsPerPixel();
   samples->SetMeasurementVectorSize(num_features);
@@ -193,45 +190,23 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
     }
   //Make the batch prediction
   typename TargetListSampleType::Pointer labels;
-  typename ConfidenceListSampleType::Pointer confidences;
-  if(computeConfidenceMap)
-    confidences = ConfidenceListSampleType::New();
-
+ 
   // This call is threadsafe
   //labels = m_Model->PredictBatch(samples,confidences);
   labels = m_Model->PredictBatch(samples);
   // Set the output values
-  ConfidenceMapIteratorType confidenceIt;
-  if (computeConfidenceMap)
-    {
-    confidenceIt = ConfidenceMapIteratorType(confidencePtr,outputRegionForThread);
-    confidenceIt.GoToBegin();
-    }
+ 
 	
   typename TargetListSampleType::ConstIterator labIt = labels->Begin();
  
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
-    double confidenceIndex = 0.0;
-     
-	itk::VariableLengthVector<TargetValueType> labelValue;
-    
-    labelValue = labIt.GetMeasurementVector();
 
-    if(computeConfidenceMap)
-    {
-       confidenceIndex = confidences->GetMeasurementVector(labIt.GetInstanceIdentifier())[0];
-    }
-       
+	itk::VariableLengthVector<TargetValueType> labelValue;
+  
+    labelValue = labIt.GetMeasurementVector();
     ++labIt;    
-   
     outIt.Set(labelValue);
-    if(computeConfidenceMap)
-      {
-      confidenceIt.Set(confidenceIndex);
-      ++confidenceIt;
-      }
-    
     progress.CompletedPixel();
     }
 }

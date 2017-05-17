@@ -14,7 +14,6 @@ namespace otb
 template <class TInputValue>
 SOMModel<TInputValue>::SOMModel()
 {
-	this->m_IsRegressionSupported = true;
 }
 
 
@@ -42,6 +41,7 @@ void SOMModel<TInputValue>::Train()
     estimator->Update();
 	
     m_SOMMap = estimator->GetOutput();
+    std::cout << "dr of the first sample : " << m_SOMMap->GetWinner(m_ListSample->GetMeasurementVector(0)) << std::endl;
 }
 
 
@@ -95,14 +95,14 @@ void SOMModel<TInputValue>::Load(const std::string & filename, const std::string
 
 template <class TInputValue>
 typename SOMModel<TInputValue>::TargetSampleType
-SOMModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
+SOMModel<TInputValue>::DoPredict(const InputSampleType & value) const
 { 
 	unsigned int dimension =MapType::ImageDimension;
     TargetSampleType target;
     target.SetSize(dimension);
 	
     auto winner =m_SOMMap->GetWinner(value);
-    
+    // std::cout <<  winner << std::endl;
     
     for (int i=0; i< dimension ;i++) {
 		target[i] = winner.GetElement(i); 

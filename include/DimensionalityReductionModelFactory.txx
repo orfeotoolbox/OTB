@@ -42,6 +42,9 @@ template <class TInputValue, class TTargetValue>
 using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  ;
 
 
+template <class TInputValue, class TTargetValue>
+using SOM3DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 2>  ;
+
 template <class TInputValue, class TOutputValue>
 typename DimensionalityReductionModel<TInputValue,TOutputValue>::Pointer
 DimensionalityReductionModelFactory<TInputValue,TOutputValue>
@@ -99,7 +102,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   
 
 
-  RegisterFactory(SOMModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SOM3DModelFactory<TInputValue,TOutputValue>::New());
   
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
@@ -135,8 +138,8 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
     {
 
 	// SOM
-    SOMModelFactory<TInputValue,TOutputValue> *somFactory =
-      dynamic_cast<SOMModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    SOM3DModelFactory<TInputValue,TOutputValue> *somFactory =
+      dynamic_cast<SOM3DModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (somFactory)
       {
       itk::ObjectFactoryBase::UnRegisterFactory(somFactory);

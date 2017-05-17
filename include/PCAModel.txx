@@ -19,7 +19,7 @@ namespace otb
 template <class TInputValue>
 PCAModel<TInputValue>::PCAModel()
 {
-	this->m_IsRegressionSupported = true;
+	this->m_IsDoPredictBatchMultiThreaded = true;
 }
 
 
@@ -100,7 +100,7 @@ void PCAModel<TInputValue>::Load(const std::string & filename, const std::string
 
 template <class TInputValue>
 typename PCAModel<TInputValue>::TargetSampleType
-PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
+PCAModel<TInputValue>::DoPredict(const InputSampleType & value) const
 {  
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
@@ -126,7 +126,7 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueT
 
 template <class TInputValue>
 void PCAModel<TInputValue>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets) const
 {
 	
 	std::vector<shark::RealVector> features;

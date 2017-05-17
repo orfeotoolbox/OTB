@@ -19,7 +19,7 @@ namespace otb
 template <class TInputValue, class AutoencoderType>
 AutoencoderModel<TInputValue,AutoencoderType>::AutoencoderModel()
 {
-	this->m_IsRegressionSupported = true;
+	this->m_IsDoPredictBatchMultiThreaded = true;
 }
 
 
@@ -117,7 +117,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Load(const std::string & fil
 
 template <class TInputValue, class AutoencoderType>
 typename AutoencoderModel<TInputValue,AutoencoderType>::TargetSampleType
-AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
+AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType & value) const
 {  
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
@@ -143,7 +143,7 @@ AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType &
 
 template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets) const
 {
 	std::cout << "BATCH" << std::endl;
 	std::vector<shark::RealVector> features;

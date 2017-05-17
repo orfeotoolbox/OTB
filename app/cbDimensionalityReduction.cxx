@@ -145,8 +145,6 @@ private:
     AddParameter(ParameterType_InputImage, "in",  "Input Image");
     SetParameterDescription( "in", "The input image to predict.");
 
-    // TODO : use CSV input/output ?
-
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
     SetParameterDescription( "mask", "The mask allow restricting "
       "classification of the input image to the area where mask pixel values "
@@ -200,7 +198,6 @@ private:
       }
 
     m_Model->Load(GetParameterString("model"));
-    m_Model->SetRegressionMode(true);
     otbAppLogINFO("Model loaded");
 
     // Classify
@@ -218,25 +215,14 @@ private:
       MeasurementType  meanMeasurementVector;
       MeasurementType  stddevMeasurementVector;
       m_Rescaler = RescalerType::New();
+      
       // Load input image statistics
       statisticsReader->SetFileName(GetParameterString("imstat"));
       meanMeasurementVector   = statisticsReader->GetStatisticVectorByName("mean");
       stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
       otbAppLogINFO( "mean used: " << meanMeasurementVector );
       otbAppLogINFO( "standard deviation used: " << stddevMeasurementVector );
-      /*if (meanMeasurementVector.Size() == nbFeatures + 1)
-        {
-        double outMean = meanMeasurementVector[nbFeatures];
-        double outStdDev = stddevMeasurementVector[nbFeatures];
-        meanMeasurementVector.SetSize(nbFeatures,false);
-        stddevMeasurementVector.SetSize(nbFeatures,false);
-        m_OutRescaler = OutputRescalerType::New();
-        m_OutRescaler->SetInput(m_ClassificationFilter->GetOutput());
-        m_OutRescaler->GetFunctor().SetA(outStdDev);
-        m_OutRescaler->GetFunctor().SetB(outMean);
-        outputImage = m_OutRescaler->GetOutput();
-        }
-      else*/ if (meanMeasurementVector.Size() != nbFeatures)
+      if (meanMeasurementVector.Size() != nbFeatures)
         {
         otbAppLogFATAL("Wrong number of components in statistics file : "<<meanMeasurementVector.Size());
         }

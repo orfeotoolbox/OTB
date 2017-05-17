@@ -29,40 +29,21 @@
 namespace otb
 {
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
-::DimensionalityReductionModel() :
-  m_RegressionMode(false),
-  m_IsRegressionSupported(false),
-  m_ConfidenceIndex(false),
-  m_IsDoPredictBatchMultiThreaded(false)
-{}
+template <class TInputValue, class TOutputValue>
+DimensionalityReductionModel<TInputValue,TOutputValue>
+::DimensionalityReductionModel()
+{ this->m_IsDoPredictBatchMultiThreaded=false;}
 
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
+template <class TInputValue, class TOutputValue>
+DimensionalityReductionModel<TInputValue,TOutputValue>
 ::~DimensionalityReductionModel()
 {}
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
-void
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
-::SetRegressionMode(bool flag)
-{
-  if (flag && !m_IsRegressionSupported)
-    {
-    itkGenericExceptionMacro(<< "Regression mode not implemented.");
-    }
-  if (m_RegressionMode != flag)
-    {
-    m_RegressionMode = flag;
-    this->Modified();
-    }
-}
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
+template <class TInputValue, class TOutputValue>
 void
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
+DimensionalityReductionModel<TInputValue,TOutputValue>
 ::PredictAll()
 {
   itkWarningMacro("DimensionalityReductionModel::PredictAll() has been DEPRECATED. Use DimensionalityReductionModel::PredictBatch() instead.");
@@ -75,36 +56,31 @@ DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
   targets->Graft(tmpTargets);
 }
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
-typename DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
+template <class TInputValue, class TOutputValue>
+typename DimensionalityReductionModel<TInputValue,TOutputValue>
 ::TargetSampleType
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
-::Predict(const InputSampleType& input, ConfidenceValueType *quality) const
+DimensionalityReductionModel<TInputValue,TOutputValue>
+::Predict(const InputSampleType& input) const
 {
   // Call protected specialization entry point
-  return this->DoPredict(input,quality);
+  return this->DoPredict(input);
 }
 
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
-typename DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
+template <class TInputValue, class TOutputValue>
+typename DimensionalityReductionModel<TInputValue,TOutputValue>
 ::TargetListSampleType::Pointer
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
-::PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality) const
+DimensionalityReductionModel<TInputValue,TOutputValue>
+::PredictBatch(const InputListSampleType * input) const
 {
   typename TargetListSampleType::Pointer targets = TargetListSampleType::New();
   targets->Resize(input->Size());
   
-  if(quality!=ITK_NULLPTR)
-    {
-    quality->Clear();
-    quality->Resize(input->Size());
-    }
   
   if(m_IsDoPredictBatchMultiThreaded)
     {
     // Simply calls DoPredictBatch
-    this->DoPredictBatch(input,0,input->Size(),targets,quality);
+    this->DoPredictBatch(input,0,input->Size(),targets);
     return targets;
     }
   else
@@ -131,11 +107,11 @@ DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
         batch_size+=input->Size()%nb_batches;
         }
     
-      this->DoPredictBatch(input,batch_start,batch_size,targets,quality);
+      this->DoPredictBatch(input,batch_start,batch_size,targets);
       }
     }
     #else
-    this->DoPredictBatch(input,0,input->Size(),targets,quality);
+    this->DoPredictBatch(input,0,input->Size(),targets);
     #endif
     return targets;
     }
@@ -143,10 +119,10 @@ DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
 
 
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
+template <class TInputValue, class TOutputValue>
 void
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
-::DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
+DimensionalityReductionModel<TInputValue,TOutputValue>
+::DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets) const
 {
   assert(input != ITK_NULLPTR);
   assert(targets != ITK_NULLPTR);
@@ -159,29 +135,18 @@ DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
     itkExceptionMacro(<<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[");
     }
 
-  if(quality != ITK_NULLPTR)
+  
+  for(unsigned int id = startIndex;id<startIndex+size;++id)
     {
-    for(unsigned int id = startIndex;id<startIndex+size;++id)
-      {
-      ConfidenceValueType confidence = 0;
-      const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id),&confidence);
-      quality->SetMeasurementVector(id,confidence);
-      targets->SetMeasurementVector(id,target);
-      }
+    const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id));
+    targets->SetMeasurementVector(id,target);
     }
-  else
-    {
-    for(unsigned int id = startIndex;id<startIndex+size;++id)
-      {
-      const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id));
-      targets->SetMeasurementVector(id,target);
-      }
-    }
+    
 }
 
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
+template <class TInputValue, class TOutputValue>
 void
-DimensionalityReductionModel<TInputValue,TOutputValue,TConfidenceValue>
+DimensionalityReductionModel<TInputValue,TOutputValue>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation

@@ -62,7 +62,7 @@ namespace otb
  *
  * \ingroup OTBSupervised
  */
-template <class TInputValue, class TTargetValue, class TConfidenceValue = double >
+template <class TInputValue, class TTargetValue>
 class ITK_EXPORT DimensionalityReductionModel
   : public itk::Object
 {
@@ -89,11 +89,6 @@ public:
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
   //@}
 
-  /**\name Confidence value typedef */
-  typedef TConfidenceValue                              ConfidenceValueType;
-  typedef itk::FixedArray<ConfidenceValueType,1>            ConfidenceSampleType;
-  typedef itk::Statistics::ListSample<ConfidenceSampleType> ConfidenceListSampleType;
-
   /**\name Standard macros */
   //@{
   /** Run-time type information (and related methods). */
@@ -109,7 +104,7 @@ public:
     * quality value, or NULL
     * \return The predicted label
      */
-  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const;
+  TargetSampleType Predict(const InputSampleType& input) const;
 
 
 
@@ -121,7 +116,7 @@ public:
     * Note that this method will be multi-threaded if OTB is built
     * with OpenMP.
      */
-  typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
+  typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input) const;
   
   /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
   void PredictAll();
@@ -147,9 +142,6 @@ public:
   virtual bool CanWriteFile(const std::string &)  = 0;
   //@}
 
-  /** Query capacity to produce a confidence index */
-  bool HasConfidenceIndex() const {return m_ConfidenceIndex;}
-
   /**\name Input list of samples accessors */
   //@{
   itkSetObjectMacro(InputListSample,InputListSampleType);
@@ -165,13 +157,7 @@ public:
   itkGetObjectMacro(TargetListSample,TargetListSampleType);
   //@}
 
-  itkGetObjectMacro(ConfidenceListSample,ConfidenceListSampleType);
-  
-  /**\name Use model in regression mode */
-  //@{
-  itkGetMacro(RegressionMode,bool);
-  void SetRegressionMode(bool flag);
-  //@}
+ 
 
 protected:
   /** Constructor */
@@ -188,19 +174,6 @@ protected:
 
   /** Target list sample */
   typename TargetListSampleType::Pointer m_TargetListSample;
-
-  typename ConfidenceListSampleType::Pointer m_ConfidenceListSample;
-  
-  /** flag to choose between classification and regression modes */
-  bool m_RegressionMode;
-  
-  /** flag that indicates if the model supports regression, child
-   *  classes should modify it in their constructor if they support
-   *  regression mode */
-  bool m_IsRegressionSupported;
-
-  /** flag that tells if the model support confidence index output */
-  bool m_ConfidenceIndex;
 
   /** Is DoPredictBatch multi-threaded ? */
   bool m_IsDoPredictBatchMultiThreaded;
@@ -225,7 +198,7 @@ private:
     * Also set m_IsDoPredictBatchMultiThreaded to true if internal
     * implementation allows for parallel batch prediction.
     */
-  virtual void DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * target, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
+  virtual void DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * target) const;
 
   /** Actual implementation of single sample prediction
    *  \param input sample to predict
@@ -233,7 +206,7 @@ private:
    *  or NULL
    *  \return The predicted label
    */ 
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality= ITK_NULLPTR) const = 0;  
+  virtual TargetSampleType DoPredict(const InputSampleType& input) const = 0;  
  
   DimensionalityReductionModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
