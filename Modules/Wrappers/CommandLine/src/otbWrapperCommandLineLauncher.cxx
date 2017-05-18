@@ -96,12 +96,6 @@ bool CommandLineLauncher::Load(const std::vector<std::string> &vexp)
 
 bool CommandLineLauncher::Load()
 {
-  if (m_VExpression.empty())
-    {
-    std::cerr << "ERROR: No expression specified." << std::endl;
-    return false;
-    }
-
   if (this->CheckParametersPrefix() == false)
     {
     std::cerr << "ERROR: Parameters are set using \"-\", not \"--\"." << std::endl;
@@ -285,10 +279,9 @@ bool CommandLineLauncher::LoadApplication()
 {
   // Look for the module name
   std::string moduleName;
-  //if (m_Parser->GetModuleName(moduleName, m_Expression) != CommandLineParser::OK)
   if (m_Parser->GetModuleName(moduleName, m_VExpression) != CommandLineParser::OK)
     {
-    std::cerr << "ERROR: LoadApplication, no module found." << std::endl;
+    std::cerr << "ERROR: Invalid module name: " << m_VExpression[0] << "." << std::endl;
     return false;
     }
 
