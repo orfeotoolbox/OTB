@@ -251,10 +251,7 @@ void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GenerateOutputInformation(void)
 {
-
   typename TOutputImage::Pointer output = this->GetOutput();
-
-  itkDebugMacro(<< "Reading file for GenerateOutputInformation()" << this->m_FileName);
 
   // Check to see if we can read the file given the name or prefix
   if (this->m_FileName == "")
@@ -265,13 +262,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Find real image file name
   // !!!!  Update FileName
   std::string lFileName;
-  bool        found = GetGdalReadImageFileName(this->m_FileName, lFileName);
-  if (found == false)
-    {
-    otbMsgDebugMacro(<< "Filename was NOT unknown. May be recognized by a Image factory!");
-    }
-  // Update FileName
-  this->m_FileName = lFileName;
+  bool found = GetGdalReadImageFileName(this->m_FileName, lFileName);
+  if (found)
+  {
+    // Update FileName
+    this->m_FileName = lFileName;
+  }
 
   if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
   {
