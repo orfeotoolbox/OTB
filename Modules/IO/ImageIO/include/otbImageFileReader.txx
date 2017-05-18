@@ -568,7 +568,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
     else
     {
-      throw otb::ImageFileReaderException(__FILE__, __LINE__, "Cannot read image (probably unsupported or incorrect filename extension).", this->m_FileName);
+      throw otb::ImageFileReaderException(__FILE__, __LINE__, "Probably unsupported format or incorrect filename extension.", this->m_FileName);
     }
   }
 }
