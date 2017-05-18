@@ -124,9 +124,7 @@ bool CommandLineLauncher::Load()
       }
     }
 
-  this->LoadApplication();
-
-  return true;
+  return this->LoadApplication();
 }
 
 bool CommandLineLauncher::Execute()
@@ -283,7 +281,7 @@ bool CommandLineLauncher::LoadPath()
   return true;
 }
 
-void CommandLineLauncher::LoadApplication()
+bool CommandLineLauncher::LoadApplication()
 {
   // Look for the module name
   std::string moduleName;
@@ -291,7 +289,7 @@ void CommandLineLauncher::LoadApplication()
   if (m_Parser->GetModuleName(moduleName, m_VExpression) != CommandLineParser::OK)
     {
     std::cerr << "ERROR: LoadApplication, no module found." << std::endl;
-    return;
+    return false;
     }
 
   // Instantiate the application using the factory
@@ -316,6 +314,7 @@ void CommandLineLauncher::LoadApplication()
         std::cerr << "\t" << *it << std::endl;
         }
       }
+    return false;
     }
   else
     {
@@ -327,6 +326,7 @@ void CommandLineLauncher::LoadApplication()
     // Add an observer to the AddedProcess event
     m_Application->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
 
+    return true;
     }
 }
 
