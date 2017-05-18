@@ -41,20 +41,6 @@ DimensionalityReductionModel<TInputValue,TOutputValue>
 {}
 
 
-template <class TInputValue, class TOutputValue>
-void
-DimensionalityReductionModel<TInputValue,TOutputValue>
-::PredictAll()
-{
-  itkWarningMacro("DimensionalityReductionModel::PredictAll() has been DEPRECATED. Use DimensionalityReductionModel::PredictBatch() instead.");
-  
-  typename TargetListSampleType::Pointer targets = this->GetTargetListSample();
-  targets->Clear();
-  
-  typename TargetListSampleType::Pointer tmpTargets = this->PredictBatch(this->GetInputListSample());
-  
-  targets->Graft(tmpTargets);
-}
 
 template <class TInputValue, class TOutputValue>
 typename DimensionalityReductionModel<TInputValue,TOutputValue>

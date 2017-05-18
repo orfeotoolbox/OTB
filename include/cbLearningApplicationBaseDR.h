@@ -87,9 +87,11 @@ public:
 	  
 	// Dimensionality reduction models
 	
-	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> MapType;
-	typedef otb::SOM<ListSampleType, MapType> EstimatorType;
-	typedef otb::SOMModel<InputValueType> SOMModelType;
+	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> Map3DType;
+	typedef otb::SOMModel<InputValueType, 3> SOM3DModelType;
+	
+	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> Map2DType;
+	typedef otb::SOMModel<InputValueType, 2> SOM2DModelType;
 
 #ifdef OTB_USE_SHARK
 	typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
@@ -130,6 +132,7 @@ private:
   template <class autoencoderchoice>
   void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  template <class somchoice>
   void TrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
 #endif
   //@}

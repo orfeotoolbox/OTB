@@ -15,7 +15,7 @@
 
 namespace otb
 {
-template <class TInputValue, unsigned int MapDimension>>
+template <class TInputValue, unsigned int MapDimension>
 class ITK_EXPORT SOMModel: public  DimensionalityReductionModel<TInputValue,TInputValue>   
 {
 
@@ -34,7 +34,7 @@ public:
 	typedef typename Superclass::TargetSampleType TargetSampleType;
 	typedef typename Superclass::TargetListSampleType TargetListSampleType;
 
-	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> MapType;
+	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, MapDimension> MapType;
 	typedef typename MapType::SizeType       SizeType;
 	
 	typedef otb::SOM<InputListSampleType, MapType> EstimatorType;

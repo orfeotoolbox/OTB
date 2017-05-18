@@ -14,9 +14,13 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 ::InitSOMParams()
 {
 
-
   AddChoice("model.som", "OTB SOM");
   SetParameterDescription("model.som",
+                          "This group of parameters allows setting SOM parameters. "
+                          );
+  
+  AddChoice("model.som3d", "OTB SOM");
+  SetParameterDescription("model.som3d",
                           "This group of parameters allows setting SOM parameters. "
                           );
   
@@ -73,31 +77,29 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
+template <typename somchoice>
 void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 ::TrainSOM(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
-		
-		//std::cout << std::stoi(s[0]) << std::endl;
-		typename SOMModelType::Pointer dimredTrainer = SOMModelType::New();
+		using TemplateEstimatorType = typename somchoice::EstimatorType;
+		typename somchoice::Pointer dimredTrainer = somchoice::New();
+		unsigned int dim = dimredTrainer->GetDimension();
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.som.ni"));
 		dimredTrainer->SetBetaInit(GetParameterFloat("model.som.bi"));
 		dimredTrainer->SetBetaEnd(GetParameterFloat("model.som.bf"));
 		dimredTrainer->SetMaxWeight(GetParameterFloat("model.som.iv"));
-		std::cout << "0" << std::endl;
-		typename EstimatorType::SizeType size;
+		typename TemplateEstimatorType::SizeType size;
 		std::vector<std::basic_string<char>> s= GetParameterStringList("model.som.s");
-		for (int i=0; i<3; i++){ // This will be templated later (the 3)
+		for (int i=0; i<dim; i++){ // This will be templated later (the 3)
 			size[i]=std::stoi(s[i]);
 		}
 		
         dimredTrainer->SetMapSize(size);
-        std::cout << "1" << std::endl;
-        typename EstimatorType::SizeType radius;
+        typename TemplateEstimatorType::SizeType radius;
 		std::vector<std::basic_string<char>> n= GetParameterStringList("model.som.n");
-		for (int i=0; i<3; i++){ // This will be templated later (the 3)
+		for (int i=0; i<dim; i++){ // This will be templated later (the 3)
 			radius[i]=std::stoi(n[i]);
 		}
-		std::cout << "2" << std::endl;
         dimredTrainer->SetNeighborhoodSizeInit(radius);
         dimredTrainer->SetListSample(trainingListSample);
 		dimredTrainer->Train();

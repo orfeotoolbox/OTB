@@ -8,7 +8,7 @@
 namespace otb
 {
 	
-template <class TInputValue, class TTargetValue>
+template <class TInputValue, class TTargetValue, unsigned int MapDimension>
 class ITK_EXPORT SOMModelFactory : public itk::ObjectFactoryBase
 {
 public:

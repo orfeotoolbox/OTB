@@ -28,8 +28,8 @@
 
 namespace otb
 {
-template <class TInputValue, class TOutputValue>
-SOMModelFactory<TInputValue,TOutputValue>::SOMModelFactory()
+template <class TInputValue, class TOutputValue, unsigned int MapDimension>
+SOMModelFactory<TInputValue,TOutputValue,MapDimension>::SOMModelFactory()
 {
 
   std::string classOverride = std::string("DimensionalityReductionModel");
@@ -40,22 +40,22 @@ SOMModelFactory<TInputValue,TOutputValue>::SOMModelFactory()
                          "SOM DR Model",
                          1,
                       //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
-						itk::CreateObjectFunction<SOMModel<TInputValue>>::New());
+						itk::CreateObjectFunction<SOMModel<TInputValue,  MapDimension>>::New());
 }
 
-template <class TInputValue, class TOutputValue>
-SOMModelFactory<TInputValue,TOutputValue>::~SOMModelFactory()
+template <class TInputValue, class TOutputValue, unsigned int MapDimension>
+SOMModelFactory<TInputValue,TOutputValue,MapDimension>::~SOMModelFactory()
 {
 }
 
-template <class TInputValue, class TOutputValue>
-const char* SOMModelFactory<TInputValue,TOutputValue>::GetITKSourceVersion(void) const
+template <class TInputValue, class TOutputValue, unsigned int MapDimension>
+const char* SOMModelFactory<TInputValue,TOutputValue,MapDimension>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-template <class TInputValue, class TOutputValue>
-const char* SOMModelFactory<TInputValue,TOutputValue>::GetDescription() const
+template <class TInputValue, class TOutputValue, unsigned int MapDimension>
+const char* SOMModelFactory<TInputValue,TOutputValue,MapDimension>::GetDescription() const
 {
   return "SOM model factory";
 }

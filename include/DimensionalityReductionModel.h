@@ -118,9 +118,6 @@ public:
      */
   typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input) const;
   
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. */
-  void PredictAll();
-
   /** Get the size of the output after dimensionality reduction */
   virtual unsigned int GetDimension() = 0;
 
@@ -149,13 +146,6 @@ public:
   itkGetConstObjectMacro(InputListSample,InputListSampleType);
   //@}
 
-  /**\name Classification output accessors */
-  //@{
-  /** Set the target labels (to be used before training) */
-  itkSetObjectMacro(TargetListSample,TargetListSampleType);
-  /** Get the target labels (to be used after PredictAll) */
-  itkGetObjectMacro(TargetListSample,TargetListSampleType);
-  //@}
 
  
 
@@ -171,9 +161,6 @@ protected:
 
   /** Input list sample */
   typename InputListSampleType::Pointer m_InputListSample;
-
-  /** Target list sample */
-  typename TargetListSampleType::Pointer m_TargetListSample;
 
   /** Is DoPredictBatch multi-threaded ? */
   bool m_IsDoPredictBatchMultiThreaded;

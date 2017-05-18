@@ -101,9 +101,15 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
  
  if(modelName == "som")
     {
-    TrainSOM(trainingListSample,modelPath);
+    TrainSOM<SOM2DModelType >(trainingListSample,modelPath);
     }
-  if(modelName == "autoencoder")
+    
+ if(modelName == "som3d")
+    {
+    TrainSOM<SOM3DModelType >(trainingListSample,modelPath);
+    }
+      
+ if(modelName == "autoencoder")
     {
     #ifdef OTB_USE_SHARK
     TrainAutoencoder<AutoencoderModelType>(trainingListSample,modelPath);

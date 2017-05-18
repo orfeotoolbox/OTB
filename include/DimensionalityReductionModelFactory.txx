@@ -43,7 +43,10 @@ using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTa
 
 
 template <class TInputValue, class TTargetValue>
-using SOM3DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 2>  ;
+using SOM2DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 2>  ;
+
+template <class TInputValue, class TTargetValue>
+using SOM3DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 3>  ;
 
 template <class TInputValue, class TOutputValue>
 typename DimensionalityReductionModel<TInputValue,TOutputValue>::Pointer
@@ -103,6 +106,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 
 
   RegisterFactory(SOM3DModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SOM2DModelFactory<TInputValue,TOutputValue>::New());
   
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
@@ -138,11 +142,19 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
     {
 
 	// SOM
-    SOM3DModelFactory<TInputValue,TOutputValue> *somFactory =
+    SOM3DModelFactory<TInputValue,TOutputValue> *som3dFactory =
       dynamic_cast<SOM3DModelFactory<TInputValue,TOutputValue> *>(*itFac);
-    if (somFactory)
+    if (som3dFactory)
       {
-      itk::ObjectFactoryBase::UnRegisterFactory(somFactory);
+      itk::ObjectFactoryBase::UnRegisterFactory(som3dFactory);
+      continue;
+      }
+      
+    SOM2DModelFactory<TInputValue,TOutputValue> *som2dFactory =
+      dynamic_cast<SOM2DModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (som2dFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(som2dFactory);
       continue;
       }
 #ifdef OTB_USE_SHARK

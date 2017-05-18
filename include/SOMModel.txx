@@ -7,24 +7,30 @@
 
 #include "itkMacro.h"
 
+
+// test text file
+#include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
+#include <fstream> 
+
 namespace otb
 {
 
 
-template <class TInputValue>
-SOMModel<TInputValue>::SOMModel()
+template <class TInputValue, unsigned int MapDimension>
+SOMModel<TInputValue,  MapDimension>::SOMModel()
 {
 }
 
 
-template <class TInputValue>
-SOMModel<TInputValue>::~SOMModel()
+template <class TInputValue, unsigned int MapDimension>
+SOMModel<TInputValue, MapDimension>::~SOMModel()
 {
 }
 
 
-template <class TInputValue>
-void SOMModel<TInputValue>::Train()
+template <class TInputValue, unsigned int MapDimension>
+void SOMModel<TInputValue,  MapDimension>::Train()
 {
 	
     typename EstimatorType::Pointer estimator = EstimatorType::New();
@@ -45,8 +51,8 @@ void SOMModel<TInputValue>::Train()
 }
 
 
-template <class TInputValue>
-bool SOMModel<TInputValue>::CanReadFile(const std::string & filename)
+template <class TInputValue, unsigned int MapDimension>
+bool SOMModel<TInputValue, MapDimension>::CanReadFile(const std::string & filename)
 {
 	try
 	{
@@ -60,42 +66,91 @@ bool SOMModel<TInputValue>::CanReadFile(const std::string & filename)
 }
 
 
-template <class TInputValue>
-bool SOMModel<TInputValue>::CanWriteFile(const std::string & filename)
+template <class TInputValue, unsigned int MapDimension>
+bool SOMModel<TInputValue, MapDimension>::CanWriteFile(const std::string & filename)
 {
 	return true;
 }
 
-template <class TInputValue>
-void SOMModel<TInputValue>::Save(const std::string & filename, const std::string & name)
+template <class TInputValue, unsigned int MapDimension>
+void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, const std::string & name)
 {
   std::cout << m_SOMMap->GetNumberOfComponentsPerPixel() << std::endl;
   
 //Ecriture
   auto kwl = m_SOMMap->GetImageKeywordlist();
-  //kwl.AddKey("MachineLearningModelType", "SOM");
-  //m_SOMMap->SetImageKeywordList(kwl);
+  kwl.AddKey("MachineLearningModelType", "SOM"+std::to_string(MapDimension));
+  m_SOMMap->SetImageKeywordList(kwl);
   auto writer = otb::ImageFileWriter<MapType>::New();
   writer->SetInput(m_SOMMap);
   writer->SetFileName(filename);
   writer->Update();
 
+
+ // test text
+  itk::ImageRegionConstIterator<MapType> inputIterator(m_SOMMap,m_SOMMap->GetLargestPossibleRegion());
+  std::ofstream ofs(filename+"2");
+  ofs << "SOM" << std::endl; 
+  ofs << MapDimension << std::endl;
+  ofs << m_SOMMap->GetLargestPossibleRegion().GetSize() << std::endl;
+  ofs << inputIterator.Get().GetNumberOfElements() << std::endl;;
+  while(!inputIterator.IsAtEnd()){
+	InputSampleType vect = inputIterator.Get();
+	for (size_t i=0;i<vect.GetNumberOfElements();i++){
+		ofs << vect[i] << " " ;
+	}
+	ofs << std::endl;
+		
+	++inputIterator;
+  }
+  ofs.close();
+
 }
 
-template <class TInputValue>
-void SOMModel<TInputValue>::Load(const std::string & filename, const std::string & name)
+template <class TInputValue, unsigned int MapDimension>
+void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, const std::string & name)
 {
 	auto reader = otb::ImageFileReader<MapType>::New();
 	reader->SetFileName(filename);
 	reader->Update();
-	//std::cout <<  reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("MachineLearningModelType") << '\n';
+	if (reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("MachineLearningModelType") != "SOM"+std::to_string(MapDimension)){
+		itkExceptionMacro(<< "Error opening " << filename.c_str() );
+    }
 	m_SOMMap = reader->GetOutput();
+	
+	// test text
+	std::ifstream ifs(filename+"2");
+	std::string model_type_str;
+	std::string dimension_str;
+	std::string size_str;
+	std::string number_of_elements_str;
+	SizeType size;
+	
+	std::getline(ifs,model_type_str); 
+	std::getline(ifs,dimension_str); 
+	std::getline(ifs,size_str); 
+	std::getline(ifs,number_of_elements_str); 
+	
+	for (int i=0 ; i<MapDimension; i++)
+	{
+		
+	}
+	
+	while (!ifs.eof())
+    {
+    std::string line;
+    std::getline(ifs, line);
+	}
+	ifs.close();
+	std::cout << "model type " << model_type_str << std::endl;
+	std::cout << "dimension " << dimension_str << std::endl;
+	std::cout << "size " << size_str << std::endl;
 }
 
 
-template <class TInputValue>
-typename SOMModel<TInputValue>::TargetSampleType
-SOMModel<TInputValue>::DoPredict(const InputSampleType & value) const
+template <class TInputValue, unsigned int MapDimension>
+typename SOMModel<TInputValue, MapDimension>::TargetSampleType
+SOMModel<TInputValue, MapDimension>::DoPredict(const InputSampleType & value) const
 { 
 	unsigned int dimension =MapType::ImageDimension;
     TargetSampleType target;
