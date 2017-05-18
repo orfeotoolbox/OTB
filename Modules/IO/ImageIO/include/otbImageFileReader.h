@@ -189,8 +189,6 @@ private:
 
   bool m_UseStreaming;
 
-  std::string   m_ExceptionMessage;
-
   // The region that the ImageIO class will return when we ask to
   // produce the requested region.
   itk::ImageIORegion m_ActualIORegion;
