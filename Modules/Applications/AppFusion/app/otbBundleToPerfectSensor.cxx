@@ -66,17 +66,16 @@ private:
     ShareParameter("out","pansharp.out");
     ShareParameter("elev","superimpose.elev");
     ShareParameter("mode","superimpose.mode");
+    ShareParameter("method","pansharp.method");
     ShareParameter("lms","superimpose.lms",
       "Spacing of the deformation field",
       "Spacing of the deformation field. Default is 10 times the PAN image spacing.");
+    ShareParameter("interpolator","superimpose.interpolator");
     ShareParameter("fv","superimpose.fv");
     ShareParameter("ram","superimpose.ram");
 
     Connect("pansharp.inp","superimpose.inr");
     Connect("pansharp.ram","superimpose.ram");
-
-    GetInternalApplication("superimpose")->SetParameterString("interpolator","bco", false);
-    GetInternalApplication("pansharp")->SetParameterString("method","rcs", false);
     
     // Doc example parameter settings
     SetDocExampleParameterValue("inp", "QB_Toulouse_Ortho_PAN.tif");
