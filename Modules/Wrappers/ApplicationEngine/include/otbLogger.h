@@ -26,6 +26,13 @@
 
 namespace otb {
 
+/** \class Logger
+ *  \brief An ITK logger specialized for OTB
+ *
+ *  Sets OTB wide settings in its constructor
+ *
+ * \ingroup OTBApplicationEngine
+ */
 class Logger : public itk::Logger
 {
 public:

@@ -41,6 +41,13 @@
 namespace otb
 {
 
+/** \class ApplicationException
+ *  \brief Exception for runtime errors in OTB Applications
+ *
+ *  Usually thrown with the otbAppLogFATAL macro
+ *
+ * \ingroup OTBApplicationEngine
+ */
 class ApplicationException : public itk::ExceptionObject
 {
 public:
