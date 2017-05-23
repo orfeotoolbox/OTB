@@ -688,7 +688,7 @@ public:
    */
   ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
-  itk::Logger* GetLogger();
+  otb::Logger* GetLogger();
 
   itk::ProcessObject* GetProgressSource() const;
 

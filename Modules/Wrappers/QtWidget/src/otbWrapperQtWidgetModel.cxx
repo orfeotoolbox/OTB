@@ -44,7 +44,6 @@ QtWidgetModel
   m_LogOutput = QtLogOutput::New();
 
   // Attach log output to the Application logger
-  m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
   m_Application->GetLogger()->AddLogOutput(m_LogOutput);
 
   m_Timer = new QTimer(this);

@@ -312,8 +312,6 @@ bool CommandLineLauncher::LoadApplication()
   else
     {
     // Attach log output to the Application logger
-    m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
-    m_Application->GetLogger()->SetHumanReadableFormat("%Y-%m-%d %H:%M:%S");
     m_Application->GetLogger()->AddLogOutput(m_LogOutput);
 
     // Add an observer to the AddedProcess event

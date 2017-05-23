@@ -27,6 +27,16 @@ namespace otb
 Logger::Logger() :
     itk::Logger::Logger()
 {
+#if OTB_DEBUG
+  this->SetPriorityLevel(itk::LoggerBase::DEBUG);
+#else
+  this->SetPriorityLevel(itk::LoggerBase::INFO);
+#endif
+
+  this->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
+
+  this->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
+  this->SetHumanReadableFormat("%Y-%m-%d %H:%M:%S");
 }
 
 Logger::~Logger()
