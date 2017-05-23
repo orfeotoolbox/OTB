@@ -5083,7 +5083,7 @@ Le(s) résultat(s) vont être importés en tant que jeu de données.</translatio
     </message>
     <message>
         <source>OTB-Application &apos;%1&apos; cannot be closed while running!</source>
-        <translation>Impossible de fermer l&apos;OTB-Application &apos;%1&apos; pendant sont exéution !</translation>
+        <translation>Impossible de fermer l&apos;OTB-Application &apos;%1&apos; pendant sont exécution !</translation>
     </message>
     <message>
         <source>Following files will be overwritten. Are you sure you want to continue?
