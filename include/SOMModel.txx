@@ -13,6 +13,9 @@
 #include "itkImageRegionConstIterator.h"
 #include <fstream> 
 
+
+#include "itkImage.h"
+
 namespace otb
 {
 
@@ -92,14 +95,18 @@ void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, con
   std::ofstream ofs(filename+"2");
   ofs << "SOM" << std::endl; 
   ofs << MapDimension << std::endl;
-  ofs << m_SOMMap->GetLargestPossibleRegion().GetSize() << std::endl;
+  SizeType size = m_SOMMap->GetLargestPossibleRegion().GetSize() ;
+  //ofs << m_SOMMap->GetLargestPossibleRegion().GetSize() << std::endl;
+  for (size_t i=0;i<MapDimension;i++){
+		ofs << size[i] << " " ;
+  }
+  ofs << std::endl;	
   ofs << inputIterator.Get().GetNumberOfElements() << std::endl;;
   while(!inputIterator.IsAtEnd()){
 	InputSampleType vect = inputIterator.Get();
 	for (size_t i=0;i<vect.GetNumberOfElements();i++){
 		ofs << vect[i] << " " ;
 	}
-	ofs << std::endl;
 		
 	++inputIterator;
   }
@@ -110,6 +117,7 @@ void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, con
 template <class TInputValue, unsigned int MapDimension>
 void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, const std::string & name)
 {
+	/*
 	auto reader = otb::ImageFileReader<MapType>::New();
 	reader->SetFileName(filename);
 	reader->Update();
@@ -117,30 +125,101 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 		itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
 	m_SOMMap = reader->GetOutput();
-	
+	*/
 	// test text
+	
+	
+	
+	
+	
+	
 	std::ifstream ifs(filename+"2");
 	std::string model_type_str;
 	std::string dimension_str;
 	std::string size_str;
 	std::string number_of_elements_str;
-	SizeType size;
 	
 	std::getline(ifs,model_type_str); 
 	std::getline(ifs,dimension_str); 
-	std::getline(ifs,size_str); 
-	std::getline(ifs,number_of_elements_str); 
-	
+	if (model_type_str+dimension_str != "SOM"+std::to_string(MapDimension)){
+		itkExceptionMacro(<< "Error opening " << filename.c_str() );
+    }
+    
+	std::cout << "bug-1?" << std::endl;
+	SizeType size;
+	itk::Point<double, MapDimension> origin;
+	SpacingType spacing;
+	itk::Index< MapDimension > index;
 	for (int i=0 ; i<MapDimension; i++)
 	{
-		
+		std::getline(ifs,size_str , ' '); 
+		size[i] = stof(size_str);
+		origin[i] = 0;
+		spacing[i]=0;
+		index[i]=0;
 	}
 	
-	while (!ifs.eof())
-    {
-    std::string line;
-    std::getline(ifs, line);
+	
+	std::getline(ifs,number_of_elements_str); 
+	std::getline(ifs,number_of_elements_str); 
+	std::cout << "bug0?" <<  number_of_elements_str << std::endl;
+	auto number_of_elements = stof(number_of_elements_str);
+	
+	//typedef itk::Image< unsigned char, 3 > ImageType;
+	//typename MapType::Pointer image = MapType::New();
+	m_SOMMap = MapType::New();
+	typename MapType::RegionType region;
+	region.SetSize( size );
+	m_SOMMap->SetNumberOfComponentsPerPixel(number_of_elements);
+	region.SetIndex( index );
+	m_SOMMap->SetRegions( region );
+	m_SOMMap->Allocate();
+
+	std::cout << m_SOMMap << std::endl;
+/*
+	
+	std::cout << "bug1?" << number_of_elements << std::endl;
+	itk::ImageRegion<MapDimension> outputRegion;
+	
+	
+	std::cout << "bugoriggin?" << origin << std::endl;
+	m_SOMMap->SetNumberOfComponentsPerPixel(number_of_elements);
+	outputRegion.SetIndex(index);
+		std::cout << "setindex?" << index << std::endl;
+	outputRegion.SetSize(size);
+	std::cout << origin << size << std::endl;
+	m_SOMMap->SetLargestPossibleRegion(outputRegion);
+	std::cout << "setRegion" << origin << std::endl;
+	
+	m_SOMMap->Allocate();
+	std::cout << "bug2?" << std::endl;
+	
+	*/
+	itk::ImageRegionIterator<MapType> outputIterator(m_SOMMap,region);
+    
+	std::string value;
+	size_t j=0;
+	while(!outputIterator.IsAtEnd()){
+		std::cout << j << std::endl;
+		std::getline(ifs,value, ' ');
+		itk::VariableLengthVector<float>  vect(number_of_elements);
+		for (int i=0 ; i<number_of_elements; i++)
+		{
+			std::getline(ifs,value , ' '); 
+			//std::cout << value << " ";
+			std::cout << stof(value) << " ";
+			vect[i]=std::stof(value);
+		}
+		std::cout << vect << std::endl;
+		outputIterator.Set(vect);
+		++outputIterator;
+		j++;
+		std::cout << j << "end" << std::endl;
+		//std::cout << value << std::endl;
+    //std::string line;
+    //std::getline(ifs, line);
 	}
+	std::cout << j << std::endl;
 	ifs.close();
 	std::cout << "model type " << model_type_str << std::endl;
 	std::cout << "dimension " << dimension_str << std::endl;
