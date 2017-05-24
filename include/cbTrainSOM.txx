@@ -18,22 +18,6 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   SetParameterDescription("model.som",
                           "This group of parameters allows setting SOM parameters. "
                           );
-  
-  AddChoice("model.som3d", "OTB SOM");
-  SetParameterDescription("model.som3d",
-                          "This group of parameters allows setting SOM parameters. "
-                          );
-  
-  AddChoice("model.som4d", "OTB SOM");
-  SetParameterDescription("model.som4d",
-                          "This group of parameters allows setting SOM parameters. "
-                          );
-  
-  AddChoice("model.som5d", "OTB SOM");
-  SetParameterDescription("model.som5d",
-                          "This group of parameters allows setting SOM parameters. "
-                          );
-  
 
 	AddParameter(ParameterType_Int, "model.som.dim","Dimension of the map");
 	SetParameterDescription("model.som.dim","Dimension of the SOM map.");
@@ -120,7 +104,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		}   
 	if(SomDim > 5 || SomDim < 2)
 		{
-			std::cerr << "invalid dimension" << std::endl;
+			std::cerr << "k : invalid dimension" << std::endl;
 		}
 }
 

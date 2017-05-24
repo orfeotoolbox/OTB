@@ -136,9 +136,13 @@ private:
   void InitAutoencoderParams();
   void InitPCAParams();
   void InitSOMParams();
+  
+  void BeforeTrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   template <class autoencoderchoice>
   void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  
   void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  
   template <class somchoice>
   void TrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   void BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);

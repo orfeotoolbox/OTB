@@ -83,7 +83,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
  if(modelName == "autoencoder")
     {
     #ifdef OTB_USE_SHARK
-    TrainAutoencoder<AutoencoderModelType>(trainingListSample,modelPath);
+    BeforeTrainAutoencoder(trainingListSample,modelPath);
     #else
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif

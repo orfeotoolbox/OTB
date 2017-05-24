@@ -96,45 +96,32 @@ std::istream & binary_read(std::istream& stream, T& value){
 template <class TInputValue, unsigned int MapDimension>
 void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, const std::string & name)
 {
-
-//Ecriture
-  auto kwl = m_SOMMap->GetImageKeywordlist();
-  kwl.AddKey("MachineLearningModelType", "SOM"+std::to_string(MapDimension));
-  m_SOMMap->SetImageKeywordList(kwl);
-  auto writer = otb::ImageFileWriter<MapType>::New();
-  writer->SetInput(m_SOMMap);
-  writer->SetFileName(filename);
-  writer->Update();
-
-
- // test text
-  itk::ImageRegionConstIterator<MapType> inputIterator(m_SOMMap,m_SOMMap->GetLargestPossibleRegion());
-  inputIterator.GoToBegin();
-  std::ofstream ofs(filename+"2", std::ios::binary);
-  binary_write_string(ofs,"som"); 
-  binary_write(ofs,static_cast<int>(MapDimension));
-  SizeType size = m_SOMMap->GetLargestPossibleRegion().GetSize() ;
-  for (size_t i=0;i<MapDimension;i++){
+	itk::ImageRegionConstIterator<MapType> inputIterator(m_SOMMap,m_SOMMap->GetLargestPossibleRegion());
+	inputIterator.GoToBegin();
+	std::ofstream ofs(filename, std::ios::binary);
+	binary_write_string(ofs,"som"); 
+	binary_write(ofs,static_cast<int>(MapDimension));
+	SizeType size = m_SOMMap->GetLargestPossibleRegion().GetSize() ;
+	for (size_t i=0;i<MapDimension;i++){
 		binary_write(ofs,size[i]);
-  }
-  
-  binary_write(ofs,inputIterator.Get().GetNumberOfElements());
-  while(!inputIterator.IsAtEnd()){
-	InputSampleType vect = inputIterator.Get();
-	for (size_t i=0;i<vect.GetNumberOfElements();i++){
-		binary_write(ofs,vect[i]);
 	}
+	  
+	binary_write(ofs,inputIterator.Get().GetNumberOfElements());
+	while(!inputIterator.IsAtEnd()){
+		InputSampleType vect = inputIterator.Get();
+		for (size_t i=0;i<vect.GetNumberOfElements();i++){
+			binary_write(ofs,vect[i]);
+		}	
 	++inputIterator;
-  }
-  ofs.close();
-
+	}
+	ofs.close();
 }
 
 template <class TInputValue, unsigned int MapDimension>
 void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, const std::string & name)
 {
 	
-	std::ifstream ifs(filename+"2", std::ios::binary);
+	std::ifstream ifs(filename, std::ios::binary);
 	
 	/**  Read the model key (should be som) */
 	char s[]="   ";

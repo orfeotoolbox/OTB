@@ -57,7 +57,6 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 		optimizer.step(error);
 		std::cout<<i<<" "<<optimizer.solution().value<<std::endl;
 	}
-	//std::cout<<optimizer.solution().value<<std::endl;
 	m_net.setParameterVector(optimizer.solution().point);
 	
 	
@@ -111,7 +110,6 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Load(const std::string & fil
 	m_net.read(ia);
 	ifs.close();
 	m_NumberOfHiddenNeurons = m_net.numberOfHiddenNeurons();
-	//this->m_Size = m_NumberOfHiddenNeurons;
 }
 
 
@@ -119,6 +117,7 @@ template <class TInputValue, class AutoencoderType>
 typename AutoencoderModel<TInputValue,AutoencoderType>::TargetSampleType
 AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType & value) const
 {  
+	std::cout << "SINGLE PIXEL " ;
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
     {
@@ -157,17 +156,10 @@ void AutoencoderModel<TInputValue,AutoencoderType>
 		
 		for(unsigned int a = 0; a < m_NumberOfHiddenNeurons; ++a){
 			target[a]=p[a];
-		
-			//target.SetElement(a,p[a]);
-			
-			
 		}
-		//std::cout << p << std::endl;
 		targets->SetMeasurementVector(id,target);
-		++id;
-		
+		++id;	
     }
-
 }
 
 

@@ -40,7 +40,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   this->SetNthOutput(0,TOutputImage::New());
   this->SetNthOutput(1,ConfidenceImageType::New());
   m_UseConfidenceMap = false;
-  m_BatchMode = false;
+  m_BatchMode = true;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>

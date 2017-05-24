@@ -21,6 +21,21 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   SetParameterDescription("model.autoencoder",
                           "This group of parameters allows setting Shark autoencoder parameters. "
                           );
+                          
+  
+  //Tied Autoencoder
+  AddParameter(ParameterType_Choice, "model.autoencoder.istied",
+               "tied weighth <tied/untied>");
+  SetParameterDescription(
+    "model.autoencoder.istied",
+    "Parameter that determine if the weights are tied or not <tied/untied>");
+                          
+        
+  AddChoice("model.autoencoder.istied.yes","Tied weigths");
+  AddChoice("model.autoencoder.istied.no","Untied weights");
+                  
+                          
+                          
   //Number Of Iterations
   AddParameter(ParameterType_Int, "model.autoencoder.nbiter",
                "Maximum number of iterations during training");
@@ -38,12 +53,40 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     "model.autoencoder.nbneuron",
     "The number of neurons in the hidden layer.");
   
-  //normalization
-  AddParameter(ParameterType_Float, "model.autoencoder.normalizer", "Strength of the normalization");
-  SetParameterFloat("model.autoencoder.normalizer",0, false);
-  SetParameterDescription("model.autoencoder.normalizer", 
-                         "Strength of the L2 normalization used during training");
+  //Regularization
+  AddParameter(ParameterType_Float, "model.autoencoder.regularization", "Strength of the regularization");
+  SetParameterFloat("model.autoencoder.regularization",0, false);
+  SetParameterDescription("model.autoencoder.regularization", 
+                         "Strength of the L2 regularization used during training");
 }
+
+
+template <class TInputValue, class TOutputValue>
+void
+cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+::BeforeTrainAutoencoder(typename ListSampleType::Pointer trainingListSample,
+        std::string modelPath)
+{		
+	std::string TiedWeigth = GetParameterString("model.autoencoder.istied");
+	std::cout << TiedWeigth << std::endl;
+		
+	if(TiedWeigth == "no")
+		{
+		TrainAutoencoder<AutoencoderModelType>(trainingListSample,modelPath);
+		}
+		
+	if(TiedWeigth == "yes")
+		{
+		TrainAutoencoder<TiedAutoencoderModelType>(trainingListSample,modelPath);
+		}
+	 
+	if(TiedWeigth != "yes" && TiedWeigth != "no")
+		{
+			std::cerr << "istied : invalid choice <yes/no>" << std::endl;
+		}
+}
+
+
 
 template <class TInputValue, class TOutputValue>
 template <typename autoencoderchoice>
@@ -53,7 +96,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		typename autoencoderchoice::Pointer dimredTrainer = autoencoderchoice::New();
 		dimredTrainer->SetNumberOfHiddenNeurons(GetParameterInt("model.autoencoder.nbneuron"));
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
-		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.normalizer"));
+		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.regularization"));
 		dimredTrainer->SetInputListSample(trainingListSample);
 		dimredTrainer->Train();
 		dimredTrainer->Save(modelPath);
