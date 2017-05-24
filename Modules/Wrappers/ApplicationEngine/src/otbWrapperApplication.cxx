@@ -340,8 +340,9 @@ void Application::UpdateParameters()
       InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
       if(inXMLParam!=ITK_NULLPTR)
         {
-        inXMLParam->Read(this);
+        // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
         m_IsInXMLParsed = true;
+        inXMLParam->Read(this);
         }
       }
     }
