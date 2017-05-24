@@ -24,6 +24,20 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
                           "This group of parameters allows setting SOM parameters. "
                           );
   
+  AddChoice("model.som4d", "OTB SOM");
+  SetParameterDescription("model.som4d",
+                          "This group of parameters allows setting SOM parameters. "
+                          );
+  
+  AddChoice("model.som5d", "OTB SOM");
+  SetParameterDescription("model.som5d",
+                          "This group of parameters allows setting SOM parameters. "
+                          );
+  
+
+	AddParameter(ParameterType_Int, "model.som.dim","Dimension of the map");
+	SetParameterDescription("model.som.dim","Dimension of the SOM map.");
+  
 	AddParameter(ParameterType_StringList ,  "model.som.s",   "Size");
     SetParameterDescription("model.som.s", "Size of the SOM map");
     MandatoryOff("model.som.s");
@@ -63,7 +77,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     AddParameter(ParameterType_Float,  "model.som.iv",   "InitialValue");
     SetParameterDescription("model.som.iv", "Maximum initial neuron weight");
     MandatoryOff("model.som.iv");
-    ;
+    
     SetDefaultParameterInt("model.som.sx", 32);
     SetDefaultParameterInt("model.som.sy", 32);
     SetDefaultParameterInt("model.som.nx", 10);
@@ -75,6 +89,41 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 
  
 }
+
+template <class TInputValue, class TOutputValue>
+void
+cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+::BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample,
+        std::string modelPath)
+{		
+	int SomDim = GetParameterInt("model.som.dim");
+	std::cout << SomDim << std::endl;
+		
+	if(SomDim == 2)
+		{
+		TrainSOM<SOM2DModelType >(trainingListSample,modelPath);
+		}
+		
+	if(SomDim == 3)
+		{
+		TrainSOM<SOM3DModelType >(trainingListSample,modelPath);
+		}
+	 
+	if(SomDim == 4)
+		{
+		TrainSOM<SOM4DModelType >(trainingListSample,modelPath);
+		}
+	 
+	if(SomDim == 5)
+		{
+		TrainSOM<SOM5DModelType >(trainingListSample,modelPath);
+		}   
+	if(SomDim > 5 || SomDim < 2)
+		{
+			std::cerr << "invalid dimension" << std::endl;
+		}
+}
+
 
 template <class TInputValue, class TOutputValue>
 template <typename somchoice>

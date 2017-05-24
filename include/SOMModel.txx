@@ -54,6 +54,7 @@ void SOMModel<TInputValue,  MapDimension>::Train()
 }
 
 
+
 template <class TInputValue, unsigned int MapDimension>
 bool SOMModel<TInputValue, MapDimension>::CanReadFile(const std::string & filename)
 {
@@ -75,11 +76,27 @@ bool SOMModel<TInputValue, MapDimension>::CanWriteFile(const std::string & filen
 	return true;
 }
 
+template<typename T>
+std::ostream& binary_write(std::ostream& stream, const T& value){
+    return stream.write(reinterpret_cast<const char*>(&value), sizeof(T));
+}
+
+
+std::ostream& binary_write_string(std::ofstream& stream, const std::string& value){
+    return stream.write(value.c_str(), value.length());
+}
+
+template<typename T>
+std::istream & binary_read(std::istream& stream, T& value){
+    return stream.read(reinterpret_cast<char*>(&value), sizeof(T));
+}
+
+
+
 template <class TInputValue, unsigned int MapDimension>
 void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, const std::string & name)
 {
-  std::cout << m_SOMMap->GetNumberOfComponentsPerPixel() << std::endl;
-  
+
 //Ecriture
   auto kwl = m_SOMMap->GetImageKeywordlist();
   kwl.AddKey("MachineLearningModelType", "SOM"+std::to_string(MapDimension));
@@ -92,22 +109,21 @@ void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, con
 
  // test text
   itk::ImageRegionConstIterator<MapType> inputIterator(m_SOMMap,m_SOMMap->GetLargestPossibleRegion());
-  std::ofstream ofs(filename+"2");
-  ofs << "SOM" << std::endl; 
-  ofs << MapDimension << std::endl;
+  inputIterator.GoToBegin();
+  std::ofstream ofs(filename+"2", std::ios::binary);
+  binary_write_string(ofs,"som"); 
+  binary_write(ofs,static_cast<int>(MapDimension));
   SizeType size = m_SOMMap->GetLargestPossibleRegion().GetSize() ;
-  //ofs << m_SOMMap->GetLargestPossibleRegion().GetSize() << std::endl;
   for (size_t i=0;i<MapDimension;i++){
-		ofs << size[i] << " " ;
+		binary_write(ofs,size[i]);
   }
-  ofs << std::endl;	
-  ofs << inputIterator.Get().GetNumberOfElements() << std::endl;;
+  
+  binary_write(ofs,inputIterator.Get().GetNumberOfElements());
   while(!inputIterator.IsAtEnd()){
 	InputSampleType vect = inputIterator.Get();
 	for (size_t i=0;i<vect.GetNumberOfElements();i++){
-		ofs << vect[i] << " " ;
+		binary_write(ofs,vect[i]);
 	}
-		
 	++inputIterator;
   }
   ofs.close();
@@ -117,113 +133,58 @@ void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, con
 template <class TInputValue, unsigned int MapDimension>
 void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, const std::string & name)
 {
-	/*
-	auto reader = otb::ImageFileReader<MapType>::New();
-	reader->SetFileName(filename);
-	reader->Update();
-	if (reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("MachineLearningModelType") != "SOM"+std::to_string(MapDimension)){
-		itkExceptionMacro(<< "Error opening " << filename.c_str() );
-    }
-	m_SOMMap = reader->GetOutput();
-	*/
-	// test text
 	
+	std::ifstream ifs(filename+"2", std::ios::binary);
 	
+	/**  Read the model key (should be som) */
+	char s[]="   ";
+	for (int i=0; i<3; i++){	
+		binary_read(ifs,s[i]);
+	}
+	std::string modelType(s);
 	
+	/** Read the dimension of the map (should be equal to MapDimension) */
 	
+	int dimension;
+	binary_read(ifs,dimension);
 	
-	
-	std::ifstream ifs(filename+"2");
-	std::string model_type_str;
-	std::string dimension_str;
-	std::string size_str;
-	std::string number_of_elements_str;
-	
-	std::getline(ifs,model_type_str); 
-	std::getline(ifs,dimension_str); 
-	if (model_type_str+dimension_str != "SOM"+std::to_string(MapDimension)){
+	if (modelType != "som" || dimension != MapDimension){
 		itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
     
-	std::cout << "bug-1?" << std::endl;
 	SizeType size;
-	itk::Point<double, MapDimension> origin;
-	SpacingType spacing;
 	itk::Index< MapDimension > index;
 	for (int i=0 ; i<MapDimension; i++)
 	{
-		std::getline(ifs,size_str , ' '); 
-		size[i] = stof(size_str);
-		origin[i] = 0;
-		spacing[i]=0;
+		binary_read(ifs,size[i]);
 		index[i]=0;
 	}
 	
+	unsigned int numberOfElements;
+	binary_read(ifs,numberOfElements);
 	
-	std::getline(ifs,number_of_elements_str); 
-	std::getline(ifs,number_of_elements_str); 
-	std::cout << "bug0?" <<  number_of_elements_str << std::endl;
-	auto number_of_elements = stof(number_of_elements_str);
-	
-	//typedef itk::Image< unsigned char, 3 > ImageType;
-	//typename MapType::Pointer image = MapType::New();
 	m_SOMMap = MapType::New();
 	typename MapType::RegionType region;
 	region.SetSize( size );
-	m_SOMMap->SetNumberOfComponentsPerPixel(number_of_elements);
+	m_SOMMap->SetNumberOfComponentsPerPixel(numberOfElements);
 	region.SetIndex( index );
 	m_SOMMap->SetRegions( region );
 	m_SOMMap->Allocate();
 
-	std::cout << m_SOMMap << std::endl;
-/*
-	
-	std::cout << "bug1?" << number_of_elements << std::endl;
-	itk::ImageRegion<MapDimension> outputRegion;
-	
-	
-	std::cout << "bugoriggin?" << origin << std::endl;
-	m_SOMMap->SetNumberOfComponentsPerPixel(number_of_elements);
-	outputRegion.SetIndex(index);
-		std::cout << "setindex?" << index << std::endl;
-	outputRegion.SetSize(size);
-	std::cout << origin << size << std::endl;
-	m_SOMMap->SetLargestPossibleRegion(outputRegion);
-	std::cout << "setRegion" << origin << std::endl;
-	
-	m_SOMMap->Allocate();
-	std::cout << "bug2?" << std::endl;
-	
-	*/
 	itk::ImageRegionIterator<MapType> outputIterator(m_SOMMap,region);
-    
+    outputIterator.GoToBegin();
 	std::string value;
-	size_t j=0;
 	while(!outputIterator.IsAtEnd()){
-		std::cout << j << std::endl;
-		std::getline(ifs,value, ' ');
-		itk::VariableLengthVector<float>  vect(number_of_elements);
-		for (int i=0 ; i<number_of_elements; i++)
+		InputSampleType  vect(numberOfElements);
+		for (int i=0 ; i<numberOfElements; i++)
 		{
-			std::getline(ifs,value , ' '); 
-			//std::cout << value << " ";
-			std::cout << stof(value) << " ";
-			vect[i]=std::stof(value);
+			binary_read(ifs,vect[i]);
 		}
-		std::cout << vect << std::endl;
 		outputIterator.Set(vect);
 		++outputIterator;
-		j++;
-		std::cout << j << "end" << std::endl;
-		//std::cout << value << std::endl;
-    //std::string line;
-    //std::getline(ifs, line);
 	}
-	std::cout << j << std::endl;
+
 	ifs.close();
-	std::cout << "model type " << model_type_str << std::endl;
-	std::cout << "dimension " << dimension_str << std::endl;
-	std::cout << "size " << size_str << std::endl;
 }
 
 
@@ -236,8 +197,6 @@ SOMModel<TInputValue, MapDimension>::DoPredict(const InputSampleType & value) co
     target.SetSize(dimension);
 	
     auto winner =m_SOMMap->GetWinner(value);
-    // std::cout <<  winner << std::endl;
-    
     for (int i=0; i< dimension ;i++) {
 		target[i] = winner.GetElement(i); 
 	}

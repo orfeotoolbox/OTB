@@ -48,6 +48,12 @@ using SOM2DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 2>  ;
 template <class TInputValue, class TTargetValue>
 using SOM3DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 3>  ;
 
+template <class TInputValue, class TTargetValue>
+using SOM4DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 4>  ;
+
+template <class TInputValue, class TTargetValue>
+using SOM5DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 5>  ;
+
 template <class TInputValue, class TOutputValue>
 typename DimensionalityReductionModel<TInputValue,TOutputValue>::Pointer
 DimensionalityReductionModelFactory<TInputValue,TOutputValue>
@@ -104,9 +110,10 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   
   
 
-
-  RegisterFactory(SOM3DModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SOM2DModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SOM3DModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SOM4DModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(SOM5DModelFactory<TInputValue,TOutputValue>::New());
   
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
@@ -142,6 +149,23 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
     {
 
 	// SOM
+	
+	SOM5DModelFactory<TInputValue,TOutputValue> *som5dFactory =
+      dynamic_cast<SOM5DModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (som5dFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(som5dFactory);
+      continue;
+      }
+    
+    SOM4DModelFactory<TInputValue,TOutputValue> *som4dFactory =
+      dynamic_cast<SOM4DModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    if (som4dFactory)
+      {
+      itk::ObjectFactoryBase::UnRegisterFactory(som4dFactory);
+      continue;
+      }
+      
     SOM3DModelFactory<TInputValue,TOutputValue> *som3dFactory =
       dynamic_cast<SOM3DModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (som3dFactory)
