@@ -58,6 +58,12 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   SetParameterFloat("model.autoencoder.regularization",0, false);
   SetParameterDescription("model.autoencoder.regularization", 
                          "Strength of the L2 regularization used during training");
+                         
+  //Noise strength
+  AddParameter(ParameterType_Float, "model.autoencoder.noise", "Strength of the noise");
+  SetParameterFloat("model.autoencoder.noise",0, false);
+  SetParameterDescription("model.autoencoder.noise", 
+                         "Strength of the noise");
 }
 
 
@@ -97,6 +103,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->SetNumberOfHiddenNeurons(GetParameterInt("model.autoencoder.nbneuron"));
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
 		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.regularization"));
+		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.noise"));
 		dimredTrainer->SetInputListSample(trainingListSample);
 		dimredTrainer->Train();
 		dimredTrainer->Save(modelPath);

@@ -37,6 +37,9 @@ public:
 	itkGetMacro(Regularization,double);
 	itkSetMacro(Regularization,double);
 
+	itkGetMacro(Noise,double);
+	itkSetMacro(Noise,double);
+
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
 
@@ -60,6 +63,7 @@ private:
 	unsigned int m_NumberOfHiddenNeurons;
 	unsigned int m_NumberOfIterations;
 	double m_Regularization;
+	double m_Noise;
 };
 } // end namespace otb
 

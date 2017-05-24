@@ -11,6 +11,8 @@
 #include <shark/Algorithms/GradientDescent/Rprop.h>// the RProp optimization algorithm
 #include <shark/ObjectiveFunctions/Loss/SquaredLoss.h> // squared loss used for regression
 #include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
+#include <shark/Models/ImpulseNoiseModel.h>//noise source to corrupt the inputs
+#include <shark/Models/ConcatenatedModel.h>//to concatenate the noise with the model
 
 namespace otb
 {
@@ -32,7 +34,6 @@ AutoencoderModel<TInputValue,AutoencoderType>::~AutoencoderModel()
 template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 {
-	
 	std::vector<shark::RealVector> features;
 	
 	Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
@@ -42,10 +43,12 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 	std::size_t inputs = dataDimension(inputSamples);
 	m_net.setStructure(inputs, m_NumberOfHiddenNeurons);
 	initRandomUniform(m_net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
-	
+	shark::ImpulseNoiseModel noise(m_Noise,0.0);//set an input pixel with probability p to 0
+	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> m_net;
+
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(inputSamples,inputSamples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
-	shark::ErrorFunction error(trainSet, &m_net, &loss);
+	shark::ErrorFunction error(trainSet, &model, &loss);
 	shark::TwoNormRegularizer regularizer(error.numberOfVariables());
 	error.setRegularizer(m_Regularization,&regularizer);
 
@@ -117,7 +120,6 @@ template <class TInputValue, class AutoencoderType>
 typename AutoencoderModel<TInputValue,AutoencoderType>::TargetSampleType
 AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType & value) const
 {  
-	std::cout << "SINGLE PIXEL " ;
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
     {
@@ -144,7 +146,6 @@ template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>
 ::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets) const
 {
-	std::cout << "BATCH" << std::endl;
 	std::vector<shark::RealVector> features;
 	Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
 	shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
