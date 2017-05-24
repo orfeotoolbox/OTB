@@ -49,7 +49,7 @@ void QtWidgetListViewParameter::DoUpdateGUI()
     {
     for (unsigned int i = 0; i < m_ListViewParam->GetNbChoices(); ++i)
       {
-      QString key = m_ListViewParam->GetChoiceName(i).c_str();
+      QString key = m_ListViewParam->GetChoiceKey(i).c_str();
       if (key != m_ListView->item(i)->text() )
         {
         resetNeeded = true;
