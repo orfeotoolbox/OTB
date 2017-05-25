@@ -788,7 +788,7 @@ ParameterGroup::GetParameterByKey(std::string name, bool follow)
         }
       std::string childName = childNameOss.str();
 
-      return parentAsGroup->GetParameterByKey(childName);
+      return parentAsGroup->GetParameterByKey(childName,follow);
       }
 
     // Handle ChoiceParameter case
@@ -823,7 +823,7 @@ ParameterGroup::GetParameterByKey(std::string name, bool follow)
             }
           }
         std::string childName = childNameOss.str();
-        return associatedParam->GetParameterByKey(childName);
+        return associatedParam->GetParameterByKey(childName,follow);
         }
       return associatedParam.GetPointer();
       }
