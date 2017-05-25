@@ -144,8 +144,8 @@ def FindLengthOfLargestColumnText(app,paramlist):
                 if colLength[0] < lenp:
                     colLength[0] = lenp
                 lenpdescr = len(choicename)
-                if colLength[2] < lenpdescr:
-                    colLength[2] = lenpdescr
+                if colLength[1] < lenpdescr:
+                    colLength[1] = lenpdescr
         else:
             if colLength[0] < len(param):
                 colLength[0] = len(param)
@@ -194,8 +194,8 @@ def GenerateParametersTable(app,paramlist):
         if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
             for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
                 output += MakeText(param + " " + choicekey, colLength[0])
-                output += MakeText(" *Choice*" ,colLength[1])
-                output += MakeText(choicename, colLength[2])
+                output += MakeText(choicename,colLength[1])
+                output += MakeText(" *Choice*", colLength[2])
                 output += '|' + linesep
                 output += RstTableHeaderLine(headerlist, colLength, '-')
     return output
