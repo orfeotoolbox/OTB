@@ -163,14 +163,10 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
 
-  // typedef typename ModelType::InputValueType       InputValueType;
   typedef typename ModelType::InputSampleType      InputSampleType;
   typedef typename ModelType::InputListSampleType  InputListSampleType;
   typedef typename ModelType::TargetValueType      TargetValueType;
-  // typedef typename ModelType::TargetSampleType     TargetSampleType;
   typedef typename ModelType::TargetListSampleType TargetListSampleType;
-  // typedef typename ModelType::ConfidenceValueType      ConfidenceValueType;
-  // typedef typename ModelType::ConfidenceSampleType     ConfidenceSampleType;
   
   typename InputListSampleType::Pointer samples = InputListSampleType::New();
   unsigned int num_features = inputPtr->GetNumberOfComponentsPerPixel();
@@ -193,11 +189,10 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   typename TargetListSampleType::Pointer labels;
  
   // This call is threadsafe
-  //labels = m_Model->PredictBatch(samples,confidences);
   labels = m_Model->PredictBatch(samples);
+  
   // Set the output values
  
-	
   typename TargetListSampleType::ConstIterator labIt = labels->Begin();
  
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)

@@ -25,42 +25,32 @@
 namespace otb
 {
 
-/** \class MachineLearningModel
- * \brief MachineLearningModel is the base class for all classifier objects (SVM, KNN,
- *        Random Forests, Artificial Neural Network, ...) implemented in the supervised classification framework of the OTB.
+/** \class DimensionalityReductionModel
+ * \brief DimensionalityReductionModel is the base class for all dimensionality Reduction objects (PCA, autoencoders and SOM) implemented in the dimensionality Reduction framework of the OTB.
  *
- * MachineLearningModel is an abstract object that specifies behavior and
- * interface of supervised classifiers (SVM, KNN, Random Forests, Artificial
- * Neural Network, ...) in the generic supervised classification framework of the OTB.
- * The main generic virtual methods specifically implemented in each classifier
- * derived from the MachineLearningModel class are two learning-related methods:
- * Train() and Save(), and three classification-related methods: Load(),
+ * DimensionalityReductionModel is an abstract object that specifies behavior and
+ * interface of dimensionality reduction algorithms (PCA, autoencoders and SOM) in the generic dimensionality Reduction framework of the OTB.
+ * The main generic virtual methods specifically implemented in each model
+ * derived from the DimensionalityReductionModel class are two learning-related methods:
+ * Train() and Save(), and three dimensionality reduction related methods: Load(),
  * DoPredict() and optionnaly DoPredictBatch().
  *
  * Thus, each classifier derived from the MachineLearningModel class
  * computes its corresponding model with Train() and exports it with
  * the help of the Save() method.
  *
- * It is also possible to classify any input sample composed of several
+ * It is also possible to reduce the dimensionality of any input sample composed of several
  * features (or any number of bands in the case of a pixel extracted
  * from a multi-band image) with the help of the Predict() method which
  * needs a previous loading of the classification model with the Load() method.
  *
- * \sa MachineLearningModelFactory
- * \sa LibSVMMachineLearningModel
- * \sa SVMMachineLearningModel
- * \sa BoostMachineLearningModel
- * \sa KNearestNeighborsMachineLearningModel
- * \sa DecisionTreeMachineLearningModel
- * \sa RandomForestsMachineLearningModel
- * \sa GradientBoostedTreeMachineLearningModel
- * \sa NormalBayesMachineLearningModel
- * \sa NeuralNetworkMachineLearningModel
- * \sa SharkRandomForestsMachineLearningModel
- * \sa ImageClassificationFilter
+ * \sa DimensionalityReductionModelFactory
+ * \sa SOMModel
+ * \sa PCAModel
+ * \sa AutoencderModel
+ * \sa ImageDimensionalityReductionFilter
  *
- *
- * \ingroup OTBSupervised
+ * \ingroup cbDimensionalityReduction
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT DimensionalityReductionModel
@@ -121,7 +111,7 @@ public:
   /** Get the size of the output after dimensionality reduction */
   virtual unsigned int GetDimension() = 0;
 
-  /**\name Classification model file manipulation */
+  /**\name Dimensionality Reduction model file manipulation */
   //@{
   /** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="") = 0;
@@ -132,10 +122,10 @@ public:
 
   /**\name Classification model file compatibility tests */
   //@{
-  /** Is the input model file readable and compatible with the corresponding classifier ? */
+  /** Is the input model file readable and compatible with the corresponding model ? */
   virtual bool CanReadFile(const std::string &) = 0;
 
-  /** Is the input model file writable and compatible with the corresponding classifier ? */
+  /** Is the input model file writable and compatible with the corresponding model ? */
   virtual bool CanWriteFile(const std::string &)  = 0;
   //@}
 
@@ -165,19 +155,13 @@ protected:
   /** Is DoPredictBatch multi-threaded ? */
   bool m_IsDoPredictBatchMultiThreaded;
   
-  
-  
-  
-  
 private:
   /**  Actual implementation of BatchPredicition
     *  Default implementation will call DoPredict iteratively 
     *  \param input The input batch
-    *  \param startIndex Index of the first sample to predict
-    *  \param size Number of samples to predict
-    *  \param target Pointer to the list of produced labels
-    *  \param quality Pointer to the list of produced confidence
-    *  values, or NULL
+    *  \param startIndex Index of the first sample to reduce
+    *  \param size Number of samples to reduce
+    *  \param target Pointer to the list of reduced samples
     * 
     * Override me if internal implementation allows for batch
     * prediction.
@@ -187,11 +171,9 @@ private:
     */
   virtual void DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * target) const;
 
-  /** Actual implementation of single sample prediction
-   *  \param input sample to predict
-   *  \param quality Pointer to a variable to store confidence value,
-   *  or NULL
-   *  \return The predicted label
+  /** Actual implementation of single sample reduction
+   *  \param input sample to reduce
+   *  \return The reduced sample
    */ 
   virtual TargetSampleType DoPredict(const InputSampleType& input) const = 0;  
  

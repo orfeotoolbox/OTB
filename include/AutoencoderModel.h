@@ -27,7 +27,7 @@ public:
 	itkNewMacro(Self);
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
-	unsigned int GetDimension() {return m_NumberOfHiddenNeurons;};
+	unsigned int GetDimension() {return m_NumberOfHiddenNeurons;};  // Override the Dimensionality Reduction model method, it is used in the dimensionality reduction filter to set the output image size
 	itkGetMacro(NumberOfHiddenNeurons,unsigned int);
 	itkSetMacro(NumberOfHiddenNeurons,unsigned int);
 
@@ -47,9 +47,7 @@ public:
 	void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
 
 	void Train() ITK_OVERRIDE;
-	//void Dimensionality_reduction()  {}; // Dimensionality reduction is done by DoPredict
-	 
-
+	
 protected:
 	AutoencoderModel();	
 	~AutoencoderModel() ITK_OVERRIDE;
@@ -59,11 +57,14 @@ protected:
   
 private:
 	
+	/** Network attributes */
 	AutoencoderType m_net;
 	unsigned int m_NumberOfHiddenNeurons;
+	
+	/** Training parameters */
 	unsigned int m_NumberOfIterations;
-	double m_Regularization;
-	double m_Noise;
+	double m_Regularization;  // L2 Regularization parameter
+	double m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
 };
 } // end namespace otb
 

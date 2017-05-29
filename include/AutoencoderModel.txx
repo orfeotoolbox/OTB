@@ -6,12 +6,13 @@
 #include <shark/Data/Dataset.h>
 #include "itkMacro.h"
 #include "otbSharkUtils.h"
+
 //include train function
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
 #include <shark/Algorithms/GradientDescent/Rprop.h>// the RProp optimization algorithm
 #include <shark/ObjectiveFunctions/Loss/SquaredLoss.h> // squared loss used for regression
 #include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
-#include <shark/Models/ImpulseNoiseModel.h>//noise source to corrupt the inputs
+#include <shark/Models/ImpulseNoiseModel.h> //noise source to corrupt the inputs
 #include <shark/Models/ConcatenatedModel.h>//to concatenate the noise with the model
 
 namespace otb
@@ -43,7 +44,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 	std::size_t inputs = dataDimension(inputSamples);
 	m_net.setStructure(inputs, m_NumberOfHiddenNeurons);
 	initRandomUniform(m_net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
-	shark::ImpulseNoiseModel noise(m_Noise,0.0);//set an input pixel with probability p to 0
+	shark::ImpulseNoiseModel noise(m_Noise,0.0); //set an input pixel with probability m_Noise to 0
 	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> m_net;
 
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(inputSamples,inputSamples);//labels identical to inputs
@@ -92,7 +93,7 @@ template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Save(const std::string & filename, const std::string & name)
 {
 	std::ofstream ofs(filename);
-	ofs << m_net.name() << std::endl; //first line
+	ofs << m_net.name() << std::endl; // the first line of the model file contains a key
 	boost::archive::polymorphic_text_oarchive oa(ofs);
 	m_net.write(oa);
 	ofs.close();
@@ -162,7 +163,6 @@ void AutoencoderModel<TInputValue,AutoencoderType>
 		++id;	
     }
 }
-
 
 } // namespace otb
 #endif
