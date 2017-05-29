@@ -105,7 +105,9 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.regularization"));
 		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.noise"));
 		dimredTrainer->SetInputListSample(trainingListSample);
+		std::cout << "before train" << std::endl;
 		dimredTrainer->Train();
+		std::cout << "after train" << std::endl;
 		dimredTrainer->Save(modelPath);
 }
 

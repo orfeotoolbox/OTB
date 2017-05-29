@@ -35,6 +35,7 @@ AutoencoderModel<TInputValue,AutoencoderType>::~AutoencoderModel()
 template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 {
+	AutoencoderType net;
 	std::vector<shark::RealVector> features;
 	
 	Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
@@ -42,11 +43,10 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 		
 	std::size_t inputs = dataDimension(inputSamples);
-	m_net.setStructure(inputs, m_NumberOfHiddenNeurons);
-	initRandomUniform(m_net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	net.setStructure(inputs, m_NumberOfHiddenNeurons);
+	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
 	shark::ImpulseNoiseModel noise(m_Noise,0.0); //set an input pixel with probability m_Noise to 0
-	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> m_net;
-
+	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(inputSamples,inputSamples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
 	shark::ErrorFunction error(trainSet, &model, &loss);
@@ -56,13 +56,13 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 	shark::IRpropPlusFull optimizer;
 	error.init();
 	optimizer.init(error);
-	std::cout<<"Optimizing model: "+m_net.name()<<std::endl;
+	std::cout<<"Optimizing model: "+net.name()<<std::endl;
 	for(std::size_t i = 0; i != m_NumberOfIterations; ++i){
 		optimizer.step(error);
 		std::cout<<i<<" "<<optimizer.solution().value<<std::endl;
 	}
-	m_net.setParameterVector(optimizer.solution().point);
-	
+	net.setParameterVector(optimizer.solution().point);
+	m_net.push_back(net);
 	
 }
 
@@ -73,7 +73,7 @@ bool AutoencoderModel<TInputValue,AutoencoderType>::CanReadFile(const std::strin
 	try
 	{
 		this->Load(filename);
-		m_net.name();
+		m_net[0].name();
 	}
 	catch(...)
 	{
@@ -93,27 +93,31 @@ template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Save(const std::string & filename, const std::string & name)
 {
 	std::ofstream ofs(filename);
-	ofs << m_net.name() << std::endl; // the first line of the model file contains a key
+	ofs << m_net[0].name() << std::endl; // the first line of the model file contains a key
 	boost::archive::polymorphic_text_oarchive oa(ofs);
-	m_net.write(oa);
+	//m_net.write(oa);
+	oa << m_net;
 	ofs.close();
 }
 
 template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Load(const std::string & filename, const std::string & name)
 {
+	AutoencoderType net;
 	std::ifstream ifs(filename);
 	char autoencoder[256];
 	ifs.getline(autoencoder,256); 
 	std::string autoencoderstr(autoencoder);
-	
-	if (autoencoderstr != m_net.name()){
+	std::cout << "oy" << std::endl;
+	if (autoencoderstr != net.name()){
 		itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
+    std::cout << "yo" << std::endl;
 	boost::archive::polymorphic_text_iarchive ia(ifs);
-	m_net.read(ia);
+	//m_net.read(ia);
+	ia >> m_net;
 	ifs.close();
-	m_NumberOfHiddenNeurons = m_net.numberOfHiddenNeurons();
+	m_NumberOfHiddenNeurons = m_net[0].numberOfHiddenNeurons();
 }
 
 
@@ -132,7 +136,7 @@ AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType &
    
     shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
      
-    data = m_net.encode(data);
+    data = m_net[0].encode(data);
     TargetSampleType target;
     target.SetSize(m_NumberOfHiddenNeurons);
 	
@@ -151,7 +155,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>
 	Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
 	shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
 	TargetSampleType target;
-	data = m_net.encode(data);
+	data = m_net[0].encode(data);
 	unsigned int id = startIndex;
 	target.SetSize(m_NumberOfHiddenNeurons);
 	for(const auto& p : data.elements()){

@@ -58,7 +58,7 @@ protected:
 private:
 	
 	/** Network attributes */
-	AutoencoderType m_net;
+	std::vector<AutoencoderType> m_net;
 	unsigned int m_NumberOfHiddenNeurons;
 	
 	/** Training parameters */

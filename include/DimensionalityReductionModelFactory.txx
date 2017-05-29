@@ -35,7 +35,7 @@ namespace otb
 {
 	
 template <class TInputValue, class TTargetValue>
-using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron>>  ;
+using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder<shark::TanhNeuron, shark::LinearNeuron>>  ;
 
 
 template <class TInputValue, class TTargetValue>
