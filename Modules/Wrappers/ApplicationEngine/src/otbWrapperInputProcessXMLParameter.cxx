@@ -447,6 +447,9 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
 
       this_->SetParameterStringList(key, values);
       }
+
+    // Call UpdateParameters after each parameter is set
+    this_->UpdateParameters();
     } //end updateFromXML
   //choice also comes as setint and setstring why??
 

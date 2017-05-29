@@ -168,6 +168,7 @@ foreach(classifier ${classifierList})
     -io.out ${TEMP}/${OUTMODELFILE}
     -sample.vfn Class
     -rand 121212
+    -outxml ${TEMP}/cl${classifier}_OutXML1.xml
 
     VALID    ${valid}
   )
@@ -179,40 +180,15 @@ foreach(classifier ${classifierList})
   endif()
 
   otb_test_application(
-    NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
-    APP      TrainImagesClassifier
-    OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-    -classifier ${lclassifier}
-    ${${lclassifier}_parameters}
-    -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
-    -rand 121212
-    -sample.vfn Class
-    -outxml ${TEMP}/cl${classifier}_OutXML1.xml
-
-    VALID ${valid}
-  )
-
-  if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML2_${OUTMODELFILE})
-  else()
-    set(valid "")
-  endif()
-
-  otb_test_application(
     NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
     APP      TrainImagesClassifier
-    OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
-    -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-    -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
-    -sample.vfn Class
+    OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
+    -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
+
     VALID    ${valid}
   )
 
-  #set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1)
+  set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1)
 
   list(FIND classifier_with_confmap ${classifier} _classifier_has_confmap)
   if(${_classifier_has_confmap} EQUAL -1)
