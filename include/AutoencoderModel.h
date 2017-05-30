@@ -27,9 +27,9 @@ public:
 	itkNewMacro(Self);
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
-	unsigned int GetDimension() {return m_NumberOfHiddenNeurons;};  // Override the Dimensionality Reduction model method, it is used in the dimensionality reduction filter to set the output image size
-	itkGetMacro(NumberOfHiddenNeurons,unsigned int);
-	itkSetMacro(NumberOfHiddenNeurons,unsigned int);
+	unsigned int GetDimension() {return m_NumberOfHiddenNeurons[m_net.size()-1];};  // Override the Dimensionality Reduction model method, it is used in the dimensionality reduction filter to set the output image size
+	itkGetMacro(NumberOfHiddenNeurons,itk::Array<unsigned int>);
+	itkSetMacro(NumberOfHiddenNeurons,itk::Array<unsigned int>);
 
 	itkGetMacro(NumberOfIterations,unsigned int);
 	itkSetMacro(NumberOfIterations,unsigned int);
@@ -47,6 +47,7 @@ public:
 	void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
 
 	void Train() ITK_OVERRIDE;
+	void TrainOneLayer(unsigned int, shark::Data<shark::RealVector> &);
 	
 protected:
 	AutoencoderModel();	
@@ -59,8 +60,9 @@ private:
 	
 	/** Network attributes */
 	std::vector<AutoencoderType> m_net;
-	unsigned int m_NumberOfHiddenNeurons;
 	
+	
+	itk::Array<unsigned int> m_NumberOfHiddenNeurons;
 	/** Training parameters */
 	unsigned int m_NumberOfIterations;
 	double m_Regularization;  // L2 Regularization parameter

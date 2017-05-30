@@ -46,12 +46,13 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   
   
    //Number Of Hidden Neurons
-  AddParameter(ParameterType_Int, "model.autoencoder.nbneuron",
+  AddParameter(ParameterType_StringList ,  "model.autoencoder.nbneuron",   "Size");
+  /*AddParameter(ParameterType_Int, "model.autoencoder.nbneuron",
                "Number of neurons in the hidden layer");
-  SetParameterInt("model.autoencoder.nbneuron",10, false);
+  SetParameterInt("model.autoencoder.nbneuron",10, false);*/
   SetParameterDescription(
     "model.autoencoder.nbneuron",
-    "The number of neurons in the hidden layer.");
+    "The number of neurons in each hidden layer.");
   
   //Regularization
   AddParameter(ParameterType_Float, "model.autoencoder.regularization", "Strength of the regularization");
@@ -100,7 +101,14 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 ::TrainAutoencoder(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
 		typename autoencoderchoice::Pointer dimredTrainer = autoencoderchoice::New();
-		dimredTrainer->SetNumberOfHiddenNeurons(GetParameterInt("model.autoencoder.nbneuron"));
+		itk::Array<unsigned int> nb_neuron;
+		std::vector<std::basic_string<char>> s= GetParameterStringList("model.autoencoder.nbneuron");
+		nb_neuron.SetSize(s.size());
+		for (int i=0; i<s.size(); i++){ // This will be templated later (the 3)
+			nb_neuron[i]=std::stoi(s[i]);
+		}
+		std::cout << nb_neuron << std::endl;
+		dimredTrainer->SetNumberOfHiddenNeurons(nb_neuron);
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
 		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.regularization"));
 		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.noise"));
@@ -108,7 +116,9 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		std::cout << "before train" << std::endl;
 		dimredTrainer->Train();
 		std::cout << "after train" << std::endl;
-		dimredTrainer->Save(modelPath);
+		dimredTrainer->Save(modelPath);	
+		
+
 }
 
 } //end namespace wrapper
