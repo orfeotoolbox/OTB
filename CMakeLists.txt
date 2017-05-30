@@ -385,6 +385,8 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               ${OTB_BINARY_DIR}/OTBConfigVersion.cmake
               CMake/OTBApplicationMacros.cmake
               CMake/OTBModuleAPI.cmake
+              CMake/OTBStandaloneModuleMacros.cmake
+              CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
