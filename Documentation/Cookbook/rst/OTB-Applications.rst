@@ -34,12 +34,6 @@ The OTB Applications are now rich of more than 90 tools, which are
 listed in the applications reference documentation, presented in
 chapter [chap:apprefdoc], page.
 
-Running the applications
-------------------------
-
-Common framework
-~~~~~~~~~~~~~~~~
-
 All standard applications share the same implementation and expose
 automatically generated interfaces.
 Thus, the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
@@ -48,7 +42,7 @@ command-line interface of the Convert application, while
 ``otbgui_Convert`` will launch its GUI.
 
 Using the command-line launcher
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 The command-line application launcher allows to load an application
 plugin, to set its parameters, and execute it using the command line.
@@ -143,7 +137,7 @@ might include one or several ``.`` character), prefixed by a ``-``.
 Command-line examples are provided in chapter [chap:apprefdoc], page .
 
 Using the GUI launcher
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 The graphical interface for the applications provides a useful
 interactive user interface to set the parameters, choose files, and
@@ -189,7 +183,7 @@ The interface of the application is shown here as an example.
 .. figure:: Art/QtImages/rescale_documentation.png
 
 Using the Python interface
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 The applications can also be accessed from Python, through a module
 named ``otbApplication``. However, there are technical requirements to use it.
@@ -269,7 +263,7 @@ application, changing the algorithm at each iteration.
 
 
 Using OTB from QGIS
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 The processing toolbox
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -296,11 +290,8 @@ existing one, you will need to replace the otbcli, otbgui and library
 files in QGIS installation directly.
 
 
-Advanced applications capabilities
-----------------------------------
-
 Load/Save OTB-Applications parameters from/to file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------
 
 Since OTB 3.20, OTB applications parameters can be export/import to/from
 an XML file using inxml/outxml parameters. Those parameters are
@@ -346,7 +337,7 @@ It will retrieve the application name and related parameters from the
 input XML file and launch in this case the BandMath applications.
 
 In-memory connection between applications
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
 Applications are often use as parts of larger processing
 chains. Chaining applications currently requires to write/read back
@@ -409,7 +400,7 @@ writer to write intermediate data. In this case, execution should
 still be correct, but some intermediate data will be read or written.
                 
 Parallel execution with MPI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------
 
 Provided that Orfeo ToolBox has been built with MPI and SPTW modules
 activated, it is possible to use MPI for massive parallel computation
@@ -470,7 +461,7 @@ available for command-line calls to OTB applications, and only for
 images output parameters.
 
 Extended filename for reader and writer
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 Purpose
 ^^^^^^^
