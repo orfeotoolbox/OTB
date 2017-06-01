@@ -30,9 +30,8 @@ entry points. The framework can be extended, but Orfeo Toolbox ships with the fo
    the SWIG/Python interface is available with seamless integration within
    QGIS.
 
-The OTB Applications are now rich of more than 90 tools, which are
-listed in the applications reference documentation, presented in
-chapter [chap:apprefdoc], page.
+The complete list of applications is described in the :ref:`Application
+Reference Documentation <apprefdoc>`.
 
 All standard applications share the same implementation and expose
 automatically generated interfaces.
