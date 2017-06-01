@@ -514,11 +514,11 @@ for the image, along with a “.RPB” file that contains the sensor model
 coefficients and an “.IMD” file that contains a cartographic projection.
 
 This case leads to the following question : which geo-referencing
-element should be used when opening this image in an OTB reader. In
+element should be used when opening this image in OTB. In
 fact, it depends on the users need. For an orthorectification
 application, the sensor model must be used. In order to specify which
 information should be skipped, a syntax of extended filenames has been
-developed for both reader and writer.
+developed for both reading and writing.
 
 The reader and writer extended file name support is based on the same
 syntax, only the options are different. To benefit from the extended
@@ -528,237 +528,259 @@ file name mechanism, the following syntax is to be used:
 
     Path/Image.ext?&key1=<value1>&key2=<value2>
 
-IMPORTANT: Note that you’ll probably need to “quote” the filename.
+Note that you’ll probably need to “quote” the filename, especially if calling
+applications from the bash command line.
 
 Reader options
 ^^^^^^^^^^^^^^
 
-**Available Options:**
+::
 
--  ::
+    &geom=<path/filename.geom>
 
-       &geom=<path/filename.geom>
+-  Contains the file name of a valid geom file
 
-   -  Contains the file name of a valid geom file
+-  Use the content of the specified geom file instead of
+   image-embedded geometric information
 
-   -  Use the content of the specified geom file instead of
-      image-embedded geometric information
+-  empty by default, use the image-embedded information if available
 
-   -  empty by default, use the image-embedded information if available
+-----------------------------------------------
 
--  ::
+::
 
-       &sdataidx=<(int)idx>
+    &sdataidx=<(int)idx>
 
-   -  Select the sub-dataset to read
+-  Select the sub-dataset to read
 
-   -  0 by default
+-  0 by default
 
--  ::
+-----------------------------------------------
 
-       &resol=<(int)resolution factor>
+::
 
-   -  Select the JPEG2000 sub-resolution image to read
+    &resol=<(int)resolution factor>
 
-   -  0 by default
+-  Select the JPEG2000 sub-resolution image to read
 
--  ::
+-  0 by default
 
-       &bands=r1,r2,...,rn
+-----------------------------------------------
 
-   -  Select a subset of bands from the input image
+::
 
-   -  The syntax is inspired by Python indexing syntax with
-      bands=r1,r2,r3,...,rn where each ri is a band range that can be :
+    &bands=r1,r2,...,rn
 
-      -  a single index (1-based) :
+-  Select a subset of bands from the input image
 
-         -  :math:`'2'` means 2nd band
+-  The syntax is inspired by Python indexing syntax with
+   bands=r1,r2,r3,...,rn where each ri is a band range that can be :
 
-         -  :math:`'-1'` means last band
+   -  a single index (1-based) :
 
-      -  or a range of bands :
+      -  :code:`2` means 2nd band
 
-         -  :math:`'3:'` means 3rd band until the last one
+      -  :code:`-1` means last band
 
-         -  :math:`':-2'` means the first bands until the second to last
+   -  or a range of bands :
 
-         -  :math:`'2:4'` means bands 2,3 and 4
+      -  :code:`3:` means 3rd band until the last one
 
-   -  empty by default (all bands are read from the input image)
+      -  :code:`:-2` means the first bands until the second to last
 
--  ::
+      -  :code:`2:4` means bands 2,3 and 4
 
-       &skipcarto=<(bool)true>
+-  empty by default (all bands are read from the input image)
 
-   -  Skip the cartographic information
+-----------------------------------------------
 
-   -  Clears the projectionref, set the origin to :math:`[0,0]` and the
-      spacing to
-      :math:`[1/max(1,resolution factor),1/max(1,resolution factor)]`
+::
 
-   -  Keeps the keyword list
+    &skipcarto=<(bool)true>
 
-   -  false by default
+-  Skip the cartographic information
 
--  ::
+-  Clears the projectionref, set the origin to :math:`[0,0]` and the
+   spacing to :math:`[1/max(1,r),1/max(1,r)]` where :math:`r` is the resolution
+   factor.
 
-       &skipgeom=<(bool)true>
+-  Keeps the keyword list
 
-   -  Skip geometric information
+-  false by default
 
-   -  Clears the keyword list
+-----------------------------------------------
 
-   -  Keeps the projectionref and the origin/spacing information
+::
 
-   -  false by default.
+    &skipgeom=<(bool)true>
 
--  ::
+-  Skip geometric information
 
-       &skiprpctag=<(bool)true>
+-  Clears the keyword list
 
-   -  Skip the reading of internal RPC tags (see
-      [sec:TypesofSensorModels] for details)
+-  Keeps the projectionref and the origin/spacing information
 
-   -  false by default.
+-  false by default.
+
+-----------------------------------------------
+
+::
+
+    &skiprpctag=<(bool)true>
+
+-  Skip the reading of internal RPC tags (see
+   [sec:TypesofSensorModels] for details)
+
+-  false by default.
 
 Writer options
 ^^^^^^^^^^^^^^
 
-**Available Options:**
+::
 
--  ::
+    &writegeom=<(bool)false>
 
-       &writegeom=<(bool)false>
+-  To activate writing of external geom file
 
-   -  To activate writing of external geom file
+-  true by default
 
-   -  true by default
+-----------------------------------------------
 
--  ::
+::
 
-       &writerpctags=<(bool)true>
+    &writerpctags=<(bool)true>
 
-   -  To activate writing of RPC tags in TIFF files
+-  To activate writing of RPC tags in TIFF files
 
-   -  false by default
+-  false by default
 
--  ::
+-----------------------------------------------
+
+::
 
        &gdal:co:<GDALKEY>=<VALUE>
 
-   -  To specify a gdal creation option
+-  To specify a gdal creation option
 
-   -  For gdal creation option information, see dedicated gdal
-      documentation
+-  For gdal creation option information, see dedicated gdal documentation
 
-   -  None by default
+-  None by default
 
--  ::
+-----------------------------------------------
 
-       &streaming:type=<VALUE>
+::
 
-   -  Activates configuration of streaming through extended filenames
+    &streaming:type=<VALUE>
 
-   -  Override any previous configuration of streaming
+-  Activates configuration of streaming through extended filenames
 
-   -  Allows to configure the kind of streaming to perform
+-  Override any previous configuration of streaming
 
-   -  Available values are:
+-  Allows to configure the kind of streaming to perform
 
-      -  auto : tiled or stripped streaming mode chosen automatically
-         depending on TileHint read from input files
+-  Available values are:
 
-      -  tiled : tiled streaming mode
+   -  auto : tiled or stripped streaming mode chosen automatically
+      depending on TileHint read from input files
 
-      -  stripped : stripped streaming mode
+   -  tiled : tiled streaming mode
 
-      -  none : explicitly deactivate streaming
+   -  stripped : stripped streaming mode
 
-   -  Not set by default
+   -  none : explicitly deactivate streaming
 
--  ::
+-  Not set by default
 
-       &streaming:sizemode=<VALUE>
+-----------------------------------------------
 
-   -  Allows to choose how the size of the streaming pieces is computed
+::
 
-   -  Available values are:
+    &streaming:sizemode=<VALUE>
 
-      -  auto : size is estimated from the available memory setting by
-         evaluating pipeline memory print
+-  Allows to choose how the size of the streaming pieces is computed
 
-      -  height : size is set by setting height of strips or tiles
+-  Available values are:
 
-      -  nbsplits : size is computed from a given number of splits
+   -  auto : size is estimated from the available memory setting by
+      evaluating pipeline memory print
 
-   -  Default is auto
+   -  height : size is set by setting height of strips or tiles
 
--  ::
+   -  nbsplits : size is computed from a given number of splits
 
-       &streaming:sizevalue=<VALUE>
+-  Default is auto
 
-   -  Parameter for size of streaming pieces computation
+-----------------------------------------------
 
-   -  Value is :
+::
 
-      -  if sizemode=auto : available memory in Mb
+    &streaming:sizevalue=<VALUE>
 
-      -  if sizemode=height : height of the strip or tile in pixels
+-  Parameter for size of streaming pieces computation
 
-      -  if sizemode=nbsplits : number of requested splits for streaming
+-  Value is :
 
-   -  If not provided, the default value is set to 0 and result in
-      different behaviour depending on sizemode (if set to height or
-      nbsplits, streaming is deactivated, if set to auto, value is
-      fetched from configuration or cmake configuration file)
+   -  if sizemode=auto : available memory in Mb
 
--  ::
+   -  if sizemode=height : height of the strip or tile in pixels
 
-       &box=<startx>:<starty>:<sizex>:<sizey>
+   -  if sizemode=nbsplits : number of requested splits for streaming
 
-   -  User defined parameters of output image region
+-  If not provided, the default value is set to 0 and result in
+   different behaviour depending on sizemode (if set to height or
+   nbsplits, streaming is deactivated, if set to auto, value is
+   fetched from configuration or cmake configuration file)
 
-   -  The region must be set with 4 unsigned integers (the separator
-      used is the colon ’:’). Values are:
+-----------------------------------------------
 
-      -  startx: first index on X (starting with 0)
+::
 
-      -  starty: first index on Y (starting with 0)
+    &box=<startx>:<starty>:<sizex>:<sizey>
 
-      -  sizex: size along X
+-  User defined parameters of output image region
 
-      -  sizey: size along Y
+-  The region must be set with 4 unsigned integers (the separator
+   used is the colon ’:’). Values are:
 
-   -  The definition of the region follows the same convention as
-      itk::Region definition in C++. A region is defined by two classes:
-      the itk::Index and itk::Size classes. The origin of the region
-      within the image with which it is associated is defined by Index
+   -  startx: first index on X (starting with 0)
 
--  ::
+   -  starty: first index on Y (starting with 0)
 
-       &bands=r1,r2,...,rn
+   -  sizex: size along X
 
-   -  Select a subset of bands from the output image
+   -  sizey: size along Y
 
-   -  The syntax is inspired by Python indexing syntax with
-      bands=r1,r2,r3,...,rn where each ri is a band range that can be :
+-  The definition of the region follows the same convention as
+   itk::Region definition in C++. A region is defined by two classes:
+   the itk::Index and itk::Size classes. The origin of the region
+   within the image with which it is associated is defined by Index
 
-      -  a single index (1-based) :
+-----------------------------------------------
 
-         -  :math:`'2'` means 2nd band
+::
 
-         -  :math:`'-1'` means last band
+    &bands=r1,r2,...,rn
 
-      -  or a range of bands :
+-  Select a subset of bands from the output image
 
-         -  :math:`'3:'` means 3rd band until the last one
+-  The syntax is inspired by Python indexing syntax with
+   bands=r1,r2,r3,...,rn where each ri is a band range that can be :
 
-         -  :math:`':-2'` means the first bands until the second to last
+   -  a single index (1-based) :
 
-         -  :math:`'2:4'` means bands 2,3 and 4
+      -  :code:`2` means 2nd band
 
-   -  empty by default (all bands are write from the output image)
+      -  :code:`-1` means last band
+
+   -  or a range of bands :
+
+      -  :code:`3:` means 3rd band until the last one
+
+      -  :code:`:-2` means the first bands until the second to last
+
+      -  :code:`2:4` means bands 2,3 and 4
+
+-  Empty by default (all bands are write from the output image)
 
 The available syntax for boolean options are:
 
