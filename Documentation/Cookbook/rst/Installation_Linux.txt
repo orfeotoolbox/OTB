@@ -63,7 +63,8 @@ use the otbcli and otbgui launchers, you can initialize your environment
 with ``source otbenv.profile``.
 
 Python bindings
----------------
+~~~~~~~~~~~~~~~
+
 Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
 currently only Python 2.x is supported. If no compatible python is found, installation
 notify you about it. If everything works fine, you will be given information about
@@ -87,10 +88,11 @@ Notes:
 - Multiple installation of OTB can exists in same system without one conflicting the other!
 
 FAQ for Packaging
------------------
+~~~~~~~~~~~~~~~~~
 
 Q: I am getting an error message...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++
+
 ::
 
    Cannot mix incompatible Qt library (version 0x40806) with this library (version 0x40807)
@@ -104,7 +106,7 @@ A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk
    rm -f lib/libQt* && rm -fr lib/gtk
 
 Q: Monteverdi and Mapla applications look different from my other applications.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a the
 system gtk theme. If you can't install GTK on your system you can use the

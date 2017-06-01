@@ -26,7 +26,8 @@ Contents of OTB-|release|-Darwin64 is briefly listed below:
    mentions.
 
 Python bindings
----------------
+~~~~~~~~~~~~~~~
+
 Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
 currently only Python 2.x is supported. If no compatible python is found, installation
 notify you about it. If everything works fine, you will be given information about

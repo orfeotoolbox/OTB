@@ -521,7 +521,7 @@ def GenerateRstForApplications():
     print "All apps: %s" % (appNames,)
 
     appIndexFile = open(RST_DIR + '/Applications.rst', 'w')
-    appIndexFile.write(RstPageHeading("Applications", "2", ref="apprefdoc"))
+    appIndexFile.write(RstPageHeading("Applications Reference Documentation", "2", ref="apprefdoc"))
     for appName in appNames:
         tags = GetApplicationTags(appName)
 

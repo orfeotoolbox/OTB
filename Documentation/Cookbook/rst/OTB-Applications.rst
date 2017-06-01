@@ -1,9 +1,6 @@
 A brief tour of OTB Applications
 ================================
 
-Introduction
-------------
-
 OTB ships with more than 90 ready to use applications for remote sensing tasks.
 They usually expose existing processing functions from the underlying C++
 library, or compose them into high level pipelines. OTB applications allow to:
@@ -30,8 +27,7 @@ entry points. The framework can be extended, but Orfeo Toolbox ships with the fo
    the SWIG/Python interface is available with seamless integration within
    QGIS.
 
-The complete list of applications is described in the :ref:`Application
-Reference Documentation <apprefdoc>`.
+The complete list of applications is described in the :ref:`apprefdoc`.
 
 All standard applications share the same implementation and expose
 automatically generated interfaces.
@@ -40,8 +36,8 @@ Thus, the command-line interface is prefixed by ``otbcli_``, while the Qt interf
 command-line interface of the Convert application, while
 ``otbgui_Convert`` will launch its GUI.
 
-Using the command-line launcher
--------------------------------
+Command-line launcher
+---------------------
 
 The command-line application launcher allows to load an application
 plugin, to set its parameters, and execute it using the command line.
@@ -135,8 +131,8 @@ Parameters are passed to the application using the parameter key (which
 might include one or several ``.`` character), prefixed by a ``-``.
 Command-line examples are provided in chapter [chap:apprefdoc], page .
 
-Using the GUI launcher
-----------------------
+Graphical launcher
+------------------
 
 The graphical interface for the applications provides a useful
 interactive user interface to set the parameters, choose files, and
@@ -181,8 +177,8 @@ The interface of the application is shown here as an example.
 .. figure:: Art/QtImages/rescale_progress.png
 .. figure:: Art/QtImages/rescale_documentation.png
 
-Using the Python interface
---------------------------
+Python interface
+----------------
 
 The applications can also be accessed from Python, through a module
 named ``otbApplication``. However, there are technical requirements to use it.
@@ -261,8 +257,8 @@ application, changing the algorithm at each iteration.
       app.ExecuteAndWriteOutput()
 
 
-Using OTB from QGIS
--------------------
+QGIS interface
+--------------
 
 The processing toolbox
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -289,8 +285,8 @@ existing one, you will need to replace the otbcli, otbgui and library
 files in QGIS installation directly.
 
 
-Load/Save OTB-Applications parameters from/to file
---------------------------------------------------
+Load and save parameters to XML files
+-------------------------------------
 
 Since OTB 3.20, OTB applications parameters can be export/import to/from
 an XML file using inxml/outxml parameters. Those parameters are
@@ -353,7 +349,7 @@ for writing the final result images.
 
 In-memory connection between applications is available both at the C++
 API level and using the  python bindings to the application presented
-in the `Using the Python interface`_ section.
+in the `Python interface`_ section.
 
 Here is a Python code sample connecting several applications together:
 
@@ -459,11 +455,8 @@ Note that this MPI parallel invocation of applications is only
 available for command-line calls to OTB applications, and only for
 images output parameters.
 
-Extended filename for reader and writer
----------------------------------------
-
-Purpose
-^^^^^^^
+Extended filenames for reader and writer
+----------------------------------------
 
 There are multiple ways to define geo-referencing information. For
 instance, one can use a geographic transform, a cartographic projection,
@@ -482,9 +475,6 @@ fact, it depends on the users need. For an orthorectification
 application, the sensor model must be used. In order to specify which
 information should be skipped, a syntax of extended filenames has been
 developed for both reader and writer.
-
-Syntax
-^^^^^^
 
 The reader and writer extended file name support is based on the same
 syntax, only the options are different. To benefit from the extended

@@ -23,7 +23,8 @@ use the otbcli and otbgui launchers, you can initialize a command prompt
 with ``otbenv.bat``.
 
 Python bindings
----------------
+~~~~~~~~~~~~~~~
+
 Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
 currently only Python 2.x is supported. If no compatible python is found, installation
 notify you about it. If everything works fine, you will be given information about
@@ -33,9 +34,10 @@ You must have python numpy bindings installed in your system. you can install it
 without admin rights with "pip install --user numpy". This is to give users to choose
 their own existing python installation rather than distributing one in OTB package
 
-Notes:
-~~~~~~
+Notes
+~~~~~
+
 - You must have "Visual C++ Redistributable for Visual Studio 2015" installed for using this package.
   It can be downloaded freely from `microsoft <https://www.microsoft.com/en-us/download/details.aspx?id=48145>`_
-    
+
 
