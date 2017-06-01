@@ -256,6 +256,113 @@ application, changing the algorithm at each iteration.
       # This will execute the application and save the output file
       app.ExecuteAndWriteOutput()
 
+Numpy array processing
+----------------------
+
+Input and output images to any OTB application in the form of numpy array is now possible in OTB python wrapping.
+The python wrapping only exposes OTB ApplicationEngine module which allow to access existing C++ applications.
+Due to blissful nature of ApplicationEngine's loading mechanism no specific wrapping is required for each application.
+
+Numpy extension to Python wrapping allows data exchange to application as an array rather than a disk file.
+Ofcourse, it is possible to load an image from file and then convert to numpy array or just provide a file as earlier via
+Application.SetParameterString(...).
+
+This bridge that completes numpy and OTB makes it easy to plug OTB into any image processing chain via python code that uses
+GIS/Image processing tools such as GDAL, GRASS GIS, OSSIM that can deal with numpy.
+
+
+Below code reads an input image using python pillow (PIL) and convert it to numpy array. This numpy array is
+used an input to the application via *SetImageFromNumpyArray(...)* method.
+The application used in this example is ExtractROI. After extracting
+a small area the output image is taken as numpy array with *GetImageFromNumpyArray(...)* method thus avoid wiriting
+output to a temporary file.
+
+::
+
+   import sys
+   import os
+   import numpy as np
+   import otbApplication
+   from PIL import Image as PILImage
+
+   pilimage = PILImage.open('poupees.jpg')
+   npimage = np.asarray(pilimage)
+   inshow(pilimage)
+
+   ExtractROI = otbApplication.Registry.CreateApplication('ExtractROI')
+   ExtractROI.SetImageFromNumpyArray('in', npimage)
+   ExtractROI.SetParameterInt('startx', 140)
+   ExtractROI.SetParameterInt('starty', 120)
+   ExtractROI.SetParameterInt('sizex', 150)
+   ExtractROI.SetParameterInt('sizey', 150)
+   ExtractROI.Execute()
+
+   ExtractOutput = ExtractROI.GetImageAsNumpyArray('out')
+   output_pil_image = PILImage.fromarray(np.uint8(ExtractOutput))
+   imshow(output_pil_image)
+
+In-memory connection
+--------------------
+
+Applications are often use as parts of larger processing
+chains. Chaining applications currently requires to write/read back
+images between applications, resulting in heavy I/O operations and a
+significant amount of time dedicated to writing temporary files.
+
+Since OTB 5.8, it is possible to connect an output image parameter
+from one application to the input image parameter of the next
+parameter. This results in the wiring of the internal ITK/OTB
+pipelines together, allowing to perform image streaming between the
+applications. There is therefore no more writing of temporary
+images. The last application of the processing chain is responsible
+for writing the final result images.
+
+In-memory connection between applications is available both at the C++
+API level and using the  python bindings to the application presented
+in the `Python interface`_ section.
+
+Here is a Python code sample connecting several applications together:
+
+.. code-block:: python
+
+                import otbApplication as otb
+
+                app1 = otb.Registry.CreateApplication("Smoothing")
+                app2 = otb.Registry.CreateApplication("Smoothing")
+                app3 = otb.Registry.CreateApplication("Smoothing")
+                app4 = otb.Registry.CreateApplication("ConcatenateImages")
+
+                app1.IN = argv[1]
+                app1.Execute()
+
+                # Connection between app1.out and app2.in
+                app2.SetParameterInputImage("in",app1.GetParameterOutputImage("out"))
+
+                # Execute call is mandatory to wire the pipeline and expose the
+                # application output. It does not write image
+                app2.Execute()
+
+                app3.IN = argv[1]
+
+                # Execute call is mandatory to wire the pipeline and expose the
+                # application output. It does not write image
+                app3.Execute()
+
+                # Connection between app2.out, app3.out and app4.il using images list
+                app4.AddImageToParameterInputImageList("il",app2.GetParameterOutputImage("out"));
+                app4.AddImageToParameterInputImageList("il",app3.GetParameterOutputImage("out"));
+
+                app4.OUT = argv[2]
+
+                # Call to ExecuteAndWriteOutput() both wires the pipeline and
+                # actually writes the output, only necessary for last application of
+                # the chain.
+                app4.ExecuteAndWriteOutput()
+
+**Note:** Streaming will only work properly if the application internal
+implementation does not break it, for instance by using an internal
+writer to write intermediate data. In this case, execution should
+still be correct, but some intermediate data will be read or written.
 
 QGIS interface
 --------------
@@ -285,8 +392,8 @@ existing one, you will need to replace the otbcli, otbgui and library
 files in QGIS installation directly.
 
 
-Load and save parameters to XML files
--------------------------------------
+Load and save parameters to XML
+-------------------------------
 
 Since OTB 3.20, OTB applications parameters can be export/import to/from
 an XML file using inxml/outxml parameters. Those parameters are
@@ -331,69 +438,6 @@ the application name. Use in this case:
 It will retrieve the application name and related parameters from the
 input XML file and launch in this case the BandMath applications.
 
-In-memory connection between applications
------------------------------------------
-
-Applications are often use as parts of larger processing
-chains. Chaining applications currently requires to write/read back
-images between applications, resulting in heavy I/O operations and a
-significant amount of time dedicated to writing temporary files.
-
-Since OTB 5.8, it is possible to connect an output image parameter
-from one application to the input image parameter of the next
-parameter. This results in the wiring of the internal ITK/OTB
-pipelines together, allowing to perform image streaming between the
-applications. There is therefore no more writing of temporary
-images. The last application of the processing chain is responsible
-for writing the final result images.
-
-In-memory connection between applications is available both at the C++
-API level and using the  python bindings to the application presented
-in the `Python interface`_ section.
-
-Here is a Python code sample connecting several applications together:
-
-.. code-block:: python
-   
-                import otbApplication as otb
-                
-                app1 = otb.Registry.CreateApplication("Smoothing")
-                app2 = otb.Registry.CreateApplication("Smoothing")
-                app3 = otb.Registry.CreateApplication("Smoothing")
-                app4 = otb.Registry.CreateApplication("ConcatenateImages")
-   
-                app1.IN = argv[1]
-                app1.Execute()
-
-                # Connection between app1.out and app2.in
-                app2.SetParameterInputImage("in",app1.GetParameterOutputImage("out"))
-
-                # Execute call is mandatory to wire the pipeline and expose the
-                # application output. It does not write image
-                app2.Execute()
-   
-                app3.IN = argv[1]
-
-                # Execute call is mandatory to wire the pipeline and expose the
-                # application output. It does not write image
-                app3.Execute()
-
-                # Connection between app2.out, app3.out and app4.il using images list
-                app4.AddImageToParameterInputImageList("il",app2.GetParameterOutputImage("out"));
-                app4.AddImageToParameterInputImageList("il",app3.GetParameterOutputImage("out"));
-
-                app4.OUT = argv[2]
-
-                # Call to ExecuteAndWriteOutput() both wires the pipeline and
-                # actually writes the output, only necessary for last application of
-                # the chain.
-                app4.ExecuteAndWriteOutput()
-
-**Note:** Streaming will only work properly if the application internal
-implementation does not break it, for instance by using an internal
-writer to write intermediate data. In this case, execution should
-still be correct, but some intermediate data will be read or written.
-                
 Parallel execution with MPI
 ---------------------------
 
@@ -404,16 +448,16 @@ command-line activates this behaviour, with the following logic. MPI
 writing is only triggered if:
 
 - OTB is built with MPI and SPTW,
-  
+
 - The number of MPI processes is greater than 1,
-    
+
 - The output filename is ``.tif`` or ``.vrt``
 
-  
+
 In this case, the output image will be divided into several tiles
 according to the number of MPI processes specified to the ``mpirun``
 command, and all tiles will be computed in parallel.
-  
+
 If the output filename extension is ``.tif``, tiles will be written in
 parallel to a single Tiff file using SPTW (Simple Parallel Tiff Writer).
 
@@ -429,7 +473,7 @@ Here is an example of MPI call on a cluster::
     -inp $ROOT/IMG_PHR1A_P_001/IMG_PHR1A_P_201605260427149_ORT_1792732101-001_R1C1.JP2 \
     -inxs $ROOT/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201605260427149_ORT_1792732101-002_R1C1.JP2 \
     -out $ROOT/pxs.tif uint16 -ram 1024
-    
+
     ------------ JOB INFO 1043196.tu-adm01 -------------
 
     JOBID           : 1043196.tu-adm01
@@ -444,7 +488,7 @@ Here is an example of MPI call on a cluster::
     QUEUE           : t72h
     ACCOUNT         : null
     JOB EXIT CODE   : 0
-    
+
   ------------ END JOB INFO 1043196.tu-adm01 ---------
 
 One can see that the registration and pan-sharpening of the
@@ -455,8 +499,8 @@ Note that this MPI parallel invocation of applications is only
 available for command-line calls to OTB applications, and only for
 images output parameters.
 
-Extended filenames for reader and writer
-----------------------------------------
+Extended filenames
+------------------
 
 There are multiple ways to define geo-referencing information. For
 instance, one can use a geographic transform, a cartographic projection,
