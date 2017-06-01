@@ -12,17 +12,17 @@ the same direcrtory along with OTB-|release|-Darwin64.run
 
 Contents of OTB-|release|-Darwin64 is briefly listed below:
 
--  ``Monteverdi.app`` : A Mac OSX .app for Monteverdi
+-  ``Monteverdi.app``: A Mac OSX .app for Monteverdi
 
--  ``Mapla.app`` : A Mac OSX .app for Mapla.
+-  ``Mapla.app``: A Mac OSX .app for Mapla.
 
--  ``bin`` : A folder containing application launchers (otbcli.sh,
+-  ``bin``: A folder containing application launchers (otbcli.sh,
    otbgui.sh), monteverdi and mapla binaries.
 
--  ``lib`` : A folder containing all shared libraries and OTB
+-  ``lib``: A folder containing all shared libraries and OTB
    applications.
 
--  ``share`` : A folder containing common resources and copyright
+-  ``share``: A folder containing common resources and copyright
    mentions.
 
 Python bindings

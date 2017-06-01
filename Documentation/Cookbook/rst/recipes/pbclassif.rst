@@ -132,7 +132,7 @@ also provide a raster mask, that will be used to discard pixel
 positions, using parameter ``-mask``.
 
 A simple use of the application ``PolygonClassStatistics`` could be as
-follows :
+follows:
 
 ::
 
@@ -313,7 +313,7 @@ image.
 
 * **Strategy = all**
   
-  - Same behavior for all modes proportional, equal, custom : take all samples
+  - Same behavior for all modes proportional, equal, custom: take all samples
   
 * **Strategy = constant** (let's call :math:`M` the global number of samples per
   class required)
@@ -493,7 +493,7 @@ gray level label image. It allows to get an RGB classification map by
 re-mapping the image values to be suitable for display purposes. One can
 use the *ColorMapping* application. This tool will replace each label
 with an 8-bits RGB color specified in a mapping file. The mapping file
-should look like this :
+should look like this:
 
 ::
 
@@ -502,7 +502,7 @@ should look like this :
 
 In the previous example, 1 is the label and 255 0 0 is a RGB color (this
 one will be rendered as red). To use the mapping tool, enter the
-following :
+following:
 
 ::
 
@@ -511,7 +511,7 @@ following :
                         -method.custom.lut lut_mapping_file.txt
                         -out               RGB_color_image.tif
 
-Other look-up tables (LUT) are available : standard continuous LUT,
+Other look-up tables (LUT) are available: standard continuous LUT,
 optimal LUT, and LUT computed over a support image.
 
 Example
@@ -739,7 +739,7 @@ the regularization. Therefore, those NoData input pixels are invariant
 and keep their NoData label in the output regularized image.
 
 The *ClassificationMapRegularization* application has the following
-input parameters :
+input parameters:
 
 -  ``-io.in`` labeled input image resulting from a previous
    classification process
@@ -808,7 +808,7 @@ Regression
 ----------
 
 The machine learning models in OpenCV and LibSVM also support a
-regression mode : they can be used to predict a numeric value (i.e. not
+regression mode: they can be used to predict a numeric value (i.e. not
 a class index) from an input predictor. The workflow is the same as
 classification. First, the regression model is trained, then it can be
 used to predict output values. The applications to do that are and .
@@ -826,18 +826,18 @@ used to predict output values. The applications to do that are and .
 	 
 Figure 6: From left to right: Original image, fancy colored classified image and regularized classification map with radius equal to 3 pixels. 
 
-The input data set for training must have the following structure :
+The input data set for training must have the following structure:
 
 -  *n* components for the input predictors
 
 -  one component for the corresponding output value
 
-The application supports 2 input formats :
+The application supports 2 input formats:
 
--  An image list : each image should have components matching the
+-  An image list: each image should have components matching the
    structure detailed earlier (*n* feature components + 1 output value)
 
--  A CSV file : the first *n* columns are the feature components and the
+-  A CSV file: the first *n* columns are the feature components and the
    last one is the output value
 
 If you have separate images for predictors and output values, you can
@@ -853,12 +853,12 @@ Statistics estimation
 
 As in classification, a statistics estimation step can be performed
 before training. It allows to normalize the dynamic of the input
-predictors to a standard one : zero mean, unit standard deviation. The
+predictors to a standard one: zero mean, unit standard deviation. The
 main difference with the classification case is that with regression,
 the dynamic of output values can also be reduced.
 
 The statistics file format is identical to the output file from
-application, for instance :
+application, for instance:
 
 ::
 
@@ -879,14 +879,14 @@ application, for instance :
     </FeatureStatistics>
 
 In the application, normalization of input predictors and output values
-is optional. There are 3 options :
+is optional. There are 3 options:
 
--  No statistic file : normalization disabled
+-  No statistic file: normalization disabled
 
--  Statistic file with *n* components : normalization enabled for input
+-  Statistic file with *n* components: normalization enabled for input
    predictors only
 
--  Statistic file with *n+1* components : normalization enabled for
+-  Statistic file with *n+1* components: normalization enabled for
    input predictors and output values
 
 If you use an image list as training set, you can run application. It
@@ -950,13 +950,13 @@ Once the model is trained, it can be used in application to perform the
 prediction on an entire image containing input predictors (i.e. an image
 with only *n* feature components). If the model was trained with
 normalization, the same statistic file must be used for prediction. The
-behavior of with respect to statistic file is identical to :
+behavior of with respect to statistic file is identical to:
 
--  no statistic file : normalization off
+-  no statistic file: normalization off
 
--  *n* components : input only
+-  *n* components: input only
 
--  *n+1* components : input and output
+-  *n+1* components: input and output
 
 The model to use is read from file (the one produced during training).
 

@@ -47,7 +47,7 @@ results in the following help to be displayed:
 ::
 
     $ otbApplicationLauncherCommandLine
-    Usage : ./otbApplicationLauncherCommandLine module_name [MODULEPATH] [arguments]
+    Usage: ./otbApplicationLauncherCommandLine module_name [MODULEPATH] [arguments]
 
 The ``module_name`` parameter corresponds to the application name. The
 ``[MODULEPATH]`` argument is optional and allows to pass to the launcher
@@ -148,7 +148,7 @@ This launcher needs the same two arguments as the command line launcher
 The application paths can be set with the ``OTB_APPLICATION_PATH``
 environment variable, as for the command line launcher. Also, as for the
 command-line application, a more simple script is generated and
-installed by OTB to ease the configuration of the module path : to
+installed by OTB to ease the configuration of the module path: to
 launch the graphical user interface, one will start the
 ``otbgui_Rescale`` script.
 
@@ -229,7 +229,7 @@ application, changing the algorithm at each iteration.
     import otbApplication
 
     # otbApplication.Registry can tell you what application are available
-    print "Available applications : "
+    print "Available applications: "
     print str( otbApplication.Registry.GetAvailableApplications() )
 
     # Let's create the application with codename "Smoothing"
@@ -242,7 +242,7 @@ application, changing the algorithm at each iteration.
     app.SetParameterString("in", argv[1])
 
     # The smoothing algorithm can be set with the "type" parameter key
-    # and can take 3 values : 'mean', 'gaussian', 'anidif'
+    # and can take 3 values: 'mean', 'gaussian', 'anidif'
     for type in ['mean', 'gaussian', 'anidif']:
 
       print 'Running with ' + type + ' smoothing type'
@@ -505,7 +505,7 @@ Extended filenames
 There are multiple ways to define geo-referencing information. For
 instance, one can use a geographic transform, a cartographic projection,
 or a sensor model with RPC coefficients. A single image may contain
-several of these elements, such as in the “ortho-ready” products : this
+several of these elements, such as in the “ortho-ready” products: this
 is a type of product still in sensor geometry (the sensor model is
 supplied with the image) but it also contains an approximative
 geographic transform that can be used to have a quick estimate of the
@@ -513,7 +513,7 @@ image localisation. For instance, your product may contain a “.TIF” file
 for the image, along with a “.RPB” file that contains the sensor model
 coefficients and an “.IMD” file that contains a cartographic projection.
 
-This case leads to the following question : which geo-referencing
+This case leads to the following question: which geo-referencing
 element should be used when opening this image in OTB. In
 fact, it depends on the users need. For an orthorectification
 application, the sensor model must be used. In order to specify which
@@ -680,14 +680,14 @@ Writer options
 
 -  Available values are:
 
-   -  auto : tiled or stripped streaming mode chosen automatically
+   -  auto: tiled or stripped streaming mode chosen automatically
       depending on TileHint read from input files
 
-   -  tiled : tiled streaming mode
+   -  tiled: tiled streaming mode
 
-   -  stripped : stripped streaming mode
+   -  stripped: stripped streaming mode
 
-   -  none : explicitly deactivate streaming
+   -  none: explicitly deactivate streaming
 
 -  Not set by default
 
@@ -701,12 +701,12 @@ Writer options
 
 -  Available values are:
 
-   -  auto : size is estimated from the available memory setting by
+   -  auto: size is estimated from the available memory setting by
       evaluating pipeline memory print
 
-   -  height : size is set by setting height of strips or tiles
+   -  height: size is set by setting height of strips or tiles
 
-   -  nbsplits : size is computed from a given number of splits
+   -  nbsplits: size is computed from a given number of splits
 
 -  Default is auto
 
@@ -720,11 +720,11 @@ Writer options
 
 -  Value is :
 
-   -  if sizemode=auto : available memory in Mb
+   -  if sizemode=auto: available memory in Mb
 
-   -  if sizemode=height : height of the strip or tile in pixels
+   -  if sizemode=height: height of the strip or tile in pixels
 
-   -  if sizemode=nbsplits : number of requested splits for streaming
+   -  if sizemode=nbsplits: number of requested splits for streaming
 
 -  If not provided, the default value is set to 0 and result in
    different behaviour depending on sizemode (if set to height or

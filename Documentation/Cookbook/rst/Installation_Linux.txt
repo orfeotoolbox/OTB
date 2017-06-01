@@ -4,7 +4,7 @@ Download it from `OTB's download page
 <https://www.orfeo-toolbox.org/download>`__.
 
 This package is a self-extractible archive. You may uncompress it with a
-double-click on the file, or with the command line :
+double-click on the file, or with the command line:
 
 .. parsed-literal::
 
@@ -20,27 +20,27 @@ Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
 archive is extracted, the directory structure is made of:
 
--  ``monteverdi.sh`` : A launcher script for Monteverdi
+-  ``monteverdi.sh``: A launcher script for Monteverdi
 
--  ``mapla.sh`` : A launcher script for Mapla
+-  ``mapla.sh``: A launcher script for Mapla
 
--  ``otbenv.profile`` : A script to initialize the environment for OTB
+-  ``otbenv.profile``: A script to initialize the environment for OTB
    executables
 
--  ``bin`` : A folder containing application launchers (otbcli.sh,
+-  ``bin``: A folder containing application launchers (otbcli.sh,
    otbgui.sh), Monteverdi and Mapla.
 
--  ``lib`` : A folder containing all shared libraries and OTB
+-  ``lib``: A folder containing all shared libraries and OTB
    applications.
 
--  ``share`` : A folder containing common resources and copyright
+-  ``share``: A folder containing common resources and copyright
    mentions.
 
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
 distributions. There is a small caveat for "expat" though. The binaries depend
 on "libexpat.so", which can be supplied by most package managers (apt, yum, ...).
-If not already present, look for one of the following packages :
+If not already present, look for one of the following packages:
 
 ::
 
@@ -48,7 +48,7 @@ If not already present, look for one of the following packages :
 
 The graphical executable (otbgui launchers, Monteverdi
 and Mapla) use the X11 libraries, which are widely used in a lot of
-distributions :
+distributions:
 
 ::
 

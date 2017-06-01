@@ -6,17 +6,17 @@ Pick the correct version (32 bit or 64 bit) depending on your system.
 Extract the archive and use one of the launchers, they contain all applications
 and their launchers (both command line and graphical launchers are provided):
 
--  ``monteverdi.bat`` : A launcher script for Monteverdi
+-  ``monteverdi.bat``: A launcher script for Monteverdi
 
--  ``mapla.bat`` : A launcher script for Mapla
+-  ``mapla.bat``: A launcher script for Mapla
 
--  ``otbenv.bat`` : A script to initialize the environment for OTB
+-  ``otbenv.bat``: A script to initialize the environment for OTB
    executables
 
--  ``bin`` : A folder containing application launchers (otbcli.bat,
+-  ``bin``: A folder containing application launchers (otbcli.bat,
    otbgui.bat) and the DLLs.
 
--  ``lib`` : A folder containing application DLLs.
+-  ``lib``: A folder containing application DLLs.
 
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize a command prompt

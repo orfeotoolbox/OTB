@@ -11,9 +11,9 @@ The application SarRadiometricCalibration can deal with the calibration
 of data from four radar sensors: RadarSat2, Sentinel1, COSMO-SkyMed and
 TerraSAR-X.
 
-Examples :
+Examples:
 
-If SARimg.tif is a TerraSAR-X or a COSMO-SkyMed image :
+If SARimg.tif is a TerraSAR-X or a COSMO-SkyMed image:
 
 ::
 
@@ -22,7 +22,7 @@ If SARimg.tif is a TerraSAR-X or a COSMO-SkyMed image :
 
 If SARimg.tif is a RadarSat2 or a Sentinel1 image, it ’s possible to
 specify the look-up table (automatically found in the metadata provided
-with such image) :
+with such image):
 
 ::
 
@@ -31,7 +31,7 @@ with such image) :
                                  -out SARimg-calibrated.tif 
 
 For TerraSAR-X (and soon for RadarSat2 and Sentinel1), it is also
-possible to use a noise LUT to derive calibrated noise profiles :
+possible to use a noise LUT to derive calibrated noise profiles:
 
 ::
 
@@ -50,7 +50,7 @@ Frost, Lee, Gamma-MAP and Kuan.
 Figure ([ffig:S1VVdespeckledextract] shows an extract of a SLC Sentinel1
 image, band VV, taken over Cape Verde and the result of the Gamma
 filter. The following commands were used to produce the despeckled
-extract :
+extract:
 
 First, the original image is converted into an intensity one (real part
 corresponds to band 1, and imaginary part to band 2):
@@ -61,7 +61,7 @@ corresponds to band 1, and imaginary part to band 2):
                     -exp im1b1^2+im1b2^2 
                     -out S1-VV-extract-int.tif 
 
-Then the intensity image is despeckled with the Gamma-MAP filter :
+Then the intensity image is despeckled with the Gamma-MAP filter:
 
 ::
 
@@ -107,11 +107,11 @@ where each band is related to their elements. As most of the time SAR
 polarimetry handles symmetric matrices, only the relevant elements are
 stored, so that the images representing them have a minimal number of
 bands. For instance, the coherency matrix size is 3x3 in the monostatic
-case, and 4x4 in the bistatic case : it will thus be stored in a 6-band
+case, and 4x4 in the bistatic case: it will thus be stored in a 6-band
 or a 10-band complex image (the diagonal and the upper elements of the
 matrix).
 
-The Sinclair matrix is a special case : it is always represented as 3 or
+The Sinclair matrix is a special case: it is always represented as 3 or
 4 one-band complex images (for mono- or bistatic case).
 
 There are 13 available conversions, each one being related to the
@@ -414,7 +414,7 @@ For each option parameter, the list below gives the formula used.
 
    #. :math:`Im( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} )`
 
-   With :
+   With:
 
    -  :math:`T_{xx} = -S_{hh}`
 
@@ -434,7 +434,7 @@ For each option parameter, the list below gives the formula used.
 
    #. :math:`DegP_{max}`
 
-Examples :
+Examples:
 
 #. ::
 
@@ -541,9 +541,9 @@ available; it is implemented for the monostatic case (transmitter and
 receiver are co-located). User must provide three one-band complex
 images HH, HV or VH, and VV (HV = VH in monostatic case). The H-alpha-A
 decomposition consists in averaging 3x3 complex coherency matrices
-(incoherent analysis) : The user must provide the size of the averaging
+(incoherent analysis): The user must provide the size of the averaging
 window, thanks to the parameter inco.kernelsize. The applications
-returns a float vector image, made of three channels : H(entropy),
+returns a float vector image, made of three channels: H(entropy),
 Alpha, A(Anisotropy).
 
 Here are the formula used (refer to the previous section about how the
@@ -561,7 +561,7 @@ Where:
 
 -  :math:`\alpha_{i} = \left| SortedEigenVector[i] \right|* \frac{180}{\pi}`
 
-Example :
+Example:
 
 We first extract a ROI from the original image (not required). Here
 imagery\_HH.tif represents the element HH of the Sinclair matrix (and so
@@ -595,9 +595,9 @@ Next we apply the H-alpha-A decomposition:
                  -decomp haa -inco.kernelsize 5 
                              -out haa_extract.tif 
 
-The result has three bands : entropy (0..1) - alpha (0..90) - anisotropy
+The result has three bands: entropy (0..1) - alpha (0..90) - anisotropy
 (0..1). It is split into 3 mono-band images thanks to following
-command :
+command:
 
 ::
 
@@ -651,16 +651,16 @@ antenna and the receiving antenna respectively. Orientations and
 ellipticity are given in degrees, and are between -90/90 degrees and
 -45/45 degrees respectively.
 
-Four polarization architectures can be processed :
+Four polarization architectures can be processed:
 
-#. HH\_HV\_VH\_VV : full polarization, general bistatic case.
+#. HH\_HV\_VH\_VV: full polarization, general bistatic case.
 
-#. HH\_HV\_VV or HH\_VH\_VV : full polarization, monostatic case
+#. HH\_HV\_VV or HH\_VH\_VV: full polarization, monostatic case
    (transmitter and receiver are co-located).
 
-#. HH\_HV : dual polarization.
+#. HH\_HV: dual polarization.
 
-#. VH\_VV : dual polarization.
+#. VH\_VV: dual polarization.
 
 The application takes a complex vector image as input, where each band
 correspond to a particular emission/reception polarization scheme. User
@@ -680,10 +680,10 @@ the number of bands of the input image.
 #. Finally, the two last architectures (dual-polarization), can’t be
    distinguished only by the number of bands of the input image. User
    must then use the parameters emissionh and emissionv to indicate the
-   architecture of the system : emissionh=1 and emissionv=0 for HH\_HV,
+   architecture of the system: emissionh=1 and emissionv=0 for HH\_HV,
    emissionh=0 and emissionv=1 for VH\_VV.
 
-Note : if the architecture is HH\_HV, khii and psii are automatically
+Note: if the architecture is HH\_HV, khii and psii are automatically
 set to 0/0 degrees; if the architecture is VH\_VV, khii and psii are
 automatically set to 0/90 degrees.
 
@@ -695,7 +695,7 @@ and psir will be forced to psii + 90 degrees and -khii.
 Finally, the result of the polarimetric synthesis is expressed in the
 power domain, through a one-band scalar image.
 
-The final formula is thus : :math:`P=\mid B^T.[S].A\mid^2` , where A ans
+The final formula is thus: :math:`P=\mid B^T.[S].A\mid^2` , where A ans
 B are two Jones vectors and S is a Sinclair matrix.
 
 The two figures below ([fig:polsynthll] and [fig:polsynthlr]) show the
@@ -704,7 +704,7 @@ polarization and R for right polarization), from a Radarsat-2 image
 taken over Vancouver, Canada. Once the four two-band images imagery\_HH
 imagery\_HV imagery\_VH imagery\_VV were merged into a single four
 complex band image imageryC\_HH\_HV\_VH\_VV.tif, the following commands
-were used to produce the LL and LR images :
+were used to produce the LL and LR images:
 
 ::
 
@@ -799,7 +799,7 @@ Then, we rescale the produced images to intensities ranging from 0 to
        otbcli_Rescale -in VV.tif -out VV_res.png uint8 
 
 Figures below ([fig:hhfrisco] , [fig:hvfrisco] and [fig:vvfrisco]) show
-the images obtained :
+the images obtained:
 
 .. figure:: ../Art/SARImages/RSAT2_HH_Frisco.png
 
@@ -809,7 +809,7 @@ the images obtained :
 
 Now the most interesting step. In order to get a friendly coloration of
 these data, we are going to use the Pauli decomposition, defined as
-follows :
+follows:
 
 -  :math:`a=\frac{|S_{HH}-S_{VV}|}{\sqrt{2}}`
 
@@ -842,7 +842,7 @@ We use the BandMath application again:
 
 Note that sqrt(2) factors have been omitted purposely, since their
 effects will be canceled by the rescaling step. Then, we rescale the
-produced images to intensities ranging from 0 to 255 :
+produced images to intensities ranging from 0 to 255:
 
 -  ::
 
