@@ -5,7 +5,7 @@ CURRENT_DIR=$(cd -P -- "$(dirname -- "$BASH_SOURCE")" && printf '%s\n' "$(pwd -P
 unset LD_LIBRARY_PATH
 
 PATH=$CURRENT_DIR/bin:$PATH
-GDAL_DATA=$CURRENT_DIR/share/gdal
+GDAL_DATA=$CURRENT_DIR/share/data
 GEOTIFF_CSV=$CURRENT_DIR/share/epsg_csv
 
 export PATH
