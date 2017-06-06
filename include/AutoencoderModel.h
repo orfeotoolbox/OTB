@@ -40,6 +40,12 @@ public:
 	itkGetMacro(Noise,double);
 	itkSetMacro(Noise,double);
 
+	itkGetMacro(rho,double);
+	itkSetMacro(rho,double);
+
+	itkGetMacro(beta,double);
+	itkSetMacro(beta,double);
+
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
 
@@ -67,6 +73,8 @@ private:
 	unsigned int m_NumberOfIterations;
 	double m_Regularization;  // L2 Regularization parameter
 	double m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
+	double m_rho; // Sparsity parameter
+	double m_beta; // Sparsity regularization parameter
 };
 } // end namespace otb
 

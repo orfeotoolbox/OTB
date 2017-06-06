@@ -54,6 +54,7 @@ using SOM4DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 4>  ;
 template <class TInputValue, class TTargetValue>
 using SOM5DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 5>  ;
 
+
 template <class TInputValue, class TOutputValue>
 typename DimensionalityReductionModel<TInputValue,TOutputValue>::Pointer
 DimensionalityReductionModelFactory<TInputValue,TOutputValue>

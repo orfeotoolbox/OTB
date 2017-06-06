@@ -9,6 +9,8 @@
 
 //include train function
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
+#include <shark/ObjectiveFunctions/SparseAutoencoderError.h>//the error function performing the regularisation of the hidden neurons
+
 #include <shark/Algorithms/GradientDescent/Rprop.h>// the RProp optimization algorithm
 #include <shark/ObjectiveFunctions/Loss/SquaredLoss.h> // squared loss used for regression
 #include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
@@ -62,6 +64,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(unsigned int n
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
 	shark::ErrorFunction error(trainSet, &model, &loss);
+	//shark::SparseAutoencoderError error(data,&model, &loss, m_rho, m_beta);
 	shark::TwoNormRegularizer regularizer(error.numberOfVariables());
 	error.setRegularizer(m_Regularization,&regularizer);
 

@@ -111,7 +111,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->SetNumberOfHiddenNeurons(nb_neuron);
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
 		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.regularization"));
-		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.noise"));
+		dimredTrainer->SetNoise(GetParameterFloat("model.autoencoder.noise"));
 		dimredTrainer->SetInputListSample(trainingListSample);
 		std::cout << "before train" << std::endl;
 		dimredTrainer->Train();

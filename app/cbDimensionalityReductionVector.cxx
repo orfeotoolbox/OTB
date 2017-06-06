@@ -35,10 +35,11 @@ namespace Wrapper
 {
 	
 /** Utility function to negate std::isalnum */
-/*bool IsNotAlphaNum(char c)
+bool IsNotAlphaNum(char c)
 {
 return !std::isalnum(c);
-}*/
+}
+
 class CbDimensionalityReductionVector : public Application
 {
 	public:
@@ -97,8 +98,8 @@ class CbDimensionalityReductionVector : public Application
 		AddParameter(ParameterType_ListView, "feat", "Field names to be calculated."); //
 		SetParameterDescription("feat","List of field names in the input vector data used as features for training."); //
 		
-		AddParameter(ParameterType_ListView, "feat_out", "Field names to be calculated."); //
-		SetParameterDescription("feat_out","List of field names in the input vector data used as features for training."); //
+		AddParameter(ParameterType_StringList, "featout", "Field names to be calculated."); //
+		SetParameterDescription("featout","List of field names in the input vector data used as features for training."); //
 		
 		AddParameter(ParameterType_OutputFilename, "out", "Output vector data file containing the reduced vector");
 		SetParameterDescription("out","Output vector data file storing sample values (OGR format)."
@@ -111,40 +112,46 @@ class CbDimensionalityReductionVector : public Application
 		SetDocExampleParameterValue("model", "model.txt");
 		SetDocExampleParameterValue("out", "vectorDataOut.shp");
 		SetDocExampleParameterValue("feat", "perimeter area width");
-		SetDocExampleParameterValue("feat_out", "perimeter area width");
+		SetDocExampleParameterValue("featout", "perimeter area width");
 		//SetOfficialDocLink(); 
 		}
 		
 		void DoUpdateParameters() ITK_OVERRIDE
 		{
-		/** I don't know what this does */
-		/*
-		if ( HasValue("in") )
-		{
-		std::string shapefile = GetParameterString("in");
-		otb::ogr::DataSource::Pointer ogrDS;
-		OGRSpatialReference oSRS("");
-		std::vector<std::string> options;
-		ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-		otb::ogr::Layer layer = ogrDS->GetLayer(0);
-		OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
-		ClearChoices("feat");
-		
-		for(int iField=0; iField< layerDefn.GetFieldCount(); iField++)
-		{
-		std::string item = layerDefn.GetFieldDefn(iField)->GetNameRef();
-		std::string key(item);
-		key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
-		std::transform(key.begin(), key.end(), key.begin(), tolower);
-		OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
-		
-		if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
-		{
-		std::string tmpKey="feat."+key;
-		AddChoice(tmpKey,item);
-		}
-		}
-		}*/
+			
+			if ( HasValue("in") )
+			{
+				std::string shapefile = GetParameterString("in");
+				otb::ogr::DataSource::Pointer ogrDS;
+				OGRSpatialReference oSRS("");
+				std::vector<std::string> options;
+				ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
+				otb::ogr::Layer layer = ogrDS->GetLayer(0);
+				OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
+				ClearChoices("feat");
+				//ClearChoices("featout");
+				
+				for(int iField=0; iField< layerDefn.GetFieldCount(); iField++)
+				{
+					std::string item = layerDefn.GetFieldDefn(iField)->GetNameRef();
+					std::string key(item);
+					key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
+					std::transform(key.begin(), key.end(), key.begin(), tolower);
+					OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
+					
+					if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
+					{
+						std::string tmpKey="feat."+key;
+						AddChoice(tmpKey,item);
+					}
+					/*
+					if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
+					{
+						std::string tmpKey="featout."+key;
+						AddChoice(tmpKey,item);
+					}*/
+				}
+			}
 		}
 		
 		void DoExecute() ITK_OVERRIDE
@@ -222,25 +229,30 @@ class CbDimensionalityReductionVector : public Application
 			
 			/** Create/Update Output Shape file */
 			
+			std::cout << GetParameterStringList("featout").size() << std::endl;
+			
 			ogr::DataSource::Pointer output;
 			ogr::DataSource::Pointer buffer = ogr::DataSource::New();
 			bool updateMode = false;
+			
+			
 			if (IsParameterEnabled("out") && HasValue("out"))
 			{
 				// Create new OGRDataSource
 				output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
-				otb::ogr::Layer newLayer = output->CreateLayer(
-				GetParameterString("out"),
-				const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
-				layer.GetGeomType());
+				otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"),
+				 const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
+				 layer.GetGeomType());
 				// Copy existing fields
 				OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
-				for (int k=0 ; k<inLayerDefn.GetFieldCount() ; k++)
+				for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbFeatures ; k++) // we don't copy the original bands 
 				{
 				OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
 				newLayer.CreateField(fieldDefn);
 				}
 			}
+			
+			/*
 			else
 			{
 				// Update mode
@@ -253,11 +265,13 @@ class CbDimensionalityReductionVector : public Application
 				source->Clear();
 				// Re-open input data source in update mode
 				output = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-			}
+			}*/
+			
+			
 			
 			otb::ogr::Layer outLayer = output->GetLayer(0);
 			OGRErr errStart = outLayer.ogr().StartTransaction();
-			
+			/*
 			if (errStart != OGRERR_NONE)
 			{
 				itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
@@ -266,16 +280,16 @@ class CbDimensionalityReductionVector : public Application
 			// Add the field of prediction in the output layer if field not exist
 			
 			OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
-			int idx = layerDefn.GetFieldIndex(GetParameterString("feat_out").c_str());
+			int idx = layerDefn.GetFieldIndex(GetParameterStringList("featout").c_str());
 			
 			if (idx >= 0)
 			{
 				if (layerDefn.GetFieldDefn(idx)->GetType() != OFTInteger)
-				itkExceptionMacro("Field name "<< GetParameterString("feat_out") << " already exists with a different type!");
+				itkExceptionMacro("Field name "<< GetParameterStringList("featout") << " already exists with a different type!");
 			}
 			else
 			{
-				OGRFieldDefn predictedField(GetParameterString("feat_out").c_str(), OFTInteger);
+				OGRFieldDefn predictedField(GetParameterStringList("featout").c_str(), OFTInteger);
 				ogr::FieldDefn predictedFieldDef(predictedField);
 				outLayer.CreateField(predictedFieldDef);
 			}
@@ -283,7 +297,7 @@ class CbDimensionalityReductionVector : public Application
 			// Fill output layer
 			
 			unsigned int count=0;
-			std::string classfieldname = GetParameterString("feat_out");
+			std::string classfieldname = GetParameterStringList("featout");
 			it = layer.cbegin();
 			itEnd = layer.cend();
 			for( ; it!=itEnd ; ++it, ++count)
@@ -312,7 +326,7 @@ class CbDimensionalityReductionVector : public Application
 			}
 			output->SyncToDisk();
 			clock_t toc = clock();
-			otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
+			otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");*/
 		}
 		
 		ModelPointerType m_Model;
