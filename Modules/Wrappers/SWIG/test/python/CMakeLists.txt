@@ -102,12 +102,11 @@ add_test( NAME pyTvBandMathInXML
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
   PythonInXMLTest
-  ${INPUTDATA}/pyTvBandMathInXML.xml
-  ${OTB_DATA_ROOT}/Input/verySmallFSATSW_r.tif
-  ${OTB_DATA_ROOT}/Input/verySmallFSATSW_nir.tif
-  ${OTB_DATA_ROOT}/Input/verySmallFSATSW.tif
+  ${TEMP}/pyTvBandMathOutXML.xml
   ${TEMP}/pyTvBandMathInXML.tif
   )
+
+set_tests_properties(pyTvBandMathInXML PROPERTIES DEPENDS pyTvBandMathOutXML)
 
 add_test( NAME pyTvNumpyIO
   COMMAND ${TEST_DRIVER} Execute

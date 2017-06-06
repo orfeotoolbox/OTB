@@ -649,35 +649,13 @@ if(OTB_USE_LIBSVM)
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
     APP  TrainImagesClassifier
     OPTIONS
-    -inxml ${INPUTDATA}/clsvmModelQB1_OutXML.xml
-    -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
-    -sample.mv 100
-    -sample.mt 100
-    -sample.vtr 0.5
-    -sample.vfn Class
-    -classifier.libsvm.opt true
-    -rand 121212
+    -inxml ${TEMP}/clsvmModelQB1_allOpt.xml
     -io.out ${TEMP}/clsvmModelQB1_allOpt_InXML.svm
     VALID   ${ascii_comparison}
     ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
     ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
 
-  otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
-    APP  TrainImagesClassifier
-    OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
-    -sample.vfn Class
-    -classifier libsvm
-    -classifier.libsvm.opt true
-    -io.out ${TEMP}/clsvmModelQB1_OutXML.svm
-    -rand 121212
-    -outxml ${TEMP}/clsvmModelQB1_OutXML.xml
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1_OutXML.svm)
+  set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1_allOpt)
 
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB123
     APP  TrainImagesClassifier
@@ -745,6 +723,7 @@ if(OTB_USE_LIBSVM)
     -classifier.libsvm.opt true
     -rand 121212
     -io.out ${TEMP}/clsvmModelQB1_allOpt.svm
+    -outxml ${TEMP}/clsvmModelQB1_allOpt.xml
     VALID   ${ascii_comparison}
     ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
     ${TEMP}/clsvmModelQB1_allOpt.svm)
