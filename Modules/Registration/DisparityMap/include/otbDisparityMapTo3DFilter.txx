@@ -106,7 +106,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -119,7 +119,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -132,7 +132,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -145,7 +145,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<4)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -158,7 +158,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   if(this->GetNumberOfInputs()<5)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(4));
 }

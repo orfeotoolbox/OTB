@@ -41,11 +41,11 @@ namespace ossimplugins
 
    PlatformPosition::PlatformPosition():
       _nbrData(0),
-      _data(NULL),
-      _t(NULL),
-      _p(NULL),
-      _dp(NULL),
-      _interpolator(NULL)
+      _data(nullptr),
+      _t(nullptr),
+      _p(nullptr),
+      _dp(nullptr),
+      _interpolator(nullptr)
    {
    }
 
@@ -56,7 +56,7 @@ namespace ossimplugins
 
    void PlatformPosition::Clear()
    {
-      if(_data != NULL)
+      if(_data != nullptr)
       {
          for (int i=0;i<_nbrData;i++)
          {
@@ -64,11 +64,11 @@ namespace ossimplugins
          }
          delete [] _data;
       }
-      _data = NULL;
+      _data = nullptr;
       _nbrData = 0;
             
       delete[] _t;
-      if ((_p != NULL) && (_dp != NULL)) {
+      if ((_p != nullptr) && (_dp != nullptr)) {
          for (int j=0; j<3; ++j) {
             delete[] _p[j];
             delete[] _dp[j];
@@ -145,10 +145,10 @@ namespace ossimplugins
    Ephemeris* PlatformPosition::Interpolate(JSDDateTime date) const
    {
       const double JOURCIVIL_LENGTH = 86400.0;
-      Ephemeris* ephem = NULL;
+      Ephemeris* ephem = nullptr;
       if (_nbrData <= 1)
       {
-         return NULL;
+         return nullptr;
       }
       /*
        * The first element of the list is cloned to ensure that the
@@ -161,7 +161,7 @@ namespace ossimplugins
       /*------------*/
       double dt = 0.0;
                   
-      if (ephem != NULL)
+      if (ephem != nullptr)
       {
          ephem->set_date(date);
                         
@@ -214,7 +214,7 @@ namespace ossimplugins
       {
          return _data[noData];
       }
-      return NULL;
+      return nullptr;
    }
 
    int PlatformPosition::getNbrData() const
@@ -254,7 +254,7 @@ namespace ossimplugins
       
       Clear();
          
-      const char* lookup = 0;
+      const char* lookup = nullptr;
       lookup = kwl.find(prefix, NUMBER_PLATFORM_POSITIONS_KW);
       if (!lookup)
       {

@@ -32,27 +32,27 @@ namespace ossimplugins
 const double Equation::Epsilon = 1.e-12;
 
 Equation::Equation():
-   _coefficients(NULL),
+   _coefficients(nullptr),
    _degree(0),
    _nbrSol(0),
-   _solutions(NULL)
+   _solutions(nullptr)
 {
   _order.clear();
 }
 
 Equation::~Equation()
 {
-  if (_coefficients != NULL)
+  if (_coefficients != nullptr)
     delete [] _coefficients;
-  if(_solutions != NULL)
+  if(_solutions != nullptr)
     delete [] _solutions;
 }
 
 Equation::Equation(int degree, std::complex<double>* coefficients):
-   _coefficients(NULL),
+   _coefficients(nullptr),
    _degree(0),
    _nbrSol(0),
-   _solutions(NULL)
+   _solutions(nullptr)
 {
   _order.clear();
   CreateEquation(degree, coefficients);
@@ -60,14 +60,14 @@ Equation::Equation(int degree, std::complex<double>* coefficients):
 
 void Equation::CreateEquation(int degree, std::complex<double>* coefficients)
 {
-  if (_coefficients != NULL)
+  if (_coefficients != nullptr)
   {
     delete [] _coefficients;
   }
 
   if(_order.size() != 0)
     _order.clear();
-  if(_solutions != NULL)
+  if(_solutions != nullptr)
     delete [] _solutions;
 
   _coefficients = new std::complex<double>[degree+1];
@@ -239,7 +239,7 @@ void Equation::Solve1()
 
   _order.push_back(1);
 
-  if(_solutions != NULL)
+  if(_solutions != nullptr)
     delete [] _solutions;
   _solutions = new std::complex<double>[1];
   _solutions[0] = Proche(-_coefficients[0], Epsilon);
@@ -277,7 +277,7 @@ void Equation::Solve2()
   {
     /* 1 double root */
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
@@ -293,7 +293,7 @@ void Equation::Solve2()
   {
     /* 2 simple roots */
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
@@ -346,7 +346,7 @@ void Equation::Solve3(int d4)
   if (d3_1r3 == 1)
   {
     /* 1 triple root */
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
@@ -361,7 +361,7 @@ void Equation::Solve3(int d4)
   {
     /* 1 simple root + 1 double root */
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
@@ -453,7 +453,7 @@ void Equation::Solve3(int d4)
     int i1 = IndiceMin(3, ra) ;
 
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[3];
 
@@ -546,7 +546,7 @@ void Equation::Solve4()
   {
     /* 1 quadruple root */
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
@@ -562,7 +562,7 @@ void Equation::Solve4()
   {
     /* 2 double roots */
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
@@ -580,7 +580,7 @@ void Equation::Solve4()
   {
     /* 1 triple root + 1 simple root */
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
@@ -599,7 +599,7 @@ void Equation::Solve4()
   {
     /* 1 double root + 2 simple roots */
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[3];
 
@@ -727,7 +727,7 @@ void Equation::Solve4()
     }
     i1 = IndiceMin (2, h) ;
 
-    if(_solutions != NULL)
+    if(_solutions != nullptr)
       delete [] _solutions;
     _solutions = new std::complex<double>[4];
 

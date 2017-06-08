@@ -44,7 +44,7 @@ OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
 
 GDALDatasetType * Open(const char * filename, bool readOnly)
 {
-  return (GDALDatasetType *)GDALOpenEx(filename, (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,NULL,NULL,NULL);
+  return (GDALDatasetType *)GDALOpenEx(filename, (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,nullptr,nullptr,nullptr);
 }
 
 void Close(GDALDatasetType * dataset)
@@ -54,14 +54,14 @@ void Close(GDALDatasetType * dataset)
 
 GDALDatasetType * Create(GDALDriverType * driver, const char * name)
 {
-  return driver->Create(name,0,0,0,GDT_Unknown,NULL);
+  return driver->Create(name,0,0,0,GDT_Unknown,nullptr);
 }
 
 bool Delete(const char * name)
 {
   // Open dataset
   GDALDatasetType * poDS = otb::ogr::version_proxy::Open(name,false);
-  GDALDriverType * poDriver = NULL;
+  GDALDriverType * poDriver = nullptr;
   if(poDS)
     {
     poDriver = poDS->GetDriver();
@@ -130,7 +130,7 @@ std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset)
   if(capsule.P())
     {
     unsigned int i = 0;
-    while(capsule.P()[i]!=NULL)
+    while(capsule.P()[i]!=nullptr)
       {
       ret.push_back(std::string(capsule.P()[i]));
       ++i;

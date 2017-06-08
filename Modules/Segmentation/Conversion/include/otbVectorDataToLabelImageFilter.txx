@@ -35,7 +35,7 @@ namespace otb
 template<class TVectorData, class TOutputImage>
 VectorDataToLabelImageFilter<TVectorData, TOutputImage>
 ::VectorDataToLabelImageFilter()
- : m_OGRDataSourcePointer(ITK_NULLPTR),
+ : m_OGRDataSourcePointer(nullptr),
    m_BurnAttribute("FID")
 {
   this->SetNumberOfRequiredInputs(1);
@@ -168,7 +168,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
     // Get the projection ref of the current VectorData
     std::string projectionRefWkt = vd->GetProjectionRef();
     bool        projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = ITK_NULLPTR;
+    OGRSpatialReference * oSRS = nullptr;
 
     if (projectionInformationAvailable)
       {
@@ -186,14 +186,14 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
 
     // Iterative method to build the layers from a VectorData
-    OGRLayer *   ogrCurrentLayer = ITK_NULLPTR;
+    OGRLayer *   ogrCurrentLayer = nullptr;
     std::vector<OGRLayer *> ogrLayerVector;
     otb::OGRIOHelper::Pointer IOConversion = otb::OGRIOHelper::New();
 
     // The method ConvertDataTreeNodeToOGRLayers create the
     // OGRDataSource but don t release it. Destruction is done in the
     // desctructor
-    m_OGRDataSourcePointer = ITK_NULLPTR;
+    m_OGRDataSourcePointer = nullptr;
     ogrLayerVector = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot,
                                                                   m_OGRDataSourcePointer,
                                                                   ogrCurrentLayer,
@@ -213,10 +213,10 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
       // Get the geometries of the layer
       OGRFeatureH hFeat;
       OGR_L_ResetReading( (OGRLayerH)(ogrLayerVector[idx2]) );
-      while( ( hFeat = OGR_L_GetNextFeature( (OGRLayerH)(ogrLayerVector[idx2]) )) != ITK_NULLPTR )
+      while( ( hFeat = OGR_L_GetNextFeature( (OGRLayerH)(ogrLayerVector[idx2]) )) != nullptr )
         {
         OGRGeometryH hGeom;
-        if( OGR_F_GetGeometryRef( hFeat ) == ITK_NULLPTR )
+        if( OGR_F_GetGeometryRef( hFeat ) == nullptr )
           {
           OGR_F_Destroy( hFeat );
           continue;
@@ -244,7 +244,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
         }
 
     // Destroy the oSRS
-    if (oSRS != ITK_NULLPTR)
+    if (oSRS != nullptr)
       {
       OSRRelease(oSRS);
       }
@@ -312,15 +312,15 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   GDALSetGeoTransform(dataset,const_cast<double*>(geoTransform.GetDataPointer()));
 
   // Burn the geometries into the dataset
-   if (dataset != ITK_NULLPTR)
+   if (dataset != nullptr)
      {
      GDALRasterizeGeometries( dataset, m_BandsToBurn.size(),
                           &(m_BandsToBurn[0]),
                           m_SrcDataSetGeometries.size(),
                           &(m_SrcDataSetGeometries[0]),
-                          ITK_NULLPTR, ITK_NULLPTR, &(m_FullBurnValues[0]),
-                          ITK_NULLPTR,
-                          GDALDummyProgress, ITK_NULLPTR );
+                          nullptr, nullptr, &(m_FullBurnValues[0]),
+                          nullptr,
+                          GDALDummyProgress, nullptr );
 
      // release the dataset
      GDALClose( dataset );

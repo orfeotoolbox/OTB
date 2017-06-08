@@ -60,7 +60,7 @@ namespace ossimplugins
 //*************************************************************************************************
    ossimPleiadesModel::ossimPleiadesModel()
       :ossimRpcModel      (),
-       theSupportData        (0)
+       theSupportData        (nullptr)
    {
       for (unsigned int i = 0; i < 20; i++)
       {
@@ -76,7 +76,7 @@ namespace ossimplugins
 //*************************************************************************************************
    ossimPleiadesModel::ossimPleiadesModel(const ossimPleiadesModel& rhs)
       :ossimRpcModel      (rhs),
-       theSupportData        (0)
+       theSupportData        (nullptr)
    {
    }
 
@@ -87,7 +87,7 @@ namespace ossimplugins
    {
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimPleiadesModel(): entering..." << std::endl;
 
-      theSupportData = 0;
+      theSupportData = nullptr;
 
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimPleiadesModel(): returning..." << std::endl;
    }
@@ -264,7 +264,7 @@ namespace ossimplugins
 
       if(!theSupportData->parseXmlFile(DIMxmlFile))
       {
-         theSupportData = 0; // ossimRefPtr
+         theSupportData = nullptr; // ossimRefPtr
          if (traceDebug())
          {
            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimPleiadesModel::open DEBUG:"
@@ -283,7 +283,7 @@ namespace ossimplugins
       {
          if (!theSupportData->parseXmlFile(RPCxmlFile))
          {
-            theSupportData = 0; // ossimRefPtr
+            theSupportData = nullptr; // ossimRefPtr
             ossimNotify(ossimNotifyLevel_WARN) << "ossimPleiadesModel::open WARNING:"
                                                << "\nCould not open correctly RPC file" << std::endl;
             return false;

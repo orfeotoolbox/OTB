@@ -44,7 +44,7 @@ ImportImageFilter<TOutputImage>
     }
   m_Direction.SetIdentity();
 
-  m_ImportPointer = ITK_NULLPTR;
+  m_ImportPointer = nullptr;
   m_FilterManageMemory = false;
   m_Size = 0;
 }

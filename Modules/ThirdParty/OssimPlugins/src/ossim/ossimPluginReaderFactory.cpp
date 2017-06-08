@@ -43,11 +43,11 @@ namespace ossimplugins
              "ossimPluginReaderFactory",
              ossimImageHandlerFactoryBase);
 
-   ossimPluginReaderFactory* ossimPluginReaderFactory::theInstance = 0;
+   ossimPluginReaderFactory* ossimPluginReaderFactory::theInstance = nullptr;
 
    ossimPluginReaderFactory::~ossimPluginReaderFactory()
    {
-      theInstance = 0;
+      theInstance = nullptr;
    }
 
    ossimPluginReaderFactory* ossimPluginReaderFactory::instance()
@@ -73,7 +73,7 @@ namespace ossimplugins
       ossimRefPtr<ossimImageHandler> reader = new ossimRadarSat2TiffReader();
       if(reader->open(fileName) == false)
       {
-         reader = 0;
+         reader = nullptr;
       }
 
       if ( !reader.valid() )
@@ -88,7 +88,7 @@ namespace ossimplugins
          reader = new ossimTerraSarTiffReader();
          if(reader->open(fileName) == false)
          {
-            reader = 0;
+            reader = nullptr;
          }
       }
 
@@ -116,7 +116,7 @@ namespace ossimplugins
       ossimRefPtr<ossimImageHandler> reader = new ossimRadarSat2TiffReader;
       if(reader->loadState(kwl, prefix) == false)
       {
-         reader = 0;
+         reader = nullptr;
       }
 
       if ( !reader.valid() )
@@ -131,7 +131,7 @@ namespace ossimplugins
          reader = new ossimTerraSarTiffReader;
          if(reader->loadState(kwl, prefix) == false)
          {
-            reader = 0;
+            reader = nullptr;
          }
       }
 
@@ -148,7 +148,7 @@ namespace ossimplugins
    ossimObject* ossimPluginReaderFactory::createObject(
       const ossimString& typeName)const
    {
-      ossimRefPtr<ossimObject> result = 0;
+      ossimRefPtr<ossimObject> result = nullptr;
       if(typeName == "ossimRadarSat2TiffReader")
       {
          result = new ossimRadarSat2TiffReader;

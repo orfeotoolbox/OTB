@@ -37,8 +37,8 @@ template<class TSample>
 GaussianModelComponent<TSample>
 ::GaussianModelComponent()
 {
-  m_CovarianceEstimator = ITK_NULLPTR;
-  m_GaussianMembershipFunction = ITK_NULLPTR;
+  m_CovarianceEstimator = nullptr;
+  m_GaussianMembershipFunction = nullptr;
 }
 
 template<class TSample>

@@ -183,7 +183,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     {
     // Iterate through the tree to get all the stats
     for( TiXmlElement* currentStat = root->FirstChildElement();
-         currentStat != ITK_NULLPTR;
+         currentStat != nullptr;
          currentStat = currentStat->NextSiblingElement() )
       {
       InputDataType   currentStatisticVector;
@@ -197,7 +197,7 @@ StatisticsXMLFileReader<TMeasurementVector>
       std::vector<double>   tempMeasurementVector;
 
       for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticVector");
-     sample != ITK_NULLPTR;
+     sample != nullptr;
      sample = sample->NextSiblingElement() )
         {
         // Get the current value of the statistic vector
@@ -224,24 +224,24 @@ StatisticsXMLFileReader<TMeasurementVector>
     {
     // Iterate through the tree to get all the stats
     for( TiXmlElement* currentStat = root->FirstChildElement();
-         currentStat != ITK_NULLPTR;
+         currentStat != nullptr;
          currentStat = currentStat->NextSiblingElement() )
       {
       GenericMapType currentMap;
       std::string currentName(currentStat->Attribute("name"));
 
       for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticMap");
-          sample != ITK_NULLPTR;
+          sample != nullptr;
           sample = sample->NextSiblingElement() )
         {
         // Get the current pair of the statistic map
         const char *c_key = sample->Attribute("key");
         const char *c_value = sample->Attribute("value");
-        if (c_key == ITK_NULLPTR)
+        if (c_key == nullptr)
           {
           itkExceptionMacro("'key' attribute not found in StatisticMap !");
           }
-        if (c_value == ITK_NULLPTR)
+        if (c_value == nullptr)
           {
           itkExceptionMacro("'value' attribute not found in StatisticMap !");
           }

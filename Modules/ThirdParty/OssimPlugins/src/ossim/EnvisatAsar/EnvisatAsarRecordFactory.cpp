@@ -38,9 +38,9 @@ EnvisatAsarRecordFactory::~EnvisatAsarRecordFactory()
 EnvisatAsarRecord* EnvisatAsarRecordFactory::Instantiate(std::string id)
 {
 	EnvisatAsarRecord* record = _availableRecords[id];
-	if(record == NULL)
+	if(record == nullptr)
 	{
-		return NULL;
+		return nullptr;
 	}
 	else
 	{

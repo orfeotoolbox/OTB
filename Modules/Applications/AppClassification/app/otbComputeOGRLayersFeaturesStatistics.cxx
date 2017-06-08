@@ -82,7 +82,7 @@ private:
       std::string shapefile = GetParameterString("inshp");
 
        otb::ogr::DataSource::Pointer ogrDS;
-       otb::ogr::Layer layer(ITK_NULLPTR, false);
+       otb::ogr::Layer layer(nullptr, false);
 
        OGRSpatialReference oSRS("");
        std::vector<std::string> options;
@@ -135,7 +135,7 @@ private:
            
            featValue.push_back(mv);
            feature = layer.ogr().GetNextFeature();
-           goesOn = feature.addr() != ITK_NULLPTR;
+           goesOn = feature.addr() != nullptr;
          }
   
       MeasurementType mean; mean.SetSize(nbFeatures);

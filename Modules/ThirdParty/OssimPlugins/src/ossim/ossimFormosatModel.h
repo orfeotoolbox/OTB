@@ -86,10 +86,10 @@ public:
     * KWL files. Returns true if successful.
     */
    bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=NULL) const override;
+                          const char* prefix=nullptr) const override;
    
    bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix=NULL) override;
+                          const char* prefix=nullptr) override;
 
    /*!
     * Writes a template of geom keywords processed by loadState and saveState

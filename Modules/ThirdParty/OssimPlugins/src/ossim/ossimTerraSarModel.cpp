@@ -102,7 +102,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _polLayer("UNDEFINED"),
      _polLayerList(),
      _noise(0),
-     _sceneCoord(0),
+     _sceneCoord(nullptr),
      _calFactor(0.),
      _radarFrequency(0.),
      _numberOfLayers(0),
@@ -132,7 +132,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _polLayer(rhs._polLayer),
      _polLayerList(rhs._polLayerList),
      _noise(rhs._noise),
-     _sceneCoord( 0 ),
+     _sceneCoord( nullptr ),
      _calFactor(rhs._calFactor),
      _radarFrequency(rhs._radarFrequency),
      _numberOfLayers(rhs._numberOfLayers),
@@ -161,7 +161,7 @@ ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
    if (_sceneCoord)
    {
       delete _sceneCoord;
-      _sceneCoord = 0;
+      _sceneCoord = nullptr;
    }
 }
 
@@ -258,7 +258,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 //      if (!initIncidenceAngles(xdoc.get(), tsDoc)) break;
       if (!initSceneCoord(xdoc.get(), tsDoc)) break;
 
-      xdoc = 0;
+      xdoc = nullptr;
 
       _productXmlFile = xmlfile;
       ossimSupportFilesList::instance()->add(_productXmlFile);
@@ -422,7 +422,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    ossimString s;
 
    // Check the type first.
@@ -1027,7 +1027,7 @@ bool ossimplugins::ossimTerraSarModel::InitSensorParams(
    double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
    
    
-   if(_sensor != NULL)
+   if(_sensor != nullptr)
    {
       delete _sensor;
    }
@@ -1155,7 +1155,7 @@ bool ossimplugins::ossimTerraSarModel::InitPlatformPosition(
    /*
     * Creation of the platform position interpolator
     */
-   if (_platformPosition != NULL)
+   if (_platformPosition != nullptr)
    {
       delete _platformPosition;
    }
@@ -1187,7 +1187,7 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    const char* sceneCenterRangeTime_str = kwl.find(prefix,"sc_rng");
    _sceneCenterRangeTime = atof(sceneCenterRangeTime_str);
 
-   if(_refPoint == NULL)
+   if(_refPoint == nullptr)
    {
       _refPoint = new RefPoint();
    }
@@ -1198,10 +1198,10 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    auto * date = new CivilDateTime() ;
    if (! ossim::iso8601TimeStringToCivilDate(inp_sctim_string, *date)) return false ;
 
-   if(_platformPosition != NULL)
+   if(_platformPosition != nullptr)
    {
       Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-      if (ephemeris == NULL) return false ; 
+      if (ephemeris == nullptr) return false ; 
 
       _refPoint->set_ephemeris(ephemeris);
 
@@ -1552,7 +1552,7 @@ bool ossimplugins::ossimTerraSarModel::initSensorParams(const ossimXmlDocument* 
    if (!result)
    {
       delete _sensor;
-      _sensor = 0;
+      _sensor = nullptr;
    }
 
    if (traceDebug())

@@ -61,12 +61,12 @@ public:
 
   static bool CanCreate( Parameter* param )
   {
-    return dynamic_cast<TParameterType *>(param) != ITK_NULLPTR;
+    return dynamic_cast<TParameterType *>(param) != nullptr;
   }
 
   static QtWidgetParameterBase* Create( Parameter* param, QtWidgetModel* model )
   {
-    QtWidgetParameterBase* widget = ITK_NULLPTR;
+    QtWidgetParameterBase* widget = nullptr;
     TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
 
     if (specificParam)
@@ -88,7 +88,7 @@ QtWidgetParameterFactory::~QtWidgetParameterFactory()
 QtWidgetParameterBase*
 QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model )
 {
-  QtWidgetParameterBase* widget = ITK_NULLPTR;
+  QtWidgetParameterBase* widget = nullptr;
 
 #define CREATEWIDGET( ParameterType, WidgetType ) \
   else if ( QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::CanCreate(param) ) \

@@ -252,7 +252,7 @@ public:
    void remove_suffix(std::size_t n) { assert(n <= m_size); m_size -= n; }
 private:
    struct build_empty{};
-   string_view(build_empty) : m_size(0), m_first(NULL) {}
+   string_view(build_empty) : m_size(0), m_first(nullptr) {}
 
    std::size_t    m_size;
    const_iterator m_first;

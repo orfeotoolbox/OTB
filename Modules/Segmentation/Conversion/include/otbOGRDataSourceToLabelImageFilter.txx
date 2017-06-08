@@ -240,7 +240,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   GDALSetGeoTransform(dataset,const_cast<double*>(geoTransform.GetDataPointer()));
 
   // Burn the geometries into the dataset
-   if (dataset != ITK_NULLPTR)
+   if (dataset != nullptr)
      {
      std::vector<std::string> options;
 
@@ -255,9 +255,9 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
                           &m_BandsToBurn[0],
                           m_SrcDataSetLayers.size(),
                           &(m_SrcDataSetLayers[0]),
-                          ITK_NULLPTR, ITK_NULLPTR, &foreground[0],
+                          nullptr, nullptr, &foreground[0],
                           ogr::StringListConverter(options).to_ogr(),
-                          ITK_NULLPTR, ITK_NULLPTR );
+                          nullptr, nullptr );
      // release the dataset
      GDALClose( dataset );
      }

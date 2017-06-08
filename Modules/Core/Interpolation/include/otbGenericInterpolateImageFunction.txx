@@ -33,8 +33,8 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 {
   m_WindowSize = 1;
   this->SetRadius(1);
-  m_OffsetTable = ITK_NULLPTR;
-  m_WeightOffsetTable = ITK_NULLPTR;
+  m_OffsetTable = nullptr;
+  m_WeightOffsetTable = nullptr;
   m_TablesHaveBeenGenerated = false;
   m_NormalizeWeight =  false;
 }
@@ -54,21 +54,21 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 ::ResetOffsetTable()
 {
   // Clear the offset table
-  if (m_OffsetTable != ITK_NULLPTR)
+  if (m_OffsetTable != nullptr)
     {
     delete[] m_OffsetTable;
-    m_OffsetTable = ITK_NULLPTR;
+    m_OffsetTable = nullptr;
     }
 
   // Clear the weights tales
-  if (m_WeightOffsetTable != ITK_NULLPTR)
+  if (m_WeightOffsetTable != nullptr)
     {
     for (unsigned int i = 0; i < m_OffsetTableSize; ++i)
       {
       delete[] m_WeightOffsetTable[i];
       }
     delete[] m_WeightOffsetTable;
-    m_WeightOffsetTable = ITK_NULLPTR;
+    m_WeightOffsetTable = nullptr;
     }
 }
 
@@ -126,7 +126,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   // Initialize the neighborhood
   SizeType radius;
   radius.Fill(this->GetRadius());
-  if (this->GetInputImage() != ITK_NULLPTR)
+  if (this->GetInputImage() != nullptr)
     {
     IteratorType it = IteratorType(radius,  this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
     // Compute the offset tables (we ignore all the zero indices

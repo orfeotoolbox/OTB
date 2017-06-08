@@ -44,7 +44,7 @@ namespace otb
 {
 
 SarSensorModelAdapter::SarSensorModelAdapter():
-  m_SensorModel(ITK_NULLPTR)
+  m_SensorModel(nullptr)
 {
 }
 
@@ -66,7 +66,7 @@ bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
 
 bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
 {
-  if(m_SensorModel.get() != ITK_NULLPTR)
+  if(m_SensorModel.get() != nullptr)
     {
     ossimKeywordlist geom;
 
@@ -86,12 +86,12 @@ bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
 
 bool SarSensorModelAdapter::IsValidSensorModel() const
 {
-  return m_SensorModel.get() != ITK_NULLPTR;
+  return m_SensorModel.get() != nullptr;
 }
 
 bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines)
 {
-  if(m_SensorModel.get() != ITK_NULLPTR)
+  if(m_SensorModel.get() != nullptr)
     {
     return m_SensorModel->deburst(lines);
     }

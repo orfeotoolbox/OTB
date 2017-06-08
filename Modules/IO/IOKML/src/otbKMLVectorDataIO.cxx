@@ -105,7 +105,7 @@ KMLVectorDataIO::PrintIndented(const std::string& item, int depth)
 void
 KMLVectorDataIO::WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerType father)
 {
-  DataNodePointerType node = ITK_NULLPTR;
+  DataNodePointerType node = nullptr;
 
   if (!feature) return;
 
@@ -130,7 +130,7 @@ void
 KMLVectorDataIO::WalkContainer(const kmldom::ContainerPtr& container, DataNodePointerType father)
 {
 
-  DataNodePointerType node = ITK_NULLPTR;
+  DataNodePointerType node = nullptr;
 
   for (size_t i = 0; i < container->get_feature_array_size(); ++i)
     {
@@ -204,7 +204,7 @@ KMLVectorDataIO::WalkGeometry(const kmldom::GeometryPtr& geometry, DataNodePoint
 {
 
   // Creation of a node
-  DataNodePointerType node = ITK_NULLPTR;
+  DataNodePointerType node = nullptr;
 
   if (!geometry)
     {
@@ -271,7 +271,7 @@ KMLVectorDataIO
 ::ConvertGeometryToPointNode(const kmldom::GeometryPtr& geometry)
 {
 
-  if (geometry == ITK_NULLPTR)
+  if (geometry == nullptr)
     {
     itkGenericExceptionMacro(<< "Failed to convert kmldom::GeometryPtr to PointNode");
     }
@@ -303,7 +303,7 @@ KMLVectorDataIO
 ::ConvertGeometryToLineStringNode(const kmldom::GeometryPtr& geometry)
 {
 
-  if (geometry == ITK_NULLPTR)
+  if (geometry == nullptr)
     {
     itkGenericExceptionMacro(<< "Failed to convert kmldom::GeometryPtr to LineNode");
     }
@@ -339,7 +339,7 @@ KMLVectorDataIO
 ::ConvertGeometryToLinearRingNode(const kmldom::GeometryPtr& geometry)
 {
 
-  if (geometry == ITK_NULLPTR)
+  if (geometry == nullptr)
     {
     itkGenericExceptionMacro(<< "Failed to convert kmldom::GeometryPtr to LineNode");
     }
@@ -375,7 +375,7 @@ KMLVectorDataIO
 ::ConvertGeometryToPolygonNode(const kmldom::GeometryPtr& geometry)
 {
 
-  if (geometry == ITK_NULLPTR)
+  if (geometry == nullptr)
     {
     itkGenericExceptionMacro(<< "Failed to convert kmldom::GeometryPtr to LineNode");
     }
@@ -557,7 +557,7 @@ void KMLVectorDataIO::Write(const itk::DataObject* datag, char ** itkNotUsed(pap
 
   //Create the factory
   kmldom::KmlFactory* factory = kmldom::KmlFactory::GetFactory();
-  if (factory == ITK_NULLPTR)
+  if (factory == nullptr)
     {
     itkExceptionMacro(<< "Impossible to create the KML Factory to write file " << this->m_FileName);
     }
@@ -573,9 +573,9 @@ void KMLVectorDataIO::Write(const itk::DataObject* datag, char ** itkNotUsed(pap
   TreeIteratorType it(tree);
   it.GoToBegin();
 
-  kmldom::DocumentPtr      currentDocument = ITK_NULLPTR;
-  kmldom::FolderPtr        currentFolder = ITK_NULLPTR;
-  kmldom::MultiGeometryPtr currentMultiGeometry = ITK_NULLPTR;
+  kmldom::DocumentPtr      currentDocument = nullptr;
+  kmldom::FolderPtr        currentFolder = nullptr;
+  kmldom::MultiGeometryPtr currentMultiGeometry = nullptr;
 
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
   ProcessNodeWrite(inputRoot, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
@@ -674,7 +674,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
         kmldom::PointPtr point = factory->CreatePoint();
         point->set_coordinates(coordinates);
 
-        if (currentMultiGeometry != ITK_NULLPTR)
+        if (currentMultiGeometry != nullptr)
           {
           currentMultiGeometry->add_geometry(point);
           }
@@ -683,7 +683,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 
           kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
           placemark->set_geometry(point);
-          if (currentFolder != ITK_NULLPTR)
+          if (currentFolder != nullptr)
             {
             currentFolder->add_feature(placemark);
             }
@@ -721,7 +721,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
           ++vIt;
           }
 
-        if (currentMultiGeometry != ITK_NULLPTR)
+        if (currentMultiGeometry != nullptr)
           {
           currentMultiGeometry->add_geometry(line);
           }
@@ -729,7 +729,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
           {
           kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
           placemark->set_geometry(line);
-          if (currentFolder != ITK_NULLPTR)
+          if (currentFolder != nullptr)
             {
             currentFolder->add_feature(placemark);
             }
@@ -840,7 +840,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
           innerboundaryis->clear_linearring();
           }
 
-        if (currentMultiGeometry != ITK_NULLPTR)
+        if (currentMultiGeometry != nullptr)
           {
           currentMultiGeometry->add_geometry(polygon);
           }
@@ -848,7 +848,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
           {
           kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
           placemark->set_geometry(polygon);
-          if (currentFolder != ITK_NULLPTR)
+          if (currentFolder != nullptr)
             {
             currentFolder->add_feature(placemark);
             }
@@ -866,7 +866,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
         currentMultiGeometry = multi;
         kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
         placemark->set_geometry(multi);
-        if (currentFolder != ITK_NULLPTR)
+        if (currentFolder != nullptr)
           {
           currentFolder->add_feature(placemark);
           }

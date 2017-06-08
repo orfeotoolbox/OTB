@@ -35,22 +35,22 @@ namespace ossimplugins
 
 HermiteInterpolator::HermiteInterpolator():
   theNPointsAvailable(0),
-  theXValues(NULL),
-  theYValues(NULL),
-  thedYValues(NULL),
-  prodC(NULL),
-  sumC(NULL),
+  theXValues(nullptr),
+  theYValues(nullptr),
+  thedYValues(nullptr),
+  prodC(nullptr),
+  sumC(nullptr),
   isComputed(false)
 {
 }
 
 HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, double* dy):
   theNPointsAvailable(nbrPoints),
-   prodC(NULL),
-   sumC(NULL),
+   prodC(nullptr),
+   sumC(nullptr),
   isComputed(false)
 {
-  if(x != NULL)
+  if(x != nullptr)
   {
     theXValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -60,10 +60,10 @@ HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, do
   }
   else
   {
-    theXValues = NULL;
+    theXValues = nullptr;
   }
 
-  if(y != NULL)
+  if(y != nullptr)
   {
     theYValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -73,10 +73,10 @@ HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, do
   }
   else
   {
-    theYValues = NULL;
+    theYValues = nullptr;
   }
 
-  if(dy != NULL)
+  if(dy != nullptr)
   {
     thedYValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -86,7 +86,7 @@ HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, do
   }
   else
   {
-    thedYValues = NULL;
+    thedYValues = nullptr;
   }
 
   for (int i = 1 ; i < theNPointsAvailable ; i++)
@@ -111,11 +111,11 @@ HermiteInterpolator::~HermiteInterpolator()
 
 HermiteInterpolator::HermiteInterpolator(const HermiteInterpolator& rhs):
   theNPointsAvailable(rhs.theNPointsAvailable),
-  prodC(NULL),
-  sumC(NULL),
+  prodC(nullptr),
+  sumC(nullptr),
   isComputed(false)
 {
-  if(rhs.theXValues != NULL)
+  if(rhs.theXValues != nullptr)
   {
     theXValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -125,10 +125,10 @@ HermiteInterpolator::HermiteInterpolator(const HermiteInterpolator& rhs):
   }
   else
   {
-    theXValues = NULL;
+    theXValues = nullptr;
   }
 
-  if(rhs.theYValues != NULL)
+  if(rhs.theYValues != nullptr)
   {
     theYValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -138,10 +138,10 @@ HermiteInterpolator::HermiteInterpolator(const HermiteInterpolator& rhs):
   }
   else
   {
-    theYValues = NULL;
+    theYValues = nullptr;
   }
 
-  if(rhs.thedYValues != NULL)
+  if(rhs.thedYValues != nullptr)
   {
     thedYValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -151,7 +151,7 @@ HermiteInterpolator::HermiteInterpolator(const HermiteInterpolator& rhs):
   }
   else
   {
-    thedYValues = NULL;
+    thedYValues = nullptr;
   }
 }
 
@@ -160,7 +160,7 @@ HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& 
   Clear();
   theNPointsAvailable = rhs.theNPointsAvailable;
   isComputed = false;
-  if(rhs.theXValues != NULL)
+  if(rhs.theXValues != nullptr)
   {
     theXValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -170,10 +170,10 @@ HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& 
   }
   else
   {
-    theXValues = NULL;
+    theXValues = nullptr;
   }
 
-  if(rhs.theYValues != NULL)
+  if(rhs.theYValues != nullptr)
   {
     theYValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -183,10 +183,10 @@ HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& 
   }
   else
   {
-    theYValues = NULL;
+    theYValues = nullptr;
   }
 
-  if(rhs.thedYValues != NULL)
+  if(rhs.thedYValues != nullptr)
   {
     thedYValues = new double[theNPointsAvailable];
     for (int i=0;i<theNPointsAvailable;i++)
@@ -196,10 +196,10 @@ HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& 
   }
   else
   {
-    thedYValues = NULL;
+    thedYValues = nullptr;
   }
-  prodC = NULL; 
-  sumC = NULL;
+  prodC = nullptr; 
+  sumC = nullptr;
    
   return *this;
 }
@@ -333,34 +333,34 @@ int HermiteInterpolator::Precompute() const
 
 void HermiteInterpolator::Clear()
 {
-  if (theXValues != NULL)
+  if (theXValues != nullptr)
   {
     delete[] theXValues;
-    theXValues = NULL;
+    theXValues = nullptr;
   }
 
-  if (theYValues != NULL)
+  if (theYValues != nullptr)
   {
     delete[] theYValues;
-    theYValues = NULL;
+    theYValues = nullptr;
   }
 
-  if (thedYValues != NULL)
+  if (thedYValues != nullptr)
   {
     delete[] thedYValues;
-    thedYValues = NULL;
+    thedYValues = nullptr;
   }
 
-  if (prodC != NULL)
+  if (prodC != nullptr)
   {
     delete[] prodC;
-    prodC = NULL;
+    prodC = nullptr;
   }
 
-  if (sumC != NULL)
+  if (sumC != nullptr)
   {
     delete[] sumC;
-    prodC = NULL;
+    prodC = nullptr;
   }
   isComputed = false;
   theNPointsAvailable = 0;

@@ -242,7 +242,7 @@ namespace ossimplugins
                                              << std::endl;
       }
 
-      const char* value = NULL;
+      const char* value = nullptr;
       //const char* keyword =NULL;
       bool success;
 

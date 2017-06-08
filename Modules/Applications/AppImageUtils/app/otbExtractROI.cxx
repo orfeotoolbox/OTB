@@ -138,7 +138,7 @@ private:
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
       ListViewParameter *clParam = dynamic_cast<ListViewParameter*>(GetParameterByKey("cl"));
       // Update the values of the channels to be selected if nbComponents is changed
-      if (clParam != ITK_NULLPTR && clParam->GetNbChoices() != nbComponents)
+      if (clParam != nullptr && clParam->GetNbChoices() != nbComponents)
         {
 
         ClearChoices("cl");

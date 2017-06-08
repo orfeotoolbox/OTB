@@ -104,7 +104,7 @@ AeronetFileReader
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<AeronetData *> (this->ProcessObject::GetOutput(0));
 }

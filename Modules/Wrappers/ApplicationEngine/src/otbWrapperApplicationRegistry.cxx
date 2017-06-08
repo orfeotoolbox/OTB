@@ -71,7 +71,7 @@ public:
         {
         if ((*it).first == app)
           {
-          (*it).first = ITK_NULLPTR;
+          (*it).first = nullptr;
           }
         ++it;
         }
@@ -85,13 +85,13 @@ public:
     AppHandleContainerType::iterator it;
     for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
       {
-      if ((*it).first == ITK_NULLPTR)
+      if ((*it).first == nullptr)
         {
         itk::DynamicLoader::CloseLibrary( static_cast<itk::LibHandle>((*it).second));
-        (*it).second = ITK_NULLPTR;
+        (*it).second = nullptr;
         }
       }
-    m_Container.remove(AppHandlePairType((Application*) ITK_NULLPTR, (void*) ITK_NULLPTR));
+    m_Container.remove(AppHandlePairType((Application*) nullptr, (void*) nullptr));
     }
 
   /** close all handles at program exit */
@@ -226,7 +226,7 @@ typedef itk::ObjectFactoryBase * ( *ITK_LOAD_FUNCTION )();
 Application::Pointer
 ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 {
-  ApplicationPointer appli = ITK_NULLPTR;
+  ApplicationPointer appli = nullptr;
 
   std::string appExtension = itksys::DynamicLoader::LibExtension();
 #ifdef __APPLE__
@@ -332,7 +332,7 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
           {
           appSet.insert(name);
           }
-        appli = ITK_NULLPTR;
+        appli = nullptr;
         }
       }
     }

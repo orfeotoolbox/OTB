@@ -84,7 +84,7 @@ static const ossim_float64 SIGMA[] = { 0.0001,   // degrees
 ossimplugins::ossimFormosatModel::ossimFormosatModel()
    :
    ossimSensorModel      (),
-   theSupportData        (NULL),
+   theSupportData        (nullptr),
    theMetaDataFile       ("NOT ASSIGNED"),
    theIllumAzimuth       (0.0),
    theIllumElevation     (0.0),
@@ -158,7 +158,7 @@ ossimplugins::ossimFormosatModel::~ossimFormosatModel()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimFormosatModel(): entering..." << std::endl;
 
-   theSupportData = 0;
+   theSupportData = nullptr;
    
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimFormosatModel(): returning..." << std::endl;
 }
@@ -303,7 +303,7 @@ void ossimplugins::ossimFormosatModel::updateModel()
          theYawRate        = computeParameterOffset(5);
          theFocalLenOffset = computeParameterOffset(6);
       }
-      theSeedFunction = 0;
+      theSeedFunction = nullptr;
       ossimGpt ulg, urg, lrg, llg;
       lineSampleToWorld(theImageClipRect.ul(), ulg);
       lineSampleToWorld(theImageClipRect.ur(), urg);
@@ -746,7 +746,7 @@ ossimplugins::ossimFormosatModel::setupOptimizer(const ossimString& init_file)
          if (getErrorStatus())
          {
             tryKwl = true;
-            meta=0;
+            meta=nullptr;
          }
          else
          {
@@ -755,7 +755,7 @@ ossimplugins::ossimFormosatModel::setupOptimizer(const ossimString& init_file)
       }
       else
       {
-         meta=0;
+         meta=nullptr;
          tryKwl = true;
       }
    }

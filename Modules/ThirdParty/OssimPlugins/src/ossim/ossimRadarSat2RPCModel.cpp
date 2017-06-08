@@ -288,7 +288,7 @@ bool ossimRadarSat2RPCModel::open(const ossimFilename& file)
       } // matches: if ( xdoc->openFile(xmlFile) )
 
       delete xdoc;
-      xdoc = 0;
+      xdoc = nullptr;
 
    } // matches: if ( xmlFile.exists() )
 
@@ -496,7 +496,7 @@ bool ossimRadarSat2RPCModel::InitSensorParams(const ossimKeywordlist &kwl,
       ellip_min = ossimString::toDouble(ellip_min_str) * 1000.0;// km -> m
    }
    
-   if(_sensor != 0)
+   if(_sensor != nullptr)
    {
       delete _sensor;
    }
@@ -554,7 +554,7 @@ bool ossimRadarSat2RPCModel::initSensorParams(
    if (!result)
    {
       delete _sensor;
-      _sensor = 0;
+      _sensor = nullptr;
    }
    
    if (traceDebug())
@@ -611,7 +611,7 @@ bool ossimRadarSat2RPCModel::loadState (const ossimKeywordlist &kwl,
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
    
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    ossimString s;
    
    // Check the type first.

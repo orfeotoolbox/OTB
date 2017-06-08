@@ -130,11 +130,11 @@ protected:
 
   /** Predict values using the model */
   virtual TargetSampleType
-  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = ITK_NULLPTR) const override;
+  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = nullptr) const override;
 
 
   virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
-                              TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const override;
+                              TargetListSampleType *, ConfidenceListSampleType * = nullptr) const override;
 
   template<typename DataType>
   DataType NormalizeData(const DataType &data) const;

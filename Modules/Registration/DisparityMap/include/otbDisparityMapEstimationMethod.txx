@@ -42,10 +42,10 @@ DisparityMapEstimationMethod<TFixedImage, TMovingImage, TPointSet>
   //this->SetNumberOfRequiredOutputs(1);
   // this->SetReleaseDataFlag(false);
   this->SetReleaseDataBeforeUpdateFlag(false);
-  m_Transform    = ITK_NULLPTR; // has to be provided by the user.
-  m_Interpolator = ITK_NULLPTR; // has to be provided by the user.
-  m_Metric       = ITK_NULLPTR; // has to be provided by the user.
-  m_Optimizer    = ITK_NULLPTR; // has to be provided by the user.
+  m_Transform    = nullptr; // has to be provided by the user.
+  m_Interpolator = nullptr; // has to be provided by the user.
+  m_Metric       = nullptr; // has to be provided by the user.
+  m_Optimizer    = nullptr; // has to be provided by the user.
   m_WinSize.Fill(15);
   m_ExploSize.Fill(10);
   m_InitialTransformParameters = ParametersType(1);

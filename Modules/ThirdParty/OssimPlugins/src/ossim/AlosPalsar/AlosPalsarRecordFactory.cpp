@@ -48,9 +48,9 @@ AlosPalsarRecord* AlosPalsarRecordFactory::Instantiate(int id)
     ossimNotify(ossimNotifyLevel_DEBUG) << "Intanciate AlosPalsar record:" << id << "\n";
   }
   AlosPalsarRecord* record = _availableRecords[id];
-  if (record == NULL)
+  if (record == nullptr)
   {
-    return NULL;
+    return nullptr;
   }
   else
   {

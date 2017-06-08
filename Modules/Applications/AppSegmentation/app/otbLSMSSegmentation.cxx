@@ -601,7 +601,7 @@ private:
         WriteTile(changeLabel->GetOutput(),row,column,"RELAB");
 
         // Remove previous tile (not needed anymore)
-        readerIn = ITK_NULLPTR; // release the input file
+        readerIn = nullptr; // release the input file
         RemoveFile(tileIn);
         }
       }
@@ -658,7 +658,7 @@ private:
           m_FilesToRemoveAfterExecute.push_back(tmpfile);
 
           // Clean previous tiles (not needed anymore)
-          readerIn = ITK_NULLPTR; // release the input file
+          readerIn = nullptr; // release the input file
           RemoveFile(tileIn);
           }
         }
@@ -690,7 +690,7 @@ private:
   void AfterExecuteAndWriteOutputs() override
   {
     // Release input files
-    m_FinalReader = ITK_NULLPTR;
+    m_FinalReader = nullptr;
 
     if(IsParameterEnabled("cleanup"))
       {

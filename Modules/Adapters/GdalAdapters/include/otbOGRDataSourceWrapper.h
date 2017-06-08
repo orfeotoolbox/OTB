@@ -281,7 +281,7 @@ public:
    *  \return the extent of all layers
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
    */
-  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=ITK_NULLPTR) const;
+  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=nullptr) const;
 
   /** Grafts data and information from one data source to another.
    * \deprecated \c OGRLayer has an embedded input iterator. As a consequence,
@@ -328,7 +328,7 @@ public:
    */
   Layer CreateLayer(
     std::string        const& name,
-    OGRSpatialReference     * poSpatialRef = ITK_NULLPTR,
+    OGRSpatialReference     * poSpatialRef = nullptr,
     OGRwkbGeometryType        eGType = wkbUnknown,
     std::vector<std::string> const& papszOptions = std::vector<std::string>());
 
@@ -368,7 +368,7 @@ public:
   Layer CopyLayer(
     Layer            & srcLayer,
     std::string const& newName,
-    char            ** papszOptions = ITK_NULLPTR);
+    char            ** papszOptions = nullptr);
   //@}
 
   /**\name Layers access
@@ -471,7 +471,7 @@ public:
    * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
    */
   operator int boolean ::* () const {
-    return m_DataSource ? &boolean::i : ITK_NULLPTR;
+    return m_DataSource ? &boolean::i : nullptr;
     }
 
   /** Flushes all changes to disk.

@@ -96,14 +96,14 @@ public:
      * @return true on success, false on error.
      */
     bool saveState(ossimKeywordlist& kwl,
-                           const char* prefix=0) const override;
+                           const char* prefix=nullptr) const override;
 
     /**
      * @brief Method to the load (recreate) the state of the object from a
      * keyword list. Return true if ok or false on error.
      * @return true if load OK, false on error
      */
-    bool loadState (const ossimKeywordlist &kwl, const char *prefix=0) override;
+    bool loadState (const ossimKeywordlist &kwl, const char *prefix=nullptr) override;
 
 protected:
 
@@ -160,14 +160,14 @@ private:
    * @return true on success, false on error.
    */
   virtual bool internalSaveState(ossimKeywordlist& kwl,
-                         const char* prefix=0) const;
+                         const char* prefix=nullptr) const;
 
   /**
    * @brief Method to the load (recreate) the state of the object from a
    * keyword list. Return true if ok or false on error.
    * @return true if load OK, false on error
    */
-  virtual bool internalLoadState (const ossimKeywordlist &kwl, const char *prefix=0);
+  virtual bool internalLoadState (const ossimKeywordlist &kwl, const char *prefix=nullptr);
 
 
   /**

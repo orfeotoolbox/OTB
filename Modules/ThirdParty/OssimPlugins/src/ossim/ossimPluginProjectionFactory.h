@@ -56,7 +56,7 @@ public:
     * Take a keywordlist.
     */
    ossimProjection* createProjection(const ossimKeywordlist& kwl,
-                                             const char* prefix=0)const override;
+                                             const char* prefix=nullptr)const override;
 
    ossimObject* createObject(const ossimString& typeName)const override;
 
@@ -64,7 +64,7 @@ public:
     * Creates and object given a keyword list.
     */
    ossimObject* createObject(const ossimKeywordlist& kwl,
-                                     const char* prefix=0)const override;
+                                     const char* prefix=nullptr)const override;
 
    void getTypeNameList(std::vector<ossimString>& typeList)const override;
 protected:

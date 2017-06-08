@@ -58,14 +58,14 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     LibSVMMachineLearningModel<TInputValue,TOutputValue>::CM_INDEX;
 
   this->m_Parameters.nr_weight = 0;
-  this->m_Parameters.weight_label = ITK_NULLPTR;
-  this->m_Parameters.weight = ITK_NULLPTR;
+  this->m_Parameters.weight_label = nullptr;
+  this->m_Parameters.weight = nullptr;
 
-  this->m_Model = ITK_NULLPTR;
+  this->m_Model = nullptr;
 
   this->m_Problem.l = 0;
-  this->m_Problem.y = ITK_NULLPTR;
-  this->m_Problem.x = ITK_NULLPTR;
+  this->m_Problem.y = nullptr;
+  this->m_Problem.x = nullptr;
 #ifndef OTB_SHOW_ALL_MSG_DEBUG
   svm_set_print_string_function(&otb::Utils::PrintNothing);
 #endif
@@ -130,7 +130,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   x[input.Size()].index = -1;
   x[input.Size()].value = 0;
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     if (!this->m_ConfidenceIndex)
       {
@@ -222,7 +222,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 {
   this->DeleteModel();
   m_Model = svm_load_model(filename.c_str());
-  if (m_Model == ITK_NULLPTR)
+  if (m_Model == nullptr)
     {
     itkExceptionMacro(<< "Problem while loading SVM model " << filename);
     }
@@ -388,7 +388,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   if (m_Problem.y)
     {
     delete[] m_Problem.y;
-    m_Problem.y = ITK_NULLPTR;
+    m_Problem.y = nullptr;
     }
   if (m_Problem.x)
     {
@@ -400,7 +400,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
         }
       }
     delete[] m_Problem.x;
-    m_Problem.x = ITK_NULLPTR;
+    m_Problem.x = nullptr;
     }
   m_Problem.l = 0;
 }
@@ -414,7 +414,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     {
     svm_free_and_destroy_model(&m_Model);
     }
-  m_Model = ITK_NULLPTR;
+  m_Model = nullptr;
 }
 
 template <class TInputValue, class TOutputValue>

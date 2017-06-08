@@ -119,7 +119,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 {
   if (this->GetNumberOfOutputs() < (level + 2))
     {
-    return 0;
+    return nullptr;
     }
   return static_cast<otb::ogr::DataSource *>(this->itk::ProcessObject::GetOutput(level + 1));
 }
@@ -248,7 +248,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     tmpLayers[m_ClassPartition[className]].CreateFeature( dstFeature );
     }
 
-  inLayer.SetSpatialFilter(ITK_NULLPTR);
+  inLayer.SetSpatialFilter(nullptr);
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>

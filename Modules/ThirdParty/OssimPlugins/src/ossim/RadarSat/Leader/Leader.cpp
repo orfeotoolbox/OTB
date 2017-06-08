@@ -96,7 +96,7 @@ std::istream& operator>>(std::istream& is, Leader& data)
 		  if ( (header.get_rec_seq() == 2) && (header.get_length() == 8960) )
 		    {
 		    record = factory.Instantiate(header.get_rec_seq() + 5); // case of SCN, SCW
-        if (record != NULL)
+        if (record != nullptr)
           {
           record->Read(is);
           data._records[header.get_rec_seq() + 5] = record;
@@ -111,7 +111,7 @@ std::istream& operator>>(std::istream& is, Leader& data)
 		  else
 		    {
         record = factory.Instantiate(header.get_rec_seq());
-        if (record != NULL)
+        if (record != nullptr)
           {
           record->Read(is);
           data._records[header.get_rec_seq()] = record;

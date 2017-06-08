@@ -539,7 +539,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       }
    }
 
-   char* exportString = NULL;
+   char* exportString = nullptr;
    oSRS.exportToWkt(&exportString);
    
    if(exportString)
@@ -566,11 +566,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    
    const char* wkt = wktString.c_str();
    
-   OGRSpatialReferenceH  hSRS = NULL;
+   OGRSpatialReferenceH  hSRS = nullptr;
    ossimDpt falseEastingNorthing;
    
    // Translate the WKT into an OGRSpatialReference. 
-   hSRS = OSRNewSpatialReference(NULL);
+   hSRS = OSRNewSpatialReference(nullptr);
    if( OSRImportFromWkt( hSRS, (char **) &wkt ) != OGRERR_NONE )
    {
       OSRDestroySpatialReference( hSRS );
@@ -593,7 +593,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    // If geographic, use degrees.
    //---
 //   const char* units = OSRGetAttrValue( hSRS, "UNIT", 0 );
-   const char* units = NULL;
+   const char* units = nullptr;
    OGR_SRSNode* node = ((OGRSpatialReference *)hSRS)->GetRoot();
    int nbChild  = node->GetChildCount();
    for (int i = 0; i < nbChild; i++)
@@ -616,7 +616,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    if ( bGeog == false )
    {
       ossim_units = "meters";
-      if ( units != NULL )
+      if ( units != nullptr )
       {
          // Down case to avoid case mismatch.
          ossimString s = units;
@@ -705,8 +705,8 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    
    kwl.add(prefix, ossimKeywordNames::TYPE_KW, ossimProj.c_str(), true);
 
-   falseEastingNorthing.x = OSRGetProjParm(hSRS, SRS_PP_FALSE_EASTING, 0.0, NULL);
-   falseEastingNorthing.y = OSRGetProjParm(hSRS, SRS_PP_FALSE_NORTHING, 0.0, NULL);
+   falseEastingNorthing.x = OSRGetProjParm(hSRS, SRS_PP_FALSE_EASTING, 0.0, nullptr);
+   falseEastingNorthing.y = OSRGetProjParm(hSRS, SRS_PP_FALSE_NORTHING, 0.0, nullptr);
    if (epsg_code)
    {
       kwl.add(prefix, ossimKeywordNames::PCS_CODE_KW, epsg_code, true);
@@ -722,12 +722,12 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    {
       kwl.add(prefix,
               ossimKeywordNames::STD_PARALLEL_1_KW,
-              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, nullptr),
               true);
       
       kwl.add(prefix,
               ossimKeywordNames::ORIGIN_LATITUDE_KW,
-              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, nullptr),
               true);
 
       ossimUnitType units =
@@ -773,11 +773,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
 
       kwl.add(prefix,
               ossimKeywordNames::ORIGIN_LATITUDE_KW,
-              OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, nullptr),
               true);
       kwl.add(prefix,
               ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, nullptr),
               true);
    }
    else if( (ossimProj == "ossimLambertConformalConicProjection") ||
@@ -797,19 +797,19 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
               true);
       kwl.add(prefix,
               ossimKeywordNames::ORIGIN_LATITUDE_KW,
-              OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, nullptr),
               true);
       kwl.add(prefix,
               ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, nullptr),
               true);
       kwl.add(prefix,
               ossimKeywordNames::STD_PARALLEL_1_KW,
-              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, nullptr),
               true);
       kwl.add(prefix,
               ossimKeywordNames::STD_PARALLEL_2_KW,
-              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_2, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_2, 0.0, nullptr),
               true);
    }
    else if(ossimProj == "ossimMercatorProjection")
@@ -820,11 +820,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
               true);
       kwl.add(prefix,
               ossimKeywordNames::ORIGIN_LATITUDE_KW,
-              OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, nullptr),
               true);
       kwl.add(prefix,
               ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, nullptr),
               true);
       kwl.add(prefix,
               ossimKeywordNames::FALSE_EASTING_NORTHING_KW,
@@ -843,7 +843,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
               true);
       kwl.add(prefix,
               ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, NULL),
+              OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, nullptr),
               true);
       kwl.add(prefix,
               ossimKeywordNames::FALSE_EASTING_NORTHING_KW,
@@ -886,16 +886,16 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
                  true);
          kwl.add(prefix,
                  ossimKeywordNames::SCALE_FACTOR_KW,
-                 OSRGetProjParm(hSRS, SRS_PP_SCALE_FACTOR, 1.0, NULL),
+                 OSRGetProjParm(hSRS, SRS_PP_SCALE_FACTOR, 1.0, nullptr),
                  true);
          
          kwl.add(prefix,
                  ossimKeywordNames::ORIGIN_LATITUDE_KW,
-                 OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, NULL),
+                 OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, nullptr),
                  true);
          kwl.add(prefix,
                  ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-                 OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, NULL),
+                 OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, nullptr),
                  true);
          kwl.add(prefix,
                  ossimKeywordNames::FALSE_EASTING_NORTHING_KW,

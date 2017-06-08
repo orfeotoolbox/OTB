@@ -75,7 +75,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarData& data)
   is >> header;
 
   AlosPalsarRecord* record = new AlosPalsarDataFileDescriptor;
-  if (record != NULL)
+  if (record != nullptr)
   {
     record->Read(is);
     data._records[header.get_rec_seq()] = record;
@@ -94,7 +94,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarData& data)
 
   record = new AlosPalsarSignalData;
 
-  if (record != NULL)
+  if (record != nullptr)
   {
     record->Read(is);
     data._records[header.get_rec_seq()] = record;
@@ -159,7 +159,7 @@ bool AlosPalsarData::saveState(ossimKeywordlist& kwl,
    * Adding metadata necessary to the sensor model in the keywordlist
    */
   const AlosPalsarDataFileDescriptor *datafiledesc = get_AlosPalsarDataFileDescriptor();
-  if (datafiledesc != NULL)
+  if (datafiledesc != nullptr)
   {
     kwl.add(prefix, "num_lines", datafiledesc->get_num_lines(), true);
     kwl.add(prefix, "num_pix_in_line", datafiledesc->get_num_pix_in_line(), true);
@@ -170,7 +170,7 @@ bool AlosPalsarData::saveState(ossimKeywordlist& kwl,
   }
 
   const AlosPalsarSignalData *signalData = get_AlosPalsarSignalData();
-  if (datafiledesc != NULL)
+  if (datafiledesc != nullptr)
   {
     kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(), true);
     // slant range to 1st data sample in meters

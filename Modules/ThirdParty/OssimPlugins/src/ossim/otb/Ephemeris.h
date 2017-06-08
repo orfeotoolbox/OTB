@@ -124,14 +124,14 @@ public:
     * @param prefix added to keys when saved.
     * @return true on success, false on error.
     */
-   bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
+   bool saveState(ossimKeywordlist& kwl, const char* prefix=nullptr) const;
 
    /**
     * @brief Method to the load (recreate) the state of the object from a
     * keyword list. Return true if ok or false on error.
     * @return true if load OK, false on error
     */
-   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   bool loadState (const ossimKeywordlist &kwl, const char *prefix=nullptr);
 
 protected:
 

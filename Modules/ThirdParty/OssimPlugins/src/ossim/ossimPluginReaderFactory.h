@@ -65,7 +65,7 @@ namespace ossimplugins
        * @return pointer to image handler on success, 0 on failure.
        */
       ossimImageHandler* open(const ossimKeywordlist& kwl,
-                                      const char* prefix=0)const override;
+                                      const char* prefix=nullptr)const override;
 
       /**
        * @brief createObject that takes a class name.
@@ -81,7 +81,7 @@ namespace ossimplugins
        * @return pointer to image handler on success, 0 on failure.
        */
       ossimObject* createObject(const ossimKeywordlist& kwl,
-                                        const char* prefix=0)const override;
+                                        const char* prefix=nullptr)const override;
 
       /**
        * @brief Adds ossimTerraSarTiffReader to the typeList.

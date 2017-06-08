@@ -47,7 +47,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   m_ComputeFlusser(true),
   m_ComputePolygon(true),
   m_ReducedAttributeSet(true),
-  m_LabelImage(ITK_NULLPTR)
+  m_LabelImage(nullptr)
 {}
 
 /** The comparator (!=) */

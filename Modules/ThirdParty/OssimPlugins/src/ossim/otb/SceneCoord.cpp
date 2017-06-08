@@ -102,7 +102,7 @@ bool SceneCoord::loadState(const ossimKeywordlist& kwl, const char* prefix)
    bool result = true;
 
    ossimString s;
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    
    std::string pfx("");
    if (prefix)
@@ -155,7 +155,7 @@ std::ostream& SceneCoord::print(std::ostream& out) const
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\n SceneCoord class data members:\n";
 
-   const char* prefix = 0;
+   const char* prefix = nullptr;
    ossimKeywordlist kwl;
    ossimString pfx;
    pfx += SCENE_COORD;

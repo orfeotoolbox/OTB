@@ -71,7 +71,7 @@ namespace ossimplugins
 
    ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
    {
-      return initialized_ ? &factoryInstance : 0;
+      return initialized_ ? &factoryInstance : nullptr;
    }
 
    template <typename ProjectionType>
@@ -129,7 +129,7 @@ namespace ossimplugins
          }
          else
          {
-            return 0;
+            return nullptr;
          }
       }
 
@@ -137,14 +137,14 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimFilename& file_name, ossim_uint32 /*entryIdx*/)const
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
-   ossimRefPtr<ossimProjection> projection = 0;
+   ossimRefPtr<ossimProjection> projection = nullptr;
    //traceDebug.setTraceFlag(true);
 
 #ifndef _WIN32
    char real_path[PATH_MAX + 1];
-   char *ret_path = NULL;
+   char *ret_path = nullptr;
    ret_path = realpath(file_name, real_path);
-   if( ret_path == NULL)
+   if( ret_path == nullptr)
    {
       if(traceExec())
       {
@@ -154,7 +154,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             << strerror(errno) << std::endl;
       }
 
-      return NULL;
+      return nullptr;
    }
    const ossimFilename abs_file_name( real_path );
 #else
@@ -286,7 +286,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             {
                projection = model.get();
             }
-            model = 0;
+            model = nullptr;
          }
       }
    }
@@ -403,13 +403,13 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
                    << MODULE << " DEBUG: Leaving ...." << std::endl;
    }
 
-   return 0;
+   return nullptr;
 }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimKeywordlist& kwl, const char* prefix)const
 {
-   ossimRefPtr<ossimProjection> result = 0;
+   ossimRefPtr<ossimProjection> result = nullptr;
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimKeywordlist& kwl)";
 
    SCOPED_LOG(traceDebug, MODULE);
@@ -476,7 +476,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       // Then, try to load the keyword list
       if ( result.get() && !result->loadState(kwl, prefix) )
       {
-         result = 0;
+         result = nullptr;
       }
    }
 

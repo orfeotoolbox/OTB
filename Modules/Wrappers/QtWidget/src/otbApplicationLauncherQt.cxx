@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 
   // Clean resources
   if (mainWindow) delete mainWindow;
-  app = ITK_NULLPTR;
+  app = nullptr;
   ApplicationRegistry::CleanRegistry();
 
   return ret;

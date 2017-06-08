@@ -61,7 +61,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return 0;
+    return nullptr;
     }
   return static_cast<const otb::ogr::DataSource *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -81,7 +81,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return 0;
+    return nullptr;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -207,7 +207,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   this->m_InMemoryInputs.clear();
   this->m_InMemoryInputs.reserve(numberOfThreads);
   std::string tmpLayerName("thread");
-  OGRSpatialReference * oSRS = ITK_NULLPTR;
+  OGRSpatialReference * oSRS = nullptr;
   if (inLayer.GetSpatialRef())
     {
     oSRS = inLayer.GetSpatialRef()->Clone();
@@ -385,14 +385,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     case wkbPoint25D:
       {
       OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
-      if (castPoint == ITK_NULLPTR) break;
+      if (castPoint == nullptr) break;
       
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
       const TInputImage* img = this->GetInput();
       const TMaskImage* mask = this->GetMask(); 
       img->TransformPhysicalPointToIndex(imgPoint,imgIndex);
-      if ((mask == ITK_NULLPTR) || mask->GetPixel(imgIndex))
+      if ((mask == nullptr) || mask->GetPixel(imgIndex))
         {
         this->ProcessSample(feature, imgIndex, imgPoint, threadid);
         }
@@ -403,7 +403,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       OGRLineString* castLineString = dynamic_cast<OGRLineString*>(geom);
 
-      if (castLineString == ITK_NULLPTR) break;
+      if (castLineString == nullptr) break;
       this->ProcessLine(feature,castLineString,region,threadid);
       break;
       }
@@ -411,7 +411,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     case wkbPolygon25D:
       {
       OGRPolygon* castPolygon = dynamic_cast<OGRPolygon*>(geom);
-      if (castPolygon == ITK_NULLPTR) break;
+      if (castPolygon == nullptr) break;
       this->ProcessPolygon(feature,castPolygon,region,threadid);
       break;
       }
@@ -738,7 +738,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       counter = 0;
     }
 
-  inLayer.SetSpatialFilter(ITK_NULLPTR);
+  inLayer.SetSpatialFilter(nullptr);
 }
 
 template<class TInputImage, class TMaskImage>
@@ -774,7 +774,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     {
     std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
     bool projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = ITK_NULLPTR;
+    OGRSpatialReference * oSRS = nullptr;
     if(projectionInformationAvailable)
       {
       oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));

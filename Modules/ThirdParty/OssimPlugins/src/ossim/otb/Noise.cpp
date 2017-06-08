@@ -102,7 +102,7 @@ bool Noise::loadState(const ossimKeywordlist& kwl, const char* prefix)
    pfx += NOISE;
 
    ossimString s;
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    std::string s1 = pfx + ".";
 
   lookup = kwl.find(s1.c_str(), NAME_OF_NOISE_POLARISATION_KW);
@@ -152,7 +152,7 @@ std::ostream& Noise::print(std::ostream& out) const
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\n Noise class data members:\n";
 
-   const char* prefix = 0;
+   const char* prefix = nullptr;
    ossimKeywordlist kwl;
    ossimString pfx;
    pfx += NOISE;

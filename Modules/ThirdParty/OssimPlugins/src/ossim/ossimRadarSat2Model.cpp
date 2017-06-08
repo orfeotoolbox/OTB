@@ -273,7 +273,7 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
       } // matches: if ( xdoc->openFile(xmlFile) )
 
       delete xdoc;
-      xdoc = 0;
+      xdoc = nullptr;
 
    } // matches: if ( xmlFile.exists() )
 
@@ -400,7 +400,7 @@ bool ossimRadarSat2Model::InitSensorParams(const ossimKeywordlist &kwl,
    const char* ellip_min_str = kwl.find(prefix,"ellip_min");
    double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-   if(_sensor != 0)
+   if(_sensor != nullptr)
    {
       delete _sensor;
    }
@@ -504,7 +504,7 @@ bool ossimRadarSat2Model::InitPlatformPosition(const ossimKeywordlist &kwl, cons
    /*
     * Creation of the platform position interpolator
     */
-   if (_platformPosition != 0)
+   if (_platformPosition != nullptr)
    {
       delete _platformPosition;
    }
@@ -534,7 +534,7 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
 
    // no reference point (e.g. scene center) is given in the annotation file
    // we choose to use the upper left corner as reference point
-   if(_refPoint == 0)
+   if(_refPoint == nullptr)
    {
       _refPoint = new RefPoint();
    }
@@ -556,10 +556,10 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
    }
    delete date;//FIXME to confirm
 
-   if(_platformPosition != 0)
+   if(_platformPosition != nullptr)
    {
       Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-      if (ephemeris == 0) return false ;
+      if (ephemeris == nullptr) return false ;
       _refPoint->set_ephemeris(ephemeris);
 
       delete ephemeris;
@@ -738,7 +738,7 @@ bool ossimRadarSat2Model::initSRGR(const ossimXmlDocument* xdoc,
       {
          if (xnode.valid())
          {
-            ossimRefPtr<ossimXmlNode> node = 0;
+            ossimRefPtr<ossimXmlNode> node = nullptr;
             node = xnode->findFirstNode(
                ossimString("zeroDopplerAzimuthTime"));
             if (node.valid())
@@ -806,7 +806,7 @@ bool ossimRadarSat2Model::initPlatformPosition(
    if (!result)
    {
       delete _platformPosition;
-      _platformPosition = 0;
+      _platformPosition = nullptr;
    }
 
    if (traceDebug())
@@ -840,7 +840,7 @@ bool ossimRadarSat2Model::initSensorParams(
    if (!result)
    {
       delete _sensor;
-      _sensor = 0;
+      _sensor = nullptr;
    }
 
    if (traceDebug())
@@ -945,7 +945,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
 
    // Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
    Ephemeris * ephemeris = _platformPosition->Interpolate(jsdate);
-   if (ephemeris == 0)
+   if (ephemeris == nullptr)
    {
       if (traceDebug())
       {
@@ -956,7 +956,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
    }
    _refPoint->set_ephemeris(ephemeris);
    delete ephemeris;
-   ephemeris = 0;
+   ephemeris = nullptr;
 
    double distance = 1;
 
@@ -1387,7 +1387,7 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    ossimString s;
 
    // Check the type first.

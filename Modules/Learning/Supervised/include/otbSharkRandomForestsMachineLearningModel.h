@@ -142,10 +142,10 @@ protected:
   virtual ~SharkRandomForestsMachineLearningModel();
 
   /** Predict values using the model */
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
 
   
-  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const override;
+  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = nullptr) const override;
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;

@@ -30,7 +30,7 @@ namespace otb
 template<class TVectorData, class TInputImage, class TOutputImage>
 RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 ::RasterizeVectorDataFilter()
- : m_OGRDataSourcePointer(ITK_NULLPTR)
+ : m_OGRDataSourcePointer(nullptr)
 {
   this->SetNumberOfRequiredInputs(1);
 }
@@ -69,7 +69,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
     // Get the projection ref of the current VectorData
     std::string projectionRefWkt = vd->GetProjectionRef();
     bool        projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = ITK_NULLPTR;
+    OGRSpatialReference * oSRS = nullptr;
 
     if (projectionInformationAvailable)
       {
@@ -88,14 +88,14 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 
     // Iterative method to build the layers from a VectorData
     OGRRegisterAll();
-    OGRLayer *   ogrCurrentLayer = ITK_NULLPTR;
+    OGRLayer *   ogrCurrentLayer = nullptr;
     std::vector<OGRLayer *> ogrLayerVector;
     otb::OGRIOHelper::Pointer IOConversion = otb::OGRIOHelper::New();
 
     // The method ConvertDataTreeNodeToOGRLayers create the
     // OGRDataSource but don t release it. Destruction is done in the
     // desctructor
-    m_OGRDataSourcePointer = ITK_NULLPTR;
+    m_OGRDataSourcePointer = nullptr;
     ogrLayerVector = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot,
                                                                   m_OGRDataSourcePointer,
                                                                   ogrCurrentLayer,
@@ -108,7 +108,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
       }
 
     // Destroy the oSRS
-    if (oSRS != ITK_NULLPTR)
+    if (oSRS != nullptr)
       {
       OSRRelease(oSRS);
       }
@@ -189,15 +189,15 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
   GDALSetGeoTransform(dataset,const_cast<double*>(geoTransform.GetDataPointer()));
 
   // Burn the geometries into the dataset
-   if (dataset != ITK_NULLPTR)
+   if (dataset != nullptr)
      {
      GDALRasterizeLayers( dataset, m_BandsToBurn.size(),
                           &(m_BandsToBurn[0]),
                           m_SrcDataSetLayers.size(),
                           &(m_SrcDataSetLayers[0]),
-                          ITK_NULLPTR, ITK_NULLPTR, &(m_FullBurnValues[0]),
-                          ITK_NULLPTR,
-                          GDALDummyProgress, ITK_NULLPTR );
+                          nullptr, nullptr, &(m_FullBurnValues[0]),
+                          nullptr,
+                          GDALDummyProgress, nullptr );
 
      // release the dataset
      GDALClose( dataset );

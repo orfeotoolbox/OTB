@@ -54,7 +54,7 @@ namespace ossimplugins
    ossimErsSarModel::ossimErsSarModel():
       theNumberSRGR(0),
       thePixelSpacing(0),
-      theErsSarleader(NULL)
+      theErsSarleader(nullptr)
    {
       theSRGRCoeffset[0][0] = 0.0;
       theSRGRCoeffset[0][1] = 0.0;
@@ -63,10 +63,10 @@ namespace ossimplugins
 
    ossimErsSarModel::~ossimErsSarModel()
    {
-      if (theErsSarleader != NULL)
+      if (theErsSarleader != nullptr)
       {
          delete theErsSarleader;
-         theErsSarleader = NULL;
+         theErsSarleader = nullptr;
       }
    }
 
@@ -109,7 +109,7 @@ namespace ossimplugins
       const char* ellip_min_str = kwl.find(prefix, "ellip_min");
       double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-      if (_sensor != NULL)
+      if (_sensor != nullptr)
       {
          delete _sensor;
       }
@@ -168,10 +168,10 @@ namespace ossimplugins
       /*
        * Creation of the class allowing to store Leader file metadata
        */
-      if (theErsSarleader != NULL)
+      if (theErsSarleader != nullptr)
       {
          delete theErsSarleader;
-         theErsSarleader = NULL;
+         theErsSarleader = nullptr;
       }
 
       theErsSarleader = new ErsSarLeader();
@@ -245,7 +245,7 @@ namespace ossimplugins
 
       //kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimErsSarModel", true);
 
-      if (theErsSarleader == NULL)
+      if (theErsSarleader == nullptr)
       {
          std::cout << "Error: ErsSarleader is NULL" << std::endl;
          return false;
@@ -272,7 +272,7 @@ namespace ossimplugins
          ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
       }
 
-      const char* lookup = 0;
+      const char* lookup = nullptr;
       ossimString s;
 
       // Check the type first.
@@ -432,7 +432,7 @@ namespace ossimplugins
       /*
        * Antenna position interpolator creation
        */
-      if (_platformPosition != NULL)
+      if (_platformPosition != nullptr)
       {
          delete _platformPosition;
       }
@@ -463,7 +463,7 @@ namespace ossimplugins
       const char* rng_gate_str = kwl.find(prefix, "zero_dop_range_time_f_pixel");
       double rng_gate = atof(rng_gate_str);
 
-      if (_refPoint == NULL)
+      if (_refPoint == nullptr)
       {
          _refPoint = new RefPoint();
       }
@@ -531,10 +531,10 @@ namespace ossimplugins
 
       CivilDateTime date(year, month, day, hour * 3600 + min * 60 + sec, mili / 1000.0);
 
-      if (_platformPosition != NULL)
+      if (_platformPosition != nullptr)
       {
          Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
-         if (ephemeris == NULL) return false ;
+         if (ephemeris == nullptr) return false ;
          _refPoint->set_ephemeris(ephemeris);
 
          delete ephemeris;

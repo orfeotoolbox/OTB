@@ -82,7 +82,7 @@ struct OTBGdalAdapters_EXPORT StringListConverter
       {
       m_raw.push_back(b->c_str());
       }
-    m_raw.push_back(ITK_NULLPTR);
+    m_raw.push_back(nullptr);
     assert(CSLCount(const_cast <char**>(&m_raw[0])) == static_cast<int>(boost::size(strings)));
     }
   /**
@@ -91,7 +91,7 @@ struct OTBGdalAdapters_EXPORT StringListConverter
   char ** to_ogr() const
     {
     return m_raw.size() == 1
-            ? ITK_NULLPTR
+            ? nullptr
             : const_cast <char**>(&m_raw[0]);
     }
 private:

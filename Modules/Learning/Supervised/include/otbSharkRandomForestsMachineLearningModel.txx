@@ -123,7 +123,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     samples.push_back(value[i]);
     }
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     shark::RealVector probas = m_RFModel(samples);
     (*quality) = ComputeConfidence(probas, m_ComputeMargin);
@@ -142,11 +142,11 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
-  assert(input != ITK_NULLPTR);
-  assert(targets != ITK_NULLPTR);
+  assert(input != nullptr);
+  assert(targets != nullptr);
 
   assert(input->Size()==targets->Size()&&"Input sample list and target label list do not have the same size.");
-  assert(((quality==ITK_NULLPTR)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
+  assert(((quality==nullptr)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
   
   if(startIndex+size>input->Size())
     {
@@ -161,7 +161,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
   #endif
   
-  if(quality != ITK_NULLPTR)
+  if(quality != nullptr)
     {
     shark::Data<shark::RealVector> probas = m_RFModel(inputSamples);
     unsigned int id = startIndex;

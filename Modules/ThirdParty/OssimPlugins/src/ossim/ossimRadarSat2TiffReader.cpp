@@ -190,7 +190,7 @@ bool ossimplugins::ossimRadarSat2TiffReader::open(const ossimFilename& file)
          }
       }
       delete xdoc;
-      xdoc = 0;
+      xdoc = nullptr;
       
    } // matches: if ( file.ext().downcase() == "xml" )
 
@@ -279,7 +279,7 @@ ossimplugins::ossimRadarSat2TiffReader::getInternalImageGeometry() const
    } // matches: if ( xdoc->openFile(theProductXmlFile) )
    
    delete xdoc;
-   xdoc = 0;
+   xdoc = nullptr;
 
    if (traceDebug())
    {
@@ -305,7 +305,7 @@ bool ossimplugins::ossimRadarSat2TiffReader::isRadarSat2ProductFile(
       }
 
       delete xdoc;
-      xdoc = 0;
+      xdoc = nullptr;
    }
    
    return result;

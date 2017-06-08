@@ -124,7 +124,7 @@ bool Ephemeris::loadState(const ossimKeywordlist& kwl, const char* prefix)
    }
    pfx += "ephemeris.";
 
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    ossimString s;
    double d;
 

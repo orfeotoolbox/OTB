@@ -41,12 +41,12 @@ Sensor::Sensor(SensorParams* params, PlatformPosition* position)
 
 Sensor::~Sensor()
 {
-  if(_params != NULL)
+  if(_params != nullptr)
   {
     delete _params;
   }
 
-  if(_position != NULL)
+  if(_position != nullptr)
   {
     delete _position;
   }

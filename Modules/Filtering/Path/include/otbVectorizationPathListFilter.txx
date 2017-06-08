@@ -55,7 +55,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TInputModulus*>(this->itk::ProcessObject::GetInput(0));
 }
@@ -76,7 +76,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TInputDirection *>(this->itk::ProcessObject::GetInput(1));
 }

@@ -90,7 +90,7 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
   const char* ellip_min_str = kwl.find(prefix,"ellip_min");
   double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-  if(_sensor != NULL)
+  if(_sensor != nullptr)
   {
     delete _sensor;
   }
@@ -209,7 +209,7 @@ bool ossimCosmoSkymedModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
   /*
    * Creation of the platform position interpolator
    */
-  if (_platformPosition != NULL)
+  if (_platformPosition != nullptr)
   {
     delete _platformPosition;
   }
@@ -249,7 +249,7 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
   CivilDateTime ref_civil_date;
   if (! UtcDateTimeStringToCivilDate(referenceUTC, ref_civil_date)) return false;
 
-  if(_refPoint == NULL)
+  if(_refPoint == nullptr)
   {
     _refPoint = new RefPoint();
   }
@@ -262,10 +262,10 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
   double decimal = relative_date - second ;
   auto * date = new CivilDateTime(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
 
-  if(_platformPosition != NULL)
+  if(_platformPosition != nullptr)
   {
     Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-    if (ephemeris == NULL) return false ;
+    if (ephemeris == nullptr) return false ;
 
     _refPoint->set_ephemeris(ephemeris);
 

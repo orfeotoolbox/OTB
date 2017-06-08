@@ -79,7 +79,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   if (this->GetTexturesStatus()[0] == false)
     {
@@ -111,7 +111,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   if (this->GetTexturesStatus()[1] == false)
     {
@@ -143,7 +143,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   if (this->GetTexturesStatus()[2] == false)
     {
@@ -176,7 +176,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 4)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   if (this->GetTexturesStatus()[3] == false)
     {
@@ -208,7 +208,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 5)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   if (this->GetTexturesStatus()[4] == false)
     {
@@ -240,7 +240,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 6)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   if (this->GetTexturesStatus()[5] == false)
     {

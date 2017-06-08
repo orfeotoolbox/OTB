@@ -29,13 +29,13 @@ namespace ossimplugins
 {
 
 DataHistogramRecord::DataHistogramRecord():
-	_hist(NULL)
+	_hist(nullptr)
 {
 }
 
 DataHistogramRecord::~DataHistogramRecord()
 {
-	if (_hist != NULL)
+	if (_hist != nullptr)
 		delete[] _hist;
 }
 
@@ -226,7 +226,7 @@ std::istream& operator>>(std::istream& is, DataHistogramRecord& data)
 	buff[8] = '\0';
 	data._nhist = atoi(buff);
 
-	if(data._hist != NULL)
+	if(data._hist != nullptr)
 	{
 		delete[] data._hist;
 	}

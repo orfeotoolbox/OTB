@@ -46,7 +46,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, TOutputImage, TL
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<LabeledImageType *>
            (this->itk::ProcessObject::GetOutput(1));

@@ -118,7 +118,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
     pfx = prefix;
   }
    ossimString s;
-   const char* lookup = 0;
+   const char* lookup = nullptr;
 
   pfx += PREFIX;
   lookup = kwl.find(pfx.c_str(), UTC_TIME);

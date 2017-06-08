@@ -105,7 +105,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initPlatformPosition(
          
          int nbrData = 0; // to keep track of good stateVector count.
 
-         ossimRefPtr<ossimXmlNode> svNode = 0; // stateVector node
+         ossimRefPtr<ossimXmlNode> svNode = nullptr; // stateVector node
 
          for (ossim_uint32 i = 0 ; i < COUNT; ++i)
          {
@@ -263,7 +263,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initPlatformPosition(
             while (evIdx != ev.end())
             {
                delete (*evIdx);
-               (*evIdx) = 0;
+               (*evIdx) = nullptr;
             }
             ev.clear();
          }
@@ -1356,7 +1356,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initNoise(
          
          int nbrData = 0; // to keep track of good stateVector count.
 
-         ossimRefPtr<ossimXmlNode> svNode = 0; // stateVector node
+         ossimRefPtr<ossimXmlNode> svNode = nullptr; // stateVector node
 
          for (ossim_uint32 i = 0 ; i < COUNT; ++i)
          { 

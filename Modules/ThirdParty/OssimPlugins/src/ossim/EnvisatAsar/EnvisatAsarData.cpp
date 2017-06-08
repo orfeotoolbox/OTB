@@ -95,7 +95,7 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 			for (int i = 0; i<(it->get_num_dsr()); i++)
 			{
 				EnvisatAsarRecord* record = factory.Instantiate(str);
-				if (record != NULL)
+				if (record != nullptr)
 				{
 					is.seekg((std::streampos)(it->get_ds_offset())+ (std::streampos)(i*(it->get_dsr_size())));
 					record->Read(is);
@@ -151,7 +151,7 @@ mph * EnvisatAsarData::get_mph()
 		if ((*it)->get_mnemonic().compare("mph_rec") == 0)	return (mph*)(*it);
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 sph * EnvisatAsarData::get_sph()
 {
@@ -161,7 +161,7 @@ sph * EnvisatAsarData::get_sph()
 		if ((*it)->get_mnemonic().compare("sph_rec") == 0)	return (sph*)(*it);
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 
 SQ_ADSR * EnvisatAsarData::get_SQ_ADSR()
@@ -172,7 +172,7 @@ SQ_ADSR * EnvisatAsarData::get_SQ_ADSR()
 		if ((*it)->get_mnemonic().compare("SQ_ADSR_rec") == 0)	return (SQ_ADSR*)(*it);
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 MainProcessingParameters * EnvisatAsarData::get_MainProcessingParameters()
 {
@@ -182,7 +182,7 @@ MainProcessingParameters * EnvisatAsarData::get_MainProcessingParameters()
 		if ((*it)->get_mnemonic().compare("MainProcessingParameters_rec") == 0)	return (MainProcessingParameters*)(*it);
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 DopplerCentroidParameters * EnvisatAsarData::get_DopplerCentroidParameters()
 {
@@ -192,7 +192,7 @@ DopplerCentroidParameters * EnvisatAsarData::get_DopplerCentroidParameters()
 		if ((*it)->get_mnemonic().compare("DopplerCentroidParameters_rec") == 0)	return (DopplerCentroidParameters*)(*it);
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 SRGRConversionParameters * EnvisatAsarData::get_SRGRConversionParameters(int pos)
 {
@@ -209,7 +209,7 @@ SRGRConversionParameters * EnvisatAsarData::get_SRGRConversionParameters(int pos
 		}
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 ChirpParameters * EnvisatAsarData::get_ChirpParameters()
 {
@@ -219,7 +219,7 @@ ChirpParameters * EnvisatAsarData::get_ChirpParameters()
 		if ((*it)->get_mnemonic().compare("ChirpParameters_rec") == 0)	return (ChirpParameters*)(*it);
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 AntennaElevationPatterns * EnvisatAsarData::get_AntennaElevationPatterns()
 {
@@ -229,7 +229,7 @@ AntennaElevationPatterns * EnvisatAsarData::get_AntennaElevationPatterns()
 		if ((*it)->get_mnemonic().compare("AntennaElevationPatterns_rec") == 0)	return (AntennaElevationPatterns*)(*it);
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 
 // Return the first Geolocation Grid Record
@@ -274,13 +274,13 @@ GeolocationGrid * EnvisatAsarData::get_GeolocationGrid(int num_ds)
 		}
 		++it;
 	}
-	return NULL;
+	return nullptr;
 }
 
 
 int EnvisatAsarData::get_num_ds(EnvisatAsarRecord * record)
 {
-	if (record == NULL) return 0;
+	if (record == nullptr) return 0;
 	std::list<EnvisatAsarRecord*>::const_iterator it = _records.begin();
 	int cpt = 0;
 	while(it != _records.end())

@@ -63,10 +63,10 @@ ossimRadarSatModel::ossimRadarSatModel():
   ossimGeometricSarSensorModel(),
   _n_srgr(0),
   _pixel_spacing(0),
-  _data(NULL),
-  _leader(NULL),
-  _trailer(NULL),
-  _volumeDir(NULL)
+  _data(nullptr),
+  _leader(nullptr),
+  _trailer(nullptr),
+  _volumeDir(nullptr)
 {
 }
 
@@ -83,22 +83,22 @@ ossimRadarSatModel::ossimRadarSatModel(const ossimRadarSatModel& rhs):
 
 ossimRadarSatModel::~ossimRadarSatModel()
 {
-  if (_data != 0)
+  if (_data != nullptr)
   {
     delete _data;
   }
 
-  if (_leader != 0)
+  if (_leader != nullptr)
   {
     delete _leader;
   }
   
-  if (_trailer != 0)
+  if (_trailer != nullptr)
   {
     delete _trailer;
   }
 
-  if (_volumeDir != 0)
+  if (_volumeDir != nullptr)
   {
     delete _volumeDir;
   }
@@ -190,34 +190,34 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
     }
 
    //Creation of the class allowing to store the metadata from the Volume Directory File
-  if (_volumeDir != NULL)
+  if (_volumeDir != nullptr)
     {
     delete _volumeDir;
-    _volumeDir = NULL;
+    _volumeDir = nullptr;
     }
   _volumeDir = new VolumeDir();
 
   //Creation of the class allowing to store the metadata from the Data file
-  if (_data != NULL)
+  if (_data != nullptr)
     {
     delete _data;
-    _data = NULL;
+    _data = nullptr;
     }
   _data = new Data();
 
   //Creation of the class allowing to store the metadata from the Leader file
-  if(_leader != NULL)
+  if(_leader != nullptr)
     {
     delete _leader;
-    _leader = NULL;
+    _leader = nullptr;
     }
   _leader = new Leader();
 
   // Creation of the class allowing to store the metadata from the Trailer file
-  if(_trailer != NULL)
+  if(_trailer != nullptr)
     {
     delete _trailer;
-    _trailer = NULL;
+    _trailer = nullptr;
     }
   _trailer = new Trailer();
 
@@ -239,7 +239,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
       }
 
     RadarSatRecord* recordVDF = factoryVDF.Instantiate(headerVDF.get_rec_seq());
-    if (recordVDF != NULL && headerVDF.get_rec_seq() == 1)
+    if (recordVDF != nullptr && headerVDF.get_rec_seq() == 1)
       {
       recordVDF->Read(volumeDirFile);
 
@@ -295,7 +295,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
             }
 
           RadarSatRecord* recordDAT = factoryDAT.Instantiate(headerDAT.get_rec_seq());
-          if (recordDAT != NULL && headerDAT.get_rec_seq() == 1)
+          if (recordDAT != nullptr && headerDAT.get_rec_seq() == 1)
             {
             recordDAT->Read(dataFile);
             dataFile.close();
@@ -456,7 +456,7 @@ bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
     kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimRadarSatModel", true);
 
     FileDescriptor * fileDescriptor = _leader->get_FileDescriptor() ;
-    if(fileDescriptor != NULL)
+    if(fileDescriptor != nullptr)
     {
       kwl.add(prefix, "file_name",fileDescriptor->get_file_name().c_str(),true);
     }
@@ -466,13 +466,13 @@ bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
     }
 
     DataSetSummary * datasetSummary = _leader->get_DataSetSummary();
-    if(datasetSummary == NULL)
+    if(datasetSummary == nullptr)
       {
       delete datasetSummary;
       datasetSummary = _trailer->get_DataSetSummary();
       }
 
-    if(datasetSummary != NULL)
+    if(datasetSummary != nullptr)
     {
       kwl.add(prefix, "inp_sctim",datasetSummary->get_inp_sctim().c_str(),true);
 
@@ -530,13 +530,13 @@ bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
     }
 
     ProcessingParameters * processingParameters = _leader->get_ProcessingParameters();
-    if(processingParameters == NULL)
+    if(processingParameters == nullptr)
       {
       delete processingParameters;
       processingParameters = _trailer->get_ProcessingParameters();
       }
 
-    if(processingParameters != NULL)
+    if(processingParameters != nullptr)
     {
       kwl.add(prefix, "n_srgr",processingParameters->get_n_srgr(),true);
 
@@ -570,7 +570,7 @@ bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
     }
 
     PlatformPositionData * platformPositionData = _leader->get_PlatformPositionData();
-    if(platformPositionData != NULL)
+    if(platformPositionData != nullptr)
     {
       kwl.add(prefix, "neph",platformPositionData->get_ndata(),true);
       kwl.add(prefix, "eph_int",platformPositionData->get_data_int(),true);
@@ -605,7 +605,7 @@ bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
     }
 
     ImageOptionsFileDescriptor * imageOptionsFileDescriptor = _data->get_ImageOptionsFileDescriptor();
-    if(imageOptionsFileDescriptor != NULL)
+    if(imageOptionsFileDescriptor != nullptr)
     {
       kwl.add(prefix, "nbLin",imageOptionsFileDescriptor->get_nlin(),true);
       kwl.add(prefix, "nbCol",imageOptionsFileDescriptor->get_ngrp(),true);
@@ -617,7 +617,7 @@ bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
     }
 
     ProcessedDataRecord * firstProcessedDataRecord = _data->get_FirstProcessedDataRecord();
-    if(firstProcessedDataRecord != NULL)
+    if(firstProcessedDataRecord != nullptr)
     {
       sprintf(name,"cornersLon%i",0);
       kwl.add(prefix, name,((float) (firstProcessedDataRecord->get_lon_first()))/1000000.0,true);
@@ -636,7 +636,7 @@ bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
     }
 
     ProcessedDataRecord * lastProcessedDataRecord = _data->get_LastProcessedDataRecord();
-    if(lastProcessedDataRecord != NULL)
+    if(lastProcessedDataRecord != nullptr)
     {
       sprintf(name,"cornersLon%i",2);
       kwl.add(prefix, name,((float) (lastProcessedDataRecord->get_lon_first()))/1000000.0,true);
@@ -700,7 +700,7 @@ bool ossimRadarSatModel::loadState (const ossimKeywordlist &kwl,
      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
   }
 
-  const char* lookup = 0;
+  const char* lookup = nullptr;
   ossimString s;
 
   // Check the type first.
@@ -767,7 +767,7 @@ bool ossimRadarSatModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
   const char* ellip_min_str = kwl.find(prefix,"ellip_min");
   double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-  if(_sensor != NULL)
+  if(_sensor != nullptr)
   {
     delete _sensor;
   }
@@ -923,7 +923,7 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
   /*
    * Antenna position interpolator creation
    */
-  if (_platformPosition != NULL)
+  if (_platformPosition != nullptr)
   {
     delete _platformPosition;
   }
@@ -954,7 +954,7 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
   const char* rng_gate_str = kwl.find(prefix,"rng_gate");
   double rng_gate = atof(rng_gate_str);
 
-  if(_refPoint == NULL)
+  if(_refPoint == nullptr)
   {
     _refPoint = new RefPoint();
   }
@@ -1022,10 +1022,10 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 
   CivilDateTime date(year, month, day, hour * 3600 + min * 60 + sec, mili/1000.0);
 
-  if(_platformPosition != NULL)
+  if(_platformPosition != nullptr)
   {
     Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
-    if (ephemeris == NULL) return false ;
+    if (ephemeris == nullptr) return false ;
 
     _refPoint->set_ephemeris(ephemeris);
 

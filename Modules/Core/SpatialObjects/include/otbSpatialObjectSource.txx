@@ -46,7 +46,7 @@ SpatialObjectSource<TSpatialObject>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<SpatialObjectType *> (this->ProcessObject::GetOutput(0));
 }

@@ -149,7 +149,7 @@ public:
   {
     if (this->GetNumberOfInputs() < 1)
       {
-      return ITK_NULLPTR;
+      return nullptr;
       }
     else return (static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)));
   }
@@ -158,7 +158,7 @@ public:
   {
     if (this->GetNumberOfInputs() < 2)
       {
-      return ITK_NULLPTR;
+      return nullptr;
       }
     else return (static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1)));
   }

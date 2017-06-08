@@ -43,10 +43,10 @@ public:
    
    bool toOssimKwl(const ossimString& wktString,
                    ossimKeywordlist& kwl,
-                   const char* prefix=NULL)const;
+                   const char* prefix=nullptr)const;
    
    ossimString fromOssimKwl(const ossimKeywordlist& kwl,
-                            const char* prefix=NULL)const;
+                            const char* prefix=nullptr)const;
    /*!
     * Returns the empty string if the datum is not found
     *

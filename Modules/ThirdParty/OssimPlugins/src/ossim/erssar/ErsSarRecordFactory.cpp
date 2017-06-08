@@ -39,9 +39,9 @@ ErsSarRecordFactory::~ErsSarRecordFactory()
 ErsSarRecord* ErsSarRecordFactory::Instantiate(int id)
 {
   ErsSarRecord* record = _availableRecords[id];
-  if (record == NULL)
+  if (record == nullptr)
   {
-    return NULL;
+    return nullptr;
   }
   else
   {

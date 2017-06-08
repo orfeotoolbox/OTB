@@ -140,7 +140,7 @@ inline u64 GetMicroTime()
     return (count.QuadPart * 1000000) / freq.QuadPart;
 #else
     struct timeval t;
-    gettimeofday(&t, NULL);
+    gettimeofday(&t, nullptr);
     return (u64)t.tv_sec*1000000+t.tv_usec;
 #endif
 }
@@ -160,7 +160,7 @@ inline void* sift_aligned_malloc(size_t size, size_t align)
 
 void sift_aligned_free(void* pmem)
 {
-    if( pmem != NULL ) {
+    if( pmem != nullptr ) {
         char* p = (char*)pmem;
         free(p - (int)*(u16*)(p-2));
     }
@@ -294,9 +294,9 @@ Image CreateImageFromMatlabData(double* pdata, int rows, int cols)
     return image;
 }
 
-static Image* s_imgaus = NULL, *s_imdiff = NULL;
-static Image s_imgrad = NULL, s_imorient = NULL;
-static char* s_MaxMinArray = NULL;
+static Image* s_imgaus = nullptr, *s_imdiff = nullptr;
+static Image s_imgrad = nullptr, s_imorient = nullptr;
+static char* s_MaxMinArray = nullptr;
 
 Keypoint GetKeypoints(Image porgimage, unsigned int nbScales)
 {
@@ -304,10 +304,10 @@ Keypoint GetKeypoints(Image porgimage, unsigned int nbScales)
     DVProfClear();
 #endif
 
-    Image pimage = NULL;
+    Image pimage = nullptr;
     float fscale = 1.0f;
-    Image halfimage = NULL;
-    Keypoint keypts = 0;
+    Image halfimage = nullptr;
+    Keypoint keypts = nullptr;
 
     {
         DVSTARTPROFILE();
@@ -491,7 +491,7 @@ void GaussianBlur(Image imgdst, Image image, float fblur)
         ksize = 3;
     ksize += !(ksize&1); // make it odd
 
-    float* kernel = NULL;
+    float* kernel = nullptr;
     for(auto & it : s_mapkernel) {
         if( fabsf(fblur-it.first) < 0.001f ) {
             kernel = it.second;
@@ -499,7 +499,7 @@ void GaussianBlur(Image imgdst, Image image, float fblur)
         }
     }
 
-    if( kernel == NULL ) { // have to create a new one
+    if( kernel == nullptr ) { // have to create a new one
         double faccum = 0;
 
         // +4 for alignment and padding issues with sse
@@ -937,7 +937,7 @@ Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint keypts,
 
         #pragma omp parallel for schedule(dynamic,8)
         for( int rowstart = 5; rowstart < rows-5; ++rowstart ) {
-            Keypoint newkeypts = NULL;
+            Keypoint newkeypts = nullptr;
             float* diffpixels = _diffpixels + rowstart*stride;
             for( int colstart = 5; colstart < cols-5; ++colstart ) {
 
@@ -952,7 +952,7 @@ Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint keypts,
                 }
             }
 
-            if( newkeypts != NULL ) {
+            if( newkeypts != nullptr ) {
                 // find the last keypoint
                 Keypoint lastkeypt = newkeypts;
                 while(lastkeypt->next)
@@ -1683,7 +1683,7 @@ void PlaceInIndex(float* fdesc, float mag, float ori, float rx, float cx)
 
 void FreeKeypoints(Keypoint keypt)
 {
-    while(keypt != NULL) {
+    while(keypt != nullptr) {
         s_listKeypoints.push_back(keypt);
         keypt = keypt->next;
     }

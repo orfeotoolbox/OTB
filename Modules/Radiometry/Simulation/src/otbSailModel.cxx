@@ -72,7 +72,7 @@ SailModel
    if(this->GetNumberOfInputs() != 2)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -92,7 +92,7 @@ SailModel
    if(this->GetNumberOfInputs() != 2)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -113,7 +113,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -126,7 +126,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -139,7 +139,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(2));
 }
@@ -152,7 +152,7 @@ SailModel
    if(this->GetNumberOfOutputs() < 4)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(3));
 }

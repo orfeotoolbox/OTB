@@ -262,7 +262,7 @@ ImageFileWriter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
@@ -839,7 +839,7 @@ ImageFileWriter<TInputImage>
 {
   this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
   m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-  m_ImageIO = ITK_NULLPTR;
+  m_ImageIO = nullptr;
   this->Modified();
 }
 

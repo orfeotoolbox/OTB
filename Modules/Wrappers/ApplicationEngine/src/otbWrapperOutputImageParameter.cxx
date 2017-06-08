@@ -438,7 +438,7 @@ OutputImageParameter::GetWriter()
   // 1 : VectorImage
   // 2 : RGBAImage
   // 3 : RGBImage
-  itk::ProcessObject* writer = ITK_NULLPTR;
+  itk::ProcessObject* writer = nullptr;
   if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer())
@@ -534,7 +534,7 @@ OutputImageParameter::GetWriter()
       break;
       }
     }
-  if (ITK_NULLPTR == writer)
+  if (nullptr == writer)
     {
     itkExceptionMacro("Unknown Writer type.");
     }

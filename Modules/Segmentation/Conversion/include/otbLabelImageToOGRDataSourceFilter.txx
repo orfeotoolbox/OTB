@@ -81,7 +81,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(0));
@@ -103,7 +103,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(1));
@@ -207,14 +207,14 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     //Create the output layer for GDALPolygonize().
     ogr::DataSource::Pointer ogrDS = ogr::DataSource::New();
 
-    OGRLayerType outputLayer = ogrDS->CreateLayer("layer",ITK_NULLPTR,wkbPolygon);
+    OGRLayerType outputLayer = ogrDS->CreateLayer("layer",nullptr,wkbPolygon);
 
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
     outputLayer.CreateField(field, true);
 
     //Call GDALPolygonize()
     char ** options;
-    options = ITK_NULLPTR;
+    options = nullptr;
     char * option[1];
     if (m_Use8Connected == true)
     {
@@ -274,12 +274,12 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       }
       maskDataset->SetGeoTransform(geoTransform);
 
-      GDALPolygonize(dataset->GetRasterBand(1), maskDataset->GetRasterBand(1), &outputLayer.ogr(), 0, options, ITK_NULLPTR, ITK_NULLPTR);
+      GDALPolygonize(dataset->GetRasterBand(1), maskDataset->GetRasterBand(1), &outputLayer.ogr(), 0, options, nullptr, nullptr);
       GDALClose(maskDataset);
     }
     else
     {
-      GDALPolygonize(dataset->GetRasterBand(1), ITK_NULLPTR, &outputLayer.ogr(), 0, options, ITK_NULLPTR, ITK_NULLPTR);
+      GDALPolygonize(dataset->GetRasterBand(1), nullptr, &outputLayer.ogr(), 0, options, nullptr, nullptr);
     }
 
     this->SetNthOutput(0,ogrDS);

@@ -175,7 +175,7 @@ const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
   tmpParam->SetActive(false);
   AddParameter(tmpParam);
 
-  tmpParam = ITK_NULLPTR;
+  tmpParam = nullptr;
   /*
   AddParameter(ParameterType_OutputProcessXML,  key,   descr);
   SetParameterDescription(key, descr);
@@ -195,7 +195,7 @@ void ParameterGroup::AddInXMLParameter()
   tmpParam->SetActive(false);
   AddParameter(tmpParam);
 
-  tmpParam = ITK_NULLPTR;
+  tmpParam = nullptr;
   /*
   AddParameter(ParameterType_InputProcessXML,  key,   descr);
   SetParameterDescription(key, descr);
@@ -843,7 +843,7 @@ ParameterGroup::GetNumberOfParameters()
 Parameter* ParameterGroup::ResolveParameter(Parameter *param)
 {
   Parameter* ret = param;
-  if (ret == ITK_NULLPTR)
+  if (ret == nullptr)
     {
     itkGenericExceptionMacro("Can't resolve NULL parameter!");
     }

@@ -84,7 +84,7 @@ public:
   void ComputeBoundingRegion();
 protected:
   /** Constructor */
-  VectorDataProperties() : m_VectorDataObject(ITK_NULLPTR) {};
+  VectorDataProperties() : m_VectorDataObject(nullptr) {};
   /** Destructor */
   ~VectorDataProperties() override {}
   /**PrintSelf method */

@@ -134,7 +134,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -147,7 +147,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -160,7 +160,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -173,7 +173,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<4)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -186,7 +186,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<5)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -199,7 +199,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<6)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TEpipolarGridImage *>(this->itk::ProcessObject::GetInput(5));
 }
@@ -212,7 +212,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfInputs()<7)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(6));
 }
@@ -238,7 +238,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 {
   if(this->GetNumberOfOutputs()<1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<TOutputDEMImage *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -691,7 +691,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 
   typename TEpipolarGridImage::RegionType gridRegion = leftGrid->GetLargestPossibleRegion();
 
-  TOutputDEMImage * tmpDEM = ITK_NULLPTR;
+  TOutputDEMImage * tmpDEM = nullptr;
   typename TOutputDEMImage::RegionType outputRequestedRegion = outputDEM->GetRequestedRegion();
 
   typename TDisparityImage::RegionType disparityRegion;

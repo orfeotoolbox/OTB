@@ -465,7 +465,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   GDALAllRegister();
   poDriver = GetGDALDriverManager()->GetDriverByName(pszFormat);
 
-  if( poDriver == ITK_NULLPTR )
+  if( poDriver == nullptr )
     {
     std::cout << "impossible to get the driver" <<std::endl;
     return false;
@@ -484,14 +484,14 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     }
 
   GDALDataset *poDstDS;
-  char **papszOptions = ITK_NULLPTR;
+  char **papszOptions = nullptr;
 
   // Create dataset
   poDstDS = poDriver->Create( filename.c_str(), 128, 128, 1, GDT_Byte,
                               papszOptions );
 
   OGRSpatialReference oSRS_GCP;
-  char *pszSRS_WKT_GCP = ITK_NULLPTR;
+  char *pszSRS_WKT_GCP = nullptr;
   oSRS_GCP.SetWellKnownGeogCS( "WGS84" );
   oSRS_GCP.exportToWkt( &pszSRS_WKT_GCP );
 
@@ -525,7 +525,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
 
   // Set ProjectionRef
   OGRSpatialReference oSRS_ProjRef;
-  char *pszSRS_WKT_ProjRef = ITK_NULLPTR;
+  char *pszSRS_WKT_ProjRef = nullptr;
   if (setProjectionRef || setProjectionRef_UTM)
   {
     oSRS_ProjRef.SetWellKnownGeogCS( "WGS84" );
@@ -598,7 +598,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   GDALDataset  *poDataset;
 
   poDataset = (GDALDataset *) GDALOpen( filename.c_str(), GA_ReadOnly );
-  if( poDataset == ITK_NULLPTR )
+  if( poDataset == nullptr )
      return false;
 
   // Get some information from file

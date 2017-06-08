@@ -98,7 +98,7 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
    bool result = true;
 
    ossimString s;
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    
    std::string pfx("");
    if (prefix)
@@ -151,7 +151,7 @@ std::ostream& IncidenceAngles::print(std::ostream& out) const
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\n IncidentAngles class data members:\n";
 
-   const char* prefix = 0;
+   const char* prefix = nullptr;
    ossimKeywordlist kwl;
    ossimString pfx;
    pfx += INCIDENCE_ANGLES;

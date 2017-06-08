@@ -137,7 +137,7 @@ bool SensorParams::loadState(const ossimKeywordlist& kwl, const char* prefix)
    pfx += PREFIX;
 
    ossimString s;
-   const char* lookup = 0;
+   const char* lookup = nullptr;
 
    lookup = kwl.find(pfx.c_str(), PRF_KW);
    if (lookup)

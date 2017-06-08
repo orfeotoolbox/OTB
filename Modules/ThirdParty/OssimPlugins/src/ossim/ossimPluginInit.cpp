@@ -69,7 +69,7 @@ namespace ossimplugins
          {
             return theObjList[0].c_str();
          }
-         return (const char*)0;
+         return (const char*)nullptr;
       }
 
       /* Note symbols need to be exported on windoze... */

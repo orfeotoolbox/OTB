@@ -75,7 +75,7 @@ std::istream& operator>>(std::istream& is, VolumeDir& data)
     else
     {
       RadarSatRecord* record = factory.Instantiate(header.get_rec_seq());
-      if (record != NULL)
+      if (record != nullptr)
       {
         record->Read(is);
         data._records[header.get_rec_seq()] = record;

@@ -93,7 +93,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(0));
 }
@@ -106,7 +106,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(1));
 }
@@ -119,7 +119,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(2));
 }
@@ -132,7 +132,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 4)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(3));
 }
@@ -145,7 +145,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 5)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(4));
 }
@@ -158,7 +158,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 6)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(5));
 }
@@ -171,7 +171,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 7)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(6));
 }
@@ -184,7 +184,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 8)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(7));
 }
@@ -197,7 +197,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 9)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(8));
 }
@@ -210,7 +210,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 10)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(9));
 }
@@ -223,7 +223,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfOutputs() < 11)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(10));
 }

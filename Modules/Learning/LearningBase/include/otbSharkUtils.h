@@ -41,7 +41,7 @@ namespace Shark
 {
 template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<shark::RealVector> & output, unsigned int start, unsigned int size)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
 
   if(start+size>listSample->Size())
     {
@@ -83,7 +83,7 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
 
 template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<unsigned int> & output, unsigned int start, unsigned int size)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
 
   if(start+size>listSample->Size())
     {
@@ -113,13 +113,13 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<shark::RealVector> & output)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
   ListSampleRangeToSharkVector(listSample,output,0U,static_cast<unsigned int>(listSample->Size()));
 }
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<unsigned int> & output)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
   ListSampleRangeToSharkVector(listSample,output,0, static_cast<unsigned int>(listSample->Size()));
 }
   

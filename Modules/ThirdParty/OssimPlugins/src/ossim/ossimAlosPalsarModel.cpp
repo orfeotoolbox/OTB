@@ -54,22 +54,22 @@ namespace ossimplugins
 
    ossimAlosPalsarModel::ossimAlosPalsarModel():
       thePixelSpacing(0),
-      theAlosPalsarLeader(NULL),
-      theAlosPalsarData(NULL)
+      theAlosPalsarLeader(nullptr),
+      theAlosPalsarData(nullptr)
    {
    }
 
    ossimAlosPalsarModel::~ossimAlosPalsarModel()
    {
-      if (theAlosPalsarLeader != NULL)
+      if (theAlosPalsarLeader != nullptr)
       {
          delete theAlosPalsarLeader;
-         theAlosPalsarLeader = NULL;
+         theAlosPalsarLeader = nullptr;
       }
-      if (theAlosPalsarData != NULL)
+      if (theAlosPalsarData != nullptr)
       {
          delete theAlosPalsarData;
-         theAlosPalsarData = NULL;
+         theAlosPalsarData = nullptr;
       }
    }
 
@@ -116,7 +116,7 @@ namespace ossimplugins
       const char* dopcenLinear_str = kwl.find(prefix, "dopcen_range[1]");
       double dopcenLinear = atof(dopcenLinear_str);
 
-      if (_sensor != NULL)
+      if (_sensor != nullptr)
       {
          delete _sensor;
       }
@@ -187,10 +187,10 @@ namespace ossimplugins
       /*
        * Creation of the class allowing to store Leader file metadata
        */
-      if (theAlosPalsarLeader != NULL)
+      if (theAlosPalsarLeader != nullptr)
       {
          delete theAlosPalsarLeader;
-         theAlosPalsarLeader = NULL;
+         theAlosPalsarLeader = nullptr;
       }
 
       theAlosPalsarLeader = new AlosPalsarLeader();
@@ -290,7 +290,7 @@ namespace ossimplugins
 
       kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosPalsarModel", true);
 
-      if (theAlosPalsarLeader == NULL)
+      if (theAlosPalsarLeader == nullptr)
       {
          std::cout << "Error: AlosPalsarLeader is NULL" << std::endl;
          return false;
@@ -300,7 +300,7 @@ namespace ossimplugins
 
       if (result == true)
       {
-         if (theAlosPalsarData == NULL)
+         if (theAlosPalsarData == nullptr)
          {
             std::cout << "Error: AlosPalsarData is NULL" << std::endl;
             return false;
@@ -327,7 +327,7 @@ namespace ossimplugins
          ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
       }
 
-      const char* lookup = 0;
+      const char* lookup = nullptr;
       ossimString s;
 
       // Check the type first.
@@ -492,7 +492,7 @@ namespace ossimplugins
       /*
        * Antenna position interpolator creation
        */
-      if (_platformPosition != NULL)
+      if (_platformPosition != nullptr)
       {
          delete _platformPosition;
       }
@@ -524,7 +524,7 @@ namespace ossimplugins
       //const char* rng_gate_str = kwl.find(prefix,"zero_dop_range_time_f_pixel");
       //double rng_gate = atof(rng_gate_str);
 
-      if (_refPoint == NULL)
+      if (_refPoint == nullptr)
       {
          _refPoint = new RefPoint();
       }
@@ -592,10 +592,10 @@ namespace ossimplugins
 
       CivilDateTime date(year, month, day, hour * 3600 + min * 60 + sec, mili / 1000.0);
 
-      if (_platformPosition != NULL)
+      if (_platformPosition != nullptr)
       {
          Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
-         if (ephemeris == NULL) return false ;
+         if (ephemeris == nullptr) return false ;
          _refPoint->set_ephemeris(ephemeris);
 
          delete ephemeris;

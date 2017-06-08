@@ -163,7 +163,7 @@ private:
     std::vector<ImageType::PixelType>sum2(regionCount+1,defaultValue);
 
     otb::ogr::DataSource::Pointer ogrDS;
-    otb::ogr::Layer layer(ITK_NULLPTR, false);
+    otb::ogr::Layer layer(nullptr, false);
 
     OGRSpatialReference oSRS(projRef.c_str());
     std::vector<std::string> options;
@@ -267,7 +267,7 @@ private:
     std::ostringstream sqloss;
     sqloss.str("");
     sqloss<<"SELECT * FROM \""<<layername<<"\" ORDER BY label";
-    otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
+    otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), nullptr, nullptr);
     otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
 
     //Geometry fusion
@@ -280,7 +280,7 @@ private:
       OGRMultiPolygon geomToMerge;
       geomToMerge.addGeometry(firstFeature.GetGeometry());
       bool merging = true;
-      otb::ogr::Feature nextFeature(ITK_NULLPTR);
+      otb::ogr::Feature nextFeature(nullptr);
       bool haveMerged=false;
 
       while(merging)
@@ -354,7 +354,7 @@ private:
     if(extension==".shp"){
     sqloss.str("");
     sqloss<<"REPACK "<<layername;
-    ogrDS->ogr().ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
+    ogrDS->ogr().ExecuteSQL(sqloss.str().c_str(), nullptr, nullptr);
     }
 
     ogrDS->SyncToDisk();

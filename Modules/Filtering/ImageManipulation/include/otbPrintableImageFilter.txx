@@ -81,7 +81,7 @@ PrintableImageFilter<TInputImage, TMaskImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }

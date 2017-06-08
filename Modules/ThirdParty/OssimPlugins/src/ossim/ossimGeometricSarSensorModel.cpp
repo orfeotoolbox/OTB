@@ -56,10 +56,10 @@ namespace ossimplugins
    ossimGeometricSarSensorModel::ossimGeometricSarSensorModel()
       :
       ossimSensorModel(),
-      _platformPosition(0),
-      _sensor(0),
-      _refPoint(0),
-      _sarSensor(0),
+      _platformPosition(nullptr),
+      _sensor(nullptr),
+      _refPoint(nullptr),
+      _sarSensor(nullptr),
       _isProductGeoreferenced(false),
       _optimizationFactorX(0.0),
       _optimizationFactorY(0.0),
@@ -72,9 +72,9 @@ namespace ossimplugins
       const ossimGeometricSarSensorModel& rhs)
       :
       ossimSensorModel(rhs),
-      _platformPosition(rhs._platformPosition?rhs._platformPosition->Clone():(PlatformPosition*)0),
-      _sensor(rhs._sensor?rhs._sensor->Clone():(SensorParams*)0),
-      _refPoint(rhs._refPoint?rhs._refPoint->Clone():( RefPoint *)0),
+      _platformPosition(rhs._platformPosition?rhs._platformPosition->Clone():(PlatformPosition*)nullptr),
+      _sensor(rhs._sensor?rhs._sensor->Clone():(SensorParams*)nullptr),
+      _refPoint(rhs._refPoint?rhs._refPoint->Clone():( RefPoint *)nullptr),
       _isProductGeoreferenced(rhs._isProductGeoreferenced),
       _optimizationFactorX(rhs._optimizationFactorX),
       _optimizationFactorY(rhs._optimizationFactorY),
@@ -88,28 +88,28 @@ namespace ossimplugins
 
    ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
    {
-      if (_platformPosition != 0)
+      if (_platformPosition != nullptr)
       {
          delete _platformPosition;
-         _platformPosition = 0;
+         _platformPosition = nullptr;
       }
 
-      if(_sensor != 0)
+      if(_sensor != nullptr)
       {
          delete _sensor;
-         _sensor = 0;
+         _sensor = nullptr;
       }
 
-      if (_sarSensor != 0)
+      if (_sarSensor != nullptr)
       {
          delete _sarSensor;
-         _sarSensor = 0;
+         _sarSensor = nullptr;
       }
 
-      if(_refPoint != 0)
+      if(_refPoint != nullptr)
       {
          delete _refPoint;
-         _refPoint = 0;
+         _refPoint = nullptr;
       }
    }
 
@@ -435,7 +435,7 @@ namespace ossimplugins
          result = false;
       }
 
-      const char* lookup = 0;
+      const char* lookup = nullptr;
       ossimString s;
 
       lookup = kwl.find(prefix, PRODUCT_GEOREFERENCED_FLAG_KW);
@@ -577,7 +577,7 @@ std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\nossimGeometricSarSensorModel class data members:\n";
 
-   const char* prefix = 0;
+   const char* prefix = nullptr;
    ossimKeywordlist kwl;
    if (_platformPosition)
    {
@@ -773,30 +773,30 @@ void ossimGeometricSarSensorModel::lineSampleToWorld(const ossimDpt& image_point
 
 void ossimGeometricSarSensorModel::set_platformPosition(PlatformPosition* platformPosition)
 {
-   if(_platformPosition != 0)
+   if(_platformPosition != nullptr)
    {
       delete _platformPosition;
-      _platformPosition = 0;
+      _platformPosition = nullptr;
    }
    _platformPosition = platformPosition->Clone();
 }
 
 void ossimGeometricSarSensorModel::set_sensorParams(SensorParams* sensorParams)
 {
-   if(_sensor != 0)
+   if(_sensor != nullptr)
    {
       delete _sensor;
-      _sensor = 0;
+      _sensor = nullptr;
    }
    _sensor = sensorParams->Clone();
 }
 
 void ossimGeometricSarSensorModel::set_refPoint(RefPoint* refPoint)
 {
-   if(_refPoint != 0)
+   if(_refPoint != nullptr)
    {
       delete _refPoint;
-      _refPoint = 0;
+      _refPoint = nullptr;
    }
    _refPoint = refPoint->Clone();
 }

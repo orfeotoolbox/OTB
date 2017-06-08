@@ -38,7 +38,7 @@ static const char LINE_KW[]     = "line";
 static const char COL_KW[]      = "col";
 
 RefPoint::RefPoint():
-   _ephemeris(0),
+   _ephemeris(nullptr),
    _distance(0.0),
    _pix_line(0.0),
    _pix_col(0.0)
@@ -47,7 +47,7 @@ RefPoint::RefPoint():
 
 RefPoint::~RefPoint()
 {
-   if(_ephemeris != 0)
+   if(_ephemeris != nullptr)
    {
       delete _ephemeris;
    }
@@ -66,10 +66,10 @@ RefPoint& RefPoint::operator=(const RefPoint& rhs)
    _distance = rhs._distance;
    _pix_line = rhs._pix_line;
    _pix_col = rhs._pix_col;
-   if(_ephemeris != 0)
+   if(_ephemeris != nullptr)
    {
       delete _ephemeris;
-      _ephemeris = 0;
+      _ephemeris = nullptr;
    }
    _ephemeris = rhs._ephemeris->Clone();
 
@@ -78,10 +78,10 @@ RefPoint& RefPoint::operator=(const RefPoint& rhs)
 
 void RefPoint::set_ephemeris(Ephemeris* ephemeris)
 {
-   if(_ephemeris != 0)
+   if(_ephemeris != nullptr)
    {
       delete _ephemeris;
-      _ephemeris = 0;
+      _ephemeris = nullptr;
    }
    _ephemeris = ephemeris->Clone();
 }
@@ -167,7 +167,7 @@ bool RefPoint::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
    result = _ephemeris->loadState(kwl, pfx.c_str());
 
-   const char* lookup = 0;
+   const char* lookup = nullptr;
    ossimString s;
    double d;
 

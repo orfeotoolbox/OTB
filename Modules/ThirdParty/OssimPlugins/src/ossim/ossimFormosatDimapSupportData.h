@@ -166,9 +166,9 @@ public:
    void  printInfo (ostream& os) const;
 
    bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix = 0)const override;
+                          const char* prefix = nullptr)const override;
    bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix = 0) override;
+                          const char* prefix = nullptr) override;
 protected:
    ~ossimFormosatDimapSupportData() override;
 

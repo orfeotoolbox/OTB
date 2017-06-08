@@ -89,7 +89,7 @@ std::istream& operator>>(std::istream& is, ErsSarLeader& data)
     else
     {
       ErsSarRecord* record = factory.Instantiate(header.get_rec_seq());
-      if (record != NULL)
+      if (record != nullptr)
       {
         record->Read(is);
         data.theRecords[header.get_rec_seq()] = record;
@@ -160,7 +160,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
    * Adding metadata necessary to the sensor model in the keywordlist
    */
   const ErsSarFileDescriptor *leaderfiledesc = get_ErsSarFileDescriptor();
-  if (leaderfiledesc != NULL)
+  if (leaderfiledesc != nullptr)
   {
     kwl.add(prefix, "filename", leaderfiledesc->get_file_name().c_str(), true);
   }
@@ -173,7 +173,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
    * Adding metadata necessary to the sensor model in the keywordlist
    */
   const ErsSarDataSetSummary *datasetSummary = get_ErsSarDataSetSummary();
-  if ((datasetSummary != NULL) && (result == true))
+  if ((datasetSummary != nullptr) && (result == true))
   {
     kwl.add(prefix, "inp_sctim", (datasetSummary->get_inp_sctim()).c_str(), true);
     kwl.add(prefix, "ellip_maj", datasetSummary->get_ellip_maj(), true);
@@ -199,7 +199,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
   }
 
   const ErsSarMapProjectionData *mapprojectiondata = get_ErsSarMapProjectionData();
-  if ((mapprojectiondata != NULL) && (result == true))
+  if ((mapprojectiondata != nullptr) && (result == true))
   {
     kwl.add(prefix, "map_proj_des", (mapprojectiondata->get_map_proj_des()).c_str(), true);
     kwl.add(prefix, "num_lines", (double) mapprojectiondata->get_num_lines(), true);
@@ -219,7 +219,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
   }
 
   const ErsSarPlatformPositionData *platformposition = get_ErsSarPlatformPositionData();
-  if ((platformposition != NULL) && (result == true))
+  if ((platformposition != nullptr) && (result == true))
   {
     kwl.add(prefix, "neph", platformposition->get_ndata(), true);
     kwl.add(prefix, "eph_year", platformposition->get_year(), true);
@@ -255,7 +255,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
    * Adding metadata necessary to the sensor model in the keywordlist
    */
   const ErsSarFacilityData *facilitydata = get_ErsSarFacilityData();
-  if ((facilitydata != NULL) && (result == true))
+  if ((facilitydata != nullptr) && (result == true))
   {
     kwl.add(prefix, "coef_ground_range_1", facilitydata->get_coef_ground_range_1(), true);
     kwl.add(prefix, "coef_ground_range_2", facilitydata->get_coef_ground_range_2(), true);

@@ -44,7 +44,7 @@ GlVersionChecker
 {
   const GLubyte * glVersionStr = glGetString( GL_VERSION );
 
-  if( glVersionStr==ITK_NULLPTR )
+  if( glVersionStr==nullptr )
     {
     std::ostringstream oss;
 
@@ -65,7 +65,7 @@ GlVersionChecker
 {
   const GLubyte * slVersionStr = glGetString( GL_SHADING_LANGUAGE_VERSION );
 
-  if( slVersionStr==ITK_NULLPTR )
+  if( slVersionStr==nullptr )
     {
     std::ostringstream oss;
 
@@ -90,7 +90,7 @@ GlVersionChecker
   // If OpenGL version is at least 2.0, get (and return) GLSL version
   // (before checking against OpenGL required version).
   if( GlVersionChecker::VerCmp( glVersion, "2.0" )<0 )
-    glslVersion = ITK_NULLPTR;
+    glslVersion = nullptr;
   else
     glslVersion = GlVersionChecker::GLSLVersion();
 
@@ -118,7 +118,7 @@ GlVersionChecker
 {
   //
   // Special case: empty strings returns 0.0.0 and true.
-  if( version==ITK_NULLPTR || strlen( version )==0 )
+  if( version==nullptr || strlen( version )==0 )
     {
     major = 0;
     minor = 0;
@@ -147,7 +147,7 @@ GlVersionChecker
 
   const char * minorStr = strchr( version, '.' );
 
-  if( minorStr==ITK_NULLPTR )
+  if( minorStr==nullptr )
     return false;
 
   minor = atoi( ++minorStr );
@@ -161,7 +161,7 @@ GlVersionChecker
 
   // In this case, it is Ok to return because version of the form
   // Major.minor are handled.
-  if( releaseStr==ITK_NULLPTR )
+  if( releaseStr==nullptr )
     return true;
 
   release = atoi( ++releaseStr );

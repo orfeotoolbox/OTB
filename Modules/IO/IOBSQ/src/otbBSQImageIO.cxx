@@ -57,7 +57,7 @@ BSQImageIO::BSQImageIO()
   // (consistency between ImageIO, see Mantis #942)
   m_Origin[0] = 0.5;
   m_Origin[1] = 0.5;
-  m_ChannelsFile = ITK_NULLPTR;
+  m_ChannelsFile = nullptr;
   m_FlagWriteImageInformation = true;
 
   this->AddSupportedWriteExtension(".hd");
@@ -74,7 +74,7 @@ BSQImageIO::~BSQImageIO()
     {
     m_HeaderFile.close();
     }
-  if (m_ChannelsFile !=  ITK_NULLPTR)
+  if (m_ChannelsFile !=  nullptr)
     {
     for (unsigned int numComponent = 0; numComponent < this->GetNumberOfComponents(); numComponent++)
       {
@@ -155,7 +155,7 @@ void BSQImageIO::Read(void* buffer)
   step = step * (unsigned long) (this->GetComponentSize());
 
   auto * value = new char[numberOfBytesToBeRead];
-  if (value == ITK_NULLPTR)
+  if (value == nullptr)
     {
     itkExceptionMacro(<< "BSQImageIO::Read(): Bad alloc");
     return;
@@ -531,7 +531,7 @@ void BSQImageIO::Write(const void* buffer)
   const char * p = static_cast<const char *>(buffer);
 
   auto* value = new char[numberOfBytesToBeWrite];
-  if (value == ITK_NULLPTR)
+  if (value == nullptr)
     {
     itkExceptionMacro(<< "Memory allocation error");
     return;

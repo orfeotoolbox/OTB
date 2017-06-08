@@ -207,7 +207,7 @@ private:
 
   }
 
-  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform1ToWGS84,RSTransformType * rsTransform2ToWGS84, std::ofstream & file, OGRMultiLineString * mls = ITK_NULLPTR)
+  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform1ToWGS84,RSTransformType * rsTransform2ToWGS84, std::ofstream & file, OGRMultiLineString * mls = nullptr)
   {
     MatchingFilterType::Pointer matchingFilter = MatchingFilterType::New();
 
@@ -506,7 +506,7 @@ private:
       if(IsParameterEnabled("outvector"))
         {
         // Create the datasource (for matches export)
-        otb::ogr::Layer layer(ITK_NULLPTR, false);
+        otb::ogr::Layer layer(nullptr, false);
         otb::ogr::DataSource::Pointer ogrDS;
 
         ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

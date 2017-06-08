@@ -95,7 +95,7 @@ RCC8GraphFileWriter<TInputGraph>
   itkDebugMacro(<< "Writing a RCC8Graph file");
 
   // Make sure input is available
-  if (input == ITK_NULLPTR)
+  if (input == nullptr)
     {
     itkExceptionMacro(<< "No input to writer!");
     }

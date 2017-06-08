@@ -100,7 +100,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -112,7 +112,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TMask *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -124,7 +124,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<4)
   {
-    return ITK_NULLPTR;
+    return nullptr;
   }
   return static_cast<const TImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -136,7 +136,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfInputs()<5)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TMask *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -148,7 +148,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<TMask *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -160,7 +160,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 {
   if (this->GetNumberOfOutputs()<3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<TImage *>(this->itk::ProcessObject::GetOutput(2));
 }

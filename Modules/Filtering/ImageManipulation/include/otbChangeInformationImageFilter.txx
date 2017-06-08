@@ -78,7 +78,7 @@ ChangeInformationImageFilter<TInputImage>
     // enable this key for metadata change
     m_ChangedKeys.insert(key);
     itk::MetaDataDictionary &dict = this->GetMetaDataDictionary();
-    if (value == ITK_NULLPTR)
+    if (value == nullptr)
       {
       // Remove meta-data from dictionary
       dict.Erase(key);

@@ -94,7 +94,7 @@ for(auto k = possibleMachineLearningModel.begin();
 
       }
     }
-  return ITK_NULLPTR;
+  return nullptr;
 }
 
 template <class TInputValue, class TOutputValue>

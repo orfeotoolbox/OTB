@@ -123,7 +123,7 @@ FuzzyDescriptorsModelManager
 
   // Iterate through the tree to get all the stats
   for( TiXmlElement* currentStat = root.FirstChildElement().ToElement();
-       currentStat != ITK_NULLPTR;
+       currentStat != nullptr;
        currentStat = currentStat->NextSiblingElement() )
     {
       PairType currentDescriptor;
@@ -136,7 +136,7 @@ FuzzyDescriptorsModelManager
       ParameterType param;
 
       for( TiXmlElement* sample = currentStat->FirstChildElement("Parameter");
-           sample != ITK_NULLPTR;
+           sample != nullptr;
            sample = sample->NextSiblingElement() )
         {
           // Get the current value of the descriptor

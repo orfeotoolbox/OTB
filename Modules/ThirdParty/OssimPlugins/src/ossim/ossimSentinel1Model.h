@@ -93,10 +93,10 @@ namespace ossimplugins
        * KWL files. Returns true if successful.
        */
       bool saveState(ossimKeywordlist& kwl,
-            const char* prefix=NULL) const override;
+            const char* prefix=nullptr) const override;
 
       bool loadState(ossimKeywordlist const& kwl,
-            const char* prefix=NULL) override;
+            const char* prefix=nullptr) override;
 
       bool checkDirectory(const ossimFilename& file, const char* d, const char *ext) const;
 

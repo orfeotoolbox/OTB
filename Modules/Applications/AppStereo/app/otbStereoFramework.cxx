@@ -898,9 +898,9 @@ private:
         }
 
       // Compute disparities
-      FilterType* blockMatcherFilterPointer = ITK_NULLPTR;
-      FilterType* invBlockMatcherFilterPointer = ITK_NULLPTR;
-      FilterType* subPixelFilterPointer = ITK_NULLPTR;
+      FilterType* blockMatcherFilterPointer = nullptr;
+      FilterType* invBlockMatcherFilterPointer = nullptr;
+      FilterType* subPixelFilterPointer = nullptr;
       BijectionFilterType::Pointer bijectFilter;
 
       // pointer

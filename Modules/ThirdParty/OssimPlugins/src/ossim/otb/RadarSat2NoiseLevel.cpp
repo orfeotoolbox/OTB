@@ -150,7 +150,7 @@ bool RadarSat2NoiseLevel::loadState(const ossimKeywordlist& kwl, const char* pre
 
    //bool         result = true;
    ossimString  s;
-   const char*  lookup = 0;
+   const char*  lookup = nullptr;
 
    std::string pfx("");
    if (prefix)

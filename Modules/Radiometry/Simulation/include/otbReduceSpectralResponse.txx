@@ -84,7 +84,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
 
     if(m_ReflectanceMode)
       {
-      if (solarIrradiance == ITK_NULLPTR)
+      if (solarIrradiance == nullptr)
         {
         itkExceptionMacro(<<"Error occurs getting solar irradiance. Solar irradiance is mandatory using the reflectance mode.");
         }

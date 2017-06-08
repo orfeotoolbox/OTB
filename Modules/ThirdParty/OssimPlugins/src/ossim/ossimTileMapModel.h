@@ -72,7 +72,7 @@ public:
   /*!
    * Returns pointer to a new instance, copy of this.
    */
-  ossimObject* dup() const override { return 0; } // TBR
+  ossimObject* dup() const override { return nullptr; } // TBR
 
   /*!
    * Extends base-class implementation. Dumps contents of object to ostream.
@@ -87,10 +87,10 @@ public:
    * KWL files. Returns true if successful.
    */
   bool saveState(ossimKeywordlist& kwl,
-                         const char* prefix=0) const override;
+                         const char* prefix=nullptr) const override;
 
   bool loadState(const ossimKeywordlist& kwl,
-                         const char* prefix=0) override;
+                         const char* prefix=nullptr) override;
 
   /*!
    * Writes a template of geom keywords processed by loadState and saveState

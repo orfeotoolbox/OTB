@@ -29,7 +29,7 @@ WriterWatcherBase
 {
   // Initialize state
   m_Comment = "Not watching any object";
-  m_Process = ITK_NULLPTR;
+  m_Process = nullptr;
   m_StartFilterTag = 0;
   m_EndFilterTag = 0;
   m_ProgressFilterTag = 0;

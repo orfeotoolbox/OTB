@@ -52,7 +52,7 @@ ErsSarLeaderFactory::~ErsSarLeaderFactory()
     if ((*i).second)
     {
       delete(*i).second;
-      (*i).second = 0;
+      (*i).second = nullptr;
     }
     ++i;
   }

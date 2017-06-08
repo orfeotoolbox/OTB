@@ -233,7 +233,7 @@ TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string 
       ogr::DataSource::Pointer source = ogr::DataSource::New( fileList[k], ogr::DataSource::Modes::Read );
       ogr::Layer layer = source->GetLayer( static_cast<size_t>(this->GetParameterInt( parameterLayer )) );
       ogr::Feature feature = layer.ogr().GetNextFeature();
-      bool goesOn = feature.addr() != 0;
+      bool goesOn = feature.addr() != nullptr;
       if( !goesOn )
         {
         otbAppLogWARNING( "The layer " << GetParameterInt( parameterLayer ) << " of " << fileList[k]
@@ -279,7 +279,7 @@ TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string 
           target->PushBack( 0 );
 
         feature = layer.ogr().GetNextFeature();
-        goesOn = feature.addr() != 0;
+        goesOn = feature.addr() != nullptr;
         }
       }
 

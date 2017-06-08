@@ -296,8 +296,8 @@ public:
 
    //TODO: Add virtual method readAnnotationFile?
 
-   bool saveState(ossimKeywordlist      & kwl, const char* prefix=NULL) const override;
-   bool loadState(ossimKeywordlist const& kwl, const char* prefix=NULL) override;
+   bool saveState(ossimKeywordlist      & kwl, const char* prefix=nullptr) const override;
+   bool loadState(ossimKeywordlist const& kwl, const char* prefix=nullptr) override;
 
    bool isGRD() const {
       switch (theProductType.ToInternal()) {

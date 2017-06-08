@@ -54,7 +54,7 @@ namespace ossimplugins
    ossimEnvisatAsarModel::ossimEnvisatAsarModel():
       _n_srgr(0),
       _pixel_spacing(0),
-      _EnvisatAsarData(NULL)
+      _EnvisatAsarData(nullptr)
    {
    }
 
@@ -62,7 +62,7 @@ namespace ossimplugins
 
    ossimEnvisatAsarModel::~ossimEnvisatAsarModel()
    {
-      if(_EnvisatAsarData != NULL)
+      if(_EnvisatAsarData != nullptr)
       {
          delete _EnvisatAsarData;
       }
@@ -115,10 +115,10 @@ namespace ossimplugins
       /*
        * Creation of the class allowing to store EnvisatAsarData file metadata
        */
-      if (_EnvisatAsarData != NULL)
+      if (_EnvisatAsarData != nullptr)
       {
          delete _EnvisatAsarData;
-         _EnvisatAsarData = NULL;
+         _EnvisatAsarData = nullptr;
       }
 
       /*
@@ -182,7 +182,7 @@ namespace ossimplugins
        * Data derived from the SPH record
        */
       sph* sph_rec = _EnvisatAsarData->get_sph();
-      if(sph_rec != NULL)
+      if(sph_rec != nullptr)
       {
          kwl.add(prefix, "pixel_spacing", sph_rec->get_range_spacing().c_str(), true );
          kwl.add(prefix, "line_time_interval", sph_rec->get_line_time_interval().c_str(), true );
@@ -196,7 +196,7 @@ namespace ossimplugins
        * Data derived from the Main Processing Parameters record
        */
       MainProcessingParameters* MPP_rec = _EnvisatAsarData->get_MainProcessingParameters();
-      if(MPP_rec != NULL)
+      if(MPP_rec != nullptr)
       {
          kwl.add(prefix, "num_pix", (double)MPP_rec->get_num_samples_per_line(), true );
          kwl.add(prefix, "num_lines", (double)MPP_rec->get_num_output_lines(), true );
@@ -260,7 +260,7 @@ namespace ossimplugins
        * Data derived from the Geolocation Grid record - Reference Point
        */
       GeolocationGrid* GG_rec = _EnvisatAsarData->get_GeolocationGrid(0);
-      if(GG_rec != NULL)
+      if(GG_rec != nullptr)
       {
          kwl.add(prefix, "first_zero_doppler_time_day", (double)GG_rec->get_first_zero_doppler_time_day(), true );
          kwl.add(prefix, "first_zero_doppler_time_sec", (double)GG_rec->get_first_zero_doppler_time_sec(), true );
@@ -278,7 +278,7 @@ namespace ossimplugins
        * Data derived from the Geolocation Grid record - Corners
        */
       GG_rec = _EnvisatAsarData->get_GeolocationGrid(0);
-      if(GG_rec != NULL)
+      if(GG_rec != nullptr)
       {
          kwl.add(prefix, "UL_line", (double)GG_rec->get_line_num(), true );
          kwl.add(prefix, "UL_col", (double)(GG_rec->get_samp_numbers())[0], true );
@@ -294,7 +294,7 @@ namespace ossimplugins
          return false;
       }
       GG_rec = _EnvisatAsarData->get_GeolocationGrid(10);
-      if(GG_rec != NULL)
+      if(GG_rec != nullptr)
       {
          kwl.add(prefix, "LL_line", (double)GG_rec->get_line_num(), true );
          kwl.add(prefix, "LL_col", (double)(GG_rec->get_samp_numbers())[0], true );
@@ -315,7 +315,7 @@ namespace ossimplugins
        */
       int n_srgr = 0;
       SRGRConversionParameters * SRGRParameters = _EnvisatAsarData->get_SRGRConversionParameters(0);
-      if(SRGRParameters != NULL)
+      if(SRGRParameters != nullptr)
       {
          n_srgr = _EnvisatAsarData->get_num_ds(SRGRParameters);
 
@@ -408,7 +408,7 @@ namespace ossimplugins
       const char* time_dir_pix = "INCREASE";
       const char* time_dir_lin = "INCREASE";
 
-      if(_sensor != NULL)
+      if(_sensor != nullptr)
       {
          delete _sensor;
       }
@@ -491,7 +491,7 @@ namespace ossimplugins
          ephemeris[i-1] = eph;
       }
 
-      if (_platformPosition != NULL)
+      if (_platformPosition != nullptr)
       {
          delete _platformPosition;
       }
@@ -516,7 +516,7 @@ namespace ossimplugins
    {
 
       // Reference image position
-      if(_refPoint == NULL)
+      if(_refPoint == nullptr)
       {
          _refPoint = new RefPoint();
       }
@@ -539,10 +539,10 @@ namespace ossimplugins
       MJDDateTime mjdDate_ref(day_ref, sec_ref, microsec_ref);
       JSDDateTime jsd_date_ref(mjdDate_ref);
 
-      if(_platformPosition != NULL)
+      if(_platformPosition != nullptr)
       {
          Ephemeris * ephemeris = _platformPosition->Interpolate(jsd_date_ref);
-         if (ephemeris == NULL) return false ;
+         if (ephemeris == nullptr) return false ;
          _refPoint->set_ephemeris(ephemeris);
          delete ephemeris;
       }

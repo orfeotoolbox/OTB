@@ -108,7 +108,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
 
          int nbrData = 0; // to keep track of good stateVector count.
 
-         ossimRefPtr<ossimXmlNode> svNode = 0; // stateVector node
+         ossimRefPtr<ossimXmlNode> svNode = nullptr; // stateVector node
 
          for (ossim_uint32 i = 0 ; i < COUNT; ++i)
          {
@@ -253,7 +253,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
                delete ephemeris[idx];
             }
             delete [] ephemeris;
-            ephemeris = 0;
+            ephemeris = nullptr;
          }
 
       } // matches: if ( xnodes.size() )
@@ -547,7 +547,7 @@ bool ossimRadarSat2ProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
          {
             if (xnodes[i].valid())
             {
-               ossimRefPtr<ossimXmlNode> icNode = 0; // imageCoordinate
+               ossimRefPtr<ossimXmlNode> icNode = nullptr; // imageCoordinate
                icNode =
                   xnodes[i]->findFirstNode(ossimString("imageCoordinate"));
                if (icNode.valid())
@@ -580,7 +580,7 @@ bool ossimRadarSat2ProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
                   result = false;
                }
 
-               ossimRefPtr<ossimXmlNode> gcNode = 0; // geodeticCoordinate
+               ossimRefPtr<ossimXmlNode> gcNode = nullptr; // geodeticCoordinate
                gcNode = xnodes[i]->findFirstNode(
                   ossimString("geodeticCoordinate"));
                if (gcNode.valid())

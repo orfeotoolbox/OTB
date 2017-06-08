@@ -110,7 +110,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
     }
 
   // Change quality measurement only if SoftClustering or other clustering method is used.
-  if( quality != ITK_NULLPTR )
+  if( quality != nullptr )
     {
     //unsigned int probas = (*m_ClusteringModel)( data );
     ( *quality ) = ConfidenceValueType( 1.);
@@ -133,12 +133,12 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 {
 
   // Perform check on input values
-  assert( input != ITK_NULLPTR );
-  assert( targets != ITK_NULLPTR );
+  assert( input != nullptr );
+  assert( targets != nullptr );
 
   // input list sample and target list sample should be initialized and without
   assert( input->Size() == targets->Size() && "Input sample list and target label list do not have the same size." );
-  assert( ( ( quality == ITK_NULLPTR ) || ( quality->Size() == input->Size() ) ) &&
+  assert( ( ( quality == nullptr ) || ( quality->Size() == input->Size() ) ) &&
           "Quality samples list is not null and does not have the same size as input samples list" );
   if( startIndex + size > input->Size() )
     {
@@ -172,7 +172,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
     }
 
   // Change quality measurement only if SoftClustering or other clustering method is used.
-  if( quality != ITK_NULLPTR )
+  if( quality != nullptr )
     {
     for( unsigned int qid = startIndex; qid < size; ++qid )
       {

@@ -88,7 +88,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarLeader& data)
     else
     {
       AlosPalsarRecord* record = factory.Instantiate(header.get_rec_seq());
-      if (record != NULL)
+      if (record != nullptr)
       {
         record->Read(is);
         data._records[header.get_rec_seq()] = record;
@@ -162,7 +162,7 @@ bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
    * Adding metadata necessary to the sensor model in the keywordlist
    */
   const AlosPalsarFileDescriptor *leaderfiledesc = get_AlosPalsarFileDescriptor();
-  if (leaderfiledesc != NULL)
+  if (leaderfiledesc != nullptr)
   {
     kwl.add(prefix, "filename", leaderfiledesc->get_file_name().c_str(), true);
   }
@@ -175,7 +175,7 @@ bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
    * Adding metadata necessary to the sensor model in the keywordlist
    */
   const AlosPalsarDataSetSummary *datasetSummary = get_AlosPalsarDataSetSummary();
-  if ((datasetSummary != NULL) && (result == true))
+  if ((datasetSummary != nullptr) && (result == true))
   {
     kwl.add(prefix, "inp_sctim", (datasetSummary->get_inp_sctim()).c_str(), true);
     kwl.add(prefix, "ellip_maj", datasetSummary->get_ellip_maj(), true);
@@ -228,7 +228,7 @@ bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
 //   }
 
   const AlosPalsarPlatformPositionData *platformposition = get_AlosPalsarPlatformPositionData();
-  if ((platformposition != NULL) && (result == true))
+  if ((platformposition != nullptr) && (result == true))
   {
     kwl.add(prefix, "neph", platformposition->get_ndata(), true);
     kwl.add(prefix, "eph_year", platformposition->get_year(), true);
@@ -262,7 +262,7 @@ bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
   }
 
   const AlosPalsarRadiometricData *radiometricdata = get_AlosPalsarRadiometricData();
-  if ((radiometricdata != NULL) && (result == true))
+  if ((radiometricdata != nullptr) && (result == true))
   {
     kwl.add(prefix, "calibration_factor", radiometricdata->get_calibration_factor(), true);
   }

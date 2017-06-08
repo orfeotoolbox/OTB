@@ -53,7 +53,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return 0;
+    return nullptr;
     }
   return static_cast<ogr::DataSource *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -137,7 +137,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
       ogr::Layer inLayer = this->GetOGRData()->GetLayer(this->GetLayerIndex());
       if ( !imgSRS.IsSame(inLayer.GetSpatialRef()) )
         {
-        char *layerSrsWkt = NULL;
+        char *layerSrsWkt = nullptr;
         inLayer.GetSpatialRef()->exportToPrettyWkt(&layerSrsWkt);
         itkExceptionMacro(<< "Spatial reference of input image and samples don't match:  \n" << projectionRefWkt << "\nvs\n"<<  layerSrsWkt);
         }
@@ -185,7 +185,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
       case wkbPoint25D:
         {
         OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
-        if (castPoint == NULL)
+        if (castPoint == nullptr)
           {
           // Wrong Type !
           break;

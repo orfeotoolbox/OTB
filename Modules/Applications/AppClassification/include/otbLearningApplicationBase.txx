@@ -153,7 +153,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   model->Load(modelPath);
   model->SetRegressionMode(this->m_RegressionFlag);
 
-  typename TargetListSampleType::Pointer predictedList = model->PredictBatch(validationListSample, NULL);
+  typename TargetListSampleType::Pointer predictedList = model->PredictBatch(validationListSample, nullptr);
 
   // update reporter
   dummyFilter->UpdateProgress(1.0f);

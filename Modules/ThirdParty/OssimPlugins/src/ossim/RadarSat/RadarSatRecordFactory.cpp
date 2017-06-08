@@ -38,9 +38,9 @@ RadarSatRecordFactory::~RadarSatRecordFactory()
 RadarSatRecord* RadarSatRecordFactory::Instantiate(int id)
 {
 	RadarSatRecord* record = _availableRecords[id];
-	if(record == NULL)
+	if(record == nullptr)
 	{
-		return NULL;
+		return nullptr;
 	}
 	else
 	{

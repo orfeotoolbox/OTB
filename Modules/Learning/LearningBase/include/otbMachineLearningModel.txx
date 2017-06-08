@@ -83,7 +83,7 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
   typename TargetListSampleType::Pointer targets = TargetListSampleType::New();
   targets->Resize(input->Size());
   
-  if(quality!=ITK_NULLPTR)
+  if(quality!=nullptr)
     {
     quality->Clear();
     quality->Resize(input->Size());
@@ -136,18 +136,18 @@ void
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
-  assert(input != ITK_NULLPTR);
-  assert(targets != ITK_NULLPTR);
+  assert(input != nullptr);
+  assert(targets != nullptr);
   
   assert(input->Size()==targets->Size()&&"Input sample list and target label list do not have the same size.");
-  assert(((quality==ITK_NULLPTR)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
+  assert(((quality==nullptr)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
 
   if(startIndex+size>input->Size())
     {
     itkExceptionMacro(<<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[");
     }
 
-  if(quality != ITK_NULLPTR)
+  if(quality != nullptr)
     {
     for(unsigned int id = startIndex;id<startIndex+size;++id)
       {

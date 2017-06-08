@@ -98,7 +98,7 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
     }
   else
     {
-    m_Coefficients = ITK_NULLPTR;
+    m_Coefficients = nullptr;
     }
 }
 
