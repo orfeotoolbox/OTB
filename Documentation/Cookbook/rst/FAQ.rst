@@ -4,46 +4,37 @@ FAQ
 Introduction
 ------------
 
-What is OTB?
-~~~~~~~~~~~~
+What's in OTB?
+~~~~~~~~~~~~~~
 
-OTB, the ORFEO Toolbox is a library of image processing algorithms
-developed by CNES in the frame of the ORFEO Accompaniment Program. OTB
-is based on the medical image processing library ITK,
-http://www.itk.org, and offers particular functionalities for remote
-sensing image processing in general and for high spatial resolution
-images in particular.
-
-OTB provides:
-
--  image access: optimized read/write access for most of remote sensing
+-  Image access: optimized read/write access for most of remote sensing
    image formats, meta-data access, simple visualization;
 
--  sensor geometry: sensor models, cartographic projections;
+-  Sensor geometry: sensor models, cartographic projections;
 
--  radiometry: atmospheric corrections, vegetation indices;
+-  Radiometry: atmospheric corrections, vegetation indices;
 
--  filtering: blurring, denoising, enhancement;
+-  Filtering: blurring, denoising, enhancement;
 
--  fusion: image pansharpening;
+-  Fusion: image pansharpening;
 
--  feature extraction: interest points, alignments, lines;
+-  Feature extraction: interest points, alignments, lines;
 
--  image segmentation: region growing, watershed, level sets;
+-  Image segmentation: region growing, watershed, level sets;
 
--  classification: K-means, SVM, Markov random fields;
+-  Classification: K-means, SVM, Markov random fields;
 
--  change detection.
+-  Change detection.
 
--  object based image analysis.
+-  Object based image analysis.
 
--  geospatial analysis.
+-  Geospatial analysis.
 
-Many of these functionalities are provided by ITK and have been tested
-and documented for the use with remote sensing data.
-
-You can get more information on OTB on the web at
-http://www.orfeo-toolbox.org.
+For a full list of applications see the :ref:`apprefdoc`.
+For an introduction to the C++ API see the
+`Software Guide <https://www.orfeo-toolbox.org/SoftwareGuide/>`_.
+And for exhaustive descrpition of the C++ API see the
+`Doxygen <https://www.orfeo-toolbox.org/doxygen/>`_.
 
 What is ORFEO?
 ~~~~~~~~~~~~~~
@@ -124,8 +115,8 @@ Where can I get more information about the ORFEO Accompaniment Program?
 Go to the following web site:
 http://smsc.cnes.fr/PLEIADES/A_prog_accomp.htm.
 
-Who is responsible for the OTB development?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Who is responsible for OTB's development?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The French Centre National d’Études Spatiales, CNES, initiated the ORFEO
 Toolbox and is responsible for the specification of the library. CNES
@@ -135,8 +126,8 @@ for the evolution of OTB.
 License
 -------
 
-Which is the OTB license?
-~~~~~~~~~~~~~~~~~~~~~~~~~
+What is OTB's license?
+~~~~~~~~~~~~~~~~~~~~~~
 
 OTB is distributed under the permissive open source license Apache
 v2.0 - aka Apache Software License (ASL) v2.0: http://www.apache.org/licenses/LICENSE-2.0
@@ -169,13 +160,13 @@ distribution including a piece of OTB software.
 Getting OTB
 -----------
 
-Who can download the OTB?
+Who can download OTB?
+~~~~~~~~~~~~~~~~~~~~~
+
+Anybody can download OTB at no cost.
+
+Where can I download OTB?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Anybody can download the OTB at no cost.
-
-Where can I download the OTB?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Go to http://www.orfeo-toolbox.org and follow the “download OTB” link.
 You will have access to the OTB source code, to the Software User’s
@@ -202,7 +193,7 @@ The first time, you can get the source code using:
 
 Then you can build OTB as usual using this directory as the source
 (refer to build instructions). Later if you want to update your source,
-from the OTB source directory, just do:
+from OTB's source directory, just do:
 
 ::
 
@@ -214,9 +205,8 @@ the library (recompiling only the necessary files).
 Special issues about compiling OTB from source
 ----------------------------------------------
 
-All information about OTB compilation can be found into the related
-section. We present here only the special issues which can be
-encountered.
+All information about OTB compilation can be found in the Software Guide.
+We present here only the special issues which can be encountered.
 
 Debian Linux / Ubuntu
 ~~~~~~~~~~~~~~~~~~~~~
@@ -273,16 +263,6 @@ in Release or RelWithDebInfo mode.
 Using OTB
 ---------
 
-Where to start ?
-~~~~~~~~~~~~~~~~
-
-OTB presents a large set of features and it is not always easy to start
-using it. After the installation, you can proceed to the tutorials (in
-the Software Guide). This should give you a quick overview of the
-possibilities of OTB and will teach you how to build your own programs.
-You can also found some information in the OTB Cookbook in which we
-provide some recipes about remote sensing with OTB.
-
 What is the image size limitation of OTB ?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -323,10 +303,12 @@ set up and the use of OTB.
 Which is the main source of documentation?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The main source of documentation is the OTB Software Guide which can be
-downloaded at
-http://www.orfeo-toolbox.org/packages/OTBSoftwareGuide.pdf. It contains
-tenths of commented examples and a tutorial which should be a good
+The main source of documentation is the CookBook located at
+https://www.orfeo-toolbox.org/CookBook/.
+
+Secondly there is the OTB Software Guide which can be
+found at https://www.orfeo-toolbox.org/SoftwareGuide/
+It contains many examples and a tutorial which should be a good
 starting point for any new OTB user. The code source for these examples
 is distributed with the toolbox. Another information source is the
 on-line API documentation which is available at
@@ -347,13 +329,13 @@ contribute, the better the library is for everybody!
 
 First, you can send an email to the user mailing list
 (otb-users@googlegroups.com) to let us know what functionality you would
-like to introduce in OTB. If the functionality seems important for the
+like to introduce in OTB. If the functionality seems important for
 OTB users, we will then discuss on how to retrieve your code, make the
 necessary adaptions, check with you that the results are correct and
 finally include it in the next release.
 
 You can also run the nightly tests so we have a wider range of platforms
-to detect bugs earlier. Look at section [sec:runningTheTests].
+to detect bugs earlier.
 
 You can also find more information about how to contribute at
 https://www.orfeo-toolbox.org/community
@@ -470,116 +452,11 @@ If you are interested in setting up a nightly test (automatically
 launched every night), please contact us and we will give you the
 details.
 
-OTB’s Roadmap
--------------
-
-Which will be the next version of OTB?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-OTB’s version numbers have 3 digits. The first one is for major
-versions, the second one is for minor versions and the last one is for
-bugfixes.
-
-The first version was 1.0.0 in July 2006.The current one is .
-
-What is a major version?
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-A major version of the library implies the addition of high-level
-functionalities as for instance image registration, object recognition,
-etc.
-
-What is a minor version?
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-A minor version is released when low-level functionalities are available
-within one major functionality, as for instance a new change detector, a
-new feature extractor, etc.
-
-What is a bugfix version?
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A bugfix version is released when significant bugs are identified and
-fixed.
-
-When will the next version of OTB be available?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We plan to release two major new OTB version once a year. You can find
-some information into the roadmap section of the
-`wiki <http://wiki.orfeo-toolbox.org/index.php/Main_Page>`__
-
 What features will the OTB include and when?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There is no detailed plan about the availability of OTB new features,
 since OTB’s content depends on ongoing research work and on feedback
-from thematic users of the ORFEO Accompaniment Program.
+from thematic users of the ORFEO Accompaniment Program. You can find ideas and
+plans for the future on the Wishlist at https://wiki.orfeo-toolbox.org/index.php/Wishlist.
 
-Nevertheless, the main milestones for the OTB development are the
-following:
-
--  Version 1 (2006):
-
-   -  core of the system,
-
-   -  IO,
-
-   -  basic filtering, segmentation and classification,
-
-   -  basic feature extraction,
-
-   -  basic change detection.
-
--  Version 2 (2007):
-
-   -  geometric corrections,
-
-   -  radiometric corrections,
-
-   -  registration.
-
--  Version 3 (2009):
-
-   -  multi-scale and multi-resolution analysis,
-
-   -  object detection and recognition,
-
-   -  supervised learning.
-
--  Version 3.X (2010-14):
-
-   -  data fusion,
-
-   -  spatial reasoning,
-
-   -  hyperspectral images analysis,
-
-   -  large scale segmentation,
-
-   -  stereo reconstruction
-
-   -  …
-
--  Version 4.X (2014 and later):
-
-   -  support of ITK 4.X (internal or external)
-
-   -  Clean up: migration of FLTK related code from OTB to Monteverdi,
-      remove support for pqxx, gettext and LibLAS.
-
--  Version 5.X (2015 and later):
-
-   -  Modularization
-
-   -  Support Superbuild mechanism to build OTB and all dependencies
-      from source
-
-   -  No more internal versions of most third parties
-
-   -  Monteverdi as a module in OTB
-
-   -  introduction of the MPI support
-
-You can find more information in the
-`RELEASE\_NOTES.txt <https://git.orfeo-toolbox.org/otb.git/blob/HEAD:/RELEASE_NOTES.txt>`__.
