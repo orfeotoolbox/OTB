@@ -56,7 +56,7 @@ public:
    ossimFormosatModel(const ossimKeywordlist& geom_kwl);
    ossimFormosatModel(const ossimFormosatModel& rhs);
 
-   virtual ~ossimFormosatModel();
+   ~ossimFormosatModel() override;
 
    enum AdjustParamIndex
    {
@@ -74,22 +74,22 @@ public:
     * Returns pointer to a new instance, copy of this.
     * Not implemented yet!  Returns NULL...
     */
-   virtual ossimObject* dup() const;
+   ossimObject* dup() const override;
 
    /*!
     * Extends base-class implementation. Dumps contents of object to ostream.
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   std::ostream& print(std::ostream& out) const override;
 
    /*!
     * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
     * KWL files. Returns true if successful.
     */
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=NULL) const;
+   bool saveState(ossimKeywordlist& kwl,
+                          const char* prefix=NULL) const override;
    
-   virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix=NULL);
+   bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=NULL) override;
 
    /*!
     * Writes a template of geom keywords processed by loadState and saveState
@@ -100,29 +100,29 @@ public:
    /*!
     * Given an image point and height, initializes worldPoint.
     */
-   virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
+   void lineSampleHeightToWorld(const ossimDpt& image_point,
                                         const ossim_float64& heightEllipsoid,
-                                        ossimGpt& worldPoint) const;
+                                        ossimGpt& worldPoint) const override;
    
    /*!
     * Given an image point, returns a ray originating at some arbitrarily high
     * point (ideally at the sensor position) and pointing towards the target.
     */
-   virtual void imagingRay(const ossimDpt& image_point,
-                           ossimEcefRay&   image_ray) const;
+   void imagingRay(const ossimDpt& image_point,
+                           ossimEcefRay&   image_ray) const override;
 
    /*!
     * Following a change to the adjustable parameter set, this virtual
     * is called to permit instances to compute derived quantities after
     * parameter change.
     */
-   virtual void updateModel();
+   void updateModel() override;
 
    /*!
     * ossimOptimizableProjection
     */
-   inline virtual bool useForward()const {return false;} //!image to ground faster
-   virtual bool setupOptimizer(const ossimString& init_file); //!uses file path to init model
+   inline bool useForward()const override {return false;} //!image to ground faster
+   bool setupOptimizer(const ossimString& init_file) override; //!uses file path to init model
 
    bool initFromMetadata(ossimFormosatDimapSupportData* sd);
 protected:
@@ -130,7 +130,7 @@ protected:
    /*!
     * Sets adjustables to default values.
     */
-   void initAdjustableParameters();
+   void initAdjustableParameters() override;
    
    void loadGeometry(FILE*);
    void loadSupportData();

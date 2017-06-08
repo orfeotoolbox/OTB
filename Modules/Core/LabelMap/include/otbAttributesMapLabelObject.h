@@ -306,10 +306,10 @@ protected:
   /** Constructor */
   AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New()) {}
   /** Destructor */
-  ~AttributesMapLabelObject() ITK_OVERRIDE {}
+  ~AttributesMapLabelObject() override {}
 
   /** The printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Attributes: " << std::endl;

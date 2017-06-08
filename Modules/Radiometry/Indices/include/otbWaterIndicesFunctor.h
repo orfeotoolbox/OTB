@@ -126,15 +126,15 @@ class WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "WaterIndexFunctor";
   }
 
   WaterIndexFunctor() {}
-  ~WaterIndexFunctor() ITK_OVERRIDE {}
+  ~WaterIndexFunctor() override {}
 protected:
-  inline TOutput Evaluate(const TInput1& id1, const TInput2& id2) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& id1, const TInput2& id2) const override
   {
     double dindex1 = static_cast<double>(id1);
     double dindex2 = static_cast<double>(id2);
@@ -163,15 +163,15 @@ class SRWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const override
   {
     return "SRWI";
   }
 
   SRWI() {}
-  virtual ~SRWI() {}
+  ~SRWI() override {}
 protected:
-  inline TOutput Evaluate(const TInput1& rho860, const TInput2& rho1240) const
+  inline TOutput Evaluate(const TInput1& rho860, const TInput2& rho1240) const override
   {
     double drho860 = static_cast<double>(rho860);
     double drho1240 = static_cast<double>(rho1240);
@@ -202,7 +202,7 @@ class NDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDWI";
   }
@@ -211,7 +211,7 @@ public:
   /// Constructor
   NDWI() {}
   /// Desctructor
-  ~NDWI() ITK_OVERRIDE {}
+  ~NDWI() override {}
   WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
@@ -263,7 +263,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& nir, const TInput2& mir) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& nir, const TInput2& mir) const override
   {
     return (static_cast<TOutput>(GetWIFunctor() (nir, mir)));
   }
@@ -287,7 +287,7 @@ class NDWI2 : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDWI2";
   }
@@ -296,7 +296,7 @@ public:
   /// Constructor
   NDWI2() {}
   /// Desctructor
-  ~NDWI2() ITK_OVERRIDE {}
+  ~NDWI2() override {}
   WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
@@ -348,7 +348,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& g, const TInput2& nir) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& g, const TInput2& nir) const override
   {
     return (static_cast<TOutput>(GetWIFunctor() (g, nir)));
   }
@@ -372,7 +372,7 @@ class MNDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const override
   {
     return "MNDWI";
   }
@@ -381,7 +381,7 @@ public:
   /// Constructor
   MNDWI() {}
   /// Desctructor
-  virtual ~MNDWI() {}
+  ~MNDWI() override {}
   WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
@@ -433,7 +433,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& g, const TInput2& mir) const
+  inline TOutput Evaluate(const TInput1& g, const TInput2& mir) const override
   {
     return (static_cast<TOutput>(GetWIFunctor() (g, mir)));
   }
@@ -457,7 +457,7 @@ class NDPI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const override
   {
     return "NDPI";
   }
@@ -466,7 +466,7 @@ public:
   /// Constructor
   NDPI() {}
   /// Desctructor
-  virtual ~NDPI() {}
+  ~NDPI() override {}
   WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
@@ -518,7 +518,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& mir, const TInput2& g) const
+  inline TOutput Evaluate(const TInput1& mir, const TInput2& g) const override
   {
     return (static_cast<TOutput>(GetWIFunctor() (mir, g)));
   }
@@ -542,7 +542,7 @@ class NDTI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  virtual std::string GetName() const
+  std::string GetName() const override
   {
     return "NDTI";
   }
@@ -551,7 +551,7 @@ public:
   /// Constructor
   NDTI() {}
   /// Desctructor
-  virtual ~NDTI() {}
+  ~NDTI() override {}
   WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
@@ -605,7 +605,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& g) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& g) const override
   {
     return (static_cast<TOutput>(GetWIFunctor() (r, g)));
   }
@@ -650,7 +650,7 @@ public:
     reference[0] = 136.0; reference[1] = 132.0; reference[2] = 47.0; reference[3] = 24.0;
     this->SetReferenceWaterPixel(reference);
   }
-  ~WaterSqrtSpectralAngleFunctor() ITK_OVERRIDE {}
+  ~WaterSqrtSpectralAngleFunctor() override {}
 
   /** Set Reference Pixel */
   void SetReferenceWaterPixel(InputVectorPixelType ref)
@@ -742,7 +742,7 @@ public:
   }
 
 protected:
-  inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const ITK_OVERRIDE
+  inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const override
   {
     return static_cast<TOutputPixel>(Superclass::Evaluate(inPix));
   }

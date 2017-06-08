@@ -114,11 +114,11 @@ protected:
   /** Constructor */
   ScalarImageToPanTexTextureFilter();
   /** Destructor */
-  ~ScalarImageToPanTexTextureFilter() ITK_OVERRIDE;
+  ~ScalarImageToPanTexTextureFilter() override;
   /** Generate the input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
   /** Parallel textures extraction */
-  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) override;
 
 private:
   ScalarImageToPanTexTextureFilter(const Self&); //purposely not implemented

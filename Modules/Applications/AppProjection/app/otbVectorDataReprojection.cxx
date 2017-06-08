@@ -60,7 +60,7 @@ public:
 ;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VectorDataReprojection");
     std::ostringstream oss;
@@ -117,12 +117,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

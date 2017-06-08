@@ -46,7 +46,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~DopplerCentroidParameters();
+  ~DopplerCentroidParameters() override;
 
   /**
    * @brief This function writes the DopplerCentroidParameters in a stream
@@ -71,7 +71,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  EnvisatAsarRecord* Instantiate()
+  EnvisatAsarRecord* Instantiate() override
   {
     return new DopplerCentroidParameters();
   };
@@ -79,7 +79,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  EnvisatAsarRecord* Clone()
+  EnvisatAsarRecord* Clone() override
   {
     return new DopplerCentroidParameters(*this);
   };
@@ -87,7 +87,7 @@ public:
   /**
    * @brief Reads the class data from a stream
    */
-  void Read(std::istream& is)
+  void Read(std::istream& is) override
   {
     is>>*this;
   };
@@ -95,7 +95,7 @@ public:
   /**
    * @brief Writes the class to a stream
    */
-  void Write(std::ostream& os)
+  void Write(std::ostream& os) override
   {
     os<<*this;
   };

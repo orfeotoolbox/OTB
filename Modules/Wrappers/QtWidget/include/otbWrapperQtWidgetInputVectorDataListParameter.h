@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter : public QtWidgetP
   Q_OBJECT
 public:
   QtWidgetInputVectorDataListParameter(InputVectorDataListParameter*, QtWidgetModel*);
-  ~QtWidgetInputVectorDataListParameter() ITK_OVERRIDE;
+  ~QtWidgetInputVectorDataListParameter() override;
 
 
 signals:
@@ -63,9 +63,9 @@ private:
   QtWidgetInputVectorDataListParameter(const QtWidgetInputVectorDataListParameter&); //purposely not implemented
   void operator=(const QtWidgetInputVectorDataListParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   void RecreateVectorDataList();
   void UpdateFileList( std::map<unsigned int, unsigned int> idMap );

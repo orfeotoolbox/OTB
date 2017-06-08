@@ -42,7 +42,7 @@ namespace ossimplugins
    public:
 
       /** @brief virtual destructor */
-      virtual ~ossimPluginReaderFactory();
+      ~ossimPluginReaderFactory() override;
 
       /**
        * @brief static method to return instance (the only one) of this class.
@@ -55,8 +55,8 @@ namespace ossimplugins
        * @param file The file to open.
        * @return pointer to image handler on success, 0 on failure.
        */
-      virtual ossimImageHandler* open(const ossimFilename& fileName,
-                                      bool openOverview=true) const;
+      ossimImageHandler* open(const ossimFilename& fileName,
+                                      bool openOverview=true) const override;
 
       /**
        * @brief open that takes a keyword list and prefix.
@@ -64,15 +64,15 @@ namespace ossimplugins
        * @param prefix the keyword list prefix.
        * @return pointer to image handler on success, 0 on failure.
        */
-      virtual ossimImageHandler* open(const ossimKeywordlist& kwl,
-                                      const char* prefix=0)const;
+      ossimImageHandler* open(const ossimKeywordlist& kwl,
+                                      const char* prefix=0)const override;
 
       /**
        * @brief createObject that takes a class name.
        * @param typeName The name of the class..
        * @return pointer to image writer on success, 0 on failure.
        */
-      virtual ossimObject* createObject(const ossimString& typeName)const;
+      ossimObject* createObject(const ossimString& typeName)const override;
 
       /**
        * @brief Creates and object given a keyword list and prefix.
@@ -80,22 +80,22 @@ namespace ossimplugins
        * @param prefix the keyword list prefix.
        * @return pointer to image handler on success, 0 on failure.
        */
-      virtual ossimObject* createObject(const ossimKeywordlist& kwl,
-                                        const char* prefix=0)const;
+      ossimObject* createObject(const ossimKeywordlist& kwl,
+                                        const char* prefix=0)const override;
 
       /**
        * @brief Adds ossimTerraSarTiffReader to the typeList.
        * @param typeList List to add to.
        */
-      virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
+      void getTypeNameList(std::vector<ossimString>& typeList)const override;
 
       /**
        * @brief Method to add supported extension to the list, like "png".
        *
        * @param extensionList The list to add to.
        */
-      virtual void getSupportedExtensions(
-         ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
+      void getSupportedExtensions(
+         ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const override;
 
    protected:
       /** @brief hidden from use default constructor */

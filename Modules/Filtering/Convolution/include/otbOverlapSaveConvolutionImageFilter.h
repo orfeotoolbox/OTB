@@ -142,7 +142,7 @@ public:
    * region than the output region.
    */
   void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw(itk::InvalidRequestedRegionError) override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -154,13 +154,13 @@ protected:
   /** Constructor */
   OverlapSaveConvolutionImageFilter();
   /** destructor */
-  ~OverlapSaveConvolutionImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~OverlapSaveConvolutionImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /* TODO For the moment this class provide only a GenerateData(),
    * due to limited thread-safety of FFTW plan creation.
    */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:

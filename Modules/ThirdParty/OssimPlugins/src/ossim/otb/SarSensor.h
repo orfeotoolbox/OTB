@@ -54,7 +54,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~SarSensor();
+  ~SarSensor() override;
 
   /**
    * @brief This function is able to convert image coordinates into geodetic world coordinates using a geometric SAR sensor model
@@ -67,7 +67,7 @@ public:
    *
    * @remark : the doppler frequency is set to zero in this implementation
    */
-  virtual int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) const;
+  int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) const override;
 protected:
 
   /**

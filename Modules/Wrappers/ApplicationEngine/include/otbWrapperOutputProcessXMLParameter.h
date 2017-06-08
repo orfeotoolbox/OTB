@@ -66,7 +66,7 @@ public:
     this->Modified();
     }
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     if(m_FileName.empty())
       return false;
@@ -74,7 +74,7 @@ public:
       return true;
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_FileName = "";
   }
@@ -94,7 +94,7 @@ protected:
   OutputProcessXMLParameter();
 
   /** Destructor */
-  ~OutputProcessXMLParameter() ITK_OVERRIDE;
+  ~OutputProcessXMLParameter() override;
 
 private:
 

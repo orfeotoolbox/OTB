@@ -72,7 +72,7 @@ protected:
   CompositeApplication();
 
   /** Destructor */
-  ~CompositeApplication() ITK_OVERRIDE;
+  ~CompositeApplication() override;
 
   /**
    * Callback function to retrieve the process watchers on internal filters

@@ -106,11 +106,11 @@ public:
   itkGetMacro(StreamSize, SizeType);
 
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 protected:
   OGRLayerStreamStitchingFilter();
-  ~OGRLayerStreamStitchingFilter() ITK_OVERRIDE {}
+  ~OGRLayerStreamStitchingFilter() override {}
 
   struct FusionStruct
   {

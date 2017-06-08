@@ -81,7 +81,7 @@ public:
 protected:
   ImageSettings();
 
-  ~ImageSettings() ITK_OVERRIDE;
+  ~ImageSettings() override;
 
 
 private:

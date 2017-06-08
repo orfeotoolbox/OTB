@@ -53,7 +53,7 @@ public:
 
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("BandMath");
     SetDescription("Perform a mathematical operation on monoband images");
@@ -91,7 +91,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Check if the expression is correctly set
     if (HasValue("il"))
@@ -162,7 +162,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");

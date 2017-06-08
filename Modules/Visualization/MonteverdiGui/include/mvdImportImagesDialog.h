@@ -105,7 +105,7 @@ public:
 		      Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~ImportImagesDialog() ITK_OVERRIDE;
+  ~ImportImagesDialog() override;
 
   /**
    */

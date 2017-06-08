@@ -66,7 +66,7 @@ public:
    ossimFormosatDimapSupportData(const ossimFormosatDimapSupportData& rhs);
    ossimFormosatDimapSupportData(const ossimFilename& dimapFile);
 
-   virtual ossimObject* dup()const;
+   ossimObject* dup()const override;
 
    void clearFields();
    bool loadXmlFile(const ossimFilename& file);
@@ -165,12 +165,12 @@ public:
    //---
    void  printInfo (ostream& os) const;
 
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix = 0)const;
-   virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix = 0);
+   bool saveState(ossimKeywordlist& kwl,
+                          const char* prefix = 0)const override;
+   bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix = 0) override;
 protected:
-   virtual ~ossimFormosatDimapSupportData();
+   ~ossimFormosatDimapSupportData() override;
 
 private:
    void getLagrangeInterpolation(const ossim_float64& t,

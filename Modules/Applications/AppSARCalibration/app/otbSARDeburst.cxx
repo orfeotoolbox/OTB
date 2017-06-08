@@ -44,7 +44,7 @@ public:
   typedef otb::SarDeburstImageFilter<FloatVectorImageType>     DeburstFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SARDeburst");
     SetDescription("This application performs a deburst operation by removing redundant lines. \n");
@@ -73,10 +73,10 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input complex image
     FloatVectorImageType*  in = GetParameterImage("in");

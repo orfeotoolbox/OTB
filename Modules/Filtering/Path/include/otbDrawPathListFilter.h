@@ -111,11 +111,11 @@ protected:
   /** Constructor */
   DrawPathListFilter();
   /** Desctructor */
-  ~DrawPathListFilter() ITK_OVERRIDE {}
+  ~DrawPathListFilter() override {}
   /** Printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   DrawPathListFilter(const Self &); //purposely not implemented

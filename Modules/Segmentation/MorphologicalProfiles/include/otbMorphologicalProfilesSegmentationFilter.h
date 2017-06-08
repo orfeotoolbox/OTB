@@ -106,9 +106,9 @@ itkGetConstReferenceMacro(Sigma,double);
 protected:
 MorphologicalProfilesSegmentationFilter();
 
-~MorphologicalProfilesSegmentationFilter() ITK_OVERRIDE;
+~MorphologicalProfilesSegmentationFilter() override;
 
-void GenerateData() ITK_OVERRIDE;
+void GenerateData() override;
 
 private:
 typename OpeningProfileFilterType::Pointer m_OpeningProfile;

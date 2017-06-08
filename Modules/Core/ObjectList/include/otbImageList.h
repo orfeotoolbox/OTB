@@ -63,18 +63,18 @@ public:
   /**
    * Update images in the list.
    */
-  void UpdateOutputInformation(void) ITK_OVERRIDE;
+  void UpdateOutputInformation(void) override;
   void PropagateRequestedRegion(void)
-    throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
-  void UpdateOutputData(void) ITK_OVERRIDE;
+    throw (itk::InvalidRequestedRegionError) override;
+  void UpdateOutputData(void) override;
 
 protected:
   /** Constructor */
   ImageList() {};
   /** Destructor */
-  ~ImageList() ITK_OVERRIDE {}
+  ~ImageList() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }

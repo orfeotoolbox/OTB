@@ -49,7 +49,7 @@ public:
     ossimSentinel1SarSensorModel(ossimSentinel1SarSensorModel && m)=default;
 
     /** Destructor */
-    virtual ~ossimSentinel1SarSensorModel()=default;
+    ~ossimSentinel1SarSensorModel() override =default;
 #endif
 
     void readAnnotationFile(const std::string & annotationXml);

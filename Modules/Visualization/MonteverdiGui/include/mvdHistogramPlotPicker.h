@@ -123,7 +123,7 @@ public:
 		       QwtPlotCanvas* canvas );
 
   /** \brief Destructor. */
-  ~HistogramPlotPicker() ITK_OVERRIDE;
+  ~HistogramPlotPicker() override;
 
   /**
    */
@@ -136,7 +136,7 @@ public:
   //
   // QwtPlotPicker methods.
 
-  void drawRubberBand( QPainter* painter ) const ITK_OVERRIDE;
+  void drawRubberBand( QPainter* painter ) const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -161,7 +161,7 @@ protected:
 
   using QwtPlotPicker::trackerText;
 
-  QwtText trackerText( const QwtDoublePoint & ) const ITK_OVERRIDE;
+  QwtText trackerText( const QwtDoublePoint & ) const override;
 
 //
 // Protected attributes.

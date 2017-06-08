@@ -55,7 +55,7 @@ public:
   itkTypeMacro(Smoothing, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Smoothing");
     SetDescription("Apply a smoothing filter to an image");
@@ -125,12 +125,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

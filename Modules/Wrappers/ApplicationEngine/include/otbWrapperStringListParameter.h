@@ -103,12 +103,12 @@ public:
     m_Value[i] = value;
   }
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return !m_Value.empty();
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_Value.clear();
   }
@@ -129,7 +129,7 @@ protected:
   }
 
   /** Destructor */
-  ~StringListParameter() ITK_OVERRIDE
+  ~StringListParameter() override
   {
   }
 

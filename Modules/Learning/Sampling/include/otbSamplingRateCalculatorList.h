@@ -98,7 +98,7 @@ protected:
   SamplingRateCalculatorList(){}
 
   /** Destructor */
-  ~SamplingRateCalculatorList() ITK_OVERRIDE {}
+  ~SamplingRateCalculatorList() override {}
 
 private:
   SamplingRateCalculatorList(const Self &);    //purposely not implemented

@@ -52,7 +52,7 @@ namespace ossimplugins
       ossimPleiadesModel(const ossimPleiadesModel& rhs);
 
       /** @brief Destructor */
-      virtual ~ossimPleiadesModel();
+      ~ossimPleiadesModel() override;
 
       bool open(const ossimFilename& file);
 
@@ -60,22 +60,22 @@ namespace ossimplugins
        * Returns pointer to a new instance, copy of this.
        * Not implemented yet!  Returns NULL...
        */
-      virtual ossimObject* dup() const;
+      ossimObject* dup() const override;
 
       /*!
        * Extends base-class implementation. Dumps contents of object to ostream.
        */
-      virtual std::ostream& print(std::ostream& out) const;
+      std::ostream& print(std::ostream& out) const override;
 
       /*!
        * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
        * KWL files. Returns true if successful.
        */
-      virtual bool saveState(ossimKeywordlist& kwl,
-                             const char* prefix=NULL) const;
+      bool saveState(ossimKeywordlist& kwl,
+                             const char* prefix=NULL) const override;
 
-      virtual bool loadState(const ossimKeywordlist& kwl,
-                             const char* prefix=NULL);
+      bool loadState(const ossimKeywordlist& kwl,
+                             const char* prefix=NULL) override;
 
       void setSupportData(ossimPleiadesDimapSupportData* supportData)
       {

@@ -41,7 +41,7 @@ class OTBQtWidget_EXPORT QtWidgetInputImageListParameter : public QtWidgetParame
   Q_OBJECT
 public:
   QtWidgetInputImageListParameter(InputImageListParameter*, QtWidgetModel*);
-  ~QtWidgetInputImageListParameter() ITK_OVERRIDE;
+  ~QtWidgetInputImageListParameter() override;
 
 
 signals:
@@ -62,9 +62,9 @@ private:
   QtWidgetInputImageListParameter(const QtWidgetInputImageListParameter&); //purposely not implemented
   void operator=(const QtWidgetInputImageListParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   void RecreateImageList();
   void UpdateFileList( std::map<unsigned int, unsigned int> idMap );

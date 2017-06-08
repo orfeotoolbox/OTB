@@ -191,19 +191,19 @@ protected:
   /** Constructor */
   BandsStatisticsAttributesLabelMapFilter();
   /** Destructor */
-  ~BandsStatisticsAttributesLabelMapFilter() ITK_OVERRIDE {}
+  ~BandsStatisticsAttributesLabelMapFilter() override {}
 
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE{};
+  void EnlargeOutputRequestedRegion(itk::DataObject *) override{};
 
   /** Before threaded data generation */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   BandsStatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented

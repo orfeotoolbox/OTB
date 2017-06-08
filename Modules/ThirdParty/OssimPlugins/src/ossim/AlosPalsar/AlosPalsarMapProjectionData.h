@@ -50,7 +50,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~AlosPalsarMapProjectionData();
+  ~AlosPalsarMapProjectionData() override;
 
   /**
    * @brief This function write the AlosPalsarMapProjectionData in a stream
@@ -75,7 +75,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosPalsarRecord* Instantiate()
+  AlosPalsarRecord* Instantiate() override
   {
     return new AlosPalsarMapProjectionData();
   };
@@ -83,7 +83,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  AlosPalsarRecord* Clone()
+  AlosPalsarRecord* Clone() override
   {
     return new AlosPalsarMapProjectionData(*this);
   };
@@ -91,7 +91,7 @@ public:
   /**
    * @brief Read the class data from a stream
    */
-  void Read(std::istream& is)
+  void Read(std::istream& is) override
   {
     is >> *this;
   };
@@ -99,7 +99,7 @@ public:
   /**
    * @brief Write the class to a stream
    */
-  void Write(std::ostream& os)
+  void Write(std::ostream& os) override
   {
     os << *this;
   };

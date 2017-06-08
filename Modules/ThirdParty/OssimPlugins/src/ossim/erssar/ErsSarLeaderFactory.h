@@ -49,7 +49,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~ErsSarLeaderFactory();
+  ~ErsSarLeaderFactory() override;
 
 
 protected:

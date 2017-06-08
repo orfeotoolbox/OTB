@@ -41,7 +41,7 @@ public:
   itkTypeMacro(TestApplication, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
@@ -104,12 +104,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     //std::cout << "TestApplication::DoUpdateParameters" << std::endl;
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageListType* imgList = GetParameterImageList("il");
     SetParameterOutputImage("outgroup.outputimage", imgList->GetNthElement(0));

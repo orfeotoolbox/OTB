@@ -263,18 +263,18 @@ protected:
   /** Constructor */
   SurfaceReflectanceToReflectanceFilter();
   /** Destructor */
-  ~SurfaceReflectanceToReflectanceFilter() ITK_OVERRIDE {};
+  ~SurfaceReflectanceToReflectanceFilter() override {};
 
 
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   /** Fill AtmosphericRadiativeTerms using image metadata*/
   void UpdateAtmosphericRadiativeTerms();
   /** Update Functors parameters */
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
 

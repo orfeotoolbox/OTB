@@ -184,7 +184,7 @@ public:
   itkTypeMacro(SARPolarMatrixConvert, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SARPolarMatrixConvert");
     SetDescription("This applications allows converting classical polarimetric matrices to each other.");
@@ -356,7 +356,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     
     int convType = GetParameterInt("conv");
@@ -440,7 +440,7 @@ private:
     
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
 
     //****************************************

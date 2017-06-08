@@ -105,9 +105,9 @@ public:
 protected:
   VectorDataIntoImageProjectionFilter();
 
-  ~VectorDataIntoImageProjectionFilter() ITK_OVERRIDE {}
+  ~VectorDataIntoImageProjectionFilter() override {}
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   // Projection filter
   typedef VectorDataProjectionFilter<InputVectorDataType, InputVectorDataType>

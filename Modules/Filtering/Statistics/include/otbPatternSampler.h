@@ -89,7 +89,7 @@ public:
   /**
    * Method that resets the internal state of the sampler
    */
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
 
   /**
    * Method to call during iteration, returns true if the sample is selected,
@@ -118,7 +118,7 @@ protected:
   PatternSampler();
 
   /** Destructor */
-  ~PatternSampler() ITK_OVERRIDE {}
+  ~PatternSampler() override {}
 
 private:
   // Not implemented

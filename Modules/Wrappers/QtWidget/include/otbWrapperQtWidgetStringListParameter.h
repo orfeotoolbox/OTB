@@ -41,7 +41,7 @@ class OTBQtWidget_EXPORT QtWidgetStringListParameter : public QtWidgetParameterB
   Q_OBJECT
 public:
   QtWidgetStringListParameter(StringListParameter*, QtWidgetModel*);
-  ~QtWidgetStringListParameter() ITK_OVERRIDE;
+  ~QtWidgetStringListParameter() override;
 
 signals:
   void Change();
@@ -56,9 +56,9 @@ private:
   QtWidgetStringListParameter(const QtWidgetStringListParameter&); //purposely not implemented
   void operator=(const QtWidgetStringListParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   StringListParameter::Pointer m_StringListParam;
 

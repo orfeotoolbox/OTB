@@ -90,13 +90,13 @@ public:
 
 protected:
   WaveletImageFilter();
-  virtual ~WaveletImageFilter();
+  ~WaveletImageFilter() override;
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() override;
 
-  virtual void GenerateData();
+  void GenerateData() override;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   WaveletImageFilter(const Self&); //purposely not implemented

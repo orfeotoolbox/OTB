@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetComplexOutputImageParameter : public QtWidgetPa
   Q_OBJECT
 public:
   QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*);
-  ~QtWidgetComplexOutputImageParameter() ITK_OVERRIDE;
+  ~QtWidgetComplexOutputImageParameter() override;
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -57,9 +57,9 @@ private:
   QtWidgetComplexOutputImageParameter(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   std::string m_FileName;
   ComplexOutputImageParameter::Pointer m_OutputImageParam;

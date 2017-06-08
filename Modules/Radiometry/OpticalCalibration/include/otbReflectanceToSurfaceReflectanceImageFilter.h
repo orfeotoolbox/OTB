@@ -240,18 +240,18 @@ protected:
   /** Constructor */
   ReflectanceToSurfaceReflectanceImageFilter();
   /** Destructor */
-  ~ReflectanceToSurfaceReflectanceImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ReflectanceToSurfaceReflectanceImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the parameters of the functor before the threads run. */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   /** Fill AtmosphericRadiativeTerms using image metadata*/
   void UpdateAtmosphericRadiativeTerms();
   /** Update Functors parameters */
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
 

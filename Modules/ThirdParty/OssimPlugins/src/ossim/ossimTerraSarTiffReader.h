@@ -41,16 +41,16 @@ namespace ossimplugins
       ossimTerraSarTiffReader();
       
       /** virtual destructor */
-      virtual ~ossimTerraSarTiffReader();
+      ~ossimTerraSarTiffReader() override;
       
       /** @return "terrasarx" */
-      virtual ossimString getShortName() const;
+      ossimString getShortName() const override;
       
       /** @return "ossim TerraSAR-X reader" */
-      virtual ossimString getLongName()  const;
+      ossimString getLongName()  const override;
       
       /** @return "ossimTerraSarTiffReader" */
-      virtual ossimString getClassName()    const;
+      ossimString getClassName()    const override;
       
       /**
        *  This open take the product xml file.
@@ -59,37 +59,37 @@ namespace ossimplugins
        *
        *  @return true on success, false on error.
        */
-      virtual bool open(const ossimFilename& file);
+      bool open(const ossimFilename& file) override;
       
       /**
        * Method to save the state of an object to a keyword list.
        * Return true if ok or false on error.
        */
-      virtual bool saveState(ossimKeywordlist& kwl,
-                             const char* prefix=0)const;
+      bool saveState(ossimKeywordlist& kwl,
+                             const char* prefix=0)const override;
       
       /**
        * Method to the load (recreate) the state of an object from a keyword
        * list.  Return true if ok or false on error.
        */
-      virtual bool loadState(const ossimKeywordlist& kwl,
-                             const char* prefix=0);
+      bool loadState(const ossimKeywordlist& kwl,
+                             const char* prefix=0) override;
       
       /** Close method. */
-      virtual void close();
+      void close() override;
       
       /**
        * Returns the image geometry object associated with this tile source or
        * NULL if non defined.  The geometry contains full-to-local image
        * transform as well as projection (image-to-world).
        */
-      virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
+      ossimRefPtr<ossimImageGeometry> getImageGeometry() override;
 
       /**
        * @param Method to get geometry from the xml file or internal geotiff
        * tags.
        */
-      virtual ossimRefPtr<ossimImageGeometry> getInternalImageGeometry() const;
+      ossimRefPtr<ossimImageGeometry> getInternalImageGeometry() const override;
       
    private:
       

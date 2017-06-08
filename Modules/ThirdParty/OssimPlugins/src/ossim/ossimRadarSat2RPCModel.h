@@ -69,18 +69,18 @@ public:
 
 
    /** @brief Destructor */
-   virtual ~ossimRadarSat2RPCModel();
+   ~ossimRadarSat2RPCModel() override;
 
    /**
     * @brief Method to return the class name.
     * @return The name of this class.
     */
-   virtual ossimString getClassName()   const;
+   ossimString getClassName()   const override;
 
    /**
     * @brief Returns pointer to a new instance, copy of this.
     */
-   virtual ossimObject* dup() const;
+   ossimObject* dup() const override;
 
 
 	   /**
@@ -98,21 +98,21 @@ public:
     * @param prefix added to keys when saved.
     * @return true on success, false on error.
     */
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=0) const;
+   bool saveState(ossimKeywordlist& kwl,
+                          const char* prefix=0) const override;
 
    /**
     * @brief Method to the load (recreate) the state of the object from a
     * keyword list. Return true if ok or false on error.
     * @return true if load OK, false on error
     */
-   virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0) override;
 
    /*!
     * METHOD: print()
     * Fulfills base-class pure virtual. Dumps contents of object to ostream.
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   std::ostream& print(std::ostream& out) const override;
 
 
    /**
@@ -121,8 +121,8 @@ public:
     * decimation.
     * This is a temp work around for decimation RPC NITFs.
     */
-   virtual void  worldToLineSample(const ossimGpt& world_point,
-                                   ossimDpt&       image_point) const;
+   void  worldToLineSample(const ossimGpt& world_point,
+                                   ossimDpt&       image_point) const override;
 
    /**
     * @brief lineSampleHeightToWorld()
@@ -130,9 +130,9 @@ public:
     * ossimRpcModel::lineSampleHeightToWorld
     * This is a temp work around for decimation RPC NITFs.
     */
-   virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
+   void lineSampleHeightToWorld(const ossimDpt& image_point,
                                         const double&   heightEllipsoid,
-                                        ossimGpt&       worldPoint) const;
+                                        ossimGpt&       worldPoint) const override;
 
 
 private:

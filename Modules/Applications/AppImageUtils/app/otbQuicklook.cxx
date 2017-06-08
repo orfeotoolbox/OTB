@@ -53,7 +53,7 @@ public:
         <ExtractROIFilterType::OutputImageType, ExtractROIFilterType::OutputImageType> ShrinkImageFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
@@ -121,7 +121,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Update the sizes only if the user does not defined a size
     if ( HasValue("in") )
@@ -198,7 +198,7 @@ bool CropRegionOfInterest()
     return false;
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     InputImageType::Pointer inImage = GetParameterImage("in");
 

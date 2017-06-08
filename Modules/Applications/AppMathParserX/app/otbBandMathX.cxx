@@ -55,7 +55,7 @@ public:
 
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("BandMathX");
     SetDescription("This application performs mathematical operations on multiband images.\n"
@@ -176,7 +176,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // check if input context should be used
     bool useContext = this->ContextCheck();
@@ -270,7 +270,7 @@ private:
       }
     }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");

@@ -83,8 +83,8 @@ public:
 
 protected:
   ContingencyTableCalculator();
-  ~ContingencyTableCalculator() ITK_OVERRIDE {}
-  //void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ContingencyTableCalculator() override {}
+  //void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ContingencyTableCalculator(const Self &); //purposely not implemented

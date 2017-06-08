@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetInputImageParameter : public QtWidgetParameterB
   Q_OBJECT
 public:
   QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
-  ~QtWidgetInputImageParameter() ITK_OVERRIDE;
+  ~QtWidgetInputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -56,9 +56,9 @@ private:
   QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
 
   InputImageParameter::Pointer m_InputImageParam;

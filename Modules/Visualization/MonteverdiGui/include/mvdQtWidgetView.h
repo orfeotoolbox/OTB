@@ -110,7 +110,7 @@ public:
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~QtWidgetView() ITK_OVERRIDE;
+  ~QtWidgetView() override;
 
   /** \brief Gui Creation. */
   void CreateGui();
@@ -163,7 +163,7 @@ protected:
   //
   // QWidget overloads.
 
-  void closeEvent( QCloseEvent * event ) ITK_OVERRIDE;
+  void closeEvent( QCloseEvent * event ) override;
 
 //
 // Protected attributes.

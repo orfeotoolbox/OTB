@@ -56,7 +56,7 @@ public:
   ossimTileMapModel(const ossimKeywordlist& geom_kwl);
   ossimTileMapModel(const ossimTileMapModel& rhs);
 
-  virtual ~ossimTileMapModel(){};
+  ~ossimTileMapModel() override{};
 
   enum ProjectionType
   {
@@ -72,12 +72,12 @@ public:
   /*!
    * Returns pointer to a new instance, copy of this.
    */
-  virtual ossimObject* dup() const { return 0; } // TBR
+  ossimObject* dup() const override { return 0; } // TBR
 
   /*!
    * Extends base-class implementation. Dumps contents of object to ostream.
    */
-  virtual std::ostream& print(std::ostream& out) const;
+  std::ostream& print(std::ostream& out) const override;
 
 
   bool open(const ossimFilename& file);
@@ -86,11 +86,11 @@ public:
    * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
    * KWL files. Returns true if successful.
    */
-  virtual bool saveState(ossimKeywordlist& kwl,
-                         const char* prefix=0) const;
+  bool saveState(ossimKeywordlist& kwl,
+                         const char* prefix=0) const override;
 
-  virtual bool loadState(const ossimKeywordlist& kwl,
-                         const char* prefix=0);
+  bool loadState(const ossimKeywordlist& kwl,
+                         const char* prefix=0) override;
 
   /*!
    * Writes a template of geom keywords processed by loadState and saveState
@@ -101,13 +101,13 @@ public:
   //***
   // Overrides base class pure virtual.
   //***
-  virtual void worldToLineSample(const ossimGpt& ground_point,
-                                 ossimDpt&       img_pt) const;
-  virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
+  void worldToLineSample(const ossimGpt& ground_point,
+                                 ossimDpt&       img_pt) const override;
+  void lineSampleHeightToWorld(const ossimDpt& image_point,
                                        const double&   heightEllipsoid,
-                                       ossimGpt&       worldPoint) const;
-  virtual void lineSampleToWorld(const ossimDpt& image_point,
-                                 ossimGpt&       worldPoint) const;
+                                       ossimGpt&       worldPoint) const override;
+  void lineSampleToWorld(const ossimDpt& image_point,
+                                 ossimGpt&       worldPoint) const override;
 
   /*!
    * Set/Get the depth of the quadtree decomposition
@@ -125,7 +125,7 @@ public:
   /*!
    * ossimOptimizableProjection
    */
-  inline virtual bool useForward()const {return true;} //!image to ground faster
+  inline bool useForward()const override {return true;} //!image to ground faster
 
 
 protected:

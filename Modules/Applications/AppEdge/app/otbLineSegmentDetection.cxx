@@ -53,7 +53,7 @@ public:
   itkTypeMacro(LineSegmentDetection, otb::Wrapper::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("LineSegmentDetection");
     SetDescription("Detect line segments in raster");
@@ -89,11 +89,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     typedef otb::VectorImageToAmplitudeImageFilter<FloatVectorImageType, FloatImageType>
       VectorImageToAmplitudeImageFilterType;

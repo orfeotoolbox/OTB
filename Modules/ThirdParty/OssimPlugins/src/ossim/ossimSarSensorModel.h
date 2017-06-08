@@ -213,12 +213,12 @@ public:
    ossimSarSensorModel(ossimSarSensorModel && m) = default;
 
    /** Destructor */
-   virtual ~ossimSarSensorModel() = default;
+   ~ossimSarSensorModel() override = default;
 #endif
 
-   virtual void lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightEllipsoid, ossimGpt& worldPt) const;
+   void lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightEllipsoid, ossimGpt& worldPt) const override;
 
-   virtual void lineSampleToWorld(const ossimDpt& imPt, ossimGpt& worldPt) const;
+   void lineSampleToWorld(const ossimDpt& imPt, ossimGpt& worldPt) const override;
 
 
    /** This method implement inverse sar geolocation using method found
@@ -229,7 +229,7 @@ public:
     * \param[in] worldPt World point to geocode
     * \param[out] imPt Corresponding estimated image point
     */
-   virtual void worldToLineSample(const ossimGpt& worldPt, ossimDpt & imPt) const;
+   void worldToLineSample(const ossimGpt& worldPt, ossimDpt & imPt) const override;
 
    /**
     * Sub-routine of lineSampleToWorld that computes azimuthTime and
@@ -253,7 +253,7 @@ public:
    bool autovalidateForwardModelFromGCPs(double resTol = 25);
 
    //Pure virtual in base class
-   bool useForward() const;
+   bool useForward() const override;
 
    void optimizeTimeOffsetsFromGcps();
 
@@ -292,12 +292,12 @@ public:
    /**
     * Returns pointer to a new instance, copy of this.
     */
-   virtual ossimObject* dup() const;
+   ossimObject* dup() const override;
 
    //TODO: Add virtual method readAnnotationFile?
 
-   virtual bool saveState(ossimKeywordlist      & kwl, const char* prefix=NULL) const;
-   virtual bool loadState(ossimKeywordlist const& kwl, const char* prefix=NULL);
+   bool saveState(ossimKeywordlist      & kwl, const char* prefix=NULL) const override;
+   bool loadState(ossimKeywordlist const& kwl, const char* prefix=NULL) override;
 
    bool isGRD() const {
       switch (theProductType.ToInternal()) {
@@ -311,7 +311,7 @@ public:
       }
    }
 
-   virtual std::ostream& print(std::ostream& out) const;
+   std::ostream& print(std::ostream& out) const override;
 protected:
 
    /**

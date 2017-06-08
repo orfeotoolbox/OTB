@@ -130,7 +130,7 @@ public:
         <FloatPixelType, Int16PixelType> >          HooverColorFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("HooverCompareSegmentation");
     SetDescription("Compare two segmentations with Hoover metrics");
@@ -202,12 +202,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     UInt32ImageType::Pointer inputGT = GetParameterUInt32Image("ingt");
     UInt32ImageType::Pointer inputMS = GetParameterUInt32Image("inms");

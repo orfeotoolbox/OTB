@@ -58,7 +58,7 @@ public:
 protected:
   FragmentShader();
 
-  ~FragmentShader() ITK_OVERRIDE;
+  ~FragmentShader() override;
 
   void BuildShader();
 

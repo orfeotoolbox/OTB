@@ -61,10 +61,10 @@ class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
 
 
       /** Set Inputs */
-      void SetReflectance(const SpectralResponseType *object) ITK_OVERRIDE;
+      void SetReflectance(const SpectralResponseType *object) override;
       SpectralResponseType * GetReflectance();
 
-      void SetTransmittance(const SpectralResponseType *object) ITK_OVERRIDE;
+      void SetTransmittance(const SpectralResponseType *object) override;
       SpectralResponseType * GetTransmittance();
 
       /** Set parameters */
@@ -104,7 +104,7 @@ class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
       itkGetMacro(FCoverView, double);
 
       /** GenerateData */
-      void GenerateData() ITK_OVERRIDE;
+      void GenerateData() override;
 
       /** Get Output */
       virtual SpectralResponseType * GetViewingReflectance();
@@ -121,11 +121,11 @@ class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
       /** Constructor */
       SailModel();
       /** Destructor */
-      ~SailModel() ITK_OVERRIDE;
+      ~SailModel() override;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
+      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
       using Superclass::MakeOutput;
 
       /** Compute Leaf Angle Distribution */

@@ -87,17 +87,17 @@ public:
   itkSetMacro(NumberOfDecompositions,unsigned int);
 
   /** If the filter is modified, the internal filters need to be modified too */
-  virtual void Modified() const;
+  void Modified() const override;
 
 protected:
   WaveletInverseImageFilter();
-  virtual ~WaveletInverseImageFilter();
+  ~WaveletInverseImageFilter() override;
 
-  virtual void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() override;
 
-  virtual void GenerateData();
+  void GenerateData() override;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   WaveletInverseImageFilter(const Self&); //purposely not implemented

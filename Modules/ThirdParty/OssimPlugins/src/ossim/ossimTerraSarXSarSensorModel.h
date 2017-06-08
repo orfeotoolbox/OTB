@@ -45,7 +45,7 @@ public:
   ossimTerraSarXSarSensorModel(ossimTerraSarXSarSensorModel && m) = default;
 
   /** Destructor */
-  virtual ~ossimTerraSarXSarSensorModel() = default;
+  ~ossimTerraSarXSarSensorModel() override = default;
 #endif
 
   //Not implemented yet

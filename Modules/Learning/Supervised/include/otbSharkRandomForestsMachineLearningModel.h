@@ -83,21 +83,21 @@ public:
   itkTypeMacro(SharkRandomForestsMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
-  virtual void Train() ITK_OVERRIDE;
+  virtual void Train() override;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  virtual void Save(const std::string & filename, const std::string & name="") override;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  virtual void Load(const std::string & filename, const std::string & name="") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &) ITK_OVERRIDE;
+  virtual bool CanReadFile(const std::string &) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &) ITK_OVERRIDE;
+  virtual bool CanWriteFile(const std::string &) override;
   //@}
 
   /** From Shark doc: Get the number of trees to grow.*/
@@ -142,10 +142,10 @@ protected:
   virtual ~SharkRandomForestsMachineLearningModel();
 
   /** Predict values using the model */
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
 
   
-  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
+  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const override;
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;

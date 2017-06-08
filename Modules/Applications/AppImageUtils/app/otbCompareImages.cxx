@@ -49,7 +49,7 @@ public:
   typedef otb::StreamingCompareImageFilter<FloatImageType> StreamingCompareImageFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("CompareImages");
     SetDescription("Estimator between 2 images.");
@@ -134,7 +134,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Set channel interval
     if( HasValue("ref.in") )
@@ -169,7 +169,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Init filters
     m_ExtractRefFilter = ExtractROIMonoFilterType::New();

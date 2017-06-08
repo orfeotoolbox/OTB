@@ -174,9 +174,9 @@ public:
 protected:
   UnConstrainedLeastSquareImageFilter();
 
-  ~UnConstrainedLeastSquareImageFilter() ITK_OVERRIDE {}
+  ~UnConstrainedLeastSquareImageFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   UnConstrainedLeastSquareImageFilter(const Self &); //purposely not implemented

@@ -47,7 +47,7 @@ public:
   typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ConcatenateVectorData");
     SetDescription("Concatenate VectorDatas");
@@ -75,12 +75,12 @@ private:
   }
 
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input VectorData list
     VectorDataListType* vectorDataList = GetParameterVectorDataList("vd");

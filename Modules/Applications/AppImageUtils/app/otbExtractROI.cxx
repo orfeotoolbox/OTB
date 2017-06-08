@@ -58,7 +58,7 @@ public:
                                       FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
@@ -121,7 +121,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Update the sizes only if the user has not defined a size
     if ( HasValue("in") )
@@ -224,7 +224,7 @@ private:
     return false;
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();

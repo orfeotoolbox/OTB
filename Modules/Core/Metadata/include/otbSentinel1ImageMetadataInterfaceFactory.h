@@ -41,8 +41,8 @@ public:
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
-  const char* GetDescription(void) const ITK_OVERRIDE;
+  const char* GetITKSourceVersion(void) const override;
+  const char* GetDescription(void) const override;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -59,7 +59,7 @@ public:
 
 protected:
   Sentinel1ImageMetadataInterfaceFactory();
-  ~Sentinel1ImageMetadataInterfaceFactory() ITK_OVERRIDE;
+  ~Sentinel1ImageMetadataInterfaceFactory() override;
 
 private:
   Sentinel1ImageMetadataInterfaceFactory(const Self &); //purposely not implemented

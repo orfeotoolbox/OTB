@@ -47,7 +47,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~RadiometricData();
+  ~RadiometricData() override;
 
   /**
    * @brief Copy constructor
@@ -71,7 +71,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  RadarSatRecord* Instantiate()
+  RadarSatRecord* Instantiate() override
   {
     return new RadiometricData();
   };
@@ -79,7 +79,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  RadarSatRecord* Clone()
+  RadarSatRecord* Clone() override
   {
     return new RadiometricData(*this);
   };
@@ -87,7 +87,7 @@ public:
   /**
    * @brief Reads the class data from a stream
    */
-  void Read(std::istream& is)
+  void Read(std::istream& is) override
   {
     is>>*this;
   };
@@ -95,7 +95,7 @@ public:
   /**
    * @brief Writes the class to a stream
    */
-  void Write(std::ostream& os)
+  void Write(std::ostream& os) override
   {
     os<<*this;
   };

@@ -72,7 +72,7 @@ namespace ossimplugins
       ossimSentinel1Model(ossimSentinel1Model && rhs) = default;
 
       /** @brief Destructor */
-      virtual ~ossimSentinel1Model() = default;
+      ~ossimSentinel1Model() override = default;
 #endif
       //@}
 
@@ -81,22 +81,22 @@ namespace ossimplugins
       /*!
        * Returns pointer to a new instance, copy of this.
        */
-      virtual ossimObject* dup() const;
+      ossimObject* dup() const override;
 
       /*!
        * Extends base-class implementation. Dumps contents of object to ostream.
        */
-      virtual std::ostream& print(std::ostream& out) const;
+      std::ostream& print(std::ostream& out) const override;
 
       /*!
        * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
        * KWL files. Returns true if successful.
        */
-      virtual bool saveState(ossimKeywordlist& kwl,
-            const char* prefix=NULL) const;
+      bool saveState(ossimKeywordlist& kwl,
+            const char* prefix=NULL) const override;
 
-      virtual bool loadState(ossimKeywordlist const& kwl,
-            const char* prefix=NULL);
+      bool loadState(ossimKeywordlist const& kwl,
+            const char* prefix=NULL) override;
 
       bool checkDirectory(const ossimFilename& file, const char* d, const char *ext) const;
 
@@ -120,7 +120,7 @@ namespace ossimplugins
 
       bool initImageSize(ossimIpt& imageSize) const;
 
-      virtual void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const;
+      void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const override;
 
       bool isSLC() const { return  theSLC; }
       bool isOCN() const { return  theOCN; }

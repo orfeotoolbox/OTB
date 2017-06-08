@@ -99,7 +99,7 @@ public:
   ApplicationsToolBox( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~ApplicationsToolBox() ITK_OVERRIDE;
+  ~ApplicationsToolBox() override;
 
   /** Get TreeWidget */
   // QTreeWidget * GetAlgorithmsTree();

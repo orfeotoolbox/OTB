@@ -167,7 +167,7 @@ public:
   itkTypeMacro(KMeansClassification, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
@@ -224,7 +224,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // test of input image //
     if (HasValue("in"))
@@ -257,7 +257,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

@@ -45,7 +45,7 @@ public:
                                                       FloatImageType>     CalibrationFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SARCalibration");
     SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.\n");
@@ -91,12 +91,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input complex image
     ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");

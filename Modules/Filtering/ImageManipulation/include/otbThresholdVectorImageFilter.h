@@ -98,8 +98,8 @@ public:
 
 protected:
   ThresholdVectorImageFilter();
-  ~ThresholdVectorImageFilter() ITK_OVERRIDE {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ThresholdVectorImageFilter() override {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ThresholdVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -112,9 +112,9 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType ThrethreadId ) ITK_OVERRIDE;
+                            itk::ThreadIdType ThrethreadId ) override;
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE
+  void GenerateOutputInformation(void) override
   {
     Superclass::GenerateOutputInformation();
 

@@ -68,28 +68,28 @@ public:
 
 protected:
   /** Main computation method */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
    * Copy information from the first image of the list if existing.
    **/
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) override;
 
   /**
    * GenerateInputRequestedRegion
    * Set the requested region of each image in the list.
    */
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) override;
 
   /** Constructor */
   WaveletsBandsListToWaveletsSynopsisImageFilter();
 
   /** Destructor */
-  virtual ~WaveletsBandsListToWaveletsSynopsisImageFilter();
+  ~WaveletsBandsListToWaveletsSynopsisImageFilter() override;
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   WaveletsBandsListToWaveletsSynopsisImageFilter(const Self&); //purposely not implemented

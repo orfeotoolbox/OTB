@@ -123,17 +123,17 @@ public:
   typedef ExtendedFilenameToReaderOptions            FNameHelperType;
 
   /** Prepare image allocation at the first call of the pipeline processing */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Does the real work. */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Give the reader a chance to indicate that it will produce more
    * output than it was requested to produce. ImageFileReader cannot
    * currently read a portion of an image (since the ImageIO objects
    * cannot read a portion of an image), so the ImageFileReader must
    * enlarge the RequestedRegion to the size of the image on disk. */
-  void EnlargeOutputRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion(itk::DataObject *output) override;
 
   /** Set/Get the ImageIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular ImageIO can
@@ -163,8 +163,8 @@ public:
 
 protected:
   ImageFileReader();
-  ~ImageFileReader() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageFileReader() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Convert a block of pixels from one type to another. */
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);

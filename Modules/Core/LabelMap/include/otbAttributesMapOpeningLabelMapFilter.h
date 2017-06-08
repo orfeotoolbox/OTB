@@ -71,16 +71,16 @@ public:
 
   AttributeAccessorType & GetAccessor();
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 
 protected:
   /** Constructor */
   AttributesMapOpeningLabelMapFilter();
   /** Destructor */
-  ~AttributesMapOpeningLabelMapFilter() ITK_OVERRIDE;
+  ~AttributesMapOpeningLabelMapFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:

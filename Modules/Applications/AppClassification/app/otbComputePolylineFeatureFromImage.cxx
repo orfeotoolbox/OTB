@@ -76,7 +76,7 @@ public:
 ;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ComputePolylineFeatureFromImage");
     SetDescription("This application compute for each studied polyline, contained in the input VectorData, the chosen descriptors.");
@@ -116,12 +116,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Vector Data into Image projection
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

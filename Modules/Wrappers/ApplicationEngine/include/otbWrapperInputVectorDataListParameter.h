@@ -85,14 +85,14 @@ public:
   /** Add an image to the list. */
   void AddVectorData(VectorDataType* image);
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
 
  /** Clear all the list. */
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
 
 protected:
@@ -100,7 +100,7 @@ protected:
   InputVectorDataListParameter();
 
   /** Destructor */
-  ~InputVectorDataListParameter() ITK_OVERRIDE;
+  ~InputVectorDataListParameter() override;
 
   VectorDataListType::Pointer m_VectorDataList;
   VectorDataFileReaderListType::Pointer  m_ReaderList;

@@ -44,29 +44,29 @@ public:
     * determine what parser to use and return a projection if
     * successful.
     */
-   virtual ossimProjection* createProjection(const ossimFilename& filename,
-                                             ossim_uint32 entryIdx)const;
+   ossimProjection* createProjection(const ossimFilename& filename,
+                                             ossim_uint32 entryIdx)const override;
    using ossimProjectionFactoryBase::createProjection;
 
    /**
     * Take a projection type name.
     */
-   virtual ossimProjection* createProjection(const ossimString& name)const;
+   ossimProjection* createProjection(const ossimString& name)const override;
    /**
     * Take a keywordlist.
     */
-   virtual ossimProjection* createProjection(const ossimKeywordlist& kwl,
-                                             const char* prefix=0)const;
+   ossimProjection* createProjection(const ossimKeywordlist& kwl,
+                                             const char* prefix=0)const override;
 
-   virtual ossimObject* createObject(const ossimString& typeName)const;
+   ossimObject* createObject(const ossimString& typeName)const override;
 
    /*!
     * Creates and object given a keyword list.
     */
-   virtual ossimObject* createObject(const ossimKeywordlist& kwl,
-                                     const char* prefix=0)const;
+   ossimObject* createObject(const ossimKeywordlist& kwl,
+                                     const char* prefix=0)const override;
 
-   virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
+   void getTypeNameList(std::vector<ossimString>& typeList)const override;
 protected:
 
    // Taken by copy -> copy elision
@@ -78,7 +78,7 @@ private:
       initialized_ = true;
    }
 
-   ~ossimPluginProjectionFactory()
+   ~ossimPluginProjectionFactory() override
    {
       initialized_ = false;
    }

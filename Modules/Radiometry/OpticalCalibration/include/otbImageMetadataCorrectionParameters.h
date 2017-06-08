@@ -145,12 +145,12 @@ public:
   /** Constructor */
   ImageMetadataCorrectionParameters();
   /** Destructor */
-  ~ImageMetadataCorrectionParameters() ITK_OVERRIDE {}
+  ~ImageMetadataCorrectionParameters() override {}
 
 protected:
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ImageMetadataCorrectionParameters(const Self &); //purposely not implemented

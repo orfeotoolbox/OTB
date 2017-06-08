@@ -61,16 +61,16 @@ public:
 
   void SetVectorData(VectorDataType* vectorData);
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
 protected:
   /** Constructor */
   InputVectorDataParameter();
 
   /** Destructor */
-  ~InputVectorDataParameter() ITK_OVERRIDE;
+  ~InputVectorDataParameter() override;
 
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataType::Pointer m_VectorData;

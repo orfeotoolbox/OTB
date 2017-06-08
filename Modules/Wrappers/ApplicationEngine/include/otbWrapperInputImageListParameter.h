@@ -86,14 +86,14 @@ public:
   /** Add an image to the list. */
   void AddImage(ImageBaseType* image);
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
 
  /** Clear all the list. */
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
   /** Retrieve number of elements */
   unsigned int Size() const;
@@ -103,7 +103,7 @@ protected:
   InputImageListParameter();
 
   /** Destructor */
-  ~InputImageListParameter() ITK_OVERRIDE;
+  ~InputImageListParameter() override;
 
 
 private:

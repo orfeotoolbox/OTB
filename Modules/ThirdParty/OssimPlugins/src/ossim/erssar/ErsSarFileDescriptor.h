@@ -51,7 +51,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~ErsSarFileDescriptor();
+  ~ErsSarFileDescriptor() override;
 
   /**
    * @brief This function write the ErsSarFileDescriptor in a stream
@@ -76,7 +76,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  ErsSarRecord* Instantiate()
+  ErsSarRecord* Instantiate() override
   {
     return new ErsSarFileDescriptor();
   };
@@ -84,7 +84,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  ErsSarRecord* Clone()
+  ErsSarRecord* Clone() override
   {
     return new ErsSarFileDescriptor(*this);
   };
@@ -92,7 +92,7 @@ public:
   /**
    * @brief Read the class data from a stream
    */
-  void Read(std::istream& is)
+  void Read(std::istream& is) override
   {
     is >> *this;
   };
@@ -100,7 +100,7 @@ public:
   /**
    * @brief Write the class to a stream
    */
-  void Write(std::ostream& os)
+  void Write(std::ostream& os) override
   {
     os << *this;
   };

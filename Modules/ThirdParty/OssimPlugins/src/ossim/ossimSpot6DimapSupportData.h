@@ -73,7 +73,7 @@ namespace ossimplugins
 
          ossimSpot6DimapSupportData();
 
-         virtual ~ossimSpot6DimapSupportData();
+         ~ossimSpot6DimapSupportData() override;
 
          void clearFields();
 
@@ -88,14 +88,14 @@ namespace ossimplugins
           * Method to save the state of the object to a keyword list.
           * Return true if ok or false on error.
           */
-         virtual bool saveState(ossimKeywordlist& kwl,
-                                const char* prefix = 0)const;
+         bool saveState(ossimKeywordlist& kwl,
+                                const char* prefix = 0)const override;
          /**
           * Method to the load (recreate) the state of the object from a keyword
           * list.  Return true if ok or false on error.
           */
-         virtual bool loadState(const ossimKeywordlist& kwl,
-                                const char* prefix = 0);
+         bool loadState(const ossimKeywordlist& kwl,
+                                const char* prefix = 0) override;
 
          ossimString   getSensorID()                            const;
          ossimString   getProcessingLevel()                     const;

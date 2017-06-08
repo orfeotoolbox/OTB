@@ -74,7 +74,7 @@ public:
    ossimGeometricSarSensorModel(const ossimGeometricSarSensorModel& rhs);
 
    /** @brief Destructor */
-   virtual ~ossimGeometricSarSensorModel();
+   ~ossimGeometricSarSensorModel() override;
 
 //   ossimRefPtr <PlatformPosition2> thePlatformPosition;
 //   SensorParams* theSensorParams;
@@ -127,9 +127,9 @@ public:
     * @param heightEllipsoid Altitude of the world point
     * @param worldPoint Coordinates of the world point (OUT)
     */
-   virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
+   void lineSampleHeightToWorld(const ossimDpt& image_point,
                                         const double&   heightEllipsoid,
-                                        ossimGpt&       worldPoint) const;
+                                        ossimGpt&       worldPoint) const override;
 
 
    /**
@@ -176,7 +176,7 @@ public:
     * (from ground to image) than inverse(from image to ground)
     * @remark This function always return false
     */
-   inline virtual bool useForward() const {return false;}
+   inline bool useForward() const override {return false;}
 
    /**
     * @brief Method to save object state to a keyword list.
@@ -184,21 +184,21 @@ public:
     * @param prefix added to keys when saved.
     * @return true on success, false on error.
     */
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=0) const;
+   bool saveState(ossimKeywordlist& kwl,
+                          const char* prefix=0) const override;
 
    /**
     * @brief Method to the load (recreate) the state of the object from a
     * keyword list. Return true if ok or false on error.
     * @return true if load OK, false on error
     */
-   virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0) override;
 
    /*!
     * METHOD: print()
     * Fulfills base-class pure virtual. Dumps contents of object to ostream.
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   std::ostream& print(std::ostream& out) const override;
 
    /**
     * @brief Accessors to the optimization parameters.
@@ -210,8 +210,8 @@ public:
 
    ossimRefPtr<ossimCoarseGridModel> getReplacementOcgModel() { return _replacementOcgModel; }
 
-   virtual void lineSampleToWorld(const ossimDpt& image_point,
-                                  ossimGpt&       gpt) const;
+   void lineSampleToWorld(const ossimDpt& image_point,
+                                  ossimGpt&       gpt) const override;
 
    /**
     * @brief Accessors to the plateform, sensor parameters and reference point.

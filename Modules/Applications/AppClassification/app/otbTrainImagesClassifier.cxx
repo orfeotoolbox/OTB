@@ -35,7 +35,7 @@ public:
   itkNewMacro( Self )
   itkTypeMacro( Self, Superclass )
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName( "TrainImagesClassifier" );
     SetDescription( "Train a classifier from multiple pairs of images and training vector data." );
@@ -86,7 +86,7 @@ public:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if( HasValue( "io.vd" ) && IsParameterEnabled( "io.vd" ))
       {
@@ -157,7 +157,7 @@ public:
   }
 
 
-  void DoExecute()
+  void DoExecute() override
   {
     TrainFileNamesHandler fileNames;
     std::vector<std::string> vectorFileList;

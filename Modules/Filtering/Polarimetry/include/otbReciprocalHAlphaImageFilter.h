@@ -220,7 +220,7 @@ public:
 
 protected:
    ReciprocalHAlphaImageFilter() {}
-  ~ReciprocalHAlphaImageFilter() ITK_OVERRIDE {}
+  ~ReciprocalHAlphaImageFilter() override {}
 
 private:
   ReciprocalHAlphaImageFilter(const Self&); //purposely not implemented

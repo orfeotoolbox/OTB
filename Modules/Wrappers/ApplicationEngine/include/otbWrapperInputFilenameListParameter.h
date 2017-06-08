@@ -76,14 +76,14 @@ public:
   /** Get one list of the stored files. */
   StringParameterListPointerType GetFileList() const;
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
 
  /** Clear all the list. */
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
 
 protected:
@@ -91,7 +91,7 @@ protected:
   InputFilenameListParameter();
 
   /** Destructor */
-  ~InputFilenameListParameter() ITK_OVERRIDE;
+  ~InputFilenameListParameter() override;
 
 
   StringParameterListType::Pointer  m_FilenameList;

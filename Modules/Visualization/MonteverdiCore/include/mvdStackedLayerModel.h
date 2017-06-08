@@ -116,7 +116,7 @@ public:
   StackedLayerModel( QObject* p =NULL );
 
   /** \brief Destructor. */
-  ~StackedLayerModel() ITK_OVERRIDE;
+  ~StackedLayerModel() override;
 
   inline const AbstractLayerModel * operator[]( SizeType ) const;
   inline AbstractLayerModel * operator[]( SizeType );

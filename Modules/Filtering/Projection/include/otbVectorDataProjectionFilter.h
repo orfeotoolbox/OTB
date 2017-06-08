@@ -175,17 +175,17 @@ public:
 
 protected:
   VectorDataProjectionFilter();
-  ~VectorDataProjectionFilter() ITK_OVERRIDE {}
+  ~VectorDataProjectionFilter() override {}
 
-  OutputPointType ProcessPoint(InputPointType point) const ITK_OVERRIDE;
-  OutputLinePointerType ProcessLine(InputLinePointerType line) const ITK_OVERRIDE;
-  OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const ITK_OVERRIDE;
-  OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const ITK_OVERRIDE;
+  OutputPointType ProcessPoint(InputPointType point) const override;
+  OutputLinePointerType ProcessLine(InputLinePointerType line) const override;
+  OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const override;
+  OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const override;
 
   virtual void InstantiateTransform(void);
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
+  void GenerateData(void) override;
 
 private:
   VectorDataProjectionFilter(const Self &); //purposely not implemented

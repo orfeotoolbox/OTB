@@ -136,7 +136,7 @@ public:
   LayerStackItemModel( QObject* p =NULL );
 
   /** \brief Destructor. */
-  ~LayerStackItemModel() ITK_OVERRIDE;
+  ~LayerStackItemModel() override;
 
   /**
    */
@@ -152,14 +152,14 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
-  int columnCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  int columnCount( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
   
     QVariant
-    data( const QModelIndex & index, int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+    data( const QModelIndex & index, int role = Qt::DisplayRole ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#dropMimeData
@@ -170,24 +170,24 @@ public:
                   Qt::DropAction action,
                   int row,
                   int column,
-                  const QModelIndex & p ) ITK_OVERRIDE;
+                  const QModelIndex & p ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
    */
-  Qt::ItemFlags flags( const QModelIndex & index ) const ITK_OVERRIDE;
+  Qt::ItemFlags flags( const QModelIndex & index ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
    */
-  bool hasChildren( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  bool hasChildren( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
   QVariant headerData( int section,
                                Qt::Orientation orientation,
-                               int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+                               int role = Qt::DisplayRole ) const override;
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
    */
@@ -195,7 +195,7 @@ public:
     QModelIndex
     index( int row,
            int column,
-           const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+           const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
@@ -204,22 +204,22 @@ public:
     bool
     insertRows( int row,
                 int count,
-                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+                const QModelIndex & p = QModelIndex() ) override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeData
    */
-  QMimeData * mimeData( const QModelIndexList & indexes ) const ITK_OVERRIDE;
+  QMimeData * mimeData( const QModelIndexList & indexes ) const override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeTypes
    */
-  QStringList mimeTypes() const ITK_OVERRIDE;
+  QStringList mimeTypes() const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
-  QModelIndex parent( const QModelIndex & index ) const ITK_OVERRIDE;
+  QModelIndex parent( const QModelIndex & index ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
@@ -228,12 +228,12 @@ public:
     bool
     removeRows( int row,
                 int count,
-                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+                const QModelIndex & p = QModelIndex() ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
-  int rowCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  int rowCount( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
@@ -242,12 +242,12 @@ public:
     bool
     setData( const QModelIndex & index,
              const QVariant & value,
-             int role = Qt::EditRole ) ITK_OVERRIDE;
+             int role = Qt::EditRole ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#supportedDropActions
    */
-  Qt::DropActions supportedDropActions() const ITK_OVERRIDE;
+  Qt::DropActions supportedDropActions() const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

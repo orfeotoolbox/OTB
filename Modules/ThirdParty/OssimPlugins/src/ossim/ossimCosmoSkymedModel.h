@@ -59,13 +59,13 @@ public:
   /**
    * @brief Destructor
    */
-  ~ossimCosmoSkymedModel();
+  ~ossimCosmoSkymedModel() override;
 
   /**
    * @brief This function associates an image column number to a slant range when the image is georeferenced (ground projected)
    * @param col Column coordinate of the image point
    */
-  virtual double getSlantRangeFromGeoreferenced(double col) const;
+  double getSlantRangeFromGeoreferenced(double col) const override;
 
 protected:
 
@@ -91,14 +91,14 @@ protected:
   double _pixel_spacing ;
 
 private:
-  virtual bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix);
-  virtual bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
-  virtual bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
+  bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix) override;
+  bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix) override;
+  bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix) override;
   /**
    * @brief Initializes the Slant Range to Ground Range data sets :
    *        _SrToGr_R0,_SrToGr_coeffs_number,_SrToGr_exponent,_SrToGr_coeffs,_nbCol
    */
-  virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
+  bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix) override;
 
   bool UtcDateTimeStringToCivilDate(const std::string &utcString, CivilDateTime &outputDate);
 

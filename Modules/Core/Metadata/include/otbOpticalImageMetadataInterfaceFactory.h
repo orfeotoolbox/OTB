@@ -61,7 +61,7 @@ public:
 
 protected:
   OpticalImageMetadataInterfaceFactory();
-  ~OpticalImageMetadataInterfaceFactory() ITK_OVERRIDE;
+  ~OpticalImageMetadataInterfaceFactory() override;
 
 private:
   OpticalImageMetadataInterfaceFactory(const Self &); //purposely not implemented

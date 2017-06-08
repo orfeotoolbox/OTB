@@ -161,18 +161,18 @@ public:
   const InputVectorDataType * GetInput(void);
   const InputVectorDataType * GetInput(unsigned int idx);
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 protected:
   VectorDataToLabelMapFilter();
-  ~VectorDataToLabelMapFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~VectorDataToLabelMapFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * Standard pipeline method.
    */
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** VectorDataToLabelMapFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().

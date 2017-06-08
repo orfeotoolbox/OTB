@@ -88,7 +88,7 @@ public:
   itkTypeMacro(HyperspectralUnmixing, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("HyperspectralUnmixing");
     SetDescription("Estimate abundance maps from an hyperspectral image and a set of endmembers.");
@@ -139,12 +139,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     m_ProcessObjects.clear();
 

@@ -49,7 +49,7 @@ public:
   /**
     * @brief Destructor
     */
-  ~GalileanEphemeris();
+  ~GalileanEphemeris() override;
 
   /**
    * @brief Constructor with initialisations
@@ -78,7 +78,7 @@ public:
   /**
    * @brief This function creates a copy of the current class
    */
-  virtual Ephemeris* Clone()
+  Ephemeris* Clone() override
   {
     return new GalileanEphemeris(*this);
   };

@@ -51,7 +51,7 @@ public:
   };
 
   QtFileSelectionWidget();
-  ~QtFileSelectionWidget() ITK_OVERRIDE;
+  ~QtFileSelectionWidget() override;
 
   bool IsChecked()
   {

@@ -104,8 +104,8 @@ public:
 
 protected:
   ClampImageFilter();
-  ~ClampImageFilter() ITK_OVERRIDE {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ClampImageFilter() override {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ClampImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -118,9 +118,9 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId ) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId ) override;
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE
+  void GenerateOutputInformation(void) override
   {
     Superclass::GenerateOutputInformation();
 

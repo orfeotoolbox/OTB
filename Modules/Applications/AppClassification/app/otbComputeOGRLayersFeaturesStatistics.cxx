@@ -46,7 +46,7 @@ public:
 ;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ComputeOGRLayersFeaturesStatistics");
     SetDescription("Compute statistics of the features in a set of OGR Layers");
@@ -75,7 +75,7 @@ private:
   SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("inshp") )
       {
@@ -106,7 +106,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
       clock_t tic = clock();
 

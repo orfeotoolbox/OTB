@@ -58,7 +58,7 @@ itkTypeMacro(SFSTextureExtraction, otb::Application);
 
 private:
 
-void DoInit() ITK_OVERRIDE
+void DoInit() override
 {
 SetName("SFSTextureExtraction");
 SetDescription("Computes Structural Feature Set textures on every pixel of the input image selected channel");
@@ -121,12 +121,12 @@ SetDocExampleParameterValue("out", "SFSTextures.tif");
 SetOfficialDocLink();
 }
 
-void DoUpdateParameters() ITK_OVERRIDE
+void DoUpdateParameters() override
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute() ITK_OVERRIDE
+void DoExecute() override
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

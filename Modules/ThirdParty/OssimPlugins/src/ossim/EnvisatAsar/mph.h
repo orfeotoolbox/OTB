@@ -48,7 +48,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~mph();
+  ~mph() override;
 
   /**
    * @brief This function write the mph in a stream
@@ -73,7 +73,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  EnvisatAsarRecord* Instantiate()
+  EnvisatAsarRecord* Instantiate() override
   {
     return new mph();
   };
@@ -81,7 +81,7 @@ public:
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  EnvisatAsarRecord* Clone()
+  EnvisatAsarRecord* Clone() override
   {
     return new mph(*this);
   };
@@ -89,7 +89,7 @@ public:
   /**
    * @brief Read the class data from a stream
    */
-  void Read(std::istream& is)
+  void Read(std::istream& is) override
   {
     is>>*this;
   };
@@ -97,7 +97,7 @@ public:
   /**
    * @brief Write the class to a stream
    */
-  void Write(std::ostream& os)
+  void Write(std::ostream& os) override
   {
     os<<*this;
   };
