@@ -205,7 +205,7 @@ void BSQImageIO::Read(void* buffer)
   delete[] value;
 
   // Swap bytes if necessary
-  if (0) {}
+  if (false) {}
   otbSwappFileToSystemMacro(unsigned short, USHORT, buffer, numberOfPixelsOfRegion)
   otbSwappFileToSystemMacro(short, SHORT, buffer, numberOfPixelsOfRegion)
   otbSwappFileToSystemMacro(char, CHAR, buffer, numberOfPixelsOfRegion)
@@ -585,7 +585,7 @@ void BSQImageIO::WriteImageInformation()
     itkExceptionMacro(<< "Cannot write requested file " << m_FileName.c_str() << ".");
     }
 
-  if (0) {}
+  if (false) {}
   otbSetTypeBsqMacro(CHAR,   "OCT")
   otbSetTypeBsqMacro(UCHAR,  "UOCT")
   otbSetTypeBsqMacro(SHORT,  "I2")

@@ -38,7 +38,7 @@ QuickBirdImageMetadataInterfaceFactory
   this->RegisterOverride("OpticalImageMetadataInterface",
                           "otbQuickBirdImageMetadataInterface",
                           "QuickBird Metadata Interface",
-                          1,
+                          true,
                           itk::CreateObjectFunction<QuickBirdImageMetadataInterface>::New());
 }
 

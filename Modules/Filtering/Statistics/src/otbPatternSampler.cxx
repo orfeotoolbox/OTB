@@ -240,9 +240,9 @@ PatternSampler::RandArray(unsigned long N,unsigned long T)
    if (N>T)
      itkGenericExceptionMacro(<< "N must be <= to T (aka m_SamplingTabSize)." << std::endl);
 
-   std::vector<bool> res(T,0);
+   std::vector<bool> res(T,false);
    for(unsigned long i=0; i<N;i++)
-       res[i]=1;
+       res[i]=true;
 
    std::random_shuffle ( res.begin(), res.end() );
    

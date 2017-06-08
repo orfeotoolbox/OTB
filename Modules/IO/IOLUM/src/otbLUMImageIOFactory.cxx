@@ -32,7 +32,7 @@ LUMImageIOFactory::LUMImageIOFactory()
   this->RegisterOverride("otbImageIOBase",
                          "otbLUMImageIO",
                          "LUM Image IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<LUMImageIO>::New());
 }
 

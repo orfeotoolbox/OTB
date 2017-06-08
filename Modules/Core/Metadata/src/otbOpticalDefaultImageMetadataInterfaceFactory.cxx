@@ -35,7 +35,7 @@ OpticalDefaultImageMetadataInterfaceFactory
   this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbOpticalDefaultImageMetadataInterface",
                          "Default Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<OpticalDefaultImageMetadataInterface>::New());
 }
 

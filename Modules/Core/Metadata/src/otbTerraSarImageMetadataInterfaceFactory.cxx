@@ -35,7 +35,7 @@ TerraSarImageMetadataInterfaceFactory
   this->RegisterOverride("SarImageMetadataInterface",
                          "otbTerraSarImageMetadataInterface",
                          "TerraSar Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<TerraSarImageMetadataInterface>::New());
 }
 

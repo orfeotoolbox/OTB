@@ -32,7 +32,7 @@ TileMapImageIOFactory::TileMapImageIOFactory()
   this->RegisterOverride("otbImageIOBase",
                          "otbTileMapImageIO",
                          "TileMap Image IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<TileMapImageIO>::New());
 }
 

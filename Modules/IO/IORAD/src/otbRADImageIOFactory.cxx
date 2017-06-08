@@ -32,7 +32,7 @@ RADImageIOFactory::RADImageIOFactory()
   this->RegisterOverride("otbImageIOBase",
                          "otbRADImageIO",
                          "RAD Image IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<RADImageIO>::New());
 }
 

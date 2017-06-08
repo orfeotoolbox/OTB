@@ -40,7 +40,7 @@ IkonosImageMetadataInterfaceFactory
   this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbIkonosImageMetadataInterface",
                          "Ikonos Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<IkonosImageMetadataInterface>::New());
 }
 

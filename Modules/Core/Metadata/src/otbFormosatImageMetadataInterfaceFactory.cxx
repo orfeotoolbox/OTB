@@ -34,7 +34,7 @@ FormosatImageMetadataInterfaceFactory
   this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbFormosatImageMetadataInterface",
                          "Formosat Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<FormosatImageMetadataInterface>::New());
 }
 

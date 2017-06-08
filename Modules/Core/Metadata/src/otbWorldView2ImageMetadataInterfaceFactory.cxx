@@ -38,7 +38,7 @@ WorldView2ImageMetadataInterfaceFactory
   this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbWorldView2ImageMetadataInterface",
                          "WorldView2 Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<WorldView2ImageMetadataInterface>::New());
 }
 

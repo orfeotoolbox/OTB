@@ -67,7 +67,7 @@ public:
     m_RatioMaxConsiderationNumber = 5;
     m_Alpha = 1;
     this->SetNumberOfDirections(20); // set the step too
-    m_SelectedTextures = std::vector<bool>(6, 1);
+    m_SelectedTextures = std::vector<bool>(6, true);
   }
   virtual ~SFSTexturesFunctor() {}
 

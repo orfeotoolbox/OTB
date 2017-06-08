@@ -35,7 +35,7 @@ SarDefaultImageMetadataInterfaceFactory
   this->RegisterOverride("SarImageMetadataInterface",
                          "otbSarDefaultImageMetadataInterface",
                          "Default Sar Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<SarDefaultImageMetadataInterface>::New());
 }
 

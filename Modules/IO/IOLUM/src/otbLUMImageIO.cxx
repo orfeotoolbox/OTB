@@ -168,7 +168,7 @@ void LUMImageIO::Read(void* buffer)
 
   unsigned long numberOfPixelsPerLines = lNbLines * lNbColumns;
   // Swap bytes if necessary
-  if (0) {}
+  if (false) {}
   otbSwappFileToSystemMacro(unsigned short, USHORT, buffer, numberOfPixelsPerLines)
   otbSwappFileToSystemMacro(short, SHORT, buffer, numberOfPixelsPerLines)
   otbSwappFileToSystemMacro(char, CHAR, buffer, numberOfPixelsPerLines)
@@ -417,7 +417,7 @@ void LUMImageIO::WriteImageInformation()
   delete[] value;
   value = nullptr;
   //Set m_TypeLum
-  if (0) {}
+  if (false) {}
   otbSetTypeLumMacro(CHAR,   "08BI", "08LI")
   otbSetTypeLumMacro(UCHAR,  "08BU", "08LU")
   otbSetTypeLumMacro(SHORT,  "16BI", "16LI")

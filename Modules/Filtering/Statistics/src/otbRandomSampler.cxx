@@ -68,11 +68,11 @@ RandomSampler::Reset(void)
         static_cast<unsigned long>( sizeRatio1 * (double)this->GetNeededElements());
       }
     buffer.clear();
-    buffer.resize(bufferSize,0);
+    buffer.resize(bufferSize,false);
     // switch ON the first 'needed' booleans
     for (unsigned long k=0UL ; k<needed ; k++)
       {
-      buffer[k] = 1;
+      buffer[k] = true;
       }
     // shuffle boolean buffer
     std::random_shuffle ( buffer.begin(), buffer.end() );

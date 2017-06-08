@@ -37,7 +37,7 @@ SpotImageMetadataInterfaceFactory
   this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbSpotImageMetadataInterface",
                          "Spot Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<SpotImageMetadataInterface>::New());
 }
 

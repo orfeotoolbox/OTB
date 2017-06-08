@@ -598,7 +598,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       }
 
     // no exception : it can happen in this filter
-    if (0)
+    if (false)
       {
       // Couldn't crop the region (requested region is outside the largest
       // possible region).  Throw an exception.

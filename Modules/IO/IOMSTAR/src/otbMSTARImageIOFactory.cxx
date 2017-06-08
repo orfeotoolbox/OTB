@@ -31,7 +31,7 @@ MSTARImageIOFactory::MSTARImageIOFactory()
   this->RegisterOverride("otbImageIOBase",
                          "otbMSTARImageIO",
                          "MSTAR Image IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<MSTARImageIO>::New());
 }
 

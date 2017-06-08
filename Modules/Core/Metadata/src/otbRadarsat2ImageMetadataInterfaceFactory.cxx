@@ -37,7 +37,7 @@ Radarsat2ImageMetadataInterfaceFactory
   this->RegisterOverride("SarImageMetadataInterface",
                          "otbRadarsat2ImageMetadataInterface",
                          "Radarsat2 Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<Radarsat2ImageMetadataInterface>::New());
 }
 

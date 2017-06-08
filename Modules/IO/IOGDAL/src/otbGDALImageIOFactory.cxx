@@ -32,7 +32,7 @@ GDALImageIOFactory::GDALImageIOFactory()
   this->RegisterOverride("otbImageIOBase",
                          "otbGDALImageIO",
                          "GDAL Image IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<GDALImageIO>::New());
 }
 

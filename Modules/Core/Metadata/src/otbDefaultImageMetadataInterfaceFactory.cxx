@@ -38,7 +38,7 @@ DefaultImageMetadataInterfaceFactory
   this->RegisterOverride("ImageMetadataInterfaceBase",
                          "otbDefaultImageMetadataInterface",
                          "Default Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<DefaultImageMetadataInterface>::New());
 }
 

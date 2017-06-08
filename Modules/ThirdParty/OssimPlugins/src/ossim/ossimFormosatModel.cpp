@@ -550,7 +550,7 @@ bool ossimplugins::ossimFormosatModel::loadState(const ossimKeywordlist& kwl,
 void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
                                  ossimEcefRay&   image_ray) const
 {
-   bool runtime_dbflag = 0;
+   bool runtime_dbflag = false;
    NEWMAT::Matrix satToOrbit;
    ossimDpt iPt = image_point;
    iPt.samp += theSpotSubImageOffset.samp;

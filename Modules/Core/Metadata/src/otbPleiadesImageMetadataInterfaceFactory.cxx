@@ -37,7 +37,7 @@ PleiadesImageMetadataInterfaceFactory
   this->RegisterOverride("OpticalImageMetadataInterface",
                          "otbPleiadesImageMetadataInterface",
                          "Pleiades Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<PleiadesImageMetadataInterface>::New());
 }
 

@@ -694,7 +694,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
     axisDirection[1] = 1;
     imageIO->SetDirection(1, axisDirection);
 
-    imageIO->SetUseCompression(1);
+    imageIO->SetUseCompression(true);
 
     imageIO->SetFileName(filename.str().c_str());
     imageIO->WriteImageInformation();

@@ -224,7 +224,7 @@ void ONERAImageIO::Read(void* buffer)
   //byte swapping depending on pixel type:
   unsigned long numberOfPixelsPerRegion = lNbLines * lNbColumns * 2;
   // Swap bytes if necessary
-  if (0) {}
+  if (false) {}
   otbSwappFileToSystemMacro(float, FLOAT, buffer, numberOfPixelsPerRegion)
   otbSwappFileToSystemMacro(double, DOUBLE, buffer, numberOfPixelsPerRegion)
   else

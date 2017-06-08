@@ -898,7 +898,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
      } \
    }
 
-  if(0)
+  if(false)
     {
     }
   OTB_CONVERT_BUFFER_IF_BLOCK(unsigned char)

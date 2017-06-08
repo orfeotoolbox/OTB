@@ -36,7 +36,7 @@ OGRVectorDataIOFactory::OGRVectorDataIOFactory()
   this->RegisterOverride(classOverride.c_str(),
                          subclass.c_str(),
                          "OGR Vectordata IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<OGRVectorDataIO>::New());
 }
 

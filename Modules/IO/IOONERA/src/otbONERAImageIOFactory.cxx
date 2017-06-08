@@ -32,7 +32,7 @@ ONERAImageIOFactory::ONERAImageIOFactory()
   this->RegisterOverride("otbImageIOBase",
                          "otbONERAImageIO",
                          "ONERA Image IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<ONERAImageIO>::New());
 }
 

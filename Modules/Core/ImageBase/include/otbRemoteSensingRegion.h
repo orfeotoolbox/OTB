@@ -223,7 +223,7 @@ public:
   bool
   operator ==(const Self& region) const
   {
-    bool same = 1;
+    bool same = true;
     same = (m_Index == region.m_Index);
     same = same && (m_Size == region.m_Size);
     return same;
@@ -233,7 +233,7 @@ public:
   bool
   operator !=(const Self& region) const
   {
-    bool same = 1;
+    bool same = true;
     same = (m_Index == region.m_Index);
     same = same && (m_Size == region.m_Size);
     return !same;

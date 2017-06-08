@@ -206,7 +206,7 @@ void RADImageIO::Read(void* buffer)
   unsigned long numberOfPixelsOfRegion = lNbLines * lNbColumns * this->GetNumberOfComponents();
 
   // Swap bytes if necessary
-  if (0) {}
+  if (false) {}
   otbSwappFileToSystemMacro(unsigned short, USHORT, buffer, numberOfPixelsOfRegion)
   otbSwappFileToSystemMacro(short, SHORT, buffer, numberOfPixelsOfRegion)
   otbSwappFileToSystemMacro(char, CHAR, buffer, numberOfPixelsOfRegion)

@@ -37,7 +37,7 @@ Sentinel1ImageMetadataInterfaceFactory
   this->RegisterOverride("SarImageMetadataInterface",
                          "otbSentinel1ImageMetadataInterface",
                          "Sentinel1 Metadata Interface",
-                         1,
+                         true,
                          itk::CreateObjectFunction<Sentinel1ImageMetadataInterface>::New());
 }
 

@@ -683,7 +683,7 @@ public:
     _num_dsd = mph_rec._num_dsd;
     _size_dsd = mph_rec._dsd_size;
 
-    return 1;
+    return true;
   };
 
 

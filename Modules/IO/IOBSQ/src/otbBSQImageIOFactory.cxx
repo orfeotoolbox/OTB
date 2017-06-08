@@ -32,7 +32,7 @@ BSQImageIOFactory::BSQImageIOFactory()
   this->RegisterOverride("otbImageIOBase",
                          "otbBSQImageIO",
                          "BSQ Image IO",
-                         1,
+                         true,
                          itk::CreateObjectFunction<BSQImageIO>::New());
 }
 
