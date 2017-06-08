@@ -97,7 +97,7 @@ ImageKeywordlist::
 GetMetadataByKey(const std::string& key) const
 {
   // Search for the key in the output map
-  KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
+  auto it = m_Keywordlist.find(key);
 
   // If the key can not be found, throw an exception
   if (it == m_Keywordlist.end())
@@ -113,7 +113,7 @@ bool
 ImageKeywordlist::
 HasKey(const std::string& key) const
 {
-  KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
+  auto it = m_Keywordlist.find(key);
 
   return (it != m_Keywordlist.end());
 }
@@ -332,7 +332,7 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
     if (!hasMetaData && rpc_kwl.GetSize() > 0)
       {
       const ImageKeywordlist::KeywordlistMap &kwlMap = rpc_kwl.GetKeywordlist();
-      for (ImageKeywordlist::KeywordlistMap::const_iterator it = kwlMap.begin();
+      for (auto it = kwlMap.begin();
           it != kwlMap.end();
           ++it)
         {

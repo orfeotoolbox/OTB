@@ -371,7 +371,7 @@ void TrainImagesBase::SplitTrainingAndValidationSamples(FloatVectorImageType *im
   MapRateType trainRates;
   MapRateType validRates;
   otb::SamplingRateCalculator::TripletType tpt;
-  for( MapRateType::const_iterator it = inputRates.begin(); it != inputRates.end(); ++it )
+  for( auto it = inputRates.begin(); it != inputRates.end(); ++it )
     {
     double vtr = GetParameterFloat( "sample.vtr" );
     unsigned long total = std::min( it->second.Required, it->second.Tot );

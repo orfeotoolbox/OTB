@@ -66,7 +66,7 @@ public:
       {
       // mutex lock to ensure thread safety
       itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-      AppHandleContainerType::iterator it = m_Container.begin();
+      auto it = m_Container.begin();
       while (it != m_Container.end())
         {
         if ((*it).first == app)
@@ -341,7 +341,7 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
     {
     std::list<LightObject::Pointer> allobjects = itk::ObjectFactoryBase::CreateAllInstance("otbWrapperApplication");
     // Downcast and Sanity check
-    for (std::list<LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
+    for (auto i = allobjects.begin(); i != allobjects.end(); ++i)
       {
       Application* app = dynamic_cast<Application*> (i->GetPointer());
       if (app)

@@ -396,7 +396,7 @@ void HooverInstanceFilter<TLabelMap>
         regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), static_cast<AttributesValueType>(scoreRF));
 
         unsigned int indexOS=1;
-        for(typename ObjectVectorType::iterator it=objectsOfMS.begin(); it!=objectsOfMS.end(); ++it)
+        for(auto it=objectsOfMS.begin(); it!=objectsOfMS.end(); ++it)
           {
           LabelObjectType *regionMS = *it;
           std::ostringstream attribute;
@@ -414,7 +414,7 @@ void HooverInstanceFilter<TLabelMap>
           }
 
         GTindices.insert(row);
-        for(RegionSetType::iterator it=regionsOfMS.begin(); it!=regionsOfMS.end(); ++it)
+        for(auto it=regionsOfMS.begin(); it!=regionsOfMS.end(); ++it)
           {
           MSindices.insert(*it);
           otbDebugMacro(<< *it << " ");
@@ -492,7 +492,7 @@ void HooverInstanceFilter<TLabelMap>
         regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), static_cast<AttributesValueType>(scoreRA));
 
         unsigned int indexUS=1;
-        for(typename ObjectVectorType::iterator it=objectsOfGT.begin(); it!=objectsOfGT.end(); ++it)
+        for(auto it=objectsOfGT.begin(); it!=objectsOfGT.end(); ++it)
           {
           LabelObjectType *regionGT = *it;
           std::ostringstream attribute;
@@ -510,7 +510,7 @@ void HooverInstanceFilter<TLabelMap>
           }
 
         MSindices.insert(col);
-        for(RegionSetType::iterator it=regionsOfGT.begin(); it!=regionsOfGT.end(); ++it)
+        for(auto it=regionsOfGT.begin(); it!=regionsOfGT.end(); ++it)
           {
           GTindices.insert(*it);
           otbDebugMacro(<< *it << " ");

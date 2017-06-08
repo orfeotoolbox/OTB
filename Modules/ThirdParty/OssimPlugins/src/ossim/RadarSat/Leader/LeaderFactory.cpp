@@ -55,7 +55,7 @@ LeaderFactory::LeaderFactory()
 LeaderFactory::~LeaderFactory()
 {
 
-  std::map<int, RadarSatRecord*>::iterator i = _availableRecords.begin();
+  auto i = _availableRecords.begin();
 
   while (i != _availableRecords.end())
   {

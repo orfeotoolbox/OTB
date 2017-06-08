@@ -309,7 +309,7 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
   int firstSample = this->GetIORegion().GetIndex()[0];
   int nComponents = this->GetNumberOfComponents();
 
-  unsigned char * bufferTile = new unsigned char[m_TileSize * m_TileSize * nComponents];
+  auto * bufferTile = new unsigned char[m_TileSize * m_TileSize * nComponents];
   for (unsigned int currentTile = 0; currentTile < m_ListTiles.size(); currentTile++)
     {
 
@@ -597,7 +597,7 @@ void TileMapImageIO::Write(const void* buffer)
   int nTilesY = (originLine + totLines - 1) / m_TileSize - originLine / m_TileSize + 1;
   otbMsgDevMacro(<< "Number of tile to process " << nTilesX << "x" << nTilesY);
 
-  unsigned char * bufferTile = new unsigned char[m_TileSize * m_TileSize * nComponents];
+  auto * bufferTile = new unsigned char[m_TileSize * m_TileSize * nComponents];
 
   //Read all the required tiles
   for (int numTileY = 0; numTileY < nTilesY; numTileY++)

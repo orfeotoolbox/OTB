@@ -75,7 +75,7 @@ std::string CommandLineArgumentParseResult
     e.SetDescription(msg.str().c_str());
     throw e;
     }
-  OptionMapType::const_iterator it = m_OptionMap.begin();
+  auto it = m_OptionMap.begin();
   it = m_OptionMap.find(option);
   ParameterArrayType pat = (*it).second;
   std::string        lString = pat[number];

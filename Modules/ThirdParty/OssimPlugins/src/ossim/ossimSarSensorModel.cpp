@@ -73,12 +73,12 @@ namespace {// Anonymous namespace
          out_even.reserve(size/2+1);
          out_odd.reserve(size/2);
 
-         const_iterator end = in.end();
+         auto end = in.end();
          if (has_a_odd_number_of_elements)
          {
             std::advance(end, -1);
          }
-         for (const_iterator it=in.begin(); it != end ; )
+         for (auto it=in.begin(); it != end ; )
          {
             out_even.push_back(*it++);
             out_odd.push_back(*it++);
@@ -144,9 +144,9 @@ namespace ossimplugins
          // Find the closest GCP
          double distance2 = squareDistance(imPt, theGCPRecords.front().imPt);
 
-         std::vector<GCPRecordType>::const_iterator refGcp = theGCPRecords.begin();
-         std::vector<GCPRecordType>::const_iterator gcpIt  = theGCPRecords.begin();
-         std::vector<GCPRecordType>::const_iterator gcpEnd = theGCPRecords.end();
+         auto refGcp = theGCPRecords.begin();
+         auto gcpIt  = theGCPRecords.begin();
+         auto gcpEnd = theGCPRecords.end();
          for(++gcpIt ; gcpIt!=gcpEnd ; ++gcpIt)
          {
             const double currentDistance2 = squareDistance(imPt, gcpIt->imPt);
@@ -359,7 +359,7 @@ namespace ossimplugins
 
          unsigned int count = 0;
 
-         for(std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();it!=theOrbitRecords.end();++it,++count)
+         for(auto it = theOrbitRecords.begin();it!=theOrbitRecords.end();++it,++count)
          {
             const DurationType current_time = abs(azimuthTime-it->azimuthTime);
 
@@ -423,14 +423,14 @@ namespace ossimplugins
       // std::clog << "conv coord(" << in << ", az="<<azimuthTime<<")\n";
 
       // First, we need to find the correct pair of records for interpolation
-      std::vector<CoordinateConversionRecordType>::const_iterator it = records.begin();
+      auto it = records.begin();
 
       CoordinateConversionRecordType srgrRecord;
 
-      std::vector<CoordinateConversionRecordType>::const_iterator  previousRecord = it;
+      auto  previousRecord = it;
       ++it;
 
-      std::vector<CoordinateConversionRecordType>::const_iterator nextRecord = it;
+      auto nextRecord = it;
 
       // Look for the correct record
       // std::clog << "Looking for " << azimuthTime << " within records:\n";
@@ -486,8 +486,8 @@ namespace ossimplugins
          srgrRecord.rg0 = (1-interp) * previousRecord->rg0 + interp*nextRecord->rg0;
 
          srgrRecord.coefs.clear();
-         std::vector<double>::const_iterator pIt = previousRecord->coefs.begin();
-         std::vector<double>::const_iterator nIt = nextRecord->coefs.begin();
+         auto pIt = previousRecord->coefs.begin();
+         auto nIt = nextRecord->coefs.begin();
 
          for(;pIt != previousRecord->coefs.end() && nIt != nextRecord->coefs.end();++pIt,++nIt)
          {
@@ -516,7 +516,7 @@ namespace ossimplugins
    {
       assert((theOrbitRecords.size()>=2) && "Orbit records vector contains less than 2 elements");
 
-      std::vector<OrbitRecordType>::const_iterator it = theOrbitRecords.begin();
+      auto it = theOrbitRecords.begin();
 
       double doppler2(0.);
 
@@ -554,8 +554,8 @@ namespace ossimplugins
       // In this case, we need to extrapolate
       if(it == theOrbitRecords.end())
       {
-         std::vector<OrbitRecordType>::const_iterator record1 = theOrbitRecords.begin();
-         std::vector<OrbitRecordType>::const_iterator record2 = record1 + theOrbitRecords.size()-1;
+         auto record1 = theOrbitRecords.begin();
+         auto record2 = record1 + theOrbitRecords.size()-1;
          doppler1 = (inputPt-record1->position).dot(record1->velocity);
          doppler2 = (inputPt-record2->position).dot(record2->velocity);
          const DurationType delta_td = record2->azimuthTime - record1->azimuthTime;
@@ -565,8 +565,8 @@ namespace ossimplugins
       {
          assert(it != theOrbitRecords.begin());
          assert(it != theOrbitRecords.end());
-         std::vector<OrbitRecordType>::const_iterator record2 = it;
-         std::vector<OrbitRecordType>::const_iterator record1 = --it;
+         auto record2 = it;
+         auto record1 = --it;
          // now interpolate time and sensor position
          const double abs_doppler1 = std::abs(doppler1);
          const double interpDenom = abs_doppler1+std::abs(doppler2);
@@ -607,12 +607,12 @@ namespace ossimplugins
    {
       assert(!theBurstRecords.empty()&&"Burst records are empty (at least one burst should be available)");
 
-      std::vector<BurstRecordType>::const_iterator currentBurst = theBurstRecords.begin();
+      auto currentBurst = theBurstRecords.begin();
 
       // Look for the correct burst. In most cases the number of burst
       // records will be 1 (except for TOPSAR Sentinel1 products)
-      std::vector<BurstRecordType>::const_iterator it = theBurstRecords.begin();
-      std::vector<BurstRecordType>::const_iterator itend = theBurstRecords.end();
+      auto it = theBurstRecords.begin();
+      auto itend = theBurstRecords.end();
       for(; it!= itend ; ++it)
       {
          if(azimuthTime >= it->azimuthStartTime
@@ -656,14 +656,14 @@ namespace ossimplugins
    {
       assert(!theBurstRecords.empty()&&"Burst records are empty (at least one burst should be available)");
 
-      std::vector<BurstRecordType>::const_iterator currentBurst = theBurstRecords.begin();
+      auto currentBurst = theBurstRecords.begin();
 
       if(theBurstRecords.size() != 1)
       {
          // Look for the correct burst. In most cases the number of burst
          // records will be 1 (except for TOPSAR Sentinel1 products)
-         std::vector<BurstRecordType>::const_iterator it = theBurstRecords.begin();
-         std::vector<BurstRecordType>::const_iterator itend = theBurstRecords.end();
+         auto it = theBurstRecords.begin();
+         auto itend = theBurstRecords.end();
          for( ; it!= itend; ++it)
          {
             if(line >= it->startLine && line < it->endLine)
@@ -846,7 +846,7 @@ namespace ossimplugins
       unsigned int gcpId = 1;
 
       std::clog << theGCPRecords.size() << " GCPS\n";
-      for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt,++gcpId)
+      for(auto gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt,++gcpId)
       {
          ossimDpt estimatedImPt;
          TimeType estimatedAzimuthTime;
@@ -1003,7 +1003,7 @@ namespace ossimplugins
          nbOrbits = 0;
          ossimRegExp regExp;
          regExp.compile("orbitList\\.orbit\\[.*\\]\\.time");
-         ossimKeywordlist::KeywordMap::const_iterator i =
+         auto i =
            kwl.getMap().begin();
          for(; i != kwl.getMap().end(); ++i)
          {
@@ -1207,7 +1207,7 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   // Process each burst
   std::vector<BurstRecordType>::const_iterator it = theBurstRecords.begin();
   // Correct since we have at least 2 bursts records
-  std::vector<BurstRecordType>::const_iterator next = it+1;
+  auto next = it+1;
   std::vector<BurstRecordType>::const_iterator itend = theBurstRecords.end();
 
   unsigned long currentStart  = it->startLine;  
@@ -1257,7 +1257,7 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   std::vector<GCPRecordType> deburstGCPs;
   
   // Now move GCPs
-  for(std::vector<GCPRecordType>::iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+  for(auto gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
       {
       GCPRecordType currentGCP = *gcpIt;
       unsigned long newLine=0;
@@ -1283,8 +1283,8 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
 
 bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {
-  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator vit = lines.begin();
-  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator nit = vit+1;
+  auto vit = lines.begin();
+  auto nit = vit+1;
   
   unsigned long lineOffset = vit->first;
   
@@ -1306,8 +1306,8 @@ bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<uns
 
 void ossimSarSensorModel::deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine)
 {
-  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator vit = lines.begin();
-  std::vector<std::pair<unsigned long,unsigned long> >::const_iterator nit = vit+1;
+  auto vit = lines.begin();
+  auto nit = vit+1;
   
   unsigned long lineOffset = vit->first;
 
@@ -1335,7 +1335,7 @@ namespace ossimplugins {
    template <typename T> inline
    std::ostream & operator<<(std::ostream & os, const std::vector<T> & v)
    {
-      for (typename std::vector<T>::const_iterator b = v.begin(), e = v.end()
+      for (auto b = v.begin(), e = v.end()
             ; b != e
             ; ++b
           )

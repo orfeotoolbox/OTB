@@ -37,7 +37,7 @@ FuzzyDescriptorsModelManager
 {
   PairType out;
   bool found = false;
-  DescriptorsModelType::const_iterator it = descModel.begin();
+  auto it = descModel.begin();
 
   while( it!=descModel.end() && found == false)
     {
@@ -177,17 +177,17 @@ FuzzyDescriptorsModelManager
   // Write the XML file
   TiXmlDocument doc;
 
-  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+  auto* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
-  TiXmlElement * root = new TiXmlElement( "FuzzydDescriptorsModel");
+  auto * root = new TiXmlElement( "FuzzydDescriptorsModel");
   doc.LinkEndChild( root );
 
   // Iterate through the input
   for (unsigned int i = 0; i < model.size(); ++i)
     {
       // The current statistic
-      TiXmlElement * desc = new TiXmlElement("Descriptor");
+      auto * desc = new TiXmlElement("Descriptor");
       desc->SetAttribute("name", model[i].first.c_str());
       root->LinkEndChild( desc );
 
@@ -196,7 +196,7 @@ FuzzyDescriptorsModelManager
       for(unsigned int cindex = 0; cindex < param.size(); ++cindex)
         {
           // For each value in Measurementvector
-          TiXmlElement * curStatisticVector = new TiXmlElement("Parameter");
+          auto * curStatisticVector = new TiXmlElement("Parameter");
           curStatisticVector->SetDoubleAttribute("value", param[cindex]);
           desc->LinkEndChild(curStatisticVector);
         }
@@ -212,7 +212,7 @@ FuzzyDescriptorsModelManager
 {
   DescriptorListType out;
 
-  DescriptorsModelType::const_iterator it = descModel.begin();
+  auto it = descModel.begin();
 
   while( it!=descModel.end())
     {

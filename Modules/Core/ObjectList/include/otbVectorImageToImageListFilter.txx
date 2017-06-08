@@ -111,7 +111,7 @@ VectorImageToImageListFilter<TVectorImageType, TImageList>
   while (!inputIt.IsAtEnd())
     {
     unsigned int counter = 0;
-    for (typename std::vector<OutputIteratorType>::iterator it = outputIteratorList.begin();
+    for (auto it = outputIteratorList.begin();
          it != outputIteratorList.end(); ++it)
       {
       if (!(*it).IsAtEnd())

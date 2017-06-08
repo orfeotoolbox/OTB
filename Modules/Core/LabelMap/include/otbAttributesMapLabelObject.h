@@ -108,7 +108,7 @@ public:
     TMeasurementVector newSample(m_Attributes.size());
 
     unsigned int attrIndex = 0;
-    typename AttributesListType::const_iterator attrIt = m_Attributes.begin();
+    auto attrIt = m_Attributes.begin();
     while(attrIt != m_Attributes.end())
       {
       newSample[attrIndex] = object->GetAttribute(attrIt->c_str());
@@ -127,7 +127,7 @@ public:
   /** Remove an attribute from the exported attributes list */
   void RemoveAttribute(const char * attr)
   {
-    AttributesListType::iterator elt = std::find(m_Attributes.begin(), m_Attributes.end(), attr);
+    auto elt = std::find(m_Attributes.begin(), m_Attributes.end(), attr);
     if(elt!=m_Attributes.end())
       {
       m_Attributes.erase(elt);
@@ -232,7 +232,7 @@ public:
    */
   AttributesValueType GetAttribute(const char * name) const
   {
-    AttributesMapConstIteratorType it = m_Attributes.find(name);
+    auto it = m_Attributes.find(name);
     if (it != m_Attributes.end())
       {
       return it->second;
@@ -258,7 +258,7 @@ public:
   {
     std::vector<std::string> attributesNames;
 
-    AttributesMapConstIteratorType it = m_Attributes.begin();
+    auto it = m_Attributes.begin();
 
     while (it != m_Attributes.end())
       {
@@ -313,7 +313,7 @@ protected:
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Attributes: " << std::endl;
-    for (AttributesMapConstIteratorType it = m_Attributes.begin();
+    for (auto it = m_Attributes.begin();
          it != m_Attributes.end(); ++it)
       {
       os << indent << indent << it->first << " = " << it->second << std::endl;

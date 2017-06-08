@@ -50,7 +50,7 @@ void RegisterTests();
 void PrintAvailableTests()
 {
   std::cout << "Tests available:\n";
-  std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.begin();
+  auto j = StringToTestFunctionMap.begin();
   int                                              i = 0;
   while (j != StringToTestFunctionMap.end())
     {
@@ -108,7 +108,7 @@ int main(int ac, char* av[])
     std::cout << "To launch a test, enter its number: ";
     int testNum = 0;
     std::cin >> testNum;
-    std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.begin();
+    auto j = StringToTestFunctionMap.begin();
     int                                              i = 0;
     while (j != StringToTestFunctionMap.end() && i < testNum)
       {
@@ -288,7 +288,7 @@ int main(int ac, char* av[])
     testToRun = av[1];
     }
 
-  std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.find(testToRun);
+  auto j = StringToTestFunctionMap.find(testToRun);
   // If the test doesn't exists
   if ( j == StringToTestFunctionMap.end() )
       {

@@ -696,7 +696,7 @@ private:
       {
       otbAppLogINFO(<<"Final clean-up ...");
 
-      for(std::vector<std::string>::iterator it = m_FilesToRemoveAfterExecute.begin();
+      for(auto it = m_FilesToRemoveAfterExecute.begin();
           it!=m_FilesToRemoveAfterExecute.end(); ++it)
         {
         RemoveFile(*it);

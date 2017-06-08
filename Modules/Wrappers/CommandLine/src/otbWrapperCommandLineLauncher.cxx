@@ -958,7 +958,7 @@ bool CommandLineLauncher::CheckUnicity()
 bool CommandLineLauncher::CheckParametersPrefix()
 {
   // Check if the chain " --" appears in the args, could be a common mistake
-  for (std::vector<std::string>::iterator it = m_VExpression.begin(); it != m_VExpression.end(); ++it)
+  for (auto it = m_VExpression.begin(); it != m_VExpression.end(); ++it)
     {
     if (it->compare(0, 2, "--") == 0 )
       {

@@ -259,7 +259,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
       const SpectralPixelType & curSpectral = m_Modes[curLabel];
 
       // Iterate over all adjacent regions and check for merge
-      typename AdjacentLabelsContainerType::const_iterator adjIt = regionAdjacencyMap[curLabel].begin();
+      auto adjIt = regionAdjacencyMap[curLabel].begin();
       while (adjIt != regionAdjacencyMap[curLabel].end())
         {
         LabelType adjLabel = *adjIt;

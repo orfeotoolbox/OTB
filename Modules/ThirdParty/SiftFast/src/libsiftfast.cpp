@@ -238,7 +238,7 @@ Image CreateImage(int rows, int cols)
 
 void DestroyAllImages()
 {
-    for(std::list<Image>::iterator it = s_listImages.begin(); it != s_listImages.end(); ++it) {
+    for(auto it = s_listImages.begin(); it != s_listImages.end(); ++it) {
         sift_aligned_free((*it)->pixels);
         sift_aligned_free(*it);
     }
@@ -492,7 +492,7 @@ void GaussianBlur(Image imgdst, Image image, float fblur)
     ksize += !(ksize&1); // make it odd
 
     float* kernel = NULL;
-    for( std::map<float, float* >::iterator it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it) {
+    for( auto it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it) {
         if( fabsf(fblur-it->first) < 0.001f ) {
             kernel = it->second;
             break;
@@ -618,7 +618,7 @@ void ConvHorizontalFast(Image imgdst, Image image, float* kernel, int ksize)
     int convsize = (std::max)(100000,4*(cols + ksize)+36);
 
     if( s_listconvbuf.size() == 0 || s_convbufsize < convsize ) {
-        for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
+        for(auto it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
             sift_aligned_free(*it);
         s_listconvbuf.clear();
 
@@ -767,7 +767,7 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
     int convsize = (std::max)(100000,32*(image->rows + ksize+4));
 
     if( s_listconvbuf.size() == 0 || s_convbufsize < convsize ) {
-        for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
+        for(auto it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
             sift_aligned_free(*it);
 
         s_listconvbuf.clear();
@@ -1692,16 +1692,16 @@ void FreeKeypoints(Keypoint keypt)
 void DestroyAllResources()
 {
     DestroyAllImages();
-    for( std::map<float, float* >::iterator it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it)
+    for( auto it = s_mapkernel.begin(); it != s_mapkernel.end(); ++it)
         sift_aligned_free(it->second-1);
     s_mapkernel.clear();
 #ifdef __SSE__
-    for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
+    for(auto it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
         sift_aligned_free(*it);
     s_listconvbuf.clear();
     s_convbufsize = 0;
 #endif
-    for(std::list<Keypoint>::iterator it = s_listKeypoints.begin(); it != s_listKeypoints.end(); ++it)
+    for(auto it = s_listKeypoints.begin(); it != s_listKeypoints.end(); ++it)
         sift_aligned_free(*it);
     s_listKeypoints.clear();
 }

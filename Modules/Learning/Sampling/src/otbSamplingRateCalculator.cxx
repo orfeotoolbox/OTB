@@ -50,7 +50,7 @@ SamplingRateCalculator
 ::SetMinimumNbOfSamplesByClass(void)
 {
   unsigned long smallestNbofSamples = itk::NumericTraits<unsigned long>::max();
-  MapRateType::iterator it = m_RatesByClass.begin();
+  auto it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
     if (it->second.Tot)
@@ -78,7 +78,7 @@ void
 SamplingRateCalculator
 ::SetNbOfSamplesAllClasses(unsigned long dRequiredNbSamples)
 {
-  MapRateType::iterator it = m_RatesByClass.begin();
+  auto it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
     if (it->second.Tot)
@@ -98,7 +98,7 @@ void
 SamplingRateCalculator
 ::SetNbOfSamplesByClass(const ClassCountMapType &required)
 {
-  ClassCountMapType::const_iterator it = required.begin();
+  auto it = required.begin();
   for (; it != required.end() ; ++it)
     {
     if (m_RatesByClass.count(it->first))
@@ -121,7 +121,7 @@ void
 SamplingRateCalculator
 ::SetAllSamples(void)
 {
-  MapRateType::iterator it = m_RatesByClass.begin();
+  auto it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
     it->second.Required = it->second.Tot;
@@ -133,7 +133,7 @@ SamplingRateCalculator
 void SamplingRateCalculator
 ::SetPercentageOfSamples(double percent)
 {
-  MapRateType::iterator it = m_RatesByClass.begin();
+  auto it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
     it->second.Required = static_cast<unsigned long>(vcl_floor(0.5+percent * it->second.Tot));
@@ -147,7 +147,7 @@ void SamplingRateCalculator
   // First, get total number of samples
   unsigned long totalNumberOfSamplesAvailable = 0;
 
-  MapRateType::iterator it = m_RatesByClass.begin();
+  auto it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
     totalNumberOfSamplesAvailable+=it->second.Tot;
@@ -262,7 +262,7 @@ void
 SamplingRateCalculator
 ::SetClassCount(const ClassCountMapType& map)
 {
-  ClassCountMapType::const_iterator it = map.begin();
+  auto it = map.begin();
   for (; it != map.end() ; ++it)
     {
     if (m_RatesByClass.count(it->first))
@@ -378,7 +378,7 @@ SamplingRateCalculator
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os << indent << "#className requiredSamples totalSamples rate" << std::endl;
-  MapRateType::const_iterator itRates = m_RatesByClass.begin();
+  auto itRates = m_RatesByClass.begin();
   for(; itRates != m_RatesByClass.end(); ++itRates)
     {
     TripletType tpt=itRates->second;

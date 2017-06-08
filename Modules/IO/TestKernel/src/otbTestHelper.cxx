@@ -96,8 +96,8 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
                                         const StringList& testFilenamesImage)
 {
   int result = 0;
-  StringListIt itbaselineFilenames = baselineFilenamesImage.begin();
-  StringListIt itTestFilenames = testFilenamesImage.begin();
+  auto itbaselineFilenames = baselineFilenamesImage.begin();
+  auto itTestFilenames = testFilenamesImage.begin();
   int                                cpt(1);
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesImage.end())
@@ -109,7 +109,7 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
 
     std::map<std::string, int> baselines =
       this->RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
-    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    auto baseline = baselines.rbegin();
     int multiResult = 1;
     std::cout << "Number of baseline images: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
@@ -143,8 +143,8 @@ int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMet
 {
   int result = 0;
   // Creates iterators on baseline filenames vector and test filenames vector
-  StringListIt itbaselineFilenames = baselineFilenamesMetaData.begin();
-  StringListIt itTestFilenames = testFilenamesMetaData.begin();
+  auto itbaselineFilenames = baselineFilenamesMetaData.begin();
+  auto itTestFilenames = testFilenamesMetaData.begin();
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesMetaData.end())
          && (itTestFilenames != testFilenamesMetaData.end());
@@ -155,7 +155,7 @@ int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMet
 
     std::map<std::string, int> baselines =
       this->RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
-    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    auto baseline = baselines.rbegin();
     int multiResult = 1;
     std::cout << "Number of baseline images: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
@@ -189,9 +189,9 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
 {
   int result = 0;
   // Creates iterators on baseline filenames vector and test filenames vector
-  StringListIt itbaselineFilenames = baselineFilenamesAscii.begin();
-  StringListIt itTestFilenames = testFilenamesAscii.begin();
-  StringListIt itIgnoredLines = ignoredLines.begin();
+  auto itbaselineFilenames = baselineFilenamesAscii.begin();
+  auto itTestFilenames = testFilenamesAscii.begin();
+  auto itIgnoredLines = ignoredLines.begin();
 
   // Warning message
   if (ignoredLines.size() > 0)
@@ -215,7 +215,7 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
     std::map<std::string,
              int> baselines =
       this->RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
-    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    auto baseline = baselines.rbegin();
     int multiResult = 1;
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
@@ -252,9 +252,9 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
 {
   int result = 0;
   // Creates iterators on baseline filenames vector and test filenames vector
-  StringListIt itbaselineFilenames = baselineFilenamesAscii.begin();
-  StringListIt itTestFilenames = testFilenamesAscii.begin();
-  StringListIt itIgnoredLines = ignoredLines.begin();
+  auto itbaselineFilenames = baselineFilenamesAscii.begin();
+  auto itTestFilenames = testFilenamesAscii.begin();
+  auto itIgnoredLines = ignoredLines.begin();
 
   // Warning message
   if (ignoredLines.size() > 0)
@@ -278,7 +278,7 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
     std::map<std::string,
              int> baselines =
       this->RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
-    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    auto baseline = baselines.rbegin();
     int multiResult = 1;
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
@@ -314,8 +314,8 @@ int TestHelper::RegressionTestAllBinary(const StringList& baselineFilenamesBinar
 {
   int result = 0;
   // Creates iterators on baseline filenames vector and test filenames vector
-  StringListIt itbaselineFilenames = baselineFilenamesBinary.begin();
-  StringListIt itTestFilenames = testFilenamesBinary.begin();
+  auto itbaselineFilenames = baselineFilenamesBinary.begin();
+  auto itTestFilenames = testFilenamesBinary.begin();
 
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesBinary.end())
@@ -328,7 +328,7 @@ int TestHelper::RegressionTestAllBinary(const StringList& baselineFilenamesBinar
     std::map<std::string,
              int> baselines =
       this->RegressionTestBaselines(const_cast<char*>(baselineFilenameBinary.c_str()));
-    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    auto baseline = baselines.rbegin();
     int multiResult = 1;
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
@@ -360,8 +360,8 @@ int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
 {
   int result = 0;
   // Creates iterators on baseline filenames vector and test filenames vector
-  StringListIt itbaselineFilenames = baselineFilenamesOgr.begin();
-  StringListIt itTestFilenames = testFilenamesOgr.begin();
+  auto itbaselineFilenames = baselineFilenamesOgr.begin();
+  auto itTestFilenames = testFilenamesOgr.begin();
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesOgr.end())
          && (itTestFilenames != testFilenamesOgr.end());
@@ -373,7 +373,7 @@ int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
     std::map<std::string,
              int> baselines =
       this->RegressionTestBaselines(const_cast<char*>(baselineFilenameOgr.c_str()));
-    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    auto baseline = baselines.rbegin();
     int multiResult = 1;
     std::cout << "Number of baseline OGR files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
@@ -456,8 +456,8 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
 
-  std::vector<std::string>::iterator itRef = listLineFileRef.begin();
-  std::vector<std::string>::iterator itTest = listLineFileTest.begin();
+  auto itRef = listLineFileRef.begin();
+  auto itTest = listLineFileTest.begin();
 //   while (std::getline(fluxfileref, strfileref) != 0)
  while ((itRef != listLineFileRef.end()) && (itTest != listLineFileTest.end()))
     {
@@ -471,7 +471,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     bool ignoreCurrentLineTest = false;
     if (ignoredLines.size() > 0)
       {
-      for (std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+      for (auto itIgnoredLines = ignoredLines.begin();
            itIgnoredLines != ignoredLines.end(); ++itIgnoredLines)
         {
         std::string            ignoredLinesAscii = (*itIgnoredLines);
@@ -712,7 +712,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
       }
     boost::split(tokenRef, curLineRef, boost::is_any_of(separators));
     // remove empty tokens
-    TokenListType::iterator refEndFiltered = std::remove_if(tokenRef.begin(), tokenRef.end(), IsTokenEmpty);
+    auto refEndFiltered = std::remove_if(tokenRef.begin(), tokenRef.end(), IsTokenEmpty);
     tokenRef.resize(refEndFiltered-tokenRef.begin());
     nbTokenRef = tokenRef.size();
     if (nbTokenRef == 0)
@@ -739,7 +739,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
         }
       boost::split(tokenTest, curLineTest, boost::is_any_of(separators));
       // remove empty tokens
-      TokenListType::iterator testEndFiltered = std::remove_if(tokenTest.begin(), tokenTest.end(), IsTokenEmpty);
+      auto testEndFiltered = std::remove_if(tokenTest.begin(), tokenTest.end(), IsTokenEmpty);
       tokenTest.resize(testEndFiltered-tokenTest.begin());
       nbTokenTest = tokenTest.size();
       if (nbTokenTest == 0)
@@ -1087,7 +1087,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
       }
     boost::split(tokenTest, curLineTest, boost::is_any_of(separators));
     // remove empty tokens
-    TokenListType::iterator testEndFiltered = std::remove_if(tokenTest.begin(), tokenTest.end(), IsTokenEmpty);
+    auto testEndFiltered = std::remove_if(tokenTest.begin(), tokenTest.end(), IsTokenEmpty);
     tokenTest.resize(testEndFiltered-tokenTest.begin());
     nbTokenTest = tokenTest.size();
     if (nbTokenTest == 0)
@@ -2508,7 +2508,7 @@ std::string TestHelper::VectorToString(const otb::MetaDataKey::VectorType& vecto
 {
   std::stringstream oss;
   oss.str("");
-  otb::MetaDataKey::VectorType::const_iterator it = vector.begin();
+  auto it = vector.begin();
   oss << "[";
   while (it != vector.end())
     {

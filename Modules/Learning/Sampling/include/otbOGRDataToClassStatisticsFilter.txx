@@ -54,7 +54,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
   // Copy temporary stats to outputs
   for (unsigned int k=0 ; k < this->GetNumberOfThreads() ; k++)
     {
-    ClassCountMapType::iterator itClass = m_ElmtsInClassThread[k].begin();
+    auto itClass = m_ElmtsInClassThread[k].begin();
     for (; itClass != m_ElmtsInClassThread[k].end() ; ++itClass)
       {
       if (classCount.count(itClass->first))
@@ -66,7 +66,7 @@ PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage>
         classCount[itClass->first] = itClass->second;
         }
       }
-    PolygonSizeMapType::iterator itPoly = m_PolygonThread[k].begin();
+    auto itPoly = m_PolygonThread[k].begin();
     for (; itPoly != m_PolygonThread[k].end() ; ++itPoly)
       {
       if (polygonSize.count(itPoly->first))

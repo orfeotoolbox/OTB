@@ -227,7 +227,7 @@ namespace ossimplugins
       if (groundCoordinates.size() == 0) return true ;
 
       // Inverse projection of each Ground Control Point
-      std::list<ossimGpt>::iterator itGround = _optimizationGCPsGroundCoordinates.begin() ;
+      auto itGround = _optimizationGCPsGroundCoordinates.begin() ;
       std::list<ossimDpt> inverseLocResults ;
       while (itGround != _optimizationGCPsGroundCoordinates.end())
       {
@@ -243,8 +243,8 @@ namespace ossimplugins
          xErrorByActualMean = 0.0, yErrorByActualMean = 0.0 ;
       double xLocalError, yLocalError ;
 
-      std::list<ossimDpt>::iterator itActualCoords = _optimizationGCPsImageCoordinates.begin() ;
-      std::list<ossimDpt>::iterator itEstimatedCoords = inverseLocResults.begin() ;
+      auto itActualCoords = _optimizationGCPsImageCoordinates.begin() ;
+      auto itEstimatedCoords = inverseLocResults.begin() ;
       while ((itActualCoords != _optimizationGCPsImageCoordinates.end())&&(itEstimatedCoords != inverseLocResults.end())) {
          xLocalError = itActualCoords->x - itEstimatedCoords->x ;
          yLocalError = itActualCoords->y - itEstimatedCoords->y ;

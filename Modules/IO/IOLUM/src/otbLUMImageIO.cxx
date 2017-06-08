@@ -408,7 +408,7 @@ void LUMImageIO::WriteImageInformation()
   std::streamsize headerLength = static_cast<std::streamsize>(this->GetComponentSize() * m_Dimensions[0]);
 
   m_File.seekp(0, std::ios::beg);
-  char* value = new char[headerLength];
+  auto* value = new char[headerLength];
   //Write Header line and all file (whitout information)
   for (unsigned int numLigne = 0; numLigne < (m_Dimensions[1] + 1); numLigne++)
     {

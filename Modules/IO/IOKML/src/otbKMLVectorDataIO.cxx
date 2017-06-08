@@ -621,7 +621,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 //   std::cout << "Found " <<  children.size() << " children" << std::endl;
 
   // For each child
-  for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  for (auto it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
 //     std::cout << "Processing " << dataNode->GetNodeType() << " with Id: " << dataNode->GetNodeId() << std::endl;

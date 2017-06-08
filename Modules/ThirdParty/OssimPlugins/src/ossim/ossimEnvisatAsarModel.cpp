@@ -448,7 +448,7 @@ namespace ossimplugins
       // unsigned long val_ulong2;
       CivilDateTime ref_civil_date;
 
-      Ephemeris** ephemeris = new Ephemeris*[neph];
+      auto** ephemeris = new Ephemeris*[neph];
 
       for (int i=1;i<=neph;i++)
       {

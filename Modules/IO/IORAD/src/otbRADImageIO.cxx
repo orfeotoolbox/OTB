@@ -160,7 +160,7 @@ void RADImageIO::Read(void* buffer)
   // Update the step variable
   step = step * (unsigned long) (this->GetComponentSize());
 
-  char * value = new char[numberOfBytesToBeRead];
+  auto * value = new char[numberOfBytesToBeRead];
   if (value == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "RADImageIO::Read(): Bad alloc");
@@ -546,7 +546,7 @@ void RADImageIO::Write(const void* buffer)
 
   const char * p = static_cast<const char *>(buffer);
 
-  char* value = new char[numberOfBytesToBeWrite];
+  auto* value = new char[numberOfBytesToBeWrite];
   if (value == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "RADImageIO::Write : Bad Alloc");
@@ -752,7 +752,7 @@ void RADImageIO::WriteImageInformation()
   this->SetNumberOfComponents(2 * m_NbOfChannels);
 
   unsigned long numberOfBytesPerLines = m_BytePerPixel * m_Dimensions[0];
-  char*         value = new char[numberOfBytesPerLines];
+  auto*         value = new char[numberOfBytesPerLines];
 
   for (unsigned int channels = 0; channels < m_ChannelsFileName.size(); ++channels)
     {

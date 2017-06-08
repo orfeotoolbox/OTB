@@ -46,7 +46,7 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
   std::list<otb::ImageIOBase::Pointer> possibleImageIO;
   std::list<itk::LightObject::Pointer> allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
-  for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
+  for(auto i = allobjects.begin();
       i != allobjects.end(); ++i)
     {
     otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
@@ -61,7 +61,7 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
                 << std::endl;
       }
     }
-  for(std::list<otb::ImageIOBase::Pointer>::iterator k = possibleImageIO.begin();
+  for(auto k = possibleImageIO.begin();
       k != possibleImageIO.end(); ++k)
     {
     if( mode == ReadMode )

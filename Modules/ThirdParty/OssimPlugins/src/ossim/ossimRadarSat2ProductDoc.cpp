@@ -104,7 +104,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
       {
          const std::vector<ossimRefPtr<ossimXmlNode> >::size_type COUNT =
             xnodes.size();
-         Ephemeris** ephemeris = new Ephemeris*[COUNT];
+         auto** ephemeris = new Ephemeris*[COUNT];
 
          int nbrData = 0; // to keep track of good stateVector count.
 

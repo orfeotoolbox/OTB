@@ -161,7 +161,7 @@ InputImageListParameter::GetFileNameList() const
 {
   std::vector<std::string> filenames;
 
-  for(InputImageParameterVectorType::const_iterator it = m_InputImageParameterVector.begin();
+  for(auto it = m_InputImageParameterVector.begin();
       it!=m_InputImageParameterVector.end();++it)
     {
     filenames.push_back( (*it)->GetFileName() );

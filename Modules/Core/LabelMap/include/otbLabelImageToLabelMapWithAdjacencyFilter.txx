@@ -140,7 +140,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::ParseLine(const RLEVectorType & line, itk::ThreadIdType threadId)
 {
   // Get the first label
-  typename RLEVectorType::const_iterator it = line.begin();
+  auto it = line.begin();
   LabelType previousLabel = it->label;
   ++it;
 
@@ -168,7 +168,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   long offset = 1;
 
   // Iterate on line1
-  for(typename RLEVectorType::const_iterator it1 = line1.begin(); it1!=line1.end(); ++it1)
+  for(auto it1 = line1.begin(); it1!=line1.end(); ++it1)
     {
     // Delimitate RLE1
     long start1 = it1->where[0];
@@ -176,7 +176,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
     LabelType label1 = it1->label;
 
     // Iterate on line2
-    for(typename RLEVectorType::const_iterator it2 = line2.begin(); it2!=line2.end(); ++it2)
+    for(auto it2 = line2.begin(); it2!=line2.end(); ++it2)
       {
       // Delimitate RLE2
       long start2 = it2->where[0];
@@ -326,7 +326,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
     typedef typename OutputImageType::LabelObjectVectorType LabelObjectVectorType;
     const LabelObjectVectorType & labelObjectContainer = m_TemporaryImages[i]->GetLabelObjects();
 
-    for( typename LabelObjectVectorType::const_iterator it = labelObjectContainer.begin();
+    for( auto it = labelObjectContainer.begin();
         it != labelObjectContainer.end();
         ++it )
       {

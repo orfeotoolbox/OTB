@@ -578,7 +578,7 @@ void BandMathXImageFilter<TImage>
       dummyParser->SetExpr(this->GetExpression(IDExpression));
 
       mup::var_maptype vmap = dummyParser->GetExprVar();
-      for (mup::var_maptype::iterator item = vmap.begin(); item!=vmap.end(); ++item)
+      for (auto item = vmap.begin(); item!=vmap.end(); ++item)
       {
         bool OK=false; int i=0;
         while( ( !OK ) && (i < (int) m_VFinalAllowedVarName.size()) )
@@ -1085,11 +1085,11 @@ void BandMathXImageFilter<TImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // iterator on variables
-  typename std::vector<adhocStruct>::iterator iterVarStart =
+  auto iterVarStart =
     m_AImage[threadId].begin();
-  typename std::vector<adhocStruct>::iterator iterVarEnd =
+  auto iterVarEnd =
     m_AImage[threadId].end();
-  typename std::vector<adhocStruct>::iterator iterVar =
+  auto iterVar =
     iterVarStart;
 
   // temporary output vectors

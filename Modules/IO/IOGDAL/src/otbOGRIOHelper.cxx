@@ -664,7 +664,7 @@ unsigned int OGRIOHelper
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  for (auto it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
     //otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
@@ -1049,7 +1049,7 @@ std::vector<OGRLayer*> OGRIOHelper
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  for (auto it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
 

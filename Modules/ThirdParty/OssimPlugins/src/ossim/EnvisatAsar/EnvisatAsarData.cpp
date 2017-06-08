@@ -50,7 +50,7 @@ EnvisatAsarData::~EnvisatAsarData()
 
 std::ostream& operator<<(std::ostream& os, const EnvisatAsarData& data)
 {
-	std::list<EnvisatAsarRecord*>::const_iterator it = data._records.begin();
+	auto it = data._records.begin();
 	while(it != data._records.end())
 	{
 		(*it)->Write(os);
@@ -85,7 +85,7 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 
 	// For each dsd, check if present in the file and in the record factory.
 	// If true, instantiate it and add to the EnvisatAsarRecord list.
-	std::vector<dsd>::iterator it = dsd_vector.begin();
+	auto it = dsd_vector.begin();
 	while(it != dsd_vector.end())
 	{
 		std::string str = (it->get_ds_name());
@@ -112,7 +112,7 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 
 EnvisatAsarData::EnvisatAsarData(const EnvisatAsarData& rhs)
 {
-	std::list<EnvisatAsarRecord*>::const_iterator it = rhs._records.begin();
+	auto it = rhs._records.begin();
 	while(it != rhs._records.end())
 	{
 		_records.push_back((*it)->Clone());
@@ -123,7 +123,7 @@ EnvisatAsarData::EnvisatAsarData(const EnvisatAsarData& rhs)
 EnvisatAsarData& EnvisatAsarData::operator=(const EnvisatAsarData& rhs)
 {
 	ClearRecords();
-	std::list<EnvisatAsarRecord*>::const_iterator it = rhs._records.begin();
+	auto it = rhs._records.begin();
 	while(it != rhs._records.end())
 	{
 		_records.push_back((*it)->Clone());

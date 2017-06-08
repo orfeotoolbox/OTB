@@ -197,7 +197,7 @@ void ONERAImageIO::Read(void* buffer)
   std::streamsize numberOfBytesToBeRead = 2 * m_BytePerPixel * lNbColumns;
   std::streamsize numberOfBytesRead;
 
-  char*           value = new char[numberOfBytesToBeRead];
+  auto*           value = new char[numberOfBytesToBeRead];
   std::streamsize cpt = 0;
 
   for (int LineNo = lFirstLine; LineNo < lFirstLine + lNbLines; LineNo++)
@@ -311,7 +311,7 @@ void ONERAImageIO::InternalReadImageInformation()
     }
 
   // check "Format_valeurs_look"
-  char* sHeader = new char[1024];
+  auto* sHeader = new char[1024];
   // skip 2 lines
   m_Headerfile.getline(sHeader, 1024);
   m_Headerfile.getline(sHeader, 1024);
@@ -503,7 +503,7 @@ void ONERAImageIO::Write(const void* buffer)
   std::streamoff  offset;
   unsigned long   numberOfBytesRegion = step * m_BytePerPixel * lNbColumns * lNbLines;
 
-  char *tempmemory = new char[numberOfBytesRegion];
+  auto *tempmemory = new char[numberOfBytesRegion];
   memcpy(tempmemory, buffer, numberOfBytesRegion);
 
   for (unsigned int LineNo = lFirstLine; LineNo < lFirstLine + lNbLines; LineNo++)
@@ -576,7 +576,7 @@ void ONERAImageIO::InternalWriteImageInformation()
     m_Datafile.seekp(0, std::ios::beg);
     m_Datafile.write((char*) (&magicNumber), 4);
 
-    char * tab = new char[ByteSizeCol];
+    auto * tab = new char[ByteSizeCol];
     for (int i = 0; i < (NbRow + 1); ++i)
       {
       m_Datafile.write((char*) (tab), ByteSizeCol);

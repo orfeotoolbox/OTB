@@ -63,7 +63,7 @@ void ossimplugins::ossimSentinel1SarSensorModel::readCoordinates(
    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
    xmlDoc.findNodes(xpath, xnodes);
 
-   for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+   for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
    {
       CoordinateConversionRecordType coordRecord;
 
@@ -114,7 +114,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
     //TODO uncomment and adapt following code from s1_inverse to fill
     //SarSensorModel structure
 
-    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
     {
         OrbitRecordType orbitRecord;
 
@@ -182,7 +182,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         const unsigned int linesPerBurst = xmlRoot.findFirstNode("swathTiming/linesPerBurst")->getText().toUInt16();
         unsigned int burstId(0);
 
-        for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
+        for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
         {
             BurstRecordType burstRecord;
 
@@ -252,7 +252,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
     xnodes.clear();
     xmlDoc->findNodes("/product/geolocationGrid/geolocationGridPointList/geolocationGridPoint",xnodes);
 
-    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
     {
         GCPRecordType gcpRecord;
 
@@ -272,7 +272,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
             bool burstFound(false);
             unsigned long acqStartLine(0);
 
-            for(std::vector<BurstRecordType>::reverse_iterator bIt = theBurstRecords.rbegin();bIt!=theBurstRecords.rend() && !burstFound;++bIt)
+            for(auto bIt = theBurstRecords.rbegin();bIt!=theBurstRecords.rend() && !burstFound;++bIt)
             {
                 if(gcpRecord.azimuthTime >= bIt->azimuthStartTime && gcpRecord.azimuthTime < bIt->azimuthStopTime)
                 {

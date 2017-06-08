@@ -213,7 +213,7 @@ private:
       std::vector<double> absVecLat;
       absVecLat.resize(vecLat.size());                         // allocate space
 
-      std::vector<double>::iterator AbsLongit=absVecLong.begin();
+      auto AbsLongit=absVecLong.begin();
 
       for (std::vector<double>::const_iterator it=vecLong.begin(); it!=vecLong.end(); ++it)
         {
@@ -221,7 +221,7 @@ private:
         ++AbsLongit;
         }
 
-      std::vector<double>::iterator AbsLatit=absVecLat.begin();
+      auto AbsLatit=absVecLat.begin();
 
       for (std::vector<double>::const_iterator it=vecLat.begin(); it!=vecLat.end(); ++it)
         {
@@ -316,7 +316,7 @@ private:
       }
 
     //iterate over all tiles to build URLs
-    for(std::set<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
+    for(auto it= tiles.begin(); it!=tiles.end(); ++it)
       {
       switch ( m_Mode )
         {
@@ -325,7 +325,7 @@ private:
         //Build URL
         bool findURL = false;
         std::string url;
-        for(std::vector<std::string>::const_iterator contIt= USGSContinentList.begin(); contIt!=USGSContinentList.end(); ++contIt)
+        for(auto contIt= USGSContinentList.begin(); contIt!=USGSContinentList.end(); ++contIt)
           {
           std::ostringstream urlStream;
           CurlHelper::Pointer curl = CurlHelper::New();

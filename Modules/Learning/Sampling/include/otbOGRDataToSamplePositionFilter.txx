@@ -45,7 +45,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   // Reset samplers
   for (unsigned int i=0 ; i < m_Samplers.size() ; ++i)
     {
-    for (typename SamplerMapType::iterator iter = m_Samplers[i].begin();
+    for (auto iter = m_Samplers[i].begin();
          iter != m_Samplers[i].end();
          ++iter)
       {
@@ -104,7 +104,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     m_Samplers.resize(level + 1);
     }
   m_Samplers[level].clear();
-  for (SamplingRateCalculator::MapRateType::const_iterator it = map.begin() ;
+  for (auto it = map.begin() ;
        it != map.end();
        ++it)
     {
@@ -280,7 +280,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     {
     // find class with highest number of total elements
     largestClass = classCounts.begin();
-    for (ClassCountMapType::iterator iter = classCounts.begin() ;
+    for (auto iter = classCounts.begin() ;
          iter != classCounts.end() ;
          ++iter)
       {
@@ -397,7 +397,7 @@ OGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::SetSamplerParameters(SamplerParameterType param, unsigned int level)
 {
   SamplerMapType &samplers = this->GetSamplers(level);
-  for (typename SamplerMapType::iterator it = samplers.begin() ; it != samplers.end() ; ++it)
+  for (auto it = samplers.begin() ; it != samplers.end() ; ++it)
     {
     it->second->SetParameters(param);
     }

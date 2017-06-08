@@ -206,7 +206,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       * std::max(this->m_ImageIO->GetNumberOfComponents(),(unsigned int) m_BandList.size()))
       * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
-    char * loadBuffer = new char[nbBytes];
+    auto * loadBuffer = new char[nbBytes];
 
     otbMsgDevMacro(<< "buffer size for ImageIO::read = " << nbBytes << " = \n"
         << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
@@ -306,7 +306,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
-    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
+    for (auto i = allobjects.begin();
          i != allobjects.end(); ++i)
       {
       otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());

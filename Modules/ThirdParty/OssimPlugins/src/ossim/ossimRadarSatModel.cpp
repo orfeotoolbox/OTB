@@ -843,12 +843,12 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
   const char* neph_str = kwl.find(prefix,"neph");
   int neph = atoi(neph_str);
 
-  Ephemeris** ephemeris = new Ephemeris*[neph];
+  auto** ephemeris = new Ephemeris*[neph];
 
   const char* hr_angle_str = kwl.find(prefix,"hr_angle");
   double greenwich_mha_ref = atof(hr_angle_str);
 
-  GMSTDateTime * greenwich_mha_ref2000 = new GMSTDateTime();
+  auto * greenwich_mha_ref2000 = new GMSTDateTime();
   greenwich_mha_ref2000->set_origine(GMSTDateTime::AN2000);
   ref_civil_date.AsGMSTDateTime(greenwich_mha_ref2000);
 
@@ -897,7 +897,7 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
     /*
      * Date creation for referential change
      */
-    GMSTDateTime * greenwich_mha = new GMSTDateTime();
+    auto * greenwich_mha = new GMSTDateTime();
     greenwich_mha->set_origine(GMSTDateTime::AN2000);
     date.AsGMSTDateTime(greenwich_mha);
 
@@ -908,7 +908,7 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
      * Referential change
      */
     GalileanEphemeris * tmpEphemeris = new GalileanEphemeris(date,pos,vit);
-    GeographicEphemeris* eph = new GeographicEphemeris();
+    auto* eph = new GeographicEphemeris();
 
     tmpEphemeris->ToGeographic(angle,eph);
     ephemeris[i] = eph;

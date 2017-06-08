@@ -162,7 +162,7 @@ WaveletsSynopsisImageToWaveletsBandsListFilter<TImage,TImageList>
 ::GenerateData(void)
 {
   // Update each extract fillter
-  for(typename ExtractFilterVectorType::iterator it = m_ExtractFilters.begin();
+  for(auto it = m_ExtractFilters.begin();
       it!=m_ExtractFilters.end();++it)
     {
     (*it)->Update();

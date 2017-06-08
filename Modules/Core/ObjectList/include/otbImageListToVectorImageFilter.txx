@@ -111,7 +111,7 @@ ImageListToVectorImageFilter<TImageList, TVectorImage>
     typename OutputVectorImageType::PixelType pixel = outputIt.Get();
     unsigned int                              counter = 0;
     // for each input iterator, fill the right component
-    for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
+    for (auto it = inputIteratorList.begin();
          it != inputIteratorList.end(); ++it)
       {
       if (!it->IsAtEnd())

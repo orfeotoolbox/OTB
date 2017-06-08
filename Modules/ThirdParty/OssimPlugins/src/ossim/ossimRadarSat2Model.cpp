@@ -333,7 +333,7 @@ std::ostream& ossimRadarSat2Model::print(std::ostream& out) const
        << "_n_srgr: " << _n_srgr << "\n";
 
    ossim_uint32 idx = 0;
-   std::vector<double>::const_iterator i = _srgr_update.begin();
+   auto i = _srgr_update.begin();
    while ( i !=  _srgr_update.end() )
    {
       out << "sr_gr_update_" << idx << ": " << (*i) << "\n";
@@ -351,7 +351,7 @@ std::ostream& ossimRadarSat2Model::print(std::ostream& out) const
    }
 
    idx = 0;
-   std::vector< std::vector<double> >::const_iterator i2 =
+   auto i2 =
       _SrGr_coeffs.begin();
    while ( i2 !=  _SrGr_coeffs.end() )
    {
@@ -445,7 +445,7 @@ bool ossimRadarSat2Model::InitPlatformPosition(const ossimKeywordlist &kwl, cons
    const char* neph_str = kwl.find(prefix,"neph");
    int neph = atoi(neph_str);
 
-   Ephemeris** ephemeris = new Ephemeris*[neph];
+   auto** ephemeris = new Ephemeris*[neph];
 
    /*
     * Retrieval of ephemerisis
@@ -545,7 +545,7 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
    const char* zeroDopplerTimeFirstLine_str = kwl.find(prefix,"zeroDopplerTimeFirstLine");
    std::string zeroDopplerTimeFirstLine(zeroDopplerTimeFirstLine_str);
 
-   CivilDateTime * date = new CivilDateTime() ;
+   auto * date = new CivilDateTime() ;
    if (! ossim::iso8601TimeStringToCivilDate(zeroDopplerTimeFirstLine, *date)) return false ;
 
    if (_sensor->get_lin_direction() == -1) {
@@ -1591,8 +1591,8 @@ bool ossimRadarSat2Model::setModelRefPoint(
       ossimDpt center;
       center.x = theImageSize.x / 2.0;
       center.y = theImageSize.y / 2.0;
-      std::list<ossimGpt>::const_iterator gi = groundGcpCoordinates.begin();
-      std::list<ossimDpt>::const_iterator di = imageGcpCoordinates.begin();
+      auto gi = groundGcpCoordinates.begin();
+      auto di = imageGcpCoordinates.begin();
 
       while( gi != groundGcpCoordinates.end() )
       {

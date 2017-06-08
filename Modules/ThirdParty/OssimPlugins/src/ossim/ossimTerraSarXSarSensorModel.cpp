@@ -63,7 +63,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
     std::cout << "Number of states " << xnodes.size() << '\n';
 
-    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
     {
         OrbitRecordType orbitRecord;
 
@@ -190,7 +190,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
     std::cout<<"Found "<<xnodes.size()<<" GCPs\n";
 
-    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
     {
         GCPRecordType gcpRecord;
 

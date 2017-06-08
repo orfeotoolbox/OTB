@@ -179,7 +179,7 @@ public:
   {
     os << indent << " offset:'" << m_Offset << "'" << std::endl;
     os <<  " referenceNoiseLevel.gain: " << std::endl;
-    std::vector<float>::const_iterator it = m_Gains.begin();
+    auto it = m_Gains.begin();
     while (it != m_Gains.end())
       {
       os << (*it) << " ";

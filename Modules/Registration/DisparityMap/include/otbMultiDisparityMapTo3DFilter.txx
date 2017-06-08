@@ -467,15 +467,15 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
     resIt.Set(globalResidue);
 
     // Increment all iterators
-    for (typename DispMapIteratorList::iterator hIt = hDispIts.begin(); hIt != hDispIts.end(); ++hIt)
+    for (auto hIt = hDispIts.begin(); hIt != hDispIts.end(); ++hIt)
       {
       ++hIt->second;
       }
-    for (typename DispMapIteratorList::iterator vIt = vDispIts.begin(); vIt != vDispIts.end(); ++vIt)
+    for (auto vIt = vDispIts.begin(); vIt != vDispIts.end(); ++vIt)
       {
       ++vIt->second;
       }
-    for (typename MaskIteratorList::iterator mIt = maskIts.begin(); mIt != maskIts.end(); ++mIt)
+    for (auto mIt = maskIts.begin(); mIt != maskIts.end(); ++mIt)
       {
       ++mIt->second;
       }

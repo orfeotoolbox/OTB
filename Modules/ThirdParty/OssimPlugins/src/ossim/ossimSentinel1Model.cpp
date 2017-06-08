@@ -159,7 +159,7 @@ namespace ossimplugins
       unsigned int burstId(0);
       char burstPrefix[1024];
       
-      for(std::vector<BurstRecordType>::const_iterator burstIt = theBurstRecords.begin();
+      for(auto burstIt = theBurstRecords.begin();
           burstIt!=theBurstRecords.end();++burstIt)
         {
         s_printf(burstPrefix, "%s[%d].", BURST_PREFIX.c_str(), burstId);
@@ -951,7 +951,7 @@ namespace ossimplugins
          const unsigned int linesPerBurst = getFromFirstNode<unsigned int>(productRoot, "swathTiming/linesPerBurst");
          unsigned int burstId(0);
 
-         for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
+         for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
          {
             BurstRecordType burstRecord;
             const TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
@@ -1023,7 +1023,7 @@ namespace ossimplugins
       add(theProductKwl,sr_gr_prefix+"."+NUMBER_KEY, static_cast<ossim_uint32>(xnodes.size()));
 
       unsigned int idx = 0;
-      for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode, ++idx)
+      for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode, ++idx)
       {
          int pos = s_printf(prefix, "%s[%d].", sr_gr_prefix.c_str(), idx);
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix));
@@ -1062,7 +1062,7 @@ namespace ossimplugins
       productRoot.findChildNodes("geolocationGrid/geolocationGridPointList/geolocationGridPoint", xnodes);
 
       unsigned int idx = 0;
-      for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++idx)
+      for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++idx)
       {
          int pos = s_printf(prefix, "%s[%d].", GCP_PREFIX.c_str(), idx);
          assert(pos >= sizeof(SR_PREFIX)+4 && pos < 1024);

@@ -102,7 +102,7 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::vector
   // The first element must be the module name, non " -" allowed.
   // The module path list elements are the strings between the first
   // element and the first key (ie. string which begins with "-").
-  std::vector<std::string>::const_iterator it = exp.begin();
+  auto it = exp.begin();
   ++it; // first element is module name
 
   std::string tmpPath;
@@ -264,7 +264,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::vector<std::
     return res;
 
   bool foundKey=false;
-  std::vector<std::string>::const_iterator it = exp.begin();
+  auto it = exp.begin();
   while(it!=exp.end() )
     {
     if (foundKey)
@@ -462,7 +462,7 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
 bool
 CommandLineParser::IsAttributExists( const std::string key, const std::vector<std::string> & exp  )
 {
-  for (std::vector<std::string>::const_iterator it = exp.begin(); it != exp.end(); ++it)
+  for (auto it = exp.begin(); it != exp.end(); ++it)
     {
     if (it->compare(key) == 0)
       return true;
@@ -474,7 +474,7 @@ std::vector<std::string>
 CommandLineParser::GetKeyList( const std::vector<std::string> & exp  )
 {
   std::vector<std::string> keyList;
-  for (std::vector<std::string>::const_iterator it = exp.begin(); it != exp.end(); ++it)
+  for (auto it = exp.begin(); it != exp.end(); ++it)
     {
     if (it->find("-") == 0)
       {

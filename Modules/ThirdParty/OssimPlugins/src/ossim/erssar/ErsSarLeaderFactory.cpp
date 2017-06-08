@@ -45,7 +45,7 @@ ErsSarLeaderFactory::ErsSarLeaderFactory()
 
 ErsSarLeaderFactory::~ErsSarLeaderFactory()
 {
-  std::map<int, ErsSarRecord*>::iterator i = _availableRecords.begin();
+  auto i = _availableRecords.begin();
 
   while (i != _availableRecords.end())
   {

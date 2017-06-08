@@ -81,10 +81,10 @@ FillGapsFilter
   // Get the list of points which consists of two points to represent a
   // straight line
 
-  LineSpatialObjectListType::const_iterator itLineListA    = inputLine->begin();
-  LineSpatialObjectListType::const_iterator itLineListAEnd  = inputLine->end();
+  auto itLineListA    = inputLine->begin();
+  auto itLineListAEnd  = inputLine->end();
   LineSpatialObjectListType::const_iterator itLineListB;
-  LineSpatialObjectListType::const_iterator itLineListBEnd  = inputLine->end();
+  auto itLineListBEnd  = inputLine->end();
 
   double x1(0.), y1(0.), x2(0.), y2(0.), x3(0.), y3(0.), x4(0.), y4(0.);
   double xTemp(0.), yTemp(0.);

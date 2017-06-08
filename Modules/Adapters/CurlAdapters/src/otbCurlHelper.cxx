@@ -288,7 +288,7 @@ int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output)
                                &Self::CallbackWriteDataToStringStream));
 
   // Say the file where to write the received data
-  std::ostringstream* outputStream = new std::ostringstream;
+  auto* outputStream = new std::ostringstream;
   CurlHandleError::ProcessCURLcode(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEDATA, (void*) outputStream));
 
   // Perform request

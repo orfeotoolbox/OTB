@@ -64,7 +64,7 @@ ImageMetadataInterfaceFactory
   std::copy(allSarObjects.begin(), allSarObjects.end(), std::back_inserter(allObjects) );
 
 
-  for (std::list<itk::LightObject::Pointer>::iterator i = allObjects.begin();
+  for (auto i = allObjects.begin();
        i != allObjects.end(); ++i)
     {
     ImageMetadataInterfaceBase * io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
@@ -79,7 +79,7 @@ ImageMetadataInterfaceFactory
       }
     }
 
-  for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin();
+  for (auto k = possibleIMI.begin();
        k != possibleIMI.end(); ++k)
     {
     (*k)->SetMetaDataDictionary(dict);

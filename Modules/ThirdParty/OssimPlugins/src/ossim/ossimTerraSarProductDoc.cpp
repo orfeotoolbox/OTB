@@ -243,7 +243,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initPlatformPosition(
 
          if (result && ev.size())
          {
-            Ephemeris** ephemeris = new Ephemeris*[ev.size()];
+            auto** ephemeris = new Ephemeris*[ev.size()];
             for ( std::vector<Ephemeris*>::size_type evIdx = 0;
                   evIdx < ev.size();
                   ++evIdx )
@@ -259,7 +259,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initPlatformPosition(
          }
          else
          {
-            std::vector<Ephemeris*>::iterator evIdx = ev.begin();
+            auto evIdx = ev.begin();
             while (evIdx != ev.end())
             {
                delete (*evIdx);

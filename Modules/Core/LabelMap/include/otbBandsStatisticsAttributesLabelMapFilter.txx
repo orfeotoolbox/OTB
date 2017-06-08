@@ -70,7 +70,7 @@ BandStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::operator() (LabelObjectType * lo) const
 {
   // Walk every registered functors
-  for (typename StatsFunctorsMapType::const_iterator it = m_StatsFunctorsMap.begin();
+  for (auto it = m_StatsFunctorsMap.begin();
        it != m_StatsFunctorsMap.end(); ++it)
     {
     (it->second)(lo);
@@ -149,7 +149,7 @@ BandStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
   m_ReducedAttributeSet = flag;
 
   // Set the flag to all the already existing functors
-  for (typename StatsFunctorsMapType::iterator it = m_StatsFunctorsMap.begin();
+  for (auto it = m_StatsFunctorsMap.begin();
        it != m_StatsFunctorsMap.end(); ++it)
     {
     it->second.SetReducedAttributeSet(m_ReducedAttributeSet);

@@ -107,7 +107,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
       }
 
     unsigned int nbClasses = m_MapOfLabels.size();
-    typename MapOfLabelsType::iterator itMapOfLabels = m_MapOfLabels.begin();
+    auto itMapOfLabels = m_MapOfLabels.begin();
     unsigned itLabel = 0;
     for (; itMapOfLabels != m_MapOfLabels.end(); ++itMapOfLabels)
       {

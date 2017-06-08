@@ -503,7 +503,7 @@ void MapProjectionAdapter::PrintMap() const
 {
   m_MapProjection->print(std::cout);
   std::cout << "Parameter store:\n";
-  for (StoreType::const_iterator it = m_ParameterStore.begin();
+  for (auto it = m_ParameterStore.begin();
        it != m_ParameterStore.end();
        ++it)
     {

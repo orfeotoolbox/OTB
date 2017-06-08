@@ -61,7 +61,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   std::list<MachineLearningModelTypePointer> possibleMachineLearningModel;
   std::list<LightObject::Pointer> allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("otbMachineLearningModel");
-  for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
+  for(auto i = allobjects.begin();
       i != allobjects.end(); ++i)
     {
     MachineLearningModel<TInputValue,TOutputValue> * io = dynamic_cast<MachineLearningModel<TInputValue,TOutputValue>*>(i->GetPointer());
@@ -76,7 +76,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
                 << std::endl;
       }
     }
-for(typename std::list<MachineLearningModelTypePointer>::iterator k = possibleMachineLearningModel.begin();
+for(auto k = possibleMachineLearningModel.begin();
       k != possibleMachineLearningModel.end(); ++k)
     {
       if( mode == ReadMode )

@@ -67,7 +67,7 @@ std::vector<std::string>
 ListViewParameter::GetChoiceKeys( )
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator it = m_ChoiceList.begin();
+  auto it = m_ChoiceList.begin();
 
   for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
     {
@@ -96,7 +96,7 @@ std::vector<std::string>
 ListViewParameter::GetChoiceNames( )
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator it = m_ChoiceList.begin();
+  auto it = m_ChoiceList.begin();
 
   for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
     {
@@ -125,7 +125,7 @@ ListViewParameter::SetValue(unsigned int v)
 void
 ListViewParameter::SetValue(std::string choiceKey)
 {
-  ChoiceList::iterator it = m_ChoiceList.begin();
+  auto it = m_ChoiceList.begin();
 
   unsigned int i = 0;
   for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)

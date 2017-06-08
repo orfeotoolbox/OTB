@@ -300,7 +300,7 @@ void SpectralResponse<TPrecision, TValuePrecision>::PrintSelf(std::ostream& os, 
   Superclass::PrintSelf(os, indent);
   os << std::endl;
   os << indent << "[Wavelength (micrometers), Reflectance (percent)]" << std::endl;
-  for (typename VectorPairType::const_iterator it = m_Response.begin(); it != m_Response.end(); ++it)
+  for (auto it = m_Response.begin(); it != m_Response.end(); ++it)
     {
     os << indent << "Num " << it - m_Response.begin() << ": [" << (*it).first << "," << (*it).second << "]"
         << std::endl;

@@ -82,7 +82,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   // Write the XML file
   TiXmlDocument doc;
 
-  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+  auto* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
   TiXmlElement * root = ITK_NULLPTR;
@@ -99,7 +99,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     MeasurementVectorType  currentMeasurementVector = m_MeasurementVectorContainer[i].second;
 
     // The current statistic
-    TiXmlElement * feature = new TiXmlElement("Statistic");
+    auto * feature = new TiXmlElement("Statistic");
     feature->SetAttribute("name", featureName.c_str());
     root->LinkEndChild( feature );
 
@@ -107,7 +107,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     for(unsigned int cindex = 0; cindex < currentMeasurementVector.Size(); ++cindex)
       {
       // For each value in Measurementvector
-      TiXmlElement * curStatisticVector = new TiXmlElement("StatisticVector");
+      auto * curStatisticVector = new TiXmlElement("StatisticVector");
       curStatisticVector->SetDoubleAttribute("value", currentMeasurementVector.GetElement(cindex));
       feature->LinkEndChild(curStatisticVector);
       }
@@ -128,7 +128,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     GenericMapType::const_iterator mapIter;
 
     // The current statistic
-    TiXmlElement * feature = new TiXmlElement("Statistic");
+    auto * feature = new TiXmlElement("Statistic");
     feature->SetAttribute("name", mapName.c_str());
     mapRoot->LinkEndChild( feature );
 
@@ -136,7 +136,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     for( mapIter = containerIt->second.begin() ; mapIter != containerIt->second.end() ; ++mapIter )
       {
       // For each value in Measurementvector
-      TiXmlElement * curStatisticMap = new TiXmlElement("StatisticMap");
+      auto * curStatisticMap = new TiXmlElement("StatisticMap");
       curStatisticMap->SetAttribute("key" , mapIter->first.c_str());
       curStatisticMap->SetAttribute("value", mapIter->second.c_str());
       feature->LinkEndChild(curStatisticMap);
@@ -209,7 +209,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     }
   os << std::endl;
   os << indent << "Map statistics: ";
-  for (GenericMapContainer::const_iterator it = m_GenericMapContainer.begin() ; it != m_GenericMapContainer.end() ; ++it)
+  for (auto it = m_GenericMapContainer.begin() ; it != m_GenericMapContainer.end() ; ++it)
     {
     if (it != m_GenericMapContainer.begin()) os <<", ";
     os << it->first;

@@ -48,7 +48,7 @@ std::ostream & Join(std::ostream &os, TRange const& range, std::string const& se
 {
   if (!boost::empty(range))
     {
-    typename boost::range_iterator<TRange const>::type       first = boost::begin(range);
+    auto       first = boost::begin(range);
     typename boost::range_iterator<TRange const>::type const last = boost::end(range);
     os << *first;
     for (++first; first!=last; ++first)

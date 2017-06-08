@@ -63,7 +63,7 @@ MassOfBelief<TLabel, TMass>
 ::GetMass(const LabelSetType & labelSet) const
   {
     // Look for mass in the table
-    typename MassMapType::const_iterator it = m_MassesMap.find(labelSet);
+    auto it = m_MassesMap.find(labelSet);
 
     if(it!=m_MassesMap.end())
       {
@@ -85,7 +85,7 @@ MassOfBelief<TLabel, TMass>
     LabelSetOfSetType output;
 
     // Define an iterator on the mass map
-    typename MassMapType::const_iterator it = m_MassesMap.begin();
+    auto it = m_MassesMap.begin();
 
     // Walk the mass map, gathering the element of the power set
     while(it != m_MassesMap.end())
@@ -111,7 +111,7 @@ MassOfBelief<TLabel, TMass>
     LabelSetOfSetType support = this->GetSupport();
 
     // Walk the support and perform union
-    for(typename LabelSetOfSetType::iterator it = support.begin();
+    for(auto it = support.begin();
         it != support.end(); ++it)
       {
       // Temporary set
@@ -219,7 +219,7 @@ MassOfBelief<TLabel, TMass>
     unsigned long residu = elementId;
 
     // Walk the universe set
-    for(typename LabelSetType::const_iterator it = universe.begin();
+    for(auto it = universe.begin();
         residu >0 && it!=universe.end(); ++it)
       {
       // Retrieve the current bit
@@ -251,7 +251,7 @@ MassOfBelief<TLabel, TMass>
   LabelSetOfSetType containedSet;
 
   // Look for elements in the support which are contained in labelSet
-  for(typename LabelSetOfSetType::const_iterator it = support.begin();
+  for(auto it = support.begin();
       it!=support.end(); ++it)
     {
     // Temporary set containing intersection
@@ -286,7 +286,7 @@ MassOfBelief<TLabel, TMass>
   LabelSetOfSetType intersectedSet;
 
   // Look for elements in the support which are contained in labelSet
-  for(typename LabelSetOfSetType::const_iterator it = support.begin();
+  for(auto it = support.begin();
       it!=support.end(); ++it)
     {
     // Temporary set containing intersection
@@ -317,7 +317,7 @@ MassOfBelief<TLabel, TMass>
   MassType belief = itk::NumericTraits<MassType>::Zero;
 
   // Sum masses of contained set
-  for(typename LabelSetOfSetType::const_iterator it = containedLabelSet.begin();
+  for(auto it = containedLabelSet.begin();
       it!=containedLabelSet.end(); ++it)
     {
     belief+=this->GetMass((*it));
@@ -337,7 +337,7 @@ MassOfBelief<TLabel, TMass>
   MassType plausibility = itk::NumericTraits<MassType>::Zero;
 
   // Sum masses of contained set
-  for(typename LabelSetOfSetType::const_iterator it = intersectedLabelSet.begin();
+  for(auto it = intersectedLabelSet.begin();
       it!=intersectedLabelSet.end(); ++it)
     {
     plausibility+=this->GetMass((*it));
@@ -386,7 +386,7 @@ MassOfBelief<TLabel, TMass>
   os << std::endl;
 
   // Display individual masses
-  for(typename MassMapType::const_iterator it = m_MassesMap.begin();
+  for(auto it = m_MassesMap.begin();
       it!=m_MassesMap.end(); ++it)
     {
     os<< indent;
@@ -403,7 +403,7 @@ MassOfBelief<TLabel, TMass>
                 const LabelSetType & labelSet)
 {
   // Define an iterator on the label set
-  typename LabelSetType::const_iterator it = labelSet.begin();
+  auto it = labelSet.begin();
 
   // Open the set
   out<<"{";
@@ -431,7 +431,7 @@ MassOfBelief<TLabel, TMass>
                      const LabelSetOfSetType & labelSet)
 {
   // Define an iterator on the label set
-  typename LabelSetOfSetType::const_iterator it = labelSet.begin();
+  auto it = labelSet.begin();
 
   // Open the set
   out<<"{";

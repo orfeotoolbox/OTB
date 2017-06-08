@@ -147,7 +147,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
       {
       values.insert(nearest.at<float>(0,k));
       }
-    std::multiset<float>::iterator median = values.begin();
+    auto median = values.begin();
     int pos = (m_K >> 1);
     for (int k=0 ; k < pos ; ++k , ++median) {}
     result = *median;

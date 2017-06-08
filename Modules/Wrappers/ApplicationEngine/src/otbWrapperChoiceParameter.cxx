@@ -69,7 +69,7 @@ std::vector<std::string>
 ChoiceParameter::GetChoiceKeys( )
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator it = m_ChoiceList.begin();
+  auto it = m_ChoiceList.begin();
 
   for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
     {
@@ -91,7 +91,7 @@ std::vector<std::string>
 ChoiceParameter::GetChoiceNames( )
 {
   std::vector<std::string> ret;
-  ChoiceList::iterator it = m_ChoiceList.begin();
+  auto it = m_ChoiceList.begin();
 
   for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
     {
@@ -110,7 +110,7 @@ ChoiceParameter::GetChoiceParameterGroupByIndex( int i )
 ParameterGroup::Pointer
 ChoiceParameter::GetChoiceParameterGroupByKey( std::string choiceKey )
 {
-  ChoiceList::iterator it = m_ChoiceList.begin();
+  auto it = m_ChoiceList.begin();
 
   for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
     {
@@ -163,7 +163,7 @@ ChoiceParameter::SetValue(unsigned int v)
 void
 ChoiceParameter::SetValue(std::string choiceKey)
 {
-  ChoiceList::iterator it = m_ChoiceList.begin();
+  auto it = m_ChoiceList.begin();
 
   unsigned int i = 0;
   for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
@@ -194,7 +194,7 @@ ChoiceParameter::GetParametersKeys()
 {
   std::vector<std::string> parameters;
 
-  ChoiceList::iterator cit = m_ChoiceList.begin();
+  auto cit = m_ChoiceList.begin();
 
   for (cit = m_ChoiceList.begin(); cit != m_ChoiceList.end(); ++cit)
     {

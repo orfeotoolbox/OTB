@@ -168,7 +168,7 @@ private:
     // Print the classes
     VectorDataProviderType::KeyMapType  keymap = m_VdOSMGenerator->GetKeysMap();
 
-    VectorDataProviderType::KeyMapType::iterator  it = keymap.begin();
+    auto  it = keymap.begin();
 
     while(it != keymap.end())
       {

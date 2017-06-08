@@ -149,10 +149,10 @@ JointMassOfBeliefFilter<TMassFunction>
   LabelSetOfSetType currentSupportSet = output->GetSupport();
 
   // Then, Walk the two sets
-  for(typename LabelSetOfSetType::const_iterator inputIt = inputSupportSet.begin();
+  for(auto inputIt = inputSupportSet.begin();
       inputIt != inputSupportSet.end(); ++inputIt)
     {
-    for(typename LabelSetOfSetType::const_iterator currentIt = currentSupportSet.begin();
+    for(auto currentIt = currentSupportSet.begin();
       currentIt != currentSupportSet.end(); ++currentIt)
       {
       // Compute intersection
@@ -191,7 +191,7 @@ JointMassOfBeliefFilter<TMassFunction>
   MassType conflictCoefficient = 1/(1-conflict);
 
   // Retrieve support of joint mass
-  for(typename LabelSetOfSetType::const_iterator it = jointSupport.begin();
+  for(auto it = jointSupport.begin();
       it!=jointSupport.end(); ++it)
     {
     // Retrieve joint mass

@@ -117,7 +117,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
   // Allocate nodes (/TODO if performances problems are related to too
   // many allocations, a cache approach can be set)
-  struct svm_node * x = new struct svm_node[input.Size() + 1];
+  auto * x = new struct svm_node[input.Size() + 1];
 
   // Fill the node
   for (unsigned int i = 0 ; i < input.Size() ; i++)
@@ -142,7 +142,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
         {
         // Eventually allocate space for probabilities
         unsigned int nr_class = svm_get_nr_class(m_Model);
-        double *prob_estimates = new double[nr_class];
+        auto *prob_estimates = new double[nr_class];
         // predict
         target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
         double maxProb = 0.0;
@@ -188,7 +188,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     if (svm_check_probability_model(m_Model))
       {
       unsigned int nr_class = svm_get_nr_class(m_Model);
-      double *prob_estimates = new double[nr_class];
+      auto *prob_estimates = new double[nr_class];
       target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
       delete[] prob_estimates;
       }

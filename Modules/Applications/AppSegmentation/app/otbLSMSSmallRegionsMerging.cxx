@@ -324,7 +324,7 @@ private:
               }
 
           //Searching the "nearest" region
-          for(std::set<int>::iterator itMinLabel=minLabel.begin(); itMinLabel!=minLabel.end(); ++itMinLabel)
+          for(auto itMinLabel=minLabel.begin(); itMinLabel!=minLabel.end(); ++itMinLabel)
             {
             LabelImagePixelType curLabel = *itMinLabel, adjLabel(0);
             double err = itk::NumericTraits<double>::max();
@@ -333,7 +333,7 @@ private:
               if(nbPixels[curLabel]==size)
                 {
                 edgeLabel.insert(curLabel);
-                for(std::set<int>::iterator itAdjLabel=(adjMap[curLabel]).begin();
+                for(auto itAdjLabel=(adjMap[curLabel]).begin();
                     itAdjLabel!=(adjMap[curLabel]).end(); ++itAdjLabel)
                   {
                   double tmpError = 0;

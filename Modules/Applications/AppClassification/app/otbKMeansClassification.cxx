@@ -53,7 +53,7 @@ public:
   /** operator */
   TLabel operator ()(const TSample& sample) const
   {
-    typename CentroidMapType::const_iterator it = m_CentroidsMap.begin();
+    auto it = m_CentroidsMap.begin();
 
     if (it == m_CentroidsMap.end())
       {

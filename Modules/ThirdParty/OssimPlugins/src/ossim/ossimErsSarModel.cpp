@@ -380,7 +380,7 @@ namespace ossimplugins
       const char* neph_str = kwl.find(prefix, "neph");
       int neph = atoi(neph_str);
 
-      Ephemeris** ephemeris = new Ephemeris*[neph];
+      auto** ephemeris = new Ephemeris*[neph];
 
       /*
        * Ephemerisis retrieval

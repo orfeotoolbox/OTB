@@ -74,7 +74,7 @@ VectorDataKeywordlist
 {
   FieldType newField;
 
-  OGRFieldDefn* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTString);
+  auto* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTString);
 
   OGRField field;
   char *   cstr = (char*)VSIMalloc( (value.length() + 1) * sizeof(char) );
@@ -248,7 +248,7 @@ VectorDataKeywordlist
       {
       FieldType newField;
 
-      OGRFieldDefn* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTReal);
+      auto* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTReal);
 
       OGRField field;
       field.Real = value;
@@ -292,7 +292,7 @@ VectorDataKeywordlist
     {
     FieldType newField;
 
-    OGRFieldDefn* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTInteger);
+    auto* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTInteger);
     OGRField field;
     field.Integer = value;
     newField.first = fieldDefn;

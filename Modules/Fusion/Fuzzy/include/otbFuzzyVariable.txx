@@ -127,7 +127,7 @@ FuzzyVariable<TLabel, TPrecision>
   PrecisionType output = itk::NumericTraits<PrecisionType>::Zero;
 
   // Retrieve parameters for the given membership function
-  typename ParametersMapType::const_iterator mapIt = m_MembershipFunctions.find(var);
+  auto mapIt = m_MembershipFunctions.find(var);
 
   // If var exists in the parameters map
   if(mapIt!=m_MembershipFunctions.end())

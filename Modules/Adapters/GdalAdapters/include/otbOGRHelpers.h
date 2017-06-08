@@ -78,7 +78,7 @@ struct OTBGdalAdapters_EXPORT StringListConverter
     {
     BOOST_MPL_ASSERT((boost::is_same<typename ContainerType::value_type, std::string>));
     m_raw.reserve(boost::size(strings)+1);
-    for (typename ContainerType::const_iterator b = boost::begin(strings), e = boost::end(strings); b != e; ++b)
+    for (auto b = boost::begin(strings), e = boost::end(strings); b != e; ++b)
       {
       m_raw.push_back(b->c_str());
       }

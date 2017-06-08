@@ -472,7 +472,7 @@ private:
     // Filling ossHeaderRefLabels for the output file
     ossHeaderRefLabels << commentRefStr;
 
-    MapOfClassesType::iterator itMapOfClassesRefEnd = mapOfClassesRef.end();
+    auto itMapOfClassesRefEnd = mapOfClassesRef.end();
     itMapOfClassesRef = mapOfClassesRef.begin();
     int indexLabelRef = 0;
     while (itMapOfClassesRef != itMapOfClassesRefEnd)
@@ -500,7 +500,7 @@ private:
 
     // Filling ossHeaderProdLabels for the output file
     ossHeaderProdLabels << commentProdStr;
-    MapOfClassesType::iterator itMapOfClassesProdEnd = mapOfClassesProd.end();
+    auto itMapOfClassesProdEnd = mapOfClassesProd.end();
     itMapOfClassesProd = mapOfClassesProd.begin();
     int indexLabelProd = 0;
     while (itMapOfClassesProd != itMapOfClassesProdEnd)

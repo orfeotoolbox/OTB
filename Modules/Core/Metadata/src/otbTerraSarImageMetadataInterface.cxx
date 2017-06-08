@@ -955,7 +955,7 @@ double
 TerraSarImageMetadataInterface
 ::Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const
 {
-  std::vector<double>::reverse_iterator coefIt = coefficients.rbegin();
+  auto coefIt = coefficients.rbegin();
   double res = *(coefIt);
   ++coefIt;
 

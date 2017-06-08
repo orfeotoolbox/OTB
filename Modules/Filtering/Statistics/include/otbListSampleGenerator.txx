@@ -372,7 +372,7 @@ ListSampleGenerator<TImage, TVectorData>
 
   // Go through the classes size to find the smallest one
   double minSize = itk::NumericTraits<double>::max();
-  for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
+  for (auto itmap = m_ClassesSize.begin();
         itmap != m_ClassesSize.end();
         ++itmap)
     {
@@ -399,7 +399,7 @@ ListSampleGenerator<TImage, TVectorData>
       }
     }
   // Compute the probability selection for each class
-  for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
+  for (auto itmap = m_ClassesSize.begin();
        itmap != m_ClassesSize.end();
        ++itmap)
     {
@@ -468,7 +468,7 @@ ListSampleGenerator<TImage, TVectorData>
     }
   else
     {
-    for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
+    for (auto itmap = m_ClassesSize.begin();
          itmap != m_ClassesSize.end(); ++itmap)
       {
       os << indent << itmap->first << ": " << itmap->second << "\n";
@@ -483,13 +483,13 @@ ListSampleGenerator<TImage, TVectorData>
   else
     {
     os << indent << "** Selection probability:\n";
-    for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesProbTraining.begin();
+    for (auto itmap = m_ClassesProbTraining.begin();
          itmap != m_ClassesProbTraining.end(); ++itmap)
       {
       os << indent << itmap->first << ": " << itmap->second << "\n";
       }
     os << indent << "** Number of selected samples:\n";
-    for (std::map<ClassLabelType, int>::const_iterator itmap = m_ClassesSamplesNumberTraining.begin();
+    for (auto itmap = m_ClassesSamplesNumberTraining.begin();
          itmap != m_ClassesSamplesNumberTraining.end(); ++itmap)
       {
       os << indent << itmap->first << ": " << itmap->second << "\n";
@@ -504,13 +504,13 @@ ListSampleGenerator<TImage, TVectorData>
   else
     {
     os << indent << "** Selection probability:\n";
-    for (std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesProbValidation.begin();
+    for (auto itmap = m_ClassesProbValidation.begin();
          itmap != m_ClassesProbValidation.end(); ++itmap)
       {
       os << indent << itmap->first << ": " << itmap->second << "\n";
       }
     os << indent << "** Number of selected samples:\n";
-    for (std::map<ClassLabelType, int>::const_iterator itmap = m_ClassesSamplesNumberValidation.begin();
+    for (auto itmap = m_ClassesSamplesNumberValidation.begin();
          itmap != m_ClassesSamplesNumberValidation.end(); ++itmap)
       {
       os << indent << itmap->first << ": " << itmap->second << "\n";

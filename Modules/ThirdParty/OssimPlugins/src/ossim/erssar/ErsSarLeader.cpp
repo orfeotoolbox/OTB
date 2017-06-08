@@ -96,7 +96,7 @@ std::istream& operator>>(std::istream& is, ErsSarLeader& data)
       }
       else
       {
-        char* buff = new char[header.get_length()-12];
+        auto* buff = new char[header.get_length()-12];
         is.read(buff, header.get_length() - 12);
         delete [] buff;
       }

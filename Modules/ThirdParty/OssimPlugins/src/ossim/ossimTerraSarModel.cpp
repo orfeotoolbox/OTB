@@ -1098,7 +1098,7 @@ bool ossimplugins::ossimTerraSarModel::InitPlatformPosition(
    const char* neph_str = kwl.find(prefix,"neph");
    int neph = atoi(neph_str);
    
-   Ephemeris** ephemeris = new Ephemeris*[neph];
+   auto** ephemeris = new Ephemeris*[neph];
    
    /* 
     * Retrieval of ephemerisis
@@ -1195,7 +1195,7 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    _refPoint->set_pix_col(sc_pix);
    _refPoint->set_pix_line(sc_lin);
 
-   CivilDateTime * date = new CivilDateTime() ;
+   auto * date = new CivilDateTime() ;
    if (! ossim::iso8601TimeStringToCivilDate(inp_sctim_string, *date)) return false ;
 
    if(_platformPosition != NULL)
@@ -1240,9 +1240,9 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
    if (_isProductGeoreferenced) {
       std::string azimuthStartTime(kwl.find("azimuthStartTime"));
       std::string azimuthStopTime(kwl.find("azimuthStopTime"));
-      CivilDateTime * dateStart = new CivilDateTime() ;
+      auto * dateStart = new CivilDateTime() ;
       if (! ossim::iso8601TimeStringToCivilDate(azimuthStartTime, *dateStart)) return false ;
-      CivilDateTime * dateStop = new CivilDateTime() ;
+      auto * dateStop = new CivilDateTime() ;
       if (! ossim::iso8601TimeStringToCivilDate(azimuthStopTime, *dateStop)) return false ;
       double acq_msec_first = (double) dateStart->get_second()+dateStart->get_decimal();
       double acq_msec_last = (double) dateStop->get_second()+dateStop->get_decimal();

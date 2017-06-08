@@ -177,7 +177,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, TOutputImage, TL
   labeledIt.GoToBegin();
 
   bool inputIteratorsAtEnd = false;
-  for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
+  for (auto it = inputIteratorList.begin();
        it != inputIteratorList.end(); ++it)
     {
     inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
@@ -190,7 +190,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, TOutputImage, TL
     LabeledPixelType outputChar = 0;
 
     // for each input iterator, check the output and characteristics
-    for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
+    for (auto it = inputIteratorList.begin();
          it != inputIteratorList.end(); ++it)
       {
       if (it->Get() > outputPixel)
@@ -204,7 +204,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, TOutputImage, TL
     labeledIt.Set(outputChar);
     ++outputIt;
     ++labeledIt;
-    for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
+    for (auto it = inputIteratorList.begin();
          it != inputIteratorList.end(); ++it)
       {
       ++(*it);

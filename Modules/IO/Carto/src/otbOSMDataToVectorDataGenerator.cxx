@@ -242,7 +242,7 @@ void
 OSMDataToVectorDataGenerator::AddKeyTypeToMap(const std::string& key, const std::string& value)
 {
   // Is this key present in the map
-  KeyMapType::iterator   it = m_KeysMap.find(key);
+  auto   it = m_KeysMap.find(key);
 
   if( it != m_KeysMap.end())
     {

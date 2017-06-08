@@ -1279,7 +1279,7 @@ ImageIOBase
   char* inPos = static_cast<char*>(buffer);
   char* outPos = static_cast<char*>(buffer);
   bool workBackward = (outPixelSize > inPixelSize);
-  char *pixBuffer = new char[outPixelSize];
+  auto *pixBuffer = new char[outPixelSize];
 
   memset(pixBuffer, 0, outPixelSize);
 

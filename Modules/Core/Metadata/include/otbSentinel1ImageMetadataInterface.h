@@ -207,7 +207,7 @@ public:
   int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec) const
   {
       const int size = calVec.pixels.size();
-      std::vector<int>::const_iterator wh = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
+      auto wh = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
       return wh == calVec.pixels.end() ? size - 2 : std::distance(calVec.pixels.begin(),wh)-1;
   }
 

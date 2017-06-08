@@ -615,7 +615,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
          iIt1 != idxList.end();
          iIt1++)
       {
-      typename IndexListType::const_iterator iIt2 = iIt1;
+      auto iIt2 = iIt1;
       for (iIt2++; iIt2 != idxList.end(); iIt2++)
         {
         // Compute the length between the 2 indexes
@@ -781,7 +781,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
       if( ns.empty() )
         {
         // no line in the neighbors - all the lines in ls are on the contour
-        for( typename VectorLineType::const_iterator li = ls.begin(); li != ls.end(); ++li )
+        for( auto li = ls.begin(); li != ls.end(); ++li )
           {
           // std::cout << "ns.empty()" << std::endl;
           const typename LabelObjectType::LineType & l = *li;
@@ -796,8 +796,8 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
         // std::cout << "else" << std::endl;
         // TODO - fix the code when the line starts at  NumericTraits<IndexValueType>::NonpositiveMin()
         // or end at  NumericTraits<IndexValueType>::max()
-        typename VectorLineType::const_iterator li = ls.begin();
-        typename VectorLineType::const_iterator ni = ns.begin();
+        auto li = ls.begin();
+        auto ni = ns.begin();
 
         itk::IndexValueType lZero = 0;
         itk::IndexValueType lMin = 0;

@@ -246,11 +246,11 @@ LineSegmentDetector<TInputImage, TPrecision>
 ::LineSegmentDetection(CoordinateHistogramType& CoordinateHistogram)
 {
   /** Begin the search of the segments*/
-  CoordinateHistogramIteratorType ItCoordinateList = CoordinateHistogram.begin();
+  auto ItCoordinateList = CoordinateHistogram.begin();
 
   while (ItCoordinateList != CoordinateHistogram.end())
     {
-    typename IndexVectorType::iterator ItIndexVector = (*ItCoordinateList).begin();
+    auto ItIndexVector = (*ItCoordinateList).begin();
     while (ItIndexVector != (*ItCoordinateList).end())
       {
       InputIndexType index = *(ItIndexVector);
@@ -327,7 +327,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   OriginType  origin  = this->GetInput()->GetOrigin();
 
   /** store the lines*/
-  RectangleListTypeIterator itRec = m_RectangleList.begin();
+  auto itRec = m_RectangleList.begin();
   while (itRec != m_RectangleList.end())
     {
     VertexType start, end;
@@ -366,7 +366,7 @@ void
 LineSegmentDetector<TInputImage, TPrecision>
 ::CopyRectangle(RectangleType& rDst, RectangleType& rSrc) const
 {
-  RectangleIteratorType itSrc = rSrc.begin();
+  auto itSrc = rSrc.begin();
 
   while (itSrc != rSrc.end())
     {
@@ -625,7 +625,7 @@ void
 LineSegmentDetector<TInputImage, TPrecision>
 ::SetRegionToNotIni(IndexVectorType region)
 {
-  IndexVectorIteratorType it = region.begin();
+  auto it = region.begin();
   while (it != region.end())
     {
     this->SetPixelToNotIni(*it);
@@ -747,7 +747,7 @@ LineSegmentDetector<TInputImage, TPrecision>
                                                                   m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
 
   /** Computing the center of the rectangle*/
-  IndexVectorIteratorType it = region.begin();
+  auto it = region.begin();
   while (it != region.end())
     {
     itNeigh.SetLocation(*it);
@@ -883,7 +883,7 @@ LineSegmentDetector<TInputImage, TPrecision>
                                    m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
 
   /** Computing the center of the rectangle*/
-  IndexVectorIteratorType it = region.begin();
+  auto it = region.begin();
   while (it != region.end())
     {
     itNeigh.SetLocation(*it);

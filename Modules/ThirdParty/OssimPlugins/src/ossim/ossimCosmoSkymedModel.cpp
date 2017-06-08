@@ -147,7 +147,7 @@ bool ossimCosmoSkymedModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
   const char* neph_str = kwl.find(prefix,"neph");
   int neph = atoi(neph_str);
 
-  Ephemeris** ephemeris = new Ephemeris*[neph];
+  auto** ephemeris = new Ephemeris*[neph];
 
   /*
    * Retrieval of reference date
@@ -260,7 +260,7 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
   double relative_date = (azimuthStartTime + sc_lin/_sensor->get_prf());
   int second = (int) relative_date ;
   double decimal = relative_date - second ;
-  CivilDateTime * date = new CivilDateTime(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
+  auto * date = new CivilDateTime(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
 
   if(_platformPosition != NULL)
   {

@@ -595,7 +595,7 @@ ImageMetadataInterfaceBase
       if (bandNameList.size() > 1)
         {
         os << indent << "BandNameList:        ";
-        for (std::vector<std::string>::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
+        for (auto it = bandNameList.begin(); it != bandNameList.end(); ++it)
           {
           os << *it << ", ";
           }

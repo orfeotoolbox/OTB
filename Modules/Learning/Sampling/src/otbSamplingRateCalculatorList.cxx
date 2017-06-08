@@ -96,7 +96,7 @@ SamplingRateCalculatorList
       {
       // Use the smallest class globally to derive the constant needed 
       unsigned long smallest = itk::NumericTraits<unsigned long>::max();
-      ClassCountMapType::iterator it = m_GlobalCountMap.begin();
+      auto it = m_GlobalCountMap.begin();
       for (; it != m_GlobalCountMap.end() ; ++it)
         {
         if (smallest > it->second && it->second > 0UL)
@@ -150,7 +150,7 @@ SamplingRateCalculatorList
         for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
           {
           const MapRateType& rates = this->GetNthElement(i)->GetRatesByClass();
-          MapRateType::const_iterator curIt = rates.find(it->first);
+          auto curIt = rates.find(it->first);
           if (curIt != rates.end() &&
               it->second > 0UL)
             {
@@ -219,7 +219,7 @@ SamplingRateCalculatorList
         for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
           {
           const MapRateType &rates = this->GetNthElement(i)->GetRatesByClass();
-          MapRateType::const_iterator curIt = rates.find(it->first);
+          auto curIt = rates.find(it->first);
           inputIt = required[0].find(it->first);
           if (curIt != rates.end() &&
               inputIt != required[0].end() &&
@@ -248,7 +248,7 @@ SamplingRateCalculatorList
         for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
           {
           const MapRateType &rates = this->GetNthElement(i)->GetRatesByClass();
-          MapRateType::const_iterator curIt = rates.find(it->first);
+          auto curIt = rates.find(it->first);
           inputIt = required[0].find(it->first);
           if (curIt != rates.end() &&
               inputIt != required[0].end() &&
@@ -368,7 +368,7 @@ SamplingRateCalculatorList
         // Compute the total number of samples for image i
         const MapRateType & rates = this->GetNthElement(i)->GetRatesByClass();
       
-        for(MapRateType::const_iterator it = rates.begin();it!=rates.end();++it)
+        for(auto it = rates.begin();it!=rates.end();++it)
           {
           nb_samples[i]+=it->second.Tot;
           }
@@ -436,7 +436,7 @@ SamplingRateCalculatorList
   for (unsigned int i=0 ; i<this->Size() ; i++)
     {
     const MapRateType &rates = this->GetNthElement(i)->GetRatesByClass();
-    MapRateType::const_iterator it = rates.begin();
+    auto it = rates.begin();
     for (; it != rates.end() ; ++it)
       {
       m_GlobalCountMap[it->first] += it->second.Tot;

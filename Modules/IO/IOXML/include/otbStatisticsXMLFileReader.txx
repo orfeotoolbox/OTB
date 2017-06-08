@@ -75,7 +75,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     }
 
   std::vector<std::string> output;
-  for ( GenericMapContainer::iterator it = m_GenericMapContainer.begin() ;
+  for ( auto it = m_GenericMapContainer.begin() ;
         it != m_GenericMapContainer.end() ;
         ++it)
     {
@@ -137,7 +137,7 @@ StatisticsXMLFileReader<TMeasurementVector>
   MapType outputMap;
   typename MapType::key_type tmpKey;
   typename MapType::mapped_type tmpVal;
-  for ( GenericMapType::iterator it = m_GenericMapContainer[statName].begin() ;
+  for ( auto it = m_GenericMapContainer[statName].begin() ;
         it != m_GenericMapContainer[statName].end() ;
         ++it)
     {
@@ -276,7 +276,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     }
   os << std::endl;
   os << indent << "Map statistics: ";
-  for (GenericMapContainer::const_iterator it = m_GenericMapContainer.begin() ; it != m_GenericMapContainer.end() ; ++it)
+  for (auto it = m_GenericMapContainer.begin() ; it != m_GenericMapContainer.end() ; ++it)
     {
     if (it != m_GenericMapContainer.begin()) os <<", ";
     os << it->first;

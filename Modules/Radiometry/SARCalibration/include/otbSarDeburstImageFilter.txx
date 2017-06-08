@@ -105,7 +105,7 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   // Update line records to accommodate actual input image region
   LinesRecordVectorType filteredRecords;
   
-  for(LinesRecordVectorType::const_iterator it  = m_LinesRecord.begin();
+  for(auto it  = m_LinesRecord.begin();
       it!=m_LinesRecord.end();++it)
     {
     // If record is inside input image region
@@ -213,7 +213,7 @@ template <class TImage> void SarDeburstImageFilter<TImage>::ThreadedGenerateData
 
     bool lineToKeep = false;
 
-    for(LinesRecordVectorType::const_iterator it  = m_LinesRecord.begin();
+    for(auto it  = m_LinesRecord.begin();
       it!=m_LinesRecord.end();++it)
       {
       if(currentInputPoint[1]-0.5>=it->first && currentInputPoint[1]-0.5<=it->second)

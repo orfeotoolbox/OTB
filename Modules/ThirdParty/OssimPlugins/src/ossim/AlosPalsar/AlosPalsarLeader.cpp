@@ -60,7 +60,7 @@ AlosPalsarLeader::~AlosPalsarLeader()
 
 std::ostream& operator<<(std::ostream& os, const AlosPalsarLeader& data)
 {
-  std::map<int, AlosPalsarRecord*>::const_iterator it = data._records.begin();
+  auto it = data._records.begin();
   while (it != data._records.end())
   {
     (*it).second->Write(os);
@@ -97,7 +97,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarLeader& data)
       {
         if (header.get_length() > 12)
           {
-          char* buff = new char[header.get_length()-12];
+          auto* buff = new char[header.get_length()-12];
           is.read(buff, header.get_length() - 12);
           delete [] buff;
           }
@@ -110,7 +110,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarLeader& data)
 
 AlosPalsarLeader::AlosPalsarLeader(const AlosPalsarLeader& rhs)
 {
-  std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
+  auto it = rhs._records.begin();
   while (it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
@@ -121,7 +121,7 @@ AlosPalsarLeader::AlosPalsarLeader(const AlosPalsarLeader& rhs)
 AlosPalsarLeader& AlosPalsarLeader::operator=(const AlosPalsarLeader& rhs)
 {
   ClearRecords();
-  std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
+  auto it = rhs._records.begin();
   while (it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();

@@ -362,7 +362,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
       break;
     }
 
-  typename RunsPerLineType::const_iterator it = m_InternalDataSet.at(line).begin();
+  auto it = m_InternalDataSet.at(line).begin();
   resp[1] = line;
 
   while (resp[0] < 0 && it != m_InternalDataSet.at(line).end())
@@ -414,7 +414,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
     return resp;
     }
 
-  typename RunsPerLineType::const_iterator it = m_InternalDataSet.at(line).begin();
+  auto it = m_InternalDataSet.at(line).begin();
   resp[1] = line;
 
   LineType lrun = m_InternalDataSet.at(run[1]).at(run[0]);
@@ -451,7 +451,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
     }
   unsigned int idx = m_InternalDataSet.at(line).size() - 1;
 
-  typename RunsPerLineType::const_reverse_iterator it = m_InternalDataSet.at(line).rbegin();
+  auto it = m_InternalDataSet.at(line).rbegin();
   resp[1] = line;
 
   LineType lrun = m_InternalDataSet.at(run[1]).at(run[0]);

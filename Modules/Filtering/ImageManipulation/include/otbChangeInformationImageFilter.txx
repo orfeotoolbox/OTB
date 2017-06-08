@@ -41,7 +41,7 @@ ChangeInformationImageFilter<TInputImage>
       }
     else
       {
-      std::set<std::string>::iterator pos = m_ChangedKeys.find(key);
+      auto pos = m_ChangedKeys.find(key);
       if (pos != m_ChangedKeys.end())
         {
         m_ChangedKeys.erase(pos);
@@ -102,7 +102,7 @@ ChangeInformationImageFilter<TInputImage>
   // Process the metadatas to be changed
   itk::MetaDataDictionary &dict = this->GetMetaDataDictionary();
   itk::MetaDataDictionary &outputDict = this->GetOutput()->GetMetaDataDictionary();
-  std::set<std::string>::iterator it = m_ChangedKeys.begin();
+  auto it = m_ChangedKeys.begin();
   for ( ; it != m_ChangedKeys.end() ; ++it)
     {
     if (dict.HasKey(*it))

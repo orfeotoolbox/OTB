@@ -1705,7 +1705,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     if (gcpCount > 0)
       {
 
-      GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
+      auto * gdalGcps = new GDAL_GCP[gcpCount];
 
       for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
         {

@@ -1153,7 +1153,7 @@ namespace ossimplugins
          setErrorStatus();
          return false;
       }
-      std::vector<ossimRefPtr<ossimXmlNode> >::iterator node = xml_nodes.begin();
+      auto node = xml_nodes.begin();
       while (node != xml_nodes.end())
       {
          ossimGpt gpt;
@@ -2021,7 +2021,7 @@ namespace ossimplugins
          return false;
       }
 
-      std::vector<ossimRefPtr<ossimXmlNode> >::iterator node = xml_nodes.begin();
+      auto node = xml_nodes.begin();
       while (node != xml_nodes.end())
       {
          std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;

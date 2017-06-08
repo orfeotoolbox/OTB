@@ -359,7 +359,7 @@ void MSTARImageIO::Read(void* buffer)
   unsigned long lNbPixels = (unsigned long) (lNbColumns * lNbLines);
   unsigned long lTailleBuffer = (unsigned long) (m_BytePerPixel) * lNbPixels;
 
-  unsigned char* value = new unsigned char[lTailleBuffer];
+  auto* value = new unsigned char[lTailleBuffer];
 
   otbMsgDevMacro(
     << "MSTARImageIO::Read() IORegion Start[" << this->GetIORegion().GetIndex()[0] << "," <<

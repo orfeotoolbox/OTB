@@ -112,11 +112,11 @@ OutputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
 
 TiXmlElement* OutputProcessXMLParameter::AddChildNodeTo(TiXmlElement *parent, std::string name, std::string value)
 {
-  TiXmlElement * n_Node = new TiXmlElement( name.c_str() );
+  auto * n_Node = new TiXmlElement( name.c_str() );
   parent->LinkEndChild( n_Node );
   if(!value.empty())
     {
-      TiXmlText * nv_NodeValue = new TiXmlText( value.c_str() );
+      auto * nv_NodeValue = new TiXmlText( value.c_str() );
       n_Node->LinkEndChild( nv_NodeValue );
     }
   return n_Node;
@@ -139,10 +139,10 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
   // start creating XML file
   TiXmlDocument doc;
 
-  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+  auto* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
-  TiXmlElement * n_OTB = new TiXmlElement( "OTB");
+  auto * n_OTB = new TiXmlElement( "OTB");
   doc.LinkEndChild( n_OTB );
 
   std::string version = OTB_VERSION_STRING;
@@ -160,7 +160,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 TiXmlElement*
 OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
 {
-  TiXmlElement * n_App = new TiXmlElement("application");
+  auto * n_App = new TiXmlElement("application");
 
   AddChildNodeTo(n_App, "name", app->GetName());
   AddChildNodeTo(n_App, "descr", app->GetDescription());
@@ -310,7 +310,7 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
                     }
   */
          //parameter node in xml
-         TiXmlElement * n_Parameter = new TiXmlElement("parameter");
+         auto * n_Parameter = new TiXmlElement("parameter");
 
          const char * mandatory = "false";
 

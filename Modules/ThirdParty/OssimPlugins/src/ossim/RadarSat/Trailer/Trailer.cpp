@@ -60,7 +60,7 @@ Trailer::~Trailer()
 
 std::ostream& operator<<(std::ostream& os, const Trailer& data)
 {
-  std::map<int, RadarSatRecord*>::const_iterator it = data._records.begin();
+  auto it = data._records.begin();
   while(it != data._records.end())
   {
     (*it).second->Write(os);
@@ -95,7 +95,7 @@ std::istream& operator>>(std::istream& is, Trailer& data)
       }
       else
       {
-        char* buff = new char[header.get_length()-12];
+        auto* buff = new char[header.get_length()-12];
         is.read(buff, header.get_length()-12);
         delete[] buff;
       }
@@ -107,7 +107,7 @@ std::istream& operator>>(std::istream& is, Trailer& data)
 
 Trailer::Trailer(const Trailer& rhs)
 {
-  std::map<int, RadarSatRecord*>::const_iterator it = rhs._records.begin();
+  auto it = rhs._records.begin();
   while(it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
@@ -118,7 +118,7 @@ Trailer::Trailer(const Trailer& rhs)
 Trailer& Trailer::operator=(const Trailer& rhs)
 {
   ClearRecords();
-  std::map<int, RadarSatRecord*>::const_iterator it = rhs._records.begin();
+  auto it = rhs._records.begin();
   while(it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();

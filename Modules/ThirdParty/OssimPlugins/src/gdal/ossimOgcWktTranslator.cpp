@@ -1055,7 +1055,7 @@ ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)cons
 ossimString ossimOgcWktTranslator::ossimToWktDatum(const ossimString& datum)const
 {
    ossimString result;
-   map<std::string, std::string>::const_iterator i = theOssimToWktDatumTranslation.find(datum);
+   auto i = theOssimToWktDatumTranslation.find(datum);
    if(i != theOssimToWktDatumTranslation.end())
    {
       result = (*i).second;
@@ -1066,7 +1066,7 @@ ossimString ossimOgcWktTranslator::ossimToWktDatum(const ossimString& datum)cons
 ossimString ossimOgcWktTranslator::wktToOssimProjection(const ossimString& datum)const
 {
    std::string result;
-   map<std::string, std::string>::const_iterator i =
+   auto i =
       theWktToOssimProjectionTranslation.find(datum);
    if(i != theWktToOssimProjectionTranslation.end())
    {
@@ -1078,7 +1078,7 @@ ossimString ossimOgcWktTranslator::wktToOssimProjection(const ossimString& datum
 ossimString ossimOgcWktTranslator::ossimToWktProjection(const ossimString& datum)const
 {
    ossimString result;
-   map<std::string, std::string>::const_iterator i =
+   auto i =
       theOssimToWktProjectionTranslation.find(datum);
    if(i != theOssimToWktProjectionTranslation.end())
    {
