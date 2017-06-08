@@ -59,9 +59,9 @@ static ossimTrace traceDebug = ossimTrace("ossimPluginProjectionFactory:debug");
 #include <ossimFormosatDimapSupportData.h>
 
 #ifndef _WIN32
-#include <limits.h> //PATH_MAX
-#include <stdlib.h> //realpath
- #include <errno.h>
+#include <climits> //PATH_MAX
+#include <cstdlib> //realpath
+ #include <cerrno>
 #endif
 namespace ossimplugins
 {

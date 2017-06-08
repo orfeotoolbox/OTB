@@ -25,7 +25,7 @@
 
 #include "ossimTileMapModel.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
 
 #include <ossim/base/ossimKeywordlist.h>

@@ -26,7 +26,7 @@
 #include "otbStatisticsXMLFileWriter.h"
 #include "itkVariableLengthVector.h"
 
-#include <time.h>
+#include <ctime>
 
 namespace otb
 {

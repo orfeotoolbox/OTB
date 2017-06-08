@@ -47,7 +47,7 @@
 
 #include "otbOGRHelpers.h"
 
-#include "stdint.h" //needed for uintptr_t
+#include <cstdint> //needed for uintptr_t
 
 inline unsigned int uint_ceildivpow2(unsigned int a, unsigned int b) {
   return (a + (1 << b) - 1) >> b;

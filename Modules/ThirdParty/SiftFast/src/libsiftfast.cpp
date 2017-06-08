@@ -15,13 +15,13 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // This source code was carefully calibrated to match David Lowe's SIFT features program
-#include <stdlib.h>
-#include <math.h>
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
-#include <assert.h>
+#include <cstdlib>
+#include <cmath>
+#include <cassert>
+#include <cstdio>
+#include <cstring>
+#include <cstdarg>
+#include <cassert>
 
 #include <vector>
 #include <iostream>

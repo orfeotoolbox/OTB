@@ -34,7 +34,7 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbImportGeoInformationImageFilter.h"
 
-#include <time.h>
+#include <ctime>
 #include <vcl_algorithm.h>
 
 #include "otbWrapperApplication.h"

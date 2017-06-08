@@ -22,7 +22,7 @@
 #define otbDEMToImageGenerator_h
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 #include "itkImageSource.h"
 #include "otbImage.h"

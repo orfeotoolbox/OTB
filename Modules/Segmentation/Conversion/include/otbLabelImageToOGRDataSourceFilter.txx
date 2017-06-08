@@ -30,7 +30,7 @@
 #include "cpl_conv.h"
 #include "gdal_alg.h"
 
-#include "stdint.h" //needed for uintptr_t
+#include <cstdint> //needed for uintptr_t
 
 namespace otb
 {

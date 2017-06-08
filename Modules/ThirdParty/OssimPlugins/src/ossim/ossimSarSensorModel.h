@@ -28,7 +28,7 @@
 
 #include <boost/config.hpp>
 #include <string>
-#include <stdint.h>
+#include <cstdint>
 #include <cassert>
 
 #if defined(__GNUC__) || defined(__clang__)

@@ -23,7 +23,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
+#include <cstdio>
 #include "otbTransform.h"
 #include "itkMacro.h"
 

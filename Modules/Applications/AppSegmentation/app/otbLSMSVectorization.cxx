@@ -28,7 +28,7 @@
 #include "otbLabelImageToOGRDataSourceFilter.h"
 #include "otbOGRFeatureWrapper.h"
 
-#include <time.h>
+#include <ctime>
 #include <vcl_algorithm.h>
 
 namespace otb

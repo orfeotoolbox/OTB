@@ -25,7 +25,7 @@
 #include "otbPersistentImageToOGRLayerFilter.h"
 #include "itkTimeProbe.h"
 #include <boost/foreach.hpp>
-#include <stdio.h>
+#include <cstdio>
 #include "otbMacro.h"
 #include "otbOGRHelpers.h"
 

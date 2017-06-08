@@ -29,7 +29,7 @@
 
 #include "otbTileImageFilter.h"
 
-#include <time.h>
+#include <ctime>
 #include <vcl_algorithm.h>
 #include <climits>
 

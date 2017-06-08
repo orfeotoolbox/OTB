@@ -20,7 +20,7 @@
 
 #include "otbCommandLineArgumentParser.h"
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 
 #include "itkMacro.h"

@@ -35,7 +35,7 @@
 #include "otbLibSVMMachineLearningModel.h"
 #endif
 
-#include <time.h>
+#include <ctime>
 
 namespace otb
 {

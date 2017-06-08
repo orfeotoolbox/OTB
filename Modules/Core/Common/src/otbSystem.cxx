@@ -21,7 +21,7 @@
 
 #include "otbSystem.h"
 #include <string> // strdup
-#include <ctype.h> //toupper, tolower
+#include <cctype> //toupper, tolower
 #include <cstdlib>
 
 #if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)

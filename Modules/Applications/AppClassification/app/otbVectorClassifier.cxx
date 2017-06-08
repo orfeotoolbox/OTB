@@ -34,7 +34,7 @@
 
 #include "otbMachineLearningModel.h"
 
-#include <time.h>
+#include <ctime>
 
 namespace otb
 {

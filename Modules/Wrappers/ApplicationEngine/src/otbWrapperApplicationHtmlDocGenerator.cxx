@@ -20,7 +20,7 @@
 
 #include "otbWrapperApplicationHtmlDocGenerator.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include "otbWrapperChoiceParameter.h"
 
 namespace otb
