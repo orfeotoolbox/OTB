@@ -193,10 +193,10 @@ AeronetFileReader
   mean = 0.;
   stddev = 0.;
   if (vec.size() <= 0) return;
-  for (unsigned int i = 0; i < vec.size(); ++i)
+  for (double i : vec)
     {
-    sum += vec[i];
-    sumOfSquares += vec[i] * vec[i];
+    sum += i;
+    sumOfSquares += i * i;
     }
 
   // get the mean value
@@ -322,9 +322,8 @@ AeronetFileReader
   VectorDouble tau_day;
   VectorDouble angst;
   VectorDouble solarZenithAngle;
-  for (unsigned int idCurrentLine = 0; idCurrentLine < tabStr.size(); idCurrentLine++)
+  for (auto current_line2 : tabStr)
     {
-    VectorString current_line2 = tabStr[idCurrentLine];
     ParseValidLine(dinputDate, current_line2, epsilon, water, angst, tau_day, solarZenithAngle);
     }
 

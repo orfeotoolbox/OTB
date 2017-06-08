@@ -979,10 +979,10 @@ TerraSarImageMetadataInterface
   unsigned int numberOfRows = 0;
   unsigned int numberOfCols = 0;
 
-  for (unsigned int i = 0; i < cornerIndex.size(); ++i)
+  for (auto & i : cornerIndex)
     {
     IndexType index;
-    index = cornerIndex[i];
+    index = i;
     unsigned int noRow = index[0];
     unsigned int noCol = index[1];
     if (noRow > numberOfRows)

@@ -150,9 +150,9 @@ ExtendedFilenameToReaderOptions
   for ( it=map.begin(); it != map.end(); it++ )
     {
     bool isKnown=false;
-    for (unsigned int i=0; i<m_Options.optionList.size(); i++)
+    for (auto & i : m_Options.optionList)
       {
-      if (m_Options.optionList[i]==it->first)
+      if (i==it->first)
         isKnown=true;
       }
     if(!isKnown)

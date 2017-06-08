@@ -114,9 +114,9 @@ namespace ossimplugins
       is.read((char*)&(data._slant_range_time),4);
       data.SwitchEndian(data._slant_range_time);
 
-      for (int i = 0; i <5; i++) {
-         is.read((char*)&(data._dop_coef[i]),4);
-         data.SwitchEndian(data._dop_coef[i]);
+      for (float & i : data._dop_coef) {
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
 
       is.read((char*)&(data._dop_conf),4);
@@ -124,9 +124,9 @@ namespace ossimplugins
 
       is.read((char*)&(data._dop_conf_below_thresh_flag),1);
 
-      for (int i = 0; i <5; i++) {
-         is.read((char*)&(data._delta_dopp_coeff[i]),2);
-         data.SwitchEndian(data._delta_dopp_coeff[i]);
+      for (short & i : data._delta_dopp_coeff) {
+         is.read((char*)&i,2);
+         data.SwitchEndian(i);
       }
 
       is.read(buf3,3);

@@ -325,13 +325,13 @@ private:
         //Build URL
         bool findURL = false;
         std::string url;
-        for(auto contIt= USGSContinentList.begin(); contIt!=USGSContinentList.end(); ++contIt)
+        for(const auto & contIt : USGSContinentList)
           {
           std::ostringstream urlStream;
           CurlHelper::Pointer curl = CurlHelper::New();
           curl->SetTimeout(0);
           urlStream << SRTMServerPath;
-          urlStream << *contIt;
+          urlStream << contIt;
           urlStream << "/";
           urlStream << *it;
           urlStream << HGTExtension;
@@ -351,7 +351,7 @@ private:
 
             urlStream.clear();
             urlStream << SRTMServerPath;
-            urlStream << *contIt;
+            urlStream << contIt;
             urlStream << "/";
             urlStream << lowerIt;
             urlStream << HGTExtension;
@@ -371,7 +371,7 @@ private:
 
               urlStream.clear();
               urlStream << SRTMServerPath;
-              urlStream << *contIt;
+              urlStream << contIt;
               urlStream << "/";
               urlStream << upperIt;
               urlStream << HGTExtension;

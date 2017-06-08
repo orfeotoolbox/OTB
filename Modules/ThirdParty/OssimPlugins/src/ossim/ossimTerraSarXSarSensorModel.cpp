@@ -63,22 +63,22 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
     std::cout << "Number of states " << xnodes.size() << '\n';
 
-    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto & xnode : xnodes)
     {
         OrbitRecordType orbitRecord;
 
         // Retrieve acquisition time
-        orbitRecord.azimuthTime = getTimeFromFirstNode(**itNode, attTimeUTC);
+        orbitRecord.azimuthTime = getTimeFromFirstNode(*xnode, attTimeUTC);
 
         // Retrieve ECEF position
-        orbitRecord.position[0] = getDoubleFromFirstNode(**itNode, attPosX);
-        orbitRecord.position[1] = getDoubleFromFirstNode(**itNode, attPosY);
-        orbitRecord.position[2] = getDoubleFromFirstNode(**itNode, attPosZ);
+        orbitRecord.position[0] = getDoubleFromFirstNode(*xnode, attPosX);
+        orbitRecord.position[1] = getDoubleFromFirstNode(*xnode, attPosY);
+        orbitRecord.position[2] = getDoubleFromFirstNode(*xnode, attPosZ);
 
         // Retrieve ECEF velocity
-        orbitRecord.velocity[0] = getDoubleFromFirstNode(**itNode, attVelX);
-        orbitRecord.velocity[1] = getDoubleFromFirstNode(**itNode, attVelY);
-        orbitRecord.velocity[2] = getDoubleFromFirstNode(**itNode, attVelZ);
+        orbitRecord.velocity[0] = getDoubleFromFirstNode(*xnode, attVelX);
+        orbitRecord.velocity[1] = getDoubleFromFirstNode(*xnode, attVelY);
+        orbitRecord.velocity[2] = getDoubleFromFirstNode(*xnode, attVelZ);
 
         //Add one orbits record
         std::cout << "Add theOrbitRecords\n";
@@ -190,12 +190,12 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 
     std::cout<<"Found "<<xnodes.size()<<" GCPs\n";
 
-    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto & xnode : xnodes)
     {
         GCPRecordType gcpRecord;
 
         // Get delta acquisition time
-        const double deltaAzimuth = getDoubleFromFirstNode(**itNode, attT);
+        const double deltaAzimuth = getDoubleFromFirstNode(*xnode, attT);
 #if defined(USE_BOOST_TIME)
         using boost::posix_time::microseconds;
 #else
@@ -204,16 +204,16 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
         gcpRecord.azimuthTime = azimuthTimeStart + microseconds(deltaAzimuth * 1000000);
 
         //Get delta range time
-        gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);
+        gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(*xnode, attTau);
 
-        gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attCol) - 1.;
+        gcpRecord.imPt.x = getDoubleFromFirstNode(*xnode, attCol) - 1.;
 
-        gcpRecord.imPt.y = getDoubleFromFirstNode(**itNode, attRow) - 1.;
+        gcpRecord.imPt.y = getDoubleFromFirstNode(*xnode, attRow) - 1.;
 
         ossimGpt geoPoint;
-        gcpRecord.worldPt.lat = getDoubleFromFirstNode(**itNode, attLat);
-        gcpRecord.worldPt.lon = getDoubleFromFirstNode(**itNode, attLon);
-        gcpRecord.worldPt.hgt = getDoubleFromFirstNode(**itNode, attHeight);
+        gcpRecord.worldPt.lat = getDoubleFromFirstNode(*xnode, attLat);
+        gcpRecord.worldPt.lon = getDoubleFromFirstNode(*xnode, attLon);
+        gcpRecord.worldPt.hgt = getDoubleFromFirstNode(*xnode, attHeight);
 
         theGCPRecords.push_back(gcpRecord);
     }

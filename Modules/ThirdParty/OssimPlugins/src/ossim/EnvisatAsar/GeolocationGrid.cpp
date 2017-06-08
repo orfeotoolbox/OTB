@@ -142,29 +142,29 @@ namespace ossimplugins
       is.read((char*)&(data._sub_sat_track),4);
       data.SwitchEndian(data._sub_sat_track);
 
-      for (int i = 0; i<11; i++) {
-         is.read((char*)&(data._samp_numbers[i]),4);
-         data.SwitchEndian(data._samp_numbers[i]);
+      for (unsigned int & _samp_number : data._samp_numbers) {
+         is.read((char*)&_samp_number,4);
+         data.SwitchEndian(_samp_number);
       }
 
-      for (int i = 0; i<11; i++) {
-         is.read((char*)&(data._slant_range_times[i]),4);
-         data.SwitchEndian(data._slant_range_times[i]);
+      for (float & _slant_range_time : data._slant_range_times) {
+         is.read((char*)&_slant_range_time,4);
+         data.SwitchEndian(_slant_range_time);
       }
 
-      for (int i = 0; i<11; i++) {
-         is.read((char*)&(data._angles[i]),4);
-         data.SwitchEndian(data._angles[i]);
+      for (float & _angle : data._angles) {
+         is.read((char*)&_angle,4);
+         data.SwitchEndian(_angle);
       }
 
-      for (int i = 0; i<11; i++) {
-         is.read((char*)&(data._lats[i]),4);
-         data.SwitchEndian(data._lats[i]);
+      for (int & _lat : data._lats) {
+         is.read((char*)&_lat,4);
+         data.SwitchEndian(_lat);
       }
 
-      for (int i = 0; i<11; i++) {
-         is.read((char*)&(data._longs[i]),4);
-         data.SwitchEndian(data._longs[i]);
+      for (int & _long : data._longs) {
+         is.read((char*)&_long,4);
+         data.SwitchEndian(_long);
       }
 
       is.read(buf32,22);

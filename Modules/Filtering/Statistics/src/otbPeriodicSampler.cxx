@@ -44,9 +44,9 @@ PeriodicSampler::Reset(void)
     {
     // Using jitter : compute random offset value
     m_JitterValues.resize(std::min(this->GetNeededElements(), this->m_Parameters.MaxBufferSize));
-    for (unsigned long i=0UL ; i<m_JitterValues.size() ; i++)
+    for (double & m_JitterValue : m_JitterValues)
       {
-      m_JitterValues[i] = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()
+      m_JitterValue = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()
         ->GetUniformVariate(0.0,m_JitterSize);
       }
     if (m_JitterValues.empty())

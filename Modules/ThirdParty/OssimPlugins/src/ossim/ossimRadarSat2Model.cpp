@@ -734,12 +734,12 @@ bool ossimRadarSat2Model::initSRGR(const ossimXmlDocument* xdoc,
       //---
       _n_srgr = static_cast<int>(xnodes.size());
 
-      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      for (auto & xnode : xnodes)
       {
-         if (xnodes[i].valid())
+         if (xnode.valid())
          {
             ossimRefPtr<ossimXmlNode> node = 0;
-            node = xnodes[i]->findFirstNode(
+            node = xnode->findFirstNode(
                ossimString("zeroDopplerAzimuthTime"));
             if (node.valid())
             {
@@ -749,23 +749,23 @@ bool ossimRadarSat2Model::initSRGR(const ossimXmlDocument* xdoc,
                                       date.get_decimal());
             }
 
-            node = xnodes[i]->findFirstNode(
+            node = xnode->findFirstNode(
                ossimString("groundRangeOrigin"));
             if (node.valid())
             {
                _SrGr_R0.push_back(node->getText().toDouble());
             }
 
-            node = xnodes[i]->findFirstNode(
+            node = xnode->findFirstNode(
                ossimString("groundToSlantRangeCoefficients"));
             if (node.valid())
             {
                std::vector<ossimString> vs;
                node->getText().split(vs, ' ');
                std::vector<double> vd;
-               for (ossim_uint32 idx = 0; idx < vs.size(); ++idx)
+               for (auto & v : vs)
                {
-                  vd.push_back(vs[idx].toDouble());
+                  vd.push_back(v.toDouble());
                }
                _SrGr_coeffs.push_back(vd);
             }
@@ -1237,9 +1237,9 @@ bool ossimRadarSat2Model::InitRefNoiseLevel(
     s2.clear();
     noiseLevelValues.clear();
     s2 = sub_nodes[0]->getText().split(" ");
-	for(ossim_uint32 i = 0; i < s2.size(); ++i)
+	for(auto & i : s2)
 	{
-		noiseLevelValues.push_back( s2[i].toFloat64() );
+		noiseLevelValues.push_back( i.toFloat64() );
 	}
    	ev.set_noiseLevelValues( noiseLevelValues );
 
@@ -1352,9 +1352,9 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
 
    if (result)
    {
-      	for(ossim_uint32 i = 0; i < _noiseLevel.size(); ++i)
+      	for(const auto & i : _noiseLevel)
    		{
-   				_noiseLevel[i].saveState(kwl, prefix);
+   				i.saveState(kwl, prefix);
    		}
 
    }
@@ -1555,9 +1555,9 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
 
 	if(result)
 	{
-      	for(ossim_uint32 i = 0; i < _noiseLevel.size(); ++i)
+      	for(auto & i : _noiseLevel)
    		{
-   				_noiseLevel[i].loadState(kwl, prefix);
+   				i.loadState(kwl, prefix);
    		}
 	}
 

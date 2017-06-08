@@ -1449,8 +1449,8 @@ std::string Application::GetParameterAsString(std::string paramKey)
       std::ostringstream oss;
       oss << std::setprecision(10);
       const std::vector<std::string> strList = this->GetParameterStringList( paramKey );
-      for (unsigned int i=0; i<strList.size(); i++)
-        oss << strList[i] << std::endl;
+      for (const auto & i : strList)
+        oss << i << std::endl;
       ret = oss.str();
     }
   else

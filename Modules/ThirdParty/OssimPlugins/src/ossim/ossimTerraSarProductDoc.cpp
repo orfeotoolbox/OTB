@@ -800,12 +800,12 @@ bool ossimplugins::ossimTerraSarProductDoc::getImageDataStrartWith(
    xdoc->findNodes(path, xnodes);
    if ( xnodes.size() )
    {
-      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      for (auto & xnode : xnodes)
       {
-         if (xnodes[i].valid())
+         if (xnode.valid())
          {
             result = ossim::findFirstNode(ossimString("imageDataStartWith"),
-                                          xnodes[i], s);
+                                          xnode, s);
          }
       }
    }
@@ -987,12 +987,12 @@ bool ossimplugins::ossimTerraSarProductDoc::getCommonPrf(
    xdoc->findNodes(path, xnodes);
    if ( xnodes.size() )
    {
-      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      for (auto & xnode : xnodes)
       {
-         if (xnodes[i].valid())
+         if (xnode.valid())
          {
             result = ossim::findFirstNode(ossimString("commonPRF"),
-                                          xnodes[i], s);
+                                          xnode, s);
          }
       }
    }
@@ -1012,12 +1012,12 @@ bool ossimplugins::ossimTerraSarProductDoc::getCommonRsf(
    xdoc->findNodes(path, xnodes);
    if ( xnodes.size() )
    {
-      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      for (auto & xnode : xnodes)
       {
-         if (xnodes[i].valid())
+         if (xnode.valid())
          {
             result = ossim::findFirstNode(ossimString("commonRSF"),
-                                          xnodes[i], s);
+                                          xnode, s);
          }
       }
    }
@@ -1037,12 +1037,12 @@ bool ossimplugins::ossimTerraSarProductDoc::getNumberOfRangeLooks(
    xdoc->findNodes(path, xnodes);
    if ( xnodes.size() )
    {
-      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      for (auto & xnode : xnodes)
       {
-         if (xnodes[i].valid())
+         if (xnode.valid())
          {
             result = ossim::findFirstNode(ossimString("rangeLooks"),
-                                          xnodes[i], s);
+                                          xnode, s);
          }
       }
    }
@@ -1062,12 +1062,12 @@ bool ossimplugins::ossimTerraSarProductDoc::getNumberOfAzimuthLooks(
    xdoc->findNodes(path, xnodes);
    if ( xnodes.size() )
    {
-      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      for (auto & xnode : xnodes)
       {
-         if (xnodes[i].valid())
+         if (xnode.valid())
          {
             result = ossim::findFirstNode(ossimString("azimuthLooks"),
-                                          xnodes[i], s);
+                                          xnode, s);
          }
       }
    }
@@ -1283,15 +1283,15 @@ bool ossimplugins::ossimTerraSarProductDoc::initSceneCoord(const ossimXmlDocumen
       {
         std::vector<InfoSceneCoord> tabIsc;
         
-        for (ossim_uint32 i = 0; i < xnodes2.size(); ++i)
+        for (auto & i : xnodes2)
         {
-          if (xnodes2[i].valid())
+          if (i.valid())
           {
             InfoSceneCoord isc2;
             
-            result = ossim::findFirstNode(ossimString("refRow"), xnodes2[i], stmp);
+            result = ossim::findFirstNode(ossimString("refRow"), i, stmp);
             isc2.set_refRow( stmp.toUInt32() );
-            result = ossim::findFirstNode(ossimString("refColumn"), xnodes2[i], stmp);
+            result = ossim::findFirstNode(ossimString("refColumn"), i, stmp);
             isc2.set_refColumn( stmp.toUInt32() );
             result = ossim::findFirstNode(ossimString("lat"), xnodes[0], stmp);
             isc2.set_lat( stmp.toDouble() );
@@ -1301,7 +1301,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initSceneCoord(const ossimXmlDocumen
             isc2.set_azimuthTimeUTC( stmp );
             result = ossim::findFirstNode(ossimString("rangeTime"), xnodes[0], stmp);
             isc2.set_rangeTime( stmp.toDouble() );
-            result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes2[i], stmp);
+            result = ossim::findFirstNode(ossimString("incidenceAngle"), i, stmp);
             isc2.set_incidenceAngle( stmp.toDouble() );
 
             tabIsc.push_back(isc2);

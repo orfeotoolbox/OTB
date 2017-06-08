@@ -63,15 +63,15 @@ void ossimplugins::ossimSentinel1SarSensorModel::readCoordinates(
    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
    xmlDoc.findNodes(xpath, xnodes);
 
-   for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+   for(auto & xnode : xnodes)
    {
       CoordinateConversionRecordType coordRecord;
 
-      coordRecord.azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
+      coordRecord.azimuthTime = getTimeFromFirstNode(*xnode, attAzimuthTime);
 
-      coordRecord.rg0 = getDoubleFromFirstNode(**itNode, rg0_xpath);;
+      coordRecord.rg0 = getDoubleFromFirstNode(*xnode, rg0_xpath);;
 
-      ossimString const& s = getTextFromFirstNode(**itNode, coeffs_xpath);
+      ossimString const& s = getTextFromFirstNode(*xnode, coeffs_xpath);
       std::vector<ossimString> ssplit = s.split(" ");
 
       if (ssplit.empty())
@@ -114,21 +114,21 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
     //TODO uncomment and adapt following code from s1_inverse to fill
     //SarSensorModel structure
 
-    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto & xnode : xnodes)
     {
         OrbitRecordType orbitRecord;
 
         // Retrieve acquisition time
-        orbitRecord.azimuthTime = getTimeFromFirstNode(**itNode, attTime);
+        orbitRecord.azimuthTime = getTimeFromFirstNode(*xnode, attTime);
 
         // Retrieve ECEF position
-        ossimXmlNode const& positionNode = getExpectedFirstNode(**itNode, attPosition);
+        ossimXmlNode const& positionNode = getExpectedFirstNode(*xnode, attPosition);
         orbitRecord.position[0] = getDoubleFromFirstNode(positionNode, attX);
         orbitRecord.position[1] = getDoubleFromFirstNode(positionNode, attY);
         orbitRecord.position[2] = getDoubleFromFirstNode(positionNode, attZ);
 
         // Retrieve ECEF velocity
-        ossimXmlNode const& velocityNode = getExpectedFirstNode(**itNode, attVelocity);
+        ossimXmlNode const& velocityNode = getExpectedFirstNode(*xnode, attVelocity);
         orbitRecord.velocity[0] = getDoubleFromFirstNode(velocityNode, attX);
         orbitRecord.velocity[1] = getDoubleFromFirstNode(velocityNode, attY);
         orbitRecord.velocity[2] = getDoubleFromFirstNode(velocityNode, attZ);
@@ -252,16 +252,16 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
     xnodes.clear();
     xmlDoc->findNodes("/product/geolocationGrid/geolocationGridPointList/geolocationGridPoint",xnodes);
 
-    for(auto itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(auto & xnode : xnodes)
     {
         GCPRecordType gcpRecord;
 
         // Retrieve acquisition time
-        gcpRecord.azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
+        gcpRecord.azimuthTime = getTimeFromFirstNode(*xnode, attAzimuthTime);
 
-        gcpRecord.slantRangeTime = getDoubleFromFirstNode(**itNode, attSlantRangeTime);
+        gcpRecord.slantRangeTime = getDoubleFromFirstNode(*xnode, attSlantRangeTime);
 
-        gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attPixel);
+        gcpRecord.imPt.x = getDoubleFromFirstNode(*xnode, attPixel);
 
         // In TOPSAR products, GCPs are weird (they fall in black lines
         // between burst. This code allows moving them to a valid area of
@@ -303,12 +303,12 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         }
         else
         {
-            gcpRecord.imPt.y = getDoubleFromFirstNode(**itNode, attLine);;
+            gcpRecord.imPt.y = getDoubleFromFirstNode(*xnode, attLine);;
         }
         ossimGpt geoPoint;
-        gcpRecord.worldPt.lat = getDoubleFromFirstNode(**itNode, attLatitude);
-        gcpRecord.worldPt.lon = getDoubleFromFirstNode(**itNode, attLongitude);
-        gcpRecord.worldPt.hgt = getDoubleFromFirstNode(**itNode, attHeight);
+        gcpRecord.worldPt.lat = getDoubleFromFirstNode(*xnode, attLatitude);
+        gcpRecord.worldPt.lon = getDoubleFromFirstNode(*xnode, attLongitude);
+        gcpRecord.worldPt.hgt = getDoubleFromFirstNode(*xnode, attHeight);
 
         theGCPRecords.push_back(gcpRecord);
     }

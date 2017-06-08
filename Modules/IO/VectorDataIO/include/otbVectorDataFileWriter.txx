@@ -142,10 +142,9 @@ VectorDataFileWriter<TInputVectorData>
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
-    for (auto i = allobjects.begin();
-         i != allobjects.end(); ++i)
+    for (auto & allobject : allobjects)
       {
-      VectorDataIOBase* io = dynamic_cast<VectorDataIOBase*>(i->GetPointer());
+      VectorDataIOBase* io = dynamic_cast<VectorDataIOBase*>(allobject.GetPointer());
       if(io)
         msg << "    " << io->GetNameOfClass() << std::endl;
       }

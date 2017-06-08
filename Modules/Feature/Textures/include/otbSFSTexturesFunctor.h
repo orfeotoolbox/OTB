@@ -220,8 +220,8 @@ public:
     if (m_SelectedTextures[5] == true)
       {
       double sumPSI = 0;
-      for (unsigned int n = 0; n < di.size(); ++n)
-        sumPSI += vcl_pow(di[n] - sumWMean / NumberOfDirectionsDouble, 2);
+      for (double n : di)
+        sumPSI += vcl_pow(n - sumWMean / NumberOfDirectionsDouble, 2);
       out[5] = static_cast<OutputValueType>(vcl_sqrt(sumPSI) / (NumberOfDirectionsDouble - 1.));
       }
 

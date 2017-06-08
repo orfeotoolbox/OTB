@@ -1257,9 +1257,8 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   std::vector<GCPRecordType> deburstGCPs;
   
   // Now move GCPs
-  for(auto gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+  for(auto currentGCP : theGCPRecords)
       {
-      GCPRecordType currentGCP = *gcpIt;
       unsigned long newLine=0;
 
       unsigned long gcpLine = std::floor(currentGCP.imPt.y+0.5);

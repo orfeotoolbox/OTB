@@ -104,13 +104,11 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     m_Samplers.resize(level + 1);
     }
   m_Samplers[level].clear();
-  for (auto it = map.begin() ;
-       it != map.end();
-       ++it)
+  for (const auto & it : map)
     {
     SamplerPointerType sampler = SamplerType::New();
-    sampler->SetNumberOfElements(it->second.Required,it->second.Tot);
-    m_Samplers[level][it->first] = sampler;
+    sampler->SetNumberOfElements(it.second.Required,it.second.Tot);
+    m_Samplers[level][it.first] = sampler;
     }
 }
 

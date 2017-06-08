@@ -46,10 +46,9 @@ OpticalImageMetadataInterfaceFactory
   std::list<OpticalImageMetadataInterfacePointerType> possibleIMI;
   std::list<itk::LightObject::Pointer>             allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("OpticalImageMetadataInterface");
-  for (auto i = allobjects.begin();
-       i != allobjects.end(); ++i)
+  for (auto & allobject : allobjects)
     {
-    OpticalImageMetadataInterface * io = dynamic_cast<OpticalImageMetadataInterface*>(i->GetPointer());
+    OpticalImageMetadataInterface * io = dynamic_cast<OpticalImageMetadataInterface*>(allobject.GetPointer());
     if (io)
       {
       possibleIMI.push_back(io);
@@ -57,16 +56,15 @@ OpticalImageMetadataInterfaceFactory
     else
       {
       itkGenericExceptionMacro(<< "Error OpticalImageMetadataInterface factory did not return an OpticalImageMetadataInterface: "
-                               << (*i)->GetNameOfClass());
+                               << allobject->GetNameOfClass());
       }
     }
-  for (auto k = possibleIMI.begin();
-       k != possibleIMI.end(); ++k)
+  for (auto & k : possibleIMI)
     {
-   (*k)->SetMetaDataDictionary(dict);
-    if ((*k)->CanRead())
+   k->SetMetaDataDictionary(dict);
+    if (k->CanRead())
       {
-      return *k;
+      return k;
       }
     }
 

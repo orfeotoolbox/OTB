@@ -324,9 +324,9 @@ private:
               }
 
           //Searching the "nearest" region
-          for(auto itMinLabel=minLabel.begin(); itMinLabel!=minLabel.end(); ++itMinLabel)
+          for(int itMinLabel : minLabel)
             {
-            LabelImagePixelType curLabel = *itMinLabel, adjLabel(0);
+            LabelImagePixelType curLabel = itMinLabel, adjLabel(0);
             double err = itk::NumericTraits<double>::max();
             if(edgeLabel.count(curLabel)==0)
               {

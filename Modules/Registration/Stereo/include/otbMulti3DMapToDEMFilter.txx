@@ -428,9 +428,9 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     maxMapRequestedIndex[0]= 0;
     maxMapRequestedIndex[1]= 0;
 
-    for (unsigned int i = 0; i < 8; i++)
+    for (auto & corner : corners)
       {
-      TDPointType tmpSensor = groundToSensorTransform->TransformPoint( corners[i] );
+      TDPointType tmpSensor = groundToSensorTransform->TransformPoint( corner );
 
       minMapRequestedIndex[0] = std::min(
         minMapRequestedIndex[0],

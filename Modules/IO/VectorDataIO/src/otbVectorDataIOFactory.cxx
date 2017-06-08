@@ -44,10 +44,9 @@ VectorDataIOFactory
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
   std::list<itk::LightObject::Pointer>   allobjects =
     itk::ObjectFactoryBase::CreateAllInstance(baseclassID.c_str());
-  for (auto i = allobjects.begin();
-       i != allobjects.end(); ++i)
+  for (auto & allobject : allobjects)
     {
-    VectorDataIOBaseType * io = dynamic_cast<VectorDataIOBaseType*>(i->GetPointer());
+    VectorDataIOBaseType * io = dynamic_cast<VectorDataIOBaseType*>(allobject.GetPointer());
     if (io)
       {
       possibleVectorDataIO.push_back(io);
@@ -55,24 +54,23 @@ VectorDataIOFactory
     else
       {
       itkGenericExceptionMacro(<< "Error VectorDataIO factory did not return an VectorDataIOBase: "
-                               << (*i)->GetNameOfClass());
+                               << allobject->GetNameOfClass());
       }
     }
-  for (auto k = possibleVectorDataIO.begin();
-       k != possibleVectorDataIO.end(); ++k)
+  for (auto & k : possibleVectorDataIO)
     {
     if (mode == ReadMode)
       {
-      if ((*k)->CanReadFile(path))
+      if (k->CanReadFile(path))
         {
-        return *k;
+        return k;
         }
       }
     else if (mode == WriteMode)
       {
-      if ((*k)->CanWriteFile(path))
+      if (k->CanWriteFile(path))
         {
-        return *k;
+        return k;
         }
 
       }

@@ -253,9 +253,9 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
     {
     pathList = itksys::SystemTools::SplitString(otbAppPath.c_str(),pathSeparator,false);
     }
-  for (unsigned int i=0 ; i<pathList.size() ; ++i)
+  for (auto & i : pathList)
     {
-    std::string possiblePath = pathList[i];
+    std::string possiblePath = i;
     if ( !possiblePath.empty() && possiblePath[possiblePath.size() - 1] != sep )
       {
       possiblePath += sep;
@@ -302,10 +302,10 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
     {
     pathList = itksys::SystemTools::SplitString(otbAppPath.c_str(),pathSeparator,false);
     }
-  for (unsigned int k=0 ; k<pathList.size() ; ++k)
+  for (auto & k : pathList)
     {
     itk::Directory::Pointer dir = itk::Directory::New();
-    if (!dir->Load(pathList[k].c_str()))
+    if (!dir->Load(k.c_str()))
       {
       continue;
       }
@@ -321,7 +321,7 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
           prefixPos == 0)
         {
         std::string name = sfilename.substr(appPrefix.size(),extPos-appPrefix.size());
-        std::string fullpath = pathList[k];
+        std::string fullpath = k;
         if (!fullpath.empty() && fullpath[fullpath.size() - 1] != sep)
           {
           fullpath.push_back(sep);
@@ -341,9 +341,9 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
     {
     std::list<LightObject::Pointer> allobjects = itk::ObjectFactoryBase::CreateAllInstance("otbWrapperApplication");
     // Downcast and Sanity check
-    for (auto i = allobjects.begin(); i != allobjects.end(); ++i)
+    for (auto & allobject : allobjects)
       {
-      Application* app = dynamic_cast<Application*> (i->GetPointer());
+      Application* app = dynamic_cast<Application*> (allobject.GetPointer());
       if (app)
         {
         app->Init();

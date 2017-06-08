@@ -310,14 +310,14 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
   int nComponents = this->GetNumberOfComponents();
 
   auto * bufferTile = new unsigned char[m_TileSize * m_TileSize * nComponents];
-  for (unsigned int currentTile = 0; currentTile < m_ListTiles.size(); currentTile++)
+  for (auto & m_ListTile : m_ListTiles)
     {
 
     // Read tile from cache
-    this->ReadTile(m_ListTiles[currentTile].filename, bufferTile);
+    this->ReadTile(m_ListTile.filename, bufferTile);
 
-    int numTileX = m_ListTiles[currentTile].numTileX;
-    int numTileY = m_ListTiles[currentTile].numTileY;
+    int numTileX = m_ListTile.numTileX;
+    int numTileY = m_ListTile.numTileY;
 
     for (int tileJ = 0; tileJ < m_TileSize; tileJ++)
       {

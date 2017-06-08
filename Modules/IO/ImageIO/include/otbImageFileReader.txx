@@ -306,10 +306,9 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
-    for (auto i = allobjects.begin();
-         i != allobjects.end(); ++i)
+    for (auto & allobject : allobjects)
       {
-      otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
+      otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(allobject.GetPointer());
       // IO should never be null, but we would better check for it
       if(io)
         msg << "    " << io->GetNameOfClass() << std::endl;
@@ -668,9 +667,9 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     while ((cpt < listFileFind.size()) && (fic_trouve == false))
       {
       str_FileName = std::string(listFileFind[cpt]);
-      for (unsigned int i = 0; i < listFileSearch.size(); ++i)
+      for (auto & i : listFileSearch)
         {
-        if (str_FileName.compare(listFileSearch[i]) == 0)
+        if (str_FileName.compare(i) == 0)
           {
           GdalFileName = std::string(filename) + str_FileName; //listFileSearch[i];
           fic_trouve = true;

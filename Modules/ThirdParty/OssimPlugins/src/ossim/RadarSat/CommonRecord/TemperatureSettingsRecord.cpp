@@ -50,11 +50,11 @@ std::istream& operator>>(std::istream& is, TemperatureSettingsRecord& data)
 	char buf[5];
 	buf[4] = '\0';
 
-	for (int i=0;i<4;i++)
+	for (int & i : data._temp_set)
 	{
 		is.read(buf,4);
 		buf[4] = '\0';
-		data._temp_set[i] = atoi(buf);
+		i = atoi(buf);
 	}
 	return is;
 }

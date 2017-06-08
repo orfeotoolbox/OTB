@@ -160,9 +160,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   unsigned int nbImageBands = trainingListSample->GetMeasurementVectorSize();
   layerSizes.push_back(nbImageBands);
-  for (unsigned int i = 0; i < sizes.size(); i++)
+  for (auto & size : sizes)
     {
-    unsigned int nbNeurons = boost::lexical_cast<unsigned int>(sizes[i]);
+    unsigned int nbNeurons = boost::lexical_cast<unsigned int>(size);
     layerSizes.push_back(nbNeurons);
     }
 

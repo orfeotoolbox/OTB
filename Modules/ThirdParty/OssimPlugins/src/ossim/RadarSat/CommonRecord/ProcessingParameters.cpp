@@ -295,11 +295,11 @@ namespace ossimplugins
       buf[4] = '\0';
       data._n_tape_id = atoi(buf);
 
-      for (int i=0;i<10;i++)
+      for (auto & i : data._tape_id)
       {
          is.read(buf,8);
          buf[8] = '\0';
-         data._tape_id[i] = buf;
+         i = buf;
       }
 
       is.read(buf,21);
@@ -326,11 +326,11 @@ namespace ossimplugins
       buf[21] = '\0';
       data._proc_stop = buf;
 
-      for (int i=0;i<10;i++)
+      for (double & i : data._mn_sig_lev)
       {
          is.read(buf,16);
          buf[16] = '\0';
-         data._mn_sig_lev[i] = atof(buf);
+         i = atof(buf);
       }
 
       is.read(buf,4);
@@ -413,18 +413,18 @@ namespace ossimplugins
       buf[12] = '\0';
       data._rng_ref_src = buf;
 
-      for (int i=0;i<4;i++)
+      for (double & i : data._rng_amp_coef)
       {
          is.read(buf,16);
          buf[16] = '\0';
-         data._rng_amp_coef[i] = atof(buf);
+         i = atof(buf);
       }
 
-      for (int i=0;i<4;i++)
+      for (double & i : data._rng_phas_coef)
       {
          is.read(buf,16);
          buf[16] = '\0';
-         data._rng_phas_coef[i] = atof(buf);
+         i = atof(buf);
       }
 
       for (int i=0;i<4;i++)
@@ -434,11 +434,11 @@ namespace ossimplugins
          data._err_amp_coef[i] = atof(buf);
       }
 
-      for (int i=0;i<4;i++)
+      for (double & i : data._err_phas_coef)
       {
          is.read(buf,16);
          buf[16] = '\0';
-         data._err_phas_coef[i] = atof(buf);
+         i = atof(buf);
       }
 
       is.read(buf,4);
@@ -490,18 +490,18 @@ namespace ossimplugins
       buf[4] = '\0';
       data._n_beams = atoi(buf);
 
-      for (int i=0;i<4;i++)
+      for (auto & i : data._beam_info)
       {
-         is>>data._beam_info[i];
+         is>>i;
       }
 
       is.read(buf,4);
       buf[4] = '\0';
       data._n_pix_updates = atoi(buf);
 
-      for (int i=0;i<20;i++)
+      for (auto & i : data._pix_count)
       {
-         is>>data._pix_count[i];
+         is>>i;
       }
 
       is.read(buf,16);
@@ -524,9 +524,9 @@ namespace ossimplugins
       buf[4] = '\0';
       data._n_temp_set = atoi(buf);
 
-      for (int i=0;i<20;i++)
+      for (auto & i : data._temp)
       {
-         is>>data._temp[i];
+         is>>i;
       }
 
       is.read(buf,8);
@@ -545,11 +545,11 @@ namespace ossimplugins
       buf[16] = '\0';
       data._img_hist_mean = atof(buf);
 
-      for (int i=0;i<3;i++)
+      for (double & i : data._img_cumu_dist)
       {
          is.read(buf,16);
          buf[16] = '\0';
-         data._img_cumu_dist[i] = atof(buf);
+         i = atof(buf);
       }
 
       is.read(buf,16);
@@ -568,9 +568,9 @@ namespace ossimplugins
       buf[4] = '\0';
       data._n_dopcen = atoi(buf);
 
-      for (int i=0;i<20;i++)
+      for (auto & i : data._dopcen_est)
       {
-         is>>data._dopcen_est[i];
+         is>>i;
       }
 
       is.read(buf,4);
@@ -581,31 +581,31 @@ namespace ossimplugins
       buf[16] = '\0';
       data._dopamb_conf = atof(buf);
 
-      for (int i=0;i<7;i++)
+      for (double & i : data._eph_orb_data)
       {
          is.read(buf,16);
          buf[16] = '\0';
-         data._eph_orb_data[i] = atof(buf);
+         i = atof(buf);
       }
 
       is.read(buf,12);
       buf[12] = '\0';
       data._appl_type = buf;
 
-      for (int i=0;i<5;i++)
+      for (double & i : data._slow_time_coef)
       {
          is.read(buf,22);
          buf[22] = '\0';
-         data._slow_time_coef[i] = atof(buf);
+         i = atof(buf);
       }
 
       is.read(buf,4);
       buf[4] = '\0';
       data._n_srgr = atoi(buf);
 
-      for (int i=0;i<20;i++)
+      for (auto & i : data._srgr_coefset)
       {
-         is>>data._srgr_coefset[i];
+         is>>i;
       }
 
       is.read(buf,16);

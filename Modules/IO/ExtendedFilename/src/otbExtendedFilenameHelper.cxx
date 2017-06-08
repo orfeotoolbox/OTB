@@ -44,11 +44,11 @@ ExtendedFilenameHelper
     if (tmp1.size()>1)
       {
       boost::split(tmp2, tmp1[1], boost::is_any_of("&"), boost::token_compress_on);
-      for (unsigned int i=0; i<tmp2.size(); i++)
-      if (!tmp2[i].empty())
+      for (auto & i : tmp2)
+      if (!i.empty())
         {
         std::vector<std::string> tmp;
-        boost::split(tmp, tmp2[i], boost::is_any_of("="), boost::token_compress_on);
+        boost::split(tmp, i, boost::is_any_of("="), boost::token_compress_on);
         if (tmp.size()>1)
           {
           if (!tmp[1].empty())
@@ -228,10 +228,10 @@ ExtendedFilenameHelper
 {
   output.clear();
   std::vector<ExtendedFilenameHelper::GenericBandRange> bandRangeList = this->GetGenericBandRange(bandRange);
-  for (unsigned int i=0 ; i<bandRangeList.size() ; i++)
+  for (auto & i : bandRangeList)
     {
-    int a = bandRangeList[i].first;
-    int b = bandRangeList[i].second;
+    int a = i.first;
+    int b = i.second;
     if (a<0) a+= nbBands+1;
     if (b<0) b+= nbBands+1;
     if (a==0) a=1;

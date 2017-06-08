@@ -60,11 +60,11 @@ std::istream& operator>>(std::istream& is, DopplerCentroidEstimateRecord& data)
 	buf[16] = '\0';
 	data._dopcen_ref_tim = atof(buf);
 
-	for (int i=0;i<4;i++)
+	for (double & i : data._dopcen_coef)
 	{
 		is.read(buf,16);
 		buf[16] = '\0';
-		data._dopcen_coef[i] = atof(buf);
+		i = atof(buf);
 	}
 	return is;
 }

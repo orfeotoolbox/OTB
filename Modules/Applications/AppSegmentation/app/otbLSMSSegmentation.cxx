@@ -696,10 +696,9 @@ private:
       {
       otbAppLogINFO(<<"Final clean-up ...");
 
-      for(auto it = m_FilesToRemoveAfterExecute.begin();
-          it!=m_FilesToRemoveAfterExecute.end(); ++it)
+      for(auto & it : m_FilesToRemoveAfterExecute)
         {
-        RemoveFile(*it);
+        RemoveFile(it);
         }
 
       if(IsParameterEnabled("tmpdir") && m_TmpDirCleanup)

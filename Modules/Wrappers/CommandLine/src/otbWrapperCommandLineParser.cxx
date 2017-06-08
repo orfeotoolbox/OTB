@@ -157,15 +157,15 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
 
 
     // Remove " " string element
-    for(unsigned int i=0; i<pathAttribut.size(); i++)
+    for(auto & i : pathAttribut)
       {
       // Suppress possible multi space at the beginning of the string
-      while (pathAttribut[i].size()>1 && pathAttribut[i][0]==' ')
+      while (i.size()>1 && i[0]==' ')
       {
-      pathAttribut[i].erase(0, 1);
+      i.erase(0, 1);
       }
 
-      std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
+      std::string fullPath = itksys::SystemTools::CollapseFullPath(i.c_str());
 
       if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
         {
@@ -373,14 +373,14 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
       }
 
     // Remove space at the beginning of the string and cast into std::vector<std::string>
-    for(unsigned int i=0; i<spaceSplit.size(); i++)
+    for(auto & i : spaceSplit)
       {
-      while( spaceSplit[i].size()>0  && spaceSplit[i][0] == ' ' )
+      while( i.size()>0  && i[0] == ' ' )
         {
-        spaceSplit[i] = spaceSplit[i].substr(1, spaceSplit[i].size());
+        i = i.substr(1, i.size());
         }
 
-      res.push_back(spaceSplit[i]);
+      res.push_back(i);
       }
     }
   return res;
@@ -462,9 +462,9 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
 bool
 CommandLineParser::IsAttributExists( const std::string key, const std::vector<std::string> & exp  )
 {
-  for (auto it = exp.begin(); it != exp.end(); ++it)
+  for (const auto & it : exp)
     {
-    if (it->compare(key) == 0)
+    if (it.compare(key) == 0)
       return true;
     }
   return false;
@@ -474,12 +474,12 @@ std::vector<std::string>
 CommandLineParser::GetKeyList( const std::vector<std::string> & exp  )
 {
   std::vector<std::string> keyList;
-  for (auto it = exp.begin(); it != exp.end(); ++it)
+  for (const auto & it : exp)
     {
-    if (it->find("-") == 0)
+    if (it.find("-") == 0)
       {
       // Remove first character ('-')
-      std::string key = it->substr(1,std::string::npos);
+      std::string key = it.substr(1,std::string::npos);
       if (this->IsAValidKey(key))
         {
         keyList.push_back(key);

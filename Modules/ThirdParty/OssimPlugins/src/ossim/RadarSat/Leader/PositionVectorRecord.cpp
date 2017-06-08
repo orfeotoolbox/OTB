@@ -54,16 +54,16 @@ std::istream& operator>>(std::istream& is, PositionVectorRecord& data)
 	char buf[23];
 	buf[22] = '\0';
 
-	for (int i=0;i<3;i++)
+	for (double & _po : data._pos)
 	{
 		is.read(buf,22);
-		data._pos[i] = atof(buf);
+		_po = atof(buf);
 	}
 
-	for (int i=0;i<3;i++)
+	for (double & i : data._vel)
 	{
 		is.read(buf,22);
-		data._vel[i] = atof(buf);
+		i = atof(buf);
 	}
 	return is;
 }

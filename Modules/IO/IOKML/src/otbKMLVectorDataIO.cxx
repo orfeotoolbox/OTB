@@ -621,9 +621,9 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 //   std::cout << "Found " <<  children.size() << " children" << std::endl;
 
   // For each child
-  for (auto it = children.begin(); it != children.end(); ++it)
+  for (auto & it : children)
     {
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = it->Get();
 //     std::cout << "Processing " << dataNode->GetNodeType() << " with Id: " << dataNode->GetNodeId() << std::endl;
 
     ++m_Kept;
@@ -643,7 +643,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
           }
         kml->set_feature(document);
         currentDocument = document;
-        ProcessNodeWrite(*it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+        ProcessNodeWrite(it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
         break;
         }
       case FOLDER:
@@ -653,7 +653,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
         folder->set_name(fieldname);
         currentDocument->add_feature(folder);
         currentFolder = folder;
-        ProcessNodeWrite(*it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+        ProcessNodeWrite(it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
         break;
         }
       case FEATURE_POINT:
@@ -874,7 +874,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
           {
           currentDocument->add_feature(placemark);
           }
-        ProcessNodeWrite(*it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+        ProcessNodeWrite(it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
         break;
         }
       default:

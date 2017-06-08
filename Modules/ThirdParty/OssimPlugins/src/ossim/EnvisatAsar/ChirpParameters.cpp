@@ -154,9 +154,9 @@ namespace ossimplugins
 
       is.read(buf4,4);
 
-      for (int i = 0; i<352; i++) {
-         is.read((char*)&(data._cal_pulse_info[i]),4);
-         data.SwitchEndian(data._cal_pulse_info[i]);
+      for (float & i : data._cal_pulse_info) {
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
 
       is.read(buf16,16);

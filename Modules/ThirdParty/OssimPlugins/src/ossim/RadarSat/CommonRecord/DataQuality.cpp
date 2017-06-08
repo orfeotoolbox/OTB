@@ -70,9 +70,9 @@ std::ostream& operator<<(std::ostream& os, const DataQuality& data)
 
     os<<"rad_unc_deg:"<<data._rad_unc_deg<<std::endl;
 
-	for (int i=0;i<16;i++)
+	for (const auto & i : data._rad_unc)
 	{
-		os<<"rad_unc:"<<data._rad_unc[i]<<std::endl;
+		os<<"rad_unc:"<<i<<std::endl;
 	}
 
     os<<"alt_locerr:"<<data._alt_locerr<<std::endl;
@@ -87,9 +87,9 @@ std::ostream& operator<<(std::ostream& os, const DataQuality& data)
 
     os<<"ori_err:"<<data._ori_err<<std::endl;
 
-	for (int i=0;i<16;i++)
+	for (const auto & i : data._misreg)
 	{
-		os<<"misreg:"<<data._misreg[i]<<std::endl;
+		os<<"misreg:"<<i<<std::endl;
 	}
 
 	os<<"nesz:"<<data._nesz<<std::endl;
@@ -172,9 +172,9 @@ std::istream& operator>>(std::istream& is, DataQuality& data)
 	buf[16] = '\0';
 	data._rad_unc_deg = atof(buf);
 
-	for (int i=0;i<16;i++)
+	for (auto & i : data._rad_unc)
 	{
-		is>>data._rad_unc[i];
+		is>>i;
 	}
 
     is.read(buf,16);
@@ -201,9 +201,9 @@ std::istream& operator>>(std::istream& is, DataQuality& data)
 	buf[16] = '\0';
 	data._ori_err = atof(buf);
 
-	for (int i=0;i<16;i++)
+	for (auto & i : data._misreg)
 	{
-		is>>data._misreg[i];
+		is>>i;
 	}
 
 	is.read(buf,16);

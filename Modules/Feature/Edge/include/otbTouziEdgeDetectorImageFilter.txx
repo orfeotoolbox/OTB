@@ -215,10 +215,10 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
       yc = bitIndex[1];
 
       // Initializations
-      for (int dir = 0; dir < NB_DIR; ++dir)
+      for (auto & dir : Sum)
         {
         for (int m = 0; m < NB_REGION; m++)
-          Sum[dir][m] = 0.;
+          dir[m] = 0.;
         }
 
       R_contour = -1;

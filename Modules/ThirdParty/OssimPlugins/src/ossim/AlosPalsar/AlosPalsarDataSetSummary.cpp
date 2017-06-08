@@ -337,16 +337,16 @@ std::istream& operator>>(std::istream& is, AlosPalsarDataSetSummary& data)
   is.read(buf16, 16);
   data._pulse_code = buf16;
 
-  for (int i = 0; i < 5; i++)
+  for (double & i : data._ampl_coef)
   {
     is.read(buf16, 16);
-    data._ampl_coef[i] = atof(buf16);
+    i = atof(buf16);
   }
 
-  for (int i = 0; i < 5; i++)
+  for (double & i : data._phas_coef)
   {
     is.read(buf16, 16);
-    data._phas_coef[i] = atof(buf16);
+    i = atof(buf16);
   }
 
   is.read(buf8, 8);

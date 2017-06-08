@@ -54,11 +54,11 @@ std::istream& operator>>(std::istream& is, BeamPixelCountRecord& data)
 	is.read(buf,21);
 	data._pix_update = buf;
 
-	for (int i=0;i<4;i++)
+	for (int & i : data._n_pix)
 	{
 		is.read(buf,8);
 		buf[8] = '\0';
-		data._n_pix[i] = atoi(buf);
+		i = atoi(buf);
 	}
 	return is;
 }

@@ -59,9 +59,9 @@ std::istream& operator>>(std::istream& is, AttitudeData& data)
 	buf[4] = '\0';
 	data._npoint = atoi(buf);
 
-	for (int i=0;i<20;i++)
+	for (auto & i : data._att_vect)
 	{
-		is>>data._att_vect[i];
+		is>>i;
 	}
     is.read(buf,14);
 	buf[14] = '\0';

@@ -94,11 +94,11 @@ std::istream& operator>>(std::istream& is, AlosPalsarPlatformPositionData& data)
   buf[32] = '\0';
   data._orbit_ele_desg = buf;
 
-  for (int i = 0; i < 6; i++)
+  for (double & i : data._orbit_ele)
   {
     is.read(buf, 16);
     buf[16] = '\0';
-    data._orbit_ele[i] = atof(buf);
+    i = atof(buf);
   }
 
   is.read(buf, 4);

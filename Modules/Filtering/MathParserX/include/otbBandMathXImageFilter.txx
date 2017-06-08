@@ -240,11 +240,11 @@ void BandMathXImageFilter<TImage>
   {
     std::ostringstream oss;
     oss << "cat(";
-    for(unsigned int i=0; i < expression.size(); ++i)
-      if (expression[i] == ';')
+    for(char i : expression)
+      if (i == ';')
         oss << ",";
       else
-        oss << expression[i];
+        oss << i;
 
     oss << ")";
     expressionToBePushed = oss.str();
@@ -386,12 +386,12 @@ void BandMathXImageFilter<TImage>
     }
 
   // Sorting : I F M and E
-  for(unsigned int i=0; i<vectI.size(); ++i)
-    vectFinal.push_back(vectI[i]);
-  for(unsigned int i=0; i<vectF.size(); ++i)
-    vectFinal.push_back(vectF[i]);
-  for(unsigned int i=0; i<vectM.size(); ++i)
-    vectFinal.push_back(vectM[i]);
+  for(auto & i : vectI)
+    vectFinal.push_back(i);
+  for(auto & i : vectF)
+    vectFinal.push_back(i);
+  for(auto & i : vectM)
+    vectFinal.push_back(i);
   for(unsigned int i=0; i < m_Expression.size(); ++i)
     {
       std::ostringstream iss;
@@ -403,8 +403,8 @@ void BandMathXImageFilter<TImage>
   std::ofstream exportFile(filename.c_str(), std::ios::out | std::ios::trunc);
   if(exportFile)
     {
-      for(unsigned int i=0; i<vectFinal.size(); ++i)
-        exportFile << vectFinal[i] << std::endl;
+      for(auto & i : vectFinal)
+        exportFile << i << std::endl;
 
       exportFile.close();
     }
@@ -578,12 +578,12 @@ void BandMathXImageFilter<TImage>
       dummyParser->SetExpr(this->GetExpression(IDExpression));
 
       mup::var_maptype vmap = dummyParser->GetExprVar();
-      for (auto item = vmap.begin(); item!=vmap.end(); ++item)
+      for (auto & item : vmap)
       {
         bool OK=false; int i=0;
         while( ( !OK ) && (i < (int) m_VFinalAllowedVarName.size()) )
         {
-          if (item->first == m_VFinalAllowedVarName[i].name)
+          if (item.first == m_VFinalAllowedVarName[i].name)
             OK=true;
           else
             i++;
@@ -592,7 +592,7 @@ void BandMathXImageFilter<TImage>
         if (OK) {AddVariable(m_VFinalAllowedVarName[i]); }
         else {
                 adhocStruct ahc;
-                ahc.name = item->first;
+                ahc.name = item.first;
                 m_VNotAllowedVarName.push_back(ahc);
               }
       }

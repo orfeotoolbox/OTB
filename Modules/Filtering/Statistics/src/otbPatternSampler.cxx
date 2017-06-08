@@ -188,9 +188,9 @@ PatternSampler::ExportPatterns(const ParameterType &param, std::string &data)
   // clear output string
   data.clear();
   // format output patterns
-  for (unsigned int i=0 ; i< param.Pattern1.size() ; ++i)
+  for (bool i : param.Pattern1)
     {
-    if (param.Pattern1[i])
+    if (i)
       {
       data.push_back('1');
       }
@@ -203,9 +203,9 @@ PatternSampler::ExportPatterns(const ParameterType &param, std::string &data)
     {
     data.push_back('/');
     }
-  for (unsigned int i=0 ; i< param.Pattern2.size() ; ++i)
+  for (bool i : param.Pattern2)
     {
-    if (param.Pattern2[i])
+    if (i)
       {
       data.push_back('1');
       }

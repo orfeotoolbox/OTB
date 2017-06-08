@@ -503,11 +503,9 @@ void MapProjectionAdapter::PrintMap() const
 {
   m_MapProjection->print(std::cout);
   std::cout << "Parameter store:\n";
-  for (auto it = m_ParameterStore.begin();
-       it != m_ParameterStore.end();
-       ++it)
+  for (const auto & it : m_ParameterStore)
     {
-    std::cout << "  " << (*it).first << ": " << (*it).second << "\n";
+    std::cout << "  " << it.first << ": " << it.second << "\n";
     }
 }
 

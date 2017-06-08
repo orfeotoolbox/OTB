@@ -453,10 +453,9 @@ ImageFileWriter<TInputImage>
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
-    for (auto i = allobjects.begin();
-         i != allobjects.end(); ++i)
+    for (auto & allobject : allobjects)
       {
-      otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
+      otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(allobject.GetPointer());
       if(io)
         msg << "    " << io->GetNameOfClass() << std::endl;
       }

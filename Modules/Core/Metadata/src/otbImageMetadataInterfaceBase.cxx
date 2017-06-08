@@ -479,32 +479,32 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
 
   MetaDataDictionaryType dict2 = dict;
 
-  for (unsigned int itkey = 0; itkey < keys.size(); ++itkey)
+  for (auto & key : keys)
     {
-    switch (MetaDataKey::GetKeyType(keys[itkey]))
+    switch (MetaDataKey::GetKeyType(key))
       {
       case MetaDataKey::TSTRING:
       {
       std::string              svalue;
-      itk::ExposeMetaData<std::string>(dict2, keys[itkey], svalue);
-      os << indent << "---> " << keys[itkey] << " = " << svalue << std::endl;
+      itk::ExposeMetaData<std::string>(dict2, key, svalue);
+      os << indent << "---> " << key << " = " << svalue << std::endl;
       break;
       }
       case MetaDataKey::TENTIER:
       {
       unsigned int ivalue(0);
-      itk::ExposeMetaData<unsigned int>(dict2, keys[itkey], ivalue);
-      os << indent << "---> " << keys[itkey] << " = " << ivalue << std::endl;
+      itk::ExposeMetaData<unsigned int>(dict2, key, ivalue);
+      os << indent << "---> " << key << " = " << ivalue << std::endl;
       break;
       }
       case MetaDataKey::TVECTOR:
       {
       VectorType vvalue;
-      itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
+      itk::ExposeMetaData<VectorType>(dict2, key, vvalue);
       
       for (i = 0; i < vvalue.size(); ++i)
         {
-        os << indent << "---> " << keys[itkey] << "[" << i << "] = " << vvalue[i] << std::endl;
+        os << indent << "---> " << key << "[" << i << "] = " << vvalue[i] << std::endl;
         }
       vvalue.clear();
       
@@ -513,26 +513,26 @@ ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, 
       case MetaDataKey::TDOUBLE:
       {
       double dvalue(0.0);
-      itk::ExposeMetaData<double>(dict2, keys[itkey], dvalue);
-      os << indent << "---> " << keys[itkey] << " = " << dvalue << std::endl;
+      itk::ExposeMetaData<double>(dict2, key, dvalue);
+      os << indent << "---> " << key << " = " << dvalue << std::endl;
       break;
       }
 
       case MetaDataKey::TOTB_GCP:
       {
       OTB_GCP                  gcpvalue;
-      itk::ExposeMetaData<OTB_GCP>(dict2, keys[itkey], gcpvalue);
+      itk::ExposeMetaData<OTB_GCP>(dict2, key, gcpvalue);
 
-      os << indent << "---> " << keys[itkey] << std::endl;
+      os << indent << "---> " << key << std::endl;
       gcpvalue.Print(os);
       break;
       }
       case MetaDataKey::TOSSIMKEYWORDLIST:
       {
       ImageKeywordlist         kwl;
-      itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], kwl);
+      itk::ExposeMetaData<ImageKeywordlist>(dict2, key, kwl);
       
-      os << indent << "---> " << keys[itkey] << std::endl;
+      os << indent << "---> " << key << std::endl;
       kwl.Print(os);
       break;
       }
@@ -595,9 +595,9 @@ ImageMetadataInterfaceBase
       if (bandNameList.size() > 1)
         {
         os << indent << "BandNameList:        ";
-        for (auto it = bandNameList.begin(); it != bandNameList.end(); ++it)
+        for (auto & it : bandNameList)
           {
-          os << *it << ", ";
+          os << it << ", ";
           }
         os << std::endl;
         }

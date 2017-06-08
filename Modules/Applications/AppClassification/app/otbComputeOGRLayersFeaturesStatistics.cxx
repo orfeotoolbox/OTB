@@ -142,9 +142,9 @@ private:
       MeasurementType stddev; stddev.SetSize(nbFeatures);
 
       for(unsigned int featIt=0; featIt<nbFeatures; featIt++){
-       double sum = 0.0; for(unsigned add=0; add<featValue.size(); add++)  sum += featValue[add][featIt];
+       double sum = 0.0; for(auto & add : featValue)  sum += add[featIt];
        mean[featIt] =  sum / featValue.size();
-       double accum = 0.0; for(unsigned add=0; add<featValue.size(); add++) accum += (featValue[add][featIt] - mean[featIt]) * (featValue[add][featIt] - mean[featIt]);
+       double accum = 0.0; for(auto & add : featValue) accum += (add[featIt] - mean[featIt]) * (add[featIt] - mean[featIt]);
        stddev[featIt] = sqrt(accum / (featValue.size()-1)); }
   
       typedef otb::StatisticsXMLFileWriter<MeasurementType> StatisticsWriter;

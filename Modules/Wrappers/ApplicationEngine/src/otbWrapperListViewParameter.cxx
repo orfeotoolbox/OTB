@@ -167,9 +167,8 @@ ListViewParameter::SetSelectedNames(std::vector<std::string> selectedNames)
     itkExceptionMacro(<<"Single selection mode is on, but there are "<<selectedNames.size()<<" selected items");
     }
   
-  for(unsigned int i=0; i<selectedNames.size(); i++)
+  for(auto selectedName : selectedNames)
     {
-    const std::string selectedName = selectedNames[i];
     unsigned int j(0);
       for(; j<names.size(); j++)
       {

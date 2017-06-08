@@ -234,9 +234,9 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   /*  double xWeight[ImageDimension][ twiceRadius]; */
   std::vector<std::vector<double> > xWeight;
   xWeight.resize(ImageDimension);
-  for (unsigned int cpt = 0; cpt < xWeight.size(); ++cpt)
+  for (auto & cpt : xWeight)
     {
-    xWeight[cpt].resize(twiceRadius);
+    cpt.resize(twiceRadius);
     }
 
   for (unsigned int dim = 0; dim < ImageDimension; ++dim)

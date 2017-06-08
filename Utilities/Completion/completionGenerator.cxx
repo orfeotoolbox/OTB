@@ -54,18 +54,18 @@ int main(int argc, char* argv[])
   std::ofstream ofs;
   ofs.open(output_path.c_str());
   
-  for (unsigned int i=0 ; i < appList.size() ; ++i)
+  for (auto & i : appList)
     {
-    appPtr = otb::Wrapper::ApplicationRegistry::CreateApplication(appList[i],false);
+    appPtr = otb::Wrapper::ApplicationRegistry::CreateApplication(i,false);
     if (appPtr.IsNull())
       {
-      std::cout << "Error loading application "<< appList[i] << std::endl;
+      std::cout << "Error loading application "<< i << std::endl;
       return EXIT_FAILURE;
       }
     std::vector<std::string> keys = appPtr->GetParametersKeys();
     
-    ofs << "# completion for application "<< appList[i] << std::endl;
-    ofs << "_otbcli_"<<appList[i]<<"()" << std::endl;
+    ofs << "# completion for application "<< i << std::endl;
+    ofs << "_otbcli_"<<i<<"()" << std::endl;
     ofs << "{" << std::endl;
     
     ofs << "  local cur prev" << std::endl;
@@ -75,9 +75,9 @@ int main(int argc, char* argv[])
     ofs << "  case \"$cur\" in" << std::endl;
     ofs << "    -*)" << std::endl;
     ofs << "      key_list=\"";
-    for (unsigned int k=0 ; k < keys.size() ; k++ )
+    for (auto & key : keys)
       {
-      ofs << "-" << keys[k] << " ";
+      ofs << "-" << key << " ";
       }
     ofs << "\"" << std::endl;
     ofs << "      COMPREPLY=( $( compgen -W \"$key_list\" -- $cur) )" << std::endl;
@@ -87,21 +87,21 @@ int main(int argc, char* argv[])
 
     // detect choice parameters
     std::vector<std::string> choiceKeys;
-    for (unsigned int k=0 ; k < keys.size() ; k++ )
+    for (auto & key : keys)
       {
-      if ( appPtr->GetParameterType(keys[k]) == otb::Wrapper::ParameterType_Choice)
+      if ( appPtr->GetParameterType(key) == otb::Wrapper::ParameterType_Choice)
         {
-        choiceKeys.push_back(keys[k]);
+        choiceKeys.push_back(key);
         }
       }
     if (choiceKeys.size())
       {
       ofs << "  case \"$prev\" in" << std::endl;
-      for (unsigned int k=0 ; k < choiceKeys.size() ; k++)
+      for (auto & choiceKey : choiceKeys)
         {
-        ofs << "    -" << choiceKeys[k] << ")" << std::endl;
+        ofs << "    -" << choiceKey << ")" << std::endl;
         ofs << "      key_list=\"";
-        std::vector<std::string> choices = dynamic_cast<otb::Wrapper::ChoiceParameter*>(appPtr->GetParameterByKey(choiceKeys[k]))->GetChoiceKeys();
+        std::vector<std::string> choices = dynamic_cast<otb::Wrapper::ChoiceParameter*>(appPtr->GetParameterByKey(choiceKey))->GetChoiceKeys();
         for (unsigned int j=0 ; j < choices.size() ; j++)
           {
           ofs << choices[j];
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
 
     ofs << "  return 0" << std::endl;
     ofs << "}" << std::endl;
-    ofs << "complete -o default -F _otbcli_" << appList[i] << " otbcli_"<< appList[i] << std::endl;
+    ofs << "complete -o default -F _otbcli_" << i << " otbcli_"<< i << std::endl;
     }
   ofs.close();
 

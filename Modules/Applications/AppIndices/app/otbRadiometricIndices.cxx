@@ -431,9 +431,9 @@ private:
     m_Map.push_back(s_BI2);
 
     ClearChoices("list");
-    for ( unsigned int i=0; i<m_Map.size(); i++ )
+    for (auto & i : m_Map)
       {
-      AddChoice(m_Map[i].key, m_Map[i].item);
+      AddChoice(i.key, i.item);
       //SetParameterDescription(m_Map[i].item, m_Map[i].description);
       }
   }

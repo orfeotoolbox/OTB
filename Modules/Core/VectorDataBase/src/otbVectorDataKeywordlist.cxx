@@ -44,13 +44,13 @@ VectorDataKeywordlist
 VectorDataKeywordlist
 ::~VectorDataKeywordlist()
 {
-  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  for (auto & i : m_FieldList)
     {
-    if (m_FieldList[i].first->GetType() == OFTString)
+    if (i.first->GetType() == OFTString)
       {
-      VSIFree(m_FieldList[i].second.String);
+      VSIFree(i.second.String);
       }
-    delete (m_FieldList[i].first);
+    delete (i.first);
     }
 }
 
@@ -90,40 +90,40 @@ std::string
 VectorDataKeywordlist
 ::GetFieldAsString(const std::string& key) const
 {
-  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  for (const auto & i : m_FieldList)
     {
-    if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+    if (key.compare(i.first->GetNameRef()) == 0)
       {
-      switch(m_FieldList[i].first->GetType())
+      switch(i.first->GetType())
         {
         case OFTString:
         {
-        return m_FieldList[i].second.String;
+        return i.second.String;
         }
         case OFTInteger:
         {
         std::ostringstream ss;
-        ss << std::setprecision(15) << m_FieldList[i].second.Integer;
+        ss << std::setprecision(15) << i.second.Integer;
         return ss.str();
         }
 #ifdef OTB_USE_GDAL_20
         case OFTInteger64:
         {
         std::ostringstream ss;
-        ss << std::setprecision(15) << m_FieldList[i].second.Integer64;
+        ss << std::setprecision(15) << i.second.Integer64;
         return ss.str();
         }
 #endif     
         case OFTReal:
         {
         std::ostringstream ss;
-        ss << std::setprecision(15) << m_FieldList[i].second.Real;
+        ss << std::setprecision(15) << i.second.Real;
         return ss.str();
         }
         default:
         {
         itkExceptionMacro(
-          << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
+          << "Type of field " << i.first->GetNameRef() << " (" << i.first->GetType() <<
           ") is not handled (yet) by GetFieldAsString(), please request for it");
         }
         }
@@ -136,23 +136,23 @@ double
 VectorDataKeywordlist
 ::GetFieldAsDouble(const std::string& key) const
 {
-  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  for (const auto & i : m_FieldList)
       {
-      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+      if (key.compare(i.first->GetNameRef()) == 0)
         {
-        switch (m_FieldList[i].first->GetType())
+        switch (i.first->GetType())
           {
           case OFTInteger:
           {
-          return (double)(m_FieldList[i].second.Integer);
+          return (double)(i.second.Integer);
           }
           case OFTReal:
           {
-          return (double)(m_FieldList[i].second.Real);
+          return (double)(i.second.Real);
           }
           case OFTString:
           {
-          std::istringstream is(m_FieldList[i].second.String);
+          std::istringstream is(i.second.String);
           double value;
           is >> value;
           return value;
@@ -160,7 +160,7 @@ VectorDataKeywordlist
           default:
           {
            itkExceptionMacro(
-             << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
+             << "Type of field " << i.first->GetNameRef() << " (" << i.first->GetType() <<
              ") is not handled (yet) by GetFieldAsDouble(), please request for it");
           }
           }
@@ -173,15 +173,15 @@ int
 VectorDataKeywordlist
 ::GetFieldAsInt(const std::string& key) const
 {
-  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  for (const auto & i : m_FieldList)
       {
-      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+      if (key.compare(i.first->GetNameRef()) == 0)
         {
-        switch(m_FieldList[i].first->GetType())
+        switch(i.first->GetType())
           {
           case OFTInteger:
           {
-        return (int)(m_FieldList[i].second.Integer);
+        return (int)(i.second.Integer);
         }
 #ifdef OTB_USE_GDAL_20
         // Some fields that were OFTInteger with gdal 1.x are now
@@ -190,21 +190,21 @@ VectorDataKeywordlist
         // and only if no overflow occur).
         case OFTInteger64:
           {
-          if(m_FieldList[i].second.Integer64 > itk::NumericTraits<int>::max())
+          if(i.second.Integer64 > itk::NumericTraits<int>::max())
             {
-            itkExceptionMacro(<<"value "<<m_FieldList[i].second.Integer64<<" of field "<<m_FieldList[i].first->GetNameRef()<<" can not be safely casted to 32 bits integer");
+            itkExceptionMacro(<<"value "<<i.second.Integer64<<" of field "<<i.first->GetNameRef()<<" can not be safely casted to 32 bits integer");
             }
           
-          return static_cast<int>(m_FieldList[i].second.Integer64);
+          return static_cast<int>(i.second.Integer64);
           }
 #endif    
         case OFTReal:
           {
-          return (int)(m_FieldList[i].second.Real);
+          return (int)(i.second.Real);
           }
         case OFTString:
           {
-          std::istringstream is(m_FieldList[i].second.String);
+          std::istringstream is(i.second.String);
           int value;
           is >> value;
           return value;
@@ -212,7 +212,7 @@ VectorDataKeywordlist
         default:
         {
         itkExceptionMacro(
-          << "Type of field " << m_FieldList[i].first->GetNameRef() << " (" << m_FieldList[i].first->GetType() <<
+          << "Type of field " << i.first->GetNameRef() << " (" << i.first->GetType() <<
           ") is not handled (yet) by GetFieldAsInt(), please request for it");
         }
         }
@@ -227,15 +227,15 @@ VectorDataKeywordlist
 {
   if (HasField(key))
       {
-      for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+      for (auto & i : m_FieldList)
         {
-        if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+        if (key.compare(i.first->GetNameRef()) == 0)
           {
-          if (m_FieldList[i].first->GetType() == OFTReal)
+          if (i.first->GetType() == OFTReal)
             {
             OGRField field;
             field.Real = value;
-            m_FieldList[i].second = field;
+            i.second = field;
             }
           else
             {
@@ -264,22 +264,22 @@ VectorDataKeywordlist
 {
   if (HasField(key))
     {
-    for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+    for (auto & i : m_FieldList)
       {
-      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+      if (key.compare(i.first->GetNameRef()) == 0)
         {
-        if (m_FieldList[i].first->GetType() == OFTInteger)
+        if (i.first->GetType() == OFTInteger)
           {
           OGRField field;
           field.Integer = value;
-          m_FieldList[i].second = field;
+          i.second = field;
           }
         else
-          if (m_FieldList[i].first->GetType() == OFTReal)
+          if (i.first->GetType() == OFTReal)
             {
             OGRField field;
             field.Real = static_cast<double>(value);
-            m_FieldList[i].second = field;
+            i.second = field;
             }
           else
             {
@@ -305,9 +305,9 @@ bool
 VectorDataKeywordlist
 ::HasField(const std::string& key) const
 {
-  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  for (const auto & i : m_FieldList)
     {
-    if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+    if (key.compare(i.first->GetNameRef()) == 0)
       {
       return true;
       }
@@ -321,17 +321,17 @@ VectorDataKeywordlist
 {
   if (HasField(key))
     {
-    for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+    for (auto & i : m_FieldList)
       {
-      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+      if (key.compare(i.first->GetNameRef()) == 0)
         {
-        if (m_FieldList[i].first->GetType() == OFTString)
+        if (i.first->GetType() == OFTString)
           {
           OGRField field;
           char *   cstr = (char*)VSIMalloc( (value.length() + 1) * sizeof(char) );
           strcpy(cstr, value.c_str());
           field.String = cstr;
-          m_FieldList[i].second = field;
+          i.second = field;
           }
         else
           {
@@ -369,9 +369,9 @@ VectorDataKeywordlist
 ::GetFieldList() const
 {
   std::vector<std::string> res;
-  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  for (const auto & i : m_FieldList)
     {
-    res.push_back((m_FieldList[i].first)->GetNameRef());
+    res.push_back((i.first)->GetNameRef());
     }
   return res;
 }
@@ -380,9 +380,9 @@ void
 VectorDataKeywordlist
 ::operator =(const Self& p)
 {
-  for (unsigned int i = 0; i < p.m_FieldList.size(); ++i)
+  for (const auto & i : p.m_FieldList)
     {
-    m_FieldList.push_back(CopyOgrField(p.m_FieldList[i]));
+    m_FieldList.push_back(CopyOgrField(i));
     }
 }
 
@@ -399,9 +399,9 @@ VectorDataKeywordlist
 {
   os << indent << " VectorData Keyword list: ";
   os << indent << " - Size: " << m_FieldList.size() << std::endl;
-  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  for (const auto & i : m_FieldList)
     {
-    os << indent << "    " << PrintField(m_FieldList[i]);
+    os << indent << "    " << PrintField(i);
     }
 }
 

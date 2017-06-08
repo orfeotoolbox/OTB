@@ -45,9 +45,9 @@ FilterFunctionValues
   // It is anticipated that this method won't be called much and that
   // the cost will be negligible compared to the rest of the processing
   WavelengthSpectralBandType total = 0;
-  for (unsigned int i = 0; i < m_FilterFunctionValues6S.size(); ++i)
+  for (float i : m_FilterFunctionValues6S)
     {
-    total += m_FilterFunctionValues6S[i];
+    total += i;
     }
   unsigned int centerIndex = 0;
   WavelengthSpectralBandType total2 = 0;

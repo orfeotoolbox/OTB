@@ -174,10 +174,10 @@ private:
       {
       otbAppLogINFO(" Key : "<< (*it).first<< " value : ");
       std::ostringstream oss;
-      for(unsigned int i = 0; i < (*it).second.size(); i++)
+      for(auto & i : (*it).second)
         {
         oss.str();
-        oss << ((*it).second[i]) << " ";
+        oss << i << " ";
         }
       otbAppLogINFO( << oss.str() );
       ++it;

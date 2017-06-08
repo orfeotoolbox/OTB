@@ -79,14 +79,14 @@ void
 FuzzyDescriptorsModelManager
 ::Print( const DescriptorsModelType & descModel )
 {
-  for(unsigned int i=0; i<descModel.size(); ++i)
+  for(const auto & i : descModel)
     {
-      std::cout<<"Descriptor "<<descModel[i].first<<" parameters:" <<std::endl;
-      const ParameterType & param = descModel[i].second;
+      std::cout<<"Descriptor "<<i.first<<" parameters:" <<std::endl;
+      const ParameterType & param = i.second;
 
-      for(unsigned int j=0; j<param.size(); ++j)
+      for(double j : param)
         {
-          std::cout<<param[j]<<"  ";
+          std::cout<<j<<"  ";
         }
       std::cout<<std::endl;
     }
@@ -184,20 +184,20 @@ FuzzyDescriptorsModelManager
   doc.LinkEndChild( root );
 
   // Iterate through the input
-  for (unsigned int i = 0; i < model.size(); ++i)
+  for (auto & i : model)
     {
       // The current statistic
       auto * desc = new TiXmlElement("Descriptor");
-      desc->SetAttribute("name", model[i].first.c_str());
+      desc->SetAttribute("name", i.first.c_str());
       root->LinkEndChild( desc );
 
-      ParameterType param = model[i].second;
+      ParameterType param = i.second;
       // Store the value for this statistic
-      for(unsigned int cindex = 0; cindex < param.size(); ++cindex)
+      for(double cindex : param)
         {
           // For each value in Measurementvector
           auto * curStatisticVector = new TiXmlElement("Parameter");
-          curStatisticVector->SetDoubleAttribute("value", param[cindex]);
+          curStatisticVector->SetDoubleAttribute("value", cindex);
           desc->LinkEndChild(curStatisticVector);
         }
     }

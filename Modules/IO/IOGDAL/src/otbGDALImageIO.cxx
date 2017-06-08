@@ -1024,8 +1024,8 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (dataset->GetGeoTransform(adfGeoTransform) == CE_None)
     {
-    for (int cpt = 0; cpt < 6; ++cpt)
-      VadfGeoTransform.push_back(adfGeoTransform[cpt]);
+    for (double & cpt : adfGeoTransform)
+      VadfGeoTransform.push_back(cpt);
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
 
@@ -1790,12 +1790,12 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   std::vector<std::string>   keys = dict.GetKeys();
   std::string const   metadataKey = MetaDataKey::MetadataKey;
 
-  for (unsigned int itkey = 0; itkey < keys.size(); ++itkey)
+  for (auto & key : keys)
     {
     /// \todo Why not <tt>keys[itkey] == MetadataKey::MetadataKey</tt> ?
-    if (keys[itkey].compare(0, metadataKey.length(), metadataKey) == 0)
+    if (key.compare(0, metadataKey.length(), metadataKey) == 0)
       {
-      itk::ExposeMetaData<std::string>(dict, keys[itkey], svalue);
+      itk::ExposeMetaData<std::string>(dict, key, svalue);
       unsigned int equalityPos = svalue.find_first_of('=');
       std::string  tag = svalue.substr(0, equalityPos);
       std::string  value = svalue.substr(equalityPos + 1);

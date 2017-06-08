@@ -313,14 +313,14 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
     }
 
 // Check that all required arguments are specified
-  for (unsigned int cpt = 0; cpt < m_OptionList.size(); ++cpt)
+  for (auto & cpt : m_OptionList)
     {
-    if ((m_OptionList[cpt].Obligatory == true) && (m_OptionList[cpt].Finded == false))
+    if ((cpt.Obligatory == true) && (cpt.Finded == false))
       {
       // Too few parameters
       if (reportFailedMsg == true)
         {
-        std::cerr << "'" << m_OptionList[cpt].CommonName << "' argument is required !!!" << std::endl;
+        std::cerr << "'" << cpt.CommonName << "' argument is required !!!" << std::endl;
         }
       return false;
       }

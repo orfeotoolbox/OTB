@@ -91,11 +91,11 @@ std::istream& operator>>(std::istream& is, PlatformPositionData& data)
 	buf[32] = '\0';
 	data._orbit_ele_desg = buf;
 
-	for(int i=0;i<6;i++)
+	for(double & i : data._orbit_ele)
 	{
 		is.read(buf,16);
 		buf[16] = '\0';
-		data._orbit_ele[i] = atof(buf);
+		i = atof(buf);
 	}
 
 	is.read(buf,4);
@@ -158,9 +158,9 @@ std::istream& operator>>(std::istream& is, PlatformPositionData& data)
 	buf[16] = '\0';
 	data._rad_velerr = atof(buf);
 
-	for (int i=0;i<64;i++)
+	for (auto & i : data._pos_vect)
 	{
-		is>>data._pos_vect[i];
+		is>>i;
 	}
 
     is.read(buf,126);

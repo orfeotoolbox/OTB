@@ -141,8 +141,8 @@ public:
       }
 
 	entropy = 0.0;
-	for (unsigned int k = 0; k < 3; ++k)
-			entropy += plog[k];
+	for (double k : plog)
+			entropy += k;
 
     // alpha estimation
     double val0, val1, val2;

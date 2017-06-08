@@ -58,9 +58,9 @@ public:
   void SetValue(StringListType sList)
   {
     m_Value.clear();
-    for(unsigned int i=0; i<sList.size(); i++)
+    for(auto & i : sList)
       {
-      this->AddString(sList[i]);
+      this->AddString(i);
       }
   }
 

@@ -240,14 +240,14 @@ private:
         {
         std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.constant.nb"),' ');
         std::vector<unsigned long> countList;
-        for (unsigned int i=0 ; i<parts.size() ; i++)
+        for (auto & part : parts)
           {
-          if (!parts[i].empty())
+          if (!part.empty())
             {
-            std::string::size_type pos1 = parts[i].find_first_not_of(" \t");
-            std::string::size_type pos2 = parts[i].find_last_not_of(" \t");
-            std::string value(parts[i].substr(pos1, pos2 - pos1 + 1));
-            countList.push_back(boost::lexical_cast<unsigned long>(parts[i]));
+            std::string::size_type pos1 = part.find_first_not_of(" \t");
+            std::string::size_type pos2 = part.find_last_not_of(" \t");
+            std::string value(part.substr(pos1, pos2 - pos1 + 1));
+            countList.push_back(boost::lexical_cast<unsigned long>(part));
             }
           }
         if (countList.size() < minParamSize)
@@ -270,14 +270,14 @@ private:
         {
         std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.percent.p"),' ');
         std::vector<double> percentList;
-        for (unsigned int i=0 ; i<parts.size() ; i++)
+        for (auto & part : parts)
           {
-          if (!parts[i].empty())
+          if (!part.empty())
             {
-            std::string::size_type pos1 = parts[i].find_first_not_of(" \t");
-            std::string::size_type pos2 = parts[i].find_last_not_of(" \t");
-            std::string value(parts[i].substr(pos1, pos2 - pos1 + 1));
-            percentList.push_back(boost::lexical_cast<double>(parts[i]));
+            std::string::size_type pos1 = part.find_first_not_of(" \t");
+            std::string::size_type pos2 = part.find_last_not_of(" \t");
+            std::string value(part.substr(pos1, pos2 - pos1 + 1));
+            percentList.push_back(boost::lexical_cast<double>(part));
 
             if(percentList.back()<0 || percentList.back()>1)
               {
@@ -299,14 +299,14 @@ private:
         {
         std::vector<itksys::String> parts = itksys::SystemTools::SplitString(this->GetParameterString("strategy.total.v"),' ');
         std::vector<unsigned long> totalList;
-        for (unsigned int i=0 ; i<parts.size() ; i++)
+        for (auto & part : parts)
           {
-          if (!parts[i].empty())
+          if (!part.empty())
             {
-            std::string::size_type pos1 = parts[i].find_first_not_of(" \t");
-            std::string::size_type pos2 = parts[i].find_last_not_of(" \t");
-            std::string value(parts[i].substr(pos1, pos2 - pos1 + 1));
-            totalList.push_back(boost::lexical_cast<unsigned long>(parts[i]));
+            std::string::size_type pos1 = part.find_first_not_of(" \t");
+            std::string::size_type pos2 = part.find_last_not_of(" \t");
+            std::string value(part.substr(pos1, pos2 - pos1 + 1));
+            totalList.push_back(boost::lexical_cast<unsigned long>(part));
             }
           }
         if (totalList.size() < minParamSize)

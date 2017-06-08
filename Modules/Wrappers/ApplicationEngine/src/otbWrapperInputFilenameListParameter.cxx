@@ -44,9 +44,8 @@ InputFilenameListParameter::SetListFromFileName(const std::vector<std::string> &
   this->ClearValue();
 
   bool isOk = true;
-  for(unsigned int i=0; i<filenames.size(); i++)
+  for(auto filename : filenames)
     {
-    std::string filename = filenames[i];
     // TODO : when the logger will be available, redirect the exception
     // in the logger (like what is done in MsgReporter)
     // File existence checked by the reader

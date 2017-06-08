@@ -471,10 +471,9 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     bool ignoreCurrentLineTest = false;
     if (ignoredLines.size() > 0)
       {
-      for (auto itIgnoredLines = ignoredLines.begin();
-           itIgnoredLines != ignoredLines.end(); ++itIgnoredLines)
+      for (auto & ignoredLine : ignoredLines)
         {
-        std::string            ignoredLinesAscii = (*itIgnoredLines);
+        std::string            ignoredLinesAscii = ignoredLine;
         std::string::size_type loc = strfileref.find(ignoredLinesAscii);
         if (loc != std::string::npos)
           {
@@ -875,16 +874,16 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
             else
               {
               // test for special tokens
-              for (unsigned int j=0 ; j<m_SpecialTokens.size() ; j++)
+              for (const auto & m_SpecialToken : m_SpecialTokens)
                 {
                 if (curLineRef.compare(
                       tokenRef[i].begin() - curLineRef.begin(),
                       tokenRef[i].size(),
-                      m_SpecialTokens[j].first) == 0 &&
+                      m_SpecialToken.first) == 0 &&
                     curLineTest.compare(
                       tokenTest[i].begin() - curLineTest.begin(),
                       tokenTest[i].size(),
-                      m_SpecialTokens[j].second) == 0)
+                      m_SpecialToken.second) == 0)
                   {
                   areTokensEquivalent = true;
                   break;
@@ -1024,9 +1023,9 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
             }
           // record the token
           bool isTokenEquivalent = true;
-          for (unsigned int t=0 ; t < differencesPosSelected.size() ; t++)
+          for (unsigned int t : differencesPosSelected)
             {
-            if (k == differencesPosSelected[t])
+            if (k == t)
               {
               isTokenEquivalent = false;
               break;
@@ -1123,9 +1122,9 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
     std::cout << "Tolerance max check : " << m_EpsilonBoundaryChecking << std::endl;
     std::cout << "Nb lines different : " << nbdiff << std::endl;
     
-    for (unsigned int i=0 ; i<listStrDiffLineFile.size() ; i++)
+    for (auto & i : listStrDiffLineFile)
       {
-      std::cout << listStrDiffLineFile[i] << std::endl;
+      std::cout << i << std::endl;
       }
     }
   
@@ -1205,9 +1204,9 @@ bool TestHelper::IsLineValid(const std::string& str, const StringList &ignoredLi
     }
   else
     {
-    for (unsigned int i=0 ; i<ignoredLines.size() ; i++)
+    for (const auto & ignoredLine : ignoredLines)
       {
-      if (str.find(ignoredLines[i]) != std::string::npos)
+      if (str.find(ignoredLine) != std::string::npos)
         {
         ret = false;
         break;

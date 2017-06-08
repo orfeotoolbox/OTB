@@ -108,11 +108,11 @@ std::istream& operator>>(std::istream& is, RadiometricData& data)
 	buf[4] = '\0';
 	data._samp_inc = atoi(buf);
 
-	for (int i=0;i<512;i++)
+	for (double & i : data._lookup_tab)
 	{
 		is.read(buf,16);
 		buf[16] = '\0';
-		data._lookup_tab[i] = atof(buf);
+		i = atof(buf);
 	}
 
     is.read(buf,4);

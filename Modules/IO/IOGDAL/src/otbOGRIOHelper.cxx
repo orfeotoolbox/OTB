@@ -664,9 +664,9 @@ unsigned int OGRIOHelper
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for (auto it = children.begin(); it != children.end(); ++it)
+  for (auto & it : children)
     {
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = it->Get();
     //otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
     ++kept;
 
@@ -724,12 +724,12 @@ unsigned int OGRIOHelper
         // New OGRLayer, set the flag to false
         fieldsAddedToOGRLayer = false;
         }
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+      ProcessNodeWrite(it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       case FOLDER:
       {
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+      ProcessNodeWrite(it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_POINT:
@@ -939,7 +939,7 @@ unsigned int OGRIOHelper
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
 
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+      ProcessNodeWrite(it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_MULTILINE:
@@ -964,7 +964,7 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+      ProcessNodeWrite(it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_MULTIPOLYGON:
@@ -987,7 +987,7 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+      ProcessNodeWrite(it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_COLLECTION:
@@ -1012,7 +1012,7 @@ unsigned int OGRIOHelper
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
 
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+      ProcessNodeWrite(it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       }
@@ -1049,9 +1049,9 @@ std::vector<OGRLayer*> OGRIOHelper
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for (auto it = children.begin(); it != children.end(); ++it)
+  for (auto & it : children)
     {
-    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType dataNode = it->Get();
 
     // Get the kwl
     otb::VectorDataKeywordlist kwl;
@@ -1102,12 +1102,12 @@ std::vector<OGRLayer*> OGRIOHelper
         fieldsAddedToOGRLayer = false;
         }
       ogrLayerVector.push_back(ogrCurrentLayer);
-      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      ConvertDataTreeNodeToOGRLayers(it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
       }
       case FOLDER:
       {
-      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      ConvertDataTreeNodeToOGRLayers(it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_POINT:
@@ -1278,7 +1278,7 @@ std::vector<OGRLayer*> OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      ConvertDataTreeNodeToOGRLayers(it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_MULTILINE:
@@ -1297,7 +1297,7 @@ std::vector<OGRLayer*> OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      ConvertDataTreeNodeToOGRLayers(it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_MULTIPOLYGON:
@@ -1314,7 +1314,7 @@ std::vector<OGRLayer*> OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      ConvertDataTreeNodeToOGRLayers(it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_COLLECTION:
@@ -1332,7 +1332,7 @@ std::vector<OGRLayer*> OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
+      ConvertDataTreeNodeToOGRLayers(it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
       }
       }

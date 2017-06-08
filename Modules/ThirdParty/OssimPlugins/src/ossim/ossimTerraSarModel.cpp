@@ -1387,13 +1387,13 @@ bool ossimplugins::ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
    xdoc->findNodes(path, xnodes);
    if ( xnodes.size() )
    {
-      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      for (auto & xnode : xnodes)
       {
-         if (xnodes[i].valid())
+         if (xnode.valid())
          {
-            xnodes[i]->getAttributeValue(s, EXP);
+            xnode->getAttributeValue(s, EXP);
             _SrToGr_exponent.push_back(s.toInt32());
-            _SrToGr_coeffs.push_back(xnodes[i]->getText().toDouble());
+            _SrToGr_coeffs.push_back(xnode->getText().toDouble());
          }
       }
    }

@@ -371,20 +371,20 @@ void TrainImagesBase::SplitTrainingAndValidationSamples(FloatVectorImageType *im
   MapRateType trainRates;
   MapRateType validRates;
   otb::SamplingRateCalculator::TripletType tpt;
-  for( auto it = inputRates.begin(); it != inputRates.end(); ++it )
+  for(const auto & inputRate : inputRates)
     {
     double vtr = GetParameterFloat( "sample.vtr" );
-    unsigned long total = std::min( it->second.Required, it->second.Tot );
+    unsigned long total = std::min( inputRate.second.Required, inputRate.second.Tot );
     unsigned long neededValid = static_cast<unsigned long>(( double ) total * vtr );
     unsigned long neededTrain = total - neededValid;
     tpt.Tot = total;
     tpt.Required = neededTrain;
     tpt.Rate = ( 1.0 - vtr );
-    trainRates[it->first] = tpt;
+    trainRates[inputRate.first] = tpt;
     tpt.Tot = neededValid;
     tpt.Required = neededValid;
     tpt.Rate = 1.0;
-    validRates[it->first] = tpt;
+    validRates[inputRate.first] = tpt;
     }
 
   // Use an otb::OGRDataToSamplePositionFilter with 2 outputs

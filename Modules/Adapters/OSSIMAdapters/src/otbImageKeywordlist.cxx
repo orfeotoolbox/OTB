@@ -332,13 +332,11 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
     if (!hasMetaData && rpc_kwl.GetSize() > 0)
       {
       const ImageKeywordlist::KeywordlistMap &kwlMap = rpc_kwl.GetKeywordlist();
-      for (auto it = kwlMap.begin();
-          it != kwlMap.end();
-          ++it)
+      for (const auto & it : kwlMap)
         {
-        if (it->second != "")
+        if (it.second != "")
           {
-          otb_kwl.AddKey(it->first , it->second);
+          otb_kwl.AddKey(it.first , it.second);
           }
         }
       hasMetaData = true;

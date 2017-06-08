@@ -44,8 +44,8 @@ namespace ossimplugins
 
       os<<"swath:"<<data._swath.c_str()<<std::endl;
 
-      for (int i = 0; i<33; i++) {
-         os<<"elevation pattern:"<<data._elevation_pattern[i]<<std::endl;
+      for (float i : data._elevation_pattern) {
+         os<<"elevation pattern:"<<i<<std::endl;
       }
 
       return os;
@@ -72,9 +72,9 @@ namespace ossimplugins
       is.read(buf3,3);
       data._swath = buf3;
 
-      for (int i = 0; i<33; i++) {
-         is.read((char*)&(data._elevation_pattern[i]),4);
-         data.SwitchEndian(data._elevation_pattern[i]);
+      for (float & i : data._elevation_pattern) {
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
 
       is.read(buf16,14);

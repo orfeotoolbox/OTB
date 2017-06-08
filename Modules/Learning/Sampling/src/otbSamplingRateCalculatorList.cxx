@@ -368,9 +368,9 @@ SamplingRateCalculatorList
         // Compute the total number of samples for image i
         const MapRateType & rates = this->GetNthElement(i)->GetRatesByClass();
       
-        for(auto it = rates.begin();it!=rates.end();++it)
+        for(const auto & rate : rates)
           {
-          nb_samples[i]+=it->second.Tot;
+          nb_samples[i]+=rate.second.Tot;
           }
 
         total_nb_samples+=nb_samples[i];

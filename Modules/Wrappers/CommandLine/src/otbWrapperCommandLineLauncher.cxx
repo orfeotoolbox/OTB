@@ -76,10 +76,10 @@ CommandLineLauncher::~CommandLineLauncher()
 
 void CommandLineLauncher::DeleteWatcherList()
 {
-  for (unsigned int i = 0; i < m_WatcherList.size(); i++)
+  for (auto & i : m_WatcherList)
     {
-    delete m_WatcherList[i];
-    m_WatcherList[i] = ITK_NULLPTR;
+    delete i;
+    i = ITK_NULLPTR;
     }
   m_WatcherList.clear();
 }
@@ -287,9 +287,9 @@ bool CommandLineLauncher::LoadPath()
   //if (m_Parser->GetPaths(pathList, m_Expression) == CommandLineParser::OK)
   if (m_Parser->GetPaths(pathList, m_VExpression) == CommandLineParser::OK)
     {
-    for (unsigned i = 0; i < pathList.size(); i++)
+    for (auto & i : pathList)
       {
-      ApplicationRegistry::AddApplicationPath(pathList[i]);
+      ApplicationRegistry::AddApplicationPath(i);
       }
     }
   else
@@ -370,9 +370,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   // Loop over each parameter key declared in the application
   // FIRST PASS : set parameter values
-  for (unsigned int i = 0; i < appKeyList.size(); i++)
+  for (auto paramKey : appKeyList)
     {
-    const std::string paramKey(appKeyList[i]);
     std::vector<std::string> values;
 
     Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
@@ -564,9 +563,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     }
 
   // SECOND PASS : check mandatory parameters
-  for (unsigned int i = 0; i < appKeyList.size(); i++)
+  for (auto paramKey : appKeyList)
     {
-    const std::string paramKey(appKeyList[i]);
     Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
     ParameterType type = m_Application->GetParameterType(paramKey);
     const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression));
@@ -940,9 +938,9 @@ bool CommandLineLauncher::CheckUnicity()
     std::vector<std::string> listTmp = keyList;
     const std::string keyRef = keyList[i];
     listTmp.erase(listTmp.begin() + i);
-    for (unsigned int j = 0; j < listTmp.size(); j++)
+    for (auto & j : listTmp)
       {
-      if (keyRef == listTmp[j])
+      if (keyRef == j)
         {
         res = false;
         break;
@@ -958,9 +956,9 @@ bool CommandLineLauncher::CheckUnicity()
 bool CommandLineLauncher::CheckParametersPrefix()
 {
   // Check if the chain " --" appears in the args, could be a common mistake
-  for (auto it = m_VExpression.begin(); it != m_VExpression.end(); ++it)
+  for (auto & it : m_VExpression)
     {
-    if (it->compare(0, 2, "--") == 0 )
+    if (it.compare(0, 2, "--") == 0 )
       {
       return false;
       }
@@ -982,13 +980,13 @@ bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
   appKeyList.push_back("version");
 
   // Check if each key in the expression exists in the application
-  for (unsigned int i = 0; i < expKeyList.size(); i++)
+  for (auto & i : expKeyList)
     {
-    refKey = expKeyList[i];
+    refKey = i;
     bool keyExist = false;
-    for (unsigned int j = 0; j < appKeyList.size(); j++)
+    for (auto & j : appKeyList)
       {
-      if (refKey == appKeyList[j])
+      if (refKey == j)
         {
         keyExist = true;
         break;
@@ -1012,11 +1010,11 @@ void CommandLineLauncher::DisplayOutputParameters()
     return;
 
   std::ostringstream oss;
-  for( unsigned int i=0; i<paramList.size(); i++)
+  for(auto & i : paramList)
     {
-    oss << paramList[i].first;
+    oss << i.first;
     oss << ": ";
-    oss << paramList[i].second;
+    oss << i.second;
     oss << std::endl;
     }
 

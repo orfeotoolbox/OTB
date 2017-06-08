@@ -159,14 +159,13 @@ namespace ossimplugins
       unsigned int burstId(0);
       char burstPrefix[1024];
       
-      for(auto burstIt = theBurstRecords.begin();
-          burstIt!=theBurstRecords.end();++burstIt)
+      for(const auto & theBurstRecord : theBurstRecords)
         {
         s_printf(burstPrefix, "%s[%d].", BURST_PREFIX.c_str(), burstId);
-        add(kwl,burstPrefix+keyStartLine,(ossim_uint32)burstIt->startLine);
-        add(kwl,burstPrefix+keyEndLine,(ossim_uint32)burstIt->endLine);
-        add(kwl,burstPrefix+keyAzimuthStartTime,burstIt->azimuthStartTime);
-        add(kwl,burstPrefix+keyAzimuthStopTime,burstIt->azimuthStopTime);
+        add(kwl,burstPrefix+keyStartLine,(ossim_uint32)theBurstRecord.startLine);
+        add(kwl,burstPrefix+keyEndLine,(ossim_uint32)theBurstRecord.endLine);
+        add(kwl,burstPrefix+keyAzimuthStartTime,theBurstRecord.azimuthStartTime);
+        add(kwl,burstPrefix+keyAzimuthStopTime,theBurstRecord.azimuthStopTime);
         ++burstId;
         }
       

@@ -252,9 +252,9 @@ OSMDataToVectorDataGenerator::AddKeyTypeToMap(const std::string& key, const std:
     bool found = false;
 
     // Add the type if not present
-    for(unsigned int i = 0; i < currentTypes.size(); ++i)
+    for(auto & currentType : currentTypes)
       {
-      if(currentTypes[i].compare(value)  == 0)
+      if(currentType.compare(value)  == 0)
         found = true;
       }
     // if the value was not found add it the currentypes vector
@@ -294,16 +294,16 @@ OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, const st
   m_OutputVectorData->GetDataTree()->Add(folder, document);
 
   // Form the vector data with the values parsed
-  for(unsigned int idx = 0; idx < m_VectorDataElementList.size(); ++idx)
+  for(auto & idx : m_VectorDataElementList)
     {
     // Instantiate a datanode
     DataNodeType::Pointer currentDataNode = DataNodeType::New();
 
     // Get the current PointTypeList
-    PointTypeList   currentPointList = m_VectorDataElementList[idx].second;
+    PointTypeList   currentPointList = idx.second;
 
     // Get the current ElementPairList
-    ElementPairType  elementPair    = m_VectorDataElementList[idx].first;
+    ElementPairType  elementPair    = idx.first;
 
     // Add it to the vector data only if the requested key matches to
     // elementPair key
@@ -322,18 +322,18 @@ OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, const st
           currentDataNode->SetNodeId("FEATURE_POLYGON");
           currentDataNode->SetNodeType(otb::FEATURE_POLYGON);
           PolygonType::Pointer polygon = PolygonType::New();
-          for(unsigned int curVertexId = 0; curVertexId< currentPointList.size(); curVertexId++)
+          for(auto & curVertexId : currentPointList)
             {
-            polygon->AddVertex(currentPointList[curVertexId]);
+            polygon->AddVertex(curVertexId);
             }
           currentDataNode->SetPolygonExteriorRing(polygon);
           }
         else  // line
           {
           LineType::Pointer currentLine = LineType::New();
-          for(unsigned int curVertexId = 0; curVertexId< currentPointList.size(); curVertexId++)
+          for(auto & curVertexId : currentPointList)
             {
-            currentLine->AddVertex(currentPointList[curVertexId]);
+            currentLine->AddVertex(curVertexId);
             }
           currentDataNode->SetNodeId("FEATURE_LINE");
           currentDataNode->SetNodeType(otb::FEATURE_LINE);
@@ -399,8 +399,8 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(const std::string& key, const 
 bool
 OSMDataToVectorDataGenerator::IsKeyPresent(const std::string& key)
 {
-  for(unsigned int i = 0; i < m_KeyList.size(); ++i)
-    if(m_KeyList[i].compare(key) == 0)
+  for(auto & i : m_KeyList)
+    if(i.compare(key) == 0)
       return true;
 
   // Otherwise return false;

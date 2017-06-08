@@ -55,11 +55,11 @@ std::istream& operator>>(std::istream& is, SRGRCoefficientSetRecord& data)
 	buf[21] = '\0';
 	data._srgr_update = buf;
 
-	for (int i=0;i<6;i++)
+	for (double & i : data._srgr_coef)
 	{
 		is.read(buf,16);
 		buf[16] = '\0';
-		data._srgr_coef[i] = atof(buf);
+		i = atof(buf);
 	}
 	return is;
 }

@@ -122,10 +122,10 @@ ImageToGenericRSOutputParameters<TImage>
   vindex.push_back(index3);
   vindex.push_back(index4);
 
-  for (unsigned int i = 0; i < vindex.size(); ++i)
+  for (auto & i : vindex)
     {
     PointType physicalPoint;
-    m_Input->TransformContinuousIndexToPhysicalPoint(vindex[i], physicalPoint);
+    m_Input->TransformContinuousIndexToPhysicalPoint(i, physicalPoint);
     voutput.push_back(invTransform->TransformPoint(physicalPoint));
     }
 

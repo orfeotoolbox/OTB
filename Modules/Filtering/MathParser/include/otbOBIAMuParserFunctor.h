@@ -151,26 +151,26 @@ public:
     m_AAttributes.resize(nbOfAttributes, 0.0);
     m_AttributesName.resize(nbOfAttributes, "");
     std::ostringstream varName;
-    for (unsigned int i = 0; i < shapeAttributes.size(); ++i)
+    for (auto & shapeAttribute : shapeAttributes)
       {
 
-      varName << "SHAPE::" << shapeAttributes.at(i);
+      varName << "SHAPE::" << shapeAttribute;
       m_AttributesName.at(index) = varName.str();
       varName.str("");
-      varName << "SHAPE_" << shapeAttributes.at(i);
+      varName << "SHAPE_" << shapeAttribute;
 
       m_Parser->DefineVar(varName.str(), &(m_AAttributes[index]));
       varName.str("");
       index++;
       }
-    for (unsigned int i = 0; i < statAttributes.size(); ++i)
+    for (auto & statAttribute : statAttributes)
       {
       for (unsigned int bandIndex = 1; bandIndex <= nbOfBands; bandIndex++)
         {
-        varName << "STATS::Band" << bandIndex << "::" << statAttributes.at(i);
+        varName << "STATS::Band" << bandIndex << "::" << statAttribute;
         m_AttributesName.at(index) = varName.str();
         varName.str("");
-        varName << "STATS_Band" << bandIndex << "_" << statAttributes.at(i);
+        varName << "STATS_Band" << bandIndex << "_" << statAttribute;
         m_Parser->DefineVar(varName.str(), &(m_AAttributes[index]));
         varName.str("");
         index++;

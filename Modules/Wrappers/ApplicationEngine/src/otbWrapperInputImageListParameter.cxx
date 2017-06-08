@@ -45,9 +45,8 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
   this->ClearValue();
 
   bool isOk = true;
-  for(unsigned int i=0; i<filenames.size(); i++)
+  for(auto filename : filenames)
     {
-    const std::string filename = filenames[i];
     // TODO : when the logger will be available, redirect the exception
     // in the logger (like what is done in MsgReporter)
     // File existence checked by the reader
@@ -161,10 +160,9 @@ InputImageListParameter::GetFileNameList() const
 {
   std::vector<std::string> filenames;
 
-  for(auto it = m_InputImageParameterVector.begin();
-      it!=m_InputImageParameterVector.end();++it)
+  for(const auto & it : m_InputImageParameterVector)
     {
-    filenames.push_back( (*it)->GetFileName() );
+    filenames.push_back( it->GetFileName() );
     }
   
   return filenames;

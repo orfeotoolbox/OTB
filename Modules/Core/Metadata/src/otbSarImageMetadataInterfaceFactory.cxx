@@ -42,10 +42,9 @@ SarImageMetadataInterfaceFactory
   std::list<SarImageMetadataInterfacePointerType> possibleIMI;
   std::list<itk::LightObject::Pointer>             allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("SarImageMetadataInterface");
-  for (auto i = allobjects.begin();
-       i != allobjects.end(); ++i)
+  for (auto & allobject : allobjects)
     {
-    SarImageMetadataInterface * io = dynamic_cast<SarImageMetadataInterface*>(i->GetPointer());
+    SarImageMetadataInterface * io = dynamic_cast<SarImageMetadataInterface*>(allobject.GetPointer());
     if (io)
       {
       possibleIMI.push_back(io);
@@ -53,16 +52,15 @@ SarImageMetadataInterfaceFactory
     else
       {
       itkGenericExceptionMacro(<< "Error SarImageMetadataInterface factory did not return an SarImageMetadataInterface: "
-                               << (*i)->GetNameOfClass());
+                               << allobject->GetNameOfClass());
       }
     }
-  for (auto k = possibleIMI.begin();
-       k != possibleIMI.end(); ++k)
+  for (auto & k : possibleIMI)
     {
-    (*k)->SetMetaDataDictionary(dict);
-    if ((*k)->CanRead())
+    k->SetMetaDataDictionary(dict);
+    if (k->CanRead())
       {
-      return *k;
+      return k;
       }
     }
 

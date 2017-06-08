@@ -101,9 +101,9 @@ PersistentImageSampleExtractorFilter<TInputImage>
 ::SetSampleFieldNames(std::vector<std::string> &names)
 {
   m_SampleFieldNames.clear();
-  for (unsigned int i=0 ; i<names.size() ; i++)
+  for (auto & name : names)
     {
-    m_SampleFieldNames.push_back(names[i]);
+    m_SampleFieldNames.push_back(name);
     }
 }
 

@@ -214,15 +214,15 @@ void HooverInstanceFilter<TLabelMap>
       blankRegion = LabelObjectType::New();
       blankRegion->SetLabel(regionMS->GetLabel());
       std::vector< std::string > attKeys = regionMS->GetAvailableAttributes();
-      for (unsigned int k=0; k<attKeys.size(); k++)
+      for (auto & attKey : attKeys)
         {
-        if (attKeys[k].find("HooverInstance_Ext_") == 0)
+        if (attKey.find("HooverInstance_Ext_") == 0)
           {
           continue;
           }
         else
           {
-          blankRegion->SetAttribute(attKeys[k].c_str(), regionMS->GetAttribute(attKeys[k].c_str()));
+          blankRegion->SetAttribute(attKey.c_str(), regionMS->GetAttribute(attKey.c_str()));
           }
         }
       regionMS->CopyAttributesFrom(blankRegion);
@@ -268,15 +268,15 @@ void HooverInstanceFilter<TLabelMap>
     blankRegion = LabelObjectType::New();
     blankRegion->SetLabel(labelObject->GetLabel());
     std::vector< std::string > attKeys = labelObject->GetAvailableAttributes();
-    for (unsigned int k=0; k<attKeys.size(); k++)
+    for (auto & attKey : attKeys)
       {
-      if (attKeys[k].find("HooverInstance_Ext_") == 0)
+      if (attKey.find("HooverInstance_Ext_") == 0)
         {
         continue;
         }
       else
         {
-        blankRegion->SetAttribute(attKeys[k].c_str(), labelObject->GetAttribute(attKeys[k].c_str()));
+        blankRegion->SetAttribute(attKey.c_str(), labelObject->GetAttribute(attKey.c_str()));
         }
       }
     labelObject->CopyAttributesFrom(blankRegion);
@@ -414,9 +414,9 @@ void HooverInstanceFilter<TLabelMap>
           }
 
         GTindices.insert(row);
-        for(auto it=regionsOfMS.begin(); it!=regionsOfMS.end(); ++it)
+        for(unsigned long it : regionsOfMS)
           {
-          MSindices.insert(*it);
+          MSindices.insert(it);
           otbDebugMacro(<< *it << " ");
           }
         }
@@ -510,9 +510,9 @@ void HooverInstanceFilter<TLabelMap>
           }
 
         MSindices.insert(col);
-        for(auto it=regionsOfGT.begin(); it!=regionsOfGT.end(); ++it)
+        for(unsigned long it : regionsOfGT)
           {
-          GTindices.insert(*it);
+          GTindices.insert(it);
           otbDebugMacro(<< *it << " ");
           }
         otbDebugMacro(<< "US " << col);

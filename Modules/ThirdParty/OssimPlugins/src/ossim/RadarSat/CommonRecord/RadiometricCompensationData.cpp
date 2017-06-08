@@ -73,9 +73,9 @@ namespace ossimplugins
       buf[8] = '\0';
       data._dset_size = atoi(buf);
 
-      for (int i=0;i<4;i++)
+      for (auto & i : data._dset)
       {
-         is>> data._dset[i];
+         is>> i;
       }
 
       return is;

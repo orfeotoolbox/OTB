@@ -49,8 +49,8 @@ namespace ossimplugins
 
       os<<"_ground_range_origin:"<<data._ground_range_origin<<std::endl;
 
-      for (int i = 0; i<5; i++) {
-         os<<"_srgr_coef[i]:"<<data._srgr_coef[i]<<std::endl;
+      for (float i : data._srgr_coef) {
+         os<<"_srgr_coef[i]:"<<i<<std::endl;
       }
 
       return os;
@@ -82,9 +82,9 @@ namespace ossimplugins
       is.read((char*)&(data._ground_range_origin),4);
       data.SwitchEndian(data._ground_range_origin);
 
-      for (int i = 0; i<5; i++) {
-         is.read((char*)&(data._srgr_coef[i]),4);
-         data.SwitchEndian(data._srgr_coef[i]);
+      for (float & i : data._srgr_coef) {
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
 
       is.read(buf14,14);

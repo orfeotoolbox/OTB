@@ -430,10 +430,10 @@ namespace ossimplugins
       buf64[60] = '\0';
       data._image_parameters1 = buf64;
 
-      for (int i = 0; i<5; i++)
+      for (float & _prf_value : data._prf_values)
       {
-         is.read((char*)&(data._prf_values[i]),4);
-         data.SwitchEndian(data._prf_values[i]);
+         is.read((char*)&_prf_value,4);
+         data.SwitchEndian(_prf_value);
       }
 
       char buf190[191];
@@ -493,9 +493,9 @@ namespace ossimplugins
       is.read((char*)&(data._filter_coef_az),4);
       data.SwitchEndian(data._filter_coef_az);
 
-      for (int i = 0; i <3; i++) {
-         is.read((char*)&(data._az_fm_rate[i]),4);
-         data.SwitchEndian(data._az_fm_rate[i]);
+      for (float & i : data._az_fm_rate) {
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
 
       is.read((char*)&(data._ax_fm_origin),4);
@@ -553,20 +553,20 @@ namespace ossimplugins
 
       is.read(buf64,64);
 
-      for (int i=0;i<4;i++)
+      for (unsigned int & i : data._beam_overlap)
       {
-         is.read((char*)&(data._beam_overlap[i]),4);
-         data.SwitchEndian(data._beam_overlap[i]);
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
-      for (int i=0;i<4;i++)
+      for (float & i : data._beam_param)
       {
-         is.read((char*)&(data._beam_param[i]),4);
-         data.SwitchEndian(data._beam_param[i]);
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
-      for (int i=0;i<5;i++)
+      for (unsigned int & i : data._lines_per_burst)
       {
-         is.read((char*)&(data._lines_per_burst[i]),4);
-         data.SwitchEndian(data._lines_per_burst[i]);
+         is.read((char*)&i,4);
+         data.SwitchEndian(i);
       }
 
       is.read(buf12,12);

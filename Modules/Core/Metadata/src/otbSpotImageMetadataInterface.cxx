@@ -115,9 +115,9 @@ SpotImageMetadataInterface::GetSolarIrradiance() const
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.solar_irradiance");
     boost::trim(valueString);
     boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
+    for (auto & i : outputValuesString)
       {
-      outputValues.push_back(atof(outputValuesString[i].c_str()));
+      outputValues.push_back(atof(i.c_str()));
       }
     }
 
@@ -425,9 +425,9 @@ SpotImageMetadataInterface
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_bias");
     boost::trim(valueString);
     boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
+    for (auto & i : outputValuesString)
       {
-      outputValues.push_back(atof(outputValuesString[i].c_str()));
+      outputValues.push_back(atof(i.c_str()));
       }
     }
 
@@ -487,9 +487,9 @@ SpotImageMetadataInterface
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_gain");
     boost::trim(valueString);
     boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
+    for (auto & i : outputValuesString)
       {
-      outputValues.push_back(atof(outputValuesString[i].c_str()));
+      outputValues.push_back(atof(i.c_str()));
       }
     }
 

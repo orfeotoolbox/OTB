@@ -64,10 +64,9 @@ ImageMetadataInterfaceFactory
   std::copy(allSarObjects.begin(), allSarObjects.end(), std::back_inserter(allObjects) );
 
 
-  for (auto i = allObjects.begin();
-       i != allObjects.end(); ++i)
+  for (auto & allObject : allObjects)
     {
-    ImageMetadataInterfaceBase * io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
+    ImageMetadataInterfaceBase * io = dynamic_cast<ImageMetadataInterfaceBase*>(allObject.GetPointer());
     if (io)
       {
       possibleIMI.push_back(io);
@@ -75,17 +74,16 @@ ImageMetadataInterfaceFactory
     else
       {
       itkGenericExceptionMacro(<< "Error ImageMetadataInterface factory did not return an ImageMetadataInterfaceBase: "
-                               << (*i)->GetNameOfClass());
+                               << allObject->GetNameOfClass());
       }
     }
 
-  for (auto k = possibleIMI.begin();
-       k != possibleIMI.end(); ++k)
+  for (auto & k : possibleIMI)
     {
-    (*k)->SetMetaDataDictionary(dict);
-    if ((*k)->CanRead())
+    k->SetMetaDataDictionary(dict);
+    if (k->CanRead())
       {
-      return *k;
+      return k;
       }
     }
 

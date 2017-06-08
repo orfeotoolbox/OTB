@@ -211,12 +211,12 @@ SamplingRateCalculator
         separators[2] = ",";
         separators[3] = " ";
         ListType words;
-        for (unsigned int k=0 ; k<separators.size() ; k++)
+        for (auto & separator : separators)
           {
-          boost::split(words, line, boost::is_any_of(separators[k]));
+          boost::split(words, line, boost::is_any_of(separator));
           if (words.size() == 4)
             {
-            sep = separators[k];
+            sep = separator;
             break;
             }
           }
@@ -318,12 +318,12 @@ SamplingRateCalculator
         separators[2] = ",";
         separators[3] = " ";
         ListType words;
-        for (unsigned int k=0 ; k<separators.size() ; k++)
+        for (auto & separator : separators)
           {
-          boost::split(words, line, boost::is_any_of(separators[k]));
+          boost::split(words, line, boost::is_any_of(separator));
           if (words.size() >= 2)
             {
-            sep = separators[k];
+            sep = separator;
             break;
             }
           }

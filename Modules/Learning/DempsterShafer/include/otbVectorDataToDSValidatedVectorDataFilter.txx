@@ -98,9 +98,9 @@ void
 VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 ::SetDescriptorModels(DescriptorModelsType model)
 {
-  for (unsigned int i=0; i<model.size(); ++i)
+  for (auto & i : model)
     {
-     this->AddDescriptor(model[i].first, model[i].second);
+     this->AddDescriptor(i.first, i.second);
     }
 }
 

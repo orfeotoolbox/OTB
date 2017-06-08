@@ -87,9 +87,9 @@ ConvertStringToVector(std::string const &str, T& ret, std::string const& errmsg,
 
   boost::split(split, str, boost::is_any_of(delims));
 
-  for(size_t i = 0; i < split.size(); i++)
+  for(auto & i : split)
     {
-    typename T::value_type value = LexicalCast<typename T::value_type> (split[i], errmsg);
+    typename T::value_type value = LexicalCast<typename T::value_type> (i, errmsg);
     ret.push_back(value);
     }
 }

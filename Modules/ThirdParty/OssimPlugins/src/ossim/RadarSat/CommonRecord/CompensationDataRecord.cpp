@@ -86,11 +86,11 @@ std::istream& operator>>(std::istream& is, CompensationDataRecord& data)
 	buf[8] = '\0';
 	data._beam_tab_size = atoi(buf);
 
-	for (int i=0;i<256;i++)
+	for (double & i : data._beam_tab)
 	{
 		is.read(buf,16);
 		buf[16] = '\0';
-		data._beam_tab[i] = atof(buf);
+		i = atof(buf);
 	}
 
     is.read(buf,16);

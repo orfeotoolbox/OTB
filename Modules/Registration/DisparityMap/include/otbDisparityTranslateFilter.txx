@@ -263,8 +263,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
   maxIndex.Fill(itk::NumericTraits<IndexValueType>::Zero);
 
   IndexType corners[4];
-  for(int i = 0; i < 4; i++)
-    corners[i].Fill(itk::NumericTraits<IndexValueType>::Zero);
+  for(auto & corner : corners)
+    corner.Fill(itk::NumericTraits<IndexValueType>::Zero);
 
   corners[0] = requested.GetIndex();
   corners[1] = requested.GetIndex();

@@ -128,9 +128,9 @@ public:
   void SetSelectedItems(std::vector<std::string> selectedItems)
   {
     std::vector<int> items;
-    for( unsigned int i=0; i<selectedItems.size(); i++ )
+    for(auto & selectedItem : selectedItems)
       {
-        items.push_back( atoi( selectedItems[i].c_str() ) );
+        items.push_back( atoi( selectedItem.c_str() ) );
       }
     this->SetSelectedItems(items);
   }
@@ -143,10 +143,10 @@ public:
     // update selected names and keys
     std::vector<std::string> names = this->GetChoiceNames();
     std::vector<std::string> keys = this->GetChoiceKeys();
-    for (unsigned int i=0 ; i<m_SelectedItems.size() ; i++)
+    for (int m_SelectedItem : m_SelectedItems)
       {
-      m_SelectedNames.push_back(names[m_SelectedItems[i]]);
-      m_SelectedKeys.push_back(keys[m_SelectedItems[i]]);
+      m_SelectedNames.push_back(names[m_SelectedItem]);
+      m_SelectedKeys.push_back(keys[m_SelectedItem]);
       }
   }
 

@@ -227,9 +227,9 @@ MultiChannelExtractROI<TInputPixelType, TOutputPixelType>
       if ((m_ChannelsWorks[i] < 1) || (m_ChannelsWorks[i] > nbComponentsPerPixel))
         {
         bool isInsideBadChannels = false;
-        for (unsigned int j = 0; j < m_BadChannels.size(); ++j)
+        for (unsigned int & m_BadChannel : m_BadChannels)
           {
-          if (m_BadChannels[j] == m_ChannelsWorks[i]) isInsideBadChannels = true;
+          if (m_BadChannel == m_ChannelsWorks[i]) isInsideBadChannels = true;
 
           }
         if (!isInsideBadChannels) m_BadChannels.push_back(m_ChannelsWorks[i]);
@@ -240,9 +240,9 @@ MultiChannelExtractROI<TInputPixelType, TOutputPixelType>
       std::ostringstream oss;
       oss << "otb::ExtractImageFilter::GenerateOutputInformation : ";
       oss <<  "Channel(s) [ ";
-      for (unsigned int i = 0; i < m_BadChannels.size(); ++i)
+      for (unsigned int m_BadChannel : m_BadChannels)
         {
-        oss << m_BadChannels[i] << " ";
+        oss << m_BadChannel << " ";
         }
       oss << "] not authorized.";
       oss << " Each channel index has to be in [1," << nbComponentsPerPixel << "].";

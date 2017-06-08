@@ -238,22 +238,22 @@ protected:
 
     void clear()
     {
-      for( unsigned int i = 0; i < polyStatTrainOutputs.size(); i++ )
-        RemoveFile( polyStatTrainOutputs[i] );
-      for( unsigned int i = 0; i < polyStatValidOutputs.size(); i++ )
-        RemoveFile( polyStatValidOutputs[i] );
-      for( unsigned int i = 0; i < ratesTrainOutputs.size(); i++ )
-        RemoveFile( ratesTrainOutputs[i] );
-      for( unsigned int i = 0; i < ratesValidOutputs.size(); i++ )
-        RemoveFile( ratesValidOutputs[i] );
-      for( unsigned int i = 0; i < sampleOutputs.size(); i++ )
-        RemoveFile( sampleOutputs[i] );
-      for( unsigned int i = 0; i < sampleTrainOutputs.size(); i++ )
-        RemoveFile( sampleTrainOutputs[i] );
-      for( unsigned int i = 0; i < sampleValidOutputs.size(); i++ )
-        RemoveFile( sampleValidOutputs[i] );
-      for( unsigned int i = 0; i < tmpVectorFileList.size(); i++ )
-        RemoveFile( tmpVectorFileList[i] );
+      for(auto & polyStatTrainOutput : polyStatTrainOutputs)
+        RemoveFile( polyStatTrainOutput );
+      for(auto & polyStatValidOutput : polyStatValidOutputs)
+        RemoveFile( polyStatValidOutput );
+      for(auto & ratesTrainOutput : ratesTrainOutputs)
+        RemoveFile( ratesTrainOutput );
+      for(auto & ratesValidOutput : ratesValidOutputs)
+        RemoveFile( ratesValidOutput );
+      for(auto & sampleOutput : sampleOutputs)
+        RemoveFile( sampleOutput );
+      for(auto & sampleTrainOutput : sampleTrainOutputs)
+        RemoveFile( sampleTrainOutput );
+      for(auto & sampleValidOutput : sampleValidOutputs)
+        RemoveFile( sampleValidOutput );
+      for(auto & i : tmpVectorFileList)
+        RemoveFile( i );
     }
 
   public:
