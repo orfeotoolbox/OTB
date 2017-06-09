@@ -148,7 +148,7 @@ MassOfBelief<TLabel, TMass>
   if(sum > 0.0)
     {
     // Apply normalization factor
-    for(typename MassMapType::iterator it = m_MassesMap.begin();
+    for(auto it = m_MassesMap.begin();
       it != m_MassesMap.end(); ++it)
       {
       it->second/=sum;

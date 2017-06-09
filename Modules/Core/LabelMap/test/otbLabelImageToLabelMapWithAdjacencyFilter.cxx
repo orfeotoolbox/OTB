@@ -90,7 +90,7 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int itkNotUsed(argc), char * argv
     {
     ofs<<"Label:\t"<<it->first<<" adjacent with labels";
 
-    LabelMapType::AdjacentLabelsContainerType::const_iterator lit = it->second.begin();
+    auto lit = it->second.begin();
 
     for(; lit!=it->second.end(); ++lit)
       {

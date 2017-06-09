@@ -102,9 +102,9 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
                                                                   oSRS);
 
     // Cast OGRLayer* to OGRLayerH
-    for (unsigned int idx2 = 0; idx2 < ogrLayerVector.size(); ++idx2)
+    for (auto & idx2 : ogrLayerVector)
       {
-      m_SrcDataSetLayers.push_back( (OGRLayerH)(ogrLayerVector[idx2]) );
+      m_SrcDataSetLayers.push_back( (OGRLayerH)idx2 );
       }
 
     // Destroy the oSRS

@@ -80,7 +80,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   std::cout << "nbBytes of the buffer = " << nbBytes << " = " \
             << nbBand << " x " << nbPixelToRead << " x " << bytePerPixel<< std::endl;
 
-  char * loadBuffer = new char[static_cast<unsigned int>(nbBytes)];
+  auto * loadBuffer = new char[static_cast<unsigned int>(nbBytes)];
 
   int pixelOffset = bytePerPixel * nbBand;
   int lineOffset  = bytePerPixel * nbBand * sizeX;
@@ -99,7 +99,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
     std::cout << "Error while reading image buffer" << std::endl;
     }
 
-  ComplexType *pxlValue = new ComplexType[nbPixelToRead * nbBand];
+  auto *pxlValue = new ComplexType[nbPixelToRead * nbBand];
   unsigned int count = 0;
   ComplexType expectedValue;
   for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * nbBand); itPxl++)
@@ -132,7 +132,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   std::cout << "**** METHOD 2 : Use RasterIO to read each band included in the file****" << std::endl;
   GDALRasterBand  *poBand;
   //ComplexType pPixelValue[nbBand][nbPixelToRead];
-  ComplexType* pPixelValue = new ComplexType[nbBand*nbPixelToRead];
+  auto* pPixelValue = new ComplexType[nbBand*nbPixelToRead];
 
   for (unsigned int itBand = 0; itBand < (unsigned int) nbBand; itBand++)
     {

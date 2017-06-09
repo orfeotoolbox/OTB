@@ -216,7 +216,7 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -236,7 +236,7 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
   SVMType::Pointer classifierLoad = SVMType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -305,7 +305,7 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   classifier->Save(argv[2]);
 
@@ -373,7 +373,7 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   SVMType::Pointer classifier = SVMType::New();
 
   //Init SVM type in regression mode
-  classifier->SetRegressionMode(1);
+  classifier->SetRegressionMode(true);
   classifier->SetSVMType(CvSVM::EPS_SVR);
   classifier->SetP(10);
   classifier->SetKernelType(CvSVM::RBF);
@@ -404,7 +404,7 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   samplesT->SetMeasurementVectorSize(itk::NumericTraits<InputSampleRegressionType>::GetLength(sample));
   samplesT->PushBack(sample);
 
-  TargetListSampleRegressionType::Pointer predicted = classifier->PredictBatch(samplesT, NULL);
+  TargetListSampleRegressionType::Pointer predicted = classifier->PredictBatch(samplesT, nullptr);
 
   const float age = 15;
 
@@ -452,7 +452,7 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
   //write the model
   classifier->Save(argv[2]);
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -471,7 +471,7 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
   KNearestNeighborsType::Pointer classifierLoad = KNearestNeighborsType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -539,7 +539,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
   classifier->Train();
   classifier->Save(argv[2]);
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -557,7 +557,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
   RandomForestType::Pointer classifierLoad = RandomForestType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -623,7 +623,7 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   classifier->Save(argv[2]);
 
@@ -643,7 +643,7 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
   BoostType::Pointer classifierLoad = BoostType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -713,7 +713,7 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   classifier->SetEpsilon(0.01); */
   classifier->Train();
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
 
@@ -733,7 +733,7 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   ANNType::Pointer classifierLoad = ANNType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -790,7 +790,7 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   classifier->Save(argv[2]);
 
@@ -810,7 +810,7 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
   NormalBayesType::Pointer classifierLoad = NormalBayesType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -867,7 +867,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   classifier->Save(argv[2]);
 
@@ -887,7 +887,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
   DecisionTreeType::Pointer classifierLoad = DecisionTreeType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 
@@ -945,7 +945,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, nullptr);
 
   classifier->Save(argv[2]);
 
@@ -965,7 +965,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
   GBTreeType::Pointer classifierLoad = GBTreeType::New();
 
   classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, nullptr);
 
   ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
 

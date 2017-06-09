@@ -434,8 +434,8 @@ void Equation::Solve3(int d4)
     zProv[2][2] = (j2* s) + t;
     for (auto & i1 : zProv)
     {
-      for (int i2 = 0; i2 < 3; i2++)
-        i1[i2] = i1[i2]- w;
+      for (auto & i2 : i1)
+        i2 = i2- w;
     }
     for (int i3 = 0; i3 < 3; i3++)
     {

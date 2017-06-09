@@ -327,8 +327,8 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
     unsigned int pixelIndexArrayDimension = iteratorRegionSize[0] *
                                             iteratorRegionSize[1] * 2;
-    int *pixelIndexArray = new int[pixelIndexArrayDimension];
-    int *currentIndexArray = new int[pixelIndexArrayDimension];
+    auto *pixelIndexArray = new int[pixelIndexArrayDimension];
+    auto *currentIndexArray = new int[pixelIndexArrayDimension];
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

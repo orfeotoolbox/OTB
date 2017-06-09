@@ -60,7 +60,7 @@ int otbOssimElevManagerTest4(int argc, char* argv[])
   size[0] =   atoi(argv[7]);
   size[1] =   atoi(argv[8]);
 
-  double* image = new double[size[0] * size[1]];
+  auto* image = new double[size[0] * size[1]];
 
   ossimElevManager * elevManager = ossimElevManager::instance();
 

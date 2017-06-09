@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include <math.h>
+#include <cmath>
 
 // Software Guide : BeginLatex
 //

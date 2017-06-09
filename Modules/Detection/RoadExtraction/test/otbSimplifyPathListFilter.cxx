@@ -66,12 +66,12 @@ int otbSimplifyPathListFilter(int itkNotUsed(argc), char * argv[])
   PathListType::Pointer InputPathList = PathListType::New();
 
   //Generate PathList
-  for (PointsMatrixType::iterator listpos = MatricePoints.begin(); listpos != MatricePoints.end(); ++listpos)
+  for (auto & MatricePoint : MatricePoints)
     {
     PathType::Pointer path = PathType::New();
     //Generate PathList
     std::cout << "List " << std::endl;
-    for (PointsVectorType::iterator it = (*listpos).begin(); it != (*listpos).end(); ++it)
+    for (auto it = MatricePoint.begin(); it != MatricePoint.end(); ++it)
       {
       cindex[0] = *it;
       ++it;

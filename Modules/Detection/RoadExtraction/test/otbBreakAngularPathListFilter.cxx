@@ -76,12 +76,12 @@ int otbBreakAngularPathListFilter(int itkNotUsed(argc), char * argv[])
   PathListType::Pointer InputPathList = PathListType::New();
 
   //Generate PathList
-  for (PointsMatrixType::iterator listpos = MatricePoints.begin(); listpos != MatricePoints.end(); ++listpos)
+  for (auto & MatricePoint : MatricePoints)
     {
     PathType::Pointer path = PathType::New();
     //Generate PathList
     std::cout << "List " << std::endl;
-    for (PointsVectorType::iterator it = (*listpos).begin(); it != (*listpos).end(); ++it)
+    for (auto it = MatricePoint.begin(); it != MatricePoint.end(); ++it)
       {
       cindex[0] = *it;
       ++it;
@@ -99,10 +99,10 @@ int otbBreakAngularPathListFilter(int itkNotUsed(argc), char * argv[])
   std::ofstream file;
   file.open(outfname);
 
-  for (PointsVectorType::iterator itAngle = ListMaxAngle.begin(); itAngle != ListMaxAngle.end(); ++itAngle)
+  for (double & itAngle : ListMaxAngle)
     {
 
-    breakAngularFilter->SetMaxAngle((*itAngle) * otb::CONST_PI / 180.);
+    breakAngularFilter->SetMaxAngle(itAngle * otb::CONST_PI / 180.);
     breakAngularFilter->Update();
 
     PathListType::Pointer OutputPathList = breakAngularFilter->GetOutput();
@@ -115,7 +115,7 @@ int otbBreakAngularPathListFilter(int itkNotUsed(argc), char * argv[])
     PathListIteratorType pathListIt = InputPathList->Begin();
 
     file << "--------------------------------------------------------------------------" << std::endl;
-    file << "MAX ANGULAR :" << breakAngularFilter->GetMaxAngle() << "(" << (*itAngle) << " deg.)" << std::endl;
+    file << "MAX ANGULAR :" << breakAngularFilter->GetMaxAngle() << "(" << itAngle << " deg.)" << std::endl;
     file << "INPUT list of Path " << ": " << std::endl;
     while (pathListIt != InputPathList->End())
       {

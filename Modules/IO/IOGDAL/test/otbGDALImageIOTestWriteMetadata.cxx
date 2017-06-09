@@ -338,10 +338,10 @@ void testWriteMetadata(std::string filenameTIFF,
                        std::vector<std::string> options,
                        std::ostream& os)
 {
-  DatasetInfoGDAL* infoDatasetCreate_TIFF = new DatasetInfoGDAL();
-  DatasetInfoGDAL* infoDatasetWR_TIFF = new DatasetInfoGDAL();
-  DatasetInfoGDAL* infoDatasetCreate_HDR = new DatasetInfoGDAL();
-  DatasetInfoGDAL* infoDatasetWR_HDR = new DatasetInfoGDAL();
+  auto* infoDatasetCreate_TIFF = new DatasetInfoGDAL();
+  auto* infoDatasetWR_TIFF = new DatasetInfoGDAL();
+  auto* infoDatasetCreate_HDR = new DatasetInfoGDAL();
+  auto* infoDatasetWR_HDR = new DatasetInfoGDAL();
 
   os << "\n+++++++++++++++++++++++++++" << std::endl;
   if (options.size() == 0)
@@ -352,11 +352,11 @@ void testWriteMetadata(std::string filenameTIFF,
     }
   else
     {
-    for(size_t it = 0; it < options.size(); it ++)
+    for(auto & option : options)
       {
-      os << options[it] << std::endl;
-      filenameTIFF.insert(filenameTIFF.size()-4, options[it]);
-      filenameHDR.insert(filenameHDR.size()-4, options[it]);
+      os << option << std::endl;
+      filenameTIFF.insert(filenameTIFF.size()-4, option);
+      filenameHDR.insert(filenameHDR.size()-4, option);
       }
     }
 
@@ -432,9 +432,8 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   bool setGeoTransform_ID = false;
   bool setGeoTransform = false;
 
-  for (unsigned int itOption = 0; itOption < (unsigned int)options.size(); itOption++)
+  for (auto opt : options)
     {
-    std::string opt = options[itOption];
     if ( opt.compare("-setGCP") == 0 )
       {
       setGCP = true;
@@ -499,7 +498,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   if (setGCP)
     {
     unsigned int gcpCount = 1;
-    GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
+    auto * gdalGcps = new GDAL_GCP[gcpCount];
 
     std::ostringstream strIndexGCP;
     strIndexGCP << 1;
@@ -557,9 +556,9 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   // Write data into dataset
   GDALRasterBand *poBand;
   GByte abyRaster[128*128];
-  for (unsigned int it=0; it < 128*128; ++it)
+  for (unsigned char & it : abyRaster)
     {
-    abyRaster[it] = 0;
+    it = 0;
     }
 
   poBand = poDstDS->GetRasterBand(1);

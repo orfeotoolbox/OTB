@@ -249,7 +249,7 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap>
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  for (auto it = children.begin(); it != children.end(); ++it)
     {
     // Copy input DataNode info
     DataNodePointerType dataNode = (*it)->Get();

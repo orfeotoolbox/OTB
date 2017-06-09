@@ -307,12 +307,12 @@ int otbSensorModel(int argc, char* argv[])
                                  
       
       std::list<std::string> missingKw;
-      for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+      for(auto & neededIt : neededKw)
       {
         bool foundNeededKw = false;
-        for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
+        for(auto & kwlistIt : kwmap)
         {
-            std::size_t found = kwlistIt->first.find(*neededIt);
+            std::size_t found = kwlistIt.first.find(neededIt);
             if (found!=std::string::npos)
             {   
                 foundNeededKw = true;
@@ -320,22 +320,22 @@ int otbSensorModel(int argc, char* argv[])
         }
         
         if (!foundNeededKw)
-            missingKw.push_back(*neededIt);
+            missingKw.push_back(neededIt);
       }
       
       if ( (neededKw.size()>0) && (missingKw.size()>0) )
       {
         std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
-        for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
-           std::cerr << *itm << std::endl;
+        for (auto & itm : missingKw)  
+           std::cerr << itm << std::endl;
         return EXIT_FAILURE;
       }
   }
   /*-------------------------------------*/
 
 
-  pointsContainerType::iterator pointsIt=pointsContainer.begin();	
-  geo3dPointsContainerType::iterator geo3dPointsIt=geo3dPointsContainer.begin();	
+  auto pointsIt=pointsContainer.begin();	
+  auto geo3dPointsIt=geo3dPointsContainer.begin();	
   //for(; pointsIt!=pointsContainer.end(); ++pointsIt)
   while( (pointsIt!=pointsContainer.end()) && (geo3dPointsIt!=geo3dPointsContainer.end())  )
   {

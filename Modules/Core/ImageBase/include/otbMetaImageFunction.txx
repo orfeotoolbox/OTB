@@ -94,7 +94,7 @@ MetaImageFunction<TOutputPrecision, TCoordRep>
  MetaImageFunction<TOutputPrecision, TCoordRep>
  ::RemoveNthFunction(unsigned int index)
   {
-   typename FunctionContainerType::iterator fIt = m_FunctionContainer.begin()+index;
+   auto fIt = m_FunctionContainer.begin()+index;
    m_FunctionContainer.erase(fIt);
   }
 
@@ -108,7 +108,7 @@ MetaImageFunction<TOutputPrecision, TCoordRep>
   OutputType resp;
 
   // For each function
-  typename FunctionContainerType::const_iterator fIt = m_FunctionContainer.begin();
+  auto fIt = m_FunctionContainer.begin();
   while(fIt != m_FunctionContainer.end())
     {
     // Store current size

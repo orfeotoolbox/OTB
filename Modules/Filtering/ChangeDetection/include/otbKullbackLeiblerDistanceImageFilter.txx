@@ -218,7 +218,7 @@ CumulantsForEdgeworth<TInput>
   double sigma = sqrt(fMu2);
 
   std::vector<double> tab(inputSize);
-  std::vector<double>::iterator iterTab = tab.begin();
+  auto iterTab = tab.begin();
 
   inputIter.GoToBegin();
 

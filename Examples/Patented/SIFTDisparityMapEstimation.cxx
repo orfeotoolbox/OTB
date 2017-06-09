@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   double secondOrderThreshold = 0.5;
-  bool   useBackMatching = 0;
+  bool   useBackMatching = false;
 
   filter1->SetInput(0, fixedReader->GetOutput());
   filter1->SetScalesNumber(3);

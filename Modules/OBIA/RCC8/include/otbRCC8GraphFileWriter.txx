@@ -208,7 +208,7 @@ RCC8GraphFileWriter<TInputGraph>
   AttributesMapType attr = vertex->GetAttributesMap();
   otbMsgDevMacro(<< "RCC8GraphFileWriter: WriteVertex call: " << index);
   of << index << " [";
-  IteratorType it = attr.begin();
+  auto it = attr.begin();
   while (it != attr.end())
     {
     of << (*it).first << "=\"";

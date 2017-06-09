@@ -363,13 +363,13 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
       vect.push_back(it1.GetPixel(i)[1]);
 
     px1[4] = 0.0;
-    for (unsigned int i=0; i<vect.size(); i++)
-      px1[4] += vect[i];
+    for (double i : vect)
+      px1[4] += i;
     px1[4] /= ((double) vect.size()); //mean
 
     px1[5] = 0.0;
-    for (unsigned int i=0; i<vect.size(); i++)
-      px1[5] += (vect[i]-px1[4])*(vect[i]-px1[4]);
+    for (double i : vect)
+      px1[5] += (i-px1[4])*(i-px1[4]);
     px1[5] /= ((double) vect.size()); //var
 
     std::sort(vect.begin(),vect.end());

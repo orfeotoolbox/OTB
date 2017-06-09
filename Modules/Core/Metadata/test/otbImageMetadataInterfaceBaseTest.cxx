@@ -85,8 +85,8 @@ int otbImageMetadataInterfaceBaseTest(int itkNotUsed(argc), char* argv[])
     if (bandNameList.size() > 1)
       {
       file << "BandNameList: ";
-      for (std::vector<std::string>::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
-        file << *it << ", ";
+      for (auto & it : bandNameList)
+        file << it << ", ";
       file << std::endl;
       }
 
@@ -99,8 +99,8 @@ int otbImageMetadataInterfaceBaseTest(int itkNotUsed(argc), char* argv[])
     if (bandNameList2.size() > 1)
       {
       file << "ENH BandNameList: ";
-      for (std::vector<std::string>::iterator it = bandNameList2.begin(); it != bandNameList2.end(); ++it)
-        file << *it << ", ";
+      for (auto & it : bandNameList2)
+        file << it << ", ";
       file << std::endl;
       }
   file.close();

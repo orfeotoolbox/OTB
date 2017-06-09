@@ -43,7 +43,7 @@ int main(int argc, char * argv[])
   std::string geoXml = argv[3];
   bool inverse = atoi(argv[1]);
 
-  ossimplugins::ossimTerraSarXSarSensorModel * sensor = new ossimplugins::ossimTerraSarXSarSensorModel();
+  auto * sensor = new ossimplugins::ossimTerraSarXSarSensorModel();
 
   sensor->readAnnotationFile(annotationXml, geoXml);
 

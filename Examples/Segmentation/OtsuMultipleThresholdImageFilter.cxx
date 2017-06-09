@@ -42,7 +42,7 @@
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkNumericTraits.h"
 
-#include <stdio.h>
+#include <cstdio>
 int main(int argc, char * argv[])
 {
   if (argc < 2)
@@ -153,7 +153,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   const CalculatorType::OutputType& thresholdVector =
     calculator->GetOutput();
-  CalculatorType::OutputType::const_iterator itNum = thresholdVector.begin();
+  auto itNum = thresholdVector.begin();
   // Software Guide : EndCodeSnippet
 
   //Threshold into separate segments and write out as binary images

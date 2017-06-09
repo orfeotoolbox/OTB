@@ -61,20 +61,20 @@ int otbLogPolarTransform(int itkNotUsed(argc), char* argv[])
   transform->SetParameters(params);
 
   file << "Transform calculation ... :" << std::endl;
-  for (PointsVectorType::iterator it = vect.begin(); it != vect.end(); ++it)
+  for (auto & it : vect)
     {
-    PointType p = transform->TransformPoint(*it);
+    PointType p = transform->TransformPoint(it);
 
     PointType pprime;
 
-    double theta = (*it)[0] * angularStep * otb::CONST_PI / 180.0;
-    double logRho   = (*it)[1] * radialStep;
+    double theta = it[0] * angularStep * otb::CONST_PI / 180.0;
+    double logRho   = it[1] * radialStep;
 
     file << "Rho: " << logRho << ", Theta: " << theta << std::endl;
     pprime[0] = vcl_exp(logRho) * vcl_cos(theta);
     pprime[1] = vcl_exp(logRho) * vcl_sin(theta);
 
-    file << "Original Point: " << (*it) << ", Reference point: " << pprime << ", Transformed point: " << p <<
+    file << "Original Point: " << it << ", Reference point: " << pprime << ", Transformed point: " << p <<
     std::endl << std::endl;
     }
 

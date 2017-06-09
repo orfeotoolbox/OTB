@@ -64,9 +64,9 @@ int otbWindowedSincInterpolateImageBlackmanFunction(int argc, char * argv[])
   file.open(outfname);
 
   file << "Blackman Window Function" << std::endl;
-  for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin(); it != indicesList.end(); ++it)
+  for (auto & it : indicesList)
     {
-    file << (*it) << " -> " << interp->EvaluateAtContinuousIndex((*it)) << std::endl;
+    file << it << " -> " << interp->EvaluateAtContinuousIndex(it) << std::endl;
     }
   file << std::endl;
 

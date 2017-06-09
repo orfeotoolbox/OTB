@@ -141,7 +141,7 @@ ParallelLinePathListFilter<TPath>
   otbMsgDevMacro( << "Number of line pairs that pass the common distance condition:  " << commonDistCounter  );
 
   // Write all parallel lines and set the non-erase flagg.
-  typename std::vector<unsigned int>::iterator lineIt1 = parallelLineIndex.begin();
+  auto lineIt1 = parallelLineIndex.begin();
   unsigned int                                 sortLineIndex = 0;
   while (lineIt1 != parallelLineIndex.end())
     {
@@ -157,7 +157,7 @@ ParallelLinePathListFilter<TPath>
     }
 
   // Search ended, now removing the erased path from the first line pointer
-  typename std::vector<bool>::reverse_iterator it1 = eraseFlagVector1.rbegin();
+  auto it1 = eraseFlagVector1.rbegin();
   index1 = eraseFlagVector1.size() - 1;
   while (it1 != eraseFlagVector1.rend())
     {

@@ -194,7 +194,7 @@ MorphologicalPyramidSynthesisFilter<TInputImage, TOutputImage>
   ImageListReverseIterator itsupFilter = supFilter->ReverseBegin();
   ImageListReverseIterator itinfDeci = infDeci->ReverseBegin();
   ImageListReverseIterator itsupDeci = supDeci->ReverseBegin();
-  SizeReverseIterator      itSize = size.rbegin();
+  auto      itSize = size.rbegin();
 
   int i = 1;
 //--------------------------------------------------------//

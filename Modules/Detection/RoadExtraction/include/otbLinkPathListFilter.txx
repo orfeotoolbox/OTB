@@ -204,7 +204,7 @@ LinkPathListFilter<TPath>
     }
 
   // search ended, now removing the erased path
-  typename std::vector<bool>::reverse_iterator it = eraseFlagVector.rbegin();
+  auto it = eraseFlagVector.rbegin();
   index1 = eraseFlagVector.size() - 1;
   while (it != eraseFlagVector.rend())
     {

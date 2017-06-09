@@ -151,7 +151,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
         while (!flagFinish)
           {
           offsetVector = GetThreeNeighborOffsetFromDirection(nDirIt.GetCenterPixel(), flagReverse);
-          OffsetIteratorType vecIt = offsetVector.begin();
+          auto vecIt = offsetVector.begin();
           bool               flagFound = false;
           while (vecIt != offsetVector.end() && !flagFound)
             {

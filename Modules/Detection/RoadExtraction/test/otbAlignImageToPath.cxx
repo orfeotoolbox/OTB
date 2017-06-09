@@ -31,7 +31,7 @@
 
 #include "itkPathSource.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 int otbAlignImageToPath(int itkNotUsed(argc), char * argv[])
 {

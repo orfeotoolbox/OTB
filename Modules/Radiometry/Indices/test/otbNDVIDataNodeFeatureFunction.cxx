@@ -80,7 +80,7 @@ int otbNDVIDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 
   if (!DisplayWarnings)
    {
-    imgReader->SetGlobalWarningDisplay(0);
+    imgReader->SetGlobalWarningDisplay(false);
    }
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(DEMDir);

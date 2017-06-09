@@ -183,7 +183,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   // Definition of the 4 directions
   //double Theta[NB_DIR];
   //ROMAIN
-  double* Theta = new double[NB_DIR];
+  auto* Theta = new double[NB_DIR];
 
   // La rotation nulle correspond a un contour horizontal -> 0 !!
   for (unsigned int i = 0; i < NB_DIR; ++i)

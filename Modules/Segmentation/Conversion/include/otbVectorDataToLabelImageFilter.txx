@@ -200,20 +200,20 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
                                                                   oSRS);
 
     // From OGRLayer* to OGRGeometryH vector
-    for (unsigned int idx2 = 0; idx2 < ogrLayerVector.size(); ++idx2)
+    for (auto & idx2 : ogrLayerVector)
       {
       // test if the layers contain a field m_BurnField;
       int burnField = -1;
 
       if( !m_BurnAttribute.empty() )
         {
-        burnField = OGR_FD_GetFieldIndex( OGR_L_GetLayerDefn( (OGRLayerH)(ogrLayerVector[idx2]) ),
+        burnField = OGR_FD_GetFieldIndex( OGR_L_GetLayerDefn( (OGRLayerH)idx2 ),
                                            m_BurnAttribute.c_str() );
 
       // Get the geometries of the layer
       OGRFeatureH hFeat;
-      OGR_L_ResetReading( (OGRLayerH)(ogrLayerVector[idx2]) );
-      while( ( hFeat = OGR_L_GetNextFeature( (OGRLayerH)(ogrLayerVector[idx2]) )) != nullptr )
+      OGR_L_ResetReading( (OGRLayerH)idx2 );
+      while( ( hFeat = OGR_L_GetNextFeature( (OGRLayerH)idx2 )) != nullptr )
         {
         OGRGeometryH hGeom;
         if( OGR_F_GetGeometryRef( hFeat ) == nullptr )
@@ -230,7 +230,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
           // TODO : if no burnAttribute available, warning or raise an exception??
           m_FullBurnValues.push_back(m_DefaultBurnValue++);
           itkWarningMacro(<<"Failed to find attribute "<<m_BurnAttribute << " in layer "
-                          << OGR_FD_GetName( OGR_L_GetLayerDefn( (OGRLayerH)(ogrLayerVector[idx2]) ))
+                          << OGR_FD_GetName( OGR_L_GetLayerDefn( (OGRLayerH)idx2 ))
                           <<" .Setting burn value to default =  "
                           << m_DefaultBurnValue);
           }

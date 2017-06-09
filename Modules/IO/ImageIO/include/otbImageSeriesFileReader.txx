@@ -277,7 +277,7 @@ ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 
   selection->SetExtractionRegion(this->m_ListOfRegionSelection[idx]);
 
-  for (std::vector<unsigned int>::iterator band = this->m_ListOfBandSelection[idx].begin();
+  for (auto band = this->m_ListOfBandSelection[idx].begin();
        band != this->m_ListOfBandSelection[idx].end();
        ++band)
     {

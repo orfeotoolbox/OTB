@@ -250,7 +250,7 @@ int otbHoughTransform2DLinesImageTest(int itkNotUsed(argc), char* argv[])
     }
   while (lines < m_NumberOfLines);
 
-  std::list<houghPoint>::iterator it_list = m_LinesList.begin();
+  auto it_list = m_LinesList.begin();
 
   while (it_list != m_LinesList.end())
     {

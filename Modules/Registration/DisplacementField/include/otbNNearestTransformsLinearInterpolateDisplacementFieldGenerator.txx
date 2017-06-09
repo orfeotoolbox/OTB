@@ -54,7 +54,7 @@ NNearestTransformsLinearInterpolateDisplacementFieldGenerator<TPointSet, TDispla
     ydisplacement = 0;
     normalization = 0;
 
-    for (typename IndexVectorType::iterator indexIt = indexVector.begin(); indexIt != indexVector.end(); ++indexIt)
+    for (auto indexIt = indexVector.begin(); indexIt != indexVector.end(); ++indexIt)
       {
       PointType point;
       point[0] = static_cast<double>(this->GetPointSet()->GetPoints()->GetElement(*indexIt)[0]);

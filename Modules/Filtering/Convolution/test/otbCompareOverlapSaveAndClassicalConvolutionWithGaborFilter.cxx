@@ -19,7 +19,7 @@
  */
 
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 #include "otbImage.h"

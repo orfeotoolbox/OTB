@@ -24,7 +24,7 @@
 
 #include "otbImageFileReader.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 int otbRegionImageToRectangularPathListFilter(int itkNotUsed(argc), char * argv[])

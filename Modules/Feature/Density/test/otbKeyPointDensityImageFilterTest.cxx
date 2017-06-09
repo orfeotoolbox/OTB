@@ -19,7 +19,7 @@
  */
 
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "otbKeyPointDensityImageFilter.h"
 #include "otbImageToSIFTKeyPointSetFilter.h"

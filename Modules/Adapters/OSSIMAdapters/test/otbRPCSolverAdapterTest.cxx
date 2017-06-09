@@ -143,19 +143,18 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
   bool fail = false;
 
-  for(otb::RPCSolverAdapter::GCPsContainerType::iterator it = gcps.begin();
-      it != gcps.end(); ++it)
+  for(auto & gcp : gcps)
     {
     Point2DType imgPoint,groundPoint, groundPoint2dRef;
     Point3DType imgPoint3D,groundPoint3D;
 
-    groundPoint2dRef[0] = it->second[0];
-    groundPoint2dRef[1] = it->second[1];
+    groundPoint2dRef[0] = gcp.second[0];
+    groundPoint2dRef[1] = gcp.second[1];
 
     // Check forward transform
-    imgPoint3D[0] = it->first[0];
-    imgPoint3D[1] = it->first[1];
-    imgPoint3D[2] = it->second[2];
+    imgPoint3D[0] = gcp.first[0];
+    imgPoint3D[1] = gcp.first[1];
+    imgPoint3D[2] = gcp.second[2];
 
     groundPoint3D = rpcFwdTransform->TransformPoint(imgPoint3D);
 
@@ -167,18 +166,18 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
     if(groundRes>geoTol)
       {
       fail = true;
-      std::cerr<<"Imprecise result with forward estimated model: fwd("<<it->first<<") = "<<groundPoint<<", but reference is "<<groundPoint2dRef<<" error: "<<groundRes<<" meters)"<<std::endl;
+      std::cerr<<"Imprecise result with forward estimated model: fwd("<<gcp.first<<") = "<<groundPoint<<", but reference is "<<groundPoint2dRef<<" error: "<<groundRes<<" meters)"<<std::endl;
       }
 
     // Check inverse transform
     imgPoint = rpcInvTransform->TransformPoint(groundPoint2dRef);
 
-    double imgRes = euclideanDistanceMetric->Evaluate(imgPoint,it->first);
+    double imgRes = euclideanDistanceMetric->Evaluate(imgPoint,gcp.first);
 
     if(imgRes>imgTol)
       {
       fail = true;
-      std::cerr<<"Imprecise result with inverse estimated model: inv("<<groundPoint2dRef<<") = "<<imgPoint<<", but reference is "<<it->first<<" error: "<<imgRes<<" pixels)"<<std::endl;
+      std::cerr<<"Imprecise result with inverse estimated model: inv("<<groundPoint2dRef<<") = "<<imgPoint<<", but reference is "<<gcp.first<<" error: "<<imgRes<<" pixels)"<<std::endl;
       }
     }
 

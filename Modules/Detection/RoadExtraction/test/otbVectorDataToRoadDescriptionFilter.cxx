@@ -86,7 +86,7 @@ int otbVectorDataToRoadDescriptionFilter(int itkNotUsed(argc), char* argv[])
 
   if (!DisplayWarnings)
     {
-    reader->SetGlobalWarningDisplay(0);
+    reader->SetGlobalWarningDisplay(false);
     }
   otb::DEMHandler::Instance()->OpenDEMDirectory(DEMDirectory);
 

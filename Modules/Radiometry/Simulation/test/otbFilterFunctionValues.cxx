@@ -58,9 +58,9 @@ int otbFilterFunctionValuesSpectralResponseTest(int argc, char * argv[])
   file.open(outname);
 
   file << "Output vector :" << std::endl;
-  for (unsigned int i = 0; i < object.size(); ++i)
+  for (float i : object)
     {
-    file << object[i] << std::endl;
+    file << i << std::endl;
     }
   file << std::endl;
   file << "L_min :" << filterFunctionValues->GetMinSpectralValue() << std::endl;
@@ -103,15 +103,15 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
   file.open(outname);
 
   file << "Input Vector :" << std::endl;
-  for (unsigned int i = 0; i < vect.size(); ++i)
+  for (float i : vect)
     {
-    file << vect[i] << std::endl;
+    file << i << std::endl;
     }
   file << std::endl;
   file << "Output vector :" << std::endl;
-  for (unsigned int i = 0; i < object->GetFilterFunctionValues6S().size(); ++i)
+  for (float i : object->GetFilterFunctionValues6S())
     {
-    file << object->GetFilterFunctionValues6S()[i] << std::endl;
+    file << i << std::endl;
     }
   file << std::endl;
   file << "L_min :" << object->GetMinSpectralValue() << std::endl;

@@ -64,9 +64,9 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::GetNumberOfRelations()
 {
   unsigned int result = 0;
-  for (unsigned int i = 0; i < 8; ++i)
+  for (auto & i : m_Accumulator)
     {
-    result += m_Accumulator[i];
+    result += i;
 
     }
   return result;

@@ -286,7 +286,7 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  for (auto it = children.begin(); it != children.end(); ++it)
     {
     // Copy input DataNode info
     DataNodePointerType dataNode = (*it)->Get();
@@ -358,9 +358,9 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         startIdx.Fill(itk::NumericTraits<IndexValueType>::max());
         endIdx.Fill(itk::NumericTraits<IndexValueType>::NonpositiveMin());
 
-        for (unsigned int k=0; k<4; ++k)
+        for (auto & physCorner : physCorners)
           {
-          this->GetOutput()->TransformPhysicalPointToIndex(physCorners[k],tmpIdx);
+          this->GetOutput()->TransformPhysicalPointToIndex(physCorner,tmpIdx);
           
           startIdx[0] = std::min(startIdx[0],tmpIdx[0]);
           startIdx[1] = std::min(startIdx[1],tmpIdx[1]);

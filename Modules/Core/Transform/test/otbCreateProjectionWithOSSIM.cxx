@@ -32,7 +32,7 @@
 // iostream is used for general output
 #include <iostream>
 #include <iterator>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"

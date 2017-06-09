@@ -93,7 +93,7 @@ int TestPositionContainers(otb::ogr::DataSource *output, otb::ogr::DataSource *b
     const OGRGeometry* cstpgeomBase = itBase->GetGeometry();
     OGRGeometry* pgeomBase = cstpgeomBase->clone();
     OGRPoint* castPointBase = dynamic_cast<OGRPoint*>(pgeomBase);
-    if (castPointBase == NULL)
+    if (castPointBase == nullptr)
       {
       std::cerr << "Could not dynamic_cast pgeomBase" << std::endl;
       return EXIT_FAILURE;
@@ -107,7 +107,7 @@ int TestPositionContainers(otb::ogr::DataSource *output, otb::ogr::DataSource *b
         const OGRGeometry* cstpgeomOutput = itOutput->GetGeometry();
         OGRGeometry* pgeomOutput = cstpgeomOutput->clone();
         OGRPoint* castPointOutput = dynamic_cast<OGRPoint*>(pgeomOutput);
-        if (castPointOutput == NULL)
+        if (castPointOutput == nullptr)
           {
           std::cerr << "Could not dynamic_cast pgeomOutput" << std::endl;
           return EXIT_FAILURE;

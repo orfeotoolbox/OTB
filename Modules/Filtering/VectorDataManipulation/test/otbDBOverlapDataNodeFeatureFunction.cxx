@@ -69,7 +69,7 @@ int otbDBOverlapDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 
   if (!DisplayWarnings)
    {
-    vdReader->SetGlobalWarningDisplay(0);
+    vdReader->SetGlobalWarningDisplay(false);
    }
 
   vdReader->SetFileName(inputVD);

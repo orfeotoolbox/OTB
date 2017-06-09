@@ -65,7 +65,7 @@
 
 #include "otbImageFileReader.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 int main(int argc, char *argv[])

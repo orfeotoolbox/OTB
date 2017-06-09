@@ -367,7 +367,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
                                                                                lTranslation[2]);
 
             // for each main orientation
-            for (typename std::vector<PixelType>::iterator orientationIt = lOrientations.begin();
+            for (auto orientationIt = lOrientations.begin();
                  orientationIt != lOrientations.end();
                  ++orientationIt)
               {
@@ -837,7 +837,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     }
 
   // normalize histogram to unit length
-  typename std::vector<PixelType>::iterator lIterHisto = lHistogram.begin();
+  auto lIterHisto = lHistogram.begin();
   float                                     lNorm = 0.0;
 
   while (lIterHisto != lHistogram.end())

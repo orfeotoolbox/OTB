@@ -63,9 +63,9 @@ int otbBSplineInterpolateImageFunction(int argc, char * argv[])
   std::ofstream file;
   file.open(outfname);
 
-  for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin(); it != indicesList.end(); ++it)
+  for (auto & it : indicesList)
     {
-    file << (*it) << " -> " << interpolator->EvaluateAtContinuousIndex((*it)) << std::endl;
+    file << it << " -> " << interpolator->EvaluateAtContinuousIndex(it) << std::endl;
     }
 
   file.close();

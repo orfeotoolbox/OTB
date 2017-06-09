@@ -23,7 +23,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
+#include <cstdio>
 
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbCompositeTransform.h"

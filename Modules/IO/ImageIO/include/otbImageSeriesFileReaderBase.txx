@@ -145,7 +145,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     return;
     }
 
-  while (1)
+  while (true)
     {
     /*
      * Reading the filenames
@@ -214,7 +214,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     std::vector<unsigned int> bands;
     int                       aBand, oldBand = -1;
     char                      sep;
-    while (1)
+    while (true)
       {
       inputFile >> aBand;
       if (oldBand != -1)
@@ -383,7 +383,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 
   if (m_ListOfFileNames.size() > 0)
     {
-    std::vector<std::vector<unsigned int> >::const_iterator bandSelection = m_ListOfBandSelection.begin();
+    auto bandSelection = m_ListOfBandSelection.begin();
     os << indent << "Image File(s) to be read\n";
     for (unsigned int i = 0; i < GetNumberOfOutputs(); ++i)
       {
@@ -395,7 +395,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
          << m_ListOfRegionSelection[i].GetSize()[1] << ")\n";
       os << indent << "  " << "BandSelection  : ";
 
-      for (std::vector<unsigned int>::const_iterator bd = (*bandSelection).begin();
+      for (auto bd = (*bandSelection).begin();
            bd != (*bandSelection).end();
            ++bd)
         {

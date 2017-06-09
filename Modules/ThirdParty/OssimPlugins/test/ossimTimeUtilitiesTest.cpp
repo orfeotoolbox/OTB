@@ -68,13 +68,13 @@ getModifiedJulianDate(ossimString const& utcTimeString)
       throw std::runtime_error(("Invalid year" + utcTimeString).string());
    }
 
-   stop  = 0;
+   stop  = nullptr;
    int month = std::strtol( output[1].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
       throw std::runtime_error(("Invalid month" + utcTimeString).string());
    }
-   stop  = 0;
+   stop  = nullptr;
    int day = std::strtol( output[2].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
@@ -88,21 +88,21 @@ getModifiedJulianDate(ossimString const& utcTimeString)
       throw std::runtime_error(("Invalid time" + utcTimeString).string());
    }
 
-   stop  = 0;
+   stop  = nullptr;
    int hours = std::strtol( output[0].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
       throw std::runtime_error(("Invalid hour" + utcTimeString).string());
    }
 
-   stop  = 0;
+   stop  = nullptr;
    int minutes = std::strtol( output[1].c_str(), &stop, 10);
    if ( *stop != 0 )
    {
       throw std::runtime_error(("Invalid minutes" + utcTimeString).string());
    }
 
-   stop  = 0;
+   stop  = nullptr;
    double seconds = std::strtod( output[2].c_str(), &stop);
    if ( *stop != 0 )
    {

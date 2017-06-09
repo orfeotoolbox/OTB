@@ -304,7 +304,7 @@ MachineLearningModelRegressionType::Pointer getNeuralNetworkRegressionModel(unsi
     NeuralNetworkType;
   NeuralNetworkType::Pointer regression = NeuralNetworkType::New();
 
-  regression->SetRegressionMode(1);
+  regression->SetRegressionMode(true);
   regression->SetTrainMethod(CvANN_MLP_TrainParams::BACKPROP);
   std::vector<unsigned int> layerSizes;
   layerSizes.push_back(nbInputVar);
@@ -376,7 +376,7 @@ MachineLearningModelRegressionType::Pointer getSVMRegressionModel()
     SVMType;
   SVMType::Pointer regression = SVMType::New();
 
-  regression->SetRegressionMode(1);
+  regression->SetRegressionMode(true);
   regression->SetSVMType(CvSVM::NU_SVR);
   regression->SetNu(0.5);
   regression->SetKernelType(CvSVM::RBF);

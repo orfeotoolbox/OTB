@@ -19,7 +19,7 @@
  */
 
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "otbPointSetDensityEpanechnikovFunction.h"
 #include "itkPointSet.h"

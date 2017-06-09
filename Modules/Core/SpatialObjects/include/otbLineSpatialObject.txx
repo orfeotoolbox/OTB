@@ -102,8 +102,8 @@ LineSpatialObject<VDimension>
   if (this->GetBoundingBoxChildrenName().empty()
       || strstr(typeid(Self).name(), this->GetBoundingBoxChildrenName().c_str()))
     {
-    typename PointListType::const_iterator it  = m_Points.begin();
-    typename PointListType::const_iterator end = m_Points.end();
+    auto it  = m_Points.begin();
+    auto end = m_Points.end();
 
     if (it == end)
       {
@@ -143,9 +143,9 @@ bool
 LineSpatialObject<VDimension>
 ::IsInside(const PointType& point) const
 {
-  typename PointListType::const_iterator it1 = m_Points.begin();
-  typename PointListType::const_iterator end = m_Points.end();
-  typename PointListType::const_iterator it2 = it1 + 1;
+  auto it1 = m_Points.begin();
+  auto end = m_Points.end();
+  auto it2 = it1 + 1;
   if (!this->GetIndexToWorldTransform()->GetInverse(const_cast<TransformType *>(this->GetInternalInverseTransform())))
     {
     return false;

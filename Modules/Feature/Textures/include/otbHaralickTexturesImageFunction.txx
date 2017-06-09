@@ -146,7 +146,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
   double totalFrequency = static_cast<double> (GLCIList->GetTotalFrequency());
 
   //Normalize the co-occurrence indexed list and compute mean, marginalSum
-  typename VectorType::iterator it = glcVector.begin();
+  auto it = glcVector.begin();
   while( it != glcVector.end())
     {
     double frequency = (*it).second / totalFrequency;

@@ -192,7 +192,7 @@ FuzzyVariable<TLabel, TPrecision>
   MembershipValueType output;
 
   // Walk the membership parameters map
-  for(typename ParametersMapType::const_iterator mapIt = m_MembershipFunctions.begin();
+  for(auto mapIt = m_MembershipFunctions.begin();
       mapIt!=m_MembershipFunctions.end(); ++mapIt)
     {
     // Compute the membership
@@ -256,7 +256,7 @@ FuzzyVariable<TLabel, TPrecision>
 {
   // Define an iterator on the label set
   typedef std::map<TLabel, TPrecision> LabelMapType;
-  typename LabelMapType::const_iterator it = labelMap.begin();
+  auto it = labelMap.begin();
 
   // Open the set
   out<<"{";

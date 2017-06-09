@@ -58,25 +58,25 @@ int otbRCC8GraphFileWriter(int itkNotUsed(argc), char* argv[])
   VertexType::Pointer vertex1, vertex2, vertex3, vertex4;
   vertex1 = VertexType::New();
   vertex1->SetSegmentationLevel(0);
-  vertex1->SetSegmentationType(0);
+  vertex1->SetSegmentationType(false);
   vertex1->SetPath(path);
   rcc8Graph->SetVertex(0, vertex1);
 
   vertex2 = VertexType::New();
   vertex2->SetSegmentationLevel(1);
-  vertex2->SetSegmentationType(1);
+  vertex2->SetSegmentationType(true);
   vertex2->SetPath(path);
   rcc8Graph->SetVertex(1, vertex2);
 
   vertex3 = VertexType::New();
   vertex3->SetSegmentationLevel(2);
-  vertex3->SetSegmentationType(0);
+  vertex3->SetSegmentationType(false);
   vertex3->SetPath(path);
   rcc8Graph->SetVertex(2, vertex3);
 
   vertex4 = VertexType::New();
   vertex4->SetSegmentationLevel(3);
-  vertex4->SetSegmentationType(0);
+  vertex4->SetSegmentationType(false);
   vertex4->SetPath(path);
   rcc8Graph->SetVertex(3, vertex4);
 

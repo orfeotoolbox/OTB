@@ -22,7 +22,7 @@
 
 #include "otbFuzzyDescriptorsModelManager.h"
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include "itkMacro.h"
 
 int otbFuzzyDescriptorsModelManagerNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])

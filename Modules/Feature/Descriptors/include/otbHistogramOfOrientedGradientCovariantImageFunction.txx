@@ -262,7 +262,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   hog.push_back(lowerLeftHistogram);
 
   // Normalize each histogram
-  for(typename OutputType::iterator oIt = hog.begin(); oIt!=hog.end(); ++oIt)
+  for(auto oIt = hog.begin(); oIt!=hog.end(); ++oIt)
     {
     // Compute L2 norm
     double squaredCumul = 1e-10;
@@ -273,7 +273,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
       }
     double scale = 1/vcl_sqrt(squaredCumul);
     // Apply normalisation factor
-    for(typename std::vector<TOutputPrecision>::iterator vIt = oIt->begin();
+    for(auto vIt = oIt->begin();
         vIt!=oIt->end(); ++vIt)
       {
       (*vIt)*=scale;

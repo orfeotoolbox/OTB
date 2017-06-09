@@ -83,9 +83,9 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 ::GetNumberOfRelations()
 {
   unsigned int result = 0;
-  for (unsigned int i = 0; i < 8; ++i)
+  for (auto & i : m_Accumulator)
     {
-    result += m_Accumulator[i];
+    result += i;
 
     }
   return result;
@@ -381,10 +381,10 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
   EdgeMapType            globalEdgeMap;
 
   // merge all edges
-  for (typename EdgeMapVectorType::iterator vIt = m_EdgesPerThread.begin();
+  for (auto vIt = m_EdgesPerThread.begin();
        vIt != m_EdgesPerThread.end(); ++vIt)
     {
-    for (typename EdgeMapType::iterator mIt = (*vIt).begin();
+    for (auto mIt = (*vIt).begin();
          mIt != (*vIt).end(); ++mIt)
       {
       globalEdgeMap[mIt->first] = mIt->second;
@@ -392,7 +392,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
     }
 
   // Report edges to the graph
-  for (typename EdgeMapType::iterator mIt = globalEdgeMap.begin();
+  for (auto mIt = globalEdgeMap.begin();
        mIt != globalEdgeMap.end(); ++mIt)
     {
     graph->AddEdge(mIt->first.first, mIt->first.second, mIt->second);

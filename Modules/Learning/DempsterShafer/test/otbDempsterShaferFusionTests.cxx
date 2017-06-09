@@ -631,13 +631,13 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
   LabelSetMapType mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
-  for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
+  for (auto & vectorAllLabel : vectorAllLabels)
     {
     //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
-    universe.insert(vectorAllLabels[it]);
+    universe.insert(vectorAllLabel);
     labelSet.clear();
-    labelSet.insert(vectorAllLabels[it]);
-    mapLabelSets[vectorAllLabels[it]] = labelSet;
+    labelSet.insert(vectorAllLabel);
+    mapLabelSets[vectorAllLabel] = labelSet;
     }
 
   std::cout << "universe = " << universe << std::endl;
@@ -1036,13 +1036,13 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
   LabelSetMapType mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
-  for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
+  for (auto & vectorAllLabel : vectorAllLabels)
     {
     //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
-    universe.insert(vectorAllLabels[it]);
+    universe.insert(vectorAllLabel);
     labelSet.clear();
-    labelSet.insert(vectorAllLabels[it]);
-    mapLabelSets[vectorAllLabels[it]] = labelSet;
+    labelSet.insert(vectorAllLabel);
+    mapLabelSets[vectorAllLabel] = labelSet;
     }
 
   std::cout << "universe = " << universe << std::endl;
@@ -1363,13 +1363,13 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
   LabelSetMapType mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
-  for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
+  for (auto & vectorAllLabel : vectorAllLabels)
     {
     //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
-    universe.insert(vectorAllLabels[it]);
+    universe.insert(vectorAllLabel);
     labelSet.clear();
-    labelSet.insert(vectorAllLabels[it]);
-    mapLabelSets[vectorAllLabels[it]] = labelSet;
+    labelSet.insert(vectorAllLabel);
+    mapLabelSets[vectorAllLabel] = labelSet;
     }
 
   std::cout << "universe = " << universe << std::endl;

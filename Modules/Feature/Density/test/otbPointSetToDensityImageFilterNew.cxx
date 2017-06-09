@@ -19,7 +19,7 @@
  */
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "otbImage.h"
 #include "otbPointSetToDensityImageFilter.h"
 #include "itkVariableLengthVector.h"

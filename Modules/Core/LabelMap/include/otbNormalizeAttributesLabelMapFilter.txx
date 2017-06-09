@@ -63,8 +63,8 @@ NormalizeAttributesLabelObjectFunctor<TLabelObject>
   for (it = attr.begin(); it != attr.end(); ++it)
     {
     const AttributesValueType& value = lo->GetAttribute( (*it).c_str() );
-    typename AttributesMapType::const_iterator minIt = m_Min.find(*it);
-    typename AttributesMapType::const_iterator maxIt = m_Max.find(*it);
+    auto minIt = m_Min.find(*it);
+    auto maxIt = m_Max.find(*it);
     if (minIt != m_Min.end() && maxIt != m_Max.end())
       {
       lo->SetAttribute( (*it).c_str(), (value - minIt->second)/(maxIt->second - minIt->second) );

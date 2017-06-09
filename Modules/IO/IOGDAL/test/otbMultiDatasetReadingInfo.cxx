@@ -55,20 +55,20 @@ int otbMultiDatasetReadingInfo(int argc, char* argv[])
     return EXIT_FAILURE;
 
   // Parse all the names to delete the path of the filename
-  for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int)names.size(); itSubDataset++ )
+  for(auto & name : names)
     {
-    std::size_t posDeb = names[itSubDataset].find(":\"");
+    std::size_t posDeb = name.find(":\"");
     if (posDeb==std::string::npos)
       return EXIT_FAILURE;
 
-    std::size_t posEnd = names[itSubDataset].rfind("\":");
+    std::size_t posEnd = name.rfind("\":");
     if (posEnd==std::string::npos)
       return EXIT_FAILURE;
 
     // Remove the path from the SubDataset_name metadata
-    std::string strFilepath = names[itSubDataset].substr(posDeb+2, posEnd - posDeb - 2);
+    std::string strFilepath = name.substr(posDeb+2, posEnd - posDeb - 2);
     std::string filename = itksys::SystemTools::GetFilenameName(strFilepath);
-    names[itSubDataset].replace(posDeb+2, posEnd - posDeb - 2, filename.c_str() );
+    name.replace(posDeb+2, posEnd - posDeb - 2, filename.c_str() );
     }
 
   std::ofstream file;

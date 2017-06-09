@@ -116,7 +116,7 @@ SEMClassifier<TInputImage, TOutputImage>
     {
     m_ClassLabels.resize(labels->Size());
 
-    ClassLabelVectorType::iterator          iterClassLabel = m_ClassLabels.begin();
+    auto          iterClassLabel = m_ClassLabels.begin();
     typename OutputType::ConstIterator      iterLabels = labels->Begin();
     typename OutputType::InstanceIdentifier id = 0;
 
@@ -135,7 +135,7 @@ SEMClassifier<TInputImage, TOutputImage>
     {
     m_ClassLabels.resize(labels->Size());
 
-    ClassLabelVectorType::iterator          iterClassLabel = m_ClassLabels.begin();
+    auto          iterClassLabel = m_ClassLabels.begin();
     typename OutputType::iterator           iterLabels = labels->Begin();
     typename OutputType::InstanceIdentifier id = 0;
 
@@ -177,7 +177,7 @@ SEMClassifier<TInputImage, TOutputImage>
                                                                     imgLabels->GetBufferedRegion());
     imgLabelIterEnd.GoToEnd();
 
-    ClassLabelVectorType::iterator iterClassLabel = m_ClassLabels.begin();
+    auto iterClassLabel = m_ClassLabels.begin();
 
     do
       {
@@ -199,7 +199,7 @@ SEMClassifier<TInputImage, TOutputImage>
                                                                     imgLabels->GetBufferedRegion());
     imgLabelIterEnd.GoToEnd();
 
-    ClassLabelVectorType::iterator iterClassLabel = m_ClassLabels.begin();
+    auto iterClassLabel = m_ClassLabels.begin();
 
     do
       {
@@ -349,7 +349,7 @@ SEMClassifier<TInputImage, TOutputImage>
     if (static_cast<unsigned int>(m_InitialProportions.size()) != nbClasses)
       {
       unsigned int label;
-      for (typename ClassLabelVectorType::iterator labelIter = m_ClassLabels.begin();
+      for (auto labelIter = m_ClassLabels.begin();
            labelIter != m_ClassLabels.end();
            ++labelIter)
         {
@@ -366,7 +366,7 @@ SEMClassifier<TInputImage, TOutputImage>
       {
       // Be sure, the sum of initial proportion remains to 1
       double                                  sumProportion = 0.0;
-      typename ProportionVectorType::iterator iterProportion = m_InitialProportions.begin();
+      auto iterProportion = m_InitialProportions.begin();
       do
         {
         sumProportion += *iterProportion;
@@ -384,7 +384,7 @@ SEMClassifier<TInputImage, TOutputImage>
       // non uniform random sampling according to m_InitialProportions
       double sample;
       double cumulativeProportion;
-      for (typename ClassLabelVectorType::iterator labelIter = m_ClassLabels.begin();
+      for (auto labelIter = m_ClassLabels.begin();
            labelIter != m_ClassLabels.end();
            ++labelIter)
         {
@@ -443,7 +443,7 @@ SEMClassifier<TInputImage, TOutputImage>
   m_NbChange = 0;
 
   int posSample = 0;
-  for (typename ClassLabelVectorType::iterator iter = m_ClassLabels.begin();
+  for (auto iter = m_ClassLabels.begin();
        iter != m_ClassLabels.end();
        ++iter)
     {
@@ -502,8 +502,8 @@ SEMClassifier<TInputImage, TOutputImage>
   typename SampleType::ConstIterator iterSample = m_SampleList->Begin();
   typename SampleType::ConstIterator lastSample = m_SampleList->End();
 
-  ClassLabelVectorType::iterator iterLabel = m_ClassLabels.begin();
-  ClassLabelVectorType::iterator lastLabel = m_ClassLabels.end();
+  auto iterLabel = m_ClassLabels.begin();
+  auto lastLabel = m_ClassLabels.end();
 
   typename SampleType::InstanceIdentifier id = 0;
 

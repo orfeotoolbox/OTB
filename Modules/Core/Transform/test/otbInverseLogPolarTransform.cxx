@@ -60,15 +60,15 @@ int otbInverseLogPolarTransform(int itkNotUsed(argc), char* argv[])
 
   file << "Transform calculation ... :" << std::endl;
 
-  for (PointsVectorType::iterator it = vect.begin(); it != vect.end(); ++it)
+  for (auto & it : vect)
     {
-    PointType p = transform->TransformPoint(*it);
+    PointType p = transform->TransformPoint(it);
     PointType pprime;
-    double    rho = vcl_sqrt((*it)[0] * (*it)[0] + (*it)[1] * (*it)[1]);
+    double    rho = vcl_sqrt(it[0] * it[0] + it[1] * it[1]);
 
     if (rho > 0)
       {
-      pprime[0] = (1. / angularStep) * vcl_asin((*it)[1] / rho);
+      pprime[0] = (1. / angularStep) * vcl_asin(it[1] / rho);
       pprime[0] = pprime[0] * (180. / otb::CONST_PI);
       // Deplacing the range to [0, 90], [270, 360]
       pprime[0] = pprime[0] > 0. ? pprime[0] : pprime[0] + 360.;
@@ -85,7 +85,7 @@ int otbInverseLogPolarTransform(int itkNotUsed(argc), char* argv[])
       pprime[1] = 0.;
       }
 
-    file << "Original Point: " << (*it) << ", Reference point: " << pprime << ", Transformed point: " << p << std::endl;
+    file << "Original Point: " << it << ", Reference point: " << pprime << ", Transformed point: " << p << std::endl;
     }
   file.close();
 

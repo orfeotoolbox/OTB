@@ -53,8 +53,8 @@ CumulantsForEdgeworthProfile<TInput>
 {
   itk::VariableLengthVector<double> resu(fCum.size());
 
-  Iterator iter1 = fCum.begin();
-  Iterator iter2 = cumulants.fCum.begin();
+  auto iter1 = fCum.begin();
+  auto iter2 = cumulants.fCum.begin();
 
   for (unsigned int level = 0; level < resu.GetSize(); level++)
     resu[level] = KL_profile((*iter1++), (*iter2++));
@@ -131,7 +131,7 @@ CumulantsForEdgeworthProfile<TInput>
   (const TInput& input, std::vector<itk::Array2D<int> >& mask)
 {
   fMu.resize(mask.size());
-  std::vector<itk::Array2D<int> >::iterator iter = mask.begin();
+  auto iter = mask.begin();
 
   if (InitSumAndMoments (input, (*iter++))) return 1;
 
@@ -387,7 +387,7 @@ KullbackLeiblerProfile<TInput1, TInput2, TOutput>
   int i, j, middle = m_RadiusMax;
 
   // let's begin by the smaller neighborhood
-  std::vector<itk::Array2D<int> >::iterator outer_iter = m_mask.begin();
+  auto outer_iter = m_mask.begin();
   (*outer_iter).SetSize(lenMax, lenMax);
   (*outer_iter).fill(0);
   for (i = middle - m_RadiusMin; i <= middle + m_RadiusMin; ++i)

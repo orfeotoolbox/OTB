@@ -25,7 +25,7 @@
 #include "otbPersistentImageToOGRDataFilter.h"
 #include "itkTimeProbe.h"
 #include <boost/foreach.hpp>
-#include <stdio.h>
+#include <cstdio>
 #include "otbMacro.h"
 #include "otbOGRHelpers.h"
 
@@ -131,7 +131,7 @@ PersistentImageToOGRDataFilter<TImage>
 {
    std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
    bool projectionInformationAvailable = !projectionRefWkt.empty();
-   OGRSpatialReference * oSRS = NULL;
+   OGRSpatialReference * oSRS = nullptr;
    if(projectionInformationAvailable)
    {
       oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));

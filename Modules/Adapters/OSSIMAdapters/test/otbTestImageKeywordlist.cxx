@@ -87,14 +87,14 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 		return EXIT_FAILURE;
 	  }
 	  
-	  KeywordlistMapType::iterator kwlistIt = kwmap.begin();
+	  auto kwlistIt = kwmap.begin();
 	  
 	  double val1,val2;
 	  while ( kwlistIt!=kwmap.end() )
 	  {
 		  val1 = convertStringToDouble(kwlistIt->second);
 		  
-		  KeywordlistMapType::iterator it = kwmap2.find(kwlistIt->first);
+		  auto it = kwmap2.find(kwlistIt->first);
 		  if (it != kwmap2.end() )
 		  {
 		    val2 = convertStringToDouble(it->second);
@@ -126,12 +126,12 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 		 back_inserter(neededKw));
 		 
 	  std::list<std::string> missingKw;
-	  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+	  for(auto & neededIt : neededKw)
 	  {
 		bool foundNeededKw = false;
-		for(KeywordlistMapType::iterator kwlistIt=kwmap.begin(); kwlistIt!=kwmap.end(); ++kwlistIt)
+		for(auto & kwlistIt : kwmap)
 		{
-			std::size_t found = kwlistIt->first.find(*neededIt);
+			std::size_t found = kwlistIt.first.find(neededIt);
 			if (found!=std::string::npos)
 			{   
 				foundNeededKw = true;
@@ -139,14 +139,14 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 		}
 		
 		if (!foundNeededKw)
-			missingKw.push_back(*neededIt);
+			missingKw.push_back(neededIt);
 	  }
 	  
 	  if ( (neededKw.size()>0) && (missingKw.size()>0) )
 	  {
 		std::cerr << "Error : some keywords were not found; missing keywords : " << std::endl;
-		for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)  
-		   std::cerr << *itm << std::endl;
+		for (auto & itm : missingKw)  
+		   std::cerr << itm << std::endl;
 		return EXIT_FAILURE;
 	  }
 	  /*-------------------------------------*/
@@ -172,8 +172,8 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 		 
 	  std::map<std::string,double> mapKwTol;
 	  std::pair<std::map<std::string,double>::iterator,bool> ret;
-	  std::list<std::string>::iterator tolsIt=tols.begin();
-	  std::list<std::string>::iterator neededKwIt=neededKw.begin();
+	  auto tolsIt=tols.begin();
+	  auto neededKwIt=neededKw.begin();
 	  while ( (tolsIt!=tols.end()) && (neededKwIt!=neededKw.end()) )
 	  {		
 	     mapKwTol.insert(  std::pair<std::string,double>(*neededKwIt,  convertStringToDouble(*tolsIt) )   );
@@ -187,18 +187,18 @@ int otbTestImageKeywordlist(int argc, char* argv[])
 		return EXIT_FAILURE;
 	  }
 	  
-	  for(std::list<std::string>::iterator neededIt=neededKw.begin(); neededIt!=neededKw.end(); ++neededIt)
+	  for(auto & neededIt : neededKw)
 	  {
-		KeywordlistMapType::iterator kwlistIt = kwmap.begin();
-		KeywordlistMapType::iterator kwlistIt2 = kwmap2.begin();
+		auto kwlistIt = kwmap.begin();
+		auto kwlistIt2 = kwmap2.begin();
 		
 		while ( (kwlistIt!=kwmap.end()) && (kwlistIt2!=kwmap2.end()) )
 		{
-			std::size_t found = kwlistIt->first.find(*neededIt);
+			std::size_t found = kwlistIt->first.find(neededIt);
 			if (found!=std::string::npos) // keyword found
 			{   
 				
-				if ( fabs( convertStringToDouble(kwlistIt->second) - convertStringToDouble(kwlistIt2->second)) > mapKwTol[*neededIt] )
+				if ( fabs( convertStringToDouble(kwlistIt->second) - convertStringToDouble(kwlistIt2->second)) > mapKwTol[neededIt] )
 				{
 					std::cerr << "Error : orig key/value (" << kwlistIt->first << " " << kwlistIt->second << ")"<< std::endl
 					    << "reloaded key/value (" << kwlistIt2->first << " " << kwlistIt2->second << ")"<< std::endl;

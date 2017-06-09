@@ -22,7 +22,7 @@
 
 // iostream is used for general output
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <complex>
 
 #include "otbImageFileReader.h"

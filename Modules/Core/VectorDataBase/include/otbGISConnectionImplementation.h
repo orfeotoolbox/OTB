@@ -78,7 +78,7 @@ protected:
   /** Constructor */
   GISConnectionImplementation(){};
   /** Destructor */
-  virtual ~GISConnectionImplementation(){};
+  ~GISConnectionImplementation() override{};
 
 private:
   GISConnectionImplementation(const Self &); //purposely not implemented

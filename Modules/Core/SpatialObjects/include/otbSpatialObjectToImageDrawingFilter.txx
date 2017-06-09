@@ -276,8 +276,8 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
     {
     ChildrenType children;
     children = InputObject->GetChildren(0);
-    IteratorType iter = children->begin();
-    IteratorType end = children->end();
+    auto iter = children->begin();
+    auto end = children->end();
     double       minimum[ObjectDimension];
 
     (*iter)->ComputeBoundingBox();

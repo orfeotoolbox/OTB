@@ -30,7 +30,7 @@ int otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew(int itkNotUs
   //RadiometryCorrectionParametersToAtmosphericRadiativeTermsType::Pointer object =
   //  RadiometryCorrectionParametersToAtmosphericRadiativeTermsType::New();
 
-  RadiometryCorrectionParametersToAtmosphericRadiativeTermsType* object = new RadiometryCorrectionParametersToAtmosphericRadiativeTermsType;
+  auto* object = new RadiometryCorrectionParametersToAtmosphericRadiativeTermsType;
 
   std::cout << object << std::endl;
 

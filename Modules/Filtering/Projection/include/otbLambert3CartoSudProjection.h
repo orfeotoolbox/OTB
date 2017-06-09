@@ -64,7 +64,7 @@ protected:
     this->SetParameter("StandardParallel2", "44.9960938888888888888888888888");
   }
 
-  virtual ~Lambert3CartoSudProjection() {}
+  ~Lambert3CartoSudProjection() override {}
 
 private:
   Lambert3CartoSudProjection(const Self &); //purposely not implemented

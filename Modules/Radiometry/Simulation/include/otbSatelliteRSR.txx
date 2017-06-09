@@ -155,7 +155,7 @@ void SatelliteRSR<TPrecision, TValuePrecision>::PrintSelf(std::ostream& os, itk:
 
   //typename VectorPairType::iterator it = m_RSR.begin();
   //it = m_RSR.at(0);
-  for (typename RSRVectorType::const_iterator it = m_RSR.begin(); it != m_RSR.end(); ++it)
+  for (auto it = m_RSR.begin(); it != m_RSR.end(); ++it)
     {
     os << indent << "Band Number " << it - m_RSR.begin() << std::endl;
     (*it)->PrintSelf(os, indent);

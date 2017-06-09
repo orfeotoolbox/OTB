@@ -58,14 +58,14 @@ LineRatioDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, T
   double M2 = 0.0;
   double M3 = 0.0;
 
-  std::vector<double>::iterator m1It = m1->begin();
-  std::vector<double>::iterator m1End = m1->end();
+  auto m1It = m1->begin();
+  auto m1End = m1->end();
 
-  std::vector<double>::iterator m2It = m2->begin();
-  std::vector<double>::iterator m2End = m2->end();
+  auto m2It = m2->begin();
+  auto m2End = m2->end();
 
-  std::vector<double>::iterator m3It = m3->begin();
-  std::vector<double>::iterator m3End = m3->end();
+  auto m3It = m3->begin();
+  auto m3End = m3->end();
 
   while (m1It != m1End && m2It != m2End && m3It != m3End)
     {

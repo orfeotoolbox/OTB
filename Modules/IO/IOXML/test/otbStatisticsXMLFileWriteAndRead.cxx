@@ -27,7 +27,7 @@
 template <typename MapT>
 void printMap(const MapT &map)
 {
-  for (typename MapT::const_iterator it = map.begin() ; it != map.end() ; ++it)
+  for (auto it = map.begin() ; it != map.end() ; ++it)
     {
     std::cout << "  * "<<it->first << " -> " << it->second << std::endl; 
     }
@@ -153,15 +153,15 @@ int otbStatisticsXMLFileWriteAndRead(int argc, char* argv [])
   std::vector<std::string> vectorList = reader->GetStatisticVectorNames();
   std::vector<std::string> mapList = reader->GetStatisticMapNames();
   std::cout << "Available vectors :";
-  for (unsigned int i=0; i<vectorList.size() ; ++i)
+  for (auto & i : vectorList)
     {
-    std::cout << " " << vectorList[i];
+    std::cout << " " << i;
     }
   std::cout << std::endl;
   std::cout << "Available map :";
-  for (unsigned int i=0; i<mapList.size() ; ++i)
+  for (auto & i : mapList)
     {
-    std::cout << " " << mapList[i];
+    std::cout << " " << i;
     }
   std::cout << std::endl;
 
