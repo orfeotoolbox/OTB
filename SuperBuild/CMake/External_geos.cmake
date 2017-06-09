@@ -22,23 +22,10 @@ INCLUDE_ONCE_MACRO(GEOS)
 
 SETUP_SUPERBUILD(GEOS)
 
-if(MSVC)
-  set(GEOS_PATCH_COMMAND ${CMAKE_COMMAND} -E copy
-	  ${CMAKE_SOURCE_DIR}/patches/GEOS/CMakeLists.txt
-	  ${CMAKE_SOURCE_DIR}/patches/GEOS/nmake.opt
-	  ${GEOS_SB_SRC})
-  set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND} -DGEOS_SB_SRC=${GEOS_SB_SRC})
-
-else()
-  set(GEOS_PATCH_COMMAND)
-  set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND})
-
-endif()
-
 ExternalProject_Add(GEOS
    PREFIX GEOS
-   URL "http://download.osgeo.org/geos/geos-3.5.0.tar.bz2"
-   URL_MD5 136842690be7f504fba46b3c539438dd
+   URL "http://download.osgeo.org/geos/geos-3.6.1.tar.bz2"
+   URL_MD5 c97e338b3bc81f9848656e9d693ca6cc
    SOURCE_DIR ${GEOS_SB_SRC}
    BINARY_DIR ${GEOS_SB_SRC}
    INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -49,10 +36,6 @@ ExternalProject_Add(GEOS
    PATCH_COMMAND ${GEOS_PATCH_COMMAND}
    CMAKE_COMMAND ${GEOS_CMAKE_COMMAND}
    )
-
-if(NOT MSVC)
-  SUPERBUILD_PATCH_SOURCE(GEOS)
-endif()
 
 set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
