@@ -1,5 +1,5 @@
-FAQ
-===
+Frequently Asked Questions
+==========================
 
 Introduction
 ------------
@@ -78,13 +78,13 @@ Observation, the ORFEO Accompaniment Program was set up, to prepare,
 accompany and promote the use and the exploitation of the images derived
 from these sensors.
 
-The creation of a preparatory program is needed because of :
+The creation of a preparatory program is needed because of:
 
 -  the new capabilities and performances of the ORFEO systems (optical
    and radar high resolution, access capability, data quality,
    possibility to acquire simultaneously in optic and radar),
 
--  the implied need of new methodological developments : new processing
+-  the implied need of new methodological developments: new processing
    methods, or adaptation of existing methods,
 
 -  the need to realize those new developments in very close cooperation
