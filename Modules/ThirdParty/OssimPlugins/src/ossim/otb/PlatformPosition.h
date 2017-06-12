@@ -66,7 +66,7 @@ namespace ossimplugins
        * @param nbrData Number of Ephemeris in data
        * @remarks All the ephemeris have to be in the same coordinates system
        * @remarks This constructor copy the content of data, so it's the
-       * calling fonction that have to manage the memory of data.
+       * calling function that have to manage the memory of data.
        */
       PlatformPosition(Ephemeris** data, int nbrData);
 

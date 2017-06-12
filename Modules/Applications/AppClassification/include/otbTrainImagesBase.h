@@ -62,10 +62,10 @@ public:
 
 protected:
 
-  enum SamplingStrategy
+  typedef enum
   {
     CLASS, GEOMETRIC
-  };
+  } SamplingStrategy;
   struct SamplingRates;
   class TrainFileNamesHandler;
 

@@ -116,6 +116,7 @@ private:
     SetDocExampleParameterValue("thres", "0.1");
     SetDocExampleParameterValue("maxiter", "100");
 
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

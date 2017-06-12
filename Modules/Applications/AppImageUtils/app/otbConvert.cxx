@@ -138,6 +138,8 @@ private:
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
     SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png uint8");
     SetDocExampleParameterValue("type", "linear");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

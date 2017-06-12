@@ -133,6 +133,7 @@ private:
     SetDocExampleParameterValue("mode", "list");
     SetDocExampleParameterValue("mode.list.indir", "/home/user/srtm_dir/");
 
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

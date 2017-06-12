@@ -38,7 +38,7 @@ namespace otb {
  * matrix definition (through GenerateTransformationMatrix function)
  * differs.
  *
- * TODO? Utiliser une 2e entree pour donner directement une image de bruit ??
+ * TODO? Use a 2nd input to give a noise image directly?
  *
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa MNFImageFilter

@@ -80,6 +80,8 @@ private:
     SetExampleComment("Obtain a UTM Zone", 0);
     SetDocExampleParameterValue("lat","10.0");
     SetDocExampleParameterValue("lon","124.0");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

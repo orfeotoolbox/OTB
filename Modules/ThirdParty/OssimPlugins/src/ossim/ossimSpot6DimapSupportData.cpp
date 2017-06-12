@@ -1669,7 +1669,8 @@ namespace ossimplugins
       ossimString attribute = "version";
       ossimString value;
       xml_nodes[0]->getAttributeValue(value, attribute);
-      if (value != "2.0")
+      ossimString majorvalue = value.substr(0, value.find("."));
+      if (majorvalue != "2")
       {
          setErrorStatus();
          if (traceDebug())
@@ -2127,7 +2128,7 @@ namespace ossimplugins
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
-      // Fetch the mission index (1A ou 1B) ?
+      // Fetch the mission index (1A or 1B) ?
       // and generate theSensorID
       //---
       xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION";
@@ -2148,7 +2149,7 @@ namespace ossimplugins
       }
 
       //---
-      // Fetch the mission index (1A ou 1B) ?
+      // Fetch the mission index (1A or 1B) ?
       // and generate theSensorID
       //---
       xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION_INDEX"; //DIMAPv2

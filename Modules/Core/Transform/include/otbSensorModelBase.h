@@ -36,7 +36,7 @@ namespace otb
  *  \brief Base class for the sensor model projection classes.
  *
  *  This class allows transforming a geographic point in (lat, long) to a point
- *  in the sensor geometry.  (lat, lon) -> (i, j) ou (lat, lon, h) -> (i, j)
+ *  in the sensor geometry.  (lat, lon) -> (i, j) or (lat, lon, h) -> (i, j)
  *
  * \ingroup Projection
  *

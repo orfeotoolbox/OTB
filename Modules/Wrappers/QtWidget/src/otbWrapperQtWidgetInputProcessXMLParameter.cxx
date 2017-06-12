@@ -98,8 +98,6 @@ QtWidgetInputProcessXMLParameter
   if( filename.isEmpty() )
     return;
 
-  SetFileName( filename );
-
   m_Input->setText( filename  );
 }
 
@@ -113,7 +111,7 @@ void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
     // notify of value change
     QString key( m_XMLParam->GetKey() );
     emit ParameterChanged(key);
-    GetModel()->UpdateAllWidgets();
+    GetModel()->GetApplication()->ForceInXMLParseFlag();
     }
 }
 

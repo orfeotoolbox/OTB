@@ -61,6 +61,8 @@ int otbContingencyTableCalculatorSetListSamples(int argc, char* argv[])
 
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
+  if( nbClasses <= 0 )
+    nbClasses = 1;
 
   for (int i = 0; i < nbSamples; ++i)
     {

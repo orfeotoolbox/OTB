@@ -210,7 +210,7 @@ protected:
   ScalarImageToTexturesFilter();
   /** Destructor */
   ~ScalarImageToTexturesFilter() ITK_OVERRIDE;
-  /** Generate the output informations */
+  /** Generate the output information */
   void GenerateOutputInformation() ITK_OVERRIDE;
   /** Generate the input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE;

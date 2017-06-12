@@ -61,6 +61,7 @@ Application::Application()
     m_DocLimitations(""),
     m_DocSeeAlso(""),
     m_DocTags(),
+    m_Doclink(""),
     m_HaveInXML(true),
     m_HaveOutXML(true),
     m_IsInXMLParsed(false)
@@ -339,8 +340,9 @@ void Application::UpdateParameters()
       InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
       if(inXMLParam!=ITK_NULLPTR)
         {
-        inXMLParam->Read(this);
+        // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
         m_IsInXMLParsed = true;
+        inXMLParam->Read(this);
         }
       }
     }

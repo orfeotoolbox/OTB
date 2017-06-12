@@ -101,7 +101,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   typename NativeMembershipFunctionType::Pointer m_GaussianMembershipFunction;
-  // TODO ajouter un m_GaussianCumulativeFunction
+  // TODO add a m_GaussianCumulativeFunction
   typename CovarianceEstimatorType::Pointer m_CovarianceEstimator;
 
   MeanVectorType  m_Mean;

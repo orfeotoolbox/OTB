@@ -86,6 +86,8 @@ private:
     SetDocExampleParameterValue("in", "qb_RoadExtract2.tif");
     SetDocExampleParameterValue("out", "otbKmzExport.kmz");
     SetDocExampleParameterValue("logo", "otb_big.png");
+
+    SetOfficialDocLink();
   }
 
 

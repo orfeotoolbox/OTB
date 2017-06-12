@@ -117,6 +117,8 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("out", "quicklookImage.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

@@ -600,11 +600,7 @@ VectorImageSettings
   if( std::equal( m_GrayDynamicsParams.begin(),
 		  m_GrayDynamicsParams.end(),
 		  params.begin() ) )
-    {
-    assert( false );
-
     return;
-    }
 
   m_GrayDynamicsParams = params;
 

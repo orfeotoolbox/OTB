@@ -35,7 +35,7 @@ namespace otb {
  * The high pass filter which has to be used for the noise estimation is templated
  * for a better scalability.
  *
- * TODO? Utiliser une 2e entree pour donner directement une image de bruit ?
+ * TODO? Use a 2nd input to give a noise image directly?
  *
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa PCAImageFiler

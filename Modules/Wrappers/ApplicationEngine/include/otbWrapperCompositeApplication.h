@@ -80,8 +80,8 @@ protected:
   void LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event);
 
   /**
-   * Method to instanciate and register a new internal application
-   * \param appType Type of the application to instanciate
+   * Method to instantiate and register a new internal application
+   * \param appType Type of the application to instantiate
    * \param key Identifier associated to the created application
    * \param desc Description of the internal application
    */

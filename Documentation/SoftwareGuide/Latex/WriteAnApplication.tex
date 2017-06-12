@@ -52,6 +52,9 @@ contain the following actions:
   \item Set the name and the description of the application
   \item Fill the documentation and give an example
   \item Declare all the parameters
+  \item Define the documentation link:
+    \item for contrib application use SetDocLink("\textit{docLink}") function defined in \doxygen{otb}{Wrapper::Application}
+    \item for official application use SetOfficialDocLink() function defined in \doxygen{otb}{Wrapper::Application}
 \end{itemize}
 
 
@@ -163,7 +166,7 @@ If you derive this class to implement application C, you will be able to create 
 Like with standard applications, you have to write a \code{DoInit()} function. In this function,
 you should first clean any internal application with the function \code{ClearApplications()}
 (the \code{DoInit()} function is called twice in some cases). Then you can
-instanciate the internal applications that you want to use (for instance A and B).
+instantiate the internal applications that you want to use (for instance A and B).
 The function \code{AddApplication()} will do that, based on :
 \begin{itemize}
 \item The application type (i.e. its official name, such as ExtractROI, BandMath, \dots)
@@ -221,7 +224,7 @@ types. Let say you want to connect parameter \code{a.out} to parameter \code{b.i
 The "Connect()" function may work in favorable cases (see previous paragraph),
 but for images, you have two options :
 \begin{itemize}
-\item Explicitely copy the image pointer from the output image parameter in the input
+\item Explicitly copy the image pointer from the output image parameter in the input
 image parameter (with functions \code{SetParameterInputImage()} and
 \code{GetParameterOutputImage()}). It will connect the pipelines in applications
 A and B, to form an "in-memory" connexion. This has to be done between the calls

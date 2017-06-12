@@ -169,6 +169,8 @@ private:
     SetDocExampleParameterValue("nodatalabel","0");
     SetDocExampleParameterValue("undecidedlabel","10");
     SetDocExampleParameterValue("out","classification_fused.tif");
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

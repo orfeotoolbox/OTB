@@ -35,7 +35,7 @@ namespace otb
  * This image function computes the local histogram of the pixels lying
  * in a circular neighborhood around the given position.
  *
- * Pixel count can be optionnaly weighted by a gaussian kernel with
+ * Pixel count can be optionally weighted by a gaussian kernel with
  * \f$ \sigma = 0.5 radius \f$ so that pixel far from the center position
  * account less in the histogram than pixel near the center position.
  * This option can be deactivated using the GaussianSmoothing flag.

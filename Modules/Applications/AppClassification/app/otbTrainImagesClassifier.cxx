@@ -82,6 +82,8 @@ public:
     SetDocExampleParameterValue( "classifier.libsvm.opt", "false" );
     SetDocExampleParameterValue( "io.out", "svmModelQB1.txt" );
     SetDocExampleParameterValue( "io.confmatout", "svmConfusionMatrixQB1.csv" );
+
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -146,7 +148,7 @@ public:
 //      {
       ComputePolygonStatistics( imageList, vectorFileList, fileNames.polyStatTrainOutputs );
       ComputeSamplingRate( fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt );
-      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, SamplingStrategy::CLASS );
+      SelectAndExtractTrainSamples( fileNames, imageList, vectorFileList, Superclass::CLASS );
 //      }
 //    else // Select training samples base on geometric sampling if no input vector is provided
 //      {

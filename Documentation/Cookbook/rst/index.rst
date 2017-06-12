@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to OTB CookBook's documentation!
-========================================
+Welcome to Orfeo ToolBox!
+=========================
 
 `Orfeo ToolBox (OTB) <http://orfeo-toolbox.org>`_ is an open-source project for
 state-of-the-art remote sensing. Built on the shoulders of the open-source

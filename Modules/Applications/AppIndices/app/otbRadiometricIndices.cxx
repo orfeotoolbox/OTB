@@ -205,6 +205,8 @@ private:
     SetDocExampleParameterValue("list", "Vegetation:NDVI Vegetation:RVI Vegetation:IPVI");
     SetDocExampleParameterValue("out", "RadiometricIndicesImage.tif");
 
+    SetOfficialDocLink();
+
     m_Map.clear();
 
     // Add Available choices

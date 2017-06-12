@@ -153,7 +153,7 @@ private:
     SetDocExampleParameterValue("outconcave", "concave.tif");
     SetDocExampleParameterValue("outleveling", "leveling.tif");
 
-
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE

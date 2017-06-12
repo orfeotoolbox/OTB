@@ -67,15 +67,16 @@ void TrainVectorBase::DoInit()
   SetDefaultParameterInt( "valid.layer", 0 );
 
   // Add class field if we used validation
-  AddParameter( ParameterType_ListView, "cfield", "Field containing the class id for supervision" );
+  AddParameter( ParameterType_ListView, "cfield", "Field containing the class integer label for supervision" );
   SetParameterDescription( "cfield", "Field containing the class id for supervision. "
+          "The values in this field shall be cast into integers. "
           "Only geometries with this field available will be taken into account." );
   SetListViewSingleSelectionMode( "cfield", true );
 
   // Add a new parameter to compute confusion matrix / contingency table
   AddParameter( ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix or contingency table" );
   SetParameterDescription( "io.confmatout", "Output file containing the confusion matrix or contingency table (.csv format)."
-          "The contingency table is ouput when we unsupervised algorithms is used otherwise the confusion matrix is output." );
+          "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output." );
   MandatoryOff( "io.confmatout" );
 
 
