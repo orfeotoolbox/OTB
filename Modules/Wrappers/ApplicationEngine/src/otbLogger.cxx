@@ -45,7 +45,7 @@ Logger::~Logger()
 
 std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const & content)
 {
- static std::string m_LevelString[] = { "(MUSTFLUSH)", "(FATAL)", "(CRITICAL)",
+ static const std::string levelString[] = { "(MUSTFLUSH)", "(FATAL)", "(CRITICAL)",
                                          "(WARNING)", "(INFO)", "(DEBUG)", "(NOTSET)" };
   std::ostringstream s;
 
@@ -63,7 +63,7 @@ std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, st
       break;
     }
   }
-  s << " " << m_LevelString[level] << ": " << content;
+  s << " " << levelString[level] << ": " << content;
 
   return s.str();
 }
