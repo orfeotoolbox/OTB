@@ -47,7 +47,11 @@ std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, st
 {
  static const std::string levelString[] = { "(MUSTFLUSH)", "(FATAL)", "(CRITICAL)",
                                          "(WARNING)", "(INFO)", "(DEBUG)", "(NOTSET)" };
+
+  // TODO: assert(level <= std::extent<decltype(levelString)>::value);  // requires C++11
+
   std::ostringstream s;
+
 
   switch ( this->m_TimeStampFormat )
   {
