@@ -340,8 +340,8 @@ otb_add_test(NAME siTvSoilDataParseFile COMMAND otbSimulationTestDriver otbSoilD
   )
 
 otb_add_test(NAME siTvSailReflHSoilTest COMMAND otbSimulationTestDriver
-  --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvSailReflHTest.txt
-  ${TEMP}/siTvSailReflHTest.txt
+  --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvSailReflHSoilTest.txt
+  ${TEMP}/siTvSailReflHSoilTest.txt
   otbSailReflHTest
   30.0 #cab
   10.0 #car
@@ -357,7 +357,7 @@ otb_add_test(NAME siTvSailReflHSoilTest COMMAND otbSimulationTestDriver
   30 #TTS
   0 #TTO
   0 #PSI
-  ${TEMP}/siTvSailReflSoilHTest.txt
+  ${TEMP}/siTvSailReflHSoilTest.txt
   ${INPUTDATA}/Radiometry/Soils/sols_avignon_1990.txt
   20 # soil index
   1000 #wlfactor

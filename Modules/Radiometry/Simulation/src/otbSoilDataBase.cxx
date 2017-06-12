@@ -43,19 +43,20 @@ const typename SoilDataBase::SoilDataVector& SoilDataBase::GetDB() const
 
 double SoilDataBase::GetReflectance(size_t SoilIndex, WavelenghtType wl) const
 {
-  if(SoilIndex<1 || SoilIndex > m_SoilDataVector.size())
+  if(SoilIndex >= m_SoilDataVector.size())
     {
     std::stringstream  errmessg;
-    errmessg << "Soil index must be > 0 and <= " << m_SoilDataVector.size() <<'\n';
+    errmessg << "Soil index must be >= 0 and < " << m_SoilDataVector.size() << 
+      ". " << SoilIndex <<" was passed.\n";
     throw std::range_error( errmessg.str() );
     }
   // wl not in the set of measured ones
-  if(m_SoilDataVector[SoilIndex-1].find(wl)==m_SoilDataVector[SoilIndex-1].end())
+  if(m_SoilDataVector[SoilIndex].find(wl)==m_SoilDataVector[SoilIndex].end())
     {
     const auto wlmin = m_Wavelengths[0];
     const auto wlmax = m_Wavelengths[m_Wavelengths.size()-1];
-    if(wl<wlmin) return (*m_SoilDataVector[SoilIndex-1].find(wlmin)).second;
-    if(wl>wlmax) return (*m_SoilDataVector[SoilIndex-1].find(wlmax)).second;
+    if(wl<wlmin) return (*m_SoilDataVector[SoilIndex].find(wlmin)).second;
+    if(wl>wlmax) return (*m_SoilDataVector[SoilIndex].find(wlmax)).second;
 
     const auto p = std::partition_point(m_Wavelengths.cbegin(), m_Wavelengths.cend(),
                                         [&](WavelenghtType w){ return w<wl;}
@@ -64,13 +65,13 @@ double SoilDataBase::GetReflectance(size_t SoilIndex, WavelenghtType wl) const
     const auto wlsup = *p;
     const auto factinf = wl-wlinf;
     const auto factsup = wlsup-wl;
-    const auto vinf = (*m_SoilDataVector[SoilIndex-1].find(wlinf)).second;
-    const auto vsup = (*m_SoilDataVector[SoilIndex-1].find(wlsup)).second;
+    const auto vinf = (*m_SoilDataVector[SoilIndex].find(wlinf)).second;
+    const auto vsup = (*m_SoilDataVector[SoilIndex].find(wlsup)).second;
     return (vinf*factinf+vsup*factsup)/(factinf+factsup);
     }
   else
     {
-    return (*m_SoilDataVector[SoilIndex-1].find(wl)).second;
+    return (*m_SoilDataVector[SoilIndex].find(wl)).second;
     }
 }
 
