@@ -297,11 +297,11 @@ bool CommandLineLauncher::LoadApplication()
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
     if (list.size() == 0)
       {
-      std::cerr << "ERROR: Available modules : none." << std::endl;
+      std::cerr << "ERROR: Available modules: none." << std::endl;
       }
     else
       {
-      std::cerr << "ERROR: Available modules :" << std::endl;
+      std::cerr << "ERROR: Available modules:" << std::endl;
       for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
         {
         std::cerr << "\t" << *it << std::endl;
