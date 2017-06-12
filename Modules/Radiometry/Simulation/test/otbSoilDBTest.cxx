@@ -41,13 +41,18 @@ int otbSoilDataBaseParseFile(int argc, char * argv[])
     auto sindex = std::stoi(argv[i+1]);
     auto refltest = std::stod(argv[i+2]);
     auto read_refl = db[sindex][wltest];
-    std::cout << refltest << " " << read_refl << "\n";
     if(fabs(refltest-read_refl)>10e-5)
-        return EXIT_FAILURE;
+      {
+      std::cout << "GetDB " << i << " " << refltest << " " << read_refl << "\n";
+      return EXIT_FAILURE;
+      }
 
     read_refl = sdb.GetReflectance(sindex, wltest);
     if(fabs(refltest-read_refl)>10e-5)
+      {
+      std::cout << "GetRefl " << i << " " << refltest << " " << read_refl << "\n";
       return EXIT_FAILURE;
+      }
 
     }
 
