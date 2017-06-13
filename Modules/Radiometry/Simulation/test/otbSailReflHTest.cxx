@@ -92,10 +92,12 @@ int otbSailReflHTest(int argc, char * argv[])
    sail->SetPSI(PSI);
    sail->SetReflectance(prospect->GetReflectance());
    sail->SetTransmittance(prospect->GetTransmittance());
+   std::shared_ptr<otb::SoilDataBase> SoilDB;
    if(UseSoilFile)
      {
      std::cout << "Using soil file " << SoilFileName << '\n';
-     sail->UseExternalSoilFile(SoilFileName, SoilIndex, WlFactor);
+     SoilDB = std::make_shared<otb::SoilDataBase>(SoilFileName, WlFactor);
+     sail->UseExternalSoilDB(SoilDB, SoilIndex);
      }
    sail->Update();
 

@@ -106,8 +106,8 @@ public:
   /** Get the computed fcover */
   itkGetMacro(FCoverView, double);
 
-  /** Use an external soil file */
-  void UseExternalSoilFile(std::string SoilFileName, size_t SoilIndex, double WlFactor);
+  /** Use an external soil DB */
+  void UseExternalSoilDB(std::shared_ptr<SoilDataBase> SoilDB, size_t SoilIndex);
 
   /** GenerateData */
   void GenerateData() ITK_OVERRIDE;
@@ -135,15 +135,15 @@ protected:
   using Superclass::MakeOutput;
 
   /** Compute Leaf Angle Distribution */
-  void Calc_LIDF(const double a, VectorType &lidf);
-  void Campbell(const double ala, VectorType &freq);
+  void Calc_LIDF(const double a, VectorType &lidf) const;
+  void Campbell(const double ala, VectorType &freq) const;
 
   /** J functions */
-  double Jfunc1(const double k, const double l, const double t);
-  double Jfunc2(const double k, const double l, const double t);
-  double Jfunc3(const double k, const double l, const double t);
+  double Jfunc1(const double k, const double l, const double t) const;
+  double Jfunc2(const double k, const double l, const double t) const;
+  double Jfunc3(const double k, const double l, const double t) const;
   /** Volscatt */
-  void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result);
+  void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result) const;
 
 private:
   SailModel(const Self&); //purposely not implemented
@@ -159,9 +159,8 @@ private:
   double m_PSI; //azimuth
   double m_FCoverView; //fCover in the viewing direction
   bool m_UseSoilFile; //use a soil file instead of DataSpecP5B
-  std::string m_SoilFileName; //the soil file to use
   size_t m_SoilIndex; //which soil in the soil file
-  std::unique_ptr<SoilDataBase> m_SoilDataBase;
+  std::shared_ptr<SoilDataBase> m_SoilDataBase;
 };
 
 }// end namespace otb

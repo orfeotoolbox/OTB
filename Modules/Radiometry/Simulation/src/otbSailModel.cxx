@@ -485,7 +485,7 @@ SailModel
 
 void
 SailModel
-::Calc_LIDF(const double a, VectorType &lidf)
+::Calc_LIDF(const double a, VectorType &lidf) const
 {
    int ala=a;
    VectorType freq;
@@ -497,7 +497,7 @@ SailModel
 
 void
 SailModel
-::Campbell(const double ala, VectorType &freq)
+::Campbell(const double ala, VectorType &freq) const
 {
    unsigned int n=18;
    double excent = exp(-1.6184e-5*vcl_pow(ala, 3)+2.1145e-3*ala*ala-1.2390e-1*ala+3.2491);
@@ -559,7 +559,7 @@ SailModel
 
 void
 SailModel
-::Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result)
+::Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result) const
 {
 
    double rd = CONST_PI/180;
@@ -673,7 +673,7 @@ SailModel
 
 double
 SailModel
-::Jfunc1(const double k, const double l, const double t)
+::Jfunc1(const double k, const double l, const double t) const
 {
    //J1 function with avoidance of singularity problem
    double v;
@@ -693,7 +693,7 @@ SailModel
 
 double
 SailModel
-::Jfunc2(const double k, const double l, const double t)
+::Jfunc2(const double k, const double l, const double t) const
 {
    double v;
    v = (1.-exp(-(k+l)*t))/(k+l);
@@ -703,7 +703,7 @@ SailModel
 
 double
 SailModel
-::Jfunc3(const double k, const double l, const double t)
+::Jfunc3(const double k, const double l, const double t) const
 {
    double v;
    v =  (1.-exp(-(k+l)*t))/(k+l);
@@ -719,11 +719,11 @@ SailModel
 
 }
 
-void SailModel::UseExternalSoilFile(std::string SoilFileName, size_t SoilIndex, double WlFactor)
+void SailModel::UseExternalSoilDB(std::shared_ptr<SoilDataBase> SoilDB, 
+                                  size_t SoilIndex)
 {
   m_UseSoilFile = true;
-  m_SoilFileName = SoilFileName;
   m_SoilIndex = SoilIndex;
-  m_SoilDataBase = std::make_unique<SoilDataBase>(SoilFileName, WlFactor);
+  m_SoilDataBase = SoilDB;
 }
 } // end namespace otb
