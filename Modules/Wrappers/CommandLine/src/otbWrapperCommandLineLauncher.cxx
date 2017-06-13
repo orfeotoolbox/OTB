@@ -208,6 +208,7 @@ bool CommandLineLauncher::BeforeExecute()
   if( appKeyList.size()!=0 && keyList.size()==0 )
     {
     std::cerr << "ERROR: Waiting for at least one parameter." << std::endl;
+    std::cerr << std::endl;
     this->DisplayHelp();
     return false;
     }
@@ -244,6 +245,7 @@ bool CommandLineLauncher::BeforeExecute()
 
   if (result == MISSINGMANDATORYPARAMETER)
   {
+    std::cerr << std::endl;
     this->DisplayHelp();
     return false;
   }
