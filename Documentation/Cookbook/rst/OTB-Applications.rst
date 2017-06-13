@@ -499,6 +499,8 @@ Note that this MPI parallel invocation of applications is only
 available for command-line calls to OTB applications, and only for
 images output parameters.
 
+.. _extended-filenames:
+
 Extended filenames
 ------------------
 
