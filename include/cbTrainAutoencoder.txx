@@ -55,16 +55,24 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     "The number of neurons in each hidden layer.");
   
   //Regularization
-  AddParameter(ParameterType_Float, "model.autoencoder.regularization", "Strength of the regularization");
-  SetParameterFloat("model.autoencoder.regularization",0, false);
+  AddParameter(ParameterType_StringList, "model.autoencoder.regularization", "Strength of the regularization");
   SetParameterDescription("model.autoencoder.regularization", 
                          "Strength of the L2 regularization used during training");
                          
   //Noise strength
-  AddParameter(ParameterType_Float, "model.autoencoder.noise", "Strength of the noise");
-  SetParameterFloat("model.autoencoder.noise",0, false);
+  AddParameter(ParameterType_StringList, "model.autoencoder.noise", "Strength of the noise");
   SetParameterDescription("model.autoencoder.noise", 
                          "Strength of the noise");
+  
+  // Sparsity parameter
+  AddParameter(ParameterType_StringList, "model.autoencoder.rho", "Sparsity parameter");
+  SetParameterDescription("model.autoencoder.rho", 
+                         "Sparsity parameter");
+  
+  // Sparsity regularization strength
+  AddParameter(ParameterType_StringList, "model.autoencoder.beta", "Sparsity regularization strength");
+  SetParameterDescription("model.autoencoder.beta", 
+                         "Sparsity regularization strength");
 }
 
 
@@ -102,16 +110,34 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 {
 		typename autoencoderchoice::Pointer dimredTrainer = autoencoderchoice::New();
 		itk::Array<unsigned int> nb_neuron;
-		std::vector<std::basic_string<char>> s= GetParameterStringList("model.autoencoder.nbneuron");
-		nb_neuron.SetSize(s.size());
-		for (int i=0; i<s.size(); i++){ // This will be templated later (the 3)
-			nb_neuron[i]=std::stoi(s[i]);
+		itk::Array<float> noise;
+		itk::Array<float> regularization;
+		itk::Array<float> rho;
+		itk::Array<float> beta;
+		std::vector<std::basic_string<char>> s_nbneuron= GetParameterStringList("model.autoencoder.nbneuron");
+		std::vector<std::basic_string<char>> s_noise= GetParameterStringList("model.autoencoder.noise");
+		std::vector<std::basic_string<char>> s_regularization= GetParameterStringList("model.autoencoder.regularization");
+		std::vector<std::basic_string<char>> s_rho= GetParameterStringList("model.autoencoder.rho");
+		std::vector<std::basic_string<char>> s_beta= GetParameterStringList("model.autoencoder.beta");
+		nb_neuron.SetSize(s_nbneuron.size());
+		noise.SetSize(s_nbneuron.size());
+		regularization.SetSize(s_nbneuron.size());
+		rho.SetSize(s_nbneuron.size());
+		beta.SetSize(s_nbneuron.size());
+		for (int i=0; i<s_nbneuron.size(); i++){ 
+			nb_neuron[i]=std::stoi(s_nbneuron[i]);
+			noise[i]=std::stof(s_noise[i]);
+			regularization[i]=std::stof(s_regularization[i]);
+			rho[i]=std::stof(s_rho[i]);
+			beta[i]=std::stof(s_beta[i]);
 		}
 		std::cout << nb_neuron << std::endl;
 		dimredTrainer->SetNumberOfHiddenNeurons(nb_neuron);
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
-		dimredTrainer->SetRegularization(GetParameterFloat("model.autoencoder.regularization"));
-		dimredTrainer->SetNoise(GetParameterFloat("model.autoencoder.noise"));
+		dimredTrainer->SetRegularization(regularization);
+		dimredTrainer->SetNoise(noise);
+		dimredTrainer->SetRho(rho);
+		dimredTrainer->SetBeta(beta);
 		dimredTrainer->SetInputListSample(trainingListSample);
 		std::cout << "before train" << std::endl;
 		dimredTrainer->Train();

@@ -29,6 +29,7 @@
 #include "DimensionalityReductionModelFactory.h"
 #include "DimensionalityReductionModel.h"
 #include <time.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -115,7 +116,7 @@ class CbDimensionalityReductionVector : public Application
 		SetDocExampleParameterValue("featout", "perimeter area width");
 		//SetOfficialDocLink(); 
 		}
-		
+		//   
 		void DoUpdateParameters() ITK_OVERRIDE
 		{
 			
@@ -271,7 +272,7 @@ class CbDimensionalityReductionVector : public Application
 			
 			otb::ogr::Layer outLayer = output->GetLayer(0);
 			OGRErr errStart = outLayer.ogr().StartTransaction();
-			/*
+			
 			if (errStart != OGRERR_NONE)
 			{
 				itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
@@ -279,25 +280,28 @@ class CbDimensionalityReductionVector : public Application
 			
 			// Add the field of prediction in the output layer if field not exist
 			
-			OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
-			int idx = layerDefn.GetFieldIndex(GetParameterStringList("featout").c_str());
-			
-			if (idx >= 0)
+			for (int i=0; i<GetParameterStringList("featout").size() ;i++)
 			{
-				if (layerDefn.GetFieldDefn(idx)->GetType() != OFTInteger)
-				itkExceptionMacro("Field name "<< GetParameterStringList("featout") << " already exists with a different type!");
-			}
-			else
-			{
-				OGRFieldDefn predictedField(GetParameterStringList("featout").c_str(), OFTInteger);
-				ogr::FieldDefn predictedFieldDef(predictedField);
-				outLayer.CreateField(predictedFieldDef);
+				OGRFeatureDefn &layerDefn = outLayer.GetLayerDefn();
+				int idx = layerDefn.GetFieldIndex(GetParameterStringList("featout")[i].c_str());
+				
+				if (idx >= 0)
+				{
+					if (layerDefn.GetFieldDefn(idx)->GetType() != OFTReal)
+					itkExceptionMacro("Field name "<< GetParameterStringList("featout")[i] << " already exists with a different type!");
+				}
+				else
+				{
+					OGRFieldDefn predictedField(GetParameterStringList("featout")[i].c_str(), OFTReal);
+					ogr::FieldDefn predictedFieldDef(predictedField);
+					outLayer.CreateField(predictedFieldDef);
+				}
 			}
 			
 			// Fill output layer
 			
 			unsigned int count=0;
-			std::string classfieldname = GetParameterStringList("featout");
+			auto classfieldname = GetParameterStringList("featout");
 			it = layer.cbegin();
 			itEnd = layer.cend();
 			for( ; it!=itEnd ; ++it, ++count)
@@ -305,8 +309,9 @@ class CbDimensionalityReductionVector : public Application
 				ogr::Feature dstFeature(outLayer.GetLayerDefn());
 				dstFeature.SetFrom( *it , TRUE);
 				dstFeature.SetFID(it->GetFID());
-				dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
-				
+				for (std::size_t i=0; i<classfieldname.size(); ++i){
+					dstFeature[classfieldname[i]].SetValue<ValueType>(target->GetMeasurementVector(count)[i]);
+				}
 				if (updateMode)
 				{
 					outLayer.SetFeature(dstFeature);
@@ -316,6 +321,7 @@ class CbDimensionalityReductionVector : public Application
 					outLayer.CreateFeature(dstFeature);
 				}
 			}
+			
 			if(outLayer.ogr().TestCapability("Transactions"))
 			{
 				const OGRErr errCommitX = outLayer.ogr().CommitTransaction();
@@ -326,7 +332,7 @@ class CbDimensionalityReductionVector : public Application
 			}
 			output->SyncToDisk();
 			clock_t toc = clock();
-			otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");*/
+			otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
 		}
 		
 		ModelPointerType m_Model;

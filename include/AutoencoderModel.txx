@@ -20,7 +20,6 @@
 namespace otb
 {
 
-
 template <class TInputValue, class AutoencoderType>
 AutoencoderModel<TInputValue,AutoencoderType>::AutoencoderModel()
 {
@@ -42,31 +41,34 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 	
 	for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
 	{
-		TrainOneLayer( m_NumberOfHiddenNeurons[i], inputSamples);
+		if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
+		{
+			TrainOneLayer( m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples);
+		}
+		else
+		{
+			TrainOneSparseLayer( m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples);
+		}
 	}
 }
 
 template <class TInputValue, class AutoencoderType>
-void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(unsigned int nbneuron, shark::Data<shark::RealVector> &samples)
+void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(unsigned int nbneuron,double noise_strength,double regularization, shark::Data<shark::RealVector> &samples)
 {
 	AutoencoderType net;
-	/*std::vector<shark::RealVector> features;
-	
-	Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
-	
-	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
-		*/ //in Train()  now
+
 	std::size_t inputs = dataDimension(samples);
 	net.setStructure(inputs, nbneuron);
 	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
-	shark::ImpulseNoiseModel noise(m_Noise,0.0); //set an input pixel with probability m_Noise to 0
+	shark::ImpulseNoiseModel noise(noise_strength,0.0); //set an input pixel with probability m_Noise to 0
 	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
 	shark::ErrorFunction error(trainSet, &model, &loss);
-	//shark::SparseAutoencoderError error(data,&model, &loss, m_rho, m_beta);
+	//shark::SparseAutoencoderError error(trainSet,&model, &loss, m_Rho, m_Beta);
+	//shark::SparseAutoencoderError error(trainSet,&net, &loss, 0.1, 0.1);
 	shark::TwoNormRegularizer regularizer(error.numberOfVariables());
-	error.setRegularizer(m_Regularization,&regularizer);
+	error.setRegularizer(regularization,&regularizer);
 
 	shark::IRpropPlusFull optimizer;
 	error.init();
@@ -81,6 +83,35 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(unsigned int n
 	samples = net.encode(samples);
 }
 
+
+template <class TInputValue, class AutoencoderType>
+void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(unsigned int nbneuron,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples)
+{
+	AutoencoderType net;
+
+	std::size_t inputs = dataDimension(samples);
+	net.setStructure(inputs, nbneuron);
+	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+
+	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
+	shark::SquaredLoss<shark::RealVector> loss;
+	shark::SparseAutoencoderError error(trainSet,&net, &loss, rho, beta);
+	
+	shark::TwoNormRegularizer regularizer(error.numberOfVariables());
+	error.setRegularizer(regularization,&regularizer);
+
+	shark::IRpropPlusFull optimizer;
+	error.init();
+	optimizer.init(error);
+	std::cout<<"Optimizing model: "+net.name()<<std::endl;
+	for(std::size_t i = 0; i != m_NumberOfIterations; ++i){
+		optimizer.step(error);
+		std::cout<<i<<" "<<optimizer.solution().value<<std::endl;
+	}
+	net.setParameterVector(optimizer.solution().point);
+	m_net.push_back(net);
+	samples = net.encode(samples);
+}
 
 template <class TInputValue, class AutoencoderType>
 bool AutoencoderModel<TInputValue,AutoencoderType>::CanReadFile(const std::string & filename)

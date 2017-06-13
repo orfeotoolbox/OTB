@@ -34,17 +34,17 @@ public:
 	itkGetMacro(NumberOfIterations,unsigned int);
 	itkSetMacro(NumberOfIterations,unsigned int);
 
-	itkGetMacro(Regularization,double);
-	itkSetMacro(Regularization,double);
+	itkGetMacro(Regularization,itk::Array<double>);
+	itkSetMacro(Regularization,itk::Array<double>);
 
-	itkGetMacro(Noise,double);
-	itkSetMacro(Noise,double);
+	itkGetMacro(Noise,itk::Array<double>);
+	itkSetMacro(Noise,itk::Array<double>);
 
-	itkGetMacro(rho,double);
-	itkSetMacro(rho,double);
+	itkGetMacro(Rho,itk::Array<double>);
+	itkSetMacro(Rho,itk::Array<double>);
 
-	itkGetMacro(beta,double);
-	itkSetMacro(beta,double);
+	itkGetMacro(Beta,itk::Array<double>);
+	itkSetMacro(Beta,itk::Array<double>);
 
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
@@ -53,7 +53,8 @@ public:
 	void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
 
 	void Train() ITK_OVERRIDE;
-	void TrainOneLayer(unsigned int, shark::Data<shark::RealVector> &);
+	void TrainOneLayer(unsigned int,double, double, shark::Data<shark::RealVector> &);
+	void TrainOneSparseLayer(unsigned int,double, double,double, shark::Data<shark::RealVector> &);
 	
 protected:
 	AutoencoderModel();	
@@ -71,10 +72,10 @@ private:
 	itk::Array<unsigned int> m_NumberOfHiddenNeurons;
 	/** Training parameters */
 	unsigned int m_NumberOfIterations;
-	double m_Regularization;  // L2 Regularization parameter
-	double m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
-	double m_rho; // Sparsity parameter
-	double m_beta; // Sparsity regularization parameter
+	itk::Array<double> m_Regularization;  // L2 Regularization parameter
+	itk::Array<double> m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
+	itk::Array<double> m_Rho; // Sparsity parameter
+	itk::Array<double> m_Beta; // Sparsity regularization parameter
 };
 } // end namespace otb
 
