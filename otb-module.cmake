@@ -20,7 +20,7 @@
 
 set(DOCUMENTATION "This module contains advanced filters for block matching")
 
-otb_module(OTBMatchingFilters
+otb_module(OTBCVFFilters
   DEPENDS
     OTBCommon
     OTBITK
