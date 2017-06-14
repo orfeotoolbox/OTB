@@ -1,3 +1,8 @@
+/** Execution ./bin/otbCVFFiltersTestDriver main_CVF Radius Min_Disp Max_Disp
+ * Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images 
+ 
+ * **/ 
+
 #include <cstdio>
 #include <cmath>
 #include <cstdlib>
@@ -56,23 +61,16 @@ int main_CVF(int argc, char *argv[])
 {
 	
 
-	if(argc < 5) {
+	if(argc < 7) {
 		std::cerr << "Usage: " << argv[0] << " radius(uint) disparity(uint) sense(char)" << std::endl;
 		return EXIT_FAILURE;
 	}
 	
-	long unsigned int r = atoi(argv[1]);
-	//std::cout << "enter the filter radius value: "; 	std::cin >> r;
-	
+     long unsigned int r = atoi(argv[1]);
 	 int HdispMin = atoi(argv[2]);
 	 int HdispMax  = atoi(argv[3]);
-	//std::cout << "enter the Horizontal Disparity value: "; 	std::cin >> HdispMin;
-	
-	 char Sense = atoi(argv[4]);
-
-//static const char* OUTFILE1="disparity.tif"; // l'image vas etre généré dans le dossier build
   
-    // Main type definition
+// Main type definition
 const unsigned int Dimension = 2;
 typedef otb::Image< double, Dimension > OTBImageType;
 typedef otb::VectorImage< double , Dimension > ImageType;
@@ -85,19 +83,20 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   // Reading Leftinput images
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer LeftReader = ReaderType::New();
-  LeftReader->SetFileName("/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/ImageRGB/middlebury/tsukuba0.png");
+  LeftReader->SetFileName(argv[4]); //LeftImage 
   LeftReader->UpdateOutputInformation();//*
  
   // Reading ReghtInput images
   typedef otb::ImageFileReader<ImageType> RightReaderType;
   RightReaderType::Pointer RightReader = RightReaderType::New();
-  RightReader->SetFileName("/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/ImageRGB/middlebury/tsukuba1.png");
+  RightReader->SetFileName(argv[5]);//RightImage
   RightReader->UpdateOutputInformation();//*
   
-  
-  
-   
-  /*==================================== calcul de la multiplication pour la covariance ================================================*/
+ //argv[6] le chemin des images de sortie  
+  std::string argv6 = std::string(argv[6]);
+  #define FILENAME(n) std::string( argv6 + std::string(n)).c_str()
+  ImageWriterType::Pointer LeftMeanwriter = ImageWriterType::New(); 
+/*==================================== calcul de la multiplication pour la covariance ===================*/
 // covariance = Mean( im1*im2) - Mean(im1)*mean(im2) 
 
   typedef otb::MultiplyImagebandsFilter< ImageType, ImageType > MultiplyFilterType;
@@ -109,16 +108,12 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   MultiplyRight->SetInput( RightReader->GetOutput() );
  
   
-  //~ ImageWriterType::Pointer Multiplywriter = ImageWriterType::New();
-  //~ Multiplywriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/MultiplyImage.tif");
-  //~ Multiplywriter->SetInput( MultiplyLeft->GetOutput() );
-  //~ Multiplywriter->Update();
-  
+  ImageWriterType::Pointer Multiplywriter = ImageWriterType::New();
+  Multiplywriter->SetFileName(FILENAME("MultiplyImage.tif" ));
+  Multiplywriter->SetInput( MultiplyLeft->GetOutput() );
+  Multiplywriter->Update();
 
-  
-  
- 
- /*==================================== calcul de l'image intégrales================================================*/ 
+ /*==================================== calcul de l'image intégrales=================================*/ 
   
   typedef otb::BoxImageFilter< ImageType, ImageType > BoxFilterType;
   
@@ -135,14 +130,14 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   MultiplyRightBox->SetInput( MultiplyRight->GetOutput() );
  
    
-  //~ ImageWriterType::Pointer Boxwriter = ImageWriterType::New();
-  //~ Boxwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/integraleLeftImage.tif");
-  //~ Boxwriter->SetInput( LeftBox->GetOutput() );
-  //~ otb::StandardFilterWatcher watcherIn(Boxwriter, "LeftBoxFilter");    
-  //~ Boxwriter->Update();
+  ImageWriterType::Pointer Boxwriter = ImageWriterType::New();
+  Boxwriter->SetFileName( FILENAME("integraleLeftImage.tif"));
+  Boxwriter->SetInput( LeftBox->GetOutput() );
+  otb::StandardFilterWatcher watcherIn(Boxwriter, "LeftBoxFilter");    
+  Boxwriter->Update();
   
   
-   /*==================================== calcul des moyennes avec le boxFilter================================================*/
+   /*==================================== calcul des moyennes avec le boxFilter=============================*/
 
   typedef otb::LocalMeanBoxVectorImageFilter< ImageType, ImageType > MeanBoxFilterType;
   
@@ -155,19 +150,17 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   RightMeanBoxFilter->SetInput( RightBox->GetOutput() );  
   RightMeanBoxFilter->SetRadius(radius);
   
+ 
+  LeftMeanwriter->SetFileName( FILENAME("LeftMean.tif"));
+  LeftMeanwriter->SetInput( LeftMeanBoxFilter->GetOutput() );
+  LeftMeanwriter->Update();
   
-  //~ ImageWriterType::Pointer LeftMeanwriter = ImageWriterType::New();
-  //~ LeftMeanwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/LeftMean.tif");
-  //~ LeftMeanwriter->SetInput( LeftMeanBoxFilter->GetOutput() );
-  //~ LeftMeanwriter->Update();
-  
-  //~ ImageWriterType::Pointer RightMeanwriter = ImageWriterType::New();
-  //~ RightMeanwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/RightMean.tif");
-  //~ RightMeanwriter->SetInput( RightMeanBoxFilter->GetOutput() );
-  //~ RightMeanwriter->Update();
-  
+  ImageWriterType::Pointer RightMeanwriter = ImageWriterType::New();
+  RightMeanwriter->SetFileName( FILENAME("RightMean.tif"));
+  RightMeanwriter->SetInput( RightMeanBoxFilter->GetOutput() );
+  RightMeanwriter->Update();
    
-  // La moyenne de la multiplication
+  // The mean multiplication
   MeanBoxFilterType::Pointer MultiplyLeftMeanBoxFilter = MeanBoxFilterType::New();
   MultiplyLeftMeanBoxFilter->SetInput( MultiplyLeftBox->GetOutput() );
   MultiplyLeftMeanBoxFilter->SetRadius(radius);
@@ -177,7 +170,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   MultiplyRightMeanBoxFilter->SetRadius(radius);
 
  
-  //=============================== Calcul de la covariance avec le boxFiler ===============
+  //=============================== Calcul de la covariance avec le boxFiler ======================*/
   
   /** remarque: on a pas besoin de mettre le radius car le radius est utilisé uniquement pour les moyenne et 
    * les moyenne sont faite avec le box filter*/
@@ -191,22 +184,18 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   RightCovBoxFilter->SetInput1( MultiplyRightMeanBoxFilter->GetOutput() );
   RightCovBoxFilter->SetInput2( RightMeanBoxFilter->GetOutput() ); 
   
-  //~ ImageWriterType::Pointer CovBoxwriter = ImageWriterType::New();
-  //~ CovBoxwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/LeftCovBoxFilter.tif");
-  //~ CovBoxwriter->SetInput( LeftCovBoxFilter->GetOutput() );  
-  //~ otb::StandardFilterWatcher watcherBoxVov(CovBoxwriter, "LeftCovBoxFilter");
-  //~ CovBoxwriter->Update();
-  
-
-
-
-
-/* ================================== Gradient ====================================================================*/
+  ImageWriterType::Pointer CovBoxwriter = ImageWriterType::New();
+  CovBoxwriter->SetFileName( FILENAME("LeftCovBoxFilter.tif"));
+  CovBoxwriter->SetInput( LeftCovBoxFilter->GetOutput() );  
+  otb::StandardFilterWatcher watcherBoxVov(CovBoxwriter, "LeftCovBoxFilter");
+  CovBoxwriter->Update();
+ 
+/* ================================== Gradient =======================================================*/
  
 
 // ConvolutionImageFilter Left  
   
-  typedef itk::ConstantBoundaryCondition<OTBImageType>                                      BoundaryConditionTypeLeft;
+  typedef itk::ConstantBoundaryCondition<OTBImageType> BoundaryConditionTypeLeft;
   typedef otb::ConvolutionImageFilter<OTBImageType, OTBImageType, BoundaryConditionTypeLeft> ConvFilterTypeLeft;
   ConvFilterTypeLeft::Pointer convFilterXL = ConvFilterTypeLeft::New();
   ConvFilterTypeLeft::Pointer convFilterYL = ConvFilterTypeLeft::New();
@@ -241,7 +230,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   GradientXL->SetInput(LeftReader->GetOutput());
  
   ImageWriterType::Pointer writerGradientXL = ImageWriterType::New();
-  writerGradientXL->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/GradientXLeft.tif");
+  writerGradientXL->SetFileName( FILENAME("GradientXLeft.tif"));
   writerGradientXL->SetInput(GradientXL->GetOutput());
   writerGradientXL->Update();
   
@@ -252,7 +241,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   GradientXR->SetInput(RightReader->GetOutput());
  
   ImageWriterType::Pointer writerGradientXR = ImageWriterType::New();
-  writerGradientXR->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/GradientXRight.tif");
+  writerGradientXR->SetFileName(FILENAME("GradientXRight.tif"));
   writerGradientXR->SetInput(GradientXR->GetOutput());
   writerGradientXR->Update();
   
@@ -282,10 +271,10 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   GradientYL->SetInput(LeftReader->GetOutput());
  
  
-  //~ ImageWriterType::Pointer writerGradientYL = ImageWriterType::New();
- //~ writerGradientYL->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/GradientYLeft.tif");
- //~ writerGradientYL->SetInput(GradientYL->GetOutput());
- //~ writerGradientYL->Update();
+  ImageWriterType::Pointer writerGradientYL = ImageWriterType::New();
+ writerGradientYL->SetFileName(FILENAME("GradientYLeft.tif"));
+ writerGradientYL->SetInput(GradientYL->GetOutput());
+ writerGradientYL->Update();
  
  //---Right -----
   VectorFilterTypeRight::Pointer GradientYR = VectorFilterTypeRight::New();
@@ -293,10 +282,10 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   GradientYR->SetInput(RightReader->GetOutput());
  
  
- //~ ImageWriterType::Pointer writerGradientYR = ImageWriterType::New();
- //~ writerGradientYR->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/GradientYRight.tif");
- //~ writerGradientYR->SetInput(GradientYR->GetOutput());
- //~ writerGradientYR->Update();
+ ImageWriterType::Pointer writerGradientYR = ImageWriterType::New();
+ writerGradientYR->SetFileName( FILENAME("GradientYRight.tif"));
+ writerGradientYR->SetInput(GradientYR->GetOutput());
+ writerGradientYR->Update();
  
    
 // Norme du gradient
@@ -313,12 +302,12 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   filterG->AddObserver( itk::ProgressEvent(), observerG );
 
 
-  //~ ImageWriterType::Pointer writerG = ImageWriterType::New();
-  //~ writerG->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/GradientNormLeft.tif");
-  //~ writerG->SetInput( filterG->GetOutput() );
-  //~ writerG->Update();
+  ImageWriterType::Pointer writerG = ImageWriterType::New();
+  writerG->SetFileName( FILENAME("GradientNormLeft.tif"));
+  writerG->SetInput( filterG->GetOutput() );
+  writerG->Update();
 
-/*========================================== Cost Volume ===========================================================*/
+/*========================================== Cost Volume ===========================================*/
    /** sortie a une seule bande et elle contient le volume de cout */
  typedef otb::CostVolumeImageFilter< ImageType, ImageType, ImageType > CostVolumeType;
  
@@ -339,18 +328,16 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   RightCost->SetDisp(-HdispMin);
 	
 
-  //~ ImageWriterType::Pointer LeftCostwriter = ImageWriterType::New();
-  //~ LeftCostwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/LeftCostVolumeFilter.tif");
-  //~ LeftCostwriter->SetInput( LeftCost->GetOutput() );   
-  //~ LeftCostwriter->Update();
+  ImageWriterType::Pointer LeftCostwriter = ImageWriterType::New();
+  LeftCostwriter->SetFileName(FILENAME("LeftCostVolumeFilter.tif"));
+  LeftCostwriter->SetInput( LeftCost->GetOutput() );   
+  LeftCostwriter->Update();
   
   
-  //~ ImageWriterType::Pointer RightCostwriter = ImageWriterType::New();
-  //~ RightCostwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/RightCostVolumeFilter.tif");
-  //~ RightCostwriter->SetInput( RightCost->GetOutput() );    
-  //~ RightCostwriter->Update();
- 
-
+  ImageWriterType::Pointer RightCostwriter = ImageWriterType::New();
+  RightCostwriter->SetFileName(FILENAME("RightCostVolumeFilter.tif"));
+  RightCostwriter->SetInput( RightCost->GetOutput() );    
+  RightCostwriter->Update();
  
 
  /*========================================== Guided filter ==========================================================*/
@@ -446,24 +433,24 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   RightGuided->SetRadius(radius); 
 
 
-  //~ ImageWriterType::Pointer LeftGuidedWriter = ImageWriterType::New();
-  //~ LeftGuidedWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/CoeffLeftGuidedFilter.tif");
-  //~ LeftGuidedWriter->SetInput( LeftGuided->GetOutput() );   
-  //~ otb::StandardFilterWatcher LeftGuidedWatcher(LeftGuidedWriter, "CoeffLeftGuidedFilter");  
-  //~ LeftGuidedWriter->Update(); 
+  ImageWriterType::Pointer LeftGuidedWriter = ImageWriterType::New();
+  LeftGuidedWriter->SetFileName(FILENAME("CoeffLeftGuidedFilter.tif"));
+  LeftGuidedWriter->SetInput( LeftGuided->GetOutput() );   
+  otb::StandardFilterWatcher LeftGuidedWatcher(LeftGuidedWriter, "CoeffLeftGuidedFilter");  
+  LeftGuidedWriter->Update(); 
   
   
-  //~ ImageWriterType::Pointer RightGuidedWriter = ImageWriterType::New();
-  //~ RightGuidedWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/CoeffRightGuidedFilter.tif");
-  //~ RightGuidedWriter->SetInput( RightGuided->GetOutput() );  
-  //~ otb::StandardFilterWatcher RightGuidedWatcher(RightGuidedWriter, "RightGuidedFilter");  
-  //~ RightGuidedWriter->Update(); 
+  ImageWriterType::Pointer RightGuidedWriter = ImageWriterType::New();
+  RightGuidedWriter->SetFileName( FILENAME("CoeffRightGuidedFilter.tif"));
+  RightGuidedWriter->SetInput( RightGuided->GetOutput() );  
+  otb::StandardFilterWatcher RightGuidedWatcher(RightGuidedWriter, "RightGuidedFilter");  
+  RightGuidedWriter->Update(); 
 
 
 
 
 
-//============= La moyenne des coeffs du guided box filter avec les images integrales==========
+/*============= La moyenne des coeffs du guided box filter avec les images integrales==========*/
 
 /** la moyenne du CostVolume en utilsant les images intégrales*/
 //Left
@@ -483,7 +470,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   
   
 
-// =========== le cost volume filtré avec le guided filter =====================================
+/* =========== le cost volume filtré avec le guided filter =====================================*/
 
  typedef otb::GuidedImageFilter< ImageType,ImageType, ImageType> GuidedFilterType;
  //Left
@@ -498,15 +485,13 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
 
   
   ImageWriterType::Pointer LeftCVFFiltredWriter = ImageWriterType::New();
-  LeftCVFFiltredWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/GuidedFilter.tif");
+  LeftCVFFiltredWriter->SetFileName(FILENAME("GuidedFilter.tif"));
   LeftCVFFiltredWriter->SetInput( LeftCVFFiltred->GetOutput() ); 
   otb::StandardFilterWatcher LeftCVFFiltredWatcher(LeftCVFFiltredWriter, "GuidedFilter");  
  // LeftCVFFiltredWriter->Update();
 
 
- /* =========================================== Min Filter ============================================================*/
-
-/** sortie a deux bandes la 1ère contient la disp et 2nd contient le volume de cout minimal  */
+ /* =========================================== Min Filter ======================================*/
 ImageWriterType::Pointer LeftMinWriter = ImageWriterType::New();
 ImageWriterType::Pointer RightMinWriter = ImageWriterType::New();
 ImageWriterType::Pointer writerMinHuit = ImageWriterType::New();
@@ -608,7 +593,6 @@ itk::TimeProbe chrono1;
 // left disp
 
 for (int Hdisp = HdispMin ; Hdisp <=HdispMax ;Hdisp++){ 	 
-std::cout << " Left Disp :  "<< Hdisp << "  \n "; 
  LeftCost->SetDisp(Hdisp); 
  LeftCost->Modified();
 
@@ -631,7 +615,7 @@ std::cout << " Left Disp :  "<< Hdisp << "  \n ";
 }  
 
 /** écriture du resultat de la disparité avec le cost volumebrute**/  
- LeftMinWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/LeftDisparité.tif");
+ LeftMinWriter->SetFileName(FILENAME("LeftDisparité.tif"));
  LeftMinWriter->SetInput(  LeftMin->GetOutput());  
  otb::StandardFilterWatcher LeftMinwatcher(LeftMin, "LeftMinFilter"); 
  LeftMinWriter->Update();
@@ -642,9 +626,7 @@ MinFilterType::Pointer RightMin = MinFilterType::New();
 RightMin->SetInput1(RightMinIn); 
 RightMin->SetInput2(RightCVFFiltred->GetOutput()); 
 	 
-for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
- std::cout << " Right Disp = "<< Hdisp <<std::endl; 
- 
+for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){ 
  RightCost->SetDisp(Hdisp); 
  RightCost->Modified();
  
@@ -663,14 +645,14 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
 }   
 
 /** écriture du resultat de la disparité avec le cost volumebrute**/  
- RightMinWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/RightDisparité.tif");
+ RightMinWriter->SetFileName(FILENAME("RightDisparité.tif"));
  RightMinWriter->SetInput( RightMin->GetOutput());  
  otb::StandardFilterWatcher RightMinwatcher(RightMinWriter, "RightMinFilter"); 
  RightMinWriter->Update(); 
  
 
 
- /*==================================== calcul de la mediane================================================*/
+ /*==================================== calcul de la mediane===========================================*/
 
   typedef itk::MedianImageFilter< OTBImageType, OTBImageType > MedianFilterType;
   MedianFilterType::Pointer LMedian = MedianFilterType::New();
@@ -689,13 +671,13 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
   RightMedianFilter->SetInput(RightReader->GetOutput());
   
  
-  //~ ImageWriterType::Pointer Medianwriter = ImageWriterType::New();
-  //~ Medianwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/LeftMedian.tif");
-  //~ Medianwriter->SetInput( LeftMedianFilter->GetOutput() );
-  //~ Medianwriter->Update();
+  ImageWriterType::Pointer Medianwriter = ImageWriterType::New();
+  Medianwriter->SetFileName( FILENAME("LeftMedian.tif"));
+  Medianwriter->SetInput( LeftMedianFilter->GetOutput() );
+  Medianwriter->Update();
 
 
-//========================================= filtrage de la carte de disparité  par Weighted Median  ===================
+/*========================================= filtrage de la carte de disparité  par Weighted Median  =====*/
   
 
  
@@ -713,12 +695,6 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
    Rightchannel1-> SetInput(const_cast <ImageType *>( RightMin->GetOutput() ));         
    Rightchannel1->SetChannel(1);
    
- 
-  //~ /** écriture de la 1 ère bande éxtraite càd la disparité **/
-  //~ OtbImageWriterType::Pointer writerotbImage = OtbImageWriterType::New();
-  //~ writerotbImage->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/otbImageLeftdisp.tif");
-  //~ writerotbImage->SetInput( Leftchannel1->GetOutput() );
-  //~ writerotbImage->Update(); // affichage du resultat
 
 
   /** Conversion otb::Image (la 1ère composante de la sortie du Min filter) vers Otb::vecteurImage */
@@ -754,7 +730,8 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
   LeftMedian->SetRadius(radiusM) ;
    
    
-  LeftMedianwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/LeftMedianDispFilter.tif");
+  LeftMedianwriter->SetFileName(FILENAME("LeftMedianDispFilter.tif"));
+ //  LeftMedianwriter->SetFileName(OUTFILE2);
   LeftMedianwriter->SetInput( LeftMedian->GetOutput() );  
   otb::StandardFilterWatcher watcherMedian(LeftMedianwriter, "LeftMedianDisp");  
   LeftMedianwriter->Update(); 
@@ -766,50 +743,25 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
   
   RightMedian->SetRadius(radiusM) ;
    
-  RightMedianwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/RightMedianDispFilter.tif");
+  RightMedianwriter->SetFileName( FILENAME("RightMedianDispFilter.tif"));
   RightMedianwriter->SetInput( RightMedian->GetOutput() );  
   otb::StandardFilterWatcher watcher5(RightMedianwriter, "RightMedianDisp");  
   RightMedianwriter->Update(); 
 
 
-//========================== Detection d'occulusion =============================
+/*========================== Detection d'occulusion =============================*/
   
-  /** Conversion des vectorImage vers OtbImage*/
+/** Conversion des vectorImage vers OtbImage*/
 typedef otb::VectorImageToImageListFilter< ImageType, ImageListType > ListType;
 ListType::Pointer OtbImageLeftMedian = ListType::New();
 OtbImageLeftMedian->SetInput( LeftMedian->GetOutput() );
 OtbImageLeftMedian->Update();
-  
 
-  //~ OtbImageWriterType::Pointer TestWriter = OtbImageWriterType::New();
-  //~ TestWriter->SetFileName("/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/TestFilter1.tif");
-  //~ TestWriter->SetInput(OtbImageLeftMedian->GetOutput()->GetNthElement(0));
-  //~ otb::StandardFilterWatcher TestWatcher(TestWriter, "TestFilter"); 
-  //~ TestWriter->Update();
-
-  //~ TestWriter = OtbImageWriterType::New();
-  //~ TestWriter->SetFileName("/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/TestFilter2.tif");
-  //~ TestWriter->SetInput(OtbImageLeftMedian->GetOutput()->GetNthElement(1));
-  //~ TestWriter->Update();
-
-  //~ TestWriter = OtbImageWriterType::New();
-  //~ TestWriter->SetFileName("/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/TestFilter3.tif");
-  //~ TestWriter->SetInput(OtbImageLeftMedian->GetOutput()->GetNthElement(2));
-  //~ TestWriter->Update();
   
 ListType::Pointer OtbImageRightMedian = ListType::New();
 OtbImageRightMedian->SetInput( RightMedian->GetOutput() );
 OtbImageRightMedian->Update();
 
-
-
-  
-  //~ ImageWriterType::Pointer TestWriter = ImageWriterType::New();
-  //~ TestWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/TestFilter.tif");
-  //~ TestWriter->SetInput(ListFilter->GetOutput() );  //* 
-  //~ otb::StandardFilterWatcher TestWatcher(TestWriter, "TestFilter");  
-  //~ TestWriter->Update();
-  
 
 /** Detection d'occlusion*/
  typedef otb::BijectionCoherencyFilter< OTBImageType, OTBImageType > OcclusionType;
@@ -826,22 +778,19 @@ OtbImageRightMedian->Update();
  
 /** écriture du resultat de l'oclusion**/ 
  OtbImageWriterType::Pointer OcclusionWriter = OtbImageWriterType::New(); 
- OcclusionWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/Occlusion.tif");
+ OcclusionWriter->SetFileName( FILENAME("Occlusion.tif"));
  OcclusionWriter->SetInput( Occlusionfilter->GetOutput());  
  otb::StandardFilterWatcher OcclusionWatcher(OcclusionWriter, "Occlusion"); 
  OcclusionWriter->Update(); 
  
 
 
-//========================== Fill occlusion =====================================
-
-
-
+/*========================== Fill occlusion =====================================*/
   CastFilterType::Pointer OccCastFiler = CastFilterType::New();
   OccCastFiler-> SetInput( const_cast <OTBImageType *>( Occlusionfilter->GetOutput() ));
   
   
- ConcatenateVectorImageFilterType::Pointer ConcatenateOccEndInLeftMedImage = ConcatenateVectorImageFilterType::New();
+  ConcatenateVectorImageFilterType::Pointer ConcatenateOccEndInLeftMedImage = ConcatenateVectorImageFilterType::New();
   ConcatenateOccEndInLeftMedImage->SetInput1(OccCastFiler->GetOutput());
   ConcatenateOccEndInLeftMedImage->SetInput2( LeftMedian->GetOutput() );
   
@@ -857,7 +806,7 @@ OtbImageRightMedian->Update();
   
 /** écriture du resultat de la disparité avec le cost volumebrute**/ 
  ImageWriterType::Pointer FillOcclusionWriter = ImageWriterType::New(); 
- FillOcclusionWriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/FillOcclusion.tif");
+ FillOcclusionWriter->SetFileName( FILENAME("FillOcclusion.tif"));
  FillOcclusionWriter->SetInput( FillOcclusionfilter->GetOutput());  
  otb::StandardFilterWatcher FillOcclusionWatcher(FillOcclusionWriter, "FillOcclusion"); 
  FillOcclusionWriter->Update();
@@ -865,30 +814,21 @@ OtbImageRightMedian->Update();
  
    /** Instanciation du filtre weighted median en metant en entrée une image a 4 bandes (sortie de la concatenation) 
    * le 1ere bande etant la carte de fill occlusion et 3 autre l'image de droite filtré avec un median simple */
-     /** Conversion otb::Image (la 1ère composante de la sortie du Min filter) vers Otb::vecteurImage */
- 
-  
    
   ConcatenateVectorImageFilterType::Pointer ConcatenateFillEndInLeftMedImage = ConcatenateVectorImageFilterType::New();
   ConcatenateFillEndInLeftMedImage->SetInput1(FillOcclusionfilter->GetOutput());
   ConcatenateFillEndInLeftMedImage->SetInput2( LeftMedianFilter->GetOutput() );
   
   
-   WeightMedianType::Pointer FillMedian = WeightMedianType::New();
-   FillMedian-> SetInput(ConcatenateFillEndInLeftMedImage->GetOutput()); 
-   FillMedian->SetRadius(radiusM) ;
+  WeightMedianType::Pointer FillMedian = WeightMedianType::New();
+  FillMedian-> SetInput(ConcatenateFillEndInLeftMedImage->GetOutput()); 
+  FillMedian->SetRadius(radiusM) ;
  
-  FillMedianwriter->SetFileName( "/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/include/data/SortieFiltre/SmoothFillDisparity.tif");
+  FillMedianwriter->SetFileName( FILENAME("SmoothFillDisparity.tif"));
   FillMedianwriter->SetInput( FillMedian->GetOutput() );  
   FillMedianwriter->Update(); 
    
-  
 
-
- 
-  
-  
-  
 
 return EXIT_SUCCESS;
 }
