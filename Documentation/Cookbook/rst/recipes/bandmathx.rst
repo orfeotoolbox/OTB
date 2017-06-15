@@ -30,8 +30,8 @@ A simple example is given below:
 As we can see, the new band math filter works with the class
 otb::VectorImage.
 
-Syntax : first elements
------------------------
+Syntax: first elements
+----------------------
 
 The default prefix name for variables related to the ith input is
 *im(i+1)* (note the indexing from 1 to N, for N inputs). The user has
@@ -41,14 +41,14 @@ prefix.
 ::
 
 
-    // All variables related to image1 (input 0) will have the prefix im1 
-    filter->SetNthInput(0, image1);         
+    // All variables related to image1 (input 0) will have the prefix im1
+    filter->SetNthInput(0, image1);
 
-    // All variables related to image2 (input 1) will have the prefix  toulouse   
-    filter->SetNthInput(1, image2, "toulouse");   
+    // All variables related to image2 (input 1) will have the prefix  toulouse
+    filter->SetNthInput(1, image2, "toulouse");
 
     // All variables related to anotherImage (input 2) will have the prefix im3
-    filter->SetNthInput(2, anotherImage);      
+    filter->SetNthInput(2, anotherImage);
 
 In this document, we will keep the default convention. Following list
 summaries the available variables for input #0 (and so on for every
@@ -65,15 +65,15 @@ Variables and their descriptions:
 +-----------------------+--------------------------------------------------------------------------------------+----------+
 | im1bjNkxp             | a neighbourhood (”N”) of pixels of the jth component from first input, of size kxp   | Matrix   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
-| im1bjMini             | global statistic : minimum of the jth band from first input                          | Scalar   |
+| im1bjMini             | global statistic: minimum of the jth band from first input                           | Scalar   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
-| im1bjMaxi             | global statistic : maximum of the jth band from first input                          | Scalar   |
+| im1bjMaxi             | global statistic: maximum of the jth band from first input                           | Scalar   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
-| im1bjMean             | global statistic : mean of the jth band from first input                             | Scalar   |
+| im1bjMean             | global statistic: mean of the jth band from first input                              | Scalar   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
-| im1bjSum              | global statistic : sum of the jth band from first input                              | Scalar   |
+| im1bjSum              | global statistic: sum of the jth band from first input                               | Scalar   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
-| im1bjVar              | global statistic : variance of the jth band from first input                         | Scalar   |
+| im1bjVar              | global statistic: variance of the jth band from first input                          | Scalar   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
 | im1PhyX and im1PhyY   | spacing of first input in X and Y directions                                         | Scalar   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
@@ -345,33 +345,33 @@ Functions and operators summary:
 +----------------+-------------------------------------------------------------------------------+
 | pow and pw     | operators                                                                     |
 +----------------+-------------------------------------------------------------------------------+
-| vnorm          | adapation of an existing function to vectors : one input                      |
+| vnorm          | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vabs           | adapation of an existing function to vectors : one input                      |
+| vabs           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vmin           | adapation of an existing function to vectors : one input                      |
+| vmin           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vmax           | adapation of an existing function to vectors : one input                      |
+| vmax           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vcos           | adapation of an existing function to vectors : one input                      |
+| vcos           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vsin           | adapation of an existing function to vectors : one input                      |
+| vsin           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vtan           | adapation of an existing function to vectors : one input                      |
+| vtan           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vtanh          | adapation of an existing function to vectors : one input                      |
+| vtanh          | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vsinh          | adapation of an existing function to vectors : one input                      |
+| vsinh          | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vcosh          | adapation of an existing function to vectors : one input                      |
+| vcosh          | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vlog           | adapation of an existing function to vectors : one input                      |
+| vlog           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vlog10         | adapation of an existing function to vectors : one input                      |
+| vlog10         | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vexp           | adapation of an existing function to vectors : one input                      |
+| vexp           | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-| vsqrt          | adapation of an existing function to vectors : one input                      |
+| vsqrt          | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
 
 [variables]
@@ -391,7 +391,7 @@ of the new band math filter.
     /** Return a pointer on the nth filter input */
     ImageType * GetNthInput(unsigned int idx);
 
-Refer to the section “Syntax : first elements” ([ssec:syntax]) where the
+Refer to the section “Syntax: first elements” ([ssec:syntax]) where the
 two first functions have already been commented. The function
 GetNthInput is quite clear to understand.
 
@@ -404,7 +404,7 @@ Each time the function SetExpression is called, a new expression is
 pushed inside the filter. **There are as many outputs as there are
 expressions. The dimensions of the outputs (number of bands) are totally
 dependent on the dimensions of the related expressions (see also last
-remark of the section “Syntax : first element” -[ssec:syntax]-).** Thus,
+remark of the section “Syntax: first element” -[ssec:syntax]-).** Thus,
 the filter always performs a pre-evaluation of each expression, in order
 to guess how to allocate the outputs.
 
