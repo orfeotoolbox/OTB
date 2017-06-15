@@ -138,6 +138,9 @@ QtWidgetStringListParameter::UpdateStringList()
 
   // notify model text changed
   emit Change();
+
+  QString key( m_StringListParam->GetKey() );
+  emit ParameterChanged(key);
 }
 
 
