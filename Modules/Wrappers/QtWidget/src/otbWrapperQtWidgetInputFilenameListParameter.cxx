@@ -169,6 +169,10 @@ QtWidgetInputFilenameListParameter::UpdateFilenameList()
     }
 
   emit Change();
+
+  // notify of value change
+  QString key(m_InputFilenameListParam->GetKey());
+  emit ParameterChanged(key);
 }
 
 
