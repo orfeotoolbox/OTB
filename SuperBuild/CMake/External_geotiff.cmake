@@ -46,8 +46,8 @@ if(UNIX)
 
   ExternalProject_Add(GEOTIFF
     PREFIX GEOTIFF
-    URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.1.tar.gz"
-    URL_MD5 48bdf817e6e7a37671cc1f41b01e10fc
+    URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.2.tar.gz"
+    URL_MD5 96ab80e0d4eff7820579957245d844f8
     SOURCE_DIR ${GEOTIFF_SB_SRC}
     BINARY_DIR ${GEOTIFF_SB_SRC}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -72,8 +72,8 @@ else()
 
   ExternalProject_Add(GEOTIFF
     PREFIX GEOTIFF
-    URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.1.tar.gz"
-    URL_MD5 48bdf817e6e7a37671cc1f41b01e10fc
+    URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.2.tar.gz"
+    URL_MD5 96ab80e0d4eff7820579957245d844f8
     SOURCE_DIR ${GEOTIFF_SB_SRC}
     BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
