@@ -81,7 +81,7 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("Convert");
-    SetDescription("Convert an image to a different format, eventually rescaling the data"
+    SetDescription("Convert an image to a different format, optionally rescaling the data"
                    " and/or changing the pixel type.");
     // Documentation
     SetDocName("Image Conversion");

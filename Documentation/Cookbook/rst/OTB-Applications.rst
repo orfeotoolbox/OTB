@@ -5,9 +5,9 @@ OTB ships with more than 90 ready to use applications for remote sensing tasks.
 They usually expose existing processing functions from the underlying C++
 library, or compose them into high level pipelines. OTB applications allow to:
 
--  combine together two or more functions from the Orfeo Toolbox,
+-  Combine together two or more functions from the Orfeo Toolbox,
 
--  provide a nice high level interface to handle: parameters, input
+-  Provide a nice high level interface to handle: parameters, input
    data, output data and communication with the user.
 
 OTB applications can be launched in different ways, and accessed from different
@@ -498,6 +498,8 @@ among 560 cpus and took only 56 seconds.
 Note that this MPI parallel invocation of applications is only
 available for command-line calls to OTB applications, and only for
 images output parameters.
+
+.. _extended-filenames:
 
 Extended filenames
 ------------------

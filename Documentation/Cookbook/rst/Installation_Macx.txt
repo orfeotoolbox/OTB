@@ -1,6 +1,6 @@
 We provide for MacOS X through a standalone package. This package is a
 self-extractible archive, quite similar to the Linux one. You may
-uncompress it with the command line :
+uncompress it with the command line:
 
 .. parsed-literal::
 
