@@ -3,7 +3,6 @@
 
 #include "DimensionalityReductionModel.h"
 
-
 namespace otb
 {
 template <class TInputValue, class AutoencoderType>

@@ -26,7 +26,7 @@ AutoencoderModel<TInputValue,AutoencoderType>::AutoencoderModel()
 	this->m_IsDoPredictBatchMultiThreaded = true;
 }
 
-
+   
 template <class TInputValue, class AutoencoderType>
 AutoencoderModel<TInputValue,AutoencoderType>::~AutoencoderModel()
 {
