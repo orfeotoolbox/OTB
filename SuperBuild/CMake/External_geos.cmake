@@ -37,6 +37,12 @@ ExternalProject_Add(GEOS
    CMAKE_COMMAND ${GEOS_CMAKE_COMMAND}
    )
 
+# Patch still needed with version 3.6.1 to avoid error during CMake configuration
+# See https://trac.osgeo.org/geos/ticket/753
+if(NOT MSVC)
+  SUPERBUILD_PATCH_SOURCE(GEOS)
+endif()
+
 set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
   set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos_i.lib )
