@@ -768,6 +768,10 @@ void CommandLineLauncher::DisplayHelp(bool longHelp)
     bigKey.append(" ");
 
   std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
+  bigKey = "help";
+  for(unsigned int i=0; i<m_MaxKeySize-std::string("help").size(); i++)
+    bigKey.append(" ");
+  std::cerr << "        -"<<bigKey<<" <string list>    Display long help (empty list), or help for given parameters keys" << std::endl;
 
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
