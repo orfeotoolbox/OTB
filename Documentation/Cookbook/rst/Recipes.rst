@@ -18,4 +18,3 @@ future needs.
    recipes/featextract.rst
    recipes/stereo.rst
    recipes/bandmathx.rst
-   recipes/numpy.rst

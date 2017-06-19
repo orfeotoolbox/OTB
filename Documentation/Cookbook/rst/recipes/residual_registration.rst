@@ -84,7 +84,7 @@ or `SURF <http://en.wikipedia.org/wiki/SURF>`__ keypoints can be
 computed in the application. The band on which keypoints are computed
 can be set independently for both images.
 
-The application offers two modes :
+The application offers two modes:
 
 -  the first is the full mode where keypoints are extracted from the
    full extent of both images (please note that in this mode large image
@@ -198,7 +198,7 @@ estimated sensor model is small, you must achieve a good registration
 now between the 2 rectified images. Normally far better than ’only’
 performing separate orthorectification over the 2 images.
 
-This methodology can be adapt and apply in several cases, for example :
+This methodology can be adapt and apply in several cases, for example:
 
 -  register stereo pair of images and estimate accurate epipolar
    geometry

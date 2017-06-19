@@ -47,7 +47,7 @@ This transformation can be done either with **OTB Applications** or with
 **Monteverdi** . Sensor-related parameters such as gain, date, spectral
 sensitivity and sensor position are seamlessly read from the image
 metadata. Atmospheric parameters can be tuned by the user. Supported
-sensors are :
+sensors are:
 
 -  Pleiades
 
@@ -86,7 +86,7 @@ Pan-sharpening
 --------------
 
 Because of physical constrains on the sensor design, it is difficult to
-achieve high spatial and spectral resolution at the same time : a better
+achieve high spatial and spectral resolution at the same time: a better
 spatial resolution means a smaller detector, which in turns means lesser
 optical flow on the detector surface. On the contrary, spectral bands
 are obtained through filters applied on the detector surface, that
@@ -95,7 +95,7 @@ detector size to achieve an acceptable signal to noise ratio.
 
 For these reasons, many high resolution satellite payload are composed
 of two sets of detectors, which in turns delivers two different kind of
-images :
+images:
 
 -  The multi-spectral (XS) image, composed of 3 to 8 spectral bands
    containing usually blue, green, red and near infra-red bands at a
@@ -115,7 +115,7 @@ multi-spectral one so as to get an image combining the spatial
 resolution of the panchromatic image with the spectral richness of the
 multi-spectral image. This operation is called pan-sharpening.
 
-This fusion operation requires two different steps :
+This fusion operation requires two different steps:
 
 #. The multi-spectral (XS) image is zoomed and registered to the
    panchromatic image,
@@ -131,7 +131,7 @@ described in the above sections.
 The *BundleToPerfectSensor* application allows to perform both steps in
 a row. Seamless sensor modelling is used to perform zooming and
 registration of the multi-spectral image on the panchromatic image. In
-the case of a Pléiades bundle, a different approach is used : an affine
+the case of a Pléiades bundle, a different approach is used: an affine
 transform is used to zoom the multi-spectral image and apply a residual
 translation. This translation is computed based on metadata about the
 geometric processing of the bundle. This zooming and registration of the
@@ -189,7 +189,7 @@ Default value is 256 Mb.
 
 .. figure:: ../Art/MonteverdiImages/monteverdi_QB_XS_pan-sharpened.png
 
-Figure 5 : Pan-sharpened image using Orfeo ToolBox. 
+Figure 5: Pan-sharpened image using Orfeo ToolBox.
 
 Please also note that since registration and zooming of the
 multi-spectral image with the panchromatic image relies on sensor
@@ -226,7 +226,7 @@ both delivered as 1 degree by 1 degree tiles:
    resolution DEM obtained by stereoscopic processing of the archive of
    the ASTER instrument.
 
-The **Orfeo Toolbox** relies on `OSSIM <http://www.ossim.org/>`_ 
+The **Orfeo Toolbox** relies on `OSSIM <http://www.ossim.org/>`_
 capabilities for sensor modelling and DEM handling. Tiles of a given DEM
 are supposed to be located within a single directory. General elevation
 support is also supported from GeoTIFF files.
@@ -238,9 +238,9 @@ files. Subdirectories are not supported.
 
 Depending on the reference of the elevation, you also need to use a
 geoid to manage elevation accurately. For this, you need to specify a
-path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Geoid>`_ 
+path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Geoid>`_
 corresponds to the equipotential surface that would coincide with the mean ocean surface of
-the Earth . 
+the Earth.
 
 We provide one geoid in the `OTB-Data  <http://hg.orfeo-toolbox.org/OTB-Data/file/4722d9e672c6/Input/DEM/egm96.grd>`_ repository.
 
@@ -314,7 +314,7 @@ Beware of “ortho-ready” products
 
 There are some image products, called “ortho-ready”, that should be
 processed carefully. They are actual products in raw geometry, but their
-metadata also contains projection data :
+metadata also contains projection data:
 
 -  a map projection
 
@@ -335,27 +335,27 @@ projection has to be hidden from **Orfeo Toolbox** .
 
 You can see if a product is an “ortho-ready” product by using ``gdalinfo`` or
 OTB ReadImageInfo application.
-Check if your product verifies following two conditions :
+Check if your product verifies following two conditions:
 
--  The product is in raw geometry : you should expect the presence of
+-  The product is in raw geometry: you should expect the presence of
    RPC coefficients and a non-empty OSSIM keywordlist.
 
--  The product has a map projection : you should see a projection name
+-  The product has a map projection: you should see a projection name
    with physical origin and spacing.
 
 In that case, you can hide the map projection from the **Orfeo Toolbox**
 by using *extended* filenames. Instead of using the plain input image
-path, you append a specific key at the end :
+path, you append a specific key at the end:
 
 ::
 
     "path_to_image?&skipcarto=true"
 
 The double quote can be necessary for a successful parsing. More details
-about the extended filenames can be found in the `wiki page <http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName>`_ , and
-also in the `OTB Software Guide <http://orfeo-toolbox.org/SoftwareGuide>`_  .
+about the extended filenames can be found in the :ref:`extended-filenames`
+section.
 
-Ortho-rectification with **OTB Applications** 
+Ortho-rectification with **OTB Applications**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The *OrthoRectification* application allows to perform
@@ -402,7 +402,7 @@ used (example with *lambert93* map projection):
 Map projections handled by the application are the following (please
 note that the ellipsoid is always WGS84):
 
--  | UTM : ``-map utm``  | The UTM zone and hemisphere can be set by the options ``-map.utm.zone`` and ``-map.utm.northhem``.
+-  | UTM: ``-map utm``  | The UTM zone and hemisphere can be set by the options ``-map.utm.zone`` and ``-map.utm.northhem``.
 
 -  Lambert 2 etendu: ``-map lambert2``
 
@@ -410,9 +410,9 @@ note that the ellipsoid is always WGS84):
 
 -  | TransMercator: ``-map transmercator`` | The related parameters (false easting, false northing and scale factor) can be set by the options    ``-map.transmercator.falseeasting``, ``-map.transmercator.falsenorthing`` and ``-map.transmercator.scale``
 
--  WGS : ``-map wgs``
+-  WGS: ``-map wgs``
 
--  | Any map projection system with an EPSG code : ``-map epsg`` | The EPSG code is set with the option ``-map.epsg.code``
+-  | Any map projection system with an EPSG code: ``-map epsg`` | The EPSG code is set with the option ``-map.epsg.code``
 
 The group ``outputs`` contains parameters to set the origin, size and
 spacing of the output image. For instance, the ground spacing can be
