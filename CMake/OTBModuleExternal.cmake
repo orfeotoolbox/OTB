@@ -40,6 +40,7 @@ endif()
 if(OTB_BUILD_MODULE_AS_STANDALONE)
   message(STATUS "You are building this module as a standalone CMake project. Beware that dependencies to other remote modules will not be tracked.")
   include(OTBStandaloneModuleMacros)
+  otb_module_impl()
 else()
   
   # Setup build locations.
