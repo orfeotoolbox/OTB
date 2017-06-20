@@ -105,7 +105,7 @@ private:
     SetDescription("Generates two deformation fields to stereo-rectify (i.e. resample in epipolar geometry) a pair of stereo images up to the sensor model precision");
 
     SetDocName("Stereo-rectification deformation grid generator");
-    SetDocLongDescription("This application generates a pair of deformation grid to stereo-rectify a pair of stereo images according to sensor modelling and a mean elevation hypothesis. The deformation grids can be passed to the StereoRectificationGridGenerator application for actual resampling in epipolar geometry.");
+    SetDocLongDescription("This application generates a pair of deformation grid to stereo-rectify a pair of stereo images according to sensor modelling and a mean elevation hypothesis. The deformation grids can be passed to the GridBasedImageResampling application for actual resampling in epipolar geometry.");
     SetDocLimitations("Generation of the deformation grid is not streamable, pay attention to this fact when setting the grid step.");
     SetDocAuthors("OTB-Team");
 
