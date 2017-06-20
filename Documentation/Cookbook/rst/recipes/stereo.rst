@@ -275,13 +275,13 @@ Here are a few of these functionalities:
 
        otbcli_BandMath -il image1_epipolar.tif
                        -out image1_epipolar_mask.tif
-                       -exp "if(im1b1<=0,0,255)"
+                       -exp "im1b1<=0 ? 0 : 255"
 
    ::
 
        otbcli_BandMath -il image2_epipolar.tif
                        -out image2_epipolar_mask.tif
-                       -exp "if(im1b1<=0,0,255)"
+                       -exp "im1b1<=0 ? 0 : 255"
 
 -  -mask.variancet: The block matching algorithm has difficulties to
    find matches on uniform areas. We can use the variance threshold to
@@ -342,7 +342,7 @@ to their optimal metric value:
 
     otbcli_BandMath -il disparity_map_ncc.tif
                     -out thres_hdisparity.tif uint8
-                    -exp "if(im1b3>0.9,255,0)"
+                    -exp "im1b3>0.9 ? 255 : 0"
 
 Then, we concatenate thresholded disparities using the
 *ConcatenateImages*:
