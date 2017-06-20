@@ -1,4 +1,3 @@
-
 #ifndef AutoencoderModel_txx
 #define AutoencoderModel_txx
 

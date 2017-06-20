@@ -22,25 +22,25 @@
 #include "otbConfigure.h"
 
 #include "SOMModelFactory.h"
-
+/*
 #ifdef OTB_USE_SHARK
 #include "AutoencoderModelFactory.h"
 #include "PCAModelFactory.h"
 #endif
-
+*/
 #include "itkMutexLockHolder.h"
 
 
 namespace otb
 {
-	
+/*	
 template <class TInputValue, class TTargetValue>
 using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder<shark::TanhNeuron, shark::LinearNeuron>>  ;
 
 
 template <class TInputValue, class TTargetValue>
 using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  ;
-
+*/
 
 template <class TInputValue, class TTargetValue>
 using SOM2DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 2>  ;
@@ -115,13 +115,13 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   RegisterFactory(SOM3DModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SOM4DModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SOM5DModelFactory<TInputValue,TOutputValue>::New());
-  
+  /*
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(AutoencoderModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
 #endif
-  
+  */
 }
 
 template <class TInputValue, class TOutputValue>
@@ -182,6 +182,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(som2dFactory);
       continue;
       }
+      /*
 #ifdef OTB_USE_SHARK
 	
 	// Autoencoder
@@ -210,7 +211,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       continue;
       }
 #endif
-
+*/
     }
 
 }

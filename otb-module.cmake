@@ -6,9 +6,9 @@ otb_module(CbDimensionalityReduction
 		OTBITK
 		OTBShark	
 		OTBBoost
-		OTBSupervised
 		OTBAppClassification
 		OTBSOM
+		OTBLearningBase
 	DESCRIPTION 
 		"${DOCUMENTATION}"
 )

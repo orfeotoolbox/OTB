@@ -1,7 +1,7 @@
 #ifndef SOMModel_h
 #define SOMModel_h
 
-#include "DimensionalityReductionModel.h"
+//#include "DimensionalityReductionModel.h"
 #include "otbSOMMap.h"
 
 #include "otbSOM.h"
@@ -11,38 +11,45 @@
 #include "otbCzihoSOMLearningBehaviorFunctor.h"
 #include "otbCzihoSOMNeighborhoodBehaviorFunctor.h"
 
-
+#include "otbMachineLearningModelTraits.h"
+#include "otbMachineLearningModel.h"
 
 namespace otb
 {
 template <class TInputValue, unsigned int MapDimension>
-class ITK_EXPORT SOMModel: public  DimensionalityReductionModel<TInputValue,TInputValue>   
+class ITK_EXPORT SOMModel: public  MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>>   
 {
 
 public:
 	
 	typedef SOMModel Self;
-	typedef DimensionalityReductionModel<TInputValue,TInputValue> Superclass;
+	typedef MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>> Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
 	typedef itk::SmartPointer<const Self> ConstPointer;
 
-	typedef typename Superclass::InputValueType InputValueType;
-	typedef typename Superclass::InputSampleType InputSampleType;
-	typedef typename Superclass::InputListSampleType InputListSampleType;
-	typedef typename InputListSampleType::Pointer ListSamplePointerType;
-	typedef typename Superclass::TargetValueType TargetValueType;
-	typedef typename Superclass::TargetSampleType TargetSampleType;
-	typedef typename Superclass::TargetListSampleType TargetListSampleType;
+	typedef typename Superclass::InputValueType 			InputValueType;
+	typedef typename Superclass::InputSampleType 			InputSampleType;
+	typedef typename Superclass::InputListSampleType 		InputListSampleType;
+	typedef typename InputListSampleType::Pointer 			ListSamplePointerType;
+	typedef typename Superclass::TargetValueType 			TargetValueType;
+	typedef typename Superclass::TargetSampleType 			TargetSampleType;
+	typedef typename Superclass::TargetListSampleType 		TargetListSampleType;
+
+	/// Confidence map related typedefs
+	
+	typedef typename Superclass::ConfidenceValueType  				ConfidenceValueType;
+	typedef typename Superclass::ConfidenceSampleType 				ConfidenceSampleType;
+	typedef typename Superclass::ConfidenceListSampleType      		ConfidenceListSampleType;
+
+
 
 	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, MapDimension> MapType;
-	typedef typename MapType::SizeType       SizeType;
-	typedef typename MapType::SpacingType       SpacingType;
-	
-	typedef otb::SOM<InputListSampleType, MapType> EstimatorType;
+	typedef typename MapType::SizeType       				SizeType;
+	typedef typename MapType::SpacingType       			SpacingType;
+	typedef otb::SOM<InputListSampleType, MapType> 			EstimatorType;
 
-	
-	typedef Functor::CzihoSOMLearningBehaviorFunctor    SOMLearningBehaviorFunctorType;
-	typedef Functor::CzihoSOMNeighborhoodBehaviorFunctor SOMNeighborhoodBehaviorFunctorType;
+	typedef Functor::CzihoSOMLearningBehaviorFunctor    	SOMLearningBehaviorFunctorType;
+	typedef Functor::CzihoSOMNeighborhoodBehaviorFunctor 	SOMNeighborhoodBehaviorFunctorType;
 
 	itkNewMacro(Self);
 	itkTypeMacro(SOMModel, DimensionalityReductionModel);
@@ -72,8 +79,8 @@ public:
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
 
-	void Save(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
-	void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
+	void Save(const std::string & filename, const std::string & name="") ;
+	void Load(const std::string & filename, const std::string & name="") ;
 
 	void Train() ITK_OVERRIDE;
 	//void Dimensionality_reduction()  {}; // Dimensionality reduction is done by DoPredict
@@ -83,11 +90,10 @@ protected:
 	SOMModel();	
 	~SOMModel() ITK_OVERRIDE;
  
-	virtual TargetSampleType DoPredict(const InputSampleType& input) const ITK_OVERRIDE;
-	
 private:
 	typename MapType::Pointer m_SOMMap;
-
+	
+	virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality = ITK_NULLPTR) const;
 
 	/** Map Parameters used for training */
   

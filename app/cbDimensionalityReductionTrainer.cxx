@@ -9,7 +9,7 @@
 #include "otbShiftScaleSampleListFilter.h"
 #include "otbStatisticsXMLFileReader.h"
 
-#include "otbSharkUtils.h"
+//#include "otbSharkUtils.h"
 
 #include <fstream> // write the model file
 

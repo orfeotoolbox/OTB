@@ -15,12 +15,12 @@
 #include "DimensionalityReductionModelFactory.h"
 
 #include "SOMModel.h"
-
+/*
 #ifdef OTB_USE_SHARK
 #include "AutoencoderModel.h"
 #include "PCAModel.h"
 #endif
-
+*/
 namespace otb
 {
 namespace Wrapper
@@ -99,7 +99,7 @@ public:
 	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 5> Map5DType;
 	typedef otb::SOMModel<InputValueType, 5> SOM5DModelType;
 	
-
+/*
 #ifdef OTB_USE_SHARK
 	typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
 	typedef otb::AutoencoderModel<InputValueType, AutoencoderType> AutoencoderModelType;
@@ -109,7 +109,7 @@ public:
 	
 	typedef otb::PCAModel<InputValueType> PCAModelType;
 #endif
-  
+  */
 protected:
   cbLearningApplicationBaseDR();
 
@@ -131,11 +131,15 @@ private:
 
   /** Specific Init and Train methods for each machine learning model */
   //@{
-
+  
+  void InitSOMParams();
+  template <class somchoice>
+  void TrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  void BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+/*
 #ifdef OTB_USE_SHARK
   void InitAutoencoderParams();
   void InitPCAParams();
-  void InitSOMParams();
   
   void BeforeTrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   template <class autoencoderchoice>
@@ -143,10 +147,8 @@ private:
   
   void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   
-  template <class somchoice>
-  void TrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
-  void BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
-#endif
+ 
+#endif  */
   //@}
 };
 
@@ -156,10 +158,11 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "cbLearningApplicationBaseDR.txx"
 #include "cbTrainSOM.txx"
+/*
 #ifdef OTB_USE_SHARK
 #include "cbTrainAutoencoder.txx"
 #include "cbTrainPCA.txx"
-#endif
+#endif*/
 #endif
 
 #endif

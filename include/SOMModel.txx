@@ -1,4 +1,3 @@
-
 #ifndef SOMModel_txx
 #define SOMModel_txx
 
@@ -177,7 +176,7 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 
 template <class TInputValue, unsigned int MapDimension>
 typename SOMModel<TInputValue, MapDimension>::TargetSampleType
-SOMModel<TInputValue, MapDimension>::DoPredict(const InputSampleType & value) const
+SOMModel<TInputValue, MapDimension>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
 { 
 	unsigned int dimension =MapType::ImageDimension;
     TargetSampleType target;

@@ -20,7 +20,7 @@
 
 #include "DimensionalityReductionModel.h"
 #include "otbMachineLearningModelFactoryBase.h"
-
+ 
 namespace otb
 {
 /** \class MachineLearningModelFactory
