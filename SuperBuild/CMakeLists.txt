@@ -32,8 +32,6 @@ set(CMAKE_MODULE_PATH
 
 include(ExternalProject)
 
-include(OTBCheckCpp11Keywords)
-
 include(OTBCheckTargetSystemArch)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
