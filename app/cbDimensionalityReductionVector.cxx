@@ -27,7 +27,7 @@
 #include "itkListSample.h"
 #include "otbShiftScaleSampleListFilter.h"
 #include "DimensionalityReductionModelFactory.h"
-#include "DimensionalityReductionModel.h"
+//#include "DimensionalityReductionModel.h"
 #include <time.h>
 
 namespace otb
@@ -57,16 +57,16 @@ class CbDimensionalityReductionVector : public Application
 		
 		/** Filters typedef */
 		
-		typedef double ValueType;
-		typedef DimensionalityReductionModel<ValueType,ValueType> DimensionalityReductionModelType;
-		typedef DimensionalityReductionModelFactory<ValueType, ValueType> DimensionalityReductionModelFactoryType;
-		typedef DimensionalityReductionModelType::Pointer ModelPointerType;
+		typedef double 															ValueType;
+		typedef itk::VariableLengthVector<ValueType> 							InputSampleType;
+		typedef itk::Statistics::ListSample<InputSampleType> 					ListSampleType;
+		typedef MachineLearningModel<itk::VariableLengthVector<ValueType>, itk::VariableLengthVector<ValueType>>	DimensionalityReductionModelType;
+		typedef DimensionalityReductionModelFactory<ValueType,ValueType> 		DimensionalityReductionModelFactoryType;
+		typedef DimensionalityReductionModelType::Pointer 						ModelPointerType;
 		
 		/** Statistics Filters typedef */
-		typedef itk::VariableLengthVector<ValueType> MeasurementType;
-		typedef otb::StatisticsXMLFileReader<MeasurementType> StatisticsReader;
-		typedef itk::VariableLengthVector<ValueType> InputSampleType;
-		typedef itk::Statistics::ListSample<InputSampleType> ListSampleType;
+		typedef itk::VariableLengthVector<ValueType> 										MeasurementType;
+		typedef otb::StatisticsXMLFileReader<MeasurementType> 								StatisticsReader;
 		typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 		~CbDimensionalityReductionVector() ITK_OVERRIDE
 		{
@@ -211,7 +211,7 @@ class CbDimensionalityReductionVector : public Application
 			
 			
 			/** Read the model */
-			
+			std::cout << "create the fact ?" << std::endl;
 			m_Model = DimensionalityReductionModelFactoryType::CreateDimensionalityReductionModel(GetParameterString("model"),
 			DimensionalityReductionModelFactoryType::ReadMode);
 			if (m_Model.IsNull())

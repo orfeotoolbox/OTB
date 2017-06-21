@@ -40,6 +40,7 @@ void PCAModel<TInputValue>::Train()
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 	m_pca.setData(inputSamples);
 	m_pca.encoder(m_encoder, m_Dimension);
+	std::cout << m_encoder.matrix() << std::endl;
 	m_pca.decoder(m_decoder, m_Dimension);
 	
 }
@@ -94,13 +95,17 @@ void PCAModel<TInputValue>::Load(const std::string & filename, const std::string
 	m_encoder.read(ia);
 	ifs.close();
 	m_Dimension = m_encoder.outputSize();
+	auto eigenvectors = m_encoder.matrix();
+	eigenvectors.resize(2,m_encoder.inputSize());
+	m_encoder.setStructure(eigenvectors, m_encoder.offset() );
+	std::cout << m_encoder.matrix() << std::endl;
 	//this->m_Size = m_NumberOfHiddenNeurons;
 }
 
 
 template <class TInputValue>
 typename PCAModel<TInputValue>::TargetSampleType
-PCAModel<TInputValue>::DoPredict(const InputSampleType & value) const
+PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
 {  
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
@@ -126,7 +131,7 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value) const
 
 template <class TInputValue>
 void PCAModel<TInputValue>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
 	
 	std::vector<shark::RealVector> features;

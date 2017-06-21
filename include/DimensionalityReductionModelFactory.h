@@ -18,9 +18,11 @@
 #ifndef DimensionalityReductionModelFactory_h
 #define DimensionalityReductionModelFactory_h
 
-#include "DimensionalityReductionModel.h"
+//#include "DimensionalityReductionModel.h"
 #include "otbMachineLearningModelFactoryBase.h"
  
+#include "otbMachineLearningModel.h" 
+
 namespace otb
 {
 /** \class MachineLearningModelFactory
@@ -44,7 +46,7 @@ public:
   itkTypeMacro(DimensionalityReductionModelFactory, itk::Object);
 
   /** Convenient typedefs. */
-  typedef otb::DimensionalityReductionModel<TInputValue,TOutputValue> DimensionalityReductionModelType;
+  typedef otb::MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TOutputValue>> DimensionalityReductionModelType;
   typedef typename DimensionalityReductionModelType::Pointer DimensionalityReductionModelTypePointer;
 
   /** Mode in which the files is intended to be used */

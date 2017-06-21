@@ -19,7 +19,8 @@
 #define ImageDimensionalityReduction_h
 
 #include "itkImageToImageFilter.h"
-#include "DimensionalityReductionModel.h"
+//#include "DimensionalityReductionModel.h"
+#include "otbMachineLearningModel.h"
 #include "otbImage.h"
 
 namespace otb
@@ -66,7 +67,7 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename OutputImageType::InternalPixelType  LabelType;
 
-  typedef DimensionalityReductionModel<ValueType, LabelType> ModelType;
+  typedef MachineLearningModel<itk::VariableLengthVector<ValueType>, itk::VariableLengthVector<LabelType>> ModelType;
   typedef typename ModelType::Pointer                ModelPointerType;
 
   typedef otb::Image<double>                    ConfidenceImageType;

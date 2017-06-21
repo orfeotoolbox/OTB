@@ -50,12 +50,12 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   
 
   InitSOMParams();
-  /*
+  
 #ifdef OTB_USE_SHARK
   InitAutoencoderParams();
   InitPCAParams();
 #endif
-  */
+  
 }
 
 template <class TInputValue, class TOutputValue>
@@ -80,7 +80,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 	{
 		BeforeTrainSOM(trainingListSample,modelPath);
 	}
- /*
+ 
  if(modelName == "autoencoder")
     {
     #ifdef OTB_USE_SHARK
@@ -105,7 +105,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     #else
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
     #endif
-    }*/
+    }
 }
 
 }

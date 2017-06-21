@@ -171,7 +171,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Load(const std::string & fil
 
 template <class TInputValue, class AutoencoderType>
 typename AutoencoderModel<TInputValue,AutoencoderType>::TargetSampleType
-AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType & value) const
+AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
 {  
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
@@ -200,7 +200,7 @@ AutoencoderModel<TInputValue,AutoencoderType>::DoPredict(const InputSampleType &
 
 template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
 	std::vector<shark::RealVector> features;
 	Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);

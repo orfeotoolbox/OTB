@@ -6,23 +6,31 @@
 namespace otb
 {
 template <class TInputValue, class AutoencoderType>
-class ITK_EXPORT AutoencoderModel: public  DimensionalityReductionModel<TInputValue,TInputValue>   
+class ITK_EXPORT AutoencoderModel: public  MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>>   
 {
 
 public:
 	
 	typedef AutoencoderModel Self;
-	typedef DimensionalityReductionModel<TInputValue,TInputValue> Superclass;
+	typedef MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>> Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
 	typedef itk::SmartPointer<const Self> ConstPointer;
 
-	typedef typename Superclass::InputValueType InputValueType;
-	typedef typename Superclass::InputSampleType InputSampleType;
-	typedef typename Superclass::InputListSampleType InputListSampleType;
-	typedef typename Superclass::TargetValueType TargetValueType;
-	typedef typename Superclass::TargetSampleType TargetSampleType;
-	typedef typename Superclass::TargetListSampleType TargetListSampleType;
+	typedef typename Superclass::InputValueType 			InputValueType;
+	typedef typename Superclass::InputSampleType 			InputSampleType;
+	typedef typename Superclass::InputListSampleType 		InputListSampleType;
+	typedef typename InputListSampleType::Pointer 			ListSamplePointerType;
+	typedef typename Superclass::TargetValueType 			TargetValueType;
+	typedef typename Superclass::TargetSampleType 			TargetSampleType;
+	typedef typename Superclass::TargetListSampleType 		TargetListSampleType;
+
+	/// Confidence map related typedefs
 	
+	typedef typename Superclass::ConfidenceValueType  				ConfidenceValueType;
+	typedef typename Superclass::ConfidenceSampleType 				ConfidenceSampleType;
+	typedef typename Superclass::ConfidenceListSampleType      		ConfidenceListSampleType;
+
+
 	itkNewMacro(Self);
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
@@ -59,8 +67,9 @@ protected:
 	AutoencoderModel();	
 	~AutoencoderModel() ITK_OVERRIDE;
  
-	virtual TargetSampleType DoPredict(const InputSampleType& input) const ITK_OVERRIDE;
-	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *) const ITK_OVERRIDE;
+	virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality = ITK_NULLPTR) const;
+
+	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
   
 private:
 	

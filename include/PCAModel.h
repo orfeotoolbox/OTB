@@ -7,28 +7,38 @@
 namespace otb
 {
 template <class TInputValue>
-class ITK_EXPORT PCAModel: public  DimensionalityReductionModel<TInputValue,TInputValue>   
+class ITK_EXPORT PCAModel: public  MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>>    
 {
 
 public:
 	
 	typedef PCAModel Self;
-	typedef DimensionalityReductionModel<TInputValue,TInputValue> Superclass;
+	typedef MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>> Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
 	typedef itk::SmartPointer<const Self> ConstPointer;
 
-	typedef typename Superclass::InputValueType InputValueType;
-	typedef typename Superclass::InputSampleType InputSampleType;
-	typedef typename Superclass::InputListSampleType InputListSampleType;
-	typedef typename Superclass::TargetValueType TargetValueType;
-	typedef typename Superclass::TargetSampleType TargetSampleType;
-	typedef typename Superclass::TargetListSampleType TargetListSampleType;
+	typedef typename Superclass::InputValueType 			InputValueType;
+	typedef typename Superclass::InputSampleType 			InputSampleType;
+	typedef typename Superclass::InputListSampleType 		InputListSampleType;
+	typedef typename InputListSampleType::Pointer 			ListSamplePointerType;
+	typedef typename Superclass::TargetValueType 			TargetValueType;
+	typedef typename Superclass::TargetSampleType 			TargetSampleType;
+	typedef typename Superclass::TargetListSampleType 		TargetListSampleType;
+
+	/// Confidence map related typedefs
 	
+	typedef typename Superclass::ConfidenceValueType  				ConfidenceValueType;
+	typedef typename Superclass::ConfidenceSampleType 				ConfidenceSampleType;
+	typedef typename Superclass::ConfidenceListSampleType      		ConfidenceListSampleType;
+
+
 	itkNewMacro(Self);
 	itkTypeMacro(PCAModel, DimensionalityReductionModel);
 
 	unsigned int GetDimension() {return m_Dimension;}; 
 	itkSetMacro(Dimension,unsigned int);
+	
+	itkSetMacro(Do_resize_flag,bool);
 	
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
@@ -44,15 +54,16 @@ protected:
 	PCAModel();	
 	~PCAModel() ITK_OVERRIDE;
  
-	virtual TargetSampleType DoPredict(const InputSampleType& input) const ITK_OVERRIDE;
-	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *) const ITK_OVERRIDE;
+	virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality = ITK_NULLPTR) const;
+
+	virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * quality = ITK_NULLPTR) const ITK_OVERRIDE;
   
 private:
 	shark::LinearModel<> m_encoder;
 	shark::LinearModel<> m_decoder;
 	shark::PCA m_pca;
 	unsigned int m_Dimension;
-
+	bool m_Do_resize_flag;
 };
 } // end namespace otb
 
