@@ -1,7 +1,8 @@
 #ifndef AutoencoderModel_h
 #define AutoencoderModel_h
 
-#include "DimensionalityReductionModel.h"
+#include "otbMachineLearningModelTraits.h"
+#include "otbMachineLearningModel.h"
 
 namespace otb
 {

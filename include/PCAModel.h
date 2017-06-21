@@ -1,7 +1,9 @@
 #ifndef PCAModel_h
 #define PCAModel_h
 
-#include "DimensionalityReductionModel.h"
+#include "otbMachineLearningModelTraits.h"
+#include "otbMachineLearningModel.h"
+
 #include <shark/Algorithms/Trainers/PCA.h>
 
 namespace otb
