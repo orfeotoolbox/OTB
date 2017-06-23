@@ -87,8 +87,8 @@ Notes:
 
 - Multiple installation of OTB can exists in same system without one conflicting the other!
 
-FAQ for Packaging
-~~~~~~~~~~~~~~~~~
+FAQ
+~~~
 
 Q: I am getting an error message...
 +++++++++++++++++++++++++++++++++++
