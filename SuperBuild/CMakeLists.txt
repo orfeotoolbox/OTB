@@ -22,6 +22,10 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(OTB-SuperBuild)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Path to additional CMake modules
 #MESSAGE(INFO "${CMAKE_SOURCE_DIR}")
 set(CMAKE_MODULE_PATH
@@ -32,7 +36,8 @@ set(CMAKE_MODULE_PATH
 
 include(ExternalProject)
 
-include(OTBCheckCpp11Keywords)
+# Not needed as OTB Superbuild requires c++14 since version 6.2
+# include(OTBCheckCpp11Keywords)
 
 include(OTBCheckTargetSystemArch)
 
