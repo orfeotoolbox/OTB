@@ -359,5 +359,6 @@ macro(otb_module_target _name)
 endmacro()
 
 macro(otb_module_requires_cxx11)
+  message(WARNING "otb_module_requires_cxx11 is deprecated since OTB version 6.2 which build with c++14 by default. You can safely remove the call to this macro.")
   set(OTB_MODULE_${otb-module}_REQUIRES_CXX11 1)
 endmacro()
