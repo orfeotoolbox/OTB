@@ -117,6 +117,8 @@ public:
   TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const;
 
 
+  virtual unsigned int GetDimension() {return 1;}; /// This method is used to determine the output vector size after dimensionality reduction, and should be overrided for all machine learning models used for dimensionality reduction. This method is not used for classification and regression
+
 
   /** Predict a batch of samples (InputListSampleType)
     * \param input The batch of sample to predict
