@@ -32,6 +32,7 @@
 
 #include "otbMacro.h"
 
+
 namespace otb
 {
 
@@ -145,7 +146,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
     // get the mean value
     if (m_NormalizeFilter)
       {
-      outputIt.Set(static_cast<OutputPixelType>(sum / double(norm)));
+      outputIt.Set(static_cast<OutputPixelType>(sum / double(vcl_abs(norm))));
       }
     else
       {
