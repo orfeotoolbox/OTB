@@ -148,7 +148,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   InputImageType *input = const_cast<InputImageType*>(this->GetInput());
   MaskImageType *mask = const_cast<MaskImageType*>(this->GetMask());
 
-  RegionType requested = this->GetOutput()->GetRequestedRegion();
+  const RegionType& requested = this->GetOutput()->GetRequestedRegion();
   RegionType emptyRegion = input->GetLargestPossibleRegion();
   emptyRegion.SetSize(0,0);
   emptyRegion.SetSize(1,0);
@@ -159,6 +159,32 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     {
     mask->SetRequestedRegion(requested);
     }
+  // set the spatial filter on the OGRData
+  ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
+  ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
+
+  itk::ContinuousIndex<double> startIndex(requested.GetIndex());
+  itk::ContinuousIndex<double> endIndex(requested.GetUpperIndex());
+  startIndex[0] += -0.5;
+  startIndex[1] += -0.5;
+  endIndex[0] += 0.5;
+  endIndex[1] += 0.5;
+  itk::Point<double, 2> startPoint;
+  itk::Point<double, 2> endPoint;
+  input->TransformContinuousIndexToPhysicalPoint(startIndex, startPoint);
+  input->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
+
+  // create geometric extent
+  OGRPolygon tmpPolygon;
+  OGRLinearRing ring;
+  ring.addPoint(startPoint[0],startPoint[1],0.0);
+  ring.addPoint(startPoint[0],endPoint[1]  ,0.0);
+  ring.addPoint(endPoint[0]  ,endPoint[1]  ,0.0);
+  ring.addPoint(endPoint[0]  ,startPoint[1],0.0);
+  ring.addPoint(startPoint[0],startPoint[1],0.0);
+  tmpPolygon.addRing(&ring);
+
+  inLayer.SetSpatialFilter(&tmpPolygon);
 }
 
 template <class TInputImage, class TMaskImage>
@@ -688,33 +714,8 @@ void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::DispatchInputVectors()
 {
-  TInputImage* outputImage = this->GetOutput();
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
   ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
-
-  const RegionType& requestedRegion = outputImage->GetRequestedRegion();
-  itk::ContinuousIndex<double> startIndex(requestedRegion.GetIndex());
-  itk::ContinuousIndex<double> endIndex(requestedRegion.GetUpperIndex());
-  startIndex[0] += -0.5;
-  startIndex[1] += -0.5;
-  endIndex[0] += 0.5;
-  endIndex[1] += 0.5;
-  itk::Point<double, 2> startPoint;
-  itk::Point<double, 2> endPoint;
-  outputImage->TransformContinuousIndexToPhysicalPoint(startIndex, startPoint);
-  outputImage->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
-
-  // create geometric extent
-  OGRPolygon tmpPolygon;
-  OGRLinearRing ring;
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
-  ring.addPoint(startPoint[0],endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,startPoint[1],0.0);
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
-  tmpPolygon.addRing(&ring);
-
-  inLayer.SetSpatialFilter(&tmpPolygon);
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   std::vector<ogr::Layer> tmpLayers;
@@ -897,6 +898,37 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     itkExceptionMacro(<< "Requested output dataset not available " << index << " (available : "<< m_InMemoryOutputs[threadId].size() <<").");
     }
   return m_InMemoryOutputs[threadId][index]->GetLayerChecked(0);
+}
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::UpdateOutputData(itk::DataObject *output)
+{
+  // can't perform this check, no access to m_Updating
+  //~ if ( m_Updating )
+    //~ {
+    //~ return;
+    //~ }
+
+  // Check if there are samples.
+  ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
+  ogr::Layer inLayer = inputDS->GetLayer(m_LayerIndex);
+  ogr::Layer::const_iterator featIt = inLayer.begin();
+  if (featIt == inLayer.end())
+    {
+    // this region has no geometry, we can skip it
+    // PrepareOutput() ?
+    // this->CacheInputReleaseDataFlags() ?
+    // this->GenerateData(); ?
+    // maybe just the allocateOutput is needed.
+    output->DataHasBeenGenerated();
+    //
+    }
+  else
+    {
+    Superclass::UpdateOutputData(output);
+    }
 }
 
 } // end namespace otb
