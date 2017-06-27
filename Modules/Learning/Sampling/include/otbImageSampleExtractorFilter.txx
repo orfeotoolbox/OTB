@@ -150,6 +150,8 @@ void
 PersistentImageSampleExtractorFilter<TInputImage>
 ::GenerateInputRequestedRegion()
 {
+  Superclass::GenerateInputRequestedRegion();
+  // By default an empty region is asked to the input image
   InputImageType *input = const_cast<InputImageType*>(this->GetInput());
   RegionType requested = this->GetOutput()->GetRequestedRegion();
   input->SetRequestedRegion(requested);
