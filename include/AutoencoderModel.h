@@ -4,6 +4,8 @@
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
 
+#include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
+
 namespace otb
 {
 template <class TInputValue, class AutoencoderType>
@@ -35,12 +37,15 @@ public:
 	itkNewMacro(Self);
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
-	unsigned int GetDimension() {return m_NumberOfHiddenNeurons[m_net.size()-1];};  // Override the Dimensionality Reduction model method, it is used in the dimensionality reduction filter to set the output image size
+	//unsigned int GetDimension() {return m_NumberOfHiddenNeurons[m_net.size()-1];};  // Override the Dimensionality Reduction model method, it is used in the dimensionality reduction filter to set the output image size
 	itkGetMacro(NumberOfHiddenNeurons,itk::Array<unsigned int>);
 	itkSetMacro(NumberOfHiddenNeurons,itk::Array<unsigned int>);
 
 	itkGetMacro(NumberOfIterations,unsigned int);
 	itkSetMacro(NumberOfIterations,unsigned int);
+	
+	itkGetMacro(Epsilon,double);
+	itkSetMacro(Epsilon,double);
 
 	itkGetMacro(Regularization,itk::Array<double>);
 	itkSetMacro(Regularization,itk::Array<double>);
@@ -61,8 +66,12 @@ public:
 	void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
 
 	void Train() ITK_OVERRIDE;
-	void TrainOneLayer(unsigned int,double, double, shark::Data<shark::RealVector> &);
-	void TrainOneSparseLayer(unsigned int,double, double,double, shark::Data<shark::RealVector> &);
+	
+	template <class T>
+	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double, shark::Data<shark::RealVector> &);
+	
+	template <class T>
+	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double,double, shark::Data<shark::RealVector> &);
 	
 protected:
 	AutoencoderModel();	
@@ -80,7 +89,8 @@ private:
 	
 	itk::Array<unsigned int> m_NumberOfHiddenNeurons;
 	/** Training parameters */
-	unsigned int m_NumberOfIterations;
+	unsigned int m_NumberOfIterations; // stop the training after a fixed number of iterations
+	double m_Epsilon; // Stops the training when the training error seems to converge
 	itk::Array<double> m_Regularization;  // L2 Regularization parameter
 	itk::Array<double> m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
 	itk::Array<double> m_Rho; // Sparsity parameter

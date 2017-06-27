@@ -22,6 +22,7 @@ namespace otb
 template <class TInputValue, unsigned int MapDimension>
 SOMModel<TInputValue,  MapDimension>::SOMModel()
 {
+	//m_Dimension = typename MapType::ImageDimension;
 }
 
 
@@ -171,6 +172,7 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 	}
 
 	ifs.close();
+	this->m_Dimension = MapType::ImageDimension;
 }
 
 

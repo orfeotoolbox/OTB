@@ -105,6 +105,7 @@ private:
 		
 		MeasurementType meanMeasurementVector;
 		MeasurementType stddevMeasurementVector;
+		
 		if (HasValue("io.stats") && IsParameterEnabled("io.stats"))
 		{
 			StatisticsReader::Pointer statisticsReader = StatisticsReader::New();

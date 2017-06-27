@@ -107,6 +107,10 @@ class CbDimensionalityReductionVector : public Application
 		"If not given, the input vector data file is updated.");
 		MandatoryOff("out");
 		
+		AddParameter(ParameterType_Int, "pcadim", "Principal component"); //
+		SetParameterDescription("pcadim","This optional parameter can be set to reduce the number of eignevectors used in the PCA model file."); //
+		MandatoryOff("pcadim");
+		
 		// Doc example parameter settings
 		SetDocExampleParameterValue("in", "vectorData.shp");
 		SetDocExampleParameterValue("instat", "meanVar.xml");
@@ -211,13 +215,21 @@ class CbDimensionalityReductionVector : public Application
 			
 			
 			/** Read the model */
-			std::cout << "create the fact ?" << std::endl;
+
 			m_Model = DimensionalityReductionModelFactoryType::CreateDimensionalityReductionModel(GetParameterString("model"),
 			DimensionalityReductionModelFactoryType::ReadMode);
 			if (m_Model.IsNull())
 			{
 				otbAppLogFATAL(<< "Error when loading model " << GetParameterString("model") << " : unsupported model type");
 			}
+			if (HasValue("pcadim") && IsParameterEnabled("pcadim"))
+			{
+				int dimension = GetParameterInt("pcadim");
+				m_Model->SetDimension(dimension );
+				std::cout << "yo"  << std::endl;
+			}
+
+			
 			m_Model->Load(GetParameterString("model"));
 			otbAppLogINFO("Model loaded");
 			

@@ -20,6 +20,7 @@ template <class TInputValue>
 PCAModel<TInputValue>::PCAModel()
 {
 	this->m_IsDoPredictBatchMultiThreaded = true;
+	this->m_Dimension = 0;
 }
 
 
@@ -39,9 +40,9 @@ void PCAModel<TInputValue>::Train()
 	
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 	m_pca.setData(inputSamples);
-	m_pca.encoder(m_encoder, m_Dimension);
+	m_pca.encoder(m_encoder, this->m_Dimension);
 	std::cout << m_encoder.matrix() << std::endl;
-	m_pca.decoder(m_decoder, m_Dimension);
+	m_pca.decoder(m_decoder, this->m_Dimension);
 	
 }
 
@@ -94,11 +95,19 @@ void PCAModel<TInputValue>::Load(const std::string & filename, const std::string
 	boost::archive::polymorphic_text_iarchive ia(ifs);
 	m_encoder.read(ia);
 	ifs.close();
-	m_Dimension = m_encoder.outputSize();
+	if (this->m_Dimension ==0)
+	{
+		this->m_Dimension = m_encoder.outputSize();
+	}
+	else
+	{
+		std::cout << "yo" << std::endl;
+	}
+	
 	auto eigenvectors = m_encoder.matrix();
-	eigenvectors.resize(2,m_encoder.inputSize());
+	eigenvectors.resize(this->m_Dimension,m_encoder.inputSize());
 	m_encoder.setStructure(eigenvectors, m_encoder.offset() );
-	std::cout << m_encoder.matrix() << std::endl;
+	std::cout << m_encoder.matrix() << "end" << std::endl;
 	//this->m_Size = m_NumberOfHiddenNeurons;
 }
 
@@ -120,9 +129,9 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueT
      
 	data = m_encoder(data);
     TargetSampleType target;
-    target.SetSize(m_Dimension);
+    target.SetSize(this->m_Dimension);
 	
-	for(unsigned int a = 0; a < m_Dimension; ++a){
+	for(unsigned int a = 0; a < this->m_Dimension; ++a){
 		target[a]=data.element(0)[a];
 	}
 	return target;
@@ -140,10 +149,10 @@ void PCAModel<TInputValue>
 	TargetSampleType target;
 	data = m_encoder(data);
 	unsigned int id = startIndex;
-	target.SetSize(m_Dimension);
+	target.SetSize(this->m_Dimension);
 	for(const auto& p : data.elements()){
 		
-		for(unsigned int a = 0; a < m_Dimension; ++a){
+		for(unsigned int a = 0; a < this->m_Dimension; ++a){
 			target[a]=p[a];
 			//target[a]=1;
 		

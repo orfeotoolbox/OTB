@@ -85,7 +85,7 @@ public:
 	void Train() ITK_OVERRIDE;
 	//void Dimensionality_reduction()  {}; // Dimensionality reduction is done by DoPredict
 	 
-	unsigned int GetDimension() { return MapType::ImageDimension;};
+	//unsigned int GetDimension() { return MapType::ImageDimension;};
 protected:
 	SOMModel();	
 	~SOMModel() ITK_OVERRIDE;

@@ -16,6 +16,8 @@
 #include <shark/Models/ImpulseNoiseModel.h> //noise source to corrupt the inputs
 #include <shark/Models/ConcatenatedModel.h>//to concatenate the noise with the model
 
+#include <shark/Algorithms/StoppingCriteria/MaxIterations.h> //A simple stopping criterion that stops after a fixed number of iterations
+#include <shark/Algorithms/StoppingCriteria/TrainingProgress.h> //Stops when the algorithm seems to converge, Tracks the progress of the training error over a period of time
 namespace otb
 {
 
@@ -35,24 +37,52 @@ template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 {
 	std::vector<shark::RealVector> features;
+	std::cout << "converting the input ListSample to Shark vector" << std::endl;
 	Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
+	std::cout << "creating the data vector" << std::endl;
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 	
-	for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
-	{
-		if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
+	
+	if (m_Epsilon > 0){
+		shark::TrainingProgress<> criterion(5,m_Epsilon);
+		
+		for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
 		{
-			TrainOneLayer( m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples);
+			if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
+			{
+				TrainOneLayer(criterion, m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples);
+			}
+			else
+			{
+				TrainOneSparseLayer( criterion,m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples);
+			}
+			criterion.reset();
 		}
-		else
+
+	}
+	
+	else {
+		shark::MaxIterations<> criterion(m_NumberOfIterations);
+		
+		for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
 		{
-			TrainOneSparseLayer( m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples);
+			if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
+			{
+				TrainOneLayer(criterion, m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples);
+			}
+			else
+			{
+				TrainOneSparseLayer(criterion, m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples);
+			}
+			criterion.reset();
 		}
+		
 	}
 }
 
 template <class TInputValue, class AutoencoderType>
-void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(unsigned int nbneuron,double noise_strength,double regularization, shark::Data<shark::RealVector> &samples)
+template <class T>
+void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int nbneuron,double noise_strength,double regularization, shark::Data<shark::RealVector> &samples)
 {
 	AutoencoderType net;
 
@@ -64,19 +94,22 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(unsigned int n
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
 	shark::ErrorFunction error(trainSet, &model, &loss);
-	//shark::SparseAutoencoderError error(trainSet,&model, &loss, m_Rho, m_Beta);
-	//shark::SparseAutoencoderError error(trainSet,&net, &loss, 0.1, 0.1);
+
 	shark::TwoNormRegularizer regularizer(error.numberOfVariables());
 	error.setRegularizer(regularization,&regularizer);
 
 	shark::IRpropPlusFull optimizer;
 	error.init();
 	optimizer.init(error);
-	std::cout<<"Optimizing model: "+net.name()<<std::endl;
-	for(std::size_t i = 0; i != m_NumberOfIterations; ++i){
+	
+	std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
+	unsigned int i=0;
+	do{
+		i++;
 		optimizer.step(error);
-		std::cout<<i<<" "<<optimizer.solution().value<<std::endl;
-	}
+	} while( !criterion.stop( optimizer.solution() ) );
+	std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
+	
 	net.setParameterVector(optimizer.solution().point);
 	m_net.push_back(net);
 	samples = net.encode(samples);
@@ -84,7 +117,8 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(unsigned int n
 
 
 template <class TInputValue, class AutoencoderType>
-void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(unsigned int nbneuron,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples)
+template <class T>
+void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int nbneuron,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples)
 {
 	AutoencoderType net;
 
@@ -102,11 +136,14 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(unsigned
 	shark::IRpropPlusFull optimizer;
 	error.init();
 	optimizer.init(error);
-	std::cout<<"Optimizing model: "+net.name()<<std::endl;
-	for(std::size_t i = 0; i != m_NumberOfIterations; ++i){
+	std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
+	unsigned int i=0;
+	do{
+		i++;
 		optimizer.step(error);
-		std::cout<<i<<" "<<optimizer.solution().value<<std::endl;
-	}
+	} while( !criterion.stop( optimizer.solution() ) );
+	std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
+	
 	net.setParameterVector(optimizer.solution().point);
 	m_net.push_back(net);
 	samples = net.encode(samples);
@@ -165,7 +202,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Load(const std::string & fil
 	for (int i=0; i<m_net.size(); i++){ 
 		m_NumberOfHiddenNeurons[i] = m_net[i].numberOfHiddenNeurons();
 	}
-	
+	this->m_Dimension = m_NumberOfHiddenNeurons[m_net.size()-1];
 }
 
 

@@ -36,10 +36,10 @@ public:
 
 	itkNewMacro(Self);
 	itkTypeMacro(PCAModel, DimensionalityReductionModel);
-
+/*
 	unsigned int GetDimension() {return m_Dimension;}; 
 	itkSetMacro(Dimension,unsigned int);
-	
+	*/
 	itkSetMacro(Do_resize_flag,bool);
 	
 	bool CanReadFile(const std::string & filename);
@@ -64,7 +64,7 @@ private:
 	shark::LinearModel<> m_encoder;
 	shark::LinearModel<> m_decoder;
 	shark::PCA m_pca;
-	unsigned int m_Dimension;
+	//unsigned int m_Dimension;
 	bool m_Do_resize_flag;
 };
 } // end namespace otb

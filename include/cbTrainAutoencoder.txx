@@ -44,6 +44,13 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     "model.autoencoder.nbiter",
     "The maximum number of iterations used during training.");
   
+  AddParameter(ParameterType_Float, "model.autoencoder.epsilon",
+               " ");
+  SetParameterFloat("model.autoencoder.epsilon",0, false);
+  SetParameterDescription(
+    "model.autoencoder.epsilon",
+    " ");
+  
   
    //Number Of Hidden Neurons
   AddParameter(ParameterType_StringList ,  "model.autoencoder.nbneuron",   "Size");
@@ -134,6 +141,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		std::cout << nb_neuron << std::endl;
 		dimredTrainer->SetNumberOfHiddenNeurons(nb_neuron);
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
+		dimredTrainer->SetEpsilon(GetParameterFloat("model.autoencoder.epsilon"));
 		dimredTrainer->SetRegularization(regularization);
 		dimredTrainer->SetNoise(noise);
 		dimredTrainer->SetRho(rho);
