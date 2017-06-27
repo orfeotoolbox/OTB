@@ -3,7 +3,7 @@
 
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
-
+#include <fstream>
 #include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
 
 namespace otb
@@ -68,10 +68,10 @@ public:
 	void Train() ITK_OVERRIDE;
 	
 	template <class T>
-	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double, shark::Data<shark::RealVector> &);
+	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double, shark::Data<shark::RealVector> &, std::ostream&);
 	
 	template <class T>
-	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double,double, shark::Data<shark::RealVector> &);
+	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double,double, shark::Data<shark::RealVector> &, std::ostream&);
 	
 protected:
 	AutoencoderModel();	
@@ -85,7 +85,9 @@ private:
 	
 	/** Network attributes */
 	std::vector<AutoencoderType> m_net;
-	
+
+	typename InputListSampleType::Pointer m_ValidationListSample; // This list can optionnaly be used during training to prevent overfitting.
+
 	
 	itk::Array<unsigned int> m_NumberOfHiddenNeurons;
 	/** Training parameters */

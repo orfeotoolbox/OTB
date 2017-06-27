@@ -43,6 +43,9 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 	
 	
+	std::ofstream ofs("/mnt/data/home/traizetc/computation/learning_curve.txt"); //learning curve
+	ofs << "learning curve" << std::endl; 
+	
 	if (m_Epsilon > 0){
 		shark::TrainingProgress<> criterion(5,m_Epsilon);
 		
@@ -50,11 +53,11 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 		{
 			if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
 			{
-				TrainOneLayer(criterion, m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples);
+				TrainOneLayer(criterion, m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples,ofs);
 			}
 			else
 			{
-				TrainOneSparseLayer( criterion,m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples);
+				TrainOneSparseLayer( criterion,m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i],inputSamples, ofs);
 			}
 			criterion.reset();
 		}
@@ -68,11 +71,11 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 		{
 			if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
 			{
-				TrainOneLayer(criterion, m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples);
+				TrainOneLayer(criterion, m_NumberOfHiddenNeurons[i],m_Noise[i],m_Regularization[i], inputSamples, ofs);
 			}
 			else
 			{
-				TrainOneSparseLayer(criterion, m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples);
+				TrainOneSparseLayer(criterion, m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples, ofs);
 			}
 			criterion.reset();
 		}
@@ -82,7 +85,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 
 template <class TInputValue, class AutoencoderType>
 template <class T>
-void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int nbneuron,double noise_strength,double regularization, shark::Data<shark::RealVector> &samples)
+void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int nbneuron,double noise_strength,double regularization, shark::Data<shark::RealVector> &samples, std::ostream& File)
 {
 	AutoencoderType net;
 
@@ -103,10 +106,15 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(shark::Abstrac
 	optimizer.init(error);
 	
 	std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
+	
+	File << "end layer" << std::endl;
+	
+	
 	unsigned int i=0;
 	do{
 		i++;
 		optimizer.step(error);
+		File << optimizer.solution().value << std::endl;
 	} while( !criterion.stop( optimizer.solution() ) );
 	std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
 	
@@ -118,7 +126,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(shark::Abstrac
 
 template <class TInputValue, class AutoencoderType>
 template <class T>
-void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int nbneuron,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples)
+void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int nbneuron,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples, std::ostream& File)
 {
 	AutoencoderType net;
 
@@ -141,6 +149,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(shark::A
 	do{
 		i++;
 		optimizer.step(error);
+		File << optimizer.solution().value << std::endl;
 	} while( !criterion.stop( optimizer.solution() ) );
 	std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
 	
