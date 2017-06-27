@@ -113,9 +113,6 @@ protected:
   /** Allocate in-memory layers for input and outputs */
   void AllocateOutputs(void) ITK_OVERRIDE;
 
-  /** Override UpdateOutputData so that empty tiles are not generated */
-  void UpdateOutputData(itk::DataObject *output) ITK_OVERRIDE;
-
   /** Start of main processing loop */
   virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);
 

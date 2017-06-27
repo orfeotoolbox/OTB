@@ -154,7 +154,39 @@ PersistentImageSampleExtractorFilter<TInputImage>
   // By default an empty region is asked to the input image
   InputImageType *input = const_cast<InputImageType*>(this->GetInput());
   RegionType requested = this->GetOutput()->GetRequestedRegion();
-  input->SetRequestedRegion(requested);
+  ogr::Layer inLayer = this->GetOGRData()->GetLayer(this->GetLayerIndex());
+  ogr::Layer::const_iterator featIt = inLayer.begin();
+  if (featIt == inLayer.end())
+    {
+    // there are no features in this tile, we leave the default empty region
+    return;
+    }
+  itk::Point<double, 2> ul;
+  itk::Point<double, 2> lr;
+  inLayer.GetExtent(ul[0],ul[1],lr[0],lr[1],true);
+  IndexType ulIndex,lrIndex;
+  int tmpIndex;
+  input->TransformPhysicalPointToIndex(ul,ulIndex);
+  input->TransformPhysicalPointToIndex(lr,lrIndex);
+  if (ulIndex[0] > lrIndex[0])
+    {
+    // Swap x coord.
+    tmpIndex = ulIndex[0];
+    ulIndex[0] = lrIndex[0];
+    lrIndex[0] = tmpIndex;
+    }
+  if (ulIndex[1] > lrIndex[1])
+    {
+    // Swap y coord.
+    tmpIndex = ulIndex[1];
+    ulIndex[1] = lrIndex[1];
+    lrIndex[1] = tmpIndex;
+    }
+  RegionType extent;
+  extent.SetIndex(ulIndex);
+  extent.SetUpperIndex(lrIndex);
+  extent.Crop(requested);
+  input->SetRequestedRegion(extent);
 }
 
 

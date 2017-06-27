@@ -900,37 +900,6 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   return m_InMemoryOutputs[threadId][index]->GetLayerChecked(0);
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::UpdateOutputData(itk::DataObject *output)
-{
-  // can't perform this check, no access to m_Updating
-  //~ if ( m_Updating )
-    //~ {
-    //~ return;
-    //~ }
-
-  // Check if there are samples.
-  ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
-  ogr::Layer inLayer = inputDS->GetLayer(m_LayerIndex);
-  ogr::Layer::const_iterator featIt = inLayer.begin();
-  if (featIt == inLayer.end())
-    {
-    // this region has no geometry, we can skip it
-    // PrepareOutput() ?
-    // this->CacheInputReleaseDataFlags() ?
-    // this->GenerateData(); ?
-    // maybe just the allocateOutput is needed.
-    output->DataHasBeenGenerated();
-    //
-    }
-  else
-    {
-    Superclass::UpdateOutputData(output);
-    }
-}
-
 } // end namespace otb
 
 #endif
