@@ -55,7 +55,7 @@ namespace Wrapper
 {
 
 CommandLineLauncher::CommandLineLauncher() :
-  /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0)
+  /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true)
 {
   m_Application = ITK_NULLPTR;
   m_Parser = CommandLineParser::New();
@@ -206,17 +206,7 @@ bool CommandLineLauncher::BeforeExecute()
       }
     else
       {
-      const unsigned int nbOfParam = appKeyList.size();
-      
-      m_MaxKeySize = std::string("progress").size();
-      for (unsigned int i = 0; i < nbOfParam; i++)
-        {
-        if (m_Application->GetParameterRole(appKeyList[i]) != Role_Output)
-          {
-          if( m_MaxKeySize < appKeyList[i].size() )
-            m_MaxKeySize = appKeyList[i].size();
-          }
-        }
+     
       
       for(std::vector<std::string>::const_iterator it = val.begin(); it!=val.end();++it)
         {
@@ -752,24 +742,16 @@ void CommandLineLauncher::DisplayHelp(bool longHelp)
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   const unsigned int nbOfParam = appKeyList.size();
 
-  m_MaxKeySize = std::string("progress").size();
-  for (unsigned int i = 0; i < nbOfParam; i++)
-    {
-    if (m_Application->GetParameterRole(appKeyList[i]) != Role_Output)
-      {
-      if( m_MaxKeySize < appKeyList[i].size() )
-        m_MaxKeySize = appKeyList[i].size();
-      }
-    }
+  unsigned int maxKeySize = GetMaxKeySize();
 
   //// progress report parameter
   std::string bigKey = "progress";
-  for(unsigned int i=0; i<m_MaxKeySize-std::string("progress").size(); i++)
+  for(unsigned int i=0; i<maxKeySize-std::string("progress").size(); i++)
     bigKey.append(" ");
 
   std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
   bigKey = "help";
-  for(unsigned int i=0; i<m_MaxKeySize-std::string("help").size(); i++)
+  for(unsigned int i=0; i<maxKeySize-std::string("help").size(); i++)
     bigKey.append(" ");
   std::cerr << "        -"<<bigKey<<" <string list>    Display long help (empty list), or help for given parameters keys" << std::endl;
 
@@ -886,7 +868,10 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     }
 
   std::string bigKey = paramKey;
-  for(unsigned int i=0; i<m_MaxKeySize-paramKey.size(); i++)
+
+  unsigned int maxKeySize = GetMaxKeySize();
+  
+  for(unsigned int i=0; i<maxKeySize-paramKey.size(); i++)
     bigKey.append(" ");
 
   oss<< "-" << bigKey << " ";
@@ -996,7 +981,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   if(longHelp)
     {
     oss << "        ";
-    for(unsigned int i=0; i<m_MaxKeySize;++i)
+    for(unsigned int i=0; i<maxKeySize;++i)
       oss<<" ";
     oss<<"                   ";
     oss<<m_Application->GetParameterDescription(paramKey)<<std::endl;
@@ -1118,6 +1103,25 @@ void CommandLineLauncher::DisplayOutputParameters()
 
   std::cout << "Output parameters value:" << std::endl;
   std::cout << oss.str() << std::endl;
+}
+
+unsigned int CommandLineLauncher::GetMaxKeySize() const
+{
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
+  const unsigned int nbOfParam = appKeyList.size();
+
+  unsigned int maxKeySize = std::string("progress").size();
+  
+  for (unsigned int i = 0; i < nbOfParam; i++)
+    {
+    if (m_Application->GetParameterRole(appKeyList[i]) != Role_Output)
+      {
+      if( maxKeySize < appKeyList[i].size() )
+        maxKeySize = appKeyList[i].size();
+      }
+    }
+  
+  return maxKeySize;
 }
 
 }

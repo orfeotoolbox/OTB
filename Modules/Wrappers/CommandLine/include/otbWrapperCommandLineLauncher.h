@@ -164,6 +164,8 @@ protected:
   /** Clear watcher list, deleting its pointers. */
   void DeleteWatcherList();
 
+  /** Returns the width of the longest key (in number of chars) */
+  unsigned int GetMaxKeySize() const;
 
 private:
 
@@ -184,7 +186,6 @@ private:
   AddProcessCommandType::Pointer    m_AddProcessCommand;
   bool                              m_ReportProgress;
 
-  unsigned int m_MaxKeySize;
 }; //end class
 
 } // end namespace Wrapper
