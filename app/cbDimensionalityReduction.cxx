@@ -112,33 +112,27 @@ protected:
 private:
   void DoInit() ITK_OVERRIDE
   {
-    SetName("PredictRegression");
-    SetDescription("Performs a prediction of the input image according to a regression model file.");
+    SetName("DimensionalityReduction");
+    SetDescription("Performs dimensionality reduction of the input image according to a dimensionality reduction model file.");
 
     // Documentation
-    SetDocName("Predict Regression");
-    SetDocLongDescription("This application predict output values from an input"
-                          " image, based on a regression model file produced by"
-                          " the TrainRegression application. Pixels of the "
-                          "output image will contain the predicted values from"
-                          "the regression model (single band). The input pixels"
+    SetDocName("DimensionalityReduction");
+    SetDocLongDescription("This application reduces the dimension of an input"
+                          " image, based on a dimensionality reduction model file produced by"
+                          " the DimensionalityReductionTrainer application. Pixels of the "
+                          "output image will contain the reduced values from"
+                          "the model. The input pixels"
                           " can be optionally centered and reduced according "
                           "to the statistics file produced by the "
-                          "ComputeImagesStatistics application. An optional "
-                          "input mask can be provided, in which case only "
-                          "input image pixels whose corresponding mask value "
-                          "is greater than 0 will be processed. The remaining"
-                          " of pixels will be given the value 0 in the output"
-                          " image.");
+                          "ComputeImagesStatistics application. ");
 
     SetDocLimitations("The input image must contain the feature bands used for"
-                      " the model training (without the predicted value). "
+                      " the model training. "
                       "If a statistics file was used during training by the "
                       "TrainRegression, it is mandatory to use the same "
-                      "statistics file for prediction. If an input mask is "
-                      "used, its size must match the input image size.");
+                      "statistics file for prediction.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("TrainRegression, ComputeImagesStatistics");
+    SetDocSeeAlso("DimensionalityReductionTrainer, ComputeImagesStatistics");
 
     AddDocTag(Tags::Learning);
 
@@ -187,7 +181,7 @@ private:
     inImage->UpdateOutputInformation();
     unsigned int nbFeatures = inImage->GetNumberOfComponentsPerPixel();
 
-    // Load svm model
+    // Load DR model using a factory
     otbAppLogINFO("Loading model");
     m_Model = DimensionalityReductionModelFactoryType::CreateDimensionalityReductionModel(GetParameterString("model"),
                                                                           DimensionalityReductionModelFactoryType::ReadMode);
