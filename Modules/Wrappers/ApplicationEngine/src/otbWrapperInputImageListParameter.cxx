@@ -44,40 +44,24 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
   // First clear previous file chosen
   this->ClearValue();
 
-  bool isOk = true;
   for(unsigned int i=0; i<filenames.size(); i++)
     {
     const std::string filename = filenames[i];
-    // TODO : when the logger will be available, redirect the exception
-    // in the logger (like what is done in MsgReporter)
+
     // File existence checked by the reader
     if (!filename.empty())
       {
       // Try to build a new ParameterInputImage
       InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
       tmpInputImageParameter->SetFromFileName(filename);
-
-      if(!tmpInputImageParameter->HasValue())
-        {
-        // If loading failed
-        this->ClearValue();
-        isOk = false;
-        break;
-        }
 
       m_InputImageParameterVector.push_back(tmpInputImageParameter);
       m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
       }
     }
 
-  if( !isOk )
-    {
-    return false;
-    }
-
-  SetActive(true);
   this->Modified();
+  SetActive(true);
   return true;
 }
 
@@ -94,27 +78,17 @@ InputImageListParameter::AddNullElement()
 bool
 InputImageListParameter::AddFromFileName(const std::string & filename)
 {
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
   // File existence checked by the reader
   if (!filename.empty())
     {
-    // Try to build a new ParameterInputImage
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
     tmpInputImageParameter->SetFromFileName(filename);
-    
-    if(!tmpInputImageParameter->HasValue())
-      {
-      // If loading failed
-      this->ClearValue();
-      return false;
-      }
-    
+
     m_InputImageParameterVector.push_back(tmpInputImageParameter);
     m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
-    SetActive(true);
+
     this->Modified();
+    SetActive(true);
     return true;
     }
 
@@ -129,24 +103,15 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
     itkExceptionMacro(<< "No image "<<id<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
     }
 
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
   // File existence checked by the reader
   if (!filename.empty())
     {
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
     tmpInputImageParameter->SetFromFileName(filename);
-
-    if(!tmpInputImageParameter->HasValue())
-      {
-      this->ClearValue();
-      return false;
-      }
 
     m_InputImageParameterVector[id] = tmpInputImageParameter;
     m_ImageList->SetNthElement(id,tmpInputImageParameter->GetFloatVectorImage());
-      
+
     this->Modified();
     SetActive(true);
     return true;
@@ -166,7 +131,7 @@ InputImageListParameter::GetFileNameList() const
     {
     filenames.push_back( (*it)->GetFileName() );
     }
-  
+
   return filenames;
 }
 
