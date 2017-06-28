@@ -18,6 +18,9 @@
 # limitations under the License.
 #
 
+# DEPRECATED: Not used in OTB cmake configuration
+# DEPRECATED: should be removed after 6.2 release
+
 include(CheckCXXSourceCompiles)
 
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
