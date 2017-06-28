@@ -50,3 +50,23 @@ Notes:
 -  You are allowed to move these .app files and refrain from moving or
    deleting OTB-|release|-Darwin64 after extraction. In case you need to have OTB
    installed in some other directory. Extract the .run file there.
+
+FAQ
+~~~
+
+Q: I am getting an error message...
++++++++++++++++++++++++++++++++++++
+
+::
+
+   xcrun: error: invalid active developer path
+   (/Library/Developer/CommandLineTools), missing xcrun at:
+   /Library/Developer/CommandLineTools/usr/bin/xcrun
+
+A: You can get this error at startup running Monteverdi.app or Mapla.app. The
+solution is to run in a terminal the following command:  
+
+::
+   xcode-select --install
+
+And then try to restart Monteverdi or Mapla. 

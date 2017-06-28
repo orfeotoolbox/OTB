@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.1.0)
 
 foreach(p
     CMP0025 # CMake 3.0
@@ -42,6 +42,10 @@ if(POLICY CMP0054)
 endif()
 
 project(OTB)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(CMakeDependentOption)
 #
@@ -227,9 +231,6 @@ set(CMAKE_EXE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}
 set(CMAKE_SHARED_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS}")
 set(CMAKE_MODULE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
 
-# detect some C++11 keywords
-include(OTBCheckCpp11Keywords)
-
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
 option(BUILD_TESTING "Build the testing tree." OFF)
 
@@ -332,12 +333,7 @@ if(OTB_WRAP_PYTHON)
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"${OTB_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
-if(OTB_HAS_CXX11)
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
-     "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set(OTB_REQUIRED_CXX_FLAGS " -std=c++11")
-  endif()
-endif()
+
 set(OTB_CONFIG_APPLICATION_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
 set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/OTBTargets.cmake")
@@ -504,7 +500,6 @@ foreach(otb_option
     CMAKE_BUILD_TYPE
     CMAKE_C_FLAGS
     CMAKE_CXX_FLAGS
-    OTB_HAS_CXX11
     ${option_list}
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA

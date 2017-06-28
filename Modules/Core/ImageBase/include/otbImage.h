@@ -197,10 +197,10 @@ protected:
   ~Image() ITK_OVERRIDE {}
 
 private:
-  Image(const Self &); //purposely not implemented
+  Image(const Self &) = delete;
   void operator =(const Self&); //purposely not implemented
 
-  /** Return the ImageMetadataInterfacePointer associated to the data
+    /** Return the ImageMetadataInterfacePointer associated to the data
    *  and creates it on first call
    */
   ImageMetadataInterfacePointerType GetMetaDataInterface() const;
