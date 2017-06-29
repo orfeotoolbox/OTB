@@ -106,6 +106,11 @@ class CbDimensionalityReductionVector : public Application
 		SetParameterDescription("out","Output vector data file storing sample values (OGR format)."
 		"If not given, the input vector data file is updated.");
 		MandatoryOff("out");
+				
+		AddParameter(ParameterType_Int, "indim", "Dimension of the input vector");
+		SetParameterDescription("indim","Dimension of the whole input vector, this value is required if only a part of the bands contained in the vector are used."
+		"If not given, the dimension is deduced from the length of the 'feat' parameter");
+		MandatoryOff("indim");
 		
 		AddParameter(ParameterType_Int, "pcadim", "Principal component"); //
 		SetParameterDescription("pcadim","This optional parameter can be set to reduce the number of eignevectors used in the PCA model file."); //
@@ -167,7 +172,8 @@ class CbDimensionalityReductionVector : public Application
 			otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
 			otb::ogr::Layer layer = source->GetLayer(0);
 			ListSampleType::Pointer input = ListSampleType::New();
-			const int nbFeatures = GetSelectedItems("feat").size();
+			int nbFeatures = GetSelectedItems("feat").size();
+			
 			input->SetMeasurementVectorSize(nbFeatures);
 			otb::ogr::Layer::const_iterator it = layer.cbegin();
 			otb::ogr::Layer::const_iterator itEnd = layer.cend();
@@ -247,6 +253,10 @@ class CbDimensionalityReductionVector : public Application
 			ogr::DataSource::Pointer output;
 			ogr::DataSource::Pointer buffer = ogr::DataSource::New();
 			bool updateMode = false;
+				
+			int nbBands = nbFeatures;
+			if (HasValue("indim") && IsParameterEnabled("indim"))
+				{nbBands = GetParameterInt("indim");} 
 			
 			
 			if (IsParameterEnabled("out") && HasValue("out"))
@@ -258,7 +268,7 @@ class CbDimensionalityReductionVector : public Application
 				 layer.GetGeomType());
 				// Copy existing fields
 				OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
-				for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbFeatures ; k++) // we don't copy the original bands 
+				for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbBands ; k++) // we don't copy the original bands 
 				{
 				OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
 				newLayer.CreateField(fieldDefn);
@@ -279,8 +289,7 @@ class CbDimensionalityReductionVector : public Application
 				// Re-open input data source in update mode
 				output = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
 			}*/
-			
-			
+		
 			
 			otb::ogr::Layer outLayer = output->GetLayer(0);
 			OGRErr errStart = outLayer.ogr().StartTransaction();
@@ -310,12 +319,18 @@ class CbDimensionalityReductionVector : public Application
 				}
 			}
 			
+			// Add an ID field. (The ID already contained in the layer refers to the polygon)
+			OGRFieldDefn IDField("ID_point", OFTInteger);
+			ogr::FieldDefn IDFieldDef(IDField);
+			outLayer.CreateField(IDFieldDef);
+			
 			// Fill output layer
 			
 			unsigned int count=0;
 			auto classfieldname = GetParameterStringList("featout");
 			it = layer.cbegin();
 			itEnd = layer.cend();
+			int id=0;
 			for( ; it!=itEnd ; ++it, ++count)
 			{
 				ogr::Feature dstFeature(outLayer.GetLayerDefn());
@@ -324,6 +339,7 @@ class CbDimensionalityReductionVector : public Application
 				for (std::size_t i=0; i<classfieldname.size(); ++i){
 					dstFeature[classfieldname[i]].SetValue<ValueType>(target->GetMeasurementVector(count)[i]);
 				}
+				dstFeature["ID_point"].SetValue<int>(id);
 				if (updateMode)
 				{
 					outLayer.SetFeature(dstFeature);
@@ -332,6 +348,7 @@ class CbDimensionalityReductionVector : public Application
 				{
 					outLayer.CreateFeature(dstFeature);
 				}
+				id++;
 			}
 			
 			if(outLayer.ogr().TestCapability("Transactions"))

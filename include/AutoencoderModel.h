@@ -86,8 +86,7 @@ private:
 	/** Network attributes */
 	std::vector<AutoencoderType> m_net;
 
-	typename InputListSampleType::Pointer m_ValidationListSample; // This list can optionnaly be used during training to prevent overfitting.
-
+	
 	
 	itk::Array<unsigned int> m_NumberOfHiddenNeurons;
 	/** Training parameters */
@@ -97,6 +96,9 @@ private:
 	itk::Array<double> m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
 	itk::Array<double> m_Rho; // Sparsity parameter
 	itk::Array<double> m_Beta; // Sparsity regularization parameter
+	
+	bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
+	
 };
 } // end namespace otb
 
