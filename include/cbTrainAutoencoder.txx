@@ -80,6 +80,11 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   AddParameter(ParameterType_StringList, "model.autoencoder.beta", "Sparsity regularization strength");
   SetParameterDescription("model.autoencoder.beta", 
                          "Sparsity regularization strength");
+                         
+  AddParameter(ParameterType_OutputFilename, "model.autoencoder.learningcurve", "Learning curve");
+  SetParameterDescription("model.autoencoder.learningcurve", "Learning error values");
+  MandatoryOff("model.autoencoder.learningcurve");
+		
 }
 
 
@@ -146,6 +151,14 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->SetNoise(noise);
 		dimredTrainer->SetRho(rho);
 		dimredTrainer->SetBeta(beta);
+		
+		if (HasValue("model.autoencoder.learningcurve") && IsParameterEnabled("model.autoencoder.learningcurve"))
+		{
+			std::cout << "yo" << std::endl;
+			dimredTrainer->SetWriteLearningCurve(true);
+			dimredTrainer->SetLearningCurveFileName(GetParameterString("model.autoencoder.learningcurve"));
+		}
+		
 		dimredTrainer->SetInputListSample(trainingListSample);
 		std::cout << "before train" << std::endl;
 		dimredTrainer->Train();

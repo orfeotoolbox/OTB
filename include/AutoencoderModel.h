@@ -59,6 +59,12 @@ public:
 	itkGetMacro(Beta,itk::Array<double>);
 	itkSetMacro(Beta,itk::Array<double>);
 
+	itkGetMacro(WriteLearningCurve,bool);
+	itkSetMacro(WriteLearningCurve,bool);
+	
+	itkGetMacro(LearningCurveFileName,std::string);
+	itkSetMacro(LearningCurveFileName,std::string);
+
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
 
@@ -98,6 +104,7 @@ private:
 	itk::Array<double> m_Beta; // Sparsity regularization parameter
 	
 	bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
+	std::string m_LearningCurveFileName; // Name of the output learning curve printed after training
 	
 };
 } // end namespace otb

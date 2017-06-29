@@ -25,6 +25,7 @@ template <class TInputValue, class AutoencoderType>
 AutoencoderModel<TInputValue,AutoencoderType>::AutoencoderModel()
 {
 	this->m_IsDoPredictBatchMultiThreaded = true;
+	this->m_WriteLearningCurve = false;
 }
 
    
@@ -36,6 +37,7 @@ AutoencoderModel<TInputValue,AutoencoderType>::~AutoencoderModel()
 template <class TInputValue, class AutoencoderType>
 void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 {
+	std::cout << this->m_WriteLearningCurve << std::endl;
 	std::vector<shark::RealVector> features;
 	std::cout << "converting the input ListSample to Shark vector" << std::endl;
 	Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
@@ -43,9 +45,16 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Train()
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 	
 	
+	std::ofstream ofs;
+	if (this->m_WriteLearningCurve =true) 
+	{
+		ofs.open(m_LearningCurveFileName);
+		ofs << "learning curve" << std::endl; 
+	}
+	/*
 	std::ofstream ofs("/mnt/data/home/traizetc/computation/learning_curve.txt"); //learning curve
 	ofs << "learning curve" << std::endl; 
-	
+	*/
 	if (m_Epsilon > 0){
 		shark::TrainingProgress<> criterion(5,m_Epsilon);
 		
@@ -106,15 +115,19 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(shark::Abstrac
 	optimizer.init(error);
 	
 	std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
-	
-	File << "end layer" << std::endl;
-	
+	if (this->m_WriteLearningCurve =true) 
+	{
+		File << "end layer" << std::endl;
+	}
 	
 	unsigned int i=0;
 	do{
 		i++;
 		optimizer.step(error);
+		if (this->m_WriteLearningCurve =true) 
+		{	
 		File << optimizer.solution().value << std::endl;
+		}
 	} while( !criterion.stop( optimizer.solution() ) );
 	std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
 	
@@ -149,10 +162,16 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(shark::A
 	do{
 		i++;
 		optimizer.step(error);
+		if (this->m_WriteLearningCurve =true) 
+		{	
 		File << optimizer.solution().value << std::endl;
+		}
 	} while( !criterion.stop( optimizer.solution() ) );
 	std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
-	
+	if (this->m_WriteLearningCurve =true) 
+	{
+		File << "end layer" << std::endl;
+	}
 	net.setParameterVector(optimizer.solution().point);
 	m_net.push_back(net);
 	samples = net.encode(samples);
