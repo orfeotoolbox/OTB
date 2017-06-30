@@ -116,6 +116,11 @@ class CbDimensionalityReductionVector : public Application
 		SetParameterDescription("pcadim","This optional parameter can be set to reduce the number of eignevectors used in the PCA model file."); //
 		MandatoryOff("pcadim");
 		
+		AddParameter(ParameterType_String, "mode", "Writting mode"); //
+		SetParameterString("mode","overwrite", false);
+		SetParameterDescription("mode","This parameter determines if the output file is overwritten or updated [overwrite/update]"); //
+
+		
 		// Doc example parameter settings
 		SetDocExampleParameterValue("in", "vectorData.shp");
 		SetDocExampleParameterValue("instat", "meanVar.xml");
@@ -262,7 +267,19 @@ class CbDimensionalityReductionVector : public Application
 			if (IsParameterEnabled("out") && HasValue("out"))
 			{
 				// Create new OGRDataSource
-				output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
+				if (GetParameterString("mode")=="overwrite")
+				{
+					output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
+				}
+				else if (GetParameterString("mode")=="update")
+				{
+					output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Update_LayerCreateOnly );
+				}
+				else
+				{
+					otbAppLogFATAL(<< "Error when creating the output file" << GetParameterString("mode") << " : unsupported writting mode type [update/overwrite]");
+				}
+				
 				otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"),
 				 const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
 				 layer.GetGeomType());

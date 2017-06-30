@@ -45,7 +45,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   AddDocTag(Tags::Learning);
 
   // main choice parameter that will contain all dimensionality reduction options
-  AddParameter(ParameterType_Choice, "model", "moddel to use for the training");
+  AddParameter(ParameterType_Choice, "model", "model to use for the training");
   SetParameterDescription("model", "Choice of the dimensionality reduction model to use for the training.");
   
 
@@ -83,28 +83,28 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
  
  if(modelName == "autoencoder")
     {
-    #ifdef OTB_USE_SHARK
-    BeforeTrainAutoencoder(trainingListSample,modelPath);
-    #else
-    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-    #endif
+		#ifdef OTB_USE_SHARK
+		BeforeTrainAutoencoder(trainingListSample,modelPath);
+		#else
+		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+		#endif
     }
   if(modelName == "tiedautoencoder")
     {
-    #ifdef OTB_USE_SHARK
-    TrainAutoencoder<TiedAutoencoderModelType>(trainingListSample,modelPath);
-    #else
-    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-    #endif
+		#ifdef OTB_USE_SHARK
+		TrainAutoencoder<TiedAutoencoderModelType>(trainingListSample,modelPath);
+		#else
+		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+		#endif
     }
     
   if(modelName == "pca")
     {
-    #ifdef OTB_USE_SHARK
-    TrainPCA(trainingListSample,modelPath);
-    #else
-    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-    #endif
+		#ifdef OTB_USE_SHARK
+		TrainPCA(trainingListSample,modelPath);
+		#else
+		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+		#endif
     }
 }
 

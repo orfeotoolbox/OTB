@@ -60,7 +60,8 @@ private:
 
 		AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
 		SetParameterDescription("io.out", "Output file containing the model estimated (.txt format).");
-
+		
+	
 		AddParameter(ParameterType_InputFilename, "io.stats", "Input XML image statistics file");
 		MandatoryOff("io.stats");
 		SetParameterDescription("io.stats", "XML file containing mean and variance of each feature.");
