@@ -55,7 +55,7 @@ namespace Wrapper
 {
 
 CommandLineLauncher::CommandLineLauncher() :
-  /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0)
+  /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true)
 {
   m_Application = ITK_NULLPTR;
   m_Parser = CommandLineParser::New();
@@ -197,7 +197,26 @@ bool CommandLineLauncher::BeforeExecute()
   // if help is asked...
   if (m_Parser->IsAttributExists("-help", m_VExpression) == true)
     {
-    this->DisplayHelp();
+    std::vector<std::string> val;
+    val = m_Parser->GetAttribut("-help", m_VExpression);
+
+    if(val.empty())
+      {      
+      this->DisplayHelp(true);
+      }
+    else
+      {
+     
+      
+      for(std::vector<std::string>::const_iterator it = val.begin(); it!=val.end();++it)
+        {
+        Parameter::Pointer param = m_Application->GetParameterByKey(*it);
+        if (param->GetRole() != Role_Output)
+          {
+          std::cerr << this->DisplayParameterHelp(param, *it,true)<<std::endl;
+          }
+        }
+      }
     return false;
     }
 
@@ -549,11 +568,11 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 {
                 dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
                 }
-             else
-              {
-              std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
-              return WRONGPARAMETERVALUE;
-              }
+              else
+                {
+                std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
+                return WRONGPARAMETERVALUE;
+                }
             }
         // Update the flag UserValue
         param->SetUserValue(true);
@@ -685,69 +704,100 @@ void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const i
     }
 }
 
-void CommandLineLauncher::DisplayHelp()
+void CommandLineLauncher::DisplayHelp(bool longHelp)
 {
-  std::cerr << "This is the "<<m_Application->GetName() << " application, version " << OTB_VERSION_STRING <<std::endl;
+  std::cerr<<std::endl;
+  std::cerr << "This is the "<<m_Application->GetDocName() << " ("<<m_Application->GetName()<<") application, version " << OTB_VERSION_STRING <<std::endl<<std::endl;
 
   std::cerr << m_Application->GetDescription() << std::endl;
-  std::cerr<<std::endl;
 
-  std::string link = m_Application->GetDocLink();
-  if (!link.empty())
-  {
-    std::cerr << "Complete documentation: " << link << std::endl;
+  if(longHelp)
+    { 
+    std::cerr<<"Tags: ";
+
+    std::vector<std::string> tags = m_Application->GetDocTags();
+    
+    for(std::vector<std::string>::const_iterator it = tags.begin(); it!=tags.end();++it)
+      {
+      std::cerr<<*it<<" ";
+      }
     std::cerr<<std::endl;
-  }
+  
+    std::cerr<<std::endl;
+    std::cerr<<m_Application->GetDocLongDescription() << std::endl;
+    std::cerr<<std::endl;
+    }
+  else
+    {
+    std::string link = m_Application->GetDocLink();
+    if (!link.empty())
+      {
+      std::cerr << "Complete documentation: " << link << " or -help" <<std::endl;
+      std::cerr<<std::endl;
+      }
+    }
 
   std::cerr << "Parameters: " << std::endl;
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   const unsigned int nbOfParam = appKeyList.size();
 
-  m_MaxKeySize = std::string("progress").size();
-  for (unsigned int i = 0; i < nbOfParam; i++)
-    {
-    if (m_Application->GetParameterRole(appKeyList[i]) != Role_Output)
-      {
-      if( m_MaxKeySize < appKeyList[i].size() )
-        m_MaxKeySize = appKeyList[i].size();
-      }
-    }
+  unsigned int maxKeySize = GetMaxKeySize();
 
   //// progress report parameter
   std::string bigKey = "progress";
-  for(unsigned int i=0; i<m_MaxKeySize-std::string("progress").size(); i++)
+  for(unsigned int i=0; i<maxKeySize-std::string("progress").size(); i++)
     bigKey.append(" ");
 
   std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
+  bigKey = "help";
+  for(unsigned int i=0; i<maxKeySize-std::string("help").size(); i++)
+    bigKey.append(" ");
+  std::cerr << "        -"<<bigKey<<" <string list>    Display long help (empty list), or help for given parameters keys" << std::endl;
 
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
-      Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
-      if (param->GetRole() != Role_Output)
-        {
-        std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
-        }
+    Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
+    if (param->GetRole() != Role_Output)
+      {
+      std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
+      }
     }
 
   std::cerr<<std::endl;
   //std::string cl(m_Application->GetCLExample());
 
+
+  std::cerr<<"Use -help param1 [... paramN] to see detailed documentation of those parameters."<<std::endl;
+  std::cerr<<std::endl;
+  
   std::cerr << "Examples: " << std::endl;
   std::cerr << m_Application->GetCLExample() << std::endl;
 
-}
+  if(longHelp)
+    {
+    std::cerr<<"Authors: "<<std::endl<<m_Application->GetDocAuthors() << std::endl;
 
+    std::cerr<<std::endl;
+    std::cerr<<"Limitations: "<<std::endl<<m_Application->GetDocLimitations() << std::endl;
+
+    std::cerr<<std::endl;
+    std::cerr<<"See also: "<<std::endl<<m_Application->GetDocSeeAlso() << std::endl;
+    std::cerr<<std::endl;
+
+    }  
+
+}
 
 void CommandLineLauncher::LoadTestEnv()
 {
   //Set seed for rand and itk mersenne twister
   //srand(1);
- // itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(121212);
+  // itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(121212);
 }
 
 
-std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer & param, const std::string paramKey)
+std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer & param, const std::string paramKey, bool longHelp)
 {
   // Display the type the type
   ParameterType type = m_Application->GetParameterType(paramKey);
@@ -818,7 +868,10 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     }
 
   std::string bigKey = paramKey;
-  for(unsigned int i=0; i<m_MaxKeySize-paramKey.size(); i++)
+
+  unsigned int maxKeySize = GetMaxKeySize();
+  
+  for(unsigned int i=0; i<maxKeySize-paramKey.size(); i++)
     bigKey.append(" ");
 
   oss<< "-" << bigKey << " ";
@@ -924,6 +977,17 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   oss<<")";
 
   oss << std::endl;
+
+  if(longHelp)
+    {
+    oss << "        ";
+    for(unsigned int i=0; i<maxKeySize;++i)
+      oss<<" ";
+    oss<<"                   ";
+    oss<<m_Application->GetParameterDescription(paramKey)<<std::endl;
+
+    }
+  
   return oss.str();
 }
 
@@ -1039,6 +1103,25 @@ void CommandLineLauncher::DisplayOutputParameters()
 
   std::cout << "Output parameters value:" << std::endl;
   std::cout << oss.str() << std::endl;
+}
+
+unsigned int CommandLineLauncher::GetMaxKeySize() const
+{
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
+  const unsigned int nbOfParam = appKeyList.size();
+
+  unsigned int maxKeySize = std::string("progress").size();
+  
+  for (unsigned int i = 0; i < nbOfParam; i++)
+    {
+    if (m_Application->GetParameterRole(appKeyList[i]) != Role_Output)
+      {
+      if( maxKeySize < appKeyList[i].size() )
+        maxKeySize = appKeyList[i].size();
+      }
+    }
+  
+  return maxKeySize;
 }
 
 }
