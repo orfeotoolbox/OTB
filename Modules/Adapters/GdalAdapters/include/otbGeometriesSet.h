@@ -25,6 +25,7 @@
 // #include "otbOGRLayerWrapper.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImageReference.h"
+#include "otbGeometriesRegion.h"
 
 namespace otb
 {
@@ -143,6 +144,32 @@ public:
     { return m_ImageReference; }
   //@}
 
+  // TODO : virtual void SetRequestedRegionToLargestPossibleRegion()
+
+  // TODO : virtual bool RequestedRegionIsOutsideOfTheBufferedRegion()
+
+  // TODO : virtual bool VerifyRequestedRegion()
+
+  // TODO : virtual void CopyInformation(const DataObject *)
+
+  // TODO : virtual void SetRequestedRegion(const DataObject *)
+
+  // TODO : virtual void Graft(const DataObject *)
+
+  void SetLargestPossibleRegion(const GeometriesRegion & region);
+
+  const GeometriesRegion & GetLargestPossibleRegion() const;
+
+  void SetBufferedRegion(const GeometriesRegion & region);
+
+  const GeometriesRegion & GetBufferedRegion() const;
+
+  void SetRequestedRegion(const GeometriesRegion & region);
+
+  const GeometriesRegion & GetRequestedRegion() const;
+
+  virtual void SetRequestedRegion( const DataObject *data ) ITK_OVERRIDE;
+
 protected:
   /** Default constructor.
    * This actual geometries set is an in-memory \c otb::ogr::DataSource.
@@ -167,6 +194,9 @@ private:
   typedef boost::variant<ogr::DataSource::Pointer, ogr::Layer> AnyGeometriesSetType;
   AnyGeometriesSetType m_GeometriesSet;
   ImageReference       m_ImageReference;
+  GeometriesRegion     m_LargestPossibleRegion;
+  GeometriesRegion     m_BufferedRegion;
+  GeometriesRegion     m_RequestedRegion;
   };
 
 } // end namespace otb

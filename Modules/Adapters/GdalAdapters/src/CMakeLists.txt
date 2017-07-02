@@ -21,6 +21,7 @@
 set(OTBGdalAdapters_SRC
   otbOGRFieldWrapper.cxx
   otbGeometriesSet.cxx
+  otbGeometriesRegion.cxx
   otbOGRFeatureWrapper.cxx
   otbOGRLayerWrapper.cxx
   otbOGRGeometryWrapper.cxx

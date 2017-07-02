@@ -128,6 +128,65 @@ void otb::GeometriesSet::Set(ogr::DataSource::Pointer datasource)
   m_GeometriesSet = datasource;
 }
 
+void
+otb::GeometriesSet::SetLargestPossibleRegion(const GeometriesRegion & region)
+{
+  if (m_LargestPossibleRegion != region)
+    {
+    m_LargestPossibleRegion = region;
+    this->Modified();
+    }
+}
+
+const otb::GeometriesRegion &
+otb::GeometriesSet::GetLargestPossibleRegion() const
+{
+  return m_LargestPossibleRegion;
+}
+
+void
+otb::GeometriesSet::SetBufferedRegion(const GeometriesRegion & region)
+{
+  if (m_BufferedRegion != region)
+    {
+    m_BufferedRegion = region;
+    this->Modified();
+    }
+}
+
+const otb::GeometriesRegion &
+otb::GeometriesSet::GetBufferedRegion() const
+{
+  return m_BufferedRegion;
+}
+
+void
+otb::GeometriesSet::SetRequestedRegion(const GeometriesRegion & region)
+{
+  if (m_RequestedRegion != region)
+    {
+    m_RequestedRegion = region;
+    this->Modified();
+    }
+}
+
+const otb::GeometriesRegion &
+otb::GeometriesSet::GetRequestedRegion() const
+{
+  return m_RequestedRegion;
+}
+
+void
+otb::GeometriesSet::SetRequestedRegion( const DataObject *data )
+{
+  const otb::GeometriesSet * const geometries =
+    dynamic_cast<const otb::GeometriesSet *>(data);
+  if (geometries != ITK_NULLPTR)
+    {
+    this->SetRequestedRegion(geometries->GetRequestedRegion());
+    }
+}
+
 /*===========================================================================*/
 /*=================================[ IsSet ]=================================*/
 /*===========================================================================*/
