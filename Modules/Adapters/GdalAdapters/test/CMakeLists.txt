@@ -37,3 +37,12 @@ target_link_libraries(otbOGRTestsIO ${OTBGdalAdapters-Test_LIBRARIES})
 
 add_test(NAME coTuOGRDataSourceWrapperIO
          COMMAND otbOGRTestsIO ${INPUTDATA}/ToulousePoints-examples.shp )
+
+add_executable(otbGeometriesFilterTest otbGeometriesFilterTest.cxx)
+target_link_libraries(otbGeometriesFilterTest ${OTBGdalAdapters-Test_LIBRARIES})
+otb_module_target_label(otbGeometriesFilterTest)
+
+add_test(NAME coTvGeometriesFilterTest
+         COMMAND otbGeometriesFilterTest
+            ${INPUTDATA}/ToulousePoints-examples.shp
+            ${TEMP}/coTvGeometriesFilterTest.shp)
