@@ -85,7 +85,9 @@ private:
     AddChoice("mode.fit","Fit");
     SetParameterDescription("mode.fit","In fit mode, extract is made to best fit a reference image.");
     AddChoice( "mode.extent" , "Extent" );
+    AddChoice( "mode.radius" , "Radius" );
     SetParameterDescription( "mode.extent" , "In progress" );
+    SetParameterDescription( "mode.radius" , "In progress" );
 
     AddParameter( ParameterType_InputImage , "mode.fit.ref" , "Reference image" );
     SetParameterDescription( "mode.fit.ref" , "Reference image to define the ROI" );
@@ -99,13 +101,21 @@ private:
     AddParameter( ParameterType_Float , "mode.extent.lry" , "Down right Y" );
     SetParameterDescription( "mode.extent.lry" , "ROI y coordinate of lower right corner point." );
 
+    AddParameter( ParameterType_Float , "mode.radius.radius" , "Radius" );
+    AddParameter( ParameterType_Float , "mode.radius.cx" , "X coordinate of the center" );
+    AddParameter( ParameterType_Float , "mode.radius.cy" , "Y coordinate of the center" );
+
     AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
     AddChoice( "mode.extent.unit.pixel" , "Pixel" );
     AddChoice( "mode.extent.unit.phy" , "Physical" );
     AddChoice( "mode.extent.unit.lonlat" , "Lon/Lat" );
 
+    AddParameter( ParameterType_Choice , "mode.radius.unit" , "Unit" );
+    AddChoice( "mode.radius.unit.pixel" , "Pixel" );
+    AddChoice( "mode.radius.unit.phy" , "Physical" );
+
     // Elevation
-    ElevationParametersHandler::AddElevationParameters(this,"mode.fit.elev");
+    ElevationParametersHandler::AddElevationParameters(this,"elev");
 
     AddParameter(ParameterType_Int,  "startx", "Start X");
     SetParameterDescription("startx", "ROI start x position.");
@@ -126,6 +136,10 @@ private:
     SetDefaultParameterInt("mode.extent.uly", 0);
     SetDefaultParameterInt("mode.extent.lrx",  0);
     SetDefaultParameterInt("mode.extent.lry",  0);
+
+    SetDefaultParameterInt("mode.radius.radius", 0);
+    SetDefaultParameterInt("mode.radius.cx",  0);
+    SetDefaultParameterInt("mode.radius.cy",  0);
 
     // Channelist Parameters
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
@@ -185,12 +199,15 @@ private:
       SetMinimumParameterIntValue("starty", 0);
       SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
 
+      // Update the start and size parameter depending on the mode
+      if ( GetParameterString("mode") == "extent" )
+          computeExtent();
+      if (GetParameterString("mode") == "mode.radius")
+          computeRadius();
+
       // Crop the roi region to be included in the largest possible
       // region
-      if (GetParameterString("mode")=="extent")
-        {
-          computeStartandSize();
-        }
+
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
@@ -250,7 +267,7 @@ private:
   }
 
   void
-  computeStartandSize()
+  computeExtent()
   {
     assert( GetParameterString( "mode" ) != "mode.extent" );
     int pixelValue;
@@ -259,12 +276,10 @@ private:
         pixelValue = floor( GetParameterFloat( "mode.extent.ulx" ) );
         SetParameterInt( "startx", pixelValue , false );
         pixelValue = floor( GetParameterFloat( "mode.extent.lrx" ) - pixelValue ) + 1;
-        // assert( pixelValue >= 0 );
         SetParameterInt( "sizex", pixelValue , false );
         pixelValue = floor( GetParameterFloat( "mode.extent.uly" ) );
         SetParameterInt( "starty", pixelValue , false );
         pixelValue = floor( GetParameterFloat( "mode.extent.lry" ) - pixelValue ) + 1;
-        // assert( pixelValue >= 0 );
         SetParameterInt( "sizey", pixelValue , false );
       }
     else if(GetParameterString( "mode.extent.unit" ) == "phy")
@@ -273,26 +288,58 @@ private:
         FloatVectorImageType::SpacingType spacing = GetParameterImage("in")->GetSpacing();
         pixelValue = floor( ( GetParameterFloat( "mode.extent.ulx" ) - origin[ 0 ] ) \
                       / static_cast<float>( spacing[ 0 ] ) ) ;
-         // assert( pixelValue >= 0 );
         SetParameterInt( "startx", pixelValue , false );
-        pixelValue = floor( ( GetParameterFloat( "mode.extent.lrx" ) - \
-                      GetParameterFloat( "mode.extent.ulx" ) ) / static_cast<float>( spacing[ 0 ] ) ) - pixelValue ;
-         // assert( pixelValue >= 0 );
+        pixelValue = floor( ( GetParameterFloat( "mode.extent.lrx" ) \
+                      - GetParameterFloat( "mode.extent.ulx" ) ) / static_cast<float>( spacing[ 0 ] ) ) \
+                      - pixelValue ;
         SetParameterInt( "sizex", pixelValue , false );
         pixelValue = floor( ( GetParameterFloat( "mode.extent.uly" ) - origin[ 1 ] ) \
                       / static_cast<float>( spacing[ 1 ] ) ) ;
-         // assert( pixelValue >= 0 );
         SetParameterInt( "starty", pixelValue , false );
         pixelValue = floor( ( GetParameterFloat( "mode.extent.lry" ) - \
                       GetParameterFloat( "mode.extent.uly" ) ) / static_cast<float>( spacing[ 1 ] ) ) - pixelValue ;
-         // assert( pixelValue >= 0 );
         SetParameterInt( "sizey", pixelValue , false );
       }
     else
     {
       std::cout<<"work in progress"<<std::endl;
-    }
-    
+    }  
+  }
+
+  void
+  computeRadius()
+  {
+    int pixelValue;
+    assert( GetParameterString( "mode" ) != "mode.radius" );
+    if ( GetParameterString( "mode.radius.unit" ) == "pixel" )
+      {
+        pixelValue = floor(GetParameterFloat( "mode.radius.cx" ) - GetParameterFloat( "mode.radius.radius" ) );
+        SetParameterInt( "startx", pixelValue , false );
+        pixelValue = floor(GetParameterFloat( "mode.radius.cy" ) - GetParameterFloat( "mode.radius.radius" ) );
+        SetParameterInt( "starty", pixelValue , false );
+        pixelValue = floor( 2 * GetParameterFloat( "mode.radius.radius" ) + 1);
+        SetParameterInt( "sizex", pixelValue , false );
+        SetParameterInt( "sizey", pixelValue , false );
+      }
+    if ( GetParameterString( "mode.radius.unit" ) == "phy" )
+      {
+        itk::Point<double, 2> origin = GetParameterImage("in")->GetOrigin();
+        FloatVectorImageType::SpacingType spacing = GetParameterImage("in")->GetSpacing();
+        pixelValue = floor( ( GetParameterFloat( "mode.radius.cx" ) - origin[ 0 ] \
+                      - GetParameterFloat( "mode.radius.radius" ) )\
+                      / static_cast<float>( spacing[ 0 ] ) ) ;
+        SetParameterInt( "startx", pixelValue , false );
+        pixelValue = floor( ( GetParameterFloat( "mode.radius.cy" ) - origin[ 0 ] \
+                      - GetParameterFloat( "mode.radius.radius" ) ) \
+                      / static_cast<float>( spacing[ 1 ] ) ) ;
+        SetParameterInt( "starty", pixelValue , false );
+        pixelValue = floor( ( 2 * GetParameterFloat( "mode.radius.radius" ) ) \
+                      / static_cast<float>( spacing[ 0 ] ) ) + 1 ;
+        SetParameterInt( "sizex", pixelValue , false );
+        pixelValue = floor( ( 2 * GetParameterFloat( "mode.radius.radius" ) ) \
+                      / static_cast<float>( spacing[ 1 ] ) ) + 1 ;
+        SetParameterInt( "sizey", pixelValue , false );
+      }
   }
 
   void DoExecute() ITK_OVERRIDE
@@ -304,7 +351,7 @@ private:
     if(GetParameterString("mode")=="fit")
       {
       // Setup the DEM Handler
-      otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"mode.fit.elev");
+      otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
       FloatVectorImageType::Pointer referencePtr = this->GetParameterImage("mode.fit.ref");
       referencePtr->UpdateOutputInformation();
