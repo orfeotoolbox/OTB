@@ -84,9 +84,25 @@ private:
     SetParameterDescription("mode.standard","In standard mode, extract is done according the coordinates entered by the user");
     AddChoice("mode.fit","Fit");
     SetParameterDescription("mode.fit","In fit mode, extract is made to best fit a reference image.");
+    AddChoice( "mode.extent" , "Extent" );
+    SetParameterDescription( "mode.extent" , "In progress" );
 
-    AddParameter(ParameterType_InputImage,"mode.fit.ref","Reference image");
-    SetParameterDescription("mode.fit.ref","Reference image to define the ROI");
+    AddParameter( ParameterType_InputImage , "mode.fit.ref" , "Reference image" );
+    SetParameterDescription( "mode.fit.ref" , "Reference image to define the ROI" );
+
+    AddParameter( ParameterType_Float , "mode.extent.ulx" , "Up left X" );
+    SetParameterDescription( "mode.extent.ulx" , "ROI x coordinate of upper left corner point." );
+    AddParameter( ParameterType_Float , "mode.extent.uly" , "Up left Y" );
+    SetParameterDescription( "mode.extent.uly" , "ROI y coordinate of upper left corner point." );
+    AddParameter( ParameterType_Float , "mode.extent.lrx" , "Down right X" );
+    SetParameterDescription( "mode.extent.lrx" , "ROI x coordinate of lower right corner point." );
+    AddParameter( ParameterType_Float , "mode.extent.lry" , "Down right Y" );
+    SetParameterDescription( "mode.extent.lry" , "ROI y coordinate of lower right corner point." );
+
+    AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
+    AddChoice( "mode.extent.unit.pixel" , "Pixel" );
+    AddChoice( "mode.extent.unit.phy" , "Physical" );
+    AddChoice( "mode.extent.unit.lonlat" , "Lon/Lat" );
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this,"mode.fit.elev");
@@ -105,6 +121,11 @@ private:
     SetDefaultParameterInt("starty", 0);
     SetDefaultParameterInt("sizex",  0);
     SetDefaultParameterInt("sizey",  0);
+
+    SetDefaultParameterInt("mode.extent.ulx", 0);
+    SetDefaultParameterInt("mode.extent.uly", 0);
+    SetDefaultParameterInt("mode.extent.lrx",  0);
+    SetDefaultParameterInt("mode.extent.lry",  0);
 
     // Channelist Parameters
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
@@ -166,6 +187,10 @@ private:
 
       // Crop the roi region to be included in the largest possible
       // region
+      if (GetParameterString("mode")=="extent")
+        {
+          computeStartandSize();
+        }
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
@@ -188,7 +213,7 @@ private:
       this->DisableParameter("sizey");
 
       }
-    else if(GetParameterString("mode")=="standard")
+    else if(GetParameterString("mode")=="standard" || GetParameterString("mode")=="extent")
       {
       this->SetParameterRole("startx",Role_Input);
       this->SetParameterRole("starty",Role_Input);
@@ -222,6 +247,52 @@ private:
           }
       }
     return false;
+  }
+
+  void
+  computeStartandSize()
+  {
+    assert( GetParameterString( "mode" ) != "mode.extent" );
+    int pixelValue;
+    if (GetParameterString( "mode.extent.unit" ) == "pixel" )
+      {
+        pixelValue = floor( GetParameterFloat( "mode.extent.ulx" ) );
+        SetParameterInt( "startx", pixelValue , false );
+        pixelValue = floor( GetParameterFloat( "mode.extent.lrx" ) - pixelValue ) + 1;
+        // assert( pixelValue >= 0 );
+        SetParameterInt( "sizex", pixelValue , false );
+        pixelValue = floor( GetParameterFloat( "mode.extent.uly" ) );
+        SetParameterInt( "starty", pixelValue , false );
+        pixelValue = floor( GetParameterFloat( "mode.extent.lry" ) - pixelValue ) + 1;
+        // assert( pixelValue >= 0 );
+        SetParameterInt( "sizey", pixelValue , false );
+      }
+    else if(GetParameterString( "mode.extent.unit" ) == "phy")
+      {
+        itk::Point<double, 2> origin = GetParameterImage("in")->GetOrigin();
+        FloatVectorImageType::SpacingType spacing = GetParameterImage("in")->GetSpacing();
+        pixelValue = floor( ( GetParameterFloat( "mode.extent.ulx" ) - origin[ 0 ] ) \
+                      / static_cast<float>( spacing[ 0 ] ) ) ;
+         // assert( pixelValue >= 0 );
+        SetParameterInt( "startx", pixelValue , false );
+        pixelValue = floor( ( GetParameterFloat( "mode.extent.lrx" ) - \
+                      GetParameterFloat( "mode.extent.ulx" ) ) / static_cast<float>( spacing[ 0 ] ) ) - pixelValue ;
+         // assert( pixelValue >= 0 );
+        SetParameterInt( "sizex", pixelValue , false );
+        pixelValue = floor( ( GetParameterFloat( "mode.extent.uly" ) - origin[ 1 ] ) \
+                      / static_cast<float>( spacing[ 1 ] ) ) ;
+         // assert( pixelValue >= 0 );
+        SetParameterInt( "starty", pixelValue , false );
+        pixelValue = floor( ( GetParameterFloat( "mode.extent.lry" ) - \
+                      GetParameterFloat( "mode.extent.uly" ) ) / static_cast<float>( spacing[ 1 ] ) ) - pixelValue ;
+         // assert( pixelValue >= 0 );
+        SetParameterInt( "sizey", pixelValue , false );
+      }
+    else
+    {
+      std::cout<<"work in progress"<<std::endl;
+    }
+    
   }
 
   void DoExecute() ITK_OVERRIDE
