@@ -237,7 +237,6 @@ class CbDimensionalityReductionVector : public Application
 			{
 				int dimension = GetParameterInt("pcadim");
 				m_Model->SetDimension(dimension );
-				std::cout << "yo"  << std::endl;
 			}
 
 			
@@ -270,26 +269,41 @@ class CbDimensionalityReductionVector : public Application
 				if (GetParameterString("mode")=="overwrite")
 				{
 					output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
+					otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"),
+					 const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
+					 layer.GetGeomType());
+					// Copy existing fields
+					OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
+					for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbBands ; k++) // we don't copy the original bands 
+					{
+					OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
+					newLayer.CreateField(fieldDefn);
+					}
 				}
 				else if (GetParameterString("mode")=="update")
 				{
-					output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Update_LayerCreateOnly );
+					//output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Update_LayerCreateOnly);
+					// Update mode
+					otb::ogr::DataSource::Pointer source_output = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Read);
+					layer = source_output->GetLayer(0);
+					updateMode = true;
+					otbAppLogINFO("Update input vector data.");
+					
+					// fill temporary buffer for the transfer
+					otb::ogr::Layer inputLayer = layer;
+					layer = buffer->CopyLayer(inputLayer, std::string("Buffer"));
+					// close input data source 
+					source_output->Clear();
+					// Re-open input data source in update mode
+					output = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Update_LayerUpdate);
+				
 				}
 				else
 				{
-					otbAppLogFATAL(<< "Error when creating the output file" << GetParameterString("mode") << " : unsupported writting mode type [update/overwrite]");
+					otbAppLogFATAL(<< "Error when creating the output file" << GetParameterString("mode") << " : unsupported writting mode type");
 				}
 				
-				otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"),
-				 const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
-				 layer.GetGeomType());
-				// Copy existing fields
-				OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
-				for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbBands ; k++) // we don't copy the original bands 
-				{
-				OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
-				newLayer.CreateField(fieldDefn);
-				}
+			
 			}
 			
 			/*
@@ -309,6 +323,7 @@ class CbDimensionalityReductionVector : public Application
 		
 			
 			otb::ogr::Layer outLayer = output->GetLayer(0);
+			
 			OGRErr errStart = outLayer.ogr().StartTransaction();
 			
 			if (errStart != OGRERR_NONE)
@@ -337,10 +352,11 @@ class CbDimensionalityReductionVector : public Application
 			}
 			
 			// Add an ID field. (The ID already contained in the layer refers to the polygon)
+			/*
 			OGRFieldDefn IDField("ID_point", OFTInteger);
 			ogr::FieldDefn IDFieldDef(IDField);
 			outLayer.CreateField(IDFieldDef);
-			
+			*/
 			// Fill output layer
 			
 			unsigned int count=0;
@@ -351,12 +367,18 @@ class CbDimensionalityReductionVector : public Application
 			for( ; it!=itEnd ; ++it, ++count)
 			{
 				ogr::Feature dstFeature(outLayer.GetLayerDefn());
-				dstFeature.SetFrom( *it , TRUE);
-				dstFeature.SetFID(it->GetFID());
+				/*
+				if (GetParameterString("mode")=="overwrite")
+				{*/
+					dstFeature.SetFrom( *it , TRUE);
+					dstFeature.SetFID(it->GetFID());
+				//}
+				
+				
 				for (std::size_t i=0; i<classfieldname.size(); ++i){
 					dstFeature[classfieldname[i]].SetValue<ValueType>(target->GetMeasurementVector(count)[i]);
 				}
-				dstFeature["ID_point"].SetValue<int>(id);
+				//dstFeature["ID_point"].SetValue<int>(id);
 				if (updateMode)
 				{
 					outLayer.SetFeature(dstFeature);

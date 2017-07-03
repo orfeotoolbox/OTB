@@ -22,7 +22,7 @@ namespace otb
 template <class TInputValue, unsigned int MapDimension>
 SOMModel<TInputValue,  MapDimension>::SOMModel()
 {
-	//m_Dimension = typename MapType::ImageDimension;
+	this->m_Dimension = MapType::ImageDimension;
 }
 
 
@@ -46,12 +46,9 @@ void SOMModel<TInputValue,  MapDimension>::Train()
     estimator->SetBetaEnd(m_BetaEnd);
     estimator->SetMaxWeight(m_MaxWeight);
     //AddProcess(estimator,"Learning");
-    
     estimator->Update();
-	
     m_SOMMap = estimator->GetOutput();
-    std::cout << "dr of the first sample : " << m_SOMMap->GetWinner(m_ListSample->GetMeasurementVector(0)) << std::endl;
-}
+   }
 
 
 
@@ -100,7 +97,7 @@ void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, con
 	inputIterator.GoToBegin();
 	std::ofstream ofs(filename, std::ios::binary);
 	binary_write_string(ofs,"som"); 
-	binary_write(ofs,static_cast<int>(MapDimension));
+	binary_write(ofs,static_cast<unsigned int>(MapDimension));
 	SizeType size = m_SOMMap->GetLargestPossibleRegion().GetSize() ;
 	for (size_t i=0;i<MapDimension;i++){
 		binary_write(ofs,size[i]);
@@ -129,12 +126,10 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 		binary_read(ifs,s[i]);
 	}
 	std::string modelType(s);
-	
 	/** Read the dimension of the map (should be equal to MapDimension) */
 	
-	int dimension;
+	unsigned int dimension;
 	binary_read(ifs,dimension);
-	
 	if (modelType != "som" || dimension != MapDimension){
 		itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
@@ -146,10 +141,8 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 		binary_read(ifs,size[i]);
 		index[i]=0;
 	}
-	
 	unsigned int numberOfElements;
 	binary_read(ifs,numberOfElements);
-	
 	m_SOMMap = MapType::New();
 	typename MapType::RegionType region;
 	region.SetSize( size );
@@ -165,13 +158,15 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 		InputSampleType  vect(numberOfElements);
 		for (int i=0 ; i<numberOfElements; i++)
 		{
-			binary_read(ifs,vect[i]);
+			float v;    // InputValue type is not the same during training anddimredvector.
+			binary_read(ifs,v);
+			vect[i] = static_cast<double>(v);
 		}
 		outputIterator.Set(vect);
 		++outputIterator;
 	}
-
 	ifs.close();
+	
 	this->m_Dimension = MapType::ImageDimension;
 }
 
@@ -180,15 +175,14 @@ template <class TInputValue, unsigned int MapDimension>
 typename SOMModel<TInputValue, MapDimension>::TargetSampleType
 SOMModel<TInputValue, MapDimension>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
 { 
-	unsigned int dimension =MapType::ImageDimension;
     TargetSampleType target;
-    target.SetSize(dimension);
+    target.SetSize(this->m_Dimension);
 	
     auto winner =m_SOMMap->GetWinner(value);
-    for (int i=0; i< dimension ;i++) {
+    for (int i=0; i< this->m_Dimension ;i++) {
 		target[i] = winner.GetElement(i); 
 	}
-	
+
 	return target;
 }
 

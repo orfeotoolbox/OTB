@@ -117,6 +117,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		using TemplateEstimatorType = typename somchoice::EstimatorType;
 		typename somchoice::Pointer dimredTrainer = somchoice::New();
 		unsigned int dim = dimredTrainer->GetDimension();
+		std::cout << dim << std::endl;
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.som.ni"));
 		dimredTrainer->SetBetaInit(GetParameterFloat("model.som.bi"));
 		dimredTrainer->SetBetaEnd(GetParameterFloat("model.som.bf"));

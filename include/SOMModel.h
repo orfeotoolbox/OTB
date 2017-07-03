@@ -46,6 +46,7 @@ public:
 	typedef SOMMap<itk::VariableLengthVector<TInputValue>,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, MapDimension> MapType;
 	typedef typename MapType::SizeType       				SizeType;
 	typedef typename MapType::SpacingType       			SpacingType;
+	//typedef otb::SOM<InputListSampleType, MapType> 			EstimatorType;
 	typedef otb::SOM<InputListSampleType, MapType> 			EstimatorType;
 
 	typedef Functor::CzihoSOMLearningBehaviorFunctor    	SOMLearningBehaviorFunctorType;

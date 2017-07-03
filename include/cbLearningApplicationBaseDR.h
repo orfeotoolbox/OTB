@@ -87,16 +87,16 @@ public:
 	  
 	// Dimensionality reduction models
 
-	typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> Map2DType;
+	//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> Map2DType;
 	typedef otb::SOMModel<InputValueType, 2> SOM2DModelType;
 	
-	typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> Map3DType;
+	//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> Map3DType;
 	typedef otb::SOMModel<InputValueType, 3> SOM3DModelType;
 	
-	typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 4> Map4DType;
+	//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 4> Map4DType;
 	typedef otb::SOMModel<InputValueType, 4> SOM4DModelType;
 	
-	typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 5> Map5DType;
+	//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 5> Map5DType;
 	typedef otb::SOMModel<InputValueType, 5> SOM5DModelType;
 	
 
