@@ -101,17 +101,17 @@ private:
     AddParameter( ParameterType_Float , "mode.extent.lry" , "Down right Y" );
     SetParameterDescription( "mode.extent.lry" , "ROI y coordinate of lower right corner point." );
 
-    AddParameter( ParameterType_Float , "mode.radius.radius" , "Radius" );
+    AddParameter( ParameterType_Float , "mode.radius.r" , "Radius" );
     AddParameter( ParameterType_Float , "mode.radius.cx" , "X coordinate of the center" );
     AddParameter( ParameterType_Float , "mode.radius.cy" , "Y coordinate of the center" );
 
     AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
-    AddChoice( "mode.extent.unit.pixel" , "Pixel" );
+    AddChoice( "mode.extent.unit.pxl" , "Pixel" );
     AddChoice( "mode.extent.unit.phy" , "Physical" );
     AddChoice( "mode.extent.unit.lonlat" , "Lon/Lat" );
 
     AddParameter( ParameterType_Choice , "mode.radius.unit" , "Unit" );
-    AddChoice( "mode.radius.unit.pixel" , "Pixel" );
+    AddChoice( "mode.radius.unit.pxl" , "Pixel" );
     AddChoice( "mode.radius.unit.phy" , "Physical" );
 
     // Elevation
@@ -137,7 +137,7 @@ private:
     SetDefaultParameterInt("mode.extent.lrx",  0);
     SetDefaultParameterInt("mode.extent.lry",  0);
 
-    SetDefaultParameterInt("mode.radius.radius", 0);
+    SetDefaultParameterInt("mode.radius.r", 0);
     SetDefaultParameterInt("mode.radius.cx",  0);
     SetDefaultParameterInt("mode.radius.cy",  0);
 
@@ -168,7 +168,99 @@ private:
         {
         SetParameterInt("sizex",largestRegion.GetSize()[0], false);
         SetParameterInt("sizey",largestRegion.GetSize()[1], false);
+        if ( GetParameterString("mode") == "extent" )
+          {
+          if ( GetParameterString( "mode.extent.unit" ) == "pxl" )
+            {
+            if  ( !HasUserValue("mode.extent.ulx") && !HasUserValue("mode.extent.uly") )
+              {
+              SetParameterFloat("mode.extent.ulx", 0 , false);
+              SetParameterFloat("mode.extent.uly", 0 , false);
+              }
+
+            if  ( !HasUserValue("mode.extent.lrx") && !HasUserValue("mode.extent.lry") )
+              {
+              SetParameterFloat("mode.extent.lrx",largestRegion.GetSize()[0], false);
+              SetParameterFloat("mode.extent.lry",largestRegion.GetSize()[1], false);
+              }
+            }
+          else if ( GetParameterString( "mode.extent.unit" ) == "phy" )
+            {
+            itk::Point<float, 2> ulp,  lrp;
+            FloatVectorImageType::IndexType uli , lri;
+            if  ( !HasUserValue("mode.extent.ulx") && !HasUserValue("mode.extent.uly") )
+              {
+              uli.Fill(0);
+              inImage->TransformIndexToPhysicalPoint(uli,ulp);
+              SetParameterFloat("mode.extent.ulx",ulp[0], false);
+              SetParameterFloat("mode.extent.uly",ulp[1], false);
+              }
+            if  ( !HasUserValue("mode.extent.lrx") && !HasUserValue("mode.extent.lry") )
+              {
+              lri[ 0 ] = largestRegion.GetSize()[0];
+              lri[ 1 ] = largestRegion.GetSize()[1];
+              inImage->TransformIndexToPhysicalPoint(lri,lrp);
+              SetParameterFloat("mode.extent.lrx",lrp[0], false);
+              SetParameterFloat("mode.extent.lry",lrp[1], false);  
+              }
+            }
+          else if ( GetParameterString( "mode.extent.unit" ) == "lonlat" )
+            {
+            RSTransformType::Pointer rsTransform = RSTransformType::New();
+            rsTransform->SetInputKeywordList( inImage->GetImageKeywordlist() );
+            rsTransform->SetInputProjectionRef( inImage->GetProjectionRef() );
+            rsTransform->InstantiateTransform();
+            itk::Point<double, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+            FloatVectorImageType::IndexType uli , lri;
+            if  ( !HasUserValue("mode.extent.ulx") && !HasUserValue("mode.extent.uly") )
+              {
+              uli.Fill(0);
+              inImage->TransformIndexToPhysicalPoint(uli,ulp_in);
+              ulp_out = rsTransform->TransformPoint(ulp_in);
+              SetParameterFloat( "mode.extent.ulx" , ulp_out[0] , false );
+              SetParameterFloat( "mode.extent.uly" , ulp_out[1] , false );
+              }
+            if  ( !HasUserValue("mode.extent.lrx") && !HasUserValue("mode.extent.lry") )
+              {
+              lri[ 0 ] = largestRegion.GetSize()[0];
+              lri[ 1 ] = largestRegion.GetSize()[1];
+              inImage->TransformIndexToPhysicalPoint(lri,lrp_in);
+              lrp_out = rsTransform->TransformPoint(lrp_in);
+              SetParameterFloat( "mode.extent.lrx" , lrp_out[0] , false );
+              SetParameterFloat( "mode.extent.lry" , lrp_out[1] , false );
+              }
+            }
+          }
+        if ( GetParameterString("mode") == "radius" )
+          {
+            if (!HasUserValue("mode.radius.r")  && !HasUserValue("mode.radius.cx") \
+                && !HasUserValue("mode.radius.cy") )
+              {
+              FloatVectorImageType::IndexType centeri , helpRi;
+              centeri[ 0 ] = largestRegion.GetSize()[0] / 2;
+              centeri[ 1 ] = largestRegion.GetSize()[1] / 2;
+              helpRi[ 0 ] = 0;
+              helpRi[ 1 ] = largestRegion.GetSize()[1] / 2;
+
+              if ( GetParameterString("mode.radius.unit") == "pxl" )
+                {
+                SetParameterFloat( "mode.radius.r" , helpRi[1] , false );
+                SetParameterFloat( "mode.radius.cx" , centeri[0] , false );
+                SetParameterFloat( "mode.radius.cy" , centeri[1] , false) ;
+                }
+              if ( GetParameterString("mode.radius.unit") == "phy" )
+                {
+                itk::Point<double, 2> centerp , helpRp;
+                inImage->TransformIndexToPhysicalPoint(centeri,centerp);
+                SetParameterFloat( "mode.radius.cx" , centerp[0] , false );
+                SetParameterFloat( "mode.radius.cy" , centerp[1] , false) ;
+                inImage->TransformIndexToPhysicalPoint(helpRi,helpRp);
+                SetParameterFloat( "mode.radius.r" , centerp[0]-helpRp[0] , false );
+                }
+              }
+          }
         }
+
 
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
       ListViewParameter *clParam = dynamic_cast<ListViewParameter*>(GetParameterByKey("cl"));
@@ -230,7 +322,7 @@ private:
       this->DisableParameter("sizey");
 
       }
-    else if(GetParameterString("mode")=="standard" || GetParameterString("mode")=="extent")
+    else if(GetParameterString("mode")=="standard" || GetParameterString("mode")=="extent" || GetParameterString("mode")=="radius")
       {
       this->SetParameterRole("startx",Role_Input);
       this->SetParameterRole("starty",Role_Input);
@@ -254,14 +346,14 @@ private:
 
     if ( HasValue("in") )
       {
-        if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
-          {
-            SetParameterInt("sizex",region.GetSize(0), HasUserValue("sizex"));
-            SetParameterInt("sizey",region.GetSize(1), HasUserValue("sizey"));
-            SetParameterInt("startx",region.GetIndex(0), HasUserValue("startx"));
-            SetParameterInt("starty",region.GetIndex(1), HasUserValue("starty"));
-            return true;
-          }
+      if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
+        {
+        SetParameterInt("sizex",region.GetSize(0), HasUserValue("sizex"));
+        SetParameterInt("sizey",region.GetSize(1), HasUserValue("sizey"));
+        SetParameterInt("startx",region.GetIndex(0), HasUserValue("startx"));
+        SetParameterInt("starty",region.GetIndex(1), HasUserValue("starty"));
+        return true;
+        }
       }
     return false;
   }
@@ -269,22 +361,42 @@ private:
   void
   computeExtent()
   {
-    assert( GetParameterString( "mode" ) != "mode.extent" );
+    assert( GetParameterString( "mode" ) == "extent" );
     int pixelValue;
-    if (GetParameterString( "mode.extent.unit" ) == "pixel" )
+    if (GetParameterString( "mode.extent.unit" ) == "pxl" )
       {
-        pixelValue = floor( GetParameterFloat( "mode.extent.ulx" ) );
-        SetParameterInt( "startx", pixelValue , false );
-        pixelValue = floor( GetParameterFloat( "mode.extent.lrx" ) - pixelValue ) + 1;
-        SetParameterInt( "sizex", pixelValue , false );
-        pixelValue = floor( GetParameterFloat( "mode.extent.uly" ) );
-        SetParameterInt( "starty", pixelValue , false );
-        pixelValue = floor( GetParameterFloat( "mode.extent.lry" ) - pixelValue ) + 1;
-        SetParameterInt( "sizey", pixelValue , false );
+      pixelValue = floor( GetParameterFloat( "mode.extent.ulx" ) );
+      SetParameterInt( "startx", pixelValue , false );
+      pixelValue = floor( GetParameterFloat( "mode.extent.lrx" ) - pixelValue ) + 1;
+      SetParameterInt( "sizex", pixelValue , false );
+      pixelValue = floor( GetParameterFloat( "mode.extent.uly" ) );
+      SetParameterInt( "starty", pixelValue , false );
+      pixelValue = floor( GetParameterFloat( "mode.extent.lry" ) - pixelValue ) + 1;
+      SetParameterInt( "sizey", pixelValue , false );
       }
     else if(GetParameterString( "mode.extent.unit" ) == "phy")
       {
-        itk::Point<double, 2> origin = GetParameterImage("in")->GetOrigin();
+      itk::Point<float, 2> ulp_in,  lrp_in;
+      ulp_in[ 0 ] = GetParameterFloat( "mode.extent.ulx" );
+      ulp_in[ 1 ] = GetParameterFloat( "mode.extent.uly" );
+      lrp_in[ 0 ] = GetParameterFloat( "mode.extent.lrx" );
+      lrp_in[ 1 ] = GetParameterFloat( "mode.extent.lry" );
+
+      ExtractROIFilterType::InputImageType * inImage = GetParameterImage("in");
+      FloatVectorImageType::IndexType uli_out , lri_out;
+      if ( inImage->TransformPhysicalPointToIndex(ulp_in,uli_out) )
+        {
+        SetParameterInt( "startx", uli_out[0] , false );
+        SetParameterInt( "starty", uli_out[1] , false );
+        }
+        
+      if( inImage->TransformPhysicalPointToIndex(lrp_in,lri_out) )
+        {
+        SetParameterInt( "sizex", uli_out[0] - lri_out[0] , false );
+        SetParameterInt( "sizey", uli_out[1] - lri_out[1] , false );
+        }
+        
+/*        itk::Point<double, 2> origin = GetParameterImage("in")->GetOrigin();
         FloatVectorImageType::SpacingType spacing = GetParameterImage("in")->GetSpacing();
         pixelValue = floor( ( GetParameterFloat( "mode.extent.ulx" ) - origin[ 0 ] ) \
                       / static_cast<float>( spacing[ 0 ] ) ) ;
@@ -298,12 +410,39 @@ private:
         SetParameterInt( "starty", pixelValue , false );
         pixelValue = floor( ( GetParameterFloat( "mode.extent.lry" ) - \
                       GetParameterFloat( "mode.extent.uly" ) ) / static_cast<float>( spacing[ 1 ] ) ) - pixelValue ;
-        SetParameterInt( "sizey", pixelValue , false );
-      }
-    else
-    {
-      std::cout<<"work in progress"<<std::endl;
-    }  
+        SetParameterInt( "sizey", pixelValue , false );*/
+        }
+    else if( GetParameterString( "mode.extent.unit" ) == "lonlat" )
+      {
+      RSTransformType::Pointer rsTransform = RSTransformType::New();
+      ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
+      rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
+      rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
+      rsTransform->InstantiateTransform();
+      itk::Point<double, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+      ulp_in[ 0 ] = GetParameterFloat( "mode.extent.ulx" );
+      ulp_in[ 1 ] = GetParameterFloat( "mode.extent.uly" );
+      lrp_in[ 0 ] = GetParameterFloat( "mode.extent.lrx" );
+      lrp_in[ 1 ] = GetParameterFloat( "mode.extent.lry" );
+      ulp_out = rsTransform->TransformPoint(ulp_in);
+      lrp_out = rsTransform->TransformPoint(lrp_in);
+
+      FloatVectorImageType::IndexType uli_out , lri_out;
+      inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+      inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
+
+      if ( inImage->TransformPhysicalPointToIndex(ulp_in,uli_out) )
+        {
+        SetParameterInt( "startx", uli_out[0] , false );
+        SetParameterInt( "starty", uli_out[1] , false );
+        }
+            
+      if( inImage->TransformPhysicalPointToIndex(lrp_in,lri_out) )
+        {
+        SetParameterInt( "sizex", uli_out[0] - lri_out[0] , false );
+        SetParameterInt( "sizey", uli_out[1] - lri_out[1] , false );
+        }
+      }  
   }
 
   void
@@ -311,13 +450,13 @@ private:
   {
     int pixelValue;
     assert( GetParameterString( "mode" ) != "mode.radius" );
-    if ( GetParameterString( "mode.radius.unit" ) == "pixel" )
+    if ( GetParameterString( "mode.radius.unit" ) == "pxl" )
       {
-        pixelValue = floor(GetParameterFloat( "mode.radius.cx" ) - GetParameterFloat( "mode.radius.radius" ) );
+        pixelValue = floor(GetParameterFloat( "mode.radius.cx" ) - GetParameterFloat( "mode.radius.r" ) );
         SetParameterInt( "startx", pixelValue , false );
-        pixelValue = floor(GetParameterFloat( "mode.radius.cy" ) - GetParameterFloat( "mode.radius.radius" ) );
+        pixelValue = floor(GetParameterFloat( "mode.radius.cy" ) - GetParameterFloat( "mode.radius.r" ) );
         SetParameterInt( "starty", pixelValue , false );
-        pixelValue = floor( 2 * GetParameterFloat( "mode.radius.radius" ) + 1);
+        pixelValue = floor( 2 * GetParameterFloat( "mode.radius.r" ) + 1);
         SetParameterInt( "sizex", pixelValue , false );
         SetParameterInt( "sizey", pixelValue , false );
       }
@@ -326,17 +465,17 @@ private:
         itk::Point<double, 2> origin = GetParameterImage("in")->GetOrigin();
         FloatVectorImageType::SpacingType spacing = GetParameterImage("in")->GetSpacing();
         pixelValue = floor( ( GetParameterFloat( "mode.radius.cx" ) - origin[ 0 ] \
-                      - GetParameterFloat( "mode.radius.radius" ) )\
+                      - GetParameterFloat( "mode.radius.r" ) )\
                       / static_cast<float>( spacing[ 0 ] ) ) ;
         SetParameterInt( "startx", pixelValue , false );
         pixelValue = floor( ( GetParameterFloat( "mode.radius.cy" ) - origin[ 0 ] \
-                      - GetParameterFloat( "mode.radius.radius" ) ) \
+                      - GetParameterFloat( "mode.radius.r" ) ) \
                       / static_cast<float>( spacing[ 1 ] ) ) ;
         SetParameterInt( "starty", pixelValue , false );
-        pixelValue = floor( ( 2 * GetParameterFloat( "mode.radius.radius" ) ) \
+        pixelValue = floor( ( 2 * GetParameterFloat( "mode.radius.r" ) ) \
                       / static_cast<float>( spacing[ 0 ] ) ) + 1 ;
         SetParameterInt( "sizex", pixelValue , false );
-        pixelValue = floor( ( 2 * GetParameterFloat( "mode.radius.radius" ) ) \
+        pixelValue = floor( ( 2 * GetParameterFloat( "mode.radius.r" ) ) \
                       / static_cast<float>( spacing[ 1 ] ) ) + 1 ;
         SetParameterInt( "sizey", pixelValue , false );
       }
