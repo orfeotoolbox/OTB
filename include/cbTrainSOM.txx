@@ -120,6 +120,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		std::cout << dim << std::endl;
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.som.ni"));
 		dimredTrainer->SetBetaInit(GetParameterFloat("model.som.bi"));
+		dimredTrainer->SetWriteMap(true);
 		dimredTrainer->SetBetaEnd(GetParameterFloat("model.som.bf"));
 		dimredTrainer->SetMaxWeight(GetParameterFloat("model.som.iv"));
 		typename TemplateEstimatorType::SizeType size;

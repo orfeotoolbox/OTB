@@ -60,6 +60,8 @@ public:
 	itkGetMacro(NumberOfIterations, unsigned int);
     itkSetMacro(BetaInit, double);
 	itkGetMacro(BetaInit, double);
+	itkSetMacro(WriteMap, bool);
+	itkGetMacro(WriteMap, bool);
 	itkSetMacro(BetaEnd, double);
 	itkGetMacro(BetaEnd, double);
 	itkSetMacro(MinWeight, InputValueType);
@@ -121,7 +123,8 @@ private:
 	SOMLearningBehaviorFunctorType m_BetaFunctor;
 	/** Behavior of the Neighborhood extent */
 	SOMNeighborhoodBehaviorFunctorType m_NeighborhoodSizeFunctor;
-
+	/** Write the SOM Map vectors in a txt file */
+	bool m_WriteMap;
 };
 
 

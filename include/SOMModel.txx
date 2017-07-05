@@ -112,6 +112,24 @@ void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, con
 	++inputIterator;
 	}
 	ofs.close();
+	
+	if (this->m_WriteMap == true)     // output the map vectors in a txt file
+	{
+		std::ofstream otxt(filename+".txt");
+		inputIterator.GoToBegin();
+		while(!inputIterator.IsAtEnd())
+		{
+			InputSampleType vect = inputIterator.Get();
+			for (size_t i=0;i<vect.GetNumberOfElements();i++)
+			{
+				
+				otxt << vect[i] << " ";
+			}	
+			otxt << std::endl;
+			++inputIterator;
+		}
+		otxt.close();
+	}
 }
 
 template <class TInputValue, unsigned int MapDimension>
