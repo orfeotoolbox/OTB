@@ -152,6 +152,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->SetRho(rho);
 		dimredTrainer->SetBeta(beta);
 		
+		dimredTrainer->SetWriteWeights(true);
 		if (HasValue("model.autoencoder.learningcurve") && IsParameterEnabled("model.autoencoder.learningcurve"))
 		{
 			std::cout << "yo" << std::endl;

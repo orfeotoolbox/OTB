@@ -61,6 +61,9 @@ public:
 
 	itkGetMacro(WriteLearningCurve,bool);
 	itkSetMacro(WriteLearningCurve,bool);
+		
+	itkSetMacro(WriteWeights, bool);
+	itkGetMacro(WriteWeights, bool);
 	
 	itkGetMacro(LearningCurveFileName,std::string);
 	itkSetMacro(LearningCurveFileName,std::string);
@@ -105,7 +108,7 @@ private:
 	
 	bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
 	std::string m_LearningCurveFileName; // Name of the output learning curve printed after training
-	
+	bool m_WriteWeights;
 };
 } // end namespace otb
 

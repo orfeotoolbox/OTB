@@ -42,6 +42,9 @@ public:
 	*/
 	itkSetMacro(Do_resize_flag,bool);
 	
+	itkSetMacro(WriteEigenvectors, bool);
+	itkGetMacro(WriteEigenvectors, bool);
+	
 	bool CanReadFile(const std::string & filename);
 	bool CanWriteFile(const std::string & filename);
 
@@ -66,6 +69,7 @@ private:
 	shark::PCA m_pca;
 	//unsigned int m_Dimension;
 	bool m_Do_resize_flag;
+	bool m_WriteEigenvectors;
 };
 } // end namespace otb
 

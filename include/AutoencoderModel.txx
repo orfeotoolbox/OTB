@@ -208,6 +208,22 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Save(const std::string & fil
 	//m_net.write(oa);
 	oa << m_net;
 	ofs.close();
+	
+	
+	if (this->m_WriteWeights == true)     // output the map vectors in a txt file
+	{
+		std::ofstream otxt(filename+".txt");
+		
+		for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
+		{
+			otxt << m_net[i].encoderMatrix() << std::endl;
+			otxt << m_net[i].hiddenBias() << std::endl;
+		}
+		otxt.close();
+	}
+	
+	
+	
 }
 
 template <class TInputValue, class AutoencoderType>
