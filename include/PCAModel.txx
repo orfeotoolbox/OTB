@@ -78,6 +78,16 @@ void PCAModel<TInputValue>::Save(const std::string & filename, const std::string
 	boost::archive::polymorphic_text_oarchive oa(ofs);
 	m_encoder.write(oa);
 	ofs.close();
+	
+	if (this->m_WriteEigenvectors == true)     // output the map vectors in a txt file
+	{
+		std::ofstream otxt(filename+".txt");
+		
+		otxt << m_pca.eigenvectors() << std::endl;
+		otxt << m_pca.eigenvalues() << std::endl;
+		
+		otxt.close();
+	}
 }
 
 template <class TInputValue>
@@ -109,6 +119,8 @@ void PCAModel<TInputValue>::Load(const std::string & filename, const std::string
 	m_encoder.setStructure(eigenvectors, m_encoder.offset() );
 	std::cout << m_encoder.matrix() << "end" << std::endl;
 	//this->m_Size = m_NumberOfHiddenNeurons;
+	
+	
 }
 
 

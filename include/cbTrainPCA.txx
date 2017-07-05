@@ -40,6 +40,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		typename PCAModelType::Pointer dimredTrainer = PCAModelType::New();
 		dimredTrainer->SetDimension(GetParameterInt("model.pca.dim"));
 		dimredTrainer->SetInputListSample(trainingListSample);
+		dimredTrainer->SetWriteEigenvectors(true);
 		dimredTrainer->Train();
 		dimredTrainer->Save(modelPath);
 }
