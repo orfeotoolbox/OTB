@@ -20,12 +20,12 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-
 #include "otbMultiChannelExtractROI.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperTypes.h"
+#include "otbOGRDataSourceToLabelImageFilter.h"
 
 #include "otbWrapperElevationParametersHandler.h"
 
@@ -82,12 +82,19 @@ private:
     AddParameter(ParameterType_Choice,"mode","Extraction mode");
     AddChoice("mode.standard","Standard");
     SetParameterDescription("mode.standard","In standard mode, extract is done according the coordinates entered by the user");
+
     AddChoice("mode.fit","Fit");
     SetParameterDescription("mode.fit","In fit mode, extract is made to best fit a reference image.");
+
     AddChoice( "mode.extent" , "Extent" );
-    AddChoice( "mode.radius" , "Radius" );
     SetParameterDescription( "mode.extent" , "In fit mode, the ROI is defined by two points, the upper left corner and the lower right corner." );
+
+    AddChoice( "mode.radius" , "Radius" );
     SetParameterDescription( "mode.radius" , "In radius mode, the ROI is defined by a point and a radius." );
+
+    AddChoice( "mode.vector" , "Reference vector dataset");
+    SetParameterDescription( "mode.vector" , "In Reference vector dataset mode you provide the extent of the ROI with a vector file");
+
 
     AddParameter( ParameterType_InputImage , "mode.fit.ref" , "Reference image" );
     SetParameterDescription( "mode.fit.ref" , "Reference image to define the ROI" );
@@ -104,6 +111,8 @@ private:
     AddParameter( ParameterType_Float , "mode.radius.r" , "Radius" );
     AddParameter( ParameterType_Float , "mode.radius.cx" , "X coordinate of the center" );
     AddParameter( ParameterType_Float , "mode.radius.cy" , "Y coordinate of the center" );
+    
+    AddParameter( ParameterType_InputFilename , "mode.vector.vf" , "Reference vector dataset destination" );
 
     AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
     AddChoice( "mode.extent.unit.pxl" , "Pixel" );
@@ -159,9 +168,9 @@ private:
   void DoUpdateParameters() ITK_OVERRIDE
   {
     // Update the sizes only if the user has not defined a size
+    ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     if ( HasValue("in") )
       {
-      ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
       ExtractROIFilterType::InputImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
 
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
@@ -322,7 +331,7 @@ private:
       this->DisableParameter("sizey");
 
       }
-    else if(GetParameterString("mode")=="standard" || GetParameterString("mode")=="extent" || GetParameterString("mode")=="radius")
+    else if(GetParameterString("mode")=="standard" || GetParameterString("mode")=="extent" || GetParameterString("mode")=="radius" || GetParameterString("mode")=="vector")
       {
       this->SetParameterRole("startx",Role_Input);
       this->SetParameterRole("starty",Role_Input);
@@ -334,6 +343,56 @@ private:
       this->EnableParameter("sizex");
       this->EnableParameter("sizey");
       }
+
+    if (GetParameterString("mode")=="vector")
+    {
+      otb::ogr::DataSource::Pointer ogrDS;
+      ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
+      double ulx, uly, lrx, lry;
+      bool extentAvailable = true;
+      std::string inputProjectionRef = "";
+      try
+        {
+        inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+        }
+      catch(const itk::ExceptionObject&)
+        {
+        extentAvailable = false;
+        }
+      if (extentAvailable)
+        {
+          RSTransformType::Pointer rsTransform = RSTransformType::New();
+          rsTransform->SetInputProjectionRef(inputProjectionRef);
+          rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
+          rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
+          rsTransform->InstantiateTransform();
+
+          itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+          ulp_in[ 0 ] = ulx ;
+          ulp_in[ 1 ] = uly ;
+          lrp_in[ 0 ] = lrx ;
+          lrp_in[ 1 ] = lry ;
+          ulp_out = rsTransform->TransformPoint(ulp_in);
+          lrp_out = rsTransform->TransformPoint(lrp_in);
+
+        FloatVectorImageType::IndexType uli_out , lri_out;
+        bool startin , sizein ;
+        startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+        sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
+
+        if ( startin )
+          {
+          SetParameterInt( "startx", uli_out[0] , false );
+          SetParameterInt( "starty", uli_out[1] , false );
+          }
+            
+        if( startin && sizein )
+          {
+          SetParameterInt( "sizey", lri_out[1] - uli_out[1] , false );
+          SetParameterInt( "sizex", lri_out[0] - uli_out[0] , false );
+          }
+        }
+    }
   }
 
   bool CropRegionOfInterest()
@@ -479,6 +538,58 @@ private:
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
 
+    if (GetParameterString("mode")=="vector")
+      {
+      otb::ogr::DataSource::Pointer ogrDS;
+      ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
+      double ulx, uly, lrx, lry;
+      bool extentAvailable = false;
+      std::string inputProjectionRef = "";
+      try
+        {
+        inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
+        extentAvailable = true;
+        }
+      catch(itk::ExceptionObject & err)
+        {
+        extentAvailable = false;
+
+        otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them. Error from library: "<<err.GetDescription());
+        }
+        if (extentAvailable)
+          {
+          RSTransformType::Pointer rsTransform = RSTransformType::New();
+          rsTransform->SetInputProjectionRef(inputProjectionRef);
+          rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
+          rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
+          rsTransform->InstantiateTransform();
+
+          itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+          ulp_in[ 0 ] = ulx ;
+          ulp_in[ 1 ] = uly ;
+          lrp_in[ 0 ] = lrx ;
+          lrp_in[ 1 ] = lry ;
+          ulp_out = rsTransform->TransformPoint(ulp_in);
+          lrp_out = rsTransform->TransformPoint(lrp_in);
+
+        FloatVectorImageType::IndexType uli_out , lri_out;
+        bool startin , sizein ;
+        startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+        sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
+
+        if ( startin )
+          {
+          SetParameterInt( "startx", uli_out[0] , false );
+          SetParameterInt( "starty", uli_out[1] , false );
+          }
+            
+        if( startin && sizein )
+          {
+          SetParameterInt( "sizey", lri_out[1] - uli_out[1] , false );
+          SetParameterInt( "sizex", lri_out[0] - uli_out[0] , false );
+          }
+        }
+      }
 
     if(GetParameterString("mode")=="fit")
       {
