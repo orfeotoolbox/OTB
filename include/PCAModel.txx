@@ -12,6 +12,8 @@
 #include <shark/ObjectiveFunctions/Loss/SquaredLoss.h> // squared loss used for regression
 #include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
 
+#include <shark/ObjectiveFunctions/ErrorFunction.h>
+
 namespace otb
 {
 
@@ -83,9 +85,16 @@ void PCAModel<TInputValue>::Save(const std::string & filename, const std::string
 	{
 		std::ofstream otxt(filename+".txt");
 		
-		otxt << m_pca.eigenvectors() << std::endl;
-		otxt << m_pca.eigenvalues() << std::endl;
+		otxt << "Eigenvectors : " << m_pca.eigenvectors() << std::endl;
+		otxt << "Eigenvalues : " << m_pca.eigenvalues() << std::endl;
 		
+		std::vector<shark::RealVector> features;
+	
+		shark::SquaredLoss<shark::RealVector> loss;
+		Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
+		shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
+		otxt << "Reconstruction error : " << loss.eval(inputSamples,m_decoder(m_encoder(inputSamples))) << std::endl;
+		std::cout << "Reconstruction error : " << loss.eval(inputSamples,m_decoder(m_encoder(inputSamples))) << std::endl;
 		otxt.close();
 	}
 }
@@ -109,16 +118,13 @@ void PCAModel<TInputValue>::Load(const std::string & filename, const std::string
 	{
 		this->m_Dimension = m_encoder.outputSize();
 	}
-	else
-	{
-		std::cout << "yo" << std::endl;
-	}
+	
 	
 	auto eigenvectors = m_encoder.matrix();
 	eigenvectors.resize(this->m_Dimension,m_encoder.inputSize());
+	
 	m_encoder.setStructure(eigenvectors, m_encoder.offset() );
-	std::cout << m_encoder.matrix() << "end" << std::endl;
-	//this->m_Size = m_NumberOfHiddenNeurons;
+
 	
 	
 }

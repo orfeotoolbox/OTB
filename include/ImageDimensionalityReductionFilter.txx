@@ -134,7 +134,6 @@ void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::
 {
 	Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel( m_Model->GetDimension() );
-    std::cout << m_Model->GetDimension() << std::endl;
 }
 
 

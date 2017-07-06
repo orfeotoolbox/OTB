@@ -100,7 +100,8 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneLayer(shark::Abstrac
 
 	std::size_t inputs = dataDimension(samples);
 	net.setStructure(inputs, nbneuron);
-	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	//initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	initRandomUniform(net,-1,1);
 	shark::ImpulseNoiseModel noise(noise_strength,0.0); //set an input pixel with probability m_Noise to 0
 	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
@@ -145,8 +146,8 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(shark::A
 
 	std::size_t inputs = dataDimension(samples);
 	net.setStructure(inputs, nbneuron);
-	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
-
+	//initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	initRandomUniform(net,-1,1);
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
 	shark::SparseAutoencoderError error(trainSet,&net, &loss, rho, beta);
@@ -219,7 +220,33 @@ void AutoencoderModel<TInputValue,AutoencoderType>::Save(const std::string & fil
 			otxt << m_net[i].encoderMatrix() << std::endl;
 			otxt << m_net[i].hiddenBias() << std::endl;
 		}
+		
+		
+		std::vector<shark::RealVector> features;
+	
+		shark::SquaredLoss<shark::RealVector> loss;
+		Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
+		shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
+		shark::Data<shark::RealVector> outputSamples = inputSamples;
+		
+		for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
+		{
+			outputSamples = m_net[i].encode(outputSamples);
+		}
+		
+		for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
+		{
+			outputSamples = m_net[m_NumberOfHiddenNeurons.Size()-i-1].decode(outputSamples);   // We decode the data starting from the smallest layer 
+		}
+		otxt << "Reconstruction error : " << loss.eval(inputSamples,outputSamples) << std::endl; // the mean squared error is returned
+		std::cout << "Reconstruction error : " << loss.eval(inputSamples,outputSamples) << std::endl; // the mean squared error is returned
+		
+		std::cout << "in" << inputSamples.element(0) << std::endl;
+		std::cout << "out" << outputSamples.element(0) << std::endl;
+		
 		otxt.close();
+		
+		
 	}
 	
 	
