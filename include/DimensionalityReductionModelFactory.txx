@@ -34,6 +34,7 @@
 namespace otb
 {
 
+/*
 template <class TInputValue, class TTargetValue>
 // using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder<shark::TanhNeuron, shark::LinearNeuron>>  ;
 using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder<shark::TanhNeuron, shark::TanhNeuron>>  ;
@@ -42,6 +43,10 @@ using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTarget
 template <class TInputValue, class TTargetValue>
 // using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  ;
 using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::TanhNeuron>>  ;
+*/
+
+template <class TInputValue, class TTargetValue>
+using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TanhNeuron>  ;
 
 
 template <class TInputValue, class TTargetValue>
@@ -125,7 +130,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(AutoencoderModelFactory<TInputValue,TOutputValue>::New());
-  RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
+ // RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
 #endif
   
 }
@@ -200,6 +205,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       continue;
       }
     
+    /*
     TiedAutoencoderModelFactory<TInputValue,TOutputValue> *taeFactory =
       dynamic_cast<TiedAutoencoderModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (taeFactory)
@@ -207,7 +213,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(taeFactory);
       continue;
       }
-    
+    */
     // PCA  
     PCAModelFactory<TInputValue,TOutputValue> *pcaFactory =
       dynamic_cast<PCAModelFactory<TInputValue,TOutputValue> *>(*itFac);

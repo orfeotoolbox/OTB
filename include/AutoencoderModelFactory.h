@@ -10,7 +10,7 @@
 namespace otb
 {
 	
-template <class TInputValue, class TTargetValue, class AutoencoderType>
+template <class TInputValue, class TTargetValue, class NeuronType>
 class ITK_EXPORT AutoencoderModelFactoryBase : public itk::ObjectFactoryBase
 {
 public:

@@ -27,8 +27,8 @@
 
 namespace otb
 {
-template <class TInputValue, class TOutputValue, class AutoencoderType>
-AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::AutoencoderModelFactoryBase()
+template <class TInputValue, class TOutputValue, class NeuronType>
+AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::AutoencoderModelFactoryBase()
 {
 
   std::string classOverride = std::string("DimensionalityReductionModel");
@@ -39,22 +39,22 @@ AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::Autoenco
                          "Shark AE ML Model",
                          1,
                       //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
-						itk::CreateObjectFunction<AutoencoderModel<TInputValue,AutoencoderType > >::New());
+						itk::CreateObjectFunction<AutoencoderModel<TInputValue,NeuronType > >::New());
 }
 
-template <class TInputValue, class TOutputValue, class AutoencoderType>
-AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::~AutoencoderModelFactoryBase()
+template <class TInputValue, class TOutputValue, class NeuronType>
+AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::~AutoencoderModelFactoryBase()
 {
 }
 
-template <class TInputValue, class TOutputValue, class AutoencoderType>
-const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::GetITKSourceVersion(void) const
+template <class TInputValue, class TOutputValue, class NeuronType>
+const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-template <class TInputValue, class TOutputValue, class AutoencoderType>
-const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, AutoencoderType>::GetDescription() const
+template <class TInputValue, class TOutputValue, class NeuronType>
+const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::GetDescription() const
 {
   return "Autoencoder model factory";
 }

@@ -89,6 +89,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
 		#endif
     }
+    /*
   if(modelName == "tiedautoencoder")
     {
 		#ifdef OTB_USE_SHARK
@@ -97,7 +98,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
 		#endif
     }
-    
+    */
   if(modelName == "pca")
     {
 		#ifdef OTB_USE_SHARK

@@ -6,9 +6,11 @@
 #include <fstream>
 #include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
 
+#include <shark/Models/FFNet.h>
+#include <shark/Models/Autoencoder.h>
 namespace otb
 {
-template <class TInputValue, class AutoencoderType>
+template <class TInputValue, class NeuronType>
 class ITK_EXPORT AutoencoderModel: public  MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>>   
 {
 
@@ -33,7 +35,12 @@ public:
 	typedef typename Superclass::ConfidenceSampleType 				ConfidenceSampleType;
 	typedef typename Superclass::ConfidenceListSampleType      		ConfidenceListSampleType;
 
-
+	/// Neural network related typedefs
+	typedef shark::Autoencoder<NeuronType,shark::LinearNeuron> OutAutoencoderType;
+	typedef shark::Autoencoder<NeuronType,NeuronType> AutoencoderType;
+	typedef shark::FFNet<NeuronType,shark::LinearNeuron> NetworkType;
+	
+	
 	itkNewMacro(Self);
 	itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
 
@@ -77,10 +84,10 @@ public:
 	void Train() ITK_OVERRIDE;
 	
 	template <class T>
-	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double, shark::Data<shark::RealVector> &, std::ostream&);
+	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion,unsigned int, unsigned int,double, double, shark::Data<shark::RealVector> &, std::ostream&);
 	
 	template <class T>
-	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, unsigned int,double, double,double, shark::Data<shark::RealVector> &, std::ostream&);
+	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion,unsigned int, unsigned int,double, double,double, shark::Data<shark::RealVector> &, std::ostream&);
 	
 protected:
 	AutoencoderModel();	
@@ -93,8 +100,8 @@ protected:
 private:
 	
 	/** Network attributes */
-	std::vector<AutoencoderType> m_net;
-
+	//std::vector<AutoencoderType> m_net;
+	NetworkType m_net;
 	
 	
 	itk::Array<unsigned int> m_NumberOfHiddenNeurons;

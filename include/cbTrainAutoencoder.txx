@@ -101,12 +101,12 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		{
 		TrainAutoencoder<AutoencoderModelType>(trainingListSample,modelPath);
 		}
-		
+	/*	
 	if(TiedWeigth == "yes")
 		{
 		TrainAutoencoder<TiedAutoencoderModelType>(trainingListSample,modelPath);
 		}
-	 
+	 */
 	if(TiedWeigth != "yes" && TiedWeigth != "no")
 		{
 			std::cerr << "istied : invalid choice <yes/no>" << std::endl;
