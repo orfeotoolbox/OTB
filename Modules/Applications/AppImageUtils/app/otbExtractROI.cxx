@@ -168,9 +168,9 @@ private:
   void DoUpdateParameters() ITK_OVERRIDE
   {
     // Update the sizes only if the user has not defined a size
-    ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     if ( HasValue("in") )
       {
+      ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
       ExtractROIFilterType::InputImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
 
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
@@ -316,7 +316,56 @@ private:
         SetParameterInt("starty",0, false);
         this->CropRegionOfInterest();
         }
-      }
+      if (GetParameterString("mode")=="vector")
+        {
+        otb::ogr::DataSource::Pointer ogrDS;
+        ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
+        double ulx, uly, lrx, lry;
+        bool extentAvailable = true;
+        std::string inputProjectionRef = "";
+        try
+          {
+          inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+          }
+        catch(const itk::ExceptionObject&)
+          {
+          extentAvailable = false;
+          }
+        if (extentAvailable)
+          {
+          RSTransformType::Pointer rsTransform = RSTransformType::New();
+          rsTransform->SetInputProjectionRef(inputProjectionRef);
+          rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
+          rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
+          rsTransform->InstantiateTransform();
+
+          itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+          ulp_in[ 0 ] = ulx ;
+          ulp_in[ 1 ] = uly ;
+          lrp_in[ 0 ] = lrx ;
+          lrp_in[ 1 ] = lry ;
+          ulp_out = rsTransform->TransformPoint(ulp_in);
+          lrp_out = rsTransform->TransformPoint(lrp_in);
+
+          FloatVectorImageType::IndexType uli_out , lri_out;
+          bool startin , sizein ;
+          startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+          sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
+
+          if ( startin )
+              {
+              SetParameterInt( "startx", uli_out[0] , false );
+              SetParameterInt( "starty", uli_out[1] , false );
+              }
+                  
+          if( startin && sizein )
+              {
+              SetParameterInt( "sizey", lri_out[1] - uli_out[1] , false );
+              SetParameterInt( "sizex", lri_out[0] - uli_out[0] , false );
+              }
+          }
+        }
+      
 
     if(GetParameterString("mode")=="fit")
       {
@@ -343,55 +392,6 @@ private:
       this->EnableParameter("sizex");
       this->EnableParameter("sizey");
       }
-
-    if (GetParameterString("mode")=="vector")
-    {
-      otb::ogr::DataSource::Pointer ogrDS;
-      ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
-      double ulx, uly, lrx, lry;
-      bool extentAvailable = true;
-      std::string inputProjectionRef = "";
-      try
-        {
-        inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
-        }
-      catch(const itk::ExceptionObject&)
-        {
-        extentAvailable = false;
-        }
-      if (extentAvailable)
-        {
-          RSTransformType::Pointer rsTransform = RSTransformType::New();
-          rsTransform->SetInputProjectionRef(inputProjectionRef);
-          rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
-          rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
-          rsTransform->InstantiateTransform();
-
-          itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
-          ulp_in[ 0 ] = ulx ;
-          ulp_in[ 1 ] = uly ;
-          lrp_in[ 0 ] = lrx ;
-          lrp_in[ 1 ] = lry ;
-          ulp_out = rsTransform->TransformPoint(ulp_in);
-          lrp_out = rsTransform->TransformPoint(lrp_in);
-
-        FloatVectorImageType::IndexType uli_out , lri_out;
-        bool startin , sizein ;
-        startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
-        sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
-
-        if ( startin )
-          {
-          SetParameterInt( "startx", uli_out[0] , false );
-          SetParameterInt( "starty", uli_out[1] , false );
-          }
-            
-        if( startin && sizein )
-          {
-          SetParameterInt( "sizey", lri_out[1] - uli_out[1] , false );
-          SetParameterInt( "sizex", lri_out[0] - uli_out[0] , false );
-          }
-        }
     }
   }
 
