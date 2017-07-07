@@ -30,17 +30,16 @@ namespace Wrapper
 
 // todo RM ALL std::cout
 
-void ClassKMeansBase::initKMIO()
+void ClassKMeansBase::initKMParams()
 {
-/*
-  AddParameter(ParameterType_InputImage, "in", "Input Image");
-  SetParameterDescription("in", "Input image to classify.");
-*/
   AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
   EnableParameter( "cleanup" );
   SetParameterDescription( "cleanup",
                          "If activated, the application will try to clean all temporary files it created" );
   MandatoryOff( "cleanup" );
+  
+  InitKMSampling();
+  InitKMClassification();
 }
 
 void ClassKMeansBase::InitKMSampling()
@@ -84,7 +83,8 @@ void ClassKMeansBase::InitKMSampling()
 
 void ClassKMeansBase::InitKMClassification()
 {
-  AddApplication( "TrainVectorClassifier", "training", "Model training" );
+  AddApplication("TrainVectorClassifier", "training", "Model training");
+  AddApplication("ImageClassifier", "classif", "Performs a classification of the input image");
 
   ShareKMClassificationParams();
   ConnectKMClassificationParams();
@@ -94,13 +94,12 @@ void ClassKMeansBase::ShareKMSamplingParameters()
 {
   ShareParameter("in", "imgenvelop.in");
   ShareParameter("vm", "select.mask");
-  ShareParameter( "ram", "polystats.ram");
+  ShareParameter("ram", "polystats.ram");
 }
 
 void ClassKMeansBase::ShareKMClassificationParams()
 {
-  // TODO
-  //ShareParameter( "classifier", "training.classifier" );
+  ShareParameter("out", "classif.out");
 }
 
 void ClassKMeansBase::ConnectKMSamplingParams()
@@ -109,19 +108,25 @@ void ClassKMeansBase::ConnectKMSamplingParams()
 
   Connect("select.in", "polystats.in");
   Connect("select.vec", "polystats.vec");
-  Connect( "select.ram", "polystats.ram" );
+  Connect("select.ram", "polystats.ram");
 
   Connect("extraction.in", "select.in");
   Connect("extraction.field", "select.field");
   Connect("extraction.vec", "select.out");
-  Connect( "extraction.ram", "polystats.ram" );
+  Connect("extraction.ram", "polystats.ram");
 }
 
 void ClassKMeansBase::ConnectKMClassificationParams()
 {
   Connect("training.cfield", "extraction.field");
-  Connect("training.io.stats", "polystats.out");
-  // TODO Connect Classification
+
+  Connect("classif.in", "imgenvelop.in");
+  Connect("classif.model", "training.io.out");
+}
+
+void ClassKMeansBase::ConnectKMClassificationMask()
+{
+  Connect("classif.mask", "select.mask");
 }
 
 void ClassKMeansBase::ComputeImageEnvelope(const std::string &vectorFileName)
@@ -160,10 +165,6 @@ void ClassKMeansBase::ComputeAddField(const std::string &vectorFileName,
   if (err != OGRERR_NONE)
     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << layer.ogr().GetName() << ".");
   ogrDS->SyncToDisk();
-/*
-    // close input data source
-    source->Clear();
-*/
 }
 
 void ClassKMeansBase::ComputePolygonStatistics(const std::string &statisticsFileName,
@@ -181,40 +182,46 @@ void ClassKMeansBase::ComputePolygonStatistics(const std::string &statisticsFile
 void ClassKMeansBase::SelectAndExtractSamples(std::string sampleFileName,
                                               std::string statisticsFileName,
                                               std::string fieldName,
-                                              std::string sampleExtractFileName)
+                                              std::string sampleExtractFileName,
+                                              int NBSamples)
 {
+  /* SampleSelection */
   std::cout << "Select init ..." << std::endl; 
-  //GetInternalApplication( "select" )->SetParameterInputImage( "in", image );
-  GetInternalApplication( "select" )->SetParameterString( "out", sampleFileName, false );
+  GetInternalApplication("select")->SetParameterString("out", sampleFileName, false);
 
-  UpdateInternalParameters( "select" );
-  GetInternalApplication( "select" )->SetParameterString( "instats", statisticsFileName, false );
-  GetInternalApplication( "select" )->SetParameterString( "field", fieldName, false );
+  UpdateInternalParameters("select");
+  GetInternalApplication("select")->SetParameterString("instats", statisticsFileName, false);
+  GetInternalApplication("select")->SetParameterString("field", fieldName, false);
 
-  GetInternalApplication("select" )->SetParameterString("sampler", "random", false);
-  GetInternalApplication( "select" )->SetParameterString("strategy", "constant", false);
-  GetInternalApplication( "select" )->SetParameterInt("strategy.constant.nb", GetParameterInt("ts"), false);
+  GetInternalApplication("select")->SetParameterString("sampler", "random", false);
+  GetInternalApplication("select")->SetParameterString("strategy", "constant", false);
+  GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples, false);
 
-  std::cout << "select.field = " << GetInternalApplication( "select" )->GetParameterString( "field" ) << std::endl;
-  std::cout << "select.out = " << GetInternalApplication( "select" )->GetParameterString( "out" ) << std::endl;
+  // TODO if GetParameterInt("rand") is not defined, default value
+  GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
+
+  std::cout << "select.field = " << GetInternalApplication("select")->GetParameterString("field") << std::endl;
+  std::cout << "select.out = " << GetInternalApplication("select")->GetParameterString("out") << std::endl;
   // select sample positions
-  ExecuteInternal( "select" );
+  ExecuteInternal("select");
 
-  UpdateInternalParameters( "extraction" );
-  std::cout << "extraction.field =" << GetInternalApplication( "extraction" )->GetParameterString( "field") << std::endl;
+  /* SampleExtraction */
+  UpdateInternalParameters("extraction");
+  std::cout << "extraction.field =" << GetInternalApplication("extraction")->GetParameterString("field") << std::endl;
 
-  GetInternalApplication( "extraction" )->SetParameterString( "outfield", "prefix", false );
-  GetInternalApplication( "extraction" )->SetParameterString( "outfield.prefix.name", "value_", false );
+  GetInternalApplication("extraction")->SetParameterString("outfield", "prefix", false);
+  GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name", "value_", false);
 
-  GetInternalApplication( "extraction" )->SetParameterString( "out", sampleExtractFileName, false);
+  GetInternalApplication("extraction")->SetParameterString("out", sampleExtractFileName, false);
   std::cout << "extraction.out = " << sampleExtractFileName << std::endl;
 
   // extract sample descriptors
-  GetInternalApplication( "extraction" )->ExecuteAndWriteOutput();
+  GetInternalApplication("extraction")->ExecuteAndWriteOutput();
 }
 
 void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
-                                   std::string sampleTrainFileName)
+                                   std::string sampleTrainFileName,
+                                   std::string modelFileName)
 {
   std::cout << "init train model ..." << std::endl;
 
@@ -233,17 +240,28 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
     std::cout << "feat : " << std::string(selectPrefix + oss.str()) << std::endl;
     selectedNames.push_back( selectPrefix + oss.str() );
     }
+  GetInternalApplication("training")->SetParameterStringList("feat", selectedNames, false);
 
-  GetInternalApplication( "training" )->SetParameterStringList("feat", selectedNames, false);
-  /* TODO test sans, a enlever
   GetInternalApplication("training")->SetParameterString("classifier", "sharkkm", false);
   GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.maxiter",
                                                       GetParameterInt("maxit"), false);
   GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                       GetParameterInt("nc"), false);
-  */
-  ExecuteInternal( "training" );
 
+  GetInternalApplication("training")->SetParameterString("io.out", modelFileName, false);
+  // todo RM
+  std::cout << "training.io.out : " << GetInternalApplication("training")->GetParameterString("io.out") << std::endl;
+
+  ExecuteInternal( "training" );
+}
+
+void ClassKMeansBase::KMeansClassif()
+{
+  std::cout << "classification ... " << std::endl;
+  std::cout << "classif.in : " << GetInternalApplication("classif")->GetParameterString("in") << std::endl;
+  std::cout << "classif.model : " << GetInternalApplication("classif")->GetParameterString("model") << std::endl;
+  std::cout << "classif.out : " << GetInternalApplication("classif")->GetParameterString("out") << std::endl;
+  ExecuteInternal( "classif" );
 }
 
 }

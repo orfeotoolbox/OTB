@@ -57,15 +57,18 @@ private:
     // Perform initialization
     ClearApplications();
 
-    initKMIO();
-    InitKMSampling();
-    InitKMClassification();
+    // initialisations parameters and synchronizes parameters
+    initKMParams();
+
+    if ( HasValue("vm") ) ConnectKMClassificationMask();
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Output image containing the class indexes.");
     SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
     AddRAMParameter(); // TODO verifier si les RAMParameter sont bien tous cablés
+
+    AddRANDParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
@@ -80,7 +83,6 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    //UpdateInternalParameters("");
   }
 
   void DoExecute() ITK_OVERRIDE
@@ -92,37 +94,42 @@ private:
     fileNames.CreateTemporaryFileNames(GetParameterString( "out" ));
     otbAppLogINFO(" init filename : " << fileNames.tmpVectorFile);      //RM
 
+    // Create an image envelope
     ComputeImageEnvelope(fileNames.tmpVectorFile);
+    // Add a new field at the ImageEnvelope output file
     ComputeAddField(fileNames.tmpVectorFile, fieldName);
 
+    // Compute PolygonStatistics app
     UpdateKMPolygonClassStatisticsParameters(fileNames.tmpVectorFile);
     ComputePolygonStatistics(fileNames.polyStatOutput, fieldName);
 
-    const double theoricNBSamplesForKMeans = GetParameterInt("ts");
-    const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
-    const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans,
-                                                     upperThresholdNBSamplesForKMeans);
-
+    // Compute number of sample max for KMeans
+    const int theoricNBSamplesForKMeans = GetParameterInt("ts");
+    const int upperThresholdNBSamplesForKMeans = 1000 * 1000;
+    const int actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans,
+                                                  upperThresholdNBSamplesForKMeans);
     otbAppLogINFO(<< actualNBSamplesForKMeans << " is the maximum sample size that will be used." \
                   << std::endl);
 
+    // Compute SampleSelection and SampleExtraction app
     SelectAndExtractSamples(fileNames.sampleSelectOutput, fileNames.polyStatOutput, 
-                            fieldName, fileNames.sampleExtractOutput);
+                            fieldName, fileNames.sampleExtractOutput,
+                            actualNBSamplesForKMeans);
 
-    // todo RM
-    //std::vector<std::string> sampleTrainFileName = {fileNames.sampleSelectOutput};
-    //UpdateTrainKMModelParameters(sampleTrainFileName);
+    // Compute a train model with TrainVectorClassifier app
+    TrainKMModel(GetParameterImage("in"), fileNames.sampleExtractOutput,
+                 fileNames.modelFile);
 
-    TrainKMModel(GetParameterImage("in"), fileNames.sampleExtractOutput);
+    // Compute a classification of the input image according to a model file
+    KMeansClassif();
 
-/* TODO cleanup
-    // cleanup
+    // remove all tempory files
     if( IsParameterEnabled( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
-      fileNames.clear();                          // TODO create clear()
+      fileNames.clear();
       }
-*/
+
   }
 
 private :
@@ -132,13 +139,7 @@ private :
     GetInternalApplication( "polystats" )->SetParameterString( "vec", vectorFileName, false );
     UpdateInternalParameters( "polystats" );
   }
-  /*
-  void UpdateTrainKMModelParameters(const std::vector<std::string> &sampleTrainFileName)
-  {
-    GetInternalApplication( "training" )->SetParameterStringList( "io.vd", sampleTrainFileName, false );
-    UpdateInternalParameters( "training" );
-  }
-  */
+
 };
 
 
