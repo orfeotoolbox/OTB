@@ -282,8 +282,8 @@ HistogramWidget
   );
   //
   QObject::connect(
-    m_PlotPicker, SIGNAL( changed( const QwtPolygon& ) ),
-    this, SLOT( OnChanged( const QwtPolygon& ) )
+    m_PlotPicker, SIGNAL( changed( const QPolygon& ) ),
+    this, SLOT( OnChanged( const QPolygon& ) )
   );
   //
   QObject::connect(
@@ -295,8 +295,8 @@ HistogramWidget
     this, SLOT( OnSelected( const QRectF& ) )
   );
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtPolygon& ) ),
-    this, SLOT( OnSelected( const QwtPolygon& ) )
+    m_PlotPicker, SIGNAL( selected( const QPolygon& ) ),
+    this, SLOT( OnSelected( const QPolygon& ) )
   );
   QObject::connect(
     m_PlotPicker, SIGNAL( selected( const QwtArray< QPointF >& ) ),
@@ -716,7 +716,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnChanged( const QwtPolygon & )
+::OnChanged( const QPolygon & )
 {
   // qDebug() << this << "::OnChanged(" << pa << ")";
 }
@@ -756,7 +756,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtPolygon & )
+::OnSelected( const QPolygon & )
 {
   // qDebug() << this << "::OnSelected(" << pa << ")";
 }

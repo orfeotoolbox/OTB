@@ -329,14 +329,14 @@ private slots:
   void OnAppended( const QPointF& pos );
   void OnAppended( const QPoint& pos );
 
-  void OnChanged( const QwtPolygon& pa );
+  void OnChanged( const QPolygon& pa );
 
   void OnMoved( const QPointF&pos );
   void OnMoved( const QPoint& pos );
 
   void OnSelected( const QPointF& pos );
   void OnSelected( const QRectF & rect );
-  void OnSelected( const QwtPolygon& pa );
+  void OnSelected( const QPolygon& pa );
   void OnSelected( const QwtArray< QPointF >& pa );
 };
 
