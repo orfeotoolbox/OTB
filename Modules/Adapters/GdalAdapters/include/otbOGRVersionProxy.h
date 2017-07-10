@@ -44,6 +44,8 @@ class OGRDataSource;
 class OGRSFDriver;
 #endif
 
+class OGRFeature;
+
 #include "OTBGdalAdaptersExport.h"
 
 namespace otb
@@ -211,6 +213,15 @@ OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type);
    */  
   OTBGdalAdapters_EXPORT
   std::vector<std::string> GetAvailableDriversAsStringVector();
+
+  /**
+   * Returns true if the field 'index' is set and not-null in the given feature
+   *
+   * Before gdal 2.2, it calls OGRFeature::IsFieldSet().
+   * After gdal 2.2, it calls OGRFeature::IsFieldSetAndNotNull()
+   */
+   OTBGdalAdapters_EXPORT
+   bool IsFieldSetAndNotNull(OGRFeature *feat, int index);
 
 }
 }

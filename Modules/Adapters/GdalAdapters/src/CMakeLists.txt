@@ -28,6 +28,7 @@ set(OTBGdalAdapters_SRC
   otbOGRDriversInit.cxx
   otbGeometriesToGeometriesFilter.cxx
   otbOGRDataSourceWrapper.cxx
+  otbOGRVersionProxy.cxx
   )
 
 if(OTB_USE_GDAL_20)
