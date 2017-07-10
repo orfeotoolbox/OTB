@@ -299,8 +299,8 @@ HistogramWidget
     this, SLOT( OnSelected( const QPolygon& ) )
   );
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtArray< QPointF >& ) ),
-    this, SLOT( OnSelected( const QwtArray< QPointF >& ) )
+    m_PlotPicker, SIGNAL( selected( const QVector< QPointF >& ) ),
+    this, SLOT( OnSelected( const QVector< QPointF >& ) )
   );
 }
 

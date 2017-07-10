@@ -326,18 +326,18 @@ private slots:
 
   /**
    */
-  void OnAppended( const QPointF& pos );
-  void OnAppended( const QPoint& pos );
+  void OnAppended( const QPointF & );
+  void OnAppended( const QPoint & );
 
-  void OnChanged( const QPolygon& pa );
+  void OnChanged( const QPolygon & );
 
-  void OnMoved( const QPointF&pos );
-  void OnMoved( const QPoint& pos );
+  void OnMoved( const QPointF & );
+  void OnMoved( const QPoint & );
 
-  void OnSelected( const QPointF& pos );
-  void OnSelected( const QRectF & rect );
-  void OnSelected( const QPolygon& pa );
-  void OnSelected( const QwtArray< QPointF >& pa );
+  void OnSelected( const QPointF & );
+  void OnSelected( const QRectF & );
+  void OnSelected( const QPolygon & );
+  void OnSelected( const QVector< QPointF > & );
 };
 
 } // end namespace 'mvd'
