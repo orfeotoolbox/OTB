@@ -94,7 +94,7 @@ HistogramWidget::CURVE_NAMES[ HistogramWidget::CURVE_COUNT ] =
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Red" ),
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Green" ),
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Blue" ),
-  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Gray" ), 
+  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Gray" ),
 };
 
 const QColor
@@ -291,8 +291,8 @@ HistogramWidget
     this, SLOT( OnSelected( const QwtDoublePoint& ) )
   );
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtDoubleRect& ) ),
-    this, SLOT( OnSelected( const QwtDoubleRect& ) )
+    m_PlotPicker, SIGNAL( selected( const QRectF& ) ),
+    this, SLOT( OnSelected( const QRectF& ) )
   );
   QObject::connect(
     m_PlotPicker, SIGNAL( selected( const QwtPolygon& ) ),
@@ -486,7 +486,7 @@ HistogramWidget
   /*
   for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
     {
-    bool isVisible = 
+    bool isVisible =
       i<RGBW_CHANNEL_WHITE
       ? !activated
       : activated;
@@ -555,7 +555,7 @@ HistogramWidget
       ? i==RGBW_CHANNEL_WHITE
       : ( index==RGBW_CHANNEL_WHITE
 	  ? i<RGBW_CHANNEL_WHITE
-	  : i==index ); 
+	  : i==index );
 
     assert( i<HistogramWidget::CURVE_COUNT );
 
@@ -748,7 +748,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtDoubleRect & )
+::OnSelected( const QRectF & )
 {
   // qDebug() << this << "::OnSelected(" << rect.x() << ", " << rect.y() << ")";
 }

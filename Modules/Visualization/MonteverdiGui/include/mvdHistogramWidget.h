@@ -37,7 +37,6 @@
 
 //
 // Qwt includes.
-#include <qwt_double_rect.h>
 #include <qwt_polygon.h>
 
 //
@@ -337,7 +336,7 @@ private slots:
   void OnMoved( const QPoint& pos );
 
   void OnSelected( const QwtDoublePoint& pos );
-  void OnSelected( const QwtDoubleRect& rect );
+  void OnSelected( const QRectF & rect );
   void OnSelected( const QwtPolygon& pa );
   void OnSelected( const QwtArray< QwtDoublePoint >& pa );
 };
