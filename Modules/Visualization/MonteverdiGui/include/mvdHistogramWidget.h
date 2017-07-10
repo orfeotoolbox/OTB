@@ -37,7 +37,6 @@
 
 //
 // Qwt includes.
-#include <qwt_polygon.h>
 
 //
 // System includes (sorted by alphabetic order)
@@ -327,18 +326,18 @@ private slots:
 
   /**
    */
-  void OnAppended( const QwtDoublePoint& pos );
+  void OnAppended( const QPointF& pos );
   void OnAppended( const QPoint& pos );
 
   void OnChanged( const QwtPolygon& pa );
 
-  void OnMoved( const QwtDoublePoint&pos );
+  void OnMoved( const QPointF&pos );
   void OnMoved( const QPoint& pos );
 
-  void OnSelected( const QwtDoublePoint& pos );
+  void OnSelected( const QPointF& pos );
   void OnSelected( const QRectF & rect );
   void OnSelected( const QwtPolygon& pa );
-  void OnSelected( const QwtArray< QwtDoublePoint >& pa );
+  void OnSelected( const QwtArray< QPointF >& pa );
 };
 
 } // end namespace 'mvd'

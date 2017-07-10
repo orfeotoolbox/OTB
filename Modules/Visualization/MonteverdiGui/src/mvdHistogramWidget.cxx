@@ -273,8 +273,8 @@ HistogramWidget
   //
   //
   QObject::connect(
-    m_PlotPicker, SIGNAL( appended( const QwtDoublePoint& ) ),
-    this, SLOT( OnAppended( const QwtDoublePoint& ) )
+    m_PlotPicker, SIGNAL( appended( const QPointF& ) ),
+    this, SLOT( OnAppended( const QPointF& ) )
   );
   QObject::connect(
     m_PlotPicker, SIGNAL( appended( const QPoint& ) ),
@@ -287,8 +287,8 @@ HistogramWidget
   );
   //
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtDoublePoint& ) ),
-    this, SLOT( OnSelected( const QwtDoublePoint& ) )
+    m_PlotPicker, SIGNAL( selected( const QPointF& ) ),
+    this, SLOT( OnSelected( const QPointF& ) )
   );
   QObject::connect(
     m_PlotPicker, SIGNAL( selected( const QRectF& ) ),
@@ -299,8 +299,8 @@ HistogramWidget
     this, SLOT( OnSelected( const QwtPolygon& ) )
   );
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtArray< QwtDoublePoint >& ) ),
-    this, SLOT( OnSelected( const QwtArray< QwtDoublePoint >& ) )
+    m_PlotPicker, SIGNAL( selected( const QwtArray< QPointF >& ) ),
+    this, SLOT( OnSelected( const QwtArray< QPointF >& ) )
   );
 }
 
@@ -700,7 +700,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnAppended( const QwtDoublePoint & )
+::OnAppended( const QPointF & )
 {
   // qDebug() << this << "::OnAppended(" << pos.x() << ", " << pos.y() << ")";
 }
@@ -724,7 +724,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnMoved( const QwtDoublePoint & )
+::OnMoved( const QPointF & )
 {
   // qDebug() << this << "::OnMoved(" << pos.x() << ", " << pos.y() << ")";
 }
@@ -740,7 +740,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtDoublePoint & )
+::OnSelected( const QPointF & )
 {
   // qDebug() << this << "::OnSelected(" << pos.x() << ", " << pos.y() << ")";
 }
@@ -764,7 +764,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtArray< QwtDoublePoint > & )
+::OnSelected( const QwtArray< QPointF > & )
 {
   // qDebug() << this << "::OnSelected(" << pa << ")";
 }
