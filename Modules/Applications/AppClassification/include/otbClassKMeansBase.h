@@ -37,7 +37,12 @@ namespace Wrapper
 /** \class ClassKMeansBase
  * \brief Base class for the KMeansClassification
  *
- *  TODO
+ * This class intends to hold common input/output parameters and
+ * composite application connection.
+ * 
+ * KMeansClassification = ImageEnveloppe + PolygonClassStatistics + 
+ *                        SampleSelection + SamplesExtraction + 
+ *                        TrainVectorClassifier + ImageClassifier.
  *
  * \ingroup OTBAppClassification
  */
@@ -74,7 +79,7 @@ public:
     void ComputeImageEnvelope(const std::string &vectorFile);
 
     /** 
-     *  add field in the layer (ImageEnvelope output)
+     *  Add field in the layer (ImageEnvelope output)
      * \param vectorFile vector file
      * \param fieldName field name
      * */
@@ -90,21 +95,22 @@ public:
 
   /**
    * Select samples by constant strategy
-   * \param sampleFileName
-   * \param statisticsFileName
-   * \param fieldName
-   * \param sampleExtractFileName
+   * \param statisticsFileName statistics out file name
+   * \param fieldName field name
+   * \param sampleFileName samples select output filename
+   * \param sampleExtractFileName samples extract filename
    */
-    void SelectAndExtractSamples(std::string sampleFileName,
-                                 std::string statisticsFileName,
+    void SelectAndExtractSamples(std::string statisticsFileName,
                                  std::string fieldName,
+                                 std::string sampleFileName,
                                  std::string sampleExtractFileName,
                                  int NBSamples);
 
   /**
    * Train the model
    * \param image input image
-   * \param sampleTrainFileName
+   * \param sampleTrainFileName samples to train filename (SampleExtraction output)
+   * \param modelFileName model filename
    */
     void TrainKMModel(FloatVectorImageType *image,
                       std::string sampleTrainFileName,

@@ -28,8 +28,6 @@ namespace otb
 namespace Wrapper
 {
 
-// todo RM ALL std::cout
-
 void ClassKMeansBase::initKMParams()
 {
   AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
@@ -37,7 +35,7 @@ void ClassKMeansBase::initKMParams()
   SetParameterDescription( "cleanup",
                          "If activated, the application will try to clean all temporary files it created" );
   MandatoryOff( "cleanup" );
-  
+
   InitKMSampling();
   InitKMClassification();
 }
@@ -48,11 +46,6 @@ void ClassKMeansBase::InitKMSampling()
   AddApplication("PolygonClassStatistics", "polystats", "Polygon Class Statistics");
   AddApplication( "SampleSelection", "select", "Sample selection" );
   AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
-
-  // "vm" ShareParameter
-  AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
-  SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
-  MandatoryOff("vm");
 
   AddParameter(ParameterType_Int, "ts", "Training set size");
   SetParameterDescription("ts", "Size of the training set (in pixels).");
@@ -122,6 +115,7 @@ void ClassKMeansBase::ConnectKMClassificationParams()
 
   Connect("classif.in", "imgenvelop.in");
   Connect("classif.model", "training.io.out");
+  Connect("classif.ram", "polystats.ram");
 }
 
 void ClassKMeansBase::ConnectKMClassificationMask()
@@ -131,7 +125,6 @@ void ClassKMeansBase::ConnectKMClassificationMask()
 
 void ClassKMeansBase::ComputeImageEnvelope(const std::string &vectorFileName)
 {
-  std::cout << "vectorfile = " << vectorFileName << std::endl; // todo RM
   GetInternalApplication("imgenvelop")->SetParameterString("out", vectorFileName, false);
   GetInternalApplication("imgenvelop")->ExecuteAndWriteOutput();
 }
@@ -139,7 +132,7 @@ void ClassKMeansBase::ComputeImageEnvelope(const std::string &vectorFileName)
 void ClassKMeansBase::ComputeAddField(const std::string &vectorFileName,
                                       const std::string &fieldName)
 {
-  std::cout << "add field in the layer ..." << std::endl;
+  otbAppLogINFO("add field in the layer ...");
   otb::ogr::DataSource::Pointer ogrDS;
   ogrDS = otb::ogr::DataSource::New(vectorFileName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
   otb::ogr::Layer layer = ogrDS->GetLayer(0);
@@ -150,16 +143,13 @@ void ClassKMeansBase::ComputeAddField(const std::string &vectorFileName,
   ogr::FieldDefn confFieldDefn(confidenceField);
   layer.CreateField(confFieldDefn);
 
-  std::cout << "Complete field ..." << std::endl;
   // Complete field
   layer.ogr().ResetReading();
   otb::ogr::Feature feature = layer.ogr().GetNextFeature();
   if(feature.addr())
   {
-    std::cout << "SetField()" << std::endl;
-    feature.ogr().SetField(fieldName.c_str(), 0); // ne connait pas 
+    feature.ogr().SetField(fieldName.c_str(), 0);
     layer.SetFeature(feature);
-    std::cout << "GetField " << feature.ogr().GetFieldAsInteger(fieldName.c_str()) << std::endl;
   }
   const OGRErr err = layer.ogr().CommitTransaction();
   if (err != OGRERR_NONE)
@@ -173,20 +163,18 @@ void ClassKMeansBase::ComputePolygonStatistics(const std::string &statisticsFile
   std::vector<std::string> fieldList = {fieldName};
 
   GetInternalApplication("polystats")->SetParameterStringList("field", fieldList, false);
-  otbAppLogINFO("statsfile : " << statisticsFileName); // TODO RM
   GetInternalApplication("polystats")->SetParameterString("out", statisticsFileName, false);
 
   ExecuteInternal("polystats");
 }
 
-void ClassKMeansBase::SelectAndExtractSamples(std::string sampleFileName,
-                                              std::string statisticsFileName,
+void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
                                               std::string fieldName,
+                                              std::string sampleFileName,
                                               std::string sampleExtractFileName,
                                               int NBSamples)
 {
   /* SampleSelection */
-  std::cout << "Select init ..." << std::endl; 
   GetInternalApplication("select")->SetParameterString("out", sampleFileName, false);
 
   UpdateInternalParameters("select");
@@ -197,23 +185,25 @@ void ClassKMeansBase::SelectAndExtractSamples(std::string sampleFileName,
   GetInternalApplication("select")->SetParameterString("strategy", "constant", false);
   GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples, false);
 
-  // TODO if GetParameterInt("rand") is not defined, default value
-  GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
+  if( IsParameterEnabled("rand"))
+  {
+    GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
+  } else {
+    //default value
+    GetInternalApplication("select")->SetParameterInt("rand", 121212, false);
+  }
 
-  std::cout << "select.field = " << GetInternalApplication("select")->GetParameterString("field") << std::endl;
-  std::cout << "select.out = " << GetInternalApplication("select")->GetParameterString("out") << std::endl;
   // select sample positions
   ExecuteInternal("select");
 
   /* SampleExtraction */
   UpdateInternalParameters("extraction");
-  std::cout << "extraction.field =" << GetInternalApplication("extraction")->GetParameterString("field") << std::endl;
 
   GetInternalApplication("extraction")->SetParameterString("outfield", "prefix", false);
   GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name", "value_", false);
 
   GetInternalApplication("extraction")->SetParameterString("out", sampleExtractFileName, false);
-  std::cout << "extraction.out = " << sampleExtractFileName << std::endl;
+  otbAppLogINFO("Sample extraction file name  : " << sampleExtractFileName);
 
   // extract sample descriptors
   GetInternalApplication("extraction")->ExecuteAndWriteOutput();
@@ -223,8 +213,6 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
                                    std::string sampleTrainFileName,
                                    std::string modelFileName)
 {
-  std::cout << "init train model ..." << std::endl;
-
   std::vector<std::string> extractOutputList = {sampleTrainFileName};
   GetInternalApplication("training")->SetParameterStringList("io.vd", extractOutputList, false);
   UpdateInternalParameters("training");
@@ -237,7 +225,6 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
     {
     std::ostringstream oss;
     oss << i;
-    std::cout << "feat : " << std::string(selectPrefix + oss.str()) << std::endl;
     selectedNames.push_back( selectPrefix + oss.str() );
     }
   GetInternalApplication("training")->SetParameterStringList("feat", selectedNames, false);
@@ -249,18 +236,13 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
                                                       GetParameterInt("nc"), false);
 
   GetInternalApplication("training")->SetParameterString("io.out", modelFileName, false);
-  // todo RM
-  std::cout << "training.io.out : " << GetInternalApplication("training")->GetParameterString("io.out") << std::endl;
 
   ExecuteInternal( "training" );
+  otbAppLogINFO("output model : " << GetInternalApplication("training")->GetParameterString("io.out"));
 }
 
 void ClassKMeansBase::KMeansClassif()
 {
-  std::cout << "classification ... " << std::endl;
-  std::cout << "classif.in : " << GetInternalApplication("classif")->GetParameterString("in") << std::endl;
-  std::cout << "classif.model : " << GetInternalApplication("classif")->GetParameterString("model") << std::endl;
-  std::cout << "classif.out : " << GetInternalApplication("classif")->GetParameterString("out") << std::endl;
   ExecuteInternal( "classif" );
 }
 

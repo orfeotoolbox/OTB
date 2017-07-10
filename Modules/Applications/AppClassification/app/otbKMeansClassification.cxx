@@ -57,16 +57,10 @@ private:
     // Perform initialization
     ClearApplications();
 
-    // initialisations parameters and synchronizes parameters
+    // initialisation parameters and synchronizes parameters
     initKMParams();
 
     if ( HasValue("vm") ) ConnectKMClassificationMask();
-
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out", "Output image containing the class indexes.");
-    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
-
-    AddRAMParameter(); // TODO verifier si les RAMParameter sont bien tous cablés
 
     AddRANDParameter();
 
@@ -92,7 +86,6 @@ private:
     std::string fieldName = "field";
 
     fileNames.CreateTemporaryFileNames(GetParameterString( "out" ));
-    otbAppLogINFO(" init filename : " << fileNames.tmpVectorFile);      //RM
 
     // Create an image envelope
     ComputeImageEnvelope(fileNames.tmpVectorFile);
@@ -112,8 +105,9 @@ private:
                   << std::endl);
 
     // Compute SampleSelection and SampleExtraction app
-    SelectAndExtractSamples(fileNames.sampleSelectOutput, fileNames.polyStatOutput, 
-                            fieldName, fileNames.sampleExtractOutput,
+    SelectAndExtractSamples(fileNames.polyStatOutput, fieldName,
+                            fileNames.sampleSelectOutput,
+                            fileNames.sampleExtractOutput,
                             actualNBSamplesForKMeans);
 
     // Compute a train model with TrainVectorClassifier app
@@ -133,7 +127,6 @@ private:
   }
 
 private :
-
   void UpdateKMPolygonClassStatisticsParameters(const std::string &vectorFileName)
   {
     GetInternalApplication( "polystats" )->SetParameterString( "vec", vectorFileName, false );
@@ -141,7 +134,6 @@ private :
   }
 
 };
-
 
 }
 }
