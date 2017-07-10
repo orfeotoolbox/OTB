@@ -764,7 +764,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtArray< QPointF > & )
+::OnSelected( const QVector< QPointF > & )
 {
   // qDebug() << this << "::OnSelected(" << pa << ")";
 }
