@@ -183,7 +183,7 @@ HistogramPlotPicker
     {
     const QRect& rect = pickRect();
     const QPoint& pos = pa[ 0 ];
-   
+
     QwtPainter::drawLine(
       painter,
       pos.x(), rect.bottom(),
@@ -196,7 +196,7 @@ HistogramPlotPicker
     if( !RgbwBounds( start, stop, RGBW_CHANNEL_ALL ) )
       return;
 
-    QwtDoublePoint p( invTransform( pos ) );
+    QPoint p( invTransform( pos ) );
 
     for( CountType i=start; i<stop; ++i )
       if( m_PlotCurves[ i ]->isVisible() )
@@ -225,7 +225,7 @@ HistogramPlotPicker
 /*******************************************************************************/
 QwtText
 HistogramPlotPicker
-::trackerText( const QwtDoublePoint& point ) const
+::trackerText( const QPoint & point ) const
 {
   if( rubberBand()!=QwtPicker::UserRubberBand )
     return QwtPlotPicker::trackerText( point );
