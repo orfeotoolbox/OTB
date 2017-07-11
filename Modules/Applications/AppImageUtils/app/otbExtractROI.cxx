@@ -66,13 +66,14 @@ private:
 
     // Documentation
     SetDocName("Extract ROI");
-    SetDocLongDescription("This application extracts a Region Of Interest with user defined size, or reference image.");
+    SetDocLongDescription("This application extracts a Region Of Interest with user defined size, or reference.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Manip);
 
+    // Set parameter input
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
@@ -82,51 +83,53 @@ private:
 
     AddParameter(ParameterType_Choice,"mode","Extraction mode");
     AddChoice("mode.standard","Standard");
-    SetParameterDescription("mode.standard","In standard mode, extract is done according the coordinates entered by the user");
+    SetParameterDescription("mode.standard","In standard mode, extract is done according to the coordinates entered by the user");
 
+    // Fit mode : the ROI is computed through a ref vector dataset or a ref image 
     AddChoice("mode.fit","Fit");
-    SetParameterDescription("mode.fit","In fit mode, extract is made from a reference : image or vector.");
-
-    AddChoice( "mode.extent" , "Extent" );
-    SetParameterDescription( "mode.extent" , "In fit mode, the ROI is defined by two points, the upper left corner and the lower right corner." );
-
-    AddChoice( "mode.radius" , "Radius" );
-    SetParameterDescription( "mode.radius" , "In radius mode, the ROI is defined by a point and a radius." );
-
+    SetParameterDescription("mode.fit","In fit mode, extract is made from a reference : image or vector dataset.");
     AddParameter( ParameterType_InputImage , "mode.fit.im" , "Reference image" );
     SetParameterDescription( "mode.fit.im" , "Reference image to define the ROI" );
     AddParameter( ParameterType_InputFilename , "mode.fit.vect" , "Vector dataset" );
     SetParameterDescription( "mode.fit.vect" , "Reference vector dataset to define the ROI" );
 
-    AddParameter( ParameterType_Float , "mode.extent.ulx" , "Up left X" );
-    SetParameterDescription( "mode.extent.ulx" , "X coordinate of upper left corner point." );
-    AddParameter( ParameterType_Float , "mode.extent.uly" , "Up left Y" );
-    SetParameterDescription( "mode.extent.uly" , "Y coordinate of upper left corner point." );
-    AddParameter( ParameterType_Float , "mode.extent.lrx" , "Low right X" );
-    SetParameterDescription( "mode.extent.lrx" , "X coordinate of lower right corner point." );
-    AddParameter( ParameterType_Float , "mode.extent.lry" , "Low right Y" );
-    SetParameterDescription( "mode.extent.lry" , "Y coordinate of lower right corner point." );
-
+    // Extent mode : ROI is computed with two point (upper left and lower left corners)
+    AddChoice( "mode.extent" , "Extent" );
+    SetParameterDescription( "mode.extent" , "In extent mode, the ROI is defined by two points, the upper left corner and the lower right corner." );
+    AddParameter( ParameterType_Float , "mode.extent.ulx" , "Up left X/lon" );
+    SetParameterDescription( "mode.extent.ulx" , "X/lon coordinate of upper left corner point." );
+    AddParameter( ParameterType_Float , "mode.extent.uly" , "Up left Y/lat" );
+    SetParameterDescription( "mode.extent.uly" , "Y/lat coordinate of upper left corner point." );
+    AddParameter( ParameterType_Float , "mode.extent.lrx" , "Low right X/lon" );
+    SetParameterDescription( "mode.extent.lrx" , "X/lon coordinate of lower right corner point." );
+    AddParameter( ParameterType_Float , "mode.extent.lry" , "Low right Y/lat" );
+    SetParameterDescription( "mode.extent.lry" , "Y/lat coordinate of lower right corner point." );
+    // Unit of extent mode
     AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
     AddChoice( "mode.extent.unit.pxl" , "Pixel" );
     AddChoice( "mode.extent.unit.phy" , "Physical" );
     AddChoice( "mode.extent.unit.lonlat" , "Lon/Lat" );
-    
+
+    // Radius mode : ROI is computed through a point and a radius
+    AddChoice( "mode.radius" , "Radius" );
+    SetParameterDescription( "mode.radius" , "In radius mode, the ROI is defined by a point and a radius." );
+
     AddParameter( ParameterType_Float , "mode.radius.r" , "Radius" );
     AddParameter( ParameterType_Choice , "mode.radius.unitr" , "Radius unit" );
     AddChoice( "mode.radius.unitr.pxl" , "Pixel" );
     AddChoice( "mode.radius.unitr.phy" , "Physical" );
-    
-    AddParameter( ParameterType_Float , "mode.radius.cx" , "First coordinate of the center" );
-    AddParameter( ParameterType_Float , "mode.radius.cy" , "Second coordinate of the center" );
+
+    AddParameter( ParameterType_Float , "mode.radius.cx" , "X/lon coordinate of the center" );
+    AddParameter( ParameterType_Float , "mode.radius.cy" , "Y/lat coordinate of the center" );
     AddParameter( ParameterType_Choice , "mode.radius.unitc" , "Center unit" );
     AddChoice( "mode.radius.unitc.pxl" , "Pixel" );
     AddChoice( "mode.radius.unitc.phy" , "Physical" );
     AddChoice( "mode.radius.unitc.lonlat" , "Lon/Lat" );
-    
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this,"elev");
 
+    // Standard parameter
     AddParameter(ParameterType_Int,  "startx", "Start X");
     SetParameterDescription("startx", "ROI start x position.");
     AddParameter(ParameterType_Int,  "starty", "Start Y");
@@ -178,6 +181,8 @@ private:
         {
         SetParameterInt("sizex",largestRegion.GetSize()[0], false);
         SetParameterInt("sizey",largestRegion.GetSize()[1], false);
+
+        // Compute extent parameter with default sizex and sizey
         if ( GetParameterString("mode") == "extent" )
           {
           if ( GetParameterString( "mode.extent.unit" ) == "pxl" )
@@ -241,6 +246,8 @@ private:
               }
             }
           }
+
+        // Compute radius parameter with default sizex and sizey
         if ( GetParameterString("mode") == "radius" )
           {
           if (!HasUserValue("mode.radius.r")  && !HasUserValue("mode.radius.cx") \
@@ -368,6 +375,7 @@ private:
       }
     }
 
+    // If not standard mode start and size parameter will be computed by the application
     if ( GetParameterString( "mode" ) != "standard" )
       {
       MandatoryOff("startx");
@@ -422,6 +430,7 @@ private:
   {
     assert( GetParameterString( "mode" ) == "extent" );
     int pixelValue;
+    // Compute standard parameter depending on the unit choosen by the user
     if (GetParameterString( "mode.extent.unit" ) == "pxl" )
       {
       pixelValue = floor( GetParameterFloat( "mode.extent.ulx" ) );
@@ -497,6 +506,7 @@ private:
   {
     int pixelValue;
     assert( GetParameterString( "mode" ) == "radius" );
+    // First compute sizex sizey thanks to the radius
     if ( GetParameterString( "mode.radius.unitr" ) == "pxl" )
       {
       pixelValue = floor( 2 * GetParameterFloat( "mode.radius.r" ) + 1);
@@ -541,14 +551,17 @@ private:
       SetParameterInt( "sizey", 2 * pixelValue + 1 , false );
       SetParameterInt( "sizex", 2 * pixelValue + 1 , false );
       }
-    if ( GetParameterString( "mode.radius.unitc" ) == "pxl" && ( HasValue("sizex")  && HasValue("sizey") ) )
+
+    // Then compute startx and starty
+    bool size = ( HasValue("sizex")  && HasValue("sizey") );
+    if ( GetParameterString( "mode.radius.unitc" ) == "pxl" && size )
       {
-        pixelValue = floor(GetParameterFloat( "mode.radius.cx" ));
-        SetParameterInt( "startx", pixelValue - GetParameterInt("sizex") , false );
-        pixelValue = floor(GetParameterFloat( "mode.radius.cy" ));
-        SetParameterInt( "starty", pixelValue - GetParameterInt("sizey") , false );
+      pixelValue = floor(GetParameterFloat( "mode.radius.cx" ));
+      SetParameterInt( "startx", pixelValue - GetParameterInt("sizex") , false );
+      pixelValue = floor(GetParameterFloat( "mode.radius.cy" ));
+      SetParameterInt( "starty", pixelValue - GetParameterInt("sizey") , false );
       }
-    if ( GetParameterString( "mode.radius.unitc" ) == "phy" && ( HasValue("sizex")  && HasValue("sizey") ) ) 
+    if ( GetParameterString( "mode.radius.unitc" ) == "phy" && size ) 
       {
         itk::Point<float, 2> centerp;
         centerp[ 0 ] = GetParameterFloat( "mode.radius.cx" );
@@ -563,7 +576,7 @@ private:
         SetParameterInt( "starty", centeri[1] - GetParameterInt("sizey") , false );
         }
       }
-    if ( GetParameterString( "mode.radius.unitc" ) == "lonlat" && ( HasValue("sizex")  && HasValue("sizey") ) )
+    if ( GetParameterString( "mode.radius.unitc" ) == "lonlat" && size )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
@@ -592,71 +605,70 @@ private:
 
     if ( HasValue( "mode.fit.vect" ) && GetParameterString("mode") == "fit" )
       {
-        if ( HasValue( "mode.fit.vect" ) && GetParameterString("mode") == "fit" )
+      otb::ogr::DataSource::Pointer ogrDS;
+      ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
+      double ulx, uly, lrx, lry;
+      bool extentAvailable = true;
+      std::string inputProjectionRef = "";
+      // First try to get the extent in the metadata
+      try
         {
-        otb::ogr::DataSource::Pointer ogrDS;
-        ogrDS = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
-        double ulx, uly, lrx, lry;
-        bool extentAvailable = true;
-        std::string inputProjectionRef = "";
+        inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+        }
+      catch(const itk::ExceptionObject&)
+        {
+        extentAvailable = false;
+        }
+      // If no extent available force the computation of the extent
+      if (!extentAvailable)
+        {
         try
           {
-          inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
+          inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
+          extentAvailable = true;
           }
-        catch(const itk::ExceptionObject&)
+        catch(itk::ExceptionObject & err)
           {
           extentAvailable = false;
-          }
 
-        if (!extentAvailable)
-          {
-          try
-            {
-            inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
-            extentAvailable = true;
-            }
-          catch(itk::ExceptionObject & err)
-            {
-            extentAvailable = false;
-
-            otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them. Error from library: "<<err.GetDescription());
-            }
-          }
-
-        if (extentAvailable)
-          {
-          RSTransformType::Pointer rsTransform = RSTransformType::New();
-          rsTransform->SetInputProjectionRef(inputProjectionRef);
-          rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
-          rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
-          rsTransform->InstantiateTransform();
-
-          itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
-          ulp_in[ 0 ] = ulx ;
-          ulp_in[ 1 ] = uly ;
-          lrp_in[ 0 ] = lrx ;
-          lrp_in[ 1 ] = lry ;
-          ulp_out = rsTransform->TransformPoint(ulp_in);
-          lrp_out = rsTransform->TransformPoint(lrp_in);
-
-          FloatVectorImageType::IndexType uli_out , lri_out;
-          bool startin , sizein ;
-          startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
-          sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
-
-          if ( startin )
-              {
-              SetParameterInt( "startx", uli_out[0] , false );
-              SetParameterInt( "starty", uli_out[1] , false );
-              }
-                  
-          if( startin && sizein )
-              {
-              SetParameterInt( "sizey", lri_out[1] - uli_out[1] , false );
-              SetParameterInt( "sizex", lri_out[0] - uli_out[0] , false );
-              }
+          otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset in force mode. The spatial extent is mandatory when orx, ory, spx and spy parameters are not set, consider setting them. Error from library: "<<err.GetDescription());
           }
         }
+
+      if (extentAvailable)
+        {
+        RSTransformType::Pointer rsTransform = RSTransformType::New();
+        rsTransform->SetInputProjectionRef(inputProjectionRef);
+        rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
+        rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
+        rsTransform->InstantiateTransform();
+
+        itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+        ulp_in[ 0 ] = ulx ;
+        ulp_in[ 1 ] = uly ;
+        lrp_in[ 0 ] = lrx ;
+        lrp_in[ 1 ] = lry ;
+        ulp_out = rsTransform->TransformPoint(ulp_in);
+        lrp_out = rsTransform->TransformPoint(lrp_in);
+
+        FloatVectorImageType::IndexType uli_out , lri_out;
+        bool startin , sizein ;
+        startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+        sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
+
+        if ( startin )
+            {
+            SetParameterInt( "startx", uli_out[0] , false );
+            SetParameterInt( "starty", uli_out[1] , false );
+            }
+                
+        if( startin && sizein )
+            {
+            SetParameterInt( "sizey", lri_out[1] - uli_out[1] , false );
+            SetParameterInt( "sizex", lri_out[0] - uli_out[0] , false );
+            }
+        }
+        
       }
 
     if( HasValue( "mode.fit.im" ) && GetParameterString( "mode" ) == "fit" )
