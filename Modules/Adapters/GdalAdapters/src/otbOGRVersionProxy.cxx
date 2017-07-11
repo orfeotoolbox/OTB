@@ -25,21 +25,12 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
-#include "ogr_feature.h"
-#pragma GCC diagnostic pop
-#else
-#include "ogr_feature.h"
-#endif
-
-#if 0 // TEST: gather implementations in a single file.
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
 #if GDAL_VERSION_NUM<2000000
 #include "ogrsf_frmts.h"
 #else
 #include "gdal_priv.h"
 #endif
+#include "ogr_feature.h"
 #pragma GCC diagnostic pop
 #else
 #if GDAL_VERSION_NUM<2000000
@@ -47,8 +38,8 @@
 #else
 #include "gdal_priv.h"
 #endif
+#include "ogr_feature.h"
 #endif // __GNUC__ || __clang__
-#endif // TEST
 
 namespace otb
 {
@@ -57,11 +48,11 @@ namespace ogr
 namespace version_proxy
 {
 
-#if 0 // TEST: gather implementations in a single file.
 /*-------------------------[GDAL v2 API change]-------------------------------*/
-OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType itkNotUsed(type))
+OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
 {
 #if GDAL_VERSION_NUM<2000000
+  (void)type;
   return false;
 #else
   return type == OFTInteger64;
@@ -246,8 +237,6 @@ std::string GetDriverNameFromDataSource(const GDALDatasetType * ds)
   return std::string(const_cast<GDALDatasetType *>(ds)->GetDriverName());
 #endif
 }
-
-#endif //TEST
 
 /*----------------------[GDAL 2.2 change on IsFieldSet()]---------------------*/
 bool IsFieldSetAndNotNull(OGRFeature *feat, int index)
