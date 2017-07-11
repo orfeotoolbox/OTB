@@ -60,7 +60,7 @@ private:
     // initialisation parameters and synchronizes parameters
     initKMParams();
 
-    if ( HasValue("vm") ) ConnectKMClassificationMask();
+    if (IsParameterEnabled("vm") && HasValue("vm")) ConnectKMClassificationMask();
 
     AddRANDParameter();
 
