@@ -222,7 +222,7 @@ private:
         }
         
       // Rescale vector image
-      m_Rescaler->SetScale(stddevMeasurementVector);
+      m_Rescaler->SetScale(stddevMeasurementVector*5);
       m_Rescaler->SetShift(meanMeasurementVector);
       m_Rescaler->SetInput(inImage);
 
