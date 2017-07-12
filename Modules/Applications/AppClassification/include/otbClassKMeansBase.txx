@@ -186,12 +186,7 @@ void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
   GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples, false);
 
   if( IsParameterEnabled("rand"))
-  {
     GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
-  } else {
-    //default value
-    GetInternalApplication("select")->SetParameterInt("rand", 121212, false);
-  }
 
   // select sample positions
   ExecuteInternal("select");
@@ -234,6 +229,9 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
                                                       GetParameterInt("maxit"), false);
   GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                       GetParameterInt("nc"), false);
+
+  if( IsParameterEnabled("rand"))
+    GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"), false);
 
   GetInternalApplication("training")->SetParameterString("io.out", modelFileName, false);
 
