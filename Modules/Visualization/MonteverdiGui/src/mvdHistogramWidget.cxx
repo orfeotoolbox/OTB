@@ -404,7 +404,7 @@ HistogramWidget
     assert( i<HistogramWidget::CURVE_COUNT );
     assert( m_PlotCurves[ i ]!=NULL );
 
-    m_PlotCurves[ i ]->setData( xVal, yVal, sizeVal );
+    m_PlotCurves[ i ]->setSamples( xVal, yVal, sizeVal );
 
     if( xVal==NULL && yVal==NULL )
       m_PlotCurves[ i ]->setVisible( false );

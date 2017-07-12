@@ -31,7 +31,6 @@
 //
 // Qwt includes.
 #include <qwt_plot_curve.h>
-#include <qwt_data.h>
 #include <qwt_painter.h>
 #include <qwt_plot.h>
 #include <qwt_text.h>
@@ -83,7 +82,10 @@ HistogramPlotPicker
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
 
+#if 0
   setSelectionFlags( QwtPicker::PointSelection );
+#endif
+
   setRubberBand( QwtPicker::UserRubberBand );
 }
 
@@ -101,7 +103,10 @@ HistogramPlotPicker
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
 
+#if 0
   setSelectionFlags( QwtPicker::PointSelection );
+#endif
+
   setRubberBand( QwtPicker::UserRubberBand );
 }
 
@@ -115,7 +120,9 @@ HistogramPlotPicker
   QwtPlotPicker(
     xA,
     yA,
+#if 0
     QwtPicker::PointSelection,
+#endif
     QwtPicker::UserRubberBand,
     tracker,
     can ),
@@ -175,10 +182,12 @@ HistogramPlotPicker
       rubberBandPen().style()==Qt::NoPen )
     return;
 
-  const QwtPolygon& pa = selection();
+  const QPolygon & pa = selection();
 
   if( rubberBand()==QwtPicker::UserRubberBand &&
+#if 0
       ( selectionFlags() & PointSelection ) &&
+#endif
       selection().count() >= 1 )
     {
     const QRect& rect = pickRect();
@@ -196,7 +205,7 @@ HistogramPlotPicker
     if( !RgbwBounds( start, stop, RGBW_CHANNEL_ALL ) )
       return;
 
-    QPoint p( invTransform( pos ) );
+    QPointF p( invTransform( pos ) );
 
     for( CountType i=start; i<stop; ++i )
       if( m_PlotCurves[ i ]->isVisible() )
@@ -225,10 +234,10 @@ HistogramPlotPicker
 /*******************************************************************************/
 QwtText
 HistogramPlotPicker
-::trackerText( const QPoint & point ) const
+::trackerTextF( const QPointF & point ) const
 {
   if( rubberBand()!=QwtPicker::UserRubberBand )
-    return QwtPlotPicker::trackerText( point );
+    return QwtPlotPicker::trackerTextF( point );
 
   if( !isActive() )
     return QwtText(
@@ -270,7 +279,11 @@ double
 HistogramPlotPicker
 ::Find( const QwtPlotCurve* curve, double x ) const
 {
-  const QwtData& data = curve->data();
+  typedef QwtSeriesData< QPointF > SeriesData;
+
+  const SeriesData * data = curve->data();
+
+  assert( data!=nullptr );
 
 /*
 #if HISTOGRAM_CURVE_TYPE==0
@@ -282,42 +295,52 @@ HistogramPlotPicker
 #elif HISTOGRAM_CURVE_TYPE==2
 */
 
-  assert( data.size() % 4 == 0 );
+  assert( data->size() % 4 == 0 );
 
   CountType steps = 0;
 
-  if( data.size()==0 )
+  if( data->size()==0 )
     return -1.0;
 
   CountType i0 = 0;
-  CountType i1 = data.size() / 4 - 1;
+  CountType i1 = data->size() / 4 - 1;
 
-  // assert( x>=data.x( 4 * i0 ) && x<=data.x( 4 * i1 + 3 ) );
-  if( x<data.x( 4 * i0 ) || x>data.x( 4 * i1 + 3 ) )
+  // assert( x>=data->sample( 4 * i0 ).x() && x<=data->sample( 4 * i1 + 3 ).x() );
+  if( x<data->sample( 4 * i0 ).x() ||
+      x>data->sample( 4 * i1 + 3 ).x() )
     return -1.0;
 
   while( i0!=i1 )
     {
-    assert( data.x( 4 * i0 )==data.x( 4 * i0 + 1 ) );
-    assert( data.x( 4 * i0 + 2 )==data.x( 4 * i0 + 3 ) );
-    assert( data.y( 4 * i0 + 1 )==data.y( 4 * i0 + 2 ) );
-    assert( data.y( 4 * i0 )==data.y( 4 * i0 + 3 ) );
+    assert( data->sample( 4 * i0 ).x()==data->sample( 4 * i0 + 1 ).x() );
+    assert( data->sample( 4 * i0 + 2 ).x()==data->sample( 4 * i0 + 3 ).x() );
+    assert( data->sample( 4 * i0 + 1 ).y()==data->sample( 4 * i0 + 2 ).y() );
+    assert( data->sample( 4 * i0 ).y()==data->sample( 4 * i0 + 3 ).y() );
 
-    assert( data.x( 4 * i1 )==data.x( 4 * i1 + 1 ) );
-    assert( data.x( 4 * i1 + 2 )==data.x( 4 * i1 + 3 ) );
-    assert( data.y( 4 * i1 + 1 )==data.y( 4 * i1 + 2 ) );
-    assert( data.y( 4 * i1 )==data.y( 4 * i1 + 3 ) );
+    assert( data->sample( 4 * i1 ).x()==data->sample( 4 * i1 + 1 ).x() );
+    assert( data->sample( 4 * i1 + 2 ).x()==data->sample( 4 * i1 + 3 ).x() );
+    assert( data->sample( 4 * i1 + 1 ).y()==data->sample( 4 * i1 + 2 ).y() );
+    assert( data->sample( 4 * i1 ).y()==data->sample( 4 * i1 + 3 ).y() );
 
     CountType i = (i0 + i1 + 1) / 2;
 
 #if 0
     qDebug()
-      << i0 << " (" << data.x( 4*i0 ) << ", " << data.x( 4*i0+2 ) << ") "
-      << i << " (" << data.x( 4*i ) << ", " << data.x( 4*i+2 ) << ") "
-      << i1 << " (" << data.x( 4*i1 ) << ", " << data.x( 4*i1+2 ) << ")";
+      << i0
+      << " (" << data->sample( 4*i0 ).x()
+      << ", " << data->sample( 4*i0+2 ).x()
+      << ") "
+      << i
+      << " (" << data->sample( 4*i ).x()
+      << ", " << data->sample( 4*i+2 ).x()
+      << ") "
+      << i1
+      << " (" << data->sample( 4*i1 ).x()
+      << ", " << data->sample( 4*i1+2 ).x()
+      << ")";
 #endif
 
-    if( x<data.x( 4 * i ) )
+    if( x<data->sample( 4 * i ).x() )
       i1 = i - 1;
     else
       i0 = i;
@@ -325,17 +348,17 @@ HistogramPlotPicker
     ++ steps;
     }
 
-  assert( x>=data.x( 4 * i0 ) && x<=data.x( 4 * i0 + 2 ) );
-  assert( x>=data.x( 4 * i0 + 1 ) && x<=data.x( 4 * i0 + 3 ) );
+  assert( x>=data->sample( 4 * i0 ).x() && x<=data->sample( 4 * i0 + 2 ).x() );
+  assert( x>=data->sample( 4 * i0 + 1 ).x() && x<=data->sample( 4 * i0 + 3 ).x() );
 
 #if 0
   qDebug()
     << steps << ":"
-    << x << "in [" << data.x( 4 * i0 ) << "; " << data.x( 4 * i0 + 2 ) << "] ->"
-    << data.y( 4 * i0 + 1 );
+    << x << "in [" << data->sample( 4 * i0 ).x() << "; " << data->sample( 4 * i0 + 2 ).x() << "] ->"
+    << data->sample( 4 * i0 + 1 ).y();
 #endif
 
-  return data.y( 4 * i0 + 1 );
+  return data->sample( 4 * i0 + 1 ).y();
 
 /*
 #else
@@ -354,7 +377,11 @@ HistogramPlotPicker
 	double& xmax,
 	double& y ) const
 {
-  const QwtData& data = curve->data();
+  typedef QwtSeriesData< QPointF > SeriesData;
+
+  const SeriesData * data = curve->data();
+
+  assert( data!=nullptr );
 
 /*
 #if HISTOGRAM_CURVE_TYPE==0
@@ -366,41 +393,51 @@ HistogramPlotPicker
 #elif HISTOGRAM_CURVE_TYPE==2
 */
 
-  assert( data.size() % 4 == 0 );
+  assert( data->size() % 4 == 0 );
 
   CountType steps = 0;
 
-  if( data.size()==0 )
+  if( data->size()==0 )
     return 0;
 
   CountType i0 = 0;
-  CountType i1 = data.size() / 4 - 1;
+  CountType i1 = data->size() / 4 - 1;
 
-  if( x<data.x( 4 * i0 ) || x>data.x( 4 * i1 + 3 ) )
+  if( x<data->sample( 4 * i0 ).x() ||
+      x>data->sample( 4 * i1 + 3 ).x() )
     return 0;
 
   while( i0!=i1 )
     {
-    assert( data.x( 4 * i0 )==data.x( 4 * i0 + 1 ) );
-    assert( data.x( 4 * i0 + 2 )==data.x( 4 * i0 + 3 ) );
-    assert( data.y( 4 * i0 + 1 )==data.y( 4 * i0 + 2 ) );
-    assert( data.y( 4 * i0 )==data.y( 4 * i0 + 3 ) );
+    assert( data->sample( 4 * i0 ).x()==data->sample( 4 * i0 + 1 ).x() );
+    assert( data->sample( 4 * i0 + 2 ).x()==data->sample( 4 * i0 + 3 ).x() );
+    assert( data->sample( 4 * i0 + 1 ).y()==data->sample( 4 * i0 + 2 ).y() );
+    assert( data->sample( 4 * i0 ).y()==data->sample( 4 * i0 + 3 ).y() );
 
-    assert( data.x( 4 * i1 )==data.x( 4 * i1 + 1 ) );
-    assert( data.x( 4 * i1 + 2 )==data.x( 4 * i1 + 3 ) );
-    assert( data.y( 4 * i1 + 1 )==data.y( 4 * i1 + 2 ) );
-    assert( data.y( 4 * i1 )==data.y( 4 * i1 + 3 ) );
+    assert( data->sample( 4 * i1 ).x()==data->sample( 4 * i1 + 1 ).x() );
+    assert( data->sample( 4 * i1 + 2 ).x()==data->sample( 4 * i1 + 3 ).x() );
+    assert( data->sample( 4 * i1 + 1 ).y()==data->sample( 4 * i1 + 2 ).y() );
+    assert( data->sample( 4 * i1 ).y()==data->sample( 4 * i1 + 3 ).y() );
 
     CountType i = (i0 + i1 + 1) / 2;
 
 #if 0
     qDebug()
-      << i0 << " (" << data.x( 4*i0 ) << ", " << data.x( 4*i0+2 ) << ") "
-      << i << " (" << data.x( 4*i ) << ", " << data.x( 4*i+2 ) << ") "
-      << i1 << " (" << data.x( 4*i1 ) << ", " << data.x( 4*i1+2 ) << ")";
+      << i0
+      << " (" << data->sample( 4*i0 ).x()
+      << ", " << data->sample( 4*i0+2 ).x()
+      << ") "
+      << i
+      << " (" << data->sample( 4*i ).x()
+      << ", " << data->sample( 4*i+2 ).x()
+      << ") "
+      << i1
+      << " (" << data->sample( 4*i1 ).x()
+      << ", " << data->sample( 4*i1+2 ).x()
+      << ")";
 #endif
 
-    if( x<data.x( 4 * i ) )
+    if( x<data->sample( 4 * i ).x() )
       i1 = i - 1;
     else
       i0 = i;
@@ -408,19 +445,19 @@ HistogramPlotPicker
     ++ steps;
     }
 
-  assert( x>=data.x( 4 * i0 ) && x<=data.x( 4 * i0 + 2 ) );
-  assert( x>=data.x( 4 * i0 + 1 ) && x<=data.x( 4 * i0 + 3 ) );
+  assert( x>=data->sample( 4 * i0 ).x() && x<=data->sample( 4 * i0 + 2 ).x() );
+  assert( x>=data->sample( 4 * i0 + 1 ).x() && x<=data->sample( 4 * i0 + 3 ).x() );
 
 #if 0
   qDebug()
     << steps << ":"
-    << x << "in [" << data.x( 4 * i0 ) << "; " << data.x( 4 * i0 + 2 ) << "] ->"
-    << data.y( 4 * i0 + 1 );
+    << x << "in [" << data->sample( 4 * i0 ).x() << "; " << data->sample( 4 * i0 + 2 ).x() << "] ->"
+    << data->sample( 4 * i0 + 1 ).y();
 #endif
 
-  xmin = data.x( 4 * i0 );
-  xmax = data.x( 4 * i0 + 2 );
-  y = data.y( 4 * i0 + 1 );
+  xmin = data->sample( 4 * i0 ).x();
+  xmax = data->sample( 4 * i0 + 2 ).x();
+  y = data->sample( 4 * i0 + 1 ).y();
 
   return steps;
 
