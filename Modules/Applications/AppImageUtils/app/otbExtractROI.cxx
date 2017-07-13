@@ -61,7 +61,8 @@ public:
   typedef ExtractROIFilterType::InputImageType ImageType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void 
+  DoInit() ITK_OVERRIDE
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
@@ -109,24 +110,36 @@ private:
     // Unit of extent mode
     AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
     AddChoice( "mode.extent.unit.pxl" , "Pixel" );
+    SetParameterDescription("mode.extent.unit.pxl","The unit for the parameters coordinates will be the pixel");
     AddChoice( "mode.extent.unit.phy" , "Physical" );
+    SetParameterDescription("mode.extent.unit.phy","The unit for the parameters coordinates will be the physical mesure of the image");
     AddChoice( "mode.extent.unit.lonlat" , "Lon/Lat" );
+    SetParameterDescription("mode.extent.unit.lonlat","The unit for the parameters coordinates will be the longitude and the latitude");
+
 
     // Radius mode : ROI is computed through a point and a radius
     AddChoice( "mode.radius" , "Radius" );
     SetParameterDescription( "mode.radius" , "In radius mode, the ROI is defined by a point and a radius." );
 
     AddParameter( ParameterType_Float , "mode.radius.r" , "Radius" );
+    SetParameterDescription( "mode.radius.r" , "This is the radius parameter of the radius mode." );
     AddParameter( ParameterType_Choice , "mode.radius.unitr" , "Radius unit" );
     AddChoice( "mode.radius.unitr.pxl" , "Pixel" );
+    SetParameterDescription("mode.radius.unitr.pxl","The unit for the radius will be the pixel");
     AddChoice( "mode.radius.unitr.phy" , "Physical" );
+    SetParameterDescription("mode.radius.unitr.phy","The unit for the radius will be the physical mesure of the image");
 
     AddParameter( ParameterType_Float , "mode.radius.cx" , "X/lon coordinate of the center" );
+    SetParameterDescription( "mode.radius.cx" , "This is the center corrdinate of the radius mode, it will be either an abscissa or a longitude." );
     AddParameter( ParameterType_Float , "mode.radius.cy" , "Y/lat coordinate of the center" );
+    SetParameterDescription( "mode.radius.cx" , "This is the center corrdinate of the radius mode, it will be either an ordinate or a latitude." );
     AddParameter( ParameterType_Choice , "mode.radius.unitc" , "Center unit" );
     AddChoice( "mode.radius.unitc.pxl" , "Pixel" );
+    SetParameterDescription("mode.radius.unitc.pxl","The unit for the center coordinates will be the pixel");
     AddChoice( "mode.radius.unitc.phy" , "Physical" );
+    SetParameterDescription("mode.radius.unitc.phy","The unit for the center coordinates will be the physical mesure of the image");
     AddChoice( "mode.radius.unitc.lonlat" , "Lon/Lat" );
+    SetParameterDescription("mode.radius.unitc.lonlat","The unit for the center coordinates will be the longitude and the latitude");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this,"elev");
@@ -171,7 +184,8 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void 
+  DoUpdateParameters() ITK_OVERRIDE
   {
     if ( HasValue("in") )
       {
@@ -195,15 +209,11 @@ private:
 
         // Compute extent parameter with default sizex and sizey
         if ( GetParameterString( "mode" ) == "extent" && userExtent )
-          {
           computeExtentFromIndex( inImage, largestRegion );
-          }
 
         // Compute radius parameter with default sizex and sizey
         if ( GetParameterString( "mode" ) == "radius" && userRadius )
-          {
           computeRadiusFromIndex( inImage , largestRegion );
-          }
         }
 
 
@@ -212,7 +222,6 @@ private:
       // Update the values of the channels to be selected if nbComponents is changed
       if (clParam != ITK_NULLPTR && clParam->GetNbChoices() != nbComponents)
         {
-
         ClearChoices("cl");
         for (unsigned int idx = 0; idx < nbComponents; ++idx)
           {
@@ -238,6 +247,7 @@ private:
 
       SetMinimumParameterFloatValue( "mode.radius.r" , 0 );
 
+
       // Update the start and size parameter depending on the mode
       if ( GetParameterString("mode") == "extent" && !userExtent)
           computeIndexFromExtent();
@@ -247,7 +257,6 @@ private:
       
       // Crop the roi region to be included in the largest possible
       // region
-
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
@@ -604,7 +613,8 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void 
+  DoExecute() ITK_OVERRIDE
   {
     ImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
