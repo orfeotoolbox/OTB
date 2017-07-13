@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.3.0)
 
 project(OTB-SuperBuild)
 
@@ -143,15 +143,6 @@ endif()
 if(NOT CMAKE_BUILD_TYPE)
   message(STATUS "CMake build type is none. Setting it to Release")
   set(CMAKE_BUILD_TYPE Release)
-endif()
-
-if(MSVC)
-  set(BUILD_SHARED_LIBS OFF)
-  if(CMAKE_MAJOR_VERSION GREATER 2 AND CMAKE_MINOR_VERSION GREATER 2)
-    set(BUILD_SHARED_LIBS ON)
-  else()
-    message(WARNING "BUILD_SHARED_LIBS is set to OFF with CMake < 3.3")
-  endif()
 endif()
 
 if(MSVC)
