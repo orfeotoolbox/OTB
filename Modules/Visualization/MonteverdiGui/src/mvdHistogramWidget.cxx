@@ -702,7 +702,7 @@ void
 HistogramWidget
 ::OnAppended( const QPointF & )
 {
-  // qDebug() << this << "::OnAppended(" << pos.x() << ", " << pos.y() << ")";
+  // qDebug() << this << "::OnAppended(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -710,7 +710,7 @@ void
 HistogramWidget
 ::OnAppended( const QPoint & )
 {
-  // qDebug() << this << "::OnAppended(" << pos << ")";
+  // qDebug() << this << "::OnAppended(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -718,7 +718,7 @@ void
 HistogramWidget
 ::OnChanged( const QPolygon & )
 {
-  // qDebug() << this << "::OnChanged(" << pa << ")";
+  // qDebug() << this << "::OnChanged(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -726,7 +726,7 @@ void
 HistogramWidget
 ::OnMoved( const QPointF & )
 {
-  // qDebug() << this << "::OnMoved(" << pos.x() << ", " << pos.y() << ")";
+  // qDebug() << this << "::OnMoved(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -734,7 +734,7 @@ void
 HistogramWidget
 ::OnMoved( const QPoint & )
 {
-  // qDebug() << this << "::OnMoved(" << pos << ")";
+  // qDebug() << this << "::OnMoved(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -742,7 +742,7 @@ void
 HistogramWidget
 ::OnSelected( const QPointF & )
 {
-  // qDebug() << this << "::OnSelected(" << pos.x() << ", " << pos.y() << ")";
+  // qDebug() << this << "::OnSelected(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -750,7 +750,7 @@ void
 HistogramWidget
 ::OnSelected( const QRectF & )
 {
-  // qDebug() << this << "::OnSelected(" << rect.x() << ", " << rect.y() << ")";
+  // qDebug() << this << "::OnSelected(" << r << ")";
 }
 
 /*******************************************************************************/
@@ -758,7 +758,7 @@ void
 HistogramWidget
 ::OnSelected( const QPolygon & )
 {
-  // qDebug() << this << "::OnSelected(" << pa << ")";
+  // qDebug() << this << "::OnSelected(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -766,7 +766,7 @@ void
 HistogramWidget
 ::OnSelected( const QVector< QPointF > & )
 {
-  // qDebug() << this << "::OnSelected(" << pa << ")";
+  // qDebug() << this << "::OnSelected(" << v << ")";
 }
 
 } // end namespace 'mvd'
