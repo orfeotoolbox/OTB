@@ -32,6 +32,7 @@
 // Qwt includes.
 #include <qwt_plot_curve.h>
 #include <qwt_painter.h>
+#include <qwt_picker_machine.h>
 #include <qwt_plot.h>
 #include <qwt_text.h>
 
@@ -82,9 +83,7 @@ HistogramPlotPicker
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
 
-#if 0
-  setSelectionFlags( QwtPicker::PointSelection );
-#endif
+  setStateMachine( new QwtPickerDragPointMachine() );
 
   setRubberBand( QwtPicker::UserRubberBand );
 }
@@ -103,9 +102,7 @@ HistogramPlotPicker
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
 
-#if 0
-  setSelectionFlags( QwtPicker::PointSelection );
-#endif
+  setStateMachine( new QwtPickerDragPointMachine() );
 
   setRubberBand( QwtPicker::UserRubberBand );
 }
@@ -120,9 +117,6 @@ HistogramPlotPicker
   QwtPlotPicker(
     xA,
     yA,
-#if 0
-    QwtPicker::PointSelection,
-#endif
     QwtPicker::UserRubberBand,
     tracker,
     can ),
@@ -131,6 +125,8 @@ HistogramPlotPicker
   m_IsGrayscaleActivated( false )
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
+
+  setStateMachine( new QwtPickerDragPointMachine() );
 }
 
 /*******************************************************************************/
@@ -185,9 +181,7 @@ HistogramPlotPicker
   const QPolygon & pa = selection();
 
   if( rubberBand()==QwtPicker::UserRubberBand &&
-#if 0
-      ( selectionFlags() & PointSelection ) &&
-#endif
+      // ( selectionType()==QwtPicker::PointSelection ) &&
       selection().count() >= 1 )
     {
     const QRect& rect = pickRect();
