@@ -103,6 +103,8 @@ private:
 			}
 			input->PushBack(mv);
 		}
+		std::cout << GetParameterStringList("feat")[0] << std::endl;
+		std::cout << input->GetMeasurementVector(0) << std::endl;
 		
 		MeasurementType meanMeasurementVector;
 		MeasurementType stddevMeasurementVector;

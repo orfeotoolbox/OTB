@@ -57,7 +57,7 @@ class CbDimensionalityReductionVector : public Application
 		
 		/** Filters typedef */
 		
-		typedef double 															ValueType;
+		typedef float 															ValueType;
 		typedef itk::VariableLengthVector<ValueType> 							InputSampleType;
 		typedef itk::Statistics::ListSample<InputSampleType> 					ListSampleType;
 		typedef MachineLearningModel<itk::VariableLengthVector<ValueType>, itk::VariableLengthVector<ValueType>>	DimensionalityReductionModelType;
@@ -136,6 +136,7 @@ class CbDimensionalityReductionVector : public Application
 			
 			if ( HasValue("in") )
 			{
+				
 				std::string shapefile = GetParameterString("in");
 				otb::ogr::DataSource::Pointer ogrDS;
 				OGRSpatialReference oSRS("");
@@ -153,20 +154,31 @@ class CbDimensionalityReductionVector : public Application
 					key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
 					std::transform(key.begin(), key.end(), key.begin(), tolower);
 					OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
-					
-					if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
-					{
+					/*if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
+					{*/
 						std::string tmpKey="feat."+key;
 						AddChoice(tmpKey,item);
-					}
-				
+					//}
 				}
+				
 			}
+			
 		}
 		
 		void DoExecute() ITK_OVERRIDE
 		{
 			clock_t tic = clock();
+			
+			
+			std::cout << GetChoiceKeys("feat")[0] << std::endl;
+			std::cout << GetChoiceKeys("feat")[1] << std::endl;
+			std::cout << GetChoiceKeys("feat")[2] << std::endl;
+			std::cout << GetChoiceKeys("feat")[3] << std::endl;
+			std::cout << GetChoiceKeys("feat")[4] << std::endl;
+			std::cout << GetChoiceKeys("feat")[5] << std::endl;
+			std::cout << GetChoiceKeys("feat")[6] << std::endl;
+			std::cout << GetChoiceKeys("feat")[7] << std::endl;
+			std::cout << GetChoiceKeys("feat")[8] << std::endl;
 			
 			std::string shapefile = GetParameterString("in");
 			otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
@@ -177,18 +189,31 @@ class CbDimensionalityReductionVector : public Application
 			input->SetMeasurementVectorSize(nbFeatures);
 			otb::ogr::Layer::const_iterator it = layer.cbegin();
 			otb::ogr::Layer::const_iterator itEnd = layer.cend();
-			
+			std::cout << (*it)[GetSelectedItems("feat")[0]].GetValue<double>() << std::endl;
 			for( ; it!=itEnd ; ++it)
 			{
 				MeasurementType mv;
 				mv.SetSize(nbFeatures);
+				
 				for(int idx=0; idx < nbFeatures; ++idx)
 				{
-					mv[idx] = (*it)[GetSelectedItems("feat")[idx]].GetValue<double>();
+					mv[idx] = static_cast<float>( (*it)[GetSelectedItems("feat")[idx]].GetValue<double>() );
+					
 				}
 				input->PushBack(mv);
 				
 			}
+			std::cout << GetSelectedItems("feat")[0] << std::endl;
+			std::cout << input->GetMeasurementVector(0) << std::endl;
+			
+			
+			
+				
+			
+			
+			
+			
+			
 			/** Statistics for shift/scale */
 			
 			MeasurementType meanMeasurementVector;
@@ -242,8 +267,9 @@ class CbDimensionalityReductionVector : public Application
 			
 			ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
 			ListSampleType::Pointer target = m_Model->PredictBatch(listSample);
-			
-			
+			target = input;
+			std::cout << target->GetMeasurementVector(0) << std::endl;
+			std::cout << input->GetMeasurementVector(0) << std::endl;
 			/** Create/Update Output Shape file */
 			
 			std::cout << GetParameterStringList("featout").size() << std::endl;
@@ -350,7 +376,7 @@ class CbDimensionalityReductionVector : public Application
 				
 				
 				for (std::size_t i=0; i<classfieldname.size(); ++i){
-					dstFeature[classfieldname[i]].SetValue<ValueType>(target->GetMeasurementVector(count)[i]);
+					dstFeature[classfieldname[i]].SetValue<double>(target->GetMeasurementVector(count)[i]);
 				}
 				if (updateMode)
 				{

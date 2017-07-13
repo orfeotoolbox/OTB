@@ -189,7 +189,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
  
   // This call is threadsafe
   labels = m_Model->PredictBatch(samples);
-  
+  labels = samples;
   // Set the output values
  
   typename TargetListSampleType::ConstIterator labIt = labels->Begin();
