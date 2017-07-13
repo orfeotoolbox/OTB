@@ -158,7 +158,6 @@ macro(macro_super_package)
   #only for *nix
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks   "#!/bin/sh\n")
 
-
   set(program_list)
 
   if(LINUX)
@@ -175,14 +174,19 @@ macro(macro_super_package)
       )
   endif()
 
-
   ############# otb_loader executable ################
   add_executable(otb_loader ${PACKAGE_SUPPORT_FILES_DIR}/otb_loader.cxx)
   target_link_libraries(otb_loader ${CMAKE_DL_LIBS})
   install(TARGETS otb_loader DESTINATION ${PKG_STAGE_DIR}/bin)
 
-
   set(PKG_PEFILES)
+
+  # special case for msvc: ucrtbase.dll must be explicitly vetted.
+  # for proj.dll, see Mantis-1424
+  if(MSVC AND NOT PKG_GENERATE_XDK)
+    list(APPEND PKG_PEFILES "ucrtbase.dll")
+    list(APPEND PKG_PEFILES "proj.dll")
+  endif()
   
 
   prepare_file_list(PKG_PEFILES)

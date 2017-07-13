@@ -65,7 +65,7 @@ PeriodicSOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBeha
   SizeType  mapSize = mapRegion.GetSize();
   IndexType positionToUpdate;
 
-  // Iterate over the neighborhood ot the winner neuron
+  // Iterate over the neighborhood of the winner neuron
   it.SetLocation(position);
 
   for (i = 0; i < it.Size(); ++i)

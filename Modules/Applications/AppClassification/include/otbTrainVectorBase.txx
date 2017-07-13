@@ -67,8 +67,9 @@ void TrainVectorBase::DoInit()
   SetDefaultParameterInt( "valid.layer", 0 );
 
   // Add class field if we used validation
-  AddParameter( ParameterType_ListView, "cfield", "Field containing the class id for supervision" );
+  AddParameter( ParameterType_ListView, "cfield", "Field containing the class integer label for supervision" );
   SetParameterDescription( "cfield", "Field containing the class id for supervision. "
+          "The values in this field shall be cast into integers. "
           "Only geometries with this field available will be taken into account." );
   SetListViewSingleSelectionMode( "cfield", true );
 

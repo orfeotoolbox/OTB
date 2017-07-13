@@ -180,7 +180,7 @@ protected:
   void ProcessVectorData(const std::string& key, const std::string& value);
 
   /**
-    * internal convenient method to serach if a key was already added
+    * internal convenient method to search if a key was already added
     */
   bool IsKeyPresent(const std::string& key);
 
