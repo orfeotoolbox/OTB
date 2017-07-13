@@ -346,9 +346,15 @@ endif()
 
 if(GENERATE_PACKAGE OR GENERATE_XDK)
   add_subdirectory(Packaging)
+endif()
+
+message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
+message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
+
+if(DOWNLOAD_LOCATION)
+  message(STATUS "Source archives for dependencies will be taken from '${DOWNLOAD_LOCATION}'")
 else()
-  message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
-  message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")  
+  message(STATUS "DOWNLOAD_LOCATION is not set. We will download all source archives during build!")
 endif()
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
