@@ -73,9 +73,11 @@ option(BUILD_TESTING "Build the testing tree." OFF)
 include(CTest)
 include(SuperBuild_Macro)
 
-# Setup location where source tar-balls are downloaded
-set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
-     CACHE PATH "Location where source tar-balls are (to be) downloaded.")
+# Configure location where source tar-balls are downloaded
+find_path(DOWNLOAD_LOCATION
+  NAMES OTBSuperBuild.readme
+  HINTS $ENV{DOWNLOAD_LOCATION} "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
+  )
 
 # General options
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
