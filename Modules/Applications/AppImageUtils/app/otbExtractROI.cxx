@@ -236,6 +236,8 @@ private:
       SetMinimumParameterIntValue("starty", 0);
       SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
 
+      SetMinimumParameterFloatValue( "mode.radius.r" , 0 );
+
       // Update the start and size parameter depending on the mode
       if ( GetParameterString("mode") == "extent" && !userExtent)
           computeIndexFromExtent();
