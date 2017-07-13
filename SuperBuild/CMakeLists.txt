@@ -74,10 +74,8 @@ include(CTest)
 include(SuperBuild_Macro)
 
 # Setup location where source tar-balls are downloaded
-#set (install_location "${CMAKE_CURRENT_BINARY_DIR}/install")
 set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
      CACHE PATH "Location where source tar-balls are (to be) downloaded.")
-mark_as_advanced(DOWNLOAD_LOCATION)
 
 # General options
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
