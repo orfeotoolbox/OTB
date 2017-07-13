@@ -81,8 +81,6 @@ private:
 	void DoExecute()
 	{	
 
-		std::cout << "Appli Training!" << std::endl;
-
 		std::string shapefile = GetParameterString("io.vd");
 
 		otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
@@ -103,9 +101,7 @@ private:
 			}
 			input->PushBack(mv);
 		}
-		std::cout << GetParameterStringList("feat")[0] << std::endl;
-		std::cout << input->GetMeasurementVector(0) << std::endl;
-		
+	
 		MeasurementType meanMeasurementVector;
 		MeasurementType stddevMeasurementVector;
 		
