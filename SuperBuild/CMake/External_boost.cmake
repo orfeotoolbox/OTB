@@ -71,7 +71,7 @@ set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
 #NOTE: update _SB_Boost_INCLUDE_DIR below when you change version number
 ExternalProject_Add(BOOST
   PREFIX BOOST
-  URL "http://download.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2"
+  URL "http://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2"
   URL_MD5 65a840e1a0b13a558ff19eeb2c4f0cbe
   BINARY_DIR ${BOOST_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
