@@ -215,4 +215,4 @@ std::ostream & operator<<(std::ostream & os, const GeometriesRegion & region)
   return os;
 }
 
-}
+} // end of namespace otb

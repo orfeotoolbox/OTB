@@ -125,8 +125,9 @@ private:
   VariantRegion m_R;
 };
 
+OTBGdalAdapters_EXPORT
 std::ostream & operator<<(std::ostream & os, const GeometriesRegion & region);
 
-}
+} // end of namespace otb
 
 #endif
