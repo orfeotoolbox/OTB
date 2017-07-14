@@ -53,6 +53,9 @@ public:
   /** Default constructor */
   GeometriesRegion();
 
+  /** Copy constructor*/
+  GeometriesRegion(const Self &region);
+
   /** Default destructor */
   ~GeometriesRegion() ITK_OVERRIDE;
 
@@ -101,6 +104,9 @@ public:
 
   /** Compare two regions. */
   bool operator!=(const Self & region) const;
+
+  /** copy */
+  void operator=(const Self & region);
 
 protected:
 

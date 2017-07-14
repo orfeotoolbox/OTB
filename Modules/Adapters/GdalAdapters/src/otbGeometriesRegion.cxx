@@ -29,6 +29,13 @@ GeometriesRegion::GeometriesRegion()
   m_R.Range.Count = 0;
 }
 
+GeometriesRegion::GeometriesRegion(const Self & region)
+  : itk::Region(region)
+  , m_Mode(region.m_Mode)
+  , m_R(region.m_R)
+{
+}
+
 GeometriesRegion::~GeometriesRegion()
 {
 }
@@ -184,6 +191,13 @@ GeometriesRegion::operator!=(const GeometriesRegion & region) const
       break;
     }
   return true;
+}
+
+void
+GeometriesRegion::operator=(const Self & region)
+{
+  m_Mode = region.m_Mode;
+  m_R = region.m_R;
 }
 
 void
