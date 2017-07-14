@@ -17,19 +17,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #include "otbGeometriesRegion.h"
 
 namespace otb
 {
 
 GeometriesRegion::GeometriesRegion()
-  : m_Modes(1) // Default mode : range type
-  , m_StartId(0)
-  , m_Count(0)
-  , m_StartPoint{0.,0.}
-  , m_EndPoint{0.,0.}
+  : m_Mode(RANGE) // Default mode : range type
 {
+  m_R.Range.Start = 0;
+  m_R.Range.Count = 0;
 }
 
 GeometriesRegion::~GeometriesRegion()
@@ -37,169 +34,179 @@ GeometriesRegion::~GeometriesRegion()
 }
 
 void
-GeometriesRegion::SetRangeMode(bool state)
+GeometriesRegion::SetMode(ModeType m)
 {
-  if (state)
+  if (m_Mode != m)
     {
-    m_Modes = m_Modes | 0x01;
-    }
-  else
-    {
-    m_Modes = m_Modes & 0xFE;
+    m_Mode = m;
     }
 }
 
-void
-GeometriesRegion::SetSpatialMode(bool state)
+const GeometriesRegion::ModeType &
+GeometriesRegion::GetMode()
 {
-  if (state)
-    {
-    m_Modes = m_Modes | 0x02;
-    }
-  else
-    {
-    m_Modes = m_Modes & 0xFD;
-    }
+  return m_Mode;
 }
 
 bool
 GeometriesRegion::IsRange() const
 {
-  return bool(m_Modes & 0x01);
+  return bool(m_Mode==GeometriesRegion::RANGE);
 }
 
 bool
 GeometriesRegion::IsSpatial() const
 {
-  return bool((m_Modes & 0x02)>>1);
+  return bool(m_Mode==GeometriesRegion::SPATIAL);
 }
 
 const unsigned long &
 GeometriesRegion::GetStartId(void) const
 {
-  return m_StartId;
+  return m_R.Range.Start;
 }
 
 void
 GeometriesRegion::SetStartId(const unsigned long & id)
 {
-  m_StartId = id;
+  m_R.Range.Start = id;
 }
 
 const unsigned long &
 GeometriesRegion::GetCount() const
 {
-  return m_Count;
+  return m_R.Range.Count;
 }
 
 void
 GeometriesRegion::SetCount(const unsigned long & count)
 {
-  m_Count = count;
+  m_R.Range.Count = count;
 }
 
 const double &
 GeometriesRegion::GetStartX() const
 {
-  return m_StartPoint[0];
+  return m_R.Spatial.Start[0];
 }
 
 void
 GeometriesRegion::SetStartX(const double& x)
 {
-  m_StartPoint[0] = x;
+  m_R.Spatial.Start[0] = x;
 }
 
 const double &
 GeometriesRegion::GetStartY() const
 {
-  return m_StartPoint[1];
+  return m_R.Spatial.Start[1];
 }
 
 void
 GeometriesRegion::SetStartY(const double& y)
 {
-  m_StartPoint[1] = y;
+  m_R.Spatial.Start[1] = y;
 }
 
 const double &
 GeometriesRegion::GetEndX() const
 {
-  return m_EndPoint[0];
+  return m_R.Spatial.End[0];
 }
 
 void
 GeometriesRegion::SetEndX(const double& x)
 {
-  m_EndPoint[0] = x;
+  m_R.Spatial.End[0] = x;
 }
 
 const double &
 GeometriesRegion::GetEndY() const
 {
-  return m_EndPoint[1];
+  return m_R.Spatial.End[1];
 }
 
 void
 GeometriesRegion::SetEndY(const double& y)
 {
-  m_EndPoint[1] = y;
+  m_R.Spatial.End[1] = y;
 }
 
 double*
 GeometriesRegion::GetStartPoint()
 {
-  return m_StartPoint;
+  return m_R.Spatial.Start;
 }
 
 double*
 GeometriesRegion::GetEndPoint()
 {
-  return m_EndPoint;
+  return m_R.Spatial.End;
 }
 
 bool
-GeometriesRegion::operator==(const Self & region) const
+GeometriesRegion::operator==(const GeometriesRegion & region) const
 {
-  if (m_Modes != region.m_Modes)
+  if (m_Mode != region.m_Mode)
     return false;
-  bool same = true;
-  if (this->IsRange())
-    same = same && (m_StartId == region.m_StartId) && (m_Count == region.m_Count);
-  if (this->IsSpatial())
-    same = same && ( m_StartPoint[0] == region.m_StartPoint[0] )
-                && ( m_StartPoint[1] == region.m_StartPoint[1] )
-                && ( m_EndPoint[0] == region.m_EndPoint[0] )
-                && ( m_EndPoint[1] == region.m_EndPoint[1] );
-  return same;
+  switch(m_Mode)
+    {
+    case RANGE:
+      return bool(m_R.Range.Start == region.m_R.Range.Start &&
+                  m_R.Range.Count == region.m_R.Range.Count);
+    case SPATIAL:
+      return bool(m_R.Spatial.Start[0] == region.m_R.Spatial.Start[0] &&
+                  m_R.Spatial.Start[1] == region.m_R.Spatial.Start[1] &&
+                  m_R.Spatial.End[0] == region.m_R.Spatial.End[0] &&
+                  m_R.Spatial.End[1] == region.m_R.Spatial.End[1]);
+    default:
+      break;
+    }
+  return false;
 }
 
 bool
-GeometriesRegion::operator!=(const Self & region) const
+GeometriesRegion::operator!=(const GeometriesRegion & region) const
 {
-  if (m_Modes != region.m_Modes)
+  if (m_Mode != region.m_Mode)
     return true;
-  bool same = false;
-  if (this->IsRange())
-    same = same && (m_StartId == region.m_StartId) && (m_Count == region.m_Count);
-  if (this->IsSpatial())
-    same = same && ( m_StartPoint[0] == region.m_StartPoint[0] )
-                && ( m_StartPoint[1] == region.m_StartPoint[1] )
-                && ( m_EndPoint[0] == region.m_EndPoint[0] )
-                && ( m_EndPoint[1] == region.m_EndPoint[1] );
-  return !same;
+  switch(m_Mode)
+    {
+    case RANGE:
+      return bool(m_R.Range.Start != region.m_R.Range.Start ||
+                  m_R.Range.Count != region.m_R.Range.Count);
+    case SPATIAL:
+      return bool(m_R.Spatial.Start[0] != region.m_R.Spatial.Start[0] ||
+                  m_R.Spatial.Start[1] != region.m_R.Spatial.Start[1] ||
+                  m_R.Spatial.End[0] != region.m_R.Spatial.End[0] ||
+                  m_R.Spatial.End[1] != region.m_R.Spatial.End[1]);
+    default:
+      break;
+    }
+  return true;
 }
 
 void
 GeometriesRegion::PrintSelf(std::ostream & os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-
-  os << indent << "Modes     : " << (this->IsSpatial()?"S":"_") << (this->IsRange()?"R":"_") << std::endl;
-  os << indent << "StartId   : " << this->m_StartId << std::endl;
-  os << indent << "Count     : " << this->m_Count << std::endl;
-  os << indent << "StartPoint: " << this->m_Count << std::endl;
-  os << indent << "EndPoint  : " << this->m_Count << std::endl;
+  switch(m_Mode)
+    {
+    case RANGE:
+      os << indent << "Mode  : RANGE"  << std::endl;
+      os << indent << "Start : " << this->m_R.Range.Start << std::endl;
+      os << indent << "Count : " << this->m_R.Range.Count << std::endl;
+      break;
+    case SPATIAL:
+      os << indent << "Mode  : SPATIAL"  << std::endl;
+      os << indent << "Start : [" << this->m_R.Spatial.Start[0]
+        << " ; "<< this->m_R.Spatial.Start[1] << "]" << std::endl;
+      os << indent << "End   : [" << this->m_R.Spatial.End[0]
+        << " ; "<< this->m_R.Spatial.End[1] << "]" << std::endl;
+      break;
+    default:
+      break;
+    }
 }
 
 std::ostream & operator<<(std::ostream & os, const GeometriesRegion & region)

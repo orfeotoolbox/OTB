@@ -28,6 +28,11 @@
 namespace otb
 {
 
+/**
+ * \class GeometriesRegion
+ * 
+ * Region type applied to geometries, implemented as a tagged-union
+ */
 class OTBGdalAdapters_EXPORT GeometriesRegion : public itk::Region
 {
 public:
@@ -42,6 +47,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GeometriesRegion, itk::Region);
   //@}
+  
+  typedef enum {RANGE, SPATIAL} ModeType;
 
   /** Default constructor */
   GeometriesRegion();
@@ -53,9 +60,9 @@ public:
   virtual typename Superclass::RegionType GetRegionType() const ITK_OVERRIDE
   { return Superclass::ITK_UNSTRUCTURED_REGION; }
 
-  void SetRangeMode(bool state);
-
-  void SetSpatialMode(bool state);
+  void SetMode(ModeType m);
+  
+  const ModeType & GetMode();
 
   bool IsRange() const;
 
@@ -101,15 +108,21 @@ protected:
   
 private:
 
-  unsigned char m_Modes;
+  ModeType m_Mode;
+  
+  typedef union
+    {
+    struct {
+      unsigned long Start;
+      unsigned long Count;
+      } Range;
+    struct {
+      double Start[2];
+      double End[2];
+      } Spatial;
+    } VariantRegion;
 
-  unsigned long m_StartId;
-
-  unsigned long m_Count;
-
-  double m_StartPoint[2];
-
-  double m_EndPoint[2];
+  VariantRegion m_R;
 };
 
 std::ostream & operator<<(std::ostream & os, const GeometriesRegion & region);
