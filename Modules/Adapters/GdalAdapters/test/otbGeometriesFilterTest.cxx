@@ -19,7 +19,19 @@
  */
 
 #include "otbGeometriesToGeometriesFilter.h"
+#include "otbGeometriesSet.h"
 #include "otbOGRDataSourceWrapper.h"
+
+class CopyGeometryFunctor
+{
+public:
+  typedef OGRGeometry TransformedElementType;
+
+  otb::ogr::UniqueGeometryPtr operator()(OGRGeometry const* in) const
+    {
+    return otb::ogr::UniqueGeometryPtr(in->clone());
+    }
+};
 
 int main(int argc, char **argv)
 {
@@ -30,16 +42,18 @@ int main(int argc, char **argv)
     }
   otb::ogr::DataSource::Pointer ds = otb::ogr::DataSource::New(argv[1]);
   otb::ogr::DataSource::Pointer outDs = otb::ogr::DataSource::New(argv[2]);
+  
+  otb::GeometriesSet::Pointer input = otb::GeometriesSet::New(ds);
+  otb::GeometriesSet::Pointer output = otb::GeometriesSet::New(outDs);
 
-  // TODO : create and use instead a GeometriesFunctorFilter class
-  otb::GeometriesToGeometriesFilter::Pointer filter =
-    otb::GeometriesToGeometriesFilter::New();
+  typedef otb::DefaultGeometriesToGeometriesFilter<CopyGeometryFunctor> FilterType;
+  FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput(ds);
-  filter->SetOutput(outDs);
+  filter->SetInput(input);
+  filter->SetOutput(output);
 
-  outDs->UpdateOutputInformation();
-  std::cout << "Output region : " << outDs->GetLargestPossibleRegion() << std::endl;
+  output->UpdateOutputInformation();
+  std::cout << "Output region : " << output->GetLargestPossibleRegion() << std::endl;
   
   return EXIT_SUCCESS;
 }
