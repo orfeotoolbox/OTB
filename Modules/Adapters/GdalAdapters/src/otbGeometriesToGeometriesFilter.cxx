@@ -216,6 +216,20 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
 }
 
 /*virtual*/
+void otb::GeometriesToGeometriesFilter::GenerateInputRequestedRegion()
+{
+  Superclass::GenerateInputRequestedRegion();
+  for(unsigned int i=0 ; i<this->GetNumberOfIndexedInputs() ; ++i)
+    {
+    otb::GeometriesSet * input = dynamic_cast<otb::GeometriesSet*>(this->ProcessObject::GetInput(i));
+    if (input)
+      {
+      input->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+      }
+    }
+}
+
+/*virtual*/
 OGRSpatialReference* otb::GeometriesToGeometriesFilter::DoDefineNewLayerSpatialReference(
   ogr::Layer const& itkNotUsed(source)) const
 {

@@ -99,6 +99,11 @@ protected:
    */
   void GenerateData(void) ITK_OVERRIDE;
 
+  /**
+   * Copy the output requested region to input
+   */
+  virtual void GenerateInputRequestedRegion() ITK_OVERRIDE;
+
 private:
   /** \e In-place processing function.
    * \param[in,out] inout the geometries set that'll be modified by the filter.

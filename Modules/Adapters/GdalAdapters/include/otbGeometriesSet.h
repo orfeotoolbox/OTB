@@ -144,17 +144,19 @@ public:
     { return m_ImageReference; }
   //@}
 
-  // TODO : virtual void SetRequestedRegionToLargestPossibleRegion()
+  virtual void SetRequestedRegionToLargestPossibleRegion();
 
   // TODO : virtual bool RequestedRegionIsOutsideOfTheBufferedRegion()
 
   // TODO : virtual bool VerifyRequestedRegion()
 
-  // TODO : virtual void CopyInformation(const DataObject *)
+  virtual void CopyInformation(const DataObject *data);
 
   // TODO : virtual void SetRequestedRegion(const DataObject *)
 
   // TODO : virtual void Graft(const DataObject *)
+
+  virtual void UpdateOutputInformation();
 
   void SetLargestPossibleRegion(const GeometriesRegion & region);
 

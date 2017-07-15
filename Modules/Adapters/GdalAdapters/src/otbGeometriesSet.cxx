@@ -128,6 +128,90 @@ void otb::GeometriesSet::Set(ogr::DataSource::Pointer datasource)
   m_GeometriesSet = datasource;
 }
 
+void otb::GeometriesSet::CopyInformation(const DataObject *data)
+{
+  const otb::GeometriesSet * geom =
+    dynamic_cast<const otb::GeometriesSet*>(data);
+  if (geom)
+    {
+    this->SetLargestPossibleRegion(geom->GetLargestPossibleRegion());
+    }
+}
+
+void otb::GeometriesSet::SetRequestedRegionToLargestPossibleRegion()
+{
+  this->SetRequestedRegion(this->GetLargestPossibleRegion());
+}
+
+void otb::GeometriesSet::UpdateOutputInformation()
+{
+  Superclass::UpdateOutputInformation();
+  if( !this->GetSource() && !m_GeometriesSet.empty())
+    {
+    ogr::Layer layer(ITK_NULLPTR,true);
+    switch(m_GeometriesSet.which())
+      {
+      case 0: // OGRDataSource
+        {
+        ogr::DataSource::Pointer & ds = boost::get<ogr::DataSource::Pointer>(m_GeometriesSet);
+        layer = ds->GetLayer(0);
+        break;
+        }
+      case 1: // OGRLayer
+        {
+        layer = boost::get<ogr::Layer>(m_GeometriesSet);
+        break;
+        }
+      default:
+        break;
+      }
+    switch(m_LargestPossibleRegion.GetMode())
+      {
+      case otb::GeometriesRegion::RANGE:
+        {
+        int size = layer.GetFeatureCount(false);
+        if (size < 0)
+          size = layer.GetFeatureCount(true);
+        assert((size >= 0) && "Unable to compute number of features");
+        m_LargestPossibleRegion.SetStartId(0);
+        m_LargestPossibleRegion.SetCount(static_cast<unsigned long>(size));
+        break;
+        }
+      case otb::GeometriesRegion::SPATIAL:
+        {
+        double ulx=0.0,uly=0.0,lrx=0.0,lry=0.0;
+        bool extentAvailable = true;
+        try
+          {
+          layer.GetExtent(ulx,uly,lrx,lry,false);
+          }
+        catch(const itk::ExceptionObject&)
+          {
+          extentAvailable = false;
+          }
+        if (!extentAvailable)
+          {
+          try
+            {
+            layer.GetExtent(ulx,uly,lrx,lry,true);
+            extentAvailable = true;
+            }
+          catch (const itk::ExceptionObject&)
+            {}
+          }
+        assert(extentAvailable && "Unable to compute extent");
+        m_LargestPossibleRegion.SetStartX(ulx);
+        m_LargestPossibleRegion.SetStartY(uly);
+        m_LargestPossibleRegion.SetEndX(lrx);
+        m_LargestPossibleRegion.SetEndY(lry);
+        break;
+        }
+      default:
+        break;
+      }
+    }
+}
+
 void
 otb::GeometriesSet::SetLargestPossibleRegion(const GeometriesRegion & region)
 {

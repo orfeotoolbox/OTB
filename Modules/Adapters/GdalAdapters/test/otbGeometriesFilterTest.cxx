@@ -41,8 +41,9 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
     }
   otb::ogr::DataSource::Pointer ds = otb::ogr::DataSource::New(argv[1]);
-  otb::ogr::DataSource::Pointer outDs = otb::ogr::DataSource::New(argv[2]);
-  
+  otb::ogr::DataSource::Pointer outDs = otb::ogr::DataSource::New(
+    argv[2], otb::ogr::DataSource::Modes::Overwrite);
+
   otb::GeometriesSet::Pointer input = otb::GeometriesSet::New(ds);
   otb::GeometriesSet::Pointer output = otb::GeometriesSet::New(outDs);
 
@@ -53,7 +54,24 @@ int main(int argc, char **argv)
   filter->SetOutput(output);
 
   output->UpdateOutputInformation();
-  std::cout << "Output region : " << output->GetLargestPossibleRegion() << std::endl;
-  
+  otb::GeometriesRegion largest = output->GetLargestPossibleRegion();
+  std::cout << "Output region : " << largest << std::endl;
+
+  otb::GeometriesRegion request;
+  request.SetStartId(2);
+  request.SetCount(3);
+  output->SetRequestedRegion(request);
+  output->PropagateRequestedRegion();
+
+  std::cout << "Input requested region : " << input->GetRequestedRegion() << std::endl;
+
+  otb::GeometriesRegion largest2;
+  largest2.SetMode(otb::GeometriesRegion::SPATIAL);
+  input->SetLargestPossibleRegion(largest2);
+  output->UpdateOutputInformation();
+
+  largest = output->GetLargestPossibleRegion();
+  std::cout << "Output region (spatial) : " << largest << std::endl;
+
   return EXIT_SUCCESS;
 }
