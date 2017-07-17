@@ -74,8 +74,6 @@ private:
     // initialisation parameters and synchronizes parameters
     initKMParams();
 
-    if (IsParameterEnabled("vm") && HasValue("vm")) ConnectKMClassificationMask();
-
     AddRANDParameter();
 
     // Doc example parameter settings
@@ -95,6 +93,8 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    if (IsParameterEnabled("vm") && HasValue("vm")) ConnectKMClassificationMask();
+
     KMeansFileNamesHandler fileNames;
 
     std::string fieldName = "field";
