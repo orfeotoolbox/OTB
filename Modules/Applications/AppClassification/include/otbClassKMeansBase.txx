@@ -88,6 +88,7 @@ void ClassKMeansBase::ShareKMSamplingParameters()
   ShareParameter("in", "imgenvelop.in");
   ShareParameter("vm", "select.mask");
   ShareParameter("ram", "polystats.ram");
+  ShareParameter("sampler", "select.sampler");
 }
 
 void ClassKMeansBase::ShareKMClassificationParams()
@@ -181,7 +182,6 @@ void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
   GetInternalApplication("select")->SetParameterString("instats", statisticsFileName, false);
   GetInternalApplication("select")->SetParameterString("field", fieldName, false);
 
-  GetInternalApplication("select")->SetParameterString("sampler", "random", false);
   GetInternalApplication("select")->SetParameterString("strategy", "constant", false);
   GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples, false);
 

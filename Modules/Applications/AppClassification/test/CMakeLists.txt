@@ -662,6 +662,7 @@ if(OTB_USE_SHARK)
     -nc 5
     -maxit 10000
     -ct 0.0000001
+    -sampler random
     -rand 121212
     -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif
     VALID   --compare-image ${NOTOL}
