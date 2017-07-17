@@ -48,11 +48,11 @@ equalized(std::array< int , sizeh > gridHisto[],
           int nW,
           int nH)
 {
-  for (int i = 0 ; i<nH ; i++)
+  for (int i = 0 ; i<nW ; i++)
     {
-    for ( int j = 0 ; j<nW ; j++ )
+    for ( int j = 0 ; j<nH ; j++ )
       {
-      equalized( gridHisto[i * nW + j] , targetHisto , gridLut[i * nW + j]);
+      equalized( gridHisto[i + j * nW ] , targetHisto , gridLut[i+ j * nW ]);
       }
     }
 }
@@ -72,7 +72,7 @@ computehisto( ImageType::Pointer const input,
       {
       index[0] = i;
       index[1] = j;
-      ++inputHisto[ (i / wThumbnail) * nW + j / hThumbnail][ input->GetPixel( index ) ];
+      ++inputHisto[ (i / wThumbnail)  + ( j / hThumbnail ) * nW][ input->GetPixel( index ) ];
       }
     }
 }
@@ -95,6 +95,69 @@ createTarget( std::array< int , sizeh > & targetHisto,
   int nbPixel = h * l;
   int height = nbPixel/256 ;
   targetHisto.fill( height );
+}
+
+float
+interpoleGain(std::array< int , sizeh > lut[],
+              int nW,
+              int nH,
+              int pixelValue,
+              ImageType::IndexType index,
+              int wThumbnail,
+              int hThumbnail)
+{
+  int lutX = index[0]/wThumbnail;
+  int lutY = index[1]/hThumbnail;
+  float x = static_cast< float >(index[0]%wThumbnail) / static_cast< float >(wThumbnail);
+  float y = static_cast< float >(index[1]%hThumbnail) / static_cast< float >(hThumbnail);
+  float w = (1 - std::abs(x - 0.5) )*(1 - std::abs(y - 0.5) );
+  float gain = lut[lutX + lutY * nW ][ pixelValue ] * (1 - std::abs(x - 0.5) )*(1 - std::abs(y - 0.5) ) ;
+  bool right = x>=0.5 && lutX<(nW - 1) ;
+  bool up = y<=0.5 && lutY>0;
+  bool left = x<=0.5 && lutX>0;
+  bool down = y>=0.5 && lutY<(nH - 1);
+  if ( right )
+    {
+    gain += lut[lutX + 1 + lutY * nW ][ pixelValue ] * (1 - std::abs(y - 0.5) ) * (x - 0.5);
+    w += (1 - std::abs(y - 0.5) ) * (x - 0.5);
+    }
+  if ( left )
+    {
+    gain += lut[lutX + lutY * nW - 1 ][ pixelValue ] * (1 - std::abs(y - 0.5) ) * std::abs(x - 0.5);
+    w += (1 - std::abs(y - 0.5) ) * std::abs(x - 0.5);
+    }
+  if ( up )
+    {
+    gain += lut[lutX + (lutY - 1) * nW ][ pixelValue ] * std::abs(y - 0.5) * (1 - std::abs(x - 0.5) );
+    w += std::abs(y - 0.5) * (1 - std::abs(x - 0.5) );
+    }
+  if ( down )
+    {
+    gain += lut[lutX + (lutY + 1)* nW ][ pixelValue ]  * (y - 0.5) * (1 - std::abs(x - 0.5) );
+    w += (y - 0.5) * (1 - std::abs(x - 0.5) );
+    }
+  if ( up && left )
+    {
+    gain += lut[( lutX - 1 ) + (lutY - 1 ) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    w += std::abs(y - 0.5) * std::abs(x - 0.5);
+    }
+  if (down && left)
+    {
+    gain += lut[( lutX - 1 ) + (lutY + 1) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    w += std::abs(y - 0.5) * std::abs(x - 0.5);
+    }
+  if ( up && right )
+    {
+    gain += lut[( lutX + 1 ) + (lutY - 1) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    w += std::abs(y - 0.5) * std::abs(x - 0.5) ;
+    }
+  if ( down && right )
+    {
+    gain += lut[( lutX + 1 ) + (lutY + 1 ) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    w += std::abs(y - 0.5) * std::abs(x - 0.5);
+    }
+
+  return gain/(w * pixelValue);
 }
 
 int
@@ -182,22 +245,9 @@ main( int argc,
     {
       lutGrid[i].fill(0);
       histoGrid[i].fill(0);
-      // for (int j = 0 ; j<50 ; j++)
-      // {
-      // std::cout<<i<<"   "<<j<<"   "<<histoGrid[i][j]<<std::endl;
-      // }
     }
-    // for (int i = 0 ; i<50 ; i++)
-    // {
-      // std::cout<<i<<"   "<<histoGrid[0][i]<<std::endl;
-    // }
 
     computehisto( inputImage , histoGrid , wThumbnail , hThumbnail , nW , nH);
-
-    // for (int i = 0 ; i<50 ; i++)
-    // {
-    //   std::cout<<i<<"   "<<histoGrid[0][i]<<std::endl;
-    // }
 
     equalized( histoGrid , lutGrid , histoTarget , nW , nH);
     
@@ -219,7 +269,10 @@ main( int argc,
       ++itin;
       ++itgain;
       }*/
-    float pixelValue = 0.0;
+
+
+
+    float gainValue = 0.0;
     ImageType::IndexType index;
     for (int i = 0 ; i < wThumbnail * nW ; i++)
       {
@@ -227,9 +280,10 @@ main( int argc,
         {
         index[0] = i;
         index[1] = j;
-        pixelValue = static_cast<float>( lutGrid[ (i / wThumbnail) * nW + j / hThumbnail ] [ inputImage->GetPixel( index ) ] )\
+        gainValue = interpoleGain(lutGrid , nW , nH , inputImage->GetPixel( index ) , index , wThumbnail , hThumbnail);
+        // gainValue = static_cast<float>( lutGrid[ i / wThumbnail + (j / hThumbnail) * nW ] [ inputImage->GetPixel( index ) ] )\
                                       / static_cast<float>( inputImage->GetPixel( index ) ) ;
-        gainImage->SetPixel( index , pixelValue );
+        gainImage->SetPixel( index , gainValue );
         }
       }
 
