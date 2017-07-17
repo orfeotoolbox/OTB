@@ -117,6 +117,14 @@ public:
                       std::string modelFileName);
 
   /**
+   * Compute image second order statistics
+   * \param imageFileName input image filename
+   * \param imagesStatsFileName image statistics
+   */
+  void ComputeImageStatistics(std::string imageFileName,
+                              std::string imagesStatsFileName);
+
+  /**
    * Performs a classification of the input image according to a model file
    */
     void KMeansClassif();
@@ -137,6 +145,7 @@ public:
           sampleSelectOutput = outPath + "_sampleSelect.shp";
           sampleExtractOutput = outPath + "_sampleExtract.shp";
           modelFile = outPath + "_model.txt";
+          imgStatOutput = outPath + "_imgstats.xml";
         }
 
         void clear()
@@ -146,6 +155,7 @@ public:
           RemoveFile(sampleSelectOutput);
           RemoveFile(sampleExtractOutput);
           RemoveFile(modelFile);
+          RemoveFile(imgStatOutput);
         }
 
         std::string tmpVectorFile;
@@ -153,6 +163,7 @@ public:
         std::string sampleSelectOutput;
         std::string sampleExtractOutput;
         std::string modelFile;
+        std::string imgStatOutput;
 
       private:
         bool RemoveFile(std::string &filePath)

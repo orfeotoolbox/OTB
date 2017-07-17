@@ -56,7 +56,8 @@ private:
         3) SampleSelection : select the samples by constant strategy in the shapefile, \
         4) SamplesExtraction :  extract the samples descriptors, \
         5) TrainVectorClassifier : train the SharkKMeans model, \
-        6) ImageClassifier : performs the classification of the input image according to a model file."
+        6) ComputeImagesStatistics : compute images second order statistics, \
+        7) ImageClassifier : performs the classification of the input image according to a model file."
 
         "If you want keep the temporary files (sample selected, model file, ...), initialize cleanup parameter.");
 
@@ -122,6 +123,9 @@ private:
                             fileNames.sampleSelectOutput,
                             fileNames.sampleExtractOutput,
                             actualNBSamplesForKMeans);
+
+    // Compute Images second order statistics
+    ComputeImageStatistics(GetParameterString("in"), fileNames.imgStatOutput);
 
     // Compute a train model with TrainVectorClassifier app
     TrainKMModel(GetParameterImage("in"), fileNames.sampleExtractOutput,

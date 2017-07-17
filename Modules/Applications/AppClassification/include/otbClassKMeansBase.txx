@@ -77,6 +77,7 @@ void ClassKMeansBase::InitKMSampling()
 void ClassKMeansBase::InitKMClassification()
 {
   AddApplication("TrainVectorClassifier", "training", "Model training");
+  AddApplication("ComputeImagesStatistics", "imgstats", "Compute Images second order statistics");
   AddApplication("ImageClassifier", "classif", "Performs a classification of the input image");
 
   ShareKMClassificationParams();
@@ -113,10 +114,12 @@ void ClassKMeansBase::ConnectKMSamplingParams()
 void ClassKMeansBase::ConnectKMClassificationParams()
 {
   Connect("training.cfield", "extraction.field");
+  Connect("training.io.stats","imgstats.out");
 
   Connect("classif.in", "imgenvelop.in");
   Connect("classif.model", "training.io.out");
   Connect("classif.ram", "polystats.ram");
+  Connect("classif.imstat", "imgstats.out");
 }
 
 void ClassKMeansBase::ConnectKMClassificationMask()
@@ -238,6 +241,18 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
   ExecuteInternal( "training" );
   otbAppLogINFO("output model : " << GetInternalApplication("training")->GetParameterString("io.out"));
 }
+
+void ClassKMeansBase::ComputeImageStatistics(std::string imageFileName,
+                                             std::string imagesStatsFileName)
+{
+  std::vector<std::string> imageFileNameList = {imageFileName};
+  GetInternalApplication("imgstats")->SetParameterStringList("il", imageFileNameList, false);
+  GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName, false);
+
+  ExecuteInternal( "imgstats" );
+  otbAppLogINFO("image statistics file : " << GetInternalApplication("imgstats")->GetParameterString("out"));
+}
+
 
 void ClassKMeansBase::KMeansClassif()
 {
