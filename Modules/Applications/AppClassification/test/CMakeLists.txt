@@ -657,7 +657,7 @@ if(OTB_USE_SHARK)
   otb_test_application(NAME apTvClKMeansImageClassification
     APP  KMeansClassification
     OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
-    -vm ${INPUTDATA}/qb_RoadExtract_mask.png
+    -vm ${INPUTDATA}/qb_RoadExtract_mask_binary.png
     -ts 30000
     -nc 5
     -maxit 10000
