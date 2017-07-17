@@ -5,31 +5,66 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkImageLinearIteratorWithIndex.h"
+#include "itkImageRegionConstIterator.h"
 #include "itkImageToHistogramFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "itkMultiplyImageFilter.h"
+#include "itkComposeImageFilter.h"
 
-
+int const sizeh = 256;
 typedef int                   PixelType;
 typedef itk::Image< PixelType , 2 >  ImageType;
 typedef itk::VectorImage< PixelType , 2 >  VectorImageType;
+typedef itk::Statistics::ImageToHistogramFilter< ImageType > HistogramFilterType;
+typedef HistogramFilterType::HistogramType HistogramType;
 
 void
-computeLuminance( ImageType::Pointer luminance ,
-                  VectorImageType::Pointer input )
+equalized( std::array< int , sizeh > const inputHisto,
+           std::array< int , sizeh > const targethisto,
+           std::array< int , sizeh > & lut)
+
 {
-  itk::ImageRegionIterator< VectorImageType >  itinp( input , input->GetRequestedRegion() );
-  itk::ImageRegionIterator< ImageType >  itlum( luminance , luminance->GetRequestedRegion() );
-  itinp.GoToBegin();
-  itlum.GoToBegin();
-  while ( !itinp.IsAtEnd() )
-  {
-    // 0.3R 0.6G 0.1B
-    itlum.Set( round(0.3 * itinp.Get()[0] + 0.6 * itinp.Get()[1] + 0.1  * itinp.Get()[2]) );
-    ++itinp;
-    ++itlum;
-  }
+  int countMapValue = 0 ;
+  int countValue = 0;
+  int countInput  = inputHisto[ countValue ];
+  int countTarget = targethisto[ countMapValue ];
+  while ( countMapValue<256 )
+    {
+    if (countInput > countTarget)
+      {
+      ++countMapValue;
+      countTarget += targethisto[countMapValue];
+      }
+    else
+      {
+      lut[countValue] =  countMapValue ;
+      ++countValue;
+      countInput  += inputHisto[ countValue ];
+      }
+    }
+}
+
+void
+computehisto( ImageType::Pointer const input,
+              std::array<int , sizeh> & inputHisto)
+{
+  itk::ImageRegionConstIterator< ImageType > it ( input , input->GetRequestedRegion() );
+  it.GoToBegin();
+  while ( !it.IsAtEnd() )
+    {
+    ++inputHisto[ it.Get() ];
+    ++it;
+    }
+}
+
+void
+createTarget( std::array< int , sizeh > & targetHisto,
+              ImageType::Pointer const input )
+{
+  ImageType::SizeType size = input->GetLargestPossibleRegion().GetSize();
+  int nbPixel = size[0] * size[1];
+  int height = nbPixel/256 ;
+  targetHisto.fill( height );
 }
 
 int
@@ -38,104 +73,91 @@ main( int argc,
 {
   // const char * inputfilename  = argv[ 1 ];
   // const char * outputfilename = argv[ 2 ];
-
+  if (argc<3)
+  {
+    std::cout<<"error"<<std::endl;
+    return 1;
+  }
 
   typedef otb::ImageFileReader< VectorImageType > ReaderType;
-  typedef itk::Statistics::ImageToHistogramFilter< ImageType > HistogramFilterType;
-  typedef HistogramFilterType::HistogramType HistogramType;
   typedef itk::VectorIndexSelectionCastImageFilter< VectorImageType , ImageType > VectorToImageFilterType;
-
+  typedef itk::Image< float , 2 > ImageGainType;
+  typedef itk::VectorImage< float , 2 >  VectorGainType;
+  typedef itk::ComposeImageFilter< ImageGainType > ImageGainToVectorImageGainFilterType;
+  typedef itk::ComposeImageFilter< ImageType > ImageToVectorImageFilterType;
+  typedef itk::MultiplyImageFilter< ImageType, ImageGainType, ImageType > MultiplyImageFilterType;
 
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
   reader->Update();
   VectorImageType::Pointer input = reader->GetOutput();
-  ImageType::Pointer lum ( ImageType::New() ); 
-  lum->SetRegions( input->GetRequestedRegion() );
-  lum->Allocate();
-  lum->SetOrigin( input->GetOrigin() );
+
+  ImageGainToVectorImageGainFilterType::Pointer imageGainToVectorImageGainFilterOut( ImageGainToVectorImageGainFilterType::New() );
+  ImageToVectorImageFilterType::Pointer imageToVectorImageFilterOut( ImageToVectorImageFilterType::New() );
   VectorToImageFilterType::Pointer vectorToImageFilter ( VectorToImageFilterType::New() );
-  if ( input->GetVectorLength() == 3 )
-  {
-    computeLuminance(lum, input);
-  }
-  else
-  {
-    // default is a black and white image, if length>3 and is not equal to one
-    // other case :  how to apply the equalization :
-    // - channel per channel?
-    // - with a general luminance?
-    vectorToImageFilter->SetInput( input );
-    vectorToImageFilter->SetIndex( 0 );
-    vectorToImageFilter->Update();
-    lum = vectorToImageFilter->GetOutput();
-  }
-
-
+  vectorToImageFilter->SetInput( input );
+  vectorToImageFilter->SetIndex( 0 );
+  // Hack to get quick result
   HistogramFilterType::Pointer histofilter( HistogramFilterType::New() );
-  histofilter->SetInput( lum );
+  histofilter->SetInput( vectorToImageFilter->GetOutput() );
   histofilter->Update();
-  // Compute the histogram of the bw image
-  HistogramType * histo = histofilter->GetOutput();
-
-  // Define propertise of the target histogram : nomber of bin, height per bin
-  ImageType::SizeType lumSize = lum->GetLargestPossibleRegion().GetSize(); 
-  int npx = lumSize[0] * lumSize[1];
-  int nbin = histo->GetSize()[0];
-  float height = npx / nbin;
-
-  // The transfer function will be a look up table
-  std::vector< int > lut;
-  float nbOri, nbNew ; 
-  int countnew, countold;
-  countnew = 0;
-  countold = 0;
-  nbNew = height;
-  HistogramType::Iterator it = histo->Begin();
-  nbOri = it.GetFrequency();
-  while ( it != histo->End() )
-  {
-    if (nbOri> nbNew)
+  
+  std::array< int , sizeh > hTarget;
+  createTarget( hTarget , vectorToImageFilter->GetOutput() );
+  int m = input->GetVectorLength ();
+  for (int chanel = 0 ; chanel<m ; chanel++ ) 
     {
-      nbNew += height;
-      // index[0] += 1; 
-      ++countnew;
+    MultiplyImageFilterType::Pointer gainMultiplyer ( MultiplyImageFilterType::New() );
+    vectorToImageFilter->SetIndex( chanel );
+    vectorToImageFilter->Update();
+    ImageGainType::Pointer gainImage ( ImageGainType::New() );
+    gainImage->SetRegions( vectorToImageFilter->GetOutput()->GetRequestedRegion() );
+    gainImage->Allocate();
+    gainImage->SetOrigin( vectorToImageFilter->GetOutput()->GetOrigin() );
+    itk::ImageRegionIterator< ImageGainType > itgain( gainImage , gainImage->GetRequestedRegion() );
+    std::array< int , sizeh > hInput;
+    hInput.fill(0);
+    computehisto( vectorToImageFilter->GetOutput() , hInput );
+
+    // histofilter->SetInput( vectorToImageFilter->GetOutput() );
+    // histofilter->Update();
+    // HistogramType::Pointer hInput = histofilter->GetOutput();
+    
+    std::array< int , sizeh > lut;
+    equalized( hInput , hTarget , lut );
+    itk::ImageRegionIterator< ImageType > itin( vectorToImageFilter->GetOutput() , vectorToImageFilter->GetOutput()->GetRequestedRegion() );
+    itin.GoToBegin();
+    itgain.GoToBegin();
+    while( !itin.IsAtEnd() )
+      {
+      itgain.Set( static_cast<float>(lut[itin.Get()]) / static_cast<float>( itin.Get() ) ) ;
+      // itin.Set(lut[itin.Get()]);
+      ++itin;
+      ++itgain;
+      }
+    // gainImage->SetOrigin( vectorToImageFilter->GetOutput() );
+    // gainImage->SetSpacing( vectorToImageFilter->GetOutput() );
+
+    gainMultiplyer->SetInput1( vectorToImageFilter->GetOutput() );
+    gainMultiplyer->SetInput2( gainImage );
+    gainMultiplyer->Update();
+    imageGainToVectorImageGainFilterOut->SetInput( chanel , gainImage );
+    imageToVectorImageFilterOut->SetInput( chanel , gainMultiplyer->GetOutput() );
+    // imageToVectorImageFilterOut->SetInput( chanel , vectorToImageFilter->GetOutput() ); 
     }
-    else
-    {
-      ++it;
-      nbOri += it.GetFrequency();
-      ++countold;
-      lut.push_back(countnew);
-    }
-  }
 
   // Here we compute a gain image corresponding to the associated gain of the equalization
-  typedef itk::Image< float , 2 > ImageGainType;
-  ImageGainType::Pointer gainImage ( ImageGainType::New() );
-  gainImage->SetRegions( lum->GetRequestedRegion() );
-  gainImage->Allocate();
-  gainImage->SetOrigin( lum->GetOrigin() );
-  itk::ImageRegionIterator< ImageType > itlum( lum , lum->GetRequestedRegion() );
-  itk::ImageRegionIterator< ImageGainType > itgain( gainImage , gainImage->GetRequestedRegion() );
-  itlum.GoToBegin();
-  itgain.GoToBegin();
-  while( !itlum.IsAtEnd() )
-  {
-    itgain.Set( static_cast<float>(lut[itlum.Get()]) / static_cast<float>( itlum.Get() ) ) ;
-    ++itlum;
-    ++itgain;
-  }
-
-  typedef  itk::MultiplyImageFilter< VectorImageType, ImageGainType, VectorImageType > MultiplyImageFilterType;
-  MultiplyImageFilterType::Pointer gainMultiplyer ( MultiplyImageFilterType::New() );
-  gainMultiplyer->SetInput1( input );
-  gainMultiplyer->SetInput2( gainImage );
-  gainMultiplyer->Update();
-  typedef otb::ImageFileWriter<VectorImageType>  writertype;
-  writertype::Pointer writer( writertype::New());
+  VectorGainType::Pointer gainVector = imageGainToVectorImageGainFilterOut->GetOutput();
+  typedef otb::ImageFileWriter<VectorImageType>  WriterType;
+  WriterType::Pointer writer( WriterType::New());
   writer->SetFileName( argv[2] );
-  writer->SetInput( gainMultiplyer->GetOutput() );
+  writer->SetInput( imageToVectorImageFilterOut->GetOutput() );
   writer->Update();
+
+  typedef otb::ImageFileWriter<VectorGainType>  WriterGainType;
+  WriterGainType::Pointer writergain( WriterGainType::New() );
+  writergain->SetFileName( argv[3] );
+  writergain->SetInput( gainVector );
+  writergain->Update();
   return 0;
 }
