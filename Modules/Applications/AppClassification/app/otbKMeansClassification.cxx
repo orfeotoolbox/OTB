@@ -46,10 +46,23 @@ private:
     SetDescription("Unsupervised KMeans image classification");
 
     SetDocName("Unsupervised KMeans image classification");
-    SetDocLongDescription("Performs unsupervised KMeans image classification.");
+    SetDocLongDescription("Performs unsupervised KMeans image classification."
+      "KMeansClassification is a composite application, using an existing training and classification application."
+      "The SharkKMeans model is used."
+
+      "The steps of this composite application : \
+        1) ImageEnveloppe : create a shapefile (1 polygon), \
+        2) PolygonClassStatistics : compute the statistics, \
+        3) SampleSelection : select the samples by constant strategy in the shapefile, \
+        4) SamplesExtraction :  extract the samples descriptors, \
+        5) TrainVectorClassifier : train the SharkKMeans model, \
+        6) ImageClassifier : performs the classification of the input image according to a model file."
+
+        "If you want keep the temporary files (sample selected, model file, ...), initialize cleanup parameter.");
+
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("otbImageEnveloppe otbPolygonClassStatistics otbSampleSelection otbSamplesExtraction otbTrainVectorClassifier otbImageClassifier");
 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Segmentation);
@@ -139,5 +152,4 @@ private :
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::KMeansClassification)
-
 
