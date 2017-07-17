@@ -70,7 +70,7 @@ private:
     SetDocExampleParameterValue("nc", "5");
     SetDocExampleParameterValue("maxit", "1000");
     SetDocExampleParameterValue("ct", "0.0001");
-    SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif");
+    SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif uint8");
 
     SetOfficialDocLink();
   }
