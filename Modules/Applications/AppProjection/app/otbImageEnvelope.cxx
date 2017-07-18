@@ -56,21 +56,25 @@ private:
 
     // Documentation
     SetDocName("Image Envelope");
-    SetDocLongDescription("Build a vector data containing the polygon of the image envelope.");
+    SetDocLongDescription("Build a vector data containing the image envelope polygon. "
+      "Useful for some projection, you can set the polygon with more points with the sr parameter. "
+      "This filter supports user-specified output projection. "
+      "If no projection is defined, the standard WGS84 projection will be used.");
+
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Geometry);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image.");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "Input image filename.");
 
-    AddParameter(ParameterType_OutputVectorData,  "out",   "Output Vector Data");
-    SetParameterDescription("out", "Vector data file containing the envelope");
+    AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
+    SetParameterDescription("out", "Vector data file containing the envelope.");
 
     AddParameter(ParameterType_Int, "sr", "Sampling Rate");
-    SetParameterDescription("sr", "Sampling rate for image edges (in pixel)");
+    SetParameterDescription("sr", "Sampling rate for image edges (in pixel).");
     SetDefaultParameterInt("sr",0);
     MandatoryOff("sr");
     DisableParameter("sr");
