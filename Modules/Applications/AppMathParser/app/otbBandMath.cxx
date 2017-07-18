@@ -67,16 +67,16 @@ private:
     SetDocLongDescription(
       "This application performs a mathematical operation on several multi-band "
       "images and outputs the result into a monoband image. Evaluation of the "
-      "mathematical formula is done by the MuParser libraries.\n\n"
+      "mathematical formula is done by the muParser libraries.\n\n"
 
-      "MuParser version superior to 2.0, provides the '&&' and '||' logical "
+      "muParser version superior to 2.0, provides the '&&' and '||' logical "
       "operators, and a ternary operator 'boolean_expression ? if_true : "
       "if_false'.\n\n"
 
-      "Older versions of MuParser (prior to v-2.0) provides only the 'and' and "
+      "Older versions of muParser (prior to v-2.0) provides only the 'and' and "
       "'or' logical operators, and a ternary operator 'if(; ; )'.\n\n"
 
-      "The list of features and operators is available on the MuParser website: "
+      "The list of features and operators is available on the muParser website: "
       "http://muparser.sourceforge.net/\n\n"
       );
 
@@ -102,7 +102,7 @@ private:
     AddParameter( ParameterType_String, "exp", "Expression");
     SetParameterDescription(
       "exp",
-      "The MuParser mathematical expression to apply on input images.\n"
+      "The muParser mathematical expression to apply on input images.\n"
       "Use im1b1 as first band of first image, im1b2 for the second band of "
       "first image.\n"
       "Use im2b1 as first band of second image, im2b2 for the second band of "
