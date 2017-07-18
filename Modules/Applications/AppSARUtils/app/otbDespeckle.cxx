@@ -61,13 +61,37 @@ private:
 
     // Documentation
     SetDocName("Despeckle");
-    SetDocLongDescription("This application reduce speckle noise. Four methods are available: Lee, Frost, GammaMAP and Kuan.");
-    SetDocLimitations("None");
+    SetDocLongDescription("SAR images are affected by speckle noise that inherently exists in and which"
+     " degrades the image quality. It is caused by the coherent nature of"
+     " back-scattered waves from multiple distributed targets. It is locally strong"
+     " and it increases the mean Grey level of a local area. \n\n"
+     "Several different methods are used to eliminate speckle noise, based upon"
+     " different mathematical models of the phenomenon. The application includes four"
+     " methods: Lee [1], Frost [2], GammaMAP [3] and Kuan [4]. \n");
+
+    SetDocLimitations("The application does not handle complex image as input.");
+
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+
+    SetDocSeeAlso("[1] J. Lee. Digital image enhancement and noise filtering by"
+                  "use of local statistics. IEEE Transactions on Pattern Analysis and Machine"
+                  "Intelligence, 2:165–168, 1980.\n"
+                  "[2] V. S. Frost, et al., A Model for Radar Images and Its"
+                  "Application to Adaptive Digital Filtering of Multiplicative"
+                  "Noise, IEEE Trans. Pattern Anal., Machine Intell., vol. 4,"
+                  "no. 2, pp. 157-166, Mar. 1982.\n"
+                  "[3] A. Lopes, E. Nezry, R. Touzi and H. Laur, Maximum A"
+                  "Posteriori Speckle Filtering And First Order Texture Models"
+                  "In Sar Images, 10th" "Annual International Symposium on"
+                  "Geoscience and Remote Sensing, 1990,pp. 2409-2412.  doi:"
+                  "10.1109/IGARSS.1990.689026\n"
+                  "[4] Kuan, D.  T., Sawchuk, A.  A., Strand, T.  C, and Chavel,"
+                  "P., 1987.  Adaptive restoration of image with speckle.  IEEE"
+                  "Trans on Acoustic Speech and Signal Processing, 35,"
+                  "pp. 373-383.");
 
     AddDocTag(Tags::Filter);
-	AddDocTag(Tags::SAR);
+	  AddDocTag(Tags::SAR);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
@@ -76,39 +100,47 @@ private:
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_Choice,"filter","speckle filtering method");
+    AddParameter(ParameterType_Choice,"filter","Speckle filtering method");
+    
     AddChoice("filter.lee","Lee");
     SetParameterDescription("filter.lee","Lee filter");
+
     AddChoice("filter.frost","Frost");
     SetParameterDescription("filter.frost","Frost filter");
+
     AddChoice("filter.gammamap","GammaMap");
     SetParameterDescription("filter.gammamap","GammaMap filter");
+
     AddChoice("filter.kuan","Kuan");
     SetParameterDescription("filter.kuan","Kuan filter");
 
     AddParameter(ParameterType_Int,"filter.lee.rad","Radius");
-    SetParameterDescription("filter.lee.rad","Radius for lee filter");
+    SetParameterDescription("filter.lee.rad","Radius in pixel");
 
-    AddParameter(ParameterType_Float,"filter.lee.nblooks","nb looks");
-    SetParameterDescription("filter.lee.nblooks","Nb looks for lee filter");
+    AddParameter(ParameterType_Float,"filter.lee.nblooks","Number of looks");
+    SetParameterDescription("filter.lee.nblooks","Number of looks in the input image.");
 
     AddParameter(ParameterType_Int,"filter.frost.rad","Radius");
-    SetParameterDescription("filter.frost.rad","Radius for frost filter");
+    SetParameterDescription("filter.frost.rad","Radius in pixel.");
 
-    AddParameter(ParameterType_Float,"filter.frost.deramp","deramp");
-    SetParameterDescription("filter.frost.deramp","Decrease factor declaration");
+    AddParameter(ParameterType_Float,"filter.frost.deramp","Deramp factor");
+    SetParameterDescription("filter.frost.deramp","factor use to control the\n"
+       "exponential function used to weight effect of the distance between the\n"
+       "central pixel and its neighborhood. Increasing the deramp parameter will\n"
+       "lead to take more into account pixels farther from the center and\n"
+       "therefore increase the smoothing effects.");
     
     AddParameter(ParameterType_Int,"filter.gammamap.rad","Radius");
-    SetParameterDescription("filter.gammamap.rad","Radius for GammaMAP filter");
+    SetParameterDescription("filter.gammamap.rad","Radius in pixel.");
 
-    AddParameter(ParameterType_Float,"filter.gammamap.nblooks","nb looks");
-    SetParameterDescription("filter.gammamap.nblooks","Nb looks for GammaMAP filter");
+    AddParameter(ParameterType_Float,"filter.gammamap.nblooks","Number of looks");
+    SetParameterDescription("filter.gammamap.nblooks","Number of looks in the input image.");
     
     AddParameter(ParameterType_Int,"filter.kuan.rad","Radius");
-    SetParameterDescription("filter.kuan.rad","Radius for Kuan filter");
+    SetParameterDescription("filter.kuan.rad","Radius in pixel.");
 
-    AddParameter(ParameterType_Float,"filter.kuan.nblooks","nb looks");
-    SetParameterDescription("filter.kuan.nblooks","Nb looks for Kuan filter");
+    AddParameter(ParameterType_Float,"filter.kuan.nblooks","Number of looks");
+    SetParameterDescription("filter.kuan.nblooks","Number of looks in the input image.");
 
     // Default values
     SetDefaultParameterInt("filter.lee.rad", 1);
