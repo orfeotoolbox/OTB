@@ -20,11 +20,11 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-#include <otbMultiToMonoChannelExtractROI.h>
+#include "otbMultiToMonoChannelExtractROI.h"
 
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
-#include <itkMacro.h>
+#include "itkMacro.h"
 
 namespace otb
 {
