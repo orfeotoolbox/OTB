@@ -32,6 +32,8 @@ otb_test_application(NAME apTvUtComputeModulusAndPhase_1inputComplex
   ${TEMP}/apTvUtPha1inputComplex.tif
   )
 
+#----------- Despeckle TESTS ----------------
+
 otb_test_application(NAME  apTvDespeckleLee
   APP  Despeckle
   OPTIONS -in ${INPUTDATA}/GomaAvant.tif
