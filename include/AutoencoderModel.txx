@@ -167,6 +167,7 @@ void AutoencoderModel<TInputValue,AutoencoderType>::TrainOneSparseLayer(shark::A
 		{	
 		File << optimizer.solution().value << std::endl;
 		}
+		std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
 	} while( !criterion.stop( optimizer.solution() ) );
 	std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
 	if (this->m_WriteLearningCurve =true) 
