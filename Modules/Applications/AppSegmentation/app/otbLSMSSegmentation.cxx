@@ -217,51 +217,61 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("LSMSSegmentation");
-    SetDescription("Second step of the exact Large-Scale Mean-Shift segmentation workflow.");
+    SetDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS) [1].");
 
     SetDocName("Exact Large-Scale Mean-Shift segmentation, step 2");
-    SetDocLongDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS). Filtered range image and spatial image should be created with the MeanShiftSmoothing application, with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account. This application will produce a labeled image where neighbor pixels whose range distance is below range radius (and optionally spatial distance below spatial radius) will be grouped together into the same cluster. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results. Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows removing all temporary file as soon as they are not needed anymore (if cleanup is activated, tmpdir set and tmpdir does not exists before running the application, it will be removed as well during cleanup). The tmpdir option allows defining a directory where to write the temporary files. Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.");
-    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
+    SetDocLongDescription("This application will produce a labeled image where neighbor pixels whose range distance is below range radius (and optionally spatial distance below spatial radius) will be grouped together into the same cluster. For large images one can use the tilesizex and tilesizey parameters for tile-wise processing, with the guarantees of identical results.\n\n"
+                          "Filtered range image and spatial image should be created with the MeanShiftSmoothing application outputs (fout and foutpos) [2], with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account.\n\n"
+                          "Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows removing all temporary file as soon as they are not needed anymore (if cleanup is activated, tmpdir set and tmpdir does not exists before running the application, it will be removed as well during cleanup). The tmpdir option allows defining a directory where to write the temporary files.\n\n"
+                          "Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.\n\n"
+                          "The output of this application can be passed to the LSMSSmallRegionMerging [3] or LSMSVectorization [4] to complete the LSMS workflow.");
+    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) [1] and may not be suited for any other purpose. This application is not compatible with in-memory connection since it does its own internal streaming.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso("MeanShiftSmoothing, LSMSSmallRegionsMerging, LSMSVectorization");
+    SetDocSeeAlso( "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
+                   " mean-shift algorithm and its application to the segmentation of"
+                   " arbitrarily large remote sensing images. IEEE Transactions on"
+                   " Geoscience and Remote Sensing, 53(2), 952-964.\n"
+                   "[2] MeanShiftSmoothing\n"
+                   "[3] LSMSSmallRegionsMerging\n"
+                   "[4] LSMSVectorization");
     AddDocTag(Tags::Segmentation);
     AddDocTag("LSMS");
 
     AddParameter(ParameterType_InputImage,  "in",    "Filtered image");
-    SetParameterDescription( "in", "The filtered image (cf. Adaptive MeanShift Smoothing application)." );
-    AddParameter(ParameterType_InputImage,  "inpos",    "Spatial image");
-    SetParameterDescription( "inpos", " The spatial image. Spatial input is the displacement map (output of the Adaptive MeanShift Smoothing application)." );
+    SetParameterDescription( "in", "The filtered image, corresponding to the fout output parameter of the MeanShiftSmoothing application." );
+    AddParameter(ParameterType_InputImage,  "inpos",    "Filtered position image");
+    SetParameterDescription( "inpos", " The filtered position image, corresponding to the foutpos output parameter of the MeanShiftSmoothing application.");
     MandatoryOff("inpos");
 
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription( "out", "The output image. The output image is the segmentation of the filtered image. It is recommended to set the pixel type to uint32." );
+    AddParameter(ParameterType_OutputImage, "out", "Output labeled Image");
+    SetParameterDescription( "out", "This output contains the segmented image, where each pixel value is the unique label of the segment it belongs to. It is recommended to set the pixel type to uint32." );
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
     AddParameter(ParameterType_Float, "spatialr", "Spatial radius");
-    SetParameterDescription("spatialr", "Spatial radius of the neighborhood.");
+    SetParameterDescription("spatialr", "Threshold on Spatial distance to consider pixels in the same segment. A good value is half the spatial radius used in the MeanShiftSmoothing application (spatialr parameter).");
     SetDefaultParameterFloat("spatialr", 5);
     SetMinimumParameterFloatValue("spatialr", 0);
     MandatoryOff("spatialr");
     
     AddParameter(ParameterType_Float, "ranger", "Range radius");
-    SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
+    SetParameterDescription("ranger", "Threshold on spectral signature euclidean distance (expressed in radiometry unit) to consider pixels in the same segment. A good value is half the range radius used in the MeanShiftSmoothing application (ranger parameter).");
     SetDefaultParameterFloat("ranger", 15);
     SetMinimumParameterFloatValue("ranger", 0);
     MandatoryOff("ranger");
 
-    AddParameter(ParameterType_Int, "minsize", "Minimum Region Size");
-    SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is deleted.");
+    AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
+    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, a segment is of size lower than this criterion, the segment is discarded.");
     SetDefaultParameterInt("minsize", 0);
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
 
     AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
-    SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
+    SetParameterDescription("tilesizex", "Size of tiles along the X-axis for tile-wise processing.");
     SetDefaultParameterInt("tilesizex", 500);
     SetMinimumParameterIntValue("tilesizex", 1);
 
     AddParameter(ParameterType_Int, "tilesizey", "Size of tiles in pixel (Y-axis)");
-    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis.");
+    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis for tile-wise processing.");
     SetDefaultParameterInt("tilesizey", 500);
     SetMinimumParameterIntValue("tilesizey", 1);
 
@@ -272,7 +282,7 @@ private:
 
     AddParameter(ParameterType_Empty,"cleanup","Temporary files cleaning");
     EnableParameter("cleanup");
-    SetParameterDescription("cleanup","If activated, the application will try to clean all temporary files it created");
+    SetParameterDescription("cleanup","If activated, the application will try to remove all temporary files it created.");
     MandatoryOff("cleanup");
 
     // Doc example parameter settings
