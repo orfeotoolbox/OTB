@@ -66,6 +66,7 @@ computehisto( ImageType::Pointer const input,
               int nH)
 {
   ImageType::IndexType index;
+  int nbBin = inputHisto.size();
   for (int i = 0 ; i < wThumbnail * nW ; i++)
     {
     for (int j = 0 ; j< hThumbnail * nH ; j++)
@@ -90,10 +91,11 @@ createTarget( std::array< int , sizeh > & targetHisto,
 void
 createTarget( std::array< int , sizeh > & targetHisto,
               int h,
-              int l )
+              int l)
 {
   int nbPixel = h * l;
-  int height = nbPixel/256 ;
+  int nbBin = targetHisto.size();
+  int height = nbPixel/nbBin;
   targetHisto.fill( height );
 }
 
@@ -141,7 +143,7 @@ interpoleGain(std::array< int , sizeh > lut[],
     gain += lut[( lutX - 1 ) + (lutY - 1 ) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
     w += std::abs(y - 0.5) * std::abs(x - 0.5);
     }
-  if (down && left)
+  if ( down && left )
     {
     gain += lut[( lutX - 1 ) + (lutY + 1) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
     w += std::abs(y - 0.5) * std::abs(x - 0.5);
