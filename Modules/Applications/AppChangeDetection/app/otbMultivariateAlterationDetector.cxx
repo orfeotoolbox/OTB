@@ -46,58 +46,59 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("MultivariateAlterationDetector");
-    SetDescription("Multivariate Alteration Detector");
+    SetDescription("Change detection by Multivariate Alteration Detector (MAD) algorithm");
 
     // Documentation
-    SetDocName("Multivariate alteration detector");
-    SetDocLongDescription("This application detects change between two given images.");
-    SetDocLimitations("None");
-    SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" This filter implements the Multivariate Alteration Detector, based "
-                  " on the following work: \n"
-                  " A. A. Nielsen and K. Conradsen, Multivariate alteration detection"
-                  " (mad) in multispectral, bi-temporal image data: a new approach to"
-                  " change detection studies, Remote Sens. Environ., vol. 64,"
-                  " pp. 1-19, (1998) \n"
-                  " \n"
-                  " Multivariate Alteration Detector takes two images as inputs and "
-                  " produce a set of N change maps as a VectorImage (where N is the "
-                  " maximum of number of bands in first and second image) with the "
-                  " following properties: \n"
-                  " - Change maps are differences of a pair of linear combinations of "
-                  " bands from image 1 and bands from image 2 chosen to maximize the "
-                  " correlation. \n"
-                  " - Each change map is orthogonal to the others. \n"
-                  " \n"
-                  " This is a statistical method which can handle different modalities "
-                  " and even different bands and number of bands between images. \n"
-                  " \n"
-                  " If numbers of bands in image 1 and 2 are equal, then change maps "
-                  " are sorted by increasing correlation. If number of bands is "
-                  " different, the change maps are sorted by decreasing correlation. \n"
-                  " \n"
-                  " The GetV1() and GetV2() methods allow retrieving the linear "
-                  " combinations used to generate the Mad change maps as a vnl_matrix of "
-                  " double, and the GetRho() method allows retrieving the correlation "
-                  " associated to each Mad change maps as a vnl_vector. \n"
-                  " \n"
-                  " This filter has been implemented from the Matlab code kindly made "
-                  " available by the authors here: \n"
-                  " http://www2.imm.dtu.dk/~aa/software.html \n"
-                  " \n"
-                  " Both cases (same and different number of bands) have been validated "
-                  " by comparing the output image to the output produced by the Matlab "
-                  " code, and the reference images for testing have been generated from "
-                  " the Matlab code using Octave." );
+    SetDocName("Multivariate Alteration Detector");
+    SetDocLongDescription("This application performs change detection between two multispectral"
+                          " images using the Multivariate Alteration Detector (MAD) [1]"
+                          " algorithm.\n\n"
+                          "The MAD algorithm produces a set of N change maps (where N is the"
+                          " maximum number of bands in first and second input images), with the"
+                          " following properties:\n"
+                          " - Change maps are differences of a pair of linear combinations of "
+                          " bands from image 1 and bands from image 2 chosen to maximize the "
+                          " correlation, \n"
+                          " - Each change map is orthogonal to the others.\n"
+                          " \n"
+                          "This is a statistical method which can handle different modalities"
+                          " and even different bands and number of bands between images. \n"
+                          " \n"
+                          "The application will output all change maps into a single multiband"
+                          " image. If numbers of bands in image 1 and 2 are equal, then change"
+                          " maps are sorted by increasing correlation. If number of bands is"
+                          " different, the change maps are sorted by decreasing correlation. \n"
+                          " \n"
+                          "The application will also print the following information:\n"
+                          "- Mean1 and Mean2 which are the mean values of bands for both input"
+                          " images,\n"
+                          "- V1 and V2 which are the two linear transform that are applied to"
+                          " input image 1 and input image 2 to build the change map,\n"
+                          "- Rho, the vector of correlation associated to each change map.\n"
+                          " \n"
+                          "The OTB filter used in this application has been implemented from the"
+                          " Matlab code kindly made available by the authors here [2]. Both cases"
+                          " (same and different number of bands) have been validated"
+                          " by comparing the output image to the output produced by the Matlab "
+                          " code, and the reference images for testing have been generated from "
+                          " the Matlab code using Octave." );
 
-    AddDocTag(Tags::FeatureExtraction);
+                          
+    SetDocLimitations("Input images 1 and 2 should share exactly the same origin, spacing, size, and projection if any.");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("[1] Nielsen, A. A., & Conradsen, K. (1997). Multivariate alteration"
+                  "detection (MAD) in multispectral, bi-temporal image data: A new"
+                  "approach to change detection studies.\n"
+                  "[2] http://www2.imm.dtu.dk/~aa/software.html");
+
+    AddDocTag(Tags::ChangeDetection);
 
     AddParameter(ParameterType_InputImage,  "in1", "Input Image 1");
-    SetParameterDescription("in1","Image which describe initial state of the scene.");
+    SetParameterDescription("in1","Multiband image of the scene before perturbations");
     AddParameter(ParameterType_InputImage,  "in2", "Input Image 2");
-    SetParameterDescription("in2","Image which describe scene after perturbations.");
+    SetParameterDescription("in2","Mutliband image of the scene after perturbations.");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
-    SetParameterDescription("out","Image of detected changes.");
+    SetParameterDescription("out","Multiband image containing change maps. Each map will be in range [0,1], so a floating point output type is advised.");
 
     AddRAMParameter();
 
