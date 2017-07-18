@@ -96,18 +96,18 @@ SetParameterDescription("filter", "Choice of edge feature");
 
 //Gradient Section
 AddChoice("filter.gradient", "Gradient");
-SetParameterDescription("Gradient", 
+SetParameterDescription("filter.gradient", 
   "This filter computes the gradient magnitude of the image at each pixel.");
 
 //Sobel Section
 AddChoice("filter.sobel", "Sobel");
-SetParameterDescription("Sobel", 
+SetParameterDescription("filter.sobel", 
   "This filter uses the Sobel operator to calculate the image gradient and "
   "then finds the magnitude of this gradient vector.");
 
 //Touzi Section
 AddChoice("filter.touzi", "Touzi");
-SetParameterDescription("Touzi", 
+SetParameterDescription("filter.touzi", 
   "This filter is more suited for radar images. It has a spatial parameter "
   "to avoid speckle noise perturbations. The larger the radius is, "
   "less sensible to the speckle noise the filter is, but micro edge will be missed.");
