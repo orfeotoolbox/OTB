@@ -61,13 +61,21 @@ private:
 
     // Documentation
     SetDocName("Despeckle");
-    SetDocLongDescription("This application reduce speckle noise. Four methods are available: Lee, Frost, GammaMAP and Kuan.");
+    SetDocLongDescription("This application perform speckle filtering. SAR "
+     " images are affected by speckle noise that inherently exists in and which "
+     " degrades the image quality. It is caused by the coherent nature of "
+     " backscattered waves from multiple distributed targets. It is locally strong "
+     " and it increases the mean grey level of a local area. "
+
+     " Several different methods are used to eliminate speckle noise, based upon "
+     " different mathematical models of the phenomenon. The application includes 4 "
+     " methods: Lee, Frost, GammaMAP and Kuan.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("");
 
     AddDocTag(Tags::Filter);
-	AddDocTag(Tags::SAR);
+	  AddDocTag(Tags::SAR);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
@@ -76,13 +84,17 @@ private:
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_Choice,"filter","speckle filtering method");
+    AddParameter(ParameterType_Choice,"filter","Speckle filtering method");
+    
     AddChoice("filter.lee","Lee");
     SetParameterDescription("filter.lee","Lee filter");
+
     AddChoice("filter.frost","Frost");
     SetParameterDescription("filter.frost","Frost filter");
+
     AddChoice("filter.gammamap","GammaMap");
     SetParameterDescription("filter.gammamap","GammaMap filter");
+
     AddChoice("filter.kuan","Kuan");
     SetParameterDescription("filter.kuan","Kuan filter");
 
