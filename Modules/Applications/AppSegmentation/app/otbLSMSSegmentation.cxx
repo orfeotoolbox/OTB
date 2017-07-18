@@ -220,12 +220,34 @@ private:
     SetDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS) [1].");
 
     SetDocName("Exact Large-Scale Mean-Shift segmentation, step 2");
-    SetDocLongDescription("This application will produce a labeled image where neighbor pixels whose range distance is below range radius (and optionally spatial distance below spatial radius) will be grouped together into the same cluster. For large images one can use the tilesizex and tilesizey parameters for tile-wise processing, with the guarantees of identical results.\n\n"
-                          "Filtered range image and spatial image should be created with the MeanShiftSmoothing application outputs (fout and foutpos) [2], with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account.\n\n"
-                          "Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows removing all temporary file as soon as they are not needed anymore (if cleanup is activated, tmpdir set and tmpdir does not exists before running the application, it will be removed as well during cleanup). The tmpdir option allows defining a directory where to write the temporary files.\n\n"
-                          "Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.\n\n"
-                          "The output of this application can be passed to the LSMSSmallRegionMerging [3] or LSMSVectorization [4] to complete the LSMS workflow.");
-    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) [1] and may not be suited for any other purpose. This application is not compatible with in-memory connection since it does its own internal streaming.");
+    SetDocLongDescription("This application will produce a labeled image where neighbor pixels"
+                          " whose range distance is below range radius (and optionally spatial"
+                          " distance below spatial radius) will be grouped together into the same"
+                          " cluster. For large images one can use the tilesizex and tilesizey"
+                          " parameters for tile-wise processing, with the guarantees of identical"
+                          " results.\n\n"
+                          "Filtered range image and spatial image should be created with the"
+                          " MeanShiftSmoothing application outputs (fout and foutpos) [2], with"
+                          " modesearch parameter disabled. If spatial image is not set, the"
+                          " application will only process the range image and spatial radius"
+                          " parameter will not be taken into account.\n\n"
+                          "Please note that this application will generate a lot of temporary"
+                          " files (as many as the number of tiles), and will therefore require"
+                          " twice the size of the final result in term of disk space. The cleanup"
+                          " option (activated by default) allows removing all temporary file as"
+                          " soon as they are not needed anymore (if cleanup is activated, tmpdir"
+                          " set and tmpdir does not exists before running the application, it will"
+                          " be removed as well during cleanup). The tmpdir option allows defining"
+                          " a directory where to write the temporary files.\n\n"
+                          "Please also note that the output image type should be set to uint32 to"
+                          " ensure that there are enough labels available.\n\n"
+                          "The output of this application can be passed to the"
+                          " LSMSSmallRegionMerging [3] or LSMSVectorization [4] applications to"
+                          " complete the LSMS workflow.");
+    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation"
+                      " workflow (LSMS) [1] and may not be suited for any other purpose. This"
+                      " application is not compatible with in-memory connection since it does"
+                      " its own internal streaming.");
     SetDocAuthors("David Youssefi");
     SetDocSeeAlso( "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
                    " mean-shift algorithm and its application to the segmentation of"
@@ -244,7 +266,7 @@ private:
     MandatoryOff("inpos");
 
     AddParameter(ParameterType_OutputImage, "out", "Output labeled Image");
-    SetParameterDescription( "out", "This output contains the segmented image, where each pixel value is the unique label of the segment it belongs to. It is recommended to set the pixel type to uint32." );
+    SetParameterDescription( "out", "This output contains the segmented image, where each pixel value is the unique integer label of the segment it belongs to. It is recommended to set the pixel type to uint32." );
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
     AddParameter(ParameterType_Float, "spatialr", "Spatial radius");
