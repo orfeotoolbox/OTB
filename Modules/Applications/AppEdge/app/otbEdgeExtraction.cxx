@@ -64,11 +64,16 @@ private:
 void DoInit() ITK_OVERRIDE
 {
 SetName("EdgeExtraction");
-SetDescription("Computes edge features on every pixel of the input image selected channel");
+SetDescription(
+  "This application computes edge features on every pixel of the input image "
+  "selected channel");
 
 // Documentation
 SetDocName("Edge Feature Extraction");
-SetDocLongDescription("This application computes edge features on a mono band image");
+SetDocLongDescription(
+  "This application computes edge features on a selected channel of the input."
+  "It uses different filter such as gradient, Sobel and Touzi");
+
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otb class");
@@ -77,7 +82,7 @@ AddDocTag(Tags::FeatureExtraction);
 AddDocTag("Edge");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
-SetParameterDescription("in", "The input image to compute the features on.");
+SetParameterDescription("in", "The input image on which the features are computed.");
 
 AddParameter(ParameterType_Int,  "channel",  "Selected Channel");
 SetParameterDescription("channel", "The selected channel index");
@@ -91,15 +96,26 @@ SetParameterDescription("filter", "Choice of edge feature");
 
 //Gradient Section
 AddChoice("filter.gradient", "Gradient");
+SetParameterDescription("Gradient", 
+  "This filter computes the gradient magnitude of the image at each pixel.");
 
 //Sobel Section
 AddChoice("filter.sobel", "Sobel");
+SetParameterDescription("Sobel", 
+  "This filter uses the Sobel operator to calculate the image gradient and "
+  "then finds the magnitude of this gradient vector.");
 
 //Touzi Section
 AddChoice("filter.touzi", "Touzi");
-AddParameter(ParameterType_Int, "filter.touzi.xradius", "The X Radius");
+SetParameterDescription("Touzi", 
+  "This filter is more suited for radar images. It has a spatial parameter "
+  "to avoid speckle noise perturbations. The larger the radius is, "
+  "less sensible to the speckle noise the filter is, but micro edge will be missed.");
+AddParameter(ParameterType_Int, "filter.touzi.xradius", 
+  "The X radius of the neighborhood.");
 SetDefaultParameterInt("filter.touzi.xradius", 1);
-AddParameter(ParameterType_Int, "filter.touzi.yradius", "The Y Radius");
+AddParameter(ParameterType_Int, "filter.touzi.yradius", 
+  "The Y radius of the neighborhood.");
 SetDefaultParameterInt("filter.touzi.yradius", 1);
 
 //Canny Section
