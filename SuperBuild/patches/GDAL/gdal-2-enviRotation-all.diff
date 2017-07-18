@@ -22,7 +22,7 @@ diff -burN gdal-2.2.1-orig/frmts/raw/envidataset.cpp gdal-2.2.1/frmts/raw/envida
          oSRS.SetLocalCS(papszFields[0]);
  
 +    // Arbitrary : assume that the Y axis isn't flipped
-+    if( STARTS_WITH_CI(papszFields[0], "Arbitrary" )
++    if( STARTS_WITH_CI(papszFields[0], "Arbitrary" ) )
 +      {
 +      adfGeoTransform[2] *= -1.0;
 +      adfGeoTransform[5] *= -1.0;
