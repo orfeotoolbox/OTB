@@ -37,9 +37,23 @@ namespace Wrapper
     SetParameterDescription("classifier.libsvm", "This group of parameters allows setting SVM classifier parameters.");
     AddParameter(ParameterType_Choice, "classifier.libsvm.k", "SVM Kernel Type");
     AddChoice("classifier.libsvm.k.linear", "Linear");
+    SetParameterDescription("classifier.libsvm.k.linear", 
+      "Linear Kernel, no mapping is done, this is the fastest option.");
+
     AddChoice("classifier.libsvm.k.rbf", "Gaussian radial basis function");
+    SetParameterDescription("classifier.libsvm.k.rbf", 
+      "This kernel is a good choice in most of the case. It is "
+      "an exponential function of the euclidian distance between "
+      "the vectors.");
+
     AddChoice("classifier.libsvm.k.poly", "Polynomial");
+    SetParameterDescription("classifier.libsvm.k.poly", 
+      "Polynomial Kernel, the mapping is a polynomial function.")
+
     AddChoice("classifier.libsvm.k.sigmoid", "Sigmoid");
+    SetParameterDescription("classifier.libsvm.k.sigmoid", 
+      "The kernel is a hyperbolic tangente function of the vectors.");
+
     SetParameterString("classifier.libsvm.k", "linear", false);
     SetParameterDescription("classifier.libsvm.k", "SVM Kernel Type.");
     AddParameter(ParameterType_Choice, "classifier.libsvm.m", "SVM Model Type");
@@ -47,21 +61,41 @@ namespace Wrapper
     if (this->m_RegressionFlag)
       {
       AddChoice("classifier.libsvm.m.epssvr", "Epsilon Support Vector Regression");
+      SetParameterDescription("classifier.libsvm.m.epssvr",
+       "The distance between feature vectors from the training set and the "
+       "fitting hyper-plane must be less than Epsilon. For outliers the penalty "
+       "multiplier C is used ");
+
       AddChoice("classifier.libsvm.m.nusvr", "Nu Support Vector Regression");
       SetParameterString("classifier.libsvm.m", "epssvr", false);
+      SetParameterDescription("classifier.libsvm.m.nusvr",
+       "Same as the epsilon regression except that this time the bounded "
+       "parameter nu is used instead of epsilon");
       }
     else
       {
       AddChoice("classifier.libsvm.m.csvc", "C support vector classification");
+      SetParameterDescription("classifier.libsvm.m.csvc", 
+      "This formulation allows imperfect separation of classes. The penalty "
+      "is set through the cost parameter C.");
+
       AddChoice("classifier.libsvm.m.nusvc", "Nu support vector classification");
+      SetParameterDescription("classifier.libsvm.m.nusvc", 
+        "This formulation allows imperfect separation of classes. The penalty "
+        "is set through the cost parameter Nu. As compared to C, Nu is harder "
+        "to optimize, and may not be as fast.");
+
       AddChoice("classifier.libsvm.m.oneclass", "Distribution estimation (One Class SVM)");
       SetParameterString("classifier.libsvm.m", "csvc", false);
       }
+
     AddParameter(ParameterType_Float, "classifier.libsvm.c", "Cost parameter C");
     SetParameterFloat("classifier.libsvm.c",1.0, false);
-    SetParameterDescription(
-        "classifier.libsvm.c",
-        "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
+    SetParameterDescription("classifier.libsvm.c",
+        "SVM models have a cost parameter C (1 by default) to control the "
+        "trade-off between training errors and forcing rigid margins.");
+    
+    // It seems that it miss a nu parameter for the nu-SVM use. 
     AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "Parameters optimization");
     MandatoryOff("classifier.libsvm.opt");
     SetParameterDescription("classifier.libsvm.opt", "SVM parameters optimization flag.");
@@ -73,8 +107,13 @@ namespace Wrapper
       {
       AddParameter(ParameterType_Float, "classifier.libsvm.eps", "Epsilon");
       SetParameterFloat("classifier.libsvm.eps",1e-3, false);
+      SetParameterDescription("classifier.libsvm.eps", 
+        "Parameter for the epsilon regression mode.");
       AddParameter(ParameterType_Float, "classifier.libsvm.nu", "Nu");
       SetParameterFloat("classifier.libsvm.nu",0.5, false);
+      SetParameterDescription("classifier.libsvm.nu", 
+        "Cost parameter Nu, in the range 0..1, the larger the value, "
+        "the smoother the decision.");
       }
   }
 
