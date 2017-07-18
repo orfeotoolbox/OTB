@@ -66,7 +66,7 @@ private:
      " back-scattered waves from multiple distributed targets. It is locally strong"
      " and it increases the mean Grey level of a local area. \n\n"
      "Several different methods are used to eliminate speckle noise, based upon"
-     " different mathematical models of the phenomenon. The application includes four "
+     " different mathematical models of the phenomenon. The application includes four"
      " methods: Lee [1], Frost [2], GammaMAP [3] and Kuan [4]. \n");
 
     SetDocLimitations("The application does not handle complex image as input.");
@@ -123,7 +123,7 @@ private:
     AddParameter(ParameterType_Int,"filter.frost.rad","Radius");
     SetParameterDescription("filter.frost.rad","Radius in pixel.");
 
-    AddParameter(ParameterType_Float,"filter.frost.deramp","deramp");
+    AddParameter(ParameterType_Float,"filter.frost.deramp","Deramp factor");
     SetParameterDescription("filter.frost.deramp","factor use to control the\n"
        "exponential function used to weight effect of the distance between the\n"
        "central pixel and its neighborhood. Increasing the deramp parameter will\n"
@@ -139,7 +139,7 @@ private:
     AddParameter(ParameterType_Int,"filter.kuan.rad","Radius");
     SetParameterDescription("filter.kuan.rad","Radius in pixel.");
 
-    AddParameter(ParameterType_Float,"filter.kuan.nblooks","number of looks");
+    AddParameter(ParameterType_Float,"filter.kuan.nblooks","Number of looks");
     SetParameterDescription("filter.kuan.nblooks","Number of looks in the input image.");
 
     // Default values

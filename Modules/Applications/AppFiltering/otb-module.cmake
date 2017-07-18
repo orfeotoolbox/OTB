@@ -22,7 +22,6 @@ set(DOCUMENTATION "Basic filters application.")
 
 otb_module(OTBAppFiltering
   DEPENDS
-    OTBImageNoise
     OTBImageManipulation
     OTBITK
     OTBApplicationEngine
