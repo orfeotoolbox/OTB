@@ -76,38 +76,58 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("LSMSSmallRegionsMerging");
-    SetDescription("Third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow.");
+    SetDescription("This application performs the third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
 
     SetDocName("Exact Large-Scale Mean-Shift segmentation, step 3 (optional)");
-    SetDocLongDescription("This application performs the third step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS). Given a segmentation result (label image) and the original image, it will merge regions whose size in pixels is lower than minsize parameter with the adjacent regions with the adjacent region with closest radiometry and acceptable size. Small regions will be processed by size: first all regions of area, which is equal to 1 pixel will be merged with adjacent region, then all regions of area equal to 2 pixels, until regions of area minsize. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results.");
-    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
+    SetDocLongDescription("Given a segmentation result (can be the out output parameter of the"
+                          " LSMSSegmentation application [2]) and the original image, it will"
+                          " merge segments whose size in pixels is lower than minsize parameter"
+                          " with the adjacent segments with the adjacent segment with closest"
+                          " radiometry and acceptable size.\n\n"
+                          "Small segments will be processed by increasing size: first all segments"
+                          " for which area is equal to 1 pixel will be merged with adjacent"
+                          " segments, then all segments of area equal to 2 pixels will be processed,"
+                          " until segments of area minsize. For large images one can use the"
+                          " tilesizex and tilesizey parameters for tile-wise processing, with the"
+                          " guarantees of identical results.\n\n"
+                          "The output of this application can be passed to the"
+                          " LSMSVectorization application [3] to complete the LSMS workflow.");
+    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation"
+                      " workflow (LSMS) and may not be suited for any other purpose. This"
+                      " application is not compatible with in-memory connection since it does"
+                      " its own internal streaming.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso("LSMSSegmentation, LSMSVectorization, MeanShiftSmoothing");
+    SetDocSeeAlso( "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
+                   " mean-shift algorithm and its application to the segmentation of"
+                   " arbitrarily large remote sensing images. IEEE Transactions on"
+                   " Geoscience and Remote Sensing, 53(2), 952-964.\n"
+                   "[2] LSMSegmentation\n"
+                   "[3] LSMSVectorization");
     AddDocTag(Tags::Segmentation);
     AddDocTag("LSMS");
 
     AddParameter(ParameterType_InputImage,  "in",    "Input image");
-    SetParameterDescription( "in", "The input image." );
+    SetParameterDescription( "in", "The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." );
     AddParameter(ParameterType_InputImage,  "inseg",    "Segmented image");
-    SetParameterDescription( "inseg", " The segmented image input. Segmented image input is the segmentation of the input image." );
+    SetParameterDescription( "inseg", "Segmented image where each pixel value is the unique integer label of the segment it belongs to." );
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription( "out", "The output image. The output image is the input image where the minimal regions have been merged." );
+    SetParameterDescription( "out", "The output image. The output image is the segmented image where the minimal segments have been merged. An ecoding of uint32 is advised." );
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
-    AddParameter(ParameterType_Int, "minsize", "Minimum Region Size");
-    SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is merged with the \"nearest\" region (radiometrically).");
+    AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
+    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, a segment is of size lower than this criterion, the segment is merged with the segment that has the closest sepctral signature.");
     SetDefaultParameterInt("minsize", 50);
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
 
     AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
-    SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
+    SetParameterDescription("tilesizex", "Size of tiles along the X-axis for tile-wise processing.");
     SetDefaultParameterInt("tilesizex", 500);
     SetMinimumParameterIntValue("tilesizex", 1);
 
     AddParameter(ParameterType_Int, "tilesizey", "Size of tiles in pixel (Y-axis)");
-    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis.");
+    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis for tile-wise processing.");
     SetDefaultParameterInt("tilesizey", 500);
     SetMinimumParameterIntValue("tilesizey", 1);
 
