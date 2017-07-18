@@ -507,7 +507,7 @@ def GenerateRstForApplications():
     allApps = None
     try:
         allApps = otbApplication.Registry.GetAvailableApplications( )
-    except e:
+    except:
         print 'error in otbApplication.Registry.GetAvailableApplications()'
         sys.exit(1)
 
