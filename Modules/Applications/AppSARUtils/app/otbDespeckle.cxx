@@ -65,9 +65,19 @@ private:
      " degrades the image quality. It is caused by the coherent nature of"
      " back-scattered waves from multiple distributed targets. It is locally strong"
      " and it increases the mean Grey level of a local area. \n\n"
+     "Reducing the speckle noise enhances radiometric resolution but tend to decrease the spatial resolution."
      "Several different methods are used to eliminate speckle noise, based upon"
      " different mathematical models of the phenomenon. The application includes four"
-     " methods: Lee [1], Frost [2], GammaMAP [3] and Kuan [4]. \n");
+     " methods: Lee [1], Frost [2], GammaMAP [3] and Kuan [4]. \n\n"
+     "We sum up below the basic principle of this four methods:\n"
+      "  * Lee : Estimate the signal by mean square error minimization (MMSE) on a sliding window.\n"
+      "  * Frost : Also derived from the MMSE criteria with a weighted sum of the values within the window. The weighting factors decrease with distance from the pixel of interest.\n"
+      "  * GammaMAP  : Derived under the assumption of the image follows a Gamma distribution.\n"
+      "  * Kuan : Also derived from the MMSE criteria under the assumption of non stationary mean and variance. It is quite similar to Lee filter in form.\n"                  
+      "\n"                    
+
+
+    );
 
     SetDocLimitations("The application does not handle complex image as input.");
 

@@ -68,21 +68,26 @@ private:
       "complex SAR image. The input should be a single band image with "
       "complex pixels."
     );
-    SetDocLimitations("None");
+    SetDocLimitations("The application takes as input single band image with complex pixels.");
     SetDocAuthors("Alexia Mondot (alexia.mondot@c-s.fr) and Mickael Savinaud (mickael.savinaud@c-s.fr)");
-    SetDocSeeAlso("SARPolarMatrixConvert, SARPolarSynth");
-    AddDocTag(Tags::SAR);
+    SetDocSeeAlso("Despeckle, SARPolarMatrixConvert, SARPolarSynth");
 
+    AddDocTag(Tags::SAR);
+    AddDocTag(Tags::Manip);
     // Input images
     AddParameter(ParameterType_ComplexInputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image (complex single band)");
 
     // Outputs
     AddParameter(ParameterType_OutputImage, "modulus", "Modulus");
-    SetParameterDescription("modulus", "Modulus of the input: sqrt(real*real + imag*imag).");
-
+    SetParameterDescription("modulus", "Modulus of the input image computes with the\n"
+                            "following formula: :math:`\\sqrt{real*real + imag*imag}` where real and imag \n"
+                            "are respectively the real and the imaginary part of the input complex image.\n");
+    
     AddParameter(ParameterType_OutputImage, "phase", "Phase");
-    SetParameterDescription("phase", "Phase of the input: atan2(imag, real).");
+    SetParameterDescription("phase", "Phase of the input image computes with the following formula:\n"
+    ":math:`\\tan^{-1}(\\frac{imag}{real})` where real and imag are respectively the real and\n"
+    "the imaginary part of the input complex image.");
 
     AddRAMParameter();
 
