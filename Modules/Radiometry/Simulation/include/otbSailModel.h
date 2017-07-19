@@ -64,10 +64,10 @@ public:
 
 
   /** Set Inputs */
-  void SetReflectance(const SpectralResponseType *object) ITK_OVERRIDE;
+  void SetReflectance(const SpectralResponseType *object) override;
   SpectralResponseType * GetReflectance();
 
-  void SetTransmittance(const SpectralResponseType *object) ITK_OVERRIDE;
+  void SetTransmittance(const SpectralResponseType *object) override;
   SpectralResponseType * GetTransmittance();
 
   /** Set parameters */
@@ -110,7 +110,7 @@ public:
   void UseExternalSoilDB(std::shared_ptr<SoilDataBase> SoilDB, size_t SoilIndex);
 
   /** GenerateData */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Get Output */
   virtual SpectralResponseType * GetViewingReflectance();
@@ -127,11 +127,11 @@ protected:
   /** Constructor */
   SailModel();
   /** Destructor */
-  ~SailModel() ITK_OVERRIDE;
+  ~SailModel() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
   using Superclass::MakeOutput;
 
   /** Compute Leaf Angle Distribution */
@@ -146,8 +146,8 @@ protected:
   void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result) const;
 
 private:
-  SailModel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SailModel(const Self&) = delete; 
+  void operator=(const Self&) = delete;
 
   double m_LAI; //leaf area index
   double m_Angl; //average leaf angle
