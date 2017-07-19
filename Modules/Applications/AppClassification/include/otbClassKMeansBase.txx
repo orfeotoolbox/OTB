@@ -44,8 +44,8 @@ void ClassKMeansBase::InitKMSampling()
 {
   AddApplication("ImageEnvelope", "imgenvelop", "mean shift smoothing"); 
   AddApplication("PolygonClassStatistics", "polystats", "Polygon Class Statistics");
-  AddApplication( "SampleSelection", "select", "Sample selection" );
-  AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
+  AddApplication("SampleSelection", "select", "Sample selection");
+  AddApplication("SampleExtraction", "extraction", "Sample extraction");
 
   AddParameter(ParameterType_Int, "ts", "Training set size");
   SetParameterDescription("ts", "Size of the training set (in pixels).");

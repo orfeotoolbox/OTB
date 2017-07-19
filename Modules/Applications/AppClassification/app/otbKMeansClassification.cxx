@@ -47,23 +47,29 @@ private:
 
     SetDocName("Unsupervised KMeans image classification");
     SetDocLongDescription("Performs unsupervised KMeans image classification."
-      "KMeansClassification is a composite application, using an existing training and classification application."
-      "The SharkKMeans model is used."
-
-      "The steps of this composite application : \
-        1) ImageEnveloppe : create a shapefile (1 polygon), \
-        2) PolygonClassStatistics : compute the statistics, \
-        3) SampleSelection : select the samples by constant strategy in the shapefile, \
-        4) SamplesExtraction :  extract the samples descriptors, \
-        5) TrainVectorClassifier : train the SharkKMeans model, \
-        6) ComputeImagesStatistics : compute images second order statistics, \
-        7) ImageClassifier : performs the classification of the input image according to a model file."
-
-        "If you want keep the temporary files (sample selected, model file, ...), initialize cleanup parameter.");
+      "KMeansClassification is a composite application, "
+      "using an existing training and classification application."
+      "The SharkKMeans model is used.\n"
+      "The steps of this composite application :\n"
+        "1) ImageEnveloppe : create a shapefile (1 polygon),\n"
+        "2) PolygonClassStatistics : compute the statistics,\n"
+        "3) SampleSelection : select the samples by constant strategy in the shapefile "
+            "(1000000 samples max),\n"
+        "4) SamplesExtraction :  extract the samples descriptors,\n"
+        "5) TrainVectorClassifier : train the SharkKMeans model,\n"
+        "6) ComputeImagesStatistics : compute images second order statistics,\n"
+        "7) ImageClassifier : performs the classification of the input image "
+            "according to a model file.\n\n"
+        "It's possible to choice random/periodic modes of the SampleSelection application.\n"
+        "If you want keep the temporary files (sample selected, model file, ...), "
+        "initialize cleanup parameter.\n"
+        "For more information on shark KMeans algorithm [1].");
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("otbImageEnveloppe otbPolygonClassStatistics otbSampleSelection otbSamplesExtraction otbTrainVectorClassifier otbImageClassifier");
+    SetDocSeeAlso("ImageEnveloppe PolygonClassStatistics SampleSelection SamplesExtraction "
+      "PolygonClassStatistics TrainVectorClassifier ImageClassifier\n"
+      "[1] http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html");
 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Segmentation);
@@ -140,7 +146,6 @@ private:
       otbAppLogINFO( <<"Final clean-up ..." );
       fileNames.clear();
       }
-
   }
 
 private :
