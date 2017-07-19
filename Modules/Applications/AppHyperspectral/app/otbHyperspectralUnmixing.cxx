@@ -95,22 +95,38 @@ private:
 
     // Documentation
     SetDocName("Hyperspectral data unmixing");
-    SetDocLongDescription("The application applies a linear unmixing algorithm to an hyperspectral data cube. This method supposes that the mixture between materials in the scene is macroscopic and simulates a linear mixing model of spectra.\nThe Linear Mixing Model (LMM) acknowledges that reflectance spectrum associated with each pixel is a linear combination of pure materials in the recovery area, commonly known as endmembers. Endmembers can be estimated using the VertexComponentAnalysis application.\nThe application allows one to estimate the abundance maps with several algorithms : Unconstrained Least Square (ucls), Fully Constrained Least Square (fcls), Image Space Reconstruction Algorithm (isra) and Non-negative constrained Least Square (ncls) and Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF).\n");
+    SetDocLongDescription("The application applies a linear unmixing algorithm"
+    "to an hyperspectral data cube. This method supposes that the mixture between"
+    "aterials in the scene is macroscopic and simulates a linear mixing model of"
+    "spectra.\n\n"
+    "The Linear Mixing Model (LMM) acknowledges that reflectance"
+    "spectrum associated with each pixel is a linear combination of pure"
+    "materials in the recovery area, commonly known as endmembers. Endmembers can"
+    "be estimated using the VertexComponentAnalysis application.\n\n"
+    "The application allows to estimate the abundance maps with several algorithms :\n"
+    "  * Unconstrained Least Square (ucls)\n"
+                          //"  * Fully Constrained Least Square (fcls)\n"
+    "  * Image Space Reconstruction Algorithm (isra)\n"
+    "  * Non-negative constrained\n"
+    "  * Least Square (ncls)\n"
+    "  * Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF).\n"
+    "\n"
+    );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis");
 
-	AddDocTag("Miscellaneous");
+    AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
-    SetParameterDescription("in","The hyperspectral data cube to unmix");
+    SetParameterDescription("in","The hyperspectral data cube input");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out","The output abundance map");
+    SetParameterDescription("out","The output abundance map. The abundance fraction are stored in a multispectral image where band N corresponds to the fraction of endmembers N in each pixel.");
 
     AddParameter(ParameterType_InputImage,  "ie",   "Input endmembers");
-    SetParameterDescription("ie","The endmembers (estimated pure pixels) to use for unmixing. Must be stored as a multispectral image, where each pixel is interpreted as an endmember");
+    SetParameterDescription("ie","The endmembers (estimated pure pixels) to use for unmixing. Must be stored as a multispectral image, where each pixel is interpreted as an endmember.");
 
     AddParameter(ParameterType_Choice, "ua", "Unmixing algorithm");
     SetParameterDescription("ua", "The algorithm to use for unmixing");

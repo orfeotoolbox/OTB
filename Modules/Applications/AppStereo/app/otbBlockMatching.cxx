@@ -149,6 +149,7 @@ private:
       "  * SSD : Sum of Squared Distances\n"
       "  * NCC : Normalized Cross-Correlation\n"
       "  * Lp  : Lp pseudo norm\n"
+      "\n"                    
       "Once the best integer disparity is found, an optional step of sub-pixel "
       "disparity estimation can be performed, with various algorithms "
       "(triangular interpolation, parabollic interpolation, dichotimic search)."
