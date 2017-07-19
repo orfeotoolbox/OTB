@@ -103,11 +103,11 @@ public:
 #ifdef OTB_USE_SHARK
 
 	// typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
-	typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
+	typedef shark::Autoencoder< shark::LinearNeuron, shark::LinearNeuron> AutoencoderType;
 	typedef otb::AutoencoderModel<InputValueType, AutoencoderType> AutoencoderModelType;
 	
 	// typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron> TiedAutoencoderType;
-	typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron> TiedAutoencoderType;
+	typedef shark::TiedAutoencoder< shark::LinearNeuron, shark::LinearNeuron> TiedAutoencoderType;
 	typedef otb::AutoencoderModel<InputValueType, TiedAutoencoderType> TiedAutoencoderModelType;
 	
 	typedef otb::PCAModel<InputValueType> PCAModelType;
