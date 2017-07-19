@@ -80,20 +80,23 @@ size_t SoilDataBase::CountColumns(std::string fileName) const
   std::ifstream ifile(fileName.c_str());
   std::string line;
   if (ifile.is_open())
-    {
-    size_t nbSpaces = 0;
-    getline(ifile,line);
-    ifile.close();
-    boost::trim(line);
-    auto found = line.find(' ');
-    while(found!=std::string::npos)
-      {
-      ++nbSpaces;
-      while(line[found+1] == ' ') ++found;
-      found = line.find(' ', found+1);
-      }
-    return nbSpaces+1;
-    }
+       {
+       size_t nbSpaces = 0;
+       if(!getline(ifile,line))
+         {
+         itkGenericExceptionMacro(<< "Error reading file " << fileName);
+         }
+       ifile.close();
+       boost::trim(line);
+       auto found = line.find(' ');
+       while(found!=std::string::npos)
+         {
+         ++nbSpaces;
+         while(line[found+1] == ' ') ++found;
+         found = line.find(' ', found+1);
+         }
+       return nbSpaces+1;
+       }
   else
     {
     itkGenericExceptionMacro(<< "Could not open file " << fileName);
@@ -104,10 +107,13 @@ void SoilDataBase::ParseSoilFile()
   unsigned int number_of_soils = CountColumns(m_SoilFileName) - 1;
   m_SoilDataVector.resize(number_of_soils);
   std::ifstream sdb(m_SoilFileName);
-  std::string line;
-  while(sdb.good())
+  if(! sdb.is_open())
     {
-    std::getline(sdb, line);
+    itkGenericExceptionMacro(<< "Could not open file " << m_SoilFileName);
+    }
+  std::string line;
+  while(std::getline(sdb, line))
+    {
     if(line.size() > 3)
       {
       std::stringstream ss(line);
