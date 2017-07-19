@@ -173,9 +173,9 @@ main( int argc,
 {
   // const char * inputfilename  = argv[ 1 ];
   // const char * outputfilename = argv[ 2 ];
-  if (argc<6)
+  if (argc<5)
   {
-    std::cout<<"error : otbContrastTestDriver -inputFilename -outputFilename -gainImageFilename -h -l"<<std::endl;
+    std::cout<<"error : otbContrastTestDriver -inputFilename -outputFilename -hThumbnail -wThumbnail"<<std::endl;
     if (argc>1)
       {
         typedef otb::ImageFileReader< VectorImageType > ReaderType;
@@ -208,25 +208,25 @@ main( int argc,
   vectorToImageFilter->SetInput( input );
   vectorToImageFilter->SetIndex( 0 );
   vectorToImageFilter->Update();
-  int hThumbnail = atoi(argv[4]);
-  int wThumbnail = atoi(argv[5]);
+  int hThumbnail = atoi(argv[3]);
+  int wThumbnail = atoi(argv[4]);
   ImageType::Pointer inputImage = vectorToImageFilter->GetOutput();
-  if ( inputImage->GetLargestPossibleRegion().GetSize()[1]%wThumbnail != 0 )
+  if ( inputImage->GetLargestPossibleRegion().GetSize()[1]%hThumbnail != 0 )
     {
-    std::cout<<"error : l is not a divider of the input's width"<<std::endl;
+    std::cout<<"error : hThumbnail = "<<hThumbnail<<" is not a divider of the input's width"<<std::endl;
     std::cout<<"Image Height = "<<input->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
     return 1;
     }
-  if ( inputImage->GetLargestPossibleRegion().GetSize()[0]%hThumbnail != 0 )
+  if ( inputImage->GetLargestPossibleRegion().GetSize()[0]%wThumbnail != 0 )
     {
-    std::cout<<"error : h is not a divider of the input's height"<<std::endl;
+    std::cout<<"error : wThumbnail = "<<wThumbnail<<"is not a divider of the input's height"<<std::endl;
     std::cout<<"Image Width = "<<input->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
     return 1;
     }
 
-  int nH = inputImage->GetLargestPossibleRegion().GetSize()[0]/hThumbnail;
+  int nH = inputImage->GetLargestPossibleRegion().GetSize()[0]/wThumbnail;
   std::cout<<"nH ="<<nH<<std::endl;
-  int nW = inputImage->GetLargestPossibleRegion().GetSize()[1]/wThumbnail;
+  int nW = inputImage->GetLargestPossibleRegion().GetSize()[1]/hThumbnail;
   std::cout<<"nW ="<<nW<<std::endl;
   std::array< int , sizeh > histoTarget;
   // createTarget( histoTarget , vectorToImageFilter->GetOutput() );
@@ -248,7 +248,6 @@ main( int argc,
 
     // lutGrid[0][0].fill(0);
     std::array< int , sizeh >  histoGrid [(nH)*(nW)] = {};
-    std::cout<<nH*nW<<std::endl;
     for (int i = 0 ; i<(nH)*(nW) ; i++)
     {
       lutGrid[i].fill(0);
@@ -299,10 +298,10 @@ main( int argc,
   writer->SetInput( imageToVectorImageFilterOut->GetOutput() );
   writer->Update();
 
-  typedef otb::ImageFileWriter<VectorGainType>  WriterGainType;
+  /*typedef otb::ImageFileWriter<VectorGainType>  WriterGainType;
   WriterGainType::Pointer writergain( WriterGainType::New() );
   writergain->SetFileName( argv[3] );
   writergain->SetInput( gainVector );
-  writergain->Update();
+  writergain->Update();*/
   return 0;
 }
