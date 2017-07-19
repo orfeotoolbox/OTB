@@ -9,6 +9,7 @@
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 #include "itkComposeImageFilter.h"
+#include "itkThresholdImageFilter.h"
 
 int const sizeh = 256;
 typedef int                   PixelType;
@@ -16,16 +17,20 @@ typedef itk::Image< PixelType , 2 >  ImageType;
 typedef itk::VectorImage< PixelType , 2 >  VectorImageType;
 
 void
-equalized( const std::array< int , sizeh > & inputHisto,
+equalized( const std::array< int ,
+           sizeh > & inputHisto,
            const std::array< int , sizeh > & targetHisto,
            std::array< int , sizeh > & lut)
 
 {
-  int countMapValue = 0 ;
+  int countMapValue = 0;
   int countValue = 0;
-  int countInput  = inputHisto[ countValue ];
+  lut[countValue] = 1; // Black stay black
+  ++countValue;
+  int countInput  = inputHisto[ 0 ] + inputHisto[ countValue ];
+  lut[lut.size() - 1 ] = 1 ; // White stay white
   int countTarget = targetHisto[ countMapValue ];
-  while ( countMapValue<256 )
+  while ( countMapValue<256 && countValue<255)
     {
     if (countInput > countTarget)
       {
@@ -42,11 +47,11 @@ equalized( const std::array< int , sizeh > & inputHisto,
 }
 
 void
-equalized(std::array< int , sizeh > gridHisto[],
-          std::array< int , sizeh > gridLut[],
-          const std::array< int , sizeh > & targetHisto,
-          int nW,
-          int nH)
+equalized( std::array< int , sizeh > gridHisto[],
+           std::array< int , sizeh > gridLut[],
+           const std::array< int , sizeh > & targetHisto,
+           int nW,
+           int nH)
 {
   for (int i = 0 ; i<nW ; i++)
     {
@@ -66,7 +71,7 @@ computehisto( ImageType::Pointer const input,
               int nH)
 {
   ImageType::IndexType index;
-  int nbBin = inputHisto.size();
+  // int nbBin = inputHisto[0].size();
   for (int i = 0 ; i < wThumbnail * nW ; i++)
     {
     for (int j = 0 ; j< hThumbnail * nH ; j++)
@@ -100,13 +105,13 @@ createTarget( std::array< int , sizeh > & targetHisto,
 }
 
 float
-interpoleGain(std::array< int , sizeh > lut[],
-              int nW,
-              int nH,
-              int pixelValue,
-              ImageType::IndexType index,
-              int wThumbnail,
-              int hThumbnail)
+interpoleGain( std::array< int , sizeh > lut[],
+               int nW,
+               int nH,
+               int pixelValue,
+               ImageType::IndexType index,
+               int wThumbnail,
+               int hThumbnail)
 {
   int lutX = index[0]/wThumbnail;
   int lutY = index[1]/hThumbnail;
@@ -190,6 +195,7 @@ main( int argc,
   typedef itk::ComposeImageFilter< ImageGainType > ImageGainToVectorImageGainFilterType;
   typedef itk::ComposeImageFilter< ImageType > ImageToVectorImageFilterType;
   typedef itk::MultiplyImageFilter< ImageType, ImageGainType, ImageType > MultiplyImageFilterType;
+  typedef itk::ThresholdImageFilter< ImageGainType > ThresholdFilterType;
 
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
@@ -219,7 +225,7 @@ main( int argc,
     }
 
   int nH = inputImage->GetLargestPossibleRegion().GetSize()[0]/hThumbnail;
-  std::cout<<"nH ="<<inputImage->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
+  std::cout<<"nH ="<<nH<<std::endl;
   int nW = inputImage->GetLargestPossibleRegion().GetSize()[1]/wThumbnail;
   std::cout<<"nW ="<<nW<<std::endl;
   std::array< int , sizeh > histoTarget;
@@ -253,27 +259,6 @@ main( int argc,
 
     equalized( histoGrid , lutGrid , histoTarget , nW , nH);
     
-
-    /*std::array< int , sizeh > hInput;
-    hInput.fill(0);
-    computehisto( inputImage , hInput );
-    std::array< int , sizeh > lut;
-    lut.fill(0);
-    equalized( hInput , histoTarget , lut );*/
-    
-    /*itk::ImageRegionIterator< ImageType > itin( inputImage , inputImage->GetRequestedRegion() );
-    itk::ImageRegionIterator< ImageGainType > itgain( gainImage , gainImage->GetRequestedRegion() );
-    itin.GoToBegin();
-    itgain.GoToBegin();
-    while( !itin.IsAtEnd() )
-      {
-      itgain.Set( static_cast<float>(lut[itin.Get()]) / static_cast<float>( itin.Get() ) ) ;
-      ++itin;
-      ++itgain;
-      }*/
-
-
-
     float gainValue = 0.0;
     ImageType::IndexType index;
     for (int i = 0 ; i < wThumbnail * nW ; i++)
@@ -283,15 +268,24 @@ main( int argc,
         index[0] = i;
         index[1] = j;
         gainValue = interpoleGain(lutGrid , nW , nH , inputImage->GetPixel( index ) , index , wThumbnail , hThumbnail);
-        // gainValue = static_cast<float>( lutGrid[ i / wThumbnail + (j / hThumbnail) * nW ] [ inputImage->GetPixel( index ) ] )\
-                                      / static_cast<float>( inputImage->GetPixel( index ) ) ;
         gainImage->SetPixel( index , gainValue );
         }
       }
 
-
+    ThresholdFilterType::Pointer thresholdFilter ( ThresholdFilterType::New() );
+    // thresholdFilter->SetInPlace( true );
+    thresholdFilter->SetInput( gainImage );
+    float upThresh = 1.5;
+    float lowThresh = 0.9;
+    thresholdFilter->SetOutsideValue (upThresh);
+    thresholdFilter->ThresholdAbove( upThresh );
+    thresholdFilter->Update();
+    thresholdFilter->SetInput( thresholdFilter->GetOutput() );
+    thresholdFilter->SetOutsideValue (lowThresh);
+    thresholdFilter->ThresholdBelow( lowThresh );
+    thresholdFilter->Update();
     gainMultiplyer->SetInput1( inputImage );
-    gainMultiplyer->SetInput2( gainImage );
+    gainMultiplyer->SetInput2( thresholdFilter->GetOutput() );
     gainMultiplyer->Update();
     imageGainToVectorImageGainFilterOut->SetInput( chanel , gainImage );
     imageToVectorImageFilterOut->SetInput( chanel , gainMultiplyer->GetOutput() );
