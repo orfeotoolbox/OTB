@@ -42,12 +42,15 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //TrainMethod
   AddParameter(ParameterType_Choice, "classifier.ann.t", "Train Method Type");
-  AddChoice("classifier.ann.t.reg", "RPROP algorithm");
-  SetParameterDescription("classifier.ann.t.reg",
-    "");
   AddChoice("classifier.ann.t.back", "Back-propagation algorithm");
   SetParameterDescription("classifier.ann.t.back",
-    "");
+    "Method to compute the gradient of the loss function and adjust weights "
+    "in the network to optimize the result.");
+  AddChoice("classifier.ann.t.reg", "Resilient Back-propagation algorithm");
+  SetParameterDescription("classifier.ann.t.reg",
+    "Almost the same as the Back-prop algorithm exept that it does not "
+    "take into account the magnitude of the partial derivative (coordinate "
+    "of the gradient) but only its sign.");
 
   SetParameterString("classifier.ann.t", "reg", false);
   SetParameterDescription("classifier.ann.t", 
@@ -71,7 +74,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddChoice("classifier.ann.f.sig", "Symmetrical Sigmoid function");
   AddChoice("classifier.ann.f.gau", "Gaussian function (Not completely supported)");
   SetParameterString("classifier.ann.f", "sig", false);
-  SetParameterDescription("classifier.ann.f", "Neuron activation function.");
+  SetParameterDescription("classifier.ann.f", 
+    "This function determine whether the output of the node is positive or not "
+    "depending on the output of the transfert function.");
 
   //Alpha
   AddParameter(ParameterType_Float, "classifier.ann.a", 
@@ -123,8 +128,17 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //TermCriteriaType
   AddParameter(ParameterType_Choice, "classifier.ann.term", "Termination criteria");
   AddChoice("classifier.ann.term.iter", "Maximum number of iterations");
+  SetParameterDescription("classifier.ann.term.iter", 
+    "Set the number of iterations allowed to the network for its "
+    "training. Training will stop regardless of the result when this "
+    "number is reached");
   AddChoice("classifier.ann.term.eps", "Epsilon");
+  SetParameterDescription("classifier.ann.term.eps", 
+    "Training will focus on result and will stop once the precision is"
+    "at most epsilon");
   AddChoice("classifier.ann.term.all", "Max. iterations + Epsilon");
+  SetParameterDescription("classifier.ann.term.all", 
+    "Both termination criteria are used. Training stop at the first reached");
   SetParameterString("classifier.ann.term", "all", false);
   SetParameterDescription("classifier.ann.term", "Termination criteria.");
 
