@@ -43,7 +43,7 @@ public:
   double GetReflectance(size_t SoilIndex, WavelenghtType wl) const;
 
 protected:
-  size_t countColumns(std::string fileName) const;
+  size_t CountColumns(std::string fileName) const;
   void ParseSoilFile();
 
   std::string m_SoilFileName;

@@ -75,7 +75,7 @@ double SoilDataBase::GetReflectance(size_t SoilIndex, WavelenghtType wl) const
     }
 }
 
-size_t SoilDataBase::countColumns(std::string fileName) const
+size_t SoilDataBase::CountColumns(std::string fileName) const
 {
   std::ifstream ifile(fileName.c_str());
   std::string line;
@@ -101,7 +101,7 @@ size_t SoilDataBase::countColumns(std::string fileName) const
 }
 void SoilDataBase::ParseSoilFile()
 {
-  unsigned int number_of_soils = countColumns(m_SoilFileName) - 1;
+  unsigned int number_of_soils = CountColumns(m_SoilFileName) - 1;
   m_SoilDataVector.resize(number_of_soils);
   std::ifstream sdb(m_SoilFileName);
   std::string line;
