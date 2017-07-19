@@ -29,7 +29,6 @@ set(PATCHELF_TMP_DIR     "${PKGTOOLS_SB_PREFIX_DIR}/tmp/patchelf")
 #This variable is referenced in CreateCMakeProjects.cmake
 set(PATCHELF_PROGRAM "${PATCHELF_SOURCE_DIR}/src/patchelf")
 
-
 set(MAKESELF_SOURCE_DIR  "${PKGTOOLS_SB_PREFIX_DIR}/src/makeself")
 # MAKESELF_SOURCE_DIR is same as MAKESELF_BINARY_DIR and MAKESELF_INSTALL_DIR
 set(MAKESELF_STAMP_DIR   "${PKGTOOLS_SB_PREFIX_DIR}/stamp/makeself")
@@ -51,6 +50,7 @@ endif()
 
 include(ExternalProject)
 
+set(PATCHELF_ENV_CONFIGURE_CMD "${SB_ENV_CONFIGURE_CMD};CXXFLAGS='-static'")
 
 if(APPLE)
   add_custom_target(PATCHELF)
@@ -65,7 +65,9 @@ else()
     INSTALL_DIR         "${PATCHELF_INSTALL_DIR}"
     STAMP_DIR           "${PATCHELF_STAMP_DIR}"
     TMP_DIR             "${PATCHELF_TMP_DIR}"
-    CONFIGURE_COMMAND "./configure" "--prefix" "${PATCHELF_INSTALL_DIR}"
+    CONFIGURE_COMMAND
+    ${PATCHELF_ENV_CONFIGURE_CMD}
+    ${PATCHELF_SOURCE_DIR}/configure
     INSTALL_COMMAND ""
     )
 endif()
