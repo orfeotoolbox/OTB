@@ -48,7 +48,7 @@ namespace Wrapper
 
     AddChoice("classifier.libsvm.k.poly", "Polynomial");
     SetParameterDescription("classifier.libsvm.k.poly", 
-      "Polynomial Kernel, the mapping is a polynomial function.")
+      "Polynomial Kernel, the mapping is a polynomial function.");
 
     AddChoice("classifier.libsvm.k.sigmoid", "Sigmoid");
     SetParameterDescription("classifier.libsvm.k.sigmoid", 
@@ -86,6 +86,9 @@ namespace Wrapper
         "to optimize, and may not be as fast.");
 
       AddChoice("classifier.libsvm.m.oneclass", "Distribution estimation (One Class SVM)");
+      SetParameterDescription("classifier.libsvm.m.oneclass", 
+        "All the training data are from the same class, SVM builds a boundary "
+        "that separates the class from the rest of the feature space.");
       SetParameterString("classifier.libsvm.m", "csvc", false);
       }
 
