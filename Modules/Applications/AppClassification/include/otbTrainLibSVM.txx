@@ -48,7 +48,7 @@ namespace Wrapper
 
     AddChoice("classifier.libsvm.k.poly", "Polynomial");
     SetParameterDescription("classifier.libsvm.k.poly", 
-      "Polynomial Kernel, the mapping is a polynomial function.")
+                            "Polynomial Kernel, the mapping is a polynomial function.");
 
     AddChoice("classifier.libsvm.k.sigmoid", "Sigmoid");
     SetParameterDescription("classifier.libsvm.k.sigmoid", 
