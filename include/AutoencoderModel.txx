@@ -395,9 +395,11 @@ void AutoencoderModel<TInputValue,NeuronType>
 		data = net.encode(data);    
 	}
 	*/
-	data = m_net.evalLayer( m_net.layerMatrices().size()/2 ,data);   // features layer for a network containing the encoder and decoder part
+	data = m_net.evalLayer( m_net.layerMatrices().size()/2-1 ,data);   // features layer for a network containing the encoder and decoder part
+	std::cout << data.element(0) << std::endl;
 	unsigned int id = startIndex;
 	target.SetSize(this->m_Dimension);
+	
 	for(const auto& p : data.elements())
 	{
 		for(unsigned int a = 0; a < this->m_Dimension; ++a){
