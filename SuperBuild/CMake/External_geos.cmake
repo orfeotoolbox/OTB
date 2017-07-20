@@ -35,6 +35,9 @@ ExternalProject_Add(GEOS
    -DGEOS_ENABLE_TESTS:BOOL=OFF
    PATCH_COMMAND ${GEOS_PATCH_COMMAND}
    CMAKE_COMMAND ${GEOS_CMAKE_COMMAND}
+   LOG_CONFIGURE 1
+   LOG_BUILD 1
+   LOG_INSTALL 1
    )
 
 # Patch still needed with version 3.6.1 to avoid error during CMake configuration
