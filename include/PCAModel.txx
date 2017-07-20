@@ -43,7 +43,6 @@ void PCAModel<TInputValue>::Train()
 	shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 	m_pca.setData(inputSamples);
 	m_pca.encoder(m_encoder, this->m_Dimension);
-	std::cout << m_encoder.matrix() << std::endl;
 	m_pca.decoder(m_decoder, this->m_Dimension);
 	
 }
@@ -175,8 +174,6 @@ void PCAModel<TInputValue>
 			//target[a]=1;
 		
 			//target.SetElement(a,p[a]);
-			
-			
 		}
 		//std::cout << p << std::endl;
 		targets->SetMeasurementVector(id,target);

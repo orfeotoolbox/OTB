@@ -57,7 +57,7 @@ class CbDimensionalityReductionVector : public Application
 		
 		/** Filters typedef */
 		
-		typedef double 															ValueType;
+		typedef float 															ValueType;
 		typedef itk::VariableLengthVector<ValueType> 							InputSampleType;
 		typedef itk::Statistics::ListSample<InputSampleType> 					ListSampleType;
 		typedef MachineLearningModel<itk::VariableLengthVector<ValueType>, itk::VariableLengthVector<ValueType>>	DimensionalityReductionModelType;
@@ -136,6 +136,7 @@ class CbDimensionalityReductionVector : public Application
 			
 			if ( HasValue("in") )
 			{
+				
 				std::string shapefile = GetParameterString("in");
 				otb::ogr::DataSource::Pointer ogrDS;
 				OGRSpatialReference oSRS("");
@@ -150,28 +151,28 @@ class CbDimensionalityReductionVector : public Application
 				{
 					std::string item = layerDefn.GetFieldDefn(iField)->GetNameRef();
 					std::string key(item);
-					key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
-					std::transform(key.begin(), key.end(), key.begin(), tolower);
-					OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
-					
-					if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
-					{
-						std::string tmpKey="feat."+key;
-						AddChoice(tmpKey,item);
-					}
+					std::string::iterator end = std::remove_if( key.begin(), key.end(), IsNotAlphaNum );
+					std::transform( key.begin(), end, key.begin(), tolower );
 					/*
-					if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
-					{
-						std::string tmpKey="featout."+key;
+					key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
+					std::transform(key.begin(), key.end(), key.begin(), tolower);*/
+					OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
+				/*	if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
+					{*/
+						//std::string tmpKey="feat."+key;
+						std::string tmpKey = "feat." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
 						AddChoice(tmpKey,item);
-					}*/
+					//}   // this is the same as in otbVectorClassifier, but it doesnt work
 				}
+				
 			}
+			
 		}
 		
 		void DoExecute() ITK_OVERRIDE
 		{
 			clock_t tic = clock();
+			
 			
 			std::string shapefile = GetParameterString("in");
 			otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
@@ -187,12 +188,16 @@ class CbDimensionalityReductionVector : public Application
 			{
 				MeasurementType mv;
 				mv.SetSize(nbFeatures);
+				
 				for(int idx=0; idx < nbFeatures; ++idx)
 				{
-					mv[idx] = (*it)[GetSelectedItems("feat")[idx]].GetValue<double>();
+					mv[idx] = static_cast<float>( (*it)[GetSelectedItems("feat")[idx]].GetValue<double>() );
+					
 				}
 				input->PushBack(mv);
+				
 			}
+				
 			
 			/** Statistics for shift/scale */
 			
@@ -218,7 +223,7 @@ class CbDimensionalityReductionVector : public Application
 			ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
 			trainingShiftScaleFilter->SetInput(input);
 			trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
-			trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
+			trainingShiftScaleFilter->SetScales(stddevMeasurementVector*3);
 			trainingShiftScaleFilter->Update();
 			otbAppLogINFO("mean used: " << meanMeasurementVector);
 			otbAppLogINFO("standard deviation used: " << stddevMeasurementVector);
@@ -246,9 +251,7 @@ class CbDimensionalityReductionVector : public Application
 			/** Perform Dimensionality Reduction */
 			
 			ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
-			ListSampleType::Pointer target;
-			target = m_Model->PredictBatch(listSample);
-			
+			ListSampleType::Pointer target = m_Model->PredictBatch(listSample);
 			
 			/** Create/Update Output Shape file */
 			
@@ -276,8 +279,8 @@ class CbDimensionalityReductionVector : public Application
 					OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
 					for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbBands ; k++) // we don't copy the original bands 
 					{
-					OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
-					newLayer.CreateField(fieldDefn);
+						OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
+						newLayer.CreateField(fieldDefn);
 					}
 				}
 				else if (GetParameterString("mode")=="update")
@@ -306,20 +309,7 @@ class CbDimensionalityReductionVector : public Application
 			
 			}
 			
-			/*
-			else
-			{
-				// Update mode
-				updateMode = true;
-				otbAppLogINFO("Update input vector data.");
-				// fill temporary buffer for the transfer
-				otb::ogr::Layer inputLayer = layer;
-				layer = buffer->CopyLayer(inputLayer, std::string("Buffer"));
-				// close input data source
-				source->Clear();
-				// Re-open input data source in update mode
-				output = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-			}*/
+
 		
 			
 			otb::ogr::Layer outLayer = output->GetLayer(0);
@@ -351,34 +341,26 @@ class CbDimensionalityReductionVector : public Application
 				}
 			}
 			
-			// Add an ID field. (The ID already contained in the layer refers to the polygon)
-			/*
-			OGRFieldDefn IDField("ID_point", OFTInteger);
-			ogr::FieldDefn IDFieldDef(IDField);
-			outLayer.CreateField(IDFieldDef);
-			*/
+		
 			// Fill output layer
 			
 			unsigned int count=0;
 			auto classfieldname = GetParameterStringList("featout");
 			it = layer.cbegin();
 			itEnd = layer.cend();
-			int id=0;
+		
 			for( ; it!=itEnd ; ++it, ++count)
 			{
 				ogr::Feature dstFeature(outLayer.GetLayerDefn());
-				/*
-				if (GetParameterString("mode")=="overwrite")
-				{*/
-					dstFeature.SetFrom( *it , TRUE);
-					dstFeature.SetFID(it->GetFID());
-				//}
+			
+				dstFeature.SetFrom( *it , TRUE);
+				dstFeature.SetFID(it->GetFID());
+			
 				
 				
 				for (std::size_t i=0; i<classfieldname.size(); ++i){
-					dstFeature[classfieldname[i]].SetValue<ValueType>(target->GetMeasurementVector(count)[i]);
+					dstFeature[classfieldname[i]].SetValue<double>(target->GetMeasurementVector(count)[i]);
 				}
-				//dstFeature["ID_point"].SetValue<int>(id);
 				if (updateMode)
 				{
 					outLayer.SetFeature(dstFeature);
@@ -387,7 +369,6 @@ class CbDimensionalityReductionVector : public Application
 				{
 					outLayer.CreateFeature(dstFeature);
 				}
-				id++;
 			}
 			
 			if(outLayer.ogr().TestCapability("Transactions"))

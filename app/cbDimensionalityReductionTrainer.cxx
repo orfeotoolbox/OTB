@@ -37,7 +37,7 @@ public:
 	typedef Superclass::ListSampleType          ListSampleType;
 	typedef Superclass::SampleImageType         SampleImageType;
 	  
-	typedef double ValueType;
+	typedef float ValueType;
 	typedef itk::VariableLengthVector<ValueType> MeasurementType;
 
 	typedef otb::StatisticsXMLFileReader<SampleType> StatisticsReader;
@@ -81,8 +81,6 @@ private:
 	void DoExecute()
 	{	
 
-		std::cout << "Appli Training!" << std::endl;
-
 		std::string shapefile = GetParameterString("io.vd");
 
 		otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
@@ -103,7 +101,7 @@ private:
 			}
 			input->PushBack(mv);
 		}
-		
+	
 		MeasurementType meanMeasurementVector;
 		MeasurementType stddevMeasurementVector;
 		
@@ -126,7 +124,7 @@ private:
 		ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
 		trainingShiftScaleFilter->SetInput(input);
 		trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
-		trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
+		trainingShiftScaleFilter->SetScales(stddevMeasurementVector*3);
 		trainingShiftScaleFilter->Update();
 
 		ListSampleType::Pointer trainingListSample= trainingShiftScaleFilter->GetOutput();
