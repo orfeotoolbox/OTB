@@ -15,6 +15,8 @@ int const sizeh = 256;
 typedef int                   PixelType;
 typedef itk::Image< PixelType , 2 >  ImageType;
 typedef itk::VectorImage< PixelType , 2 >  VectorImageType;
+typedef itk::Image< float , 2 > ImageGainType; 
+
 
 void
 equalized( const std::array< int ,
@@ -82,6 +84,7 @@ computehisto( ImageType::Pointer const input,
       }
     }
 }
+
 
 void
 createTarget( std::array< int , sizeh > & targetHisto,
@@ -167,6 +170,63 @@ interpoleGain( std::array< int , sizeh > lut[],
   return gain/(w * pixelValue);
 }
 
+void
+histoLimiteContrast(std::array< int , sizeh > inputHisto[],
+                    int h,
+                    int nW,
+                    int nH)
+{
+  int histoLength = inputHisto[0].size();
+  int nbHisto = nW * nH;
+  int toThresh = 0;
+  int npx = 0;
+  int rest = 0;
+  for ( int i = 0 ; i < nbHisto ; i++)
+    {
+    toThresh = 0;
+    for (int j = 0 ; j < histoLength ; j++)
+      {
+      if ( inputHisto[i][j] > h )
+        {
+          toThresh+= inputHisto[i][j] - h;
+          inputHisto[i][j] = h ;
+        }
+      }
+    if (toThresh != 0 )
+      {
+      npx = toThresh / histoLength;
+      rest = toThresh%histoLength;
+      for (int j = 0 ; j < histoLength ; j++)
+       {
+        inputHisto[i][j] += npx ;
+        if (rest>0)
+          {
+          ++inputHisto[i][j];
+          --rest;
+          }
+        }
+      }
+    }
+}
+
+ImageGainType::Pointer
+gainLimiteContrast(const ImageGainType::Pointer & gainImage,
+                   float upThresh,
+                   float lowThresh)
+{
+  typedef itk::ThresholdImageFilter< ImageGainType > ThresholdFilterType;
+  ThresholdFilterType::Pointer thresholdFilter ( ThresholdFilterType::New() );
+  thresholdFilter->SetInput( gainImage );
+  thresholdFilter->SetOutsideValue (upThresh);
+  thresholdFilter->ThresholdAbove( upThresh );
+  thresholdFilter->Update();
+  thresholdFilter->SetInput( thresholdFilter->GetOutput() );
+  thresholdFilter->SetOutsideValue (lowThresh);
+  thresholdFilter->ThresholdBelow( lowThresh );
+  thresholdFilter->Update();
+  return thresholdFilter->GetOutput();
+}
+
 int
 main( int argc, 
       char const *argv[] )
@@ -190,12 +250,11 @@ main( int argc,
   }
   typedef otb::ImageFileReader< VectorImageType > ReaderType;
   typedef itk::VectorIndexSelectionCastImageFilter< VectorImageType , ImageType > VectorToImageFilterType;
-  typedef itk::Image< float , 2 > ImageGainType;
   typedef itk::VectorImage< float , 2 >  VectorGainType;
   typedef itk::ComposeImageFilter< ImageGainType > ImageGainToVectorImageGainFilterType;
   typedef itk::ComposeImageFilter< ImageType > ImageToVectorImageFilterType;
   typedef itk::MultiplyImageFilter< ImageType, ImageGainType, ImageType > MultiplyImageFilterType;
-  typedef itk::ThresholdImageFilter< ImageGainType > ThresholdFilterType;
+  
 
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
@@ -229,6 +288,7 @@ main( int argc,
   int nW = inputImage->GetLargestPossibleRegion().GetSize()[1]/hThumbnail;
   std::cout<<"nW ="<<nW<<std::endl;
   std::array< int , sizeh > histoTarget;
+
   // createTarget( histoTarget , vectorToImageFilter->GetOutput() );
   createTarget( histoTarget , hThumbnail , wThumbnail );
   int m = input->GetVectorLength ();
@@ -244,10 +304,9 @@ main( int argc,
     gainImage->SetOrigin( inputImage->GetOrigin() );
 
     std::array< int , sizeh > lutGrid[(nH)*(nW)] = {};
-    
-
-    // lutGrid[0][0].fill(0);
     std::array< int , sizeh >  histoGrid [(nH)*(nW)] = {};
+
+    // Initialize lutGrid and histoGrid to zero
     for (int i = 0 ; i<(nH)*(nW) ; i++)
     {
       lutGrid[i].fill(0);
@@ -255,6 +314,12 @@ main( int argc,
     }
 
     computehisto( inputImage , histoGrid , wThumbnail , hThumbnail , nW , nH);
+
+    // Compute the threshold limit for the clipping described in the original 
+    // CLAHE algorithm
+    float factor = 3.0;
+    int threshH = factor * (wThumbnail * hThumbnail ) / sizeh;
+    // histoLimiteContrast( histoGrid , threshH , nW , nH);
 
     equalized( histoGrid , lutGrid , histoTarget , nW , nH);
     
@@ -271,20 +336,13 @@ main( int argc,
         }
       }
 
-    ThresholdFilterType::Pointer thresholdFilter ( ThresholdFilterType::New() );
-    // thresholdFilter->SetInPlace( true );
-    thresholdFilter->SetInput( gainImage );
     float upThresh = 1.5;
-    float lowThresh = 0.9;
-    thresholdFilter->SetOutsideValue (upThresh);
-    thresholdFilter->ThresholdAbove( upThresh );
-    thresholdFilter->Update();
-    thresholdFilter->SetInput( thresholdFilter->GetOutput() );
-    thresholdFilter->SetOutsideValue (lowThresh);
-    thresholdFilter->ThresholdBelow( lowThresh );
-    thresholdFilter->Update();
+    float lowThresh = 0.8;
+    // Limit contrast through limited gain
+    gainImage = gainLimiteContrast( gainImage , upThresh , lowThresh );
+    
     gainMultiplyer->SetInput1( inputImage );
-    gainMultiplyer->SetInput2( thresholdFilter->GetOutput() );
+    gainMultiplyer->SetInput2( gainImage );
     gainMultiplyer->Update();
     imageGainToVectorImageGainFilterOut->SetInput( chanel , gainImage );
     imageToVectorImageFilterOut->SetInput( chanel , gainMultiplyer->GetOutput() );
@@ -298,10 +356,5 @@ main( int argc,
   writer->SetInput( imageToVectorImageFilterOut->GetOutput() );
   writer->Update();
 
-  /*typedef otb::ImageFileWriter<VectorGainType>  WriterGainType;
-  WriterGainType::Pointer writergain( WriterGainType::New() );
-  writergain->SetFileName( argv[3] );
-  writergain->SetInput( gainVector );
-  writergain->Update();*/
   return 0;
 }
