@@ -365,7 +365,7 @@ AutoencoderModel<TInputValue,NeuronType>::DoPredict(const InputSampleType & valu
    
     shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
     
-    data = m_net.evalLayer( m_net.layerMatrices().size()/2 ,data); // features layer for a network containing the encoder and decoder part
+    data = m_net.evalLayer( m_net.layerMatrices().size()/2-1 ,data); // features layer for a network containing the encoder and decoder part
     /*
 	for (int i=0; i<m_net.size(); i++){ // loop over all autoencoders in m_net
 		data = m_net[i].encode(data);    
