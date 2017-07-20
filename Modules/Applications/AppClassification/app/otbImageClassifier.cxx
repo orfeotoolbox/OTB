@@ -50,7 +50,8 @@ public:
   itkTypeMacro(ImageClassifier, otb::Application);
 
   /** Filters typedef */
-  typedef UInt16ImageType                                                                      OutputImageType;
+  //typedef UInt16ImageType                                                                    OutputImageType;
+  typedef Int32ImageType                                                                       OutputImageType;
   typedef UInt8ImageType                                                                       MaskImageType;
   typedef itk::VariableLengthVector<FloatVectorImageType::InternalPixelType>                   MeasurementType;
   typedef otb::StatisticsXMLFileReader<MeasurementType>                                        StatisticsReader;
