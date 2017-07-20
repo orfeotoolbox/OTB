@@ -97,14 +97,16 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
     ++it;
     while (it != pairs.end())
       {
-      PrecisionType lambda1 = (*(it-1)).first;
-      PrecisionType lambda2 = (*it).first;
-//      PrecisionType deltaLambda = lambda2-lambda1;
       ValuePrecisionType rsr1 = (*(it-1)).second;
       ValuePrecisionType rsr2 = (*it).second;
-      ValuePrecisionType spectrum1 = (*m_InputSpectralResponse)(lambda1);
-      ValuePrecisionType spectrum2 = (*m_InputSpectralResponse)(lambda2);
-      /*
+      if(rsr1 > 0 || rsr2 >0)
+        {
+        PrecisionType lambda1 = (*(it-1)).first;
+        PrecisionType lambda2 = (*it).first;
+//      PrecisionType deltaLambda = lambda2-lambda1;
+        ValuePrecisionType spectrum1 = (*m_InputSpectralResponse)(lambda1);
+        ValuePrecisionType spectrum2 = (*m_InputSpectralResponse)(lambda2);
+        /*
         In order to simplify the computation for the reflectance mode,
         we introduce the solar irradiance in the general formula with
         a value of 1.0 for the luminance case.
@@ -112,21 +114,22 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
         In this way the formula is the same if we weight the RSR by
         the solar irradiance before the integration.
       */
-      ValuePrecisionType solarIrradiance1(1.0);
-      ValuePrecisionType solarIrradiance2(1.0);
-      if(m_ReflectanceMode)
-        {
-        solarIrradiance1 = (*solarIrradiance)(lambda1);
-        solarIrradiance2 = (*solarIrradiance)(lambda2);
+        ValuePrecisionType solarIrradiance1(1.0);
+        ValuePrecisionType solarIrradiance2(1.0);
+        if(m_ReflectanceMode)
+          {
+          solarIrradiance1 = (*solarIrradiance)(lambda1);
+          solarIrradiance2 = (*solarIrradiance)(lambda2);
+          }
+        rsr1 *= solarIrradiance1;
+        rsr2 *= solarIrradiance2;
+        res += trapezoid_area(lambda1, lambda2,
+                              rsr1*spectrum1,
+                              rsr2*spectrum2);
+        totalArea += trapezoid_area(lambda1, lambda2,
+                                    rsr1,
+                                    rsr2);
         }
-      rsr1 *= solarIrradiance1;
-      rsr2 *= solarIrradiance2;
-      res += trapezoid_area(lambda1, lambda2,
-                            rsr1*spectrum1,
-                            rsr2*spectrum2);
-      totalArea += trapezoid_area(lambda1, lambda2,
-                                  rsr1,
-                                  rsr2);
       ++it;
       }
     return res / totalArea;
