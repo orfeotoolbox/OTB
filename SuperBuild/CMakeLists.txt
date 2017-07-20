@@ -94,7 +94,7 @@ endif()
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
 option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
- 
+
 #get version of OTB from source_dir/CMakeLists.txt
 get_version(
   INPUT_FILE   "${CMAKE_SOURCE_DIR}/../CMakeLists.txt"
@@ -359,4 +359,3 @@ endif()
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
-

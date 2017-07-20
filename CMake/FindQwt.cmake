@@ -62,11 +62,16 @@
 # either expressed or implied, of the FreeBSD Project.
 #=============================================================================
 
-find_path ( QWT_INCLUDE_DIR
+# message( "QWT_INCLUDE_DIR: '${QWT_INCLUDE_DIR}'" )
+# message( "QWT_INCLUDE_DIR: '${QT_INCLUDE_DIR}'" )
+
+find_path( QWT_INCLUDE_DIR
   NAMES qwt_plot.h
-  HINTS ${QT_INCLUDE_DIR}
   PATH_SUFFIXES qwt
 )
+
+# message( "QWT_INCLUDE_DIR: '${QWT_INCLUDE_DIR}'" )
+# message( "QWT_INCLUDE_DIR: '${QT_INCLUDE_DIR}'" )
 
 set ( QWT_INCLUDE_DIRS ${QWT_INCLUDE_DIR} )
 
