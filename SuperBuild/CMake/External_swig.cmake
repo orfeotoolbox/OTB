@@ -76,6 +76,10 @@ else()
     BUILD_COMMAND $(MAKE)
     INSTALL_COMMAND $(MAKE) install
     DEPENDS ${SWIG_DEPENDENCIES}
+    LOG_DOWNLOAD 1
+    LOG_CONFIGURE 1
+    LOG_BUILD 1
+    LOG_INSTALL 1
     )
 
   ExternalProject_Add_Step(SWIG copy_source
