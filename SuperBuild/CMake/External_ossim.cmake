@@ -67,6 +67,9 @@ ExternalProject_Add(OSSIM
   ${OSSIM_SB_CONFIG}
   DEPENDS ${OSSIM_DEPENDENCIES}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 ExternalProject_Add_Step(OSSIM patch_no_cmakelists
