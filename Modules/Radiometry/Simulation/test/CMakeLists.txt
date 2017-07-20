@@ -53,10 +53,11 @@ otbSailReflVTest.cxx
 otbSatelliteRSRNew.cxx
 otbSailReflHTest.cxx
 otbFilterFunctionValues.cxx
+otbSoilDBTest.cxx
 )
 
 add_executable(otbSimulationTestDriver ${OTBSimulationTests})
-target_link_libraries(otbSimulationTestDriver ${OTBSimulation-Test_LIBRARIES})
+target_link_libraries(otbSimulationTestDriver ${OTBSimulation-Test_LIBRARIES} )
 otb_module_target_label(otbSimulationTestDriver)
 
 # Tests Declaration
@@ -317,4 +318,47 @@ otb_add_test(NAME raTuFilterFunctionValuesTest COMMAND otbSimulationTestDriver
   0.7             # lambda max
   0.05            # user step
   0.2 0.5 0.3 0.9 0.8 # vector
+  )
+
+otb_add_test(NAME siTvSoilDataParseFile COMMAND otbSimulationTestDriver otbSoilDataBaseParseFile
+  ${INPUTDATA}/Radiometry/Soils/sols_avignon_1990.txt
+  400 # wlmin
+  2450# wlmax
+  10  # wlstep
+  400 # wltest
+  0   # soil index test
+  1.0200000e-001 # refl test
+  460
+  2
+  6.2000000e-002
+  2440
+  134
+  6.8700000e-001
+  2450
+  133
+  6.0800000e-001
+  )
+
+otb_add_test(NAME siTvSailReflHSoilTest COMMAND otbSimulationTestDriver
+  --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvSailReflHSoilTest.txt
+  ${TEMP}/siTvSailReflHSoilTest.txt
+  otbSailReflHTest
+  30.0 #cab
+  10.0 #car
+  0.0 #CBrown
+  0.015 #Cw
+  0.009 #Cm
+  1.2 #N
+  2 #LAI
+  50 #Angl
+  1 #PSoil
+  70 #Skyl
+  0.2 #HSpot
+  30 #TTS
+  0 #TTO
+  0 #PSI
+  ${TEMP}/siTvSailReflHSoilTest.txt
+  ${INPUTDATA}/Radiometry/Soils/sols_avignon_1990.txt
+  20 # soil index
+  1000 #wlfactor
   )
