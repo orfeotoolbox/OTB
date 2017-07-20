@@ -343,6 +343,7 @@ message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
 message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
 
 if(DOWNLOAD_LOCATION)
+  message(STATUS "DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION}")
   message(STATUS "Source archives for dependencies will be taken from '${DOWNLOAD_LOCATION}'")
 else()
   message(STATUS "DOWNLOAD_LOCATION is not set. We will download all source archives during build!")
