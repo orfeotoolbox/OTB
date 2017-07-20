@@ -36,8 +36,8 @@ if(MSVC)
   configure_file(${CMAKE_SOURCE_DIR}/patches/TIFF/nmake.opt ${CMAKE_BINARY_DIR}/nmake_libtiff_extra.opt)
   ExternalProject_Add(TIFF_build
     PREFIX TIFF
-    URL "http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz"
-    URL_MD5 d1d2e940dea0b5ad435f21f03d96dd72
+    URL "http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz"
+    URL_MD5 2a7d1c1318416ddf36d5f6fa4600069b
     SOURCE_DIR ${TIFF_SB_SRC}
     BINARY_DIR ${TIFF_SB_SRC}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -68,8 +68,8 @@ if(MSVC)
 else()
   ExternalProject_Add(TIFF
     PREFIX TIFF
-    URL "http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz"
-    URL_MD5 d1d2e940dea0b5ad435f21f03d96dd72
+    URL "http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz"
+    URL_MD5 2a7d1c1318416ddf36d5f6fa4600069b
     SOURCE_DIR ${TIFF_SB_SRC}
     BINARY_DIR ${TIFF_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}

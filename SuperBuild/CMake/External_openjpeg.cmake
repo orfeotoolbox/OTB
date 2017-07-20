@@ -60,5 +60,5 @@ ExternalProject_Add(OPENJPEG
 
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(OPENJPEG FALSE)
 
-#Apply patches to openjpeg (for now Even Roualt optim)
+#Apply patches to openjpeg (for now Even Rouault optimizations)
 SUPERBUILD_PATCH_SOURCE(OPENJPEG "-ut")

@@ -45,7 +45,7 @@ endif()
 
 ExternalProject_Add(QWT
   PREFIX QWT
-  URL "http://sourceforge.net/projects/qwt/files/qwt/5.2.3/qwt-5.2.3.zip/download"
+  URL "http://downloads.sourceforge.net/project/qwt/qwt/5.2.3/qwt-5.2.3.zip"
   URL_MD5 310a1c8ab831f4b2219505dcb7691cf1
   SOURCE_DIR ${QWT_SB_SRC}
   BINARY_DIR ${QWT_SB_BUILD_DIR}
