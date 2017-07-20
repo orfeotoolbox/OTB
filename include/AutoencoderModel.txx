@@ -48,12 +48,64 @@ void AutoencoderModel<TInputValue,NeuronType>::Train()
 		ofs << "learning curve" << std::endl; 
 	}
 	
+	/// Initialization of the feed forward neural network
+	std::vector<size_t> layers;
+	layers.push_back(shark::dataDimension(inputSamples));
+	for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
+	{
+		layers.push_back(m_NumberOfHiddenNeurons[i]);
+		std::cout << m_NumberOfHiddenNeurons.Size() << std::endl;
+	}
+	// another loop for the decoder should be added, for now i just add the output layer size
+	std::cout << "i?" << static_cast<int>(m_NumberOfHiddenNeurons.Size()-1) << std::endl;
+	for (unsigned int i = std::max(0,static_cast<int>(m_NumberOfHiddenNeurons.Size()-1)) ; i > 0; --i)
+	{
+		std::cout << i << std::endl;
+		layers.push_back(m_NumberOfHiddenNeurons[i-1]);
+	}
 	
-	
+	layers.push_back(shark::dataDimension(inputSamples));
+	m_net.setStructure(layers);
+	shark::initRandomNormal(m_net,0.1);
+
+
+	/// Training of the first Autoencoder (first and last layer of the FF network)
 	if (m_Epsilon > 0){
 		shark::TrainingProgress<> criterion(5,m_Epsilon);
 		
-		for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
+		if (m_Noise[0] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
+		{
+			TrainOneLayer(criterion,0 , m_NumberOfHiddenNeurons[0],m_Noise[0],m_Regularization[0], inputSamples,ofs);
+		}
+		else
+		{
+			OutAutoencoderType net;
+			TrainOneSparseLayer( criterion, net , 0 , m_NumberOfHiddenNeurons[0],m_Rho[0],m_Beta[0],m_Regularization[0],inputSamples, ofs);
+		}
+		criterion.reset();
+	}
+	
+	else {
+		shark::MaxIterations<> criterion(m_NumberOfIterations);
+
+		if (m_Noise[0] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
+		{
+			TrainOneLayer(criterion,0, m_NumberOfHiddenNeurons[0],m_Noise[0],m_Regularization[0], inputSamples, ofs);
+		}
+		else
+		{
+			OutAutoencoderType net;
+			TrainOneSparseLayer(criterion, net, 0, m_NumberOfHiddenNeurons[0],m_Rho[0],m_Beta[0],m_Regularization[0], inputSamples, ofs);
+		}
+		criterion.reset();
+	}
+
+
+	/// Training of the other autoencoders 
+	if (m_Epsilon > 0){
+		shark::TrainingProgress<> criterion(5,m_Epsilon);
+		
+		for (unsigned int i = 1 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
 		{
 			if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
 			{
@@ -61,7 +113,8 @@ void AutoencoderModel<TInputValue,NeuronType>::Train()
 			}
 			else
 			{
-				TrainOneSparseLayer( criterion,i , m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i],inputSamples, ofs);
+				AutoencoderType net;
+				TrainOneSparseLayer( criterion, net , i , m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i],inputSamples, ofs);
 			}
 			criterion.reset();
 		}
@@ -71,7 +124,7 @@ void AutoencoderModel<TInputValue,NeuronType>::Train()
 	else {
 		shark::MaxIterations<> criterion(m_NumberOfIterations);
 		
-		for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
+		for (unsigned int i = 1 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
 		{
 			if (m_Noise[i] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
 			{
@@ -79,7 +132,8 @@ void AutoencoderModel<TInputValue,NeuronType>::Train()
 			}
 			else
 			{
-				TrainOneSparseLayer(criterion,i, m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples, ofs);
+				AutoencoderType net;
+				TrainOneSparseLayer(criterion, net, i, m_NumberOfHiddenNeurons[i],m_Rho[i],m_Beta[i],m_Regularization[i], inputSamples, ofs);
 			}
 			criterion.reset();
 		}
@@ -95,8 +149,8 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneLayer(shark::AbstractStop
 
 	std::size_t inputs = dataDimension(samples);
 	net.setStructure(inputs, nbneuron);
-	//initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
-	initRandomUniform(net,-1,1);
+	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	//initRandomUniform(net,-1,1);
 	shark::ImpulseNoiseModel noise(noise_strength,0.0); //set an input pixel with probability m_Noise to 0
 	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
@@ -136,15 +190,15 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneLayer(shark::AbstractStop
 
 
 template <class TInputValue, class NeuronType>
-template <class T>
-void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion,unsigned int layer_index, unsigned int nbneuron,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples, std::ostream& File)
+template <class T, class Autoencoder>
+void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion, Autoencoder & net, unsigned int layer_index, unsigned int nbneuron,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples, std::ostream& File)
 {
-	AutoencoderType net;
+	//AutoencoderType net;
 
 	std::size_t inputs = dataDimension(samples);
 	net.setStructure(inputs, nbneuron);
-	//initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
-	initRandomUniform(net,-1,1);
+	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	//initRandomUniform(net,-1,1);
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
 	shark::SparseAutoencoderError error(trainSet,&net, &loss, rho, beta);
@@ -172,9 +226,12 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(shark::Abstra
 	}
 	net.setParameterVector(optimizer.solution().point);
 	//m_net.push_back(net);
-	m_net.setLayer(layer_index,net.encoderMatrix(),net.hiddenBias());
-	m_net.setLayer( m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index,net.decoderMatrix(),net.outputBias());
+	m_net.setLayer(layer_index,net.encoderMatrix(),net.hiddenBias());  // Copy the encoder in the FF neural network
+	m_net.setLayer( m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index,net.decoderMatrix(),net.outputBias()); // Copy the decoder in the FF neural network
 	samples = net.encode(samples);
+	std::cout << "numero zero " << m_net.layerMatrix(layer_index) << "i " << layer_index <<std::endl <<std::endl;
+	std::cout << "numero uno " << m_net.layerMatrix(m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index) << "i " <<  m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index << std::endl <<std::endl;
+	
 }
 
 template <class TInputValue, class NeuronType>
@@ -202,6 +259,7 @@ bool AutoencoderModel<TInputValue,NeuronType>::CanWriteFile(const std::string & 
 template <class TInputValue, class NeuronType>
 void AutoencoderModel<TInputValue,NeuronType>::Save(const std::string & filename, const std::string & name)
 {
+	std::cout << "saving model ..." << std::endl;
 	std::ofstream ofs(filename);
 	ofs << m_net.name() << std::endl; // the first line of the model file contains a key
 	boost::archive::polymorphic_text_oarchive oa(ofs);
@@ -271,13 +329,23 @@ void AutoencoderModel<TInputValue,NeuronType>::Load(const std::string & filename
 	//m_net.read(ia);
 	ia >> m_net;
 	ifs.close();
-
-	m_NumberOfHiddenNeurons.SetSize(m_net.size());
-	for (int i=0; i<m_net.size(); i++){ 
+	
+	// This gives us the dimension if we keep the encoder and decoder
+	size_t feature_layer_index = m_net.layerMatrices().size()/2; 
+	this->m_Dimension = m_net.layerMatrix(feature_layer_index).size1(); // number of neurons in the feature layer (first dimension of the first decoder weight matrix)
+	std::cout << this->m_Dimension << std::endl;
+	
+	
+	
+	/* This might not be needed
+	int number_of_layers = m_net.layerMatrices().size()/2;
+	std::cout << "number of layers" << number_of_layers << std::endl;
+	m_NumberOfHiddenNeurons.SetSize(number_of_layers);
+	for (int i=0; i<number_of_layers; i++){ 
 		m_NumberOfHiddenNeurons[i] = m_net[i].numberOfHiddenNeurons();
 	}
-	this->m_Dimension = m_NumberOfHiddenNeurons[m_net.size()-1];
-	
+	this->m_Dimension = m_NumberOfHiddenNeurons[number_of_layers-1];
+	*/
 }
 
 
@@ -285,7 +353,7 @@ template <class TInputValue, class NeuronType>
 typename AutoencoderModel<TInputValue,NeuronType>::TargetSampleType
 AutoencoderModel<TInputValue,NeuronType>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
 {  
-	/*
+	
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
     {
@@ -296,18 +364,20 @@ AutoencoderModel<TInputValue,NeuronType>::DoPredict(const InputSampleType & valu
     features.push_back(samples);
    
     shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
-     	
+    
+    data = m_net.evalLayer( m_net.layerMatrices().size()/2 ,data); // features layer for a network containing the encoder and decoder part
+    /*
 	for (int i=0; i<m_net.size(); i++){ // loop over all autoencoders in m_net
 		data = m_net[i].encode(data);    
-	}
+	}*/
     TargetSampleType target;
-    target.SetSize(m_NumberOfHiddenNeurons[m_net.size()-1]);
+    target.SetSize(this->m_Dimension);
 	
-	for(unsigned int a = 0; a < m_NumberOfHiddenNeurons[m_net.size()-1]; ++a){
+	for(unsigned int a = 0; a < this->m_Dimension; ++a){
 		target[a]=data.element(0)[a];
 	}
 	return target;
-	*/
+	
 }
 
 
@@ -315,27 +385,28 @@ template <class TInputValue, class NeuronType>
 void AutoencoderModel<TInputValue,NeuronType>
 ::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
 {
-	/*
+	
 	std::vector<shark::RealVector> features;
 	Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
 	shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
 	TargetSampleType target;
-	
+	/*
 	for (auto net :m_net ){ // loop over all autoencoders in m_net
 		data = net.encode(data);    
 	}
-	
+	*/
+	data = m_net.evalLayer( m_net.layerMatrices().size()/2 ,data);   // features layer for a network containing the encoder and decoder part
 	unsigned int id = startIndex;
-	target.SetSize(m_NumberOfHiddenNeurons[m_net.size()-1]);
+	target.SetSize(this->m_Dimension);
 	for(const auto& p : data.elements())
 	{
-		for(unsigned int a = 0; a < m_NumberOfHiddenNeurons[m_net.size()-1]; ++a){
+		for(unsigned int a = 0; a < this->m_Dimension; ++a){
 			target[a]=p[a];
 		}
 		targets->SetMeasurementVector(id,target);
 		++id;	
     }
-    */ 
+    
 }
 
 } // namespace otb

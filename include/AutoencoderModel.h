@@ -86,8 +86,8 @@ public:
 	template <class T>
 	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion,unsigned int, unsigned int,double, double, shark::Data<shark::RealVector> &, std::ostream&);
 	
-	template <class T>
-	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion,unsigned int, unsigned int,double, double,double, shark::Data<shark::RealVector> &, std::ostream&);
+	template <class T, class Autoencoder>
+	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion,Autoencoder &, unsigned int, unsigned int,double, double,double, shark::Data<shark::RealVector> &, std::ostream&);
 	
 protected:
 	AutoencoderModel();	
@@ -102,8 +102,6 @@ private:
 	/** Network attributes */
 	//std::vector<AutoencoderType> m_net;
 	NetworkType m_net;
-	
-	
 	itk::Array<unsigned int> m_NumberOfHiddenNeurons;
 	/** Training parameters */
 	unsigned int m_NumberOfIterations; // stop the training after a fixed number of iterations
