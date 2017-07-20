@@ -69,7 +69,8 @@ private:
 
     // Documentation
     SetDocName("Extract ROI");
-    SetDocLongDescription("This application extracts a Region Of Interest with user defined size, or reference.");
+    SetDocLongDescription("This application extracts a Region Of Interest with "
+      "user parameter. It has several modes and channel can be selected also.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -78,68 +79,99 @@ private:
 
     // Set parameter input
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image.");
+    SetParameterDescription("in", "Image to be processed.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "Output image.");
+    SetParameterDescription("out", "Region of interest fom the input image");
 
     AddRAMParameter();
 
     AddParameter(ParameterType_Choice,"mode","Extraction mode");
     AddChoice("mode.standard","Standard");
-    SetParameterDescription("mode.standard","In standard mode, extract is done according to the coordinates entered by the user");
+    SetParameterDescription("mode.standard",
+      "In standard mode extraction is done with 2 parameters : the "
+      "upper left corner and the size of the region, decomposed "
+      "in X and Y coordinates.");
 
     // Fit mode : the ROI is computed through a ref vector dataset or a ref image 
     AddChoice("mode.fit","Fit");
-    SetParameterDescription("mode.fit","In fit mode, extract is made from a reference : image or vector dataset.");
-    AddParameter( ParameterType_InputImage , "mode.fit.im" , "Reference image" );
-    SetParameterDescription( "mode.fit.im" , "Reference image to define the ROI" );
+    SetParameterDescription("mode.fit",
+      "In fit mode, extract is made from a reference : image or vector dataset.");
+
+    AddParameter( ParameterType_InputImage , "mode.fit.im" , 
+      "Reference image" );
+    SetParameterDescription( "mode.fit.im" ,
+      "Reference image to define the ROI" );
     AddParameter( ParameterType_InputFilename , "mode.fit.vect" , "Reference vector" );
-    SetParameterDescription( "mode.fit.vect" , "Reference vector to define the ROI" );
+    SetParameterDescription( "mode.fit.vect" ,
+      "The extent of the vectors is computed and then "
+      "give an region of interest that will be extracted." );
 
     // Extent mode : ROI is computed with two point (upper left and lower left corners)
     AddChoice( "mode.extent" , "Extent" );
-    SetParameterDescription( "mode.extent" , "In extent mode, the ROI is defined by two points, the upper left corner and the lower right corner." );
+    SetParameterDescription( "mode.extent" ,
+      "In extent mode, the ROI is defined by two points, the upper left corner "
+      "and the lower right corner, decomposed in 2 coordinates : "
+      "X and Y or longitude and latitude." );
     AddParameter( ParameterType_Float , "mode.extent.ulx" , "Up left X/lon" );
-    SetParameterDescription( "mode.extent.ulx" , "X/lon coordinate of upper left corner point." );
+    SetParameterDescription( "mode.extent.ulx" ,
+      "X/lon coordinate of upper left corner point." );
     AddParameter( ParameterType_Float , "mode.extent.uly" , "Up left Y/lat" );
-    SetParameterDescription( "mode.extent.uly" , "Y/lat coordinate of upper left corner point." );
+    SetParameterDescription( "mode.extent.uly" ,
+      "Y/lat coordinate of upper left corner point." );
     AddParameter( ParameterType_Float , "mode.extent.lrx" , "Low right X/lon" );
-    SetParameterDescription( "mode.extent.lrx" , "X/lon coordinate of lower right corner point." );
+    SetParameterDescription( "mode.extent.lrx" ,
+      "X/lon coordinate of lower right corner point." );
     AddParameter( ParameterType_Float , "mode.extent.lry" , "Low right Y/lat" );
-    SetParameterDescription( "mode.extent.lry" , "Y/lat coordinate of lower right corner point." );
+    SetParameterDescription( "mode.extent.lry" ,
+      "Y/lat coordinate of lower right corner point." );
     // Unit of extent mode
     AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
     AddChoice( "mode.extent.unit.pxl" , "Pixel" );
-    SetParameterDescription("mode.extent.unit.pxl","The unit for the parameters coordinates will be the pixel");
+    SetParameterDescription("mode.extent.unit.pxl",
+      "The unit for the parameters coordinates will be the pixel, ie the "
+      "index of the two points.");
     AddChoice( "mode.extent.unit.phy" , "Physical" );
-    SetParameterDescription("mode.extent.unit.phy","The unit for the parameters coordinates will be the physical mesure of the image");
+    SetParameterDescription("mode.extent.unit.phy",
+      "The unit for the parameters coordinates will be the physical mesure of the image.");
     AddChoice( "mode.extent.unit.lonlat" , "Lon/Lat" );
-    SetParameterDescription("mode.extent.unit.lonlat","The unit for the parameters coordinates will be the longitude and the latitude");
+    SetParameterDescription("mode.extent.unit.lonlat",
+      "The unit for the parameters coordinates will be the longitude and the latitude.");
 
 
     // Radius mode : ROI is computed through a point and a radius
     AddChoice( "mode.radius" , "Radius" );
-    SetParameterDescription( "mode.radius" , "In radius mode, the ROI is defined by a point and a radius." );
+    SetParameterDescription( "mode.radius" ,
+      "In radius mode, the ROI is defined by a point and a radius." );
 
     AddParameter( ParameterType_Float , "mode.radius.r" , "Radius" );
-    SetParameterDescription( "mode.radius.r" , "This is the radius parameter of the radius mode." );
+    SetParameterDescription( "mode.radius.r" ,
+      "This is the radius parameter of the radius mode." );
     AddParameter( ParameterType_Choice , "mode.radius.unitr" , "Radius unit" );
     AddChoice( "mode.radius.unitr.pxl" , "Pixel" );
-    SetParameterDescription("mode.radius.unitr.pxl","The unit for the radius will be the pixel");
+    SetParameterDescription("mode.radius.unitr.pxl",
+      "The unit for the radius will be the pixel.");
     AddChoice( "mode.radius.unitr.phy" , "Physical" );
-    SetParameterDescription("mode.radius.unitr.phy","The unit for the radius will be the physical mesure of the image");
+    SetParameterDescription("mode.radius.unitr.phy",
+      "The unit for the radius will be the physical mesure of the image.");
 
     AddParameter( ParameterType_Float , "mode.radius.cx" , "X/lon coordinate of the center" );
-    SetParameterDescription( "mode.radius.cx" , "This is the center corrdinate of the radius mode, it will be either an abscissa or a longitude." );
+    SetParameterDescription( "mode.radius.cx" ,
+      "This is the center corrdinate of the radius mode, it will be either an "
+      "abscissa or a longitude." );
     AddParameter( ParameterType_Float , "mode.radius.cy" , "Y/lat coordinate of the center" );
-    SetParameterDescription( "mode.radius.cx" , "This is the center corrdinate of the radius mode, it will be either an ordinate or a latitude." );
+    SetParameterDescription( "mode.radius.cx" ,
+      "This is the center corrdinate of the radius mode, it will be either an "
+      "ordinate or a latitude." );
     AddParameter( ParameterType_Choice , "mode.radius.unitc" , "Center unit" );
     AddChoice( "mode.radius.unitc.pxl" , "Pixel" );
-    SetParameterDescription("mode.radius.unitc.pxl","The unit for the center coordinates will be the pixel");
+    SetParameterDescription("mode.radius.unitc.pxl",
+      "The unit for the center coordinates will be the pixel");
     AddChoice( "mode.radius.unitc.phy" , "Physical" );
-    SetParameterDescription("mode.radius.unitc.phy","The unit for the center coordinates will be the physical mesure of the image");
+    SetParameterDescription("mode.radius.unitc.phy",
+      "The unit for the center coordinates will be the physical mesure of the image.");
     AddChoice( "mode.radius.unitc.lonlat" , "Lon/Lat" );
-    SetParameterDescription("mode.radius.unitc.lonlat","The unit for the center coordinates will be the longitude and the latitude");
+    SetParameterDescription("mode.radius.unitc.lonlat",
+      "The unit for the center coordinates will be the longitude and the latitude.");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this,"elev");
@@ -680,8 +712,8 @@ private:
                 
         if( startin && sizein )
             {
-            SetParameterInt( "sizey", lri_out[1] - uli_out[1] , false );
-            SetParameterInt( "sizex", lri_out[0] - uli_out[0] , false );
+            SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1 , false );
+            SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1 , false );
             }
         }
         
