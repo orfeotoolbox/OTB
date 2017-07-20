@@ -81,6 +81,7 @@ ExternalProject_Add(FFTWD
   --disable-fortran
   --disable-dependency-tracking
   DEPENDS FFTWF
+  LOG_DOWNLOAD 1
   LOG_CONFIGURE 1
   LOG_BUILD 1
   LOG_INSTALL 1  
