@@ -19,8 +19,7 @@ typedef itk::Image< float , 2 > ImageGainType;
 
 
 void
-equalized( const std::array< int ,
-           sizeh > & inputHisto,
+equalized( const std::array< int , sizeh > & inputHisto,
            const std::array< int , sizeh > & targetHisto,
            std::array< int , sizeh > & lut)
 
