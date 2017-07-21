@@ -66,6 +66,10 @@ void ClassKMeansBase::InitKMSampling()
   SetDefaultParameterFloat("ct", 0.0001);
   MandatoryOff("ct");
 
+  AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
+  SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
+  MandatoryOff("vm");
+
   AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
   SetParameterDescription("outmeans", "Output text file containing centroid positions");
   MandatoryOff("outmeans");
@@ -87,7 +91,6 @@ void ClassKMeansBase::InitKMClassification()
 void ClassKMeansBase::ShareKMSamplingParameters()
 {
   ShareParameter("in", "imgenvelop.in");
-  ShareParameter("vm", "select.mask");
   ShareParameter("ram", "polystats.ram");
   ShareParameter("sampler", "select.sampler");
 }
@@ -124,6 +127,8 @@ void ClassKMeansBase::ConnectKMClassificationParams()
 
 void ClassKMeansBase::ConnectKMClassificationMask()
 {
+  otbAppLogINFO("Using input mask ...");
+  Connect("select.mask", "vm");
   Connect("classif.mask", "select.mask");
 }
 

@@ -654,7 +654,7 @@ endif()
 
 #----------- KMeansClassification TESTS ----------------
 if(OTB_USE_SHARK)
-  otb_test_application(NAME apTvClKMeansImageClassification
+  otb_test_application(NAME apTvClKMeansImageClassificationRandom
     APP  KMeansClassification
     OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
     -vm ${INPUTDATA}/qb_RoadExtract_mask_binary.png
@@ -662,13 +662,28 @@ if(OTB_USE_SHARK)
     -nc 5
     -maxit 10000
     -ct 0.0000001
-    -sampler random
+    -sampler ramdom
     -rand 121212
-    -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif
+    -out ${TEMP}/apTvClKMeansImageClassificationFilterOutputRandom.tif
+    -cleanup 0
     VALID   --compare-image ${NOTOL}
     ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif
-    ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif )
+    ${TEMP}/apTvClKMeansImageClassificationFilterOutputRandom.tif )
+
+  otb_test_application(NAME apTvClKMeansImageClassificationPeriodic
+    APP  KMeansClassification
+    OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
+    -vm ${INPUTDATA}/qb_RoadExtract_mask_binary.png
+    -ts 30000
+    -nc 5
+    -maxit 10000
+    -ct 0.0000001
+    -sampler periodic
+    -rand 121212
+    -out ${TEMP}/apTvClKMeansImageClassificationFilterOutputPeriodic.tif
+    -cleanup 0)
 endif()
+
 
 #----------- TrainImagesClassifier TESTS ----------------
 if(OTB_USE_LIBSVM)
