@@ -273,18 +273,12 @@ option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
 option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
 option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
-option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
-option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
-option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
-option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
-option(OTB_USE_SHARK "Enable module Shark in OTB" OFF)
-option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
-
-#Problem: below cmake setting will fail!
-#-DOTB_USE_OPENGL=ON -DOTB_USE_GLEW=ON -DOTB_USE_QWT=ON
-#This is because ENABLE_MONTEVERDI is OFF by default
-# This brings a lot of twisted logic. so taking out this option
-
+option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
+option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
+option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
+option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
+option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
+option(OTB_USE_QWT "Enable module QWT in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
