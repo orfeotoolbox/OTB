@@ -314,8 +314,10 @@ function(func_prepare_package)
   endif()
 
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
+  # for proj.dll, see Mantis-1424
   if(MSVC AND NOT PKG_GENERATE_XDK)
     list(APPEND PKG_PEFILES "ucrtbase.dll")
+    list(APPEND PKG_PEFILES "proj.dll")
   endif()
   
   file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb

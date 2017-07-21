@@ -352,8 +352,8 @@ path, you append a specific key at the end:
     "path_to_image?&skipcarto=true"
 
 The double quote can be necessary for a successful parsing. More details
-about the extended filenames can be found in the `wiki page <http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName>`_ , and
-also in the `OTB Software Guide <http://orfeo-toolbox.org/SoftwareGuide>`_  .
+about the extended filenames can be found in the :ref:`extended-filenames`
+section.
 
 Ortho-rectification with **OTB Applications**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

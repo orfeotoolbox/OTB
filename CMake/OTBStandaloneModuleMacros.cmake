@@ -18,30 +18,165 @@
 # limitations under the License.
 #
 
-get_filename_component(_OTBModuleMacros_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+#Adapted from ITKModuleExternal.cmake
+# This file ensures the appropriate variables are set up for a project extending
+# OTB before including OTBModuleMacros. This is the preferred way to build an
+# OTB module outside of the OTB source tree.
 
-set(_OTBModuleMacros_DEFAULT_LABEL "OTBModular")
+macro(otb_module_test)
+  include(../otb-module.cmake) # Load module meta-data
+  set(${otb-module-test}_LIBRARIES "")
+  foreach(dep IN LISTS OTB_MODULE_${otb-module-test}_DEPENDS)
+    list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
+  endforeach()
+endmacro()
 
-include(${_OTBModuleMacros_DIR}/OTBModuleAPI.cmake)
-include(${_OTBModuleMacros_DIR}/OTBModuleDoxygen.cmake)
-include(${_OTBModuleMacros_DIR}/OTBModuleHeaderTest.cmake)
-include(${_OTBModuleMacros_DIR}/OTBApplicationMacros.cmake)
 
-# With Apple's GGC <=4.2 and LLVM-GCC <=4.2 visibility of template
-# don't work. Set the option to off and hide it.
-if(APPLE AND CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION  VERSION_LESS "4.3")
-  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
-elseif(APPLE)
-  #RK:  compiler visibility nor woking on osx with appleclang xcode.
-  #gcc is a symlink to clang
-  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
-endif()
+function(otb_add_test)
+  set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
 
-include(GenerateExportHeader)
+  set(_depends_on_largeinput OFF)
+  foreach(arg IN LISTS ARGN)
+     if("x${arg}" MATCHES "${largeinput_regex}")
+       string(REGEX REPLACE "${largeinput_regex}" "\\1" largeinput_relative_path "${arg}")
+       set(_fullpath "${OTB_DATA_LARGEINPUT_ROOT}/${largeinput_relative_path}")
+       list(APPEND _out_arg ${_fullpath})
+       set(_depends_on_largeinput ON)
+     else()
+       list(APPEND _out_arg ${arg})
+     endif()
+  endforeach()
 
-if(OTB_CPPCHECK_TEST)
-  include(${_OTBModuleMacros_DIR}/OTBModuleCPPCheckTest.cmake)
-endif()
+  if (_depends_on_largeinput AND NOT OTB_DATA_USE_LARGEINPUT)
+    return()
+  endif()
+
+  add_test(${_out_arg})
+
+  if("NAME" STREQUAL "${ARGV0}")
+    set(_iat_testname ${ARGV1})
+  else()
+    set(_iat_testname ${ARGV0})
+  endif()
+
+  if(otb-module)
+    set(_label ${otb-module})
+  else()
+    set(_label ${main_project_name})
+  endif()
+
+  set_property(TEST ${_iat_testname} PROPERTY LABELS ${_label})
+
+endfunction()
+
+
+macro(otb_test_application)
+  cmake_parse_arguments(TESTAPPLICATION  "" "NAME;APP" "OPTIONS;TESTENVOPTIONS;VALID" ${ARGN} )
+  if(otb-module)
+    otb_add_test(NAME ${TESTAPPLICATION_NAME}
+                  COMMAND otbTestDriver
+                  ${TESTAPPLICATION_VALID}
+                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                  ${TESTAPPLICATION_APP}
+                  $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
+                  ${TESTAPPLICATION_OPTIONS}
+                  -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
+    # Be sure that the ${otb-module}-all target triggers the build of commandline launcher and testdriver
+    add_dependencies(${otb-module}-all otbApplicationLauncherCommandLine)
+    add_dependencies(${otb-module}-all otbTestDriver)
+  else()
+    add_test(NAME ${TESTAPPLICATION_NAME}
+            COMMAND otbTestDriver
+            ${TESTAPPLICATION_VALID}
+            Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+            ${TESTAPPLICATION_APP}
+            $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
+            ${TESTAPPLICATION_OPTIONS}
+            -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
+  endif()
+endmacro()
+
+#-----------------------------------------------------------------------------
+# Function otb_add_test_mpi to run mpi tests
+function(otb_add_test_mpi)
+   set( _OPTIONS_ARGS )
+   set( _ONE_VALUE_ARGS NAME NBPROCS COMMAND)
+   set( _MULTI_VALUE_ARGS )
+   cmake_parse_arguments( TEST_MPI "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
+
+   # Test nb procs
+   if( NOT TEST_MPI_NBPROCS )
+     set(TEST_MPI_NBPROCS 2)
+   endif()
+   # Test command line
+   foreach(arg IN LISTS TEST_MPI_UNPARSED_ARGUMENTS)
+     list(APPEND ARGS ${arg})
+   endforeach()
+   set (test_parameters -np ${TEST_MPI_NBPROCS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
+   otb_add_test(NAME ${TEST_MPI_NAME} COMMAND ${MPIEXEC} ${test_parameters})
+endfunction()
+
+
+macro(otb_module_target_label _target_name)
+  if(otb-module)
+    set(_label ${otb-module})
+    if(TARGET ${otb-module}-all)
+      add_dependencies(${otb-module}-all ${_target_name})
+    endif()
+  else()
+    set(_label ${_OTBModuleMacros_DEFAULT_LABEL})
+  endif()
+  set_property(TARGET ${_target_name} PROPERTY LABELS ${_label})
+endmacro()
+
+macro(otb_module_target_name _name)
+  get_property(_target_type TARGET ${_name} PROPERTY TYPE)
+  if (NOT ${_target_type} STREQUAL "EXECUTABLE")
+    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
+      set_property(TARGET ${_name} PROPERTY VERSION 1)
+      set_property(TARGET ${_name} PROPERTY SOVERSION 1)
+    endif()
+    if("${_name}" MATCHES "^[Oo][Tt][Bb]")
+      set(_otb "")
+    else()
+      set(_otb "otb")
+    endif()
+    set_property(TARGET ${_name} PROPERTY OUTPUT_NAME ${_otb}${_name}-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  endif()
+endmacro()
+
+macro(otb_module_target_install _name)
+  #Use specific runtime components for executables and libraries separately when installing a module,
+  #considering that the target of a module could be either an executable or a library.
+  get_property(_ttype TARGET ${_name} PROPERTY TYPE)
+  if("${_ttype}" STREQUAL EXECUTABLE)
+    set(runtime_component Runtime)
+  else()
+    set(runtime_component RuntimeLibraries)
+  endif()
+  install(TARGETS ${_name}
+    EXPORT  ${${otb-module}-targets}
+    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${runtime_component}
+    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT Development
+    )
+endmacro()
+
+macro(otb_module_target _name)
+  set(_install 1)
+  foreach(arg ${ARGN})
+    if("${arg}" MATCHES "^(NO_INSTALL)$")
+      set(_install 0)
+    else()
+      message(FATAL_ERROR "Unknown argument [${arg}]")
+    endif()
+  endforeach()
+  otb_module_target_name(${_name})
+  otb_module_target_label(${_name})
+  if(_install)
+    otb_module_target_install(${_name})
+  endif()
+endmacro()
 
 macro(otb_module _name)
   otb_module_check_name(${_name})
@@ -109,12 +244,37 @@ macro(otb_module_check_name _name)
 endmacro()
 
 macro(otb_module_impl)
-  include(otb-module.cmake) # Load module meta-data
-  set(${otb-module}_INSTALL_RUNTIME_DIR ${OTB_INSTALL_RUNTIME_DIR})
-  set(${otb-module}_INSTALL_LIBRARY_DIR ${OTB_INSTALL_LIBRARY_DIR})
-  set(${otb-module}_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_ARCHIVE_DIR})
-  set(${otb-module}_INSTALL_INCLUDE_DIR ${OTB_INSTALL_INCLUDE_DIR})
 
+  # Force shared lib and testing
+  OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
+  OPTION(BUILD_TESTING "Build testing" OFF)
+
+  find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS $ENV{OTB_DATA_ROOT} ${CMAKE_CURRENT_SOURCE_DIR}/../OTB-Data)
+  mark_as_advanced(OTB_DATA_ROOT)
+
+  set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+  set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+  set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
+  set(TEMP           ${CMAKE_BINARY_DIR}/Testing/Temporary)
+  set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
+  set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
+  set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
+  
+  if(${BUILD_TESTING})
+    enable_testing()
+  endif()
+  
+  include(otb-module.cmake) # Load module meta-data
+  set(${otb-module}_INSTALL_RUNTIME_DIR ${CMAKE_INSTALL_PREFIX}/bin)
+  set(${otb-module}_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_PREFIX}/lib)
+  set(${otb-module}_INSTALL_ARCHIVE_DIR ${CMAKE_INSTALL_PREFIX}/lib)
+  set(${otb-module}_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include)
+
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  
   # Collect all sources and headers for IDE projects.
   set(_srcs "")
   if("${CMAKE_GENERATOR}" MATCHES "Xcode|Visual Studio|KDevelop"
@@ -194,9 +354,6 @@ macro(otb_module_impl)
     if(OTB_CPPCHECK_TEST)
       otb_module_cppcheck_test( ${otb-module} )
     endif()
-    if(EXISTS "${${otb-module}_SOURCE_DIR}/include" AND BUILD_TESTING)
-      otb_module_headertest(${otb-module})
-    endif()
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/src/CMakeLists.txt)
@@ -205,8 +362,12 @@ macro(otb_module_impl)
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/app/CMakeLists.txt AND NOT ${otb-module}_NO_SRC)
-    add_subdirectory(app)
+    add_subdirectory(app) 
   endif()
+
+  if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
+    add_subdirectory(test)
+    endif()
 
   if( OTB_MODULE_${otb-module}_ENABLE_SHARED )
     if(OTB_SOURCE_DIR)
@@ -230,12 +391,9 @@ macro(otb_module_impl)
     if (BUILD_SHARED_LIBS)
       # export flags are only added when building shared libs, they cause
       # mismatched visibility warnings when building statically.
-      if (USE_COMPILER_HIDDEN_VISIBILITY)
-        # Prefer to use target properties supported by newer cmake
-        set_target_properties(${otb-module} PROPERTIES CXX_VISIBILITY_PRESET hidden)
-        set_target_properties(${otb-module} PROPERTIES C_VISIBILITY_PRESET hidden)
-        set_target_properties(${otb-module} PROPERTIES VISIBILITY_INLINES_HIDDEN 1)
-      endif()
+      add_compiler_export_flags(my_abi_flags)
+      set_property(TARGET ${otb-module} APPEND
+        PROPERTY COMPILE_FLAGS "${my_abi_flags}")
     endif()
   endif()
 
@@ -258,107 +416,5 @@ macro(otb_module_impl)
   set(otb-module-LIBRARY_DIRS "${${otb-module}_SYSTEM_LIBRARY_DIRS}")
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-build}")
-  configure_file(${_OTBModuleMacros_DIR}/OTBModuleInfo.cmake.in ${OTB_MODULES_DIR}/${otb-module}.cmake @ONLY)
-  set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-install}")
-  set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-install}")
-  configure_file(${_OTBModuleMacros_DIR}/OTBModuleInfo.cmake.in CMakeFiles/${otb-module}.cmake @ONLY)
-  install(FILES
-    ${${otb-module}_BINARY_DIR}/CMakeFiles/${otb-module}.cmake
-    DESTINATION ${OTB_INSTALL_PACKAGE_DIR}/Modules
-    COMPONENT Development
-    )
-  otb_module_doxygen(${otb-module})   # module name
 endmacro()
 
-macro(otb_module_test)
-  include(../otb-module.cmake) # Load module meta-data
-  set(${otb-module-test}_LIBRARIES "")
-  otb_module_use(${OTB_MODULE_${otb-module-test}_DEPENDS})
-  foreach(dep IN LISTS OTB_MODULE_${otb-module-test}_DEPENDS)
-    list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
-  endforeach()
-endmacro()
-
-macro(otb_module_warnings_disable)
-  foreach(lang ${ARGN})
-    if(MSVC)
-      string(REGEX REPLACE "(^| )[/-]W[0-4]( |$)" " "
-        CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w")
-    elseif(BORLAND)
-      set(CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w-")
-    else()
-      set(CMAKE_${lang}_FLAGS "${CMAKE_${lang}_FLAGS} -w")
-    endif()
-  endforeach()
-endmacro()
-
-macro(otb_module_target_label _target_name)
-  if(otb-module)
-    set(_label ${otb-module})
-    if(TARGET ${otb-module}-all)
-      add_dependencies(${otb-module}-all ${_target_name})
-    endif()
-  else()
-    set(_label ${_OTBModuleMacros_DEFAULT_LABEL})
-  endif()
-  set_property(TARGET ${_target_name} PROPERTY LABELS ${_label})
-endmacro()
-
-macro(otb_module_target_name _name)
-  get_property(_target_type TARGET ${_name} PROPERTY TYPE)
-  if (NOT ${_target_type} STREQUAL "EXECUTABLE")
-    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
-      set_property(TARGET ${_name} PROPERTY VERSION 1)
-      set_property(TARGET ${_name} PROPERTY SOVERSION 1)
-    endif()
-    if("${_name}" MATCHES "^[Oo][Tt][Bb]")
-      set(_otb "")
-    else()
-      set(_otb "otb")
-    endif()
-    set_property(TARGET ${_name} PROPERTY OUTPUT_NAME ${_otb}${_name}-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
-  endif()
-endmacro()
-
-macro(otb_module_target_export _name)
-  export(TARGETS ${_name} APPEND FILE ${${otb-module}-targets-build})
-endmacro()
-
-macro(otb_module_target_install _name)
-  #Use specific runtime components for executables and libraries separately when installing a module,
-  #considering that the target of a module could be either an executable or a library.
-  get_property(_ttype TARGET ${_name} PROPERTY TYPE)
-  if("${_ttype}" STREQUAL EXECUTABLE)
-    set(runtime_component Runtime)
-  else()
-    set(runtime_component RuntimeLibraries)
-  endif()
-  install(TARGETS ${_name}
-    EXPORT  ${${otb-module}-targets}
-    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${runtime_component}
-    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT Development
-    )
-endmacro()
-
-macro(otb_module_target _name)
-  set(_install 1)
-  foreach(arg ${ARGN})
-    if("${arg}" MATCHES "^(NO_INSTALL)$")
-      set(_install 0)
-    else()
-      message(FATAL_ERROR "Unknown argument [${arg}]")
-    endif()
-  endforeach()
-  otb_module_target_name(${_name})
-  otb_module_target_label(${_name})
-  otb_module_target_export(${_name})
-  if(_install)
-    otb_module_target_install(${_name})
-  endif()
-endmacro()
-
-macro(otb_module_requires_cxx11)
-  message(WARNING "otb_module_requires_cxx11 is deprecated since OTB version 6.2 which build with c++14 by default. You can safely remove the call to this macro.")
-  set(OTB_MODULE_${otb-module}_REQUIRES_CXX11 1)
-endmacro()

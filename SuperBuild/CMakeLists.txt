@@ -18,9 +18,13 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.1.0)
 
 project(OTB-SuperBuild)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Path to additional CMake modules
 #MESSAGE(INFO "${CMAKE_SOURCE_DIR}")
@@ -32,7 +36,8 @@ set(CMAKE_MODULE_PATH
 
 include(ExternalProject)
 
-include(OTBCheckCpp11Keywords)
+# Not needed as OTB Superbuild requires c++14 since version 6.2
+# include(OTBCheckCpp11Keywords)
 
 include(OTBCheckTargetSystemArch)
 
@@ -346,6 +351,11 @@ endif()
 
 message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
 message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
+if(DOWNLOAD_LOCATION)
+  message(STATUS "Source archives for dependencies will be taken from '${DOWNLOAD_LOCATION}'")
+else()
+  message(STATUS "DOWNLOAD_LOCATION is not set. We will download all source archives during build!")
+endif()
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
