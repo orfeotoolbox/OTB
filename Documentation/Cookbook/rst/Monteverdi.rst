@@ -56,14 +56,14 @@ The top toolbar is made up of ten icons; from left to right:
 
 #. gives/changes the current projection, used as reference of the view
 
-#. selects the effect to be applied to the selected layer :
+#. selects the effect to be applied to the selected layer:
    chessboard, local constrast, local translucency, normal, spectral
    angle, swipe (horizontal and vertical)
 
-#. a parameter used for the following effects : chessboard, local
+#. a parameter used for the following effects: chessboard, local
    contrast, local translucency, spectral angle
 
-#. a parameter used for the following effects : local constrast,
+#. a parameter used for the following effects: local constrast,
    spectral angle
 
 Image displaying
@@ -74,7 +74,7 @@ the user. There are many nice keyboard shortcuts or mouse tricks that
 let the user have a better experience in navigating throughout the
 loaded images. These shortcuts and tricks are given within the Help item
 of the main menu, by clicking Keymap; here is a short list of the most
-useful ones :
+useful ones:
 
 The classical ones:
 
@@ -106,22 +106,22 @@ In the layer stack part:
 Right side dock
 ~~~~~~~~~~~~~~~
 
-The dock on the right side is divided into four tabs :
+The dock on the right side is divided into four tabs:
 
--  Quicklook : gives the user a degraded view of the whole extent,
+-  Quicklook: gives the user a degraded view of the whole extent,
    letting him/her easily select the area to be displayed
 
--  Histogram : gives the user information about the value distribution
+-  Histogram: gives the user information about the value distribution
    of the selected channels. By clicking the mouse’s left button, user
    can sample their values.
 
--  Color Setup : lets the user map the image channels to the RGB
+-  Color Setup: lets the user map the image channels to the RGB
    channels. Also lets him/her set the alpha parameter (translucency).
 
--  Color dynamics : lets the user change the displaying dynamics of a
+-  Color dynamics: lets the user change the displaying dynamics of a
    selected image. For each RGB channel (each mapped to an image
    channel), the user can decide how the pixel range of a selected image
-   will be shortcut before being rescaled to 0-255 : either by setting
+   will be shortcut before being rescaled to 0-255: either by setting
    the extremal values, or by setting the extremal quantiles.
 
 Each tab is represented by the figures below ( [fig:quickhisto]
@@ -139,29 +139,29 @@ loaded images: projection, resolution (if available), name, and effect
 applied to the images (see top toolbar subsection). If the user moves
 the mouse over the displayed images, they will get more information:
 
--  (i,j) : pixel index
+-  (i,j): pixel index
 
--  (Red Green Blue) : original image pixel values from channel mapped to
+-  (Red Green Blue): original image pixel values from channel mapped to
    the RGB ones.
 
--  (X,Y) : pixel position
+-  (X,Y): pixel position
 
 Concerning the six icons, from left to right:
 
--  1st : moves the selected layer to the top of the stack
+-  1st: moves the selected layer to the top of the stack
 
--  2nd : moves the selected layer up within the stack
+-  2nd: moves the selected layer up within the stack
 
--  3rd : moves the selected layer down within the stack
+-  3rd: moves the selected layer down within the stack
 
--  4th : moves the selected layer to the bottom of the stack
+-  4th: moves the selected layer to the bottom of the stack
 
--  5th : use selected layer as projection reference
+-  5th: use selected layer as projection reference
 
--  6th : applies all display settings (color-setup, color-dynamics,
+-  6th: applies all display settings (color-setup, color-dynamics,
    shader and so forth) of selected layer to all other layers
 
-The layer stack is represented in the figure below ( [fig:layerstack]) :
+The layer stack is represented in the figure below ( [fig:layerstack]):
 
 .. figure:: Art/MonteverdiImages/layerstack.png
 
@@ -192,7 +192,7 @@ values in a txt file-, solarillumination.txt -solar illumination values
 in watt/m2/micron for each band in a txt file-, and so on... refer to
 the documentation of the application).
 
--  Note : if OTB (on which is based ) is able to parse the metadata of
+-  Note: if OTB (on which is based ) is able to parse the metadata of
    the image to be calibrated, then some of the fields will be
    automatically filled in.
 
@@ -209,7 +209,7 @@ BandMath application is intended to apply mathematical operations on
 pixels (launch it with shortcut CTRL+A). In this example, we are going
 to use this application to change the dynamics of an image, and check
 the result by looking at histogram tab, in the right side dock. The
-formula used is the following : :math:`\text{im1b1} \times 1000`. In the
+formula used is the following: :math:`\text{im1b1} \times 1000`. In the
 figures below ( [fig:BM]), one can notice that the mode of the
 distribution is located at position :math:`356.0935`, whereas in the
 transformed image, the mode is located at position :math:`354737.1454`,
@@ -256,7 +256,7 @@ effects.
 Polarimetry
 ~~~~~~~~~~~
 
-In this example, we are going to use three applications :
+In this example, we are going to use three applications:
 
 -  the first one is SARDecompositions. This application is used to
    compute the HaA decomposition. It takes as inputs three complex
@@ -277,7 +277,7 @@ In this example, we are going to use three applications :
       a gradient of colors to represent the entropy image.
 
    -  method.continuous.lut = hot. We specify here the kind of gradient
-      to be used : low values in black, high ones in white, and
+      to be used: low values in black, high ones in white, and
       intermediate ones in red/orange/yellow...
 
    -  method.continuous.min = 0 and method.continuous.max = 1. Here, the
@@ -295,7 +295,7 @@ Pansharpening
 ~~~~~~~~~~~~~
 
 Finally, let’s try a last example with the Pansharpening application
-(launch it with shortcut CTRL+A). The fields are quite easy to fill in :
+(launch it with shortcut CTRL+A). The fields are quite easy to fill in:
 this application needs a panchromatic image, a XS image, and an output
 image. These images are represented in the figures below ( [fig:ps12]
 and  [fig:ps3]):
@@ -306,12 +306,12 @@ and  [fig:ps3]):
 
 Now, in order to inspect the result properly, these three images are
 loaded in . The pansharpened image is placed to the top of the stack
-layer, and different layer effects are applied to it :
+layer, and different layer effects are applied to it:
 
--  in figure  [fig:ps4] : chessboard effect, to compare the result with
+-  in figure  [fig:ps4]: chessboard effect, to compare the result with
    the XS image.
 
--  in figure  [fig:ps5] : translucency effect, to compare the result
+-  in figure  [fig:ps5]: translucency effect, to compare the result
    with the panchromatic image.
 
 .. figure:: Art/MonteverdiImages/ps4.png
@@ -324,7 +324,7 @@ Conclusion
 The images used in this documentation can be found in the OTB-Data
 repository (https://git.orfeo-toolbox.org/otb-data.git):
 
--  in OTB-Data/Input :
+-  in OTB-Data/Input:
 
    -  QB\_TOULOUSE\_MUL\_Extract\_500\_500.tif and
       QB\_Toulouse\_Ortho\_XS\_ROI\_170x230.tif (GUI presentation)
@@ -335,4 +335,4 @@ repository (https://git.orfeo-toolbox.org/otb-data.git):
    -  QB\_Toulouse\_Ortho\_PAN.tif QB\_Toulouse\_Ortho\_XS.tif
       (pansharpening example)
 
--  in OTB-Data/Input/mv2-test : QB\_1\_ortho.tif
+-  in OTB-Data/Input/mv2-test: QB\_1\_ortho.tif

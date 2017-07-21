@@ -332,7 +332,7 @@ public:
 
   /** Determine if the ImageIO can stream writing to this file. Default is false.
    *
-   * There are two types of non exclusive streaming: pasteing subregions, and iterative
+   * There are two types of non exclusive streaming: pasting subregions, and iterative
    * If true then
    */
   virtual bool CanStreamWrite()

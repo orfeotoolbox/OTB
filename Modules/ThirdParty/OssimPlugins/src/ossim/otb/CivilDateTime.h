@@ -80,21 +80,21 @@ public:
    /**
     * @brief This function converts the current CivilDateTime into Julian Date
     * @return 0 if no error or an int greater than 0 indicating the error
-    * @param julianDate [out] The classe that receives the result of the conversion of the current CivilDateTime into JulianDate
+    * @param julianDate [out] The class that receives the result of the conversion of the current CivilDateTime into JulianDate
     */
    int AsJulianDate(JulianDate* julianDate);
 
    /**
     * @brief This function converts the current CivilDateTime into JSDDateTime
     * @return 0 if no error or an int greater than 0 indicating the error
-    * @param JSDdate [out] The classe that receives the result of the conversion of the current CivilDateTime into JSDDateTime
+    * @param JSDdate [out] The class that receives the result of the conversion of the current CivilDateTime into JSDDateTime
     */
    int AsJSDDateTime(JSDDateTime* JSDdate);
 
    /**
     * @brief This function converts the current CivilDateTime into GMSTDateTime
     * @return 0 if no error or an int greater than 0 indicating the error
-    * @param GMSTdate [out] The classe that receives the result of the conversion of the current CivilDateTime into GMSTDateTime
+    * @param GMSTdate [out] The class that receives the result of the conversion of the current CivilDateTime into GMSTDateTime
     */
    int AsGMSTDateTime(GMSTDateTime* GMSTdate);
 

@@ -87,7 +87,7 @@ int generic_otbMultiToMonoChannelExtractROI(int itkNotUsed(argc),
 
   reader->SetFileName(inputFilename);
   //THOMAS
-  //        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
+  //        reader->Update(); // Needed to know the number of channels in the image
   writer->SetFileName(outputFilename);
   extractROIFilter->SetInput(reader->GetOutput());
 

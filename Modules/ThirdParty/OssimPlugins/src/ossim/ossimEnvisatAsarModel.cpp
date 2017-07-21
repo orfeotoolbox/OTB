@@ -404,7 +404,7 @@ namespace ossimplugins
          fa = 1.0/atof(fa_str);
       }
 
-      // TODO : v�rifier que ceci est ok pour les produits IMP
+      // TODO check that this is OK for IMP products
       const char* time_dir_pix = "INCREASE";
       const char* time_dir_lin = "INCREASE";
 

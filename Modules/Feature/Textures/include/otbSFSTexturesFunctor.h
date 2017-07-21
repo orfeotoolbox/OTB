@@ -95,11 +95,13 @@ public:
   }
   void SetTextureStatus(unsigned int id, bool isSelected){ m_SelectedTextures[id] = isSelected; }
 
-  unsigned int GetSpatialThreshold(){ return m_SpatialThreshold; }
-  InternalPixelType GetSpectralThreshold(){ return m_SpectralThreshold; }
-  unsigned int GetRatioMaxConsiderationNumber(){ return m_RatioMaxConsiderationNumber; }
-  double  GetAlpha(){ return m_Alpha; }
-  unsigned int GetNumberOfDirections(){ return m_NumberOfDirections(); }
+  // Define some getters using itkGetMacro
+  itkGetMacro(SpatialThreshold,unsigned int);
+  itkGetMacro(SpectralThreshold,InternalPixelType);
+  itkGetMacro(RatioMaxConsiderationNumber,unsigned int);
+  itkGetMacro(Alpha,double);
+  itkGetMacro(NumberOfDirections,unsigned int);
+  
   std::vector<bool> GetTexturesStatus(){ return m_SelectedTextures; }
 
   inline OutputType operator ()(const TIter& it)

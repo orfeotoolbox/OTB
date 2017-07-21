@@ -32,6 +32,7 @@
 
 #include "otbMacro.h"
 
+
 namespace otb
 {
 
@@ -123,6 +124,8 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
   inputIt.GoToBegin();
   unsigned int neighborhoodSize = inputIt.Size();
 
+  double norm_double = 1.;
+  
   // Compute the norm of the filter
   if (m_NormalizeFilter)
     {
@@ -131,6 +134,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
       {
       norm += static_cast<InputRealType>(vcl_abs(m_Filter(i)));
       }
+    norm_double = static_cast<double>(vcl_abs(norm));
     }
 
   while (!inputIt.IsAtEnd())
@@ -145,7 +149,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
     // get the mean value
     if (m_NormalizeFilter)
       {
-      outputIt.Set(static_cast<OutputPixelType>(sum / double(norm)));
+      outputIt.Set(static_cast<OutputPixelType>(sum / norm_double));
       }
     else
       {

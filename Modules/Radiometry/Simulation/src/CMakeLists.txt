@@ -23,6 +23,7 @@ set(OTBSimulation_SRC
   otbProspectModel.cxx
   otbDataSpecP5B.cxx
   otbLeafParameters.cxx
+  otbSoilDataBase.cxx
   )
 
 add_library(OTBSimulation ${OTBSimulation_SRC})

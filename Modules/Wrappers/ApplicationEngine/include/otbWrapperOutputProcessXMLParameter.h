@@ -98,7 +98,16 @@ protected:
 
 private:
 
+  /** Recursive function to parse a group parameter */
+  void ParseGroup(const std::string& group);
+
   std::string    m_FileName;
+
+  /** Temporary storage of the XML node to fill (internal) */
+  TiXmlElement* m_Node;
+
+  /** Temporary pointer to the application to parse (internal) */
+  Application::Pointer m_Appli;
 
   OutputProcessXMLParameter(const OutputProcessXMLParameter &); //purposely not implemented
   void operator =(const OutputProcessXMLParameter&); //purposely not implemented
