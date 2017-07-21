@@ -104,7 +104,7 @@ size_t SoilDataBase::CountColumns(std::string fileName) const
 }
 void SoilDataBase::ParseSoilFile()
 {
-  unsigned int number_of_soils = CountColumns(m_SoilFileName) - 1;
+  auto number_of_soils = CountColumns(m_SoilFileName) - 1;
   m_SoilDataVector.resize(number_of_soils);
   std::ifstream sdb(m_SoilFileName);
   if(! sdb.is_open())
