@@ -281,15 +281,14 @@ option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
 option(OTB_USE_QWT "Enable module QWT in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
-find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
-
+find_path(OTB_DATA_ROOT README-OTB-Data
+  PATHS
+  $ENV{OTB_DATA_ROOT}
+  ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
-
-option(GENERATE_PACKAGE "Generate a portable .run package of OTB (only Unix)." OFF)
-option(GENERATE_XDK "Generate an XDK. This files provides all headers and libraries to build and or develop OTB (only Unix)." OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
@@ -328,10 +327,6 @@ if(FROM_SUPERBUILD_LIST)
   foreach( item ${FROM_SUPERBUILD_LIST})
     message(STATUS "Using SuperBuild version of ${item}")
   endforeach()
-endif()
-
-if(GENERATE_PACKAGE OR GENERATE_XDK)
-  add_subdirectory(Packaging)
 endif()
 
 message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
