@@ -89,7 +89,7 @@ public:
   /**
    * @brief This function converts the current JulianDate in JSDDateTime
    * @return 0 if no error or an int greater than 0 indicating the error
-   * @param JSDdate [out] The classe that receives the result of the conversion of the current JulianDate in JSDDateTime
+   * @param JSDdate [out] The class that receives the result of the conversion of the current JulianDate in JSDDateTime
    */
   int AsJSDDateTime(JSDDateTime* JSDdate);
 

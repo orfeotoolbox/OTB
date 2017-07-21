@@ -492,7 +492,7 @@ public:
    * underlying \c GDALDataset is required.
    * \pre The underlying \c GDALDataset must be valid, i.e.
    * <tt>m_DataSource != 0</tt>, an assertion is fired otherwise.
-   * \warning You must under no circonstance try to delete the \c GDALDataset
+   * \warning You must under no circumstance try to delete the \c GDALDataset
    * obtained this way.
    */
     ogr::version_proxy::GDALDatasetType & ogr();

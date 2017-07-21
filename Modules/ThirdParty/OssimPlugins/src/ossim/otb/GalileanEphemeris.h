@@ -68,7 +68,7 @@ public:
   GalileanEphemeris& operator=(const GalileanEphemeris& rhs);
 
   /**
-   * @brief This fonction converts the current ephemeris in the Geographic coordinates syst�m
+   * @brief This function converts the current ephemeris in the Geographic coordinates system
    */
   void ToGeographic(GeographicEphemeris* vGeo);
   void ToGeographic(double greenwich,GeographicEphemeris* vGeo);

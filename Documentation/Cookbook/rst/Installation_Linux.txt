@@ -4,7 +4,7 @@ Download it from `OTB's download page
 <https://www.orfeo-toolbox.org/download>`__.
 
 This package is a self-extractible archive. You may uncompress it with a
-double-click on the file, or with the command line :
+double-click on the file, or with the command line:
 
 .. parsed-literal::
 
@@ -20,27 +20,27 @@ Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
 archive is extracted, the directory structure is made of:
 
--  ``monteverdi.sh`` : A launcher script for Monteverdi
+-  ``monteverdi.sh``: A launcher script for Monteverdi
 
--  ``mapla.sh`` : A launcher script for Mapla
+-  ``mapla.sh``: A launcher script for Mapla
 
--  ``otbenv.profile`` : A script to initialize the environment for OTB
+-  ``otbenv.profile``: A script to initialize the environment for OTB
    executables
 
--  ``bin`` : A folder containing application launchers (otbcli.sh,
+-  ``bin``: A folder containing application launchers (otbcli.sh,
    otbgui.sh), Monteverdi and Mapla.
 
--  ``lib`` : A folder containing all shared libraries and OTB
+-  ``lib``: A folder containing all shared libraries and OTB
    applications.
 
--  ``share`` : A folder containing common resources and copyright
+-  ``share``: A folder containing common resources and copyright
    mentions.
 
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
 distributions. There is a small caveat for "expat" though. The binaries depend
 on "libexpat.so", which can be supplied by most package managers (apt, yum, ...).
-If not already present, look for one of the following packages :
+If not already present, look for one of the following packages:
 
 ::
 
@@ -48,7 +48,7 @@ If not already present, look for one of the following packages :
 
 The graphical executable (otbgui launchers, Monteverdi
 and Mapla) use the X11 libraries, which are widely used in a lot of
-distributions :
+distributions:
 
 ::
 
@@ -63,7 +63,8 @@ use the otbcli and otbgui launchers, you can initialize your environment
 with ``source otbenv.profile``.
 
 Python bindings
----------------
+~~~~~~~~~~~~~~~
+
 Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
 currently only Python 2.x is supported. If no compatible python is found, installation
 notify you about it. If everything works fine, you will be given information about
@@ -86,11 +87,12 @@ Notes:
 
 - Multiple installation of OTB can exists in same system without one conflicting the other!
 
-FAQ for Packaging
------------------
+FAQ
+~~~
 
 Q: I am getting an error message...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++
+
 ::
 
    Cannot mix incompatible Qt library (version 0x40806) with this library (version 0x40807)
@@ -104,7 +106,7 @@ A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk
    rm -f lib/libQt* && rm -fr lib/gtk
 
 Q: Monteverdi and Mapla applications look different from my other applications.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a the
 system gtk theme. If you can't install GTK on your system you can use the

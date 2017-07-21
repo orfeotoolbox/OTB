@@ -230,7 +230,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     destRegion.SetSize(destSize);
 
 #if 0
-    // Contrairement a Wavelet::INVERSE, ici ca ne sera a rien apparemment...
+    // Contrary to Wavelet::INVERSE, this is useless apparently...
 
     // Region Padding
     LowPassOperatorType lowPassOperator;

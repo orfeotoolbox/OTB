@@ -112,9 +112,6 @@ LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
 
   ImageRegionIteratorType outputIt(outputPtr, *fit);
 
-  //std::cout << "Region de la face list : " << *vectorFit << std::endl;
-  //std::cout << "Region dans le buffer : " << inputPtr->GetBufferedRegion() << std::endl;
-
   // Run Input Image
   for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt, ++outputIt)
     {

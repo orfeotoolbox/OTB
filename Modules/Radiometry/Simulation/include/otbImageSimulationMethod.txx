@@ -39,8 +39,8 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
   //    this->SetNthOutput(0, OutputImageType::New());
   //    this->SetNthOutput(1, OutputLabelImageType::New());
 
-  //TODO a changer mais pour le moment obligatoire car ProlateInterpolateImageFunction
-  // ne fonctionne qu'avec des images mono canal.
+  // TODO fix this. But for now this is mandatory because ProlateInterpolateImageFunction
+  // only works with single channel images.
   //    m_FTMFilter = FTMFilterType::New();
   //    m_Interpolator = InterpolatorType::New();
   //    m_MultiToMonoChannelFilter = MultiToMonoChannelFilterType::New();

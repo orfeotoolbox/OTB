@@ -1,4 +1,4 @@
-OTB-v.6.0.0 - Changes since version 5.10.0 (May 2th, 2017)
+OTB-v.6.0.0 - Changes since version 5.10.1 (May 2th, 2017)
 ----------------------------------------------------------
 
 * Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
@@ -30,10 +30,25 @@ OTB-v.6.0.0 - Changes since version 5.10.0 (May 2th, 2017)
     * 0001365: Python wrapper OTB-5.8.0: @rpath problem on MacOSX El Captain 10.11
     * 0001364: Crash of Mapla.app v5.10.0 on MacOSX  El Captain 10.11.5
     * 0001368: OTB 5.11 TrainImagesClassifier (FATAL) Error "Input Sample List is empty"
-    * 0001374: Alpha paramater seems not works in opengl mode
+    * 0001374: Alpha parameter seems not works in opengl mode
 
   * OTB-applications
     * 0001369: otbgui_Segmentation.bat won't produce correct results
+
+OTB-v.5.10.1 - Changes since version 5.10.0 (March 8th, 2017)
+---------------------------------------------------------------
+
+* Packaging :
+  * Upgrade to GDAL 2.1.3, compatible with new format of Sentinel 2 products
+  * Upgrade of SertitObject external module with bugfixes
+
+* Bugfixes :
+
+  * Orfeo Toolbox (OTB)
+    * 0001364: Crash of Mapla.app v5.10.0 on MacOSX El Captain 10.11.5
+    * 0001365: Python wrapper OTB-5.8.0: @rpath problem on MacOSX El Captain 10.11
+    * 0001367: Monteverdi from the OTB standalone package for Mac OS X fails to run
+    * 0001366: OTB 5.10 : can't use extract ROI using bindings python
 
 OTB-v.5.10.0 - Changes since version 5.8.0 (February 14th, 2017)
 ---------------------------------------------------------------
@@ -132,7 +147,7 @@ OTB-v.5.8.0 - Changes since version 5.6.1 (November 8th, 2016)
     * 0001300: monteverdi $input_filename crash with relative path
     * 0001303: Memory issue in Monteverdi with images with subdatasets (HDF4)
     * 0001299: Monteverdi shortcuts list needs some updates
-    * 0001291: Word "Échiquier" is not displayed properly in layer stack (effect column)
+    * 0001291: Word "Echiquier" is not displayed properly in layer stack (effect column)
 
   * OTB-Packaging
     * 0001290: Unable to run OTB applications from Mapla.app on Mac OS X
@@ -1743,7 +1758,7 @@ OTB-v.3.12.0 - Changes since version 3.10.0 (2011/01/31)
       are missing)
 
   * Documentation
-    * 0000483: "<" or ">" are interpreted as ¿ in Cookbook
+    * 0000483: "<" or ">" are interpreted as inverted ? in Cookbook
     * 0000370: Cookbook : make a HTML documentation
     * 0000378: Doxygen not updated
 
@@ -2236,10 +2251,10 @@ OTB-v.3.0.0 - Changes since version 2.8.0 (2009/05/11)
 --------------------------------------------------------
 
 * Applications
-  - Urban area extraction (Pléaides, QB, Ikonos, SPOT5). For more
+  - Urban area extraction (Pleaides, QB, Ikonos, SPOT5). For more
     details,
     see the README file
-  - Image to Data Base registration (Pléiades, QB). For more details, see
+  - Image to Data Base registration (Pleiades, QB). For more details, see
     the README file
   - Feature Extraction: add new textures, new radiometric indexes and
     add MeanShift capabilities
@@ -2247,7 +2262,7 @@ OTB-v.3.0.0 - Changes since version 2.8.0 (2009/05/11)
 
 * Library
     The library includes these additions
-  - Cloud detection for QB/Pléiades images
+  - Cloud detection for QB/Pleiades images
   - Alignment and right angle detection (Burns, Grompone)
   - Radiometric indices (vegetation, water, soil)
   - Optimized texture computations including Haralick, SFS, Pantex,
@@ -2339,7 +2354,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 *Common:
 
       Extraction ROI Classes :
-    - Lifting of the otbExtractionBase classe
+    - Lifting of the otbExtractionBase class
     - Correction of the SetExtractionRegion method
 
 *BasicFilters:

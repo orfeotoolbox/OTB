@@ -126,7 +126,7 @@ public:
   /** Show the parameters in a minimal form in comparison to PrintSelf */
   virtual void ShowParameters(std::ostream& os, itk::Indent indent) const;
 
-  // TODO: Distance entre distribution via une sorte de fonction membre...
+  // TODO: Distance between distribtions with some kind of member function...
 
 protected:
   ModelComponentBase();

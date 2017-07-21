@@ -116,7 +116,7 @@ find_library(
   OPENCV_core_LIBRARY
   NAMES ${opencv_core_NAMES}
   PATHS ${OPENCV_SEARCH_PATH}
-  PATH_SUFFIXES "lib" "lib64" "lib/x86_64-linux-gnu"
+  PATH_SUFFIXES "lib" "lib64" "lib/${CMAKE_LIBRARY_ARCHITECTURE}"
   NO_DEFAULT_PATH
   DOC "Path to opencv_core library")
 
@@ -124,7 +124,7 @@ find_library(
   OPENCV_ml_LIBRARY
   NAMES ${opencv_ml_NAMES}
   PATHS ${OPENCV_SEARCH_PATH}
-  PATH_SUFFIXES "lib" "lib64" "lib/x86_64-linux-gnu"
+  PATH_SUFFIXES "lib" "lib64" "lib/${CMAKE_LIBRARY_ARCHITECTURE}"
   NO_DEFAULT_PATH
   DOC "Path to opencv_ml library")
 
