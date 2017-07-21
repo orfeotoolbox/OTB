@@ -233,7 +233,7 @@ our case we use a range of :math:`-1` to :math:`1`).
 One more time, take care of the sign of this minimum and this maximum
 for disparities (always from image1 to image2).
 
-The command line for the *BlockMatching* application is :
+The command line for the *BlockMatching* application is:
 
 ::
 
@@ -275,13 +275,13 @@ Here are a few of these functionalities:
 
        otbcli_BandMath -il image1_epipolar.tif
                        -out image1_epipolar_mask.tif
-                       -exp "if(im1b1<=0,0,255)"
+                       -exp "im1b1<=0 ? 0 : 255"
 
    ::
 
        otbcli_BandMath -il image2_epipolar.tif
                        -out image2_epipolar_mask.tif
-                       -exp "if(im1b1<=0,0,255)"
+                       -exp "im1b1<=0 ? 0 : 255"
 
 -  -mask.variancet: The block matching algorithm has difficulties to
    find matches on uniform areas. We can use the variance threshold to
@@ -342,10 +342,10 @@ to their optimal metric value:
 
     otbcli_BandMath -il disparity_map_ncc.tif
                     -out thres_hdisparity.tif uint8
-                    -exp "if(im1b3>0.9,255,0)"
+                    -exp "im1b3>0.9 ? 255 : 0"
 
 Then, we concatenate thresholded disparities using the
-*ConcatenateImages* :
+*ConcatenateImages*:
 
 ::
 
@@ -394,67 +394,67 @@ images are processed by pairs (which is equivalent as using “ 0 1,2 3,4
 5 ” …). In addition to the usual elevation and projection parameters,
 main parameters have been split in groups detailed below:
 
-Output :
+Output:
     output parameters: DSM resolution, NoData value, Cell Fusion
     method,
 
-    -  : output projection map selection.
+    - Output projection map selection.
 
-    -  : Spatial Sampling Distance of the output DSM in meters
+    - Spatial Sampling Distance of the output DSM in meters
 
-    -  : DSM empty cells are filled with this float value (-32768 by
+    - DSM empty cells are filled with this float value (-32768 by
        default)
 
-    -  : Choice of fusion strategy in each DSM cell (max, min, mean,
+    - Choice of fusion strategy in each DSM cell (max, min, mean,
        acc)
 
-    -  : Output DSM
+    - Output DSM
 
-    -  : Output DSM extent choice
+    - Output DSM extent choice
 
-Stereorect :
+Stereorect:
     Direct and inverse stereorectification grid subsampling parameters
 
-    -  : Step of the direct deformation grid (in pixels)
+    - Step of the direct deformation grid (in pixels)
 
-    -  : Sub-sampling of the inverse epipolar grid
+    - Sub-sampling of the inverse epipolar grid
 
-BM :
+BM:
     Block Matching parameters.
 
-    -  : Block-matching metric choice (robust SSD, SSD, NCC, Lp Norm)
+    - Block-matching metric choice (robust SSD, SSD, NCC, Lp Norm)
 
-    -  : Radius of blocks for matching filter (in pixels, :math:`2` by
+    - Radius of blocks for matching filter (in pixels, :math:`2` by
        default)
 
-    -  : Minimum altitude below the selected elevation source (in
+    - Minimum altitude below the selected elevation source (in
        meters, -20.0 by default)
 
-    -  : Maximum altitude above the selected elevation source (in
+    - Maximum altitude above the selected elevation source (in
        meters, 20.0 by default)
 
-Postproc :
+Postproc: 
     Post-Processing parameters
 
-    -  : use bijection consistency. Right to Left correlation is
+    - Use bijection consistency. Right to Left correlation is
        computed to validate Left to Right disparities. If bijection is
        not found pixel is rejected
 
-    -  : use median disparities filtering (disabled by default)
+    - Use median disparities filtering (disabled by default)
 
-    -  : use block matching metric output to discard pixels with low
+    - Use block matching metric output to discard pixels with low
        correlation value (disabled by default, float value)");
 
-Mask :
+Mask:
     Compute optional intermediate masks.
 
-    -  : Mask for left input image (must have the same size for all
+    - Mask for left input image (must have the same size for all
        couples)
 
-    -  : Mask for right input image (must have the same size for all
+    - Mask for right input image (must have the same size for all
        couples)
 
-    -  : This parameter allows to discard pixels whose local variance is
+    - This parameter allows to discard pixels whose local variance is
        too small. The size of the neighborhood is given by the radius
        parameter. (disabledd by default)
 

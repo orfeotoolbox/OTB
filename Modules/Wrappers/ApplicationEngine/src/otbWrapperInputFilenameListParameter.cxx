@@ -108,7 +108,7 @@ InputFilenameListParameter::SetNthFileName( const unsigned int id, const std::st
     strParameter->HasValue();
 
     m_FilenameList->SetNthElement(id, strParameter);
-
+    SetActive(true);
     this->Modified();
     return true;
     }

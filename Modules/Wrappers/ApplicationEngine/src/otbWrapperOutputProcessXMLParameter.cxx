@@ -45,6 +45,8 @@ namespace otb
 namespace Wrapper
 {
 OutputProcessXMLParameter::OutputProcessXMLParameter()
+  : m_Node(ITK_NULLPTR)
+  , m_Appli()
 {
   this->SetKey("outxml");
   this->SetName("Save otb application to xml file");
@@ -160,7 +162,9 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 TiXmlElement*
 OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
 {
+  m_Appli = app;
   TiXmlElement * n_App = new TiXmlElement("application");
+  m_Node = n_App;
 
   AddChildNodeTo(n_App, "name", app->GetName());
   AddChildNodeTo(n_App, "descr", app->GetDescription());
@@ -183,24 +187,55 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
       std::string tag = *tagIt;
       AddChildNodeTo(n_DocTags, "tag", tag);
     }
-  ParameterGroup::Pointer paramGroup = app->GetParameterList();
 
-  std::vector<std::string> paramList = paramGroup->GetParametersKeys(true);
+  // recursive call to ParseGroup(), starting with "" (i.e. GetParameterList())
+  this->ParseGroup(std::string(""));
 
+  // reset temporary members
+  m_Appli = ITK_NULLPTR;
+  m_Node = ITK_NULLPTR;
+  return n_App;
+}
+
+void
+OutputProcessXMLParameter::ParseGroup(const std::string& group)
+{
+  std::string prefix(group);
+  ParameterGroup::Pointer paramGroup = m_Appli->GetParameterList();
+  if (!group.empty())
+    {
+    prefix += '.';
+    Parameter* rawParam = paramGroup->GetParameterByKey(group);
+    ParameterGroup* rawParamAsGroup = dynamic_cast<ParameterGroup*>(rawParam);
+    if (rawParamAsGroup)
+      {
+      paramGroup = rawParamAsGroup;
+      }
+    else
+      {
+      itkExceptionMacro("Function ParseGroup() expected a group parameter for key "<<group);
+      }
+    }
+
+  std::vector<std::string> paramList = paramGroup->GetParametersKeys(false);
 
   // Iterate through parameters
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it!= paramList.end(); ++it)
     {
-      std::string key = *it;
-      Parameter *param = paramGroup->GetParameterByKey(key);
+      std::string key = prefix + *it;
+      Parameter *param = paramGroup->GetParameterByKey(*it);
       std::string paramName = param->GetName();
-      ParameterType type = app->GetParameterType(key);
+      ParameterType type = m_Appli->GetParameterType(key);
       std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
 
-      // if param is a Group, don't do anything, ParamGroup don't have values
-      if (type != ParameterType_Group)
-      {
-       bool paramExists = app->HasUserValue(key) && app->IsParameterEnabled(key);
+      // if param is a Group, inspect this group with a recursive call
+      if (type == ParameterType_Group)
+        {
+        this->ParseGroup(key);
+        }
+      else
+       {
+       bool paramExists = m_Appli->HasUserValue(key) && m_Appli->IsParameterEnabled(key);
        if ( type == ParameterType_OutputProcessXML )
          {
            paramExists = false;
@@ -213,7 +248,7 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
 
            if(eParam!=ITK_NULLPTR)
              {
-             //Don't use app->HasUserValue which returns false always because of
+             //Don't use m_Appli->HasUserValue which returns false always because of
              //EmptyParameter::HasValue() is false for EmptyParameter
              if(eParam->HasUserValue())
                {
@@ -252,18 +287,18 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
                   type == ParameterType_InputVectorDataList || type == ParameterType_StringList ||
                   type == ParameterType_ListView )
            {
-           values = app->GetParameterStringList(key);
+           values = m_Appli->GetParameterStringList(key);
            hasValueList = true;
            }
          else if (type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_RAM )
            {
-           value = app->GetParameterAsString(key);
+           value = m_Appli->GetParameterAsString(key);
            }
          else if(type == ParameterType_Float)
            {
            std::ostringstream oss;
            oss << std::setprecision(std::numeric_limits<float>::digits10+1);
-           oss << app->GetParameterFloat( key );
+           oss << m_Appli->GetParameterFloat( key );
            value = oss.str();
            }
          else if ( type == ParameterType_String || type == ParameterType_InputFilename ||
@@ -272,12 +307,12 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
                    type == ParameterType_Choice || type == ParameterType_OutputVectorData ||
                    type == ParameterType_OutputFilename)
            {
-           value = app->GetParameterString(key);
+           value = m_Appli->GetParameterString(key);
            }
          else if(key == "rand")
            {
            std::ostringstream strm;
-           strm << app->GetParameterInt("rand");
+           strm << m_Appli->GetParameterInt("rand");
            value = strm.str();
            }
          else if (typeAsString == "Empty")
@@ -341,11 +376,18 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
                 AddChildNodeTo(n_Values, "value",*strIt);
               }
            }
-         n_App->LinkEndChild(n_Parameter);
-       }
+         m_Node->LinkEndChild(n_Parameter);
+         }
+       // dig into Choice parameter
+       if (type == ParameterType_Choice)
+        {
+        std::string choiceGroup(key);
+        choiceGroup += '.';
+        choiceGroup += m_Appli->GetParameterString(key);
+        this->ParseGroup(choiceGroup);
+        }
       }
     }
-  return n_App;
 }
 
 } //end namespace wrapper

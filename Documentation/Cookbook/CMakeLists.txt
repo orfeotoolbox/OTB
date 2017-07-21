@@ -13,7 +13,7 @@ if(BUILD_TESTING)
 endif()
 
 string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
-set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR}, OTB Team")
+set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES.The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA)")
 
 #find OTB
 find_package(OTB REQUIRED)
