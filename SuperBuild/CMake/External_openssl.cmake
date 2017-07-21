@@ -51,6 +51,10 @@ if(MSVC)
     perl Configure ${OPENSSL_BUILD_ARCH} no-asm  --prefix=${CMAKE_WIN_INSTALL_PREFIX} --openssldir=${CMAKE_WIN_INSTALL_PREFIX}
     BUILD_COMMAND ms/do_ms.bat
     INSTALL_COMMAND nmake -f ms/ntdll.mak install
+    LOG_DOWNLOAD 1
+    LOG_CONFIGURE 1
+    LOG_BUILD 1
+    LOG_INSTALL 1
     )
 
 else(UNIX)
@@ -68,7 +72,12 @@ else(UNIX)
     ${CMAKE_COMMAND} -E chdir ${OPENSSL_SB_BUILD_DIR} ./config ${OPENSSL_BUILD_ARCH}
     --prefix=${SB_INSTALL_PREFIX} shared zlib zlib-dynamic -I${SB_INSTALL_PREFIX}/include -L${SB_INSTALL_PREFIX}/lib
     BUILD_COMMAND $(MAKE)
-    INSTALL_COMMAND $(MAKE) install)
+    INSTALL_COMMAND $(MAKE) install
+    LOG_DOWNLOAD 1
+    LOG_CONFIGURE 1
+    LOG_BUILD 1
+    LOG_INSTALL 1
+    )
 
   ExternalProject_Add_Step(OPENSSL remove_static
     COMMAND ${CMAKE_COMMAND} -E remove
