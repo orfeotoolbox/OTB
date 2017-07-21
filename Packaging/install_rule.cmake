@@ -134,7 +134,7 @@ function(install_rule src_file)
     endif()
 
     if("${sfile_NAME}" MATCHES "^otbapp_")
-      set(output_dir "lib/otb/applications")
+      set(install_dir "lib/otb/applications")
       set(install_type PROGRAMS)
       ########### install cli and gui script for each application ###########
       set(WRAPPER_SCRIPT_EXT "")

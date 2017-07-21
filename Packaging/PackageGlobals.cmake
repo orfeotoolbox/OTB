@@ -18,6 +18,26 @@
 # limitations under the License.
 #
 
+set(DEST_BIN_DIR bin)
+set(DEST_APP_DIR lib/otb/applications)
+
+set(LIB_PREFIX lib)
+set(DEST_LIB_DIR lib)
+set(EXE_EXT "")
+set(SCRIPT_EXT ".sh")
+set(LIB_EXT ".so")
+set(PYMODULE_EXT ".so")
+if(WIN32)
+  set(LIB_PREFIX)
+  set(DEST_LIB_DIR bin)
+  set(EXE_EXT ".exe")
+  set(LIB_EXT ".dll")
+  set(SCRIPT_EXT ".bat")
+  set(PYMODULE_EXT ".pyd")
+elseif(APPLE)
+  set(LIB_EXT ".dylib")
+endif()
+
 set(WINDOWS_SYSTEM_DLLS
   user32.dll
   gdi32.dll
@@ -45,17 +65,17 @@ set(WINDOWS_SYSTEM_DLLS
   python...dll
   )
 
-if(PKG_GENERATE_XDK)
-  set(WINDOWS_SYSTEM_DLLS
-    ${WINDOWS_SYSTEM_DLLS}
-    api-ms-win-*
-    concrt140.dll
-    ucrtbase.dll
-    msvcp140.dll
-    msvrt140.dll
-    vcomp140.dll
-    )
-endif()
+# if(PKG_GENERATE_XDK)
+#   set(WINDOWS_SYSTEM_DLLS
+#     ${WINDOWS_SYSTEM_DLLS}
+#     api-ms-win-*
+#     concrt140.dll
+#     ucrtbase.dll
+#     msvcp140.dll
+#     msvrt140.dll
+#     vcomp140.dll
+#     )
+# endif()
 
 set(LINUX_SYSTEM_DLLS
   libm.so

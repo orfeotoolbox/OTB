@@ -29,7 +29,7 @@ function(process_file_recurse input_file)
   set(raw_items)
 
   execute_process(
-    COMMAND ${LOADER_PROGRAM} ${LOADER_PROGRAM_ARGS} "${input_file_full_path}"
+    COMMAND ${LOADER_PROGRAM} ${LOADER_ARGS} "${input_file_full_path}"
     RESULT_VARIABLE loader_rv
     OUTPUT_VARIABLE loader_ov
     ERROR_VARIABLE loader_ev
@@ -54,11 +54,11 @@ function(process_file_recurse input_file)
       continue()
     endif()
 
-    if(NOT "${candidate}" MATCHES "${loader_program_regex}")
+    if(NOT "${candidate}" MATCHES "${LOADER_REGEX}")
       continue()
     endif()
    
-    string(REGEX REPLACE "${loader_program_regex}" "\\1" raw_item "${candidate}")
+    string(REGEX REPLACE "${LOADER_REGEX}" "\\1" raw_item "${candidate}")
 
     if(NOT raw_item)
       continue()
@@ -99,7 +99,7 @@ function(process_file_recurse input_file)
       search_library(${item} PKG_SEARCHDIRS item_full_path)
       set(is_a_symlink FALSE)
       set(item_target_file)
-      func_is_file_a_symbolic_link("${item_full_path}" is_a_symlink item_target_file)      
+      isfile_symlink("${item_full_path}" is_a_symlink item_target_file)      
       if(is_a_symlink)
         set(${item}_RESOLVED TRUE CACHE INTERNAL "")
         set(item ${item_target_file})

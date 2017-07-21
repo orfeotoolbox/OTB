@@ -1,0 +1,10 @@
+macro(clear_cmakecache_variables)
+unset(matched_vars CACHE)
+  get_variables_ending_with("_USED|_RESOLVED" matched_vars)
+  foreach (var_to_unset IN LISTS matched_vars)
+    if(PKG_DEBUG)
+      message("unset ${var_to_unset} from cache")
+    endif()
+    unset(${var_to_unset} CACHE)
+  endforeach()
+endmacro() #clear_cmakecache_variables

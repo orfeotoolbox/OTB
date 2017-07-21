@@ -1,0 +1,20 @@
+function(search_library input_file pkg_searchdirs result)
+  set(${result} "" PARENT_SCOPE)
+  foreach(pkg_searchdir ${${pkg_searchdirs}})
+
+    if(EXISTS ${pkg_searchdir}/${input_file} )
+      if(PKG_DEBUG)
+        message("Found '${pkg_searchdir}/${input_file}' (return)")
+      endif()
+      set(${result} "${pkg_searchdir}/${input_file}" PARENT_SCOPE)
+      return()
+    endif()
+
+    #check for file with lowercase
+    string(TOLOWER "${input_file}" input_file_lower )
+    if(EXISTS ${pkg_searchdir}/${input_file_lower})
+      set(${result} "${pkg_searchdir}/${input_file_lower}"  PARENT_SCOPE)
+      return()
+    endif()
+  endforeach()
+endfunction()

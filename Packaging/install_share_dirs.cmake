@@ -22,21 +22,21 @@ function(install_share_dirs)
   endif()
 
 
-  func_install_without_message("${GDAL_DATA_DIR}" "share" )
+  install_without_message("${GDAL_DATA_DIR}" "share" )
   ####################### install GeoTIFF data ########################
-  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/epsg_csv" "share" )
+  install_without_message("${PKG_SHARE_SOURCE_DIR}/epsg_csv" "share" )
 
   ####################### install OSSIM data ##########################
-  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/ossim" "share" )
+  install_without_message("${PKG_SHARE_SOURCE_DIR}/ossim" "share" )
 
   ####################### install proj share ##########################
   if(EXISTS ${PKG_SHARE_SOURCE_DIR}/proj)
-    func_install_without_message("${PKG_SHARE_SOURCE_DIR}/proj" "share" )
+    install_without_message("${PKG_SHARE_SOURCE_DIR}/proj" "share" )
   endif()
   
   ####################### Install copyrights ##########################
   #install license for packages
-  func_install_without_message("${PKG_SHARE_SOURCE_DIR}/copyright" "share" )
+  install_without_message("${PKG_SHARE_SOURCE_DIR}/copyright" "share" )
 
   
   install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE DESTINATION ${PKG_STAGE_DIR})
