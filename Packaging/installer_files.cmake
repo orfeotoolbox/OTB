@@ -91,13 +91,23 @@ macro(installer_files)
     cmake_uninstall_lines_1 ${cmake_uninstall_lines} )
 
   # Replace @CMAKE_BINARY_DIR@ with ${MY_INSTALL_DIR}.
-  # The result is stored in cmake_uninstall_lines_NEW
+  # The result is stored in cmake_uninstall_lines_2
   # Input is 'cmake_uninstall_lines_1' created from string(REPLACE...
   string(
     REPLACE
     "@CMAKE_BINARY_DIR@"
     "$\{MY_INSTALL_DIR}"
-    cmake_uninstall_lines_NEW ${cmake_uninstall_lines_1} )
+    cmake_uninstall_lines_2 ${cmake_uninstall_lines_1} )
+
+  # Replace @CMAKE_COMMAND@ with ${CMAKE_COMMAND}.
+  # The result is stored in cmake_uninstall_lines_NEW
+  # Input is 'cmake_uninstall_lines_2' created from string(REPLACE...
+  string(
+    REPLACE
+    "@CMAKE_COMMAND@"
+    "$\{CMAKE_COMMAND}"
+    cmake_uninstall_lines_NEW ${cmake_uninstall_lines_2} )
+  
 
   #write cmake_uninstall_otb.cmake
   file(WRITE "${CMAKE_BINARY_DIR}/cmake_uninstall_otb.cmake"
