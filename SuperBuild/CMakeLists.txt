@@ -276,7 +276,14 @@ option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
 option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
-option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
+
+#Cannot activate GLUT on OSX. See manits issue #1194")
+if(APPLE)
+  option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+else()
+  option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
+endif()
+
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
 option(OTB_USE_QWT "Enable module QWT in OTB" ON)
 
