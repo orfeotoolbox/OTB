@@ -151,7 +151,6 @@ include(install_translation_files)
 include(install_cmake_files)
 include(install_mvd_files)
 include(install_qtdev_files)
-include(install_script_files)
 include(install_vstudio_files)
 include(installer_files)
 include(create_package)
@@ -210,8 +209,6 @@ install_cmake_files()
 install_mvd_files()
 
 install_qtdev_files()
-
-install_script_files()
 
 install_vstudio_files()
 

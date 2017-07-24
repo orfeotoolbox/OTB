@@ -19,10 +19,8 @@
 # limitations under the License.
 #
 
-@CODE_FOR_PYTHON_SETUP_SH@
-
 if [ ! -f "$OTB_PYTHON_EXE" ] ; then
-    OTB_PYTHON_EXE=$(which python)
+    OTB_PYTHON_EXE=$(which python2.7)
 fi
 
 python_major_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[0])")
@@ -61,9 +59,18 @@ do
 done
 
 if [ "$found_python_lib" -eq "1" ]; then
+    numpy_import_result="$($OTB_PYTHON_EXE -c 'import numpyx' 2>&1)"
+    if [ ! -z "$numpy_import_result" ]; then
+	printf %s\\n "*****Error occurred during installation******"
+	printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"	
+	printf %s\\n "numpy not installed with '$OTB_PYTHON_EXE'"
+	printf %s\\n "Check failed with result:"
+	printf %s\\n "$numpy_import_result"
+	exit 1;
+    fi;
     printf %s\\n "OTB python bindings will be configured for $OTB_PYTHON_EXE ( version: $python_version )"
     printf %s\\n "Found python library: $python_lib_file_path"
-    ln -sf "$python_lib_file_path" "OUT_DIR/lib/$python_INSTALLED_SONAME"
+    #ln -sf "$python_lib_file_path" "OUT_DIR/lib/$python_INSTALLED_SONAME"
 else
     printf %s\\n "*****Error occurred during installation******"
     printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
@@ -71,5 +78,5 @@ else
     printf %s\\n "We had searched following directories $python_lib_dirs"
     printf %s\\n "If you don't have python-dev package installed, install it and make a symlink"
     printf %s\\n "If you don't have python headers and so installed on a custom location, then make a symlink"
-    printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME OUT_DIR/lib/$python_INSTALLED_SONAME"
+    printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME OUT_DIR/lib/$python_INSTSONAME"
 fi
