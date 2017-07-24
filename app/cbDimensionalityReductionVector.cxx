@@ -223,7 +223,7 @@ class CbDimensionalityReductionVector : public Application
 			ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
 			trainingShiftScaleFilter->SetInput(input);
 			trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
-			trainingShiftScaleFilter->SetScales(stddevMeasurementVector*3);
+			trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
 			trainingShiftScaleFilter->Update();
 			otbAppLogINFO("mean used: " << meanMeasurementVector);
 			otbAppLogINFO("standard deviation used: " << stddevMeasurementVector);

@@ -143,7 +143,6 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 			rho[i]=std::stof(s_rho[i]);
 			beta[i]=std::stof(s_beta[i]);
 		}
-		std::cout << nb_neuron << std::endl;
 		dimredTrainer->SetNumberOfHiddenNeurons(nb_neuron);
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
 		dimredTrainer->SetEpsilon(GetParameterFloat("model.autoencoder.epsilon"));

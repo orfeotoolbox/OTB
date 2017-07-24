@@ -83,11 +83,14 @@ public:
 
 	void Train() ITK_OVERRIDE;
 	
-	template <class T>
-	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion,unsigned int, unsigned int,double, double, shark::Data<shark::RealVector> &, std::ostream&);
+	template <class T, class Autoencoder>
+	void TrainOneLayer(shark::AbstractStoppingCriterion<T> & criterion,Autoencoder &,unsigned int, unsigned int,double, double, shark::Data<shark::RealVector> &, std::ostream&);
 	
 	template <class T, class Autoencoder>
 	void TrainOneSparseLayer(shark::AbstractStoppingCriterion<T> & criterion,Autoencoder &, unsigned int, unsigned int,double, double,double, shark::Data<shark::RealVector> &, std::ostream&);
+	
+	template <class T>
+	void TrainNetwork(shark::AbstractStoppingCriterion<T> & criterion,double, double,double, shark::Data<shark::RealVector> &, std::ostream&);
 	
 protected:
 	AutoencoderModel();	

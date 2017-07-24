@@ -124,7 +124,7 @@ private:
 		ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
 		trainingShiftScaleFilter->SetInput(input);
 		trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
-		trainingShiftScaleFilter->SetScales(stddevMeasurementVector*3);
+		trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
 		trainingShiftScaleFilter->Update();
 
 		ListSampleType::Pointer trainingListSample= trainingShiftScaleFilter->GetOutput();
