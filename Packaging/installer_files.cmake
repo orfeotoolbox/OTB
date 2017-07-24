@@ -30,13 +30,27 @@ macro(installer_files)
     install( PROGRAMS "${CMAKE_BINARY_DIR}/make_symlinks" DESTINATION ${PKG_STAGE_DIR})
   endif()
 
-  ########### install patchelf( linux only) ##################
+
   if(LINUX)
     install( PROGRAMS "${PATCHELF_PROGRAM}" DESTINATION ${PKG_STAGE_DIR})
   endif()
 
+  file(READ "${OTB_BINARY_DIR}/install_manifest.txt"  mfile_lines)
+  string(
+    REPLACE
+    "${CMAKE_INSTALL_PREFIX}"
+    "OUT_DIR"
+    mfile_lines_NEW ${mfile_lines} )
 
-  ################## otb_loader executable ###################
+  file(WRITE "${CMAKE_BINARY_DIR}/install_manifest.txt"
+    ${mfile_lines_NEW})
+
+  install(FILES "${CMAKE_BINARY_DIR}/install_manifest.txt"
+    DESTINATION ${PKG_STAGE_DIR})
+
+  install(FILES "Files/uninstall_otb.sh"
+    DESTINATION ${PKG_STAGE_DIR})
+
   add_executable(otb_loader ${CMAKE_CURRENT_SOURCE_DIR}/Files/otb_loader.cxx)
   target_link_libraries(otb_loader ${CMAKE_DL_LIBS})
   install(TARGETS otb_loader DESTINATION ${PKG_STAGE_DIR}/bin)

@@ -52,6 +52,12 @@ if [ -f "$otb_python_lib" ]; then
     "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$otb_python_lib"
 fi
 
+#install uninstall_otb script
+echo "Installing uninstall script for OTB 'uninstall_otb.sh'"
+sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/install_manifest.txt"
+sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/uninstall_otb.sh"
+chmod +x "$OUT_DIR/uninstall_otb.sh"
+
 sed -i -E  "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/monteverdi.sh"
 chmod +x "$OUT_DIR/monteverdi.sh"
 
@@ -74,12 +80,10 @@ EOF
 
 rm -f  "$OUT_DIR/make_symlinks"
 
-
 printf %s\\n ""
-printf %s\\n "You MUST source './otbenv.profile' file to use OTB. see next line:"
-printf %s\\n ". $OUT_DIR/otbenv.profile"
-printf %s\\n "The changes to environment variables from ./otbenv.profile only affect current session."
-printf %s\\n "You can also copy above line to  ~/.profile to keep those changes permanently!"
+printf %s\\n "source './otbenv.profile' file to set required environment variables"
+printf %s\\n "eg: '. $OUT_DIR/otbenv.profile'"
+printf %s\\n "You can also copy above line to  ~/.profile to keep changes permanently!"
 printf %s\\n "More documentation can be found in $OUT_DIR/README"
 
 
