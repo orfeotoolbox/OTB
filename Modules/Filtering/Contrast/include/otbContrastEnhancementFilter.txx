@@ -23,6 +23,8 @@
 
 #include "otbContrastEnhancementFilter.h"
 
+#include <limits>
+
 #include "itkThresholdImageFilter.h"
 
 namespace otb
@@ -34,6 +36,13 @@ ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 ::ContrastEnhancementFilter()
 {
 	targetHisto.fill(0);
+	gainImage = ImageGainType::New();
+	gainMultiplyer = MultiplyImageFilterType::New() ;
+	wThumbnail = 0;
+	hThumbnail = 0;
+	threshFactor = INT_MAX;
+	lowThresh = 0;
+	upThresh = INT_MAX;
 }
 
 template <class TInputImage, class TOutputImage , int Tsize >
@@ -43,10 +52,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 {
 	int countMapValue = 0;
   int countValue = 0;
-  lut[countValue] = 1; // Black stay black
+  lut[countValue] = 0; // Black stays black
   ++countValue;
   int countInput  = inputHisto[ 0 ] + inputHisto[ countValue ];
-  lut[lut.size() - 1 ] = 1 ; // White stay white
+  lut[lut.size() - 1 ] = lut.size() - 1 ; // White stays white
   int countTarget = this->targetHisto[ countMapValue ];
   while ( countMapValue<Tsize && countValue<Tsize-1)
     {
@@ -56,23 +65,33 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
       countTarget += this->targetHisto[countMapValue];
       }
     else
-      {
+      {	
       lut[countValue] =  countMapValue ;
       ++countValue;
       countInput  += inputHisto[ countValue ];
       }
     }
+  for (int i = 0 ; i<lut.size() ; i++)
+  	{
+  	if (lut[i] == -1)
+  		{
+  		lut[i] = lut[i-1];	
+  		}	
+  	}
 }
 
 template <class TInputImage, class TOutputImage , int Tsize >
 void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::equalized()
+::equalized( std::array< int , Tsize > gridHisto[] , 
+						 std::array< int , Tsize > gridLut[] ,
+						 int nW , 
+						 int nH )
 {
-  for (int i = 0 ; i< this->nW ; i++)
+  for (int i = 0 ; i< nW ; i++)
     {
     for ( int j = 0 ; j<nH ; j++ )
       {
-      equalized( this->gridHisto[i + j * this->nW ] , this->targetHisto , this->gridLut[i+ j * this->nW ]);
+      equalized( gridHisto[i + j * nW ] , gridLut[i+ j * nW ]);
       }
     }
 }
@@ -80,17 +99,20 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 
 template <class TInputImage, class TOutputImage , int Tsize >
 void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::computehisto( typename TInputImage::Pointer const input)
+::computehisto( typename TInputImage::ConstPointer const input ,
+								std::array< int , Tsize > gridHisto[] ,
+								int nW,
+								int nH)
 {
   typename TInputImage::IndexType index;
   // int nbBin = this->inputHisto[0].size();
-  for (int i = 0 ; i < this->wThumbnail * this->nW ; i++)
+  for (int i = 0 ; i < this->wThumbnail * nW ; i++)
     {
-    for (int j = 0 ; j< this->hThumbnail * this->nH ; j++)
+    for (int j = 0 ; j< this->hThumbnail * nH ; j++)
       {
       index[0] = i;
       index[1] = j;
-      ++this->inputHisto[ (i / this->wThumbnail)  + ( j / this->hThumbnail ) * this->nW][ input->GetPixel( index ) ];
+      ++gridHisto[ (i / this->wThumbnail)  + ( j / this->hThumbnail ) * nW][ input->GetPixel( index ) ];
       }
     }
 }
@@ -98,7 +120,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 
 template <class TInputImage, class TOutputImage , int Tsize >
 void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::createTarget(typename TInputImage::Pointer const input )
+::createTarget(typename TInputImage::ConstPointer const input )
 {
   typename TInputImage::SizeType size = input->GetLargestPossibleRegion().GetSize();
   int nbPixel = size[0] * size[1];
@@ -118,57 +140,60 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 
 template <class TInputImage, class TOutputImage , int Tsize >
 float ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::interpoleGain(int pixelValue,
-                typename TInputImage::IndexType index)
+::interpoleGain( const std::array< int , Tsize > gridLut[] ,
+								 int pixelValue ,
+                 typename TInputImage::IndexType index ,
+                 int nW ,
+                 int nH )
 {
   int lutX = index[0]/this->wThumbnail;
   int lutY = index[1]/this->hThumbnail;
   float x = static_cast< float >(index[0]%this->wThumbnail) / static_cast< float >(this->wThumbnail);
   float y = static_cast< float >(index[1]%this->hThumbnail) / static_cast< float >(this->hThumbnail);
   float w = (1 - std::abs(x - 0.5) )*(1 - std::abs(y - 0.5) );
-  float gain = this->lut[lutX + lutY * this->nW ][ pixelValue ] * (1 - std::abs(x - 0.5) )*(1 - std::abs(y - 0.5) ) ;
-  bool right = x>=0.5 && lutX<(this->nW - 1) ;
+  float gain = gridLut[lutX + lutY * nW ][ pixelValue ] * (1 - std::abs(x - 0.5) )*(1 - std::abs(y - 0.5) ) ;
+  bool right = x>=0.5 && lutX<(nW - 1) ;
   bool up = y<=0.5 && lutY>0;
   bool left = x<=0.5 && lutX>0;
-  bool down = y>=0.5 && lutY<(this->nH - 1);
+  bool down = y>=0.5 && lutY<(nH - 1);
   if ( right )
     {
-    gain += this->lut[lutX + 1 + lutY * this->nW ][ pixelValue ] * (1 - std::abs(y - 0.5) ) * (x - 0.5);
+    gain += gridLut[lutX + 1 + lutY * nW ][ pixelValue ] * (1 - std::abs(y - 0.5) ) * (x - 0.5);
     w += (1 - std::abs(y - 0.5) ) * (x - 0.5);
     }
   if ( left )
     {
-    gain += this->lut[lutX + lutY * this->nW - 1 ][ pixelValue ] * (1 - std::abs(y - 0.5) ) * std::abs(x - 0.5);
+    gain += gridLut[lutX + lutY * nW - 1 ][ pixelValue ] * (1 - std::abs(y - 0.5) ) * std::abs(x - 0.5);
     w += (1 - std::abs(y - 0.5) ) * std::abs(x - 0.5);
     }
   if ( up )
     {
-    gain += this->lut[lutX + (lutY - 1) * this->nW ][ pixelValue ] * std::abs(y - 0.5) * (1 - std::abs(x - 0.5) );
+    gain += gridLut[lutX + (lutY - 1) * nW ][ pixelValue ] * std::abs(y - 0.5) * (1 - std::abs(x - 0.5) );
     w += std::abs(y - 0.5) * (1 - std::abs(x - 0.5) );
     }
   if ( down )
     {
-    gain += this->lut[lutX + (lutY + 1)* this->nW ][ pixelValue ]  * (y - 0.5) * (1 - std::abs(x - 0.5) );
+    gain += gridLut[lutX + (lutY + 1)* nW ][ pixelValue ]  * (y - 0.5) * (1 - std::abs(x - 0.5) );
     w += (y - 0.5) * (1 - std::abs(x - 0.5) );
     }
   if ( up && left )
     {
-    gain += this->lut[( lutX - 1 ) + (lutY - 1 ) * this->nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    gain += gridLut[( lutX - 1 ) + (lutY - 1 ) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
     w += std::abs(y - 0.5) * std::abs(x - 0.5);
     }
   if ( down && left )
     {
-    gain += this->lut[( lutX - 1 ) + (lutY + 1) * this->nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    gain += gridLut[( lutX - 1 ) + (lutY + 1) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
     w += std::abs(y - 0.5) * std::abs(x - 0.5);
     }
   if ( up && right )
     {
-    gain += this->lut[( lutX + 1 ) + (lutY - 1) * this->nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    gain += gridLut[( lutX + 1 ) + (lutY - 1) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
     w += std::abs(y - 0.5) * std::abs(x - 0.5) ;
     }
   if ( down && right )
     {
-    gain += this->lut[( lutX + 1 ) + (lutY + 1 ) * this->nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
+    gain += gridLut[( lutX + 1 ) + (lutY + 1 ) * nW ][ pixelValue ] * std::abs(y - 0.5) * std::abs(x - 0.5);
     w += std::abs(y - 0.5) * std::abs(x - 0.5);
     }
 
@@ -177,10 +202,13 @@ float ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 
 template <class TInputImage, class TOutputImage , int Tsize >
 void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::histoLimiteContrast( int hThresh )
+::histoLimiteContrast( std::array< int , Tsize > gridHisto[] ,
+											 int hThresh,
+											 int nW,
+											 int nH )
 {
-  int histoLength = this->inputHisto[0].size();
-  int nbHisto = this->nW * this->nH;
+  int histoLength = gridHisto[0].size();
+  int nbHisto = nW * nH;
   int toThresh = 0;
   int npx = 0;
   int rest = 0;
@@ -189,10 +217,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
     toThresh = 0;
     for (int j = 0 ; j < histoLength ; j++)
       {
-      if ( this->inputHisto[i][j] > hThresh )
+      if ( gridHisto[i][j] > hThresh )
         {
-          toThresh+= this->inputHisto[i][j] - hThresh;
-          this->inputHisto[i][j] = hThresh ;
+          toThresh+= gridHisto[i][j] - hThresh;
+          gridHisto[i][j] = hThresh ;
         }
       }
     if (toThresh != 0 )
@@ -201,10 +229,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
       rest = toThresh%histoLength;
       for (int j = 0 ; j < histoLength ; j++)
        {
-        this->inputHisto[i][j] += npx ;
+        gridHisto[i][j] += npx ;
         if (rest>0)
           {
-          ++this->inputHisto[i][j];
+          ++gridHisto[i][j];
           --rest;
           }
         }
@@ -235,24 +263,74 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 ::GenerateData()
 {
 	typename OutputImageType::Pointer     output = this->GetOutput();
-  typename InputImageType::ConstPointer input  = this->GetInput();
+  typename InputImageType::ConstPointer input = this->GetInput();
 
-  
+  // output->SetRegions( input->GetLargestPossibleRegion() );
+  // output->Allocate();
+  // output->SetOrigin( input->GetOrigin() );
+  // output->SetSpacing( input->GetSpacing() );
+  // typename InputImageType::PixelType Val(1);
+	// Val[0];
+	// output->FillBuffer(Val);
+  createTarget(input);
 
-
-  if ( inputImage->GetLargestPossibleRegion().GetSize()[1]%this->hThumbnail != 0 )
+  if ( input->GetLargestPossibleRegion().GetSize()[1]%this->hThumbnail != 0 )
     {
     std::cout<<"error : hThumbnail = "<<this->hThumbnail<<" is not a divider of the input's width"<<std::endl;
     std::cout<<"Image Height = "<<input->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
-    break;
     }
-  if ( inputImage->GetLargestPossibleRegion().GetSize()[0]%this->wThumbnail != 0 )
+  if ( input->GetLargestPossibleRegion().GetSize()[0]%this->wThumbnail != 0 )
     {
     std::cout<<"error : wThumbnail = "<<this->wThumbnail<<"is not a divider of the input's height"<<std::endl;
     std::cout<<"Image Width = "<<input->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
-    break;
     }
 
+  int nW = input->GetLargestPossibleRegion().GetSize()[0]/this->wThumbnail;
+  int nH = input->GetLargestPossibleRegion().GetSize()[1]/this->hThumbnail;
+  
+  gainImage->SetRegions( input->GetRequestedRegion() );
+  gainImage->Allocate();
+  gainImage->SetOrigin( input->GetOrigin() );
+
+  std::array< int , Tsize > gridHisto[(nH)*(nW)] = {} ;
+ 	std::array< int , Tsize > gridLut[(nH)*(nW)] = {} ;
+
+
+
+  // Initialize gridLut and gridHisto to zero
+  for (int i = 0 ; i<(nH)*(nW) ; i++)
+    {
+      gridLut[i].fill(-1);
+      gridHisto[i].fill(0);
+    }
+
+  computehisto( input , gridHisto , nW , nH );
+
+  int histoTresh = this->threshFactor * (this->wThumbnail * this->hThumbnail ) / Tsize;
+	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
+
+	equalized( gridHisto , gridLut , nW , nH );
+	
+	float gainValue = 0.0;
+  typename InputImageType::IndexType index;
+  for (uint i = 0 ; i < input->GetLargestPossibleRegion().GetSize()[0] ; i++)
+    {
+    for (uint j = 0 ; j < input->GetLargestPossibleRegion().GetSize()[1] ; j++)
+      {
+      index[0] = i;
+      index[1] = j;
+      gainValue = interpoleGain( gridLut , input->GetPixel( index ) , index , nW , nH );
+      gainImage->SetPixel( index , gainValue );
+      }
+    }
+
+
+  gainLimiteContrast();
+
+  gainMultiplyer->SetInput1( input );
+  gainMultiplyer->SetInput2( gainImage );
+  gainMultiplyer->Update();
+  this-> GraftOutput ( gainMultiplyer -> GetOutput ());
 }
 
 

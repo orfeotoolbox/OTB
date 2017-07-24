@@ -24,6 +24,8 @@
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 
+#include "itkMultiplyImageFilter.h"
+
 namespace otb
 {
 
@@ -37,7 +39,6 @@ public:
 
 	/** typedef to simplify variables definition and declaration. */
   typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer ImagePointer;
   /** typedef to simplify variables definition and declaration. */
   typedef TOutputImage OutputImageType;
 
@@ -59,23 +60,35 @@ public:
 	           std::array< int , Tsize > & lut);
 	
 	void
-	equalized();
+	equalized( std::array< int , Tsize > gridHisto[] , 
+						 std::array< int , Tsize > gridLut[] ,
+						 int nW ,
+						 int nH );
 	
 	void
-	computehisto( ImagePointer const input );
+	computehisto( typename TInputImage::ConstPointer const input ,
+								std::array< int , Tsize > gridHisto[] ,
+								int nW ,
+								int nH );
 
 	void
-	createTarget( ImagePointer const input );
+	createTarget( typename TInputImage::ConstPointer const input );
 
 	void
 	createTarget( int h , int l);
 
 	float
-	interpoleGain( int pixelValue,
-	               typename InputImageType::IndexType index );
+	interpoleGain( const std::array< int , Tsize > gridLut[] ,
+								 int pixelValue ,
+                 typename TInputImage::IndexType index ,
+                 int nW ,
+                 int nH );
 
 	void
-	histoLimiteContrast( int hThresh );
+	histoLimiteContrast( std::array< int , Tsize > gridHisto[] ,
+											 int hThresh ,
+											 int nW ,
+											 int nH );
 	
 	void
 	gainLimiteContrast();
@@ -105,15 +118,13 @@ public:
 protected:
  	ContrastEnhancementFilter();
  	~ContrastEnhancementFilter() ITK_OVERRIDE {}
+  // void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
- 	void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+ 	typedef itk::MultiplyImageFilter< InputImageType, ImageGainType, OutputImageType > MultiplyImageFilterType;
+ 	typename MultiplyImageFilterType::Pointer gainMultiplyer;
 
  	ImageGainType::Pointer gainImage;
  	std::array< int , Tsize > targetHisto;
- 	std::array< int , Tsize > gridHisto[];
- 	std::array< int , Tsize > gridLut[];
- 	int nH;
- 	int nW;
  	int wThumbnail;
  	int hThumbnail;
  	float threshFactor;
@@ -126,6 +137,7 @@ protected:
 private:
   ContrastEnhancementFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
 };
 
 

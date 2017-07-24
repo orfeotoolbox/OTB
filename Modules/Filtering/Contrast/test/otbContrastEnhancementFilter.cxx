@@ -10,9 +10,10 @@
 #include "itkMultiplyImageFilter.h"
 #include "itkComposeImageFilter.h"
 #include "itkThresholdImageFilter.h"
+#include "otbContrastEnhancementFilter.h"
 
 int const sizeh = 256;
-typedef int                   PixelType;
+typedef int                  PixelType;
 typedef itk::Image< PixelType , 2 >  ImageType;
 typedef itk::VectorImage< PixelType , 2 >  VectorImageType;
 typedef itk::Image< float , 2 > ImageGainType; 
@@ -227,7 +228,7 @@ gainLimiteContrast(const ImageGainType::Pointer & gainImage,
 }
 
 int
-main( int argc, 
+prototype ( int argc, 
       char const *argv[] )
 {
   // const char * inputfilename  = argv[ 1 ];
@@ -355,5 +356,35 @@ main( int argc,
   writer->SetInput( imageToVectorImageFilterOut->GetOutput() );
   writer->Update();
 
+  return 0;
+}
+
+int
+main ( int argc, 
+       char const *argv[] )
+{
+  typedef otb::ImageFileReader< ImageType > ReaderType;
+  typedef otb::ContrastEnhancementFilter< ImageType , ImageType , 256 > FilterType;
+
+  ReaderType::Pointer reader( ReaderType::New() );
+  reader->SetFileName( argv[ 1 ] );
+  reader->Update();
+
+  FilterType::Pointer filter( FilterType::New() );
+  filter->SetInput(reader->GetOutput());
+  filter->setHistoThreshFactor(3);
+  int sThumbnail = atoi(argv[3]);
+  filter->setThumbnailSize( sThumbnail, sThumbnail );
+  filter->Update();
+
+  ImageType::Pointer output = filter->GetOutput();
+  itk::ImageRegionIterator< ImageType > it (filter->GetOutput() , filter->GetOutput()->GetLargestPossibleRegion());
+  it.GoToBegin();
+  
+  typedef otb::ImageFileWriter< ImageType > WriterType;
+  WriterType::Pointer writer( WriterType::New() );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(output);
+  writer->Update();
   return 0;
 }
