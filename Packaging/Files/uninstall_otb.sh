@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-xargs rm -frv OUT_DIR/install_manifest.txt
+cmake -S OUT_DIR/cmake_uninstall_otb.cmake -DMY_INSTALL_DIR=OUT_DIR
 rm -f OUT_DIR/mapla.sh
 rm -f OUT_DIR/monteverdi.sh
 echo "OTB is now uninstalled from OUT_DIR"
