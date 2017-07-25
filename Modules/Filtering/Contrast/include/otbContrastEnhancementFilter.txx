@@ -22,10 +22,10 @@
 #define otbContrastEnhancementFilter_txx
 
 #include "otbContrastEnhancementFilter.h"
+#include "itkThresholdImageFilter.h"
 
 #include <limits>
 
-#include "itkThresholdImageFilter.h"
 
 namespace otb
 {
@@ -35,14 +35,14 @@ template <class TInputImage, class TOutputImage , int Tsize >
 ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 ::ContrastEnhancementFilter()
 {
-	targetHisto.fill(0);
-	gainImage = ImageGainType::New();
-	gainMultiplyer = MultiplyImageFilterType::New() ;
-	wThumbnail = 0;
-	hThumbnail = 0;
-	threshFactor = INT_MAX;
-	lowThresh = 0;
-	upThresh = INT_MAX;
+	this->targetHisto.fill(0);
+	this->gainImage = ImageGainType::New();
+	this->gainMultiplyer = MultiplyImageFilterType::New() ;
+	this->wThumbnail = 0;
+	this->hThumbnail = 0;
+	this->threshFactor = INT_MAX;
+	this->lowThresh = 0;
+	this->upThresh = INT_MAX;
 }
 
 template <class TInputImage, class TOutputImage , int Tsize >
@@ -57,6 +57,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   int countInput  = inputHisto[ 0 ] + inputHisto[ countValue ];
   lut[lut.size() - 1 ] = lut.size() - 1 ; // White stays white
   int countTarget = this->targetHisto[ countMapValue ];
+
   while ( countMapValue<Tsize && countValue<Tsize-1)
     {
     if (countInput > countTarget)
@@ -126,6 +127,14 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   int nbPixel = size[0] * size[1];
   int height = nbPixel/Tsize ;
   this->targetHisto.fill( height );
+  int rest = nbPixel%Tsize;
+  int diff = (Tsize-rest)/2;
+  while (rest > 0 && diff < Tsize )
+  	{
+  	++this->targetHisto[diff];
+  	--rest;
+  	++diff;
+  	}
 }
 
 template <class TInputImage, class TOutputImage , int Tsize >
@@ -307,10 +316,11 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   computehisto( input , gridHisto , nW , nH );
 
   int histoTresh = this->threshFactor * (this->wThumbnail * this->hThumbnail ) / Tsize;
+
 	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
 
 	equalized( gridHisto , gridLut , nW , nH );
-	
+
 	float gainValue = 0.0;
   typename InputImageType::IndexType index;
   for (uint i = 0 ; i < input->GetLargestPossibleRegion().GetSize()[0] ; i++)
