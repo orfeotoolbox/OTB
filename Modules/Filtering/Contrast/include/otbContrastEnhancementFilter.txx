@@ -31,11 +31,10 @@ namespace otb
 {
 typedef itk::Image< float , 2 > ImageGainType;
 
-template <class TInputImage, class TOutputImage , int Tsize >
-ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
+template <class TInputImage, class TOutputImage >
+ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::ContrastEnhancementFilter()
 {
-	this->targetHisto.fill(0);
 	this->gainImage = ImageGainType::New();
 	this->gainMultiplyer = MultiplyImageFilterType::New() ;
 	this->wThumbnail = 0;
@@ -43,12 +42,13 @@ ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 	this->threshFactor = INT_MAX;
 	this->lowThresh = 0;
 	this->upThresh = INT_MAX;
+  this->hSize = 256;
 }
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::equalized( const std::array< int , Tsize > & inputHisto,
-	           std::array< int , Tsize > & lut)
+template <class TInputImage, class TOutputImage >
+void ContrastEnhancementFilter < TInputImage , TOutputImage >
+::equalized( const std::vector< int > & inputHisto,
+	           std::vector< int > & lut)
 {
 	int countMapValue = 0;
   int countValue = 0;
@@ -58,7 +58,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   lut[lut.size() - 1 ] = lut.size() - 1 ; // White stays white
   int countTarget = this->targetHisto[ countMapValue ];
 
-  while ( countMapValue<Tsize && countValue<Tsize-1)
+  while ( countMapValue< (this->hSize) && countValue< ( this->hSize-1 ) )
     {
     if (countInput > countTarget)
       {
@@ -81,10 +81,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   	}
 }
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::equalized( std::array< int , Tsize > gridHisto[] , 
-						 std::array< int , Tsize > gridLut[] ,
+template <class TInputImage, class TOutputImage >
+void ContrastEnhancementFilter < TInputImage , TOutputImage >
+::equalized( std::vector< std::vector < int > > & gridHisto, 
+						 std::vector< std::vector < int > > & gridLut,
 						 int nW , 
 						 int nH )
 {
@@ -98,10 +98,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 }
 
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
+template <class TInputImage, class TOutputImage >
+void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::computehisto( typename TInputImage::ConstPointer const input ,
-								std::array< int , Tsize > gridHisto[] ,
+								std::vector< std::vector < int > > & gridHisto ,
 								int nW,
 								int nH)
 {
@@ -119,37 +119,29 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 }
 
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
+template <class TInputImage, class TOutputImage >
+void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::createTarget(typename TInputImage::ConstPointer const input )
 {
   typename TInputImage::SizeType size = input->GetLargestPossibleRegion().GetSize();
   int nbPixel = size[0] * size[1];
-  int height = nbPixel/Tsize ;
-  this->targetHisto.fill( height );
-  int rest = nbPixel%Tsize;
-  int diff = (Tsize-rest)/2;
-  while (rest > 0 && diff < Tsize )
-  	{
-  	++this->targetHisto[diff];
-  	--rest;
-  	++diff;
-  	}
+  int height = nbPixel/this->hSize ;
+  std::vector < int > tempTarget;
+  tempTarget.resize(this->hSize , height );
+  int rest = nbPixel%this->hSize;
+  int diff = (this->hSize-rest)/2;
+  while (rest > 0 && diff < this->hSize )
+    {
+    ++tempTarget[diff];
+    --rest;
+    ++diff;
+    }
+  this->targetHisto = tempTarget;
 }
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::createTarget( int h , int l )
-{
-  int nbPixel = h * l;
-  int nbBin = this->targetHisto.size();
-  int height = nbPixel/nbBin;
-  this->targetHisto.fill( height );
-}
-
-template <class TInputImage, class TOutputImage , int Tsize >
-float ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::interpoleGain( const std::array< int , Tsize > gridLut[] ,
+template <class TInputImage, class TOutputImage >
+float ContrastEnhancementFilter < TInputImage , TOutputImage >
+::interpoleGain( const std::vector< std::vector < int > > & gridLut,
 								 int pixelValue ,
                  typename TInputImage::IndexType index ,
                  int nW ,
@@ -209,9 +201,9 @@ float ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   return gain/(w * pixelValue);
 }
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
-::histoLimiteContrast( std::array< int , Tsize > gridHisto[] ,
+template <class TInputImage, class TOutputImage >
+void ContrastEnhancementFilter < TInputImage , TOutputImage >
+::histoLimiteContrast( std::vector< std::vector < int > > & gridHisto ,
 											 int hThresh,
 											 int nW,
 											 int nH )
@@ -250,8 +242,8 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
 }
 
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
+template <class TInputImage, class TOutputImage >
+void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::gainLimiteContrast()
 {
   typedef itk::ThresholdImageFilter< ImageGainType > ThresholdFilterType;
@@ -267,8 +259,8 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   this->gainImage = thresholdFilter->GetOutput();
 }
 
-template <class TInputImage, class TOutputImage , int Tsize >
-void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
+template <class TInputImage, class TOutputImage >
+void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::GenerateData()
 {
 	typename OutputImageType::Pointer     output = this->GetOutput();
@@ -301,21 +293,20 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage , Tsize >
   gainImage->Allocate();
   gainImage->SetOrigin( input->GetOrigin() );
 
-  std::array< int , Tsize > gridHisto[(nH)*(nW)] = {} ;
- 	std::array< int , Tsize > gridLut[(nH)*(nW)] = {} ;
+  std::vector< std::vector < int > > gridHisto((nH)*(nW));
+  std::vector< std::vector < int > > gridLut((nH)*(nW));
 
 
-
-  // Initialize gridLut and gridHisto to zero
+  // Initialize gridLut and gridHisto to zero and -1
   for (int i = 0 ; i<(nH)*(nW) ; i++)
     {
-      gridLut[i].fill(-1);
-      gridHisto[i].fill(0);
+      gridLut[i].resize(this->hSize , -1);
+      gridHisto[i].resize(this->hSize , 0);
     }
 
   computehisto( input , gridHisto , nW , nH );
 
-  int histoTresh = this->threshFactor * (this->wThumbnail * this->hThumbnail ) / Tsize;
+  int histoTresh = this->threshFactor * (this->wThumbnail * this->hThumbnail ) / this->hSize;
 
 	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
 

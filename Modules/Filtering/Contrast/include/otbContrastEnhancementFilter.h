@@ -30,8 +30,7 @@ namespace otb
 {
 
 
-
-template <class TInputImage, class TOutputImage , int Tsize >
+template <class TInputImage, class TOutputImage >
 class ITK_EXPORT ContrastEnhancementFilter :
 	public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
@@ -56,36 +55,33 @@ public:
   itkTypeMacro(ContrastEnhancementFilter, ImageToImageFilter);
 
   void 
-	equalized( const std::array< int , Tsize > & inputHisto,
-	           std::array< int , Tsize > & lut);
+	equalized( const std::vector < int > & inputHisto,
+	           std::vector < int > & lut);
 	
 	void
-	equalized( std::array< int , Tsize > gridHisto[] , 
-						 std::array< int , Tsize > gridLut[] ,
+	equalized( std::vector < std::vector < int > > & gridHisto , 
+						 std::vector < std::vector < int > > & gridLut ,
 						 int nW ,
 						 int nH );
 	
 	void
 	computehisto( typename TInputImage::ConstPointer const input ,
-								std::array< int , Tsize > gridHisto[] ,
+								std::vector < std::vector < int > > & gridHisto ,
 								int nW ,
 								int nH );
 
 	void
 	createTarget( typename TInputImage::ConstPointer const input );
 
-	void
-	createTarget( int h , int l);
-
 	float
-	interpoleGain( const std::array< int , Tsize > gridLut[] ,
+	interpoleGain( const std::vector < std::vector < int > > & gridLut ,
 								 int pixelValue ,
                  typename TInputImage::IndexType index ,
                  int nW ,
                  int nH );
 
 	void
-	histoLimiteContrast( std::array< int , Tsize > gridHisto[] ,
+	histoLimiteContrast( std::vector < std::vector < int > > & gridHisto ,
 											 int hThresh ,
 											 int nW ,
 											 int nH );
@@ -107,6 +103,12 @@ public:
 	}
 
 	void
+	setHistoSize( int size )
+	{
+		this->hSize = size;
+	}
+
+	void
 	setGainThresh( float lowThreshi , float upThreshi)
 	{
 		assert( lowThreshi<=1 && lowThreshi >=0 );
@@ -124,7 +126,8 @@ protected:
  	typename MultiplyImageFilterType::Pointer gainMultiplyer;
 
  	ImageGainType::Pointer gainImage;
- 	std::array< int , Tsize > targetHisto;
+ 	std::vector < int > targetHisto;
+ 	int hSize;
  	int wThumbnail;
  	int hThumbnail;
  	float threshFactor;

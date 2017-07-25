@@ -364,7 +364,7 @@ main ( int argc,
        char const *argv[] )
 {
   typedef otb::ImageFileReader< ImageType > ReaderType;
-  typedef otb::ContrastEnhancementFilter< ImageType , ImageType , 256 > FilterType;
+  typedef otb::ContrastEnhancementFilter< ImageType , ImageType > FilterType;
 
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
@@ -373,6 +373,7 @@ main ( int argc,
   FilterType::Pointer filter( FilterType::New() );
   filter->SetInput(reader->GetOutput());
   filter->setHistoThreshFactor(3);
+  filter->setHistoSize(256);
   int sThumbnail = atoi(argv[3]);
   filter->setThumbnailSize( sThumbnail, sThumbnail );
   filter->Update();
