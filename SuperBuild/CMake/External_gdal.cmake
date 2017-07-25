@@ -107,8 +107,6 @@ if(UNIX)
   #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
 
 else(MSVC)
-  STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
-  STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
     ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
