@@ -25,7 +25,7 @@ PNG_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libpng.lib
 
 # if using an external libtiff library
 TIFF_INC = -I@CMAKE_WIN_INSTALL_PREFIX@\include
-TIFF_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\libtiff.lib
+TIFF_LIB = @CMAKE_WIN_INSTALL_PREFIX@\lib\tiff.lib
 # uncomment following line, if you have libtiff version >= 4.0 to enable BigTIFF support
 TIFF_OPTS= -DBIGTIFF_SUPPORT
 
