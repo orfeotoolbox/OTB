@@ -645,6 +645,32 @@ if(OTB_USE_SHARK)
     VALID   --compare-image ${NOTOL}
     ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif
     ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif )
+
+  otb_test_application(NAME apTvClKMeansImageClassification_SampleSelectionTest
+    APP SampleSelection
+    OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
+    -vec ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif_imgEnvelope.shp
+    -instats ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif_polyStats.xml
+    -field field
+    -strategy constant
+    -strategy.constant.nb 30000
+    -rand 121212
+    -mask ${INPUTDATA}/qb_RoadExtract_mask_binary.png
+    -out ${TEMP}/apTvClSampleSelectOutput_test.shp
+    VALID   --compare-ogr 0.0
+    ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif_sampleSelect.shp
+    ${TEMP}/apTvClSampleSelectOutput_test.shp)
+
+  otb_test_application(NAME apTvClKMeansImageClassification_SampleExtractionTest
+    APP SampleExtraction
+    OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
+    -vec ${TEMP}/apTvClSampleSelectOutput_test.shp
+    -field field
+    -outfield.prefix.name value_
+    -out ${TEMP}/apTvClSampleExtraction_test.shp
+    VALID   --compare-ogr 0.0
+    ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif_sampleExtract.shp
+    ${TEMP}/apTvClSampleExtraction_test.shp)
 endif()
 
 #----------- TrainImagesClassifier TESTS ----------------
