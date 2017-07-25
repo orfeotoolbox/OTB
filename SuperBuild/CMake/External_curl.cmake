@@ -55,3 +55,10 @@ ExternalProject_Add(CURL
   )
 
 SUPERBUILD_PATCH_SOURCE(CURL)
+
+set(_SB_CURL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+if(WIN32)
+  set(_SB_CURL_LIBRARY "${SB_INSTALL_PREFIX}/lib/libcurl_imp.lib")
+elseif(UNIX)
+  set(_SB_CURL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libcurl${CMAKE_SHARED_LIBRARY_SUFFIX})
+endif()
