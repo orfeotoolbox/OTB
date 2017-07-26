@@ -340,14 +340,14 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   if ( input->GetLargestPossibleRegion().GetSize()[1]%this->hThumbnail != 0 )
     {
     std::cout<<"error : hThumbnail = "<<this->hThumbnail<<" is not a divider of the "
-    "input's width"<<std::endl;
+    "input's height"<<std::endl;
     std::cout<<"Image Height = "<<input->GetLargestPossibleRegion().GetSize()[1]
       <<std::endl;
     }
   if ( input->GetLargestPossibleRegion().GetSize()[0]%this->wThumbnail != 0 )
     {
     std::cout<<"error : wThumbnail = "<<this->wThumbnail<<"is not a divider of the "
-    "input's height"<<std::endl;
+    "input's width"<<std::endl;
     std::cout<<"Image Width = "<<input->GetLargestPossibleRegion().GetSize()[0]
       <<std::endl;
     }
@@ -378,7 +378,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   int histoTresh = static_cast<int>( this->threshFactor * this->targetHisto[0] );
 
   computehisto( gridHisto , nW , nH );
-	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
+	// histoLimiteContrast( gridHisto , histoTresh , nW , nH );
 	equalized( gridHisto , gridLut , nW , nH );
 
 	float gainValue = 0.0;
@@ -389,7 +389,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
       {
       index[0] = i;
       index[1] = j;
-      gainValue = interpoleGain( gridLut , input->GetPixel( index ) ,
+      gainValue = interpoleGain( gridLut , this->binImage->GetPixel( index ) ,
                                  index , nW , nH );
       gainImage->SetPixel( index , gainValue );
       }
@@ -402,6 +402,8 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   gainMultiplyer->SetInput2( gainImage );
   gainMultiplyer->Update();
   this-> GraftOutput ( gainMultiplyer -> GetOutput ());
+  this->GetOutput()->Graft(input);
+  gainMultiplyer -> GetOutput ()->Graft(input);
   this->GetOutput()->SetOrigin(input->GetOrigin());
   this->GetOutput()->SetSpacing(input->GetSpacing());
 }

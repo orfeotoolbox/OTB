@@ -424,18 +424,22 @@ main ( int argc,
     vectorToImageFilter->Update();
     FilterType::Pointer filter( FilterType::New() );
     filter->SetInput(vectorToImageFilter->GetOutput());
-    filter->setHistoThreshFactor(3);
-    filter->setHistoSize(256);
-    filter->setThumbnailSize( hThumbnail, wThumbnail );
+    filter->setHistoThreshFactor(100000);
+    filter->setHistoSize(1024);
+    // filter->setGainThresh(1.0, 1.0);
+    filter->setThumbnailSize( wThumbnail, hThumbnail );
     filter->Update();
     imageToVectorImageFilterOut->SetInput( chanel , filter->GetOutput() );
     }
 
+  VectorImageType::Pointer output = imageToVectorImageFilterOut->GetOutput();
+  output->SetOrigin(input->GetOrigin());
+  output->CopyInformation(input);
+  output->Graft(input);
   // Here we compute a gain image corresponding to the associated gain of the equalization
-  imageToVectorImageFilterOut->GetOutput()->SetOrigin(input->GetOrigin());
   typedef otb::ImageFileWriter<VectorImageType>  WriterType;
   WriterType::Pointer writer( WriterType::New());
   writer->SetFileName( argv[2] );
-  writer->SetInput( imageToVectorImageFilterOut->GetOutput() );
+  writer->SetInput( output );
   writer->Update();
 }
