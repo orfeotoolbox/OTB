@@ -363,7 +363,7 @@ int
 main ( int argc, 
        char const *argv[] )
 {
-  typedef otb::ImageFileReader< ImageType > ReaderType;
+  /*typedef otb::ImageFileReader< ImageType > ReaderType;
   typedef otb::ContrastEnhancementFilter< ImageType , ImageType > FilterType;
 
   ReaderType::Pointer reader( ReaderType::New() );
@@ -378,14 +378,64 @@ main ( int argc,
   filter->setThumbnailSize( sThumbnail, sThumbnail );
   filter->Update();
 
-  ImageType::Pointer output = filter->GetOutput();
-  itk::ImageRegionIterator< ImageType > it (filter->GetOutput() , filter->GetOutput()->GetLargestPossibleRegion());
-  it.GoToBegin();
-  
   typedef otb::ImageFileWriter< ImageType > WriterType;
   WriterType::Pointer writer( WriterType::New() );
   writer->SetFileName(argv[2]);
-  writer->SetInput(output);
+  writer->SetInput(filter->GetOutput());
   writer->Update();
-  return 0;
+  return 0;*/
+
+  typedef otb::ImageFileReader< VectorImageType > ReaderType;
+  typedef itk::VectorIndexSelectionCastImageFilter< VectorImageType , ImageType > VectorToImageFilterType;
+  typedef itk::ComposeImageFilter< ImageType > ImageToVectorImageFilterType;
+
+  ReaderType::Pointer reader( ReaderType::New() );
+  reader->SetFileName( argv[ 1 ] );
+  reader->Update();
+  VectorImageType::Pointer input = reader->GetOutput();
+
+  ImageToVectorImageFilterType::Pointer imageToVectorImageFilterOut( ImageToVectorImageFilterType::New() );
+  VectorToImageFilterType::Pointer vectorToImageFilter ( VectorToImageFilterType::New() );
+  vectorToImageFilter->SetInput( input );
+  vectorToImageFilter->SetIndex( 0 );
+  vectorToImageFilter->Update();
+  int hThumbnail = atoi(argv[3]);
+  int wThumbnail = atoi(argv[4]);
+  ImageType::Pointer inputImage = vectorToImageFilter->GetOutput();
+  if ( inputImage->GetLargestPossibleRegion().GetSize()[1]%hThumbnail != 0 )
+    {
+    std::cout<<"error : hThumbnail = "<<hThumbnail<<" is not a divider of the input's height"<<std::endl;
+    std::cout<<"Image Height = "<<input->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
+    return 1;
+    }
+  if ( inputImage->GetLargestPossibleRegion().GetSize()[0]%wThumbnail != 0 )
+    {
+    std::cout<<"error : wThumbnail = "<<wThumbnail<<"is not a divider of the input's width"<<std::endl;
+    std::cout<<"Image Width = "<<input->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
+    return 1;
+    }
+
+  typedef otb::ContrastEnhancementFilter< ImageType , ImageType > FilterType;
+  int m = input->GetVectorLength ();
+
+  for (int chanel = 0 ; chanel<m ; chanel++ ) 
+    {
+    vectorToImageFilter->SetIndex( chanel );
+    vectorToImageFilter->Update();
+    FilterType::Pointer filter( FilterType::New() );
+    filter->SetInput(vectorToImageFilter->GetOutput());
+    filter->setHistoThreshFactor(3);
+    filter->setHistoSize(256);
+    filter->setThumbnailSize( hThumbnail, wThumbnail );
+    filter->Update();
+    imageToVectorImageFilterOut->SetInput( chanel , filter->GetOutput() );
+    }
+
+  // Here we compute a gain image corresponding to the associated gain of the equalization
+  imageToVectorImageFilterOut->GetOutput()->SetOrigin(input->GetOrigin());
+  typedef otb::ImageFileWriter<VectorImageType>  WriterType;
+  WriterType::Pointer writer( WriterType::New());
+  writer->SetFileName( argv[2] );
+  writer->SetInput( imageToVectorImageFilterOut->GetOutput() );
+  writer->Update();
 }

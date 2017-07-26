@@ -37,6 +37,8 @@ public:
   typedef itk::SmartPointer < Self >	      Pointer;
   typedef itk::SmartPointer < const Self >	ConstPointer;
 
+  typedef otb::ContrastEnhancementFilter < FloatImageType , FloatImageType >
+  				FilterType;
   /** Standard macro */
   itkNewMacro( Self );
  
@@ -78,7 +80,6 @@ private:
     AddParameter(ParameterType_Int,"thumb.h","Thumbnail height in pixel");
     AddParameter(ParameterType_Int,"thumb.w","Thumbnail width in pixel");
 
-
 	}
 
 	void DoUpdateParameters() ITK_OVERRIDE
@@ -88,7 +89,7 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-
+  	
   }
 };
 

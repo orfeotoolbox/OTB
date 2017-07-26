@@ -47,50 +47,17 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef itk::Image< float , 2 > ImageGainType; 
+  typedef itk::Image< float , 2 > ImageGainType;
+  typedef itk::Image< int , 2 > ImageBinType;
 
+  typedef typename InputImageType::PixelType PixelType;
   /** "object factory" management method. */
   itkNewMacro(Self);
   /** Return the class name. */
   itkTypeMacro(ContrastEnhancementFilter, ImageToImageFilter);
 
-  void 
-	equalized( const std::vector < int > & inputHisto,
-	           std::vector < int > & lut);
-	
 	void
-	equalized( std::vector < std::vector < int > > & gridHisto , 
-						 std::vector < std::vector < int > > & gridLut ,
-						 int nW ,
-						 int nH );
-	
-	void
-	computehisto( typename TInputImage::ConstPointer const input ,
-								std::vector < std::vector < int > > & gridHisto ,
-								int nW ,
-								int nH );
-
-	void
-	createTarget( typename TInputImage::ConstPointer const input );
-
-	float
-	interpoleGain( const std::vector < std::vector < int > > & gridLut ,
-								 int pixelValue ,
-                 typename TInputImage::IndexType index ,
-                 int nW ,
-                 int nH );
-
-	void
-	histoLimiteContrast( std::vector < std::vector < int > > & gridHisto ,
-											 int hThresh ,
-											 int nW ,
-											 int nH );
-	
-	void
-	gainLimiteContrast();
-
-	void
-	setThumbnailSize( int hThumbnaili , int wThumbnaili )
+	setThumbnailSize( int wThumbnaili , int hThumbnaili )
 	{
 		this->hThumbnail = hThumbnaili;
 		this->wThumbnail = wThumbnaili;
@@ -124,9 +91,13 @@ protected:
 
  	typedef itk::MultiplyImageFilter< InputImageType, ImageGainType, OutputImageType > MultiplyImageFilterType;
  	typename MultiplyImageFilterType::Pointer gainMultiplyer;
+ 	typename ImageBinType::Pointer binImage;
+ 	typename ImageGainType::Pointer gainImage;
 
- 	ImageGainType::Pointer gainImage;
  	std::vector < int > targetHisto;
+ 	double step;
+ 	PixelType min;
+ 	PixelType max;
  	int hSize;
  	int wThumbnail;
  	int hThumbnail;
@@ -140,6 +111,47 @@ protected:
 private:
   ContrastEnhancementFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  void 
+	equalized( const std::vector < int > & inputHisto,
+	           std::vector < int > & lut);
+	
+	void
+	equalized( std::vector < std::vector < int > > & gridHisto , 
+						 std::vector < std::vector < int > > & gridLut ,
+						 int nW ,
+						 int nH );
+	
+	void
+	computehisto(	std::vector < std::vector < int > > & gridHisto ,
+								int nW ,
+								int nH );
+
+	void
+	createTarget();
+
+	float
+	interpoleGain( const std::vector < std::vector < int > > & gridLut ,
+								 int pixelValue ,
+                 typename TInputImage::IndexType index ,
+                 int nW ,
+                 int nH );
+
+	void
+	histoLimiteContrast( std::vector < std::vector < int > > & gridHisto ,
+											 int hThresh ,
+											 int nW ,
+											 int nH );
+	
+	void
+	gainLimiteContrast();
+
+	void
+	preprocess();
+
+	float
+	postprocess( const std::vector < int > & lut ,
+							 int pixelValue );
 
 };
 
