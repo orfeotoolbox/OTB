@@ -27,6 +27,12 @@ def ConvertString(s):
     s = s.replace('*','\*')
     return s
 
+def ConvertToLineBlock(s):
+    '''Convert a string into a line bloc (prefix with |) '''
+    s = s.strip()
+    s = s.replace('*','\*')
+    s = "  | " + s.replace('\n','\n  | ')
+    return s
 
 def EncloseString(s):
     if not s.startswith("\"") :
@@ -484,7 +490,7 @@ def ApplicationToRst(appname):
         output += "These additional resources can be useful for further information: " + linesep
         # hlink="<http://www.readthedocs.org/" + ConvertString(app.GetDocSeeAlso()) + ".html>`_ "
         # output += linesep + "`" + ConvertString(app.GetDocSeeAlso()) + " " + hlink + linesep + linesep
-        output += linesep + ConvertString(app.GetDocSeeAlso()) + linesep + linesep
+        output += ConvertToLineBlock(app.GetDocSeeAlso()) + linesep + linesep
 
     return output
 
