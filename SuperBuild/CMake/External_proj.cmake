@@ -41,6 +41,8 @@ ExternalProject_Add(PROJ
   LOG_INSTALL 1
   )
 
+SUPERBUILD_PATCH_SOURCE(PROJ)
+
 set(_SB_PROJ_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
   set(_SB_PROJ_LIBRARY ${SB_INSTALL_PREFIX}/lib/proj_4_9.lib)

@@ -1,0 +1,12 @@
+diff -burN proj-4.9.3.orig/src/lib_proj.cmake proj-4.9.3/src/lib_proj.cmake
+--- proj-4.9.3.orig/src/lib_proj.cmake	Wed Jul 26 11:13:47 2017
++++ proj-4.9.3/src/lib_proj.cmake	Wed Jul 26 11:17:38 2017
+@@ -277,7 +277,7 @@
+   set_target_properties(${PROJ_CORE_TARGET}
+     PROPERTIES
+     VERSION "${${PROJECT_INTERN_NAME}_BUILD_VERSION}"
+-    OUTPUT_NAME "${PROJ_CORE_TARGET_OUTPUT_NAME}"
++#    OUTPUT_NAME "${PROJ_CORE_TARGET_OUTPUT_NAME}"
+     CLEAN_DIRECT_OUTPUT 1)
+ elseif(BUILD_FRAMEWORKS_AND_BUNDLE)
+   set_target_properties(${PROJ_CORE_TARGET}
