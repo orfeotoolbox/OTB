@@ -240,6 +240,7 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
 
   if( IsParameterEnabled("rand"))
     GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"), false);
+  GetInternalApplication("training")->GetParameterByKey("v")->SetActive(false);
 
   GetInternalApplication("training")->SetParameterString("io.out", modelFileName, false);
 
