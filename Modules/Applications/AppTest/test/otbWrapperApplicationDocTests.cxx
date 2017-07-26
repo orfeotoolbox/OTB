@@ -27,6 +27,68 @@
 using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationRegistry;
 
+typedef std::pair<std::string,std::string> DocElement;
+
+bool CheckNonEmpty(const DocElement & elem)
+{
+  bool ret = true;
+  if (elem.second == "")
+    {
+    std::cout << "  /!\\ Missing "<< elem.first << std::endl;
+    ret = false;
+    }
+  return ret;
+}
+
+bool CheckMinimumSize(const DocElement & elem, unsigned int size)
+{
+  bool ret = true;
+  if (elem.second.size() < size)
+    {
+    std::cout<<"  /!\\ " << elem.first <<" too small..."<<std::endl;
+    ret = false;
+    }
+  return ret;
+}
+
+bool CheckNoNewline(const DocElement & elem)
+{
+  bool ret = true;
+  if (elem.second.find('\n') != std::string::npos)
+    {
+    std::cout << "  /!\\ "<< elem.first << " should not contain newlines"<<std::endl;
+    ret = false;
+    }
+  return ret;
+}
+
+bool CheckNoTrailingNewline(const DocElement & elem)
+{
+  bool ret = true;
+  std::string whitespace(" \t\f\v\r");
+  size_t pos = elem.second.find_last_not_of(whitespace);
+  if (pos != std::string::npos && elem.second.at(pos) == '\n')
+    {
+    std::cout << "  /!\\ "<< elem.first << " should not end with a newline" << std::endl;
+    ret = false;
+    }
+  return ret;
+}
+
+bool CheckMultiline(const DocElement & elem)
+{
+  bool ret = true;
+  std::string whitespace(" \t\f\v\r");
+  size_t pos = elem.second.find('\n');
+  size_t lastPos = elem.second.find_last_not_of(whitespace);
+  if (pos == std::string::npos || pos == lastPos)
+    {
+    std::cout << "  /!\\ "<< elem.first << " should not be a single line" << std::endl;
+    ret = false;
+    }
+  return ret;
+}
+
 int otbWrapperApplicationDocTest(int argc, char* argv[])
 {
   if (argc < 2)
@@ -69,46 +131,34 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
       }
 
     // Check doc element...
-    if( std::string(app->GetName()) == "" )
-      {
-      std::cout<<"Missing Name."<<std::endl;
-      isOK = false;
-      }
-    if( std::string(app->GetDocName()) == "" )
-      {
-      std::cout<<"Missing Doc Name."<<std::endl;
-      isOK = false;
-      }
-    if( std::string(app->GetDescription()) == "" )
-      {
-      std::cout<<"Missing Description."<<std::endl;
-      isOK = false;
-      }
-    if( std::string(app->GetDocLongDescription()) == "" )
-      {
-      std::cout<<"Missing DocLongDescription."<<std::endl;
-      isOK = false;
-      }
-    else if( std::string(app->GetDocLongDescription()).size() < 30 )
-      {
-      std::cout<<"DocLongDescription too small..."<<std::endl;
-      isOK = false;
-      }
-    if( std::string(app->GetDocAuthors()) == "" )
-      {
-      std::cout<<"Missing DocAuthors."<<std::endl;
-      isOK = false;
-      }
-    if( std::string(app->GetDocLimitations()) == "" )
-      {
-      std::cout<<"Missing DocLimitations."<<std::endl;
-      isOK = false;
-      }
-    if( std::string(app->GetDocSeeAlso()) == "" )
-      {
-      std::cout<<"Missing DocSeeAlso."<<std::endl;
-      isOK = false;
-      }
+    DocElement name("Name",app->GetName());
+    DocElement docName("Doc Name",app->GetDocName());
+    DocElement description("Description",app->GetDescription());
+    DocElement longDescription("Long description",app->GetDocLongDescription());
+    DocElement authors("DocAuthors",app->GetDocAuthors());
+    DocElement limitations("DocLimitations",app->GetDocLimitations());
+    DocElement seeAlso("DocSeeAlso",app->GetDocSeeAlso());
+
+    isOK = CheckNonEmpty(name) && isOK;
+    isOK = CheckNoNewline(name) && isOK;
+
+    isOK = CheckNonEmpty(docName) && isOK;
+    isOK = CheckNoNewline(docName) && isOK;
+
+    isOK = CheckNonEmpty(description) && isOK;
+
+    isOK = CheckNonEmpty(longDescription) && isOK;
+    isOK = CheckMinimumSize(longDescription,30) && isOK;
+    isOK = CheckNoTrailingNewline(longDescription) && isOK;
+    //isOK = CheckMultiline(longDescription) && isOK;
+
+    isOK = CheckNonEmpty(authors) && isOK;
+
+    isOK = CheckNonEmpty(limitations) && isOK;
+
+    isOK = CheckNonEmpty(seeAlso) && isOK;
+    // TODO : check format of SeeAlso section
+
     if( app->GetDocTags().size() == 0 )
       {
       std::cout<<"Missing DocTags."<<std::endl;
