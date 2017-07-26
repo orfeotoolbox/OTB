@@ -73,11 +73,8 @@ private:
       "  * Lee : Estimate the signal by mean square error minimization (MMSE) on a sliding window.\n"
       "  * Frost : Also derived from the MMSE criteria with a weighted sum of the values within the window. The weighting factors decrease with distance from the pixel of interest.\n"
       "  * GammaMAP  : Derived under the assumption of the image follows a Gamma distribution.\n"
-      "  * Kuan : Also derived from the MMSE criteria under the assumption of non stationary mean and variance. It is quite similar to Lee filter in form.\n"                  
-      "\n"                    
-
-
-    );
+      "  * Kuan : Also derived from the MMSE criteria under the assumption of non stationary mean and variance. It is quite similar to Lee filter in form."
+      );
 
     SetDocLimitations("The application does not handle complex image as input.");
 

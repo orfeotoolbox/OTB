@@ -85,7 +85,7 @@ private:
       "different for each type of geometry :\n"
       "  - polygon: select pixels whose center is inside the polygon\n"
       "  - lines  : select pixels intersecting the line\n"
-      "  - points : select closest pixel to the point\n");
+      "  - points : select closest pixel to the point");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

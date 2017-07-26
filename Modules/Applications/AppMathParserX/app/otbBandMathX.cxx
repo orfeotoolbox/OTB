@@ -71,10 +71,9 @@ private:
       "opposed to the BandMath OTB-application). The mathematical formula is "
       "done by the muParserX libraries.\n\n"
 
-      "The list of features and the syntax of muParserX is available at: "
-      "http://articles.beltoforion.de/article.php?a=muparserx\n\n"
+      "The list of features and the syntax of muParserX is available at [1].\n\n"
 
-      "As opposed to muParser (and thus the BandMath OTB-application), "
+      "As opposed to muParser (and thus the BandMath OTB-application [2]), "
       "muParserX supports vector expressions which allows to output multi-band "
       "images.\n\n"
 
@@ -119,9 +118,8 @@ private:
       "im1b2Var\n"
       "  minimum of the 2nd component of the 1st input (global statistics)\n\n"
 
-      "Generic variables:\n"
       "idxX, idxY\n"
-      "  indices of the current pixel\n\n"
+      "  indices of the current pixel (generic variables)\n\n"
 
       "Always keep in mind that this application only addresses mathematically "
       "well-defined formulas. For instance, it is not possible to add vectors of"
@@ -222,7 +220,7 @@ private:
       "\n"
 
       "Finally, we strongly recommend to read the OTB Cookbook which can be "
-      "found at: http://www.orfeo-toolbox.org/packages/OTBCookBook.pdf\n"
+      "found at: http://www.orfeo-toolbox.org/packages/OTBCookBook.pdf"
     );
 
     SetDocLimitations(
@@ -232,7 +230,8 @@ private:
       "into a unique multiband output image."
     );
     SetDocAuthors( "OTB-Team" );
-    SetDocSeeAlso( "" );
+    SetDocSeeAlso("[1] http://articles.beltoforion.de/article.php?a=muparserx\n"
+      "[2] BandMath");
     AddDocTag( "Miscellaneous" );
 
     AddParameter( ParameterType_InputImageList, "il", "Input image-list" );

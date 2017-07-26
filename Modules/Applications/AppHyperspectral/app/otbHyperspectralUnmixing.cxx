@@ -109,8 +109,7 @@ private:
     "  * Image Space Reconstruction Algorithm (isra)\n"
     "  * Non-negative constrained\n"
     "  * Least Square (ncls)\n"
-    "  * Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF).\n"
-    "\n"
+    "  * Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF)."
     );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

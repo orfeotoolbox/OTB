@@ -76,13 +76,12 @@ private:
       "Older versions of muParser (prior to v-2.0) provides only the 'and' and "
       "'or' logical operators, and a ternary operator 'if(; ; )'.\n\n"
 
-      "The list of features and operators is available on the muParser website: "
-      "http://muparser.sourceforge.net/\n\n"
+      "The list of features and operators is available on the muParser website [1]."
       );
 
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("[1] http://muparser.sourceforge.net/");
     AddDocTag( "Miscellaneous" );
 
     AddParameter( ParameterType_InputImageList, "il", "Input image-list" );
