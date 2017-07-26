@@ -39,7 +39,7 @@ namespace Wrapper
     //BoostType
     AddParameter(ParameterType_Choice, "classifier.boost.t", "Boost Type");
     AddChoice("classifier.boost.t.discrete", "Discrete AdaBoost");
-    SetParameterDescription("classifier.boost.t.discret",
+    SetParameterDescription("classifier.boost.t.discrete",
       "This procedure trains the classifiers on weighted versions of the training "
       "sample, giving higher weight to cases that are currently misclassified. "
       "This is done for a sequence of weighter samples, and then the final "
