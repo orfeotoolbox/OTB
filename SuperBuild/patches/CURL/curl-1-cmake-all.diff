@@ -1,0 +1,67 @@
+diff -burN curl-7.40.0/CMake/CurlTests.c curl-7.40.0.orig/CMake/CurlTests.c
+--- curl-7.40.0/CMake/CurlTests.c	2017-07-26 15:24:27.473903048 +0200
++++ curl-7.40.0.orig/CMake/CurlTests.c	2017-07-26 15:22:05.268949035 +0200
+@@ -139,7 +139,7 @@
+   rc = gethostbyname_r(address, &h, &hdata);
+ #elif defined(HAVE_GETHOSTBYNAME_R_5) || \
+       defined(HAVE_GETHOSTBYNAME_R_5_REENTRANT)
+-  rc = gethostbyname_r(address, &h, buffer, 8192, &h_errnop);
++  rc = gethostbyname_r(address, &h, buffer, 8192, 0, &h_errnop);
+   (void)hp; /* not used for test */
+ #elif defined(HAVE_GETHOSTBYNAME_R_6) || \
+       defined(HAVE_GETHOSTBYNAME_R_6_REENTRANT)
+diff -burN curl-7.40.0/CMake/OtherTests.cmake curl-7.40.0.orig/CMake/OtherTests.cmake
+--- curl-7.40.0/CMake/OtherTests.cmake	2017-07-26 15:23:53.377674268 +0200
++++ curl-7.40.0.orig/CMake/OtherTests.cmake	2017-07-26 15:22:05.268949035 +0200
+@@ -10,7 +10,6 @@
+ 
+ set(signature_call_conv)
+ if(HAVE_WINDOWS_H)
+-   set(_source_epilogue "${_source_epilogue}\n#define _WINSOCKAPI_")
+   add_header_include(HAVE_WINDOWS_H "windows.h")
+   add_header_include(HAVE_WINSOCK2_H "winsock2.h")
+   add_header_include(HAVE_WINSOCK_H "winsock.h")
+@@ -164,9 +163,7 @@
+     return 0;
+   }" HAVE_MSG_NOSIGNAL)
+ 
+-if(HAVE_WINDOWS_H)
+-add_header_include(HAVE_WINSOCK2_H "winsock2.h")
+-else()
++if(NOT HAVE_WINDOWS_H)
+   add_header_include(HAVE_SYS_TIME_H "sys/time.h")
+   add_header_include(TIME_WITH_SYS_TIME "time.h")
+   add_header_include(HAVE_TIME_H "time.h")
+diff -burN curl-7.40.0/src/CMakeLists.txt curl-7.40.0.orig/src/CMakeLists.txt
+--- curl-7.40.0/src/CMakeLists.txt	2017-07-26 15:23:53.377674268 +0200
++++ curl-7.40.0.orig/src/CMakeLists.txt	2017-07-26 15:22:05.276949090 +0200
+@@ -25,21 +25,14 @@
+       "${CMAKE_CURRENT_SOURCE_DIR}/tool_hugehelp.h"
+     VERBATIM)
+ else()
+-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/tool_hugehelp.c
+-"/*built-in manual is disabled, blank function */\n"
+-)
+-file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/tool_hugehelp.c
+-"#include \"tool_hugehelp.h\"\nvoid hugehelp(void) {}\n"
+-)
+-
+-  # add_custom_command(
+-    # OUTPUT tool_hugehelp.c
+-    # COMMAND echo "/* built-in manual is disabled, blank function */" > tool_hugehelp.c
+-    # COMMAND echo "#include \"tool_hugehelp.h\"" >> tool_hugehelp.c
+-    # COMMAND echo "void hugehelp(void) {}" >> tool_hugehelp.c
+-    # DEPENDS
+-      # "${CMAKE_CURRENT_SOURCE_DIR}/tool_hugehelp.h"
+-    # VERBATIM)
++  add_custom_command(
++    OUTPUT tool_hugehelp.c
++    COMMAND echo "/* built-in manual is disabled, blank function */" > tool_hugehelp.c
++    COMMAND echo "#include \"tool_hugehelp.h\"" >> tool_hugehelp.c
++    COMMAND echo "void hugehelp(void) {}" >> tool_hugehelp.c
++    DEPENDS
++      "${CMAKE_CURRENT_SOURCE_DIR}/tool_hugehelp.h"
++    VERBATIM)
+ endif()
+ 
+ transform_makefile_inc("Makefile.inc" "${CMAKE_CURRENT_BINARY_DIR}/Makefile.inc.cmake")
