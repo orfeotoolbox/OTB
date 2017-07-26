@@ -106,12 +106,12 @@ void ClassKMeansBase::ConnectKMSamplingParams()
 
   Connect("select.in", "polystats.in");
   Connect("select.vec", "polystats.vec");
-  //Connect("select.ram", "polystats.ram");
+  Connect("select.ram", "polystats.ram");
 
   Connect("extraction.in", "select.in");
   Connect("extraction.field", "select.field");
   Connect("extraction.vec", "select.out");
-  //Connect("extraction.ram", "polystats.ram");
+  Connect("extraction.ram", "polystats.ram");
 }
 
 void ClassKMeansBase::ConnectKMClassificationParams()
@@ -121,14 +121,15 @@ void ClassKMeansBase::ConnectKMClassificationParams()
 
   Connect("classif.in", "imgenvelop.in");
   Connect("classif.model", "training.io.out");
-  //Connect("classif.ram", "polystats.ram");
+  Connect("classif.ram", "polystats.ram");
   Connect("classif.imstat", "imgstats.out");
 }
 
 void ClassKMeansBase::ConnectKMClassificationMask()
 {
   otbAppLogINFO("Using input mask ...");
-  Connect("select.mask", "vm");
+  Connect("polystats.mask", "vm");
+  Connect("select.mask", "polystats.mask");
   Connect("classif.mask", "select.mask");
 }
 
@@ -197,7 +198,7 @@ void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
     GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
 
   // select sample positions
-  ExecuteInternal("select");
+  GetInternalApplication("select")->ExecuteAndWriteOutput();
 
   /* SampleExtraction */
   UpdateInternalParameters("extraction");
