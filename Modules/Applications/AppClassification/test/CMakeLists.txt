@@ -630,7 +630,7 @@ endif()
 
 #----------- KMeansClassification TESTS ----------------
 if(OTB_USE_SHARK)
-  otb_test_application(NAME apTvClKMeansImageClassification
+  otb_test_application(NAME apTvClKMeansImageClassification_composite
     APP  KMeansClassification
     OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
     -vm ${INPUTDATA}/qb_RoadExtract_mask_binary.png
@@ -646,11 +646,11 @@ if(OTB_USE_SHARK)
     ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif
     ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif )
 
-  otb_test_application(NAME apTvClKMeansImageClassification_SampleSelectionTest
+  otb_test_application(NAME apTvClKMeansImageClassification_1_SampleSelectionTest
     APP SampleSelection
     OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
-    -vec ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif_imgEnvelope.shp
-    -instats ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif_polyStats.xml
+    -vec ${INPUTDATA}/Classification/apTvClKMeansImageClassificationFilterOutput.tif_imgEnvelope.shp
+    -instats ${INPUTDATA}/Classification/apTvClKMeansImageClassificationFilterOutput.tif_polyStats.xml
     -field field
     -strategy constant
     -strategy.constant.nb 30000
@@ -661,7 +661,7 @@ if(OTB_USE_SHARK)
     ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif_sampleSelect.shp
     ${TEMP}/apTvClSampleSelectOutput_test.shp)
 
-  otb_test_application(NAME apTvClKMeansImageClassification_SampleExtractionTest
+  otb_test_application(NAME apTvClKMeansImageClassification_2_SampleExtractionTest
     APP SampleExtraction
     OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
     -vec ${TEMP}/apTvClSampleSelectOutput_test.shp
