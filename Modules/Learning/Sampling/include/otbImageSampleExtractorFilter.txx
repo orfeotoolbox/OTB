@@ -175,6 +175,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
   IndexType imgIndex;
   PixelType imgPixel;
   double imgComp;
+
   ogr::Layer::const_iterator featIt = layerForThread.begin();
   for(; featIt!=layerForThread.end(); ++featIt)
     {
@@ -194,6 +195,8 @@ PersistentImageSampleExtractorFilter<TInputImage>
         imgPoint[1] = castPoint->getY();
         inputImage->TransformPhysicalPointToIndex(imgPoint,imgIndex);
         imgPixel = inputImage->GetPixel(imgIndex);
+
+       if(featIt->GetFID() == 10) std::cout << "imgPoint: " << imgPoint[0] << "," << imgPoint[1] << std::endl;
 
         ogr::Feature dstFeature(outputLayer.GetLayerDefn());
         dstFeature.SetFrom( *featIt, TRUE );
