@@ -56,7 +56,6 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
       tmpInputImageParameter->SetFromFileName(filename);
 
       m_InputImageParameterVector.push_back(tmpInputImageParameter);
-      m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
       }
     }
 
@@ -70,7 +69,6 @@ void
 InputImageListParameter::AddNullElement()
 {
   m_InputImageParameterVector.push_back(ITK_NULLPTR);
-  m_ImageList->PushBack(ITK_NULLPTR);
   SetActive(false);
   this->Modified();
 }
@@ -85,7 +83,6 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
     tmpInputImageParameter->SetFromFileName(filename);
 
     m_InputImageParameterVector.push_back(tmpInputImageParameter);
-    m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
 
     this->Modified();
     SetActive(true);
@@ -110,7 +107,6 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
     tmpInputImageParameter->SetFromFileName(filename);
 
     m_InputImageParameterVector[id] = tmpInputImageParameter;
-    m_ImageList->SetNthElement(id,tmpInputImageParameter->GetFloatVectorImage());
 
     this->Modified();
     SetActive(true);
@@ -150,17 +146,22 @@ InputImageListParameter::GetNthFileName( unsigned int i ) const
 FloatVectorImageListType*
 InputImageListParameter::GetImageList() const
 {
+  m_ImageList->Clear();
+  for (unsigned int i=0 ; i < this->Size() ; ++i)
+    {
+    m_ImageList->PushBack(m_InputImageParameterVector[i]->GetFloatVectorImage());
+    }
   return m_ImageList;
 }
 
 FloatVectorImageType*
 InputImageListParameter::GetNthImage(unsigned int i) const
 {
-  if(m_ImageList->Size()<i)
+  if(this->Size()<=i)
     {
-    itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
+    itkExceptionMacro(<< "No image "<<i<<". Only "<<this->Size()<<" images available.");
     }
-  return m_ImageList->GetNthElement(i);
+  return m_InputImageParameterVector[i]->GetFloatVectorImage();
 }
 
 void
@@ -192,9 +193,9 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 
 void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
 {
-  if(m_ImageList->Size()<i)
+  if(this->Size()<i)
   {
-    itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
+    itkExceptionMacro(<< "No image "<<i<<". Only "<<this->Size()<<" images available.");
   }
 
   // Check input availability
@@ -206,7 +207,6 @@ void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
   tmpInputImageParameter->SetImage(img);
 
   m_InputImageParameterVector[i] = tmpInputImageParameter;
-  m_ImageList->SetNthElement(i,tmpInputImageParameter->GetFloatVectorImage());
 }
 
 
@@ -221,7 +221,6 @@ InputImageListParameter::AddImage(ImageBaseType* image)
   tmpInputImageParameter->SetImage(image);
 
   m_InputImageParameterVector.push_back(tmpInputImageParameter);
-  m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
 
   this->Modified();
 }
@@ -229,16 +228,18 @@ InputImageListParameter::AddImage(ImageBaseType* image)
 bool
 InputImageListParameter::HasValue() const
 {
-  if(m_ImageList->Size() == 0)
+  if(this->Size() == 0)
     {
     return false;
     }
 
   bool res(true);
   unsigned int i(0);
-  while(i < m_ImageList->Size() && res == true)
+  while(i < this->Size() && res == true)
     {
-    res = m_ImageList->GetNthElement(i).IsNotNull();
+    res = (m_InputImageParameterVector[i] ?
+           m_InputImageParameterVector[i]->HasValue() :
+           false);
     i++;
     }
 
@@ -249,12 +250,11 @@ InputImageListParameter::HasValue() const
 void
 InputImageListParameter::Erase( unsigned int id )
 {
-  if(m_ImageList->Size()<id)
+  if(this->Size()<id)
     {
-    itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ImageList->Size()<<" images available.");
+    itkExceptionMacro(<< "No image "<<id<<". Only "<<this->Size()<<" images available.");
     }
 
-  m_ImageList->Erase( id );
   m_InputImageParameterVector.erase(m_InputImageParameterVector.begin()+id);
 
   this->Modified();

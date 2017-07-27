@@ -160,16 +160,14 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
 void
 QtWidgetInputImageListParameter::UpdateImageList()
 {
-  /* Adding a NullElement so to make the m_FileSelectionList and
-* m_InputImageList's ImageList are of same size. So that GetImageList().Size()
-* seems to be happy.
-  */
-  for(unsigned int i = m_InputImageListParam->GetImageList()->Size(); i < m_FileSelectionList.size(); i++)
+  // Adding a NullElement so to make the m_FileSelectionList and
+  // m_InputImageList's ImageList are of same size.
+  for(unsigned int i = m_InputImageListParam->Size(); i < m_FileSelectionList.size(); i++)
     {
     m_InputImageListParam->AddNullElement();
     }
 
-  for(unsigned int j = 0; j < m_InputImageListParam->GetImageList()->Size(); j++)
+  for(unsigned int j = 0; j < m_InputImageListParam->Size(); j++)
     {
     if(m_InputImageListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == false)
       {
