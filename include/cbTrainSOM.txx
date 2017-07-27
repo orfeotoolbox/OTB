@@ -125,14 +125,14 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->SetMaxWeight(GetParameterFloat("model.som.iv"));
 		typename TemplateEstimatorType::SizeType size;
 		std::vector<std::basic_string<char>> s= GetParameterStringList("model.som.s");
-		for (int i=0; i<dim; i++){ // This will be templated later (the 3)
+		for (int i=0; i<dim; i++){ 
 			size[i]=std::stoi(s[i]);
 		}
 		
         dimredTrainer->SetMapSize(size);
         typename TemplateEstimatorType::SizeType radius;
 		std::vector<std::basic_string<char>> n= GetParameterStringList("model.som.n");
-		for (int i=0; i<dim; i++){ // This will be templated later (the 3)
+		for (int i=0; i<dim; i++){ 
 			radius[i]=std::stoi(n[i]);
 		}
         dimredTrainer->SetNeighborhoodSizeInit(radius);
