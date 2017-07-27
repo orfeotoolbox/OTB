@@ -38,6 +38,9 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
+#if QWT_IS_ABOVE_6_1
+# include <qwt_plot_canvas.h>
+#endif // QWT_IS_ABOVE_6_1
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_magnifier.h>
@@ -148,7 +151,7 @@ const QColor RUBBER_BAND_COLOR( 0xFF, 0xFF, 0x00, 0xAA );
 
 /*******************************************************************************/
 HistogramWidget
-::HistogramWidget( QWidget* p, Qt::WindowFlags flags  ):
+::HistogramWidget( QWidget* p, Qt::WindowFlags flags  ) :
   QWidget( p, flags ),
   m_UI( new mvd::Ui::HistogramWidget() ),
   m_PlotGrid( NULL ),
@@ -255,9 +258,22 @@ HistogramWidget
 
   //
   // PICKER.
+  assert(
+    dynamic_cast< QwtPlotCanvas * >( m_UI->histogramPlot->canvas() )!=nullptr
+  );
 
   m_PlotPicker =
-    new HistogramPlotPicker( curves, m_UI->histogramPlot->canvas() );
+    new HistogramPlotPicker(
+      curves,
+#if QWT_IS_ABOVE_6_1
+      dynamic_cast< QwtPlotCanvas * >(
+#endif // QWT_IS_ABOVE_6_1
+	m_UI->histogramPlot->canvas()
+#if QWT_IS_ABOVE_6_1
+        )
+#endif // QWT_IS_ABOVE_6_1
+      );
+
   m_PlotPicker->setTrackerMode( QwtPicker::ActiveOnly );
   m_PlotPicker->setRubberBandPen( RUBBER_BAND_COLOR );
   m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );

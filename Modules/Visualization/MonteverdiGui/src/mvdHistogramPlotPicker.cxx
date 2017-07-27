@@ -34,6 +34,9 @@
 #include <qwt_painter.h>
 #include <qwt_picker_machine.h>
 #include <qwt_plot.h>
+#if QWT_IS_ABOVE_6_1
+#  include <qwt_plot_canvas.h>
+#endif // QWT_ABOVE_6_1
 #include <qwt_text.h>
 
 //
@@ -184,7 +187,16 @@ HistogramPlotPicker
       // ( selectionType()==QwtPicker::PointSelection ) &&
       selection().count() >= 1 )
     {
-    const QRect& rect = pickRect();
+#if QWT_IS_ABOVE_6_1
+    assert( parentWidget()!=nullptr );
+
+    const QRect & rect = parentWidget()->contentsRect();
+
+#else // QWT_IS_ABOVE_6_1
+    const QRect & rect = pickRect();
+
+#endif //QWT_IS_ABOVE_6_1
+
     const QPoint& pos = pa[ 0 ];
 
     QwtPainter::drawLine(
