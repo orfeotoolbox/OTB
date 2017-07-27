@@ -1,5 +1,4 @@
 function(process_file_recurse input_file)
-
   set(input_file_full_path)
   search_library(${input_file} PKG_SEARCHDIRS input_file_full_path)
   if(NOT input_file_full_path)
@@ -55,6 +54,7 @@ function(process_file_recurse input_file)
     if(NOT "${candidate}" MATCHES "${LOADER_REGEX}")
       continue()
     endif()
+
     string(REGEX REPLACE "${LOADER_REGEX}" "\\1" raw_item "${candidate}")
 
     if(NOT raw_item)
@@ -76,6 +76,9 @@ function(process_file_recurse input_file)
       message("${raw_item} is already resolved [${raw_item}_RESOLVED=${${raw_item}_RESOLVED}]")
     endif()
 
+    if(PKG_DEBUG)
+      message("raw_item='${raw_item}'\tis_system='${is_system}'")
+    endif()
     if(is_system OR ${raw_item}_RESOLVED OR ${raw_item}_USED)
       continue()
     endif()
