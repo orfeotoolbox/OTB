@@ -17,13 +17,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-function(setif_value_in_list matched value list)
-  set(${matched})
-  string(TOLOWER ${value} value_)
-  foreach (pattern ${${list}})
-    string(TOLOWER ${pattern} pattern_)
-    if("${value_}" MATCHES "${pattern_}")
-      set(${matched} TRUE)
+function(setif_value_in_list matched VALUE list)
+  set(${matched} FALSE  PARENT_SCOPE)
+  string(TOLOWER ${VALUE} value)
+  foreach (PATTERN ${${list}})
+    string(TOLOWER ${PATTERN} pattern)
+    if("${value}" MATCHES "${pattern}")
+      set(${matched} TRUE PARENT_SCOPE)
+      #we found a match. return from loop.
+      return()
     endif()
   endforeach()
   #message("'${value}' not found in ${list}")
