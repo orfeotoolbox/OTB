@@ -121,6 +121,7 @@ function(install_rule src_file)
 	set(lib_dir "lib")
 	if(is_gtk_lib)
 	  set(lib_dir "lib/gtk")
+	  set(install_dir "lib/gtk")
 	endif()
 	
 	file(APPEND
