@@ -118,7 +118,9 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
       ++gridHisto[ (i / this->wThumbnail)  + ( j / this->hThumbnail ) * nW] \
                  [ input->GetPixel( index ) ];
       }
+      // std::cout<<"gridHisto[0][127] = "<<gridHisto[0][127]<<std::endl;
     }
+  // std::cout<<"end of histogram computation"<<std::endl;
 }
 
 template <class TInputImage, class TOutputImage >
@@ -139,6 +141,11 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
     ++diff;
     }
   this->targetHisto = tempTarget;
+
+  // ////////////////////////DEBUG////////////////////////
+  // std::cout<<"size ="<<this->hSize<<std::endl;
+  // std::cout<<"height ="<<height<<std::endl;
+  // std::cout<<"targetHisto[middle] ="<<targetHisto[this->hSize/2]<<std::endl;
 }
 
 template <class TInputImage, class TOutputImage >
@@ -223,6 +230,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 											 int nW,
 											 int nH )
 {
+  assert(hThresh>=0);
   int histoLength = gridHisto[0].size();
   int nbHisto = nW * nH;
   int toThresh = 0;
@@ -289,18 +297,22 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   statFilter->Update();
   this->min = statFilter->GetMinimum();
   this->max = statFilter->GetMaximum();
-  this->step = static_cast<double>( this->max - this->min ) \
-                / static_cast<double>( this->hSize - 1 );
+  this->step = static_cast<double>( this->max - this->min + 1) \
+                / static_cast<double>( this->hSize );
   typename itk::ImageRegionConstIterator < InputImageType > 
       it( input , input->GetRequestedRegion() );
   typename itk::ImageRegionIterator < ImageBinType > 
       nit ( this->binImage , this->binImage->GetRequestedRegion() );
   it.GoToBegin();
   nit.GoToBegin();
+  std::cout<<"min ="<<this->min<<std::endl;
+  std::cout<<"max ="<<this->max<<std::endl;
+  std::cout<<"step ="<<this->step<<std::endl;
+  int pixelValue = 0;
   while( !nit.IsAtEnd() )
   {
-
-  nit.Set(std::floor( ( it.Get() - this->min ) / this->step ) );
+  pixelValue = std::floor( ( it.Get() - this->min ) / this->step );
+  nit.Set( pixelValue );
   ++it;
   ++nit;
   }
@@ -374,8 +386,38 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   int histoTresh = static_cast<int>( this->threshFactor * this->targetHisto[0] );
 
   computehisto( gridHisto , nW , nH );
-	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
+  for (int i : gridHisto[0])
+  { 
+    if (i<0)
+      std::cout<<i<<std::endl;
+  }
+
+  // std::cout<<gridHisto[0][this->hSize/2]<<std::endl;
+  // std::cout<<"========one==========="<<std::endl;
+
+	// histoLimiteContrast( gridHisto , histoTresh , nW , nH );
+
+  // std::cout<<gridHisto[0][this->hSize/2]<<std::endl;
+  // std::cout<<"========two==========="<<std::endl;
+
 	equalized( gridHisto , gridLut , nW , nH );
+  
+  // std::cout<<gridHisto[0][this->hSize/2]<<std::endl;
+  // std::cout<<"========three==========="<<std::endl;
+
+  // ///////////////////Debug ///////////////////
+  // std::cout<<"=======LUT======="<<std::endl;
+  // for (int i : gridLut[0])
+  // {
+  //   std::cout<<i<<std::endl;
+  // }
+  // std::cout<<"=======Histo======="<<std::endl;
+  for (int i : gridHisto[0])
+  { 
+    if (i<0)
+      std::cout<<i<<std::endl;
+  }
+  
 
 	float gainValue = 0.0;
   typename InputImageType::IndexType index;
@@ -387,7 +429,14 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
       index[1] = j;
       gainValue = interpoleGain( gridLut , this->binImage->GetPixel( index ) ,
                                  index , nW , nH );
+
+      // if (i>2000 && i<3000 && j>2000 && j<2010)
+      //   std::cout<<gainValue<<std::endl;
+      if (gainValue <0 )
+        std::cout<<"WARNING"<<std::endl;
       gainImage->SetPixel( index , gainValue );
+
+
       }
     }
 
@@ -398,8 +447,8 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   gainMultiplyer->SetInput2( gainImage );
   gainMultiplyer->Update();
   this->GraftOutput( gainMultiplyer -> GetOutput () );
-  this->GetOutput()->SetOrigin( input->GetOrigin() );
-  this->GetOutput()->SetSpacing( input->GetSpacing() );
+  // this->GetOutput()->SetOrigin( input->GetOrigin() );
+  // this->GetOutput()->SetSpacing( input->GetSpacing() );
 }
 
 

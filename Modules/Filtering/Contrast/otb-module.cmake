@@ -24,13 +24,12 @@ otb_module(OTBContrast
   DEPENDS
     OTBITK
   	OTBCommon
-    
-    
+  	OTBImageBase  
 
   TEST_DEPENDS
     OTBTestKernel
-    OTBImageIO
     OTBImageBase
+    OTBImageIO
 
   DESCRIPTION
     "${DOCUMENTATION}"

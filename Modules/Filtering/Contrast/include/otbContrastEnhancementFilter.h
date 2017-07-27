@@ -22,7 +22,7 @@
 #define otbContrastEnhancementFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 #include "itkMultiplyImageFilter.h"
 
@@ -47,8 +47,8 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef itk::Image< float , 2 > ImageGainType;
-  typedef itk::Image< int , 2 > ImageBinType;
+  typedef otb::Image< float , 2 > ImageGainType;
+  typedef otb::Image< int , 2 > ImageBinType;
 
   typedef typename InputImageType::PixelType PixelType;
   /** "object factory" management method. */

@@ -11,12 +11,15 @@
 #include "itkComposeImageFilter.h"
 #include "itkThresholdImageFilter.h"
 #include "otbContrastEnhancementFilter.h"
+#include "otbVectorImageToImageListFilter.h"
+#include "otbImageListToVectorImageFilter.h"
 
+#if 0
 int const sizeh = 256;
 typedef int                  PixelType;
-typedef itk::Image< PixelType , 2 >  ImageType;
-typedef itk::VectorImage< PixelType , 2 >  VectorImageType;
-typedef itk::Image< float , 2 > ImageGainType; 
+typedef otb::Image< PixelType , 2 >  ImageType;
+typedef otb::VectorImage< PixelType , 2 >  VectorImageType;
+typedef otb::Image< float , 2 > ImageGainType; 
 
 
 void
@@ -358,6 +361,7 @@ prototype ( int argc,
 
   return 0;
 }
+#endif
 
 int
 main ( int argc, 
@@ -384,24 +388,46 @@ main ( int argc,
   writer->SetInput(filter->GetOutput());
   writer->Update();
   return 0;*/
-
+  // typedef int OPixelType;
+  // typedef otb::Image<OPixelType, 2 > OImageType;
+  // typedef otb::VectorImage< OPixelType , 2 >  OVectorImageType;
+  typedef int                  PixelType;
+  typedef otb::Image< PixelType , 2 >  ImageType;
+  typedef otb::VectorImage< PixelType , 2 >  VectorImageType;
   typedef otb::ImageFileReader< VectorImageType > ReaderType;
-  typedef itk::VectorIndexSelectionCastImageFilter< VectorImageType , ImageType > VectorToImageFilterType;
-  typedef itk::ComposeImageFilter< ImageType > ImageToVectorImageFilterType;
+  typedef otb::ImageFileWriter< VectorImageType > WriterType;
+  typedef otb :: ImageList< ImageType > ImageListType;
+  typedef otb::VectorImageToImageListFilter< VectorImageType, ImageListType > 
+          VectorToImageListFilterType;
+  typedef otb::ImageListToVectorImageFilter< ImageListType, VectorImageType > 
+          ImageListToVectorFilterType;
+  typedef otb::ContrastEnhancementFilter< ImageType , ImageType > FilterType;
 
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
   reader->Update();
   VectorImageType::Pointer input = reader->GetOutput();
 
-  ImageToVectorImageFilterType::Pointer imageToVectorImageFilterOut( ImageToVectorImageFilterType::New() );
-  VectorToImageFilterType::Pointer vectorToImageFilter ( VectorToImageFilterType::New() );
-  vectorToImageFilter->SetInput( input );
-  vectorToImageFilter->SetIndex( 0 );
-  vectorToImageFilter->Update();
+  VectorToImageListFilterType::Pointer vectorToImageListFilter ( VectorToImageListFilterType::New() );
+  ImageListToVectorFilterType::Pointer imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
+  vectorToImageListFilter->SetInput( input );
+  vectorToImageListFilter->Update();
+  if (argc<5)
+  {
+    std::cout<<"error : otbContrastTestDriver -inputFilename -outputFilename -hThumbnail -wThumbnail"<<std::endl;
+    if (argc>1)
+      {
+        std::cout<<"Image Width = "<<input->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
+        std::cout<<"Image Height = "<<input->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
+      }
+    return 1;
+  }
   int hThumbnail = atoi(argv[3]);
   int wThumbnail = atoi(argv[4]);
-  ImageType::Pointer inputImage = vectorToImageFilter->GetOutput();
+  ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
+
+  ImageType::Pointer inputImage = inputImageList->Front();
+
   if ( inputImage->GetLargestPossibleRegion().GetSize()[1]%hThumbnail != 0 )
     {
     std::cout<<"error : hThumbnail = "<<hThumbnail<<" is not a divider of the input's height"<<std::endl;
@@ -415,29 +441,29 @@ main ( int argc,
     return 1;
     }
 
-  typedef otb::ContrastEnhancementFilter< ImageType , ImageType > FilterType;
+  ImageListType::Pointer outputImageList ( ImageListType::New() );
+
+
   int m = input->GetVectorLength ();
 
   for (int chanel = 0 ; chanel<m ; chanel++ ) 
     {
-    vectorToImageFilter->SetIndex( chanel );
-    vectorToImageFilter->Update();
     FilterType::Pointer filter( FilterType::New() );
-    filter->SetInput(vectorToImageFilter->GetOutput());
-    filter->setHistoThreshFactor(3);
-    filter->setHistoSize(512);
-    // filter->setGainThresh(1.0, 1.0);
+    filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
+    filter->setHistoThreshFactor(6);
+    filter->setHistoSize(1024);
+    // filter->setGainThresh(0.1, 10.0);
     filter->setThumbnailSize( wThumbnail, hThumbnail );
     filter->Update();
-    imageToVectorImageFilterOut->SetInput( chanel , filter->GetOutput() );
+    outputImageList->PushBack( filter->GetOutput() );
     }
 
-  VectorImageType::Pointer output = imageToVectorImageFilterOut->GetOutput();
+  imageListToVectorFilterOut->SetInput(outputImageList);
+  imageListToVectorFilterOut->Update();
+  VectorImageType::Pointer output = imageListToVectorFilterOut->GetOutput();
   output->SetOrigin(input->GetOrigin());
   output->CopyInformation(input);
-  output->Graft(input);
   // Here we compute a gain image corresponding to the associated gain of the equalization
-  typedef otb::ImageFileWriter<VectorImageType>  WriterType;
   WriterType::Pointer writer( WriterType::New());
   writer->SetFileName( argv[2] );
   writer->SetInput( output );
