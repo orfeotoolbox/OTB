@@ -66,21 +66,9 @@ set(WINDOWS_SYSTEM_DLLS
   python...dll
   )
 
-# if(PKG_GENERATE_XDK)
-#   set(WINDOWS_SYSTEM_DLLS
-#     ${WINDOWS_SYSTEM_DLLS}
-#     api-ms-win-*
-#     concrt140.dll
-#     ucrtbase.dll
-#     msvcp140.dll
-#     msvrt140.dll
-#     vcomp140.dll
-#     )
-# endif()
-
 set(LINUX_SYSTEM_DLLS
   libm.so
-  libc.so
+  libc.so.*
   libstdc*
   libgcc_s.so
   librt.so
@@ -105,11 +93,12 @@ set(LINUX_SYSTEM_DLLS
   libICE.so*
   libXrandr.so*
   libpython*
-  libexpat.so.*
-  libfontconfig.so*
-  libfreetype.so*
-  libwebp.so*
   )
+  # libexpat.so.*
+  # libfontconfig.so*
+  # libfreetype.so*
+  # libwebp.so*
+  # )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
 set(APPLE_SYSTEM_DLLS
@@ -168,9 +157,11 @@ set(GTK_LIB_LIST_1
   libpcre.so.3
   libffi.so.6
   )
-set(GTK_LIB_LIST_2
-  libz.so.1
-  libpng12.so.0
-  )
+# set(GTK_LIB_LIST_2
+#   libz.so.1
+#   libpng12.so.0
+#   )
 
-set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})
+
+#set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})
+set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1}) # ${GTK_LIB_LIST_2})
