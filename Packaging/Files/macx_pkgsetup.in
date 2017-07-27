@@ -27,6 +27,11 @@ cd  "$DIRNAME_0" || exit 1
 
 OUT_DIR=$(pwd)
 
+#do not move below 3 lines. it must be before "unset LD_LIBRARY_PATH" code
+sed -i "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/setup_python.sh"
+chmod +x $OUT_DIR/setup_python.sh
+./setup_python.sh
+
 # find install_name_tool
 INSTALL_NAME_TOOL=$(which install_name_tool)
 if [ -z "$INSTALL_NAME_TOOL" ]; then
@@ -40,38 +45,26 @@ unset DYLD_LIBRARY_PATH
 unset DYLD_FALLBACK_LIBRARY_PATH
 
 echo "Configuring..."
-LIBRARY_FILES=$(find "$OUT_DIR/lib" -maxdepth 1 -type f)
-EXE_FILES=$(find "$OUT_DIR/bin"  -type f -exec file {} \; | grep -i "Mach-O*.*executable"|cut -d ':' -f1)
+
+LIB_FILES=$(find "$OUT_DIR/lib" -type f -exec file {} \; | grep -i "Mach-O"|cut -d ':' -f1)
+BIN_FILES=$(find "$OUT_DIR/bin" -type f -exec file {} \; | grep -i "Mach-O*.*executable"|cut -d ':' -f1)
 # run install_name_tool
-for lib_file in $LIBRARY_FILES $EXE_FILES; do
+for input_file in $LIB_FILES $BIN_FILES; do
     #echo "adding rpath to $OUT_DIR/$lib_file"
-
-    if [ -f "$lib_file" ]; then
-	lib_file_TYPE=$(file "$lib_file" |cut -d ':' -f2)
-	
-	match_type="ar archive"
-	if test "${lib_file_TYPE#*$match_type}" != "$lib_file_TYPE" ; then
-	    continue;
-	fi
-      lib_file_original_rpaths=$(otool -l "$lib_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
-      for original_rpath in $lib_file_original_rpaths; do
-        $INSTALL_NAME_TOOL "-delete_rpath" "$original_rpath" "$lib_file"
+    if [ -f "$input_file" ]; then
+      input_file_old_rpaths=$(otool -l "$input_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
+      for rpath_old in $input_file_old_rpaths; do
+        $INSTALL_NAME_TOOL "-delete_rpath" "$rpath_old" "$input_file"
       done
-      $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$lib_file"
+      $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$input_file"
     fi
 done
 
-OTB_APP_FILES=$(find "$OUT_DIR/lib/otb/applications" -maxdepth 1 -type f)
-# run install_name_tool
-for app_file in $OTB_APP_FILES; do
-    #echo "adding rpath to $app_file"
-    if [ -f "$app_file" ]; then
-        $INSTALL_NAME_TOOL "-rpath" "@ORIGINAL_RPATH_TO_REPLACE@" "$OUT_DIR/lib" "$app_file"
-    fi
-done
-if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ]; then
-    $INSTALL_NAME_TOOL "-rpath" "@ORIGINAL_RPATH_TO_REPLACE@" "$OUT_DIR/lib" "$OUT_DIR/lib/python/_otbApplication.so"
-fi
+#install uninstall_otb script
+echo "Installing uninstall script for OTB 'uninstall_otb.sh'"
+sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/install_manifest.txt"
+sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/uninstall_otb.sh"
+chmod +x "$OUT_DIR/uninstall_otb.sh"
 
 rm -fr "Mapla.app"
 rm -fr "Monteveridi.app"
@@ -81,19 +74,11 @@ cp -r "$OUT_DIR/template.app" "$OUT_DIR/Monteverdi.app"
 
 mv "$OUT_DIR/mapla.sh" "Mapla.app/Contents/MacOS/Mapla"
 mv "$OUT_DIR/monteverdi.sh" "Monteverdi.app/Contents/MacOS/Monteverdi"
-
 rm -fr "template.app"
-
-
-cat > "$OUT_DIR/bin/qt.conf" << EOF
-[Paths]
-Translations=$OUT_DIR/lib/qt4/translations
-Plugins=$OUT_DIR/lib/qt4/plugins
-EOF
-
 LONG_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@
 SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@
-
+#sed qt.conf
+sed -i "" "s,../lib,$OUT_DIR/lib,g" "$OUT_DIR/bin/qt.conf"
 
 cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Mapla.app/Contents/Resources/qt.conf"
 cp "$OUT_DIR/Monteverdi.icns" "Mapla.app/Contents/Resources/"
@@ -111,23 +96,20 @@ sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" "Monteverdi.app/Contents/Inf
 sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
 chmod +x "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
 
-
 sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/otbenv.profile"
 chmod +x "$OUT_DIR/otbenv.profile"
 
-
 printf %s\\n ""
-printf %s\\n "You MUST source 'otbenv.profile' file to use OTB. see next line:"
-printf %s\\n ". $OUT_DIR/otbenv.profile"
-printf %s\\n "The changes to environment variables from otbenv.profile only affect current session."
-printf %s\\n "You can also copy above line to  ~/.profile to keep those changes permanently!"
+printf %s\\n "source './otbenv.profile' file to set required environment variables"
+printf %s\\n "eg: '. $OUT_DIR/otbenv.profile'"
+printf %s\\n "You can also copy above line to  ~/.profile to keep changes permanently!"
 printf %s\\n "More documentation can be found in $OUT_DIR/README"
 
 
 # echo "Creating symbolic links..."
 . "./make_symlinks"
 rm -f "$OUT_DIR/make_symlinks"
-
+rm -f "$OUT_DIR/setup_python.sh"
 rm -f "$OUT_DIR/Monteverdi.icns"
 rm -f "$OUT_DIR/pkgsetup"
 

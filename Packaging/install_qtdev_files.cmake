@@ -19,13 +19,9 @@ set(QT_REQ_DIRS)
     endif()
   endforeach()
 
-  # We need qt.conf on windows. for macx and linux we write
-  # when installing package
-  if(WIN32)
-    install(FILES
-      ${CMAKE_CURRENT_SOURCE_DIR}/Files/qt.conf
-      DESTINATION ${PKG_STAGE_DIR}/bin
-      )
-  endif()
-  
+  install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Files/qt.conf
+    DESTINATION ${PKG_STAGE_DIR}/bin
+    )
+ 
 endfunction()
