@@ -424,8 +424,8 @@ main ( int argc,
     vectorToImageFilter->Update();
     FilterType::Pointer filter( FilterType::New() );
     filter->SetInput(vectorToImageFilter->GetOutput());
-    filter->setHistoThreshFactor(100000);
-    filter->setHistoSize(1024);
+    filter->setHistoThreshFactor(3);
+    filter->setHistoSize(512);
     // filter->setGainThresh(1.0, 1.0);
     filter->setThumbnailSize( wThumbnail, hThumbnail );
     filter->Update();

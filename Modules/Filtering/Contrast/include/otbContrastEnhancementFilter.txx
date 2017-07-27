@@ -121,15 +121,11 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
     }
 }
 
-
 template <class TInputImage, class TOutputImage >
 void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::createTarget()
 {
-  typename InputImageType::ConstPointer input = this->GetInput();
-  typename TInputImage::SizeType size = input->GetLargestPossibleRegion()
-                                               .GetSize();
-  int nbPixel = size[0] * size[1];
+  int nbPixel = this->wThumbnail * this->hThumbnail;
   int height = nbPixel/this->hSize ;
   std::vector < int > tempTarget;
   tempTarget.resize(this->hSize , height );
@@ -163,7 +159,7 @@ float ContrastEnhancementFilter < TInputImage , TOutputImage >
   float distx = std::abs(x - 0.5);
   float w = (1 - distx )*(1 - disty );
   float gain = postprocess( gridLut[lutX + lutY * nW ] , pixelValue ) * \
-              (1 - distx )*(1 - disty ) ;
+              (1 - distx ) * (1 - disty ) ;
   bool right = x>=0.5 && lutX<(nW - 1) ;
   bool up = y<=0.5 && lutY>0;
   bool left = x<=0.5 && lutX>0;
@@ -378,7 +374,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   int histoTresh = static_cast<int>( this->threshFactor * this->targetHisto[0] );
 
   computehisto( gridHisto , nW , nH );
-	// histoLimiteContrast( gridHisto , histoTresh , nW , nH );
+	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
 	equalized( gridHisto , gridLut , nW , nH );
 
 	float gainValue = 0.0;
@@ -401,11 +397,9 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   gainMultiplyer->SetInput1( input );
   gainMultiplyer->SetInput2( gainImage );
   gainMultiplyer->Update();
-  this-> GraftOutput ( gainMultiplyer -> GetOutput ());
-  this->GetOutput()->Graft(input);
-  gainMultiplyer -> GetOutput ()->Graft(input);
-  this->GetOutput()->SetOrigin(input->GetOrigin());
-  this->GetOutput()->SetSpacing(input->GetSpacing());
+  this->GraftOutput( gainMultiplyer -> GetOutput () );
+  this->GetOutput()->SetOrigin( input->GetOrigin() );
+  this->GetOutput()->SetSpacing( input->GetSpacing() );
 }
 
 
