@@ -100,6 +100,8 @@ if(UNIX)
     --with-xerces=no
     --with-xml2=no
     --with-pg=no
+    --with-webp=no
+    --with-threads=yes
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
