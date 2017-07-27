@@ -42,6 +42,7 @@ include(ExternalProject)
 include(OTBCheckTargetSystemArch)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
+option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
 
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
 
