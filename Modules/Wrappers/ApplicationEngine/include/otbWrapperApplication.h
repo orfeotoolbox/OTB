@@ -778,7 +778,7 @@ public:
   /** documentation link */
   void SetDocLink(const std::string & link)
   {
-    if (!m_Doclink.compare(link) == 0) {
+    if (m_Doclink.compare(link) != 0) {
       m_Doclink = link;
       this->Modified();
     }
