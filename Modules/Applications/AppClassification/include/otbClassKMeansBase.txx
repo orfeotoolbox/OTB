@@ -65,11 +65,11 @@ void ClassKMeansBase::InitKMSampling()
   SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.0001).");
   SetDefaultParameterFloat("ct", 0.0001);
   MandatoryOff("ct");
-
+/*
   AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
   SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
   MandatoryOff("vm");
-
+*/
   AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
   SetParameterDescription("outmeans", "Output text file containing centroid positions");
   MandatoryOff("outmeans");
@@ -93,6 +93,7 @@ void ClassKMeansBase::ShareKMSamplingParameters()
   ShareParameter("in", "imgenvelop.in");
   ShareParameter("ram", "polystats.ram");
   ShareParameter("sampler", "select.sampler");
+  ShareParameter("vm", "polystats.mask");
 }
 
 void ClassKMeansBase::ShareKMClassificationParams()
@@ -128,7 +129,6 @@ void ClassKMeansBase::ConnectKMClassificationParams()
 void ClassKMeansBase::ConnectKMClassificationMask()
 {
   otbAppLogINFO("Using input mask ...");
-  Connect("polystats.mask", "vm");
   Connect("select.mask", "polystats.mask");
   Connect("classif.mask", "select.mask");
 }
