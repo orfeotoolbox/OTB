@@ -23,6 +23,7 @@
 #define otbSoilDataBase_h
 
 #include "OTBSimulationExport.h"
+#include "itkMacro.h"
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -30,7 +31,7 @@
 namespace otb
 {
 
-class OTBSimulation_EXPORT SoilDataBase
+class ITK_ABI_EXPORT SoilDataBase
 {
 public:
   //wavelength in nm
