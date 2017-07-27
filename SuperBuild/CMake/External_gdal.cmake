@@ -65,7 +65,6 @@ if(UNIX)
     ${SB_CONFIGURE_ARGS}
     --with-cfitsio=no
     --with-dods-root=no
-    --with-dwgdirect=no
     --with-ecw=no
     --with-epsilon=no
     --with-fme=no
