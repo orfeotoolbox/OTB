@@ -36,23 +36,20 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wshadow"
-#include <qwt_plot_curve.h>
-#include <qwt_plot_grid.h>
-#include <qwt_plot_magnifier.h>
-#include <qwt_plot_marker.h>
-#include <qwt_plot_panner.h>
-// #include <qwt_plot_zoomer.h>
-#include <qwt_scale_engine.h>
-#pragma GCC diagnostic pop
-#else
-#include <qwt_plot_curve.h>
-#include <qwt_plot_grid.h>
-#include <qwt_plot_magnifier.h>
-#include <qwt_plot_marker.h>
-#include <qwt_plot_panner.h>
-// #include <qwt_plot_zoomer.h>
-#include <qwt_scale_engine.h>
 #endif
+
+#include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
+#include <qwt_plot_magnifier.h>
+#include <qwt_plot_marker.h>
+#include <qwt_plot_panner.h>
+// #include <qwt_plot_zoomer.h>
+#include <qwt_scale_engine.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+
 //
 // System includes (sorted by alphabetic order)
 
@@ -177,8 +174,14 @@ HistogramWidget
   m_PlotGrid = new QwtPlotGrid();
   m_PlotGrid->attach( m_UI->histogramPlot );
 
+#if QWT_IS_ABOVE_6_1
+  m_PlotGrid->setMajorPen( GRID_MAJ_PEN_COLOR );
+  m_PlotGrid->setMinorPen( GRID_MIN_PEN_COLOR );
+
+#else // QWT_IS_ABOVE_6_1
   m_PlotGrid->setMajPen( GRID_MAJ_PEN_COLOR );
   m_PlotGrid->setMinPen( GRID_MIN_PEN_COLOR );
+#endif // QWT_IS_ABOVE_6_1
 
   //
   // ZOOMER.
