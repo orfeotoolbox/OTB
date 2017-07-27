@@ -115,7 +115,7 @@ macro(installer_files)
 
   #install all required files to perform uninstall
   install(FILES
-    Files/uninstall_otb.${SCRIPT_EXT}
+    Files/uninstall_otb${SCRIPT_EXT}
     ${CMAKE_BINARY_DIR}/install_manifest_otb.txt
     ${CMAKE_BINARY_DIR}/cmake_uninstall_otb.cmake
     DESTINATION ${PKG_STAGE_DIR})

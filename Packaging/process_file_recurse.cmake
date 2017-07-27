@@ -2,7 +2,6 @@ function(process_file_recurse input_file)
 
   set(input_file_full_path)
   search_library(${input_file} PKG_SEARCHDIRS input_file_full_path)
-
   if(NOT input_file_full_path)
     if(LINUX)
       setif_value_in_list(is_gtk_lib "${input_file}" ALLOWED_SYSTEM_DLLS)
@@ -23,7 +22,6 @@ function(process_file_recurse input_file)
     message("Processing ${input_file_full_path}")
   endif()
 
-
   install_rule(${input_file_full_path})
 
   set(raw_items)
@@ -40,7 +38,7 @@ function(process_file_recurse input_file)
   endif()
 
   string(REPLACE ";" "\\;" candidates "${loader_ov}")
-  string(REPLACE "\n" "${eol_char};" candidates "${candidates}")
+  string(REPLACE "\n" "${LOADER_REGEX_EOL};" candidates "${candidates}")
   
   get_filename_component(bn_name ${input_file_full_path} NAME)
   set(${bn_name}_USED TRUE CACHE INTERNAL "")
@@ -57,7 +55,6 @@ function(process_file_recurse input_file)
     if(NOT "${candidate}" MATCHES "${LOADER_REGEX}")
       continue()
     endif()
-   
     string(REGEX REPLACE "${LOADER_REGEX}" "\\1" raw_item "${candidate}")
 
     if(NOT raw_item)
@@ -67,7 +64,6 @@ function(process_file_recurse input_file)
     string(STRIP ${raw_item} raw_item)
     set(is_system FALSE)
     setif_value_in_list(is_system "${raw_item}" SYSTEM_DLLS)
-
     if(APPLE AND NOT is_system)
       if("${raw_item}" MATCHES "@rpath")
         string(REGEX REPLACE "@rpath." "" raw_item "${raw_item}")

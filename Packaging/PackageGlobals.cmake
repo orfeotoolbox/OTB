@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
+set(LOADER_REGEX_EOL "E")
 set(DEST_BIN_DIR bin)
 set(DEST_APP_DIR lib/otb/applications)
 
