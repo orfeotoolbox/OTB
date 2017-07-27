@@ -54,6 +54,9 @@ public:
 	itkGetMacro(Epsilon,double);
 	itkSetMacro(Epsilon,double);
 
+	itkGetMacro(InitFactor,double);
+	itkSetMacro(InitFactor,double);
+
 	itkGetMacro(Regularization,itk::Array<double>);
 	itkSetMacro(Regularization,itk::Array<double>);
 
@@ -113,6 +116,7 @@ private:
 	itk::Array<double> m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
 	itk::Array<double> m_Rho; // Sparsity parameter
 	itk::Array<double> m_Beta; // Sparsity regularization parameter
+	double m_InitFactor; // Weight initialization factor (the weights are intialized at m_initfactor/sqrt(inputDimension)  )
 	
 	bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
 	std::string m_LearningCurveFileName; // Name of the output learning curve printed after training

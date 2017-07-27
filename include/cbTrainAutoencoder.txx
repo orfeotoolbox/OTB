@@ -52,6 +52,12 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
     " ");
   
   
+  AddParameter(ParameterType_Float, "model.autoencoder.initfactor",
+               " ");
+  SetParameterFloat("model.autoencoder.initfactor",1, false);
+  SetParameterDescription(
+    "model.autoencoder.initfactor", "parameter that control the weight initialization of the autoencoder");
+  
    //Number Of Hidden Neurons
   AddParameter(ParameterType_StringList ,  "model.autoencoder.nbneuron",   "Size");
   /*AddParameter(ParameterType_Int, "model.autoencoder.nbneuron",
@@ -146,6 +152,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		dimredTrainer->SetNumberOfHiddenNeurons(nb_neuron);
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
 		dimredTrainer->SetEpsilon(GetParameterFloat("model.autoencoder.epsilon"));
+		dimredTrainer->SetInitFactor(GetParameterFloat("model.autoencoder.initfactor"));
 		dimredTrainer->SetRegularization(regularization);
 		dimredTrainer->SetNoise(noise);
 		dimredTrainer->SetRho(rho);

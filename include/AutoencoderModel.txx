@@ -151,7 +151,7 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneLayer(shark::AbstractStop
 
 	std::size_t inputs = dataDimension(samples);
 	net.setStructure(inputs, nbneuron);
-	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	initRandomUniform(net,-m_InitFactor*std::sqrt(1.0/inputs),m_InitFactor*std::sqrt(1.0/inputs));
 	//initRandomUniform(net,-1,1);
 	shark::ImpulseNoiseModel noise(noise_strength,0.0); //set an input pixel with probability m_Noise to 0
 	shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
@@ -200,7 +200,7 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(shark::Abstra
 
 	std::size_t inputs = dataDimension(samples);
 	net.setStructure(inputs, nbneuron);
-	initRandomUniform(net,-0.1*std::sqrt(1.0/inputs),0.1*std::sqrt(1.0/inputs));
+	initRandomUniform(net,-m_InitFactor*std::sqrt(1.0/inputs),m_InitFactor*std::sqrt(1.0/inputs));
 	//initRandomUniform(net,-1,1);
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
 	shark::SquaredLoss<shark::RealVector> loss;
