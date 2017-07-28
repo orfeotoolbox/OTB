@@ -51,8 +51,6 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
             message(FATAL_ERROR "Impossible to compile libsiftfast. Contact OTB development team")
         endif()
         set(OTB_DISABLE_FAST_FUNCTIONS_VALUE 1)
-    else()
-        message(STATUS "Try to compile libsiftfast.cpp done.")
     endif()
 
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
