@@ -141,7 +141,7 @@ public:
     return m_Parameters.coef0;
   }
 
-  /** Set the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
+  /** Set the C parameter for the training for C_SVC, EPSILON_SVR and C_SVR */
   otbSetSVMParameterMacro(C,C,double)
 
   /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
