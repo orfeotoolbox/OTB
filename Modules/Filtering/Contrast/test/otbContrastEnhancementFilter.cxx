@@ -452,7 +452,7 @@ main ( int argc,
     filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
     filter->setHistoThreshFactor(6);
     filter->setHistoSize(1024);
-    // filter->setGainThresh(0.1, 10.0);
+    // filter->setGainThresh(0.0 , 10.0);
     filter->setThumbnailSize( wThumbnail, hThumbnail );
     filter->Update();
     outputImageList->PushBack( filter->GetOutput() );
@@ -462,7 +462,7 @@ main ( int argc,
   imageListToVectorFilterOut->Update();
   VectorImageType::Pointer output = imageListToVectorFilterOut->GetOutput();
   output->SetOrigin(input->GetOrigin());
-  output->CopyInformation(input);
+  // output->CopyInformation(input);
   // Here we compute a gain image corresponding to the associated gain of the equalization
   WriterType::Pointer writer( WriterType::New());
   writer->SetFileName( argv[2] );

@@ -31,7 +31,6 @@
 
 namespace otb
 {
-typedef itk::Image< float , 2 > ImageGainType;
 
 template <class TInputImage, class TOutputImage >
 ContrastEnhancementFilter < TInputImage , TOutputImage >
@@ -316,7 +315,6 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   ++it;
   ++nit;
   }
-
 }
 
 template <class TInputImage, class TOutputImage >
@@ -324,8 +322,11 @@ float ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::postprocess( const std::vector < int >  & lut ,
                int pixelValue ) // TODO inline
 {
+  float denum = pixelValue * this->step + this->min;
+  if ( denum == 0 )
+    denum = 1.0;
   return (lut[ pixelValue ] * this->step + this->min) \
-          / ( pixelValue * this->step + this->min) ;
+          / denum ;
 }
 
 template <class TInputImage, class TOutputImage >
@@ -337,8 +338,8 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 	typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input = this->GetInput();
 
-  // output->SetRegions( input->GetLargestPossibleRegion() );
-  // output->Allocate();
+  output->SetRegions( input->GetLargestPossibleRegion() );
+  output->Allocate();
   // output->SetOrigin( input->GetOrigin() );
   // output->SetSpacing( input->GetSpacing() );
   // typename InputImageType::PixelType Val(1);
@@ -432,11 +433,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
       // if (i>2000 && i<3000 && j>2000 && j<2010)
       //   std::cout<<gainValue<<std::endl;
-      if (gainValue <0 )
-        std::cout<<"WARNING"<<std::endl;
+      // if (gainValue < 0.0 )
+      //   std::cout<<"WARNING "<<std::endl;
       gainImage->SetPixel( index , gainValue );
-
-
+      // output->SetPixel(index , static_cast<int>(gainValue * (float)input->GetPixel(index)));
       }
     }
 
@@ -447,6 +447,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   gainMultiplyer->SetInput2( gainImage );
   gainMultiplyer->Update();
   this->GraftOutput( gainMultiplyer -> GetOutput () );
+  // this->GetOutput() = gainImage  input;
   // this->GetOutput()->SetOrigin( input->GetOrigin() );
   // this->GetOutput()->SetSpacing( input->GetSpacing() );
 }
