@@ -134,7 +134,7 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   fileSelection->setFixedHeight(30);
   fileLayout->addWidget(fileSelection);
   m_InputImageListParam->AddNullElement();
-  connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
+  connect(fileSelection, SIGNAL(FilenameChanged()), this, SLOT(UpdateImageList()));
 
   m_FileSelectionList.push_back(fileSelection);
 
@@ -319,8 +319,8 @@ QtWidgetInputImageListParameter::AddFile()
   /* No need of AddNullElement() here. Moved adding NullElement when updating the list  */
   //m_InputImageListParam->AddNullElement();
   connect(
-    fileSelection->GetInput(),
-    SIGNAL( textChanged( const QString & ) ),
+    fileSelection,
+    SIGNAL( FilenameChanged() ),
     this,
     SLOT( UpdateImageList() )
   );
@@ -372,7 +372,7 @@ QtWidgetInputImageListParameter::EraseFile()
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
   m_InputImageListParam->AddNullElement();
-  connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
+  connect(fileSelection, SIGNAL(FilenameChanged()), this, SLOT(UpdateImageList()));
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
@@ -396,7 +396,7 @@ void QtWidgetInputImageListParameter::RecreateImageList()
     for(unsigned int j = 0; j < m_FileSelectionList.size(); j++)
       {
       m_InputImageListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
-      connect(m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
+      connect(m_FileSelectionList[j], SIGNAL(FilenameChanged()), this, SLOT(UpdateImageList()));
       }
 
     emit Change();
