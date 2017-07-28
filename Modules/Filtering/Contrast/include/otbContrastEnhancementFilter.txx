@@ -36,20 +36,23 @@ template <class TInputImage, class TOutputImage >
 ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::ContrastEnhancementFilter()
 {
-	this->gainImage = ImageGainType::New();
-  this->binImage = ImageBinType::New();
-	this->gainMultiplyer = MultiplyImageFilterType::New() ;
-	this->wThumbnail = 0;
-	this->hThumbnail = 0;
-	this->threshFactor = INT_MAX;
-	this->lowThresh = 0;
-	this->upThresh = INT_MAX;
-  this->hSize = 256;
+	m_gainImage = ImageGainType::New();
+  m_binImage = ImageBinType::New();
+	m_gainMultiplyer = MultiplyImageFilterType::New() ;
+	m_wThumbnail = 0;
+	m_hThumbnail = 0;
+	m_threshFactor = INT_MAX;
+	m_lowThresh = 0;
+	m_upThresh = INT_MAX;
+  m_hSize = 256;
+  m_NoData = std::numeric_limits<double>::quiet_NaN();
+  m_nbPixel.resize( 1 , 0 );
 }
 
 template <class TInputImage, class TOutputImage >
 void ContrastEnhancementFilter < TInputImage , TOutputImage >
-::equalized( const std::vector< int > & inputHisto,
+::equalized( const std::vector< int > & inputHisto ,
+             const std::vector< int > & targetHisto ,
 	           std::vector< int > & lut)
 {
 	int countMapValue = 0;
@@ -58,14 +61,14 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   ++countValue;
   int countInput  = inputHisto[ 0 ] + inputHisto[ countValue ];
   lut[lut.size() - 1 ] = lut.size() - 1 ; // White stays white
-  int countTarget = this->targetHisto[ countMapValue ];
+  int countTarget = targetHisto[ countMapValue ];
 
-  while ( countMapValue< (this->hSize) && countValue< ( this->hSize-1 ) )
+  while ( countMapValue< (m_hSize) && countValue< ( m_hSize-1 ) )
     {
     if (countInput > countTarget)
       {
       ++countMapValue;
-      countTarget += this->targetHisto[countMapValue];
+      countTarget += targetHisto[ countMapValue ];
       }
     else
       {	
@@ -85,8 +88,9 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
 template <class TInputImage, class TOutputImage >
 void ContrastEnhancementFilter < TInputImage , TOutputImage >
-::equalized( std::vector< std::vector < int > > & gridHisto, 
-						 std::vector< std::vector < int > > & gridLut,
+::equalized( const std::vector< std::vector < int > > & gridHisto , 
+             const std::vector< std::vector < int > > & gridTarget,
+						 std::vector< std::vector < int > > & gridLut ,
 						 int nW , 
 						 int nH )
 {
@@ -94,7 +98,8 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
     {
     for ( int j = 0 ; j<nH ; j++ )
       {
-      equalized( gridHisto[i + j * nW ] , gridLut[i+ j * nW ]);
+      equalized( gridHisto[ i + j * nW ] , gridTarget[ i+ j * nW ] ,
+                 gridLut[ i+ j * nW ]);
       }
     }
 }
@@ -106,45 +111,76 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 								int nW,
 								int nH)
 {
-  typename ImageBinType::Pointer input = this->binImage;
-  typename TInputImage::IndexType index;
-  for (int i = 0 ; i < this->wThumbnail * nW ; i++)
+  typename itk::ImageRegionConstIterator < ImageBinType > 
+      bit( m_binImage , m_binImage->GetRequestedRegion() );
+
+  bit.GoToBegin();
+  int i = 0;
+  int j = 0;
+  while( !bit.IsAtEnd() )
     {
-    for (int j = 0 ; j< this->hThumbnail * nH ; j++)
+    if ( bit.Get() != -1 )
       {
-      index[0] = i;
-      index[1] = j;
-      ++gridHisto[ (i / this->wThumbnail)  + ( j / this->hThumbnail ) * nW] \
-                 [ input->GetPixel( index ) ];
+      i = bit.GetIndex()[0];
+      j = bit.GetIndex()[1];
+      ++gridHisto[ (i / m_wThumbnail)  + ( j / m_hThumbnail ) * nW] \
+                 [ bit.Get() ];
       }
-      // std::cout<<"gridHisto[0][127] = "<<gridHisto[0][127]<<std::endl;
+    ++bit;
     }
+  // std::cout<<"gridHisto[0][127] = "<<gridHisto[0][127]<<std::endl;
   // std::cout<<"end of histogram computation"<<std::endl;
 }
 
 template <class TInputImage, class TOutputImage >
 void ContrastEnhancementFilter < TInputImage , TOutputImage >
-::createTarget()
+::createTarget( std::vector < std::vector < int > > & gridTarget ,
+                int nW ,
+                int nH)
 {
-  int nbPixel = this->wThumbnail * this->hThumbnail;
-  int height = nbPixel/this->hSize ;
-  std::vector < int > tempTarget;
-  tempTarget.resize(this->hSize , height );
-  // Place the rest of the pixel in the middle of the histogram
-  int rest = nbPixel%this->hSize;
-  int diff = (this->hSize-rest)/2;
-  while (rest > 0 && diff < this->hSize )
-    {
-    ++tempTarget[diff];
-    --rest;
-    ++diff;
-    }
-  this->targetHisto = tempTarget;
+  typename InputImageType::ConstPointer input = this->GetInput();
+  typename itk::ImageRegionConstIterator < InputImageType > 
+      it( input , input->GetRequestedRegion() );
 
-  // ////////////////////////DEBUG////////////////////////
-  // std::cout<<"size ="<<this->hSize<<std::endl;
-  // std::cout<<"height ="<<height<<std::endl;
-  // std::cout<<"targetHisto[middle] ="<<targetHisto[this->hSize/2]<<std::endl;
+  it.GoToBegin();
+  bool isFirst = true;
+  int index;
+  while ( !it.IsAtEnd() )
+    {
+    if ( it.Get() != m_NoData)
+      {
+      if ( isFirst )
+        {
+        m_min = it.Get();
+        m_max = it.Get();
+        isFirst = false;
+        }
+      index =  it.GetIndex()[0] / m_wThumbnail \
+            +  (it.GetIndex()[1] / m_hThumbnail) * nW;
+      if (m_min>it.Get())
+        m_min = it.Get();
+      if (m_max<it.Get())
+        m_max = it.Get();
+      ++m_nbPixel[ index ];
+      }
+    ++it;
+    }
+  int rest = 0;
+  int offset = 0;
+  for (int i = 0 ; i < nW * nH ; i++)
+    {
+    gridTarget[i].resize( m_hSize , m_nbPixel[ i ] / m_hSize);
+    rest = m_nbPixel[i]%m_hSize;
+    offset = (m_hSize - rest ) / 2;
+    for (int j = 0 ; j < rest ; j++)
+      {
+      ++gridTarget[i][j + offset];
+      }
+      ////////////////////////DEBUG////////////////////////
+      std::cout<<"size ="<<m_hSize<<std::endl;
+      std::cout<<"height ="<<m_nbPixel[ i ] / m_hSize<<std::endl;
+      std::cout<<"targetHisto[middle] ="<<gridTarget[i][m_hSize/2]<<std::endl;
+    }
 }
 
 template <class TInputImage, class TOutputImage >
@@ -155,12 +191,12 @@ float ContrastEnhancementFilter < TInputImage , TOutputImage >
                  int nW ,
                  int nH )
 {
-  int lutX = index[0]/this->wThumbnail;
-  int lutY = index[1]/this->hThumbnail;
-  float x = static_cast< float >(index[0]%this->wThumbnail) \
-            / static_cast< float >(this->wThumbnail);
-  float y = static_cast< float >(index[1]%this->hThumbnail) \
-            / static_cast< float >(this->hThumbnail);
+  int lutX = index[0]/m_wThumbnail;
+  int lutY = index[1]/m_hThumbnail;
+  float x = static_cast< float >(index[0]%m_wThumbnail) \
+            / static_cast< float >(m_wThumbnail);
+  float y = static_cast< float >(index[1]%m_hThumbnail) \
+            / static_cast< float >(m_hThumbnail);
   float disty = std::abs(y - 0.5);
   float distx = std::abs(x - 0.5);
   float w = (1 - distx )*(1 - disty );
@@ -270,15 +306,15 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 {
   typedef itk::ThresholdImageFilter< ImageGainType > ThresholdFilterType;
   ThresholdFilterType::Pointer thresholdFilter ( ThresholdFilterType::New() );
-  thresholdFilter->SetInput( this->gainImage );
-  thresholdFilter->SetOutsideValue (this->upThresh);
-  thresholdFilter->ThresholdAbove( this->upThresh );
+  thresholdFilter->SetInput( m_gainImage );
+  thresholdFilter->SetOutsideValue (m_upThresh);
+  thresholdFilter->ThresholdAbove( m_upThresh );
   thresholdFilter->Update();
   thresholdFilter->SetInput( thresholdFilter->GetOutput() );
-  thresholdFilter->SetOutsideValue (this->lowThresh);
-  thresholdFilter->ThresholdBelow( this->lowThresh );
+  thresholdFilter->SetOutsideValue (m_lowThresh);
+  thresholdFilter->ThresholdBelow( m_lowThresh );
   thresholdFilter->Update();
-  this->gainImage = thresholdFilter->GetOutput();
+  m_gainImage = thresholdFilter->GetOutput();
 }
 
 template <class TInputImage, class TOutputImage >
@@ -287,45 +323,49 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 {
   typename InputImageType::ConstPointer input = this->GetInput();
 
-  this->binImage->SetRegions( input->GetLargestPossibleRegion() );
-  this->binImage->Allocate();
-  this->binImage->SetRequestedRegion( input->GetRequestedRegion() );
-  typedef itk::StatisticsImageFilter < InputImageType > StatFilter;
-  typename StatFilter::Pointer statFilter( StatFilter::New() );
-  statFilter->SetInput( input );
-  statFilter->Update();
-  this->min = statFilter->GetMinimum();
-  this->max = statFilter->GetMaximum();
-  this->step = static_cast<double>( this->max - this->min + 1) \
-                / static_cast<double>( this->hSize );
+  m_binImage->SetRegions( input->GetLargestPossibleRegion() );
+  m_binImage->Allocate();
+  m_binImage->SetRequestedRegion( input->GetRequestedRegion() );
+
+  m_step = static_cast<double>( m_max - m_min + 1) \
+                / static_cast<double>( m_hSize );
+
   typename itk::ImageRegionConstIterator < InputImageType > 
       it( input , input->GetRequestedRegion() );
   typename itk::ImageRegionIterator < ImageBinType > 
-      nit ( this->binImage , this->binImage->GetRequestedRegion() );
+      bit ( m_binImage , m_binImage->GetRequestedRegion() );
+
   it.GoToBegin();
-  nit.GoToBegin();
-  std::cout<<"min ="<<this->min<<std::endl;
-  std::cout<<"max ="<<this->max<<std::endl;
-  std::cout<<"step ="<<this->step<<std::endl;
+  bit.GoToBegin();
+  std::cout<<"min ="<<m_min<<std::endl;
+  std::cout<<"max ="<<m_max<<std::endl;
+  std::cout<<"step ="<<m_step<<std::endl;
   int pixelValue = 0;
-  while( !nit.IsAtEnd() )
+  while( !bit.IsAtEnd() )
   {
-  pixelValue = std::floor( ( it.Get() - this->min ) / this->step );
-  nit.Set( pixelValue );
+  if ( it.Get() != m_NoData )
+    {
+    pixelValue = std::floor( ( it.Get() - m_min ) / m_step );
+    bit.Set( pixelValue );
+    }
+  else
+    {
+    bit.Set(-1);
+    }
   ++it;
-  ++nit;
+  ++bit;
   }
 }
 
 template <class TInputImage, class TOutputImage >
 float ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::postprocess( const std::vector < int >  & lut ,
-               int pixelValue ) // TODO inline
-{
-  float denum = pixelValue * this->step + this->min;
+               int pixelValue )
+{ 
+  float denum = pixelValue * m_step + m_min;
   if ( denum == 0 )
     denum = 1.0;
-  return (lut[ pixelValue ] * this->step + this->min) \
+  return (lut[ pixelValue ] * m_step + m_min) \
           / denum ;
 }
 
@@ -333,77 +373,86 @@ template <class TInputImage, class TOutputImage >
 void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::GenerateData()
 {
-  assert(this->hSize>=0);
-  assert(this->threshFactor>0);
+  assert(m_hSize>=0);
+  assert(m_threshFactor>0);
 	typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input = this->GetInput();
 
-  output->SetRegions( input->GetLargestPossibleRegion() );
-  output->Allocate();
+  // output->SetRegions( input->GetLargestPossibleRegion() );
+  // output->Allocate();
   // output->SetOrigin( input->GetOrigin() );
   // output->SetSpacing( input->GetSpacing() );
   // typename InputImageType::PixelType Val(1);
 	// Val[0];
 	// output->FillBuffer(Val);
 
-  if ( input->GetLargestPossibleRegion().GetSize()[1]%this->hThumbnail != 0 )
+  if ( input->GetLargestPossibleRegion().GetSize()[1]%m_hThumbnail != 0 )
     {
-    std::cout<<"error : hThumbnail = "<<this->hThumbnail<<" is not a divider of the "
+    std::cout<<"error : hThumbnail = "<<m_hThumbnail<<" is not a divider of the "
     "input's height"<<std::endl;
     std::cout<<"Image Height = "<<input->GetLargestPossibleRegion().GetSize()[1]
       <<std::endl;
     }
-  if ( input->GetLargestPossibleRegion().GetSize()[0]%this->wThumbnail != 0 )
+  if ( input->GetLargestPossibleRegion().GetSize()[0]%m_wThumbnail != 0 )
     {
-    std::cout<<"error : wThumbnail = "<<this->wThumbnail<<"is not a divider of the "
+    std::cout<<"error : wThumbnail = "<<m_wThumbnail<<"is not a divider of the "
     "input's width"<<std::endl;
     std::cout<<"Image Width = "<<input->GetLargestPossibleRegion().GetSize()[0]
       <<std::endl;
     }
 
-  int nW = input->GetLargestPossibleRegion().GetSize()[0]/this->wThumbnail;
-  int nH = input->GetLargestPossibleRegion().GetSize()[1]/this->hThumbnail;
+  int nW = input->GetLargestPossibleRegion().GetSize()[0]/m_wThumbnail;
+  int nH = input->GetLargestPossibleRegion().GetSize()[1]/m_hThumbnail;
   
-  gainImage->SetRegions( input->GetRequestedRegion() );
-  gainImage->Allocate();
-  gainImage->SetOrigin( input->GetOrigin() );
-  gainImage->SetSpacing( input->GetSpacing() );
+  m_gainImage->SetRegions( input->GetRequestedRegion() );
+  m_gainImage->Allocate();
+  m_gainImage->SetOrigin( input->GetOrigin() );
+  m_gainImage->SetSpacing( input->GetSpacing() );
 
-  std::vector< std::vector < int > > gridHisto((nH)*(nW));
-  std::vector< std::vector < int > > gridLut((nH)*(nW));
-
+  std::vector< std::vector < int > > gridHisto( (nH)*(nW) );
+  std::vector< std::vector < int > > gridLut( (nH)*(nW) );
+  std::vector< std::vector < int > > gridTarget( (nH)*(nW) );
+  m_nbPixel.resize( (nH)*(nW) , 0 );
 
   // Initialize gridLut and gridHisto to zero and -1
   for (int i = 0 ; i<(nH)*(nW) ; i++)
     {
-      gridLut[i].resize( this->hSize , -1 );
-      gridHisto[i].resize( this->hSize , 0 );
+      gridLut[i].resize( m_hSize , -1 );
+      gridHisto[i].resize( m_hSize , 0 );
+      // gridTarget[i].resize( m_hSize , 0 );
     }
+
+  createTarget( gridTarget , nW , nH );
 
   preprocess();
 
-  createTarget();
 
-  int histoTresh = static_cast<int>( this->threshFactor * this->targetHisto[0] );
+  std::vector < int > histoTresh(nW*nH);
+  for (int i = 0 ; i < nW*nH ; i++ )
+    {
+    histoTresh[ i ] = m_threshFactor * gridTarget[ i ][0];
+    }
 
   computehisto( gridHisto , nW , nH );
-  for (int i : gridHisto[0])
-  { 
-    if (i<0)
-      std::cout<<i<<std::endl;
-  }
+  
+	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
 
-  // std::cout<<gridHisto[0][this->hSize/2]<<std::endl;
+  // for (int i : gridHisto[0])
+  // { 
+  //   if (i<0)
+  //     std::cout<<i<<std::endl;
+  // }
+
+  // std::cout<<gridHisto[0][m_hSize/2]<<std::endl;
   // std::cout<<"========one==========="<<std::endl;
 
-	// histoLimiteContrast( gridHisto , histoTresh , nW , nH );
 
-  // std::cout<<gridHisto[0][this->hSize/2]<<std::endl;
+  // std::cout<<gridHisto[0][m_hSize/2]<<std::endl;
   // std::cout<<"========two==========="<<std::endl;
 
-	equalized( gridHisto , gridLut , nW , nH );
+	equalized( gridHisto , gridTarget , gridLut , nW , nH );
   
-  // std::cout<<gridHisto[0][this->hSize/2]<<std::endl;
+  // std::cout<<gridHisto[0][m_hSize/2]<<std::endl;
   // std::cout<<"========three==========="<<std::endl;
 
   // ///////////////////Debug ///////////////////
@@ -422,36 +471,47 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
 	float gainValue = 0.0;
   typename InputImageType::IndexType index;
-  for (uint i = 0 ; i < input->GetLargestPossibleRegion().GetSize()[0] ; i++)
-    {
-    for (uint j = 0 ; j < input->GetLargestPossibleRegion().GetSize()[1] ; j++)
-      {
-      index[0] = i;
-      index[1] = j;
-      gainValue = interpoleGain( gridLut , this->binImage->GetPixel( index ) ,
-                                 index , nW , nH );
+  typename itk::ImageRegionConstIterator < ImageBinType > 
+      bit( m_binImage , m_binImage->GetRequestedRegion() );
+  typename itk::ImageRegionIterator < ImageGainType > 
+      git ( m_gainImage , m_gainImage->GetRequestedRegion() );
 
-      // if (i>2000 && i<3000 && j>2000 && j<2010)
-      //   std::cout<<gainValue<<std::endl;
-      // if (gainValue < 0.0 )
-      //   std::cout<<"WARNING "<<std::endl;
-      gainImage->SetPixel( index , gainValue );
-      // output->SetPixel(index , static_cast<int>(gainValue * (float)input->GetPixel(index)));
+  git.GoToBegin();
+  bit.GoToBegin();
+  while ( !bit.IsAtEnd() )
+    {
+    if ( bit.Get() != -1 )
+      {
+      index = bit.GetIndex();
+      gainValue = interpoleGain( gridLut , bit.Get() ,
+                                 index , nW , nH );
+      git.Set( gainValue );
       }
+    else
+      {
+      git.Set(1.0);
+      }
+    // if (i>2000 && i<3000 && j>2000 && j<2010)
+    //   std::cout<<gainValue<<std::endl;
+    // if (gainValue < 0.0 )
+    //   std::cout<<"WARNING "<<std::endl;
+    // output->SetPixel(index , static_cast<int>(gainValue * (float)input->GetPixel(index)));
+    ++bit;
+    ++git;
     }
+    
 
 
   // gainLimiteContrast();
 
-  gainMultiplyer->SetInput1( input );
-  gainMultiplyer->SetInput2( gainImage );
-  gainMultiplyer->Update();
-  this->GraftOutput( gainMultiplyer -> GetOutput () );
-  // this->GetOutput() = gainImage  input;
-  // this->GetOutput()->SetOrigin( input->GetOrigin() );
-  // this->GetOutput()->SetSpacing( input->GetSpacing() );
+  m_gainMultiplyer->SetInput1( input );
+  m_gainMultiplyer->SetInput2( m_gainImage );
+  m_gainMultiplyer->Update();
+  this->GraftOutput( m_gainMultiplyer -> GetOutput () );
+  // GetOutput() = gainImage  input;
+  // GetOutput()->SetOrigin( input->GetOrigin() );
+  // GetOutput()->SetSpacing( input->GetSpacing() );
 }
-
 
 }
 

@@ -57,31 +57,35 @@ public:
   itkTypeMacro(ContrastEnhancementFilter, ImageToImageFilter);
 
 	void
-	setThumbnailSize( int wThumbnaili , int hThumbnaili )
+	setThumbnailSize( int wThumbnail , int hThumbnail )
 	{
-		this->hThumbnail = hThumbnaili;
-		this->wThumbnail = wThumbnaili;
+		m_hThumbnail = hThumbnail;
+		m_wThumbnail = wThumbnail;
 	}
 
 	void
-	setHistoThreshFactor( float threshFactori )
+	setHistoThreshFactor( float threshFactor )
 	{
-		this->threshFactor = threshFactori;
+		m_threshFactor = threshFactor;
 	}
 
 	void
 	setHistoSize( int size )
 	{
-		this->hSize = size;
+		m_hSize = size;
 	}
 
 	void
-	setGainThresh( float lowThreshi , float upThreshi)
+	setGainThresh( float lowThresh , float upThresh)
 	{
-		assert( lowThreshi<=1 && lowThreshi >=0 );
-		assert( upThreshi>=1);
-		this->upThresh = upThreshi;
-		this->lowThresh = lowThreshi;
+		m_upThresh = upThresh;
+		m_lowThresh = lowThresh;
+	}
+
+	void
+	setNoData( PixelType noData)
+	{
+		m_NoData = noData;
 	}
 
 protected:
@@ -90,20 +94,21 @@ protected:
   // void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
  	typedef itk::MultiplyImageFilter< InputImageType, ImageGainType, OutputImageType > MultiplyImageFilterType;
- 	typename MultiplyImageFilterType::Pointer gainMultiplyer;
- 	typename ImageBinType::Pointer binImage;
- 	typename ImageGainType::Pointer gainImage;
+ 	typename MultiplyImageFilterType::Pointer m_gainMultiplyer;
+ 	typename ImageBinType::Pointer m_binImage;
+ 	typename ImageGainType::Pointer m_gainImage;
 
- 	std::vector < int > targetHisto;
- 	double step;
- 	PixelType min;
- 	PixelType max;
- 	int hSize;
- 	int wThumbnail;
- 	int hThumbnail;
- 	float threshFactor;
- 	float lowThresh;
- 	float upThresh;
+ 	double m_step;
+ 	PixelType m_min;
+ 	PixelType m_max;
+ 	std::vector< int > m_nbPixel;
+ 	int m_hSize;
+ 	int m_wThumbnail;
+ 	int m_hThumbnail;
+ 	float m_threshFactor;
+ 	float m_lowThresh;
+ 	float m_upThresh;
+ 	PixelType m_NoData;
 
 
  	void GenerateData();
@@ -113,11 +118,13 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   void 
-	equalized( const std::vector < int > & inputHisto,
-	           std::vector < int > & lut);
+	equalized( const std::vector < int > & inputHisto ,
+	           const std::vector< int > & targetHisto ,
+	           std::vector < int > & lut );
 	
 	void
-	equalized( std::vector < std::vector < int > > & gridHisto , 
+	equalized( const std::vector < std::vector < int > > & gridHisto , 
+						 const std::vector< std::vector < int > > & gridTarget,
 						 std::vector < std::vector < int > > & gridLut ,
 						 int nW ,
 						 int nH );
@@ -127,8 +134,12 @@ private:
 								int nW ,
 								int nH );
 
+// Create the target for each thumbnail and compute the min and max
+// of the image without taking into account the nodata
 	void
-	createTarget();
+	createTarget( std::vector < std::vector < int > > & gridTarget ,
+								int nW ,
+								int nH );
 
 	float
 	interpoleGain( const std::vector < std::vector < int > > & gridLut ,

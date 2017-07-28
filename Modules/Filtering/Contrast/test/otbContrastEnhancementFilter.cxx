@@ -393,6 +393,7 @@ main ( int argc,
   // typedef otb::VectorImage< OPixelType , 2 >  OVectorImageType;
   typedef int                  PixelType;
   typedef otb::Image< PixelType , 2 >  ImageType;
+  typedef otb::Image< float , 2 >  ImageGainType;
   typedef otb::VectorImage< PixelType , 2 >  VectorImageType;
   typedef otb::ImageFileReader< VectorImageType > ReaderType;
   typedef otb::ImageFileWriter< VectorImageType > WriterType;
@@ -401,7 +402,7 @@ main ( int argc,
           VectorToImageListFilterType;
   typedef otb::ImageListToVectorImageFilter< ImageListType, VectorImageType > 
           ImageListToVectorFilterType;
-  typedef otb::ContrastEnhancementFilter< ImageType , ImageType > FilterType;
+  typedef otb::ContrastEnhancementFilter< ImageGainType , ImageGainType > FilterType;
 
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
@@ -441,24 +442,92 @@ main ( int argc,
     return 1;
     }
 
+
   ImageListType::Pointer outputImageList ( ImageListType::New() );
 
+  typename itk::ImageRegionIterator < ImageType > 
+      rit ( inputImageList->GetNthElement(0) ,
+           inputImageList->GetNthElement(0)->GetRequestedRegion() );
+  typename itk::ImageRegionIterator < ImageType > 
+      git ( inputImageList->GetNthElement(1) ,
+           inputImageList->GetNthElement(1)->GetRequestedRegion() );
+  typename itk::ImageRegionIterator < ImageType > 
+      bit ( inputImageList->GetNthElement(2) ,
+           inputImageList->GetNthElement(2)->GetRequestedRegion() );
 
+  ImageGainType::Pointer luminance(ImageGainType::New());
+  luminance->SetRegions( inputImage->GetRequestedRegion() );
+  luminance->Allocate();
+  luminance->SetOrigin( inputImage->GetOrigin() );
+  luminance->SetSpacing( inputImage->GetSpacing() );
+
+  typename itk::ImageRegionIterator < ImageGainType > 
+      lit ( luminance ,
+           luminance->GetRequestedRegion() );
+  lit.GoToBegin();
+  bit.GoToBegin();
+  rit.GoToBegin();
+  git.GoToBegin();
+  while ( !lit.IsAtEnd())
+    {
+    lit.Set( 0.21 * rit.Get() + 0.71 * git.Get() + 0.08 * bit.Get() );
+    ++lit;
+    ++bit;
+    ++rit;
+    ++git;
+    }
+  FilterType::Pointer filter( FilterType::New() );
+  filter->SetInput( luminance ) ;
+  filter->setHistoThreshFactor(4);
+  filter->setHistoSize(512);
+  filter->setNoData(0);
+  // filter->setGainThresh(0.0 , 10.0);
+  filter->setThumbnailSize( wThumbnail, hThumbnail );
+  filter->Update();
+  typename itk::ImageRegionIterator < ImageGainType > 
+      nlit ( filter->GetOutput() , 
+            filter->GetOutput()->GetRequestedRegion() );
+  lit.GoToBegin();
+  nlit.GoToBegin();
+  bit.GoToBegin();
+  rit.GoToBegin();
+  git.GoToBegin();
+  float gain = 0.0;
+  float denum = 1;
+  while ( !lit.IsAtEnd())
+    {
+    if ( lit.Get() != 0 )
+      denum = lit.Get();
+    else
+      {
+      denum = 1;
+      }
+    gain = nlit.Get()/denum;
+    bit.Set(gain * bit.Get());
+    rit.Set(gain * rit.Get());
+    git.Set(gain * git.Get());
+    ++nlit;
+    ++lit;
+    ++bit;
+    ++rit;
+    ++git;
+    }
+/*
   int m = input->GetVectorLength ();
-
   for (int chanel = 0 ; chanel<m ; chanel++ ) 
     {
     FilterType::Pointer filter( FilterType::New() );
     filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
     filter->setHistoThreshFactor(6);
-    filter->setHistoSize(1024);
+    filter->setHistoSize(256);
+    filter->setNoData(0);
     // filter->setGainThresh(0.0 , 10.0);
     filter->setThumbnailSize( wThumbnail, hThumbnail );
     filter->Update();
     outputImageList->PushBack( filter->GetOutput() );
     }
-
-  imageListToVectorFilterOut->SetInput(outputImageList);
+*/
+  imageListToVectorFilterOut->SetInput(inputImageList);
   imageListToVectorFilterOut->Update();
   VectorImageType::Pointer output = imageListToVectorFilterOut->GetOutput();
   output->SetOrigin(input->GetOrigin());
