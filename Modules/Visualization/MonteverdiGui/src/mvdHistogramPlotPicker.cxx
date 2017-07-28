@@ -30,6 +30,13 @@
 
 //
 // Qwt includes.
+
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+# pragma GCC diagnostic ignored "-Wshadow"
+#endif
+
 #include <qwt_plot_curve.h>
 #include <qwt_painter.h>
 #include <qwt_picker_machine.h>
@@ -38,6 +45,10 @@
 #  include <qwt_plot_canvas.h>
 #endif // QWT_ABOVE_6_1
 #include <qwt_text.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 
 //
 // System includes (sorted by alphabetic order)
