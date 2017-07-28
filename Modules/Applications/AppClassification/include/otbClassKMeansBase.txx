@@ -181,7 +181,6 @@ void ClassKMeansBase::ComputePolygonStatistics(const std::string &statisticsFile
 void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
                                               std::string fieldName,
                                               std::string sampleFileName,
-                                              std::string sampleExtractFileName,
                                               int NBSamples)
 {
   /* SampleSelection */
@@ -205,9 +204,6 @@ void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
 
   GetInternalApplication("extraction")->SetParameterString("outfield", "prefix", false);
   GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name", "value_", false);
-
-  GetInternalApplication("extraction")->SetParameterString("out", sampleExtractFileName, false);
-  otbAppLogINFO("Sample extraction file name  : " << sampleExtractFileName);
 
   // extract sample descriptors
   GetInternalApplication("extraction")->ExecuteAndWriteOutput();

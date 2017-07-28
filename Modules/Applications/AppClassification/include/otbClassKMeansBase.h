@@ -103,7 +103,6 @@ public:
     void SelectAndExtractSamples(std::string statisticsFileName,
                                  std::string fieldName,
                                  std::string sampleFileName,
-                                 std::string sampleExtractFileName,
                                  int NBSamples);
 
   /**
@@ -142,8 +141,7 @@ public:
         {
           tmpVectorFile = outPath + "_imgEnvelope.shp";
           polyStatOutput = outPath + "_polyStats.xml";
-          sampleSelectOutput = outPath + "_sampleSelect.shp";
-          sampleExtractOutput = outPath + "_sampleExtract.shp";
+          sampleOutput = outPath + "_sampleSelect.shp";
           modelFile = outPath + "_model.txt";
           imgStatOutput = outPath + "_imgstats.xml";
         }
@@ -152,16 +150,14 @@ public:
         {
           RemoveFile(tmpVectorFile);
           RemoveFile(polyStatOutput);
-          RemoveFile(sampleSelectOutput);
-          RemoveFile(sampleExtractOutput);
+          RemoveFile(sampleOutput);
           RemoveFile(modelFile);
           RemoveFile(imgStatOutput);
         }
 
         std::string tmpVectorFile;
         std::string polyStatOutput;
-        std::string sampleSelectOutput;
-        std::string sampleExtractOutput;
+        std::string sampleOutput;
         std::string modelFile;
         std::string imgStatOutput;
 

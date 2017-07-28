@@ -55,7 +55,7 @@ private:
         "2) PolygonClassStatistics : compute the statistics,\n"
         "3) SampleSelection : select the samples by constant strategy in the shapefile "
             "(1000000 samples max),\n"
-        "4) SamplesExtraction :  extract the samples descriptors,\n"
+        "4) SamplesExtraction : extract the samples descriptors (update of SampleSelection output file),\n"
         "5) TrainVectorClassifier : train the SharkKMeans model,\n"
         "6) ComputeImagesStatistics : compute images second order statistics,\n"
         "7) ImageClassifier : performs the classification of the input image "
@@ -126,15 +126,14 @@ private:
 
     // Compute SampleSelection and SampleExtraction app
     SelectAndExtractSamples(fileNames.polyStatOutput, fieldName,
-                            fileNames.sampleSelectOutput,
-                            fileNames.sampleExtractOutput,
+                            fileNames.sampleOutput,
                             actualNBSamplesForKMeans);
 
     // Compute Images second order statistics
     ComputeImageStatistics(GetParameterString("in"), fileNames.imgStatOutput);
 
     // Compute a train model with TrainVectorClassifier app
-    TrainKMModel(GetParameterImage("in"), fileNames.sampleExtractOutput,
+    TrainKMModel(GetParameterImage("in"), fileNames.sampleOutput,
                  fileNames.modelFile);
 
     // Compute a classification of the input image according to a model file
