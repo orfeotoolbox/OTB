@@ -396,6 +396,7 @@ main ( int argc,
   typedef otb::Image< float , 2 >  ImageGainType;
   typedef otb::VectorImage< PixelType , 2 >  VectorImageType;
   typedef otb::ImageFileReader< VectorImageType > ReaderType;
+  typedef otb::ImageFileReader< ImageType > ReaderImageType;
   typedef otb::ImageFileWriter< VectorImageType > WriterType;
   typedef otb :: ImageList< ImageType > ImageListType;
   typedef otb::VectorImageToImageListFilter< VectorImageType, ImageListType > 
@@ -403,14 +404,14 @@ main ( int argc,
   typedef otb::ImageListToVectorImageFilter< ImageListType, VectorImageType > 
           ImageListToVectorFilterType;
   typedef otb::ContrastEnhancementFilter< ImageGainType , ImageGainType > FilterType;
-
+  ImageListToVectorFilterType::Pointer imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
+/*
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
   reader->Update();
   VectorImageType::Pointer input = reader->GetOutput();
 
   VectorToImageListFilterType::Pointer vectorToImageListFilter ( VectorToImageListFilterType::New() );
-  ImageListToVectorFilterType::Pointer imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
   vectorToImageListFilter->SetInput( input );
   vectorToImageListFilter->Update();
   if (argc<5)
@@ -425,20 +426,32 @@ main ( int argc,
   }
   int hThumbnail = atoi(argv[3]);
   int wThumbnail = atoi(argv[4]);
-  ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
+  */
+  // ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
 
+  //////////For several input but one image out/////
+  ImageListType::Pointer inputImageList (ImageListType::New());
+  for (int i = 1 ; i<4 ; i++)
+  {
+  ReaderImageType::Pointer readerImage (ReaderImageType::New());
+  readerImage->SetFileName(argv[i]);
+  readerImage->Update();
+  inputImageList->PushBack( readerImage->GetOutput() );
+  }
+  int hThumbnail = atoi(argv[5]);
+  int wThumbnail = atoi(argv[6]);
   ImageType::Pointer inputImage = inputImageList->Front();
 
   if ( inputImage->GetLargestPossibleRegion().GetSize()[1]%hThumbnail != 0 )
     {
     std::cout<<"error : hThumbnail = "<<hThumbnail<<" is not a divider of the input's height"<<std::endl;
-    std::cout<<"Image Height = "<<input->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
+    std::cout<<"Image Height = "<<inputImage->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
     return 1;
     }
   if ( inputImage->GetLargestPossibleRegion().GetSize()[0]%wThumbnail != 0 )
     {
     std::cout<<"error : wThumbnail = "<<wThumbnail<<"is not a divider of the input's width"<<std::endl;
-    std::cout<<"Image Width = "<<input->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
+    std::cout<<"Image Width = "<<inputImage->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
     return 1;
     }
 
@@ -513,6 +526,7 @@ main ( int argc,
     ++git;
     }
 /*
+  // Working for equalization channel by channel
   int m = input->GetVectorLength ();
   for (int chanel = 0 ; chanel<m ; chanel++ ) 
     {
@@ -530,11 +544,11 @@ main ( int argc,
   imageListToVectorFilterOut->SetInput(inputImageList);
   imageListToVectorFilterOut->Update();
   VectorImageType::Pointer output = imageListToVectorFilterOut->GetOutput();
-  output->SetOrigin(input->GetOrigin());
+  output->SetOrigin(inputImage->GetOrigin());
   // output->CopyInformation(input);
   // Here we compute a gain image corresponding to the associated gain of the equalization
   WriterType::Pointer writer( WriterType::New());
-  writer->SetFileName( argv[2] );
+  writer->SetFileName( argv[4] );
   writer->SetInput( output );
   writer->Update();
 }

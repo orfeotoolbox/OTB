@@ -261,11 +261,10 @@ float ContrastEnhancementFilter < TInputImage , TOutputImage >
 template <class TInputImage, class TOutputImage >
 void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::histoLimiteContrast( std::vector< std::vector < int > > & gridHisto ,
-											 int hThresh,
+											 const std::vector < int > & hThresh,
 											 int nW,
 											 int nH )
 {
-  assert(hThresh>=0);
   int histoLength = gridHisto[0].size();
   int nbHisto = nW * nH;
   int toThresh = 0;
@@ -276,10 +275,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
     toThresh = 0;
     for (int j = 0 ; j < histoLength ; j++)
       {
-      if ( gridHisto[i][j] > hThresh )
+      if ( gridHisto[i][j] > hThresh[i] )
         {
-          toThresh+= gridHisto[i][j] - hThresh;
-          gridHisto[i][j] = hThresh ;
+          toThresh+= gridHisto[i][j] - hThresh[i];
+          gridHisto[i][j] = hThresh[i] ;
         }
       }
     if (toThresh != 0 )

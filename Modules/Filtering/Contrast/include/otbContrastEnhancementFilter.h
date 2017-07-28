@@ -150,7 +150,7 @@ private:
 
 	void
 	histoLimiteContrast( std::vector < std::vector < int > > & gridHisto ,
-											 int hThresh ,
+											 const std::vector < int > & hThresh ,
 											 int nW ,
 											 int nH );
 	
