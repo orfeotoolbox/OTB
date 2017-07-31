@@ -71,7 +71,9 @@ public:
  /** Get one specific stored image filename. */
   std::string GetNthFileName( unsigned int i ) const;
 
-  /** Get one list of the stored image. */
+  /** Get one list of the stored image. WARNING : if the parameter list changes,
+   *  the returned image list may become obsolete. You should call
+   *  GetImageList() again to make sure your image list is up-to-date. */
   FloatVectorImageListType* GetImageList() const;
 
   /** Get one specific stored image. */

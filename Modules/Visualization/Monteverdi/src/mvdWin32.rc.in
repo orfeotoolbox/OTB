@@ -16,12 +16,12 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "OrfeoToolbox"
-            VALUE "FileDescription", "Monteverdi 2"
+            VALUE "FileDescription", "Monteverdi"
             VALUE "FileVersion", "@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@.0"
             VALUE "LegalCopyright", "Copyright (c) 2012-2013 Centre National d'Etudes Spatiales. All rights reserved."
             VALUE "InternalName", "monteverdi"
             VALUE "OriginalFilename", "monteverdi.exe"
-            VALUE "ProductName", "Monteverdi 2"
+            VALUE "ProductName", "Monteverdi"
             VALUE "ProductVersion", "@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@.0"
         END
     END
