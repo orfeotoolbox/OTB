@@ -173,11 +173,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   switch (GetParameterInt("classifier.ann.t"))
     {
-    case 0: // RPROP
-      classifier->SetTrainMethod(CvANN_MLP_TrainParams::RPROP);
-      break;
-    case 1: // BACKPROP
+    case 0: // BACKPROP
       classifier->SetTrainMethod(CvANN_MLP_TrainParams::BACKPROP);
+      break;
+    case 1: // RPROP
+      classifier->SetTrainMethod(CvANN_MLP_TrainParams::RPROP);
       break;
     default: // DEFAULT = RPROP
       classifier->SetTrainMethod(CvANN_MLP_TrainParams::RPROP);
