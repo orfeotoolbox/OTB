@@ -47,6 +47,10 @@ fi
 python_INSTSONAME=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));")
 
 python_lib_dirs="$LD_LIBRARY_PATH /usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu"
+if [ "$(uname)" = "Darwin" ]; then
+    python_lib_dirs="$DYLD_LIBRARY_PATH /usr/lib /Library/Frameworks /opt/local/lib /opt/local/Library/Frameworks"
+fi;
+
 found_python_lib="0"
 python_lib_file_path=""
 for list_of_dir in $python_lib_dirs
@@ -59,7 +63,7 @@ do
 done
 
 if [ "$found_python_lib" -eq "1" ]; then
-    numpy_import_result="$($OTB_PYTHON_EXE -c 'import numpyx' 2>&1)"
+    numpy_import_result="$($OTB_PYTHON_EXE -c 'import numpy' 2>&1)"
     if [ ! -z "$numpy_import_result" ]; then
 	printf %s\\n "*****Error occurred during installation******"
 	printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"	

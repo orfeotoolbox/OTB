@@ -28,7 +28,7 @@ cd  "$DIRNAME_0" || exit 1
 OUT_DIR=$(pwd)
 
 #do not move below 3 lines. it must be before "unset LD_LIBRARY_PATH" code
-sed -i "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/setup_python.sh"
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/setup_python.sh"
 chmod +x $OUT_DIR/setup_python.sh
 ./setup_python.sh
 
@@ -62,12 +62,11 @@ done
 
 #install uninstall_otb script
 echo "Installing uninstall script for OTB 'uninstall_otb.sh'"
-sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/install_manifest.txt"
-sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/uninstall_otb.sh"
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/install_manifest_otb.txt"
+sed -i "" "s,mapla.sh,mapla.app -r,g" "$OUT_DIR/uninstall_otb.sh"
+sed -i "" "s,monteverdi.sh,Monteverdi.app -r,g" "$OUT_DIR/uninstall_otb.sh"
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/uninstall_otb.sh"
 chmod +x "$OUT_DIR/uninstall_otb.sh"
-
-rm -fr "Mapla.app"
-rm -fr "Monteveridi.app"
 
 cp -r "$OUT_DIR/template.app" "$OUT_DIR/Mapla.app"
 cp -r "$OUT_DIR/template.app" "$OUT_DIR/Monteverdi.app"
@@ -113,4 +112,4 @@ rm -f "$OUT_DIR/setup_python.sh"
 rm -f "$OUT_DIR/Monteverdi.icns"
 rm -f "$OUT_DIR/pkgsetup"
 
-open "$OUT_DIR"
+#open "$OUT_DIR"
