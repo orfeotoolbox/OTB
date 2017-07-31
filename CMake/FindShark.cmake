@@ -41,9 +41,11 @@ if(Shark_DIR)
 
 endif() #if(Shark_DIR)
 
-find_path( SHARK_INCLUDE_DIR shark/Core/Shark.h
+find_path( SHARK_INCLUDE_DIR
+  NAMES shark/Core/Shark.h
   PATHS "${SHARK_SEARCH_PATH}"
-  PATH_SUFFIXES include include/shark shark)
+  PATH_SUFFIXES include include/shark shark
+  )
 
 find_library( SHARK_LIBRARY
   NAMES shark shark_debug
@@ -51,22 +53,37 @@ find_library( SHARK_LIBRARY
   PATH_SUFFIXES lib
   )
 
-mark_as_advanced( SHARK_INCLUDE_DIR
-                  SHARK_LIBRARY )
-find_package( 
-	Boost 1.48.0 REQUIRED QUIET COMPONENTS
+mark_as_advanced( SHARK_INCLUDE_DIR  SHARK_LIBRARY )
+
+find_package( Boost 1.48.0 REQUIRED QUIET COMPONENTS
 	system date_time filesystem
 	program_options serialization thread
 	unit_test_framework
-)
+	)
 
 if(NOT Boost_FOUND)
   message(FATAL_ERROR "Please make sure Boost 1.48.0 is installed on your system")
 endif()
 
-if(NOT SHARK_CONFIG_FILE)
-  find_file(SHARK_CONFIG_FILE SharkConfig.cmake PATH_SUFFIXES lib/cmake/Shark share/Shark)
+if(NOT SHARK_LIBRARY)
+  message(FATAL_ERROR "Cannot find SHARK_LIBRARY. set it with cmake -DSHARK_LIBRARY=")
+  return()
 endif()
+
+if(NOT SHARK_INCLUDE_DIR)
+  message(FATAL_ERROR "Cannot find SHARK_INCLUDE_DIR. Set it with cmake -DSHARK_INCLUDE_DIR=")
+  return()
+endif()
+
+get_filename_component(SHARK_INSTALLDIR ${SHARK_LIBRARY} PATH)
+get_filename_component(SHARK_INSTALLDIR ${SHARK_INSTALLDIR} PATH)
+
+if(NOT SHARK_CONFIG_FILE)
+  find_file(SHARK_CONFIG_FILE SharkConfig.cmake
+    PATHS ${SHARK_INSTALLDIR}
+    PATH_SUFFIXES lib/cmake/Shark share/Shark cmake/Shark)
+endif()
+
 if(SHARK_CONFIG_FILE)
   file(STRINGS "${SHARK_CONFIG_FILE}" SHARK_CONFIG_FILE_CONTENTS)
   string(REGEX REPLACE
@@ -81,13 +98,49 @@ if(SHARK_CONFIG_FILE)
 
   set(SHARK_VERSION_STRING 
   "${SHARK_VERSION_MAJOR}.${SHARK_VERSION_MINOR}.${SHARK_VERSION_PATCH}")
-
 endif()
 
+set(SHARK_USE_OPENMP_matched)
+#define SHARK_USE_OPENMP
+find_file( SHARK_H_FILE
+  NAMES shark/Core/Shark.h
+  PATHS "${SHARK_SEARCH_PATH}"
+  PATH_SUFFIXES include include/shark shark
+  )
+
+#define SHARK_USE_OPENMP
+file(STRINGS "${SHARK_H_FILE}" SHARK_H_CONTENTS)
+string(REGEX MATCH
+  "#define.SHARK_USE_OPENMP"
+  SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
+
+#this variable is added in cache but not used now
+# you can use it to see if shark installation has openMP
+# later if needed in other places..
+set(SHARK_USE_OPENMP FALSE CACHE BOOL "shark is built with OpenMP")
+if(SHARK_USE_OPENMP_matched)
+  set(SHARK_USE_OPENMP TRUE CACHE BOOL "shark is built with OpenMP" FORCE)
+endif()
+
+if(SHARK_USE_OPENMP)
+  message(STATUS "Shark is built with OpenMP: SHARK_USE_OPENMP = TRUE")
+  find_package(OpenMP REQUIRED QUIET)
+  if(OPENMP_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+  else()
+    message(FATAL_ERROR "Your shark libraries are compiled with it OpenMP")
+    set(SHARK_FOUND FALSE)
+  endif()
+else()
+  message(STATUS "Shark is built without OpenMP: SHARK_USE_OPENMP = FALSE")
+endif()
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Shark
-                                  REQUIRED_VARS SHARK_LIBRARY SHARK_INCLUDE_DIR
-                                  VERSION_VAR SHARK_VERSION_STRING)
+  REQUIRED_VARS SHARK_LIBRARY SHARK_INCLUDE_DIR
+  VERSION_VAR SHARK_VERSION_STRING)
+
 if(SHARK_FOUND)
   set(SHARK_INCLUDE_DIRS ${SHARK_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
   set(SHARK_LIBRARIES ${SHARK_LIBRARY} ${Boost_LIBRARIES} )

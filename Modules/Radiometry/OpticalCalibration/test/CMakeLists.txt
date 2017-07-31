@@ -249,7 +249,7 @@ otb_add_test(NAME raTuLuminanceToImageImageFilterNew COMMAND otbOpticalCalibrati
 #FIXME Those tests have performing local copies of header, baselines...They were migrate "as it" for now in version 5.0 but
 # something cleaner could be done in the future.
 #TODO Rewrite those tests and ban local copy and cmake trickery
-if(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT AND OTB_DATA_ROOT)
 
   set(TOULOUSEQBDIR ${TEMP}/OpticalCalibLumToImQBPAN)
   file(MAKE_DIRECTORY ${TOULOUSEQBDIR})
