@@ -640,7 +640,8 @@ if(OTB_USE_SHARK)
     -ct 0.0000001
     -sampler periodic
     -rand 121212
-    -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif
+    -nodatalabel 255
+    -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif uint8
     -cleanup 0
     VALID   --compare-image ${NOTOL}
     ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif

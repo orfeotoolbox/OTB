@@ -102,6 +102,11 @@ private:
     SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application).");
     MandatoryOff("imstat");
 
+    AddParameter(ParameterType_Int, "nodatalabel", "Label mask value");
+    SetParameterDescription("nodatalabel", "TODO");
+    SetDefaultParameterInt("nodatalabel", 0);
+    MandatoryOff("nodatalabel");
+
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
     SetDefaultOutputPixelType( "out", ImagePixelType_uint8);
@@ -165,6 +170,8 @@ private:
     // Classify
     m_ClassificationFilter = ClassificationFilterType::New();
     m_ClassificationFilter->SetModel(m_Model);
+
+    m_ClassificationFilter->SetDefaultLabel(GetParameterInt("nodatalabel"));
 
     // Normalize input image if asked
     if(IsParameterEnabled("imstat")  )

@@ -65,6 +65,12 @@ void ClassKMeansBase::InitKMSampling()
   SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.0001).");
   SetDefaultParameterFloat("ct", 0.0001);
   MandatoryOff("ct");
+
+  AddParameter(ParameterType_Int, "nodatalabel", "Label for the NoData class");
+  SetParameterDescription("nodatalabel", "TODO");
+  SetDefaultParameterInt("nodatalabel", 0);
+  MandatoryOff("nodatalabel");
+
 /*
   AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
   SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
@@ -259,6 +265,7 @@ void ClassKMeansBase::ComputeImageStatistics(std::string imageFileName,
 
 void ClassKMeansBase::KMeansClassif()
 {
+  GetInternalApplication("classif")->SetParameterInt("nodatalabel", GetParameterInt("nodatalabel"), false);
   ExecuteInternal( "classif" );
 }
 
