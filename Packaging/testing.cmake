@@ -28,4 +28,4 @@ add_test(Tu_selftester
   DEPENDS
   )
 
-set_tests_properties ( TuOtbLoader PROPERTIES DEPENDS TuExtractPackage)
+set_tests_properties ( Tu_selftester PROPERTIES DEPENDS Tu_install_package)
