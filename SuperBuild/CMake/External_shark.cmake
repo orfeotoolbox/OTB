@@ -52,4 +52,6 @@ ExternalProject_Add(SHARK
   LOG_INSTALL 1
   )
 
+SUPERBUILD_PATCH_SOURCE(SHARK)
+
 set(_SB_Shark_DIR ${SB_INSTALL_PREFIX}/lib/cmake/Shark)
