@@ -104,7 +104,7 @@ set(SHARK_USE_OPENMP_matched)
 #define SHARK_USE_OPENMP
 find_file( SHARK_H_FILE
   NAMES shark/Core/Shark.h
-  PATHS "${SHARK_SEARCH_PATH}"
+  PATHS ${SHARK_INSTALLDIR}
   PATH_SUFFIXES include include/shark shark
   )
 
