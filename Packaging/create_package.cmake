@@ -1,10 +1,4 @@
 macro(create_package)
-  # creation of package is different from windows and unix like
-  if(WIN32)
-    set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.zip")
-  else()
-    set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.run")
-  endif()
   
   install(CODE "
     message(STATUS \"Creating ${PACKAGE_OUTPUT_FILE}\") 

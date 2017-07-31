@@ -152,6 +152,7 @@ include(install_cmake_files)
 include(install_mvd_files)
 include(install_qtdev_files)
 include(install_vstudio_files)
+include(add_uninstall_script)
 include(installer_files)
 include(create_package)
 
@@ -214,7 +215,22 @@ install_vstudio_files()
 
 installer_files()
 
+# creation of package is different from windows and unix like
+if(WIN32)
+  set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.zip")
+else()
+  set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.run")
+endif()
+
 create_package()
+
+if(BUILD_TESTING)
+  enable_testing()
+  include(testing.cmake)
+endif()
+
+
+
 
 #TODO: dummy targets. to be removed after merge
 add_custom_target(
