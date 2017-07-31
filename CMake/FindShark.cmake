@@ -44,7 +44,7 @@ endif() #if(Shark_DIR)
 find_path( SHARK_INCLUDE_DIR
   NAMES shark/Core/Shark.h
   PATHS "${SHARK_SEARCH_PATH}"
-  PATH_SUFFIXES include include/sharkxx sharkxx
+  PATH_SUFFIXES include include/shark shark
   )
 
 find_library( SHARK_LIBRARY
@@ -102,7 +102,14 @@ endif()
 
 set(SHARK_USE_OPENMP_matched)
 #define SHARK_USE_OPENMP
-file(STRINGS "${SHARK_INSTALLDIR}/include/shark/Core/Shark.h" SHARK_H_CONTENTS)
+find_file( SHARK_H_FILE
+  NAMES shark/Core/Shark.h
+  PATHS "${SHARK_SEARCH_PATH}"
+  PATH_SUFFIXES include include/shark shark
+  )
+
+#define SHARK_USE_OPENMP
+file(STRINGS "${SHARK_H_FILE}" SHARK_H_CONTENTS)
 string(REGEX MATCH
   "#define.SHARK_USE_OPENMP"
   SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
