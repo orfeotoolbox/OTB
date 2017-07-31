@@ -102,14 +102,7 @@ endif()
 
 set(SHARK_USE_OPENMP_matched)
 #define SHARK_USE_OPENMP
-find_file( SHARK_H_FILE
-  NAMES shark/Core/Shark.h
-  PATHS ${SHARK_INSTALLDIR}
-  PATH_SUFFIXES include include/shark shark
-  )
-
-#define SHARK_USE_OPENMP
-file(STRINGS "${SHARK_H_FILE}" SHARK_H_CONTENTS)
+file(STRINGS "${SHARK_INCLUDE_DIR}/shark/Core/Shark.h" SHARK_H_CONTENTS)
 string(REGEX MATCH
   "#define.SHARK_USE_OPENMP"
   SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
