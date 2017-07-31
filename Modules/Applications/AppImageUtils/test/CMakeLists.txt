@@ -77,6 +77,26 @@ otb_test_application(NAME apTvUtExtractROISizeTooBig
                              ${INPUTDATA}/couleurs_extrait.png
                              ${TEMP}/apTvUtExtractROISizeTooBig.tif)
 
+otb_test_application(NAME apTvUtExtractROISizeTooBigExtent
+                     APP  ExtractROI
+                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
+                             -out ${TEMP}/apTvUtExtractROISizeTooBig.tif
+                             -mode extent
+                             -mode.extent.lrx 1000000
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/couleurs_extrait.png
+                             ${TEMP}/apTvUtExtractROISizeTooBig.tif)
+
+otb_test_application(NAME apTvUtExtractROISizeTooBigRadius
+                     APP  ExtractROI
+                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
+                             -out ${TEMP}/apTvUtExtractROISizeTooBig.tif
+                             -mode radius
+                             -mode.radius.r 1000000
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/couleurs_extrait.png
+                             ${TEMP}/apTvUtExtractROISizeTooBig.tif)
+
 otb_test_application(NAME apTvUtExtractROISizeNULL
                      APP  ExtractROI
                      OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
