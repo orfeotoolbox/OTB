@@ -32,8 +32,6 @@ namespace Wrapper
 
 CompositeApplication::CompositeApplication()
 {
-  m_LogOutput = itk::StdStreamLogOutput::New();
-  m_LogOutput->SetStream(m_Oss);
   m_AddProcessCommand = AddProcessCommandType::New();
   m_AddProcessCommand->SetCallbackFunction(this, &CompositeApplication::LinkWatchers);
 }
@@ -65,8 +63,7 @@ CompositeApplication
   container.App = ApplicationRegistry::CreateApplication(appType);
   container.Desc = desc;
   // Setup logger
-  container.App->GetLogger()->AddLogOutput(m_LogOutput);
-  container.App->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
+  container.App->SetLogger(this->GetLogger());
   container.App->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
   m_AppContainer[key] = container;
   return true;
@@ -179,40 +176,14 @@ CompositeApplication
 ::ExecuteInternal(std::string key)
 {
   otbAppLogINFO(<< GetInternalAppDescription(key) <<"...");
-  try
-    {
-    GetInternalApplication(key)->Execute();
-    }
-  catch(...)
-    {
-    this->GetLogger()->Write( itk::LoggerBase::FATAL, std::string("\n") + m_Oss.str() );
-    throw;
-    }
-  if(!m_Oss.str().empty())
-    {
-    otbAppLogINFO(<< "\n" << m_Oss.str());
-    m_Oss.str(std::string(""));
-    }
+  GetInternalApplication(key)->Execute();
 }
 
 void
 CompositeApplication
 ::UpdateInternalParameters(std::string key)
 {
-  try
-    {
-    GetInternalApplication(key)->UpdateParameters();
-    }
-  catch(...)
-    {
-    this->GetLogger()->Write( itk::LoggerBase::FATAL, std::string("\n") + m_Oss.str() );
-    throw;
-    }
-  if(!m_Oss.str().empty())
-    {
-    otbAppLogINFO(<< "\n" << m_Oss.str());
-    m_Oss.str(std::string(""));
-    }
+  GetInternalApplication(key)->UpdateParameters();
 }
 
 } // end namespace Wrapper
