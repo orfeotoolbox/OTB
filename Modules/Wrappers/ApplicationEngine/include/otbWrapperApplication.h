@@ -695,7 +695,10 @@ public:
    */
   ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
-  otb::Logger* GetLogger();
+  otb::Logger* GetLogger() const;
+
+  /** Sets the logger instance of the application (use with caution) */
+  void SetLogger(otb::Logger *logger);
 
   itk::ProcessObject* GetProgressSource() const;
 
