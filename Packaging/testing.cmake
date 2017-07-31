@@ -24,8 +24,8 @@ add_test(Tu_install_package
 
 add_test(Tu_selftester
   COMMAND ${pkg_extracted_dir}/bin/selftester${my_ext}
-  WORKING_DIRECTORY ${pkg_extracted_dir}
-  DEPENDS
+  ${pkg_extracted_dir}
+  WORKING_DIRECTORY ${testing_dir}
   )
 
 set_tests_properties ( Tu_selftester PROPERTIES DEPENDS Tu_install_package)
