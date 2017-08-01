@@ -32,7 +32,7 @@
       <number>1</number>
      </property>
      <item>
-      <widget class="QToolButton" name="toolButton_3">
+      <widget class="QToolButton" name="upButton">
        <property name="text">
         <string>Up</string>
        </property>
@@ -42,7 +42,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton">
+      <widget class="QToolButton" name="addButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_2">
+      <widget class="QToolButton" name="removeButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -68,7 +68,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_4">
+      <widget class="QToolButton" name="downButton">
        <property name="text">
         <string>Down</string>
        </property>
