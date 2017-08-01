@@ -18,6 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+set -e
 
 DIRNAME_0=$(dirname "$0")
 cd  "$DIRNAME_0" || exit 1
@@ -61,16 +62,17 @@ for input_file in $LIB_FILES $BIN_FILES; do
 done
 
 #install uninstall_otb script
-echo "Installing uninstall script for OTB 'uninstall_otb.sh'"
-sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/install_manifest_otb.txt"
-sed -i "" "s,mapla.sh,Mapla.app -r,g" "$OUT_DIR/uninstall_otb.sh"
-sed -i "" "s,monteverdi.sh,Monteverdi.app -r,g" "$OUT_DIR/uninstall_otb.sh"
-sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/uninstall_otb.sh"
-chmod +x "$OUT_DIR/uninstall_otb.sh"
+echo "Installing uninstall script for OTB 'tools/uninstall_otb.sh'"
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/install_manifest_otb.txt"
+sed -i "" "s,mapla.sh,Mapla.app -r,g" "$OUT_DIR/tools/uninstall_otb.sh"
+sed -i "" "s,monteverdi.sh,Monteverdi.app -r,g" "$OUT_DIR/tools/uninstall_otb.sh"
+sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/uninstall_otb.sh"
+chmod +x "$OUT_DIR/tools/uninstall_otb.sh"
 
+mkdir "$OUT_DIR/template.app/Contents/MacOS"
+mkdir "$OUT_DIR/template.app/Contents/Resources"
 cp -r "$OUT_DIR/template.app" "$OUT_DIR/Mapla.app"
 cp -r "$OUT_DIR/template.app" "$OUT_DIR/Monteverdi.app"
-
 mv "$OUT_DIR/mapla.sh" "Mapla.app/Contents/MacOS/Mapla"
 mv "$OUT_DIR/monteverdi.sh" "Monteverdi.app/Contents/MacOS/Monteverdi"
 rm -fr "template.app"
