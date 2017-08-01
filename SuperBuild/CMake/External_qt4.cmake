@@ -57,7 +57,7 @@ if(UNIX)
       message(WARNING "QT4_SB_ENABLE_GTK support is experimental")
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
     else()
-      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle -no-glib")
+      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle -no-glib -no-fontconfig")
     endif()
   endif()
   #common for all unix
