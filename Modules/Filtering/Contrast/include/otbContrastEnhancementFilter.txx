@@ -41,7 +41,8 @@ ContrastEnhancementFilter < TInputImage , TOutputImage >
 	m_gainMultiplyer = MultiplyImageFilterType::New() ;
 	m_wThumbnail = 0;
 	m_hThumbnail = 0;
-	m_threshFactor = INT_MAX;
+	m_threshFactor = 3;
+  m_thresh = false;
 	m_lowThresh = 0;
 	m_upThresh = INT_MAX;
   m_hSize = 256;
@@ -326,8 +327,9 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   m_binImage->Allocate();
   m_binImage->SetRequestedRegion( input->GetRequestedRegion() );
 
-  m_step = static_cast<double>( m_max - m_min + 1) \
-                / static_cast<double>( m_hSize );
+  assert(m_hSize>1);
+  m_step = static_cast<double>( m_max - m_min ) \
+                / static_cast<double>( m_hSize -1 );
 
   typename itk::ImageRegionConstIterator < InputImageType > 
       it( input , input->GetRequestedRegion() );
@@ -344,7 +346,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   {
   if ( it.Get() != m_NoData )
     {
-    pixelValue = std::floor( ( it.Get() - m_min ) / m_step );
+    pixelValue = static_cast<int>( std::floor( ( it.Get() - m_min ) / m_step ) );
     bit.Set( pixelValue );
     }
   else
@@ -425,22 +427,25 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
   preprocess();
 
-
-  std::vector < int > histoTresh(nW*nH);
-  for (int i = 0 ; i < nW*nH ; i++ )
-    {
-    histoTresh[ i ] = m_threshFactor * gridTarget[ i ][0];
-    }
-
   computehisto( gridHisto , nW , nH );
-  
-	histoLimiteContrast( gridHisto , histoTresh , nW , nH );
 
-  // for (int i : gridHisto[0])
-  // { 
-  //   if (i<0)
-  //     std::cout<<i<<std::endl;
-  // }
+
+  if (m_thresh)
+    {
+    std::vector < int > histoTresh(nW*nH);
+    for (int i = 0 ; i < nW*nH ; i++ )
+      {
+      histoTresh[ i ] = m_threshFactor * gridTarget[ i ][0];
+      }
+    histoLimiteContrast( gridHisto , histoTresh , nW , nH );
+    }
+  
+
+  for (int i : gridHisto[0])
+  { 
+    if (i<0)
+      std::cout<<"warning histo value "<<i<<std::endl;
+  }
 
   // std::cout<<gridHisto[0][m_hSize/2]<<std::endl;
   // std::cout<<"========one==========="<<std::endl;
@@ -461,11 +466,11 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   //   std::cout<<i<<std::endl;
   // }
   // std::cout<<"=======Histo======="<<std::endl;
-  for (int i : gridHisto[0])
-  { 
-    if (i<0)
-      std::cout<<i<<std::endl;
-  }
+  // for (int i : gridHisto[0])
+  // { 
+  //   if (i<0)
+  //     std::cout<<i<<std::endl;
+  // }
   
 
 	float gainValue = 0.0;
@@ -502,7 +507,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
 
   // gainLimiteContrast();
-
+  // std::cout<<"No_data value ="<<m_NoData<<std::endl;
   m_gainMultiplyer->SetInput1( input );
   m_gainMultiplyer->SetInput2( m_gainImage );
   m_gainMultiplyer->Update();

@@ -67,6 +67,7 @@ public:
 	setHistoThreshFactor( float threshFactor )
 	{
 		m_threshFactor = threshFactor;
+		m_thresh = true;
 	}
 
 	void
@@ -88,6 +89,12 @@ public:
 		m_NoData = noData;
 	}
 
+	void
+	setHistoThresh(bool thresh)
+	{
+		m_thresh = thresh;
+	}
+
 protected:
  	ContrastEnhancementFilter();
  	~ContrastEnhancementFilter() ITK_OVERRIDE {}
@@ -106,6 +113,7 @@ protected:
  	int m_wThumbnail;
  	int m_hThumbnail;
  	float m_threshFactor;
+ 	bool m_thresh;
  	float m_lowThresh;
  	float m_upThresh;
  	PixelType m_NoData;

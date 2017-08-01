@@ -391,7 +391,7 @@ main ( int argc,
   // typedef int OPixelType;
   // typedef otb::Image<OPixelType, 2 > OImageType;
   // typedef otb::VectorImage< OPixelType , 2 >  OVectorImageType;
-  typedef int                  PixelType;
+  typedef float                  PixelType;
   typedef otb::Image< PixelType , 2 >  ImageType;
   typedef otb::Image< float , 2 >  ImageGainType;
   typedef otb::VectorImage< PixelType , 2 >  VectorImageType;
@@ -405,7 +405,7 @@ main ( int argc,
           ImageListToVectorFilterType;
   typedef otb::ContrastEnhancementFilter< ImageGainType , ImageGainType > FilterType;
   ImageListToVectorFilterType::Pointer imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
-/*
+
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
   reader->Update();
@@ -426,20 +426,20 @@ main ( int argc,
   }
   int hThumbnail = atoi(argv[3]);
   int wThumbnail = atoi(argv[4]);
-  */
-  // ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
+  
+  ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
 
   //////////For several input but one image out/////
-  ImageListType::Pointer inputImageList (ImageListType::New());
-  for (int i = 1 ; i<4 ; i++)
-  {
-  ReaderImageType::Pointer readerImage (ReaderImageType::New());
-  readerImage->SetFileName(argv[i]);
-  readerImage->Update();
-  inputImageList->PushBack( readerImage->GetOutput() );
-  }
-  int hThumbnail = atoi(argv[5]);
-  int wThumbnail = atoi(argv[6]);
+  // ImageListType::Pointer inputImageList (ImageListType::New());
+  // for (int i = 1 ; i<4 ; i++)
+  // {
+  // ReaderImageType::Pointer readerImage (ReaderImageType::New());
+  // readerImage->SetFileName(argv[i]);
+  // readerImage->Update();
+  // inputImageList->PushBack( readerImage->GetOutput() );
+  // }
+  // int hThumbnail = atoi(argv[5]);
+  // int wThumbnail = atoi(argv[6]);
   ImageType::Pointer inputImage = inputImageList->Front();
 
   if ( inputImage->GetLargestPossibleRegion().GetSize()[1]%hThumbnail != 0 )
@@ -458,13 +458,13 @@ main ( int argc,
 
   ImageListType::Pointer outputImageList ( ImageListType::New() );
 
-  typename itk::ImageRegionIterator < ImageType > 
+  itk::ImageRegionIterator < ImageType > 
       rit ( inputImageList->GetNthElement(0) ,
            inputImageList->GetNthElement(0)->GetRequestedRegion() );
-  typename itk::ImageRegionIterator < ImageType > 
+  itk::ImageRegionIterator < ImageType > 
       git ( inputImageList->GetNthElement(1) ,
            inputImageList->GetNthElement(1)->GetRequestedRegion() );
-  typename itk::ImageRegionIterator < ImageType > 
+  itk::ImageRegionIterator < ImageType > 
       bit ( inputImageList->GetNthElement(2) ,
            inputImageList->GetNthElement(2)->GetRequestedRegion() );
 
@@ -474,7 +474,7 @@ main ( int argc,
   luminance->SetOrigin( inputImage->GetOrigin() );
   luminance->SetSpacing( inputImage->GetSpacing() );
 
-  typename itk::ImageRegionIterator < ImageGainType > 
+  itk::ImageRegionIterator < ImageGainType > 
       lit ( luminance ,
            luminance->GetRequestedRegion() );
   lit.GoToBegin();
@@ -497,7 +497,7 @@ main ( int argc,
   // filter->setGainThresh(0.0 , 10.0);
   filter->setThumbnailSize( wThumbnail, hThumbnail );
   filter->Update();
-  typename itk::ImageRegionIterator < ImageGainType > 
+  itk::ImageRegionIterator < ImageGainType > 
       nlit ( filter->GetOutput() , 
             filter->GetOutput()->GetRequestedRegion() );
   lit.GoToBegin();
@@ -540,15 +540,44 @@ main ( int argc,
     filter->Update();
     outputImageList->PushBack( filter->GetOutput() );
     }
-*/
+*/ 
   imageListToVectorFilterOut->SetInput(inputImageList);
   imageListToVectorFilterOut->Update();
   VectorImageType::Pointer output = imageListToVectorFilterOut->GetOutput();
   output->SetOrigin(inputImage->GetOrigin());
   // output->CopyInformation(input);
-  // Here we compute a gain image corresponding to the associated gain of the equalization
   WriterType::Pointer writer( WriterType::New());
-  writer->SetFileName( argv[4] );
+  writer->SetFileName( argv[2] );
   writer->SetInput( output );
   writer->Update();
+
+
+#if 0
+  ImageType::Pointer img ( ImageType::New() );
+  ImageType::SizeType size;
+  size[1] = 1080;
+  size[0] = (int) (size[1]*(16.0/9.0));
+  ImageType::RegionType region;
+  region.SetSize(size);
+  img->SetRegions(region);
+  img->Allocate();
+  itk::ImageRegionIterator<ImageType> pat(img , img->GetLargestPossibleRegion());
+  pat.GoToBegin();
+  int val = 0;
+  while(!pat.IsAtEnd())
+  { 
+    val = pat.GetIndex()[0]%2;
+    pat.Set(val*255);
+    ++pat;
+  }
+
+
+   otb::ImageFileWriter< ImageType >::Pointer writ(otb::ImageFileWriter< ImageType >::New()) ;
+   const char * name = "../../my_data/imgline1080.jpeg";
+   writ->SetFileName(name);
+   writ->SetInput(img);
+   writ->Update();
+
+#endif
+
 }
