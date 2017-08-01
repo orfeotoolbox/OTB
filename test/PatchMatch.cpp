@@ -220,7 +220,7 @@ typedef otb::CoefOfThePatchFilter< ImageType, ImageType> CoefPatchFilterType;
 /*========================================== Spatial Propagation ===========================================*/
 
 
-
+#if 1
 	 
    /** sortie a une seule bande et elle contient le volume de cout */
 typedef otb::SpatialPropagationImageFilter< ImageType, ImageType > SpatialPropType;
@@ -308,7 +308,7 @@ RightCoefPatch->UpdateOutputInformation();
   MinPlaneType::Pointer RightMinPlaneView = MinPlaneType::New();  
  
 
-for(unsigned int iteration = 1 ; iteration <= 3; iteration++){ 
+for(unsigned int iteration = 1 ; iteration <= 2; iteration++){ 
  std::cout<< "  iteration   " << iteration<< std::endl;
  ///Left  
   LeftSpatial->SetLeftInputImage(LeftReader->GetOutput());
@@ -707,7 +707,7 @@ RightDispFilter->SetRadius(radiusD);
  
 
 
-
+#endif
 
 return EXIT_SUCCESS;
 }

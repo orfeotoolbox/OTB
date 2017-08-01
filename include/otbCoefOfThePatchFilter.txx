@@ -28,7 +28,7 @@ Implémentation of coeffs of patches
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 
-#define PI  3.14159265358979323846
+
 
 namespace otb
 {	
@@ -133,10 +133,12 @@ CoefOfThePatchFilter<TInputImage,  TOutputImage >
 PixelType coeffs(3);
  coeffs.Fill(0);
  
+ double d(0.);
+ 
  PixelType NormalAndZValue(4);
  NormalAndZValue.Fill(0);
  
-
+double z(0.),nx(0.),ny(0.),nz(0.),NormalNorm(0.);
 
 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 //créer l'intérator  
@@ -148,21 +150,51 @@ InputImageIt.GoToBegin();
 
 while ( !outputIt.IsAtEnd() && !InputImageIt.IsAtEnd() ){
 		IndexType index = InputImageIt.GetIndex();
- 
-	 // Compute disparity using a patch		 
 		
-		double z = (int)rand() % (m_DispMax - m_DispMin) + m_DispMin;	 
+		 z = (int)rand() % (m_DispMax - m_DispMin) + m_DispMin;	 
 		// le vecteur normal au plan valeurs aléatoires
 			
 		
-		//std::cout<< "m_Iteration  impaire " <<m_Iteration << std::endl;		
+		//std::cout<< "d =  " <<d << std::endl;		
 		//std::cout<< "index  " <<index << std::endl;
 		
-		double nx = ( rand()/(double)RAND_MAX ) *(2) - 1; 
-		double ny = ( rand()/(double)RAND_MAX ) *(2) - 1;  
-		double nz =  ( rand()/(double)RAND_MAX ) *(2) - 1; 
+		 nx = ( rand()/(double)RAND_MAX ) *(2) - 1; 
+		 ny = ( rand()/(double)RAND_MAX ) *(2) - 1;  
+		 nz =  ( rand()/(double)RAND_MAX ) *(2) - 1; 
 		
-		double NormalNorm = std::sqrt(nx*nx + ny*ny + nz*nz);
+		 NormalNorm = std::sqrt(nx*nx + ny*ny + nz*nz);
+		nx = nx/NormalNorm;
+		ny = ny/NormalNorm;
+		nz = nz/NormalNorm;
+				
+		NormalAndZValue[0] = nx;
+		NormalAndZValue[1] = ny;
+		NormalAndZValue[2] = nz;
+		
+		NormalAndZValue[3] = z;
+		
+		coeffs[0] = -nx / nz;
+		coeffs[1] = -ny / nz;
+		coeffs[2] = (nx*index[0] + ny*index[1] + nz*z) / nz ;
+std::cout<< "coeffs  " <<coeffs << std::endl;
+	 d = coeffs[0]*index[0] + coeffs[1]*index[1] + coeffs[2] ;
+		
+std::cout<< "d1  " <<d << std::endl;		
+		
+			 
+	while( d>m_DispMax || d< m_DispMin){
+		 z = (int)rand() % (m_DispMax - m_DispMin) + m_DispMin;	 
+		// le vecteur normal au plan valeurs aléatoires
+			
+			std::cout<< "d2 =  " <<d << std::endl;	
+			
+		//std::cout<< "index  " <<index << std::endl;
+		
+		 nx = ( rand()/(double)RAND_MAX ) *(2) - 1; 
+		 ny = ( rand()/(double)RAND_MAX ) *(2) - 1;  
+		 nz =  ( rand()/(double)RAND_MAX ) *(2) - 1; 
+		
+		 NormalNorm = std::sqrt(nx*nx + ny*ny + nz*nz);
 		nx = nx/NormalNorm;
 		ny = ny/NormalNorm;
 		nz = nz/NormalNorm;
@@ -177,7 +209,10 @@ while ( !outputIt.IsAtEnd() && !InputImageIt.IsAtEnd() ){
 		coeffs[1] = -ny / nz;
 		coeffs[2] = (nx*index[0] + ny*index[1] + nz*z) / nz ;
 
+	 d = coeffs[0]*index[0] + coeffs[1]*index[1] + coeffs[2] ;
+	}
 	
+
 								
 	    outputIt.Set(coeffs);
 		//std::cout << " cost volume = "<< OutPixel[0] ;

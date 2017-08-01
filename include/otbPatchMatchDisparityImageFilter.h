@@ -48,8 +48,12 @@ public:
 	   temp = 	 input.GetCenterPixel()[0]*index[0] 
 				+input.GetCenterPixel()[1]*index[1] 
 				+input.GetCenterPixel()[2] ;
-		
+		if(temp > 1 && temp < 15){
 			output[0] = static_cast<typename TOutput::ValueType>(temp) ;
+		}
+		else{
+			output[0] = 15;
+		}
 	
  return output;
 
