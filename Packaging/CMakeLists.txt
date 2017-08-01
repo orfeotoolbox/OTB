@@ -143,7 +143,6 @@ include(update_symlinks_script)
 
 # below functions include many install commands which are installing
 # files under PKG_STAGE_DIR
-
 include(install_python_bindings)
 include(install_include_dirs)
 include(install_share_dirs)
@@ -152,7 +151,7 @@ include(install_cmake_files)
 include(install_mvd_files)
 include(install_qtdev_files)
 include(install_vstudio_files)
-include(add_uninstall_script)
+include(add_uninstall_otb_script)
 include(installer_files)
 include(create_package)
 

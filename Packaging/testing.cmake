@@ -23,7 +23,7 @@ add_test(Tu_install_package
   )
 
 add_test(Tu_selftester
-  COMMAND ${pkg_extracted_dir}/bin/selftester${my_ext}
+  COMMAND ${pkg_extracted_dir}/tools/selftester${my_ext}
   WORKING_DIRECTORY ${pkg_extracted_dir}
   )
 

@@ -1,5 +1,4 @@
 macro(create_package)
-  
   install(CODE "
     message(STATUS \"Creating ${PACKAGE_OUTPUT_FILE}\") 
     if(WIN32)

@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Setup test environment
-DIRNAME_0=$(dirname "$0")
-DIRNAME=$(readlink "$DIRNAME_0/..")
-cd "$DIRNAME" || exit
+CUR_DIR="$( cd "$( dirname "$0" )/../" && pwd )"
+echo "CUR_DIR=$CUR_DIR"
+cd "$CUR_DIR" || exit
 
 # define convenient functions
 # ps_children( parentPID ) : get PIDs of children processes
@@ -23,7 +23,7 @@ echo_and_report () {
 }
 
 # -------------------------------------------------------------------------
-. ./otbenv.profile
+. "$CUR_DIR/otbenv.profile"
 
 rm -f selftest_report.log
 touch selftest_report.log

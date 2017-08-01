@@ -1,4 +1,4 @@
-function(add_uninstall_script)
+function(add_uninstall_otb_script)
   file(READ "${OTB_BINARY_DIR}/install_manifest.txt"  mfile_lines)
   string(
     REPLACE
@@ -48,6 +48,6 @@ function(add_uninstall_script)
     Files/uninstall_otb${SCRIPT_EXT}
     ${CMAKE_BINARY_DIR}/install_manifest_otb.txt
     ${CMAKE_BINARY_DIR}/cmake_uninstall_otb.cmake
-    DESTINATION ${PKG_STAGE_DIR})
+    DESTINATION ${PKG_STAGE_DIR}/tools)
 
 endfunction()
