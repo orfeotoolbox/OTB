@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mvd::MyWidget</class>
- <widget class="QWidget" name="mvd::MyWidget">
+ <class>otb::Wrapper::ListEditWidget</class>
+ <widget class="QWidget" name="otb::Wrapper::ListEditWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
