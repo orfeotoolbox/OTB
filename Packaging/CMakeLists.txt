@@ -45,24 +45,19 @@ set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
 get_filename_component(PACKAGE_OTB_SRC_DIR ${OTBPackaging_SOURCE_DIR} PATH)
 set(SUPERBUILD_SOURCE_DIR     "${PACKAGE_OTB_SRC_DIR}/SuperBuild")
 
-if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
-  find_package(PythonInterp REQUIRED)
-endif()
-
-find_program(FILE_COMMAND "file")
-if(WIN32)
-  set(ZIP_EXE_NAMES 7z 7za)
-  find_program(ZIP_EXECUTABLE NAMES ${ZIP_EXE_NAMES})
-  if(NOT ZIP_EXECUTABLE)
-    message(FATAL_ERROR
-      "Cannot find 7z executable '${ZIP_EXE_NAMES}' in your PATH")
-  endif()
-endif()
 
 set(LINUX FALSE)
 if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(LINUX TRUE)
 endif()
+
+if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
+  find_package(PythonInterp REQUIRED)
+endif()
+
+find_program(FILE_COMMAND NAMES  "file")
+find_program(READLINK NAMES "readlink")
+find_program(ZIP_EXECUTABLE NAMES 7z 7za)
 
 #install prefix is same as SUPERBUILD_INSTALL_DIR. could be changed later
 set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
@@ -140,6 +135,8 @@ include(install_without_message)
 include(install_rule)
 include(isfile_symlink)
 include(update_symlinks_script)
+include(detect_using_file_command)
+include(install_otbapp_wrapper_scripts)
 
 # below functions include many install commands which are installing
 # files under PKG_STAGE_DIR
@@ -224,6 +221,7 @@ endif()
 create_package()
 
 if(BUILD_TESTING)
+  message("adding testing")
   enable_testing()
   include(testing.cmake)
 endif()

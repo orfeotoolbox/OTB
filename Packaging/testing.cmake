@@ -3,7 +3,7 @@
 #          [WORKING_DIRECTORY <dir>])
 
 set(testing_dir ${CMAKE_BINARY_DIR}/tests)
-execute_process(  COMMAND ${CMAKE_COMMAND} -E make_directory ${testing_dir})
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${testing_dir})
 
 set(pkg_extracted_dir "${testing_dir}/${PKG_STAGE_DIR}")
 if(WIN32)
@@ -16,13 +16,15 @@ else()
   set(my_ext ".sh")
 endif()
 
-add_test(Tu_install_package
+add_test(
+  NAME Tu_install_package
   COMMAND ${extract_cmd}
   ${extract_opts}
   WORKING_DIRECTORY ${testing_dir}
   )
 
-add_test(Tu_selftester
+add_test(
+  NAME Tu_selftester
   COMMAND ${pkg_extracted_dir}/tools/selftester${my_ext}
   WORKING_DIRECTORY ${pkg_extracted_dir}
   )

@@ -18,8 +18,18 @@
 # limitations under the License.
 #
 macro(check_cmake_variables)
+  set(required_vars)
   if(OTB_WRAP_PYTHON)
-    set(required_vars PYTHON_EXECUTABLE)
+    list(APPEND required_vars PYTHON_EXECUTABLE)
+  endif()
+  
+  if(LINUX)
+    list(APPEND required_vars FILE_COMMAND)
+    list(APPEND required_vars READLINK)
+  endif()
+
+  if(WIN32)
+    list(APPEND required_vars ZIP_EXECUTABLE)
   endif()
   foreach(req
       ${required_vars}
@@ -35,6 +45,8 @@ macro(check_cmake_variables)
       LOADER_PROGRAM
       LOADER_ARGS
       LOADER_REGEX
+      PKG_ITK_SB_VERSION
+      PKG_OTB_VERSION_STRING
       )
     if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
       message(FATAL_ERROR "you must set ${req}")
