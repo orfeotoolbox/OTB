@@ -96,6 +96,31 @@ private:
     AddParameter(ParameterType_Int,"thumb.h","Thumbnail height in pixel");
     AddParameter(ParameterType_Int,"thumb.w","Thumbnail width in pixel");
 
+    AddParameter(ParameterType_Choice , "mode" , "What to equalized");
+    AddChoice( "mode.each" , "Channels" );
+    SetParameterDescription( "mode.each" , "Each channel are equalized independently" );
+    AddChoice( "mode.lum" , "Luminance" );
+    SetParameterDescription( "mode.lum" , "The luminance is equalized and then "
+        "a gain is applied on the channels." );
+    AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
+    SetDefaultParameterInt("mode.lum.red.ch", 0 );
+    AddParameter(ParameterType_Float , "mode.lum.red.coef" , "Value for luminance computation" );
+    SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
+
+    AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Channel" );
+    SetDefaultParameterInt("mode.lum.gre.ch", 1 );
+    AddParameter(ParameterType_Float , "mode.lum.gre.coef" , "Value for luminance computation" );
+    SetDefaultParameterFloat("mode.lum.gre.coef", 0.71 );
+
+    AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Channel" );
+    SetDefaultParameterInt("mode.lum.blu.ch", 2 );
+    AddParameter(ParameterType_Float , "mode.lum.blu.coef" , "Value for luminance computation" );
+    SetDefaultParameterFloat("mode.lum.blu.coef", 0.08 );
+
+    
 	}
 
 	void DoUpdateParameters() ITK_OVERRIDE
@@ -131,36 +156,120 @@ private:
   {
     ImageListToVectorFilterType::Pointer imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
     FloatVectorImageType * inImage = GetParameterImage("in");
+    ImageListType::Pointer outputImageList ( ImageListType::New() );
     VectorToImageListFilterType::Pointer vectorToImageListFilter ( VectorToImageListFilterType::New() );
     vectorToImageListFilter->SetInput( inImage );
     vectorToImageListFilter->Update();
     ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
-    ImageListType::Pointer outputImageList ( ImageListType::New() );
-    int m = inImage->GetVectorLength ();
-    for (int chanel = 0 ; chanel<m ; chanel++ ) 
+
+    if ( GetParameterString("mode") == "each")
       {
-      std::cout<<"channel m ="<<m<<std::endl;
-      FilterType::Pointer filter( FilterType::New() );
-      filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
-      if ( HasValue("hfact") )
+      int m = inImage->GetVectorLength ();
+      for (int chanel = 0 ; chanel<m ; chanel++ ) 
         {
-        filter->setHistoThreshFactor( GetParameterInt("hfact") );
+        std::cout<<"channel m ="<<m<<std::endl;
+        FilterType::Pointer filter( FilterType::New() );
+        filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
+        if ( HasValue("hfact") )
+          {
+          filter->setHistoThreshFactor( GetParameterInt("hfact") );
+          }
+        filter->setHistoSize(GetParameterInt("bin"));
+        if ( HasUserValue("nodata") )
+          {
+          filter->setNoData( GetParameterFloat("nodata") );
+          }
+        filter->setThumbnailSize( GetParameterInt("thumb.w") , 
+                                GetParameterInt("thumb.h") );
+        filter->Update();
+        outputImageList->PushBack( filter->GetOutput() );
         }
-      filter->setHistoSize(GetParameterInt("bin"));
-      if ( HasUserValue("nodata") )
-        {
-        filter->setNoData( GetParameterFloat("nodata") );
-        }
-      filter->setThumbnailSize( GetParameterInt("thumb.w") , 
-                              GetParameterInt("thumb.h") );
-      filter->Update();
-      outputImageList->PushBack( filter->GetOutput() );
       }
 
+    if ( GetParameterString("mode") == "lum")
+      {
+      std::vector<int> rgb(3 , 0);
+      rgb[0] = GetParameterInt("mode.lum.red.ch");
+      rgb[1] = GetParameterInt("mode.lum.gre.ch");
+      rgb[2] = GetParameterInt("mode.lum.blu.ch");
+
+      std::vector<float> lumCoef(3 , 0.0);
+      lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
+      lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
+      lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
+
+      itk::ImageRegionIterator < FloatImageType > 
+          rit ( inputImageList->GetNthElement(rgb[0]) ,
+               inputImageList->GetNthElement(rgb[0])->GetRequestedRegion() );
+      itk::ImageRegionIterator < FloatImageType > 
+          git ( inputImageList->GetNthElement(rgb[1]) ,
+               inputImageList->GetNthElement(rgb[1])->GetRequestedRegion() );
+      itk::ImageRegionIterator < FloatImageType > 
+          bit ( inputImageList->GetNthElement(rgb[2]) ,
+               inputImageList->GetNthElement(rgb[2])->GetRequestedRegion() );
+
+      FloatImageType::Pointer luminance(FloatImageType::New());
+      luminance->SetRegions( inputImageList->GetNthElement(rgb[0])->GetRequestedRegion() );
+      luminance->Allocate();
+      luminance->SetOrigin( inputImageList->GetNthElement(rgb[0])->GetOrigin() );
+      luminance->SetSpacing( inputImageList->GetNthElement(rgb[0])->GetSpacing() );
+
+      itk::ImageRegionIterator < FloatImageType > 
+          lit ( luminance ,
+               luminance->GetRequestedRegion() );
+      lit.GoToBegin();
+      bit.GoToBegin();
+      rit.GoToBegin();
+      git.GoToBegin();
+      while ( !lit.IsAtEnd())
+        {
+        lit.Set( lumCoef[0] * rit.Get() + lumCoef[1] * git.Get() + lumCoef[2] * bit.Get() );
+        ++lit;
+        ++bit;
+        ++rit;
+        ++git;
+        }
+      FilterType::Pointer filter( FilterType::New() );
+      filter->SetInput( luminance ) ;
+      filter->setHistoThreshFactor(4);
+      filter->setHistoSize(512);
+      filter->setNoData(0);
+      filter->setThumbnailSize( GetParameterInt("thumb.w") , 
+                                GetParameterInt("thumb.h") );
+      filter->Update();
+      itk::ImageRegionIterator < FloatImageType > 
+          nlit ( filter->GetOutput() , 
+                filter->GetOutput()->GetRequestedRegion() );
+      lit.GoToBegin();
+      nlit.GoToBegin();
+      bit.GoToBegin();
+      rit.GoToBegin();
+      git.GoToBegin();
+      float gain = 0.0;
+      float denum = 1;
+      while ( !lit.IsAtEnd())
+        {
+        if ( lit.Get() != 0 )
+          denum = lit.Get();
+        else
+          {
+          denum = 1;
+          }
+        gain = nlit.Get()/denum;
+        bit.Set(gain * bit.Get());
+        rit.Set(gain * rit.Get());
+        git.Set(gain * git.Get());
+        ++nlit;
+        ++lit;
+        ++bit;
+        ++rit;
+        ++git;
+        }
+      outputImageList = inputImageList;
+      }
     imageListToVectorFilterOut->SetInput(outputImageList);
     imageListToVectorFilterOut->Update();
-
-    SetParameterOutputImage("out", imageListToVectorFilterOut->GetOutput());
+    SetParameterOutputImage( "out" , imageListToVectorFilterOut->GetOutput() );
   }
 };
 

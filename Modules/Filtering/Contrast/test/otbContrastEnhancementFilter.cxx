@@ -410,7 +410,28 @@ main ( int argc,
   reader->SetFileName( argv[ 1 ] );
   reader->Update();
   VectorImageType::Pointer input = reader->GetOutput();
+  
+  typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+  ImageMetadataInterfaceType::Pointer metadataInterface = otb::ImageMetadataInterfaceFactory::CreateIMI(input->GetMetaDataDictionary());
 
+  std::vector<double> values;
+  std::vector<bool> flags;
+
+  bool ret = metadataInterface->GetNoDataFlags(flags,values);
+
+  if(ret && !values.empty() && !flags.empty() && flags[0])
+    {
+    std::cout<<values[0]<<std::endl;
+    }
+  std::vector<uint> rgb = metadataInterface->GetDefaultDisplay() ;
+
+
+  std::cout<<"red is "<<rgb[ 0 ]<<std::endl;
+  std::cout<<"green is "<<rgb[ 1 ]<<std::endl;
+  std::cout<<"blue is "<<rgb[ 2 ]<<std::endl;
+
+
+#if 0
   VectorToImageListFilterType::Pointer vectorToImageListFilter ( VectorToImageListFilterType::New() );
   vectorToImageListFilter->SetInput( input );
   vectorToImageListFilter->Update();
@@ -579,5 +600,8 @@ main ( int argc,
    writ->Update();
 
 #endif
+
+#endif
+return 0;
 
 }
