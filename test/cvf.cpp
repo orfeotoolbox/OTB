@@ -606,7 +606,6 @@ std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << st
  LeftMin->SetInput1( LeftDispOut); // ne pas mettre le SetInput2 car il vas se mettre a j automatiquement avec le pipeline
   
 }  
-
 /** écriture du resultat de la disparité avec le cost volumebrute**/  
  LeftMinWriter->SetFileName(FILENAME("LeftDisparité.tif"));
  LeftMinWriter->SetInput(  LeftMin->GetOutput());  

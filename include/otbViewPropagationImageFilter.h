@@ -52,7 +52,7 @@ public:
   
   typedef typename itk::ContinuousIndex<double, 1> 			ContinuousIndextype;
   
-  typedef std::pair<PixelType,double> pairCord;
+  typedef typename std::pair<PixelType,double> pairCord;
 /**  iterators */ 
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
   

@@ -1,7 +1,7 @@
 
 #ifndef otbViewPropagationImageFilter_txx
 #define otbViewPropagationImageFilter_txx
-
+#include <math.h> 
 
 #include "otbViewPropagationImageFilter.h"
 #include "itkProgressReporter.h"
@@ -40,7 +40,7 @@ ViewPropagationImageFilter<TInputImage, TOutputImage>
 
 m_LeftCost = AggregatedCostType::New();	
 m_RightCost = AggregatedCostType::New();	
-m_Radius[0] = 3;// il faut tjr le prendre >1, il définit la fenetre de recherche dans l'autre image
+m_Radius[0] = 9;// il faut tjr le prendre >1, il définit la fenetre de recherche dans l'autre image
 m_Radius[1] = 0;
 }
 
@@ -401,12 +401,23 @@ LeftAggCostPixel.Fill(0);
 PixelType RightAggCostPixel(3);
 RightAggCostPixel.Fill(0);
 
+PixelType I(3);
+I.Fill(0);
+
+PixelType P(3);
+P.Fill(0);
+
+PixelType Out(3);
+Out.Fill(0);
+
 IndexType R_Index;
 IndexType L_Index; 
+OffsetType Offset_j;
+    RadiusType Wradius = this->GetRadius();
+    double Wsize = (Wradius[0]*2+1)*(Wradius[1]*2+1);
+double Wt(0.), W(0.), Wtemp(0.), m_gamma(10);
+std::vector< std::pair<PixelType,double> > duo(Wsize); 
 
-    
-
-std::vector< std::pair<PixelType,double> > duo(9); 
 	 
 if(m_Iteration % (2) == 1){	      
 LeftPatchInputIt.GoToBegin();
@@ -437,22 +448,24 @@ L_Index = LeftPatchInputIt.GetIndex();
 			  m = LeftAggCostPixel[0] ;
 		
 
- for(unsigned int i = 0; i< RightPatchInputIt.Size(); i++){			
+ for(unsigned int i = 0; i< RightPatchInputIt.Size(); i++){
+	 
+	 			
 	R_Index = RightPatchInputIt.GetIndex(i);
-	//~ Offset_j = input.GetOffset(i); 	
+	 Offset_j = RightPatchInputIt.GetOffset(i); 
+	 
+	 if((RightPatchInputIt.GetPixel(i) == LeftPatchInputIt.Get() ) && (R_Index[0] >= 0 || R_Index[0] < (unsigned)ImageSize[0] ||
+			R_Index[1] >= 0 || R_Index[1] < (unsigned)ImageSize[1] )){	
 			
-				//~ I[0] = this->GetLeftInputImage()->GetPixel(L_Index)[1]- this->GetLeftInputImage()->GetPixel(R_Index)[1];
-				//~ I[1] = this->GetLeftInputImage()->GetPixel(L_Index)[2]- this->GetLeftInputImage()->GetPixel(R_Index)[2];
-				//~ I[2] = this->GetLeftInputImage()->GetPixel(L_Index)[3]- this->GetLeftInputImage()->GetPixel(R_Index)[3];
+	 I[0] = this->GetLeftInputImage()->GetPixel(L_Index)[1]- this->GetLeftInputImage()->GetPixel(R_Index)[1];
+	 I[1] = this->GetLeftInputImage()->GetPixel(L_Index)[2]- this->GetLeftInputImage()->GetPixel(R_Index)[2];
+	 I[2] = this->GetLeftInputImage()->GetPixel(L_Index)[3]- this->GetLeftInputImage()->GetPixel(R_Index)[3];
 				
 								
-				//~ W =  std::exp( -(I.GetSquaredNorm())*m_gamma);
-		
-		
-	
+		 W =  std::exp( -(I.GetSquaredNorm())*m_gamma);
 
 				
-		if(RightPatchInputIt.GetPixel(i) == LeftPatchInputIt.Get()){  
+		  // if){  
 						// m(l_index, R_plane_R_index)				 
 	 
 			  m_RightCost->SetLeftInputImage(this->GetLeftInputImage());
@@ -481,25 +494,26 @@ L_Index = LeftPatchInputIt.GetIndex();
 		}
 		
 	
-		//~ duo[i].first = OutPatch;               
-		//~ duo[i].second =  W; 
-		//~ Wt += W	;	
-}
+		duo[i].first = OutPatch;               
+		duo[i].second =  W; 
+		Wt += W	;	
+
 	
+}
+Wt = Wt/2;
 
-//~ Wt = Wt/2;
 
 
-
-   //~ for (std::vector<pairCord>::iterator it=duo.begin(); it !=duo.end(); ++it){
-       		 //~ Wtemp += it->second ;
-       		 //~ if (Wtemp >= Wt){
-				 //~ P = it->first; 
-				 //~ //std::cout << "Element found in myvector: " << d << '\n';
-				 //~ output[0] = static_cast<typename TOutput::ValueType>(P) ;
-				 //~ break;
-		//~ }	 
-     //~ }	
+   for (typename std::vector<pairCord>::iterator it=duo.begin(); it !=duo.end(); ++it){
+       		 Wtemp += it->second ;
+       		 if (Wtemp >= Wt){
+				 P = it->first; 
+				 //std::cout << "Element found in myvector: " << P << '\n';
+				Out = P ;
+				
+				 break;
+		}	 
+     }	
      
      
      	
@@ -509,7 +523,7 @@ OutCost[0] = m;
 //std::cout<<"L_Index" << L_Index<< std::endl;
 	
 	OutputCostIt.Set(OutCost);
-	OutputPatchIt.Set(OutPatch);
+	OutputPatchIt.Set(Out);
 	OutputNormalIt.Set(NormalAndZValuePixel);
 	
 				
@@ -568,8 +582,9 @@ while ( !LeftPatchInputIt.IsAtBegin()  ){
 
  for(unsigned int i = 0; i< RightPatchInputIt.Size(); i++){			
 	R_Index = RightPatchInputIt.GetIndex(i);
-
-			if(RightPatchInputIt.GetPixel(i) == LeftPatchInputIt.Get()){  
+if((RightPatchInputIt.GetPixel(i) == LeftPatchInputIt.Get()) && ( R_Index[0] >= 0 || R_Index[0] < (unsigned)ImageSize[0] ||
+			R_Index[1] >= 0 || R_Index[1] < (unsigned)ImageSize[1] )){
+			
 		
 			 
 			// m(l_index, R_plane_R_index)				 
@@ -597,8 +612,8 @@ while ( !LeftPatchInputIt.IsAtBegin()  ){
 			OutPatch = this->GetLeftPatchInputImage()->GetPixel(L_Index);
 			NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(L_Index);			
 		}
-}			
-
+			
+}
 
 OutCost[0] = m;
 				
