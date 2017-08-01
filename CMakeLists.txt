@@ -18,6 +18,6 @@
 # limitations under the License.
 #
 
-project(OTBCVFFilters)
+project(OTBStereoFilters)
 otb_module_impl()
 

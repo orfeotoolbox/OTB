@@ -35,7 +35,7 @@ CoeffGuidedBoxImageFilter<TInputImage,TOutputImage>
   // this->SetNumberOfThreads(1);
 
   // Default parameters
-  m_Epsilon = 0.0001*255*255;
+  m_Epsilon = 0.00001*255*255;
 
 }
 
@@ -198,7 +198,6 @@ CoeffGuidedBoxImageFilter<TInputImage,  TOutputImage >
   this->GetOutput()->SetNumberOfComponentsPerPixel(4);
  
 }
-
 
 //================================================ ThreadedGenerateData ====================================
 template <class TInputImage,  class TOutputImage >

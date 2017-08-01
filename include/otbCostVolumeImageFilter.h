@@ -18,9 +18,9 @@ class ITK_EXPORT CostVolumeImageFilter :
 {
 public:
   /** Standard class typedef */
-  typedef CostVolumeImageFilter       Self; //*
+  typedef CostVolumeImageFilter       Self; 
   typedef itk::ImageToImageFilter<TInputImage, 
-                                  TOutputImage>    Superclass; //*
+                                  TOutputImage>    Superclass; 
   typedef itk::SmartPointer<Self>                           Pointer;
   typedef itk::SmartPointer<const Self>                     ConstPointer;
 
@@ -28,7 +28,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CostVolumeImageFilter, ImageToImageFilter); //*
+  itkTypeMacro(CostVolumeImageFilter, ImageToImageFilter); 
 
   /** Useful typedefs */
    
@@ -83,15 +83,6 @@ public:
     m_HorizontalDisparity  = disp;
   }
   
-    //~ void SetMinMAxDisp(int Mindisp,int Maxdisp)
-  //~ {
-    //~ m_MinHDisp  = Mindisp;
-    //~ m_MaxHDisp = Maxdisp;
-  //~ }
-
-  //~ /** Set/Get the radius of the area on which metric is evaluated */
-  //~ itkSetMacro(Radius, SizeType);
-  //~ itkGetConstReferenceMacro(Radius, SizeType);
 
 
 protected:
@@ -105,7 +96,7 @@ protected:
   void GenerateOutputInformation() ITK_OVERRIDE; // meme taille de sortie, 1 composante
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE; // voir dans unaryneighborhood
+  void GenerateInputRequestedRegion() ITK_OVERRIDE; 
 
 
   /** Threaded generate data */
@@ -118,15 +109,11 @@ private:
 
    /** The min disparity to explore */
   int                           m_HorizontalDisparity;
- // int                           m_MinHDisp;
- // int                           m_MaxHDisp;
+
 
    /** The min disparity to explore */
   int                           m_VerticalDisparity;
   
-  
-  //~ /** The radius of the blocks */
-  //~ SizeType                      	  m_Radius;
 
 
 };

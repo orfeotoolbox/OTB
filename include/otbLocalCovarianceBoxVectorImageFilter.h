@@ -1,5 +1,5 @@
-#ifndef otbLocalCovarianceBoxVectorImageFilters_h
-#define otbLocalCovarianceBoxVectorImageFilters_h
+#ifndef otbLocalCovarianceBoxVectorImageFilter_h
+#define otbLocalCovarianceBoxVectorImageFilter_h
 
 /*===================================================================================================
 
@@ -12,6 +12,7 @@ Implémentation of local variance and covariance using Summed areas
 #include "otbBinaryFunctorNeighborhoodVectorImageFilter.h"
 #include <itkNumericTraits.h>
 #include <itkConstNeighborhoodIterator.h>
+#include "itkBinaryFunctorImageFilter.h"
 
 namespace otb
 {

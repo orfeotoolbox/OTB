@@ -20,12 +20,13 @@
 
 otb_module_test()
 
-set(OTBCVFFiltersTests
-otbCVFFiltersTestDriver.cxx
+set(OTBStereoFiltersTests
+otbStereoFiltersTestDriver.cxx
 cvf.cpp
+PatchMatch.cpp
 )
 
 
-add_executable(otbCVFFiltersTestDriver ${OTBCVFFiltersTests})
-target_link_libraries(otbCVFFiltersTestDriver ${OTBCVFFilters-Test_LIBRARIES})
-otb_module_target_label(otbCVFFiltersTestDriver)
+add_executable(otbStereoFiltersTestDriver ${OTBStereoFiltersTests})
+target_link_libraries(otbStereoFiltersTestDriver ${OTBStereoFilters-Test_LIBRARIES})
+otb_module_target_label(otbStereoFiltersTestDriver)

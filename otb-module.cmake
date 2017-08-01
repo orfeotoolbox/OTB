@@ -1,7 +1,7 @@
 #
 # Copyright (C) 2017 CS SI
 #
-# This file is part of remote module MatchingFilters
+# This file is part of remote module StereoFilters
 #
 #     TODO
 #
@@ -20,7 +20,7 @@
 
 set(DOCUMENTATION "This module contains advanced filters for block matching")
 
-otb_module(OTBCVFFilters
+otb_module(OTBStereoFilters
   DEPENDS
     OTBCommon
     OTBITK

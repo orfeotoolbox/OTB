@@ -62,7 +62,7 @@ int main_CVF(int argc, char *argv[])
 	
 
 	if(argc < 7) {
-		std::cerr << "Usage: " << argv[0] << " radius(uint) disparity(uint) sense(char)" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp Left_Image Right_Image Out_Path" << std::endl;
 		return EXIT_FAILURE;
 	}
 	
@@ -95,8 +95,10 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
  //argv[6] le chemin des images de sortie  
   std::string argv6 = std::string(argv[6]);
   #define FILENAME(n) std::string( argv6 + std::string(n)).c_str()
-  ImageWriterType::Pointer LeftMeanwriter = ImageWriterType::New(); 
-/*==================================== calcul de la multiplication pour la covariance ===================*/
+  
+ 
+  
+/*============================== calcul de la multiplication pour la covariance =======*/
 // covariance = Mean( im1*im2) - Mean(im1)*mean(im2) 
 
   typedef otb::MultiplyImagebandsFilter< ImageType, ImageType > MultiplyFilterType;
@@ -113,7 +115,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   Multiplywriter->SetInput( MultiplyLeft->GetOutput() );
   Multiplywriter->Update();
 
- /*==================================== calcul de l'image intégrales=================================*/ 
+ /*==================================== calcul de l'image intégrales======================*/ 
   
   typedef otb::BoxImageFilter< ImageType, ImageType > BoxFilterType;
   
@@ -150,7 +152,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   RightMeanBoxFilter->SetInput( RightBox->GetOutput() );  
   RightMeanBoxFilter->SetRadius(radius);
   
- 
+  ImageWriterType::Pointer LeftMeanwriter = ImageWriterType::New(); 
   LeftMeanwriter->SetFileName( FILENAME("LeftMean.tif"));
   LeftMeanwriter->SetInput( LeftMeanBoxFilter->GetOutput() );
   LeftMeanwriter->Update();
@@ -191,8 +193,6 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   CovBoxwriter->Update();
  
 /* ================================== Gradient =======================================================*/
- 
-
 // ConvolutionImageFilter Left  
   
   typedef itk::ConstantBoundaryCondition<OTBImageType> BoundaryConditionTypeLeft;
@@ -247,8 +247,6 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   
    
 // Gradient Y
-
-// 
   ConvFilterTypeLeft::InputSizeType radiusGY;
   radiusGY[0] = 0;
   radiusGY[1] = 1;
@@ -296,11 +294,6 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
 
 	GradientType::RadiusType radiusG = {{r,r}};
 	filterG->SetRadius(radiusG);
-
-  typedef otb::CommandProgressUpdate< GradientType > CommandTypeG;
-  CommandTypeG::Pointer observerG = CommandTypeG::New();
-  filterG->AddObserver( itk::ProgressEvent(), observerG );
-
 
   ImageWriterType::Pointer writerG = ImageWriterType::New();
   writerG->SetFileName( FILENAME("GradientNormLeft.tif"));
@@ -488,7 +481,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   LeftCVFFiltredWriter->SetFileName(FILENAME("GuidedFilter.tif"));
   LeftCVFFiltredWriter->SetInput( LeftCVFFiltred->GetOutput() ); 
   otb::StandardFilterWatcher LeftCVFFiltredWatcher(LeftCVFFiltredWriter, "GuidedFilter");  
- // LeftCVFFiltredWriter->Update();
+  //LeftCVFFiltredWriter->Update(); //* A NE PAS METTRE 
 
 
  /* =========================================== Min Filter ======================================*/
@@ -596,12 +589,12 @@ for (int Hdisp = HdispMin ; Hdisp <=HdispMax ;Hdisp++){
  LeftCost->SetDisp(Hdisp); 
  LeftCost->Modified();
 
-//chrono1.Start();
+chrono1.Start();
  LeftMin->GetFunctor().SetDisp(Hdisp); 
  LeftMin->Update();
  
-//chrono1.Stop();
-//std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << std::endl;
+chrono1.Stop();
+std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << std::endl;
 
  LeftDispOut = LeftMin->GetOutput();
  
@@ -748,7 +741,7 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
   otb::StandardFilterWatcher watcher5(RightMedianwriter, "RightMedianDisp");  
   RightMedianwriter->Update(); 
 
-
+# if 0
 /*========================== Detection d'occulusion =============================*/
   
 /** Conversion des vectorImage vers OtbImage*/
@@ -827,7 +820,7 @@ OtbImageRightMedian->Update();
   FillMedianwriter->SetFileName( FILENAME("SmoothFillDisparity.tif"));
   FillMedianwriter->SetInput( FillMedian->GetOutput() );  
   FillMedianwriter->Update(); 
-   
+ #endif  
 
 
 return EXIT_SUCCESS;
