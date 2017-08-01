@@ -36,9 +36,7 @@ class ITK_EXPORT ContrastEnhancementFilter :
 {
 public:
 
-	/** typedef to simplify variables definition and declaration. */
   typedef TInputImage InputImageType;
-  /** typedef to simplify variables definition and declaration. */
   typedef TOutputImage OutputImageType;
 
 	/** typedef for standard classes. */
@@ -51,9 +49,9 @@ public:
   typedef otb::Image< int , 2 > ImageBinType;
 
   typedef typename InputImageType::PixelType PixelType;
-  /** "object factory" management method. */
+
   itkNewMacro(Self);
-  /** Return the class name. */
+
   itkTypeMacro(ContrastEnhancementFilter, ImageToImageFilter);
 
 	void
@@ -139,8 +137,7 @@ private:
 	
 	void
 	computehisto(	std::vector < std::vector < int > > & gridHisto ,
-								int nW ,
-								int nH );
+								int nW );
 
 // Create the target for each thumbnail and compute the min and max
 // of the image without taking into account the nodata

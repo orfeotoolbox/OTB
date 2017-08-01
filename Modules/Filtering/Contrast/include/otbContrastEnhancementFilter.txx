@@ -109,8 +109,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 template <class TInputImage, class TOutputImage >
 void ContrastEnhancementFilter < TInputImage , TOutputImage >
 ::computehisto( std::vector< std::vector < int > > & gridHisto ,
-								int nW,
-								int nH)
+								int nW )
 {
   typename itk::ImageRegionConstIterator < ImageBinType > 
       bit( m_binImage , m_binImage->GetRequestedRegion() );
@@ -129,8 +128,6 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
       }
     ++bit;
     }
-  // std::cout<<"gridHisto[0][127] = "<<gridHisto[0][127]<<std::endl;
-  // std::cout<<"end of histogram computation"<<std::endl;
 }
 
 template <class TInputImage, class TOutputImage >
@@ -145,7 +142,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
   it.GoToBegin();
   bool isFirst = true;
-  int index;
+  int index = 0;
   while ( !it.IsAtEnd() )
     {
     if ( it.Get() != m_NoData)
@@ -177,10 +174,10 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
       {
       ++gridTarget[i][j + offset];
       }
-      ////////////////////////DEBUG////////////////////////
-      std::cout<<"size ="<<m_hSize<<std::endl;
-      std::cout<<"height ="<<m_nbPixel[ i ] / m_hSize<<std::endl;
-      std::cout<<"targetHisto[middle] ="<<gridTarget[i][m_hSize/2]<<std::endl;
+    ////////////////////////DEBUG////////////////////////
+    // std::cout<<"size ="<<m_hSize<<std::endl;
+    // std::cout<<"height ="<<m_nbPixel[ i ] / m_hSize<<std::endl;
+    // std::cout<<"targetHisto[middle] ="<<gridTarget[i][m_hSize/2]<<std::endl;
     }
 }
 
@@ -327,7 +324,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   m_binImage->Allocate();
   m_binImage->SetRequestedRegion( input->GetRequestedRegion() );
 
-  assert(m_hSize>1);
+  assert( m_hSize > 1 );
   m_step = static_cast<double>( m_max - m_min ) \
                 / static_cast<double>( m_hSize -1 );
 
@@ -383,9 +380,6 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
   // output->Allocate();
   // output->SetOrigin( input->GetOrigin() );
   // output->SetSpacing( input->GetSpacing() );
-  // typename InputImageType::PixelType Val(1);
-	// Val[0];
-	// output->FillBuffer(Val);
 
   if ( input->GetLargestPossibleRegion().GetSize()[1]%m_hThumbnail != 0 )
     {
@@ -427,7 +421,7 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
   preprocess();
 
-  computehisto( gridHisto , nW , nH );
+  computehisto( gridHisto , nW );
 
 
   if (m_thresh)
@@ -449,10 +443,6 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
   // std::cout<<gridHisto[0][m_hSize/2]<<std::endl;
   // std::cout<<"========one==========="<<std::endl;
-
-
-  // std::cout<<gridHisto[0][m_hSize/2]<<std::endl;
-  // std::cout<<"========two==========="<<std::endl;
 
 	equalized( gridHisto , gridTarget , gridLut , nW , nH );
   
