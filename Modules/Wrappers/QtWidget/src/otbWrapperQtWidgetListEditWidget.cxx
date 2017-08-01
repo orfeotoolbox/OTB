@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include "mvdMyWidget.h"
-#include "ui_mvdMyWidget.h"
+#include "otbWrapperQtWidgetListEditWidget.h"
+#include "ui_otbWrapperQtWidgetListEditWidget.h"
 
 
 /*****************************************************************************/
@@ -38,14 +38,14 @@
 //
 // OTB includes (sorted by alphabetic order)
 
-//
-// Monteverdi includes (sorted by alphabetic order)
+namespace otb
+{
 
-namespace mvd
+namespace Wrapper
 {
 
 /*
-  TRANSLATOR mvd::MyWidget
+  TRANSLATOR otn::Wrappers
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -65,24 +65,26 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-MyWidget
-::MyWidget( QWidget* p, Qt::WindowFlags flags  ):
+ListEditWidget
+::ListEditWidget( QWidget * p, Qt::WindowFlags flags ) :
   QWidget( p, flags ),
-  m_UI( new mvd::Ui::MyWidget() )
+  m_UI( new otb::Wrapper::Ui::ListEditWidget() )
 {
   m_UI->setupUi( this );
 }
 
 /*******************************************************************************/
-MyWidget
-::~MyWidget()
+ListEditWidget
+::~ListEditWidget()
 {
   delete m_UI;
-  m_UI = NULL;
+  m_UI = nullptr;
 }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 
-} // end namespace 'mvd'
+} // end namespace 'Wrapper'
+
+} // end namespace 'otb'

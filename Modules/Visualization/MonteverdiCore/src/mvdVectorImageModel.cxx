@@ -111,7 +111,7 @@ VectorImageModel
 
   m_ImageFileReader->SetFileName( QFile::encodeName( GetFilename() ) );
   m_ImageFileReader->GetOutput()->UpdateOutputInformation();
-  
+
   // Retrieve the list of Lod from file
   m_LodCount = m_ImageFileReader->GetOverviewsCount();
 
@@ -129,7 +129,7 @@ VectorImageModel
   //   << m_ImageFileReader->GetOutput()->GetOrigin()[ 1 ]
   //   << "\nspacing:" << m_NativeSpacing[ 0 ] << m_NativeSpacing[ 1 ];
 
-  
+
   // Setup GenericRSTransform
   m_ToWgs84 = otb::GenericRSTransform<>::New();
   m_ToWgs84->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
@@ -139,11 +139,11 @@ VectorImageModel
   //Compute estimated spacing here
   //m_EstimatedGroundSpacing
   m_EstimatedGroundSpacing = m_NativeSpacing;
- 
+
   typedef otb::GroundSpacingImageFunction<VectorImageType> GroundSpacingImageType;
   GroundSpacingImageType::Pointer GroundSpacing = GroundSpacingImageType::New();
   GroundSpacing->SetInputImage(m_ImageFileReader->GetOutput());
-  
+
   if (m_ToWgs84->IsUpToDate())
     {
     if (m_ToWgs84->GetTransformAccuracy() != otb::Projection::UNKNOWN)
@@ -300,7 +300,7 @@ VectorImageModel
     static_cast< VectorImageSettings * const >( buildContext->m_Settings );
 
 
-// Fetch the no data flags if any
+  // Fetch the no data flags if any
   otb::ImageMetadataInterfaceBase::ConstPointer metaData(
     GetMetaDataInterface()
     );
@@ -315,7 +315,7 @@ VectorImageModel
     GetProperties()->SetNoDataEnabled(true);
     GetProperties()->SetNoData(values[0]);
     }
-  
+
   //
   // Step #1: Perform pre-process of AbstractModel::BuildModel()
   // pattern.
@@ -347,7 +347,7 @@ VectorImageModel
   // Remember image properties.
   if( buildContext->m_Properties!=NULL )
     SetProperties( *buildContext->m_Properties );
-  
+
   // Apply settings to child QuicklookModel.
   ApplySettings();
 }
@@ -478,7 +478,7 @@ VectorImageModel::ComputeBestLod( double zoomFactor ) const
 }
 
 /*****************************************************************************/
-unsigned int 
+unsigned int
 VectorImageModel::Closest( double invZoomfactor,
                            unsigned int lodCount )
 {
@@ -553,7 +553,7 @@ VectorImageModel
   // Update m_ImageFileReader
   m_ImageFileReader->SetFileName( QFile::encodeName( lodFilename ).constData() );
   m_ImageFileReader->GetOutput()->UpdateOutputInformation();
-  
+
   // (Always) Update m_Image reference.
   m_Image = m_ImageFileReader->GetOutput();
 }
@@ -593,17 +593,17 @@ VectorImageModel
   IndexType centerIndex;
   centerIndex[0] = GetNativeLargestRegion().GetIndex()[0] + GetNativeLargestRegion().GetSize(0)/2;
   centerIndex[1] = GetNativeLargestRegion().GetIndex()[1] + GetNativeLargestRegion().GetSize(1)/2;
-  
+
   //
-  // Compute the physical coordinates of the center pixel 
+  // Compute the physical coordinates of the center pixel
   PointType centerPoint;
   centerPoint[0] = (centerIndex[0] *   GetNativeSpacing()[0] )  + GetOrigin()[0];
   centerPoint[1] = (centerIndex[1] *   GetNativeSpacing()[1] )  + GetOrigin()[1];
-  
+
   // lat / long
   PointType wgs84;
   wgs84 = GetGenericRSTransform()->TransformPoint(centerPoint);
-  
+
   // get placename
   otb::CoordinateToName::Pointer coordinateToName = otb::CoordinateToName::New();
   coordinateToName->SetLonLat(wgs84);
@@ -611,13 +611,13 @@ VectorImageModel
 
   // get the placename - Country (if any)
   std::ostringstream oss;
-  
+
   std::string placeName = coordinateToName->GetPlaceName();
   std::string countryName = coordinateToName->GetCountryName();
-  
+
   if (placeName != "")
     oss << placeName;
-  
+
   if (countryName != "")
     oss << " - "<< countryName;
 
@@ -791,7 +791,7 @@ VectorImageModel
   // show the current pixel description only if the mouse cursor is
   // under the image
   if( isInsideNativeLargestRegion || 1 )
-    {   
+    {
     //
     // get the physical coordinates
     if (!ToImage()->GetProjectionRef().empty())
@@ -814,11 +814,11 @@ VectorImageModel
     IndexType currentLodIndex;
     currentLodIndex[0] = (point[ 0 ] - ToImage()->GetOrigin()[0]) / ToImage()->GetSpacing()[0];
     currentLodIndex[1] = (point[ 1 ] - ToImage()->GetOrigin()[1]) / ToImage()->GetSpacing()[1];
-    
+
     //
     // get the LatLong
-    
-    if (!ToImage()->GetProjectionRef().empty()) 
+
+    if (!ToImage()->GetProjectionRef().empty())
       {
       geoVector.push_back(ToStdString(tr("Geographic(exact)")));
       }
@@ -834,23 +834,23 @@ VectorImageModel
     if( ToImage()->GetLargestPossibleRegion().IsInside(currentLodIndex) || 1 )
       {
       // TODO : Is there a better method to detect no geoinfo available ?
-      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
+      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0)
         {
 	assert( !m_ToWgs84.IsNull() );
 
         PointType wgs84;
 
         wgs84 = m_ToWgs84->TransformPoint( point );
-      
+
         ossGeographicLong.precision(6);
         ossGeographicLat.precision(6);
-        
+
         ossGeographicLong << std::fixed << wgs84[0];
         ossGeographicLat << std::fixed << wgs84[1];
 
         geoVector.push_back(ossGeographicLong.str());
         geoVector.push_back(ossGeographicLat.str());
-      
+
         double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
 
         if(elev > -32768)
@@ -872,33 +872,33 @@ VectorImageModel
     /*
     else
       {
-      //handle here the case of QL information display. It 
+      //handle here the case of QL information display. It
       //displays geographic info when the user is scrolling over the QL
       //
       // compute the current ql index
 
-      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
+      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0)
         {
-      currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
+      currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0])
         / GetQuicklookModel()->ToImage()->GetSpacing()[0];
-      currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
+      currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1])
         / GetQuicklookModel()->ToImage()->GetSpacing()[1];
 
        PointType wgs84;
        PointType currentLodPoint;
        GetQuicklookModel()->ToImage()->TransformIndexToPhysicalPoint(currentLodIndex, currentLodPoint);
        wgs84 = GetGenericRSTransform()->TransformPoint(currentLodPoint);
-      
+
        ossGeographicLong.precision(6);
        ossGeographicLat.precision(6);
-       
+
        ossGeographicLong << std::fixed << wgs84[0];
        ossGeographicLat << std::fixed << wgs84[1];
 
        //Update geovector with location over QL index
        geoVector.push_back(ossGeographicLong.str());
        geoVector.push_back(ossGeographicLat.str());
-      
+
        double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
 
        if(elev > -32768)
@@ -949,16 +949,16 @@ VectorImageModel
       {
       //
       // compute the current ql index
-      currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
+      currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0])
         / GetQuicklookModel()->ToImage()->GetSpacing()[0];
-      currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
+      currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1])
         / GetQuicklookModel()->ToImage()->GetSpacing()[1];
-    
+
       //
       // Get the radiometry form the Ql
       if ( GetQuicklookModel()->ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
         {
-        currentPixel = 
+        currentPixel =
           GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
 
         ossRadio <<"Ql [ ";
@@ -972,7 +972,7 @@ VectorImageModel
     */
     }
 
-  // update band name for the current position 
+  // update band name for the current position
   bandNames = GetBandNames( true );
 
     // qDebug() << bandNames;

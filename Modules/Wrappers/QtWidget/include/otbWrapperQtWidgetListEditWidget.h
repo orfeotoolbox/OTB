@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef mvdMyWidget_h
-#define mvdMyWidget_h
+#ifndef otbWrapperQtWidgetListEditWidget_h
+#define otbWrapperQtWidgetListEditWidget_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi.h"
+#include "otbConfigure.h"
 
 
 /*****************************************************************************/
@@ -43,9 +43,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "OTBMonteverdiGUIExport.h"
-//
-// Monteverdi includes (sorted by alphabetic order)
+#include "OTBQtWidgetExport.h"
 
 
 /*****************************************************************************/
@@ -57,14 +55,17 @@ namespace
 {
 }
 
-namespace mvd
+namespace otb
+{
+
+namespace Wrapper
 {
 
 //
 // Internal classes pre-declaration.
 namespace Ui
 {
-class MyWidget;
+class ListEditWidget;
 };
 
 
@@ -72,14 +73,13 @@ class MyWidget;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class MyWidget
+ * \class ListEditWidget
  *
- * \ingroup OTBMonteverdiGUI
+ * \ingroup OTBQtWidget
  *
- * \brief Widget template skeleton to copy-paste when adding a new
- * widget class.
+ * \brief
  */
-class OTBMonteverdiGUI_EXPORT MyWidget :
+class OTBQtWidget_EXPORT ListEditWidget :
     public QWidget
 {
 
@@ -94,10 +94,10 @@ class OTBMonteverdiGUI_EXPORT MyWidget :
 public:
 
   /** \brief Constructor. */
-  MyWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  ListEditWidget( QWidget * p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  virtual ~MyWidget();
+  virtual ~ListEditWidget();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -133,7 +133,7 @@ private:
   /**
    * \brief uic generated.
    */
-  Ui::MyWidget* m_UI;
+  Ui::ListEditWidget * m_UI;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -142,13 +142,15 @@ private:
 private slots:
 };
 
-} // end namespace 'mvd'
+} // end namespace 'Wrapper'
+
+} // end namespace 'otb'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
-namespace mvd
+namespace Wrapper
 {
-} // end namespace 'mvd'
+} // end namespace 'Wrapper'
 
-#endif // mvdMyWidget_h
+#endif // otbWrappersQtWidgetListEditWidget_h
