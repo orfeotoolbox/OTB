@@ -193,6 +193,10 @@ private:
     AddParameter(ParameterType_Int,  "sizey",  "Size Y");
     SetParameterDescription("sizey","size along y in pixels.");
 
+    // Channelist Parameters
+    AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
+    SetParameterDescription("cl","Channels to write in the output image.");
+    
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this,"elev");
     AddRAMParameter();
@@ -212,9 +216,6 @@ private:
     SetDefaultParameterInt("mode.radius.cx", 0);
     SetDefaultParameterInt("mode.radius.cy", 0);
 
-    // Channelist Parameters
-    AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
-    SetParameterDescription("cl","Channels to write in the output image.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "VegetationIndex.hd");
