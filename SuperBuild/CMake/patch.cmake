@@ -54,7 +54,8 @@ foreach(dot_diff_file ${DOT_DIFF_FILES})
   endif()
 
   if(PATCHING_FAILED)
-    message(FATAL_ERROR "${PATCH_PROGRAM} returned non-zero exit status \n ${patch_ov} \n")
+    message(FATAL_ERROR
+      "${PATCH_PROGRAM} ${PATCH_ARGS} -p1 -i ${dot_diff_file} failed\n error: ${patch_ov} \n")
   else()
     message("${patch_ov}")
   endif()
