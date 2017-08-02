@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-set(OTBApplicationEngine_SRC
+set( OTBApplicationEngine_SRC
   otbWrapperApplicationHtmlDocGenerator.cxx
   otbWrapperComplexOutputImageParameter.cxx
   otbWrapperInputVectorDataListParameter.cxx
@@ -48,10 +48,11 @@ set(OTBApplicationEngine_SRC
   otbWrapperApplicationRegistry.cxx
   otbWrapperApplicationFactoryBase.cxx
   otbWrapperCompositeApplication.cxx
+  otbWrapperAbstractStringListParameter.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})
-target_link_libraries(OTBApplicationEngine 
+target_link_libraries(OTBApplicationEngine
   ${OTBVectorDataBase_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBImageIO_LIBRARIES}
