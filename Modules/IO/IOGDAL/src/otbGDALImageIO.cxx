@@ -1578,7 +1578,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (driverShortName == "NOT-FOUND")
     {
     itkExceptionMacro(
-      << "GDAL Writing failed : the image file name '" << m_FileName.c_str() << "' is not recognized by GDAL.");
+      << "GDAL Writing failed: the image file name '" << m_FileName.c_str() << "' is not recognized by GDAL.");
     }
 
   if (m_CanStreamWrite)
@@ -1664,9 +1664,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   if (m_Dataset.IsNull())
     {
-    itkExceptionMacro(
-      << "GDAL Writing failed : Impossible to create the image file name '"
-      << m_FileName << "' : " << CPLGetLastErrorMsg() );
+    itkExceptionMacro(<< CPLGetLastErrorMsg());
     }
 
   /*----------------------------------------------------------------------*/

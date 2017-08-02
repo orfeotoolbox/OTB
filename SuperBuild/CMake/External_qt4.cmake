@@ -55,10 +55,9 @@ if(UNIX)
   else() #Linux
     if(QT4_SB_ENABLE_GTK)
       message(WARNING "QT4_SB_ENABLE_GTK support is experimental")
-
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
     else()
-      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle")
+      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle -no-glib -no-fontconfig")
     endif()
   endif()
   #common for all unix
@@ -105,10 +104,12 @@ add_custom_target(QT4-uninstall
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtSvg"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtTest"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtXml"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/Qt"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/mkspecs"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/plugins"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/translations"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/lib/libQt*"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/lib/pkgconfig/Qt*"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/qmake${QT4_BIN_EXT}"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/lrelease${QT4_BIN_EXT}"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/moc${QT4_BIN_EXT}"

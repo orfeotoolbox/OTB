@@ -48,6 +48,7 @@ set(OTBApplicationEngine_SRC
   otbWrapperApplicationRegistry.cxx
   otbWrapperApplicationFactoryBase.cxx
   otbWrapperCompositeApplication.cxx
+  otbLogger.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})
