@@ -21,88 +21,63 @@
 #ifndef otbWrapperAbstractStringListParameter_h
 #define otbWrapperAbstractStringListParameter_h
 
-#include <string>
-#include "otbWrapperStringParameter.h"
 
-#include "otbObjectList.h"
+#include <string>
+#include <vector>
+
+#include "OTBApplicationEngineExport.h"
+
 
 namespace otb
 {
+
 namespace Wrapper
 {
+
 /** \class AbstractStringListParameter
  *  \brief This class represents a list of InputFilename parameter
  *
  * \ingroup OTBApplicationEngine
  */
-
-class OTBApplicationEngine_EXPORT AbstractStringListParameter : public Parameter
+class OTBApplicationEngine_EXPORT AbstractStringListParameter
 {
 public:
-  /** Standard class typedef */
-  typedef AbstractStringListParameter    Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  typedef otb::ObjectList<StringParameter>  StringParameterListType;
-  typedef StringParameterListType*          StringParameterListPointerType;
-
-
-  /** Defining ::New() static method */
-  itkNewMacro(Self);
-
-  /** RTTI support */
-  itkTypeMacro(AbstractStringListParameter, Parameter);
+  typedef std::vector< std::string > StringVector;
 
   /** Set file form a list of filenames */
-  bool SetListFromFileName(const std::vector<std::string> & filenames);
+  virtual bool SetListFromFileName( const StringVector & filenames ) = 0;
 
   /** Add null element to lists. */
-  void AddNullElement();
+  virtual void AddNullElement() = 0;
 
   /** Add a filename from a filename */
-  bool AddFromFileName(const std::string & filename);
+  virtual bool AddFromFileName( const std::string & filename ) = 0;
 
   /** Set one specific stored filename. */
-  bool SetNthFileName( const unsigned int id, const std::string & filename );
+  virtual bool SetNthFileName( const unsigned int id, const std::string & filename ) = 0;
 
   /** Get the stored filename list */
-  std::vector<std::string> GetFileNameList() const;
+  virtual StringVector GetFileNameList() const = 0;
 
- /** Get one specific stored filename. */
-  std::string GetNthFileName( unsigned int i ) const;
-
-  /** Get one list of the stored files. */
-  StringParameterListPointerType GetFileList() const;
-
-  bool HasValue() const ITK_OVERRIDE;
-
+  /** Get one specific stored filename. */
+  virtual const std::string & GetNthFileName( unsigned int i ) const = 0;
 
   /** Erase one element of the list. */
-  void Erase( unsigned int id );
-
- /** Clear all the list. */
-  void ClearValue() ITK_OVERRIDE;
+  virtual void Erase( unsigned int id ) = 0;
 
 
 protected:
   /** Constructor */
   AbstractStringListParameter();
 
-  /** Destructor */
-  ~AbstractStringListParameter() ITK_OVERRIDE;
-
-
-  StringParameterListType::Pointer  m_FilenameList;
 
 private:
-  AbstractStringListParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
 
-}; // End class InputFilenameList Parameter
+};
 
 } // End namespace Wrapper
+
 } // End namespace otb
 
-#endif
+
+#endif // otbWrapperAbstractStringListParameter_h
