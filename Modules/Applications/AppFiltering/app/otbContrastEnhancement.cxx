@@ -98,27 +98,40 @@ private:
 
     AddParameter(ParameterType_Choice , "mode" , "What to equalized");
     AddChoice( "mode.each" , "Channels" );
-    SetParameterDescription( "mode.each" , "Each channel are equalized independently" );
+    SetParameterDescription( "mode.each" ,
+                "Each channel are equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
-    SetParameterDescription( "mode.lum" , "The luminance is equalized and then "
-        "a gain is applied on the channels." );
+    SetParameterDescription( "mode.lum" ,
+                "The luminance is equalized and then a gain is applied "
+                "on the channels." );
     AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
     AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
     SetDefaultParameterInt("mode.lum.red.ch", 0 );
-    AddParameter(ParameterType_Float , "mode.lum.red.coef" , "Value for luminance computation" );
+    AddParameter(ParameterType_Float , "mode.lum.red.coef" ,
+                 "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
 
     AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Channel" );
     AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Channel" );
     SetDefaultParameterInt("mode.lum.gre.ch", 1 );
-    AddParameter(ParameterType_Float , "mode.lum.gre.coef" , "Value for luminance computation" );
+    AddParameter(ParameterType_Float , "mode.lum.gre.coef" ,
+                 "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.gre.coef", 0.71 );
 
     AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Channel" );
     AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Channel" );
     SetDefaultParameterInt("mode.lum.blu.ch", 2 );
-    AddParameter(ParameterType_Float , "mode.lum.blu.coef" , "Value for luminance computation" );
+    AddParameter(ParameterType_Float , "mode.lum.blu.coef" ,
+                 "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.blu.coef", 0.08 );
+
+    SetMinimumParameterIntValue("mode.lum.red.ch", 0);
+    SetMinimumParameterIntValue("mode.lum.gre.ch", 0);
+    SetMinimumParameterIntValue("mode.lum.blu.ch", 0);
+    SetMinimumParameterIntValue("bin", 2);
+    SetMinimumParameterIntValue("thumb.h", 0);
+    SetMinimumParameterIntValue("thumb.w", 0);
+
 
     
 	}
@@ -127,16 +140,18 @@ private:
   {
     if (HasValue("in") )
       {
+      FloatVectorImageType * inImage = GetParameterImage("in");
       if ( !HasUserValue("thumb.w") )
         {
         SetParameterInt( "thumb.w" , 
-          GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[0] );
+          inImage->GetLargestPossibleRegion().GetSize()[0] );
         }
       if ( !HasUserValue("thumb.h") )
         {
       SetParameterInt( "thumb.h" , 
-        GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1] );
+        inImage->GetLargestPossibleRegion().GetSize()[1] );
         }
+      {
       if ( HasUserValue("thumb.h") && 
         GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]%GetParameterInt("thumb.h") != 0 )
         {
@@ -150,14 +165,55 @@ private:
         std::cout<<"Image Width = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
         }
       }
+      if ( !HasUserValue("nodata") )
+        {
+        typedef ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+        ImageMetadataInterfaceType::Pointer metadataInterface = 
+            ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
+        std::vector<double> values;
+        std::vector<bool> flags;
+
+        bool ret = metadataInterface->GetNoDataFlags(flags,values);
+
+        if(ret && !values.empty() && !flags.empty() && flags[0])
+          {
+          SetParameterFloat( "nodata" , static_cast<float>( values[0] ) );
+          }
+        if ( GetParameterString( "mode" ) == "lum" )
+          {
+          std::vector<uint> rgb = metadataInterface->GetDefaultDisplay() ;
+          uint m = inImage->GetVectorLength ();
+          SetParameterInt( "mode.lum.red.ch" , rgb[0] );
+          SetParameterInt( "mode.lum.gre.ch" , rgb[1] );
+          SetParameterInt( "mode.lum.blu.ch" , rgb[2] );
+          if( m < rgb[ 0 ] )
+            {
+            SetParameterFloat ("mode.lum.red.coef" , 0.0 );
+            SetParameterInt( "mode.lum.red.ch" , 0 );
+            }
+          if( m < rgb[ 1 ] )
+            {
+            SetParameterFloat ("mode.lum.gre.coef" , 0.0 );
+            SetParameterInt( "mode.lum.gre.ch" , 0 );
+            }
+          if( m < rgb[ 2 ] )
+            {
+            SetParameterFloat ("mode.lum.blu.coef" , 0.0 );
+            SetParameterInt( "mode.lum.blu.ch" , 0 );
+            }
+          }
+        }
+      }
   }
 
   void DoExecute() ITK_OVERRIDE
   {
-    ImageListToVectorFilterType::Pointer imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
+    ImageListToVectorFilterType::Pointer 
+          imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
     FloatVectorImageType * inImage = GetParameterImage("in");
     ImageListType::Pointer outputImageList ( ImageListType::New() );
-    VectorToImageListFilterType::Pointer vectorToImageListFilter ( VectorToImageListFilterType::New() );
+    VectorToImageListFilterType::Pointer 
+          vectorToImageListFilter ( VectorToImageListFilterType::New() );
     vectorToImageListFilter->SetInput( inImage );
     vectorToImageListFilter->Update();
     ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
