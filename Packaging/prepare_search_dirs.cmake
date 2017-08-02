@@ -3,7 +3,7 @@ function(prepare_search_dirs search_dirs_result)
   set(search_dirs)
   
   if(MSVC)
-    if(DEFINED ENV{UniversalCRTSdkDir})
+    if(NOT DEFINED ENV{UniversalCRTSdkDir})
       message(FATAL_ERROR "UniversalCRTSdkDir variable not set. Cannot continue")
     endif()
     if(NOT DEFINED ENV{VCINSTALLDIR})
