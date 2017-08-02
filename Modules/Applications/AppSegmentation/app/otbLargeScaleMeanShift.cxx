@@ -59,7 +59,7 @@ private:
     SetDocName("Large-Scale MeanShift");
     SetDocLongDescription("This application chains together the 4 steps of the "
       "MeanShit framework, that is the MeanShiftSmoothing [1], the "
-      "LSMSSegmentation [2], the LSMSSmallRegionMerging [3] and the "
+      "LSMSSegmentation [2], the LSMSSmallRegionsMerging [3] and the "
       "LSMSVectorization [4].\n\n"
       "It generates a vector data file containing the regions extracted with "
       "the MeanShift algorithm.\n\n"
@@ -69,7 +69,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("[1] MeanShiftSmoothing\n"
       "[2] LSMSSegmentation\n"
-      "[3] LSMSSmallRegionMerging\n"
+      "[3] LSMSSmallRegionsMerging\n"
       "[4] LSMSVectorization");
 
     AddDocTag(Tags::Segmentation);
@@ -78,13 +78,16 @@ private:
     ClearApplications();
     AddApplication("MeanShiftSmoothing", "smoothing", "Smoothing step");
     AddApplication("LSMSSegmentation", "segmentation", "Segmentation step");
-    AddApplication("LSMSSmallRegionMerging", "merging", "Small region merging step");
+    AddApplication("LSMSSmallRegionsMerging", "merging", "Small region merging step");
     AddApplication("LSMSVectorization", "vectorization", "Vectorization step");
 
     ShareParameter("in","smoothing.in");
     ShareParameter("spatialr","smoothing.spatialr");
     ShareParameter("ranger","smoothing.ranger");
     ShareParameter("minsize","merging.minsize");
+
+    ShareParameter("tilesizex","segmentation.tilesizex");
+    ShareParameter("tilesizey","segmentation.tilesizey");
 
     AddParameter(ParameterType_InputImage, "imfield", "Support image for field computation");
     SetParameterDescription( "imfield", "This is an optional support image "
@@ -93,9 +96,14 @@ private:
 
     ShareParameter("out","vectorization.out");
 
+    AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
+    EnableParameter( "cleanup" );
+    SetParameterDescription( "cleanup",
+      "If activated, the application will try to clean all temporary files it created" );
+    MandatoryOff( "cleanup" );
+
     // Setup RAM
     ShareParameter("ram","smoothing.ram");
-    Connect("segmentation.ram","smoothing.ram");
     Connect("merging.ram","smoothing.ram");
     Connect("vectorization.ram","smoothing.ram");
 
@@ -108,13 +116,15 @@ private:
     Connect("merging.in","smoothing.in");
 
     // Setup constant parameters
-    GetInternalApplication("smoothing")->SetParameterString("foutpos","foo")
+    GetInternalApplication("smoothing")->SetParameterString("foutpos","foo");
     GetInternalApplication("smoothing")->EnableParameter("foutpos");
 
     // Doc example parameter settings
-    //~ SetDocExampleParameterValue("inp", "QB_Toulouse_Ortho_PAN.tif");
-    //~ SetDocExampleParameterValue("inxs", "QB_Toulouse_Ortho_XS.tif");
-    //~ SetDocExampleParameterValue("out", "BundleToPerfectSensor.png uchar");
+    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
+    SetDocExampleParameterValue("spatialr", "4");
+    SetDocExampleParameterValue("ranger", "80");
+    SetDocExampleParameterValue("minsize", "16");
+    SetDocExampleParameterValue("out", "regions.shp");
 
     SetOfficialDocLink();
     }
@@ -127,16 +137,20 @@ private:
     std::vector<std::string> tmpFilenames;
     tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap.tif"));
     tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.tif"));
+    tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap.geom"));
+    tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.geom"));
     ExecuteInternal("smoothing");
-    // in-memory connexion here
+    // in-memory connexion here (saves 1 additional update for foutpos)
     GetInternalApplication("segmentation")->SetParameterInputImage("in",
-      GetInternalApplication("smoothing")->GetParameterInputImage("fout"));
+      GetInternalApplication("smoothing")->GetParameterOutputImage("fout"));
     GetInternalApplication("segmentation")->SetParameterInputImage("inpos",
-      GetInternalApplication("smoothing")->GetParameterInputImage("foutpos"));
+      GetInternalApplication("smoothing")->GetParameterOutputImage("foutpos"));
+    // temporary file output here
     GetInternalApplication("segmentation")->SetParameterString("out",
       tmpFilenames[0]);
+    // take half of previous radii
     GetInternalApplication("segmentation")->SetParameterFloat("spatialr",
-      0.5 * GetInternalApplication("smoothing")->GetParameterFloat("spatialr"));
+      0.5 * (double)GetInternalApplication("smoothing")->GetParameterInt("spatialr"));
     GetInternalApplication("segmentation")->SetParameterFloat("ranger",
       0.5 * GetInternalApplication("smoothing")->GetParameterFloat("ranger"));
     GetInternalApplication("segmentation")->ExecuteAndWriteOutput();
@@ -160,6 +174,18 @@ private:
     GetInternalApplication("vectorization")->SetParameterString("inseg",
       tmpFilenames[1]);
     ExecuteInternal("vectorization");
+
+    if( IsParameterEnabled( "cleanup" ) )
+      {
+      otbAppLogINFO( <<"Final clean-up ..." );
+      for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
+        {
+        if(itksys::SystemTools::FileExists(tmpFilenames[i].c_str()))
+          {
+          itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
+          }
+        }
+      }
     }
 
 };
