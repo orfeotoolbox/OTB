@@ -203,7 +203,7 @@ void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
     GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
 
   // select sample positions
-  GetInternalApplication("select")->ExecuteAndWriteOutput();
+  ExecuteInternal("select");
 
   /* SampleExtraction */
   UpdateInternalParameters("extraction");
