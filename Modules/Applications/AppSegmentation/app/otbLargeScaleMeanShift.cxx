@@ -61,9 +61,17 @@ private:
       "MeanShit framework, that is the MeanShiftSmoothing [1], the "
       "LSMSSegmentation [2], the LSMSSmallRegionsMerging [3] and the "
       "LSMSVectorization [4].\n\n"
+      "This application can be a preliminary step for an object-based analysis.\n\n"
       "It generates a vector data file containing the regions extracted with "
-      "the MeanShift algorithm.\n\n"
-      "This application can be a preliminary step for an object-based analysis."
+      "the MeanShift algorithm. The spatial and range radius parameters allow "
+      "to adapt the sensitivity of the algorithm depending on the image dynamic "
+      "and resolution. There is a step to remove small regions whose size "
+      "(in pixels) is less than the given 'minsize' parameter. These regions "
+      "are merged to a similar neighbor region. In the output vectors, there "
+      "are additional fields to describe each region. In particular the mean "
+      "and standard deviation (for each band) is computed for each region "
+      "using the input image as support. If an optional 'imfield' image is "
+      "given, it will be used as support image instead."
       );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
