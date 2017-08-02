@@ -35,8 +35,8 @@ function(install_rule src_file)
       continue()
     elseif("${sfile_ABS_LOWER}" MATCHES "\\.lnk$")
       #we don't install symlink on windows. issue a warning
-      message(WARNING "${sfile_ABS} is a symbolic link and this will be excluded from package") 
-      continue()
+      set(install_type "symlink")
+      set(install_dir)
     elseif("${sfile_ABS_LOWER}" MATCHES "(\\.a)$")
       set(install_type FILES)
       set(install_dir lib)
@@ -54,22 +54,28 @@ function(install_rule src_file)
 	set(install_type)
 	set(install_dir)
 	#message("sfile_ABS=${sfile_ABS}")
+	#this is whole other story
 	detect_using_file_command(${sfile_ABS} install_type install_dir)
       endif(UNIX)
     endif()
-    
-    if(NOT install_type OR NOT install_type)
-      message(FATAL_ERROR "install_type OR install_dir is empty\ninstall_type=${install_dir}\ninstall_dir=${install_dir}")
+
+    if(install_type STREQUAL "symlink")
+      #we don't install symlink on windows. issue a warning
+      message(WARNING "${sfile_ABS} is a symbolic link and this will be excluded from package") 
       return()
     endif()
     
-    if ( NOT install_type STREQUAL "symlink")
-       install(${install_type} "${sfile}"
-     	DESTINATION
-     	"${PKG_STAGE_DIR}/${install_dir}"
-     	)
+    if(NOT install_type OR NOT install_type)
+      message(FATAL_ERROR "sfile_ABS=${sfile_ABS}.\ninstall_type=${install_dir}\ninstall_dir=${install_dir}")
+      return()
+    endif()
+
+    install(${install_type} "${sfile}"
+      DESTINATION
+      "${PKG_STAGE_DIR}/${install_dir}"
+      )
     
-     endif()
+  
   endforeach()  
 endfunction()   
 
