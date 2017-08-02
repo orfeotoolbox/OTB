@@ -9,16 +9,15 @@ function(install_rule src_file)
   foreach(sfile ${src_file_star})
     get_filename_component(sfile_NAME ${sfile} NAME)
     string(TOLOWER "${sfile_NAME}" sfile_NAME_LOWER)
-    
-    get_filename_component(sfile_ABS "${sfile}" ABSOLUTE) #file_full -> sfile_ABS
-    string(TOLOWER "${sfile_ABS}" sfile_ABS_LOWER) #file_full_lower -> sfile_ABS_LOWER
-    
+
+    get_filename_component(sfile_ABS "${sfile}" ABSOLUTE)
+    string(TOLOWER "${sfile_ABS}" sfile_ABS_LOWER)
     set(install_type)
     set(install_dir)
-    if ("${sfile_NAME_LOWER}" MATCHES
-	"^(otb|mvd)([a-z]+)(headertest|testdriver)"
-	)
-      message("SKIP INSTALL for ${sfile_NAME_LOWER}")
+    if ("${sfile_NAME_LOWER}" MATCHES "^(otb|mvd)([a-z]+)(test)*.*" )
+      if(PKG_DEBUG)
+        message("SKIP INSTALL for ${sfile_NAME_LOWER}")
+      endif()
       continue()
     elseif("${sfile_ABS_LOWER}" MATCHES "(\\.exe)$")
       set(install_type PROGRAMS)
@@ -59,7 +58,9 @@ function(install_rule src_file)
 
     if(install_type STREQUAL "symlink")
       #we don't install symlink on windows. issue a warning and continue
-      message(WARNING "${sfile_ABS} is a symbolic link and this will be excluded from package") 
+      if(PKG_DEBUG)
+        message("${sfile_ABS} is a symbolic link and this will be excluded from package")
+      endif()
       continue()
     endif()
     
