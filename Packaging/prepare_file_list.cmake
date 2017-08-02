@@ -94,8 +94,8 @@ function(prepare_file_list file_list_result)
      list(APPEND file_list "proj.dll")
    endif()  
 
-  set(OTB_APPLICATIONS_DIR "${SUPERBUILD_INSTALL_DIR}/lib/otb/applications")
-  file(GLOB OTB_APPS_LIST "${OTB_APPLICATIONS_DIR}/otbapp_*${LIB_EXT}") # /lib/otb
+  set(otb_applications_dir "${SUPERBUILD_INSTALL_DIR}/lib/otb/applications")
+  file(GLOB OTB_APPS_LIST "${otb_applications_dir}/otbapp_*${LIB_EXT}") # /lib/otb
   list(APPEND  file_list ${OTB_APPS_LIST})
 
 
