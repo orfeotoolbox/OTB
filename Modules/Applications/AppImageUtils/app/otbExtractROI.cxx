@@ -75,7 +75,7 @@ private:
       "extract) and a size. The extent mode needs two points (upper left "
       "corner and lower right) and the radius mode need the center of the "
       "region and the radius : it will extract the rectangle containing the "
-      "cirecle defined and limited by the image dimension. The fit mode "
+      "circle defined and limited by the image dimension. The fit mode "
       "needs a reference image or vector and the dimension of the extracted "
       "region will be the same as the extent of the reference. "
       "Different are available such as pixel, image physical space "
