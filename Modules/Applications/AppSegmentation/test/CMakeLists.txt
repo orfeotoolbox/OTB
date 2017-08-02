@@ -293,3 +293,17 @@ otb_test_application(NAME     apTvSeHooverCompareSegmentationTest
                               --ignore-lines-with 2 outgt: outms:
                      )
 
+#----------- LargeScaleMeanShift TESTS ----------------
+otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
+                     APP      LargeScaleMeanShift
+                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                              -spatialr 3
+                              -ranger 80
+                              -minsize 16
+                              -tilesizex 100
+                              -tilesizey 100
+                              -out ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
+                              ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
+                     )
