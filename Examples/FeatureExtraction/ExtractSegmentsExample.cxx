@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  An \doxygen{ImageFileReader} class is also instantiated in order to read
+  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file.
   //
   //  Software Guide : EndLatex
@@ -110,7 +110,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // An \doxygen{ImageFileWriter} is instantiated in order to write the
+  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
   //  Software Guide : EndLatex

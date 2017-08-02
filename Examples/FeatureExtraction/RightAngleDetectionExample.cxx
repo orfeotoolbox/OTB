@@ -194,7 +194,7 @@ int main(int argc, char * argv[])
   //
   // Before calling the \code{Update()} method of the writer in order to
   // trigger the pipeline execution, we call the
-  // \doxygen{GenerateOutputInformation()} of the reader, so the
+  // \code{GenerateOutputInformation()} of the reader, so the
   // filter gets the information about image size and spacing.
   //
   // Software Guide : EndLatex
