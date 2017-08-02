@@ -235,8 +235,7 @@ protected:
   {}
 
   /** Destructor */
-  ~Parameter() ITK_OVERRIDE
-  {}
+  ~Parameter() ITK_OVERRIDE {}
 
   /** Name of the parameter */
   std::string                        m_Name;
