@@ -55,40 +55,40 @@ public:
   itkTypeMacro(ContrastEnhancementFilter, ImageToImageFilter);
 
 	void
-	setThumbnailSize( int wThumbnail , int hThumbnail )
+	SetThumbnailSize( int wThumbnail , int hThumbnail )
 	{
 		m_hThumbnail = hThumbnail;
 		m_wThumbnail = wThumbnail;
 	}
 
 	void
-	setHistoThreshFactor( float threshFactor )
+	SetHistoThreshFactor( float threshFactor )
 	{
 		m_threshFactor = threshFactor;
 		m_thresh = true;
 	}
 
 	void
-	setHistoSize( int size )
+	SetHistoSize( int size )
 	{
 		m_hSize = size;
 	}
 
 	void
-	setGainThresh( float lowThresh , float upThresh)
+	SetGainThresh( float lowThresh , float upThresh)
 	{
 		m_upThresh = upThresh;
 		m_lowThresh = lowThresh;
 	}
 
 	void
-	setNoData( PixelType noData)
+	SetNoData( PixelType noData)
 	{
 		m_NoData = noData;
 	}
 
 	void
-	setHistoThresh(bool thresh)
+	SetHistoThresh(bool thresh)
 	{
 		m_thresh = thresh;
 	}

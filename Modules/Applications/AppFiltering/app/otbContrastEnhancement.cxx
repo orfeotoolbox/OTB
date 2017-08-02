@@ -75,7 +75,6 @@ private:
     SetParameterDescription("out", "Output image.");
     SetParameterString("out", "/home/antoine/dev/my_data/lenaapp.jpg");
 
-    AddRAMParameter();
 
     AddParameter(ParameterType_Int,"bin","Bin number");
     SetDefaultParameterInt("bin", 256);
@@ -132,11 +131,12 @@ private:
     SetMinimumParameterIntValue("thumb.h", 0);
     SetMinimumParameterIntValue("thumb.w", 0);
 
+    AddRAMParameter();
 
     
-	}
+  }
 
-	void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if (HasValue("in") )
       {
@@ -228,14 +228,14 @@ private:
         filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
         if ( HasValue("hfact") )
           {
-          filter->setHistoThreshFactor( GetParameterInt("hfact") );
+          filter->SetHistoThreshFactor( GetParameterInt("hfact") );
           }
-        filter->setHistoSize(GetParameterInt("bin"));
+        filter->SetHistoSize(GetParameterInt("bin"));
         if ( HasUserValue("nodata") )
           {
-          filter->setNoData( GetParameterFloat("nodata") );
+          filter->SetNoData( GetParameterFloat("nodata") );
           }
-        filter->setThumbnailSize( GetParameterInt("thumb.w") , 
+        filter->SetThumbnailSize( GetParameterInt("thumb.w") , 
                                 GetParameterInt("thumb.h") );
         filter->Update();
         outputImageList->PushBack( filter->GetOutput() );
@@ -287,10 +287,10 @@ private:
         }
       FilterType::Pointer filter( FilterType::New() );
       filter->SetInput( luminance ) ;
-      filter->setHistoThreshFactor(4);
-      filter->setHistoSize(512);
-      filter->setNoData(0);
-      filter->setThumbnailSize( GetParameterInt("thumb.w") , 
+      filter->SetHistoThreshFactor(4);
+      filter->SetHistoSize(512);
+      filter->SetNoData(0);
+      filter->SetThumbnailSize( GetParameterInt("thumb.w") , 
                                 GetParameterInt("thumb.h") );
       filter->Update();
       itk::ImageRegionIterator < FloatImageType > 
