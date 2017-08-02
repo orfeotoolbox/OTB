@@ -70,7 +70,16 @@ private:
     // Documentation
     SetDocName("Extract ROI");
     SetDocLongDescription("This application extracts a Region Of Interest with "
-      "user parameters. It has several modes and channels can be selected also.");
+      "user parameters. There are four mode of extraction. The standard mode "
+      "allows the user to enter one point (upper left corner of the region to "
+      "extract) and a size. The extent mode needs two points (upper left "
+      "corner and lower right) and the radius mode need the center of the "
+      "region and the radius : it will extract the rectangle containing the "
+      "cirecle defined and limited by the image dimension. The fit mode "
+      "needs a reference image or vector and the dimension of the extracted "
+      "region will be the same as the extent of the reference. "
+      "Different are available such as pixel, image physical space "
+      "or longitude and latitude.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -81,9 +90,8 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Image to be processed.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "Region of interest fom the input image");
+    SetParameterDescription("out", "Region of interest from the input image");
 
-    AddRAMParameter();
 
     AddParameter(ParameterType_Choice,"mode","Extraction mode");
     AddChoice("mode.standard","Standard");
@@ -151,7 +159,7 @@ private:
     AddChoice( "mode.radius.unitr.pxl" , "Pixel" );
     SetParameterDescription("mode.radius.unitr.pxl",
       "The unit of the radius will be the pixel.");
-    AddChoice( "mode.radius.unitr.phy" , "Physical" );
+    AddChoice( "mode.radius.unitr.phy" , "Image physical space" );
     SetParameterDescription("mode.radius.unitr.phy",
       "The unit of the radius will be the physical measure of the image.");
 
@@ -167,15 +175,13 @@ private:
     AddChoice( "mode.radius.unitc.pxl" , "Pixel" );
     SetParameterDescription("mode.radius.unitc.pxl",
       "The unit for the center coordinates will be the pixel");
-    AddChoice( "mode.radius.unitc.phy" , "Physical" );
+    AddChoice( "mode.radius.unitc.phy" , "Image physical space" );
     SetParameterDescription("mode.radius.unitc.phy",
       "The unit for the center coordinates will be the physical measure of the image.");
     AddChoice( "mode.radius.unitc.lonlat" , "Lon/Lat" );
     SetParameterDescription("mode.radius.unitc.lonlat",
       "The unit for the center coordinates will be the longitude and the latitude.");
 
-    // Elevation
-    ElevationParametersHandler::AddElevationParameters(this,"elev");
 
     // Standard parameter
     AddParameter(ParameterType_Int,  "startx", "Start X");
@@ -186,6 +192,10 @@ private:
     SetParameterDescription("sizex","size along x in pixels.");
     AddParameter(ParameterType_Int,  "sizey",  "Size Y");
     SetParameterDescription("sizey","size along y in pixels.");
+
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this,"elev");
+    AddRAMParameter();
 
     // Default values
     SetDefaultParameterInt("startx", 0);
