@@ -3,7 +3,7 @@ function(patch_cmake_files)
 
   set(PATCH_DIR_NAME ${PATCH_NAME}-${PATCH_VERSION})
   set(PATCH_DIR "${SUPERBUILD_INSTALL_DIR}/lib/cmake/${PATCH_DIR_NAME}")
-  set(PATCH_STAGE_DIR ${CMAKE_CURRENT_BINARY_DIR}/staging/${PATCH_DIR_NAME})
+  set(PATCH_STAGE_DIR ${CMAKE_CURRENT_BINARY_DIR}/patched/${PATCH_DIR_NAME})
 
   ##message("COPY ${PATCH_DIR} to ${PATCH_STAGE_DIR} for patching")
 
