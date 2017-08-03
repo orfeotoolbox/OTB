@@ -103,14 +103,14 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
 
     tmpInputImageParameter->SetFromFileName(filename);
-    
+
     if(!tmpInputImageParameter->HasValue())
       {
       // If loading failed
       this->ClearValue();
       return false;
       }
-    
+
     m_InputImageParameterVector.push_back(tmpInputImageParameter);
     m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
     SetActive(true);
@@ -146,7 +146,7 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
 
     m_InputImageParameterVector[id] = tmpInputImageParameter;
     m_ImageList->SetNthElement(id,tmpInputImageParameter->GetFloatVectorImage());
-      
+
     this->Modified();
     SetActive(true);
     return true;
@@ -166,12 +166,12 @@ InputImageListParameter::GetFileNameList() const
     {
     filenames.push_back( (*it)->GetFileName() );
     }
-  
+
   return filenames;
 }
 
 
-std::string
+const std::string &
 InputImageListParameter::GetNthFileName( unsigned int i ) const
 {
     if(m_InputImageParameterVector.size()<i)
@@ -223,13 +223,13 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
     {
     // Try to build a new ParameterInputImage
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-    
+
     tmpInputImageParameter->SetImage(imList->GetNthElement(i));
-    
+
     m_InputImageParameterVector.push_back(tmpInputImageParameter);
     m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
     }
-  
+
   SetActive(true);
   this->Modified();
 }
@@ -248,10 +248,10 @@ void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
     {
     return;
     }
-  
+
   // Try to build a new ParameterInputImage
   InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-  
+
   tmpInputImageParameter->SetImage(img);
 
   m_InputImageParameterVector[i] = tmpInputImageParameter;
@@ -275,9 +275,9 @@ InputImageListParameter::AddImage(ImageBaseType* image)
     }
 
   InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-  
+
   tmpInputImageParameter->SetImage(image);
-  
+
   m_InputImageParameterVector.push_back(tmpInputImageParameter);
   m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
 
@@ -338,4 +338,3 @@ InputImageListParameter::ClearValue()
 
 }
 }
-
