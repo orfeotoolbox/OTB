@@ -33,6 +33,6 @@ set_tests_properties ( Tu_selftester PROPERTIES DEPENDS Tu_install_package)
 
 add_test(
   NAME Tu_uninstall_otb
-  COMMAND ${pkg_extracted_dir}/uninstall_otb${my_ext}
+  COMMAND ${pkg_extracted_dir}/tools/uninstall_otb${my_ext}
   WORKING_DIRECTORY ${testing_dir}
   )
