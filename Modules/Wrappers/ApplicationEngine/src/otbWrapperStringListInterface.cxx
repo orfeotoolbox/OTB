@@ -19,7 +19,7 @@
  */
 
 
-#include "otbWrapperAbstractStringListParameter.h"
+#include "otbWrapperStringListInterface.h"
 
 
 namespace otb

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperAbstractStringListParameter_h
-#define otbWrapperAbstractStringListParameter_h
+#ifndef otbWrapperStringListInterface_h
+#define otbWrapperStringListInterface_h
 
 
 #include <string>
@@ -34,12 +34,12 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class AbstractStringListParameter
+/** \class StringListInterface
  *  \brief This class represents a list of InputFilename parameter
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT AbstractStringListParameter
+class OTBApplicationEngine_EXPORT StringListInterface
 {
 public:
   typedef std::vector< std::string > StringVector;
@@ -65,10 +65,13 @@ public:
   /** Erase one element of the list. */
   virtual void Erase( unsigned int id ) = 0;
 
+  /** Retrieve number of elements */
+  virtual unsigned int Size() const = 0;
+
 
 protected:
   /** Constructor */
-  AbstractStringListParameter();
+  StringListInterface() {};
 
 
 private:
@@ -80,4 +83,4 @@ private:
 } // End namespace otb
 
 
-#endif // otbWrapperAbstractStringListParameter_h
+#endif // otbWrapperStringListInterface_h
