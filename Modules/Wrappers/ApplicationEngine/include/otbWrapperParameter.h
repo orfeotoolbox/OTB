@@ -220,18 +220,19 @@ public:
 
 protected:
   /** Constructor */
-  Parameter() : m_Name(""),
-                m_Description(""),
-                m_Key(""),
-                m_Mandatory(true),
-                m_Active(false),
-                m_UserValue(false),
-                m_AutomaticValue(false),
-                m_DefaultValueMode(DefaultValueMode_UNKNOWN),
-                m_UserLevel(UserLevel_Basic),
-                m_Role(Role_Input),
-                m_Root(this),
-                m_IsChecked(false)
+  Parameter() :
+    m_Name( "" ),
+    m_Description( "" ),
+    m_Key( "" ),
+    m_Mandatory( true ),
+    m_Active( false ),
+    m_UserValue( false ),
+    m_AutomaticValue( false ),
+    m_DefaultValueMode( DefaultValueMode_UNKNOWN ),
+    m_UserLevel( UserLevel_Basic ),
+    m_Role( Role_Input ),
+    m_Root( this ),
+    m_IsChecked( false )
   {}
 
   /** Destructor */
