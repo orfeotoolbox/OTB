@@ -48,7 +48,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperApplicationRegistry.cxx
   otbWrapperApplicationFactoryBase.cxx
   otbWrapperCompositeApplication.cxx
-  otbWrapperAbstractStringListParameter.cxx
+  otbWrapperStringListInterface.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})
