@@ -21,13 +21,17 @@
 #ifndef otbWrapperQtWidgetInputImageListParameter_h
 #define otbWrapperQtWidgetInputImageListParameter_h
 
+
+#include "OTBQtWidgetExport.h"
+#include "otbWrapperQtWidgetParameterBase.h"
+
+
 #include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "otbQtFileSelectionWidget.h"
-#endif //tag=QT4-boost-compatibility
+
 
 namespace otb
 {
+
 namespace Wrapper
 {
 
@@ -36,11 +40,13 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputImageListParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetInputImageListParameter :
+    public QtWidgetParameterBase
 {
   Q_OBJECT
+
 public:
-  QtWidgetInputImageListParameter(InputImageListParameter*, QtWidgetModel*);
+  QtWidgetInputImageListParameter( InputImageListParameter *, QtWidgetModel * );
   ~QtWidgetInputImageListParameter() ITK_OVERRIDE;
 
 
@@ -71,10 +77,8 @@ private:
 
   InputImageListParameter::Pointer m_InputImageListParam;
 
-  QHBoxLayout * m_HLayout;
-  QVBoxLayout * m_FileLayout;
-  QScrollArea * m_Scroll;
-  std::vector<QtFileSelectionWidget *> m_FileSelectionList;
+
+private:
 };
 
 

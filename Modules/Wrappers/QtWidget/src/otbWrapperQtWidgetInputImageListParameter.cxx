@@ -20,16 +20,23 @@
 
 #include "otbWrapperQtWidgetInputImageListParameter.h"
 
+#include "otbWrapperQtWidgetListEditWidget.h"
+
+
 namespace otb
 {
 namespace Wrapper
 {
 
-QtWidgetInputImageListParameter::QtWidgetInputImageListParameter(InputImageListParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
-  m_InputImageListParam(param)
+QtWidgetInputImageListParameter
+::QtWidgetInputImageListParameter( InputImageListParameter * param,
+				   QtWidgetModel * m ) :
+  QtWidgetParameterBase( param, m )
 {
- connect(this, SIGNAL(Change()), GetModel(), SLOT(NotifyUpdate()));
+  connect(
+    this, SIGNAL( Change() ),
+    GetModel(), SLOT( NotifyUpdate() )
+  );
 }
 
 QtWidgetInputImageListParameter::~QtWidgetInputImageListParameter()
@@ -38,6 +45,7 @@ QtWidgetInputImageListParameter::~QtWidgetInputImageListParameter()
 
 void QtWidgetInputImageListParameter::DoUpdateGUI()
 {
+#if 0
   if(!m_InputImageListParam)
     return;
 
@@ -59,107 +67,31 @@ void QtWidgetInputImageListParameter::DoUpdateGUI()
       );
       }
     }
+#endif
 }
-void QtWidgetInputImageListParameter::DoCreateWidget()
+
+void
+QtWidgetInputImageListParameter
+::DoCreateWidget()
 {
-  m_FileSelectionList.clear();
-  const unsigned int sp(2);
-  const unsigned int buttonSize(30);
+  ListEditWidget * widget = new ListEditWidget();
 
-  // Global layout
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  hLayout->setSpacing(sp);
-  hLayout->setContentsMargins(sp, sp, sp, sp);
+  //
+  // Global Layout
+  QGridLayout * layout = new QGridLayout();
 
-  // Button layout
-  QVBoxLayout * buttonLayout = new QVBoxLayout;
-  buttonLayout->setSpacing(sp);
-  buttonLayout->setContentsMargins(sp, sp, sp, sp);
+  layout->setSpacing( 1 );
+  layout->setContentsMargins( 2, 2, 2, 2 );
 
-  QHBoxLayout * addSupLayout = new QHBoxLayout;
-  addSupLayout->setSpacing(sp);
-  addSupLayout->setContentsMargins(sp, sp, sp, sp);
+  layout->addWidget( widget );
 
-  QHBoxLayout * upDownLayout = new QHBoxLayout;
-  upDownLayout->setSpacing(sp);
-  upDownLayout->setContentsMargins(sp, sp, sp, sp);
-
-  // Add file button
-  QPushButton * addButton = new QPushButton;
-  addButton->setText("+");
-  addButton->setFixedWidth(buttonSize);
-  addButton->setToolTip("Add a file selector...");
-  connect(addButton, SIGNAL(clicked()), this, SLOT(AddFile()));
-  addSupLayout->addWidget(addButton);
-
-  // Suppress file button
-  QPushButton * supButton = new QPushButton;
-  supButton->setText("-");
-  supButton->setFixedWidth(buttonSize);
-  supButton->setToolTip("Suppress the selected file...");
-  connect(supButton, SIGNAL(clicked()), this, SLOT(SuppressFile()));
-  addSupLayout->addWidget(supButton);
-  buttonLayout->addLayout(addSupLayout);
-
-  // Up file edit
-  QPushButton * upButton = new QPushButton;
-  upButton->setText("Up");
-  upButton->setFixedWidth(buttonSize);
-  upButton->setToolTip("Up the selected file in the list...");
-  connect(upButton, SIGNAL(clicked()), this, SLOT(UpFile()));
-  upDownLayout->addWidget(upButton);
-
-  // Down file edit
-  QPushButton * downButton = new QPushButton;
-  downButton->setText("Down");
-  downButton->setFixedWidth(buttonSize);
-  downButton->setToolTip("Down the selected file in the list...");
-  connect(downButton, SIGNAL(clicked()), this, SLOT(DownFile()));
-  upDownLayout->addWidget(downButton);
-  buttonLayout->addLayout(upDownLayout);
-
-  // Erase file edit
-  QPushButton * eraseButton = new QPushButton;
-  eraseButton->setText("Erase");
-  eraseButton->setFixedWidth(2*(buttonSize+sp));
-  eraseButton->setToolTip("Erase the selected file of the list...");
-  connect(eraseButton, SIGNAL(clicked()), this, SLOT(EraseFile()));
-  buttonLayout->addWidget(eraseButton);
-
-  QVBoxLayout * fileLayout = new QVBoxLayout();
-  fileLayout->setSpacing(0);
-
-  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  fileSelection->SetIOMode( QtFileSelectionWidget::IO_MODE_INPUT );
-  fileSelection->setFixedHeight(30);
-  fileLayout->addWidget(fileSelection);
-  m_InputImageListParam->AddNullElement();
-  connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
-
-  m_FileSelectionList.push_back(fileSelection);
-
-  QGroupBox *mainGroup = new QGroupBox();
-  mainGroup->setLayout(fileLayout);
-  QScrollArea * s = new QScrollArea();
-  s->setWidget(mainGroup);
-  s->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  s->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  s->setWidgetResizable(true);
-
-  hLayout->addWidget(s);
-  hLayout->addLayout(buttonLayout);
-
-  this->setLayout(hLayout);
-
-  m_FileLayout = fileLayout;
-  m_HLayout = hLayout;
-  m_Scroll = s;
-
+  setLayout( layout );
 }
 
 void
 QtWidgetInputImageListParameter::UpdateImageList()
 {
+#if 0
   /* Adding a NullElement so to make the m_FileSelectionList and
 * m_InputImageList's ImageList are of same size. So that GetImageList().Size()
 * seems to be happy.
@@ -184,11 +116,13 @@ QtWidgetInputImageListParameter::UpdateImageList()
   // notify of value change
   QString key(m_InputImageListParam->GetKey());
   emit ParameterChanged(key);
+#endif
 }
 
 void
 QtWidgetInputImageListParameter::UpFile()
 {
+#if 0
  if(m_FileSelectionList.size() < 2)
     return;
 
@@ -227,11 +161,13 @@ QtWidgetInputImageListParameter::UpFile()
   this->UpdateFileList(idMap);
 
   this->RecreateImageList();
+#endif
 }
 
 void
 QtWidgetInputImageListParameter::DownFile()
 {
+#if 0
   if(m_FileSelectionList.size() < 2) return;
 
   m_FileLayout = new QVBoxLayout();
@@ -268,12 +204,15 @@ QtWidgetInputImageListParameter::DownFile()
   this->UpdateFileList(idMap);
 
   this->RecreateImageList();
+#endif
 }
 
 
 void
-QtWidgetInputImageListParameter::UpdateFileList(std::map<unsigned int, unsigned int> idMap)
+QtWidgetInputImageListParameter
+::UpdateFileList( std::map< unsigned int, unsigned int > /* idMap */ )
 {
+#if 0
   std::vector<QtFileSelectionWidget *> tmpList;
   // Keys become values and inverse
   std::map<unsigned int, unsigned int> idMapBis;
@@ -299,12 +238,14 @@ QtWidgetInputImageListParameter::UpdateFileList(std::map<unsigned int, unsigned 
   // notify of value change
   QString key(m_InputImageListParam->GetKey());
   emit ParameterChanged(key);
+#endif
 }
 
 
 void
 QtWidgetInputImageListParameter::AddFile()
 {
+#if 0
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
 
@@ -334,11 +275,13 @@ QtWidgetInputImageListParameter::AddFile()
   this->update();
 
   emit FileSelectionWidgetAdded( fileSelection );
+#endif
 }
 
 void
 QtWidgetInputImageListParameter::SuppressFile()
 {
+#if 0
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
   std::vector<QtFileSelectionWidget *> tmpList;
@@ -359,11 +302,13 @@ QtWidgetInputImageListParameter::SuppressFile()
 
   this->update();
   this->RecreateImageList();
+#endif
 }
 
 void
 QtWidgetInputImageListParameter::EraseFile()
 {
+#if 0
   m_FileSelectionList.clear();
 
   m_FileLayout = new QVBoxLayout();
@@ -382,10 +327,12 @@ QtWidgetInputImageListParameter::EraseFile()
 
   this->update();
   this->RecreateImageList();
+#endif
 }
 
 void QtWidgetInputImageListParameter::RecreateImageList()
 {
+#if 0
   // save value
   m_InputImageListParam->ClearValue();
 
@@ -407,6 +354,7 @@ void QtWidgetInputImageListParameter::RecreateImageList()
 
     emit ParameterChanged(key);
     }
+#endif
 }
 
 
