@@ -335,9 +335,9 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
 
   it.GoToBegin();
   bit.GoToBegin();
-  std::cout<<"min ="<<m_min<<std::endl;
-  std::cout<<"max ="<<m_max<<std::endl;
-  std::cout<<"step ="<<m_step<<std::endl;
+  // std::cout<<"min ="<<m_min<<std::endl;
+  // std::cout<<"max ="<<m_max<<std::endl;
+  // std::cout<<"step ="<<m_step<<std::endl;
   int pixelValue = 0;
   while( !bit.IsAtEnd() )
   {
@@ -494,10 +494,6 @@ void ContrastEnhancementFilter < TInputImage , TOutputImage >
     ++git;
     }
     
-
-
-  // gainLimiteContrast();
-  // std::cout<<"No_data value ="<<m_NoData<<std::endl;
   m_gainMultiplyer->SetInput1( input );
   m_gainMultiplyer->SetInput2( m_gainImage );
   m_gainMultiplyer->Update();

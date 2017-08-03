@@ -152,18 +152,26 @@ private:
         inImage->GetLargestPossibleRegion().GetSize()[1] );
         }
       {
+      std::ostringstream oss;
       if ( HasUserValue("thumb.h") && 
         GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]%GetParameterInt("thumb.h") != 0 )
         {
-        std::cout<<"error : hThumbnail = "<<GetParameterInt("thumb.h")<<" is not a divider of the input's height"<<std::endl;
-        std::cout<<"Image Height = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
+        oss <<"error : hThumbnail = "<<GetParameterInt("thumb.h")<<
+              " is not a divider of the input's height"<<std::endl;
+        oss<<"Image Height = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
+        // std::cout<<"error : hThumbnail = "<<GetParameterInt("thumb.h")<<" is not a divider of the input's height"<<std::endl;
+        // std::cout<<"Image Height = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
         }
       if ( HasUserValue("thumb.w") && 
         GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[0]%GetParameterInt("thumb.w") != 0 )
-        {
-        std::cout<<"error : wThumbnail = "<<GetParameterInt("thumb.w")<<"is not a divider of the input's width"<<std::endl;
-        std::cout<<"Image Width = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
+        {   
+        oss <<"error : wThumbnail = "<<GetParameterInt("thumb.w")<<
+              " is not a divider of the input's width"<<std::endl;
+        oss<<"Image Width = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
+        // std::cout<<"error : wThumbnail = "<<GetParameterInt("thumb.w")<<"is not a divider of the input's width"<<std::endl;
+        // std::cout<<"Image Width = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
         }
+      otbAppLogINFO( << oss.str() );
       }
       if ( !HasUserValue("nodata") )
         {
@@ -223,7 +231,7 @@ private:
       int m = inImage->GetVectorLength ();
       for (int chanel = 0 ; chanel<m ; chanel++ ) 
         {
-        std::cout<<"channel m ="<<m<<std::endl;
+        // std::cout<<"channel m ="<<m<<std::endl;
         FilterType::Pointer filter( FilterType::New() );
         filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
         if ( HasValue("hfact") )

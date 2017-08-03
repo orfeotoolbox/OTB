@@ -32,15 +32,15 @@ namespace otb
 
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT ContrastEnhancementFilter :
-	public itk::ImageToImageFilter< TInputImage , TOutputImage >
+  public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public:
 
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
 
-	/** typedef for standard classes. */
-	typedef ContrastEnhancementFilter Self;
+  /** typedef for standard classes. */
+  typedef ContrastEnhancementFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
@@ -54,120 +54,120 @@ public:
 
   itkTypeMacro(ContrastEnhancementFilter, ImageToImageFilter);
 
-	void
-	SetThumbnailSize( int wThumbnail , int hThumbnail )
-	{
-		m_hThumbnail = hThumbnail;
-		m_wThumbnail = wThumbnail;
-	}
+  void
+  SetThumbnailSize( int wThumbnail , int hThumbnail )
+  {
+    m_hThumbnail = hThumbnail;
+    m_wThumbnail = wThumbnail;
+  }
 
-	void
-	SetHistoThreshFactor( float threshFactor )
-	{
-		m_threshFactor = threshFactor;
-		m_thresh = true;
-	}
+  void
+  SetHistoThreshFactor( float threshFactor )
+  {
+    m_threshFactor = threshFactor;
+    m_thresh = true;
+  }
 
-	void
-	SetHistoSize( int size )
-	{
-		m_hSize = size;
-	}
+  void
+  SetHistoSize( int size )
+  {
+    m_hSize = size;
+  }
 
-	void
-	SetGainThresh( float lowThresh , float upThresh)
-	{
-		m_upThresh = upThresh;
-		m_lowThresh = lowThresh;
-	}
+  void
+  SetGainThresh( float lowThresh , float upThresh)
+  {
+    m_upThresh = upThresh;
+    m_lowThresh = lowThresh;
+  }
 
-	void
-	SetNoData( PixelType noData)
-	{
-		m_NoData = noData;
-	}
+  void
+  SetNoData( PixelType noData)
+  {
+    m_NoData = noData;
+  }
 
-	void
-	SetHistoThresh(bool thresh)
-	{
-		m_thresh = thresh;
-	}
+  void
+  SetHistoThresh(bool thresh)
+  {
+    m_thresh = thresh;
+  }
 
 protected:
- 	ContrastEnhancementFilter();
- 	~ContrastEnhancementFilter() ITK_OVERRIDE {}
+  ContrastEnhancementFilter();
+  ~ContrastEnhancementFilter() ITK_OVERRIDE {}
   // void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
- 	typedef itk::MultiplyImageFilter< InputImageType, ImageGainType, OutputImageType > MultiplyImageFilterType;
- 	typename MultiplyImageFilterType::Pointer m_gainMultiplyer;
- 	typename ImageBinType::Pointer m_binImage;
- 	typename ImageGainType::Pointer m_gainImage;
+  typedef itk::MultiplyImageFilter< InputImageType, ImageGainType, OutputImageType > MultiplyImageFilterType;
+  typename MultiplyImageFilterType::Pointer m_gainMultiplyer;
+  typename ImageBinType::Pointer m_binImage;
+  typename ImageGainType::Pointer m_gainImage;
 
- 	double m_step;
- 	PixelType m_min;
- 	PixelType m_max;
- 	std::vector< int > m_nbPixel;
- 	int m_hSize;
- 	int m_wThumbnail;
- 	int m_hThumbnail;
- 	float m_threshFactor;
- 	bool m_thresh;
- 	float m_lowThresh;
- 	float m_upThresh;
- 	PixelType m_NoData;
+  double m_step;
+  PixelType m_min;
+  PixelType m_max;
+  std::vector< int > m_nbPixel;
+  int m_hSize;
+  int m_wThumbnail;
+  int m_hThumbnail;
+  float m_threshFactor;
+  bool m_thresh;
+  float m_lowThresh;
+  float m_upThresh;
+  PixelType m_NoData;
 
 
- 	void GenerateData();
+  void GenerateData();
 
 private:
   ContrastEnhancementFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   void 
-	equalized( const std::vector < int > & inputHisto ,
-	           const std::vector< int > & targetHisto ,
-	           std::vector < int > & lut );
-	
-	void
-	equalized( const std::vector < std::vector < int > > & gridHisto , 
-						 const std::vector< std::vector < int > > & gridTarget,
-						 std::vector < std::vector < int > > & gridLut ,
-						 int nW ,
-						 int nH );
-	
-	void
-	computehisto(	std::vector < std::vector < int > > & gridHisto ,
-								int nW );
+  equalized( const std::vector < int > & inputHisto ,
+             const std::vector< int > & targetHisto ,
+             std::vector < int > & lut );
+  
+  void
+  equalized( const std::vector < std::vector < int > > & gridHisto , 
+             const std::vector< std::vector < int > > & gridTarget,
+             std::vector < std::vector < int > > & gridLut ,
+             int nW ,
+             int nH );
+  
+  void
+  computehisto( std::vector < std::vector < int > > & gridHisto ,
+                int nW );
 
 // Create the target for each thumbnail and compute the min and max
 // of the image without taking into account the nodata
-	void
-	createTarget( std::vector < std::vector < int > > & gridTarget ,
-								int nW ,
-								int nH );
+  void
+  createTarget( std::vector < std::vector < int > > & gridTarget ,
+                int nW ,
+                int nH );
 
-	float
-	interpoleGain( const std::vector < std::vector < int > > & gridLut ,
-								 int pixelValue ,
+  float
+  interpoleGain( const std::vector < std::vector < int > > & gridLut ,
+                 int pixelValue ,
                  typename TInputImage::IndexType index ,
                  int nW ,
                  int nH );
 
-	void
-	histoLimiteContrast( std::vector < std::vector < int > > & gridHisto ,
-											 const std::vector < int > & hThresh ,
-											 int nW ,
-											 int nH );
-	
-	void
-	gainLimiteContrast();
+  void
+  histoLimiteContrast( std::vector < std::vector < int > > & gridHisto ,
+                       const std::vector < int > & hThresh ,
+                       int nW ,
+                       int nH );
+  
+  void
+  gainLimiteContrast();
 
-	void
-	preprocess();
+  void
+  preprocess();
 
-	float
-	postprocess( const std::vector < int > & lut ,
-							 int pixelValue );
+  float
+  postprocess( const std::vector < int > & lut ,
+               int pixelValue );
 
 };
 
