@@ -134,7 +134,6 @@ include(process_file_recurse)
 include(install_without_message)
 include(install_rule)
 include(isfile_symlink)
-include(update_symlinks_script)
 include(detect_using_file_command)
 include(install_otbapp_wrapper_scripts)
 
