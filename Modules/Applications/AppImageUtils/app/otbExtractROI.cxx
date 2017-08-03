@@ -79,7 +79,7 @@ private:
       "circle defined and limited by the image dimension. The fit mode "
       "needs a reference image or vector and the dimension of the extracted "
       "region will be the same as the extent of the reference. "
-      "Different are available such as pixel, image physical space "
+      "Different units are available such as pixel, image physical space "
       "or longitude and latitude.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -144,7 +144,7 @@ private:
     SetParameterDescription("mode.extent.unit.pxl",
       "The unit for the parameters coordinates will be the pixel, meaning the "
       "index of the two points.");
-    AddChoice( "mode.extent.unit.phy" , "Physical measure" );
+    AddChoice( "mode.extent.unit.phy" , "Image physical space" );
     SetParameterDescription("mode.extent.unit.phy",
       "The unit for the parameters coordinates will be the physical "
       "measure of the image.");
@@ -237,6 +237,11 @@ private:
     SetDocExampleParameterValue("mode.extent.lrx", "150");
     SetDocExampleParameterValue("mode.extent.lry", "150");
     SetDocExampleParameterValue("out", "ExtractROI.tif");
+    SetMinimumParameterIntValue("sizex", 0);
+    SetMinimumParameterIntValue("sizey", 0);
+    SetMinimumParameterIntValue("startx", 0);
+    SetMinimumParameterIntValue("starty", 0);
+    SetMinimumParameterFloatValue( "mode.radius.r" , 0 );
 
     SetOfficialDocLink();
   }
@@ -266,11 +271,11 @@ private:
 
         // Compute extent parameter with default sizex and sizey
         if ( GetParameterString( "mode" ) == "extent" && userExtent )
-          computeExtentFromIndex( inImage, largestRegion );
+          ComputeExtentFromIndex( inImage, largestRegion );
 
         // Compute radius parameter with default sizex and sizey
         if ( GetParameterString( "mode" ) == "radius" && userRadius )
-          computeRadiusFromIndex( inImage , largestRegion );
+          ComputeRadiusFromIndex( inImage , largestRegion );
         }
 
 
@@ -291,26 +296,18 @@ private:
         }
 
       // Put the limit of the index and the size relative the image
-      SetMinimumParameterIntValue("sizex", 0);
-      SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));
-
-      SetMinimumParameterIntValue("sizey", 0);
-      SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));
-
-      SetMinimumParameterIntValue("startx", 0);
+      
+      SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));      
+      SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));      
       SetMaximumParameterIntValue("startx", largestRegion.GetSize(0));
-
-      SetMinimumParameterIntValue("starty", 0);
       SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
 
-      SetMinimumParameterFloatValue( "mode.radius.r" , 0 );
-
-
+      
       // Update the start and size parameter depending on the mode
       if ( GetParameterString("mode") == "extent" && !userExtent)
-          computeIndexFromExtent();
+          ComputeIndexFromExtent();
       if (GetParameterString("mode") == "radius" && !userRadius)
-          computeIndexFromRadius();
+          ComputeIndexFromRadius();
 
       
       // Crop the roi region to be included in the largest possible
@@ -358,7 +355,7 @@ private:
       MandatoryOff("sizex");
       MandatoryOff("sizey");
       }
-    else if ( GetParameterString( "mode" ) == "standard" )
+    else
       {
       MandatoryOn("startx");
       MandatoryOn("starty");
@@ -401,22 +398,22 @@ private:
   }
 
   void
-  computeIndexFromExtent()
+  ComputeIndexFromExtent()
   {
     assert( GetParameterString( "mode" ) == "extent" );
     int pixelValue = -1 ;
     // Compute standard parameter depending on the unit chosen by the user
     if (GetParameterString( "mode.extent.unit" ) == "pxl" )
       {
-      pixelValue = std::floor( GetParameterFloat( "mode.extent.ulx" ) );
+      pixelValue = std::round( GetParameterFloat( "mode.extent.ulx" ) );
       SetParameterInt( "startx", pixelValue , true );
-      pixelValue = std::floor( GetParameterFloat( "mode.extent.lrx" ) \
-                   - pixelValue ) + 1;
+      pixelValue = std::round( GetParameterFloat( "mode.extent.lrx" ) \
+                   - pixelValue ) + 1 ;
       SetParameterInt( "sizex", pixelValue , true );
-      pixelValue = std::floor( GetParameterFloat( "mode.extent.uly" ) );
+      pixelValue = std::round( GetParameterFloat( "mode.extent.uly" ) );
       SetParameterInt( "starty", pixelValue , true );
-      pixelValue = std::floor( GetParameterFloat( "mode.extent.lry" ) \
-                   - pixelValue ) + 1;
+      pixelValue = std::round( GetParameterFloat( "mode.extent.lry" ) \
+                   - pixelValue ) + 1 ;
       SetParameterInt( "sizey", pixelValue , true );
       }
     else if( GetParameterString( "mode.extent.unit" ) == "phy" )
@@ -477,7 +474,7 @@ private:
   }
 
   void
-  computeExtentFromIndex(const ImageType * input , 
+  ComputeExtentFromIndex(const ImageType * input , 
                          const ImageType::RegionType & largestRegion )
   {
     FloatVectorImageType::IndexType uli , lri;
@@ -523,7 +520,7 @@ private:
   }
 
   void
-  computeIndexFromRadius()
+  ComputeIndexFromRadius()
   {
     int pixelValue = -1;
     assert( GetParameterString( "mode" ) == "radius" );
@@ -532,7 +529,7 @@ private:
       {
       if ( GetParameterString( "mode.radius.unitr" ) == "pxl" )
         {
-        pixelValue = std::floor( 2 * GetParameterFloat( "mode.radius.r" ) + 1);
+        pixelValue = std::floor( 2 * GetParameterFloat( "mode.radius.r" ) ) + 1;
         SetParameterInt( "sizey", pixelValue , true );
         SetParameterInt( "sizex", pixelValue , true );
         }
@@ -582,16 +579,14 @@ private:
     bool size = ( HasValue("sizex")  && HasValue("sizey") );
     if ( size ) 
       {
-      int radiusxi = GetParameterInt("sizex") / 2  \
-                    - ( (GetParameterInt("sizex") + 1 ) % 2);
-      int radiusyi = GetParameterInt("sizey") / 2  \
-                    - ( (GetParameterInt("sizey") + 1 ) % 2);
+      int radiusxi = GetParameterInt("sizex") / 2 ;
+      int radiusyi = GetParameterInt("sizey") / 2 ;
 
       if ( GetParameterString( "mode.radius.unitc" ) == "pxl" && size )
         {
-        pixelValue = std::floor(GetParameterFloat( "mode.radius.cx" ));
+        pixelValue = std::round(GetParameterFloat( "mode.radius.cx" ));
         SetParameterInt( "startx", pixelValue - radiusxi , true );
-        pixelValue = std::floor(GetParameterFloat( "mode.radius.cy" ));
+        pixelValue = std::round(GetParameterFloat( "mode.radius.cy" ));
         SetParameterInt( "starty", pixelValue - radiusyi , true );
         }
       if ( GetParameterString( "mode.radius.unitc" ) == "phy" && size ) 
@@ -632,7 +627,7 @@ private:
   }
 
   void
-  computeRadiusFromIndex(const ImageType * input , 
+  ComputeRadiusFromIndex(const ImageType * input , 
                          const ImageType::RegionType & largestRegion)
   {
     FloatVectorImageType::IndexType centeri , helpRxi, helpRyi;

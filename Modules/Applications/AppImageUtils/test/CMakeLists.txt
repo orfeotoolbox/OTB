@@ -80,22 +80,22 @@ otb_test_application(NAME apTvUtExtractROISizeTooBig
 otb_test_application(NAME apTvUtExtractROISizeTooBigExtent
                      APP  ExtractROI
                      OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                             -out ${TEMP}/apTvUtExtractROISizeTooBig.tif
+                             -out ${TEMP}/apTvUtExtractROISizeTooBigExtent.tif
                              -mode extent
                              -mode.extent.lrx 1000000
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROISizeTooBig.tif)
+                             ${TEMP}/apTvUtExtractROISizeTooBigExtent.tif)
 
 otb_test_application(NAME apTvUtExtractROISizeTooBigRadius
                      APP  ExtractROI
                      OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                             -out ${TEMP}/apTvUtExtractROISizeTooBig.tif
+                             -out ${TEMP}/apTvUtExtractROISizeTooBigRadius.tif
                              -mode radius
                              -mode.radius.r 1000000
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROISizeTooBig.tif)
+                             ${TEMP}/apTvUtExtractROISizeTooBigRadius.tif)
 
 otb_test_application(NAME apTvUtExtractROISizeNULL
                      APP  ExtractROI
