@@ -86,6 +86,7 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   # Ignore clang's summary warning, assuming prior text has matched some
   # other warning expression:
   "[0-9,]+ warnings? generated."
+  "cl...Command.line.warning.D9025"
   ".*include.opencv2.*warning.*"
   ".*include.opencv2.*note.*"
   ".*include.kml.*warning.*"
