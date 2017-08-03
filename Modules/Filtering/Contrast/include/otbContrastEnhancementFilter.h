@@ -123,11 +123,13 @@ private:
   ContrastEnhancementFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  // Equalized a simple histogram with respect to a target and fill the lut 
   void 
   equalized( const std::vector < int > & inputHisto ,
              const std::vector< int > & targetHisto ,
              std::vector < int > & lut );
   
+  // Framework to equalized each histogram
   void
   equalized( const std::vector < std::vector < int > > & gridHisto , 
              const std::vector< std::vector < int > > & gridTarget,
@@ -135,6 +137,7 @@ private:
              int nW ,
              int nH );
   
+  // Compute histogram with respect of the thumbnail frameworrk
   void
   computehisto( std::vector < std::vector < int > > & gridHisto ,
                 int nW );
@@ -146,6 +149,7 @@ private:
                 int nW ,
                 int nH );
 
+  // Interpole gain with the nearest neighbours (bilineare)
   float
   interpoleGain( const std::vector < std::vector < int > > & gridLut ,
                  int pixelValue ,
@@ -153,18 +157,23 @@ private:
                  int nW ,
                  int nH );
 
+  // Limite the contrast by clipping histogram (See the CLAHE original algorithm
+  // for extensive description)
   void
   histoLimiteContrast( std::vector < std::vector < int > > & gridHisto ,
                        const std::vector < int > & hThresh ,
                        int nW ,
                        int nH );
   
+  // Limite the contrast by thresholding the gain image (not used)
   void
   gainLimiteContrast();
 
+  // Compute a "binimage" representing that has bin value instead of pixel value
   void
   preprocess();
 
+  // Compute the real gain thanks to the "bin gain"
   float
   postprocess( const std::vector < int > & lut ,
                int pixelValue );

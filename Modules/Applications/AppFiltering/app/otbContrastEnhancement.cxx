@@ -228,6 +228,7 @@ private:
 
     if ( GetParameterString("mode") == "each")
       {
+      // Each channel will be equalized
       int m = inImage->GetVectorLength ();
       for (int chanel = 0 ; chanel<m ; chanel++ ) 
         {
@@ -252,16 +253,27 @@ private:
 
     if ( GetParameterString("mode") == "lum")
       {
+      // Retreive order of the RGB channels
       std::vector<int> rgb(3 , 0);
       rgb[0] = GetParameterInt("mode.lum.red.ch");
       rgb[1] = GetParameterInt("mode.lum.gre.ch");
       rgb[2] = GetParameterInt("mode.lum.blu.ch");
-
+      // Retreive the coeff for each channel
       std::vector<float> lumCoef(3 , 0.0);
       lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
       lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
       lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
-
+      // Normalize those coeff
+      float sum = 0.0;
+      for (float f : lumCoef)
+        {
+        sum +=f;
+        }
+      assert(sum>0);
+      for (int i = 0 ; i<3 ; i++ )
+        {
+        lumCoef[1] /= sum;
+        }
       itk::ImageRegionIterator < FloatImageType > 
           rit ( inputImageList->GetNthElement(rgb[0]) ,
                inputImageList->GetNthElement(rgb[0])->GetRequestedRegion() );
@@ -271,10 +283,10 @@ private:
       itk::ImageRegionIterator < FloatImageType > 
           bit ( inputImageList->GetNthElement(rgb[2]) ,
                inputImageList->GetNthElement(rgb[2])->GetRequestedRegion() );
-
+      // Create Luminance image 
       FloatImageType::Pointer luminance(FloatImageType::New());
-      luminance->SetRegions( inputImageList->GetNthElement(rgb[0])->GetRequestedRegion() );
       luminance->Allocate();
+      luminance->SetRegions( inputImageList->GetNthElement(rgb[0])->GetLargestPossibleRegion() );
       luminance->SetOrigin( inputImageList->GetNthElement(rgb[0])->GetOrigin() );
       luminance->SetSpacing( inputImageList->GetNthElement(rgb[0])->GetSpacing() );
 
@@ -293,14 +305,24 @@ private:
         ++rit;
         ++git;
         }
+
+      // Apply equalization on the luminance
       FilterType::Pointer filter( FilterType::New() );
       filter->SetInput( luminance ) ;
-      filter->SetHistoThreshFactor(4);
-      filter->SetHistoSize(512);
-      filter->SetNoData(0);
+      if ( HasValue("hfact") )
+        {
+        filter->SetHistoThreshFactor( GetParameterInt("hfact") );
+        }
+      filter->SetHistoSize(GetParameterInt("bin"));
+      // Nodata has to be the same for all the channels
+      if ( HasUserValue("nodata") )
+        {
+        filter->SetNoData( GetParameterFloat("nodata") );
+        }
       filter->SetThumbnailSize( GetParameterInt("thumb.w") , 
                                 GetParameterInt("thumb.h") );
       filter->Update();
+
       itk::ImageRegionIterator < FloatImageType > 
           nlit ( filter->GetOutput() , 
                 filter->GetOutput()->GetRequestedRegion() );
@@ -311,6 +333,9 @@ private:
       git.GoToBegin();
       float gain = 0.0;
       float denum = 1;
+      // Compute the gain F(luminance)/luminance
+      // Check if the creation of a gain image and a multiplication 
+      // would be more efficient (memory and time)
       while ( !lit.IsAtEnd())
         {
         if ( lit.Get() != 0 )
