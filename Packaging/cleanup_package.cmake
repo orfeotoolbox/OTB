@@ -14,7 +14,7 @@ ${CMAKE_COMMAND} -E remove_directory
   if(cleanup_stagedir_rv)
   message(FATAL_ERROR  "Delete ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR} - FAILED\ncleanup_stagedir_ov=${cleanup_stagedir_ov}")
   else()
-  message(FATAL_ERROR  "Delete ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR} - OK")  
+  message(STATUS "Delete ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR} - OK")  
   endif()
 endif()
 
@@ -31,7 +31,7 @@ ${CMAKE_COMMAND} -E remove -f "${PACKAGE_OUTPUT_FILE}"
     if(cleanup_pkgfile_rv)
   message(FATAL_ERROR  "Delete ${PACKAGE_OUTPUT_FILE} - FAILED\ncleanup_pkgfile_ov=${cleanup_pkgfile_ov}")
   else()
-  message(FATAL_ERROR  "Delete ${PACKAGE_OUTPUT_FILE} - OK")  
+  message(STATUS "Delete ${PACKAGE_OUTPUT_FILE} - OK")  
   endif()
   
 endif()
