@@ -29,8 +29,7 @@
 namespace otb
 {
 
-
-template <class TInputImage, class TOutputImage >
+template < class TInputImage, class TOutputImage >
 class ITK_EXPORT ContrastEnhancementFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {

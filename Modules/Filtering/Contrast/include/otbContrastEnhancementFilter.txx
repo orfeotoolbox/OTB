@@ -46,8 +46,7 @@ ContrastEnhancementFilter < TInputImage , TOutputImage >
 	m_lowThresh = 0;
 	m_upThresh = INT_MAX;
   m_hSize = 256;
-  m_NoData = std::numeric_limits<double>::quiet_NaN();
-  m_nbPixel.resize( 1 , 0 );
+  m_NoData = std::numeric_limits< PixelType >::quiet_NaN();
 }
 
 template <class TInputImage, class TOutputImage >

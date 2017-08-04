@@ -19,10 +19,14 @@
 #
 otb_module_test()
 
-set(OTBContrastTests
-otbContrastEnhancementFilter.cxx
-)
+#set(OTBContrastTests
+#otbContrastEnhancementFilter.cxx
+#)
+#
+#add_executable(otbContrastTestDriver ${OTBContrastTests})
+#target_link_libraries(otbContrastTestDriver ${OTBContrast-Test_LIBRARIES})
+#otb_module_target_label(otbContrastTestDriver)
 
-add_executable(otbContrastTestDriver ${OTBContrastTests})
-target_link_libraries(otbContrastTestDriver ${OTBContrast-Test_LIBRARIES})
-otb_module_target_label(otbContrastTestDriver)
+add_executable(otbComputeLutFilterTest otbComputeLutFilterTest.cxx)
+target_link_libraries(otbComputeLutFilterTest ${OTBContrast-Test_LIBRARIES})
+otb_module_target_label(otbComputeLutFilterTest)
