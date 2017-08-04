@@ -50,3 +50,8 @@ add_test(
   )
   
 set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_install_package)
+
+
+#if(UNIX)
+  #TODO: add test with shellcheck for script files
+#endif()
