@@ -70,12 +70,13 @@ properties than the image to classify, in order to build a classification model.
 \subsection{Machine learning models}
 \label{sec:MLGenericFramework}
 
-The OTB supervised classification is implemented as a generic Machine Learning
+The OTB classification is implemented as a generic Machine Learning
 framework, supporting several possible machine learning libraries as backends.
 The base class \doxygen{otb}{MachineLearningModel} defines this framework.
 As of now libSVM (the machine learning library historically integrated in OTB),
 machine learning methods of OpenCV library (\cite{opencv_library}) and also
-Shark machine learning library (\cite{shark_library}) are available.
+Shark machine learning library (\cite{shark_library}) are available. Both
+supervised and unsupervised classifiers are supported in the framework.
 
 The current list of classifiers available through the same generic interface within the OTB is:
 
@@ -89,12 +90,14 @@ The current list of classifiers available through the same generic interface wit
   \item \textbf{GBT}: Gradient Boosted Tree classifier based on OpenCV (removed in version 3).
   \item \textbf{KNN}: K-Nearest Neighbors classifier based on OpenCV.
   \item \textbf{ANN}: Artificial Neural Network classifier based on OpenCV.
+  \item \textbf{SharkRF} : Random Forests classifier based on Shark.
+  \item \textbf{SharkKM} : KMeans unsupervised classifier based on Shark.
 \end{itemize}
 
 These models have a common interface, with the following major functions:
 \begin{itemize}
   \item \code{SetInputListSample(InputListSampleType *in)} : set the list of input samples
-  \item \code{SetTargetListSample(TargetListSampleType *in)} : set the list of target samples (used for supervised learning)
+  \item \code{SetTargetListSample(TargetListSampleType *in)} : set the list of target samples
   \item \code{Train()} : train the model based on input samples
   \item \code{Save(...)} : saves the model to file
   \item \code{Load(...)} : load a model from file
@@ -102,27 +105,70 @@ These models have a common interface, with the following major functions:
   \item \code{PredictBatch(...)} : prediction on a list of input samples
 \end{itemize}
 
-There is a factory mechanism on top of the model class. Given an input file,
-the factories are able to instanciate a model of the right type
-% TODO
+The \code{PredictBatch(...)} function can be multi-threaded when
+called either from a multi-threaded filter, or from a single location. In
+the later case, it creates several threads using OpenMP.
+There is a factory mechanism on top of the model class (see
+\doxygen{otb}{MachineLearningModelFactory}). Given an input file,
+the static function \code{CreateMachineLearningModel(...)} is able
+to instanciate a model of the right type.
+
+For unsupervised models, the target samples \textbf{still have to be set}. They
+won't be used so you can fill a ListSample with zeros.
+
 %-------------------------------------------------------------------------------
 \subsection{Training a model}
+
+The models are trained from a list of input samples, stored in a
+\subdoxygen{itk}{Statistics}{ListSample}. For supervised classifiers, they
+also need a list of targets associated to each input sample. Whatever the
+source of samples, it has to be converted into a \code{ListSample} before
+being fed into the model.
+
+Then, model-specific parameters can be set. And finally, the \code{Train()}
+method starts the learning step. Once the model is trained it can be saved
+to file using the function \code{Save()}. The following examples show how
+to do that.
 
 \input{TrainMachineLearningModelFromSamplesExample.tex}
 
 \input{TrainMachineLearningModelFromImagesExample.tex}
-% TODO
+
 %-------------------------------------------------------------------------------
 \subsection{Prediction of a model}
+
+For the prediction step, the usual process is to:
+\begin{itemize}
+\item Load an existing model from a file.
+\item Convert the data to predict into a \code{ListSample}.
+\item Run the \code{PredictBatch(...)} function.
+\end{itemize}
+
+There is an image filter that perform this step on a whole image, supporting
+streaming and multi-threading: \doxygen{otb}{ImageClassificationFilter}.
 
 \ifitkFullVersion
 \input{SupervisedImageClassificationExample.tex}
 \fi
 
-% TODO
 %-------------------------------------------------------------------------------
 \subsection{Integration in applications}
-% TODO
+
+The classifiers are integrated in several OTB Applications. There is a base
+class that provides an easy access to all the classifiers:
+\subdoxygen{otb}{Wrapper}{LearningApplicationBase}. As each machine learning
+model has a specific set of parameters, the base class
+\code{LearningApplicationBase} knows how to expose each type of classifier with
+its dedicated parameters (a task that is a bit tedious so we want to implement
+it only once). The \code{DoInit()} method creates a choice parameter named
+\code{classifier} which contains the different supported classifiers along
+with their parameters.
+
+The function \code{Train(...)} provide an easy way to train the selected
+classifier, with the corresponding parameters, and save the model to file.
+
+On the other hand, the function \code{Classify(...)} allows to load a model
+from file and apply it on a list of samples.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Supervised classification}
@@ -246,13 +292,33 @@ class which is most often selected by the whole set of SVM.
 
 %-------------------------------------------------------------------------------
 \subsection{Shark Random Forests}
-% TODO
+
+The Random Forests algorithm is also available in OTB machine learning
+framework. This model builds a set of decision trees. Each tree may not give
+a reliable prediction, but taking them together, they form a robust classifier.
+The prediction of this model is the mode of the predictions of individual trees.
+
+There are two implementations: one in OpenCV and the other on in
+Shark. The Shark implementation has a noteworthy advantage: the training step
+is parallel. It uses the following parameters:
+\begin{itemize}
+\item The number of trees to train
+\item The number of random attributes to investigate at each node
+\item The maximum node size to decide a split
+\item The ratio of the original training dataset to use as the out of bag sample
+\end{itemize}
+
+Except these specific parameter, its usage is exactly the same as the other
+machine learning models (such as the SVM model).
 
 %-------------------------------------------------------------------------------
-\subsection{Generic Kernel SVM}
+\subsection{Generic Kernel SVM (deprecated)}
 OTB has developed a specific interface for user-defined kernels. However, the 
-following functions use a deprecated OTB interface. A function 
-$k(\cdot,\cdot)$ is considered to be a kernel when:
+following functions use a deprecated OTB interface. The code source for these
+Generic Kernels has been removed from the official repository. It is now
+available as a remote module: \href{https://github.com/jmichel-otb/GKSVM}{GKSVM}.
+
+A function $k(\cdot,\cdot)$ is considered to be a kernel when:
 \begin{align}\label{eqMercer}
         \forall g(\cdot) \in {\cal L}^2(\mathbbm{R}^n) \quad & \text{so 
 that} \quad
@@ -293,16 +359,16 @@ the way to use it.
 
 Some pre-defined generic kernels have already been implemented in OTB:
 \begin{itemize}
-\item \doxygen{otb}{MixturePolyRBFKernelFunctor} which implements a 
+\item \code{otb::MixturePolyRBFKernelFunctor} which implements a 
 linear mixture
 of a polynomial and a RBF kernel;
-\item \doxygen{otb}{NonGaussianRBFKernelFunctor} which implements a non
+\item \code{otb::NonGaussianRBFKernelFunctor} which implements a non
 gaussian RBF kernel;
-\item \doxygen{otb}{SpectralAngleKernelFunctor}, a kernel that integrates
+\item \code{otb::SpectralAngleKernelFunctor}, a kernel that integrates
 the Spectral Angle, instead of the Euclidean distance, into an inverse 
 multiquadric kernel.
 This kernel may be appropriated when using multispectral data.
-\item \doxygen{otb}{ChangeProfileKernelFunctor}, a kernel which is
+\item \code{otb::ChangeProfileKernelFunctor}, a kernel which is
 dedicated to the supervized classification of the multiscale change profile
 presented in section \ref{sec:KullbackLeiblerProfile}.
 \end{itemize}
@@ -325,7 +391,24 @@ presented in section \ref{sec:KullbackLeiblerProfile}.
 
 \subsection{K-Means Classification}
 \label{sec:KMeansClassifier}
-% TODO : adapt for Shark implementation
+
+\subsubsection{Shark version}
+
+The KMeans algorithm has been implemented in Shark library, and has been
+wrapped in the OTB machine learning framework. It is the first unsupervised
+algorithm in this framework. It can be used in the same way as other machine
+learning models. Remember that even if unsupervised model don't use a label
+information on the samples, the target ListSample still has to be set in
+\code{MachineLearningModel}. A ListSample filled with zeros can be used.
+
+This model uses a hard clustering model with the following parameters:
+\begin{itemize}
+\item The maximum number of iterations
+\item The number of centroids (K)
+\item An option to normalize input samples
+\end{itemize}
+
+As with Shark Random Forests, the training step is parallel.
 
 \subsubsection{Simple version}
 \ifitkFullVersion
