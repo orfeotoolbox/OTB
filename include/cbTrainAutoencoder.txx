@@ -43,6 +43,13 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
   SetParameterDescription(
     "model.autoencoder.nbiter",
     "The maximum number of iterations used during training.");
+   
+  AddParameter(ParameterType_Int, "model.autoencoder.nbiterfinetuning",
+               "Maximum number of iterations during training");
+  SetParameterInt("model.autoencoder.nbiterfinetuning",0, false);
+  SetParameterDescription(
+    "model.autoencoder.nbiterfinetuning",
+    "The maximum number of iterations used during fine tuning of the whole network.");
   
   AddParameter(ParameterType_Float, "model.autoencoder.epsilon",
                " ");
@@ -151,6 +158,7 @@ void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 		}
 		dimredTrainer->SetNumberOfHiddenNeurons(nb_neuron);
 		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.autoencoder.nbiter"));
+		dimredTrainer->SetNumberOfIterationsFineTuning(GetParameterInt("model.autoencoder.nbiterfinetuning"));
 		dimredTrainer->SetEpsilon(GetParameterFloat("model.autoencoder.epsilon"));
 		dimredTrainer->SetInitFactor(GetParameterFloat("model.autoencoder.initfactor"));
 		dimredTrainer->SetRegularization(regularization);

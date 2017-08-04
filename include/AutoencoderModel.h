@@ -51,6 +51,9 @@ public:
 	itkGetMacro(NumberOfIterations,unsigned int);
 	itkSetMacro(NumberOfIterations,unsigned int);
 	
+	itkGetMacro(NumberOfIterationsFineTuning,unsigned int);
+	itkSetMacro(NumberOfIterationsFineTuning,unsigned int);
+	
 	itkGetMacro(Epsilon,double);
 	itkSetMacro(Epsilon,double);
 
@@ -111,6 +114,7 @@ private:
 	itk::Array<unsigned int> m_NumberOfHiddenNeurons;
 	/** Training parameters */
 	unsigned int m_NumberOfIterations; // stop the training after a fixed number of iterations
+	unsigned int m_NumberOfIterationsFineTuning; // stop the fine tuning after a fixed number of iterations
 	double m_Epsilon; // Stops the training when the training error seems to converge
 	itk::Array<double> m_Regularization;  // L2 Regularization parameter
 	itk::Array<double> m_Noise;  // probability for an input to be set to 0 (denosing autoencoder)
