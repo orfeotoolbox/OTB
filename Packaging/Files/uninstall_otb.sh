@@ -19,9 +19,11 @@
 # limitations under the License.
 #
 set -e
+rm -fv OUT_DIR/include/OTB-*
+rm -fv OUT_DIR/lib/{libotb*,libOTB*}
+rm -fr OUT_DIR/lib/{otb,python/_otbApplication*}
+rm -fv OUT_DIR/share/OTB*
+rm -fv OUT_DIR/bin/{otb*,monteverdi,mapla}
+rm -fv OUT_DIR/{mapla.sh,monteverdi.sh}
 
-CMAKE=$(which cmake)
-$CMAKE -S OUT_DIR/tools/cmake_uninstall_otb.cmake -DMY_INSTALL_DIR=OUT_DIR -DCMAKE_COMMAND=$CMAKE
-rm -f OUT_DIR/mapla.sh
-rm -f OUT_DIR/monteverdi.sh
 echo "OTB is now uninstalled from OUT_DIR"
