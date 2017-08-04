@@ -42,17 +42,13 @@ function(install_rule src_file)
       continue()
     elseif("${sfile_ABS_LOWER}" MATCHES "\\.la$")
       continue()
-    elseif("${sfile_NAME_LOWER}" MATCHES "^otbapp_")
-      set(install_dir "lib/otb/applications")
-      set(install_type PROGRAMS)
-      install_otbapp_wrapper_scripts(${sfile_NAME})
     else()
       if(UNIX)
-	#the last else() loop where we run a 'file' command to find file type and directory
-	set(install_type)
-	set(install_dir)
-	#this is whole other story
-	detect_using_file_command(${sfile_ABS} install_type install_dir)
+        #the last else() loop where we run a 'file' command to find file type and directory
+        set(install_type)
+        set(install_dir)
+        #this is whole other story
+        detect_using_file_command(${sfile_ABS} install_type install_dir)
       endif(UNIX)
     endif()
 
@@ -64,9 +60,18 @@ function(install_rule src_file)
       continue()
     endif()
     
-    if(NOT install_type OR NOT install_type)
+    # This check comes outside the first if-elseif ladder
+    # because no matter what extension of file type, otbapp_* must go
+    # into lib/otb/applications
+  if("${sfile_NAME_LOWER}" MATCHES "^otbapp_")
+    install_otbapp_wrapper_scripts(${sfile_NAME})
+    set(install_dir "lib/otb/applications")
+    set(install_type PROGRAMS)
+  endif()
+  
+    if(NOT install_type OR NOT install_dir)
       #throw fatal error and return
-      message(FATAL_ERROR "sfile_ABS=${sfile_ABS}.\ninstall_type=${install_dir}\ninstall_dir=${install_dir}")
+      message(FATAL_ERROR "sfile_ABS=${sfile_ABS}.\ninstall_type=${install_type}\ninstall_dir=${install_dir}")
       return()
     endif()
 
