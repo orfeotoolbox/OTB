@@ -32,11 +32,11 @@
 // \doxygen{otb}{SEMClassifier}. This class performs a stochastic version
 // of the EM algorithm, but instead of inheriting from
 // \doxygen{itk}{ExpectationMaximizationMixtureModelEstimator}, we chose to
-// inherit from \subdoxygen{itk}{Statistics}{ListSample< TSample >},
+// inherit from \subdoxygen{itk}{Statistics}{ListSample},
 // in the same way as \doxygen{otb}{SVMClassifier}.
 //
 // The program begins with \doxygen{otb}{VectorImage} and outputs
-// \doxygen{itb}{Image}. Then appropriate header files have to be included:
+// \doxygen{otb}{Image}. Then appropriate header files have to be included:
 //
 // Software Guide : EndLatex
 
@@ -144,7 +144,7 @@ int main(int argc, char * argv[])
 // When an initial segmentation is available, the classifier may use it
 // as image (of type \code{OutputImageType}) or as a
 // \doxygen{itk}{SampleClassifier} result (of type
-// \subdoxygen{itk}{Statistics}{MembershipSample< SampleType >}).
+// \subdoxygen{itk}{Statistics}{MembershipSample}).
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
@@ -205,7 +205,7 @@ int main(int argc, char * argv[])
 //  Software Guide : BeginLatex
 //
 //  The segmentation may outputs a result of type
-// \subdoxygen{itk}{Statistics}{MembershipSample< SampleType >} as it is the
+// \subdoxygen{itk}{Statistics}{MembershipSample} as it is the
 // case for the \doxygen{otb}{SVMClassifier}. But when using
 // \code{GetOutputImage} the output is directly an Image.
 //

@@ -118,7 +118,7 @@ int main(int itkNotUsed(argc), char* argv[])
 //
 //  Software Guide : BeginLatex
 //
-// We can now define the type for the map. The \subdoxygen{otb}{SOMMap}
+// We can now define the type for the map. The \doxygen{otb}{SOMMap}
 // class is templated over the neuron type -- \code{PixelType} here
 // --, the distance type and the number of dimensions. Note that the
 // number of dimensions of the map could be different from the one of

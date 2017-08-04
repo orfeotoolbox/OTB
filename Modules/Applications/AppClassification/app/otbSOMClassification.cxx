@@ -254,6 +254,10 @@ private:
     itk::RandomPermutation randPerm(numberOfStreamDivisions);
     unsigned int index = 0;
 
+    // reset seed and step once (itk::RandomPermutation may have used it)
+    randomGen->SetSeed(GetParameterInt("rand"));
+    randomGen->GetVariateWithClosedRange();
+
     // TODO : maybe change the approach: at the moment, the sampling process is able to pick a sample twice or more
     while (totalSamples < nbsamples)
     {

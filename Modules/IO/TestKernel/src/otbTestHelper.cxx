@@ -1941,7 +1941,7 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
               poFDefn->GetNameRef(),
               OGRFieldDefn::GetFieldTypeName(poFDefn->GetType()));
 
-      if (feature->IsFieldSet(iField)) fprintf(fpOut, "%s\n", feature->GetFieldAsString(iField));
+      if (ogr::version_proxy::IsFieldSetAndNotNull(feature, iField)) fprintf(fpOut, "%s\n", feature->GetFieldAsString(iField));
       else fprintf(fpOut, "(null)\n");
 
       }

@@ -25,6 +25,9 @@
 #include "otbSpectralResponse.h"
 #include "otbDataSpecP5B.h"
 #include "otbSimulationStep2Base.h"
+#include "otbSoilDataBase.h"
+#include <string>
+#include <memory>
 
 namespace otb
 {
@@ -42,116 +45,122 @@ namespace otb
 
 class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
 {
-   public:
-      /** Standard class typedefs */
-      typedef SailModel Self;
-      typedef SimulationStep2Base   Superclass;
-      typedef itk::SmartPointer<Self> Pointer;
-      typedef itk::SmartPointer<const Self> ConstPointer;
+public:
+  /** Standard class typedefs */
+  typedef SailModel Self;
+  typedef SimulationStep2Base   Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-      typedef Superclass::SpectralResponseType      SpectralResponseType;
-      typedef std::vector<double>                   VectorType;
-      typedef Superclass::ParametersType   ParametersType;
+  typedef Superclass::SpectralResponseType      SpectralResponseType;
+  typedef std::vector<double>                   VectorType;
+  typedef Superclass::ParametersType   ParametersType;
 
-      typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
-      /** Standard macros */
-      itkNewMacro(Self);
-      itkTypeMacro(SailModel, ProcessObject);
-
-
-      /** Set Inputs */
-      void SetReflectance(const SpectralResponseType *object) ITK_OVERRIDE;
-      SpectralResponseType * GetReflectance();
-
-      void SetTransmittance(const SpectralResponseType *object) ITK_OVERRIDE;
-      SpectralResponseType * GetTransmittance();
-
-      /** Set parameters */
-      /** Set/Get leaf area index */
-      itkSetMacro(LAI, double);
-      itkGetMacro(LAI, double);
-
-      /** Set/Get average leaf angle (deg)*/
-      itkSetMacro(Angl, double);
-      itkGetMacro(Angl, double);
-
-      /** Set/Get soil coefficient*/
-      itkSetMacro(PSoil, double);
-      itkGetMacro(PSoil, double);
-
-      /** Set/Get diffuse/direct radiation*/
-      itkSetMacro(Skyl, double);
-      itkGetMacro(Skyl, double);
-
-      /** Set/Get hot spot */
-      itkSetMacro(HSpot, double);
-      itkGetMacro(HSpot, double);
-
-      /** Set/Get solar zenith angle (deg) */
-      itkSetMacro(TTS, double);
-      itkGetMacro(TTS, double);
-
-      /** Set/Get observer zenith angle (deg) */
-      itkSetMacro(TTO, double);
-      itkGetMacro(TTO, double);
-
-      /** Set/Get azimuth(deg) */
-      itkSetMacro(PSI, double);
-      itkGetMacro(PSI, double);
-
-      /** Get the computed fcover */
-      itkGetMacro(FCoverView, double);
-
-      /** GenerateData */
-      void GenerateData() ITK_OVERRIDE;
-
-      /** Get Output */
-      virtual SpectralResponseType * GetViewingReflectance();
-      virtual SpectralResponseType * GetHemisphericalReflectance();
-      virtual SpectralResponseType * GetViewingAbsorptance();
-      virtual SpectralResponseType * GetHemisphericalAbsorptance();
-
-     const ParametersType  GetInput();
-     void SetInput(const ParametersType &);
-     using Superclass::SetInput;
+  /** Standard macros */
+  itkNewMacro(Self);
+  itkTypeMacro(SailModel, ProcessObject);
 
 
-   protected:
-      /** Constructor */
-      SailModel();
-      /** Destructor */
-      ~SailModel() ITK_OVERRIDE;
-      /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  /** Set Inputs */
+  void SetReflectance(const SpectralResponseType *object) override;
+  SpectralResponseType * GetReflectance();
 
-      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
-      using Superclass::MakeOutput;
+  void SetTransmittance(const SpectralResponseType *object) override;
+  SpectralResponseType * GetTransmittance();
 
-      /** Compute Leaf Angle Distribution */
-      void Calc_LIDF(const double a, VectorType &lidf);
-      void Campbell(const double ala, VectorType &freq);
+  /** Set parameters */
+  /** Set/Get leaf area index */
+  itkSetMacro(LAI, double);
+  itkGetMacro(LAI, double);
 
-      /** J functions */
-      double Jfunc1(const double k, const double l, const double t);
-      double Jfunc2(const double k, const double l, const double t);
-      double Jfunc3(const double k, const double l, const double t);
-      /** Volscatt */
-      void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result);
+  /** Set/Get average leaf angle (deg)*/
+  itkSetMacro(Angl, double);
+  itkGetMacro(Angl, double);
 
-   private:
-      SailModel(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+  /** Set/Get soil coefficient*/
+  itkSetMacro(PSoil, double);
+  itkGetMacro(PSoil, double);
 
-      double m_LAI; //leaf area index
-      double m_Angl; //average leaf angle
-      double m_PSoil; //soil coefficient
-      double m_Skyl; //diffuse/direct radiation
-      double m_HSpot; //hot spot
-      double m_TTS; //solar zenith angle
-      double m_TTO; //observer zenith angle
-      double m_PSI; //azimuth
-      double m_FCoverView; //fCover in the viewing direction
+  /** Set/Get diffuse/direct radiation*/
+  itkSetMacro(Skyl, double);
+  itkGetMacro(Skyl, double);
+
+  /** Set/Get hot spot */
+  itkSetMacro(HSpot, double);
+  itkGetMacro(HSpot, double);
+
+  /** Set/Get solar zenith angle (deg) */
+  itkSetMacro(TTS, double);
+  itkGetMacro(TTS, double);
+
+  /** Set/Get observer zenith angle (deg) */
+  itkSetMacro(TTO, double);
+  itkGetMacro(TTO, double);
+
+  /** Set/Get azimuth(deg) */
+  itkSetMacro(PSI, double);
+  itkGetMacro(PSI, double);
+
+  /** Get the computed fcover */
+  itkGetMacro(FCoverView, double);
+
+  /** Use an external soil DB */
+  void UseExternalSoilDB(std::shared_ptr<SoilDataBase> SoilDB, size_t SoilIndex);
+
+  /** GenerateData */
+  void GenerateData() override;
+
+  /** Get Output */
+  virtual SpectralResponseType * GetViewingReflectance();
+  virtual SpectralResponseType * GetHemisphericalReflectance();
+  virtual SpectralResponseType * GetViewingAbsorptance();
+  virtual SpectralResponseType * GetHemisphericalAbsorptance();
+
+  const ParametersType  GetInput();
+  void SetInput(const ParametersType &);
+  using Superclass::SetInput;
+
+
+protected:
+  /** Constructor */
+  SailModel();
+  /** Destructor */
+  ~SailModel() override;
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
+  using Superclass::MakeOutput;
+
+  /** Compute Leaf Angle Distribution */
+  void Calc_LIDF(const double a, VectorType &lidf) const;
+  void Campbell(const double ala, VectorType &freq) const;
+
+  /** J functions */
+  double Jfunc1(const double k, const double l, const double t) const;
+  double Jfunc2(const double k, const double l, const double t) const;
+  double Jfunc3(const double k, const double l, const double t) const;
+  /** Volscatt */
+  void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result) const;
+
+private:
+  SailModel(const Self&) = delete; 
+  void operator=(const Self&) = delete;
+
+  double m_LAI; //leaf area index
+  double m_Angl; //average leaf angle
+  double m_PSoil; //soil coefficient
+  double m_Skyl; //diffuse/direct radiation
+  double m_HSpot; //hot spot
+  double m_TTS; //solar zenith angle
+  double m_TTO; //observer zenith angle
+  double m_PSI; //azimuth
+  double m_FCoverView; //fCover in the viewing direction
+  bool m_UseSoilFile; //use a soil file instead of DataSpecP5B
+  size_t m_SoilIndex; //which soil in the soil file
+  std::shared_ptr<SoilDataBase> m_SoilDataBase;
 };
 
 }// end namespace otb
