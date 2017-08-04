@@ -8,7 +8,7 @@ setlocal
 set CURRENT_SCRIPT_DIR=%~dp0
 
 :: Setup environment
-call %CURRENT_SCRIPT_DIR%otbenv.cmd
+call %CURRENT_SCRIPT_DIR%otbenv.bat
 
 :: Set current dir to HOME dir because Monteverdi generates temporary files and need write access
 cd %HOMEDRIVE%%HOMEPATH%

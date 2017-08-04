@@ -20,7 +20,7 @@ wmic PROCESS where "Name='WMIC.exe'" get ParentProcessId >pid.log 2>&1
 for /F "TOKENS=1" %%b in ('type pid.log ^| findstr [0-9]') do set CURRENT_PID=%%b
 
 :: setup the otbenv
-call otbenv.cmd
+call otbenv.bat
 
 del selftest_report.log
 type NUL > selftest_report.log
