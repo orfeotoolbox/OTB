@@ -21,7 +21,7 @@
 set -e
 
 CMAKE=$(which cmake)
-$CMAKE -S OUT_DIR/cmake_uninstall_otb.cmake -DMY_INSTALL_DIR=OUT_DIR -DCMAKE_COMMAND=$CMAKE
+$CMAKE -S OUT_DIR/tools/cmake_uninstall_otb.cmake -DMY_INSTALL_DIR=OUT_DIR -DCMAKE_COMMAND=$CMAKE
 rm -f OUT_DIR/mapla.sh
 rm -f OUT_DIR/monteverdi.sh
 echo "OTB is now uninstalled from OUT_DIR"

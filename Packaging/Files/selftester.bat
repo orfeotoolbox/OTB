@@ -87,7 +87,7 @@ goto :eof
 :check_binary
 setlocal
 type NUL > tmp.log
-bin\otb_loader.exe %1 > tmp.log 2>&1
+tools\otb_loader.exe %1 > tmp.log 2>&1
 call :nb_tmp_lines
 if %nb_tmp_lines_out% gtr 0 (
   echo ERROR : otb_loader.exe %1
