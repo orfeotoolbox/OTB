@@ -84,6 +84,7 @@ macro(installer_files)
 
   install(PROGRAMS
     Files/selftester${SCRIPT_EXT}
+    Files/uninstall_otb${SCRIPT_EXT}
     DESTINATION ${PKG_STAGE_DIR}/tools)
 
   # only required for linux.
@@ -96,8 +97,6 @@ macro(installer_files)
       DESTINATION ${PKG_STAGE_DIR})
   endif()
 
-  #add otb_uninstall script
-  add_uninstall_otb_script()
   
   #add otb_loader
   add_executable(otb_loader ${CMAKE_CURRENT_SOURCE_DIR}/Files/otb_loader.cxx)
