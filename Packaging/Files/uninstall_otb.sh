@@ -18,6 +18,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+set -e
+
 CMAKE=$(which cmake)
 $CMAKE -S OUT_DIR/cmake_uninstall_otb.cmake -DMY_INSTALL_DIR=OUT_DIR -DCMAKE_COMMAND=$CMAKE
 rm -f OUT_DIR/mapla.sh
