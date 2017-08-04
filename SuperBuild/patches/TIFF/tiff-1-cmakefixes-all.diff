@@ -1,0 +1,163 @@
+diff -burN tiff-4.0.8.orig/CMakeLists.txt tiff-4.0.8/CMakeLists.txt
+--- tiff-4.0.8.orig/CMakeLists.txt	Thu Jul 20 12:53:54 2017
++++ tiff-4.0.8/CMakeLists.txt	Thu Jul 20 13:17:05 2017
+@@ -601,21 +601,35 @@
+   set(CXX_SUPPORT TRUE)
+ endif()
+ 
+-# OpenGL and GLUT
+-find_package(OpenGL)
+-find_package(GLUT)
+-set(HAVE_OPENGL FALSE)
+-if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND GLUT_FOUND)
++# OpenGL support
++option(with_opengl "Enable opengl support (requires opengl and glut packages)" ON)
++if(with_opengl)
++  # OpenGL and GLUT
++  find_package(OpenGL)
++  find_package(GLUT)
++  set(HAVE_OPENGL FALSE)
++  if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND GLUT_FOUND)
+   set(HAVE_OPENGL TRUE)
+-endif()
+-# Purely to satisfy the generated headers:
+-check_include_file(GL/gl.h HAVE_GL_GL_H)
+-check_include_file(GL/glu.h HAVE_GL_GLU_H)
+-check_include_file(GL/glut.h HAVE_GL_GLUT_H)
+-check_include_file(GLUT/glut.h HAVE_GLUT_GLUT_H)
+-check_include_file(OpenGL/gl.h HAVE_OPENGL_GL_H)
+-check_include_file(OpenGL/glu.h HAVE_OPENGL_GLU_H)
++  endif()
++  # Purely to satisfy the generated headers:
++  check_include_file(GL/gl.h HAVE_GL_GL_H)
++  check_include_file(GL/glu.h HAVE_GL_GLU_H)
++  check_include_file(GL/glut.h HAVE_GL_GLUT_H)
++  check_include_file(GLUT/glut.h HAVE_GLUT_GLUT_H)
++  check_include_file(OpenGL/gl.h HAVE_OPENGL_GL_H)
++  check_include_file(OpenGL/glu.h HAVE_OPENGL_GLU_H)
++else() #with_opengl
++  set(HAVE_OPENGL FALSE)
++  #force  opengl headers check to FALSE.
++  set(HAVE_GL_GL_H FALSE)
++  set(HAVE_GL_GLU_H FALSE)
++  set(HAVE_GL_GLUT_H FALSE)
++  set(HAVE_GLUT_GLUT_H FALSE)
++  set(HAVE_OPENGL_GL_H FALSE)
++  set(HAVE_OPENGL_GLU_H FALSE)
++endif() #with_opengl
+ 
++
+ # Win32 IO
+ set(win32_io FALSE)
+ if(WIN32)
+@@ -713,19 +727,38 @@
+ if(LIBLZMA_LIBRARIES)
+   list(APPEND TIFF_LIBRARY_DEPS ${LIBLZMA_LIBRARIES})
+ endif()
+-
+ #report_values(TIFF_INCLUDES TIFF_LIBRARY_DEPS)
+ 
++# NEED_LIBPORT is later updated in port/CMakeLists.txt and 
++# used in libtiff/CMakeLists.txt to generate tif_config.h.
++# see libtiff/tif_config.h.cmake.in for usage
++set(NEED_LIBPORT FALSE)
++
+ # Process subdirectories
+ add_subdirectory(port)
+ add_subdirectory(libtiff)
+-add_subdirectory(tools)
+-add_subdirectory(test)
+-add_subdirectory(contrib)
++
++option(with_tools "build executables in tools directory" ON)
++if(with_tools)
++  add_subdirectory(tools)
++endif()
++option(with_test "build executables in tests directory" ON)
++if(with_test)
++  add_subdirectory(test)
++endif()
++
++option(with_contrib "build executables in contrib directory" ON)
++if(with_contrib)
++  add_subdirectory(contrib)
++endif()
++
+ add_subdirectory(build)
+-add_subdirectory(man)
+-add_subdirectory(html)
+-
++
++option(with_docs "build html and man docs" ON)
++if(with_docs)
++  add_subdirectory(man)
++  add_subdirectory(html)
++endif()
+ #message(STATUS "EXTRA_DIST: ${EXTRA_DIST}")
+ 
+ message(STATUS "")
+diff -burN tiff-4.0.8.orig/contrib/iptcutil/iptcutil.c tiff-4.0.8/contrib/iptcutil/iptcutil.c
+--- tiff-4.0.8.orig/contrib/iptcutil/iptcutil.c	Thu Jul 20 12:53:54 2017
++++ tiff-4.0.8/contrib/iptcutil/iptcutil.c	Thu Jul 20 13:14:55 2017
+@@ -19,7 +19,7 @@
+ # include <fcntl.h>
+ #endif
+ 
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #define STRNICMP strnicmp
+ #else 
+ #define STRNICMP strncasecmp
+diff -burN tiff-4.0.8.orig/libtiff/tif_config.h.cmake.in tiff-4.0.8/libtiff/tif_config.h.cmake.in
+--- tiff-4.0.8.orig/libtiff/tif_config.h.cmake.in	Thu Jul 20 12:53:54 2017
++++ tiff-4.0.8/libtiff/tif_config.h.cmake.in	Thu Jul 20 13:15:21 2017
+@@ -259,3 +259,9 @@
+ 
+ /* Define to `unsigned int' if <sys/types.h> does not define. */
+ #undef size_t
++
++#ifdef _MSC_VER
++#pragma warning(disable : 4996) /* function deprecation warnings */
++#endif
++
++#cmakedefine NEED_LIBPORT 1
+diff -burN tiff-4.0.8.orig/port/CMakeLists.txt tiff-4.0.8/port/CMakeLists.txt
+--- tiff-4.0.8.orig/port/CMakeLists.txt	Thu Jul 20 12:53:54 2017
++++ tiff-4.0.8/port/CMakeLists.txt	Thu Jul 20 13:15:32 2017
+@@ -32,25 +32,35 @@
+   strtoull.c)
+ 
+ set(port_USED_FILES ${port_SOURCES} ${port_HEADERS})
+-
++  set(LIBPORT_USED FALSE)
+ if(NOT HAVE_GETOPT)
+   list(APPEND port_USED_FILES getopt.c)
++    set(LIBPORT_USED TRUE)
+ endif()
+ if(NOT HAVE_LFIND)
+   list(APPEND port_USED_FILES lfind.c)
++    set(LIBPORT_USED TRUE)
+ endif()
+ if(MSVC AND NOT HAVE_SNPRINTF)
+   list(APPEND port_USED_FILES snprintf.c)
++    set(LIBPORT_USED TRUE)
+ endif()
+ if(NOT HAVE_STRCASECMP)
+   list(APPEND port_USED_FILES strcasecmp.c)
++    set(LIBPORT_USED TRUE)
+ endif()
+ if(NOT HAVE_STRTOUL)
+   list(APPEND port_USED_FILES strtoul.c)
++    set(LIBPORT_USED TRUE)
+ endif()
+ if(NOT HAVE_STRTOULL)
+   list(APPEND port_USED_FILES strtoull.c)
++  set(LIBPORT_USED TRUE)
+ endif()
++
++# We set NEED_LIBPORT with PARENT_SCOPE 
++# because it is used in libtiff/CMakeLists.txt
++set(NEED_LIBPORT ${LIBPORT_USED} PARENT_SCOPE)
+ 
+ add_library(port STATIC ${port_USED_FILES})
+ 

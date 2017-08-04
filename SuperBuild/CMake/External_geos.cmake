@@ -22,23 +22,10 @@ INCLUDE_ONCE_MACRO(GEOS)
 
 SETUP_SUPERBUILD(GEOS)
 
-if(MSVC)
-  set(GEOS_PATCH_COMMAND ${CMAKE_COMMAND} -E copy
-	  ${CMAKE_SOURCE_DIR}/patches/GEOS/CMakeLists.txt
-	  ${CMAKE_SOURCE_DIR}/patches/GEOS/nmake.opt
-	  ${GEOS_SB_SRC})
-  set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND} -DGEOS_SB_SRC=${GEOS_SB_SRC})
-
-else()
-  set(GEOS_PATCH_COMMAND)
-  set(GEOS_CMAKE_COMMAND ${SB_CMAKE_COMMAND})
-
-endif()
-
 ExternalProject_Add(GEOS
    PREFIX GEOS
-   URL "http://download.osgeo.org/geos/geos-3.5.0.tar.bz2"
-   URL_MD5 136842690be7f504fba46b3c539438dd
+   URL "http://download.osgeo.org/geos/geos-3.6.1.tar.bz2"
+   URL_MD5 c97e338b3bc81f9848656e9d693ca6cc
    SOURCE_DIR ${GEOS_SB_SRC}
    BINARY_DIR ${GEOS_SB_SRC}
    INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -46,17 +33,23 @@ ExternalProject_Add(GEOS
    CMAKE_CACHE_ARGS
    ${SB_CMAKE_CACHE_ARGS}
    -DGEOS_ENABLE_TESTS:BOOL=OFF
-   PATCH_COMMAND ${GEOS_PATCH_COMMAND}
+   -DGEOS_ENABLE_MACOSX_FRAMEWORK:BOOL=OFF
+   -DGEOS_BUILD_STATIC:BOOL=${BUILD_STATIC_LIBS}
+   -DGEOS_BUILD_SHARED:BOOL=${BUILD_SHARED_LIBS}
    CMAKE_COMMAND ${GEOS_CMAKE_COMMAND}
+   LOG_DOWNLOAD 1
+   LOG_CONFIGURE 1
+   LOG_BUILD 1
+   LOG_INSTALL 1
    )
 
-if(NOT MSVC)
-  SUPERBUILD_PATCH_SOURCE(GEOS)
-endif()
+# Patch still needed with version 3.6.1 to avoid error during CMake configuration
+# See https://trac.osgeo.org/geos/ticket/753
+SUPERBUILD_PATCH_SOURCE(GEOS)
 
 set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
-  set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos_i.lib )
+  set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos.lib )
 elseif(UNIX)
   set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()

@@ -134,7 +134,7 @@ protected:
     * Pay attention, the executable paths have to be loaded or set in
     * the environment before calling the function.
     */
-  void LoadApplication();
+  bool LoadApplication();
 
   /** Parse the user expression, extract the key and the associated
     * string and set it as value of each corresponding application

@@ -97,7 +97,13 @@ namespace Wrapper
     SetParameterDescription("classifier.libsvm.c",
         "SVM models have a cost parameter C (1 by default) to control the "
         "trade-off between training errors and forcing rigid margins.");
-    
+
+    AddParameter(ParameterType_Float, "classifier.libsvm.nu", "Cost parameter Nu");
+    SetParameterFloat("classifier.libsvm.nu",0.5, false);
+    SetParameterDescription("classifier.libsvm.nu",
+        "Cost parameter Nu, in the range 0..1, the larger the value, "
+        "the smoother the decision.");
+
     // It seems that it miss a nu parameter for the nu-SVM use. 
     AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "Parameters optimization");
     MandatoryOff("classifier.libsvm.opt");
@@ -111,12 +117,9 @@ namespace Wrapper
       AddParameter(ParameterType_Float, "classifier.libsvm.eps", "Epsilon");
       SetParameterFloat("classifier.libsvm.eps",1e-3, false);
       SetParameterDescription("classifier.libsvm.eps", 
-        "Parameter for the epsilon regression mode.");
-      AddParameter(ParameterType_Float, "classifier.libsvm.nu", "Nu");
-      SetParameterFloat("classifier.libsvm.nu",0.5, false);
-      SetParameterDescription("classifier.libsvm.nu", 
-        "Cost parameter Nu, in the range 0..1, the larger the value, "
-        "the smoother the decision.");
+        "The distance between feature vectors from the training set and "
+        "the fitting hyper-plane must be less than Epsilon. For outliers"
+        "the penalty mutliplier is set by C.");
       }
   }
 
@@ -142,6 +145,7 @@ namespace Wrapper
       {
       libSVMClassifier->SetDoProbabilityEstimates(true);
       }
+    libSVMClassifier->SetNu(GetParameterFloat("classifier.libsvm.nu"));
     libSVMClassifier->SetC(GetParameterFloat("classifier.libsvm.c"));
 
     switch (GetParameterInt("classifier.libsvm.k"))
@@ -177,7 +181,6 @@ namespace Wrapper
           break;
         }
       libSVMClassifier->SetEpsilon(GetParameterFloat("classifier.libsvm.eps"));
-      libSVMClassifier->SetNu(GetParameterFloat("classifier.libsvm.nu"));
       }
     else
       {
@@ -197,6 +200,7 @@ namespace Wrapper
           break;
         }
       }
+      
 
     libSVMClassifier->Train();
     libSVMClassifier->Save(modelPath);

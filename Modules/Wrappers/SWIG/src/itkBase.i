@@ -29,6 +29,10 @@
 %exception {
   try {
     $action
+  } catch(otb::ImageFileReaderException& err) {
+    std::ostringstream oss;
+    oss << "Cannot open image " << err.m_Filename + ". " + err.GetDescription();
+    SWIG_exception( SWIG_RuntimeError, oss.str().c_str() );
   } catch( itk::ExceptionObject &ex ) {
     std::ostringstream oss;
     oss << "Exception thrown in otbApplication $symname: " << ex.what();

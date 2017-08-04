@@ -211,7 +211,7 @@ void OGRIOHelper
     otb::VectorDataKeywordlist kwl;
     for (int fieldNum = 0; fieldNum < feature->GetFieldCount(); ++fieldNum)
       {
-      if (feature->IsFieldSet(fieldNum))
+      if (ogr::version_proxy::IsFieldSetAndNotNull(feature, fieldNum))
         {
         kwl.AddField(feature->GetFieldDefnRef(fieldNum), feature->GetRawFieldRef(fieldNum));
         }
