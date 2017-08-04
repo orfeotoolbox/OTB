@@ -45,33 +45,7 @@ function(prepare_file_list file_list_result)
     list(APPEND file_list "cs2cs${EXE_EXT}")
   endif()
   
-  #RK: to hell with cmake targets files.
-  file(GLOB ALL_EXTRA_FILES
-    ${SUPERBUILD_INSTALL_DIR}/lib/*boost*${LIB_EXT}*
-    ${SUPERBUILD_INSTALL_DIR}/lib/*glut*${LIB_EXT}*
-    ${SUPERBUILD_INSTALL_DIR}/lib/*QtXml*${LIB_EXT}*
-    ${SUPERBUILD_INSTALL_DIR}/lib/*kml*${LIB_EXT}*
-      )
-    foreach(EXTRA_FILE ${ALL_EXTRA_FILES})
-      get_filename_component(EXTRA_FILE_name ${EXTRA_FILE} NAME)
-      list(APPEND file_list "${EXTRA_FILE_name}")
-    endforeach()  
 
-    #RK: there is a bug in itk cmake files in install tree 
-    #we workaround with below code
-    #start hack
-     file(GLOB itk_all_lib_files  
-     "${SUPERBUILD_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}itk*${LIB_EXT}*"
-     "${SUPERBUILD_INSTALL_DIR}/${DEST_LIB_DIR}/${LIB_PREFIX}ITK*${LIB_EXT}*"
-     )
-
-   foreach(itk_lib_file ${itk_all_lib_files})
-     isfile_symlink("${itk_lib_file}" a_symlink itk_lib_file_target)
-     if(NOT a_symlink)
-       list(APPEND file_list "${itk_lib_file}")
-     endif()
-   endforeach()
-   #end hack
    
    file(GLOB otb_test_exe_list 
      "${SUPERBUILD_INSTALL_DIR}/bin/gdal*${EXE_EXT}"
@@ -79,8 +53,7 @@ function(prepare_file_list file_list_result)
      )
    
    list(REMOVE_ITEM otb_test_exe_list "${SUPERBUILD_INSTALL_DIR}/bin/gdal-config")
-   list(REMOVE_ITEM otb_test_exe_list "${OTB_BINARY_DIR}/bin/otbcli_TestApplication")
-   list(REMOVE_ITEM otb_test_exe_list "${OTB_BINARY_DIR}/bin/otbgui_TestApplication")
+
 
    foreach(otb_test_exe   ${otb_test_exe_list})
      get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
