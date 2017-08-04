@@ -26,6 +26,7 @@ macro(check_cmake_variables)
   if(LINUX)
     list(APPEND required_vars FILE_COMMAND)
     list(APPEND required_vars READLINK)
+    list(APPEND required_vars  PATCHELF_PROGRAM)
   endif()
 
   if(WIN32)
@@ -33,7 +34,6 @@ macro(check_cmake_variables)
   endif()
   foreach(req
       ${required_vars}
-      PATCHELF_PROGRAM
       PKG_STAGE_DIR
       QT_TRANSLATIONS_DIR
       SUPERBUILD_BINARY_DIR
