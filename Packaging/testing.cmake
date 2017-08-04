@@ -3,7 +3,13 @@
 #          [WORKING_DIRECTORY <dir>])
 
 set(testing_dir ${CMAKE_BINARY_DIR}/tests)
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${testing_dir})
+
+if(EXISTS "${testing_dir}")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${testing_dir})
+  execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory   ${testing_dir})
+else()
+  execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory   ${testing_dir})
+endif()
 
 set(pkg_extracted_dir "${testing_dir}/${PKG_STAGE_DIR}")
 if(WIN32)
@@ -23,9 +29,15 @@ add_test(
   WORKING_DIRECTORY ${testing_dir}
   )
 
+set(Tu_selftester_ARGS)
+if(WIN32)
+  set(Tu_selftester_ARGS "/q")
+endif()
+
 add_test(
   NAME Tu_selftester
   COMMAND ${pkg_extracted_dir}/tools/selftester${my_ext}
+  ${Tu_selftester_ARGS}
   WORKING_DIRECTORY ${pkg_extracted_dir}
   )
 
@@ -36,3 +48,5 @@ add_test(
   COMMAND ${pkg_extracted_dir}/tools/uninstall_otb${my_ext}
   WORKING_DIRECTORY ${testing_dir}
   )
+  
+set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_install_package)
