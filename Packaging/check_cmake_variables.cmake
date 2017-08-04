@@ -47,6 +47,7 @@ macro(check_cmake_variables)
       LOADER_REGEX
       PKG_ITK_SB_VERSION
       PKG_OTB_VERSION_STRING
+      PACKAGE_OUTPUT_FILE
       )
     if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
       message(FATAL_ERROR "you must set ${req}")

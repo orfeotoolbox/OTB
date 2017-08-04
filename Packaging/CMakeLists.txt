@@ -136,6 +136,7 @@ include(install_rule)
 include(isfile_symlink)
 include(detect_using_file_command)
 include(install_otbapp_wrapper_scripts)
+include(cleanup_package)
 
 # below functions include many install commands which are installing
 # files under PKG_STAGE_DIR
@@ -153,13 +154,22 @@ include(create_package)
 
 configure_loader(LOADER_PROGRAM LOADER_ARGS LOADER_REGEX)
 
+
+# creation of package is different from windows and unix like
+# WE KEEP THIS VARIABLE HERE BECAUSE IT IS USED IN
+# cleanup_package, create_package, testing.cmake
+# and check_cmake_variables
+
+# THIS IS JUST TO AVOID DUPLICATION
+if(WIN32)
+  set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.zip")
+else()
+  set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.run")
+endif()
+
 check_cmake_variables()
 
-message(STATUS "Empty package staging directory: ${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}")
-execute_process(COMMAND
-  ${CMAKE_COMMAND} -E remove_directory
-  "${CMAKE_INSTALL_PREFIX}/${PKG_STAGE_DIR}"
-  )
+cleanup_package()
 
 set(HAVE_QT4 FALSE CACHE INTERNAL "HAVE_QT4")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
@@ -176,8 +186,10 @@ if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EX
   set(HAVE_PYTHON TRUE)
 endif()
 
-#only for *nix
-file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks   "#!/bin/sh\n")
+  #only for *nix
+if(UNIX)
+  file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks   "#!/bin/sh\n")
+endif()
 
 #remove all *_USED|*_RESOLVED variables from CMakeCache.txt
 clear_cmakecache_variables()
@@ -209,13 +221,6 @@ install_qtdev_files()
 install_vstudio_files()
 
 installer_files()
-
-# creation of package is different from windows and unix like
-if(WIN32)
-  set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.zip")
-else()
-  set(PACKAGE_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PKG_STAGE_DIR}.run")
-endif()
 
 create_package()
 
