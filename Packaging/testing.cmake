@@ -49,7 +49,7 @@ add_test(
   WORKING_DIRECTORY ${testing_dir}
   )
   
-set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_install_package)
+set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_selftester)
 
 
 #if(UNIX)
