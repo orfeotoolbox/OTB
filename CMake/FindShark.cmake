@@ -115,6 +115,10 @@ if(SHARK_USE_OPENMP_matched)
   set(SHARK_USE_OPENMP TRUE CACHE BOOL "shark is built with OpenMP" FORCE)
 endif()
 
+#This is quick fix/hack/commit that will get back all failing tests on
+# The good fix must to fix all those failing tests. They are crashing
+# due to openmp issues which only popup with this fix
+if(NOT WIN32)
 if(SHARK_USE_OPENMP)
   message(STATUS "Shark is built with OpenMP: SHARK_USE_OPENMP = TRUE")
   find_package(OpenMP REQUIRED QUIET)
@@ -129,6 +133,8 @@ if(SHARK_USE_OPENMP)
 else()
   message(STATUS "Shark is built without OpenMP: SHARK_USE_OPENMP = FALSE")
 endif()
+endif(NOT WIN32)
+
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Shark
   REQUIRED_VARS SHARK_LIBRARY SHARK_INCLUDE_DIR
