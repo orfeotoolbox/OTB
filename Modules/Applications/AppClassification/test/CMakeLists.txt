@@ -637,7 +637,6 @@ if(OTB_USE_SHARK)
     -ts 30000
     -nc 5
     -maxit 10000
-    -ct 0.0000001
     -sampler periodic
     -rand 121212
     -nodatalabel 255

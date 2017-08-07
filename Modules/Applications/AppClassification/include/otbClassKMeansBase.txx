@@ -61,25 +61,6 @@ void ClassKMeansBase::InitKMSampling()
   SetDefaultParameterInt("maxit", 1000);
   MandatoryOff("maxit");
 
-  AddParameter(ParameterType_Float, "ct", "Convergence threshold");
-  SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.0001).");
-  SetDefaultParameterFloat("ct", 0.0001);
-  MandatoryOff("ct");
-
-  AddParameter(ParameterType_Int, "nodatalabel", "Label for the NoData class");
-  SetParameterDescription("nodatalabel", "TODO");
-  SetDefaultParameterInt("nodatalabel", 0);
-  MandatoryOff("nodatalabel");
-
-/*
-  AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
-  SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
-  MandatoryOff("vm");
-*/
-  AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
-  SetParameterDescription("outmeans", "Output text file containing centroid positions");
-  MandatoryOff("outmeans");
-
   ShareKMSamplingParameters();
   ConnectKMSamplingParams();
 }
@@ -99,11 +80,13 @@ void ClassKMeansBase::ShareKMSamplingParameters()
   ShareParameter("in", "imgenvelop.in");
   ShareParameter("ram", "polystats.ram");
   ShareParameter("sampler", "select.sampler");
-  ShareParameter("vm", "polystats.mask");
+  ShareParameter("vm", "polystats.mask", "Validity Mask",
+    "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
 }
 
 void ClassKMeansBase::ShareKMClassificationParams()
 {
+  ShareParameter("nodatalabel", "classif.nodatalabel");
   ShareParameter("out", "classif.out");
 }
 
@@ -265,7 +248,6 @@ void ClassKMeansBase::ComputeImageStatistics(std::string imageFileName,
 
 void ClassKMeansBase::KMeansClassif()
 {
-  GetInternalApplication("classif")->SetParameterInt("nodatalabel", GetParameterInt("nodatalabel"), false);
   ExecuteInternal( "classif" );
 }
 

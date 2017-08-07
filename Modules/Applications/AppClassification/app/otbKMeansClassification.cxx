@@ -87,7 +87,6 @@ private:
     SetDocExampleParameterValue("ts", "1000");
     SetDocExampleParameterValue("nc", "5");
     SetDocExampleParameterValue("maxit", "1000");
-    SetDocExampleParameterValue("ct", "0.0001");
     SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif uint8");
 
     SetOfficialDocLink();
