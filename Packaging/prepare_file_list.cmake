@@ -1,17 +1,16 @@
 function(prepare_file_list file_list_result)
 
   set(file_list)
+  set(otbapp_launcher "otbApplicationLauncherCommandLine${EXE_EXT}")
   #This must exist in any OTB Installation. minimal or full
-  if(NOT EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT}")
+  if(NOT EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/${otbapp_launcher}")
     message(
       FATAL_ERROR
-      "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherCommandLine${EXE_EXT} not found."
-      )
-    
+      "${SUPERBUILD_INSTALL_DIR}/bin/${otbapp_launcher} not found.")
     return()
   endif()
 
-  set(file_list "otbApplicationLauncherCommandLine${EXE_EXT}")
+  set(file_list "${otbapp_launcher}")
 
   if(HAVE_QT4)
     list(APPEND file_list "otbApplicationLauncherQt${EXE_EXT}")
@@ -51,9 +50,16 @@ function(prepare_file_list file_list_result)
      "${SUPERBUILD_INSTALL_DIR}/bin/gdal*${EXE_EXT}"
      "${OTB_BINARY_DIR}/bin/*[T|t]est*${EXE_EXT}"
      )
-   
-   list(REMOVE_ITEM otb_test_exe_list "${SUPERBUILD_INSTALL_DIR}/bin/gdal-config")
 
+  #special items to be removed!
+   list(REMOVE_ITEM otb_test_exe_list
+     "${SUPERBUILD_INSTALL_DIR}/bin/gdal-config"
+     )
+   list(REMOVE_ITEM otb_test_exe_list
+     "${OTB_BINARY_DIR}/bin/otbcli_TestApplication")
+
+   list(REMOVE_ITEM otb_test_exe_list
+     "${OTB_BINARY_DIR}/bin/otbgui_TestApplication")
 
    foreach(otb_test_exe   ${otb_test_exe_list})
      get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
