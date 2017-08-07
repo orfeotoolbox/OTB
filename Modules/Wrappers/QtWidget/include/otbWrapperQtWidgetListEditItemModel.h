@@ -58,6 +58,7 @@
 // External classes pre-declaration.
 namespace
 {
+
 }
 
 namespace otb
@@ -68,6 +69,7 @@ namespace Wrapper
 
 //
 // Internal classes pre-declaration.
+class StringListInterface;
 
 
 /*****************************************************************************/
@@ -81,7 +83,7 @@ namespace Wrapper
  * \brief WIP.
  */
 class OTBQtWidget_EXPORT ListEditItemModel :
-    public QObject
+    public QAbstractItemModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -89,6 +91,19 @@ class OTBQtWidget_EXPORT ListEditItemModel :
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+
+  enum Columns
+  {
+    COLUMN_NONE = -1,
+    //
+    COLUMN_NAME = 0,
+    //
+    COLUMN_COUNT,
+  };
 
 //
 // Public methods.
@@ -99,6 +114,59 @@ public:
 
   /** \brief Destructor. */
   ~ListEditItemModel() ITK_OVERRIDE;
+
+  /** */
+  void SetStringList( StringListInterface * );
+
+  //
+  // QAbstractItemModel overloads.
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
+   */
+  int columnCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
+   */
+  QVariant
+    data( const QModelIndex & index,
+	  int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
+   */
+  Qt::ItemFlags flags( const QModelIndex & index ) const ITK_OVERRIDE;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
+   */
+  bool hasChildren( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
+   */
+  QVariant headerData( int section,
+                               Qt::Orientation orientation,
+                               int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
+   */
+  QModelIndex
+    index( int row,
+           int column,
+           const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
+   */
+  QModelIndex parent( const QModelIndex & index ) const ITK_OVERRIDE;
+
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
+   */
+  int rowCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -132,6 +200,8 @@ private:
 //
 // Private attributes.
 private:
+  /** */
+  StringListInterface * m_StringList;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
