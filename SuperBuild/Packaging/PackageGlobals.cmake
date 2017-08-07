@@ -91,6 +91,7 @@ set(LINUX_SYSTEM_DLLS
   libexpat.so.*
   libfontconfig.so*
   libfreetype.so*
+  libwebp.so*
   )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT

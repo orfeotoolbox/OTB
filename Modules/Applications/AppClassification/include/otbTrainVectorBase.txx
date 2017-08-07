@@ -277,7 +277,7 @@ TrainVectorBase::ExtractSamplesWithLabel(std::string parameterName, std::string 
 
         input->PushBack( mv );
 
-        if( feature.ogr().IsFieldSet( cFieldIndex ) && cFieldIndex != -1 )
+        if(cFieldIndex>=0 && ogr::Field(feature,cFieldIndex).HasBeenSet())
           target->PushBack( feature.ogr().GetFieldAsInteger( cFieldIndex ) );
         else
           target->PushBack( 0 );

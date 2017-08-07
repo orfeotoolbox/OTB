@@ -24,10 +24,15 @@
 
 #define otbAppLogFATAL(x) \
   { \
-  std::ostringstream msg; \
-  msg << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::FATAL, msg.str() ); \
-  itkGenericExceptionMacro(<< "Fatal error caught. Aborting..."); \
+    std::ostringstream msg; \
+    msg << "" x << std::endl; \
+    this->GetLogger()->Fatal(msg.str()); \
+    {                                                                                          \
+      std::ostringstream message;                                                              \
+      message << "otb::ApplicationException " x;                                               \
+      ::otb::ApplicationException e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
+      throw e_; /* Explicit naming to work around Intel compiler bug.  */                      \
+    } \
   }
 
 #define otbAppLogCRITICAL(x) \

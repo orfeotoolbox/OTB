@@ -28,7 +28,7 @@
 
 //  Software Guide : BeginLatex
 // This example illustrates the creation of an application.
-// A new application is a class, which derives from \doxygen{otb}{Wrapper::Application} class.
+// A new application is a class, which derives from \subdoxygen{otb}{Wrapper}{Application} class.
 // We start by including the needed header files.
 //
 //  Software Guide : EndLatex
@@ -147,7 +147,7 @@ private:
     // Software Guide : BeginLatex
     // Application parameters declaration is done using \code{AddParameter()} method.
     // \code{AddParameter()} requires Parameter type, its name and description.
-    // \doxygen{otb}{Wrapper::Application} class contains methods to set parameters characteristics.
+    // \subdoxygen{otb}{Wrapper}{Application} class contains methods to set parameters characteristics.
     // Software Guide : EndLatex
 
     //  Software Guide : BeginCodeSnippet

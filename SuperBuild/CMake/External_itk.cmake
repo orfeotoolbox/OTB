@@ -152,14 +152,14 @@ set(ITK_SB_COMPILATION_FLAGS
 
 #variables are later used in packaging
 set(SB_ITK_VERSION_MAJOR "4")
-set(SB_ITK_VERSION_MINOR "10")
+set(SB_ITK_VERSION_MINOR "12")
 
 set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_ITK_VERSION_MINOR})
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "http://downloads.sourceforge.net/project/itk/itk/4.10/InsightToolkit-4.10.0.tar.gz"
-  URL_MD5 8c67ba296da3835fb67bb29d98dcff3e
+  URL "https://sourceforge.net/projects/itk/files/itk/4.12/InsightToolkit-4.12.0.tar.gz"
+  URL_MD5 561a403f93c88c64085b5623e8e61f79
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -180,6 +180,10 @@ ExternalProject_Add(ITK
   ${ITK_SB_CONFIG}
   DEPENDS ${ITK_DEPENDENCIES}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_PATCH_SOURCE(ITK)
