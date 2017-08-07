@@ -42,6 +42,10 @@ ExternalProject_Add(MUPARSERX
   ${MUPARSERX_FLAGS}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   DEPENDS ${MUPARSERX_DEPENDENCIES}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 #Patch mpParserMessageProvider.cpp. This patch is integrated upstream but not yet released (last release is 4.0.7)

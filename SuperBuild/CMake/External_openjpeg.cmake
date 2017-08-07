@@ -56,9 +56,13 @@ ExternalProject_Add(OPENJPEG
   ${OPENJPEG_SB_CONFIG}
   DEPENDS ${OPENJPEG_DEPENDENCIES}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(OPENJPEG FALSE)
 
-#Apply patches to openjpeg (for now Even Roualt optim)
+#Apply patches to openjpeg (for now Even Rouault optimizations)
 SUPERBUILD_PATCH_SOURCE(OPENJPEG "-ut")

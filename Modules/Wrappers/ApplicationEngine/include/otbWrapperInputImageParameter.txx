@@ -56,14 +56,7 @@ InputImageParameter::GetImage()
       typename ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(m_FileName);
 
-      try
-        {
-        reader->UpdateOutputInformation();
-        }
-      catch (itk::ExceptionObject &)
-        {
-        this->ClearValue();
-        }
+      reader->UpdateOutputInformation();
 
       m_Image = reader->GetOutput();
       m_Reader = reader;
