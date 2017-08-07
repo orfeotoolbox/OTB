@@ -86,7 +86,7 @@ public:
   itkSetStringMacro(Description);
 
   /** Get the parameter description */
-  itkGetStringMacro(Description);
+  itkGetConstReferenceMacro( Description, std::string );
 
   /** Set the parameter key */
   itkSetStringMacro(Key);

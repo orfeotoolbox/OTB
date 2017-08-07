@@ -102,7 +102,9 @@ void QtWidgetListViewParameter::DoUpdateGUI()
 void QtWidgetListViewParameter::DoCreateWidget()
 {
   m_ListView = new QListWidget();
-  m_ListView->setToolTip(m_ListViewParam->GetDescription());
+  m_ListView->setToolTip(
+    QString::fromStdString( m_ListViewParam->GetDescription() )
+  );
 
   if(m_ListViewParam->GetSingleSelection())
     {

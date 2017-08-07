@@ -68,7 +68,9 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit;
-  m_Input->setToolTip( m_InputImageParam->GetDescription() );
+  m_Input->setToolTip(
+    QString::fromStdString( m_InputImageParam->GetDescription() )
+  );
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
   connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
 
