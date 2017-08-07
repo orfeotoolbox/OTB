@@ -120,6 +120,13 @@ ListEditWidget
 ::on_addButton_clicked()
 {
   // qDebug() << this << "::on_addButton_clicked()";
+
+  ListEditItemModel * itemModel = GetItemModel();
+
+  assert( itemModel!=nullptr );
+
+  if( !GetItemModel()->insertRow( itemModel->rowCount() ) )
+    return;
 }
 
 } // end namespace 'Wrapper'

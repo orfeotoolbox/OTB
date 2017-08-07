@@ -275,6 +275,16 @@ ListEditItemModel
 }
 
 /*****************************************************************************/
+bool
+ListEditItemModel
+::insertRow( int row, const QModelIndex & parent )
+{
+  qDebug() << this << "::insertRow(" << row << "," << parent << ")";
+
+  return QAbstractItemModel::insertRow( row, parent );
+}
+
+/*****************************************************************************/
 QModelIndex
 ListEditItemModel
 ::parent( const QModelIndex & ) const

@@ -159,6 +159,12 @@ public:
            const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
 
   /**
+   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#insertRow
+   */
+  bool
+    insertRow( int row, const QModelIndex & parent = QModelIndex() );
+
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
   QModelIndex parent( const QModelIndex & index ) const ITK_OVERRIDE;
