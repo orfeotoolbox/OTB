@@ -335,6 +335,28 @@ InputImageListParameter::ClearValue()
   this->Modified();
 }
 
+bool
+InputImageListParameter
+::IsActive( unsigned int i ) const
+{
+  assert( i<m_InputImageParameterVector.size() );
+  assert( !m_InputImageParameterVector[ i ].IsNull() );
+
+  return m_InputImageParameterVector[ i ]->GetActive();
+}
+
+
+const std::string &
+InputImageListParameter
+::GetToolTip( unsigned int i ) const
+{
+  assert( i<m_InputImageParameterVector.size() );
+  assert( !m_InputImageParameterVector[ i ].IsNull() );
+
+  return m_InputImageParameterVector[ i ]->GetDescription();
+}
+
 
 }
+
 }

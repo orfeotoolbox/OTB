@@ -83,6 +83,9 @@ public:
   /** Set one specific image. */
   void SetNthImage( unsigned int i, ImageBaseType * img );
 
+  /** */
+  const std::string & GetToolTip( unsigned int ) const ITK_OVERRIDE;
+
   /** Set the list of image. */
   void SetImageList( FloatVectorImageListType * imList );
 
@@ -100,6 +103,9 @@ public:
 
   /** Retrieve number of elements */
   unsigned int Size() const ITK_OVERRIDE;
+
+  /** */
+  bool IsActive( unsigned int ) const ITK_OVERRIDE;
 
 protected:
   /** Constructor */
