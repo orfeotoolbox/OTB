@@ -113,7 +113,7 @@ private:
     AddParameter( ParameterType_InputVectorData , "mode.fit.vect" , 
                   "Reference vector" );
     SetParameterDescription( "mode.fit.vect" ,
-      "The extent of the vectors is computed and then "
+      "The extent of the input vector file is computed and then "
       "gives a region of interest that will be extracted." );
 
     // Extent mode : ROI is computed with two point (upper left and lower left corners)
@@ -174,12 +174,12 @@ private:
     AddParameter( ParameterType_Float , "mode.radius.cx" ,
                   "X coordinate of the center" );
     SetParameterDescription( "mode.radius.cx" ,
-      "This is the center corrdinate of the radius mode, it will be either an "
+      "This is the center coordinate of the radius mode, it will be either an "
       "abscissa or a longitude." );
     AddParameter( ParameterType_Float , "mode.radius.cy" ,
                   "Y coordinate of the center" );
     SetParameterDescription( "mode.radius.cx" ,
-      "This is the center corrdinate of the radius mode, it will be either an "
+      "This is the center coordinate of the radius mode, it will be either an "
       "ordinate or a latitude." );
     AddParameter( ParameterType_Choice , "mode.radius.unitc" , "Center unit" );
     AddChoice( "mode.radius.unitc.pxl" , "Pixel" );
