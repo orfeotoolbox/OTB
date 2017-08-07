@@ -66,7 +66,7 @@ goto :eof
 ::########################[ FUNCTIONS ]##################################
 :check_binary
 setlocal
-if %VERBOSE% equ  1 ( echo ":check_binary %1" )
+if %VERBOSE% gtr 1 ( echo ":check_binary %1" )
 type NUL > tmp.log
 tools\otb_loader.exe %1 > tmp.log 2>&1
 call :nb_tmp_lines
@@ -82,7 +82,7 @@ goto :eof
 setlocal
 set dll_path=%~n1
 set app=%dll_path:~7%
-if %VERBOSE% equ  1 ( echo ":check_application %app%" )
+if %VERBOSE% equ 1 ( echo ":check_application %app%" )
 if not exist bin\otbcli_%app%.bat (
   echo ERROR : missing cli launcher for application %app%
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
