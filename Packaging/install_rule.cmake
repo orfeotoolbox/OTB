@@ -1,3 +1,7 @@
+# This is one big fat if-elseif ladder
+# that will detect a type and destination to use in
+# install(..
+
 function(install_rule src_file)
 
   get_filename_component(src_file_EXT ${src_file} EXT)
@@ -17,6 +21,14 @@ function(install_rule src_file)
     if ("${sfile_NAME_LOWER}" MATCHES "^(otb|mvd)([a-z0-9]+)test*.*" )
       if(PKG_DEBUG)
         message("SKIP INSTALL for ${sfile_NAME_LOWER}")
+      endif()
+      continue()
+    #special case for remote modules which has executables
+    #like MosiacHeaderTest1.exe. This ideally should be
+    #fixed in remote modules
+    elseif ("${sfile_NAME_LOWER}" MATCHES "headertest" )
+      if(PKG_DEBUG)
+	message("SKIP INSTALL for ${sfile_NAME_LOWER}")
       endif()
       continue()
     elseif("${sfile_ABS_LOWER}" MATCHES "(\\.exe)$")
