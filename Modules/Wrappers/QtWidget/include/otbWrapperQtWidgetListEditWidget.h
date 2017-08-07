@@ -150,6 +150,7 @@ private:
 //
 // Slots.
 private slots:
+  void on_addButton_clicked();
 };
 
 } // end namespace 'Wrapper'
