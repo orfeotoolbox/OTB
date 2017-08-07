@@ -86,7 +86,13 @@ void ClassKMeansBase::ShareKMSamplingParameters()
 
 void ClassKMeansBase::ShareKMClassificationParams()
 {
-  ShareParameter("nodatalabel", "classif.nodatalabel");
+  ShareParameter("nodatalabel", "classif.nodatalabel", "Label mask value",
+    "By default, hidden pixels will have the assigned label 0 in the output image. "
+    "It's possible to define the label mask by another value, "
+    "but be careful to not take a label from another class. "
+    "This application initalize the labels from 0 to N-1, "
+    "N is the number of class (defined by 'nc' parameter).");
+
   ShareParameter("out", "classif.out");
 }
 
