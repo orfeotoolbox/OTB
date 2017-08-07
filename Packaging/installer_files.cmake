@@ -73,6 +73,14 @@ macro(installer_files)
       Files/otbenv.bash
       DESTINATION ${PKG_STAGE_DIR}
       )
+    
+    #A script to launch selftest and
+    #save output to selftest_report.log
+    install(PROGRAMS
+      Files/run_selftester.bat
+      RENAME selftester.bat
+      DESTINATION ${PKG_STAGE_DIR}
+      )
   endif()
 
   #these scripts are not auto-installed in PKG_STAGE_DIR
