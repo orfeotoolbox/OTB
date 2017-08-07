@@ -37,6 +37,8 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbWrapperQtWidgetListEditItemModel.h"
+
 
 namespace otb
 {
@@ -71,6 +73,15 @@ ListEditWidget
   m_UI( new otb::Wrapper::Ui::ListEditWidget() )
 {
   m_UI->setupUi( this );
+
+  {
+  QItemSelectionModel * ism = m_UI->treeView->selectionModel();
+
+  m_UI->treeView->setModel( new ListEditItemModel( m_UI->treeView ) );
+
+  delete ism;
+  ism = NULL;
+  }
 }
 
 /*******************************************************************************/
@@ -79,6 +90,27 @@ ListEditWidget
 {
   delete m_UI;
   m_UI = nullptr;
+}
+
+/*******************************************************************************/
+const ListEditItemModel *
+ListEditWidget
+::GetItemModel() const
+{
+  return const_cast< ListEditWidget * >( this )->GetItemModel();
+}
+
+/*******************************************************************************/
+ListEditItemModel *
+ListEditWidget
+::GetItemModel()
+{
+  assert(
+    m_UI->treeView->model()==
+    qobject_cast< ListEditItemModel * >( m_UI->treeView->model() )
+    );
+
+  return qobject_cast< ListEditItemModel * >( m_UI->treeView->model() );
 }
 
 /*******************************************************************************/

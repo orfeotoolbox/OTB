@@ -63,6 +63,8 @@ namespace Wrapper
 
 //
 // Internal classes pre-declaration.
+class ListEditItemModel;
+
 namespace Ui
 {
 class ListEditWidget;
@@ -98,6 +100,14 @@ public:
 
   /** \brief Destructor. */
   virtual ~ListEditWidget();
+
+  /**
+   */
+  const ListEditItemModel * GetItemModel() const;
+
+  /**
+   */
+  ListEditItemModel * GetItemModel();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

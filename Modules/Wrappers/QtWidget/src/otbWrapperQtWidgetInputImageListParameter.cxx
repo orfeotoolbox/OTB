@@ -20,6 +20,7 @@
 
 #include "otbWrapperQtWidgetInputImageListParameter.h"
 
+#include "otbWrapperQtWidgetListEditItemModel.h"
 #include "otbWrapperQtWidgetListEditWidget.h"
 
 
@@ -75,6 +76,10 @@ QtWidgetInputImageListParameter
 ::DoCreateWidget()
 {
   ListEditWidget * widget = new ListEditWidget();
+
+  assert( widget->GetItemModel() );
+
+  widget->GetItemModel()->SetStringList( m_InputImageListParam.GetPointer() );
 
   //
   // Global Layout
