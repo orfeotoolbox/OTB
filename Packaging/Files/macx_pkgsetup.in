@@ -63,7 +63,6 @@ done
 
 #install uninstall_otb script
 echo "Installing uninstall script for OTB 'tools/uninstall_otb.sh'"
-sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/install_manifest_otb.txt"
 sed -i "" "s,mapla.sh,Mapla.app -r,g" "$OUT_DIR/tools/uninstall_otb.sh"
 sed -i "" "s,monteverdi.sh,Monteverdi.app -r,g" "$OUT_DIR/tools/uninstall_otb.sh"
 sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/uninstall_otb.sh"

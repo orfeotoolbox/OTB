@@ -51,7 +51,6 @@ done
 
 #install uninstall_otb script
 echo "Installing uninstall script for OTB 'tools/uninstall_otb.sh'"
-sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/install_manifest_otb.txt"
 sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/uninstall_otb.sh"
 chmod +x "$OUT_DIR/tools/uninstall_otb.sh"
 
