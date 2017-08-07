@@ -11,7 +11,7 @@
 int main ( int argc, 
        char const *argv[] )
 {
-  typedef int                  PixelType;
+  typedef unsigned char                  PixelType;
   typedef otb::Image< PixelType , 2 >  ImageType;
   typedef otb::VectorImage< PixelType , 2 >  VectorImageType;
   typedef otb::ImageFileReader< ImageType > ReaderType;
@@ -21,6 +21,8 @@ int main ( int argc,
 
   ReaderType::Pointer reader( ReaderType::New() );
   reader->SetFileName( argv[ 1 ] );
+  WriterType::Pointer writer( WriterType::New() );
+  writer->SetFileName( argv[ 2 ] );
   reader->Update();
   FilterType::Pointer filter ( FilterType::New() );
   filter->SetInput( reader->GetOutput() );
@@ -28,10 +30,8 @@ int main ( int argc,
   thumbSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
   filter->SetThumbSize(thumbSize);
   filter->SetMin(0);
-  filter->SetMax(0);
+  filter->SetMax(255);
   filter->Update();
-  WriterType::Pointer writer( WriterType::New() );
-  writer->SetFileName( argv[ 2 ] );
   writer->SetInput(filter->GetOutput());
   writer->Update();
   return 0;

@@ -94,7 +94,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   typename OutputImageType::Pointer m_TargetHisto;
-  std::vector< typename OutputImageType::Pointer > m_HistoThread;
+  std::vector< typename OutputImageType::PixelType > m_HistoThread;
   InputPixelType m_Min;
   InputPixelType m_Max;
   InputPixelType m_NoData;

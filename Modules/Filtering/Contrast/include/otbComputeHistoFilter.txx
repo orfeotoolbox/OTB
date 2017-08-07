@@ -27,7 +27,7 @@
 
 #include <limits>
 
-#define DEBUG
+// #define DEBUG
 namespace otb
 {
 
@@ -35,7 +35,7 @@ template <class TInputImage, class TOutputImage >
 ComputeHistoFilter < TInputImage , TOutputImage >
 ::ComputeHistoFilter()
 {
-  m_TargetHisto =  OutputImageType::New() ;
+  //m_TargetHisto =  OutputImageType::New() ;
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
@@ -155,6 +155,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   typename OutputImageType::RegionType region;
   region.SetSize(size);
   region.SetIndex(start);
+  output->SetNumberOfComponentsPerPixel(m_NbBin);
   output->SetLargestPossibleRegion(region);
 
 }
@@ -165,7 +166,6 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 {
   // Initializing output
   typename OutputImageType::Pointer output = this->GetOutput();
-  output->SetVectorLength( m_NbBin );
   typename OutputImageType::PixelType zeroPixel ; 
   zeroPixel.SetSize( m_NbBin );
   zeroPixel.Fill(0);
@@ -177,30 +177,14 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
   // Initializing shared variable with thread number parameter
   ThreadIdType const nbThread = this->GetNumberOfThreads();
-  m_HistoThread.resize(nbThread);
-  for (uint i = 0 ; i<nbThread ; i++)
-    {
-    // typename OutputImageType::Pointer histoThread ( OutputImageType::New() );
-    // histoThread->CopyInformation( output );
-    // histoThread->SetRequestedRegion( output->GetRequestedRegion() );
-    // histoThread->SetBufferedRegion( output->GetBufferedRegion() );
-    // histoThread->Allocate();
-    // histoThread->FillBuffer( zeroPixel );
-    // m_HistoThread.push_back(histoThread);
-    m_HistoThread[i] = OutputImageType::New() ;
-    m_HistoThread[i]->CopyInformation( output );
-    m_HistoThread[i]->SetRequestedRegion( output->GetRequestedRegion() );
-    m_HistoThread[i]->SetBufferedRegion( output->GetBufferedRegion() );
-    m_HistoThread[i]->Allocate();
-    m_HistoThread[i]->FillBuffer( zeroPixel );
-    #ifdef DEBUG
-    std::cout<<"Thread "<<i<<std::endl;
-    std::cout<<"Requested Region "<<m_HistoThread[i]->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"Largest Region "<<m_HistoThread[i]->GetLargestPossibleRegion().GetSize()<<std::endl;    
-    std::cout<<"Buffered Region "<<m_HistoThread[i]->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"Vector length "<<m_HistoThread[i]->GetVectorLength()<<std::endl;
-    #endif
-    } 
+  SizeType outSize = output->GetRequestedRegion().GetSize();
+  m_HistoThread.resize( nbThread*outSize[0]*outSize[1] , zeroPixel );
+
+  #ifdef DEBUG
+  std::cout<<"NbThread "<<nbThread<<std::endl;
+  std::cout<<"vector size "<<m_HistoThread.size()<<std::endl;
+  std::cout<<"Vector's pixel "<<m_HistoThread[0]<<std::endl;
+  #endif
 
   m_Step = static_cast<double>( m_Max - m_Min ) \
                 / static_cast<double>( m_NbBin -1 );
@@ -212,17 +196,20 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
                        ThreadIdType threadId )
 {
   typename InputImageType::ConstPointer input = this->GetInput();
-  typename OutputImageType::Pointer output = m_HistoThread[threadId];
-  typename itk::ImageRegionIterator < OutputImageType > 
-      oit( output , output->GetRequestedRegion() );
+  SizeType outSize = this->GetOutput()->GetRequestedRegion().GetSize();
+  IndexType outIndex = this->GetOutput()->GetRequestedRegion().GetIndex();
+  int threadIndex = threadId * outSize[0] * outSize[1];
+  ;
   typename InputImageType::RegionType region;
   int pixel = 0;
-  oit.GoToBegin();
-  while ( !oit.IsAtEnd() )
+  for ( int nthHisto = 0 ; nthHisto < outSize[0] * outSize[1] ; nthHisto++ )
     {
     IndexType start;
-    start[0] = oit.GetIndex()[0] * m_ThumbSize[0];
-    start[1] = oit.GetIndex()[1] * m_ThumbSize[1];
+    start[0] = (outIndex[0] +  nthHisto % outSize[0] ) * m_ThumbSize[0];
+    start[1] = (outIndex[1] +  nthHisto / outSize[0] ) * m_ThumbSize[1];
+    #ifdef DEBUG
+    std::cout<<"Region start threaded "<<start<<std::endl;
+    #endif
     region.SetIndex(start);
     region.SetSize(m_ThumbSize);
     typename itk::ImageRegionConstIterator < InputImageType > 
@@ -236,10 +223,11 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
         continue;
         }
       pixel = static_cast<int>( std::round( ( it.Get() - m_Min ) / m_Step ) );
-      ++oit.Get()[pixel];
+      ++m_HistoThread[threadIndex + nthHisto][pixel];
       ++it;
       }
-    ++oit;
+    ++nthHisto;
+
     }
 }
 
@@ -251,14 +239,9 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   typename OutputImageType::Pointer output = this->GetOutput();
   typename itk::ImageRegionIterator < OutputImageType > 
       oit( output , output->GetRequestedRegion() );
-  std::vector< typename itk::ImageRegionIterator < OutputImageType > > threadIt;
+  SizeType outSize = this->GetOutput()->GetRequestedRegion().GetSize();
+  IndexType outIndex = this->GetOutput()->GetRequestedRegion().GetIndex();
   int agreg = 0;
-  for (uint threadId = 0 ; threadId<nbThread ; threadId++ )
-    {
-    threadIt[threadId] = itk::ImageRegionIterator < OutputImageType > \
-      ( m_HistoThread[threadId] , m_HistoThread[threadId]->GetRequestedRegion() );
-    threadIt[threadId].GoToBegin();    
-    }
   oit.GoToBegin();
   while ( !oit.IsAtEnd() )
     {
@@ -267,15 +250,15 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
       agreg = 0;
       for (uint threadId = 0 ; threadId<nbThread ; threadId++ )
         {
-        agreg += threadIt[threadId].Get()[i]; 
+        agreg += m_HistoThread[threadId * outSize[0] * outSize[1] \
+          + ( ( oit.GetIndex()[0] - outIndex[0] )  ) \
+          + ( oit.GetIndex()[1] - outIndex[1] ) * outSize[0]][i]; 
+          // std::cout<<threadId * outSize[0] * outSize[1] + ( ( oit.GetIndex()[0] - outIndex[0] )  )  + ( oit.GetIndex()[1] - outIndex[1] ) * outSize[0]<<std::endl;
+          // std::cout<<agreg<<std::endl;
         }
       oit.Get()[i] = agreg;
       }
     ++oit;
-    for (uint threadId = 0 ; threadId<nbThread ; threadId++ )
-      {
-      threadIt[threadId].GoToBegin();    
-      }
     }
 }
 
