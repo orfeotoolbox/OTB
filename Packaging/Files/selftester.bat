@@ -7,7 +7,7 @@ echo "MY_INSTALL_DIR=%MY_INSTALL_DIR%"
 
 :: this is set in wrapper script
 ::set EXIT_ON_ERROR=0
-IF %EXIT_ON_ERROR%.==. ( set EXIT_ON_ERROR=0)
+IF %EXIT_ON_ERROR%.==. ( set EXIT_ON_ERROR=1)
 IF %VERBOSE%.==. ( set VERBOSE=1)
 
 :: if "/q" is given, hide the error dialogs (hence make the script non-interactive)
