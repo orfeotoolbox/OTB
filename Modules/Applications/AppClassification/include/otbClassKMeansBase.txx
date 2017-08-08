@@ -61,6 +61,10 @@ void ClassKMeansBase::InitKMSampling()
   SetDefaultParameterInt("maxit", 1000);
   MandatoryOff("maxit");
 
+  AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
+  SetParameterDescription("outmeans", "Output text file containing centroid positions");
+  MandatoryOff("outmeans");
+
   ShareKMSamplingParameters();
   ConnectKMSamplingParams();
 }
@@ -255,6 +259,58 @@ void ClassKMeansBase::ComputeImageStatistics(std::string imageFileName,
 void ClassKMeansBase::KMeansClassif()
 {
   ExecuteInternal( "classif" );
+}
+
+void ClassKMeansBase::CreateOutMeansFile(FloatVectorImageType *image,
+                                        std::string modelFileName,
+                                         unsigned int nbClasses)
+{
+  if (IsParameterEnabled("outmeans"))
+  {
+    unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
+    unsigned int nbElements = nbClasses * nbBands;
+    // get the line in model file that contains the centroids positions
+    std::ifstream infile(modelFileName.c_str());
+    if(infile)
+    {
+      // get the end line with the centroids
+      std::string line, centroidLine;
+      while(!infile.eof())
+      {
+        std::getline(infile,line);
+        if (!line.empty())
+          centroidLine = line;
+      }
+
+      std::vector<std::string> centroidElm;
+      boost::split(centroidElm,centroidLine,boost::is_any_of(" "));
+
+      // remove the first elements, not the centroids positions
+      int nbWord = centroidElm.size();
+      int beginCentroid = nbWord-nbElements;
+      centroidElm.erase(centroidElm.begin(), centroidElm.begin()+beginCentroid);
+
+      // write in the output file
+      std::ofstream outfile;
+      outfile.open(GetParameterString("outmeans").c_str());
+
+      for (unsigned int i = 0; i < nbClasses; i++)
+      {
+        for (unsigned int j = 0; j < nbBands; j++)
+        {
+          outfile << std::setw(8) << centroidElm[i * nbBands + j] << " ";
+        }
+        outfile << std::endl;
+      }
+    outfile.close();
+    }
+    else
+    {
+      itkExceptionMacro(<< "File : " << modelFileName << " couldn't be opened");
+    }
+    infile.close();
+
+  }
 }
 
 }

@@ -21,12 +21,9 @@
 #ifndef otbClassKMeansBase_h
 #define otbClassKMeansBase_h
 
-#include "otbVectorDataFileWriter.h"
 #include "otbWrapperCompositeApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbStatisticsXMLFileWriter.h"
-#include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbOGRDataToSamplePositionFilter.h"
 
 namespace otb
@@ -42,6 +39,7 @@ namespace Wrapper
  * 
  * KMeansClassification = ImageEnveloppe + PolygonClassStatistics + 
  *                        SampleSelection + SamplesExtraction + 
+ *                        ComputeImagesStatistics +
  *                        TrainVectorClassifier + ImageClassifier.
  *
  * \ingroup OTBAppClassification
@@ -120,13 +118,25 @@ public:
    * \param imageFileName input image filename
    * \param imagesStatsFileName image statistics
    */
-  void ComputeImageStatistics(std::string imageFileName,
-                              std::string imagesStatsFileName);
+    void ComputeImageStatistics(std::string imageFileName,
+                                std::string imagesStatsFileName);
 
   /**
    * Performs a classification of the input image according to a model file
    */
     void KMeansClassif();
+
+  /**
+   * Write in the output file the centroids positions
+   *    class1Dim1 .. class1DimN
+   *    ...              ...
+   *    classMDim1 .. classMDimN
+   * \param image input image
+   * \param modelFileName model filename
+   * \param nbClasses number of class
+   */
+    void CreateOutMeansFile(FloatVectorImageType *image, std::string modelFileName,
+                            unsigned int nbClasses);
 
     /**
    * \class KMeansFileNamesHandler

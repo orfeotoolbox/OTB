@@ -640,6 +640,7 @@ if(OTB_USE_SHARK)
     -sampler periodic
     -rand 121212
     -nodatalabel 255
+    -outmeans ${TEMP}/apTvClKMeansImageClassificationFilterOutMeans.txt
     -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif uint8
     -cleanup 0
     VALID   --compare-image ${NOTOL}

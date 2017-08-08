@@ -138,7 +138,10 @@ private:
     // Compute a classification of the input image according to a model file
     KMeansClassif();
 
-    // remove all tempory files
+    // Create the output text file containing centroids positions
+    CreateOutMeansFile(GetParameterImage("in"), fileNames.modelFile, GetParameterInt("nc"));
+
+    // Remove all tempory files
     if( IsParameterEnabled( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
