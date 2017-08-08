@@ -102,16 +102,12 @@ private:
   int m_NbBin;
   double m_Step;
 
-
-
 };
 
-}
+}  // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbComputeHistoFilter.txx"
 #endif
-  // End namespace otb
-
-
+  
 #endif
