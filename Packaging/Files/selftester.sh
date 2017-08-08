@@ -5,6 +5,8 @@ CUR_DIR="$( cd "$( dirname "$0" )/../" && pwd )"
 echo "CUR_DIR=$CUR_DIR"
 cd "$CUR_DIR" || exit
 
+EXIT_ON_ERROR=1
+
 # define convenient functions
 # ps_children( parentPID ) : get PIDs of children processes
 ps_children () {
@@ -16,10 +18,19 @@ nb_report_lines () {
   report_lines="$(wc -l selftest_report.log)"
   echo $report_lines | cut -d ' ' -f 1
 }
+#
+
+exit_if () {
+  if [ $EXIT_ON_ERROR = 1 ]; then
+      echo "EXIT_ON_ERROR=1"
+      exit 1;
+  fi
+}
 
 # echo_and_report ( string ) : echo and print to report
 echo_and_report () {
-  echo "$1" | tee -a selftest_report.log
+    echo "$1" | tee -a selftest_report.log
+    exit_if
 }
 
 # -------------------------------------------------------------------------
@@ -35,7 +46,8 @@ OTB_SO_LIBRARIES=$(find lib -name '*.so*')
 OTB_DY_LIBRARIES=$(find lib -name '*.dylib')
 OTB_EXE="bin/mapla bin/monteverdi bin/otbApplicationLauncherQt bin/otbApplicationLauncherCommandLine"
 for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
-  F_OUTPUT=$(file "$name")
+    F_OUTPUT=$(file "$name")
+    echo "checking $name"
   if echo "$F_OUTPUT" | grep -q 'cannot open'; then
     echo_and_report "$F_OUTPUT"
   elif echo "$F_OUTPUT" | grep -q ': broken symbolic link'; then
@@ -76,14 +88,14 @@ fi
 app_index=0
 for app in $OTB_APPS; do
   if [ ! -f "bin/otbcli_$app" ]; then
-    echo_and_report "ERROR: missing cli launcher for application $app"
+      echo_and_report "ERROR: missing cli launcher for application $app"
+      
   else
     CLI_OUTPUT=$("bin/otbcli_$app" -help 2>&1)
-    CLI_FILTER=$(echo "${CLI_OUTPUT}"| tr '\n' ' ' | grep -E "^This is the $app application, version .* Parameters: .* Examples:.*")
+    CLI_FILTER=$(echo "${CLI_OUTPUT}"| tr '\n' ' ' | grep -E "This is the*.*$app*.*application, version .* Parameters: .* Examples:.*")
     CLI_FILTER2=$(echo "$CLI_FILTER" | grep -v 'FATAL')
     if [ -z "$CLI_FILTER2" ]; then
-      echo_and_report "ERROR: bin/otbcli_$app"
-      echo_and_report "$CLI_OUTPUT"
+      echo_and_report "ERROR: bin/otbcli_$app\n$CLI_OUTPUT"
     fi
   fi
   # test the gui launcher only on 2 first applications
@@ -104,12 +116,14 @@ for app in $OTB_APPS; do
         kill -9 "$NEXT_CHILD_PID"
         wait "$NEXT_CHILD_PID" 2>/dev/null
       else
-        echo_and_report "ERROR: otbApplicationLauncherQt $app failed to launch"
+        echo "ERROR: otbApplicationLauncherQt $app failed to launch"
         tee -a selftest_report.log < tmp.log
+	exit_if
       fi
     else
-      echo_and_report "ERROR: bin/otbgui_$app failed to launch"
-      tee -a selftest_report.log < tmp.log
+	echo "ERROR: bin/otbgui_$app failed to launch"
+	tee -a selftest_report.log < tmp.log
+	exit_if
     fi
   fi
   app_index=$(( app_index + 1 ))
