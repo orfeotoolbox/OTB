@@ -14,14 +14,19 @@ echo "MY_INSTALL_DIR=%MY_INSTALL_DIR%"
 IF %EXIT_ON_ERROR%.==. ( set EXIT_ON_ERROR=1)
 IF %VERBOSE%.==. ( set VERBOSE=1)
 
+echo VERBOSE=%VERBOSE%
+echo EXIT_ON_ERROR=%EXIT_ON_ERROR%
+
 :: if "/q" is given, hide the error dialogs (hence make the script non-interactive)
 if /i not -%1-==-/q- (
   goto :skip_hide_error
 )
-echo Hide error dialogs
+
+
 call :getDontShowUI
 if %DONTSHOWUI_VALUE% equ 0 call :setDontShowUI 1
 :skip_hide_error
+echo Hide error dialogs
 :: Get current PID
 type NUL > pid.log
 wmic PROCESS where "Name='WMIC.exe'" get ParentProcessId >pid.log 2>&1
