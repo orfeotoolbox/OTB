@@ -1,5 +1,9 @@
 @echo off
 
+rem set EXIT_ON_ERROR=0
+rem set VERBOSE=1
+rem cmd /k tools\selftester.bat /q > selftest_report.log 2>&1
+
 set MY_TOOLS_DIR=%~dp0
 cd %MY_TOOLS_DIR%..
 set MY_INSTALL_DIR=%cd%
