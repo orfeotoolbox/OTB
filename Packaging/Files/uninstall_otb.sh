@@ -19,10 +19,10 @@
 # limitations under the License.
 #
 set -e
-rm -fv OUT_DIR/include/OTB-*
-rm -fv OUT_DIR/lib/{libotb*,libOTB*}
+rm -fr OUT_DIR/include/OTB-*
+rm -f OUT_DIR/lib/{libotb*,libOTB*}
 rm -fr OUT_DIR/lib/{otb,python/_otbApplication*}
-rm -fv OUT_DIR/share/OTB*
+rm -fr OUT_DIR/share/OTB*
 rm -fv OUT_DIR/bin/{otb*,monteverdi,mapla}
 rm -fv OUT_DIR/{mapla.sh,monteverdi.sh}
 
