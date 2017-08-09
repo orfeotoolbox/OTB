@@ -103,6 +103,21 @@ void QtWidgetParameterBase::Reset(  )
   this->UpdateGUI();
 }
 
+const Parameter *
+QtWidgetParameterBase
+::GetParam() const
+{
+  return m_Param;
+}
+
+Parameter *
+QtWidgetParameterBase
+::GetParam()
+{
+  return m_Param;
+}
+
+
 }
 
 }

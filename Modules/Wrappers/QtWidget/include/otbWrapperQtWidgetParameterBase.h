@@ -61,6 +61,9 @@ signals:
 protected:
   QtWidgetModel* GetModel();
 
+  const Parameter * GetParam() const;
+
+  Parameter * GetParam();
 
 private:
   QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
@@ -72,7 +75,7 @@ private:
 
   QtWidgetModel* m_Model;
 
-  Parameter*      m_Param;
+  Parameter * m_Param;
 };
 
 
