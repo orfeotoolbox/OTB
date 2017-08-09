@@ -47,7 +47,6 @@ OTB_DY_LIBRARIES=$(find lib -name '*.dylib')
 OTB_EXE="bin/mapla bin/monteverdi bin/otbApplicationLauncherQt bin/otbApplicationLauncherCommandLine"
 for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
     F_OUTPUT=$(file "$name")
-    echo "checking $name"
   if echo "$F_OUTPUT" | grep -q 'cannot open'; then
     echo_and_report "$F_OUTPUT"
   elif echo "$F_OUTPUT" | grep -q ': broken symbolic link'; then
