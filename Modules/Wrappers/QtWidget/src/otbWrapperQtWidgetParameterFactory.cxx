@@ -66,13 +66,14 @@ public:
 
   static QtWidgetParameterBase* Create( Parameter* param, QtWidgetModel* model )
   {
-    QtWidgetParameterBase* widget = ITK_NULLPTR;
-    TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
+    QtWidgetParameterBase * widget = ITK_NULLPTR;
+    TParameterType * specificParam = dynamic_cast< TParameterType * >( param );
 
-    if (specificParam)
-      {
-      widget = new TQtWidget(specificParam, model);
-      }
+    // Code should break if param is not a TParameterType and not be silent!
+    assert( specificParam!=nullptr );
+
+    widget = new TQtWidget( specificParam, model );
+
     return widget;
   }
 };
