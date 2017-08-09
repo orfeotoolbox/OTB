@@ -281,7 +281,11 @@ ListEditItemModel
 {
   qDebug() << this << "::insertRow(" << row << "," << parent << ")";
 
-  return QAbstractItemModel::insertRow( row, parent );
+  assert( m_StringList!=nullptr );
+
+  m_StringList->Insert( "", row );
+
+  return true;
 }
 
 /*****************************************************************************/
