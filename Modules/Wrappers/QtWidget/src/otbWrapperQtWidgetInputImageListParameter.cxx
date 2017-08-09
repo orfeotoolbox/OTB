@@ -79,7 +79,11 @@ QtWidgetInputImageListParameter
 
   assert( widget->GetItemModel() );
 
-  widget->GetItemModel()->SetStringList( m_InputImageListParam.GetPointer() );
+  assert( dynamic_cast< StringListInterface * >( GetParam() )!=nullptr );
+
+  widget->GetItemModel()->SetStringList(
+    dynamic_cast< StringListInterface * >( GetParam() )
+  );
 
   //
   // Global Layout
