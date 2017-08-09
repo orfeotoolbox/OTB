@@ -83,13 +83,75 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
 
 
 void
-InputImageListParameter::AddNullElement()
+InputImageListParameter
+::AddNullElement()
 {
-  m_InputImageParameterVector.push_back(ITK_NULLPTR);
-  m_ImageList->PushBack(ITK_NULLPTR);
-  SetActive(false);
-  this->Modified();
+  InsertNullElement();
 }
+
+
+void
+InputImageListParameter
+::InsertNullElement( int index )
+{
+  InputImageParameterVectorType::iterator it1( m_InputImageParameterVector.begin() );
+  FloatVectorImageListType::Iterator it2( m_ImageList->Begin() );
+
+  if( index>=0 )
+    {
+    it1 += index;
+    it2 += index;
+    }
+
+  m_InputImageParameterVector.insert( it1, ITK_NULLPTR );
+  m_ImageList->Insert( it2, ITK_NULLPTR );
+
+  SetActive( false );
+
+  Modified();
+}
+
+bool
+InputImageListParameter
+::Insert( const std::string & filename, int index )
+{
+  InputImageParameter::Pointer ip(
+    InputImageParameter::New()
+  );
+
+  FloatVectorImageType * i = nullptr;
+
+  if( !filename.empty() )
+    {
+    ip->SetFromFileName( filename );
+    i = ip->GetFloatVectorImage();
+    }
+
+  InputImageParameterVectorType::iterator it1;
+  FloatVectorImageListType::Iterator it2;
+
+  if( index<0 )
+    {
+    it1 = m_InputImageParameterVector.end();
+    it2 = m_ImageList->Begin();
+    }
+
+  else
+    {
+    it1 = m_InputImageParameterVector.begin() + index;
+    it2 = m_ImageList->Begin() + index;
+    }
+
+  m_InputImageParameterVector.insert( it1, ip );
+  m_ImageList->Insert( it2, i );
+
+  SetActive( true );
+
+  Modified();
+
+  return true;
+}
+
 
 bool
 InputImageListParameter::AddFromFileName(const std::string & filename)

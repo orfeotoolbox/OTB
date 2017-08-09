@@ -50,8 +50,14 @@ public:
   /** Add null element to lists. */
   virtual void AddNullElement() = 0;
 
+  /** */
+  virtual void InsertNullElement( int = -1 ) = 0;
+
   /** Add a filename from a filename */
   virtual bool AddFromFileName( const std::string & filename ) = 0;
+
+  /** */
+  virtual bool Insert( const std::string & filename, int = -1 ) = 0;
 
   /** Set one specific stored filename. */
   virtual bool SetNthFileName( const unsigned int id, const std::string & filename ) = 0;

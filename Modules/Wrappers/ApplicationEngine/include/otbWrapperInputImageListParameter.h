@@ -62,8 +62,14 @@ public:
   /** Add null element to lists. */
   void AddNullElement() ITK_OVERRIDE;
 
+  /** */
+  void InsertNullElement( int = -1 ) ITK_OVERRIDE;
+
   /** Add an image from a filename */
   bool AddFromFileName( const std::string & filename ) ITK_OVERRIDE;
+
+  /** */
+  bool Insert( const std::string &, int = -1 ) ITK_OVERRIDE;
 
   /** Set one specific stored image filename. */
   bool SetNthFileName( const unsigned int id, const std::string & filename ) ITK_OVERRIDE;
