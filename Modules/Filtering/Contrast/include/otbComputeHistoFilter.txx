@@ -92,7 +92,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
   Superclass::GenerateInputRequestedRegion();
   typename Superclass::InputImagePointer inputPtr =
-    const_cast<InputImageType *>(this->GetInput());
+                  const_cast<InputImageType *>(this->GetInput());
   IndexType start ;
   start[0] = this->GetOutput()->GetRequestedRegion().GetIndex()[0] * m_ThumbSize[0];
   start[1] = this->GetOutput()->GetRequestedRegion().GetIndex()[1] * m_ThumbSize[1];
@@ -192,17 +192,16 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
-::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
+::ThreadedGenerateData(const OutputImageRegionType & itkNotUsed(outputRegionForThread) ,
                        ThreadIdType threadId )
 {
   typename InputImageType::ConstPointer input = this->GetInput();
   SizeType outSize = this->GetOutput()->GetRequestedRegion().GetSize();
   IndexType outIndex = this->GetOutput()->GetRequestedRegion().GetIndex();
   int threadIndex = threadId * outSize[0] * outSize[1];
-  ;
   typename InputImageType::RegionType region;
   int pixel = 0;
-  for ( int nthHisto = 0 ; nthHisto < outSize[0] * outSize[1] ; nthHisto++ )
+  for ( uint nthHisto = 0 ; nthHisto < outSize[0] * outSize[1] ; nthHisto++ )
     {
     IndexType start;
     start[0] = (outIndex[0] +  nthHisto % outSize[0] ) * m_ThumbSize[0];
@@ -217,7 +216,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
     it.GoToBegin();
     while ( !it.IsAtEnd() )
       {
-      if( it.Get() == m_NoData )
+      if( it.Get() == m_NoData || it.Get() > m_Max || it.Get() < m_Min )
         {
         ++it;
         continue;
@@ -226,8 +225,6 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
       ++m_HistoThread[threadIndex + nthHisto][pixel];
       ++it;
       }
-    ++nthHisto;
-
     }
 }
 
@@ -263,7 +260,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 }
 
 
-  // End namespace otb
-}
+  
+} // End namespace otb
 
 #endif

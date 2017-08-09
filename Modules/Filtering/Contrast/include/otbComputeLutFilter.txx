@@ -158,7 +158,7 @@ void ComputeLutFilter < TInputImage , TOutputImage >
       countInput  += inputHisto[ countValue ];
       }
     }
-  for (uint i = 0 ; i < m_NbBin ; i++)
+  for (int i = 0 ; i < m_NbBin ; i++)
     {
     if (lut[i] == -1)
       {

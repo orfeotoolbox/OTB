@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbComputeHistoFilter_h
-#define otbComputeHistoFilter_h
+#ifndef otbComputeGainFilter_h
+#define otbComputeGainFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbImage.h"
@@ -27,35 +27,41 @@
 namespace otb
 {
 
-template < class TInputImage , class TOutputImage >
-class ITK_EXPORT ComputeHistoFilter :
+template < class TInputImage , class TLut , class TOutputImage >
+class ITK_EXPORT ComputeGainFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
-public:
+public :
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
+  typedef TLut LutType;
+
   /** typedef for standard classes. */
-  typedef ComputeHistoFilter Self;
+  typedef ComputeGainFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
   typedef typename InputImageType::InternalPixelType InputPixelType;
-  typedef typename InputImageType::IndexType IndexType;
-  typedef typename InputImageType::SizeType SizeType;
+  typedef typename OutputImageType::InternalPixelType OutputPixelType;
+
+  typedef typename LutType::PixelType LutPixelType;
+  typedef typename LutType::SizeType LutSizeType;
+  typedef typename LutType::IndexType LutIndexType;
+
+  typedef typename InputImageType::SizeType InputSizeType;
 
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   typedef unsigned int ThreadIdType;
-
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
 
-  itkSetMacro(NbBin, int);
-  itkGetMacro(NbBin, int);
+  itkSetMacro(NoData, InputPixelType);
+  itkGetMacro(NoData, InputPixelType);
 
   itkSetMacro(Min, InputPixelType);
   itkGetMacro(Min, InputPixelType);
@@ -63,51 +69,62 @@ public:
   itkSetMacro(Max, InputPixelType);
   itkGetMacro(Max, InputPixelType);
 
-  itkSetMacro(NoData, InputPixelType);
-  itkGetMacro(NoData, InputPixelType);
+  itkSetMacro(Step, double);
+  itkGetMacro(Step, double);
 
-  itkSetMacro(ThumbSize, SizeType);
-  itkGetMacro(ThumbSize, SizeType);
+  void SetInputLut( const LutType * lut) ;
 
-  itkGetMacro(TargetHisto, typename OutputImageType::Pointer);
+  void SetInputImage( const InputImageType * input) ;
 
-protected:
-  ComputeHistoFilter();
-  ~ComputeHistoFilter() ITK_OVERRIDE {}
+protected :
+  ComputeGainFilter();
+  ~ComputeGainFilter() ITK_OVERRIDE {}
+  
+  const TInputImage * GetInputImage() const;
 
+  
+  const TLut * GetInputLut() const;
+
+
+  // void GenerateOutputInformation();
   void GenerateInputRequestedRegion();
 
-  void GenerateOutputInformation();
-
-  // Call  BeforeThreadedGenerateData after getting the number of thread
-  void GenerateData();
+    // Call  BeforeThreadedGenerateData after getting the number of thread
+  // void GenerateData();
 
   void BeforeThreadedGenerateData();
 
-  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
+  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
                             ThreadIdType threadId);
 
-  void AfterThreadedGenerateData();
+  // void AfterThreadedGenerateData();
 
-private:
-  ComputeHistoFilter(const Self &); //purposely not implemented
+  float Postprocess( const LutPixelType & lut ,
+                     int pixelValue );
+
+  float InterpoleGain( typename LutType::ConstPointer gridLut ,
+                       int pixelValue , 
+                       typename InputImageType::IndexType index);
+
+private :
+  ComputeGainFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  typename OutputImageType::Pointer m_TargetHisto;
-  std::vector< typename OutputImageType::PixelType > m_HistoThread;
+  InputPixelType m_NoData;
   InputPixelType m_Min;
   InputPixelType m_Max;
-  InputPixelType m_NoData;
-  SizeType m_ThumbSize;
-  int m_NbBin;
   double m_Step;
+  LutSizeType m_LutSize;
+  InputSizeType m_ThumbSize;
+
 
 };
 
 }  // End namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComputeHistoFilter.txx"
-#endif
   
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbComputeGainFilter.txx"
+#endif
+
+
 #endif
