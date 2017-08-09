@@ -279,11 +279,24 @@ bool
 ListEditItemModel
 ::insertRow( int row, const QModelIndex & parent )
 {
-  qDebug() << this << "::insertRow(" << row << "," << parent << ")";
+  return insertRows( row, 1, parent );
+}
+
+/*****************************************************************************/
+bool
+ListEditItemModel
+::insertRows( int row, int count, const QModelIndex & parent )
+{
+  qDebug() << this << "::insertRows(" << row << "," << count << "," << parent << ")";
 
   assert( m_StringList!=nullptr );
 
-  m_StringList->Insert( "", row );
+  beginInsertRows( parent, row, count );
+  {
+    for( int r=row; r<row+count; ++r )
+      m_StringList->Insert( "", r );
+  }
+  endInsertRows();
 
   return true;
 }

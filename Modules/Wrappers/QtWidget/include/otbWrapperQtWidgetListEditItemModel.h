@@ -165,6 +165,14 @@ public:
     insertRow( int row, const QModelIndex & parent = QModelIndex() );
 
   /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
+   */
+  bool
+    insertRows( int row,
+                int count,
+                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
   QModelIndex parent( const QModelIndex & index ) const ITK_OVERRIDE;
