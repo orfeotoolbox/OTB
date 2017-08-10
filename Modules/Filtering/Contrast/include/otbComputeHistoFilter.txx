@@ -40,6 +40,7 @@ ComputeHistoFilter < TInputImage , TOutputImage >
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NbBin = 256;
+  m_Threshold = std::numeric_limits< float >::max();
   m_ThumbSize.Fill(-1);
 }
 
@@ -239,12 +240,17 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   SizeType outSize = this->GetOutput()->GetRequestedRegion().GetSize();
   IndexType outIndex = this->GetOutput()->GetRequestedRegion().GetIndex();
   int agreg = 0;
+  int total = 0;
+  int height = 0;
+  int rest = 0;
   oit.GoToBegin();
   while ( !oit.IsAtEnd() )
     {
+    total = 0;
     for (int i = 0 ; i<m_NbBin ; i++)
       {
       agreg = 0;
+
       for (uint threadId = 0 ; threadId<nbThread ; threadId++ )
         {
         agreg += m_HistoThread[threadId * outSize[0] * outSize[1] \
@@ -254,6 +260,34 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
           // std::cout<<agreg<<std::endl;
         }
       oit.Get()[i] = agreg;
+      total += agreg;
+      }
+    height = 0;
+    rest = 0;
+    if ( m_Threshold == std::numeric_limits< float >::max() )
+      {
+      ++oit;
+      continue;
+      }
+    height = static_cast<int>( m_Threshold * ( total / m_NbBin ) );
+    // Warning!!!! Need to handle out of bound int!!!
+    for( int i = 0 ; i < m_NbBin ; i++ )
+      {
+      if ( oit.Get()[i] > height )
+        {
+        rest += oit.Get()[i] - height ;
+        oit.Get()[i] = height ;
+        }
+      }
+    height = rest / m_NbBin;
+    rest = rest % m_NbBin;
+    for( int i = 0 ; i < m_NbBin ; i++ )
+      {
+      oit.Get()[i] += height ;
+      if ( i > (m_NbBin - rest)/2 && i <= (m_NbBin - rest)/2 + rest )
+        {
+        ++oit.Get()[i];
+        }
       }
     ++oit;
     }

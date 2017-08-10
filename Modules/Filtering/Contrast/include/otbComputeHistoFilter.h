@@ -71,6 +71,9 @@ public:
 
   itkGetMacro(TargetHisto, typename OutputImageType::Pointer);
 
+  itkSetMacro(Threshold , float);
+  itkGetMacro(Threshold , float);
+
 protected:
   ComputeHistoFilter();
   ~ComputeHistoFilter() ITK_OVERRIDE {}
@@ -100,6 +103,7 @@ private:
   InputPixelType m_NoData;
   SizeType m_ThumbSize;
   int m_NbBin;
+  float m_Threshold;
   double m_Step;
 
 };

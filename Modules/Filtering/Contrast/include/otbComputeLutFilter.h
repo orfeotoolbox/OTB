@@ -53,9 +53,6 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComputeLutFilter, ImageToImageFilter);
 
-  itkSetMacro(Threshold , int);
-  itkGetMacro(Threshold , int);
-
 protected:
   ComputeLutFilter();
   ~ComputeLutFilter() ITK_OVERRIDE {}
@@ -81,7 +78,6 @@ private:
   ComputeLutFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  int m_Threshold;
   int m_NbBin;
 
 };

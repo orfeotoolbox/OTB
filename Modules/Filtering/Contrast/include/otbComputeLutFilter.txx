@@ -36,7 +36,6 @@ ComputeLutFilter < TInputImage , TOutputImage >
 ::ComputeLutFilter()
 {
   m_NbBin = 256;
-  m_Threshold = 3;
 }
 
 template <class TInputImage, class TOutputImage >

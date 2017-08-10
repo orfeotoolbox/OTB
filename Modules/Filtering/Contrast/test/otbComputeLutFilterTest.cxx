@@ -36,8 +36,10 @@ int main ( int itkNotUsed(argc),
   thumbSize[0] /= 15;
   thumbSize[1] /= 15;
   filterHisto->SetThumbSize( thumbSize );
+  filterHisto->SetNoData( 0 );
   filterHisto->SetMin( 377 );
   filterHisto->SetMax( 12654 );
+  filterHisto->SetThreshold( 3.0 );
   filterHisto->Update();
   FilterLutType::Pointer filterLut ( FilterLutType::New() );
   filterLut->SetInput(filterHisto->GetOutput());
