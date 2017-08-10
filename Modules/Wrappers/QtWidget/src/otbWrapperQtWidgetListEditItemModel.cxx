@@ -147,11 +147,19 @@ ListEditItemModel
       switch( idx.column() )
         {
         case COLUMN_NAME:
+	  {
 	  assert( idx.row() >= 0 );
+
+	  std::string filename(
+	    stringList->GetNthFileName( idx.row() )
+	  );
+
 	  return
-	    QFile::decodeName(
-	      stringList->GetNthFileName( idx.row() ).c_str()
+	    filename.empty()
+	    ? "NO FILENAME"
+	    : QFile::decodeName( filename.c_str()
 	    );
+	  }
           break;
 
 	default:
@@ -328,6 +336,53 @@ ListEditItemModel
     ( m_StringList==nullptr || p.isValid() )
     ? 0
     : m_StringList->Size();
+}
+
+/*****************************************************************************/
+bool
+ListEditItemModel
+::setData( const QModelIndex & idx,
+           const QVariant & value,
+           int role )
+{
+  qDebug()
+    << this << "::setData(" << idx << "," << value << "," << role
+    << ");";
+
+  assert( !idx.parent().isValid() );
+  assert( idx.row()>=0 );
+  assert( idx.internalPointer()!=nullptr );
+
+  StringListInterface * stringList =
+    static_cast< StringListInterface * >( idx.internalPointer() );
+
+  switch( idx.column() )
+    {
+    case COLUMN_NAME:
+      switch( role )
+	{
+	case Qt::EditRole:
+	  stringList->SetNthFileName(
+	    idx.row(),
+	    QFile::encodeName( value.toString() ).data()
+	  );
+
+	  return true;
+	  break;
+
+	case Qt::CheckStateRole:
+	  break;
+
+	default:
+	  break;
+	}
+      break;
+
+    default:
+      break;
+    }
+
+  return false;
 }
 
 /*******************************************************************************/

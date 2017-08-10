@@ -182,6 +182,14 @@ public:
    */
   int rowCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
 
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
+   */
+  bool
+    setData( const QModelIndex & index,
+             const QVariant & value,
+             int role = Qt::EditRole ) ITK_OVERRIDE;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
