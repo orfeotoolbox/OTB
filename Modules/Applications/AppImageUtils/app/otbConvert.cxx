@@ -71,10 +71,15 @@ public:
   /** Filters typedef */
   typedef itk::Statistics::ListSample<FloatVectorImageType::PixelType> ListSampleType;
   typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
-  typedef ListSampleToHistogramListGenerator<ListSampleType, FloatVectorImageType::InternalPixelType, DFContainerType> HistogramsGeneratorType;
-  typedef StreamingShrinkImageFilter<FloatVectorImageType, FloatVectorImageType> ShrinkFilterType;
+  typedef ListSampleToHistogramListGenerator<ListSampleType,
+                                             FloatVectorImageType::InternalPixelType,
+                                             DFContainerType> HistogramsGeneratorType;
+  typedef StreamingShrinkImageFilter<FloatVectorImageType,
+                                     FloatVectorImageType> ShrinkFilterType;
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
-  typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType, FloatVectorImageType, TransferLogFunctor> TransferLogType;
+  typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
+                                                 FloatVectorImageType,
+                                                 TransferLogFunctor> TransferLogType;
 
 
 private:
@@ -85,12 +90,16 @@ private:
                    " and/or changing the pixel type.");
     // Documentation
     SetDocName("Image Conversion");
-    SetDocLongDescription("This application performs an image pixel type conversion (short, ushort, uchar, int, uint, float and double types are handled). The output image is written in the specified format (ie. that corresponds to the given extension).\n The conversion can include a rescale using the image 2 percent minimum and maximum values. The rescale can be linear or log2.");
+    SetDocLongDescription("This application performs an image pixel type conversion "
+      " (short, ushort, uchar, int, uint, float and double types are handled). "
+      "The output image is written in the specified format (ie. that corresponds "
+      "to the given extension).\n The conversion can include a rescale using "
+      "the image 2 percent minimum and maximum values. The rescale can be linear or log2.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
 
-	AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 
@@ -110,7 +119,8 @@ private:
     MandatoryOff("type.linear.gamma");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
-    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic (the mask must have the same dimensions as the input image)");
+    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic "
+      "(the mask must have the same dimensions as the input image)");
     MandatoryOff("mask");
     DisableParameter("mask");
 
@@ -118,13 +128,15 @@ private:
     SetParameterDescription("hcp","Parameters to cut the histogram edges before rescaling");
 
     AddParameter(ParameterType_Float, "hcp.high", "High Cut Quantile");
-    SetParameterDescription("hcp.high", "Quantiles to cut from histogram high values before computing min/max rescaling (in percent, 2 by default)");
+    SetParameterDescription("hcp.high", "Quantiles to cut from histogram high values "
+      "before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("hcp.high");
     SetDefaultParameterFloat("hcp.high", 2.0);
     DisableParameter("hcp.high");
 
     AddParameter(ParameterType_Float, "hcp.low", "Low Cut Quantile");
-    SetParameterDescription("hcp.low", "Quantiles to cut from histogram low values before computing min/max rescaling (in percent, 2 by default)");
+    SetParameterDescription("hcp.low", "Quantiles to cut from histogram low values "
+      "before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("hcp.low");
     SetDefaultParameterFloat("hcp.low", 2.0);
     DisableParameter("hcp.low");
@@ -198,7 +210,8 @@ private:
       // Shrink factor is computed so as to load a quicklook of 1000
       // pixels square at most
       typename FloatVectorImageType::SizeType imageSize = input->GetLargestPossibleRegion().GetSize();
-      unsigned int shrinkFactor = std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
+      unsigned int shrinkFactor =
+        std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
 
       otbAppLogDEBUG( << "Shrink factor used to compute Min/Max: "<<shrinkFactor );
 
@@ -239,11 +252,13 @@ private:
 
 
       otbAppLogDEBUG( << "Evaluating input Min/Max..." );
-      itk::ImageRegionConstIterator<FloatVectorImageType> it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator<FloatVectorImageType>
+        it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
       itk::ImageRegionConstIterator<FloatVectorImageType> itMask;
       if (useMask)
         {
-        itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
+        itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
+          maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
         }
 
       typename ListSampleType::Pointer listSample = ListSampleType::New();
@@ -277,7 +292,8 @@ private:
       // if all pixels were masked, we assume a wrong mask and then include all image
       if (listSample->Size() == 0)
         {
-        otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask and include all the image");
+        otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask "
+          "and include all the image");
         for(it.GoToBegin(); !it.IsAtEnd(); ++it)
           {
           listSample->PushBack(it.Get());
@@ -296,8 +312,12 @@ private:
 
       for(unsigned int i = 0; i < nbComp; ++i)
         {
-        inputMin[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.01 * GetParameterFloat("hcp.low"));
-        inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 1.0 - 0.01 * GetParameterFloat("hcp.high"));
+        inputMin[i] =
+          histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,
+                                                                0.01 * GetParameterFloat("hcp.low"));
+        inputMax[i] =
+          histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,
+                                                                1.0 - 0.01 * GetParameterFloat("hcp.high"));
         }
 
       otbAppLogDEBUG( << std::setprecision(5) << "Min/Max computation done : min=" << inputMin
