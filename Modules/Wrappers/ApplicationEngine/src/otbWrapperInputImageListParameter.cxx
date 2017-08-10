@@ -115,6 +115,8 @@ bool
 InputImageListParameter
 ::Insert( const std::string & filename, int index )
 {
+  assert( m_InputImageParameterVector.size()==m_ImageList->Size() );
+
   InputImageParameter::Pointer ip(
     InputImageParameter::New()
   );
@@ -127,23 +129,22 @@ InputImageListParameter
     i = ip->GetFloatVectorImage();
     }
 
-  InputImageParameterVectorType::iterator it1;
-  FloatVectorImageListType::Iterator it2;
-
-  if( index<0 )
+  if( index<0 ||
+      static_cast< unsigned int >( index )>=m_InputImageParameterVector.size() )
     {
-    it1 = m_InputImageParameterVector.end();
-    it2 = m_ImageList->Begin();
+    m_InputImageParameterVector.push_back( ip );
+    m_ImageList->PushBack( i );
     }
 
   else
     {
-    it1 = m_InputImageParameterVector.begin() + index;
-    it2 = m_ImageList->Begin() + index;
-    }
+    m_InputImageParameterVector.insert(
+      m_InputImageParameterVector.begin() + index,
+      ip
+    );
 
-  m_InputImageParameterVector.insert( it1, ip );
-  m_ImageList->Insert( it2, i );
+    m_ImageList->Insert( m_ImageList->Begin() + index, i );
+    }
 
   SetActive( true );
 
@@ -184,7 +185,8 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
 }
 
 bool
-InputImageListParameter::SetNthFileName( const unsigned int id, const std::string & filename )
+InputImageListParameter
+::SetNthFileName( const unsigned int id, const std::string & filename )
 {
   if( m_InputImageParameterVector.size()<id )
     {
