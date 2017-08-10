@@ -43,8 +43,14 @@ const char* USGSContinentDir[] = {"Africa",
 
 const std::vector<std::string> USGSContinentList(USGSContinentDir, USGSContinentDir + sizeof(USGSContinentDir)/sizeof(USGSContinentDir[0]));
 
-const std::string HGTExtension = ".hgt.zip";
-const std::string HGTExtensionSimulation = ".hgt";
+const std::string HGTZIPExtension = ".hgt.zip";
+const std::string HGTExtension = ".hgt";
+const std::string ZIPExtension = ".zip";
+#ifdef _WIN32
+const char Sep = '\\';
+#else
+const char Sep = '/';
+#endif
 namespace Wrapper
 {
 
@@ -70,30 +76,140 @@ public:
 
 private:
 
-  int m_Mode;
-  
-  DownloadSRTMTiles() : m_Mode(Mode_Download) {}
+  typedef enum {
+    SRTM_Unknown = 0,
+    SRTM_Africa,
+    SRTM_Australia,
+    SRTM_Eurasia,
+    SRTM_Islands,
+    SRTM_North_America,
+    SRTM_South_America
+  } SRTMContinent;
 
-  bool SRTMTileExists(const std::string & url) const
+  typedef struct {
+    int Lon : 9;
+    int Lat : 8;
+    unsigned int Conti : 3;
+  } SRTMTileId;
+
+  class TileIdComparator
+    {
+    public:
+      bool operator() (const SRTMTileId & a, const SRTMTileId & b) const
+        {
+        if (a.Lat < b.Lat)
+          return true;
+        if (a.Lat == b.Lat && a.Lon < b.Lon)
+          return true;
+        return false;
+        }
+    };
+
+  typedef std::set<SRTMTileId,TileIdComparator> SRTMTileSet;
+
+  DownloadSRTMTiles()
+    {
+    static SRTMTileId staticTileList[] = {
+    {0,72,2},{0,73,2},{0,97,2},{0,98,2},{0,99,2}
+      };
+    // initialize the default set of SRTM tiles
+    m_SRTMTileList = SRTMTileSet(staticTileList,staticTileList+5);
+    }
+
+  std::string SRTMIdToName(const SRTMTileId &id) const
+    {
+    char name[8];
+    sprintf(name,"%c%02d%c%03d",
+      (id.Lat < 0 ? 'S' : 'N'),
+      vcl_abs(id.Lat),
+      (id.Lon < 0 ? 'W' : 'E'),
+      vcl_abs(id.Lon));
+    return std::string(name);
+    }
+
+  std::string SRTMIdToContinent(const SRTMTileId &id) const
+    {
+    switch (id.Conti)
+      {
+      case SRTM_Africa:
+        return std::string("Africa");
+      case SRTM_Australia:
+        return std::string("Australia");
+      case SRTM_Eurasia:
+        return std::string("Eurasia");
+      case SRTM_Islands:
+        return std::string("Islands");
+      case SRTM_North_America:
+        return std::string("North_America");
+      case SRTM_South_America:
+        return std::string("South_America");
+      default:
+        break;
+      }
+    return std::string();
+    }
+
+  bool SRTMTileExists(const SRTMTileId & tile, std::string & continent) const
   {
-    switch ( m_Mode )
+    SRTMTileSet::const_iterator pos = m_SRTMTileList.find(tile);
+    if (pos != m_SRTMTileList.end())
       {
-      case Mode_Download:
-      {
-      CurlHelper::Pointer curl = CurlHelper::New();
-      curl->SetTimeout(0);
-      return !curl->IsCurlReturnHttpError(url);
-      }
-      break;
-      case Mode_List:
-      {
-      return itksys::SystemTools::FileExists(url.c_str());
-      }
-      default :
-      break;
+      continent = this->SRTMIdToContinent(*pos);
+      return true;
       }
     return false;
   }
+
+  bool SRTMTileDownloaded(const std::string & name, const std::string & tileDir) const
+  {
+    std::string path(tileDir);
+    if (!path.empty() && path.back() != Sep)
+      {
+      path += Sep;
+      }
+    // try different filenames
+    std::string filepath(path+name+HGTExtension);
+    bool exists = itksys::SystemTools::FileExists(filepath.c_str());
+    if (!exists)
+      {
+      filepath += ZIPExtension;
+      exists = itksys::SystemTools::FileExists(filepath.c_str());
+      }
+
+    if (!exists)
+      {
+      std::string lowerName(name);
+      std::transform(name.begin(), name.end(), lowerName.begin(), ::tolower);
+      filepath = path + lowerName + HGTExtension;
+      exists = itksys::SystemTools::FileExists(filepath.c_str());
+      if (!exists)
+        {
+        filepath += ZIPExtension;
+        exists = itksys::SystemTools::FileExists(filepath.c_str());
+        }
+      }
+    return exists;
+  }
+
+  bool CheckPermissions(const std::string &dir) const
+    {
+    std::string path(dir);
+    if (!path.empty() && path.back() != Sep)
+      {
+      path += Sep;
+      }
+    path += "foo";
+    if( itksys::SystemTools::Touch( path.c_str(), true ) )
+      {
+      itksys::SystemTools::RemoveFile( path.c_str() );
+      }
+    else
+      {
+      return false;
+      }
+    return true;
+    }
+
   void DoInit() ITK_OVERRIDE
   {
     SetName("DownloadSRTMTiles");
@@ -107,10 +223,17 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Manip);
-	AddDocTag("Utilities");
+	  AddDocTag("Utilities");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
     SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");
+
+    AddParameter(ParameterType_Directory, "tiledir", "Tiles directory");
+    SetParameterDescription("tiledir", "Directory where SRTM tiles "
+      "are stored. In download mode, the zipped archives will be downloaded to "
+      "this directory. You'll need to unzip all tile files before using them in"
+      " your application. In any case, this directory will be inspected to "
+      "check which tiles are already downloaded.");
 
     // UserDefined values
     AddParameter(ParameterType_Choice, "mode", "Download/List corresponding SRTM tiles.");
@@ -119,19 +242,13 @@ private:
     AddChoice("mode.download", "Download");
     SetParameterDescription("mode.download","Download corresponding tiles on USGE server.");
 
-    AddParameter(ParameterType_Directory, "mode.download.outdir", "Output directory");
-    SetParameterDescription("mode.download.outdir", "Directory where zipped tiles will be save. You'll need to unzip all tile files before using them in your application.");
-
     AddChoice("mode.list", "List tiles");
     SetParameterDescription("mode.list","List tiles in an existing local directory.");
-
-    AddParameter(ParameterType_Directory, "mode.list.indir", "Input directory");
-    SetParameterDescription("mode.list.indir", "Input directory where SRTM tiles can are located.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "QB_Toulouse_Ortho_XS.tif");
     SetDocExampleParameterValue("mode", "list");
-    SetDocExampleParameterValue("mode.list.indir", "/home/user/srtm_dir/");
+    SetDocExampleParameterValue("tiledir", "/home/user/srtm_dir/");
 
     SetOfficialDocLink();
   }
@@ -144,328 +261,185 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-
     //Get the mode
-    m_Mode = GetParameterInt("mode");
+    int mode = GetParameterInt("mode");
 
     // Get the input image list
     FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
+
+    const std::string tileDir = this->GetParameterString("tiledir");
 
     if( inList->Size() == 0 )
       {
       itkExceptionMacro("No input Image set...");
       }
 
-    inList->GetNthElement(0)->UpdateOutputInformation();
+    // Should already come with Output information updated
+    //inList->GetNthElement(0)->UpdateOutputInformation();
 
-    std::set<std::string> listTilesVector;
-    std::set<std::string> tiles;
-
+    SRTMTileSet tiles;
     for( unsigned int i=0; i<inList->Size(); i++ )
       {
       FloatVectorImageType::Pointer inImage = inList->GetNthElement(i);
-      inImage->UpdateOutputInformation();
+      // Should already come with Output information updated
+      //inImage->UpdateOutputInformation();
 
       RSTransformType::Pointer rsTransformToWGS84 = RSTransformType::New();
-       rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
-       rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
-       rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+      rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
+      rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
+      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+      
+      rsTransformToWGS84->InstantiateTransform();
+      
+      const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
+      const IndexType start = inImage->GetLargestPossibleRegion().GetIndex();
+      PointType tmpPoint;
+      itk::ContinuousIndex<double,2> index(start);
+      index[0] += -0.5;
+      index[1] += -0.5;
+      inImage->TransformContinuousIndexToPhysicalPoint(index,tmpPoint);
+      PointType ul = rsTransformToWGS84->TransformPoint(tmpPoint);
+      index[0] += size[0];
+      inImage->TransformContinuousIndexToPhysicalPoint(index,tmpPoint);
+      PointType ur = rsTransformToWGS84->TransformPoint(tmpPoint);
+      index[1] += size[1];
+      inImage->TransformContinuousIndexToPhysicalPoint(index,tmpPoint);
+      PointType lr = rsTransformToWGS84->TransformPoint(tmpPoint);
+      index[0] -= (double)size[0];
+      inImage->TransformContinuousIndexToPhysicalPoint(index,tmpPoint);
+      PointType ll = rsTransformToWGS84->TransformPoint(tmpPoint);
+      
+      int floorMinLong = std::floor(std::min(
+        std::min(ul[0],ur[0]),
+        std::min(ll[0],lr[0])));
+      int floorMaxLong = std::floor(std::max(
+        std::max(ul[0],ur[0]),
+        std::max(ll[0],lr[0])));
+      int floorMinLat = std::floor(std::min(
+        std::min(ul[1],ur[1]),
+        std::min(ll[1],lr[1])));
+      int floorMaxLat = std::floor(std::max(
+        std::max(ul[1],ur[1]),
+        std::max(ll[1],lr[1])));
 
-       rsTransformToWGS84->InstantiateTransform();
-
-       const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
-       const PointType origin=inImage->GetOrigin();
-       const SpacingType spacing=inImage->GetSpacing();
-       PointType upperLeft;
-       upperLeft[0] = origin[0];
-       upperLeft[1] = origin[1];
-       PointType upperLeftWGS84 = rsTransformToWGS84->TransformPoint(upperLeft);
-       otbAppLogDEBUG(<< "upperLeftWGS84 " << upperLeftWGS84);
-
-       PointType upperRight;
-       upperRight[0] = origin[0]+ (size[0] - 1) * spacing[0];
-       upperRight[1] = origin[1];
-       PointType upperRightWGS84 = rsTransformToWGS84->TransformPoint(upperRight);
-       otbAppLogDEBUG(<< "upperRightWGS84 " << upperRightWGS84);
-
-       PointType lowerLeft;
-       lowerLeft[0] = origin[0];
-       lowerLeft[1] = origin[1]+ (size[1] - 1) * spacing[1];
-       PointType lowerLeftWGS84 = rsTransformToWGS84->TransformPoint(lowerLeft);
-       otbAppLogDEBUG(<< "lowerLeftWGS84 " << lowerLeftWGS84);
-
-       PointType lowerRight;
-       lowerRight[0] = origin[0] + (size[0] - 1) * spacing[0];
-       lowerRight[1] = origin[1] + (size[1] - 1) * spacing[1];
-       PointType lowerRightWGS84 = rsTransformToWGS84->TransformPoint(lowerRight);
-       otbAppLogDEBUG(<< "lowerRightWGS84 " << lowerRightWGS84);
-
-      // the iterator constructor can also be used to construct from arrays:
-      const double Longitude[] = {upperLeftWGS84[0],upperRightWGS84[0],lowerLeftWGS84[0],lowerRightWGS84[0]};
-      const double Latitude[] = {upperLeftWGS84[1],upperRightWGS84[1],lowerLeftWGS84[1],lowerRightWGS84[1]};
-
-      std::vector<double> vecLong (Longitude, Longitude + sizeof(Longitude) / sizeof(double) );
-      std::vector<double> vecLat (Latitude, Latitude + sizeof(Latitude) / sizeof(double) );
-
-      std::vector<double> absVecLong;
-      absVecLong.resize(vecLong.size());                         // allocate space
-
-      std::vector<double> absVecLat;
-      absVecLat.resize(vecLat.size());                         // allocate space
-
-      std::vector<double>::iterator AbsLongit=absVecLong.begin();
-
-      for (std::vector<double>::const_iterator it=vecLong.begin(); it!=vecLong.end(); ++it)
-        {
-        *AbsLongit = vcl_abs(*it);
-        ++AbsLongit;
-        }
-
-      std::vector<double>::iterator AbsLatit=absVecLat.begin();
-
-      for (std::vector<double>::const_iterator it=vecLat.begin(); it!=vecLat.end(); ++it)
-        {
-        *AbsLatit = vcl_abs(*it);
-        ++AbsLatit;
-        }
-
-      const unsigned int distMinLong =
-        std::distance(absVecLong.begin(), min_element (absVecLong.begin(),absVecLong.end()));
-      const unsigned int distMaxLong =
-        std::distance(absVecLong.begin(), max_element (absVecLong.begin(),absVecLong.end()));
-
-      const unsigned int distMinLat =
-        std::distance(absVecLat.begin(), min_element (absVecLat.begin(),absVecLat.end()));
-      const unsigned int distMaxLat =
-        std::distance(absVecLat.begin(), max_element (absVecLat.begin(),absVecLat.end()));
-
-      //find corresponding tiled  for initialization
-      //FIXME recode this properly
-
-      int floorMinLong = 0;
-      int floorMaxLong = 0;
-      int floorMinLat = 0;
-      int floorMaxLat = 0;
-
-      if (vecLong.at(distMinLong) <= vecLong.at(distMaxLong))
-        {
-        floorMinLong = std::floor(vecLong.at(distMinLong));
-        floorMaxLong = std::floor(vecLong.at(distMaxLong));
-        }
-      else
-        {
-        floorMinLong = std::floor(vecLong.at(distMaxLong));
-        floorMaxLong = std::floor(vecLong.at(distMinLong));
-        }
-
-      if (vecLat.at(distMinLat) <= vecLat.at(distMaxLat))
-        {
-        floorMinLat = std::floor(vecLat.at(distMinLat));
-        floorMaxLat = std::floor(vecLat.at(distMaxLat));
-        }
-      else
-        {
-        floorMinLat = std::floor(vecLat.at(distMaxLat));
-        floorMaxLat = std::floor(vecLat.at(distMinLat));
-        }
+      otbAppLogDEBUG(<< "upperLeftWGS84 "  << ul);
+      otbAppLogDEBUG(<< "upperRightWGS84 " << ur);
+      otbAppLogDEBUG(<< "lowerLeftWGS84 "  << ll);
+      otbAppLogDEBUG(<< "lowerRightWGS84 " << lr);
 
       //Construct SRTM tile filename based on min/max lat/long
       for (int k = floorMinLat; k <= floorMaxLat; ++k)
         {
         for (int j = floorMinLong; j <= floorMaxLong; ++j)
           {
-          std::ostringstream ossOutput;
-          if (k < 0)
-            {
-            ossOutput << "S";
-            }
-          else
-            {
-            ossOutput << "N";
-            }
-
-          if (vcl_abs(k) <= 9)
-            {
-            ossOutput << "0";
-            }
-          ossOutput << vcl_abs(k);
-
-          if (j < 0)
-            {
-            ossOutput << "W";
-            }
-          else
-            {
-            ossOutput << "E";
-            }
-          if (vcl_abs(j) >= 10 && vcl_abs(j) < 100)
-            {
-            ossOutput << "0";
-            }
-          else if (vcl_abs(j) <= 9)
-            {
-            ossOutput << "00";
-            }
-
-          ossOutput << vcl_abs(j);
-
-          tiles.insert(ossOutput.str());
+          tiles.insert(SRTMTileId({j,k,0}));
           }
         }
-
       }
 
-    //iterate over all tiles to build URLs
-    for(std::set<std::string>::const_iterator it= tiles.begin(); it!=tiles.end(); ++it)
+    if (tiles.empty())
       {
-      switch ( m_Mode )
+      otbAppLogWARNING(<< "No tile found for the given image(s)!");
+      return;
+      }
+    otbAppLogINFO(<<"Input image(s) cover "<< tiles.size() << " potential tiles.");
+
+    //iterate over all tiles to build URLs
+    std::vector<std::string> nonSRTMTiles;
+    std::vector<std::string> localTiles;
+    std::vector<std::string> missingTiles;
+    std::vector<std::string> continentList;
+    for(SRTMTileSet::iterator it= tiles.begin(); it!=tiles.end(); ++it)
+      {
+      std::string curName(this->SRTMIdToName(*it));
+      std::string continent;
+      // Check 1 : does the tile exists in SRTM ? If yes, get the continent
+      if (SRTMTileExists(*it,continent))
         {
-        case Mode_Download:
-        {
-        //Build URL
-        bool findURL = false;
-        std::string url;
-        for(std::vector<std::string>::const_iterator contIt= USGSContinentList.begin(); contIt!=USGSContinentList.end(); ++contIt)
+        // Check 2 : is the tile already downloaded
+        if (SRTMTileDownloaded(curName,tileDir))
           {
-          std::ostringstream urlStream;
-          CurlHelper::Pointer curl = CurlHelper::New();
-          curl->SetTimeout(0);
-          urlStream << SRTMServerPath;
-          urlStream << *contIt;
-          urlStream << "/";
-          urlStream << *it;
-          urlStream << HGTExtension;
-
-          url = urlStream.str();
-
-          if (!curl->IsCurlReturnHttpError( urlStream.str()))
-            {
-            findURL = true;
-            break;
-            }
-          else
-            {
-            //try down casing the url
-            std::string lowerIt = *it;
-            std::transform(it->begin(), it->end(), lowerIt.begin(), ::tolower);
-
-            urlStream.clear();
-            urlStream << SRTMServerPath;
-            urlStream << *contIt;
-            urlStream << "/";
-            urlStream << lowerIt;
-            urlStream << HGTExtension;
-            if (!curl->IsCurlReturnHttpError( urlStream.str()))
-              {
-              tiles.erase(*it);
-              tiles.insert(lowerIt);
-              //urls.insert(urlStream.str());
-              findURL = true;
-              break;
-              }
-            else
-              {
-              //upcase all
-              std::string upperIt = *it;
-              std::transform(it->begin(), it->end(), upperIt.begin(), ::toupper);
-
-              urlStream.clear();
-              urlStream << SRTMServerPath;
-              urlStream << *contIt;
-              urlStream << "/";
-              urlStream << upperIt;
-              urlStream << HGTExtension;
-
-              if (!curl->IsCurlReturnHttpError( urlStream.str()))
-                {
-                tiles.erase(*it);
-                tiles.insert(upperIt);
-                //urls.insert(urlStream.str());
-                findURL = true;
-                break;
-                }
-              }
-            }
-
-          }
-
-        if (!findURL)
-          {
-          itkExceptionMacro(<< url  <<" not found!");
-          }
-
-        otbAppLogINFO(<< "Found Tile on USGS server at URL: " << url);
-        // TODO use the RetrieveUrlInMemory? In this case need to adapt the
-        // timeout
-
-        const std::string outDir = GetParameterString("mode.download.outdir");
-
-        std::ostringstream oss;
-        oss<<outDir<<"/foo";
-
-        if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
-          {
-          itkExceptionMacro( "Error, no write permission in given output directory "<< outDir <<".");
+          localTiles.push_back(curName);
           }
         else
           {
-          itksys::SystemTools::RemoveFile( oss.str().c_str() );
+          missingTiles.push_back(curName);
+          continentList.push_back(continent);
           }
-
-        CurlHelper::Pointer curlReq = CurlHelper::New();
-        curlReq->SetTimeout(0);
-        curlReq->RetrieveFile(url, GetParameterString("mode.download.outdir") + "/" + *it + HGTExtension);
-        //TODO unzip here (can do this in memory?)
         }
-        break;
-        case Mode_List:
+      else
         {
-        bool findURL = false;
-        std::ostringstream listStream;
-        listStream << "Corresponding SRTM tiles: ";
-        listStream << GetParameterString("mode.list.indir") + "/";
-        if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + *it + HGTExtensionSimulation) )
-          {
-          listStream << *it + HGTExtensionSimulation << " ";
-          findURL = true;
-          }
-        else
-          {
-          //try down casing the url
-          std::string lowerIt = *it;
-          std::transform(it->begin(), it->end(), lowerIt.begin(), ::tolower);
-
-          if ( this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + HGTExtensionSimulation) )
-            {
-            tiles.erase(*it);
-            tiles.insert(lowerIt);
-            findURL = true;
-            }
-          else
-            {
-            //upcase all
-            std::string upperIt = *it;
-            std::transform(it->begin(), it->end(), upperIt.begin(), ::toupper);
-
-            if (this->SRTMTileExists(GetParameterString("mode.list.indir") + "/" + lowerIt + HGTExtensionSimulation) )
-              {
-              tiles.erase(*it);
-              tiles.insert(upperIt);
-              findURL = true;
-              }
-            }
-          }
-
-        if (!findURL)
-          {
-          itkExceptionMacro(<< "Tile " <<  *it + HGTExtensionSimulation  <<" not found in " << GetParameterString("mode.list.indir") << " !");
-          }
-        otbAppLogINFO( << listStream.str());
+        nonSRTMTiles.push_back(curName);
         }
-        break;
+      }
+
+    // If download mode : try to get missing tiles
+    int srtmHitRatio = ( 100 * (tiles.size() - nonSRTMTiles.size() ) ) /
+      tiles.size();
+    otbAppLogINFO(<< "Percentage of tiles present in SRTM: " << srtmHitRatio);
+    if (mode == Mode_List)
+      {
+      std::ostringstream oss;
+      for (unsigned int i=0 ; i<nonSRTMTiles.size() ; ++i)
+        {
+        oss << nonSRTMTiles[i] << " ";
+        }
+      otbAppLogINFO(<< "Tiles not present in SRTM: " << oss.str());
+      }
+    otbAppLogINFO(<< "Number of tiles already available: "<< localTiles.size());
+    if (mode == Mode_List)
+      {
+      std::ostringstream oss;
+      for (unsigned int i=0 ; i<localTiles.size() ; ++i)
+        {
+        oss << localTiles[i] << " ";
+        }
+      otbAppLogINFO(<< "  --> " << oss.str());
+      }
+    otbAppLogINFO(<< "Number of tiles to be downloaded: "<< missingTiles.size());
+    if (mode == Mode_List)
+      {
+      std::ostringstream oss;
+      for (unsigned int i=0 ; i<missingTiles.size() ; ++i)
+        {
+        oss << missingTiles[i] << " ";
+        }
+      otbAppLogINFO(<< "  --> " << oss.str());
+      }
+    if (mode == Mode_Download)
+      {
+      // Check permissions first
+      if ( !CheckPermissions(tileDir) )
+        {
+        otbAppLogFATAL(<< "Can't write into directory : '"<< tileDir <<"'");
+        }
+      std::vector<std::string>::const_iterator it,itConti;
+      CurlHelper::Pointer curl = CurlHelper::New();
+      curl->SetTimeout(0);
+      std::string request;
+      for (it=missingTiles.begin(), itConti=continentList.begin() ;
+           it!=missingTiles.end() && itConti!=continentList.end() ;
+           ++it, ++itConti)
+        {
+        otbAppLogINFO(<< " - downloading tile "<<*it << " ...");
+        request = SRTMServerPath + *itConti + "/" + *it + HGTZIPExtension;
+        if (curl->IsCurlReturnHttpError( request ))
+          {
+          otbAppLogWARNING(<< "Can't access tile : "<< request);
+          continue;
+          }
+        std::string outputFile(tileDir);
+        if (!outputFile.empty() && outputFile.back() != Sep)
+          {
+          outputFile += Sep;
+          }
+        outputFile += *it + HGTZIPExtension;
+        curl->RetrieveFile(request, outputFile);
         }
       }
   }
+
+  SRTMTileSet m_SRTMTileList;
 };
 
 }
