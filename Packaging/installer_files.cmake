@@ -97,6 +97,10 @@ macro(installer_files)
       DESTINATION ${PKG_STAGE_DIR})
   endif()
 
+  install(FILES
+    Files/build_example.cmake
+    DESTINATION ${PKG_STAGE_DIR}/tools)
+
   
   #add otb_loader
   add_executable(otb_loader ${CMAKE_CURRENT_SOURCE_DIR}/Files/otb_loader.cxx)
