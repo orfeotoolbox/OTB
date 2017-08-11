@@ -272,43 +272,42 @@ void ClassKMeansBase::CreateOutMeansFile(FloatVectorImageType *image,
     unsigned int nbElements = nbClasses * nbBands;
     // get the line in model file that contains the centroids positions
     std::ifstream infile(modelFileName);
-    if(infile)
-    {
-      // get the end line with the centroids
-      std::string line, centroidLine;
-      while(!infile.eof())
-      {
-        std::getline(infile,line);
-        if (!line.empty())
-          centroidLine = line;
-      }
-
-      std::vector<std::string> centroidElm;
-      boost::split(centroidElm,centroidLine,boost::is_any_of(" "));
-
-      // remove the first elements, not the centroids positions
-      int nbWord = centroidElm.size();
-      int beginCentroid = nbWord-nbElements;
-      centroidElm.erase(centroidElm.begin(), centroidElm.begin()+beginCentroid);
-
-      // write in the output file
-      std::ofstream outfile;
-      outfile.open(GetParameterString("outmeans"));
-
-      for (unsigned int i = 0; i < nbClasses; i++)
-      {
-        for (unsigned int j = 0; j < nbBands; j++)
-        {
-          outfile << std::setw(8) << centroidElm[i * nbBands + j] << " ";
-        }
-        outfile << std::endl;
-      }
-    outfile.close();
-    }
-    else
+    if(!infile)
     {
       itkExceptionMacro(<< "File : " << modelFileName << " couldn't be opened");
     }
+
+    // get the end line with the centroids
+    std::string line, centroidLine;
+    while(!infile.eof())
+    {
+      std::getline(infile,line);
+      if (!line.empty())
+        centroidLine = line;
+    }
+
+    std::vector<std::string> centroidElm;
+    boost::split(centroidElm,centroidLine,boost::is_any_of(" "));
+
+    // remove the first elements, not the centroids positions
+    int nbWord = centroidElm.size();
+    int beginCentroid = nbWord-nbElements;
+    centroidElm.erase(centroidElm.begin(), centroidElm.begin()+beginCentroid);
+
+    // write in the output file
+    std::ofstream outfile;
+    outfile.open(GetParameterString("outmeans"));
+
+    for (unsigned int i = 0; i < nbClasses; i++)
+    {
+      for (unsigned int j = 0; j < nbBands; j++)
+      {
+        outfile << std::setw(8) << centroidElm[i * nbBands + j] << " ";
+      }
+      outfile << std::endl;
+    }
+    outfile.close();
+
     infile.close();
 
   }
