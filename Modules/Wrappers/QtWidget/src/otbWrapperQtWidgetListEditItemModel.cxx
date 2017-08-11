@@ -345,9 +345,9 @@ ListEditItemModel
            const QVariant & value,
            int role )
 {
-  qDebug()
-    << this << "::setData(" << idx << "," << value << "," << role
-    << ");";
+  // qDebug()
+  //   << this << "::setData(" << idx << "," << value << "," << role
+  //   << ");";
 
   assert( !idx.parent().isValid() );
   assert( idx.row()>=0 );
