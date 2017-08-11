@@ -178,9 +178,9 @@ void ClassKMeansBase::ComputePolygonStatistics(const std::string &statisticsFile
   ExecuteInternal("polystats");
 }
 
-void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
-                                              std::string fieldName,
-                                              std::string sampleFileName,
+void ClassKMeansBase::SelectAndExtractSamples(const std::string &statisticsFileName,
+                                              const std::string &fieldName,
+                                              const std::string &sampleFileName,
                                               int NBSamples)
 {
   /* SampleSelection */
@@ -210,8 +210,8 @@ void ClassKMeansBase::SelectAndExtractSamples(std::string statisticsFileName,
 }
 
 void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
-                                   std::string sampleTrainFileName,
-                                   std::string modelFileName)
+                                   const std::string &sampleTrainFileName,
+                                   const std::string &modelFileName)
 {
   std::vector<std::string> extractOutputList = {sampleTrainFileName};
   GetInternalApplication("training")->SetParameterStringList("io.vd", extractOutputList, false);
@@ -245,8 +245,8 @@ void ClassKMeansBase::TrainKMModel(FloatVectorImageType *image,
   otbAppLogINFO("output model : " << GetInternalApplication("training")->GetParameterString("io.out"));
 }
 
-void ClassKMeansBase::ComputeImageStatistics(std::string imageFileName,
-                                             std::string imagesStatsFileName)
+void ClassKMeansBase::ComputeImageStatistics(const std::string &imageFileName,
+                                             const std::string &imagesStatsFileName)
 {
   std::vector<std::string> imageFileNameList = {imageFileName};
   GetInternalApplication("imgstats")->SetParameterStringList("il", imageFileNameList, false);
@@ -263,7 +263,7 @@ void ClassKMeansBase::KMeansClassif()
 }
 
 void ClassKMeansBase::CreateOutMeansFile(FloatVectorImageType *image,
-                                        std::string modelFileName,
+                                         const std::string &modelFileName,
                                          unsigned int nbClasses)
 {
   if (IsParameterEnabled("outmeans"))
