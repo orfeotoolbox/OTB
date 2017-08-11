@@ -295,7 +295,7 @@ bool
 ListEditItemModel
 ::insertRows( int row, int count, const QModelIndex & parent )
 {
-  qDebug() << this << "::insertRows(" << row << "," << count << "," << parent << ")";
+  // qDebug() << this << "::insertRows(" << row << "," << count << "," << parent << ")";
 
   assert( m_StringList!=nullptr );
 
