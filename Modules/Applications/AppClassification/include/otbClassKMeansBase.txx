@@ -30,31 +30,39 @@ namespace Wrapper
 
 void ClassKMeansBase::initKMParams()
 {
-  AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
-  EnableParameter( "cleanup" );
-  SetParameterDescription( "cleanup",
-                         "If activated, the application will try to clean all temporary files it created" );
-  MandatoryOff( "cleanup" );
-
-  InitKMSampling();
-  InitKMClassification();
-}
-
-void ClassKMeansBase::InitKMSampling()
-{
   AddApplication("ImageEnvelope", "imgenvelop", "mean shift smoothing"); 
   AddApplication("PolygonClassStatistics", "polystats", "Polygon Class Statistics");
   AddApplication("SampleSelection", "select", "Sample selection");
   AddApplication("SampleExtraction", "extraction", "Sample extraction");
 
+  AddApplication("TrainVectorClassifier", "training", "Model training");
+  AddApplication("ComputeImagesStatistics", "imgstats", "Compute Images second order statistics");
+  AddApplication("ImageClassifier", "classif", "Performs a classification of the input image");
+
+  ShareParameter("in", "imgenvelop.in");
+  ShareParameter("out", "classif.out");
+
+  InitKMSampling();
+  InitKMClassification();
+
+  // init at the end cleanup
+  AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
+  EnableParameter( "cleanup" );
+  SetParameterDescription( "cleanup",
+                         "If activated, the application will try to clean all temporary files it created" );
+  MandatoryOff( "cleanup" );
+}
+
+void ClassKMeansBase::InitKMSampling()
+{
+  AddParameter(ParameterType_Int, "nc", "Number of classes");
+  SetParameterDescription("nc", "Number of modes, which will be used to generate class membership.");
+  SetDefaultParameterInt("nc", 5);
+
   AddParameter(ParameterType_Int, "ts", "Training set size");
   SetParameterDescription("ts", "Size of the training set (in pixels).");
   SetDefaultParameterInt("ts", 100);
   MandatoryOff("ts");
-
-  AddParameter(ParameterType_Int, "nc", "Number of classes");
-  SetParameterDescription("nc", "Number of modes, which will be used to generate class membership.");
-  SetDefaultParameterInt("nc", 5);
 
   AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
   SetParameterDescription("maxit", "Maximum number of iterations for the learning step.");
@@ -71,17 +79,12 @@ void ClassKMeansBase::InitKMSampling()
 
 void ClassKMeansBase::InitKMClassification()
 {
-  AddApplication("TrainVectorClassifier", "training", "Model training");
-  AddApplication("ComputeImagesStatistics", "imgstats", "Compute Images second order statistics");
-  AddApplication("ImageClassifier", "classif", "Performs a classification of the input image");
-
   ShareKMClassificationParams();
   ConnectKMClassificationParams();
 }
 
 void ClassKMeansBase::ShareKMSamplingParameters()
 {
-  ShareParameter("in", "imgenvelop.in");
   ShareParameter("ram", "polystats.ram");
   ShareParameter("sampler", "select.sampler");
   ShareParameter("vm", "polystats.mask", "Validity Mask",
@@ -96,8 +99,6 @@ void ClassKMeansBase::ShareKMClassificationParams()
     "but be careful to not take a label from another class. "
     "This application initalize the labels from 0 to N-1, "
     "N is the number of class (defined by 'nc' parameter).");
-
-  ShareParameter("out", "classif.out");
 }
 
 void ClassKMeansBase::ConnectKMSamplingParams()
