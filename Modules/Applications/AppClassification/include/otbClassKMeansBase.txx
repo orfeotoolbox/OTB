@@ -271,7 +271,7 @@ void ClassKMeansBase::CreateOutMeansFile(FloatVectorImageType *image,
     unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
     unsigned int nbElements = nbClasses * nbBands;
     // get the line in model file that contains the centroids positions
-    std::ifstream infile(modelFileName.c_str());
+    std::ifstream infile(modelFileName);
     if(infile)
     {
       // get the end line with the centroids
@@ -293,7 +293,7 @@ void ClassKMeansBase::CreateOutMeansFile(FloatVectorImageType *image,
 
       // write in the output file
       std::ofstream outfile;
-      outfile.open(GetParameterString("outmeans").c_str());
+      outfile.open(GetParameterString("outmeans"));
 
       for (unsigned int i = 0; i < nbClasses; i++)
       {
