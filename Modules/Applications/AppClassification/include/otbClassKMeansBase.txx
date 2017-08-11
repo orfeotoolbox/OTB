@@ -279,9 +279,8 @@ void ClassKMeansBase::CreateOutMeansFile(FloatVectorImageType *image,
 
     // get the end line with the centroids
     std::string line, centroidLine;
-    while(!infile.eof())
+    while(std::getline(infile,line))
     {
-      std::getline(infile,line);
       if (!line.empty())
         centroidLine = line;
     }
