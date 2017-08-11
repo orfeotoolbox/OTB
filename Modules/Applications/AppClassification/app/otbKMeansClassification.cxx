@@ -100,11 +100,9 @@ private:
   {
     if (IsParameterEnabled("vm") && HasValue("vm")) ConnectKMClassificationMask();
 
-    KMeansFileNamesHandler fileNames;
+    KMeansFileNamesHandler fileNames(GetParameterString("out"));
 
     const std::string fieldName = "field";
-
-    fileNames.CreateTemporaryFileNames(GetParameterString( "out" ));
 
     // Create an image envelope
     ComputeImageEnvelope(fileNames.tmpVectorFile);

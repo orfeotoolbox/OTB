@@ -147,7 +147,7 @@ public:
     class KMeansFileNamesHandler
       {
       public :
-        void CreateTemporaryFileNames(const std::string &outPath)
+        KMeansFileNamesHandler(const std::string &outPath)
         {
           tmpVectorFile = outPath + "_imgEnvelope.shp";
           polyStatOutput = outPath + "_polyStats.xml";
