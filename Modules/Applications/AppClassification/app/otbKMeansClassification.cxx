@@ -102,7 +102,7 @@ private:
 
     KMeansFileNamesHandler fileNames;
 
-    std::string fieldName = "field";
+    const std::string fieldName = "field";
 
     fileNames.CreateTemporaryFileNames(GetParameterString( "out" ));
 
