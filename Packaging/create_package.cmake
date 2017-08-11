@@ -9,7 +9,7 @@ macro(create_package)
       )
     else()
       execute_process(
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/makeself/makeself.sh
+        COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/makeself/makeself.sh
         \"--quiet\"
         \"--target\"
         \"${PKG_STAGE_DIR}\"
