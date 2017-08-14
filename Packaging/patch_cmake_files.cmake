@@ -18,7 +18,7 @@ function(patch_cmake_files)
     -DP_DIRS=${DIR_LIST}
     -DP_MATCH=${PATCH_MATCH_STRING}
     -DP_REPLACE=${PATCH_REPLACE_VAR}
-    -P ${PACKAGE_OTB_SRC_DIR}/SuperBuild/CMake/post_install.cmake
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/post_install.cmake
     RESULT_VARIABLE patch_${PATCH_NAME}_cmake_rv
     )
 
