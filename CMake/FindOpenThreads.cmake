@@ -58,23 +58,9 @@
 # standard install paths.
 # Explicit -DVAR=value arguments should still be able to override everything.
 
-find_path(OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
-    HINTS
-        # enough environment variables?
-        $ENV{OPENTHREADS_INCLUDE_DIR}
-        $ENV{OPENTHREADS_DIR}
-        $ENV{OSG_INCLUDE_DIR}
-        $ENV{OSG_DIR}
-        $ENV{OSGDIR}
-        $ENV{OpenThreads_ROOT}
-        $ENV{OSG_ROOT}
-    PATHS
-        /sw # Fink
-        /opt/local # DarwinPorts
-        /opt/csw # Blastwave
-        /opt
-        /usr/freeware
-    PATH_SUFFIXES include
+find_path(
+  OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
+  PATH_SUFFIXES include
 )
 mark_as_advanced(OPENTHREADS_INCLUDE_DIR)
 
@@ -95,41 +81,12 @@ endif()
 
 find_library(OPENTHREADS_LIBRARY
     NAMES OpenThreads OpenThreadsWin32
-    HINTS
-        $ENV{OPENTHREADS_LIBRARY_DIR}
-        $ENV{OPENTHREADS_DIR}
-        $ENV{OSG_LIBRARY_DIR}
-        $ENV{OSG_DIR}
-        $ENV{OSGDIR}
-        $ENV{OpenThreads_ROOT}
-        $ENV{OSG_ROOT}
-    PATHS
-        /sw
-        /opt/local
-        /opt/csw
-        /opt
-        /usr/freeware
     PATH_SUFFIXES lib64 lib
 )
 mark_as_advanced(OPENTHREADS_LIBRARY)
 
 find_library(OPENTHREADS_LIBRARY_DEBUG
     NAMES OpenThreadsd OpenThreadsWin32d
-    HINTS
-        $ENV{OPENTHREADS_DEBUG_LIBRARY_DIR}
-        $ENV{OPENTHREADS_LIBRARY_DIR}
-        $ENV{OPENTHREADS_DIR}
-        $ENV{OSG_LIBRARY_DIR}
-        $ENV{OSG_DIR}
-        $ENV{OSGDIR}
-        $ENV{OpenThreads_ROOT}
-        $ENV{OSG_ROOT}
-    PATHS
-        /sw
-        /opt/local
-        /opt/csw
-        /opt
-        /usr/freeware
     PATH_SUFFIXES lib64 lib
 )
 mark_as_advanced(OPENTHREADS_LIBRARY_DEBUG)
