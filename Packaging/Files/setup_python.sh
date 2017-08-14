@@ -19,8 +19,18 @@
 # limitations under the License.
 #
 
+# Setup python environment
+
+#check if we have any python bindings
+CUR_DIR_PY="$( cd "$( dirname "$0" )" && pwd )"
+if [ ! -f "$CUR_DIR_PY/lib/python/_otbApplication.so" ] ; then
+    echo "./lib/python/_otbApplication.so does not exists"
+    echo "THIS MEANS YOU DON'T HAVE PYTHON BINDINGS IN YOUR PACKAGE"
+    echo "REPORT THIS TO otb-developers@googlegroups.com"
+fi
+
 if [ ! -f "$OTB_PYTHON_EXE" ] ; then
-    OTB_PYTHON_EXE=$(which python2.7)
+    OTB_PYTHON_EXE=$(which python)
 fi
 
 python_major_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[0])")
