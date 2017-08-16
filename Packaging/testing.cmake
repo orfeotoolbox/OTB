@@ -56,27 +56,6 @@ add_test(
   WORKING_DIRECTORY ${testing_dir}
   )
 
-if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
-  find_program(GREP grep)
-  add_test(
-    NAME Tu_grep_usr
-    COMMAND ${GREP} -Rs "/usr/"
-    WORKING_DIRECTORY ${pkg_extracted_dir}/lib/cmake/
-    RESULT_VARIABLE grep_usr_rv
-    OUTPUT_VARIABLE grep_usr_ov
-    ERROR_VARIABLE  grep_usr_ov
-    )
-  
-  if(NOT grep_usr_rv EQUAL 1)
-    message(FATAL_ERROR
-      "Test 'grep_usr_rv' failed with output:\n${grep_usr_ov}")
-    return()
-  endif()
-
-  set_tests_properties ( Tu_grep_usr PROPERTIES DEPENDS Tu_selftester)
-  
-endif() #Linux
-
 #configure test dependencies..
 set_tests_properties ( Tu_selftester PROPERTIES DEPENDS Tu_install_package)
 
