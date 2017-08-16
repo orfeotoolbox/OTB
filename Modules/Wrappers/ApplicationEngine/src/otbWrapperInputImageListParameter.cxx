@@ -181,6 +181,13 @@ InputImageListParameter
   assert( m_InputImageParameterVector.size()==m_ImageList->Size() );
   assert( !m_InputImageParameterVector[ id ].IsNull() );
 
+  if( !filename.empty() )
+    {
+    Modified();
+
+    SetActive( true );
+    }
+
   return m_InputImageParameterVector[ id ]->SetFromFileName( filename );
 #endif
 }
