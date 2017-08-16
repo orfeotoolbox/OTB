@@ -158,7 +158,7 @@ ListEditItemModel
 
 	  return
 	    filename.empty()
-	    ? "NO FILENAME"
+	    ? "EMPTY"
 	    : QFile::decodeName( filename.c_str()
 	    );
 	  }
