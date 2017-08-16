@@ -154,6 +154,8 @@ ListEditItemModel
 	    stringList->GetNthFileName( idx.row() )
 	  );
 
+	  // qDebug() << "Filename:" << QString( "%1" ).arg( filename.c_str() );
+
 	  return
 	    filename.empty()
 	    ? "NO FILENAME"
