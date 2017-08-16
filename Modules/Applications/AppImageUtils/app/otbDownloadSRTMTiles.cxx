@@ -21,6 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbGenericRSTransform.h"
+#include "otbOGRDataSourceWrapper.h"
 #include "otbCurlHelper.h"
 
 namespace otb
@@ -204,7 +205,7 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("DownloadSRTMTiles");
-    SetDescription("Download or list SRTM tiles related to a set of images");
+    SetDescription("Download or list SRTM tiles");
 
     // Documentation
     SetDocName("Download or list SRTM tiles related to a set of images");
@@ -217,7 +218,21 @@ private:
 	  AddDocTag("Utilities");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
-    SetParameterDescription("il", "The list of images on which you want to determine corresponding SRTM tiles.");
+    SetParameterDescription("il", "List of images on which you want to "
+      "determine corresponding SRTM tiles.");
+    MandatoryOff("il");
+
+    AddParameter(ParameterType_InputVectorDataList, "vl", "Input vector data list");
+    SetParameterDescription("vl", "List of vector data files on which you want "
+      "to determine corresponding SRTM tiles.");
+    MandatoryOff("vl");
+
+    AddParameter(ParameterType_StringList, "names", "Input tile names");
+    SetParameterDescription("names", "List of SRTM tile names to download. "
+      "This list is added to the tiles derived from input images or vectors."
+      "The names should follow the SRTM tile naming convention, for instance "
+      "N43E001.");
+    MandatoryOff("names");
 
     AddParameter(ParameterType_Directory, "tiledir", "Tiles directory");
     SetParameterDescription("tiledir", "Directory where SRTM tiles "
@@ -228,7 +243,6 @@ private:
 
     // UserDefined values
     AddParameter(ParameterType_Choice, "mode", "Download/List corresponding SRTM tiles.");
-    //MandatoryOn("mode");
 
     AddChoice("mode.download", "Download");
     SetParameterDescription("mode.download","Download corresponding tiles on USGE server.");
@@ -255,17 +269,21 @@ private:
     //Get the mode
     int mode = GetParameterInt("mode");
 
-    // Get the input image list
+    // Get the inputs
     FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
+    std::vector<std::string> vectorDataList = this->GetParameterStringList("vl");
+    std::vector<std::string> nameList = this->GetParameterStringList("names");
 
     const std::string tileDir = this->GetParameterString("tiledir");
 
-    if( inList->Size() == 0 )
+    if( inList->Size() + vectorDataList.size() + nameList.size() == 0 )
       {
-      itkExceptionMacro("No input Image set...");
+      itkExceptionMacro("No input image/vector/name set...");
       }
 
     SRTMTileSet tiles;
+    //--------------------------------------------------------------------------
+    // Check input images
     for( unsigned int i=0; i<inList->Size(); i++ )
       {
       FloatVectorImageType::Pointer inImage = inList->GetNthElement(i);
@@ -316,10 +334,108 @@ private:
           }
         }
       }
+    //--------------------------------------------------------------------------
+    // Check input vector files
+    for( unsigned int i=0; i<vectorDataList.size(); i++ )
+      {
+      ogr::DataSource::Pointer source = ogr::DataSource::New(
+        vectorDataList[i],
+        ogr::DataSource::Modes::Read);
+      OGREnvelope envelope;
+      std::string currentWkt("");
+      try
+        {
+        envelope = source->GetGlobalExtent(false,&currentWkt);
+        }
+      catch(...) {}
+      if (currentWkt.empty())
+        {
+        try
+          {
+          envelope = source->GetGlobalExtent(true,&currentWkt);
+          }
+        catch(...)
+          {
+          otbAppLogWARNING("Can't get envelope of vector file : "<<vectorDataList[i]);
+          continue;
+          }
+        }
+
+      RSTransformType::Pointer rsTransformToWGS84 = RSTransformType::New();
+      rsTransformToWGS84->SetInputProjectionRef(currentWkt);
+      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+      rsTransformToWGS84->InstantiateTransform();
+      PointType tmpPoint;
+      tmpPoint[0] = envelope.MinX;
+      tmpPoint[1] = envelope.MinY;
+      PointType ll = rsTransformToWGS84->TransformPoint(tmpPoint);
+      tmpPoint[0] = envelope.MaxX;
+      tmpPoint[1] = envelope.MaxY;
+      PointType ur = rsTransformToWGS84->TransformPoint(tmpPoint);
+      int floorMinLong = std::floor(ll[0]);
+      int floorMaxLong = std::floor(ur[0]);
+      int floorMinLat = std::floor(ll[1]);
+      int floorMaxLat = std::floor(ur[1]);
+
+      //Construct SRTM tile filename based on min/max lat/long
+      for (int k = floorMinLat; k <= floorMaxLat; ++k)
+        {
+        for (int j = floorMinLong; j <= floorMaxLong; ++j)
+          {
+          tiles.insert(SRTMTileId({j,k,0}));
+          }
+        }
+      }
+    //--------------------------------------------------------------------------
+    // Check input names
+    for( unsigned int i=0; i<nameList.size(); i++ )
+      {
+      if (nameList[i].size() >= 7)
+        {
+        int lon = 0, lat = 0;
+        try
+          {
+          lat = boost::lexical_cast<int>(nameList[i].substr(1,2));
+          }
+        catch(boost::bad_lexical_cast &)
+          {
+          otbAppLogWARNING(<< "Wrong longitude in tile name : "<<nameList[i]);
+          continue;
+          }
+        try
+          {
+          lon = boost::lexical_cast<int>(nameList[i].substr(4,3));
+          }
+        catch(boost::bad_lexical_cast &)
+          {
+          otbAppLogWARNING(<< "Wrong latitude in tile name : "<<nameList[i]);
+          continue;
+          }
+        if (nameList[i][0] == 's' || nameList[i][0] == 'S')
+          lat = -lat;
+        else if (nameList[i][0] != 'n' && nameList[i][0] != 'N')
+          {
+          otbAppLogWARNING(<< "Wrong northing in tile name : "<<nameList[i]);
+          continue;
+          }
+        if (nameList[i][3] == 'w' || nameList[i][3] == 'W')
+          lon = -lon;
+        else if (nameList[i][3] != 'e' && nameList[i][3] != 'E')
+          {
+          otbAppLogWARNING(<< "Wrong easting in tile name : "<<nameList[i]);
+          continue;
+          }
+        tiles.insert(SRTMTileId({lon,lat,0}));
+        }
+      else
+        {
+        otbAppLogWARNING(<< "Tile name should have at least 7 characters : "<<nameList[i]);
+        }
+      }
 
     if (tiles.empty())
       {
-      otbAppLogWARNING(<< "No tile found for the given image(s)!");
+      otbAppLogWARNING(<< "No tile found for the given input(s)!");
       return;
       }
 
