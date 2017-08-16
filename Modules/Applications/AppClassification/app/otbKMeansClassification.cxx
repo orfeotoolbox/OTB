@@ -320,10 +320,6 @@ protected:
         }
         outfile << std::endl;
       }
-      outfile.close();
-
-      infile.close();
-
     }
   }
 
