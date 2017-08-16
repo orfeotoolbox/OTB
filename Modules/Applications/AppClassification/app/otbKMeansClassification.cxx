@@ -160,19 +160,21 @@ protected:
     ogrDS = otb::ogr::DataSource::New(vectorFileName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
     otb::ogr::Layer layer = ogrDS->GetLayer(0);
 
-    OGRFieldDefn confidenceField(fieldName.c_str(), OFTInteger);
-    confidenceField.SetWidth(confidenceField.GetWidth());
-    confidenceField.SetPrecision(confidenceField.GetPrecision());
-    ogr::FieldDefn confFieldDefn(confidenceField);
-    layer.CreateField(confFieldDefn);
+    OGRFieldDefn classField(fieldName.c_str(), OFTInteger);
+    classField.SetWidth(classField.GetWidth());
+    classField.SetPrecision(classField.GetPrecision());
+    ogr::FieldDefn classFieldDefn(classField);
+    layer.CreateField(classFieldDefn);
 
-    // Complete field
-    layer.ogr().ResetReading();
-    otb::ogr::Feature feature = layer.ogr().GetNextFeature();
-    if(feature.addr())
+    otb::ogr::Layer::const_iterator it = layer.cbegin();
+    otb::ogr::Layer::const_iterator itEnd = layer.cend();
+    for( ; it!=itEnd ; ++it)
     {
-      feature.ogr().SetField(fieldName.c_str(), 0);
-      layer.SetFeature(feature);
+      ogr::Feature dstFeature(layer.GetLayerDefn());
+      dstFeature.SetFrom( *it, TRUE);
+      dstFeature.SetFID(it->GetFID());
+      dstFeature[fieldName].SetValue<int>(0);
+      layer.SetFeature(dstFeature);
     }
     const OGRErr err = layer.ogr().CommitTransaction();
     if (err != OGRERR_NONE)
