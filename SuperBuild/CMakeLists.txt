@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.3.0)
 
 project(OTB-SuperBuild)
 
@@ -42,6 +42,7 @@ include(ExternalProject)
 include(OTBCheckTargetSystemArch)
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
+option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
 
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
 
@@ -73,11 +74,11 @@ option(BUILD_TESTING "Build the testing tree." OFF)
 include(CTest)
 include(SuperBuild_Macro)
 
-# Setup location where source tar-balls are downloaded
-#set (install_location "${CMAKE_CURRENT_BINARY_DIR}/install")
-set (DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
-     CACHE PATH "Location where source tar-balls are (to be) downloaded.")
-mark_as_advanced(DOWNLOAD_LOCATION)
+# Configure location where source tar-balls are downloaded
+find_path(DOWNLOAD_LOCATION
+  NAMES OTBSuperBuild.readme
+  HINTS $ENV{DOWNLOAD_LOCATION} "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
+  )
 
 # General options
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
@@ -143,15 +144,6 @@ endif()
 if(NOT CMAKE_BUILD_TYPE)
   message(STATUS "CMake build type is none. Setting it to Release")
   set(CMAKE_BUILD_TYPE Release)
-endif()
-
-if(MSVC)
-  set(BUILD_SHARED_LIBS OFF)
-  if(CMAKE_MAJOR_VERSION GREATER 2 AND CMAKE_MINOR_VERSION GREATER 2)
-    set(BUILD_SHARED_LIBS ON)
-  else()
-    message(WARNING "BUILD_SHARED_LIBS is set to OFF with CMake < 3.3")
-  endif()
 endif()
 
 if(MSVC)
@@ -249,6 +241,7 @@ option(USE_SYSTEM_GDAL "Use a system build of GDAL" OFF)
 option(USE_SYSTEM_FFTW "Use a system build of FFTW" OFF)
 option(USE_SYSTEM_ITK "Use a system build of ITK" OFF)
 option(USE_SYSTEM_OPENTHREADS  "Use a system build of OpenThreads" OFF)
+option(USE_SYSTEM_OSSIM  "Use a system build of OSSIM" OFF)
 option(USE_SYSTEM_MUPARSER  "Use a system build of muParser" OFF)
 option(USE_SYSTEM_MUPARSERX "Use a system build of  muParserX" OFF)
 option(USE_SYSTEM_TINYXML  "Use a system build of TinyXML" OFF)
@@ -281,18 +274,19 @@ option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
 option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
 option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
-option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
-option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
-option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
-option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
-option(OTB_USE_SHARK "Enable module Shark in OTB" OFF)
-option(OTB_USE_QWT "Enable module QWT in OTB" OFF)
+option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
+option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
+option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
 
-#Problem: below cmake setting will fail!
-#-DOTB_USE_OPENGL=ON -DOTB_USE_GLEW=ON -DOTB_USE_QWT=ON
-#This is because ENABLE_MONTEVERDI is OFF by default
-# This brings a lot of twisted logic. so taking out this option
+#Cannot activate GLUT on OSX. See manits issue #1194")
+if(APPLE)
+  option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+else()
+  option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
+endif()
 
+option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
+option(OTB_USE_QWT "Enable module QWT in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
@@ -352,6 +346,7 @@ endif()
 message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
 message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
 if(DOWNLOAD_LOCATION)
+  message(STATUS "DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION}")
   message(STATUS "Source archives for dependencies will be taken from '${DOWNLOAD_LOCATION}'")
 else()
   message(STATUS "DOWNLOAD_LOCATION is not set. We will download all source archives during build!")

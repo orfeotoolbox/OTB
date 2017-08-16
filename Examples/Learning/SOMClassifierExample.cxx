@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 // As for the SOM learning step, we must define the types for the
 // \code{otb::SOMMap}, and therefore, also for the distance to be
 // used. We will also define the type for the SOM reader, which is
-// actually an \subdoxygen{otb}{ImageFileReader} which the appropriate
+// actually an \doxygen{otb}{ImageFileReader} which the appropriate
 // image type.
 //
 //  Software Guide : EndLatex
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 //  Software Guide : BeginLatex
 //
 //  The classification will be performed by the
-//  \subdoxygen{otb}{SOMClassifier}, which, as most of the
+//  \doxygen{otb}{SOMClassifier}, which, as most of the
 //  classifiers, works on
 //  \subdoxygen{itk}{Statistics}{ListSample}s. In order to be able
 //  to perform an image classification, we will need to use the
@@ -218,7 +218,7 @@ int main(int argc, char* argv[])
 //
 //  Software Guide : BeginLatex
 //
-//  We also declare an \subdoxygen{itk}{ImageRegionIterator} in order
+//  We also declare an \doxygen{itk}{ImageRegionIterator} in order
 //  to fill the output image with the class labels.
 //
 //  Software Guide : EndLatex

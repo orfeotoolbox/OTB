@@ -21,7 +21,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example illustrates the use of the \subdoxygen{otb}{ImageList}
+//  This example illustrates the use of the \doxygen{otb}{ImageList}
 //  class. This class provides the functionnalities needed in order to
 //  integrate image lists as data objects into the OTB
 //  pipeline. Indeed, if a \code{std::list< ImageType >} was used, the
@@ -29,10 +29,10 @@
 //  effects.
 //
 //  In this example, we will only present the basic operations which
-//  can be applied on an \subdoxygen{otb}{ImageList} object.
+//  can be applied on an \doxygen{otb}{ImageList} object.
 //
 //  The first thing required to read an image from a file is to include
-//  the header file of the \subdoxygen{otb}{ImageFileReader} class.
+//  the header file of the \doxygen{otb}{ImageFileReader} class.
 //
 //  Software Guide : EndLatex
 
@@ -70,7 +70,7 @@ int main(int itkNotUsed(argc), char * argv[])
 // Software Guide : BeginLatex
 //
 // We can now define the type for the image list. The
-// \subdoxygen{otb}{ImageList} class is templated over the type of image
+// \doxygen{otb}{ImageList} class is templated over the type of image
 // contained in it. This means that all images in a list must have the
 // same type.
 //
@@ -146,7 +146,7 @@ int main(int itkNotUsed(argc), char * argv[])
 //
 // Also, iterator classes are defined in order to have an efficient
 // mean of moving through the list. Finally, the
-// \subdoxygen{otb}{ImageListToImageListFilter} is provided in order
+// \doxygen{otb}{ImageListToImageListFilter} is provided in order
 // to implement filter which operate on image lists and produce image lists.
 // Software Guide : EndLatex
 

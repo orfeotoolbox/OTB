@@ -65,7 +65,6 @@ if(UNIX)
     ${SB_CONFIGURE_ARGS}
     --with-cfitsio=no
     --with-dods-root=no
-    --with-dwgdirect=no
     --with-ecw=no
     --with-epsilon=no
     --with-fme=no
@@ -100,6 +99,8 @@ if(UNIX)
     --with-xerces=no
     --with-xml2=no
     --with-pg=no
+    --with-webp=no
+    --with-threads=yes
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
@@ -107,8 +108,6 @@ if(UNIX)
   #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
 
 else(MSVC)
-  STRING(REGEX REPLACE "/$" "" CMAKE_WIN_INSTALL_PREFIX ${SB_INSTALL_PREFIX})
-  STRING(REGEX REPLACE "/" "\\\\" CMAKE_WIN_INSTALL_PREFIX ${CMAKE_WIN_INSTALL_PREFIX})
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
     ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
@@ -133,8 +132,8 @@ endif()
 
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz"
-  URL_MD5 0fc165cd947c54b132204233dfb243f1
+  URL "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
+  URL_MD5 785acf2b0cbf9d56d37c9044d0ee2505
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -143,6 +142,7 @@ ExternalProject_Add(GDAL
   CONFIGURE_COMMAND ${GDAL_CONFIGURE_COMMAND}
   BUILD_COMMAND ${GDAL_BUILD_COMMAND}
   INSTALL_COMMAND ${GDAL_INSTALL_COMMAND}
+  LOG_DOWNLOAD 1
   LOG_CONFIGURE 1
   LOG_BUILD 1
   LOG_INSTALL 1

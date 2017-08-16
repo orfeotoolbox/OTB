@@ -78,7 +78,6 @@ QtWidgetInputImageListParameter
   ListEditWidget * widget = new ListEditWidget();
 
   assert( widget->GetItemModel() );
-
   assert( dynamic_cast< StringListInterface * >( GetParam() )!=nullptr );
 
   widget->GetItemModel()->SetStringList(
@@ -101,16 +100,14 @@ void
 QtWidgetInputImageListParameter::UpdateImageList()
 {
 #if 0
-  /* Adding a NullElement so to make the m_FileSelectionList and
-* m_InputImageList's ImageList are of same size. So that GetImageList().Size()
-* seems to be happy.
-  */
-  for(unsigned int i = m_InputImageListParam->GetImageList()->Size(); i < m_FileSelectionList.size(); i++)
+  // Adding a NullElement so to make the m_FileSelectionList and
+  // m_InputImageList's ImageList are of same size.
+  for(unsigned int i = m_InputImageListParam->Size(); i < m_FileSelectionList.size(); i++)
     {
     m_InputImageListParam->AddNullElement();
     }
 
-  for(unsigned int j = 0; j < m_InputImageListParam->GetImageList()->Size(); j++)
+  for(unsigned int j = 0; j < m_InputImageListParam->Size(); j++)
     {
     if(m_InputImageListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == false)
       {
@@ -271,8 +268,8 @@ QtWidgetInputImageListParameter::AddFile()
   /* No need of AddNullElement() here. Moved adding NullElement when updating the list  */
   //m_InputImageListParam->AddNullElement();
   connect(
-    fileSelection->GetInput(),
-    SIGNAL( textChanged( const QString & ) ),
+    fileSelection,
+    SIGNAL( FilenameChanged() ),
     this,
     SLOT( UpdateImageList() )
   );
@@ -328,7 +325,7 @@ QtWidgetInputImageListParameter::EraseFile()
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
   m_InputImageListParam->AddNullElement();
-  connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
+  connect(fileSelection, SIGNAL(FilenameChanged()), this, SLOT(UpdateImageList()));
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
@@ -354,7 +351,7 @@ void QtWidgetInputImageListParameter::RecreateImageList()
     for(unsigned int j = 0; j < m_FileSelectionList.size(); j++)
       {
       m_InputImageListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
-      connect(m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
+      connect(m_FileSelectionList[j], SIGNAL(FilenameChanged()), this, SLOT(UpdateImageList()));
       }
 
     emit Change();

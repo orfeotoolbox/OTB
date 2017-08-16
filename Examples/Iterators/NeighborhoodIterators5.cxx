@@ -46,9 +46,9 @@
 // 2, stride = 3, end = 8)}, that represents the neighborhood offsets $(1,
 // -1)$, $(1, 0)$, $(1, 1)$ (see Figure~\ref{fig:NeighborhoodIteratorFig2}). If we
 // pass this slice as an extra argument to the
-// \doxygen{NeighborhoodInnerProduct} function, then the inner product is taken
+// \doxygen{itk}{NeighborhoodInnerProduct} function, then the inner product is taken
 // only along that slice.  This ``sliced'' inner product with a 1D
-// \doxygen{DerivativeOperator} gives the desired derivative.
+// \doxygen{itk}{DerivativeOperator} gives the desired derivative.
 //
 // The previous separable Gaussian filtering example can be rewritten using
 // slices and slice-based inner products.  In general, slice-based processing
@@ -57,7 +57,7 @@
 // Section~\ref{sec:NeighborhoodExample4} becomes impractical or inefficient.
 // Good examples of slice-based neighborhood processing can be found in any of
 // the ND anisotropic diffusion function objects, such as
-// \doxygen{CurvatureNDAnisotropicDiffusionFunction}.
+// \doxygen{itk}{CurvatureNDAnisotropicDiffusionFunction}.
 //
 // Software Guide : EndLatex
 

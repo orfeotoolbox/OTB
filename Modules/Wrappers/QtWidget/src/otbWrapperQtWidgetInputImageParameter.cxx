@@ -71,8 +71,16 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   m_Input->setToolTip(
     QString::fromStdString( m_InputImageParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+
+  connect(
+    m_Input, SIGNAL( editingFinished() ),
+    this, SLOT( SetFileName() )
+  );
+
+  connect(
+    this, SIGNAL( FileNameIsSet() ),
+    GetModel(), SLOT( NotifyUpdate() )
+  );
 
   m_HLayout->addWidget(m_Input);
 
@@ -107,7 +115,9 @@ QtWidgetInputImageParameter
   if( filename.isEmpty() )
     return;
 
-  if( !SetFileName( filename ) )
+  m_Input->setText( filename  );
+
+  if( !SetFileName() )
     {
     std::ostringstream oss;
 
@@ -121,21 +131,20 @@ QtWidgetInputImageParameter
 
     return;
     }
-
-  m_Input->setText( filename  );
 }
 
-bool QtWidgetInputImageParameter::SetFileName(const QString& value)
+bool QtWidgetInputImageParameter::SetFileName()
 {
   bool res = true;
   // save value
   if( m_InputImageParam->SetFromFileName(
-	QFile::encodeName( value ).constData() ) == true )
+	QFile::encodeName( m_Input->text() ).constData() ) == true )
     {
     // notify of value change
     QString key( m_InputImageParam->GetKey() );
 
     emit ParameterChanged(key);
+    emit FileNameIsSet();
     }
   else
     res = false;

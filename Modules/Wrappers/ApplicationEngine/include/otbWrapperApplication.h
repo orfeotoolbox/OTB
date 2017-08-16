@@ -26,7 +26,7 @@
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
 
-#include "itkLogger.h"
+#include "otbLogger.h"
 #include "itkTimeProbe.h"
 #include "otbWrapperMacros.h"
 #include "otbWrapperInputImageParameter.h"
@@ -40,6 +40,37 @@
 
 namespace otb
 {
+
+/** \class ApplicationException
+ *  \brief Exception for runtime errors in OTB Applications
+ *
+ *  Usually thrown with the otbAppLogFATAL macro
+ *
+ * \ingroup OTBApplicationEngine
+ */
+class ApplicationException : public itk::ExceptionObject
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro( ApplicationException, ExceptionObject );
+
+  /** Constructor. */
+  ApplicationException(const char *file, unsigned int line,
+                       const char* message = "Application error.",
+                       const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+  {
+  }
+
+  /** Constructor. */
+  ApplicationException(const std::string &file, unsigned int line,
+                       const char* message = "Application error.",
+                       const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+  {
+  }
+};
+
 namespace Wrapper
 {
 
@@ -70,6 +101,7 @@ public:
     m_Name = name;
     GetDocExample()->SetApplicationName(name);
     this->Modified();
+    m_Logger->SetName(name);
   }
 
   itkGetStringMacro(Name);
@@ -663,7 +695,7 @@ public:
    */
   ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
-  itk::Logger* GetLogger();
+  otb::Logger* GetLogger();
 
   itk::ProcessObject* GetProgressSource() const;
 
@@ -916,7 +948,6 @@ protected:
       }
   }
 
-
 private:
   /* Implement this method to add parameters */
   virtual void DoInit() = 0;
@@ -938,7 +969,7 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
-  itk::Logger::Pointer              m_Logger;
+  otb::Logger::Pointer              m_Logger;
 
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;

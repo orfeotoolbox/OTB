@@ -44,40 +44,23 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
   // First clear previous file chosen
   this->ClearValue();
 
-  bool isOk = true;
   for(unsigned int i=0; i<filenames.size(); i++)
     {
     const std::string filename = filenames[i];
-    // TODO : when the logger will be available, redirect the exception
-    // in the logger (like what is done in MsgReporter)
+
     // File existence checked by the reader
     if (!filename.empty())
       {
       // Try to build a new ParameterInputImage
       InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
       tmpInputImageParameter->SetFromFileName(filename);
 
-      if(!tmpInputImageParameter->HasValue())
-        {
-        // If loading failed
-        this->ClearValue();
-        isOk = false;
-        break;
-        }
-
       m_InputImageParameterVector.push_back(tmpInputImageParameter);
-      m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
       }
     }
 
-  if( !isOk )
-    {
-    return false;
-    }
-
-  SetActive(true);
   this->Modified();
+  SetActive(true);
   return true;
 }
 
@@ -95,16 +78,11 @@ InputImageListParameter
 ::InsertNullElement( int index )
 {
   InputImageParameterVectorType::iterator it1( m_InputImageParameterVector.begin() );
-  FloatVectorImageListType::Iterator it2( m_ImageList->Begin() );
 
   if( index>=0 )
-    {
     it1 += index;
-    it2 += index;
-    }
 
   m_InputImageParameterVector.insert( it1, ITK_NULLPTR );
-  m_ImageList->Insert( it2, ITK_NULLPTR );
 
   SetActive( false );
 
@@ -157,27 +135,16 @@ InputImageListParameter
 bool
 InputImageListParameter::AddFromFileName(const std::string & filename)
 {
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
   // File existence checked by the reader
   if (!filename.empty())
     {
-    // Try to build a new ParameterInputImage
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
     tmpInputImageParameter->SetFromFileName(filename);
 
-    if(!tmpInputImageParameter->HasValue())
-      {
-      // If loading failed
-      this->ClearValue();
-      return false;
-      }
-
     m_InputImageParameterVector.push_back(tmpInputImageParameter);
-    m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
-    SetActive(true);
+
     this->Modified();
+    SetActive(true);
     return true;
     }
 
@@ -193,23 +160,13 @@ InputImageListParameter
     itkExceptionMacro(<< "No image "<<id<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
     }
 
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
   // File existence checked by the reader
   if (!filename.empty())
     {
     InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
     tmpInputImageParameter->SetFromFileName(filename);
 
-    if(!tmpInputImageParameter->HasValue())
-      {
-      this->ClearValue();
-      return false;
-      }
-
     m_InputImageParameterVector[id] = tmpInputImageParameter;
-    m_ImageList->SetNthElement(id,tmpInputImageParameter->GetFloatVectorImage());
 
     this->Modified();
     SetActive(true);
@@ -249,36 +206,32 @@ InputImageListParameter::GetNthFileName( unsigned int i ) const
 FloatVectorImageListType*
 InputImageListParameter::GetImageList() const
 {
+  m_ImageList->Clear();
+  for (unsigned int i=0 ; i < this->Size() ; ++i)
+    {
+    m_ImageList->PushBack(m_InputImageParameterVector[i]->GetFloatVectorImage());
+    }
   return m_ImageList;
 }
 
 FloatVectorImageType*
 InputImageListParameter::GetNthImage(unsigned int i) const
 {
-  if(m_ImageList->Size()<i)
+  if(this->Size()<=i)
     {
-    itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
+    itkExceptionMacro(<< "No image "<<i<<". Only "<<this->Size()<<" images available.");
     }
-  return m_ImageList->GetNthElement(i);
+  return m_InputImageParameterVector[i]->GetFloatVectorImage();
 }
 
 void
 InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 {
   // Check input availability
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  try
-    {
-    for(unsigned int i=0; i<imList->Size(); i++)
-      {
-      imList->GetNthElement( i )->UpdateOutputInformation();
-      }
-    }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
+  for(unsigned int i = 0; i < imList->Size(); i++)
+  {
+    imList->GetNthElement(i)->UpdateOutputInformation();
+  }
 
   // Clear previous values
   this->ClearValue();
@@ -300,18 +253,13 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 
 void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
 {
-  if(m_ImageList->Size()<i)
-    {
-    itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
-    }
-  try
-    {
-    img->UpdateOutputInformation();
-    }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
+  if(this->Size()<i)
+  {
+    itkExceptionMacro(<< "No image "<<i<<". Only "<<this->Size()<<" images available.");
+  }
+
+  // Check input availability
+  img->UpdateOutputInformation();
 
   // Try to build a new ParameterInputImage
   InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
@@ -319,7 +267,6 @@ void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
   tmpInputImageParameter->SetImage(img);
 
   m_InputImageParameterVector[i] = tmpInputImageParameter;
-  m_ImageList->SetNthElement(i,tmpInputImageParameter->GetFloatVectorImage());
 }
 
 
@@ -327,23 +274,13 @@ void
 InputImageListParameter::AddImage(ImageBaseType* image)
 {
   // Check input availability
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  try
-    {
-    image->UpdateOutputInformation();
-    }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
+  image->UpdateOutputInformation();
 
   InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
 
   tmpInputImageParameter->SetImage(image);
 
   m_InputImageParameterVector.push_back(tmpInputImageParameter);
-  m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
 
   this->Modified();
 }
@@ -351,16 +288,18 @@ InputImageListParameter::AddImage(ImageBaseType* image)
 bool
 InputImageListParameter::HasValue() const
 {
-  if(m_ImageList->Size() == 0)
+  if(this->Size() == 0)
     {
     return false;
     }
 
   bool res(true);
   unsigned int i(0);
-  while(i < m_ImageList->Size() && res == true)
+  while(i < this->Size() && res == true)
     {
-    res = m_ImageList->GetNthElement(i).IsNotNull();
+    res = (m_InputImageParameterVector[i] ?
+           m_InputImageParameterVector[i]->HasValue() :
+           false);
     i++;
     }
 
@@ -371,12 +310,11 @@ InputImageListParameter::HasValue() const
 void
 InputImageListParameter::Erase( unsigned int id )
 {
-  if(m_ImageList->Size()<id)
+  if(this->Size()<id)
     {
-    itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ImageList->Size()<<" images available.");
+    itkExceptionMacro(<< "No image "<<id<<". Only "<<this->Size()<<" images available.");
     }
 
-  m_ImageList->Erase( id );
   m_InputImageParameterVector.erase(m_InputImageParameterVector.begin()+id);
 
   this->Modified();

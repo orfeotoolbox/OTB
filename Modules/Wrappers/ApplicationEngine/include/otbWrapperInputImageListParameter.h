@@ -80,8 +80,10 @@ public:
  /** Get one specific stored image filename. */
   const std::string & GetNthFileName( unsigned int i ) const ITK_OVERRIDE;
 
-  /** Get one list of the stored image. */
-  FloatVectorImageListType * GetImageList() const;
+  /** Get one list of the stored image. WARNING : if the parameter list changes,
+   *  the returned image list may become obsolete. You should call
+   *  GetImageList() again to make sure your image list is up-to-date. */
+  FloatVectorImageListType* GetImageList() const;
 
   /** Get one specific stored image. */
   FloatVectorImageType * GetNthImage( unsigned int i ) const;

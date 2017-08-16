@@ -74,6 +74,7 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_HLayout->addWidget(m_Checkbox);
 
   m_Input = new QLineEdit;
+  connect( m_Input, SIGNAL(editingFinished()), this, SLOT(CallFilenameChanged()) );
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
@@ -116,8 +117,16 @@ QtFileSelectionWidget
     return;
 
   m_Input->setText( filename  );
+
+  emit FilenameChanged();
 }
 
+void
+QtFileSelectionWidget
+::CallFilenameChanged()
+{
+  emit FilenameChanged();
+}
 
 }
 

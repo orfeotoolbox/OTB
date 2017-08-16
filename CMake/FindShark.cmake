@@ -102,14 +102,7 @@ endif()
 
 set(SHARK_USE_OPENMP_matched)
 #define SHARK_USE_OPENMP
-find_file( SHARK_H_FILE
-  NAMES shark/Core/Shark.h
-  PATHS "${SHARK_SEARCH_PATH}"
-  PATH_SUFFIXES include include/shark shark
-  )
-
-#define SHARK_USE_OPENMP
-file(STRINGS "${SHARK_H_FILE}" SHARK_H_CONTENTS)
+file(STRINGS "${SHARK_INCLUDE_DIR}/shark/Core/Shark.h" SHARK_H_CONTENTS)
 string(REGEX MATCH
   "#define.SHARK_USE_OPENMP"
   SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
@@ -122,6 +115,10 @@ if(SHARK_USE_OPENMP_matched)
   set(SHARK_USE_OPENMP TRUE CACHE BOOL "shark is built with OpenMP" FORCE)
 endif()
 
+#This is quick fix/hack/commit that will get back all failing tests on
+# The good fix must to fix all those failing tests. They are crashing
+# due to openmp issues which only popup with this fix
+if(NOT WIN32)
 if(SHARK_USE_OPENMP)
   message(STATUS "Shark is built with OpenMP: SHARK_USE_OPENMP = TRUE")
   find_package(OpenMP REQUIRED QUIET)
@@ -136,6 +133,8 @@ if(SHARK_USE_OPENMP)
 else()
   message(STATUS "Shark is built without OpenMP: SHARK_USE_OPENMP = FALSE")
 endif()
+endif(NOT WIN32)
+
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Shark
   REQUIRED_VARS SHARK_LIBRARY SHARK_INCLUDE_DIR

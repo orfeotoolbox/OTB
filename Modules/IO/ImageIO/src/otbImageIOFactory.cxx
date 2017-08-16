@@ -48,38 +48,35 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
     itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
   for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
-    {
+  {
     otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
     if(io)
-      {
-      possibleImageIO.push_back(io);
-      }
-    else
-      {
-      std::cerr << "Error ImageIO factory did not return an ImageIOBase: "
-                << (*i)->GetNameOfClass()
-                << std::endl;
-      }
-    }
-  for(std::list<otb::ImageIOBase::Pointer>::iterator k = possibleImageIO.begin();
-      k != possibleImageIO.end(); ++k)
     {
-    if( mode == ReadMode )
-      {
-      if((*k)->CanReadFile(path))
-        {
-        return *k;
-        }
-      }
-    else if( mode == WriteMode )
-      {
-      if((*k)->CanWriteFile(path))
-        {
-        return *k;
-        }
+      possibleImageIO.push_back(io);
+    }
+    else
+    {
+      itkGenericExceptionMacro(<< "ImageIO factory did not return an ImageIOBase but a " << (*i)->GetNameOfClass());
+    }
+  }
 
+  for(std::list<otb::ImageIOBase::Pointer>::iterator k = possibleImageIO.begin(); k != possibleImageIO.end(); ++k)
+  {
+    if( mode == ReadMode )
+    {
+      if((*k)->CanReadFile(path))
+      {
+        return *k;
       }
     }
+    else if( mode == WriteMode )
+    {
+      if((*k)->CanWriteFile(path))
+      {
+        return *k;
+      }
+    }
+  }
   return ITK_NULLPTR;
 }
 
