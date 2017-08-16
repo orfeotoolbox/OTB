@@ -155,6 +155,7 @@ bool
 InputImageListParameter
 ::SetNthFileName( const unsigned int id, const std::string & filename )
 {
+#if 0
   if( m_InputImageParameterVector.size()<id )
     {
     itkExceptionMacro(<< "No image "<<id<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
@@ -174,6 +175,14 @@ InputImageListParameter
     }
 
   return false;
+
+#else
+  assert( id<m_InputImageParameterVector.size() );
+  assert( m_InputImageParameterVector.size()==m_ImageList->Size() );
+  assert( !m_InputImageParameterVector[ id ].IsNull() );
+
+  return m_InputImageParameterVector[ id ]->SetFromFileName( filename );
+#endif
 }
 
 

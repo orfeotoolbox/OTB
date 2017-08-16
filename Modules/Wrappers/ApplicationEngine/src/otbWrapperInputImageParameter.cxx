@@ -55,7 +55,8 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   // myfile.tif:2 for example, or myfile.tif:nocarto
   m_FileName = filename;
   m_UseFilename = true;
-  SetActive(true);
+  SetActive( true );
+
   return true;
 }
 
@@ -88,14 +89,15 @@ InputImageParameter::HasValue() const
 }
 
 void
-InputImageParameter::ClearValue()
+InputImageParameter
+::ClearValue()
 {
- m_Image  = ITK_NULLPTR;
- m_Reader = ITK_NULLPTR;
- m_Caster = ITK_NULLPTR;
- m_FileName = "";
- m_PreviousFileName="";
- m_UseFilename = true;
+  m_Image  = ITK_NULLPTR;
+  m_Reader = ITK_NULLPTR;
+  m_Caster = ITK_NULLPTR;
+  m_FileName = "";
+  m_PreviousFileName="";
+  m_UseFilename = true;
 }
 
 }
