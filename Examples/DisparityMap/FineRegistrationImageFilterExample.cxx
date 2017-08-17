@@ -125,7 +125,7 @@ int main(int argc, char** argv)
 
   // Software Guide : BeginLatex
   //
-  // Now, we declare and instantiate the \doxygen{otb}{FineCorrelationImageFilter} which is going to perform the registration:
+  // Now, we declare and instantiate the \doxygen{otb}{FineRegistrationImageFilter} which is going to perform the registration:
   //
   // Software Guide : EndLatex
 
@@ -188,7 +188,7 @@ int main(int argc, char** argv)
 
   // Software Guide : BeginLatex
   //
-  // The default matching metric used by the \doxygen{FineRegistrationImageFilter} is standard correlation.
+  // The default matching metric used by the \doxygen{otb}{FineRegistrationImageFilter} is standard correlation.
   // However, we may also use any other image-to-image metric provided by ITK. For instance, here is how we
   // would use the \doxygen{itk}{MutualInformationImageToImageMetric} (do not forget to include the proper header).
   //

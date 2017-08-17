@@ -74,7 +74,7 @@
 // class assumes that such type of components.
 //
 // In the following example we use the \subdoxygen{itk}{Statistics}{ListSample} as
-// the sample (test and training). The \subdoxygen{itk}{Vector} is our measurement
+// the sample (test and training). The \doxygen{itk}{Vector} is our measurement
 // vector class. To store measurement vectors into two separate sample
 // container, we use the \subdoxygen{itk}{Statistics}{Subsample} objects.
 //

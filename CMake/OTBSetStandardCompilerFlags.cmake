@@ -209,6 +209,9 @@ macro(check_compiler_platform_flags)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
       endif()
     else()
+      if(MSVC)
+        set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /MANIFEST:NO")
+      endif()
       # if CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS is on, then
       # BUILD_SHARED_LIBS works as it would on other systems
       if(NOT CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
