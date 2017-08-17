@@ -91,6 +91,10 @@ void TrainVectorBase::DoInit()
     "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output." );
   MandatoryOff( "io.confmatout" );
 
+  AddParameter(ParameterType_Empty, "v", "Verbose mode");
+  EnableParameter("v");
+  SetParameterDescription("v", "Verbose mode, display the contingency table result.");
+  MandatoryOff("v");
 
   // Doc example parameter settings
   SetDocExampleParameterValue( "io.vd", "vectorData.shp" );

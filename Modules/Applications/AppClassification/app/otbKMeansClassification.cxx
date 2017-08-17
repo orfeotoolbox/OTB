@@ -18,153 +18,381 @@
  * limitations under the License.
  */
 
-
-#include "otbWrapperApplication.h"
+#include "otbWrapperCompositeApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbVectorImage.h"
-#include "otbStreamingTraits.h"
-#include "itkImageRegionConstIterator.h"
-#include "itkListSample.h"
-#include "itkWeightedCentroidKdTreeGenerator.h"
-#include "itkKdTreeBasedKmeansEstimator.h"
-#include "otbStreamingShrinkImageFilter.h"
-#include "otbChangeLabelImageFilter.h"
-#include "otbRAMDrivenStrippedStreamingManager.h"
-
-#include "otbChangeLabelImageFilter.h"
-#include "itkLabelToRGBImageFilter.h"
-#include "otbReliefColormapFunctor.h"
-#include "itkScalarToRGBColormapImageFilter.h"
-
+#include "otbOGRDataToSamplePositionFilter.h"
 
 namespace otb
 {
-
-
 namespace Wrapper
 {
 
-namespace Functor
-{
-template <class TSample, class TLabel> class KMeansFunctor
+class KMeansApplicationBase : public CompositeApplication
 {
 public:
-  /** operator */
-  TLabel operator ()(const TSample& sample) const
-  {
-    typename CentroidMapType::const_iterator it = m_CentroidsMap.begin();
+  /** Standard class typedefs. */
+  typedef KMeansApplicationBase Self;
+  typedef CompositeApplication Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    if (it == m_CentroidsMap.end())
+  /** Standard macro */
+  itkTypeMacro( KMeansApplicationBase, Superclass )
+
+protected:
+  void InitKMParams()
+  {
+    AddApplication("ImageEnvelope", "imgenvelop", "mean shift smoothing");
+    AddApplication("PolygonClassStatistics", "polystats", "Polygon Class Statistics");
+    AddApplication("SampleSelection", "select", "Sample selection");
+    AddApplication("SampleExtraction", "extraction", "Sample extraction");
+
+    AddApplication("TrainVectorClassifier", "training", "Model training");
+    AddApplication("ComputeImagesStatistics", "imgstats", "Compute Images second order statistics");
+    AddApplication("ImageClassifier", "classif", "Performs a classification of the input image");
+
+    ShareParameter("in", "imgenvelop.in");
+    ShareParameter("out", "classif.out");
+
+    InitKMSampling();
+    InitKMClassification();
+
+    // init at the end cleanup
+    AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
+    EnableParameter( "cleanup" );
+    SetParameterDescription( "cleanup",
+                           "If activated, the application will try to clean all temporary files it created" );
+    MandatoryOff( "cleanup" );
+  }
+
+  void InitKMSampling()
+  {
+    AddParameter(ParameterType_Int, "nc", "Number of classes");
+    SetParameterDescription("nc", "Number of modes, which will be used to generate class membership.");
+    SetDefaultParameterInt("nc", 5);
+
+    AddParameter(ParameterType_Int, "ts", "Training set size");
+    SetParameterDescription("ts", "Size of the training set (in pixels).");
+    SetDefaultParameterInt("ts", 100);
+    MandatoryOff("ts");
+
+    AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
+    SetParameterDescription("maxit", "Maximum number of iterations for the learning step.");
+    SetDefaultParameterInt("maxit", 1000);
+    MandatoryOff("maxit");
+
+    AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
+    SetParameterDescription("outmeans", "Output text file containing centroid positions");
+    MandatoryOff("outmeans");
+
+    ShareKMSamplingParameters();
+    ConnectKMSamplingParams();
+  }
+
+  void InitKMClassification()
+  {
+    ShareKMClassificationParams();
+    ConnectKMClassificationParams();
+  }
+
+  void ShareKMSamplingParameters()
+  {
+    ShareParameter("ram", "polystats.ram");
+    ShareParameter("sampler", "select.sampler");
+    ShareParameter("vm", "polystats.mask", "Validity Mask",
+      "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
+  }
+
+  void ShareKMClassificationParams()
+  {
+    ShareParameter("nodatalabel", "classif.nodatalabel", "Label mask value",
+      "By default, hidden pixels will have the assigned label 0 in the output image. "
+      "It's possible to define the label mask by another value, "
+      "but be careful to not take a label from another class. "
+      "This application initalize the labels from 0 to N-1, "
+      "N is the number of class (defined by 'nc' parameter).");
+  }
+
+  void ConnectKMSamplingParams()
+  {
+    Connect("polystats.in", "imgenvelop.in");
+
+    Connect("select.in", "polystats.in");
+    Connect("select.vec", "polystats.vec");
+    Connect("select.ram", "polystats.ram");
+
+    Connect("extraction.in", "select.in");
+    Connect("extraction.field", "select.field");
+    Connect("extraction.vec", "select.out");
+    Connect("extraction.ram", "polystats.ram");
+  }
+
+  void ConnectKMClassificationParams()
+  {
+    Connect("training.cfield", "extraction.field");
+    Connect("training.io.stats","imgstats.out");
+
+    Connect("classif.in", "imgenvelop.in");
+    Connect("classif.model", "training.io.out");
+    Connect("classif.ram", "polystats.ram");
+    Connect("classif.imstat", "imgstats.out");
+  }
+
+  void ConnectKMClassificationMask()
+  {
+    otbAppLogINFO("Using input mask ...");
+    Connect("select.mask", "polystats.mask");
+    Connect("classif.mask", "select.mask");
+  }
+
+  void ComputeImageEnvelope(const std::string &vectorFileName)
+  {
+    GetInternalApplication("imgenvelop")->SetParameterString("out", vectorFileName, false);
+    GetInternalApplication("imgenvelop")->ExecuteAndWriteOutput();
+  }
+
+  void ComputeAddField(const std::string &vectorFileName,
+                       const std::string &fieldName)
+  {
+    otbAppLogINFO("add field in the layer ...");
+    otb::ogr::DataSource::Pointer ogrDS;
+    ogrDS = otb::ogr::DataSource::New(vectorFileName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
+    otb::ogr::Layer layer = ogrDS->GetLayer(0);
+
+    OGRFieldDefn classField(fieldName.c_str(), OFTInteger);
+    classField.SetWidth(classField.GetWidth());
+    classField.SetPrecision(classField.GetPrecision());
+    ogr::FieldDefn classFieldDefn(classField);
+    layer.CreateField(classFieldDefn);
+
+    otb::ogr::Layer::const_iterator it = layer.cbegin();
+    otb::ogr::Layer::const_iterator itEnd = layer.cend();
+    for( ; it!=itEnd ; ++it)
+    {
+      ogr::Feature dstFeature(layer.GetLayerDefn());
+      dstFeature.SetFrom( *it, TRUE);
+      dstFeature.SetFID(it->GetFID());
+      dstFeature[fieldName].SetValue<int>(0);
+      layer.SetFeature(dstFeature);
+    }
+    const OGRErr err = layer.ogr().CommitTransaction();
+    if (err != OGRERR_NONE)
+      itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << layer.ogr().GetName() << ".");
+    ogrDS->SyncToDisk();
+  }
+
+  void ComputePolygonStatistics(const std::string &statisticsFileName,
+                                const std::string &fieldName)
+  {
+    std::vector<std::string> fieldList = {fieldName};
+
+    GetInternalApplication("polystats")->SetParameterStringList("field", fieldList, false);
+    GetInternalApplication("polystats")->SetParameterString("out", statisticsFileName, false);
+
+    ExecuteInternal("polystats");
+  }
+
+  void SelectAndExtractSamples(const std::string &statisticsFileName,
+                               const std::string &fieldName,
+                               const std::string &sampleFileName,
+                               int NBSamples)
+  {
+    /* SampleSelection */
+    GetInternalApplication("select")->SetParameterString("out", sampleFileName, false);
+
+    UpdateInternalParameters("select");
+    GetInternalApplication("select")->SetParameterString("instats", statisticsFileName, false);
+    GetInternalApplication("select")->SetParameterString("field", fieldName, false);
+
+    GetInternalApplication("select")->SetParameterString("strategy", "constant", false);
+    GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples, false);
+
+    if( IsParameterEnabled("rand"))
+      GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
+
+    // select sample positions
+    ExecuteInternal("select");
+
+    /* SampleExtraction */
+    UpdateInternalParameters("extraction");
+
+    GetInternalApplication("extraction")->SetParameterString("outfield", "prefix", false);
+    GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name", "value_", false);
+
+    // extract sample descriptors
+    GetInternalApplication("extraction")->ExecuteAndWriteOutput();
+  }
+
+  void TrainKMModel(FloatVectorImageType *image,
+                    const std::string &sampleTrainFileName,
+                    const std::string &modelFileName)
+  {
+    std::vector<std::string> extractOutputList = {sampleTrainFileName};
+    GetInternalApplication("training")->SetParameterStringList("io.vd", extractOutputList, false);
+    UpdateInternalParameters("training");
+
+    // set field names
+    std::string selectPrefix = GetInternalApplication("extraction")->GetParameterString("outfield.prefix.name");
+    unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
+    std::vector<std::string> selectedNames;
+    for( unsigned int i = 0; i < nbBands; i++ )
       {
-      return 0;
+      std::ostringstream oss;
+      oss << i;
+      selectedNames.push_back( selectPrefix + oss.str() );
+      }
+    GetInternalApplication("training")->SetParameterStringList("feat", selectedNames, false);
+
+    GetInternalApplication("training")->SetParameterString("classifier", "sharkkm", false);
+    GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.maxiter",
+                                                        GetParameterInt("maxit"), false);
+    GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
+                                                        GetParameterInt("nc"), false);
+
+    if( IsParameterEnabled("rand"))
+      GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"), false);
+    GetInternalApplication("training")->GetParameterByKey("v")->SetActive(false);
+
+    GetInternalApplication("training")->SetParameterString("io.out", modelFileName, false);
+
+    ExecuteInternal( "training" );
+    otbAppLogINFO("output model : " << GetInternalApplication("training")->GetParameterString("io.out"));
+  }
+
+  void ComputeImageStatistics(const std::string &imageFileName,
+                                               const std::string &imagesStatsFileName)
+  {
+    std::vector<std::string> imageFileNameList = {imageFileName};
+    GetInternalApplication("imgstats")->SetParameterStringList("il", imageFileNameList, false);
+    GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName, false);
+
+    ExecuteInternal( "imgstats" );
+    otbAppLogINFO("image statistics file : " << GetInternalApplication("imgstats")->GetParameterString("out"));
+  }
+
+
+  void KMeansClassif()
+  {
+    ExecuteInternal( "classif" );
+  }
+
+  void CreateOutMeansFile(FloatVectorImageType *image,
+                          const std::string &modelFileName,
+                          unsigned int nbClasses)
+  {
+    if (IsParameterEnabled("outmeans"))
+    {
+      unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
+      unsigned int nbElements = nbClasses * nbBands;
+      // get the line in model file that contains the centroids positions
+      std::ifstream infile(modelFileName);
+      if(!infile)
+      {
+        itkExceptionMacro(<< "File : " << modelFileName << " couldn't be opened");
       }
 
-    TLabel resp = it->first;
-    double minDist = m_Distance->Evaluate(sample, it->second);
-    ++it;
-
-    while (it != m_CentroidsMap.end())
+      // get the end line with the centroids
+      std::string line, centroidLine;
+      while(std::getline(infile,line))
       {
-      double dist = m_Distance->Evaluate(sample, it->second);
+        if (!line.empty())
+          centroidLine = line;
+      }
 
-      if (dist < minDist)
+      std::vector<std::string> centroidElm;
+      boost::split(centroidElm,centroidLine,boost::is_any_of(" "));
+
+      // remove the first elements, not the centroids positions
+      int nbWord = centroidElm.size();
+      int beginCentroid = nbWord-nbElements;
+      centroidElm.erase(centroidElm.begin(), centroidElm.begin()+beginCentroid);
+
+      // write in the output file
+      std::ofstream outfile;
+      outfile.open(GetParameterString("outmeans"));
+
+      for (unsigned int i = 0; i < nbClasses; i++)
+      {
+        for (unsigned int j = 0; j < nbBands; j++)
         {
-        resp = it->first;
-        minDist = dist;
+          outfile << std::setw(8) << centroidElm[i * nbBands + j] << " ";
         }
-      ++it;
+        outfile << std::endl;
       }
-    return resp;
+    }
   }
 
-  /** Add a new centroid */
-  void AddCentroid(const TLabel& label, const TSample& centroid)
-  {
-    m_CentroidsMap[label] = centroid;
-  }
+  class KMeansFileNamesHandler
+    {
+    public :
+      KMeansFileNamesHandler(const std::string &outPath)
+      {
+        tmpVectorFile = outPath + "_imgEnvelope.shp";
+        polyStatOutput = outPath + "_polyStats.xml";
+        sampleOutput = outPath + "_sampleSelect.shp";
+        modelFile = outPath + "_model.txt";
+        imgStatOutput = outPath + "_imgstats.xml";
+      }
 
-  /** Constructor */
-  KMeansFunctor() : m_CentroidsMap(), m_Distance()
-  {
-    m_Distance = DistanceType::New();
-  }
+      void clear()
+      {
+        RemoveFile(tmpVectorFile);
+        RemoveFile(polyStatOutput);
+        RemoveFile(sampleOutput);
+        RemoveFile(modelFile);
+        RemoveFile(imgStatOutput);
+      }
 
-  bool operator !=(const KMeansFunctor& other) const
-  {
-    return m_CentroidsMap != other.m_CentroidsMap;
-  }
+      std::string tmpVectorFile;
+      std::string polyStatOutput;
+      std::string sampleOutput;
+      std::string modelFile;
+      std::string imgStatOutput;
 
-private:
-  typedef std::map<TLabel, TSample>                   CentroidMapType;
-  typedef itk::Statistics::EuclideanDistanceMetric<TSample> DistanceType;
+    private:
+      bool RemoveFile(const std::string &filePath)
+      {
+        bool res = true;
+        if( itksys::SystemTools::FileExists( filePath.c_str() ) )
+          {
+          size_t posExt = filePath.rfind( '.' );
+          if( posExt != std::string::npos && filePath.compare( posExt, std::string::npos, ".shp" ) == 0 )
+            {
+            std::string shxPath = filePath.substr( 0, posExt ) + std::string( ".shx" );
+            std::string dbfPath = filePath.substr( 0, posExt ) + std::string( ".dbf" );
+            std::string prjPath = filePath.substr( 0, posExt ) + std::string( ".prj" );
+            RemoveFile( shxPath );
+            RemoveFile( dbfPath );
+            RemoveFile( prjPath );
+            }
+          res = itksys::SystemTools::RemoveFile( filePath.c_str() );
+          if( !res )
+            {
+            //otbAppLogINFO( <<"Unable to remove file  "<<filePath );
+            }
+          }
+        return res;
+      }
 
-  CentroidMapType m_CentroidsMap;
-  typename DistanceType::Pointer m_Distance;
+    };
+
 };
-}
 
 
-typedef FloatImageType::PixelType PixelType;
-typedef UInt16ImageType   LabeledImageType;
-
-typedef UInt16VectorImageType       VectorImageType;
-typedef VectorImageType::PixelType  VectorPixelType;
-typedef UInt8RGBImageType           RGBImageType;
-typedef RGBImageType::PixelType     RGBPixelType;
-
-
-typedef LabeledImageType::PixelType LabelType;
-
-
-typedef FloatVectorImageType::PixelType                               SampleType;
-typedef itk::Statistics::ListSample<SampleType> ListSampleType;
-typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType> TreeGeneratorType;
-typedef TreeGeneratorType::KdTreeType TreeType;
-typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType> EstimatorType;
-typedef RAMDrivenStrippedStreamingManager<FloatVectorImageType> RAMDrivenStrippedStreamingManagerType;
-
-
-typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
-typedef itk::ImageRegionConstIterator<UInt8ImageType> LabeledIteratorType;
-
-typedef otb::StreamingShrinkImageFilter<FloatVectorImageType,
-     FloatVectorImageType>              ImageSamplingFilterType;
-
-typedef otb::StreamingShrinkImageFilter<UInt8ImageType,
-    UInt8ImageType>              MaskSamplingFilterType;
-typedef Functor::KMeansFunctor<SampleType, LabelType> KMeansFunctorType;
-typedef itk::UnaryFunctorImageFilter<FloatVectorImageType,
-    LabeledImageType, KMeansFunctorType>     KMeansFilterType;
-
-
-// Manual label LUT
- typedef otb::ChangeLabelImageFilter
- <LabeledImageType, VectorImageType>    ChangeLabelFilterType;
-
- // Continuous LUT mapping
-  typedef itk::ScalarToRGBColormapImageFilter<LabeledImageType, RGBImageType>      ColorMapFilterType;
-
-
-  typedef otb::Functor::ReliefColormapFunctor
-   <LabelType, RGBPixelType>           ReliefColorMapFunctorType;
-
-  typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-
-
-class KMeansClassification: public Application
+class KMeansClassification: public KMeansApplicationBase
 {
 public:
   /** Standard class typedefs. */
   typedef KMeansClassification Self;
-  typedef Application Superclass;
+  typedef KMeansApplicationBase Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(KMeansClassification, otb::Application);
+  itkTypeMacro(Self, Superclass);
 
 private:
   void DoInit() ITK_OVERRIDE
@@ -173,43 +401,39 @@ private:
     SetDescription("Unsupervised KMeans image classification");
 
     SetDocName("Unsupervised KMeans image classification");
-    SetDocLongDescription("Performs unsupervised KMeans image classification.");
+    SetDocLongDescription("Performs unsupervised KMeans image classification."
+      "KMeansClassification is a composite application, "
+      "using an existing training and classification application."
+      "The SharkKMeans model is used.\n"
+      "The steps of this composite application :\n"
+        "1) ImageEnveloppe : create a shapefile (1 polygon),\n"
+        "2) PolygonClassStatistics : compute the statistics,\n"
+        "3) SampleSelection : select the samples by constant strategy in the shapefile "
+            "(1000000 samples max),\n"
+        "4) SamplesExtraction : extract the samples descriptors (update of SampleSelection output file),\n"
+        "5) ComputeImagesStatistics : compute images second order statistics,\n"
+        "6) TrainVectorClassifier : train the SharkKMeans model,\n"
+        "7) ImageClassifier : performs the classification of the input image "
+            "according to a model file.\n\n"
+        "It's possible to choice random/periodic modes of the SampleSelection application.\n"
+        "If you want keep the temporary files (sample selected, model file, ...), "
+        "initialize cleanup parameter.\n"
+        "For more information on shark KMeans algorithm [1].");
+
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("ImageEnveloppe PolygonClassStatistics SampleSelection SamplesExtraction "
+      "PolygonClassStatistics TrainVectorClassifier ImageClassifier\n"
+      "[1] http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html");
 
     AddDocTag(Tags::Learning);
-	AddDocTag(Tags::Segmentation);
-	
-    AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in", "Input image to classify.");
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out", "Output image containing the class indexes.");
-    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
+    AddDocTag(Tags::Segmentation);
 
-    AddRAMParameter();
+    // Perform initialization
+    ClearApplications();
 
-    AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
-    SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
-    MandatoryOff("vm");
-    AddParameter(ParameterType_Int, "ts", "Training set size");
-    SetParameterDescription("ts", "Size of the training set (in pixels).");
-    SetDefaultParameterInt("ts", 100);
-    MandatoryOff("ts");
-    AddParameter(ParameterType_Int, "nc", "Number of classes");
-    SetParameterDescription("nc", "Number of modes, which will be used to generate class membership.");
-    SetDefaultParameterInt("nc", 5);
-    AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
-    SetParameterDescription("maxit", "Maximum number of iterations for the learning step.");
-    SetDefaultParameterInt("maxit", 1000);
-    MandatoryOff("maxit");
-    AddParameter(ParameterType_Float, "ct", "Convergence threshold");
-    SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.0001).");
-    SetDefaultParameterFloat("ct", 0.0001);
-    MandatoryOff("ct");
-    AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
-    SetParameterDescription("outmeans", "Output text file containing centroid positions");
-    MandatoryOff("outmeans");
+    // initialisation parameters and synchronizes parameters
+    Superclass::InitKMParams();
 
     AddRANDParameter();
 
@@ -218,336 +442,76 @@ private:
     SetDocExampleParameterValue("ts", "1000");
     SetDocExampleParameterValue("nc", "5");
     SetDocExampleParameterValue("maxit", "1000");
-    SetDocExampleParameterValue("ct", "0.0001");
-    SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif");
+    SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif uint8");
 
     SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    // test of input image //
-    if (HasValue("in"))
-      {
-      // input image
-      FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-
-      RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
-      int availableRAM = GetParameterInt("ram");
-      streamingManager->SetAvailableRAMInMB(availableRAM);
-      float bias = 1.5; // empirical value
-      streamingManager->SetBias(bias);
-      FloatVectorImageType::RegionType largestRegion = inImage->GetLargestPossibleRegion();
-      FloatVectorImageType::SizeType largestRegionSize = largestRegion.GetSize();
-      streamingManager->PrepareStreaming(inImage, largestRegion);
-
-      unsigned long nbDivisions = streamingManager->GetNumberOfSplits();
-      unsigned long largestPixNb = largestRegionSize[0] * largestRegionSize[1];
-
-      unsigned long maxPixNb = largestPixNb / nbDivisions;
-
-      if (GetParameterInt("ts") > static_cast<int> (maxPixNb))
-        {
-        otbAppLogWARNING("The available RAM is too small to process this sample size of " << GetParameterInt("ts") <<
-            " pixels. The sample size will be reduced to " << maxPixNb << " pixels." << std::endl);
-        this->SetParameterInt("ts",maxPixNb, false);
-        }
-
-      this->SetMaximumParameterIntValue("ts", maxPixNb);
-      }
   }
 
   void DoExecute() ITK_OVERRIDE
   {
-    GetLogger()->Debug("Entering DoExecute\n");
+    if (IsParameterEnabled("vm") && HasValue("vm")) Superclass::ConnectKMClassificationMask();
 
-    m_InImage = GetParameterImage("in");
-    m_InImage->UpdateOutputInformation();
-    UInt8ImageType::Pointer maskImage;
+    KMeansFileNamesHandler fileNames(GetParameterString("out"));
 
-    std::ostringstream message("");
+    const std::string fieldName = "field";
 
-    int nbsamples = GetParameterInt("ts");
-    const unsigned int nbClasses = GetParameterInt("nc");
+    // Create an image envelope
+    Superclass::ComputeImageEnvelope(fileNames.tmpVectorFile);
+    // Add a new field at the ImageEnvelope output file
+    Superclass::ComputeAddField(fileNames.tmpVectorFile, fieldName);
 
-    /*******************************************/
-    /*           Sampling data                 */
-    /*******************************************/
+    // Compute PolygonStatistics app
+    UpdateKMPolygonClassStatisticsParameters(fileNames.tmpVectorFile);
+    Superclass::ComputePolygonStatistics(fileNames.polyStatOutput, fieldName);
 
-    otbAppLogINFO("-- SAMPLING DATA --"<<std::endl);
+    // Compute number of sample max for KMeans
+    const int theoricNBSamplesForKMeans = GetParameterInt("ts");
+    const int upperThresholdNBSamplesForKMeans = 1000 * 1000;
+    const int actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans,
+                                                  upperThresholdNBSamplesForKMeans);
+    otbAppLogINFO(<< actualNBSamplesForKMeans << " is the maximum sample size that will be used." \
+                  << std::endl);
 
-    // Update input images information
-    m_InImage->UpdateOutputInformation();
+    // Compute SampleSelection and SampleExtraction app
+    Superclass::SelectAndExtractSamples(fileNames.polyStatOutput, fieldName,
+                                        fileNames.sampleOutput,
+                                        actualNBSamplesForKMeans);
 
-    bool maskFlag = IsParameterEnabled("vm");
-    if (maskFlag)
+    // Compute Images second order statistics
+    Superclass::ComputeImageStatistics(GetParameterString("in"), fileNames.imgStatOutput);
+
+    // Compute a train model with TrainVectorClassifier app
+    Superclass::TrainKMModel(GetParameterImage("in"), fileNames.sampleOutput,
+                             fileNames.modelFile);
+
+    // Compute a classification of the input image according to a model file
+    Superclass::KMeansClassif();
+
+    // Create the output text file containing centroids positions
+    Superclass::CreateOutMeansFile(GetParameterImage("in"), fileNames.modelFile, GetParameterInt("nc"));
+
+    // Remove all tempory files
+    if( IsParameterEnabled( "cleanup" ) )
       {
-      otbAppLogINFO("sample choice using mask "<<std::endl);
-      maskImage = GetParameterUInt8Image("vm");
-      maskImage->UpdateOutputInformation();
-      if (m_InImage->GetLargestPossibleRegion() != maskImage->GetLargestPossibleRegion())
-        {
-        GetLogger()->Error("Mask image and input image have different sizes.");
-        return;
-        }
+      otbAppLogINFO( <<"Final clean-up ..." );
+      fileNames.clear();
       }
-
-    // Training sample lists
-    ListSampleType::Pointer sampleList = ListSampleType::New();
-    sampleList->SetMeasurementVectorSize(m_InImage->GetNumberOfComponentsPerPixel());
-
-    //unsigned int init_means_index = 0;
-
-    // Sample dimension and max dimension
-    const unsigned int nbComp = m_InImage->GetNumberOfComponentsPerPixel();
-    unsigned int sampleSize = nbComp;
-    unsigned int totalSamples = 0;
-
-    // sampleSize = std::min(nbComp, maxDim);
-
-    EstimatorType::ParametersType initialMeans(nbComp * nbClasses);
-    initialMeans.Fill(0);
-
-    // use image and mask shrink
-
-    ImageSamplingFilterType::Pointer imageSampler = ImageSamplingFilterType::New();
-    imageSampler->SetInput(m_InImage);
-
-    double theoricNBSamplesForKMeans = nbsamples;
-
-    const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
-    const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans, upperThresholdNBSamplesForKMeans);
-
-    otbAppLogINFO(<< actualNBSamplesForKMeans << " is the maximum sample size that will be used." << std::endl);
-
-    const double shrinkFactor = vcl_floor(
-                                          vcl_sqrt(
-                                                   m_InImage->GetLargestPossibleRegion().GetNumberOfPixels()
-                                                       / actualNBSamplesForKMeans));
-    imageSampler->SetShrinkFactor(shrinkFactor);
-    imageSampler->Update();
-
-    MaskSamplingFilterType::Pointer maskSampler;
-    LabeledIteratorType m_MaskIt;
-    if (maskFlag)
-      {
-      maskSampler = MaskSamplingFilterType::New();
-      maskSampler->SetInput(maskImage);
-      maskSampler->SetShrinkFactor(shrinkFactor);
-      maskSampler->Update();
-      m_MaskIt = LabeledIteratorType(maskSampler->GetOutput(), maskSampler->GetOutput()->GetLargestPossibleRegion());
-      m_MaskIt.GoToBegin();
-      }
-    // Then, build the sample list
-
-    IteratorType it(imageSampler->GetOutput(), imageSampler->GetOutput()->GetLargestPossibleRegion());
-
-    it.GoToBegin();
-
-    SampleType min;
-    SampleType max;
-    SampleType sample;
-    //first sample
-
-    itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randGen=itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
-
-    //randGen->Initialize();
-
-    if (maskFlag)
-      {
-      while (!it.IsAtEnd() && !m_MaskIt.IsAtEnd() && (m_MaskIt.Get() <= 0))
-        {
-        ++it;
-        ++m_MaskIt;
-        }
-
-      // If the mask is empty after the subsampling
-      if (m_MaskIt.IsAtEnd())
-        {
-        GetLogger()->Error("The mask image is empty after subsampling. Please increase the training set size.");
-        return;
-        }
-      }
-
-    min = it.Get();
-    max = it.Get();
-    sample = it.Get();
-
-    sampleList->PushBack(sample);
-
-    ++it;
-
-    if (maskFlag)
-      {
-      ++m_MaskIt;
-      }
-
-    totalSamples = 1;
-    bool selectSample;
-    while (!it.IsAtEnd())
-      {
-      if (maskFlag)
-        {
-        selectSample = (m_MaskIt.Get() > 0);
-        ++m_MaskIt;
-        }
-      else selectSample = true;
-
-      if (selectSample)
-        {
-        totalSamples++;
-
-        sample = it.Get();
-
-        sampleList->PushBack(sample);
-
-        for (unsigned int i = 0; i < nbComp; ++i)
-          {
-          if (min[i] > sample[i])
-            {
-            min[i] = sample[i];
-            }
-          if (max[i] < sample[i])
-            {
-            max[i] = sample[i];
-            }
-          }
-        }
-      ++it;
-      }
-
-    // Next, initialize centroids by random sampling in the generated
-    // list of samples
-
-    for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
-      {
-      SampleType newCentroid = sampleList->GetMeasurementVector(randGen->GetIntegerVariate(sampleList->Size()-1));
-
-      for (unsigned int compIndex = 0; compIndex < sampleSize; ++compIndex)
-        {
-        initialMeans[compIndex + classIndex * sampleSize] = newCentroid[compIndex];
-        }
-      }
-    otbAppLogINFO(<< totalSamples << " samples will be used as estimator input." << std::endl);
-
-    /*******************************************/
-    /*           Learning                      */
-    /*******************************************/
-
-    otbAppLogINFO("-- LEARNING --" << std::endl);
-    otbAppLogINFO("Initial centroids are: " << std::endl);
-
-    message.str("");
-    message << std::endl;
-    for (unsigned int i = 0; i < nbClasses; i++)
-      {
-      message << "Class " << i << ": ";
-      for (unsigned int j = 0; j < sampleSize; j++)
-        {
-        message << std::setw(8) << initialMeans[i * sampleSize + j] << "   ";
-        }
-      message << std::endl;
-      }
-    message << std::endl;
-    GetLogger()->Info(message.str());
-    message.str("");
-    otbAppLogINFO("Starting optimization." << std::endl);
-    EstimatorType::Pointer estimator = EstimatorType::New();
-
-    TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
-    treeGenerator->SetSample(sampleList);
-
-    treeGenerator->SetBucketSize(10000);
-    treeGenerator->Update();
-
-    estimator->SetParameters(initialMeans);
-    estimator->SetKdTree(treeGenerator->GetOutput());
-    int maxIt = GetParameterInt("maxit");
-    estimator->SetMaximumIteration(maxIt);
-    estimator->SetCentroidPositionChangesThreshold(GetParameterFloat("ct"));
-    estimator->StartOptimization();
-
-    EstimatorType::ParametersType estimatedMeans = estimator->GetParameters();
-
-    otbAppLogINFO("Optimization completed." );
-    if (estimator->GetCurrentIteration() == maxIt)
-      {
-      otbAppLogWARNING("The estimator reached the maximum iteration number." << std::endl);
-      }
-    message.str("");
-    message << "Estimated centroids are: " << std::endl;
-    message << std::endl;
-    for (unsigned int i = 0; i < nbClasses; i++)
-      {
-      message << "Class " << i << ": ";
-      for (unsigned int j = 0; j < sampleSize; j++)
-        {
-        message << std::setw(8) << estimatedMeans[i * sampleSize + j] << "   ";
-        }
-      message << std::endl;
-      }
-
-    message << std::endl;
-    message << "Learning completed." << std::endl;
-    message << std::endl;
-    GetLogger()->Info(message.str());
-
-    /*******************************************/
-    /*           Classification                */
-    /*******************************************/
-    otbAppLogINFO("-- CLASSIFICATION --" << std::endl);
-
-    // Finally, update the KMeans filter
-    KMeansFunctorType functor;
-
-    for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
-      {
-      SampleType centroid(sampleSize);
-
-      for (unsigned int compIndex = 0; compIndex < sampleSize; ++compIndex)
-        {
-        centroid[compIndex] = estimatedMeans[compIndex + classIndex * sampleSize];
-        }
-      functor.AddCentroid(classIndex, centroid);
-      }
-
-    m_KMeansFilter = KMeansFilterType::New();
-    m_KMeansFilter->SetFunctor(functor);
-    m_KMeansFilter->SetInput(m_InImage);
-
-    // optional saving option -> lut
-
-    if (IsParameterEnabled("outmeans"))
-      {
-      std::ofstream file;
-      file.open(GetParameterString("outmeans").c_str());
-      for (unsigned int i = 0; i < nbClasses; i++)
-        {
-
-        for (unsigned int j = 0; j < sampleSize; j++)
-          {
-          file << std::setw(8) << estimatedMeans[i * sampleSize + j] << " ";
-          }
-        file << std::endl;
-        }
-
-      file.close();
-      }
-
-    SetParameterOutputImage("out", m_KMeansFilter->GetOutput());
-
   }
 
-  // KMeans filter
-  KMeansFilterType::Pointer           m_KMeansFilter;
-  FloatVectorImageType::Pointer       m_InImage;
+  void UpdateKMPolygonClassStatisticsParameters(const std::string &vectorFileName)
+  {
+    GetInternalApplication( "polystats" )->SetParameterString( "vec", vectorFileName, false );
+    UpdateInternalParameters( "polystats" );
+  }
 
 };
-
 
 }
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::KMeansClassification)
-
 
