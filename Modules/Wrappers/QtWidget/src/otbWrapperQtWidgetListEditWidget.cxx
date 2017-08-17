@@ -128,6 +128,36 @@ ListEditWidget
   if( !GetItemModel()->insertRow( itemModel->rowCount() ) )
     return;
 }
+/*******************************************************************************/
+void
+ListEditWidget
+::on_removeButton_clicked()
+{
+  // qDebug() << this << "::on_removeButton_clicked()";
+
+  assert( m_UI->treeView->selectionModel()!=nullptr );
+
+
+  QModelIndexList indexes(
+    m_UI->treeView->selectionModel()->selectedRows()
+  );
+
+  if( indexes.empty() )
+    return;
+
+
+  ListEditItemModel * itemModel = GetItemModel();
+
+  assert( itemModel!=nullptr );
+
+
+  for( const QModelIndex & i : indexes )
+    {
+    assert( i.isValid() );
+
+    itemModel->removeRow( i.row() );
+    }
+}
 
 } // end namespace 'Wrapper'
 
