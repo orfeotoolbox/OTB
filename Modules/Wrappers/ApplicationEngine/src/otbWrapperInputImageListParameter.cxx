@@ -93,36 +93,21 @@ bool
 InputImageListParameter
 ::Insert( const std::string & filename, int index )
 {
-  assert( m_InputImageParameterVector.size()==m_ImageList->Size() );
-
-  InputImageParameter::Pointer ip(
+  InputImageParameter::Pointer image(
     InputImageParameter::New()
   );
 
-  FloatVectorImageType * i = nullptr;
-
   if( !filename.empty() )
-    {
-    ip->SetFromFileName( filename );
-    i = ip->GetFloatVectorImage();
-    }
+    image->SetFromFileName( filename );
 
-  if( index<0 ||
-      static_cast< unsigned int >( index )>=m_InputImageParameterVector.size() )
-    {
-    m_InputImageParameterVector.push_back( ip );
-    m_ImageList->PushBack( i );
-    }
 
-  else
-    {
-    m_InputImageParameterVector.insert(
-      m_InputImageParameterVector.begin() + index,
-      ip
-    );
+  m_InputImageParameterVector.insert(
+    index<0
+    ? m_InputImageParameterVector.end()
+    : m_InputImageParameterVector.begin() + index,
+    image
+  );
 
-    m_ImageList->Insert( m_ImageList->Begin() + index, i );
-    }
 
   SetActive( true );
 
@@ -178,7 +163,6 @@ InputImageListParameter
 
 #else
   assert( id<m_InputImageParameterVector.size() );
-  assert( m_InputImageParameterVector.size()==m_ImageList->Size() );
   assert( !m_InputImageParameterVector[ id ].IsNull() );
 
   if( !filename.empty() )
@@ -335,6 +319,23 @@ InputImageListParameter::Erase( unsigned int id )
 
   this->Modified();
 }
+
+
+void
+InputImageListParameter
+::Erase( unsigned int start, unsigned int count )
+{
+  assert( start<m_InputImageParameterVector.size() );
+  assert( start+count<=m_InputImageParameterVector.size() );
+
+  m_InputImageParameterVector.erase(
+    m_InputImageParameterVector.begin() + start,
+    m_InputImageParameterVector.begin() + start + count
+  );
+
+  Modified();
+}
+
 
 unsigned int
 InputImageListParameter::Size() const

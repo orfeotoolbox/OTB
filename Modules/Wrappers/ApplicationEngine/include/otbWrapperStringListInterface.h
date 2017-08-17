@@ -71,6 +71,9 @@ public:
   /** Erase one element of the list. */
   virtual void Erase( unsigned int id ) = 0;
 
+  /** */
+  virtual void Erase( unsigned int start, unsigned int count ) = 0;
+
   /** Retrieve number of elements */
   virtual unsigned int Size() const = 0;
 

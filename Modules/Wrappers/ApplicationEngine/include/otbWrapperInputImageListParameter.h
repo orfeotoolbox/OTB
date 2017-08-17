@@ -106,7 +106,10 @@ public:
   /** Erase one element of the list. */
   void Erase( unsigned int id ) ITK_OVERRIDE;
 
- /** Clear all the list. */
+  /** */
+  void Erase( unsigned int start, unsigned int count ) ITK_OVERRIDE;
+
+  /** Clear all the list. */
   void ClearValue() ITK_OVERRIDE;
 
   /** Retrieve number of elements */
