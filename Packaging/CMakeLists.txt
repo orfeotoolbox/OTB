@@ -141,7 +141,7 @@ include(cleanup_package)
 # below functions include many install commands which are installing
 # files under PKG_STAGE_DIR
 include(install_include_dirs)
-include(install_staticlib_files)
+include(install_importlibs)
 include(install_python_bindings)
 include(install_share_dirs)
 include(install_translation_files)

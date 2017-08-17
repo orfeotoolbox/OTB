@@ -1,5 +1,44 @@
 #TODO: remove commented code
-function(install_staticlib_files)
+function(install_importlibs)
+
+  if(NOT WIN32)
+    return()
+  endif()
+
+  set(search_regex  "..IMPORTED_IMPLIB_([A-Z]+)...{_IMPORT_PREFIX}\/lib\/")
+  if(NOT WIN32)
+    set(search_regex    "..IMPORTED_LOCATION_([A-Z]+)...{_IMPORT_PREFIX}\/lib\/")
+  endif()
+
+  file(GLOB_RECURSE
+    target_cmake_files
+    "${SUPERBUILD_INSTALL_DIR}/lib/cmake/ITK*/*Targets-*.*"
+    "${SUPERBUILD_INSTALL_DIR}/lib/cmake/OTB*/*Targets-*.*")
+
+  set(lib_files)
+  foreach( target_cmake_file ${target_cmake_files})
+    if(PKG_DEBUG)
+      message("checking IMPORTED_IMPLIB_RELEASE in ${target_cmake_file}")
+    endif()
+    file(STRINGS "${target_cmake_file}" matched_items REGEX "${search_regex}")
+    foreach(matched_item ${matched_items})
+      if(matched_item MATCHES "otbapp_")
+	continue()
+      endif()
+      string(REGEX REPLACE "${search_regex}" "" lib_file "${matched_item}")
+      string(REGEX REPLACE "\"" "" lib_file "${lib_file}")
+      list(APPEND lib_files "${SUPERBUILD_INSTALL_DIR}/lib/${lib_file}")
+    endforeach()
+  endforeach()
+
+  foreach(lib_file ${lib_files})
+    if(PKG_DEBUG)
+      message("SPECIAL install_rule for lib_file: ${lib_file}")
+    endif()
+    install_rule(${lib_file})
+  endforeach()
+
+
 #RK: to hell with cmake targets files.
   # file(GLOB ALL_EXTRA_FILES
     # ${SUPERBUILD_INSTALL_DIR}/lib/*boost*${LIB_EXT}*
