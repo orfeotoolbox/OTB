@@ -46,7 +46,7 @@ public:
   
   typedef TOutputImage										OutputImageType;
   
-  typedef typename itk::ContinuousIndex<double, 1> 			ContinuousIndextype;
+ 
   
 /**  iterators */ 
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;    
@@ -59,13 +59,13 @@ public:
 
   /** Get the inputs */
  
-   TInputImage * GetPatchInputImage() ; 
+
   
   const TInputImage *  GetNormalAndZValueImage() const;
 
    /** Get the Outputs */  
-  TInputImage * GetOutputPatchImage() ;
-  TInputImage * GetOutputNormalAndZValueImage() ;
+  TOutputImage * GetOutputPatchImage() ;
+  TOutputImage * GetOutputNormalAndZValueImage() ;
  
   
   SizeType GetRadius()
@@ -75,14 +75,9 @@ public:
 
 //=============== Seters ====================================================================================
 
-  /** Set patch image input  */
-  void SetPatchInputImage( TInputImage * image);
-
    /** Set Normal And ZValue of patch image input  */
-  void SetNormalAndZValueImage(TInputImage * image);
+  void SetNormalAndZValueImage(const TInputImage * image);
   
-   /** Set patch image input */
-  void SetOutputPatchImage(const TInputImage * image);
    
    
   /** Set unsigned int radius */
@@ -91,12 +86,23 @@ public:
     m_Radius.Fill(radius);
   }
   
-int SetMaxdisp(int Maxdisp){
-	   m_DispMax = Maxdisp;
-	   return m_DispMax;
+void SetMaxDz0(double MaxDz0){
+	   m_MaxDz0 = MaxDz0;
+	   
 	}
 	
- 
+void SetMaxDn(double  MaxDn){
+	   m_MaxDn = MaxDn;
+	  
+	} 
+	
+void SetDispMinMax(double  DispMin, double DispMax){
+	   m_DispMin = DispMin;
+	   m_DispMax = DispMax;
+	  
+	} 
+	
+	
     /** Set/Get the radius of the area on which metric is evaluated */
   itkSetMacro(Radius, SizeType);
   itkGetConstReferenceMacro(Radius, SizeType);
@@ -111,8 +117,7 @@ protected:
   /** Generate output information */
   void GenerateOutputInformation() ITK_OVERRIDE; 
 
-  /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE; 
+
 
   
   /** Threaded generate data */
@@ -125,14 +130,15 @@ private:
 
 
     /** The radius of the blocks */
-  SizeType                   	 m_Radius; 
-
+  SizeType                   	m_Radius; 
   
       /** The index of pixel in image*/
   IndexType						m_Index;
-  int							m_DispMax;
-
-  SizeType					m_PatchSize;
+  double						m_MaxDn;
+  double 						m_MaxDz0;
+  SizeType					    m_PatchSize;
+  double 						m_DispMin;
+  double 						m_DispMax;
   
 };
 } // end namespace otb

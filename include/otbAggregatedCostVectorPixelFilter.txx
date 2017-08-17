@@ -213,8 +213,8 @@ if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr |
   inputRequestedRegion = inPatchPtr->GetRequestedRegion();
   
   SizeType Re;
-Re[0] = m_PatchSize[0] ;
-Re[1] = m_PatchSize[1] ;
+Re[0] = m_PatchSize[0] +3 ;
+Re[1] = m_PatchSize[1] +3;
   // pad the input requested region by the operator radius
   inputRequestedRegion.PadByRadius(Re);
   otbMsgDevMacro(<< "Padding by " << Re);
@@ -277,7 +277,7 @@ typedef itk::LinearInterpolateImageFunction
 		    PatchIndex2[1]= m_PatchOffset2[1] + m_Index[1];
 		    
 		  
-		   typename TOutputImage::PixelType OutPixel(1);
+		    PixelType OutPixel(1);
 			OutPixel.Fill(0);
 
 		  // initialize
@@ -286,20 +286,8 @@ typedef itk::LinearInterpolateImageFunction
 			PixelType costGradient;
 			costGradient.Fill(0.);
 			
-			std::vector<double> costColorNorm;
-			costColorNorm.resize(3,0);
-			
-			std::vector<double> costGradientNorm;
-			costGradientNorm.resize(3,0);
-			
-			std::vector<double> Cost;
-			Cost.resize(3,0);
-			
-			std::vector<double> W;
-			W.resize(3,0);						
-			
-			std::vector<double> m;
-			m.resize(3,0);			
+			double costColorNorm(0.), costGradientNorm(0.),Cost(0.), W(0.), m(0.);
+						
 			
 			std::vector<double> Somme;
 			Somme.resize(3,0);
@@ -320,87 +308,85 @@ typedef itk::LinearInterpolateImageFunction
 			SizeType PatchSize = this->GetPatchSize();
 			int rx = (PatchSize[0] - 1)/2 ;
 			int ry = (PatchSize[1] - 1)/2 ;
-for(int p=0; p<3; p++){			
+for(int p=0; p<3; p++){		
+Somme[p] = 0;		
 			
-	 for(int Vx = -rx; Vx <= rx ; ++Vx ){
-			for(int Vy = -ry; Vy <= ry ; ++Vy ){
-			
-			 //~ for(int Vx = 0; Vx < PatchSize[0]  ; ++Vx ){
-			//~ for(int Vy = 0; Vy < PatchSize[0]  ; ++Vy ){
+ for(int Vx = -rx; Vx <= rx ; ++Vx ){
+	for(int Vy = -ry; Vy <= ry ; ++Vy ){			
 				
-				OffsetType NeighborhoodOffset = {{ Vx, Vy}};			
-				OffsetType NeighborhoodIndex;
+	OffsetType NeighborhoodOffset = {{ Vx, Vy}};			
+	IndexType NeighborhoodIndex;
 				
-				if(NewIndexList[p][0] < (unsigned)ImageSize[0] && NewIndexList[p][1] < (unsigned)ImageSize[1]
-				 && NewIndexList[p][0] >= 0 && NewIndexList[p][1] >= 0){
-			 			  
-					NeighborhoodIndex[0] = NeighborhoodOffset[0] + InputIndex[0];
-					NeighborhoodIndex[1] = NeighborhoodOffset[1] + InputIndex[1];			 
-			
-					ShiftedIndex[0] = NeighborhoodIndex[0] - (this->GetPatchInputImage()->GetPixel(NewIndexList[p])[0]*NeighborhoodIndex[0]+
-						this->GetPatchInputImage()->GetPixel(NewIndexList[p])[1]* NeighborhoodIndex[1]+
-						this->GetPatchInputImage()->GetPixel(NewIndexList[p])[2] ) ;				   
-										   
-					
-				}				
-				else{ 
-					NeighborhoodIndex[0] = NeighborhoodOffset[0] + InputIndex[0];
-					NeighborhoodIndex[1] = NeighborhoodOffset[1] + InputIndex[1];
-					
-					ShiftedIndex[0] = NeighborhoodIndex[0] - (this->GetPatchInputImage()->GetPixel(InputIndex)[0]*NeighborhoodIndex[0]+
-						this->GetPatchInputImage()->GetPixel(InputIndex)[1]* NeighborhoodIndex[1]+
-						this->GetPatchInputImage()->GetPixel(InputIndex)[2] );				   
-					ShiftedIndex[1] = NeighborhoodIndex[1];						   
-					
-				}
+	 if(NewIndexList[p][0] < (unsigned)ImageSize[0] && NewIndexList[p][1] < (unsigned)ImageSize[1]
+					 && NewIndexList[p][0] >= 0 && NewIndexList[p][1] >= 0){
+							  
+						NeighborhoodIndex[0] = NeighborhoodOffset[0] + InputIndex[0];
+						NeighborhoodIndex[1] = NeighborhoodOffset[1] + InputIndex[1];			 
+				
+						ShiftedIndex[0] = NeighborhoodIndex[0] - 
+							(this->GetPatchInputImage()->GetPixel(NewIndexList[p])[0]*NeighborhoodIndex[0]+
+							this->GetPatchInputImage()->GetPixel(NewIndexList[p])[1]* NeighborhoodIndex[1]+
+							this->GetPatchInputImage()->GetPixel(NewIndexList[p])[2] ) ;				   
+											   
+						ShiftedIndex[1] = NeighborhoodIndex[1];	
+						
 		
+				
+		if( ShiftedIndex[0] < (unsigned)ImageSize[0] && ShiftedIndex[1] < (unsigned)ImageSize[1] 
+			&& ShiftedIndex[0] >=0 && ShiftedIndex[1] >= 0 ){
+					
+		typename LinearInterpolationType::Pointer interpImage = LinearInterpolationType::New();
+		interpImage->SetInputImage(this->GetRightInputImage());
+		PixelType ShiftedRightPixel = interpImage->EvaluateAtContinuousIndex(ShiftedIndex);
+
+		typename LinearInterpolationType::Pointer interpGradient = LinearInterpolationType::New();
+		interpGradient->SetInputImage(this->GetRightGradientXInput());
+		PixelType ShiftedRightGradientPixel = interpGradient->EvaluateAtContinuousIndex(ShiftedIndex);
+
+
+		costColor = this->GetLeftInputImage()->GetPixel(NeighborhoodIndex)- ShiftedRightPixel ;			 
+		costColorNorm=	costColor.GetNorm();																				
+									
+										if(costColorNorm > taux1) 
+											costColorNorm = taux1;
+													
+						
+		costGradient =   this->GetLeftGradientXInput()->GetPixel(NeighborhoodIndex)- ShiftedRightGradientPixel; 
+		costGradientNorm =	costGradient.GetNorm() ;								
+										
+										if(costGradientNorm > taux2) 
+											costGradientNorm = taux2;
+								
+										  
+		Cost= (1-alpha)*costColorNorm + alpha*costGradientNorm ;
+		
+		
+		W = ((this->GetLeftInputImage()->GetPixel(InputIndex)) - 
+		(this->GetLeftInputImage()->GetPixel(NeighborhoodIndex))).GetNorm();	
+		
+		W = std::exp(W/(-gamma))	;// Weight computation 
+		} // if ShiftedIndex
+
+		else{				
+			Cost = (1-alpha)*taux1 + alpha*taux2 ;
+			W= 1.	;	//*					  
+		 } //end of else
+		
+		m= W*Cost;//  m computation	
+		
+				
+		Somme[p] += m;	
+				
+	 } // if NewIndexList
+		
+		else{ 
+			Somme[p]  = 10e9;
+		}		
 	}// end of for  Vy
  } // end of for Vx	
 
 
-
-if( ShiftedIndex[0] < (unsigned)ImageSize[0] && ShiftedIndex[1] < (unsigned)ImageSize[1] && ShiftedIndex[0] >=0 && ShiftedIndex[1] >= 0 ){
-			
-typename LinearInterpolationType::Pointer interpImage = LinearInterpolationType::New();
-interpImage->SetInputImage(this->GetRightInputImage());
-PixelType ShiftedRightPixel = interpImage->EvaluateAtContinuousIndex(ShiftedIndex);
-
-typename LinearInterpolationType::Pointer interpGradient = LinearInterpolationType::New();
-interpGradient->SetInputImage(this->GetRightGradientXInput());
-PixelType ShiftedRightGradientPixel = interpGradient->EvaluateAtContinuousIndex(ShiftedIndex);
-
-
-	costColor = this->GetLeftInputImage()->GetPixel(InputIndex) - ShiftedRightPixel ;			 
-	costColorNorm[p]=	costColor.GetSquaredNorm();																				
-								
-									if(costColorNorm[p] > taux1) 
-										costColorNorm[p] = taux1;
-									 			
-					
-	costGradient =   this->GetLeftGradientXInput()->GetPixel(InputIndex)- ShiftedRightGradientPixel; 
-	costGradientNorm[p] =	costGradient.GetSquaredNorm() ;								
-									
-									if(costGradientNorm[p] > taux2) 
-										costGradientNorm[p] = taux2;
-							
-									  
-	Cost[p] = (1-alpha)*costColorNorm[p] + alpha*costGradientNorm[p] ;
-	
-	W[p] = std::exp(costColorNorm[p]/(-gamma))	;// Weight computation 
-}
-
-	else{				
-		Cost[p] = (1-alpha)*taux1 + alpha*taux2 ;
-		W[p] = 1.	;	//*					  
-	 } //end of else
-	
-	m[p]= W[p]*Cost[p];//  m computation	
-	
-	Somme[p] += m[p];	
-	
-	
-
-							  
+					  
 OutPixel[p] = static_cast<typename TOutputImage::InternalPixelType>(Somme[p]) ;				
 
 

@@ -44,16 +44,29 @@ public:
 	  double temp(0.);
 	  IndexType index = input.GetIndex();
 
+	 
+		//~ double nx1 = input.GetCenterPixel()[0] ; 		
+		//~ double ny1 = input.GetCenterPixel()[1] ;
+		//~ double nz1 = input.GetCenterPixel()[2] ;
+		
+		 //~ double z1 = input.GetCenterPixel()[3];
+
+
+
+		//~ double coeffs0 = -nx1 / nz1;
+		//~ double coeffs1 = -ny1 / nz1;
+		//~ double coeffs2 = (nx1*index[0] + ny1*index[1] + nz1*z1) / nz1 ;
 	   
+	   
+	     //~ temp = coeffs0*index[0] + coeffs1*index[1] +coeffs2 ;
+	     
 	   temp = 	 input.GetCenterPixel()[0]*index[0] 
 				+input.GetCenterPixel()[1]*index[1] 
 				+input.GetCenterPixel()[2] ;
-		if(temp > 1 && temp < 15){
+		
 			output[0] = static_cast<typename TOutput::ValueType>(temp) ;
-		}
-		else{
-			output[0] = 15;
-		}
+		
+		
 	
  return output;
 

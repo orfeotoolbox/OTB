@@ -40,8 +40,8 @@ ViewPropagationImageFilter<TInputImage, TOutputImage>
 
 m_LeftCost = AggregatedCostType::New();	
 m_RightCost = AggregatedCostType::New();	
-m_Radius[0] = 9;// il faut tjr le prendre >1, il définit la fenetre de recherche dans l'autre image
-m_Radius[1] = 0;
+//~ m_Radius[0] = (unsigned int)((m_dispMax-m_dispMin)-1)/2;// il faut tjr le prendre >1, il définit la fenetre de recherche dans l'autre image
+//~ m_Radius[1] = 0;
 }
 
 template <class TInputImage,  class TOutputImage >
@@ -122,6 +122,18 @@ ViewPropagationImageFilter<TInputImage,  TOutputImage >
 
   this->SetNthInput(7, const_cast<TInputImage *>( image ));
 }
+
+
+template <class TInputImage,  class TOutputImage >
+void
+ViewPropagationImageFilter<TInputImage,  TOutputImage >
+::SetSpatialCostImage(TInputImage * image)
+{
+
+  this->SetNthInput(8, const_cast<TInputImage *>( image ));
+}
+
+
 template <class TInputImage,  class TOutputImage >
 void
 ViewPropagationImageFilter<TInputImage,  TOutputImage >
@@ -207,29 +219,41 @@ ViewPropagationImageFilter<TInputImage, TOutputImage >
   return static_cast< TInputImage *>(this->itk::ProcessObject::GetInput(5));
 }
 template <class TInputImage,  class TOutputImage >
-const TInputImage *
+ TInputImage *
 ViewPropagationImageFilter<TInputImage,  TOutputImage >
-::GetLeftNormalAndZValueImage() const
+::GetLeftNormalAndZValueImage() 
 {
 if(this->GetNumberOfInputs()<7)
     {
     return ITK_NULLPTR;
     }
-  return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(6));
+  return static_cast< TInputImage *>(this->itk::ProcessObject::GetInput(6));
 }
 
 template <class TInputImage,  class TOutputImage >
-const TInputImage *
+ TInputImage *
 ViewPropagationImageFilter<TInputImage,  TOutputImage >
-::GetRightNormalAndZValueImage() const
+::GetRightNormalAndZValueImage() 
 {
 if(this->GetNumberOfInputs()<8)
     {
     return ITK_NULLPTR;
     }
-  return static_cast< const TInputImage *>(this->itk::ProcessObject::GetInput(7));
+  return static_cast<  TInputImage *>(this->itk::ProcessObject::GetInput(7));
 }
 
+template <class TInputImage,  class TOutputImage >
+ TInputImage *
+ViewPropagationImageFilter<TInputImage,  TOutputImage >
+::GetSpatialCostImage() 
+{
+if(this->GetNumberOfInputs()<9)
+    {
+    return ITK_NULLPTR;
+    }
+  return static_cast<  TInputImage *>(this->itk::ProcessObject::GetInput(8));
+}
+// outputs
 template <class TInputImage,  class TOutputImage >
 TOutputImage *
 ViewPropagationImageFilter<TInputImage, TOutputImage >
@@ -311,8 +335,8 @@ if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr |
   inputRequestedRegion = inPatchPtr->GetRequestedRegion();
 
   SizeType Re;
-Re[0] = m_PatchSize[0] ;
-Re[1] = m_PatchSize[1] ;
+Re[0] = m_PatchSize[0] +3;
+Re[1] = m_PatchSize[1] +3;
   // pad the input requested region by the plane Size
   inputRequestedRegion.PadByRadius(Re);
   otbMsgDevMacro(<< "Padding by " << Re);
@@ -335,7 +359,7 @@ Re[1] = m_PatchSize[1] ;
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (in spatialPro filter)(at least partially) outside the largest possible region.");
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inPatchPtr);
     throw e;
     }
@@ -363,11 +387,34 @@ ViewPropagationImageFilter<TInputImage,  TOutputImage >
 RegionType bufferedRegion = this->GetOutputNormalAndZValueImage()->GetBufferedRegion();
 //std::cout<< "bufferedRegion"<< bufferedRegion << std::endl;
 
-//input iterator 
+ /// create an image
+//~ PixelType p(3);
+//~ p.Fill(0);
 
+ //~ typename TInputImage::Pointer RightPatch = TInputImage::New(); 
+    //~ RightPatch->CopyInformation(this->GetRightPatchInputImage());
+    //~ RightPatch->SetNumberOfComponentsPerPixel(3);
+    //~ RightPatch->SetRegions(this->GetRightPatchInputImage()->GetLargestPossibleRegion());
+    //~ RightPatch->Allocate();   
+    //~ RightPatch->FillBuffer(p);
+   // RightPatch = this->GetRightPatchInputImage();
+    
+//input iterator
 
+//~ itk::ImageRegionIterator<TInputImage> RightPatchIt ( this->GetRightPatchInputImage(), outputRegionForThread );
+//~ RightPatchIt.GoToBegin();
+
+//~ itk::ImageRegionIterator<TInputImage> OutputRightIt ( RightPatch, outputRegionForThread );
+//~ OutputRightIt.GoToBegin();
+
+//~ while ( !RightPatchIt.IsAtEnd() && !OutputRightIt.IsAtEnd()){
+	
+	//~ p = -RightPatchIt.Get();
+	//~ OutputRightIt.Set(p);
+//~ ++RightPatchIt;
+//~ ++OutputRightIt;
+//~ }
 itk::ImageRegionIterator<TInputImage> LeftPatchInputIt ( this->GetLeftPatchInputImage(), outputRegionForThread );
-
 ConstNeighborhoodIteratorType RightPatchInputIt ( this->GetRadius(), this->GetRightPatchInputImage(), outputRegionForThread);
    
 
@@ -384,9 +431,9 @@ SizeType ImageSize = this->GetLeftInputImage()->GetLargestPossibleRegion().GetSi
 IndexType CostIndex = {{ 0,0 }};
 OffsetType Offset0  = {{ 0,0 }};
 OffsetType Offset1;
-double m(0);
+
  
-PixelType OutCost(3);
+PixelType OutCost(1);
 OutCost.Fill(0);
 
 PixelType OutPatch(3);
@@ -413,13 +460,11 @@ Out.Fill(0);
 IndexType R_Index;
 IndexType L_Index; 
 OffsetType Offset_j;
-    RadiusType Wradius = this->GetRadius();
-    double Wsize = (Wradius[0]*2+1)*(Wradius[1]*2+1);
-double Wt(0.), W(0.), Wtemp(0.), m_gamma(10);
-std::vector< std::pair<PixelType,double> > duo(Wsize); 
+RadiusType Wradius = this->GetRadius();
+
 
 	 
-if(m_Iteration % (2) == 1){	      
+//if(m_Iteration % (2) == 1){	      
 LeftPatchInputIt.GoToBegin();
 RightPatchInputIt.GoToBegin();
 
@@ -430,100 +475,80 @@ OutputNormalIt.GoToBegin();
 while ( !LeftPatchInputIt.IsAtEnd() ){	
 L_Index = LeftPatchInputIt.GetIndex();
 
-	
-			// m(l_index, L_plane_L_index)
+
+ for(unsigned int i = 0; i< RightPatchInputIt.Size(); i++){	
+
+		if(floor(RightPatchInputIt.GetPixel(i)[0]) == floor(LeftPatchInputIt.Get()[0]) &&
+				floor(RightPatchInputIt.GetPixel(i)[1]) == floor(LeftPatchInputIt.Get()[1]) &&
+				floor(RightPatchInputIt.GetPixel(i)[2]) == floor(LeftPatchInputIt.Get()[2])){		
+			
+			//std::cout<< "LeftAggCostPixel" << LeftAggCostPixel <<std::endl;	
+			
+			
+			R_Index = RightPatchInputIt.GetIndex(i);
+			Offset1[0] = L_Index[0]-R_Index[0];
+			Offset1[1] = L_Index[1]-R_Index[1];
+			
+			// m(p, fp')
 			  m_LeftCost->SetLeftInputImage(this->GetLeftInputImage());
 			  m_LeftCost->SetRightInputImage(this->GetRightInputImage());  
 			  m_LeftCost->SetLeftGradientXInput(this->GetLeftGradientXInput());
 			  m_LeftCost->SetRightGradientXInput(this->GetRightGradientXInput());  
-			  m_LeftCost->SetPatchInputImage(this->GetLeftPatchInputImage());		  
-			  
-			  m_LeftCost->SetIndex(L_Index[0], L_Index[1]);  
-			  m_LeftCost->SetOffsetPatch(Offset0,Offset0,Offset0);
+			  m_LeftCost->SetPatchInputImage(this->GetLeftPatchInputImage());			  
+			  m_LeftCost->SetIndex(R_Index[0], R_Index[1]);  
+			  m_LeftCost->SetOffsetPatch(Offset1,Offset1,Offset1);
 			  m_LeftCost->SetPatchSize(m_PatchSize[0],m_PatchSize[0]);
 			  m_LeftCost->Update();
 			  m_LeftCost->Modified();		  
 		  
 			  LeftAggCostPixel = m_LeftCost->GetOutput()->GetPixel(CostIndex);	
-			  m = LeftAggCostPixel[0] ;
-		
 
- for(unsigned int i = 0; i< RightPatchInputIt.Size(); i++){
-	 
-	 			
-	R_Index = RightPatchInputIt.GetIndex(i);
-	 Offset_j = RightPatchInputIt.GetOffset(i); 
-	 
-	 if((RightPatchInputIt.GetPixel(i) == LeftPatchInputIt.Get() ) && (R_Index[0] >= 0 || R_Index[0] < (unsigned)ImageSize[0] ||
-			R_Index[1] >= 0 || R_Index[1] < (unsigned)ImageSize[1] )){	
-			
-	 I[0] = this->GetLeftInputImage()->GetPixel(L_Index)[1]- this->GetLeftInputImage()->GetPixel(R_Index)[1];
-	 I[1] = this->GetLeftInputImage()->GetPixel(L_Index)[2]- this->GetLeftInputImage()->GetPixel(R_Index)[2];
-	 I[2] = this->GetLeftInputImage()->GetPixel(L_Index)[3]- this->GetLeftInputImage()->GetPixel(R_Index)[3];
-				
-								
-		 W =  std::exp( -(I.GetSquaredNorm())*m_gamma);
-
-				
-		  // if){  
-						// m(l_index, R_plane_R_index)				 
-	 
-			  m_RightCost->SetLeftInputImage(this->GetLeftInputImage());
-			  m_RightCost->SetRightInputImage(this->GetRightInputImage());  
-			  m_RightCost->SetLeftGradientXInput(this->GetLeftGradientXInput());
-			  m_RightCost->SetRightGradientXInput(this->GetRightGradientXInput());  
+			// m(p, fp)		 
+			  m_RightCost->SetLeftInputImage(this->GetRightInputImage());
+			  m_RightCost->SetRightInputImage(this->GetLeftInputImage());  
+			  m_RightCost->SetLeftGradientXInput(this->GetRightGradientXInput());
+			  m_RightCost->SetRightGradientXInput(this->GetLeftGradientXInput());  
 			  m_RightCost->SetPatchInputImage(this->GetRightPatchInputImage());		  
 			  
 			  m_RightCost->SetIndex(R_Index[0], R_Index[1]);  
 			  m_RightCost->SetOffsetPatch(Offset0,Offset0,Offset0);
 			  m_RightCost->SetPatchSize(m_PatchSize[0],m_PatchSize[0]);
-			 // m_RightCost->UpdateOutputInformation();
 			  m_RightCost->Update();
 			  m_RightCost->Modified();		  
 		  
 			  RightAggCostPixel = m_RightCost->GetOutput()->GetPixel(CostIndex);
+			  
+				//
 				
-			
-			m = std::min(m,RightAggCostPixel[0]);
-			OutPatch = this->GetRightPatchInputImage()->GetPixel(R_Index);	
-			NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(R_Index);				 				 
+				if(LeftAggCostPixel[0] < RightAggCostPixel[0]){
+				OutCost[0]  = LeftAggCostPixel[0];
+				OutPatch = this->GetLeftPatchInputImage()->GetPixel(L_Index);	
+				NormalAndZValuePixel = this->GetLeftNormalAndZValueImage()->GetPixel(L_Index);
+				//~ this->GetRightPatchInputImage()->SetPixel(R_Index,OutPatch);
+				//~ this->GetRightNormalAndZValueImage()->SetPixel(R_Index,NormalAndZValuePixel);
+				}
+				
+				else{
+				OutCost[0]  = RightAggCostPixel[0];
+				OutPatch = this->GetRightPatchInputImage()->GetPixel(R_Index);
+				NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(R_Index);						
+				}
+					 				 
 		}//end of If between patchs
 		else{
-			OutPatch = this->GetLeftPatchInputImage()->GetPixel(L_Index);
-			NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(L_Index);			
-		}
-		
-	
-		duo[i].first = OutPatch;               
-		duo[i].second =  W; 
-		Wt += W	;	
+			OutCost  = this->GetSpatialCostImage()->GetPixel(L_Index);
+			OutPatch = this->GetRightPatchInputImage()->GetPixel(L_Index);
+			NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(L_Index);						
+			}
 
-	
 }
-Wt = Wt/2;
 
-
-
-   for (typename std::vector<pairCord>::iterator it=duo.begin(); it !=duo.end(); ++it){
-       		 Wtemp += it->second ;
-       		 if (Wtemp >= Wt){
-				 P = it->first; 
-				 //std::cout << "Element found in myvector: " << P << '\n';
-				Out = P ;
-				
-				 break;
-		}	 
-     }	
      
-     
-     	
-		
-OutCost[0] = m;
-				
+			
 //std::cout<<"L_Index" << L_Index<< std::endl;
 	
 	OutputCostIt.Set(OutCost);
-	OutputPatchIt.Set(Out);
+	OutputPatchIt.Set(OutPatch); //OutPatch
 	OutputNormalIt.Set(NormalAndZValuePixel);
 	
 				
@@ -539,8 +564,16 @@ OutCost[0] = m;
 	 
 }// end of while
 
-} // end if 
-
+//} // end if 
+#if 0
+/*
+ * It is necessary to implement this part and browse
+ *
+ * 
+ *  the image in the opposite direction with the good offset
+ * 
+ * 
+ * */
 else{	      
 LeftPatchInputIt.GoToEnd();
 RightPatchInputIt.GoToEnd();
@@ -561,38 +594,44 @@ while ( !LeftPatchInputIt.IsAtBegin()  ){
 			--OutputNormalIt;
 		 L_Index = LeftPatchInputIt.GetIndex();
 
+	
+for(unsigned int i = RightPatchInputIt.Size()-1; i>0; i--){	
+	
 
+
+	if(floor(RightPatchInputIt.GetPixel(i)[0]) == floor(LeftPatchInputIt.Get()[0]) &&
+				floor(RightPatchInputIt.GetPixel(i)[1]) == floor(LeftPatchInputIt.Get()[1]) &&
+				floor(RightPatchInputIt.GetPixel(i)[2]) == floor(LeftPatchInputIt.Get()[2])){		
 			
-			// m(l_index, L_plane_L_index)
+		
+			R_Index = RightPatchInputIt.GetIndex(i);
+			
+			//	std::cout<< "R_Index =  " << R_Index <<std::endl;
+				
+			Offset1[0] = L_Index[0]-R_Index[0];
+			Offset1[1] = L_Index[1]-R_Index[1];
+			
+			// m(p, fp')
 			  m_LeftCost->SetLeftInputImage(this->GetLeftInputImage());
 			  m_LeftCost->SetRightInputImage(this->GetRightInputImage());  
 			  m_LeftCost->SetLeftGradientXInput(this->GetLeftGradientXInput());
 			  m_LeftCost->SetRightGradientXInput(this->GetRightGradientXInput());  
 			  m_LeftCost->SetPatchInputImage(this->GetLeftPatchInputImage());		  
 			  
-			  m_LeftCost->SetIndex(L_Index[0], L_Index[1]);  
-			  m_LeftCost->SetOffsetPatch(Offset0,Offset0,Offset0);
+			  m_LeftCost->SetIndex(R_Index[0], R_Index[1]);  
+			  m_LeftCost->SetOffsetPatch(Offset1,Offset1,Offset1);
 			  m_LeftCost->SetPatchSize(m_PatchSize[0],m_PatchSize[0]);
 			  m_LeftCost->Update();
 			  m_LeftCost->Modified();		  
 		  
 			  LeftAggCostPixel = m_LeftCost->GetOutput()->GetPixel(CostIndex);	
-			  m = LeftAggCostPixel[0] ;
-		
+			  
 
- for(unsigned int i = 0; i< RightPatchInputIt.Size(); i++){			
-	R_Index = RightPatchInputIt.GetIndex(i);
-if((RightPatchInputIt.GetPixel(i) == LeftPatchInputIt.Get()) && ( R_Index[0] >= 0 || R_Index[0] < (unsigned)ImageSize[0] ||
-			R_Index[1] >= 0 || R_Index[1] < (unsigned)ImageSize[1] )){
-			
-		
-			 
-			// m(l_index, R_plane_R_index)				 
-	 
-			  m_RightCost->SetLeftInputImage(this->GetLeftInputImage());
-			  m_RightCost->SetRightInputImage(this->GetRightInputImage());  
-			  m_RightCost->SetLeftGradientXInput(this->GetLeftGradientXInput());
-			  m_RightCost->SetRightGradientXInput(this->GetRightGradientXInput());  
+			// m(p, fp)		 
+			  m_RightCost->SetLeftInputImage(this->GetRightInputImage());
+			  m_RightCost->SetRightInputImage(this->GetLeftInputImage());  
+			  m_RightCost->SetLeftGradientXInput(this->GetRightGradientXInput());
+			  m_RightCost->SetRightGradientXInput(this->GetLeftGradientXInput());  
 			  m_RightCost->SetPatchInputImage(this->GetRightPatchInputImage());		  
 			  
 			  m_RightCost->SetIndex(R_Index[0], R_Index[1]);  
@@ -602,22 +641,32 @@ if((RightPatchInputIt.GetPixel(i) == LeftPatchInputIt.Get()) && ( R_Index[0] >= 
 			  m_RightCost->Modified();		  
 		  
 			  RightAggCostPixel = m_RightCost->GetOutput()->GetPixel(CostIndex);
+			  
+				//
 				
-			
-			  m = std::min(m,RightAggCostPixel[0]);
-			  OutPatch = this->GetRightPatchInputImage()->GetPixel(R_Index);	
-			  NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(R_Index);				 				 
+				if(LeftAggCostPixel[0] < RightAggCostPixel[0]){
+				OutCost[0]  = LeftAggCostPixel[0];
+				OutPatch = this->GetLeftPatchInputImage()->GetPixel(L_Index);	
+				NormalAndZValuePixel = this->GetLeftNormalAndZValueImage()->GetPixel(L_Index);
+				//~ this->GetRightPatchInputImage()->SetPixel(R_Index,OutPatch);
+				//~ this->GetRightNormalAndZValueImage()->SetPixel(R_Index,NormalAndZValuePixel);
+				}
+				
+				else{
+				OutCost[0]  = RightAggCostPixel[0];
+				OutPatch = this->GetRightPatchInputImage()->GetPixel(R_Index);
+				NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(R_Index);						
+				}
+					 				 
 		}//end of If between patchs
 		else{
+			OutCost  = this->GetSpatialCostImage()->GetPixel(L_Index);
 			OutPatch = this->GetLeftPatchInputImage()->GetPixel(L_Index);
-			NormalAndZValuePixel = this->GetRightNormalAndZValueImage()->GetPixel(L_Index);			
-		}
-			
+			NormalAndZValuePixel = this->GetLeftNormalAndZValueImage()->GetPixel(L_Index);						
+			}
+
 }
 
-OutCost[0] = m;
-				
-//std::cout<<"L_Index" << L_Index<< std::endl;
 	
 	OutputCostIt.Set(OutCost);
 	OutputPatchIt.Set(OutPatch);
@@ -627,8 +676,8 @@ OutCost[0] = m;
 				progress.CompletedPixel();
 	 
 }// end of while 2
-} // end if 
-
+} // end else 
+#endif
 
 } //end of threaded generate data
 

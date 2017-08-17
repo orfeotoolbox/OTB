@@ -31,9 +31,10 @@ MinPlaneRefinementImageFilter<TInputImage, TOutputImage>
   this->SetNumberOfRequiredInputs(8);  
 
   // Set the outputs
-  this->SetNumberOfRequiredOutputs(1);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TOutputImage::New()); 
   this->SetNthOutput(1,TOutputImage::New());
+  this->SetNthOutput(2,TOutputImage::New()); 
 
   this->SetNumberOfThreads(1); 
 
@@ -268,7 +269,19 @@ MinPlaneRefinementImageFilter<TInputImage, TOutputImage >
     return ITK_NULLPTR;
     }
   return static_cast< TOutputImage *>(this->itk::ProcessObject::GetOutput(1));
-}    
+}  
+
+template <class TInputImage,  class TOutputImage >
+TOutputImage *
+MinPlaneRefinementImageFilter<TInputImage, TOutputImage >
+::GetOutputCostImage()
+{
+  if (this->GetNumberOfOutputs()<3)
+    {
+    return ITK_NULLPTR;
+    }
+  return static_cast< TOutputImage *>(this->itk::ProcessObject::GetOutput(2));
+}  
 //============================================  GenerateOutputInformation  ========================================================
 template <class TInputImage,  class TOutputImage >
 void
@@ -280,7 +293,7 @@ MinPlaneRefinementImageFilter<TInputImage,  TOutputImage >
 
   this->GetOutputPatchImage()->SetNumberOfComponentsPerPixel(3);
   this->GetOutputNormalAndZValueImage()->SetNumberOfComponentsPerPixel(4);
-
+  this->GetOutputCostImage()->SetNumberOfComponentsPerPixel(1);
 }
 
 //============================================  GenerateInputRequestedRegion  ========================================================
@@ -424,11 +437,9 @@ IndexType InputIndex = InputImageIt.GetIndex();
 		OutPatch = this->GetPatchInputImage()->GetPixel(InputIndex);
 		NormalAndZValuePixel = this->GetNormalAndZValueImage()->GetPixel(InputIndex);
 	  } 									
-		
-
-				
+			
 			this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, NormalAndZValuePixel);				
-		
+			this->GetOutputCostImage()->SetPixel(InputIndex, OutCost);
 			this->GetOutputPatchImage()->SetPixel(InputIndex, OutPatch);
 
 ++InputImageIt;

@@ -281,8 +281,8 @@ if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr |
   inputRequestedRegion = inPatchPtr->GetRequestedRegion();
 
   SizeType Re;
-Re[0] = m_PatchSize[0] ;
-Re[1] = m_PatchSize[1] ;
+Re[0] = m_PatchSize[0]+3 ;
+Re[1] = m_PatchSize[1]+3;
   // pad the input requested region by the plane Size
   inputRequestedRegion.PadByRadius(Re);
   otbMsgDevMacro(<< "Padding by " << Re);
@@ -338,29 +338,35 @@ OutPatch.Fill(10);
 PixelType NormalAndZValuePixel(4);
 NormalAndZValuePixel.Fill(0);
 
-//~ std::cout<< "  m_Iteration spatial avant le if =  " << m_Iteration<< std::endl;
-//~ std::cout<< "  m_Iteration % (2) " << m_Iteration % (2) << std::endl;
     		  
 if(m_Iteration % (2) == 1  ){	      
-//std::cout<< "  m_Iteration spatial  dans le if=  " << m_Iteration<< std::endl;
+
 
 InputImageIt.GoToBegin();
 //std::cin.get();
 while(!InputImageIt.IsAtEnd() ){
-double m(100000); 	
+double m(10e9); 	
 int val(0);	
 
 PixelType AggCostPixel(3);
 AggCostPixel.Fill(0);
 
 
-	
 IndexType InputIndex = InputImageIt.GetIndex();	
+IndexType TestIndex1;
+IndexType TestIndex2;
+TestIndex1[0] = m_Offset1[0] +InputIndex[0];
+TestIndex1[1] = m_Offset1[1] +InputIndex[1];
+TestIndex2[0] = m_Offset2[0] +InputIndex[0];
+TestIndex2[1] = m_Offset2[1] +InputIndex[1];
 //std::cin.get();
           		  
-unsigned int x = InputIndex[0];
-unsigned int y = InputIndex[1];
 
+
+//~ if(TestIndex1[0]< 0 || TestIndex2[0]< 0 || TestIndex1[1]<0|| TestIndex2[1]<0){
+//~ AggCostPixel = 10e9;
+//~ }
+//~ else{
 	 
 		  m_AggregatedCost->SetLeftInputImage(this->GetLeftInputImage());
 		  m_AggregatedCost->SetRightInputImage(this->GetRightInputImage());  
@@ -368,32 +374,25 @@ unsigned int y = InputIndex[1];
 		  m_AggregatedCost->SetRightGradientXInput(this->GetRightGradientXInput());  
 		  m_AggregatedCost->SetPatchInputImage(this->GetPatchInputImage());		  
 		  
-		  m_AggregatedCost->SetIndex(x, y);  
+		  m_AggregatedCost->SetIndex(InputIndex[0], InputIndex[1]);  
 		  m_AggregatedCost->SetOffsetPatch(m_Offset0,m_Offset1,m_Offset2);
 		  m_AggregatedCost->SetPatchSize(m_PatchSize[0],m_PatchSize[0]);
           m_AggregatedCost->Update();
 		  m_AggregatedCost->Modified();		  
 		  
 AggCostPixel = m_AggregatedCost->GetOutput()->GetPixel(CostIndex);	
-	
-//m_AggregatedCost->UpdateOutputInformation();		  
-//RegionType CostRegion = m_AggregatedCost->GetOutput()->GetLargestPossibleRegion();
+//}	
+
 	 
 
-if(InputIndex[0] == 0 || InputIndex[0] == (unsigned)ImageSize[0] ||
- InputIndex[1] == 0 || InputIndex[1] == (unsigned)ImageSize[1] ){
- 
-    m = AggCostPixel[0];
-    val = 0;
- }
-else{
+
 	 for(unsigned int b = 0; b<3 ; ++b){		 
 					m = std::min(m,AggCostPixel[b]);
 					 if ( m == AggCostPixel[b]){
 						val = b ;
 					 }				 
 	}
-  } 									
+   									
 	OutCost[0] = m ;
 	switch(val){
 					case 0:	
@@ -433,12 +432,20 @@ else{
 				 } // end of switch
  				
 			this->GetPatchInputImage()->SetPixel(InputIndex, OutPatch);	
-				
-							
-			this->GetOutputCostImage()->SetPixel(InputIndex, OutCost);	
+						
+			this->GetOutputCostImage()->SetPixel(InputIndex, OutCost);			
+		if(m_Sense  == 1){	
 			this->GetOutputPatchImage()->SetPixel(InputIndex, OutPatch);
+			this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, NormalAndZValuePixel);
+		}
+		
+		else if(m_Sense  == 0){	
+		//ROutPatch = 
+			 this->GetOutputPatchImage()->SetPixel(InputIndex, -OutPatch);
+			 this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, -NormalAndZValuePixel);
+		 }
             
-            this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, NormalAndZValuePixel);		
+            		
 				
 ++InputImageIt;
  
@@ -465,7 +472,18 @@ IndexType InputIndex = InputImageIt.GetIndex();
 unsigned int x = InputIndex[0];
 unsigned int y = InputIndex[1];
 
-	 
+IndexType TestIndex1;
+IndexType TestIndex2;
+TestIndex1[0] = m_Offset1[0] +InputIndex[0];
+TestIndex1[1] = m_Offset1[1] +InputIndex[1];
+TestIndex2[0] = m_Offset2[0] +InputIndex[0];
+TestIndex2[1] = m_Offset2[1] +InputIndex[1];
+
+//~ if(TestIndex1[0] > (unsigned)ImageSize[0] || TestIndex2[0] > (unsigned)ImageSize[0] ||  
+	//~ TestIndex1[1] > (unsigned)ImageSize[1]|| TestIndex2[1] > (unsigned)ImageSize[1] ){
+//~ AggCostPixel = 10e9;
+//~ }
+//~ else{	 
 		  m_AggregatedCost->SetLeftInputImage(this->GetLeftInputImage());
 		  m_AggregatedCost->SetRightInputImage(this->GetRightInputImage());  
 		  m_AggregatedCost->SetLeftGradientXInput(this->GetLeftGradientXInput());
@@ -479,21 +497,15 @@ unsigned int y = InputIndex[1];
 		  m_AggregatedCost->Modified();		  
 		  
 AggCostPixel = m_AggregatedCost->GetOutput()->GetPixel(CostIndex);
+//}
 
-if(InputIndex[0] == 0 || InputIndex[0] == (unsigned)ImageSize[0] ||
- InputIndex[1] == 0 || InputIndex[1] == (unsigned)ImageSize[1] ){
-    m = AggCostPixel[0];
-    val = 0;
- 
-}
-else{
 	 for(unsigned int b = 0; b<3 ; ++b){		 
 					m = std::min(m,AggCostPixel[b]);
 					 if ( m == AggCostPixel[b]){
 						val = b ;
 					 }				 
 	}
-  }  									
+   									
 	OutCost[0] = m ;
 	switch(val){
 					case 0:	
@@ -539,9 +551,20 @@ else{
 			this->GetPatchInputImage()->SetPixel(InputIndex, OutPatch);	
 		//	 m_AggregatedCost->SetPatchInputImage(this->GetPatchInputImage());
 				
-			this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, NormalAndZValuePixel);				
+			//this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, NormalAndZValuePixel);				
 			this->GetOutputCostImage()->SetPixel(InputIndex, OutCost);	
+			
+		if(m_Sense  == 1){	
 			this->GetOutputPatchImage()->SetPixel(InputIndex, OutPatch);
+			this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, NormalAndZValuePixel);
+		}
+		
+		else if(m_Sense  == 0){	
+		//ROutPatch = 
+			 this->GetOutputPatchImage()->SetPixel(InputIndex, -OutPatch);
+			 this->GetOutputNormalAndZValueImage()->SetPixel(InputIndex, -NormalAndZValuePixel);
+		 }
+			//this->GetOutputPatchImage()->SetPixel(InputIndex, OutPatch);
 
 progress.CompletedPixel();
 }  // end of while 

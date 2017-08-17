@@ -29,6 +29,7 @@ otb_module(OTBStereoFilters
     OTBDisparityMap
     OTBConvolution
     OTBObjectList
+    OTBApplicationEngine
 
   TEST_DEPENDS
     OTBImageIO

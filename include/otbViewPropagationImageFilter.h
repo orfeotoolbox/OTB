@@ -72,8 +72,9 @@ public:
   const TInputImage * GetRightGradientXInput() const;
    TInputImage * GetLeftPatchInputImage() ; 
    TInputImage * GetRightPatchInputImage() ;
-  const TInputImage *  GetLeftNormalAndZValueImage() const;
-  const TInputImage *  GetRightNormalAndZValueImage() const;
+   TInputImage *  GetLeftNormalAndZValueImage() ;
+  TInputImage *  GetRightNormalAndZValueImage() ;
+  TInputImage * GetSpatialCostImage();
   /** Get the metric output */
    
   TOutputImage * GetOutputCostImage();
@@ -91,6 +92,7 @@ public:
   {
     return m_PatchSize;
   }  
+
 //=============== Seters ====================================================================================
   /** Set image input */
   void SetLeftInputImage( const TInputImage * image);
@@ -109,6 +111,9 @@ public:
    /** Set Normal And ZValue of patch image input  */
   void SetLeftNormalAndZValueImage(TInputImage * image);
   
+   void SetSpatialCostImage(TInputImage * image);
+  
+  
   void SetRightNormalAndZValueImage(TInputImage * image);
    /** Set patch image input */
   void SetOutputPatchImage(const TInputImage * image);
@@ -126,9 +131,10 @@ public:
   }
   
   /** Set unsigned int radius */
-  void SetRadius(unsigned int radius)
+  void SetRadius(unsigned int x,unsigned int y )
   {
-    m_Radius.Fill(radius);
+	m_Radius[1] = y;  
+    m_Radius[0] = x;
   }
   
   
@@ -137,6 +143,12 @@ public:
   {
     m_PatchSize[0] = XSize;
     m_PatchSize[1] = YSize;
+  }
+  
+  void SetDispMinMax(double DispMin, double DispMax){
+	  
+	  m_dispMin = DispMin;
+	  m_dispMax = DispMax;
   }
     /** Set/Get the radius of the area on which metric is evaluated */
   itkSetMacro(Radius, SizeType);
@@ -190,7 +202,8 @@ private:
         /** The index of pixel in image*/
   SizeType						m_PatchSize;
      
-    
+  double						m_dispMax;
+  double						m_dispMin; 
   
 };
 } // end namespace otb

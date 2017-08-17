@@ -207,8 +207,8 @@ typedef otb::CoefOfThePatchFilter< ImageType, ImageType> CoefPatchFilterType;
   // Right
   CoefPatchFilterType::Pointer RightCoefPatch = CoefPatchFilterType::New();
   RightCoefPatch->SetInputImage(RightReader->GetOutput());
-  RightCoefPatch->SetMindisp(HdispMin);
-  RightCoefPatch->SetMaxdisp(HdispMax);
+  RightCoefPatch->SetMindisp(-HdispMax);
+  RightCoefPatch->SetMaxdisp(-HdispMin);
  // RightCoefPatch->UpdateOutputInformation(); 
 
  ImageWriterType::Pointer CoefPatchWriter = ImageWriterType::New();
@@ -219,8 +219,8 @@ typedef otb::CoefOfThePatchFilter< ImageType, ImageType> CoefPatchFilterType;
 /* ************************************************************************* */
 /*========================================== Spatial Propagation ===========================================*/
 
-
-#if 1
+itk::TimeProbe chrono1;
+chrono1.Start();
 	 
    /** sortie a une seule bande et elle contient le volume de cout */
 typedef otb::SpatialPropagationImageFilter< ImageType, ImageType > SpatialPropType;
@@ -275,7 +275,7 @@ RightCoefPatch->UpdateOutputInformation();
     LeftCoefPlane->FillBuffer(In);	
 	LeftCoefPlane = LeftCoefPatch->GetOutputCoefImage();
 	
-	std::cout<< "  origin   " << LeftCoefPlane->GetOrigin()<< std::endl;
+	//std::cout<< "  origin   " << LeftCoefPlane->GetOrigin()<< std::endl;
 	
 	ImageType::Pointer LeftNormalPlane = ImageType::New();; 
 	LeftNormalPlane->CopyInformation(LeftCoefPatch->GetOutputCoefImage());
@@ -293,7 +293,7 @@ RightCoefPatch->UpdateOutputInformation();
     RightCoefPlane->FillBuffer(In);	
 	RightCoefPlane = RightCoefPatch->GetOutputCoefImage();
 	
-	std::cout<< "  origin   " << RightCoefPlane->GetOrigin()<< std::endl;
+	//std::cout<< "  origin   " << RightCoefPlane->GetOrigin()<< std::endl;
 	 
 	ImageType::Pointer RightNormalPlane = ImageType::New();;
 	RightNormalPlane->CopyInformation(LeftCoefPatch->GetOutputCoefImage());
@@ -307,8 +307,11 @@ RightCoefPatch->UpdateOutputInformation();
    MinPlaneType::Pointer LeftMinPlaneView = MinPlaneType::New(); 
   MinPlaneType::Pointer RightMinPlaneView = MinPlaneType::New();  
  
-
-for(unsigned int iteration = 1 ; iteration <= 2; iteration++){ 
+double MaxDz0 = HdispMin/2;
+double MaxDn = 1;
+//char Sense;
+for(unsigned int iteration = 1 ; iteration < 4; iteration++){
+//unsigned int iteration = 2 ;
  std::cout<< "  iteration   " << iteration<< std::endl;
  ///Left  
   LeftSpatial->SetLeftInputImage(LeftReader->GetOutput());
@@ -318,7 +321,8 @@ for(unsigned int iteration = 1 ; iteration <= 2; iteration++){
   LeftSpatial->SetPatchInputImage(LeftCoefPlane);
   LeftSpatial->SetNormalAndZValueImage(LeftNormalPlane); //
   LeftSpatial->SetIteration(iteration);
-  LeftSpatial->SetPatchSize(PatchSize,PatchSize); 
+  LeftSpatial->SetPatchSize(PatchSize,PatchSize);
+  LeftSpatial->SetSense(1); 
  
 if(iteration % (2) == 1){
   LeftSpatial->SetOffsetPatch(Offset0,Offset1,Offset2);
@@ -327,7 +331,7 @@ if(iteration % (2) == 1){
 else{
   LeftSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
 }
-//LeftSpatial->Modified();
+
 /// Right
   
   RightSpatial->SetLeftInputImage(LeftReader->GetOutput());
@@ -338,6 +342,7 @@ else{
   RightSpatial->SetNormalAndZValueImage(RightNormalPlane); //
   RightSpatial->SetIteration(iteration);
   RightSpatial->SetPatchSize(PatchSize,PatchSize); 
+  RightSpatial->SetSense(0); 
  
 if(iteration % (2) == 1){
   RightSpatial->SetOffsetPatch(Offset0,Offset1,Offset2);
@@ -346,94 +351,23 @@ if(iteration % (2) == 1){
 else{
   RightSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
 }
-//RightSpatial->Modified();
 
 
-
-   
-
- //~ ImageWriterType::Pointer SpatialPlaneWriter = ImageWriterType::New();
-  //~ SpatialPlaneWriter->SetFileName(FILENAME("SpatialPropPlaneOutputImage.tif"));
-  //~ SpatialPlaneWriter->SetInput( LeftSpatial->GetOutputPatchImage() ); 
-//~ otb::StandardFilterWatcher watcherPlane(SpatialPlaneWriter, "SpatialPropFilter");  
-  //~ SpatialPlaneWriter->Update();  
+ ImageWriterType::Pointer SpatialPlaneWriter = ImageWriterType::New();
+  SpatialPlaneWriter->SetFileName(FILENAME("SpatialPropPlaneOutputImage.tif"));
+  SpatialPlaneWriter->SetInput( LeftSpatial->GetOutputPatchImage() ); 
+otb::StandardFilterWatcher watcherPlane(SpatialPlaneWriter, "SpatialPropFilter");  
+  SpatialPlaneWriter->Update();  
   
   
-   //~ ImageWriterType::Pointer SpatialCostWriter = ImageWriterType::New();
-  //~ SpatialCostWriter->SetFileName(FILENAME("SpatialPropCostOutputImage.tif"));  
-  //~ SpatialCostWriter->SetInput( LeftSpatial->GetOutputCostImage() );
- //~ otb::StandardFilterWatcher watcherCost(SpatialCostWriter, "SpatialPropFilter");  
-  //~ SpatialCostWriter->Update();
+   ImageWriterType::Pointer SpatialCostWriter = ImageWriterType::New();
+  SpatialCostWriter->SetFileName(FILENAME("SpatialPropCostOutputImage.tif"));  
+  SpatialCostWriter->SetInput( LeftSpatial->GetOutputCostImage() );
+ otb::StandardFilterWatcher watcherCost(SpatialCostWriter, "SpatialPropFilter");  
+  SpatialCostWriter->Update();
   
-/* ************************************************************************* */  
-/* ===================Spatial Propagation Rafinement=========================*/   
-  //~ typedef otb::PatchMatchRefinementImageFilter< ImageType, ImageType > RefinementType;
-  //~ ///Left
-  //~ RefinementType::Pointer LeftRefinementSpatial = RefinementType::New(); 
-  //~ LeftRefinementSpatial->SetPatchInputImage(LeftSpatial->GetOutputPatchImage()); 
-  //~ LeftRefinementSpatial->SetNormalAndZValueImage(LeftSpatial->GetOutputNormalAndZValueImage());
-  //~ LeftRefinementSpatial->SetMaxdisp(HdispMax);
-
-  
-  //~ /// Right
-  //~ RefinementType::Pointer RightRefinementSpatial = RefinementType::New(); 
-  //~ RightRefinementSpatial->SetPatchInputImage(RightSpatial->GetOutputPatchImage()); 
-  //~ RightRefinementSpatial->SetNormalAndZValueImage(RightSpatial->GetOutputNormalAndZValueImage());
-  //~ RightRefinementSpatial->SetMaxdisp(HdispMax);
- 
 
 
-  //~ ImageWriterType::Pointer SpatialRefineWriter = ImageWriterType::New();
-  //~ SpatialRefineWriter->SetFileName(FILENAME("RightRefinementSpatial.tif"));  
-  //~ SpatialRefineWriter->SetInput( RightRefinementSpatial->GetOutputPatchImage());   
- //~ otb::StandardFilterWatcher watcherLastRafine(SpatialRefineWriter, "RightRefinementSpatial");  
-  //~ SpatialRefineWriter->Update(); 
-/* ************************************************************************/
-/* ===========================Spatial MinPlaneRefinement =========================*/
-
- //~ typedef otb::MinPlaneRefinementImageFilter< ImageType, ImageType > MinPlaneType;
- //~ ///Left
-  //~ MinPlaneType::Pointer LeftMinPlaneSpatial = MinPlaneType::New();  
-  //~ LeftMinPlaneSpatial->SetLeftInputImage(LeftReader->GetOutput());
-  //~ LeftMinPlaneSpatial->SetRightInputImage(RightReader->GetOutput());  
-  //~ LeftMinPlaneSpatial->SetLeftGradientXInput(GradientXL->GetOutput());
-  //~ LeftMinPlaneSpatial->SetRightGradientXInput(GradientXR->GetOutput()); 
-   
-  //~ LeftMinPlaneSpatial->SetPatchInputImage(LeftSpatial->GetOutputPatchImage()); 
-  //~ LeftMinPlaneSpatial->SetCostInputImage(LeftSpatial->GetOutputCostImage()); //
-  //~ LeftMinPlaneSpatial->SetNormalAndZValueImage(LeftSpatial->GetOutputNormalAndZValueImage());
-    
-  //~ LeftMinPlaneSpatial->SetCoefRefinedInputImage(LeftRefinementSpatial->GetOutputPatchImage());
-  //~ LeftMinPlaneSpatial->SetRefinedNormalAndZValueImage(LeftRefinementSpatial->GetOutputNormalAndZValueImage());
-  
-  //~ LeftMinPlaneSpatial->SetPatchSize(PatchSize,PatchSize); 
-  //~ LeftMinPlaneSpatial->SetOffsetPatch(Offset0,Offset0,Offset0); 
-
-  
- //~ ///Right
-  //~ MinPlaneType::Pointer RightMinPlaneSpatial = MinPlaneType::New();  
-  //~ RightMinPlaneSpatial->SetLeftInputImage(LeftReader->GetOutput());
-  //~ RightMinPlaneSpatial->SetRightInputImage(RightReader->GetOutput());  
-  //~ RightMinPlaneSpatial->SetLeftGradientXInput(GradientXL->GetOutput());
-  //~ RightMinPlaneSpatial->SetRightGradientXInput(GradientXR->GetOutput());
-    
-  //~ RightMinPlaneSpatial->SetPatchInputImage(RightSpatial->GetOutputPatchImage()); 
-  //~ RightMinPlaneSpatial->SetCostInputImage(RightSpatial->GetOutputCostImage()); //
-  //~ RightMinPlaneSpatial->SetNormalAndZValueImage(RightSpatial->GetOutputNormalAndZValueImage());
-  
-  //~ RightMinPlaneSpatial->SetCoefRefinedInputImage(RightRefinementSpatial->GetOutputPatchImage());
-  //~ RightMinPlaneSpatial->SetRefinedNormalAndZValueImage(RightRefinementSpatial->GetOutputNormalAndZValueImage());
-  
-  //~ RightMinPlaneSpatial->SetPatchSize(PatchSize,PatchSize); 
-  //~ RightMinPlaneSpatial->SetOffsetPatch(Offset0,Offset0,Offset0); 
-
-  
-  
-   //~ ImageWriterType::Pointer MinPlaneWriter = ImageWriterType::New();
-  //~ MinPlaneWriter->SetFileName(FILENAME("LeftMinPlaneSpatial.tif"));  
-  //~ MinPlaneWriter->SetInput( LeftMinPlaneSpatial->GetOutputPatchImage() );   
- //~ otb::StandardFilterWatcher MinS(MinPlaneWriter, "LeftMinPlaneSpatial");  
-  //~ MinPlaneWriter->Update();
   
 /* ************************************************************************* */ 
 /*=====================  View Propagation =======================================================*/
@@ -445,6 +379,7 @@ ViewPropType::Pointer RightView = ViewPropType::New();
 
 
 //Left view
+  LeftView->SetSpatialCostImage(RightSpatial->GetOutputCostImage());
   LeftView->SetLeftInputImage(LeftReader->GetOutput());
   LeftView->SetRightInputImage(RightReader->GetOutput());   
   LeftView->SetLeftPatchInputImage(LeftSpatial->GetOutputPatchImage()); 
@@ -455,9 +390,12 @@ ViewPropType::Pointer RightView = ViewPropType::New();
   LeftView->SetRightGradientXInput(GradientXR->GetOutput());
   LeftView->SetIteration(iteration);
   LeftView->SetPatchSize(PatchSize,PatchSize);
+  LeftView->SetDispMinMax(HdispMin,HdispMax); // pour deteminer la taille de la fenetre de recherche
+  LeftView->SetRadius((unsigned int)((HdispMax-HdispMin)/2), 0);
  
    
 //Right view
+  RightView->SetSpatialCostImage(LeftSpatial->GetOutputCostImage());
   RightView->SetLeftInputImage(RightReader->GetOutput());
   RightView->SetRightInputImage(LeftReader->GetOutput());   
   RightView->SetLeftPatchInputImage(RightSpatial->GetOutputPatchImage()); 
@@ -468,7 +406,8 @@ ViewPropType::Pointer RightView = ViewPropType::New();
   RightView->SetRightGradientXInput(GradientXL->GetOutput());
   RightView->SetIteration(iteration);
   RightView->SetPatchSize(PatchSize,PatchSize);
-  
+  RightView->SetDispMinMax(HdispMin, HdispMax);
+  RightView->SetRadius((unsigned int)((HdispMax-HdispMin)/2), 0);
 
 
 ImageWriterType::Pointer CostViewWriter = ImageWriterType::New();
@@ -483,31 +422,32 @@ ImageWriterType::Pointer CostViewWriter = ImageWriterType::New();
  otb::StandardFilterWatcher watcherPView(PlaneViewWriter, "ViewPlaneFilter");  
   PlaneViewWriter->Update(); 
 /* ************************************************************************* */  
-/*======View Propagation Rafinement =======================================================================*/
+/*=================== Refinement ====================================================*/
 
 typedef otb::PatchMatchRefinementImageFilter< ImageType, ImageType > RefinementType;
-RefinementType::Pointer LeftRefinementView = RefinementType::New();
- 
-  LeftRefinementView->SetPatchInputImage(LeftView->GetOutputPatchImage()); 
-  LeftRefinementView->SetNormalAndZValueImage(LeftView->GetOutputNormalAndZValueImage());
-  LeftRefinementView->SetMaxdisp(HdispMax); 
+///Left
+  RefinementType::Pointer LeftRefinement = RefinementType::New(); 
+  LeftRefinement->SetNormalAndZValueImage(LeftView->GetOutputNormalAndZValueImage());
+  LeftRefinement->SetMaxDz0(MaxDz0); 
+  LeftRefinement->SetMaxDn(MaxDn); 
+ LeftRefinement->SetDispMinMax(HdispMin, HdispMax);
  
 
+
 /// Right
-RefinementType::Pointer RightRefinementView = RefinementType::New();
- 
-  RightRefinementView->SetPatchInputImage(RightView->GetOutputPatchImage()); 
-  RightRefinementView->SetNormalAndZValueImage(RightView->GetOutputNormalAndZValueImage());
-  RightRefinementView->SetMaxdisp(HdispMax);  
+  RefinementType::Pointer RightRefinement = RefinementType::New(); 
+  RightRefinement->SetNormalAndZValueImage(RightView->GetOutputNormalAndZValueImage());
+  RightRefinement->SetMaxDz0(MaxDz0);
+  RightRefinement->SetMaxDn(MaxDn); 
+ RightRefinement->SetDispMinMax(HdispMin, HdispMax); 
   
-  //~ ImageWriterType::Pointer RefineViewWriter = ImageWriterType::New();
-  //~ RefineViewWriter->SetFileName(FILENAME("LeftRefinementView.tif"));  
-  //~ RefineViewWriter->SetInput( LeftRefinementView->GetOutputPatchImage() );   
- //~ otb::StandardFilterWatcher watcherRV(RefineViewWriter, "LeftRefinementView");  
-  //~ RefineViewWriter->Update(); 
- 
+  ImageWriterType::Pointer RefineViewWriter = ImageWriterType::New();
+  RefineViewWriter->SetFileName(FILENAME("LeftRefinement.tif"));  
+  RefineViewWriter->SetInput( LeftRefinement->GetOutputPatchImage() );   
+ otb::StandardFilterWatcher watcherRV(RefineViewWriter, "LeftRefinement");  
+  RefineViewWriter->Update();  
 /* ************************************************************************/
-/* ===========================View MinPlaneRefinement =========================*/
+/* =========================== MinPlaneRefinement =========================*/
 
  //~ typedef otb::MinPlaneRefinementImageFilter< ImageType, ImageType > MinPlaneType;
  ///Left
@@ -521,13 +461,13 @@ RefinementType::Pointer RightRefinementView = RefinementType::New();
   LeftMinPlaneView->SetCostInputImage(LeftView->GetOutputCostImage()); //
   LeftMinPlaneView->SetNormalAndZValueImage(LeftView->GetOutputNormalAndZValueImage());
     
-  LeftMinPlaneView->SetCoefRefinedInputImage(LeftRefinementView->GetOutputPatchImage());
-  LeftMinPlaneView->SetRefinedNormalAndZValueImage(LeftRefinementView->GetOutputNormalAndZValueImage());
+  LeftMinPlaneView->SetCoefRefinedInputImage(LeftRefinement->GetOutputPatchImage());
+  LeftMinPlaneView->SetRefinedNormalAndZValueImage(LeftRefinement->GetOutputNormalAndZValueImage());
   
   LeftMinPlaneView->SetPatchSize(PatchSize,PatchSize); 
   LeftMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0); 
  
- LeftMinPlaneView->Update();
+  LeftMinPlaneView->Update();
    ///Right
  
   //~ MinPlaneType::Pointer RightMinPlaneView = MinPlaneType::New();  
@@ -540,25 +480,31 @@ RefinementType::Pointer RightRefinementView = RefinementType::New();
   RightMinPlaneView->SetCostInputImage(RightView->GetOutputCostImage()); 
   RightMinPlaneView->SetNormalAndZValueImage(RightView->GetOutputNormalAndZValueImage());
     
-  RightMinPlaneView->SetCoefRefinedInputImage(RightRefinementView->GetOutputPatchImage());
-  RightMinPlaneView->SetRefinedNormalAndZValueImage(RightRefinementView->GetOutputNormalAndZValueImage());
+  RightMinPlaneView->SetCoefRefinedInputImage(RightRefinement->GetOutputPatchImage());
+  RightMinPlaneView->SetRefinedNormalAndZValueImage(RightRefinement->GetOutputNormalAndZValueImage());
   
   RightMinPlaneView->SetPatchSize(PatchSize,PatchSize); 
   RightMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);
    
   RightMinPlaneView->Update();
 
-  //~ ImageWriterType::Pointer MinRVWriter = ImageWriterType::New();
-  //~ MinRVWriter->SetFileName(FILENAME("LeftMinPlaneView.tif"));  
-  //~ MinRVWriter->SetInput( RightMinPlaneView->GetOutputPatchImage());   
- //~ otb::StandardFilterWatcher watcherMinRV(MinRVWriter, "LeftMinPlaneView");  
-  //~ MinRVWriter->Update();
+  ImageWriterType::Pointer LeftMinRVWriter = ImageWriterType::New();
+  LeftMinRVWriter->SetFileName(FILENAME("LeftMinCost.tif"));  
+  LeftMinRVWriter->SetInput( LeftMinPlaneView->GetOutputCostImage());   
+ otb::StandardFilterWatcher LwatcherMinRV(LeftMinRVWriter, "LeftMinPlane");  
+  LeftMinRVWriter->Update();
+  
+   ImageWriterType::Pointer RightMinRVWriter = ImageWriterType::New();
+  RightMinRVWriter->SetFileName(FILENAME("LeftMinCost.tif"));  
+  RightMinRVWriter->SetInput( RightMinPlaneView->GetOutputCostImage());   
+ otb::StandardFilterWatcher RwatcherMinRV(RightMinRVWriter, "LeftMinPlane");  
+  RightMinRVWriter->Update();
 
  /// mèttre à jour les plan et les normales  
 
 	LeftCoefPlane = LeftMinPlaneView->GetOutputPatchImage();
 	LeftCoefPlane->DisconnectPipeline();
-	 std::cout<< "  origin   " << LeftCoefPlane->GetOrigin()<< std::endl;
+	// std::cout<< "  origin   " << LeftCoefPlane->GetOrigin()<< std::endl;
 	LeftNormalPlane = LeftMinPlaneView->GetOutputNormalAndZValueImage(); 
 	LeftNormalPlane->DisconnectPipeline();
 	
@@ -567,45 +513,58 @@ RefinementType::Pointer RightRefinementView = RefinementType::New();
 	RightCoefPlane->DisconnectPipeline();
 	RightNormalPlane = RightMinPlaneView->GetOutputNormalAndZValueImage(); 
     RightNormalPlane->DisconnectPipeline();
- 
+    
+    
+   /// refinement Disparity
+   
+if(MaxDz0>0.1){		
+MaxDz0 = MaxDz0/2;
+MaxDn = MaxDn/2; 
+}
+else{
+MaxDz0 = MaxDz0;
+MaxDn = MaxDn;
 } 
+chrono1.Stop();
+std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << std::endl;
+} // end of for
  
  
  
   
-// ====  Plane Weighted Median ==========================
-   /** Concatenation de la disparité avec l'image de de droite  ou gauche*/
- typedef otb::ConcatenateVectorImageFilter< ImageType,ImageType, ImageType> ConcatenateVectorImageFilterType;
-  ConcatenateVectorImageFilterType::Pointer DispEndLeftImage = ConcatenateVectorImageFilterType::New();
-  DispEndLeftImage->SetInput1(LeftMinPlaneView->GetOutputPatchImage());
-  DispEndLeftImage->SetInput2( LeftReader->GetOutput() );
+//~ // ====  Plane Weighted Median ==========================
+   //~ /** Concatenation de la disparité avec l'image de de droite  ou gauche*/
+ //~ typedef otb::ConcatenateVectorImageFilter< ImageType,ImageType, ImageType> ConcatenateVectorImageFilterType;
+  //~ ConcatenateVectorImageFilterType::Pointer DispEndLeftImage = ConcatenateVectorImageFilterType::New();
+  //~ DispEndLeftImage->SetInput1(LeftMinPlaneView->GetOutputPatchImage());
+  //~ DispEndLeftImage->SetInput2( LeftReader->GetOutput() );
 
-  ConcatenateVectorImageFilterType::Pointer DispEndRightImage = ConcatenateVectorImageFilterType::New();
-  DispEndRightImage->SetInput1(RightMinPlaneView->GetOutputPatchImage());
-  DispEndRightImage->SetInput2( RightReader->GetOutput() ); 
+  //~ ConcatenateVectorImageFilterType::Pointer DispEndRightImage = ConcatenateVectorImageFilterType::New();
+  //~ DispEndRightImage->SetInput1(RightMinPlaneView->GetOutputPatchImage());
+  //~ DispEndRightImage->SetInput2( RightReader->GetOutput() ); 
 
 
- typedef otb::PatchWeightedMedianImageFilter< ImageType, ImageType > PlaneMedianType;
- //Left
-PlaneMedianType::Pointer LeftPMedianFilter = PlaneMedianType::New();
+ //~ typedef otb::PatchWeightedMedianImageFilter< ImageType, ImageType > PlaneMedianType;
+ //~ //Left
+//~ PlaneMedianType::Pointer LeftPMedianFilter = PlaneMedianType::New();
 
-PlaneMedianType::RadiusType radiusPMedian;
-  radiusPMedian[0] = 19;
-  radiusPMedian[1] = 19;
+//~ PlaneMedianType::RadiusType radiusPMedian;
+  //~ radiusPMedian[0] = 19;
+  //~ radiusPMedian[1] = 19;
 
-LeftPMedianFilter->SetInput(DispEndLeftImage->GetOutput());
-LeftPMedianFilter->SetRadius(radiusPMedian);
+//~ LeftPMedianFilter->SetInput(DispEndLeftImage->GetOutput());
+//~ LeftPMedianFilter->SetRadius(radiusPMedian);
 
- //Right
-PlaneMedianType::Pointer RightPMedianFilter = PlaneMedianType::New();
-RightPMedianFilter->SetInput(DispEndRightImage->GetOutput());
-RightPMedianFilter->SetRadius(radiusPMedian);
+ //~ //Right
+//~ PlaneMedianType::Pointer RightPMedianFilter = PlaneMedianType::New();
+//~ RightPMedianFilter->SetInput(DispEndRightImage->GetOutput());
+//~ RightPMedianFilter->SetRadius(radiusPMedian);
  
-  ImageWriterType::Pointer LeftPMedianWriter = ImageWriterType::New();
-  LeftPMedianWriter->SetFileName(FILENAME("LeftPMedian.tif"));  
-  LeftPMedianWriter->SetInput( LeftPMedianFilter->GetOutput() );   
- otb::StandardFilterWatcher watcherLPM(LeftPMedianWriter, "LeftPMedian");  
-  LeftPMedianWriter->Update(); 
+  //~ ImageWriterType::Pointer LeftPMedianWriter = ImageWriterType::New();
+  //~ LeftPMedianWriter->SetFileName(FILENAME("LeftPMedian.tif"));  
+  //~ LeftPMedianWriter->SetInput( LeftPMedianFilter->GetOutput() );   
+ //~ otb::StandardFilterWatcher watcherLPM(LeftPMedianWriter, "LeftPMedian");  
+  //~ LeftPMedianWriter->Update(); 
   
 
 
@@ -625,12 +584,12 @@ DisparityType::RadiusType radiusD;
   radiusD[0] = 0;
   radiusD[1] = 0;
 
-LeftDispFilter->SetInput(LeftPMedianFilter->GetOutput());
+LeftDispFilter->SetInput(LeftMinPlaneView->GetOutputPatchImage());
 LeftDispFilter->SetRadius(radiusD);
 /// Right
 
 DisparityType::Pointer RightDispFilter = DisparityType::New();
-RightDispFilter->SetInput(RightMinPlaneView->GetOutput());
+RightDispFilter->SetInput(RightMinPlaneView->GetOutputPatchImage());
 RightDispFilter->SetRadius(radiusD);
 
    ImageWriterType::Pointer DispWriter = ImageWriterType::New();
@@ -642,33 +601,36 @@ RightDispFilter->SetRadius(radiusD);
 // ======== Weighted Median Disparity ==============================  
   
    /** Concatenation de la disparité avec l'image de de droite  ou gauche*/
- 
-  //~ ConcatenateVectorImageFilterType::Pointer ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();
-  //~ ConcatenateDispEndInLeftImage->SetInput1(LeftDispFilter->GetOutput());
-  //~ ConcatenateDispEndInLeftImage->SetInput2( LeftReader->GetOutput() );
+ typedef otb::ConcatenateVectorImageFilter< ImageType,ImageType, ImageType> ConcatenateVectorImageFilterType; 
+  ConcatenateVectorImageFilterType::Pointer ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();
+  ConcatenateDispEndInLeftImage->SetInput1(LeftDispFilter->GetOutput());
+  ConcatenateDispEndInLeftImage->SetInput2( LeftReader->GetOutput() );
 
-  //~ ConcatenateVectorImageFilterType::Pointer ConcatenateDispEndInRightImage = ConcatenateVectorImageFilterType::New();
-  //~ ConcatenateDispEndInRightImage->SetInput1(RightDispFilter->GetOutput());
-  //~ ConcatenateDispEndInRightImage->SetInput2( RightReader->GetOutput() ); 
+  ConcatenateVectorImageFilterType::Pointer ConcatenateDispEndInRightImage = ConcatenateVectorImageFilterType::New();
+  ConcatenateDispEndInRightImage->SetInput1(RightDispFilter->GetOutput());
+  ConcatenateDispEndInRightImage->SetInput2( RightReader->GetOutput() ); 
   
 
 
-//~ typedef otb::DisparityWeightedMedianImageFilter< ImageType, ImageType > DispMedianType;
-//~ /// Left
-//~ DispMedianType::Pointer LeftDispMedian = DispMedianType::New();
-//~ LeftDispMedian->SetInput(ConcatenateDispEndInLeftImage->GetOutput());
-//~ LeftDispMedian->SetRadius(radiusPMedian);
-//~ /// Right
+typedef otb::DisparityWeightedMedianImageFilter< ImageType, ImageType > DispMedianType;
+DispMedianType::RadiusType radiusPMedian;
+  radiusPMedian[0] = 19;
+  radiusPMedian[1] = 19;
+/// Left
+DispMedianType::Pointer LeftDispMedian = DispMedianType::New();
+LeftDispMedian->SetInput(ConcatenateDispEndInLeftImage->GetOutput());
+LeftDispMedian->SetRadius(radiusPMedian);
+/// Right
 
-//~ DispMedianType::Pointer RightDispMedian = DispMedianType::New();
-//~ RightDispMedian->SetInput(ConcatenateDispEndInRightImage->GetOutput());
-//~ RightDispMedian->SetRadius(radiusPMedian);
+DispMedianType::Pointer RightDispMedian = DispMedianType::New();
+RightDispMedian->SetInput(ConcatenateDispEndInRightImage->GetOutput());
+RightDispMedian->SetRadius(radiusPMedian);
 
- //~ ImageWriterType::Pointer DispMedWriter = ImageWriterType::New();
- //~ DispMedWriter->SetFileName(FILENAME("LeftDispMedian.tif"));  
- //~ DispMedWriter->SetInput(LeftDispMedian->GetOutput() );   
- //~ otb::StandardFilterWatcher watcherMedDisp(DispMedWriter, "LeftDispMedian");  
- //~ DispMedWriter->Update();
+ ImageWriterType::Pointer DispMedWriter = ImageWriterType::New();
+ DispMedWriter->SetFileName(FILENAME("LeftDispMedian.tif"));  
+ DispMedWriter->SetInput(LeftDispMedian->GetOutput() );   
+ otb::StandardFilterWatcher watcherMedDisp(DispMedWriter, "LeftDispMedian");  
+ DispMedWriter->Update();
  
 /*========================== Detection d'occulusion =============================*/
   
@@ -704,10 +666,10 @@ RightDispFilter->SetRadius(radiusD);
  //~ otb::StandardFilterWatcher OcclusionWatcher(OcclusionWriter, "Occlusion"); 
  //~ OcclusionWriter->Update();
  
+
+
  
 
-
-#endif
 
 return EXIT_SUCCESS;
 }

@@ -30,3 +30,21 @@ PatchMatch.cpp
 add_executable(otbStereoFiltersTestDriver ${OTBStereoFiltersTests})
 target_link_libraries(otbStereoFiltersTestDriver ${OTBStereoFilters-Test_LIBRARIES})
 otb_module_target_label(otbStereoFiltersTestDriver)
+
+
+#----------- StereoFilters TESTS ----------------
+otb_test_application(NAME apTvCVFTest
+                     APP  CVF
+                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif
+                             -io.inright ${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif
+                             -io.out ${TEMP}/apTvDmCVFTest.tif
+                             -hdispmin -15
+                             -hdispmax 0
+                                          
+                             -radius 9
+                             -rmf 19
+                             
+                     VALID   --compare-image ${EPSILON_10}
+                         ${BASELINE}/apTvCVFTest.tif
+                         ${TEMP}/apTvCVFTest.tif
+                     )

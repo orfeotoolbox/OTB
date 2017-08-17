@@ -123,6 +123,11 @@ public:
     m_Radius.Fill(radius);
   }
   
+   void SetSense(int sense)
+  {
+    m_Sense = sense;
+  }
+  
     /** Set unsigned int Patch offset */
   void SetOffsetPatch(OffsetType Offset0, OffsetType Offset1, OffsetType Offset2)
   {
@@ -192,7 +197,8 @@ private:
      
   OffsetType					m_Offset0;
   OffsetType					m_Offset1;
-  OffsetType					m_Offset2;    
+  OffsetType					m_Offset2;
+  int     						m_Sense;
   
 };
 } // end namespace otb
