@@ -23,6 +23,8 @@
 
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToVectorImageFilter.h"
+#include "otbStreamingStatisticsImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 #include "otbComputeHistoFilter.h"
 #include "otbComputeLutFilter.h"
@@ -30,8 +32,51 @@
 
 namespace otb
 {
+
 namespace Wrapper
 {
+
+namespace Functor
+{
+
+class LuminanceOperator
+{
+typedef FloatImageType::PixelType OutPixel;
+typedef FloatVectorImageType::PixelType InPixel;
+public:
+  LuminanceOperator()
+    {
+    m_Rgb = new int [3] ;
+    m_LumCoef = new float [3] ;
+    }
+  virtual ~LuminanceOperator() { }
+
+ OutPixel operator() (  InPixel  input )
+  {  
+  OutPixel out;  
+  out = (m_LumCoef[0]*input[m_Rgb[0]] + \
+         m_LumCoef[1]*input[m_Rgb[1]] + \
+         m_LumCoef[2]*input[m_Rgb[2]] ) ;
+  return out;
+  } // end operator ()
+
+
+  void SetRgb( int rgb[])
+    {
+    m_Rgb = rgb;
+    }
+
+  void SetLumCoef(float lumCoef[])
+    {
+    m_LumCoef = lumCoef;
+    }
+private:
+  int * m_Rgb;
+  float * m_LumCoef;
+
+}; // end of functor class  MultiplyOperator
+
+}  // end of fonctor 
 
 class ContrastEnhancement : public Application
 {
@@ -53,6 +98,8 @@ public:
           VectorToImageListFilterType;
   typedef otb::ImageListToVectorImageFilter< ImageListType, FloatVectorImageType > 
           ImageListToVectorFilterType;
+  typedef otb::StreamingStatisticsImageFilter< FloatImageType >
+          StatsFilterType;
 
   /** Standard macro */
   itkNewMacro( Self );
@@ -101,6 +148,16 @@ private:
 
     AddParameter(ParameterType_Int,"thumb.h","Thumbnail height in pixel");
     AddParameter(ParameterType_Int,"thumb.w","Thumbnail width in pixel");
+
+    AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum definition");
+    AddChoice( "minmax.auto" , "Automatique" );
+    AddChoice( "minmax.man" , "Manuel" );
+    AddParameter(ParameterType_Float , "min" , "Minimum");
+    AddParameter(ParameterType_Float , "max" , "Maximum");
+    // SetDefaultParameterFloat("min", 0.0 );
+    // SetDefaultParameterFloat("max", 0.0 );
+    MandatoryOff("min");
+    MandatoryOff("max");
 
     AddParameter(ParameterType_Choice , "mode" , "What to equalized");
     AddChoice( "mode.each" , "Channels" );
@@ -221,6 +278,17 @@ private:
           }
         }
       }
+
+      if ( GetParameterString("minmax") == "man" )
+        {
+        MandatoryOn("min");
+        MandatoryOn("max");
+        }
+      if ( GetParameterString("minmax") == "auto" )
+        {
+        MandatoryOff("min");
+        MandatoryOff("max");
+        }
   }
 
   void ComputeLuminance( const ImageListType::Pointer inputImageList ,
@@ -318,7 +386,27 @@ private:
     FilterHistoType::Pointer filterHisto( FilterHistoType::New() );
     FilterLutType::Pointer filterLut( FilterLutType::New() );
     FilterGainType::Pointer filterGain( FilterGainType::New() );
-
+    float min = 0.0;
+    float max = 0.0;
+    if ( GetParameterString("minmax") == "man" )
+      {
+      min = GetParameterFloat("min");
+      max = GetParameterFloat("max");
+      }
+    if ( GetParameterString("minmax") == "auto" )
+      {
+      StatsFilterType::Pointer statFilter ( StatsFilterType::New() );
+      statFilter->SetIgnoreInfiniteValues(true);
+      if( HasUserValue("nodata") )
+        {
+        statFilter->SetIgnoreUserDefinedValue(true);
+        statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
+        }
+      statFilter->SetInput( input );
+      statFilter->Update();
+      min = statFilter->GetMinimum();
+      max = statFilter->GetMaximum();
+      }
     filterHisto->SetInput( input ) ;
     if ( HasValue("hfact") )
       {
@@ -329,10 +417,10 @@ private:
       filterHisto->SetNoData( GetParameterFloat("nodata") );
       filterGain->SetNoData( GetParameterFloat("nodata") );
       }
-    filterHisto->SetMin( 0 );
-    filterHisto->SetMax( 255 );
-    filterGain->SetMin( 0 );
-    filterGain->SetMax( 255 );
+    filterHisto->SetMin( min );
+    filterHisto->SetMax( max );
+    filterGain->SetMin( min );
+    filterGain->SetMax( max );
     filterHisto->SetNbBin(GetParameterInt("bin"));
     FloatImageType::SizeType thumbSize;
     thumbSize[0] = GetParameterInt("thumb.w");
@@ -394,19 +482,25 @@ private:
         {
         lumCoef[i] /= sum;
         }
+      typedef itk::UnaryFunctorImageFilter < FloatVectorImageType ,
+              FloatImageType , Functor::LuminanceOperator > LuminanceFilter;
+      LuminanceFilter::Pointer luminanceFilter ( LuminanceFilter::New() );
+      luminanceFilter->GetFunctor().SetRgb(rgb);
+      luminanceFilter->GetFunctor().SetLumCoef(lumCoef);
+      luminanceFilter->SetInput( inImage );
 
       // Create Luminance image 
-      FloatImageType::Pointer luminance(FloatImageType::New());
-      luminance->SetRegions( inputImageList->GetNthElement(rgb[0])->GetLargestPossibleRegion() );
-      luminance->SetOrigin( inputImageList->GetNthElement(rgb[0])->GetOrigin() );
-      luminance->SetSpacing( inputImageList->GetNthElement(rgb[0])->GetSpacing() );
-      luminance->Allocate();
+      // FloatImageType::Pointer luminance(FloatImageType::New());
+      // luminance->SetRegions( inputImageList->GetNthElement(rgb[0])->GetLargestPossibleRegion() );
+      // luminance->SetOrigin( inputImageList->GetNthElement(rgb[0])->GetOrigin() );
+      // luminance->SetSpacing( inputImageList->GetNthElement(rgb[0])->GetSpacing() );
+      // luminance->Allocate();
 
-      ComputeLuminance( inputImageList , rgb , lumCoef , luminance );
+      // ComputeLuminance( inputImageList , rgb , lumCoef , luminanceFilter->GetOutput() );
       
       // Apply equalization on the luminance
-      outputImageList = ApplyGainOnChannels( luminance ,
-                                  ApplyPipeline(luminance) ,
+      outputImageList = ApplyGainOnChannels( luminanceFilter->GetOutput() ,
+                                  ApplyPipeline(luminanceFilter->GetOutput()) ,
                                   rgb ,
                                   inputImageList );
       
