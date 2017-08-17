@@ -24,7 +24,9 @@
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToVectorImageFilter.h"
 
-#include "otbContrastEnhancementFilter.h"
+#include "otbComputeHistoFilter.h"
+#include "otbComputeLutFilter.h"
+#include "otbComputeGainFilter.h"
 
 namespace otb
 {
@@ -40,8 +42,12 @@ public:
   typedef itk::SmartPointer < Self >	      Pointer;
   typedef itk::SmartPointer < const Self >	ConstPointer;
 
-  typedef otb::ContrastEnhancementFilter < FloatImageType , FloatImageType >
-  				FilterType;
+  typedef otb::ComputeHistoFilter < FloatImageType , FloatVectorImageType > 
+          FilterHistoType;
+  typedef otb::ComputeLutFilter < FloatVectorImageType , FloatVectorImageType > 
+          FilterLutType;
+  typedef otb::ComputeGainFilter < FloatImageType , FloatVectorImageType , FloatImageType > 
+          FilterGainType;
   typedef otb :: ImageList< FloatImageType > ImageListType;
   typedef otb::VectorImageToImageListFilter< FloatVectorImageType, ImageListType > 
           VectorToImageListFilterType;
@@ -54,6 +60,7 @@ public:
   itkTypeMacro( ContrastEnhancement , otb::Application );
 
 private:
+
 	void DoInit() ITK_OVERRIDE
 	{
 		SetName("Contrast Enhancement");
@@ -131,9 +138,7 @@ private:
     SetMinimumParameterIntValue("thumb.h", 0);
     SetMinimumParameterIntValue("thumb.w", 0);
 
-    AddRAMParameter();
-
-    
+    AddRAMParameter(); 
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -144,13 +149,14 @@ private:
       if ( !HasUserValue("thumb.w") )
         {
         SetParameterInt( "thumb.w" , 
-          inImage->GetLargestPossibleRegion().GetSize()[0] );
+                      inImage->GetLargestPossibleRegion().GetSize()[0] );
         }
       if ( !HasUserValue("thumb.h") )
         {
-      SetParameterInt( "thumb.h" , 
-        inImage->GetLargestPossibleRegion().GetSize()[1] );
+        SetParameterInt( "thumb.h" , 
+                      inImage->GetLargestPossibleRegion().GetSize()[1] );
         }
+      
       {
       std::ostringstream oss;
       if ( HasUserValue("thumb.h") && 
@@ -187,7 +193,10 @@ private:
           {
           SetParameterFloat( "nodata" , static_cast<float>( values[0] ) );
           }
-        if ( GetParameterString( "mode" ) == "lum" )
+        if ( GetParameterString( "mode" ) == "lum" && 
+             !HasUserValue("mode.lum.red.ch") &&
+             !HasUserValue("mode.lum.gre.ch") &&
+             !HasUserValue("mode.lum.blu.ch") )
           {
           std::vector<uint> rgb = metadataInterface->GetDefaultDisplay() ;
           uint m = inImage->GetVectorLength ();
@@ -214,6 +223,129 @@ private:
       }
   }
 
+  void ComputeLuminance( const ImageListType::Pointer inputImageList ,
+                         const int rgb[] ,
+                         const float lumCoef[] ,
+                         FloatImageType::Pointer luminance)
+  {
+    itk::ImageRegionIterator < FloatImageType > 
+        rit ( inputImageList->GetNthElement(rgb[0]) ,
+             inputImageList->GetNthElement(rgb[0])->GetRequestedRegion() );
+    itk::ImageRegionIterator < FloatImageType > 
+        git ( inputImageList->GetNthElement(rgb[1]) ,
+             inputImageList->GetNthElement(rgb[1])->GetRequestedRegion() );
+    itk::ImageRegionIterator < FloatImageType > 
+        bit ( inputImageList->GetNthElement(rgb[2]) ,
+             inputImageList->GetNthElement(rgb[2])->GetRequestedRegion() );
+    itk::ImageRegionIterator < FloatImageType > 
+        lit ( luminance , luminance->GetRequestedRegion() );
+    lit.GoToBegin();
+    rit.GoToBegin();
+    git.GoToBegin();
+    bit.GoToBegin();
+    int i = 0;
+    while ( !lit.IsAtEnd())
+      {
+      // std::cout<<i<<std::endl;
+      // std::cout<<lumCoef[0]<<" "<<lumCoef[1]<<" "<<lumCoef[2]<<std::endl;
+      if (lumCoef[0]>1)
+        {
+        std::cout<<"WARNNNNNNNNNNING"<<std::endl;
+        std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
+        }
+      lit.Set( lumCoef[0] * rit.Get() + lumCoef[1] * git.Get() + lumCoef[2] * bit.Get() );
+      ++i;   
+      ++lit;
+      ++rit;
+      ++git;
+      ++bit;
+      }
+  }
+
+  ImageListType::Pointer ApplyGainOnChannels( 
+                      const FloatImageType::Pointer luminance ,
+                      const FloatImageType::Pointer nLuminance ,
+                      const int rgb[] ,
+                      ImageListType::Pointer inputImageList )
+  {
+    itk::ImageRegionIterator < FloatImageType > 
+        rit ( inputImageList->GetNthElement(rgb[0]) ,
+             inputImageList->GetNthElement(rgb[0])->GetRequestedRegion() );
+    itk::ImageRegionIterator < FloatImageType > 
+        git ( inputImageList->GetNthElement(rgb[1]) ,
+             inputImageList->GetNthElement(rgb[1])->GetRequestedRegion() );
+    itk::ImageRegionIterator < FloatImageType > 
+        bit ( inputImageList->GetNthElement(rgb[2]) ,
+             inputImageList->GetNthElement(rgb[2])->GetRequestedRegion() );
+    itk::ImageRegionConstIterator < FloatImageType > 
+        lit ( luminance , luminance->GetRequestedRegion() );
+    itk::ImageRegionConstIterator < FloatImageType > 
+        nlit ( nLuminance , nLuminance->GetRequestedRegion() );
+
+    lit.GoToBegin();
+    nlit.GoToBegin();
+    bit.GoToBegin();
+    rit.GoToBegin();
+    git.GoToBegin();
+    float gain = 0.0;
+    float denum = 1;
+    // Compute the gain F(luminance)/luminance
+    // Check if the creation of a gain image and a multiplication 
+    // would be more efficient (memory and time)
+    while ( !lit.IsAtEnd())
+      {
+      if ( lit.Get() != 0 )
+        denum = lit.Get();
+      else
+        {
+        denum = 1;
+        }
+      gain = nlit.Get()/denum;
+      bit.Set(gain * bit.Get());
+      rit.Set(gain * rit.Get());
+      git.Set(gain * git.Get());
+      ++nlit;
+      ++lit;
+      ++bit;
+      ++rit;
+      ++git;
+      }
+    return inputImageList;
+  }
+
+  FloatImageType::Pointer ApplyPipeline(const FloatImageType::Pointer input)
+  {
+    FilterHistoType::Pointer filterHisto( FilterHistoType::New() );
+    FilterLutType::Pointer filterLut( FilterLutType::New() );
+    FilterGainType::Pointer filterGain( FilterGainType::New() );
+
+    filterHisto->SetInput( input ) ;
+    if ( HasValue("hfact") )
+      {
+      filterHisto->SetThreshold( GetParameterInt("hfact") );
+      }
+    if ( HasUserValue("nodata") )
+      {
+      filterHisto->SetNoData( GetParameterFloat("nodata") );
+      filterGain->SetNoData( GetParameterFloat("nodata") );
+      }
+    filterHisto->SetMin( 0 );
+    filterHisto->SetMax( 255 );
+    filterGain->SetMin( 0 );
+    filterGain->SetMax( 255 );
+    filterHisto->SetNbBin(GetParameterInt("bin"));
+    FloatImageType::SizeType thumbSize;
+    thumbSize[0] = GetParameterInt("thumb.w");
+    thumbSize[1] = GetParameterInt("thumb.h");
+    filterHisto->SetThumbSize( thumbSize );
+    filterLut->SetInput(filterHisto->GetOutput());
+    filterLut->Update();
+    filterGain->SetInputLut( filterLut->GetOutput() );
+    filterGain->SetInputImage( input );
+    filterGain->Update();
+    return filterGain->GetOutput();
+  }
+
   void DoExecute() ITK_OVERRIDE
   {
     ImageListToVectorFilterType::Pointer 
@@ -233,33 +365,21 @@ private:
       for (int chanel = 0 ; chanel<m ; chanel++ ) 
         {
         // std::cout<<"channel m ="<<m<<std::endl;
-        FilterType::Pointer filter( FilterType::New() );
-        filter->SetInput( inputImageList->GetNthElement(chanel) ) ;
-        if ( HasValue("hfact") )
-          {
-          filter->SetHistoThreshFactor( GetParameterInt("hfact") );
-          }
-        filter->SetHistoSize(GetParameterInt("bin"));
-        if ( HasUserValue("nodata") )
-          {
-          filter->SetNoData( GetParameterFloat("nodata") );
-          }
-        filter->SetThumbnailSize( GetParameterInt("thumb.w") , 
-                                GetParameterInt("thumb.h") );
-        filter->Update();
-        outputImageList->PushBack( filter->GetOutput() );
+        
+        outputImageList->PushBack( 
+                  ApplyPipeline( inputImageList->GetNthElement(chanel) ) );
         }
       }
 
     if ( GetParameterString("mode") == "lum")
       {
       // Retreive order of the RGB channels
-      std::vector<int> rgb(3 , 0);
+      int rgb[3];
       rgb[0] = GetParameterInt("mode.lum.red.ch");
       rgb[1] = GetParameterInt("mode.lum.gre.ch");
       rgb[2] = GetParameterInt("mode.lum.blu.ch");
       // Retreive the coeff for each channel
-      std::vector<float> lumCoef(3 , 0.0);
+      float lumCoef[3];
       lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
       lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
       lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
@@ -272,90 +392,26 @@ private:
       assert(sum>0);
       for (int i = 0 ; i<3 ; i++ )
         {
-        lumCoef[1] /= sum;
+        lumCoef[i] /= sum;
         }
-      itk::ImageRegionIterator < FloatImageType > 
-          rit ( inputImageList->GetNthElement(rgb[0]) ,
-               inputImageList->GetNthElement(rgb[0])->GetRequestedRegion() );
-      itk::ImageRegionIterator < FloatImageType > 
-          git ( inputImageList->GetNthElement(rgb[1]) ,
-               inputImageList->GetNthElement(rgb[1])->GetRequestedRegion() );
-      itk::ImageRegionIterator < FloatImageType > 
-          bit ( inputImageList->GetNthElement(rgb[2]) ,
-               inputImageList->GetNthElement(rgb[2])->GetRequestedRegion() );
+
       // Create Luminance image 
       FloatImageType::Pointer luminance(FloatImageType::New());
-      luminance->Allocate();
       luminance->SetRegions( inputImageList->GetNthElement(rgb[0])->GetLargestPossibleRegion() );
       luminance->SetOrigin( inputImageList->GetNthElement(rgb[0])->GetOrigin() );
       luminance->SetSpacing( inputImageList->GetNthElement(rgb[0])->GetSpacing() );
+      luminance->Allocate();
 
-      itk::ImageRegionIterator < FloatImageType > 
-          lit ( luminance ,
-               luminance->GetRequestedRegion() );
-      lit.GoToBegin();
-      bit.GoToBegin();
-      rit.GoToBegin();
-      git.GoToBegin();
-      while ( !lit.IsAtEnd())
-        {
-        lit.Set( lumCoef[0] * rit.Get() + lumCoef[1] * git.Get() + lumCoef[2] * bit.Get() );
-        ++lit;
-        ++bit;
-        ++rit;
-        ++git;
-        }
-
+      ComputeLuminance( inputImageList , rgb , lumCoef , luminance );
+      
       // Apply equalization on the luminance
-      FilterType::Pointer filter( FilterType::New() );
-      filter->SetInput( luminance ) ;
-      if ( HasValue("hfact") )
-        {
-        filter->SetHistoThreshFactor( GetParameterInt("hfact") );
-        }
-      filter->SetHistoSize(GetParameterInt("bin"));
-      // Nodata has to be the same for all the channels
-      if ( HasUserValue("nodata") )
-        {
-        filter->SetNoData( GetParameterFloat("nodata") );
-        }
-      filter->SetThumbnailSize( GetParameterInt("thumb.w") , 
-                                GetParameterInt("thumb.h") );
-      filter->Update();
-
-      itk::ImageRegionIterator < FloatImageType > 
-          nlit ( filter->GetOutput() , 
-                filter->GetOutput()->GetRequestedRegion() );
-      lit.GoToBegin();
-      nlit.GoToBegin();
-      bit.GoToBegin();
-      rit.GoToBegin();
-      git.GoToBegin();
-      float gain = 0.0;
-      float denum = 1;
-      // Compute the gain F(luminance)/luminance
-      // Check if the creation of a gain image and a multiplication 
-      // would be more efficient (memory and time)
-      while ( !lit.IsAtEnd())
-        {
-        if ( lit.Get() != 0 )
-          denum = lit.Get();
-        else
-          {
-          denum = 1;
-          }
-        gain = nlit.Get()/denum;
-        bit.Set(gain * bit.Get());
-        rit.Set(gain * rit.Get());
-        git.Set(gain * git.Get());
-        ++nlit;
-        ++lit;
-        ++bit;
-        ++rit;
-        ++git;
-        }
-      outputImageList = inputImageList;
+      outputImageList = ApplyGainOnChannels( luminance ,
+                                  ApplyPipeline(luminance) ,
+                                  rgb ,
+                                  inputImageList );
+      
       }
+
     imageListToVectorFilterOut->SetInput(outputImageList);
     imageListToVectorFilterOut->Update();
     SetParameterOutputImage( "out" , imageListToVectorFilterOut->GetOutput() );

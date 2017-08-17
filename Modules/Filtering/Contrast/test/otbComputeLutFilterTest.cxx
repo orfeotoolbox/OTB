@@ -48,8 +48,8 @@ int main ( int itkNotUsed(argc),
   FilterGainType::Pointer filterGain (FilterGainType::New());
   filterGain->SetInputImage(input);
   filterGain->SetInputLut(lut);
-  filterGain->SetMax( 12654 );
   filterGain->SetMin( 377 );
+  filterGain->SetMax( 12654 );
   filterGain->Update();
   writer->SetInput( filterGain->GetOutput() );
   writer->Update();

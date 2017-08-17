@@ -69,9 +69,6 @@ public :
   itkSetMacro(Max, InputPixelType);
   itkGetMacro(Max, InputPixelType);
 
-  itkSetMacro(Step, double);
-  itkGetMacro(Step, double);
-
   void SetInputLut( const LutType * lut) ;
 
   void SetInputImage( const InputImageType * input) ;
