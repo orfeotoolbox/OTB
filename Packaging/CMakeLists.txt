@@ -206,7 +206,7 @@ endforeach()
 
 install_include_dirs()
 
-install_staticlib_files()
+install_importlibs()
 
 install_python_bindings()
 
