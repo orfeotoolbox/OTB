@@ -23,10 +23,10 @@ function(install_rule src_file)
         message("SKIP INSTALL for ${sfile_NAME_LOWER}")
       endif()
       continue()
-    #special case for remote modules which has executables
-    #like MosiacHeaderTest1.exe. This ideally should be
-    #fixed in remote modules
     elseif ("${sfile_NAME_LOWER}" MATCHES "headertest" )
+      # special case for remote modules which has executables
+      # like MosiacHeaderTest1.exe. This ideally should be
+      # fixed in remote modules like OTBMosiacHeaderTest1.exe
       if(PKG_DEBUG)
 	message("SKIP INSTALL for ${sfile_NAME_LOWER}")
       endif()
@@ -42,6 +42,10 @@ function(install_rule src_file)
       set(install_dir lib)
     elseif("${sfile_ABS_LOWER}" MATCHES "(\\.pyd)$")
       #python bindings are installed in install_python_bindings
+      continue()
+    elseif( "${sfile_NAME_LOWER}" MATCHES "^_otbapplication")
+      # _otbApplication.so matched below; so we explicit skip it
+      # because it's already handled in install_python_bindings.cmake
       continue()
     elseif("${sfile_ABS_LOWER}" MATCHES "\\.lnk$")
       #we don't install symlink on windows. issue a warning
