@@ -47,3 +47,15 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/src.pro qt-everywhere-ope
  nacl: SRC_SUBDIRS -= src_network src_testlib
  !symbian:contains(QT_CONFIG, dbus):SRC_SUBDIRS += src_dbus
  !contains(QT_CONFIG, no-gui): SRC_SUBDIRS += src_gui
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/image/qjpeghandler.pri qt-everywhere-opensource-src-4.8.7/src/image/qjpeghandler.pri
+--- qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri      2017-08-17 11:58:59.850961441 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri   2017-08-17 13:32:31.252551029 +0200
+@@ -4,7 +4,7 @@
+ SOURCES += $$PWD/qjpeghandler.cpp
+ contains(QT_CONFIG, system-jpeg) {
+     if(unix|win32-g++*): LIBS += -ljpeg
+-    else:win32:          LIBS += libjpeg.lib
++    else:win32:          LIBS += jpeg.lib
+ } else {
+     include($$PWD/../../3rdparty/libjpeg.pri)
+ }
