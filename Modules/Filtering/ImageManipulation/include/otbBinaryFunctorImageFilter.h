@@ -35,7 +35,7 @@ namespace otb
  *
  * \sa itk::BinaryFunctorImageFilter
  *
- * \ingroup OTBCommon
+ * \ingroup OTBImageManipulation
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
 class ITK_EXPORT BinaryFunctorImageFilter : public itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
