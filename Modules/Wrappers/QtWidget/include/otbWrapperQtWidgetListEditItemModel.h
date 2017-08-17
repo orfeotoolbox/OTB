@@ -178,6 +178,14 @@ public:
   QModelIndex parent( const QModelIndex & index ) const ITK_OVERRIDE;
 
   /**
+   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
+   */
+  bool
+    removeRows( int row,
+                int count,
+                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
   int rowCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;

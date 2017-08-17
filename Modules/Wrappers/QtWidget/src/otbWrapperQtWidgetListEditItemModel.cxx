@@ -322,6 +322,28 @@ ListEditItemModel
 }
 
 /*****************************************************************************/
+bool
+ListEditItemModel
+::removeRows( int row, int count, const QModelIndex & p )
+{
+  assert( !p.isValid() );
+  assert( count==1 );
+
+  if( p.isValid() || count!=1 )
+    return false;
+
+  assert( m_StringList!=nullptr );
+
+  beginRemoveRows( p, row, row + count - 1 );
+  {
+    m_StringList->Erase( row, count );
+  }
+  endRemoveRows();
+
+  return true;
+}
+
+/*****************************************************************************/
 int
 ListEditItemModel
 ::rowCount( const QModelIndex & p ) const
