@@ -17,24 +17,21 @@ message("TEST_DIR=${TEST_DIR}")
 message("PKG_DIR=${PKG_DIR}")
 message("SRC_DIR=${SRC_DIR}")
 
+# if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+#   find_program(GREP grep)
+#   execute_process(COMMAND ${GREP} -Rs "/usr/"
+#     WORKING_DIRECTORY ${PKG_DIR}/lib/cmake/
+#     RESULT_VARIABLE grep_usr_rv
+#     OUTPUT_VARIABLE grep_usr_ov
+#     ERROR_VARIABLE  grep_usr_ov
+#     )
 
-if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
-  find_program(GREP grep)
-  execute_process(COMMAND ${GREP} -Rs "/usr/"
-    WORKING_DIRECTORY ${PKG_DIR}/lib/cmake/
-    RESULT_VARIABLE grep_usr_rv
-    OUTPUT_VARIABLE grep_usr_ov
-    ERROR_VARIABLE  grep_usr_ov
-    )
-
-  if(NOT grep_usr_rv EQUAL 1)
-    message(FATAL_ERROR
-      "Test 'grep_usr_rv' failed with output:\n${grep_usr_ov}")
-    return()
-  endif()
-  
-endif() #Linux
-
+#   if(NOT grep_usr_rv EQUAL 1)
+#     message(FATAL_ERROR
+#       "Test 'grep_usr_rv' failed with output:\n${grep_usr_ov}")
+#     return()
+#   endif()
+# endif() #Linux
 
 execute_process(
   COMMAND ${CMAKE_COMMAND}
