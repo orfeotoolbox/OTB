@@ -1,7 +1,7 @@
 @echo off
 
 rem set EXIT_ON_ERROR=0
-rem set VERBOSE=1
+rem set TEST_VERBOSE=1
 rem cmd /k tools\selftester.bat /q > selftest_report.log 2>&1
 
 set MY_TOOLS_DIR=%~dp0
@@ -12,9 +12,9 @@ echo "MY_INSTALL_DIR=%MY_INSTALL_DIR%"
 :: this is set in wrapper script
 ::set EXIT_ON_ERROR=0
 IF %EXIT_ON_ERROR%.==. ( set EXIT_ON_ERROR=1)
-IF %VERBOSE%.==. ( set VERBOSE=1)
+IF %TEST_VERBOSE%.==. ( set TEST_VERBOSE=1)
 
-echo VERBOSE=%VERBOSE%
+echo TEST_VERBOSE=%TEST_VERBOSE%
 echo EXIT_ON_ERROR=%EXIT_ON_ERROR%
 
 :: if "/q" is given, hide the error dialogs (hence make the script non-interactive)
@@ -75,7 +75,7 @@ goto :eof
 ::########################[ FUNCTIONS ]##################################
 :check_binary
 setlocal
-if %VERBOSE% gtr 1 ( echo ":check_binary %1" )
+if %TEST_VERBOSE% gtr 1 ( echo ":check_binary %1" )
 type NUL > tmp.log
 tools\otb_loader.exe %1 > tmp.log 2>&1
 call :nb_tmp_lines
@@ -91,7 +91,7 @@ goto :eof
 setlocal
 set dll_path=%~n1
 set app=%dll_path:~7%
-if %VERBOSE% equ 1 ( echo ":check_application %app%" )
+if %TEST_VERBOSE% equ 1 ( echo ":check_application %app%" )
 if not exist bin\otbcli_%app%.bat (
   echo ERROR : missing cli launcher for application %app%
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
