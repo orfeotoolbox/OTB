@@ -21,7 +21,7 @@ function(process_file_recurse input_file)
     message("Processing ${input_file_full_path}")
   endif()
 
-  install_rule(${input_file_full_path})
+  #install_rule(${input_file_full_path})
 
   set(raw_items)
 
