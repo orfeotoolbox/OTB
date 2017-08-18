@@ -50,7 +50,8 @@ public:
   itkTypeMacro(ImageClassifier, otb::Application);
 
   /** Filters typedef */
-  typedef UInt16ImageType                                                                      OutputImageType;
+  //typedef UInt16ImageType                                                                    OutputImageType;
+  typedef Int32ImageType                                                                       OutputImageType;
   typedef UInt8ImageType                                                                       MaskImageType;
   typedef itk::VariableLengthVector<FloatVectorImageType::InternalPixelType>                   MeasurementType;
   typedef otb::StatisticsXMLFileReader<MeasurementType>                                        StatisticsReader;
@@ -79,7 +80,7 @@ private:
 
     // Documentation
     SetDocName("Image Classification");
-    SetDocLongDescription("This application performs an image classification based on a model file produced by the TrainImagesClassifier application. Pixels of the output image will contain the class labels decided by the classifier (maximal class label = 65535). The input pixels can be optionally centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. The remaining of pixels will be given the label 0 in the output image.");
+    SetDocLongDescription("This application performs an image classification based on a model file produced by the TrainImagesClassifier application. Pixels of the output image will contain the class labels decided by the classifier (maximal class label = 65535). The input pixels can be optionally centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. By default, the remaining of pixels will be given the label 0 in the output image.");
 
     SetDocLimitations("The input image must have the same type, order and number of bands than the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
@@ -100,6 +101,15 @@ private:
     AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
     SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application).");
     MandatoryOff("imstat");
+
+    AddParameter(ParameterType_Int, "nodatalabel", "Label mask value");
+    SetParameterDescription("nodatalabel", "By default, "
+      "hidden pixels will have the assigned label 0 in the output image. "
+      "It's possible to define the label mask by another value, "
+      "but be careful to not take a label from another class (max. 65535).");
+
+    SetDefaultParameterInt("nodatalabel", 0);
+    MandatoryOff("nodatalabel");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
@@ -164,6 +174,8 @@ private:
     // Classify
     m_ClassificationFilter = ClassificationFilterType::New();
     m_ClassificationFilter->SetModel(m_Model);
+
+    m_ClassificationFilter->SetDefaultLabel(GetParameterInt("nodatalabel"));
 
     // Normalize input image if asked
     if(IsParameterEnabled("imstat")  )
