@@ -128,6 +128,7 @@ ListEditWidget
   if( !GetItemModel()->insertRow( itemModel->rowCount() ) )
     return;
 }
+
 /*******************************************************************************/
 void
 ListEditWidget
@@ -157,6 +158,41 @@ ListEditWidget
 
     itemModel->removeRow( i.row() );
     }
+}
+
+/*******************************************************************************/
+void
+ListEditWidget
+::on_upButton_clicked()
+{
+  // qDebug() << this << "::on_upButton_clicked()";
+
+  assert( m_UI->treeView->selectionModel()!=nullptr );
+
+
+  QModelIndexList indexes(
+    m_UI->treeView->selectionModel()->selectedRows()
+  );
+
+  if( indexes.empty() )
+    return;
+
+  assert( indexes.size()==1 );
+
+  if( indexes.front().row()<1 )
+    return;
+
+  assert( GetItemModel()!=nullptr );
+
+  assert(
+    dynamic_cast< ListEditItemModel * >( GetItemModel() )==
+    GetItemModel() );
+
+  dynamic_cast< ListEditItemModel * >( GetItemModel() )
+    ->Swap(
+      indexes.front().row(),
+      indexes.front().row() - 1
+    );
 }
 
 } // end namespace 'Wrapper'
