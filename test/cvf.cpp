@@ -21,6 +21,7 @@
 #include "otbMultiplyImagebandsFilter.h"
 #include "otbMultiplyImageAndCostImageFilter.h"
 #include "otbGuidedImageFilter.h"
+#include "otbRMSEVectorImageFilter.h"
 
 
 
@@ -224,7 +225,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   convFilterXR->SetRadius(radiusGX);
   convFilterXR->SetFilter(filterCoeffsX);
 //--Left---------------  
- typedef otb::PerBandVectorImageFilter<ImageType, ImageType, ConvFilterTypeLeft> VectorFilterTypeLeft;
+  typedef otb::PerBandVectorImageFilter<ImageType, ImageType, ConvFilterTypeLeft> VectorFilterTypeLeft;
   VectorFilterTypeLeft::Pointer GradientXL = VectorFilterTypeLeft::New();
   GradientXL->SetFilter(convFilterXL);
   GradientXL->SetInput(LeftReader->GetOutput());
@@ -235,7 +236,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   writerGradientXL->Update();
   
 //--Right---------------  
- typedef otb::PerBandVectorImageFilter<ImageType, ImageType, ConvFilterTypeRight> VectorFilterTypeRight;
+  typedef otb::PerBandVectorImageFilter<ImageType, ImageType, ConvFilterTypeRight> VectorFilterTypeRight;
   VectorFilterTypeRight::Pointer GradientXR = VectorFilterTypeRight::New();
   GradientXR->SetFilter(convFilterXR);
   GradientXR->SetInput(RightReader->GetOutput());
@@ -270,9 +271,9 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
  
  
   ImageWriterType::Pointer writerGradientYL = ImageWriterType::New();
- writerGradientYL->SetFileName(FILENAME("GradientYLeft.tif"));
- writerGradientYL->SetInput(GradientYL->GetOutput());
- writerGradientYL->Update();
+  writerGradientYL->SetFileName(FILENAME("GradientYLeft.tif"));
+  writerGradientYL->SetInput(GradientYL->GetOutput());
+  writerGradientYL->Update();
  
  //---Right -----
   VectorFilterTypeRight::Pointer GradientYR = VectorFilterTypeRight::New();
@@ -280,10 +281,10 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   GradientYR->SetInput(RightReader->GetOutput());
  
  
- ImageWriterType::Pointer writerGradientYR = ImageWriterType::New();
- writerGradientYR->SetFileName( FILENAME("GradientYRight.tif"));
- writerGradientYR->SetInput(GradientYR->GetOutput());
- writerGradientYR->Update();
+  ImageWriterType::Pointer writerGradientYR = ImageWriterType::New();
+  writerGradientYR->SetFileName( FILENAME("GradientYRight.tif"));
+  writerGradientYR->SetInput(GradientYR->GetOutput());
+  writerGradientYR->Update();
  
    
 // Norme du gradient
@@ -292,8 +293,8 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   GradientType::Pointer filterG = GradientType::New();
   filterG->SetInput( LeftReader->GetOutput() );
 
-	GradientType::RadiusType radiusG = {{r,r}};
-	filterG->SetRadius(radiusG);
+  GradientType::RadiusType radiusG = {{r,r}};
+  filterG->SetRadius(radiusG);
 
   ImageWriterType::Pointer writerG = ImageWriterType::New();
   writerG->SetFileName( FILENAME("GradientNormLeft.tif"));
@@ -302,7 +303,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
 
 /*========================================== Cost Volume ===========================================*/
    /** sortie a une seule bande et elle contient le volume de cout */
- typedef otb::CostVolumeImageFilter< ImageType, ImageType, ImageType > CostVolumeType;
+  typedef otb::CostVolumeImageFilter< ImageType, ImageType, ImageType > CostVolumeType;
  
   CostVolumeType::Pointer LeftCost = CostVolumeType::New();
   LeftCost->SetLeftInputImage(LeftReader->GetOutput() );
@@ -352,15 +353,15 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
  
   
  /** sortie a 3 bandes et elle contient la multiplication de l'image avec le volume de cout*/
- typedef otb::MultiplyImageAndCostImageFilter< ImageType,ImageType, ImageType> MImageAndCostType; 
- //Left
- MImageAndCostType::Pointer MLeftAndCostFilter = MImageAndCostType::New();
- MLeftAndCostFilter->SetInput1( LeftReader->GetOutput() ); 
- MLeftAndCostFilter->SetInput2( LeftCost->GetOutput() ); 
- //Right
- MImageAndCostType::Pointer MRightAndCostFilter = MImageAndCostType::New();
- MRightAndCostFilter->SetInput1( RightReader->GetOutput() ); 
- MRightAndCostFilter->SetInput2( RightCost->GetOutput() ); 
+  typedef otb::MultiplyImageAndCostImageFilter< ImageType,ImageType, ImageType> MImageAndCostType; 
+  //Left
+  MImageAndCostType::Pointer MLeftAndCostFilter = MImageAndCostType::New();
+  MLeftAndCostFilter->SetInput1( LeftReader->GetOutput() ); 
+  MLeftAndCostFilter->SetInput2( LeftCost->GetOutput() ); 
+  //Right
+  MImageAndCostType::Pointer MRightAndCostFilter = MImageAndCostType::New();
+  MRightAndCostFilter->SetInput1( RightReader->GetOutput() ); 
+  MRightAndCostFilter->SetInput2( RightCost->GetOutput() ); 
  
   /** image integrale*/
   //Left
@@ -404,8 +405,8 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   CovRightCostBoxFilter->SetInput2( ConcatenateRightAndCostMean->GetOutput() ); 
 
   /** sortie a 4 bandes, les 3 1ere contienent les ak et la 4eme contient bk  */
- typedef otb::CoeffGuidedBoxImageFilter< ImageType, ImageType> CoeffGuidedFilterType;
- //Left
+  typedef otb::CoeffGuidedBoxImageFilter< ImageType, ImageType> CoeffGuidedFilterType;
+  //Left
   CoeffGuidedFilterType::Pointer LeftGuided = CoeffGuidedFilterType::New();
   LeftGuided->SetLeftImageInput(LeftReader->GetOutput() );
   LeftGuided->SetMeanImageInput(LeftMeanBoxFilter->GetOutput() ); 
@@ -415,7 +416,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   LeftGuided->SetCovIm1CostImageInput(CovLeftCostBoxFilter->GetOutput()); 
   LeftGuided->SetRadius(radius);
   
- //Right
+  //Right
   CoeffGuidedFilterType::Pointer RightGuided = CoeffGuidedFilterType::New(); 
   RightGuided->SetLeftImageInput(RightReader->GetOutput() );
   RightGuided->SetMeanImageInput(RightMeanBoxFilter->GetOutput() );
@@ -439,12 +440,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   otb::StandardFilterWatcher RightGuidedWatcher(RightGuidedWriter, "RightGuidedFilter");  
   RightGuidedWriter->Update(); 
 
-
-
-
-
 /*============= La moyenne des coeffs du guided box filter avec les images integrales==========*/
-
 /** la moyenne du CostVolume en utilsant les images intégrales*/
 //Left
   BoxFilterType::Pointer LeftCoeffBox = BoxFilterType::New();
@@ -461,10 +457,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   RightMeanCoeffBoxFilter->SetInput( RightCoeffBox->GetOutput() ); 
   RightMeanCoeffBoxFilter->SetRadius(radius);
   
-  
-
 /* =========== le cost volume filtré avec le guided filter =====================================*/
-
  typedef otb::GuidedImageFilter< ImageType,ImageType, ImageType> GuidedFilterType;
  //Left
   GuidedFilterType::Pointer LeftCVFFiltred = GuidedFilterType::New();  
@@ -482,7 +475,6 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   LeftCVFFiltredWriter->SetInput( LeftCVFFiltred->GetOutput() ); 
   otb::StandardFilterWatcher LeftCVFFiltredWatcher(LeftCVFFiltredWriter, "GuidedFilter");  
   //LeftCVFFiltredWriter->Update(); //* A NE PAS METTRE 
-
 
  /* =========================================== Min Filter ======================================*/
 ImageWriterType::Pointer LeftMinWriter = ImageWriterType::New();
@@ -546,55 +538,53 @@ RightCVFFiltred->UpdateOutputInformation();
     RightMinCost->FillBuffer(costMax);
 
 // concate of LeftDispIn and LeftMinCost  
-  ConcatenateVectorImageFilterType::Pointer LeftConcatenateCostDisp = ConcatenateVectorImageFilterType::New();
-  LeftConcatenateCostDisp->SetInput1(LeftDispIn);
-  LeftConcatenateCostDisp->SetInput2(LeftMinCost);
+   ConcatenateVectorImageFilterType::Pointer LeftConcatenateCostDisp = ConcatenateVectorImageFilterType::New();
+   LeftConcatenateCostDisp->SetInput1(LeftDispIn);
+   LeftConcatenateCostDisp->SetInput2(LeftMinCost);
   
   
 // concate of RightDispIn and RightMinCost  
-  ConcatenateVectorImageFilterType::Pointer RightConcatenateCostDisp = ConcatenateVectorImageFilterType::New();
-  RightConcatenateCostDisp->SetInput1(RightDispIn);
-  RightConcatenateCostDisp->SetInput2(RightMinCost); //RightMinCost = LeftMinCost(initilisation) 
+   ConcatenateVectorImageFilterType::Pointer RightConcatenateCostDisp = ConcatenateVectorImageFilterType::New();
+   RightConcatenateCostDisp->SetInput1(RightDispIn);
+   RightConcatenateCostDisp->SetInput2(RightMinCost); //RightMinCost = LeftMinCost(initilisation) 
    
    
-  LeftMinIn = LeftConcatenateCostDisp->GetOutput();   
-  RightMinIn = RightConcatenateCostDisp->GetOutput();
+   LeftMinIn = LeftConcatenateCostDisp->GetOutput();   
+   RightMinIn = RightConcatenateCostDisp->GetOutput();
  
-  LeftOutGuided->CopyInformation(LeftMinCost); 
-  RightOutGuided->CopyInformation(RightMinCost);
+   LeftOutGuided->CopyInformation(LeftMinCost); 
+   RightOutGuided->CopyInformation(RightMinCost);
   
   
-  LeftCVFFiltred->GraftOutput(LeftOutGuided);
-  LeftCVFFiltred->Modified();
-  LeftCVFFiltred->UpdateOutputInformation();
+   LeftCVFFiltred->GraftOutput(LeftOutGuided);
+   LeftCVFFiltred->Modified();
+   LeftCVFFiltred->UpdateOutputInformation();
 
-  RightCVFFiltred->GraftOutput(RightOutGuided);
-  RightCVFFiltred->Modified();
-  RightCVFFiltred->UpdateOutputInformation();
+   RightCVFFiltred->GraftOutput(RightOutGuided);
+   RightCVFFiltred->Modified();
+   RightCVFFiltred->UpdateOutputInformation();
   
- 
-
 /** Instanction du filtre MinFilter en mettant en entrée la sortie du filtre guidé avec la disp**/	 
-  typedef otb::MinFilter< ImageType,ImageType,ImageType> MinFilterType;
-  MinFilterType::Pointer LeftMin = MinFilterType::New();
-  LeftMin->SetInput1(LeftMinIn); 
-  LeftMin->SetInput2(LeftCVFFiltred->GetOutput()); 
+   typedef otb::MinFilter< ImageType,ImageType,ImageType> MinFilterType;
+   MinFilterType::Pointer LeftMin = MinFilterType::New();
+   LeftMin->SetInput1(LeftMinIn); 
+   LeftMin->SetInput2(LeftCVFFiltred->GetOutput()); 
 
- std::cout << " there are :  "<< HdispMax-HdispMin+1 << " Disparities \n "; 
-itk::TimeProbe chrono1;
- itk::TimeProbe chrono2;   
+  std::cout << " there are :  "<< HdispMax-HdispMin+1 << " Disparities \n "; 
+  itk::TimeProbe chrono1;
+  itk::TimeProbe chrono2;   
 // left disp
 
 for (int Hdisp = HdispMin ; Hdisp <=HdispMax ;Hdisp++){ 	 
  LeftCost->SetDisp(Hdisp); 
  LeftCost->Modified();
 
-chrono1.Start();
+ chrono1.Start();
  LeftMin->GetFunctor().SetDisp(Hdisp); 
  LeftMin->Update();
  
-chrono1.Stop();
-std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << std::endl;
+ chrono1.Stop();
+ std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << std::endl;
 
  LeftDispOut = LeftMin->GetOutput();
  
@@ -614,9 +604,9 @@ std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << st
 
  
 // Right disp 
-MinFilterType::Pointer RightMin = MinFilterType::New();
-RightMin->SetInput1(RightMinIn); 
-RightMin->SetInput2(RightCVFFiltred->GetOutput()); 
+ MinFilterType::Pointer RightMin = MinFilterType::New();
+ RightMin->SetInput1(RightMinIn); 
+ RightMin->SetInput2(RightCVFFiltred->GetOutput()); 
 	 
 for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){ 
  RightCost->SetDisp(Hdisp); 
@@ -669,10 +659,7 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
   Medianwriter->Update();
 
 
-/*========================================= filtrage de la carte de disparité  par Weighted Median  =====*/
-  
-
- 
+/*========================================= filtrage de la carte de disparité  par Weighted Median  =====*/ 
    /** Extraction des bandes de l'image de MinFilter **/
    typedef otb::MultiToMonoChannelExtractROI<ImageType::InternalPixelType,
    ImageType::InternalPixelType> ExtractFilterType;
@@ -740,9 +727,8 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
   otb::StandardFilterWatcher watcher5(RightMedianwriter, "RightMedianDisp");  
   RightMedianwriter->Update(); 
 
-# if 0
-/*========================== Detection d'occulusion =============================*/
-  
+
+/*========================== Detection d'occulusion =============================*/  
 /** Conversion des vectorImage vers OtbImage*/
 typedef otb::VectorImageToImageListFilter< ImageType, ImageListType > ListType;
 ListType::Pointer OtbImageLeftMedian = ListType::New();
@@ -775,8 +761,6 @@ OtbImageRightMedian->Update();
  otb::StandardFilterWatcher OcclusionWatcher(OcclusionWriter, "Occlusion"); 
  OcclusionWriter->Update(); 
  
-
-
 /*========================== Fill occlusion =====================================*/
   CastFilterType::Pointer OccCastFiler = CastFilterType::New();
   OccCastFiler-> SetInput( const_cast <OTBImageType *>( Occlusionfilter->GetOutput() ));
@@ -819,7 +803,26 @@ OtbImageRightMedian->Update();
   FillMedianwriter->SetFileName( FILENAME("SmoothFillDisparity.tif"));
   FillMedianwriter->SetInput( FillMedian->GetOutput() );  
   FillMedianwriter->Update(); 
- #endif  
+  
+// ================ Test du RMSE =================
+ ReaderType::Pointer GroundTruth = ReaderType::New();
+  GroundTruth->SetFileName("/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/data/ImageRGB/middlebury/tsukuba_o_d.png"); //LeftImage 
+  GroundTruth->UpdateOutputInformation();//*
+GroundTruth->UpdateOutputInformation();//*
+
+ typedef otb::RMSEVectorImageFilter< ImageType, ImageType > RMSEType;
+  RMSEType::Pointer RMSEfilter = RMSEType::New();
+  RMSEfilter->SetEstimatedInputImage(GroundTruth->GetOutput()); //groundTruth
+  RMSEfilter->SetInputImage(FillMedian->GetOutput()); //Fillmedian
+   
+ 
+/** écriture du resultat de la disparité avec le cost volumebrute**/ 
+ ImageWriterType::Pointer RMSEWriter = ImageWriterType::New(); 
+ RMSEWriter->SetFileName( FILENAME("RMSEfilter.tif"));
+ RMSEWriter->SetInput( RMSEfilter->GetOutput());  
+ otb::StandardFilterWatcher RMSEWatcher(RMSEWriter, "RMSEfilter"); 
+ RMSEWriter->Update();
+ 
 
 
 return EXIT_SUCCESS;

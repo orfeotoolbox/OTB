@@ -6,6 +6,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkContinuousIndex.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkConstantBoundaryCondition.h"
 #include "itkImageRegionIterator.h"
 #include "otbImage.h"
 
@@ -54,7 +55,8 @@ public:
   
   typedef typename std::pair<PixelType,double> pairCord;
 /**  iterators */ 
-  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
+   // typedef itk::ConstantBoundaryCondition<TInputImage> BoundaryConditionType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage/*, BoundaryConditionType*/> ConstNeighborhoodIteratorType;
   
     typedef itk::ImageConstIterator<TInputImage> ConstIteratorType;
     

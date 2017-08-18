@@ -464,7 +464,7 @@ RadiusType Wradius = this->GetRadius();
 
 
 	 
-//if(m_Iteration % (2) == 1){	      
+if(m_Iteration % (2) == 1){	      
 LeftPatchInputIt.GoToBegin();
 RightPatchInputIt.GoToBegin();
 
@@ -564,8 +564,8 @@ L_Index = LeftPatchInputIt.GetIndex();
 	 
 }// end of while
 
-//} // end if 
-#if 0
+} // end if 
+
 /*
  * It is necessary to implement this part and browse
  *
@@ -595,9 +595,7 @@ while ( !LeftPatchInputIt.IsAtBegin()  ){
 		 L_Index = LeftPatchInputIt.GetIndex();
 
 	
-for(unsigned int i = RightPatchInputIt.Size()-1; i>0; i--){	
-	
-
+for(unsigned int i = 0; i< RightPatchInputIt.Size(); i++){
 
 	if(floor(RightPatchInputIt.GetPixel(i)[0]) == floor(LeftPatchInputIt.Get()[0]) &&
 				floor(RightPatchInputIt.GetPixel(i)[1]) == floor(LeftPatchInputIt.Get()[1]) &&
@@ -677,7 +675,7 @@ for(unsigned int i = RightPatchInputIt.Size()-1; i>0; i--){
 	 
 }// end of while 2
 } // end else 
-#endif
+
 
 } //end of threaded generate data
 
