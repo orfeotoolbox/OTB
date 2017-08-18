@@ -103,7 +103,7 @@ private:
                                    "The output image can be :"
                                    "- A :math:`N` multi band image for the opening/closing normal or derivative profiles.\n"
                                    "- A mono band image for the opening/closing characteristics.\n"
-                                   "- A labeled image for the classification\n" );
+                                   "- A labeled image for the classification." );
     SetDocLimitations( "Generation of the morphological profile is not streamable, pay attention to this fact when setting the radius initial size and step of the structuring element." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbMorphologicalOpeningProfileFilter, otbMorphologicalClosingProfileFilter, otbProfileToProfileDerivativeFilter, otbProfileDerivativeToMultiScaleCharacteristicsFilter, otbMultiScaleConvexOrConcaveClassificationFilter, classes" );

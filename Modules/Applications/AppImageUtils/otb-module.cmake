@@ -22,6 +22,7 @@ set(DOCUMENTATION "Image utils and handling application.")
 
 otb_module(OTBAppImageUtils
   DEPENDS
+    OTBConversion
     OTBApplicationEngine
     OTBBoostAdapters
     OTBCarto

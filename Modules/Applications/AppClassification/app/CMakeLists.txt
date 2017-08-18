@@ -149,3 +149,6 @@ otb_create_application(
   NAME           VectorClassifier
   SOURCES        otbVectorClassifier.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+# Mantis-1427 : temporary fix
+add_dependencies(${otb-module}-all otbapp_ImageEnvelope)
