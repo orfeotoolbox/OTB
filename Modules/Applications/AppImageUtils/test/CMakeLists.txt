@@ -34,7 +34,7 @@ otb_test_application(NAME apTuUtDownloadSRTMTiles
 otb_test_application(NAME apTvUtConvertBasic
                      APP Convert
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertBasicOutput.tif
+                             -out ${TEMP}/apTvUtConvertBasicOutput.tif float
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertBasicOutput.tif
                 	     ${TEMP}/apTvUtConvertBasicOutput.tif
@@ -49,7 +49,7 @@ otb_test_application(NAME apTuUtConvertExtendedFilename_writer
 otb_test_application(NAME apTvUtConvertWithScaling
                      APP Convert
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif uint8
+                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif
                              -type linear
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertWithScalingOutput.tif
@@ -64,6 +64,28 @@ otb_test_application(NAME apTvUtConvertExtendedFilename_readerGEOM
                              ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
                              ${TEMP}/apTvUtGeomExtendedFilename.geom)
 
+otb_test_application(NAME apTvUtConvertSelectChannels
+                     APP Convert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif
+                             -channels rgb
+                             -channels.rgb.red 2
+                             -channels.rgb.green 3
+                             -channels.rgb.blue 1
+                             -type linear
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtConvertSelectChannelsRgbOutput.tif
+                             ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif)
+
+otb_test_application(NAME apTvUtConvertMonoChannel
+                     APP Convert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -out ${TEMP}/apTvUtConvertMonoChannelOutput.tif
+                             -channels mono
+                             -type linear
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtConvertMonoChannelOutput.tif
+                             ${TEMP}/apTvUtConvertMonoChannelOutput.tif)
 
 #----------- PixelInfo TESTS ----------------
 
