@@ -35,7 +35,6 @@ macro(check_cmake_variables)
   foreach(req
       ${required_vars}
       PKG_STAGE_DIR
-      QT_TRANSLATIONS_DIR
       SUPERBUILD_BINARY_DIR
       SUPERBUILD_INSTALL_DIR
       SUPERBUILD_SOURCE_DIR

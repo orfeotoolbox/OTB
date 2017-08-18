@@ -144,9 +144,7 @@ include(install_include_dirs)
 include(install_importlibs)
 include(install_python_bindings)
 include(install_share_dirs)
-include(install_translation_files)
 include(install_cmake_files)
-include(install_mvd_files)
 include(install_qtdev_files)
 include(install_vstudio_files)
 include(installer_files)
@@ -212,11 +210,7 @@ install_python_bindings()
 
 install_share_dirs()
 
-install_translation_files()
-
-install_cmake_files()  
-
-install_mvd_files()
+install_cmake_files()
 
 install_qtdev_files()
 

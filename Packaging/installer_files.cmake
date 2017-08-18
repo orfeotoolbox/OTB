@@ -13,6 +13,7 @@ macro(installer_files)
   configure_file("${README_FILE}" ${CMAKE_BINARY_DIR}/README )
   install(FILES ${CMAKE_BINARY_DIR}/README DESTINATION ${PKG_STAGE_DIR} )
 
+  
   #configure pkgsetup for mac and linux
   if(LINUX)
     configure_file(
@@ -27,6 +28,10 @@ macro(installer_files)
       ${CMAKE_CURRENT_SOURCE_DIR}/Files/macx_pkgsetup.in
       ${CMAKE_CURRENT_BINARY_DIR}/pkgsetup @ONLY
       )
+
+    #install icon file for .app file. Monteverdi and Mapla has same icon!
+    install(FILES
+      Files/Monteverdi.icns DESTINATION ${PKG_STAGE_DIR})
   endif()
 
   #start installing script and other stuff related to package
