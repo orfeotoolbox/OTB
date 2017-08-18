@@ -20,9 +20,11 @@ function(process_file_recurse input_file)
   if(NOT PKG_DEBUG)
     message("Processing ${input_file_full_path}")
   endif()
-
-  #install_rule(${input_file_full_path})
-
+  
+  # Install the file with install_rule().
+  # This function has specific "rules" to decide wheather and where to install file  
+  install_rule(${input_file_full_path})
+  
   set(raw_items)
 
   execute_process(
@@ -115,8 +117,6 @@ function(process_file_recurse input_file)
      message("All dependencies of ${bn_name} are processed. Install file and set ${bn_name}_RESOLVED=${${bn_name}_RESOLVED}")
    endif()
 
-   #Install the file with install_rule().
-   #This function has specific "rules" to decide wheather and where to install file
-   install_rule(${input_file_full_path})
+   #install_rule(${input_file_full_path})
 
 endfunction() #function(process_file_recurse infile)
