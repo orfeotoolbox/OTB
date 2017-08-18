@@ -386,6 +386,27 @@ InputImageListParameter
 }
 
 
+void
+InputImageListParameter
+::Swap( unsigned int i1, unsigned int i2 )
+{
+  assert( !m_InputImageParameterVector.empty() );
+
+  auto clamp = [ this ]( unsigned int i ) -> unsigned int
+  {
+    return
+    i>=m_InputImageParameterVector.size()
+    ? m_InputImageParameterVector.size() - 1
+    : i;
+  };
+
+  std::swap(
+    m_InputImageParameterVector[ clamp( i1 ) ],
+    m_InputImageParameterVector[ clamp( i2 ) ]
+  );
+}
+
+
 }
 
 }

@@ -118,6 +118,9 @@ public:
   /** */
   bool IsActive( unsigned int ) const ITK_OVERRIDE;
 
+  /** */
+  void Swap( unsigned int, unsigned int ) ITK_OVERRIDE;
+
 protected:
   /** Constructor */
   InputImageListParameter();

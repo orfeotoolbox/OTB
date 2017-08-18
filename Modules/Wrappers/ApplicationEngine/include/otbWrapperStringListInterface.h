@@ -83,6 +83,9 @@ public:
   /** */
   virtual const std::string & GetToolTip( unsigned int ) const = 0;
 
+  /** */
+  virtual void Swap( unsigned int, unsigned int ) = 0;
+
 protected:
   /** Constructor */
   StringListInterface() {};
