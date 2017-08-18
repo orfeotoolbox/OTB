@@ -39,6 +39,7 @@
 #include "otbOGRLayerStreamStitchingFilter.h"
 
 #include "otbGeoInformationConversion.h"
+#include "otbClampImageFilter.h"
 
 //Utils
 #include "itksys/SystemTools.hxx"
@@ -128,6 +129,8 @@ public:
   typedef otb::StreamingImageToOGRLayerSegmentationFilter
   <FloatImageType,
    WatershedSegmentationFilterType>      StreamingVectorizedWatershedFilterType;
+
+  typedef otb::ClampImageFilter<FloatImageType, UInt32ImageType> ClampFilterType;
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -369,7 +372,7 @@ private:
 
     if (segModeType == "vector" && HasValue("mode.vector.inmask"))
       {
-      streamingVectorizedFilter->SetInputMask(this->GetParameterUInt32Image("mode.vector.inmask"));
+      streamingVectorizedFilter->SetInputMask(m_ClampFilter->GetOutput());
       otbAppLogINFO(<<"Use a mask as input." << std::endl);
       }
     streamingVectorizedFilter->SetOGRLayer(layer);
@@ -547,6 +550,13 @@ private:
               }
       }
 
+    // handle mask
+    if (HasValue("mode.vector.inmask"))
+      {
+      m_ClampFilter = ClampFilterType::New();
+      m_ClampFilter->SetInput( this->GetParameterFloatImage("mode.vector.inmask"));
+      }
+
     // The actual stream size used
     FloatVectorImageType::SizeType streamSize;
 
@@ -559,7 +569,7 @@ private:
       if (HasValue("mode.vector.inmask"))
         {
         ccVectorizationFilter->GetSegmentationFilter()->SetMaskImage(
-                                                                     this->GetParameterUInt32Image("mode.vector.inmask"));
+                                                                     m_ClampFilter->GetOutput());
         }
 
       ccVectorizationFilter->GetSegmentationFilter()->GetFunctor().SetExpression(GetParameterString("filter.cc.expr"));
@@ -696,6 +706,8 @@ private:
        }
       }
   }
+
+  ClampFilterType::Pointer m_ClampFilter;
 };
 }
 }
