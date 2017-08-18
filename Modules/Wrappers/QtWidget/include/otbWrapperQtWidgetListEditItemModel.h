@@ -101,6 +101,7 @@ public:
     COLUMN_NONE = -1,
     //
     COLUMN_NAME = 0,
+    // COLUMN_BROWSE = 1,
     //
     COLUMN_COUNT,
   };
@@ -197,6 +198,9 @@ public:
     setData( const QModelIndex & index,
              const QVariant & value,
              int role = Qt::EditRole ) ITK_OVERRIDE;
+
+  /** */
+  virtual bool Swap( int, int );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

@@ -65,6 +65,7 @@ const char * const
 HEADERS[ ListEditItemModel::COLUMN_COUNT ] =
 {
   QT_TRANSLATE_NOOP( "otb::Wrapper::ListEditItemModel", "Name" ),
+  // QT_TRANSLATE_NOOP( "otb::Wrapper::ListEditItemModel", "Browse" ),
 };
 
 } // end of anonymous namespace.
@@ -407,6 +408,42 @@ ListEditItemModel
     }
 
   return false;
+}
+
+/*******************************************************************************/
+bool
+ListEditItemModel
+::Swap( int row1, int row2 )
+{
+  assert( m_StringList!=nullptr );
+
+  assert( row1>=0 );
+  assert( static_cast< unsigned int >( row1 )<m_StringList->Size() );
+
+  assert( row2>=0 );
+  assert( static_cast< unsigned int >( row2 )<m_StringList->Size() );
+
+  assert( row1!=row2 );
+
+  {
+    emit layoutAboutToBeChanged();
+
+    m_StringList->Swap( row1, row2 );
+
+  // emit dataChanged(
+  //   createIndex( row1, 0  ),
+  //   createIndex( row1, ListEditItemModel::COLUMN_COUNT - 1 )
+  // );
+
+  // emit dataChanged(
+  //   createIndex( row2, 0  ),
+  //   createIndex( row2, ListEditItemModel::COLUMN_COUNT - 1 )
+  // );
+
+    emit layoutChanged();
+  }
+
+  return true;
 }
 
 /*******************************************************************************/
