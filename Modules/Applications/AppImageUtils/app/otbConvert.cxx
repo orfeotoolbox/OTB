@@ -32,6 +32,9 @@
 #include "otbListSampleToHistogramListGenerator.h"
 #include "itkImageRegionConstIterator.h"
 
+#include "otbImageListToVectorImageFilter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
+#include "otbImageList.h"
 
 namespace otb
 {
@@ -79,10 +82,23 @@ public:
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
   typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
                                                  FloatVectorImageType,
-                                                 TransferLogFunctor> TransferLogType;
+                                                 TransferLogFunctor>   TransferLogType;
+
+  typedef otb::ImageList<FloatImageType>                               ImageListType;
+  typedef ImageListToVectorImageFilter<ImageListType,
+                                       FloatVectorImageType >          ListConcatenerFilterType;
+  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
+                                       FloatImageType::PixelType>      ExtractROIFilterType;
+  typedef ObjectList<ExtractROIFilterType>                             ExtractROIFilterListType;
 
 
 private:
+
+  std::string m_channelMode;
+
+  Convert() : m_channelMode("default") {}
+
+
   void DoInit() ITK_OVERRIDE
   {
     SetName("Convert");
@@ -143,28 +159,57 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
+    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
+
+    // TODO add parameter descriptions 
+    AddParameter(ParameterType_Choice, "channels", "Channels selection");
+    SetParameterDescription("channels", "Channels selection");
+
+    AddChoice("channels.default", "Default mode");
+    SetParameterDescription("channels.default", "Select all bands in the input image.");
+
+    AddChoice("channels.mono", "Channels selection ...");
+
+    AddChoice("channels.rgb", "Channels selection RGB");
+    AddParameter(ParameterType_Int, "channels.rgb.red", "Red Channel");
+    SetParameterDescription("channels.rgb.red", "TODO");
+    SetDefaultParameterInt("channels.rgb.red", 1);
+    AddParameter(ParameterType_Int, "channels.rgb.green", "Green Channel");
+    SetParameterDescription("channels.rgb.green", "TODO");
+    SetDefaultParameterInt("channels.rgb.green", 2);
+    AddParameter(ParameterType_Int, "channels.rgb.blue", "Blue Channel");
+    SetParameterDescription("channels.rgb.blue", "TODO");
+    SetDefaultParameterInt("channels.rgb.blue", 3);
+
+    m_ExtractorList = ExtractROIFilterListType::New();
+    m_ImageList = ImageListType::New();
+    m_Concatener = ListConcatenerFilterType::New();
 
     AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
-    SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png uint8");
+    SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png");
     SetDocExampleParameterValue("type", "linear");
+    SetDocExampleParameterValue("channels", "rgb");
 
     SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    // Nothing to do here for the parameters : all are independent
+    m_ImageList = ImageListType::New();
+    m_Concatener = ListConcatenerFilterType::New();
+    m_ExtractorList = ExtractROIFilterListType::New();
   }
 
   template<class TImageType>
   void GenericDoExecute()
   {
-    typename TImageType::Pointer castIm;
-
+    m_channelMode = GetParameterString("channels");
     std::string rescaleType = this->GetParameterString("type");
+
+    typename TImageType::Pointer castIm;
 
     if( (rescaleType != "none") && (rescaleType != "linear") && (rescaleType != "log2") )
       {
@@ -175,9 +220,10 @@ private:
       {
       castIm = this->GetParameterImage<TImageType>("in");
       }
-    else
+    else // linear or log2
       {
       FloatVectorImageType::Pointer input = this->GetParameterImage("in");
+      FloatVectorImageType::Pointer interInput;
 
       FloatVectorImageType::Pointer mask;
       bool useMask = false;
@@ -187,7 +233,34 @@ private:
         useMask = true;
         }
 
-      const unsigned int nbComp(input->GetNumberOfComponentsPerPixel());
+      // channel mode
+      const bool monoChannel = IsParameterEnabled("channels.mono");
+      if (IsParameterEnabled("channels.rgb") || monoChannel)
+        {
+        otbAppLogINFO( << "Select channels ...");
+        GetChannels();
+
+        input->UpdateOutputInformation();
+        for (std::vector<int>::iterator j=m_Channels.begin(); j!=m_Channels.end(); ++j)
+        {
+          ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+          extractROIFilter->SetInput(input);
+          if (!monoChannel) extractROIFilter->SetChannel((*j)+1);
+          extractROIFilter->UpdateOutputInformation();
+          m_ExtractorList->PushBack(extractROIFilter);
+          m_ImageList->PushBack(extractROIFilter->GetOutput());
+        }
+        m_Concatener->SetInput(m_ImageList);
+        m_Concatener->UpdateOutputInformation();
+
+        interInput = m_Concatener->GetOutput();
+        }
+      else
+        {
+        interInput = input;
+        }
+
+      const unsigned int nbComp(interInput->GetNumberOfComponentsPerPixel());
 
       typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType, TImageType> RescalerType;
       typename TImageType::PixelType minimum;
@@ -209,7 +282,7 @@ private:
 
       // Shrink factor is computed so as to load a quicklook of 1000
       // pixels square at most
-      typename FloatVectorImageType::SizeType imageSize = input->GetLargestPossibleRegion().GetSize();
+      typename FloatVectorImageType::SizeType imageSize = interInput->GetLargestPossibleRegion().GetSize();
       unsigned int shrinkFactor =
         std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
 
@@ -225,7 +298,7 @@ private:
         {
         //define the transfer log
         m_TransferLog = TransferLogType::New();
-        m_TransferLog->SetInput(input);
+        m_TransferLog->SetInput(interInput);
         m_TransferLog->UpdateOutputInformation();
 
         shrinkFilter->SetInput(m_TransferLog->GetOutput());
@@ -234,8 +307,8 @@ private:
         }
       else
         {
-        shrinkFilter->SetInput(input);
-        rescaler->SetInput(input);
+        shrinkFilter->SetInput(interInput);
+        rescaler->SetInput(interInput);
         shrinkFilter->Update();
         }
 
@@ -262,7 +335,7 @@ private:
         }
 
       typename ListSampleType::Pointer listSample = ListSampleType::New();
-      listSample->SetMeasurementVectorSize(input->GetNumberOfComponentsPerPixel());
+      listSample->SetMeasurementVectorSize(interInput->GetNumberOfComponentsPerPixel());
 
       // Now we generate the list of samples
       if (useMask)
@@ -334,14 +407,49 @@ private:
 
       m_TmpFilter = rescaler;
       castIm = rescaler->GetOutput();
-      }
 
+      }
 
     SetParameterOutputImage<TImageType>("out", castIm);
   }
 
 
- void DoExecute() ITK_OVERRIDE
+// TODO comment function
+void GetChannels()
+  {
+    m_Channels.clear();
+
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+    inImage->UpdateOutputInformation();
+    int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+
+    if(m_channelMode == "mono")
+    {
+      m_Channels = {1,1,1};
+    }
+    else if (m_channelMode == "rgb")
+    {
+      if ((GetParameterInt("channels.rgb.red") <= nbChan)
+      && ( GetParameterInt("channels.rgb.green") <= nbChan)
+      && ( GetParameterInt("channels.rgb.blue")   <= nbChan))
+      {
+        m_Channels = {GetParameterInt("channels.rgb.red"),
+                      GetParameterInt("channels.rgb.green"),
+                      GetParameterInt("channels.rgb.blue")};
+      }
+      else
+      {
+        itkExceptionMacro(<< "At least one needed channel has an invalid index");
+      }
+    }
+    else if (m_channelMode == "default")
+    {
+      // take all bands
+    }
+  }
+
+
+  void DoExecute() ITK_OVERRIDE
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {
@@ -374,6 +482,10 @@ private:
 
   itk::ProcessObject::Pointer m_TmpFilter;
   TransferLogType::Pointer m_TransferLog;
+  std::vector<int> m_Channels;
+  ImageListType::Pointer        m_ImageList;
+  ListConcatenerFilterType::Pointer  m_Concatener;
+  ExtractROIFilterListType::Pointer  m_ExtractorList;
 };
 
 }
