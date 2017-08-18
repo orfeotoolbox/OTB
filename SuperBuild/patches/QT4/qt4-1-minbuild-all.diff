@@ -1,15 +1,39 @@
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri
+--- qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri	2017-08-18 10:54:45.407880063 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri	2017-08-18 10:58:21.313281563 +0200
+@@ -4,7 +4,7 @@
+ SOURCES += $$PWD/qjpeghandler.cpp
+ contains(QT_CONFIG, system-jpeg) {
+     if(unix|win32-g++*): LIBS += -ljpeg
+-    else:win32:          LIBS += libjpeg.lib
++    else:win32:          LIBS += jpeg.lib
+ } else {
+     include($$PWD/../../3rdparty/libjpeg.pri)
+ }
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro
---- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro	2017-08-17 11:59:00.122963214 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro	2017-08-17 12:00:04.699387068 +0200
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro	2017-08-18 10:54:45.583881205 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro	2017-08-18 10:58:21.313281563 +0200
 @@ -1,5 +1,4 @@
  TEMPLATE = subdirs
 -SUBDIRS += trace
  !wince*:contains(QT_CONFIG, opengl):SUBDIRS += opengl
  contains(QT_CONFIG, openvg):contains(QT_CONFIG, egl) {
      SUBDIRS += openvg
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/imageformats/imageformats.pro qt-everywhere-opensource-src-4.8.7/src/plugins/imageformats/imageformats.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/imageformats/imageformats.pro	2017-08-18 10:54:45.583881205 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/imageformats/imageformats.pro	2017-08-18 10:59:04.493561642 +0200
+@@ -3,7 +3,7 @@
+ !contains(QT_CONFIG, no-jpeg):!contains(QT_CONFIG, jpeg):SUBDIRS += jpeg
+ !contains(QT_CONFIG, no-gif):!contains(QT_CONFIG, gif):SUBDIRS += gif
+ !contains(QT_CONFIG, no-mng):!contains(QT_CONFIG, mng):SUBDIRS += mng
+-contains(QT_CONFIG, svg):SUBDIRS += svg
++# contains(QT_CONFIG, svg):SUBDIRS += svg
+ !contains(QT_CONFIG, no-tiff):!contains(QT_CONFIG, tiff):SUBDIRS += tiff
+ !contains(QT_CONFIG, no-ico):SUBDIRS += ico
+ !contains(QT_CONFIG, no-tga):SUBDIRS += tga
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro
---- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro	2017-08-17 11:59:00.138963317 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro	2017-08-17 12:02:45.716444268 +0200
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro	2017-08-18 10:54:45.599881309 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro	2017-08-18 10:58:52.317482582 +0200
 @@ -1,16 +1,16 @@
  TEMPLATE = subdirs
  
@@ -19,13 +43,14 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro qt-ev
 -} else {
 -        SUBDIRS *= codecs
 -}
+-!contains(QT_CONFIG, no-gui): SUBDIRS *= imageformats iconengines
 +# SUBDIRS	*= sqldrivers
 +# unix:!symbian {
 +#        contains(QT_CONFIG,iconv)|contains(QT_CONFIG,gnu-libiconv)|contains(QT_CONFIG,sun-libiconv):SUBDIRS *= codecs
 +# } else {
 +#         SUBDIRS *= codecs
 +# }
- !contains(QT_CONFIG, no-gui): SUBDIRS *= imageformats iconengines
++!contains(QT_CONFIG, no-gui): SUBDIRS *= imageformats
  !embedded:!qpa:!contains(QT_CONFIG, no-gui):SUBDIRS *= graphicssystems
  embedded:SUBDIRS *=  gfxdrivers decorations mousedrivers kbddrivers
 -!win32:!embedded:!mac:!symbian:!contains(QT_CONFIG, no-gui):SUBDIRS *= inputmethods
@@ -36,8 +61,8 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro qt-ev
  qpa:SUBDIRS += platforms
  contains(QT_CONFIG, declarative): SUBDIRS *= qmltooling
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/src.pro qt-everywhere-opensource-src-4.8.7/src/src.pro
---- qt-everywhere-opensource-src-4.8.7.orig/src/src.pro	2017-08-17 11:59:00.870968087 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/src.pro	2017-08-17 12:00:51.991697564 +0200
+--- qt-everywhere-opensource-src-4.8.7.orig/src/src.pro	2017-08-18 10:54:46.487887069 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/src.pro	2017-08-18 10:58:21.313281563 +0200
 @@ -4,7 +4,7 @@
  unset(SRC_SUBDIRS)
  win32:SRC_SUBDIRS += src_winmain
@@ -47,15 +72,3 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/src.pro qt-everywhere-ope
  nacl: SRC_SUBDIRS -= src_network src_testlib
  !symbian:contains(QT_CONFIG, dbus):SRC_SUBDIRS += src_dbus
  !contains(QT_CONFIG, no-gui): SRC_SUBDIRS += src_gui
-diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/image/qjpeghandler.pri qt-everywhere-opensource-src-4.8.7/src/image/qjpeghandler.pri
---- qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri      2017-08-17 11:58:59.850961441 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri   2017-08-17 13:32:31.252551029 +0200
-@@ -4,7 +4,7 @@
- SOURCES += $$PWD/qjpeghandler.cpp
- contains(QT_CONFIG, system-jpeg) {
-     if(unix|win32-g++*): LIBS += -ljpeg
--    else:win32:          LIBS += libjpeg.lib
-+    else:win32:          LIBS += jpeg.lib
- } else {
-     include($$PWD/../../3rdparty/libjpeg.pri)
- }
