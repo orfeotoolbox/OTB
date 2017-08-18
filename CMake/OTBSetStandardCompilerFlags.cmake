@@ -236,6 +236,7 @@ macro(check_compiler_platform_flags)
       set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -Wno-array-bounds")
     endif()
 
+    # RK: copy past from ITK?
    if(APPLE)
      option(OTB_USE_64BITS_APPLE_TRUNCATION_WARNING "Turn on warnings on 64bits to 32bits truncations." OFF)
      mark_as_advanced(OTB_USE_64BITS_APPLE_TRUNCATION_WARNING)
@@ -259,10 +260,11 @@ macro(check_compiler_platform_flags)
      endforeach()
    endif()
 
+   #RK: copy past from ITK?
    # gcc must have -msse2 option to enable sse2 support
-   if(VNL_CONFIG_ENABLE_SSE2 OR VNL_CONFIG_ENABLE_SSE2_ROUNDING)
-     set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -msse2")
-   endif()
+   # if(VNL_CONFIG_ENABLE_SSE2 OR VNL_CONFIG_ENABLE_SSE2_ROUNDING)
+   #   set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -msse2")
+   # endif()
 
   endif()
 

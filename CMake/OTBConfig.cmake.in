@@ -26,6 +26,11 @@
 # to load OTB's settings for an external project.
 @OTB_CONFIG_CODE@
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+#RK: TODO: add sse2, see4, see4.1, openmp flags
+
 # The C and C++ flags added by OTB to the cmake-configured flags.
 set(OTB_REQUIRED_C_FLAGS "@OTB_REQUIRED_C_FLAGS@")
 set(OTB_REQUIRED_CXX_FLAGS "@OTB_REQUIRED_CXX_FLAGS@")
