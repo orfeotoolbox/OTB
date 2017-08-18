@@ -1,5 +1,9 @@
 if(NOT SRC_DIR)
-  message(FATAL_ERROR "SRC_DIR=${SRC_DIR}")
+  message(FATAL_ERROR "SRC_DIR is not set")
+endif()
+
+if(NOT MAKE_PROGRAM)
+  message(FATAL_ERROR "MAKE_PROGRAM is not set")
 endif()
 
 set(PKG_DIR)
@@ -16,6 +20,7 @@ endif()
 message("TEST_DIR=${TEST_DIR}")
 message("PKG_DIR=${PKG_DIR}")
 message("SRC_DIR=${SRC_DIR}")
+message("MAKE_PROGRAM=${MAKE_PROGRAM}")
 
 # if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
 #   find_program(GREP grep)
@@ -44,10 +49,15 @@ execute_process(
   )
 
 if( configure_rv )
-  message(FATAL_ERROR "Configure test failed.\nconfigure_ov=${configure_ov}")
+  message(FATAL_ERROR "Configure FAILED. configure_ov:\n${configure_ov}")
   return()
+else()
+  message("Configure PASSED. configure_ov:\n${configure_ov}")
 endif()
 
+# If you want to test building a third targert, use foreach.
+# the code is written in a way that it is easy to stuff these two
+# into a cmake foreach
 execute_process(COMMAND ${MAKE_PROGRAM} HelloWorldOTB
   WORKING_DIRECTORY ${TEST_DIR}
   RESULT_VARIABLE build_HelloWorldOTB_rv
@@ -56,22 +66,22 @@ execute_process(COMMAND ${MAKE_PROGRAM} HelloWorldOTB
   )
 
 if( build_HelloWorldOTB_rv )
-  message(FATAL_ERROR
-    "Build test failed.\nbuild_HelloWorldOTB_ov=${build_HelloWorldOTB_ov}")
+  message(FATAL_ERROR "Build FAILED. build_HelloWorldOTB_ov:\n${build_HelloWorldOTB_ov}")
   return()
+else()
+  message("Build PASSED. build_HelloWorldOTB_ov:\n${build_HelloWorldOTB_ov}")
 endif()
 
+execute_process(COMMAND ${MAKE_PROGRAM} Pipeline
+  WORKING_DIRECTORY ${TEST_DIR}
+  RESULT_VARIABLE build_Pipeline_rv
+  OUTPUT_VARIABLE build_Pipeline_ov
+  ERROR_VARIABLE  build_Pipeline_ov
+  )
 
-# execute_process(COMMAND ${MAKE_PROGRAM} Pipeline
-#   WORKING_DIRECTORY ${TEST_DIR}
-#   RESULT_VARIABLE build_Pipeline_rv
-#   OUTPUT_VARIABLE build_Pipeline_ov
-#   ERROR_VARIABLE  build_Pipeline_ov
-#   )
-
-
-# if( build_Pipeline_rv )
-#   message(FATAL_ERROR
-#     "Build test failed.\nbuild_Pipeline_ov=${build_Pipeline_ov}")
-#   return()
-# endif()
+if( build_Pipeline_rv )
+  message(FATAL_ERROR "Build FAILED. build_Pipeline_ov=${build_Pipeline_ov}")
+  return()
+else()
+  message("Build PASSED. build_Pipeline_ov=${build_Pipeline_ov}")  
+endif()

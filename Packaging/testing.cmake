@@ -46,7 +46,8 @@ add_test(
   NAME Tu_build_examples
   COMMAND ${CMAKE_COMMAND}
   -DSRC_DIR=${CMAKE_SOURCE_DIR}/../Examples
-  -P ${pkg_extracted_dir}/tools/build_example.cmake  
+  -DMAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
+  -P ${pkg_extracted_dir}/tools/build_examples.cmake
   WORKING_DIRECTORY ${testing_dir}
   )
 

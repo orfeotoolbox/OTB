@@ -103,7 +103,7 @@ macro(installer_files)
   endif()
 
   install(FILES
-    Files/build_example.cmake
+    Files/build_examples.cmake
     DESTINATION ${PKG_STAGE_DIR}/tools)
 
   
