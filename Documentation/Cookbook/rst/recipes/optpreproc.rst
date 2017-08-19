@@ -2,14 +2,14 @@ From raw image to calibrated product
 ====================================
 
 This section presents various pre-processing tasks that are presented in
-a classical order to obtain a calibrated, pan-sharpened image.
+a standard order to obtain a calibrated, pan-sharpened image.
 
 Optical radiometric calibration
 -------------------------------
 
-In remote sensing imagery, pixel values are called DN (for Digital
-Numbers) and can not be physically interpreted and compared: they are
-influenced by various factors such as the amount of light flowing trough
+In remote sensing imagery, pixel values are referred to as Digital
+Numbers (DN) and they cannot be physically interpreted or compared. They are
+influenced by various factors such as the amount of light flowing through
 the sensor, the gain of the detectors and the analogic to numeric
 converter.
 

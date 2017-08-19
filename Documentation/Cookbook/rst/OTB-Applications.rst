@@ -492,7 +492,7 @@ Here is an example of MPI call on a cluster::
   ------------ END JOB INFO 1043196.tu-adm01 ---------
 
 One can see that the registration and pan-sharpening of the
-panchromatic and multi-spectral bands of a Pleiades image has bee split
+panchromatic and multi-spectral bands of a Pleiades image has been split
 among 560 cpus and took only 56 seconds.
 
 Note that this MPI parallel invocation of applications is only

@@ -208,21 +208,20 @@ BandMath
 BandMath application is intended to apply mathematical operations on
 pixels (launch it with shortcut CTRL+A). In this example, we are going
 to use this application to change the dynamics of an image, and check
-the result by looking at histogram tab, in the right side dock. The
+the result by looking at the histogram tab on the right-hand side of the GUI. The
 formula used is the following: :math:`\text{im1b1} \times 1000`. In the
 figures below ( [fig:BM]), one can notice that the mode of the
 distribution is located at position :math:`356.0935`, whereas in the
 transformed image, the mode is located at position :math:`354737.1454`,
-that’s to say 1000 times farther away approximately (the cursors aren’t
+that’s to say approximately 1000 times further away (the cursors aren’t
 placed exactly at the same position in the screenshots).
 
 .. figure:: Art/MonteverdiImages/BM.png
 
 Segmentation
 ~~~~~~~~~~~~
-
-Now, let’s use the segmentation application (launch it with shortcut
-CTRL+A). We let the user take a look at the application’s documentation;
+From within Monteverdi, the Segmentation application can by launched using the 
+shortcut CTRL+A. We let the user take a look at the application’s documentation;
 let’s simply say that as we wish we could display the segmentation with
 , we must tell the application to output the segmentation in raster
 format. Thus, the value of the mode option must be set to raster. The
