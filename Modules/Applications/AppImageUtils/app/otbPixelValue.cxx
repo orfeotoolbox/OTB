@@ -122,6 +122,15 @@ private:
                       largestRegion = inImage->GetLargestPossibleRegion();
       // SetMaximumParameterIntValue("coordx", largestRegion.GetSize(0)-1);
       // SetMaximumParameterIntValue("coordy", largestRegion.GetSize(1)-1);
+      if ( GetParameterString( "mode" ) == "epsg" )
+        {
+        MandatoryOn("epsg");
+        if ( !HasUserValue("epsg") )
+          {
+          SetDefaultParameterInt("epsg" , 0);
+          }
+        }
+
       }
   }
 
@@ -132,14 +141,20 @@ private:
 
     ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
     extractor->SetInput(inImage);
-    FloatVectorImageType::IndexType id;
+    FloatVectorImageType::IndexType id , min , max;
+    min.Fill(0);
+    max[0] = inImage->GetLargestPossibleRegion().GetSize()[0];
+    max[1] = inImage->GetLargestPossibleRegion().GetSize()[1];
     bool isPixelIn = false;
+    std::string box = "";
     if (GetParameterString( "mode" ) == "ind" )
       {
       id[0] = static_cast< int >( GetParameterFloat( "coordx" ) );
       id[1] = static_cast< int >( GetParameterFloat( "coordy" ) );
-      if (id[0] >= inImage->GetLargestPossibleRegion().GetSize()[0] 
-       || id[1] >= inImage->GetLargestPossibleRegion().GetSize()[1]
+      if (static_cast< uint >( id[0] ) >= 
+                    inImage->GetLargestPossibleRegion().GetSize()[0]
+       || static_cast< uint >( id[1] ) >=
+                    inImage->GetLargestPossibleRegion().GetSize()[1]
        || id[0] < 0 || id[1] < 0 )
         {
         isPixelIn = false;
@@ -148,19 +163,28 @@ private:
         {
         isPixelIn = true;
         }
+      box += "[" + std::to_string(min[0]) + ":" + std::to_string( max[0] ) + "]x";
+      box += "[" + std::to_string(min[1]) + ":" + std::to_string( max[1] ) + "].";
       }
 
     if (GetParameterString( "mode" ) == "phy" )
       {
-      itk::Point<float, 2> pixel;
+      itk::Point<float, 2> pixel , minP , maxP;
       pixel[ 0 ] = GetParameterFloat( "coordx" );
       pixel[ 1 ] = GetParameterFloat( "coordy" );
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixel,id);
+      inImage->TransformIndexToPhysicalPoint(min,minP);
+      inImage->TransformIndexToPhysicalPoint(max,maxP);
+      box += "[" + std::to_string(minP[0]) + ":" + std::to_string( maxP[0] ) + "]x";
+      box += "[" + std::to_string(minP[1]) + ":" + std::to_string( maxP[1] ) + "].";
       }
     
     if (GetParameterString( "mode" ) == "epsg" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
+      std::string wktFromEpsg = 
+            otb::GeoInformationConversion::ToWKT(GetParameterInt( "epsg" ));
+      rsTransform->SetInputProjectionRef(wktFromEpsg);
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
       rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
       rsTransform->InstantiateTransform();
@@ -170,6 +194,15 @@ private:
       rsTransform->InstantiateTransform();
       pixelOut = rsTransform->TransformPoint(pixelIn);
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixelOut,id);
+      RSTransformType::InverseTransformBasePointer inverse = rsTransform->GetInverseTransform();
+      // inverse->InstantiateTransform();
+      itk::Point<float, 2> minPOut , maxPOut , minP , maxP;
+      inImage->TransformIndexToPhysicalPoint(min,minP);
+      inImage->TransformIndexToPhysicalPoint(max,maxP);
+      minPOut = inverse->TransformPoint( minP) ;
+      maxPOut = inverse->TransformPoint( maxP );
+      box += "[" + std::to_string(minPOut[0]) + ":" + std::to_string( maxPOut[0] ) + "]x";
+      box += "[" + std::to_string(minPOut[1]) + ":" + std::to_string( maxPOut[1] ) + "].";
       }
 
     FloatVectorImageType::SizeType size;
@@ -182,7 +215,9 @@ private:
 
     if ( !isPixelIn )
       {
-      otbAppLogFATAL(<<"Specified position out of the input image");
+      std::string why = "Accessible region is in " + box;
+      otbAppLogFATAL(<<"Specified position out of the input image.\n" + why);
+
       }
 
     extractor->SetExtractionRegion(region);
