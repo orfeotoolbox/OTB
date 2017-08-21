@@ -141,6 +141,14 @@ add_custom_target(OTB_DEPENDS
   )
 
 
+if(LINUX)
+  string(REGEX REPLACE
+    "-Wl,--no-undefined"
+    "-Wl,--no-undefined -Wl,-no-as-needed"
+    SB_CMAKE_CACHE_ARGS
+    "${SB_CMAKE_CACHE_ARGS}")
+endif()
+
 ExternalProject_Add(OTB
   DEPENDS ${OTB_DEPENDENCIES}
   PREFIX OTB
