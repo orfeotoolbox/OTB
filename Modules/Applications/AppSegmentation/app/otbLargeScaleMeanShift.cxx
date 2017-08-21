@@ -97,12 +97,26 @@ private:
     ShareParameter("tilesizex","segmentation.tilesizex");
     ShareParameter("tilesizey","segmentation.tilesizey");
 
-    AddParameter(ParameterType_InputImage, "imfield", "Support image for field computation");
-    SetParameterDescription( "imfield", "This is an optional support image "
-      "that can be used to compute field values in each region." );
-    MandatoryOff("imfield");
+    AddParameter(ParameterType_Choice, "mode","Output mode");
+    SetParameterDescription("mode", "Type of segmented output");
 
-    ShareParameter("out","vectorization.out");
+    AddChoice("mode.vector", "Segmentation as vector output.");
+    SetParameterDescription("mode.vector","In this mode, the application will "
+      "produce a vector file or database and compute field values for each "
+      "region");
+
+    AddParameter(ParameterType_InputImage, "mode.vector.imfield", "Support image for field computation");
+    SetParameterDescription( "mode.vector.imfield", "This is an optional support image "
+      "that can be used to compute field values in each region. Otherwise, the "
+      "input image is used as support." );
+    MandatoryOff("mode.vector.imfield");
+
+    ShareParameter("mode.vector.out","vectorization.out");
+
+    AddChoice("mode.raster", "Standard segmentation with labeled raster output");
+    SetParameterDescription("mode.raster","In this mode, the application will produce a standard labeled raster.");
+
+    ShareParameter("mode.raster.out","merging.out");
 
     AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
     EnableParameter( "cleanup" );
@@ -135,6 +149,8 @@ private:
     SetDocExampleParameterValue("out", "regions.shp");
 
     SetOfficialDocLink();
+
+    DebugOn();
     }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -144,9 +160,7 @@ private:
     {
     std::vector<std::string> tmpFilenames;
     tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap.tif"));
-    tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.tif"));
     tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap.geom"));
-    tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.geom"));
     ExecuteInternal("smoothing");
     // in-memory connexion here (saves 1 additional update for foutpos)
     GetInternalApplication("segmentation")->SetParameterInputImage("in",
@@ -165,23 +179,34 @@ private:
 
     GetInternalApplication("merging")->SetParameterString("inseg",
       tmpFilenames[0]);
-    GetInternalApplication("merging")->SetParameterString("out",
-      tmpFilenames[1]);
-    GetInternalApplication("merging")->ExecuteAndWriteOutput();
-
-    if (IsParameterEnabled("imfield") && HasValue("imfield"))
+    EnableParameter("mode.raster.out");
+    if (GetParameterString("mode") == "vector")
       {
-      GetInternalApplication("vectorization")->SetParameterString("in",
-        GetParameterString("imfield"));
+      tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.tif"));
+      tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.geom"));
+      GetInternalApplication("merging")->SetParameterString("out",
+        tmpFilenames[2]);
+      GetInternalApplication("merging")->ExecuteAndWriteOutput();
+      if (IsParameterEnabled("mode.vector.imfield") &&
+          HasValue("mode.vector.imfield"))
+        {
+        GetInternalApplication("vectorization")->SetParameterString("in",
+          GetParameterString("mode.vector.imfield"));
+        }
+      else
+        {
+        GetInternalApplication("vectorization")->SetParameterString("in",
+          GetParameterString("in"));
+        }
+      GetInternalApplication("vectorization")->SetParameterString("inseg",
+        tmpFilenames[2]);
+      ExecuteInternal("vectorization");
       }
     else
       {
-      GetInternalApplication("vectorization")->SetParameterString("in",
-        GetParameterString("in"));
+      GetInternalApplication("merging")->ExecuteAndWriteOutput();
       }
-    GetInternalApplication("vectorization")->SetParameterString("inseg",
-      tmpFilenames[1]);
-    ExecuteInternal("vectorization");
+    DisableParameter("mode.raster.out");
 
     if( IsParameterEnabled( "cleanup" ) )
       {
