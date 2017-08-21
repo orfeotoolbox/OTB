@@ -134,8 +134,19 @@ protected:
 protected:
 
 //
+// Private types.
+private:
+  enum SwapSelection
+  {
+    LEFT = -1,
+    NONE = 0,
+    RIGHT = +1,
+  };
+
+//
 // Private methods.
 private:
+  void Swap( int, int, SwapSelection = NONE );
 
 //
 // Private attributes.

@@ -113,6 +113,58 @@ ListEditWidget
 }
 
 /*******************************************************************************/
+void
+ListEditWidget
+::Swap( int row1, int row2, SwapSelection s )
+{
+  assert( GetItemModel()!=nullptr );
+
+  assert( row1>=0 );
+  assert( row1<GetItemModel()->rowCount() );
+
+  assert( row2>=0 );
+  assert( row2<GetItemModel()->rowCount() );
+
+
+  ListEditItemModel * itemModel = GetItemModel();
+
+  assert( itemModel!=nullptr );
+
+
+  itemModel->Swap( row1, row2 );
+
+
+  {
+    int row =
+      s==LEFT
+      ? row1
+      : ( s==RIGHT
+	  ? row2
+	  : -1 );
+
+    if( row<0 )
+      return;
+
+    assert( m_UI!=nullptr );
+    assert( m_UI->treeView!=nullptr );
+    assert( m_UI->treeView->selectionModel()!=nullptr );
+
+    QItemSelectionModel * ism =  m_UI->treeView->selectionModel();
+
+    ism->clear();
+
+    ism->setCurrentIndex(
+      itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
+      QItemSelectionModel::Clear |
+      QItemSelectionModel::Select |
+      QItemSelectionModel::Current |
+      QItemSelectionModel::Rows
+    );
+  }
+}
+
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
@@ -167,6 +219,8 @@ ListEditWidget
 {
   // qDebug() << this << "::on_upButton_clicked()";
 
+  assert( m_UI!=nullptr );
+  assert( m_UI->treeView!=nullptr );
   assert( m_UI->treeView->selectionModel()!=nullptr );
 
 
@@ -179,20 +233,18 @@ ListEditWidget
 
   assert( indexes.size()==1 );
 
-  if( indexes.front().row()<1 )
+
+  const QModelIndex & front = indexes.front();
+
+  if( front.row()<1 )
     return;
 
-  assert( GetItemModel()!=nullptr );
 
-  assert(
-    dynamic_cast< ListEditItemModel * >( GetItemModel() )==
-    GetItemModel() );
-
-  dynamic_cast< ListEditItemModel * >( GetItemModel() )
-    ->Swap(
-      indexes.front().row(),
-      indexes.front().row() - 1
-    );
+  Swap(
+    front.row(),
+    front.row() - 1,
+    RIGHT
+  );
 }
 
 } // end namespace 'Wrapper'
