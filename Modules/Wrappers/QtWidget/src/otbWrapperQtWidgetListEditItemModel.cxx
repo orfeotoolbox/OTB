@@ -135,6 +135,7 @@ ListEditItemModel
   switch( role )
     {
     case Qt::CheckStateRole:
+#if 0
       if( idx.column()!=COLUMN_NAME )
         return QVariant();
       else
@@ -142,6 +143,7 @@ ListEditItemModel
 	assert( idx.row() >= 0 );
 	return stringList->IsActive( idx.row() );
 	}
+#endif
       break;
 
     case Qt::DisplayRole:
